@@ -6,13 +6,13 @@ module.exports = {
 		'^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
 
 		// Handle CSS imports (without CSS modules)
-		'^.+\\.(css|sass|scss)$': '<rootDir>/scripts/__mocks__/style-mock.js',
+		'^.+\\.(css|sass|scss)$': '<rootDir>/jest/__mocks__/style-mock.js',
 
 		/* Handle image imports
 		https://jestjs.io/docs/webpack#handling-static-assets */
-		'^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$': '<rootDir>/scripts/__mocks__/file-mock.js',
+		'^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$': '<rootDir>/jest/__mocks__/file-mock.js',
 	},
-	setupFilesAfterEnv: ['<rootDir>/scripts/jest.setup.js'],
+	setupFilesAfterEnv: ['<rootDir>/jest/jest.setup.js'],
 	transform: {
 		/* Use babel-jest to transpile tests with the next/babel preset
 		https://jestjs.io/docs/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object */

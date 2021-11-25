@@ -15,7 +15,7 @@ describe('Page: <Home />', () => {
 		expect(title).toBeInTheDocument();
 	});
 
-	it('Should render a link back to home', () => {
+	it('Should render a link', () => {
 		const link = screen.getByText(/go to example/i);
 
 		expect(link).toBeInTheDocument();
