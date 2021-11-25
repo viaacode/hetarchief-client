@@ -11,9 +11,10 @@
     "lint": "npm run lint:ts && npm run lint:scss",
     "lint:ts": "next lint",
     "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input",
-    "test": "jest",
-    "test:coverage": "jest --cache --coverage",
-    "test:watch": "jest --cache --watch",
+    "test": "jest --cache",
+    "test:ci": "jest",
+    "test:coverage": "npm run test -- --coverage",
+    "test:watch": "npm run test -- --cache --watch",
     "prepare": "husky install"
   },
   "dependencies": {
