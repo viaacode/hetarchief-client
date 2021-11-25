@@ -4,7 +4,7 @@ module.exports = {
 		'plugin:@typescript-eslint/recommended',
 		'plugin:import/recommended',
 		'next/core-web-vitals',
-		'prettier',
+		'plugin:prettier/recommended',
 	],
 	rules: {
 		'react/self-closing-comp': 'warn',
