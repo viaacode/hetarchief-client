@@ -1,0 +1,49 @@
+{
+  "name": "hetarchief-client",
+  "private": true,
+  "contributors": [
+    "Andry Charlier <andry.charlier@studiohyperdrive.be>"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "npm run lint:ts && npm run lint:scss",
+    "lint:ts": "next lint",
+    "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "next": "12.0.4",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "15.0.0",
+    "@commitlint/config-conventional": "15.0.0",
+    "@types/node": "16.11.9",
+    "@types/react": "17.0.36",
+    "@typescript-eslint/eslint-plugin": "4.33.0",
+    "eslint": "7.32.0",
+    "eslint-config-next": "12.0.4",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "husky": "7.0.4",
+    "lint-staged": "12.1.2",
+    "postcss-flexbugs-fixes": "5.0.2",
+    "postcss-normalize": "10.0.1",
+    "postcss-preset-env": "7.0.1",
+    "prettier": "2.4.1",
+    "sass": "1.43.4",
+    "stylelint": "14.1.0",
+    "stylelint-config-prettier": "9.0.3",
+    "stylelint-config-standard-scss": "3.0.0",
+    "typescript": "4.5.2"
+  },
+  "browserslist": [
+    ">0.3%",
+    "not ie 11",
+    "not dead",
+    "not op_mini all"
+  ]
+}
