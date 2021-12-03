@@ -15,6 +15,8 @@
     "test:ci": "jest",
     "test:coverage": "npm run test -- --coverage",
     "test:watch": "npm run test -- --cache --watch",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -31,10 +33,12 @@
     "@types/react": "17.0.36",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "babel-jest": "27.3.1",
+    "cypress": "9.1.0",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.4",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
+    "har-validator": "5.1.5",
     "husky": "7.0.4",
     "identity-obj-proxy": "3.0.0",
     "jest": "27.3.1",
