@@ -13,7 +13,7 @@
     "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input",
     "test": "jest --cache",
     "test:ci": "jest",
-    "test:coverage": "npm run test -- --coverage",
+    "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --cache --watch",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
