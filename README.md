@@ -27,7 +27,7 @@ this lifecycle script will run automatically after the install.
 ### Docker
 This project runs with Docker for local development and production images.
 
-To start working, simply run `docker-compose up`, the project will be available on port `3100`.
+To start working, simply run `docker-compose up`, the project will be available on port `3000`.
 
 ### NPM
 
