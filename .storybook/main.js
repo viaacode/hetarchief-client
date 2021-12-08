@@ -4,7 +4,16 @@ module.exports = {
 		'../src/**/*.stories.@(js|jsx|ts|tsx)'
 	],
 	addons: [
-		'@storybook/preset-scss',
+		{
+			name: '@storybook/preset-scss',
+			options: {
+				sassLoaderOptions: {
+					sassOptions: {
+						includePaths: ["src"]
+					},
+				}
+			}
+		},
 		'@storybook/addon-links',
 		'@storybook/addon-essentials'
 	],
@@ -12,5 +21,6 @@ module.exports = {
 	core: {
 		builder: 'webpack5'
 	},
+	staticDirs: ['../public'],
 	typescript: { reactDocgen: false },
 };
