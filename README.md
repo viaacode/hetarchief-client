@@ -2,9 +2,9 @@
 
 ## General
 
-This repository contains the Het Archief Next.js app for the end user.
+This repository contains the `Het Archief` Next.js app for the end user.
 
-It is build with:
+It is built with:
 - node: `v16.x.x` ( ~ `lts/gallium`)
 - yarn: `v1.x.x`
 - npm: `v8.x.x`
@@ -17,8 +17,10 @@ For a complete list of packages and version check out the `package.json` file.
 ### Clone and install dependencies
 To setup this project, clone the repo and run `npm i` to install the dependencies.
 
-This will also setup [husky](https://github.com/typicode/husky) via the `npm run prepare` script,
+This will also setup [husky](https://github.com/typicode/husky) via the `npm run prepare` script and install sub-dependencies where needed,
 this lifecycle script will run automatically after the install.
+
+> ⚠️ _Due to the sub-dependencies mentioned above, installing will take a long time. See the `postinstall` script in `package.json` for more information_
 
 > ⚠️ _If you're using Yarn 2 this won't work because the `prepare` lifecycle isn't supported so
 > you'll have to run `yarn run prepare` manually.  
