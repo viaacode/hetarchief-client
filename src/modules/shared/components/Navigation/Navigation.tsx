@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
-import './Navigation.scss';
+import styles from './Navigation.module.scss';
 
 const Navigation: FC = () => {
-	return <h1 className="c-navigation">I&apos;m a nav</h1>;
+	return <nav className={styles['c-navigation']} />;
 };
 
 export default Navigation;

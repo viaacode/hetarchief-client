@@ -1,0 +1,6 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+.c-navigation {
+	z-index: get-z-layer("base");
+}
