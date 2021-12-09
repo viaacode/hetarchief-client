@@ -14,6 +14,15 @@ $silver: #E6E6E6;
 $platinum: #F8F8F8;
 
 /**
+ * Spacers
+ */
+
+ $spacer-xs: .8rem;
+ $spacer-sm: 1.6rem;
+ $spacer-md: 2.4rem;
+ $spacer-lg: 3.2rem;
+
+/**
  * Typography
  */
 
@@ -68,3 +77,10 @@ $z-layers: (
 	"base": 0,
 	"background": -1,
 );
+
+/**
+ * Dividers
+ */
+
+ $divider-grey: solid 1px rgb(0 0 0 / 20%);
+ $divider-white: solid 1px rgb(255 255 255 / 20%);
