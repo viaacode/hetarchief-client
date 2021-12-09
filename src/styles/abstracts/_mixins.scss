@@ -1,0 +1,56 @@
+@use "sass:map";
+@use "variables" as *;
+@use "functions" as *;
+
+/**
+ * Media queries
+ */
+
+@mixin respond-at($_min) {
+	$min-bp: map.get($breakpoints, $_min);
+
+	@if not $min-bp {
+		/* stylelint-disable-next-line block-no-empty */
+		@if map-property-not-found($_min, $breakpoints) {}
+	}
+
+	@media screen and (min-width: $min-bp) {
+		@content;
+	}
+};
+
+@mixin respond-to($_max) {
+	$max-bp: map.get($breakpoints, $_max);
+
+	@if not $max-bp {
+		/* stylelint-disable-next-line block-no-empty */
+		@if map-property-not-found($_max, $breakpoints) {}
+	}
+
+	@media screen and (max-width: $max-bp) {
+		@content;
+	}
+};
+
+@mixin respond-between($_min, $_max) {
+	$min-bp: map.get($breakpoints, $_min);
+	$max-bp: map.get($breakpoints, $_max);
+
+	@if not $min-bp {
+		/* stylelint-disable-next-line block-no-empty */
+		@if map-property-not-found($_min, $breakpoints) {}
+	}
+
+	@if not $max-bp {
+		/* stylelint-disable-next-line block-no-empty */
+		@if map-property-not-found($_max, $breakpoints) {}
+	}
+
+	@if $min-bp >= $max-bp {
+		@error "Min width can not be higher than or equal to max width.";
+	}
+
+	@media screen and (min-width: $min-bp) and (max-width: $max-bp) {
+		@content;
+	}
+};

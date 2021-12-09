@@ -1,0 +1,28 @@
+@use "sass:map";
+@use "variables" as *;
+
+/**
+ * Errors
+ */
+
+@function map-property-not-found($_key, $_map) {
+	@error "Property #{$_key} not found in #{$_map}.";
+}
+
+/**
+ * Getters
+ */
+
+@function base-getter($_key, $_map, $_map-name) {
+	$value: map.get($_map, $_key);
+
+	@if not $value {
+		@return map-property-not-found($_key, $_map-name);
+	}
+
+	@return $value;
+}
+
+@function get-z-layer($_key: "base") {
+	@return base-getter($_key, $z-layers, "$z-layers");
+}
