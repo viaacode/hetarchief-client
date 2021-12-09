@@ -20,15 +20,58 @@ const Template: ComponentStory<typeof Footer> = (args) => <Footer {...args} />;
 export const Default = Template.bind({});
 Default.args = {
 	type: footerType.default,
+	links: [
+		{
+			label: 'Gebruikersvoorwaarden',
+			to: '/',
+		},
+		{
+			label: 'Privacy',
+			to: 'https://google.com',
+			external: true,
+		},
+		{
+			label: 'cookiebeleid',
+			to: '/',
+		},
+	],
 };
 
 export const Simple = Template.bind({});
 Simple.args = {
 	type: footerType.simple,
+	links: [
+		{
+			label: 'Gebruikersvoorwaarden',
+			to: '/',
+		},
+		{
+			label: 'Privacy',
+			to: '/',
+		},
+		{
+			label: 'cookiebeleid',
+			to: '/',
+		},
+	],
 };
 
 export const Feedback = Template.bind({});
 Feedback.args = {
 	type: footerType.feedback,
+	links: [
+		{
+			label: 'Gebruikersvoorwaarden',
+			to: '/',
+		},
+		{
+			label: 'Privacy',
+			to: '/',
+		},
+		{
+			label: 'cookiebeleid',
+			to: '/',
+		},
+	],
 	onClickFeedback: () => console.log("This can't be empty"),
 };

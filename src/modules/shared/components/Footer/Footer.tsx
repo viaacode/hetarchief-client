@@ -2,29 +2,24 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
-import logoMeemoo from '../../../../../public/images/logo_meemoo.svg';
-
 import { footerType } from './Footer.constants';
 import styles from './Footer.module.scss';
+import { IFooterProps } from './Footer.types';
 
-interface IFooterProps {
-	type: footerType;
-	onClickFeedback?: () => void;
-}
-
-const Footer: FC<IFooterProps> = ({ type, onClickFeedback }) => {
+const Footer: FC<IFooterProps> = ({ type, links, onClickFeedback }) => {
 	const renderLinks = () => {
 		return (
 			<div className={styles['c-footer__links']}>
-				<Link href="/">
-					<a className={styles['c-footer__link']}>Gebruiksvoorwaarden</a>
-				</Link>
-				<Link href="/">
-					<a className={styles['c-footer__link']}>Privacy</a>
-				</Link>
-				<Link href="/">
-					<a className={styles['c-footer__link']}>Cookiebeleid</a>
-				</Link>
+				{links.map((link, index) => (
+					<Link key={index} href={link.to}>
+						<a
+							className={styles['c-footer__link']}
+							target={link.external ? '_blank' : '_self'}
+						>
+							{link.label}
+						</a>
+					</Link>
+				))}
 			</div>
 		);
 	};
@@ -42,17 +37,31 @@ const Footer: FC<IFooterProps> = ({ type, onClickFeedback }) => {
 			{type === footerType.feedback && renderFeedbackButton()}
 			<footer
 				className={`${styles['c-footer__bar']}
-				${type === footerType.simple ? styles['c-footer__bar--simple'] : ''}
-				`}
+				${type === footerType.simple ? styles['c-footer__bar--simple'] : ''}`}
 			>
 				<div className={styles['c-footer__left']}>
-					<p>Een initiatief van</p>
-					<Image src={'/' + logoMeemoo} alt="meemoo logo" width="104" height="44" />
+					<p data-testid="meemoo-text">Een initiatief van</p>
+					{/* Image will not display in Storybook. Open issue: https://github.com/vercel/next.js/issues/18393*/}
+					{/* Images work fine in the next.js app */}
+					<Image
+						data-testid="meemoo-img"
+						src={'/images/logo_meemoo.svg'}
+						alt="meemoo logo"
+						width="104"
+						height="44"
+					/>
 				</div>
 				{type !== footerType.simple && renderLinks()}
-				<div className={styles['c-footer__right']}>
-					<p>Gesteund door</p>
-					<Image src={'/' + logoMeemoo} alt="meemoo logo" width="89" height="39" />
+				<div data-testid="c-footer__right" className={styles['c-footer__right']}>
+					<p data-testid="vlaanderen-text">Gesteund door</p>
+					{/* See comment above */}
+					<Image
+						data-testid="vlaanderen-image"
+						src={'/images/logo_vlaanderen.png'}
+						alt="vlaanderen logo"
+						width="89"
+						height="39"
+					/>
 				</div>
 			</footer>
 		</div>
