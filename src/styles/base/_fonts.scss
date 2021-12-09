@@ -1,0 +1,54 @@
+@use "../abstracts/variables" as *;
+
+$base-font-path: "" !default;
+
+/**
+ * Icon fonts
+ */
+
+@font-face {
+	font-family: $font-family-icons-light;
+	src: url("#{$base-font-path}/fonts/meemoo-icons-light/meemoo-icons-light.woff2") format("woff2"),
+		url("#{$base-font-path}/fonts/meemoo-icons-light/meemoo-icons-light.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: $font-family-icons-solid;
+	src: url("#{$base-font-path}/fonts/meemoo-icons-solid/meemoo-icons-solid.woff2") format("woff2"),
+		url("#{$base-font-path}/fonts/meemoo-icons-solid/meemoo-icons-solid.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+}
+
+/**
+ * Font families
+ */
+
+@font-face {
+	font-family: $font-family-primary;
+	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-regular.woff") format("woff");
+	font-display: swap;
+	font-style: normal;
+	font-weight: normal;
+	text-rendering: optimizeLegibility;
+}
+
+@font-face {
+	font-family: $font-family-primary;
+	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-regular-italic.woff") format("woff");
+	font-display: swap;
+	font-style: italic;
+	font-weight: normal;
+	text-rendering: optimizeLegibility;
+}
+
+@font-face {
+	font-family: $font-family-primary;
+	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-bold.woff") format("woff");
+	font-display: swap;
+	font-style: normal;
+	font-weight: bold;
+	text-rendering: optimizeLegibility;
+}

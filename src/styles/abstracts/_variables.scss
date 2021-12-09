@@ -1,0 +1,70 @@
+/**
+ * Colors
+ */
+
+$white: #FFF;
+$black: #000;
+$teal: #00C8AA;
+$seagreen: #009690;
+$cherry: #D60039;
+$shade: #505050;
+$neutral: #727272;
+$zinc: #ADADAD;
+$silver: #E6E6E6;
+$platinum: #F8F8F8;
+
+/**
+ * Typography
+ */
+
+// Font families
+$font-family-primary: "SofiaPro";
+$font-family-icons-light: meemoo-icons-light;
+$font-family-icons-solid: meemoo-icons-solid;
+
+// Sizes
+$font-size-4xl: 6.4rem;
+$font-size-3xl: 4.8rem;
+$font-size-2xl: 4.0rem;
+$font-size-1xl: 3.2rem;
+$font-size-lg: 2.4rem;
+$font-size-md: 1.8rem;
+$font-size-base: 1.6rem;
+$font-size-sm: 1.4rem;
+$font-size-xs: 1.2rem;
+
+// Weights
+$font-weight-bold: 700;
+$font-weight-normal: 400;
+
+// Line heights
+$line-height-4xl: 1.5;
+$line-height-3xl: 1.4;
+$line-height-2xl: 1.3;
+$line-height-1xl: 1.2;
+$line-height-lg: 1.25;
+$line-height-md: 1.1;
+$line-height-base: 1;
+$line-height-sm: 0.625;
+
+/**
+ * Breakpoints
+ */
+
+$breakpoints: (
+	"xl": 1200px,
+	"lg": 992px,
+	"md": 768px,
+	"sm": 576px,
+);
+
+/**
+ * Z-index layers
+ */
+
+// Keep a list of all z-indexes used throughout the app
+$z-layers: (
+	"foreground": 1,
+	"base": 0,
+	"background": -1,
+);
