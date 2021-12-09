@@ -5,20 +5,21 @@ module.exports = {
 		'plugin:import/recommended',
 		'next/core-web-vitals',
 		'plugin:prettier/recommended',
+		'plugin:storybook/recommended',
 	],
 	rules: {
 		'react/self-closing-comp': 'warn',
-
 		'import/first': 'error',
 		'import/no-duplicates': 'error',
 		'import/order': [
 			'error',
 			{
-				alphabetize: { order: 'asc' },
+				alphabetize: {
+					order: 'asc',
+				},
 				'newlines-between': 'always',
 			},
 		],
-
 		'sort-imports': [
 			'warn',
 			{

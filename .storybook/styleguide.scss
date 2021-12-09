@@ -1,0 +1,5 @@
+@use "../src/styles/main.scss" with (
+	// This is necessary because storybook's sass loader doesn't rewrite url("...") values
+	// so all linked assets must be relative to the output
+	$base-font-path: "../public"
+);
