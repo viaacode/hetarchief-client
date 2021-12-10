@@ -15,6 +15,7 @@
 		justify-items: center;
 		align-items: center;
 		padding-top: $spacer-md;
+		padding-bottom: $spacer-sm;
 		background-color: $white;
 		border-top: $divider-grey;
 
@@ -91,7 +92,7 @@
 
 		&__left,
 		&__right {
-			gap: 0;
+			row-gap: 0;
 		}
 	}
 }
