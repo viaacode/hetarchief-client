@@ -30,6 +30,8 @@ h4 {
 p {
 	font-size: $font-size-base;
 	line-height: $line-height-base;
+	margin-block-start: 0;
+	margin-block-end: 0;
 }
 
 small {
