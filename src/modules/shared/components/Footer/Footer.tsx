@@ -54,14 +54,14 @@ const Footer: FC<IFooterProps> = ({ type, links, leftItem, rightItem, onClickFee
 
 	return (
 		<div className={styles['c-footer']}>
-			{type === footerType.feedback && renderFeedbackButton()}
+			{type === footerType.feedback && onClickFeedback && renderFeedbackButton()}
 			<footer
 				className={`${styles['c-footer__bar']}
 				${type === footerType.simple ? styles['c-footer__bar--simple'] : ''}`}
 			>
-				{renderFooterItem(leftItem, 'left')}
-				{type !== footerType.simple && renderLinks()}
-				{renderFooterItem(rightItem, 'right')}
+				{leftItem && renderFooterItem(leftItem, 'left')}
+				{type !== footerType.simple && links && renderLinks()}
+				{rightItem && renderFooterItem(rightItem, 'right')}
 			</footer>
 		</div>
 	);

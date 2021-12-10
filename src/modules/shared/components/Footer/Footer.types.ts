@@ -2,7 +2,7 @@ import { footerType } from './Footer.constants';
 
 export interface IFooterProps {
 	type: footerType;
-	links: IFooterLink[];
+	links?: IFooterLink[];
 	leftItem: IFooterItem;
 	rightItem: IFooterItem;
 	onClickFeedback?: () => void;
