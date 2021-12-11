@@ -12,6 +12,8 @@ module.exports = {
 		https://jestjs.io/docs/webpack#handling-static-assets */
 		'^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$': '<rootDir>/jest/__mocks__/file-mock.js',
 	},
+	/* Don't look for other test files except in src this will avoid running .spec files from cypress */
+	roots: ['<rootDir>/src'],
 	setupFilesAfterEnv: ['<rootDir>/jest/jest.setup.js'],
 	transform: {
 		/* Use babel-jest to transpile tests with the next/babel preset
@@ -19,6 +21,5 @@ module.exports = {
 		'^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
 	},
 	testEnvironment: 'jsdom',
-	testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
 	transformIgnorePatterns: ['/node_modules/', '^.+\\.module\\.(css|sass|scss)$'],
 };
