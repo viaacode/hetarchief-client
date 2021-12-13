@@ -12,7 +12,7 @@ const Template: ComponentStory<typeof Modal> = (args) => {
 	const [isOpen, setOpen] = useState(false);
 
 	return (
-		<div style={{ background: 'hotpink', width: '100vw', height: '100vh' }}>
+		<div>
 			<pre style={{ margin: 0 }} onClick={() => setOpen(true)}>
 				{JSON.stringify({ clickHereToToggle: isOpen }, null, 2)}
 			</pre>
@@ -61,5 +61,34 @@ Primary.args = {
 				<button>A dynamic button</button>
 			</div>
 		</>
+	),
+};
+
+export const WithFooter: ComponentStory<typeof Modal> = Template.bind({});
+WithFooter.args = {
+	...Primary.args,
+	footer: (
+		<div style={{ padding: '12px', background: '#eee' }}>
+			<span>Static text</span>
+		</div>
+	),
+};
+
+export const CustomHeading: ComponentStory<typeof Modal> = Template.bind({});
+CustomHeading.args = {
+	...WithFooter.args,
+	heading: (
+		<div
+			style={{
+				background: 'gold',
+				alignSelf: 'center',
+				justifySelf: 'center',
+				width: '100%',
+				textAlign: 'center',
+				lineHeight: '24px',
+			}}
+		>
+			<span>Custom header</span>
+		</div>
 	),
 };

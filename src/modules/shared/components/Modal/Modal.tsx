@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import { FC, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
 import styles from './Modal.module.scss';
@@ -8,11 +8,22 @@ export interface MyModalProps {
 	isOpen?: boolean;
 	className?: string;
 	title?: string;
+	heading?: JSX.Element;
+	footer?: JSX.Element;
 	onClose?: () => void;
 	onOpen?: Modal.OnAfterOpenCallback;
 }
 
-const MyModal: FC<MyModalProps> = ({ isOpen, className, title, onClose, onOpen, children }) => {
+const MyModal: FC<MyModalProps> = ({
+	isOpen,
+	className,
+	title,
+	heading,
+	footer,
+	onClose,
+	onOpen,
+	children,
+}) => {
 	const [ready, setReady] = useState(false);
 
 	// See https://github.com/reactjs/react-modal#examples
@@ -24,6 +35,14 @@ const MyModal: FC<MyModalProps> = ({ isOpen, className, title, onClose, onOpen, 
 		}
 	}, [setReady]);
 
+	const top: JSX.Element = heading || (
+		<h3 className={styles['c-hetarchief-modal__title']}>{title}</h3>
+	);
+
+	const middle: ReactNode = children;
+
+	const bottom: JSX.Element | undefined = footer || <></>;
+
 	return (
 		<Modal
 			isOpen={ready && !!isOpen}
@@ -34,11 +53,9 @@ const MyModal: FC<MyModalProps> = ({ isOpen, className, title, onClose, onOpen, 
 			onRequestClose={onClose}
 			onAfterOpen={onOpen}
 		>
-			{/* TODO: replace with grid & column components */}
 			<section className={styles['c-hetarchief-modal__heading']}>
-				<div className={styles['c-hetarchief-modal__title-wrapper']}>
-					<h3 className={styles['c-hetarchief-modal__title']}>{title}</h3>
-				</div>
+				<div className={styles['c-hetarchief-modal__title-wrapper']}>{top}</div>
+
 				<div className={styles['c-hetarchief-modal__close-wrapper']}>
 					{/* TODO: Icon button */}
 					<button onClick={onClose} className={styles['c-hetarchief-modal__close']}>
@@ -47,7 +64,8 @@ const MyModal: FC<MyModalProps> = ({ isOpen, className, title, onClose, onOpen, 
 				</div>
 			</section>
 
-			<section className={styles['c-hetarchief-modal__content']}>{children}</section>
+			<section className={styles['c-hetarchief-modal__content']}>{middle}</section>
+			<section className={styles['c-hetarchief-modal__footer']}>{bottom}</section>
 		</Modal>
 	);
 };

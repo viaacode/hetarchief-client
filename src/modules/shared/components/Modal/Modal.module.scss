@@ -25,14 +25,20 @@
 		background-color: rgb(0 0 0 / 64%);
 	}
 
+	&__heading {
+		flex-grow: 1;
+		display: flex;
+		flex-wrap: nowrap;
+	}
+
 	&__content {
+		flex-grow: 0;
 		overflow-y: auto;
 		overflow-x: hidden;
 	}
 
-	&__heading {
-		display: flex;
-		flex-wrap: nowrap;
+	&__footer {
+		flex-grow: 1;
 	}
 
 	&__title {
