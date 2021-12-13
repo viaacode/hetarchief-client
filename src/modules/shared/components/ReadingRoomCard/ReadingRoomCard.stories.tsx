@@ -19,9 +19,10 @@ export const NoAccessDefaultColor = Template.bind({});
 
 NoAccessDefaultColor.args = {
 	type: readingRoomCardType['no-access'],
-	logo: 'logo.png',
+	logo: 'logo_tall.png',
 	title: 'card title',
-	description: 'card description',
+	description:
+		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 };
 
 export const NoAccessCustomColor = Template.bind({});
@@ -29,9 +30,10 @@ export const NoAccessCustomColor = Template.bind({});
 NoAccessCustomColor.args = {
 	type: readingRoomCardType['no-access'],
 	backgroundColor: '#ee9944',
-	logo: 'logo.png',
+	logo: 'logo_wide.png',
 	title: 'card title',
-	description: 'card description',
+	description:
+		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 };
 
 export const NoAccessCustomImage = Template.bind({});
@@ -39,8 +41,9 @@ export const NoAccessCustomImage = Template.bind({});
 NoAccessCustomImage.args = {
 	type: readingRoomCardType['no-access'],
 	backgroundColor: '#ee9944',
-	backgroundImage: 'image.png',
+	backgroundImage: 'image-t.png',
 	logo: 'logo.png',
 	title: 'card title',
-	description: 'card description',
+	description:
+		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 };
