@@ -3,12 +3,13 @@ import { render, RenderResult, screen } from '@testing-library/react'; //eslint-
 import Modal from './Modal';
 
 const text = 'Title of the Modal';
+const documentOf = (result: RenderResult) => result.container.ownerDocument;
 
 describe('Component: <Modal />', () => {
-	let result: RenderResult;
+	let rendered: RenderResult;
 
 	beforeEach(() => {
-		result = render(<Modal title={text} />);
+		rendered = render(<Modal title={text} />);
 	});
 
 	it('Should render no content initially', () => {
@@ -20,10 +21,8 @@ describe('Component: <Modal />', () => {
 	});
 
 	it('Should render a portal initially', () => {
-		const portal = result.container.getElementsByClassName('ReactModalPortal');
+		const portal = documentOf(rendered).getElementsByClassName('ReactModalPortal');
 
-		expect(portal.length);
-
-		console.info(expect);
+		expect(portal.length).toEqual(1);
 	});
 });
