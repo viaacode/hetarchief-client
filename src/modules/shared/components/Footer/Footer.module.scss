@@ -71,8 +71,7 @@
 		margin-bottom: $spacer-md;
 	}
 
-	// @include respond-at("xl") {
-	@media screen and (max-width: 1200px) {
+	@include respond-to(lg) {
 		&__bar {
 			grid-template-columns: repeat(2, 1fr);
 			gap: $spacer-sm;
