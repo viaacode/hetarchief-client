@@ -25,11 +25,13 @@
     "i:a2-t": "npm --prefix node_modules/@viaa/avo2-types i node_modules/@viaa/avo2-types --legacy-peer-deps"
   },
   "dependencies": {
-		"@viaa/avo2-components": "^1.78.0",
-		"@viaa/avo2-types": "^2.33.0",
+    "@viaa/avo2-components": "^1.78.0",
+    "@viaa/avo2-types": "^2.33.0",
+    "classnames": "2.3.1",
     "next": "12.0.4",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-modal": "3.14.4"
   },
   "devDependencies": {
     "@babel/core": "7.16.0",
@@ -44,8 +46,10 @@
     "@storybook/react": "6.4.8",
     "@testing-library/jest-dom": "5.15.1",
     "@testing-library/react": "12.1.2",
+    "@types/jest": "27.0.3",
     "@types/node": "16.11.9",
     "@types/react": "17.0.36",
+    "@types/react-modal": "3.13.1",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "babel-jest": "27.3.1",
     "babel-loader": "8.2.3",

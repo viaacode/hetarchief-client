@@ -1,0 +1,67 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+// Use `hetarchief` prefix to avoid naming conflicts with avo2-components
+.c-hetarchief-modal {
+	width: 100%;
+	max-width: 800px;
+	max-height: 100%;
+	overflow: hidden;
+	background-color: $white;
+	display: flex;
+	flex-direction: column;
+
+	// z-index: get-z-layer("foreground");
+
+	&__overlay {
+		padding: 10px;
+		max-height: 100%;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: fixed;
+		inset: 0;
+		background-color: rgb(0 0 0 / 64%);
+	}
+
+	&__content {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	&__heading {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+
+	&__title {
+		display: block;
+		margin: 56px auto;
+		max-width: 480px; // Increased from 420px as discussed with Tine Saenen
+		text-align: center;
+
+		&-wrapper {
+			display: flex;
+			flex-grow: 1;
+			margin-left: $modal-title-margin-left;
+			margin-right: 0;
+		}
+	}
+
+	&__close {
+		display: block;
+		border: 0 solid transparent;
+		width: $modal-close-size;
+		height: $modal-close-size;
+		margin: $modal-close-margin;
+		cursor: pointer;
+
+		&-wrapper {
+			display: flex;
+			flex-grow: 1;
+			max-width: $modal-title-margin-left;
+			margin-left: 0;
+		}
+	}
+}
