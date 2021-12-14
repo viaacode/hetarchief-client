@@ -3,38 +3,40 @@
 
 // Use `hetarchief` prefix to avoid naming conflicts with avo2-components
 .c-hetarchief-modal {
-	width: 100%;
-	max-width: 800px;
-	max-height: 100%;
-	overflow: hidden;
 	background-color: $white;
 	display: flex;
 	flex-direction: column;
+	max-height: 100%;
+	max-width: 800px;
+	overflow: hidden;
+	width: 100%;
 
-	// z-index: get-z-layer("foreground");
+	&:focus, &:active, &:focus-visible, &:focus-within {
+		outline: none;
+	}
 
 	&__overlay {
-		padding: 10px;
+		align-items: center;
+		background-color: rgb(0 0 0 / 64%);
+		display: flex;
+		inset: 0;
+		justify-content: center;
 		max-height: 100%;
 		overflow: hidden;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		padding: 10px;
 		position: fixed;
-		inset: 0;
-		background-color: rgb(0 0 0 / 64%);
 	}
 
 	&__heading {
-		flex-grow: 1;
 		display: flex;
+		flex-grow: 1;
 		flex-wrap: nowrap;
 	}
 
 	&__content {
 		flex-grow: 0;
-		overflow-y: auto;
 		overflow-x: hidden;
+		overflow-y: auto;
 	}
 
 	&__footer {
@@ -56,18 +58,18 @@
 	}
 
 	&__close {
-		display: block;
 		border: 0 solid transparent;
-		width: $modal-close-size;
+		cursor: pointer;
+		display: block;
 		height: $modal-close-size;
 		margin: $modal-close-margin;
-		cursor: pointer;
+		width: $modal-close-size;
 
 		&-wrapper {
 			display: flex;
 			flex-grow: 1;
-			max-width: $modal-title-margin-left;
 			margin-left: 0;
+			max-width: $modal-title-margin-left;
 		}
 	}
 }

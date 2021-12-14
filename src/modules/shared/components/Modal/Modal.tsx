@@ -57,7 +57,7 @@ const MyModal: FC<MyModalProps> = ({
 				<div className={styles['c-hetarchief-modal__title-wrapper']}>{top}</div>
 
 				<div className={styles['c-hetarchief-modal__close-wrapper']}>
-					{/* TODO: Icon button */}
+					{/* TODO: Add accessible icon button, ARC-178 / ARC-177 */}
 					<button onClick={onClose} className={styles['c-hetarchief-modal__close']}>
 						Close
 					</button>
