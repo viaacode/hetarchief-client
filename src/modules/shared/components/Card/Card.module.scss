@@ -1,0 +1,21 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+.c-card {
+    display: block;
+
+    // Elements
+
+    // &__title {
+    //     &-wrapper {
+    //     }
+    // }
+
+    // Mutators
+
+    &--edge {
+        &-zinc {
+            border: 1px solid $zinc
+        }
+    }
+}
