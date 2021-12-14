@@ -3,12 +3,12 @@ module.exports = {
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:import/recommended',
+		'plugin:import/typescript',
 		'next/core-web-vitals',
-		'plugin:prettier/recommended',
 		'plugin:storybook/recommended',
+		'plugin:prettier/recommended',
 	],
 	rules: {
-		'react/self-closing-comp': 'warn',
 		'import/first': 'error',
 		'import/no-duplicates': 'error',
 		'import/order': [
@@ -27,6 +27,9 @@ module.exports = {
 				],
 			},
 		],
+
+		'react/self-closing-comp': 'warn',
+
 		'sort-imports': [
 			'warn',
 			{
