@@ -18,6 +18,13 @@ module.exports = {
 					order: 'asc',
 				},
 				'newlines-between': 'always',
+				pathGroups: [
+					{
+						pattern: '@{shared}/**',
+						group: 'parent',
+						position: 'before',
+					},
+				],
 			},
 		],
 		'sort-imports': [
