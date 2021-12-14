@@ -8,16 +8,14 @@ $base-font-path: "" !default;
 
 @font-face {
 	font-family: $font-family-icons-light;
-	src: url("#{$base-font-path}/fonts/meemoo-icons-light/meemoo-icons-light.woff2") format("woff2"),
-		url("#{$base-font-path}/fonts/meemoo-icons-light/meemoo-icons-light.woff") format("woff");
+	src: url("#{$base-font-path}/fonts/meemoo-icons-light/meemoo-icons-light.woff") format("woff");
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
 	font-family: $font-family-icons-solid;
-	src: url("#{$base-font-path}/fonts/meemoo-icons-solid/meemoo-icons-solid.woff2") format("woff2"),
-		url("#{$base-font-path}/fonts/meemoo-icons-solid/meemoo-icons-solid.woff") format("woff");
+	src: url("#{$base-font-path}/fonts/meemoo-icons-solid/meemoo-icons-solid.woff") format("woff");
 	font-weight: normal;
 	font-style: normal;
 }
