@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Column, Container, Grid } from '@viaa/avo2-components/src/components';
+import { Column, Container, Grid } from '@viaa/avo2-components';
 import React, { CSSProperties } from 'react';
 
 export default {

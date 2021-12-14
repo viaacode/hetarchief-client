@@ -19,10 +19,7 @@
     "cy:run": "cypress run",
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "postinstall": "npm run i:a2-c --silent && npm run i:a2-t --silent",
-    "i:a2-c": "npm --prefix node_modules/@viaa/avo2-components i node_modules/@viaa/avo2-components --legacy-peer-deps",
-    "i:a2-t": "npm --prefix node_modules/@viaa/avo2-types i node_modules/@viaa/avo2-types --legacy-peer-deps"
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
 		"@viaa/avo2-components": "^1.78.0",
