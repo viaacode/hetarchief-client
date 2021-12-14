@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import Icon from './Icon';
-
-import { IconSolidNames } from '.';
+import { IconSolidNames } from './Icon.types';
 
 describe('Components', () => {
 	describe('<Icon />', () => {
