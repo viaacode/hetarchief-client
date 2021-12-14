@@ -7,10 +7,13 @@ import { IconProps } from './Icon.types';
 
 import { IconSolidNames } from '.';
 
-const Icon: FC<IconProps> = ({ name, type = 'light' }) => {
-	const rootCls = clsx(styles['c-icon'], { [styles['c-icon--solid']]: type === 'solid' });
+const Icon: FC<IconProps> = ({ className, name, type = 'light' }) => {
+	const rootCls = clsx(className, styles['c-icon'], {
+		[styles['c-icon--solid']]: type === 'solid',
+	});
 	const hasIcon =
 		type === 'light' ? ICON_LIGHT.includes(name) : ICON_SOLID.includes(name as IconSolidNames);
+
 	return hasIcon ? <span className={rootCls}>{name}</span> : null;
 };
 

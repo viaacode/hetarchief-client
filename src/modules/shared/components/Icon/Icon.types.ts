@@ -1,6 +1,10 @@
 import { ICON_LIGHT, ICON_SOLID } from './Icon.const';
 
-export type IconProps =
+import { DefaultComponentProps } from '@shared/types';
+
+export type IconProps = DefaultComponentProps & IconTypes;
+
+export type IconTypes =
 	| {
 			name: IconLightNames;
 			type?: 'light';
