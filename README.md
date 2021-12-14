@@ -2,9 +2,9 @@
 
 ## General
 
-This repository contains the Het Archief Next.js app for the end user.
+This repository contains the `Het Archief` Next.js app for the end user.
 
-It is build with:
+It is built with:
 - node: `v16.x.x` ( ~ `lts/gallium`)
 - yarn: `v1.x.x`
 - npm: `v8.x.x`

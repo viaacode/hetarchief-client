@@ -22,7 +22,8 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@viaa/avo2-components": "1.78.0",
+		"@viaa/avo2-components": "^1.78.0",
+		"@viaa/avo2-types": "^2.33.0",
     "next": "12.0.4",
     "next-transpile-modules": "9.0.0",
     "react": "17.0.2",
