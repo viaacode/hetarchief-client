@@ -1,0 +1,28 @@
+@use "styles/abstracts" as *;
+
+.c-placeholder {
+	display: block;
+	text-align: center;
+}
+
+/**
+ * Elements
+ */
+
+.c-placeholder__img {
+	height: 9.2rem;
+}
+
+.c-placeholder__icon {
+	font-size: 8.2rem;
+	color: $teal;
+}
+
+.c-placeholder__title {
+	margin: 2.4rem 0 1.6rem;
+}
+
+.c-placeholder__description {
+	color: $neutral;
+}
+
