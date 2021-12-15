@@ -1,10 +1,9 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
-// $c: "c-card";
+$c: "c-card";
 
-// .#{$c} {
-.c-card {
+.#{$c} {
     display: block;
 
     // Elements
@@ -24,8 +23,7 @@
 
     &--padded {
         &-both {
-            // .#{$c}__image-wrapper {
-            .c-card__image_wrapper {
+            .#{$c}__image-wrapper {
                 padding-left: $spacing;
                 padding-right: $spacing;
                 padding-top: $spacing;
