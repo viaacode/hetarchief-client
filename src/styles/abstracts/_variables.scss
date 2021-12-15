@@ -80,6 +80,13 @@ $z-layers: (
 );
 
 /**
+ * Modal
+ */
+$modal-close-size: 24px;
+$modal-close-margin: 32px;
+$modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
+
+/**
  * Dividers
  */
 
