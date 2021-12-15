@@ -33,6 +33,10 @@ $font-size-base: 1.6rem;
 $font-size-sm: 1.4rem;
 $font-size-xs: 1.2rem;
 
+// Whitespace
+$spacing-base: 1.6rem;
+$spacing: $spacing-base; // alias
+
 // Weights
 $font-weight-bold: 700;
 $font-weight-normal: 400;

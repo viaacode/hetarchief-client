@@ -1,6 +1,9 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
+// $c: "c-card";
+
+// .#{$c} {
 .c-card {
     display: block;
 
@@ -16,6 +19,18 @@
     &--edge {
         &-zinc {
             border: 1px solid $zinc
+        }
+    }
+
+    &--padded {
+        &-both {
+            // .#{$c}__image-wrapper {
+            .c-card__image_wrapper {
+                padding-left: $spacing;
+                padding-right: $spacing;
+                padding-top: $spacing;
+                margin-bottom: $spacing;
+            }
         }
     }
 }
