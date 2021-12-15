@@ -2,6 +2,12 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import Footer from './Footer';
+import {
+	footerFloatingActionButton,
+	footerLeftItem,
+	footerLinks,
+	footerRightItem,
+} from './__mocks__';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -16,126 +22,21 @@ const Template: ComponentStory<typeof Footer> = (args) => <Footer {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-	links: [
-		{
-			label: 'Gebruikersvoorwaarden',
-			to: '/',
-		},
-		{
-			label: 'Privacy',
-			to: 'https://google.com',
-			external: true,
-		},
-		{
-			label: 'cookiebeleid',
-			to: '/',
-		},
-	],
-	leftItem: {
-		label: 'Een initiatief van',
-		image: {
-			name: 'logo_meemoo.svg',
-			alt: 'Meemoo logo',
-			width: 104,
-			height: 44,
-		},
-		link: {
-			label: '',
-			to: '/',
-			external: true,
-		},
-	},
-	rightItem: {
-		label: 'Gesteund door',
-		image: {
-			name: 'logo_vlaanderen.png',
-			alt: 'Vlaanderen logo',
-			width: 89,
-			height: 39,
-		},
-		link: {
-			label: '',
-			to: '/',
-			external: true,
-		},
-	},
+	links: footerLinks,
+	leftItem: footerLeftItem,
+	rightItem: footerRightItem,
 };
 
 export const Simple = Template.bind({});
 Simple.args = {
-	leftItem: {
-		label: 'Een initiatief van',
-		image: {
-			name: 'logo_meemoo.svg',
-			alt: 'Meemoo logo',
-			width: 104,
-			height: 44,
-		},
-		link: {
-			label: '',
-			to: '/',
-			external: true,
-		},
-	},
-	rightItem: {
-		label: 'Gesteund door',
-		image: {
-			name: 'logo_vlaanderen.png',
-			alt: 'Vlaanderen logo',
-			width: 89,
-			height: 39,
-		},
-		link: {
-			label: '',
-			to: '/',
-			external: true,
-		},
-	},
+	leftItem: footerLeftItem,
+	rightItem: footerRightItem,
 };
 
 export const Feedback = Template.bind({});
 Feedback.args = {
-	links: [
-		{
-			label: 'Gebruikersvoorwaarden',
-			to: '/',
-		},
-		{
-			label: 'Privacy',
-			to: '/',
-		},
-		{
-			label: 'cookiebeleid',
-			to: '/',
-		},
-	],
-	leftItem: {
-		label: 'Een initiatief van',
-		image: {
-			name: 'logo_meemoo.svg',
-			alt: 'Meemoo logo',
-			width: 104,
-			height: 44,
-		},
-		link: {
-			label: '',
-			to: '/',
-			external: true,
-		},
-	},
-	rightItem: {
-		label: 'Gesteund door',
-		image: {
-			name: 'logo_vlaanderen.png',
-			alt: 'Vlaanderen logo',
-			width: 89,
-			height: 39,
-		},
-		link: {
-			label: '',
-			to: '/',
-			external: true,
-		},
-	},
-	onClickFeedback: () => console.log("This can't be empty"),
+	links: footerLinks,
+	leftItem: footerLeftItem,
+	rightItem: footerRightItem,
+	floatingActionButton: footerFloatingActionButton,
 };

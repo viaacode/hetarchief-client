@@ -43,3 +43,13 @@ export const footerRightItem = {
 		external: true,
 	},
 };
+
+export const footerFloatingActionButton = (
+	<button
+		onClick={() => {
+			console.log('Te vervangen door button component');
+		}}
+	>
+		Feedback
+	</button>
+);
