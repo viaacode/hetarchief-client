@@ -30,7 +30,21 @@ $c: "c-card";
 
 	&__children-wrapper {
 		@include c-card-horizontal-whitespace;
+
+        margin-bottom: $spacing;
 	}
+}
+
+@mixin c-card-image-overflow {
+    // Spill the image over the border if it's not padded and the card has a border
+    &.#{$c}--padded-content {
+        &:not(.#{$c}--edge-none) {
+            .#{$c}__image-wrapper {
+                margin: -$modal-edge-size;
+                @content
+            }
+        }
+    }
 }
 
 .#{$c} {
@@ -60,10 +74,6 @@ $c: "c-card";
 		}
 	}
 
-	&__children-wrapper {
-		margin-bottom: $spacing;
-	}
-
 	// Mutators
 
 	&--orientation {
@@ -75,16 +85,24 @@ $c: "c-card";
 					margin-bottom: $spacing;
 				}
 			}
+
+            @include c-card-image-overflow {
+                margin-right: 0;
+            }
 		}
 
 		&-vertical {
 			flex-direction: column;
+
+            @include c-card-image-overflow {
+                margin-bottom: 0;
+            }
 		}
 	}
 
 	&--edge {
 		&-zinc {
-			border: 1px solid $zinc;
+			border: $modal-edge-size solid $zinc;
 		}
 	}
 
@@ -113,6 +131,10 @@ $c: "c-card";
 					margin-top: $spacing * 1.5;
 					margin-bottom: $spacing;
 				}
+
+                &__children-wrapper {
+                    margin-bottom: $spacing;
+                }
 			}
 		}
 	}

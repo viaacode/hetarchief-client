@@ -18,7 +18,14 @@ const Template: ComponentStory<typeof Card> = (args) => {
 		<>
 			<Grid>
 				<Column size="2">
-					<Card {...args} title="A card with a zinc-colored border" />
+					<Card {...args} image={undefined} title={undefined}>
+						The simplest card
+					</Card>
+				</Column>
+				<Column size="2">
+					<Card {...args} title="A card with a zinc-colored border">
+						This card is still pretty basic but also has an image and a title
+					</Card>
 				</Column>
 				<Column size="2">
 					<Card
@@ -27,21 +34,21 @@ const Template: ComponentStory<typeof Card> = (args) => {
 						padding="vertical"
 						title={<b>A card with no border</b>}
 					>
-						Aenean nec feugiat nisi. Pellentesque vel nunc sit amet augue tincidunt
-						egestas. Cras vitae molestie leo.
+						Now that&apos;s more like it, this card has an image, a title in bold, gets
+						rid of the border and adds some much needed vertical padding
 					</Card>
 				</Column>
 				<Column size="2">
 					<Card
 						{...args}
 						padding="both"
-						title="A card with padding on both image and title"
-						subtitle="Aanbieder (01 jan. 1970)"
+						title="A card with a few more things"
+						subtitle="Including a subtitle"
 						toolbar="both"
 					>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis
-						luctus eros, vehicula commodo nulla. Suspendisse enim lacus, bibendum
-						Aflevering 1 at nibh id, molestie…
+						Things keep getting better; Now we have a card that has padding on both the
+						content and image, reintroducs the border, adds a subtitle and adds
+						&quot;both&quot; in the toolbar-area
 					</Card>
 				</Column>
 				<Column size="2">
@@ -50,7 +57,10 @@ const Template: ComponentStory<typeof Card> = (args) => {
 						padding="content"
 						title="A card with padding on just the content"
 						toolbar="content"
-					/>
+					>
+						Okay, maybe we&apos;d like to give our visual just that little bit of extra
+						space...
+					</Card>
 				</Column>
 			</Grid>
 			<br />
