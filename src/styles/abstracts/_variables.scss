@@ -88,8 +88,12 @@ $z-layers: (
  */
 $modal-close-margin: 32px;
 $modal-close-size: 24px;
-$modal-edge-size: 1px;
 $modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
+
+/*
+ * Card
+ */
+$card-edge-size: 1px;
 
 /**
  * Dividers

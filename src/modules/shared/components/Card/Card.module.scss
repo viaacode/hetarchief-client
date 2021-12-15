@@ -40,7 +40,7 @@ $c: "c-card";
     &.#{$c}--padded-content {
         &:not(.#{$c}--edge-none) {
             .#{$c}__image-wrapper {
-                margin: -$modal-edge-size;
+                margin: -$card-edge-size;
                 @content
             }
         }
@@ -102,7 +102,7 @@ $c: "c-card";
 
 	&--edge {
 		&-zinc {
-			border: $modal-edge-size solid $zinc;
+			border: $card-edge-size solid $zinc;
 		}
 	}
 
