@@ -2,15 +2,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
-import { footerType } from './Footer.constants';
 import styles from './Footer.module.scss';
-import { IFooterItem, IFooterProps } from './Footer.types';
+import { FooterItem, FooterProps } from './Footer.types';
 
-const Footer: FC<IFooterProps> = ({ type, links, leftItem, rightItem, onClickFeedback }) => {
+const Footer: FC<FooterProps> = ({ links, leftItem, rightItem, onClickFeedback }) => {
 	const renderLinks = () => {
 		return (
 			<div className={styles['c-footer__links']}>
-				{links.map((link, index) => (
+				{links?.map((link, index) => (
 					<Link key={index} href={link.to}>
 						<a
 							className={styles['c-footer__link']}
@@ -32,7 +31,7 @@ const Footer: FC<IFooterProps> = ({ type, links, leftItem, rightItem, onClickFee
 		);
 	};
 
-	const renderFooterItem = (item: IFooterItem, side: string) => {
+	const renderFooterItem = (item: FooterItem, side: string) => {
 		return (
 			<div className={styles[`c-footer__${side}`]}>
 				<p data-testid="vlaanderen-text">{item.label}</p>
@@ -54,13 +53,10 @@ const Footer: FC<IFooterProps> = ({ type, links, leftItem, rightItem, onClickFee
 
 	return (
 		<div className={styles['c-footer']}>
-			{type === footerType.feedback && onClickFeedback && renderFeedbackButton()}
-			<footer
-				className={`${styles['c-footer__bar']}
-				${type === footerType.simple ? styles['c-footer__bar--simple'] : ''}`}
-			>
+			{onClickFeedback && renderFeedbackButton()}
+			<footer className={styles['c-footer__bar']}>
 				{leftItem && renderFooterItem(leftItem, 'left')}
-				{type !== footerType.simple && links && renderLinks()}
+				{links && renderLinks()}
 				{rightItem && renderFooterItem(rightItem, 'right')}
 			</footer>
 		</div>

@@ -1,28 +1,25 @@
-import { footerType } from './Footer.constants';
-
-export interface IFooterProps {
-	type: footerType;
-	links?: IFooterLink[];
-	leftItem: IFooterItem;
-	rightItem: IFooterItem;
+export interface FooterProps {
+	links?: FooterLink[];
+	leftItem: FooterItem;
+	rightItem: FooterItem;
 	onClickFeedback?: () => void;
 }
 
-export interface IFooterLink {
+export interface FooterLink {
 	label: string;
 	to: string;
 	external?: boolean;
 }
 
-export interface IFooterImage {
+export interface FooterImage {
 	name: string;
 	alt?: string;
 	width: number;
 	height: number;
 }
 
-export interface IFooterItem {
+export interface FooterItem {
 	label: string;
-	image: IFooterImage;
-	link: IFooterLink;
+	image: FooterImage;
+	link: FooterLink;
 }

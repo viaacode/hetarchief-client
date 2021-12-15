@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
 import Footer from './Footer';
-import { footerType } from './Footer.constants';
 
 const feedbackMock = jest.fn();
 
@@ -11,7 +10,6 @@ describe('Component: <Footer /> (default)', () => {
 	beforeEach(() => {
 		render(
 			<Footer
-				type={footerType.default}
 				links={[
 					{
 						label: 'link',
@@ -127,7 +125,6 @@ describe('Component: <Footer /> (simple)', () => {
 	beforeEach(() => {
 		render(
 			<Footer
-				type={footerType.simple}
 				links={[
 					{
 						label: 'link',
@@ -228,7 +225,6 @@ describe('Component: <Footer /> (simple)', () => {
 	beforeEach(() => {
 		render(
 			<Footer
-				type={footerType.feedback}
 				links={[
 					{
 						label: 'link',
