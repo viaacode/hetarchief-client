@@ -1,4 +1,5 @@
 module.exports = {
+	parser: '@typescript-eslint/parser',
 	extends: [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
@@ -35,6 +36,17 @@ module.exports = {
 			{
 				ignoreCase: true,
 				ignoreDeclarationSort: true,
+			},
+		],
+		'@typescript-eslint/naming-convention': [
+			'error',
+			{
+				selector: 'interface',
+				format: ['PascalCase'],
+				custom: {
+					regex: '^I[A-Z]',
+					match: false,
+				},
 			},
 		],
 	},
