@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import Footer from './Footer';
 import { footerLeftItem, footerLinks, footerRightItem } from './__mocks__';
 
-const feedbackMock = jest.fn();
+const mockFucntion = jest.fn();
 
 // Default
 
@@ -139,7 +139,7 @@ describe('Component: <Footer /> (feedback)', () => {
 				links={footerLinks}
 				leftItem={footerLeftItem}
 				rightItem={footerRightItem}
-				onClickFeedback={feedbackMock}
+				floatingActionButton={<button onClick={mockFucntion}>Feedback</button>}
 			/>
 		);
 	});
@@ -204,6 +204,6 @@ describe('Component: <Footer /> (feedback)', () => {
 
 		button.click();
 
-		expect(feedbackMock).toHaveBeenCalled();
+		expect(mockFucntion).toHaveBeenCalled();
 	});
 });
