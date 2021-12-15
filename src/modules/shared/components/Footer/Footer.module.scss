@@ -2,23 +2,18 @@
 @use "styles/abstracts" as *;
 
 .c-footer {
-	display: flex;
-	flex-flow: column;
-	padding: 0 $spacer-lg;
 	z-index: get-z-layer("base");
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-rows: 1fr;
+	justify-items: center;
+	align-items: center;
+	padding: 0 $spacer-lg;
+	padding-top: $spacer-md;
+	padding-bottom: $spacer-sm;
 	color: $neutral;
-
-	&__bar {
-		display: grid;
-		grid-template-columns: 1fr 2fr 1fr;
-		grid-template-rows: 1fr;
-		justify-items: center;
-		align-items: center;
-		padding-top: $spacer-md;
-		padding-bottom: $spacer-sm;
-		background-color: $white;
-		border-top: $divider-grey;
-	}
+	background-color: $white;
+	border-top: $divider-grey;
 
 	&__link,
 	&__left,
@@ -64,18 +59,11 @@
 		justify-content: flex-end;
 	}
 
-	&__feedback-button {
-		align-self: flex-end;
-		margin-bottom: $spacer-md;
-	}
-
 	@include respond-to(lg) {
-		&__bar {
-			grid-template-columns: repeat(2, 1fr);
-			gap: $spacer-sm;
-			border-top: none;
-			padding-top: 0;
-		}
+		grid-template-columns: repeat(2, 1fr);
+		gap: $spacer-sm;
+		border-top: none;
+		padding-top: 0;
 
 		&__links {
 			grid-row-start: 2;

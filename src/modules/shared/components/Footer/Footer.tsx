@@ -5,7 +5,7 @@ import { FC } from 'react';
 import styles from './Footer.module.scss';
 import { FooterItem, FooterProps } from './Footer.types';
 
-const Footer: FC<FooterProps> = ({ links, leftItem, rightItem, floatingActionButton }) => {
+const Footer: FC<FooterProps> = ({ links, leftItem, rightItem }) => {
 	const renderLinks = () => {
 		return (
 			<div className={styles['c-footer__links']}>
@@ -21,11 +21,6 @@ const Footer: FC<FooterProps> = ({ links, leftItem, rightItem, floatingActionBut
 				))}
 			</div>
 		);
-	};
-
-	// TODO: button component type
-	const renderFloatingActionButton = (floatingActionButton: any) => {
-		return <div className={styles['c-footer__feedback-button']}>{floatingActionButton}</div>;
 	};
 
 	const renderFooterItem = (item: FooterItem, side: string) => {
@@ -49,14 +44,11 @@ const Footer: FC<FooterProps> = ({ links, leftItem, rightItem, floatingActionBut
 	};
 
 	return (
-		<div className={styles['c-footer']}>
-			{floatingActionButton && renderFloatingActionButton(floatingActionButton)}
-			<footer className={styles['c-footer__bar']}>
-				{leftItem && renderFooterItem(leftItem, 'left')}
-				{links && renderLinks()}
-				{rightItem && renderFooterItem(rightItem, 'right')}
-			</footer>
-		</div>
+		<footer className={styles['c-footer']}>
+			{leftItem && renderFooterItem(leftItem, 'left')}
+			{links && renderLinks()}
+			{rightItem && renderFooterItem(rightItem, 'right')}
+		</footer>
 	);
 };
 

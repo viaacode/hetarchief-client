@@ -2,12 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import Footer from './Footer';
-import {
-	footerFloatingActionButton,
-	footerLeftItem,
-	footerLinks,
-	footerRightItem,
-} from './__mocks__';
+import { footerLeftItem, footerLinks, footerRightItem } from './__mocks__';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -31,12 +26,4 @@ export const Simple = Template.bind({});
 Simple.args = {
 	leftItem: footerLeftItem,
 	rightItem: footerRightItem,
-};
-
-export const Feedback = Template.bind({});
-Feedback.args = {
-	links: footerLinks,
-	leftItem: footerLeftItem,
-	rightItem: footerRightItem,
-	floatingActionButton: footerFloatingActionButton,
 };
