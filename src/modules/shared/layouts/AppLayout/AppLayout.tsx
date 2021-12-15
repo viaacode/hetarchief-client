@@ -1,7 +1,10 @@
 import { FC } from 'react';
 
 import { Navigation } from '@shared/components';
-import { MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from '@shared/components/Navigation/__mocks__';
+import {
+	MOCK_ITEMS_LEFT,
+	MOCK_ITEMS_RIGHT,
+} from '@shared/components/Navigation/__mocks__/navigation';
 
 const AppLayout: FC = ({ children }) => {
 	return (

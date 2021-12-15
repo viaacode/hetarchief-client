@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import Footer from './Footer';
-import { footerLeftItem, footerLinks, footerRightItem } from './__mocks__';
+import { footerLeftItem, footerLinks, footerRightItem } from './__mocks__/footer';
 
 // Default
 

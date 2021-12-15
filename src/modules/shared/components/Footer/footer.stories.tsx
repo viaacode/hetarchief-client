@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import Footer from './Footer';
-import { footerLeftItem, footerLinks, footerRightItem } from './__mocks__';
+import { footerLeftItem, footerRightItem } from './__mocks__/footer';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
