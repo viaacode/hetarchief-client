@@ -23,13 +23,9 @@ const Placeholder: FC<PlaceholderProps> = ({
 		<div className={clsx(className, styles['c-placeholder'])}>
 			{iconProps && <Icon className={styles['c-placeholder__icon']} {...iconProps} />}
 			{!icon && img && (
-				<Image
-					className={styles['c-placeholder__img']}
-					src={img}
-					alt={imgAlt}
-					layout="fill"
-					objectFit="cover"
-				/>
+				<div className={styles['c-placeholder__img']}>
+					<Image src={img} alt={imgAlt} layout="fill" objectFit="contain" />
+				</div>
 			)}
 			<h3 className={styles['c-placeholder__title']}>{title}</h3>
 			<p className={styles['c-placeholder__description']}>{description}</p>
