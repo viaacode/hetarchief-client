@@ -17,7 +17,21 @@ const Template: ComponentStory<typeof Footer> = (args) => <Footer {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-	links: footerLinks,
+	links: [
+		{
+			label: 'Gebruikersvoorwaarden',
+			to: 'https://www.test.com',
+			external: true,
+		},
+		{
+			label: 'Privacy',
+			to: 'https://www.test.com',
+		},
+		{
+			label: 'Cookiebeleid',
+			to: 'https://www.test.com',
+		},
+	],
 	leftItem: footerLeftItem,
 	rightItem: footerRightItem,
 };
