@@ -1,0 +1,15 @@
+.l-app {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+/**
+ * Elements
+ */
+
+.l-app__main {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+}
