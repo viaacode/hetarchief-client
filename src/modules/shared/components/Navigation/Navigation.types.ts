@@ -1,0 +1,25 @@
+import { FC } from 'react';
+
+export type NavigationFC<P = unknown> = FC<P> & {
+	Left: FC<NavigationSectionProps>;
+	Center: FC<NavigationCenterProps>;
+	Right: FC<NavigationSectionProps>;
+};
+
+export interface NavigationProps {
+	contextual?: boolean;
+}
+
+export interface NavigationCenterProps {
+	title?: string;
+}
+
+export interface NavigationSectionProps {
+	items?: NavigationItem[][];
+}
+
+export interface NavigationItem {
+	href: string;
+	isActive?: boolean;
+	label: string;
+}

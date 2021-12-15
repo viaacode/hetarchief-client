@@ -3,8 +3,11 @@
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5,
+h6 {
 	font-weight: $font-weight-bold;
+	margin: 0;
 }
 
 h1 {
@@ -30,6 +33,11 @@ h4 {
 p {
 	font-size: $font-size-base;
 	line-height: $line-height-base;
+}
+
+a {
+	text-decoration: underline;
+	color: inherit;
 }
 
 small {

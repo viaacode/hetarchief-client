@@ -11,7 +11,7 @@ const Example: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main style={{ display: 'grid', placeItems: 'center', height: '100vh' }}>
+			<main style={{ display: 'grid', placeItems: 'center', height: '500px' }}>
 				<h1>This is an example page</h1>
 				<div>
 					<Link href="/">Go back</Link>
