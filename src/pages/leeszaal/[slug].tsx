@@ -15,17 +15,19 @@ const ReadingRoomPage: NextPage = () => {
 
 			<Navigation contextual>
 				<Navigation.Left>
-					<Link href="/">Go back</Link>
+					<Link href="/">Terug</Link>
 				</Navigation.Left>
 				<Navigation.Center title="Leeszaal" />
 				<Navigation.Right />
 			</Navigation>
 
-			<Placeholder
-				img="/images/lightbulb.svg"
-				title="Start je zoektocht!"
-				description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-			/>
+			<div style={{ padding: '3.2rem' }}>
+				<Placeholder
+					img="/images/lightbulb.svg"
+					title="Start je zoektocht!"
+					description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+				/>
+			</div>
 		</div>
 	);
 };

@@ -12,7 +12,7 @@ const Home: NextPage = () => {
 			</Head>
 
 			<div style={{ display: 'grid', placeItems: 'center', height: '500px' }}>
-				<h1>Welcome to Het Archief</h1>
+				<h1>Welcome in de digitale leeszaal</h1>
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
 			</div>
 		</div>
