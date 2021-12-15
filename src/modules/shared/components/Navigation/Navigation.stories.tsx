@@ -15,7 +15,7 @@ const Template: ComponentStory<typeof Navigation> = (args) => (
 	<Navigation {...args}>
 		<Navigation.Left items={MOCK_ITEMS_LEFT} />
 		<Navigation.Center title="Hello" />
-		<Navigation.Right items={MOCK_ITEMS_RIGHT} />,
+		<Navigation.Right items={MOCK_ITEMS_RIGHT} />
 	</Navigation>
 );
 

@@ -1,2 +1,4 @@
-export * from './Navigation';
 export * from './Footer';
+export * from './Icon';
+export * from './Navigation';
+export * from './Placeholder';
