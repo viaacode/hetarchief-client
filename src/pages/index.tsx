@@ -11,12 +11,12 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main style={{ display: 'grid', placeItems: 'center', height: '100vh' }}>
+			<div style={{ display: 'grid', placeItems: 'center', height: '500px' }}>
 				<h1>Welcome to Het Archief</h1>
 				<div>
 					<Link href="/example">Go to example</Link>
 				</div>
-			</main>
+			</div>
 		</div>
 	);
 };
