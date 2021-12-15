@@ -62,8 +62,6 @@
 	@include respond-to(lg) {
 		grid-template-columns: repeat(2, 1fr);
 		gap: $spacer-sm;
-		border-top: none;
-		padding-top: 0;
 
 		&__links {
 			grid-row-start: 2;
