@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import Navigation from './Navigation';
-import { MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__';
+import { MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';
 
 describe('Components', () => {
 	describe('<Navigation />', () => {

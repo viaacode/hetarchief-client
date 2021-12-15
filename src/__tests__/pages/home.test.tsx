@@ -9,7 +9,7 @@ describe('Page: <Home />', () => {
 
 	it('Should render a title', () => {
 		const title = screen.getByRole('heading', {
-			name: /welcome to het archief/i,
+			name: /^Welkom/i,
 		});
 
 		expect(title).toBeInTheDocument();

@@ -10,6 +10,18 @@ module.exports = {
 		'plugin:prettier/recommended',
 	],
 	rules: {
+		'@typescript-eslint/naming-convention': [
+			'error',
+			{
+				selector: 'interface',
+				format: ['PascalCase'],
+				custom: {
+					regex: '^I[A-Z]',
+					match: false,
+				},
+			},
+		],
+
 		'import/first': 'error',
 		'import/no-duplicates': 'error',
 		'import/order': [
@@ -36,17 +48,6 @@ module.exports = {
 			{
 				ignoreCase: true,
 				ignoreDeclarationSort: true,
-			},
-		],
-		'@typescript-eslint/naming-convention': [
-			'error',
-			{
-				selector: 'interface',
-				format: ['PascalCase'],
-				custom: {
-					regex: '^I[A-Z]',
-					match: false,
-				},
 			},
 		],
 	},
