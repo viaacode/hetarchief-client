@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import Footer from './Footer';
+import { footerLeftItem, footerLinks, footerRightItem } from './__mocks__';
 
 const feedbackMock = jest.fn();
 
@@ -9,51 +10,7 @@ const feedbackMock = jest.fn();
 describe('Component: <Footer /> (default)', () => {
 	beforeEach(() => {
 		render(
-			<Footer
-				links={[
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-						external: true,
-					},
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-					},
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-					},
-				]}
-				leftItem={{
-					label: 'Een initiatief van',
-					image: {
-						name: 'logo_meemoo.svg',
-						alt: 'Meemoo logo',
-						width: 104,
-						height: 44,
-					},
-					link: {
-						label: '',
-						to: 'https://www.test.com',
-						external: true,
-					},
-				}}
-				rightItem={{
-					label: 'Gesteund door',
-					image: {
-						name: 'logo_vlaanderen.png',
-						alt: 'Vlaanderen logo',
-						width: 89,
-						height: 39,
-					},
-					link: {
-						label: '',
-						to: 'https://www.test.com',
-						external: true,
-					},
-				}}
-			/>
+			<Footer links={footerLinks} leftItem={footerLeftItem} rightItem={footerRightItem} />
 		);
 	});
 
@@ -123,53 +80,7 @@ describe('Component: <Footer /> (default)', () => {
 
 describe('Component: <Footer /> (simple)', () => {
 	beforeEach(() => {
-		render(
-			<Footer
-				links={[
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-						external: true,
-					},
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-					},
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-					},
-				]}
-				leftItem={{
-					label: 'Een initiatief van',
-					image: {
-						name: 'logo_meemoo.svg',
-						alt: 'Meemoo logo',
-						width: 104,
-						height: 44,
-					},
-					link: {
-						label: '',
-						to: 'https://www.test.com',
-						external: true,
-					},
-				}}
-				rightItem={{
-					label: 'Gesteund door',
-					image: {
-						name: 'logo_vlaanderen.png',
-						alt: 'Vlaanderen logo',
-						width: 89,
-						height: 39,
-					},
-					link: {
-						label: '',
-						to: 'https://www.test.com',
-						external: true,
-					},
-				}}
-			/>
-		);
+		render(<Footer leftItem={footerLeftItem} rightItem={footerRightItem} />);
 	});
 
 	it('Should render meemoo reference', () => {
@@ -221,53 +132,13 @@ describe('Component: <Footer /> (simple)', () => {
 
 // Feedback
 
-describe('Component: <Footer /> (simple)', () => {
+describe('Component: <Footer /> (feedback)', () => {
 	beforeEach(() => {
 		render(
 			<Footer
-				links={[
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-						external: true,
-					},
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-					},
-					{
-						label: 'link',
-						to: 'https://www.test.com',
-					},
-				]}
-				leftItem={{
-					label: 'Een initiatief van',
-					image: {
-						name: 'logo_meemoo.svg',
-						alt: 'Meemoo logo',
-						width: 104,
-						height: 44,
-					},
-					link: {
-						label: '',
-						to: 'https://www.test.com',
-						external: true,
-					},
-				}}
-				rightItem={{
-					label: 'Gesteund door',
-					image: {
-						name: 'logo_vlaanderen.png',
-						alt: 'Vlaanderen logo',
-						width: 89,
-						height: 39,
-					},
-					link: {
-						label: '',
-						to: 'https://www.test.com',
-						external: true,
-					},
-				}}
+				links={footerLinks}
+				leftItem={footerLeftItem}
+				rightItem={footerRightItem}
 				onClickFeedback={feedbackMock}
 			/>
 		);
