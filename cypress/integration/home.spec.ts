@@ -5,6 +5,6 @@ describe('Page: Home', () => {
 
 	it('Should link to reading room detail', () => {
 		cy.get('a[href^="/leeszaal"]').click();
-		cy.location('pathname').should('eq', '/');
+		cy.location('pathname').should('contain', '/leeszaal');
 	});
 });
