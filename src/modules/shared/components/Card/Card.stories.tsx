@@ -15,26 +15,72 @@ const galaxy =
 
 const Template: ComponentStory<typeof Card> = (args) => {
 	return (
-		<Grid>
-			<Column size="2">
-				<Card {...args} />
-			</Column>
-			<Column size="2">
-				<Card {...args} edge="none" />
-			</Column>
-			<Column size="2">
-				<Card {...args} padding="both" />
-			</Column>
-			<Column size="2">
-				<Card {...args} padding="content" />
-			</Column>
-			<Column size="2">
-				<Card {...args} />
-			</Column>
-			<Column size="2">
-				<Card {...args} />
-			</Column>
-		</Grid>
+		<>
+			<Grid>
+				<Column size="2">
+					<Card {...args} title="A card with a zinc-colored border" />
+				</Column>
+				<Column size="2">
+					<Card
+						{...args}
+						edge="none"
+						padding="vertical"
+						title={<b>A card with no border</b>}
+					>
+						Aenean nec feugiat nisi. Pellentesque vel nunc sit amet augue tincidunt
+						egestas. Cras vitae molestie leo.
+					</Card>
+				</Column>
+				<Column size="2">
+					<Card
+						{...args}
+						padding="both"
+						title="A card with padding on both image and title"
+						subtitle="Aanbieder (01 jan. 1970)"
+						toolbar="both"
+					>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis
+						luctus eros, vehicula commodo nulla. Suspendisse enim lacus, bibendum
+						Aflevering 1 at nibh id, molestie…
+					</Card>
+				</Column>
+				<Column size="2">
+					<Card
+						{...args}
+						padding="content"
+						title="A card with padding on just the content"
+						toolbar="content"
+					/>
+				</Column>
+			</Grid>
+			<br />
+			<br />
+			<Grid>
+				<Column size="6">
+					<Card
+						{...args}
+						padding="both"
+						orientation="horizontal"
+						title={<b>A horizontal card with padding on both image and content</b>}
+						subtitle="Studio Hyperdrive (15 dec. 2022) "
+						toolbar="both + horizontal"
+					>
+						Aenean nec feugiat nisi. Pellentesque vel nunc sit amet augue tincidunt
+						egestas. Cras vitae molestie leo. Nullam sed arcu aliquet, porta massa vel,
+						feugiat sapien.
+					</Card>
+				</Column>
+				<Column size="6">
+					<Card
+						{...args}
+						padding="content"
+						orientation="horizontal"
+						title="A horizontal card with padding on just the content"
+						toolbar="content + horizontal"
+					/>
+				</Column>
+			</Grid>
+		</>
 	);
 };
 

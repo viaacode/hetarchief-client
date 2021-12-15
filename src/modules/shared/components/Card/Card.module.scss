@@ -3,32 +3,117 @@
 
 $c: "c-card";
 
+@mixin c-card-horizontal-whitespace {
+	margin-left: $spacing;
+	margin-right: $spacing;
+}
+
+@mixin c-card-content-whitespace {
+	&__header-wrapper {
+		margin-top: $spacing;
+		margin-bottom: $spacing;
+	}
+
+	&__title-wrapper {
+		@include c-card-horizontal-whitespace;
+	}
+
+	&__toolbar-wrapper {
+		@include c-card-horizontal-whitespace;
+
+		margin-left: 0;
+	}
+
+	&__subtitle-wrapper {
+		@include c-card-horizontal-whitespace;
+	}
+
+	&__children-wrapper {
+		@include c-card-horizontal-whitespace;
+	}
+}
+
 .#{$c} {
-    display: block;
+	display: flex;
 
-    // Elements
+	// Elements
 
-    // &__title {
-    //     &-wrapper {
-    //     }
-    // }
+	&__header-wrapper {
+		display: flex;
+		flex-grow: 1;
+		flex-flow: row nowrap;
+	}
 
-    // Mutators
+	&__title-wrapper {
+		flex-grow: 1;
+	}
 
-    &--edge {
-        &-zinc {
-            border: 1px solid $zinc
-        }
-    }
+	&__toolbar-wrapper {
+		flex-grow: 0;
+		width: auto;
+	}
 
-    &--padded {
-        &-both {
-            .#{$c}__image-wrapper {
-                padding-left: $spacing;
-                padding-right: $spacing;
-                padding-top: $spacing;
-                margin-bottom: $spacing;
-            }
-        }
-    }
+	&__subtitle,
+	&__children {
+		&-wrapper {
+			color: $neutral;
+		}
+	}
+
+	&__children-wrapper {
+		margin-bottom: $spacing;
+	}
+
+	// Mutators
+
+	&--orientation {
+		&-horizontal {
+			flex-direction: row;
+
+			&.#{$c}--padded-both {
+				.#{$c}__image-wrapper {
+					margin-bottom: $spacing;
+				}
+			}
+		}
+
+		&-vertical {
+			flex-direction: column;
+		}
+	}
+
+	&--edge {
+		&-zinc {
+			border: 1px solid $zinc;
+		}
+	}
+
+	&--padded {
+		&-both {
+			.#{$c} {
+				@include c-card-content-whitespace;
+
+				&__image-wrapper {
+					@include c-card-horizontal-whitespace;
+
+					margin-top: $spacing;
+				}
+			}
+		}
+
+		&-content {
+			.#{$c} {
+				@include c-card-content-whitespace;
+			}
+		}
+
+		&-vertical {
+			.#{$c} {
+				&__header-wrapper {
+					margin-top: $spacing * 1.5;
+					margin-bottom: $spacing;
+				}
+			}
+		}
+	}
 }
