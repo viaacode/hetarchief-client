@@ -2,7 +2,7 @@ export interface FooterProps {
 	links?: FooterLink[];
 	leftItem: FooterItem;
 	rightItem: FooterItem;
-	floatingActionButton: any; // TODO: button component type
+	floatingActionButton?: any; // TODO: button component type
 }
 
 export interface FooterLink {
