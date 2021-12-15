@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
@@ -47,7 +47,7 @@ const MyModal: FC<MyModalProps> = ({
 		<Modal
 			isOpen={ready && !!isOpen}
 			overlayClassName={styles['c-hetarchief-modal__overlay']}
-			className={classnames(className, styles['c-hetarchief-modal'])}
+			className={clsx(className, styles['c-hetarchief-modal'])}
 			shouldCloseOnEsc={true}
 			shouldCloseOnOverlayClick={true}
 			onRequestClose={onClose}

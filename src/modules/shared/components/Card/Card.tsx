@@ -1,5 +1,5 @@
 import { Image } from '@viaa/avo2-components';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { FC } from 'react';
 
 import { getNodeText } from './../../utils/get-node-text';
@@ -16,18 +16,17 @@ const defaultProps: CardProps = {
 	edge: 'zinc',
 };
 
-// TODO: change `classnames` to `clsx` after https://github.com/viaacode/hetarchief-client/pull/14
 const Card: FC<CardProps> = ({ edge, image, padding, title }) => {
 	return (
 		<article
-			className={classnames(
+			className={clsx(
 				styles['c-card'],
 				styles[`c-card--edge-${edge}`],
 				styles[`c-card--padded-${padding}`]
 			)}
 		>
 			{image && (
-				<section className={classnames(styles['c-card__image-wrapper'])}>
+				<section className={clsx(styles['c-card__image-wrapper'])}>
 					{typeof image === 'string' ? (
 						<Image
 							wide={true}
@@ -40,9 +39,7 @@ const Card: FC<CardProps> = ({ edge, image, padding, title }) => {
 				</section>
 			)}
 
-			{title && (
-				<section className={classnames(styles['c-card__title-wrapper'])}>{title}</section>
-			)}
+			{title && <section className={clsx(styles['c-card__title-wrapper'])}>{title}</section>}
 		</article>
 	);
 };
