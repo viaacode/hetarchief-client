@@ -8,7 +8,7 @@
 	grid-template-rows: 1fr;
 	justify-items: center;
 	align-items: center;
-	padding: 0 $spacer-lg;
+	margin: 0 $spacer-lg;
 	padding-top: $spacer-md;
 	padding-bottom: $spacer-sm;
 	color: $neutral;
@@ -81,6 +81,10 @@
 		&__right {
 			grid-column-start: 2;
 		}
+	}
+
+	@include respond-to(md) {
+		margin: 0 $spacer-sm;
 	}
 }
 
