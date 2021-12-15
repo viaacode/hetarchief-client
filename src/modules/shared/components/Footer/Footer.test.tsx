@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react';
 
 import Footer from './Footer';
-import { footerLeftItem, footerLinks, footerRightItem } from './__mocks__/footer';
+import { footerLeftItem, footerRightItem, footerTestLinks } from './__mocks__/footer';
 
 // Default
 
 describe('Component: <Footer /> (default)', () => {
 	beforeEach(() => {
 		render(
-			<Footer links={footerLinks} leftItem={footerLeftItem} rightItem={footerRightItem} />
+			<Footer links={footerTestLinks} leftItem={footerLeftItem} rightItem={footerRightItem} />
 		);
 	});
 

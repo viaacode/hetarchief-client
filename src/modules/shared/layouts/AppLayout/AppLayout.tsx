@@ -1,6 +1,11 @@
 import { FC } from 'react';
 
-import { Navigation } from '@shared/components';
+import { Footer, Navigation } from '@shared/components';
+import {
+	footerLeftItem,
+	footerLinks,
+	footerRightItem,
+} from '@shared/components/Footer/__mocks__/footer';
 import {
 	MOCK_ITEMS_LEFT,
 	MOCK_ITEMS_RIGHT,
@@ -15,6 +20,8 @@ const AppLayout: FC = ({ children }) => {
 			</Navigation>
 
 			<main className="l-app__main">{children}</main>
+
+			<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
 		</div>
 	);
 };

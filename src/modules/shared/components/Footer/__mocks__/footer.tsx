@@ -1,4 +1,4 @@
-export const footerLinks = [
+export const footerTestLinks = [
 	{
 		label: 'link',
 		to: 'https://www.test.com',
@@ -11,6 +11,22 @@ export const footerLinks = [
 	{
 		label: 'link',
 		to: 'https://www.test.com',
+	},
+];
+
+export const footerLinks = [
+	{
+		label: 'Gebruikersvoorwaarden',
+		to: '/',
+		external: true,
+	},
+	{
+		label: 'Privacy',
+		to: '/',
+	},
+	{
+		label: 'Cookiebeleid',
+		to: '/',
 	},
 ];
 
