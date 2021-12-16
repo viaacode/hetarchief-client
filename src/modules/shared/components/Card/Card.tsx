@@ -1,11 +1,9 @@
-import { Image } from '@viaa/avo2-components';
 import clsx from 'clsx';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
-import { getNodeText } from './../../utils/get-node-text';
 import styles from './Card.module.scss';
 
-type Renderable = string | number | JSX.Element;
+type Renderable = ReactNode;
 
 export interface CardProps {
 	edge?: 'zinc' | 'none';
@@ -45,11 +43,7 @@ const Card: FC<CardProps> = ({
 				{image && (
 					<section className={clsx(styles['c-card__image-wrapper'])}>
 						{typeof image === 'string' ? (
-							<Image
-								wide={true}
-								src={image}
-								alt={(title && getNodeText(title)) || "The card's image"}
-							/>
+							<img className='u-image-responsive' src={image} alt={title?.toString() || "The card's image"} /> //eslint-disable-line
 						) : (
 							image
 						)}
