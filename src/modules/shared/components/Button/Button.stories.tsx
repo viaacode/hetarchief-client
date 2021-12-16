@@ -4,12 +4,12 @@ import React, { FC, ReactNode } from 'react';
 
 import { Icon } from '../Icon';
 
-const Button: FC<{
+export const Button: FC<{
 	className?: string;
-	icon: ReactNode;
-	iconStart: ReactNode;
-	iconEnd: ReactNode;
-}> = ({ children, className, icon, iconStart = null, iconEnd = null }) => {
+	icon?: ReactNode;
+	iconStart?: ReactNode;
+	iconEnd?: ReactNode;
+}> = ({ children, className, icon, iconStart, iconEnd }) => {
 	return (
 		<button className={clsx(className, 'c-button')}>
 			{icon ? (
