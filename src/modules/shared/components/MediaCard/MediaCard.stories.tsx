@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { CSSProperties } from 'react';
 
 import MediaCard from './MediaCard';
 import { soundwave, thumbnail } from './MediaCard.mock';
@@ -8,14 +9,47 @@ export default {
 	component: MediaCard,
 } as ComponentMeta<typeof MediaCard>;
 
+const container: CSSProperties = {
+	display: 'flex',
+	margin: '-10px',
+};
+const column: CSSProperties = { flex: '1 1 0', margin: '10px' };
+
 const Template: ComponentStory<typeof MediaCard> = (args) => {
 	return (
-		<>
-			<MediaCard {...args} title="Something you can hear" type="audio" preview={soundwave} />
-			<MediaCard {...args} title="Something you can watch" type="video" preview={thumbnail} />
-			<MediaCard {...args} title="Something you can see nothing of" type="video" />
-			<MediaCard {...args} title="Something you can hear very little about" type="audio" />
-		</>
+		<section
+			style={{
+				...container,
+				flexDirection: args.view === 'grid' ? 'row' : 'column',
+			}}
+		>
+			<div style={column}>
+				<MediaCard
+					{...args}
+					title="Something you can hear"
+					type="audio"
+					preview={soundwave}
+				/>
+			</div>
+			<div style={column}>
+				<MediaCard
+					{...args}
+					title="Something you can watch"
+					type="video"
+					preview={thumbnail}
+				/>
+			</div>
+			<div style={column}>
+				<MediaCard
+					{...args}
+					title="Something you can hear very little about"
+					type="audio"
+				/>
+			</div>
+			<div style={column}>
+				<MediaCard {...args} title="Something you can see nothing of" type="video" />
+			</div>
+		</section>
 	);
 };
 
