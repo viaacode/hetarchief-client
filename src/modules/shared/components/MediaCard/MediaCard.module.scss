@@ -1,0 +1,46 @@
+@use "styles/abstracts" as *;
+
+$c: "c-media-card";
+$c-media-card-no-video-intended-spacing: 0.9rem;
+
+.#{$c} {
+    &__no-video {
+        display: block;
+        margin-bottom: $c-media-card-no-video-intended-spacing - $spacing;
+
+        &-wrapper {
+            display: flex;
+            color: $zinc;
+            background-color: $platinum;
+            height: 100%;
+            width: 100%;
+            place-content: center;
+            align-items: center;
+
+            .#{$c}__no-video {
+                transform: translateY(-25%);
+            }
+        }
+    }
+
+    &__icon {
+        font-size: $font-size-lg * (11 / 12);
+        line-height: 1;
+    }
+
+    &__toolbar {
+        display: flex;
+        flex-direction: row;
+
+        // margin-bottom: -0.4rem; // Magic number correction ...
+
+        .#{$c}__icon {
+            cursor: pointer;
+
+            &:hover {
+                opacity: 0.34;
+                transition: opacity $animate-default;
+            }
+        }
+    }
+}
