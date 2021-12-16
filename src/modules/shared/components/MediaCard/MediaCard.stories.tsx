@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Column, Grid as G } from '@viaa/avo2-components';
 
 import MediaCard from './MediaCard';
 import { soundwave, thumbnail } from './MediaCard.mock';
@@ -11,38 +10,12 @@ export default {
 
 const Template: ComponentStory<typeof MediaCard> = (args) => {
 	return (
-		<G>
-			<Column size={args.view === 'list' ? '12' : '3'}>
-				{args.view === 'list' ? <br /> : undefined}
-				<MediaCard
-					{...args}
-					title="Something you can hear"
-					type="audio"
-					preview={soundwave}
-				/>
-			</Column>
-			<Column size={args.view === 'list' ? '12' : '3'}>
-				{args.view === 'list' ? <br /> : undefined}
-				<MediaCard
-					{...args}
-					title="Something you can watch"
-					type="video"
-					preview={thumbnail}
-				/>
-			</Column>
-			<Column size={args.view === 'list' ? '12' : '3'}>
-				{args.view === 'list' ? <br /> : undefined}
-				<MediaCard {...args} title="Something you can see nothing of" type="video" />
-			</Column>
-			<Column size={args.view === 'list' ? '12' : '3'}>
-				{args.view === 'list' ? <br /> : undefined}
-				<MediaCard
-					{...args}
-					title="Something you can hear very little about"
-					type="audio"
-				/>
-			</Column>
-		</G>
+		<>
+			<MediaCard {...args} title="Something you can hear" type="audio" preview={soundwave} />
+			<MediaCard {...args} title="Something you can watch" type="video" preview={thumbnail} />
+			<MediaCard {...args} title="Something you can see nothing of" type="video" />
+			<MediaCard {...args} title="Something you can hear very little about" type="audio" />
+		</>
 	);
 };
 
