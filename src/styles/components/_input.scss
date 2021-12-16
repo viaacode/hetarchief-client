@@ -1,0 +1,135 @@
+@use "styles/abstracts" as *;
+
+.c-input {
+	position: relative;
+}
+
+/**
+ * Elements
+ */
+
+.c-input__field {
+	display: block;
+	width: 100%;
+	height: 4.8rem;
+	padding: 1.4rem 1.6rem;
+	border: 1px solid $zinc;
+	font-family: $font-family-primary;
+	font-size: $font-size-base;
+	background-color: $white;
+	border-radius: 0;
+	color: $black;
+	outline: 1px solid transparent;
+	transition: outline-color $animate-default, border-color $animate-default;
+
+	&:focus {
+		border-color: $teal;
+	}
+}
+
+.c-input__icon {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	display: inline-flex;
+	font-size: $font-size-lg;
+	color: $neutral;
+}
+
+/**
+ * Modifiers
+ */
+
+// Sizes
+.c-input--lg {
+	.c-input__field {
+		height: 6.4rem;
+	}
+}
+
+//  Variants
+.c-input--icon-start {
+	.c-input__field {
+		padding-left: 4.5rem;
+	}
+
+	.c-input__icon {
+		left: 1.3rem;
+	}
+}
+
+.c-input--icon-end {
+	.c-input__field {
+		padding-right: 4.5rem;
+	}
+
+	.c-input__icon {
+		right: 1.3rem;
+	}
+}
+
+.c-input--disabled {
+	.c-input__field {
+		border-color: $silver;
+		cursor: not-allowed;
+	}
+}
+
+.c-input--rounded {
+	.c-input__field {
+		padding-left: 2.4rem;
+		padding-right: 2.4rem;
+		border-radius: 2.4rem;
+	}
+
+	&.c-input--lg {
+		.c-input__field {
+			border-radius: 3.2rem;
+		}
+	}
+
+	&.c-input--icon-start {
+		.c-input__field {
+			padding-left: 5.4rem;
+		}
+
+		.c-input__icon {
+			left: 2rem;
+		}
+	}
+
+	&.c-input--icon-end {
+		.c-input__field {
+			padding-right: 5.4rem;
+		}
+
+		.c-input__icon {
+			right: 2rem;
+		}
+	}
+}
+
+// Colors
+.c-input--grey {
+	/* stylelint-disable-next-line no-descending-specificity */
+	.c-input__field {
+		background-color: $silver;
+		border-color: $silver;
+
+		&:focus {
+			border-color: $teal;
+		}
+	}
+}
+
+// States
+
+/* stylelint-disable-next-line no-duplicate-selectors */
+.c-input {
+	&:not(.c-input--grey,.c-input--disabled,:focus-within):hover {
+		/* stylelint-disable-next-line no-descending-specificity */
+		.c-input__field {
+			outline-color: $zinc;
+		}
+	}
+}
