@@ -4,7 +4,11 @@ SHELL = /bin/bash
 .PHONY: all test
 
 test:
-	sleep 3600
+	whoami; \
+	pwd; \
+	ls -ltrha; \ 
+	env; \
+	sleep 240
 	mkdir $(pwd)/cypress/.cypress_cache
 	export CYPRESS_CACHE_FOLDER=$(pwd)/cypress/.cypress_cache
 	npm ci
