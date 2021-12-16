@@ -3,6 +3,7 @@ import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
 import { Card, Icon } from '..';
+import { Button } from '../Button/Button.stories';
 
 import styles from './MediaCard.module.scss';
 
@@ -13,7 +14,6 @@ const MediaCard: FC<MediaCardProps> = ({
 	preview,
 	published_at,
 	published_by,
-	thumbnail,
 	title,
 	type,
 	view,
@@ -29,9 +29,31 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
-			{/* TODO: Switch to icon buttons? */}
-			<Icon className={styles['c-media-card__icon']} type="light" name="bookmark" />
-			<Icon className={styles['c-media-card__icon']} type="light" name="dots-vertical" />
+			<Button
+				className={clsx(
+					styles['c-media-card__icon-button'],
+					'c-button--text c-button--icon c-button--xxs c-button--ghost'
+				)}
+				icon={
+					<Icon className={styles['c-media-card__icon']} type="light" name="bookmark" />
+				}
+			/>
+
+			{/* TODO: uncomment & switch to dropdown / action / ... once more actions are required on a MediaCard
+			see: https://meemoo.atlassian.net/browse/ARC-206?focusedCommentId=24402 */}
+			{/* <Button
+				className={clsx(
+					styles['c-media-card__icon-button'],
+					'c-button--text c-button--icon c-button--xxs c-button--ghost'
+				)}
+				icon={
+					<Icon
+						className={styles['c-media-card__icon']}
+						type="light"
+						name="dots-vertical"
+					/>
+				}
+			/> */}
 		</div>
 	);
 
@@ -51,36 +73,29 @@ const MediaCard: FC<MediaCardProps> = ({
 			subtitle += ` (${formatted})`;
 		}
 
+		subtitle = subtitle.trim();
+
 		return subtitle.length > 0 ? subtitle : undefined;
 	};
 
-	const renderNoVideoIcon = () => (
+	const renderNoContentIcon = () => (
 		<Icon
-			className={clsx(styles['c-media-card__no-video'], styles['c-media-card__icon'])}
+			className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'])}
 			type="light"
-			name="no-video"
+			name={`no-${type}` as 'no-audio' | 'no-video'}
 		/>
 	);
 
-	const renderHeader = () => {
-		switch (type) {
-			case 'audio':
-				return preview;
+	const renderNoContent = () =>
+		view === 'grid' ? (
+			renderNoContentIcon()
+		) : (
+			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
+				{renderNoContentIcon()}
+			</div>
+		);
 
-			case 'video':
-				return thumbnail;
-
-			default:
-				// 'meta'
-				return view === 'grid' ? (
-					renderNoVideoIcon()
-				) : (
-					<div className={clsx(styles['c-media-card__no-video-wrapper'])}>
-						{renderNoVideoIcon()}
-					</div>
-				);
-		}
-	};
+	const renderHeader = () => preview || renderNoContent();
 
 	return (
 		<Card

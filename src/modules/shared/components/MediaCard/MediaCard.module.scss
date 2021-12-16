@@ -4,7 +4,7 @@ $c: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 
 .#{$c} {
-    &__no-video {
+    &__no-content {
         display: block;
         margin-bottom: $c-media-card-no-video-intended-spacing - $spacing;
 
@@ -17,7 +17,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
             place-content: center;
             align-items: center;
 
-            .#{$c}__no-video {
+            .#{$c}__no-content {
                 transform: translateY(-25%);
             }
         }
@@ -31,16 +31,5 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
     &__toolbar {
         display: flex;
         flex-direction: row;
-
-        // margin-bottom: -0.4rem; // Magic number correction ...
-
-        .#{$c}__icon {
-            cursor: pointer;
-
-            &:hover {
-                opacity: 0.34;
-                transition: opacity $animate-default;
-            }
-        }
     }
 }

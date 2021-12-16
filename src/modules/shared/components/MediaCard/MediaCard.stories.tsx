@@ -12,7 +12,7 @@ export default {
 const Template: ComponentStory<typeof MediaCard> = (args) => {
 	return (
 		<G>
-			<Column size={args.view === 'list' ? '12' : '4'}>
+			<Column size={args.view === 'list' ? '12' : '3'}>
 				{args.view === 'list' ? <br /> : undefined}
 				<MediaCard
 					{...args}
@@ -21,18 +21,26 @@ const Template: ComponentStory<typeof MediaCard> = (args) => {
 					preview={soundwave}
 				/>
 			</Column>
-			<Column size={args.view === 'list' ? '12' : '4'}>
+			<Column size={args.view === 'list' ? '12' : '3'}>
 				{args.view === 'list' ? <br /> : undefined}
 				<MediaCard
 					{...args}
 					title="Something you can watch"
 					type="video"
-					thumbnail={thumbnail}
+					preview={thumbnail}
 				/>
 			</Column>
-			<Column size={args.view === 'list' ? '12' : '4'}>
+			<Column size={args.view === 'list' ? '12' : '3'}>
 				{args.view === 'list' ? <br /> : undefined}
-				<MediaCard {...args} title="Something you know very little about" type="meta" />
+				<MediaCard {...args} title="Something you can see nothing of" type="video" />
+			</Column>
+			<Column size={args.view === 'list' ? '12' : '3'}>
+				{args.view === 'list' ? <br /> : undefined}
+				<MediaCard
+					{...args}
+					title="Something you can hear very little about"
+					type="audio"
+				/>
 			</Column>
 		</G>
 	);
@@ -51,4 +59,5 @@ export const List: ComponentStory<typeof MediaCard> = Template.bind({});
 List.args = {
 	...Grid.args,
 	view: 'list',
+	published_by: undefined,
 };
