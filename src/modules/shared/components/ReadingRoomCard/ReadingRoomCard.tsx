@@ -2,10 +2,9 @@ import Image from 'next/image';
 import { FC } from 'react';
 
 import styles from './ReadingRoomCard.module.scss';
-import { IReadingRoomProps } from './ReadingRoomCard.types';
+import { ReadingRoomProps } from './ReadingRoomCard.types';
 
-const ReadingRoomCard: FC<IReadingRoomProps> = ({
-	type,
+const ReadingRoomCard: FC<ReadingRoomProps> = ({
 	backgroundColor,
 	backgroundImage,
 	logo,

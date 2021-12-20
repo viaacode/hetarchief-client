@@ -14,6 +14,15 @@ $silver: #E6E6E6;
 $platinum: #F8F8F8;
 
 /**
+ * Spacers
+ */
+
+ $spacer-xs: .8rem;
+ $spacer-sm: 1.6rem;
+ $spacer-md: 2.4rem;
+ $spacer-lg: 3.2rem;
+
+/**
  * Typography
  */
 
@@ -60,11 +69,57 @@ $breakpoints: (
 
 /**
  * Z-index layers
+ * ---
+ * Keep a list of all z-indexes used throughout the app
  */
 
-// Keep a list of all z-indexes used throughout the app
 $z-layers: (
 	"foreground": 1,
 	"base": 0,
 	"background": -1,
 );
+
+/**
+ * Modal
+ */
+$modal-close-size: 24px;
+$modal-close-margin: 32px;
+$modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
+
+/**
+ * Dividers
+ */
+
+ $divider-grey: solid 1px rgb(0 0 0 / 20%);
+ $divider-white: solid 1px rgb(255 255 255 / 20%);
+
+/**
+ * Animations
+ * ---
+ * Inspiration: https://material.io/design/motion/speed.html#controlling-speed
+ */
+
+// Duration
+$timing-xslow: 300ms;
+$timing-slow: 250ms;
+$timing-default: 200ms;
+$timing-fast: 100ms;
+$timing-sm: $timing-fast;
+$timing-md-in: $timing-slow;
+$timing-md-out: $timing-default;
+$timing-lg-in: $timing-xslow;
+$timing-lg-out: $timing-slow;
+
+// Easings
+$ease-default: cubic-bezier(0.4, 0.0, 0.2, 1);
+$ease-in: cubic-bezier(0.0, 0.0, 0.2, 1);
+$ease-out: cubic-bezier(0.4, 0.0, 1, 1);
+
+// Combinations
+$animate-default: $timing-default $ease-default;
+$animate-sm-in: $timing-sm $ease-in;
+$animate-sm-out: $timing-sm $ease-out;
+$animate-md-in: $timing-md-in $ease-in;
+$animate-md-out: $timing-md-out $ease-out;
+$animate-lg-in: $timing-lg-in $ease-in;
+$animate-lg-out: $timing-lg-out $ease-out;

@@ -1,6 +1,6 @@
 import { readingRoomCardType } from './ReadingRoomCard.constants';
 
-export interface IReadingRoomProps {
+export interface ReadingRoomProps {
 	type: readingRoomCardType;
 	backgroundColor?: string;
 	backgroundImage?: string;
