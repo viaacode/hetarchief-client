@@ -1,0 +1,169 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+$c: "c-card";
+
+@mixin c-card-horizontal-whitespace {
+	margin-left: $spacing;
+	margin-right: $spacing;
+}
+
+@mixin c-card-content-whitespace {
+	&__header-wrapper {
+		margin-top: $spacing;
+		margin-bottom: $spacing;
+	}
+
+	&__title-wrapper {
+		@include c-card-horizontal-whitespace;
+	}
+
+	&__toolbar-wrapper {
+		@include c-card-horizontal-whitespace;
+
+		margin-left: 0;
+	}
+
+	&__subtitle-wrapper {
+		@include c-card-horizontal-whitespace;
+	}
+
+	&__children-wrapper {
+		@include c-card-horizontal-whitespace;
+
+        margin-bottom: $spacing;
+	}
+}
+
+@mixin c-card-image-overflow {
+    // Spill the image over the border if it's not padded and the card has a border
+    &.#{$c}--padded-content {
+        &:not(.#{$c}--edge-none) {
+            .#{$c}__image-wrapper {
+                margin: -$card-edge-size;
+                @content
+            }
+        }
+    }
+}
+
+.#{$c} {
+	display: flex;
+
+	// Elements
+
+	&__header-wrapper {
+		display: flex;
+		flex-grow: 1;
+		flex-flow: row nowrap;
+	}
+
+	&__title-wrapper {
+		flex-grow: 1;
+	}
+
+	&__toolbar-wrapper {
+		flex-grow: 0;
+		width: auto;
+	}
+
+	&__subtitle,
+	&__children {
+		&-wrapper {
+			color: $neutral;
+		}
+	}
+
+	// Mutators
+
+	&--edge {
+		&-zinc {
+			border: $card-edge-size solid $zinc;
+		}
+	}
+
+	&--padded {
+		&-both {
+			.#{$c} {
+				@include c-card-content-whitespace;
+
+				&__image-wrapper {
+					@include c-card-horizontal-whitespace;
+
+					margin-top: $spacing;
+				}
+			}
+		}
+
+		&-content {
+			.#{$c} {
+				@include c-card-content-whitespace;
+			}
+		}
+
+		&-vertical {
+			.#{$c} {
+				&__header-wrapper {
+					margin-top: $spacing * 1.5;
+					margin-bottom: $spacing;
+				}
+
+                &__children-wrapper {
+                    margin-bottom: $spacing;
+                }
+			}
+		}
+	}
+
+	// Orientation must be below Padded
+	&--orientation {
+		&-horizontal {
+			flex-direction: row;
+
+			.#{$c}__header-wrapper {
+                margin-top: $spacing * 1.5;
+            }
+
+            .#{$c}__top-wrapper {
+                width: 280px;
+				min-width: 280px;
+				display: flex;
+            }
+
+			.#{$c}__bottom-wrapper {
+                flex-grow: 1;
+            }
+
+			.#{$c}__image-wrapper {
+				margin-bottom: $spacing;
+				flex-grow: 1;
+				display: flex;
+				align-items: center;
+			}
+
+            @include c-card-image-overflow {
+                margin-right: 0;
+            }
+
+			&.#{$c}--padded-both {
+				.#{$c}__image-wrapper {
+					margin-bottom: $spacing;
+				}
+
+                .#{$c}__title-wrapper,
+                .#{$c}__subtitle-wrapper,
+                .#{$c}__children-wrapper {
+                    margin-left: 0;
+                }
+			}
+		}
+
+		&-vertical {
+			flex-direction: column;
+
+            @include c-card-image-overflow {
+                margin-bottom: 0;
+            }
+		}
+	}
+}

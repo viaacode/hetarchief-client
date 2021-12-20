@@ -1,0 +1,36 @@
+@use "styles/abstracts" as *;
+@use "sass:math";
+
+$c: "c-media-card";
+$c-media-card-no-video-intended-spacing: 0.9rem;
+
+.#{$c} {
+    &__no-content {
+        display: block;
+        margin-bottom: $c-media-card-no-video-intended-spacing - $spacing;
+
+        &-wrapper {
+            display: flex;
+            color: $zinc;
+            background-color: $platinum;
+            height: 100%;
+            width: 100%;
+            place-content: center;
+            align-items: center;
+
+            .#{$c}__no-content {
+                transform: translateY(-25%);
+            }
+        }
+    }
+
+    &__icon {
+        font-size: $font-size-lg * math.div(11, 12);
+        line-height: 1;
+    }
+
+    &__toolbar {
+        display: flex;
+        flex-direction: row;
+    }
+}

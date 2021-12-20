@@ -22,14 +22,14 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@viaa/avo2-components": "1.78.0",
     "@viaa/avo2-types": "2.33.0",
     "clsx": "1.1.1",
     "next": "12.0.4",
     "next-transpile-modules": "9.0.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-modal": "3.14.4"
+    "react-modal": "3.14.4",
+    "react-truncate-markup": "5.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.16.0",
