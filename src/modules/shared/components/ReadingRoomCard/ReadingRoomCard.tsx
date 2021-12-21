@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { FC } from 'react';
 
+import { Card } from '..';
+
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomProps } from './ReadingRoomCard.types';
 
@@ -11,8 +13,9 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 	title,
 	description,
 }) => {
-	return (
-		<article className={styles['c-reading-room-card']}>
+	const renderDescription = () => <p>{description}</p>;
+	const renderImage = () => {
+		return (
 			<div className={styles['c-reading-room-card__background']}>
 				{!backgroundImage && (
 					<div
@@ -20,6 +23,7 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 						style={{ backgroundColor: backgroundColor ? backgroundColor : '#009690' }}
 					/>
 				)}
+
 				{backgroundImage && (
 					<div className={styles['c-reading-room-card__background--image']}>
 						<Image
@@ -30,6 +34,7 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 						/>
 					</div>
 				)}
+
 				<div className={styles['c-reading-room-card__logo']}>
 					<Image
 						className={styles['c-reading-room-card__logo-image']}
@@ -40,9 +45,13 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 					/>
 				</div>
 			</div>
-			<b className={styles['c-reading-room-card__title']}>{title}</b>
-			<p className={styles['c-reading-room-card__description']}>{description}</p>
-		</article>
+		);
+	};
+
+	return (
+		<Card image={renderImage()} edge="none" padding="vertical" title={title}>
+			{renderDescription()}
+		</Card>
 	);
 };
 

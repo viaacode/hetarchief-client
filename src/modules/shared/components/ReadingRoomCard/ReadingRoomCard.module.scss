@@ -1,18 +1,9 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
-$spacer-sm: 16px;
-
 .c-reading-room-card {
-	z-index: get-z-layer("base");
-	display: grid;
-	position: relative;
-	max-width: 400px;
-	grid-template-columns: 1fr;
-	grid-template-rows: minmax(50px, 200px) auto auto;
-	row-gap: $spacer-sm;
-
 	&__background {
+		min-height: 205px;
 		display: grid;
 		grid-template-columns: 1fr 2fr 1fr;
 		grid-template-rows: 1fr 2fr 1fr;
@@ -46,19 +37,4 @@ $spacer-sm: 16px;
 		max-height: 100%;
 		position: relative;
 	}
-
-	&__title {
-		font-size: $font-size-md;
-	}
-
-	&__description {
-		font-size: $font-size-xs;
-		color: $neutral;
-		/* stylelint-disable-next-line value-no-vendor-prefix */
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 3;
-		overflow: hidden;
-	}
-
 }
