@@ -6,6 +6,7 @@ import { Card, Icon } from '..';
 import { Button } from '../Button/Button.stories';
 
 import styles from './MediaCard.module.scss';
+import { formatDate } from './MediaCard.utils';
 
 import { MediaCardProps } from '.';
 
@@ -66,9 +67,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		if (published_at) {
 			// TODO: connect to i18n locale
-			const formatted = published_at.toLocaleDateString('nl-BE', {
-				dateStyle: 'medium',
-			});
+			const formatted = formatDate(published_at);
 
 			subtitle += ` (${formatted})`;
 		}

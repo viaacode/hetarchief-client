@@ -14,23 +14,18 @@ $c: "c-card";
 		margin-bottom: $spacing;
 	}
 
-	&__title-wrapper {
+	&__title-wrapper,
+	&__subtitle-wrapper,
+	&__toolbar-wrapper,
+	&__children-wrapper, {
 		@include c-card-horizontal-whitespace;
 	}
 
 	&__toolbar-wrapper {
-		@include c-card-horizontal-whitespace;
-
 		margin-left: 0;
 	}
 
-	&__subtitle-wrapper {
-		@include c-card-horizontal-whitespace;
-	}
-
 	&__children-wrapper {
-		@include c-card-horizontal-whitespace;
-
         margin-bottom: $spacing;
 	}
 }
