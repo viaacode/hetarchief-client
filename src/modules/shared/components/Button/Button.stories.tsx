@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import clsx from 'clsx';
-import React, { FC, ReactNode } from 'react';
+import React, { FC, MouseEventHandler, ReactNode } from 'react';
 
 import { Icon } from '../Icon';
 
@@ -9,9 +9,10 @@ export const Button: FC<{
 	icon?: ReactNode;
 	iconStart?: ReactNode;
 	iconEnd?: ReactNode;
-}> = ({ children, className, icon, iconStart, iconEnd }) => {
+	onClick?: MouseEventHandler<HTMLButtonElement>;
+}> = ({ children, className, icon, iconStart, iconEnd, onClick }) => {
 	return (
-		<button className={clsx(className, 'c-button')}>
+		<button className={clsx(className, 'c-button')} onClick={onClick}>
 			{icon ? (
 				<span className="c-button__icon">{icon}</span>
 			) : (
