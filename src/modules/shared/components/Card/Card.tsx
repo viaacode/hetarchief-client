@@ -41,35 +41,31 @@ const Card: FC<CardProps> = ({
 		>
 			<section className={clsx(styles['c-card__top-wrapper'])}>
 				{image && (
-					<section className={clsx(styles['c-card__image-wrapper'])}>
+					<div className={clsx(styles['c-card__image-wrapper'])}>
 						{typeof image === 'string' ? (
 							<img className='u-image-responsive' src={image} alt={title?.toString() || "The card's image"} /> //eslint-disable-line
 						) : (
 							image
 						)}
-					</section>
+					</div>
 				)}
 			</section>
 
 			<section className={clsx(styles['c-card__bottom-wrapper'])}>
-				<section className={clsx(styles['c-card__header-wrapper'])}>
+				<div className={clsx(styles['c-card__header-wrapper'])}>
 					{title && <div className={clsx(styles['c-card__title-wrapper'])}>{title}</div>}
 
 					{toolbar && (
 						<div className={clsx(styles['c-card__toolbar-wrapper'])}>{toolbar}</div>
 					)}
-				</section>
+				</div>
 
 				{subtitle && (
-					<section className={clsx(styles['c-card__subtitle-wrapper'])}>
-						{subtitle}
-					</section>
+					<div className={clsx(styles['c-card__subtitle-wrapper'])}>{subtitle}</div>
 				)}
 
 				{children && (
-					<section className={clsx(styles['c-card__children-wrapper'])}>
-						{children}
-					</section>
+					<div className={clsx(styles['c-card__children-wrapper'])}>{children}</div>
 				)}
 			</section>
 		</article>
