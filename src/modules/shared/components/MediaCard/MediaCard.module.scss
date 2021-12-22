@@ -7,7 +7,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 .#{$c} {
     &__no-content {
         display: block;
-        margin-bottom: $c-media-card-no-video-intended-spacing - $spacing;
+        margin-bottom: $c-media-card-no-video-intended-spacing - $spacer-sm;
 
         &-wrapper {
             display: flex;

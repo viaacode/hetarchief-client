@@ -4,42 +4,58 @@
 $c: "c-card";
 
 @mixin c-card-horizontal-whitespace {
-	margin-left: $spacing;
-	margin-right: $spacing;
+	margin-left: $spacer-sm;
+	margin-right: $spacer-sm;
 }
 
 @mixin c-card-content-whitespace {
-	&__header-wrapper {
-		margin-top: $spacing;
-		margin-bottom: $spacing;
+	// Note: I shouldn't let whitespace be influenced by color mode but this saves us a lot of className exposure
+	&.#{$c}--mode-dark {
+		.#{$c} {
+			&__header-wrapper {
+				margin-top: $spacer-lg + $spacer-xs;
+				margin-bottom: $spacer-sm * 2;
+			}
+
+			&__children-wrapper {
+				margin-bottom: $spacer-md;
+			}
+		}
 	}
 
-	&__title-wrapper,
-	&__subtitle-wrapper,
-	&__toolbar-wrapper,
-	&__children-wrapper, {
-		@include c-card-horizontal-whitespace;
-	}
+	.#{$c} {
+		&__header-wrapper {
+			margin-top: $spacer-sm;
+			margin-bottom: $spacer-sm;
+		}
 
-	&__toolbar-wrapper {
-		margin-left: 0;
-	}
+		&__title-wrapper,
+		&__subtitle-wrapper,
+		&__toolbar-wrapper,
+		&__children-wrapper {
+			@include c-card-horizontal-whitespace;
+		}
 
-	&__children-wrapper {
-        margin-bottom: $spacing;
+		&__toolbar-wrapper {
+			margin-left: 0;
+		}
+
+		&__children-wrapper {
+			margin-bottom: $spacer-sm;
+		}
 	}
 }
 
 @mixin c-card-image-overflow {
-    // Spill the image over the border if it's not padded and the card has a border
-    &.#{$c}--padded-content {
-        &:not(.#{$c}--edge-none) {
-            .#{$c}__image-wrapper {
-                margin: -$card-edge-size;
-                @content
-            }
-        }
-    }
+	// Spill the image over the border if it's not padded and the card has a border
+	&.#{$c}--padded-content {
+		&:not(.#{$c}--edge-none) {
+			.#{$c}__image-wrapper {
+				margin: -$card-edge-size;
+				@content;
+			}
+		}
+	}
 }
 
 .#{$c} {
@@ -79,33 +95,31 @@ $c: "c-card";
 
 	&--padded {
 		&-both {
-			.#{$c} {
-				@include c-card-content-whitespace;
+			@include c-card-content-whitespace;
 
+			.#{$c} {
 				&__image-wrapper {
 					@include c-card-horizontal-whitespace;
 
-					margin-top: $spacing;
+					margin-top: $spacer-sm;
 				}
 			}
 		}
 
 		&-content {
-			.#{$c} {
-				@include c-card-content-whitespace;
-			}
+			@include c-card-content-whitespace;
 		}
 
 		&-vertical {
 			.#{$c} {
 				&__header-wrapper {
-					margin-top: $spacing * 1.5;
-					margin-bottom: $spacing;
+					margin-top: $spacer-sm * 1.5;
+					margin-bottom: $spacer-sm;
 				}
 
-                &__children-wrapper {
-                    margin-bottom: $spacing;
-                }
+				&__children-wrapper {
+					margin-bottom: $spacer-sm;
+				}
 			}
 		}
 	}
@@ -116,49 +130,84 @@ $c: "c-card";
 			flex-direction: row;
 
 			.#{$c}__header-wrapper {
-                margin-top: $spacing * 1.5;
-            }
+				margin-top: $spacer-sm * 1.5;
+			}
 
-            .#{$c}__top-wrapper {
-                width: 280px;
+			.#{$c}__top-wrapper {
+				width: 280px;
 				min-width: 280px;
 				display: flex;
-            }
+			}
 
 			.#{$c}__bottom-wrapper {
-                flex-grow: 1;
-            }
+				flex-grow: 1;
+			}
 
 			.#{$c}__image-wrapper {
-				margin-bottom: $spacing;
 				flex-grow: 1;
 				display: flex;
 				align-items: center;
 			}
 
-            @include c-card-image-overflow {
-                margin-right: 0;
-            }
+			@include c-card-image-overflow {
+				margin-right: 0;
+			}
 
 			&.#{$c}--padded-both {
 				.#{$c}__image-wrapper {
-					margin-bottom: $spacing;
+					margin-bottom: $spacer-sm;
 				}
 
-                .#{$c}__title-wrapper,
-                .#{$c}__subtitle-wrapper,
-                .#{$c}__children-wrapper {
-                    margin-left: 0;
-                }
+				.#{$c}__title-wrapper,
+				.#{$c}__subtitle-wrapper,
+				.#{$c}__children-wrapper {
+					margin-left: 0;
+				}
 			}
 		}
 
 		&-vertical {
 			flex-direction: column;
 
-            @include c-card-image-overflow {
-                margin-bottom: 0;
-            }
+			@include c-card-image-overflow {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	&--mode {
+		&-light {
+			background-color: $white;
+		}
+
+		&-dark {
+			background-color: $black;
+
+			.#{$c} {
+				&__title,
+				&__toolbar {
+					&-wrapper {
+						color: $white;
+					}
+				}
+			}
+		}
+	}
+
+	&--offset {
+		margin-left: $card-offset;
+		margin-top: $card-offset;
+
+		&.#{$c}--orientation-horizontal {
+			.#{$c} {
+				&__image {
+					&-wrapper {
+						align-self: flex-start;
+						transform: translate(-$card-offset, -$card-offset);
+						box-shadow: $shadow-24-black;
+					}
+				}
+			}
 		}
 	}
 }
