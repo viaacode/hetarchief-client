@@ -58,4 +58,10 @@ describe('Component: <Card />', () => {
 
 		expect(element.length).toEqual(1);
 	});
+
+	it('Should not apply padding by default', () => {
+		const element = documentOf(rendered).getElementsByClassName(styles['c-card--padded-none']);
+
+		expect(element.length).toEqual(1);
+	});
 });
