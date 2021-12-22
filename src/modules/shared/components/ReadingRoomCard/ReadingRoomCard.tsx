@@ -1,51 +1,121 @@
+import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
 
-import { Card } from '..';
+import { Card, Icon } from '..';
+import { Button } from '../Button/Button.stories';
+import ContactIconButton from '../ContactIconButton/ContactIconButton';
 
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomProps } from './ReadingRoomCard.types';
 
+import { readingRoomCardType } from '.';
+
 const ReadingRoomCard: FC<ReadingRoomProps> = ({
-	backgroundColor,
-	backgroundImage,
-	logo,
-	title,
-	description,
+	access,
+	onAccessRequest,
+	onContactClick,
+	room,
+	type,
 }) => {
-	const renderDescription = () => <p>{description}</p>;
+	const isWaitingForAccess = !access?.granted && !access?.pending;
+	const hasAccess = access?.granted && !access?.pending;
+
 	const renderImage = () => {
 		return (
-			<div className={styles['c-reading-room-card__background']}>
-				{!backgroundImage && (
-					<div
-						className={styles['c-reading-room-card__background--color']}
-						style={{ backgroundColor: backgroundColor ? backgroundColor : '#009690' }}
-					/>
-				)}
-
-				{backgroundImage && (
+			<div
+				className={styles['c-reading-room-card__background']}
+				style={{ backgroundColor: room?.color ? room?.color : '#009690' }}
+			>
+				{room?.image && (
 					<div className={styles['c-reading-room-card__background--image']}>
-						<Image src={backgroundImage} alt={title} layout="fill" objectFit="cover" />
+						<Image
+							src={room?.image}
+							alt={room?.name || room?.id.toString()}
+							layout="fill"
+							objectFit="cover"
+						/>
 					</div>
 				)}
 
-				<div className={styles['c-reading-room-card__logo']}>
-					<Image
-						className={styles['c-reading-room-card__logo-image']}
-						src={logo}
-						alt={title}
-						layout="fill"
-						objectFit="contain"
-					/>
-				</div>
+				{room?.logo && (
+					<div className={styles['c-reading-room-card__logo']}>
+						<Image
+							className={styles['c-reading-room-card__logo-image']}
+							src={room?.logo || ''}
+							alt={room?.name || room?.id.toString()}
+							layout="fill"
+							objectFit="contain"
+						/>
+					</div>
+				)}
 			</div>
 		);
 	};
 
+	const renderDescription = () => (
+		<p className={styles['c-reading-room-card__description']}>{room?.description}</p>
+	);
+
+	const renderControls = () => {
+		if (hasAccess) {
+			return null; // TODO: add content for when the user has access
+		}
+
+		if (!isWaitingForAccess) {
+			return (
+				<>
+					<Button
+						className={clsx('c-button--sm', 'c-button--black')}
+						onClick={() => onAccessRequest && onAccessRequest(room)}
+					>
+						Vraag toegang aan
+					</Button>
+
+					<ContactIconButton
+						color="silver"
+						onClick={() => onContactClick && onContactClick(room)}
+					/>
+				</>
+			);
+		} else {
+			return (
+				<>
+					<Icon
+						className={styles['c-reading-room-card__not-available']}
+						type="light"
+						name="not-available"
+					/>
+
+					<p>Momenteel is er geen toegang mogelijk tot deze leeszaal</p>
+
+					<ContactIconButton
+						color="silver"
+						onClick={() => onContactClick && onContactClick(room)}
+					/>
+				</>
+			);
+		}
+	};
+
 	return (
-		<Card image={renderImage()} edge="none" padding="vertical" title={title}>
+		<Card
+			image={renderImage()}
+			edge="none"
+			padding="vertical"
+			title={<b className={styles['c-reading-room-card__title']}>{room?.name || room?.id}</b>}
+		>
 			{renderDescription()}
+
+			<div
+				className={clsx(
+					styles['c-reading-room-card__controls'],
+					type === readingRoomCardType['no-access'] &&
+						styles['c-reading-room-card__controls--near']
+				)}
+			>
+				{renderControls()}
+			</div>
 		</Card>
 	);
 };

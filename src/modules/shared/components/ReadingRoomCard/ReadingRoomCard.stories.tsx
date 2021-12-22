@@ -3,47 +3,78 @@ import React from 'react';
 
 import ReadingRoomCard from './ReadingRoomCard';
 import { readingRoomCardType } from './ReadingRoomCard.constants';
+import { ReadingRoomAccess } from './ReadingRoomCard.types';
 
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
 	title: 'Components/ReadingRoomCard',
 	component: ReadingRoomCard,
-	// More on argTypes: https://storybook.js.org/docs/react/api/argtypes
 	argTypes: {},
 } as ComponentMeta<typeof ReadingRoomCard>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
+const NoAccess: ReadingRoomAccess = {
+	granted: false,
+	pending: false,
+};
+
+const AccessRequested: ReadingRoomAccess = {
+	granted: false,
+	pending: true,
+};
+
+const description =
+	'A digital development studio that shoots for the stars. We are a bunch of JavaScript enthusiasts who thrive on getting things done. We are using a solid set of technologies and methodologies we truly believe in as a spearpoint to help you realize your full digital potential.';
 const Template: ComponentStory<typeof ReadingRoomCard> = (args) => <ReadingRoomCard {...args} />;
 
-export const NoAccessDefaultColor = Template.bind({});
+export const Logo = Template.bind({});
 
-NoAccessDefaultColor.args = {
+Logo.args = {
 	type: readingRoomCardType['no-access'],
-	logo: '/images/logo_tall.png',
-	title: 'card title',
-	description:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+	room: {
+		id: 12345,
+		logo: '/images/storybook/logo-shd--small.svg',
+		name: 'Studio Hyperdrive',
+		description,
+	},
+	access: NoAccess,
 };
 
-export const NoAccessCustomColor = Template.bind({});
+export const Color = Template.bind({});
 
-NoAccessCustomColor.args = {
+Color.args = {
 	type: readingRoomCardType['no-access'],
-	backgroundColor: '#ee9944',
-	logo: '/images/logo_wide.png',
-	title: 'card title',
-	description:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+	room: {
+		id: 45678,
+		color: '#31156b',
+		logo: '/images/storybook/logo-shd--small.svg',
+		name: 'Studio Hyperdrive',
+		description,
+	},
+	access: NoAccess,
 };
 
-export const NoAccessCustomImage = Template.bind({});
+export const Image = Template.bind({});
 
-NoAccessCustomImage.args = {
+Image.args = {
 	type: readingRoomCardType['no-access'],
-	backgroundColor: '#ee9944',
-	backgroundImage: '/images/image-t.png',
-	logo: '/images/logo.png',
-	title: 'card title',
-	description:
-		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+	room: {
+		id: 78912,
+		color: '#ee9944',
+		image: '/images/storybook/bg-shd.png',
+		logo: '/images/storybook/logo-shd--small.svg',
+		name: 'Studio Hyperdrive',
+		description,
+	},
+	access: NoAccess,
+};
+
+export const Requested = Template.bind({});
+
+Requested.args = {
+	type: readingRoomCardType['no-access'],
+	room: {
+		id: 34567,
+		name: 'Studio Hyperdrive',
+		description,
+	},
+	access: AccessRequested,
 };
