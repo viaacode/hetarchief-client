@@ -18,11 +18,12 @@ export interface CardProps {
 const defaultProps: CardProps = {
 	edge: 'zinc',
 	orientation: 'vertical',
+	padding: 'none',
 };
 
 const Card: FC<CardProps> = ({
-	edge,
 	children,
+	edge,
 	image,
 	orientation,
 	padding,
