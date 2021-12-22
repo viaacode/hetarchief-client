@@ -26,20 +26,15 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 
 				{backgroundImage && (
 					<div className={styles['c-reading-room-card__background--image']}>
-						<Image
-							src={`/images/${backgroundImage}`}
-							alt=""
-							layout="fill"
-							objectFit="cover"
-						/>
+						<Image src={backgroundImage} alt={title} layout="fill" objectFit="cover" />
 					</div>
 				)}
 
 				<div className={styles['c-reading-room-card__logo']}>
 					<Image
 						className={styles['c-reading-room-card__logo-image']}
-						src={`/images/${logo}`}
-						alt=""
+						src={logo}
+						alt={title}
 						layout="fill"
 						objectFit="contain"
 					/>
