@@ -21,6 +21,11 @@ const AccessRequested: ReadingRoomAccess = {
 	pending: true,
 };
 
+const AccessGranted: ReadingRoomAccess = {
+	granted: true,
+	pending: false,
+};
+
 const description =
 	'A digital development studio that shoots for the stars. We are a bunch of JavaScript enthusiasts who thrive on getting things done. We are using a solid set of technologies and methodologies we truly believe in as a spearpoint to help you realize your full digital potential.';
 const Template: ComponentStory<typeof ReadingRoomCard> = (args) => <ReadingRoomCard {...args} />;
@@ -77,4 +82,17 @@ Requested.args = {
 		description,
 	},
 	access: AccessRequested,
+};
+
+export const Granted = Template.bind({});
+
+Granted.args = {
+	...Image.args,
+	type: readingRoomCardType['access-granted'],
+	room: {
+		...Image.args.room,
+		id: 777,
+		name: '//TODO: width of image',
+	},
+	access: AccessGranted,
 };
