@@ -31,7 +31,7 @@ Logo.args = {
 	type: readingRoomCardType['no-access'],
 	room: {
 		id: 12345,
-		logo: '/images/storybook/logo-shd--small.svg',
+		logo: '/images/logo-shd--small.svg',
 		name: 'Studio Hyperdrive',
 		description,
 	},
@@ -45,7 +45,7 @@ Color.args = {
 	room: {
 		id: 45678,
 		color: '#31156b',
-		logo: '/images/storybook/logo-shd--small.svg',
+		logo: '/images/logo-shd--small.svg',
 		name: 'Studio Hyperdrive',
 		description,
 	},
@@ -59,8 +59,8 @@ Image.args = {
 	room: {
 		id: 78912,
 		color: '#ee9944',
-		image: '/images/storybook/bg-shd.png',
-		logo: '/images/storybook/logo-shd--small.svg',
+		image: '/images/bg-shd.png',
+		logo: '/images/logo-shd--small.svg',
 		name: 'Studio Hyperdrive',
 		description,
 	},
