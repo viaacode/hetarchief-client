@@ -1,33 +1,8 @@
+import { Button } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import clsx from 'clsx';
-import React, { FC, ReactNode } from 'react';
+import React from 'react';
 
 import { Icon } from '../Icon';
-
-const Button: FC<{
-	className?: string;
-	icon: ReactNode;
-	iconStart: ReactNode;
-	iconEnd: ReactNode;
-}> = ({ children, className, icon, iconStart = null, iconEnd = null }) => {
-	return (
-		<button className={clsx(className, 'c-button')}>
-			{icon ? (
-				<span className="c-button__icon">{icon}</span>
-			) : (
-				<>
-					{iconStart && (
-						<span className="c-button__icon c-button__icon--start">{iconStart}</span>
-					)}
-					<span className="c-button__label">{children}</span>
-					{iconEnd && (
-						<span className="c-button__icon c-button__icon--end">{iconEnd}</span>
-					)}
-				</>
-			)}
-		</button>
-	);
-};
 
 export default {
 	title: 'Components/Button',
@@ -43,64 +18,66 @@ Default.args = {
 
 export const Disabled = Template.bind({});
 Disabled.args = {
-	className: 'c-button--disabled',
 	children: 'Click me!',
+	disabled: true,
 };
 
 export const Outline = Template.bind({});
 Outline.args = {
-	className: 'c-button--outline',
 	children: 'Click me!',
+	variants: 'outline',
 };
 
 export const OutlineDisabled = Template.bind({});
 OutlineDisabled.args = {
-	className: 'c-button--outline c-button--disabled',
 	children: 'Click me!',
+	disabled: true,
+	variants: 'outline',
 };
 
 export const Text = Template.bind({});
 Text.args = {
-	className: 'c-button--text',
 	children: 'Click me!',
+	variants: 'text',
 };
 
 export const TextNeutral = Template.bind({});
 TextNeutral.args = {
-	className: 'c-button--text c-button--neutral c-button--underline',
 	children: 'Click me!',
+	variants: ['text', 'neutral', 'underline'],
 };
 
 export const TextDisabled = Template.bind({});
 TextDisabled.args = {
-	className: 'c-button--text c-button--disabled',
 	children: 'Click me!',
+	variants: 'text',
+	disabled: true,
 };
 
 // Colors
 export const ColorBlack = Template.bind({});
 ColorBlack.args = {
-	className: 'c-button--black',
 	children: 'Click me!',
+	variants: 'black',
 };
 
 export const ColorWhite = Template.bind({});
 ColorWhite.args = {
-	className: 'c-button--white',
 	children: 'Click me!',
+	variants: 'white',
 };
 
 // Sizes
 export const SizeBlock = Template.bind({});
 SizeBlock.args = {
-	className: 'c-button--block',
 	children: 'Click me!',
+	variants: 'block',
 };
 
 export const SizeSmall = Template.bind({});
 SizeSmall.args = {
-	className: 'c-button--sm',
 	children: 'Click me!',
+	variants: 'sm',
 };
 
 export const TextWithIconLeft = Template.bind({});
@@ -117,21 +94,17 @@ TextWithIconRight.args = {
 
 export const IconOnly = Template.bind({});
 IconOnly.args = {
-	className: 'c-button--icon',
-	children: 'Click me!',
 	icon: <Icon name="info" />,
 };
 
 export const IconOnlySmall = Template.bind({});
 IconOnlySmall.args = {
-	className: 'c-button--icon c-button--sm',
-	children: 'Click me!',
 	icon: <Icon name="info" />,
+	variants: 'sm',
 };
 
 export const IconOnlyExtraSmall = Template.bind({});
 IconOnlyExtraSmall.args = {
-	className: 'c-button--icon c-button--xs',
-	children: 'Click me!',
 	icon: <Icon name="info" />,
+	variants: 'xs',
 };

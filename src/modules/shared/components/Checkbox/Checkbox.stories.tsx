@@ -1,49 +1,8 @@
+import { Checkbox } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import clsx from 'clsx';
-import React, { FC, ReactNode } from 'react';
+import React from 'react';
 
 import { Icon } from '../Icon';
-
-import { DefaultComponentProps } from '@shared/types';
-
-export interface CheckboxPropsSchema extends DefaultComponentProps {
-	label: string | ReactNode;
-	checked?: boolean;
-	id?: string;
-	disabled?: boolean;
-	onChange?: () => void;
-	checkIcon?: ReactNode;
-}
-
-const Checkbox: FC<CheckboxPropsSchema> = ({
-	className,
-	label,
-	id,
-	disabled = false,
-	checked = false,
-	onChange = () => null,
-	checkIcon,
-}) => {
-	return (
-		<label
-			className={clsx(className, 'c-checkbox', {
-				'c-checkbox--checked': checked,
-				'c-checkbox--disabled': disabled,
-			})}
-		>
-			<input
-				className="c-checkbox__input"
-				type="checkbox"
-				id={id}
-				checked={checked}
-				disabled={disabled}
-				onChange={onChange}
-			/>
-			<span className="c-checkbox__check-icon">{checkIcon}</span>
-			{label}
-		</label>
-	);
-};
 
 export default {
 	title: 'Components/Checkbox',
