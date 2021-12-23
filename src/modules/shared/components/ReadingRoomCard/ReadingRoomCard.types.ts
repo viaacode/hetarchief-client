@@ -1,4 +1,4 @@
-import { ReadingRoomCardType } from './ReadingRoomCard.constants';
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 
 export interface ReadingRoom {
 	color?: string;

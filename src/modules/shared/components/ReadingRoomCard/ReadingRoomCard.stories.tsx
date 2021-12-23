@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import ReadingRoomCard from './ReadingRoomCard';
-import { ReadingRoomCardType } from './ReadingRoomCard.constants';
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import { ReadingRoomAccess } from './ReadingRoomCard.types';
 
 export default {

@@ -7,7 +7,7 @@ import Card from '../Card/Card';
 import ContactIconButton from '../ContactIconButton/ContactIconButton';
 import Icon from '../Icon/Icon';
 
-import { ReadingRoomCardType } from './ReadingRoomCard.constants';
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomProps } from './ReadingRoomCard.types';
 
