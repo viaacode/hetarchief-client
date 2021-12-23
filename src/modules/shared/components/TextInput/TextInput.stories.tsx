@@ -1,63 +1,8 @@
+import { TextInput } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import clsx from 'clsx';
-import React, { FC, ReactNode } from 'react';
+import React from 'react';
 
 import { Icon } from '../Icon';
-
-import { DefaultComponentProps } from '@shared/types';
-
-interface TextInputPropsSchema extends DefaultComponentProps {
-	id?: string;
-	disabled?: boolean;
-	placeholder?: string;
-	value?: string;
-	iconStart?: ReactNode;
-	iconEnd?: ReactNode;
-	type?: 'text' | 'number';
-	variants: string | string[];
-}
-
-const TextInput: FC<TextInputPropsSchema> = ({
-	className,
-	id,
-	disabled = false,
-	placeholder,
-	value = '',
-	iconStart = null,
-	iconEnd = null,
-	type = 'text',
-	variants,
-}) => {
-	// Make util for this
-	const variantsArray = Array.isArray(variants) ? variants : [variants];
-
-	const rootCls = clsx(
-		className,
-		'c-input',
-		variantsArray.map((variant) => `c-input--${variant}`),
-		{
-			'c-input--disabled': disabled,
-			'c-input--icon-start': iconStart,
-			'c-input--icon-end': iconEnd,
-		}
-	);
-
-	return (
-		<div className={rootCls}>
-			{iconStart && <span className="c-input__icon c-input__icon--start">{iconStart}</span>}
-			<input
-				className="c-input__field"
-				type={type}
-				id={id}
-				value={value}
-				disabled={disabled}
-				placeholder={placeholder}
-				onChange={() => null}
-			/>
-			{iconEnd && <span className="c-input__icon c-input__icon--end">{iconEnd}</span>}
-		</div>
-	);
-};
 
 export default {
 	title: 'Components/TextInput',
@@ -95,7 +40,7 @@ export const Rounded = Template.bind({});
 Rounded.args = {
 	placeholder: 'Zoek',
 	iconEnd: <Icon name="search" />,
-	variants: ['rounded'],
+	variants: 'rounded',
 };
 
 export const SizeLarge = Template.bind({});

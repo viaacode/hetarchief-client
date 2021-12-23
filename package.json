@@ -22,6 +22,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@meemoo/react-components": "2.0.0",
     "@viaa/avo2-components": "1.78.0",
     "@viaa/avo2-types": "2.33.0",
     "clsx": "1.1.1",
