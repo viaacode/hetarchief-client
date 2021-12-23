@@ -2,9 +2,10 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
 
-import { Card, Icon } from '..';
 import { Button } from '../Button/Button.stories';
+import Card from '../Card/Card';
 import ContactIconButton from '../ContactIconButton/ContactIconButton';
+import Icon from '../Icon/Icon';
 
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomProps } from './ReadingRoomCard.types';
