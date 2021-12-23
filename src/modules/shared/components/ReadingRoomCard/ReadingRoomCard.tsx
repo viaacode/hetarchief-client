@@ -133,7 +133,7 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 			return (
 				<>
 					<Icon
-						className={styles['c-reading-room-card__not-available']}
+						className={styles['c-reading-room-card__control-icon']}
 						type="light"
 						name="not-available"
 					/>
