@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import ReadingRoomCard from './ReadingRoomCard';
-import { readingRoomCardType } from './ReadingRoomCard.constants';
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import { ReadingRoomAccess } from './ReadingRoomCard.types';
 
 export default {
@@ -32,7 +32,7 @@ const Template: ComponentStory<typeof ReadingRoomCard> = (args) => (
 	<div style={{ display: 'flex', justifyContent: 'center' }}>
 		<div
 			style={{
-				flex: args.type === readingRoomCardType['access-granted'] ? '0 0 50%' : '0 0 33%',
+				flex: args.type === ReadingRoomCardType['access-granted'] ? '0 0 50%' : '0 0 33%',
 			}}
 		>
 			<ReadingRoomCard {...args} />
@@ -43,10 +43,10 @@ const Template: ComponentStory<typeof ReadingRoomCard> = (args) => (
 export const Logo = Template.bind({});
 
 Logo.args = {
-	type: readingRoomCardType['no-access'],
+	type: ReadingRoomCardType['no-access'],
 	room: {
 		id: 12345,
-		logo: '/images/storybook/logo-shd--small.svg',
+		logo: '/images/logo-shd--small.svg',
 		name: 'Studio Hyperdrive',
 		description,
 	},
@@ -56,11 +56,11 @@ Logo.args = {
 export const Color = Template.bind({});
 
 Color.args = {
-	type: readingRoomCardType['no-access'],
+	type: ReadingRoomCardType['no-access'],
 	room: {
 		id: 45678,
 		color: '#31156b',
-		logo: '/images/storybook/logo-shd--small.svg',
+		logo: '/images/logo-shd--small.svg',
 		name: 'Studio Hyperdrive',
 		description,
 	},
@@ -70,12 +70,12 @@ Color.args = {
 export const Image = Template.bind({});
 
 Image.args = {
-	type: readingRoomCardType['no-access'],
+	type: ReadingRoomCardType['no-access'],
 	room: {
 		id: 78912,
 		color: '#ee9944',
-		image: '/images/storybook/bg-shd.png',
-		logo: '/images/storybook/logo-shd--small.svg',
+		image: '/images/bg-shd.png',
+		logo: '/images/logo-shd--small.svg',
 		name: 'Studio Hyperdrive',
 		description,
 	},
@@ -85,7 +85,7 @@ Image.args = {
 export const Requested = Template.bind({});
 
 Requested.args = {
-	type: readingRoomCardType['no-access'],
+	type: ReadingRoomCardType['no-access'],
 	room: {
 		id: 34567,
 		name: 'Studio Hyperdrive',
@@ -98,6 +98,6 @@ export const Granted = Template.bind({});
 
 Granted.args = {
 	...Image.args,
-	type: readingRoomCardType['access-granted'],
+	type: ReadingRoomCardType['access-granted'],
 	access: AccessGranted,
 };

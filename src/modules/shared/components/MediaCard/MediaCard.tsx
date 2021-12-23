@@ -3,13 +3,13 @@ import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import { Card, Icon } from '..';
 import { Button } from '../Button/Button.stories';
+import Card from '../Card/Card';
+import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
+import { MediaCardProps } from './MediaCard.types';
 import { formatDate } from './MediaCard.utils';
-
-import { MediaCardProps } from '.';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,

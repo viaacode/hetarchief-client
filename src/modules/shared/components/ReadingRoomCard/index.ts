@@ -1,2 +1,2 @@
 export { default as ReadingRoomCard } from './ReadingRoomCard';
-export * from './ReadingRoomCard.constants';
+export * from './ReadingRoomCard.const';

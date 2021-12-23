@@ -3,14 +3,14 @@ import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import { Card, Icon } from '..';
 import { Button } from '../Button/Button.stories';
+import Card from '../Card/Card';
 import ContactIconButton from '../ContactIconButton/ContactIconButton';
+import Icon from '../Icon/Icon';
 
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomProps } from './ReadingRoomCard.types';
-
-import { readingRoomCardType } from '.';
 
 const ReadingRoomCard: FC<ReadingRoomProps> = ({
 	access,
@@ -23,8 +23,8 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 	const isWaitingForAccess = !access?.granted && !access?.pending;
 	const hasAccess = access?.granted && !access?.pending;
 
-	const typeNoAccess = type === readingRoomCardType['no-access'];
-	const typeAccessGranted = type === readingRoomCardType['access-granted'];
+	const typeNoAccess = type === ReadingRoomCardType['no-access'];
+	const typeAccessGranted = type === ReadingRoomCardType['access-granted'];
 
 	const renderImage = () => {
 		return (
