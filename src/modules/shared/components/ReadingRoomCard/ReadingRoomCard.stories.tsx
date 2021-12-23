@@ -89,10 +89,5 @@ export const Granted = Template.bind({});
 Granted.args = {
 	...Image.args,
 	type: readingRoomCardType['access-granted'],
-	room: {
-		...Image.args.room,
-		id: 777,
-		name: '//TODO: width of image',
-	},
 	access: AccessGranted,
 };
