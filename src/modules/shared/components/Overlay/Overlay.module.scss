@@ -1,6 +1,9 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
+$overlay-opacity-dark: 64%;
+$overlay-opacity-light: 40%;
+
 .c-overlay {
 	visibility: hidden;
 	position: absolute;
