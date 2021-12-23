@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
+import TruncateMarkup from 'react-truncate-markup';
 
 import { Button } from '../Button/Button.stories';
 import Card from '../Card/Card';
@@ -9,22 +10,31 @@ import Icon from '../Icon/Icon';
 
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
-import { ReadingRoomProps } from './ReadingRoomCard.types';
+import { ReadingRoomCardProps } from './ReadingRoomCard.types';
+import { formatDateTime } from './ReadingRoomCard.utils';
 
-const ReadingRoomCard: FC<ReadingRoomProps> = ({
+const ReadingRoomCard: FC<ReadingRoomCardProps> = ({
 	access,
 	onAccessRequest,
 	onContactClick,
+	onVisitClick,
 	room,
 	type,
 }) => {
-	const isWaitingForAccess = !access?.granted && !access?.pending;
+	const isWaitingForAccess = !access?.granted && access?.pending;
 	const hasAccess = access?.granted && !access?.pending;
+
+	const typeNoAccess = type === ReadingRoomCardType['no-access'];
+	const typeAccessGranted = type === ReadingRoomCardType['access-granted'];
 
 	const renderImage = () => {
 		return (
 			<div
-				className={styles['c-reading-room-card__background']}
+				className={clsx(
+					styles['c-reading-room-card__background'],
+					typeNoAccess && styles['c-reading-room-card__background--short'],
+					typeAccessGranted && styles['c-reading-room-card__background--tall']
+				)}
 				style={{ backgroundColor: room?.color ? room?.color : '#009690' }}
 			>
 				{room?.image && (
@@ -53,13 +63,56 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 		);
 	};
 
+	const renderTitle = () => {
+		if (typeAccessGranted) {
+			return (
+				<h2
+					className={clsx(
+						styles['c-reading-room-card__title'],
+						styles['c-reading-room-card__title--large']
+					)}
+				>
+					{room?.name || room?.id}
+				</h2>
+			);
+		}
+
+		return <b className={styles['c-reading-room-card__title']}>{room?.name || room?.id}</b>;
+	};
+
 	const renderDescription = () => (
-		<p className={styles['c-reading-room-card__description']}>{room?.description}</p>
+		<TruncateMarkup lines={3}>
+			<p className={styles['c-reading-room-card__description']}>{room?.description}</p>
+		</TruncateMarkup>
 	);
 
 	const renderControls = () => {
 		if (hasAccess) {
-			return null; // TODO: add content for when the user has access
+			return (
+				<>
+					{access?.until && (
+						<>
+							<Icon
+								className={styles['c-reading-room-card__control-icon']}
+								type="light"
+								name="timer"
+							/>
+
+							<p>
+								Beschikbaar tot <br />
+								{formatDateTime(access?.until)}
+							</p>
+						</>
+					)}
+
+					<Button
+						className={clsx('c-button--lg', 'c-button--white')}
+						onClick={() => onVisitClick && onVisitClick(room)}
+					>
+						Bezoek de leeszaal
+					</Button>
+				</>
+			);
 		}
 
 		if (!isWaitingForAccess) {
@@ -82,7 +135,7 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 			return (
 				<>
 					<Icon
-						className={styles['c-reading-room-card__not-available']}
+						className={styles['c-reading-room-card__control-icon']}
 						type="light"
 						name="not-available"
 					/>
@@ -102,16 +155,21 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 		<Card
 			image={renderImage()}
 			edge="none"
-			padding="vertical"
-			title={<b className={styles['c-reading-room-card__title']}>{room?.name || room?.id}</b>}
+			offset={typeAccessGranted}
+			padding={typeAccessGranted ? 'content' : 'vertical'}
+			orientation={typeAccessGranted ? 'horizontal' : 'vertical'}
+			mode={typeAccessGranted ? 'dark' : 'light'}
+			title={renderTitle()}
 		>
 			{renderDescription()}
 
 			<div
 				className={clsx(
 					styles['c-reading-room-card__controls'],
-					type === ReadingRoomCardType['no-access'] &&
-						styles['c-reading-room-card__controls--near']
+					typeNoAccess && styles['c-reading-room-card__controls--near'],
+					typeAccessGranted && styles['c-reading-room-card__controls--far'],
+					typeAccessGranted && styles['c-reading-room-card__controls--light'],
+					typeAccessGranted && styles['c-reading-room-card__controls--thinner']
 				)}
 			>
 				{renderControls()}

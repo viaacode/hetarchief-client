@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
@@ -94,7 +95,22 @@ const MediaCard: FC<MediaCardProps> = ({
 			</div>
 		);
 
-	const renderHeader = () => preview || renderNoContent();
+	const renderHeader = () => {
+		if (preview) {
+			return (
+				<div
+					className={clsx(
+						styles['c-media-card__header-wrapper'],
+						styles[`c-media-card__header-wrapper--${view}`]
+					)}
+				>
+					<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
+				</div>
+			);
+		} else {
+			return renderNoContent();
+		}
+	};
 
 	return (
 		<Card
