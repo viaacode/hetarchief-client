@@ -12,9 +12,10 @@ export interface ReadingRoom {
 export interface ReadingRoomAccess {
 	granted?: boolean;
 	pending?: boolean;
+	until?: Date;
 }
 
-export interface ReadingRoomProps {
+export interface ReadingRoomCardProps {
 	access?: ReadingRoomAccess;
 	onAccessRequest?: (room: ReadingRoom) => void;
 	onContactClick?: (room: ReadingRoom) => void;

@@ -10,9 +10,10 @@ import Icon from '../Icon/Icon';
 
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
-import { ReadingRoomProps } from './ReadingRoomCard.types';
+import { ReadingRoomCardProps } from './ReadingRoomCard.types';
+import { formatDateTime } from './ReadingRoomCard.utils';
 
-const ReadingRoomCard: FC<ReadingRoomProps> = ({
+const ReadingRoomCard: FC<ReadingRoomCardProps> = ({
 	access,
 	onAccessRequest,
 	onContactClick,
@@ -20,7 +21,7 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 	room,
 	type,
 }) => {
-	const isWaitingForAccess = !access?.granted && !access?.pending;
+	const isWaitingForAccess = !access?.granted && access?.pending;
 	const hasAccess = access?.granted && !access?.pending;
 
 	const typeNoAccess = type === ReadingRoomCardType['no-access'];
@@ -89,19 +90,20 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 		if (hasAccess) {
 			return (
 				<>
-					<Icon
-						className={styles['c-reading-room-card__control-icon']}
-						type="light"
-						name="timer"
-					/>
+					{access?.until && (
+						<>
+							<Icon
+								className={styles['c-reading-room-card__control-icon']}
+								type="light"
+								name="timer"
+							/>
 
-					<p>
-						Beschikbaar tot <br />
-						{new Date().toLocaleString('nl-BE', {
-							dateStyle: 'medium',
-							timeStyle: 'short',
-						})}
-					</p>
+							<p>
+								Beschikbaar tot <br />
+								{formatDateTime(access?.until)}
+							</p>
+						</>
+					)}
 
 					<Button
 						className={clsx('c-button--lg', 'c-button--white')}

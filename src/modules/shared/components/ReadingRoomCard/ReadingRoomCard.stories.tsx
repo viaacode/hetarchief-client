@@ -3,7 +3,7 @@ import React from 'react';
 
 import ReadingRoomCard from './ReadingRoomCard';
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
-import { ReadingRoomAccess } from './ReadingRoomCard.types';
+import { AccessGranted, AccessRequested, mockReadingRoomCardProps } from './ReadingRoomCard.mock';
 
 export default {
 	title: 'Components/ReadingRoomCard',
@@ -11,23 +11,6 @@ export default {
 	argTypes: {},
 } as ComponentMeta<typeof ReadingRoomCard>;
 
-const NoAccess: ReadingRoomAccess = {
-	granted: false,
-	pending: false,
-};
-
-const AccessRequested: ReadingRoomAccess = {
-	granted: false,
-	pending: true,
-};
-
-const AccessGranted: ReadingRoomAccess = {
-	granted: true,
-	pending: false,
-};
-
-const description =
-	'A digital development studio that shoots for the stars. We are a bunch of JavaScript enthusiasts who thrive on getting things done. We are using a solid set of technologies and methodologies we truly believe in as a spearpoint to help you realize your full digital potential.';
 const Template: ComponentStory<typeof ReadingRoomCard> = (args) => (
 	<div
 		style={{ display: 'flex', justifyContent: 'center', maxWidth: '1216px', margin: '0 auto' }}
@@ -45,61 +28,41 @@ const Template: ComponentStory<typeof ReadingRoomCard> = (args) => (
 export const Logo = Template.bind({});
 
 Logo.args = {
-	type: ReadingRoomCardType['no-access'],
+	...mockReadingRoomCardProps,
 	room: {
-		id: 12345,
-		logo: '/images/logo-shd--small.svg',
-		name: 'Studio Hyperdrive',
-		description,
+		...mockReadingRoomCardProps.room,
+		color: undefined,
+		image: undefined,
 	},
-	access: NoAccess,
 };
 
 export const Color = Template.bind({});
 
 Color.args = {
-	type: ReadingRoomCardType['no-access'],
+	...mockReadingRoomCardProps,
 	room: {
-		id: 45678,
-		color: '#31156b',
-		logo: '/images/logo-shd--small.svg',
-		name: 'Studio Hyperdrive',
-		description,
+		...mockReadingRoomCardProps.room,
+		image: undefined,
 	},
-	access: NoAccess,
 };
 
 export const Image = Template.bind({});
 
 Image.args = {
-	type: ReadingRoomCardType['no-access'],
-	room: {
-		id: 78912,
-		color: '#ee9944',
-		image: '/images/bg-shd.png',
-		logo: '/images/logo-shd--small.svg',
-		name: 'Studio Hyperdrive',
-		description,
-	},
-	access: NoAccess,
+	...mockReadingRoomCardProps,
 };
 
 export const Requested = Template.bind({});
 
 Requested.args = {
-	type: ReadingRoomCardType['no-access'],
-	room: {
-		id: 34567,
-		name: 'Studio Hyperdrive',
-		description,
-	},
+	...mockReadingRoomCardProps,
 	access: AccessRequested,
 };
 
 export const Granted = Template.bind({});
 
 Granted.args = {
-	...Image.args,
+	...mockReadingRoomCardProps,
 	type: ReadingRoomCardType['access-granted'],
 	access: AccessGranted,
 };
