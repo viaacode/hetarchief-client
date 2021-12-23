@@ -5,18 +5,48 @@ $c: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 
 .#{$c} {
+    &__header,
+    &__no-content {
+        &-wrapper {
+            height: 100%;
+            max-width: 100%;
+            min-width: 248px;
+            position: relative;
+        }
+    }
+
+    // Override next/image
+    &__header-wrapper {
+        &--list {
+            span > img {
+                height: auto !important;
+                max-height: unset !important;
+                min-height: unset !important;
+            }
+        }
+
+        &--grid {
+            span {
+                position: static !important;
+
+                > img {
+                    height: auto !important;
+                    position: static !important;
+                }
+            }
+        }
+    }
+
     &__no-content {
         display: block;
         margin-bottom: $c-media-card-no-video-intended-spacing - $spacer-sm;
 
         &-wrapper {
-            display: flex;
-            color: $zinc;
-            background-color: $platinum;
-            height: 100%;
-            width: 100%;
-            place-content: center;
             align-items: center;
+            background-color: $platinum;
+            color: $zinc;
+            display: flex;
+            place-content: center;
 
             .#{$c}__no-content {
                 transform: translateY(-25%);
