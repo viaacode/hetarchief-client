@@ -28,7 +28,17 @@ const AccessGranted: ReadingRoomAccess = {
 
 const description =
 	'A digital development studio that shoots for the stars. We are a bunch of JavaScript enthusiasts who thrive on getting things done. We are using a solid set of technologies and methodologies we truly believe in as a spearpoint to help you realize your full digital potential.';
-const Template: ComponentStory<typeof ReadingRoomCard> = (args) => <ReadingRoomCard {...args} />;
+const Template: ComponentStory<typeof ReadingRoomCard> = (args) => (
+	<div style={{ display: 'flex', justifyContent: 'center' }}>
+		<div
+			style={{
+				flex: args.type === readingRoomCardType['access-granted'] ? '0 0 50%' : '0 0 33%',
+			}}
+		>
+			<ReadingRoomCard {...args} />
+		</div>
+	</div>
+);
 
 export const Logo = Template.bind({});
 
