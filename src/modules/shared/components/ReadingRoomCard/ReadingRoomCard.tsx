@@ -7,10 +7,9 @@ import Card from '../Card/Card';
 import ContactIconButton from '../ContactIconButton/ContactIconButton';
 import Icon from '../Icon/Icon';
 
+import { readingRoomCardType } from './ReadingRoomCard.constants';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomProps } from './ReadingRoomCard.types';
-
-import { readingRoomCardType } from '.';
 
 const ReadingRoomCard: FC<ReadingRoomProps> = ({
 	access,

@@ -7,9 +7,8 @@ import Card from '../Card/Card';
 import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
+import { MediaCardProps } from './MediaCard.types';
 import { formatDate } from './MediaCard.utils';
-
-import { MediaCardProps } from '.';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,
