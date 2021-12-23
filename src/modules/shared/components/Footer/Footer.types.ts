@@ -1,13 +1,9 @@
+import { ComponentLink } from '@shared/types';
+
 export interface FooterProps {
-	links?: FooterLink[];
+	links?: ComponentLink[];
 	leftItem: FooterItem;
 	rightItem: FooterItem;
-}
-
-export interface FooterLink {
-	label: string;
-	to: string;
-	external?: boolean;
 }
 
 export interface FooterImage {
@@ -20,5 +16,5 @@ export interface FooterImage {
 export interface FooterItem {
 	label: string;
 	image: FooterImage;
-	link: FooterLink;
+	link: ComponentLink;
 }

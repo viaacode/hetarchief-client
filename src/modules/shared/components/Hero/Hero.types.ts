@@ -1,14 +1,10 @@
+import { ComponentLink } from '@shared/types';
+
 export interface HeroProps {
 	title: string;
 	description: string;
-	link: HeroLink;
+	link: ComponentLink;
 	image: HeroImage;
-}
-
-export interface HeroLink {
-	label: string;
-	to: string;
-	external?: boolean;
 }
 
 export interface HeroImage {
