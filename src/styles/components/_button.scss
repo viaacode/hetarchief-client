@@ -3,6 +3,7 @@
 .c-button {
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	height: 4.8rem;
 	padding: 1.4rem 2.4rem;
 	border: 1px solid $teal;
@@ -36,6 +37,18 @@
  * Elements
  */
 
+.c-button__icon {
+	display: inline-flex;
+	font-size: $font-size-md;
+
+	&--start {
+		margin-right: 4px;
+	}
+
+	&--end {
+		margin-left: 4px;
+	}
+}
 
 /**
  * Modifiers
@@ -79,9 +92,11 @@
 }
 
 .c-button--sm {
+	height: 3.6rem;
 	padding: 0.9rem 2rem;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-normal;
+	line-height: $line-height-base;
 }
 
 // Variants
@@ -141,6 +156,26 @@
 
 	&.c-button--underline {
 		text-decoration: underline;
+	}
+}
+
+.c-button--icon {
+	width: 4.8rem;
+	padding: 0;
+	border-radius: 50%;
+
+	.c-button__icon {
+		font-size: $font-size-lg;
+	}
+
+	&.c-button--sm {
+		width: 3.6rem;
+	}
+
+	&.c-button--xs {
+		width: 3.2rem;
+		height: 3.2rem;
+		box-shadow: 0 0 12px rgb(0 0 0 / 29%);
 	}
 }
 

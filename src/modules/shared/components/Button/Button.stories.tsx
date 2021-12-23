@@ -1,11 +1,30 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import clsx from 'clsx';
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
-const Button: FC<{ className?: string }> = ({ children, className }) => {
+import { Icon } from '../Icon';
+
+const Button: FC<{
+	className?: string;
+	icon: ReactNode;
+	iconStart: ReactNode;
+	iconEnd: ReactNode;
+}> = ({ children, className, icon, iconStart = null, iconEnd = null }) => {
 	return (
 		<button className={clsx(className, 'c-button')}>
-			<span>{children}</span>
+			{icon ? (
+				<span className="c-button__icon">{icon}</span>
+			) : (
+				<>
+					{iconStart && (
+						<span className="c-button__icon c-button__icon--start">{iconStart}</span>
+					)}
+					<span className="c-button__label">{children}</span>
+					{iconEnd && (
+						<span className="c-button__icon c-button__icon--end">{iconEnd}</span>
+					)}
+				</>
+			)}
 		</button>
 	);
 };
@@ -82,4 +101,37 @@ export const SizeSmall = Template.bind({});
 SizeSmall.args = {
 	className: 'c-button--sm',
 	children: 'Click me!',
+};
+
+export const TextWithIconLeft = Template.bind({});
+TextWithIconLeft.args = {
+	children: 'Click me!',
+	iconStart: <Icon name="info" />,
+};
+
+export const TextWithIconRight = Template.bind({});
+TextWithIconRight.args = {
+	children: 'Click me!',
+	iconEnd: <Icon name="info" />,
+};
+
+export const IconOnly = Template.bind({});
+IconOnly.args = {
+	className: 'c-button--icon',
+	children: 'Click me!',
+	icon: <Icon name="info" />,
+};
+
+export const IconOnlySmall = Template.bind({});
+IconOnlySmall.args = {
+	className: 'c-button--icon c-button--sm',
+	children: 'Click me!',
+	icon: <Icon name="info" />,
+};
+
+export const IconOnlyExtraSmall = Template.bind({});
+IconOnlyExtraSmall.args = {
+	className: 'c-button--icon c-button--xs',
+	children: 'Click me!',
+	icon: <Icon name="info" />,
 };
