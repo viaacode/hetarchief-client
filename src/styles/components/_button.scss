@@ -1,9 +1,7 @@
 @use "styles/abstracts" as *;
 
 .c-button {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+	display: inline-block;
 	height: 4.8rem;
 	padding: 1.4rem 2.4rem;
 	border: 1px solid $teal;
@@ -36,6 +34,13 @@
 /**
  * Elements
  */
+
+.c-button__content {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
 
 .c-button__icon {
 	display: inline-flex;

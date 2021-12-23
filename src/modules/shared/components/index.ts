@@ -5,3 +5,4 @@ export * from './MediaCard';
 export * from './Modal';
 export * from './Navigation';
 export * from './Placeholder';
+export * from './Overlay';

@@ -22,6 +22,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@meemoo/react-components": "2.0.0",
     "clsx": "1.1.1",
     "next": "12.0.4",
     "next-transpile-modules": "9.0.0",

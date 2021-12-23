@@ -1,0 +1,113 @@
+@use "styles/abstracts" as *;
+
+.c-checkbox {
+	position: relative;
+	display: inline-block;
+	padding-left: 3.4rem;
+	font-size: $font-size-base;
+	cursor: pointer;
+
+	&::before,
+	&::after {
+		content: "";
+		position: absolute;
+	}
+
+	// Background hover
+	&::before {
+		top: -0.8rem;
+		left: -1rem;
+		z-index: get-z-layer("background");
+		width: 3.6rem;
+		height: 3.6rem;
+		border-radius: 50%;
+		transform: scale(0.3);
+		transition: transform $animate-default;
+	}
+
+	// Checkmark box
+	&::after {
+		top: 2px;
+		left: 0;
+		z-index: get-z-layer("base");
+		width: 1.6rem;
+		height: 1.6rem;
+		border: 2px solid $black;
+		background-color: $white;
+		transition: background-color $animate-default;
+	}
+
+	// States
+	&:focus-within {
+		&::before {
+			background-color: rgb(0 0 0 / 29%);
+			transform: scale(1);
+		}
+	}
+
+	&:hover {
+		&::before {
+			background-color: rgb(0 0 0 / 14%);
+			transform: scale(1);
+		}
+	}
+
+	&:active {
+		&::before {
+			background-color: rgb(0 150 144 / 40%);
+		}
+	}
+}
+
+/**
+ * Elements
+ */
+
+.c-checkbox__input {
+	appearance: none;
+	opacity: 0;
+}
+
+.c-checkbox__check-icon {
+	position: absolute;
+	top: 3px;
+	left: 1px;
+	z-index: get-z-layer("foreground");
+	display: inline-flex;
+	font-size: $font-size-sm;
+	color: $white;
+	opacity: 0;
+	transition: opacity $animate-default;
+}
+
+/**
+ * Modifiers
+ */
+
+.c-checkbox--checked {
+	&::after {
+		background-color: $black;
+	}
+
+	.c-checkbox__check-icon {
+		opacity: 1;
+	}
+}
+
+.c-checkbox--disabled {
+	cursor: not-allowed;
+
+	&::before {
+		content: none;
+	}
+
+	&::after {
+		border-color: $zinc;
+	}
+
+	&.c-checkbox--checked {
+		&::after {
+			background-color: $zinc;
+		}
+	}
+}
