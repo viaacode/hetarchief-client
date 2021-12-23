@@ -1,4 +1,4 @@
-import { readingRoomCardType } from './ReadingRoomCard.constants';
+import { ReadingRoomCardType } from './ReadingRoomCard.constants';
 
 export interface ReadingRoom {
 	color?: string;
@@ -19,5 +19,5 @@ export interface ReadingRoomProps {
 	onAccessRequest?: (room: ReadingRoom) => void;
 	onContactClick?: (room: ReadingRoom) => void;
 	room: ReadingRoom;
-	type: readingRoomCardType;
+	type: ReadingRoomCardType;
 }

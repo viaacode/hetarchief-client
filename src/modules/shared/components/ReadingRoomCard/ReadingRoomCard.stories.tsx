@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import ReadingRoomCard from './ReadingRoomCard';
-import { readingRoomCardType } from './ReadingRoomCard.constants';
+import { ReadingRoomCardType } from './ReadingRoomCard.constants';
 import { ReadingRoomAccess } from './ReadingRoomCard.types';
 
 export default {
@@ -28,7 +28,7 @@ const Template: ComponentStory<typeof ReadingRoomCard> = (args) => <ReadingRoomC
 export const Logo = Template.bind({});
 
 Logo.args = {
-	type: readingRoomCardType['no-access'],
+	type: ReadingRoomCardType['no-access'],
 	room: {
 		id: 12345,
 		logo: '/images/logo-shd--small.svg',
@@ -41,7 +41,7 @@ Logo.args = {
 export const Color = Template.bind({});
 
 Color.args = {
-	type: readingRoomCardType['no-access'],
+	type: ReadingRoomCardType['no-access'],
 	room: {
 		id: 45678,
 		color: '#31156b',
@@ -55,7 +55,7 @@ Color.args = {
 export const Image = Template.bind({});
 
 Image.args = {
-	type: readingRoomCardType['no-access'],
+	type: ReadingRoomCardType['no-access'],
 	room: {
 		id: 78912,
 		color: '#ee9944',
@@ -70,7 +70,7 @@ Image.args = {
 export const Requested = Template.bind({});
 
 Requested.args = {
-	type: readingRoomCardType['no-access'],
+	type: ReadingRoomCardType['no-access'],
 	room: {
 		id: 34567,
 		name: 'Studio Hyperdrive',

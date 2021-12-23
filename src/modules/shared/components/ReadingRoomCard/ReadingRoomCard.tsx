@@ -7,7 +7,7 @@ import Card from '../Card/Card';
 import ContactIconButton from '../ContactIconButton/ContactIconButton';
 import Icon from '../Icon/Icon';
 
-import { readingRoomCardType } from './ReadingRoomCard.constants';
+import { ReadingRoomCardType } from './ReadingRoomCard.constants';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomProps } from './ReadingRoomCard.types';
 
@@ -110,7 +110,7 @@ const ReadingRoomCard: FC<ReadingRoomProps> = ({
 			<div
 				className={clsx(
 					styles['c-reading-room-card__controls'],
-					type === readingRoomCardType['no-access'] &&
+					type === ReadingRoomCardType['no-access'] &&
 						styles['c-reading-room-card__controls--near']
 				)}
 			>
