@@ -1,9 +1,9 @@
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
 import { Card, Icon } from '..';
-import { Button } from '../Button/Button.stories';
 
 import styles from './MediaCard.module.scss';
 import { formatDate } from './MediaCard.utils';
