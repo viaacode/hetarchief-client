@@ -1,7 +1,7 @@
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC, MouseEventHandler } from 'react';
 
-import { Button } from '../Button/Button.stories';
 import Icon from '../Icon/Icon';
 
 import styles from './ContactIconButton.module.scss';
