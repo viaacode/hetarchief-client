@@ -8,6 +8,8 @@ type Renderable = ReactNode;
 export interface CardProps {
 	edge?: 'zinc' | 'none';
 	image?: Renderable;
+	mode?: 'light' | 'dark';
+	offset?: boolean;
 	orientation?: 'horizontal' | 'vertical';
 	padding?: 'both' | 'content' | 'vertical' | 'none';
 	subtitle?: Renderable;
@@ -17,6 +19,7 @@ export interface CardProps {
 
 const defaultProps: CardProps = {
 	edge: 'zinc',
+	mode: 'light',
 	orientation: 'vertical',
 	padding: 'none',
 };
@@ -25,6 +28,8 @@ const Card: FC<CardProps> = ({
 	children,
 	edge,
 	image,
+	mode,
+	offset,
 	orientation,
 	padding,
 	subtitle,
@@ -36,8 +41,10 @@ const Card: FC<CardProps> = ({
 			className={clsx(
 				styles['c-card'],
 				styles[`c-card--edge-${edge}`],
+				styles[`c-card--mode-${mode}`],
 				styles[`c-card--orientation-${orientation}`],
-				styles[`c-card--padded-${padding}`]
+				styles[`c-card--padded-${padding}`],
+				offset && styles['c-card--offset']
 			)}
 		>
 			<section className={clsx(styles['c-card__top-wrapper'])}>

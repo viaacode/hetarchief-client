@@ -66,5 +66,5 @@ export const List: ComponentStory<typeof MediaCard> = Template.bind({});
 List.args = {
 	...Grid.args,
 	view: 'list',
-	published_by: undefined,
+	published_by: '',
 };

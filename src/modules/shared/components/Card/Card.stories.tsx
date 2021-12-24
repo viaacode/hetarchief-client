@@ -15,6 +15,7 @@ const container: CSSProperties = {
 	margin: '-10px',
 };
 const column: CSSProperties = { flex: '1 1 0', margin: '10px' };
+const h2: CSSProperties = { fontSize: '3.2rem', lineHeight: 1 };
 
 const Template: ComponentStory<typeof Card> = (args) => {
 	return (
@@ -138,6 +139,60 @@ const Template: ComponentStory<typeof Card> = (args) => {
 					</Card>
 				</div>
 			</section>
+
+			<br />
+
+			<section style={{ ...container }}>
+				<div style={column}>
+					<h4>Dark</h4>
+
+					<br />
+
+					<Card
+						{...args}
+						mode="dark"
+						edge="none"
+						padding="content"
+						orientation="horizontal"
+						title={<h2 style={h2}>A dark card</h2>}
+					>
+						<TruncateMarkup lines={3}>
+							<span>
+								Het Sint-Felixpakhuis is één van de meest tot de verbeelding
+								sprekende voorbeelden, van pakhuizen uit de 19e eeuw. In 1860 werd
+								het gebouwd als warenhuis voor simpele artikelen.
+							</span>
+						</TruncateMarkup>
+					</Card>
+				</div>
+				<div style={column}>
+					<h4>Offset</h4>
+
+					<br />
+
+					<Card
+						{...args}
+						mode="dark"
+						edge="none"
+						padding="content"
+						orientation="horizontal"
+						title={
+							<h2 style={h2}>
+								An offset card with a very long title that spans multiple lines
+							</h2>
+						}
+						offset
+					>
+						<TruncateMarkup lines={3}>
+							<span>
+								Het Museum voor Schone Kunsten Gent (MSK) is het oudste museum in
+								België. De kern van de collectie gaat terug tot 1798. Het museum is
+								gehuisvest in een verlaten deel van de binnenstad.
+							</span>
+						</TruncateMarkup>
+					</Card>
+				</div>
+			</section>
 		</>
 	);
 };
@@ -145,5 +200,5 @@ const Template: ComponentStory<typeof Card> = (args) => {
 export const Overview: ComponentStory<typeof Card> = Template.bind({});
 Overview.args = {
 	title: <span>{title}</span>,
-	image: <img className='u-image-responsive' src={galaxy} alt={title} />, //eslint-disable-line
+	image: <img className="u-image-responsive" src={galaxy} alt={title} />, //eslint-disable-line
 };

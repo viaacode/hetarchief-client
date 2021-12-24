@@ -1,14 +1,15 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import { Card, Icon } from '..';
+import Card from '../Card/Card';
+import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
+import { MediaCardProps } from './MediaCard.types';
 import { formatDate } from './MediaCard.utils';
-
-import { MediaCardProps } from '.';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,
@@ -94,7 +95,22 @@ const MediaCard: FC<MediaCardProps> = ({
 			</div>
 		);
 
-	const renderHeader = () => preview || renderNoContent();
+	const renderHeader = () => {
+		if (preview) {
+			return (
+				<div
+					className={clsx(
+						styles['c-media-card__header-wrapper'],
+						styles[`c-media-card__header-wrapper--${view}`]
+					)}
+				>
+					<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
+				</div>
+			);
+		} else {
+			return renderNoContent();
+		}
+	};
 
 	return (
 		<Card
