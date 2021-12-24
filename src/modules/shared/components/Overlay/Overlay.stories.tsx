@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React, { CSSProperties } from 'react';
+import React from 'react';
 
 import Overlay from './Overlay';
 
