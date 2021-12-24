@@ -2,5 +2,6 @@
 
 @use "abstracts" as *;
 @forward "base";
+@use "components" as *;
 @use "layouts" as *;
 @use "utilities" as *;

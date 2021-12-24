@@ -1,14 +1,11 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
 
 import { Hero } from '@shared/components';
 import { heroMock } from '@shared/components/Hero/__mocks__/hero';
-import Modal from 'modules/shared/components/Modal/Modal';
 
 const Home: NextPage = () => {
-	const [modalOpen, setModalOpen] = useState(false);
 	return (
 		<div className="p-home">
 			<Head>
