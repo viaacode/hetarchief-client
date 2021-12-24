@@ -19,7 +19,6 @@ const Home: NextPage = () => {
 
 			<Hero {...heroMock} />
 			<div style={{ display: 'grid', placeItems: 'center', height: '500px' }}>
-				<h1>Welkom in de digitale leeszaal</h1>
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
 			</div>
 		</div>
