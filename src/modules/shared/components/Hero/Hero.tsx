@@ -19,14 +19,16 @@ const Hero: FC<HeroProps> = ({ title, description, link, image }) => {
 			<div className={styles['c-hero__content']}>
 				<h1 className={styles['c-hero__title']}>{title}</h1>
 				<p className={styles['c-hero__description']}>{description}</p>
-				<Link href={link.to}>
-					<a
-						className={styles['c-hero__link']}
-						target={link.external ? '_blank' : '_self'}
-					>
-						{link.label}
-					</a>
-				</Link>
+				<b>
+					<Link href={link.to}>
+						<a
+							className={styles['c-hero__link']}
+							target={link.external ? '_blank' : '_self'}
+						>
+							{link.label}
+						</a>
+					</Link>
+				</b>
 			</div>
 		</header>
 	);

@@ -4,12 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { Hero } from '@shared/components';
-import {
-	heroDescription,
-	heroImage,
-	heroLink,
-	heroTitle,
-} from '@shared/components/Hero/__mocks__/hero';
+import { heroMock } from '@shared/components/Hero/__mocks__/hero';
 import Modal from 'modules/shared/components/Modal/Modal';
 
 const Home: NextPage = () => {
@@ -22,12 +17,7 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<Hero
-				title={heroTitle}
-				description={heroDescription}
-				link={heroLink}
-				image={heroImage}
-			/>
+			<Hero {...heroMock} />
 			<div style={{ display: 'grid', placeItems: 'center', height: '500px' }}>
 				<h1>Welkom in de digitale leeszaal</h1>
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>

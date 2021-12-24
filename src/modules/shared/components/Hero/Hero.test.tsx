@@ -1,18 +1,11 @@
 import { render, screen } from '@testing-library/react';
 
 import Hero from './Hero';
-import { heroDescription, heroImage, heroLink, heroTitle } from './__mocks__/hero';
+import { heroDescription, heroImage, heroLink, heroMock, heroTitle } from './__mocks__/hero';
 
 describe('Component: <Hero /> (default)', () => {
 	beforeEach(() => {
-		render(
-			<Hero
-				title={heroTitle}
-				description={heroDescription}
-				link={heroLink}
-				image={heroImage}
-			/>
-		);
+		render(<Hero {...heroMock} />);
 	});
 
 	it('Should render the hero title', () => {

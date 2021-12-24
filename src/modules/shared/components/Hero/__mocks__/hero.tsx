@@ -1,3 +1,5 @@
+import { HeroProps } from '../Hero.types';
+
 export const heroTitle = 'Welkom in de digitale leeszaal';
 
 export const heroDescription =
@@ -9,3 +11,10 @@ export const heroLink = {
 };
 
 export const heroImage = { name: 'hero.png', alt: 'hero image' };
+
+export const heroMock: HeroProps = {
+	title: heroTitle,
+	description: heroDescription,
+	link: heroLink,
+	image: heroImage,
+};
