@@ -1,0 +1,10 @@
+@use "styles/abstracts" as *;
+
+.c-dropdown-list__list {
+	padding: calc($spacer-md / 2) 0;
+	margin: 0;
+
+	&--divider {
+		border-top: solid 1px $zinc;
+	}
+}
