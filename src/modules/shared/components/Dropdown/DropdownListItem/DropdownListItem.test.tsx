@@ -54,6 +54,15 @@ describe('Component: <DropdownListItem /> (default)', () => {
 		expect(listItemIcon).toHaveLength(0);
 	});
 
+	it('should get the correct classes', () => {
+		const className = 'component';
+		const rendered = renderListItem({ className });
+
+		const component = documentOf(rendered).getElementsByClassName('c-dropdown-list-item')[0];
+
+		expect(component).toHaveClass(className);
+	});
+
 	it('should trigger onClick when clicked', () => {
 		const className = 'trigger';
 		const listItem = renderListItem({ className });
