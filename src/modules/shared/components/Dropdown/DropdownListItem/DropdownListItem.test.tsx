@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import DropdownListItem from './DropdownListItem';
-import styles from './DropdownListItem.module.scss';
 
 import { documentOf } from '@shared/helpers/document-of';
 
@@ -25,7 +24,7 @@ describe('Component: <DropdownListItem /> (default)', () => {
 		const listItem = renderListItem({ icon });
 
 		const listItemIcon = documentOf(listItem).getElementsByClassName(
-			styles['c-dropdown-list-item__icon']
+			'c-dropdown-list-item__icon'
 		);
 
 		expect(listItemIcon).toHaveLength(1);
@@ -37,7 +36,7 @@ describe('Component: <DropdownListItem /> (default)', () => {
 		const listItem = renderListItem({ label });
 
 		const listItemLabel = documentOf(listItem).getElementsByClassName(
-			styles['c-dropdown-list-item__label']
+			'c-dropdown-list-item__label'
 		);
 
 		expect(listItemLabel).toHaveLength(1);
@@ -48,7 +47,7 @@ describe('Component: <DropdownListItem /> (default)', () => {
 		const listItem = renderListItem({});
 
 		const listItemIcon = documentOf(listItem).getElementsByClassName(
-			styles['c-dropdown-list-item__icon']
+			'c-dropdown-list-item__icon'
 		);
 
 		expect(listItemIcon).toHaveLength(0);
@@ -67,7 +66,7 @@ describe('Component: <DropdownListItem /> (default)', () => {
 		const className = 'trigger';
 		const listItem = renderListItem({ className });
 
-		const button = documentOf(listItem).getElementsByClassName('trigger')[0];
+		const button = documentOf(listItem).getElementsByClassName(className)[0];
 
 		fireEvent.click(button);
 
