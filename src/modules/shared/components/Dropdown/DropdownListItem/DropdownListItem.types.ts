@@ -1,7 +1,9 @@
-import { DropdownListItem } from '../DropdownList/DropdownList.types';
+import { IconTypes } from '../../Icon';
 
 import { DefaultComponentProps } from '@shared/types';
 
 export interface DropdownListItemProps extends DefaultComponentProps {
-	item: DropdownListItem;
+	icon: IconTypes;
+	label: string;
+	onClick: () => void;
 }

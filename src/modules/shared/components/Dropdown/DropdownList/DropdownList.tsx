@@ -6,9 +6,6 @@ import DropdownListItem from '../DropdownListItem/DropdownListItem';
 import styles from './DropdownList.module.scss';
 import { DropdownListProps } from './DropdownList.types';
 
-// TODO
-// Enkel children renderen en meegeven aan dropdown in pagina?
-
 const DropdownList: FC<DropdownListProps> = ({ className, listItems }) => {
 	const rootCls = clsx(className, styles['c-dropdown-list']);
 
@@ -24,7 +21,7 @@ const DropdownList: FC<DropdownListProps> = ({ className, listItems }) => {
 						)}
 					>
 						{items.map((item) => {
-							return <DropdownListItem key={item.label} item={item} />;
+							return <DropdownListItem key={item.label} {...item} />;
 						})}
 					</ul>
 				);

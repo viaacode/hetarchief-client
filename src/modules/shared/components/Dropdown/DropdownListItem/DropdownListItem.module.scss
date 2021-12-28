@@ -6,10 +6,5 @@
 	padding: calc($spacer-md / 2) $spacer-md;
 	background-color: $white;
 	font-size: $font-size-sm;
-
-	&__button {
-		background-color: transparent;
-		outline: none;
-		border: none;
-	}
+	cursor: pointer;
 }

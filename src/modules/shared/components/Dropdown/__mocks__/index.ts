@@ -8,21 +8,21 @@ export const DropdownListMock: DropdownListProps = {
 				icon: {
 					name: 'trash',
 				},
-				onClick: () => null,
+				onClick: () => console.log('click'),
 			},
 			{
 				label: 'second item',
 				icon: {
 					name: 'trash',
 				},
-				onClick: () => null,
+				onClick: () => console.log('click'),
 			},
 			{
 				label: 'third item',
 				icon: {
 					name: 'trash',
 				},
-				onClick: () => null,
+				onClick: () => console.log('click'),
 			},
 		],
 		[
@@ -31,7 +31,7 @@ export const DropdownListMock: DropdownListProps = {
 				icon: {
 					name: 'trash',
 				},
-				onClick: () => null,
+				onClick: () => console.log('click'),
 			},
 		],
 	],
