@@ -25,7 +25,7 @@ Default.args = {
 	displayCount: 5,
 	currentPage: 0,
 	onPageChange: (page: number) => console.log(`page index is ${page}`),
-	showStartEndNumbers: true,
+	showFirstLastNumbers: true,
 	buttons: {
 		previous: renderButton('angle-left', 'Vorige', 'right'),
 		next: renderButton('angle-right', 'Volgende', 'left'),
@@ -38,7 +38,7 @@ FirstPage.args = {
 	displayCount: 5,
 	currentPage: 0,
 	onPageChange: (page: number) => console.log(`page index is ${page}`),
-	showStartEndNumbers: true,
+	showFirstLastNumbers: true,
 	buttons: {
 		previous: renderButton('angle-left', 'Vorige', 'right'),
 		next: renderButton('angle-right', 'Volgende', 'left'),
@@ -51,7 +51,7 @@ MiddlePage.args = {
 	displayCount: 5,
 	currentPage: 5,
 	onPageChange: (page: number) => console.log(`page index is ${page}`),
-	showStartEndNumbers: true,
+	showFirstLastNumbers: true,
 	buttons: {
 		previous: renderButton('angle-left', 'Vorige', 'right'),
 		next: renderButton('angle-right', 'Volgende', 'left'),
@@ -64,7 +64,7 @@ LastPage.args = {
 	displayCount: 5,
 	currentPage: 8,
 	onPageChange: (page: number) => console.log(`page index is ${page}`),
-	showStartEndNumbers: true,
+	showFirstLastNumbers: true,
 	buttons: {
 		previous: renderButton('angle-left', 'Vorige', 'right'),
 		next: renderButton('angle-right', 'Volgende', 'left'),
