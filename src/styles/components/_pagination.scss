@@ -10,6 +10,8 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		min-width: 3.2rem;
+		min-height: 3.2rem;
 		margin: 0 calc($spacer-xs / 4);
 		cursor: pointer;
 
@@ -42,7 +44,7 @@
 	}
 
 	&__icon {
-		margin-top: .3rem;
+		margin-top: .2rem;
 		font-size: $font-size-md !important; // overwrite default icon style
 	}
 
@@ -52,8 +54,8 @@
 			display: none;
 		}
 
-		&__btn:first-of-type span:nth-child(1) {
-			margin-right: $spacer-sm;
+		&__btn:first-of-type {
+			margin-right: $spacer-xs;
 		}
 	}
 }
