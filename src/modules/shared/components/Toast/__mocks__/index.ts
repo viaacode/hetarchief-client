@@ -6,4 +6,6 @@ export const toastMock: ToastProps = {
 		'Een annuleringsbevestiging van de leeszaalbeheerder kan je verwachten in je mail inxox',
 	buttonLabel: 'Ok',
 	maxLines: 1,
+	visible: true,
+	onClose: () => console.log('close'),
 };
