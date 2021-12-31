@@ -33,3 +33,11 @@ MultiLine.args = {
 	buttonLabel: 'Ok',
 	maxLines: 2,
 };
+
+export const ButtonHover = Template.bind({});
+ButtonHover.args = {
+	title: 'Aanvraag goedgekeurd',
+	description: 'Bevestiging verzonden naar bezoeker',
+	buttonLabel: 'Ok',
+	buttonLabelHover: 'Hover',
+};

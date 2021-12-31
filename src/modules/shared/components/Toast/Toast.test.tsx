@@ -1,4 +1,4 @@
-import { getByDisplayValue, render, screen } from '@testing-library/react';
+import { fireEvent, getByDisplayValue, render, screen } from '@testing-library/react';
 
 import Toast from './Toast';
 import { toastMock } from './__mocks__';
@@ -41,8 +41,19 @@ describe('Component: <Toast /> (default)', () => {
 	it('Should render button', () => {
 		const { getByText } = renderToast({});
 
-		const description = getByText(toastMock.buttonLabel);
+		const button = getByText(toastMock.buttonLabel);
 
-		expect(description).toBeInTheDocument();
+		expect(button).toBeInTheDocument();
+	});
+
+	it('Should render label on hover', () => {
+		const buttonLabelHover = 'hover';
+		const { getByText } = renderToast({ buttonLabelHover });
+
+		const button = getByText(toastMock.buttonLabel);
+
+		fireEvent.mouseOver(button);
+
+		expect(button.textContent).toBe(buttonLabelHover);
 	});
 });

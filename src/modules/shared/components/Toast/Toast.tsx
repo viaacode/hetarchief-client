@@ -3,10 +3,21 @@ import clsx from 'clsx';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
+import { useHover } from '../../hooks';
+
 import styles from './Toast.module.scss';
 import { ToastProps } from './Toast.types';
 
-const Toast: FC<ToastProps> = ({ className, title, description, buttonLabel, maxLines = 1 }) => {
+const Toast: FC<ToastProps> = ({
+	className,
+	title,
+	description,
+	buttonLabel,
+	buttonLabelHover,
+	maxLines = 1,
+}) => {
+	const [hovering, hoverProps] = useHover();
+
 	return (
 		<div className={clsx(className, styles['c-toast'])}>
 			<TruncateMarkup lines={maxLines}>
@@ -19,7 +30,13 @@ const Toast: FC<ToastProps> = ({ className, title, description, buttonLabel, max
 					{description}
 				</p>
 			</TruncateMarkup>
-			<Button className={styles['c-toast__button']} label={buttonLabel} variants="white" />
+			<div {...hoverProps} className={styles['c-toast__button-wrapper']}>
+				<Button
+					className={styles['c-toast__button']}
+					label={buttonLabelHover && hovering ? buttonLabelHover : buttonLabel}
+					variants="white"
+				/>
+			</div>
 		</div>
 	);
 };
