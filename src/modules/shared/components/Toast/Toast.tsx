@@ -16,6 +16,7 @@ const Toast: FC<ToastProps> = ({
 	buttonLabelHover,
 	maxLines = 1,
 	visible = false,
+	onClose,
 }) => {
 	const [hovering, hoverProps] = useHover();
 
@@ -43,6 +44,7 @@ const Toast: FC<ToastProps> = ({
 					className={styles['c-toast__button']}
 					label={buttonLabelHover && hovering ? buttonLabelHover : buttonLabel}
 					variants="white"
+					onClick={onClose}
 				/>
 			</div>
 		</div>
