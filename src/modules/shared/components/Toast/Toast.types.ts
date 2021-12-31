@@ -6,4 +6,5 @@ export interface ToastProps extends DefaultComponentProps {
 	buttonLabel: string;
 	buttonLabelHover?: string;
 	maxLines: number;
+	visible: boolean;
 }

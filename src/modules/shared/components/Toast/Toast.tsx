@@ -15,11 +15,19 @@ const Toast: FC<ToastProps> = ({
 	buttonLabel,
 	buttonLabelHover,
 	maxLines = 1,
+	visible = false,
 }) => {
 	const [hovering, hoverProps] = useHover();
 
 	return (
-		<div className={clsx(className, styles['c-toast'])}>
+		<div
+			className={clsx(
+				className,
+				styles['c-toast'],
+				visible ? styles['c-toast--visible'] : styles['c-toast--hidden']
+			)}
+			aria-hidden={!visible}
+		>
 			<TruncateMarkup lines={maxLines}>
 				<p data-testid="toast-title" className={styles['c-toast__title']}>
 					{title}

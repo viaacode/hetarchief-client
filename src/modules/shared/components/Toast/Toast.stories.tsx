@@ -15,6 +15,7 @@ Default.args = {
 	title: 'Aanvraag goedgekeurd',
 	description: 'Bevestiging verzonden naar bezoeker',
 	buttonLabel: 'Ok',
+	visible: true,
 };
 
 export const LongLabels = Template.bind({});
@@ -23,6 +24,7 @@ LongLabels.args = {
 	description:
 		'Bevestiging van de aanvraag die de bezoeker via de leeszaal heeft aangevraagd is verzonden naar de bezoeker die de aanvraag bij de leeszaal gedaan heeft',
 	buttonLabel: 'Ok',
+	visible: true,
 };
 
 export const MultiLine = Template.bind({});
@@ -32,6 +34,7 @@ MultiLine.args = {
 		'Een annuleringsbevestiging van de leeszaalbeheerder kan je verwachten in je mail inxox',
 	buttonLabel: 'Ok',
 	maxLines: 2,
+	visible: true,
 };
 
 export const ButtonHover = Template.bind({});
@@ -40,4 +43,5 @@ ButtonHover.args = {
 	description: 'Bevestiging verzonden naar bezoeker',
 	buttonLabel: 'Ok',
 	buttonLabelHover: 'Hover',
+	visible: true,
 };
