@@ -10,10 +10,14 @@ const Toast: FC<ToastProps> = ({ className, title, description, buttonLabel, max
 	return (
 		<div className={clsx(className, styles['c-toast'])}>
 			<TruncateMarkup lines={maxLines}>
-				<p className={styles['c-toast__title']}>{title}</p>
+				<p data-testid="toast-title" className={styles['c-toast__title']}>
+					{title}
+				</p>
 			</TruncateMarkup>
 			<TruncateMarkup lines={maxLines}>
-				<p className={styles['c-toast__description']}>{description}</p>
+				<p data-testid="toast-description" className={styles['c-toast__description']}>
+					{description}
+				</p>
 			</TruncateMarkup>
 			<Button className={styles['c-toast__button']} label={buttonLabel} variants="white" />
 		</div>
