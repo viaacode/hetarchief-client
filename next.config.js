@@ -8,8 +8,11 @@
  */
 const withTM = require('next-transpile-modules')(['@viaa/avo2-components']);
 
+const { i18n } = require('./next-i18next.config');
+
 /** @type {import('next').NextConfig} */
 module.exports = withTM({
+	i18n,
 	reactStrictMode: true,
 	experimental: {
 		/**
