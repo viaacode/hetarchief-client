@@ -4,6 +4,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
 
+import { Hero } from '@shared/components';
+
 const Home: NextPage = () => {
 	const { t } = useTranslation();
 
@@ -15,8 +17,18 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<div style={{ display: 'grid', placeItems: 'center', height: '500px' }}>
-				<h1>{t('pages/index___welkom-in-de-digitale-leeszaal')}</h1>
+			<Hero
+				image={{ src: '/images/hero.png', alt: 'Hero image' }}
+				title={t('pages/index___welkom-in-de-digitale-leeszaal')}
+				description={t(
+					'pages/index___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-leeszaal-benieuwd-hoe-het-werkt'
+				)}
+				link={{
+					label: t('pages/index___hier-kom-je-er-alles-over-te-weten'),
+					to: '#',
+				}}
+			/>
+			<div style={{ display: 'grid', placeItems: 'center', padding: '2rem' }}>
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
 			</div>
 		</div>

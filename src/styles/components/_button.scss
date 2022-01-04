@@ -69,6 +69,7 @@
 	}
 }
 
+// White
 .c-button--white {
 	background-color: $white;
 	border-color: $white;
@@ -84,6 +85,17 @@
 		border-color: $teal;
 		color: $white;
 	}
+
+	&:not(:active,:hover):focus {
+		outline: 2px solid $teal;
+	}
+}
+
+// Silver
+.c-button--silver {
+	background-color: $silver;
+	border-color: $silver;
+	color: $black;
 
 	&:not(:active,:hover):focus {
 		outline: 2px solid $teal;
@@ -181,6 +193,11 @@
 		width: 3.2rem;
 		height: 3.2rem;
 		box-shadow: 0 0 12px rgb(0 0 0 / 29%);
+	}
+
+	&.c-button--xxs {
+		width: 2.2rem;
+		height: 2.2rem;
 	}
 }
 

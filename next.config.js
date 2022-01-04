@@ -6,7 +6,7 @@
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-const withTM = require('next-transpile-modules')(['@viaa/avo2-components']);
+const withTM = require('next-transpile-modules')([]);
 
 const { i18n } = require('./next-i18next.config');
 
