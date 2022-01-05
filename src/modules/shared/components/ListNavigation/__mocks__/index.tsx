@@ -1,7 +1,7 @@
 import { Icon } from '../../Icon';
 import { ListNavigationProps } from '../ListNavigation.types';
 
-export const ListNavigationMock: ListNavigationProps = {
+export const listNavigationMock: ListNavigationProps = {
 	listItems: [
 		[
 			{

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { ComponentLink, DefaultComponentProps } from '@shared/types';
 
-export interface ListNavigationLink extends ComponentLink {
+export interface ListNavigationLink extends Omit<ComponentLink, 'icon'> {
 	active?: boolean;
 }
 

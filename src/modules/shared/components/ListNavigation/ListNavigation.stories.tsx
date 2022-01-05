@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import ListNavigation from './ListNavigation';
-import { ListNavigationMock } from './__mocks__';
+import { listNavigationMock } from './__mocks__';
 
 export default {
 	title: 'Components/ListNavigation',
@@ -10,7 +10,7 @@ export default {
 } as ComponentMeta<typeof ListNavigation>;
 
 const Template: ComponentStory<typeof ListNavigation> = (args) => (
-	<ListNavigation {...ListNavigationMock} {...args} />
+	<ListNavigation {...listNavigationMock} {...args} />
 );
 
 export const Default = Template.bind({});
