@@ -25,6 +25,7 @@ const ListNavigation: FC<ListNavigationProps> = ({ listItems }) => {
 						link.active && styles['c-list-navigation__link--active']
 					)}
 					target={link.external ? '_blank' : '_self'}
+					role="link"
 				>
 					{link.label}
 				</a>
@@ -50,13 +51,14 @@ const ListNavigation: FC<ListNavigationProps> = ({ listItems }) => {
 
 	const renderItems = (items: ListNavigationListItem[]) => {
 		return (
-			<ul className={styles['c-list-navigation__list']}>
+			<ul className={styles['c-list-navigation__list']} role="list">
 				{items.map((item: ListNavigationListItem, index) => {
 					if (isLink(item)) {
 						return (
 							<li
 								className={styles['c-list-navigation__list-item']}
 								key={`list-item-${index}`}
+								role="listitem"
 							>
 								{renderLink(item)}
 							</li>
@@ -66,6 +68,7 @@ const ListNavigation: FC<ListNavigationProps> = ({ listItems }) => {
 							<li
 								className={styles['c-list-navigation__list-item']}
 								key={`list-item-${index}`}
+								role="listitem"
 							>
 								{renderButton(item as ListNavigationButton)}
 							</li>
