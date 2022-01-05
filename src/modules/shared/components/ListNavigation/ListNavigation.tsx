@@ -11,7 +11,7 @@ import {
 	ListNavigationProps,
 } from './ListNavigation.types';
 
-const ListNavigation: FC<ListNavigationProps> = ({ listItems }) => {
+const ListNavigation: FC<ListNavigationProps> = ({ listItems, className }) => {
 	const isLink = (item: ListNavigationListItem): item is ListNavigationLink => {
 		return (item as ListNavigationLink).to !== undefined;
 	};
@@ -94,7 +94,7 @@ const ListNavigation: FC<ListNavigationProps> = ({ listItems }) => {
 		}
 		return renderItems(listItemsArray as ListNavigationListItem[]);
 	};
-	return <Fragment>{renderArrays(listItems)}</Fragment>;
+	return <div className={className}>{renderArrays(listItems)}</div>;
 };
 
 export default ListNavigation;
