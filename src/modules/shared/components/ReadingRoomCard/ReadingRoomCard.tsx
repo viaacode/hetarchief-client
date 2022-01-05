@@ -1,10 +1,9 @@
-import { Button } from '@meemoo/react-components';
+import { Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import Card from '../Card/Card';
 import ContactIconButton from '../ContactIconButton/ContactIconButton';
 import Icon from '../Icon/Icon';
 

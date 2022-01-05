@@ -1,6 +1,5 @@
+import { documentOf } from '@meemoo/react-components';
 import { render, RenderResult, screen } from '@testing-library/react'; //eslint-disable-line
-
-import cardStyles from '../Card/Card.module.scss';
 
 import ReadingRoomCard from './ReadingRoomCard';
 import { AccessGranted, AccessRequested, mockReadingRoomCardProps } from './ReadingRoomCard.mock';
@@ -8,8 +7,6 @@ import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
 
 import { ReadingRoomCardType } from '.';
-
-import { documentOf } from '@shared/helpers/document-of';
 
 describe('Component: <ReadingRoomCard />', () => {
 	let rendered: RenderResult | undefined;
@@ -32,7 +29,7 @@ describe('Component: <ReadingRoomCard />', () => {
 	it('Should render a light card with a short image when not accessible', () => {
 		rendered = render(template());
 
-		const card = documentOf(rendered).getElementsByClassName(cardStyles['c-card--mode-light']);
+		const card = documentOf(rendered).getElementsByClassName('c-card--mode-light');
 
 		const image = documentOf(rendered).getElementsByClassName(
 			styles['c-reading-room-card__background--short']
@@ -63,7 +60,7 @@ describe('Component: <ReadingRoomCard />', () => {
 			})
 		);
 
-		const card = documentOf(rendered).getElementsByClassName(cardStyles['c-card--mode-dark']);
+		const card = documentOf(rendered).getElementsByClassName('c-card--mode-dark');
 
 		const image = documentOf(rendered).getElementsByClassName(
 			styles['c-reading-room-card__background--tall']
