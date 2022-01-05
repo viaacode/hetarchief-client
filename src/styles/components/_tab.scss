@@ -1,0 +1,32 @@
+@use "../abstracts/" as *;
+
+.c-tab {
+	display: inline-flex;
+	align-items: center;
+	min-height: 5.6rem;
+	padding: 1.6rem 2.4rem;
+	background-color: $black;
+	color: $white;
+	cursor: pointer;
+	transition: background-color $animate-default, color $animate-default;
+}
+
+/**
+ * Elements
+ */
+
+.c-tab__icon {
+	display: inline-flex;
+	font-size: $font-size-lg;
+	margin-right: 0.8rem;
+}
+
+/**
+ * Modifiers
+ */
+
+.c-tab--active {
+	background-color: $white;
+	color: $black;
+}
+
