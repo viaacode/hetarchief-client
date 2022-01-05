@@ -6,6 +6,7 @@
   ],
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run build:storybook && npm run copy-sb-to-public",
     "build": "next build",
     "start": "next start",
     "lint": "npm run lint:ts && npm run lint:scss",
@@ -19,8 +20,9 @@
     "cy:run": "cypress run",
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "i18n:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix"
+    "build:storybook": "build-storybook",
+    "i18n:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix",
+    "copy-sb-to-public": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/copy-storybook-to-public.ts"
   },
   "dependencies": {
     "@meemoo/react-components": "2.0.0",
@@ -46,6 +48,7 @@
     "@storybook/react": "6.4.8",
     "@testing-library/jest-dom": "5.15.1",
     "@testing-library/react": "12.1.2",
+    "@types/fs-extra": "9.0.13",
     "@types/jest": "27.0.3",
     "@types/lodash": "4.14.178",
     "@types/node": "16.11.9",
@@ -62,6 +65,7 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-storybook": "0.5.3",
+    "fs-extra": "10.0.0",
     "glob": "7.2.0",
     "husky": "7.0.4",
     "identity-obj-proxy": "3.0.0",
