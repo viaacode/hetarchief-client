@@ -18,6 +18,6 @@ module.exports = {
 	core: {
 		builder: 'webpack5',
 	},
-	staticDirs: ['../public'],
+	staticDirs: ['./static', '../public'],
 	typescript: { reactDocgen: false },
 };

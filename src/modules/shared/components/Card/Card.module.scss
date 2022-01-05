@@ -1,0 +1,212 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+$c: "c-card";
+
+@mixin c-card-horizontal-whitespace {
+	margin-left: $spacer-sm;
+	margin-right: $spacer-sm;
+}
+
+@mixin c-card-content-whitespace {
+	// Note: I shouldn't let whitespace be influenced by color mode but this saves us a lot of className exposure
+	&.#{$c}--mode-dark {
+		.#{$c} {
+			&__header-wrapper {
+				margin-top: $spacer-lg + $spacer-xs;
+				margin-bottom: $spacer-sm * 2;
+			}
+
+			&__children-wrapper {
+				margin-bottom: $spacer-md;
+				margin-right: $spacer-lg;
+			}
+		}
+	}
+
+	.#{$c} {
+		&__header-wrapper {
+			margin-top: $spacer-sm;
+			margin-bottom: $spacer-sm;
+		}
+
+		&__title-wrapper,
+		&__subtitle-wrapper,
+		&__toolbar-wrapper,
+		&__children-wrapper {
+			@include c-card-horizontal-whitespace;
+		}
+
+		&__toolbar-wrapper {
+			margin-left: 0;
+		}
+
+		&__children-wrapper {
+			margin-bottom: $spacer-sm;
+		}
+	}
+}
+
+@mixin c-card-image-overflow {
+	// Spill the image over the border if it's not padded and the card has a border
+	&.#{$c}--padded-content {
+		&:not(.#{$c}--edge-none) {
+			.#{$c}__image-wrapper {
+				margin: -$card-edge-size;
+				@content;
+			}
+		}
+	}
+}
+
+.#{$c} {
+	display: flex;
+
+	// Elements
+
+	&__header-wrapper {
+		display: flex;
+		flex-grow: 1;
+		flex-flow: row nowrap;
+	}
+
+	&__title-wrapper {
+		flex-grow: 1;
+	}
+
+	&__toolbar-wrapper {
+		flex-grow: 0;
+		width: auto;
+	}
+
+	&__subtitle,
+	&__children {
+		&-wrapper {
+			color: $neutral;
+		}
+	}
+
+	// Mutators
+
+	&--edge {
+		&-zinc {
+			border: $card-edge-size solid $zinc;
+		}
+	}
+
+	&--padded {
+		&-both {
+			@include c-card-content-whitespace;
+
+			.#{$c} {
+				&__image-wrapper {
+					@include c-card-horizontal-whitespace;
+
+					margin-top: $spacer-sm;
+				}
+			}
+		}
+
+		&-content {
+			@include c-card-content-whitespace;
+		}
+
+		&-vertical {
+			.#{$c} {
+				&__header-wrapper {
+					margin-top: $spacer-sm * 1.5;
+					margin-bottom: $spacer-sm;
+				}
+
+				&__children-wrapper {
+					margin-bottom: $spacer-sm;
+				}
+			}
+		}
+	}
+
+	// Orientation must be below Padded
+	&--orientation {
+		&-horizontal {
+			flex-direction: row;
+
+			.#{$c}__header-wrapper {
+				margin-top: $spacer-sm * 1.5;
+			}
+
+			.#{$c}__top-wrapper {
+				display: flex;
+			}
+
+			.#{$c}__bottom-wrapper {
+				flex-grow: 1;
+			}
+
+			.#{$c}__image-wrapper {
+				flex-grow: 1;
+				display: flex;
+				align-items: center;
+			}
+
+			@include c-card-image-overflow {
+				margin-right: 0;
+			}
+
+			&.#{$c}--padded-both {
+				.#{$c}__image-wrapper {
+					margin-bottom: $spacer-sm;
+				}
+
+				.#{$c}__title-wrapper,
+				.#{$c}__subtitle-wrapper,
+				.#{$c}__children-wrapper {
+					margin-left: 0;
+				}
+			}
+		}
+
+		&-vertical {
+			flex-direction: column;
+
+			@include c-card-image-overflow {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	&--mode {
+		&-light {
+			background-color: $white;
+		}
+
+		&-dark {
+			background-color: $black;
+
+			.#{$c} {
+				&__title,
+				&__toolbar {
+					&-wrapper {
+						color: $white;
+					}
+				}
+			}
+		}
+	}
+
+	&--offset {
+		margin-left: $card-offset;
+		margin-top: $card-offset;
+
+		&.#{$c}--orientation-horizontal {
+			.#{$c} {
+				&__image {
+					&-wrapper {
+						align-self: flex-start;
+						transform: translate(-$card-offset, -$card-offset);
+						box-shadow: $shadow-24-black;
+					}
+				}
+			}
+		}
+	}
+}

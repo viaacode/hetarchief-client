@@ -3,11 +3,12 @@ import { render, RenderResult, screen, fireEvent, waitFor } from '@testing-libra
 import Modal from './Modal';
 import styles from './Modal.module.scss';
 
+import { documentOf } from '@shared/helpers/document-of';
+
 const text = 'Title of the Modal';
 const noPadding = { padding: '' };
 const noMargin = { margin: '' };
 
-const documentOf = (result: RenderResult) => result.container.ownerDocument;
 const paddingOf = (el: Element) => window.getComputedStyle(el).getPropertyValue('padding');
 const marginOf = (el: Element) => window.getComputedStyle(el).getPropertyValue('margin');
 

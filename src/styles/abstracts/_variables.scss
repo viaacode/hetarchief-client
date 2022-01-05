@@ -1,3 +1,5 @@
+@use "sass:color";
+
 /**
  * Colors
  */
@@ -14,13 +16,21 @@ $silver: #E6E6E6;
 $platinum: #F8F8F8;
 
 /**
+ * Shadow
+ */
+
+$shadow-24-black: 0 0 24px color.adjust($black, $alpha: -0.39);
+
+/**
  * Spacers
  */
 
- $spacer-xs: .8rem;
- $spacer-sm: 1.6rem;
- $spacer-md: 2.4rem;
- $spacer-lg: 3.2rem;
+$spacer-xs: .8rem;
+$spacer-sm: 1.6rem;
+$spacer-md: 2.4rem;
+$spacer-lg: 3.2rem;
+$spacer-1xl: 4rem;
+$spacer-2xl: 8rem;
 
 /**
  * Typography
@@ -60,7 +70,7 @@ $line-height-sm: 0.625;
  * Breakpoints
  */
 
- $breakpoints: (
+$breakpoints: (
 	"sm": 576px,
 	"md": 768px,
 	"lg": 992px,
@@ -82,9 +92,15 @@ $z-layers: (
 /**
  * Modal
  */
-$modal-close-size: 24px;
 $modal-close-margin: 32px;
+$modal-close-size: 24px;
 $modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
+
+/**
+ * Card
+ */
+$card-edge-size: 1px;
+$card-offset: 2rem;
 
 /**
  * Dividers

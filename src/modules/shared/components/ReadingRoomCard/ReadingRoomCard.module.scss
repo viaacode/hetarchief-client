@@ -1,0 +1,109 @@
+@use "sass:map";
+@use "sass:math";
+@use "styles/abstracts" as *;
+
+.c-reading-room-card {
+	&__background {
+		display: grid;
+		grid-template-columns: 1fr 2fr 1fr;
+		grid-template-rows: 1fr 2fr 1fr;
+
+		&--image {
+			grid-column: 1 / 4;
+			grid-row: 1 / 4;
+			overflow: hidden;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+		}
+
+		&--short {
+			min-height: 205px;
+		}
+
+		&--tall {
+			min-height: 276px;
+			min-width: 176px;
+			width: 176px;
+		}
+	}
+
+	&__logo {
+		grid-column: 2 / 3;
+		grid-row: 2 / 3;
+		overflow: hidden;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		max-width: 100%;
+		max-height: 100%;
+		position: relative;
+	}
+
+	&__title {
+		font-size: $font-size-md;
+		line-height: math.div($font-size-md, 9) * 10; // 2rem
+
+		&--large {
+			font-size: $font-size-1xl;
+			line-height: 1;
+		}
+	}
+
+	&__description {
+		line-height: $line-height-1xl;
+	}
+
+	&__control-icon {
+		font-size: $font-size-lg;
+		margin-right: $spacer-xs;
+	}
+
+	&__controls {
+		color: $black;
+		display: flex;
+		align-items: center;
+		flex-wrap: nowrap;
+
+		p {
+			font-size: $font-size-xs;
+			line-height: $font-size-sm;
+			max-width: 175px;
+		}
+
+		& > {
+			& button {
+				+ button {
+					margin-left: $spacer-xs;
+				}
+			}
+
+			& p {
+				+ button {
+					margin-left: $spacer-sm;
+				}
+			}
+		}
+
+		&--near {
+			margin-top: $spacer-md;
+		}
+
+		&--far {
+			margin-top: $spacer-lg;
+		}
+		
+		&--light {
+			color: $white;
+		}
+
+		&--thinner {
+			p {
+				font-size: $font-size-sm;
+				line-height: $line-height-3xl;
+				max-width: 130px;
+			}
+		}
+	}
+}
