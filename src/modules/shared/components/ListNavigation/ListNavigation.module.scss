@@ -1,0 +1,40 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+.c-list-navigation {
+	&__list {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	&__link {
+		display: block;
+		padding: $spacer-sm;
+		padding-left: $spacer-lg;
+		text-decoration: none;
+
+		&--active {
+			background-color: $black;
+			color: white;
+			font-weight: 700;
+		}
+
+		&:not(:active,:hover):focus {
+			outline: 1px solid $teal;
+		}
+	}
+
+	&__button {
+		height: auto;
+		padding: $spacer-sm;
+		padding-left: $spacer-md;
+	}
+
+	&__divider {
+		height: 0.1rem;
+		margin: $spacer-md;
+		background-color: $silver;
+	}
+
+}
