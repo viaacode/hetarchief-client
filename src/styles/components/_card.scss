@@ -4,12 +4,72 @@
 
 $c: "c-card";
 
-@mixin c-card-horizontal-whitespace {
+// Mixins
+
+@mixin c-card-image-overflow {
+	// Spill the image over the border if it's not padded and the card has a border
+	&.#{$c}--padded-content {
+		&:not(.#{$c}--edge-none) {
+			.#{$c}__image-wrapper {
+				margin: -$card-edge-size;
+				@content;
+			}
+		}
+	}
+}
+
+@mixin m-card-horizontal {
+	flex-direction: row;
+
+	.#{$c}__top-wrapper {
+		display: flex;
+	}
+
+	.#{$c}__bottom-wrapper {
+		flex-grow: 1;
+		min-width: 0;
+	}
+
+	.#{$c}__image-wrapper {
+		align-items: center;
+		display: flex;
+		flex-grow: 1;
+		min-width: 0;
+	}
+
+	@include c-card-image-overflow {
+		margin-right: 0;
+	}
+
+	&.#{$c}--padded-both {
+		.#{$c}__image-wrapper {
+			margin-bottom: $spacer-sm;
+		}
+
+		.#{$c}__title-wrapper,
+		.#{$c}__subtitle-wrapper,
+		.#{$c}__children-wrapper {
+			margin-left: 0;
+		}
+	}
+}
+
+@mixin m-card-vertical {
+	flex-direction: column;
+
+	@include c-card-image-overflow {
+		margin-bottom: 0;
+	}
+}
+
+// Placeholders
+
+%s-card-horizontal-whitespace {
 	margin-left: $spacer-sm;
 	margin-right: $spacer-sm;
 }
 
-@mixin c-card-content-whitespace {
+%s-card-content-whitespace {
 	// Note: I shouldn't let whitespace be influenced by color mode but this saves us a lot of className exposure
 	&.#{$c}--mode-dark {
 		.#{$c} {
@@ -43,7 +103,7 @@ $c: "c-card";
 		&__subtitle-wrapper,
 		&__toolbar-wrapper,
 		&__children-wrapper {
-			@include c-card-horizontal-whitespace;
+			@extend %s-card-horizontal-whitespace;
 		}
 
 		&__toolbar-wrapper {
@@ -56,17 +116,7 @@ $c: "c-card";
 	}
 }
 
-@mixin c-card-image-overflow {
-	// Spill the image over the border if it's not padded and the card has a border
-	&.#{$c}--padded-content {
-		&:not(.#{$c}--edge-none) {
-			.#{$c}__image-wrapper {
-				margin: -$card-edge-size;
-				@content;
-			}
-		}
-	}
-}
+// Component
 
 .#{$c} {
 	display: flex;
@@ -107,11 +157,11 @@ $c: "c-card";
 
 	&--padded {
 		&-both {
-			@include c-card-content-whitespace;
+			@extend %s-card-content-whitespace;
 
 			.#{$c} {
 				&__image-wrapper {
-					@include c-card-horizontal-whitespace;
+					@extend %s-card-horizontal-whitespace;
 
 					margin-top: $spacer-sm;
 				}
@@ -119,7 +169,7 @@ $c: "c-card";
 		}
 
 		&-content {
-			@include c-card-content-whitespace;
+			@extend %s-card-content-whitespace;
 		}
 
 		&-vertical {
@@ -144,50 +194,21 @@ $c: "c-card";
 	// Orientation must be below Padded
 	&--orientation {
 		&-horizontal {
-			flex-direction: row;
-
-			.#{$c}__header-wrapper {
-				margin-top: $spacer-sm * 1.5;
-			}
-
-			.#{$c}__top-wrapper {
-				display: flex;
-			}
-
-			.#{$c}__bottom-wrapper {
-				flex-grow: 1;
-				min-width: 0;
-			}
-
-			.#{$c}__image-wrapper {
-				align-items: center;
-				display: flex;
-				flex-grow: 1;
-				min-width: 0;
-			}
-
-			@include c-card-image-overflow {
-				margin-right: 0;
-			}
-
-			&.#{$c}--padded-both {
-				.#{$c}__image-wrapper {
-					margin-bottom: $spacer-sm;
-				}
-
-				.#{$c}__title-wrapper,
-				.#{$c}__subtitle-wrapper,
-				.#{$c}__children-wrapper {
-					margin-left: 0;
-				}
-			}
+			@include m-card-horizontal;
 		}
 
 		&-vertical {
-			flex-direction: column;
+			@include m-card-vertical;
 
-			@include c-card-image-overflow {
-				margin-bottom: 0;
+			// Only define one variant to avoid bloat
+			&--at-md {
+				@include respond-to("md") {
+					@include m-card-horizontal;
+				}
+
+				@include respond-at("md") {
+					@include m-card-vertical;
+				}
 			}
 		}
 	}

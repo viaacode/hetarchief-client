@@ -98,6 +98,10 @@ $c: "c-reading-room-card-controls";
 			margin-left: $spacer-md;
 			margin-right: $spacer-xs;
 			margin-top: $spacer-sm;
+			min-width: 285px;
+		}
+
+		@include respond-at("lg") {
 			min-width: 385px;
 		}
 
@@ -120,8 +124,6 @@ $c: "c-reading-room-card-controls";
 	}
 
 	&--wrap {
-		// flex-wrap: wrap;
-		
 		@include respond-to("sm") {
 			flex-direction: column;
 			align-items: unset;

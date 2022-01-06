@@ -23,6 +23,14 @@ $c: "c-reading-room-card";
 
 		&--short {
 			min-height: 205px;
+
+			// desktop-first to avoid reset properties
+			@include respond-to("md") {
+				min-height: 160px;
+				min-width: 120px;
+				margin-right: 2rem;
+				height: 100%;
+			}
 		}
 
 		&--tall {

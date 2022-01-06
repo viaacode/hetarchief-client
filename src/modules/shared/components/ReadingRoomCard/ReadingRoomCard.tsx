@@ -102,6 +102,10 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 			return 'horizontal';
 		}
 
+		if (typeNoAccess) {
+			return 'vertical--at-md';
+		}
+
 		return 'vertical';
 	};
 
