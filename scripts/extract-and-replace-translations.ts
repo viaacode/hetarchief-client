@@ -19,7 +19,7 @@ Every time the `npm run extract-translations` command is run, it will extract ne
 (without i18nKey or not containing "___")
 and add them to the json file without overwriting the existing strings.
 
-We can now give the src/shared/translations/nl.json file to claire to enter the final copy.
+We can now give the src/shared/translations/nl.json file to team meemoo to enter the final copy.
 
 In the future we could add a build step to replace the translate tags with the actual translations,
 so we don't have to load the translation framework anymore and do the bindings at runtime, but this is a nice to have.
