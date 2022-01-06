@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import TabLabel from './TabLabel';
-
-import { TabLabelProps } from '.';
+import { TabLabelProps } from './TabLabel.types';
 
 const mockLabel = 'Audio';
 const renderTabLabel = ({ label = mockLabel, ...rest }: Partial<TabLabelProps> = {}) =>

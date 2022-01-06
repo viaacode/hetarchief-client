@@ -5,6 +5,14 @@ import { mockTabs } from '../__mocks__/tabs';
 
 import ScrollableTabs from './ScrollableTabs';
 
+window.ResizeObserver =
+	window.ResizeObserver ||
+	jest.fn().mockImplementation(() => ({
+		disconnect: jest.fn(),
+		observe: jest.fn(),
+		unobserve: jest.fn(),
+	}));
+
 const containerWidth = 320;
 const baseContainer = document.createElement('div');
 baseContainer.style.cssText = `max-width: ${containerWidth}px; width: 100%;`;
