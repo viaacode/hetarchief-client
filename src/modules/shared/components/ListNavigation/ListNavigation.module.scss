@@ -3,9 +3,7 @@
 
 .c-list-navigation {
 	&__list {
-		padding: 0;
-		margin: 0;
-		list-style: none;
+		@extend %reset-list;
 	}
 
 	&__link {
