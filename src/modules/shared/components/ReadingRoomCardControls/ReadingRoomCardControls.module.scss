@@ -13,13 +13,10 @@ $c: "c-reading-room-card-controls";
 		display: flex;
 		align-items: center;
 		max-width: 100%;
+		margin-right: $spacer-xs;
 
-		& + button {
-			margin-left: $spacer-xs;
-
-			@include respond-at("md") {
-				margin-left: $spacer-md;
-			}
+		@include respond-at("md") {
+			margin-right: $spacer-md;
 		}
 
 		&-icon {
@@ -123,18 +120,29 @@ $c: "c-reading-room-card-controls";
 	}
 
 	&--wrap {
-		flex-wrap: wrap;
+		// flex-wrap: wrap;
+		
+		@include respond-to("sm") {
+			flex-direction: column;
+			align-items: unset;
+
+			ul, button, div {
+				&:not(:last-child) {
+					margin-bottom: $spacer-xs;
+				}
+			}
+		}
 	}
 
 	button {
 		@include text-ellipsis;
+
+		&:not(:last-child) {
+			margin-right: $spacer-xs;
+		}
 	}
 
-	button + button {
-		margin-left: $spacer-xs;
+	ul {
+		margin: 0;
 	}
-
-    ul {
-        margin: 0;
-    }
 }

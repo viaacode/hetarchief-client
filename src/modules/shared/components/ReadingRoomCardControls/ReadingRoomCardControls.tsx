@@ -24,6 +24,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 	const typeAccessRequested = type === ReadingRoomCardType['future--requested'];
 
 	const flat = typeAccessAccepted || typeAccessRequested;
+	const wrap = typeAccessGranted;
 
 	const renderLabel = (icon: IconLightNames, text: ReactNode) => {
 		return (
@@ -157,6 +158,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 			className={clsx(
 				styles['c-reading-room-card-controls'],
 				typeNoAccess && styles['c-reading-room-card-controls--near'],
+				wrap && styles['c-reading-room-card-controls--wrap'],
 				...(flat
 					? [
 							styles['c-reading-room-card-controls--flat'],
@@ -169,7 +171,6 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 							styles['c-reading-room-card-controls--far'],
 							styles['c-reading-room-card-controls--light'],
 							styles['c-reading-room-card-controls--thinner'],
-							styles['c-reading-room-card-controls--wrap'],
 					  ]
 					: [])
 			)}
