@@ -1,6 +1,6 @@
 @use "styles/abstracts" as *;
 
-$teal66: #00C8AA66;
+$tag-list-teal-66: #00C8AA66;
 
 .c-tag-list {
 	display: flex;
@@ -16,7 +16,7 @@ $teal66: #00C8AA66;
 			height: 3.2rem;
 			padding: $spacer-xs $spacer-sm;
 			border-radius: 1.6rem;
-			background-color: $teal66;
+			background-color: $tag-list-teal-66;
 			font-weight: 700;
 
 			&.c-tag-list__tag--closable a {
@@ -85,7 +85,7 @@ $teal66: #00C8AA66;
 				}
 
 				&:active {
-					background-color: $teal66;
+					background-color: $tag-list-teal-66;
 					color: $black
 				}
 
@@ -106,7 +106,7 @@ $teal66: #00C8AA66;
 				}
 
 				&:not(:active,:hover):focus {
-					outline: 2px solid $teal;
+					outline: 2px solid $tag-list-teal-66;
 				}
 			}
 		}
