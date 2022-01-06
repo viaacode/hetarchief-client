@@ -55,7 +55,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['access-granted'],
+				type: ReadingRoomCardType['access'],
 				access: AccessGranted,
 			})
 		);
@@ -74,7 +74,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['access-granted'],
+				type: ReadingRoomCardType['access'],
 				access: AccessGranted,
 			})
 		);

@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:math";
 @use "styles/abstracts" as *;
 
 $c: "c-card";
@@ -13,13 +14,21 @@ $c: "c-card";
 	&.#{$c}--mode-dark {
 		.#{$c} {
 			&__header-wrapper {
-				margin-bottom: $spacer-sm * 2;
-				margin-top: $spacer-lg + $spacer-xs;
+				margin-bottom: math.div($spacer-md, 2);
+				margin-top: $spacer-sm;
+
+				@include respond-at("md") {
+					margin-bottom: $spacer-sm * 2;
+					margin-top: $spacer-lg + $spacer-xs;
+				}
 			}
 
 			&__children-wrapper {
 				margin-bottom: $spacer-md;
-				margin-right: $spacer-lg;
+
+				@include respond-at("md") {
+					margin-right: $spacer-lg;
+				}
 			}
 		}
 	}
@@ -68,10 +77,12 @@ $c: "c-card";
 		display: flex;
 		flex-flow: row nowrap;
 		flex-grow: 1;
+		min-width: 0;
 	}
 
 	&__title-wrapper {
 		flex-grow: 1;
+		min-width: 0;
 	}
 
 	&__toolbar-wrapper {
@@ -114,8 +125,13 @@ $c: "c-card";
 		&-vertical {
 			.#{$c} {
 				&__header-wrapper {
-					margin-bottom: $spacer-sm;
-					margin-top: $spacer-sm * 1.5;
+					margin-bottom: math.div($spacer-md, 2);
+					margin-top: math.div($spacer-md, 2);
+
+					@include respond-at("md") {
+						margin-bottom: $spacer-sm;
+						margin-top: $spacer-sm * 1.5;
+					}
 				}
 
 				&__children-wrapper {
@@ -140,12 +156,14 @@ $c: "c-card";
 
 			.#{$c}__bottom-wrapper {
 				flex-grow: 1;
+				min-width: 0;
 			}
 
 			.#{$c}__image-wrapper {
 				align-items: center;
 				display: flex;
 				flex-grow: 1;
+				min-width: 0;
 			}
 
 			@include c-card-image-overflow {
@@ -194,19 +212,50 @@ $c: "c-card";
 	}
 
 	&--offset {
-		margin-left: $card-offset;
-		margin-top: $card-offset;
+		margin-left: $card-offset * 0.8;
+		margin-top: $card-offset * 0.8;
 
 		&.#{$c}--orientation-horizontal {
 			.#{$c} {
 				&__image {
 					&-wrapper {
 						align-self: flex-start;
-						box-shadow: $shadow-24-black;
-						transform: translate(-$card-offset, -$card-offset);
+						box-shadow: $shadow-24-black-61;
+						transform: translate(-($card-offset * 0.8), -($card-offset * 0.8));
 					}
 				}
 			}
 		}
+
+		@include respond-to("md") {
+			&.#{$c}--orientation-horizontal {
+				.#{$c} {
+					&__image {
+						&-wrapper {
+							margin-right: 0 - $card-offset * 0.8;
+						}
+					}
+				}
+			}
+		}
+
+		@include respond-at("md") {
+			margin-left: $card-offset;
+			margin-top: $card-offset;
+
+			&.#{$c}--orientation-horizontal {
+				.#{$c} {
+					&__image {
+						&-wrapper {
+							transform: translate(-$card-offset, -$card-offset);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	&--shadow {
+		box-shadow: $shadow-24-black-04;
 	}
 }

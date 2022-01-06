@@ -1,3 +1,9 @@
+@use "styles/abstracts/mixins" as *;
+
 .u-text-center {
 	text-align: center;
+}
+
+.u-text-ellipsis {
+	@include text-ellipsis;
 }

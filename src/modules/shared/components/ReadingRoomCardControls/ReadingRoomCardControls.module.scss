@@ -1,0 +1,159 @@
+@use "sass:math";
+@use "styles/abstracts" as *;
+
+$c: "c-reading-room-card-controls";
+$row-spacing: $spacer-sm;
+$row-spacing-xs: $spacer-xs;
+
+.#{$c} {
+    color: $black;
+    display: flex;
+    align-items: center;
+    margin-top: -$row-spacing-xs;
+    margin-bottom: -$row-spacing-xs;
+    flex-wrap: nowrap;
+
+    @include respond-at("md") {
+        margin-top: -$row-spacing;
+        margin-bottom: -$row-spacing;
+    }
+
+    &__label {
+        display: flex;
+        align-items: center;
+        max-width: 100%;
+        margin-top: $row-spacing-xs;
+        margin-bottom: $row-spacing-xs;
+    
+        @include respond-at("md") {
+            margin-top: $row-spacing;
+            margin-bottom: $row-spacing;
+        }
+
+        & + button {
+            margin-left: $spacer-xs;
+
+            @include respond-at("md") {
+                margin-left: $spacer-md;
+            }
+        }
+
+        &-icon {
+            font-size: $font-size-1xl;
+
+            @include respond-at("md") {
+                font-size: $font-size-lg;
+            }
+
+            + .#{$c}__label-text {
+                margin-left: $spacer-xs;
+            }
+        }
+
+        &-text {
+            font-size: $font-size-xs;
+            line-height: $line-height-lg;
+
+            @include respond-at("md") {
+                max-width: 170px;
+            }
+        }
+    }
+
+    &--near {
+        margin-top: $spacer-sm;
+
+        @include respond-at("md") {
+            margin-top: $spacer-md;
+        }
+    }
+
+    &--far {
+        margin-top: math.div($spacer-md, 2);
+
+        @include respond-at("md") {
+            margin-top: $spacer-lg;
+        }
+    }
+    
+    &--light {
+        color: $white;
+
+        .#{$c} {
+            &__label {
+                &-text {
+                    font-size: $font-size-sm;
+                    line-height: $line-height-3xl;
+                    max-width: 130px;
+                }
+
+                &-icon {
+                    + .#{$c}__label-text {
+                        margin-left: $spacer-xs;
+                    }
+                }
+            }
+        }
+    }
+
+    &--neutral {
+        color: $neutral;
+    }
+
+    &--thinner {
+        .#{$c} {
+            &__label-text {
+                font-size: $font-size-sm;
+                line-height: $line-height-3xl;
+                max-width: 130px;
+            }
+        }
+    }
+
+    &--flat {
+        margin-top: 0;
+        justify-content: space-between;
+
+        @include respond-at("md") {
+            margin-left: $spacer-md;
+            margin-right: $spacer-xs;
+        }
+
+        .#{$c} {
+            &__label {
+                &-text {
+                    font-size: $font-size-sm;
+                    line-height: math.div($font-size-md, 9) * 10; // 2rem;
+                }
+
+                &-icon {
+                    font-size: $font-size-md;
+
+                    + .#{$c}__label-text {
+                        margin-left: math.div($spacer-md, 2);
+                    }
+                }
+            }
+        }
+    }
+    
+    &--wrap {
+        flex-wrap: wrap;
+    }
+
+    button {
+        @include text-ellipsis;
+
+        margin-top: $row-spacing-xs;
+        margin-bottom: $row-spacing-xs;
+
+        @include respond-at("md") {
+            margin-top: $row-spacing;
+            margin-bottom: $row-spacing;
+        }
+    }
+
+    button + button {
+        margin-left: $spacer-xs;
+    }
+}
