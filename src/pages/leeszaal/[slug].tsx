@@ -3,31 +3,23 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { useQueryParams } from 'use-query-params';
 
-import { Icon, Navigation, Placeholder, TabLabel } from '@shared/components';
+import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-room/const';
+import { Icon, IconProps, Navigation, Placeholder, TabLabel } from '@shared/components';
 
 const ReadingRoomPage: NextPage = () => {
+	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+
 	const tabs: TabProps[] = useMemo(
-		() => [
-			{
-				id: 'all',
-				label: (<TabLabel label="Alles" count={0} />) as any,
-				active: true,
-			},
-			{
-				id: 'video',
-				icon: <Icon name="video" />,
-				label: (<TabLabel label="Video's" count={0} />) as any,
-				active: false,
-			},
-			{
-				id: 'audio',
-				icon: <Icon name="audio" />,
-				label: (<TabLabel label="Audio" count={0} />) as any,
-				active: false,
-			},
-		],
-		[]
+		() =>
+			READING_ROOM_TABS.map((tab) => ({
+				...tab,
+				icon: <Icon name={tab.icon as IconProps['name']} />,
+				label: (<TabLabel label={tab.label} count={0} />) as any,
+				active: tab.id === query.mediaType,
+			})),
+		[query.mediaType]
 	);
 
 	/**
@@ -35,7 +27,7 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const onTabClick = (tabId: string | number) => {
-		console.log(tabId);
+		setQuery({ mediaType: String(tabId) });
 	};
 
 	/**
@@ -45,9 +37,8 @@ const ReadingRoomPage: NextPage = () => {
 	return (
 		<div className="p-reading-room">
 			<Head>
-				<title>Leeszaal</title>
+				<title>Leeszaal | Het Archief</title>
 				<meta name="description" content="Leeszaal omschrijving" />
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
 			<Navigation contextual>
