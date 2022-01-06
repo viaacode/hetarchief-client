@@ -13,15 +13,31 @@ const Template: ComponentStory<typeof Badge> = (args) => <Badge {...args} />;
 
 export const Text = Template.bind({});
 Text.args = {
-	text: '23 items',
+	text: 2,
 };
 
 export const Success = Template.bind({});
 Success.args = {
-	children: <Icon name="check" />,
+	text: <Icon name="check" />,
+	type: 'success',
+	variants: 'icon', // Badges with icons need 'icon' variant to adjust font-size
 };
 
 export const Error = Template.bind({});
 Error.args = {
-	children: <Icon name="forbidden" />,
+	text: <Icon name="forbidden" />,
+	type: 'error',
+	variants: 'icon',
+};
+
+export const SmallText = Template.bind({});
+SmallText.args = {
+	text: '23 items',
+	variants: 'small',
+};
+
+export const SmallIcon = Template.bind({});
+SmallIcon.args = {
+	text: <Icon name="link" />,
+	variants: ['small', 'icon'],
 };

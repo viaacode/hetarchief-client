@@ -1,0 +1,64 @@
+@use "styles/abstracts/" as *;
+
+$badge-font-size-sm: 1.2rem;
+$badge-font-size: 1.4rem;
+
+@mixin badge-variant($background-color, $text-color, $padding) {
+	background-color: $background-color;
+	color: $text-color;
+	padding: 0 $padding;
+}
+
+@mixin icon-font-size($font-size) {
+	font-size: calc($font-size + 0.6rem);
+}
+
+/* Component
+   ========================================================================== */
+
+.c-badge {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	height: 2.4rem;
+	min-width: 3.2rem;
+	font-size: $badge-font-size;
+	font-weight: 700;
+	border-radius: 1.2rem;
+
+	&--default {
+		@include badge-variant($teal, $black, $spacer-xs);
+	}
+
+	&--success {
+		@include badge-variant($seagreen, $white, 0.6rem);
+	}
+
+	&--error {
+		@include badge-variant($cherry, $white, 0.6rem);
+	}
+
+	&--icon {
+		@include icon-font-size($badge-font-size);
+	}
+
+	&--small {
+		@include badge-variant($black, $white, $spacer-xs);
+
+		height: 1.6rem;
+		min-width: 2.6rem;
+		font-size: $badge-font-size-sm;
+		border-radius: 0.8rem;
+	}
+
+	&--small.c-badge--icon {
+		@include icon-font-size($badge-font-size-sm);
+
+		padding: 0;
+
+		// icon font size = 18px -> icon container = 18px. badge container = 16px
+		span {
+			margin-bottom: -0.1rem;
+		}
+	}
+}
