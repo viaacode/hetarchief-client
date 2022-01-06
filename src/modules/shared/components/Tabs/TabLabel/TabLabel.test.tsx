@@ -21,7 +21,6 @@ describe('Components', () => {
 			renderTabLabel({ count: 52 });
 
 			const tabLabel = screen.queryByText('(52)');
-			screen.debug();
 			expect(tabLabel).toBeInTheDocument();
 		});
 	});

@@ -6,7 +6,14 @@ import { useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-room/const';
-import { Icon, IconProps, Navigation, Placeholder, TabLabel } from '@shared/components';
+import {
+	Icon,
+	IconProps,
+	Navigation,
+	Placeholder,
+	ScrollableTabs,
+	TabLabel,
+} from '@shared/components';
 
 const ReadingRoomPage: NextPage = () => {
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
@@ -51,7 +58,7 @@ const ReadingRoomPage: NextPage = () => {
 
 			<section className="u-bg-black">
 				<div className="l-container">
-					<Tabs tabs={tabs} onClick={onTabClick} />
+					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>
 

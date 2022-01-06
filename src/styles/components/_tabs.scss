@@ -12,6 +12,8 @@
 
 .c-tabs__item {
 	&:not(:last-child) {
-		margin-right: 3.2rem;
+		@include respond-at("md") {
+			margin-right: 3.2rem;
+		}
 	}
 }
