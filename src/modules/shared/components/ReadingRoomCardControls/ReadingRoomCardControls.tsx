@@ -85,7 +85,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 	const renderFutureRequestedControls = () => {
 		return (
 			<>
-				<TagList tags={[{ id: 1, label: 'foo', color: 'teal' }]} />
+				<TagList tags={[{ id: 1, label: 'Aanvraag ingediend' }]} variants={['large']} />
 
 				<ContactIconButton
 					color="silver"
@@ -160,7 +160,8 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 				...(flat
 					? [
 							styles['c-reading-room-card-controls--flat'],
-							styles['c-reading-room-card-controls--neutral'],
+							styles['c-reading-room-card-controls--near'],
+							typeAccessAccepted && styles['c-reading-room-card-controls--neutral'],
 					  ]
 					: []),
 				...(typeAccessGranted

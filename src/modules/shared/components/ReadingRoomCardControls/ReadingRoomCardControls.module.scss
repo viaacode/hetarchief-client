@@ -2,158 +2,139 @@
 @use "styles/abstracts" as *;
 
 $c: "c-reading-room-card-controls";
-$row-spacing: $spacer-sm;
-$row-spacing-xs: $spacer-xs;
 
 .#{$c} {
-    color: $black;
-    display: flex;
-    align-items: center;
-    margin-top: -$row-spacing-xs;
-    margin-bottom: -$row-spacing-xs;
-    flex-wrap: nowrap;
+	color: $black;
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
 
-    @include respond-at("md") {
-        margin-top: -$row-spacing;
-        margin-bottom: -$row-spacing;
-    }
+	&__label {
+		display: flex;
+		align-items: center;
+		max-width: 100%;
 
-    &__label {
-        display: flex;
-        align-items: center;
-        max-width: 100%;
-        margin-top: $row-spacing-xs;
-        margin-bottom: $row-spacing-xs;
-    
-        @include respond-at("md") {
-            margin-top: $row-spacing;
-            margin-bottom: $row-spacing;
-        }
+		& + button {
+			margin-left: $spacer-xs;
 
-        & + button {
-            margin-left: $spacer-xs;
+			@include respond-at("md") {
+				margin-left: $spacer-md;
+			}
+		}
 
-            @include respond-at("md") {
-                margin-left: $spacer-md;
-            }
-        }
+		&-icon {
+			font-size: $font-size-1xl;
 
-        &-icon {
-            font-size: $font-size-1xl;
+			@include respond-at("md") {
+				font-size: $font-size-lg;
+			}
 
-            @include respond-at("md") {
-                font-size: $font-size-lg;
-            }
+			+ .#{$c}__label-text {
+				margin-left: $spacer-xs;
+			}
+		}
 
-            + .#{$c}__label-text {
-                margin-left: $spacer-xs;
-            }
-        }
+		&-text {
+			font-size: $font-size-xs;
+			line-height: $line-height-lg;
 
-        &-text {
-            font-size: $font-size-xs;
-            line-height: $line-height-lg;
+			@include respond-at("md") {
+				max-width: 170px;
+			}
+		}
+	}
 
-            @include respond-at("md") {
-                max-width: 170px;
-            }
-        }
-    }
+	&--near {
+		margin-top: $spacer-sm;
 
-    &--near {
-        margin-top: $spacer-sm;
+		@include respond-at("md") {
+			margin-top: $spacer-md;
+		}
+	}
 
-        @include respond-at("md") {
-            margin-top: $spacer-md;
-        }
-    }
+	&--far {
+		margin-top: math.div($spacer-md, 2);
 
-    &--far {
-        margin-top: math.div($spacer-md, 2);
+		@include respond-at("md") {
+			margin-top: $spacer-lg;
+		}
+	}
 
-        @include respond-at("md") {
-            margin-top: $spacer-lg;
-        }
-    }
-    
-    &--light {
-        color: $white;
+	&--light {
+		color: $white;
 
-        .#{$c} {
-            &__label {
-                &-text {
-                    font-size: $font-size-sm;
-                    line-height: $line-height-3xl;
-                    max-width: 130px;
-                }
+		.#{$c} {
+			&__label {
+				&-text {
+					font-size: $font-size-sm;
+					line-height: $line-height-3xl;
+					max-width: 130px;
+				}
 
-                &-icon {
-                    + .#{$c}__label-text {
-                        margin-left: $spacer-xs;
-                    }
-                }
-            }
-        }
-    }
+				&-icon {
+					+ .#{$c}__label-text {
+						margin-left: $spacer-xs;
+					}
+				}
+			}
+		}
+	}
 
-    &--neutral {
-        color: $neutral;
-    }
+	&--neutral {
+		color: $neutral;
+	}
 
-    &--thinner {
-        .#{$c} {
-            &__label-text {
-                font-size: $font-size-sm;
-                line-height: $line-height-3xl;
-                max-width: 130px;
-            }
-        }
-    }
+	&--thinner {
+		.#{$c} {
+			&__label-text {
+				font-size: $font-size-sm;
+				line-height: $line-height-3xl;
+				max-width: 130px;
+			}
+		}
+	}
 
-    &--flat {
-        margin-top: 0;
-        justify-content: space-between;
+	&--flat {
+		justify-content: space-between;
 
-        @include respond-at("md") {
-            margin-left: $spacer-md;
-            margin-right: $spacer-xs;
-        }
+		@include respond-at("md") {
+			margin-left: $spacer-md;
+			margin-right: $spacer-xs;
+			margin-top: $spacer-sm;
+			min-width: 385px;
+		}
 
-        .#{$c} {
-            &__label {
-                &-text {
-                    font-size: $font-size-sm;
-                    line-height: math.div($font-size-md, 9) * 10; // 2rem;
-                }
+		.#{$c} {
+			&__label {
+				&-text {
+					font-size: $font-size-sm;
+					line-height: math.div($font-size-md, 9) * 10; // 2rem;
+				}
 
-                &-icon {
-                    font-size: $font-size-md;
+				&-icon {
+					font-size: $font-size-md;
 
-                    + .#{$c}__label-text {
-                        margin-left: math.div($spacer-md, 2);
-                    }
-                }
-            }
-        }
-    }
-    
-    &--wrap {
-        flex-wrap: wrap;
-    }
+					+ .#{$c}__label-text {
+						margin-left: math.div($spacer-md, 2);
+					}
+				}
+			}
+		}
+	}
 
-    button {
-        @include text-ellipsis;
+	&--wrap {
+		flex-wrap: wrap;
+	}
 
-        margin-top: $row-spacing-xs;
-        margin-bottom: $row-spacing-xs;
+	button {
+		@include text-ellipsis;
+	}
 
-        @include respond-at("md") {
-            margin-top: $row-spacing;
-            margin-bottom: $row-spacing;
-        }
-    }
+	button + button {
+		margin-left: $spacer-xs;
+	}
 
-    button + button {
-        margin-left: $spacer-xs;
+    ul {
+        margin: 0;
     }
 }
