@@ -2,12 +2,12 @@
 @use "styles/abstracts" as *;
 
 .c-toast {
-	// max-width: 48.6rem;
+	max-width: 48.6rem;
 	display: grid;
 	grid-template-columns: 1fr auto;
 	column-gap: $spacer-sm;
 	row-gap: $spacer-xs;
-	padding: calc($spacer-sm + 0.4rem);
+	padding: 2rem;
 	background-color: $black;
 	color: white;
 
