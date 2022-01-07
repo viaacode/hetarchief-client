@@ -1,6 +1,7 @@
+@use "sass:color";
 @use "styles/abstracts" as *;
 
-$tag-list-teal-66: #00C8AA66;
+$tag-list-teal-66: color.adjust($teal, $alpha: -0.34);
 
 .c-tag-list {
 	display: flex;
