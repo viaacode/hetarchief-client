@@ -5,6 +5,7 @@ import { mockTabs } from '../__mocks__/tabs';
 
 import ScrollableTabs from './ScrollableTabs';
 
+// Mock ResizeObserver used in ScrollableTabs component
 window.ResizeObserver =
 	window.ResizeObserver ||
 	jest.fn().mockImplementation(() => ({
@@ -13,6 +14,7 @@ window.ResizeObserver =
 		unobserve: jest.fn(),
 	}));
 
+// Make sure the container is small enough to create overflow
 const containerWidth = 320;
 const baseContainer = document.createElement('div');
 baseContainer.style.cssText = `max-width: ${containerWidth}px; width: 100%;`;
