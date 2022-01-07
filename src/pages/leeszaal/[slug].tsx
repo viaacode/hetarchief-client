@@ -1,4 +1,4 @@
-import { TabProps, Tabs } from '@meemoo/react-components';
+import { TabProps } from '@meemoo/react-components';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -14,6 +14,7 @@ import {
 	ScrollableTabs,
 	TabLabel,
 } from '@shared/components';
+import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
@@ -23,7 +24,8 @@ const ReadingRoomPage: NextPage = () => {
 			READING_ROOM_TABS.map((tab) => ({
 				...tab,
 				icon: <Icon name={tab.icon as IconProps['name']} />,
-				label: (<TabLabel label={tab.label} count={0} />) as any,
+				// TODO: remove any once Tab type supports ReactNode
+				label: (<TabLabel label={tab.label} count={0} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
 				active: tab.id === query.mediaType,
 			})),
 		[query.mediaType]
@@ -44,7 +46,7 @@ const ReadingRoomPage: NextPage = () => {
 	return (
 		<div className="p-reading-room">
 			<Head>
-				<title>Leeszaal | Het Archief</title>
+				<title>{createPageTitle('Leeszaal')}</title>
 				<meta name="description" content="Leeszaal omschrijving" />
 			</Head>
 

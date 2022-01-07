@@ -4,12 +4,13 @@ import Link from 'next/link';
 
 import { Hero } from '@shared/components';
 import { heroMock } from '@shared/components/Hero/__mocks__/hero';
+import { createPageTitle } from '@shared/utils';
 
 const Home: NextPage = () => {
 	return (
 		<div className="p-home">
 			<Head>
-				<title>Home | Het Archief</title>
+				<title>{createPageTitle('Home')}</title>
 				<meta name="description" content="TODO: Home meta description" />
 			</Head>
 

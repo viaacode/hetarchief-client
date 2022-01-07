@@ -5,7 +5,7 @@ import CardStyles from '../Card/Card.module.scss';
 import MediaCard from './MediaCard';
 import { formatDate } from './MediaCard.utils';
 
-import { documentOf } from '@shared/helpers/document-of';
+import { documentOf } from '@shared/utils';
 
 const author = 'Author';
 const now = new Date();

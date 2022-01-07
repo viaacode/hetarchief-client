@@ -9,7 +9,7 @@ import { ReadingRoomCardProps } from './ReadingRoomCard.types';
 
 import { ReadingRoomCardType } from '.';
 
-import { documentOf } from '@shared/helpers/document-of';
+import { documentOf } from '@shared/utils';
 
 describe('Component: <ReadingRoomCard />', () => {
 	let rendered: RenderResult | undefined;
