@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
+import Masonry from 'react-masonry-css';
 
 import { MediaCard } from '..';
 
@@ -9,6 +10,12 @@ import { MediaCardListProps } from './MediaCardList.types';
 const MediaCardList: FC<MediaCardListProps> = ({ children, items, view }) => {
 	if (!items) return null;
 
+	const renderWrapper = (style: 'masonry' | 'sidebar', children?: ReactNode) => (
+		<div className={clsx(styles['c-media-card-list'], styles[`c-media-card-list--${style}`])}>
+			{children}
+		</div>
+	);
+
 	const renderChildren = () =>
 		children && <div className={styles['c-media-card-list__sidebar']}>{children}</div>;
 
@@ -16,34 +23,38 @@ const MediaCardList: FC<MediaCardListProps> = ({ children, items, view }) => {
 
 	switch (view) {
 		case 'grid':
-			return (
-				<div
-					className={clsx(
-						styles['c-media-card-list'],
-						styles['c-media-card-list__content'],
-						styles['c-media-card-list__content--grid']
-					)}
+			return renderWrapper(
+				'masonry',
+				<Masonry
+					breakpointCols={{
+						default: 4,
+						992: 3,
+						768: 2,
+						576: 1,
+					}}
+					className={styles['c-media-card-list__content']}
+					columnClassName={styles['c-media-card-list__column']}
 				>
 					{renderChildren()}
 
 					{renderItems()}
-				</div>
+				</Masonry>
 			);
 
 		default:
-			return (
-				<div className={styles['c-media-card-list']}>
+			return renderWrapper(
+				'sidebar',
+				<>
 					{renderChildren()}
 
-					<div
-						className={clsx(
-							styles['c-media-card-list__content'],
-							styles['c-media-card-list__content--list']
-						)}
+					<Masonry
+						breakpointCols={1}
+						className={styles['c-media-card-list__content']}
+						columnClassName={styles['c-media-card-list__column']}
 					>
 						{renderItems()}
-					</div>
-				</div>
+					</Masonry>
+				</>
 			);
 	}
 };

@@ -16,6 +16,11 @@ $silver: #E6E6E6;
 $platinum: #F8F8F8;
 
 /**
+ * Derived Colors
+ */
+$zinc-40: color.adjust($zinc, $alpha: -0.6);
+
+/**
  * Shadow
  */
 

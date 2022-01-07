@@ -27,9 +27,9 @@ export const mock = async (args: Pick<MediaCardProps, 'view'>): Promise<MediaCar
 					published_at: new Date(
 						start.getTime() + Math.random() * (end.getTime() - start.getTime())
 					),
-					published_by: Math.floor(Math.random() * 1000).toString(),
+					published_by: item.title.split(' ')[0] || 'Somebody',
 					type: type ? 'audio' : 'video',
-					preview: preview ? item.url.replace('/600/', '/248x161/') : undefined,
+					preview: preview ? item.url.replace('/600/', '/496x322/') : undefined,
 					view: args.view,
 				};
 			});
