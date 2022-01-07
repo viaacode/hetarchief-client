@@ -1,4 +1,8 @@
+@use "sass:list";
 @use "sass:map";
+@use "sass:meta";
+@use "sass:string";
+
 @use "variables" as *;
 @use "functions" as *;
 
@@ -54,6 +58,84 @@
 		@content;
 	}
 };
+
+/**
+ * Generators
+ */
+
+@mixin generate-properties($_properties, $_value) {
+	@if meta.type-of($_properties) == string {
+		#{$_properties}: $_value;
+	} @else {
+		@each $_prop in $_properties {
+			#{$_prop}: $_value;
+		}
+	}
+};
+
+/**
+ * Utility class generator
+ *
+ * usage:
+	// Value list
+	$align: ('left', 'right', 'center');
+	@include generate-utils('text', 'text-align', $align);
+	// output: u-text-left, u-text-right, u-text-center
+
+	// Value map
+	$spacers: (
+		'8': $spacer-xs,
+		'16': $spacer-sm,
+	);
+	$mx-props: ('margin-left', 'margin-right');
+	@include generate-utils('mx', $mx-props, $spacers);
+	// output: u-mx-8, u-mx-16
+
+	// With responsive utils
+	// Important! add breakpoints from small to large for mobile-first approach
+	// The keys are the same as used for the respond- mixins
+	$align: ('left');
+	@include generate-utils('text', 'text-align', $align, ("sm", "xl"));
+	// output: u-text-left, u-text-left:sm, u-text-left:xl
+ */
+
+
+@mixin generate-utils($_name, $_properties, $_values, $_bps: null) {
+	@each $_key, $_value in $_values {
+		$key: $_key;
+		$value: $_value;
+		$bps: $_bps;
+
+		// If $_values is a list and not a map the key is also the value
+		@if not $value {
+			$value: $_key;
+		}
+
+		.u-#{$_name}-#{$key} {
+			@include generate-properties($_properties, $value);
+		}
+
+		// A single item in a list returns string with type-of for some reason
+		// This way we support a single string
+		@if meta.type-of($_bps) == string {
+			$bps: ($_bps);
+		}
+
+		@if $bps and list.length($bps) > 0 {
+			@each $_bp-key in $_bps {
+				.u-#{$_name}-#{$key}\:#{$_bp-key} {
+					@include respond-at($_bp-key) {
+						@include generate-properties($_properties, $value);
+					}
+				}
+			}
+		}
+	}
+}
+
+/**
+ * Others
+ */
 
 @mixin aspect-ratio($width, $height) {
 	&::before {

@@ -1,3 +1,11 @@
-.u-text-center {
-	text-align: center;
-}
+@use "../abstracts" as *;
+
+/**
+ * Alignment
+ *
+ * usage: u-text-left
+ */
+
+$align: (left, right, center);
+@include generate-utils("text", "text-align", $align);
+

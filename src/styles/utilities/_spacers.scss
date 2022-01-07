@@ -1,0 +1,11 @@
+@use "../abstracts" as *;
+
+/**
+ * Margin
+ */
+
+// Right
+$mr: (
+	"8": $spacer-xs,
+);
+@include generate-utils("mr", "margin-right", $mr, ("sm"));
