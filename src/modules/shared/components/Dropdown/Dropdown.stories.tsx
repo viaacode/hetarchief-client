@@ -35,7 +35,11 @@ export default {
 const Template: ComponentStory<typeof Dropdown> = (args) => (
 	<DropdownStoryComponent>
 		<Dropdown {...args}>
-			<MenuContent menuItems={menuItemsWithIcons} onClick={(id) => console.log(id)} />
+			<MenuContent
+				rootClassName="c-dropdown-menu"
+				menuItems={menuItemsWithIcons}
+				onClick={(id) => console.log(id)}
+			/>
 		</Dropdown>
 	</DropdownStoryComponent>
 );
@@ -47,7 +51,11 @@ const TemplateCustomButton: ComponentStory<typeof Dropdown> = (args) => (
 				<span>Click me!</span>
 			</DropdownButton>
 			<DropdownContent>
-				<MenuContent menuItems={menuItemsWithIcons} onClick={(id) => console.log(id)} />
+				<MenuContent
+					rootClassName="c-dropdown-menu"
+					menuItems={menuItemsWithIcons}
+					onClick={(id) => console.log(id)}
+				/>
 			</DropdownContent>
 		</Dropdown>
 	</DropdownStoryComponent>
