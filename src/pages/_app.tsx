@@ -1,3 +1,4 @@
+import { appWithTranslation } from 'next-i18next';
 import { AppProps } from 'next/app';
 import { ReactElement } from 'react';
 
@@ -16,4 +17,4 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 	);
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);
