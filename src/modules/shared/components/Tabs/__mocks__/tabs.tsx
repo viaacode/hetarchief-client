@@ -10,6 +10,7 @@ export const mockTabs = [
 			</>
 		) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
 		// TODO: remove any once Tab type supports ReactNode
+		active: true,
 	},
 	{
 		id: 'audio',
