@@ -42,10 +42,8 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 		if (activeEl && tabsRef.current) {
 			const tabsEl = tabsRef.current;
 			const rect = activeEl.getBoundingClientRect();
-			// - 16 = width of gradient, so the active tab will be fully visible
+			// - 20 = width of gradient, so the active tab will be fully visible
 			const newX = rect.left + tabsEl.scrollLeft - 20;
-
-			console.log('new x', newX);
 
 			// scrollTo is not supported on IE and Safari (iOS)
 			if (tabsEl.scrollTo) {
@@ -108,22 +106,26 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 		if (scrollContainerRef.current) {
 			const tabsEl = scrollContainerRef.current.querySelector('.c-tabs');
 
+			const setHeight = (el: Element) => {
+				setTabsHeight(el.clientHeight);
+				tabsRef.current = el;
+			};
+
 			if (tabsEl) {
-				observer = new ResizeObserver((entries) => {
-					entries.forEach(({ target }) => {
-						console.log(target);
-						if (typeof window !== undefined) {
+				if (typeof window !== undefined && window.ResizeObserver) {
+					observer = new ResizeObserver((entries) => {
+						entries.forEach(({ target }) => {
 							if (window.innerWidth < target.scrollWidth + 40) {
 								setGradients(target);
 							}
-						}
-						if (target.clientHeight !== tabsHeight) {
-							setTabsHeight(target.clientHeight);
-							tabsRef.current = tabsEl;
-						}
+							if (target.clientHeight !== tabsHeight) {
+								setHeight(target);
+							}
+						});
 					});
-				});
-				observer.observe(tabsEl);
+					observer.observe(tabsEl);
+				}
+				setHeight(tabsEl);
 			}
 		}
 

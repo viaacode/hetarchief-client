@@ -33,4 +33,15 @@ export const mockTabs = [
 		// TODO: remove any once Tab type supports ReactNode
 		icon: <Icon name="video" />,
 	},
+	{
+		id: 'news',
+		label: (
+			<>
+				<strong className="u-mr-8">Kranten</strong>
+				<small>(0)</small>
+			</>
+		) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+		// TODO: remove any once Tab type supports ReactNode
+		icon: <Icon name="newspaper" />,
+	},
 ];
