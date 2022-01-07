@@ -45,7 +45,7 @@ const ListNavigation: FC<ListNavigationProps> = ({ listItems, className }) => {
 		);
 	};
 
-	const renderdivider = () => {
+	const renderDivider = () => {
 		return <div className={styles['c-list-navigation__divider']} />;
 	};
 
@@ -53,27 +53,17 @@ const ListNavigation: FC<ListNavigationProps> = ({ listItems, className }) => {
 		return (
 			<ul className={styles['c-list-navigation__list']} role="list">
 				{items.map((item: ListNavigationListItem, index) => {
-					if (isLink(item)) {
-						return (
-							<li
-								className={styles['c-list-navigation__list-item']}
-								key={`list-item-${index}`}
-								role="listitem"
-							>
-								{renderLink(item)}
-							</li>
-						);
-					} else {
-						return (
-							<li
-								className={styles['c-list-navigation__list-item']}
-								key={`list-item-${index}`}
-								role="listitem"
-							>
-								{renderButton(item as ListNavigationButton)}
-							</li>
-						);
-					}
+					return (
+						<li
+							className={styles['c-list-navigation__list-item']}
+							key={`list-item-${index}`}
+							role="listitem"
+						>
+							{isLink(item)
+								? renderLink(item)
+								: renderButton(item as ListNavigationButton)}
+						</li>
+					);
 				})}
 			</ul>
 		);
@@ -87,7 +77,7 @@ const ListNavigation: FC<ListNavigationProps> = ({ listItems, className }) => {
 				return (
 					<Fragment key={`list-${index}`}>
 						{renderItems(array)}
-						{index < listItemsArray.length - 1 && renderdivider()}
+						{index < listItemsArray.length - 1 && renderDivider()}
 					</Fragment>
 				);
 			});
