@@ -77,7 +77,7 @@ $tag-list-teal-66: color.adjust($teal, $alpha: -0.34);
 
 		// interaction
 		&--clickable, &--closable {
-			transition: all $animate-default;
+			transition: background-color $animate-default, color $animate-default, outline $animate-default;
 
 			&.c-tag-list__tag--large:not(.c-tag-list__tag--disabled) {
 				&:hover {
