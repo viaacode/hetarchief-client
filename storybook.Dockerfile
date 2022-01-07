@@ -10,7 +10,7 @@ FROM node:gallium-alpine AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN   npm run build-storybook 
+RUN   npm run build:storybook
 # Production image, copy all the files and run next
 FROM node:gallium-alpine AS runner
 WORKDIR /app
