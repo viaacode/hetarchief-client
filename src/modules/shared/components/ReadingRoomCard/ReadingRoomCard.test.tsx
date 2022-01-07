@@ -79,7 +79,7 @@ describe('Component: <ReadingRoomCard />', () => {
 			})
 		);
 
-		expect(screen.getByText(/Beschikbaar tot/)).toBeDefined();
+		expect(screen.getByText('timer')).toBeDefined(); // Check icon
 		expect(screen.getByText('Bezoek de leeszaal')).toBeDefined();
 	});
 
@@ -93,7 +93,36 @@ describe('Component: <ReadingRoomCard />', () => {
 		);
 
 		expect(
-			screen.getByText('Momenteel is er geen toegang mogelijk tot deze leeszaal')
+			screen.getByText('not-available') // Check icon
 		).toBeDefined();
+	});
+
+	it('Should show a timestamp when access is approved and in the future', () => {
+		rendered = render(
+			template({
+				room: mockReadingRoomCardProps.room,
+				type: ReadingRoomCardType['future--approved'],
+				access: AccessRequested,
+			})
+		);
+
+		expect(
+			screen.getByText('calendar') // Check icon
+		).toBeDefined();
+	});
+
+	it('Should show a tag with a translated message while future access is still pending', () => {
+		rendered = render(
+			template({
+				room: mockReadingRoomCardProps.room,
+				type: ReadingRoomCardType['future--requested'],
+				access: AccessRequested,
+			})
+		);
+
+		const tag = documentOf(rendered).getElementsByClassName('c-tag-list__tag');
+
+		expect(tag.length).toEqual(1);
+		expect(tag[0].innerHTML.length).toBeGreaterThan(0);
 	});
 });
