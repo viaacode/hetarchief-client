@@ -1,0 +1,18 @@
+@use "sass:map";
+@use "sass:color";
+@use "styles/abstracts" as *;
+
+$c-toggle-opacity-disabled: 32%;
+$c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
+
+.c-toggle {
+	max-height: 4.8rem;
+	border: 1px solid $c-toggle-zinc-66;
+	border-radius: 2.4rem;
+
+	&__option {
+		&--disabled {
+			opacity: $c-toggle-opacity-disabled;
+		}
+	}
+}
