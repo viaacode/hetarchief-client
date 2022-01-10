@@ -8,6 +8,6 @@ export interface HeroProps {
 }
 
 export interface HeroImage {
-	name: string;
+	src: string;
 	alt?: string;
 }

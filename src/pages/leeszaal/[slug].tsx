@@ -1,15 +1,41 @@
+import { TabProps } from '@meemoo/react-components';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useQueryParams } from 'use-query-params';
 
-import { MediaCardProps, MediaCardViewMode, Navigation, Placeholder } from '@shared/components';
+import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-room/const';
+import {
+	Icon,
+	IconProps,
+	MediaCardProps,
+	MediaCardViewMode,
+	Navigation,
+	Placeholder,
+	ScrollableTabs,
+	TabLabel,
+} from '@shared/components';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
+import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
+	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
 	const [mode] = useState<MediaCardViewMode>('grid');
+
+	const tabs: TabProps[] = useMemo(
+		() =>
+			READING_ROOM_TABS.map((tab) => ({
+				...tab,
+				icon: <Icon name={tab.icon as IconProps['name']} />,
+				// TODO: remove any once Tab type supports ReactNode
+				label: (<TabLabel label={tab.label} count={0} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+				active: tab.id === query.mediaType,
+			})),
+		[query.mediaType]
+	);
 
 	useEffect(() => {
 		async function fetchMedia() {
@@ -20,12 +46,23 @@ const ReadingRoomPage: NextPage = () => {
 		fetchMedia();
 	}, [setMedia]);
 
+	/**
+	 * Methods
+	 */
+
+	const onTabClick = (tabId: string | number) => {
+		setQuery({ mediaType: String(tabId) });
+	};
+
+	/**
+	 * Render
+	 */
+
 	return (
 		<div className="p-reading-room">
 			<Head>
-				<title>Leeszaal</title>
+				<title>{createPageTitle('Leeszaal')}</title>
 				<meta name="description" content="Leeszaal omschrijving" />
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
 			<Navigation contextual>
@@ -36,17 +73,25 @@ const ReadingRoomPage: NextPage = () => {
 				<Navigation.Right />
 			</Navigation>
 
-			<div style={{ padding: '3.2rem' }}>
-				{media.length > 0 ? (
-					<MediaCardList items={media} view={mode} />
-				) : (
-					<Placeholder
-						img="/images/lightbulb.svg"
-						title="Start je zoektocht!"
-						description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-					/>
-				)}
-			</div>
+			<section className="u-bg-black">
+				<div className="l-container">
+					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
+				</div>
+			</section>
+
+			<section className="u-py-48">
+				<div className="l-container">
+					{media.length > 0 ? (
+						<MediaCardList items={media} view={mode} />
+					) : (
+						<Placeholder
+							img="/images/lightbulb.svg"
+							title="Start je zoektocht!"
+							description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+						/>
+					)}
+				</div>
+			</section>
 		</div>
 	);
 };

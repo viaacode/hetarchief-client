@@ -1,4 +1,3 @@
-// import { documentOf } from '@meemoo/react-components';
 import { render, RenderResult, screen } from '@testing-library/react';
 
 import MediaCard from './MediaCard';
