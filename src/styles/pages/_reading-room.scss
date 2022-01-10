@@ -1,0 +1,38 @@
+@use "../abstracts/" as *;
+
+@function calc-filter-menu-width($_gutter, $_cols) {
+	@return calc((100% - ($_gutter * ($_cols - 1))) / $_cols)
+}
+
+$reading-room-grid-gutter-lg: $spacer-md;
+$reading-room-grid-cols-lg: 3;
+$reading-room-grid-gutter-xl: $spacer-lg;
+$reading-room-grid-cols-xl: 4;
+
+.p-reading-room__results {
+	&--initial {
+		.l-container {
+			display: flex;
+
+			@include respond-to("md") {
+				flex-direction: column;
+			}
+		}
+
+		.p-reading-room__filter-menu {
+			width: 100%;
+
+			@include respond-at("md") {
+				width: calc-filter-menu-width($reading-room-grid-gutter-lg, $reading-room-grid-cols-lg);
+			}
+			@include respond-at("xl") {
+				width: calc-filter-menu-width($reading-room-grid-gutter-xl, $reading-room-grid-cols-xl);
+			}
+		}
+
+		.p-reading-room__placeholder {
+			width: 100%;
+		}
+	}
+}
+
