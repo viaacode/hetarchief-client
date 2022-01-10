@@ -151,7 +151,7 @@ $c: "c-card";
 
 	&--edge {
 		&-zinc {
-			border: $card-edge-size solid $zinc;
+			border: $card-edge-size solid $zinc-40;
 		}
 	}
 
@@ -192,15 +192,25 @@ $c: "c-card";
 	}
 
 	// Orientation must be below Padded
+	// Only define a few responsive variants to avoid bloat
 	&--orientation {
 		&-horizontal {
 			@include m-card-horizontal;
+
+			&--at-md {
+				@include respond-to("md") {
+					@include m-card-vertical;
+				}
+
+				@include respond-at("md") {
+					@include m-card-horizontal;
+				}
+			}
 		}
 
 		&-vertical {
 			@include m-card-vertical;
 
-			// Only define one variant to avoid bloat
 			&--at-md {
 				@include respond-to("md") {
 					@include m-card-horizontal;

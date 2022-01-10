@@ -1,4 +1,3 @@
-import { documentOf } from '@meemoo/react-components';
 import { render, RenderResult, screen } from '@testing-library/react'; //eslint-disable-line
 
 import ReadingRoomCard from './ReadingRoomCard';
@@ -29,9 +28,9 @@ describe('Component: <ReadingRoomCard />', () => {
 	it('Should render a light card with a short image when not accessible', () => {
 		rendered = render(template());
 
-		const card = documentOf(rendered).getElementsByClassName('c-card--mode-light');
+		const card = rendered.container.getElementsByClassName('c-card--mode-light');
 
-		const image = documentOf(rendered).getElementsByClassName(
+		const image = rendered.container.getElementsByClassName(
 			styles['c-reading-room-card__background--short']
 		);
 
@@ -60,9 +59,9 @@ describe('Component: <ReadingRoomCard />', () => {
 			})
 		);
 
-		const card = documentOf(rendered).getElementsByClassName('c-card--mode-dark');
+		const card = rendered.container.getElementsByClassName('c-card--mode-dark');
 
-		const image = documentOf(rendered).getElementsByClassName(
+		const image = rendered.container.getElementsByClassName(
 			styles['c-reading-room-card__background--tall']
 		);
 
@@ -120,7 +119,7 @@ describe('Component: <ReadingRoomCard />', () => {
 			})
 		);
 
-		const tag = documentOf(rendered).getElementsByClassName('c-tag-list__tag');
+		const tag = rendered.container.getElementsByClassName('c-tag-list__tag');
 
 		expect(tag.length).toEqual(1);
 		expect(tag[0].innerHTML.length).toBeGreaterThan(0);

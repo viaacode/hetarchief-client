@@ -1,10 +1,25 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-import { Navigation, Placeholder } from '@shared/components';
+import { MediaCardProps, MediaCardViewMode, Navigation, Placeholder } from '@shared/components';
+import { MediaCardList } from '@shared/components/MediaCardList';
+import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 
 const ReadingRoomPage: NextPage = () => {
+	const [media, setMedia] = useState<MediaCardProps[]>([]);
+	const [mode] = useState<MediaCardViewMode>('grid');
+
+	useEffect(() => {
+		async function fetchMedia() {
+			const data = (await mock({ view: 'grid' })).items;
+			data && setMedia(data);
+		}
+
+		fetchMedia();
+	}, [setMedia]);
+
 	return (
 		<div className="p-reading-room">
 			<Head>
@@ -22,11 +37,15 @@ const ReadingRoomPage: NextPage = () => {
 			</Navigation>
 
 			<div style={{ padding: '3.2rem' }}>
-				<Placeholder
-					img="/images/lightbulb.svg"
-					title="Start je zoektocht!"
-					description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-				/>
+				{media.length > 0 ? (
+					<MediaCardList items={media} view={mode} />
+				) : (
+					<Placeholder
+						img="/images/lightbulb.svg"
+						title="Start je zoektocht!"
+						description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+					/>
+				)}
 			</div>
 		</div>
 	);
