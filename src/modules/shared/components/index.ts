@@ -1,3 +1,4 @@
+export * from './Blade';
 export * from './Card';
 export * from './Footer';
 export * from './Hero';
