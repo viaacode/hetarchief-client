@@ -1,3 +1,5 @@
+export type MediaCardViewMode = 'list' | 'grid';
+
 export interface MediaCardProps {
 	description?: string;
 	published_at?: Date;
@@ -5,5 +7,5 @@ export interface MediaCardProps {
 	title?: string;
 	preview?: string;
 	type?: 'video' | 'audio';
-	view: 'list' | 'grid';
+	view: MediaCardViewMode;
 }
