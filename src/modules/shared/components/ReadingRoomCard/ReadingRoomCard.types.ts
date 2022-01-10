@@ -12,6 +12,7 @@ export interface ReadingRoom {
 export interface ReadingRoomAccess {
 	granted?: boolean;
 	pending?: boolean;
+	from?: Date;
 	until?: Date;
 }
 

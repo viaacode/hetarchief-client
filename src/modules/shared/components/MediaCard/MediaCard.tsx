@@ -1,10 +1,9 @@
-import { Button } from '@meemoo/react-components';
+import { Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import Card from '../Card/Card';
 import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
@@ -20,15 +19,6 @@ const MediaCard: FC<MediaCardProps> = ({
 	type,
 	view,
 }) => {
-	const showDescription = () => {
-		switch (view) {
-			case 'grid':
-				return type === 'video';
-			default:
-				return true;
-		}
-	};
-
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
 			<Button
@@ -114,7 +104,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	return (
 		<Card
-			orientation={view === 'grid' ? 'vertical' : 'horizontal'}
+			orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 			title={<b>{title}</b>}
 			image={renderHeader()}
 			subtitle={renderSubtitle()}
@@ -122,8 +112,8 @@ const MediaCard: FC<MediaCardProps> = ({
 			padding="both"
 		>
 			{/* // Wrapping this in a conditional ensures TruncateMarkup only renders after the content is received */}
-			{description && showDescription() ? (
-				<TruncateMarkup lines={view === 'grid' ? 1 : 2}>
+			{description ? (
+				<TruncateMarkup lines={2}>
 					<span>{description}</span>
 				</TruncateMarkup>
 			) : (
