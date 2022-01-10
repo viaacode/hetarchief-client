@@ -1,4 +1,4 @@
-import { IconLightNames } from '..';
+import { IconLightNames } from '../Icon';
 
 import { DefaultComponentProps } from '@shared/types';
 
