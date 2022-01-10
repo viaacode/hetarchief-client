@@ -1,4 +1,9 @@
+
 @use "../abstracts" as *;
+
+.u-text-ellipsis {
+	@include text-ellipsis;
+}
 
 /**
  * Alignment

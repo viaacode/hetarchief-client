@@ -8,22 +8,18 @@ import { AccessGranted, AccessRequested, mockReadingRoomCardProps } from './Read
 export default {
 	title: 'Components/ReadingRoomCard',
 	component: ReadingRoomCard,
-	argTypes: {},
+	parameters: {
+		backgrounds: {
+			default: 'white',
+			values: [
+				{ name: 'white', value: '#FFFFFF' },
+				{ name: 'platinum', value: '#F8F8F8' },
+			],
+		},
+	},
 } as ComponentMeta<typeof ReadingRoomCard>;
 
-const Template: ComponentStory<typeof ReadingRoomCard> = (args) => (
-	<div
-		style={{ display: 'flex', justifyContent: 'center', maxWidth: '1216px', margin: '0 auto' }}
-	>
-		<div
-			style={{
-				flex: args.type === ReadingRoomCardType['access-granted'] ? '0 0 50%' : '0 0 33%',
-			}}
-		>
-			<ReadingRoomCard {...args} />
-		</div>
-	</div>
-);
+const Template: ComponentStory<typeof ReadingRoomCard> = (args) => <ReadingRoomCard {...args} />;
 
 export const Logo = Template.bind({});
 
@@ -63,6 +59,28 @@ export const Granted = Template.bind({});
 
 Granted.args = {
 	...mockReadingRoomCardProps,
-	type: ReadingRoomCardType['access-granted'],
+	type: ReadingRoomCardType['access'],
 	access: AccessGranted,
+};
+
+export const FutureApproved = Template.bind({});
+
+FutureApproved.args = {
+	...mockReadingRoomCardProps,
+	type: ReadingRoomCardType['future--approved'],
+	access: AccessGranted,
+};
+FutureApproved.parameters = {
+	backgrounds: { default: 'platinum' },
+};
+
+export const FutureRequested = Template.bind({});
+
+FutureRequested.args = {
+	...mockReadingRoomCardProps,
+	type: ReadingRoomCardType['future--requested'],
+	access: AccessGranted,
+};
+FutureRequested.parameters = {
+	backgrounds: { default: 'platinum' },
 };

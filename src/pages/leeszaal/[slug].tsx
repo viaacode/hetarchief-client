@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { KeyboardEvent, useEffect, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { FilterMenu } from '@reading-room/components';
@@ -12,11 +12,15 @@ import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-roo
 import {
 	Icon,
 	IconProps,
+	MediaCardProps,
+	MediaCardViewMode,
 	Navigation,
 	Placeholder,
 	ScrollableTabs,
 	TabLabel,
 } from '@shared/components';
+import { MediaCardList } from '@shared/components/MediaCardList';
+import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
 import { Breakpoints } from '@shared/types';
@@ -25,15 +29,12 @@ import { createPageTitle } from '@shared/utils';
 const ReadingRoomPage: NextPage = () => {
 	const windowSize = useWindowSize();
 	const isMobile = windowSize.width ? windowSize.width < Breakpoints.md : false;
-	console.log('mobile', isMobile);
-
-	// TODO: replace this with actual results
-	const mediaResults: [] = [];
-	const [hasInitialSearch, setHasInitialSearch] = useState<boolean>(false);
-	const [filterMenuOpen, setFilterMenuOpen] = useState<boolean>(isMobile ? false : true);
-	console.log('menu open', filterMenuOpen);
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+	const [hasInitialSearch, setHasInitialSearch] = useState<boolean>(false);
+	const [filterMenuOpen, setFilterMenuOpen] = useState<boolean>(isMobile ? false : true);
+	const [media, setMedia] = useState<MediaCardProps[]>([]);
+	const [mode] = useState<MediaCardViewMode>('grid');
 
 	const tabs: TabProps[] = useMemo(
 		() =>
@@ -47,14 +48,30 @@ const ReadingRoomPage: NextPage = () => {
 		[query.mediaType]
 	);
 
+	useEffect(() => {
+		// TODO: replace this with actual results
+		async function fetchMedia() {
+			const data = (await mock({ view: 'grid' })).items;
+			data && setMedia(data);
+		}
+
+		fetchMedia();
+	}, [setMedia]);
+
 	/**
 	 * Methods
 	 */
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onSearch = () => {
+	const onSearch = (value: string[]) => {
 		if (!hasInitialSearch) {
 			setHasInitialSearch(true);
+		}
+	};
+
+	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			onSearch([e.currentTarget.value]);
 		}
 	};
 
@@ -64,7 +81,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onFilterMenuToggle = () => setFilterMenuOpen((prevOpen) => !prevOpen);
 
-	const showInitialView = !hasInitialSearch && (!mediaResults || mediaResults.length === 0);
+	const showInitialView = !hasInitialSearch && (!media || media.length === 0);
 
 	/**
 	 * Render
@@ -93,6 +110,7 @@ const ReadingRoomPage: NextPage = () => {
 						iconEnd={<Icon name="search" />}
 						placeholder="Zoek op trefwoord, jaartal, aanbieder..."
 						variants={['lg', 'rounded']}
+						onKeyUp={onSearchKeyUp}
 					/>
 					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
 				</div>
@@ -122,6 +140,7 @@ const ReadingRoomPage: NextPage = () => {
 							/>
 						</>
 					)}
+					{media.length > 0 && <MediaCardList items={media} view={mode} />}
 				</div>
 			</section>
 		</div>

@@ -1,31 +1,24 @@
-import { Button } from '@meemoo/react-components';
+import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import Card from '../Card/Card';
-import ContactIconButton from '../ContactIconButton/ContactIconButton';
-import Icon from '../Icon/Icon';
+import ReadingRoomCardControls from '../ReadingRoomCardControls/ReadingRoomCardControls';
 
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
-import { formatDateTime } from './ReadingRoomCard.utils';
 
-const ReadingRoomCard: FC<ReadingRoomCardProps> = ({
-	access,
-	onAccessRequest,
-	onContactClick,
-	onVisitClick,
-	room,
-	type,
-}) => {
-	const isWaitingForAccess = !access?.granted && access?.pending;
-	const hasAccess = access?.granted && !access?.pending;
+const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
+	const { room, type } = props;
 
 	const typeNoAccess = type === ReadingRoomCardType['no-access'];
-	const typeAccessGranted = type === ReadingRoomCardType['access-granted'];
+	const typeAccessGranted = type === ReadingRoomCardType['access'];
+	const typeAccessAccepted = type === ReadingRoomCardType['future--approved'];
+	const typeAccessRequested = type === ReadingRoomCardType['future--requested'];
+
+	const flat = typeAccessAccepted || typeAccessRequested;
 
 	const renderImage = () => {
 		return (
@@ -33,7 +26,8 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = ({
 				className={clsx(
 					styles['c-reading-room-card__background'],
 					typeNoAccess && styles['c-reading-room-card__background--short'],
-					typeAccessGranted && styles['c-reading-room-card__background--tall']
+					typeAccessGranted && styles['c-reading-room-card__background--tall'],
+					flat && styles['c-reading-room-card__background--small']
 				)}
 				style={{ backgroundColor: room?.color ? room?.color : '#009690' }}
 			>
@@ -77,102 +71,80 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = ({
 			);
 		}
 
-		return <b className={styles['c-reading-room-card__title']}>{room?.name || room?.id}</b>;
+		return (
+			<b
+				className={clsx(
+					styles['c-reading-room-card__title'],
+					flat && styles['c-reading-room-card__title--flat']
+				)}
+			>
+				{room?.name || room?.id}
+			</b>
+		);
 	};
 
 	const renderDescription = () => (
-		<TruncateMarkup lines={3}>
-			<p className={styles['c-reading-room-card__description']}>{room?.description}</p>
+		<TruncateMarkup lines={flat ? 2 : 3}>
+			<p className={clsx(styles['c-reading-room-card__description'])}>{room?.description}</p>
 		</TruncateMarkup>
 	);
 
-	const renderControls = () => {
-		if (hasAccess) {
-			return (
-				<>
-					{access?.until && (
-						<>
-							<Icon
-								className={styles['c-reading-room-card__control-icon']}
-								type="light"
-								name="timer"
-							/>
-
-							<p>
-								Beschikbaar tot <br />
-								{formatDateTime(access?.until)}
-							</p>
-						</>
-					)}
-
-					<Button
-						className={clsx('c-button--lg', 'c-button--white')}
-						onClick={() => onVisitClick && onVisitClick(room)}
-					>
-						Bezoek de leeszaal
-					</Button>
-				</>
-			);
+	const getMode = () => {
+		if (typeAccessGranted) {
+			return 'dark';
 		}
 
-		if (!isWaitingForAccess) {
-			return (
-				<>
-					<Button
-						className={clsx('c-button--sm', 'c-button--black')}
-						onClick={() => onAccessRequest && onAccessRequest(room)}
-					>
-						Vraag toegang aan
-					</Button>
+		return 'light';
+	};
 
-					<ContactIconButton
-						color="silver"
-						onClick={() => onContactClick && onContactClick(room)}
-					/>
-				</>
-			);
-		} else {
-			return (
-				<>
-					<Icon
-						className={styles['c-reading-room-card__control-icon']}
-						type="light"
-						name="not-available"
-					/>
-
-					<p>Momenteel is er geen toegang mogelijk tot deze leeszaal</p>
-
-					<ContactIconButton
-						color="silver"
-						onClick={() => onContactClick && onContactClick(room)}
-					/>
-				</>
-			);
+	const getOrientation = () => {
+		if (typeAccessGranted || typeAccessAccepted || typeAccessRequested) {
+			return 'horizontal';
 		}
+
+		if (typeNoAccess) {
+			return 'vertical--at-md';
+		}
+
+		return 'vertical';
+	};
+
+	const getPadding = () => {
+		if (typeAccessGranted || typeAccessAccepted || typeAccessRequested) {
+			return 'content';
+		}
+
+		return 'vertical';
 	};
 
 	return (
 		<Card
-			image={renderImage()}
 			edge="none"
+			image={renderImage()}
+			mode={getMode()}
 			offset={typeAccessGranted}
-			padding={typeAccessGranted ? 'content' : 'vertical'}
-			orientation={typeAccessGranted ? 'horizontal' : 'vertical'}
-			mode={typeAccessGranted ? 'dark' : 'light'}
-			title={renderTitle()}
+			orientation={getOrientation()}
+			padding={getPadding()}
+			title={!flat && renderTitle()}
+			shadow={flat}
 		>
-			{renderDescription()}
-
 			<div
 				className={clsx(
-					styles['c-reading-room-card__controls'],
-					typeNoAccess && styles['c-reading-room-card__controls--near'],
-					typeAccessGranted && styles['c-reading-room-card__controls--far'],
-					typeAccessGranted && styles['c-reading-room-card__controls--light'],
-					typeAccessGranted && styles['c-reading-room-card__controls--thinner']
+					styles['c-reading-room-card__wrapper'],
+					flat && styles['c-reading-room-card__wrapper--flat']
 				)}
 			>
-				{renderControls()}
+				<div
+					className={clsx(
+						styles['c-reading-room-card__content'],
+						flat && styles['c-reading-room-card__content--flat']
+					)}
+				>
+					{flat && renderTitle()}
+					{renderDescription()}
+				</div>
+
+				<ReadingRoomCardControls {...props} />
 			</div>
 		</Card>
 	);

@@ -1,9 +1,8 @@
+import { documentOf } from '@meemoo/react-components';
 import { render, RenderResult, screen, fireEvent, waitFor } from '@testing-library/react'; //eslint-disable-line
 
 import Modal from './Modal';
 import styles from './Modal.module.scss';
-
-import { documentOf } from '@shared/utils';
 
 const text = 'Title of the Modal';
 const noPadding = { padding: '' };

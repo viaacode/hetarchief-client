@@ -204,6 +204,7 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 	return newTranslations;
 }
 
+// TODO: re-enable this once online translations are available
 // async function getOnlineTranslations() {
 // 	const response = await fetch(`https://avo2-proxy-qas.hetarchief.be/translations/nl.json`, {
 // 		method: 'GET',
@@ -282,5 +283,4 @@ async function updateTranslations(): Promise<void> {
 	`);
 }
 
-// deepcode ignore UsageOfUndefinedReturnValue: False positive
 updateTranslations().catch((err) => console.error('Update of translations failed: ', err));
