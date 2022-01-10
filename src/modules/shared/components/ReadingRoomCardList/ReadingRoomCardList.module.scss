@@ -1,0 +1,26 @@
+@use "styles/abstracts" as *;
+
+$c: "c-reading-room-card-list";
+
+.#{$c} {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	@include respond-at("md") {
+		display: grid;
+		column-gap: $spacer-lg;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-rows: max-content;
+	}
+
+	&__item {
+		&:not(:last-child) {
+			margin-bottom: $spacer-md;
+
+			@include respond-at("md") {
+				margin-bottom: $spacer-lg * 2;
+			}
+		}
+	}
+}
