@@ -1,6 +1,5 @@
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import { ReadingRoomAccess, ReadingRoomCardProps } from './ReadingRoomCard.types';
-
-import { ReadingRoomCardType } from '.';
 
 export const mockReadingRoomCardProps: ReadingRoomCardProps = {
 	room: {

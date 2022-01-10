@@ -1,10 +1,10 @@
 import { render, RenderResult, screen } from '@testing-library/react'; //eslint-disable-line
 
+import { documentOf } from '@shared/utils';
+
 import Card from './Card';
 import { galaxy, title } from './Card.mock';
 import styles from './Card.module.scss';
-
-import { documentOf } from '@shared/utils';
 
 const subtitle = '(1 Dec. 2021)';
 const toolbar = 'Toolbar content';

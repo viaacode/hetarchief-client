@@ -1,15 +1,14 @@
 import { render, RenderResult, screen } from '@testing-library/react'; //eslint-disable-line
 
+import { documentOf } from '@shared/utils';
+
 import cardStyles from '../Card/Card.module.scss';
 
 import ReadingRoomCard from './ReadingRoomCard';
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import { AccessGranted, AccessRequested, mockReadingRoomCardProps } from './ReadingRoomCard.mock';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
-
-import { ReadingRoomCardType } from '.';
-
-import { documentOf } from '@shared/utils';
 
 describe('Component: <ReadingRoomCard />', () => {
 	let rendered: RenderResult | undefined;
