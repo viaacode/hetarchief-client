@@ -3,12 +3,20 @@
 .c-tab {
 	display: inline-flex;
 	align-items: center;
-	min-height: 5.6rem;
-	padding: 1.6rem 2.4rem;
+	min-height: 3.4rem;
+	padding: $spacer-xs 1.2rem;
 	background-color: $black;
 	color: $white;
 	cursor: pointer;
 	transition: background-color $animate-default, color $animate-default;
+
+	@include respond-to("md") {
+		font-size: $font-size-sm;
+	}
+	@include respond-at("md") {
+		min-height: 5.6rem;
+		padding: $spacer-sm $spacer-md;
+	}
 }
 
 /**
@@ -17,8 +25,12 @@
 
 .c-tab__icon {
 	display: inline-flex;
-	font-size: $font-size-lg;
-	margin-right: 0.8rem;
+	font-size: $font-size-base;
+	margin-right: $spacer-xs;
+
+	@include respond-at("md") {
+		font-size: $font-size-lg;
+	}
 }
 
 /**

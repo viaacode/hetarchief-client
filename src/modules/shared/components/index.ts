@@ -9,3 +9,4 @@ export * from './Navigation';
 export * from './Overlay';
 export * from './Placeholder';
 export * from './ReadingRoomCard';
+export * from './Tabs';
