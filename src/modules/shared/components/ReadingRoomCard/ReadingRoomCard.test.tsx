@@ -1,18 +1,21 @@
 import { render, RenderResult, screen } from '@testing-library/react'; //eslint-disable-line
 
 import ReadingRoomCard from './ReadingRoomCard';
-import { AccessGranted, AccessRequested, mockReadingRoomCardProps } from './ReadingRoomCard.mock';
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
-
-import { ReadingRoomCardType } from '.';
+import {
+	AccessGranted,
+	AccessRequested,
+	mockReadingRoomCardProps,
+} from './__mocks__/reading-room-card';
 
 describe('Component: <ReadingRoomCard />', () => {
 	let rendered: RenderResult | undefined;
 
-	const template = (args?: ReadingRoomCardProps) => (
-		<ReadingRoomCard {...mockReadingRoomCardProps} {...args} />
-	);
+	const template = (args?: ReadingRoomCardProps) => {
+		return <ReadingRoomCard {...mockReadingRoomCardProps} {...args} />;
+	};
 
 	beforeEach(() => {
 		// Avoid render bloat
