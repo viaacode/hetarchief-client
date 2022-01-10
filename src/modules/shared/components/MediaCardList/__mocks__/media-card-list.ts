@@ -37,8 +37,6 @@ export const mock = async (args: Pick<MediaCardProps, 'view'>): Promise<MediaCar
 			});
 		});
 
-	console.info(items);
-
 	return {
 		items,
 		view: args.view,
