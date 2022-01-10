@@ -12,4 +12,5 @@ export interface ToggleProps extends DefaultComponentProps {
 	options: ToggleOptions[];
 	onChange: (id: string) => void;
 	bordered?: boolean;
+	dark?: boolean;
 }

@@ -51,3 +51,8 @@ export const Bordered = Template.bind({});
 Bordered.args = {
 	bordered: true,
 };
+
+export const Dark = Template.bind({});
+Dark.args = {
+	dark: true,
+};

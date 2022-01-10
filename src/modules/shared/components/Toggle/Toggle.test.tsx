@@ -37,6 +37,13 @@ describe('Component: <Toggle /> (default)', () => {
 		expect(container.firstChild).toHaveClass('c-toggle--bordered');
 	});
 
+	it('Should render dark component when dark = true', () => {
+		const dark = true;
+		const { container } = renderToggle({ ...toggleMock, dark: dark });
+
+		expect(container.firstChild).toHaveClass('c-toggle--dark');
+	});
+
 	it('Should set disabled class on non-active elements', () => {
 		const options: ToggleOptions[] = [
 			{
