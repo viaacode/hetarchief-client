@@ -23,7 +23,7 @@
     "i18n:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix"
   },
   "dependencies": {
-    "@meemoo/react-components": "2.0.0",
+    "@meemoo/react-components": "2.2.0",
     "clsx": "1.1.1",
     "next": "12.0.4",
     "next-i18next": "10.0.1",
