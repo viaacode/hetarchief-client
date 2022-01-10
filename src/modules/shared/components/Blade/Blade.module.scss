@@ -1,3 +1,15 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
 .c-blade {
-	// todo
+	visibility: hidden;
+	background-color: $white;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+
+	&--visible {
+		visibility: visible;
+	}
 }
