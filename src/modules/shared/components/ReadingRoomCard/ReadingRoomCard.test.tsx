@@ -13,9 +13,9 @@ import {
 describe('Component: <ReadingRoomCard />', () => {
 	let rendered: RenderResult | undefined;
 
-	const template = (args?: ReadingRoomCardProps) => {
-		return <ReadingRoomCard {...mockReadingRoomCardProps} {...args} />;
-	};
+	const template = (args?: ReadingRoomCardProps) => (
+		<ReadingRoomCard {...mockReadingRoomCardProps} {...args} />
+	);
 
 	beforeEach(() => {
 		// Avoid render bloat
