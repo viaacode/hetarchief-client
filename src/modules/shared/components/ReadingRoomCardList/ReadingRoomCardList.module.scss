@@ -10,7 +10,7 @@ $c: "c-reading-room-card-list";
 	@include respond-at("md") {
 		display: grid;
 		column-gap: $spacer-lg;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: max-content;
 	}
 
