@@ -16,15 +16,22 @@ $silver: #E6E6E6;
 $platinum: #F8F8F8;
 
 /**
+ * Derived Colors
+ */
+$zinc-40: color.adjust($zinc, $alpha: -0.6);
+
+/**
  * Shadow
  */
 
-$shadow-24-black: 0 0 24px color.adjust($black, $alpha: -0.39);
+$shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
+$shadow-24-black-04: 0 0 24px color.adjust($black, $alpha: -0.96);
 
 /**
  * Spacers
  */
 
+$spacer-xxs: .4rem;
 $spacer-xs: .8rem;
 $spacer-sm: 1.6rem;
 $spacer-md: 2.4rem;

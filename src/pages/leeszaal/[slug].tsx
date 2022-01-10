@@ -2,22 +2,28 @@ import { TabProps } from '@meemoo/react-components';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-room/const';
 import {
 	Icon,
 	IconProps,
+	MediaCardProps,
+	MediaCardViewMode,
 	Navigation,
 	Placeholder,
 	ScrollableTabs,
 	TabLabel,
 } from '@shared/components';
+import { MediaCardList } from '@shared/components/MediaCardList';
+import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+	const [media, setMedia] = useState<MediaCardProps[]>([]);
+	const [mode] = useState<MediaCardViewMode>('grid');
 
 	const tabs: TabProps[] = useMemo(
 		() =>
@@ -30,6 +36,15 @@ const ReadingRoomPage: NextPage = () => {
 			})),
 		[query.mediaType]
 	);
+
+	useEffect(() => {
+		async function fetchMedia() {
+			const data = (await mock({ view: 'grid' })).items;
+			data && setMedia(data);
+		}
+
+		fetchMedia();
+	}, [setMedia]);
 
 	/**
 	 * Methods
@@ -66,11 +81,15 @@ const ReadingRoomPage: NextPage = () => {
 
 			<section className="u-py-48">
 				<div className="l-container">
-					<Placeholder
-						img="/images/lightbulb.svg"
-						title="Start je zoektocht!"
-						description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-					/>
+					{media.length > 0 ? (
+						<MediaCardList items={media} view={mode} />
+					) : (
+						<Placeholder
+							img="/images/lightbulb.svg"
+							title="Start je zoektocht!"
+							description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+						/>
+					)}
 				</div>
 			</section>
 		</div>

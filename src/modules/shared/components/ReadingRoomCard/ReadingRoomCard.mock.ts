@@ -28,5 +28,6 @@ export const AccessRequested: ReadingRoomAccess = {
 export const AccessGranted: ReadingRoomAccess = {
 	granted: true,
 	pending: false,
+	from: new Date(),
 	until: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
 };
