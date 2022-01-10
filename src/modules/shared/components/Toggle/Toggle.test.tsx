@@ -30,6 +30,13 @@ describe('Component: <Toggle /> (default)', () => {
 		expect(container.firstChild).toHaveClass(className);
 	});
 
+	it('Should show border when bordered = true', () => {
+		const bordered = true;
+		const { container } = renderToggle({ ...toggleMock, bordered: bordered });
+
+		expect(container.firstChild).toHaveClass('c-toggle--bordered');
+	});
+
 	it('Should set disabled class on non-active elements', () => {
 		const options: ToggleOptions[] = [
 			{

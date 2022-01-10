@@ -46,3 +46,8 @@ const Template: ComponentStory<typeof Toggle> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const Bordered = Template.bind({});
+Bordered.args = {
+	bordered: true,
+};

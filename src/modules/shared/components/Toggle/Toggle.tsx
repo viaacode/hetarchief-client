@@ -7,11 +7,17 @@ import { Icon, IconLightNames } from '../Icon';
 import styles from './Toggle.module.scss';
 import { ToggleProps } from './Toggle.types';
 
-const Toggle: FC<ToggleProps> = ({ className, options, onChange }) => {
+const Toggle: FC<ToggleProps> = ({ className, options, onChange, bordered }) => {
 	const renderIcon = (name: IconLightNames) => <Icon name={name} />;
 
 	return (
-		<div className={clsx(className, styles['c-toggle'])}>
+		<div
+			className={clsx(
+				className,
+				styles['c-toggle'],
+				bordered && styles['c-toggle--bordered']
+			)}
+		>
 			{options.map((option) => {
 				return (
 					<Button
