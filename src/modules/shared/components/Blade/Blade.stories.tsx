@@ -4,6 +4,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import Blade from './Blade';
+import { bladeMock } from './__mocks__';
 
 import { BladeProps } from '.';
 
@@ -40,36 +41,21 @@ const Template: ComponentStory<typeof Blade> = (args) => <BladeStoryComponent ar
 
 export const Default = Template.bind({});
 Default.args = {
-	title: 'Vraag toegang aan',
+	...bladeMock,
 	children: <div style={{ backgroundColor: 'beige', height: '100%' }}>This is the content</div>,
-	footer: (
-		<div style={{ padding: '3.2rem' }}>
-			<Button label="continue" variants="block" />
-		</div>
-	),
 };
 
 export const WithoutOverlay = Template.bind({});
 WithoutOverlay.args = {
-	title: 'Vraag toegang aan',
+	...bladeMock,
 	children: <div style={{ backgroundColor: 'beige', height: '100%' }}>This is the content</div>,
-	footer: (
-		<div style={{ padding: '3.2rem' }}>
-			<Button label="continue" variants="block" />
-		</div>
-	),
 	hideOverlay: true,
 };
 
 export const WithoutCloseButton = Template.bind({});
 WithoutCloseButton.args = {
-	title: 'Vraag toegang aan',
+	...bladeMock,
 	children: <div style={{ backgroundColor: 'beige', height: '100%' }}>This is the content</div>,
-	footer: (
-		<div style={{ padding: '3.2rem' }}>
-			<Button label="continue" variants="block" />
-		</div>
-	),
 	hideCloseButton: true,
 };
 
@@ -92,7 +78,7 @@ WithCustomTitle.args = {
 
 export const WithScrollingContent = Template.bind({});
 WithScrollingContent.args = {
-	title: 'This is a lot of content',
+	...bladeMock,
 	children: (
 		<div style={{ backgroundColor: 'beige' }}>
 			<p>
@@ -148,11 +134,6 @@ WithScrollingContent.args = {
 				lobortis, efficitur ante in, pellentesque arcu. Integer ac mauris id lorem iaculis
 				molestie elementum eget justo.
 			</p>
-		</div>
-	),
-	footer: (
-		<div>
-			<Button label="continue" variants={['block', 'text']} />
 		</div>
 	),
 };
