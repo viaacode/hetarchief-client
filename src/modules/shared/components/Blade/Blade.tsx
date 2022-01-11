@@ -40,10 +40,17 @@ const Blade: FC<BladeProps> = ({
 				aria-labelledby="bladeTitle"
 				className={clsx(className, styles['c-blade'], isOpen && styles['c-blade--visible'])}
 			>
-				{heading || <h3 id="bladeTitle">{title}</h3>}
-				{children}
-				{footer || <></>}
 				{!hideCloseButton && renderCloseButton()}
+				<div className={styles['c-blade__title-wrapper']}>
+					{heading ||
+						(title && (
+							<h3 id="bladeTitle" className={styles['c-blade__title']}>
+								{title}
+							</h3>
+						))}
+				</div>
+				<div className={styles['c-blade__body-wrapper']}>{children}</div>
+				<div className={styles['c-blade__footer-wrapper']}>{footer || <></>}</div>
 			</div>
 		</>
 	);
