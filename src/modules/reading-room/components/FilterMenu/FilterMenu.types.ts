@@ -6,8 +6,9 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	filters?: FilterMenuFilterOption[];
 	label?: string;
 	isOpen?: boolean;
+	isMobileOpen?: boolean;
 	sortOptions?: FilterMenuSortOption[];
-	onMenuToggle?: () => void;
+	onMenuToggle?: (nextOpen?: boolean) => void;
 	onSortClick?: FilterMenuOnSortClick;
 	onFilterSubmit?: (values: Record<string, unknown>) => void;
 	onViewToggle?: (viewType: string) => void;

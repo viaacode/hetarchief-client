@@ -15,19 +15,18 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	className,
 	filters = [],
 	label = 'Filters',
+	isMobileOpen = false,
 	isOpen = true,
 	sortOptions = [],
 	onMenuToggle,
 }) => {
-	console.log('isOpen', isOpen);
-
 	const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 	const [activeFilter, setActiveFilter] = useState<string | null>(null);
 	const [lockScroll, setLockScroll] = useState<boolean>(false);
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 
-	const isMobile = windowSize.width ? windowSize.width < Breakpoints.md : false;
+	const isMobile = windowSize.width ? windowSize.width < Breakpoints.sm : false;
 	const openIcon: IconLightNames = isMobile ? 'filter' : isOpen ? 'angle-up' : 'angle-down';
 
 	useScrollLock(isBrowser() ? document.body : null, lockScroll);
@@ -36,8 +35,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		if (!isMobile) {
 			// Remove body scroll lock when leaving mobile
 			if (lockScroll) {
-				console.log('lock scroll effet');
-
 				setLockScroll(false);
 			}
 		}
@@ -51,21 +48,18 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		setActiveFilter(filterId);
 	};
 
-	const onToggleClick = () => {
-		console.log(isOpen);
-
-		if (isOpen) {
+	const onToggleClick = (nextOpen?: boolean) => {
+		const openState = isMobile ? isMobileOpen : isOpen;
+		if (openState) {
 			// Remove active filter when closing the menu
 			setActiveFilter(null);
-			console.log('closing');
 			isMobile && setLockScroll(false);
 		} else {
-			console.log('opening');
 			isMobile && setLockScroll(true);
 		}
 
 		if (typeof onMenuToggle === 'function') {
-			onMenuToggle();
+			onMenuToggle(nextOpen);
 		}
 	};
 
@@ -100,7 +94,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					label={label}
 					iconEnd={<Icon name={openIcon} />}
 					variants="black"
-					onClick={onToggleClick}
+					onClick={() => onToggleClick()}
 				/>
 				{!isMobile && (
 					<div className={styles['c-filter-menu__view-toggle']}>
@@ -138,7 +132,10 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					{filters.map(renderFilterButton)}
 				</div>
 			)}
-			<FilterMenuMobile isOpen={isMobile && isOpen} />
+			<FilterMenuMobile
+				isOpen={isMobile && isMobileOpen}
+				onClose={() => onToggleClick(false)}
+			/>
 		</div>
 	);
 };

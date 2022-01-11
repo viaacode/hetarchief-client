@@ -10,8 +10,13 @@ import {
 } from './Navigation.types';
 import NavigationList from './NavigationList/NavigationList';
 
-const NavigationSection: FC<NavigationSectionProps> = ({ children, items }) => (
-	<div className={styles['c-navigation__section']}>
+const NavigationSection: FC<NavigationSectionProps> = ({ children, items, placement }) => (
+	<div
+		className={clsx(
+			styles['c-navigation__section'],
+			styles[`c-navigation__section--${placement}`]
+		)}
+	>
 		{items && items.length ? <NavigationList items={items} /> : children}
 	</div>
 );
@@ -29,8 +34,10 @@ const Navigation: NavigationFC<NavigationProps> = ({ children, contextual = fals
 	return <nav className={rootCls}>{children}</nav>;
 };
 
-Navigation.Left = NavigationSection;
+// eslint-disable-next-line react/display-name
+Navigation.Left = (props) => <NavigationSection {...props} placement="left" />;
 Navigation.Center = NavigationCenter;
-Navigation.Right = NavigationSection;
+// eslint-disable-next-line react/display-name
+Navigation.Right = (props) => <NavigationSection {...props} placement="right" />;
 
 export default Navigation;

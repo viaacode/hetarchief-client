@@ -18,21 +18,10 @@ $reading-room-grid-cols-xl: 4;
 				flex-direction: column;
 			}
 		}
-
-		.p-reading-room__filter-menu {
-			width: 100%;
-
-			@include respond-at("md") {
-				width: calc-filter-menu-width($reading-room-grid-gutter-lg, $reading-room-grid-cols-lg);
-			}
-			@include respond-at("xl") {
-				width: calc-filter-menu-width($reading-room-grid-gutter-xl, $reading-room-grid-cols-xl);
-			}
-		}
-
-		.p-reading-room__placeholder {
-			width: 100%;
-		}
 	}
+}
+
+.p-reading-room__placeholder {
+	width: 100%;
 }
 

@@ -72,12 +72,12 @@ $c-navigation-list-divider-color: #4E4E4E;
 	display: flex;
 	justify-self: center;
 
-	&:first-child {
+	&--left {
 		grid-column: 1/2;
 		justify-self: start;
 	}
 
-	&:last-child {
+	&--right {
 		grid-column: 3/4;
 		justify-self: end;
 	}

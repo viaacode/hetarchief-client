@@ -1,8 +1,6 @@
 import debounce from 'lodash.debounce';
 import { useEffect, useState } from 'react';
 
-import { isBrowser } from '@shared/utils';
-
 import { UseWindowSize, WindowSizeState } from './use-window-size.types';
 
 const useWindowSize: UseWindowSize = () => {
@@ -14,10 +12,6 @@ const useWindowSize: UseWindowSize = () => {
 	});
 
 	useEffect(() => {
-		if (!isBrowser()) {
-			return;
-		}
-
 		const handleResize = () => {
 			setWindowSize({
 				width: window.innerWidth,

@@ -1,17 +1,15 @@
-import { TabProps, TextInput } from '@meemoo/react-components';
+import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { KeyboardEvent, useEffect, useMemo, useState } from 'react';
+import { KeyboardEvent, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { FilterMenu } from '@reading-room/components';
+import { FilterMenu, SearchBar } from '@reading-room/components';
 import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
 import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-room/const';
 import {
-	Icon,
-	IconProps,
 	MediaCardProps,
 	MediaCardViewMode,
 	Navigation,
@@ -27,20 +25,20 @@ import { Breakpoints } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
-	const windowSize = useWindowSize();
-	const isMobile = windowSize.width ? windowSize.width < Breakpoints.md : false;
-
-	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const [hasInitialSearch, setHasInitialSearch] = useState<boolean>(false);
-	const [filterMenuOpen, setFilterMenuOpen] = useState<boolean>(isMobile ? false : true);
+	const [filterMenuOpen, setFilterMenuOpen] = useState<boolean>(true);
+	// We need 2 different states for the filter menu for different viewport sizes
+	const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
 	const [mode] = useState<MediaCardViewMode>('grid');
+
+	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+	const windowSize = useWindowSize();
 
 	const tabs: TabProps[] = useMemo(
 		() =>
 			READING_ROOM_TABS.map((tab) => ({
 				...tab,
-				icon: <Icon name={tab.icon as IconProps['name']} />,
 				// TODO: remove any once Tab type supports ReactNode
 				label: (<TabLabel label={tab.label} count={0} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
 				active: tab.id === query.mediaType,
@@ -48,7 +46,17 @@ const ReadingRoomPage: NextPage = () => {
 		[query.mediaType]
 	);
 
-	useEffect(() => {
+	/**
+	 * Methods
+	 */
+
+	const onSearch = (keywords: string[]) => {
+		if (!hasInitialSearch) {
+			setHasInitialSearch(true);
+		}
+
+		setQuery({ search: keywords });
+
 		// TODO: replace this with actual results
 		async function fetchMedia() {
 			const data = (await mock({ view: 'grid' })).items;
@@ -56,17 +64,6 @@ const ReadingRoomPage: NextPage = () => {
 		}
 
 		fetchMedia();
-	}, [setMedia]);
-
-	/**
-	 * Methods
-	 */
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onSearch = (value: string[]) => {
-		if (!hasInitialSearch) {
-			setHasInitialSearch(true);
-		}
 	};
 
 	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -79,13 +76,37 @@ const ReadingRoomPage: NextPage = () => {
 		setQuery({ mediaType: String(tabId) });
 	};
 
-	const onFilterMenuToggle = () => setFilterMenuOpen((prevOpen) => !prevOpen);
+	const onFilterMenuToggle = (nextOpen?: boolean) => {
+		const isMobile = windowSize.width ? windowSize.width < Breakpoints.sm : false;
+		const nextOpenState =
+			typeof nextOpen !== 'undefined' ? nextOpen : (prevOpen: boolean) => !prevOpen;
+		if (isMobile) {
+			setMobileMenuOpen(nextOpenState);
+		} else {
+			setFilterMenuOpen(nextOpenState);
+		}
+	};
 
 	const showInitialView = !hasInitialSearch && (!media || media.length === 0);
+	const showResults = hasInitialSearch && media.length > 0;
 
 	/**
 	 * Render
 	 */
+
+	const renderFilterMenu = () => {
+		return (
+			<WindowSizeContext.Provider value={windowSize}>
+				<FilterMenu
+					className="p-reading-room__filter-menu"
+					filters={filterOptionsMock}
+					isOpen={filterMenuOpen}
+					isMobileOpen={mobileMenuOpen}
+					onMenuToggle={onFilterMenuToggle}
+				/>
+			</WindowSizeContext.Provider>
+		);
+	};
 
 	return (
 		<div className="p-reading-room">
@@ -104,14 +125,7 @@ const ReadingRoomPage: NextPage = () => {
 
 			<section className="u-bg-black u-pt-8">
 				<div className="l-container">
-					{/* TODO: Replace with Search component */}
-					<TextInput
-						className="u-mb-24"
-						iconEnd={<Icon name="search" />}
-						placeholder="Zoek op trefwoord, jaartal, aanbieder..."
-						variants={['lg', 'rounded']}
-						onKeyUp={onSearchKeyUp}
-					/>
+					<SearchBar onKeyUp={onSearchKeyUp} />
 					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>
@@ -124,14 +138,7 @@ const ReadingRoomPage: NextPage = () => {
 				<div className="l-container">
 					{showInitialView && (
 						<>
-							<WindowSizeContext.Provider value={windowSize}>
-								<FilterMenu
-									className="p-reading-room__filter-menu"
-									filters={filterOptionsMock}
-									isOpen={filterMenuOpen}
-									onMenuToggle={onFilterMenuToggle}
-								/>
-							</WindowSizeContext.Provider>
+							{renderFilterMenu()}
 							<Placeholder
 								className="p-reading-room__placeholder"
 								img="/images/lightbulb.svg"
@@ -140,7 +147,9 @@ const ReadingRoomPage: NextPage = () => {
 							/>
 						</>
 					)}
-					{media.length > 0 && <MediaCardList items={media} view={mode} />}
+					{showResults && (
+						<MediaCardList items={media} sidebar={renderFilterMenu()} view={mode} />
+					)}
 				</div>
 			</section>
 		</div>
