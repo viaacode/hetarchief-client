@@ -15,11 +15,14 @@ const Blade: FC<BladeProps> = ({
 	title,
 	heading,
 	footer,
+	hideOverlay,
 	onClose,
 }) => {
 	return (
 		<>
-			<Overlay visible={isOpen} onClick={onClose} />
+			{!hideOverlay && (
+				<Overlay visible={isOpen} onClick={onClose} animate="animate-default" />
+			)}
 			<div
 				role="dialog"
 				aria-modal={isOpen}
