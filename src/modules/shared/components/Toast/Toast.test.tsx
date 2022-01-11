@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 
 import Toast from './Toast';
 import { ToastProps } from './Toast.types';
-import { toastMock } from './__mocks__';
+import { toastMock } from './__mocks__/toast';
 
 const renderToast = (mock: ToastProps, { ...rest }) => {
 	return render(<Toast {...mock} {...rest} />);

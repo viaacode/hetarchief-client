@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 
 import Toggle from './Toggle';
 import { ToggleOptions, ToggleProps } from './Toggle.types';
-import { toggleMock } from './__mocks__';
+import { toggleMock } from './__mocks__/toggle';
 
 const renderToggle = (mock: ToggleProps = toggleMock) => {
 	return render(<Toggle {...mock} />);
