@@ -3,7 +3,11 @@ import React from 'react';
 
 import ReadingRoomCard from './ReadingRoomCard';
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
-import { AccessGranted, AccessRequested, mockReadingRoomCardProps } from './ReadingRoomCard.mock';
+import {
+	AccessGranted,
+	AccessRequested,
+	mockReadingRoomCardProps,
+} from './__mocks__/reading-room-card';
 
 export default {
 	title: 'Components/ReadingRoomCard',
