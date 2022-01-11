@@ -4,7 +4,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import Blade from './Blade';
-import { bladeMock } from './__mocks__';
+import { bladeMock } from './__mocks__/blade';
 
 import { BladeProps } from '.';
 

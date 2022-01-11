@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 import Blade from './Blade';
 import { BladeProps } from './Blade.types';
-import { bladeMock } from './__mocks__';
+import { bladeMock } from './__mocks__/blade';
 
 const renderBlade = (mock: BladeProps = bladeMock, children: ReactNode = <p>some child</p>) => {
 	return render(<Blade {...mock}>{children}</Blade>);
