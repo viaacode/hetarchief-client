@@ -30,7 +30,7 @@ const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({ items, limit }) => 
 		return items;
 	};
 
-	return items ? (
+	return (
 		<ul className={styles['c-reading-room-card-list']}>
 			{getItems().map((item, i) => (
 				<li className={styles['c-reading-room-card-list__item']} key={i}>
@@ -38,7 +38,7 @@ const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({ items, limit }) => 
 				</li>
 			))}
 		</ul>
-	) : null;
+	);
 };
 
 ReadingRoomCardList.defaultProps = defaultProps;
