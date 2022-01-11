@@ -16,15 +16,22 @@ $silver: #E6E6E6;
 $platinum: #F8F8F8;
 
 /**
+ * Derived Colors
+ */
+$zinc-40: color.adjust($zinc, $alpha: -0.6);
+
+/**
  * Shadow
  */
 
-$shadow-24-black: 0 0 24px color.adjust($black, $alpha: -0.39);
+$shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
+$shadow-24-black-04: 0 0 24px color.adjust($black, $alpha: -0.96);
 
 /**
  * Spacers
  */
 
+$spacer-xxs: .4rem;
 $spacer-xs: .8rem;
 $spacer-sm: 1.6rem;
 $spacer-md: 2.4rem;
@@ -92,6 +99,7 @@ $z-layers: (
 /**
  * Modal
  */
+
 $modal-close-margin: 32px;
 $modal-close-size: 24px;
 $modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
@@ -99,6 +107,7 @@ $modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
 /**
  * Card
  */
+
 $card-edge-size: 1px;
 $card-offset: 2rem;
 
@@ -106,8 +115,8 @@ $card-offset: 2rem;
  * Dividers
  */
 
- $divider-grey: solid 1px rgb(0 0 0 / 20%);
- $divider-white: solid 1px rgb(255 255 255 / 20%);
+$divider-grey: solid 1px rgb(0 0 0 / 20%);
+$divider-white: solid 1px rgb(255 255 255 / 20%);
 
 /**
  * Animations
