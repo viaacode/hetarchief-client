@@ -1,3 +1,4 @@
+import { Button } from '@meemoo/react-components';
 import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
