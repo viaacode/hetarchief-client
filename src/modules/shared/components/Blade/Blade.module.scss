@@ -35,6 +35,7 @@
 
 	&__body-wrapper {
 		grid-row-start: 3;
+		overflow-y: scroll;
 	}
 
 	&__footer-wrapper {
