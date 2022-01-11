@@ -19,7 +19,7 @@ const Blade: FC<BladeProps> = ({
 }) => {
 	return (
 		<>
-			<Overlay visible={isOpen} />
+			<Overlay visible={isOpen} onClick={onClose} />
 			<div
 				role="dialog"
 				aria-modal={isOpen}

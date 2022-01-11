@@ -4,7 +4,7 @@ import { FC } from 'react';
 import styles from './Overlay.module.scss';
 import { OverlayProps } from './Overlay.types';
 
-const Overlay: FC<OverlayProps> = ({ type = 'dark', visible = false }) => {
+const Overlay: FC<OverlayProps> = ({ type = 'dark', visible = false, onClick = () => null }) => {
 	return (
 		<div
 			className={clsx(
@@ -12,6 +12,7 @@ const Overlay: FC<OverlayProps> = ({ type = 'dark', visible = false }) => {
 				styles[`c-overlay--${type}`],
 				visible && styles['c-overlay--visible']
 			)}
+			onClick={onClick}
 		/>
 	);
 };
