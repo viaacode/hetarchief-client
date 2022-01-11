@@ -4,6 +4,7 @@
 .c-blade {
 	z-index: get-z-layer("foreground");
 	pointer-events: none;
+	visibility: hidden;
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
 	width: 100%;
@@ -14,8 +15,7 @@
 	right: 0;
 	bottom: 0;
 	transform: translateX(100%);
-	transition: transform $animate-default;
-
+	transition: transform $animate-default, visibility $animate-default;
 
 	&__close-button {
 		justify-self: end;
@@ -44,6 +44,7 @@
 
 	&--visible {
 		pointer-events: all;
+		visibility: visible;
 		transform: translateX(0);
 	}
 }
