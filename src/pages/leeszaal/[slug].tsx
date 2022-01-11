@@ -3,10 +3,15 @@ import clsx from 'clsx';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-room/const';
+import {
+	READING_ROOM_ITEM_COUNT,
+	READING_ROOM_QUERY_PARAM_CONFIG,
+	READING_ROOM_TABS,
+} from '@reading-room/const';
+import { ReadingRoomMediaType } from '@reading-room/types';
 import {
 	Icon,
 	IconProps,
@@ -19,14 +24,25 @@ import {
 } from '@shared/components';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
+import PaginationBar from '@shared/components/PaginationBar/PaginationBar';
 import Toggle from '@shared/components/Toggle/Toggle';
 import { ToggleOptions } from '@shared/components/Toggle/Toggle.types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
+	// State
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const [searched, setSearched] = useState(false);
+
+	// Data
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
+	const [mediaCount] = useState({
+		[ReadingRoomMediaType.All]: 123,
+		[ReadingRoomMediaType.Audio]: 456,
+		[ReadingRoomMediaType.Video]: 789,
+	});
+
+	// Display
 	const [mode, setMode] = useState<MediaCardViewMode>('grid'); // Note: not in `query` intentionally
 
 	const tabs: TabProps[] = useMemo(
@@ -35,10 +51,10 @@ const ReadingRoomPage: NextPage = () => {
 				...tab,
 				icon: <Icon name={tab.icon as IconProps['name']} />,
 				// TODO: remove any once Tab type supports ReactNode
-				label: (<TabLabel label={tab.label} count={0} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+				label: (<TabLabel label={tab.label} count={mediaCount[tab.id]} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
 				active: tab.id === query.mediaType,
 			})),
-		[query.mediaType]
+		[query.mediaType, mediaCount]
 	);
 
 	const toggle: ToggleOptions[] = [
@@ -56,12 +72,12 @@ const ReadingRoomPage: NextPage = () => {
 
 	useEffect(() => {
 		async function fetchMedia() {
-			const data = (await mock({ view: 'grid' })).items;
+			const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
 			data && setMedia(data);
 		}
 
 		fetchMedia();
-	}, [setMedia]);
+	}, [setMedia, query.start]);
 
 	/**
 	 * Methods
@@ -92,7 +108,7 @@ const ReadingRoomPage: NextPage = () => {
 
 		if (searched) {
 			return (
-				<div className="u-positioning-row">
+				<div className="u-flex-row">
 					{renderFilters()}
 
 					<Placeholder
@@ -105,7 +121,7 @@ const ReadingRoomPage: NextPage = () => {
 		}
 
 		return (
-			<div className="u-positioning-row">
+			<div className="u-flex-row">
 				{renderFilters()}
 
 				<Placeholder
@@ -166,7 +182,13 @@ const ReadingRoomPage: NextPage = () => {
 						variants={['sm']}
 						onClick={() => {
 							async function fetchMedia() {
-								const data = (await mock({ view: 'grid' })).items;
+								const data = (
+									await mock(
+										{ view: 'grid' },
+										query.start,
+										READING_ROOM_ITEM_COUNT
+									)
+								).items;
 								data && setMedia(data);
 								setSearched(true);
 							}
@@ -183,6 +205,24 @@ const ReadingRoomPage: NextPage = () => {
 			<section className="u-py-48">
 				<div className="l-container">{renderMediaCardList()}</div>
 			</section>
+
+			{media.length > 0 && (
+				<section className="u-mb-md2">
+					<div className="l-container">
+						<PaginationBar
+							start={query.start}
+							count={READING_ROOM_ITEM_COUNT}
+							total={mediaCount[query.mediaType as ReadingRoomMediaType]}
+							onPageChange={(page) =>
+								setQuery({
+									...query,
+									start: page * READING_ROOM_ITEM_COUNT,
+								})
+							}
+						/>
+					</div>
+				</section>
+			)}
 		</div>
 	);
 };
