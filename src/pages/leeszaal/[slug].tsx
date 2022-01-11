@@ -18,12 +18,14 @@ import {
 } from '@shared/components';
 import { MediaCardList } from '@shared/components/MediaCardList';
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
+import Toggle from '@shared/components/Toggle/Toggle';
+import { ToggleOptions } from '@shared/components/Toggle/Toggle.types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
-	const [mode] = useState<MediaCardViewMode>('grid');
+	const [mode, setMode] = useState<MediaCardViewMode>('grid');
 
 	const tabs: TabProps[] = useMemo(
 		() =>
@@ -36,6 +38,19 @@ const ReadingRoomPage: NextPage = () => {
 			})),
 		[query.mediaType]
 	);
+
+	const toggle: ToggleOptions[] = [
+		{
+			id: 'list',
+			active: mode === 'list',
+			iconName: 'list-view',
+		},
+		{
+			id: 'grid',
+			active: mode === 'grid',
+			iconName: 'grid-view',
+		},
+	];
 
 	useEffect(() => {
 		async function fetchMedia() {
@@ -57,6 +72,28 @@ const ReadingRoomPage: NextPage = () => {
 	/**
 	 * Render
 	 */
+
+	const renderMediaCardList = () => {
+		if (media.length > 0) {
+			return (
+				<MediaCardList items={media} view={mode}>
+					<Toggle
+						dark
+						options={toggle}
+						onChange={(id) => setMode(id as MediaCardViewMode)}
+					/>
+				</MediaCardList>
+			);
+		}
+
+		return (
+			<Placeholder
+				img="/images/lightbulb.svg"
+				title="Start je zoektocht!"
+				description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+			/>
+		);
+	};
 
 	return (
 		<div className="p-reading-room">
@@ -80,17 +117,7 @@ const ReadingRoomPage: NextPage = () => {
 			</section>
 
 			<section className="u-py-48">
-				<div className="l-container">
-					{media.length > 0 ? (
-						<MediaCardList items={media} view={mode} />
-					) : (
-						<Placeholder
-							img="/images/lightbulb.svg"
-							title="Start je zoektocht!"
-							description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-						/>
-					)}
-				</div>
+				<div className="l-container">{renderMediaCardList()}</div>
 			</section>
 		</div>
 	);
