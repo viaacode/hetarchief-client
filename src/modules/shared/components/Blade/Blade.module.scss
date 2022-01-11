@@ -2,7 +2,7 @@
 @use "styles/abstracts" as *;
 
 .c-blade {
-	visibility: hidden;
+	pointer-events: none;
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
 	width: 100%;
@@ -12,6 +12,9 @@
 	top: 0;
 	right: 0;
 	bottom: 0;
+	transform: translateX(100%);
+	transition: transform $animate-default;
+
 
 	&__close-button {
 		justify-self: end;
@@ -38,6 +41,7 @@
 	}
 
 	&--visible {
-		visibility: visible;
+		pointer-events: all;
+		transform: translateX(0);
 	}
 }
