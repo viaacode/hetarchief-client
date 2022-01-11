@@ -14,22 +14,26 @@ $py: (
  * Margin
  */
 
-// Left / Right
+// Left
 $ml: (
 	"8": $spacer-xs,
 );
 @include generate-utils("ml", "margin-left", $ml);
 
+// Right
 $mr: (
 	"8": $spacer-xs,
+	"lg": $spacer-lg
 );
-@include generate-utils("mr", "margin-right", $mr);
+@include generate-utils("mr", "margin-right", $mr, ("md"));
 
+// Top
 $mt: (
 	"2xl": $spacer-2xl,
 );
 @include generate-utils("mt", ("margin-top"), $mt);
 
+// Bottom
 $mb: (
 	"lg2": $spacer-lg * 2,
 	"2xl": $spacer-2xl,

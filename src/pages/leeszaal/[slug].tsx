@@ -1,8 +1,9 @@
-import { TabProps } from '@meemoo/react-components';
+import { Button, TabProps } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-room/const';
@@ -24,8 +25,9 @@ import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+	const [searched, setSearched] = useState(false);
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
-	const [mode, setMode] = useState<MediaCardViewMode>('grid');
+	const [mode, setMode] = useState<MediaCardViewMode>('grid'); // Note: not in `query` intentionally
 
 	const tabs: TabProps[] = useMemo(
 		() =>
@@ -73,25 +75,45 @@ const ReadingRoomPage: NextPage = () => {
 	 * Render
 	 */
 
+	const renderFilters = () => (
+		<div className={clsx(mode === 'list' && 'u-mr-lg:md')}>
+			<Toggle dark options={toggle} onChange={(id) => setMode(id as MediaCardViewMode)} />
+		</div>
+	);
+
 	const renderMediaCardList = () => {
 		if (media.length > 0) {
 			return (
 				<MediaCardList items={media} view={mode}>
-					<Toggle
-						dark
-						options={toggle}
-						onChange={(id) => setMode(id as MediaCardViewMode)}
-					/>
+					{renderFilters()}
 				</MediaCardList>
 			);
 		}
 
+		if (searched) {
+			return (
+				<div className="u-positioning-row">
+					{renderFilters()}
+
+					<Placeholder
+						img="/images/looking-glass.svg"
+						title="Geen resultaten"
+						description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
+					/>
+				</div>
+			);
+		}
+
 		return (
-			<Placeholder
-				img="/images/lightbulb.svg"
-				title="Start je zoektocht!"
-				description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-			/>
+			<div className="u-positioning-row">
+				{renderFilters()}
+
+				<Placeholder
+					img="/images/lightbulb.svg"
+					title="Start je zoektocht!"
+					description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+				/>
+			</div>
 		);
 	};
 
@@ -106,7 +128,9 @@ const ReadingRoomPage: NextPage = () => {
 				<Navigation.Left>
 					<Link href="/">Terug</Link>
 				</Navigation.Left>
+
 				<Navigation.Center title="Leeszaal" />
+
 				<Navigation.Right />
 			</Navigation>
 
@@ -115,6 +139,46 @@ const ReadingRoomPage: NextPage = () => {
 					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>
+
+			{/* Start debug */}
+			<section className="u-mt-2xl">
+				<div className="l-container">
+					<Button
+						variants={['sm']}
+						onClick={() => {
+							setQuery({});
+							setSearched(false);
+						}}
+					>
+						Reset
+					</Button>
+					&nbsp;
+					<Button
+						variants={['sm']}
+						onClick={() => {
+							setMedia([]);
+						}}
+					>
+						Hide all items
+					</Button>
+					&nbsp;
+					<Button
+						variants={['sm']}
+						onClick={() => {
+							async function fetchMedia() {
+								const data = (await mock({ view: 'grid' })).items;
+								data && setMedia(data);
+								setSearched(true);
+							}
+
+							fetchMedia();
+						}}
+					>
+						Load new data
+					</Button>
+				</div>
+			</section>
+			{/* End debug */}
 
 			<section className="u-py-48">
 				<div className="l-container">{renderMediaCardList()}</div>
