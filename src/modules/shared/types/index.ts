@@ -7,3 +7,12 @@ export interface ComponentLink {
 	to: string;
 	external?: boolean;
 }
+
+export type AnimationTypes =
+	| 'animate-default'
+	| 'animate-sm-in'
+	| 'animate-sm-out'
+	| 'animate-md-in'
+	| 'animate-md-out'
+	| 'animate-lg-in'
+	| 'animate-lg-out';
