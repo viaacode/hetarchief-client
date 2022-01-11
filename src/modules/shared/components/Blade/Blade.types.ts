@@ -6,5 +6,6 @@ export interface BladeProps extends DefaultComponentProps {
 	footer?: JSX.Element;
 	isOpen: boolean;
 	hideOverlay?: boolean;
+	hideCloseButton?: boolean;
 	onClose?: () => void;
 }

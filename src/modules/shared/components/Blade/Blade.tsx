@@ -16,8 +16,19 @@ const Blade: FC<BladeProps> = ({
 	heading,
 	footer,
 	hideOverlay,
+	hideCloseButton,
 	onClose,
 }) => {
+	const renderCloseButton = () => {
+		return (
+			<Button
+				className={styles['c-blade__close-button']}
+				icon={<Icon name="times" />}
+				variants="text"
+				onClick={onClose}
+			/>
+		);
+	};
 	return (
 		<>
 			{!hideOverlay && (
@@ -29,10 +40,10 @@ const Blade: FC<BladeProps> = ({
 				aria-labelledby="bladeTitle"
 				className={clsx(className, styles['c-blade'], isOpen && styles['c-blade--visible'])}
 			>
-				<Button icon={<Icon name="times" />} variants="text" onClick={onClose} />
 				{heading || <h3 id="bladeTitle">{title}</h3>}
 				{children}
 				{footer || <></>}
+				{!hideCloseButton && renderCloseButton()}
 			</div>
 		</>
 	);
