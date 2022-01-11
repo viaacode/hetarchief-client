@@ -24,6 +24,7 @@ COPY --chown=1001:1001 .storybook .storybook
 COPY --chown=1001:1001 --from=builder /app/storybook-static ./public
 COPY --chown=1001:1001 --from=builder /app/node_modules ./node_modules
 COPY --chown=1001:1001 --from=builder /app/package.json ./package.json
+COPY --chown=1001:1001 tsconfig.json tsconfig.json
 COPY --chown=1001:1001 src src
 USER nextjs
 
