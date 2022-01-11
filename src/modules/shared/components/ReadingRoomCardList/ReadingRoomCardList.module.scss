@@ -3,24 +3,16 @@
 $c: "c-reading-room-card-list";
 
 .#{$c} {
+	display: grid;
+	list-style: none;
 	margin: 0;
 	padding: 0;
-	list-style: none;
+	row-gap: $spacer-md;
 
 	@include respond-at("md") {
-		display: grid;
 		column-gap: $spacer-lg;
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: max-content;
-	}
-
-	&__item {
-		&:not(:last-child) {
-			margin-bottom: $spacer-md;
-
-			@include respond-at("md") {
-				margin-bottom: $spacer-lg * 2;
-			}
-		}
+		row-gap: $spacer-lg * 2;
 	}
 }
