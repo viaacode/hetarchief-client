@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
+      "@reading-room/*": ["modules/reading-room/*"],
       "@shared/*": ["modules/shared/*"]
     },
     "target": "es5",

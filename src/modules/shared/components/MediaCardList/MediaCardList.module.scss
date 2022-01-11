@@ -1,0 +1,64 @@
+@use "styles/abstracts" as *;
+
+$c: "c-media-card-list";
+
+// Sidebar
+$media-card-list-sidebar-gutter: $spacer-md;
+$media-card-list-sidebar-gutter-md: $spacer-sm;
+
+// Masonry
+$media-card-list-masonry-gutter: $media-card-list-sidebar-gutter;
+$media-card-list-masonry-gutter-md: $spacer-lg;
+
+@mixin media-card-list-gutters($gutter) {
+    .#{$c} {
+        &__content {
+            margin-left: 0 - $gutter; /* gutter size offset */
+        }
+
+        &__column {
+            padding-left: $gutter; /* gutter size */
+
+            & > div, article {
+                margin-bottom: $gutter;
+            }
+        }
+    }
+}
+
+.#{$c} {
+    &__content {
+        display: flex;
+        width: auto;
+    }
+
+    &__column {
+        background-clip: padding-box;
+    }
+
+    // Modifiers
+
+    &--sidebar {
+        @include media-card-list-gutters($media-card-list-sidebar-gutter);
+
+        .#{$c} {
+            &__sidebar {
+                margin-bottom: $media-card-list-sidebar-gutter;
+            }
+        }
+
+        @include respond-at("md") {
+            @include media-card-list-gutters($media-card-list-sidebar-gutter-md);
+
+            display: flex;
+        }
+    }
+
+    &--masonry {
+        @include media-card-list-gutters($media-card-list-masonry-gutter);
+
+        @include respond-at("md") {
+            @include media-card-list-gutters($media-card-list-masonry-gutter-md);
+        }
+    }
+}

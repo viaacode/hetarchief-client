@@ -1,0 +1,19 @@
+@use "../abstracts/" as *;
+
+.c-tabs {
+	display: flex;
+	background-color: $black;
+}
+
+/**
+ * Elements
+ */
+
+
+.c-tabs__item {
+	&:not(:last-child) {
+		@include respond-at("md") {
+			margin-right: 3.2rem;
+		}
+	}
+}

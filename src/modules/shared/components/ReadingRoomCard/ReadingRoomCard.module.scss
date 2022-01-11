@@ -1,8 +1,11 @@
 @use "sass:map";
 @use "sass:math";
+@use "sass:color";
 @use "styles/abstracts" as *;
 
-.c-reading-room-card {
+$c: "c-reading-room-card";
+
+.#{$c} {
 	&__background {
 		display: grid;
 		grid-template-columns: 1fr 2fr 1fr;
@@ -20,12 +23,50 @@
 
 		&--short {
 			min-height: 205px;
+
+			// desktop-first to avoid reset properties
+			@include respond-to("md") {
+				min-height: 160px;
+				min-width: 120px;
+				margin-right: 2rem;
+				height: 100%;
+			}
 		}
 
 		&--tall {
-			min-height: 276px;
-			min-width: 176px;
-			width: 176px;
+			min-height: 212px;
+			min-width: 120px;
+			width: 120px;
+
+			@include respond-at("md") {
+				min-height: 276px;
+				min-width: 176px;
+				width: 176px;
+			}
+		}
+
+		&--small {
+			height: 100%;
+			min-height: 72px;
+			min-width: 20px;
+			width: 20px;
+
+			.#{$c} {
+				&__logo {
+					display: none;
+				}
+			}
+
+			@include respond-at("md") {
+				min-width: 96px;
+				width: 96px;
+
+				.#{$c} {
+					&__logo {
+						display: flex;
+					}
+				}
+			}
 		}
 	}
 
@@ -41,69 +82,75 @@
 		position: relative;
 	}
 
+	&__wrapper {
+		&--flat {
+			display: flex;
+			flex-direction: column;
+
+			@include respond-at("md") {
+				flex-direction: row;
+			}
+		}
+	}
+
+	&__content {
+		&--flat {
+			flex-grow: 1;
+			min-width: 0;
+			position: relative;
+			
+			@include respond-at("md") {
+				padding-right: $spacer-md;
+
+				&::after {
+					background-color: color.adjust($black, $alpha: -0.8);
+					bottom: 0;
+					content: "";
+					display: block;
+					position: absolute;
+					right: 0;
+					top: $spacer-sm;
+					width: 1px;
+				}
+			}
+		}
+	}
+
 	&__title {
+		@include text-ellipsis;
+		
 		font-size: $font-size-md;
 		line-height: math.div($font-size-md, 9) * 10; // 2rem
 
 		&--large {
-			font-size: $font-size-1xl;
-			line-height: 1;
+			font-size: $font-size-base;
+
+			@include respond-at("md") {
+				font-size: $font-size-1xl;
+				line-height: 1;
+			}
+		}
+
+		&--flat {
+			color: $black;
+			font-size: $font-size-base;
+			margin-bottom: $spacer-xxs;
+			margin-top: $spacer-sm;
 		}
 	}
 
 	&__description {
-		line-height: $line-height-1xl;
+		font-size: $font-size-xs;
+		line-height: $font-size-base;
+
+		@include respond-at("md") {
+			font-size: $font-size-sm;
+			line-height: math.div($font-size-md, 9) * 10; // 2rem;
+		}
 	}
 
 	&__control-icon {
 		font-size: $font-size-lg;
 		margin-right: $spacer-xs;
-	}
-
-	&__controls {
-		color: $black;
-		display: flex;
-		align-items: center;
-		flex-wrap: nowrap;
-
-		p {
-			font-size: $font-size-xs;
-			line-height: $font-size-sm;
-			max-width: 175px;
-		}
-
-		& > {
-			& button {
-				+ button {
-					margin-left: $spacer-xs;
-				}
-			}
-
-			& p {
-				+ button {
-					margin-left: $spacer-sm;
-				}
-			}
-		}
-
-		&--near {
-			margin-top: $spacer-md;
-		}
-
-		&--far {
-			margin-top: $spacer-lg;
-		}
-		
-		&--light {
-			color: $white;
-		}
-
-		&--thinner {
-			p {
-				font-size: $font-size-sm;
-				line-height: $line-height-3xl;
-				max-width: 130px;
-			}
-		}
 	}
 }

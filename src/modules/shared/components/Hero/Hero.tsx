@@ -9,12 +9,7 @@ const Hero: FC<HeroProps> = ({ title, description, link, image }) => {
 	return (
 		<header className={styles['c-hero']}>
 			<div className={styles['c-hero__image']}>
-				<Image
-					src={`/images/${image.name}`}
-					layout="fill"
-					alt={image.alt}
-					objectFit="contain"
-				/>
+				<Image src={image.src} layout="fill" alt={image.alt} objectFit="contain" />
 			</div>
 			<div className={styles['c-hero__content']}>
 				<h1 className={styles['c-hero__title']}>{title}</h1>

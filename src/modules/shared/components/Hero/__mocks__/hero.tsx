@@ -10,7 +10,7 @@ export const heroLink = {
 	to: 'https://www.test.com',
 };
 
-export const heroImage = { name: 'hero.png', alt: 'hero image' };
+export const heroImage = { src: '/images/hero.png', alt: 'hero image' };
 
 export const heroMock: HeroProps = {
 	title: heroTitle,
