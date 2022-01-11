@@ -1,0 +1,26 @@
+@use "../abstracts" as *;
+
+/**
+ * Padding
+ */
+
+// Top / Bottom
+$py: (
+	"48": 4.8rem,
+);
+@include generate-utils("py", ("padding-top", "padding-bottom"), $py);
+
+/**
+ * Margin
+ */
+
+// Left / Right
+$ml: (
+	"8": $spacer-xs,
+);
+@include generate-utils("ml", "margin-left", $ml);
+
+$mr: (
+	"8": $spacer-xs,
+);
+@include generate-utils("mr", "margin-right", $mr);

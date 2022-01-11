@@ -186,6 +186,10 @@ $c-navigation-list-divider-color: #4E4E4E;
 	height: $c-navigation-height-sm;
 	padding: 0 2.8rem;
 
+	&::after {
+		content: none;
+	}
+
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-navigation__link {
 		height: $c-navigation-height-sm - 0.1rem;

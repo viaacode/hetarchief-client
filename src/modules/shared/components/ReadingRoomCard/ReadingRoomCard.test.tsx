@@ -1,15 +1,14 @@
 import { render, RenderResult, screen } from '@testing-library/react'; //eslint-disable-line
 
-import cardStyles from '../Card/Card.module.scss';
-
 import ReadingRoomCard from './ReadingRoomCard';
-import { AccessGranted, AccessRequested, mockReadingRoomCardProps } from './ReadingRoomCard.mock';
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
-
-import { ReadingRoomCardType } from '.';
-
-import { documentOf } from '@shared/helpers/document-of';
+import {
+	AccessGranted,
+	AccessRequested,
+	mockReadingRoomCardProps,
+} from './__mocks__/reading-room-card';
 
 describe('Component: <ReadingRoomCard />', () => {
 	let rendered: RenderResult | undefined;
@@ -32,9 +31,9 @@ describe('Component: <ReadingRoomCard />', () => {
 	it('Should render a light card with a short image when not accessible', () => {
 		rendered = render(template());
 
-		const card = documentOf(rendered).getElementsByClassName(cardStyles['c-card--mode-light']);
+		const card = rendered.container.getElementsByClassName('c-card--mode-light');
 
-		const image = documentOf(rendered).getElementsByClassName(
+		const image = rendered.container.getElementsByClassName(
 			styles['c-reading-room-card__background--short']
 		);
 
@@ -58,14 +57,14 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['access-granted'],
+				type: ReadingRoomCardType['access'],
 				access: AccessGranted,
 			})
 		);
 
-		const card = documentOf(rendered).getElementsByClassName(cardStyles['c-card--mode-dark']);
+		const card = rendered.container.getElementsByClassName('c-card--mode-dark');
 
-		const image = documentOf(rendered).getElementsByClassName(
+		const image = rendered.container.getElementsByClassName(
 			styles['c-reading-room-card__background--tall']
 		);
 
@@ -77,12 +76,12 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['access-granted'],
+				type: ReadingRoomCardType['access'],
 				access: AccessGranted,
 			})
 		);
 
-		expect(screen.getByText(/Beschikbaar tot/)).toBeDefined();
+		expect(screen.getByText('timer')).toBeDefined(); // Check icon
 		expect(screen.getByText('Bezoek de leeszaal')).toBeDefined();
 	});
 
@@ -96,7 +95,36 @@ describe('Component: <ReadingRoomCard />', () => {
 		);
 
 		expect(
-			screen.getByText('Momenteel is er geen toegang mogelijk tot deze leeszaal')
+			screen.getByText('not-available') // Check icon
 		).toBeDefined();
+	});
+
+	it('Should show a timestamp when access is approved and in the future', () => {
+		rendered = render(
+			template({
+				room: mockReadingRoomCardProps.room,
+				type: ReadingRoomCardType['future--approved'],
+				access: AccessRequested,
+			})
+		);
+
+		expect(
+			screen.getByText('calendar') // Check icon
+		).toBeDefined();
+	});
+
+	it('Should show a tag with a translated message while future access is still pending', () => {
+		rendered = render(
+			template({
+				room: mockReadingRoomCardProps.room,
+				type: ReadingRoomCardType['future--requested'],
+				access: AccessRequested,
+			})
+		);
+
+		const tag = rendered.container.getElementsByClassName('c-tag-list__tag');
+
+		expect(tag.length).toEqual(1);
+		expect(tag[0].innerHTML.length).toBeGreaterThan(0);
 	});
 });

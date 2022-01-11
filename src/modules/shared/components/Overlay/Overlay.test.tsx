@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import Overlay from './Overlay';
 import styles from './Overlay.module.scss';
 
-fdescribe('Component: <Overlay /> (default)', () => {
+describe('Component: <Overlay /> (default)', () => {
 	it('Should render hidden overlay', () => {
 		const testId = 'overlayWrapper';
 

@@ -10,7 +10,7 @@ FROM node:gallium-alpine AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN   npm run build-storybook 
+RUN   npm run build:storybook
 # Production image, copy all the files and run next
 FROM node:gallium-alpine AS runner
 WORKDIR /app
@@ -24,6 +24,7 @@ COPY --chown=1001:1001 .storybook .storybook
 COPY --chown=1001:1001 --from=builder /app/storybook-static ./public
 COPY --chown=1001:1001 --from=builder /app/node_modules ./node_modules
 COPY --chown=1001:1001 --from=builder /app/package.json ./package.json
+COPY --chown=1001:1001 tsconfig.json tsconfig.json
 COPY --chown=1001:1001 src src
 USER nextjs
 

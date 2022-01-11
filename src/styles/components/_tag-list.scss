@@ -1,0 +1,120 @@
+@use "sass:color";
+@use "styles/abstracts" as *;
+
+$tag-list-teal-66: color.adjust($teal, $alpha: -0.34);
+
+.c-tag-list {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0;
+	list-style: none;
+	font-size: $font-size-sm;
+	gap: $spacer-xs;
+
+	.c-tag-list__tag {
+		// variants
+		&--large {
+			height: 3.2rem;
+			padding: $spacer-xs $spacer-sm;
+			border-radius: 1.6rem;
+			background-color: $tag-list-teal-66;
+			font-weight: 700;
+
+			&.c-tag-list__tag--closable a {
+				padding: $spacer-xs;
+				padding-right: $spacer-sm;
+				font-size: $font-size-md;
+			}
+
+		}
+
+		&--medium,
+		&--small {
+			font-size: $font-size-xs;
+			font-weight: 700;
+
+			&.c-tag-list__tag--closable a {
+				font-size: $font-size-sm;
+			}
+		}
+
+		&--medium {
+			height: 2.4rem;
+			border-radius: 1.2rem;
+			padding: calc($spacer-xs / 2) $spacer-xs;
+			background-color: $silver;
+
+			&.c-tag-list__tag--closable a {
+				padding: calc($spacer-xs / 2);
+				padding-right: $spacer-xs;
+			}
+		}
+
+		&--small {
+			height: 1.5rem;
+			padding: 0 $spacer-xs;
+			border-radius: 0.75rem;
+			background-color: $black;
+			color: $white;
+
+			&.c-tag-list__tag--closable a {
+				padding: 0 calc($spacer-xs / 2);
+				padding-right: calc($spacer-xs / 2);
+			}
+		}
+
+		// style icon button (large)
+		&.c-tag-list__tag--closable {
+			display: flex;
+			align-items: center;
+			padding-right: 0;
+
+			a {
+				display: flex;
+				text-decoration: none;
+			}
+		}
+
+		// interaction
+		&--clickable, &--closable {
+			transition: background-color $animate-default, color $animate-default, outline $animate-default;
+
+			&.c-tag-list__tag--large:not(.c-tag-list__tag--disabled) {
+				&:hover {
+					background-color: $shade;
+					color: $white;
+				}
+
+				&:active {
+					background-color: $tag-list-teal-66;
+					color: $black
+				}
+
+				&:not(:active,:hover):focus {
+					outline: 2px solid $black;
+				}
+			}
+
+			&.c-tag-list__tag--medium:not(.c-tag-list__tag--disabled), &.c-tag-list__tag--small:not(.c-tag-list__tag--disabled) {
+				&:hover {
+					background-color: $shade;
+					color: $white;
+				}
+
+				&:active {
+					background-color: $seagreen;
+					color: $white
+				}
+
+				&:not(:active,:hover):focus {
+					outline: 2px solid $tag-list-teal-66;
+				}
+			}
+		}
+
+		&--disabled {
+			background-color: $silver;
+			color: $zinc;
+		}
+	}
+}

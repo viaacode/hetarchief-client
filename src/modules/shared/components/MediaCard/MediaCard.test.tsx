@@ -1,11 +1,7 @@
 import { render, RenderResult, screen } from '@testing-library/react';
 
-import CardStyles from '../Card/Card.module.scss';
-
 import MediaCard from './MediaCard';
 import { formatDate } from './MediaCard.utils';
-
-import { documentOf } from '@shared/helpers/document-of';
 
 const author = 'Author';
 const now = new Date();
@@ -18,18 +14,16 @@ describe('Component: <MediaCard />', () => {
 	});
 
 	it('Should apply the vertical orientation when rendered in grid view', () => {
-		const element = documentOf(rendered).getElementsByClassName(
-			CardStyles['c-card--orientation-vertical']
-		);
+		const element = rendered.container.getElementsByClassName('c-card--orientation-vertical');
 
 		expect(element.length).toEqual(1);
 	});
 
-	it('Should apply the horizontal orientation when rendered in list view', () => {
+	it('Should apply the horizontal--at-md orientation when rendered in list view', () => {
 		rendered = render(<MediaCard view="list" />);
 
-		const element = documentOf(rendered).getElementsByClassName(
-			CardStyles['c-card--orientation-vertical']
+		const element = rendered.container.getElementsByClassName(
+			'c-card--orientation-horizontal--at-md'
 		);
 
 		expect(element.length).toEqual(1);

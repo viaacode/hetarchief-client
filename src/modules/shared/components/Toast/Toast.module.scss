@@ -1,0 +1,38 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+.c-toast {
+	max-width: 48.6rem;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	column-gap: $spacer-sm;
+	row-gap: $spacer-xs;
+	padding: 2rem;
+	background-color: $black;
+	color: white;
+
+	&__title {
+		font-weight: 700;
+		font-size: $font-size-md;
+		line-height: $line-height-2xl;
+	}
+
+	&__description {
+		font-size: $font-size-sm;
+		align-self: center;
+		line-height: $line-height-2xl;
+	}
+
+	&__button-wrapper {
+		grid-column: 2 / 3;
+		grid-row: 1 / 3;
+	}
+
+	&--visible {
+		visibility: visible;
+	}
+
+	&--hidden {
+		visibility: hidden;
+	}
+}

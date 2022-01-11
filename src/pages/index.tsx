@@ -5,6 +5,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 
 import { Hero } from '@shared/components';
+import { createPageTitle } from '@shared/utils';
 
 const Home: NextPage = () => {
 	const { t } = useTranslation();
@@ -12,9 +13,8 @@ const Home: NextPage = () => {
 	return (
 		<div className="p-home">
 			<Head>
-				<title>Home | Het Archief</title>
+				<title>{createPageTitle('Home')}</title>
 				<meta name="description" content="TODO: Home meta description" />
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
 			<Hero

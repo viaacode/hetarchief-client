@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { CSSProperties } from 'react';
 
 import MediaCard from './MediaCard';
-import { soundwave, thumbnail } from './MediaCard.mock';
+import { soundwave, thumbnail } from './__mocks__/media-card';
 
 export default {
 	title: 'Components/MediaCard',
