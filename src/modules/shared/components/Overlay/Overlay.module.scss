@@ -5,6 +5,7 @@ $overlay-opacity-dark: 64%;
 $overlay-opacity-light: 40%;
 
 .c-overlay {
+	z-index: get-z-layer("foreground");
 	pointer-events: none;
 	opacity: 0;
 	position: absolute;
