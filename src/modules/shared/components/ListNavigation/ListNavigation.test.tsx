@@ -1,9 +1,8 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 
 import { Icon } from '../Icon';
 
 import ListNavigation from './ListNavigation';
-import { ListNavigationListItem } from './ListNavigation.types';
 import { listNavigationMock } from './__mocks__';
 
 const renderListNavigation = ({ items = listNavigationMock.listItems, ...rest }) => {

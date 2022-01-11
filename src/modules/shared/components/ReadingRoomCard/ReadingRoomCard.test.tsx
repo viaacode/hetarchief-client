@@ -2,9 +2,13 @@ import { render, RenderResult, screen } from '@testing-library/react'; //eslint-
 
 import ReadingRoomCard from './ReadingRoomCard';
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
-import { AccessGranted, AccessRequested, mockReadingRoomCardProps } from './ReadingRoomCard.mock';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
+import {
+	AccessGranted,
+	AccessRequested,
+	mockReadingRoomCardProps,
+} from './__mocks__/reading-room-card';
 
 describe('Component: <ReadingRoomCard />', () => {
 	let rendered: RenderResult | undefined;

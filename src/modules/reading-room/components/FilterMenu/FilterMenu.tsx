@@ -121,7 +121,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 											<span>
 												Sorteer op: <strong>{}</strong>
 											</span>
-										) as any
+										) as any // eslint-disable-line @typescript-eslint/no-explicit-any
 									}
 									onClick={() => setSortOptionsOpen(true)}
 								/>

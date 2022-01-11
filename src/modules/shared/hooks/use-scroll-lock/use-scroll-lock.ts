@@ -12,7 +12,6 @@ const useScrollLock: UseScrollLock = (element, lock) => {
 
 		if (!prevOverflowStyle.current) {
 			prevOverflowStyle.current = element.style.overflow;
-			console.log('prev', prevOverflowStyle.current);
 		}
 
 		if (lock) {
