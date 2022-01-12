@@ -15,8 +15,8 @@ const Blade: FC<BladeProps> = ({
 	title,
 	heading,
 	footer,
-	hideOverlay,
-	hideCloseButton,
+	hideOverlay = false,
+	hideCloseButton = false,
 	onClose,
 }) => {
 	const renderCloseButton = () => {
