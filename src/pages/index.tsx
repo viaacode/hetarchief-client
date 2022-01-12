@@ -46,12 +46,12 @@ const Home: NextPage = () => {
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
 			</div>
 
-			<div className="l-container u-mb-lg2">
+			<div className="l-container u-mb-64">
 				<ReadingRoomCardList items={readingRooms} limit={!areAllReadingRoomsVisible} />
 			</div>
 
 			{!areAllReadingRoomsVisible && (
-				<div style={{ display: 'grid', placeItems: 'center' }} className="u-mb-2xl">
+				<div style={{ display: 'grid', placeItems: 'center' }} className="u-mb-80">
 					<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
 						Toon alles (123)
 					</Button>

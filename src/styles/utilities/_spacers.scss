@@ -23,20 +23,20 @@ $ml: (
 // Right
 $mr: (
 	"8": $spacer-xs,
-	"lg": $spacer-lg
+	"32": $spacer-lg
 );
 @include generate-utils("mr", "margin-right", $mr, ("md"));
 
 // Top
 $mt: (
-	"2xl": $spacer-2xl,
+	"80": $spacer-2xl,
 );
 @include generate-utils("mt", ("margin-top"), $mt);
 
 // Bottom
 $mb: (
-	"md2": $spacer-md * 2,
-	"lg2": $spacer-lg * 2,
-	"2xl": $spacer-2xl,
+	"48": $spacer-md * 2,
+	"64": $spacer-lg * 2,
+	"80": $spacer-2xl,
 );
 @include generate-utils("mb", ("margin-bottom"), $mb);

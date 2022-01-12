@@ -93,7 +93,7 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const renderFilters = () => (
-		<div className={clsx(mode === 'list' && 'u-mr-lg:md')}>
+		<div className={clsx(mode === 'list' && 'u-mr-32:md')}>
 			<Toggle dark options={toggle} onChange={(id) => setMode(id as MediaCardViewMode)} />
 		</div>
 	);
@@ -158,7 +158,7 @@ const ReadingRoomPage: NextPage = () => {
 			</section>
 
 			{/* Start debug */}
-			<section className="u-mt-2xl">
+			<section className="u-mt-80">
 				<div className="l-container">
 					<Button
 						variants={['sm']}
@@ -208,7 +208,7 @@ const ReadingRoomPage: NextPage = () => {
 			</section>
 
 			{media.length > 0 && (
-				<section className="u-mb-md2">
+				<section className="u-mb-48">
 					<div className="l-container">
 						<PaginationBar
 							start={query.start}
