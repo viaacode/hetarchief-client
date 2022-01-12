@@ -9,8 +9,22 @@ $reading-room-grid-cols-lg: 3;
 $reading-room-grid-gutter-xl: $spacer-lg;
 $reading-room-grid-cols-xl: 4;
 
+.p-reading-room__contact-button {
+	@include respond-to(md) {
+		.c-button__icon {
+			margin: 0;
+		}
+
+		.c-button__label {
+			visibility: hidden;
+			font-size: 0;
+		}
+	}
+}
+
+
 .p-reading-room__results {
-	&--initial {
+	&--placeholder {
 		.l-container {
 			display: flex;
 
@@ -24,4 +38,3 @@ $reading-room-grid-cols-xl: 4;
 .p-reading-room__placeholder {
 	width: 100%;
 }
-

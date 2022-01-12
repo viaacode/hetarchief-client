@@ -1,12 +1,15 @@
-import { ArrayParam, StringParam, withDefault } from 'use-query-params';
+import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { Icon } from '@shared/components';
+import { Icon, IconProps } from '@shared/components';
 
 import { ReadingRoomMediaType } from '../types';
+
+export const READING_ROOM_ITEM_COUNT = 10;
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	mediaType: withDefault(StringParam, ReadingRoomMediaType.All),
 	search: ArrayParam,
+	start: withDefault(NumberParam, 0),
 };
 
 export const READING_ROOM_TABS = [
@@ -23,5 +26,16 @@ export const READING_ROOM_TABS = [
 		id: ReadingRoomMediaType.Audio,
 		icon: <Icon name="audio" />,
 		label: 'Audio',
+	},
+];
+
+export const READING_ROOM_VIEW_TOGGLE_OPTIONS = [
+	{
+		id: 'list',
+		iconName: 'list-view' as IconProps['name'],
+	},
+	{
+		id: 'grid',
+		iconName: 'grid-view' as IconProps['name'],
 	},
 ];

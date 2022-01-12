@@ -1,0 +1,29 @@
+@use "styles/abstracts" as *;
+
+$c: "c-pagination-bar";
+
+.#{$c} {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: min-content;
+	align-items: center;
+	justify-items: center;
+
+	& *:first-child {
+		justify-self: left;
+	}
+
+	& *:last-child {
+		justify-self: right;
+	}
+
+	@include respond-at("md") {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	&__back-to-top {
+		@include respond-to("md") {
+			display: none;
+		}
+	}
+}

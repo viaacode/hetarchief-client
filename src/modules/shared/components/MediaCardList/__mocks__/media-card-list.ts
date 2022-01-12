@@ -2,9 +2,13 @@ import { MediaCardProps } from '@shared/components';
 
 import { MediaCardListProps } from '../MediaCardList.types';
 
-export const mock = async (args: Pick<MediaCardProps, 'view'>): Promise<MediaCardListProps> => {
+export const mock = async (
+	args: Pick<MediaCardProps, 'view'>,
+	start = 0,
+	limit = 24
+): Promise<MediaCardListProps> => {
 	const items: MediaCardProps[] = await fetch(
-		'https://jsonplaceholder.typicode.com/photos?_start=0&_limit=25'
+		`https://jsonplaceholder.typicode.com/photos?_start=${start}&_limit=${limit}`
 	)
 		.then((response) => response.json())
 		.then((json: unknown) => {
@@ -36,8 +40,6 @@ export const mock = async (args: Pick<MediaCardProps, 'view'>): Promise<MediaCar
 				};
 			});
 		});
-
-	console.info(items);
 
 	return {
 		items,

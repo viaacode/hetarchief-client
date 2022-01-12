@@ -2,7 +2,7 @@ import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react
 import clsx from 'clsx';
 import { FC, ReactElement, useEffect, useState } from 'react';
 
-import { Icon, IconLightNames } from '@shared/components';
+import { Icon, IconLightNames, Toggle } from '@shared/components';
 import { useScrollLock, useWindowSizeContext } from '@shared/hooks';
 import { Breakpoints } from '@shared/types';
 import { isBrowser } from '@shared/utils';
@@ -18,7 +18,9 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	isMobileOpen = false,
 	isOpen = true,
 	sortOptions = [],
+	toggleOptions = [],
 	onMenuToggle,
+	onViewToggle = () => null,
 }) => {
 	const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 	const [activeFilter, setActiveFilter] = useState<string | null>(null);
@@ -98,15 +100,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				/>
 				{!isMobile && (
 					<div className={styles['c-filter-menu__view-toggle']}>
-						{/* TODO: replace with Toggle component */}
-						<Button
-							icon={<Icon name="list-view" />}
-							variants={['black', 'sm', 'text']}
-						/>
-						<Button
-							icon={<Icon name="grid-view" />}
-							variants={['black', 'sm', 'text']}
-						/>
+						<Toggle options={toggleOptions} onChange={onViewToggle} />
 					</div>
 				)}
 			</div>

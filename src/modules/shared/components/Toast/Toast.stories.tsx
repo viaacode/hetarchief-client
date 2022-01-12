@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import Toast from './Toast';
-import { toastMock } from './__mocks__';
+import { toastMock } from './__mocks__/toast';
 
 export default {
 	title: 'Components/Toast',

@@ -2,14 +2,14 @@ import { DefaultComponentProps } from '@shared/types';
 
 import { IconLightNames } from '../Icon';
 
-export interface ToggleOptions {
+export interface ToggleOption {
 	id: string;
 	iconName: IconLightNames;
 	active: boolean;
 }
 
 export interface ToggleProps extends DefaultComponentProps {
-	options: ToggleOptions[];
+	options: ToggleOption[];
 	onChange: (id: string) => void;
 	bordered?: boolean;
 	dark?: boolean;

@@ -16,23 +16,43 @@ $py: (
 );
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
 
+// Left / Right
+$px: (
+	"12": 1.2rem,
+);
+@include generate-utils("px", ("padding-left", "padding-right"), $px);
+
 /**
  * Margin
  */
 
-// Top / Bottom
+// Top
+$mt: (
+	"80": $spacer-2xl,
+);
+@include generate-utils("mt", ("margin-top"), $mt);
+
+// Bottom
 $mb: (
 	"24": $spacer-md,
+	"48": $spacer-md * 2,
+	"64": $spacer-lg * 2,
+	"80": $spacer-2xl,
 );
-@include generate-utils("mb", "margin-bottom", $mb);
+@include generate-utils("mb", ("margin-bottom"), $mb);
 
-// Left / Right
+
+// Left
 $ml: (
 	"8": $spacer-xs,
+	"-12": - 1.2rem,
 );
 @include generate-utils("ml", "margin-left", $ml);
 
+// Right
 $mr: (
 	"8": $spacer-xs,
+	"-12": - 1.2rem,
+	"32": $spacer-lg
 );
-@include generate-utils("mr", "margin-right", $mr);
+@include generate-utils("mr", "margin-right", $mr, ("md"));

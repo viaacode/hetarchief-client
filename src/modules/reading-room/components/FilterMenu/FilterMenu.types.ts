@@ -1,4 +1,4 @@
-import { IconProps } from '@shared/components';
+import { IconProps, ToggleOption } from '@shared/components';
 import { DefaultComponentProps, SortOrder } from '@shared/types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
@@ -8,10 +8,11 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
 	sortOptions?: FilterMenuSortOption[];
+	toggleOptions?: ToggleOption[];
 	onMenuToggle?: (nextOpen?: boolean) => void;
 	onSortClick?: FilterMenuOnSortClick;
 	onFilterSubmit?: (values: Record<string, unknown>) => void;
-	onViewToggle?: (viewType: string) => void;
+	onViewToggle?: (viewMode: string) => void;
 }
 
 export interface FilterMenuSortOption {
