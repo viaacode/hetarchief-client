@@ -227,6 +227,14 @@ $c-navigation-divider-size: 0.1rem;
 		}
 	}
 
+	.c-navigation--sm {
+		height: $c-navigation-height-contextual-md;
+
+		.c-navigation__title {
+			font-size: $font-size-base;
+		}
+	}
+
 	.c-navigation--responsive-dropdown {
 		grid-template-columns: auto;
 
