@@ -3,10 +3,12 @@
 @use "styles/abstracts" as *;
 
 $c-navigation-height: 8.8rem;
-$c-navigation-height-mobile: 8rem;
-$c-navigation-height-sm: 6.4rem;
+$c-navigation-height-md: 8rem;
+$c-navigation-height-contextual: 6.4rem;
+$c-navigation-height-contextual-md: 4.8rem;
 $c-navigation-border-height: 0.6rem;
 $c-navigation-list-divider-color: #4E4E4E;
+$c-navigation-divider-size: 0.1rem;
 
 @mixin navigation-link-border-decoration($_offset1: 0, $_offset2: 0) {
 	$offset1-border: if($_offset1 == 0, 0, calc($_offset1 + 0.1rem));
@@ -106,7 +108,7 @@ $c-navigation-list-divider-color: #4E4E4E;
 			position: absolute;
 			top: 50%;
 			right: 0;
-			width: 0.1rem;
+			width: $c-navigation-divider-size;
 			height: 50%;
 			background-color: $c-navigation-list-divider-color;
 			transform: translateY(-50%);
@@ -148,9 +150,9 @@ $c-navigation-list-divider-color: #4E4E4E;
 	position: relative;
 	display: inline-flex;
 	align-items: center;
-	height: $c-navigation-height - 0.1rem;
+	height: $c-navigation-height - $c-navigation-divider-size;
 	border-bottom: $c-navigation-border-height solid transparent;
-	margin-bottom: 0.1rem;
+	margin-bottom: $c-navigation-divider-size;
 	text-decoration: none;
 	transition: border-color $animate-md-out, color $animate-md-out;
 
@@ -192,7 +194,7 @@ $c-navigation-list-divider-color: #4E4E4E;
 
 .c-navigation--sm {
 	grid-template-columns: 1fr 2fr 1fr;
-	height: $c-navigation-height-sm;
+	height: $c-navigation-height-contextual;
 	padding: 0 2.8rem;
 
 	&::after {
@@ -201,7 +203,7 @@ $c-navigation-list-divider-color: #4E4E4E;
 
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-navigation__link {
-		height: $c-navigation-height-sm - 0.1rem;
+		height: $c-navigation-height-contextual - $c-navigation-divider-size;
 	}
 }
 
@@ -211,11 +213,11 @@ $c-navigation-list-divider-color: #4E4E4E;
 
 @include respond-to(md) {
 	.c-navigation {
-		height: $c-navigation-height-mobile;
+		height: $c-navigation-height-md;
 		padding: 0 2rem;
 
 		&__link {
-			height: $c-navigation-height-mobile - 0.1rem;
+			height: $c-navigation-height-md - $c-navigation-divider-size;
 			border-bottom: none;
 		}
 
