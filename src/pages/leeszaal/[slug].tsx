@@ -79,9 +79,9 @@ const ReadingRoomPage: NextPage = () => {
 				<Navigation.Right>
 					<Button
 						label="Contacteer"
-						iconStart={<Icon name="contact" />}
+						iconStart={<Icon className="u-fs-24" name="contact" />}
 						variants="text"
-						className="u-color-white u-mr--12 u-px-12"
+						className="u-color-white u-mr--12 u-px-12 p-reading-room__contact-button"
 					/>
 				</Navigation.Right>
 			</Navigation>
