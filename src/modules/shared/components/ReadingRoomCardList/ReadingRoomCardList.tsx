@@ -17,7 +17,7 @@ const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({ className, items, l
 	// Only run once to avoid listeners
 	useEffect(() => {
 		if (window.innerWidth >= 768) setMax(6);
-	}, [setMax]);
+	}, []);
 
 	const getItems = () => {
 		if (!items) {
