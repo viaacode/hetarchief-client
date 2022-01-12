@@ -20,14 +20,14 @@ import {
 	MediaCardProps,
 	MediaCardViewMode,
 	Navigation,
+	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
 	TabLabel,
+	Toggle,
+	ToggleOptions,
 } from '@shared/components';
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
-import PaginationBar from '@shared/components/PaginationBar/PaginationBar';
-import Toggle from '@shared/components/Toggle/Toggle';
-import { ToggleOptions } from '@shared/components/Toggle/Toggle.types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
