@@ -6,5 +6,6 @@
 
 $color: (
 	"white": $white,
+	"teal": $teal,
 );
 @include generate-utils("color", "color", $color);

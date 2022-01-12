@@ -21,7 +21,7 @@ const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 					label="Menu"
 					variants="text"
 					className="u-color-white u-px-12 u-ml--12"
-					iconStart={<Icon name="grid-view" />}
+					iconStart={<Icon className="u-color-teal u-fs-24" name="grid-view" />}
 				/>
 			</div>
 		);
