@@ -6,12 +6,12 @@ import ReadingRoomCard from '../ReadingRoomCard/ReadingRoomCard';
 import styles from './ReadingRoomCardList.module.scss';
 import { ReadingRoomCardListProps } from './ReadingRoomCardList.types';
 
-const defaultProps = {
-	items: [],
-	limit: true,
-};
-
-const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({ className, items, limit, style }) => {
+const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({
+	className,
+	items = [],
+	limit = true,
+	style,
+}) => {
 	const [max, setMax] = useState(3);
 
 	// Only run once to avoid listeners
@@ -43,7 +43,5 @@ const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({ className, items, l
 		</ul>
 	);
 };
-
-ReadingRoomCardList.defaultProps = defaultProps;
 
 export default ReadingRoomCardList;
