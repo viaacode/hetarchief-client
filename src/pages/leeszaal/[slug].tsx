@@ -78,7 +78,7 @@ const ReadingRoomPage: NextPage = () => {
 		}
 
 		fetchMedia();
-	}, [setMedia, query.start]);
+	}, [query.start]);
 
 	/**
 	 * Methods
