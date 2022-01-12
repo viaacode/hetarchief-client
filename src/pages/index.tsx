@@ -6,8 +6,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import { Hero } from '@shared/components';
-import ReadingRoomCardList from '@shared/components/ReadingRoomCardList/ReadingRoomCardList';
+import { Hero, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { createPageTitle } from '@shared/utils';
 

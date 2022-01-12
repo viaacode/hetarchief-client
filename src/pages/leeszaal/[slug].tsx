@@ -9,6 +9,7 @@ import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-roo
 import {
 	Icon,
 	IconProps,
+	MediaCardList,
 	MediaCardProps,
 	MediaCardViewMode,
 	Navigation,
@@ -16,7 +17,6 @@ import {
 	ScrollableTabs,
 	TabLabel,
 } from '@shared/components';
-import { MediaCardList } from '@shared/components/MediaCardList';
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { createPageTitle } from '@shared/utils';
 
