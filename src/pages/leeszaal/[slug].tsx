@@ -143,12 +143,25 @@ const ReadingRoomPage: NextPage = () => {
 
 			<Navigation contextual>
 				<Navigation.Left>
-					<Link href="/">Terug</Link>
+					<Link href="/" passHref={true}>
+						<Button
+							icon={<Icon name="arrow-left" />}
+							variants="text"
+							className="u-color-white u-ml--12"
+						/>
+					</Link>
 				</Navigation.Left>
 
 				<Navigation.Center title="Leeszaal" />
 
-				<Navigation.Right />
+				<Navigation.Right>
+					<Button
+						label="Contacteer"
+						iconStart={<Icon className="u-fs-24" name="contact" />}
+						variants="text"
+						className="u-color-white u-mr--12 u-px-12 p-reading-room__contact-button"
+					/>
+				</Navigation.Right>
 			</Navigation>
 
 			<section className="u-bg-black">

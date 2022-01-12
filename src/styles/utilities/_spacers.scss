@@ -10,6 +10,12 @@ $py: (
 );
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py);
 
+// Left / Right
+$px: (
+	"12": 1.2rem,
+);
+@include generate-utils("px", ("padding-left", "padding-right"), $px);
+
 /**
  * Margin
  */
@@ -17,12 +23,14 @@ $py: (
 // Left
 $ml: (
 	"8": $spacer-xs,
+	"-12": - 1.2rem,
 );
 @include generate-utils("ml", "margin-left", $ml);
 
 // Right
 $mr: (
 	"8": $spacer-xs,
+	"-12": - 1.2rem,
 	"32": $spacer-lg
 );
 @include generate-utils("mr", "margin-right", $mr, ("md"));
