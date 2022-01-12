@@ -205,6 +205,10 @@ $c-navigation-list-divider-color: #4E4E4E;
 	}
 }
 
+/**
+ * Breakpoints
+ */
+
 @include respond-to(md) {
 	.c-navigation {
 		height: $c-navigation-height-mobile;
@@ -222,6 +226,8 @@ $c-navigation-list-divider-color: #4E4E4E;
 	}
 
 	.c-navigation--responsive-dropdown {
+		grid-template-columns: auto;
+
 		.c-navigation__section {
 			&--responsive-desktop {
 				display: none;
