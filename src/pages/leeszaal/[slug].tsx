@@ -67,7 +67,7 @@ const ReadingRoomPage: NextPage = () => {
 
 			<Navigation contextual>
 				<Navigation.Left>
-					<Link href="/">
+					<Link href="/" passHref={true}>
 						<Button
 							icon={<Icon name="arrow-left" />}
 							variants="text"
