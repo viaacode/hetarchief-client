@@ -3,6 +3,7 @@
 @use "styles/abstracts" as *;
 
 $c-navigation-height: 8.8rem;
+$c-navigation-height-mobile: 8rem;
 $c-navigation-height-sm: 6.4rem;
 $c-navigation-border-height: 0.6rem;
 $c-navigation-list-divider-color: #4E4E4E;
@@ -69,8 +70,14 @@ $c-navigation-list-divider-color: #4E4E4E;
  */
 
 .c-navigation__section {
-	display: flex;
-	justify-self: center;
+	&--responsive-desktop, &--right {
+		display: flex;
+		justify-self: center;
+	}
+
+	&--responsive-mobile {
+		display: none;
+	}
 
 	&:first-child {
 		grid-column: 1/2;
@@ -193,5 +200,35 @@ $c-navigation-list-divider-color: #4E4E4E;
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-navigation__link {
 		height: $c-navigation-height-sm - 0.1rem;
+	}
+}
+
+@include respond-to(md) {
+	.c-navigation {
+		height: $c-navigation-height-mobile;
+		padding: 0 2rem;
+
+		&__link {
+			height: $c-navigation-height-mobile - 0.1rem;
+			border-bottom: none;
+		}
+
+		&::after {
+			left: 2rem;
+			right: 2rem;
+		}
+	}
+
+	.c-navigation--responsive-dropdown {
+		.c-navigation__section {
+			&--responsive-desktop {
+				display: none;
+			}
+
+			&--responsive-mobile {
+				display: flex;
+				justify-self: center;
+			}
+		}
 	}
 }

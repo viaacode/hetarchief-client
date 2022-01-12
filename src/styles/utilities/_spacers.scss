@@ -10,6 +10,12 @@ $py: (
 );
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py);
 
+// Left
+$pl: (
+	"0": 0,
+);
+@include generate-utils("pl", "padding-left", $pl);
+
 /**
  * Margin
  */
