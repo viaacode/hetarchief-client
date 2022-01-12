@@ -10,8 +10,9 @@ import {
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
 	READING_ROOM_TABS,
-} from '@reading-room/const';
-import { ReadingRoomMediaType } from '@reading-room/types';
+} from '../../modules/reading-room/const';
+import { ReadingRoomMediaType } from '../../modules/reading-room/types';
+
 import {
 	Icon,
 	IconProps,
