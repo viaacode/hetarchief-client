@@ -70,9 +70,11 @@ $c-navigation-list-divider-color: #4E4E4E;
  */
 
 .c-navigation__section {
-	&--responsive-desktop, &--right {
+	display: flex;
+	justify-self: center;
+
+	&--responsive-desktop {
 		display: flex;
-		justify-self: center;
 	}
 
 	&--responsive-mobile {
