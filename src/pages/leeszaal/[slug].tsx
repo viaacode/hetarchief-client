@@ -1,4 +1,4 @@
-import { TabProps } from '@meemoo/react-components';
+import { Button, TabProps } from '@meemoo/react-components';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -67,12 +67,24 @@ const ReadingRoomPage: NextPage = () => {
 
 			<Navigation contextual>
 				<Navigation.Left>
-					<Link href="/">Terug</Link>
+					<Link href="/">
+						<Button
+							icon={<Icon name="arrow-left" />}
+							variants="text"
+							className="u-color-white"
+						/>
+					</Link>
 				</Navigation.Left>
 				<Navigation.Center title="Leeszaal" />
-				<Navigation.Right />
+				<Navigation.Right>
+					<Button
+						label="Contacteer"
+						iconStart={<Icon name="contact" />}
+						variants="text"
+						className="u-color-white"
+					/>
+				</Navigation.Right>
 			</Navigation>
-
 			<section className="u-bg-black">
 				<div className="l-container">
 					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
