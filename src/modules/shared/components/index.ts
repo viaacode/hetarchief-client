@@ -8,6 +8,8 @@ export * from './MediaCardList';
 export * from './Modal';
 export * from './Navigation';
 export * from './Overlay';
+export * from './PaginationBar';
+export * from './PaginationProgress';
 export * from './Placeholder';
 export * from './ReadingRoomCard';
 export * from './ReadingRoomCardControls';

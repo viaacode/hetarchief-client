@@ -13,4 +13,3 @@
 
 $align: (left, right, center);
 @include generate-utils("text", "text-align", $align);
-
