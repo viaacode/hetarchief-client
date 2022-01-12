@@ -1,7 +1,9 @@
 import { PaginationProps } from '@meemoo/react-components';
 
-export interface PaginationBarProps extends Pick<PaginationProps, 'onPageChange'> {
-	start: number;
+import { PaginationProgressProps } from '../PaginationProgress';
+
+export interface PaginationBarProps
+	extends Pick<PaginationProps, 'onPageChange'>,
+		Pick<PaginationProgressProps, 'start' | 'total'> {
 	count: number;
-	total: number;
 }
