@@ -71,7 +71,7 @@ const ReadingRoomPage: NextPage = () => {
 						<Button
 							icon={<Icon name="arrow-left" />}
 							variants="text"
-							className="u-color-white"
+							className="u-color-white u-ml--12"
 						/>
 					</Link>
 				</Navigation.Left>
@@ -81,7 +81,7 @@ const ReadingRoomPage: NextPage = () => {
 						label="Contacteer"
 						iconStart={<Icon name="contact" />}
 						variants="text"
-						className="u-color-white"
+						className="u-color-white u-mr--12 u-px-12"
 					/>
 				</Navigation.Right>
 			</Navigation>
