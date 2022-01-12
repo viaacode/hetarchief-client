@@ -1,29 +1,50 @@
 import { Button, TabProps } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { READING_ROOM_QUERY_PARAM_CONFIG, READING_ROOM_TABS } from '@reading-room/const';
+import {
+	READING_ROOM_ITEM_COUNT,
+	READING_ROOM_QUERY_PARAM_CONFIG,
+	READING_ROOM_TABS,
+} from '../../modules/reading-room/const';
+import { ReadingRoomMediaType } from '../../modules/reading-room/types';
+
 import {
 	Icon,
 	IconProps,
+	MediaCardList,
 	MediaCardProps,
 	MediaCardViewMode,
 	Navigation,
+	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
 	TabLabel,
+	Toggle,
+	ToggleOptions,
 } from '@shared/components';
-import { MediaCardList } from '@shared/components/MediaCardList';
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
+	// State
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+	const [searched, setSearched] = useState(false);
+
+	// Data
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
-	const [mode] = useState<MediaCardViewMode>('grid');
+	const [mediaCount] = useState({
+		[ReadingRoomMediaType.All]: 123,
+		[ReadingRoomMediaType.Audio]: 456,
+		[ReadingRoomMediaType.Video]: 789,
+	});
+
+	// Display
+	const [mode, setMode] = useState<MediaCardViewMode>('grid'); // Note: not in `query` intentionally
 
 	const tabs: TabProps[] = useMemo(
 		() =>
@@ -31,20 +52,33 @@ const ReadingRoomPage: NextPage = () => {
 				...tab,
 				icon: <Icon name={tab.icon as IconProps['name']} />,
 				// TODO: remove any once Tab type supports ReactNode
-				label: (<TabLabel label={tab.label} count={0} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+				label: (<TabLabel label={tab.label} count={mediaCount[tab.id]} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
 				active: tab.id === query.mediaType,
 			})),
-		[query.mediaType]
+		[query.mediaType, mediaCount]
 	);
+
+	const toggle: ToggleOptions[] = [
+		{
+			id: 'list',
+			active: mode === 'list',
+			iconName: 'list-view',
+		},
+		{
+			id: 'grid',
+			active: mode === 'grid',
+			iconName: 'grid-view',
+		},
+	];
 
 	useEffect(() => {
 		async function fetchMedia() {
-			const data = (await mock({ view: 'grid' })).items;
+			const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
 			data && setMedia(data);
 		}
 
 		fetchMedia();
-	}, [setMedia]);
+	}, [query.start]);
 
 	/**
 	 * Methods
@@ -57,6 +91,48 @@ const ReadingRoomPage: NextPage = () => {
 	/**
 	 * Render
 	 */
+
+	const renderFilters = () => (
+		<div className={clsx(mode === 'list' && 'u-mr-32:md')}>
+			<Toggle dark options={toggle} onChange={(id) => setMode(id as MediaCardViewMode)} />
+		</div>
+	);
+
+	const renderMediaCardList = () => {
+		if (media.length > 0) {
+			return (
+				<MediaCardList items={media} view={mode}>
+					{renderFilters()}
+				</MediaCardList>
+			);
+		}
+
+		if (searched) {
+			return (
+				<div className="u-flex-row">
+					{renderFilters()}
+
+					<Placeholder
+						img="/images/looking-glass.svg"
+						title="Geen resultaten"
+						description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
+					/>
+				</div>
+			);
+		}
+
+		return (
+			<div className="u-flex-row">
+				{renderFilters()}
+
+				<Placeholder
+					img="/images/lightbulb.svg"
+					title="Start je zoektocht!"
+					description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+				/>
+			</div>
+		);
+	};
 
 	return (
 		<div className="p-reading-room">
@@ -75,7 +151,9 @@ const ReadingRoomPage: NextPage = () => {
 						/>
 					</Link>
 				</Navigation.Left>
+
 				<Navigation.Center title="Leeszaal" />
+
 				<Navigation.Right>
 					<Button
 						label="Contacteer"
@@ -85,25 +163,80 @@ const ReadingRoomPage: NextPage = () => {
 					/>
 				</Navigation.Right>
 			</Navigation>
+
 			<section className="u-bg-black">
 				<div className="l-container">
 					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>
 
-			<section className="u-py-48">
+			{/* Start debug */}
+			<section className="u-mt-80">
 				<div className="l-container">
-					{media.length > 0 ? (
-						<MediaCardList items={media} view={mode} />
-					) : (
-						<Placeholder
-							img="/images/lightbulb.svg"
-							title="Start je zoektocht!"
-							description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-						/>
-					)}
+					<Button
+						variants={['sm']}
+						onClick={() => {
+							setQuery({});
+							setSearched(false);
+						}}
+					>
+						Reset
+					</Button>
+					&nbsp;
+					<Button
+						variants={['sm']}
+						onClick={() => {
+							setMedia([]);
+						}}
+					>
+						Hide all items
+					</Button>
+					&nbsp;
+					<Button
+						variants={['sm']}
+						onClick={() => {
+							async function fetchMedia() {
+								const data = (
+									await mock(
+										{ view: 'grid' },
+										query.start,
+										READING_ROOM_ITEM_COUNT
+									)
+								).items;
+								data && setMedia(data);
+								setSearched(true);
+							}
+
+							fetchMedia();
+						}}
+					>
+						Load new data
+					</Button>
 				</div>
 			</section>
+			{/* End debug */}
+
+			<section className="u-py-48">
+				<div className="l-container">{renderMediaCardList()}</div>
+			</section>
+
+			{media.length > 0 && (
+				<section className="u-mb-48">
+					<div className="l-container">
+						<PaginationBar
+							start={query.start}
+							count={READING_ROOM_ITEM_COUNT}
+							total={mediaCount[query.mediaType as ReadingRoomMediaType]}
+							onPageChange={(page) =>
+								setQuery({
+									...query,
+									start: page * READING_ROOM_ITEM_COUNT,
+								})
+							}
+						/>
+					</div>
+				</section>
+			)}
 		</div>
 	);
 };

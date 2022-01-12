@@ -2,7 +2,6 @@ import { documentOf } from '@meemoo/react-components';
 import { render, RenderResult, screen, fireEvent, waitFor } from '@testing-library/react'; //eslint-disable-line
 
 import Modal from './Modal';
-import styles from './Modal.module.scss';
 
 const text = 'Title of the Modal';
 const noPadding = { padding: '' };
@@ -41,9 +40,7 @@ describe('Component: <Modal />', () => {
 
 	it('Should show a close button when opened', () => {
 		rendered = render(<Modal title={text} isOpen={true} />);
-		const close = documentOf(rendered).getElementsByClassName(
-			styles['c-hetarchief-modal__close']
-		);
+		const close = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__close');
 
 		expect(close.length).toEqual(1);
 	});
@@ -54,9 +51,7 @@ describe('Component: <Modal />', () => {
 
 		rendered = render(<Modal title={text} isOpen={true} onClose={onClose} />);
 
-		const close = documentOf(rendered).getElementsByClassName(
-			styles['c-hetarchief-modal__close']
-		);
+		const close = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__close');
 
 		expect(close.length).toEqual(1);
 
@@ -68,10 +63,10 @@ describe('Component: <Modal />', () => {
 		rendered = render(<Modal title={text} isOpen={true} />);
 
 		const title = documentOf(rendered).getElementsByClassName(
-			styles['c-hetarchief-modal__title-wrapper']
+			'c-hetarchief-modal__title-wrapper'
 		);
 		const close = documentOf(rendered).getElementsByClassName(
-			styles['c-hetarchief-modal__close-wrapper']
+			'c-hetarchief-modal__close-wrapper'
 		);
 
 		expect(title.length).toEqual(1);
@@ -106,15 +101,9 @@ describe('Component: <Modal />', () => {
 			</Modal>
 		);
 
-		const heading = documentOf(rendered).getElementsByClassName(
-			styles['c-hetarchief-modal__heading']
-		);
-		const content = documentOf(rendered).getElementsByClassName(
-			styles['c-hetarchief-modal__content']
-		);
-		const footer = documentOf(rendered).getElementsByClassName(
-			styles['c-hetarchief-modal__footer']
-		);
+		const heading = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__heading');
+		const content = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__content');
+		const footer = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__footer');
 
 		expect(heading.length).toEqual(1);
 		expect(content.length).toEqual(1);
@@ -132,9 +121,7 @@ describe('Component: <Modal />', () => {
 	it('Should never obscure the entire screen', () => {
 		rendered = render(<Modal title={text} isOpen={true} />);
 
-		const overlay = documentOf(rendered).getElementsByClassName(
-			styles['c-hetarchief-modal__overlay']
-		);
+		const overlay = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__overlay');
 
 		expect(overlay.length).toEqual(1);
 	});
