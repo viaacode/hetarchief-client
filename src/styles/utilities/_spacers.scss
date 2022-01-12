@@ -25,13 +25,8 @@ $mr: (
 );
 @include generate-utils("mr", "margin-right", $mr);
 
-$mt: (
-	"2xl": $spacer-2xl,
-);
-@include generate-utils("mt", ("margin-top"), $mt);
-
 $mb: (
-	"lg2": $spacer-lg * 2,
-	"2xl": $spacer-2xl,
+	"64": $spacer-lg * 2,
+	"80": $spacer-2xl,
 );
 @include generate-utils("mb", ("margin-bottom"), $mb);
