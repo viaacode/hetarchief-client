@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { FC, useEffect, useState } from 'react';
 
 import ReadingRoomCard from '../ReadingRoomCard/ReadingRoomCard';
@@ -10,7 +11,7 @@ const defaultProps = {
 	limit: true,
 };
 
-const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({ items, limit }) => {
+const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({ className, items, limit, style }) => {
 	const [max, setMax] = useState(3);
 
 	// Only run once to avoid listeners
@@ -31,7 +32,7 @@ const ReadingRoomCardList: FC<ReadingRoomCardListProps> = ({ items, limit }) => 
 	};
 
 	return (
-		<ul className={styles['c-reading-room-card-list']}>
+		<ul style={style} className={clsx(className, styles['c-reading-room-card-list'])}>
 			{getItems().map((item, i) => (
 				<li className={styles['c-reading-room-card-list__item']} key={i}>
 					<ReadingRoomCard {...item} />
