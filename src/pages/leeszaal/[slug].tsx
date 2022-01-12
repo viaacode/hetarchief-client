@@ -16,6 +16,7 @@ import { ReadingRoomMediaType } from '../../modules/reading-room/types';
 import {
 	Icon,
 	IconProps,
+	MediaCardList,
 	MediaCardProps,
 	MediaCardViewMode,
 	Navigation,
@@ -23,7 +24,6 @@ import {
 	ScrollableTabs,
 	TabLabel,
 } from '@shared/components';
-import { MediaCardList } from '@shared/components/MediaCardList';
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import PaginationBar from '@shared/components/PaginationBar/PaginationBar';
 import Toggle from '@shared/components/Toggle/Toggle';

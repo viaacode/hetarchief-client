@@ -1,2 +1,2 @@
-export { default as MediaCardList } from './ReadingRoomCardList';
+export { default as ReadingRoomCardList } from './ReadingRoomCardList';
 export * from './ReadingRoomCardList.types';

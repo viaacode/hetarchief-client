@@ -2,7 +2,6 @@ import { render, RenderResult, screen } from '@testing-library/react'; //eslint-
 
 import ReadingRoomCard from './ReadingRoomCard';
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
-import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
 import {
 	AccessGranted,
@@ -34,7 +33,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		const card = rendered.container.getElementsByClassName('c-card--mode-light');
 
 		const image = rendered.container.getElementsByClassName(
-			styles['c-reading-room-card__background--short']
+			'c-reading-room-card__background--short'
 		);
 
 		expect(card.length).toEqual(1);
@@ -65,7 +64,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		const card = rendered.container.getElementsByClassName('c-card--mode-dark');
 
 		const image = rendered.container.getElementsByClassName(
-			styles['c-reading-room-card__background--tall']
+			'c-reading-room-card__background--tall'
 		);
 
 		expect(card.length).toEqual(1);
