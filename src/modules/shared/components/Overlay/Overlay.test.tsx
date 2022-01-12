@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
 import Overlay from './Overlay';
-import styles from './Overlay.module.scss';
 
 describe('Component: <Overlay /> (default)', () => {
 	it('Should render hidden overlay', () => {
@@ -13,7 +12,7 @@ describe('Component: <Overlay /> (default)', () => {
 			</div>
 		);
 
-		const overlay = screen.getByTestId(testId).getElementsByClassName(styles['c-overlay']);
+		const overlay = screen.getByTestId(testId).getElementsByClassName('c-overlay');
 		expect(overlay[0].classList.contains('c-overlay--visible')).toBe(false);
 	});
 
@@ -26,7 +25,7 @@ describe('Component: <Overlay /> (default)', () => {
 			</div>
 		);
 
-		const overlay = screen.getByTestId(testId).getElementsByClassName(styles['c-overlay']);
+		const overlay = screen.getByTestId(testId).getElementsByClassName('c-overlay');
 		expect(overlay[0].classList.contains('c-overlay--dark')).toBe(true);
 		expect(overlay[0].classList.contains('c-overlay--visible')).toBe(true);
 	});
@@ -40,7 +39,7 @@ describe('Component: <Overlay /> (default)', () => {
 			</div>
 		);
 
-		const overlay = screen.getByTestId(testId).getElementsByClassName(styles['c-overlay']);
+		const overlay = screen.getByTestId(testId).getElementsByClassName('c-overlay');
 		expect(overlay[0].classList.contains('c-overlay--dark')).toBe(true);
 	});
 
@@ -53,7 +52,7 @@ describe('Component: <Overlay /> (default)', () => {
 			</div>
 		);
 
-		const overlay = screen.getByTestId(testId).getElementsByClassName(styles['c-overlay']);
+		const overlay = screen.getByTestId(testId).getElementsByClassName('c-overlay');
 		expect(overlay[0].classList.contains('c-overlay--light')).toBe(true);
 	});
 });

@@ -1,14 +1,27 @@
+import { Button } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState } from 'react';
 
-import { Hero } from '@shared/components';
+import { Hero, ReadingRoomCardList } from '@shared/components';
+import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { createPageTitle } from '@shared/utils';
 
 const Home: NextPage = () => {
 	const { t } = useTranslation();
+
+	const [readingRooms, setReadingRooms] = useState(sixItems);
+	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
+
+	const handleLoadAllReadingRooms = () => {
+		Promise.resolve([...sixItems, ...sixItems]).then((data) => {
+			setReadingRooms(data);
+			setAreAllReadingRoomsVisible(true);
+		});
+	};
 
 	return (
 		<div className="p-home">
@@ -28,9 +41,22 @@ const Home: NextPage = () => {
 					to: '#',
 				}}
 			/>
+
 			<div style={{ display: 'grid', placeItems: 'center', padding: '2rem' }}>
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
 			</div>
+
+			<div className="l-container u-mb-64">
+				<ReadingRoomCardList items={readingRooms} limit={!areAllReadingRoomsVisible} />
+			</div>
+
+			{!areAllReadingRoomsVisible && (
+				<div style={{ display: 'grid', placeItems: 'center' }} className="u-mb-80">
+					<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
+						Toon alles (123)
+					</Button>
+				</div>
+			)}
 		</div>
 	);
 };

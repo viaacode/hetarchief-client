@@ -4,7 +4,7 @@ import React, { cloneElement, ReactElement, useState } from 'react';
 
 import Toggle from './Toggle';
 import { ToggleOptions } from './Toggle.types';
-import { toggleMock } from './__mocks__';
+import { toggleMock } from './__mocks__/toggle';
 
 const ToggleStoryComponent = ({
 	children,
