@@ -1,16 +1,20 @@
-import { Button } from '@meemoo/react-components';
+import { Button, TextInput } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
+import { useQueryParams } from 'use-query-params';
 
-import { Hero, ReadingRoomCardList } from '@shared/components';
+import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
+import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { createPageTitle } from '@shared/utils';
 
 const Home: NextPage = () => {
+	const [searchValue, setSearchValue] = useState('');
+	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
 
 	const [readingRooms, setReadingRooms] = useState(sixItems);
@@ -21,6 +25,12 @@ const Home: NextPage = () => {
 			setReadingRooms(data);
 			setAreAllReadingRoomsVisible(true);
 		});
+	};
+
+	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			setQuery({ search: searchValue });
+		}
 	};
 
 	return (
@@ -46,17 +56,35 @@ const Home: NextPage = () => {
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
 			</div>
 
-			<div className="l-container u-mb-64">
-				<ReadingRoomCardList items={readingRooms} limit={!areAllReadingRoomsVisible} />
-			</div>
+			<div className="l-container u-mb-80">
+				<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-80">
+					<h3 className="p-home__subtitle">Vind een leeszaal</h3>
 
-			{!areAllReadingRoomsVisible && (
-				<div style={{ display: 'grid', placeItems: 'center' }} className="u-mb-80">
-					<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
-						Toon alles (123)
-					</Button>
+					<TextInput
+						className="p-home__search"
+						iconEnd={<Icon name="search" />}
+						placeholder="Zoek"
+						value={searchValue}
+						variants={['grey', 'large', 'rounded']}
+						onChange={(e) => setSearchValue(e.target.value)}
+						onKeyUp={onSearchKeyUp as () => void}
+					/>
 				</div>
-			)}
+
+				<ReadingRoomCardList
+					className="u-mb-64"
+					items={readingRooms}
+					limit={!areAllReadingRoomsVisible}
+				/>
+
+				{!areAllReadingRoomsVisible && (
+					<div className="u-text-center">
+						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
+							Toon alles (123)
+						</Button>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };
