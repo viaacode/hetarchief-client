@@ -13,7 +13,7 @@ module.exports = {
 		'^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$': '<rootDir>/jest/__mocks__/file-mock.js',
 
 		/* Handle custom path aliases */
-		'^@(shared)/?(.*)$': ['<rootDir>/src/modules/shared/$2'],
+		'^@(home|reading-room|shared)/?(.*)$': ['<rootDir>/src/modules/$1/$2'],
 
 		/* Handle deps */
 		'^lodash-es$': '<rootDir>/node_modules/lodash/index.js',
