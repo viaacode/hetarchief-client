@@ -1,4 +1,5 @@
 import { Button, Pagination } from '@meemoo/react-components';
+import clsx from 'clsx';
 import React, { FC } from 'react';
 
 import { Icon } from '../Icon';
@@ -7,7 +8,13 @@ import { PaginationProgress } from '../PaginationProgress';
 import styles from './PaginationBar.module.scss';
 import { PaginationBarProps } from './PaginationBar.types';
 
-const PaginationBar: FC<PaginationBarProps> = ({ start, count, total, onPageChange }) => {
+const PaginationBar: FC<PaginationBarProps> = ({
+	count,
+	onPageChange,
+	showBackToTop,
+	start,
+	total,
+}) => {
 	const renderProgress = () => {
 		const end = start + count;
 
@@ -40,18 +47,20 @@ const PaginationBar: FC<PaginationBarProps> = ({ start, count, total, onPageChan
 	);
 
 	return (
-		<div className={styles['c-pagination-bar']}>
+		<div className={clsx(styles['c-pagination-bar'], styles['c-pagination-bar--back-to-top'])}>
 			{renderProgress()}
 
 			{renderPagination()}
 
-			<Button
-				// TODO: smooth scroll to top
-				className={styles['c-pagination-bar__back-to-top']}
-				variants={['text', 'neutral']}
-				label="Terug naar boven"
-				iconEnd={<Icon name="arrow-up" />}
-			/>
+			{showBackToTop && (
+				<Button
+					// TODO: smooth scroll to top
+					className={styles['c-pagination-bar__back-to-top']}
+					variants={['text', 'neutral']}
+					label="Terug naar boven"
+					iconEnd={<Icon name="arrow-up" />}
+				/>
+			)}
 		</div>
 	);
 };
