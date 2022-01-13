@@ -30,6 +30,11 @@ $c-table-border: 1px solid $silver;
 		border-bottom: $c-table-border;
 	}
 
+	&__footer {
+		padding-right: $spacer-xs;
+		padding-left: $spacer-md;
+	}
+
 	&__cell {
 		text-align: left;
 		padding: $spacer-sm $spacer-md;
