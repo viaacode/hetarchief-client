@@ -81,6 +81,21 @@ $c-navigation-divider-size: 0.1rem;
 
 	&--responsive-mobile {
 		display: none;
+
+		.c-navigation__dropdown {
+			z-index: 2; // above overlay
+		}
+
+		.c-navigation__dropdown-flyout {
+			// Overwrite element styles
+			inset: $c-navigation-height-md 0 0 0 !important;
+			transform: translate(0) !important;
+		}
+
+		.c-navigation__dropdown-overlay {
+			z-index: 2; // above foreground layers
+			height: 100vh;
+		}
 	}
 
 	&:first-child {
@@ -235,7 +250,7 @@ $c-navigation-divider-size: 0.1rem;
 		}
 	}
 
-	.c-navigation--responsive-dropdown {
+	.c-navigation--responsive {
 		grid-template-columns: auto;
 
 		.c-navigation__section {

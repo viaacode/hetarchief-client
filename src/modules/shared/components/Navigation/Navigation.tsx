@@ -1,8 +1,17 @@
-import { Button } from '@meemoo/react-components';
+import {
+	Button,
+	Dropdown,
+	DropdownButton,
+	DropdownContent,
+	MenuContent,
+	MenuItemInfo,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC } from 'react';
+import router from 'next/router';
+import { FC, useState } from 'react';
 
 import { Icon } from '../Icon';
+import { Overlay } from '../Overlay';
 
 import styles from './Navigation.module.scss';
 import {
@@ -14,15 +23,65 @@ import {
 import NavigationList from './NavigationList/NavigationList';
 
 const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
-	const renderMobile = () => {
+	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+
+	// Map items to fit {label: string, id: string} TODO: let menuContent accept react nodes
+	const renderHamburgerMenu = () => {
+		const menuItems: MenuItemInfo[][] = items
+			? items.map((itemArray) => {
+					return itemArray.map((item) => {
+						return {
+							label: item.label,
+							id: item.href,
+							key: item.label,
+						};
+					});
+			  })
+			: [];
+
+		const handleOnClick = (id: string | number) => {
+			router.push(`/${id}`);
+		};
+
 		return (
 			<div className={styles['c-navigation__section--responsive-mobile']}>
-				<Button
-					label="Menu"
-					variants="text"
-					className="u-color-white u-px-12 u-ml--12"
-					iconStart={<Icon className="u-color-teal u-fs-24" name="grid-view" />}
+				<Overlay
+					visible={isHamburgerMenuOpen}
+					className={styles['c-navigation__dropdown-overlay']}
 				/>
+				<Dropdown
+					className={styles['c-navigation__dropdown']}
+					isOpen={isHamburgerMenuOpen}
+					triggerWidth="full-width"
+					flyoutClassName={styles['c-navigation__dropdown-flyout']}
+					onOpen={() => setIsHamburgerMenuOpen(true)}
+					onClose={() => setIsHamburgerMenuOpen(false)}
+				>
+					<DropdownButton>
+						<Button
+							label={isHamburgerMenuOpen ? 'Sluit' : 'Menu'}
+							variants="text"
+							className="u-color-white u-px-12 u-ml--12"
+							iconStart={
+								<Icon
+									className={clsx(
+										'u-fs-24',
+										!isHamburgerMenuOpen && 'u-color-teal'
+									)}
+									name={isHamburgerMenuOpen ? 'times' : 'grid-view'}
+								/>
+							}
+						/>
+					</DropdownButton>
+					<DropdownContent>
+						<MenuContent
+							rootClassName="c-dropdown-menu"
+							className={'u-color-black'}
+							menuItems={menuItems}
+							onClick={(id) => handleOnClick(id)}
+						/>
+					</DropdownContent>
+				</Dropdown>
 			</div>
 		);
 	};
@@ -39,7 +98,7 @@ const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 			className={clsx(styles['c-navigation__section'], styles['c-navigation__section--left'])}
 		>
 			{renderDesktop()}
-			{renderMobile()}
+			{renderHamburgerMenu()}
 		</div>
 	);
 };
@@ -65,7 +124,7 @@ const NavigationCenter: FC<NavigationCenterProps> = ({ children, title }) => (
 const Navigation: NavigationFC<NavigationProps> = ({ children, contextual = false }) => {
 	const rootCls = clsx(styles['c-navigation'], {
 		[styles['c-navigation--sm']]: contextual,
-		[styles['c-navigation--responsive-dropdown']]: !contextual,
+		[styles['c-navigation--responsive']]: !contextual,
 	});
 
 	return <nav className={rootCls}>{children}</nav>;
