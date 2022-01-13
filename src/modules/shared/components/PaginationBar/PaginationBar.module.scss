@@ -3,15 +3,16 @@
 $c: "c-pagination-bar";
 
 @mixin c-pagination-bar-two-item-justify {
-	& span,
-	div,
-	button {
+	& > span,
+	> div,
+	> button {
 		&:nth-child(2n + 1) {
 			justify-self: left;
 		}
 
 		&:nth-child(2n + 2) {
 			justify-self: right;
+			margin-right: -$button-horizontal-whitespace;
 		}
 	}
 }
@@ -19,9 +20,9 @@ $c: "c-pagination-bar";
 @mixin c-pagination-bar-three-item-justify {
 	grid-template-columns: repeat(3, 1fr);
 
-	& span,
-	div,
-	button {
+	& > span,
+	> div,
+	> button {
 		&:nth-child(3n + 1) {
 			justify-self: left;
 		}
@@ -32,6 +33,7 @@ $c: "c-pagination-bar";
 
 		&:nth-child(3n + 3) {
 			justify-self: right;
+			margin-right: -$button-horizontal-whitespace;
 		}
 	}
 }
@@ -43,13 +45,19 @@ $c: "c-pagination-bar";
 	align-items: center;
 	justify-items: center;
 
-	@include c-pagination-bar-two-item-justify;
+	&:not(.#{$c}--back-to-top) {
+		@include c-pagination-bar-two-item-justify;
+	}
 
 	&__back-to-top {
 		display: none;
 	}
 
 	&--back-to-top {
+		@include respond-to("md") {
+			@include c-pagination-bar-two-item-justify;
+		}
+
 		@include respond-at("md") {
 			@include c-pagination-bar-three-item-justify;
 		}

@@ -154,9 +154,12 @@
 	  }
 }
 
-@mixin text-ellipsis() {
-	display: block;
+@mixin text-ellipsis($block: false) {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+
+	@if $block {
+		display: block;
+	}
 }

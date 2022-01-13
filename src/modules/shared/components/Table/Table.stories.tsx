@@ -10,6 +10,15 @@ import { mockColumns, mockData } from './__mocks__/table';
 export default {
 	title: 'Components/Table',
 	component: Table,
+	parameters: {
+		backgrounds: {
+			default: 'platinum',
+			values: [
+				{ name: 'white', value: '#FFFFFF' },
+				{ name: 'platinum', value: '#F8F8F8' },
+			],
+		},
+	},
 } as ComponentMeta<typeof Table>;
 
 const Template: ComponentStory<typeof Table> = (args) => <Table {...args} />;
@@ -21,16 +30,16 @@ Default.args = {
 		data: mockData,
 	},
 	sortingIcons: {
-		default: <Icon name="sort-table" />,
-		asc: <Icon name="arrow-up" />,
-		desc: <Icon name="arrow-down" />,
+		default: <Icon className="c-table__icon" name="sort-table" />,
+		asc: <Icon className="c-table__icon" name="arrow-up" />,
+		desc: <Icon className="c-table__icon" name="arrow-down" />,
 	},
-	pagination: ({ pageCount, gotoPage }) => {
+	pagination: ({ gotoPage }) => {
 		return (
 			<PaginationBar
-				count={10}
+				count={6}
 				start={0}
-				total={pageCount}
+				total={123}
 				onPageChange={(page) => {
 					gotoPage(page);
 				}}
