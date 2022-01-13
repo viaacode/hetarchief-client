@@ -18,15 +18,13 @@ export default {
 } as ComponentMeta<typeof MediaCardList>;
 
 const Template: ComponentStory<typeof MediaCardList> = (args, { loaded: { items } }) => (
-	<MediaCardList {...args} {...items}>
-		{args.children}
-	</MediaCardList>
+	<MediaCardList {...args} {...items} />
 );
 
 export const Grid: ComponentStory<typeof MediaCardList> = Template.bind({});
 Grid.args = {
 	view: 'grid',
-	children: <p style={{ textAlign: 'center' }}>&lt;sidebar&gt;</p>,
+	sidebar: <p style={{ textAlign: 'center' }}>&lt;sidebar&gt;</p>,
 };
 Grid.loaders = [
 	async () => ({

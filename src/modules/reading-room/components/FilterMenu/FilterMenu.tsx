@@ -52,17 +52,16 @@ const FilterMenu: FC<FilterMenuProps> = ({
 
 	const onToggleClick = (nextOpen?: boolean) => {
 		const openState = isMobile ? isMobileOpen : isOpen;
+
 		if (openState) {
 			// Remove active filter when closing the menu
 			setActiveFilter(null);
-			isMobile && setLockScroll(false);
-		} else {
-			isMobile && setLockScroll(true);
 		}
-
 		if (typeof onMenuToggle === 'function') {
 			onMenuToggle(nextOpen);
 		}
+
+		isMobile && setLockScroll(!openState);
 	};
 
 	/**
@@ -99,8 +98,13 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					onClick={() => onToggleClick()}
 				/>
 				{!isMobile && (
-					<div className={styles['c-filter-menu__view-toggle']}>
-						<Toggle options={toggleOptions} onChange={onViewToggle} />
+					<div className={styles['c-filter-menu__view-toggle-container']}>
+						<Toggle
+							className={styles['c-filter-menu__view-toggle']}
+							dark
+							options={toggleOptions}
+							onChange={onViewToggle}
+						/>
 					</div>
 				)}
 			</div>
