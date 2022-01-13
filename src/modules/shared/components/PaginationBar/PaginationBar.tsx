@@ -1,4 +1,5 @@
 import { Button, Pagination } from '@meemoo/react-components';
+import clsx from 'clsx';
 import React, { FC } from 'react';
 
 import { Icon } from '../Icon';
@@ -7,7 +8,13 @@ import { PaginationProgress } from '../PaginationProgress';
 import styles from './PaginationBar.module.scss';
 import { PaginationBarProps } from './PaginationBar.types';
 
-const PaginationBar: FC<PaginationBarProps> = ({ start, count, total, onPageChange }) => {
+const PaginationBar: FC<PaginationBarProps> = ({
+	className,
+	start,
+	count,
+	total,
+	onPageChange,
+}) => {
 	const renderProgress = () => {
 		const end = start + count;
 
@@ -40,7 +47,7 @@ const PaginationBar: FC<PaginationBarProps> = ({ start, count, total, onPageChan
 	);
 
 	return (
-		<div className={styles['c-pagination-bar']}>
+		<div className={clsx(className, styles['c-pagination-bar'])}>
 			{renderProgress()}
 
 			{renderPagination()}

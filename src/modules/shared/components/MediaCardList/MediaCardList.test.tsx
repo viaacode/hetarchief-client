@@ -16,11 +16,7 @@ describe('Component: <MediaCardList />', () => {
 	it('Should be able to show children that are always visible', () => {
 		const child = '<child>';
 
-		rendered = render(
-			<MediaCardList view="grid" items={data}>
-				{child}
-			</MediaCardList>
-		);
+		rendered = render(<MediaCardList sidebar={child} view="grid" items={data} />);
 
 		expect(screen.getByText(child)).toBeDefined();
 	});

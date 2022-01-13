@@ -2,6 +2,8 @@ import { Tabs, TabsProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 
+import { isBrowser } from '@shared/utils';
+
 import styles from './ScrollableTabs.module.scss';
 
 const ScrollableTabs: FC<TabsProps> = (props) => {
@@ -112,7 +114,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 			};
 
 			if (tabsEl) {
-				if (typeof window !== undefined && window.ResizeObserver) {
+				if (isBrowser() && window.ResizeObserver) {
 					observer = new ResizeObserver((entries) => {
 						entries.forEach(({ target }) => {
 							if (window.innerWidth < target.scrollWidth + 40) {

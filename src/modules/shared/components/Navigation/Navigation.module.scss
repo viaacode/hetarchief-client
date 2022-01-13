@@ -88,7 +88,7 @@ $c-navigation-divider-size: 0.1rem;
 		justify-self: start;
 	}
 
-	&:last-child {
+	&--right {
 		grid-column: 3/4;
 		justify-self: end;
 	}

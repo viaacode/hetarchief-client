@@ -11,6 +11,15 @@ export interface ComponentLink {
 	external?: boolean;
 }
 
+export type SortOrder = 'asc' | 'desc';
+
+export enum Breakpoints {
+	sm = 576,
+	md = 768,
+	lg = 992,
+	xl = 1200,
+}
+
 export type AnimationTypes =
 	| 'animate-default'
 	| 'animate-sm-in'

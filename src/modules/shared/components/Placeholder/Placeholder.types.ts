@@ -1,6 +1,6 @@
-import { IconLightNames, IconTypes } from '../Icon';
-
 import { DefaultComponentProps } from '@shared/types';
+
+import { IconLightNames, IconTypes } from '../Icon';
 
 export type PlaceholderProps = DefaultComponentProps &
 	PlaceholderCommonProps &
