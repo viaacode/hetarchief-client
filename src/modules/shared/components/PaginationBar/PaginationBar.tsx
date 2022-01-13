@@ -47,7 +47,12 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	);
 
 	return (
-		<div className={clsx(styles['c-pagination-bar'], styles['c-pagination-bar--back-to-top'])}>
+		<div
+			className={clsx(
+				styles['c-pagination-bar'],
+				showBackToTop && styles['c-pagination-bar--back-to-top']
+			)}
+		>
 			{renderProgress()}
 
 			{renderPagination()}

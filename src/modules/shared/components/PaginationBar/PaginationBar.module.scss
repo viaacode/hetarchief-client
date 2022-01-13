@@ -50,11 +50,11 @@ $c: "c-pagination-bar";
 	}
 
 	&--back-to-top {
+		@include respond-at("md") {
+			@include c-pagination-bar-three-item-justify;
+		}
+		
 		.#{$c} {
-			@include respond-at("md") {
-				@include c-pagination-bar-three-item-justify;
-			}
-
 			&__back-to-top {
 				@include respond-at("md") {
 					display: initial;

@@ -224,6 +224,7 @@ const ReadingRoomPage: NextPage = () => {
 				<section className="u-mb-48">
 					<div className="l-container">
 						<PaginationBar
+							showBackToTop
 							start={query.start}
 							count={READING_ROOM_ITEM_COUNT}
 							total={mediaCount[query.mediaType as ReadingRoomMediaType]}
