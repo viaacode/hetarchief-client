@@ -1,13 +1,14 @@
 @use "../abstracts/" as *;
 
-@function calc-filter-menu-width($_gutter, $_cols) {
-	@return calc((100% - ($_gutter * ($_cols - 1))) / $_cols)
+.p-reading-room {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
 }
 
-$reading-room-grid-gutter-lg: $spacer-md;
-$reading-room-grid-cols-lg: 3;
-$reading-room-grid-gutter-xl: $spacer-lg;
-$reading-room-grid-cols-xl: 4;
+/**
+ * Elements
+ */
 
 .p-reading-room__contact-button {
 	@include respond-to(md) {
@@ -24,17 +25,33 @@ $reading-room-grid-cols-xl: 4;
 
 
 .p-reading-room__results {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+
 	&--placeholder {
 		.l-container {
 			display: flex;
+			flex: 1 1 auto;
 
 			@include respond-to("md") {
 				flex-direction: column;
+			}
+		}
+
+		.p-reading-room__filter-menu {
+			flex-shrink: 0;
+
+			@include respond-at("md") {
+				width: calc(100% / 3 - 2.2rem);
+			}
+			@include respond-at("lg") {
+				width: calc(25% - 2.4rem);
 			}
 		}
 	}
 }
 
 .p-reading-room__placeholder {
-	width: 100%;
+	margin: auto 0;
 }
