@@ -7,6 +7,7 @@ import {
 	MenuItemInfo,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
+import Link from 'next/link';
 import router from 'next/router';
 import { FC, useState } from 'react';
 
@@ -25,7 +26,25 @@ import NavigationList from './NavigationList/NavigationList';
 const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
 
-	// Map items to fit {label: string, id: string} TODO: let menuContent accept react nodes
+	const renderMenuItem = (item: MenuItemInfo) => {
+		// item.id holds original href
+		return (
+			<Link href={`/${item.id as string}`}>
+				<a
+					className="u-color-black c-dropdown-menu__item"
+					role="menuitem"
+					tabIndex={0}
+					key={item.key ? item.key : `menu-item-${item.id}`}
+				>
+					{item.label}
+					<span className={styles['c-navigation__border-decoration']} />
+					<span className={styles['c-navigation__border-decoration']} />
+				</a>
+			</Link>
+		);
+	};
+
+	// Map items to fit {label: string, id: string}; id will hold href
 	const renderHamburgerMenu = () => {
 		const menuItems: MenuItemInfo[][] = items
 			? items.map((itemArray) => {
@@ -78,6 +97,7 @@ const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 							rootClassName="c-dropdown-menu"
 							className={'u-color-black'}
 							menuItems={menuItems}
+							renderItem={renderMenuItem}
 							onClick={(id) => handleOnClick(id)}
 						/>
 					</DropdownContent>

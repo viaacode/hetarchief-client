@@ -90,6 +90,11 @@ $c-navigation-divider-size: 0.1rem;
 			// Overwrite element styles
 			inset: $c-navigation-height-md 0 0 0 !important;
 			transform: translate(0) !important;
+
+			:global(.c-dropdown-menu__item) {
+				text-decoration: none;
+				display: block;
+			}
 		}
 
 		.c-navigation__dropdown-overlay {
