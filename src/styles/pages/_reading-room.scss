@@ -1,0 +1,31 @@
+@use "../abstracts/" as *;
+
+.p-reading-room__contact-button {
+	@include respond-to(md) {
+		.c-button__icon {
+			margin: 0;
+		}
+
+		.c-button__label {
+			visibility: hidden;
+			font-size: 0;
+		}
+	}
+}
+
+
+.p-reading-room__results {
+	&--placeholder {
+		.l-container {
+			display: flex;
+
+			@include respond-to("md") {
+				flex-direction: column;
+			}
+		}
+	}
+}
+
+.p-reading-room__placeholder {
+	width: 100%;
+}

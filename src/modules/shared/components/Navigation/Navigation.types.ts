@@ -16,6 +16,7 @@ export interface NavigationCenterProps {
 
 export interface NavigationSectionProps {
 	items?: NavigationItem[][];
+	placement?: 'left' | 'right';
 }
 
 export interface NavigationItem {

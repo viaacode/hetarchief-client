@@ -1,0 +1,19 @@
+@use "styles/abstracts" as *;
+
+.c-filter-menu-mobile {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: get-z-layer("foreground");
+	background-color: $black;
+}
+
+/**
+ * Elements
+ */
+
+.c-filter-menu-mobile__back {
+	color: $white;
+}

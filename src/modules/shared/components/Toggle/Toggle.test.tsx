@@ -1,8 +1,8 @@
 import { fireEvent, render } from '@testing-library/react';
 
 import Toggle from './Toggle';
-import { ToggleOptions, ToggleProps } from './Toggle.types';
-import { toggleMock } from './__mocks__';
+import { ToggleOption, ToggleProps } from './Toggle.types';
+import { toggleMock } from './__mocks__/toggle';
 
 const renderToggle = (mock: ToggleProps = toggleMock) => {
 	return render(<Toggle {...mock} />);
@@ -45,7 +45,7 @@ describe('Component: <Toggle /> (default)', () => {
 	});
 
 	it('Should set disabled class on non-active elements', () => {
-		const options: ToggleOptions[] = [
+		const options: ToggleOption[] = [
 			{
 				id: 'grid',
 				iconName: 'grid-view',
@@ -60,7 +60,7 @@ describe('Component: <Toggle /> (default)', () => {
 	});
 
 	it('Should not set disabled class on active elements', () => {
-		const options: ToggleOptions[] = [
+		const options: ToggleOption[] = [
 			{
 				id: 'grid',
 				iconName: 'grid-view',

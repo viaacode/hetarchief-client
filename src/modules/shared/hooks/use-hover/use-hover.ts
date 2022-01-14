@@ -1,9 +1,6 @@
 import { useState } from 'react';
 
-interface HoverProps {
-	onMouseEnter: () => void;
-	onMouseLeave: () => void;
-}
+import { HoverProps } from './use-hover.types';
 
 const useHover = (): [boolean, HoverProps] => {
 	const [hovering, setHovering] = useState(false);

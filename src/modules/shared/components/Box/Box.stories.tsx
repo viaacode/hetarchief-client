@@ -2,7 +2,7 @@ import { Box } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { boxChildrenMock } from './__mocks__';
+import { boxChildrenMock } from './__mocks__/box';
 
 export default {
 	title: 'Components/Box',

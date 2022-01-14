@@ -31,7 +31,7 @@
 		@if map-property-not-found($_max, $breakpoints) {}
 	}
 
-	@media screen and (max-width: $max-bp) {
+	@media screen and (max-width: calc($max-bp - 1px)) {
 		@content;
 	}
 };
@@ -54,7 +54,7 @@
 		@error "Min width can not be higher than or equal to max width.";
 	}
 
-	@media screen and (min-width: $min-bp) and (max-width: $max-bp) {
+	@media screen and (min-width: $min-bp) and (max-width: calc($max-bp - 1px)) {
 		@content;
 	}
 };
