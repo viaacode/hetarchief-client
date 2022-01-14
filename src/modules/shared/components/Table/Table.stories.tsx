@@ -37,7 +37,7 @@ Default.args = {
 	pagination: ({ gotoPage }) => {
 		return (
 			<PaginationBar
-				count={6}
+				count={8}
 				start={0}
 				total={123}
 				onPageChange={(page) => {

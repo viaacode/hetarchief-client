@@ -16,6 +16,11 @@ $c-table-border: 1px solid $silver;
     &__scroller {
         max-width: 100%;
         overflow-x: scroll;
+
+		// Note: desktop resolutions will rarely need to hide overflow, disable to allow the shadow
+		@include respond-at("lg") {
+			overflow: initial;
+		}
     }
 
 	&__wrapper {
@@ -23,6 +28,10 @@ $c-table-border: 1px solid $silver;
 			background-color: $white;
 			border-bottom: $c-table-border;
 			border-top: $c-table-border;
+
+			@include respond-at("lg") {
+				box-shadow: $shadow-24-black-08;
+			}
 		}
 	}
 
