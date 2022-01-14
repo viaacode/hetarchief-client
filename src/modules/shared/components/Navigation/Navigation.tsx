@@ -11,6 +11,9 @@ import Link from 'next/link';
 import router from 'next/router';
 import { FC, useState } from 'react';
 
+import { useScrollLock } from '@shared/hooks';
+import { isBrowser } from '@shared/utils';
+
 import { Icon } from '../Icon';
 import { Overlay } from '../Overlay';
 
@@ -25,6 +28,8 @@ import NavigationList from './NavigationList/NavigationList';
 
 const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+
+	useScrollLock(isBrowser() ? document.body : null, isHamburgerMenuOpen);
 
 	const renderMenuItem = (item: MenuItemInfo) => {
 		// item.id holds original href
