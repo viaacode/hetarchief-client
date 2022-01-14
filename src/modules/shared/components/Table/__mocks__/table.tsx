@@ -1,4 +1,4 @@
-import { Badge, Button, Tag } from '@meemoo/react-components';
+import { Badge, Button } from '@meemoo/react-components';
 import React, { ReactNode } from 'react';
 
 import { Icon } from '@shared/components';

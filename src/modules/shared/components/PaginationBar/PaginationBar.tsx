@@ -9,6 +9,7 @@ import styles from './PaginationBar.module.scss';
 import { PaginationBarProps } from './PaginationBar.types';
 
 const PaginationBar: FC<PaginationBarProps> = ({
+	className,
 	count,
 	onPageChange,
 	showBackToTop,
@@ -49,6 +50,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	return (
 		<div
 			className={clsx(
+				className,
 				styles['c-pagination-bar'],
 				showBackToTop && styles['c-pagination-bar--back-to-top']
 			)}

@@ -1,4 +1,4 @@
-@use "../abstracts" as *;
+@use "../abstracts/" as *;
 
 .p-reading-room__contact-button {
 	@include respond-to(md) {
@@ -11,4 +11,21 @@
 			font-size: 0;
 		}
 	}
+}
+
+
+.p-reading-room__results {
+	&--placeholder {
+		.l-container {
+			display: flex;
+
+			@include respond-to("md") {
+				flex-direction: column;
+			}
+		}
+	}
+}
+
+.p-reading-room__placeholder {
+	width: 100%;
 }

@@ -3,19 +3,20 @@ import clsx from 'clsx';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { KeyboardEvent, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
+import { FilterMenu, SearchBar } from '@reading-room/components';
+import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
 import {
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
 	READING_ROOM_TABS,
-} from '../../modules/reading-room/const';
-import { ReadingRoomMediaType } from '../../modules/reading-room/types';
-
+	READING_ROOM_VIEW_TOGGLE_OPTIONS,
+} from '@reading-room/const';
+import { ReadingRoomMediaType } from '@reading-room/types';
 import {
 	Icon,
-	IconProps,
 	MediaCardList,
 	MediaCardProps,
 	MediaCardViewMode,
@@ -24,16 +25,22 @@ import {
 	Placeholder,
 	ScrollableTabs,
 	TabLabel,
-	Toggle,
-	ToggleOptions,
+	ToggleOption,
 } from '@shared/components';
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
+import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useWindowSize } from '@shared/hooks';
+import { Breakpoints } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
 	// State
+	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
+	// We need 2 different states for the filter menu for different viewport sizes
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const [hasSearched, setHasSearched] = useState(false);
+	const windowSize = useWindowSize();
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
-	const [searched, setSearched] = useState(false);
 
 	// Data
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
@@ -44,13 +51,12 @@ const ReadingRoomPage: NextPage = () => {
 	});
 
 	// Display
-	const [mode, setMode] = useState<MediaCardViewMode>('grid'); // Note: not in `query` intentionally
+	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
 	const tabs: TabProps[] = useMemo(
 		() =>
 			READING_ROOM_TABS.map((tab) => ({
 				...tab,
-				icon: <Icon name={tab.icon as IconProps['name']} />,
 				// TODO: remove any once Tab type supports ReactNode
 				label: (<TabLabel label={tab.label} count={mediaCount[tab.id]} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
 				active: tab.id === query.mediaType,
@@ -58,78 +64,86 @@ const ReadingRoomPage: NextPage = () => {
 		[query.mediaType, mediaCount]
 	);
 
-	const toggle: ToggleOptions[] = [
-		{
-			id: 'list',
-			active: mode === 'list',
-			iconName: 'list-view',
-		},
-		{
-			id: 'grid',
-			active: mode === 'grid',
-			iconName: 'grid-view',
-		},
-	];
-
-	useEffect(() => {
-		async function fetchMedia() {
-			const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
-			data && setMedia(data);
-		}
-
-		fetchMedia();
-	}, [query.start]);
+	const toggleOptions: ToggleOption[] = useMemo(
+		() =>
+			READING_ROOM_VIEW_TOGGLE_OPTIONS.map((option) => ({
+				...option,
+				active: option.id === viewMode,
+			})),
+		[viewMode]
+	);
 
 	/**
 	 * Methods
 	 */
 
+	// TODO: replace this with actual results
+	const fetchMedia = async () => {
+		const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
+		data && setMedia(data);
+	};
+
+	const onSearch = async (keywords: string[]) => {
+		if (!hasSearched) {
+			setHasSearched(true);
+		}
+
+		if (!keywords?.[0]) {
+			setMedia([]);
+			setQuery({ search: undefined });
+		} else {
+			await fetchMedia();
+			setQuery({ search: keywords });
+		}
+	};
+
+	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			onSearch([e.currentTarget.value]);
+		}
+	};
+
+	const onFilterMenuToggle = (nextOpen?: boolean) => {
+		const isMobile = windowSize.width ? windowSize.width < Breakpoints.sm : false;
+		const nextOpenState =
+			typeof nextOpen !== 'undefined' ? nextOpen : (prevOpen: boolean) => !prevOpen;
+		if (isMobile) {
+			setMobileMenuOpen(nextOpenState);
+		} else {
+			setFilterMenuOpen(nextOpenState);
+		}
+	};
+
+	const onViewToggle = (nextMode: string) => {
+		setViewMode(nextMode as MediaCardViewMode);
+	};
+
 	const onTabClick = (tabId: string | number) => {
 		setQuery({ mediaType: String(tabId) });
 	};
+
+	const showInitialView = !hasSearched && (!media || media.length === 0);
+	const showNoResults = hasSearched && media.length === 0;
+	const showResults = hasSearched && media.length > 0;
 
 	/**
 	 * Render
 	 */
 
-	const renderFilters = () => (
-		<div className={clsx(mode === 'list' && 'u-mr-32:md')}>
-			<Toggle dark options={toggle} onChange={(id) => setMode(id as MediaCardViewMode)} />
-		</div>
-	);
-
-	const renderMediaCardList = () => {
-		if (media.length > 0) {
-			return (
-				<MediaCardList items={media} view={mode}>
-					{renderFilters()}
-				</MediaCardList>
-			);
-		}
-
-		if (searched) {
-			return (
-				<div className="u-flex-row">
-					{renderFilters()}
-
-					<Placeholder
-						img="/images/looking-glass.svg"
-						title="Geen resultaten"
-						description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
-					/>
-				</div>
-			);
-		}
-
+	const renderFilterMenu = () => {
 		return (
-			<div className="u-flex-row">
-				{renderFilters()}
-
-				<Placeholder
-					img="/images/lightbulb.svg"
-					title="Start je zoektocht!"
-					description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-				/>
+			<div className={clsx(viewMode === 'list' && 'u-mr-32:md')}>
+				<WindowSizeContext.Provider value={windowSize}>
+					<FilterMenu
+						className="p-reading-room__filter-menu"
+						filters={filterOptionsMock}
+						isOpen={filterMenuOpen}
+						isMobileOpen={mobileMenuOpen}
+						toggleOptions={toggleOptions}
+						onMenuToggle={onFilterMenuToggle}
+						onViewToggle={onViewToggle}
+					/>
+				</WindowSizeContext.Provider>
 			</div>
 		);
 	};
@@ -164,80 +178,65 @@ const ReadingRoomPage: NextPage = () => {
 				</Navigation.Right>
 			</Navigation>
 
-			<section className="u-bg-black">
+			<section className="u-bg-black u-pt-8">
 				<div className="l-container">
+					<SearchBar onKeyUp={onSearchKeyUp} />
 					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>
 
-			{/* Start debug */}
-			<section className="u-mt-80">
+			<section
+				className={clsx('p-reading-room__results u-py-24 u-py-48:md', {
+					'p-reading-room__results--placeholder': showInitialView || showNoResults,
+				})}
+			>
 				<div className="l-container">
-					<Button
-						variants={['sm']}
-						onClick={() => {
-							setQuery({});
-							setSearched(false);
-						}}
-					>
-						Reset
-					</Button>
-					&nbsp;
-					<Button
-						variants={['sm']}
-						onClick={() => {
-							setMedia([]);
-						}}
-					>
-						Hide all items
-					</Button>
-					&nbsp;
-					<Button
-						variants={['sm']}
-						onClick={() => {
-							async function fetchMedia() {
-								const data = (
-									await mock(
-										{ view: 'grid' },
-										query.start,
-										READING_ROOM_ITEM_COUNT
-									)
-								).items;
-								data && setMedia(data);
-								setSearched(true);
-							}
+					{showInitialView && (
+						<>
+							{renderFilterMenu()}
 
-							fetchMedia();
-						}}
-					>
-						Load new data
-					</Button>
+							<Placeholder
+								className="p-reading-room__placeholder"
+								img="/images/lightbulb.svg"
+								title="Start je zoektocht!"
+								description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+							/>
+						</>
+					)}
+					{showNoResults && (
+						<>
+							{renderFilterMenu()}
+
+							<Placeholder
+								img="/images/looking-glass.svg"
+								title="Geen resultaten"
+								description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
+							/>
+						</>
+					)}
+					{showResults && (
+						<>
+							<MediaCardList
+								items={media}
+								sidebar={renderFilterMenu()}
+								view={viewMode}
+							/>
+							<PaginationBar
+								className="u-mb-48"
+								start={query.start}
+								count={READING_ROOM_ITEM_COUNT}
+								total={mediaCount[query.mediaType as ReadingRoomMediaType]}
+								onPageChange={(page) =>
+									setQuery({
+										...query,
+										start: page * READING_ROOM_ITEM_COUNT,
+									})
+								}
+							/>
+						</>
+					)}
 				</div>
 			</section>
-			{/* End debug */}
-
-			<section className="u-py-48">
-				<div className="l-container">{renderMediaCardList()}</div>
-			</section>
-
-			{media.length > 0 && (
-				<section className="u-mb-48">
-					<div className="l-container">
-						<PaginationBar
-							showBackToTop
-							start={query.start}
-							count={READING_ROOM_ITEM_COUNT}
-							total={mediaCount[query.mediaType as ReadingRoomMediaType]}
-							onPageChange={(page) =>
-								setQuery({
-									...query,
-									start: page * READING_ROOM_ITEM_COUNT,
-								})
-							}
-						/>
-					</div>
-				</section>
-			)}
 		</div>
 	);
 };

@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { cloneElement, ReactElement, useState } from 'react';
 
 import Toggle from './Toggle';
-import { ToggleOptions } from './Toggle.types';
+import { ToggleOption } from './Toggle.types';
 import { toggleMock } from './__mocks__/toggle';
 
 const ToggleStoryComponent = ({
@@ -11,7 +11,7 @@ const ToggleStoryComponent = ({
 	initialOptions = toggleMock.options,
 }: {
 	children: ReactElement;
-	initialOptions?: ToggleOptions[];
+	initialOptions?: ToggleOption[];
 }) => {
 	const [options, setOptions] = useState(initialOptions);
 
