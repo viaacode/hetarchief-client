@@ -1,20 +1,9 @@
-import {
-	Button,
-	Dropdown,
-	DropdownButton,
-	DropdownContent,
-	MenuContent,
-	MenuItemInfo,
-} from '@meemoo/react-components';
 import clsx from 'clsx';
-import Link from 'next/link';
-import router from 'next/router';
 import { FC, useState } from 'react';
 
 import { useScrollLock } from '@shared/hooks';
 import { isBrowser } from '@shared/utils';
 
-import { Icon } from '../Icon';
 import { Overlay } from '../Overlay';
 
 import styles from './Navigation.module.scss';
@@ -24,89 +13,26 @@ import {
 	NavigationProps,
 	NavigationSectionProps,
 } from './Navigation.types';
+import { NavigationDropdown } from './NavigationDropdown';
 import NavigationList from './NavigationList/NavigationList';
 
 const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
-	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false); // Note: Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 
 	useScrollLock(isBrowser() ? document.body : null, isHamburgerMenuOpen);
 
-	const renderMenuItem = (item: MenuItemInfo) => {
-		// item.id holds original href
-		return (
-			<Link href={`/${item.id as string}`}>
-				<a
-					className="u-color-black c-dropdown-menu__item"
-					role="menuitem"
-					tabIndex={0}
-					key={item.key ? item.key : `menu-item-${item.id}`}
-				>
-					{item.label}
-					<span className={styles['c-navigation__border-decoration']} />
-					<span className={styles['c-navigation__border-decoration']} />
-				</a>
-			</Link>
-		);
-	};
-
-	// Map items to fit {label: string, id: string}; id will hold href
 	const renderHamburgerMenu = () => {
-		const menuItems: MenuItemInfo[][] = items
-			? items.map((itemArray) => {
-					return itemArray.map((item) => {
-						return {
-							label: item.label,
-							id: item.href,
-							key: item.label,
-						};
-					});
-			  })
-			: [];
-
-		const handleOnClick = (id: string | number) => {
-			router.push(`/${id}`);
-		};
-
 		return (
 			<div className={styles['c-navigation__section--responsive-mobile']}>
 				<Overlay
 					visible={isHamburgerMenuOpen}
 					className={styles['c-navigation__dropdown-overlay']}
 				/>
-				<Dropdown
-					className={styles['c-navigation__dropdown']}
-					isOpen={isHamburgerMenuOpen}
-					triggerWidth="full-width"
-					flyoutClassName={styles['c-navigation__dropdown-flyout']}
+				<NavigationDropdown
+					items={items ? items : []}
 					onOpen={() => setIsHamburgerMenuOpen(true)}
 					onClose={() => setIsHamburgerMenuOpen(false)}
-				>
-					<DropdownButton>
-						<Button
-							label={isHamburgerMenuOpen ? 'Sluit' : 'Menu'}
-							variants="text"
-							className="u-color-white u-px-12 u-ml--12"
-							iconStart={
-								<Icon
-									className={clsx(
-										'u-fs-24',
-										!isHamburgerMenuOpen && 'u-color-teal'
-									)}
-									name={isHamburgerMenuOpen ? 'times' : 'grid-view'}
-								/>
-							}
-						/>
-					</DropdownButton>
-					<DropdownContent>
-						<MenuContent
-							rootClassName="c-dropdown-menu"
-							className={'u-color-black'}
-							menuItems={menuItems}
-							renderItem={renderMenuItem}
-							onClick={(id) => handleOnClick(id)}
-						/>
-					</DropdownContent>
-				</Dropdown>
+				/>
 			</div>
 		);
 	};
