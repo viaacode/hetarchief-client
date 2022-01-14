@@ -1,5 +1,4 @@
 import {
-	Button,
 	Dropdown,
 	DropdownButton,
 	DropdownContent,
@@ -9,16 +8,27 @@ import {
 import clsx from 'clsx';
 import Link from 'next/link';
 import router from 'next/router';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconLightNames } from '@shared/components';
+import { useScrollLock } from '@shared/hooks';
+import { isBrowser } from '@shared/utils';
 
 import styles from '../Navigation.module.scss';
 
 import { NavigationDropdownProps } from './NavigationDropdown.types';
 
-const NavigationDropdown: FC<NavigationDropdownProps> = ({ items, onOpen, onClose }) => {
-	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const NavigationDropdown: FC<NavigationDropdownProps> = ({
+	id,
+	isOpen,
+	items,
+	trigger,
+	lockScroll,
+	flyoutClassName,
+	onOpen,
+	onClose,
+}) => {
+	useScrollLock(isBrowser() ? document.body : null, lockScroll ? isOpen : false);
 
 	const renderMenuItem = (item: MenuItemInfo) => {
 		// item.id holds original href
@@ -30,9 +40,9 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({ items, onOpen, onClos
 					tabIndex={0}
 					key={item.key ? item.key : `menu-item-${item.id}`}
 				>
+					{item.iconStart && item.iconStart}
 					{item.label}
-					<span className={styles['c-navigation__border-decoration']} />
-					<span className={styles['c-navigation__border-decoration']} />
+					{item.iconEnd && item.iconEnd}
 				</a>
 			</Link>
 		);
@@ -47,7 +57,19 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({ items, onOpen, onClos
 			return {
 				label: item.label,
 				id: item.href,
-				key: item.label,
+				key: `${item.label} - ${item.href}`,
+				iconStart: (
+					<Icon
+						className={clsx('u-fs-24', styles['c-navigation__dropdown-icon--start'])}
+						name={item.iconStart as IconLightNames}
+					/>
+				),
+				iconEnd: (
+					<Icon
+						className={clsx('u-fs-24', styles['c-navigation__dropdown-icon--end'])}
+						name={item.iconEnd as IconLightNames}
+					/>
+				),
 			};
 		});
 	});
@@ -55,38 +77,20 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({ items, onOpen, onClos
 	return (
 		<Dropdown
 			className={styles['c-navigation__dropdown']}
-			isOpen={isDropdownOpen}
+			isOpen={isOpen}
 			triggerWidth="full-width"
-			flyoutClassName={styles['c-navigation__dropdown-flyout']}
-			onOpen={() => {
-				setIsDropdownOpen(true);
-				onOpen();
-			}}
-			onClose={() => {
-				setIsDropdownOpen(false);
-				onClose();
-			}}
+			flyoutClassName={flyoutClassName}
+			onOpen={() => onOpen && onOpen(id)}
+			onClose={() => onClose && onClose(id)}
 		>
-			<DropdownButton>
-				<Button
-					label={isDropdownOpen ? 'Sluit' : 'Menu'}
-					variants="text"
-					className="u-color-white u-px-12 u-ml--12"
-					iconStart={
-						<Icon
-							className={clsx('u-fs-24', !isDropdownOpen && 'u-color-teal')}
-							name={isDropdownOpen ? 'times' : 'grid-view'}
-						/>
-					}
-				/>
-			</DropdownButton>
+			<DropdownButton>{trigger}</DropdownButton>
 			<DropdownContent>
 				<MenuContent
 					rootClassName="c-dropdown-menu"
 					className={'u-color-black'}
 					menuItems={menuItems}
 					renderItem={renderMenuItem}
-					onClick={(id) => handleOnClick(id)}
+					onClick={(id: string | number) => handleOnClick(id)}
 				/>
 			</DropdownContent>
 		</Dropdown>

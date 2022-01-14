@@ -1,7 +1,14 @@
-import { NavigationItem } from '../Navigation.types';
+import { ReactNode } from 'react';
+
+import { NavigationDropdownItem } from '../Navigation.types';
 
 export interface NavigationDropdownProps {
-	items: NavigationItem[][];
-	onOpen: () => void;
-	onClose: () => void;
+	id: string;
+	isOpen: boolean;
+	items: NavigationDropdownItem[][];
+	trigger: ReactNode;
+	lockScroll?: boolean;
+	flyoutClassName?: string;
+	onOpen?: (id: string) => void;
+	onClose?: (id: string) => void;
 }

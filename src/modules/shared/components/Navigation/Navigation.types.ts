@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { IconLightNames } from '..';
+
 export type NavigationFC<P = unknown> = FC<P> & {
 	Left: FC<NavigationSectionProps>;
 	Center: FC<NavigationCenterProps>;
@@ -19,8 +21,19 @@ export interface NavigationSectionProps {
 	placement?: 'left' | 'right';
 }
 
-export interface NavigationItem {
+export interface NavigationLink {
 	href: string;
 	isActive?: boolean;
 	label: string;
+	id: string;
+	badge?: string | number;
+}
+
+export interface NavigationItem extends NavigationLink {
+	dropdown?: NavigationDropdownItem[][];
+}
+
+export interface NavigationDropdownItem extends NavigationLink {
+	iconStart?: IconLightNames;
+	iconEnd?: IconLightNames;
 }

@@ -1,9 +1,8 @@
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 
-import { useScrollLock } from '@shared/hooks';
-import { isBrowser } from '@shared/utils';
-
+import { Icon } from '../Icon';
 import { Overlay } from '../Overlay';
 
 import styles from './Navigation.module.scss';
@@ -19,8 +18,6 @@ import NavigationList from './NavigationList/NavigationList';
 const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false); // Note: Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 
-	useScrollLock(isBrowser() ? document.body : null, isHamburgerMenuOpen);
-
 	const renderHamburgerMenu = () => {
 		return (
 			<div className={styles['c-navigation__section--responsive-mobile']}>
@@ -29,7 +26,27 @@ const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 					className={styles['c-navigation__dropdown-overlay']}
 				/>
 				<NavigationDropdown
+					id="menu"
+					isOpen={isHamburgerMenuOpen}
 					items={items ? items : []}
+					trigger={
+						<Button
+							label={isHamburgerMenuOpen ? 'Sluit' : 'Menu'}
+							variants="text"
+							className="u-color-white u-px-12 u-ml--12"
+							iconStart={
+								<Icon
+									className={clsx(
+										'u-fs-24',
+										!isHamburgerMenuOpen && 'u-color-teal'
+									)}
+									name={isHamburgerMenuOpen ? 'times' : 'grid-view'}
+								/>
+							}
+						/>
+					}
+					lockScroll
+					flyoutClassName={styles['c-navigation__dropdown-flyout']}
 					onOpen={() => setIsHamburgerMenuOpen(true)}
 					onClose={() => setIsHamburgerMenuOpen(false)}
 				/>
