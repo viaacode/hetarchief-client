@@ -38,6 +38,7 @@ const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 								<Icon
 									className={clsx(
 										'u-fs-24',
+										'u-text-left',
 										!isHamburgerMenuOpen && 'u-color-teal'
 									)}
 									name={isHamburgerMenuOpen ? 'times' : 'grid-view'}

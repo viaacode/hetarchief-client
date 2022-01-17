@@ -91,13 +91,21 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 				key: `${item.label} - ${item.href}`,
 				iconStart: (
 					<Icon
-						className={clsx('u-fs-24', styles['c-navigation__dropdown-icon--start'])}
+						className={clsx(
+							'u-fs-24',
+							'u-text-left',
+							styles['c-navigation__dropdown-icon--start']
+						)}
 						name={item.iconStart as IconLightNames}
 					/>
 				),
 				iconEnd: (
 					<Icon
-						className={clsx('u-fs-24', styles['c-navigation__dropdown-icon--end'])}
+						className={clsx(
+							'u-fs-24',
+							'u-text-left',
+							styles['c-navigation__dropdown-icon--end']
+						)}
 						name={item.iconEnd as IconLightNames}
 					/>
 				),

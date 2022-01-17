@@ -26,7 +26,7 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 					<span className={styles['c-navigation__border-decoration']} />
 					<span className={styles['c-navigation__border-decoration']} />
 					{item.badge && <Badge text={item.badge} />}
-					{icon && <Icon name={icon} />}
+					{icon && <Icon className="u-text-left u-ml-4" name={icon} />}
 				</a>
 			</Link>
 		);
