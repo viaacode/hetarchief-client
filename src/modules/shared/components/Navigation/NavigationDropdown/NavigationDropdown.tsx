@@ -31,6 +31,15 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 }) => {
 	useScrollLock(isBrowser() ? document.body : null, lockScroll ? isOpen : false);
 
+	const shouldShowDropdownItems = (item: NavigationItem): boolean => {
+		if (!item.dropdown) {
+			return false;
+		}
+		return item.dropdown.some((menuItems) => {
+			return menuItems.some((item) => item.showOnlyOn !== 'desktop');
+		});
+	};
+
 	// Render menu items
 	const renderMenuItem = (menuItem: MenuItemInfo) => {
 		const currentItem = items.flat().find((item) => menuItem.id === item.id);
@@ -51,6 +60,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 				</Link>
 				{currentItem &&
 					(currentItem as NavigationItem).dropdown?.length &&
+					shouldShowDropdownItems(currentItem) &&
 					renderSubMenuItems(currentItem)}
 			</>
 		);
@@ -60,7 +70,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 		return (
 			<div className={styles['c-dropdown-menu__sub-list']}>
 				{(currentItem as NavigationItem).dropdown?.flat().map((item) => {
-					if (item.hideOnMobile) {
+					if (item.showOnlyOn === 'desktop') {
 						return;
 					}
 					return (
@@ -83,34 +93,33 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 		router.push(`/${id}`);
 	};
 
-	const menuItems: MenuItemInfo[][] = items.map((itemArray) => {
-		return itemArray.map((item) => {
-			return {
-				label: item.label,
-				id: item.id,
-				key: `${item.label} - ${item.href}`,
-				iconStart: (
-					<Icon
-						className={clsx(
-							'u-fs-24',
-							'u-text-left',
-							styles['c-navigation__dropdown-icon--start']
-						)}
-						name={item.iconStart as IconLightNames}
-					/>
-				),
-				iconEnd: (
-					<Icon
-						className={clsx(
-							'u-fs-24',
-							'u-text-left',
-							styles['c-navigation__dropdown-icon--end']
-						)}
-						name={item.iconEnd as IconLightNames}
-					/>
-				),
-			};
-		});
+	const flattenedMenuItems = items.flat(1);
+	const menuItems: MenuItemInfo[] = flattenedMenuItems.map((item) => {
+		return {
+			label: item.label,
+			id: item.id,
+			key: `${item.label} - ${item.href}`,
+			iconStart: (
+				<Icon
+					className={clsx(
+						'u-fs-24',
+						'u-text-left',
+						styles['c-navigation__dropdown-icon--start']
+					)}
+					name={item.iconStart as IconLightNames}
+				/>
+			),
+			iconEnd: (
+				<Icon
+					className={clsx(
+						'u-fs-24',
+						'u-text-left',
+						styles['c-navigation__dropdown-icon--end']
+					)}
+					name={item.iconEnd as IconLightNames}
+				/>
+			),
+		};
 	});
 
 	return (

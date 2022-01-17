@@ -5,7 +5,7 @@ import { FC, ReactNode, useState } from 'react';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 
-import { NavigationItem } from '..';
+import { NavigationDropdownItem, NavigationItem } from '..';
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
 
@@ -37,12 +37,16 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 		trigger: ReactNode,
 		dropdownItems: NavigationItem[][]
 	): ReactNode => {
+		const desktopDropdownItems = dropdownItems.map((menuItems) => {
+			return menuItems.filter((item: NavigationDropdownItem) => item.showOnlyOn !== 'mobile');
+		});
+
 		return (
 			<>
 				<NavigationDropdown
 					id={id}
 					isOpen={openDropdown === id}
-					items={dropdownItems}
+					items={desktopDropdownItems}
 					trigger={trigger}
 					lockScroll
 					onOpen={(id) => setOpenDropdown(id)}
@@ -51,6 +55,15 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 				/>
 			</>
 		);
+	};
+
+	const shouldShowDropdownItems = (item: NavigationItem): boolean => {
+		if (!item.dropdown) {
+			return false;
+		}
+		return item.dropdown.some((menuItems) => {
+			return menuItems.some((item) => item.showOnlyOn !== 'mobile');
+		});
 	};
 
 	return (
@@ -75,7 +88,7 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 							);
 							return (
 								<li key={item.label} className={styles['c-navigation__item']}>
-									{item.dropdown?.length
+									{item.dropdown?.length && shouldShowDropdownItems(item)
 										? renderDropdown(
 												item.id,
 												renderLink(

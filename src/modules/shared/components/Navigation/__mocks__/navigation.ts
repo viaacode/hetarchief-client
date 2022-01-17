@@ -9,7 +9,14 @@ export const MOCK_ITEMS_LEFT: NavigationItem[][] = [
 			isActive: true,
 			badge: 2,
 			dropdown: [
-				[{ href: '#', label: 'Alle leeszalen', id: 'alle leeszalen', hideOnMobile: true }],
+				[
+					{
+						href: '#',
+						label: 'Alle leeszalen',
+						id: 'alle leeszalen',
+						showOnlyOn: 'desktop',
+					},
+				],
 				[
 					{
 						href: 'leeszaal/leeszaal-8',
@@ -33,7 +40,35 @@ export const MOCK_ITEMS_LEFT: NavigationItem[][] = [
 		},
 		{ href: '#', label: 'Vaak gestelde vragen', id: 'vragen' },
 	],
-	[{ href: '#', label: 'Admin', id: 'admin' }],
+	[
+		{
+			href: '#',
+			label: 'Beheer',
+			id: 'beheer',
+			dropdown: [
+				[
+					{
+						href: '#',
+						label: 'Aanvragen',
+						id: 'aanvragen',
+						showOnlyOn: 'mobile',
+					},
+					{
+						href: '#',
+						label: 'Bezoekers',
+						id: 'bezoekers',
+						showOnlyOn: 'mobile',
+					},
+					{
+						href: '#',
+						label: 'Instellingen',
+						id: 'instellingen',
+						showOnlyOn: 'mobile',
+					},
+				],
+			],
+		},
+	],
 ];
 
 export const MOCK_ITEMS_RIGHT: NavigationItem[][] = [

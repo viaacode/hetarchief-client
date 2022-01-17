@@ -34,7 +34,7 @@ export interface NavigationItem extends NavigationLink {
 }
 
 export interface NavigationDropdownItem extends NavigationLink {
-	hideOnMobile?: boolean;
+	showOnlyOn?: 'mobile' | 'desktop';
 	iconStart?: IconLightNames;
 	iconEnd?: IconLightNames;
 }
