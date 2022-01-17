@@ -8,13 +8,14 @@ import {
 import clsx from 'clsx';
 import Link from 'next/link';
 import router from 'next/router';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { Icon, IconLightNames } from '@shared/components';
 import { useScrollLock } from '@shared/hooks';
 import { isBrowser } from '@shared/utils';
 
 import styles from '../Navigation.module.scss';
+import { NavigationItem } from '../Navigation.types';
 
 import { NavigationDropdownProps } from './NavigationDropdown.types';
 
@@ -30,21 +31,51 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 }) => {
 	useScrollLock(isBrowser() ? document.body : null, lockScroll ? isOpen : false);
 
-	const renderMenuItem = (item: MenuItemInfo) => {
-		// item.id holds original href
+	// Render menu items
+	const renderMenuItem = (menuItem: MenuItemInfo) => {
+		const currentItem = items.flat().find((item) => menuItem.id === item.id);
+
 		return (
-			<Link href={`/${item.id as string}`}>
-				<a
-					className="u-color-black c-dropdown-menu__item"
-					role="menuitem"
-					tabIndex={0}
-					key={item.key ? item.key : `menu-item-${item.id}`}
-				>
-					{item.iconStart && item.iconStart}
-					{item.label}
-					{item.iconEnd && item.iconEnd}
-				</a>
-			</Link>
+			<>
+				<Link href={`/${currentItem?.href}`}>
+					<a
+						className="u-color-black c-dropdown-menu__item"
+						role="menuitem"
+						tabIndex={0}
+						key={`menu-item-${menuItem.id}`}
+					>
+						{menuItem.iconStart && menuItem.iconStart}
+						{menuItem.label}
+						{menuItem.iconEnd && menuItem.iconEnd}
+					</a>
+				</Link>
+				{currentItem &&
+					(currentItem as NavigationItem).dropdown?.length &&
+					renderSubMenuItems(currentItem)}
+			</>
+		);
+	};
+
+	const renderSubMenuItems = (currentItem: NavigationItem): ReactNode | null => {
+		return (
+			<div className={styles['c-dropdown-menu__sub-list']}>
+				{(currentItem as NavigationItem).dropdown?.flat().map((item) => {
+					if (item.hideOnMobile) {
+						return;
+					}
+					return (
+						<Link key={`sub-menu-item-${item.id}`} href={`/${item?.href}`}>
+							<a
+								className="u-color-black c-dropdown-menu__item"
+								role="menuitem"
+								tabIndex={0}
+							>
+								{item.label}
+							</a>
+						</Link>
+					);
+				})}
+			</div>
 		);
 	};
 
@@ -56,7 +87,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 		return itemArray.map((item) => {
 			return {
 				label: item.label,
-				id: item.href,
+				id: item.id,
 				key: `${item.label} - ${item.href}`,
 				iconStart: (
 					<Icon

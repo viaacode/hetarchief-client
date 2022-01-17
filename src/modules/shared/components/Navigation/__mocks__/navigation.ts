@@ -9,7 +9,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[][] = [
 			isActive: true,
 			badge: 2,
 			dropdown: [
-				[{ href: '#', label: 'Alle leeszalen', id: 'alle leeszalen' }],
+				[{ href: '#', label: 'Alle leeszalen', id: 'alle leeszalen', hideOnMobile: true }],
 				[
 					{
 						href: 'leeszaal/leeszaal-8',

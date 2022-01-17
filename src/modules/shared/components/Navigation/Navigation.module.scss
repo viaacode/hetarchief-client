@@ -75,10 +75,24 @@ $c-navigation-divider-size: 0.1rem;
 	display: flex;
 	justify-self: center;
 
+	:global(.c-badge) {
+		margin-left: $spacer-sm;
+		margin-right: $spacer-xxs;
+	}
+
 	:global(.c-dropdown-menu__item) {
 		display: flex;
 		align-items: center;
 		text-decoration: none;
+	}
+
+	.c-navigation-list {
+		:global(.c-dropdown-menu__item) {
+			display: flex;
+			align-items: center;
+			text-decoration: none;
+			padding-right: $spacer-sm;
+		}
 	}
 
 	.c-navigation__dropdown {
@@ -106,6 +120,16 @@ $c-navigation-divider-size: 0.1rem;
 		height: 100vh;
 	}
 
+	.c-dropdown-menu__sub-list {
+		margin-left: $spacer-md;
+		border-left: solid 0.2rem $silver;
+
+		:global(.c-dropdown-menu__item) {
+			padding-left: $spacer-sm;
+			margin: -0.1rem; // Prevent 1px gap between left border and silver background on hover
+		}
+	}
+
 	&:first-child {
 		grid-column: 1/2;
 		justify-self: start;
@@ -130,13 +154,6 @@ $c-navigation-divider-size: 0.1rem;
 
 	position: relative;
 	display: flex;
-
-	:global(.c-dropdown-menu__item) {
-		display: flex;
-		align-items: center;
-		text-decoration: none;
-		padding-right: $spacer-sm;
-	}
 
 	.c-navigation__list-flyout {
 		// Overwrite element styles
@@ -173,11 +190,6 @@ $c-navigation-divider-size: 0.1rem;
 .c-navigation__item {
 	&:not(:last-child) {
 		margin-right: 4.8rem;
-	}
-
-	:global(.c-badge) {
-		margin-left: $spacer-sm;
-		margin-right: $spacer-xs;
 	}
 }
 
