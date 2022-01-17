@@ -1,12 +1,14 @@
 import { FC } from 'react';
 
+import { DefaultComponentProps } from '@shared/types';
+
 export type NavigationFC<P = unknown> = FC<P> & {
 	Left: FC<NavigationSectionProps>;
 	Center: FC<NavigationCenterProps>;
 	Right: FC<NavigationSectionProps>;
 };
 
-export interface NavigationProps {
+export interface NavigationProps extends DefaultComponentProps {
 	contextual?: boolean;
 }
 

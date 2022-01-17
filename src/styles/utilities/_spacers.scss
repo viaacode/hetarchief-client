@@ -28,6 +28,7 @@ $px: (
 
 // Top
 $mt: (
+	"24": $spacer-md,
 	"80": $spacer-2xl,
 );
 @include generate-utils("mt", ("margin-top"), $mt);
