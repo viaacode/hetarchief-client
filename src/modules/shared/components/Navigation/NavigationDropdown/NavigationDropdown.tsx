@@ -1,4 +1,5 @@
 import {
+	Badge,
 	Dropdown,
 	DropdownButton,
 	DropdownContent,
@@ -55,6 +56,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 					>
 						{menuItem.iconStart && menuItem.iconStart}
 						{menuItem.label}
+						{currentItem?.badge && <Badge text={currentItem?.badge} />}
 						{menuItem.iconEnd && menuItem.iconEnd}
 					</a>
 				</Link>

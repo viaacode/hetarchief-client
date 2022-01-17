@@ -306,6 +306,10 @@ $c-navigation-divider-size: 0.1rem;
 		grid-template-columns: auto;
 
 		.c-navigation__section {
+			:global(.c-badge) {
+				margin-left: $spacer-xs;
+			}
+
 			&--responsive-desktop {
 				display: none;
 			}
