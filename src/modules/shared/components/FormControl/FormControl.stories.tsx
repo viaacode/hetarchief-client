@@ -1,4 +1,4 @@
-import { FormControl, TextInput } from '@meemoo/react-components';
+import { FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
@@ -33,12 +33,26 @@ Required.args = {
 
 export const Errors = Template.bind({});
 Errors.args = {
-	...Label.args,
-	errors: [`Something went wrong while validating your ${name}.`],
+	...Required.args,
+	errors: [
+		<span key={1}>
+			Something went wrong while validating your email.
+			<br />
+			If the issue persists, please contact <a href="#">support</a>.
+		</span>,
+		'Try again.',
+	],
 };
 
 export const Disabled = Template.bind({});
 Disabled.args = {
-	...Errors.args,
+	...Label.args,
 	disabled: true,
+	children: <TextInput disabled id={name} placeholder="..." />,
+};
+
+export const Area = Template.bind({});
+Area.args = {
+	...Label.args,
+	children: <TextArea id={name} placeholder="..." />,
 };
