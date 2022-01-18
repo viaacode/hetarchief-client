@@ -2,7 +2,7 @@
 
 .p-home__subtitle {
 	@include respond-to("md") {
-		font-size: $spacer-lg;
+		font-size: $font-size-1xl;
 	}
 }
 

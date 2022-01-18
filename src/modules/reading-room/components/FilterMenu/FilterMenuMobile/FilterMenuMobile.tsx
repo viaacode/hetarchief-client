@@ -4,7 +4,7 @@ import { FC, ReactElement } from 'react';
 
 import { Icon, Navigation } from '@shared/components';
 
-import { FilterMenuFilterOption } from '..';
+import { FilterMenuFilterOption } from '../FilterMenu.types';
 
 import styles from './FilterMenuMobile.module.scss';
 import { FilterMenuMobileProps } from './FilterMenuMobile.types';

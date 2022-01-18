@@ -56,8 +56,8 @@ const Home: NextPage = () => {
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
 			</div>
 
-			<div className="l-container u-mb-80">
-				<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-80">
+			<div className="l-container u-mb-48 u-mb-80:md">
+				<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
 					<h3 className="p-home__subtitle">Vind een leeszaal</h3>
 
 					<TextInput
