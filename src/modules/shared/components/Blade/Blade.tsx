@@ -22,7 +22,7 @@ const Blade: FC<BladeProps> = ({
 	onClose,
 	layer,
 }) => {
-	const { isManaged, currentLayer, opacityStep } = useBladeManagerContext();
+	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 
 	const isBladeOpen = isManaged && layer ? layer <= currentLayer : isOpen;
 
@@ -32,7 +32,7 @@ const Blade: FC<BladeProps> = ({
 				className={styles['c-blade__close-button']}
 				icon={<Icon name="times" />}
 				variants="text"
-				onClick={onClose}
+				onClick={isManaged && layer && onCloseBlade ? () => onCloseBlade(layer) : onClose}
 			/>
 		);
 	};
@@ -41,7 +41,9 @@ const Blade: FC<BladeProps> = ({
 			{!hideOverlay && (
 				<Overlay
 					visible={isBladeOpen}
-					onClick={onClose}
+					onClick={
+						isManaged && layer && onCloseBlade ? () => onCloseBlade(layer) : onClose
+					}
 					animate="animate-default"
 					className={
 						isManaged && layer && layer > 1 ? styles['c-blade__overlay--managed'] : ''

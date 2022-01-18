@@ -6,12 +6,17 @@ import { isBrowser } from '@shared/utils';
 
 import { BladeManagerProps } from './BladeManager.types';
 
-const BladeManager: FC<BladeManagerProps> = ({ children, currentLayer, opacityStep = 0.1 }) => {
+const BladeManager: FC<BladeManagerProps> = ({
+	children,
+	currentLayer,
+	opacityStep = 0.1,
+	onCloseBlade,
+}) => {
 	useScrollLock(isBrowser() ? document.body : null, currentLayer > 0);
 
 	return (
 		<BladeManagerContext.Provider
-			value={{ isManaged: true, currentLayer: currentLayer, opacityStep: opacityStep }}
+			value={{ isManaged: true, currentLayer, opacityStep, onCloseBlade }}
 		>
 			{children}
 		</BladeManagerContext.Provider>
