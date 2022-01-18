@@ -45,7 +45,7 @@ const ReadingRoomPage: NextPage = () => {
 	// Data
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
 	const [mediaCount] = useState({
-		[ReadingRoomMediaType.All]: 123,
+		[ReadingRoomMediaType.All]: 1245,
 		[ReadingRoomMediaType.Audio]: 456,
 		[ReadingRoomMediaType.Video]: 789,
 	});
