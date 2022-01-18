@@ -1,4 +1,4 @@
 export interface BladeManagerContextValue {
 	isManaged: boolean;
-	currentBlade: number;
+	currentLayer: number;
 }
