@@ -1,15 +1,35 @@
-import { TagsInput } from '@meemoo/react-components';
+import { TagsInput, TagsInputProps } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React from 'react';
+import React, { cloneElement, FC, ReactElement, useState } from 'react';
 
+import { TAGS_INPUT_DEFAULT_PROPS } from './TagsInput.const';
 import { tagsInputOptionsMock } from './__mocks__/tags-input';
+
+const TagsInputStoryComponent = ({ children }: { children: ReactElement }) => {
+	const [values, setValues] = useState(tagsInputOptionsMock);
+
+	const onChange = (values: unknown) => {
+		console.log('storybook', values);
+
+		// setValues();
+	};
+
+	return cloneElement<TagsInputProps>(children, {
+		value: values,
+		onChange,
+	});
+};
 
 export default {
 	title: 'Components/TagsInput',
 	component: TagsInput,
 } as ComponentMeta<typeof TagsInput>;
 
-const Template: ComponentStory<typeof TagsInput> = (args) => <TagsInput {...args} />;
+const Template: ComponentStory<typeof TagsInput> = (args) => (
+	<TagsInputStoryComponent>
+		<TagsInput {...TAGS_INPUT_DEFAULT_PROPS} {...args} />
+	</TagsInputStoryComponent>
+);
 
 export const Default = Template.bind({});
 Default.args = {

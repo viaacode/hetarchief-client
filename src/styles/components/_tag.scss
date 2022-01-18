@@ -1,0 +1,131 @@
+@use "sass:color";
+
+@use "../abstracts" as *;
+
+.c-tag {
+	display: flex;
+	align-items: center;
+	height: 3.2rem;
+	padding: $spacer-xs $spacer-sm;
+	border-radius: 1.6rem;
+	font-weight: 700;
+	background-color: $teal-66;
+	color: $black;
+}
+
+/**
+ * Elements
+ */
+
+.c-tag__close {
+	@extend %reset-button;
+
+	display: flex;
+	text-decoration: none;
+	padding: $spacer-xxs;
+	margin: 0 1.2rem 0 $spacer-xxs;
+	font-size: $font-size-md;
+	cursor: pointer;
+	transition: color $animate-sm-in;
+
+	&:hover {
+		color: color.adjust($black, $alpha: -0.3);
+	}
+}
+
+
+/**
+ * Modifiers
+ */
+
+.c-tag--closable {
+	height: 3.6rem;
+	padding-right: 0;
+}
+
+// Colors
+.c-tag--black {
+	background-color: $black;
+	color: $white;
+}
+
+.c-tag--silver {
+	background-color: $silver;
+}
+
+// Sizes
+.c-tag--medium,
+.c-tag--small {
+	font-size: $font-size-xs;
+	font-weight: 700;
+
+	.c-tag__close {
+		font-size: $font-size-sm;
+	}
+}
+
+.c-tag--medium {
+	height: 2.4rem;
+	border-radius: 1.2rem;
+	padding: calc($spacer-xs / 2) $spacer-xs;
+
+	.c-tag__close {
+		padding: calc($spacer-xs / 2);
+		padding-right: $spacer-xs;
+	}
+}
+
+.c-tag--small {
+	height: 1.5rem;
+	padding: 0 $spacer-xs;
+	border-radius: 0.75rem;
+
+	.c-tag__close {
+		padding: 0 calc($spacer-xs / 2);
+		padding-right: calc($spacer-xs / 2);
+	}
+}
+
+// interaction
+.c-tag--clickable {
+	transition: background-color $animate-default, color $animate-default, outline $animate-default;
+
+	&:not(.c-tag--disabled) {
+		&:hover {
+			background-color: $shade;
+			color: $white;
+		}
+
+		&:active {
+			background-color: $teal-66;
+			color: $black
+		}
+
+		&:not(:active,:hover):focus {
+			outline: 2px solid $black;
+		}
+
+		&.c-tag--medium,
+		&.c-tag--small {
+			&:hover {
+				background-color: $shade;
+				color: $white;
+			}
+
+			&:active {
+				background-color: $seagreen;
+				color: $white
+			}
+
+			&:not(:active,:hover):focus {
+				outline: 2px solid $teal-66;
+			}
+		}
+	}
+
+}
+
+.c-tag--disabled {
+	background-color: $silver;
+	color: $zinc;
+}
