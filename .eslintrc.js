@@ -33,7 +33,7 @@ module.exports = {
 				'newlines-between': 'always',
 				pathGroups: [
 					{
-						pattern: '@{reading-room,shared}/**',
+						pattern: '@{home,reading-room,shared}/**',
 						group: 'parent',
 						position: 'before',
 					},

@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
+      "@home/*": ["modules/home/*"],
       "@reading-room/*": ["modules/reading-room/*"],
       "@shared/*": ["modules/shared/*"]
     },

@@ -1,0 +1,20 @@
+@use "styles/abstracts" as *;
+
+.p-home__subtitle {
+	@include respond-to("md") {
+		font-size: $font-size-1xl;
+	}
+}
+
+.p-home__search {
+	width: 100%;
+
+	@include respond-to("md") {
+		margin-top: $spacer-sm;
+	}
+	@include respond-at("md") {
+		align-self: start;
+		width: 48%;
+		margin-left: $spacer-sm;
+	}
+}
