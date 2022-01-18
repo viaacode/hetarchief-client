@@ -1,3 +1,5 @@
+import { TagOption } from '@meemoo/react-components';
+
 import { FilterMenuFilterOption, FilterMenuSortOption } from '..';
 
 export const sortOptionsMock: FilterMenuSortOption[] = [
@@ -27,5 +29,16 @@ export const filterOptionsMock: FilterMenuFilterOption[] = [
 		id: 'advanced',
 		label: 'Geavanceerd',
 		icon: 'dots-horizontal',
+	},
+];
+
+export const filterTagsMock: TagOption[] = [
+	{
+		id: 'episode',
+		label: (
+			<span>
+				Trefwoord: <strong>Episode 1</strong>
+			</span>
+		),
 	},
 ];
