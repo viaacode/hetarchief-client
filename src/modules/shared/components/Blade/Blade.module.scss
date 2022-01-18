@@ -42,6 +42,14 @@
 		grid-row-start: 4;
 	}
 
+	&__overlay {
+		&--managed {
+			min-width: calc(46.4rem + 5.6rem);
+			left: auto;
+			transition: opacity $animate-default, right $animate-default;
+		}
+	}
+
 	&--visible {
 		pointer-events: all;
 		visibility: visible;
