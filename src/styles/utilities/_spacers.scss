@@ -36,11 +36,12 @@ $mt: (
 // Bottom
 $mb: (
 	"24": $spacer-md,
+	"32": $spacer-lg,
 	"48": $spacer-md * 2,
 	"64": $spacer-lg * 2,
 	"80": $spacer-2xl,
 );
-@include generate-utils("mb", ("margin-bottom"), $mb);
+@include generate-utils("mb", ("margin-bottom"), $mb, ("md"));
 
 
 // Left
