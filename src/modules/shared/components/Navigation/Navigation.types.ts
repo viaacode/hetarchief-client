@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { IconLightNames } from '..';
+import { IconLightNames } from '../Icon';
 
 export type NavigationFC<P = unknown> = FC<P> & {
 	Left: FC<NavigationSectionProps>;

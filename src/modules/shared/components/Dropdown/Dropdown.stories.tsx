@@ -38,7 +38,7 @@ const Template: ComponentStory<typeof Dropdown> = (args) => (
 			<MenuContent
 				rootClassName="c-dropdown-menu"
 				menuItems={menuItemsWithIcons}
-				onClick={(id: string | number) => console.log(id)}
+				onClick={(id: string | number) => action(id as string)}
 			/>
 		</Dropdown>
 	</DropdownStoryComponent>
@@ -54,7 +54,7 @@ const TemplateCustomButton: ComponentStory<typeof Dropdown> = (args) => (
 				<MenuContent
 					rootClassName="c-dropdown-menu"
 					menuItems={menuItemsWithIcons}
-					onClick={(id: string | number) => console.log(id)}
+					onClick={(id: string | number) => action(id as string)}
 				/>
 			</DropdownContent>
 		</Dropdown>

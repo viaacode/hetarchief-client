@@ -42,18 +42,16 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 		});
 
 		return (
-			<>
-				<NavigationDropdown
-					id={id}
-					isOpen={openDropdown === id}
-					items={desktopDropdownItems}
-					trigger={trigger}
-					lockScroll
-					onOpen={(id) => setOpenDropdown(id)}
-					onClose={() => setOpenDropdown('')}
-					flyoutClassName={styles['c-navigation__list-flyout']}
-				/>
-			</>
+			<NavigationDropdown
+				id={id}
+				isOpen={openDropdown === id}
+				items={desktopDropdownItems}
+				trigger={trigger}
+				lockScroll
+				onOpen={(id) => setOpenDropdown(id)}
+				onClose={() => setOpenDropdown('')}
+				flyoutClassName={styles['c-navigation__list-flyout']}
+			/>
 		);
 	};
 
