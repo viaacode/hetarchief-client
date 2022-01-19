@@ -1,52 +1,81 @@
-import { Button, TagsInput } from '@meemoo/react-components';
-import { FC } from 'react';
+import { TagsInput, TagsInputProps } from '@meemoo/react-components';
+import clsx from 'clsx';
+import { KeyboardEvent, ReactElement } from 'react';
 
-import { SearchBarProps } from './SearchBar.types';
+import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
 
-import { Icon } from '@shared/components';
+import { SearchBarMeta, SearchBarProps, SearchBarValue } from './SearchBar.types';
+import { SearchBarButton } from './SearchBarButton';
+import { SearchBarClear } from './SearchBarClear';
+import { SearchBarValueContainer } from './SearchBarValueContainer';
+
+const components = {
+	...TAGS_INPUT_COMPONENTS,
+	ClearIndicator: SearchBarClear,
+	DropdownIndicator: SearchBarButton,
+	ValueContainer: SearchBarValueContainer,
+};
 
 // Wrap TagsInput with default props and custom search button
-const SearchBar: FC<SearchBarProps> = ({
+const SearchBar = <IsMulti extends boolean>({
+	className,
 	clearLabel,
+	isClearable = true,
+	isMulti = false as IsMulti,
+	large,
 	menuIsOpen,
 	options,
+	valuePlaceholder,
 	onClear,
-	onSearchClick,
+	onChange,
+	onSearch,
 	...tagsInputProps
-}) => {
-	const hasSearchClick = typeof onSearchClick === 'function';
-	const hasOnClear = typeof onSearchClick === 'function';
-	const hasCustomClear = clearLabel || hasOnClear;
+}: SearchBarProps<IsMulti>): ReactElement => {
+	const rootCls = clsx(className, 'c-search-bar', {
+		['c-search-bar--large']: large,
+	});
+	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 
-	const renderClearButton = () => {
-		return <div />;
+	const onTagsInputChange = (
+		newValue: SearchBarValue<IsMulti>,
+		actionMeta: SearchBarMeta
+	): void => {
+		if (actionMeta.action === 'clear') {
+			onClear?.();
+		}
+		onChange?.(newValue, actionMeta);
 	};
 
-	const renderSearchButton = () => {
-		return (
-			<div
-				onMouseDown={(e) => {
-					// Prevent react-select default behaviour when clicking on dropdown indicator
-					e.stopPropagation();
-					e.preventDefault();
-				}}
-			>
-				<Button icon={<Icon name="search" />} onClick={onSearchClick} />
-			</div>
-		);
+	const onTagsInputKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+		if (e.key === 'Enter') {
+			onSearch?.();
+			return;
+		}
+
+		tagsInputProps.onKeyDown?.(e);
 	};
 
 	return (
 		<TagsInput
 			{...tagsInputProps}
-			components={{
-				...tagsInputProps.components,
-				...(hasCustomClear && { ClearIndicator: renderClearButton }),
-				...(hasSearchClick && { DropdownIndicator: renderSearchButton }),
-				IndicatorSeparator: () => null,
-			}}
-			menuIsOpen={typeof menuIsOpen !== undefined ? menuIsOpen : (options?.length ?? 0) > 0}
+			className={rootCls}
+			components={components as TagsInputProps<boolean>['components']}
+			isClearable={isClearable}
+			isMulti={isMulti}
+			menuIsOpen={showMenu}
 			options={options}
+			// ts-igonore is necessary to provide custom props to react-select, this is explained
+			// in the react-select docs: https://react-select.com/components#defining-components
+			/* eslint-disable @typescript-eslint/ban-ts-comment */
+			// @ts-ignore
+			clearLabel={clearLabel}
+			// @ts-ignore
+			valuePlaceholder={valuePlaceholder}
+			// @ts-ignore
+			onSearch={onSearch}
+			/* eslint-enable @typescript-eslint/ban-ts-comment */
+			onChange={onTagsInputChange}
+			onKeyDown={onTagsInputKeyDown}
 		/>
 	);
 };

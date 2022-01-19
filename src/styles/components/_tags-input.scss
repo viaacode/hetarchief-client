@@ -1,7 +1,6 @@
 @use "sass:color";
 
 @use "../abstracts" as *;
-@use "input" as input;
 
 // Wrap everything for higher specificity
 .c-tags-input {
@@ -25,6 +24,25 @@
 
 	.c-tags-input__value-container {
 		padding-left: $spacer-sm;
+	}
+
+	.c-tags-input__multi-value {
+		margin-right: $spacer-sm;
+		font-size: $font-size-sm;
+	}
+
+	.c-tags-input__indicator {
+		display: inline-flex;
+		padding: 0.6rem;
+	}
+
+	.c-tags-input__clear-indicator,
+	.c-tags-input__dropdown-indicator {
+		cursor: pointer;
+	}
+
+	.c-tags-input__indicator-icon {
+		font-size: $font-size-lg;
 	}
 
 	.c-tags-input__menu {
