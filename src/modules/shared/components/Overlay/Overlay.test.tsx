@@ -66,7 +66,7 @@ describe('Component: <Overlay /> (default)', () => {
 			</div>
 		);
 
-		const overlay = screen.getByTestId(testId).getElementsByClassName(styles['c-overlay'])[0];
+		const overlay = screen.getByTestId(testId).getElementsByClassName('c-overlay')[0];
 
 		fireEvent.click(overlay);
 
@@ -84,7 +84,7 @@ describe('Component: <Overlay /> (default)', () => {
 			</div>
 		);
 
-		const overlay = screen.getByTestId(testId).getElementsByClassName(styles['c-overlay'])[0];
+		const overlay = screen.getByTestId(testId).getElementsByClassName('c-overlay')[0];
 
 		expect(overlay).toHaveClass(`c-overlay--${animate}`);
 	});

@@ -16,6 +16,10 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	start,
 	total,
 }) => {
+	const scrollToTop = () => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	};
+
 	const renderProgress = () => {
 		const end = start + count;
 
@@ -61,11 +65,11 @@ const PaginationBar: FC<PaginationBarProps> = ({
 
 			{showBackToTop && (
 				<Button
-					// TODO: smooth scroll to top
 					className={styles['c-pagination-bar__back-to-top']}
 					variants={['text', 'neutral']}
 					label="Terug naar boven"
 					iconEnd={<Icon name="arrow-up" />}
+					onClick={scrollToTop}
 				/>
 			)}
 		</div>
