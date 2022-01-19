@@ -8,12 +8,12 @@ import { Icon } from '@shared/components';
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
 
-const linkCls = (i: number, active: boolean, color: 'black' | 'white' = 'white') => {
-	return clsx(styles['c-navigation__link'], `u-color-${color}`);
+const linkCls = (classNames: string[] = []) => {
+	return clsx(styles['c-navigation__link'], ...classNames);
 };
 
-const dropdownCls = (color: 'black' | 'white' = 'black') => {
-	return clsx('c-dropdown-menu__item', `u-color-${color}`);
+const dropdownCls = (classNames: string[] = []) => {
+	return clsx('c-dropdown-menu__item', ...classNames);
 };
 
 const renderLink = (
@@ -47,7 +47,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	{
 		node: renderLink('Leeszalen', '#', {
 			badge: <Badge text="2" />,
-			className: linkCls(0, true),
+			className: linkCls(['u-color-black', 'u-color-white:md']),
 		}),
 		id: 'leeszalen',
 		active: true,
@@ -59,12 +59,14 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 							className={clsx(
 								'u-fs-24',
 								'u-text-left',
+								'u-visibility-hidden',
+								'u-visibility-visible:md',
 								styles['c-navigation__dropdown-icon--end']
 							)}
 							name="angle-right"
 						/>
 					),
-					className: dropdownCls(),
+					className: dropdownCls(['u-display-none', 'u-display-block:md']),
 				}),
 				id: 'alle leeszalen',
 			},
@@ -75,6 +77,8 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 							className={clsx(
 								'u-fs-24',
 								'u-text-left',
+								'u-visibility-hidden',
+								'u-visibility-visible:md',
 								styles['c-navigation__dropdown-icon--end']
 							)}
 							name="angle-right"
@@ -91,6 +95,8 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 							className={clsx(
 								'u-fs-24',
 								'u-text-left',
+								'u-visibility-hidden',
+								'u-visibility-visible:md',
 								styles['c-navigation__dropdown-icon--end']
 							)}
 							name="angle-right"
@@ -104,18 +110,20 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	},
 	{
 		node: renderLink('Over de leeszalen', '#', {
-			className: linkCls(1, false),
+			className: linkCls(['u-color-black', 'u-color-white:md']),
 		}),
 		id: 'over leeszalen',
 	},
 	{
 		node: renderLink('Vaak gestelde vragen', '#', {
-			className: linkCls(2, false),
+			className: linkCls(['u-color-black', 'u-color-white:md']),
 		}),
 		id: 'vragen',
 	},
 	{
-		node: renderLink('Beheer', '#', { className: linkCls(3, false) }),
+		node: renderLink('Beheer', '#', {
+			className: linkCls(['u-color-black', 'u-color-white:md']),
+		}),
 		id: 'beheer',
 		hasDivider: true,
 		children: [
@@ -143,7 +151,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 
 export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 	{
-		node: renderLink('Inloggen of registreren', '#', { className: linkCls(-1, false) }),
+		node: renderLink('Inloggen of registreren', '#', { className: linkCls() }),
 		id: 'auth log in',
 		children: [
 			{
@@ -179,6 +187,7 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 					),
 				}),
 				id: 'auth log uit',
+				hasDivider: true,
 			},
 		],
 	},

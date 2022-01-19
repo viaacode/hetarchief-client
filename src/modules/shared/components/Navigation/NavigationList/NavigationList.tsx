@@ -53,7 +53,9 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 				{items.map((item, index) => {
 					return (
 						<>
-							{item.hasDivider && <div className={styles['c-navigation__divider']} />}
+							{item.hasDivider && (
+								<div className={styles['c-navigation__divider--vertical']} />
+							)}
 							<li
 								key={`navigation-item-${index}`}
 								className={clsx(

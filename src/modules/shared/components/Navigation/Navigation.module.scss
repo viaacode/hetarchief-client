@@ -85,6 +85,7 @@ $c-navigation-divider-size: 0.1rem;
 		align-items: center;
 		text-decoration: none;
 		font-weight: 400;
+		color: $black;
 	}
 
 	.c-navigation-list {
@@ -121,12 +122,28 @@ $c-navigation-divider-size: 0.1rem;
 		height: 100vh;
 	}
 
+	.c-navigation__dropdown-item--1 {
+		margin-left: $spacer-md;
+	}
+
+	.c-navigation__dropdown-item--2 {
+		margin-left: calc(2 * $spacer-md);
+	}
+
+	.c-navigation__dropdown-item--3 {
+		margin-left: calc(3 * $spacer-md);
+	}
+
+	.c-navigation__dropdown-item--4 {
+		margin-left: calc(4 * $spacer-md);
+	}
+
 	.c-dropdown-menu__sub-list {
 		margin-left: $spacer-md;
 		border-left: solid 0.2rem $silver;
 
 		:global(.c-dropdown-menu__item) {
-			padding-left: $spacer-sm;
+			padding-left: $spacer-md;
 			margin: -0.1rem; // Prevent 1px gap between left border and silver background on hover
 		}
 	}
@@ -158,7 +175,7 @@ $c-navigation-divider-size: 0.1rem;
 
 	.c-navigation__list-flyout {
 		// Overwrite element styles
-		top: 2rem !important;
+		top: -1rem !important;
 		min-width: 26.6rem !important;
 	}
 
@@ -182,10 +199,6 @@ $c-navigation-divider-size: 0.1rem;
 			transform: translateY(-50%);
 		}
 	}
-
-	&:nth-child(n+2) {
-		padding-left: 4.8rem;
-	}
 }
 
 .c-navigation__link {
@@ -195,7 +208,7 @@ $c-navigation-divider-size: 0.1rem;
 	&--wrapper {
 		display: flex;
 		align-items: center;
-}
+	}
 }
 
 .c-navigation__item {
@@ -267,11 +280,20 @@ $c-navigation-divider-size: 0.1rem;
 }
 
 .c-navigation__divider {
-	align-self: center;
-	width: $c-navigation-divider-size;
-	height: 50%;
-	margin-right: 4.8rem;
-	background-color: $c-navigation-list-divider-color;
+	&--vertical {
+		background-color: $c-navigation-list-divider-color;
+		align-self: center;
+		width: $c-navigation-divider-size;
+		height: 50%;
+		margin-right: 4.8rem;
+	}
+
+	&--horizontal {
+		width: calc(100% - 2 * $spacer-md);
+		height: $c-navigation-divider-size;
+		margin: 1.2rem $spacer-md;
+		background-color: $silver;
+	}
 }
 
 /**
@@ -303,8 +325,14 @@ $c-navigation-divider-size: 0.1rem;
 		padding: 0 2rem;
 
 		&__link {
-			height: $c-navigation-height-md - $c-navigation-divider-size;
+			display: block;
+			padding: 1.2rem 0 1.2rem $spacer-md;
 			border-bottom: none;
+			font-size: $font-size-sm;
+
+			&:hover {
+				background-color: $silver;
+			}
 		}
 
 		&::after {

@@ -1,9 +1,11 @@
 import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
-import { FC } from 'react';
+import clsx from 'clsx';
+import { FC, ReactNode } from 'react';
 
 import { useScrollLock } from '@shared/hooks';
 import { isBrowser } from '@shared/utils';
 
+import { NavigationItem } from '..';
 import styles from '../Navigation.module.scss';
 
 import { NavigationDropdownProps } from './NavigationDropdown.types';
@@ -20,6 +22,25 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 }) => {
 	useScrollLock(isBrowser() ? document.body : null, lockScroll ? isOpen : false);
 
+	const renderChildrenRecursively = (items: NavigationItem[], layer = 0): ReactNode => {
+		return (
+			<div className={clsx(layer > 0 && styles['c-dropdown-menu__sub-list'])}>
+				{items.map((item) => {
+					return (
+						<>
+							{item.hasDivider && (
+								<div className={styles['c-navigation__divider--horizontal']} />
+							)}
+							{item.node}
+							{item.children &&
+								renderChildrenRecursively(item.children, (layer += 1))}
+						</>
+					);
+				})}
+			</div>
+		);
+	};
+
 	return (
 		<Dropdown
 			className={styles['c-navigation__dropdown']}
@@ -30,11 +51,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			onClose={() => onClose && onClose(id)}
 		>
 			<DropdownButton>{trigger}</DropdownButton>
-			<DropdownContent>
-				{items.map((item) => {
-					return item.node;
-				})}
-			</DropdownContent>
+			<DropdownContent>{renderChildrenRecursively(items)}</DropdownContent>
 		</Dropdown>
 	);
 };
