@@ -1,11 +1,9 @@
-import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Link from 'next/link';
 import { FC, ReactNode, useState } from 'react';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 
-import { NavigationDropdownItem, NavigationItem } from '..';
+import { NavigationItem } from '..';
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
 
@@ -14,38 +12,16 @@ import { NavigationListProps } from './NavigationList.types';
 const NavigationList: FC<NavigationListProps> = ({ items }) => {
 	const [openDropdown, setOpenDropdown] = useState('');
 
-	const renderLink = (
-		item: NavigationItem,
-		linkCls: string,
-		icon: IconLightNames | undefined = undefined
-	): ReactNode => {
-		return (
-			<Link href={item.href}>
-				<a className={linkCls}>
-					{item.label}
-					<span className={styles['c-navigation__border-decoration']} />
-					<span className={styles['c-navigation__border-decoration']} />
-					{item.badge && <Badge text={item.badge} />}
-					{icon && <Icon className="u-text-left u-ml-4" name={icon} />}
-				</a>
-			</Link>
-		);
-	};
-
 	const renderDropdown = (
 		id: string,
 		trigger: ReactNode,
-		dropdownItems: NavigationItem[][]
+		dropdownItems: NavigationItem[]
 	): ReactNode => {
-		const desktopDropdownItems = dropdownItems.map((menuItems) => {
-			return menuItems.filter((item: NavigationDropdownItem) => item.showOnlyOn !== 'mobile');
-		});
-
 		return (
 			<NavigationDropdown
 				id={id}
 				isOpen={openDropdown === id}
-				items={desktopDropdownItems}
+				items={dropdownItems}
 				trigger={trigger}
 				lockScroll
 				onOpen={(id) => setOpenDropdown(id)}
@@ -55,13 +31,13 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 		);
 	};
 
-	const shouldShowDropdownItems = (item: NavigationItem): boolean => {
-		if (!item.dropdown) {
-			return false;
-		}
-		return item.dropdown.some((menuItems) => {
-			return menuItems.some((item) => item.showOnlyOn !== 'mobile');
-		});
+	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
+		return (
+			<div className={styles['c-navigation__link--wrapper']}>
+				{item.node}
+				<Icon className="u-text-left u-ml-4" name={iconName} />
+			</div>
+		);
 	};
 
 	return (
@@ -73,38 +49,40 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 					styles['c-navigation__list-overlay']
 				)}
 			/>
-			{items.map((navItems, itemIndex) => {
-				return (
-					<ul key={`nav-list-${itemIndex}`} className={styles['c-navigation__list']}>
-						{navItems.map((item, i) => {
-							const linkCls = clsx(
-								styles['c-navigation__link'],
-								styles[`c-navigation__link--variant-${i + 1}`],
-								{
-									[styles['c-navigation__link--active']]: item.isActive,
-								}
-							);
-							return (
-								<li key={item.label} className={styles['c-navigation__item']}>
-									{item.dropdown?.length && shouldShowDropdownItems(item)
-										? renderDropdown(
-												item.id,
-												renderLink(
-													item,
-													linkCls,
-													openDropdown === item.id
-														? 'angle-up'
-														: 'angle-down'
-												),
-												item.dropdown
-										  )
-										: renderLink(item, linkCls)}
-								</li>
-							);
-						})}
-					</ul>
-				);
-			})}
+			<ul className={styles['c-navigation__list']}>
+				{items.map((item, index) => {
+					return (
+						<>
+							{item.hasDivider && <div className={styles['c-navigation__divider']} />}
+							<li
+								key={`navigation-item-${index}`}
+								className={clsx(
+									styles['c-navigation__item'],
+									styles[`c-navigation__link--variant-${index + 1}`],
+									item.active && [styles['c-navigation__item--active']]
+								)}
+							>
+								{item.children?.length
+									? renderDropdown(
+											item.id,
+											renderTrigger(
+												item,
+												openDropdown === item.id ? 'angle-down' : 'angle-up'
+											),
+											item.children
+									  )
+									: item.node}
+								{item.active && (
+									<span className={styles['c-navigation__border-decoration']} />
+								)}
+								{item.active && (
+									<span className={styles['c-navigation__border-decoration']} />
+								)}
+							</li>
+						</>
+					);
+				})}
+			</ul>
 		</>
 	);
 };

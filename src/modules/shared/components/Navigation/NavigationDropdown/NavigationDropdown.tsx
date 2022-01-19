@@ -1,22 +1,10 @@
-import {
-	Badge,
-	Dropdown,
-	DropdownButton,
-	DropdownContent,
-	MenuContent,
-	MenuItemInfo,
-} from '@meemoo/react-components';
-import clsx from 'clsx';
-import Link from 'next/link';
-import router from 'next/router';
-import { FC, ReactNode } from 'react';
+import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { FC } from 'react';
 
-import { Icon, IconLightNames } from '@shared/components';
 import { useScrollLock } from '@shared/hooks';
 import { isBrowser } from '@shared/utils';
 
 import styles from '../Navigation.module.scss';
-import { NavigationItem } from '../Navigation.types';
 
 import { NavigationDropdownProps } from './NavigationDropdown.types';
 
@@ -32,98 +20,6 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 }) => {
 	useScrollLock(isBrowser() ? document.body : null, lockScroll ? isOpen : false);
 
-	const shouldShowDropdownItems = (item: NavigationItem): boolean => {
-		if (!item.dropdown) {
-			return false;
-		}
-		return item.dropdown.some((menuItems) => {
-			return menuItems.some((item) => item.showOnlyOn !== 'desktop');
-		});
-	};
-
-	// Render menu items
-	const renderMenuItem = (menuItem: MenuItemInfo) => {
-		const currentItem = items.flat().find((item) => menuItem.id === item.id);
-
-		return (
-			<>
-				<Link href={`/${currentItem?.href}`}>
-					<a
-						className="u-color-black c-dropdown-menu__item"
-						role="menuitem"
-						tabIndex={0}
-						key={`menu-item-${menuItem.id}`}
-					>
-						{menuItem.iconStart && menuItem.iconStart}
-						{menuItem.label}
-						{currentItem?.badge && <Badge text={currentItem?.badge} />}
-						{menuItem.iconEnd && menuItem.iconEnd}
-					</a>
-				</Link>
-				{currentItem &&
-					(currentItem as NavigationItem).dropdown?.length &&
-					shouldShowDropdownItems(currentItem) &&
-					renderSubMenuItems(currentItem)}
-			</>
-		);
-	};
-
-	const renderSubMenuItems = (currentItem: NavigationItem): ReactNode | null => {
-		return (
-			<div className={styles['c-dropdown-menu__sub-list']}>
-				{(currentItem as NavigationItem).dropdown?.flat().map((item) => {
-					if (item.showOnlyOn === 'desktop') {
-						return;
-					}
-					return (
-						<Link key={`sub-menu-item-${item.id}`} href={`/${item?.href}`}>
-							<a
-								className="u-color-black c-dropdown-menu__item"
-								role="menuitem"
-								tabIndex={0}
-							>
-								{item.label}
-							</a>
-						</Link>
-					);
-				})}
-			</div>
-		);
-	};
-
-	const handleOnClick = (id: string | number) => {
-		router.push(`/${id}`);
-	};
-
-	const flattenedMenuItems = items.flat(1);
-	const menuItems: MenuItemInfo[] = flattenedMenuItems.map((item) => {
-		return {
-			label: item.label,
-			id: item.id,
-			key: `${item.label} - ${item.href}`,
-			iconStart: (
-				<Icon
-					className={clsx(
-						'u-fs-24',
-						'u-text-left',
-						styles['c-navigation__dropdown-icon--start']
-					)}
-					name={item.iconStart as IconLightNames}
-				/>
-			),
-			iconEnd: (
-				<Icon
-					className={clsx(
-						'u-fs-24',
-						'u-text-left',
-						styles['c-navigation__dropdown-icon--end']
-					)}
-					name={item.iconEnd as IconLightNames}
-				/>
-			),
-		};
-	});
-
 	return (
 		<Dropdown
 			className={styles['c-navigation__dropdown']}
@@ -135,13 +31,9 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 		>
 			<DropdownButton>{trigger}</DropdownButton>
 			<DropdownContent>
-				<MenuContent
-					rootClassName="c-dropdown-menu"
-					className={'u-color-black'}
-					menuItems={menuItems}
-					renderItem={renderMenuItem}
-					onClick={(id: string | number) => handleOnClick(id)}
-				/>
+				{items.map((item) => {
+					return item.node;
+				})}
 			</DropdownContent>
 		</Dropdown>
 	);

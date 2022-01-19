@@ -1,6 +1,4 @@
-import { FC } from 'react';
-
-import { IconLightNames } from '../Icon';
+import { FC, ReactNode } from 'react';
 
 export type NavigationFC<P = unknown> = FC<P> & {
 	Left: FC<NavigationSectionProps>;
@@ -17,24 +15,14 @@ export interface NavigationCenterProps {
 }
 
 export interface NavigationSectionProps {
-	items?: NavigationItem[][];
+	items?: NavigationItem[];
 	placement?: 'left' | 'right';
 }
 
-export interface NavigationLink {
-	href: string;
-	isActive?: boolean;
-	label: string;
+export interface NavigationItem {
+	node: ReactNode;
 	id: string;
-	badge?: string | number;
-}
-
-export interface NavigationItem extends NavigationLink {
-	dropdown?: NavigationDropdownItem[][];
-}
-
-export interface NavigationDropdownItem extends NavigationLink {
-	showOnlyOn?: 'mobile' | 'desktop';
-	iconStart?: IconLightNames;
-	iconEnd?: IconLightNames;
+	active?: boolean;
+	hasDivider?: boolean;
+	children?: NavigationItem[];
 }

@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 
-import { NavigationDropdownItem } from '../Navigation.types';
+import { NavigationItem } from '../Navigation.types';
 
 export interface NavigationDropdownProps {
 	id: string;
 	isOpen: boolean;
-	items: NavigationDropdownItem[][];
+	items: NavigationItem[];
 	trigger: ReactNode;
 	lockScroll?: boolean;
 	flyoutClassName?: string;

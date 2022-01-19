@@ -84,6 +84,7 @@ $c-navigation-divider-size: 0.1rem;
 		display: flex;
 		align-items: center;
 		text-decoration: none;
+		font-weight: 400;
 	}
 
 	.c-navigation-list {
@@ -157,7 +158,7 @@ $c-navigation-divider-size: 0.1rem;
 
 	.c-navigation__list-flyout {
 		// Overwrite element styles
-		top: -2rem !important;
+		top: 2rem !important;
 		min-width: 26.6rem !important;
 	}
 
@@ -187,45 +188,35 @@ $c-navigation-divider-size: 0.1rem;
 	}
 }
 
-.c-navigation__item {
-	&:not(:last-child) {
-		margin-right: 4.8rem;
-	}
-}
-
-.c-navigation__border-decoration {
-	&::before,
-	&::after {
-		position: absolute;
-		bottom: -$c-navigation-border-height;
-		width: $c-navigation-border-height;
-		height: $c-navigation-border-height;
-	}
-
-	&::before {
-		width: $c-navigation-border-height + 0.2rem;
-		background-color: $black;
-	}
-
-	&::after {
-		background-color: $teal;
-		border-radius: 50%;
-	}
-}
-
 .c-navigation__link {
+	padding: $spacer-md 0;
+	text-decoration: none;
+
+	&--wrapper {
+		display: flex;
+		align-items: center;
+}
+}
+
+.c-navigation__item {
+	cursor: pointer;
 	position: relative;
 	display: inline-flex;
 	align-items: center;
 	height: $c-navigation-height - $c-navigation-divider-size;
 	border-bottom: $c-navigation-border-height solid transparent;
 	margin-bottom: $c-navigation-divider-size;
-	text-decoration: none;
 	transition: border-color $animate-md-out, color $animate-md-out;
 
+	&:not(:last-child) {
+		margin-right: 4.8rem;
+	}
+
 	&:not(&--active):hover {
-		color: color.adjust($white, $alpha: -0.3);
-		transition: color $animate-md-in;
+		.c-navigation__link, .c-navigation__link+span {
+			color: color.adjust($white, $alpha: -0.3);
+			transition: color $animate-md-in;
+		}
 	}
 
 	&--active {
@@ -251,8 +242,36 @@ $c-navigation-divider-size: 0.1rem;
 	}
 }
 
+.c-navigation__border-decoration {
+	&::before,
+	&::after {
+		position: absolute;
+		bottom: -$c-navigation-border-height;
+		width: $c-navigation-border-height;
+		height: $c-navigation-border-height;
+	}
+
+	&::before {
+		width: $c-navigation-border-height + 0.2rem;
+		background-color: $black;
+	}
+
+	&::after {
+		background-color: $teal;
+		border-radius: 50%;
+	}
+}
+
 .c-navigation__title {
 	font-size: $font-size-lg;
+}
+
+.c-navigation__divider {
+	align-self: center;
+	width: $c-navigation-divider-size;
+	height: 50%;
+	margin-right: 4.8rem;
+	background-color: $c-navigation-list-divider-color;
 }
 
 /**
