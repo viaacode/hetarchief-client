@@ -11,22 +11,22 @@ $c: "c-form-control";
 		font-weight: $font-weight-bold;
 		line-height: $line-height-1xl;
 		margin-bottom: $spacer-sm;
-        cursor: pointer;
+		cursor: pointer;
 	}
 
 	&__errors {
 		@extend %reset-list;
 
 		margin-top: $spacer-sm;
-        color: $cherry;
+		color: $cherry;
 	}
 
-    &--disabled {
-        .#{$c} {
-            &__label {
-                color: $neutral;
-                cursor: not-allowed;
-            }
-        }
-    }
+	&--disabled {
+		.#{$c} {
+			&__label {
+				color: $neutral;
+				cursor: not-allowed;
+			}
+		}
+	}
 }
