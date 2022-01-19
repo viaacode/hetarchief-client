@@ -131,11 +131,14 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const renderFilterMenu = () => {
+		const filterMenuCls = clsx('p-reading-room__filter-menu', {
+			'u-mr-32:md': viewMode === 'list' && showResults,
+		});
+
 		return (
-			<div className={clsx(viewMode === 'list' && 'u-mr-32:md')}>
+			<div className={filterMenuCls}>
 				<WindowSizeContext.Provider value={windowSize}>
 					<FilterMenu
-						className="p-reading-room__filter-menu"
 						filters={filterOptionsMock}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}
@@ -171,7 +174,7 @@ const ReadingRoomPage: NextPage = () => {
 				<Navigation.Right>
 					<Button
 						label="Contacteer"
-						iconStart={<Icon className="u-fs-24" name="contact" />}
+						iconStart={<Icon className="u-font-size-24" name="contact" />}
 						variants="text"
 						className="u-color-white u-mr--12 u-px-12 p-reading-room__contact-button"
 					/>
@@ -208,6 +211,7 @@ const ReadingRoomPage: NextPage = () => {
 							{renderFilterMenu()}
 
 							<Placeholder
+								className="p-reading-room__placeholder"
 								img="/images/looking-glass.svg"
 								title="Geen resultaten"
 								description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."

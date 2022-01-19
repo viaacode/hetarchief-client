@@ -2,8 +2,8 @@ import { Table } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { PaginationBar } from '..';
 import { Icon } from '../Icon';
+import { PaginationBar } from '../PaginationBar';
 
 import { mockColumns, mockData } from './__mocks__/table';
 

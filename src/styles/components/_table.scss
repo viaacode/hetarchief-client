@@ -10,18 +10,18 @@ $c-table-border: 1px solid $silver;
 	max-width: 100%;
 	border-spacing: 0;
 	border-collapse: collapse;
-    display: table;
-    overflow-x: auto;
+	display: table;
+	overflow-x: auto;
 
-    &__scroller {
-        max-width: 100%;
-        overflow-x: scroll;
+	&__scroller {
+		max-width: 100%;
+		overflow-x: scroll;
 
 		// Note: desktop resolutions will rarely need to hide overflow, disable to allow the shadow
 		@include respond-at("lg") {
 			overflow: initial;
 		}
-    }
+	}
 
 	&__wrapper {
 		&--body {
@@ -50,24 +50,24 @@ $c-table-border: 1px solid $silver;
 
 		&:last-child {
 			text-align: right;
-            padding-right: $spacer-xs;
+			padding-right: $spacer-xs;
 		}
 
 		&--body {
 			font-size: $font-size-sm;
 			line-height: $font-size-base;
-            overflow-x: scroll;
+			overflow-x: scroll;
 		}
 
 		&--header {
 			@include text-ellipsis;
 
-            position: relative;
-            font-weight: $font-weight-bold;
+			position: relative;
+			font-weight: $font-weight-bold;
 			font-size: $font-size-xs;
 			line-height: $line-height-2xl;
 			color: $neutral;
-            user-select: none;
+			user-select: none;
 
 			&.#{$c} {
 				&__cell--active {
@@ -75,12 +75,12 @@ $c-table-border: 1px solid $silver;
 				}
 			}
 
-            .#{$c} {
-                &__icon {
-                    font-size: $font-size-base;
-                    position: absolute; // This is enough to correctly position it
-                }
-            }
+			.#{$c} {
+				&__icon {
+					font-size: $font-size-base;
+					position: absolute; // This is enough to correctly position it
+				}
+			}
 		}
 	}
 }
