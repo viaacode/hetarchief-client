@@ -70,7 +70,7 @@ $datepicker-border-color: $zinc;
 
 		&__day--selected,
 		&__day--keyboard-selected {
-			background-color: $teal;
+			background-color: $seagreen;
 			font-weight: $font-weight-normal;
 		}
 
@@ -103,7 +103,7 @@ $datepicker-border-color: $zinc;
 				border: 1px solid $zinc;
 				cursor: pointer;
 				font-family: inherit;
-				outline-color: $teal;
+				outline-color: $seagreen;
 				padding: $spacer-xxs $spacer-xs;
 				width: 100%;
 
@@ -111,9 +111,9 @@ $datepicker-border-color: $zinc;
 				&:focus,
 				&:hover {
 					@extend %datepicker-select-background;
-					@include base64-chevron-down-background($teal);
+					@include base64-chevron-down-background($seagreen);
 
-					border-color: $teal;
+					border-color: $seagreen;
 				}
 			}
 		}
