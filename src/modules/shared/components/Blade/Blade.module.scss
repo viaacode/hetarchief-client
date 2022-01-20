@@ -46,7 +46,7 @@
 		&--managed {
 			min-width: calc(46.4rem + 5.6rem);
 			left: auto;
-			transition: opacity $animate-default, right $animate-default;
+			transition: opacity $animate-default;
 		}
 	}
 

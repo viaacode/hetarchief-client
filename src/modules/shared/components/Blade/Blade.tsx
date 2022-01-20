@@ -51,7 +51,7 @@ const Blade: FC<BladeProps> = ({
 					style={
 						isManaged && layer && layer > 1
 							? {
-									right: `${(currentLayer - layer) * 5.6}rem`,
+									transform: `translateX(-${(currentLayer - layer) * 5.6}rem)`,
 									opacity: isBladeOpen ? 0.4 - (layer - 2) * opacityStep : 0,
 							  }
 							: {}
