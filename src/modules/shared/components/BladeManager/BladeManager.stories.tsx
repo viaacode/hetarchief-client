@@ -36,6 +36,6 @@ export default {
 	component: BladeManager,
 } as ComponentMeta<typeof BladeManager>;
 
-const Template: ComponentStory<typeof BladeManager> = (args) => <BladeManagerStoryComponent />;
+const Template: ComponentStory<typeof BladeManager> = () => <BladeManagerStoryComponent />;
 
 export const Default = Template.bind({});
