@@ -1,4 +1,34 @@
-.u-flex-row {
-    display: flex;
-    flex-direction: row;
+@use "../abstracts" as *;
+
+.u-flex {
+	display: flex;
 }
+
+/**
+ * Direction
+ */
+
+$direction: (
+	"col": column,
+	"row": row,
+);
+@include generate-utils("flex", "flex-direction", $direction, ("md"));
+
+/**
+ * Align
+ */
+
+$align: (
+	"center": center,
+);
+@include generate-utils("align", "align-items", $align);
+
+/**
+ * Justify
+ */
+
+$justify: (
+	"center": center,
+	"between": space-between,
+);
+@include generate-utils("justify", "justify-content", $justify, ("md"));
