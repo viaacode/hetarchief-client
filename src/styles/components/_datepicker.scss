@@ -1,3 +1,133 @@
-@import "@meemoo/react-components/node_modules/react-datepicker/dist/react-datepicker.min.css";
+@use "sass:map";
+@use "sass:math";
+@use "styles/abstracts" as *;
 
 // Note: Not sure this is the right way to import...
+@import "@meemoo/react-components/node_modules/react-datepicker/dist/react-datepicker.min.css";
+
+$c: "c-datepicker";
+$datepicker-day-size: $spacer-lg;
+$datepicker-edge-spacing: $spacer-sm * 0.75;
+
+%datepicker-select-background {
+	appearance: none;
+	background-position-x: calc(100% - #{$spacer-xs});
+	background-position-y: center;
+	background-repeat: no-repeat;
+	background-size: 1.25em;
+}
+
+.#{$c} {
+	.react-datepicker {
+		border-color: $zinc;
+		border-radius: 0;
+		border-top-width: 0;
+		font-family: $font-family-primary;
+		font-size: $font-size-base;
+		line-height: $line-height-lg;
+
+		&-popper {
+			padding-top: 0;
+		}
+
+		&__header {
+			background-color: transparent;
+			border-bottom-width: 0;
+			padding-left: $datepicker-edge-spacing;
+			padding-right: $datepicker-edge-spacing;
+			padding-top: $datepicker-edge-spacing;
+
+			&__dropdown {
+				display: flex;
+			}
+		}
+
+		&__month {
+			margin: 0 $datepicker-edge-spacing $datepicker-edge-spacing $datepicker-edge-spacing;
+		}
+
+		&__day {
+			font-weight: $font-weight-bold;
+		}
+
+		&__day,
+		&__day-name {
+			border-radius: math.div($datepicker-day-size, 2);
+			line-height: $datepicker-day-size;
+			margin: 0;
+			width: $datepicker-day-size;
+
+			&:not(:last-of-type) {
+				margin-right: $datepicker-edge-spacing;
+			}
+		}
+
+		&__day--selected,
+		&__day--keyboard-selected {
+			background-color: $teal;
+			font-weight: $font-weight-normal;
+		}
+
+		&__day--disabled {
+			cursor: not-allowed;
+		}
+
+		&__day--outside-month {
+			opacity: 0.24;
+		}
+
+		&__day-names {
+			font-size: $font-size-sm;
+			line-height: $line-height-3xl;
+			margin-top: $spacer-xs;
+            opacity: 0.59;
+		}
+
+		&__day-name {
+			color: $neutral;
+		}
+
+		&__month-dropdown-container,
+		&__year-dropdown-container {
+			margin: 0;
+
+			select {
+				@extend %datepicker-select-background;
+				@include base64-chevron-down-background($zinc);
+
+				border: 1px solid $zinc;
+				cursor: pointer;
+				font-family: inherit;
+				outline-color: $teal;
+				padding: $spacer-xxs $spacer-xs;
+				width: 100%;
+
+				&:active,
+				&:focus,
+				&:hover {
+					@extend %datepicker-select-background;
+					@include base64-chevron-down-background($teal);
+
+					border-color: $teal;
+				}
+			}
+		}
+
+		&__month-dropdown-container {
+			flex-grow: 4;
+			margin-left: $spacer-xxs;
+			margin-right: $spacer-xs;
+
+			// Note: this does not align with the nlBE locale used by react-datepicker
+			select {
+				text-transform: capitalize;
+			}
+		}
+
+		&__year-dropdown-container {
+			flex-grow: 3;
+			margin-left: $spacer-xs;
+			margin-right: $spacer-xxs;
+		}
+	}
+}
