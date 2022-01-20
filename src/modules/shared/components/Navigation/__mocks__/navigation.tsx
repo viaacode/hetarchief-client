@@ -61,7 +61,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					iconEnd: (
 						<Icon
 							className={clsx(
-								'u-fs-24',
+								'u-font-size-24',
 								'u-text-left',
 								'u-visibility-hidden',
 								'u-visibility-visible:md',
@@ -79,7 +79,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					iconEnd: (
 						<Icon
 							className={clsx(
-								'u-fs-24',
+								'u-font-size-24',
 								'u-text-left',
 								'u-visibility-hidden',
 								'u-visibility-visible:md',
@@ -97,7 +97,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					iconEnd: (
 						<Icon
 							className={clsx(
-								'u-fs-24',
+								'u-font-size-24',
 								'u-text-left',
 								'u-visibility-hidden',
 								'u-visibility-visible:md',
@@ -194,7 +194,7 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 					iconStart: (
 						<Icon
 							className={clsx(
-								'u-fs-24',
+								'u-font-size-24',
 								'u-text-left',
 								styles['c-navigation__dropdown-icon--start']
 							)}

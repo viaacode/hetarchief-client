@@ -3,14 +3,14 @@ import { FC, ReactNode, useState } from 'react';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 
-import { NavigationItem } from '..';
 import styles from '../Navigation.module.scss';
+import { NavigationItem } from '../Navigation.types';
 import { NavigationDropdown } from '../NavigationDropdown';
 
 import { NavigationListProps } from './NavigationList.types';
 
 const NavigationList: FC<NavigationListProps> = ({ items }) => {
-	const [openDropdown, setOpenDropdown] = useState('');
+	const [openDropdown, setOpenDropdown] = useState<string | undefined>(undefined);
 
 	const renderDropdown = (
 		id: string,
@@ -25,7 +25,7 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 				trigger={trigger}
 				lockScroll
 				onOpen={(id) => setOpenDropdown(id)}
-				onClose={() => setOpenDropdown('')}
+				onClose={() => setOpenDropdown(undefined)}
 				flyoutClassName={styles['c-navigation__list-flyout']}
 			/>
 		);

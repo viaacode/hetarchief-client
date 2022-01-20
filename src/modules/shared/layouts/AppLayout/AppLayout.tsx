@@ -22,8 +22,6 @@ const AppLayout: FC = ({ children }) => {
 					hamburgerProps={{
 						hamburgerLabelOpen: 'sluit',
 						hamburgerLabelClosed: 'Menu',
-						hamburgerIconOpen: 'times',
-						hamburgerIconClosed: 'grid-view',
 					}}
 				/>
 				<Navigation.Right placement="right" items={MOCK_ITEMS_RIGHT} />

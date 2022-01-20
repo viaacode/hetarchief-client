@@ -36,6 +36,6 @@ export interface NavigationItem {
 export interface NavigationHamburgerProps {
 	hamburgerLabelOpen: string;
 	hamburgerLabelClosed: string;
-	hamburgerIconOpen: IconLightNames;
-	hamburgerIconClosed: IconLightNames;
+	hamburgerIconOpen?: IconLightNames;
+	hamburgerIconClosed?: IconLightNames;
 }

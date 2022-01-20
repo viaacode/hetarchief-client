@@ -130,20 +130,10 @@ $c-navigation-divider-size: 0.1rem;
 		z-index: 3; // above all
 	}
 
-	.c-navigation__dropdown-item--1 {
-		margin-left: $spacer-md;
-	}
-
-	.c-navigation__dropdown-item--2 {
-		margin-left: calc(2 * $spacer-md);
-	}
-
-	.c-navigation__dropdown-item--3 {
-		margin-left: calc(3 * $spacer-md);
-	}
-
-	.c-navigation__dropdown-item--4 {
-		margin-left: calc(4 * $spacer-md);
+	@for $i from 1 through 4 {
+		.c-navigation__dropdown-item--#{$i} {
+			margin-left: $i * $spacer-md;
+		}
 	}
 
 	.c-dropdown-menu__sub-list {

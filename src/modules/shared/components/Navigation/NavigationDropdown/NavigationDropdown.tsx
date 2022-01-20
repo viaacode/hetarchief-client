@@ -5,8 +5,8 @@ import { FC, ReactNode } from 'react';
 import { useScrollLock } from '@shared/hooks';
 import { isBrowser } from '@shared/utils';
 
-import { NavigationItem } from '..';
 import styles from '../Navigation.module.scss';
+import { NavigationItem } from '../Navigation.types';
 
 import { NavigationDropdownProps } from './NavigationDropdown.types';
 

@@ -51,21 +51,22 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 							variants="text"
 							className="u-color-white u-px-12 u-ml--12"
 							iconStart={
-								hamburgerProps?.hamburgerIconOpen &&
-								hamburgerProps?.hamburgerIconClosed && (
-									<Icon
-										className={clsx(
-											'u-fs-24',
-											`u-text-${placement}`,
-											!isHamburgerMenuOpen && 'u-color-teal'
-										)}
-										name={
-											isHamburgerMenuOpen
-												? (hamburgerProps?.hamburgerIconOpen as IconLightNames)
-												: (hamburgerProps?.hamburgerIconClosed as IconLightNames)
-										}
-									/>
-								)
+								<Icon
+									className={clsx(
+										'u-fs-24',
+										`u-text-${placement}`,
+										!isHamburgerMenuOpen && 'u-color-teal'
+									)}
+									name={
+										isHamburgerMenuOpen
+											? hamburgerProps?.hamburgerIconOpen
+												? hamburgerProps?.hamburgerIconOpen
+												: 'times'
+											: hamburgerProps?.hamburgerIconClosed
+											? hamburgerProps?.hamburgerIconClosed
+											: 'grid-view'
+									}
+								/>
 							}
 						/>
 					}
