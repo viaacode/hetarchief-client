@@ -2,6 +2,8 @@ import { FC, ReactNode } from 'react';
 
 import { DefaultComponentProps } from '@shared/types';
 
+import { IconLightNames } from '../Icon';
+
 export type NavigationFC<P = unknown> = FC<P> & {
 	Left: FC<NavigationSectionProps>;
 	Center: FC<NavigationCenterProps>;
@@ -18,7 +20,9 @@ export interface NavigationCenterProps {
 
 export interface NavigationSectionProps {
 	items?: NavigationItem[];
-	placement?: 'left' | 'right';
+	placement: 'left' | 'right';
+	renderHamburger?: boolean;
+	hamburgerProps?: NavigationHamburgerProps;
 }
 
 export interface NavigationItem {
@@ -27,4 +31,11 @@ export interface NavigationItem {
 	active?: boolean;
 	hasDivider?: boolean;
 	children?: NavigationItem[];
+}
+
+export interface NavigationHamburgerProps {
+	hamburgerLabelOpen: string;
+	hamburgerLabelClosed: string;
+	hamburgerIconOpen: IconLightNames;
+	hamburgerIconClosed: IconLightNames;
 }

@@ -151,7 +151,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 
 export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 	{
-		node: renderLink('Inloggen of registreren', '#', { className: linkCls() }),
+		node: renderLink('Inloggen of registreren', '#', { className: linkCls(['u-text-right']) }),
 		id: 'auth log in',
 		children: [
 			{

@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconLightNames } from '../Icon';
 import { Overlay } from '../Overlay';
 
 import styles from './Navigation.module.scss';
@@ -15,34 +15,53 @@ import {
 import { NavigationDropdown } from './NavigationDropdown';
 import NavigationList from './NavigationList/NavigationList';
 
-const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
+const NavigationSection: FC<NavigationSectionProps> = ({
+	children,
+	items,
+	placement,
+	renderHamburger,
+	hamburgerProps,
+}) => {
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false); // Note: Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 
 	const renderHamburgerMenu = () => {
 		return (
 			<div className={styles['c-navigation__section--responsive-mobile']}>
-				<Overlay
-					visible={isHamburgerMenuOpen}
-					className={styles['c-navigation__dropdown-overlay']}
-				/>
+				{renderHamburger && (
+					<Overlay
+						visible={isHamburgerMenuOpen}
+						className={styles['c-navigation__dropdown-overlay']}
+					/>
+				)}
 				<NavigationDropdown
-					id="menu"
+					id={'menu'}
 					isOpen={isHamburgerMenuOpen}
 					items={items ? items : []}
 					trigger={
 						<Button
-							label={isHamburgerMenuOpen ? 'Sluit' : 'Menu'}
+							label={
+								isHamburgerMenuOpen
+									? hamburgerProps?.hamburgerLabelOpen
+									: hamburgerProps?.hamburgerLabelClosed
+							}
 							variants="text"
 							className="u-color-white u-px-12 u-ml--12"
 							iconStart={
-								<Icon
-									className={clsx(
-										'u-fs-24',
-										'u-text-left',
-										!isHamburgerMenuOpen && 'u-color-teal'
-									)}
-									name={isHamburgerMenuOpen ? 'times' : 'grid-view'}
-								/>
+								hamburgerProps?.hamburgerIconOpen &&
+								hamburgerProps?.hamburgerIconClosed && (
+									<Icon
+										className={clsx(
+											'u-fs-24',
+											`u-text-${placement}`,
+											!isHamburgerMenuOpen && 'u-color-teal'
+										)}
+										name={
+											isHamburgerMenuOpen
+												? (hamburgerProps?.hamburgerIconOpen as IconLightNames)
+												: (hamburgerProps?.hamburgerIconClosed as IconLightNames)
+										}
+									/>
+								)
 							}
 						/>
 					}
@@ -56,33 +75,26 @@ const NavigationLeft: FC<NavigationSectionProps> = ({ children, items }) => {
 	};
 
 	const renderDesktop = () => {
-		return (
+		return renderHamburger ? (
 			<div className={styles['c-navigation__section--responsive-desktop']}>
 				{items && items.length ? <NavigationList items={items} /> : children}
 			</div>
+		) : (
+			<>{items && items.length ? <NavigationList items={items} /> : children}</>
 		);
 	};
 	return (
 		<div
-			className={clsx(styles['c-navigation__section'], styles['c-navigation__section--left'])}
+			className={clsx(
+				styles['c-navigation__section'],
+				styles[`c-navigation__section--${placement}`]
+			)}
 		>
 			{renderDesktop()}
-			{renderHamburgerMenu()}
+			{renderHamburger && renderHamburgerMenu()}
 		</div>
 	);
 };
-
-const NavigationRight: FC<NavigationSectionProps> = ({ children, items }) => (
-	<div
-		className={clsx(
-			styles['c-navigation__section'],
-			styles['c-navigation__section--right'],
-			'u-text-right'
-		)}
-	>
-		{items && items.length ? <NavigationList items={items} /> : children}
-	</div>
-);
 
 const NavigationCenter: FC<NavigationCenterProps> = ({ children, title }) => (
 	<div className={styles['c-navigation__section']}>
@@ -99,8 +111,8 @@ const Navigation: NavigationFC<NavigationProps> = ({ children, className, contex
 	return <nav className={rootCls}>{children}</nav>;
 };
 
-Navigation.Left = NavigationLeft;
+Navigation.Left = NavigationSection;
 Navigation.Center = NavigationCenter;
-Navigation.Right = NavigationRight;
+Navigation.Right = NavigationSection;
 
 export default Navigation;
