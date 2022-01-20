@@ -47,7 +47,11 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	{
 		node: renderLink('Leeszalen', '#', {
 			badge: <Badge text="2" />,
-			className: linkCls(['u-color-black', 'u-color-white:md']),
+			className: linkCls([
+				'u-color-black',
+				'u-color-white:md',
+				styles['c-navigation__link--dropdown'],
+			]),
 		}),
 		id: 'leeszalen',
 		active: true,
@@ -110,19 +114,31 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	},
 	{
 		node: renderLink('Over de leeszalen', '#', {
-			className: linkCls(['u-color-black', 'u-color-white:md']),
+			className: linkCls([
+				'u-color-black',
+				'u-color-white:md',
+				styles['c-navigation__link--dropdown'],
+			]),
 		}),
 		id: 'over leeszalen',
 	},
 	{
 		node: renderLink('Vaak gestelde vragen', '#', {
-			className: linkCls(['u-color-black', 'u-color-white:md']),
+			className: linkCls([
+				'u-color-black',
+				'u-color-white:md',
+				styles['c-navigation__link--dropdown'],
+			]),
 		}),
 		id: 'vragen',
 	},
 	{
 		node: renderLink('Beheer', '#', {
-			className: linkCls(['u-color-black', 'u-color-white:md']),
+			className: linkCls([
+				'u-color-black',
+				'u-color-white:md',
+				styles['c-navigation__link--dropdown'],
+			]),
 		}),
 		id: 'beheer',
 		hasDivider: true,

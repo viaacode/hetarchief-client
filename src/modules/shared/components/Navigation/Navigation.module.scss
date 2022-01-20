@@ -330,7 +330,7 @@ $c-navigation-divider-size: 0.1rem;
 			border-bottom: none;
 			font-size: $font-size-sm;
 
-			&:hover {
+			&--dropdown:hover {
 				background-color: $silver;
 			}
 		}
