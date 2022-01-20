@@ -3,6 +3,7 @@
 .c-button {
 	display: inline-block;
 	height: 4.8rem;
+	padding: 1.4rem $button-horizontal-whitespace;
 	padding: 1.4rem 2.4rem;
 	border: 1px solid $teal-dark;
 	font-family: $font-family-primary;
@@ -211,6 +212,11 @@
 	&.c-button--xxs {
 		width: 2.2rem;
 		height: 2.2rem;
+
+		.c-button__icon {
+			font-size: 2.2rem;
+			transform: translateX(-0.1rem); // adjust for visual mismatch
+		}
 	}
 }
 

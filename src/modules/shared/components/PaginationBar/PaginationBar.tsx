@@ -10,10 +10,11 @@ import { PaginationBarProps } from './PaginationBar.types';
 
 const PaginationBar: FC<PaginationBarProps> = ({
 	className,
-	start,
 	count,
-	total,
 	onPageChange,
+	showBackToTop,
+	start,
+	total,
 }) => {
 	const scrollToTop = () => {
 		window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -51,18 +52,26 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	);
 
 	return (
-		<div className={clsx(className, styles['c-pagination-bar'])}>
+		<div
+			className={clsx(
+				className,
+				styles['c-pagination-bar'],
+				showBackToTop && styles['c-pagination-bar--back-to-top']
+			)}
+		>
 			{renderProgress()}
 
 			{renderPagination()}
 
-			<Button
-				className={styles['c-pagination-bar__back-to-top']}
-				variants={['text', 'neutral']}
-				label="Terug naar boven"
-				iconEnd={<Icon name="arrow-up" />}
-				onClick={scrollToTop}
-			/>
+			{showBackToTop && (
+				<Button
+					className={styles['c-pagination-bar__back-to-top']}
+					variants={['text', 'neutral']}
+					label="Terug naar boven"
+					iconEnd={<Icon name="arrow-up" />}
+					onClick={scrollToTop}
+				/>
+			)}
 		</div>
 	);
 };

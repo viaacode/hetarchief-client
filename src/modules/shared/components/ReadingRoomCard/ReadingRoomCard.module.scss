@@ -122,7 +122,7 @@ $c: "c-reading-room-card";
 	}
 
 	&__title {
-		@include text-ellipsis;
+		@include text-ellipsis(true);
 
 		font-size: $font-size-md;
 		line-height: math.div($font-size-md, 9) * 10; // 2rem
