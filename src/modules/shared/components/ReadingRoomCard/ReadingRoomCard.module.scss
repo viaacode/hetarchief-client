@@ -32,6 +32,10 @@ $c: "c-reading-room-card";
 				margin-right: 2rem;
 				height: 100%;
 			}
+			@include respond-to("xs") {
+				min-width: 100px;
+				margin-right: $spacer-sm;
+			}
 		}
 
 		&--tall {
@@ -99,7 +103,7 @@ $c: "c-reading-room-card";
 			flex-grow: 1;
 			min-width: 0;
 			position: relative;
-			
+
 			@include respond-at("md") {
 				padding-right: $spacer-md;
 
@@ -119,7 +123,7 @@ $c: "c-reading-room-card";
 
 	&__title {
 		@include text-ellipsis;
-		
+
 		font-size: $font-size-md;
 		line-height: math.div($font-size-md, 9) * 10; // 2rem
 

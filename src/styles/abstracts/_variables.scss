@@ -7,6 +7,7 @@
 $white: #FFF;
 $black: #000;
 $teal: #00C8AA;
+$teal-dark: #00857D;
 $seagreen: #009690;
 $cherry: #D60039;
 $shade: #505050;
@@ -79,6 +80,7 @@ $line-height-sm: 0.625;
  */
 
 $breakpoints: (
+	"xs": 390px,
 	"sm": 576px,
 	"md": 768px,
 	"lg": 992px,

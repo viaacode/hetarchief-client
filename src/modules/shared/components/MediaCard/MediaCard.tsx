@@ -22,13 +22,9 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
 			<Button
-				className={clsx(
-					styles['c-media-card__icon-button'],
-					'c-button--text c-button--icon c-button--xxs c-button--ghost'
-				)}
-				icon={
-					<Icon className={styles['c-media-card__icon']} type="light" name="bookmark" />
-				}
+				className={styles['c-media-card__icon-button']}
+				icon={<Icon className={styles['c-media-card__icon']} name="bookmark" />}
+				variants={['text', 'xxs']}
 			/>
 
 			{/* TODO: uncomment & switch to dropdown / action / ... once more actions are required on a MediaCard
@@ -36,12 +32,11 @@ const MediaCard: FC<MediaCardProps> = ({
 			{/* <Button
 				className={clsx(
 					styles['c-media-card__icon-button'],
-					'c-button--text c-button--icon c-button--xxs c-button--ghost'
+					'c-button--text c-button--icon c-button--xxs'
 				)}
 				icon={
 					<Icon
 						className={styles['c-media-card__icon']}
-						type="light"
 						name="dots-vertical"
 					/>
 				}
@@ -71,7 +66,6 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderNoContentIcon = () => (
 		<Icon
 			className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'])}
-			type="light"
 			name={`no-${type}` as 'no-audio' | 'no-video'}
 		/>
 	);
