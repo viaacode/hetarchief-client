@@ -1,5 +1,5 @@
-@use "sass:map";
 @use "sass:math";
+@use "sass:color";
 @use "styles/abstracts" as *;
 
 // Note: Not sure this is the right way to import...
@@ -8,6 +8,7 @@
 $c: "c-datepicker";
 $datepicker-day-size: $spacer-lg;
 $datepicker-edge-spacing: $spacer-sm * 0.75;
+$datepicker-border-color: $zinc;
 
 %datepicker-select-background {
 	appearance: none;
@@ -19,7 +20,7 @@ $datepicker-edge-spacing: $spacer-sm * 0.75;
 
 .#{$c} {
 	.react-datepicker {
-		border-color: $zinc;
+		border-color: $datepicker-border-color;
 		border-radius: 0;
 		border-top-width: 0;
 		font-family: $font-family-primary;
@@ -28,6 +29,10 @@ $datepicker-edge-spacing: $spacer-sm * 0.75;
 
 		&-popper {
 			padding-top: 0;
+			margin-top: -1px;
+			border-top: 1px solid $datepicker-border-color;
+			overflow-x: scroll;
+			max-width: 100%;
 		}
 
 		&__header {
@@ -80,11 +85,10 @@ $datepicker-edge-spacing: $spacer-sm * 0.75;
 			font-size: $font-size-sm;
 			line-height: $line-height-3xl;
 			margin-top: $spacer-xs;
-            opacity: 0.59;
 		}
 
 		&__day-name {
-			color: $neutral;
+			color: color.adjust($neutral, $alpha: -0.41);
 		}
 
 		&__month-dropdown-container,
