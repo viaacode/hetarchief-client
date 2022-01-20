@@ -30,13 +30,17 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 				{renderHamburger && (
 					<Overlay
 						visible={isHamburgerMenuOpen}
-						className={styles['c-navigation__dropdown-overlay']}
+						className={clsx(
+							styles['c-navigation__dropdown-overlay'],
+							styles['c-navigation__hamburger-overlay']
+						)}
 					/>
 				)}
 				<NavigationDropdown
 					id={'menu'}
 					isOpen={isHamburgerMenuOpen}
 					items={items ? items : []}
+					className={styles['c-navigation__hamburger']}
 					trigger={
 						<Button
 							label={
@@ -66,7 +70,10 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 						/>
 					}
 					lockScroll
-					flyoutClassName={styles['c-navigation__dropdown-flyout']}
+					flyoutClassName={clsx(
+						styles['c-navigation__dropdown-flyout'],
+						styles['c-navigation__hamburger']
+					)}
 					onOpen={() => setIsHamburgerMenuOpen(true)}
 					onClose={() => setIsHamburgerMenuOpen(false)}
 				/>

@@ -8,6 +8,7 @@ export interface NavigationDropdownProps {
 	items: NavigationItem[];
 	trigger: ReactNode;
 	lockScroll?: boolean;
+	className?: string;
 	flyoutClassName?: string;
 	onOpen?: (id: string) => void;
 	onClose?: (id: string) => void;

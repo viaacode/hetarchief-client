@@ -101,6 +101,10 @@ $c-navigation-divider-size: 0.1rem;
 		z-index: 2; // above overlay
 	}
 
+	.c-navigation__hamburger {
+		z-index: 3; // above all
+	}
+
 	.c-navigation__dropdown-flyout {
 		// Overwrite element styles
 		inset: $c-navigation-height-md 0 0 0 !important;
@@ -120,6 +124,10 @@ $c-navigation-divider-size: 0.1rem;
 	.c-navigation__dropdown-overlay {
 		z-index: 2; // above foreground layers
 		height: 100vh;
+	}
+
+	.c-navigation__hamburger-overlay {
+		z-index: 3; // above all
 	}
 
 	.c-navigation__dropdown-item--1 {

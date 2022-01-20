@@ -16,6 +16,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 	items,
 	trigger,
 	lockScroll,
+	className,
 	flyoutClassName,
 	onOpen,
 	onClose,
@@ -43,7 +44,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 
 	return (
 		<Dropdown
-			className={styles['c-navigation__dropdown']}
+			className={clsx(styles['c-navigation__dropdown'], className)}
 			isOpen={isOpen}
 			triggerWidth="full-width"
 			flyoutClassName={flyoutClassName}
