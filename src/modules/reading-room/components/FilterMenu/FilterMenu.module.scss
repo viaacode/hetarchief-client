@@ -27,15 +27,16 @@
 	}
 }
 
-.c-filter-menu__view-toggle {
-	flex: 0 1 auto;
-	display: flex;
-	align-items: center;
-	height: 100%;
+.c-filter-menu__view-toggle-container {
 	border-left: 1px solid rgb(255 255 255 / 10%);
+}
+
+.c-filter-menu__view-toggle {
+	padding: 0;
 
 	:global(.c-button) {
-		color: $white;
+		width: 4rem;
+		height: 4rem;
 	}
 }
 

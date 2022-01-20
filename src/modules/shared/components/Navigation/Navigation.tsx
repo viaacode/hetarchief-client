@@ -90,8 +90,8 @@ const NavigationCenter: FC<NavigationCenterProps> = ({ children, title }) => (
 	</div>
 );
 
-const Navigation: NavigationFC<NavigationProps> = ({ children, contextual = false }) => {
-	const rootCls = clsx(styles['c-navigation'], {
+const Navigation: NavigationFC<NavigationProps> = ({ children, className, contextual = false }) => {
+	const rootCls = clsx(className, styles['c-navigation'], {
 		[styles['c-navigation--sm']]: contextual,
 		[styles['c-navigation--responsive']]: !contextual,
 	});

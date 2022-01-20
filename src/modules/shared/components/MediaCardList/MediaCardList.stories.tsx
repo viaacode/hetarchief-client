@@ -28,7 +28,7 @@ Grid.args = {
 };
 Grid.loaders = [
 	async () => ({
-		items: await mock({ view: 'grid' }),
+		items: await mock({ view: 'grid' }, 0, 100),
 	}),
 ];
 Grid.parameters = {
