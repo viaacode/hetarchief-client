@@ -9,4 +9,5 @@ export interface PaginationBarProps
 		Pick<PaginationProps, 'onPageChange'>,
 		Pick<PaginationProgressProps, 'start' | 'total'> {
 	count: number;
+	showBackToTop?: boolean;
 }
