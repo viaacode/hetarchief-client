@@ -60,6 +60,7 @@ $datepicker-border-color: $zinc;
 			border-radius: math.div($datepicker-day-size, 2);
 			line-height: $datepicker-day-size;
 			margin: 0;
+			outline-color: $neutral;
 			width: $datepicker-day-size;
 
 			&:not(:last-of-type) {
