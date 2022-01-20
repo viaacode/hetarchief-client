@@ -1,4 +1,9 @@
-import { Datepicker, future, historic, TextInput } from '@meemoo/react-components';
+import {
+	Datepicker,
+	futureDatepicker,
+	historicDatepicker,
+	TextInput,
+} from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
@@ -17,16 +22,16 @@ const Template: ComponentStory<typeof Datepicker> = (props) => {
 
 export const Future = Template.bind({});
 Future.args = {
-	...future,
+	...futureDatepicker,
 };
 
 export const Historic = Template.bind({});
 Historic.args = {
-	...historic,
+	...historicDatepicker,
 };
 
 export const WithInput = Template.bind({});
 WithInput.args = {
-	...future,
+	...futureDatepicker,
 	customInput: <TextInput iconStart={<Icon name="calendar" />} />,
 };
