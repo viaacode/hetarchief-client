@@ -4,16 +4,16 @@
  * Colors
  */
 
-$white: #FFF;
+$white: #fff;
 $black: #000;
-$teal: #00C8AA;
+$teal: #00c8aa;
 $seagreen: #009690;
-$cherry: #D60039;
+$cherry: #d60039;
 $shade: #505050;
 $neutral: #727272;
-$zinc: #ADADAD;
-$silver: #E6E6E6;
-$platinum: #F8F8F8;
+$zinc: #adadad;
+$silver: #e6e6e6;
+$platinum: #f8f8f8;
 
 /**
  * Derived Colors
@@ -26,14 +26,15 @@ $zinc-40: color.adjust($zinc, $alpha: -0.6);
 
 $shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
 $shadow-24-black-24: 0 0 24px color.adjust($black, $alpha: -0.76);
+$shadow-24-black-08: 0 0 24px color.adjust($black, $alpha: -0.92);
 $shadow-24-black-04: 0 0 24px color.adjust($black, $alpha: -0.96);
 
 /**
  * Spacers
  */
 
-$spacer-xxs: .4rem;
-$spacer-xs: .8rem;
+$spacer-xxs: 0.4rem;
+$spacer-xs: 0.8rem;
 $spacer-sm: 1.6rem;
 $spacer-md: 2.4rem;
 $spacer-lg: 3.2rem;
@@ -52,7 +53,7 @@ $font-family-icons-solid: meemoo-icons-solid;
 // Sizes
 $font-size-4xl: 6.4rem;
 $font-size-3xl: 4.8rem;
-$font-size-2xl: 4.0rem;
+$font-size-2xl: 4rem;
 $font-size-1xl: 3.2rem;
 $font-size-lg: 2.4rem;
 $font-size-md: 1.8rem;
@@ -113,6 +114,12 @@ $card-edge-size: 1px;
 $card-offset: 2rem;
 
 /**
+ * Card
+ */
+
+$button-horizontal-whitespace: $spacer-md;
+
+/**
  * Dividers
  */
 
@@ -137,9 +144,9 @@ $timing-lg-in: $timing-xslow;
 $timing-lg-out: $timing-slow;
 
 // Easings
-$ease-default: cubic-bezier(0.4, 0.0, 0.2, 1);
-$ease-in: cubic-bezier(0.0, 0.0, 0.2, 1);
-$ease-out: cubic-bezier(0.4, 0.0, 1, 1);
+$ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-in: cubic-bezier(0, 0, 0.2, 1);
+$ease-out: cubic-bezier(0.4, 0, 1, 1);
 
 // Combinations
 $animate-default: $timing-default $ease-default;

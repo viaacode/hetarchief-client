@@ -16,3 +16,9 @@ Default.args = {
 	count: 50,
 	total: 1024,
 };
+
+export const BackToTop = Template.bind({});
+BackToTop.args = {
+	...Default.args,
+	showBackToTop: true,
+};
