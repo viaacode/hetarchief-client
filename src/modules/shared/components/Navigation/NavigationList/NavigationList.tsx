@@ -69,7 +69,7 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 											item.id,
 											renderTrigger(
 												item,
-												openDropdown === item.id ? 'angle-down' : 'angle-up'
+												openDropdown === item.id ? 'angle-up' : 'angle-down'
 											),
 											item.children
 									  )
