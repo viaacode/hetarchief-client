@@ -19,7 +19,7 @@ $datepicker-border-color: $zinc;
 }
 
 .#{$c} {
-	.react-datepicker {
+	&.react-datepicker {
 		border-color: $datepicker-border-color;
 		border-radius: 0;
 		border-top-width: 0;
@@ -34,7 +34,9 @@ $datepicker-border-color: $zinc;
 			overflow-x: scroll;
 			max-width: 100%;
 		}
+	}
 
+	.react-datepicker {
 		&__header {
 			background-color: transparent;
 			border-bottom-width: 0;
