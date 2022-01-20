@@ -75,10 +75,14 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 									  )
 									: item.node}
 								{item.active && (
-									<span className={styles['c-navigation__border-decoration']} />
-								)}
-								{item.active && (
-									<span className={styles['c-navigation__border-decoration']} />
+									<>
+										<span
+											className={styles['c-navigation__border-decoration']}
+										/>
+										<span
+											className={styles['c-navigation__border-decoration']}
+										/>
+									</>
 								)}
 							</li>
 						</>
