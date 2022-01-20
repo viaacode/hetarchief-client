@@ -1,0 +1,32 @@
+@use "styles/abstracts" as *;
+
+$c: "c-datepicker--time";
+$item-selector: ".react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item";
+
+.#{$c} {
+	.react-datepicker {
+		&__header {
+			&--time--only {
+				display: none;
+			}
+		}
+
+		#{$item-selector} {
+			outline-color: $seagreen;
+
+            &--disabled {
+                cursor: not-allowed;
+                color: $zinc;
+            }
+
+			&--selected {
+				background-color: $seagreen;
+				font-weight: $font-weight-normal;
+			}
+
+            &:not(.react-datepicker__time-list-item):hover {
+                background-color: $silver;
+            }
+		}
+	}
+}
