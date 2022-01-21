@@ -57,8 +57,7 @@ const ReadingRoomPage: NextPage = () => {
 		() =>
 			READING_ROOM_TABS.map((tab) => ({
 				...tab,
-				// TODO: remove any once Tab type supports ReactNode
-				label: (<TabLabel label={tab.label} count={mediaCount[tab.id]} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+				label: <TabLabel label={tab.label} count={mediaCount[tab.id]} />,
 				active: tab.id === query.mediaType,
 			})),
 		[query.mediaType, mediaCount]
@@ -159,7 +158,7 @@ const ReadingRoomPage: NextPage = () => {
 			</Head>
 
 			<Navigation contextual>
-				<Navigation.Left>
+				<Navigation.Left placement="left">
 					<Link href="/" passHref={true}>
 						<Button
 							icon={<Icon name="arrow-left" />}
@@ -171,7 +170,7 @@ const ReadingRoomPage: NextPage = () => {
 
 				<Navigation.Center title="Leeszaal" />
 
-				<Navigation.Right>
+				<Navigation.Right placement="right">
 					<Button
 						label="Contacteer"
 						iconStart={<Icon className="u-font-size-24" name="contact" />}
@@ -189,7 +188,7 @@ const ReadingRoomPage: NextPage = () => {
 			</section>
 
 			<section
-				className={clsx('p-reading-room__results u-py-24 u-py-48:md', {
+				className={clsx('p-reading-room__results u-bg-platinum u-py-24 u-py-48:md', {
 					'p-reading-room__results--placeholder': showInitialView || showNoResults,
 				})}
 			>
