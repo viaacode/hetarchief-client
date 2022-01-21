@@ -41,8 +41,7 @@ WithCustomLabel.args = {
 			<strong className="u-mr-8">Video</strong>
 			<small>(52)</small>
 		</>
-	) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-	// TODO: remove any once Tab type supports ReactNode
+	),
 	active: false,
 	icon: <Icon name="video" />,
 };

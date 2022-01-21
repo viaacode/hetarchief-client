@@ -1,4 +1,3 @@
-@use "sass:map";
 @use "sass:color";
 @use "styles/abstracts" as *;
 
@@ -16,6 +15,14 @@ $c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
 		width: 4rem;
 		height: 4rem;
 
+		&:global(.c-button) {
+			outline: none;
+
+			&:not(:active,:hover):focus {
+				outline: none;
+			}
+		}
+
 		&--disabled {
 			color: $c-toggle-black-32;
 		}
@@ -29,6 +36,7 @@ $c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
 	&--dark {
 		background-color: $black;
 
+		/* stylelint-disable-next-line no-descending-specificity */
 		.c-toggle__option {
 			color: $white;
 

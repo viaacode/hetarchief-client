@@ -56,6 +56,5 @@ $ml: (
 $mr: (
 	"8": $spacer-xs,
 	"-12": - 1.2rem,
-	"32": $spacer-lg
 );
-@include generate-utils("mr", "margin-right", $mr, ("md"));
+@include generate-utils("mr", "margin-right", $mr);
