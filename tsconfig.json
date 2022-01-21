@@ -23,5 +23,5 @@
     "types": ["jest"]
   },
   "include": ["next-env.d.ts", "jest/**/*.js", "src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "src/**/*.stories.*", "src/**/*.test.*"]
 }
