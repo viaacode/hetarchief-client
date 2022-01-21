@@ -10,7 +10,7 @@ const BladeManager: FC<BladeManagerProps> = ({
 	children,
 	currentLayer,
 	opacityStep = 0.1,
-	onCloseBlade,
+	onCloseBlade = () => null,
 }) => {
 	useScrollLock(isBrowser() ? document.body : null, currentLayer > 0);
 

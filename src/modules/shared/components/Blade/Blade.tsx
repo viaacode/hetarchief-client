@@ -51,7 +51,9 @@ const Blade: FC<BladeProps> = ({
 						isLayered && layer > 1 && layer <= currentLayer
 							? {
 									transform: `translateX(-${(currentLayer - layer) * 5.6}rem)`,
-									opacity: isBladeOpen ? 0.4 - (layer - 2) * opacityStep : 0,
+									opacity: isBladeOpen
+										? (0.4 - (layer - 2) * opacityStep).toFixed(2)
+										: 0,
 							  }
 							: {}
 					}
