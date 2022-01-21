@@ -1,5 +1,5 @@
-@use "styles/abstracts" as *;
 @use "sass:math";
+@use "styles/abstracts" as *;
 
 $c: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
@@ -30,7 +30,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 		&--list {
 			min-width: 248px;
-			
+
 			span > img {
 				max-height: unset !important;
 				min-height: unset !important;
@@ -47,9 +47,13 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 			background-color: $platinum;
 			color: $zinc;
 			display: flex;
-			min-height: 100%;
-			min-width: 248px;
+			min-height: 3.2rem;
+			min-width: 24.8rem;
 			place-content: center;
+
+			@include respond-at(md) {
+				min-height: 100%;
+			}
 
 			.#{$c}__no-content {
 				transform: translateY(-25%);
@@ -65,5 +69,6 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 	&__toolbar {
 		display: flex;
 		flex-direction: row;
+		flex-shrink: 0;
 	}
 }

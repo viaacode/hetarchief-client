@@ -8,8 +8,7 @@ export const mockTabs = [
 				<strong className="u-mr-8">Alles</strong>
 				<small>(52)</small>
 			</>
-		) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-		// TODO: remove any once Tab type supports ReactNode
+		),
 		active: true,
 	},
 	{
@@ -19,8 +18,7 @@ export const mockTabs = [
 				<strong className="u-mr-8">Audio</strong>
 				<small>(52)</small>
 			</>
-		) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-		// TODO: remove any once Tab type supports ReactNode
+		),
 		icon: <Icon name="audio" />,
 	},
 	{
@@ -30,8 +28,7 @@ export const mockTabs = [
 				<strong className="u-mr-8">Video</strong>
 				<small>(0)</small>
 			</>
-		) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-		// TODO: remove any once Tab type supports ReactNode
+		),
 		icon: <Icon name="video" />,
 	},
 	{
@@ -41,8 +38,7 @@ export const mockTabs = [
 				<strong className="u-mr-8">Kranten</strong>
 				<small>(0)</small>
 			</>
-		) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-		// TODO: remove any once Tab type supports ReactNode
+		),
 		icon: <Icon name="newspaper" />,
 	},
 ];
