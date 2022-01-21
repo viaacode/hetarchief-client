@@ -2,6 +2,42 @@
 
 $c: "c-pagination-bar";
 
+@mixin c-pagination-bar-two-item-justify {
+	& > span,
+	> div,
+	> button {
+		&:nth-child(2n + 1) {
+			justify-self: left;
+		}
+
+		&:nth-child(2n + 2) {
+			justify-self: right;
+			margin-right: -$button-horizontal-whitespace;
+		}
+	}
+}
+
+@mixin c-pagination-bar-three-item-justify {
+	grid-template-columns: repeat(3, 1fr);
+
+	& > span,
+	> div,
+	> button {
+		&:nth-child(3n + 1) {
+			justify-self: left;
+		}
+
+		&:nth-child(3n + 2) {
+			justify-self: center;
+		}
+
+		&:nth-child(3n + 3) {
+			justify-self: right;
+			margin-right: -$button-horizontal-whitespace;
+		}
+	}
+}
+
 .#{$c} {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -9,21 +45,29 @@ $c: "c-pagination-bar";
 	align-items: center;
 	justify-items: center;
 
-	& *:first-child {
-		justify-self: left;
-	}
-
-	& *:last-child {
-		justify-self: right;
-	}
-
-	@include respond-at("md") {
-		grid-template-columns: repeat(3, 1fr);
+	&:not(.#{$c}--back-to-top) {
+		@include c-pagination-bar-two-item-justify;
 	}
 
 	&__back-to-top {
+		display: none;
+	}
+
+	&--back-to-top {
 		@include respond-to("md") {
-			display: none;
+			@include c-pagination-bar-two-item-justify;
+		}
+
+		@include respond-at("md") {
+			@include c-pagination-bar-three-item-justify;
+		}
+		
+		.#{$c} {
+			&__back-to-top {
+				@include respond-at("md") {
+					display: initial;
+				}
+			}
 		}
 	}
 }

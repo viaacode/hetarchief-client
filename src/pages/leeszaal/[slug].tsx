@@ -197,6 +197,7 @@ const ReadingRoomPage: NextPage = () => {
 					{showInitialView && (
 						<>
 							{renderFilterMenu()}
+
 							<Placeholder
 								className="p-reading-room__placeholder"
 								img="/images/lightbulb.svg"
