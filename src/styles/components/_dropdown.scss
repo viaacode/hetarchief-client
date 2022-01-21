@@ -1,28 +1,46 @@
 @use "styles/abstracts" as *;
 
-.c-dropdown-menu {
+.c-menu {
 	padding: calc($spacer-md / 2) 0;
 	margin: 0;
+	background-color: $white;
+}
 
+.c-dropdown-menu {
 	&__divider {
 		height: 0.1rem;
+		margin: calc($spacer-md / 2) 0;
 		background-color: $silver;
 	}
 
 	&__item {
 		padding: calc($spacer-md / 2) $spacer-md;
-		background-color: $white;
 		font-size: $font-size-sm;
 		cursor: pointer;
+
+		.c-dropdown__icon {
+			font-size: $font-size-lg;
+		}
+
+		&:hover {
+			background-color: $silver;
+		}
+
+		&:active {
+			background-color: $teal;
+			border-color: $teal;
+			color: $white;
+		}
+
+		&:not(:active,:hover):focus {
+			border-color: transparent;
+			outline: 2px solid $teal;
+		}
 	}
 
 	&__label {
 		display: flex;
 		align-items: center;
 		gap: $spacer-xs;
-	}
-
-	.c-dropdown__icon {
-		font-size: $font-size-lg;
 	}
 }

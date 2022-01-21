@@ -11,54 +11,63 @@ $media-card-list-masonry-gutter: $media-card-list-sidebar-gutter;
 $media-card-list-masonry-gutter-md: $spacer-lg;
 
 @mixin media-card-list-gutters($gutter) {
-    .#{$c} {
-        &__content {
-            margin-left: 0 - $gutter; /* gutter size offset */
-        }
+	.#{$c} {
+		&__content {
+			margin-left: 0 - $gutter; /* gutter size offset */
+		}
 
-        &__column {
-            padding-left: $gutter; /* gutter size */
+		&__column {
+			padding-left: $gutter; /* gutter size */
 
-            & > div, article {
-                margin-bottom: $gutter;
-            }
-        }
-    }
+			& > div, article {
+				margin-bottom: $gutter;
+			}
+		}
+	}
 }
 
 .#{$c} {
-    &__content {
-        display: flex;
-        width: auto;
-    }
+	&__content {
+		display: flex;
+		width: auto;
+	}
 
-    &__column {
-        background-clip: padding-box;
-    }
+	&__column {
+		background-clip: padding-box;
+	}
 
-    // Modifiers
+	// Modifiers
 
-    &--sidebar {
-        @include media-card-list-gutters($media-card-list-sidebar-gutter);
+	&--sidebar {
+		@include media-card-list-gutters($media-card-list-sidebar-gutter);
 
-        .#{$c} {
-            &__sidebar {
-                margin-bottom: $media-card-list-sidebar-gutter;
-            }
-        }
+		.#{$c} {
+			&__sidebar {
+				flex-shrink: 0;
+				margin-bottom: $media-card-list-sidebar-gutter;
 
-        @include respond-at("md") {
-            @include media-card-list-gutters($media-card-list-sidebar-gutter-md);
+				@include respond-at("md") {
+					width: calc(100% / 3 - 2.2rem);
+					margin-right: $media-card-list-masonry-gutter-md; /* Same spacing as for masonry */
+				}
+				@include respond-at("lg") {
+					width: calc(25% - 2.4rem);
+				}
+			}
+		}
 
-            display: flex;
-        }
-    }
+		@include respond-at("md") {
+			@include media-card-list-gutters($media-card-list-sidebar-gutter-md);
 
-    &--masonry {
-        @include media-card-list-gutters($media-card-list-masonry-gutter);
+			display: flex;
+		}
+	}
 
-        @include respond-at("md") {
-            @include media-card-list-gutters($media-card-list-masonry-gutter-md);
-        }
-    }
+	&--masonry {
+		@include media-card-list-gutters($media-card-list-masonry-gutter);
+
+		@include respond-at("md") {
+			@include media-card-list-gutters($media-card-list-masonry-gutter-md);
+		}
+	}
 }

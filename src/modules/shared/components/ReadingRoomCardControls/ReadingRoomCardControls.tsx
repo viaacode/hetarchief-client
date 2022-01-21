@@ -3,9 +3,8 @@ import clsx from 'clsx';
 import { FC, ReactNode } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import { Icon, IconLightNames, ReadingRoomCardType } from '..';
-import ContactIconButton from '../ContactIconButton/ContactIconButton';
-import { ReadingRoomCardProps } from '../ReadingRoomCard/ReadingRoomCard.types';
+import { Icon, IconLightNames } from '../Icon';
+import { ReadingRoomCardProps, ReadingRoomCardType } from '../ReadingRoomCard';
 import { formatDateTime } from '../ReadingRoomCard/ReadingRoomCard.utils';
 
 import styles from './ReadingRoomCardControls.module.scss';
@@ -29,11 +28,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 	const renderLabel = (icon: IconLightNames, text: ReactNode) => {
 		return (
 			<div className={styles['c-reading-room-card-controls__label']}>
-				<Icon
-					className={styles['c-reading-room-card-controls__label-icon']}
-					type="light"
-					name={icon}
-				/>
+				<Icon className={styles['c-reading-room-card-controls__label-icon']} name={icon} />
 
 				<TruncateMarkup lines={2}>
 					<p
@@ -49,6 +44,16 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 		);
 	};
 
+	const renderContactIconButton = () => (
+		<div>
+			<Button
+				icon={<Icon name="contact" />}
+				variants={['silver', 'sm']}
+				onClick={() => onContactClick && onContactClick(room)}
+			/>
+		</div>
+	);
+
 	const renderAccessGrantedControls = () => {
 		return (
 			<>
@@ -61,7 +66,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 				)}
 
 				<Button
-					className={clsx('c-button--lg', 'c-button--white')}
+					variants={['lg', 'white']}
 					onClick={() => onVisitClick && onVisitClick(room)}
 				>
 					Bezoek de leeszaal
@@ -74,11 +79,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 		return (
 			<>
 				{renderLabel('calendar', <>Vanaf {access?.from && formatDateTime(access.from)}</>)}
-
-				<ContactIconButton
-					color="silver"
-					onClick={() => onContactClick && onContactClick(room)}
-				/>
+				{renderContactIconButton()}
 			</>
 		);
 	};
@@ -87,11 +88,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 		return (
 			<>
 				<TagList tags={[{ id: 1, label: 'Aanvraag ingediend' }]} variants={['large']} />
-
-				<ContactIconButton
-					color="silver"
-					onClick={() => onContactClick && onContactClick(room)}
-				/>
+				{renderContactIconButton()}
 			</>
 		);
 	};
@@ -100,16 +97,13 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 		return (
 			<>
 				<Button
-					className={clsx('c-button--sm', 'c-button--black')}
+					variants={['sm', 'black']}
 					onClick={() => onAccessRequest && onAccessRequest(room)}
 				>
 					Vraag toegang aan
 				</Button>
 
-				<ContactIconButton
-					color="silver"
-					onClick={() => onContactClick && onContactClick(room)}
-				/>
+				{renderContactIconButton()}
 			</>
 		);
 	};
@@ -122,10 +116,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 					'Momenteel is er geen toegang mogelijk tot deze leeszaal'
 				)}
 
-				<ContactIconButton
-					color="silver"
-					onClick={() => onContactClick && onContactClick(room)}
-				/>
+				{renderContactIconButton()}
 			</>
 		);
 	};

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import Navigation from './Navigation';
 import { MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';
@@ -10,7 +10,7 @@ describe('Components', () => {
 
 			render(
 				<Navigation>
-					<Navigation.Left>
+					<Navigation.Left placement="left">
 						<div data-testid={leftTestId} />
 					</Navigation.Left>
 				</Navigation>
@@ -23,11 +23,11 @@ describe('Components', () => {
 		it('Should render items in the left section', () => {
 			render(
 				<Navigation>
-					<Navigation.Left items={MOCK_ITEMS_LEFT} />
+					<Navigation.Left placement="left" items={MOCK_ITEMS_LEFT} />
 				</Navigation>
 			);
 
-			const leftItem = screen.queryByText(MOCK_ITEMS_LEFT[0][1].label);
+			const leftItem = screen.queryAllByText('Over de leeszalen')[0];
 			expect(leftItem).toBeInTheDocument();
 		});
 
@@ -64,7 +64,7 @@ describe('Components', () => {
 
 			render(
 				<Navigation>
-					<Navigation.Right>
+					<Navigation.Right placement="right">
 						<div data-testid={rightTestId} />
 					</Navigation.Right>
 				</Navigation>
@@ -77,12 +77,162 @@ describe('Components', () => {
 		it('Should render items in the right section', () => {
 			render(
 				<Navigation>
-					<Navigation.Right items={MOCK_ITEMS_RIGHT} />
+					<Navigation.Right placement="right" items={MOCK_ITEMS_RIGHT} />
 				</Navigation>
 			);
 
-			const rightItem = screen.queryByText(MOCK_ITEMS_RIGHT[0][0].label);
+			const rightItem = screen.queryByText('Log uit');
 			expect(rightItem).toBeInTheDocument();
+		});
+
+		it('Should render dropdown when renderHamburger = true', () => {
+			render(
+				<Navigation>
+					<Navigation.Left
+						placement="right"
+						items={MOCK_ITEMS_LEFT}
+						renderHamburger={true}
+						hamburgerProps={{
+							hamburgerLabelOpen: 'sluit',
+							hamburgerLabelClosed: 'Menu',
+							hamburgerIconOpen: 'times',
+							hamburgerIconClosed: 'grid-view',
+						}}
+					/>
+				</Navigation>
+			);
+
+			const trigger = screen.queryByText('Menu');
+			expect(trigger).toBeInTheDocument();
+		});
+		it('Should not render dropdown when renderHamburger = false', () => {
+			render(
+				<Navigation>
+					<Navigation.Left
+						placement="right"
+						items={MOCK_ITEMS_LEFT}
+						hamburgerProps={{
+							hamburgerLabelOpen: 'sluit',
+							hamburgerLabelClosed: 'Menu',
+							hamburgerIconOpen: 'times',
+							hamburgerIconClosed: 'grid-view',
+						}}
+					/>
+				</Navigation>
+			);
+
+			const trigger = screen.queryByText('Menu');
+			expect(trigger).not.toBeInTheDocument();
+		});
+
+		it('Should render overlay when a dropdown is rendered', () => {
+			const { container } = render(
+				<Navigation>
+					<Navigation.Left
+						placement="right"
+						items={MOCK_ITEMS_LEFT}
+						renderHamburger={true}
+						hamburgerProps={{
+							hamburgerLabelOpen: 'sluit',
+							hamburgerLabelClosed: 'Menu',
+							hamburgerIconOpen: 'times',
+							hamburgerIconClosed: 'grid-view',
+						}}
+					/>
+				</Navigation>
+			);
+
+			const overlay = container.querySelector(
+				'.c-navigation__section--responsive-mobile .c-navigation__dropdown-overlay'
+			);
+
+			expect(overlay).toBeInTheDocument();
+		});
+
+		it('Should not render overlay when no dropdown is rendered', () => {
+			const { container } = render(
+				<Navigation>
+					<Navigation.Left placement="right" items={MOCK_ITEMS_LEFT} />
+				</Navigation>
+			);
+
+			const overlay = container.querySelector(
+				'.c-navigation__section--responsive-mobile .c-navigation__dropdown-overlay'
+			);
+
+			expect(overlay).not.toBeInTheDocument();
+		});
+
+		it('Should render an icon when a menu item has children', () => {
+			const items = [
+				{
+					node: <div>link</div>,
+					id: 'link',
+					hasDivider: true,
+					children: [
+						{
+							node: <div>item 1</div>,
+							id: 'item 1',
+						},
+					],
+				},
+			];
+
+			render(
+				<Navigation>
+					<Navigation.Left placement="right" items={items} />
+				</Navigation>
+			);
+
+			const link = screen.getByText('link');
+
+			expect(link.nextSibling).toHaveClass('c-icon');
+		});
+
+		it('Should not render an icon when a menu item has no children', () => {
+			const items = [
+				{
+					node: <div>link</div>,
+					id: 'link',
+					hasDivider: true,
+				},
+			];
+
+			render(
+				<Navigation>
+					<Navigation.Left placement="right" items={items} />
+				</Navigation>
+			);
+
+			const link = screen.getByText('link');
+
+			expect(link.nextSibling).not.toBeInTheDocument();
+		});
+
+		it('Should render dropdown children', () => {
+			const items = [
+				{
+					node: <div>link</div>,
+					id: 'link',
+					hasDivider: true,
+					children: [
+						{
+							node: <div>item 1</div>,
+							id: 'item 1',
+						},
+					],
+				},
+			];
+
+			render(
+				<Navigation>
+					<Navigation.Left placement="right" items={items} />
+				</Navigation>
+			);
+
+			const item = screen.getByText('item 1');
+
+			expect(item).toBeInTheDocument();
 		});
 	});
 });

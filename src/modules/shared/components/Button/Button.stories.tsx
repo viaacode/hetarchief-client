@@ -14,6 +14,7 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 export const Default = Template.bind({});
 Default.args = {
 	children: 'Click me!',
+	variants: 'black',
 };
 
 export const Disabled = Template.bind({});
@@ -55,10 +56,9 @@ TextDisabled.args = {
 };
 
 // Colors
-export const ColorBlack = Template.bind({});
-ColorBlack.args = {
+export const ColorTeal = Template.bind({});
+ColorTeal.args = {
 	children: 'Click me!',
-	variants: 'black',
 };
 
 export const ColorWhite = Template.bind({});
@@ -67,17 +67,23 @@ ColorWhite.args = {
 	variants: 'white',
 };
 
+export const ColorSilver = Template.bind({});
+ColorSilver.args = {
+	children: 'Click me!',
+	variants: 'silver',
+};
+
 // Sizes
 export const SizeBlock = Template.bind({});
 SizeBlock.args = {
 	children: 'Click me!',
-	variants: 'block',
+	variants: ['block', 'black'],
 };
 
 export const SizeSmall = Template.bind({});
 SizeSmall.args = {
 	children: 'Click me!',
-	variants: 'sm',
+	variants: ['sm', 'black'],
 };
 
 export const TextWithIconLeft = Template.bind({});
@@ -95,16 +101,20 @@ TextWithIconRight.args = {
 export const IconOnly = Template.bind({});
 IconOnly.args = {
 	icon: <Icon name="info" />,
+	title: 'Info',
+	variants: 'black',
 };
 
 export const IconOnlySmall = Template.bind({});
 IconOnlySmall.args = {
 	icon: <Icon name="info" />,
-	variants: 'sm',
+	title: 'Info',
+	variants: ['sm', 'black'],
 };
 
 export const IconOnlyExtraSmall = Template.bind({});
 IconOnlyExtraSmall.args = {
 	icon: <Icon name="info" />,
-	variants: 'xs',
+	title: 'Info',
+	variants: ['xs', 'black'],
 };
