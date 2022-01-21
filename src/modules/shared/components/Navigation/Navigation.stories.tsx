@@ -13,9 +13,18 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof Navigation> = (args) => (
 	<Navigation {...args}>
-		<Navigation.Left items={MOCK_ITEMS_LEFT} />
-		<Navigation.Center title="Hello" />
-		<Navigation.Right items={MOCK_ITEMS_RIGHT} />
+		<Navigation.Left
+			placement="left"
+			renderHamburger={true}
+			items={MOCK_ITEMS_LEFT}
+			hamburgerProps={{
+				hamburgerLabelOpen: 'sluit',
+				hamburgerLabelClosed: 'Menu',
+				hamburgerIconOpen: 'times',
+				hamburgerIconClosed: 'grid-view',
+			}}
+		/>
+		<Navigation.Right placement="right" items={MOCK_ITEMS_RIGHT} />
 	</Navigation>
 );
 

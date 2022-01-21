@@ -1,4 +1,3 @@
-export * from './ContactIconButton';
 export * from './Footer';
 export * from './Hero';
 export * from './Icon';

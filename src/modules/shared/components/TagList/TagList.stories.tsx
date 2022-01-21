@@ -44,8 +44,6 @@ Large.args = {
 export const LargeClosable = Template.bind({});
 LargeClosable.args = {
 	tags: tags,
-	selectable: true,
-	closable: true,
 	closeIcon: <Icon name="times" />,
 	onTagClosed: () => console.log('close'),
 	variants: ['large', 'closable'],
@@ -54,7 +52,6 @@ LargeClosable.args = {
 export const Medium = Template.bind({});
 Medium.args = {
 	tags: tags,
-	selectable: true,
 	onTagClicked: () => console.log('clicked'),
 	variants: ['medium', 'clickable'],
 };

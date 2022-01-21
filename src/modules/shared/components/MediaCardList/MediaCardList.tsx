@@ -33,7 +33,7 @@ const MediaCardList: FC<MediaCardListProps> = ({ items, view, sidebar }) => {
 			>
 				{isMasonryView && renderSidebar()}
 				{items.map((item, i) => (
-					<MediaCard key={i} {...item} />
+					<MediaCard key={i} {...item} view={view} />
 				))}
 			</Masonry>
 		</div>
