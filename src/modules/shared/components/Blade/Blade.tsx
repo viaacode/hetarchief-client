@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
+import { useBladeManagerContext } from '@shared/hooks';
 
 import { Icon } from '../Icon';
 import { Overlay } from '../Overlay';
@@ -25,6 +25,7 @@ const Blade: FC<BladeProps> = ({
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 
 	const isBladeOpen = isManaged && layer ? layer <= currentLayer : isOpen;
+	const isLayered = isManaged && layer;
 
 	const renderCloseButton = () => {
 		return (
@@ -32,7 +33,7 @@ const Blade: FC<BladeProps> = ({
 				className={styles['c-blade__close-button']}
 				icon={<Icon name="times" />}
 				variants="text"
-				onClick={isManaged && layer && onCloseBlade ? () => onCloseBlade(layer) : onClose}
+				onClick={isLayered && onCloseBlade ? () => onCloseBlade(layer) : onClose}
 			/>
 		);
 	};
@@ -41,22 +42,20 @@ const Blade: FC<BladeProps> = ({
 			{!hideOverlay && (
 				<Overlay
 					visible={isBladeOpen}
-					onClick={
-						isManaged && layer && onCloseBlade ? () => onCloseBlade(layer) : onClose
-					}
+					onClick={isLayered && onCloseBlade ? () => onCloseBlade(layer) : onClose}
 					animate="animate-default"
-					className={
-						isManaged && layer && layer > 1 ? styles['c-blade__overlay--managed'] : ''
-					}
+					className={clsx({
+						[styles['c-blade__overlay--managed']]: isLayered && layer > 1,
+					})}
 					style={
-						isManaged && layer && layer > 1 && layer <= currentLayer
+						isLayered && layer > 1 && layer <= currentLayer
 							? {
 									transform: `translateX(-${(currentLayer - layer) * 5.6}rem)`,
 									opacity: isBladeOpen ? 0.4 - (layer - 2) * opacityStep : 0,
 							  }
 							: {}
 					}
-					type={isManaged && layer && layer > 1 ? 'light' : 'dark'}
+					type={isLayered && layer > 1 ? 'light' : 'dark'}
 				/>
 			)}
 			<div
@@ -70,7 +69,7 @@ const Blade: FC<BladeProps> = ({
 				)}
 				// offset underlying blades
 				style={
-					isManaged && layer && layer < currentLayer
+					isLayered && layer < currentLayer
 						? { transform: `translateX(-${(currentLayer - layer) * 5.6}rem)` }
 						: {}
 				}
