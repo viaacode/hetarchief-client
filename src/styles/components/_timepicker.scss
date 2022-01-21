@@ -14,19 +14,19 @@ $item-selector: ".react-datepicker__time-container .react-datepicker__time .reac
 		#{$item-selector} {
 			outline-color: $seagreen;
 
-            &--disabled {
-                cursor: not-allowed;
-                color: $zinc;
-            }
+			&--disabled {
+				cursor: not-allowed;
+				color: $zinc;
+			}
 
 			&--selected {
 				background-color: $seagreen;
 				font-weight: $font-weight-normal;
 			}
 
-            &:not(.react-datepicker__time-list-item):hover {
-                background-color: $silver;
-            }
+			&:not(.react-datepicker__time-list-item):hover {
+				background-color: $silver;
+			}
 		}
 	}
 }
