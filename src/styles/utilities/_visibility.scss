@@ -1,0 +1,21 @@
+@use "../abstracts" as *;
+
+/**
+ * Visibility
+ */
+
+$visibility: (
+	"hidden": hidden,
+	"visible": visible,
+);
+@include generate-utils("visibility", "visibility", $visibility, ("md"));
+
+/**
+ * Display
+ */
+
+ $display: (
+	"none": none,
+	"block": block,
+);
+@include generate-utils("display", "display", $display, ("md"));
