@@ -24,8 +24,8 @@ const Blade: FC<BladeProps> = ({
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 
-	const isBladeOpen = isManaged && layer ? layer <= currentLayer : isOpen;
 	const isLayered = isManaged && layer;
+	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
 
 	const renderCloseButton = () => {
 		return (
