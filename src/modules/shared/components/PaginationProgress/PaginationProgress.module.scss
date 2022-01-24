@@ -3,7 +3,7 @@
 $c: "c-pagination-progress";
 
 .#{$c} {
-    @include text-ellipsis;
+    @include text-ellipsis(true);
 
     color: $neutral;
     font-size: $font-size-sm;

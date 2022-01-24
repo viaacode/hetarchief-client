@@ -1,0 +1,30 @@
+@use "styles/abstracts" as *;
+
+$c: "c-form-control";
+
+.#{$c} {
+	&__label {
+		display: block;
+		font-size: $font-size-base;
+		font-weight: $font-weight-bold;
+		line-height: $line-height-1xl;
+		margin-bottom: $spacer-sm;
+		cursor: pointer;
+	}
+
+	&__errors {
+		@extend %reset-list;
+
+		margin-top: $spacer-sm;
+		color: $cherry;
+	}
+
+	&--disabled {
+		.#{$c} {
+			&__label {
+				color: $neutral;
+				cursor: not-allowed;
+			}
+		}
+	}
+}
