@@ -11,6 +11,7 @@ import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { createPageTitle } from '@shared/utils';
+import { withI18n } from '@shared/wrappers';
 
 const Home: NextPage = () => {
 	const [searchValue, setSearchValue] = useState('');
@@ -89,12 +90,6 @@ const Home: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-	return {
-		props: {
-			...(await serverSideTranslations(locale ?? '')),
-		},
-	};
-};
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default Home;
