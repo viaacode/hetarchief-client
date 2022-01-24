@@ -2,14 +2,29 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans, useTranslation } from 'next-i18next';
 import { FC } from 'react';
+import { useDispatch } from 'react-redux';
 
+import { loginAction } from '@auth/store/user';
 import { Icon, Modal } from '@shared/components';
 
 import styles from './AuthModal.module.scss';
 import { AuthModalProps } from './AuthModal.types';
 
 const AuthModal: FC<AuthModalProps> = (props) => {
+	const dispatch = useDispatch();
 	const { t } = useTranslation();
+
+	/**
+	 * Methods
+	 */
+
+	const onLogin = () => {
+		dispatch(loginAction());
+	};
+
+	/**
+	 * Render
+	 */
 
 	const renderHeading = () => {
 		return (
@@ -43,6 +58,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 						'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 					)}
 					variants="black"
+					onClick={onLogin}
 				/>
 
 				<p className="u-mt-32 u-mb-16 u-font-size-14 u-color-neutral">

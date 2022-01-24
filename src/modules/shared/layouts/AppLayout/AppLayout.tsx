@@ -1,8 +1,9 @@
 import { Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import { FC, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { selectIsLoggedIn } from '@auth/store/user';
 import { Footer, Navigation, NavigationItem } from '@shared/components';
 import {
 	footerLeftItem,
@@ -14,8 +15,7 @@ import { NAV_HAMBURGER_PROPS } from '@shared/const';
 import { setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
-	// TODO: replace with actual logged in state
-	const isLoggedIn = false;
+	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 

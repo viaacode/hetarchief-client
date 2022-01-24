@@ -3,8 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import Link from 'next/link';
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
@@ -22,8 +21,13 @@ const Home: NextPage = () => {
 
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const dispatch = useDispatch();
-	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
+
+	// Sync showAuthModal query param with store
+	useEffect(() => {
+		setQuery({ showAuthModal });
+	}, [setQuery, showAuthModal]);
 
 	/**
 	 * Methods
