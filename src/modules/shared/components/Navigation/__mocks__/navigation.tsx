@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 
 import { Icon } from '@shared/components';
 
+import { NavigationHamburgerProps } from '..';
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
 
@@ -41,6 +42,13 @@ const renderLink = (
 			</a>
 		</Link>
 	);
+};
+
+export const MOCK_HAMBURGER_PROPS: NavigationHamburgerProps = {
+	openLabel: 'sluit',
+	closedLabel: 'Menu',
+	openIcon: 'times',
+	closedIcon: 'grid-view',
 };
 
 export const MOCK_ITEMS_LEFT: NavigationItem[] = [
