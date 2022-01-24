@@ -1,0 +1,32 @@
+@use "styles/abstracts" as *;
+
+.c-auth-modal__heading,
+.c-auth-modal__container {
+	max-width: 41.8rem;
+	padding: 0 2rem;
+	margin: 0 auto;
+}
+
+.c-auth-modal__heading {
+	margin-top: 5.6rem;
+	margin-bottom: $spacer-1xl;
+
+	@include respond-to(md) {
+		font-size: 2.8rem;
+	}
+}
+
+.c-auth-modal__container {
+	p {
+		line-height: $line-height-3xl;
+
+		strong {
+			color: $black;
+		}
+	}
+
+	:global(.c-button) {
+		max-width: 32.8rem;
+		width: 100%;
+	}
+}
