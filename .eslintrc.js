@@ -1,14 +1,27 @@
 module.exports = {
+	parser: '@typescript-eslint/parser',
 	extends: [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:import/recommended',
+		'plugin:import/typescript',
 		'next/core-web-vitals',
-		'plugin:prettier/recommended',
 		'plugin:storybook/recommended',
+		'plugin:prettier/recommended',
 	],
 	rules: {
-		'react/self-closing-comp': 'warn',
+		'@typescript-eslint/naming-convention': [
+			'error',
+			{
+				selector: 'interface',
+				format: ['PascalCase'],
+				custom: {
+					regex: '^I[A-Z]',
+					match: false,
+				},
+			},
+		],
+
 		'import/first': 'error',
 		'import/no-duplicates': 'error',
 		'import/order': [
@@ -18,8 +31,18 @@ module.exports = {
 					order: 'asc',
 				},
 				'newlines-between': 'always',
+				pathGroups: [
+					{
+						pattern: '@{home,reading-room,shared}/**',
+						group: 'parent',
+						position: 'before',
+					},
+				],
 			},
 		],
+
+		'react/self-closing-comp': 'warn',
+
 		'sort-imports': [
 			'warn',
 			{

@@ -1,17 +1,46 @@
+@use "sass:color";
+
 /**
  * Colors
  */
 
-$white: #FFF;
+$white: #fff;
 $black: #000;
-$teal: #00C8AA;
+$teal: #00c8aa;
+$teal-dark: #00857d;
 $seagreen: #009690;
-$cherry: #D60039;
+$cherry: #d60039;
 $shade: #505050;
 $neutral: #727272;
-$zinc: #ADADAD;
-$silver: #E6E6E6;
-$platinum: #F8F8F8;
+$zinc: #adadad;
+$silver: #e6e6e6;
+$platinum: #f8f8f8;
+
+/**
+ * Derived Colors
+ */
+$zinc-40: color.adjust($zinc, $alpha: -0.6);
+
+/**
+ * Shadow
+ */
+
+$shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
+$shadow-24-black-24: 0 0 24px color.adjust($black, $alpha: -0.76);
+$shadow-24-black-08: 0 0 24px color.adjust($black, $alpha: -0.92);
+$shadow-24-black-04: 0 0 24px color.adjust($black, $alpha: -0.96);
+
+/**
+ * Spacers
+ */
+
+$spacer-xxs: 0.4rem;
+$spacer-xs: 0.8rem;
+$spacer-sm: 1.6rem;
+$spacer-md: 2.4rem;
+$spacer-lg: 3.2rem;
+$spacer-1xl: 4rem;
+$spacer-2xl: 8rem;
 
 /**
  * Typography
@@ -25,7 +54,7 @@ $font-family-icons-solid: meemoo-icons-solid;
 // Sizes
 $font-size-4xl: 6.4rem;
 $font-size-3xl: 4.8rem;
-$font-size-2xl: 4.0rem;
+$font-size-2xl: 4rem;
 $font-size-1xl: 3.2rem;
 $font-size-lg: 2.4rem;
 $font-size-md: 1.8rem;
@@ -41,8 +70,8 @@ $font-weight-normal: 400;
 $line-height-4xl: 1.5;
 $line-height-3xl: 1.4;
 $line-height-2xl: 1.3;
-$line-height-1xl: 1.2;
-$line-height-lg: 1.25;
+$line-height-1xl: 1.25;
+$line-height-lg: 1.2;
 $line-height-md: 1.1;
 $line-height-base: 1;
 $line-height-sm: 0.625;
@@ -52,19 +81,80 @@ $line-height-sm: 0.625;
  */
 
 $breakpoints: (
-	"xl": 1200px,
-	"lg": 992px,
-	"md": 768px,
+	"xs": 390px,
 	"sm": 576px,
+	"md": 768px,
+	"lg": 992px,
+	"xl": 1200px,
 );
 
 /**
  * Z-index layers
+ * ---
+ * Keep a list of all z-indexes used throughout the app
  */
 
-// Keep a list of all z-indexes used throughout the app
 $z-layers: (
 	"foreground": 1,
 	"base": 0,
 	"background": -1,
 );
+
+/**
+ * Modal
+ */
+
+$modal-close-margin: 32px;
+$modal-close-size: 24px;
+$modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
+
+/**
+ * Card
+ */
+
+$card-edge-size: 1px;
+$card-offset: 2rem;
+
+/**
+ * Card
+ */
+
+$button-horizontal-whitespace: $spacer-md;
+
+/**
+ * Dividers
+ */
+
+$divider-grey: solid 1px rgb(0 0 0 / 20%);
+$divider-white: solid 1px rgb(255 255 255 / 20%);
+
+/**
+ * Animations
+ * ---
+ * Inspiration: https://material.io/design/motion/speed.html#controlling-speed
+ */
+
+// Duration
+$timing-xslow: 300ms;
+$timing-slow: 250ms;
+$timing-default: 200ms;
+$timing-fast: 100ms;
+$timing-sm: $timing-fast;
+$timing-md-in: $timing-slow;
+$timing-md-out: $timing-default;
+$timing-lg-in: $timing-xslow;
+$timing-lg-out: $timing-slow;
+
+// Easings
+$ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-in: cubic-bezier(0, 0, 0.2, 1);
+$ease-out: cubic-bezier(0.4, 0, 1, 1);
+
+// Combinations
+$animate-default: $timing-default $ease-default;
+$animate-sm-in: $timing-sm $ease-in;
+$animate-sm-out: $timing-sm $ease-out;
+$animate-md-in: $timing-md-in $ease-in;
+$animate-md-out: $timing-md-out $ease-out;
+$animate-lg-in: $timing-lg-in $ease-in;
+$animate-lg-out: $timing-lg-out $ease-out;

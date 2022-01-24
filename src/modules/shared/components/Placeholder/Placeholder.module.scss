@@ -1,0 +1,45 @@
+@use "styles/abstracts" as *;
+
+.c-placeholder {
+	display: block;
+	text-align: center;
+	width: 100%;
+}
+
+/**
+ * Elements
+ */
+
+.c-placeholder__img {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	height: 6.4rem;
+
+	@include respond-at(md) {
+		height: 9.2rem;
+	}
+}
+
+.c-placeholder__icon {
+	font-size: 8.2rem;
+	color: $teal;
+}
+
+.c-placeholder__title {
+	margin: 2.4rem 0 1.6rem;
+	margin: $spacer-sm 0;
+
+	@include respond-to(md) {
+		font-size: $font-size-1xl;
+	}
+	@include respond-at(md) {
+		height: 9.2rem;
+		margin: $spacer-md 0 $spacer-sm;
+	}
+}
+
+.c-placeholder__description {
+	color: $neutral;
+}
+

@@ -1,0 +1,58 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+$overlay-opacity-dark: 64%;
+$overlay-opacity-light: 40%;
+
+.c-overlay {
+	z-index: get-z-layer("foreground");
+	pointer-events: none;
+	opacity: 0;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: $black;
+
+	&--visible {
+		pointer-events: all;
+	}
+
+	&--visible.c-overlay--dark {
+		opacity: $overlay-opacity-dark;
+	}
+
+	&--visible.c-overlay--light {
+		opacity: $overlay-opacity-light;
+	}
+
+	// animation types
+	&--animate-default {
+		transition: opacity $animate-default;
+	}
+
+	&--animate-sm-in {
+		transition: opacity $animate-sm-in;
+	}
+
+	&--animate-sm-out {
+		transition: opacity $animate-sm-out;
+	}
+
+	&--animate-md-in {
+		transition: opacity $animate-md-in;
+	}
+
+	&--animate-md-out {
+		transition: opacity $animate-md-out;
+	}
+
+	&--animate-lg-in {
+		transition: opacity $animate-lg-in;
+	}
+
+	&--animate-lg-out {
+		transition: opacity $animate-lg-out;
+	}
+}

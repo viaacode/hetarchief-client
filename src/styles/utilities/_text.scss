@@ -1,3 +1,25 @@
-.u-text-center {
-	text-align: center;
+
+@use "../abstracts" as *;
+
+.u-text-ellipsis {
+	@include text-ellipsis;
 }
+
+/**
+ * Alignment
+ *
+ * usage: u-text-left
+ */
+
+$align: (left, right, center);
+@include generate-utils("text", "text-align", $align);
+
+/**
+ * Size
+ */
+
+ $size: (
+	 "24": $font-size-lg,
+ );
+ @include generate-utils("font-size", "font-size", $size);
+

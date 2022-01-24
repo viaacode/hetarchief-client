@@ -1,0 +1,292 @@
+@use "sass:map";
+@use "sass:math";
+@use "styles/abstracts" as *;
+
+$c: "c-card";
+
+// Mixins
+
+@mixin c-card-image-overflow {
+	// Spill the image over the border if it's not padded and the card has a border
+	&.#{$c}--padded-content {
+		&:not(.#{$c}--edge-none) {
+			.#{$c}__image-wrapper {
+				margin: -$card-edge-size;
+				@content;
+			}
+		}
+	}
+}
+
+@mixin m-card-horizontal {
+	flex-direction: row;
+
+	.#{$c}__top-wrapper {
+		display: flex;
+	}
+
+	.#{$c}__bottom-wrapper {
+		flex-grow: 1;
+		min-width: 0;
+	}
+
+	.#{$c}__image-wrapper {
+		align-items: center;
+		display: flex;
+		flex-grow: 1;
+		min-width: 0;
+	}
+
+	@include c-card-image-overflow {
+		margin-right: 0;
+	}
+
+	&.#{$c}--padded-both {
+		.#{$c}__image-wrapper {
+			margin-bottom: $spacer-sm;
+		}
+
+		.#{$c}__title-wrapper,
+		.#{$c}__subtitle-wrapper,
+		.#{$c}__children-wrapper {
+			margin-left: 0;
+		}
+	}
+}
+
+@mixin m-card-vertical {
+	flex-direction: column;
+
+	@include c-card-image-overflow {
+		margin-bottom: 0;
+	}
+}
+
+// Placeholders
+
+%s-card-horizontal-whitespace {
+	margin-left: $spacer-sm;
+	margin-right: $spacer-sm;
+}
+
+%s-card-content-whitespace {
+	// Note: I shouldn't let whitespace be influenced by color mode but this saves us a lot of className exposure
+	&.#{$c}--mode-dark {
+		.#{$c} {
+			&__header-wrapper {
+				margin-bottom: math.div($spacer-md, 2);
+				margin-top: $spacer-sm;
+
+				@include respond-at("md") {
+					margin-bottom: $spacer-sm * 2;
+					margin-top: $spacer-lg + $spacer-xs;
+				}
+			}
+
+			&__children-wrapper {
+				margin-bottom: $spacer-md;
+
+				@include respond-at("md") {
+					margin-right: $spacer-lg;
+				}
+			}
+		}
+	}
+
+	.#{$c} {
+		&__header-wrapper {
+			margin-bottom: $spacer-sm;
+			margin-top: $spacer-sm;
+		}
+
+		&__title-wrapper,
+		&__subtitle-wrapper,
+		&__toolbar-wrapper,
+		&__children-wrapper {
+			@extend %s-card-horizontal-whitespace;
+		}
+
+		&__toolbar-wrapper {
+			margin-left: 0;
+		}
+
+		&__children-wrapper {
+			margin-bottom: $spacer-sm;
+		}
+	}
+}
+
+// Component
+
+.#{$c} {
+	display: flex;
+
+	// Elements
+
+	&__header-wrapper {
+		display: flex;
+		flex-flow: row nowrap;
+		flex-grow: 1;
+		min-width: 0;
+	}
+
+	&__title-wrapper {
+		flex-grow: 1;
+		min-width: 0;
+	}
+
+	&__toolbar-wrapper {
+		flex-grow: 0;
+		width: auto;
+	}
+
+	&__subtitle,
+	&__children {
+		&-wrapper {
+			color: $neutral;
+		}
+	}
+
+	// Mutators
+
+	&--edge {
+		&-zinc {
+			border: $card-edge-size solid $zinc-40;
+		}
+	}
+
+	&--padded {
+		&-both {
+			@extend %s-card-content-whitespace;
+
+			.#{$c} {
+				&__image-wrapper {
+					@extend %s-card-horizontal-whitespace;
+
+					margin-top: $spacer-sm;
+				}
+			}
+		}
+
+		&-content {
+			@extend %s-card-content-whitespace;
+		}
+
+		&-vertical {
+			.#{$c} {
+				&__header-wrapper {
+					margin-bottom: math.div($spacer-md, 2);
+					margin-top: math.div($spacer-md, 2);
+
+					@include respond-at("md") {
+						margin-bottom: $spacer-sm;
+						margin-top: $spacer-sm * 1.5;
+					}
+				}
+
+				&__children-wrapper {
+					margin-bottom: $spacer-sm;
+				}
+			}
+		}
+	}
+
+	// Orientation must be below Padded
+	// Only define a few responsive variants to avoid bloat
+	&--orientation {
+		&-horizontal {
+			@include m-card-horizontal;
+
+			&--at-md {
+				@include respond-to("md") {
+					@include m-card-vertical;
+				}
+
+				@include respond-at("md") {
+					@include m-card-horizontal;
+				}
+			}
+		}
+
+		&-vertical {
+			@include m-card-vertical;
+
+			&--at-md {
+				@include respond-to("md") {
+					@include m-card-horizontal;
+				}
+
+				@include respond-at("md") {
+					@include m-card-vertical;
+				}
+			}
+		}
+	}
+
+	&--mode {
+		&-light {
+			background-color: $white;
+		}
+
+		&-dark {
+			background-color: $black;
+
+			.#{$c} {
+				&__title,
+				&__toolbar {
+					&-wrapper {
+						color: $white;
+					}
+				}
+			}
+		}
+	}
+
+	&--offset {
+		margin-left: $card-offset * 0.8;
+		margin-top: $card-offset * 0.8;
+
+		&.#{$c}--orientation-horizontal {
+			.#{$c} {
+				&__image {
+					&-wrapper {
+						align-self: flex-start;
+						box-shadow: $shadow-24-black-61;
+						transform: translate(-($card-offset * 0.8), -($card-offset * 0.8));
+					}
+				}
+			}
+		}
+
+		@include respond-to("md") {
+			&.#{$c}--orientation-horizontal {
+				.#{$c} {
+					&__image {
+						&-wrapper {
+							margin-right: 0 - $card-offset * 0.8;
+						}
+					}
+				}
+			}
+		}
+
+		@include respond-at("md") {
+			margin-left: $card-offset;
+			margin-top: $card-offset;
+
+			&.#{$c}--orientation-horizontal {
+				.#{$c} {
+					&__image {
+						&-wrapper {
+							transform: translate(-$card-offset, -$card-offset);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	&--shadow {
+		box-shadow: $shadow-24-black-04;
+	}
+}

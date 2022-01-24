@@ -1,0 +1,11 @@
+@use "../abstracts" as *;
+
+/**
+ * Color
+ */
+
+$bg: (
+	"black": $black,
+	"platinum": $platinum,
+);
+@include generate-utils("bg", "background-color", $bg);

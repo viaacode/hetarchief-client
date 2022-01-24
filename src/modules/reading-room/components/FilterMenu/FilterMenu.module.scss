@@ -1,0 +1,70 @@
+@use "styles/abstracts" as *;
+
+.c-filter-menu__header {
+	display: flex;
+	height: 5.2rem;
+	background-color: $black;
+}
+
+.c-filter-menu__toggle,
+.c-filter-menu__filter {
+	border-radius: 0;
+
+	:global(.c-button__content) {
+		display: flex;
+		justify-content: space-between;
+	}
+}
+
+.c-filter-menu__toggle {
+	flex: 2 0 auto;
+	height: 100%;
+	padding-right: 1.2rem;
+	text-align: left;
+
+	@include respond-to("md") {
+		font-size: $font-size-md;
+	}
+}
+
+.c-filter-menu__view-toggle-container {
+	border-left: 1px solid rgb(255 255 255 / 10%);
+}
+
+.c-filter-menu__view-toggle {
+	padding: 0;
+
+	:global(.c-button) {
+		width: 4rem;
+		height: 4rem;
+	}
+}
+
+.c-filter-menu__filter {
+	width: 100%;
+	padding-right: $spacer-sm;
+	font-weight: $font-weight-normal;
+
+	&:active {
+		border-color: black;
+	}
+
+	:global(.c-button__icon) {
+		font-size: $font-size-lg;
+	}
+
+	&--active {
+		background-color: $white;
+		border-color: $white;
+		color: $black;
+
+		&:hover {
+			background-color: $white;
+			border-color: $white;
+		}
+
+		&:not(:active,:hover):focus {
+			outline: none;
+		}
+	}
+}

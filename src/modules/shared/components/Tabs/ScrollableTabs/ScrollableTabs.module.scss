@@ -1,0 +1,55 @@
+@use "styles/abstracts" as *;
+
+.c-scrollable-tabs {
+	overflow: hidden;
+	position: relative;
+
+	&::before,
+	&::after {
+		position: absolute;
+		top: 0;
+		width: $spacer-sm;
+		height: 100%;
+		transition: transform $animate-default;
+		content: "";
+		pointer-events: none;
+	}
+
+	&::before {
+		left: 0;
+		background: linear-gradient(to right, $black, rgb(0 0 0 / 10%));
+		transform: translateX(-$spacer-sm);
+	}
+
+	&::after {
+		right: 0;
+		background: linear-gradient(to left, $black, rgb(0 0 0 / 10%));
+		transform: translateX($spacer-sm);
+	}
+
+	:global(.c-tabs) {
+		overflow-x: scroll;
+		scrollbar-width: none; /* Firefox */
+
+		&::-webkit-scrollbar { /* WebKit */
+			width: 0;
+			height: 0;
+		}
+	}
+}
+
+/**
+ * Modifiers
+ */
+
+.c-scrollable-tabs--gradient-left {
+	&::before {
+		transform: translateX(0);
+	}
+}
+
+.c-scrollable-tabs--gradient-right {
+	&::after {
+		transform: translateX(0);
+	}
+}

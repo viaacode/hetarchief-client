@@ -1,0 +1,11 @@
+@use "styles/abstracts" as *;
+
+$c: "c-pagination-progress";
+
+.#{$c} {
+    @include text-ellipsis(true);
+
+    color: $neutral;
+    font-size: $font-size-sm;
+    line-height: $line-height-3xl;
+}

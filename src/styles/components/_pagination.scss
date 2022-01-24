@@ -1,0 +1,61 @@
+@use "styles/abstracts" as *;
+
+.c-pagination {
+	display: flex;
+	align-items: center;
+	font-size: $font-size-sm;
+	color: $neutral;
+
+	&__btn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-width: 3.2rem;
+		min-height: 3.2rem;
+		margin: 0 calc($spacer-xs / 4);
+		cursor: pointer;
+
+		&--active {
+			background-color: $seagreen;
+			color: $white;
+			font-weight: 700;
+			border-radius: 50%;
+		}
+
+		&--disabled {
+			color: $zinc;
+			cursor: default;
+		}
+	}
+
+	&__pages {
+		display: flex;
+		align-items: baseline;
+
+		.c-pagination__btn {
+			width: 3.2rem;
+			height: 3.2rem;
+		}
+	}
+
+	&__ellipsis {
+		color: $zinc;
+		margin: 0 calc($spacer-xs / 4);
+	}
+
+	&__icon {
+		margin-top: .2rem;
+		font-size: $font-size-md !important; // overwrite default icon style
+	}
+
+	@include respond-to(sm) {
+		&__pages,
+		&__btn:first-of-type span:nth-child(2) {
+			display: none;
+		}
+
+		&__btn:first-of-type {
+			padding: 0;
+		}
+	}
+}

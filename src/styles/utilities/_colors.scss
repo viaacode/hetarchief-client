@@ -1,0 +1,12 @@
+@use "../abstracts" as *;
+
+/**
+ * Color
+ */
+
+$color: (
+	"black": $black,
+	"white": $white,
+	"teal": $teal,
+);
+@include generate-utils("color", "color", $color, ("md"));
