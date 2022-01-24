@@ -5,20 +5,29 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
 import { KeyboardEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
+import { AuthModal } from '@auth/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
+import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
 const Home: NextPage = () => {
+	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
+	const [readingRooms, setReadingRooms] = useState(sixItems);
 	const [searchValue, setSearchValue] = useState('');
-	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+
+	const showAuthModal = useSelector(selectShowAuthModal);
+	const dispatch = useDispatch();
+	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
 
-	const [readingRooms, setReadingRooms] = useState(sixItems);
-	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
+	/**
+	 * Methods
+	 */
 
 	const handleLoadAllReadingRooms = () => {
 		Promise.resolve([...sixItems, ...sixItems]).then((data) => {
@@ -27,11 +36,19 @@ const Home: NextPage = () => {
 		});
 	};
 
+	const onCloseAuthModal = () => {
+		dispatch(setShowAuthModal(false));
+	};
+
 	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
 			setQuery({ search: searchValue });
 		}
 	};
+
+	/**
+	 * Render
+	 */
 
 	return (
 		<div className="p-home">
@@ -85,6 +102,8 @@ const Home: NextPage = () => {
 					</div>
 				)}
 			</div>
+
+			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
 		</div>
 	);
 };
