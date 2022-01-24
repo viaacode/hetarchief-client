@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 
-import { Icon, IconLightNames } from '../Icon';
+import { Icon } from '../Icon';
 import { Overlay } from '../Overlay';
 
 import styles from './Navigation.module.scss';
