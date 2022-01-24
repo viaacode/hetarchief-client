@@ -1,0 +1,23 @@
+@use "styles/abstracts" as *;
+
+$c: "c-avatar";
+
+.#{$c} {
+    &__image {
+        background: $teal;
+        color: $white;
+        margin-right: $spacer-xs;
+
+        // Assume icon
+        & > span {
+            display: block;
+            margin: $spacer-xs;
+            font-size: $font-size-lg;
+        }
+    }
+
+    &__label {
+        font-size: $font-size-base;
+        line-height: $line-height-1xl;
+    }
+}
