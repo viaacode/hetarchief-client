@@ -2,9 +2,6 @@
 @use "sass:color";
 @use "styles/abstracts" as *;
 
-// TODO: re-export file from @meemoo/react-components
-@import "~react-datepicker/dist/react-datepicker.min.css";
-
 $c: "c-datepicker";
 $datepicker-day-size: $spacer-lg;
 $datepicker-edge-spacing: $spacer-sm * 0.75;
