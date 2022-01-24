@@ -53,5 +53,9 @@
 }
 
 .p-reading-room__placeholder {
-	margin: auto 0;
+	margin: $spacer-md 0 auto;
+
+	@include respond-at("md") {
+		margin: 17rem 0 auto;
+	}
 }

@@ -1,6 +1,12 @@
+@use "../abstracts" as *;
+
 .l-container {
 	max-width: 121.6rem;
 	width: 100%;
-	padding: 0 2rem;
+	padding: 0 $spacer-sm;
 	margin: 0 auto;
+
+	@include respond-at(xs) {
+		padding: 0 2rem;
+	}
 }

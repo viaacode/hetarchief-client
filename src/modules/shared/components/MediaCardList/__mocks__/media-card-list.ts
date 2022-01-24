@@ -22,7 +22,10 @@ export const mock = async (
 				const end = new Date(1990, 0, 1);
 
 				return {
-					title: `#${i + 1} - ${item.title}`,
+					// Capitalize title
+					title: `#${i + 1} - ${
+						item.title?.charAt(0).toUpperCase() + item.title?.slice(1)
+					}`,
 					description: Array(20)
 						.join(` ${item.title}`)
 						.split(' ')
