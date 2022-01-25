@@ -23,14 +23,14 @@ const NotificationCenters: FC<NotificationCenterProps> = ({
 		notifications.filter((notification) => notification.read === read);
 
 	const renderReadNotifications = (notifications: Notification[]) => {
-		return notifications.map((notification, index) => {
+		return notifications.map((notification) => {
 			return (
 				<div
 					className={clsx(
 						styles['c-notification-center__notification'],
 						styles['c-notification-center__notification--read']
 					)}
-					key={`notification-${index}`}
+					key={`notification-${notification.id}`}
 				>
 					<b
 						className={clsx(
@@ -49,14 +49,14 @@ const NotificationCenters: FC<NotificationCenterProps> = ({
 	};
 
 	const renderUnreadNotifications = (notifications: Notification[]) => {
-		return notifications.map((notification, index) => {
+		return notifications.map((notification) => {
 			return (
 				<div
 					className={clsx(
 						styles['c-notification-center__notification'],
 						styles['c-notification-center__notification--unread']
 					)}
-					key={`notification-${index}`}
+					key={`notification-${notification.id}`}
 				>
 					<b
 						className={clsx(
