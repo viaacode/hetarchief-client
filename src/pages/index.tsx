@@ -14,6 +14,7 @@ import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
+import { withI18n } from '@shared/wrappers';
 
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
@@ -108,12 +109,6 @@ const Home: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-	return {
-		props: {
-			...(await serverSideTranslations(locale ?? '')),
-		},
-	};
-};
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default Home;

@@ -1,6 +1,6 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { KeyboardEvent, useMemo, useState } from 'react';
@@ -32,6 +32,7 @@ import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
 import { Breakpoints } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
+import { withI18n } from '@shared/wrappers';
 
 const ReadingRoomPage: NextPage = () => {
 	// State
@@ -243,5 +244,7 @@ const ReadingRoomPage: NextPage = () => {
 		</div>
 	);
 };
+
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default ReadingRoomPage;
