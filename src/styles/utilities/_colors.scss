@@ -8,5 +8,6 @@ $color: (
 	"black": $black,
 	"white": $white,
 	"teal": $teal,
+	"neutral": $neutral,
 );
 @include generate-utils("color", "color", $color, ("md"));
