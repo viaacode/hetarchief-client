@@ -9,6 +9,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
 import { selectIsLoggedIn } from '@auth/store/user';
+import { RequestAccessBlade } from '@home/component/RequestAccessBlade';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
@@ -118,6 +119,10 @@ const Home: NextPage = () => {
 			</div>
 
 			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
+			<RequestAccessBlade
+				isOpen={isOpenRequestAccessBlade}
+				onClose={() => setIsOpenRequestAccessBlade(false)}
+			/>
 		</div>
 	);
 };

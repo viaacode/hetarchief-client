@@ -2,6 +2,10 @@
 @use "styles/abstracts" as *;
 
 .c-blade {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
 	z-index: get-z-layer("foreground");
 	pointer-events: none;
 	visibility: hidden;
@@ -10,10 +14,6 @@
 	width: 100%;
 	max-width: 46.4rem;
 	background-color: $white;
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
 	transform: translateX(100%);
 	transition: transform $animate-default, visibility $animate-default;
 
@@ -26,7 +26,14 @@
 	&__title {
 		padding: $spacer-lg;
 		padding-top: 0;
-		font-size: $font-size-3xl;
+		font-size: $font-size-sm * 2;
+
+		@include respond-to(md) {
+			text-align: center;
+		}
+		@include respond-at(md) {
+			font-size: $font-size-3xl;
+		}
 
 		&-wrapper {
 			grid-row-start: 2;
