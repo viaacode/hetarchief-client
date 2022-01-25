@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { FC } from 'react';
 
 import { ReadingRoomCard, ReadingRoomCardType } from '..';
+import { AccessGranted } from '../ReadingRoomCard/__mocks__/reading-room-card';
 
 import styles from './Hero.module.scss';
 import { HeroProps } from './Hero.types';
@@ -65,41 +66,50 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 							styles['c-hero__section--access']
 						)}
 					>
-						{accessGranted.map((room, i) => (
-							<ReadingRoomCard
-								key={`hero-access-granted-${i}`}
-								room={room}
-								type={ReadingRoomCardType['access']}
-							/>
-						))}
+						<div className={styles['c-hero__access-cards']}>
+							{accessGranted.map((room, i) => (
+								<ReadingRoomCard
+									key={`hero-access-${i}`}
+									access={AccessGranted}
+									room={room}
+									type={ReadingRoomCardType['access']}
+								/>
+							))}
+						</div>
 					</section>
 				)}
 				{planned.length > 0 && (
 					<section className={clsx(styles['c-hero__section'])}>
-						<h5 className="u-mb-16">
+						<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
 							{t('modules/shared/components/hero/hero___geplande-bezoeken')}
 						</h5>
-						{planned.map((room, i) => (
-							<ReadingRoomCard
-								key={`hero-planned-${i}`}
-								room={room}
-								type={ReadingRoomCardType['future--approved']}
-							/>
-						))}
+						<div className={styles['c-hero__requests']}>
+							{planned.map((room, i) => (
+								<ReadingRoomCard
+									key={`hero-planned-${i}`}
+									access={AccessGranted}
+									room={room}
+									type={ReadingRoomCardType['future--approved']}
+								/>
+							))}
+						</div>
 					</section>
 				)}
 				{requested.length > 0 && (
 					<section className={clsx(styles['c-hero__section'])}>
-						<h5 className="u-mb-16">
+						<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
 							{t('modules/shared/components/hero/hero___aanvragen')}
 						</h5>
-						{requested.map((room, i) => (
-							<ReadingRoomCard
-								key={`hero-requested-${i}`}
-								room={room}
-								type={ReadingRoomCardType['future--requested']}
-							/>
-						))}
+						<div className={styles['c-hero__requests']}>
+							{requested.map((room, i) => (
+								<ReadingRoomCard
+									key={`hero-requested-${i}`}
+									access={AccessGranted}
+									room={room}
+									type={ReadingRoomCardType['future--requested']}
+								/>
+							))}
+						</div>
 					</section>
 				)}
 			</div>

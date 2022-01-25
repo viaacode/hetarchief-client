@@ -1,7 +1,6 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, ReactNode } from 'react';
-import TruncateMarkup from 'react-truncate-markup';
 
 import { Icon, IconLightNames } from '../Icon';
 import { ReadingRoomCardProps, ReadingRoomCardType } from '../ReadingRoomCard';
@@ -30,16 +29,14 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 			<div className={styles['c-reading-room-card-controls__label']}>
 				<Icon className={styles['c-reading-room-card-controls__label-icon']} name={icon} />
 
-				<TruncateMarkup lines={2}>
-					<p
-						className={clsx(
-							styles['c-reading-room-card-controls__label-text'],
-							flat && 'u-text-ellipsis'
-						)}
-					>
-						{text}
-					</p>
-				</TruncateMarkup>
+				<p
+					className={clsx(
+						styles['c-reading-room-card-controls__label-text'],
+						flat && 'u-text-ellipsis'
+					)}
+				>
+					{text}
+				</p>
 			</div>
 		);
 	};

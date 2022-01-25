@@ -1,7 +1,8 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
-$hero-logged-in-bg: #F0F0F0;
+$c-hero-logged-in-bg: #F0F0F0;
+$c-hero-access-card-min-width: 57.2rem;
 
 .c-hero {
 	display: grid;
@@ -47,8 +48,40 @@ $hero-logged-in-bg: #F0F0F0;
 	}
 
 	&__section {
+		&-title {
+			@include respond-to(md) {
+				font-size: $font-size-sm;
+			}
+		}
+
 		&:not(:last-child) {
 			margin-bottom: $spacer-lg;
+		}
+
+		&--access {
+			&:not(:last-child) {
+				margin-bottom: $spacer-lg;
+
+				@include respond-at(md) {
+					margin-bottom: $spacer-lg * 2;
+				}
+			}
+		}
+	}
+
+	&__access-cards {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-gap: $spacer-md $spacer-lg;
+
+		@include respond-at(md) {
+			grid-template-columns: repeat(auto-fill, minmax($c-hero-access-card-min-width, 1fr));
+		}
+	}
+
+	&__requests {
+		> *:not(:last-child) {
+			margin-bottom: $spacer-xxs;
 		}
 	}
 
@@ -107,7 +140,7 @@ $hero-logged-in-bg: #F0F0F0;
 		display: flex;
 		flex-direction: column;
 		padding: $spacer-1xl 0 $spacer-lg;
-		background-color: $hero-logged-in-bg;
+		background-color: $c-hero-logged-in-bg;
 		color: $black;
 
 		@include respond-at(md) {
@@ -127,7 +160,9 @@ $hero-logged-in-bg: #F0F0F0;
 		}
 
 		.c-hero__description {
-			max-width: 48.8rem;
+			@include respond-at(md) {
+				max-width: 48.8rem;
+			}
 		}
 	}
 }
