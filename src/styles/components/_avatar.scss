@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @use "styles/abstracts" as *;
 
 $c: "c-avatar";
@@ -6,7 +8,7 @@ $c: "c-avatar";
     &__image {
         background: $teal;
         color: $white;
-        margin-right: $spacer-xs;
+        margin-right: math.div($font-size-lg, 2);
 
         // Assume icon
         & > span {
@@ -19,5 +21,9 @@ $c: "c-avatar";
     &__label {
         font-size: $font-size-base;
         line-height: $line-height-1xl;
+    }
+
+    &--padded-y {
+        padding: $spacer-sm 0;
     }
 }
