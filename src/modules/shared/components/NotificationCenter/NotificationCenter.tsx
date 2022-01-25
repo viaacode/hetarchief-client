@@ -14,6 +14,7 @@ const NotificationCenters: FC<NotificationCenterProps> = ({
 	isOpen,
 	readTitle,
 	unreadTitle,
+	buttonTitle,
 	onClose,
 	onClickNotification,
 	onClickButton,
@@ -82,22 +83,18 @@ const NotificationCenters: FC<NotificationCenterProps> = ({
 
 	const renderFooter = () => (
 		<Button
+			disabled={!filteredNotifications(false).length}
 			onClick={onClickButton}
 			className={styles['c-notification-center__button']}
 			variants={['black', 'block']}
-			iconStart={
-				<Icon
-					className={clsx(styles['c-notification-center__notification-icon'])}
-					name="check"
-				/>
-			}
-			label="Markeer alles als gelezen"
+			iconStart={<Icon name="check" />}
+			label={buttonTitle}
 		/>
 	);
 
 	return (
 		<Blade
-			className={className}
+			className={clsx(className, styles['c-notification-center__blade'])}
 			isOpen={isOpen}
 			onClose={onClose}
 			hideCloseButton

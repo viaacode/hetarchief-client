@@ -5,6 +5,7 @@ export interface NotificationCenterProps extends DefaultComponentProps {
 	isOpen: boolean;
 	readTitle: string;
 	unreadTitle: string;
+	buttonTitle: string;
 	onClose: () => void;
 	onClickNotification: (id: string) => void;
 	onClickButton: () => void;

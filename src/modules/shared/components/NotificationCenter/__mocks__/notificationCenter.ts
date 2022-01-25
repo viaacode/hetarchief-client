@@ -41,6 +41,7 @@ export const notificationCenterMock: NotificationCenterProps = {
 	isOpen: true,
 	readTitle: 'Gelezen',
 	unreadTitle: 'Ongelezen',
+	buttonTitle: 'Markeer alles als gelezen',
 	onClose: () => null,
 	onClickButton: () => null,
 	onClickNotification: () => null,

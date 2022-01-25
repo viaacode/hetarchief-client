@@ -2,8 +2,9 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
-$c-navigation-height: 8.8rem;
-$c-navigation-height-md: 8rem;
+// In variables. Needed in notification center
+// $c-navigation-height: 8.8rem;
+// $c-navigation-height-md: 8rem;
 $c-navigation-height-contextual: 6.4rem;
 $c-navigation-height-contextual-md: 4.8rem;
 $c-navigation-border-height: 0.6rem;
