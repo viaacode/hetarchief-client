@@ -1,8 +1,9 @@
 import { Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import { FC, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { Footer, Navigation, NavigationItem } from '@shared/components';
 import {
 	footerLeftItem,
@@ -13,15 +14,19 @@ import { MOCK_ITEMS_LEFT } from '@shared/components/Navigation/__mocks__/navigat
 import { setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
-	// TODO: replace with actual logged in state
-	const isLoggedIn = false;
 	const dispatch = useDispatch();
+	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const user = useSelector(selectUser);
 	const { t } = useTranslation();
 
 	const rightNavItems: NavigationItem[] = useMemo(() => {
 		return isLoggedIn
 			? [
 					// TODO: add notification center and user dropdown menu here
+					{
+						id: 'user-menu',
+						node: user && <span>{`${user.firstName} ${user.lastName}`}</span>,
+					},
 			  ]
 			: [
 					{
