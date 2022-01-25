@@ -131,8 +131,11 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				</div>
 			)}
 			<FilterMenuMobile
+				activeFilter={activeFilter}
+				filters={filters}
 				isOpen={isMobile && isMobileOpen}
 				onClose={() => onToggleClick(false)}
+				onFilterClick={onFilterClick}
 			/>
 		</div>
 	);

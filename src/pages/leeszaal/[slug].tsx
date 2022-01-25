@@ -1,6 +1,6 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { KeyboardEvent, useMemo, useState } from 'react';
@@ -32,6 +32,7 @@ import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
 import { Breakpoints } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
+import { withI18n } from '@shared/wrappers';
 
 const ReadingRoomPage: NextPage = () => {
 	// State
@@ -45,7 +46,7 @@ const ReadingRoomPage: NextPage = () => {
 	// Data
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
 	const [mediaCount] = useState({
-		[ReadingRoomMediaType.All]: 123,
+		[ReadingRoomMediaType.All]: 1245,
 		[ReadingRoomMediaType.Audio]: 456,
 		[ReadingRoomMediaType.Video]: 789,
 	});
@@ -57,8 +58,7 @@ const ReadingRoomPage: NextPage = () => {
 		() =>
 			READING_ROOM_TABS.map((tab) => ({
 				...tab,
-				// TODO: remove any once Tab type supports ReactNode
-				label: (<TabLabel label={tab.label} count={mediaCount[tab.id]} />) as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+				label: <TabLabel label={tab.label} count={mediaCount[tab.id]} />,
 				active: tab.id === query.mediaType,
 			})),
 		[query.mediaType, mediaCount]
@@ -131,11 +131,14 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const renderFilterMenu = () => {
+		const filterMenuCls = clsx('p-reading-room__filter-menu', {
+			'u-mr-32:md': viewMode === 'list' && showResults,
+		});
+
 		return (
-			<div className={clsx(viewMode === 'list' && 'u-mr-32:md')}>
+			<div className={filterMenuCls}>
 				<WindowSizeContext.Provider value={windowSize}>
 					<FilterMenu
-						className="p-reading-room__filter-menu"
 						filters={filterOptionsMock}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}
@@ -156,7 +159,7 @@ const ReadingRoomPage: NextPage = () => {
 			</Head>
 
 			<Navigation contextual>
-				<Navigation.Left>
+				<Navigation.Left placement="left">
 					<Link href="/" passHref={true}>
 						<Button
 							icon={<Icon name="arrow-left" />}
@@ -168,10 +171,10 @@ const ReadingRoomPage: NextPage = () => {
 
 				<Navigation.Center title="Leeszaal" />
 
-				<Navigation.Right>
+				<Navigation.Right placement="right">
 					<Button
 						label="Contacteer"
-						iconStart={<Icon className="u-fs-24" name="contact" />}
+						iconStart={<Icon className="u-font-size-24" name="contact" />}
 						variants="text"
 						className="u-color-white u-mr--12 u-px-12 p-reading-room__contact-button"
 					/>
@@ -186,7 +189,7 @@ const ReadingRoomPage: NextPage = () => {
 			</section>
 
 			<section
-				className={clsx('p-reading-room__results u-py-24 u-py-48:md', {
+				className={clsx('p-reading-room__results u-bg-platinum u-py-24 u-py-48:md', {
 					'p-reading-room__results--placeholder': showInitialView || showNoResults,
 				})}
 			>
@@ -194,6 +197,7 @@ const ReadingRoomPage: NextPage = () => {
 					{showInitialView && (
 						<>
 							{renderFilterMenu()}
+
 							<Placeholder
 								className="p-reading-room__placeholder"
 								img="/images/lightbulb.svg"
@@ -207,6 +211,7 @@ const ReadingRoomPage: NextPage = () => {
 							{renderFilterMenu()}
 
 							<Placeholder
+								className="p-reading-room__placeholder"
 								img="/images/looking-glass.svg"
 								title="Geen resultaten"
 								description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
@@ -239,5 +244,7 @@ const ReadingRoomPage: NextPage = () => {
 		</div>
 	);
 };
+
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default ReadingRoomPage;

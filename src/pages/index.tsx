@@ -1,20 +1,34 @@
-import { Button } from '@meemoo/react-components';
+import { Button, TextInput } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useQueryParams } from 'use-query-params';
 
-import { Hero, ReadingRoomCardList } from '@shared/components';
+import { AuthModal } from '@auth/components';
+import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
+import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
+import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
+import { withI18n } from '@shared/wrappers';
 
 const Home: NextPage = () => {
+	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
+	const [readingRooms, setReadingRooms] = useState(sixItems);
+	const [searchValue, setSearchValue] = useState('');
+
+	const showAuthModal = useSelector(selectShowAuthModal);
+	const dispatch = useDispatch();
+	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
 
-	const [readingRooms, setReadingRooms] = useState(sixItems);
-	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
+	/**
+	 * Methods
+	 */
 
 	const handleLoadAllReadingRooms = () => {
 		Promise.resolve([...sixItems, ...sixItems]).then((data) => {
@@ -22,6 +36,20 @@ const Home: NextPage = () => {
 			setAreAllReadingRoomsVisible(true);
 		});
 	};
+
+	const onCloseAuthModal = () => {
+		dispatch(setShowAuthModal(false));
+	};
+
+	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			setQuery({ search: searchValue });
+		}
+	};
+
+	/**
+	 * Render
+	 */
 
 	return (
 		<div className="p-home">
@@ -46,27 +74,41 @@ const Home: NextPage = () => {
 				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
 			</div>
 
-			<div className="l-container u-mb-64">
-				<ReadingRoomCardList items={readingRooms} limit={!areAllReadingRoomsVisible} />
+			<div className="l-container u-mb-48 u-mb-80:md">
+				<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
+					<h3 className="p-home__subtitle">Vind een leeszaal</h3>
+
+					<TextInput
+						className="p-home__search"
+						iconEnd={<Icon name="search" />}
+						placeholder="Zoek"
+						value={searchValue}
+						variants={['grey', 'large', 'rounded']}
+						onChange={(e) => setSearchValue(e.target.value)}
+						onKeyUp={onSearchKeyUp as () => void}
+					/>
+				</div>
+
+				<ReadingRoomCardList
+					className="u-mb-64"
+					items={readingRooms}
+					limit={!areAllReadingRoomsVisible}
+				/>
+
+				{!areAllReadingRoomsVisible && (
+					<div className="u-text-center">
+						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
+							Toon alles (123)
+						</Button>
+					</div>
+				)}
 			</div>
 
-			{!areAllReadingRoomsVisible && (
-				<div style={{ display: 'grid', placeItems: 'center' }} className="u-mb-80">
-					<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
-						Toon alles (123)
-					</Button>
-				</div>
-			)}
+			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
 		</div>
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-	return {
-		props: {
-			...(await serverSideTranslations(locale ?? '')),
-		},
-	};
-};
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default Home;

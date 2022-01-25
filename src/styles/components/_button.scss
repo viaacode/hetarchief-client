@@ -3,13 +3,15 @@
 .c-button {
 	display: inline-block;
 	height: 4.8rem;
+	padding: 1.4rem $button-horizontal-whitespace;
 	padding: 1.4rem 2.4rem;
-	border: 1px solid $teal;
+	border: 1px solid $teal-dark;
 	font-family: $font-family-primary;
 	font-size: $font-size-base;
 	font-weight: $font-weight-bold;
 	line-height: 1.125;
-	background-color: $teal;
+	text-align: center;
+	background-color: $teal-dark;
 	border-radius: 4rem;
 	color: $white;
 	cursor: pointer;
@@ -22,8 +24,8 @@
 	}
 
 	&:active {
-		background-color: $teal;
-		border-color: $teal;
+		background-color: $teal-dark;
+		border-color: $teal-dark;
 	}
 
 	&:not(:active,:hover):focus {
@@ -81,8 +83,8 @@
 	}
 
 	&:active {
-		background-color: $teal;
-		border-color: $teal;
+		background-color: $teal-dark;
+		border-color: $teal-dark;
 		color: $white;
 	}
 
@@ -96,6 +98,18 @@
 	background-color: $silver;
 	border-color: $silver;
 	color: $black;
+
+	&:hover {
+		background-color: $shade;
+		border-color: $shade;
+		color: $white;
+	}
+
+	&:active {
+		background-color: $teal-dark;
+		border-color: $teal-dark;
+		color: $white;
+	}
 
 	&:not(:active,:hover):focus {
 		outline: 2px solid $teal;
@@ -127,8 +141,8 @@
 	}
 
 	&:active {
-		background-color: $teal;
-		border-color: $teal;
+		background-color: $teal-dark;
+		border-color: $teal-dark;
 		color: $white;
 	}
 
@@ -151,7 +165,7 @@
 	}
 
 	&:active {
-		color: $teal;
+		color: $teal-dark;
 	}
 
 	&:not(:active,:hover):focus {
@@ -173,6 +187,10 @@
 
 	&.c-button--underline {
 		text-decoration: underline;
+	}
+
+	&.c-button--white {
+		color: $white;
 	}
 }
 
@@ -198,6 +216,11 @@
 	&.c-button--xxs {
 		width: 2.2rem;
 		height: 2.2rem;
+
+		.c-button__icon {
+			font-size: 2.2rem;
+			transform: translateX(-0.1rem); // adjust for visual mismatch
+		}
 	}
 }
 
@@ -213,14 +236,11 @@
 	&:hover {
 		background-color: $silver;
 		border-color: $silver;
+		color: $zinc;
 	}
 
 	&:not(:active,:hover):focus {
 		outline: none;
-	}
-
-	&.c-button--white {
-		color: $zinc;
 	}
 
 	&.c-button--outline {

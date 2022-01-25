@@ -4,7 +4,7 @@ import { Icon, IconProps } from '@shared/components';
 
 import { ReadingRoomMediaType } from '../types';
 
-export const READING_ROOM_ITEM_COUNT = 10;
+export const READING_ROOM_ITEM_COUNT = 100;
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	mediaType: withDefault(StringParam, ReadingRoomMediaType.All),

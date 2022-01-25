@@ -1,5 +1,15 @@
 @use "../abstracts/" as *;
 
+.p-reading-room {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+}
+
+/**
+ * Elements
+ */
+
 .p-reading-room__contact-button {
 	@include respond-to(md) {
 		.c-button__icon {
@@ -15,17 +25,37 @@
 
 
 .p-reading-room__results {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+
 	&--placeholder {
 		.l-container {
 			display: flex;
+			flex: 1 1 auto;
 
 			@include respond-to("md") {
 				flex-direction: column;
+			}
+		}
+
+		.p-reading-room__filter-menu {
+			flex-shrink: 0;
+
+			@include respond-at("md") {
+				width: calc(100% / 3 - 2.2rem);
+			}
+			@include respond-at("lg") {
+				width: calc(25% - 2.4rem);
 			}
 		}
 	}
 }
 
 .p-reading-room__placeholder {
-	width: 100%;
+	margin: $spacer-md 0 auto;
+
+	@include respond-at("md") {
+		margin: 17rem 0 auto;
+	}
 }

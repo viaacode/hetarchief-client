@@ -1,0 +1,150 @@
+@use "sass:math";
+@use "sass:color";
+@use "styles/abstracts" as *;
+
+$c: "c-datepicker";
+$datepicker-day-size: $spacer-lg;
+$datepicker-edge-spacing: $spacer-sm * 0.75;
+$datepicker-border-color: $zinc;
+
+%datepicker-select-background {
+	appearance: none;
+	background-position-x: calc(100% - #{$spacer-xs});
+	background-position-y: center;
+	background-repeat: no-repeat;
+	background-size: 1.25em;
+}
+
+.#{$c} {
+	&.react-datepicker-wrapper {
+		&:hover,
+		&:active,
+		&:focus,
+		&:focus-within {
+			& + .react-datepicker__tab-loop .react-datepicker-popper,
+			& + .react-datepicker-popper {
+				border-top-color: $teal;
+			}
+		}
+	}
+
+	&.react-datepicker {
+		border-color: $datepicker-border-color;
+		border-radius: 0;
+		border-top: none;
+		font-family: $font-family-primary;
+		font-size: $font-size-base;
+		line-height: $line-height-lg;
+
+		&-popper {
+			padding-bottom: 0;
+			padding-top: 0;
+			margin-top: -1px;
+			border-top: 1px solid $datepicker-border-color;
+			overflow-x: scroll;
+			max-width: 100%;
+		}
+	}
+
+	.react-datepicker {
+		&__header {
+			background-color: transparent;
+			border-bottom-width: 0;
+			padding-left: $datepicker-edge-spacing;
+			padding-right: $datepicker-edge-spacing;
+			padding-top: $datepicker-edge-spacing;
+
+			&__dropdown {
+				display: flex;
+			}
+		}
+
+		&__month {
+			margin: 0 $datepicker-edge-spacing $datepicker-edge-spacing $datepicker-edge-spacing;
+		}
+
+		&__day {
+			font-weight: $font-weight-bold;
+		}
+
+		&__day,
+		&__day-name {
+			border-radius: math.div($datepicker-day-size, 2);
+			line-height: $datepicker-day-size;
+			margin: 0;
+			outline-color: $neutral;
+			width: $datepicker-day-size;
+
+			&:not(:last-of-type) {
+				margin-right: $datepicker-edge-spacing;
+			}
+		}
+
+		&__day--selected,
+		&__day--keyboard-selected {
+			background-color: $seagreen;
+			font-weight: $font-weight-normal;
+		}
+
+		&__day--disabled {
+			cursor: not-allowed;
+		}
+
+		&__day--outside-month {
+			opacity: 0.24;
+		}
+
+		&__day-names {
+			font-size: $font-size-sm;
+			line-height: $line-height-3xl;
+			margin-top: $spacer-xs;
+		}
+
+		&__day-name {
+			color: color.adjust($neutral, $alpha: -0.41);
+		}
+
+		&__month-dropdown-container,
+		&__year-dropdown-container {
+			margin: 0;
+
+			select {
+				@extend %datepicker-select-background;
+				@include base64-chevron-down-background($zinc);
+
+				border: 1px solid $zinc;
+				cursor: pointer;
+				font-family: inherit;
+				outline-color: $seagreen;
+				padding: $spacer-xxs $spacer-xs;
+				width: 100%;
+
+				&:active,
+				&:focus,
+				&:hover {
+					@extend %datepicker-select-background;
+					@include base64-chevron-down-background($seagreen);
+
+					border-color: $seagreen;
+				}
+			}
+		}
+
+		&__month-dropdown-container {
+			flex-grow: 4;
+			margin-left: $spacer-xxs;
+			margin-right: $spacer-xs;
+
+			// Note: this does not align with the nlBE locale used by react-datepicker
+			select {
+				text-transform: capitalize;
+			}
+		}
+
+		&__year-dropdown-container {
+			flex-grow: 3;
+			margin-left: $spacer-xs;
+			margin-right: $spacer-xxs;
+		}
+	}
+}
