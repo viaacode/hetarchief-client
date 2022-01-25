@@ -2,9 +2,6 @@
 @use "sass:color";
 @use "styles/abstracts" as *;
 
-// TODO: re-export file from @meemoo/react-components
-@import "~react-datepicker/dist/react-datepicker.min.css";
-
 $c: "c-datepicker";
 $datepicker-day-size: $spacer-lg;
 $datepicker-edge-spacing: $spacer-sm * 0.75;
@@ -19,15 +16,28 @@ $datepicker-border-color: $zinc;
 }
 
 .#{$c} {
+	&.react-datepicker-wrapper {
+		&:hover,
+		&:active,
+		&:focus,
+		&:focus-within {
+			& + .react-datepicker__tab-loop .react-datepicker-popper,
+			& + .react-datepicker-popper {
+				border-top-color: $teal;
+			}
+		}
+	}
+
 	&.react-datepicker {
 		border-color: $datepicker-border-color;
 		border-radius: 0;
-		border-top-width: 0;
+		border-top: none;
 		font-family: $font-family-primary;
 		font-size: $font-size-base;
 		line-height: $line-height-lg;
 
 		&-popper {
+			padding-bottom: 0;
 			padding-top: 0;
 			margin-top: -1px;
 			border-top: 1px solid $datepicker-border-color;

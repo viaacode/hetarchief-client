@@ -10,7 +10,7 @@
 	width: 100%;
 	max-width: 46.4rem;
 	background-color: $white;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -40,6 +40,15 @@
 
 	&__footer-wrapper {
 		grid-row-start: 4;
+	}
+
+	&__overlay {
+		&--managed {
+			min-width: calc(46.4rem + 5.6rem);
+			left: auto;
+			transform: translateX(5.6rem);
+			transition: opacity $animate-default, transform $animate-default;
+		}
 	}
 
 	&--visible {

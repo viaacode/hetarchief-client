@@ -7,6 +7,7 @@ import { Icon } from '@shared/components';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
+import { NavigationHamburgerProps } from '../NavigationSection';
 
 const linkCls = (classNames: string[] = []) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -41,6 +42,13 @@ const renderLink = (
 			</a>
 		</Link>
 	);
+};
+
+export const MOCK_HAMBURGER_PROPS: NavigationHamburgerProps = {
+	openLabel: 'sluit',
+	closedLabel: 'Menu',
+	openIcon: 'times',
+	closedIcon: 'grid-view',
 };
 
 export const MOCK_ITEMS_LEFT: NavigationItem[] = [

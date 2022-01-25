@@ -6,6 +6,7 @@ import { OverlayProps } from './Overlay.types';
 
 const Overlay: FC<OverlayProps> = ({
 	className,
+	style,
 	type = 'dark',
 	visible = false,
 	animate,
@@ -20,6 +21,7 @@ const Overlay: FC<OverlayProps> = ({
 				visible && styles['c-overlay--visible'],
 				animate && styles[`c-overlay--${animate}`]
 			)}
+			style={style}
 			onClick={onClick}
 		/>
 	);

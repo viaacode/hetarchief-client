@@ -16,10 +16,17 @@ export const loginAction = createAsyncThunk('users/login', async () => {
 export const userSlice = createSlice({
 	name: 'user',
 	initialState,
-	reducers: {},
+	reducers: {
+		// TODO: replace this once login is added
+		setMockUser(state, action) {
+			state.user = action.payload;
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addCase(loginAction.fulfilled, (state, action) => {
 			state.user = action.payload as UserSchema;
 		});
 	},
 });
+
+export const { setMockUser } = userSlice.actions;

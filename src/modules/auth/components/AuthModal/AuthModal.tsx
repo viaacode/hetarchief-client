@@ -4,8 +4,9 @@ import { Trans, useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { loginAction } from '@auth/store/user';
+import { loginAction, setMockUser } from '@auth/store/user';
 import { Icon, Modal } from '@shared/components';
+import { setShowAuthModal } from '@shared/store/ui';
 
 import styles from './AuthModal.module.scss';
 import { AuthModalProps } from './AuthModal.types';
@@ -25,6 +26,12 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	/**
 	 * Render
 	 */
+
+	const onMockLogin = () => {
+		// TODO: replace with real login action
+		dispatch(setMockUser({ firstName: 'Tom', lastName: 'Testerom' }));
+		dispatch(setShowAuthModal(false));
+	};
 
 	const renderHeading = () => {
 		return (
