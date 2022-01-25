@@ -1,7 +1,6 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
-$c-hero-logged-in-bg: #F0F0F0;
 $c-hero-access-card-min-width: 57.2rem;
 
 .c-hero {
@@ -140,7 +139,7 @@ $c-hero-access-card-min-width: 57.2rem;
 		display: flex;
 		flex-direction: column;
 		padding: $spacer-1xl 0 $spacer-lg;
-		background-color: $c-hero-logged-in-bg;
+		background-color: $platinum;
 		color: $black;
 
 		@include respond-at(md) {

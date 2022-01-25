@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
-import { ReadingRoomCard, ReadingRoomCardType } from '..';
+import { ReadingRoomCard, ReadingRoomCardType } from '../ReadingRoomCard';
 import { AccessGranted } from '../ReadingRoomCard/__mocks__/reading-room-card';
 
 import styles from './Hero.module.scss';
