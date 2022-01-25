@@ -48,7 +48,7 @@ pipeline {
                         env.IMAGE_TAG = sh(script: 'git describe --tags || echo latest', returnStdout: true)
                         // The name used for the build config based on the image tag
                         // Replace '.' with '_' as '.' is not allowed.
-                        env.BUILD_CONFIG_NAME = sh(script: 'echo "${IMAGE_TAG}" | sed -r "s/\\./\\-/g"', returnStdout: true)
+                        // env.BUILD_CONFIG_NAME = sh(script: 'echo "${IMAGE_TAG}" | sed -r "s/\\./\\-/g"', returnStdout: true)
                     }
                 }
             }
@@ -71,10 +71,11 @@ pipeline {
                         oc project $OC_PROJECT
                         oc import-image $BASE_IMG --confirm
                         oc set image-lookup $BASE_IMG_NAME
-                        oc new-build -l ref=$BRANCH_NAME --strategy=docker --name $APP_NAME-$GIT_SHORT_COMMIT --to $APP_NAME:$GIT_SHORT_COMMIT --binary --context-dir="" || echo "Probably already exists, start new build"
+                        oc new-build -l ref=$BRANCH_NAME --strategy=docker --name $APP_NAME --to $APP_NAME:$GIT_SHORT_COMMIT --binary --context-dir="" || echo "Probably already exists, start new build"
                         sleep 3
-                        oc annotate --overwrite buildconfig/$APP_NAME-$GIT_SHORT_COMMIT ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
-                        oc start-build $APP_NAME-$GIT_SHORT_COMMIT --from-dir=. --follow=true --wait=true
+                        oc annotate --overwrite buildconfig/$APP_NAME ref=$BRANCH_NAME shortcommit=$GIT_SHORT_COMMIT
+			patch-bc-current-ref.sh
+                        oc start-build $APP_NAME --from-dir=. --follow=true --wait=true
                         '''
                     }
                 }
