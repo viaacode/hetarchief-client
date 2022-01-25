@@ -1,5 +1,14 @@
 {
+  "modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account": "Inloggen met Het Archief-account",
+  "modules/auth/components/auth-modal/auth-modal___inloggen-of-registreren": "Inloggen of registreren",
+  "modules/auth/components/auth-modal/auth-modal___klaar-om-een-bezoek-te-plannen-aan-een-van-de-leeszalen-br-log-dan-meteen-in-met-jouw-het-archief-account": "Klaar om een bezoek te plannen aan één van de leeszalen? <br /> Log dan\n meteen in met jouw Het Archief-account",
+  "modules/auth/components/auth-modal/auth-modal___nog-geen-strong-gratis-strong-account-op-het-archief": "Nog geen <strong>gratis</strong> account op Het Archief?",
+  "modules/auth/components/auth-modal/auth-modal___registreer-je-hier": "Registreer je hier",
+  "modules/shared/const/navigation___menu": "Menu",
+  "modules/shared/const/navigation___sluit": "Sluit",
+  "modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren": "Inloggen of registreren",
   "pages/index___hier-kom-je-er-alles-over-te-weten": "Hier kom je er alles over te weten.",
   "pages/index___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-leeszaal-benieuwd-hoe-het-werkt": "Plan een nieuw bezoek, stap fysiek binnen en krijg meteen toegang tot het digitale archief van de leeszaal. Benieuwd hoe het werkt?",
+  "pages/index___vind-een-leeszaal": "Vind een leeszaal",
   "pages/index___welkom-in-de-digitale-leeszaal": "Welkom in de digitale leeszaal"
 }
