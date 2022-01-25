@@ -1,3 +1,4 @@
+export * from './BladeManager';
 export * from './Footer';
 export * from './Hero';
 export * from './Icon';
