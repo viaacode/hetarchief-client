@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, ReactNode, useState } from 'react';
+import { FC, Fragment, ReactNode, useState } from 'react';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 
@@ -52,12 +52,11 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 			<ul className={styles['c-navigation__list']}>
 				{items.map((item, index) => {
 					return (
-						<>
+						<Fragment key={`navigation-item-${index}`}>
 							{item.hasDivider && (
 								<div className={styles['c-navigation__divider--vertical']} />
 							)}
 							<li
-								key={`navigation-item-${index}`}
 								className={clsx(
 									styles['c-navigation__item'],
 									styles[`c-navigation__link--variant-${index + 1}`],
@@ -85,7 +84,7 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 									</>
 								)}
 							</li>
-						</>
+						</Fragment>
 					);
 				})}
 			</ul>

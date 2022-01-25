@@ -1,9 +1,7 @@
 import { Button, TextInput } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import Link from 'next/link';
 import { KeyboardEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -23,7 +21,7 @@ const Home: NextPage = () => {
 
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const dispatch = useDispatch();
-	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
 
 	/**
@@ -70,13 +68,9 @@ const Home: NextPage = () => {
 				}}
 			/>
 
-			<div style={{ display: 'grid', placeItems: 'center', padding: '2rem' }}>
-				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
-			</div>
-
-			<div className="l-container u-mb-48 u-mb-80:md">
+			<div className="l-container u-pt-32 u-pt-80:md u-pb-48 u-pb-80:md">
 				<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
-					<h3 className="p-home__subtitle">Vind een leeszaal</h3>
+					<h3 className="p-home__subtitle">{t('pages/index___vind-een-leeszaal')}</h3>
 
 					<TextInput
 						className="p-home__search"

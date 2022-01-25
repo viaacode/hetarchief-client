@@ -10,6 +10,7 @@ import {
 	footerRightItem,
 } from '@shared/components/Footer/__mocks__/footer';
 import { MOCK_ITEMS_LEFT } from '@shared/components/Navigation/__mocks__/navigation';
+import { NAV_HAMBURGER_PROPS } from '@shared/const';
 import { setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
@@ -46,10 +47,7 @@ const AppLayout: FC = ({ children }) => {
 					placement="left"
 					renderHamburger={true}
 					items={MOCK_ITEMS_LEFT}
-					hamburgerProps={{
-						hamburgerLabelOpen: 'sluit',
-						hamburgerLabelClosed: 'Menu',
-					}}
+					hamburgerProps={NAV_HAMBURGER_PROPS()}
 				/>
 				<Navigation.Right placement="right" items={rightNavItems} />
 			</Navigation>
