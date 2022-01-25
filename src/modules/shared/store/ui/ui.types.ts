@@ -1,3 +1,3 @@
 export interface UIState {
-	randomBoolean: boolean;
+	showAuthModal: boolean;
 }

@@ -87,10 +87,11 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 	codeFiles.forEach((relativeFilePath: string) => {
 		try {
 			const absoluteFilePath = path.resolve(__dirname, '../src', relativeFilePath);
-			let content: string = fs.readFileSync(absoluteFilePath).toString();
+			const content: string = fs.readFileSync(absoluteFilePath).toString();
+			let newContent = '';
 
 			// Replace Trans objects
-			content = content.replace(
+			newContent = content.replace(
 				/<Trans( i18nKey="([^"]+)")?>([\s\S]*?)<\/Trans>/g,
 				(match: string, keyAttribute: string, key: string, translation: string) => {
 					let formattedKey: string | undefined = key;
@@ -141,7 +142,7 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 				tFuncEnd,
 			].join('');
 			const regex = new RegExp(combinedRegex, 'gim');
-			const newContent = content.replace(
+			newContent = newContent.replace(
 				// Match char before t function to make sure it isn't part of a bigger function name, eg: sent()
 				regex,
 				(

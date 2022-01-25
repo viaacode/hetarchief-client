@@ -1,20 +1,17 @@
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, ReactNode, useEffect, useState } from 'react';
-import Modal from 'react-modal';
+import { FC, useEffect, useState } from 'react';
+import { default as ReactModal } from 'react-modal';
+
+import { useScrollLock } from '@shared/hooks';
+import { isBrowser } from '@shared/utils';
+
+import { Icon } from '../Icon';
 
 import styles from './Modal.module.scss';
+import { ModalProps } from './Modal.types';
 
-export interface MyModalProps {
-	isOpen?: boolean;
-	className?: string;
-	title?: string;
-	heading?: JSX.Element;
-	footer?: JSX.Element;
-	onClose?: () => void;
-	onOpen?: Modal.OnAfterOpenCallback;
-}
-
-const MyModal: FC<MyModalProps> = ({
+const Modal: FC<ModalProps> = ({
 	isOpen,
 	className,
 	title,
@@ -24,27 +21,23 @@ const MyModal: FC<MyModalProps> = ({
 	onOpen,
 	children,
 }) => {
+	const root = isBrowser() ? document.body : null;
 	const [ready, setReady] = useState(false);
+
+	useScrollLock(root, isOpen ?? false);
 
 	// See https://github.com/reactjs/react-modal#examples
 	useEffect(() => {
-		const root = document.getElementById('__next') || document.querySelector('body');
 		if (root) {
-			Modal.setAppElement(root);
+			ReactModal.setAppElement(root);
 			setReady(true);
 		}
-	}, [setReady]);
+	}, [root, setReady]);
 
-	const top: JSX.Element = heading || (
-		<h3 className={styles['c-hetarchief-modal__title']}>{title}</h3>
-	);
-
-	const middle: ReactNode = children;
-
-	const bottom: JSX.Element | undefined = footer || <></>;
+	const top = heading || <h3 className={styles['c-hetarchief-modal__title']}>{title}</h3>;
 
 	return (
-		<Modal
+		<ReactModal
 			isOpen={ready && !!isOpen}
 			overlayClassName={styles['c-hetarchief-modal__overlay']}
 			className={clsx(className, styles['c-hetarchief-modal'])}
@@ -57,17 +50,21 @@ const MyModal: FC<MyModalProps> = ({
 				<div className={styles['c-hetarchief-modal__title-wrapper']}>{top}</div>
 
 				<div className={styles['c-hetarchief-modal__close-wrapper']}>
-					{/* TODO: Add accessible icon button, ARC-178 / ARC-177 */}
-					<button onClick={onClose} className={styles['c-hetarchief-modal__close']}>
-						Close
-					</button>
+					<Button
+						className={styles['c-hetarchief-modal__close']}
+						icon={<Icon name="times" />}
+						variants={['text']}
+						onClick={onClose}
+					/>
 				</div>
 			</section>
 
-			<section className={styles['c-hetarchief-modal__content']}>{middle}</section>
-			<section className={styles['c-hetarchief-modal__footer']}>{bottom}</section>
-		</Modal>
+			<section className={styles['c-hetarchief-modal__content']}>{children}</section>
+			{footer ? (
+				<section className={styles['c-hetarchief-modal__footer']}>{footer}</section>
+			) : null}
+		</ReactModal>
 	);
 };
 
-export default MyModal;
+export default Modal;
