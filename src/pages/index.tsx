@@ -9,7 +9,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
 import { selectIsLoggedIn } from '@auth/store/user';
-import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
@@ -52,9 +52,8 @@ const Home: NextPage = () => {
 		isLoggedIn ? setIsOpenRequestAccessBlade(true) : onOpenAuthModal();
 	};
 
-	const onRequestAccessSubmit = (values: RequestAccessFormState) => {
+	const onRequestAccessSubmit = () => {
 		// TODO: add create request call here
-		console.log(values);
 		setIsOpenRequestAccessBlade(false);
 	};
 
