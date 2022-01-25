@@ -49,3 +49,17 @@ const Template: ComponentStory<typeof NotificationCenter> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export const ReadOnly = Template.bind({});
+ReadOnly.args = {
+	notifications: notificationCenterMock.notifications.filter(
+		(notification) => notification.read === true
+	),
+};
+
+export const UnreadOnly = Template.bind({});
+UnreadOnly.args = {
+	notifications: notificationCenterMock.notifications.filter(
+		(notification) => notification.read === false
+	),
+};
