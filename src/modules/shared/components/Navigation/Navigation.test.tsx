@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 
 import Navigation from './Navigation';
-import { MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';
+import { MOCK_HAMBURGER_PROPS, MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';
 
 describe('Components', () => {
 	describe('<Navigation />', () => {
@@ -20,7 +20,7 @@ describe('Components', () => {
 			expect(leftChild).toBeInTheDocument();
 		});
 
-		it('Should render items in the left section', () => {
+		it('Should render items in the left section', async () => {
 			render(
 				<Navigation>
 					<Navigation.Left placement="left" items={MOCK_ITEMS_LEFT} />
@@ -28,7 +28,9 @@ describe('Components', () => {
 			);
 
 			const leftItem = screen.queryAllByText('Over de leeszalen')[0];
-			expect(leftItem).toBeInTheDocument();
+			await waitFor(() => {
+				expect(leftItem).toBeInTheDocument();
+			});
 		});
 
 		it('Should render children in the center section', () => {
@@ -74,7 +76,7 @@ describe('Components', () => {
 			expect(rightChild).toBeInTheDocument();
 		});
 
-		it('Should render items in the right section', () => {
+		it('Should render items in the right section', async () => {
 			render(
 				<Navigation>
 					<Navigation.Right placement="right" items={MOCK_ITEMS_RIGHT} />
@@ -82,62 +84,53 @@ describe('Components', () => {
 			);
 
 			const rightItem = screen.queryByText('Log uit');
-			expect(rightItem).toBeInTheDocument();
+			await waitFor(() => {
+				expect(rightItem).toBeInTheDocument();
+			});
 		});
 
-		it('Should render dropdown when renderHamburger = true', () => {
+		it('Should render dropdown when renderHamburger = true', async () => {
 			render(
 				<Navigation>
 					<Navigation.Left
 						placement="right"
 						items={MOCK_ITEMS_LEFT}
 						renderHamburger={true}
-						hamburgerProps={{
-							hamburgerLabelOpen: 'sluit',
-							hamburgerLabelClosed: 'Menu',
-							hamburgerIconOpen: 'times',
-							hamburgerIconClosed: 'grid-view',
-						}}
+						hamburgerProps={MOCK_HAMBURGER_PROPS}
 					/>
 				</Navigation>
 			);
 
 			const trigger = screen.queryByText('Menu');
-			expect(trigger).toBeInTheDocument();
+			await waitFor(() => {
+				expect(trigger).toBeInTheDocument();
+			});
 		});
-		it('Should not render dropdown when renderHamburger = false', () => {
+		it('Should not render dropdown when renderHamburger = false', async () => {
 			render(
 				<Navigation>
 					<Navigation.Left
 						placement="right"
 						items={MOCK_ITEMS_LEFT}
-						hamburgerProps={{
-							hamburgerLabelOpen: 'sluit',
-							hamburgerLabelClosed: 'Menu',
-							hamburgerIconOpen: 'times',
-							hamburgerIconClosed: 'grid-view',
-						}}
+						hamburgerProps={MOCK_HAMBURGER_PROPS}
 					/>
 				</Navigation>
 			);
 
 			const trigger = screen.queryByText('Menu');
-			expect(trigger).not.toBeInTheDocument();
+			await waitFor(() => {
+				expect(trigger).not.toBeInTheDocument();
+			});
 		});
 
-		it('Should render overlay when a dropdown is rendered', () => {
+		it('Should render overlay when a dropdown is rendered', async () => {
 			const { container } = render(
 				<Navigation>
 					<Navigation.Left
 						placement="right"
 						items={MOCK_ITEMS_LEFT}
 						renderHamburger={true}
-						hamburgerProps={{
-							hamburgerLabelOpen: 'sluit',
-							hamburgerLabelClosed: 'Menu',
-							hamburgerIconOpen: 'times',
-							hamburgerIconClosed: 'grid-view',
-						}}
+						hamburgerProps={MOCK_HAMBURGER_PROPS}
 					/>
 				</Navigation>
 			);
@@ -146,10 +139,12 @@ describe('Components', () => {
 				'.c-navigation__section--responsive-mobile .c-navigation__dropdown-overlay'
 			);
 
-			expect(overlay).toBeInTheDocument();
+			await waitFor(() => {
+				expect(overlay).toBeInTheDocument();
+			});
 		});
 
-		it('Should not render overlay when no dropdown is rendered', () => {
+		it('Should not render overlay when no dropdown is rendered', async () => {
 			const { container } = render(
 				<Navigation>
 					<Navigation.Left placement="right" items={MOCK_ITEMS_LEFT} />
@@ -160,10 +155,12 @@ describe('Components', () => {
 				'.c-navigation__section--responsive-mobile .c-navigation__dropdown-overlay'
 			);
 
-			expect(overlay).not.toBeInTheDocument();
+			await waitFor(() => {
+				expect(overlay).not.toBeInTheDocument();
+			});
 		});
 
-		it('Should render an icon when a menu item has children', () => {
+		it('Should render an icon when a menu item has children', async () => {
 			const items = [
 				{
 					node: <div>link</div>,
@@ -185,8 +182,9 @@ describe('Components', () => {
 			);
 
 			const link = screen.getByText('link');
-
-			expect(link.nextSibling).toHaveClass('c-icon');
+			await waitFor(() => {
+				expect(link.nextSibling).toHaveClass('c-icon');
+			});
 		});
 
 		it('Should not render an icon when a menu item has no children', () => {
@@ -209,7 +207,7 @@ describe('Components', () => {
 			expect(link.nextSibling).not.toBeInTheDocument();
 		});
 
-		it('Should render dropdown children', () => {
+		it('Should render dropdown children', async () => {
 			const items = [
 				{
 					node: <div>link</div>,
@@ -231,8 +229,9 @@ describe('Components', () => {
 			);
 
 			const item = screen.getByText('item 1');
-
-			expect(item).toBeInTheDocument();
+			await waitFor(() => {
+				expect(item).toBeInTheDocument();
+			});
 		});
 	});
 });

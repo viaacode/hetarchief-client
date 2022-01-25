@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 
 import { Icon } from '@shared/components';
 
+import { NavigationHamburgerProps } from '..';
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
 
@@ -43,6 +44,13 @@ const renderLink = (
 	);
 };
 
+export const MOCK_HAMBURGER_PROPS: NavigationHamburgerProps = {
+	openLabel: 'sluit',
+	closedLabel: 'Menu',
+	openIcon: 'times',
+	closedIcon: 'grid-view',
+};
+
 export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	{
 		node: renderLink('Leeszalen', '#', {
@@ -75,7 +83,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				id: 'alle leeszalen',
 			},
 			{
-				node: renderLink('Leeszaal 8', 'leeszaal/leeszaal-8', {
+				node: renderLink('Leeszaal 8', '/leeszaal/leeszaal-8', {
 					iconEnd: (
 						<Icon
 							className={clsx(
@@ -93,7 +101,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				id: 'leeszaal 8',
 			},
 			{
-				node: renderLink('Leeszaal 12', 'leeszaal/leeszaal-12', {
+				node: renderLink('Leeszaal 12', '/leeszaal/leeszaal-12', {
 					iconEnd: (
 						<Icon
 							className={clsx(
