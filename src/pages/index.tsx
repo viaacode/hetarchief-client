@@ -1,7 +1,6 @@
 import { Button, TextInput } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
 import { KeyboardEvent, useState } from 'react';
@@ -9,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
+import { selectIsLoggedIn } from '@auth/store/user';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
@@ -20,10 +20,12 @@ const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
 	const [readingRooms, setReadingRooms] = useState(sixItems);
 	const [searchValue, setSearchValue] = useState('');
+	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
 
+	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const dispatch = useDispatch();
-	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
 
 	/**
@@ -39,6 +41,14 @@ const Home: NextPage = () => {
 
 	const onCloseAuthModal = () => {
 		dispatch(setShowAuthModal(false));
+	};
+
+	const onOpenAuthModal = () => {
+		dispatch(setShowAuthModal(true));
+	};
+
+	const onRequestAccess = () => {
+		isLoggedIn ? setIsOpenRequestAccessBlade(true) : onOpenAuthModal();
 	};
 
 	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -91,7 +101,10 @@ const Home: NextPage = () => {
 
 				<ReadingRoomCardList
 					className="u-mb-64"
-					items={readingRooms}
+					items={readingRooms.map((room) => ({
+						...room,
+						onAccessRequest: onRequestAccess,
+					}))}
 					limit={!areAllReadingRoomsVisible}
 				/>
 
