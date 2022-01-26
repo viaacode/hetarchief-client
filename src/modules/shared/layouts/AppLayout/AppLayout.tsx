@@ -1,10 +1,19 @@
 import { Avatar, Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Slide, ToastContainer } from 'react-toastify';
 
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
-import { Footer, Icon, Navigation, NavigationItem } from '@shared/components';
+import {
+	Footer,
+	Icon,
+	Navigation,
+	NavigationItem,
+	NotificationCenter,
+	notificationCenterMock,
+} from '@shared/components';
 import {
 	footerLeftItem,
 	footerLinks,
@@ -18,14 +27,40 @@ import { NAV_HAMBURGER_PROPS } from '@shared/const';
 import { setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
+	const [notificationsOpen, setNotificationsOpen] = useState(false);
+
 	const dispatch = useDispatch();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
 	const { t } = useTranslation();
 
+	const anyUnreadNotifications = notificationCenterMock.notifications.some(
+		(notification) => notification.read === false
+	);
+
 	const rightNavItems: NavigationItem[] = useMemo(() => {
 		return isLoggedIn && user
 			? [
+					{
+						id: 'notification-center',
+						node: (
+							<Button
+								onClick={() => setNotificationsOpen(!notificationsOpen)}
+								variants="text"
+								className={clsx(
+									notificationsOpen ? 'u-color-teal' : 'u-color-white',
+									`c-navigation__notifications-badge--${
+										notificationsOpen ? 'white' : 'teal'
+									}`,
+									{
+										['c-navigation__notifications-badge']:
+											anyUnreadNotifications,
+									}
+								)}
+								icon={<Icon type="solid" name="notification" />}
+							/>
+						),
+					},
 					{
 						id: 'user-menu',
 						node: (
@@ -50,7 +85,7 @@ const AppLayout: FC = ({ children }) => {
 						),
 					},
 			  ];
-	}, [dispatch, isLoggedIn, t, user]);
+	}, [dispatch, isLoggedIn, t, user, notificationsOpen, anyUnreadNotifications]);
 
 	return (
 		<div className="l-app">
@@ -64,7 +99,27 @@ const AppLayout: FC = ({ children }) => {
 				<Navigation.Right placement="right" items={rightNavItems} />
 			</Navigation>
 
-			<main className="l-app__main">{children}</main>
+			<main className="l-app__main">
+				<>
+					{children}
+
+					<NotificationCenter
+						{...notificationCenterMock}
+						isOpen={notificationsOpen}
+						onClose={() => setNotificationsOpen(false)}
+					/>
+				</>
+			</main>
+
+			<ToastContainer
+				autoClose={5000}
+				className="c-toast-container"
+				toastClassName="c-toast-container__toast"
+				closeButton={false}
+				hideProgressBar
+				position="bottom-left"
+				transition={Slide}
+			/>
 
 			<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
 		</div>
