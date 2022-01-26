@@ -1,4 +1,4 @@
-import { Button } from '@meemoo/react-components';
+import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, useMemo, useState } from 'react';
@@ -18,7 +18,10 @@ import {
 	footerLinks,
 	footerRightItem,
 } from '@shared/components/Footer/__mocks__/footer';
-import { MOCK_ITEMS_LEFT } from '@shared/components/Navigation/__mocks__/navigation';
+import {
+	MOCK_ITEMS_LEFT,
+	MOCK_ITEMS_RIGHT,
+} from '@shared/components/Navigation/__mocks__/navigation';
 import { NAV_HAMBURGER_PROPS } from '@shared/const';
 import { setShowAuthModal } from '@shared/store/ui';
 
@@ -35,9 +38,8 @@ const AppLayout: FC = ({ children }) => {
 	);
 
 	const rightNavItems: NavigationItem[] = useMemo(() => {
-		return isLoggedIn
+		return isLoggedIn && user
 			? [
-					// TODO: add notification center and user dropdown menu here
 					{
 						id: 'notification-center',
 						node: (
@@ -60,7 +62,12 @@ const AppLayout: FC = ({ children }) => {
 					},
 					{
 						id: 'user-menu',
-						node: user && <span>{`${user.firstName} ${user.lastName}`}</span>,
+						node: (
+							<Avatar variants="padded-y" text={`${user.firstName} ${user.lastName}`}>
+								<Icon type="solid" name="user" />
+							</Avatar>
+						),
+						children: MOCK_ITEMS_RIGHT[0].children,
 					},
 			  ]
 			: [
