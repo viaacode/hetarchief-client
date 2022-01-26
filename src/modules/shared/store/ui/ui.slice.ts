@@ -4,7 +4,7 @@ import { UIState } from './ui.types';
 
 const initialState: UIState = {
 	showAuthModal: false,
-	isStickyLayout: true,
+	isStickyLayout: false,
 };
 
 export const uiSlice = createSlice({
