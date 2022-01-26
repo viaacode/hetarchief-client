@@ -2,13 +2,13 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { Icon } from '..';
 import { Blade } from '../Blade';
+import { Icon } from '../Icon';
 
 import styles from './NotificationCenter.module.scss';
 import { Notification, NotificationCenterProps } from './NotificationCenter.types';
 
-const NotificationCenters: FC<NotificationCenterProps> = ({
+const NotificationCenter: FC<NotificationCenterProps> = ({
 	className,
 	notifications,
 	isOpen,
@@ -21,6 +21,9 @@ const NotificationCenters: FC<NotificationCenterProps> = ({
 }) => {
 	const filteredNotifications = (read: boolean) =>
 		notifications.filter((notification) => notification.read === read);
+
+	const unreadNotifications = filteredNotifications(false);
+	const readNotifications = filteredNotifications(true);
 
 	const renderReadNotifications = (notifications: Notification[]) => {
 		return notifications.map((notification) => {
@@ -83,7 +86,7 @@ const NotificationCenters: FC<NotificationCenterProps> = ({
 
 	const renderFooter = () => (
 		<Button
-			disabled={!filteredNotifications(false).length}
+			disabled={!unreadNotifications.length}
 			onClick={onClickButton}
 			className={styles['c-notification-center__button']}
 			variants={['black', 'block']}
@@ -101,16 +104,16 @@ const NotificationCenters: FC<NotificationCenterProps> = ({
 			footer={renderFooter()}
 		>
 			<div className={styles['c-notification-center']}>
-				{!!filteredNotifications(false).length && (
+				{!!unreadNotifications.length && (
 					<div className={styles['c-notification-center__unread']}>
 						<b>{unreadTitle}</b>
-						{renderUnreadNotifications(filteredNotifications(false))}
+						{renderUnreadNotifications(unreadNotifications)}
 					</div>
 				)}
-				{!!filteredNotifications(true).length && (
+				{!!readNotifications.length && (
 					<div className={styles['c-notification-center__read']}>
 						<b>{readTitle}</b>
-						{renderReadNotifications(filteredNotifications(true))}
+						{renderReadNotifications(readNotifications)}
 					</div>
 				)}
 			</div>
@@ -118,4 +121,4 @@ const NotificationCenters: FC<NotificationCenterProps> = ({
 	);
 };
 
-export default NotificationCenters;
+export default NotificationCenter;

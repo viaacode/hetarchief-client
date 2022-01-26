@@ -1,7 +1,7 @@
-import { fireEvent, queryByText, render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 
 import NotificationCenter from './NotificationCenter';
-import { notificationCenterMock } from './__mocks__/notificationCenter';
+import { notificationCenterMock, notificationsMock } from './__mocks__/notification-center';
 
 const renderNotificationCenter = (args) => {
 	return render(<NotificationCenter {...notificationCenterMock} {...args} />);
@@ -40,22 +40,6 @@ describe('Components', () => {
 			expect(notificationButtonTitle).toBeInTheDocument();
 		});
 		it('Should render unread and read notifications', () => {
-			const notificationsMock = [
-				{
-					title: 'Aanvraag goedgekeurd',
-					description:
-						'Jouw aanvraag coor Leeszaal 6 is goedgekeurd. Je hebt toegang t.e.m. 12 augustus 2021, 17:00.',
-					read: false,
-					id: 'aanvraag - leeszaal 6 - 12 augustus',
-				},
-				{
-					title: 'Aanvraag goedgekeurd',
-					description:
-						'Jouw aanvraag coor Leeszaal 6 is goedgekeurd. Je hebt toegang t.e.m. 12 augustus 2021, 17:00.',
-					read: true,
-					id: 'aanvraag - leeszaal 6 - 12 augustus',
-				},
-			];
 			const { queryAllByText } = renderNotificationCenter({
 				notifications: notificationsMock,
 			});
@@ -70,24 +54,15 @@ describe('Components', () => {
 			);
 		});
 		it('Should call onClickNotification when a notification check has been clicked', () => {
-			const notificationsMock = [
-				{
-					title: 'Aanvraag goedgekeurd',
-					description:
-						'Jouw aanvraag coor Leeszaal 6 is goedgekeurd. Je hebt toegang t.e.m. 12 augustus 2021, 17:00.',
-					read: false,
-					id: 'aanvraag - leeszaal 6 - 12 augustus',
-				},
-			];
 			const onClickNotification = jest.fn();
-			const { queryByText } = renderNotificationCenter({
+			const { queryAllByText } = renderNotificationCenter({
 				notifications: notificationsMock,
 				onClickNotification,
 			});
 
-			const notificationButton = queryByText(
+			const notificationButton = queryAllByText(
 				notificationsMock[0].title
-			).parentElement.querySelector('.c-button');
+			)[0].parentElement.querySelector('.c-button');
 
 			fireEvent.click(notificationButton);
 

@@ -7,10 +7,10 @@
 	flex-flow: column;
 
 	&__unread, &__read {
-		padding: $spacer-lg;
+		padding: $spacer-md 2rem;
 
-		@include respond-to(sm) {
-			padding: $spacer-md 2rem;
+		@include respond-at(sm) {
+			padding: $spacer-lg;
 		}
 	}
 
@@ -20,17 +20,17 @@
 	}
 
 	&__blade {
-		height: calc(100vh - $c-navigation-height);
-		top: $c-navigation-height;
+		height: calc(100vh - $c-navigation-height-md);
+		top: $c-navigation-height-md;
 
-		@include respond-to(md) {
-			height: calc(100vh - $c-navigation-height-md);
-			top: $c-navigation-height-md;
+		@include respond-at(md) {
+			height: calc(100vh - $c-navigation-height);
+			top: $c-navigation-height;
 		}
 
 		.c-notification-center__button {
 			height: auto;
-			padding: $spacer-lg;
+			padding: $spacer-md 2rem;
 			border-radius: 0;
 			text-align: left;
 
@@ -38,8 +38,8 @@
 				font-size: $font-size-lg;
 			}
 
-			@include respond-to(sm) {
-				padding: $spacer-md 2rem;
+			@include respond-at(sm) {
+				padding: $spacer-lg;
 			}
 		}
 	}
@@ -87,10 +87,6 @@
 					background-color: $teal;
 				}
 			}
-		}
-
-		&--read {
-			// specific
 		}
 	}
 }

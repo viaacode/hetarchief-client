@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import NotificationCenter from './NotificationCenter';
 import { NotificationCenterProps } from './NotificationCenter.types';
-import { notificationCenterMock } from './__mocks__/notificationCenter';
+import { notificationCenterMock } from './__mocks__/notification-center';
 
 const NotificationCenterStoryComponent = ({ args }: { args: NotificationCenterProps }) => {
 	const [isOpen, setOpen] = useState(false);

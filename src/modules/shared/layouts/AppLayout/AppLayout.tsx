@@ -24,7 +24,7 @@ const AppLayout: FC = ({ children }) => {
 	const [notificationsOpen, setNotificationsOpen] = useState(false);
 
 	// TODO: replace with actual logged in state
-	const isLoggedIn = false;
+	const isLoggedIn = true;
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 

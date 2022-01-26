@@ -1,14 +1,25 @@
 import { NotificationCenterProps } from '../NotificationCenter.types';
 
+export const notificationsMock = [
+	{
+		title: 'Aanvraag goedgekeurd',
+		description:
+			'Jouw aanvraag coor Leeszaal 6 is goedgekeurd. Je hebt toegang t.e.m. 12 augustus 2021, 17:00.',
+		read: false,
+		id: 'aanvraag - leeszaal 6 - 12 augustus',
+	},
+	{
+		title: 'Aanvraag goedgekeurd',
+		description:
+			'Jouw aanvraag coor Leeszaal 8 is goedgekeurd. Je hebt toegang t.e.m. 14 augustus 2021, 17:00.',
+		read: true,
+		id: 'aanvraag - leeszaal 8 - 14 augustus',
+	},
+];
+
 export const notificationCenterMock: NotificationCenterProps = {
 	notifications: [
-		{
-			title: 'Aanvraag goedgekeurd',
-			description:
-				'Jouw aanvraag coor Leeszaal 6 is goedgekeurd. Je hebt toegang t.e.m. 12 augustus 2021, 17:00.',
-			read: false,
-			id: 'aanvraag - leeszaal 6 - 12 augustus',
-		},
+		...notificationsMock,
 		{
 			title: 'Aanvraag goedgekeurd',
 			description:
@@ -22,13 +33,6 @@ export const notificationCenterMock: NotificationCenterProps = {
 				'Jouw aanvraag coor Leeszaal 9 is goedgekeurd. Je hebt toegang t.e.m. 13 augustus 2021, 17:00.',
 			read: false,
 			id: 'aanvraag - leeszaal 9 - 13 augustus',
-		},
-		{
-			title: 'Aanvraag goedgekeurd',
-			description:
-				'Jouw aanvraag coor Leeszaal 8 is goedgekeurd. Je hebt toegang t.e.m. 14 augustus 2021, 17:00.',
-			read: true,
-			id: 'aanvraag - leeszaal 8 - 14 augustus',
 		},
 		{
 			title: 'Aanvraag goedgekeurd',

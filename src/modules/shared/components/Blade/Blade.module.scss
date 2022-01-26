@@ -3,17 +3,17 @@
 
 .c-blade {
 	z-index: get-z-layer("foreground");
-	pointer-events: none;
 	visibility: hidden;
+	max-width: 46.4rem;
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
-	width: 46.4rem;
-	max-width: 92%;
-	background-color: $white;
 	position: fixed;
 	top: 0;
 	right: 0;
 	bottom: 0;
+	margin-left: 4rem;
+	pointer-events: none;
+	background-color: $white;
 	transform: translateX(100%);
 	transition: transform $animate-default, visibility $animate-default;
 
