@@ -7,8 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
+import { selectUser } from '@auth/store/user';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
+import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
@@ -19,6 +21,7 @@ const Home: NextPage = () => {
 	const [readingRooms, setReadingRooms] = useState(sixItems);
 	const [searchValue, setSearchValue] = useState('');
 
+	const user = useSelector(selectUser);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const dispatch = useDispatch();
 	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
@@ -66,6 +69,8 @@ const Home: NextPage = () => {
 					label: t('pages/index___hier-kom-je-er-alles-over-te-weten'),
 					to: '#',
 				}}
+				user={user}
+				requests={heroRequests}
 			/>
 
 			<div className="l-container u-pt-32 u-pt-80:md u-pb-48 u-pb-80:md">
