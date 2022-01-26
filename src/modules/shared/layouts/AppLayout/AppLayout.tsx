@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Slide, ToastContainer } from 'react-toastify';
 
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { Footer, Icon, Navigation, NavigationItem } from '@shared/components';
@@ -71,6 +72,16 @@ const AppLayout: FC = ({ children }) => {
 			</Navigation>
 
 			<main className="l-app__main">{children}</main>
+
+			<ToastContainer
+				autoClose={5000}
+				className="c-toast-container"
+				toastClassName="c-toast-container__toast"
+				closeButton={false}
+				hideProgressBar
+				position="bottom-left"
+				transition={Slide}
+			/>
 
 			<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
 		</div>
