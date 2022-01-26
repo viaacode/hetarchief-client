@@ -10,7 +10,10 @@ import AppLayout from './AppLayout';
 reactI18nextMock.mock('react-i18next');
 
 const mockStore = configureStore({
-	preloadedState: { user: { user: { firstName: 'Tom', lastName: 'Testerom' } } },
+	preloadedState: {
+		ui: { isStickyLayout: false },
+		user: { user: { firstName: 'Tom', lastName: 'Testerom' } },
+	},
 	reducer: (state) => state,
 });
 
