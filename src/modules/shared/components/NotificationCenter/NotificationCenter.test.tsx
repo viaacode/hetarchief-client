@@ -1,9 +1,15 @@
 import { fireEvent, render } from '@testing-library/react';
 
+import reactI18nextMock from '../../../../__mocks__/react-i18next';
+
 import NotificationCenter from './NotificationCenter';
 import { notificationCenterMock, notificationsMock } from './__mocks__/notification-center';
 
-const renderNotificationCenter = (args) => {
+import { NotificationCenterProps } from '.';
+
+reactI18nextMock.mock('react-i18next');
+
+const renderNotificationCenter = (args: Partial<NotificationCenterProps>) => {
 	return render(<NotificationCenter {...notificationCenterMock} {...args} />);
 };
 
@@ -23,21 +29,13 @@ describe('Components', () => {
 		});
 		it('Should render translations', () => {
 			const readTitle = 'Gelezen';
-			const unreadTitle = 'Ongelezen';
-			const buttonTitle = 'Markeer alles als gelezen';
 			const { queryByText } = renderNotificationCenter({
-				readTitle,
-				unreadTitle,
-				buttonTitle,
+				notifications: [{ title: readTitle, description: '', read: true, id: '123' }],
 			});
 
 			const notificationTitle = queryByText(readTitle);
-			const notificationUnreadTitle = queryByText(unreadTitle);
-			const notificationButtonTitle = queryByText(buttonTitle);
 
 			expect(notificationTitle).toBeInTheDocument();
-			expect(notificationUnreadTitle).toBeInTheDocument();
-			expect(notificationButtonTitle).toBeInTheDocument();
 		});
 		it('Should render unread and read notifications', () => {
 			const { queryAllByText } = renderNotificationCenter({
@@ -72,11 +70,11 @@ describe('Components', () => {
 		});
 		it('Should call onClickButton when the footer button has been clicked', () => {
 			const onClickButton = jest.fn();
-			const { queryByText } = renderNotificationCenter({
+			const { container } = renderNotificationCenter({
 				onClickButton,
 			});
 
-			const button = queryByText('Markeer alles als gelezen');
+			const button = container.querySelector('.c-notification-center__button');
 
 			fireEvent.click(button);
 

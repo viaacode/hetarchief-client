@@ -1,12 +1,13 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { KeyboardEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { FilterMenu, SearchBar } from '@reading-room/components';
+import { FilterMenu } from '@reading-room/components';
 import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
 import {
 	READING_ROOM_ITEM_COUNT,
@@ -15,6 +16,7 @@ import {
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
 import { ReadingRoomMediaType } from '@reading-room/types';
+import { mapFilters } from '@reading-room/utils';
 import {
 	Icon,
 	MediaCardList,
@@ -24,6 +26,8 @@ import {
 	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
+	SearchBar,
+	SearchBarValue,
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
@@ -40,8 +44,10 @@ const ReadingRoomPage: NextPage = () => {
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
-	const windowSize = useWindowSize();
+	const { t } = useTranslation();
+
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+	const windowSize = useWindowSize();
 
 	// Data
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
@@ -54,6 +60,7 @@ const ReadingRoomPage: NextPage = () => {
 	// Display
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
+	const activeFilters = useMemo(() => mapFilters(query), [query]);
 	const tabs: TabProps[] = useMemo(
 		() =>
 			READING_ROOM_TABS.map((tab) => ({
@@ -83,23 +90,16 @@ const ReadingRoomPage: NextPage = () => {
 		data && setMedia(data);
 	};
 
-	const onSearch = async (keywords: string[]) => {
+	const onSearch = async (values: SearchBarValue<true>) => {
 		if (!hasSearched) {
 			setHasSearched(true);
 		}
 
-		if (!keywords?.[0]) {
+		if (!values?.[0]) {
 			setMedia([]);
 			setQuery({ search: undefined });
 		} else {
 			await fetchMedia();
-			setQuery({ search: keywords });
-		}
-	};
-
-	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			onSearch([e.currentTarget.value]);
 		}
 	};
 
@@ -114,6 +114,18 @@ const ReadingRoomPage: NextPage = () => {
 		}
 	};
 
+	const onNewKeyWord = (newKeyWord: string) => {
+		setQuery({ search: (query.search ?? []).concat(newKeyWord) });
+	};
+
+	const onResetFilters = () => {
+		setQuery({ search: undefined });
+	};
+
+	const onRemoveFilter = (newValue: SearchBarValue<true>) => {
+		setQuery({ search: newValue.map((tag) => tag.value as string) });
+	};
+
 	const onViewToggle = (nextMode: string) => {
 		setViewMode(nextMode as MediaCardViewMode);
 	};
@@ -121,6 +133,10 @@ const ReadingRoomPage: NextPage = () => {
 	const onTabClick = (tabId: string | number) => {
 		setQuery({ mediaType: String(tabId) });
 	};
+
+	/**
+	 * Computed
+	 */
 
 	const showInitialView = !hasSearched && (!media || media.length === 0);
 	const showNoResults = hasSearched && media.length === 0;
@@ -183,7 +199,21 @@ const ReadingRoomPage: NextPage = () => {
 
 			<section className="u-bg-black u-pt-8">
 				<div className="l-container">
-					<SearchBar onKeyUp={onSearchKeyUp} />
+					<SearchBar
+						allowCreate
+						className="u-mb-24"
+						clearLabel={t('Wis volledige zoekopdracht')}
+						isMulti
+						large
+						placeholder={t('Zoek op trefwoord, jaartal, aanbieder...')}
+						syncSearchValue={false}
+						valuePlaceholder={t('Zoek naar:')}
+						value={activeFilters}
+						onCreate={onNewKeyWord}
+						onSearch={onSearch}
+						onRemoveValue={onRemoveFilter}
+						onClear={onResetFilters}
+					/>
 					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>

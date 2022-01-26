@@ -1,0 +1,99 @@
+@use "sass:color";
+
+@use "../abstracts" as *;
+
+// Wrap everything for higher specificity
+.c-tags-input {
+	/**
+	 * Elements
+	 */
+
+	.c-tags-input__control {
+		min-height: 4.8rem;
+		border: 1px solid $zinc;
+		border-radius: 0;
+		box-shadow: none;
+		outline: 1px solid transparent !important;
+		transition: outline-color $animate-default, border-color $animate-default;
+
+		&--is-focused,
+		&--is-focused:hover {
+			border-color: $teal;
+		}
+	}
+
+	.c-tags-input__value-container {
+		padding-left: $spacer-sm;
+	}
+
+	.c-tags-input__multi-value {
+		margin: $spacer-xxs $spacer-sm $spacer-xxs 0;
+		font-size: $font-size-sm;
+	}
+
+	.c-tags-input__indicator {
+		display: inline-flex;
+		padding: 0.6rem;
+	}
+
+	.c-tags-input__clear-indicator,
+	.c-tags-input__dropdown-indicator {
+		cursor: pointer;
+
+		&:hover {
+			color: color.adjust($black, $alpha: -0.5);
+		}
+	}
+
+	.c-tags-input__indicator-icon {
+		font-size: $font-size-lg;
+		transition: color $animate-sm-in;
+	}
+
+	.c-tags-input__menu {
+		border: 1px solid $zinc;
+		border-top: none;
+		margin: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
+
+	.c-tags-input__menu-list {
+		padding: 0;
+	}
+
+	.c-tags-input__option {
+		border-right: 4px solid transparent;
+		color: $black;
+		transition:
+			background-color $animate-default,
+			border-color $animate-default,
+			border-right-width $animate-sm-in;
+
+		&--is-focused,
+		&--is-selected,
+		&:not(&--is-selected):hover {
+			background-color: color.adjust($teal, $alpha: -0.76);
+		}
+
+		&--is-selected {
+			border-color: $teal;
+
+			&.c-tags-input__option--is-focused,
+			&:hover {
+				border-right-width: 6px;
+			}
+		}
+	}
+
+	/**
+	 * States
+	 */
+
+	&:not(:focus-within):hover {
+		/* stylelint-disable-next-line no-descending-specificity */
+		.c-tags-input__control {
+			outline-color: $zinc !important;
+		}
+	}
+}
