@@ -2,7 +2,6 @@
 @use "sass:color";
 @use "styles/abstracts" as *;
 
-
 $terms-of-service-background-color: #ebfbf8;
 
 .p-terms-of-service {
@@ -36,6 +35,11 @@ $terms-of-service-background-color: #ebfbf8;
         grid-column: 1 / 2;
         grid-row: 2 / 3; // 192px after X
         z-index: 1;
+        transition: opacity $animate-default;
+
+        &--hidden {
+            opacity: 0;
+        }
     }
 
     &__text {

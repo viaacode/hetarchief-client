@@ -1,7 +1,8 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { UIEventHandler, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { setIsStickyLayout } from '@shared/store/ui';
@@ -13,6 +14,7 @@ const lipsum =
 const TermsOfService: NextPage = () => {
 	const scrollable = useRef<HTMLDivElement | null>(null);
 	const [hasFinished, setHasFinished] = useState(false);
+	const [isAtBottom, setIsAtBottom] = useState(false);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -23,17 +25,18 @@ const TermsOfService: NextPage = () => {
 		};
 	});
 
-	const handleScroll: UIEventHandler<HTMLDivElement> = () => {
+	const handleScroll = useCallback(() => {
 		const el = scrollable.current;
 
 		if (el !== null) {
 			const bottom = el.scrollHeight - el.scrollTop === el.clientHeight;
+			setIsAtBottom(bottom);
 
 			if (bottom) {
 				setHasFinished(true);
 			}
 		}
-	};
+	}, [scrollable]);
 
 	return (
 		<div className="p-terms-of-service">
@@ -57,7 +60,11 @@ const TermsOfService: NextPage = () => {
 				</div>
 			</section>
 
-			<div className="p-terms-of-service__gradient" />
+			<div
+				className={clsx('p-terms-of-service__gradient', {
+					'p-terms-of-service__gradient--hidden': isAtBottom,
+				})}
+			/>
 
 			<section className="u-pt-96 p-terms-of-service__buttons-wrapper">
 				<div className="l-container">
