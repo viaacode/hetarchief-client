@@ -18,7 +18,7 @@ $pb: (
 	"48": $spacer-md * 2,
 	"80": $spacer-2xl,
 );
-@include generate-utils("pb", "padding-top", $pb);
+@include generate-utils("pb", "padding-bottom", $pb, ("md"));
 
 // Top / Bottom
 $py: (

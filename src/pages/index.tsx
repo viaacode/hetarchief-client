@@ -2,15 +2,16 @@ import { Button, TextInput } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
-import { selectIsLoggedIn } from '@auth/store/user';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
+import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
@@ -23,10 +24,19 @@ const Home: NextPage = () => {
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
 
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const user = useSelector(selectUser);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const dispatch = useDispatch();
-	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
+
+	// Open request blade after user requested access and wasn't logged in
+	useEffect(() => {
+		if (!showAuthModal && isLoggedIn && query.returnToRequestAccess) {
+			setIsOpenRequestAccessBlade(true);
+			setQuery({ returnToRequestAccess: undefined });
+		}
+	}, [isLoggedIn, query.returnToRequestAccess, setQuery, showAuthModal]);
 
 	/**
 	 * Methods
@@ -48,7 +58,12 @@ const Home: NextPage = () => {
 	};
 
 	const onRequestAccess = () => {
-		isLoggedIn ? setIsOpenRequestAccessBlade(true) : onOpenAuthModal();
+		if (isLoggedIn) {
+			setIsOpenRequestAccessBlade(true);
+		} else {
+			onOpenAuthModal();
+			setQuery({ returnToRequestAccess: true });
+		}
 	};
 
 	const onRequestAccessSubmit = () => {
@@ -83,6 +98,8 @@ const Home: NextPage = () => {
 					label: t('pages/index___hier-kom-je-er-alles-over-te-weten'),
 					to: '#',
 				}}
+				user={user}
+				requests={heroRequests}
 			/>
 
 			<div className="l-container u-pt-32 u-pt-80:md u-pb-48 u-pb-80:md">

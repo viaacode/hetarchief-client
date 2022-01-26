@@ -31,7 +31,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 							{...field}
 							className="u-mb-24"
 							label={t(
-								'Ik verklaar deze toegang aan te vragen met het oog op onderzoeksdoeleinden of privé studie.'
+								'modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie'
 							)}
 							checked={field.value}
 							checkIcon={<Icon name="check" />}
@@ -40,12 +40,16 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 				/>
 
 				<Button
-					label={t('Verstuur')}
+					label={t(
+						'modules/home/components/request-access-blade/request-access-blade___verstuur'
+					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
 				/>
 				<Button
-					label={t('Annuleer')}
+					label={t(
+						'modules/home/components/request-access-blade/request-access-blade___annuleer'
+					)}
 					variants={['block', 'text']}
 					onClick={bladeProps.onClose}
 				/>
@@ -54,9 +58,20 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 	};
 
 	return (
-		<Blade {...bladeProps} title={t('Vraag toegang aan')} footer={renderFooter()}>
+		<Blade
+			{...bladeProps}
+			title={t(
+				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
+			)}
+			footer={renderFooter()}
+		>
 			<div className="u-px-32">
-				<FormControl className="u-mb-24" label={t('Reden van aanvraag')}>
+				<FormControl
+					className="u-mb-24"
+					label={t(
+						'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag'
+					)}
+				>
 					<Controller
 						name="requestReason"
 						control={control}
@@ -65,7 +80,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 				</FormControl>
 
 				<FormControl
-					label={t('Wanneer wil je de leeszaal bezoeken?')}
+					label={t(
+						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-leeszaal-bezoeken'
+					)}
 					suffix={OPTIONAL_LABEL}
 				>
 					<Controller
