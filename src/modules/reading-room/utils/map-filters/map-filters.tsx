@@ -12,7 +12,8 @@ export const mapFilters = (
 		.map((keyword) => ({
 			label: (
 				<span>
-					{i18n?.t('Trefwoord')}: <strong>{keyword}</strong>
+					{i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord')}:{' '}
+					<strong>{keyword}</strong>
 				</span>
 			),
 			value: keyword as string,

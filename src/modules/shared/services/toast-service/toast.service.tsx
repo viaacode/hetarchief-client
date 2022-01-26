@@ -7,7 +7,7 @@ import { Optional } from '@shared/types';
 class ToastService {
 	public notify(
 		{
-			buttonLabel = i18n?.t('Ok') ?? '',
+			buttonLabel = i18n?.t('modules/shared/services/toast-service/toast___ok') ?? '',
 			onClose,
 			...toastProps
 		}: Optional<ToastProps, 'maxLines' | 'buttonLabel' | 'onClose'>,

@@ -24,7 +24,7 @@ import {
 	MOCK_ITEMS_RIGHT,
 } from '@shared/components/Navigation/__mocks__/navigation';
 import { NAV_HAMBURGER_PROPS } from '@shared/const';
-import { setShowAuthModal } from '@shared/store/ui';
+import { selectIsStickyLayout, setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
 	const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -32,6 +32,7 @@ const AppLayout: FC = ({ children }) => {
 	const dispatch = useDispatch();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
+	const sticky = useSelector(selectIsStickyLayout);
 	const { t } = useTranslation();
 
 	const anyUnreadNotifications = notificationCenterMock.notifications.some(
@@ -88,7 +89,11 @@ const AppLayout: FC = ({ children }) => {
 	}, [dispatch, isLoggedIn, t, user, notificationsOpen, anyUnreadNotifications]);
 
 	return (
-		<div className="l-app">
+		<div
+			className={clsx('l-app', {
+				'l-app--sticky': sticky,
+			})}
+		>
 			<Navigation>
 				<Navigation.Left
 					placement="left"

@@ -202,12 +202,12 @@ const ReadingRoomPage: NextPage = () => {
 					<SearchBar
 						allowCreate
 						className="u-mb-24"
-						clearLabel={t('Wis volledige zoekopdracht')}
+						clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
 						isMulti
 						large
-						placeholder={t('Zoek op trefwoord, jaartal, aanbieder...')}
+						placeholder={t('pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder')}
 						syncSearchValue={false}
-						valuePlaceholder={t('Zoek naar:')}
+						valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
 						value={activeFilters}
 						onCreate={onNewKeyWord}
 						onSearch={onSearch}
