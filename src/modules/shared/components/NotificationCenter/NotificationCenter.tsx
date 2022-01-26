@@ -43,9 +43,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 					>
 						{notification.title}
 					</b>
-					<p className="u-font-size-14 u-color-neutral u-line-height-13">
-						{notification.description}
-					</p>
+					{notification.description}
 				</div>
 			);
 		});
@@ -69,9 +67,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 					>
 						{notification.title}
 					</b>
-					<p className="u-font-size-14 u-color-neutral u-line-height-13">
-						{notification.description}
-					</p>
+					{notification.description}
 					<Button
 						onClick={() => onClickNotification(notification.id)}
 						className={clsx(styles['c-notification-center__notification-icon'])}

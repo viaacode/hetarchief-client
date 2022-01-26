@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { DefaultComponentProps } from '@shared/types';
 
 export interface NotificationCenterProps extends DefaultComponentProps {
@@ -10,7 +12,7 @@ export interface NotificationCenterProps extends DefaultComponentProps {
 
 export interface Notification {
 	title: string;
-	description: string;
+	description: ReactNode;
 	read: boolean;
 	id: string;
 }
