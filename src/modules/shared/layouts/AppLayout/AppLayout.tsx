@@ -2,8 +2,9 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import {
 	Footer,
 	Icon,
@@ -18,14 +19,15 @@ import {
 	footerRightItem,
 } from '@shared/components/Footer/__mocks__/footer';
 import { MOCK_ITEMS_LEFT } from '@shared/components/Navigation/__mocks__/navigation';
+import { NAV_HAMBURGER_PROPS } from '@shared/const';
 import { setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
 	const [notificationsOpen, setNotificationsOpen] = useState(false);
 
-	// TODO: replace with actual logged in state
-	const isLoggedIn = true;
 	const dispatch = useDispatch();
+	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const user = useSelector(selectUser);
 	const { t } = useTranslation();
 
 	const anyUnreadNotifications = notificationCenterMock.notifications.some(
@@ -56,6 +58,10 @@ const AppLayout: FC = ({ children }) => {
 							/>
 						),
 					},
+					{
+						id: 'user-menu',
+						node: user && <span>{`${user.firstName} ${user.lastName}`}</span>,
+					},
 			  ]
 			: [
 					{
@@ -71,7 +77,7 @@ const AppLayout: FC = ({ children }) => {
 						),
 					},
 			  ];
-	}, [dispatch, isLoggedIn, t, notificationsOpen, anyUnreadNotifications]);
+	}, [dispatch, isLoggedIn, t, user, notificationsOpen, anyUnreadNotifications]);
 
 	return (
 		<div className="l-app">
@@ -80,10 +86,7 @@ const AppLayout: FC = ({ children }) => {
 					placement="left"
 					renderHamburger={true}
 					items={MOCK_ITEMS_LEFT}
-					hamburgerProps={{
-						hamburgerLabelOpen: 'sluit',
-						hamburgerLabelClosed: 'Menu',
-					}}
+					hamburgerProps={NAV_HAMBURGER_PROPS()}
 				/>
 				<Navigation.Right placement="right" items={rightNavItems} />
 			</Navigation>

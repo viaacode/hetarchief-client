@@ -1,16 +1,16 @@
 import { Button, TextInput } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
-import Link from 'next/link';
 import { KeyboardEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
+import { selectUser } from '@auth/store/user';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
+import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
@@ -21,9 +21,10 @@ const Home: NextPage = () => {
 	const [readingRooms, setReadingRooms] = useState(sixItems);
 	const [searchValue, setSearchValue] = useState('');
 
+	const user = useSelector(selectUser);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const dispatch = useDispatch();
-	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
 
 	/**
@@ -68,15 +69,13 @@ const Home: NextPage = () => {
 					label: t('pages/index___hier-kom-je-er-alles-over-te-weten'),
 					to: '#',
 				}}
+				user={user}
+				requests={heroRequests}
 			/>
 
-			<div style={{ display: 'grid', placeItems: 'center', padding: '2rem' }}>
-				<Link href="/leeszaal/leeszaal-8">Ga naar leeszaal</Link>
-			</div>
-
-			<div className="l-container u-mb-48 u-mb-80:md">
+			<div className="l-container u-pt-32 u-pt-80:md u-pb-48 u-pb-80:md">
 				<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
-					<h3 className="p-home__subtitle">Vind een leeszaal</h3>
+					<h3 className="p-home__subtitle">{t('pages/index___vind-een-leeszaal')}</h3>
 
 					<TextInput
 						className="p-home__search"
