@@ -100,7 +100,6 @@ const ReadingRoomPage: NextPage = () => {
 			setQuery({ search: undefined });
 		} else {
 			await fetchMedia();
-			// setQuery({ search: values });
 		}
 	};
 

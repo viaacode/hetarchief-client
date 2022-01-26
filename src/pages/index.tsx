@@ -37,7 +37,7 @@ const Home: NextPage = () => {
 		});
 	};
 
-	const onClearSeach = () => {
+	const onClearSearch = () => {
 		setQuery({ search: undefined });
 	};
 
@@ -83,7 +83,7 @@ const Home: NextPage = () => {
 						placeholder="Zoek"
 						backspaceRemovesValue={false}
 						searchValue={query.search ?? ''}
-						onClear={onClearSeach}
+						onClear={onClearSearch}
 						onSearch={onSearch}
 					/>
 				</div>

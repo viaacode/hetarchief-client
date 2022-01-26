@@ -36,15 +36,15 @@ const SearchBar = <IsMulti extends boolean>({
 	onSearch,
 	...tagsInputProps
 }: SearchBarProps<IsMulti>): ReactElement => {
-	const [localSearch, setLocalSearch] = useState(searchValue);
+	const [inputValue, setInputValue] = useState(searchValue);
 	const selectValue = useMemo(
-		() => (localSearch ? { label: localSearch, value: localSearch } : null),
-		[localSearch]
+		() => (inputValue ? { label: inputValue, value: inputValue } : null),
+		[inputValue]
 	);
 
 	useEffect(() => {
 		if (syncSearchValue) {
-			setLocalSearch(searchValue);
+			setInputValue(searchValue);
 		}
 	}, [searchValue, syncSearchValue]);
 
@@ -64,25 +64,25 @@ const SearchBar = <IsMulti extends boolean>({
 
 	const onSearchInputChange = (newValue: string, actionMeta: InputActionMeta): void => {
 		if (actionMeta.action === 'input-change') {
-			setLocalSearch(newValue);
+			setInputValue(newValue);
 		}
 	};
 
 	const onSafeSearchSingle = () => {
 		if (onSearch) {
-			(onSearch as OnSearchSingle)(localSearch ?? '');
+			(onSearch as OnSearchSingle)(inputValue ?? '');
 		}
 	};
 
 	const onSearchKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
 		if (e.key === 'Enter') {
 			if (tagsInputProps.allowCreate) {
-				if (!localSearch) {
+				if (!inputValue) {
 					return;
 				}
 
-				onCreate?.(localSearch);
-				setLocalSearch('');
+				onCreate?.(inputValue);
+				setInputValue('');
 				e.preventDefault();
 			}
 
@@ -114,7 +114,7 @@ const SearchBar = <IsMulti extends boolean>({
 			{...tagsInputProps}
 			className={rootCls}
 			components={components as TagsInputProps<boolean>['components']}
-			inputValue={localSearch}
+			inputValue={inputValue}
 			isClearable={isClearable}
 			isMulti={isMulti}
 			menuIsOpen={showMenu}
