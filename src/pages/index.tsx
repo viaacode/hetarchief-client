@@ -2,12 +2,13 @@ import { Button, TextInput } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
-import { selectUser } from '@auth/store/user';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
@@ -20,12 +21,22 @@ const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
 	const [readingRooms, setReadingRooms] = useState(sixItems);
 	const [searchValue, setSearchValue] = useState('');
+	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
 
+	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const dispatch = useDispatch();
-	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
+
+	// Open request blade after user requested access and wasn't logged in
+	useEffect(() => {
+		if (!showAuthModal && isLoggedIn && query.returnToRequestAccess) {
+			setIsOpenRequestAccessBlade(true);
+			setQuery({ returnToRequestAccess: undefined });
+		}
+	}, [isLoggedIn, query.returnToRequestAccess, setQuery, showAuthModal]);
 
 	/**
 	 * Methods
@@ -40,6 +51,24 @@ const Home: NextPage = () => {
 
 	const onCloseAuthModal = () => {
 		dispatch(setShowAuthModal(false));
+	};
+
+	const onOpenAuthModal = () => {
+		dispatch(setShowAuthModal(true));
+	};
+
+	const onRequestAccess = () => {
+		if (isLoggedIn) {
+			setIsOpenRequestAccessBlade(true);
+		} else {
+			onOpenAuthModal();
+			setQuery({ returnToRequestAccess: true });
+		}
+	};
+
+	const onRequestAccessSubmit = () => {
+		// TODO: add create request call here
+		setIsOpenRequestAccessBlade(false);
 	};
 
 	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -90,7 +119,10 @@ const Home: NextPage = () => {
 
 				<ReadingRoomCardList
 					className="u-mb-64"
-					items={readingRooms}
+					items={readingRooms.map((room) => ({
+						...room,
+						onAccessRequest: onRequestAccess,
+					}))}
 					limit={!areAllReadingRoomsVisible}
 				/>
 
@@ -104,6 +136,11 @@ const Home: NextPage = () => {
 			</div>
 
 			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
+			<RequestAccessBlade
+				isOpen={isOpenRequestAccessBlade}
+				onClose={() => setIsOpenRequestAccessBlade(false)}
+				onSubmit={onRequestAccessSubmit}
+			/>
 		</div>
 	);
 };
