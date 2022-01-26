@@ -1,0 +1,64 @@
+@use "../abstracts" as *;
+
+/**
+* Elements
+*/
+
+.c-search-bar.c-tags-input {
+	.c-tags-input__control {
+		border-radius: 2.4rem;
+		background-color: $silver;
+		border-color: $silver;
+
+		&--is-focused,
+		&--is-focused:hover {
+			border-color: $teal;
+		}
+	}
+
+	.c-tags-input__value-container {
+		padding-left: $spacer-md;
+	}
+
+	.c-tags-input__indicators {
+		padding-right: 1.4rem;
+	}
+}
+
+
+.c-search-bar__value-placeholder {
+	color: $neutral;
+	margin-right: 1.4rem;
+}
+
+.c-search-bar__clear-label {
+	text-decoration: underline;
+}
+
+/**
+ * Modifiers
+ */
+
+.c-search-bar--lg.c-tags-input {
+	.c-tags-input__control {
+		min-height: 6.4rem;
+		border-radius: 3.2rem;
+	}
+
+	.c-tags-input__value-container {
+		padding-left: $spacer-lg;
+	}
+
+	.c-tags-input__indicators {
+		padding-right: $spacer-md;
+	}
+}
+
+.c-search-bar--has-value-placeholder.c-tags-input {
+	.c-tags-input__value-container {
+		&--has-value {
+			display: flex;
+			flex-wrap: nowrap;
+		}
+	}
+}
