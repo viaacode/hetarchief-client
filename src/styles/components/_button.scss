@@ -188,6 +188,10 @@
 	&.c-button--underline {
 		text-decoration: underline;
 	}
+
+	&.c-button--white {
+		color: $white;
+	}
 }
 
 .c-button--icon {

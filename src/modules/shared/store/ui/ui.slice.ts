@@ -3,19 +3,17 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UIState } from './ui.types';
 
 const initialState: UIState = {
-	// TODO: replace this with actual state
-	randomBoolean: false,
+	showAuthModal: false,
 };
 
 export const uiSlice = createSlice({
 	name: 'ui',
 	initialState,
 	reducers: {
-		// TODO: replace this with actual actions
-		setRandomBoolean(state, action: PayloadAction<boolean>) {
-			state.randomBoolean = action.payload;
+		setShowAuthModal(state, action: PayloadAction<boolean>) {
+			state.showAuthModal = action.payload;
 		},
 	},
 });
 
-export const { setRandomBoolean } = uiSlice.actions;
+export const { setShowAuthModal } = uiSlice.actions;
