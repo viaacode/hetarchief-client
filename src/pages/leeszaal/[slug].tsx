@@ -1,4 +1,4 @@
-import { Button, TabProps, TagInfo } from '@meemoo/react-components';
+import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -122,7 +122,7 @@ const ReadingRoomPage: NextPage = () => {
 		setQuery({ search: undefined });
 	};
 
-	const onRemoveFilter = (newValue: TagInfo[]) => {
+	const onRemoveFilter = (newValue: SearchBarValue<true>) => {
 		setQuery({ search: newValue.map((tag) => tag.value as string) });
 	};
 

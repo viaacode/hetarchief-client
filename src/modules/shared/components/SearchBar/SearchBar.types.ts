@@ -12,8 +12,8 @@ export type SearchBarProps<IsMulti extends boolean = false> = DefaultComponentPr
 		syncSearchValue?: boolean;
 		valuePlaceholder?: SearchBarValuePlaceholder;
 		onClear?: () => void;
-		onCreate?: (newValue: any) => void;
-		onRemoveValue?: (removedValue: any) => void;
+		onCreate?: (newValue: string) => void;
+		onRemoveValue?: (removedValue: SearchBarValue<IsMulti>) => void;
 		onSearch?: IsMulti extends true ? OnSearchMulti : OnSearchSingle;
 	};
 

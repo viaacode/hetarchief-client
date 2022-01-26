@@ -2,8 +2,6 @@ import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { tagsInputOptionsMock } from '../TagsInput/__mocks__/tags-input';
-
 import SearchBar from './SearchBar';
 
 export default {
@@ -16,13 +14,11 @@ const Template: ComponentStory<typeof SearchBar> = (args) => <SearchBar {...args
 export const Default = Template.bind({});
 Default.args = {
 	clearLabel: 'Wis volledige zoekopdracht',
-	// isMulti: true,
 	placeholder: 'Zoek:',
 	valuePlaceholder: 'Zoek:',
 	onInputChange: action('Input changed'),
 	onClear: action('Value cleared'),
 	onSearch: action('Search triggered'),
-	// value: ,
 };
 
 export const AllowCreate = Template.bind({});
