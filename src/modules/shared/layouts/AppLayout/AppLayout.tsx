@@ -1,4 +1,5 @@
 import { Avatar, Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,12 +16,13 @@ import {
 	MOCK_ITEMS_RIGHT,
 } from '@shared/components/Navigation/__mocks__/navigation';
 import { NAV_HAMBURGER_PROPS } from '@shared/const';
-import { setShowAuthModal } from '@shared/store/ui';
+import { selectIsStickyLayout, setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useDispatch();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
+	const sticky = useSelector(selectIsStickyLayout);
 	const { t } = useTranslation();
 
 	const rightNavItems: NavigationItem[] = useMemo(() => {
@@ -53,7 +55,11 @@ const AppLayout: FC = ({ children }) => {
 	}, [dispatch, isLoggedIn, t, user]);
 
 	return (
-		<div className="l-app">
+		<div
+			className={clsx('l-app', {
+				'l-app--sticky': sticky,
+			})}
+		>
 			<Navigation>
 				<Navigation.Left
 					placement="left"
