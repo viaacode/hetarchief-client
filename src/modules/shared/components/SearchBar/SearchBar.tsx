@@ -1,10 +1,11 @@
 import { TagsInput, TagsInputProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { KeyboardEvent, ReactElement } from 'react';
+import { KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
+import { InputActionMeta } from 'react-select';
 
 import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
 
-import { SearchBarMeta, SearchBarProps, SearchBarValue } from './SearchBar.types';
+import { OnSearchSingle, SearchBarMeta, SearchBarProps, SearchBarValue } from './SearchBar.types';
 import { SearchBarButton } from './SearchBarButton';
 import { SearchBarClear } from './SearchBarClear';
 import { SearchBarValueContainer } from './SearchBarValueContainer';
@@ -22,48 +23,107 @@ const SearchBar = <IsMulti extends boolean>({
 	clearLabel,
 	isClearable = true,
 	isMulti = false as IsMulti,
-	large,
+	large = false,
+	searchValue,
+	syncSearchValue = true,
 	menuIsOpen,
 	options,
 	valuePlaceholder,
 	onClear,
 	onChange,
+	onCreate,
+	onRemoveValue,
 	onSearch,
 	...tagsInputProps
 }: SearchBarProps<IsMulti>): ReactElement => {
-	const rootCls = clsx(className, 'c-search-bar', {
-		['c-search-bar--large']: large,
-	});
-	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
+	const [localSearch, setLocalSearch] = useState(searchValue);
+	const selectValue = useMemo(
+		() => (localSearch ? { label: localSearch, value: localSearch } : null),
+		[localSearch]
+	);
 
-	const onTagsInputChange = (
-		newValue: SearchBarValue<IsMulti>,
-		actionMeta: SearchBarMeta
-	): void => {
+	useEffect(() => {
+		if (syncSearchValue) {
+			setLocalSearch(searchValue);
+		}
+	}, [searchValue, syncSearchValue]);
+
+	/**
+	 * Methods
+	 */
+
+	const onSearchChange = (newValue: SearchBarValue<IsMulti>, actionMeta: SearchBarMeta): void => {
+		if (['pop-value', 'remove-value'].includes(actionMeta.action)) {
+			onRemoveValue?.(newValue);
+		}
 		if (actionMeta.action === 'clear') {
 			onClear?.();
 		}
 		onChange?.(newValue, actionMeta);
 	};
 
-	const onTagsInputKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+	const onSearchInputChange = (newValue: string, actionMeta: InputActionMeta): void => {
+		if (actionMeta.action === 'input-change') {
+			setLocalSearch(newValue);
+		}
+	};
+
+	const onSafeSearchSingle = () => {
+		if (onSearch) {
+			(onSearch as OnSearchSingle)(localSearch ?? '');
+		}
+	};
+
+	const onSearchKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
 		if (e.key === 'Enter') {
-			onSearch?.();
-			return;
+			if (tagsInputProps.allowCreate) {
+				if (!localSearch) {
+					return;
+				}
+
+				onCreate?.(localSearch);
+				setLocalSearch('');
+				e.preventDefault();
+			}
+
+			onSafeSearchSingle();
 		}
 
-		tagsInputProps.onKeyDown?.(e);
+		if (!tagsInputProps.allowCreate) {
+			tagsInputProps.onKeyDown?.(e);
+		}
 	};
+
+	/**
+	 * Computed
+	 */
+
+	const rootCls = clsx(className, 'c-search-bar', {
+		['c-search-bar--lg']: large,
+		['c-search-bar--has-value-placeholder']: !!valuePlaceholder,
+	});
+	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
+	const value = isMulti ? tagsInputProps.value : selectValue;
+
+	/**
+	 * Render
+	 */
 
 	return (
 		<TagsInput
 			{...tagsInputProps}
 			className={rootCls}
 			components={components as TagsInputProps<boolean>['components']}
+			inputValue={localSearch}
 			isClearable={isClearable}
 			isMulti={isMulti}
 			menuIsOpen={showMenu}
 			options={options}
+			value={value}
+			onChange={onSearchChange}
+			onCreateOption={onCreate}
+			onInputChange={onSearchInputChange}
+			onKeyDown={onSearchKeyDown}
 			// ts-igonore is necessary to provide custom props to react-select, this is explained
 			// in the react-select docs: https://react-select.com/components#defining-components
 			/* eslint-disable @typescript-eslint/ban-ts-comment */
@@ -72,10 +132,8 @@ const SearchBar = <IsMulti extends boolean>({
 			// @ts-ignore
 			valuePlaceholder={valuePlaceholder}
 			// @ts-ignore
-			onSearch={onSearch}
+			onSearch={onSafeSearchSingle}
 			/* eslint-enable @typescript-eslint/ban-ts-comment */
-			onChange={onTagsInputChange}
-			onKeyDown={onTagsInputKeyDown}
 		/>
 	);
 };

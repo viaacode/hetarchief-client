@@ -1,17 +1,15 @@
 import { TagsInput, TagsInputProps } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import React, { cloneElement, FC, ReactElement, useState } from 'react';
+import React, { cloneElement, ReactElement, useState } from 'react';
 
-import { TAGS_INPUT_DEFAULT_PROPS } from './TagsInput.const';
+import { TAGS_INPUT_COMPONENTS } from './TagsInput.const';
 import { tagsInputOptionsMock } from './__mocks__/tags-input';
 
 const TagsInputStoryComponent = ({ children }: { children: ReactElement }) => {
-	const [values, setValues] = useState(tagsInputOptionsMock);
+	const [values, setValues] = useState<TagsInputProps['value']>(tagsInputOptionsMock);
 
-	const onChange = (values: unknown) => {
-		console.log('storybook', values);
-
-		// setValues();
+	const onChange = (values: TagsInputProps['value']) => {
+		setValues(values);
 	};
 
 	return cloneElement<TagsInputProps>(children, {
@@ -27,19 +25,12 @@ export default {
 
 const Template: ComponentStory<typeof TagsInput> = (args) => (
 	<TagsInputStoryComponent>
-		<TagsInput {...TAGS_INPUT_DEFAULT_PROPS} {...args} />
+		<TagsInput components={{ ...TAGS_INPUT_COMPONENTS }} {...args} />
 	</TagsInputStoryComponent>
 );
 
 export const Default = Template.bind({});
-Default.args = {
-	allowCreate: true,
-	isClearable: true,
-	isMulti: true,
-	menuIsOpen: true,
-	// options: ,
-	value: tagsInputOptionsMock,
-};
+Default.args = {};
 
 export const AllowCreate = Template.bind({});
 AllowCreate.args = {

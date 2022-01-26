@@ -44,4 +44,21 @@
 		min-height: 6.4rem;
 		border-radius: 3.2rem;
 	}
+
+	.c-tags-input__value-container {
+		padding-left: $spacer-lg;
+	}
+
+	.c-tags-input__indicators {
+		padding-right: $spacer-md;
+	}
+}
+
+.c-search-bar--has-value-placeholder.c-tags-input {
+	.c-tags-input__value-container {
+		&--has-value {
+			display: flex;
+			flex-wrap: nowrap;
+		}
+	}
 }

@@ -27,7 +27,7 @@
 	}
 
 	.c-tags-input__multi-value {
-		margin-right: $spacer-sm;
+		margin: $spacer-xxs $spacer-sm $spacer-xxs 0;
 		font-size: $font-size-sm;
 	}
 
@@ -39,10 +39,15 @@
 	.c-tags-input__clear-indicator,
 	.c-tags-input__dropdown-indicator {
 		cursor: pointer;
+
+		&:hover {
+			color: color.adjust($black, $alpha: -0.5);
+		}
 	}
 
 	.c-tags-input__indicator-icon {
 		font-size: $font-size-lg;
+		transition: color $animate-sm-in;
 	}
 
 	.c-tags-input__menu {

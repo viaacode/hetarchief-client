@@ -11,7 +11,7 @@ const SearchBarClear: FC<SearchBarClearProps> = ({ className, cx, innerProps, se
 	const { clearLabel } = selectProps;
 
 	return (
-		<span {...innerProps} className={cx(dropdownIndicatorCxState, className)} tabIndex={1}>
+		<span {...innerProps} className={cx(dropdownIndicatorCxState, className)} tabIndex={0}>
 			{clearLabel ? (
 				<span className="c-search-bar__clear-label">{clearLabel}</span>
 			) : (

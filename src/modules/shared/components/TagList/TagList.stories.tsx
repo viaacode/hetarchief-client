@@ -1,4 +1,5 @@
 import { TagList } from '@meemoo/react-components';
+import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
@@ -35,29 +36,46 @@ export default {
 
 const Template: ComponentStory<typeof TagList> = (args) => <TagList {...args} />;
 
-export const Large = Template.bind({});
-Large.args = {
+export const Default = Template.bind({});
+Default.args = {
 	tags: tags,
-	variants: ['large'],
 };
 
-export const LargeClosable = Template.bind({});
-LargeClosable.args = {
+export const Closable = Template.bind({});
+Closable.args = {
 	tags: tags,
 	closeIcon: <Icon name="times" />,
-	onTagClosed: () => console.log('close'),
-	variants: ['large', 'closable'],
+	onTagClosed: action('Closed tag'),
+	variants: ['closable'],
 };
 
-export const Medium = Template.bind({});
-Medium.args = {
+export const Clickable = Template.bind({});
+Clickable.args = {
 	tags: tags,
-	onTagClicked: () => console.log('clicked'),
-	variants: ['medium', 'clickable'],
+	onTagClicked: action('Clicked tag'),
+	variants: ['clickable'],
 };
 
-export const Small = Template.bind({});
-Small.args = {
+export const ColorBlack = Template.bind({});
+ColorBlack.args = {
 	tags: tags,
-	variants: ['small'],
+	variants: ['black'],
+};
+
+export const ColorSilver = Template.bind({});
+ColorSilver.args = {
+	tags: tags,
+	variants: ['silver'],
+};
+
+export const SizeMedium = Template.bind({});
+SizeMedium.args = {
+	tags: tags,
+	variants: ['medium', 'silver'],
+};
+
+export const SizeSmall = Template.bind({});
+SizeSmall.args = {
+	tags: tags,
+	variants: ['small', 'black'],
 };

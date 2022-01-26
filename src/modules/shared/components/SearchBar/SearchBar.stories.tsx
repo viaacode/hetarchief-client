@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
@@ -14,15 +15,22 @@ const Template: ComponentStory<typeof SearchBar> = (args) => <SearchBar {...args
 
 export const Default = Template.bind({});
 Default.args = {
-	allowCreate: true,
-	isClearable: true,
-	isMulti: true,
-	menuIsOpen: true,
-	// options: ,
-	value: tagsInputOptionsMock,
+	clearLabel: 'Wis volledige zoekopdracht',
+	// isMulti: true,
+	placeholder: 'Zoek:',
+	valuePlaceholder: 'Zoek:',
+	onInputChange: action('Input changed'),
+	onClear: action('Value cleared'),
+	onSearch: action('Search triggered'),
+	// value: ,
 };
 
 export const AllowCreate = Template.bind({});
 AllowCreate.args = {
 	allowCreate: true,
+};
+
+export const Large = Template.bind({});
+Large.args = {
+	large: true,
 };
