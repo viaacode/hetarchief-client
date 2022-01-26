@@ -1,6 +1,8 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
+$c-hero-access-card-min-width: 57.2rem;
+
 .c-hero {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -41,6 +43,44 @@
 
 		img {
 			object-position: right center;
+		}
+	}
+
+	&__section {
+		&-title {
+			@include respond-to(md) {
+				font-size: $font-size-sm;
+			}
+		}
+
+		&:not(:last-child) {
+			margin-bottom: $spacer-lg;
+		}
+
+		&--access {
+			&:not(:last-child) {
+				margin-bottom: $spacer-lg;
+
+				@include respond-at(md) {
+					margin-bottom: $spacer-lg * 2;
+				}
+			}
+		}
+	}
+
+	&__access-cards {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-gap: $spacer-md $spacer-lg;
+
+		@include respond-at(md) {
+			grid-template-columns: repeat(auto-fill, minmax($c-hero-access-card-min-width, 1fr));
+		}
+	}
+
+	&__requests {
+		> *:not(:last-child) {
+			margin-bottom: $spacer-xxs;
 		}
 	}
 
@@ -91,6 +131,36 @@
 
 			img {
 				object-position: center top;
+			}
+		}
+	}
+
+	&--logged-in {
+		display: flex;
+		flex-direction: column;
+		padding: $spacer-1xl 0 $spacer-lg;
+		background-color: $platinum;
+		color: $black;
+
+		@include respond-at(md) {
+			padding: $spacer-2xl 0;
+		}
+
+		.c-hero__title {
+			max-width: none;
+			padding-bottom: 0;
+			padding-right: $spacer-md;
+
+			@include respond-to(md) {
+				margin-bottom: $spacer-md;
+				font-size: $font-size-3xl;
+				text-align: left;
+			}
+		}
+
+		.c-hero__description {
+			@include respond-at(md) {
+				max-width: 48.8rem;
 			}
 		}
 	}

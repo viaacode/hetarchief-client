@@ -23,7 +23,7 @@
     "i18n:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix"
   },
   "dependencies": {
-    "@meemoo/react-components": "2.4.0",
+    "@meemoo/react-components": "2.5.0",
     "@reduxjs/toolkit": "1.7.1",
     "clsx": "1.1.1",
     "lodash.debounce": "4.0.8",

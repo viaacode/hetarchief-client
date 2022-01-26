@@ -15,10 +15,6 @@ $c: "c-reading-room-card-controls";
 		max-width: 100%;
 		margin-right: $spacer-xs;
 
-		@include respond-at("md") {
-			margin-right: $spacer-md;
-		}
-
 		&-icon {
 			font-size: $font-size-1xl;
 
@@ -137,8 +133,6 @@ $c: "c-reading-room-card-controls";
 	}
 
 	button {
-		@include text-ellipsis(true);
-
 		&:not(:last-child) {
 			margin-right: $spacer-xs;
 		}
