@@ -47,7 +47,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			className={clsx(styles['c-navigation__dropdown'], className)}
 			isOpen={isOpen}
 			triggerWidth="full-width"
-			menuClassName={flyoutClassName}
+			flyoutClassName={flyoutClassName}
 			onOpen={() => onOpen && onOpen(id)}
 			onClose={() => onClose && onClose(id)}
 		>
