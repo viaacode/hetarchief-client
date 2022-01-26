@@ -3,9 +3,6 @@ import { DefaultComponentProps } from '@shared/types';
 export interface NotificationCenterProps extends DefaultComponentProps {
 	notifications: Notification[];
 	isOpen: boolean;
-	readTitle: string;
-	unreadTitle: string;
-	buttonTitle: string;
 	onClose: () => void;
 	onClickNotification: (id: string) => void;
 	onClickButton: () => void;

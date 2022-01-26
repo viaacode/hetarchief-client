@@ -76,7 +76,7 @@ describe('Components', () => {
 				onClickButton,
 			});
 
-			const button = queryByText(notificationCenterMock.buttonTitle);
+			const button = queryByText('Markeer alles als gelezen');
 
 			fireEvent.click(button);
 

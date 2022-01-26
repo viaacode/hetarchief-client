@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
 import { Blade } from '../Blade';
@@ -12,13 +13,12 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 	className,
 	notifications,
 	isOpen,
-	readTitle,
-	unreadTitle,
-	buttonTitle,
 	onClose,
 	onClickNotification,
 	onClickButton,
 }) => {
+	const { t } = useTranslation();
+
 	const filteredNotifications = (read: boolean) =>
 		notifications.filter((notification) => notification.read === read);
 
@@ -91,7 +91,9 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			className={styles['c-notification-center__button']}
 			variants={['black', 'block']}
 			iconStart={<Icon name="check" />}
-			label={buttonTitle}
+			label={t(
+				'modules/shared/components/notification-center/notification-center___markeer-alles-als-gelezen'
+			)}
 		/>
 	);
 
@@ -106,13 +108,21 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			<div className={styles['c-notification-center']}>
 				{!!unreadNotifications.length && (
 					<div className={styles['c-notification-center__unread']}>
-						<b>{unreadTitle}</b>
+						<b>
+							{t(
+								'modules/shared/components/notification-center/notification-center___ongelezen'
+							)}
+						</b>
 						{renderUnreadNotifications(unreadNotifications)}
 					</div>
 				)}
 				{!!readNotifications.length && (
 					<div className={styles['c-notification-center__read']}>
-						<b>{readTitle}</b>
+						<b>
+							{t(
+								'modules/shared/components/notification-center/notification-center___gelezen'
+							)}
+						</b>
 						{renderReadNotifications(readNotifications)}
 					</div>
 				)}
