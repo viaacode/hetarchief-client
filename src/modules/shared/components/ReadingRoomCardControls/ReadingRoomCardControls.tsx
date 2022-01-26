@@ -9,8 +9,9 @@ import { formatDateTime } from '../ReadingRoomCard/ReadingRoomCard.utils';
 
 import styles from './ReadingRoomCardControls.module.scss';
 
-const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
+const ReadingRoomCardControls: FC<ReadingRoomCardProps & { cardIsClickable: boolean }> = ({
 	access,
+	cardIsClickable = false,
 	onAccessRequest,
 	onContactClick,
 	onVisitClick,
@@ -49,7 +50,12 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 			<Button
 				icon={<Icon name="contact" />}
 				variants={['silver', 'sm']}
-				onClick={() => onContactClick && onContactClick(room)}
+				onClick={(e) => {
+					if (cardIsClickable) {
+						e.stopPropagation();
+					}
+					onContactClick && onContactClick(room);
+				}}
 			/>
 		</div>
 	);

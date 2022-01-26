@@ -19,6 +19,7 @@ export interface ReadingRoomAccess {
 export interface ReadingRoomCardProps {
 	access?: ReadingRoomAccess;
 	onAccessRequest?: (room: ReadingRoom) => void;
+	onClick?: () => void;
 	onContactClick?: (room: ReadingRoom) => void;
 	onVisitClick?: (room: ReadingRoom) => void;
 	room: ReadingRoom;

@@ -10,7 +10,7 @@ import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
 
-const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
+const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 	const { room, type } = props;
 
 	const typeNoAccess = type === ReadingRoomCardType['no-access'];
@@ -19,6 +19,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 	const typeAccessRequested = type === ReadingRoomCardType['future--requested'];
 
 	const flat = typeAccessAccepted || typeAccessRequested;
+	const isClickable = typeof onClick !== 'undefined';
 
 	const renderImage = () => {
 		return (
@@ -117,8 +118,9 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 		return 'vertical';
 	};
 
-	return (
+	const renderCard = () => (
 		<Card
+			className={clsx({ 'u-cursor-pointer': isClickable })}
 			edge="none"
 			image={renderImage()}
 			mode={getMode()}
@@ -144,9 +146,17 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 					{renderDescription()}
 				</div>
 
-				<ReadingRoomCardControls {...props} />
+				<ReadingRoomCardControls {...props} cardIsClickable={isClickable} />
 			</div>
 		</Card>
+	);
+
+	return isClickable ? (
+		<div role="button" tabIndex={0} onClick={onClick}>
+			{renderCard()}
+		</div>
+	) : (
+		renderCard()
 	);
 };
 
