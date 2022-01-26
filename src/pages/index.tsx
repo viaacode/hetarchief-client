@@ -1,24 +1,23 @@
-import { Button, TextInput } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import Link from 'next/link';
-import { KeyboardEvent, useState } from 'react';
+import { useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
-import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
+import { Hero, ReadingRoomCardList, SearchBar } from '@shared/components';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { createPageTitle } from '@shared/utils';
 
 const Home: NextPage = () => {
-	const [searchValue, setSearchValue] = useState('');
-	const [, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
-	const { t } = useTranslation();
-
-	const [readingRooms, setReadingRooms] = useState(sixItems);
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
+	const [readingRooms, setReadingRooms] = useState(sixItems);
+
+	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+	const { t } = useTranslation();
 
 	const handleLoadAllReadingRooms = () => {
 		Promise.resolve([...sixItems, ...sixItems]).then((data) => {
@@ -27,10 +26,12 @@ const Home: NextPage = () => {
 		});
 	};
 
-	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			setQuery({ search: searchValue });
-		}
+	const onClearSeach = () => {
+		setQuery({ search: undefined });
+	};
+
+	const onSearch = (searchValue: string) => {
+		setQuery({ search: searchValue });
 	};
 
 	return (
@@ -60,14 +61,13 @@ const Home: NextPage = () => {
 				<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
 					<h3 className="p-home__subtitle">Vind een leeszaal</h3>
 
-					<TextInput
+					<SearchBar
 						className="p-home__search"
-						iconEnd={<Icon name="search" />}
 						placeholder="Zoek"
-						value={searchValue}
-						variants={['grey', 'large', 'rounded']}
-						onChange={(e) => setSearchValue(e.target.value)}
-						onKeyUp={onSearchKeyUp as () => void}
+						backspaceRemovesValue={false}
+						searchValue={query.search ?? ''}
+						onClear={onClearSeach}
+						onSearch={onSearch}
 					/>
 				</div>
 
