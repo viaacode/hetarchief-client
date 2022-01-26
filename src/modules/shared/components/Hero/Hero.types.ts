@@ -1,4 +1,5 @@
 import { UserSchema } from '@auth/store/user';
+import { ReadingRoomStatus } from '@reading-room/types';
 import { ComponentLink } from '@shared/types';
 
 import { ReadingRoom } from '..';
@@ -10,6 +11,7 @@ export interface HeroProps {
 	image: HeroImage;
 	user?: UserSchema;
 	requests?: HeroRequest[];
+	onReadingRoomClick?: (room: ReadingRoom, type: ReadingRoomStatus) => void;
 }
 
 export interface HeroImage {

@@ -8,9 +8,10 @@ import { useQueryParams } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
-import { RequestAccessBlade } from '@home/components';
+import { RequestAccessBlade, RequestDetailBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
-import { Hero, Icon, ReadingRoomCardList } from '@shared/components';
+import { ReadingRoomStatus } from '@reading-room/types';
+import { Hero, Icon, ReadingRoom, ReadingRoomCardList } from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
@@ -22,6 +23,10 @@ const Home: NextPage = () => {
 	const [readingRooms, setReadingRooms] = useState(sixItems);
 	const [searchValue, setSearchValue] = useState('');
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
+	const [activeRoomDetail, setActiveRoomDetail] = useState<{
+		data: ReadingRoom;
+		type?: ReadingRoomStatus;
+	} | null>(null);
 
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
@@ -53,13 +58,20 @@ const Home: NextPage = () => {
 		dispatch(setShowAuthModal(false));
 	};
 
+	const onHeroReadingRoomClick = (room: ReadingRoom, type: ReadingRoomStatus) => {
+		console.log('clicked hero');
+
+		setActiveRoomDetail({ data: room, type });
+	};
+
 	const onOpenAuthModal = () => {
 		dispatch(setShowAuthModal(true));
 	};
 
-	const onRequestAccess = () => {
+	const onRequestAccess = (room: ReadingRoom) => {
 		if (isLoggedIn) {
 			setIsOpenRequestAccessBlade(true);
+			setActiveRoomDetail({ data: room });
 		} else {
 			onOpenAuthModal();
 			setQuery({ returnToRequestAccess: true });
@@ -100,6 +112,7 @@ const Home: NextPage = () => {
 				}}
 				user={user}
 				requests={heroRequests}
+				onReadingRoomClick={onHeroReadingRoomClick}
 			/>
 
 			<div className="l-container u-pt-32 u-pt-80:md u-pb-48 u-pb-80:md">
@@ -121,7 +134,7 @@ const Home: NextPage = () => {
 					className="u-mb-64"
 					items={readingRooms.map((room) => ({
 						...room,
-						onAccessRequest: onRequestAccess,
+						onAccessRequest: () => onRequestAccess(room.room),
 					}))}
 					limit={!areAllReadingRoomsVisible}
 				/>
@@ -140,6 +153,12 @@ const Home: NextPage = () => {
 				isOpen={isOpenRequestAccessBlade}
 				onClose={() => setIsOpenRequestAccessBlade(false)}
 				onSubmit={onRequestAccessSubmit}
+			/>
+			<RequestDetailBlade
+				isOpen={!!activeRoomDetail}
+				roomData={activeRoomDetail?.data}
+				type={activeRoomDetail?.type}
+				onClose={() => setActiveRoomDetail(null)}
 			/>
 		</div>
 	);

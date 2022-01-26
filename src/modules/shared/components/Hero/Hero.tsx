@@ -4,13 +4,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
+import { ReadingRoomStatus } from '@reading-room/types';
+
 import { ReadingRoomCard, ReadingRoomCardType } from '../ReadingRoomCard';
 import { AccessGranted } from '../ReadingRoomCard/__mocks__/reading-room-card';
 
 import styles from './Hero.module.scss';
 import { HeroProps } from './Hero.types';
 
-const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], user }) => {
+const Hero: FC<HeroProps> = ({
+	title,
+	description,
+	link,
+	image,
+	requests = [],
+	user,
+	onReadingRoomClick,
+}) => {
 	const { t } = useTranslation();
 
 	const isLoggedIn = !!user;
@@ -90,6 +100,9 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 									access={AccessGranted}
 									room={room}
 									type={ReadingRoomCardType['future--approved']}
+									onClick={() =>
+										onReadingRoomClick?.(room, ReadingRoomStatus.Planned)
+									}
 								/>
 							))}
 						</div>
@@ -107,6 +120,9 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 									access={AccessGranted}
 									room={room}
 									type={ReadingRoomCardType['future--requested']}
+									onClick={() =>
+										onReadingRoomClick?.(room, ReadingRoomStatus.Requested)
+									}
 								/>
 							))}
 						</div>
