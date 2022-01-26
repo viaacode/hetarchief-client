@@ -1,13 +1,13 @@
-import { Button, TabProps } from '@meemoo/react-components';
+import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { KeyboardEvent, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { FilterMenu, SearchBar } from '@reading-room/components';
 import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
+import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import {
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
@@ -16,11 +16,9 @@ import {
 } from '@reading-room/const';
 import { ReadingRoomMediaType } from '@reading-room/types';
 import {
-	Icon,
 	MediaCardList,
 	MediaCardProps,
 	MediaCardViewMode,
-	Navigation,
 	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
@@ -158,28 +156,8 @@ const ReadingRoomPage: NextPage = () => {
 				<meta name="description" content="Leeszaal omschrijving" />
 			</Head>
 
-			<Navigation contextual>
-				<Navigation.Left placement="left">
-					<Link href="/" passHref={true}>
-						<Button
-							icon={<Icon name="arrow-left" />}
-							variants="text"
-							className="u-color-white u-ml--12"
-						/>
-					</Link>
-				</Navigation.Left>
-
-				<Navigation.Center title="Leeszaal" />
-
-				<Navigation.Right placement="right">
-					<Button
-						label="Contacteer"
-						iconStart={<Icon className="u-font-size-24" name="contact" />}
-						variants="text"
-						className="u-color-white u-mr--12 u-px-12 p-reading-room__contact-button"
-					/>
-				</Navigation.Right>
-			</Navigation>
+			{/* TODO: bind title to state */}
+			<ReadingRoomNavigation title={'Leeszaal'} />
 
 			<section className="u-bg-black u-pt-8">
 				<div className="l-container">

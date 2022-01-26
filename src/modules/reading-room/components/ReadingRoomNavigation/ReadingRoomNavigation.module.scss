@@ -1,0 +1,33 @@
+@use "sass:math";
+
+@use "styles/abstracts" as *;
+
+$c: "c-reading-room-navigation";
+$c-reading-room-navigation-transform-amount: math.div($spacer-md, 2); // Equal to u-px-12
+
+.#{$c} {
+	&__contact {
+        &-button {
+            transform: translateX($c-reading-room-navigation-transform-amount); 
+    
+            @include respond-to(md) {
+                :global(.c-button__icon) {
+                    margin: 0;
+                }
+    
+                :global(.c-button__label) {
+                    visibility: hidden;
+                    font-size: 0;
+                }
+            }
+        }
+
+        &-list {
+            @extend %reset-list;
+        }
+
+        &-item {
+            color: red;
+        }
+    }
+}
