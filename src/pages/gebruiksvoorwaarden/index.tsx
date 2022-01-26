@@ -23,9 +23,8 @@ const TermsOfService: NextPage = () => {
 		};
 	});
 
-	const handleScroll: UIEventHandler<HTMLDivElement> = (e) => {
+	const handleScroll: UIEventHandler<HTMLDivElement> = () => {
 		const el = scrollable.current;
-		console.info(el);
 
 		if (el !== null) {
 			const bottom = el.scrollHeight - el.scrollTop === el.clientHeight;
