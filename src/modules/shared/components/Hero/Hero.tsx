@@ -55,7 +55,7 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 					</h1>
 					<p className={styles['c-hero__description']}>
 						{t(
-							'Plan een nieuw bezoek, stap fysiek binnen en krijg meteen toegang tot het digitale archief van de leeszaal.'
+							'modules/shared/components/hero/hero___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-leeszaal'
 						)}
 					</p>
 				</section>

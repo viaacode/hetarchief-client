@@ -1,3 +1,4 @@
+export * from './Blade';
 export * from './BladeManager';
 export * from './Footer';
 export * from './Hero';
@@ -7,6 +8,7 @@ export * from './MediaCard';
 export * from './MediaCardList';
 export * from './Modal';
 export * from './Navigation';
+export * from './NotificationCenter';
 export * from './Overlay';
 export * from './PaginationBar';
 export * from './PaginationProgress';
