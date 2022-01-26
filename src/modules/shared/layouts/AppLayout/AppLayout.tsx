@@ -43,7 +43,7 @@ const AppLayout: FC = ({ children }) => {
 						),
 					},
 			  ];
-	}, [dispatch, isLoggedIn, t]);
+	}, [dispatch, isLoggedIn, t, user]);
 
 	return (
 		<div className="l-app">
