@@ -1,7 +1,6 @@
 import { Button, TextInput } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { KeyboardEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
