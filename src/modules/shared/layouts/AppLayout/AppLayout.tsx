@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Slide, ToastContainer } from 'react-toastify';
 
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import {
@@ -101,6 +102,7 @@ const AppLayout: FC = ({ children }) => {
 			<main className="l-app__main">
 				<>
 					{children}
+
 					<NotificationCenter
 						{...notificationCenterMock}
 						isOpen={notificationsOpen}
@@ -108,6 +110,17 @@ const AppLayout: FC = ({ children }) => {
 					/>
 				</>
 			</main>
+
+			<ToastContainer
+				autoClose={5000}
+				className="c-toast-container"
+				toastClassName="c-toast-container__toast"
+				closeButton={false}
+				hideProgressBar
+				position="bottom-left"
+				transition={Slide}
+			/>
+
 			<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
 		</div>
 	);
