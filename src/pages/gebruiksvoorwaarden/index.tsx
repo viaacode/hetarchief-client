@@ -1,10 +1,12 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import DOMPurify from 'isomorphic-dompurify';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { RICH_TEXT_SANITIZATION } from '@shared/const';
 import { setIsStickyLayout } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
@@ -55,7 +57,12 @@ const TermsOfService: NextPage = () => {
 						ref={scrollable}
 						onScroll={handleScroll}
 						className="p-terms-of-service__content"
-						dangerouslySetInnerHTML={{ __html: lipsum + lipsum }}
+						dangerouslySetInnerHTML={{
+							__html: DOMPurify.sanitize(
+								lipsum + lipsum, // rich-text content
+								RICH_TEXT_SANITIZATION
+							) as string,
+						}}
 					/>
 				</div>
 			</section>
