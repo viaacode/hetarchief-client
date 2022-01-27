@@ -85,7 +85,14 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 
 	const renderDescription = () => (
 		<TruncateMarkup lines={flat ? 2 : 3}>
-			<p className={clsx(styles['c-reading-room-card__description'])}>{room?.description}</p>
+			<p
+				className={clsx(
+					styles['c-reading-room-card__description'],
+					flat && styles['c-reading-room-card__description--flat']
+				)}
+			>
+				{room?.description}
+			</p>
 		</TruncateMarkup>
 	);
 
