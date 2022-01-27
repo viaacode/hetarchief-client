@@ -46,6 +46,7 @@ const AppLayout: FC = ({ children }) => {
 						id: 'notification-center',
 						node: (
 							<Button
+								key="notification-center"
 								onClick={() => setNotificationsOpen(!notificationsOpen)}
 								variants="text"
 								className={clsx(
@@ -65,7 +66,11 @@ const AppLayout: FC = ({ children }) => {
 					{
 						id: 'user-menu',
 						node: (
-							<Avatar variants="padded-y" text={`${user.firstName} ${user.lastName}`}>
+							<Avatar
+								key="user-menu"
+								variants="padded-y"
+								text={(user?.firstName ?? '') as string}
+							>
 								<Icon type="solid" name="user" />
 							</Avatar>
 						),
@@ -77,6 +82,7 @@ const AppLayout: FC = ({ children }) => {
 						id: 'auth-button',
 						node: (
 							<Button
+								key="auth-button"
 								label={t(
 									'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
 								)}
