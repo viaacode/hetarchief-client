@@ -24,7 +24,7 @@ const Toggle: FC<ToggleProps> = ({ className, options, onChange, bordered, dark 
 					<Button
 						className={clsx(
 							styles['c-toggle__option'],
-							!option.active && styles['c-toggle__option--disabled']
+							option.active && styles['c-toggle__option--active']
 						)}
 						key={option.id}
 						icon={renderIcon(option.iconName)}
