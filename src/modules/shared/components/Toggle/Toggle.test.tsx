@@ -44,22 +44,7 @@ describe('Component: <Toggle /> (default)', () => {
 		expect(container.firstChild).toHaveClass('c-toggle--dark');
 	});
 
-	it('Should set disabled class on non-active elements', () => {
-		const options: ToggleOption[] = [
-			{
-				id: 'grid',
-				iconName: 'grid-view',
-				active: false,
-			},
-		];
-		const { getByRole } = renderToggle({ options: options, onChange: () => null });
-
-		const button = getByRole('button');
-
-		expect(button).toHaveClass('c-toggle__option--disabled');
-	});
-
-	it('Should not set disabled class on active elements', () => {
+	it('Should set active class on active elements', () => {
 		const options: ToggleOption[] = [
 			{
 				id: 'grid',
@@ -67,11 +52,28 @@ describe('Component: <Toggle /> (default)', () => {
 				active: true,
 			},
 		];
+		const { getByRole } = renderToggle({ options: options, onChange: () => null });
+
+		const button = getByRole('button');
+
+		console.info(button);
+
+		expect(button).toHaveClass('c-toggle__option--active');
+	});
+
+	it('Should not set active class on disabled elements', () => {
+		const options: ToggleOption[] = [
+			{
+				id: 'grid',
+				iconName: 'grid-view',
+				active: false,
+			},
+		];
 		const { getByRole } = renderToggle({ ...toggleMock, options: options });
 
 		const button = getByRole('button');
 
-		expect(button).not.toHaveClass('c-toggle__option--disabled');
+		expect(button).not.toHaveClass('c-toggle__option--active');
 	});
 
 	it('Should call onChange when an option is clicked', () => {
