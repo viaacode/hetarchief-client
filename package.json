@@ -20,7 +20,8 @@
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
     "build:storybook": "build-storybook",
-    "i18n:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix"
+    "i18n:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix",
+    "gql:extract": "ts-node --transpile-only --require dotenv/config scripts/whitelist-gql-queries.ts dotenv_config_path=.env"
   },
   "dependencies": {
     "@hookform/resolvers": "2.8.8",
@@ -79,6 +80,7 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-storybook": "0.5.3",
+    "fs-extra": "10.0.0",
     "glob": "7.2.0",
     "husky": "7.0.4",
     "identity-obj-proxy": "3.0.0",
