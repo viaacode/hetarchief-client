@@ -18,7 +18,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	label = 'Filters',
 	isMobileOpen = false,
 	isOpen = true,
-	sortOptions = [{ label: 'sort' }],
+	sortOptions = [],
 	toggleOptions = [],
 	onMenuToggle,
 	onViewToggle = () => null,
