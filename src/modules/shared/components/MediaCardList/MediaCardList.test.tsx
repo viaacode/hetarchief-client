@@ -1,6 +1,6 @@
 import { render, RenderResult, screen } from '@testing-library/react';
 
-import { MediaCardProps } from '..';
+import { MediaCardProps } from '../MediaCard';
 
 import MediaCardList from './MediaCardList';
 import { gridData } from './__mocks__/media-card-list';

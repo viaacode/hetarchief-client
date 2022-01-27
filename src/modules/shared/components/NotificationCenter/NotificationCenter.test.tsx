@@ -3,9 +3,8 @@ import { fireEvent, render } from '@testing-library/react';
 import reactI18nextMock from '../../../../__mocks__/react-i18next';
 
 import NotificationCenter from './NotificationCenter';
+import { NotificationCenterProps } from './NotificationCenter.types';
 import { notificationCenterMock, notificationsMock } from './__mocks__/notification-center';
-
-import { NotificationCenterProps } from '.';
 
 reactI18nextMock.mock('react-i18next');
 

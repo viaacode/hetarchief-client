@@ -285,9 +285,9 @@ $c-navigation-divider-size: 0.1rem;
 	}
 
 	&--horizontal {
-		width: calc(100% - 2 * $spacer-md);
+		width: 100%;
 		height: $c-navigation-divider-size;
-		margin: 1.2rem $spacer-md;
+		margin: 1.2rem 0;
 		background-color: $silver;
 	}
 }
