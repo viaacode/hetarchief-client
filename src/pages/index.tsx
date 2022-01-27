@@ -42,7 +42,7 @@ const Home: NextPage = () => {
 	 */
 
 	const handleLoadAllReadingRooms = () => {
-		Promise.resolve([...sixItems, ...sixItems]).then((data) => {
+		Promise.resolve([...sixItems, ...sixItems.slice(0, 5)]).then((data) => {
 			setReadingRooms(data);
 			setAreAllReadingRoomsVisible(true);
 		});
@@ -130,7 +130,7 @@ const Home: NextPage = () => {
 					<div className="u-text-center">
 						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
 							{t('pages/index___toon-alles-amount', {
-								amount: 123,
+								amount: 5,
 							})}
 						</Button>
 					</div>
