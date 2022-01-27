@@ -3,10 +3,18 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
-import '../../../../__mocks__/react-i18next';
+import kyMock from '../../../../__mocks__/ky-universal';
+import reactI18nextMock from '../../../../__mocks__/react-i18next';
+
 import AppLayout from './AppLayout';
 
-const mockStore = configureStore({ reducer: (state) => state });
+kyMock.mock('ky-universal');
+reactI18nextMock.mock('react-i18next');
+
+const mockStore = configureStore({
+	preloadedState: { user: { user: { firstName: 'Tom', lastName: 'Testerom' } } },
+	reducer: (state) => state,
+});
 
 const renderAppLayout = (children?: ReactNode) => {
 	return render(

@@ -2,17 +2,14 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans, useTranslation } from 'next-i18next';
 import { FC } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { loginAction, setMockUser } from '@auth/store/user';
+import { authService } from '@auth/services/auth-service';
 import { Icon, Modal } from '@shared/components';
-import { setShowAuthModal } from '@shared/store/ui';
 
 import styles from './AuthModal.module.scss';
 import { AuthModalProps } from './AuthModal.types';
 
 const AuthModal: FC<AuthModalProps> = (props) => {
-	const dispatch = useDispatch();
 	const { t } = useTranslation();
 
 	/**
@@ -20,18 +17,12 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	 */
 
 	const onLogin = () => {
-		dispatch(loginAction());
+		authService.redirectToLogin();
 	};
 
 	/**
 	 * Render
 	 */
-
-	const onMockLogin = () => {
-		// TODO: replace with real login action
-		dispatch(setMockUser({ firstName: 'Tom', lastName: 'Testerom' }));
-		dispatch(setShowAuthModal(false));
-	};
 
 	const renderHeading = () => {
 		return (

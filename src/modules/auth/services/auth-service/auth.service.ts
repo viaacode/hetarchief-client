@@ -1,12 +1,19 @@
 import ky from 'ky-universal';
+import queryString from 'query-string';
 
-// TODO: add to env vars
-const authUrl =
-	'http://localhost:3000/auth/hetarchief/login?returnToUrl=http://localhost:3001/leeszaal/leeszaal-8';
+import { getEnv } from '@shared/utils';
 
 class AuthService {
-	public async login() {
-		return await ky(authUrl).json();
+	public async checkLogin() {
+		return await ky('').json();
+	}
+
+	public redirectToLogin() {
+		const returnToUrl = `${getEnv('ORIGIN')}`;
+
+		window.location.href = `${getEnv(
+			'PROXY_URL'
+		)}/auth/hetarchief/login?${queryString.stringify({ returnToUrl })}`;
 	}
 }
 

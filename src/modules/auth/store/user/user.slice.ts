@@ -9,7 +9,7 @@ const initialState: UserState = {
 };
 
 export const loginAction = createAsyncThunk('users/login', async () => {
-	const response = await authService.login();
+	const response = await authService.checkLogin();
 	return response;
 });
 
