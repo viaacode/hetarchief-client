@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { FC, Fragment, ReactNode, useState } from 'react';
+import { useRouter } from 'next/router';
+import { FC, Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 
@@ -10,7 +11,18 @@ import { NavigationDropdown } from '../NavigationDropdown';
 import { NavigationListProps } from './NavigationList.types';
 
 const NavigationList: FC<NavigationListProps> = ({ items }) => {
+	const prevPath = useRef<string | null>(null);
 	const [openDropdown, setOpenDropdown] = useState<string | undefined>(undefined);
+
+	const { asPath } = useRouter();
+
+	// Close dropdowns when the url path changed
+	useEffect(() => {
+		if (prevPath.current !== asPath && openDropdown) {
+			setOpenDropdown(undefined);
+			prevPath.current = asPath;
+		}
+	}, [asPath, openDropdown]);
 
 	const renderDropdown = (
 		id: string,

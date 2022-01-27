@@ -31,11 +31,11 @@ export const READING_ROOM_TABS = [
 
 export const READING_ROOM_VIEW_TOGGLE_OPTIONS = [
 	{
-		id: 'list',
-		iconName: 'list-view' as IconProps['name'],
-	},
-	{
 		id: 'grid',
 		iconName: 'grid-view' as IconProps['name'],
+	},
+	{
+		id: 'list',
+		iconName: 'list-view' as IconProps['name'],
 	},
 ];
