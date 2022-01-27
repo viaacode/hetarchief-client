@@ -1,7 +1,7 @@
 import { UserSchema } from '@auth/store/user';
 import { ComponentLink } from '@shared/types';
 
-import { ReadingRoom } from '..';
+import { ReadingRoom } from '../ReadingRoomCard';
 
 export interface HeroProps {
 	title: string;

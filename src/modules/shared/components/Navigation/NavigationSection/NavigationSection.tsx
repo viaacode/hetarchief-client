@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 
-import { Icon, Overlay } from '@shared/components';
+import { Icon, IconProps, Overlay } from '@shared/components';
 
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
@@ -57,10 +57,10 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 										isHamburgerMenuOpen
 											? hamburgerProps?.openIcon
 												? hamburgerProps?.openIcon
-												: 'times'
+												: ('times' as IconProps['name'])
 											: hamburgerProps?.closedIcon
 											? hamburgerProps?.closedIcon
-											: 'grid-view'
+											: ('menu' as IconProps['name'])
 									}
 								/>
 							}
