@@ -17,10 +17,13 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 
 			if (copied && enableToast) {
 				toastService.notify({
-					title: t('Success'),
-					description: t('"{{text}}" was copied to your clipboard', {
-						text,
-					}),
+					title: t('modules/shared/components/copy-button/copy-button___success'),
+					description: t(
+						'modules/shared/components/copy-button/copy-button___text-was-copied-to-your-clipboard',
+						{
+							text,
+						}
+					),
 				});
 			}
 

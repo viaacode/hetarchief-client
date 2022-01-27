@@ -49,7 +49,9 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 								styles['c-reading-room-navigation__contact-button']
 							)}
 							iconStart={<Icon className="u-font-size-24" name="contact" />}
-							label={t('Contacteer')}
+							label={t(
+								'modules/reading-room/components/reading-room-navigation/reading-room-navigation___contacteer'
+							)}
 							variants="text"
 						/>
 					</DropdownButton>
