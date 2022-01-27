@@ -27,7 +27,20 @@ $c-reading-room-navigation-transform-amount: math.div($spacer-md, 2); // Equal t
         }
 
         &-item {
-            color: red;
+            display: flex;
+            padding-left: $spacer-sm;
+            padding-right: $spacer-sm;
+
+            button {
+                &:not(:global(.c-button--icon)) {
+                    padding-left: $spacer-xs;
+                    padding-right: $spacer-xs;
+                }
+                
+                &:global(.c-button--icon) {
+                    flex-shrink: 0;
+                }
+            }
         }
     }
 }

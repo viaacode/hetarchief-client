@@ -1,24 +1,24 @@
-import {
-	Button,
-	Dropdown,
-	DropdownButton,
-	DropdownContent,
-	MenuContent,
-} from '@meemoo/react-components';
+import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 
 import { Icon, Navigation } from '@shared/components';
+import { CopyButton } from '@shared/components/CopyButton';
 
-import { READING_ROOM_NAVIGATION__CONTACT_ITEMS } from './ReadingRoomNavigation.const';
 import styles from './ReadingRoomNavigation.module.scss';
 import { ReadingRoomNavigationProps } from './ReadingRoomNavigation.types';
 
 const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 	const { t } = useTranslation();
 	const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
+
+	// TODO: replace with model
+	const { phone, email } = {
+		phone: '+32 487 02 80 55',
+		email: 'info@studiohyperdrive.be',
+	};
 
 	return (
 		<Navigation contextual>
@@ -57,13 +57,33 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 					<DropdownContent>
 						<ul className={styles['c-reading-room-navigation__contact-list']}>
 							<li className={styles['c-reading-room-navigation__contact-item']}>
-								{/* TODO: bind to state */}
-								<Button variants="text" label={'info@studiohyperdrive.be'} />
+								<Link href={`mailto:${email}`} passHref={true}>
+									<Button
+										className="u-text-left"
+										iconStart={
+											<Icon className="u-font-size-24 u-mr-8" name="email" />
+										}
+										variants={['text', 'block', 'sm']}
+										label={email}
+									/>
+								</Link>
+
+								<CopyButton text={email} variants={['sm', 'text']} />
 							</li>
 
 							<li className={styles['c-reading-room-navigation__contact-item']}>
-								{/* TODO: bind to state */}
-								<Button variants="text" label={'+32 487 02 80 55'} />
+								<Link href={`tel:${phone}`} passHref={true}>
+									<Button
+										className="u-text-left"
+										iconStart={
+											<Icon className="u-font-size-24 u-mr-8" name="phone" />
+										}
+										variants={['text', 'block', 'sm']}
+										label={phone}
+									/>
+								</Link>
+
+								<CopyButton text={phone} variants={['sm', 'text']} />
 							</li>
 						</ul>
 					</DropdownContent>
