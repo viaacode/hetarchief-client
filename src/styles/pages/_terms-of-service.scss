@@ -31,6 +31,7 @@ $terms-of-service-background-color: #ebfbf8;
 	}
 
 	&__gradient {
+		pointer-events: none; // allow pointer through
 		background: linear-gradient(
 			0deg,
 			$terms-of-service-background-color 0%,

@@ -42,7 +42,7 @@ const Home: NextPage = () => {
 	 */
 
 	const handleLoadAllReadingRooms = () => {
-		Promise.resolve([...sixItems, ...sixItems]).then((data) => {
+		Promise.resolve([...sixItems, ...sixItems.slice(0, 5)]).then((data) => {
 			setReadingRooms(data);
 			setAreAllReadingRoomsVisible(true);
 		});
@@ -109,7 +109,7 @@ const Home: NextPage = () => {
 
 					<SearchBar
 						className="p-home__search"
-						placeholder="Zoek"
+						placeholder={t('pages/index___zoek')}
 						backspaceRemovesValue={false}
 						searchValue={query.search ?? ''}
 						onClear={onClearSearch}
@@ -129,7 +129,9 @@ const Home: NextPage = () => {
 				{!areAllReadingRoomsVisible && (
 					<div className="u-text-center">
 						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
-							Toon alles (123)
+							{t('pages/index___toon-alles-amount', {
+								amount: 5,
+							})}
 						</Button>
 					</div>
 				)}

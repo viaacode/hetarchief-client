@@ -23,7 +23,7 @@ const BladeStoryComponent = ({ args }: { args: BladeProps }) => {
 	return (
 		<>
 			<div>
-				<h1>Dummy content</h1>
+				<h1>Blades</h1>
 				<Button label="Open modal" onClick={open} />
 			</div>
 			<Blade {...args} onClose={close} isOpen={isOpen} />

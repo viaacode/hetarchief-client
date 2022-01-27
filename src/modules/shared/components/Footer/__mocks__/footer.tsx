@@ -17,16 +17,18 @@ export const footerTestLinks = [
 export const footerLinks = [
 	{
 		label: 'Gebruikersvoorwaarden',
-		to: '/',
-		external: true,
+		to: '/gebruiksvoorwaarden',
+		external: false,
 	},
 	{
 		label: 'Privacy',
-		to: '/',
+		to: 'https://meemoo.be/nl/privacybeleid',
+		external: true,
 	},
 	{
 		label: 'Cookiebeleid',
-		to: '/',
+		to: 'https://meemoo.be/nl/cookiebeleid',
+		external: true,
 	},
 ];
 
