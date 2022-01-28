@@ -96,11 +96,11 @@ $c-navigation-divider-size: 0.1rem;
 	}
 
 	.c-navigation__dropdown {
-		z-index: 2; // above overlay
+		z-index: get-z-layer("nav-dropdown"); // above overlay
 	}
 
 	.c-navigation__hamburger {
-		z-index: 3; // above all
+		z-index: get-z-layer("nav-hamburger"); // above all
 	}
 
 	.c-navigation__dropdown-flyout {
@@ -120,12 +120,12 @@ $c-navigation-divider-size: 0.1rem;
 	}
 
 	.c-navigation__dropdown-overlay {
-		z-index: 2; // above foreground layers
+		z-index: get-z-layer("nav-dropdown"); // above foreground layers
 		height: 100vh;
 	}
 
 	.c-navigation__hamburger-overlay {
-		z-index: 3; // above all
+		z-index: get-z-layer("nav-dropdown"); // above all
 	}
 
 	@for $i from 1 through 4 {

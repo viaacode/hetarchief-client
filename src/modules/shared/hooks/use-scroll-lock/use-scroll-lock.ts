@@ -1,27 +1,24 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import { UseScrollLock } from './use-scroll-lock.types';
 
-const useScrollLock: UseScrollLock = (element, lock) => {
-	const prevOverflowStyle = useRef<string>('');
-
+const useScrollLock: UseScrollLock = (lock, element) => {
 	useEffect(() => {
-		if (!element) {
-			return;
-		}
+		const elementToLock = element ?? document.body;
+		let prevOverflowStyle = '';
 
-		if (!prevOverflowStyle.current) {
-			prevOverflowStyle.current = element.style.overflow;
+		if (!prevOverflowStyle) {
+			prevOverflowStyle = elementToLock.style.overflow;
 		}
 
 		if (lock) {
-			element.style.overflow = 'hidden';
+			elementToLock.style.overflow = 'hidden';
 		} else {
-			element.style.overflow = prevOverflowStyle.current;
+			elementToLock.style.overflow = prevOverflowStyle;
 		}
 
 		return () => {
-			element.style.overflow = prevOverflowStyle.current;
+			elementToLock.style.overflow = prevOverflowStyle;
 		};
 	}, [element, lock]);
 };

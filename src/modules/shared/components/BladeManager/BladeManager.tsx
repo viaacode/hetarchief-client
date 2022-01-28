@@ -2,7 +2,6 @@ import { FC } from 'react';
 
 import { BladeManagerContext } from '@shared/context/BladeManagerContext';
 import { useScrollLock } from '@shared/hooks';
-import { isBrowser } from '@shared/utils';
 
 import { BladeManagerProps } from './BladeManager.types';
 
@@ -12,7 +11,7 @@ const BladeManager: FC<BladeManagerProps> = ({
 	opacityStep = 0.1,
 	onCloseBlade = () => null,
 }) => {
-	useScrollLock(isBrowser() ? document.body : null, currentLayer > 0);
+	useScrollLock(currentLayer > 0);
 
 	return (
 		<BladeManagerContext.Provider

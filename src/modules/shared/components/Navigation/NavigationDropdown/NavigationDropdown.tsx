@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { FC, Fragment, ReactNode } from 'react';
 
 import { useScrollLock } from '@shared/hooks';
-import { isBrowser } from '@shared/utils';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -21,7 +20,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 	onOpen,
 	onClose,
 }) => {
-	useScrollLock(isBrowser() ? document.body : null, lockScroll ? isOpen : false);
+	useScrollLock(lockScroll ? isOpen : false);
 
 	const renderChildrenRecursively = (items: NavigationItem[], layer = 0): ReactNode => {
 		return (
@@ -48,8 +47,8 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 			isOpen={isOpen}
 			triggerWidth="full-width"
 			flyoutClassName={flyoutClassName}
-			onOpen={() => onOpen && onOpen(id)}
-			onClose={() => onClose && onClose(id)}
+			onOpen={() => onOpen?.(id)}
+			onClose={() => onClose?.(id)}
 		>
 			<DropdownButton>{trigger}</DropdownButton>
 			<DropdownContent>{renderChildrenRecursively(items)}</DropdownContent>
