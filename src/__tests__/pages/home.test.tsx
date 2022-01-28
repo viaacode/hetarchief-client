@@ -1,25 +1,26 @@
-// import { render, screen } from '@testing-library/react';
-// import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
 
-import '../../__mocks__/react-i18next';
-// import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
+import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 
-// import Home from '../../pages/index';
+import { mockStore } from '../../__mocks__/store';
+import Home from '../../pages/index';
+
+const renderHome = () => {
+	return render(
+		<NextQueryParamProvider>
+			<Provider store={mockStore}>
+				<Home />
+			</Provider>
+		</NextQueryParamProvider>
+	);
+};
 
 describe('Page: <Home />', () => {
-	// Disable test for now because of missing router mock
-	// beforeEach(() => {
-	// 	render(
-	// 		<NextQueryParamProvider>
-	// 			<Home />
-	// 		</NextQueryParamProvider>
-	// 	);
-	// });
-	it('Should render a title', () => {
-		// 	const title = screen.getByRole('heading', {
-		// 		name: /Welkom/i,
-		// 	});
-		// expect(title).toBeInTheDocument();
-		expect(true).toBeTruthy();
+	it('Should render a hero', () => {
+		const { container } = renderHome();
+		const hero = container.querySelector('.c-hero');
+
+		expect(hero).toBeInTheDocument();
 	});
 });

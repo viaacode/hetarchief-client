@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @use "../abstracts" as *;
 
 /**
@@ -30,7 +32,7 @@ $py: (
 
 // Left / Right
 $px: (
-	"12": 1.2rem,
+	"12": math.div($spacer-md, 2),
 	"32": $spacer-lg,
 );
 @include generate-utils("px", ("padding-left", "padding-right"), $px);
@@ -70,6 +72,5 @@ $ml: (
 // Right
 $mr: (
 	"8": $spacer-xs,
-	"-12": - 1.2rem,
 );
 @include generate-utils("mr", "margin-right", $mr);

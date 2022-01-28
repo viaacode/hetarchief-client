@@ -1,21 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
 import { render, screen, waitFor } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
-import reactI18nextMock from '../../../../__mocks__/react-i18next';
+import { mockStore } from '../../../../__mocks__/store';
 
 import AppLayout from './AppLayout';
-
-reactI18nextMock.mock('react-i18next');
-
-const mockStore = configureStore({
-	preloadedState: {
-		ui: { isStickyLayout: false },
-		user: { user: { firstName: 'Tom', lastName: 'Testerom' } },
-	},
-	reducer: (state) => state,
-});
 
 const renderAppLayout = (children?: ReactNode) => {
 	return render(

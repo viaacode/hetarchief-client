@@ -1,0 +1,46 @@
+@use "sass:math";
+
+@use "styles/abstracts" as *;
+
+$c: "c-reading-room-navigation";
+$c-reading-room-navigation-transform-amount: math.div($spacer-md, 2); // Equal to u-px-12
+
+.#{$c} {
+	&__contact {
+		&-button {
+			transform: translateX($c-reading-room-navigation-transform-amount);
+
+			@include respond-to(md) {
+				:global(.c-button__icon) {
+					margin: 0;
+				}
+
+				:global(.c-button__label) {
+					visibility: hidden;
+					font-size: 0;
+				}
+			}
+		}
+
+		&-list {
+			@extend %reset-list;
+		}
+
+		&-item {
+			display: flex;
+			padding-left: $spacer-sm;
+			padding-right: $spacer-sm;
+
+			button {
+				&:not(:global(.c-button--icon)) {
+					padding-left: $spacer-xs;
+					padding-right: $spacer-xs;
+				}
+
+				&:global(.c-button--icon) {
+					flex-shrink: 0;
+				}
+			}
+		}
+	}
+}

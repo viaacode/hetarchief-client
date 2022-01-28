@@ -23,4 +23,7 @@ module.exports = withTM({
 		 */
 		esmExternals: 'loose',
 	},
+	typescript: {
+		tsconfigPath: './tsconfig.build.json',
+	},
 });

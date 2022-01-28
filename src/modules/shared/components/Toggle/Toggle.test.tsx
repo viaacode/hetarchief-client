@@ -25,7 +25,7 @@ describe('Component: <Toggle /> (default)', () => {
 
 	it('Should set the correct class name', () => {
 		const className = 'class-name';
-		const { container } = renderToggle({ ...toggleMock, className: className });
+		const { container } = renderToggle({ ...toggleMock, className });
 
 		expect(container.firstChild).toHaveClass(className);
 	});
@@ -55,8 +55,6 @@ describe('Component: <Toggle /> (default)', () => {
 		const { getByRole } = renderToggle({ options: options, onChange: () => null });
 
 		const button = getByRole('button');
-
-		console.info(button);
 
 		expect(button).toHaveClass('c-toggle__option--active');
 	});

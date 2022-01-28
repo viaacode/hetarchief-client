@@ -20,6 +20,7 @@ module.exports = {
 	},
 	/* Don't look for other test files except in src this will avoid running .spec files from cypress */
 	roots: ['<rootDir>/src'],
+	setupFiles: ['<rootDir>/src/setup-tests.ts'],
 	setupFilesAfterEnv: ['<rootDir>/jest/jest.setup.js'],
 	transform: {
 		/* Use babel-jest to transpile tests with the next/babel preset
