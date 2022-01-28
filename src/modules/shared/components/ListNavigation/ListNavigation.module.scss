@@ -12,10 +12,18 @@
 		padding-left: $spacer-lg;
 		text-decoration: none;
 
+		&:hover {
+			background-color: $silver;
+		}
+
 		&--active {
 			background-color: $black;
 			color: white;
 			font-weight: 700;
+
+			&:hover {
+				background-color: $black;
+			}
 		}
 
 		&:not(:active,:hover):focus {

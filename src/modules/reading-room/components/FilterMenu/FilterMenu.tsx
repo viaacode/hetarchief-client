@@ -1,5 +1,6 @@
 import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { Trans } from 'next-i18next';
 import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Icon, IconLightNames, Toggle } from '@shared/components';
@@ -111,18 +112,29 @@ const FilterMenu: FC<FilterMenuProps> = ({
 			{isOpen && !isMobile && (
 				<div className={styles['c-filter-menu__list']}>
 					{sortOptions.length > 0 && (
-						<Dropdown isOpen={sortOptionsOpen}>
+						<Dropdown
+							isOpen={sortOptionsOpen}
+							onOpen={() => setSortOptionsOpen(true)}
+							onClose={() => setSortOptionsOpen(false)}
+						>
 							<DropdownButton>
 								<Button
+									className={clsx(
+										styles['c-filter-menu__filter']
+										// TODO: additional styling
+									)}
+									variants={['black', 'block']}
 									label={
-										(
-											<span>
-												Sorteer op: <strong>{}</strong>
-											</span>
-										) as any // eslint-disable-line @typescript-eslint/no-explicit-any
+										<Trans
+											// TODO: adjust i18n:extract to preserve key
+											i18nKey="modules/reading-room/components/filter-menu/filter-menu___sorteer-op"
+											values={{ sorted: sortOptions[0].label }}
+											defaults="Sorteer op: <strong>{{ sorted }}</strong>"
+										/>
 									}
-									onClick={() => setSortOptionsOpen(true)}
 								/>
+
+								{/* TODO: sorting indicator */}
 							</DropdownButton>
 							<DropdownContent />
 						</Dropdown>

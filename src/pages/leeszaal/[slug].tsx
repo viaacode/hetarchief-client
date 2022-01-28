@@ -1,13 +1,14 @@
-import { Button, TabProps } from '@meemoo/react-components';
+import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import Link from 'next/link';
-import { KeyboardEvent, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { FilterMenu, SearchBar } from '@reading-room/components';
+import { FilterMenu } from '@reading-room/components';
 import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
+import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import {
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
@@ -15,15 +16,16 @@ import {
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
 import { ReadingRoomMediaType } from '@reading-room/types';
+import { mapFilters } from '@reading-room/utils';
 import {
-	Icon,
 	MediaCardList,
 	MediaCardProps,
 	MediaCardViewMode,
-	Navigation,
 	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
+	SearchBar,
+	SearchBarValue,
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
@@ -40,8 +42,10 @@ const ReadingRoomPage: NextPage = () => {
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [hasSearched, setHasSearched] = useState(false);
-	const windowSize = useWindowSize();
+	const { t } = useTranslation();
+
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+	const windowSize = useWindowSize();
 
 	// Data
 	const [media, setMedia] = useState<MediaCardProps[]>([]);
@@ -54,6 +58,7 @@ const ReadingRoomPage: NextPage = () => {
 	// Display
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
+	const activeFilters = useMemo(() => mapFilters(query), [query]);
 	const tabs: TabProps[] = useMemo(
 		() =>
 			READING_ROOM_TABS.map((tab) => ({
@@ -83,23 +88,16 @@ const ReadingRoomPage: NextPage = () => {
 		data && setMedia(data);
 	};
 
-	const onSearch = async (keywords: string[]) => {
+	const onSearch = async (values: SearchBarValue<true>) => {
 		if (!hasSearched) {
 			setHasSearched(true);
 		}
 
-		if (!keywords?.[0]) {
+		if (!values?.[0]) {
 			setMedia([]);
 			setQuery({ search: undefined });
 		} else {
 			await fetchMedia();
-			setQuery({ search: keywords });
-		}
-	};
-
-	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			onSearch([e.currentTarget.value]);
 		}
 	};
 
@@ -114,6 +112,18 @@ const ReadingRoomPage: NextPage = () => {
 		}
 	};
 
+	const onNewKeyWord = (newKeyWord: string) => {
+		setQuery({ search: (query.search ?? []).concat(newKeyWord) });
+	};
+
+	const onResetFilters = () => {
+		setQuery({ search: undefined });
+	};
+
+	const onRemoveFilter = (newValue: SearchBarValue<true>) => {
+		setQuery({ search: newValue.map((tag) => tag.value as string) });
+	};
+
 	const onViewToggle = (nextMode: string) => {
 		setViewMode(nextMode as MediaCardViewMode);
 	};
@@ -121,6 +131,10 @@ const ReadingRoomPage: NextPage = () => {
 	const onTabClick = (tabId: string | number) => {
 		setQuery({ mediaType: String(tabId) });
 	};
+
+	/**
+	 * Computed
+	 */
 
 	const showInitialView = !hasSearched && (!media || media.length === 0);
 	const showNoResults = hasSearched && media.length === 0;
@@ -158,32 +172,26 @@ const ReadingRoomPage: NextPage = () => {
 				<meta name="description" content="Leeszaal omschrijving" />
 			</Head>
 
-			<Navigation contextual>
-				<Navigation.Left placement="left">
-					<Link href="/" passHref={true}>
-						<Button
-							icon={<Icon name="arrow-left" />}
-							variants="text"
-							className="u-color-white u-ml--12"
-						/>
-					</Link>
-				</Navigation.Left>
-
-				<Navigation.Center title="Leeszaal" />
-
-				<Navigation.Right placement="right">
-					<Button
-						label="Contacteer"
-						iconStart={<Icon className="u-font-size-24" name="contact" />}
-						variants="text"
-						className="u-color-white u-mr--12 u-px-12 p-reading-room__contact-button"
-					/>
-				</Navigation.Right>
-			</Navigation>
+			{/* TODO: bind title to state */}
+			<ReadingRoomNavigation title={'Leeszaal'} />
 
 			<section className="u-bg-black u-pt-8">
 				<div className="l-container">
-					<SearchBar onKeyUp={onSearchKeyUp} />
+					<SearchBar
+						allowCreate
+						className="u-mb-24"
+						clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
+						isMulti
+						large
+						placeholder={t('pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder')}
+						syncSearchValue={false}
+						valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
+						value={activeFilters}
+						onCreate={onNewKeyWord}
+						onSearch={onSearch}
+						onRemoveValue={onRemoveFilter}
+						onClear={onResetFilters}
+					/>
 					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>

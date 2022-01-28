@@ -151,6 +151,13 @@ $c: "c-reading-room-card";
 		@include respond-at("md") {
 			font-size: $font-size-sm;
 			line-height: math.div($font-size-md, 9) * 10; // 2rem;
+
+			// Force text to singleline despite truncate to 2 lines
+			&--flat {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
 		}
 	}
 

@@ -110,7 +110,7 @@ $datepicker-border-color: $zinc;
 
 			select {
 				@extend %datepicker-select-background;
-				@include base64-chevron-down-background($zinc);
+				@include chevron-down-background($zinc);
 
 				border: 1px solid $zinc;
 				cursor: pointer;
@@ -123,7 +123,7 @@ $datepicker-border-color: $zinc;
 				&:focus,
 				&:hover {
 					@extend %datepicker-select-background;
-					@include base64-chevron-down-background($seagreen);
+					@include chevron-down-background($seagreen);
 
 					border-color: $seagreen;
 				}

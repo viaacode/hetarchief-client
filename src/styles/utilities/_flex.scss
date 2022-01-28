@@ -21,7 +21,7 @@ $direction: (
 $align: (
 	"center": center,
 );
-@include generate-utils("align", "align-items", $align);
+@include generate-utils("align", "align-items", $align, ("md"));
 
 /**
  * Justify

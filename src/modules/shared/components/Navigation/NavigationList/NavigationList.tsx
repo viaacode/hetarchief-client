@@ -1,5 +1,6 @@
 import clsx from 'clsx';
-import { FC, ReactNode, useState } from 'react';
+import { useRouter } from 'next/router';
+import { FC, Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 
@@ -10,7 +11,18 @@ import { NavigationDropdown } from '../NavigationDropdown';
 import { NavigationListProps } from './NavigationList.types';
 
 const NavigationList: FC<NavigationListProps> = ({ items }) => {
+	const prevPath = useRef<string | null>(null);
 	const [openDropdown, setOpenDropdown] = useState<string | undefined>(undefined);
+
+	const { asPath } = useRouter();
+
+	// Close dropdowns when the url path changed
+	useEffect(() => {
+		if (prevPath.current !== asPath && openDropdown) {
+			setOpenDropdown(undefined);
+			prevPath.current = asPath;
+		}
+	}, [asPath, openDropdown]);
 
 	const renderDropdown = (
 		id: string,
@@ -52,12 +64,11 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 			<ul className={styles['c-navigation__list']}>
 				{items.map((item, index) => {
 					return (
-						<>
+						<Fragment key={`navigation-item-${index}`}>
 							{item.hasDivider && (
 								<div className={styles['c-navigation__divider--vertical']} />
 							)}
 							<li
-								key={`navigation-item-${index}`}
 								className={clsx(
 									styles['c-navigation__item'],
 									styles[`c-navigation__link--variant-${index + 1}`],
@@ -85,7 +96,7 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 									</>
 								)}
 							</li>
-						</>
+						</Fragment>
 					);
 				})}
 			</ul>

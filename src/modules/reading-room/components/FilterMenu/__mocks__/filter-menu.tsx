@@ -1,6 +1,6 @@
 import { TagOption } from '@meemoo/react-components';
 
-import { FilterMenuFilterOption, FilterMenuSortOption } from '..';
+import { FilterMenuFilterOption, FilterMenuSortOption } from '../FilterMenu.types';
 
 export const sortOptionsMock: FilterMenuSortOption[] = [
 	{

@@ -1,26 +1,42 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { ReactNode } from 'react';
+import { Provider } from 'react-redux';
+
+import { mockStore } from '../../../../__mocks__/store';
 
 import AppLayout from './AppLayout';
 
+const renderAppLayout = (children?: ReactNode) => {
+	return render(
+		<Provider store={mockStore}>
+			<AppLayout>{children}</AppLayout>
+		</Provider>
+	);
+};
+
 describe('Layouts', () => {
 	describe('<AppLayout />', () => {
-		it('Should show the navigation', () => {
-			const { container } = render(<AppLayout />);
+		it('Should show the navigation', async () => {
+			const { container } = renderAppLayout();
 			const nav = container.querySelector('.c-navigation');
-			expect(nav).toBeInTheDocument();
+			await waitFor(() => {
+				expect(nav).toBeInTheDocument();
+			});
 		});
 
-		it('Should render children', () => {
+		it('Should render children', async () => {
 			const testId = 'inner-child-id';
 			const children = (
 				<div>
 					<span data-testid={testId} />
 				</div>
 			);
-			render(<AppLayout>{children}</AppLayout>);
+			renderAppLayout(children);
 
 			const child = screen.queryByTestId(testId);
-			expect(child).toBeInTheDocument();
+			await waitFor(() => {
+				expect(child).toBeInTheDocument();
+			});
 		});
 	});
 });

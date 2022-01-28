@@ -2,14 +2,24 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans, useTranslation } from 'next-i18next';
 import { FC } from 'react';
+import { useDispatch } from 'react-redux';
 
+import { setMockUser } from '@auth/store/user';
 import { Icon, Modal } from '@shared/components';
+import { setShowAuthModal } from '@shared/store/ui';
 
 import styles from './AuthModal.module.scss';
 import { AuthModalProps } from './AuthModal.types';
 
 const AuthModal: FC<AuthModalProps> = (props) => {
+	const dispatch = useDispatch();
 	const { t } = useTranslation();
+
+	const onLogin = () => {
+		// TODO: replace with real login action
+		dispatch(setMockUser({ firstName: 'Tom', lastName: 'Testerom' }));
+		dispatch(setShowAuthModal(false));
+	};
 
 	const renderHeading = () => {
 		return (
@@ -22,7 +32,12 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	const renderFooter = () => {
 		return (
 			<div className="u-text-center u-bg-platinum">
-				<Button label={t('Meld je aan als admin')} variants="text" />
+				<Button
+					label={t(
+						'modules/auth/components/auth-modal/auth-modal___meld-je-aan-als-admin'
+					)}
+					variants="text"
+				/>
 			</div>
 		);
 	};
@@ -43,6 +58,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 						'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 					)}
 					variants="black"
+					onClick={onLogin}
 				/>
 
 				<p className="u-mt-32 u-mb-16 u-font-size-14 u-color-neutral">

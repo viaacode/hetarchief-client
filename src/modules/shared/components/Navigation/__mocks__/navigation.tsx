@@ -7,6 +7,7 @@ import { Icon } from '@shared/components';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
+import { NavigationHamburgerProps } from '../NavigationSection';
 
 const linkCls = (classNames: string[] = []) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -31,21 +32,35 @@ const renderLink = (
 		className?: string;
 	} = {}
 ): ReactNode => {
-	return (
+	return href ? (
 		<Link href={href}>
-			<a className={className} role="menuitem" tabIndex={0} key={'leeszalen'}>
+			<a className={className} role="menuitem" tabIndex={0}>
 				{iconStart && iconStart}
 				{label}
 				{badge && badge}
 				{iconEnd && iconEnd}
 			</a>
 		</Link>
+	) : (
+		<a className={className} role="menuitem" tabIndex={0}>
+			{iconStart && iconStart}
+			{label}
+			{badge && badge}
+			{iconEnd && iconEnd}
+		</a>
 	);
+};
+
+export const MOCK_HAMBURGER_PROPS: NavigationHamburgerProps = {
+	openLabel: 'sluit',
+	closedLabel: 'Menu',
+	openIcon: 'times',
+	closedIcon: 'grid-view',
 };
 
 export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	{
-		node: renderLink('Leeszalen', '#', {
+		node: renderLink('Leeszalen', '', {
 			badge: <Badge text="2" />,
 			className: linkCls([
 				'u-color-black',
@@ -57,25 +72,13 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		active: true,
 		children: [
 			{
-				node: renderLink('Alle leeszalen', '#', {
-					iconEnd: (
-						<Icon
-							className={clsx(
-								'u-font-size-24',
-								'u-text-left',
-								'u-visibility-hidden',
-								'u-visibility-visible:md',
-								styles['c-navigation__dropdown-icon--end']
-							)}
-							name="angle-right"
-						/>
-					),
+				node: renderLink('Alle leeszalen', '/', {
 					className: dropdownCls(['u-display-none', 'u-display-block:md']),
 				}),
 				id: 'alle leeszalen',
 			},
 			{
-				node: renderLink('Leeszaal 8', 'leeszaal/leeszaal-8', {
+				node: renderLink('Leeszaal 8', '/leeszaal/leeszaal-8', {
 					iconEnd: (
 						<Icon
 							className={clsx(
@@ -91,9 +94,10 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					className: dropdownCls(),
 				}),
 				id: 'leeszaal 8',
+				hasDivider: true,
 			},
 			{
-				node: renderLink('Leeszaal 12', 'leeszaal/leeszaal-12', {
+				node: renderLink('Leeszaal 12', '/leeszaal/leeszaal-12', {
 					iconEnd: (
 						<Icon
 							className={clsx(
@@ -133,7 +137,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		id: 'vragen',
 	},
 	{
-		node: renderLink('Beheer', '#', {
+		node: renderLink('Beheer', '', {
 			className: linkCls([
 				'u-color-black',
 				'u-color-white:md',
