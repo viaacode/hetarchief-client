@@ -5,6 +5,8 @@ describe('Utils', () => {
 		it('should map search query', () => {
 			const query = {
 				search: ['test1', 'test2'],
+				mediaType: '',
+				start: 0,
 			};
 			const filters = mapFilters(query);
 
@@ -16,6 +18,8 @@ describe('Utils', () => {
 			const value = 'test';
 			const query = {
 				search: [null, value],
+				mediaType: '',
+				start: 0,
 			};
 			const filters = mapFilters(query);
 

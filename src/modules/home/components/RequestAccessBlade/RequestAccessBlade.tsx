@@ -11,8 +11,12 @@ import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
 import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccessBlade.types';
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladeProps }) => {
-	const { control, handleSubmit } = useForm<RequestAccessFormState>({
-		resolver: yupResolver(REQUEST_ACCESS_FORM_SCHEMA),
+	const {
+		control,
+		formState: { errors },
+		handleSubmit,
+	} = useForm<RequestAccessFormState>({
+		resolver: yupResolver(REQUEST_ACCESS_FORM_SCHEMA()),
 	});
 	const { t } = useTranslation();
 
@@ -23,21 +27,22 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 	const renderFooter = () => {
 		return (
 			<div className="u-px-32 u-py-16">
-				<Controller
-					name="acceptTerms"
-					control={control}
-					render={({ field }) => (
-						<Checkbox
-							{...field}
-							className="u-mb-24"
-							label={t(
-								'modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie'
-							)}
-							checked={field.value}
-							checkIcon={<Icon name="check" />}
-						/>
-					)}
-				/>
+				<FormControl className="u-mb-24" errors={[errors.acceptTerms?.message]}>
+					<Controller
+						name="acceptTerms"
+						control={control}
+						render={({ field }) => (
+							<Checkbox
+								{...field}
+								label={t(
+									'modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie'
+								)}
+								checked={field.value}
+								checkIcon={<Icon name="check" />}
+							/>
+						)}
+					/>
+				</FormControl>
 
 				<Button
 					label={t(
@@ -68,6 +73,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 			<div className="u-px-32">
 				<FormControl
 					className="u-mb-24"
+					errors={[errors.requestReason?.message]}
 					label={t(
 						'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag'
 					)}
@@ -83,7 +89,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					label={t(
 						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-leeszaal-bezoeken'
 					)}
-					suffix={OPTIONAL_LABEL}
+					suffix={OPTIONAL_LABEL()}
 				>
 					<Controller
 						name="visitTime"

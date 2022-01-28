@@ -1,12 +1,8 @@
 import { fireEvent, render } from '@testing-library/react';
 
-import reactI18nextMock from '../../../../__mocks__/react-i18next';
-
 import NotificationCenter from './NotificationCenter';
 import { NotificationCenterProps } from './NotificationCenter.types';
 import { notificationCenterMock, notificationsMock } from './__mocks__/notification-center';
-
-reactI18nextMock.mock('react-i18next');
 
 const renderNotificationCenter = (args: Partial<NotificationCenterProps>) => {
 	return render(<NotificationCenter {...notificationCenterMock} {...args} />);
@@ -59,9 +55,9 @@ describe('Components', () => {
 
 			const notificationButton = queryAllByText(
 				notificationsMock[0].title
-			)[0].parentElement.querySelector('.c-button');
+			)[0].parentElement?.querySelector('.c-button');
 
-			fireEvent.click(notificationButton);
+			fireEvent.click(notificationButton as Element);
 
 			expect(onClickNotification).toHaveBeenCalled();
 			expect(onClickNotification).toHaveBeenCalledTimes(1);
@@ -75,7 +71,7 @@ describe('Components', () => {
 
 			const button = container.querySelector('.c-notification-center__button');
 
-			fireEvent.click(button);
+			fireEvent.click(button as Element);
 
 			expect(onClickButton).toHaveBeenCalled();
 			expect(onClickButton).toHaveBeenCalledTimes(1);

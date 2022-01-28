@@ -1,11 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
-import reactI18nextMock from '../../../../__mocks__/react-i18next';
-
 import Hero from './Hero';
 import { heroDescription, heroImage, heroLink, heroMock, heroTitle } from './__mocks__/hero';
-
-reactI18nextMock.mock('react-i18next');
 
 describe('Component: <Hero /> (default)', () => {
 	beforeEach(() => {
