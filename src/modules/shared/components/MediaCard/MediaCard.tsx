@@ -2,6 +2,7 @@ import { Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { FC } from 'react';
+import Highlighter from 'react-highlight-words';
 import TruncateMarkup from 'react-truncate-markup';
 
 import Icon from '../Icon/Icon';
@@ -18,6 +19,8 @@ const MediaCard: FC<MediaCardProps> = ({
 	title,
 	type,
 	view,
+	highlight,
+	keywords,
 }) => {
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
@@ -96,12 +99,23 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 	};
 
+	const highlighted = (toHighlight: string) => {
+		return (
+			<Highlighter
+				highlightClassName="highlight"
+				searchWords={keywords ?? []}
+				autoEscape={true}
+				textToHighlight={toHighlight}
+			/>
+		);
+	};
+
 	return (
 		<Card
 			orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
-			title={<b>{title}</b>}
+			title={<b>{highlight ? highlighted(title ?? '') : title}</b>}
 			image={renderHeader()}
-			subtitle={renderSubtitle()}
+			subtitle={highlight ? highlighted(renderSubtitle() ?? '') : renderSubtitle()}
 			toolbar={renderToolbar()}
 			padding="both"
 		>
