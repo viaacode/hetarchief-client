@@ -102,7 +102,6 @@ const MediaCard: FC<MediaCardProps> = ({
 	const highlighted = (toHighlight: string) => {
 		return (
 			<Highlighter
-				highlightClassName="highlight"
 				searchWords={keywords ?? []}
 				autoEscape={true}
 				textToHighlight={toHighlight}
