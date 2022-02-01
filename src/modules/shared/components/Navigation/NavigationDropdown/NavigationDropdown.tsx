@@ -1,6 +1,6 @@
 import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, Fragment, ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { useScrollLock } from '@shared/hooks';
 
@@ -24,17 +24,19 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 
 	const renderChildrenRecursively = (items: NavigationItem[], layer = 0): ReactNode => {
 		return (
-			<div className={clsx(layer > 0 && styles['c-dropdown-menu__sub-list'])}>
+			<div className={clsx(layer > 0 && styles['c-navigation__dropdown-submenu'])}>
 				{items.map((item) => {
 					return (
-						<Fragment key={`nav-dropdown-item-${item.id}`}>
-							{item.hasDivider && (
-								<div className={styles['c-navigation__divider--horizontal']} />
-							)}
+						<div
+							key={`nav-dropdown-item-${item.id}`}
+							className={clsx({
+								[styles['c-navigation__dropdown-item--divider']]: item.hasDivider,
+							})}
+						>
 							{item.node}
 							{item.children &&
 								renderChildrenRecursively(item.children, (layer += 1))}
-						</Fragment>
+						</div>
 					);
 				})}
 			</div>

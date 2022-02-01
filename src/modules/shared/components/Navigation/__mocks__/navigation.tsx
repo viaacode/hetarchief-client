@@ -76,6 +76,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					className: dropdownCls(['u-display-none', 'u-display-block:md']),
 				}),
 				id: 'alle leeszalen',
+				hasDivider: true,
 			},
 			{
 				node: renderLink('Leeszaal 8', '/leeszaal/leeszaal-8', {
@@ -94,7 +95,6 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					className: dropdownCls(),
 				}),
 				id: 'leeszaal 8',
-				hasDivider: true,
 			},
 			{
 				node: renderLink('Leeszaal 12', '/leeszaal/leeszaal-12', {
