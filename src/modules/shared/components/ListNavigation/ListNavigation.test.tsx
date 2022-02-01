@@ -3,9 +3,9 @@ import { fireEvent, render } from '@testing-library/react';
 import { Icon } from '../Icon';
 
 import ListNavigation from './ListNavigation';
-import { listNavigationMock } from './__mocks__';
+import { mockItem, secondaryListNavigationMock } from './__mocks__/listNavigation';
 
-const renderListNavigation = ({ items = listNavigationMock.listItems, ...rest }) => {
+const renderListNavigation = ({ items = secondaryListNavigationMock.listItems, ...rest }) => {
 	return render(<ListNavigation listItems={items} {...rest} />);
 };
 
@@ -18,32 +18,31 @@ describe('Component: <ListNavigation /> (default)', () => {
 	});
 
 	it('Should render a link item', () => {
-		const items = [
-			{
-				label: 'label',
-				to: '/',
-			},
-		];
-		const { getByText } = renderListNavigation({ items });
+		const { getByText } = renderListNavigation({ items: mockItem });
 
-		const link = getByText(items[0].label);
+		const link = getByText(mockItem[0].label);
 
 		expect(link).toBeInTheDocument();
 	});
 
 	it('Should render active class when link is active', () => {
-		const items = [
-			{
-				label: 'label',
-				to: '/',
-				active: true,
-			},
-		];
-		const { getByText } = renderListNavigation({ items });
+		const { getByText } = renderListNavigation({ items: mockItem });
 
-		const link = getByText(items[0].label);
+		const link = getByText(mockItem[0].label);
 
 		expect(link).toHaveClass('c-list-navigation__link--active');
+	});
+
+	it('Should render primary type by default', () => {
+		const { container } = renderListNavigation({ items: mockItem, type: 'secondary' });
+
+		expect(container.firstChild).toHaveClass('c-list-navigation--secondary');
+	});
+
+	it('Should render secondary type', () => {
+		const { container } = renderListNavigation({ items: mockItem });
+
+		expect(container.firstChild).toHaveClass('c-list-navigation--primary');
 	});
 
 	it('Should render internal link by default', () => {
@@ -155,6 +154,6 @@ describe('Component: <ListNavigation /> (default)', () => {
 
 		const dividers = container.querySelectorAll('.c-list-navigation__divider');
 
-		expect(dividers).toHaveLength(listNavigationMock.listItems.length - 1);
+		expect(dividers).toHaveLength(secondaryListNavigationMock.listItems.length - 1);
 	});
 });

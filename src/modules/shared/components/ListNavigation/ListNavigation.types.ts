@@ -16,4 +16,5 @@ export type ListNavigationListItem = ListNavigationLink | ListNavigationButton;
 
 export interface ListNavigationProps extends DefaultComponentProps {
 	listItems: ListNavigationListItem[] | ListNavigationListItem[][]; // divider between arrays
+	type?: 'primary' | 'secondary';
 }

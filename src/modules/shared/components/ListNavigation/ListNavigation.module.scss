@@ -1,5 +1,8 @@
 @use "sass:map";
+@use "sass:color";
 @use "styles/abstracts" as *;
+
+$teal-24: color.adjust($teal, $alpha: -0.76);
 
 .c-list-navigation {
 	&__list {
@@ -17,13 +20,7 @@
 		}
 
 		&--active {
-			background-color: $black;
-			color: white;
 			font-weight: 700;
-
-			&:hover {
-				background-color: $black;
-			}
 		}
 
 		&:not(:active,:hover):focus {
@@ -43,4 +40,26 @@
 		background-color: $silver;
 	}
 
+	&--primary {
+		.c-list-navigation__link--active {
+			background-color: $teal-24;
+			border-right: 0.4rem solid $teal;
+
+			&:hover {
+				background-color: $teal-24;
+			}
+		}
+	}
+
+	&--secondary {
+		/* stylelint-disable-next-line no-descending-specificity */
+		.c-list-navigation__link--active {
+			background-color: $black;
+			color: white;
+
+			&:hover {
+				background-color: $black;
+			}
+		}
+	}
 }

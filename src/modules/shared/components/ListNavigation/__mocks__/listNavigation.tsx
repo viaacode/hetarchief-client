@@ -1,7 +1,47 @@
 import { Icon } from '../../Icon';
 import { ListNavigationProps } from '../ListNavigation.types';
 
-export const listNavigationMock: ListNavigationProps = {
+export const mockItem = [
+	{
+		label: 'label',
+		to: '/',
+		active: true,
+	},
+];
+
+export const primaryListNavigationMock: ListNavigationProps = {
+	listItems: [
+		[
+			{
+				label: 'Leeszalenbeheer',
+				to: '/',
+				active: true,
+			},
+			{
+				label: 'Gebruiksbeheer',
+				to: '/',
+				active: false,
+			},
+			{
+				label: 'Navigatie',
+				to: '/',
+				active: false,
+			},
+			{
+				label: 'Vertalingen',
+				to: '/',
+				active: false,
+			},
+			{
+				label: "Contentpagina's",
+				to: '/',
+				active: false,
+			},
+		],
+	],
+};
+
+export const secondaryListNavigationMock: ListNavigationProps = {
 	listItems: [
 		[
 			{
@@ -38,4 +78,5 @@ export const listNavigationMock: ListNavigationProps = {
 			},
 		],
 	],
+	type: 'secondary',
 };
