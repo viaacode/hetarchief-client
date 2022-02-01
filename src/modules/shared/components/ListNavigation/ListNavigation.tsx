@@ -7,8 +7,6 @@ import { ListNavigationItem, ListNavigationProps } from './ListNavigation.types'
 const ListNavigation: FC<ListNavigationProps> = ({ listItems, className, type = 'primary' }) => {
 	const renderChildrenRecursively = (items: ListNavigationItem[], layer = 0): ReactNode => {
 		return items.map((item) => {
-			console.log(item.active);
-
 			return (
 				<Fragment key={`list-nav-item-${item.id}`}>
 					{item.hasDivider && <div className={styles['c-list-navigation__divider']} />}
