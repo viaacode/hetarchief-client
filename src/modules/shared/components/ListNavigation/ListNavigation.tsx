@@ -1,99 +1,42 @@
-import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Link from 'next/link';
-import { FC, Fragment } from 'react';
+import { FC, Fragment, ReactNode } from 'react';
 
 import styles from './ListNavigation.module.scss';
-import {
-	ListNavigationButton,
-	ListNavigationLink,
-	ListNavigationListItem,
-	ListNavigationProps,
-} from './ListNavigation.types';
+import { ListNavigationItem, ListNavigationProps } from './ListNavigation.types';
 
 const ListNavigation: FC<ListNavigationProps> = ({ listItems, className, type = 'primary' }) => {
-	const isLink = (item: ListNavigationListItem): item is ListNavigationLink => {
-		return (item as ListNavigationLink).to !== undefined;
+	const renderChildrenRecursively = (items: ListNavigationItem[], layer = 0): ReactNode => {
+		return items.map((item) => {
+			console.log(item.active);
+
+			return (
+				<Fragment key={`list-nav-item-${item.id}`}>
+					{item.hasDivider && <div className={styles['c-list-navigation__divider']} />}
+					<li
+						className={clsx(
+							styles['c-list-navigation__item'],
+							layer > 0 && styles[`c-list-navigation__item--${layer}`],
+							item.active && styles['c-list-navigation__item--active']
+						)}
+					>
+						{item.node}
+					</li>
+					{item.children && renderChildrenRecursively(item.children, layer + 1)}
+				</Fragment>
+			);
+		});
 	};
 
-	const renderLink = (link: ListNavigationLink) => {
-		return (
-			<Link href={link.to}>
-				<a
-					className={clsx(
-						styles['c-list-navigation__link'],
-						link.active && styles['c-list-navigation__link--active']
-					)}
-					target={link.external ? '_blank' : '_self'}
-					role="link"
-				>
-					{link.label}
-				</a>
-			</Link>
-		);
-	};
-
-	const renderButton = (button: ListNavigationButton) => {
-		return (
-			<Button
-				className={styles['c-list-navigation__button']}
-				onClick={button.onClick}
-				iconStart={button.icon}
-				variants={['text']}
-				label={button.label}
-			/>
-		);
-	};
-
-	const renderDivider = () => {
-		return <div className={styles['c-list-navigation__divider']} />;
-	};
-
-	const renderItems = (items: ListNavigationListItem[]) => {
-		return (
-			<ul className={styles['c-list-navigation__list']} role="list">
-				{items.map((item: ListNavigationListItem, index) => {
-					return (
-						<li
-							className={styles['c-list-navigation__list-item']}
-							key={`list-item-${index}`}
-							role="listitem"
-						>
-							{isLink(item)
-								? renderLink(item)
-								: renderButton(item as ListNavigationButton)}
-						</li>
-					);
-				})}
-			</ul>
-		);
-	};
-
-	const renderArrays = (
-		listItemsArray: ListNavigationListItem[] | ListNavigationListItem[][]
-	) => {
-		if (Array.isArray(listItemsArray[0])) {
-			return (listItemsArray as ListNavigationListItem[][]).map((array, index) => {
-				return (
-					<Fragment key={`list-${index}`}>
-						{renderItems(array)}
-						{index < listItemsArray.length - 1 && renderDivider()}
-					</Fragment>
-				);
-			});
-		}
-		return renderItems(listItemsArray as ListNavigationListItem[]);
-	};
 	return (
-		<div
+		<ul
 			className={clsx(
 				className,
 				styles['c-list-navigation'],
 				styles[`c-list-navigation--${type}`]
 			)}
 		>
-			{renderArrays(listItems)}
-		</div>
+			{renderChildrenRecursively(listItems)}
+		</ul>
 	);
 };
 

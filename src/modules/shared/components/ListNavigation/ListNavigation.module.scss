@@ -5,16 +5,15 @@
 $teal-24: color.adjust($teal, $alpha: -0.76);
 
 .c-list-navigation {
-	&__list {
-		@extend %reset-list;
+	@extend %reset-list;
+
+	@for $i from 1 through 4 {
+		&__item--#{$i} {
+			padding-left: $i * $spacer-md;
+		}
 	}
 
-	&__link {
-		display: block;
-		padding: $spacer-sm;
-		padding-left: $spacer-lg;
-		text-decoration: none;
-
+	&__item {
 		&:hover {
 			background-color: $silver;
 		}
@@ -26,6 +25,13 @@ $teal-24: color.adjust($teal, $alpha: -0.76);
 		&:not(:active,:hover):focus {
 			outline: 1px solid $teal;
 		}
+	}
+
+	&__link {
+		display: block;
+		padding: $spacer-sm;
+		padding-left: $spacer-lg;
+		text-decoration: none;
 	}
 
 	&__button {
@@ -41,7 +47,7 @@ $teal-24: color.adjust($teal, $alpha: -0.76);
 	}
 
 	&--primary {
-		.c-list-navigation__link--active {
+		.c-list-navigation__item--active {
 			background-color: $teal-24;
 			border-right: 0.4rem solid $teal;
 
@@ -53,7 +59,7 @@ $teal-24: color.adjust($teal, $alpha: -0.76);
 
 	&--secondary {
 		/* stylelint-disable-next-line no-descending-specificity */
-		.c-list-navigation__link--active {
+		.c-list-navigation__item--active {
 			background-color: $black;
 			color: white;
 

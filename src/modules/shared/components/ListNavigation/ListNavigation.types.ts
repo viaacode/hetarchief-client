@@ -1,20 +1,16 @@
 import { ReactNode } from 'react';
 
-import { ComponentLink, DefaultComponentProps } from '@shared/types';
+import { DefaultComponentProps } from '@shared/types';
 
-export interface ListNavigationLink extends Omit<ComponentLink, 'icon'> {
+export interface ListNavigationItem {
+	node: ReactNode;
+	id: string;
 	active?: boolean;
+	hasDivider?: boolean;
+	children?: ListNavigationItem[];
 }
-
-export interface ListNavigationButton {
-	label: string;
-	icon?: ReactNode;
-	onClick: () => void;
-}
-
-export type ListNavigationListItem = ListNavigationLink | ListNavigationButton;
 
 export interface ListNavigationProps extends DefaultComponentProps {
-	listItems: ListNavigationListItem[] | ListNavigationListItem[][]; // divider between arrays
+	listItems: ListNavigationItem[];
 	type?: 'primary' | 'secondary';
 }
