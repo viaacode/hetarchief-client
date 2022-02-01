@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import Sidebar from './Sidebar';
+import styles from './Sidebar.module.scss';
 
 export default {
 	title: 'Components/Sidebar',
@@ -16,7 +17,7 @@ const Template: ComponentStory<typeof Sidebar> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-	title: 'title',
+	title: 'This is a title',
 	children: (
 		<div style={{ backgroundColor: 'beige', height: '100%' }}>
 			This is the content area. The sidebar adjusts to the width of its children
@@ -26,7 +27,7 @@ Default.args = {
 
 export const WithCustomHeading = Template.bind({});
 WithCustomHeading.args = {
-	heading: <h3>This heading is a react component</h3>,
+	heading: <h3 className={styles['c-sidebar__title']}>This heading is a custom heading</h3>,
 	children: (
 		<div style={{ backgroundColor: 'beige', height: '100%' }}>
 			This is the content area. The sidebar adjusts to the width of its children
