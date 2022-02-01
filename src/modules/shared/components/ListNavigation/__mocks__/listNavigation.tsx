@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { Icon } from '../../Icon';
 import styles from '../ListNavigation.module.scss';
-import { ListNavigationProps } from '../ListNavigation.types';
+import { ListNavigationItem, ListNavigationProps } from '../ListNavigation.types';
 
 const renderLink = ({ to = '#', label = 'link', external = false }) => {
 	return (
@@ -36,11 +36,19 @@ const renderButton = ({
 	);
 };
 
-export const mockItem = [
+export const mockItem = ({
+	node = 'mock item',
+	id = 'mock item',
+	active = true,
+	hasDivider = false,
+	children = [],
+}: Partial<ListNavigationItem>): ListNavigationItem[] => [
 	{
-		label: 'label',
-		to: '/',
-		active: true,
+		node: node,
+		id: id,
+		active: active,
+		hasDivider: hasDivider,
+		children: children,
 	},
 ];
 
