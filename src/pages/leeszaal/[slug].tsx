@@ -86,7 +86,6 @@ const ReadingRoomPage: NextPage = () => {
 			return {
 				...item,
 				keywords: keywords,
-				highlight: !!keywords.length, // Only use highlight component text if keywords array is not empty
 			};
 		});
 	};

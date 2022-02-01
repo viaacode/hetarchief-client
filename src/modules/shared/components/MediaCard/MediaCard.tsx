@@ -19,7 +19,6 @@ const MediaCard: FC<MediaCardProps> = ({
 	title,
 	type,
 	view,
-	highlight,
 	keywords,
 }) => {
 	const renderToolbar = () => (
@@ -112,9 +111,9 @@ const MediaCard: FC<MediaCardProps> = ({
 	return (
 		<Card
 			orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
-			title={<b>{highlight ? highlighted(title ?? '') : title}</b>}
+			title={<b>{keywords?.length ? highlighted(title ?? '') : title}</b>}
 			image={renderHeader()}
-			subtitle={highlight ? highlighted(renderSubtitle() ?? '') : renderSubtitle()}
+			subtitle={keywords?.length ? highlighted(renderSubtitle() ?? '') : renderSubtitle()}
 			toolbar={renderToolbar()}
 			padding="both"
 		>
