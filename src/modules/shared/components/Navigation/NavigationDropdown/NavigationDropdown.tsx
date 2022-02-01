@@ -33,8 +33,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 								<div className={styles['c-navigation__divider--horizontal']} />
 							)}
 							{item.node}
-							{item.children &&
-								renderChildrenRecursively(item.children, (layer += 1))}
+							{item.children && renderChildrenRecursively(item.children, layer + 1)}
 						</Fragment>
 					);
 				})}
