@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
@@ -14,9 +15,11 @@ const Template: ComponentStory<typeof ListNavigation> = (args) => <ListNavigatio
 export const Primary = Template.bind({});
 Primary.args = {
 	...primaryListNavigationMock,
+	onClick: action('clicked item'),
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
 	...secondaryListNavigationMock,
+	onClick: action('clicked item'),
 };

@@ -13,4 +13,5 @@ export interface ListNavigationItem {
 export interface ListNavigationProps extends DefaultComponentProps {
 	listItems: ListNavigationItem[];
 	type?: 'primary' | 'secondary';
+	onClick?: (id: string) => void;
 }
