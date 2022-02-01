@@ -5,17 +5,14 @@
 $teal-24: color.adjust($teal, $alpha: -0.76);
 
 .c-list-navigation {
-	@extend %reset-list;
-
-	@for $i from 1 through 4 {
-		&__item--#{$i} {
-			padding-left: $i * $spacer-md;
-		}
+	&__list {
+		@extend %reset-list;
 	}
 
 	&__item {
 		&:hover {
 			background-color: $silver;
+			cursor: pointer;
 		}
 
 		&--active {
