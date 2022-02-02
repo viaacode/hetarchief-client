@@ -65,6 +65,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			className: linkCls([
 				'u-color-black',
 				'u-color-white:md',
+				'u-whitespace-nowrap',
 				styles['c-navigation__link--dropdown'],
 			]),
 		}),

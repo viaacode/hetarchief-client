@@ -32,3 +32,10 @@ $align: (left, right, center);
 	 "13": $line-height-2xl,
  );
  @include generate-utils("line-height", "line-height", $height);
+
+/**
+ * Whitespace
+ */
+
+$whitespace: (nowrap);
+@include generate-utils("whitespace", "white-space", $whitespace);
