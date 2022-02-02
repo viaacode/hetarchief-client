@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from 'react';
 import { default as ReactModal } from 'react-modal';
 
 import { useScrollLock } from '@shared/hooks';
-import { isBrowser } from '@shared/utils';
 
 import { Icon } from '../Icon';
 
@@ -21,18 +20,19 @@ const Modal: FC<ModalProps> = ({
 	onOpen,
 	children,
 }) => {
-	const root = isBrowser() ? document.body : null;
 	const [ready, setReady] = useState(false);
 
-	useScrollLock(root, isOpen ?? false);
+	useScrollLock(isOpen ?? false);
 
 	// See https://github.com/reactjs/react-modal#examples
 	useEffect(() => {
+		const root = document.body;
+
 		if (root) {
 			ReactModal.setAppElement(root);
 			setReady(true);
 		}
-	}, [root, setReady]);
+	}, []);
 
 	const top = heading || <h3 className={styles['c-hetarchief-modal__title']}>{title}</h3>;
 

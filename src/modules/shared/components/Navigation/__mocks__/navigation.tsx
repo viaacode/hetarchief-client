@@ -65,6 +65,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			className: linkCls([
 				'u-color-black',
 				'u-color-white:md',
+				'u-whitespace-nowrap',
 				styles['c-navigation__link--dropdown'],
 			]),
 		}),
@@ -76,6 +77,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					className: dropdownCls(['u-display-none', 'u-display-block:md']),
 				}),
 				id: 'alle leeszalen',
+				hasDivider: 'md',
 			},
 			{
 				node: renderLink('Leeszaal 8', '/leeszaal/leeszaal-8', {
@@ -94,7 +96,6 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					className: dropdownCls(),
 				}),
 				id: 'leeszaal 8',
-				hasDivider: true,
 			},
 			{
 				node: renderLink('Leeszaal 12', '/leeszaal/leeszaal-12', {
@@ -145,7 +146,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			]),
 		}),
 		id: 'beheer',
-		hasDivider: true,
+		hasDivider: 'md',
 		children: [
 			{
 				node: renderLink('Aanvragen', '#', {

@@ -9,7 +9,7 @@ describe('Hooks', () => {
 			const el = document.createElement('div');
 			el.style.overflow = initialOverflow;
 
-			const { rerender } = renderHook(({ lock }) => useScrollLock(el, lock), {
+			const { rerender } = renderHook(({ lock }) => useScrollLock(lock, el), {
 				initialProps: { lock: true },
 			});
 

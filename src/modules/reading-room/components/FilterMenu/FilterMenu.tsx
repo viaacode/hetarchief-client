@@ -6,7 +6,6 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { Icon, IconLightNames, Toggle } from '@shared/components';
 import { useScrollLock, useWindowSizeContext } from '@shared/hooks';
 import { Breakpoints } from '@shared/types';
-import { isBrowser } from '@shared/utils';
 
 import styles from './FilterMenu.module.scss';
 import { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
@@ -32,7 +31,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	const isMobile = windowSize.width ? windowSize.width < Breakpoints.sm : false;
 	const openIcon: IconLightNames = isMobile ? 'filter' : isOpen ? 'angle-up' : 'angle-down';
 
-	useScrollLock(isBrowser() ? document.body : null, lockScroll);
+	useScrollLock(lockScroll);
 
 	useEffect(() => {
 		if (!isMobile) {

@@ -11,5 +11,5 @@ export interface NavigationDropdownProps {
 	className?: string;
 	flyoutClassName?: string;
 	onOpen?: (id: string) => void;
-	onClose?: (id: string) => void;
+	onClose?: (id?: string) => void;
 }
