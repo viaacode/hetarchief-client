@@ -8,4 +8,5 @@ export interface MediaCardProps {
 	preview?: string;
 	type?: 'video' | 'audio';
 	view: MediaCardViewMode;
+	keywords?: string[];
 }
