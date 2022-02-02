@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { FC, Fragment, useState } from 'react';
 
 import { Icon, IconProps, Overlay } from '@shared/components';
 
@@ -12,6 +12,7 @@ import { NavigationSectionProps } from './NavigationSection.types';
 
 const NavigationSection: FC<NavigationSectionProps> = ({
 	children,
+	currentPath,
 	items,
 	placement,
 	renderHamburger,
@@ -79,12 +80,19 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 	};
 
 	const renderDesktop = () => {
-		return renderHamburger ? (
-			<div className={styles['c-navigation__section--responsive-desktop']}>
-				{items && items.length ? <NavigationList items={items} /> : children}
-			</div>
-		) : (
-			<>{items && items.length ? <NavigationList items={items} /> : children}</>
+		const Wrapper = renderHamburger ? 'div' : Fragment;
+		const wrapperCls = clsx(
+			renderHamburger && styles['c-navigation__section--responsive-desktop']
+		);
+
+		return (
+			<Wrapper {...(wrapperCls && { className: wrapperCls })}>
+				{items && items.length ? (
+					<NavigationList currentPath={currentPath} items={items} />
+				) : (
+					children
+				)}
+			</Wrapper>
 		);
 	};
 	return (

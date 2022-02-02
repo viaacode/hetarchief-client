@@ -33,7 +33,9 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 								[styles['c-navigation__dropdown-item--divider']]: item.hasDivider,
 							})}
 						>
-							{item.node}
+							{typeof item.node === 'function'
+								? item.node({ closeDropdowns: () => onClose?.() })
+								: item.node}
 							{item.children &&
 								renderChildrenRecursively(item.children, (layer += 1))}
 						</div>

@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import { FC, Fragment, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, Fragment, useEffect, useRef, useState } from 'react';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 
@@ -10,38 +9,23 @@ import { NavigationDropdown } from '../NavigationDropdown';
 
 import { NavigationListProps } from './NavigationList.types';
 
-const NavigationList: FC<NavigationListProps> = ({ items }) => {
+const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items }) => {
 	const prevPath = useRef<string | null>(null);
-	const [openDropdown, setOpenDropdown] = useState<string | undefined>(undefined);
-
-	const { asPath } = useRouter();
+	const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
 	// Close dropdowns when the url path changed
 	useEffect(() => {
-		if (prevPath.current !== asPath && openDropdown) {
-			setOpenDropdown(undefined);
-			prevPath.current = asPath;
+		// Make sure prevPath is not null when checking for the first time
+		if (!prevPath.current) {
+			prevPath.current = currentPath;
 		}
-	}, [asPath, openDropdown]);
+		if (prevPath.current !== currentPath && openDropdown) {
+			setOpenDropdown(null);
+			prevPath.current = currentPath;
+		}
+	}, [currentPath, openDropdown]);
 
-	const renderDropdown = (
-		id: string,
-		trigger: ReactNode,
-		dropdownItems: NavigationItem[]
-	): ReactNode => {
-		return (
-			<NavigationDropdown
-				id={id}
-				isOpen={openDropdown === id}
-				items={dropdownItems}
-				trigger={trigger}
-				lockScroll
-				onOpen={(id) => setOpenDropdown(id)}
-				onClose={() => setOpenDropdown(undefined)}
-				flyoutClassName={styles['c-navigation__list-flyout']}
-			/>
-		);
-	};
+	const closeDropdowns = () => setOpenDropdown(null);
 
 	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
 		return (
@@ -63,40 +47,43 @@ const NavigationList: FC<NavigationListProps> = ({ items }) => {
 			/>
 			<ul className={styles['c-navigation__list']}>
 				{items.map((item, index) => {
+					const itemCls = clsx(
+						styles['c-navigation__item'],
+						styles[`c-navigation__link--variant-${index + 1}`],
+						{
+							[styles['c-navigation__item--active']]: item.active,
+							[styles['c-navigation__item--divider']]: item.hasDivider,
+						}
+					);
+
 					return (
-						<Fragment key={`navigation-item-${index}`}>
-							{item.hasDivider && (
-								<div className={styles['c-navigation__divider--vertical']} />
+						<li key={`navigation-item-${item.id}`} className={itemCls}>
+							{item.children?.length ? (
+								<NavigationDropdown
+									flyoutClassName={styles['c-navigation__list-flyout']}
+									id={item.id}
+									isOpen={openDropdown === item.id}
+									items={item.children}
+									lockScroll
+									trigger={renderTrigger(
+										item,
+										openDropdown === item.id ? 'angle-up' : 'angle-down'
+									)}
+									onClose={closeDropdowns}
+									onOpen={setOpenDropdown}
+								/>
+							) : typeof item.node === 'function' ? (
+								item.node({ closeDropdowns })
+							) : (
+								item.node
 							)}
-							<li
-								className={clsx(
-									styles['c-navigation__item'],
-									styles[`c-navigation__link--variant-${index + 1}`],
-									item.active && [styles['c-navigation__item--active']]
-								)}
-							>
-								{item.children?.length
-									? renderDropdown(
-											item.id,
-											renderTrigger(
-												item,
-												openDropdown === item.id ? 'angle-up' : 'angle-down'
-											),
-											item.children
-									  )
-									: item.node}
-								{item.active && (
-									<>
-										<span
-											className={styles['c-navigation__border-decoration']}
-										/>
-										<span
-											className={styles['c-navigation__border-decoration']}
-										/>
-									</>
-								)}
-							</li>
-						</Fragment>
+							{item.active && (
+								<>
+									<span className={styles['c-navigation__border-decoration']} />
+									<span className={styles['c-navigation__border-decoration']} />
+								</>
+							)}
+						</li>
 					);
 				})}
 			</ul>

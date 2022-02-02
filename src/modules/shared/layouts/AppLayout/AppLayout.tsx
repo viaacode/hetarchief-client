@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
@@ -24,6 +25,7 @@ const AppLayout: FC = ({ children }) => {
 	const [notificationsOpen, setNotificationsOpen] = useState(false);
 
 	const dispatch = useDispatch();
+	const { asPath } = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
@@ -63,6 +65,7 @@ const AppLayout: FC = ({ children }) => {
 		>
 			<Navigation>
 				<Navigation.Left
+					currentPath={asPath}
 					hamburgerProps={NAV_HAMBURGER_PROPS()}
 					items={MOCK_ITEMS_LEFT}
 					placement="left"

@@ -84,11 +84,14 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 				},
 				{
 					id: 'log-out',
-					node: (
+					node: ({ closeDropdowns }) => (
 						<NavigationLink
-							iconStart={<Icon name="log-out" />}
+							iconStart="log-out"
 							label={i18n?.t('Log uit')}
-							onClick={onLogOutClick}
+							onClick={() => {
+								onLogOutClick();
+								closeDropdowns();
+							}}
 							isDropdownItem
 						/>
 					),

@@ -9,6 +9,7 @@ $c-navigation-list-divider-color: #4E4E4E;
 $c-navigation-divider-size: 0.1rem;
 $c-navigation-item-spacing: $spacer-md;
 $c-navigation-item-spacing-lg: 4.8rem;
+$c-navigation-dropdown-item-spacer: 1.2rem;
 
 @mixin navigation-link-border-decoration($_offset1: 0, $_offset2: 0) {
 	$offset1-border: if($_offset1 == 0, 0, calc($_offset1 + 0.1rem));
@@ -114,6 +115,8 @@ $c-navigation-item-spacing-lg: 4.8rem;
 	}
 
 	.c-navigation__dropdown-icon {
+		font-size: $font-size-lg;
+
 		&--start {
 			margin-right: $spacer-xxs;
 		}
@@ -144,11 +147,12 @@ $c-navigation-item-spacing-lg: 4.8rem;
 
 	.c-navigation__dropdown-item--divider {
 		position: relative;
+		margin-bottom: $c-navigation-divider-size + ($c-navigation-dropdown-item-spacer * 2);
 
 		&::before {
 			content: "";
 			position: absolute;
-			bottom: 0;
+			bottom: -$c-navigation-dropdown-item-spacer;
 			width: 100%;
 			height: $c-navigation-divider-size;
 			background-color: $silver;
@@ -177,20 +181,30 @@ $c-navigation-item-spacing-lg: 4.8rem;
 .c-navigation__list {
 	@extend %reset-list;
 
-	position: relative;
 	display: flex;
 
 	.c-navigation__list-flyout {
-		// Overwrite element styles
-		top: -1rem !important;
-		min-width: 26.6rem !important;
 		color: $black;
+
+		// Overwrite popper element styles
+		@include respond-to(md) {
+			inset: $c-navigation-height-md 0 0 0 !important;
+			transform: translate(0) !important;
+		}
+		@include respond-at(md) {
+			min-width: 26.6rem !important;
+		}
 	}
 
 	&-overlay {
 		width: 100vw;
-		height: calc(100vh - $c-navigation-height);
-		top: $c-navigation-height;
+		height: calc(100vh - $c-navigation-height-md);
+		top: $c-navigation-height-md;
+
+		@include respond-at(md) {
+			height: calc(100vh - $c-navigation-height);
+			top: $c-navigation-height;
+		}
 	}
 }
 
@@ -222,13 +236,16 @@ $c-navigation-item-spacing-lg: 4.8rem;
 
 .c-navigation__item {
 	cursor: pointer;
-	position: relative;
 	display: inline-flex;
 	align-items: center;
 	height: $c-navigation-height - $c-navigation-divider-size;
 	border-bottom: $c-navigation-border-height solid transparent;
 	margin-bottom: $c-navigation-divider-size;
 	transition: border-color $animate-md-out, color $animate-md-out;
+
+	@include respond-at(md) {
+		position: relative;
+	}
 
 	&:not(:last-child) {
 		margin-right: $c-navigation-item-spacing;
