@@ -191,6 +191,16 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 	}
 
+	.c-navigation__list-overlay {
+		width: 100vw;
+		height: calc(100vh - $c-navigation-height-md);
+
+		@include respond-at(md) {
+			height: calc(100vh - $c-navigation-height);
+			top: $c-navigation-height;
+		}
+	}
+
 	&:first-child {
 		grid-column: 1/2;
 		justify-self: start;
@@ -225,16 +235,6 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 		@include respond-at(md) {
 			min-width: 26.6rem !important;
-		}
-	}
-
-	&-overlay {
-		width: 100vw;
-		height: calc(100vh - $c-navigation-height-md);
-
-		@include respond-at(md) {
-			height: calc(100vh - $c-navigation-height);
-			top: $c-navigation-height;
 		}
 	}
 }

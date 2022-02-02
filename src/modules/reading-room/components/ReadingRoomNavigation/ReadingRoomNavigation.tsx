@@ -4,7 +4,8 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 
-import { Icon, Navigation } from '@shared/components';
+import { Navigation } from '@navigation/components';
+import { Icon } from '@shared/components';
 import { CopyButton } from '@shared/components/CopyButton';
 
 import styles from './ReadingRoomNavigation.module.scss';

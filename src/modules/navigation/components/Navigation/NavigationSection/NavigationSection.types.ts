@@ -1,4 +1,5 @@
-import { IconLightNames } from '../../Icon';
+import { IconLightNames } from '@shared/components';
+
 import { NavigationItem } from '../Navigation.types';
 
 export interface NavigationSectionProps {

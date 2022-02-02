@@ -2,8 +2,10 @@ import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { i18n } from 'next-i18next';
 
-import { Icon, NavigationHamburgerProps, NavigationItem, NavigationLink } from '@shared/components';
-import { NavItemsRightLoggedIn } from '@shared/types/navigation';
+import { Icon } from '@shared/components';
+
+import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
+import { NavItemsRightLoggedIn } from '../types';
 
 export const NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
 	openLabel: i18n?.t('modules/shared/const/navigation___sluit') ?? '',

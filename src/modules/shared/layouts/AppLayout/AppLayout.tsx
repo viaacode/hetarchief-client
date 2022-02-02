@@ -5,20 +5,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 
 import { selectIsLoggedIn, selectUser, setMockUser } from '@auth/store/user';
-import {
-	Footer,
-	Navigation,
-	NavigationItem,
-	NotificationCenter,
-	notificationCenterMock,
-} from '@shared/components';
+import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import {
 	footerLeftItem,
 	footerLinks,
 	footerRightItem,
-} from '@shared/components/Footer/__mocks__/footer';
-import { MOCK_ITEMS_LEFT } from '@shared/components/Navigation/__mocks__/navigation';
-import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@shared/const';
+} from '@navigation/components/Footer/__mocks__/footer';
+import { MOCK_ITEMS_LEFT } from '@navigation/components/Navigation/__mocks__/navigation';
+import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
+import { NotificationCenter, notificationCenterMock } from '@shared/components';
 import { selectIsStickyLayout, setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
