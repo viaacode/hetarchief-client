@@ -36,13 +36,13 @@ const renderButton = ({
 	);
 };
 
-export const mockItem = ({
+export const mockListNavigationItem = ({
 	node = 'mock item',
 	id = 'mock item',
 	active = true,
 	hasDivider = false,
 	children = [],
-}: Partial<ListNavigationItem>): ListNavigationItem[] => [
+}: Partial<ListNavigationItem> = {}): ListNavigationItem[] => [
 	{
 		node: node,
 		id: id,

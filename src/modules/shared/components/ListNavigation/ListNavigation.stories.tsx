@@ -3,7 +3,10 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import ListNavigation from './ListNavigation';
-import { primaryListNavigationMock, secondaryListNavigationMock } from './__mocks__/listNavigation';
+import {
+	primaryListNavigationMock,
+	secondaryListNavigationMock,
+} from './__mocks__/list-navigation';
 
 export default {
 	title: 'Components/ListNavigation',

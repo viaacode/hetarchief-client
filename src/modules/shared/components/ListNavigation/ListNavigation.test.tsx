@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 
 import ListNavigation from './ListNavigation';
-import { mockItem, secondaryListNavigationMock } from './__mocks__/listNavigation';
+import { mockListNavigationItem, secondaryListNavigationMock } from './__mocks__/list-navigation';
 
 const renderListNavigation = ({ items = secondaryListNavigationMock.listItems, ...rest }) => {
 	return render(<ListNavigation listItems={items} {...rest} />);
@@ -15,61 +15,70 @@ describe('Component: <ListNavigation /> (default)', () => {
 		expect(container.firstChild).toHaveClass(className);
 	});
 	it('Should render primary type by default', () => {
-		const { container } = renderListNavigation({ items: mockItem({}), type: 'secondary' });
+		const { container } = renderListNavigation({
+			items: mockListNavigationItem(),
+			type: 'secondary',
+		});
 
 		expect(container.firstChild).toHaveClass('c-list-navigation--secondary');
 	});
 
 	it('Should render secondary type', () => {
-		const { container } = renderListNavigation({ items: mockItem({}) });
+		const { container } = renderListNavigation({ items: mockListNavigationItem() });
 
 		expect(container.firstChild).toHaveClass('c-list-navigation--primary');
 	});
 
 	it('Should render children', () => {
-		const { getByText } = renderListNavigation({ items: mockItem({}) });
+		const { getByText } = renderListNavigation({ items: mockListNavigationItem() });
 
-		const child = getByText(mockItem({})[0].node as string);
+		const child = getByText(mockListNavigationItem()[0].node as string);
 
 		expect(child).toBeInTheDocument();
 	});
 
 	it('Should render nested children', () => {
-		const nestedChild = mockItem({ node: 'nested child' });
+		const nestedChild = mockListNavigationItem({ node: 'nested child' });
 		const { getByText } = renderListNavigation({
-			items: mockItem({ children: nestedChild }),
+			items: mockListNavigationItem({ children: nestedChild }),
 		});
 
 		const child = getByText(nestedChild[0].node as string);
 
 		expect(child).toBeInTheDocument();
-		expect(child).toHaveClass('c-list-navigation__item--1');
+		expect(child).toHaveStyle({ paddingLeft: '3.2rem' });
 	});
 
 	it('Should render active class when child is active', () => {
-		const { getByText } = renderListNavigation({ items: mockItem({}) });
+		const { getByText } = renderListNavigation({ items: mockListNavigationItem() });
 
-		const child = getByText(mockItem({})[0].node as string);
+		const child = getByText(mockListNavigationItem()[0].node as string).closest(
+			'.c-list-navigation__item'
+		) as HTMLElement;
 
 		expect(child).toHaveClass('c-list-navigation__item--active');
 	});
 
 	it('Should render dividers', () => {
-		const { container } = renderListNavigation({ items: mockItem({ hasDivider: true }) });
+		const { container } = renderListNavigation({
+			items: mockListNavigationItem({ hasDivider: true }),
+		});
 
-		expect(container.firstChild?.firstChild).toHaveClass('c-list-navigation__divider');
+		const listItem = container.querySelector('.c-list-navigation__list li');
+
+		expect(listItem?.firstChild).toHaveClass('c-list-navigation__divider');
 	});
 
 	it('Should call onClick handler', () => {
 		const onClick = jest.fn();
-		const { getByText } = renderListNavigation({ items: mockItem({}), onClick });
-
-		const child = getByText(mockItem({})[0].node as string);
+		const { getByText } = renderListNavigation({ items: mockListNavigationItem(), onClick });
+		const listNavigationItems = mockListNavigationItem();
+		const child = getByText(listNavigationItems[0].node as string);
 
 		fireEvent.click(child);
 
 		expect(onClick).toHaveBeenCalled();
 		expect(onClick).toHaveBeenCalledTimes(1);
-		expect(onClick).toHaveBeenCalledWith(mockItem({})[0].id);
+		expect(onClick).toHaveBeenCalledWith(listNavigationItems[0].id);
 	});
 });
