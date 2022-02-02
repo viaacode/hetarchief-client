@@ -1,13 +1,10 @@
-import {
-	Datepicker,
-	futureDatepicker,
-	historicDatepicker,
-	TextInput,
-} from '@meemoo/react-components';
+import { futureDatepicker, historicDatepicker, TextInput } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import { Icon } from '../Icon';
+
+import Datepicker from './Datepicker';
 
 export default {
 	title: 'Components/Datepicker',
