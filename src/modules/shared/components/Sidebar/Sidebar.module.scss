@@ -1,0 +1,16 @@
+@use "styles/abstracts" as *;
+
+.c-sidebar {
+	display: grid;
+	grid-template-columns: max-content;
+	grid-template-rows: auto;
+	grid-auto-rows: 1fr;
+	height: 100%;
+
+	&__title {
+		padding: $spacer-lg;
+		padding-top: $spacer-2xl;
+		color: $zinc;
+		font-size: $font-size-1xl;
+	}
+}
