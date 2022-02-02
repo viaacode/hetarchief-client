@@ -26,6 +26,6 @@ export interface NavigationItem {
 	node: ReactNode | ((nodeProps: NavigationItemNodeProps) => void);
 	id: string;
 	active?: boolean;
-	hasDivider?: boolean;
+	hasDivider?: boolean | 'md';
 	children?: NavigationItem[];
 }

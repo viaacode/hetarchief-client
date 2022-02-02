@@ -57,6 +57,13 @@ const AppLayout: FC = ({ children }) => {
 		onLogOutClick,
 	]);
 
+	const onOpenNavDropdowns = () => {
+		// Also close notification center when opening other dropdowns in nav
+		if (notificationsOpen) {
+			setNotificationsOpen(false);
+		}
+	};
+
 	return (
 		<div
 			className={clsx('l-app', {
@@ -70,20 +77,23 @@ const AppLayout: FC = ({ children }) => {
 					items={MOCK_ITEMS_LEFT}
 					placement="left"
 					renderHamburger={true}
+					onOpenDropdowns={onOpenNavDropdowns}
 				/>
-				<Navigation.Right placement="right" items={rightNavItems} />
+				<Navigation.Right
+					placement="right"
+					items={rightNavItems}
+					onOpenDropdowns={onOpenNavDropdowns}
+				/>
 			</Navigation>
 
 			<main className="l-app__main">
-				<>
-					{children}
+				{children}
 
-					<NotificationCenter
-						{...notificationCenterMock}
-						isOpen={notificationsOpen}
-						onClose={() => setNotificationsOpen(false)}
-					/>
-				</>
+				<NotificationCenter
+					{...notificationCenterMock}
+					isOpen={notificationsOpen}
+					onClose={() => setNotificationsOpen(false)}
+				/>
 			</main>
 
 			<ToastContainer

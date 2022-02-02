@@ -7,6 +7,7 @@ export interface NavigationSectionProps {
 	placement: 'left' | 'right';
 	renderHamburger?: boolean;
 	hamburgerProps?: NavigationHamburgerProps;
+	onOpenDropdowns?: () => void;
 }
 
 export interface NavigationHamburgerProps {

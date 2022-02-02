@@ -9,7 +9,7 @@ import { NavigationDropdown } from '../NavigationDropdown';
 
 import { NavigationListProps } from './NavigationList.types';
 
-const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items }) => {
+const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOpenDropdowns }) => {
 	const prevPath = useRef<string | null>(null);
 	const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
@@ -25,7 +25,14 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items }) =>
 		}
 	}, [currentPath, openDropdown]);
 
-	const closeDropdowns = () => setOpenDropdown(null);
+	const openDropdowns = (id: string) => {
+		setOpenDropdown(id);
+		onOpenDropdowns?.();
+	};
+
+	const closeDropdowns = () => {
+		setOpenDropdown(null);
+	};
 
 	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
 		return (
@@ -70,7 +77,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items }) =>
 										openDropdown === item.id ? 'angle-up' : 'angle-down'
 									)}
 									onClose={closeDropdowns}
-									onOpen={setOpenDropdown}
+									onOpen={openDropdowns}
 								/>
 							) : typeof item.node === 'function' ? (
 								item.node({ closeDropdowns })

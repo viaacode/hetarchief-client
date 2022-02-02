@@ -17,6 +17,7 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 	placement,
 	renderHamburger,
 	hamburgerProps,
+	onOpenDropdowns,
 }) => {
 	// Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
@@ -88,7 +89,11 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 		return (
 			<Wrapper {...(wrapperCls && { className: wrapperCls })}>
 				{items && items.length ? (
-					<NavigationList currentPath={currentPath} items={items} />
+					<NavigationList
+						currentPath={currentPath}
+						items={items}
+						onOpenDropdowns={onOpenDropdowns}
+					/>
 				) : (
 					children
 				)}

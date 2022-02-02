@@ -153,9 +153,25 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			content: "";
 			position: absolute;
 			bottom: -$c-navigation-dropdown-item-spacer;
-			width: 100%;
+			left: $spacer-md;
+			right: $spacer-md;
 			height: $c-navigation-divider-size;
 			background-color: $silver;
+
+			@include respond-at(md) {
+				left: 0;
+				right: 0;
+			}
+		}
+
+		&\:md {
+			@include respond-to(md) {
+				margin-bottom: 0;
+
+				&::before {
+					content: none;
+				}
+			}
 		}
 	}
 
