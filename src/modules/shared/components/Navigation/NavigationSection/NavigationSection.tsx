@@ -38,7 +38,10 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 					id="menu"
 					isOpen={isHamburgerMenuOpen}
 					items={items ? items : []}
-					className={styles['c-navigation__hamburger']}
+					className={clsx(styles['c-navigation__hamburger'], {
+						[styles['c-navigation__hamburger--open']]: isHamburgerMenuOpen,
+					})}
+					flyoutClassName={clsx(styles['c-navigation__dropdown-flyout'])}
 					trigger={
 						<Button
 							label={
@@ -69,10 +72,6 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 						/>
 					}
 					lockScroll
-					flyoutClassName={clsx(
-						styles['c-navigation__dropdown-flyout'],
-						styles['c-navigation__hamburger']
-					)}
 					onOpen={() => setIsHamburgerMenuOpen(true)}
 					onClose={() => setIsHamburgerMenuOpen(false)}
 				/>
