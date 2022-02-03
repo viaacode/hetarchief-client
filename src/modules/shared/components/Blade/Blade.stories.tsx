@@ -4,9 +4,8 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import Blade from './Blade';
+import { BladeProps } from './Blade.types';
 import { bladeMock } from './__mocks__/blade';
-
-import { BladeProps } from '.';
 
 const BladeStoryComponent = ({ args }: { args: BladeProps }) => {
 	const [isOpen, setOpen] = useState(false);
@@ -24,7 +23,7 @@ const BladeStoryComponent = ({ args }: { args: BladeProps }) => {
 	return (
 		<>
 			<div>
-				<h1>Dummy content</h1>
+				<h1>Blades</h1>
 				<Button label="Open modal" onClick={open} />
 			</div>
 			<Blade {...args} onClose={close} isOpen={isOpen} />

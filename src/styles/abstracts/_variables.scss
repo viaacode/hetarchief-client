@@ -19,7 +19,9 @@ $platinum: #f8f8f8;
 /**
  * Derived Colors
  */
+
 $zinc-40: color.adjust($zinc, $alpha: -0.6);
+$teal-66: color.adjust($teal, $alpha: -0.34);
 
 /**
  * Shadow
@@ -95,6 +97,9 @@ $breakpoints: (
  */
 
 $z-layers: (
+	"filter-menu-mobile": 4,
+	"nav-hamburger": 3,
+	"nav-dropdown": 2,
 	"foreground": 1,
 	"base": 0,
 	"background": -1,
@@ -127,6 +132,13 @@ $button-horizontal-whitespace: $spacer-md;
 
 $divider-grey: solid 1px rgb(0 0 0 / 20%);
 $divider-white: solid 1px rgb(255 255 255 / 20%);
+
+/**
+ * Navigation
+ */
+
+ $c-navigation-height: 8.8rem;
+ $c-navigation-height-md: 8rem;
 
 /**
  * Animations

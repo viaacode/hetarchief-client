@@ -35,7 +35,12 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	const renderFooter = () => {
 		return (
 			<div className="u-text-center u-bg-platinum">
-				<Button label={t('Meld je aan als admin')} variants="text" />
+				<Button
+					label={t(
+						'modules/auth/components/auth-modal/auth-modal___meld-je-aan-als-admin'
+					)}
+					variants="text"
+				/>
 			</div>
 		);
 	};

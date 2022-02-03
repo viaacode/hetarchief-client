@@ -1,8 +1,10 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, ReactElement } from 'react';
 
-import { Icon, Navigation } from '@shared/components';
+import { Navigation } from '@navigation/components';
+import { Icon } from '@shared/components';
 
 import { FilterMenuFilterOption } from '../FilterMenu.types';
 
@@ -16,6 +18,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	onClose,
 	onFilterClick = () => null,
 }) => {
+	const { t } = useTranslation();
+
 	if (!isOpen) {
 		return null;
 	}
@@ -53,7 +57,11 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			</Navigation>
 
 			<div className="l-container">
-				<h4 className="u-text-center u-mt-24">Filters</h4>
+				<h4 className="u-text-center u-mt-24">
+					{t(
+						'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
+					)}
+				</h4>
 
 				<TagList
 					closeIcon={<Icon name="times" />}

@@ -4,6 +4,7 @@
     "paths": {
       "@auth/*": ["modules/auth/*"],
       "@home/*": ["modules/home/*"],
+      "@navigation/*": ["modules/navigation/*"],
       "@reading-room/*": ["modules/reading-room/*"],
       "@shared/*": ["modules/shared/*"]
     },
@@ -24,5 +25,5 @@
     "types": ["jest"]
   },
   "include": ["next-env.d.ts", "jest/**/*.js", "src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "src/**/*.stories.*", "src/**/*.test.*"]
+  "exclude": ["node_modules"]
 }

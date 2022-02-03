@@ -16,6 +16,9 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	start,
 	total,
 }) => {
+	const pageCount = Math.ceil(total / count);
+	const currentPage = start / count;
+
 	const scrollToTop = () => {
 		window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
@@ -31,6 +34,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 			buttons={{
 				next: (
 					<Button
+						disabled={currentPage + 1 === pageCount}
 						variants={['text', 'neutral']}
 						label="Volgende"
 						iconEnd={<Icon name="angle-right" />}
@@ -38,6 +42,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 				),
 				previous: (
 					<Button
+						disabled={currentPage + 1 === 1}
 						variants={['text', 'neutral']}
 						label="Vorige"
 						iconStart={<Icon name="angle-left" />}
@@ -46,8 +51,8 @@ const PaginationBar: FC<PaginationBarProps> = ({
 			}}
 			showFirstLastNumbers
 			onPageChange={onPageChange}
-			currentPage={start / count}
-			pageCount={Math.ceil(total / count)}
+			currentPage={currentPage}
+			pageCount={pageCount}
 		/>
 	);
 

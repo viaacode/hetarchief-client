@@ -1,0 +1,100 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+.c-footer {
+	position: relative;
+	z-index: get-z-layer("base");
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-rows: 1fr;
+	justify-items: center;
+	align-items: center;
+	padding: $spacer-md $spacer-sm $spacer-sm $spacer-sm;
+	color: $neutral;
+	background-color: $white;
+
+	@include respond-at(xl) {
+		padding-left: $spacer-lg;
+		padding-right: $spacer-lg;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0 $spacer-sm auto $spacer-sm;
+		border-top: $divider-grey;
+
+		@include respond-at(xl) {
+			inset: 0 $spacer-lg auto $spacer-lg;
+		}
+	}
+
+	&__link,
+	&__left,
+	&__right {
+		font-size: $font-size-sm;
+
+		p {
+			font-size: $font-size-sm;
+			margin: 0;
+		}
+	}
+
+	&__links {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	&__link {
+		display: block;
+		color: $neutral;
+		text-decoration: none;
+		padding: 0 $spacer-md;
+	}
+
+	&__left,
+	&__right {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: $spacer-xs;
+	}
+
+	&__left {
+		grid-column-start: 1;
+		justify-self: start;
+	}
+
+	&__right {
+		grid-column-start: 3;
+		justify-self: end;
+		justify-content: flex-end;
+	}
+
+	@include respond-to(lg) {
+		grid-template-columns: repeat(2, 1fr);
+		gap: $spacer-sm;
+
+		&__links {
+			grid-row-start: 2;
+			grid-column: 1 / 3;
+			justify-content: space-between;
+		}
+
+		&__link {
+			padding: 0;
+		}
+
+		&__left,
+		&__right {
+			row-gap: 0;
+		}
+
+		&__right {
+			grid-column-start: 2;
+		}
+	}
+}
+

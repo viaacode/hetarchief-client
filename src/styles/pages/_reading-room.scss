@@ -6,24 +6,6 @@
 	flex: 1 1 auto;
 }
 
-/**
- * Elements
- */
-
-.p-reading-room__contact-button {
-	@include respond-to(md) {
-		.c-button__icon {
-			margin: 0;
-		}
-
-		.c-button__label {
-			visibility: hidden;
-			font-size: 0;
-		}
-	}
-}
-
-
 .p-reading-room__results {
 	display: flex;
 	flex-direction: column;

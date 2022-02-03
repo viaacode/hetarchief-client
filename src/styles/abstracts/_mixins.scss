@@ -65,10 +65,10 @@
 
 @mixin generate-properties($_properties, $_value) {
 	@if meta.type-of($_properties) == string {
-		#{$_properties}: $_value;
+		#{$_properties}: $_value !important;
 	} @else {
 		@each $_prop in $_properties {
-			#{$_prop}: $_value;
+			#{$_prop}: $_value !important;
 		}
 	}
 };
