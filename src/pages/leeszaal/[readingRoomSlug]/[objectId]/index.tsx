@@ -7,8 +7,9 @@ import { Icon } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
 import { withI18n } from '@shared/wrappers';
 
-import { Metadata } from 'modules/object-detail/components';
+import { Metadata, ObjectPlaceholder } from 'modules/object-detail/components';
 import { metadataMock } from 'modules/object-detail/components/Metadata/__mocks__/metadata';
+import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
 	/**
@@ -47,7 +48,7 @@ const ObjectDetailPage: NextPage = () => {
 			{/* TODO: use correct left and right sections */}
 			<ReadingRoomNavigation title={'Leeszaal'} />
 			<article className="p-object-detail__wrapper">
-				<div>fragment placeholder</div>
+				<ObjectPlaceholder {...objectPlaceholderMock} />
 				<div className="p-object-detail__metadata">
 					<div className="u-px-32">
 						{/* TODO: bind content to state */}
