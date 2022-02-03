@@ -2,18 +2,39 @@
 
 .c-tabs {
 	display: flex;
-	background-color: $black;
-}
 
-/**
- * Elements
- */
+	/**
+	* Elements
+	*/
 
-
-.c-tabs__item {
-	&:not(:last-child) {
-		@include respond-at("md") {
-			margin-right: $spacer-md;
+	&__item {
+		&:not(:last-child) {
+			@include respond-at("md") {
+				margin-right: $spacer-md;
+			}
 		}
+	}
+
+	/**
+	* Modifiers
+	*/
+
+	&--dark {
+		background-color: $black;
+	}
+
+	&--light {
+		background-color: $white;
+	}
+
+	&--rounded {
+		@include tabs-border-radius;
+
+		padding: 0 $tabs-rounded-size;
+		border-radius: $tabs-rounded-size;
+	}
+
+	&--bordered {
+		border: $tabs-border-width solid $zinc;
 	}
 }
