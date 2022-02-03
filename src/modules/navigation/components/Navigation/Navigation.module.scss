@@ -7,6 +7,9 @@ $c-navigation-height-contextual-md: 4.8rem;
 $c-navigation-border-height: 0.6rem;
 $c-navigation-list-divider-color: #4E4E4E;
 $c-navigation-divider-size: 0.1rem;
+$c-navigation-item-spacing: $spacer-md;
+$c-navigation-item-spacing-lg: 4.8rem;
+$c-navigation-dropdown-item-spacer: 1.2rem;
 
 @mixin navigation-link-border-decoration($_offset1: 0, $_offset2: 0) {
 	$offset1-border: if($_offset1 == 0, 0, calc($_offset1 + 0.1rem));
@@ -46,22 +49,32 @@ $c-navigation-divider-size: 0.1rem;
 	position: relative;
 	display: grid;
 	align-items: center;
-	grid-template-columns: 3fr 1fr 2fr;
-	height: $c-navigation-height;
-	padding: 0 3.2rem;
+	grid-template-columns: auto 1fr 2fr;
+	height: $c-navigation-height-md;
+	padding: 0 2rem;
 	background-color: $black;
 	color: $white;
+
+	@include respond-at(md) {
+		height: $c-navigation-height;
+		padding: 0 3.2rem;
+	}
 
 	&::after {
 		content: "";
 		position: absolute;
 		z-index: get-z-layer("foreground");
 		bottom: -1px;
-		left: 3.2rem;
-		right: 3.2rem;
+		left: 2rem;
+		right: 2rem;
 		height: 1px;
 		background-color: $shade;
 		opacity: 0.64;
+
+		@include respond-at(md) {
+			left: 3.2rem;
+			right: 3.2rem;
+		}
 	}
 }
 
@@ -86,30 +99,40 @@ $c-navigation-divider-size: 0.1rem;
 		color: $black;
 	}
 
-	.c-navigation-list {
-		:global(.c-dropdown-menu__item) {
-			display: flex;
-			align-items: center;
-			text-decoration: none;
-			padding-right: $spacer-sm;
+	.c-navigation__dropdown {
+		@include respond-at(md) {
+			z-index: get-z-layer("nav-dropdown"); // above overlay
+		}
+
+		&--open {
+			@include respond-to(md) {
+				z-index: get-z-layer("nav-dropdown"); // under overlay
+			}
 		}
 	}
 
-	.c-navigation__dropdown {
-		z-index: 2; // above overlay
-	}
-
 	.c-navigation__hamburger {
-		z-index: 3; // above all
+		@include respond-at(md) {
+			z-index: get-z-layer("nav-hamburger"); // above all
+		}
+
+		&--open {
+			@include respond-to(md) {
+				z-index: get-z-layer("nav-dropdown"); // under overlay
+			}
+		}
 	}
 
 	.c-navigation__dropdown-flyout {
 		// Overwrite element styles
 		inset: $c-navigation-height-md 0 0 0 !important;
 		transform: translate(0) !important;
+		color: $black;
 	}
 
 	.c-navigation__dropdown-icon {
+		font-size: $font-size-lg;
+
 		&--start {
 			margin-right: $spacer-xxs;
 		}
@@ -120,27 +143,61 @@ $c-navigation-divider-size: 0.1rem;
 	}
 
 	.c-navigation__dropdown-overlay {
-		z-index: 2; // above foreground layers
+		z-index: get-z-layer("nav-dropdown"); // above foreground layers
 		height: 100vh;
 	}
 
 	.c-navigation__hamburger-overlay {
-		z-index: 3; // above all
+		z-index: get-z-layer("nav-dropdown"); // above all
 	}
 
-	@for $i from 1 through 4 {
-		.c-navigation__dropdown-item--#{$i} {
-			margin-left: $i * $spacer-md;
-		}
-	}
-
-	.c-dropdown-menu__sub-list {
+	.c-navigation__dropdown-submenu {
 		margin-left: $spacer-md;
 		border-left: solid 0.2rem $silver;
 
 		:global(.c-dropdown-menu__item) {
 			padding-left: $spacer-md;
 			margin: -0.1rem; // Prevent 1px gap between left border and silver background on hover
+		}
+	}
+
+	.c-navigation__dropdown-item--divider {
+		position: relative;
+		margin-bottom: $c-navigation-divider-size + ($c-navigation-dropdown-item-spacer * 2);
+
+		&::before {
+			content: "";
+			position: absolute;
+			bottom: -$c-navigation-dropdown-item-spacer;
+			left: $spacer-md;
+			right: $spacer-md;
+			height: $c-navigation-divider-size;
+			background-color: $silver;
+
+			@include respond-at(md) {
+				left: 0;
+				right: 0;
+			}
+		}
+
+		&\:md {
+			@include respond-to(md) {
+				margin-bottom: 0;
+
+				&::before {
+					content: none;
+				}
+			}
+		}
+	}
+
+	.c-navigation__list-overlay {
+		width: 100vw;
+		height: calc(100vh - $c-navigation-height-md);
+
+		@include respond-at(md) {
+			height: calc(100vh - $c-navigation-height);
+			top: $c-navigation-height;
 		}
 	}
 
@@ -166,40 +223,41 @@ $c-navigation-divider-size: 0.1rem;
 .c-navigation__list {
 	@extend %reset-list;
 
-	position: relative;
 	display: flex;
 
 	.c-navigation__list-flyout {
-		// Overwrite element styles
-		top: -1rem !important;
-		min-width: 26.6rem !important;
-	}
+		color: $black;
 
-	&-overlay {
-		width: 100vw;
-		height: calc(100vh - $c-navigation-height);
-		top: $c-navigation-height;
-	}
-
-	&:not(:last-child) {
-		padding-right: 4.8rem;
-
-		&::after {
-			content: "";
-			position: absolute;
-			top: 50%;
-			right: 0;
-			width: $c-navigation-divider-size;
-			height: 50%;
-			background-color: $c-navigation-list-divider-color;
-			transform: translateY(-50%);
+		// Overwrite popper element styles
+		@include respond-to(md) {
+			inset: $c-navigation-height-md 0 0 0 !important;
+			transform: translate(0) !important;
+		}
+		@include respond-at(md) {
+			min-width: 26.6rem !important;
 		}
 	}
 }
 
 .c-navigation__link {
-	padding: $spacer-md 0;
+	display: block;
+	padding: 1.2rem 0 1.2rem $spacer-md;
 	text-decoration: none;
+
+	@include respond-to(md) {
+		border-bottom: none;
+		font-size: $font-size-sm;
+	}
+	@include respond-at(md) {
+		display: inline-block;
+		padding: $spacer-md 0;
+	}
+
+	&--dropdown:hover {
+		@include respond-to(md) {
+			background-color: $silver;
+		}
+	}
 
 	&--wrapper {
 		display: flex;
@@ -209,7 +267,6 @@ $c-navigation-divider-size: 0.1rem;
 
 .c-navigation__item {
 	cursor: pointer;
-	position: relative;
 	display: inline-flex;
 	align-items: center;
 	height: $c-navigation-height - $c-navigation-divider-size;
@@ -217,14 +274,45 @@ $c-navigation-divider-size: 0.1rem;
 	margin-bottom: $c-navigation-divider-size;
 	transition: border-color $animate-md-out, color $animate-md-out;
 
+	@include respond-at(md) {
+		position: relative;
+	}
+
 	&:not(:last-child) {
-		margin-right: 4.8rem;
+		margin-right: $c-navigation-item-spacing;
+
+		@include respond-at(lg) {
+			margin-right: $c-navigation-item-spacing-lg;
+		}
 	}
 
 	&:not(&--active):hover {
 		.c-navigation__link, .c-navigation__link+span {
 			color: color.adjust($white, $alpha: -0.3);
 			transition: color $animate-md-in;
+		}
+	}
+
+	&--divider {
+		margin-left: $c-navigation-item-spacing;
+
+		@include respond-at(lg) {
+			margin-left: $c-navigation-item-spacing-lg;
+		}
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: -$c-navigation-item-spacing;
+			width: 0.1rem;
+			height: 4.4rem;
+			background-color: $c-navigation-list-divider-color;
+			transform: translateY(-50%);
+
+			@include respond-at(lg) {
+				left: -$c-navigation-item-spacing-lg;
+			}
 		}
 	}
 
@@ -275,23 +363,6 @@ $c-navigation-divider-size: 0.1rem;
 	font-size: $font-size-lg;
 }
 
-.c-navigation__divider {
-	&--vertical {
-		background-color: $c-navigation-list-divider-color;
-		align-self: center;
-		width: $c-navigation-divider-size;
-		height: 50%;
-		margin-right: 4.8rem;
-	}
-
-	&--horizontal {
-		width: 100%;
-		height: $c-navigation-divider-size;
-		margin: 1.2rem 0;
-		background-color: $silver;
-	}
-}
-
 /**
  * Modifiers
  */
@@ -305,62 +376,46 @@ $c-navigation-divider-size: 0.1rem;
 		content: none;
 	}
 
+	@include respond-to(md) {
+		height: $c-navigation-height-contextual-md;
+	}
+
+	.c-navigation__title {
+		@include respond-to(md) {
+			font-size: $font-size-base;
+		}
+	}
+
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-navigation__link {
 		height: $c-navigation-height-contextual - $c-navigation-divider-size;
 	}
 }
 
-/**
- * Breakpoints
- */
-
-@include respond-to(md) {
-	.c-navigation {
-		height: $c-navigation-height-md;
-		padding: 0 2rem;
-
-		&__link {
-			display: block;
-			padding: 1.2rem 0 1.2rem $spacer-md;
-			border-bottom: none;
-			font-size: $font-size-sm;
-
-			&--dropdown:hover {
-				background-color: $silver;
-			}
-		}
-
-		&::after {
-			left: 2rem;
-			right: 2rem;
-		}
-	}
-
-	.c-navigation--sm {
-		height: $c-navigation-height-contextual-md;
-
-		.c-navigation__title {
-			font-size: $font-size-base;
-		}
-	}
-
-	.c-navigation--responsive {
+.c-navigation--responsive {
+	@include respond-to(md) {
 		grid-template-columns: auto;
+	}
 
-		.c-navigation__section {
-			:global(.c-badge) {
+	.c-navigation__section {
+		:global(.c-badge) {
+			@include respond-to(md) {
 				margin-left: $spacer-xs;
 			}
+		}
 
-			&--responsive-desktop {
+		&--responsive-desktop {
+			@include respond-to(md) {
 				display: none;
 			}
+		}
 
-			&--responsive-mobile {
+		&--responsive-mobile {
+			@include respond-to(md) {
 				display: flex;
 				justify-self: center;
 			}
 		}
 	}
 }
+

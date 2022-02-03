@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { FC, Fragment, useState } from 'react';
 
 import { Icon, IconProps, Overlay } from '@shared/components';
 
@@ -12,10 +12,12 @@ import { NavigationSectionProps } from './NavigationSection.types';
 
 const NavigationSection: FC<NavigationSectionProps> = ({
 	children,
+	currentPath,
 	items,
 	placement,
 	renderHamburger,
 	hamburgerProps,
+	onOpenDropdowns,
 }) => {
 	// Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
@@ -36,7 +38,10 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 					id="menu"
 					isOpen={isHamburgerMenuOpen}
 					items={items ? items : []}
-					className={styles['c-navigation__hamburger']}
+					className={clsx(styles['c-navigation__hamburger'], {
+						[styles['c-navigation__hamburger--open']]: isHamburgerMenuOpen,
+					})}
+					flyoutClassName={clsx(styles['c-navigation__dropdown-flyout'])}
 					trigger={
 						<Button
 							label={
@@ -67,10 +72,6 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 						/>
 					}
 					lockScroll
-					flyoutClassName={clsx(
-						styles['c-navigation__dropdown-flyout'],
-						styles['c-navigation__hamburger']
-					)}
 					onOpen={() => setIsHamburgerMenuOpen(true)}
 					onClose={() => setIsHamburgerMenuOpen(false)}
 				/>
@@ -79,12 +80,23 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 	};
 
 	const renderDesktop = () => {
-		return renderHamburger ? (
-			<div className={styles['c-navigation__section--responsive-desktop']}>
-				{items && items.length ? <NavigationList items={items} /> : children}
-			</div>
-		) : (
-			<>{items && items.length ? <NavigationList items={items} /> : children}</>
+		const Wrapper = renderHamburger ? 'div' : Fragment;
+		const wrapperCls = clsx(
+			renderHamburger && styles['c-navigation__section--responsive-desktop']
+		);
+
+		return (
+			<Wrapper {...(wrapperCls && { className: wrapperCls })}>
+				{items && items.length ? (
+					<NavigationList
+						currentPath={currentPath}
+						items={items}
+						onOpenDropdowns={onOpenDropdowns}
+					/>
+				) : (
+					children
+				)}
+			</Wrapper>
 		);
 	};
 	return (

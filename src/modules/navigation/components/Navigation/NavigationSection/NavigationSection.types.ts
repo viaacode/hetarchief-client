@@ -1,11 +1,14 @@
-import { IconLightNames } from '../../Icon';
+import { IconLightNames } from '@shared/components';
+
 import { NavigationItem } from '../Navigation.types';
 
 export interface NavigationSectionProps {
+	currentPath?: string;
 	items?: NavigationItem[];
 	placement: 'left' | 'right';
 	renderHamburger?: boolean;
 	hamburgerProps?: NavigationHamburgerProps;
+	onOpenDropdowns?: () => void;
 }
 
 export interface NavigationHamburgerProps {

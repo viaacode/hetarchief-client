@@ -81,11 +81,25 @@ const ReadingRoomPage: NextPage = () => {
 	/**
 	 * Methods
 	 */
+	const setMediaKeywords = (data: MediaCardProps[], keywords: string[]): MediaCardProps[] => {
+		return data.map((item) => {
+			return {
+				...item,
+				keywords: keywords,
+			};
+		});
+	};
 
 	// TODO: replace this with actual results
-	const fetchMedia = async () => {
+	const fetchMedia = async (keywords: string) => {
 		const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
-		data && setMedia(data);
+
+		// Fill keywords property for keyword highlighting in media card
+		const dataWithKeywords = setMediaKeywords(
+			data ?? [],
+			(query.search ?? []).concat(keywords) as string[]
+		);
+		dataWithKeywords && setMedia(dataWithKeywords);
 	};
 
 	const onSearch = async (values: SearchBarValue<true>) => {
@@ -97,7 +111,7 @@ const ReadingRoomPage: NextPage = () => {
 			setMedia([]);
 			setQuery({ search: undefined });
 		} else {
-			await fetchMedia();
+			await fetchMedia(String(values));
 		}
 	};
 

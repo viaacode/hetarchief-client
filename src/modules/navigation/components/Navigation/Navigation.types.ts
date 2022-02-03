@@ -18,10 +18,14 @@ export interface NavigationCenterProps {
 	title?: string;
 }
 
+export interface NavigationItemNodeProps {
+	closeDropdowns: () => void;
+}
+
 export interface NavigationItem {
-	node: ReactNode;
+	node: ReactNode | ((nodeProps: NavigationItemNodeProps) => void);
 	id: string;
 	active?: boolean;
-	hasDivider?: boolean;
+	hasDivider?: boolean | 'md';
 	children?: NavigationItem[];
 }

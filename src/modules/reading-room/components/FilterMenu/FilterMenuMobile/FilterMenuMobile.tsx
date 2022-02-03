@@ -3,7 +3,8 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, ReactElement } from 'react';
 
-import { Icon, Navigation } from '@shared/components';
+import { Navigation } from '@navigation/components';
+import { Icon } from '@shared/components';
 
 import { FilterMenuFilterOption } from '../FilterMenu.types';
 
