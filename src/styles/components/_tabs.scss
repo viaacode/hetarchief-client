@@ -1,19 +1,9 @@
 @use "../abstracts/" as *;
 
-.c-tabs {
+$c: "c-tabs";
+
+.#{$c} {
 	display: flex;
-
-	/**
-	* Elements
-	*/
-
-	&__item {
-		&:not(:last-child) {
-			@include respond-at("md") {
-				margin-right: $spacer-md;
-			}
-		}
-	}
 
 	/**
 	* Modifiers
@@ -21,6 +11,16 @@
 
 	&--dark {
 		background-color: $black;
+
+		.#{$c} {
+			&__item {
+				&:not(:last-child) {
+					@include respond-at("md") {
+						margin-right: $spacer-md;
+					}
+				}
+			}
+		}
 	}
 
 	&--light {

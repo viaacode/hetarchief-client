@@ -14,11 +14,6 @@ $c: "c-tab";
 		font-size: $font-size-sm;
 	}
 
-	@include respond-at("md") {
-		min-height: $tab-min-height-md;
-		padding: $tab-vertical-padding-md $spacer-md;
-	}
-
 	/**
 	* Elements
 	*/
@@ -41,6 +36,11 @@ $c: "c-tab";
 		background-color: $black;
 		color: $white;
 
+		@include respond-at("md") {
+			min-height: $tab-min-height-md;
+			padding: $tab-vertical-padding-md $spacer-md;
+		}
+
 		&.#{$c} {
 			&--active {
 				background-color: $platinum;
@@ -50,12 +50,32 @@ $c: "c-tab";
 	}
 
 	&--light {
+		position: relative;
 		color: $neutral;
+
+		@include respond-at("md") {
+			min-height: $tab-min-height-md;
+			padding: $tab-vertical-padding-md $spacer-sm;
+		}
 
 		&.#{$c} {
 			&--active {
 				color: $black;
 				font-weight: $font-weight-bold;
+
+				&::after {
+					content: "";
+					display: block;
+					position: absolute;
+					inset: 0 0 0 0;
+					top: auto;
+					height: 2px;
+					background: $teal;
+				}
+
+				&.#{$c}--bordered {
+					bottom: 2px;
+				}
 			}
 		}
 	}
