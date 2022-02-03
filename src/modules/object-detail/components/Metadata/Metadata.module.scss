@@ -1,0 +1,31 @@
+@use "sass:color";
+ @use "styles/abstracts" as *;
+
+$black-20: color.adjust($black, $alpha: -0.8);
+$metadata-border: 0.1rem solid $black-20;
+
+.c-metadata {
+	margin: 0 $spacer-lg;
+	border-top: $metadata-border;
+	overflow-y: hidden;
+
+	&__list {
+		@extend %reset-list;
+
+		margin-top: -0.1rem; // move top borders of first items in a column outside parent container to prevent double border
+		column-gap: $spacer-lg;
+	}
+
+	&__item {
+		display: inline-flex;
+		flex-flow: column;
+		width: 100%;
+		padding: $spacer-md 0;
+		border-top: $metadata-border;
+	}
+
+	&__item-title {
+		padding-bottom: $spacer-xxs;
+		font-size: $font-size-md;
+	}
+}
