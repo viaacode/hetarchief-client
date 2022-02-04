@@ -1,4 +1,4 @@
-import { Tabs, TabsProps } from '@meemoo/react-components';
+import { getVariantsArray, Tabs, TabsProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 
@@ -125,8 +125,10 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 							}
 						});
 					});
+
 					observer.observe(tabsEl);
 				}
+
 				setHeight(tabsEl);
 			}
 		}
@@ -159,10 +161,16 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 	return (
 		<div
 			ref={scrollContainerRef}
-			className={clsx(styles['c-scrollable-tabs'], {
-				[styles['c-scrollable-tabs--gradient-left']]: showLeftGradient,
-				[styles['c-scrollable-tabs--gradient-right']]: showRightGradient,
-			})}
+			className={clsx(
+				styles['c-scrollable-tabs'],
+				{
+					[styles['c-scrollable-tabs--gradient-left']]: showLeftGradient,
+					[styles['c-scrollable-tabs--gradient-right']]: showRightGradient,
+				},
+				getVariantsArray(props.variants).map(
+					(variant) => styles[`c-scrollable-tabs--${variant}`]
+				)
+			)}
 			style={{ height: `${tabsHeight}px` }}
 		>
 			<Tabs {...props} />

@@ -1,5 +1,6 @@
 @use "sass:list";
 @use "sass:map";
+@use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 
@@ -294,5 +295,23 @@
 				background-color: $zinc;
 			}
 		}
+	}
+}
+
+/**
+ * Tabs
+ */
+
+@mixin tabs-border-radius() {
+	border-radius: math.div(math.max(
+		$tab-line-size + ($tab-vertical-padding * 2),
+		$tab-min-height
+	), 2);
+
+	@include respond-at("md") {
+		border-radius: math.div(math.max(
+			$tab-line-size-md + ($tab-vertical-padding-md * 2),
+			$tab-min-height-md
+		), 2);
 	}
 }
