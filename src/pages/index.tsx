@@ -109,8 +109,9 @@ const Home: NextPage = () => {
 
 					<SearchBar
 						className="p-home__search"
-						placeholder={t('pages/index___zoek')}
 						backspaceRemovesValue={false}
+						instanceId="home-seach-bar"
+						placeholder={t('pages/index___zoek')}
 						searchValue={query.search ?? ''}
 						onClear={onClearSearch}
 						onSearch={onSearch}
