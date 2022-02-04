@@ -30,8 +30,3 @@ export type AnimationTypes =
 	| 'animate-md-out'
 	| 'animate-lg-in'
 	| 'animate-lg-out';
-
-export type EnvVars = Pick<
-	NodeJS.ProcessEnv,
-	'PORT' | 'NODE_ENV' | 'PORT' | 'ORIGIN' | 'PROXY_URL'
->;

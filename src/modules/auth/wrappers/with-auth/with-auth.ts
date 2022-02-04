@@ -1,15 +1,17 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
+import { AuthMessage, authService } from '@auth/services/auth-service';
+
 import { WithAuthProps, WithAuthReturn } from './with-auth.types';
 
 export const withAuth = <P extends WithAuthProps = WithAuthProps>(
 	gssp: GetServerSideProps<P>
 ): WithAuthReturn<P> => {
 	return async (context: GetServerSidePropsContext) => {
-		// Check if user is logged in or not with check-login call
-		const isLoggedIn = false;
+		const response = await authService.checkLogin(process.env.PROXY_URL);
+		console.log(response);
 
-		if (!isLoggedIn) {
+		if (!response?.userInfo || response.message === AuthMessage.LoggedOut) {
 			return {
 				redirect: {
 					destination: '/?showAuthModal=1',

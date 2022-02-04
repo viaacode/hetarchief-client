@@ -1,19 +1,37 @@
 import ky from 'ky-universal';
+import { KyInstance } from 'ky/distribution/types/ky';
 import queryString from 'query-string';
 
-import { getEnv } from '@shared/utils';
+import { CheckLoginResponse } from './auth.service.types';
 
 class AuthService {
-	public async checkLogin() {
-		return await ky('').json();
+	private baseUrl = '/api/proxy/auth';
+	private api: KyInstance;
+
+	constructor() {
+		this.api = ky.create({ prefixUrl: this.baseUrl });
+	}
+
+	public async checkLogin(absoluteUrl?: string): Promise<CheckLoginResponse> {
+		// Absolute url is necessary for accessing the proxy on the server side
+		const options = absoluteUrl ? { prefixUrl: `${absoluteUrl}/auth` } : {};
+		return await this.api('check-login', options).json();
 	}
 
 	public redirectToLogin() {
-		const returnToUrl = `${getEnv('ORIGIN')}`;
+		const returnToUrl = process.env.NEXT_PUBLIC_ORIGIN;
 
-		window.location.href = `${getEnv(
-			'PROXY_URL'
-		)}/auth/hetarchief/login?${queryString.stringify({ returnToUrl })}`;
+		window.location.href = `${this.baseUrl}/hetarchief/login?${queryString.stringify({
+			returnToUrl,
+		})}`;
+	}
+
+	public async logout() {
+		const returnToUrl = process.env.NEXT_PUBLIC_ORIGIN;
+
+		window.location.href = `${this.baseUrl}/global-logout?${queryString.stringify({
+			returnToUrl,
+		})}`;
 	}
 }
 
