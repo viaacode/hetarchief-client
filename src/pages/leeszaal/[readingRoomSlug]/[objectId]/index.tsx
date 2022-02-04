@@ -65,7 +65,7 @@ const ObjectDetailPage: NextPage = () => {
 				<div className="p-object-detail__metadata">
 					<div className="u-px-32">
 						{/* TODO: bind content to state */}
-						<h3 className="u-pt-32 u-pb-24">Object detail</h3>
+						<h3 className="u-pt-32 u-pb-24">Op de koop toe: schepijs (1993)</h3>
 						<p className="u-pb-24">
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
 							consectetur rutrum molestie. Mauris volutpat commodo velit, id fringilla
