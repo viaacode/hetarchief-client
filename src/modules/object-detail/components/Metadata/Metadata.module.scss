@@ -5,7 +5,6 @@ $black-20: color.adjust($black, $alpha: -0.8);
 $metadata-border: 0.1rem solid $black-20;
 
 .c-metadata {
-	margin: 0 $spacer-lg;
 	border-top: $metadata-border;
 	overflow-y: hidden;
 
