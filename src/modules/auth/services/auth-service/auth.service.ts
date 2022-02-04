@@ -1,35 +1,39 @@
 import ky from 'ky-universal';
-import { KyInstance } from 'ky/distribution/types/ky';
-import queryString from 'query-string';
+import { Options } from 'ky/distribution';
+import { StringifiableRecord, stringify, stringifyUrl } from 'query-string';
+
+import { config } from '@config/const';
 
 import { CheckLoginResponse } from './auth.service.types';
 
 class AuthService {
 	private baseUrl = '/api/proxy/auth';
-	private api: KyInstance;
+	private api: typeof ky;
 
 	constructor() {
 		this.api = ky.create({ prefixUrl: this.baseUrl });
 	}
 
-	public async checkLogin(absoluteUrl?: string): Promise<CheckLoginResponse> {
+	public async checkLogin(options: Options = {}, isSSR?: boolean): Promise<CheckLoginResponse> {
 		// Absolute url is necessary for accessing the proxy on the server side
-		const options = absoluteUrl ? { prefixUrl: `${absoluteUrl}/auth` } : {};
-		return await this.api('check-login', options).json();
+		const kyOptions = isSSR
+			? { ...options, prefixUrl: `${config.public.origin}/${this.baseUrl}` }
+			: options;
+		return await this.api('check-login', kyOptions).json();
 	}
 
-	public redirectToLogin() {
-		const returnToUrl = process.env.NEXT_PUBLIC_ORIGIN;
+	public redirectToLogin(query: StringifiableRecord) {
+		const returnToUrl = stringifyUrl({ url: config.public.origin, query });
 
-		window.location.href = `${this.baseUrl}/hetarchief/login?${queryString.stringify({
+		window.location.href = `${this.baseUrl}/hetarchief/login?${stringify({
 			returnToUrl,
 		})}`;
 	}
 
 	public async logout() {
-		const returnToUrl = process.env.NEXT_PUBLIC_ORIGIN;
+		const returnToUrl = config.public.origin;
 
-		window.location.href = `${this.baseUrl}/global-logout?${queryString.stringify({
+		window.location.href = `${this.baseUrl}/global-logout?${stringify({
 			returnToUrl,
 		})}`;
 	}

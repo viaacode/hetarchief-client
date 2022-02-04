@@ -1,1 +1,5 @@
-export default jest.mock('ky-universal', () => ({}));
+export default jest.mock('ky-universal', () => ({
+	create: () => () => ({
+		json: () => null,
+	}),
+}));

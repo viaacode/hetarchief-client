@@ -3,6 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "@auth/*": ["modules/auth/*"],
+      "@config/*": ["modules/config/*"],
       "@home/*": ["modules/home/*"],
       "@navigation/*": ["modules/navigation/*"],
       "@reading-room/*": ["modules/reading-room/*"],

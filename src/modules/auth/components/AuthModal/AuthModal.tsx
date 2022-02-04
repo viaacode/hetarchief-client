@@ -1,6 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans, useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import { authService } from '@auth/services/auth-service';
@@ -10,6 +11,7 @@ import styles from './AuthModal.module.scss';
 import { AuthModalProps } from './AuthModal.types';
 
 const AuthModal: FC<AuthModalProps> = (props) => {
+	const { query } = useRouter();
 	const { t } = useTranslation();
 
 	/**
@@ -17,7 +19,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	 */
 
 	const onLogin = () => {
-		authService.redirectToLogin();
+		authService.redirectToLogin(query);
 	};
 
 	/**

@@ -11,7 +11,7 @@
     "lint": "npm run lint:ts && npm run lint:scss",
     "lint:ts": "next lint --dir src",
     "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input",
-    "test": "jest --cache --runInBand",
+    "test": "jest --cache",
     "test:ci": "jest",
     "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch",
