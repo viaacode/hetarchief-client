@@ -9,7 +9,11 @@ const Metadata: FC<MetadataProps> = ({ className, metadata, columns = 1 }) => {
 
 	const renderMetadataItem = (item: MetadataItem, index: number) => {
 		return (
-			<li key={`metadata-${index}-${item.title}`} className={styles['c-metadata__item']}>
+			<li
+				key={`metadata-${index}-${item.title}`}
+				className={styles['c-metadata__item']}
+				role="listitem"
+			>
 				<b className={styles['c-metadata__item-title']}>{item.title}</b>
 				<div>{isString(item.data) ? <p>{item.data}</p> : item.data}</div>
 			</li>
@@ -18,7 +22,7 @@ const Metadata: FC<MetadataProps> = ({ className, metadata, columns = 1 }) => {
 
 	return (
 		<div className={clsx(className, styles['c-metadata'])}>
-			<ul className={styles['c-metadata__list']} style={{ columns: columns }}>
+			<ul className={styles['c-metadata__list']} style={{ columns: columns }} role="list">
 				{metadata.map(renderMetadataItem)}
 			</ul>
 		</div>
