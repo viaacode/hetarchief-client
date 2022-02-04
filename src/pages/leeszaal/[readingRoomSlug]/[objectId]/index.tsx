@@ -1,9 +1,12 @@
 import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
+import { setIsStickyLayout } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 import { withI18n } from '@shared/wrappers';
 
@@ -12,6 +15,16 @@ import { metadataMock } from 'modules/object-detail/components/Metadata/__mocks_
 import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(setIsStickyLayout(true));
+
+		return () => {
+			dispatch(setIsStickyLayout(false));
+		};
+	});
+
 	/**
 	 * Mock data
 	 */

@@ -1,8 +1,26 @@
 @use "styles/abstracts" as *;
 
 .p-object-detail {
+	flex-grow: 1;
+    min-height: 0;
+	display: flex;
+	flex-flow: column;
+
 	&__wrapper {
+		flex-grow: 1;
+    	min-height: 0;
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+
+		// temporary mobile layout
+		grid-template-columns: auto;
+		grid-auto-rows: 1fr;
+
+		@include respond-at(md) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	&__metadata {
+		overflow-y: scroll;
 	}
 }
