@@ -1,5 +1,6 @@
 import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -15,6 +16,7 @@ import { metadataMock } from 'modules/object-detail/components/Metadata/__mocks_
 import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
+	const { t } = useTranslation();
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -61,7 +63,15 @@ const ObjectDetailPage: NextPage = () => {
 			{/* TODO: use correct left and right sections */}
 			<ReadingRoomNavigation title={'Leeszaal'} />
 			<article className="p-object-detail__wrapper">
-				<ObjectPlaceholder {...objectPlaceholderMock} />
+				<ObjectPlaceholder
+					{...objectPlaceholderMock}
+					openModalButtonLabel={t(
+						'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+					)}
+					closeModalButtonLabel={t(
+						'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+					)}
+				/>
 				<div className="p-object-detail__metadata">
 					<div className="u-px-32">
 						{/* TODO: bind content to state */}
