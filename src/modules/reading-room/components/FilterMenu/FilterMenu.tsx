@@ -1,15 +1,16 @@
 import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans } from 'next-i18next';
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Icon, IconLightNames, Toggle } from '@shared/components';
 import { useScrollLock, useWindowSizeContext } from '@shared/hooks';
 import { Breakpoints } from '@shared/types';
 
 import styles from './FilterMenu.module.scss';
-import { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
+import { FilterMenuProps } from './FilterMenu.types';
 import { FilterMenuMobile } from './FilterMenuMobile';
+import { FilterOption } from './FilterOption';
 
 const FilterMenu: FC<FilterMenuProps> = ({
 	className,
@@ -28,7 +29,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 
-	const isMobile = windowSize.width ? windowSize.width < Breakpoints.sm : false;
+	const isMobile = windowSize.width ? windowSize.width < Breakpoints.md : false;
 	const openIcon: IconLightNames = isMobile ? 'filter' : isOpen ? 'angle-up' : 'angle-down';
 
 	useScrollLock(lockScroll);
@@ -47,7 +48,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	 */
 
 	const onFilterClick = (filterId: string) => {
-		setActiveFilter(filterId);
+		const nextActive = filterId === activeFilter ? null : filterId;
+		setActiveFilter(nextActive);
 	};
 
 	const onToggleClick = (nextOpen?: boolean) => {
@@ -57,35 +59,14 @@ const FilterMenu: FC<FilterMenuProps> = ({
 			// Remove active filter when closing the menu
 			setActiveFilter(null);
 		}
-		if (typeof onMenuToggle === 'function') {
-			onMenuToggle(nextOpen);
-		}
 
+		onMenuToggle?.(nextOpen, isMobile);
 		isMobile && setLockScroll(!openState);
 	};
 
 	/**
 	 * Render
 	 */
-
-	const renderFilterButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement => {
-		const filterIsActive = id === activeFilter;
-		const filterBtnCls = clsx(styles['c-filter-menu__filter'], {
-			[styles['c-filter-menu__filter--active']]: filterIsActive,
-		});
-		const iconName = filterIsActive ? 'angle-left' : icon ?? 'angle-right';
-
-		return (
-			<Button
-				key={`filter-menu-btn-${id}`}
-				className={filterBtnCls}
-				iconEnd={<Icon name={iconName} />}
-				label={label}
-				variants={['black', 'block']}
-				onClick={() => onFilterClick(id)}
-			/>
-		);
-	};
 
 	return (
 		<div className={clsx(className, styles['c-filter-menu'])}>
@@ -138,7 +119,15 @@ const FilterMenu: FC<FilterMenuProps> = ({
 							<DropdownContent />
 						</Dropdown>
 					)}
-					{filters.map(renderFilterButton)}
+					{filters.map((option) => (
+						<FilterOption
+							key={`filter-menu-option-${option.id}`}
+							className={styles['c-filter-menu__option']}
+							{...option}
+							activeFilter={activeFilter}
+							onClick={onFilterClick}
+						/>
+					))}
 				</div>
 			)}
 			<FilterMenuMobile

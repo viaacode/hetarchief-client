@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 
 import { UseWindowSize, WindowSizeState } from './use-window-size.types';
 
+export const WINDOW_RESIZE_TIMEOUT = 300;
+
 const useWindowSize: UseWindowSize = () => {
 	// Initialize state with undefined width/height so server and client renders match
 	// Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
@@ -18,7 +20,7 @@ const useWindowSize: UseWindowSize = () => {
 				height: window.innerHeight,
 			});
 		};
-		const debouncedResize = debounce(handleResize, 100);
+		const debouncedResize = debounce(handleResize, WINDOW_RESIZE_TIMEOUT);
 
 		window.addEventListener('resize', debouncedResize);
 		handleResize();

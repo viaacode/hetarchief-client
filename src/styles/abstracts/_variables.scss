@@ -97,9 +97,11 @@ $breakpoints: (
  */
 
 $z-layers: (
-	"modal": 6,
-	"blade": 5,
-	"filter-menu-mobile": 4,
+	"modal": 8,
+	"blade": 7,
+	"filter-menu-mobile": 6,
+	"filter-option": 5,
+	"filter-option-overlay": 4,
 	"nav-hamburger": 3,
 	"nav-dropdown": 2,
 	"foreground": 1,
