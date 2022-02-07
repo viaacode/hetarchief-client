@@ -172,7 +172,7 @@ const ReadingRoomPage: NextPage = () => {
 					<FilterMenu
 						activeSort={activeSort}
 						filters={filterOptionsMock}
-						label={t('Filters')}
+						label={t('pages/leeszaal/reading-room-slug/index___filters')}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}
 						sortOptions={READING_ROOM_SORT_OPTIONS()}
@@ -274,7 +274,6 @@ const ReadingRoomPage: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
-// export const getServerSideProps: GetServerSideProps = withAuth(withI18n());
+export const getServerSideProps: GetServerSideProps = withAuth(withI18n());
 
 export default ReadingRoomPage;

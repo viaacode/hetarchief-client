@@ -1,7 +1,10 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { Trans } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 
+import { READING_ROOM_ACTIVE_SORT_MAP } from '@reading-room/const';
+import { ReadingRoomSort } from '@reading-room/types';
 import { Icon, IconLightNames, Toggle } from '@shared/components';
 import { useScrollLock, useWindowSizeContext } from '@shared/hooks';
 import { Breakpoints } from '@shared/types';
@@ -69,6 +72,20 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	 * Render
 	 */
 
+	const renderActiveSortLabel = () => {
+		const sortBtnLabel = activeSort
+			? READING_ROOM_ACTIVE_SORT_MAP()[activeSort.sort as ReadingRoomSort]
+			: '';
+
+		return (
+			<Trans
+				i18nKey="modules/reading-room/components/filter-menu/filter-menu___sorteer-op"
+				values={{ sorted: sortBtnLabel }}
+				defaults="Sorteer op: <strong>{{ sorted }}</strong>"
+			/>
+		);
+	};
+
 	return (
 		<div className={clsx(className, styles['c-filter-menu'])}>
 			<div className={styles['c-filter-menu__header']}>
@@ -95,6 +112,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					{sortOptions.length > 0 && (
 						<FilterSort
 							activeSort={activeSort}
+							activeSortLabel={renderActiveSortLabel()}
 							className={styles['c-filter-menu__option']}
 							options={sortOptions}
 							onOptionClick={onSortClick}
@@ -113,10 +131,14 @@ const FilterMenu: FC<FilterMenuProps> = ({
 			)}
 			<FilterMenuMobile
 				activeFilter={activeFilter}
+				activeSort={activeSort}
+				activeSortLabel={renderActiveSortLabel()}
 				filters={filters}
 				isOpen={isMobile && isMobileOpen}
+				sortOptions={sortOptions}
 				onClose={() => onToggleClick(false)}
 				onFilterClick={onFilterClick}
+				onSortClick={onSortClick}
 			/>
 		</div>
 	);

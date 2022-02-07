@@ -1,56 +1,63 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
 import { Icon } from '@shared/components';
 
+import { FilterButton } from '../FilterButton';
 import { FilterMenuFilterOption } from '../FilterMenu.types';
+import { FilterSortList } from '../FilterSortList';
 
 import styles from './FilterMenuMobile.module.scss';
 import { FilterMenuMobileProps } from './FilterMenuMobile.types';
 
 const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	activeFilter,
+	activeSort,
+	activeSortLabel,
 	isOpen,
-	filters,
+	filters = [],
+	sortOptions = [],
 	onClose,
 	onFilterClick = () => null,
+	onSortClick,
 }) => {
+	const [isSortActive, setIsSortActive] = useState(false);
 	const { t } = useTranslation();
 
 	if (!isOpen) {
 		return null;
 	}
 
-	// TODO: move to separate component
 	const renderFilterButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement => {
 		const filterIsActive = id === activeFilter;
-		const filterBtnCls = clsx(styles['c-filter-menu__filter'], {
-			[styles['c-filter-menu__filter--active']]: filterIsActive,
-		});
-		const iconName = filterIsActive ? 'angle-left' : icon ?? 'angle-right';
 
 		return (
-			<Button
-				key={`filter-menu-btn-${id}`}
-				className={filterBtnCls}
-				iconEnd={<Icon name={iconName} />}
+			<FilterButton
+				key={`filter-menu-mobile-btn-${id}`}
+				icon={filterIsActive ? 'angle-left' : icon ?? 'angle-right'}
+				isActive={filterIsActive}
 				label={label}
-				variants={['black', 'block']}
 				onClick={() => onFilterClick(id)}
 			/>
 		);
 	};
 
+	const showInitialScreen = !activeFilter && !isSortActive;
+	const showFilterOrSort = activeFilter || isSortActive;
+	const goBackToInitial = activeFilter
+		? () => onFilterClick(activeFilter)
+		: () => setIsSortActive(false);
+
 	return (
 		<div
 			className={clsx(styles['c-filter-menu-mobile'], {
-				[styles['c-filter-menu-mobile--active']]: activeFilter,
+				[styles['c-filter-menu-mobile--active']]: showFilterOrSort,
 			})}
 		>
-			{!activeFilter ? (
+			{showInitialScreen && (
 				<>
 					<Navigation className={styles['c-filter-menu-mobile__nav']}>
 						<Button
@@ -79,10 +86,20 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 					</div>
 
 					<div className={clsx(styles['c-filter-menu-mobile__filters'], 'u-mt-24')}>
-						{(filters ?? []).map(renderFilterButton)}
+						{sortOptions.length > 0 && (
+							<FilterButton
+								icon={activeSort?.order === 'desc' ? 'sort-down' : 'sort-up'}
+								isActive={isSortActive}
+								label={activeSortLabel}
+								type="sort"
+								onClick={() => setIsSortActive(true)}
+							/>
+						)}
+						{filters.map(renderFilterButton)}
 					</div>
 				</>
-			) : (
+			)}
+			{showFilterOrSort && (
 				<>
 					<Navigation className={styles['c-filter-menu-mobile__nav']}>
 						<Button
@@ -91,13 +108,29 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							iconStart={<Icon name="arrow-left" />}
 							label="Filters"
 							variants={['text']}
-							onClick={() => onFilterClick(activeFilter)}
+							onClick={goBackToInitial}
 						/>
 					</Navigation>
 
-					<div className="l-container">
-						<h4 className="u-text-center u-mt-24">Filter title</h4>
-					</div>
+					{activeFilter && !isSortActive && (
+						<div className="l-container">
+							<h4 className="u-text-center u-mt-24">Filter title</h4>
+						</div>
+					)}
+					{isSortActive && !activeFilter && (
+						<>
+							<h4 className="u-text-center u-mt-24 u-mb-16">
+								{t(
+									'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___sorteer-op'
+								)}
+							</h4>
+							<FilterSortList
+								activeSort={activeSort}
+								options={sortOptions}
+								onOptionClick={onSortClick}
+							/>
+						</>
+					)}
 				</>
 			)}
 		</div>

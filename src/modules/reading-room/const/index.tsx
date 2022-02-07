@@ -51,33 +51,33 @@ export const READING_ROOM_VIEW_TOGGLE_OPTIONS = [
 ];
 
 export const READING_ROOM_ACTIVE_SORT_MAP = (): { [key in ReadingRoomSort]: string } => ({
-	date: i18n?.t('sorteer op Datum') ?? '',
-	relevance: i18n?.t('sorteer op Relevantie') ?? '',
-	title: i18n?.t('sorteer op Titel') ?? '',
+	date: i18n?.t('modules/reading-room/const/index___sorteer-op-datum') ?? '',
+	relevance: i18n?.t('modules/reading-room/const/index___sorteer-op-relevantie') ?? '',
+	title: i18n?.t('modules/reading-room/const/index___sorteer-op-titel') ?? '',
 });
 
 export const READING_ROOM_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	{
-		label: i18n?.t('Relevantie') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___relevantie') ?? '',
 		sort: ReadingRoomSort.Relevance,
 	},
 	{
-		label: i18n?.t('Datum oplopend') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___datum-oplopend') ?? '',
 		sort: ReadingRoomSort.Date,
 		order: 'asc',
 	},
 	{
-		label: i18n?.t('Datum aflopend') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___datum-aflopend') ?? '',
 		sort: ReadingRoomSort.Date,
 		order: 'desc',
 	},
 	{
-		label: i18n?.t('Van A tot Z') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___van-a-tot-z') ?? '',
 		sort: ReadingRoomSort.Title,
 		order: 'asc',
 	},
 	{
-		label: i18n?.t('Van Z tot A') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___van-z-tot-a') ?? '',
 		sort: ReadingRoomSort.Title,
 		order: 'desc',
 	},
