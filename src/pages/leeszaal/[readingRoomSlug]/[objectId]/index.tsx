@@ -1,8 +1,8 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 
+import { withI18n } from '@i18n/wrappers';
 import { createPageTitle } from '@shared/utils';
-import { withI18n } from '@shared/wrappers';
 
 const ReadingRoomPage: NextPage = () => {
 	/**
