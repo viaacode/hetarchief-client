@@ -13,7 +13,7 @@ import styles from './FilterMenu.module.scss';
 import { FilterMenuProps } from './FilterMenu.types';
 import { FilterMenuMobile } from './FilterMenuMobile';
 import { FilterOption } from './FilterOption';
-import FilterSort from './FilterSort/FilterSort';
+import { FilterSort } from './FilterSort';
 
 const FilterMenu: FC<FilterMenuProps> = ({
 	activeSort,
