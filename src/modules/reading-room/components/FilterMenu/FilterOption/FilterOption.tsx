@@ -23,20 +23,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
 
-	useEffect(() => {
-		const closeOnEsc = (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && filterIsActive) {
-				onFilterToggle();
-			}
-		};
-
-		window.addEventListener('keydown', closeOnEsc);
-
-		return () => {
-			window.removeEventListener('keydown', closeOnEsc);
-		};
-	}, [filterIsActive, onFilterToggle]);
-
 	return (
 		<>
 			<Dropdown
@@ -45,6 +31,8 @@ const FilterOption: FC<FilterOptionProps> = ({
 				flyoutClassName={styles['c-filter-option__flyout']}
 				isOpen={filterIsActive}
 				placement="right"
+				onOpen={onFilterToggle}
+				onClose={onFilterToggle}
 			>
 				<DropdownButton>
 					<Button
@@ -52,7 +40,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 						iconEnd={<Icon name={iconName} />}
 						label={label}
 						variants={['black', 'block']}
-						onClick={onFilterToggle}
 					/>
 				</DropdownButton>
 				<DropdownContent>

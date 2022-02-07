@@ -1,6 +1,5 @@
-import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { Trans } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 
 import { Icon, IconLightNames, Toggle } from '@shared/components';
@@ -11,19 +10,21 @@ import styles from './FilterMenu.module.scss';
 import { FilterMenuProps } from './FilterMenu.types';
 import { FilterMenuMobile } from './FilterMenuMobile';
 import { FilterOption } from './FilterOption';
+import FilterSort from './FilterSort/FilterSort';
 
 const FilterMenu: FC<FilterMenuProps> = ({
+	activeSort,
 	className,
 	filters = [],
-	label = 'Filters',
+	label,
 	isMobileOpen = false,
 	isOpen = true,
 	sortOptions = [],
 	toggleOptions = [],
 	onMenuToggle,
+	onSortClick,
 	onViewToggle = () => null,
 }) => {
-	const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 	const [activeFilter, setActiveFilter] = useState<string | null>(null);
 	const [lockScroll, setLockScroll] = useState<boolean>(false);
 	// We need different functionalities for different viewport sizes
@@ -92,32 +93,12 @@ const FilterMenu: FC<FilterMenuProps> = ({
 			{isOpen && !isMobile && (
 				<div className={styles['c-filter-menu__list']}>
 					{sortOptions.length > 0 && (
-						<Dropdown
-							isOpen={sortOptionsOpen}
-							onOpen={() => setSortOptionsOpen(true)}
-							onClose={() => setSortOptionsOpen(false)}
-						>
-							<DropdownButton>
-								<Button
-									className={clsx(
-										styles['c-filter-menu__filter']
-										// TODO: additional styling
-									)}
-									variants={['black', 'block']}
-									label={
-										<Trans
-											// TODO: adjust i18n:extract to preserve key
-											i18nKey="modules/reading-room/components/filter-menu/filter-menu___sorteer-op"
-											values={{ sorted: sortOptions[0].label }}
-											defaults="Sorteer op: <strong>{{ sorted }}</strong>"
-										/>
-									}
-								/>
-
-								{/* TODO: sorting indicator */}
-							</DropdownButton>
-							<DropdownContent />
-						</Dropdown>
+						<FilterSort
+							activeSort={activeSort}
+							className={styles['c-filter-menu__option']}
+							options={sortOptions}
+							onOptionClick={onSortClick}
+						/>
 					)}
 					{filters.map((option) => (
 						<FilterOption

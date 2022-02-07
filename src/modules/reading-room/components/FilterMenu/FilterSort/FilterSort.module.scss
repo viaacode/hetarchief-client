@@ -1,6 +1,6 @@
 @use "styles/abstracts" as *;
 
-.c-filter-option {
+.c-filter-sort {
 	position: relative;
 	width: 100%;
 }
@@ -9,10 +9,11 @@
  * Elements
  */
 
-.c-filter-option__button {
+.c-filter-sort__button {
 	position: relative;
 	padding-right: $spacer-sm;
 	font-weight: $font-weight-normal;
+	background-color: $shade;
 
 	&:active {
 		border-color: black;
@@ -39,9 +40,8 @@
 	}
 }
 
-.c-filter-option__flyout {
-	z-index: get-z-layer("filter-option-overlay");
-
-	// Overwrite popper styles
-	min-width: 46.4rem !important;
+.c-filter-sort__flyout {
+	&:global(.c-dropdown__content-open) {
+		z-index: get-z-layer("filter-option-overlay");
+	}
 }

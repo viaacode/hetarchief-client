@@ -14,6 +14,8 @@ import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavig
 import {
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
+	READING_ROOM_QUERY_PARAM_INIT,
+	READING_ROOM_SORT_OPTIONS,
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
@@ -34,6 +36,7 @@ import {
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
+import { SortOrder } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
@@ -125,30 +128,31 @@ const ReadingRoomPage: NextPage = () => {
 		}
 	};
 
-	const onNewKeyWord = (newKeyWord: string) => {
-		setQuery({ search: (query.search ?? []).concat(newKeyWord) });
-	};
-
 	const onResetFilters = () => {
-		setQuery({ search: undefined });
+		setQuery({
+			...READING_ROOM_QUERY_PARAM_INIT,
+			search: undefined,
+			order: undefined,
+		});
 	};
 
-	const onRemoveFilter = (newValue: SearchBarValue<true>) => {
+	const onNewKeyWord = (newKeyWord: string) =>
+		setQuery({ search: (query.search ?? []).concat(newKeyWord) });
+
+	const onRemoveFilter = (newValue: SearchBarValue<true>) =>
 		setQuery({ search: newValue.map((tag) => tag.value as string) });
-	};
 
-	const onViewToggle = (nextMode: string) => {
-		setViewMode(nextMode as MediaCardViewMode);
-	};
+	const onSortClick = (sort: string, order?: SortOrder) => setQuery({ sort, order });
 
-	const onTabClick = (tabId: string | number) => {
-		setQuery({ mediaType: String(tabId) });
-	};
+	const onTabClick = (tabId: string | number) => setQuery({ mediaType: String(tabId) });
+
+	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
 	/**
 	 * Computed
 	 */
 
+	const activeSort = { sort: query.sort, order: (query.order as SortOrder) ?? undefined };
 	const showInitialView = !hasSearched && (!media || media.length === 0);
 	const showNoResults = hasSearched && media.length === 0;
 	const showResults = hasSearched && media.length > 0;
@@ -166,10 +170,14 @@ const ReadingRoomPage: NextPage = () => {
 			<div className={filterMenuCls}>
 				<WindowSizeContext.Provider value={windowSize}>
 					<FilterMenu
+						activeSort={activeSort}
 						filters={filterOptionsMock}
+						label={t('Filters')}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}
+						sortOptions={READING_ROOM_SORT_OPTIONS()}
 						toggleOptions={toggleOptions}
+						onSortClick={onSortClick}
 						onMenuToggle={onFilterMenuToggle}
 						onViewToggle={onViewToggle}
 					/>
@@ -266,6 +274,7 @@ const ReadingRoomPage: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withAuth(withI18n());
+export const getServerSideProps: GetServerSideProps = withI18n();
+// export const getServerSideProps: GetServerSideProps = withAuth(withI18n());
 
 export default ReadingRoomPage;

@@ -5,7 +5,7 @@ import { DecodedValueMap } from 'use-query-params';
 import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
 
 export const mapFilters = (
-	query: DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>
+	query: DecodedValueMap<Pick<typeof READING_ROOM_QUERY_PARAM_CONFIG, 'search'>>
 ): TagInfo[] => {
 	const searchFilters = (query.search ?? [])
 		.filter((keyword) => !!keyword)
