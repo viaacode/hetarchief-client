@@ -23,7 +23,12 @@ class AuthService {
 	}
 
 	public redirectToLogin(query: StringifiableRecord) {
-		const returnToUrl = stringifyUrl({ url: config.public.origin, query });
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { showAuth, ...queryParams } = query;
+		const returnToUrl = stringifyUrl({
+			url: config.public.origin,
+			query: queryParams,
+		});
 
 		window.location.href = `${this.baseUrl}/hetarchief/login?${stringify({
 			returnToUrl,
