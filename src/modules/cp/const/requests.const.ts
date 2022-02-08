@@ -1,6 +1,6 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
-import { NumberParam, withDefault } from 'use-query-params';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 export const enum requestStatusFilterIds {
 	all,
@@ -29,5 +29,6 @@ export const requestStatusFilters: TabProps[] = [
 ];
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
+	search: withDefault(StringParam, undefined),
 	status: withDefault(NumberParam, requestStatusFilterIds.all),
 };

@@ -28,5 +28,10 @@ AllowCreate.args = {
 
 export const Large = Template.bind({});
 Large.args = {
-	large: true,
+	size: 'lg',
+};
+
+export const Medium = Template.bind({});
+Medium.args = {
+	size: 'md',
 };

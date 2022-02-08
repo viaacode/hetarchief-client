@@ -1,0 +1,20 @@
+@use "styles/abstracts" as *;
+
+$page: "p-cp-requests";
+
+.#{$page} {
+    &__header {
+        display: flex;
+        flex-flow: row nowrap;
+
+        // Can't use &__status-filter here due to ScrollableTabs implementation
+        & > div:first-child {
+            flex-grow: 1;
+        }
+    }
+
+    &__search {
+        flex-basis: 34.1rem;
+        margin-left: $spacer-sm;
+    }
+}
