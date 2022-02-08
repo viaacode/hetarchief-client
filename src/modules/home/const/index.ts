@@ -6,5 +6,5 @@ export const SHOW_AUTH_QUERY_KEY = 'showAuth';
 export const HOME_QUERY_PARAM_CONFIG = {
 	returnToRequestAccess: BooleanParam,
 	search: StringParam,
-	showAuth: BooleanParam,
+	[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 };
