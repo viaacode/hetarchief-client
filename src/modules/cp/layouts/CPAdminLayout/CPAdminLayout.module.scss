@@ -9,7 +9,7 @@ $l-cp-admin-sidebar-width: 25.4rem;
     flex-grow: 1;
     height: 100%;
 
-    &__left {
+    &__navigation {
         width: $l-cp-admin-sidebar-width;
         border-right: $divider-grey;
 
@@ -20,7 +20,7 @@ $l-cp-admin-sidebar-width: 25.4rem;
         }
     }
 
-    &__right {
+    &__main {
         flex-grow: 1;
     }
 }

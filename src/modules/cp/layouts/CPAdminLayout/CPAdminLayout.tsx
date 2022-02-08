@@ -33,7 +33,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ pageTitle, children, className 
 
 	return (
 		<div className={clsx(styles['l-cp-admin'], 'u-bg-platinum', className)}>
-			<div className={clsx(styles['l-cp-admin__left'], 'u-bg-white')}>
+			<div className={clsx(styles['l-cp-admin__navigation'], 'u-bg-white')}>
 				<Sidebar
 					className={styles['l-cp-admin__sidebar']}
 					title={t('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
@@ -42,7 +42,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ pageTitle, children, className 
 				</Sidebar>
 			</div>
 
-			<div className={styles['l-cp-admin__right']}>
+			<div className={styles['l-cp-admin__main']}>
 				<div className={clsx(styles['l-cp-admin__content'], 'l-container', 'u-mt-64')}>
 					{pageTitle && (
 						<h1 className={clsx(styles['l-cp-admin__title'], 'u-mb-48')}>
