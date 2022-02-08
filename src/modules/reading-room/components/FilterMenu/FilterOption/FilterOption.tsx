@@ -41,7 +41,7 @@ const FilterOption: FC<FilterOptionProps> = ({ activeFilter, icon, id, label, on
 				</DropdownContent>
 			</Dropdown>
 			<Overlay
-				className={clsx(styles['c-filter-menu__overlay'])}
+				className={styles['c-filter-menu__overlay']}
 				visible={filterIsActive}
 				onClick={onFilterToggle}
 			/>
