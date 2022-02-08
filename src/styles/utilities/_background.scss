@@ -7,5 +7,6 @@
 $bg: (
 	"black": $black,
 	"platinum": $platinum,
+	"white": $white,
 );
 @include generate-utils("bg", "background-color", $bg);

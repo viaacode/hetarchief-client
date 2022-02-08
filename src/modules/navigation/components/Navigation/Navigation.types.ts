@@ -23,7 +23,7 @@ export interface NavigationItemNodeProps {
 }
 
 export interface NavigationItem {
-	node: ReactNode | ((nodeProps: NavigationItemNodeProps) => void);
+	node: ReactNode | ((nodeProps: NavigationItemNodeProps) => ReactNode);
 	id: string;
 	active?: boolean;
 	hasDivider?: boolean | 'md';

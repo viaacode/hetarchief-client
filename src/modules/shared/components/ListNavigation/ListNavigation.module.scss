@@ -31,10 +31,11 @@ $teal-24: color.adjust($teal, $alpha: -0.76);
 		text-decoration: none;
 	}
 
-	&__button {
+	&__button:global(.c-button) {
 		height: auto;
-		padding: $spacer-sm;
+		padding: 1.2rem $spacer-sm;
 		padding-left: $spacer-md;
+		text-align: left;
 	}
 
 	&__divider {

@@ -1,15 +1,16 @@
+import { ReadingRoomSort } from '@reading-room/types';
 import { IconProps, ToggleOption } from '@shared/components';
-import { DefaultComponentProps, SortOrder } from '@shared/types';
+import { DefaultComponentProps, SortObject, SortOrder } from '@shared/types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
-	activeSort?: FilterMenuSortOption;
+	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
 	label?: string;
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
 	sortOptions?: FilterMenuSortOption[];
 	toggleOptions?: ToggleOption[];
-	onMenuToggle?: (nextOpen?: boolean) => void;
+	onMenuToggle?: (nextOpen?: boolean, isMobile?: boolean) => void;
 	onSortClick?: FilterMenuOnSortClick;
 	onFilterSubmit?: (values: Record<string, unknown>) => void;
 	onViewToggle?: (viewMode: string) => void;
@@ -17,15 +18,14 @@ export interface FilterMenuProps extends DefaultComponentProps {
 
 export interface FilterMenuSortOption {
 	label: string;
+	sort: ReadingRoomSort;
 	order?: SortOrder;
-	onClick?: FilterMenuOnSortClick;
 }
 
 export interface FilterMenuFilterOption {
 	id: string;
 	icon?: IconProps['name'];
 	label: string;
-	onClick?: FilterMenuOnSortClick;
 }
 
-export type FilterMenuOnSortClick = (key: string, order?: SortOrder) => void;
+export type FilterMenuOnSortClick = (key: ReadingRoomSort, order?: SortOrder) => void;

@@ -1,7 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE } from '@shared/const';
+import { DEFAULT_LOCALE } from '../../const';
 
 import { WithI18n } from './with-i18n.types';
 

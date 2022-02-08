@@ -4,6 +4,12 @@ export enum ReadingRoomMediaType {
 	Video = 'video',
 }
 
+export enum ReadingRoomSort {
+	Date = 'date',
+	Relevance = 'relevance',
+	Title = 'title',
+}
+
 export interface ApiResponseWrapper<T> {
 	items: T[];
 	total: number;

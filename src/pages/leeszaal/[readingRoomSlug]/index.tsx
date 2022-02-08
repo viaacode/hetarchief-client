@@ -7,12 +7,15 @@ import { useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { FilterMenu } from '@reading-room/components';
 import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import {
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
+	READING_ROOM_QUERY_PARAM_INIT,
+	READING_ROOM_SORT_OPTIONS,
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
@@ -33,9 +36,8 @@ import {
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
-import { Breakpoints } from '@shared/types';
+import { SortOrder } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
-import { withI18n } from '@shared/wrappers';
 
 const ReadingRoomPage: NextPage = () => {
 	// State
@@ -116,8 +118,7 @@ const ReadingRoomPage: NextPage = () => {
 		}
 	};
 
-	const onFilterMenuToggle = (nextOpen?: boolean) => {
-		const isMobile = windowSize.width ? windowSize.width < Breakpoints.sm : false;
+	const onFilterMenuToggle = (nextOpen?: boolean, isMobile?: boolean) => {
 		const nextOpenState =
 			typeof nextOpen !== 'undefined' ? nextOpen : (prevOpen: boolean) => !prevOpen;
 		if (isMobile) {
@@ -127,30 +128,31 @@ const ReadingRoomPage: NextPage = () => {
 		}
 	};
 
-	const onNewKeyWord = (newKeyWord: string) => {
-		setQuery({ search: (query.search ?? []).concat(newKeyWord) });
-	};
-
 	const onResetFilters = () => {
-		setQuery({ search: undefined });
+		setQuery({
+			...READING_ROOM_QUERY_PARAM_INIT,
+			search: undefined,
+			order: undefined,
+		});
 	};
 
-	const onRemoveFilter = (newValue: SearchBarValue<true>) => {
+	const onNewKeyWord = (newKeyWord: string) =>
+		setQuery({ search: (query.search ?? []).concat(newKeyWord) });
+
+	const onRemoveFilter = (newValue: SearchBarValue<true>) =>
 		setQuery({ search: newValue.map((tag) => tag.value as string) });
-	};
 
-	const onViewToggle = (nextMode: string) => {
-		setViewMode(nextMode as MediaCardViewMode);
-	};
+	const onSortClick = (sort: string, order?: SortOrder) => setQuery({ sort, order });
 
-	const onTabClick = (tabId: string | number) => {
-		setQuery({ mediaType: String(tabId) });
-	};
+	const onTabClick = (tabId: string | number) => setQuery({ mediaType: String(tabId) });
+
+	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
 	/**
 	 * Computed
 	 */
 
+	const activeSort = { sort: query.sort, order: (query.order as SortOrder) ?? undefined };
 	const showInitialView = !hasSearched && (!media || media.length === 0);
 	const showNoResults = hasSearched && media.length === 0;
 	const showResults = hasSearched && media.length > 0;
@@ -168,10 +170,14 @@ const ReadingRoomPage: NextPage = () => {
 			<div className={filterMenuCls}>
 				<WindowSizeContext.Provider value={windowSize}>
 					<FilterMenu
+						activeSort={activeSort}
 						filters={filterOptionsMock}
+						label={t('pages/leeszaal/reading-room-slug/index___filters')}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}
+						sortOptions={READING_ROOM_SORT_OPTIONS()}
 						toggleOptions={toggleOptions}
+						onSortClick={onSortClick}
 						onMenuToggle={onFilterMenuToggle}
 						onViewToggle={onViewToggle}
 					/>
