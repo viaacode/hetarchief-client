@@ -53,47 +53,47 @@ export const READING_ROOM_VIEW_TOGGLE_OPTIONS = [
 export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: 'format',
-		label: i18n?.t('Analoge drager') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___analoge-drager') ?? '',
 		form: () => null, // Checkbox list
 	},
 	{
 		id: 'duration',
-		label: i18n?.t('Duurtijd') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___duurtijd') ?? '',
 		form: () => null, // Timepicker hh:mm:ss:SSSS
 	},
 	{
 		id: 'created',
-		label: i18n?.t('Creatiedatum') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___creatiedatum') ?? '',
 		form: () => null, // Datetime
 	},
 	{
 		id: 'published',
-		label: i18n?.t('Publicatiedatum') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___publicatiedatum') ?? '',
 		form: () => null, // Datetime
 	},
 	{
 		id: 'creator',
-		label: i18n?.t('Maker') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___maker') ?? '',
 		form: () => null,
 	},
 	{
 		id: 'genre',
-		label: i18n?.t('Genre') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
 		form: () => null, // Checkbox list
 	},
 	{
 		id: 'keywords',
-		label: i18n?.t('Trefwoorden') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___trefwoorden') ?? '',
 		form: () => null, // Text input
 	},
 	{
 		id: 'language',
-		label: i18n?.t('Taal') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___taal') ?? '',
 		form: () => null, // Text input
 	},
 	{
 		id: 'image-sound',
-		label: i18n?.t('Beeld/Geluid') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___beeld-geluid') ?? '',
 		form: () => null, // Boolean yes / no
 	},
 ];

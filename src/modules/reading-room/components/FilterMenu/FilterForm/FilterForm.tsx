@@ -21,12 +21,16 @@ const FilterForm: FC<FilterFormProps> = ({ children, className, title }) => {
 				<Button
 					className={styles['c-filter-form__reset']}
 					iconStart={<Icon name="redo" />}
-					label={t('Reset')}
+					label={t(
+						'modules/reading-room/components/filter-menu/filter-form/filter-form___reset'
+					)}
 					variants="text"
 				/>
 				<Button
 					className={styles['c-filter-form__submit']}
-					label={t('Pas toe')}
+					label={t(
+						'modules/reading-room/components/filter-menu/filter-form/filter-form___pas-toe'
+					)}
 					variants={['black']}
 				/>
 			</div>
