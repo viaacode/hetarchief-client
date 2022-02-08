@@ -61,7 +61,7 @@ const CPRequestsPage: NextPage = () => {
 						className="p-cp-requests__search"
 						instanceId="requests-seach-bar"
 						light={true}
-						placeholder={t('Zoek')}
+						placeholder={t('pages/beheer/aanvragen/index___zoek')}
 						searchValue={filters.search}
 						size="md"
 						onClear={() => {

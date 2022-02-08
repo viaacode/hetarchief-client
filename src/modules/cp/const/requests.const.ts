@@ -12,19 +12,19 @@ export const enum requestStatusFilterIds {
 export const requestStatusFilters: TabProps[] = [
 	{
 		id: requestStatusFilterIds.all,
-		label: i18n?.t('Alle'),
+		label: i18n?.t('modules/cp/const/requests___alle'),
 	},
 	{
 		id: requestStatusFilterIds.open,
-		label: i18n?.t('Open'),
+		label: i18n?.t('modules/cp/const/requests___open'),
 	},
 	{
 		id: requestStatusFilterIds.approved,
-		label: i18n?.t('Goedgekeurd'),
+		label: i18n?.t('modules/cp/const/requests___goedgekeurd'),
 	},
 	{
 		id: requestStatusFilterIds.denied,
-		label: i18n?.t('Geweigerd'),
+		label: i18n?.t('modules/cp/const/requests___geweigerd'),
 	},
 ];
 
