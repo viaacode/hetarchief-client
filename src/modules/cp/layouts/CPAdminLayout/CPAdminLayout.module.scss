@@ -1,0 +1,26 @@
+@use "styles/abstracts" as *;
+
+$component: "l-cp-admin";
+$l-cp-admin-sidebar-width: 25.4rem;
+
+.#{$component} {
+    display: flex;
+    flex-flow: row nowrap;
+    flex-grow: 1;
+    height: 100%;
+
+    &__left {
+        width: $l-cp-admin-sidebar-width;
+        border-right: $divider-grey;
+
+        .#{$component} {
+            &__sidebar {
+                width: $l-cp-admin-sidebar-width; // force overlap with border
+            }
+        }
+    }
+
+    &__right {
+        flex-grow: 1;
+    }
+}

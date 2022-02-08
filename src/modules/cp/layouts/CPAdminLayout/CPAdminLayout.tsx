@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -7,9 +8,10 @@ import { ListNavigation, ListNavigationItem, Sidebar } from '@shared/components'
 
 import { CP_ADMIN_NAVIGATION_LINKS } from '../../const';
 
+import styles from './CPAdminLayout.module.scss';
 import { CPAdminLayoutProps } from './CPAdminLayout.types';
 
-const CPAdminLayout: FC<CPAdminLayoutProps> = ({ pageTitle }) => {
+const CPAdminLayout: FC<CPAdminLayoutProps> = ({ pageTitle, children, className }) => {
 	const { asPath } = useRouter();
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
@@ -30,12 +32,19 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ pageTitle }) => {
 	const { t } = useTranslation();
 
 	return (
-		<div>
-			<Sidebar title={t('Beheer')}>
-				<ListNavigation listItems={sidebarLinks} />
-			</Sidebar>
-			<div>
-				<h1>{pageTitle}</h1>
+		<div className={clsx(styles['l-cp-admin'], 'u-bg-platinum', className)}>
+			<div className={clsx(styles['l-cp-admin__left'], 'u-bg-white')}>
+				<Sidebar className={styles['l-cp-admin__sidebar']} title={t('Beheer')}>
+					<ListNavigation listItems={sidebarLinks} />
+				</Sidebar>
+			</div>
+
+			<div className={styles['l-cp-admin__right']}>
+				<div className={clsx(styles['l-cp-admin__content'], 'l-container', 'u-mt-64')}>
+					<h1 className={clsx(styles['l-cp-admin__title'], 'u-mb-48')}>{pageTitle}</h1>
+
+					{children}
+				</div>
 			</div>
 		</div>
 	);

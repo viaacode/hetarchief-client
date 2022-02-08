@@ -11,14 +11,16 @@ const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 
 	return (
-		<div className="p-cp-requests">
+		<>
 			<Head>
-				<title>{createPageTitle('Aanvragen')}</title>
+				<title>{createPageTitle(t('Aanvragen'))}</title>
 				<meta name="description" content={t('Aanvragen meta omschrijving')} />
 			</Head>
 
-			<CPAdminLayout pageTitle={t('Aanvragen')}>{/* Requests table */}</CPAdminLayout>
-		</div>
+			<CPAdminLayout className="p-cp-requests" pageTitle={t('Aanvragen')}>
+				Requests table
+			</CPAdminLayout>
+		</>
 	);
 };
 

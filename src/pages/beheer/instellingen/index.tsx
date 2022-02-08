@@ -11,14 +11,16 @@ const CPSettingsPage: NextPage = () => {
 	const { t } = useTranslation();
 
 	return (
-		<div className="p-cp-settings">
+		<>
 			<Head>
-				<title>{createPageTitle('Beheer instellingen title')}</title>
+				<title>{createPageTitle(t('Beheer instellingen title'))}</title>
 				<meta name="description" content={t('Beheer instellingen meta omschrijving')} />
 			</Head>
 
-			<CPAdminLayout pageTitle={t('Instellingen')}>{/* Visitors table */}</CPAdminLayout>
-		</div>
+			<CPAdminLayout className="p-cp-settings" pageTitle={t('Instellingen')}>
+				Settings table
+			</CPAdminLayout>
+		</>
 	);
 };
 

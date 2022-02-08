@@ -2,10 +2,10 @@
 
 .c-sidebar {
 	display: grid;
-	grid-template-columns: max-content;
 	grid-template-rows: auto;
 	grid-auto-rows: 1fr;
 	height: 100%;
+	width: 100%;
 
 	&__title {
 		padding: $spacer-lg;
