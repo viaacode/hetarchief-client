@@ -11,14 +11,14 @@ import styles from './Modal.module.scss';
 import { ModalProps } from './Modal.types';
 
 const Modal: FC<ModalProps> = ({
-	isOpen,
+	children,
 	className,
-	title,
-	heading,
 	footer,
+	heading,
+	isOpen,
+	title,
 	onClose,
 	onOpen,
-	children,
 }) => {
 	const [ready, setReady] = useState(false);
 

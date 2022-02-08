@@ -1,0 +1,8 @@
+@use "styles/abstracts" as *;
+
+.p-object-detail {
+	&__wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+	}
+}

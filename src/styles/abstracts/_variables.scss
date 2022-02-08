@@ -97,6 +97,8 @@ $breakpoints: (
  */
 
 $z-layers: (
+	"modal": 6,
+	"blade": 5,
 	"filter-menu-mobile": 4,
 	"nav-hamburger": 3,
 	"nav-dropdown": 2,
@@ -121,7 +123,7 @@ $card-edge-size: 1px;
 $card-offset: 2rem;
 
 /**
- * Card
+ * Button
  */
 
 $button-horizontal-whitespace: $spacer-md;
@@ -137,8 +139,21 @@ $divider-white: solid 1px rgb(255 255 255 / 20%);
  * Navigation
  */
 
- $c-navigation-height: 8.8rem;
- $c-navigation-height-md: 8rem;
+$c-navigation-height: 8.8rem;
+$c-navigation-height-md: 8rem;
+
+/**
+ * Tab(s)
+ */
+
+$tab-min-height: 3.4rem;
+$tab-min-height-md: 5.6rem;
+$tab-line-size: $font-size-base * $line-height-lg; // body font size * base line height
+$tab-line-size-md: $font-size-sm * $line-height-lg; // font size of .tab at md * base line height
+$tab-vertical-padding: $spacer-xs;
+$tab-vertical-padding-md: $spacer-sm;
+$tabs-rounded-size: $spacer-md;
+$tabs-border-width: 1px;
 
 /**
  * Animations

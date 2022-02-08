@@ -42,3 +42,23 @@ export const mockTabs = [
 		icon: <Icon name="newspaper" />,
 	},
 ];
+
+export const mockAdminTabs = [
+	{
+		id: 'all',
+		label: 'Alle',
+		active: true,
+	},
+	{
+		id: 'all',
+		label: 'Open',
+	},
+	{
+		id: 'all',
+		label: 'Goedgekeurd',
+	},
+	{
+		id: 'all',
+		label: 'Geweigerd',
+	},
+];

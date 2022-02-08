@@ -6,6 +6,7 @@ import Head from 'next/head';
 import { useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
+import { withAuth } from '@auth/wrappers/with-auth';
 import { FilterMenu } from '@reading-room/components';
 import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
@@ -206,7 +207,7 @@ const ReadingRoomPage: NextPage = () => {
 						onRemoveValue={onRemoveFilter}
 						onClear={onResetFilters}
 					/>
-					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
+					<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>
 
@@ -267,6 +268,6 @@ const ReadingRoomPage: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps: GetServerSideProps = withAuth(withI18n());
 
 export default ReadingRoomPage;

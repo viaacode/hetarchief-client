@@ -44,7 +44,7 @@ const Blade: FC<BladeProps> = ({
 					visible={isBladeOpen}
 					onClick={isLayered && onCloseBlade ? () => onCloseBlade(layer) : onClose}
 					animate="animate-default"
-					className={clsx(className, {
+					className={clsx(className, styles['c-blade__overlay'], {
 						[styles['c-blade__overlay--managed']]: isLayered && layer > 1,
 					})}
 					style={
