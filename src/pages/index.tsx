@@ -170,7 +170,7 @@ const Home: NextPage = () => {
 					<div className="u-text-center">
 						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
 							{t('pages/index___toon-alles-amount', {
-								amount: 5,
+								amount: readingRoomInfo?.total,
 							})}
 						</Button>
 					</div>
