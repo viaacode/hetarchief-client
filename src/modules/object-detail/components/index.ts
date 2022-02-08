@@ -1,2 +1,2 @@
+export * from './ObjectPlaceholder';
 export * from './Metadata';
-// export * from './ObjectPlaceholder';
