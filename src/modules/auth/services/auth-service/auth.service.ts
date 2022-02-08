@@ -1,6 +1,5 @@
-import ky from 'ky-universal';
 import { Options } from 'ky/distribution';
-import { StringifiableRecord, stringify, stringifyUrl } from 'query-string';
+import { StringifiableRecord, stringifyUrl } from 'query-string';
 
 import { config } from '@config/const';
 import { ApiService } from '@shared/services';
@@ -20,17 +19,23 @@ class AuthService extends ApiService {
 	public redirectToLogin(query: StringifiableRecord) {
 		const returnToUrl = stringifyUrl({ url: config.public.origin, query });
 
-		window.location.href = `${this.baseUrl}/hetarchief/login?${stringify({
-			returnToUrl,
-		})}`;
+		window.location.href = stringifyUrl({
+			url: `${this.baseUrl}/hetarchief/login`,
+			query: {
+				returnToUrl,
+			},
+		});
 	}
 
 	public logout() {
 		const returnToUrl = config.public.origin;
 
-		window.location.href = `${this.baseUrl}/global-logout?${stringify({
-			returnToUrl,
-		})}`;
+		window.location.href = stringifyUrl({
+			url: `${this.baseUrl}/global-logout`,
+			query: {
+				returnToUrl,
+			},
+		});
 	}
 }
 

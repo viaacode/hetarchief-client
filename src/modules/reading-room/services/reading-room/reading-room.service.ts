@@ -1,4 +1,4 @@
-import { stringify } from 'query-string';
+import { stringifyUrl } from 'query-string';
 
 import { ApiResponseWrapper, ReadingRoomInfo } from '@reading-room/types';
 import { ApiService } from '@shared/services';
@@ -13,11 +13,14 @@ class ReadingRoomService extends ApiService {
 	): Promise<ApiResponseWrapper<ReadingRoomInfo>> {
 		const parsed = await this.api
 			.get(
-				`${READING_ROOM_SERVICE_BASE_URL}?${stringify({
-					query: `%${searchInput}%`,
-					page,
-					size,
-				})}`
+				stringifyUrl({
+					url: '',
+					query: {
+						query: `%${searchInput}%`,
+						page,
+						size,
+					},
+				})
 			)
 			.json();
 		return parsed as ApiResponseWrapper<ReadingRoomInfo>;
