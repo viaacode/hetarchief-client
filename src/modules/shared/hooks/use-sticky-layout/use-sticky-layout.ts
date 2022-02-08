@@ -5,7 +5,7 @@ import { setIsStickyLayout } from '@shared/store/ui';
 
 import { UseStickyLayout } from './use-stikcy-layout.types';
 
-const useStickyLayout: UseStickyLayout = (isSticky) => {
+const useStickyLayout: UseStickyLayout = (isSticky = true) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -13,7 +13,7 @@ const useStickyLayout: UseStickyLayout = (isSticky) => {
 		return () => {
 			dispatch(setIsStickyLayout(false));
 		};
-	});
+	}, [dispatch, isSticky]);
 };
 
 export default useStickyLayout;

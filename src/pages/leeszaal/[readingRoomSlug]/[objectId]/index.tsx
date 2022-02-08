@@ -15,7 +15,7 @@ import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPl
 
 const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
-	useStickyLayout(true);
+	useStickyLayout();
 
 	/**
 	 * Mock data

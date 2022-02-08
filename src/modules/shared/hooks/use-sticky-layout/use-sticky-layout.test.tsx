@@ -12,7 +12,7 @@ describe('Hooks', () => {
 	describe('useStickyLayout', () => {
 		it('Should set isStickyLayout in the store', () => {
 			mockDispatch = jest.fn();
-			renderHook(() => useStickyLayout(true));
+			renderHook(() => useStickyLayout());
 
 			expect(mockDispatch).toHaveBeenCalled();
 			expect(mockDispatch).toHaveBeenCalledTimes(1);

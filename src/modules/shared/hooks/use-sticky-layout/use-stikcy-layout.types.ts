@@ -1,1 +1,1 @@
-export type UseStickyLayout = (isSticky: boolean) => void;
+export type UseStickyLayout = (isSticky?: boolean) => void;

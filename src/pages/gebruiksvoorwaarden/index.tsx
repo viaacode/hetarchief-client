@@ -20,7 +20,7 @@ const TermsOfService: NextPage = () => {
 	const { t } = useTranslation();
 	const scrollable = useRef<HTMLDivElement | null>(null);
 
-	useStickyLayout(true);
+	useStickyLayout();
 
 	const handleScroll = useCallback(() => {
 		const el = scrollable.current;
