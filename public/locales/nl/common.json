@@ -19,6 +19,7 @@
   "modules/navigation/const/index___mijn-profiel": "Mijn profiel",
   "modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters": "Filters",
   "modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___sorteer-op": "Sorteer op",
+  "modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten": "Zoekresultaten",
   "modules/reading-room/components/reading-room-navigation/reading-room-navigation___contacteer": "Contacteer",
   "modules/reading-room/const/index___datum-aflopend": "Datum aflopend",
   "modules/reading-room/const/index___datum-oplopend": "Datum oplopend",

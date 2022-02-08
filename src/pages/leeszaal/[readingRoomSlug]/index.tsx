@@ -213,7 +213,7 @@ const ReadingRoomPage: NextPage = () => {
 						onRemoveValue={onRemoveFilter}
 						onClear={onResetFilters}
 					/>
-					<ScrollableTabs tabs={tabs} onClick={onTabClick} />
+					<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 				</div>
 			</section>
 
