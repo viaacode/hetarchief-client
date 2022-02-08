@@ -1,7 +1,7 @@
 import { i18n } from 'next-i18next';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { FilterMenuSortOption } from '@reading-room/components';
+import { FilterMenuFilterOption, FilterMenuSortOption } from '@reading-room/components';
 import { Icon, IconProps } from '@shared/components';
 
 import { ReadingRoomMediaType, ReadingRoomSort } from '../types';
@@ -47,6 +47,54 @@ export const READING_ROOM_VIEW_TOGGLE_OPTIONS = [
 	{
 		id: 'list',
 		iconName: 'list-view' as IconProps['name'],
+	},
+];
+
+export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
+	{
+		id: 'format',
+		label: i18n?.t('Analoge drager') ?? '',
+		form: () => null, // Checkbox list
+	},
+	{
+		id: 'duration',
+		label: i18n?.t('Duurtijd') ?? '',
+		form: () => null, // Timepicker hh:mm:ss:SSSS
+	},
+	{
+		id: 'created',
+		label: i18n?.t('Creatiedatum') ?? '',
+		form: () => null, // Datetime
+	},
+	{
+		id: 'published',
+		label: i18n?.t('Publicatiedatum') ?? '',
+		form: () => null, // Datetime
+	},
+	{
+		id: 'creator',
+		label: i18n?.t('Maker') ?? '',
+		form: () => null,
+	},
+	{
+		id: 'genre',
+		label: i18n?.t('Genre') ?? '',
+		form: () => null, // Checkbox list
+	},
+	{
+		id: 'keywords',
+		label: i18n?.t('Trefwoorden') ?? '',
+		form: () => null, // Text input
+	},
+	{
+		id: 'language',
+		label: i18n?.t('Taal') ?? '',
+		form: () => null, // Text input
+	},
+	{
+		id: 'image-sound',
+		label: i18n?.t('Beeld/Geluid') ?? '',
+		form: () => null, // Boolean yes / no
 	},
 ];
 

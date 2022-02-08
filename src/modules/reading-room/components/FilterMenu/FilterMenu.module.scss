@@ -1,9 +1,15 @@
 @use "sass:color";
 @use "styles/abstracts" as *;
 
+$c-filter-menu-flyout-top-padding: 6.4rem;
+
 .c-filter-menu {
 	background-color: $black;
 }
+
+/**
+ * Elements
+ */
 
 .c-filter-menu__header {
 	display: flex;
@@ -91,13 +97,29 @@
 		z-index: get-z-layer("filter");
 	}
 
+	:global(.c-menu) {
+		padding: $c-filter-menu-flyout-top-padding 0 0;
+	}
+
+
 	&--filter {
+		max-width: 46.4rem;
+
 		// Overwrite popper styles
 		min-width: 46.4rem !important;
 		max-height: 100vh;
 	}
 }
 
+.c-filter-menu__flyout-close {
+	position: absolute;
+	inset: 1.2rem 1.2rem auto auto;
+}
+
 .c-filter-menu__overlay {
 	z-index: get-z-layer("filter-overlay");
+}
+
+.c-filter-menu__form {
+	max-height: calc(100vh - $c-filter-menu-flyout-top-padding);
 }

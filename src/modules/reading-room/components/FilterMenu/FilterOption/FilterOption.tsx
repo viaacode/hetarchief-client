@@ -1,10 +1,11 @@
-import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useCallback } from 'react';
 
-import { Overlay } from '@shared/components';
+import { Icon, Overlay } from '@shared/components';
 
 import { FilterButton } from '../FilterButton';
+import FilterForm from '../FilterForm/FilterForm';
 import styles from '../FilterMenu.module.scss';
 
 import { FilterOptionProps } from './FilterOption.types';
@@ -37,7 +38,13 @@ const FilterOption: FC<FilterOptionProps> = ({ activeFilter, icon, id, label, on
 					/>
 				</DropdownButton>
 				<DropdownContent>
-					<div>Add form component here</div>
+					<Button
+						className={styles['c-filter-menu__flyout-close']}
+						icon={<Icon name="times" />}
+						variants="text"
+						onClick={onFilterToggle}
+					/>
+					<FilterForm className={styles['c-filter-menu__form']} title={label} />
 				</DropdownContent>
 			</Dropdown>
 			<Overlay
