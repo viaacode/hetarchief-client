@@ -10,9 +10,15 @@ import { AuthModal } from '@auth/components';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
-import { Hero, ReadingRoomCardList, SearchBar } from '@shared/components';
+import { useGetReadingRooms } from '@reading-room/queries/getReadingRooms';
+import {
+	Hero,
+	ReadingRoomCardList,
+	ReadingRoomCardProps,
+	ReadingRoomCardType,
+	SearchBar,
+} from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
-import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 import { withI18n } from '@shared/wrappers';
@@ -20,7 +26,6 @@ import { withI18n } from '@shared/wrappers';
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
-	const [readingRooms, setReadingRooms] = useState(sixItems);
 
 	const dispatch = useDispatch();
 	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
@@ -28,6 +33,11 @@ const Home: NextPage = () => {
 	const user = useSelector(selectUser);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const { t } = useTranslation();
+	const { data: readingRoomInfo, isLoading: isLoadingReadingRooms } = useGetReadingRooms(
+		query.search || undefined,
+		0,
+		areAllReadingRoomsVisible ? 200 : 6
+	);
 
 	// Sync showAuth query param with store value
 	useEffect(() => {
@@ -48,10 +58,7 @@ const Home: NextPage = () => {
 	 */
 
 	const handleLoadAllReadingRooms = () => {
-		Promise.resolve([...sixItems, ...sixItems.slice(0, 5)]).then((data) => {
-			setReadingRooms(data);
-			setAreAllReadingRoomsVisible(true);
-		});
+		setAreAllReadingRoomsVisible(true);
 	};
 
 	const onClearSearch = () => {
@@ -134,14 +141,30 @@ const Home: NextPage = () => {
 					/>
 				</div>
 
-				<ReadingRoomCardList
-					className="u-mb-64"
-					items={readingRooms.map((room) => ({
-						...room,
-						onAccessRequest: onRequestAccess,
-					}))}
-					limit={!areAllReadingRoomsVisible}
-				/>
+				{isLoadingReadingRooms && <p>Loading...</p>}
+				{!isLoadingReadingRooms && readingRoomInfo?.items?.length === 0 && (
+					<p>Geen resultaten</p>
+				)}
+				{!isLoadingReadingRooms && readingRoomInfo?.items?.length && (
+					<ReadingRoomCardList
+						className="u-mb-64"
+						items={(readingRoomInfo?.items || []).map((room): ReadingRoomCardProps => {
+							return {
+								room: {
+									color: room.color || undefined,
+									description: room.description || undefined,
+									id: room.id,
+									image: room.image || undefined,
+									name: room.name,
+									logo: room.logo,
+								},
+								type: ReadingRoomCardType.access, // TODO change this based on current logged in user
+								onAccessRequest: onRequestAccess,
+							};
+						})}
+						limit={!areAllReadingRoomsVisible}
+					/>
+				)}
 
 				{!areAllReadingRoomsVisible && (
 					<div className="u-text-center">
