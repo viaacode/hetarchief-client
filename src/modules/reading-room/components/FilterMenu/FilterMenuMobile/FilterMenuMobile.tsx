@@ -7,6 +7,7 @@ import { Navigation } from '@navigation/components';
 import { Icon } from '@shared/components';
 
 import { FilterButton } from '../FilterButton';
+import FilterForm from '../FilterForm/FilterForm';
 import { FilterMenuFilterOption } from '../FilterMenu.types';
 import { FilterSortList } from '../FilterSortList';
 
@@ -45,6 +46,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		);
 	};
 
+	const selectedFilter = filters.find((filter) => filter.id === activeFilter);
 	const showInitialScreen = !activeFilter && !isSortActive;
 	const showFilterOrSort = activeFilter || isSortActive;
 	const goBackToInitial = activeFilter
@@ -112,10 +114,11 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						/>
 					</Navigation>
 
-					{activeFilter && !isSortActive && (
-						<div className="l-container">
-							<h4 className="u-text-center u-mt-24">Filter title</h4>
-						</div>
+					{activeFilter && selectedFilter && !isSortActive && (
+						<FilterForm
+							className={styles['c-filter-menu-mobile__form']}
+							title={selectedFilter.label}
+						/>
 					)}
 					{isSortActive && !activeFilter && (
 						<>

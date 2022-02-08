@@ -73,6 +73,10 @@
 	}
 }
 
+.c-filter-menu-mobile__form {
+	height: calc(100% - $c-navigation-height-md);
+}
+
 /**
  * Modifiers
  */
