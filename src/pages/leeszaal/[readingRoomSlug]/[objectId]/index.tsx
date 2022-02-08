@@ -1,16 +1,22 @@
 import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
+import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { createPageTitle } from '@shared/utils';
 
-import { Metadata } from 'modules/object-detail/components';
+import { Metadata, ObjectPlaceholder } from 'modules/object-detail/components';
 import { metadataMock } from 'modules/object-detail/components/Metadata/__mocks__/metadata';
+import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
+	const { t } = useTranslation();
+	useStickyLayout();
+
 	/**
 	 * Mock data
 	 */
@@ -47,11 +53,19 @@ const ObjectDetailPage: NextPage = () => {
 			{/* TODO: use correct left and right sections */}
 			<ReadingRoomNavigation title={'Leeszaal'} />
 			<article className="p-object-detail__wrapper">
-				<div>fragment placeholder</div>
+				<ObjectPlaceholder
+					{...objectPlaceholderMock}
+					openModalButtonLabel={t(
+						'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+					)}
+					closeModalButtonLabel={t(
+						'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+					)}
+				/>
 				<div className="p-object-detail__metadata">
 					<div className="u-px-32">
 						{/* TODO: bind content to state */}
-						<h3 className="u-pt-32 u-pb-24">Object detail</h3>
+						<h3 className="u-pt-32 u-pb-24">Op de koop toe: schepijs (1993)</h3>
 						<p className="u-pb-24">
 							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
 							consectetur rutrum molestie. Mauris volutpat commodo velit, id fringilla
