@@ -11,7 +11,7 @@ import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
-import { useGetReadingRooms } from '@reading-room/queries/getReadingRooms';
+import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
 import {
 	Hero,
 	ReadingRoomCardList,
@@ -141,9 +141,9 @@ const Home: NextPage = () => {
 					/>
 				</div>
 
-				{isLoadingReadingRooms && <p>Loading...</p>}
+				{isLoadingReadingRooms && <p>{t('pages/index___laden')}</p>}
 				{!isLoadingReadingRooms && readingRoomInfo?.items?.length === 0 && (
-					<p>Geen resultaten</p>
+					<p>{t('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
 				)}
 				{!isLoadingReadingRooms && readingRoomInfo?.items?.length && (
 					<ReadingRoomCardList
