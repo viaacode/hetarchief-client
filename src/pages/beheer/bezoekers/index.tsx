@@ -13,11 +13,17 @@ const CPVisitorsPage: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Bezoekers'))}</title>
-				<meta name="description" content={t('Beheer Bezoekers meta omschrijving')} />
+				<title>{createPageTitle(t('pages/beheer/bezoekers/index___bezoekers'))}</title>
+				<meta
+					name="description"
+					content={t('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving')}
+				/>
 			</Head>
 
-			<CPAdminLayout className="p-cp-visitors" pageTitle={t('Bezoekers')}>
+			<CPAdminLayout
+				className="p-cp-visitors"
+				pageTitle={t('pages/beheer/bezoekers/index___bezoekers')}
+			>
 				Visitors table
 			</CPAdminLayout>
 		</>

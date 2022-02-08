@@ -13,11 +13,17 @@ const CPRequestsPage: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Aanvragen'))}</title>
-				<meta name="description" content={t('Aanvragen meta omschrijving')} />
+				<title>{createPageTitle(t('pages/beheer/aanvragen/index___aanvragen'))}</title>
+				<meta
+					name="description"
+					content={t('pages/beheer/aanvragen/index___aanvragen-meta-omschrijving')}
+				/>
 			</Head>
 
-			<CPAdminLayout className="p-cp-requests" pageTitle={t('Aanvragen')}>
+			<CPAdminLayout
+				className="p-cp-requests"
+				pageTitle={t('pages/beheer/aanvragen/index___aanvragen')}
+			>
 				Requests table
 			</CPAdminLayout>
 		</>

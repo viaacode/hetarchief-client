@@ -13,11 +13,23 @@ const CPSettingsPage: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Beheer instellingen title'))}</title>
-				<meta name="description" content={t('Beheer instellingen meta omschrijving')} />
+				<title>
+					{createPageTitle(
+						t('pages/beheer/instellingen/index___beheer-instellingen-title')
+					)}
+				</title>
+				<meta
+					name="description"
+					content={t(
+						'pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'
+					)}
+				/>
 			</Head>
 
-			<CPAdminLayout className="p-cp-settings" pageTitle={t('Instellingen')}>
+			<CPAdminLayout
+				className="p-cp-settings"
+				pageTitle={t('pages/beheer/instellingen/index___instellingen')}
+			>
 				Settings table
 			</CPAdminLayout>
 		</>

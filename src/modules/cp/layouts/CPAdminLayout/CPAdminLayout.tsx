@@ -34,7 +34,10 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ pageTitle, children, className 
 	return (
 		<div className={clsx(styles['l-cp-admin'], 'u-bg-platinum', className)}>
 			<div className={clsx(styles['l-cp-admin__left'], 'u-bg-white')}>
-				<Sidebar className={styles['l-cp-admin__sidebar']} title={t('Beheer')}>
+				<Sidebar
+					className={styles['l-cp-admin__sidebar']}
+					title={t('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
+				>
 					<ListNavigation listItems={sidebarLinks} />
 				</Sidebar>
 			</div>
