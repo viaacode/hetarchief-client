@@ -40,3 +40,9 @@ yarn-error.log*
 
 # Project specific
 /storybook-static
+
+# Intellij IDE
+.idea
+
+# Babel config to disable swcMinify on windows
+.babelrc
