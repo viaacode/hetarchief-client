@@ -70,17 +70,31 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 				{
 					id: 'profile',
 					node: (
-						<NavigationLink href="/" label={i18n?.t('Mijn profiel')} isDropdownItem />
+						<NavigationLink
+							href="/"
+							label={i18n?.t('modules/navigation/const/index___mijn-profiel')}
+							isDropdownItem
+						/>
 					),
 				},
 				{
 					id: 'folders',
-					node: <NavigationLink href="/" label={i18n?.t('Mijn mappen')} isDropdownItem />,
+					node: (
+						<NavigationLink
+							href="/"
+							label={i18n?.t('modules/navigation/const/index___mijn-mappen')}
+							isDropdownItem
+						/>
+					),
 				},
 				{
 					id: 'history',
 					node: (
-						<NavigationLink href="/" label={i18n?.t('Mijn historiek')} isDropdownItem />
+						<NavigationLink
+							href="/"
+							label={i18n?.t('modules/navigation/const/index___mijn-historiek')}
+							isDropdownItem
+						/>
 					),
 					hasDivider: true,
 				},
@@ -89,7 +103,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 					node: ({ closeDropdowns }) => (
 						<NavigationLink
 							iconStart="log-out"
-							label={i18n?.t('Log uit')}
+							label={i18n?.t('modules/navigation/const/index___log-uit')}
 							onClick={() => {
 								onLogOutClick();
 								closeDropdowns();
