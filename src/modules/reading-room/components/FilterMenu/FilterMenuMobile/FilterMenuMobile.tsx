@@ -66,7 +66,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							key="filter-menu-mobile-nav-close"
 							className={styles['c-filter-menu-mobile__back']}
 							iconStart={<Icon name="arrow-left" />}
-							label="Zoekresultaten"
+							label={t(
+								'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten'
+							)}
 							variants={['text']}
 							onClick={onClose}
 						/>
@@ -108,7 +110,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							key="filter-menu-mobile-nav-filter"
 							className={styles['c-filter-menu-mobile__back']}
 							iconStart={<Icon name="arrow-left" />}
-							label="Filters"
+							label={t(
+								'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
+							)}
 							variants={['text']}
 							onClick={goBackToInitial}
 						/>
