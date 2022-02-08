@@ -3,17 +3,12 @@ import { Options } from 'ky/distribution';
 import { StringifiableRecord, stringify, stringifyUrl } from 'query-string';
 
 import { config } from '@config/const';
+import { ApiService } from '@shared/services';
 
+import { AUTH_BASE_URL } from './auth.service.const';
 import { CheckLoginResponse } from './auth.service.types';
 
-class AuthService {
-	private baseUrl = '/api/proxy/auth';
-	private api: typeof ky;
-
-	constructor() {
-		this.api = ky.create({ prefixUrl: this.baseUrl });
-	}
-
+class AuthService extends ApiService {
 	public async checkLogin(options: Options = {}, isSSR?: boolean): Promise<CheckLoginResponse> {
 		// Absolute url is necessary for accessing the proxy on the server side
 		const kyOptions = isSSR
@@ -30,7 +25,7 @@ class AuthService {
 		})}`;
 	}
 
-	public async logout() {
+	public logout() {
 		const returnToUrl = config.public.origin;
 
 		window.location.href = `${this.baseUrl}/global-logout?${stringify({
@@ -39,4 +34,4 @@ class AuthService {
 	}
 }
 
-export const authService = new AuthService();
+export const authService = new AuthService(AUTH_BASE_URL);
