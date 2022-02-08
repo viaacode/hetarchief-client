@@ -10,12 +10,12 @@ import { AuthModal } from '@auth/components';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
+import { withI18n } from '@i18n/wrappers';
 import { Hero, ReadingRoomCardList, SearchBar } from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
-import { withI18n } from '@shared/wrappers';
 
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
@@ -29,11 +29,17 @@ const Home: NextPage = () => {
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const { t } = useTranslation();
 
+	// Sync showAuth query param with store value
+	useEffect(() => {
+		if (typeof query.showAuth === 'boolean') {
+			dispatch(setShowAuthModal(query.showAuth));
+		}
+	}, [dispatch, query.showAuth]);
+
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
 		if (!showAuthModal && isLoggedIn && query.returnToRequestAccess) {
 			setIsOpenRequestAccessBlade(true);
-			setQuery({ returnToRequestAccess: undefined });
 		}
 	}, [isLoggedIn, query.returnToRequestAccess, setQuery, showAuthModal]);
 
@@ -57,11 +63,21 @@ const Home: NextPage = () => {
 	};
 
 	const onCloseAuthModal = () => {
+		if (typeof query.showAuth === 'boolean') {
+			setQuery({ showAuth: undefined });
+		}
 		dispatch(setShowAuthModal(false));
 	};
 
 	const onOpenAuthModal = () => {
 		dispatch(setShowAuthModal(true));
+	};
+
+	const onCloseRequestBlade = () => {
+		if (typeof query.returnToRequestAccess === 'boolean') {
+			setQuery({ returnToRequestAccess: undefined });
+		}
+		setIsOpenRequestAccessBlade(false);
 	};
 
 	const onRequestAccess = () => {
@@ -109,8 +125,9 @@ const Home: NextPage = () => {
 
 					<SearchBar
 						className="p-home__search"
-						placeholder={t('pages/index___zoek')}
 						backspaceRemovesValue={false}
+						instanceId="home-seach-bar"
+						placeholder={t('pages/index___zoek')}
 						searchValue={query.search ?? ''}
 						onClear={onClearSearch}
 						onSearch={onSearch}
@@ -140,7 +157,7 @@ const Home: NextPage = () => {
 			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
 			<RequestAccessBlade
 				isOpen={isOpenRequestAccessBlade}
-				onClose={() => setIsOpenRequestAccessBlade(false)}
+				onClose={onCloseRequestBlade}
 				onSubmit={onRequestAccessSubmit}
 			/>
 		</div>

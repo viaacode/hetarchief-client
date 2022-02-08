@@ -1,4 +1,4 @@
-import { UserSchema } from '@auth/store/user';
+import { UserSchema } from '@auth/types';
 import { ComponentLink } from '@shared/types';
 
 import { ReadingRoom } from '../ReadingRoomCard';
@@ -8,7 +8,7 @@ export interface HeroProps {
 	description: string;
 	link: ComponentLink;
 	image: HeroImage;
-	user?: UserSchema;
+	user?: UserSchema | null;
 	requests?: HeroRequest[];
 }
 

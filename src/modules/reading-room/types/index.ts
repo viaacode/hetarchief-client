@@ -3,3 +3,9 @@ export enum ReadingRoomMediaType {
 	Audio = 'audio',
 	Video = 'video',
 }
+
+export enum ReadingRoomSort {
+	Date = 'date',
+	Relevance = 'relevance',
+	Title = 'title',
+}

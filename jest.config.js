@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const pathAliases = require('./scripts/path-aliases');
+
+const pathAliasesRegex = `^@(${pathAliases.join('|')})/?(.*)$`;
+
 module.exports = {
 	collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
 	moduleNameMapper: {
@@ -13,7 +18,7 @@ module.exports = {
 		'^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$': '<rootDir>/jest/__mocks__/file-mock.js',
 
 		/* Handle custom path aliases */
-		'^@(auth|home|navigation|reading-room|shared)/?(.*)$': ['<rootDir>/src/modules/$1/$2'],
+		[pathAliasesRegex]: '<rootDir>/src/modules/$1/$2',
 
 		/* Handle deps */
 		'^lodash-es$': '<rootDir>/node_modules/lodash/index.js',
@@ -28,5 +33,5 @@ module.exports = {
 		'^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
 	},
 	testEnvironment: 'jsdom',
-	transformIgnorePatterns: ['/node_modules/', '^.+\\.module\\.(css|sass|scss)$'],
+	transformIgnorePatterns: ['/node_modules/(?!(ky))', '^.+\\.module\\.(css|sass|scss)$'],
 };
