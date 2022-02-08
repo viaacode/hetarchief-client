@@ -4,11 +4,10 @@ import DOMPurify from 'isomorphic-dompurify';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useCallback, useRef, useState } from 'react';
 
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
-import { setIsStickyLayout } from '@shared/store/ui';
+import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { createPageTitle } from '@shared/utils';
 import { withI18n } from '@shared/wrappers';
 
@@ -19,16 +18,9 @@ const TermsOfService: NextPage = () => {
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const { t } = useTranslation();
-	const dispatch = useDispatch();
 	const scrollable = useRef<HTMLDivElement | null>(null);
 
-	useEffect(() => {
-		dispatch(setIsStickyLayout(true));
-
-		return () => {
-			dispatch(setIsStickyLayout(false));
-		};
-	});
+	useStickyLayout(true);
 
 	const handleScroll = useCallback(() => {
 		const el = scrollable.current;

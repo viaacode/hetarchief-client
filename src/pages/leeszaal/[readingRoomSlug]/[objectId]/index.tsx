@@ -2,12 +2,10 @@ import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
-import { setIsStickyLayout } from '@shared/store/ui';
+import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { createPageTitle } from '@shared/utils';
 import { withI18n } from '@shared/wrappers';
 
@@ -17,15 +15,7 @@ import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPl
 
 const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		dispatch(setIsStickyLayout(true));
-
-		return () => {
-			dispatch(setIsStickyLayout(false));
-		};
-	});
+	useStickyLayout(true);
 
 	/**
 	 * Mock data
