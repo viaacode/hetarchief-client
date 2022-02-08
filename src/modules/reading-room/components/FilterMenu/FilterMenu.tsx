@@ -1,8 +1,10 @@
-import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 
+import { READING_ROOM_ACTIVE_SORT_MAP } from '@reading-room/const';
+import { ReadingRoomSort } from '@reading-room/types';
 import { Icon, IconLightNames, Toggle } from '@shared/components';
 import { useScrollLock, useWindowSizeContext } from '@shared/hooks';
 import { Breakpoints } from '@shared/types';
@@ -11,19 +13,21 @@ import styles from './FilterMenu.module.scss';
 import { FilterMenuProps } from './FilterMenu.types';
 import { FilterMenuMobile } from './FilterMenuMobile';
 import { FilterOption } from './FilterOption';
+import { FilterSort } from './FilterSort';
 
 const FilterMenu: FC<FilterMenuProps> = ({
+	activeSort,
 	className,
 	filters = [],
-	label = 'Filters',
+	label,
 	isMobileOpen = false,
 	isOpen = true,
 	sortOptions = [],
 	toggleOptions = [],
 	onMenuToggle,
+	onSortClick,
 	onViewToggle = () => null,
 }) => {
-	const [sortOptionsOpen, setSortOptionsOpen] = useState<boolean>(false);
 	const [activeFilter, setActiveFilter] = useState<string | null>(null);
 	const [lockScroll, setLockScroll] = useState<boolean>(false);
 	// We need different functionalities for different viewport sizes
@@ -68,6 +72,20 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	 * Render
 	 */
 
+	const renderActiveSortLabel = () => {
+		const sortBtnLabel = activeSort
+			? READING_ROOM_ACTIVE_SORT_MAP()[activeSort.sort as ReadingRoomSort]
+			: '';
+
+		return (
+			<Trans
+				i18nKey="modules/reading-room/components/filter-menu/filter-menu___sorteer-op"
+				values={{ sorted: sortBtnLabel }}
+				defaults="Sorteer op: <strong>{{ sorted }}</strong>"
+			/>
+		);
+	};
+
 	return (
 		<div className={clsx(className, styles['c-filter-menu'])}>
 			<div className={styles['c-filter-menu__header']}>
@@ -92,32 +110,13 @@ const FilterMenu: FC<FilterMenuProps> = ({
 			{isOpen && !isMobile && (
 				<div className={styles['c-filter-menu__list']}>
 					{sortOptions.length > 0 && (
-						<Dropdown
-							isOpen={sortOptionsOpen}
-							onOpen={() => setSortOptionsOpen(true)}
-							onClose={() => setSortOptionsOpen(false)}
-						>
-							<DropdownButton>
-								<Button
-									className={clsx(
-										styles['c-filter-menu__filter']
-										// TODO: additional styling
-									)}
-									variants={['black', 'block']}
-									label={
-										<Trans
-											// TODO: adjust i18n:extract to preserve key
-											i18nKey="modules/reading-room/components/filter-menu/filter-menu___sorteer-op"
-											values={{ sorted: sortOptions[0].label }}
-											defaults="Sorteer op: <strong>{{ sorted }}</strong>"
-										/>
-									}
-								/>
-
-								{/* TODO: sorting indicator */}
-							</DropdownButton>
-							<DropdownContent />
-						</Dropdown>
+						<FilterSort
+							activeSort={activeSort}
+							activeSortLabel={renderActiveSortLabel()}
+							className={styles['c-filter-menu__option']}
+							options={sortOptions}
+							onOptionClick={onSortClick}
+						/>
 					)}
 					{filters.map((option) => (
 						<FilterOption
@@ -132,10 +131,14 @@ const FilterMenu: FC<FilterMenuProps> = ({
 			)}
 			<FilterMenuMobile
 				activeFilter={activeFilter}
+				activeSort={activeSort}
+				activeSortLabel={renderActiveSortLabel()}
 				filters={filters}
 				isOpen={isMobile && isMobileOpen}
+				sortOptions={sortOptions}
 				onClose={() => onToggleClick(false)}
 				onFilterClick={onFilterClick}
+				onSortClick={onSortClick}
 			/>
 		</div>
 	);

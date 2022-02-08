@@ -1,13 +1,17 @@
+@use "sass:color";
 @use "styles/abstracts" as *;
+
+.c-filter-menu {
+	background-color: $black;
+}
 
 .c-filter-menu__header {
 	display: flex;
 	height: 5.2rem;
-	background-color: $black;
 }
 
 .c-filter-menu__toggle,
-.c-filter-menu__option {
+.c-filter-menu__button {
 	border-radius: 0;
 	outline: none;
 
@@ -39,4 +43,61 @@
 		width: 4rem;
 		height: 4rem;
 	}
+}
+
+.c-filter-menu__option {
+	position: relative;
+	width: 100%;
+}
+
+.c-filter-menu__button {
+	position: relative;
+	padding-right: $spacer-sm;
+	font-weight: $font-weight-normal;
+	border-bottom: 0.1rem solid color.adjust($white, $alpha: -0.8);
+
+	&--sort {
+		background-color: $shade;
+		border-color: $shade;
+	}
+
+	&:active {
+		border-color: $black;
+	}
+
+	:global(.c-button__icon) {
+		font-size: $font-size-lg;
+	}
+
+	&--active {
+		z-index: get-z-layer("filter");
+		background-color: $white;
+		border-color: $white;
+		color: $black;
+
+		&:hover {
+			background-color: $white;
+			border-color: $white;
+		}
+
+		&:not(:active,:hover):focus {
+			outline: none;
+		}
+	}
+}
+
+.c-filter-menu__flyout {
+	&:global(.c-dropdown__content-open) {
+		z-index: get-z-layer("filter");
+	}
+
+	&--filter {
+		// Overwrite popper styles
+		min-width: 46.4rem !important;
+		max-height: 100vh;
+	}
+}
+
+.c-filter-menu__overlay {
+	z-index: get-z-layer("filter-overlay");
 }

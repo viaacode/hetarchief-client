@@ -1,58 +1,39 @@
-import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback } from 'react';
 
-import { Icon, Overlay } from '@shared/components';
+import { Overlay } from '@shared/components';
 
-import styles from './FilterOption.module.scss';
+import { FilterButton } from '../FilterButton';
+import styles from '../FilterMenu.module.scss';
+
 import { FilterOptionProps } from './FilterOption.types';
 
-const FilterOption: FC<FilterOptionProps> = ({
-	activeFilter,
-	className,
-	icon,
-	id,
-	label,
-	onClick,
-}) => {
+const FilterOption: FC<FilterOptionProps> = ({ activeFilter, icon, id, label, onClick }) => {
 	const filterIsActive = id === activeFilter;
-	const filterBtnCls = clsx(className, styles['c-filter-option__button'], {
-		[styles['c-filter-option__button--active']]: filterIsActive,
-	});
-	const iconName = filterIsActive ? 'angle-left' : icon ?? 'angle-right';
+	const flyoutCls = clsx(
+		styles['c-filter-menu__flyout'],
+		styles['c-filter-menu__flyout--filter']
+	);
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
-
-	useEffect(() => {
-		const closeOnEsc = (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && filterIsActive) {
-				onFilterToggle();
-			}
-		};
-
-		window.addEventListener('keydown', closeOnEsc);
-
-		return () => {
-			window.removeEventListener('keydown', closeOnEsc);
-		};
-	}, [filterIsActive, onFilterToggle]);
 
 	return (
 		<>
 			<Dropdown
 				key={`filter-menu-btn-${id}`}
-				className={styles['c-filter-option']}
-				flyoutClassName={styles['c-filter-option__flyout']}
+				className={styles['c-filter-menu__option']}
+				flyoutClassName={flyoutCls}
 				isOpen={filterIsActive}
 				placement="right"
+				onOpen={onFilterToggle}
+				onClose={onFilterToggle}
 			>
 				<DropdownButton>
-					<Button
-						className={filterBtnCls}
-						iconEnd={<Icon name={iconName} />}
+					<FilterButton
+						icon={filterIsActive ? 'angle-left' : icon ?? 'angle-right'}
+						isActive={filterIsActive}
 						label={label}
-						variants={['black', 'block']}
-						onClick={onFilterToggle}
 					/>
 				</DropdownButton>
 				<DropdownContent>
@@ -60,7 +41,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 				</DropdownContent>
 			</Dropdown>
 			<Overlay
-				className={styles['c-filter-option__overlay']}
+				className={styles['c-filter-menu__overlay']}
 				visible={filterIsActive}
 				onClick={onFilterToggle}
 			/>
