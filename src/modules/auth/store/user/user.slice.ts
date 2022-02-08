@@ -34,8 +34,6 @@ export const userSlice = createSlice({
 				state.loading = true;
 			})
 			.addCase(checkLoginAction.fulfilled, (state, action) => {
-				console.log(action.payload);
-
 				state.user = action.payload;
 				state.loading = false;
 			})
