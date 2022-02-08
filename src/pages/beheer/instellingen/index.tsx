@@ -2,9 +2,9 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
-import { withI18n } from '@i18n/wrappers';
 import { createPageTitle } from '@shared/utils';
 
+import { withI18n } from '@i18n/wrappers';
 import { CPAdminLayout } from 'modules/cp/layouts';
 
 const CPSettingsPage: NextPage = () => {
