@@ -7,8 +7,9 @@
 }
 
 .c-filter-menu__toggle,
-.c-filter-menu__filter {
+.c-filter-menu__option {
 	border-radius: 0;
+	outline: none;
 
 	:global(.c-button__content) {
 		display: flex;
@@ -37,34 +38,5 @@
 	:global(.c-button) {
 		width: 4rem;
 		height: 4rem;
-	}
-}
-
-.c-filter-menu__filter {
-	width: 100%;
-	padding-right: $spacer-sm;
-	font-weight: $font-weight-normal;
-
-	&:active {
-		border-color: black;
-	}
-
-	:global(.c-button__icon) {
-		font-size: $font-size-lg;
-	}
-
-	&--active {
-		background-color: $white;
-		border-color: $white;
-		color: $black;
-
-		&:hover {
-			background-color: $white;
-			border-color: $white;
-		}
-
-		&:not(:active,:hover):focus {
-			outline: none;
-		}
 	}
 }

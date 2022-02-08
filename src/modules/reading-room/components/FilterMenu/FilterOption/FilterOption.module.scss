@@ -1,0 +1,47 @@
+@use "styles/abstracts" as *;
+
+.c-filter-option {
+	position: relative;
+	width: 100%;
+}
+
+/**
+ * Elements
+ */
+
+.c-filter-option__button {
+	position: relative;
+	z-index: get-z-layer("filter-option");
+	padding-right: $spacer-sm;
+	font-weight: $font-weight-normal;
+
+	&:active {
+		border-color: black;
+	}
+
+	:global(.c-button__icon) {
+		font-size: $font-size-lg;
+	}
+
+	&--active {
+		background-color: $white;
+		border-color: $white;
+		color: $black;
+
+		&:hover {
+			background-color: $white;
+			border-color: $white;
+		}
+
+		&:not(:active,:hover):focus {
+			outline: none;
+		}
+	}
+}
+
+.c-filter-option__flyout {
+	z-index: get-z-layer("filter-option-overlay");
+
+	// Overwrite popper styles
+	min-width: 46.4rem !important;
+}

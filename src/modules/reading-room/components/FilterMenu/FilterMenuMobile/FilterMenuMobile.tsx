@@ -45,35 +45,65 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	};
 
 	return (
-		<div className={styles['c-filter-menu-mobile']}>
-			<Navigation className={styles['c-filter-menu-mobile__nav']}>
-				<Button
-					className={styles['c-filter-menu-mobile__back']}
-					iconStart={<Icon name="arrow-left" />}
-					label="Zoekresultaten"
-					variants={['text']}
-					onClick={onClose}
-				/>
-			</Navigation>
+		<div
+			className={clsx(styles['c-filter-menu-mobile'], {
+				[styles['c-filter-menu-mobile--active']]: activeFilter,
+			})}
+		>
+			{!activeFilter ? (
+				<>
+					<Navigation className={styles['c-filter-menu-mobile__nav']}>
+						<Button
+							key="filter-menu-mobile-nav-close"
+							className={styles['c-filter-menu-mobile__back']}
+							iconStart={<Icon name="arrow-left" />}
+							label={t(
+								'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten'
+							)}
+							variants={['text']}
+							onClick={onClose}
+						/>
+					</Navigation>
 
-			<div className="l-container">
-				<h4 className="u-text-center u-mt-24">
-					{t(
-						'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
-					)}
-				</h4>
+					<div className="l-container">
+						<h4 className="u-text-center u-mt-24">
+							{t(
+								'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
+							)}
+						</h4>
 
-				<TagList
-					closeIcon={<Icon name="times" />}
-					tags={[]}
-					variants="large"
-					onTagClosed={() => null}
-				/>
-			</div>
+						<TagList
+							closeIcon={<Icon name="times" />}
+							tags={[]}
+							variants="large"
+							onTagClosed={() => null}
+						/>
+					</div>
 
-			<div className={clsx(styles['c-filter-menu-mobile__filters'], 'u-mt-24')}>
-				{(filters ?? []).map(renderFilterButton)}
-			</div>
+					<div className={clsx(styles['c-filter-menu-mobile__filters'], 'u-mt-24')}>
+						{(filters ?? []).map(renderFilterButton)}
+					</div>
+				</>
+			) : (
+				<>
+					<Navigation className={styles['c-filter-menu-mobile__nav']}>
+						<Button
+							key="filter-menu-mobile-nav-filter"
+							className={styles['c-filter-menu-mobile__back']}
+							iconStart={<Icon name="arrow-left" />}
+							label={t(
+								'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
+							)}
+							variants={['text']}
+							onClick={() => onFilterClick(activeFilter)}
+						/>
+					</Navigation>
+
+					<div className="l-container">
+						<h4 className="u-text-center u-mt-24">Filter title</h4>
+					</div>
+				</>
+			)}
 		</div>
 	);
 };

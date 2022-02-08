@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 
-import useWindowSize from './use-window-size';
+import useWindowSize, { WINDOW_RESIZE_TIMEOUT } from './use-window-size';
 
 describe('Hooks', () => {
 	describe('useWindowSize()', () => {
@@ -19,7 +19,7 @@ describe('Hooks', () => {
 					expect(result.current.height).toBe(resize.innerHeight);
 					expect(result.current.width).toBe(resize.innerWidth);
 				},
-				{ timeout: 100 } // Resize event is debounced with 100ms in hook
+				{ timeout: WINDOW_RESIZE_TIMEOUT } // Resize event is debounced in hook
 			);
 		});
 	});

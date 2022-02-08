@@ -33,7 +33,6 @@ import {
 import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
-import { Breakpoints } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { withI18n } from '@shared/wrappers';
 
@@ -116,8 +115,7 @@ const ReadingRoomPage: NextPage = () => {
 		}
 	};
 
-	const onFilterMenuToggle = (nextOpen?: boolean) => {
-		const isMobile = windowSize.width ? windowSize.width < Breakpoints.sm : false;
+	const onFilterMenuToggle = (nextOpen?: boolean, isMobile?: boolean) => {
 		const nextOpenState =
 			typeof nextOpen !== 'undefined' ? nextOpen : (prevOpen: boolean) => !prevOpen;
 		if (isMobile) {
