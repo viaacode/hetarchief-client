@@ -1,25 +1,30 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans, useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { setMockUser } from '@auth/store/user';
+import { authService } from '@auth/services/auth-service';
 import { Icon, Modal } from '@shared/components';
-import { setShowAuthModal } from '@shared/store/ui';
 
 import styles from './AuthModal.module.scss';
 import { AuthModalProps } from './AuthModal.types';
 
 const AuthModal: FC<AuthModalProps> = (props) => {
-	const dispatch = useDispatch();
+	const { query } = useRouter();
 	const { t } = useTranslation();
 
+	/**
+	 * Methods
+	 */
+
 	const onLogin = () => {
-		// TODO: replace with real login action
-		dispatch(setMockUser({ firstName: 'Tom', lastName: 'Testerom' }));
-		dispatch(setShowAuthModal(false));
+		authService.redirectToLogin(query);
 	};
+
+	/**
+	 * Render
+	 */
 
 	const renderHeading = () => {
 		return (

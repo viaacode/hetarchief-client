@@ -29,11 +29,17 @@ const Home: NextPage = () => {
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const { t } = useTranslation();
 
+	// Sync showAuth query param with store value
+	useEffect(() => {
+		if (typeof query.showAuth === 'boolean') {
+			dispatch(setShowAuthModal(query.showAuth));
+		}
+	}, [dispatch, query.showAuth]);
+
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
 		if (!showAuthModal && isLoggedIn && query.returnToRequestAccess) {
 			setIsOpenRequestAccessBlade(true);
-			setQuery({ returnToRequestAccess: undefined });
 		}
 	}, [isLoggedIn, query.returnToRequestAccess, setQuery, showAuthModal]);
 
@@ -57,11 +63,21 @@ const Home: NextPage = () => {
 	};
 
 	const onCloseAuthModal = () => {
+		if (typeof query.showAuth === 'boolean') {
+			setQuery({ showAuth: undefined });
+		}
 		dispatch(setShowAuthModal(false));
 	};
 
 	const onOpenAuthModal = () => {
 		dispatch(setShowAuthModal(true));
+	};
+
+	const onCloseRequestBlade = () => {
+		if (typeof query.returnToRequestAccess === 'boolean') {
+			setQuery({ returnToRequestAccess: undefined });
+		}
+		setIsOpenRequestAccessBlade(false);
 	};
 
 	const onRequestAccess = () => {
@@ -141,7 +157,7 @@ const Home: NextPage = () => {
 			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
 			<RequestAccessBlade
 				isOpen={isOpenRequestAccessBlade}
-				onClose={() => setIsOpenRequestAccessBlade(false)}
+				onClose={onCloseRequestBlade}
 				onSubmit={onRequestAccessSubmit}
 			/>
 		</div>
