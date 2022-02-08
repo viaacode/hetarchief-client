@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { FilterMenu } from '@reading-room/components';
 import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
@@ -34,7 +35,6 @@ import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
-import { withI18n } from '@shared/wrappers';
 
 const ReadingRoomPage: NextPage = () => {
 	// State

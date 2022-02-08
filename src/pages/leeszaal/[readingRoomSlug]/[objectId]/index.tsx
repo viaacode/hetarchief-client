@@ -2,10 +2,10 @@ import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 
+import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
-import { withI18n } from '@shared/wrappers';
 
 import { Metadata } from 'modules/object-detail/components';
 import { metadataMock } from 'modules/object-detail/components/Metadata/__mocks__/metadata';

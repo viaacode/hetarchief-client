@@ -10,12 +10,12 @@ import { AuthModal } from '@auth/components';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
+import { withI18n } from '@i18n/wrappers';
 import { Hero, ReadingRoomCardList, SearchBar } from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
-import { withI18n } from '@shared/wrappers';
 
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
