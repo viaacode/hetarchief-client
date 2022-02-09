@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../abstracts" as *;
 
 /**
@@ -29,6 +30,10 @@
 .c-search-bar__value-placeholder {
 	color: $neutral;
 	margin-right: 1.4rem;
+
+	@include respond-to(md) {
+		display: none;
+	}
 }
 
 .c-search-bar__clear-label {
@@ -41,16 +46,35 @@
 
 .c-search-bar--lg.c-tags-input {
 	.c-tags-input__control {
-		min-height: 6.4rem;
-		border-radius: 3.2rem;
+		min-height: 4.8rem;
+		border-radius: 2.4rem;
+
+		@include respond-at(md) {
+			min-height: 6.4rem;
+			border-radius: 3.2rem;
+		}
 	}
 
 	.c-tags-input__value-container {
-		padding-left: $spacer-lg;
+		padding-left: $spacer-sm;
+
+		@include respond-at(md) {
+			padding-left: $spacer-lg;
+		}
+
+		&--is-multi.c-tags-input__value-container--has-value {
+			@include respond-to(md) {
+				padding-left: $spacer-xs;
+			}
+		}
 	}
 
 	.c-tags-input__indicators {
-		padding-right: $spacer-md;
+		padding-right: math.div($spacer-md, 2);
+
+		@include respond-at(md) {
+			padding-right: $spacer-md;
+		}
 	}
 }
 
