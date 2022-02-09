@@ -72,7 +72,7 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 									key={`hero-access-${i}`}
 									access={AccessGranted}
 									room={room}
-									type={ReadingRoomCardType['access']}
+									type={ReadingRoomCardType.access}
 								/>
 							))}
 						</div>
@@ -89,7 +89,7 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 									key={`hero-planned-${i}`}
 									access={AccessGranted}
 									room={room}
-									type={ReadingRoomCardType['future--approved']}
+									type={ReadingRoomCardType.futureApproved}
 								/>
 							))}
 						</div>
@@ -106,7 +106,7 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 									key={`hero-requested-${i}`}
 									access={AccessGranted}
 									room={room}
-									type={ReadingRoomCardType['future--requested']}
+									type={ReadingRoomCardType.futureRequested}
 								/>
 							))}
 						</div>
