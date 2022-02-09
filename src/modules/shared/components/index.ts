@@ -16,6 +16,7 @@ export * from './ReadingRoomCardControls';
 export * from './ReadingRoomCardList';
 export * from './SearchBar';
 export * from './Sidebar';
+export * from './Table';
 export * from './Tabs';
 export * from './TagsInput';
 export * from './Toast';

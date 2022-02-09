@@ -1,0 +1,14 @@
+@use "styles/abstracts" as *;
+
+$component: "c-request-status-chip";
+
+.#{$component} {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    min-height: $spacer-md;
+
+    :global(.c-badge) {
+        margin-right: $spacer-xs;
+    }
+}
