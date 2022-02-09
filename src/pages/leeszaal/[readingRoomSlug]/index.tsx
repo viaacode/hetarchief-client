@@ -8,6 +8,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
 	READING_ROOM_FILTERS,
@@ -36,9 +37,6 @@ import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
 import { SortOrder } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
-
-import { useGetMediaObjects } from '../../../modules/media/hooks/get-media-objects';
-import { MediaInfo } from '../../../modules/media/types';
 
 const ReadingRoomPage: NextPage = () => {
 	// State
