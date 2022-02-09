@@ -4,10 +4,10 @@ import Head from 'next/head';
 import { useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { withI18n } from '@i18n/wrappers';
 import { ScrollableTabs, SearchBar } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
 
+import { withI18n } from '@i18n/wrappers';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	requestStatusFilters,
