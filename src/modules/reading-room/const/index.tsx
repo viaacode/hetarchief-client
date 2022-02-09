@@ -92,7 +92,7 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 		form: () => null, // Text input
 	},
 	{
-		id: 'image-sound',
+		id: 'video-has-sound',
 		label: i18n?.t('modules/reading-room/const/index___beeld-geluid') ?? '',
 		form: () => null, // Boolean yes / no
 	},
