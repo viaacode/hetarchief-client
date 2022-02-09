@@ -1,3 +1,5 @@
+import { ParsedUrlQuery } from 'querystring';
+
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans, useTranslation } from 'next-i18next';
@@ -19,7 +21,9 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	 */
 
 	const onLogin = () => {
-		authService.redirectToLogin(query);
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { showAuth, ...queryParams } = query;
+		authService.redirectToLogin(queryParams);
 	};
 
 	/**

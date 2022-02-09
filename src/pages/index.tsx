@@ -154,7 +154,7 @@ const Home: NextPage = () => {
 				)}
 			</div>
 
-			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
+			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 			<RequestAccessBlade
 				isOpen={isOpenRequestAccessBlade}
 				onClose={onCloseRequestBlade}
