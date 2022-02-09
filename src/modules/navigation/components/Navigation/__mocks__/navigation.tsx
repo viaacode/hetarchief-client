@@ -155,7 +155,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				id: 'nav__beheer--aanvragen',
 			},
 			{
-				node: renderLink('Bezoekers', '/beheer/bezoeker', {
+				node: renderLink('Bezoekers', '/beheer/bezoekers', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--bezoekers',

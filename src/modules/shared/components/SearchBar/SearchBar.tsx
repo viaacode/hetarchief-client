@@ -72,6 +72,7 @@ const SearchBar = <IsMulti extends boolean>({
 	const onSafeSearchSingle = () => {
 		if (onSearch) {
 			(onSearch as OnSearchSingle)(inputValue ?? '');
+			setInputValue('');
 		}
 	};
 

@@ -13,10 +13,10 @@ import { ReadingRoomCardProps } from './ReadingRoomCard.types';
 const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 	const { room, type } = props;
 
-	const typeNoAccess = type === ReadingRoomCardType['no-access'];
-	const typeAccessGranted = type === ReadingRoomCardType['access'];
-	const typeAccessAccepted = type === ReadingRoomCardType['future--approved'];
-	const typeAccessRequested = type === ReadingRoomCardType['future--requested'];
+	const typeNoAccess = type === ReadingRoomCardType.noAccess;
+	const typeAccessGranted = type === ReadingRoomCardType.access;
+	const typeAccessAccepted = type === ReadingRoomCardType.futureApproved;
+	const typeAccessRequested = type === ReadingRoomCardType.futureRequested;
 
 	const flat = typeAccessAccepted || typeAccessRequested;
 
