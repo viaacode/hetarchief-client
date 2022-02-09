@@ -1,0 +1,8 @@
+@use "styles/abstracts" as *;
+
+.c-dynamic-action-menu {
+	@extend %reset-list;
+
+	display: flex;
+	column-gap: $spacer-xs;
+}
