@@ -8,10 +8,9 @@ import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { FilterMenu } from '@reading-room/components';
-import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
-import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
+import { FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
+	READING_ROOM_FILTERS,
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
 	READING_ROOM_QUERY_PARAM_INIT,
@@ -171,7 +170,7 @@ const ReadingRoomPage: NextPage = () => {
 				<WindowSizeContext.Provider value={windowSize}>
 					<FilterMenu
 						activeSort={activeSort}
-						filters={filterOptionsMock}
+						filters={READING_ROOM_FILTERS()}
 						label={t('pages/leeszaal/reading-room-slug/index___filters')}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}

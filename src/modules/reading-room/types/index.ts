@@ -9,3 +9,7 @@ export enum ReadingRoomSort {
 	Relevance = 'relevance',
 	Title = 'title',
 }
+
+export interface DefaultFilterFormProps {
+	name: string;
+}

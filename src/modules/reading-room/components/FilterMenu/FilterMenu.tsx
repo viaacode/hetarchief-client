@@ -24,6 +24,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	isOpen = true,
 	sortOptions = [],
 	toggleOptions = [],
+	onFilterReset = () => null,
+	onFilterSubmit = () => null,
 	onMenuToggle,
 	onSortClick,
 	onViewToggle = () => null,
@@ -120,11 +122,13 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					)}
 					{filters.map((option) => (
 						<FilterOption
+							{...option}
 							key={`filter-menu-option-${option.id}`}
 							className={styles['c-filter-menu__option']}
-							{...option}
 							activeFilter={activeFilter}
 							onClick={onFilterClick}
+							onFormReset={onFilterReset}
+							onFormSubmit={onFilterSubmit}
 						/>
 					))}
 				</div>
