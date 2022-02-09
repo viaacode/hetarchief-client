@@ -17,7 +17,10 @@ class AuthService extends ApiService {
 	}
 
 	public redirectToLogin(query: StringifiableRecord) {
-		const returnToUrl = stringifyUrl({ url: config.public.origin, query });
+		const returnToUrl = stringifyUrl({
+			url: config.public.origin,
+			query,
+		});
 
 		window.location.href = stringifyUrl({
 			url: `${this.baseUrl}/hetarchief/login`,
