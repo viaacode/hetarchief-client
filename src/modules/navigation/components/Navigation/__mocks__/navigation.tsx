@@ -149,19 +149,19 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		hasDivider: 'md',
 		children: [
 			{
-				node: renderLink('Aanvragen', 'beheer/aanvragen', {
+				node: renderLink('Aanvragen', '/beheer/aanvragen', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--aanvragen',
 			},
 			{
-				node: renderLink('Bezoekers', 'beheer/bezoeker', {
+				node: renderLink('Bezoekers', '/beheer/bezoeker', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--bezoekers',
 			},
 			{
-				node: renderLink('Instellingen', 'beheer/instellingen', {
+				node: renderLink('Instellingen', '/beheer/instellingen', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--instellingen',
