@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -62,6 +62,7 @@ const ReadingRoomPage: NextPage = () => {
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
 	const activeFilters = useMemo(() => mapFilters(query), [query]);
+
 	const tabs: TabProps[] = useMemo(
 		() =>
 			READING_ROOM_TABS.map((tab) => ({
@@ -81,40 +82,30 @@ const ReadingRoomPage: NextPage = () => {
 		[viewMode]
 	);
 
+	useEffect(() => {
+		// TODO: replace this with actual results
+		const fetchMedia = async () => {
+			const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
+			if (!hasSearched) {
+				setHasSearched(true);
+			}
+			setMedia(data ?? []);
+		};
+
+		if (query.search) {
+			console.log('search');
+
+			fetchMedia();
+		}
+	}, [hasSearched, query.search, query.start]);
+
 	/**
 	 * Methods
 	 */
-	const setMediaKeywords = (data: MediaCardProps[], keywords: string[]): MediaCardProps[] => {
-		return data.map((item) => {
-			return {
-				...item,
-				keywords: keywords,
-			};
-		});
-	};
 
-	// TODO: replace this with actual results
-	const fetchMedia = async (keywords: string) => {
-		const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
-
-		// Fill keywords property for keyword highlighting in media card
-		const dataWithKeywords = setMediaKeywords(
-			data ?? [],
-			(query.search ?? []).concat(keywords) as string[]
-		);
-		dataWithKeywords && setMedia(dataWithKeywords);
-	};
-
-	const onSearch = async (values: SearchBarValue<true>) => {
-		if (!hasSearched) {
-			setHasSearched(true);
-		}
-
-		if (!values?.[0]) {
-			setMedia([]);
-			setQuery({ search: undefined });
-		} else {
-			await fetchMedia(String(values));
+	const onSearch = async (newValue: string) => {
+		if (newValue.trim()) {
+			setQuery({ search: (query.search ?? []).concat(newValue) });
 		}
 	};
 
@@ -129,6 +120,7 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	const onResetFilters = () => {
+		setMedia([]);
 		setQuery({
 			...READING_ROOM_QUERY_PARAM_INIT,
 			search: undefined,
@@ -136,11 +128,8 @@ const ReadingRoomPage: NextPage = () => {
 		});
 	};
 
-	const onNewKeyWord = (newKeyWord: string) =>
-		setQuery({ search: (query.search ?? []).concat(newKeyWord) });
-
 	const onRemoveFilter = (newValue: SearchBarValue<true>) =>
-		setQuery({ search: newValue.map((tag) => tag.value as string) });
+		setQuery({ search: newValue?.map((tag) => tag.value as string) });
 
 	const onSortClick = (sort: string, order?: SortOrder) => setQuery({ sort, order });
 
@@ -153,6 +142,7 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const activeSort = { sort: query.sort, order: (query.order as SortOrder) ?? undefined };
+	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched && (!media || media.length === 0);
 	const showNoResults = hasSearched && media.length === 0;
 	const showResults = hasSearched && media.length > 0;
@@ -202,16 +192,16 @@ const ReadingRoomPage: NextPage = () => {
 						allowCreate
 						className="u-mb-24"
 						clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
+						instanceId="reading-room-search-bar"
 						isMulti
 						large
 						placeholder={t('pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder')}
 						syncSearchValue={false}
 						valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
 						value={activeFilters}
-						onCreate={onNewKeyWord}
-						onSearch={onSearch}
-						onRemoveValue={onRemoveFilter}
 						onClear={onResetFilters}
+						onRemoveValue={onRemoveFilter}
+						onSearch={onSearch}
 					/>
 					<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 				</div>
@@ -275,6 +265,6 @@ const ReadingRoomPage: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withAuth(withI18n());
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default ReadingRoomPage;
