@@ -3,47 +3,64 @@
 $page: "p-cp-requests";
 
 .#{$page} {
-    &__header {
-        display: flex;
-        flex-flow: row nowrap;
+	&__header {
+		@include respond-at("md") {
+			display: flex;
+			flex-flow: row-reverse nowrap;
 
-        // Can't use &__status-filter here due to ScrollableTabs implementation
-        & > div:first-child {
-            flex-grow: 1;
-        }
-    }
+			// Can't use &__status-filter here due to ScrollableTabs implementation
+			& > div:first-child {
+				flex-grow: 1;
+			}
+		}
+	}
 
-    &__search {
-        flex-basis: 34.1rem;
-        margin-left: $spacer-sm;
-    }
+	&__search {
+		margin-bottom: $spacer-md;
 
-    &__actions {
-        cursor: pointer;
-        font-size: $font-size-lg;
-        transform: translateY(0.2rem); // shift if to center on single-line
-    }
+		@include respond-at("md") {
+			flex-basis: 34.1rem;
+			margin-bottom: 0;
+			margin-left: $spacer-sm;
+		}
+	}
 
-    &__link {
-        text-decoration: none;
-        transition: color $animate-default;
-    
-        &:hover,
-        &:active,
-        &:focus,
-        &:focus-within {
-            color: $teal !important;
-        }
-    }
+	&__actions {
+		cursor: pointer;
+		font-size: $font-size-lg;
+		transform: translateY(0.2rem); // shift if to center on single-line
+	}
 
-    tr {
-        td:nth-last-child(1) {
-            padding-left: 0;
-        }
+	&__link {
+		text-decoration: none;
+		transition: color $animate-default;
 
-        td:nth-last-child(2) {
-            padding-right: 0;
-            border-left: 1px solid $silver;
-        }
-    }
+		&:hover,
+		&:active,
+		&:focus,
+		&:focus-within {
+			color: $teal !important;
+		}
+	}
+
+	tr {
+		@include respond-to("lg") {
+			td,
+			th {
+				&:nth-child(2),
+				&:nth-child(3) {
+					display: none;
+				}
+			}
+		}
+
+		td:nth-last-child(1) {
+			padding-left: 0;
+		}
+
+		td:nth-last-child(2) {
+			padding-right: 0;
+			border-left: 1px solid $silver;
+		}
+	}
 }

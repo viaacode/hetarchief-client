@@ -49,9 +49,9 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ pageTitle, children, className 
 							{pageTitle}
 						</h1>
 					)}
-
-					{children}
 				</div>
+
+				{children}
 			</div>
 		</div>
 	);

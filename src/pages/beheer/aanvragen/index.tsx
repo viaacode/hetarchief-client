@@ -102,54 +102,58 @@ const CPRequestsPage: NextPage = () => {
 				className="p-cp-requests"
 				pageTitle={t('pages/beheer/aanvragen/index___aanvragen')}
 			>
-				<div className="p-cp-requests__header">
-					<ScrollableTabs
-						className="p-cp-requests__status-filter"
-						tabs={statusFilters}
-						variants={['rounded', 'light', 'bordered']}
-						onClick={(tabId) =>
-							setFilters({
-								...filters,
-								status: tabId.toString(),
-							})
-						}
-					/>
+				<div className="l-container">
+					<div className="p-cp-requests__header">
+						<SearchBar
+							backspaceRemovesValue={false}
+							className="p-cp-requests__search"
+							instanceId="requests-seach-bar"
+							light={true}
+							placeholder={t('pages/beheer/aanvragen/index___zoek')}
+							searchValue={filters.search}
+							size="md"
+							onClear={() => {
+								setFilters({
+									...filters,
+									search: undefined,
+								});
+							}}
+							onSearch={(searchValue: string) => {
+								setFilters({
+									...filters,
+									search: searchValue,
+								});
+							}}
+						/>
 
-					<SearchBar
-						backspaceRemovesValue={false}
-						className="p-cp-requests__search"
-						instanceId="requests-seach-bar"
-						light={true}
-						placeholder={t('pages/beheer/aanvragen/index___zoek')}
-						searchValue={filters.search}
-						size="md"
-						onClear={() => {
-							setFilters({
-								...filters,
-								search: undefined,
-							});
-						}}
-						onSearch={(searchValue: string) => {
-							setFilters({
-								...filters,
-								search: searchValue,
-							});
-						}}
-					/>
+						<ScrollableTabs
+							className="p-cp-requests__status-filter"
+							tabs={statusFilters}
+							variants={['rounded', 'light', 'bordered']}
+							onClick={(tabId) =>
+								setFilters({
+									...filters,
+									status: tabId.toString(),
+								})
+							}
+						/>
+					</div>
 				</div>
 
-				{data.length > 0 && (
-					<Table
-						className="u-mt-24"
-						options={{
-							// TODO: fix type hinting
-							// eslint-disable-next-line @typescript-eslint/ban-types
-							columns: columns as Column<object>[],
-							data,
-						}}
-						sortingIcons={sortingIcons}
-					/>
-				)}
+				<div className="l-container p-cp__edgeless-container--lg">
+					{data.length > 0 && (
+						<Table
+							className="u-mt-24"
+							options={{
+								// TODO: fix type hinting
+								// eslint-disable-next-line @typescript-eslint/ban-types
+								columns: columns as Column<object>[],
+								data,
+							}}
+							sortingIcons={sortingIcons}
+						/>
+					)}
+				</div>
 			</CPAdminLayout>
 		</>
 	);
