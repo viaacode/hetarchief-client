@@ -7,8 +7,9 @@ import { DefaultComponentProps } from '@shared/types';
 export type SearchBarProps<IsMulti extends boolean = false> = DefaultComponentProps &
 	Omit<TagsInputProps<IsMulti>, 'rootClassName' | 'classNamePrefix' | 'variants'> & {
 		clearLabel?: SearchBarClearLabel;
-		large?: boolean;
+		light?: boolean;
 		searchValue?: string;
+		size?: 'lg' | 'md';
 		syncSearchValue?: boolean;
 		valuePlaceholder?: SearchBarValuePlaceholder;
 		onClear?: () => void;

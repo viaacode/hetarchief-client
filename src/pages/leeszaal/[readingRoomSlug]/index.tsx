@@ -191,7 +191,7 @@ const ReadingRoomPage: NextPage = () => {
 						clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
 						instanceId="reading-room-search-bar"
 						isMulti
-						large
+						size="lg"
 						placeholder={t('pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder')}
 						syncSearchValue={false}
 						valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}

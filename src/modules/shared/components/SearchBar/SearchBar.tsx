@@ -23,14 +23,15 @@ const SearchBar = <IsMulti extends boolean>({
 	clearLabel,
 	isClearable = true,
 	isMulti = false as IsMulti,
-	large = false,
-	searchValue,
-	syncSearchValue = true,
+	light = false,
 	menuIsOpen,
 	options,
+	searchValue,
+	size = undefined,
+	syncSearchValue = true,
 	valuePlaceholder,
-	onClear,
 	onChange,
+	onClear,
 	onCreate,
 	onRemoveValue,
 	onSearch,
@@ -100,8 +101,9 @@ const SearchBar = <IsMulti extends boolean>({
 	 */
 
 	const rootCls = clsx(className, 'c-search-bar', {
-		['c-search-bar--lg']: large,
+		[`c-search-bar--${size}`]: size,
 		['c-search-bar--has-value-placeholder']: !!valuePlaceholder,
+		['c-search-bar--light']: light,
 	});
 	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 	const value = isMulti ? tagsInputProps.value : selectValue;
@@ -119,12 +121,12 @@ const SearchBar = <IsMulti extends boolean>({
 			isClearable={isClearable}
 			isMulti={isMulti}
 			menuIsOpen={showMenu}
-			options={options}
-			value={value}
 			onChange={onSearchChange}
 			onCreateOption={onCreate}
 			onInputChange={onSearchInputChange}
 			onKeyDown={onSearchKeyDown}
+			options={options}
+			value={value}
 			// ts-igonore is necessary to provide custom props to react-select, this is explained
 			// in the react-select docs: https://react-select.com/components#defining-components
 			/* eslint-disable @typescript-eslint/ban-ts-comment */

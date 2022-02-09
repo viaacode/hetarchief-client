@@ -13,23 +13,24 @@ export const requestStatusFilters = (): TabProps[] => {
 	return [
 		{
 			id: RequestStatusFilterIds.all,
-			label: i18n?.t('Alle'),
+			label: i18n?.t('modules/cp/const/requests___alle'),
 		},
 		{
 			id: RequestStatusFilterIds.open,
-			label: i18n?.t('Open'),
+			label: i18n?.t('modules/cp/const/requests___open'),
 		},
 		{
 			id: RequestStatusFilterIds.approved,
-			label: i18n?.t('Goedgekeurd'),
+			label: i18n?.t('modules/cp/const/requests___goedgekeurd'),
 		},
 		{
 			id: RequestStatusFilterIds.denied,
-			label: i18n?.t('Geweigerd'),
+			label: i18n?.t('modules/cp/const/requests___geweigerd'),
 		},
 	];
 };
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, RequestStatusFilterIds.all),
+	search: withDefault(StringParam, undefined),
 };
