@@ -1,6 +1,6 @@
 import { TagInfo, TagsInputProps } from '@meemoo/react-components';
 import { ReactNode } from 'react';
-import { ActionMeta, InputActionMeta, OnChangeValue, PropsValue } from 'react-select';
+import { ActionMeta, InputActionMeta, OnChangeValue } from 'react-select';
 
 import { DefaultComponentProps } from '@shared/types';
 

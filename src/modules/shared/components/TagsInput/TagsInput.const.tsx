@@ -1,5 +1,4 @@
 import { Tag, TagsInputProps } from '@meemoo/react-components';
-import { MouseEvent } from 'react';
 
 import { Icon } from '../Icon';
 
