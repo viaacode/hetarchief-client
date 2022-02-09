@@ -158,7 +158,7 @@ const Home: NextPage = () => {
 									name: room.name,
 									logo: room.logo,
 								},
-								type: ReadingRoomCardType.access, // TODO change this based on current logged in user
+								type: ReadingRoomCardType.noAccess, // TODO change this based on current logged in user
 								onAccessRequest: onRequestAccess,
 							};
 						})}
