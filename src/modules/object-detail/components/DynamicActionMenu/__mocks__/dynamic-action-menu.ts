@@ -33,6 +33,6 @@ export const dynamicActionMenuMock: DynamicActionMenuProps = {
 			id: 'list-view',
 		},
 	],
-	limit: 2,
+	limit: 3,
 	onClickAction: (id) => console.log(id),
 };
