@@ -1,6 +1,6 @@
 import { TagInfo, TagsInputProps } from '@meemoo/react-components';
 import { ReactNode } from 'react';
-import { ActionMeta, InputActionMeta, OnChangeValue } from 'react-select';
+import { ActionMeta, InputActionMeta, OnChangeValue, PropsValue } from 'react-select';
 
 import { DefaultComponentProps } from '@shared/types';
 
@@ -14,7 +14,7 @@ export type SearchBarProps<IsMulti extends boolean = false> = DefaultComponentPr
 		onClear?: () => void;
 		onCreate?: (newValue: string) => void;
 		onRemoveValue?: (removedValue: SearchBarValue<IsMulti>) => void;
-		onSearch?: IsMulti extends true ? OnSearchMulti : OnSearchSingle;
+		onSearch?: (newValue: string) => void;
 	};
 
 export type SearchBarClearLabel = string | ReactNode;

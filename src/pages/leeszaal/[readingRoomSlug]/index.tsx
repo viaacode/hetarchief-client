@@ -251,6 +251,7 @@ const ReadingRoomPage: NextPage = () => {
 						<>
 							<MediaCardList
 								items={media}
+								keywords={keywords}
 								sidebar={renderFilterMenu()}
 								view={viewMode}
 							/>
