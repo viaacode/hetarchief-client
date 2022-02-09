@@ -74,16 +74,16 @@
 				padding-right: $spacer-md;
 			}
 		}
+	}
 
-		&.c-search-bar--light {
-			.c-tags-input__control {
-				background-color: $white;
-				border-color: $zinc;
+	&.c-search-bar--light {
+		.c-tags-input__control {
+			background-color: $white;
+			border-color: $zinc;
 
-				&--is-focused,
-				&--is-focused:hover {
-					border-color: $black;
-				}
+			&--is-focused,
+			&--is-focused:hover {
+				border-color: $black;
 			}
 		}
 	}
