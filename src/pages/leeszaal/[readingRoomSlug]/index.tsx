@@ -8,10 +8,10 @@ import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { FilterMenu } from '@reading-room/components';
-import { filterOptionsMock } from '@reading-room/components/FilterMenu/__mocks__/filter-menu';
-import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
+import { useGetMediaObjects } from '@media/hooks/get-media-objects';
+import { FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
+	READING_ROOM_FILTERS,
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
 	READING_ROOM_QUERY_PARAM_INIT,
@@ -33,7 +33,6 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
 import { SortOrder } from '@shared/types';
@@ -44,14 +43,21 @@ const ReadingRoomPage: NextPage = () => {
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const [hasSearched, setHasSearched] = useState(false);
 	const { t } = useTranslation();
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const windowSize = useWindowSize();
 
+	const hasSearched = !!query?.search?.length || query?.mediaType !== ReadingRoomMediaType.All; // TODO add other filters once available
+
 	// Data
-	const [media, setMedia] = useState<MediaCardProps[]>([]);
+	const { data: mediaResultInfo } = useGetMediaObjects(
+		{
+			query: (query.search || []).join(' '),
+		},
+		query.start || 0,
+		20
+	);
 	const [mediaCount] = useState({
 		[ReadingRoomMediaType.All]: 1245,
 		[ReadingRoomMediaType.Audio]: 456,
@@ -62,6 +68,7 @@ const ReadingRoomPage: NextPage = () => {
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
 	const activeFilters = useMemo(() => mapFilters(query), [query]);
+
 	const tabs: TabProps[] = useMemo(
 		() =>
 			READING_ROOM_TABS.map((tab) => ({
@@ -84,37 +91,10 @@ const ReadingRoomPage: NextPage = () => {
 	/**
 	 * Methods
 	 */
-	const setMediaKeywords = (data: MediaCardProps[], keywords: string[]): MediaCardProps[] => {
-		return data.map((item) => {
-			return {
-				...item,
-				keywords: keywords,
-			};
-		});
-	};
 
-	// TODO: replace this with actual results
-	const fetchMedia = async (keywords: string) => {
-		const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
-
-		// Fill keywords property for keyword highlighting in media card
-		const dataWithKeywords = setMediaKeywords(
-			data ?? [],
-			(query.search ?? []).concat(keywords) as string[]
-		);
-		dataWithKeywords && setMedia(dataWithKeywords);
-	};
-
-	const onSearch = async (values: SearchBarValue<true>) => {
-		if (!hasSearched) {
-			setHasSearched(true);
-		}
-
-		if (!values?.[0]) {
-			setMedia([]);
-			setQuery({ search: undefined });
-		} else {
-			await fetchMedia(String(values));
+	const onSearch = async (newValue: string) => {
+		if (newValue.trim()) {
+			setQuery({ search: (query.search ?? []).concat(newValue) });
 		}
 	};
 
@@ -136,11 +116,8 @@ const ReadingRoomPage: NextPage = () => {
 		});
 	};
 
-	const onNewKeyWord = (newKeyWord: string) =>
-		setQuery({ search: (query.search ?? []).concat(newKeyWord) });
-
 	const onRemoveFilter = (newValue: SearchBarValue<true>) =>
-		setQuery({ search: newValue.map((tag) => tag.value as string) });
+		setQuery({ search: newValue?.map((tag) => tag.value as string) });
 
 	const onSortClick = (sort: string, order?: SortOrder) => setQuery({ sort, order });
 
@@ -153,9 +130,10 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const activeSort = { sort: query.sort, order: (query.order as SortOrder) ?? undefined };
-	const showInitialView = !hasSearched && (!media || media.length === 0);
-	const showNoResults = hasSearched && media.length === 0;
-	const showResults = hasSearched && media.length > 0;
+	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
+	const showInitialView = !hasSearched;
+	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
+	const showResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length > 0;
 
 	/**
 	 * Render
@@ -171,7 +149,7 @@ const ReadingRoomPage: NextPage = () => {
 				<WindowSizeContext.Provider value={windowSize}>
 					<FilterMenu
 						activeSort={activeSort}
-						filters={filterOptionsMock}
+						filters={READING_ROOM_FILTERS()}
 						label={t('pages/leeszaal/reading-room-slug/index___filters')}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}
@@ -202,16 +180,16 @@ const ReadingRoomPage: NextPage = () => {
 						allowCreate
 						className="u-mb-24"
 						clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
+						instanceId="reading-room-search-bar"
 						isMulti
 						size="lg"
 						placeholder={t('pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder')}
 						syncSearchValue={false}
 						valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
 						value={activeFilters}
-						onCreate={onNewKeyWord}
-						onSearch={onSearch}
-						onRemoveValue={onRemoveFilter}
 						onClear={onResetFilters}
+						onRemoveValue={onRemoveFilter}
+						onSearch={onSearch}
 					/>
 					<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 				</div>
@@ -250,7 +228,18 @@ const ReadingRoomPage: NextPage = () => {
 					{showResults && (
 						<>
 							<MediaCardList
-								items={media}
+								items={mediaResultInfo?.items?.map(
+									(mediaObject): MediaCardProps => ({
+										description: mediaObject.schema_description,
+										title: mediaObject.schema_name,
+										published_at: mediaObject.schema_date_published
+											? new Date(mediaObject.schema_date_published)
+											: undefined,
+										published_by: mediaObject.schema_creator?.Maker?.join(', '),
+										type: mediaObject.dcterms_format || undefined,
+									})
+								)}
+								keywords={keywords}
 								sidebar={renderFilterMenu()}
 								view={viewMode}
 							/>

@@ -38,8 +38,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 							{typeof item.node === 'function'
 								? item.node({ closeDropdowns: () => onClose?.() })
 								: item.node}
-							{item.children &&
-								renderChildrenRecursively(item.children, (layer += 1))}
+							{item.children && renderChildrenRecursively(item.children, layer + 1)}
 						</div>
 					);
 				})}

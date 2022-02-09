@@ -11,16 +11,22 @@ import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
-import { Hero, ReadingRoomCardList, SearchBar } from '@shared/components';
+import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
+import { ReadingRoomInfo } from '@reading-room/types';
+import {
+	Hero,
+	ReadingRoomCardList,
+	ReadingRoomCardProps,
+	ReadingRoomCardType,
+	SearchBar,
+} from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
-import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
-	const [readingRooms, setReadingRooms] = useState(sixItems);
 
 	const dispatch = useDispatch();
 	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
@@ -28,6 +34,11 @@ const Home: NextPage = () => {
 	const user = useSelector(selectUser);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const { t } = useTranslation();
+	const { data: readingRoomInfo, isLoading: isLoadingReadingRooms } = useGetReadingRooms(
+		query.search || undefined,
+		0,
+		areAllReadingRoomsVisible ? 200 : 6
+	);
 
 	// Sync showAuth query param with store value
 	useEffect(() => {
@@ -48,10 +59,7 @@ const Home: NextPage = () => {
 	 */
 
 	const handleLoadAllReadingRooms = () => {
-		Promise.resolve([...sixItems, ...sixItems.slice(0, 5)]).then((data) => {
-			setReadingRooms(data);
-			setAreAllReadingRoomsVisible(true);
-		});
+		setAreAllReadingRoomsVisible(true);
 	};
 
 	const onClearSearch = () => {
@@ -134,27 +142,45 @@ const Home: NextPage = () => {
 					/>
 				</div>
 
-				<ReadingRoomCardList
-					className="u-mb-64"
-					items={readingRooms.map((room) => ({
-						...room,
-						onAccessRequest: onRequestAccess,
-					}))}
-					limit={!areAllReadingRoomsVisible}
-				/>
+				{isLoadingReadingRooms && <p>{t('pages/index___laden')}</p>}
+				{!isLoadingReadingRooms && readingRoomInfo?.items?.length === 0 && (
+					<p>{t('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
+				)}
+				{!isLoadingReadingRooms && readingRoomInfo?.items?.length && (
+					<ReadingRoomCardList
+						className="u-mb-64"
+						items={(readingRoomInfo?.items || []).map(
+							(room: ReadingRoomInfo): ReadingRoomCardProps => {
+								return {
+									room: {
+										color: room.color || undefined,
+										description: room.description || undefined,
+										id: room.id,
+										image: room.image || undefined,
+										name: room.name,
+										logo: room.logo,
+									},
+									type: ReadingRoomCardType.noAccess, // TODO change this based on current logged in user
+									onAccessRequest: onRequestAccess,
+								};
+							}
+						)}
+						limit={!areAllReadingRoomsVisible}
+					/>
+				)}
 
 				{!areAllReadingRoomsVisible && (
 					<div className="u-text-center">
 						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
 							{t('pages/index___toon-alles-amount', {
-								amount: 5,
+								amount: readingRoomInfo?.total,
 							})}
 						</Button>
 					</div>
 				)}
 			</div>
 
-			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
+			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 			<RequestAccessBlade
 				isOpen={isOpenRequestAccessBlade}
 				onClose={onCloseRequestBlade}

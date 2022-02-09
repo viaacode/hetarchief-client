@@ -23,15 +23,6 @@ export const checkLoginAction = createAsyncThunk<UserSchema, undefined, { reject
 	}
 );
 
-export const logoutAction = createAsyncThunk('users/logout', async () => {
-	try {
-		const response = await authService.logout();
-		return response;
-	} catch (error) {
-		return error;
-	}
-});
-
 export const userSlice = createSlice({
 	name: 'user',
 	initialState,
@@ -47,20 +38,6 @@ export const userSlice = createSlice({
 				state.loading = false;
 			})
 			.addCase(checkLoginAction.rejected, (state, action) => {
-				state.user = null;
-				state.loading = false;
-				state.error = action.payload;
-			});
-		// Logout
-		builder
-			.addCase(logoutAction.pending, (state) => {
-				state.loading = true;
-			})
-			.addCase(logoutAction.fulfilled, (state) => {
-				state.user = null;
-				state.loading = false;
-			})
-			.addCase(logoutAction.rejected, (state, action) => {
 				state.user = null;
 				state.loading = false;
 				state.error = action.payload;

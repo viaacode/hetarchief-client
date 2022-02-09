@@ -15,7 +15,7 @@ export type SearchBarProps<IsMulti extends boolean = false> = DefaultComponentPr
 		onClear?: () => void;
 		onCreate?: (newValue: string) => void;
 		onRemoveValue?: (removedValue: SearchBarValue<IsMulti>) => void;
-		onSearch?: IsMulti extends true ? OnSearchMulti : OnSearchSingle;
+		onSearch?: (newValue: string) => void;
 	};
 
 export type SearchBarClearLabel = string | ReactNode;

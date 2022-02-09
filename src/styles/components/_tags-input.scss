@@ -27,8 +27,12 @@
 	}
 
 	.c-tags-input__multi-value {
-		margin: $spacer-xxs $spacer-sm $spacer-xxs 0;
+		margin: $spacer-xxs $spacer-xs $spacer-xxs 0;
 		font-size: $font-size-sm;
+
+		@include respond-at(md) {
+			margin: $spacer-xxs $spacer-sm $spacer-xxs 0;
+		}
 	}
 
 	.c-tags-input__indicator {
