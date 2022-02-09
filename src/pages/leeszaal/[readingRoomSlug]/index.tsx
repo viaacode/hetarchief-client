@@ -93,8 +93,6 @@ const ReadingRoomPage: NextPage = () => {
 		};
 
 		if (query.search) {
-			console.log('search');
-
 			fetchMedia();
 		}
 	}, [hasSearched, query.search, query.start]);
