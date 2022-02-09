@@ -39,6 +39,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 								)}
 								checked={field.value}
 								checkIcon={<Icon name="check" />}
+								value="accept-terms"
 							/>
 						)}
 					/>

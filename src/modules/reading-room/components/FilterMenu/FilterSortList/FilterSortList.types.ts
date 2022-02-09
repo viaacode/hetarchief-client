@@ -1,9 +1,9 @@
 import { DefaultComponentProps, SortObject } from '@shared/types';
 
-import { FilterMenuOnSortClick, FilterMenuSortOption } from '../FilterMenu.types';
+import { FilterMenuSortOption, OnFilterMenuSortClick } from '../FilterMenu.types';
 
 export interface FilterSortListProps extends DefaultComponentProps {
 	activeSort?: SortObject;
 	options: FilterMenuSortOption[];
-	onOptionClick?: FilterMenuOnSortClick;
+	onOptionClick?: OnFilterMenuSortClick;
 }

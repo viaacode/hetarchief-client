@@ -10,6 +10,10 @@ export enum ReadingRoomSort {
 	Title = 'title',
 }
 
+export interface DefaultFilterFormProps {
+	name: string;
+}
+
 export interface ApiResponseWrapper<T> {
 	items: T[];
 	total: number;
