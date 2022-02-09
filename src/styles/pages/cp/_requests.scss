@@ -9,7 +9,7 @@ $page: "p-cp-requests";
 			flex-flow: row-reverse nowrap;
 
 			// Can't use &__status-filter here due to ScrollableTabs implementation
-			& > div:first-child {
+			& > div:last-child {
 				flex-grow: 1;
 			}
 		}
