@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { Column } from 'react-table';
+import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { RequestStatusChip } from '@cp/components';
@@ -12,11 +12,12 @@ import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	RequestStatus,
 	requestStatusFilters,
+	RequestTablePageSize,
 	RequestTableRow,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { Icon, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
+import { Icon, PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { mockData } from '@shared/components/Table/__mocks__/table';
 import { createPageTitle } from '@shared/utils';
 
@@ -140,20 +141,43 @@ const CPRequestsPage: NextPage = () => {
 					</div>
 				</div>
 
-				<div className="l-container p-cp__edgeless-container--lg">
-					{data.length > 0 && (
+				{data.length > 0 && (
+					<div className="l-container p-cp__edgeless-container--lg">
 						<Table
 							className="u-mt-24"
-							options={{
+							options={
 								// TODO: fix type hinting
-								// eslint-disable-next-line @typescript-eslint/ban-types
-								columns: columns as Column<object>[],
-								data,
-							}}
+								/* eslint-disable @typescript-eslint/ban-types */
+								{
+									columns: columns as Column<object>[],
+									data: [...data, ...data, ...data, ...data], // 20
+									initialState: {
+										pageSize: RequestTablePageSize,
+									},
+								} as TableOptions<object>
+								/* eslint-enable @typescript-eslint/ban-types */
+							}
 							sortingIcons={sortingIcons}
+							pagination={({ gotoPage }) => {
+								return (
+									<PaginationBar
+										className="u-mt-16 u-mb-16"
+										count={RequestTablePageSize}
+										start={filters.start}
+										total={120} // TODO: fetch count from db
+										onPageChange={(page) => {
+											gotoPage(page);
+											setFilters({
+												...filters,
+												start: page * RequestTablePageSize,
+											});
+										}}
+									/>
+								);
+							}}
 						/>
-					)}
-				</div>
+					</div>
+				)}
 			</CPAdminLayout>
 		</>
 	);
