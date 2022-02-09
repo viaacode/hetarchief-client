@@ -3,10 +3,10 @@ import { i18n } from 'next-i18next';
 import { NumberParam, withDefault } from 'use-query-params';
 
 export const enum requestStatusFilterIds {
-	all,
-	open,
-	approved,
-	denied,
+	all = 'all',
+	open = 'open',
+	approved = 'approved',
+	denied = 'denied',
 }
 
 export const requestStatusFilters: TabProps[] = [
