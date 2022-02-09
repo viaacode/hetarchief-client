@@ -1,7 +1,7 @@
 import { i18n } from 'next-i18next';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { FilterMenuSortOption } from '@reading-room/components';
+import { FilterMenuFilterOption, FilterMenuSortOption } from '@reading-room/components';
 import { Icon, IconProps } from '@shared/components';
 
 import { ReadingRoomMediaType, ReadingRoomSort } from '../types';
@@ -47,6 +47,54 @@ export const READING_ROOM_VIEW_TOGGLE_OPTIONS = [
 	{
 		id: 'list',
 		iconName: 'list-view' as IconProps['name'],
+	},
+];
+
+export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
+	{
+		id: 'format',
+		label: i18n?.t('modules/reading-room/const/index___analoge-drager') ?? '',
+		form: () => null, // Checkbox list
+	},
+	{
+		id: 'duration',
+		label: i18n?.t('modules/reading-room/const/index___duurtijd') ?? '',
+		form: () => null, // Timepicker hh:mm:ss:SSSS
+	},
+	{
+		id: 'created',
+		label: i18n?.t('modules/reading-room/const/index___creatiedatum') ?? '',
+		form: () => null, // Datetime
+	},
+	{
+		id: 'published',
+		label: i18n?.t('modules/reading-room/const/index___publicatiedatum') ?? '',
+		form: () => null, // Datetime
+	},
+	{
+		id: 'creator',
+		label: i18n?.t('modules/reading-room/const/index___maker') ?? '',
+		form: () => null,
+	},
+	{
+		id: 'genre',
+		label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
+		form: () => null, // Checkbox list
+	},
+	{
+		id: 'keywords',
+		label: i18n?.t('modules/reading-room/const/index___trefwoorden') ?? '',
+		form: () => null, // Text input
+	},
+	{
+		id: 'language',
+		label: i18n?.t('modules/reading-room/const/index___taal') ?? '',
+		form: () => null, // Text input
+	},
+	{
+		id: 'video-has-sound',
+		label: i18n?.t('modules/reading-room/const/index___beeld-geluid') ?? '',
+		form: () => null, // Boolean yes / no
 	},
 ];
 
