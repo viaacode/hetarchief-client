@@ -17,7 +17,7 @@
 
 	&__overlay {
 		position: fixed;
-		z-index: get-z-layer("foreground");
+		z-index: get-z-layer("modal");
 		align-items: center;
 		background-color: rgb(0 0 0 / 64%);
 		display: flex;

@@ -39,6 +39,7 @@ export const ICON_LIGHT = [
 	'lock',
 	'log-in',
 	'log-out',
+	'menu',
 	'minus',
 	'newspaper',
 	'no-audio',

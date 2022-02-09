@@ -11,6 +11,6 @@ export const sixItems = [1, 2, 3, 6, 4, 5].map((data: number) => {
 	return {
 		...mockReadingRoomCardProps,
 		access: hasAccess ? AccessGranted : AccessRequested,
-		type: ReadingRoomCardType['no-access'],
+		type: ReadingRoomCardType.noAccess,
 	};
 });

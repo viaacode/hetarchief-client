@@ -13,10 +13,10 @@ import { ReadingRoomCardProps } from './ReadingRoomCard.types';
 const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 	const { room, type } = props;
 
-	const typeNoAccess = type === ReadingRoomCardType['no-access'];
-	const typeAccessGranted = type === ReadingRoomCardType['access'];
-	const typeAccessAccepted = type === ReadingRoomCardType['future--approved'];
-	const typeAccessRequested = type === ReadingRoomCardType['future--requested'];
+	const typeNoAccess = type === ReadingRoomCardType.noAccess;
+	const typeAccessGranted = type === ReadingRoomCardType.access;
+	const typeAccessAccepted = type === ReadingRoomCardType.futureApproved;
+	const typeAccessRequested = type === ReadingRoomCardType.futureRequested;
 
 	const flat = typeAccessAccepted || typeAccessRequested;
 	const isClickable = typeof onClick !== 'undefined';
@@ -86,7 +86,14 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 
 	const renderDescription = () => (
 		<TruncateMarkup lines={flat ? 2 : 3}>
-			<p className={clsx(styles['c-reading-room-card__description'])}>{room?.description}</p>
+			<p
+				className={clsx(
+					styles['c-reading-room-card__description'],
+					flat && styles['c-reading-room-card__description--flat']
+				)}
+			>
+				{room?.description}
+			</p>
 		</TruncateMarkup>
 	);
 

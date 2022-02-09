@@ -1,5 +1,11 @@
 import { CSSProperties } from 'react';
 
+export * from './utils';
+
+/**
+ * Generic components
+ */
+
 export interface DefaultComponentProps {
 	className?: string;
 	style?: CSSProperties;
@@ -11,7 +17,20 @@ export interface ComponentLink {
 	external?: boolean;
 }
 
+/**
+ * Filter / Sort
+ */
+
 export type SortOrder = 'asc' | 'desc';
+
+export interface SortObject {
+	sort: string;
+	order?: SortOrder;
+}
+
+/**
+ * UI
+ */
 
 export enum Breakpoints {
 	sm = 576,

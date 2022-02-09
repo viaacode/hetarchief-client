@@ -1,1 +1,1 @@
-export type UseScrollLock = <El extends HTMLElement>(element: El | null, lock: boolean) => void;
+export type UseScrollLock = <El extends HTMLElement>(lock: boolean, element?: El | null) => void;

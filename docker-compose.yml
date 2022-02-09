@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile.local
     container_name: hetarchief-client
     ports:
-      - 3000:3000
+      - 3200:3200
     env_file:
       - .env.local
     volumes:

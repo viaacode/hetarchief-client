@@ -1,6 +1,7 @@
-export type UserSchema = Record<string, unknown> | null;
+import { UserSchema } from '@auth/types';
 
 export interface UserState {
-	// TODO: add user typings from proxy
-	user: UserSchema;
+	user: UserSchema | null;
+	loading: boolean;
+	error: unknown | null;
 }

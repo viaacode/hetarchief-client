@@ -1,0 +1,41 @@
+@use "sass:math";
+
+@use "styles/abstracts" as *;
+
+$c: "c-avatar";
+
+.#{$c} {
+	&__image {
+		background: $teal;
+		color: $white;
+
+		@include respond-at(md) {
+			margin-right: math.div($font-size-lg, 2);
+		}
+
+		// Assume icon
+		& > span {
+			display: block;
+			margin: 0.6rem;
+			font-size: 2rem;
+
+			@include respond-at(md) {
+				margin: $spacer-xs;
+				font-size: $font-size-lg;
+			}
+		}
+	}
+
+	&__text {
+		font-size: $font-size-base;
+		line-height: $line-height-1xl;
+
+		@include respond-to(md) {
+			display: none;
+		}
+	}
+
+	&--padded-y {
+		padding: $spacer-sm 0;
+	}
+}

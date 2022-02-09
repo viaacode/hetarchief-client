@@ -82,7 +82,7 @@ const Hero: FC<HeroProps> = ({
 									key={`hero-access-${i}`}
 									access={AccessGranted}
 									room={room}
-									type={ReadingRoomCardType['access']}
+									type={ReadingRoomCardType.access}
 								/>
 							))}
 						</div>
@@ -99,7 +99,7 @@ const Hero: FC<HeroProps> = ({
 									key={`hero-planned-${i}`}
 									access={AccessGranted}
 									room={room}
-									type={ReadingRoomCardType['future--approved']}
+									type={ReadingRoomCardType.futureApproved}
 									onClick={() =>
 										onReadingRoomClick?.(room, ReadingRoomStatus.Planned)
 									}
@@ -119,7 +119,7 @@ const Hero: FC<HeroProps> = ({
 									key={`hero-requested-${i}`}
 									access={AccessGranted}
 									room={room}
-									type={ReadingRoomCardType['future--requested']}
+									type={ReadingRoomCardType.futureRequested}
 									onClick={() =>
 										onReadingRoomClick?.(room, ReadingRoomStatus.Requested)
 									}

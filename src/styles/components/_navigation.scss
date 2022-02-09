@@ -1,0 +1,29 @@
+@use "styles/abstracts" as *;
+
+.c-navigation__notifications {
+	&-badge {
+		position: relative;
+
+		&::after {
+			position: absolute;
+			top: 0.8rem;
+			right: 0.8rem;
+			content: "";
+			width: 0.8rem;
+			height: 0.8rem;
+			border-radius: 50%;
+		}
+
+		&--white {
+			&::after {
+				background-color: $white;
+			}
+		}
+
+		&--teal {
+			&::after {
+				background-color: $teal;
+			}
+		}
+	}
+}

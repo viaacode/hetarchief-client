@@ -1,12 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
 import { render, screen, waitFor } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
-import '../../../../__mocks__/react-i18next';
-import AppLayout from './AppLayout';
+import { mockStore } from '../../../../__mocks__/store';
 
-const mockStore = configureStore({ reducer: (state) => state });
+import AppLayout from './AppLayout';
 
 const renderAppLayout = (children?: ReactNode) => {
 	return render(

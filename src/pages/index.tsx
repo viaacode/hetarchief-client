@@ -1,8 +1,8 @@
-import { Button, TextInput } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { KeyboardEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
@@ -10,36 +10,52 @@ import { AuthModal } from '@auth/components';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestDetailBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
+import { withI18n } from '@i18n/wrappers';
+import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
 import { ReadingRoomStatus } from '@reading-room/types';
-import { Hero, Icon, ReadingRoom, ReadingRoomCardList } from '@shared/components';
+import {
+	Hero,
+	ReadingRoom,
+	ReadingRoomCardList,
+	ReadingRoomCardProps,
+	ReadingRoomCardType,
+	SearchBar,
+} from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
-import { sixItems } from '@shared/components/ReadingRoomCardList/__mocks__/reading-room-card-list';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
-import { withI18n } from '@shared/wrappers';
 
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
-	const [readingRooms, setReadingRooms] = useState(sixItems);
-	const [searchValue, setSearchValue] = useState('');
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
 	const [activeRoomDetail, setActiveRoomDetail] = useState<{
 		data: ReadingRoom;
 		type?: ReadingRoomStatus;
 	} | null>(null);
 
+	const dispatch = useDispatch();
+	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
 	const showAuthModal = useSelector(selectShowAuthModal);
-	const dispatch = useDispatch();
-	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const { t } = useTranslation();
+	const { data: readingRoomInfo, isLoading: isLoadingReadingRooms } = useGetReadingRooms(
+		query.search || undefined,
+		0,
+		areAllReadingRoomsVisible ? 200 : 6
+	);
+
+	// Sync showAuth query param with store value
+	useEffect(() => {
+		if (typeof query.showAuth === 'boolean') {
+			dispatch(setShowAuthModal(query.showAuth));
+		}
+	}, [dispatch, query.showAuth]);
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
 		if (!showAuthModal && isLoggedIn && query.returnToRequestAccess) {
 			setIsOpenRequestAccessBlade(true);
-			setQuery({ returnToRequestAccess: undefined });
 		}
 	}, [isLoggedIn, query.returnToRequestAccess, setQuery, showAuthModal]);
 
@@ -48,13 +64,21 @@ const Home: NextPage = () => {
 	 */
 
 	const handleLoadAllReadingRooms = () => {
-		Promise.resolve([...sixItems, ...sixItems]).then((data) => {
-			setReadingRooms(data);
-			setAreAllReadingRoomsVisible(true);
-		});
+		setAreAllReadingRoomsVisible(true);
+	};
+
+	const onClearSearch = () => {
+		setQuery({ search: undefined });
+	};
+
+	const onSearch = (searchValue: string) => {
+		setQuery({ search: searchValue });
 	};
 
 	const onCloseAuthModal = () => {
+		if (typeof query.showAuth === 'boolean') {
+			setQuery({ showAuth: undefined });
+		}
 		dispatch(setShowAuthModal(false));
 	};
 
@@ -78,15 +102,16 @@ const Home: NextPage = () => {
 		}
 	};
 
-	const onRequestAccessSubmit = () => {
-		// TODO: add create request call here
+	const onCloseRequestBlade = () => {
+		if (typeof query.returnToRequestAccess === 'boolean') {
+			setQuery({ returnToRequestAccess: undefined });
+		}
 		setIsOpenRequestAccessBlade(false);
 	};
 
-	const onSearchKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter') {
-			setQuery({ search: searchValue });
-		}
+	const onRequestAccessSubmit = () => {
+		// TODO: add create request call here
+		setIsOpenRequestAccessBlade(false);
 	};
 
 	/**
@@ -119,39 +144,57 @@ const Home: NextPage = () => {
 				<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
 					<h3 className="p-home__subtitle">{t('pages/index___vind-een-leeszaal')}</h3>
 
-					<TextInput
+					<SearchBar
 						className="p-home__search"
-						iconEnd={<Icon name="search" />}
-						placeholder="Zoek"
-						value={searchValue}
-						variants={['grey', 'large', 'rounded']}
-						onChange={(e) => setSearchValue(e.target.value)}
-						onKeyUp={onSearchKeyUp as () => void}
+						backspaceRemovesValue={false}
+						instanceId="home-seach-bar"
+						placeholder={t('pages/index___zoek')}
+						searchValue={query.search ?? ''}
+						onClear={onClearSearch}
+						onSearch={onSearch}
 					/>
 				</div>
 
-				<ReadingRoomCardList
-					className="u-mb-64"
-					items={readingRooms.map((room) => ({
-						...room,
-						onAccessRequest: () => onRequestAccess(room.room),
-					}))}
-					limit={!areAllReadingRoomsVisible}
-				/>
+				{isLoadingReadingRooms && <p>{t('pages/index___laden')}</p>}
+				{!isLoadingReadingRooms && readingRoomInfo?.items?.length === 0 && (
+					<p>{t('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
+				)}
+				{!isLoadingReadingRooms && readingRoomInfo?.items?.length && (
+					<ReadingRoomCardList
+						className="u-mb-64"
+						items={(readingRoomInfo?.items || []).map((room): ReadingRoomCardProps => {
+							return {
+								room: {
+									color: room.color || undefined,
+									description: room.description || undefined,
+									id: room.id,
+									image: room.image || undefined,
+									name: room.name,
+									logo: room.logo,
+								},
+								type: ReadingRoomCardType.noAccess, // TODO change this based on current logged in user
+								onAccessRequest: onRequestAccess,
+							};
+						})}
+						limit={!areAllReadingRoomsVisible}
+					/>
+				)}
 
 				{!areAllReadingRoomsVisible && (
 					<div className="u-text-center">
 						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
-							Toon alles (123)
+							{t('pages/index___toon-alles-amount', {
+								amount: readingRoomInfo?.total,
+							})}
 						</Button>
 					</div>
 				)}
 			</div>
 
-			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
+			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 			<RequestAccessBlade
 				isOpen={isOpenRequestAccessBlade}
-				onClose={() => setIsOpenRequestAccessBlade(false)}
+				onClose={onCloseRequestBlade}
 				onSubmit={onRequestAccessSubmit}
 			/>
 			<RequestDetailBlade

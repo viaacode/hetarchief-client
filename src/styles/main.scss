@@ -2,6 +2,7 @@
 
 @use "abstracts" as *;
 @forward "base";
+@use "vendor" as *;
 @use "components" as *;
 @use "layouts" as *;
 @use "pages" as *;

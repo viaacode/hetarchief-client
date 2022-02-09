@@ -1,23 +1,23 @@
-import { documentOf } from '@meemoo/react-components';
-import { render, RenderResult, screen, fireEvent, waitFor } from '@testing-library/react'; //eslint-disable-line
+import { fireEvent, render, RenderOptions, screen } from '@testing-library/react';
+import { PropsWithChildren } from 'react';
 
 import Modal from './Modal';
+import { ModalProps } from './Modal.types';
 
 const text = 'Title of the Modal';
 const noPadding = { padding: '' };
 const noMargin = { margin: '' };
+const closeIcon = 'times';
 
-const paddingOf = (el: Element) => window.getComputedStyle(el).getPropertyValue('padding');
-const marginOf = (el: Element) => window.getComputedStyle(el).getPropertyValue('margin');
+const renderModal = (
+	{ isOpen = true, title = text, ...rest }: PropsWithChildren<ModalProps> = {},
+	renderOptions?: RenderOptions
+) => render(<Modal {...rest} isOpen={isOpen} title={title} />, renderOptions);
 
 describe('Component: <Modal />', () => {
-	let rendered: RenderResult;
-
-	beforeEach(() => {
-		rendered = render(<Modal title={text} />);
-	});
-
 	it('Should render no content initially', () => {
+		renderModal({ isOpen: false });
+
 		try {
 			screen.getByText(text);
 		} catch (error) {
@@ -26,103 +26,107 @@ describe('Component: <Modal />', () => {
 	});
 
 	it('Should render a portal initially', () => {
-		const portal = documentOf(rendered).getElementsByClassName('ReactModalPortal');
+		renderModal({ isOpen: true });
 
-		expect(portal.length).toEqual(1);
+		const portal = screen.getByText(closeIcon);
+
+		expect(portal).toBeInTheDocument();
 	});
 
 	it('Should show a title when opened', () => {
-		rendered = render(<Modal title={text} isOpen={true} />);
+		renderModal();
+
 		const title = screen.getByText(text);
 
 		expect(title).toBeDefined();
 	});
 
 	it('Should show a close button when opened', () => {
-		rendered = render(<Modal title={text} isOpen={true} />);
-		const close = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__close');
+		renderModal();
 
-		expect(close.length).toEqual(1);
+		const close = screen.getByText(closeIcon);
+
+		expect(close).toBeInTheDocument();
 	});
 
 	// Note: no need to test a function that changes isOpen, state & prop-binding have their own framework-level tests
 	it('Should call a function when pressing the close button', () => {
 		const onClose = jest.fn();
+		renderModal({ onClose });
 
-		rendered = render(<Modal title={text} isOpen={true} onClose={onClose} />);
+		const close = screen.getByText(closeIcon);
 
-		const close = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__close');
+		expect(close).toBeInTheDocument();
 
-		expect(close.length).toEqual(1);
-
-		fireEvent.click(close[0]);
+		fireEvent.click(close as HTMLElement);
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 
 	it('Should render the header and close button in seperate wrappers', () => {
-		rendered = render(<Modal title={text} isOpen={true} />);
+		const title = 'Modal title';
+		renderModal({ title });
 
-		const title = documentOf(rendered).getElementsByClassName(
-			'c-hetarchief-modal__title-wrapper'
-		);
-		const close = documentOf(rendered).getElementsByClassName(
-			'c-hetarchief-modal__close-wrapper'
-		);
+		const modalTitle = screen.getByText(title).parentElement;
+		const modalClose = screen
+			.getByText(closeIcon)
+			.closest('.c-hetarchief-modal__close-wrapper');
 
-		expect(title.length).toEqual(1);
-		expect(close.length).toEqual(1);
+		expect(modalTitle).toHaveClass('c-hetarchief-modal__title-wrapper');
+		expect(modalClose).toBeInTheDocument();
 	});
 
 	it('Should be able to render dynamic content', () => {
-		rendered = render(
-			<Modal title={text} isOpen={true} heading={<h1>heading</h1>} footer={<h1>footer</h1>}>
-				<h1>children</h1>
-			</Modal>
-		);
+		renderModal({
+			heading: <h1>heading</h1>,
+			children: <h1>children</h1>,
+			footer: <h1>footer</h1>,
+		});
 
 		const heading = screen.getByText('heading');
 		const children = screen.getByText('children');
 		const footer = screen.getByText('footer');
 
-		expect(heading).toBeDefined();
-		expect(children).toBeDefined();
-		expect(footer).toBeDefined();
+		expect(heading).toBeInTheDocument();
+		expect(children).toBeInTheDocument();
+		expect(footer).toBeInTheDocument();
 	});
 
 	it('Should render content without enforcing whitespace', () => {
-		rendered = render(
-			<Modal
-				title={text}
-				isOpen={true}
-				heading={<h1 style={{ padding: '20px' }}>heading</h1>}
-				footer={<h1>footer</h1>}
-			>
-				<h1>children</h1>
-			</Modal>
-		);
+		const headingTestId = 'heading-id';
+		const childrenTestId = 'children-id';
+		const footerTestId = 'footer-id';
+		renderModal({
+			heading: (
+				<h1 data-testid={headingTestId} style={{ padding: '20px' }}>
+					heading
+				</h1>
+			),
+			children: <h1 data-testid={childrenTestId}>children</h1>,
+			footer: <h1 data-testid={footerTestId}>footer</h1>,
+		});
 
-		const heading = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__heading');
-		const content = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__content');
-		const footer = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__footer');
+		const heading = screen.getByTestId(headingTestId);
+		const content = screen.getByTestId(childrenTestId);
+		const footer = screen.getByTestId(footerTestId);
 
-		expect(heading.length).toEqual(1);
-		expect(content.length).toEqual(1);
-		expect(footer.length).toEqual(1);
+		expect(heading).toBeInTheDocument();
+		expect(content).toBeInTheDocument();
+		expect(footer).toBeInTheDocument();
 
 		// Note: we're testing the wrappers, not the 20px-padded contents
-		expect({ padding: paddingOf(heading[0]) }).toStrictEqual(noPadding);
-		expect({ padding: paddingOf(content[0]) }).toStrictEqual(noPadding);
-		expect({ padding: paddingOf(footer[0]) }).toStrictEqual(noPadding);
+		expect(heading.parentElement).toHaveStyle(noPadding);
+		expect(content).toHaveStyle(noPadding);
+		expect(footer).toHaveStyle(noPadding);
 
-		expect({ margin: marginOf(content[0]) }).toStrictEqual(noMargin);
-		expect({ margin: marginOf(footer[0]) }).toStrictEqual(noMargin);
+		expect(content).toHaveStyle(noMargin);
+		expect(footer).toHaveStyle(noMargin);
 	});
 
 	it('Should never obscure the entire screen', () => {
-		rendered = render(<Modal title={text} isOpen={true} />);
+		renderModal();
 
-		const overlay = documentOf(rendered).getElementsByClassName('c-hetarchief-modal__overlay');
+		const overlay = screen.getByText(text).closest('.c-hetarchief-modal__overlay');
 
-		expect(overlay.length).toEqual(1);
+		expect(overlay).toBeInTheDocument();
 	});
 });

@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { OnAfterOpenCallback } from 'react-modal';
 
 export interface ModalProps {
 	isOpen?: boolean;
@@ -7,5 +8,5 @@ export interface ModalProps {
 	heading?: ReactNode;
 	footer?: ReactNode;
 	onClose?: () => void;
-	onOpen?: ReactModal.OnAfterOpenCallback;
+	onOpen?: OnAfterOpenCallback;
 }

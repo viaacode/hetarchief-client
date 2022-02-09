@@ -1,15 +1,26 @@
-.l-app {
+$class: "l-app";
+
+.#{$class} {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-}
 
-/**
- * Elements
- */
+	&--sticky {
+		height: 100vh;
+		overflow: hidden;
 
-.l-app__main {
-	display: flex;
-	flex-direction: column;
-	flex: 1 1 auto;
+		.#{$class}__main {
+			min-height: 0;
+		}
+	}
+
+	/**
+	* Elements
+	*/
+
+	&__main {
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 auto;
+	}
 }

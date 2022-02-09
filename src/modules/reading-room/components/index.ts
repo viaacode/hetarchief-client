@@ -1,2 +1,2 @@
 export * from './FilterMenu';
-export * from './SearchBar';
+export * from './ReadingRoomNavigation';

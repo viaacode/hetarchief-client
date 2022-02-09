@@ -6,7 +6,7 @@
 	right: 0;
 	bottom: 0;
 	left: 0;
-	z-index: get-z-layer("foreground");
+	z-index: get-z-layer("filter-menu-mobile");
 	background-color: $black;
 	color: $white;
 
@@ -71,4 +71,17 @@
 			}
 		}
 	}
+}
+
+.c-filter-menu-mobile__form {
+	height: calc(100% - $c-navigation-height-md);
+}
+
+/**
+ * Modifiers
+ */
+
+.c-filter-menu-mobile--active {
+	background-color: $white;
+	color: $black;
 }

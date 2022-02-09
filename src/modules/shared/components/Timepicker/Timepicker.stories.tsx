@@ -1,8 +1,10 @@
-import { futureTimepicker, TextInput, timepicker, Timepicker } from '@meemoo/react-components';
+import { futureTimepicker, TextInput, timepicker } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
 import { Icon } from '../Icon';
+
+import Timepicker from './Timepicker';
 
 export default {
 	title: 'Components/Timepicker',

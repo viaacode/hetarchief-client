@@ -1,3 +1,10 @@
 import { BooleanParam, StringParam } from 'use-query-params';
 
-export const HOME_QUERY_PARAM_CONFIG = { search: StringParam, returnToRequestAccess: BooleanParam };
+// Should match the key in query config below
+export const SHOW_AUTH_QUERY_KEY = 'showAuth';
+
+export const HOME_QUERY_PARAM_CONFIG = {
+	returnToRequestAccess: BooleanParam,
+	search: StringParam,
+	[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+};

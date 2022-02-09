@@ -18,10 +18,10 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps & { cardIsClickable: bool
 	room,
 	type,
 }) => {
-	const typeNoAccess = type === ReadingRoomCardType['no-access'];
-	const typeAccessGranted = type === ReadingRoomCardType['access'];
-	const typeAccessAccepted = type === ReadingRoomCardType['future--approved'];
-	const typeAccessRequested = type === ReadingRoomCardType['future--requested'];
+	const typeNoAccess = type === ReadingRoomCardType.noAccess;
+	const typeAccessGranted = type === ReadingRoomCardType.access;
+	const typeAccessAccepted = type === ReadingRoomCardType.futureApproved;
+	const typeAccessRequested = type === ReadingRoomCardType.futureRequested;
 
 	const flat = typeAccessAccepted || typeAccessRequested;
 	const wrap = typeAccessGranted;
@@ -129,20 +129,20 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps & { cardIsClickable: bool
 
 	const renderControls = () => {
 		switch (type) {
-			case ReadingRoomCardType['access']:
+			case ReadingRoomCardType.access:
 				return renderAccessGrantedControls();
 
-			case ReadingRoomCardType['no-access']:
+			case ReadingRoomCardType.noAccess:
 				if (!access?.pending) {
 					return renderNoAccessControls();
 				} else {
 					return renderDefaultControls();
 				}
 
-			case ReadingRoomCardType['future--approved']:
+			case ReadingRoomCardType.futureApproved:
 				return renderFutureApprovedControls();
 
-			case ReadingRoomCardType['future--requested']:
+			case ReadingRoomCardType.futureRequested:
 				return renderFutureRequestedControls();
 
 			default:

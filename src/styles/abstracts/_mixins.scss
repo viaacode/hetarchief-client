@@ -1,5 +1,6 @@
 @use "sass:list";
 @use "sass:map";
+@use "sass:math";
 @use "sass:meta";
 @use "sass:string";
 
@@ -65,10 +66,10 @@
 
 @mixin generate-properties($_properties, $_value) {
 	@if meta.type-of($_properties) == string {
-		#{$_properties}: $_value;
+		#{$_properties}: $_value !important;
 	} @else {
 		@each $_prop in $_properties {
-			#{$_prop}: $_value;
+			#{$_prop}: $_value !important;
 		}
 	}
 };
@@ -294,5 +295,23 @@
 				background-color: $zinc;
 			}
 		}
+	}
+}
+
+/**
+ * Tabs
+ */
+
+@mixin tabs-border-radius() {
+	border-radius: math.div(math.max(
+		$tab-line-size + ($tab-vertical-padding * 2),
+		$tab-min-height
+	), 2);
+
+	@include respond-at("md") {
+		border-radius: math.div(math.max(
+			$tab-line-size-md + ($tab-vertical-padding-md * 2),
+			$tab-min-height-md
+		), 2);
 	}
 }

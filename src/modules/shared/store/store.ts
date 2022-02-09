@@ -1,4 +1,4 @@
-import { configureStore, EnhancedStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { userSlice } from '@auth/store/user';
@@ -6,7 +6,8 @@ import { userSlice } from '@auth/store/user';
 import { AppStore } from './store.types';
 import { uiSlice } from './ui';
 
-export const makeStore = (): EnhancedStore =>
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const makeStore = () =>
 	configureStore({
 		reducer: {
 			[uiSlice.name]: uiSlice.reducer,

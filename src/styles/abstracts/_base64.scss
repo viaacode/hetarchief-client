@@ -1,8 +1,0 @@
-@use "sass:color";
-@use "variables" as *;
-
-@mixin base64-chevron-down-background($color) {
-    $col: "rgb(#{color.red($color)},#{color.green($color)},#{color.blue($color)})";
-
-    background-image: url('data:image/svg+xml;utf8,<svg fill="#{$col}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="m297 414 23 23 181-181-45-45-136 135-136-135-45 45z"/></svg>');
-}

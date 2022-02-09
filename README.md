@@ -6,11 +6,10 @@ This repository contains the `Het Archief` Next.js app for the end user.
 
 It is built with:
 - node: `v16.x.x` ( ~ `lts/gallium`)
-- yarn: `v1.x.x`
 - npm: `v8.x.x`
 - Next: `v12.0.4`
 
-For a complete list of packages and version check out the `package.json` file.
+For a complete list of packages and versions check out the `package.json` file.
 
 ## Setup
 
@@ -19,10 +18,6 @@ To setup this project, clone the repo and run `npm i` to install the dependencie
 
 This will also setup [husky](https://github.com/typicode/husky) via the `npm run prepare` script,
 this lifecycle script will run automatically after the install.
-
-> ⚠️ _If you're using Yarn 2 this won't work because the `prepare` lifecycle isn't supported so
-> you'll have to run `yarn run prepare` manually.  
-> Yarn 1 doesn't have this issue._
 
 ### Docker
 This project runs with Docker for local development and production images.
@@ -37,13 +32,15 @@ The available commands for development are:
 |--------------|------------------------------------------------------------------------------------------------------|
 | dev          | Run the development server.                                                                          |
 | start        | Run the server in production mode.                                                                   |
+| storybook    | Run Storybook in development mode.                                                                   |
 <br>
 
 The available commands for building the project are:
 
-| command      | runs                                                                                                 |
-|--------------|------------------------------------------------------------------------------------------------------|
-| build        | Build a production ready app to the `/dist` folder.                                                  |
+| command          | runs                                                                                             |
+|------------------|--------------------------------------------------------------------------------------------------|
+| build            | Build a production ready app to the `/dist` folder.                                              |
+| build:storybook  | Build Storybook to the `/storybook-static` folder.                                               |
 <br>
 
 The available commands for testing the project are:
@@ -62,13 +59,63 @@ Other available commands are:
 
 | command      | runs                                                                                                 |
 |--------------|------------------------------------------------------------------------------------------------------|
+| prepare      | Lifecycle script which installs husky.                                                               |
 | lint         | Lint all scripts and styling.                                                                        |
 | lint:ts      | Lint all script files.                                                                               |
 | lint:scss    | Lint all style related files.                                                                        |
+| type-check   | Perform a type check with TypeScript without emitting files.                                         |
+| i18n:extract | Extract and replace translation strings to separate json file located in `/public/locales`.          |
+| gql:extract  | Whitelist GraphQL queries and copy them over to the proxy repo.                                      |
 
 ## Deploy
 
-TODO: Link to the Confluence page describing the entire flow of the project.
+For our deployment flow take a look at the official [meemoo docs for CI/CD](https://github.com/viaacode/ci-cd-docs/tree/main).
+
+### Branching model
+
+Important in the deployment flow is the branching model. Ours differs a bit from the official docs
+but it changes nothing to the deploy flow.  
+Below you can find an explanation and example of each branch:
+
+**Feature**:
+
+Used for creating new features or refactoring. Usually associated with a Task issue in Jira.  
+If this is the case don't forget to include the correct ticket number in the branch.
+
+*example*: `feature/ARC-1-button-component`, `feature/update-readme`
+
+**Bugfix**:
+
+Used for fixing bugs that arise during development or after testing. Usually associated with a bug
+issue in Jira.  
+If this is the case don't forget to include the correct ticket number in the branch.
+
+*example*: `bugfix/ARC-1-button-component`, `bugfix/typo-in-readme`
+
+**Release**:
+
+Used during development to mark the next release we will be deploying to QAS and PRD.  
+Release branches should be merged periodically to develop.
+
+*example*: `release/v1.0.0`
+
+**Develop**:
+
+Used for deploying to the TST environment.  
+Opening PR's to develop will also perform several checks to make sure code is passing all tests and
+the build doesn't fail.
+
+*branch name*: `develop`
+
+**Master**:
+
+Used for deploying to the QAS environment.  
+Opening PR's to master will also perform several checks to make sure code is passing all tests and
+the build doesn't fail.  
+Pushing a tag to master will deploy to PRD.
+
+*branch name*: `master`
+
 
 ## Environment variables
 

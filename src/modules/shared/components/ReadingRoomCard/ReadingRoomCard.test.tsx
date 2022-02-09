@@ -44,7 +44,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['no-access'],
+				type: ReadingRoomCardType.noAccess,
 			})
 		);
 
@@ -56,7 +56,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['access'],
+				type: ReadingRoomCardType.access,
 				access: AccessGranted,
 			})
 		);
@@ -75,7 +75,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['access'],
+				type: ReadingRoomCardType.access,
 				access: AccessGranted,
 			})
 		);
@@ -88,7 +88,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['no-access'],
+				type: ReadingRoomCardType.noAccess,
 				access: AccessRequested,
 			})
 		);
@@ -102,7 +102,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['future--approved'],
+				type: ReadingRoomCardType.futureApproved,
 				access: AccessRequested,
 			})
 		);
@@ -116,7 +116,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		rendered = render(
 			template({
 				room: mockReadingRoomCardProps.room,
-				type: ReadingRoomCardType['future--requested'],
+				type: ReadingRoomCardType.futureRequested,
 				access: AccessRequested,
 			})
 		);

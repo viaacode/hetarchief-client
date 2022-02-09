@@ -63,7 +63,7 @@ export const Granted = Template.bind({});
 
 Granted.args = {
 	...mockReadingRoomCardProps,
-	type: ReadingRoomCardType['access'],
+	type: ReadingRoomCardType.access,
 	access: AccessGranted,
 };
 
@@ -71,7 +71,7 @@ export const FutureApproved = Template.bind({});
 
 FutureApproved.args = {
 	...mockReadingRoomCardProps,
-	type: ReadingRoomCardType['future--approved'],
+	type: ReadingRoomCardType.futureApproved,
 	access: AccessGranted,
 };
 FutureApproved.parameters = {
@@ -82,7 +82,7 @@ export const FutureRequested = Template.bind({});
 
 FutureRequested.args = {
 	...mockReadingRoomCardProps,
-	type: ReadingRoomCardType['future--requested'],
+	type: ReadingRoomCardType.futureRequested,
 	access: AccessGranted,
 };
 FutureRequested.parameters = {

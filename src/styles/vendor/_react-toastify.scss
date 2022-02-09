@@ -1,0 +1,15 @@
+@import "react-toastify/dist/ReactToastify.min.css";
+
+// Resets
+
+.c-toast-container {
+	max-width: 48.6rem;
+	width: 100%;
+	padding: 0;
+}
+
+.c-toast-container__toast {
+	font-family: inherit;
+	background: none;
+	box-shadow: none;
+}

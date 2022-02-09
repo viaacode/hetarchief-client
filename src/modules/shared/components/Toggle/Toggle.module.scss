@@ -23,8 +23,13 @@ $c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
 			}
 		}
 
-		&--disabled {
+		&--active {
 			color: $c-toggle-black-32;
+
+			&:hover {
+				color: $c-toggle-black-32;
+				cursor: default;
+			}
 		}
 	}
 
@@ -44,8 +49,13 @@ $c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
 				color: $zinc;
 			}
 
-			&--disabled {
+			&--active {
 				color: $c-toggle-white-40;
+
+				&:hover {
+					color: $c-toggle-white-40;
+					cursor: default;
+				}
 			}
 		}
 	}

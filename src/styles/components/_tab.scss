@@ -1,44 +1,82 @@
 @use "../abstracts/" as *;
 
-.c-tab {
+$c: "c-tab";
+
+.#{$c} {
 	display: inline-flex;
 	align-items: center;
-	min-height: 3.4rem;
-	padding: $spacer-xs 1.2rem;
-	background-color: $black;
-	color: $white;
+	min-height: $tab-min-height;
+	padding: $tab-vertical-padding 1.2rem;
 	cursor: pointer;
 	transition: background-color $animate-default, color $animate-default;
 
 	@include respond-to("md") {
 		font-size: $font-size-sm;
 	}
-	@include respond-at("md") {
-		min-height: 5.6rem;
-		padding: $spacer-sm $spacer-md;
+
+	/**
+	* Elements
+	*/
+
+	&__icon {
+		display: inline-flex;
+		font-size: $font-size-base;
+		margin-right: $spacer-xs;
+	
+		@include respond-at("md") {
+			font-size: $font-size-lg;
+		}
+	}
+
+	/**
+	* Modifiers
+	*/
+
+	&--dark {
+		background-color: $black;
+		color: $white;
+
+		@include respond-at("md") {
+			min-height: $tab-min-height-md;
+			padding: $tab-vertical-padding-md $spacer-md;
+		}
+
+		&.#{$c} {
+			&--active {
+				background-color: $platinum;
+				color: $black;
+			}
+		}
+	}
+
+	&--light {
+		position: relative;
+		color: $neutral;
+
+		@include respond-at("md") {
+			min-height: $tab-min-height-md;
+			padding: $tab-vertical-padding-md $spacer-sm;
+		}
+
+		&.#{$c} {
+			&--active {
+				color: $black;
+				font-weight: $font-weight-bold;
+
+				&::after {
+					content: "";
+					display: block;
+					position: absolute;
+					inset: 0 0 0 0;
+					top: auto;
+					height: 2px;
+					background: $teal;
+				}
+
+				&.#{$c}--bordered {
+					bottom: 2px;
+				}
+			}
+		}
 	}
 }
-
-/**
- * Elements
- */
-
-.c-tab__icon {
-	display: inline-flex;
-	font-size: $font-size-base;
-	margin-right: $spacer-xs;
-
-	@include respond-at("md") {
-		font-size: $font-size-lg;
-	}
-}
-
-/**
- * Modifiers
- */
-
-.c-tab--active {
-	background-color: $platinum;
-	color: $black;
-}
-
