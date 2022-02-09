@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../abstracts" as *;
 
 /**
@@ -63,7 +64,7 @@
 	}
 
 	.c-tags-input__indicators {
-		padding-right: 1.4rem;
+		padding-right: math.div($spacer-md, 2);
 
 		@include respond-at(md) {
 			padding-right: $spacer-md;
