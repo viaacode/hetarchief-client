@@ -6,6 +6,11 @@ export abstract class ApiService {
 
 	constructor(baseUrl: string) {
 		this.baseUrl = baseUrl;
-		this.api = ky.create({ prefixUrl: this.baseUrl });
+		this.api = ky.create({
+			prefixUrl: this.baseUrl,
+			headers: {
+				'content-type': 'application/json',
+			},
+		});
 	}
 }
