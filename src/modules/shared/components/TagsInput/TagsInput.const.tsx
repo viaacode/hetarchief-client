@@ -56,13 +56,8 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 					id={data.value}
 					label={children}
 					closeButton={renderCloseButton()}
-					closeIcon={<Icon name="times" />}
 					disabled={isDisabled}
 					variants="closable"
-					onClose={(id, e) => {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						removeProps.onClick?.(e as MouseEvent<any>);
-					}}
 				/>
 			</span>
 		);
