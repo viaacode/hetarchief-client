@@ -26,5 +26,13 @@ $page: "p-cp-requests";
 
     &__link {
         text-decoration: none;
+        transition: color $animate-default;
+    
+        &:hover,
+        &:active,
+        &:focus,
+        &:focus-within {
+            color: $teal !important;
+        }
     }
 }

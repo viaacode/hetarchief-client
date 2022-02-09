@@ -47,14 +47,6 @@ p {
 a {
 	text-decoration: underline;
 	color: inherit;
-	transition: color $animate-default;
-
-	&:hover,
-	&:active,
-	&:focus,
-	&:focus-within {
-		color: $teal !important;
-	}
 }
 
 small {
