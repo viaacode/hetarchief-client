@@ -11,9 +11,16 @@ const SearchBarButton: FC<SearchBarButtonProps> = ({ className, cx, innerProps, 
 			{...innerProps}
 			className={cx(dropdownIndicatorCxState, className)}
 			tabIndex={0}
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			/* eslint-disable @typescript-eslint/ban-ts-comment */
 			// @ts-ignore
 			onClick={selectProps.onSearch}
+			onKeyDown={(e) => {
+				if (e.key === 'Enter') {
+					// @ts-ignore
+					selectProps.onSearch?.();
+				}
+			}}
+			/* eslint-enable @typescript-eslint/ban-ts-comment */
 			onMouseDown={(e) => {
 				// Prevent react-select default behaviour when clicking on dropdown indicator
 				e.stopPropagation();
