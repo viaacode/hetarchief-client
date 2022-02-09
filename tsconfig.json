@@ -4,6 +4,7 @@
     "paths": {
       "@auth/*": ["modules/auth/*"],
       "@config/*": ["modules/config/*"],
+      "@cp/*": ["modules/cp/*"],
       "@home/*": ["modules/home/*"],
       "@i18n/*": ["modules/i18n/*"],
       "@navigation/*": ["modules/navigation/*"],

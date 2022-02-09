@@ -4,15 +4,14 @@ import Head from 'next/head';
 import { useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { ScrollableTabs, SearchBar } from '@shared/components';
-import { createPageTitle } from '@shared/utils';
-
-import { withI18n } from '@i18n/wrappers';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	requestStatusFilters,
-} from 'modules/cp/const/requests.const';
-import { CPAdminLayout } from 'modules/cp/layouts';
+} from '@cp/const/requests.const';
+import { CPAdminLayout } from '@cp/layouts';
+import { withI18n } from '@i18n/wrappers';
+import { ScrollableTabs, SearchBar } from '@shared/components';
+import { createPageTitle } from '@shared/utils';
 
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
@@ -20,7 +19,7 @@ const CPRequestsPage: NextPage = () => {
 
 	const statusFilters = useMemo(
 		() =>
-			requestStatusFilters.map((filter) => {
+			requestStatusFilters().map((filter) => {
 				return {
 					...filter,
 					active: filter.id === filters.status,
@@ -51,7 +50,7 @@ const CPRequestsPage: NextPage = () => {
 						onClick={(tabId) =>
 							setFilters({
 								...filters,
-								status: parseInt(tabId.toString()),
+								status: tabId.toString(),
 							})
 						}
 					/>

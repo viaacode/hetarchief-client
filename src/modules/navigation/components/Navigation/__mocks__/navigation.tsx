@@ -145,26 +145,26 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				styles['c-navigation__link--dropdown'],
 			]),
 		}),
-		id: 'beheer',
+		id: 'nav__beheer',
 		hasDivider: 'md',
 		children: [
 			{
-				node: renderLink('Aanvragen', '#', {
+				node: renderLink('Aanvragen', 'beheer/aanvragen', {
 					className: dropdownCls(),
 				}),
-				id: 'aanvragen',
+				id: 'nav__beheer--aanvragen',
 			},
 			{
-				node: renderLink('Bezoekers', '#', {
+				node: renderLink('Bezoekers', 'beheer/bezoeker', {
 					className: dropdownCls(),
 				}),
-				id: 'bezoekers',
+				id: 'nav__beheer--bezoekers',
 			},
 			{
-				node: renderLink('Instellingen', '#', {
+				node: renderLink('Instellingen', 'beheer/instellingen', {
 					className: dropdownCls(),
 				}),
-				id: 'instellingen',
+				id: 'nav__beheer--instellingen',
 			},
 		],
 	},
