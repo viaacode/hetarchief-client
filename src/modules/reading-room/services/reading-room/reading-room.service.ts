@@ -1,7 +1,8 @@
 import { stringifyUrl } from 'query-string';
 
-import { ApiResponseWrapper, ReadingRoomInfo } from '@reading-room/types';
+import { ReadingRoomInfo } from '@reading-room/types';
 import { ApiService } from '@shared/services';
+import { ApiResponseWrapper } from '@shared/types/api';
 
 import { READING_ROOM_SERVICE_BASE_URL } from './reading-room.service.const';
 

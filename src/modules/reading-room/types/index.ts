@@ -14,14 +14,6 @@ export interface DefaultFilterFormProps {
 	name: string;
 }
 
-export interface ApiResponseWrapper<T> {
-	items: T[];
-	total: number;
-	pages: number;
-	page: number;
-	size: number;
-}
-
 export interface ReadingRoomInfo {
 	id: string;
 	maintainerId: string;

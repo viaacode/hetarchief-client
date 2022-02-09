@@ -12,6 +12,7 @@ import { RequestAccessBlade } from '@home/components';
 import { HOME_QUERY_PARAM_CONFIG } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
+import { ReadingRoomInfo } from '@reading-room/types';
 import {
 	Hero,
 	ReadingRoomCardList,
@@ -148,20 +149,22 @@ const Home: NextPage = () => {
 				{!isLoadingReadingRooms && readingRoomInfo?.items?.length && (
 					<ReadingRoomCardList
 						className="u-mb-64"
-						items={(readingRoomInfo?.items || []).map((room): ReadingRoomCardProps => {
-							return {
-								room: {
-									color: room.color || undefined,
-									description: room.description || undefined,
-									id: room.id,
-									image: room.image || undefined,
-									name: room.name,
-									logo: room.logo,
-								},
-								type: ReadingRoomCardType.noAccess, // TODO change this based on current logged in user
-								onAccessRequest: onRequestAccess,
-							};
-						})}
+						items={(readingRoomInfo?.items || []).map(
+							(room: ReadingRoomInfo): ReadingRoomCardProps => {
+								return {
+									room: {
+										color: room.color || undefined,
+										description: room.description || undefined,
+										id: room.id,
+										image: room.image || undefined,
+										name: room.name,
+										logo: room.logo,
+									},
+									type: ReadingRoomCardType.noAccess, // TODO change this based on current logged in user
+									onAccessRequest: onRequestAccess,
+								};
+							}
+						)}
 						limit={!areAllReadingRoomsVisible}
 					/>
 				)}
