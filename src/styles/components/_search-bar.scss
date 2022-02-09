@@ -56,10 +56,16 @@
 	}
 
 	.c-tags-input__value-container {
-		padding-left: $spacer-xs;
+		padding-left: $spacer-sm;
 
 		@include respond-at(md) {
 			padding-left: $spacer-lg;
+		}
+
+		&--is-multi.c-tags-input__value-container--has-value {
+			@include respond-to(md) {
+				padding-left: $spacer-xs;
+			}
 		}
 	}
 
