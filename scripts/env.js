@@ -5,7 +5,7 @@ const CI_ENV_VARIABLES = {
 	PORT: process.env.PORT,
 	NEXT_PUBLIC_ORIGIN: process.env.NEXT_PUBLIC_ORIGIN,
 	NEXT_TELEMETRY_DISABLED: process.env.NEXT_TELEMETRY_DISABLED,
-	PROXY_URL: process.env.PROXY_URL,
+	PROXY_URL: publicRuntimeConfig.PROXY_URL,
 };
 
 let envVariables = {};

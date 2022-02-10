@@ -14,4 +14,4 @@ echo "  NEXT_PUBLIC_ORIGIN: \"$NEXT_PUBLIC_ORIGIN\"," >> ./env-config.js
 echo "  NEXT_TELEMETRY_DISABLED: \"$NEXT_TELEMETRY_DISABLED\"," >> ./env-config.js
 echo "  PROXY_URL: \"$PROXY_URL\"," >> ./env-config.js
 
-echo "};" >> ./env-config.js
+echo "};" >> ./public/env-config.js

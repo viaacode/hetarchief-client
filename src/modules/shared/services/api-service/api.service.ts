@@ -1,18 +1,22 @@
 import ky from 'ky-universal';
+import { KyInstance } from 'ky/distribution/types/ky';
+import getConfig from 'next/config';
 
-import { getEnv } from '@shared/helpers/env';
+const { publicRuntimeConfig } = getConfig();
 
 export abstract class ApiService {
-	protected baseUrl: string;
-	protected api: typeof ky;
+	private static api: KyInstance | null = null;
 
-	constructor(path: string) {
-		this.baseUrl = getEnv('PROXY_URL') + path;
-		this.api = ky.create({
-			prefixUrl: this.baseUrl,
-			headers: {
-				'content-type': 'application/json',
-			},
-		});
+	public static getApi(): KyInstance {
+		if (!ApiService.api) {
+			this.api = ky.create({
+				prefixUrl: publicRuntimeConfig.PROXY_URL,
+				headers: {
+					'content-type': 'application/json',
+				},
+				credentials: 'include', // TODO change to same-origin once working on server
+			});
+		}
+		return this.api as KyInstance;
 	}
 }
