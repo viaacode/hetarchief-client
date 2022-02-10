@@ -1,0 +1,47 @@
+@use "sass:math";
+@use "styles/abstracts" as *;
+
+$component: "c-process-request-blade";
+
+.#{$component} {
+    &__info {
+        background: $platinum;
+        margin-bottom: $spacer-md;
+        padding: $spacer-md $spacer-sm;
+
+        @include respond-at("lg") {
+            display: none;
+        }
+
+        &-list {
+            @extend %reset-list;
+
+            font-size: $font-size-sm;
+        }
+
+        &-item {
+            strong {
+                color: $neutral;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: math.div($spacer-md, 2); 
+            }
+        }
+    }
+
+    &__details {
+        padding: 0 $spacer-sm;
+        
+        strong {
+            display: block;
+            margin-bottom: $spacer-sm;
+        }
+
+        p {
+            color: $neutral;
+            font-size: $font-size-sm;
+            margin-bottom: $spacer-1xl;
+        }
+    }
+}

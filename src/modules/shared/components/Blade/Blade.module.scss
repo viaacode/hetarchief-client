@@ -33,6 +33,7 @@
 		}
 		@include respond-at(md) {
 			font-size: $font-size-3xl;
+			padding-right: $spacer-md * 2;
 		}
 
 		&-wrapper {

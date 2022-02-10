@@ -12,10 +12,13 @@ export const enum RequestStatus {
 }
 
 export interface RequestTableRow extends Object {
+	id: string | number;
 	name: string;
 	email: string;
 	status: RequestStatus;
 	created_at: Date;
+	reason: string;
+	time: string; // free-text indication of when
 }
 
 export const RequestTablePageSize = 20;
@@ -47,4 +50,8 @@ export const requestStatusFilters = (): TabProps[] => {
 			label: i18n?.t('modules/cp/const/requests___geweigerd'),
 		},
 	];
+};
+
+export const requestCreatedAtFormatter = (date: Date): string => {
+	return new Date(date).toLocaleString('nl-be');
 };
