@@ -8,7 +8,7 @@ import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 import { MediaCardListProps } from './MediaCardList.types';
 
-const MediaCardList: FC<MediaCardListProps> = ({ items, view, sidebar }) => {
+const MediaCardList: FC<MediaCardListProps> = ({ items, keywords, view, sidebar }) => {
 	if (!items) {
 		return null;
 	}
@@ -33,7 +33,7 @@ const MediaCardList: FC<MediaCardListProps> = ({ items, view, sidebar }) => {
 			>
 				{isMasonryView && renderSidebar()}
 				{items.map((item, i) => (
-					<MediaCard key={i} {...item} view={view} />
+					<MediaCard key={i} {...item} keywords={keywords} view={view} />
 				))}
 			</Masonry>
 		</div>

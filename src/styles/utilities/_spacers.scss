@@ -9,6 +9,7 @@
 // Top
 $pt: (
 	"8": $spacer-xs,
+	"12": 1.2rem,
 	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
@@ -17,6 +18,7 @@ $pt: (
 // Bottom
 $pb: (
 	"8": $spacer-xs,
+	"24": $spacer-md,
 	"48": $spacer-md * 2,
 	"80": $spacer-2xl,
 );
@@ -45,6 +47,7 @@ $px: (
 $mt: (
 	"24": $spacer-md,
 	"32": $spacer-lg,
+	"64": $spacer-lg * 2,
 	"80": $spacer-2xl,
 );
 @include generate-utils("mt", ("margin-top"), $mt);

@@ -1,0 +1,70 @@
+@use "styles/abstracts" as *;
+
+.c-object-placeholder {
+	height: 100%;
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	background-color: $silver;
+
+	&__page {
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 13.6rem;
+		height: 16.9rem;
+		background-color: white;
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0; right: 0;
+			border-top: 3rem solid $silver;
+			border-left: 3rem solid $zinc;
+			width: 0;
+		}
+	}
+
+	&__icon {
+		font-size: $font-size-3xl;
+		color: $teal;
+	}
+
+	&__img {
+		position: relative;
+		display: inline-block;
+		width: 100%;
+		height: 6.4rem;
+
+		@include respond-at(md) {
+			height: 9.2rem;
+		}
+	}
+
+	&__description {
+		padding: $spacer-1xl $spacer-2xl $spacer-lg $spacer-2xl;
+		text-align: center;
+		line-height: $line-height-3xl;
+	}
+
+	&__modal-description {
+		padding: 0 6.2rem;
+		color: $neutral;
+		font-size: $font-size-sm;
+		text-align: center;
+		line-height: $line-height-3xl;
+	}
+
+	&__modal-button-wrapper {
+		display: flex;
+		justify-content: center;
+	}
+
+	&__modal-button {
+		margin-top: $spacer-1xl;
+		margin-bottom: 5.6rem;
+		min-width: 20rem;
+	}
+}

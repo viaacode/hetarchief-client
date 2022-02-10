@@ -17,5 +17,6 @@ $visibility: (
  $display: (
 	"none": none,
 	"block": block,
+	"inline-block": inline-block,
 );
-@include generate-utils("display", "display", $display, ("md"));
+@include generate-utils("display", "display", $display, ("md", "lg"));
