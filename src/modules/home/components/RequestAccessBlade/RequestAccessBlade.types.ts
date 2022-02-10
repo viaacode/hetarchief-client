@@ -1,8 +1,6 @@
-import { BladeProps } from '@shared/components';
+import { FormBladeProps } from '@shared/types';
 
-export interface RequestAccessBladeProps extends Pick<BladeProps, 'isOpen' | 'onClose'> {
-	onSubmit?: (values: RequestAccessFormState) => void;
-}
+export type RequestAccessBladeProps = FormBladeProps<RequestAccessFormState>;
 
 export interface RequestAccessFormState {
 	requestReason: string;
