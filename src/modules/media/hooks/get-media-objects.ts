@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { UseQueryResult } from 'react-query/types/react/types';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { ApiResponseWrapper, ElasticsearchResponse } from '@shared/types/api';
+import { ApiResponseWrapper } from '@shared/types/api';
 
 import { mediaService } from '../services/media';
 import { MediaInfo } from '../types';
