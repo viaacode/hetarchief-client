@@ -4,7 +4,15 @@ FROM node:gallium-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+# --unsafe-perm needed to install sharp native package. Otherwise we get this error:
+#		npm ERR! code 1
+#		npm ERR! path /home/jenkins/agent/workspace/hetarchief_client_PR-102/node_modules/sharp
+#		npm ERR! command failed
+#		npm ERR! command sh -c (node install/libvips && node install/dll-copy && prebuild-install) || (node install/can-compile && node-gyp rebuild && node install/dll-copy)
+#		npm ERR! sharp: Are you trying to install as a root or sudo user? Try again with the --unsafe-perm flag
+#		npm ERR! sharp: Please see https://sharp.pixelplumbing.com/install for required dependencies
+#		npm ERR! sharp: Installation error: EACCES: permission denied, mkdir '/root/.npm'
+RUN npm ci --ignore-scripts --unsafe-perm
 
 # Rebuild the source code only when needed
 FROM node:gallium-alpine AS builder
