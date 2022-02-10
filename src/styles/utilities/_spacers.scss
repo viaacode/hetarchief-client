@@ -77,13 +77,3 @@ $mr: (
 	"8": $spacer-xs,
 );
 @include generate-utils("mr", "margin-right", $mr);
-
-/**
- * Gap
- */
-
-// Column
-$c-gap: (
-	"10": 1rem,
-);
-@include generate-utils("c-gap", ("column-gap"), $c-gap);

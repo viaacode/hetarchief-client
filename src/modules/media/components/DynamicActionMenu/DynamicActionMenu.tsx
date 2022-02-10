@@ -89,6 +89,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				ref={listRef}
 				className={clsx(className, styles['c-dynamic-action-menu'])}
 				role="list"
+				style={{ minWidth: `${(limit + 1) * 4.8 + limit * 0.8}rem` }}
 			>
 				{visibleActions.map(renderButton)}
 				{!!hiddenActions.length && renderDropdown(hiddenActions)}

@@ -2,6 +2,7 @@ import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import TruncateMarkup from 'react-truncate-markup';
 
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
@@ -75,8 +76,13 @@ const ObjectDetailPage: NextPage = () => {
 							netus et malesuada fames ac turpis egestas. Vivamus convallis aliquet
 							tellus a rutrum. Suspendisse ut posuere lectus, vel elementum sapien.
 						</p>
-						<div className="u-pb-24 u-flex u-c-gap-10">
-							<Button label="Exporteer metadata" iconStart={<Icon name="export" />} />
+						<div className="u-pb-24 p-object-detail__actions">
+							<Button
+								className="p-object-detail__export"
+								iconStart={<Icon name="export" />}
+							>
+								<span className="u-text-ellipsis">Exporteer metadata</span>
+							</Button>
 							<DynamicActionMenu {...dynamicActionMenuMock} />
 						</div>
 						<Metadata
