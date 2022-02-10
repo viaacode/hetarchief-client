@@ -43,4 +43,4 @@ EXPOSE 3000
 ## Run script which initializes env vars to fs
 #RUN chmod +x ./env.sh
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["node_modules/.bin/next", "start"]
