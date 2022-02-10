@@ -9,7 +9,8 @@ import { Icon } from '@shared/components';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { createPageTitle } from '@shared/utils';
 
-import { Metadata, ObjectPlaceholder } from 'modules/object-detail/components';
+import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/object-detail/components';
+import { dynamicActionMenuMock } from 'modules/object-detail/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
 import { metadataMock } from 'modules/object-detail/components/Metadata/__mocks__/metadata';
 import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
@@ -74,8 +75,9 @@ const ObjectDetailPage: NextPage = () => {
 							netus et malesuada fames ac turpis egestas. Vivamus convallis aliquet
 							tellus a rutrum. Suspendisse ut posuere lectus, vel elementum sapien.
 						</p>
-						<div className="u-pb-24">
+						<div className="u-pb-24 u-flex u-c-gap-10">
 							<Button label="Exporteer metadata" iconStart={<Icon name="export" />} />
+							<DynamicActionMenu {...dynamicActionMenuMock} />
 						</div>
 						<Metadata
 							metadata={[
