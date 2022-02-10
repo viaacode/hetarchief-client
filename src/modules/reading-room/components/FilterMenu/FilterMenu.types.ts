@@ -29,7 +29,7 @@ export interface FilterMenuFilterOption {
 	id: string;
 	icon?: IconProps['name'];
 	label: string;
-	form: () => ReactElement | null;
+	form?: () => ReactElement | null; // TODO make form not optional
 }
 
 export type OnFilterMenuSortClick = (key: ReadingRoomSort, order?: SortOrder) => void;

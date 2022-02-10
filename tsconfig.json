@@ -9,6 +9,7 @@
       "@i18n/*": ["modules/i18n/*"],
       "@navigation/*": ["modules/navigation/*"],
       "@reading-room/*": ["modules/reading-room/*"],
+      "@media/*": ["modules/media/*"],
       "@shared/*": ["modules/shared/*"]
     },
     "target": "es5",

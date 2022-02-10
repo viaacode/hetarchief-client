@@ -6,7 +6,8 @@ const pathAliases = [
 	'i18n',
 	'navigation',
 	'reading-room',
-	'shared'
+	'media',
+	'shared',
 ];
 
 module.exports = pathAliases;

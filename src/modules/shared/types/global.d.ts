@@ -9,3 +9,18 @@ declare namespace NodeJS {
 		readonly PROXY_URL: 'string';
 	}
 }
+
+interface Window {
+	_ENV_: {
+		NODE_ENV: string;
+		PORT: string;
+		NEXT_PUBLIC_ORIGIN: string;
+		NEXT_TELEMETRY_DISABLED: string;
+		PROXY_URL: string;
+		PROXY_PATH: string;
+	};
+	APP_INFO: {
+		version: string;
+		mode: 'development' | 'production' | 'test';
+	};
+}

@@ -3,11 +3,12 @@ import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
 	READING_ROOM_FILTERS,
@@ -32,7 +33,6 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { mock } from '@shared/components/MediaCardList/__mocks__/media-card-list';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
 import { SortOrder } from '@shared/types';
@@ -43,14 +43,21 @@ const ReadingRoomPage: NextPage = () => {
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const [hasSearched, setHasSearched] = useState(false);
 	const { t } = useTranslation();
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const windowSize = useWindowSize();
 
+	const hasSearched = !!query?.search?.length || query?.mediaType !== ReadingRoomMediaType.All; // TODO add other filters once available
+
 	// Data
-	const [media, setMedia] = useState<MediaCardProps[]>([]);
+	const { data: mediaResultInfo } = useGetMediaObjects(
+		{
+			query: (query.search || []).join(' '),
+		},
+		query.start || 0,
+		20
+	);
 	const [mediaCount] = useState({
 		[ReadingRoomMediaType.All]: 1245,
 		[ReadingRoomMediaType.Audio]: 456,
@@ -81,21 +88,6 @@ const ReadingRoomPage: NextPage = () => {
 		[viewMode]
 	);
 
-	useEffect(() => {
-		// TODO: replace this with actual results
-		const fetchMedia = async () => {
-			const data = (await mock({ view: 'grid' }, query.start, READING_ROOM_ITEM_COUNT)).items;
-			if (!hasSearched) {
-				setHasSearched(true);
-			}
-			setMedia(data ?? []);
-		};
-
-		if (query.search) {
-			fetchMedia();
-		}
-	}, [hasSearched, query.search, query.start]);
-
 	/**
 	 * Methods
 	 */
@@ -117,7 +109,6 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	const onResetFilters = () => {
-		setMedia([]);
 		setQuery({
 			...READING_ROOM_QUERY_PARAM_INIT,
 			search: undefined,
@@ -140,9 +131,9 @@ const ReadingRoomPage: NextPage = () => {
 
 	const activeSort = { sort: query.sort, order: (query.order as SortOrder) ?? undefined };
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
-	const showInitialView = !hasSearched && (!media || media.length === 0);
-	const showNoResults = hasSearched && media.length === 0;
-	const showResults = hasSearched && media.length > 0;
+	const showInitialView = !hasSearched;
+	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
+	const showResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length > 0;
 
 	/**
 	 * Render
@@ -237,7 +228,17 @@ const ReadingRoomPage: NextPage = () => {
 					{showResults && (
 						<>
 							<MediaCardList
-								items={media}
+								items={mediaResultInfo?.items?.map(
+									(mediaObject): MediaCardProps => ({
+										description: mediaObject.schema_description,
+										title: mediaObject.schema_name,
+										published_at: mediaObject.schema_date_published
+											? new Date(mediaObject.schema_date_published)
+											: undefined,
+										published_by: mediaObject.schema_creator?.Maker?.join(', '),
+										type: mediaObject.dcterms_format || undefined,
+									})
+								)}
 								keywords={keywords}
 								sidebar={renderFilterMenu()}
 								view={viewMode}

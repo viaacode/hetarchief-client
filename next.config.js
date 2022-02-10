@@ -23,17 +23,17 @@ module.exports = withTM({
 		 */
 		esmExternals: 'loose',
 	},
-	rewrites: () => [
-		/**
-		 * We need to proxy calls to our own proxy server to prevent cookies from not being set when
-		 * authenticating
-		 */
-		{ source: '/api/proxy/:path*', destination: `${process.env.PROXY_URL}/:path*` },
-	],
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
 	},
 	images: {
 		domains: ['assets.viaa.be'],
+	},
+	publicRuntimeConfig: {
+		NODE_ENV: process.env.NODE_ENV,
+		PORT: process.env.PORT,
+		NEXT_PUBLIC_ORIGIN: process.env.NEXT_PUBLIC_ORIGIN,
+		NEXT_TELEMETRY_DISABLED: process.env.NEXT_TELEMETRY_DISABLED,
+		PROXY_URL: process.env.PROXY_URL,
 	},
 });
