@@ -106,7 +106,7 @@ const CPRequestsPage: NextPage = () => {
 				order: rules[0] ? (rules[0].desc ? 'desc' : 'asc') : undefined,
 			});
 		},
-		[setFilters] // eslint-disable-line react-hooks/exhaustive-deps
+		[filters, setFilters]
 	);
 
 	return (
