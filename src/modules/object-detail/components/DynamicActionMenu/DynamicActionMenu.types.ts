@@ -11,4 +11,5 @@ export interface ActionItem {
 	label: string;
 	iconName: IconLightNames;
 	id: string;
+	ariaLabel: string;
 }

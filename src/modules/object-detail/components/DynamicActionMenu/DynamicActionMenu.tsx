@@ -49,6 +49,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					onClick={() => onClickAction(action.id)}
 					icon={renderIcon(action.iconName)}
 					variants={['silver']}
+					aria-label={action.ariaLabel}
 				/>
 			</li>
 		);
