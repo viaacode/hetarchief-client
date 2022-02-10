@@ -9,10 +9,10 @@ import { Icon } from '@shared/components';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { createPageTitle } from '@shared/utils';
 
-import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/object-detail/components';
-import { dynamicActionMenuMock } from 'modules/object-detail/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
-import { metadataMock } from 'modules/object-detail/components/Metadata/__mocks__/metadata';
-import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPlaceholder/__mocks__/object-placeholder';
+import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
+import { dynamicActionMenuMock } from 'modules/media/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
+import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
+import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
