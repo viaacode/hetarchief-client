@@ -79,4 +79,8 @@ $c: "c-tab";
 			}
 		}
 	}
+
+	&--medium {
+		min-height: $tab-min-height-medium;
+	}
 }

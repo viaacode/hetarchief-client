@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "../abstracts/" as *;
 
 $c: "c-tabs";
@@ -34,6 +35,16 @@ $c: "c-tabs";
 
 		@include respond-at("md") {
 			padding: 0 $tabs-rounded-size-md;
+		}
+
+		&.#{$c} {
+			&--medium {
+				padding: 0 math.div($tab-min-height-medium, 2);
+				
+				@include respond-to("md") {
+					border-radius: math.div($tab-min-height-medium, 2);
+				}
+			}
 		}
 	}
 

@@ -150,7 +150,7 @@ const CPRequestsPage: NextPage = () => {
 						<ScrollableTabs
 							className="p-cp-requests__status-filter"
 							tabs={statusFilters}
-							variants={['rounded', 'light', 'bordered']}
+							variants={['rounded', 'light', 'bordered', 'medium']}
 							onClick={(tabId) =>
 								setFilters({
 									...filters,

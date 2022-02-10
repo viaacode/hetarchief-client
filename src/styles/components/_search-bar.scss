@@ -34,7 +34,7 @@
 			@include tabs-border-radius;
 
 			height: 100%;
-			border-radius: $tabs-rounded-size;
+			min-height: 0;
 		}
 
 		.c-tags-input__value-container {
