@@ -24,8 +24,8 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, RequestStatus.all),
 	search: withDefault(StringParam, undefined),
 	start: withDefault(NumberParam, 0),
-	sortBy: withDefault(StringParam, undefined),
-	sortDir: withDefault(SortDirectionParam, undefined),
+	sort: withDefault(StringParam, undefined),
+	order: withDefault(SortDirectionParam, undefined),
 };
 
 export const requestStatusFilters = (): TabProps[] => {

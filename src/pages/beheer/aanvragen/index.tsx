@@ -41,8 +41,8 @@ const CPRequestsPage: NextPage = () => {
 	const sortFilters = useMemo(() => {
 		return [
 			{
-				id: filters.sortBy,
-				desc: filters.sortDir !== 'asc',
+				id: filters.sort,
+				desc: filters.order !== 'asc',
 			},
 		];
 	}, [filters]);
@@ -102,8 +102,8 @@ const CPRequestsPage: NextPage = () => {
 		(rules) => {
 			setFilters({
 				...filters,
-				sortBy: rules[0]?.id || undefined,
-				sortDir: rules[0] ? (rules[0].desc ? 'desc' : 'asc') : undefined,
+				sort: rules[0]?.id || undefined,
+				order: rules[0] ? (rules[0].desc ? 'desc' : 'asc') : undefined,
 			});
 		},
 		[setFilters] // eslint-disable-line react-hooks/exhaustive-deps
