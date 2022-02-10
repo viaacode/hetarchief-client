@@ -49,11 +49,11 @@ const CPRequestsPage: NextPage = () => {
 
 	const columns: Column<RequestTableRow>[] = [
 		{
-			Header: t('Naam') || '',
+			Header: t('pages/beheer/aanvragen/index___naam') || '',
 			accessor: 'name',
 		},
 		{
-			Header: t('Emailadres') || '',
+			Header: t('pages/beheer/aanvragen/index___emailadres') || '',
 			accessor: 'email',
 			Cell: ({ row }: RequestTableArgs) => {
 				return (
@@ -64,7 +64,7 @@ const CPRequestsPage: NextPage = () => {
 			},
 		},
 		{
-			Header: t('Tijdstip') || '',
+			Header: t('pages/beheer/aanvragen/index___tijdstip') || '',
 			accessor: 'created_at',
 			Cell: ({ row }: RequestTableArgs) => {
 				return (
@@ -75,7 +75,7 @@ const CPRequestsPage: NextPage = () => {
 			},
 		},
 		{
-			Header: t('Status') || '',
+			Header: t('pages/beheer/aanvragen/index___status') || '',
 			accessor: 'status',
 			Cell: ({ row }: RequestTableArgs) => {
 				return <RequestStatusChip status={row.original.status} />;
