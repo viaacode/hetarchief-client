@@ -41,6 +41,6 @@ COPY scripts/env.sh ./public
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh && chown 101:101 /docker-entrypoint.sh
 # Run script which initializes env vars to fs
-RUN chmod +x env.sh
+RUN chmod +x ./public/env.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
