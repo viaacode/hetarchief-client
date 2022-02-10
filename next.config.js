@@ -33,4 +33,7 @@ module.exports = withTM({
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
 	},
+	images: {
+		domains: ['assets.viaa.be'],
+	},
 });

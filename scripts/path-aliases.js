@@ -1,6 +1,7 @@
 const pathAliases = [
 	'auth',
 	'config',
+	'cp',
 	'home',
 	'i18n',
 	'media',

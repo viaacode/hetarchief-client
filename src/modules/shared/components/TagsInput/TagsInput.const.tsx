@@ -1,5 +1,4 @@
 import { Tag, TagsInputProps } from '@meemoo/react-components';
-import { MouseEvent } from 'react';
 
 import { Icon } from '../Icon';
 
@@ -42,18 +41,22 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 	},
 	IndicatorSeparator: () => null,
 	MultiValue: ({ children, className, cx, data, innerProps, isDisabled, removeProps }) => {
+		const renderCloseButton = () => {
+			return (
+				<div {...removeProps} className="c-tag__close">
+					<Icon name="times" />
+				</div>
+			);
+		};
+
 		return (
 			<span {...innerProps} className={cx(multiValueCxState, className)}>
 				<Tag
 					id={data.value}
 					label={children}
-					closeIcon={<Icon name="times" />}
+					closeButton={renderCloseButton()}
 					disabled={isDisabled}
 					variants="closable"
-					onClose={(id, e) => {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						removeProps.onClick?.(e as MouseEvent<any>);
-					}}
 				/>
 			</span>
 		);
