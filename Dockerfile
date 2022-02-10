@@ -34,4 +34,13 @@ USER nextjs
 
 EXPOSE 3000
 
+#ENV NODE_ENV $NODE_ENV
+#ENV CI false
+#USER root
+#COPY scripts/env.sh ./public
+#COPY docker-entrypoint.sh /docker-entrypoint.sh
+#RUN chmod +x /docker-entrypoint.sh && chown 101:101 /docker-entrypoint.sh
+## Run script which initializes env vars to fs
+#RUN chmod +x ./env.sh
+
 CMD ["node_modules/.bin/next", "start"]

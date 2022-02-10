@@ -1,5 +1,6 @@
 import { appWithTranslation } from 'next-i18next';
 import { AppProps } from 'next/app';
+import Script from 'next/script';
 import { ReactElement } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
@@ -17,6 +18,8 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 			<QueryClientProvider client={queryClient}>
 				<AppLayout>
 					<Component {...pageProps} />
+					{/* Dynamically load env vars after the build has been completed */}
+					<Script src="/env-config.js" strategy="lazyOnload" />
 				</AppLayout>
 			</QueryClientProvider>
 		</NextQueryParamProvider>
