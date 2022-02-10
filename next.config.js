@@ -23,13 +23,6 @@ module.exports = withTM({
 		 */
 		esmExternals: 'loose',
 	},
-	rewrites: () => [
-		/**
-		 * We need to proxy calls to our own proxy server to prevent cookies from not being set when
-		 * authenticating
-		 */
-		{ source: '/api/proxy/:path*', destination: `${process.env.PROXY_URL}/:path*` },
-	],
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
 	},

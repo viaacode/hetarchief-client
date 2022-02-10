@@ -5,9 +5,12 @@
     "Andry Charlier <andry.charlier@studiohyperdrive.be>"
   ],
   "scripts": {
+    "predev": "npm run env",
     "dev": "next dev -p 3200",
     "build": "next build",
+    "prestart": "npm run env",
     "start": "next start",
+    "env": "dotenv -e .env.local node ./scripts/env.js && cp env-config.js ./public",
     "lint": "npm run lint:ts && npm run lint:scss",
     "lint:ts": "next lint --dir src",
     "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input",

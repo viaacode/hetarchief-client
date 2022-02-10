@@ -47,3 +47,6 @@ yarn-error.log*
 
 # Babel config to disable swcMinify on windows
 .babelrc
+
+# Ignore auto generated env file
+public/env-config.js
