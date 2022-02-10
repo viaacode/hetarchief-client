@@ -1,9 +1,9 @@
 @use "sass:math";
 @use "styles/abstracts" as *;
 
-$c: "c-reading-room-card-controls";
+$component: "c-reading-room-card-controls";
 
-.#{$c} {
+.#{$component} {
 	color: $black;
 	display: flex;
 	align-items: center;
@@ -22,7 +22,7 @@ $c: "c-reading-room-card-controls";
 				font-size: $font-size-lg;
 			}
 
-			+ .#{$c}__label-text {
+			+ .#{$component}__label-text {
 				margin-left: $spacer-xs;
 			}
 		}
@@ -56,7 +56,7 @@ $c: "c-reading-room-card-controls";
 	&--light {
 		color: $white;
 
-		.#{$c} {
+		.#{$component} {
 			&__label {
 				&-text {
 					font-size: $font-size-sm;
@@ -65,7 +65,7 @@ $c: "c-reading-room-card-controls";
 				}
 
 				&-icon {
-					+ .#{$c}__label-text {
+					+ .#{$component}__label-text {
 						margin-left: $spacer-xs;
 					}
 				}
@@ -78,7 +78,7 @@ $c: "c-reading-room-card-controls";
 	}
 
 	&--thinner {
-		.#{$c} {
+		.#{$component} {
 			&__label-text {
 				font-size: $font-size-sm;
 				line-height: $line-height-3xl;
@@ -101,7 +101,7 @@ $c: "c-reading-room-card-controls";
 			min-width: 385px;
 		}
 
-		.#{$c} {
+		.#{$component} {
 			&__label {
 				&-text {
 					font-size: $font-size-sm;
@@ -111,7 +111,7 @@ $c: "c-reading-room-card-controls";
 				&-icon {
 					font-size: $font-size-md;
 
-					+ .#{$c}__label-text {
+					+ .#{$component}__label-text {
 						margin-left: math.div($spacer-md, 2);
 					}
 				}

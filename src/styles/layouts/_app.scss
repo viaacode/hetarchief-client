@@ -1,6 +1,6 @@
-$class: "l-app";
+$layout: "l-app";
 
-.#{$class} {
+.#{$layout} {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
@@ -9,7 +9,7 @@ $class: "l-app";
 		height: 100vh;
 		overflow: hidden;
 
-		.#{$class}__main {
+		.#{$layout}__main {
 			min-height: 0;
 		}
 	}
