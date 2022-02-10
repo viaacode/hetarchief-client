@@ -2,6 +2,8 @@ import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
+import { SortDirectionParam } from '@shared/const';
+
 export const enum RequestStatus {
 	all = 'all',
 	open = 'open',
@@ -22,6 +24,8 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, RequestStatus.all),
 	search: withDefault(StringParam, undefined),
 	start: withDefault(NumberParam, 0),
+	sortBy: withDefault(StringParam, undefined),
+	sortDir: withDefault(SortDirectionParam, undefined),
 };
 
 export const requestStatusFilters = (): TabProps[] => {

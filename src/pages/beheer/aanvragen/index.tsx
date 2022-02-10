@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -37,6 +37,15 @@ const CPRequestsPage: NextPage = () => {
 			}),
 		[filters.status]
 	);
+
+	const sortFilters = useMemo(() => {
+		return [
+			{
+				id: filters.sortBy,
+				desc: filters.sortDir !== 'asc',
+			},
+		];
+	}, [filters]);
 
 	const columns: Column<RequestTableRow>[] = [
 		{
@@ -88,6 +97,17 @@ const CPRequestsPage: NextPage = () => {
 			status: RequestStatus.approved,
 		};
 	});
+
+	const onSortChange = useCallback(
+		(rules) => {
+			setFilters({
+				...filters,
+				sortBy: rules[0]?.id || undefined,
+				sortDir: rules[0] ? (rules[0].desc ? 'desc' : 'asc') : undefined,
+			});
+		},
+		[setFilters] // eslint-disable-line react-hooks/exhaustive-deps
+	);
 
 	return (
 		<>
@@ -150,13 +170,15 @@ const CPRequestsPage: NextPage = () => {
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
 									columns: columns as Column<object>[],
-									data: [...data, ...data, ...data, ...data], // 20
+									data: [...data, ...data, ...data, ...data], // TODO: fetch data from db
 									initialState: {
 										pageSize: RequestTablePageSize,
+										sortBy: sortFilters,
 									},
 								} as TableOptions<object>
 								/* eslint-enable @typescript-eslint/ban-types */
 							}
+							onSortChange={onSortChange}
 							sortingIcons={sortingIcons}
 							pagination={({ gotoPage }) => {
 								return (
