@@ -66,6 +66,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				isOpen={isDropdownOpen}
 				onOpen={() => setIsDropdownOpen(true)}
 				onClose={() => setIsDropdownOpen(false)}
+				flyoutClassName={styles['c-dynamic-action-menu__flyout']}
 			>
 				<DropdownButton>
 					<Button icon={renderIcon('dots-horizontal')} variants={['silver']} />

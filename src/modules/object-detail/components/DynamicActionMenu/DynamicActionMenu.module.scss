@@ -5,4 +5,8 @@
 
 	display: flex;
 	column-gap: $spacer-xs;
+
+	&__flyout {
+		box-shadow: $shadow-24-black-12;
+	}
 }
