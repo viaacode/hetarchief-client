@@ -9,6 +9,10 @@ $c: "c-reading-room-card-controls";
 	align-items: center;
 	flex-wrap: nowrap;
 
+	@include respond-to("md") {
+		justify-content: space-between;
+	}
+
 	&__label {
 		display: flex;
 		align-items: center;
