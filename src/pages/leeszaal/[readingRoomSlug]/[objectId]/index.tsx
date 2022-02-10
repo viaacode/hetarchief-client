@@ -2,7 +2,6 @@ import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import TruncateMarkup from 'react-truncate-markup';
 
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
