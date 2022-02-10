@@ -31,13 +31,17 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-16">
 				<Button
-					label={t('Goedkeuren')}
+					label={t(
+						'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
+					)}
 					variants={['block', 'black']}
 					onClick={() => setShowApprove(true)}
 				/>
 
 				<Button
-					label={t('Weigeren')}
+					label={t(
+						'modules/cp/components/process-request-blade/process-request-blade___weigeren'
+					)}
 					variants={['block', 'text']}
 					onClick={() => setShowDecline(true)}
 				/>
@@ -57,30 +61,60 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				}
 			}}
 		>
-			<Blade {...props} title={t('Open aanvraag')} footer={renderFooter()} layer={1}>
+			<Blade
+				{...props}
+				title={t(
+					'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
+				)}
+				footer={renderFooter()}
+				layer={1}
+			>
 				{selected && (
 					<>
 						<div className={styles['c-process-request-blade__info']}>
 							<ul className={styles['c-process-request-blade__info-list']}>
 								<li className={styles['c-process-request-blade__info-item']}>
-									<strong>{t('Emailadres')}:</strong> {selected.email}
+									<strong>
+										{t(
+											'modules/cp/components/process-request-blade/process-request-blade___emailadres'
+										)}
+										:
+									</strong>{' '}
+									{selected.email}
 								</li>
 
 								<li className={styles['c-process-request-blade__info-item']}>
-									<strong>{t('Tijdstip')}:</strong>{' '}
+									<strong>
+										{t(
+											'modules/cp/components/process-request-blade/process-request-blade___tijdstip'
+										)}
+										:
+									</strong>{' '}
 									{requestCreatedAtFormatter(selected.created_at)}
 								</li>
 							</ul>
 						</div>
 
 						<div className={styles['c-process-request-blade__details']}>
-							<strong>{t('Aanvrager')}</strong>
+							<strong>
+								{t(
+									'modules/cp/components/process-request-blade/process-request-blade___aanvrager'
+								)}
+							</strong>
 							<p>{selected.name}</p>
 
-							<strong>{t('Reden van aanvraag')}</strong>
+							<strong>
+								{t(
+									'modules/cp/components/process-request-blade/process-request-blade___reden-van-aanvraag'
+								)}
+							</strong>
 							<p>{selected.reason}</p>
 
-							<strong>{t('Wanneer wil je de leeszaal bezoeken?')}</strong>
+							<strong>
+								{t(
+									'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-leeszaal-bezoeken'
+								)}
+							</strong>
 							<p>{selected.time}</p>
 						</div>
 					</>
@@ -88,13 +122,17 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 			</Blade>
 
 			<Blade
-				title={t('Goedkeuren')}
+				title={t(
+					'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
+				)}
 				isOpen={false}
 				onClose={() => setShowApprove(false)}
 				layer={showApprove ? 2 : 9999}
 			/>
 			<Blade
-				title={t('Weigeren')}
+				title={t(
+					'modules/cp/components/process-request-blade/process-request-blade___weigeren'
+				)}
 				isOpen={false}
 				onClose={() => setShowDecline(false)}
 				layer={showDecline ? 2 : 9999}
