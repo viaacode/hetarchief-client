@@ -40,7 +40,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-	const renderIcon = (name: IconLightNames) => <Icon name={name} />;
+	const renderIcon = (name: IconLightNames) => <Icon className="u-font-size-24" name={name} />;
 
 	const renderButton = (action: ActionItem) => {
 		return (
