@@ -31,7 +31,10 @@ $c: "c-tabs";
 		@include tabs-border-radius;
 
 		padding: 0 $tabs-rounded-size;
-		border-radius: $tabs-rounded-size;
+
+		@include respond-at("md") {
+			padding: 0 $tabs-rounded-size-md;
+		}
 	}
 
 	&--bordered {
