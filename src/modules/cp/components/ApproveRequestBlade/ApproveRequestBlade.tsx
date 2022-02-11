@@ -25,6 +25,8 @@ import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
 
+import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
+
 import {
 	APPROVE_REQUEST_FORM_SCHEMA,
 	ApproveRequestAccessDateFormatter,
@@ -112,6 +114,15 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	return (
 		<Blade {...props} footer={renderFooter()} title={t('Aanvraag goedkeuren')}>
+			<div className={parentStyles['c-process-request-blade__details']}>
+				<strong>
+					{t(
+						'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-leeszaal-bezoeken'
+					)}
+				</strong>
+				<p>{props.selected?.time}</p>
+			</div>
+
 			<div className="u-px-32">
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}

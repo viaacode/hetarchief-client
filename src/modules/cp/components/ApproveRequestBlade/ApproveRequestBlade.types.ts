@@ -1,6 +1,9 @@
 import { FormBladeProps } from '@shared/types';
 
-export type ApproveRequestBladeProps = FormBladeProps<ApproveRequestFormState>;
+import { ProcessRequestBladeProps } from '../ProcessRequestBlade';
+
+export type ApproveRequestBladeProps = FormBladeProps<ApproveRequestFormState> &
+	ProcessRequestBladeProps;
 
 export interface ApproveRequestFormState {
 	accessFrom?: Date;

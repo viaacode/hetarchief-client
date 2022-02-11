@@ -9,6 +9,10 @@ $component: "c-process-request-blade";
         margin-bottom: $spacer-md;
         padding: $spacer-md $spacer-sm;
 
+        @include respond-at("md") {
+            padding: $spacer-md $spacer-lg;
+        }
+
         @include respond-at("lg") {
             display: none;
         }
@@ -32,6 +36,10 @@ $component: "c-process-request-blade";
 
     &__details {
         padding: 0 $spacer-sm;
+
+        @include respond-at("md") {
+            padding: 0 $spacer-lg;
+        }
         
         strong {
             display: block;
