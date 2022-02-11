@@ -6,6 +6,7 @@ import {
 	TextInput,
 	timepicker,
 } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { addHours, differenceInHours, endOfDay, isAfter, roundToNearestMinutes } from 'date-fns';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
@@ -21,6 +22,7 @@ import {
 	ApproveRequestAccessDateFormatter,
 	ApproveRequestAccessTimeFormatter,
 } from './ApproveRequestBlade.const';
+import styles from './ApproveRequestBlade.module.scss';
 import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
 
 const rtnm15 = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
@@ -100,7 +102,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		<Blade {...props} footer={renderFooter()} title={t('Aanvraag goedkeuren')}>
 			<div className="u-px-32">
 				<FormControl
-					className="u-mb-24"
+					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessFrom?.message]}
 					label={t('Van')}
 				>
@@ -139,7 +141,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</FormControl>
 
 				<FormControl
-					className="u-mb-24"
+					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessTo?.message]}
 					label={t('Tot')}
 				>
@@ -166,8 +168,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 									<Timepicker
 										{...timepicker}
-										minTime={addHours(accessFrom || new Date(), 1)}
 										maxTime={endOfDay(accessFrom || new Date())}
+										minTime={addHours(accessFrom || new Date(), 1)}
 										{...field}
 										onChange={(date) => onSimpleDateChange(date, field)}
 										value={ApproveRequestAccessTimeFormatter(field.value)}

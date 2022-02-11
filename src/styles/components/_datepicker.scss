@@ -16,18 +16,6 @@ $datepicker-border-color: $zinc;
 }
 
 .#{$component} {
-	&.react-datepicker-wrapper {
-		&:hover,
-		&:active,
-		&:focus,
-		&:focus-within {
-			& + .react-datepicker__tab-loop .react-datepicker-popper,
-			& + .react-datepicker-popper {
-				border-top-color: $teal;
-			}
-		}
-	}
-
 	&.react-datepicker {
 		border-color: $datepicker-border-color;
 		border-radius: 0;
