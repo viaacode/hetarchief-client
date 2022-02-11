@@ -6,7 +6,14 @@ import {
 	TextInput,
 	timepicker,
 } from '@meemoo/react-components';
-import { addHours, roundToNearestMinutes } from 'date-fns';
+import {
+	addHours,
+	addMinutes,
+	differenceInHours,
+	endOfDay,
+	isAfter,
+	roundToNearestMinutes,
+} from 'date-fns';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
@@ -24,23 +31,30 @@ import {
 import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
 
 const rtnm15 = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
+const defaultAccessTo = (accessFrom: Date) => addHours(rtnm15(accessFrom), 1);
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { onSubmit } = props;
 
 	const { t } = useTranslation();
-	const { control, formState, handleSubmit } = useForm<ApproveRequestFormState>({
+	const {
+		control,
+		formState: { errors },
+		handleSubmit,
+		getValues,
+		setValue,
+	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
 		defaultValues: {
 			accessFrom: rtnm15(new Date()),
-			accessTo: addHours(rtnm15(new Date()), 1),
+			accessTo: defaultAccessTo(new Date()),
 		},
 	});
-	const { errors } = formState;
 
 	// Events
 
 	const onFormSubmit = (values: ApproveRequestFormState) => {
+		console.info('values', values);
 		onSubmit?.(values);
 	};
 
@@ -51,6 +65,23 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			| ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
 	) => {
 		field.onChange(date);
+	};
+
+	const onFromDateChange = (
+		date: Date | null,
+		field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
+	) => {
+		onSimpleDateChange(date, field);
+
+		if (date) {
+			const { accessTo } = getValues();
+
+			// Access must be at least 1h in the future
+			// Aligns with `minTime` of the `accessTo` `Timepicker`-component
+			if (accessTo && (isAfter(date, accessTo) || differenceInHours(date, accessTo) <= 1)) {
+				setValue('accessTo', defaultAccessTo(date));
+			}
+		}
 	};
 
 	// Render
@@ -84,27 +115,33 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<Controller
 						name="accessFrom"
 						control={control}
-						render={({ field }) => (
-							<>
-								<Datepicker
-									{...futureDatepicker}
-									{...field}
-									onChange={(date) => onSimpleDateChange(date, field)}
-									value={ApproveRequestAccessDateFormatter(field.value)}
-									selected={field.value}
-									customInput={<TextInput iconStart={<Icon name="calendar" />} />}
-								/>
+						render={({ field }) => {
+							return (
+								<>
+									<Datepicker
+										{...futureDatepicker}
+										{...field}
+										onChange={(date) => onFromDateChange(date, field)}
+										value={ApproveRequestAccessDateFormatter(field.value)}
+										selected={field.value}
+										customInput={
+											<TextInput iconStart={<Icon name="calendar" />} />
+										}
+									/>
 
-								<Timepicker
-									{...timepicker}
-									{...field}
-									onChange={(date) => onSimpleDateChange(date, field)}
-									value={ApproveRequestAccessTimeFormatter(field.value)}
-									selected={field.value}
-									customInput={<TextInput iconStart={<Icon name="clock" />} />}
-								/>
-							</>
-						)}
+									<Timepicker
+										{...timepicker}
+										{...field}
+										onChange={(date) => onFromDateChange(date, field)}
+										value={ApproveRequestAccessTimeFormatter(field.value)}
+										selected={field.value}
+										customInput={
+											<TextInput iconStart={<Icon name="clock" />} />
+										}
+									/>
+								</>
+							);
+						}}
 					/>
 				</FormControl>
 
@@ -117,10 +154,13 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						name="accessTo"
 						control={control}
 						render={({ field }) => {
+							const { accessFrom } = getValues();
+
 							return (
 								<>
 									<Datepicker
 										{...futureDatepicker}
+										minDate={accessFrom}
 										{...field}
 										onChange={(date) => onSimpleDateChange(date, field)}
 										value={ApproveRequestAccessDateFormatter(field.value)}
@@ -132,6 +172,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 									<Timepicker
 										{...timepicker}
+										minTime={addHours(accessFrom || new Date(), 1)}
+										maxTime={endOfDay(accessFrom || new Date())}
 										{...field}
 										onChange={(date) => onSimpleDateChange(date, field)}
 										value={ApproveRequestAccessTimeFormatter(field.value)}
