@@ -54,7 +54,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	// Events
 
 	const onFormSubmit = (values: ApproveRequestFormState) => {
-		console.info('values', values);
 		onSubmit?.(values);
 	};
 
@@ -120,6 +119,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 								<>
 									<Datepicker
 										{...futureDatepicker}
+										maxDate={null}
 										{...field}
 										onChange={(date) => onFromDateChange(date, field)}
 										value={ApproveRequestAccessDateFormatter(field.value)}
@@ -160,6 +160,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 								<>
 									<Datepicker
 										{...futureDatepicker}
+										maxDate={null}
 										minDate={accessFrom}
 										{...field}
 										onChange={(date) => onSimpleDateChange(date, field)}
