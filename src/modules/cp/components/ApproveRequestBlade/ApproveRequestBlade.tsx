@@ -6,14 +6,7 @@ import {
 	TextInput,
 	timepicker,
 } from '@meemoo/react-components';
-import {
-	addHours,
-	addMinutes,
-	differenceInHours,
-	endOfDay,
-	isAfter,
-	roundToNearestMinutes,
-} from 'date-fns';
+import { addHours, differenceInHours, endOfDay, isAfter, roundToNearestMinutes } from 'date-fns';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';

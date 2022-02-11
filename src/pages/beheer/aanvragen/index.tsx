@@ -1,4 +1,5 @@
 import { Table } from '@meemoo/react-components';
+import { addMinutes, compareDesc } from 'date-fns';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -114,6 +115,7 @@ const CPRequestsPage: NextPage = () => {
 			time: `Ik zou graag op ${new Date().toLocaleDateString()} jullie leeszaal willen bezoeken.`,
 		};
 	});
+	// END TODO
 
 	// Events
 
@@ -201,7 +203,21 @@ const CPRequestsPage: NextPage = () => {
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
 									columns: columns as Column<object>[],
-									data: [...data, ...data, ...data, ...data], // TODO: fetch data from db
+									// TODO: fetch data from db
+									data: [...data, ...data, ...data, ...data]
+										.map((item, i) => {
+											return {
+												...item,
+												created_at: addMinutes(
+													item.created_at,
+													-20 *
+														(filters.start / RequestTablePageSize + 1) *
+														i
+												),
+											};
+										})
+										.sort((a, b) => compareDesc(a.created_at, b.created_at)),
+									// END TODO
 									initialState: {
 										pageSize: RequestTablePageSize,
 										sortBy: sortFilters,
