@@ -23,4 +23,19 @@
 	&__metadata {
 		overflow-y: scroll;
 	}
+
+	&__actions {
+		display: grid;
+		grid-auto-flow: row;
+		column-gap: 1rem;
+		grid-template-columns: minmax(auto, min-content) 1fr;
+	}
+
+	&__export {
+		min-width: 0;
+
+		.c-button__content {
+			width: 100%;
+		}
+	}
 }

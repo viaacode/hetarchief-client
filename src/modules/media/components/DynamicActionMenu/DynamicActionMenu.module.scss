@@ -1,0 +1,14 @@
+@use "styles/abstracts" as *;
+
+.c-dynamic-action-menu {
+	@extend %reset-list;
+
+	width: 100%;
+	min-width: 0; // prevent overflow in flex container
+	display: flex;
+	column-gap: $spacer-xs;
+
+	&__flyout {
+		box-shadow: $shadow-24-black-12;
+	}
+}
