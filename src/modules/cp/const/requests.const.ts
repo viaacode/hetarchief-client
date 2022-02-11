@@ -5,30 +5,20 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/const';
 import { getLocaleFromi18nLanguage } from '@shared/utils';
+import { VisitStatus } from '@visits/types';
 
-export const enum RequestStatus {
-	all = 'all',
-	open = 'open',
-	approved = 'approved',
-	denied = 'denied',
+export enum RequestStatusAll {
+	ALL = 'ALL',
 }
 
-export interface RequestTableRow extends Object {
-	id: string | number;
-	name: string;
-	email: string;
-	status: RequestStatus;
-	created_at: Date;
-	reason: string;
-	time: string; // free-text indication of when
-}
+export type RequestStatus = VisitStatus & RequestStatusAll;
 
 export const RequestTablePageSize = 20;
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
-	status: withDefault(StringParam, RequestStatus.all),
+	status: withDefault(StringParam, RequestStatusAll.ALL),
 	search: withDefault(StringParam, undefined),
-	start: withDefault(NumberParam, 0),
+	page: withDefault(NumberParam, 0),
 	sort: withDefault(StringParam, undefined),
 	order: withDefault(SortDirectionParam, undefined),
 };
@@ -36,26 +26,33 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 export const requestStatusFilters = (): TabProps[] => {
 	return [
 		{
-			id: RequestStatus.all,
+			id: RequestStatusAll.ALL,
 			label: i18n?.t('modules/cp/const/requests___alle'),
 		},
 		{
-			id: RequestStatus.open,
+			id: VisitStatus.PENDING,
 			label: i18n?.t('modules/cp/const/requests___open'),
 		},
 		{
-			id: RequestStatus.approved,
+			id: VisitStatus.APPROVED,
 			label: i18n?.t('modules/cp/const/requests___goedgekeurd'),
 		},
 		{
-			id: RequestStatus.denied,
+			id: VisitStatus.DENIED,
 			label: i18n?.t('modules/cp/const/requests___geweigerd'),
 		},
 	];
 };
 
-export const requestCreatedAtFormatter = (date: Date): string => {
+export const requestCreatedAtFormatter = (input: Date | string): string => {
 	const locale = getLocaleFromi18nLanguage(i18n?.language || '');
+
+	let date: Date;
+	if (typeof input === 'string') {
+		date = new Date(input);
+	} else {
+		date = input;
+	}
 
 	if (differenceInDays(new Date(), date) <= 5) {
 		return formatDistanceToNow(date, {

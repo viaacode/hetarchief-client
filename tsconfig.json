@@ -10,6 +10,7 @@
       "@navigation/*": ["modules/navigation/*"],
       "@reading-room/*": ["modules/reading-room/*"],
       "@media/*": ["modules/media/*"],
+      "@visits/*": ["modules/visits/*"],
       "@shared/*": ["modules/shared/*"]
     },
     "target": "es5",

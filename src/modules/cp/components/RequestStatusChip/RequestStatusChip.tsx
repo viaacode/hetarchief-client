@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
-import { RequestStatus } from '@cp/const/requests.const';
 import { Icon } from '@shared/components';
+import { VisitStatus } from '@visits/types';
 
 import styles from './RequestStatusChip.module.scss';
 import { RequestStatusChipProps } from './RequestStatusChip.types';
@@ -14,12 +14,12 @@ const RequestStatusChip: FC<RequestStatusChipProps> = ({ className, style, statu
 
 	const renderBadge = () => {
 		switch (status) {
-			case RequestStatus.open:
+			case VisitStatus.PENDING:
 				return t(
 					'modules/cp/components/request-status-chip/request-status-chip___open-aanvraag'
 				);
 
-			case RequestStatus.approved:
+			case VisitStatus.APPROVED:
 				return (
 					<>
 						<Badge type="success" text={<Icon name="check" />} variants="icon" />
@@ -29,7 +29,7 @@ const RequestStatusChip: FC<RequestStatusChipProps> = ({ className, style, statu
 					</>
 				);
 
-			case RequestStatus.denied:
+			case VisitStatus.DENIED:
 				return (
 					<>
 						<Badge type="error" text={<Icon name="forbidden" />} variants="icon" />

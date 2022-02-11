@@ -7,6 +7,7 @@ const pathAliases = [
 	'navigation',
 	'reading-room',
 	'media',
+	'visits',
 	'shared',
 ];
 

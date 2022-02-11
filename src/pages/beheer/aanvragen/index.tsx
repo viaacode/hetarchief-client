@@ -1,5 +1,4 @@
 import { Table } from '@meemoo/react-components';
-import { addMinutes, compareDesc } from 'date-fns';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -14,25 +13,31 @@ import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	requestCreatedAtFormatter,
 	RequestStatus,
+	RequestStatusAll,
 	requestStatusFilters,
 	RequestTablePageSize,
-	RequestTableRow,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { Icon, PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
-import { mockData } from '@shared/components/Table/__mocks__/table';
 import { createPageTitle } from '@shared/utils';
+import { useGetVisits } from '@visits/hooks/get-visits';
+import { VisitInfo, VisitStatus } from '@visits/types';
 
-type RequestTableArgs = { row: { original: RequestTableRow } };
-
-const lipsum =
-	'Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris.';
+type RequestTableArgs = { row: { original: VisitInfo } };
 
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selected, setSelected] = useState<string | number | undefined>(undefined);
+
+	// TODO integrate a loading state into the table component
+	const { data: visits } = useGetVisits(
+		filters.search,
+		filters.status === RequestStatusAll.ALL ? undefined : filters.status,
+		filters.page,
+		RequestTablePageSize
+	);
 
 	// Filters
 
@@ -58,29 +63,31 @@ const CPRequestsPage: NextPage = () => {
 
 	// Config
 
-	const columns: Column<RequestTableRow>[] = [
+	const columns: Column<VisitInfo>[] = [
 		{
 			Header: t('pages/beheer/aanvragen/index___naam') || '',
-			accessor: 'name',
+			accessor: 'visitorName',
 		},
 		{
 			Header: t('pages/beheer/aanvragen/index___emailadres') || '',
-			accessor: 'email',
+			accessor: 'visitorMail',
 			Cell: ({ row }: RequestTableArgs) => {
 				return (
-					<Link href={`mailto:${row.original.email}`}>
-						<a className="u-color-neutral p-cp-requests__link">{row.original.email}</a>
+					<Link href={`mailto:${row.original.visitorMail}`}>
+						<a className="u-color-neutral p-cp-requests__link">
+							{row.original.visitorMail}
+						</a>
 					</Link>
 				);
 			},
 		},
 		{
 			Header: t('pages/beheer/aanvragen/index___tijdstip') || '',
-			accessor: 'created_at',
+			accessor: 'createdAt',
 			Cell: ({ row }: RequestTableArgs) => {
 				return (
 					<span className="u-color-neutral">
-						{requestCreatedAtFormatter(row.original.created_at)}
+						{requestCreatedAtFormatter(row.original.createdAt)}
 					</span>
 				);
 			},
@@ -101,22 +108,6 @@ const CPRequestsPage: NextPage = () => {
 		},
 	];
 
-	// TODO: replace with data from db
-	const data = mockData.map((mock, i) => {
-		return {
-			...mock,
-			email: `${mock.name}@example.com`.toLowerCase().replaceAll(' ', '.'),
-			created_at: new Date(mock.created_at),
-			status:
-				filters.status === 'all' ? RequestStatus.open : (filters.status as RequestStatus),
-			reason: Array(i + 1)
-				.fill(lipsum)
-				.join(' '),
-			time: `Ik zou graag op ${new Date().toLocaleDateString()} jullie leeszaal willen bezoeken.`,
-		};
-	});
-	// END TODO
-
 	// Events
 
 	const onSortChange = useCallback(
@@ -132,10 +123,10 @@ const CPRequestsPage: NextPage = () => {
 
 	const onRowClick = useCallback(
 		(e, row) => {
-			const request = (row as { original: RequestTableRow }).original;
+			const request = (row as { original: VisitInfo }).original;
 
-			// Only open blade for "open" requests
-			if (request.status === RequestStatus.open) {
+			// Only open blade for "pending" requests
+			if (request.status === VisitStatus.PENDING) {
 				setSelected(request.id);
 			}
 		},
@@ -161,7 +152,7 @@ const CPRequestsPage: NextPage = () => {
 						<SearchBar
 							backspaceRemovesValue={false}
 							className="p-cp-requests__search"
-							instanceId="requests-seach-bar"
+							instanceId="requests-search-bar"
 							light={true}
 							placeholder={t('pages/beheer/aanvragen/index___zoek')}
 							searchValue={filters.search}
@@ -194,7 +185,7 @@ const CPRequestsPage: NextPage = () => {
 					</div>
 				</div>
 
-				{data.length > 0 && (
+				{(visits?.items?.length || 0) > 0 && (
 					<div className="l-container p-cp__edgeless-container--lg">
 						<Table
 							className="u-mt-24"
@@ -203,21 +194,7 @@ const CPRequestsPage: NextPage = () => {
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
 									columns: columns as Column<object>[],
-									// TODO: fetch data from db
-									data: [...data, ...data, ...data, ...data]
-										.map((item, i) => {
-											return {
-												...item,
-												created_at: addMinutes(
-													item.created_at,
-													-20 *
-														(filters.start / RequestTablePageSize + 1) *
-														i
-												),
-											};
-										})
-										.sort((a, b) => compareDesc(a.created_at, b.created_at)),
-									// END TODO
+									data: visits?.items || [],
 									initialState: {
 										pageSize: RequestTablePageSize,
 										sortBy: sortFilters,
@@ -233,14 +210,14 @@ const CPRequestsPage: NextPage = () => {
 									<PaginationBar
 										className="u-mt-16 u-mb-16"
 										count={RequestTablePageSize}
-										start={filters.start}
-										total={120} // TODO: fetch count from db
+										start={Math.max(0, filters.page - 1) * RequestTablePageSize}
+										total={visits?.total || 0}
 										onPageChange={(page) => {
 											gotoPage(page);
 											setSelected(undefined);
 											setFilters({
 												...filters,
-												start: page * RequestTablePageSize,
+												page,
 											});
 										}}
 									/>
@@ -252,7 +229,7 @@ const CPRequestsPage: NextPage = () => {
 			</CPAdminLayout>
 
 			<ProcessRequestBlade
-				selected={data.find((x) => x.id === selected)}
+				selected={visits?.items?.find((x) => x.id === selected)}
 				isOpen={selected !== undefined}
 				onClose={() => {
 					setSelected(undefined);
