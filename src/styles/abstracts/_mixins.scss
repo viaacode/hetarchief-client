@@ -167,6 +167,19 @@
 }
 
 /**
+ * Button
+ */
+
+@mixin generate-button-small {
+	height: 3.6rem;
+	padding: 0.9rem 2rem;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-normal;
+	line-height: $line-height-base;
+}
+
+
+/**
  * Inputs
  */
 
