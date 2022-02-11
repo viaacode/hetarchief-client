@@ -18,7 +18,7 @@ export const RequestTablePageSize = 20;
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, RequestStatusAll.ALL),
 	search: withDefault(StringParam, undefined),
-	page: withDefault(NumberParam, 0),
+	page: withDefault(NumberParam, 1),
 	sort: withDefault(StringParam, undefined),
 	order: withDefault(SortDirectionParam, undefined),
 };

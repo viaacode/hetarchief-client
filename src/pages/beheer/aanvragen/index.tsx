@@ -12,7 +12,6 @@ import { ProcessRequestBlade } from '@cp/components/ProcessRequestBlade';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	requestCreatedAtFormatter,
-	RequestStatus,
 	RequestStatusAll,
 	requestStatusFilters,
 	RequestTablePageSize,
@@ -212,12 +211,12 @@ const CPRequestsPage: NextPage = () => {
 										count={RequestTablePageSize}
 										start={Math.max(0, filters.page - 1) * RequestTablePageSize}
 										total={visits?.total || 0}
-										onPageChange={(page) => {
-											gotoPage(page);
+										onPageChange={(pageZeroBased) => {
+											gotoPage(pageZeroBased);
 											setSelected(undefined);
 											setFilters({
 												...filters,
-												page,
+												page: pageZeroBased + 1,
 											});
 										}}
 									/>

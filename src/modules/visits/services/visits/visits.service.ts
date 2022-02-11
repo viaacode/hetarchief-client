@@ -13,10 +13,10 @@ class VisitsService extends ApiService {
 		page = 0,
 		size = 20
 	): Promise<ApiResponseWrapper<VisitInfo>> {
-		const parsed = await this.api
+		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: '',
+					url: VISITS_SERVICE_BASE_URL,
 					query: {
 						query: `%${searchInput}%`,
 						status,
@@ -30,8 +30,8 @@ class VisitsService extends ApiService {
 	}
 
 	public async getById(roomId: string): Promise<unknown> {
-		return await this.api.get(roomId).json();
+		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${roomId}`).json();
 	}
 }
 
-export const visitsService = new VisitsService(VISITS_SERVICE_BASE_URL);
+export const visitsService = new VisitsService();
