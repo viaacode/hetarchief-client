@@ -26,5 +26,12 @@ Checked.args = {
 
 export const WithLabel = Template.bind({});
 WithLabel.args = {
-	label: 'Accept my terms and conditions',
+	label: (
+		<span>
+			Accept my terms and conditions
+			<br />
+			Multiline label
+		</span>
+	),
+	checked: true,
 };

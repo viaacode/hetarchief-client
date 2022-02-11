@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "sass:list";
 @use "sass:map";
 @use "sass:math";
@@ -169,65 +170,38 @@
  * Inputs
  */
 
- @mixin generate-checkbox-radio-styling($type) {
-	 .c-#{$type} {
+@mixin generate-checkbox-radio-styling($type) {
+	.c-#{$type} {
 		position: relative;
 		display: inline-block;
-		padding-left: 3.4rem;
+		min-width: $c-check-radio-size;
+		min-height: $c-check-radio-size;
 		font-size: $font-size-base;
 		cursor: pointer;
 
-		&::before,
-		&::after {
-			content: "";
-			position: absolute;
-		}
-
-		// Background hover
-		&::before {
-			top: -0.8rem;
-			left: -1rem;
-			z-index: get-z-layer("background");
-			width: 3.6rem;
-			height: 3.6rem;
-			border-radius: 50%;
-			transform: scale(0.3);
-			transition: transform $animate-default;
-		}
-
-		// Checkmark box
-		&::after {
-			top: 2px;
-			left: 0;
-			z-index: get-z-layer("base");
-			width: 1.6rem;
-			height: 1.6rem;
-			border: 2px solid $black;
-			background-color: $white;
-			transition: background-color $animate-default;
-			@if $type == "radio-button" {
-				border-radius: 50%;
-			}
-		}
-
-		// States
 		&:focus-within {
-			&::before {
-				background-color: rgb(0 0 0 / 29%);
-				transform: scale(1);
+			.c-#{$type}__check-icon {
+				&::before {
+					background-color: color.adjust($black, $alpha: -0.71);
+					transform: translate(-50%, -50%) scale(3.25);
+				}
 			}
 		}
 
 		&:hover {
-			&::before {
-				background-color: rgb(0 0 0 / 14%);
-				transform: scale(1);
+			.c-#{$type}__check-icon {
+				&::before {
+					background-color: color.adjust($black, $alpha: -0.86);
+					transform: translate(-50%, -50%) scale(3.25);
+				}
 			}
 		}
 
 		&:active {
-			&::before {
-				background-color: rgb(0 150 144 / 40%);
+			.c-#{$type}__check-icon {
+				&::before {
+					background-color: color.adjust($seagreen, $alpha: -0.6);
+				}
 			}
 		}
 	}
@@ -237,26 +211,78 @@
 	*/
 
 	.c-#{$type}__input {
-		appearance: none;
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		white-space: nowrap;
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
 		opacity: 0;
 	}
 
 	.c-#{$type}__check-icon {
 		position: absolute;
-		z-index: get-z-layer("foreground");
-		display: inline-flex;
-		font-size: $font-size-sm;
+		top: 1px;
+		left: 0;
+		width: $c-check-radio-size;
+		height: $c-check-radio-size;
+		border: 2px solid $black;
+		background-color: $white;
 		color: $white;
-		opacity: 0;
-		transition: opacity $animate-default;
-		@if $type == "checkbox" {
-			top: 3px;
-			left: 1px;
-		}
+		transition: background-color $animate-default;
 		@if $type == "radio-button" {
-			top: 7px;
-			left: 0.55rem;
+			border-radius: 50%;
 		}
+
+		&::after,
+		> span {
+			opacity: 0;
+			transition: opacity $animate-default;
+		}
+
+		&::before,
+		&::after,
+		> span {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+
+		// Background hover
+		&::before {
+			content: "";
+			z-index: get-z-layer("background");
+			width: 100%;
+			height: 100%;
+			border-radius: 50%;
+			transition: transform $animate-default;
+
+			// transform-origin: center;
+		}
+
+		// Radio button icon
+		&::after {
+			@if $type == "radio-button" {
+				content: ""
+			}
+
+			z-index: get-z-layer("foreground");
+			display: inline-flex;
+			width: 0.6rem;
+			height: 0.6rem;
+			font-size: $font-size-sm;
+			background-color: white;
+			border-radius: 50%;
+			color: $white;
+		}
+	}
+
+	.c-#{$type}__label {
+		display: inline-block;
+		padding-left: $c-check-radio-size + 1.8rem;
 	}
 
 	/**
@@ -264,17 +290,12 @@
 	*/
 
 	.c-#{$type}--checked {
-		&::after {
-			background-color: $black;
-		}
-
 		.c-#{$type}__check-icon {
-			opacity: 1;
-			@if $type == "radio-button" {
-				width: 0.6rem;
-				height: 0.6rem;
-				background-color: white;
-				border-radius: 50%;
+			background-color: $black;
+
+			&::after,
+			> span  {
+				opacity: 1;
 			}
 		}
 	}
@@ -282,16 +303,17 @@
 	.c-#{$type}--disabled {
 		cursor: not-allowed;
 
-		&::before {
-			content: none;
+		.c-#{$type}__check-icon {
+			border-color: $zinc;
+
+			&::before {
+				content: none;
+			}
 		}
 
-		&::after {
-			border-color: $zinc;
-		}
 
 		&.c-#{$type}--checked {
-			&::after {
+			.c-#{$type}__check-icon {
 				background-color: $zinc;
 			}
 		}
