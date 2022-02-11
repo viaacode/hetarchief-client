@@ -6,6 +6,7 @@ import {
 	TextInput,
 	timepicker,
 } from '@meemoo/react-components';
+import { addHours, roundToNearestMinutes } from 'date-fns';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
@@ -14,7 +15,6 @@ import { Blade, Icon } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
-import { getNearestFutureQuarter } from '@shared/utils';
 
 import {
 	APPROVE_REQUEST_FORM_SCHEMA,
@@ -23,7 +23,7 @@ import {
 } from './ApproveRequestBlade.const';
 import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
 
-const anHour = 1000 * 60 * 60;
+const rtnm15 = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { onSubmit } = props;
@@ -32,8 +32,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { control, formState, handleSubmit } = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
 		defaultValues: {
-			accessFrom: getNearestFutureQuarter(new Date()),
-			accessTo: new Date(getNearestFutureQuarter(new Date()).valueOf() + anHour),
+			accessFrom: rtnm15(new Date()),
+			accessTo: addHours(rtnm15(new Date()), 1),
 		},
 	});
 	const { errors } = formState;
