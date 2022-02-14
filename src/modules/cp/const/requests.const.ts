@@ -2,7 +2,7 @@ import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { SortDirectionParam } from '@shared/const';
+import { SortDirectionParam } from '@shared/helpers';
 
 export const enum RequestStatus {
 	all = 'all',
