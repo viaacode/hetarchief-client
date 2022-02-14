@@ -229,7 +229,8 @@ const ReadingRoomPage: NextPage = () => {
 						<>
 							<MediaCardList
 								items={mediaResultInfo?.items
-									?.filter((mediaObject) => (mediaObject as any).type !== 'SOLR')
+									// TODO: check why these 'empty' results are there
+									?.filter((mediaObject) => mediaObject.type !== 'SOLR')
 									.map(
 										(mediaObject): MediaCardProps => ({
 											description: mediaObject.schema_description,
