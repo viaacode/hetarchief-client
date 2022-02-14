@@ -6,10 +6,10 @@ import React, { FC } from 'react';
 import { RequestStatus } from '@cp/const/requests.const';
 import { Icon } from '@shared/components';
 
-import styles from './RequestStatusChip.module.scss';
-import { RequestStatusChipProps } from './RequestStatusChip.types';
+import styles from './RequestStatusBadge.module.scss';
+import { RequestStatusBadgeProps } from './RequestStatusBadge.types';
 
-const RequestStatusChip: FC<RequestStatusChipProps> = ({ className, style, status }) => {
+const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, status }) => {
 	const { t } = useTranslation();
 
 	const renderBadge = () => {
@@ -45,10 +45,10 @@ const RequestStatusChip: FC<RequestStatusChipProps> = ({ className, style, statu
 	};
 
 	return (
-		<div className={clsx(className, styles['c-request-status-chip'])} style={style}>
+		<div className={clsx(className, styles['c-request-status-badge'])} style={style}>
 			{renderBadge()}
 		</div>
 	);
 };
 
-export default RequestStatusChip;
+export default RequestStatusBadge;

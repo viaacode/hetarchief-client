@@ -6,16 +6,16 @@ import { ApiResponseWrapper } from '@shared/types/api';
 
 import { READING_ROOM_SERVICE_BASE_URL } from './reading-room.service.const';
 
-class ReadingRoomService extends ApiService {
-	public async getAll(
+export class ReadingRoomService {
+	public static async getAll(
 		searchInput = '',
 		page = 0,
 		size = 20
 	): Promise<ApiResponseWrapper<ReadingRoomInfo>> {
-		const parsed = await this.api
+		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: '',
+					url: READING_ROOM_SERVICE_BASE_URL,
 					query: {
 						query: `%${searchInput}%`,
 						page,
@@ -27,9 +27,7 @@ class ReadingRoomService extends ApiService {
 		return parsed as ApiResponseWrapper<ReadingRoomInfo>;
 	}
 
-	public async getById(roomId: string): Promise<unknown> {
-		return await this.api.get(roomId).json();
+	public static async getById(roomId: string): Promise<unknown> {
+		return await ApiService.getApi().get(roomId).json();
 	}
 }
-
-export const readingRoomService = new ReadingRoomService(READING_ROOM_SERVICE_BASE_URL);

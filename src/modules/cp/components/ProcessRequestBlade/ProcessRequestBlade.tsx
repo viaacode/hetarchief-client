@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import React, { FC, useState } from 'react';
 
 import { requestCreatedAtFormatter } from '@cp/const/requests.const';
-import { Blade, BladeManager } from '@shared/components';
+import { Blade, BladeManager, Icon } from '@shared/components';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';
 import { DeclineRequestBlade } from '../DeclineRequestBlade';
@@ -37,6 +37,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 					label={t(
 						'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
 					)}
+					iconStart={<Icon name="check" />}
 					variants={['block', 'black']}
 					onClick={() => setShowApprove(true)}
 				/>
@@ -45,6 +46,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 					label={t(
 						'modules/cp/components/process-request-blade/process-request-blade___weigeren'
 					)}
+					iconStart={<Icon name="forbidden" />}
 					variants={['block', 'text']}
 					onClick={() => setShowDecline(true)}
 				/>
