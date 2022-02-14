@@ -4,7 +4,9 @@ FROM node:gallium-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+# Manually ignore scripts instead of using --ignore-scripts, this flag will prevent running lifecycles for all dependencies
+RUN npm set-script prepare "" &&\
+    npm ci
 
 # Rebuild the source code only when needed
 FROM node:gallium-alpine AS builder
