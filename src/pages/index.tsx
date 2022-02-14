@@ -25,7 +25,7 @@ import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
-const NUMBER_OF_READING_ROOMS = 3;
+const NUMBER_OF_READING_ROOMS = 6;
 
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
