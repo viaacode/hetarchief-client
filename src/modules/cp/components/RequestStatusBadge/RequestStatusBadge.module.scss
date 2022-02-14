@@ -1,6 +1,6 @@
 @use "styles/abstracts" as *;
 
-$component: "c-request-status-chip";
+$component: "c-request-status-badge";
 
 .#{$component} {
     display: flex;

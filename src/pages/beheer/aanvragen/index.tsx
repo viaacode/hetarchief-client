@@ -2,26 +2,23 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useMemo } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
-import { RequestStatusChip } from '@cp/components';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	RequestStatus,
 	requestStatusFilters,
 	RequestTablePageSize,
-	RequestTableRow,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { Icon, PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
+import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { mockData } from '@shared/components/Table/__mocks__/table';
 import { createPageTitle } from '@shared/utils';
 
-type RequestTableArgs = { row: { original: RequestTableRow } };
+import { RequestTableColumns } from './table.const';
 
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
@@ -37,49 +34,6 @@ const CPRequestsPage: NextPage = () => {
 			}),
 		[filters.status]
 	);
-
-	const columns: Column<RequestTableRow>[] = [
-		{
-			Header: t('Naam') || '',
-			accessor: 'name',
-		},
-		{
-			Header: t('Emailadres') || '',
-			accessor: 'email',
-			Cell: ({ row }: RequestTableArgs) => {
-				return (
-					<Link href={`mailto:${row.original.email}`}>
-						<a className="u-color-neutral p-cp-requests__link">{row.original.email}</a>
-					</Link>
-				);
-			},
-		},
-		{
-			Header: t('Tijdstip') || '',
-			accessor: 'created_at',
-			Cell: ({ row }: RequestTableArgs) => {
-				return (
-					<span className="u-color-neutral">
-						{new Date(row.original.created_at).toLocaleString('nl-be')}
-					</span>
-				);
-			},
-		},
-		{
-			Header: t('Status') || '',
-			accessor: 'status',
-			Cell: ({ row }: RequestTableArgs) => {
-				return <RequestStatusChip status={row.original.status} />;
-			},
-		},
-		{
-			Header: '',
-			id: 'cp-requests-table-actions',
-			Cell: () => {
-				return <Icon className="p-cp-requests__actions" name="dots-vertical" />;
-			},
-		},
-	];
 
 	const data = mockData.map((mock) => {
 		return {
@@ -115,13 +69,11 @@ const CPRequestsPage: NextPage = () => {
 							size="md"
 							onClear={() => {
 								setFilters({
-									...filters,
 									search: undefined,
 								});
 							}}
 							onSearch={(searchValue: string) => {
 								setFilters({
-									...filters,
 									search: searchValue,
 								});
 							}}
@@ -133,7 +85,6 @@ const CPRequestsPage: NextPage = () => {
 							variants={['rounded', 'light', 'bordered']}
 							onClick={(tabId) =>
 								setFilters({
-									...filters,
 									status: tabId.toString(),
 								})
 							}
@@ -149,7 +100,7 @@ const CPRequestsPage: NextPage = () => {
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: columns as Column<object>[],
+									columns: RequestTableColumns(t) as Column<object>[],
 									data: [...data, ...data, ...data, ...data], // 20
 									initialState: {
 										pageSize: RequestTablePageSize,
