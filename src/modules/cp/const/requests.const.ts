@@ -6,7 +6,7 @@ import { RequestStatusAll } from '@cp/types';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitStatus } from '@visits/types';
 
-export const RequestTablePageSize = 10;
+export const RequestTablePageSize = 20;
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, RequestStatusAll.ALL),
