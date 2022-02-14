@@ -1,6 +1,7 @@
 import { RequestStatus } from '@cp/const/requests.const';
 
 export interface RequestTableRow extends Object {
+	id: string | number;
 	name: string;
 	email: string;
 	status: RequestStatus;
