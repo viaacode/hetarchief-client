@@ -110,6 +110,41 @@ $z-layers: (
 );
 
 /**
+ * Animations
+ * ---
+ * Inspiration: https://material.io/design/motion/speed.html#controlling-speed
+ */
+
+// Duration
+$timing-xslow: 300ms;
+$timing-slow: 250ms;
+$timing-default: 200ms;
+$timing-fast: 100ms;
+$timing-sm: $timing-fast;
+$timing-md-in: $timing-slow;
+$timing-md-out: $timing-default;
+$timing-lg-in: $timing-xslow;
+$timing-lg-out: $timing-slow;
+
+// Easings
+$ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-in: cubic-bezier(0, 0, 0.2, 1);
+$ease-out: cubic-bezier(0.4, 0, 1, 1);
+
+// Combinations
+$animate-default: $timing-default $ease-default;
+$animate-sm-in: $timing-sm $ease-in;
+$animate-sm-out: $timing-sm $ease-out;
+$animate-md-in: $timing-md-in $ease-in;
+$animate-md-out: $timing-md-out $ease-out;
+$animate-lg-in: $timing-lg-in $ease-in;
+$animate-lg-out: $timing-lg-out $ease-out;
+
+/**
+ * Components
+ */
+
+/**
  * Modal
  */
 
@@ -145,6 +180,12 @@ $c-navigation-height: 8.8rem;
 $c-navigation-height-md: 8rem;
 
 /**
+ * Checkbox / Radio button
+ */
+
+$c-check-radio-size: 1.6rem;
+
+/**
  * Tab(s)
  */
 
@@ -156,34 +197,3 @@ $tab-vertical-padding: $spacer-xs;
 $tab-vertical-padding-md: $spacer-sm;
 $tabs-rounded-size: $spacer-md;
 $tabs-border-width: 1px;
-
-/**
- * Animations
- * ---
- * Inspiration: https://material.io/design/motion/speed.html#controlling-speed
- */
-
-// Duration
-$timing-xslow: 300ms;
-$timing-slow: 250ms;
-$timing-default: 200ms;
-$timing-fast: 100ms;
-$timing-sm: $timing-fast;
-$timing-md-in: $timing-slow;
-$timing-md-out: $timing-default;
-$timing-lg-in: $timing-xslow;
-$timing-lg-out: $timing-slow;
-
-// Easings
-$ease-default: cubic-bezier(0.4, 0, 0.2, 1);
-$ease-in: cubic-bezier(0, 0, 0.2, 1);
-$ease-out: cubic-bezier(0.4, 0, 1, 1);
-
-// Combinations
-$animate-default: $timing-default $ease-default;
-$animate-sm-in: $timing-sm $ease-in;
-$animate-sm-out: $timing-sm $ease-out;
-$animate-md-in: $timing-md-in $ease-in;
-$animate-md-out: $timing-md-out $ease-out;
-$animate-lg-in: $timing-lg-in $ease-in;
-$animate-lg-out: $timing-lg-out $ease-out;

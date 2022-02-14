@@ -247,6 +247,7 @@ const ReadingRoomPage: NextPage = () => {
 								className="u-mb-48"
 								start={query.start}
 								count={READING_ROOM_ITEM_COUNT}
+								showBackToTop
 								total={mediaCount[query.mediaType as ReadingRoomMediaType]}
 								onPageChange={(page) =>
 									setQuery({

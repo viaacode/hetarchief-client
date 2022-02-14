@@ -171,7 +171,11 @@ const Home: NextPage = () => {
 
 				{!areAllReadingRoomsVisible && (
 					<div className="u-text-center">
-						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
+						<Button
+							className="u-font-weight-400"
+							onClick={handleLoadAllReadingRooms}
+							variants={['outline']}
+						>
 							{t('pages/index___toon-alles-amount', {
 								amount: readingRoomInfo?.total,
 							})}
