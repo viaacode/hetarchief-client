@@ -25,6 +25,8 @@ import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
+const NUMBER_OF_READING_ROOMS = 3;
+
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
@@ -38,7 +40,7 @@ const Home: NextPage = () => {
 	const { data: readingRoomInfo, isLoading: isLoadingReadingRooms } = useGetReadingRooms(
 		query.search || undefined,
 		0,
-		areAllReadingRoomsVisible ? 200 : 6
+		areAllReadingRoomsVisible ? 200 : NUMBER_OF_READING_ROOMS
 	);
 
 	// Sync showAuth query param with store value
@@ -108,7 +110,8 @@ const Home: NextPage = () => {
 	 */
 
 	const readingRoomsLength = readingRoomInfo?.items?.length ?? 0;
-	const showLoadMore = !areAllReadingRoomsVisible && readingRoomsLength > 6;
+	const showLoadMore =
+		!areAllReadingRoomsVisible && (readingRoomInfo?.total ?? 0) > NUMBER_OF_READING_ROOMS;
 
 	/**
 	 * Render
