@@ -175,8 +175,8 @@ const CPRequestsPage: NextPage = () => {
 			</CPAdminLayout>
 
 			<ProcessRequestBlade
+				isOpen={selected !== null}
 				selected={visits?.items?.find((x) => x.id === selected)}
-				isOpen={selected !== undefined}
 				onClose={() => setSelected(null)}
 			/>
 		</>
