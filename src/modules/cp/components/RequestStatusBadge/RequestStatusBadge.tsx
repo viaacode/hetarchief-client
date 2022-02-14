@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
-import { RequestStatus } from '@cp/const/requests.const';
+import { RequestStatus } from '@cp/types';
 import { Icon } from '@shared/components';
 
 import styles from './RequestStatusBadge.module.scss';

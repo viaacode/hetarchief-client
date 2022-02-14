@@ -1,4 +1,4 @@
-import { RequestStatus } from '@cp/const/requests.const';
+import { RequestStatus } from '@cp/types';
 import { DefaultComponentProps } from '@shared/types';
 
 export interface RequestStatusBadgeProps extends DefaultComponentProps {

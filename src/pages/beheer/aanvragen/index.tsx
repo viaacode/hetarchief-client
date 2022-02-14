@@ -1,18 +1,20 @@
 import { Table } from '@meemoo/react-components';
+import { addMinutes, compareDesc } from 'date-fns';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import { ProcessRequestBlade } from '@cp/components/ProcessRequestBlade';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
-	RequestStatus,
 	requestStatusFilters,
 	RequestTablePageSize,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
+import { RequestStatus, RequestTableRow } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { mockData } from '@shared/components/Table/__mocks__/table';
@@ -20,9 +22,15 @@ import { createPageTitle } from '@shared/utils';
 
 import { RequestTableColumns } from './table.const';
 
+const lipsum =
+	'Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris.';
+
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
+	const [selected, setSelected] = useState<string | number | null>(null);
+
+	// Filters
 
 	const statusFilters = useMemo(
 		() =>
@@ -44,13 +52,22 @@ const CPRequestsPage: NextPage = () => {
 		];
 	}, [filters]);
 
-	const data = mockData.map((mock) => {
+	const data = mockData.map((mock, i) => {
 		return {
 			...mock,
 			email: `${mock.name}@example.com`.toLowerCase().replaceAll(' ', '.'),
-			status: RequestStatus.approved,
+			created_at: new Date(mock.created_at),
+			status:
+				filters.status === 'all' ? RequestStatus.open : (filters.status as RequestStatus),
+			reason: Array(i + 1)
+				.fill(lipsum)
+				.join(' '),
+			time: `Ik zou graag op ${new Date().toLocaleDateString()} jullie leeszaal willen bezoeken.`,
 		};
 	});
+	// END TODO
+
+	// Events
 
 	const onSortChange = useCallback(
 		(rules) => {
@@ -61,6 +78,18 @@ const CPRequestsPage: NextPage = () => {
 			});
 		},
 		[filters, setFilters]
+	);
+
+	const onRowClick = useCallback(
+		(e, row) => {
+			const request = (row as { original: RequestTableRow }).original;
+
+			// Only open blade for "open" requests
+			if (request.status === RequestStatus.open) {
+				setSelected(request.id);
+			}
+		},
+		[setSelected]
 	);
 
 	return (
@@ -121,7 +150,21 @@ const CPRequestsPage: NextPage = () => {
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
 									columns: RequestTableColumns(t) as Column<object>[],
-									data: [...data, ...data, ...data, ...data], // 20
+									// TODO: fetch data from db
+									data: [...data, ...data, ...data, ...data]
+										.map((item, i) => {
+											return {
+												...item,
+												created_at: addMinutes(
+													item.created_at,
+													-20 *
+														(filters.start / RequestTablePageSize + 1) *
+														i
+												),
+											};
+										})
+										.sort((a, b) => compareDesc(a.created_at, b.created_at)),
+									// END TODO
 									initialState: {
 										pageSize: RequestTablePageSize,
 										sortBy: sortFilters,
@@ -129,6 +172,7 @@ const CPRequestsPage: NextPage = () => {
 								} as TableOptions<object>
 								/* eslint-enable @typescript-eslint/ban-types */
 							}
+							onRowClick={onRowClick}
 							onSortChange={onSortChange}
 							sortingIcons={sortingIcons}
 							pagination={({ gotoPage }) => {
@@ -140,6 +184,7 @@ const CPRequestsPage: NextPage = () => {
 										total={120} // TODO: fetch count from db
 										onPageChange={(page) => {
 											gotoPage(page);
+											setSelected(null);
 											setFilters({
 												...filters,
 												start: page * RequestTablePageSize,
@@ -152,6 +197,12 @@ const CPRequestsPage: NextPage = () => {
 					</div>
 				)}
 			</CPAdminLayout>
+
+			<ProcessRequestBlade
+				selected={data.find((x) => x.id === selected)}
+				isOpen={selected !== undefined}
+				onClose={() => setSelected(null)}
+			/>
 		</>
 	);
 };
