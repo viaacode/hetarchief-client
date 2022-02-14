@@ -37,7 +37,6 @@
 			padding-right: $spacer-md * 2;
 
 			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades
-			// This took me two hours btw :slight_smile:
 			line-height: $font-size-3xl * (math.div(56, 48));
 		}
 

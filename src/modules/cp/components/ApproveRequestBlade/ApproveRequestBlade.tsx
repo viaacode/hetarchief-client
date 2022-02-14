@@ -35,9 +35,9 @@ import {
 import styles from './ApproveRequestBlade.module.scss';
 import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
 
-const rtnm15 = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
-const defaultAccessFrom = (start: Date) => rtnm15(start);
-const defaultAccessTo = (accessFrom: Date) => addHours(rtnm15(accessFrom), 1);
+const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
+const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
+const defaultAccessTo = (accessFrom: Date) => addHours(roundToNearestQuarter(accessFrom), 1);
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { onSubmit } = props;
