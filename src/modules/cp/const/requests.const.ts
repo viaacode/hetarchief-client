@@ -3,7 +3,7 @@ import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
 import { i18n } from 'next-i18next';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { SortDirectionParam } from '@shared/const';
+import { SortDirectionParam } from '@shared/helpers';
 import { getLocaleFromi18nLanguage } from '@shared/utils';
 import { VisitStatus } from '@visits/types';
 

@@ -2,28 +2,25 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
-import { RequestStatusChip } from '@cp/components';
-import { ProcessRequestBlade } from '@cp/components/ProcessRequestBlade';
+import { ProcessRequestBlade } from '@cp/components';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
-	requestCreatedAtFormatter,
 	RequestStatusAll,
 	requestStatusFilters,
 	RequestTablePageSize,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { Icon, PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
+import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitInfo, VisitStatus } from '@visits/types';
 
-type RequestTableArgs = { row: { original: VisitInfo } };
+import { RequestTableColumns } from './table.const';
 
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
@@ -59,53 +56,6 @@ const CPRequestsPage: NextPage = () => {
 			},
 		];
 	}, [filters]);
-
-	// Config
-
-	const columns: Column<VisitInfo>[] = [
-		{
-			Header: t('pages/beheer/aanvragen/index___naam') || '',
-			accessor: 'visitorName',
-		},
-		{
-			Header: t('pages/beheer/aanvragen/index___emailadres') || '',
-			accessor: 'visitorMail',
-			Cell: ({ row }: RequestTableArgs) => {
-				return (
-					<Link href={`mailto:${row.original.visitorMail}`}>
-						<a className="u-color-neutral p-cp-requests__link">
-							{row.original.visitorMail}
-						</a>
-					</Link>
-				);
-			},
-		},
-		{
-			Header: t('pages/beheer/aanvragen/index___tijdstip') || '',
-			accessor: 'createdAt',
-			Cell: ({ row }: RequestTableArgs) => {
-				return (
-					<span className="u-color-neutral">
-						{requestCreatedAtFormatter(row.original.createdAt)}
-					</span>
-				);
-			},
-		},
-		{
-			Header: t('pages/beheer/aanvragen/index___status') || '',
-			accessor: 'status',
-			Cell: ({ row }: RequestTableArgs) => {
-				return <RequestStatusChip status={row.original.status} />;
-			},
-		},
-		{
-			Header: '',
-			id: 'cp-requests-table-actions',
-			Cell: () => {
-				return <Icon className="p-cp-requests__actions" name="dots-vertical" />;
-			},
-		},
-	];
 
 	// Events
 
@@ -158,13 +108,11 @@ const CPRequestsPage: NextPage = () => {
 							size="md"
 							onClear={() => {
 								setFilters({
-									...filters,
 									search: undefined,
 								});
 							}}
 							onSearch={(searchValue: string) => {
 								setFilters({
-									...filters,
 									search: searchValue,
 								});
 							}}
@@ -176,7 +124,6 @@ const CPRequestsPage: NextPage = () => {
 							variants={['rounded', 'light', 'bordered', 'medium']}
 							onClick={(tabId) =>
 								setFilters({
-									...filters,
 									status: tabId.toString(),
 								})
 							}
@@ -192,7 +139,7 @@ const CPRequestsPage: NextPage = () => {
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: columns as Column<object>[],
+									columns: RequestTableColumns(t) as Column<object>[],
 									data: visits?.items || [],
 									initialState: {
 										pageSize: RequestTablePageSize,
@@ -230,9 +177,7 @@ const CPRequestsPage: NextPage = () => {
 			<ProcessRequestBlade
 				selected={visits?.items?.find((x) => x.id === selected)}
 				isOpen={selected !== undefined}
-				onClose={() => {
-					setSelected(undefined);
-				}}
+				onClose={() => setSelected(undefined)}
 			/>
 		</>
 	);
