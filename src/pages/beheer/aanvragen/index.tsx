@@ -186,9 +186,7 @@ const CPRequestsPage: NextPage = () => {
 			<ProcessRequestBlade
 				selected={data.find((x) => x.id === selected)}
 				isOpen={selected !== undefined}
-				onClose={() => {
-					setSelected(undefined);
-				}}
+				onClose={() => setSelected(undefined)}
 			/>
 		</>
 	);
