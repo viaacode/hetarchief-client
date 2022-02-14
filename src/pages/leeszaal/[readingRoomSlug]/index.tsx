@@ -228,17 +228,20 @@ const ReadingRoomPage: NextPage = () => {
 					{showResults && (
 						<>
 							<MediaCardList
-								items={mediaResultInfo?.items?.map(
-									(mediaObject): MediaCardProps => ({
-										description: mediaObject.schema_description,
-										title: mediaObject.schema_name,
-										published_at: mediaObject.schema_date_published
-											? new Date(mediaObject.schema_date_published)
-											: undefined,
-										published_by: mediaObject.schema_creator?.Maker?.join(', '),
-										type: mediaObject.dcterms_format || undefined,
-									})
-								)}
+								items={mediaResultInfo?.items
+									?.filter((mediaObject) => (mediaObject as any).type !== 'SOLR')
+									.map(
+										(mediaObject): MediaCardProps => ({
+											description: mediaObject.schema_description,
+											title: mediaObject.schema_name,
+											published_at: mediaObject.schema_date_published
+												? new Date(mediaObject.schema_date_published)
+												: undefined,
+											published_by:
+												mediaObject.schema_creator?.Maker?.join(', '),
+											type: mediaObject.dcterms_format || undefined,
+										})
+									)}
 								keywords={keywords}
 								sidebar={renderFilterMenu()}
 								view={viewMode}
