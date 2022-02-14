@@ -1,8 +1,9 @@
+@use "sass:math";
 @use "../abstracts/" as *;
 
-$c: "c-tabs";
+$component: "c-tabs";
 
-.#{$c} {
+.#{$component} {
 	display: flex;
 
 	/**
@@ -12,7 +13,7 @@ $c: "c-tabs";
 	&--dark {
 		background-color: $black;
 
-		.#{$c} {
+		.#{$component} {
 			&__item {
 				&:not(:last-child) {
 					@include respond-at("md") {
@@ -31,7 +32,20 @@ $c: "c-tabs";
 		@include tabs-border-radius;
 
 		padding: 0 $tabs-rounded-size;
-		border-radius: $tabs-rounded-size;
+
+		@include respond-at("md") {
+			padding: 0 $tabs-rounded-size-md;
+		}
+
+		&.#{$component} {
+			&--medium {
+				padding: 0 math.div($tab-min-height-medium, 2);
+				
+				@include respond-to("md") {
+					border-radius: math.div($tab-min-height-medium, 2);
+				}
+			}
+		}
 	}
 
 	&--bordered {

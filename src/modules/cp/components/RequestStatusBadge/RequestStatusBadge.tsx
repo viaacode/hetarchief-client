@@ -15,13 +15,17 @@ const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, sta
 	const renderBadge = () => {
 		switch (status) {
 			case RequestStatus.open:
-				return t('Open aanvraag');
+				return t(
+					'modules/cp/components/request-status-chip/request-status-chip___open-aanvraag'
+				);
 
 			case RequestStatus.approved:
 				return (
 					<>
 						<Badge type="success" text={<Icon name="check" />} variants="icon" />
-						{t('Goedgekeurd')}
+						{t(
+							'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
+						)}
 					</>
 				);
 
@@ -29,7 +33,9 @@ const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, sta
 				return (
 					<>
 						<Badge type="error" text={<Icon name="forbidden" />} variants="icon" />
-						{t('Geweigerd')}
+						{t(
+							'modules/cp/components/request-status-chip/request-status-chip___geweigerd'
+						)}
 					</>
 				);
 

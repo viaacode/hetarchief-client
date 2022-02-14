@@ -2,10 +2,10 @@
 
 @use "styles/abstracts" as *;
 
-$c: "c-reading-room-navigation";
+$component: "c-reading-room-navigation";
 $c-reading-room-navigation-transform-amount: math.div($spacer-md, 2); // Equal to u-px-12
 
-.#{$c} {
+.#{$component} {
 	&__contact {
 		&-button {
 			transform: translateX($c-reading-room-navigation-transform-amount);

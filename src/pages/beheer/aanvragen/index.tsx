@@ -2,18 +2,19 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useMemo } from 'react';
-import { Column } from 'react-table';
+import { useCallback, useMemo } from 'react';
+import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	RequestStatus,
 	requestStatusFilters,
+	RequestTablePageSize,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
+import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { mockData } from '@shared/components/Table/__mocks__/table';
 import { createPageTitle } from '@shared/utils';
 
@@ -34,6 +35,15 @@ const CPRequestsPage: NextPage = () => {
 		[filters.status]
 	);
 
+	const sortFilters = useMemo(() => {
+		return [
+			{
+				id: filters.sort,
+				desc: filters.order !== 'asc',
+			},
+		];
+	}, [filters]);
+
 	const data = mockData.map((mock) => {
 		return {
 			...mock,
@@ -41,6 +51,17 @@ const CPRequestsPage: NextPage = () => {
 			status: RequestStatus.approved,
 		};
 	});
+
+	const onSortChange = useCallback(
+		(rules) => {
+			setFilters({
+				...filters,
+				sort: rules[0]?.id || undefined,
+				order: rules[0] ? (rules[0].desc ? 'desc' : 'asc') : undefined,
+			});
+		},
+		[filters, setFilters]
+	);
 
 	return (
 		<>
@@ -81,7 +102,7 @@ const CPRequestsPage: NextPage = () => {
 						<ScrollableTabs
 							className="p-cp-requests__status-filter"
 							tabs={statusFilters}
-							variants={['rounded', 'light', 'bordered']}
+							variants={['rounded', 'light', 'bordered', 'medium']}
 							onClick={(tabId) =>
 								setFilters({
 									status: tabId.toString(),
@@ -91,20 +112,45 @@ const CPRequestsPage: NextPage = () => {
 					</div>
 				</div>
 
-				<div className="l-container p-cp__edgeless-container--lg">
-					{data.length > 0 && (
+				{data.length > 0 && (
+					<div className="l-container p-cp__edgeless-container--lg">
 						<Table
 							className="u-mt-24"
-							options={{
+							options={
 								// TODO: fix type hinting
-								// eslint-disable-next-line @typescript-eslint/ban-types
-								columns: RequestTableColumns(t) as Column<object>[],
-								data,
-							}}
+								/* eslint-disable @typescript-eslint/ban-types */
+								{
+									columns: RequestTableColumns(t) as Column<object>[],
+									data: [...data, ...data, ...data, ...data], // 20
+									initialState: {
+										pageSize: RequestTablePageSize,
+										sortBy: sortFilters,
+									},
+								} as TableOptions<object>
+								/* eslint-enable @typescript-eslint/ban-types */
+							}
+							onSortChange={onSortChange}
 							sortingIcons={sortingIcons}
+							pagination={({ gotoPage }) => {
+								return (
+									<PaginationBar
+										className="u-mt-16 u-mb-16"
+										count={RequestTablePageSize}
+										start={filters.start}
+										total={120} // TODO: fetch count from db
+										onPageChange={(page) => {
+											gotoPage(page);
+											setFilters({
+												...filters,
+												start: page * RequestTablePageSize,
+											});
+										}}
+									/>
+								);
+							}}
 						/>
-					)}
-				</div>
+					</div>
+				)}
 			</CPAdminLayout>
 		</>
 	);

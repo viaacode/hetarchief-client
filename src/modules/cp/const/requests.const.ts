@@ -1,6 +1,8 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
-import { StringParam, withDefault } from 'use-query-params';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
+
+import { SortDirectionParam } from '@shared/helpers';
 
 export const enum RequestStatus {
 	all = 'all',
@@ -8,6 +10,23 @@ export const enum RequestStatus {
 	approved = 'approved',
 	denied = 'denied',
 }
+
+export interface RequestTableRow extends Object {
+	name: string;
+	email: string;
+	status: RequestStatus;
+	created_at: Date;
+}
+
+export const RequestTablePageSize = 20;
+
+export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
+	status: withDefault(StringParam, RequestStatus.all),
+	search: withDefault(StringParam, undefined),
+	start: withDefault(NumberParam, 0),
+	sort: withDefault(StringParam, undefined),
+	order: withDefault(SortDirectionParam, undefined),
+};
 
 export const requestStatusFilters = (): TabProps[] => {
 	return [
@@ -29,15 +48,3 @@ export const requestStatusFilters = (): TabProps[] => {
 		},
 	];
 };
-
-export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
-	status: withDefault(StringParam, RequestStatus.all),
-	search: withDefault(StringParam, undefined),
-};
-
-export interface RequestTableRow extends Object {
-	name: string;
-	email: string;
-	status: RequestStatus;
-	created_at: Date;
-}

@@ -1,8 +1,8 @@
 @use "styles/abstracts" as *;
 
-$c: "c-reading-room-card-list";
+$component: "c-reading-room-card-list";
 
-.#{$c} {
+.#{$component} {
 	display: grid;
 	list-style: none;
 	margin: 0;

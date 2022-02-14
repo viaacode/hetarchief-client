@@ -6,10 +6,11 @@
 	background: linear-gradient(to $direction, color.adjust($color), transparent);
 }
 
+$component: "c-scrollable-tabs";
 $scrollable-tabs-gradient-width: $spacer-lg;
 $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width; // spacer-md equals rounding padder size
 
-.c-scrollable-tabs {
+.#{$component} {
 	overflow: hidden;
 	position: relative;
 
@@ -88,6 +89,14 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 
 		&::after {
 			transform: translateX($scrollable-tabs-gradient-width-lg);
+		}
+
+		&.#{$component} {
+			&--medium {
+				@include respond-to("md") {
+					border-radius: math.div($tab-min-height-medium, 2);
+				}
+			}
 		}
 	}
 }

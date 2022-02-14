@@ -1,3 +1,3 @@
-import { RequestTableRow } from '@cp/const/requests.const';
+import { RequestTableRow } from '@cp/types';
 
 export type RequestTableArgs = { row: { original: RequestTableRow } };
