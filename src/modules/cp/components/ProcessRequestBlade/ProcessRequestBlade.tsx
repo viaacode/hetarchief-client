@@ -18,6 +18,14 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 	const [showApprove, setShowApprove] = useState(false);
 	const [showDecline, setShowDecline] = useState(false);
 
+	const finish = (setShowBlade?: typeof setShowApprove | typeof setShowDecline) => {
+		setShowBlade && setShowBlade(false);
+
+		// Needs a little delay, not sure about the amount.
+		// 300ms is default duration to hide a blade
+		setTimeout(() => props.onClose?.(), 100);
+	};
+
 	const getCurrentLayer = (): number => {
 		if (showApprove || showDecline) {
 			return 2;
@@ -131,19 +139,15 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				layer={showApprove ? 2 : 9999}
 				selected={selected}
 				onClose={() => setShowApprove(false)}
-				onSubmit={() => {
-					setShowApprove(false);
-
-					// Needs a little delay, not sure about the amount.
-					// 300ms is default duration to hide a blade
-					setTimeout(() => props.onClose?.(), 100);
-				}}
+				onSubmit={() => finish(setShowApprove)}
 			/>
 
 			<DeclineRequestBlade
 				isOpen={false}
 				layer={showDecline ? 2 : 9999}
+				selected={selected}
 				onClose={() => setShowDecline(false)}
+				onSubmit={() => finish(setShowDecline)}
 			/>
 		</BladeManager>
 	);

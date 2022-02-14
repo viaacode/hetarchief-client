@@ -27,13 +27,13 @@ import { OPTIONAL_LABEL } from '@shared/const';
 
 import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
 
-import {
-	APPROVE_REQUEST_FORM_SCHEMA,
-	ApproveRequestAccessDateFormatter,
-	ApproveRequestAccessTimeFormatter,
-} from './ApproveRequestBlade.const';
+import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
 import styles from './ApproveRequestBlade.module.scss';
 import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
+import {
+	formatApproveRequestAccessDate,
+	formatApproveRequestAccessTime,
+} from './ApproveRequestBlade.utils';
 
 const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
 const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
@@ -98,13 +98,17 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-16">
 				<Button
-					label={t('Keur goed')}
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
 				/>
 
 				<Button
-					label={t('Annuleer')}
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___annuleer'
+					)}
 					variants={['block', 'text']}
 					onClick={props.onClose}
 				/>
@@ -113,7 +117,13 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	};
 
 	return (
-		<Blade {...props} footer={renderFooter()} title={t('Aanvraag goedkeuren')}>
+		<Blade
+			{...props}
+			footer={renderFooter()}
+			title={t(
+				'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
+			)}
+		>
 			<div className={parentStyles['c-process-request-blade__details']}>
 				<strong>
 					{t(
@@ -127,7 +137,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessFrom?.message]}
-					label={t('Van')}
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___van'
+					)}
 				>
 					<Controller
 						name="accessFrom"
@@ -142,7 +154,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										maxDate={null}
 										{...field}
 										onChange={(date) => onFromDateChange(date, field)}
-										value={ApproveRequestAccessDateFormatter(field.value)}
+										value={formatApproveRequestAccessDate(field.value)}
 										selected={field.value}
 										customInput={
 											<TextInput iconStart={<Icon name="calendar" />} />
@@ -155,7 +167,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										minTime={defaultAccessFrom(now)}
 										{...field}
 										onChange={(date) => onFromDateChange(date, field)}
-										value={ApproveRequestAccessTimeFormatter(field.value)}
+										value={formatApproveRequestAccessTime(field.value)}
 										selected={field.value}
 										customInput={
 											<TextInput iconStart={<Icon name="clock" />} />
@@ -170,7 +182,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessTo?.message]}
-					label={t('Tot')}
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___tot'
+					)}
 				>
 					<Controller
 						name="accessTo"
@@ -187,7 +201,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										minDate={accessFrom}
 										{...field}
 										onChange={(date) => onSimpleDateChange(date, field)}
-										value={ApproveRequestAccessDateFormatter(field.value)}
+										value={formatApproveRequestAccessDate(field.value)}
 										selected={field.value}
 										customInput={
 											<TextInput iconStart={<Icon name="calendar" />} />
@@ -204,7 +218,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										}
 										{...field}
 										onChange={(date) => onSimpleDateChange(date, field)}
-										value={ApproveRequestAccessTimeFormatter(field.value)}
+										value={formatApproveRequestAccessTime(field.value)}
 										selected={field.value}
 										customInput={
 											<TextInput iconStart={<Icon name="clock" />} />
@@ -216,7 +230,12 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					/>
 				</FormControl>
 
-				<FormControl label={t('Opmerkingen')} suffix={OPTIONAL_LABEL()}>
+				<FormControl
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___opmerkingen'
+					)}
+					suffix={OPTIONAL_LABEL()}
+				>
 					<Controller
 						name="accessRemark"
 						control={control}

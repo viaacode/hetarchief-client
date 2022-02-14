@@ -1,4 +1,10 @@
-import { RequestStatus } from '@cp/const/requests.const';
+import { VisitStatus } from '@visits/types';
+
+export enum RequestStatusAll {
+	ALL = 'all',
+}
+
+export type RequestStatus = VisitStatus & RequestStatusAll;
 
 export interface RequestTableRow extends Object {
 	id: string | number;

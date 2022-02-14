@@ -9,11 +9,11 @@ import { useQueryParams } from 'use-query-params';
 import { ProcessRequestBlade } from '@cp/components';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
-	RequestStatusAll,
 	requestStatusFilters,
 	RequestTablePageSize,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
+import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
@@ -25,7 +25,7 @@ import { RequestTableColumns } from './table.const';
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
-	const [selected, setSelected] = useState<string | number | undefined>(undefined);
+	const [selected, setSelected] = useState<string | number | null>(null);
 
 	// TODO integrate a loading state into the table component
 	const { data: visits } = useGetVisits(
@@ -160,7 +160,7 @@ const CPRequestsPage: NextPage = () => {
 										total={visits?.total || 0}
 										onPageChange={(pageZeroBased) => {
 											gotoPage(pageZeroBased);
-											setSelected(undefined);
+											setSelected(null);
 											setFilters({
 												...filters,
 												page: pageZeroBased + 1,
@@ -177,7 +177,7 @@ const CPRequestsPage: NextPage = () => {
 			<ProcessRequestBlade
 				selected={visits?.items?.find((x) => x.id === selected)}
 				isOpen={selected !== undefined}
-				onClose={() => setSelected(undefined)}
+				onClose={() => setSelected(null)}
 			/>
 		</>
 	);

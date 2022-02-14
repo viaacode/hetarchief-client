@@ -1,17 +1,10 @@
 import { TabProps } from '@meemoo/react-components';
-import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
 import { i18n } from 'next-i18next';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
+import { RequestStatusAll } from '@cp/types';
 import { SortDirectionParam } from '@shared/helpers';
-import { getLocaleFromi18nLanguage } from '@shared/utils';
 import { VisitStatus } from '@visits/types';
-
-export enum RequestStatusAll {
-	ALL = 'all',
-}
-
-export type RequestStatus = VisitStatus & RequestStatusAll;
 
 export const RequestTablePageSize = 20;
 
@@ -42,20 +35,4 @@ export const requestStatusFilters = (): TabProps[] => {
 			label: i18n?.t('modules/cp/const/requests___geweigerd'),
 		},
 	];
-};
-
-export const requestCreatedAtFormatter = (input: Date | string): string => {
-	const locale = getLocaleFromi18nLanguage(i18n?.language || '');
-
-	const date: Date = new Date(input);
-	if (differenceInDays(new Date(), date) <= 5) {
-		return formatDistanceToNow(date, {
-			addSuffix: true,
-			locale,
-		});
-	}
-
-	return format(date, 'PPpp', {
-		locale,
-	});
 };
