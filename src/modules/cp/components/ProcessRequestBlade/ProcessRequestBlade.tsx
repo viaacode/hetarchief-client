@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import React, { FC, useState } from 'react';
 
-import { requestCreatedAtFormatter } from '@cp/const/requests.const';
+import { requestCreatedAtFormatter } from '@cp/utils';
 import { Blade, BladeManager, Icon } from '@shared/components';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';
