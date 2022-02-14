@@ -8,7 +8,7 @@ export function isSortDirection(value: string): value is SortDirection {
 	return QUERY_PARAM_SORT_DIRECTIONS.includes(value as SortDirection);
 }
 
-/** Uses a comma to delimit entries. e.g. ['a', 'b'] => qp?=a,b */
+// Define a query parameter config for `use-query-params` to enforce "asc" & "desc" values
 export const SortDirectionParam: QueryParamConfig<string, string | undefined> = {
 	encode: (input: string): string | null | undefined => {
 		if (isSortDirection(input)) {
