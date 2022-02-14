@@ -64,7 +64,10 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 				{renderLabel(
 					'timer',
 					<>
-						{t('Beschikbaar tot')} <br />
+						{t(
+							'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___beschikbaar-tot'
+						)}{' '}
+						<br />
 						{access?.until && formatDateTime(access?.until)}
 					</>
 				)}
@@ -73,7 +76,9 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 					variants={['lg', 'white']}
 					onClick={() => onVisitClick && onVisitClick(room)}
 				>
-					{t('Bezoek dit digitaal archief')}
+					{t(
+						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___bezoek-dit-digitaal-archief'
+					)}
 				</Button>
 			</>
 		);
@@ -104,7 +109,9 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 					variants={['sm', 'black']}
 					onClick={() => onAccessRequest && onAccessRequest(room)}
 				>
-					{t('Vraag toegang aan')}
+					{t(
+						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___vraag-toegang-aan'
+					)}
 				</Button>
 
 				{renderContactIconButton()}
@@ -117,7 +124,9 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 			<>
 				{renderLabel(
 					'not-available',
-					t('Momenteel is er geen toegang mogelijk tot deze leeszaal')
+					t(
+						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___momenteel-is-er-geen-toegang-mogelijk-tot-deze-leeszaal'
+					)
 				)}
 
 				{renderContactIconButton()}
