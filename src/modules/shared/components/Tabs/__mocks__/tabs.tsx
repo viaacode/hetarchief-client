@@ -1,8 +1,10 @@
+import { ReadingRoomMediaType } from '@reading-room/types';
+
 import { Icon } from '../../Icon';
 
 export const mockTabs = [
 	{
-		id: 'all',
+		id: ReadingRoomMediaType.All,
 		label: (
 			<>
 				<strong className="u-mr-8">Alles</strong>
@@ -12,7 +14,7 @@ export const mockTabs = [
 		active: true,
 	},
 	{
-		id: 'audio',
+		id: ReadingRoomMediaType.Audio,
 		label: (
 			<>
 				<strong className="u-mr-8">Audio</strong>
@@ -22,7 +24,7 @@ export const mockTabs = [
 		icon: <Icon name="audio" />,
 	},
 	{
-		id: 'video',
+		id: ReadingRoomMediaType.Video,
 		label: (
 			<>
 				<strong className="u-mr-8">Video</strong>
@@ -32,7 +34,7 @@ export const mockTabs = [
 		icon: <Icon name="video" />,
 	},
 	{
-		id: 'news',
+		id: ReadingRoomMediaType.News,
 		label: (
 			<>
 				<strong className="u-mr-8">Kranten</strong>

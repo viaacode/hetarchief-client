@@ -8,7 +8,7 @@ import { getLocaleFromi18nLanguage } from '@shared/utils';
 import { VisitStatus } from '@visits/types';
 
 export enum RequestStatusAll {
-	ALL = 'ALL',
+	ALL = 'all',
 }
 
 export type RequestStatus = VisitStatus & RequestStatusAll;
@@ -47,13 +47,7 @@ export const requestStatusFilters = (): TabProps[] => {
 export const requestCreatedAtFormatter = (input: Date | string): string => {
 	const locale = getLocaleFromi18nLanguage(i18n?.language || '');
 
-	let date: Date;
-	if (typeof input === 'string') {
-		date = new Date(input);
-	} else {
-		date = input;
-	}
-
+	const date: Date = new Date(input);
 	if (differenceInDays(new Date(), date) <= 5) {
 		return formatDistanceToNow(date, {
 			addSuffix: true,
