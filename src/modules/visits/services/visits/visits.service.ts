@@ -1,6 +1,7 @@
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services';
+import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { VisitInfo } from '@visits/types';
 
@@ -11,7 +12,9 @@ class VisitsService extends ApiService {
 		searchInput = '',
 		status: string | undefined,
 		page = 0,
-		size = 20
+		size = 20,
+		orderProp: keyof VisitInfo = 'startAt',
+		orderDirection: OrderDirection = OrderDirection.desc
 	): Promise<ApiResponseWrapper<VisitInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
@@ -22,6 +25,8 @@ class VisitsService extends ApiService {
 						status,
 						page,
 						size,
+						orderProp,
+						orderDirection,
 					},
 				})
 			)

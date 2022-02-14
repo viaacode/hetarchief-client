@@ -16,6 +16,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
+import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitInfo, VisitStatus } from '@visits/types';
@@ -32,7 +33,9 @@ const CPRequestsPage: NextPage = () => {
 		filters.search,
 		filters.status === RequestStatusAll.ALL ? undefined : filters.status,
 		filters.page,
-		RequestTablePageSize
+		RequestTablePageSize,
+		filters.orderProp as keyof VisitInfo,
+		filters.orderDirection as OrderDirection
 	);
 
 	// Filters
@@ -51,8 +54,8 @@ const CPRequestsPage: NextPage = () => {
 	const sortFilters = useMemo(() => {
 		return [
 			{
-				id: filters.sort,
-				desc: filters.order !== 'asc',
+				id: filters.orderProp,
+				desc: filters.orderDirection !== OrderDirection.asc,
 			},
 		];
 	}, [filters]);
@@ -63,8 +66,13 @@ const CPRequestsPage: NextPage = () => {
 		(rules) => {
 			setFilters({
 				...filters,
-				sort: rules[0]?.id || undefined,
-				order: rules[0] ? (rules[0].desc ? 'desc' : 'asc') : undefined,
+				orderProp: rules[0]?.id || undefined,
+				orderDirection: rules[0]
+					? rules[0].desc
+						? OrderDirection.desc
+						: OrderDirection.asc
+					: undefined,
+				page: 1,
 			});
 		},
 		[filters, setFilters]
@@ -109,11 +117,13 @@ const CPRequestsPage: NextPage = () => {
 							onClear={() => {
 								setFilters({
 									search: undefined,
+									page: 1,
 								});
 							}}
 							onSearch={(searchValue: string) => {
 								setFilters({
 									search: searchValue,
+									page: 1,
 								});
 							}}
 						/>
@@ -125,6 +135,7 @@ const CPRequestsPage: NextPage = () => {
 							onClick={(tabId) =>
 								setFilters({
 									status: tabId.toString(),
+									page: 1,
 								})
 							}
 						/>

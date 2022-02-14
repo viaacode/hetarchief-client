@@ -6,12 +6,19 @@ export enum RequestStatusAll {
 
 export type RequestStatus = VisitStatus & RequestStatusAll;
 
-export interface RequestTableRow extends Object {
-	id: string | number;
-	name: string;
-	email: string;
-	status: RequestStatus;
-	created_at: Date;
+export interface VisitInfo {
+	id: string;
+	spaceId: string;
+	userProfileId: string;
+	timeframe: string; // free-text indication of when
 	reason: string;
-	time: string; // free-text indication of when
+	acceptedTos: boolean;
+	status: VisitStatus;
+	startAt: string;
+	endAt: string;
+	createdAt: string;
+	updatedAt: string;
+	visitorName: string;
+	visitorMail: string;
+	visitorId: string;
 }
