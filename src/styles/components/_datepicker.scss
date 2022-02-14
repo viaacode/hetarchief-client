@@ -2,7 +2,7 @@
 @use "sass:color";
 @use "styles/abstracts" as *;
 
-$c: "c-datepicker";
+$component: "c-datepicker";
 $datepicker-day-size: $spacer-lg;
 $datepicker-edge-spacing: $spacer-sm * 0.75;
 $datepicker-border-color: $zinc;
@@ -15,7 +15,7 @@ $datepicker-border-color: $zinc;
 	background-size: 1.25em;
 }
 
-.#{$c} {
+.#{$component} {
 	&.react-datepicker-wrapper {
 		&:hover,
 		&:active,

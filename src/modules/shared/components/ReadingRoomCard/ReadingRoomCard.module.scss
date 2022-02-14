@@ -3,9 +3,9 @@
 @use "sass:color";
 @use "styles/abstracts" as *;
 
-$c: "c-reading-room-card";
+$component: "c-reading-room-card";
 
-.#{$c} {
+.#{$component} {
 	&__background {
 		display: grid;
 		grid-template-columns: 1fr 2fr 1fr;
@@ -56,7 +56,7 @@ $c: "c-reading-room-card";
 			min-width: 20px;
 			width: 20px;
 
-			.#{$c} {
+			.#{$component} {
 				&__logo {
 					display: none;
 				}
@@ -66,7 +66,7 @@ $c: "c-reading-room-card";
 				min-width: 96px;
 				width: 96px;
 
-				.#{$c} {
+				.#{$component} {
 					&__logo {
 						display: flex;
 					}
