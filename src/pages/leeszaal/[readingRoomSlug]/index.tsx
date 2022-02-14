@@ -228,17 +228,21 @@ const ReadingRoomPage: NextPage = () => {
 					{showResults && (
 						<>
 							<MediaCardList
-								items={mediaResultInfo?.items?.map(
-									(mediaObject): MediaCardProps => ({
-										description: mediaObject.schema_description,
-										title: mediaObject.schema_name,
-										published_at: mediaObject.schema_date_published
-											? new Date(mediaObject.schema_date_published)
-											: undefined,
-										published_by: mediaObject.schema_creator?.Maker?.join(', '),
-										type: mediaObject.dcterms_format || undefined,
-									})
-								)}
+								items={mediaResultInfo?.items
+									// TODO: check why these 'empty' results are there
+									?.filter((mediaObject) => mediaObject.type !== 'SOLR')
+									.map(
+										(mediaObject): MediaCardProps => ({
+											description: mediaObject.schema_description,
+											title: mediaObject.schema_name,
+											published_at: mediaObject.schema_date_published
+												? new Date(mediaObject.schema_date_published)
+												: undefined,
+											published_by:
+												mediaObject.schema_creator?.Maker?.join(', '),
+											type: mediaObject.dcterms_format || undefined,
+										})
+									)}
 								keywords={keywords}
 								sidebar={renderFilterMenu()}
 								view={viewMode}
@@ -247,6 +251,7 @@ const ReadingRoomPage: NextPage = () => {
 								className="u-mb-48"
 								start={query.start}
 								count={READING_ROOM_ITEM_COUNT}
+								showBackToTop
 								total={mediaCount[query.mediaType as ReadingRoomMediaType]}
 								onPageChange={(page) =>
 									setQuery({

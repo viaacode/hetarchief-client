@@ -12,7 +12,6 @@ export * from './PaginationBar';
 export * from './PaginationProgress';
 export * from './Placeholder';
 export * from './ReadingRoomCard';
-export * from './ReadingRoomCardControls';
 export * from './ReadingRoomCardList';
 export * from './SearchBar';
 export * from './Sidebar';

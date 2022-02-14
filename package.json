@@ -26,11 +26,12 @@
   },
   "dependencies": {
     "@hookform/resolvers": "2.8.8",
-    "@meemoo/react-components": "2.8.0",
+    "@meemoo/react-components": "2.8.3",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "1.7.1",
     "clsx": "1.1.1",
     "copy-to-clipboard": "3.3.1",
+    "dotenv-cli": "5.0.0",
     "isomorphic-dompurify": "0.17.0",
     "ky": "0.28.7",
     "ky-universal": "0.9.1",
