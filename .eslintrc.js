@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const pathAliases = require('./scripts/path-aliases');
+
+const modulesPathGroupPattern = `@{${pathAliases.join(',')}}/**`;
+
 module.exports = {
 	parser: '@typescript-eslint/parser',
 	extends: [
@@ -33,7 +38,7 @@ module.exports = {
 				'newlines-between': 'always',
 				pathGroups: [
 					{
-						pattern: '@{auth,home,reading-room,shared}/**',
+						pattern: modulesPathGroupPattern,
 						group: 'parent',
 						position: 'before',
 					},

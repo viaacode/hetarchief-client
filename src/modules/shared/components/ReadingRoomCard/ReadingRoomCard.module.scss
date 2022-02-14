@@ -6,11 +6,15 @@
 $c: "c-reading-room-card";
 
 .#{$c} {
+	/**
+	 * Elements
+	 */
+
 	&__background {
 		display: grid;
 		grid-template-columns: 1fr 2fr 1fr;
 		grid-template-rows: 1fr 2fr 1fr;
-		box-shadow: $shadow-24-black-24;
+		box-shadow: $shadow-24-black-04;
 
 		&--image {
 			grid-column: 1 / 4;
@@ -40,13 +44,18 @@ $c: "c-reading-room-card";
 
 		&--tall {
 			min-height: 212px;
-			min-width: 120px;
-			width: 120px;
+			min-width: 100px;
+			width: 100px;
+
+			@include respond-at("xs") {
+				min-width: 120px;
+				width: 120px;
+			}
 
 			@include respond-at("md") {
 				min-height: 276px;
-				min-width: 176px;
-				width: 176px;
+				min-width: 146px;
+				width: 146px;
 			}
 		}
 
@@ -164,5 +173,19 @@ $c: "c-reading-room-card";
 	&__control-icon {
 		font-size: $font-size-lg;
 		margin-right: $spacer-xs;
+	}
+
+	/**
+	 * Modifiers
+	 */
+
+	&--granted {
+		:global(.c-card__children-wrapper) {
+			@include respond-at(md) {
+				// Overwrite card styles
+				margin-left: 0 !important;
+				margin-right: $spacer-md !important;
+			}
+		}
 	}
 }

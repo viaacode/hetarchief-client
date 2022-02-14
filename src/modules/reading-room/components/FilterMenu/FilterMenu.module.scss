@@ -1,14 +1,25 @@
+@use "sass:color";
 @use "styles/abstracts" as *;
+
+$c-filter-menu-flyout-top-padding: 6.4rem;
+
+.c-filter-menu {
+	background-color: $black;
+}
+
+/**
+ * Elements
+ */
 
 .c-filter-menu__header {
 	display: flex;
 	height: 5.2rem;
-	background-color: $black;
 }
 
 .c-filter-menu__toggle,
-.c-filter-menu__filter {
+.c-filter-menu__button {
 	border-radius: 0;
+	outline: none;
 
 	:global(.c-button__content) {
 		display: flex;
@@ -40,13 +51,24 @@
 	}
 }
 
-.c-filter-menu__filter {
+.c-filter-menu__option {
+	position: relative;
 	width: 100%;
+}
+
+.c-filter-menu__button {
+	position: relative;
 	padding-right: $spacer-sm;
 	font-weight: $font-weight-normal;
+	border-bottom: 0.1rem solid color.adjust($white, $alpha: -0.8);
+
+	&--sort {
+		background-color: $shade;
+		border-color: $shade;
+	}
 
 	&:active {
-		border-color: black;
+		border-color: $black;
 	}
 
 	:global(.c-button__icon) {
@@ -54,6 +76,7 @@
 	}
 
 	&--active {
+		z-index: get-z-layer("filter");
 		background-color: $white;
 		border-color: $white;
 		color: $black;
@@ -67,4 +90,35 @@
 			outline: none;
 		}
 	}
+}
+
+.c-filter-menu__flyout {
+	&:global(.c-dropdown__content-open) {
+		z-index: get-z-layer("filter");
+	}
+
+	&--filter {
+		max-width: 46.4rem;
+
+		// Overwrite popper styles
+		min-width: 46.4rem !important;
+		max-height: 100vh;
+
+		:global(.c-menu) {
+			padding: $c-filter-menu-flyout-top-padding 0 0;
+		}
+	}
+}
+
+.c-filter-menu__flyout-close {
+	position: absolute;
+	inset: 1.2rem 1.2rem auto auto;
+}
+
+.c-filter-menu__overlay {
+	z-index: get-z-layer("filter-overlay");
+}
+
+.c-filter-menu__form {
+	max-height: calc(100vh - $c-filter-menu-flyout-top-padding);
 }

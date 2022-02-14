@@ -1,19 +1,40 @@
 @use "../abstracts/" as *;
 
-.c-tabs {
+$c: "c-tabs";
+
+.#{$c} {
 	display: flex;
-	background-color: $black;
-}
 
-/**
- * Elements
- */
+	/**
+	* Modifiers
+	*/
 
+	&--dark {
+		background-color: $black;
 
-.c-tabs__item {
-	&:not(:last-child) {
-		@include respond-at("md") {
-			margin-right: $spacer-md;
+		.#{$c} {
+			&__item {
+				&:not(:last-child) {
+					@include respond-at("md") {
+						margin-right: $spacer-md;
+					}
+				}
+			}
 		}
+	}
+
+	&--light {
+		background-color: $white;
+	}
+
+	&--rounded {
+		@include tabs-border-radius;
+
+		padding: 0 $tabs-rounded-size;
+		border-radius: $tabs-rounded-size;
+	}
+
+	&--bordered {
+		border: $tabs-border-width solid $zinc;
 	}
 }

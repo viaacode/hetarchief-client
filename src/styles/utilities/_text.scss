@@ -19,16 +19,32 @@ $align: (left, right, center);
  */
 
  $size: (
-	 "14": $font-size-sm,
-	 "24": $font-size-lg,
+	"14": $font-size-sm,
+	"24": $font-size-lg,
  );
  @include generate-utils("font-size", "font-size", $size);
+
+/**
+ * Weight
+ */
+
+ $weight: (
+	"400": $font-weight-normal,
+ );
+ @include generate-utils("font-weight", "font-weight", $weight);
 
  /**
  * Line-height
  */
 
  $height: (
-	 "13": $line-height-2xl,
+	"13": $line-height-2xl,
  );
  @include generate-utils("line-height", "line-height", $height);
+
+/**
+ * Whitespace
+ */
+
+$whitespace: (nowrap);
+@include generate-utils("whitespace", "white-space", $whitespace);

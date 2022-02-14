@@ -97,45 +97,17 @@ $breakpoints: (
  */
 
 $z-layers: (
+	"modal": 8,
+	"blade": 7,
+	"filter-menu-mobile": 6,
+	"filter": 5,
+	"filter-overlay": 4,
+	"nav-hamburger": 3,
+	"nav-dropdown": 2,
 	"foreground": 1,
 	"base": 0,
 	"background": -1,
 );
-
-/**
- * Modal
- */
-
-$modal-close-margin: 32px;
-$modal-close-size: 24px;
-$modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
-
-/**
- * Card
- */
-
-$card-edge-size: 1px;
-$card-offset: 2rem;
-
-/**
- * Card
- */
-
-$button-horizontal-whitespace: $spacer-md;
-
-/**
- * Dividers
- */
-
-$divider-grey: solid 1px rgb(0 0 0 / 20%);
-$divider-white: solid 1px rgb(255 255 255 / 20%);
-
-/**
- * Navigation
- */
-
- $c-navigation-height: 8.8rem;
- $c-navigation-height-md: 8rem;
 
 /**
  * Animations
@@ -167,3 +139,61 @@ $animate-md-in: $timing-md-in $ease-in;
 $animate-md-out: $timing-md-out $ease-out;
 $animate-lg-in: $timing-lg-in $ease-in;
 $animate-lg-out: $timing-lg-out $ease-out;
+
+/**
+ * Components
+ */
+
+/**
+ * Modal
+ */
+
+$modal-close-margin: 32px;
+$modal-close-size: 24px;
+$modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
+
+/**
+ * Card
+ */
+
+$card-edge-size: 1px;
+$card-offset: 2rem;
+
+/**
+ * Button
+ */
+
+$button-horizontal-whitespace: $spacer-md;
+
+/**
+ * Dividers
+ */
+
+$divider-grey: solid 1px $silver;
+$divider-white: solid 1px rgb(255 255 255 / 20%);
+
+/**
+ * Navigation
+ */
+
+$c-navigation-height: 8.8rem;
+$c-navigation-height-md: 8rem;
+
+/**
+ * Checkbox / Radio button
+ */
+
+$c-check-radio-size: 1.6rem;
+
+/**
+ * Tab(s)
+ */
+
+$tab-min-height: 3.4rem;
+$tab-min-height-md: 5.6rem;
+$tab-line-size: $font-size-base * $line-height-lg; // body font size * base line height
+$tab-line-size-md: $font-size-sm * $line-height-lg; // font size of .tab at md * base line height
+$tab-vertical-padding: $spacer-xs;
+$tab-vertical-padding-md: $spacer-sm;
+$tabs-rounded-size: $spacer-md;
+$tabs-border-width: 1px;

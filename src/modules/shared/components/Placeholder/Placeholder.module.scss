@@ -34,7 +34,6 @@
 		font-size: $font-size-1xl;
 	}
 	@include respond-at(md) {
-		height: 9.2rem;
 		margin: $spacer-md 0 $spacer-sm;
 	}
 }

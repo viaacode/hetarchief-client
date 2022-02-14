@@ -40,3 +40,7 @@ yarn-error.log*
 
 # Project specific
 /storybook-static
+
+# Intellij IDE
+.idea
+*.iml

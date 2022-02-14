@@ -6,7 +6,7 @@
 	top: 0;
 	right: 0;
 	bottom: 0;
-	z-index: get-z-layer("foreground");
+	z-index: get-z-layer("blade");
 	visibility: hidden;
 	max-width: 46.4rem;
 	display: grid;
@@ -50,6 +50,8 @@
 	}
 
 	&__overlay {
+		z-index: get-z-layer("blade");
+
 		&--managed {
 			min-width: calc(46.4rem + 5.6rem);
 			left: auto;

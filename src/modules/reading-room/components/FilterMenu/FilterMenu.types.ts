@@ -1,31 +1,37 @@
+import { ReactElement } from 'react';
+
+import { ReadingRoomSort } from '@reading-room/types';
 import { IconProps, ToggleOption } from '@shared/components';
-import { DefaultComponentProps, SortOrder } from '@shared/types';
+import { DefaultComponentProps, SortObject, SortOrder } from '@shared/types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
-	activeSort?: FilterMenuSortOption;
+	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
 	label?: string;
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
 	sortOptions?: FilterMenuSortOption[];
 	toggleOptions?: ToggleOption[];
-	onMenuToggle?: (nextOpen?: boolean) => void;
-	onSortClick?: FilterMenuOnSortClick;
-	onFilterSubmit?: (values: Record<string, unknown>) => void;
+	onMenuToggle?: (nextOpen?: boolean, isMobile?: boolean) => void;
+	onSortClick?: OnFilterMenuSortClick;
+	onFilterReset?: OnFilterMenuFormReset;
+	onFilterSubmit?: OnFilterMenuFormSubmit;
 	onViewToggle?: (viewMode: string) => void;
 }
 
 export interface FilterMenuSortOption {
 	label: string;
+	sort: ReadingRoomSort;
 	order?: SortOrder;
-	onClick?: FilterMenuOnSortClick;
 }
 
 export interface FilterMenuFilterOption {
 	id: string;
 	icon?: IconProps['name'];
 	label: string;
-	onClick?: FilterMenuOnSortClick;
+	form?: () => ReactElement | null; // TODO make form not optional
 }
 
-export type FilterMenuOnSortClick = (key: string, order?: SortOrder) => void;
+export type OnFilterMenuSortClick = (key: ReadingRoomSort, order?: SortOrder) => void;
+export type OnFilterMenuFormSubmit = <Values>(id: string, values: Values) => void;
+export type OnFilterMenuFormReset = (id: string) => void;
