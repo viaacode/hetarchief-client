@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
@@ -9,9 +10,11 @@ import Home from '../../pages/index';
 const renderHome = () => {
 	return render(
 		<NextQueryParamProvider>
-			<Provider store={mockStore}>
-				<Home />
-			</Provider>
+			<QueryClientProvider client={new QueryClient()}>
+				<Provider store={mockStore}>
+					<Home />
+				</Provider>
+			</QueryClientProvider>
 		</NextQueryParamProvider>
 	);
 };
