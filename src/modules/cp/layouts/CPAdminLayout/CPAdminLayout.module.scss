@@ -13,6 +13,10 @@ $l-cp-admin-sidebar-width: 25.4rem;
         width: $l-cp-admin-sidebar-width;
         border-right: $divider-grey;
 
+        @include respond-to("lg") {
+            display: none;
+        }
+
         .#{$component} {
             &__sidebar {
                 width: $l-cp-admin-sidebar-width; // force overlap with border

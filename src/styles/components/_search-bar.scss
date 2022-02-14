@@ -34,7 +34,7 @@
 			@include tabs-border-radius;
 
 			height: 100%;
-			border-radius: $tabs-rounded-size;
+			min-height: 0;
 		}
 
 		.c-tags-input__value-container {
@@ -74,16 +74,16 @@
 				padding-right: $spacer-md;
 			}
 		}
+	}
 
-		&.c-search-bar--light {
-			.c-tags-input__control {
-				background-color: $white;
-				border-color: $zinc;
+	&.c-search-bar--light {
+		.c-tags-input__control {
+			background-color: $white;
+			border-color: $zinc;
 
-				&--is-focused,
-				&--is-focused:hover {
-					border-color: $black;
-				}
+			&--is-focused,
+			&--is-focused:hover {
+				border-color: $black;
 			}
 		}
 	}
