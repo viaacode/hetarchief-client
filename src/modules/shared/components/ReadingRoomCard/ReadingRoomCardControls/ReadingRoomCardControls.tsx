@@ -66,7 +66,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 					<>
 						{t(
 							'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___beschikbaar-tot'
-						)}{' '}
+						)}
 						<br />
 						{access?.until && formatDateTime(access?.until)}
 					</>
