@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 import { Column } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
-import { RequestStatusChip } from '@cp/components';
+import { RequestStatusBadge } from '@cp/components';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	RequestStatus,
@@ -68,7 +68,7 @@ const CPRequestsPage: NextPage = () => {
 			Header: t('Status') || '',
 			accessor: 'status',
 			Cell: ({ row }: RequestTableArgs) => {
-				return <RequestStatusChip status={row.original.status} />;
+				return <RequestStatusBadge status={row.original.status} />;
 			},
 		},
 		{

@@ -1,1 +1,1 @@
-export * from './RequestStatusChip';
+export * from './RequestStatusBadge';
