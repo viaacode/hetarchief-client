@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Column } from 'react-table';
 
 import { RequestStatusBadge } from '@cp/components';
-import { RequestTableRow } from '@cp/const/requests.const';
+import { RequestTableRow } from '@cp/types';
 import { Icon } from '@shared/components';
 
 import { RequestTableArgs } from './table.types';
