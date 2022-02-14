@@ -68,13 +68,11 @@ const CPRequestsPage: NextPage = () => {
 							size="md"
 							onClear={() => {
 								setFilters({
-									...filters,
 									search: undefined,
 								});
 							}}
 							onSearch={(searchValue: string) => {
 								setFilters({
-									...filters,
 									search: searchValue,
 								});
 							}}
@@ -86,7 +84,6 @@ const CPRequestsPage: NextPage = () => {
 							variants={['rounded', 'light', 'bordered']}
 							onClick={(tabId) =>
 								setFilters({
-									...filters,
 									status: tabId.toString(),
 								})
 							}
