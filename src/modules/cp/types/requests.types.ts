@@ -6,4 +6,6 @@ export interface RequestTableRow extends Object {
 	email: string;
 	status: RequestStatus;
 	created_at: Date;
+	reason: string;
+	time: string; // free-text indication of when
 }

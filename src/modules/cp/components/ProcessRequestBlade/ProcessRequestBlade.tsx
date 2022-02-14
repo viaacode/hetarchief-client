@@ -5,6 +5,9 @@ import React, { FC, useState } from 'react';
 import { requestCreatedAtFormatter } from '@cp/const/requests.const';
 import { Blade, BladeManager, Icon } from '@shared/components';
 
+import { ApproveRequestBlade } from '../ApproveRequestBlade';
+import { DeclineRequestBlade } from '../DeclineRequestBlade';
+
 import styles from './ProcessRequestBlade.module.scss';
 import { ProcessRequestBladeProps } from './ProcessRequestBlade.types';
 
@@ -123,21 +126,24 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				)}
 			</Blade>
 
-			<Blade
-				title={t(
-					'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
-				)}
+			<ApproveRequestBlade
 				isOpen={false}
-				onClose={() => setShowApprove(false)}
 				layer={showApprove ? 2 : 9999}
+				selected={selected}
+				onClose={() => setShowApprove(false)}
+				onSubmit={() => {
+					setShowApprove(false);
+
+					// Needs a little delay, not sure about the amount.
+					// 300ms is default duration to hide a blade
+					setTimeout(() => props.onClose?.(), 100);
+				}}
 			/>
-			<Blade
-				title={t(
-					'modules/cp/components/process-request-blade/process-request-blade___weigeren'
-				)}
+
+			<DeclineRequestBlade
 				isOpen={false}
-				onClose={() => setShowDecline(false)}
 				layer={showDecline ? 2 : 9999}
+				onClose={() => setShowDecline(false)}
 			/>
 		</BladeManager>
 	);

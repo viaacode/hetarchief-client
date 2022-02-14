@@ -1,24 +1,16 @@
 import { TabProps } from '@meemoo/react-components';
+import { differenceInDays, format, formatDistanceToNow } from 'date-fns';
 import { i18n } from 'next-i18next';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
+import { getLocaleFromi18nLanguage } from '@shared/utils';
 
 export const enum RequestStatus {
 	all = 'all',
 	open = 'open',
 	approved = 'approved',
 	denied = 'denied',
-}
-
-export interface RequestTableRow extends Object {
-	id: string | number;
-	name: string;
-	email: string;
-	status: RequestStatus;
-	created_at: Date;
-	reason: string;
-	time: string; // free-text indication of when
 }
 
 export const RequestTablePageSize = 20;
@@ -53,5 +45,16 @@ export const requestStatusFilters = (): TabProps[] => {
 };
 
 export const requestCreatedAtFormatter = (date: Date): string => {
-	return new Date(date).toLocaleString('nl-be');
+	const locale = getLocaleFromi18nLanguage(i18n?.language || '');
+
+	if (differenceInDays(new Date(), date) <= 5) {
+		return formatDistanceToNow(date, {
+			addSuffix: true,
+			locale,
+		});
+	}
+
+	return format(date, 'PPpp', {
+		locale,
+	});
 };
