@@ -2,7 +2,7 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -35,6 +35,15 @@ const CPRequestsPage: NextPage = () => {
 		[filters.status]
 	);
 
+	const sortFilters = useMemo(() => {
+		return [
+			{
+				id: filters.sort,
+				desc: filters.order !== 'asc',
+			},
+		];
+	}, [filters]);
+
 	const data = mockData.map((mock) => {
 		return {
 			...mock,
@@ -42,6 +51,17 @@ const CPRequestsPage: NextPage = () => {
 			status: RequestStatus.approved,
 		};
 	});
+
+	const onSortChange = useCallback(
+		(rules) => {
+			setFilters({
+				...filters,
+				sort: rules[0]?.id || undefined,
+				order: rules[0] ? (rules[0].desc ? 'desc' : 'asc') : undefined,
+			});
+		},
+		[filters, setFilters]
+	);
 
 	return (
 		<>
@@ -104,10 +124,12 @@ const CPRequestsPage: NextPage = () => {
 									data: [...data, ...data, ...data, ...data], // 20
 									initialState: {
 										pageSize: RequestTablePageSize,
+										sortBy: sortFilters,
 									},
 								} as TableOptions<object>
 								/* eslint-enable @typescript-eslint/ban-types */
 							}
+							onSortChange={onSortChange}
 							sortingIcons={sortingIcons}
 							pagination={({ gotoPage }) => {
 								return (
