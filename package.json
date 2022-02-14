@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "2.8.8",
-    "@meemoo/react-components": "2.8.1",
+    "@meemoo/react-components": "2.8.3",
     "@reduxjs/toolkit": "1.7.1",
     "clsx": "1.1.1",
     "copy-to-clipboard": "3.3.1",
