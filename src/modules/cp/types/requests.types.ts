@@ -1,4 +1,9 @@
-import { RequestStatus } from '@cp/const/requests.const';
+export const enum RequestStatus {
+	all = 'all',
+	open = 'open',
+	approved = 'approved',
+	denied = 'denied',
+}
 
 export interface RequestTableRow extends Object {
 	id: string | number;

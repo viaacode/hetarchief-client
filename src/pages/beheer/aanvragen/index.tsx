@@ -10,12 +10,11 @@ import { useQueryParams } from 'use-query-params';
 import { ProcessRequestBlade } from '@cp/components/ProcessRequestBlade';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
-	RequestStatus,
 	requestStatusFilters,
 	RequestTablePageSize,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
-import { RequestTableRow } from '@cp/types';
+import { RequestStatus, RequestTableRow } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { mockData } from '@shared/components/Table/__mocks__/table';
@@ -29,7 +28,7 @@ const lipsum =
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
-	const [selected, setSelected] = useState<string | number | undefined>(undefined);
+	const [selected, setSelected] = useState<string | number | null>(null);
 
 	// Filters
 
@@ -185,7 +184,7 @@ const CPRequestsPage: NextPage = () => {
 										total={120} // TODO: fetch count from db
 										onPageChange={(page) => {
 											gotoPage(page);
-											setSelected(undefined);
+											setSelected(null);
 											setFilters({
 												...filters,
 												start: page * RequestTablePageSize,
@@ -202,7 +201,7 @@ const CPRequestsPage: NextPage = () => {
 			<ProcessRequestBlade
 				selected={data.find((x) => x.id === selected)}
 				isOpen={selected !== undefined}
-				onClose={() => setSelected(undefined)}
+				onClose={() => setSelected(null)}
 			/>
 		</>
 	);
