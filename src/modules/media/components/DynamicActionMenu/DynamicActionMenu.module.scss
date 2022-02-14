@@ -6,7 +6,14 @@
 	width: 100%;
 	min-width: 0; // prevent overflow in flex container
 	display: flex;
-	column-gap: $spacer-xs;
+
+	&__item:not(:last-of-type) {
+		padding-right: $spacer-xs;
+	}
+
+	&__dropdown-button {
+		margin-left: $spacer-xs;
+	}
 
 	&__flyout {
 		box-shadow: $shadow-24-black-12;
