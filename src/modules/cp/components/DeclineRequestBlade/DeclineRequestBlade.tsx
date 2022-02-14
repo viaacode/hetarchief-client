@@ -32,13 +32,17 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-16">
 				<Button
-					label={t('Keur af')}
+					label={t(
+						'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
+					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
 				/>
 
 				<Button
-					label={t('Annuleer')}
+					label={t(
+						'modules/cp/components/decline-request-blade/decline-request-blade___annuleer'
+					)}
 					variants={['block', 'text']}
 					onClick={props.onClose}
 				/>
@@ -47,12 +51,20 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 	};
 
 	return (
-		<Blade {...props} footer={renderFooter()} title={t('Aanvraag afkeuren')}>
+		<Blade
+			{...props}
+			footer={renderFooter()}
+			title={t(
+				'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
+			)}
+		>
 			<div className="u-px-32">
 				<FormControl
 					className="u-mb-24"
 					errors={[errors.reasonForDenial?.message]}
-					label={t('Reden voor afkeuring')}
+					label={t(
+						'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'
+					)}
 				>
 					<Controller
 						name="reasonForDenial"

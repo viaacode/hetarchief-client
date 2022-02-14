@@ -98,13 +98,17 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-16">
 				<Button
-					label={t('Keur goed')}
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
 				/>
 
 				<Button
-					label={t('Annuleer')}
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___annuleer'
+					)}
 					variants={['block', 'text']}
 					onClick={props.onClose}
 				/>
@@ -113,7 +117,13 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	};
 
 	return (
-		<Blade {...props} footer={renderFooter()} title={t('Aanvraag goedkeuren')}>
+		<Blade
+			{...props}
+			footer={renderFooter()}
+			title={t(
+				'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
+			)}
+		>
 			<div className={parentStyles['c-process-request-blade__details']}>
 				<strong>
 					{t(
@@ -127,7 +137,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessFrom?.message]}
-					label={t('Van')}
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___van'
+					)}
 				>
 					<Controller
 						name="accessFrom"
@@ -170,7 +182,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessTo?.message]}
-					label={t('Tot')}
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___tot'
+					)}
 				>
 					<Controller
 						name="accessTo"
@@ -216,7 +230,12 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					/>
 				</FormControl>
 
-				<FormControl label={t('Opmerkingen')} suffix={OPTIONAL_LABEL()}>
+				<FormControl
+					label={t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___opmerkingen'
+					)}
+					suffix={OPTIONAL_LABEL()}
+				>
 					<Controller
 						name="accessRemark"
 						control={control}
