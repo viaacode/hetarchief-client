@@ -2,7 +2,6 @@ import { Options } from 'ky/distribution/types/options';
 import getConfig from 'next/config';
 import { StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { config } from '@config/const';
 import { ApiService } from '@shared/services';
 
 import { CheckLoginResponse } from './auth.service.types';
@@ -16,7 +15,7 @@ export class AuthService extends ApiService {
 
 	public static redirectToLogin(query: StringifiableRecord): void {
 		const returnToUrl = stringifyUrl({
-			url: config.public.origin,
+			url: publicRuntimeConfig.CLIENT_URL,
 			query,
 		});
 
@@ -29,7 +28,7 @@ export class AuthService extends ApiService {
 	}
 
 	public static logout(): void {
-		const returnToUrl = config.public.origin;
+		const returnToUrl = publicRuntimeConfig.CLIENT_URL;
 
 		window.location.href = stringifyUrl({
 			url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,

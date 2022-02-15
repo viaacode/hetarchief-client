@@ -1,6 +1,6 @@
 @use "styles/abstracts" as *;
 
-$c: "c-media-card-list";
+$component: "c-media-card-list";
 
 // Sidebar
 $media-card-list-sidebar-gutter: $spacer-md;
@@ -11,7 +11,7 @@ $media-card-list-masonry-gutter: $media-card-list-sidebar-gutter;
 $media-card-list-masonry-gutter-md: $spacer-lg;
 
 @mixin media-card-list-gutters($gutter) {
-	.#{$c} {
+	.#{$component} {
 		&__content {
 			margin-left: 0 - $gutter; /* gutter size offset */
 		}
@@ -26,7 +26,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 	}
 }
 
-.#{$c} {
+.#{$component} {
 	&__content {
 		display: flex;
 		width: auto;
@@ -41,7 +41,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 	&--sidebar {
 		@include media-card-list-gutters($media-card-list-sidebar-gutter);
 
-		.#{$c} {
+		.#{$component} {
 			&__sidebar {
 				flex-shrink: 0;
 				margin-bottom: $media-card-list-sidebar-gutter;

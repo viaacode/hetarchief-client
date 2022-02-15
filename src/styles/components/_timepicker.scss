@@ -1,9 +1,9 @@
 @use "styles/abstracts" as *;
 
-$c: "c-datepicker--time";
+$component: "c-datepicker--time";
 $item-selector: ".react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item";
 
-.#{$c} {
+.#{$component} {
 	.react-datepicker {
 		&__header {
 			&--time--only {

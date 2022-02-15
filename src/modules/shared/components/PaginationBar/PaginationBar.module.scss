@@ -1,6 +1,6 @@
 @use "styles/abstracts" as *;
 
-$c: "c-pagination-bar";
+$component: "c-pagination-bar";
 
 @mixin c-pagination-bar-two-item-justify {
 	& > span,
@@ -38,14 +38,14 @@ $c: "c-pagination-bar";
 	}
 }
 
-.#{$c} {
+.#{$component} {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: min-content;
 	align-items: center;
 	justify-items: center;
 
-	&:not(.#{$c}--back-to-top) {
+	&:not(.#{$component}--back-to-top) {
 		@include c-pagination-bar-two-item-justify;
 	}
 
@@ -62,7 +62,7 @@ $c: "c-pagination-bar";
 			@include c-pagination-bar-three-item-justify;
 		}
 		
-		.#{$c} {
+		.#{$component} {
 			&__back-to-top {
 				@include respond-at("md") {
 					display: initial;

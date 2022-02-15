@@ -4,11 +4,10 @@ import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import ReadingRoomCardControls from '../ReadingRoomCardControls/ReadingRoomCardControls';
-
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
+import { ReadingRoomCardControls } from './ReadingRoomCardControls';
 
 const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 	const { room, type } = props;
@@ -19,6 +18,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 	const typeAccessRequested = type === ReadingRoomCardType.futureRequested;
 
 	const flat = typeAccessAccepted || typeAccessRequested;
+	const hasRequested = typeAccessGranted || typeAccessAccepted || typeAccessRequested;
 	const isClickable = typeof onClick !== 'undefined';
 
 	const renderImage = () => {
@@ -97,43 +97,24 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 		</TruncateMarkup>
 	);
 
-	const getMode = () => {
-		if (typeAccessGranted) {
-			return 'dark';
-		}
+	const mode = typeAccessGranted ? 'dark' : 'light';
+	const orientation = hasRequested ? 'horizontal' : typeNoAccess ? 'vertical--at-md' : 'vertical';
+	const padding = hasRequested ? 'content' : 'vertical';
 
-		return 'light';
-	};
-
-	const getOrientation = () => {
-		if (typeAccessGranted || typeAccessAccepted || typeAccessRequested) {
-			return 'horizontal';
-		}
-
-		if (typeNoAccess) {
-			return 'vertical--at-md';
-		}
-
-		return 'vertical';
-	};
-
-	const getPadding = () => {
-		if (typeAccessGranted || typeAccessAccepted || typeAccessRequested) {
-			return 'content';
-		}
-
-		return 'vertical';
-	};
+	const rootCls = clsx(styles['c-reading-room-card'], {
+		[styles['c-reading-room-card--granted']]: typeAccessGranted,
+		'u-cursor-pointer': isClickable,
+	});
 
 	const renderCard = () => (
 		<Card
-			className={clsx({ 'u-cursor-pointer': isClickable })}
+			className={rootCls}
 			edge="none"
 			image={renderImage()}
-			mode={getMode()}
+			mode={mode}
 			offset={typeAccessGranted}
-			orientation={getOrientation()}
-			padding={getPadding()}
+			orientation={orientation}
+			padding={padding}
 			title={!flat && renderTitle()}
 			shadow={flat}
 		>

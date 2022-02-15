@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -25,6 +26,8 @@ import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
+const NUMBER_OF_READING_ROOMS = 6;
+
 const Home: NextPage = () => {
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
@@ -42,7 +45,7 @@ const Home: NextPage = () => {
 	const { data: readingRoomInfo, isLoading: isLoadingReadingRooms } = useGetReadingRooms(
 		query.search || undefined,
 		0,
-		areAllReadingRoomsVisible ? 200 : 6
+		areAllReadingRoomsVisible ? 200 : NUMBER_OF_READING_ROOMS
 	);
 
 	// Sync showAuth query param with store value
@@ -68,7 +71,7 @@ const Home: NextPage = () => {
 	};
 
 	const onClearSearch = () => {
-		setQuery({ search: undefined });
+		setQuery({ search: '' });
 	};
 
 	const onSearch = (searchValue: string) => {
@@ -111,6 +114,14 @@ const Home: NextPage = () => {
 		// TODO: add create request call here
 		setIsOpenRequestAccessBlade(false);
 	};
+
+	/**
+	 * Computed
+	 */
+
+	const readingRoomsLength = readingRoomInfo?.items?.length ?? 0;
+	const showLoadMore =
+		!areAllReadingRoomsVisible && (readingRoomInfo?.total ?? 0) > NUMBER_OF_READING_ROOMS;
 
 	/**
 	 * Render
@@ -157,9 +168,11 @@ const Home: NextPage = () => {
 				{!isLoadingReadingRooms && readingRoomInfo?.items?.length === 0 && (
 					<p>{t('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
 				)}
-				{!isLoadingReadingRooms && readingRoomInfo?.items?.length && (
+				{!isLoadingReadingRooms && readingRoomsLength > 0 && (
 					<ReadingRoomCardList
-						className="u-mb-64"
+						className={clsx('p-home__results', {
+							'u-mb-64': showLoadMore,
+						})}
 						items={(readingRoomInfo?.items || []).map(
 							(room: ReadingRoomInfo): ReadingRoomCardProps => {
 								return {
@@ -180,9 +193,13 @@ const Home: NextPage = () => {
 					/>
 				)}
 
-				{!areAllReadingRoomsVisible && (
+				{showLoadMore && (
 					<div className="u-text-center">
-						<Button onClick={handleLoadAllReadingRooms} variants={['outline']}>
+						<Button
+							className="u-font-weight-400"
+							onClick={handleLoadAllReadingRooms}
+							variants={['outline']}
+						>
 							{t('pages/index___toon-alles-amount', {
 								amount: readingRoomInfo?.total,
 							})}

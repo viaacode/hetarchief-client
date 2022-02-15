@@ -24,9 +24,16 @@ export default {
 } as ComponentMeta<typeof ReadingRoomCard>;
 
 const Template: ComponentStory<typeof ReadingRoomCard> = (args) => <ReadingRoomCard {...args} />;
+const TemplateWithNoBg: ComponentStory<typeof ReadingRoomCard> = (args) => (
+	<>
+		<ReadingRoomCard {...args} />
+		<div className="u-pt-32">
+			<ReadingRoomCard {...args} room={{ ...args.room, color: undefined, image: '' }} />
+		</div>
+	</>
+);
 
 export const Logo = Template.bind({});
-
 Logo.args = {
 	...mockReadingRoomCardProps,
 	room: {
@@ -37,7 +44,6 @@ Logo.args = {
 };
 
 export const Color = Template.bind({});
-
 Color.args = {
 	...mockReadingRoomCardProps,
 	room: {
@@ -47,28 +53,24 @@ Color.args = {
 };
 
 export const Image = Template.bind({});
-
 Image.args = {
 	...mockReadingRoomCardProps,
 };
 
 export const Requested = Template.bind({});
-
 Requested.args = {
 	...mockReadingRoomCardProps,
 	access: AccessRequested,
 };
 
-export const Granted = Template.bind({});
-
+export const Granted = TemplateWithNoBg.bind({});
 Granted.args = {
 	...mockReadingRoomCardProps,
 	type: ReadingRoomCardType.access,
 	access: AccessGranted,
 };
 
-export const FutureApproved = Template.bind({});
-
+export const FutureApproved = TemplateWithNoBg.bind({});
 FutureApproved.args = {
 	...mockReadingRoomCardProps,
 	type: ReadingRoomCardType.futureApproved,
@@ -78,8 +80,7 @@ FutureApproved.parameters = {
 	backgrounds: { default: 'platinum' },
 };
 
-export const FutureRequested = Template.bind({});
-
+export const FutureRequested = TemplateWithNoBg.bind({});
 FutureRequested.args = {
 	...mockReadingRoomCardProps,
 	type: ReadingRoomCardType.futureRequested,

@@ -81,7 +81,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		);
 
 		expect(screen.getByText('timer')).toBeDefined(); // Check icon
-		expect(screen.getByText('Bezoek de leeszaal')).toBeDefined();
+		expect(screen.getByText(/^Bezoek/i)).toBeDefined();
 	});
 
 	it('Should show a dedicated message when access has already been requested', () => {

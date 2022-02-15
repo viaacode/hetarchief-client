@@ -1,8 +1,8 @@
 @use "styles/abstracts" as *;
 
-$c: "c-pagination-progress";
+$component: "c-pagination-progress";
 
-.#{$c} {
+.#{$component} {
     @include text-ellipsis(true);
 
     color: $neutral;

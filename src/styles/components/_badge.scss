@@ -55,10 +55,5 @@ $badge-font-size: 1.4rem;
 		@include icon-font-size($badge-font-size-sm);
 
 		padding: 0;
-
-		// icon font size = 18px -> icon container = 18px. badge container = 16px
-		span {
-			margin-bottom: -0.1rem;
-		}
 	}
 }

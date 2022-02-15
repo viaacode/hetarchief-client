@@ -1,11 +1,13 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, ReactNode } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import { Icon, IconLightNames } from '../Icon';
-import { ReadingRoomCardProps, ReadingRoomCardType } from '../ReadingRoomCard';
-import { formatDateTime } from '../ReadingRoomCard/ReadingRoomCard.utils';
+import { Icon, IconLightNames } from '../../Icon';
+import { ReadingRoomCardType } from '../ReadingRoomCard.const';
+import { ReadingRoomCardProps } from '../ReadingRoomCard.types';
+import { formatDateTime } from '../ReadingRoomCard.utils';
 
 import styles from './ReadingRoomCardControls.module.scss';
 
@@ -18,6 +20,8 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps & { cardIsClickable: bool
 	room,
 	type,
 }) => {
+	const { t } = useTranslation();
+
 	const typeNoAccess = type === ReadingRoomCardType.noAccess;
 	const typeAccessGranted = type === ReadingRoomCardType.access;
 	const typeAccessAccepted = type === ReadingRoomCardType.futureApproved;
@@ -66,7 +70,10 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps & { cardIsClickable: bool
 				{renderLabel(
 					'timer',
 					<>
-						Beschikbaar tot <br />
+						{t(
+							'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___beschikbaar-tot'
+						)}
+						<br />
 						{access?.until && formatDateTime(access?.until)}
 					</>
 				)}
@@ -75,7 +82,9 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps & { cardIsClickable: bool
 					variants={['lg', 'white']}
 					onClick={() => onVisitClick && onVisitClick(room)}
 				>
-					Bezoek de leeszaal
+					{t(
+						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___bezoek-dit-digitaal-archief'
+					)}
 				</Button>
 			</>
 		);
@@ -106,7 +115,9 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps & { cardIsClickable: bool
 					variants={['sm', 'black']}
 					onClick={() => onAccessRequest && onAccessRequest(room)}
 				>
-					Vraag toegang aan
+					{t(
+						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___vraag-toegang-aan'
+					)}
 				</Button>
 
 				{renderContactIconButton()}
@@ -119,7 +130,9 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps & { cardIsClickable: bool
 			<>
 				{renderLabel(
 					'not-available',
-					'Momenteel is er geen toegang mogelijk tot deze leeszaal'
+					t(
+						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___momenteel-is-er-geen-toegang-mogelijk-tot-deze-leeszaal'
+					)
 				)}
 
 				{renderContactIconButton()}

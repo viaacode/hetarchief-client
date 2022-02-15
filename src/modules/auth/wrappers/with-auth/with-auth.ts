@@ -10,10 +10,10 @@ export const withAuth = <P extends WithAuthProps = WithAuthProps>(
 ): WithAuthReturn<P> => {
 	return async (context: GetServerSidePropsContext) => {
 		const response = await AuthService.checkLogin({
-			// headers: {
-			// 	// Explicitly send cookie header because we are on the server
-			// 	Cookie: context.req.headers.cookie,
-			// },
+			headers: {
+				// Explicitly send cookie header because we are on the server
+				Cookie: context.req.headers.cookie,
+			},
 		});
 
 		if (!response?.userInfo || response.message === AuthMessage.LoggedOut) {

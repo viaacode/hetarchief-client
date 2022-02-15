@@ -34,7 +34,6 @@ export const heroRequests: HeroRequest[] = [
 		description:
 			'Het Museum voor Schone Kunsten Gent (MSK) zoals we het vandaag kennen, werd ontworpen door stadsarchitect Charles Van Rysselberghe en van 1898 tot 1904 opgetrokken in een typische neoclassicistische stijl met art-nouveau-accenten. Het gebouw huisvest meer dan 600 kunstwerken: een wandeling door de Europese kunstgeschiedenis van de middeleeuwen tot vandaag.',
 		id: 'mskgent',
-		image: '/images/bg-shd.png',
 		logo: '/images/logo-shd--small.svg',
 		name: 'MSK Gent',
 		status: 'access',
@@ -44,7 +43,7 @@ export const heroRequests: HeroRequest[] = [
 		description:
 			'SBS is de zendergroep achter GoPlay.be, Play4, Play5, Play6, Play7. Daarnaast heeft SBS ook de Telenet-zenders Play Sports & Play Sports Open, BBC First, The History Channel en njam! in regie. Sinds 2018 maakt ook radiozender NRJ deel uit van de SBS-groep en eind 2019 trad Native Nation toe tot de SBS-familie. Naast onze klassieke tv spots en het online video aanbod behoort influencer marketing nu ook tot de mogelijkheden. Sinds 2020 vervolledigt multifplatform brand Jani het rijtje. SBS Belgium maakt deel uit van de Telenet/Liberty Global groep.',
 		id: 'sbs',
-		image: '/images/bg-shd.png',
+		color: '#2BB0C8',
 		logo: '/images/logo-shd--small.svg',
 		name: 'SBS Belgium-archief',
 		status: 'planned',
@@ -64,6 +63,15 @@ export const heroRequests: HeroRequest[] = [
 			'Het Stadsarchief van Brugge is één van de belangrijkste stedelijke archiefdepots van Europa. Het stedelijk archief, de eeuwenlang bewaarde documenten van het stadsbestuur, is de belangrijkste bron voor de Brugse geschiedenis. Dit uniek bestand krijgt nog regelmatig aanvulling, ook met privé-archieven.',
 		id: 'stadsarchiefbrugge',
 		image: '/images/bg-shd.png',
+		logo: '/images/logo-shd--small.svg',
+		name: 'Stadsarchief Brugge',
+		status: 'requested',
+	},
+	{
+		description:
+			'Het Stadsarchief van Brugge is één van de belangrijkste stedelijke archiefdepots van Europa. Het stedelijk archief, de eeuwenlang bewaarde documenten van het stadsbestuur, is de belangrijkste bron voor de Brugse geschiedenis. Dit uniek bestand krijgt nog regelmatig aanvulling, ook met privé-archieven.',
+		id: 'stadsarchiefbrugge',
+		color: '#727272',
 		logo: '/images/logo-shd--small.svg',
 		name: 'Stadsarchief Brugge',
 		status: 'requested',

@@ -1,0 +1,8 @@
+@use "styles/abstracts/" as *;
+
+$component: "c-sorting-icon";
+
+.#{$component} {
+    font-size: $font-size-base;
+    position: absolute; // takes care of alignment and maintains inline behaviour
+}

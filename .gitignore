@@ -44,3 +44,6 @@ yarn-error.log*
 # Intellij IDE
 .idea
 *.iml
+
+# Babel config to disable swcMinify on windows
+.babelrc

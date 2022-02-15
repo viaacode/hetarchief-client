@@ -1,10 +1,10 @@
 @use "sass:math";
 @use "styles/abstracts" as *;
 
-$c: "c-media-card";
+$component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 
-.#{$c} {
+.#{$component} {
 	&__header,
 	&__no-content {
 		&-wrapper {
@@ -55,7 +55,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 				min-height: 100%;
 			}
 
-			.#{$c}__no-content {
+			.#{$component}__no-content {
 				transform: translateY(-25%);
 			}
 		}

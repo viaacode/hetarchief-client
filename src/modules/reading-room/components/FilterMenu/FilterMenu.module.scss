@@ -97,17 +97,16 @@ $c-filter-menu-flyout-top-padding: 6.4rem;
 		z-index: get-z-layer("filter");
 	}
 
-	:global(.c-menu) {
-		padding: $c-filter-menu-flyout-top-padding 0 0;
-	}
-
-
 	&--filter {
 		max-width: 46.4rem;
 
 		// Overwrite popper styles
 		min-width: 46.4rem !important;
 		max-height: 100vh;
+
+		:global(.c-menu) {
+			padding: $c-filter-menu-flyout-top-padding 0 0;
+		}
 	}
 }
 

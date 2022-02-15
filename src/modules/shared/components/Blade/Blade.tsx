@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { useBladeManagerContext } from '@shared/hooks';
+import { useBladeManagerContext, useScrollLock } from '@shared/hooks';
 
 import { Icon } from '../Icon';
 import { Overlay } from '../Overlay';
@@ -23,6 +23,8 @@ const Blade: FC<BladeProps> = ({
 	layer,
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
+
+	useScrollLock(!isManaged && isOpen);
 
 	const isLayered = isManaged && layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;

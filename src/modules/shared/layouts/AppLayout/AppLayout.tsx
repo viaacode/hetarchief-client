@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { i18n } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -49,7 +50,9 @@ const AppLayout: FC = ({ children }) => {
 					onLogOutClick,
 					setNotificationsOpen,
 			  })
-			: NAV_ITEMS_RIGHT(onLoginRegisterClick);
+			: i18n
+			? NAV_ITEMS_RIGHT(onLoginRegisterClick)
+			: [];
 	}, [
 		anyUnreadNotifications,
 		isLoggedIn,
@@ -75,7 +78,9 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation>
 				<Navigation.Left
 					currentPath={asPath}
-					hamburgerProps={NAV_HAMBURGER_PROPS()}
+					hamburgerProps={
+						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
+					}
 					items={MOCK_ITEMS_LEFT}
 					placement="left"
 					renderHamburger={true}

@@ -1,8 +1,8 @@
 @use "../abstracts/" as *;
 
-$c: "c-tab";
+$component: "c-tab";
 
-.#{$c} {
+.#{$component} {
 	display: inline-flex;
 	align-items: center;
 	min-height: $tab-min-height;
@@ -41,7 +41,7 @@ $c: "c-tab";
 			padding: $tab-vertical-padding-md $spacer-md;
 		}
 
-		&.#{$c} {
+		&.#{$component} {
 			&--active {
 				background-color: $platinum;
 				color: $black;
@@ -58,7 +58,7 @@ $c: "c-tab";
 			padding: $tab-vertical-padding-md $spacer-sm;
 		}
 
-		&.#{$c} {
+		&.#{$component} {
 			&--active {
 				color: $black;
 				font-weight: $font-weight-bold;
@@ -73,10 +73,14 @@ $c: "c-tab";
 					background: $teal;
 				}
 
-				&.#{$c}--bordered {
+				&.#{$component}--bordered {
 					bottom: 2px;
 				}
 			}
 		}
+	}
+
+	&--medium {
+		min-height: $tab-min-height-medium;
 	}
 }

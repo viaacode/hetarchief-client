@@ -23,7 +23,7 @@ const CPVisitorsPage: NextPage = () => {
 				className="p-cp-visitors"
 				pageTitle={t('pages/beheer/bezoekers/index___bezoekers')}
 			>
-				Visitors table
+				<div className="l-container">Visitors table</div>
 			</CPAdminLayout>
 		</>
 	);

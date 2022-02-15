@@ -2,7 +2,7 @@
 @use "sass:color";
 @use "styles/abstracts" as *;
 
-$c: "c-datepicker";
+$component: "c-datepicker";
 $datepicker-day-size: $spacer-lg;
 $datepicker-edge-spacing: $spacer-sm * 0.75;
 $datepicker-border-color: $zinc;
@@ -15,19 +15,7 @@ $datepicker-border-color: $zinc;
 	background-size: 1.25em;
 }
 
-.#{$c} {
-	&.react-datepicker-wrapper {
-		&:hover,
-		&:active,
-		&:focus,
-		&:focus-within {
-			& + .react-datepicker__tab-loop .react-datepicker-popper,
-			& + .react-datepicker-popper {
-				border-top-color: $teal;
-			}
-		}
-	}
-
+.#{$component} {
 	&.react-datepicker {
 		border-color: $datepicker-border-color;
 		border-radius: 0;

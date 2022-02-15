@@ -7,7 +7,7 @@ import { FilterMenuFilterOption, FilterMenuSortOption } from '../FilterMenu.type
 export const sortOptionsMock: FilterMenuSortOption[] = [
 	{
 		label: 'Relevantie',
-		sort: ReadingRoomSort.Relevance,
+		orderProp: ReadingRoomSort.Relevance,
 	},
 ];
 
