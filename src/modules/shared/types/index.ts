@@ -23,11 +23,14 @@ export interface ComponentLink {
  * Filter / Sort
  */
 
-export type SortOrder = 'asc' | 'desc';
+export enum OrderDirection {
+	asc = 'asc',
+	desc = 'desc',
+}
 
 export interface SortObject {
 	sort: string;
-	order?: SortOrder;
+	order?: OrderDirection;
 }
 
 /**

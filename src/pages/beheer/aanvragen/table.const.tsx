@@ -3,34 +3,36 @@ import Link from 'next/link';
 import { Column } from 'react-table';
 
 import { RequestStatusBadge } from '@cp/components';
-import { RequestTableRow } from '@cp/types';
+import { VisitInfo } from '@cp/types';
 import { Icon } from '@shared/components';
 
 import { RequestTableArgs } from './table.types';
 
-export const RequestTableColumns = (t?: TFunction): Column<RequestTableRow>[] => [
+export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 	{
 		Header: t?.('Naam') || '',
-		accessor: 'name',
+		accessor: 'visitorName',
 	},
 	{
 		Header: t?.('Emailadres') || '',
-		accessor: 'email',
+		accessor: 'visitorMail',
 		Cell: ({ row }: RequestTableArgs) => {
 			return (
-				<Link href={`mailto:${row.original.email}`}>
-					<a className="u-color-neutral p-cp-requests__link">{row.original.email}</a>
+				<Link href={`mailto:${row.original.visitorMail}`}>
+					<a className="u-color-neutral p-cp-requests__link">
+						{row.original.visitorMail}
+					</a>
 				</Link>
 			);
 		},
 	},
 	{
 		Header: t?.('Tijdstip') || '',
-		accessor: 'created_at',
+		accessor: 'createdAt',
 		Cell: ({ row }: RequestTableArgs) => {
 			return (
 				<span className="u-color-neutral">
-					{new Date(row.original.created_at).toLocaleString('nl-be')}
+					{new Date(row.original.createdAt).toLocaleString('nl-be')}
 				</span>
 			);
 		},

@@ -1,3 +1,3 @@
-import { RequestTableRow } from '@cp/types';
+import { VisitInfo } from '@visits/types';
 
-export type RequestTableArgs = { row: { original: RequestTableRow } };
+export type RequestTableArgs = { row: { original: VisitInfo } };
