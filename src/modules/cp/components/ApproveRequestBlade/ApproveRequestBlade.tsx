@@ -40,7 +40,7 @@ const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
 const defaultAccessTo = (accessFrom: Date) => addHours(roundToNearestQuarter(accessFrom), 1);
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
-	const { onSubmit } = props;
+	const { selected, onClose, onSubmit } = props;
 
 	const { t } = useTranslation();
 	const {
@@ -110,7 +110,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						'modules/cp/components/approve-request-blade/approve-request-blade___annuleer'
 					)}
 					variants={['block', 'text']}
-					onClick={props.onClose}
+					onClick={onClose}
 				/>
 			</div>
 		);
@@ -130,7 +130,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-leeszaal-bezoeken'
 					)}
 				</strong>
-				<p>{props.selected?.time}</p>
+				<p>{selected?.timeframe}</p>
 			</div>
 
 			<div className="u-px-32">

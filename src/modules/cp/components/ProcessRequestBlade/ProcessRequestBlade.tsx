@@ -93,7 +93,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 										)}
 										:
 									</strong>{' '}
-									{selected.email}
+									{selected.visitorMail}
 								</li>
 
 								<li className={styles['c-process-request-blade__info-item']}>
@@ -103,7 +103,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 										)}
 										:
 									</strong>{' '}
-									{requestCreatedAtFormatter(selected.created_at)}
+									{requestCreatedAtFormatter(selected.createdAt)}
 								</li>
 							</ul>
 						</div>
@@ -114,7 +114,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 									'modules/cp/components/process-request-blade/process-request-blade___aanvrager'
 								)}
 							</strong>
-							<p>{selected.name}</p>
+							<p>{selected.visitorName}</p>
 
 							<strong>
 								{t(
@@ -128,7 +128,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 									'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-leeszaal-bezoeken'
 								)}
 							</strong>
-							<p>{selected.time}</p>
+							<p>{selected.timeframe}</p>
 						</div>
 					</>
 				)}
