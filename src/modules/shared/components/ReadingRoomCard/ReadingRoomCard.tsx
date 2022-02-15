@@ -1,6 +1,5 @@
 import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
@@ -8,6 +7,7 @@ import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
 import { ReadingRoomCardControls } from './ReadingRoomCardControls';
+import { ReadingRoomImage } from './ReadingRoomImage';
 
 const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 	const { room, type } = props;
@@ -22,40 +22,14 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 	const isClickable = typeof onClick !== 'undefined';
 
 	const renderImage = () => {
-		return (
-			<div
-				className={clsx(
-					styles['c-reading-room-card__background'],
-					typeNoAccess && styles['c-reading-room-card__background--short'],
-					typeAccessGranted && styles['c-reading-room-card__background--tall'],
-					flat && styles['c-reading-room-card__background--small']
-				)}
-				style={{ backgroundColor: room?.color ? room?.color : '#009690' }}
-			>
-				{room?.image && (
-					<div className={styles['c-reading-room-card__background--image']}>
-						<Image
-							src={room?.image}
-							alt={room?.name || room?.id.toString()}
-							layout="fill"
-							objectFit="cover"
-						/>
-					</div>
-				)}
-
-				{room?.logo && (
-					<div className={styles['c-reading-room-card__logo']}>
-						<Image
-							className={styles['c-reading-room-card__logo-image']}
-							src={room?.logo || ''}
-							alt={room?.name || room?.id.toString()}
-							layout="fill"
-							objectFit="contain"
-						/>
-					</div>
-				)}
-			</div>
-		);
+		const imageVariant = typeNoAccess
+			? 'short'
+			: typeAccessGranted
+			? 'tall'
+			: flat
+			? 'small'
+			: undefined;
+		return <ReadingRoomImage {...room} variant={imageVariant} />;
 	};
 
 	const renderTitle = () => {
