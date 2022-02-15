@@ -22,3 +22,5 @@ export interface VisitInfo {
 	visitorMail: string;
 	visitorId: string;
 }
+
+export type RequestTableArgs = { row: { original: VisitInfo } };

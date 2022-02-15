@@ -10,6 +10,7 @@ import { ProcessRequestBlade } from '@cp/components';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	requestStatusFilters,
+	RequestTableColumns,
 	RequestTablePageSize,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
@@ -20,8 +21,6 @@ import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitInfo, VisitStatus } from '@visits/types';
-
-import { RequestTableColumns } from './table.const';
 
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
