@@ -70,4 +70,8 @@
 		visibility: visible;
 		transform: translateX(0);
 	}
+
+	&--managed {
+		width: 100%;
+	}
 }
