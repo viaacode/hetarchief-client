@@ -71,7 +71,6 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 							}
 						/>
 					}
-					lockScroll
 					onOpen={() => setIsHamburgerMenuOpen(true)}
 					onClose={() => setIsHamburgerMenuOpen(false)}
 				/>

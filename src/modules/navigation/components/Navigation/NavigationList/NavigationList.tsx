@@ -71,7 +71,6 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 									id={item.id}
 									isOpen={openDropdown === item.id}
 									items={item.children}
-									lockScroll
 									trigger={renderTrigger(
 										item,
 										openDropdown === item.id ? 'angle-up' : 'angle-down'
