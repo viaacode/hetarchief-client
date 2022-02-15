@@ -1,6 +1,6 @@
-import { RequestTableRow } from '@cp/const/requests.const';
 import { BladeProps } from '@shared/components';
+import { VisitInfo } from '@visits/types';
 
 export interface ProcessRequestBladeProps extends BladeProps {
-	selected?: RequestTableRow;
+	selected?: VisitInfo;
 }

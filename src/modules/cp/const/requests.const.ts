@@ -2,15 +2,16 @@ import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { RequestStatus } from '@cp/types';
+import { RequestStatusAll } from '@cp/types';
 import { SortDirectionParam } from '@shared/helpers';
+import { VisitStatus } from '@visits/types';
 
 export const RequestTablePageSize = 20;
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
-	status: withDefault(StringParam, RequestStatus.all),
+	status: withDefault(StringParam, RequestStatusAll.ALL),
 	search: withDefault(StringParam, undefined),
-	start: withDefault(NumberParam, 0),
+	page: withDefault(NumberParam, 1),
 	sort: withDefault(StringParam, undefined),
 	order: withDefault(SortDirectionParam, undefined),
 };
@@ -18,19 +19,19 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 export const requestStatusFilters = (): TabProps[] => {
 	return [
 		{
-			id: RequestStatus.all,
+			id: RequestStatusAll.ALL,
 			label: i18n?.t('modules/cp/const/requests___alle'),
 		},
 		{
-			id: RequestStatus.open,
+			id: VisitStatus.PENDING,
 			label: i18n?.t('modules/cp/const/requests___open'),
 		},
 		{
-			id: RequestStatus.approved,
+			id: VisitStatus.APPROVED,
 			label: i18n?.t('modules/cp/const/requests___goedgekeurd'),
 		},
 		{
-			id: RequestStatus.denied,
+			id: VisitStatus.DENIED,
 			label: i18n?.t('modules/cp/const/requests___geweigerd'),
 		},
 	];
