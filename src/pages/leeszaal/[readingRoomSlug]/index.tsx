@@ -35,7 +35,7 @@ import {
 } from '@shared/components';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
-import { SortOrder } from '@shared/types';
+import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
@@ -119,7 +119,7 @@ const ReadingRoomPage: NextPage = () => {
 	const onRemoveFilter = (newValue: SearchBarValue<true>) =>
 		setQuery({ search: newValue?.map((tag) => tag.value as string) });
 
-	const onSortClick = (sort: string, order?: SortOrder) => setQuery({ sort, order });
+	const onSortClick = (sort: string, order?: OrderDirection) => setQuery({ sort, order });
 
 	const onTabClick = (tabId: string | number) => setQuery({ mediaType: String(tabId) });
 
@@ -129,7 +129,7 @@ const ReadingRoomPage: NextPage = () => {
 	 * Computed
 	 */
 
-	const activeSort = { sort: query.sort, order: (query.order as SortOrder) ?? undefined };
+	const activeSort = { sort: query.sort, order: (query.order as OrderDirection) ?? undefined };
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
