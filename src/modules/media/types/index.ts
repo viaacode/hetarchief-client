@@ -24,6 +24,8 @@ export interface MediaInfo {
 	}[];
 	dcterms_format: 'video' | 'audio' | null;
 	schema_name: string;
+	// TODO: See if this is still necessary once resolved in proxy
+	type?: string;
 }
 
 export class MediaSearchFilters {

@@ -12,7 +12,7 @@ export default {
 
 const Template: ComponentStory<typeof DynamicActionMenu> = (args) => (
 	<div style={{ backgroundColor: 'beige', width: '50vw', padding: '1rem 0' }}>
-		<p>Vergroot/verklein het scerm om de overflow in actie te zien.</p>
+		<p>Vergroot/verklein het scherm om de overflow in actie te zien.</p>
 		<p>Altijd zichtbaar: {dynamicActionMenuMock.limit} items</p>
 		<DynamicActionMenu {...args} />
 	</div>

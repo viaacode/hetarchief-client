@@ -26,7 +26,7 @@ const TermsOfService: NextPage = () => {
 		const el = scrollable.current;
 
 		if (el !== null) {
-			const bottom = el.scrollHeight - el.scrollTop === el.clientHeight;
+			const bottom = el.scrollHeight - el.scrollTop - el.clientHeight < 1;
 			setIsAtBottom(bottom);
 
 			if (bottom) {

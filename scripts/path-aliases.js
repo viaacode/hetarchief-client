@@ -8,6 +8,7 @@ const pathAliases = [
 	'navigation',
 	'reading-room',
 	'shared',
+	'visits',
 ];
 
 module.exports = pathAliases;

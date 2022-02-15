@@ -29,7 +29,7 @@ const CPSettingsPage: NextPage = () => {
 				className="p-cp-settings"
 				pageTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
-				Settings table
+				<div className="l-container">Settings table</div>
 			</CPAdminLayout>
 		</>
 	);

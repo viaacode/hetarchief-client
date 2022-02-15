@@ -3,6 +3,7 @@ import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-par
 
 import { FilterMenuFilterOption, FilterMenuSortOption } from '@reading-room/components';
 import { Icon, IconProps } from '@shared/components';
+import { OrderDirection } from '@shared/types';
 
 import { ReadingRoomMediaType, ReadingRoomSort } from '../types';
 
@@ -107,26 +108,26 @@ export const READING_ROOM_ACTIVE_SORT_MAP = (): { [key in ReadingRoomSort]: stri
 export const READING_ROOM_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	{
 		label: i18n?.t('modules/reading-room/const/index___relevantie') ?? '',
-		sort: ReadingRoomSort.Relevance,
+		orderProp: ReadingRoomSort.Relevance,
 	},
 	{
 		label: i18n?.t('modules/reading-room/const/index___datum-oplopend') ?? '',
-		sort: ReadingRoomSort.Date,
-		order: 'asc',
+		orderProp: ReadingRoomSort.Date,
+		orderDirection: OrderDirection.asc,
 	},
 	{
 		label: i18n?.t('modules/reading-room/const/index___datum-aflopend') ?? '',
-		sort: ReadingRoomSort.Date,
-		order: 'desc',
+		orderProp: ReadingRoomSort.Date,
+		orderDirection: OrderDirection.desc,
 	},
 	{
 		label: i18n?.t('modules/reading-room/const/index___van-a-tot-z') ?? '',
-		sort: ReadingRoomSort.Title,
-		order: 'asc',
+		orderProp: ReadingRoomSort.Title,
+		orderDirection: OrderDirection.asc,
 	},
 	{
 		label: i18n?.t('modules/reading-room/const/index___van-z-tot-a') ?? '',
-		sort: ReadingRoomSort.Title,
-		order: 'desc',
+		orderProp: ReadingRoomSort.Title,
+		orderDirection: OrderDirection.desc,
 	},
 ];

@@ -13,7 +13,7 @@ export const makeStore = () =>
 			[uiSlice.name]: uiSlice.reducer,
 			[userSlice.name]: userSlice.reducer,
 		},
-		devTools: process.env.NODE_ENV !== 'production',
+		devTools: process.env.DEBUG_TOOLS === 'true',
 	});
 
 export const wrapper = createWrapper<AppStore>(makeStore);

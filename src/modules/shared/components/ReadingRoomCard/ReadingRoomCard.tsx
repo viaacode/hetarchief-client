@@ -4,11 +4,10 @@ import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import ReadingRoomCardControls from '../ReadingRoomCardControls/ReadingRoomCardControls';
-
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
+import { ReadingRoomCardControls } from './ReadingRoomCardControls';
 
 const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 	const { room, type } = props;
@@ -18,7 +17,12 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 	const typeAccessAccepted = type === ReadingRoomCardType.futureApproved;
 	const typeAccessRequested = type === ReadingRoomCardType.futureRequested;
 
+	const rootCls = clsx(styles['c-reading-room-card'], {
+		[styles['c-reading-room-card--granted']]: typeAccessGranted,
+	});
+
 	const flat = typeAccessAccepted || typeAccessRequested;
+	const hasRequested = typeAccessGranted || typeAccessAccepted || typeAccessRequested;
 
 	const renderImage = () => {
 		return (
@@ -96,42 +100,19 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 		</TruncateMarkup>
 	);
 
-	const getMode = () => {
-		if (typeAccessGranted) {
-			return 'dark';
-		}
-
-		return 'light';
-	};
-
-	const getOrientation = () => {
-		if (typeAccessGranted || typeAccessAccepted || typeAccessRequested) {
-			return 'horizontal';
-		}
-
-		if (typeNoAccess) {
-			return 'vertical--at-md';
-		}
-
-		return 'vertical';
-	};
-
-	const getPadding = () => {
-		if (typeAccessGranted || typeAccessAccepted || typeAccessRequested) {
-			return 'content';
-		}
-
-		return 'vertical';
-	};
+	const mode = typeAccessGranted ? 'dark' : 'light';
+	const orientation = hasRequested ? 'horizontal' : typeNoAccess ? 'vertical--at-md' : 'vertical';
+	const padding = hasRequested ? 'content' : 'vertical';
 
 	return (
 		<Card
+			className={rootCls}
 			edge="none"
 			image={renderImage()}
-			mode={getMode()}
+			mode={mode}
 			offset={typeAccessGranted}
-			orientation={getOrientation()}
-			padding={getPadding()}
+			orientation={orientation}
+			padding={padding}
 			title={!flat && renderTitle()}
 			shadow={flat}
 		>

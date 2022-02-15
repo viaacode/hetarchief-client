@@ -2,10 +2,10 @@
 @use "sass:math";
 @use "styles/abstracts" as *;
 
-$c: "c-table";
+$component: "c-table";
 $c-table-border: 1px solid $silver;
 
-.#{$c} {
+.#{$component} {
 	width: 100%;
 	max-width: 100%;
 	border-spacing: 0;
@@ -56,7 +56,6 @@ $c-table-border: 1px solid $silver;
 		&--body {
 			font-size: $font-size-sm;
 			line-height: $font-size-base;
-			overflow-x: scroll;
 		}
 
 		&--header {
@@ -69,13 +68,13 @@ $c-table-border: 1px solid $silver;
 			color: $neutral;
 			user-select: none;
 
-			&.#{$c} {
+			&.#{$component} {
 				&__cell--active {
 					color: $black;
 				}
 			}
 
-			.#{$c} {
+			.#{$component} {
 				&__icon {
 					font-size: $font-size-base;
 					position: absolute; // This is enough to correctly position it
