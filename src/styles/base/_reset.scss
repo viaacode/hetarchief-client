@@ -1,3 +1,10 @@
+html {
+	// Prevent mobile browsers from inflating text
+	// https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust
+
+	text-size-adjust: none;
+  }
+
 h1,
 h2,
 h3,
