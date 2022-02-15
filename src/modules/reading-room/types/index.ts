@@ -2,7 +2,6 @@ export enum ReadingRoomMediaType {
 	All = 'all',
 	Audio = 'audio',
 	Video = 'video',
-	News = 'news',
 }
 
 export enum ReadingRoomSort {

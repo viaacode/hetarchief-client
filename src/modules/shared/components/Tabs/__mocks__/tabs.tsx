@@ -34,7 +34,7 @@ export const mockTabs = [
 		icon: <Icon name="video" />,
 	},
 	{
-		id: ReadingRoomMediaType.News,
+		id: 'News',
 		label: (
 			<>
 				<strong className="u-mr-8">Kranten</strong>
