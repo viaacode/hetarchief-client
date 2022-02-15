@@ -51,11 +51,13 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		accessor: 'visitorMail',
 		Cell: ({ row }: RequestTableArgs) => {
 			return (
-				<Link href={`mailto:${row.original.visitorMail}`}>
-					<a className="u-color-neutral p-cp-requests__link">
-						{row.original.visitorMail}
-					</a>
-				</Link>
+				<a
+					className="u-color-neutral p-cp-requests__link"
+					href={`mailto:${row.original.visitorMail}`}
+					onClick={(e) => e.stopPropagation()}
+				>
+					{row.original.visitorMail}
+				</a>
 			);
 		},
 	},
