@@ -1,6 +1,5 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n, TFunction } from 'next-i18next';
-import Link from 'next/link';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
