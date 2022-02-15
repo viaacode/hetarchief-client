@@ -1,4 +1,4 @@
-import { RequestTableRow } from '@cp/const/requests.const';
+import { RequestTableRow } from '@cp/types';
 import { BladeProps } from '@shared/components';
 
 export interface ProcessRequestBladeProps extends BladeProps {
