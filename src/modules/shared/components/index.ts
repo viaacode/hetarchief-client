@@ -3,6 +3,7 @@ export * from './BladeManager';
 export * from './Hero';
 export * from './Icon';
 export * from './ListNavigation';
+export * from './Loading';
 export * from './MediaCard';
 export * from './MediaCardList';
 export * from './Modal';
