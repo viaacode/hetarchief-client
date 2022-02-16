@@ -268,6 +268,7 @@ const ReadingRoomPage: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withAuth(withI18n());
+export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default ReadingRoomPage;
+const withAuthExport = withAuth(ReadingRoomPage);
+export default withAuthExport;
