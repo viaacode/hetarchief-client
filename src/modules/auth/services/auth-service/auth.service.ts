@@ -16,7 +16,7 @@ export class AuthService extends ApiService {
 	public static redirectToLogin(query: StringifiableRecord): void {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
-			url: publicRuntimeConfig.CLIENT_URL + '/' + redirectTo,
+			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
