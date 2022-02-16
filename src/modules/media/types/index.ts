@@ -1,5 +1,5 @@
 export interface MediaInfo {
-	schema_in_language: any;
+	schema_in_language: unknown | null;
 	dcterms_available: string;
 	schema_creator?: {
 		Archiefvormer?: string[];
@@ -18,12 +18,14 @@ export interface MediaInfo {
 	schema_date_published?: string;
 	schema_license?: string[];
 	schema_date_created?: string;
-	schema_contributor: any;
+	schema_contributor: unknown | null;
 	schema_maintainer: {
 		schema_identifier: string;
 	}[];
 	dcterms_format: 'video' | 'audio' | null;
 	schema_name: string;
+	// TODO: See if this is still necessary once resolved in proxy
+	type?: string;
 }
 
 export class MediaSearchFilters {

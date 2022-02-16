@@ -2,10 +2,9 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
+import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { createPageTitle } from '@shared/utils';
-
-import { CPAdminLayout } from '@cp/layouts';
 
 const CPSettingsPage: NextPage = () => {
 	const { t } = useTranslation();
@@ -30,7 +29,7 @@ const CPSettingsPage: NextPage = () => {
 				className="p-cp-settings"
 				pageTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
-				Settings table
+				<div className="l-container">Settings table</div>
 			</CPAdminLayout>
 		</>
 	);

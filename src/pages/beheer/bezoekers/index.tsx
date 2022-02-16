@@ -2,10 +2,9 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
+import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { createPageTitle } from '@shared/utils';
-
-import { CPAdminLayout } from '@cp/layouts';
 
 const CPVisitorsPage: NextPage = () => {
 	const { t } = useTranslation();
@@ -24,7 +23,7 @@ const CPVisitorsPage: NextPage = () => {
 				className="p-cp-visitors"
 				pageTitle={t('pages/beheer/bezoekers/index___bezoekers')}
 			>
-				Visitors table
+				<div className="l-container">Visitors table</div>
 			</CPAdminLayout>
 		</>
 	);

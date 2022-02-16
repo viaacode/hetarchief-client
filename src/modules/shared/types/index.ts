@@ -1,6 +1,8 @@
 import { CSSProperties } from 'react';
 
 export * from './utils';
+export * from './blade';
+export * from './api';
 
 /**
  * Generic components
@@ -21,11 +23,14 @@ export interface ComponentLink {
  * Filter / Sort
  */
 
-export type SortOrder = 'asc' | 'desc';
+export enum OrderDirection {
+	asc = 'asc',
+	desc = 'desc',
+}
 
 export interface SortObject {
 	sort: string;
-	order?: SortOrder;
+	order?: OrderDirection;
 }
 
 /**

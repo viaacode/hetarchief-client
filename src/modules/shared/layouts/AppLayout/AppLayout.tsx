@@ -1,10 +1,11 @@
 import clsx from 'clsx';
+import { i18n } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 
-import { authService } from '@auth/services/auth-service';
+import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import {
@@ -32,13 +33,13 @@ const AppLayout: FC = ({ children }) => {
 	}, [dispatch]);
 
 	const anyUnreadNotifications = notificationCenterMock.notifications.some(
-		(notification: Notification) => notification.read === false
+		(notification: Notification) => !notification.read
 	);
 	const userName = (user?.firstName as string) ?? '';
 
 	const onLoginRegisterClick = useCallback(() => dispatch(setShowAuthModal(true)), [dispatch]);
 
-	const onLogOutClick = useCallback(() => authService.logout(), []);
+	const onLogOutClick = useCallback(() => AuthService.logout(), []);
 
 	const rightNavItems: NavigationItem[] = useMemo(() => {
 		return isLoggedIn
@@ -49,7 +50,9 @@ const AppLayout: FC = ({ children }) => {
 					onLogOutClick,
 					setNotificationsOpen,
 			  })
-			: NAV_ITEMS_RIGHT(onLoginRegisterClick);
+			: i18n
+			? NAV_ITEMS_RIGHT(onLoginRegisterClick)
+			: [];
 	}, [
 		anyUnreadNotifications,
 		isLoggedIn,
@@ -75,7 +78,9 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation>
 				<Navigation.Left
 					currentPath={asPath}
-					hamburgerProps={NAV_HAMBURGER_PROPS()}
+					hamburgerProps={
+						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
+					}
 					items={MOCK_ITEMS_LEFT}
 					placement="left"
 					renderHamburger={true}

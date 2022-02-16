@@ -4,10 +4,11 @@ const pathAliases = [
 	'cp',
 	'home',
 	'i18n',
+	'media',
 	'navigation',
 	'reading-room',
-	'media',
 	'shared',
+	'visits',
 ];
 
 module.exports = pathAliases;

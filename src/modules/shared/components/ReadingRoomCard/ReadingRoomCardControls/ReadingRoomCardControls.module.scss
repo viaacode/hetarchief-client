@@ -1,17 +1,22 @@
 @use "sass:math";
 @use "styles/abstracts" as *;
 
-$c: "c-reading-room-card-controls";
+$component: "c-reading-room-card-controls";
 
-.#{$c} {
+.#{$component} {
 	color: $black;
 	display: flex;
 	align-items: center;
 	flex-wrap: nowrap;
 
+	@include respond-to("md") {
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
+
 	&__label {
 		display: flex;
-		align-items: center;
+		flex: 0 0 auto;
 		max-width: 100%;
 		margin-right: $spacer-xs;
 
@@ -22,7 +27,7 @@ $c: "c-reading-room-card-controls";
 				font-size: $font-size-lg;
 			}
 
-			+ .#{$c}__label-text {
+			+ .#{$component}__label-text {
 				margin-left: $spacer-xs;
 			}
 		}
@@ -56,7 +61,7 @@ $c: "c-reading-room-card-controls";
 	&--light {
 		color: $white;
 
-		.#{$c} {
+		.#{$component} {
 			&__label {
 				&-text {
 					font-size: $font-size-sm;
@@ -65,7 +70,7 @@ $c: "c-reading-room-card-controls";
 				}
 
 				&-icon {
-					+ .#{$c}__label-text {
+					+ .#{$component}__label-text {
 						margin-left: $spacer-xs;
 					}
 				}
@@ -78,7 +83,7 @@ $c: "c-reading-room-card-controls";
 	}
 
 	&--thinner {
-		.#{$c} {
+		.#{$component} {
 			&__label-text {
 				font-size: $font-size-sm;
 				line-height: $line-height-3xl;
@@ -101,7 +106,7 @@ $c: "c-reading-room-card-controls";
 			min-width: 385px;
 		}
 
-		.#{$c} {
+		.#{$component} {
 			&__label {
 				&-text {
 					font-size: $font-size-sm;
@@ -111,7 +116,7 @@ $c: "c-reading-room-card-controls";
 				&-icon {
 					font-size: $font-size-md;
 
-					+ .#{$c}__label-text {
+					+ .#{$component}__label-text {
 						margin-left: math.div($spacer-md, 2);
 					}
 				}
@@ -123,11 +128,27 @@ $c: "c-reading-room-card-controls";
 		@include respond-to("sm") {
 			flex-direction: column;
 			align-items: unset;
+		}
 
-			ul, button, div {
-				&:not(:last-child) {
-					margin-bottom: $spacer-xs;
+		ul, button, div {
+			&:not(:last-child) {
+				@include respond-to("sm") {
+					margin-bottom: $spacer-sm;
 				}
+			}
+		}
+
+		.#{$component}__label {
+			@include respond-to("xl") {
+				margin-bottom: $spacer-sm;
+			}
+		}
+
+		:global(.c-button) {
+			@include respond-to("sm") {
+				@include generate-button-small;
+
+				padding: 0.9rem 1rem;
 			}
 		}
 	}

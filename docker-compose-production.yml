@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hetarchief-client
+    ports:
+      - 3200:3200
+    env_file:
+      - .env.local
+    volumes:
+      - .:/app:delegated
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - /app/node_modules

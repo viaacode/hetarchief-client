@@ -4,9 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
 
+import { CP_ADMIN_NAVIGATION_LINKS } from '@cp/const';
 import { ListNavigation, ListNavigationItem, Sidebar } from '@shared/components';
-
-import { CP_ADMIN_NAVIGATION_LINKS } from '../../const';
 
 import styles from './CPAdminLayout.module.scss';
 import { CPAdminLayoutProps } from './CPAdminLayout.types';
@@ -49,9 +48,9 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ pageTitle, children, className 
 							{pageTitle}
 						</h1>
 					)}
-
-					{children}
 				</div>
+
+				{children}
 			</div>
 		</div>
 	);
