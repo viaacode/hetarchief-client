@@ -1,0 +1,13 @@
+@use "styles/abstracts" as *;
+
+.c-loading--fullscreen {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - $c-navigation-height-md);
+
+  @include respond-at(md) {
+	height: calc(100vh - $c-navigation-height);
+  }
+}
