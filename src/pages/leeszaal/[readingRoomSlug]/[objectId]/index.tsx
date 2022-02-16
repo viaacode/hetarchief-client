@@ -80,7 +80,16 @@ const ObjectDetailPage: NextPage = () => {
 								className="p-object-detail__export"
 								iconStart={<Icon name="export" />}
 							>
-								<span className="u-text-ellipsis">Exporteer metadata</span>
+								<span className="u-text-ellipsis u-display-none u-display-block:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+									)}
+								</span>
+								<span className="u-text-ellipsis u-display-none:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+									)}
+								</span>
 							</Button>
 							<DynamicActionMenu {...dynamicActionMenuMock} />
 						</div>
