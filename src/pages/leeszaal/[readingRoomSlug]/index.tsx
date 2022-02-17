@@ -94,7 +94,9 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim()) {
-			setQuery({ search: (query.search ?? []).concat(newValue) });
+			if (!query.search?.includes(newValue)) {
+				setQuery({ search: (query.search ?? []).concat(newValue) });
+			}
 		}
 	};
 
