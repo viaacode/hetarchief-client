@@ -1,0 +1,10 @@
+@use "../abstracts" as *;
+
+/**
+ * Color
+ */
+
+$cursor: (
+	"pointer": pointer,
+);
+@include generate-utils("cursor", "cursor", $cursor);

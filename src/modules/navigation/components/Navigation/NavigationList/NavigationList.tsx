@@ -36,7 +36,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 
 	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
 		return (
-			<div className={styles['c-navigation__link--wrapper']}>
+			<div className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}>
 				{item.node}
 				<Icon className="u-text-left u-ml-4" name={iconName} />
 			</div>
