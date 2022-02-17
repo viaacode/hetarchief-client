@@ -6,7 +6,6 @@ import { UseScrollLock } from './use-scroll-lock.types';
 
 const useScrollLock: UseScrollLock = (lock, element) => {
 	const scrollbarWidth = useScrollbarWidth();
-	console.log(scrollbarWidth);
 
 	useEffect(() => {
 		const elementToLock = element ?? document.body;
@@ -34,7 +33,7 @@ const useScrollLock: UseScrollLock = (lock, element) => {
 			elementToLock.style.overflow = prevOverflowStyle;
 			elementToLock.style.marginRight = prevMarginStyle;
 		};
-	}, [element, lock]);
+	}, [element, lock, scrollbarWidth]);
 };
 
 export default useScrollLock;
