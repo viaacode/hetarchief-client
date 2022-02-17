@@ -3,4 +3,6 @@ export interface UserSchema {
 	firstName: string;
 	id: string;
 	lastName: string;
+	acceptedTos?: boolean;
+	acceptedTosAt?: string;
 }
