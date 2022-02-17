@@ -70,6 +70,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 									flyoutClassName={styles['c-navigation__list-flyout']}
 									id={item.id}
 									isOpen={openDropdown === item.id}
+									lockScroll={openDropdown === item.id}
 									items={item.children}
 									trigger={renderTrigger(
 										item,
