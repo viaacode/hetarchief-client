@@ -194,6 +194,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	.c-navigation__list-overlay {
 		width: 100vw;
 		height: calc(100vh - $c-navigation-height-md);
+		top: $c-navigation-height-md;
 
 		@include respond-at(md) {
 			height: calc(100vh - $c-navigation-height);
