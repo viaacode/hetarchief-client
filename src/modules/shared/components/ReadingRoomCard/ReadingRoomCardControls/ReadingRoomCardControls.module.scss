@@ -12,6 +12,7 @@ $component: "c-reading-room-card-controls";
 	@include respond-to("md") {
 		flex-wrap: wrap;
 		justify-content: space-between;
+		row-gap: $spacer-xs;
 	}
 
 	&__label {
@@ -133,7 +134,7 @@ $component: "c-reading-room-card-controls";
 		ul, button, div {
 			&:not(:last-child) {
 				@include respond-to("sm") {
-					margin-bottom: $spacer-sm;
+					margin-bottom: $spacer-xs;
 				}
 			}
 		}
