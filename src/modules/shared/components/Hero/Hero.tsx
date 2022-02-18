@@ -50,7 +50,7 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 
 		return (
 			<div className="l-container">
-				<section className="u-flex u-flex-col u-flex-row:md u-justify-between:md u-align-center:md u-mb-48 u-mb-64:md">
+				<section className={clsx(styles['c-hero__header'], 'u-mb-48 u-mb-64:md')}>
 					<h1 className={styles['c-hero__title']}>
 						{t('modules/shared/components/hero/hero___dag-user', {
 							user: user?.firstName,

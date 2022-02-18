@@ -19,6 +19,17 @@ $c-hero-access-card-min-width: 57.2rem;
 		padding-left: calc($spacer-1xl * 2);
 	}
 
+	&__header {
+		display: grid;
+		grid-template-columns: 1fr;
+		column-gap: $spacer-lg;
+		align-items: center;
+
+		@include respond-at(md) {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
 	&__title {
 		max-width: 32rem;
 		padding-bottom: $spacer-1xl;
