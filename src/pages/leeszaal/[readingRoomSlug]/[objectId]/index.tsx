@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
-import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
+import { useNavigationContext, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
 import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
@@ -17,6 +17,7 @@ import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholde
 const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
 	useStickyLayout();
+	useNavigationContext({ isBordered: true });
 
 	/**
 	 * Mock data

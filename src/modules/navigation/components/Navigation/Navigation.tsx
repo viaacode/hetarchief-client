@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { FC } from 'react';
 
+import { useNavigationContext } from '@shared/hooks/use-navigation-context';
+
 import styles from './Navigation.module.scss';
 import { NavigationCenterProps, NavigationFC, NavigationProps } from './Navigation.types';
 import { NavigationSection } from './NavigationSection';
@@ -12,9 +14,12 @@ const NavigationCenter: FC<NavigationCenterProps> = ({ children, title }) => (
 );
 
 const Navigation: NavigationFC<NavigationProps> = ({ children, className, contextual = false }) => {
+	const { navigationBorderBottom } = useNavigationContext();
+
 	const rootCls = clsx(className, styles['c-navigation'], {
 		[styles['c-navigation--sm']]: contextual,
 		[styles['c-navigation--responsive']]: !contextual,
+		[styles['c-navigation--bordered']]: navigationBorderBottom,
 	});
 
 	return <nav className={rootCls}>{children}</nav>;

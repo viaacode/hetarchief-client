@@ -4,10 +4,12 @@ import Head from 'next/head';
 
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
+import { useNavigationContext } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
 	const { t } = useTranslation();
+	useNavigationContext({ isBordered: false });
 
 	return (
 		<>

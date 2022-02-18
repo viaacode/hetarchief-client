@@ -16,11 +16,13 @@ import {
 import { MOCK_ITEMS_LEFT } from '@navigation/components/Navigation/__mocks__/navigation';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { Notification, NotificationCenter, notificationCenterMock } from '@shared/components';
+import NavigationContext from '@shared/context/NavigationContext/NavigationContext';
 import { useAppDispatch } from '@shared/store';
 import { selectIsStickyLayout, setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
 	const [notificationsOpen, setNotificationsOpen] = useState(false);
+	const [navigationBorderBottom, setNavigationBorderBottom] = useState(false); // Show/hide horizontal border between nav and hero/contextual nav
 
 	const dispatch = useAppDispatch();
 	const { asPath } = useRouter();
@@ -70,51 +72,58 @@ const AppLayout: FC = ({ children }) => {
 	};
 
 	return (
-		<div
-			className={clsx('l-app', {
-				'l-app--sticky': sticky,
-			})}
+		<NavigationContext.Provider
+			value={{
+				navigationBorderBottom,
+				setNavigationBorderBottom,
+			}}
 		>
-			<Navigation>
-				<Navigation.Left
-					currentPath={asPath}
-					hamburgerProps={
-						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
-					}
-					items={MOCK_ITEMS_LEFT}
-					placement="left"
-					renderHamburger={true}
-					onOpenDropdowns={onOpenNavDropdowns}
+			<div
+				className={clsx('l-app', {
+					'l-app--sticky': sticky,
+				})}
+			>
+				<Navigation>
+					<Navigation.Left
+						currentPath={asPath}
+						hamburgerProps={
+							i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
+						}
+						items={MOCK_ITEMS_LEFT}
+						placement="left"
+						renderHamburger={true}
+						onOpenDropdowns={onOpenNavDropdowns}
+					/>
+					<Navigation.Right
+						placement="right"
+						items={rightNavItems}
+						onOpenDropdowns={onOpenNavDropdowns}
+					/>
+				</Navigation>
+
+				<main className="l-app__main">
+					{children}
+
+					<NotificationCenter
+						{...notificationCenterMock}
+						isOpen={notificationsOpen}
+						onClose={() => setNotificationsOpen(false)}
+					/>
+				</main>
+
+				<ToastContainer
+					autoClose={5000}
+					className="c-toast-container"
+					toastClassName="c-toast-container__toast"
+					closeButton={false}
+					hideProgressBar
+					position="bottom-left"
+					transition={Slide}
 				/>
-				<Navigation.Right
-					placement="right"
-					items={rightNavItems}
-					onOpenDropdowns={onOpenNavDropdowns}
-				/>
-			</Navigation>
 
-			<main className="l-app__main">
-				{children}
-
-				<NotificationCenter
-					{...notificationCenterMock}
-					isOpen={notificationsOpen}
-					onClose={() => setNotificationsOpen(false)}
-				/>
-			</main>
-
-			<ToastContainer
-				autoClose={5000}
-				className="c-toast-container"
-				toastClassName="c-toast-container__toast"
-				closeButton={false}
-				hideProgressBar
-				position="bottom-left"
-				transition={Slide}
-			/>
-
-			<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
-		</div>
+				<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
+			</div>
+		</NavigationContext.Provider>
 	);
 };
 

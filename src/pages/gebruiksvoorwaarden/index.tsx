@@ -8,6 +8,7 @@ import { useCallback, useRef, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
+import { useNavigationContext } from '@shared/hooks';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { createPageTitle } from '@shared/utils';
 
@@ -21,6 +22,7 @@ const TermsOfService: NextPage = () => {
 	const scrollable = useRef<HTMLDivElement | null>(null);
 
 	useStickyLayout();
+	useNavigationContext({ isBordered: false });
 
 	const handleScroll = useCallback(() => {
 		const el = scrollable.current;

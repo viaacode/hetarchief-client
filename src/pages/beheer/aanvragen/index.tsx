@@ -17,6 +17,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
+import { useNavigationContext } from '@shared/hooks';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
@@ -26,6 +27,8 @@ const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selected, setSelected] = useState<string | number | null>(null);
+
+	useNavigationContext({ isBordered: false });
 
 	// TODO integrate a loading state into the table component
 	const { data: visits } = useGetVisits(
