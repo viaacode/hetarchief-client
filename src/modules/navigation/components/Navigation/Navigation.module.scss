@@ -126,6 +126,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	.c-navigation__dropdown-flyout {
 		// Overwrite element styles
 		inset: $c-navigation-height-md 0 0 0 !important;
+		top: $c-navigation-height-md !important;
+		right: 0 !important;
+		bottom: 0 !important;
+		left: 0 !important;
 		transform: translate(0) !important;
 		color: $black;
 	}
@@ -232,6 +236,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		// Overwrite popper element styles
 		@include respond-to(md) {
 			inset: $c-navigation-height-md 0 0 0 !important;
+			top: $c-navigation-height-md !important;
+			right: 0 !important;
+			bottom: 0 !important;
+			left: 0 !important;
 			transform: translate(0) !important;
 		}
 		@include respond-at(md) {

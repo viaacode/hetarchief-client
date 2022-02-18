@@ -22,10 +22,16 @@
 		content: "";
 		position: absolute;
 		inset: 0 $spacer-sm auto $spacer-sm;
+		top: 0;
+		right: $spacer-sm;
+		bottom: auto;
+		left: $spacer-sm;
 		border-top: $divider-grey;
 
 		@include respond-at(xl) {
 			inset: 0 $spacer-lg auto $spacer-lg;
+			right: $spacer-lg;
+			left: $spacer-lg;
 		}
 	}
 
