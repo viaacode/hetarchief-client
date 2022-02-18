@@ -52,6 +52,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	grid-template-columns: auto 1fr 2fr;
 	height: $c-navigation-height-md;
 	padding: 0 2rem;
+	margin-bottom: -0.1rem; // Note: prevent fine line artefact between navigation and header; better fix welcome
 	background-color: $black;
 	color: $white;
 
