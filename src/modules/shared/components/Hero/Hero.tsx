@@ -14,7 +14,10 @@ const Hero: FC<HeroProps> = ({ title, description, link, image, requests = [], u
 	const { t } = useTranslation();
 
 	const isLoggedIn = !!user;
-	const rootCls = clsx(styles['c-hero'], { [styles['c-hero--logged-in']]: isLoggedIn });
+	const rootCls = clsx(styles['c-hero'], {
+		[styles['c-hero--logged-in']]: isLoggedIn,
+		[styles['c-hero--logged-out']]: !isLoggedIn,
+	});
 
 	const renderNotLoggedIn = () => {
 		return (

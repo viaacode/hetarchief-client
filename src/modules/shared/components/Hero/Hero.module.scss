@@ -6,7 +6,7 @@ $c-hero-access-card-min-width: 57.2rem;
 .c-hero {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: $spacer-2xl 40vw;
+	grid-template-rows: $spacer-2xl clamp(calc(54rem - $spacer-2xl), 40vw, calc(70rem - $spacer-2xl));
 	padding: 0 calc($spacer-1xl * 3);
 	color: $white;
 	background-color: $black;
@@ -99,7 +99,7 @@ $c-hero-access-card-min-width: 57.2rem;
 	}
 
 	@include respond-to(lg) {
-		grid-template-rows: $spacer-lg 45vw;
+		grid-template-rows: $spacer-lg calc(54rem - $spacer-lg);
 		padding: 0 $spacer-lg;
 
 		&__content {
@@ -133,6 +133,10 @@ $c-hero-access-card-min-width: 57.2rem;
 			img {
 				object-position: center top;
 			}
+		}
+
+		&--logged-out {
+			max-height: 54rem;
 		}
 	}
 
