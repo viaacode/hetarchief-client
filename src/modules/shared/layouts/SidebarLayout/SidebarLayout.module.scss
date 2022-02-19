@@ -1,7 +1,7 @@
 @use "styles/abstracts" as *;
 
-$component: "l-cp-admin";
-$l-cp-admin-sidebar-width: 25.4rem;
+$component: "l-sidebar";
+$l-sidebar-width: 25.4rem;
 
 .#{$component} {
 	display: flex;
@@ -10,18 +10,16 @@ $l-cp-admin-sidebar-width: 25.4rem;
 	height: 100%;
 
 	&__navigation {
-		width: $l-cp-admin-sidebar-width;
+		width: $l-sidebar-width;
 		border-right: $divider-grey;
 
 		@include respond-to("lg") {
 			display: none;
 		}
+	}
 
-		.#{$component} {
-			&__sidebar {
-				width: $l-cp-admin-sidebar-width; // force overlap with border
-			}
-		}
+	&__sidebar {
+		width: $l-sidebar-width; // force overlap with border
 	}
 
 	&__main {
@@ -33,8 +31,10 @@ $l-cp-admin-sidebar-width: 25.4rem;
 	}
 
 	&__title {
-		@include respond-to("md") {
-			font-size: 2.8rem;
+		font-size: 2.8rem;
+
+		@include respond-at("md") {
+			font-size: $font-size-3xl;
 		}
 	}
 }
