@@ -1,5 +1,6 @@
 export * from './Blade';
 export * from './BladeManager';
+export * from './CardImage';
 export * from './Hero';
 export * from './Icon';
 export * from './ListNavigation';
