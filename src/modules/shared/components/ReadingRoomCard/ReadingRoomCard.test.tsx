@@ -60,7 +60,7 @@ describe('Component: <ReadingRoomCard />', () => {
 	});
 
 	it('Should show an expiration date and visit button when accessible', () => {
-		const { container } = render(
+		render(
 			template({
 				room: mockReadingRoomCardProps.room,
 				type: ReadingRoomCardType.access,

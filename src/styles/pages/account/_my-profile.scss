@@ -1,0 +1,37 @@
+@use "../../abstracts" as *;
+
+.p-account-my-profile__user-data {
+	@include respond-at(md) {
+		display: grid;
+		grid-auto-flow: column;
+		grid-template-columns: 3fr 1fr;
+	}
+
+	dl {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, 1fr);
+		row-gap: 1.2rem;
+		margin: 0;
+
+		@include respond-at(sm) {
+			grid-template-columns: repeat(auto-fill, 30rem);
+		}
+	}
+
+	dt,
+	dd {
+		margin: 0;
+	}
+
+	.c-button {
+		margin-top: 1.2rem;
+
+		@include respond-at(md) {
+			margin-top: -1.2rem;
+		}
+	}
+}
+
+.p-account-my-profile__edit {
+	justify-self: end;
+}
