@@ -1,16 +1,15 @@
 import { appWithTranslation } from 'next-i18next';
 import { AppProps } from 'next/app';
-import { ReactElement, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { ReactElement, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import { LOCAL_STORAGE, ROUTES } from '@shared/const';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
 
 import 'styles/main.scss';
-import { useRouter } from 'next/router';
-
-import { LOCAL_STORAGE, ROUTES } from '@shared/const';
 
 const queryClient = new QueryClient();
 
