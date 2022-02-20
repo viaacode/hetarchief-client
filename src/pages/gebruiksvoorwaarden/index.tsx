@@ -6,10 +6,10 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useCallback, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
-import { selectUser } from '@auth/store/user';
+import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
 import {
 	LOCAL_STORAGE,
@@ -31,6 +31,7 @@ const TermsOfService: NextPage = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 	const scrollable = useRef<HTMLDivElement | null>(null);
+	const dispatch = useDispatch();
 
 	const [query] = useQueryParams(TOS_INDEX_QUERY_PARAM_CONFIG);
 	const [hasFinished, setHasFinished] = useState(false);
@@ -65,10 +66,14 @@ const TermsOfService: NextPage = () => {
 		});
 	}, [t, router]);
 
-	const onConfirmClick = useCallback(() => {
+	const onConfirmClick = () => {
 		user &&
 			TosService.acceptTos(user?.id).then((updated) => {
-				updated.acceptedTos && router.push(query.after);
+				const decoded = decodeURIComponent(query.after);
+				dispatch(checkLoginAction());
+
+				// Execute in separate cycle
+				updated.acceptedTosAt && setTimeout(() => router.push(decoded));
 			});
 
 		toastService.notify({
@@ -78,7 +83,7 @@ const TermsOfService: NextPage = () => {
 			),
 			maxLines: 2,
 		});
-	}, [t, user, router, query.after]);
+	};
 
 	return (
 		<div className="p-terms-of-service">

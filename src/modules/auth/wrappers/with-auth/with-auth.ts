@@ -27,7 +27,9 @@ export const withAuth = <P extends WithAuthProps = WithAuthProps>(
 		const toTermsOfService = () => {
 			return {
 				redirect: {
-					destination: `${ROUTES.termsOfService}?after=TODO`,
+					destination: `${ROUTES.termsOfService}?after=${encodeURIComponent(
+						context.resolvedUrl
+					)}`,
 					permanent,
 				},
 			};

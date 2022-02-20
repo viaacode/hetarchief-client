@@ -16,7 +16,7 @@ export class TosService extends ApiService {
 		return await ApiService.getApi()
 			.post(`${USERS_BASE_URL}/${uuid}/accepted-tos`, {
 				...options,
-				json: { acceptedTos: true },
+				json: { acceptedTosAt: new Date() },
 			})
 			.json();
 	}
