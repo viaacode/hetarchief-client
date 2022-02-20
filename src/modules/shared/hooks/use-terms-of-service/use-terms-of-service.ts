@@ -10,7 +10,7 @@ const useTermsOfService: UseTermsOfService = () => {
 	const tosAcceptedAt = useSelector(selectHasAcceptedTosAt);
 	const tosUpdatedAt = useSelector(selectTosUpdatedAt);
 
-	return !!(tosAcceptedAt && tosUpdatedAt && !isCurrentTosAccepted(tosAcceptedAt, tosUpdatedAt));
+	return !!(tosAcceptedAt && tosUpdatedAt && isCurrentTosAccepted(tosAcceptedAt, tosUpdatedAt));
 };
 
 export default useTermsOfService;

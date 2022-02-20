@@ -17,6 +17,7 @@ import {
 	ROUTES,
 	TOS_INDEX_QUERY_PARAM_CONFIG,
 } from '@shared/const';
+import { useTermsOfService } from '@shared/hooks';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { toastService } from '@shared/services';
 import { TosService } from '@shared/services/tos-service';
@@ -36,6 +37,7 @@ const TermsOfService: NextPage = () => {
 	const [query] = useQueryParams(TOS_INDEX_QUERY_PARAM_CONFIG);
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
+	const tosAccepted = useTermsOfService();
 
 	const user = useSelector(selectUser);
 
@@ -67,22 +69,28 @@ const TermsOfService: NextPage = () => {
 	}, [t, router]);
 
 	const onConfirmClick = () => {
-		user &&
+		if (user) {
 			TosService.acceptTos(user?.id).then((updated) => {
-				const decoded = decodeURIComponent(query.after);
 				dispatch(checkLoginAction());
 
-				// Execute in separate cycle
-				updated.acceptedTosAt && setTimeout(() => router.push(decoded));
+				if (updated.acceptedTosAt) {
+					// Execute in separate cycle
+					setTimeout(() =>
+						router.push(decodeURIComponent(query.after)).then(() => {
+							toastService.notify({
+								title: t(
+									'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'
+								),
+								description: t(
+									'pages/gebruiksvoorwaarden/index___je-geniet-nu-van-volledige-toegang-tot-het-platform'
+								),
+								maxLines: 2,
+							});
+						})
+					);
+				}
 			});
-
-		toastService.notify({
-			title: t('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'),
-			description: t(
-				'pages/gebruiksvoorwaarden/index___je-geniet-nu-van-volledige-toegang-tot-het-platform'
-			),
-			maxLines: 2,
-		});
+		}
 	};
 
 	return (
@@ -127,18 +135,25 @@ const TermsOfService: NextPage = () => {
 				})}
 			/>
 
-			<section className="u-pt-96 p-terms-of-service__buttons-wrapper">
-				<div className="l-container">
-					<div className="p-terms-of-service__buttons">
-						<Button className="u-mr-8" variants="text" onClick={onCancelClick}>
-							{t('pages/gebruiksvoorwaarden/index___annuleer')}
-						</Button>
-						<Button variants="black" disabled={!hasFinished} onClick={onConfirmClick}>
-							{t('pages/gebruiksvoorwaarden/index___aanvaarden')}
-						</Button>
+			{user && !tosAccepted && (
+				<section className="u-pt-96 p-terms-of-service__buttons-wrapper">
+					<div className="l-container">
+						<div className="p-terms-of-service__buttons">
+							<Button className="u-mr-8" variants="text" onClick={onCancelClick}>
+								{t('pages/gebruiksvoorwaarden/index___annuleer')}
+							</Button>
+
+							<Button
+								variants="black"
+								disabled={!hasFinished}
+								onClick={onConfirmClick}
+							>
+								{t('pages/gebruiksvoorwaarden/index___aanvaarden')}
+							</Button>
+						</div>
 					</div>
-				</div>
-			</section>
+				</section>
+			)}
 		</div>
 	);
 };
