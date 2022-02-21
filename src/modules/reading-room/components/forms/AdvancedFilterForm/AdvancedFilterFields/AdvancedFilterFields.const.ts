@@ -1,9 +1,7 @@
 import { SelectOption, TextInput } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
-import { MetadataProp } from './AdvancedFilterFields.types';
-
-import { Operator } from '.';
+import { MetadataProp, Operator } from './AdvancedFilterFields.types';
 
 // TODO: replace values with actual metadata property
 export const METADATA_PROP_OPTIONS = (): SelectOption[] => [

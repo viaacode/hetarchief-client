@@ -58,6 +58,16 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		setActiveFilter(nextActive);
 	};
 
+	const onFilterFormReset = (id: string) => {
+		setActiveFilter(null);
+		onFilterReset(id);
+	};
+
+	const onFilterFormSubmit = (id: string, values: unknown) => {
+		setActiveFilter(null);
+		onFilterSubmit(id, values);
+	};
+
 	const onToggleClick = (nextOpen?: boolean) => {
 		const openState = isMobile ? isMobileOpen : isOpen;
 
@@ -127,8 +137,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 							className={styles['c-filter-menu__option']}
 							activeFilter={activeFilter}
 							onClick={onFilterClick}
-							onFormReset={onFilterReset}
-							onFormSubmit={onFilterSubmit}
+							onFormReset={onFilterFormReset}
+							onFormSubmit={onFilterFormSubmit}
 						/>
 					))}
 				</div>
@@ -143,8 +153,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onClose={() => onToggleClick(false)}
 				onFilterClick={onFilterClick}
 				onSortClick={onSortClick}
-				onFilterReset={onFilterReset}
-				onFilterSubmit={onFilterSubmit}
+				onFilterReset={onFilterFormReset}
+				onFilterSubmit={onFilterFormSubmit}
 			/>
 		</div>
 	);

@@ -7,7 +7,7 @@ import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
 import { AdvancedFilterQueryValue, ReadingRoomFilterId } from '@reading-room/types';
 
 export const mapFiltersToTags = (
-	query: DecodedValueMap<Pick<typeof READING_ROOM_QUERY_PARAM_CONFIG, 'search'>>
+	query: Partial<DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>>
 ): TagInfo[] => {
 	const searchFilters = (query.search ?? [])
 		.filter((keyword) => !!keyword)
@@ -21,26 +21,39 @@ export const mapFiltersToTags = (
 			value: keyword as string,
 		}));
 
-	return searchFilters;
+	const advancedFilters = (query.advanced ?? []).map((advanced: AdvancedFilterQueryValue) => ({
+		label: (
+			<span>
+				{advanced.prop}: <strong>{advanced.val}</strong>
+			</span>
+		),
+		value: advanced.val,
+	}));
+
+	return searchFilters.concat(advancedFilters);
 };
 
 export const mapFiltersToQuery = (
 	id: ReadingRoomFilterId,
 	values: unknown
-): AdvancedFilterQueryValue[] | void => {
+): AdvancedFilterQueryValue[] | undefined => {
 	switch (id) {
 		case ReadingRoomFilterId.Advanced: {
+			const filters = (values as AdvancedFilterFormState)?.advanced.filter(
+				(filter) => !!filter.value
+			);
+
 			// Map to smaller props to keep query params in url short
-			return (values as AdvancedFilterFormState).advanced
-				.map((item) => ({
-					prop: item.metadataProp ?? '',
-					op: item.operator ?? '',
-					val: item.value ?? '',
-				}))
-				.filter((filter) => !!filter.val);
+			return filters.length
+				? filters.map((item) => ({
+						prop: item.metadataProp ?? '',
+						op: item.operator ?? '',
+						val: item.value ?? '',
+				  }))
+				: undefined;
 		}
 
 		default:
-			return;
+			return undefined;
 	}
 };

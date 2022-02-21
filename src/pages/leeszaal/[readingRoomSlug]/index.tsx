@@ -127,10 +127,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onSubmitFilter = (id: string, values: unknown) => {
 		const parsedQueryValue = mapFiltersToQuery(id as ReadingRoomFilterId, values);
-
-		if (parsedQueryValue) {
-			setQuery({ [id]: parsedQueryValue });
-		}
+		setQuery({ [id]: parsedQueryValue });
 	};
 
 	const onRemoveKeyword = (newValue: SearchBarValue<true>) =>
