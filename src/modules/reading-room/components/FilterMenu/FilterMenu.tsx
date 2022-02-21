@@ -143,6 +143,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onClose={() => onToggleClick(false)}
 				onFilterClick={onFilterClick}
 				onSortClick={onSortClick}
+				onFilterReset={onFilterReset}
+				onFilterSubmit={onFilterSubmit}
 			/>
 		</div>
 	);

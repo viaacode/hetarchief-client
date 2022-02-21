@@ -2,9 +2,11 @@ import { TagInfo } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { DecodedValueMap } from 'use-query-params';
 
+import { AdvancedFilterFormState } from '@reading-room/components';
 import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
+import { AdvancedFilterQueryValue, ReadingRoomFilterId } from '@reading-room/types';
 
-export const mapFilters = (
+export const mapFiltersToTags = (
 	query: DecodedValueMap<Pick<typeof READING_ROOM_QUERY_PARAM_CONFIG, 'search'>>
 ): TagInfo[] => {
 	const searchFilters = (query.search ?? [])
@@ -20,4 +22,24 @@ export const mapFilters = (
 		}));
 
 	return searchFilters;
+};
+
+export const mapFiltersToQuery = (
+	id: ReadingRoomFilterId,
+	values: unknown
+): AdvancedFilterQueryValue[] | void => {
+	switch (id) {
+		case ReadingRoomFilterId.Advanced: {
+			return (values as AdvancedFilterFormState).advanced
+				.map((item) => ({
+					prop: item.metadataProp ?? '',
+					op: item.operator ?? '',
+					val: item.value ?? '',
+				}))
+				.filter((filter) => !!filter.val);
+		}
+
+		default:
+			return;
+	}
 };

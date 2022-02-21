@@ -8,17 +8,34 @@ import { Icon } from '@shared/components';
 import styles from './FilterForm.module.scss';
 import { FilterFormProps } from './FilterForm.types';
 
-const FilterForm: FC<FilterFormProps> = ({ className, form, title }) => {
+const FilterForm: FC<FilterFormProps> = ({
+	className,
+	id,
+	form,
+	title,
+	onFormReset,
+	onFormSubmit,
+}) => {
 	const { t } = useTranslation();
 
 	const FormComponent = form ?? (() => null);
 
+	const onFilterFormReset = (id: string, reset: () => void) => {
+		reset();
+		onFormReset(id);
+	};
+
+	const onFilterFormSubmit = (id: string, values: unknown) => {
+		onFormSubmit(id, values);
+	};
+
 	return (
 		<div className={clsx(className, styles['c-filter-form'])}>
-			<div className={styles['c-filter-form__body']}>
+			<div className={styles['c-filter-form__header']}>
 				<h2 className={styles['c-filter-form__title']}>{title}</h2>
 			</div>
-			<FormComponent>
+
+			<FormComponent className={styles['c-filter-form__body']}>
 				{({ reset, values }) => (
 					<div className={styles['c-filter-form__footer']}>
 						<Button
@@ -28,6 +45,7 @@ const FilterForm: FC<FilterFormProps> = ({ className, form, title }) => {
 								'modules/reading-room/components/filter-menu/filter-form/filter-form___reset'
 							)}
 							variants="text"
+							onClick={() => onFilterFormReset(id, reset)}
 						/>
 						<Button
 							className={styles['c-filter-form__submit']}
@@ -35,6 +53,7 @@ const FilterForm: FC<FilterFormProps> = ({ className, form, title }) => {
 								'modules/reading-room/components/filter-menu/filter-form/filter-form___pas-toe'
 							)}
 							variants={['black']}
+							onClick={() => onFilterFormSubmit(id, values)}
 						/>
 					</div>
 				)}

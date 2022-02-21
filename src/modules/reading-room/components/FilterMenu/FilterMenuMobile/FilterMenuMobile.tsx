@@ -24,6 +24,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	onClose,
 	onFilterClick = () => null,
 	onSortClick,
+	onFilterReset,
+	onFilterSubmit,
 }) => {
 	const [isSortActive, setIsSortActive] = useState(false);
 	const { t } = useTranslation();
@@ -126,6 +128,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							form={selectedFilter.form}
 							id={selectedFilter.id}
 							title={selectedFilter.label}
+							onFormReset={onFilterReset}
+							onFormSubmit={onFilterSubmit}
 						/>
 					)}
 					{isSortActive && !activeFilter && (

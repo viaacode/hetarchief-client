@@ -1,11 +1,22 @@
+import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
-import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
+import { FC } from 'react';
+import { ArrayParam, JsonParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { FilterMenuFilterOption, FilterMenuSortOption } from '@reading-room/components';
+import {
+	AdvancedFilterForm,
+	FilterMenuFilterOption,
+	FilterMenuSortOption,
+} from '@reading-room/components';
 import { Icon, IconProps } from '@shared/components';
 import { OrderDirection } from '@shared/types';
 
-import { ReadingRoomMediaType, ReadingRoomSort } from '../types';
+import {
+	DefaultFilterFormProps,
+	ReadingRoomFilterId,
+	ReadingRoomMediaType,
+	ReadingRoomSort,
+} from '../types';
 
 export const READING_ROOM_ITEM_COUNT = 100;
 
@@ -16,27 +27,31 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
+	// Filters
 	mediaType: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.mediaType),
 	search: ArrayParam,
+	[ReadingRoomFilterId.Advanced]: JsonParam,
+	// Pagination
 	start: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.start),
+	// Sorting
 	orderProp: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.orderProp),
 	orderDirection: StringParam,
 };
 
-export const READING_ROOM_TABS = [
+export const READING_ROOM_TABS = (): TabProps[] => [
 	{
 		id: ReadingRoomMediaType.All,
-		label: 'Alles',
+		label: i18n?.t('Alles'),
 	},
 	{
 		id: ReadingRoomMediaType.Video,
 		icon: <Icon name="video" />,
-		label: "Video's",
+		label: i18n?.t("Video's"),
 	},
 	{
 		id: ReadingRoomMediaType.Audio,
 		icon: <Icon name="audio" />,
-		label: 'Audio',
+		label: i18n?.t('Audio'),
 	},
 ];
 
@@ -53,49 +68,55 @@ export const READING_ROOM_VIEW_TOGGLE_OPTIONS = [
 
 export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
-		id: 'format',
+		id: ReadingRoomFilterId.Format,
 		label: i18n?.t('modules/reading-room/const/index___analoge-drager') ?? '',
 		form: () => null, // Checkbox list
 	},
 	{
-		id: 'duration',
+		id: ReadingRoomFilterId.Duration,
 		label: i18n?.t('modules/reading-room/const/index___duurtijd') ?? '',
 		form: () => null, // Timepicker hh:mm:ss:SSSS
 	},
 	{
-		id: 'created',
+		id: ReadingRoomFilterId.Created,
 		label: i18n?.t('modules/reading-room/const/index___creatiedatum') ?? '',
 		form: () => null, // Datetime
 	},
 	{
-		id: 'published',
+		id: ReadingRoomFilterId.Published,
 		label: i18n?.t('modules/reading-room/const/index___publicatiedatum') ?? '',
 		form: () => null, // Datetime
 	},
 	{
-		id: 'creator',
+		id: ReadingRoomFilterId.Creator,
 		label: i18n?.t('modules/reading-room/const/index___maker') ?? '',
 		form: () => null,
 	},
 	{
-		id: 'genre',
+		id: ReadingRoomFilterId.Genre,
 		label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
 		form: () => null, // Checkbox list
 	},
 	{
-		id: 'keywords',
+		id: ReadingRoomFilterId.Keywords,
 		label: i18n?.t('modules/reading-room/const/index___trefwoorden') ?? '',
 		form: () => null, // Text input
 	},
 	{
-		id: 'language',
+		id: ReadingRoomFilterId.Language,
 		label: i18n?.t('modules/reading-room/const/index___taal') ?? '',
 		form: () => null, // Text input
 	},
 	{
-		id: 'video-has-sound',
+		id: ReadingRoomFilterId.ImageSound,
 		label: i18n?.t('modules/reading-room/const/index___beeld-geluid') ?? '',
 		form: () => null, // Boolean yes / no
+	},
+	{
+		id: ReadingRoomFilterId.Advanced,
+		icon: 'dots-horizontal',
+		label: i18n?.t('Geavanceerd') ?? '',
+		form: AdvancedFilterForm as FC<DefaultFilterFormProps>, // Custom advanced form
 	},
 ];
 

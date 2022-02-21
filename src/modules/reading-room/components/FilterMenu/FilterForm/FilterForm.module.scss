@@ -10,13 +10,9 @@
  * Elements
  */
 
-.c-filter-form__body {
-	overflow: auto;
+.c-filter-form__header {
 	padding: $spacer-md 2rem;
 
-	@include respond-to(md) {
-		flex-grow: 1;
-	}
 	@include respond-at(md) {
 		padding: 0 $spacer-lg 4.8rem;
 	}
@@ -26,6 +22,14 @@
 	@include respond-to(md) {
 		font-size: 2.8rem;
 		text-align: center;
+	}
+}
+
+.c-filter-form__body {
+	overflow: auto;
+
+	@include respond-to(md) {
+		flex-grow: 1;
 	}
 }
 
