@@ -9,10 +9,10 @@ import { FilterSortListProps } from './FilterSortList.types';
 
 const FilterSortList: FC<FilterSortListProps> = ({ activeSort, options, onOptionClick }) => {
 	const checkActiveSort = ({ orderProp, orderDirection }: FilterMenuSortOption) => {
-		const isSortEqual = orderProp === activeSort?.sort;
-		return !activeSort?.order
+		const isSortEqual = orderProp === activeSort?.orderProp;
+		return !activeSort?.orderDirection
 			? isSortEqual
-			: isSortEqual && orderDirection === activeSort.order;
+			: isSortEqual && orderDirection === activeSort.orderDirection;
 	};
 
 	const sortListItems: ListNavigationItem[] = options.map((option) => {

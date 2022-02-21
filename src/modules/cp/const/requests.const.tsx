@@ -1,6 +1,5 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n, TFunction } from 'next-i18next';
-import Link from 'next/link';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
@@ -51,11 +50,13 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		accessor: 'visitorMail',
 		Cell: ({ row }: RequestTableArgs) => {
 			return (
-				<Link href={`mailto:${row.original.visitorMail}`}>
-					<a className="u-color-neutral p-cp-requests__link">
-						{row.original.visitorMail}
-					</a>
-				</Link>
+				<a
+					className="u-color-neutral p-cp-requests__link"
+					href={`mailto:${row.original.visitorMail}`}
+					onClick={(e) => e.stopPropagation()}
+				>
+					{row.original.visitorMail}
+				</a>
 			);
 		},
 	},

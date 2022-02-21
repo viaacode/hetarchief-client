@@ -11,7 +11,7 @@ export const READING_ROOM_ITEM_COUNT = 100;
 
 export const READING_ROOM_QUERY_PARAM_INIT = {
 	mediaType: ReadingRoomMediaType.All,
-	sort: ReadingRoomSort.Relevance,
+	orderProp: ReadingRoomSort.Relevance,
 	start: 0,
 };
 
@@ -19,8 +19,8 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	mediaType: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.mediaType),
 	search: ArrayParam,
 	start: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.start),
-	sort: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.sort),
-	order: StringParam,
+	orderProp: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.orderProp),
+	orderDirection: StringParam,
 };
 
 export const READING_ROOM_TABS = [
