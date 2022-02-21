@@ -15,23 +15,28 @@ export const filterOptionsMock: FilterMenuFilterOption[] = [
 	{
 		id: 'period',
 		label: 'Periode',
+		form: () => null,
 	},
 	{
 		id: 'quality',
 		label: 'Kwaliteit',
+		form: () => null,
 	},
 	{
 		id: 'source',
 		label: 'Bron',
+		form: () => null,
 	},
 	{
 		id: 'rights',
 		label: 'Rechten',
+		form: () => null,
 	},
 	{
 		id: 'advanced',
 		label: 'Geavanceerd',
 		icon: 'dots-horizontal',
+		form: () => null,
 	},
 ];
 

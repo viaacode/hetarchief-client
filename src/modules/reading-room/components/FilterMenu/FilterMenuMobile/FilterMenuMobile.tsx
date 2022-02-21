@@ -123,6 +123,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 					{activeFilter && selectedFilter && !isSortActive && (
 						<FilterForm
 							className={styles['c-filter-menu-mobile__form']}
+							form={selectedFilter.form}
+							id={selectedFilter.id}
 							title={selectedFilter.label}
 						/>
 					)}
