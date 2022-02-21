@@ -12,11 +12,21 @@ const AccountMyHistory: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Mijn historiek'))}</title>
-				<meta name="description" content={t('Mijn historiek meta omschrijving')} />
+				<title>
+					{createPageTitle(t('pages/account/mijn-historiek/index___mijn-historiek'))}
+				</title>
+				<meta
+					name="description"
+					content={t(
+						'pages/account/mijn-historiek/index___mijn-historiek-meta-omschrijving'
+					)}
+				/>
 			</Head>
 
-			<AccountLayout className="p-account-my-history" contentTitle={t('Mijn historiek')}>
+			<AccountLayout
+				className="p-account-my-history"
+				contentTitle={t('pages/account/mijn-historiek/index___mijn-historiek')}
+			>
 				<div className="l-container">History table</div>
 			</AccountLayout>
 		</>

@@ -8,17 +8,17 @@ export const ACCOUNT_NAVIGATION_LINKS = (): {
 }[] => [
 	{
 		id: 'account-profile',
-		label: i18n?.t('Mijn profiel') ?? '',
+		label: i18n?.t('modules/account/const/index___mijn-profiel') ?? '',
 		href: '/account/mijn-profiel',
 	},
 	{
 		id: 'account-collections',
-		label: i18n?.t('Mijn mappen') ?? '',
+		label: i18n?.t('modules/account/const/index___mijn-mappen') ?? '',
 		href: '/account/mijn-mappen',
 	},
 	{
 		id: 'account-history',
-		label: i18n?.t('Mijn historiek') ?? '',
+		label: i18n?.t('modules/account/const/index___mijn-historiek') ?? '',
 		href: '/account/mijn-historiek',
 		hasDivider: true,
 	},

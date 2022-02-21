@@ -12,11 +12,17 @@ const AccountMyCollections: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Mijn mappen'))}</title>
-				<meta name="description" content={t('Mijn mappen meta omschrijving')} />
+				<title>{createPageTitle(t('pages/account/mijn-mappen/index___mijn-mappen'))}</title>
+				<meta
+					name="description"
+					content={t('pages/account/mijn-mappen/index___mijn-mappen-meta-omschrijving')}
+				/>
 			</Head>
 
-			<AccountLayout className="p-account-my-collections" contentTitle={t('Mijn mappen')}>
+			<AccountLayout
+				className="p-account-my-collections"
+				contentTitle={t('pages/account/mijn-mappen/index___mijn-mappen')}
+			>
 				<div className="l-container">Collections</div>
 			</AccountLayout>
 		</>
