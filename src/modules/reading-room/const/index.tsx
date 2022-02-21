@@ -41,17 +41,17 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 export const READING_ROOM_TABS = (): TabProps[] => [
 	{
 		id: ReadingRoomMediaType.All,
-		label: i18n?.t('Alles'),
+		label: i18n?.t('modules/reading-room/const/index___alles'),
 	},
 	{
 		id: ReadingRoomMediaType.Video,
 		icon: <Icon name="video" />,
-		label: i18n?.t("Video's"),
+		label: i18n?.t('modules/reading-room/const/index___videos'),
 	},
 	{
 		id: ReadingRoomMediaType.Audio,
 		icon: <Icon name="audio" />,
-		label: i18n?.t('Audio'),
+		label: i18n?.t('modules/reading-room/const/index___audio'),
 	},
 ];
 
@@ -115,7 +115,7 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Advanced,
 		icon: 'dots-horizontal',
-		label: i18n?.t('Geavanceerd') ?? '',
+		label: i18n?.t('modules/reading-room/const/index___geavanceerd') ?? '',
 		form: AdvancedFilterForm as FC<DefaultFilterFormProps>, // Custom advanced form
 	},
 ];

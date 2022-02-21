@@ -8,30 +8,48 @@ import { Operator } from '.';
 // TODO: replace values with actual metadata property
 export const METADATA_PROP_OPTIONS = (): SelectOption[] => [
 	{
-		label: i18n?.t('Hoofdtitel') ?? '',
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___hoofdtitel'
+			) ?? '',
 		value: MetadataProp.Title,
 	},
 	{
-		label: i18n?.t('Secundaire titel') ?? '',
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___secundaire-titel'
+			) ?? '',
 		value: MetadataProp.SecundaryTitle,
 	},
 ];
 
 export const OPERATOR_OPTIONS = (): SelectOption[] => [
 	{
-		label: i18n?.t('Bevat') ?? '',
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___bevat'
+			) ?? '',
 		value: Operator.Contains,
 	},
 	{
-		label: i18n?.t('Bevat niet') ?? '',
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___bevat-niet'
+			) ?? '',
 		value: Operator.ContainsNot,
 	},
 	{
-		label: i18n?.t('Is') ?? '',
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___is'
+			) ?? '',
 		value: Operator.Equals,
 	},
 	{
-		label: i18n?.t('Is niet') ?? '',
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___is-niet'
+			) ?? '',
 		value: Operator.EqualsNot,
 	},
 ];

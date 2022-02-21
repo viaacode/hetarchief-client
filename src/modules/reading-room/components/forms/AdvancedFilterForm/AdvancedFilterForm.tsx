@@ -40,7 +40,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className }
 			<div className={clsx(className, 'c-advanced-filter-form')}>
 				<p className="u-px-20 u-px-32:md u-mt-40 u-mb-32">
 					{t(
-						'Stel je eigen geavanceerde filter samen aan de hand van deze metadata velden en waarden.'
+						'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-form___stel-je-eigen-geavanceerde-filter-samen-aan-de-hand-van-deze-metadata-velden-en-waarden'
 					)}
 				</p>
 
@@ -59,7 +59,9 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className }
 					<Button
 						className="u-p-0"
 						iconStart={<Icon name="plus" />}
-						label={t('Nieuwe stelling')}
+						label={t(
+							'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling'
+						)}
 						variants="text"
 						onClick={() => append(initialFields())}
 					/>
