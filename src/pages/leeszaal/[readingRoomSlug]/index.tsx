@@ -34,7 +34,7 @@ import {
 	ToggleOption,
 } from '@shared/components';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
-import { useNavigationContext, useWindowSize } from '@shared/hooks';
+import { useNavigationBorder, useWindowSize } from '@shared/hooks';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
@@ -47,7 +47,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const windowSize = useWindowSize();
-	useNavigationContext({ isBordered: true });
+	useNavigationBorder();
 
 	const hasSearched = !!query?.search?.length || query?.mediaType !== ReadingRoomMediaType.All; // TODO add other filters once available
 
