@@ -18,21 +18,29 @@ const AccountMyProfile: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Mijn profiel'))}</title>
-				<meta name="description" content={t('Mijn profiel meta omschrijving')} />
+				<title>
+					{createPageTitle(t('pages/account/mijn-profiel/index___mijn-profiel'))}
+				</title>
+				<meta
+					name="description"
+					content={t('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving')}
+				/>
 			</Head>
 
-			<AccountLayout className="p-account-my-profile" contentTitle={t('Mijn profiel')}>
+			<AccountLayout
+				className="p-account-my-profile"
+				contentTitle={t('pages/account/mijn-profiel/index___mijn-profiel')}
+			>
 				<div className="l-container">
 					<Box className="p-account-my-profile__user-data u-p-24">
 						<dl>
-							<dt>{t('Voornaam')}</dt>
+							<dt>{t('pages/account/mijn-profiel/index___voornaam')}</dt>
 							<dd className="u-color-neutral">{user?.firstName}</dd>
 
-							<dt>{t('Familienaam')}</dt>
+							<dt>{t('pages/account/mijn-profiel/index___familienaam')}</dt>
 							<dd className="u-color-neutral">{user?.lastName}</dd>
 
-							<dt>{t('Email')}</dt>
+							<dt>{t('pages/account/mijn-profiel/index___email')}</dt>
 							<dd className="u-text-ellipsis u-color-neutral" title={user?.email}>
 								{user?.email}
 							</dd>
@@ -41,7 +49,7 @@ const AccountMyProfile: NextPage = () => {
 							<Button
 								className="u-p-0"
 								iconStart={<Icon name="edit" />}
-								label={t('Wijzig mijn gegevens')}
+								label={t('pages/account/mijn-profiel/index___wijzig-mijn-gegevens')}
 								variants="text"
 							/>
 						</div>
