@@ -47,3 +47,5 @@ yarn-error.log*
 
 # Babel config to disable swcMinify on windows
 .babelrc
+test-results/
+playwright-report/
