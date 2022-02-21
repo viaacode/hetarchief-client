@@ -35,10 +35,10 @@ const AccountMyProfile: NextPage = () => {
 					<Box className="p-account-my-profile__user-data u-p-24">
 						<dl>
 							<dt>{t('pages/account/mijn-profiel/index___voornaam')}</dt>
-							<dd className="u-color-neutral">{user?.firstName}</dd>
+							<dd className="u-text-ellipsis u-color-neutral">{user?.firstName}</dd>
 
 							<dt>{t('pages/account/mijn-profiel/index___familienaam')}</dt>
-							<dd className="u-color-neutral">{user?.lastName}</dd>
+							<dd className="u-text-ellipsis u-color-neutral">{user?.lastName}</dd>
 
 							<dt>{t('pages/account/mijn-profiel/index___email')}</dt>
 							<dd className="u-text-ellipsis u-color-neutral" title={user?.email}>
