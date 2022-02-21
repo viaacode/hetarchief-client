@@ -100,11 +100,11 @@ $component: "c-reading-room-card-controls";
 			margin-left: $spacer-md;
 			margin-right: $spacer-xs;
 			margin-top: $spacer-sm;
-			min-width: 285px;
+			min-width: 28.5rem;
 		}
 
 		@include respond-at("lg") {
-			min-width: 385px;
+			min-width: 32rem;
 		}
 
 		.#{$component} {
