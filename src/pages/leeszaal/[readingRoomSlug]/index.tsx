@@ -35,7 +35,7 @@ import {
 } from '@shared/components';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks';
-import { OrderDirection } from '@shared/types';
+import { OrderDirection, SortObject } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
@@ -112,14 +112,15 @@ const ReadingRoomPage: NextPage = () => {
 		setQuery({
 			...READING_ROOM_QUERY_PARAM_INIT,
 			search: undefined,
-			order: undefined,
+			orderDirection: undefined,
 		});
 	};
 
 	const onRemoveFilter = (newValue: SearchBarValue<true>) =>
 		setQuery({ search: newValue?.map((tag) => tag.value as string) });
 
-	const onSortClick = (sort: string, order?: OrderDirection) => setQuery({ sort, order });
+	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
+		setQuery({ orderProp, orderDirection });
 
 	const onTabClick = (tabId: string | number) => setQuery({ mediaType: String(tabId) });
 
@@ -129,7 +130,10 @@ const ReadingRoomPage: NextPage = () => {
 	 * Computed
 	 */
 
-	const activeSort = { sort: query.sort, order: (query.order as OrderDirection) ?? undefined };
+	const activeSort: SortObject = {
+		orderProp: query.orderProp,
+		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
+	};
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
@@ -268,6 +272,7 @@ const ReadingRoomPage: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withAuth(withI18n());
+export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default ReadingRoomPage;
+const withAuthExport = withAuth(ReadingRoomPage);
+export default withAuthExport;

@@ -29,8 +29,8 @@ export enum OrderDirection {
 }
 
 export interface SortObject {
-	sort: string;
-	order?: OrderDirection;
+	orderProp: string;
+	orderDirection?: OrderDirection;
 }
 
 /**

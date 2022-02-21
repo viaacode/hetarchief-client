@@ -69,7 +69,8 @@ const Blade: FC<BladeProps> = ({
 				className={clsx(
 					className,
 					styles['c-blade'],
-					isBladeOpen && styles['c-blade--visible']
+					isBladeOpen && styles['c-blade--visible'],
+					isLayered && [styles['c-blade--managed']]
 				)}
 				// offset underlying blades
 				style={

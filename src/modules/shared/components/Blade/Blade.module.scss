@@ -58,7 +58,7 @@
 		z-index: get-z-layer("blade");
 
 		&--managed {
-			min-width: calc(46.4rem + 5.6rem);
+			width: calc(46.4rem + 5.6rem);
 			left: auto;
 			transform: translateX(5.6rem);
 			transition: opacity $animate-default, transform $animate-default;
@@ -69,5 +69,9 @@
 		pointer-events: all;
 		visibility: visible;
 		transform: translateX(0);
+	}
+
+	&--managed {
+		width: 100%;
 	}
 }

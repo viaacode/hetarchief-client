@@ -92,7 +92,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 					<div className={clsx(styles['c-filter-menu-mobile__filters'], 'u-mt-24')}>
 						{sortOptions.length > 0 && (
 							<FilterButton
-								icon={activeSort?.order === 'desc' ? 'sort-down' : 'sort-up'}
+								icon={
+									activeSort?.orderDirection === 'desc' ? 'sort-down' : 'sort-up'
+								}
 								isActive={isSortActive}
 								label={activeSortLabel}
 								type="sort"

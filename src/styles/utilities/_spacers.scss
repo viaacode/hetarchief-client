@@ -52,7 +52,7 @@ $mt: (
 	"64": $spacer-lg * 2,
 	"80": $spacer-2xl,
 );
-@include generate-utils("mt", ("margin-top"), $mt);
+@include generate-utils("mt", "margin-top", $mt, ("md"));
 
 // Bottom
 $mb: (
@@ -63,7 +63,7 @@ $mb: (
 	"64": $spacer-lg * 2,
 	"80": $spacer-2xl,
 );
-@include generate-utils("mb", ("margin-bottom"), $mb, ("md"));
+@include generate-utils("mb", "margin-bottom", $mb, ("md"));
 
 
 // Left

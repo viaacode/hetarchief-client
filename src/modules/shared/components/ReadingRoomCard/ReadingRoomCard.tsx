@@ -3,11 +3,12 @@ import clsx from 'clsx';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
+import { CardImage } from '../CardImage';
+
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
 import { ReadingRoomCardProps } from './ReadingRoomCard.types';
 import { ReadingRoomCardControls } from './ReadingRoomCardControls';
-import { ReadingRoomImage } from './ReadingRoomImage';
 
 const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 	const { room, type } = props;
@@ -22,14 +23,26 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = ({ onClick, ...props }) => {
 	const isClickable = typeof onClick !== 'undefined';
 
 	const renderImage = () => {
-		const imageVariant = typeNoAccess
-			? 'short'
-			: typeAccessGranted
-			? 'tall'
-			: flat
-			? 'small'
-			: undefined;
-		return <ReadingRoomImage {...room} variant={imageVariant} />;
+		let size: 'small' | 'short' | 'tall' | null = null;
+
+		if (typeNoAccess) {
+			size = 'short';
+		} else if (typeAccessGranted) {
+			size = 'tall';
+		} else if (flat) {
+			size = 'small';
+		}
+
+		return (
+			<CardImage
+				color={room.color}
+				logo={room.logo}
+				name={room.name || ''}
+				id={room.id.toString()}
+				image={room.image}
+				size={size || 'short'}
+			/>
+		);
 	};
 
 	const renderTitle = () => {

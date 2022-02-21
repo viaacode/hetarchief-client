@@ -1,0 +1,38 @@
+@use "styles/abstracts" as *;
+
+$component: "c-related-object";
+
+.#{$component} {
+    :global(.c-card__header-wrapper) {
+        margin-bottom: 0;
+    }
+
+    :global(.c-card__title-wrapper) {
+        @include text-ellipsis;
+
+        font-size: $font-size-base;
+        line-height: $line-height-1xl;
+        margin-bottom: $spacer-xxs;
+        position: relative;
+        padding-left: $spacer-md;
+
+        & > span:first-child {
+            position: absolute;
+            left: 0;
+            font-size: $font-size-md;
+        }
+    }
+
+    :global(.c-card__subtitle-wrapper),
+    :global(.c-card__children-wrapper) {
+        @include text-ellipsis;
+
+        color: $black;
+        font-size: $font-size-sm;
+        line-height: $line-height-4xl;
+    }
+
+    :global(.c-card__subtitle-wrapper) {
+        margin-bottom: $spacer-xxs;
+    }
+}

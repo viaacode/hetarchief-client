@@ -76,7 +76,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 
 	const renderActiveSortLabel = () => {
 		const sortBtnLabel = activeSort
-			? READING_ROOM_ACTIVE_SORT_MAP()[activeSort.sort as ReadingRoomSort]
+			? READING_ROOM_ACTIVE_SORT_MAP()[activeSort.orderProp as ReadingRoomSort]
 			: '';
 
 		return (

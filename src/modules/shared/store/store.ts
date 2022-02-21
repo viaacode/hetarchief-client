@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { userSlice } from '@auth/store/user';
+import { tosSlice } from '@shared/store/tos';
 
 import { AppStore } from './store.types';
 import { uiSlice } from './ui';
@@ -12,6 +13,7 @@ export const makeStore = () =>
 		reducer: {
 			[uiSlice.name]: uiSlice.reducer,
 			[userSlice.name]: userSlice.reducer,
+			[tosSlice.name]: tosSlice.reducer,
 		},
 		devTools: process.env.DEBUG_TOOLS === 'true',
 	});

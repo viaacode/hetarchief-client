@@ -25,7 +25,7 @@ $datepicker-border-color: $zinc;
 		line-height: $line-height-lg;
 
 		&-popper {
-			margin-top: -1px;
+			top: -1px !important;
 			border-top: 1px solid $datepicker-border-color;
 			overflow-x: scroll;
 			max-width: 100%;
