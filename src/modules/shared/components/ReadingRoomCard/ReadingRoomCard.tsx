@@ -30,6 +30,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 				className={clsx(
 					styles['c-reading-room-card__background'],
 					typeNoAccess && styles['c-reading-room-card__background--short'],
+					typeNoAccess && styles['c-reading-room-card__background--shadow'],
 					typeAccessGranted && styles['c-reading-room-card__background--tall'],
 					flat && styles['c-reading-room-card__background--small']
 				)}
