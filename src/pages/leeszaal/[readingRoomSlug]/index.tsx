@@ -293,5 +293,4 @@ const ReadingRoomPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-// export default withAuth(ReadingRoomPage);
-export default ReadingRoomPage;
+export default withAuth(ReadingRoomPage);

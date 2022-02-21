@@ -30,8 +30,6 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 		name: K,
 		updatedValue: AdvancedFilterFieldsState[K]
 	) => {
-		console.log(updatedValue);
-
 		onChange(index, { ...value, [name]: updatedValue });
 	};
 

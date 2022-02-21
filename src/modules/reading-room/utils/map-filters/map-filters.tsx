@@ -30,6 +30,7 @@ export const mapFiltersToQuery = (
 ): AdvancedFilterQueryValue[] | void => {
 	switch (id) {
 		case ReadingRoomFilterId.Advanced: {
+			// Map to smaller props to keep query params in url short
 			return (values as AdvancedFilterFormState).advanced
 				.map((item) => ({
 					prop: item.metadataProp ?? '',
