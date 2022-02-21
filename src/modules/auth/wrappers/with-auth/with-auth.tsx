@@ -5,7 +5,7 @@ import { ComponentType, useCallback, useEffect, useState } from 'react';
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
 import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import Loading from '@shared/components/Loading/Loading';
-import { ROUTES } from '@shared/const';
+import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
 import { TosService } from '@shared/services/tos-service';
 import { isCurrentTosAccepted } from '@shared/utils';
 
@@ -19,7 +19,7 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 			const tos = await TosService.getTos();
 
 			const params = {
-				redirectTo: encodeURIComponent(router.asPath),
+				[REDIRECT_TO_QUERY_KEY]: router.asPath,
 			};
 
 			const toTermsOfService = async () => {
@@ -35,7 +35,7 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 				);
 			};
 
-			if (!login?.userInfo || login.message !== AuthMessage.LoggedOut) {
+			if (!login?.userInfo || login.message === AuthMessage.LoggedOut) {
 				//
 				// When the user isn't present in the response or the response states they've logged out
 
@@ -54,9 +54,9 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 					// When the user accepted a previous version of the TOS
 
 					await toTermsOfService();
+				} else {
+					setIsLoggedIn(true);
 				}
-			} else {
-				setIsLoggedIn(true);
 			}
 		}, []); // eslint-disable-line react-hooks/exhaustive-deps
 

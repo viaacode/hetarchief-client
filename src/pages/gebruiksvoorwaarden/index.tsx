@@ -13,6 +13,7 @@ import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
 import {
 	LOCAL_STORAGE,
+	REDIRECT_TO_QUERY_KEY,
 	RICH_TEXT_SANITIZATION,
 	ROUTES,
 	TOS_INDEX_QUERY_PARAM_CONFIG,
@@ -76,7 +77,7 @@ const TermsOfService: NextPage = () => {
 				if (updated.acceptedTosAt) {
 					// Execute in separate cycle
 					setTimeout(() =>
-						router.push(decodeURIComponent(query.after)).then(() => {
+						router.push(query[REDIRECT_TO_QUERY_KEY]).then(() => {
 							toastService.notify({
 								title: t(
 									'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'
