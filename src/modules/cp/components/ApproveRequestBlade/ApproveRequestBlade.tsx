@@ -25,6 +25,7 @@ import { Blade, Icon } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
+import { toastService } from '@shared/services';
 import { visitsService } from '@visits/services';
 import { VisitStatus } from '@visits/types';
 
@@ -70,9 +71,19 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					status: VisitStatus.APPROVED,
 					startAt: values.accessFrom?.toISOString(),
 					endAt: values.accessTo?.toISOString(),
+					// TODO: remarks
 				})
 				.then(() => {
 					onSubmit?.(values);
+
+					toastService.notify({
+						title: t(
+							'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
+						),
+						description: t(
+							'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
+						),
+					});
 				});
 	};
 

@@ -5,12 +5,15 @@ import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade } from '@shared/components';
+import { toastService } from '@shared/services';
+import { visitsService } from '@visits/services';
+import { VisitStatus } from '@visits/types';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
 import { DeclineRequestBladeProps, DeclineRequestFormState } from './DeclineRequestBlade.types';
 
 const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
-	const { onSubmit } = props;
+	const { onSubmit, selected } = props;
 
 	const {
 		control,
@@ -22,10 +25,25 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 	const { t } = useTranslation();
 
 	const onFormSubmit = (values: DeclineRequestFormState) => {
-		// TODO: replace with save-to-db
-		Promise.resolve().then(() => {
-			onSubmit?.(values);
-		});
+		selected &&
+			visitsService
+				.patchById(selected.id, {
+					...selected,
+					status: VisitStatus.DENIED,
+					// TODO: reason
+				})
+				.then(() => {
+					onSubmit?.(values);
+
+					toastService.notify({
+						title: t(
+							'modules/cp/components/decline-request-blade/decline-request-blade___de-aanvraag-is-afgekeurd'
+						),
+						description: t(
+							'modules/cp/components/decline-request-blade/decline-request-blade___deze-aanvraag-werd-succesvol-afgekeurd'
+						),
+					});
+				});
 	};
 
 	const renderFooter = () => {
