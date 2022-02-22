@@ -18,10 +18,10 @@ export const uiSlice = createSlice({
 		setIsStickyLayout(state, action: PayloadAction<boolean>) {
 			state.isStickyLayout = action.payload;
 		},
-		setShowNavigationbBorder(state, action: PayloadAction<boolean>) {
+		setShowNavigationBorder(state, action: PayloadAction<boolean>) {
 			state.showNavigationBorder = action.payload;
 		},
 	},
 });
 
-export const { setShowAuthModal, setIsStickyLayout, setShowNavigationbBorder } = uiSlice.actions;
+export const { setShowAuthModal, setIsStickyLayout, setShowNavigationBorder } = uiSlice.actions;

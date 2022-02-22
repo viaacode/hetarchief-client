@@ -46,7 +46,7 @@ describe('Components', () => {
 
 			const overlay =
 				container.parentElement &&
-				container.parentElement.querySelector('.ReactModal__Overlay');
+				container.parentElement.querySelector('.c-hetarchief-modal__overlay');
 
 			expect(overlay).toBeInTheDocument();
 		});
@@ -99,7 +99,7 @@ describe('Components', () => {
 
 			const overlay =
 				container.parentElement &&
-				container.parentElement.querySelector('.ReactModal__Overlay');
+				container.parentElement.querySelector('.c-hetarchief-modal__overlay');
 
 			expect(overlay).toBeInTheDocument();
 
@@ -122,7 +122,7 @@ describe('Components', () => {
 
 			const overlay =
 				container.parentElement &&
-				container.parentElement.querySelector('.ReactModal__Overlay');
+				container.parentElement.querySelector('.c-hetarchief-modal__overlay');
 
 			expect(overlay).toBeInTheDocument();
 

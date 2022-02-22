@@ -24,7 +24,7 @@ describe('Component: <ReadingRoomCard />', () => {
 		const { container } = render(template());
 
 		const card = container.getElementsByClassName('c-card--mode-light');
-		const image = container.getElementsByClassName('c-reading-room-card__background--short');
+		const image = container.getElementsByClassName('c-card-image__background--short');
 
 		expect(card.length).toEqual(1);
 		expect(image.length).toEqual(1);
@@ -53,7 +53,7 @@ describe('Component: <ReadingRoomCard />', () => {
 
 		const card = container.getElementsByClassName('c-card--mode-dark');
 
-		const image = container.getElementsByClassName('c-reading-room-card__background--tall');
+		const image = container.getElementsByClassName('c-card-image__background--tall');
 
 		expect(card.length).toEqual(1);
 		expect(image.length).toEqual(1);
