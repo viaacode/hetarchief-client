@@ -21,7 +21,6 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 }) => {
 	// Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
-	console.log(isHamburgerMenuOpen);
 
 	const renderHamburgerMenu = () => {
 		return (
@@ -74,11 +73,9 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 						/>
 					}
 					onOpen={() => {
-						console.log('open dropdown, prev state:', isHamburgerMenuOpen);
 						setIsHamburgerMenuOpen(true);
 					}}
 					onClose={() => {
-						console.log('close dropdown, prev state:', isHamburgerMenuOpen);
 						setIsHamburgerMenuOpen(false);
 					}}
 				/>
