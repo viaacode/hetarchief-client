@@ -25,6 +25,8 @@ import { Blade, Icon } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
+import { visitsService } from '@visits/services';
+import { VisitStatus } from '@visits/types';
 
 import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
 
@@ -61,10 +63,17 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	// Events
 
 	const onFormSubmit = (values: ApproveRequestFormState) => {
-		// TODO: replace with save-to-db
-		Promise.resolve().then(() => {
-			onSubmit?.(values);
-		});
+		selected &&
+			visitsService
+				.patchById(selected.id, {
+					...selected,
+					status: VisitStatus.APPROVED,
+					startAt: values.accessFrom?.toISOString(),
+					endAt: values.accessTo?.toISOString(),
+				})
+				.then(() => {
+					onSubmit?.(values);
+				});
 	};
 
 	const onSimpleDateChange = (

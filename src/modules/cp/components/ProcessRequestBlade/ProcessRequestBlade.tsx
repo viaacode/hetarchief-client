@@ -4,6 +4,7 @@ import React, { FC, useState } from 'react';
 
 import { requestCreatedAtFormatter } from '@cp/utils';
 import { Blade, BladeManager, Icon } from '@shared/components';
+import { VisitStatus } from '@visits/types';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';
 import { DeclineRequestBlade } from '../DeclineRequestBlade';
@@ -13,7 +14,7 @@ import { ProcessRequestBladeProps } from './ProcessRequestBlade.types';
 
 const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 	const { t } = useTranslation();
-	const { selected } = props;
+	const { selected, onFinish } = props;
 
 	const [showApprove, setShowApprove] = useState(false);
 	const [showDecline, setShowDecline] = useState(false);
@@ -24,6 +25,8 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		// Needs a little delay, not sure about the amount.
 		// 300ms is default duration to hide a blade
 		setTimeout(() => props.onClose?.(), 100);
+
+		onFinish?.();
 	};
 
 	const getCurrentLayer = (): number => {
@@ -36,6 +39,28 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		}
 
 		return 0;
+	};
+
+	const getTitle = (): string => {
+		switch (selected?.status) {
+			case VisitStatus.PENDING:
+				return t(
+					'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
+				);
+
+			case VisitStatus.APPROVED:
+				return t(
+					'modules/cp/components/process-request-blade/process-request-blade___goedgekeurde-aanvraag'
+				);
+
+			case VisitStatus.DENIED:
+				return t(
+					'modules/cp/components/process-request-blade/process-request-blade___geweigerde-aanvraag'
+				);
+
+			default:
+				return ''; // this causes brief visual "despawn" but isn't very noticable
+		}
 	};
 
 	const renderFooter = () => {
@@ -76,10 +101,8 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		>
 			<Blade
 				{...props}
-				title={t(
-					'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
-				)}
-				footer={renderFooter()}
+				title={getTitle()}
+				footer={selected?.status === VisitStatus.PENDING ? renderFooter() : undefined}
 				layer={1}
 			>
 				{selected && (

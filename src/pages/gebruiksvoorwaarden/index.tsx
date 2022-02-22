@@ -42,9 +42,11 @@ const TermsOfService: NextPage = () => {
 		router.push(localStorage.getItem(LOCAL_STORAGE.previousPage) || ROUTES.home);
 
 		toastService.notify({
-			title: t('Je koos ervoor om niet in te stemmen met de gebruiksvoorwaarden.'),
+			title: t(
+				'pages/gebruiksvoorwaarden/index___je-koos-ervoor-om-niet-in-te-stemmen-met-de-gebruiksvoorwaarden'
+			),
 			description: t(
-				'Het aanvaarden van de voorwaarden is noodzakelijk voor volledige toegang tot het platform.'
+				'pages/gebruiksvoorwaarden/index___het-aanvaarden-van-de-voorwaarden-is-noodzakelijk-voor-volledige-toegang-tot-het-platform'
 			),
 			maxLines: 3,
 		});
