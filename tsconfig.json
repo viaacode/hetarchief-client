@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
+      "@account/*": ["modules/account/*"],
       "@auth/*": ["modules/auth/*"],
       "@config/*": ["modules/config/*"],
       "@cp/*": ["modules/cp/*"],
@@ -10,7 +11,6 @@
       "@media/*": ["modules/media/*"],
       "@navigation/*": ["modules/navigation/*"],
       "@reading-room/*": ["modules/reading-room/*"],
-      "@media/*": ["modules/media/*"],
       "@visits/*": ["modules/visits/*"],
       "@shared/*": ["modules/shared/*"]
     },
