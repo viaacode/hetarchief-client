@@ -13,7 +13,7 @@ $pt: (
 	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
-@include generate-utils("pt", "padding-top", $pt);
+@include generate-utils("pt", "padding-top", $pt, ("md"));
 
 // Bottom
 $pb: (
