@@ -27,7 +27,6 @@ const CPRequestsPage: NextPage = () => {
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selected, setSelected] = useState<string | number | null>(null);
 
-	// TODO integrate a loading state into the table component
 	const {
 		data: visits,
 		refetch,
