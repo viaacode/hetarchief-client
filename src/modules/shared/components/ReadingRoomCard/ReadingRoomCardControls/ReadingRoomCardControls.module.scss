@@ -12,6 +12,7 @@ $component: "c-reading-room-card-controls";
 	@include respond-to("md") {
 		flex-wrap: wrap;
 		justify-content: space-between;
+		row-gap: $spacer-xs;
 	}
 
 	&__label {
@@ -99,11 +100,11 @@ $component: "c-reading-room-card-controls";
 			margin-left: $spacer-md;
 			margin-right: $spacer-xs;
 			margin-top: $spacer-sm;
-			min-width: 285px;
+			min-width: 28.5rem;
 		}
 
 		@include respond-at("lg") {
-			min-width: 385px;
+			min-width: 32rem;
 		}
 
 		.#{$component} {
@@ -133,7 +134,7 @@ $component: "c-reading-room-card-controls";
 		ul, button, div {
 			&:not(:last-child) {
 				@include respond-to("sm") {
-					margin-bottom: $spacer-sm;
+					margin-bottom: $spacer-xs;
 				}
 			}
 		}

@@ -22,6 +22,7 @@ import {
 	SearchBar,
 } from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
+import { useNavigationBorder } from '@shared/hooks';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
@@ -42,6 +43,7 @@ const Home: NextPage = () => {
 		0,
 		areAllReadingRoomsVisible ? 200 : NUMBER_OF_READING_ROOMS
 	);
+	useNavigationBorder(!isLoggedIn);
 
 	// Sync showAuth query param with store value
 	useEffect(() => {

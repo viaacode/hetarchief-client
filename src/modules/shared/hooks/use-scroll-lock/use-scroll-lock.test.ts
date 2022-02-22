@@ -15,7 +15,7 @@ describe('Hooks', () => {
 				initialProps: { lock: true },
 			});
 
-			expect(el).toHaveStyle({ overflow: 'hidden', height: '100vh' });
+			expect(el).toHaveStyle({ overflow: 'hidden' });
 
 			rerender({ lock: false });
 			expect(el).toHaveStyle({ overflow: initialOverflow, height: initialHeight });

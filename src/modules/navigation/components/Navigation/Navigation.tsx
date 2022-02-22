@@ -1,5 +1,8 @@
 import clsx from 'clsx';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
+
+import { selectShowNavigationBorder } from '@shared/store/ui';
 
 import styles from './Navigation.module.scss';
 import { NavigationCenterProps, NavigationFC, NavigationProps } from './Navigation.types';
@@ -12,9 +15,12 @@ const NavigationCenter: FC<NavigationCenterProps> = ({ children, title }) => (
 );
 
 const Navigation: NavigationFC<NavigationProps> = ({ children, className, contextual = false }) => {
+	const showBorder = useSelector(selectShowNavigationBorder);
+
 	const rootCls = clsx(className, styles['c-navigation'], {
 		[styles['c-navigation--sm']]: contextual,
 		[styles['c-navigation--responsive']]: !contextual,
+		[styles['c-navigation--bordered']]: showBorder,
 	});
 
 	return <nav className={rootCls}>{children}</nav>;

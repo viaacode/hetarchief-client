@@ -7,4 +7,5 @@ export interface CardImageProps extends DefaultComponentProps {
 	name: string;
 	id: string;
 	size?: 'short' | 'tall' | 'small';
+	shadow?: boolean;
 }
