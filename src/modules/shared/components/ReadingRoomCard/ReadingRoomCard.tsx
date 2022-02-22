@@ -1,8 +1,9 @@
 import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Image from 'next/image';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
+
+import { CardImage } from '../CardImage';
 
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
@@ -25,40 +26,26 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 	const hasRequested = typeAccessGranted || typeAccessAccepted || typeAccessRequested;
 
 	const renderImage = () => {
-		return (
-			<div
-				className={clsx(
-					styles['c-reading-room-card__background'],
-					typeNoAccess && styles['c-reading-room-card__background--short'],
-					typeNoAccess && styles['c-reading-room-card__background--shadow'],
-					typeAccessGranted && styles['c-reading-room-card__background--tall'],
-					flat && styles['c-reading-room-card__background--small']
-				)}
-				style={{ backgroundColor: room?.color ? room?.color : '#009690' }}
-			>
-				{room?.image && (
-					<div className={styles['c-reading-room-card__background--image']}>
-						<Image
-							src={room?.image}
-							alt={room?.name || room?.id.toString()}
-							layout="fill"
-							objectFit="cover"
-						/>
-					</div>
-				)}
+		let size: 'small' | 'short' | 'tall' | null = null;
 
-				{room?.logo && (
-					<div className={styles['c-reading-room-card__logo']}>
-						<Image
-							className={styles['c-reading-room-card__logo-image']}
-							src={room?.logo || ''}
-							alt={room?.name || room?.id.toString()}
-							layout="fill"
-							objectFit="contain"
-						/>
-					</div>
-				)}
-			</div>
+		if (typeNoAccess) {
+			size = 'short';
+		} else if (typeAccessGranted) {
+			size = 'tall';
+		} else if (flat) {
+			size = 'small';
+		}
+
+		return (
+			<CardImage
+				color={room.color}
+				logo={room.logo}
+				name={room.name || ''}
+				id={room.id.toString()}
+				image={room.image}
+				size={size || 'short'}
+				shadow={typeNoAccess}
+			/>
 		);
 	};
 
