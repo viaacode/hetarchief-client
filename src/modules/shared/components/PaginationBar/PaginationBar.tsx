@@ -20,7 +20,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	const currentPage = start / count;
 
 	const scrollToTop = () => {
-		window.scrollTo({ top: 0, behavior: 'smooth' });
+		document.body.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
 	const renderProgress = () => {

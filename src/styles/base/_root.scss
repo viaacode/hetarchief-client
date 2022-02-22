@@ -9,6 +9,7 @@
 body {
 	min-height: 100vh;
 	margin: 0;
+	overflow-x: hidden;
 	font-family: $font-family-primary;
 	font-size: $font-size-base;
 	line-height: $line-height-lg;
