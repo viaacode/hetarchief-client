@@ -51,9 +51,9 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 
 	return (
 		<Modal {...props} heading={renderHeading()} footer={renderFooter()}>
-			<div className={clsx(styles['c-auth-modal__container'], 'u-text-center')}>
-				<p className="u-mb-24 u-mb-32:md u-font-size-14 u-color-neutral">
-					<Trans i18nKey="modules/auth/components/auth-modal/auth-modal___klaar-om-een-bezoek-te-plannen-aan-een-van-de-leeszalen-br-log-dan-meteen-in-met-jouw-het-archief-account">
+			<div className={clsx(styles['c-auth-modal__content'], 'u-text-center', 'u-pt-24')}>
+				<p className="u-mb-24 u-mb-40:md u-font-size-14 u-color-neutral">
+					<Trans i18nKey="modules/auth/components/auth-modal/auth-modal___klaar-om-een-bezoek-te-plannen-aan-een-van-de-leeszalen-log-dan-meteen-in-met-jouw-het-archief-account">
 						Klaar om een bezoek te plannen aan één van de leeszalen? <br /> Log dan
 						meteen in met jouw Het Archief-account
 					</Trans>
