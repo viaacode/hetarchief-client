@@ -20,7 +20,7 @@ const CardImage: FC<CardImageProps> = ({
 			className={clsx(
 				styles['c-card-image__background'],
 				size && styles[`c-card-image__background--${size}`],
-				shadow && styles['c-reading-room-card__background--shadow']
+				shadow && styles['c-card-image__background--shadow']
 			)}
 			style={{
 				...style,
