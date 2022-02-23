@@ -2,6 +2,7 @@
 
 $component: "l-sidebar";
 $l-sidebar-width: 25.4rem;
+$l-sub-sidebar-width: 27.5rem;
 
 .#{$component} {
 	display: flex;
@@ -28,13 +29,19 @@ $l-sidebar-width: 25.4rem;
 		@include respond-at("xs") {
 			flex-grow: 1;
 		}
-	}
 
-	&__title {
-		font-size: 2.8rem;
+		// sidebar layout in another sidebar layout
+		.#{$component} {
+			&__navigation,
+			&__sidebar {
+				width: $l-sub-sidebar-width;
+			}
 
-		@include respond-at("md") {
-			font-size: $font-size-3xl;
+			&__main {
+				:global(.l-container) {
+					max-width: 78.4rem; // 912 - (64*2)
+				}
+			}
 		}
 	}
 }

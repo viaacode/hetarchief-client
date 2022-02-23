@@ -117,5 +117,5 @@ export const secondaryListNavigationMock: ListNavigationProps = {
 			hasDivider: true,
 		},
 	],
-	type: 'secondary',
+	color: 'platinum',
 };

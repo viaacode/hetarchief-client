@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import { DefaultComponentProps } from '@shared/types';
+import { SidebarColor } from '@shared/types/sidebar';
 
 export interface ListNavigationItem {
 	node: ((props: ListNavigationItemNodeProps) => ReactNode) | ReactNode;
@@ -12,7 +13,7 @@ export interface ListNavigationItem {
 
 export interface ListNavigationProps extends DefaultComponentProps {
 	listItems: ListNavigationItem[];
-	type?: 'primary' | 'secondary';
+	color?: SidebarColor;
 	onClick?: (id: string) => void;
 }
 

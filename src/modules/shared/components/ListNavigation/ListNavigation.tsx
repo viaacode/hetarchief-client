@@ -7,7 +7,7 @@ import { ListNavigationItem, ListNavigationProps } from './ListNavigation.types'
 const ListNavigation: FC<ListNavigationProps> = ({
 	listItems,
 	className,
-	type = 'primary',
+	color = 'white',
 	onClick,
 }) => {
 	const nodeProps = {
@@ -49,7 +49,7 @@ const ListNavigation: FC<ListNavigationProps> = ({
 			className={clsx(
 				className,
 				styles['c-list-navigation'],
-				styles[`c-list-navigation--${type}`]
+				styles[`c-list-navigation--${color}`]
 			)}
 		>
 			{renderChildrenRecursively(listItems)}
