@@ -118,6 +118,7 @@ pipeline {
 					// tagNewImage('tst')
 					script {
 						sh """#!/bin/bash 
+						oc project $OC_PROJECT
 						oc start-build --follow=true -e DEBUG_TOOLS=true --build-arg DEBUG_TOOLS=true client-tst
 						"""
 					}
