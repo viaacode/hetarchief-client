@@ -13,7 +13,7 @@ export class AuthService extends ApiService {
 		return await ApiService.getApi().get(`auth/check-login`, options).json();
 	}
 
-	public static redirectToLogin(query: StringifiableRecord): void {
+	public static redirectToLoginHetArchief(query: StringifiableRecord): void {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
 			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
@@ -22,6 +22,21 @@ export class AuthService extends ApiService {
 
 		window.location.href = stringifyUrl({
 			url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/login`,
+			query: {
+				returnToUrl,
+			},
+		});
+	}
+
+	public static redirectToLoginMeemoo(query: StringifiableRecord): void {
+		const { redirectTo, ...otherQueryParams } = query;
+		const returnToUrl = stringifyUrl({
+			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
+			query: otherQueryParams,
+		});
+
+		window.location.href = stringifyUrl({
+			url: `${publicRuntimeConfig.PROXY_URL}/auth/meemoo/login`,
 			query: {
 				returnToUrl,
 			},
