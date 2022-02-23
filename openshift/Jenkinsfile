@@ -63,8 +63,11 @@ pipeline {
 			when {
 				not {
 					buildingTag()
-					changeRequest target: 'develop'
 				}
+                                not {
+                                       changeRequest target: 'develop'
+                                }
+
 			}
 			steps {
 				container('oc') {
