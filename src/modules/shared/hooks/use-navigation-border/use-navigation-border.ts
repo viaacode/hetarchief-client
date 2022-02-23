@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setShowNavigationbBorder } from '@shared/store/ui';
+import { setShowNavigationBorder } from '@shared/store/ui';
 
 import { UseNavigationBorder } from './use-navigation-border.types';
 
@@ -9,9 +9,9 @@ const useNavigationBorder: UseNavigationBorder = (showBorder = true) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(setShowNavigationbBorder(showBorder));
+		dispatch(setShowNavigationBorder(showBorder));
 		return () => {
-			dispatch(setShowNavigationbBorder(false));
+			dispatch(setShowNavigationBorder(false));
 		};
 	}, [dispatch, showBorder]);
 };

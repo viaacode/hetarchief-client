@@ -27,7 +27,7 @@ const CPSettingsPage: NextPage = () => {
 
 			<CPAdminLayout
 				className="p-cp-settings"
-				pageTitle={t('pages/beheer/instellingen/index___instellingen')}
+				contentTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">Settings table</div>
 			</CPAdminLayout>

@@ -87,6 +87,7 @@ const AppLayout: FC = ({ children }) => {
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
 				<Navigation.Right
+					currentPath={asPath}
 					placement="right"
 					items={rightNavItems}
 					onOpenDropdowns={onOpenNavDropdowns}

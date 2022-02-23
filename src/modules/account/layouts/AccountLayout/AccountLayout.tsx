@@ -3,17 +3,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
 
-import { CP_ADMIN_NAVIGATION_LINKS } from '@cp/const';
 import { ListNavigationItem } from '@shared/components';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 
-import { CPAdminLayoutProps } from './CPAdminLayout.types';
+import { AccountLayoutProps } from './AccountLayout.types';
 
-const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, contentTitle }) => {
+import { ACCOUNT_NAVIGATION_LINKS } from 'modules/account/const';
+
+const AccountLayout: FC<AccountLayoutProps> = ({ children, className, contentTitle }) => {
 	const { asPath } = useRouter();
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
-			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href }) => ({
+			ACCOUNT_NAVIGATION_LINKS().map(({ id, label, href }) => ({
 				id,
 				node: ({ linkClassName }) => (
 					<Link href={href}>
@@ -34,11 +35,11 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, contentTit
 			className={className}
 			contentTitle={contentTitle}
 			sidebarLinks={sidebarLinks}
-			sidebarTitle={t('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
+			sidebarTitle={t('modules/account/layouts/account-layout/account-layout___account')}
 		>
 			{children}
 		</SidebarLayout>
 	);
 };
 
-export default CPAdminLayout;
+export default AccountLayout;

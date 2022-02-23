@@ -6,6 +6,12 @@
  * Padding
  */
 
+$p: (
+	"0": 0,
+	"24": $spacer-md,
+);
+@include generate-utils("p", "padding", $p);
+
 // Top
 $pt: (
 	"8": $spacer-xs,

@@ -3,6 +3,12 @@ import { render, screen, waitFor } from '@testing-library/react';
 import Navigation from './Navigation';
 import { MOCK_HAMBURGER_PROPS, MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';
 
+const mockDispatch = jest.fn();
+jest.mock('react-redux', () => ({
+	useSelector: jest.fn(),
+	useDispatch: () => mockDispatch,
+}));
+
 describe('Components', () => {
 	describe('<Navigation />', () => {
 		it('Should render children in the left section', () => {
