@@ -34,7 +34,7 @@ import {
 	ToggleOption,
 } from '@shared/components';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
-import { useWindowSize } from '@shared/hooks';
+import { useNavigationBorder, useWindowSize } from '@shared/hooks';
 import { OrderDirection, SortObject } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
@@ -47,6 +47,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const windowSize = useWindowSize();
+	useNavigationBorder();
 
 	const hasSearched = !!query?.search?.length || query?.mediaType !== ReadingRoomMediaType.All; // TODO add other filters once available
 
@@ -99,7 +100,9 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim()) {
-			setQuery({ search: (query.search ?? []).concat(newValue) });
+			if (!query.search?.includes(newValue)) {
+				setQuery({ search: (query.search ?? []).concat(newValue) });
+			}
 		}
 	};
 

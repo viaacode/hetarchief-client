@@ -22,7 +22,7 @@ $component: "c-tab";
 		display: inline-flex;
 		font-size: $font-size-base;
 		margin-right: $spacer-xs;
-	
+
 		@include respond-at("md") {
 			font-size: $font-size-lg;
 		}
