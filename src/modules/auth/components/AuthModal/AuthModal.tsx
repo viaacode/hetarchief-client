@@ -18,10 +18,16 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	 * Methods
 	 */
 
-	const onLogin = () => {
+	const onLoginHetArchief = () => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { showAuth, ...queryParams } = query;
-		AuthService.redirectToLogin(queryParams);
+		AuthService.redirectToLoginHetArchief(queryParams);
+	};
+
+	const onLoginMeemoo = () => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { showAuth, ...queryParams } = query;
+		AuthService.redirectToLoginMeemoo(queryParams);
 	};
 
 	/**
@@ -44,6 +50,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 						'modules/auth/components/auth-modal/auth-modal___meld-je-aan-als-admin'
 					)}
 					variants="text"
+					onClick={onLoginMeemoo}
 				/>
 			</div>
 		);
@@ -65,7 +72,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 						'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 					)}
 					variants="black"
-					onClick={onLogin}
+					onClick={onLoginHetArchief}
 				/>
 
 				<p className="u-mt-32 u-mb-16 u-font-size-14 u-color-neutral">
