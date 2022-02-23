@@ -5,6 +5,7 @@ import { UIState } from './ui.types';
 const initialState: UIState = {
 	showAuthModal: false,
 	isStickyLayout: false,
+	showNavigationBorder: false,
 };
 
 export const uiSlice = createSlice({
@@ -17,7 +18,10 @@ export const uiSlice = createSlice({
 		setIsStickyLayout(state, action: PayloadAction<boolean>) {
 			state.isStickyLayout = action.payload;
 		},
+		setShowNavigationBorder(state, action: PayloadAction<boolean>) {
+			state.showNavigationBorder = action.payload;
+		},
 	},
 });
 
-export const { setShowAuthModal, setIsStickyLayout } = uiSlice.actions;
+export const { setShowAuthModal, setIsStickyLayout, setShowNavigationBorder } = uiSlice.actions;

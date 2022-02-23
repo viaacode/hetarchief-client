@@ -12,13 +12,15 @@ const CardImage: FC<CardImageProps> = ({
 	name,
 	id,
 	size,
+	shadow,
 	style,
 }) => {
 	return (
 		<div
 			className={clsx(
 				styles['c-card-image__background'],
-				size && styles[`c-card-image__background--${size}`]
+				size && styles[`c-card-image__background--${size}`],
+				shadow && styles['c-card-image__background--shadow']
 			)}
 			style={{
 				...style,

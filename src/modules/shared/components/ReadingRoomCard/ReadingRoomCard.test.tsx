@@ -1,4 +1,4 @@
-import { render, RenderResult, screen } from '@testing-library/react'; //eslint-disable-line
+import { render, screen } from '@testing-library/react'; //eslint-disable-line
 
 import ReadingRoomCard from './ReadingRoomCard';
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
@@ -10,38 +10,28 @@ import {
 } from './__mocks__/reading-room-card';
 
 describe('Component: <ReadingRoomCard />', () => {
-	let rendered: RenderResult | undefined;
-
 	const template = (args?: ReadingRoomCardProps) => (
 		<ReadingRoomCard {...mockReadingRoomCardProps} {...args} />
 	);
 
-	beforeEach(() => {
-		// Avoid render bloat
-		rendered = undefined;
-	});
-
 	it('Should show generic information about a room', () => {
-		rendered = render(template());
+		render(template());
 
 		expect(screen.getByText(mockReadingRoomCardProps.room.name || '')).toBeDefined();
 	});
 
 	it('Should render a light card with a short image when not accessible', () => {
-		rendered = render(template());
+		const { container } = render(template());
 
-		const card = rendered.container.getElementsByClassName('c-card--mode-light');
-
-		const image = rendered.container.getElementsByClassName(
-			'c-reading-room-card__background--short'
-		);
+		const card = container.getElementsByClassName('c-card--mode-light');
+		const image = container.getElementsByClassName('c-card-image__background--short');
 
 		expect(card.length).toEqual(1);
 		expect(image.length).toEqual(1);
 	});
 
 	it('Should show a request access and contact button when not accessible', () => {
-		rendered = render(
+		render(
 			template({
 				room: mockReadingRoomCardProps.room,
 				type: ReadingRoomCardType.noAccess,
@@ -49,11 +39,11 @@ describe('Component: <ReadingRoomCard />', () => {
 		);
 
 		expect(screen.getByText('contact')).toBeDefined();
-		expect(screen.getByText('Vraag toegang aan')).toBeDefined();
+		expect(screen.getByText(/toegang/i)).toBeDefined();
 	});
 
 	it('Should render a dark card with a tall image when accessible', () => {
-		rendered = render(
+		const { container } = render(
 			template({
 				room: mockReadingRoomCardProps.room,
 				type: ReadingRoomCardType.access,
@@ -61,18 +51,16 @@ describe('Component: <ReadingRoomCard />', () => {
 			})
 		);
 
-		const card = rendered.container.getElementsByClassName('c-card--mode-dark');
+		const card = container.getElementsByClassName('c-card--mode-dark');
 
-		const image = rendered.container.getElementsByClassName(
-			'c-reading-room-card__background--tall'
-		);
+		const image = container.getElementsByClassName('c-card-image__background--tall');
 
 		expect(card.length).toEqual(1);
 		expect(image.length).toEqual(1);
 	});
 
 	it('Should show an expiration date and visit button when accessible', () => {
-		rendered = render(
+		render(
 			template({
 				room: mockReadingRoomCardProps.room,
 				type: ReadingRoomCardType.access,
@@ -81,11 +69,11 @@ describe('Component: <ReadingRoomCard />', () => {
 		);
 
 		expect(screen.getByText('timer')).toBeDefined(); // Check icon
-		expect(screen.getByText(/^Bezoek/i)).toBeDefined();
+		expect(screen.getByText(/bezoek/i)).toBeDefined();
 	});
 
 	it('Should show a dedicated message when access has already been requested', () => {
-		rendered = render(
+		render(
 			template({
 				room: mockReadingRoomCardProps.room,
 				type: ReadingRoomCardType.noAccess,
@@ -99,7 +87,7 @@ describe('Component: <ReadingRoomCard />', () => {
 	});
 
 	it('Should show a timestamp when access is approved and in the future', () => {
-		rendered = render(
+		render(
 			template({
 				room: mockReadingRoomCardProps.room,
 				type: ReadingRoomCardType.futureApproved,
@@ -113,7 +101,7 @@ describe('Component: <ReadingRoomCard />', () => {
 	});
 
 	it('Should show a tag with a translated message while future access is still pending', () => {
-		rendered = render(
+		const { container } = render(
 			template({
 				room: mockReadingRoomCardProps.room,
 				type: ReadingRoomCardType.futureRequested,
@@ -121,7 +109,7 @@ describe('Component: <ReadingRoomCard />', () => {
 			})
 		);
 
-		const tag = rendered.container.getElementsByClassName('c-tag-list__tag');
+		const tag = container.getElementsByClassName('c-tag-list__tag');
 
 		expect(tag.length).toEqual(1);
 		expect(tag[0].innerHTML.length).toBeGreaterThan(0);

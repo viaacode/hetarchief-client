@@ -10,7 +10,16 @@ import styles from '../FilterMenu.module.scss';
 
 import { FilterOptionProps } from './FilterOption.types';
 
-const FilterOption: FC<FilterOptionProps> = ({ activeFilter, icon, id, label, onClick }) => {
+const FilterOption: FC<FilterOptionProps> = ({
+	activeFilter,
+	form,
+	icon,
+	id,
+	label,
+	onClick,
+	onFormReset,
+	onFormSubmit,
+}) => {
 	const filterIsActive = id === activeFilter;
 	const flyoutCls = clsx(
 		styles['c-filter-menu__flyout'],
@@ -44,7 +53,14 @@ const FilterOption: FC<FilterOptionProps> = ({ activeFilter, icon, id, label, on
 						variants="text"
 						onClick={onFilterToggle}
 					/>
-					<FilterForm className={styles['c-filter-menu__form']} title={label} />
+					<FilterForm
+						className={styles['c-filter-menu__form']}
+						form={form}
+						id={id}
+						title={label}
+						onFormReset={onFormReset}
+						onFormSubmit={onFormSubmit}
+					/>
 				</DropdownContent>
 			</Dropdown>
 			<Overlay
