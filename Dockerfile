@@ -5,6 +5,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
 # Manually ignore scripts instead of using --ignore-scripts, this flag will prevent running lifecycles for all dependencies
+ENV DEBUG_TOOLS false
+ARG DEBUG_TOOLS $DEBUG_TOOLS
+
 RUN npm set-script prepare "" &&\
     npm ci
 

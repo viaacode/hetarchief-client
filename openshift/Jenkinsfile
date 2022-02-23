@@ -111,7 +111,8 @@ pipeline {
 			}
 			steps {
 				container('oc') {
-					tagNewImage('tst')
+					// tagNewImage('tst')
+					oc start-build --follow=true -e DEBUG_TOOLS=true --build-arg DEBUG_TOOLS=true client-tst
 				}
 			}
 			post {
