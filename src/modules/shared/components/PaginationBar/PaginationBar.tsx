@@ -34,6 +34,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 			buttons={{
 				next: (
 					<Button
+						className="u-pl-24:sm u-pl-8"
 						disabled={currentPage + 1 === pageCount}
 						variants={['text', 'neutral']}
 						label="Volgende"
@@ -42,6 +43,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 				),
 				previous: (
 					<Button
+						className="u-pr-24:sm u-pr-8"
 						disabled={currentPage + 1 === 1}
 						variants={['text', 'neutral']}
 						label="Vorige"

@@ -24,20 +24,36 @@ $pb: (
 );
 @include generate-utils("pb", "padding-bottom", $pb, ("md"));
 
+// Left
+$pl: (
+	"8": $spacer-xs,
+	"24": $spacer-md,
+);
+@include generate-utils("pl", "padding-left", $pl, ("sm"));
+
+// Right
+$pr: (
+	"8": $spacer-xs,
+	"24": $spacer-md,
+);
+@include generate-utils("pr", "padding-right", $pr, ("sm"));
+
 // Top / Bottom
 $py: (
 	"16": $spacer-sm,
-	"24": 2.4rem,
+	"24": $spacer-md,
 	"48": 4.8rem,
 );
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
 
 // Left / Right
 $px: (
+	"8": $spacer-xs,
 	"12": math.div($spacer-md, 2),
+	"24": $spacer-md,
 	"32": $spacer-lg,
 );
-@include generate-utils("px", ("padding-left", "padding-right"), $px);
+@include generate-utils("px", ("padding-left", "padding-right"), $px, ("sm"));
 
 /**
  * Margin
