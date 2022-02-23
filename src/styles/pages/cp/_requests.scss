@@ -54,8 +54,11 @@ $page: "p-cp-requests";
 			}
 		}
 
-		td:nth-last-child(1) {
-			padding-left: 0;
+		td, th {
+			&:nth-last-child(1) {
+				display: none; // Hidden, see ARC-409
+				padding-left: 0;
+			}
 		}
 
 		td:nth-last-child(2) {

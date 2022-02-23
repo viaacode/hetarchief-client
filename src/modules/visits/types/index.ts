@@ -12,11 +12,19 @@ export interface VisitInfo {
 	reason: string;
 	acceptedTosAt: string;
 	status: VisitStatus;
-	startAt: string;
-	endAt: string;
+	startAt?: string;
+	endAt?: string;
 	createdAt: string;
 	updatedAt: string;
 	visitorName: string;
 	visitorMail: string;
 	visitorId: string;
+}
+
+export interface PatchVisit {
+	status: VisitStatus;
+	startAt?: string;
+	endAt?: string;
+	remark?: string;
+	denial?: string;
 }
