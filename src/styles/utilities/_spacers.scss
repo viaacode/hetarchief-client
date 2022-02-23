@@ -22,7 +22,7 @@ $p: (
 // Top
 $pt: (
 	"8": $spacer-xs,
-	"12": $spacer-12,
+	"12": math.div($spacer-md, 2),
 	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
@@ -55,7 +55,7 @@ $pr: (
 $py: (
 	"16": $spacer-sm,
 	"24": $spacer-md,
-	"48": $spacer-48,
+	"48": $spacer-md * 2,
 );
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
 
@@ -86,8 +86,9 @@ $mb: (
 	"16": $spacer-sm,
 	"24": $spacer-md,
 	"32": $spacer-lg,
-	"48": $spacer-48,
-	"64": $spacer-64,
+	"40": $spacer-1xl,
+	"48": $spacer-md * 2,
+	"64": $spacer-lg * 2,
 	"80": $spacer-2xl,
 );
 @include generate-utils("mb", "margin-bottom", $mb, ("md"));
