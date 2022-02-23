@@ -66,6 +66,10 @@ pipeline {
 				not {
 					buildingTag()
 				}
+                                not {
+                                       branch 'develop'
+                                }
+
 			}
 			steps {
 				container('oc') {
@@ -113,7 +117,13 @@ pipeline {
 			}
 			steps {
 				container('oc') {
-					tagNewImage('tst')
+					// tagNewImage('tst')
+					script {
+						sh """#!/bin/bash 
+						oc project $OC_PROJECT
+						oc start-build --follow=true -e DEBUG_TOOLS=true --build-arg DEBUG_TOOLS=true client-tst
+						"""
+					}
 				}
 			}
 			post {
