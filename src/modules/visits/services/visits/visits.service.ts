@@ -38,17 +38,18 @@ class VisitsService extends ApiService {
 		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public async patchById(id: string, visit: VisitInfo): Promise<VisitInfo> {
+	public async putById(id: string, visit: VisitInfo): Promise<VisitInfo> {
+		const { status, startAt, endAt } = visit;
 		const json: PatchVisit = {
-			status: visit.status,
-			start_date: visit.startAt,
-			end_date: visit.endAt,
+			status,
+			startAt,
+			endAt,
 			// remark: 'TODO',
 			// denial: 'TODO'
 		};
 
 		return await ApiService.getApi()
-			.patch(`${VISITS_SERVICE_BASE_URL}/${id}`, {
+			.put(`${VISITS_SERVICE_BASE_URL}/${id}`, {
 				json,
 			})
 			.json();

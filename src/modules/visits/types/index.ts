@@ -23,8 +23,8 @@ export interface VisitInfo {
 
 export interface PatchVisit {
 	status: VisitStatus;
-	start_date?: string;
-	end_date?: string;
+	startAt?: string;
+	endAt?: string;
 	remark?: string;
 	denial?: string;
 }

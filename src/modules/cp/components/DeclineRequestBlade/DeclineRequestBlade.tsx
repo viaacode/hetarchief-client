@@ -27,7 +27,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 	const onFormSubmit = (values: DeclineRequestFormState) => {
 		selected &&
 			visitsService
-				.patchById(selected.id, {
+				.putById(selected.id, {
 					...selected,
 					status: VisitStatus.DENIED,
 					// TODO: reason
