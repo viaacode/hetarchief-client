@@ -85,6 +85,7 @@ $component: "c-card";
 
 			&__children-wrapper {
 				margin-bottom: $spacer-md;
+				color: $zinc;
 
 				@include respond-at("md") {
 					margin-right: $spacer-lg;

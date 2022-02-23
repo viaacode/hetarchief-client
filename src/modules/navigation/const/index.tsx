@@ -2,6 +2,7 @@ import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { i18n } from 'next-i18next';
 
+import { ACCOUNT_NAVIGATION_LINKS } from '@account/const';
 import { Icon } from '@shared/components';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
@@ -67,37 +68,10 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 				</Avatar>
 			),
 			children: [
-				{
-					id: 'profile',
-					node: (
-						<NavigationLink
-							href="/"
-							label={i18n?.t('modules/navigation/const/index___mijn-profiel')}
-							isDropdownItem
-						/>
-					),
-				},
-				{
-					id: 'folders',
-					node: (
-						<NavigationLink
-							href="/"
-							label={i18n?.t('modules/navigation/const/index___mijn-mappen')}
-							isDropdownItem
-						/>
-					),
-				},
-				{
-					id: 'history',
-					node: (
-						<NavigationLink
-							href="/"
-							label={i18n?.t('modules/navigation/const/index___mijn-historiek')}
-							isDropdownItem
-						/>
-					),
-					hasDivider: true,
-				},
+				...ACCOUNT_NAVIGATION_LINKS().map(({ label, href, ...rest }) => ({
+					...rest,
+					node: <NavigationLink href={href} label={label} isDropdownItem />,
+				})),
 				{
 					id: 'log-out',
 					node: ({ closeDropdowns }) => (

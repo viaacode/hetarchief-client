@@ -23,6 +23,16 @@ module.exports = {
 		/* Handle deps */
 		'^lodash-es$': '<rootDir>/node_modules/lodash/index.js',
 	},
+	/* Report results to the console but also to a junit compatible xml file for Jenkins: ARC-523 */
+	reporters: [
+		'default',
+		[
+			'jest-junit',
+			{
+				outputDirectory: `tests/test_results`,
+			},
+		],
+	],
 	/* Don't look for other test files except in src this will avoid running .spec files from cypress */
 	roots: ['<rootDir>/src'],
 	setupFiles: ['<rootDir>/src/setup-tests.ts'],

@@ -44,3 +44,6 @@ yarn-error.log*
 # Intellij IDE
 .idea
 *.iml
+
+# Ignore jest junit compatible test results file: ARC-523
+tests/test_results/junit.xml

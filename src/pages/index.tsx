@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -22,26 +23,33 @@ import {
 	SearchBar,
 } from '@shared/components';
 import { heroRequests } from '@shared/components/Hero/__mocks__/hero';
+import { ROUTES } from '@shared/const';
+import { useNavigationBorder, useTermsOfService } from '@shared/hooks';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
 const NUMBER_OF_READING_ROOMS = 6;
 
 const Home: NextPage = () => {
+	const { t } = useTranslation();
+	const router = useRouter();
+	const dispatch = useDispatch();
+	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
+
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
 
-	const dispatch = useDispatch();
-	const [query, setQuery] = useQueryParams(HOME_QUERY_PARAM_CONFIG);
 	const isLoggedIn = useSelector(selectIsLoggedIn);
-	const user = useSelector(selectUser);
 	const showAuthModal = useSelector(selectShowAuthModal);
-	const { t } = useTranslation();
+	const user = useSelector(selectUser);
+	const tosAccepted = useTermsOfService();
+
 	const { data: readingRoomInfo, isLoading: isLoadingReadingRooms } = useGetReadingRooms(
 		query.search || undefined,
 		0,
 		areAllReadingRoomsVisible ? 200 : NUMBER_OF_READING_ROOMS
 	);
+	useNavigationBorder(!isLoggedIn);
 
 	// Sync showAuth query param with store value
 	useEffect(() => {
@@ -92,11 +100,13 @@ const Home: NextPage = () => {
 	};
 
 	const onRequestAccess = () => {
-		if (isLoggedIn) {
-			setIsOpenRequestAccessBlade(true);
-		} else {
+		if (!isLoggedIn) {
 			onOpenAuthModal();
 			setQuery({ returnToRequestAccess: true });
+		} else if (!tosAccepted) {
+			router.push(ROUTES.termsOfService);
+		} else {
+			setIsOpenRequestAccessBlade(true);
 		}
 	};
 

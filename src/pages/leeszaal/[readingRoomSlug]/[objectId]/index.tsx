@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
-import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
+import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
 import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
@@ -17,6 +17,7 @@ import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholde
 const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
 	useStickyLayout();
+	useNavigationBorder();
 
 	/**
 	 * Mock data
@@ -80,7 +81,16 @@ const ObjectDetailPage: NextPage = () => {
 								className="p-object-detail__export"
 								iconStart={<Icon name="export" />}
 							>
-								<span className="u-text-ellipsis">Exporteer metadata</span>
+								<span className="u-text-ellipsis u-display-none u-display-block:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+									)}
+								</span>
+								<span className="u-text-ellipsis u-display-none:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+									)}
+								</span>
 							</Button>
 							<DynamicActionMenu {...dynamicActionMenuMock} />
 						</div>

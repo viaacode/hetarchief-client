@@ -17,6 +17,8 @@ pipeline {
             command:
             - cat
             tty: true
+            securityContext:
+              runAsUser: 1000
           - name: oc
             image: image-registry.openshift-image-registry.svc:5000/ci-cd/py:3.7
             command:
