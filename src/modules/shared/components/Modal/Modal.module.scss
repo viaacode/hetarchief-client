@@ -59,6 +59,11 @@
 			flex-grow: 1;
 			margin-left: $modal-title-margin-left;
 			margin-right: 0;
+			overflow: hidden;
+
+			@include respond-at("md") {
+				margin-left: $modal-title-margin-left-md;
+			}
 		}
 	}
 
@@ -67,14 +72,24 @@
 		cursor: pointer;
 		display: block;
 		height: $modal-close-size;
+		max-height: $modal-close-size;
 		margin: $modal-close-margin;
 		width: $modal-close-size;
+		max-width: $modal-close-size;
+
+		@include respond-at("md") {
+			margin: $modal-close-margin-md;
+		}
 
 		&-wrapper {
 			display: flex;
 			flex-grow: 1;
 			margin-left: 0;
 			max-width: $modal-title-margin-left;
+
+			@include respond-at("md") {
+				max-width: $modal-title-margin-left-md;
+			}
 		}
 	}
 }
