@@ -20,7 +20,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	const currentPage = start / count;
 
 	const scrollToTop = () => {
-		window.scrollTo({ top: 0, behavior: 'smooth' });
+		document.body.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
 	const renderProgress = () => {
@@ -34,6 +34,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 			buttons={{
 				next: (
 					<Button
+						className="u-pl-24:sm u-pl-8"
 						disabled={currentPage + 1 === pageCount}
 						variants={['text', 'neutral']}
 						label="Volgende"
@@ -42,6 +43,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 				),
 				previous: (
 					<Button
+						className="u-pr-24:sm u-pr-8"
 						disabled={currentPage + 1 === 1}
 						variants={['text', 'neutral']}
 						label="Vorige"
@@ -69,13 +71,15 @@ const PaginationBar: FC<PaginationBarProps> = ({
 			{renderPagination()}
 
 			{showBackToTop && (
-				<Button
-					className={styles['c-pagination-bar__back-to-top']}
-					variants={['text', 'neutral']}
-					label="Terug naar boven"
-					iconEnd={<Icon name="arrow-up" />}
-					onClick={scrollToTop}
-				/>
+				<div className={styles['c-pagination-bar__back-to-top-wrapper']}>
+					<Button
+						className={styles['c-pagination-bar__back-to-top']}
+						variants={['text', 'neutral']}
+						label="Terug naar boven"
+						iconEnd={<Icon name="arrow-up" />}
+						onClick={scrollToTop}
+					/>
+				</div>
 			)}
 		</div>
 	);
