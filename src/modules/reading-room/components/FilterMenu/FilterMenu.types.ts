@@ -1,12 +1,13 @@
-import { ReactElement } from 'react';
+import { FC } from 'react';
 
-import { ReadingRoomSort } from '@reading-room/types';
+import { DefaultFilterFormProps, ReadingRoomSort } from '@reading-room/types';
 import { IconProps, ToggleOption } from '@shared/components';
 import { DefaultComponentProps, OrderDirection, SortObject } from '@shared/types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
 	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
+	filterValues?: Record<string, unknown>;
 	label?: string;
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
@@ -29,7 +30,7 @@ export interface FilterMenuFilterOption {
 	id: string;
 	icon?: IconProps['name'];
 	label: string;
-	form?: () => ReactElement | null; // TODO make form not optional
+	form: FC<DefaultFilterFormProps> | null;
 }
 
 export type OnFilterMenuSortClick = (key: ReadingRoomSort, order?: OrderDirection) => void;

@@ -9,4 +9,5 @@ export interface ModalProps {
 	footer?: ReactNode;
 	onClose?: () => void;
 	onOpen?: OnAfterOpenCallback;
+	excludeScrollbar?: boolean;
 }

@@ -7,7 +7,10 @@ $component: "c-card-image";
 		display: grid;
 		grid-template-columns: 1fr 2fr 1fr;
 		grid-template-rows: 1fr 2fr 1fr;
-		box-shadow: $shadow-24-black-04;
+
+		&--shadow {
+			box-shadow: $shadow-24-black-24;
+		}
 
 		&--image {
 			grid-column: 1 / 4;

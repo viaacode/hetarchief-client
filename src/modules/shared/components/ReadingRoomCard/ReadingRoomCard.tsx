@@ -44,6 +44,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 				id={room.id.toString()}
 				image={room.image}
 				size={size || 'short'}
+				shadow={typeNoAccess}
 			/>
 		);
 	};

@@ -113,6 +113,10 @@ $c-filter-menu-flyout-top-padding: 6.4rem;
 .c-filter-menu__flyout-close {
 	position: absolute;
 	inset: 1.2rem 1.2rem auto auto;
+	top: 1.2rem;
+	right: 1.2rem;
+	bottom: auto;
+	left: auto;
 }
 
 .c-filter-menu__overlay {

@@ -1,0 +1,5 @@
+@use "../abstracts" as *;
+
+.c-react-select {
+	@include react-select-base("c-react-select");
+}

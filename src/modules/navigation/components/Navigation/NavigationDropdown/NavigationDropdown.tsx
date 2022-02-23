@@ -14,7 +14,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 	isOpen,
 	items,
 	trigger,
-	lockScroll,
+	lockScroll = false,
 	className,
 	flyoutClassName,
 	onOpen,

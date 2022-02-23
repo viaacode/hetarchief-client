@@ -2,14 +2,27 @@
 
 @use "../abstracts" as *;
 
+$spacer-12: math.div($spacer-md, 2);
+$spacer-20: math.div($spacer-1xl, 2);
+$spacer-48: $spacer-md * 2;
+$spacer-64: $spacer-lg * 2;
+
 /**
  * Padding
  */
 
+$p: (
+	"0": 0,
+	"20": $spacer-20,
+	"24": $spacer-md,
+	"32": $spacer-lg,
+);
+@include generate-utils("p", "padding", $p);
+
 // Top
 $pt: (
 	"8": $spacer-xs,
-	"12": 1.2rem,
+	"12": $spacer-12,
 	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
@@ -19,7 +32,7 @@ $pt: (
 $pb: (
 	"8": $spacer-xs,
 	"24": $spacer-md,
-	"48": $spacer-md * 2,
+	"48": $spacer-48,
 	"80": $spacer-2xl,
 );
 @include generate-utils("pb", "padding-bottom", $pb, ("md"));
@@ -27,17 +40,18 @@ $pb: (
 // Top / Bottom
 $py: (
 	"16": $spacer-sm,
-	"24": 2.4rem,
-	"48": 4.8rem,
+	"24": $spacer-md,
+	"48": $spacer-48,
 );
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
 
 // Left / Right
 $px: (
-	"12": math.div($spacer-md, 2),
+	"12": $spacer-12,
+	"20": $spacer-20,
 	"32": $spacer-lg,
 );
-@include generate-utils("px", ("padding-left", "padding-right"), $px);
+@include generate-utils("px", ("padding-left", "padding-right"), $px, ("md"));
 
 /**
  * Margin
@@ -48,7 +62,7 @@ $mt: (
 	"16": $spacer-sm,
 	"24": $spacer-md,
 	"32": $spacer-lg,
-	"64": $spacer-lg * 2,
+	"64": $spacer-64,
 	"80": $spacer-2xl,
 );
 @include generate-utils("mt", "margin-top", $mt, ("md"));
@@ -58,8 +72,8 @@ $mb: (
 	"16": $spacer-sm,
 	"24": $spacer-md,
 	"32": $spacer-lg,
-	"48": $spacer-md * 2,
-	"64": $spacer-lg * 2,
+	"48": $spacer-48,
+	"64": $spacer-64,
 	"80": $spacer-2xl,
 );
 @include generate-utils("mb", "margin-bottom", $mb, ("md"));
@@ -69,7 +83,7 @@ $mb: (
 $ml: (
 	"4": $spacer-xxs,
 	"8": $spacer-xs,
-	"-12": - 1.2rem,
+	"-12": - $spacer-12,
 );
 @include generate-utils("ml", "margin-left", $ml);
 

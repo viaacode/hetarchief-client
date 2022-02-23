@@ -37,6 +37,10 @@ $component: "c-reading-room-card";
 					width: 1px;
 				}
 			}
+
+			@include respond-at("lg") {
+				padding-right: $spacer-2xl;
+			}
 		}
 	}
 

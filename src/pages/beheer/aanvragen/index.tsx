@@ -101,7 +101,7 @@ const CPRequestsPage: NextPage = () => {
 
 			<CPAdminLayout
 				className="p-cp-requests"
-				pageTitle={t('pages/beheer/aanvragen/index___aanvragen')}
+				contentTitle={t('pages/beheer/aanvragen/index___aanvragen')}
 			>
 				<div className="l-container">
 					<div className="p-cp-requests__header">

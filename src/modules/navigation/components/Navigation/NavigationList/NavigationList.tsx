@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, Fragment, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 
@@ -36,7 +36,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 
 	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
 		return (
-			<div className={styles['c-navigation__link--wrapper']}>
+			<div className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}>
 				{item.node}
 				<Icon className="u-text-left u-ml-4" name={iconName} />
 			</div>
@@ -70,8 +70,8 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 									flyoutClassName={styles['c-navigation__list-flyout']}
 									id={item.id}
 									isOpen={openDropdown === item.id}
+									lockScroll={openDropdown === item.id}
 									items={item.children}
-									lockScroll
 									trigger={renderTrigger(
 										item,
 										openDropdown === item.id ? 'angle-up' : 'angle-down'

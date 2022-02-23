@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { FC } from 'react';
 
+import { useScrollbarWidth } from '@shared/hooks';
+
 import styles from './Overlay.module.scss';
 import { OverlayProps } from './Overlay.types';
 
@@ -11,7 +13,10 @@ const Overlay: FC<OverlayProps> = ({
 	visible = false,
 	animate,
 	onClick = () => null,
+	excludeScrollbar = true,
 }) => {
+	const scrollbarWidth = useScrollbarWidth();
+
 	return (
 		<div
 			className={clsx(
@@ -21,7 +26,10 @@ const Overlay: FC<OverlayProps> = ({
 				visible && styles['c-overlay--visible'],
 				animate && styles[`c-overlay--${animate}`]
 			)}
-			style={style}
+			style={{
+				...style,
+				width: excludeScrollbar ? `calc(100vw - ${scrollbarWidth}px)` : 'auto',
+			}}
 			onClick={onClick}
 		/>
 	);
