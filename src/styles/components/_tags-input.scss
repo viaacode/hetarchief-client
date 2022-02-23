@@ -22,6 +22,11 @@
 	.c-tags-input__indicator {
 		display: inline-flex;
 		padding: 0.6rem;
+
+		&:not(:active,:hover):focus {
+			outline: 2px solid $teal;
+			border-radius: 0.5rem;
+		}
 	}
 
 	.c-tags-input__clear-indicator,

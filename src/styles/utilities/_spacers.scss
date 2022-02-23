@@ -26,7 +26,7 @@ $pt: (
 	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
-@include generate-utils("pt", "padding-top", $pt);
+@include generate-utils("pt", "padding-top", $pt, ("md"));
 
 // Bottom
 $pb: (
@@ -36,6 +36,20 @@ $pb: (
 	"80": $spacer-2xl,
 );
 @include generate-utils("pb", "padding-bottom", $pb, ("md"));
+
+// Left
+$pl: (
+	"8": $spacer-xs,
+	"24": $spacer-md,
+);
+@include generate-utils("pl", "padding-left", $pl, ("sm"));
+
+// Right
+$pr: (
+	"8": $spacer-xs,
+	"24": $spacer-md,
+);
+@include generate-utils("pr", "padding-right", $pr, ("sm"));
 
 // Top / Bottom
 $py: (
