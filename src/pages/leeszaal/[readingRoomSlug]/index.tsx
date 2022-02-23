@@ -19,8 +19,8 @@ import {
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
-import { ReadingRoomMediaType } from '@reading-room/types';
-import { mapFilters } from '@reading-room/utils';
+import { ReadingRoomFilterId, ReadingRoomMediaType } from '@reading-room/types';
+import { mapFiltersToQuery, mapFiltersToTags } from '@reading-room/utils';
 import {
 	MediaCardList,
 	MediaCardProps,
@@ -68,13 +68,18 @@ const ReadingRoomPage: NextPage = () => {
 	// Display
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
-	const activeFilters = useMemo(() => mapFilters(query), [query]);
+	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 
 	const tabs: TabProps[] = useMemo(
 		() =>
-			READING_ROOM_TABS.map((tab) => ({
+			READING_ROOM_TABS().map((tab) => ({
 				...tab,
-				label: <TabLabel label={tab.label} count={mediaCount[tab.id]} />,
+				label: (
+					<TabLabel
+						label={tab.label}
+						count={mediaCount[tab.id as ReadingRoomMediaType]}
+					/>
+				),
 				active: tab.id === query.mediaType,
 			})),
 		[query.mediaType, mediaCount]
@@ -119,7 +124,16 @@ const ReadingRoomPage: NextPage = () => {
 		});
 	};
 
-	const onRemoveFilter = (newValue: SearchBarValue<true>) =>
+	const onResetFilter = (id: string) => {
+		setQuery({ [id]: undefined });
+	};
+
+	const onSubmitFilter = (id: string, values: unknown) => {
+		const parsedQueryValue = mapFiltersToQuery(id as ReadingRoomFilterId, values);
+		setQuery({ [id]: parsedQueryValue });
+	};
+
+	const onRemoveKeyword = (newValue: SearchBarValue<true>) =>
 		setQuery({ search: newValue?.map((tag) => tag.value as string) });
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
@@ -165,6 +179,8 @@ const ReadingRoomPage: NextPage = () => {
 						onSortClick={onSortClick}
 						onMenuToggle={onFilterMenuToggle}
 						onViewToggle={onViewToggle}
+						onFilterReset={onResetFilter}
+						onFilterSubmit={onSubmitFilter}
 					/>
 				</WindowSizeContext.Provider>
 			</div>
@@ -195,7 +211,7 @@ const ReadingRoomPage: NextPage = () => {
 						valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
 						value={activeFilters}
 						onClear={onResetFilters}
-						onRemoveValue={onRemoveFilter}
+						onRemoveValue={onRemoveKeyword}
 						onSearch={onSearch}
 					/>
 					<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
@@ -277,5 +293,4 @@ const ReadingRoomPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-const withAuthExport = withAuth(ReadingRoomPage);
-export default withAuthExport;
+export default withAuth(ReadingRoomPage);
