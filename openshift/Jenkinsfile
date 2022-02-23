@@ -63,6 +63,7 @@ pipeline {
 			when {
 				not {
 					buildingTag()
+					changeRequest target: 'develop'
 				}
 			}
 			steps {
