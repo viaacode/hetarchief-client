@@ -17,7 +17,7 @@ export const METADATA_PROP_OPTIONS = (): SelectOption[] => [
 			i18n?.t(
 				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___secundaire-titel'
 			) ?? '',
-		value: MetadataProp.SecundaryTitle,
+		value: MetadataProp.SecondaryTitle,
 	},
 ];
 
@@ -54,5 +54,5 @@ export const OPERATOR_OPTIONS = (): SelectOption[] => [
 
 export const METADATA_FIELD_MAP = {
 	[MetadataProp.Title]: TextInput,
-	[MetadataProp.SecundaryTitle]: TextInput,
+	[MetadataProp.SecondaryTitle]: TextInput,
 };

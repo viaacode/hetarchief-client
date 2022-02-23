@@ -10,7 +10,7 @@ export interface AdvancedFilterFieldsProps {
 
 export enum MetadataProp {
 	Title = 'title',
-	SecundaryTitle = 'secundary_title',
+	SecondaryTitle = 'secondary_title',
 }
 
 export enum Operator {
