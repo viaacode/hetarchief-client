@@ -25,11 +25,13 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 		<Navigation contextual>
 			<Navigation.Left placement="left">
 				<Link href="/" passHref={true}>
-					<Button
-						icon={<Icon name="arrow-left" />}
-						variants="text"
-						className="u-color-white u-ml--12"
-					/>
+					<a>
+						<Button
+							icon={<Icon name="arrow-left" />}
+							variants="text"
+							className="u-color-white u-ml--12"
+						/>
+					</a>
 				</Link>
 			</Navigation.Left>
 
@@ -61,14 +63,19 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 						<ul className={styles['c-reading-room-navigation__contact-list']}>
 							<li className={styles['c-reading-room-navigation__contact-item']}>
 								<Link href={`mailto:${email}`} passHref={true}>
-									<Button
-										className="u-text-left"
-										iconStart={
-											<Icon className="u-font-size-24 u-mr-8" name="email" />
-										}
-										variants={['text', 'block', 'sm']}
-										label={email}
-									/>
+									<a>
+										<Button
+											className="u-text-left"
+											iconStart={
+												<Icon
+													className="u-font-size-24 u-mr-8"
+													name="email"
+												/>
+											}
+											variants={['text', 'block', 'sm']}
+											label={email}
+										/>
+									</a>
 								</Link>
 
 								<CopyButton text={email} variants={['sm', 'text']} />
@@ -76,14 +83,19 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 
 							<li className={styles['c-reading-room-navigation__contact-item']}>
 								<Link href={`tel:${phone}`} passHref={true}>
-									<Button
-										className="u-text-left"
-										iconStart={
-											<Icon className="u-font-size-24 u-mr-8" name="phone" />
-										}
-										variants={['text', 'block', 'sm']}
-										label={phone}
-									/>
+									<a>
+										<Button
+											className="u-text-left"
+											iconStart={
+												<Icon
+													className="u-font-size-24 u-mr-8"
+													name="phone"
+												/>
+											}
+											variants={['text', 'block', 'sm']}
+											label={phone}
+										/>
+									</a>
 								</Link>
 
 								<CopyButton text={phone} variants={['sm', 'text']} />
