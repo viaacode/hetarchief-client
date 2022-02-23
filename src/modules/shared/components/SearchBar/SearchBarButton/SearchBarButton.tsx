@@ -1,15 +1,17 @@
+import clsx from 'clsx';
 import { FC } from 'react';
 
 import { Icon } from '../../Icon';
 import { dropdownIndicatorCxState } from '../../TagsInput';
 
+import styles from './SearchBarButton.module.scss';
 import { SearchBarButtonProps } from './SearchBarButton.types';
 
 const SearchBarButton: FC<SearchBarButtonProps> = ({ className, cx, innerProps, selectProps }) => {
 	return (
 		<span
 			{...innerProps}
-			className={cx(dropdownIndicatorCxState, className)}
+			className={clsx(dropdownIndicatorCxState, className, styles['c-search-bar-button'])}
 			tabIndex={0}
 			/* eslint-disable @typescript-eslint/ban-ts-comment */
 			// @ts-ignore

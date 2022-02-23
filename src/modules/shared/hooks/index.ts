@@ -5,5 +5,6 @@ export * from './use-navigation-border';
 export * from './use-scroll-lock';
 export * from './use-scrollbar-width';
 export * from './use-sticky-layout';
-export * from './use-window-size';
+export * from './use-terms-of-service';
 export * from './use-window-size-context';
+export * from './use-window-size';

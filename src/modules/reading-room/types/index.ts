@@ -1,3 +1,9 @@
+import { ReactNode } from 'react';
+
+import { DefaultComponentProps } from '@shared/types';
+
+export * from './filters';
+
 export enum ReadingRoomMediaType {
 	All = 'all',
 	Audio = 'audio',
@@ -10,8 +16,26 @@ export enum ReadingRoomSort {
 	Title = 'title',
 }
 
-export interface DefaultFilterFormProps {
-	name: string;
+export enum ReadingRoomFilterId {
+	Format = 'format',
+	Duration = 'duration',
+	Created = 'created',
+	Published = 'published',
+	Creator = 'creator',
+	Genre = 'genre',
+	Keywords = 'keywords',
+	Language = 'language',
+	ImageSound = 'image-sound',
+	Advanced = 'advanced',
+}
+
+export interface DefaultFilterFormChildrenParams<Values = unknown> {
+	values: Values;
+	reset: () => void;
+}
+
+export interface DefaultFilterFormProps<Values = unknown> extends DefaultComponentProps {
+	children: ({ values, reset }: DefaultFilterFormChildrenParams<Values>) => ReactNode;
 }
 
 export interface ReadingRoomInfo {
