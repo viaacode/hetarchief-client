@@ -6,11 +6,11 @@ $component: "c-pagination-bar";
 	& > span,
 	> div,
 	> button {
-		&:nth-child(3n + 1) {
+		&:nth-child(2n + 1) {
 			justify-self: left;
 		}
 
-		&:nth-child(3n + 2) {
+		&:nth-child(2n + 2) {
 			justify-self: right;
 			margin-right: -$button-horizontal-whitespace;
 		}
