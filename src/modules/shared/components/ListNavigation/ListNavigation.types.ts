@@ -9,6 +9,7 @@ export interface ListNavigationItem {
 	active?: boolean;
 	hasDivider?: boolean;
 	children?: ListNavigationItem[];
+	variants?: string[];
 }
 
 export interface ListNavigationProps extends DefaultComponentProps {
