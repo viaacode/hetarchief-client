@@ -18,10 +18,16 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	 * Methods
 	 */
 
-	const onLogin = () => {
+	const onLoginHetArchief = () => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { showAuth, ...queryParams } = query;
-		AuthService.redirectToLogin(queryParams);
+		AuthService.redirectToLoginHetArchief(queryParams);
+	};
+
+	const onLoginMeemoo = () => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { showAuth, ...queryParams } = query;
+		AuthService.redirectToLoginMeemoo(queryParams);
 	};
 
 	/**
@@ -38,12 +44,13 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 
 	const renderFooter = () => {
 		return (
-			<div className="u-text-center u-bg-platinum">
+			<div className="u-text-center u-bg-silver">
 				<Button
 					label={t(
 						'modules/auth/components/auth-modal/auth-modal___meld-je-aan-als-admin'
 					)}
 					variants="text"
+					onClick={onLoginMeemoo}
 				/>
 			</div>
 		);
@@ -51,9 +58,9 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 
 	return (
 		<Modal {...props} heading={renderHeading()} footer={renderFooter()}>
-			<div className={clsx(styles['c-auth-modal__container'], 'u-text-center')}>
-				<p className="u-mb-24 u-mb-32:md u-font-size-14 u-color-neutral">
-					<Trans i18nKey="modules/auth/components/auth-modal/auth-modal___klaar-om-een-bezoek-te-plannen-aan-een-van-de-leeszalen-br-log-dan-meteen-in-met-jouw-het-archief-account">
+			<div className={clsx(styles['c-auth-modal__content'], 'u-text-center', 'u-pt-24')}>
+				<p className="u-mb-24 u-mb-40:md u-font-size-14 u-color-neutral">
+					<Trans i18nKey="modules/auth/components/auth-modal/auth-modal___klaar-om-een-bezoek-te-plannen-aan-een-van-de-leeszalen-log-dan-meteen-in-met-jouw-het-archief-account">
 						Klaar om een bezoek te plannen aan één van de leeszalen? <br /> Log dan
 						meteen in met jouw Het Archief-account
 					</Trans>
@@ -65,7 +72,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 						'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 					)}
 					variants="black"
-					onClick={onLogin}
+					onClick={onLoginHetArchief}
 				/>
 
 				<p className="u-mt-32 u-mb-16 u-font-size-14 u-color-neutral">

@@ -33,7 +33,7 @@
 			text-align: center;
 		}
 		@include respond-at(md) {
-			font-size: $font-size-3xl;
+			font-size: $font-size-2xl;
 			padding-right: $spacer-md * 2;
 
 			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades

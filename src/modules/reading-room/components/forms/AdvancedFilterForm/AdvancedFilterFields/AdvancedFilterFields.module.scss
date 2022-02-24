@@ -1,0 +1,28 @@
+@use "sass:color";
+@use "styles/abstracts" as *;
+
+.c-advanced-filter-fields {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: $spacer-sm;
+	padding: 2rem;
+	border-bottom: 1px solid color.adjust($black, $alpha: -0.8);
+	background-color: $platinum;
+
+	@include respond-at(md) {
+		padding: $spacer-lg;
+	}
+}
+
+.c-advanced-filter-fields__field-container {
+	display: flex;
+	grid-column: span 2;
+
+	:global(.c-button) {
+		margin-left: $spacer-sm;
+	}
+}
+
+.c-advanced-filter-fields__dynamic-field {
+	flex-grow: 1;
+}

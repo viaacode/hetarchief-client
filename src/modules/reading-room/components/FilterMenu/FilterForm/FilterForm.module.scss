@@ -10,13 +10,9 @@
  * Elements
  */
 
-.c-filter-form__body {
-	overflow: auto;
+.c-filter-form__header {
 	padding: $spacer-md 2rem;
 
-	@include respond-to(md) {
-		flex-grow: 1;
-	}
 	@include respond-at(md) {
 		padding: 0 $spacer-lg 4.8rem;
 	}
@@ -29,6 +25,14 @@
 	}
 }
 
+.c-filter-form__body {
+	overflow: auto;
+
+	@include respond-to(md) {
+		flex-grow: 1;
+	}
+}
+
 .c-filter-form__footer {
 	display: flex;
 	padding: $spacer-md 2rem;
@@ -37,6 +41,10 @@
 	@include respond-at(md) {
 		padding: $spacer-md $spacer-lg;
 	}
+}
+
+.c-filter-form__reset {
+	margin-right: 4rem;
 }
 
 .c-filter-form__submit {

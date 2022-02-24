@@ -27,8 +27,11 @@ const CPRequestsPage: NextPage = () => {
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selected, setSelected] = useState<string | number | null>(null);
 
-	// TODO integrate a loading state into the table component
-	const { data: visits } = useGetVisits(
+	const {
+		data: visits,
+		refetch,
+		isFetching,
+	} = useGetVisits(
 		filters.search,
 		filters.status === RequestStatusAll.ALL ? undefined : filters.status,
 		filters.page,
@@ -80,14 +83,26 @@ const CPRequestsPage: NextPage = () => {
 	const onRowClick = useCallback(
 		(e, row) => {
 			const request = (row as { original: VisitInfo }).original;
-
-			// Only open blade for "pending" requests
-			if (request.status === VisitStatus.PENDING) {
-				setSelected(request.id);
-			}
+			setSelected(request.id);
 		},
 		[setSelected]
 	);
+
+	// Render
+
+	const renderEmptyMessage = (): string => {
+		switch (filters.status) {
+			case VisitStatus.APPROVED:
+				return t('pages/beheer/aanvragen/index___er-zijn-geen-goedgekeurde-aanvragen');
+
+			case VisitStatus.DENIED:
+				return t('pages/beheer/aanvragen/index___er-zijn-geen-geweigerde-aanvragen');
+
+			case VisitStatus.PENDING:
+			default:
+				return t('pages/beheer/aanvragen/index___er-zijn-geen-openstaande-aanvragen');
+		}
+	};
 
 	return (
 		<>
@@ -141,7 +156,7 @@ const CPRequestsPage: NextPage = () => {
 					</div>
 				</div>
 
-				{(visits?.items?.length || 0) > 0 && (
+				{(visits?.items?.length || 0) > 0 ? (
 					<div className="l-container p-cp__edgeless-container--lg">
 						<Table
 							className="u-mt-24"
@@ -181,6 +196,12 @@ const CPRequestsPage: NextPage = () => {
 							}}
 						/>
 					</div>
+				) : (
+					<div className="l-container p-cp__edgeless-container--lg u-text-center u-color-neutral u-py-48">
+						{isFetching
+							? t('pages/beheer/aanvragen/index___laden')
+							: renderEmptyMessage()}
+					</div>
 				)}
 			</CPAdminLayout>
 
@@ -188,6 +209,7 @@ const CPRequestsPage: NextPage = () => {
 				isOpen={selected !== null}
 				selected={visits?.items?.find((x) => x.id === selected)}
 				onClose={() => setSelected(null)}
+				onFinish={refetch}
 			/>
 		</>
 	);

@@ -1,5 +1,6 @@
 {
   "name": "hetarchief-client",
+  "version": "0.3.0",
   "private": true,
   "contributors": [
     "Andry Charlier <andry.charlier@studiohyperdrive.be>"
@@ -37,7 +38,7 @@
     "ky": "0.28.7",
     "ky-universal": "0.9.1",
     "lodash.debounce": "4.0.8",
-    "next": "12.0.10",
+    "next": "12.1.0",
     "next-i18next": "10.0.1",
     "next-redux-wrapper": "7.0.5",
     "next-transpile-modules": "9.0.0",
@@ -122,6 +123,5 @@
     "not ie 11",
     "not dead",
     "not op_mini all"
-  ],
-  "version": "0.2.0"
+  ]
 }
