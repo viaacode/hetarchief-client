@@ -20,6 +20,7 @@ import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES } from '@shared/const';
 import { capitalise } from '@shared/helpers';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
+import { toastService } from '@shared/services';
 import { createPageTitle } from '@shared/utils';
 
 type ListNavigationCollectionItem = ListNavigationItem & Collection;
@@ -33,7 +34,7 @@ const AccountMyCollections: NextPage = () => {
 	 * Form
 	 */
 
-	const defaultName = t('Nieuwe map aanmaken');
+	const defaultName = t('pages/account/mijn-mappen/collection-slug/index___nieuwe-map-aanmaken');
 
 	const {
 		control,
@@ -93,6 +94,16 @@ const AccountMyCollections: NextPage = () => {
 		handleSubmit<CreateCollectionFormState>((values) => {
 			collectionsService.create(values).then(() => {
 				refetch();
+
+				toastService.notify({
+					title: t(
+						'pages/account/mijn-mappen/collection-slug/index___name-is-aangemaakt',
+						values
+					),
+					description: t(
+						'pages/account/mijn-mappen/collection-slug/index___je-nieuwe-map-is-succesvol-aangemaakt'
+					),
+				});
 			});
 		})();
 	};
@@ -116,7 +127,9 @@ const AccountMyCollections: NextPage = () => {
 			<AccountLayout className="p-account-my-collections">
 				<SidebarLayout
 					color="platinum"
-					sidebarTitle={t('Mijn mappen')}
+					sidebarTitle={t(
+						'pages/account/mijn-mappen/collection-slug/index___mijn-mappen'
+					)}
 					sidebarLinks={[
 						...sidebarLinks,
 						{
