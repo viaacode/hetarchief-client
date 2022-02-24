@@ -6,3 +6,7 @@ export interface Collection {
 	updatedAt: string;
 	userProfileId: string;
 }
+
+export interface CreateCollectionFormState {
+	name?: string;
+}

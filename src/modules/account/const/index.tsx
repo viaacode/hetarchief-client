@@ -1,5 +1,7 @@
 import { i18n } from 'next-i18next';
 
+export * from './my-collections';
+
 export const ACCOUNT_NAVIGATION_LINKS = (): {
 	id: string;
 	label: string;
