@@ -117,6 +117,29 @@
 	}
 }
 
+// Silver
+.c-button--platinum {
+	background-color: $platinum;
+	border-color: $platinum;
+	color: $black;
+
+	&:hover {
+		background-color: $shade;
+		border-color: $shade;
+		color: $white;
+	}
+
+	&:active {
+		background-color: $teal-dark;
+		border-color: $teal-dark;
+		color: $white;
+	}
+
+	&:not(:active,:hover):focus {
+		outline: 2px solid $teal;
+	}
+}
+
 //  Sizes
 .c-button--block {
 	display: block;
