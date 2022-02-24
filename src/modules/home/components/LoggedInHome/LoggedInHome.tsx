@@ -8,13 +8,13 @@ import { StringParam, useQueryParams } from 'use-query-params';
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade } from '@home/components';
-import { heroRequests } from '@home/components/LoggedInHome/__mocks__/VisitRequests';
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
 import { AccessGranted } from '@shared/components/ReadingRoomCard/__mocks__/reading-room-card';
 import { createPageTitle } from '@shared/utils';
 
 import styles from './LoggedInHome.module.scss';
+import { homeHeroRequests } from './__mocks__/HomeHeroRequests.mock';
 
 const LoggedInHome: FC = () => {
 	const { t } = useTranslation();
@@ -58,9 +58,9 @@ const LoggedInHome: FC = () => {
 	 */
 
 	const renderHero = () => {
-		const accessGranted = heroRequests.filter((request) => request.status === 'access');
-		const planned = heroRequests.filter((request) => request.status === 'planned');
-		const requested = heroRequests.filter((request) => request.status === 'requested');
+		const accessGranted = homeHeroRequests.filter((request) => request.status === 'access');
+		const planned = homeHeroRequests.filter((request) => request.status === 'planned');
+		const requested = homeHeroRequests.filter((request) => request.status === 'requested');
 
 		return (
 			<header className={clsx(styles['c-hero'], styles['c-hero--logged-in'])}>
