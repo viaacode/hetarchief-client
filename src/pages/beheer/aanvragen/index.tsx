@@ -135,6 +135,14 @@ const CPRequestsPage: NextPage = () => {
 								});
 							}}
 							onSearch={(searchValue: string) => {
+								// Force rerender
+								if (filters.search === searchValue) {
+									setFilters({
+										search: undefined,
+										page: 1,
+									});
+								}
+
 								setFilters({
 									search: searchValue,
 									page: 1,
