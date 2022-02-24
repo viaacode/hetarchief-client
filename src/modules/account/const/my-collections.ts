@@ -9,9 +9,12 @@ export const CREATE_COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormSt
 	return object({
 		name: string().test(
 			'name',
-			i18n?.t('De naam van een map moet minstens {{count}} tekens lang zijn.', {
-				count: nameLengthMin,
-			}) || '',
+			i18n?.t(
+				'modules/account/const/my-collections___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
+				{
+					count: nameLengthMin,
+				}
+			) || '',
 			(val) => {
 				return (val || '').length >= 3;
 			}
