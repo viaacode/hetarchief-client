@@ -171,7 +171,7 @@
  */
 
 @mixin generate-button-small {
-	height: 3.6rem;
+	height: $button-height-sm;
 	padding: 0.9rem 2rem;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-normal;
@@ -331,6 +331,16 @@
 			}
 		}
 	}
+}
+
+@mixin reset-input-field {
+	border-radius: 0;
+	color: $black;
+	display: block;
+	font-family: $font-family-primary;
+	font-size: $font-size-base;
+	transition: outline-color $animate-default, border-color $animate-default;
+	width: 100%;
 }
 
 /**

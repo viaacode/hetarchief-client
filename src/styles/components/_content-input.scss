@@ -1,0 +1,33 @@
+@use "styles/abstracts" as *;
+
+$component: "c-content-input";
+
+.#{$component} {
+    display: flex;
+    flex-flow: row nowrap;
+
+    & > input {
+        @include reset-input-field;
+
+        background: none;
+        flex-grow: 1;
+        height: $button-height-sm;
+        line-height: $button-height-sm;
+        padding: 0;
+        border: none;
+        outline: none;
+    }
+
+    &__submit,
+    &__cancel {
+        flex-grow: 0;
+        flex-shrink: 0;
+        margin-left: $spacer-xs;
+    }
+
+    &__icon {
+        &--start {
+            margin-right: $spacer-xxs;
+        }
+    }
+}
