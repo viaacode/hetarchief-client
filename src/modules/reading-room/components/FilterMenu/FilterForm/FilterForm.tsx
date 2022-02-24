@@ -40,7 +40,7 @@ const FilterForm: FC<FilterFormProps> = ({
 					<div className={styles['c-filter-form__footer']}>
 						<Button
 							className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
-							iconStart={<Icon name="redo" />}
+							iconStart={<Icon className="u-font-size-22" name="redo" />}
 							label={t(
 								'modules/reading-room/components/filter-menu/filter-form/filter-form___reset'
 							)}

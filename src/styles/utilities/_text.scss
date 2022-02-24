@@ -20,6 +20,7 @@ $align: (left, right, center);
 
  $size: (
 	"14": $font-size-sm,
+	"22": 2.2rem,
 	"24": $font-size-lg,
  );
  @include generate-utils("font-size", "font-size", $size);
