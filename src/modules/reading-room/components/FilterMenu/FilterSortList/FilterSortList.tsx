@@ -8,22 +8,24 @@ import { FilterMenuSortOption } from '../FilterMenu.types';
 import { FilterSortListProps } from './FilterSortList.types';
 
 const FilterSortList: FC<FilterSortListProps> = ({ activeSort, options, onOptionClick }) => {
-	const checkActiveSort = ({ sort, order }: FilterMenuSortOption) => {
-		const isSortEqual = sort === activeSort?.sort;
-		return !activeSort?.order ? isSortEqual : isSortEqual && order === activeSort.order;
+	const checkActiveSort = ({ orderProp, orderDirection }: FilterMenuSortOption) => {
+		const isSortEqual = orderProp === activeSort?.orderProp;
+		return !activeSort?.orderDirection
+			? isSortEqual
+			: isSortEqual && orderDirection === activeSort.orderDirection;
 	};
 
 	const sortListItems: ListNavigationItem[] = options.map((option) => {
-		const { label, sort, order } = option;
+		const { label, orderProp, orderDirection } = option;
 		return {
-			id: `filter-sort-${sort}${order ? `-${order}` : ''}`,
+			id: `filter-sort-${orderProp}${orderDirection ? `-${orderDirection}` : ''}`,
 			active: checkActiveSort(option),
 			node: ({ buttonClassName }) => (
 				<Button
 					className={buttonClassName}
 					label={label}
 					variants={['text', 'block']}
-					onClick={() => onOptionClick?.(sort, order)}
+					onClick={() => onOptionClick?.(orderProp, orderDirection)}
 				/>
 			),
 		};

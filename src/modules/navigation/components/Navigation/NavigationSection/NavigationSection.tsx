@@ -37,6 +37,7 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 				<NavigationDropdown
 					id="menu"
 					isOpen={isHamburgerMenuOpen}
+					lockScroll={isHamburgerMenuOpen}
 					items={items ? items : []}
 					className={clsx(styles['c-navigation__hamburger'], {
 						[styles['c-navigation__hamburger--open']]: isHamburgerMenuOpen,
@@ -71,9 +72,12 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 							}
 						/>
 					}
-					lockScroll
-					onOpen={() => setIsHamburgerMenuOpen(true)}
-					onClose={() => setIsHamburgerMenuOpen(false)}
+					onOpen={() => {
+						setIsHamburgerMenuOpen(true);
+					}}
+					onClose={() => {
+						setIsHamburgerMenuOpen(false);
+					}}
 				/>
 			</div>
 		);

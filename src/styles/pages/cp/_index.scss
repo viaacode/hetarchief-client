@@ -1,1 +1,14 @@
+@use "styles/abstracts" as *;
+
 @use "requests" as *;
+
+.p-cp {
+    &__edgeless-container {
+        &--lg {
+            @include respond-to("lg") {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    }
+}

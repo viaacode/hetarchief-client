@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '..';
 import { FilterMenuProps } from '../FilterMenu.types';
 
 export interface FilterMenuMobileProps
@@ -9,4 +10,6 @@ export interface FilterMenuMobileProps
 	isOpen: boolean;
 	onClose?: () => void;
 	onFilterClick?: (id: string) => void;
+	onFilterReset: OnFilterMenuFormReset;
+	onFilterSubmit: OnFilterMenuFormSubmit;
 }

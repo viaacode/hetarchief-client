@@ -1,9 +1,9 @@
 @use "sass:math";
 @use "styles/abstracts" as *;
 
-$c: "c-reading-room-card-controls";
+$component: "c-reading-room-card-controls";
 
-.#{$c} {
+.#{$component} {
 	color: $black;
 	display: flex;
 	align-items: center;
@@ -12,6 +12,7 @@ $c: "c-reading-room-card-controls";
 	@include respond-to("md") {
 		flex-wrap: wrap;
 		justify-content: space-between;
+		row-gap: $spacer-xs;
 	}
 
 	&__label {
@@ -27,7 +28,7 @@ $c: "c-reading-room-card-controls";
 				font-size: $font-size-lg;
 			}
 
-			+ .#{$c}__label-text {
+			+ .#{$component}__label-text {
 				margin-left: $spacer-xs;
 			}
 		}
@@ -61,7 +62,7 @@ $c: "c-reading-room-card-controls";
 	&--light {
 		color: $white;
 
-		.#{$c} {
+		.#{$component} {
 			&__label {
 				&-text {
 					font-size: $font-size-sm;
@@ -70,7 +71,7 @@ $c: "c-reading-room-card-controls";
 				}
 
 				&-icon {
-					+ .#{$c}__label-text {
+					+ .#{$component}__label-text {
 						margin-left: $spacer-xs;
 					}
 				}
@@ -83,7 +84,7 @@ $c: "c-reading-room-card-controls";
 	}
 
 	&--thinner {
-		.#{$c} {
+		.#{$component} {
 			&__label-text {
 				font-size: $font-size-sm;
 				line-height: $line-height-3xl;
@@ -99,14 +100,14 @@ $c: "c-reading-room-card-controls";
 			margin-left: $spacer-md;
 			margin-right: $spacer-xs;
 			margin-top: $spacer-sm;
-			min-width: 285px;
+			min-width: 28.5rem;
 		}
 
 		@include respond-at("lg") {
-			min-width: 385px;
+			min-width: 32rem;
 		}
 
-		.#{$c} {
+		.#{$component} {
 			&__label {
 				&-text {
 					font-size: $font-size-sm;
@@ -116,7 +117,7 @@ $c: "c-reading-room-card-controls";
 				&-icon {
 					font-size: $font-size-md;
 
-					+ .#{$c}__label-text {
+					+ .#{$component}__label-text {
 						margin-left: math.div($spacer-md, 2);
 					}
 				}
@@ -133,12 +134,12 @@ $c: "c-reading-room-card-controls";
 		ul, button, div {
 			&:not(:last-child) {
 				@include respond-to("sm") {
-					margin-bottom: $spacer-sm;
+					margin-bottom: $spacer-xs;
 				}
 			}
 		}
 
-		.#{$c}__label {
+		.#{$component}__label {
 			@include respond-to("xl") {
 				margin-bottom: $spacer-sm;
 			}

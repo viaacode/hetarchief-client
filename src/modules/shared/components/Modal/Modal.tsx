@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { default as ReactModal } from 'react-modal';
 
-import { useScrollLock } from '@shared/hooks';
+import { useScrollbarWidth, useScrollLock } from '@shared/hooks';
 
 import { Icon } from '../Icon';
 
@@ -19,9 +19,10 @@ const Modal: FC<ModalProps> = ({
 	title,
 	onClose,
 	onOpen,
+	excludeScrollbar = true,
 }) => {
 	const [ready, setReady] = useState(false);
-
+	const scrollbarWidth = useScrollbarWidth();
 	useScrollLock(isOpen ?? false);
 
 	// See https://github.com/reactjs/react-modal#examples
@@ -44,6 +45,17 @@ const Modal: FC<ModalProps> = ({
 			shouldCloseOnEsc={true}
 			shouldCloseOnOverlayClick={true}
 			onRequestClose={onClose}
+			overlayElement={(props, contentElement) => (
+				<div
+					{...props}
+					className={styles['c-hetarchief-modal__overlay']}
+					style={{
+						width: excludeScrollbar ? `calc(100vw - ${scrollbarWidth}px)` : '100vw',
+					}}
+				>
+					{contentElement}
+				</div>
+			)}
 			onAfterOpen={onOpen}
 		>
 			<section className={styles['c-hetarchief-modal__heading']}>

@@ -1,15 +1,14 @@
 @use "styles/abstracts" as *;
 
-$c: "c-form-control";
+$component: "c-form-control";
 
-.#{$c} {
+.#{$component} {
 	&__label {
 		display: block;
 		font-size: $font-size-base;
 		font-weight: $font-weight-bold;
 		line-height: $line-height-1xl;
 		margin-bottom: $spacer-sm;
-		cursor: pointer;
 	}
 
 	&__errors {
@@ -20,7 +19,7 @@ $c: "c-form-control";
 	}
 
 	&--disabled {
-		.#{$c} {
+		.#{$component} {
 			&__label {
 				color: $neutral;
 				cursor: not-allowed;

@@ -1,6 +1,6 @@
 export * from './Blade';
 export * from './BladeManager';
-export * from './Hero';
+export * from './CardImage';
 export * from './Icon';
 export * from './ListNavigation';
 export * from './Loading';
@@ -16,6 +16,7 @@ export * from './ReadingRoomCard';
 export * from './ReadingRoomCardList';
 export * from './SearchBar';
 export * from './Sidebar';
+export * from './Table';
 export * from './Tabs';
 export * from './TagsInput';
 export * from './Toast';

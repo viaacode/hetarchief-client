@@ -6,16 +6,18 @@ import Head from 'next/head';
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
-import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
+import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
-import { Metadata, ObjectPlaceholder } from 'modules/object-detail/components';
-import { metadataMock } from 'modules/object-detail/components/Metadata/__mocks__/metadata';
-import { objectPlaceholderMock } from 'modules/object-detail/components/ObjectPlaceholder/__mocks__/object-placeholder';
+import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
+import { dynamicActionMenuMock } from 'modules/media/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
+import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
+import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
 	useStickyLayout();
+	useNavigationBorder();
 
 	/**
 	 * Mock data
@@ -74,8 +76,23 @@ const ObjectDetailPage: NextPage = () => {
 							netus et malesuada fames ac turpis egestas. Vivamus convallis aliquet
 							tellus a rutrum. Suspendisse ut posuere lectus, vel elementum sapien.
 						</p>
-						<div className="u-pb-24">
-							<Button label="Exporteer metadata" iconStart={<Icon name="export" />} />
+						<div className="u-pb-24 p-object-detail__actions">
+							<Button
+								className="p-object-detail__export"
+								iconStart={<Icon name="export" />}
+							>
+								<span className="u-text-ellipsis u-display-none u-display-block:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+									)}
+								</span>
+								<span className="u-text-ellipsis u-display-none:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+									)}
+								</span>
+							</Button>
+							<DynamicActionMenu {...dynamicActionMenuMock} />
 						</div>
 						<Metadata
 							metadata={[

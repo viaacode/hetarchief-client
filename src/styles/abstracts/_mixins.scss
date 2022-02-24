@@ -334,6 +334,72 @@
 }
 
 /**
+ * React Select
+ */
+
+@mixin react-select-base($_root) {
+	&:not(:focus-within):hover {
+		.#{$_root}__control {
+			outline-color: $zinc !important;
+		}
+	}
+
+	.#{$_root}__control {
+		min-height: 4.8rem;
+		border: 1px solid $zinc;
+		border-radius: 0;
+		box-shadow: none;
+		outline: 1px solid transparent !important;
+		transition: outline-color $animate-default, border-color $animate-default;
+
+		&--is-focused,
+		&--is-focused:hover {
+			border-color: $teal;
+		}
+	}
+
+	.#{$_root}__value-container {
+		padding-left: $spacer-sm;
+	}
+
+	.#{$_root}__menu {
+		border: 1px solid $zinc;
+		border-top: none;
+		margin: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
+
+	.#{$_root}__menu-list {
+		padding: 0;
+	}
+
+	.#{$_root}__option {
+		border-right: 4px solid transparent;
+		color: $black;
+		transition:
+			background-color $animate-default,
+			border-color $animate-default,
+			border-right-width $animate-sm-in;
+
+		&--is-focused,
+		&--is-selected,
+		&:not(&--is-selected):hover {
+			background-color: color.adjust($teal, $alpha: -0.76);
+		}
+
+		&--is-selected {
+			border-color: $teal;
+
+			&.#{$_root}__option--is-focused,
+			&:hover {
+				border-right-width: 6px;
+			}
+		}
+	}
+}
+
+/**
  * Tabs
  */
 

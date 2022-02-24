@@ -1,0 +1,40 @@
+@use "styles/abstracts" as *;
+
+$component: "l-sidebar";
+$l-sidebar-width: 25.4rem;
+
+.#{$component} {
+	display: flex;
+	flex-flow: row nowrap;
+	flex-grow: 1;
+	height: 100%;
+
+	&__navigation {
+		width: $l-sidebar-width;
+		border-right: $divider-grey;
+
+		@include respond-to("lg") {
+			display: none;
+		}
+	}
+
+	&__sidebar {
+		width: $l-sidebar-width; // force overlap with border
+	}
+
+	&__main {
+		width: 100%;
+
+		@include respond-at("xs") {
+			flex-grow: 1;
+		}
+	}
+
+	&__title {
+		font-size: 2.8rem;
+
+		@include respond-at("md") {
+			font-size: $font-size-3xl;
+		}
+	}
+}

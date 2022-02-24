@@ -3,99 +3,9 @@
 @use "sass:color";
 @use "styles/abstracts" as *;
 
-$c: "c-reading-room-card";
+$component: "c-reading-room-card";
 
-.#{$c} {
-	/**
-	 * Elements
-	 */
-
-	&__background {
-		display: grid;
-		grid-template-columns: 1fr 2fr 1fr;
-		grid-template-rows: 1fr 2fr 1fr;
-		box-shadow: $shadow-24-black-04;
-
-		&--image {
-			grid-column: 1 / 4;
-			grid-row: 1 / 4;
-			overflow: hidden;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			position: relative;
-		}
-
-		&--short {
-			min-height: 205px;
-
-			// desktop-first to avoid reset properties
-			@include respond-to("md") {
-				min-height: 160px;
-				min-width: 120px;
-				margin-right: 2rem;
-				height: 100%;
-			}
-			@include respond-to("xs") {
-				min-width: 100px;
-				margin-right: $spacer-sm;
-			}
-		}
-
-		&--tall {
-			min-height: 212px;
-			min-width: 100px;
-			width: 100px;
-
-			@include respond-at("xs") {
-				min-width: 120px;
-				width: 120px;
-			}
-
-			@include respond-at("md") {
-				min-height: 276px;
-				min-width: 146px;
-				width: 146px;
-			}
-		}
-
-		&--small {
-			height: 100%;
-			min-height: 72px;
-			min-width: 20px;
-			width: 20px;
-
-			.#{$c} {
-				&__logo {
-					display: none;
-				}
-			}
-
-			@include respond-at("md") {
-				min-width: 96px;
-				width: 96px;
-
-				.#{$c} {
-					&__logo {
-						display: flex;
-					}
-				}
-			}
-		}
-	}
-
-	&__logo {
-		grid-column: 2 / 3;
-		grid-row: 2 / 3;
-		overflow: hidden;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		max-width: 100%;
-		max-height: 100%;
-		position: relative;
-	}
-
+.#{$component} {
 	&__wrapper {
 		&--flat {
 			display: flex;
@@ -126,6 +36,10 @@ $c: "c-reading-room-card";
 					top: $spacer-sm;
 					width: 1px;
 				}
+			}
+
+			@include respond-at("lg") {
+				padding-right: $spacer-2xl;
 			}
 		}
 	}

@@ -2,9 +2,9 @@
 
 @use "styles/abstracts" as *;
 
-$c: "c-avatar";
+$component: "c-avatar";
 
-.#{$c} {
+.#{$component} {
 	&__image {
 		background: $teal;
 		color: $white;

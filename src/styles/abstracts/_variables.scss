@@ -29,6 +29,7 @@ $teal-66: color.adjust($teal, $alpha: -0.34);
 
 $shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
 $shadow-24-black-24: 0 0 24px color.adjust($black, $alpha: -0.76);
+$shadow-24-black-12: 0 0 24px color.adjust($black, $alpha: -0.88);
 $shadow-24-black-08: 0 0 24px color.adjust($black, $alpha: -0.92);
 $shadow-24-black-04: 0 0 24px color.adjust($black, $alpha: -0.96);
 
@@ -148,9 +149,11 @@ $animate-lg-out: $timing-lg-out $ease-out;
  * Modal
  */
 
-$modal-close-margin: 32px;
+$modal-close-margin: 20px;
+$modal-close-margin-md: 32px;
 $modal-close-size: 24px;
 $modal-title-margin-left: $modal-close-size + ($modal-close-margin * 2);
+$modal-title-margin-left-md: $modal-close-size + ($modal-close-margin-md * 2);
 
 /**
  * Card
@@ -189,11 +192,13 @@ $c-check-radio-size: 1.6rem;
  * Tab(s)
  */
 
-$tab-min-height: 3.4rem;
-$tab-min-height-md: 5.6rem;
+$tab-min-height: 3.4rem; // base
+$tab-min-height-medium: 3.8rem; // medium size
+$tab-min-height-md: 5.6rem; // md breakpoint
 $tab-line-size: $font-size-base * $line-height-lg; // body font size * base line height
 $tab-line-size-md: $font-size-sm * $line-height-lg; // font size of .tab at md * base line height
 $tab-vertical-padding: $spacer-xs;
 $tab-vertical-padding-md: $spacer-sm;
-$tabs-rounded-size: $spacer-md;
+$tabs-rounded-size: $spacer-sm;
+$tabs-rounded-size-md: $spacer-md;
 $tabs-border-width: 1px;
