@@ -17,7 +17,7 @@ $p: (
 	"24": $spacer-md,
 	"32": $spacer-lg,
 );
-@include generate-utils("p", "padding", $p);
+@include generate-utils("p", "padding", $p, ("md"));
 
 // Top
 $pt: (
