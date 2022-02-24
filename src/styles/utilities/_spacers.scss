@@ -63,6 +63,7 @@ $py: (
 $px: (
 	"12": $spacer-12,
 	"20": $spacer-20,
+	"24": $spacer-md,
 	"32": $spacer-lg,
 );
 @include generate-utils("px", ("padding-left", "padding-right"), $px, ("md"));
