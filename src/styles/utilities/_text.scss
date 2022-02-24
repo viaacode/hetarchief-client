@@ -39,6 +39,7 @@ $align: (left, right, center);
  */
 
  $height: (
+	"12_5" :$line-height-1xl,
 	"13": $line-height-2xl,
  );
  @include generate-utils("line-height", "line-height", $height);
