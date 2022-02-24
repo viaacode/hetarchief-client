@@ -40,11 +40,6 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 				// When the user isn't present in the response or the response states they've logged out
 
 				await toHome();
-			} else if (!login.userInfo.acceptedTosAt) {
-				//
-				// When the user is present in the response, they've not logged out and they haven't accepted the TOS yet
-
-				await toTermsOfService();
 			} else if (tos) {
 				//
 				// When the user is present in the response, they've not logged out and they *have* accepted the TOS previously

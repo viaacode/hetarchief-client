@@ -20,10 +20,10 @@ const renderHome = () => {
 };
 
 describe('Page: <Home />', () => {
-	it('Should render a hero', () => {
+	it('Should render a wrapper page', () => {
 		const { container } = renderHome();
-		const hero = container.querySelector('.c-hero');
+		const wrapper = container.querySelector('.p-home');
 
-		expect(hero).toBeInTheDocument();
+		expect(wrapper).toBeInTheDocument();
 	});
 });
