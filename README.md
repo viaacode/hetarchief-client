@@ -154,6 +154,5 @@ The client is build automatically when
 
 For the storybook you can trigger the build in openshift:
 
-* Builds => BuildConfigs => hetarchief => storybook-tst =>
-  actions => Start Build
+* Builds => BuildConfigs => hetarchief => storybook-tst => actions => Start Build
 * https://console-openshift-console.meemoo2-2bc857e5f10eb63ab790a3a1d19a696c-i000.eu-de.containers.appdomain.cloud/k8s/ns/hetarchief/buildconfigs/storybook-tst/builds
