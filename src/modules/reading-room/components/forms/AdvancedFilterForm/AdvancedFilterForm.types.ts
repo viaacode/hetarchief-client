@@ -11,3 +11,9 @@ export interface AdvancedFilterFieldsState {
 	operator?: string;
 	value?: string;
 }
+
+export interface AdvancedFilterFieldsQueryValues {
+	prop: string;
+	op: string;
+	val: string;
+}

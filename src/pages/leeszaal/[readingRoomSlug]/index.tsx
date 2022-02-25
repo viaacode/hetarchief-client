@@ -171,6 +171,7 @@ const ReadingRoomPage: NextPage = () => {
 					<FilterMenu
 						activeSort={activeSort}
 						filters={READING_ROOM_FILTERS()}
+						filterValues={query}
 						label={t('pages/leeszaal/reading-room-slug/index___filters')}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}

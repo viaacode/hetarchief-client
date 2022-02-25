@@ -12,6 +12,7 @@ import { FilterOptionProps } from './FilterOption.types';
 
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,
+	values,
 	form,
 	icon,
 	id,
@@ -58,6 +59,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 						form={form}
 						id={id}
 						title={label}
+						values={values}
 						onFormReset={onFormReset}
 						onFormSubmit={onFormSubmit}
 					/>

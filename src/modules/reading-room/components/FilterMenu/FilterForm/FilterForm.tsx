@@ -13,6 +13,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	id,
 	form,
 	title,
+	values,
 	onFormReset,
 	onFormSubmit,
 }) => {
@@ -35,7 +36,7 @@ const FilterForm: FC<FilterFormProps> = ({
 				<h2 className={styles['c-filter-form__title']}>{title}</h2>
 			</div>
 
-			<FormComponent className={styles['c-filter-form__body']}>
+			<FormComponent className={styles['c-filter-form__body']} values={{ [id]: values }}>
 				{({ reset, values }) => (
 					<div className={styles['c-filter-form__footer']}>
 						<Button

@@ -10,6 +10,7 @@ import { Icon } from '@shared/components';
 import { AdvancedFilterFields, MetadataProp, Operator } from './AdvancedFilterFields';
 import { ADVANCED_FILTER_FORM_SCHEMA } from './AdvancedFilterForm.const';
 import {
+	AdvancedFilterFieldsQueryValues,
 	AdvancedFilterFieldsState,
 	AdvancedFilterFormProps,
 	AdvancedFilterFormState,
@@ -21,10 +22,21 @@ const initialFields = (): AdvancedFilterFieldsState => ({
 	value: '',
 });
 
-const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className }) => {
+const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, values }) => {
+	const mapValuesToFields = (
+		values: AdvancedFilterFieldsQueryValues[]
+	): AdvancedFilterFieldsState[] =>
+		values.map((value: AdvancedFilterFieldsQueryValues) => ({
+			metadataProp: value.prop,
+			operator: value.op,
+			value: value.val,
+		}));
+
 	const { control, getValues, reset } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
-			advanced: [initialFields()],
+			advanced: values?.advanced
+				? mapValuesToFields(values.advanced as AdvancedFilterFieldsQueryValues[])
+				: [initialFields()],
 		},
 		resolver: yupResolver(ADVANCED_FILTER_FORM_SCHEMA()),
 	});
