@@ -3,7 +3,7 @@ import { stringifyUrl } from 'query-string';
 import { ApiService } from '@shared/services';
 import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
-import { VisitInfo } from '@visits/types';
+import { PatchVisit, VisitInfo } from '@visits/types';
 
 import { VISITS_SERVICE_BASE_URL } from './visits.service.const';
 
@@ -34,8 +34,25 @@ class VisitsService extends ApiService {
 		return parsed as ApiResponseWrapper<VisitInfo>;
 	}
 
-	public async getById(roomId: string): Promise<unknown> {
-		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${roomId}`).json();
+	public async getById(id: string): Promise<VisitInfo> {
+		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
+	}
+
+	public async putById(id: string, visit: VisitInfo): Promise<VisitInfo> {
+		const { status, startAt, endAt } = visit;
+		const json: PatchVisit = {
+			status,
+			startAt,
+			endAt,
+			// remark: 'TODO',
+			// denial: 'TODO'
+		};
+
+		return await ApiService.getApi()
+			.put(`${VISITS_SERVICE_BASE_URL}/${id}`, {
+				json,
+			})
+			.json();
 	}
 }
 

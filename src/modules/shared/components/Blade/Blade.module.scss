@@ -33,7 +33,7 @@
 			text-align: center;
 		}
 		@include respond-at(md) {
-			font-size: $font-size-3xl;
+			font-size: $font-size-2xl;
 			padding-right: $spacer-md * 2;
 
 			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades
@@ -58,7 +58,7 @@
 		z-index: get-z-layer("blade");
 
 		&--managed {
-			min-width: calc(46.4rem + 5.6rem);
+			width: calc(46.4rem + 5.6rem);
 			left: auto;
 			transform: translateX(5.6rem);
 			transition: opacity $animate-default, transform $animate-default;
@@ -69,5 +69,9 @@
 		pointer-events: all;
 		visibility: visible;
 		transform: translateX(0);
+	}
+
+	&--managed {
+		width: 100%;
 	}
 }

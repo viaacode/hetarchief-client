@@ -12,6 +12,7 @@ import {
 	differenceInHours,
 	endOfDay,
 	isAfter,
+	isSameDay,
 	isToday,
 	roundToNearestMinutes,
 	startOfDay,
@@ -24,6 +25,9 @@ import { Blade, Icon } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
+import { toastService } from '@shared/services';
+import { visitsService } from '@visits/services';
+import { VisitStatus } from '@visits/types';
 
 import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
 
@@ -60,10 +64,27 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	// Events
 
 	const onFormSubmit = (values: ApproveRequestFormState) => {
-		// TODO: replace with save-to-db
-		Promise.resolve().then(() => {
-			onSubmit?.(values);
-		});
+		selected &&
+			visitsService
+				.putById(selected.id, {
+					...selected,
+					status: VisitStatus.APPROVED,
+					startAt: values.accessFrom?.toISOString(),
+					endAt: values.accessTo?.toISOString(),
+					// TODO: remarks
+				})
+				.then(() => {
+					onSubmit?.(values);
+
+					toastService.notify({
+						title: t(
+							'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
+						),
+						description: t(
+							'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
+						),
+					});
+				});
 	};
 
 	const onSimpleDateChange = (
@@ -81,12 +102,15 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	) => {
 		onSimpleDateChange(date, field);
 
-		if (date) {
-			const { accessTo } = getValues();
+		const { accessTo } = getValues();
 
+		if (date && accessTo) {
 			// Access must be at least 1h in the future
 			// Aligns with `minTime` of the `accessTo` `Timepicker`-component
-			if (accessTo && isAfter(date, accessTo) && differenceInHours(date, accessTo) <= 1) {
+			if (
+				(isSameDay(date, accessTo) && differenceInHours(date, accessTo) <= 1) ||
+				isAfter(date, accessTo)
+			) {
 				setValue('accessTo', defaultAccessTo(date));
 			}
 		}
@@ -152,7 +176,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 									<Datepicker
 										{...futureDatepicker}
 										maxDate={null}
-										{...field}
+										name={field.name}
+										onBlur={field.onBlur}
 										onChange={(date) => onFromDateChange(date, field)}
 										value={formatApproveRequestAccessDate(field.value)}
 										selected={field.value}
@@ -165,7 +190,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										{...timepicker}
 										maxTime={endOfDay(now)}
 										minTime={defaultAccessFrom(now)}
-										{...field}
+										name={field.name}
+										onBlur={field.onBlur}
 										onChange={(date) => onFromDateChange(date, field)}
 										value={formatApproveRequestAccessTime(field.value)}
 										selected={field.value}
@@ -199,7 +225,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										{...futureDatepicker}
 										maxDate={null}
 										minDate={accessFrom}
-										{...field}
+										name={field.name}
+										onBlur={field.onBlur}
 										onChange={(date) => onSimpleDateChange(date, field)}
 										value={formatApproveRequestAccessDate(field.value)}
 										selected={field.value}
@@ -216,7 +243,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 												? addHours(accessFrom || now, 1)
 												: startOfDay(field.value || now)
 										}
-										{...field}
+										name={field.name}
+										onBlur={field.onBlur}
 										onChange={(date) => onSimpleDateChange(date, field)}
 										value={formatApproveRequestAccessTime(field.value)}
 										selected={field.value}

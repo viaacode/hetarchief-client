@@ -1,4 +1,5 @@
 const pathAliases = [
+	'account',
 	'auth',
 	'config',
 	'cp',

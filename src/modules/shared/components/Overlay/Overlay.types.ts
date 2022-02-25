@@ -5,4 +5,5 @@ export interface OverlayProps extends DefaultComponentProps {
 	visible?: boolean;
 	animate?: AnimationTypes;
 	onClick?: () => void;
+	excludeScrollbar?: boolean;
 }

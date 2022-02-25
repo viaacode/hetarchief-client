@@ -52,6 +52,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	grid-template-columns: auto 1fr 2fr;
 	height: $c-navigation-height-md;
 	padding: 0 2rem;
+	margin-bottom: -0.1rem; // Note: prevent fine line artefact between navigation and header; better fix welcome
 	background-color: $black;
 	color: $white;
 
@@ -60,11 +61,11 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		padding: 0 3.2rem;
 	}
 
-	&::after {
+	&--bordered::after {
 		content: "";
 		position: absolute;
 		z-index: get-z-layer("foreground");
-		bottom: -1px;
+		bottom: 0;
 		left: 2rem;
 		right: 2rem;
 		height: 1px;
@@ -126,6 +127,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	.c-navigation__dropdown-flyout {
 		// Overwrite element styles
 		inset: $c-navigation-height-md 0 0 0 !important;
+		top: $c-navigation-height-md !important;
+		right: 0 !important;
+		bottom: 0 !important;
+		left: 0 !important;
 		transform: translate(0) !important;
 		color: $black;
 	}
@@ -194,6 +199,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	.c-navigation__list-overlay {
 		width: 100vw;
 		height: calc(100vh - $c-navigation-height-md);
+		top: $c-navigation-height-md;
 
 		@include respond-at(md) {
 			height: calc(100vh - $c-navigation-height);
@@ -231,6 +237,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		// Overwrite popper element styles
 		@include respond-to(md) {
 			inset: $c-navigation-height-md 0 0 0 !important;
+			top: $c-navigation-height-md !important;
+			right: 0 !important;
+			bottom: 0 !important;
+			left: 0 !important;
 			transform: translate(0) !important;
 		}
 		@include respond-at(md) {
@@ -266,7 +276,6 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 }
 
 .c-navigation__item {
-	cursor: pointer;
 	display: inline-flex;
 	align-items: center;
 	height: $c-navigation-height - $c-navigation-divider-size;

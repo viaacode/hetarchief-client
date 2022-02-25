@@ -1,5 +1,6 @@
 {
   "name": "hetarchief-client",
+  "version": "0.3.0",
   "private": true,
   "contributors": [
     "Andry Charlier <andry.charlier@studiohyperdrive.be>"
@@ -16,7 +17,7 @@
     "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch",
     "test:e2e": "npx playwright test",
-    "test:e2e:dev": "cross-env PWDEBUG=1 && npx playwright test --headed --project=chromium",
+    "test:e2e:debug": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=firefox --headed --workers=1 --retries=0 --maxFailures=1 tests/auth/login-with-redirect.spec.ts",
     "type-check": "tsc --noEmit",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
@@ -34,12 +35,11 @@
     "clsx": "1.1.1",
     "copy-to-clipboard": "3.3.1",
     "date-fns": "2.28.0",
-    "dotenv-cli": "5.0.0",
     "isomorphic-dompurify": "0.17.0",
     "ky": "0.28.7",
     "ky-universal": "0.9.1",
     "lodash.debounce": "4.0.8",
-    "next": "12.0.10",
+    "next": "12.1.0",
     "next-i18next": "10.0.1",
     "next-redux-wrapper": "7.0.5",
     "next-transpile-modules": "9.0.0",
@@ -89,8 +89,10 @@
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "babel-jest": "27.3.1",
     "babel-loader": "8.2.3",
+    "cross-env": "7.0.3",
     "css-loader": "6.5.1",
     "cypress": "9.1.1",
+    "dotenv-cli": "5.0.0",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.4",
     "eslint-config-prettier": "8.3.0",
@@ -100,7 +102,8 @@
     "glob": "7.2.0",
     "husky": "7.0.4",
     "identity-obj-proxy": "3.0.0",
-    "jest": "27.3.1",
+    "jest": "27.5.1",
+    "jest-junit": "13.0.0",
     "lint-staged": "12.1.2",
     "lodash": "4.17.21",
     "postcss-flexbugs-fixes": "5.0.2",
@@ -124,6 +127,5 @@
     "not ie 11",
     "not dead",
     "not op_mini all"
-  ],
-  "version": "0.2.0"
+  ]
 }

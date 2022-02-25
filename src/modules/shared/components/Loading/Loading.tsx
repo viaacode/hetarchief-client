@@ -18,7 +18,7 @@ const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }
 			className={clsx(className, fullscreen ? styles['c-loading--fullscreen'] : {})}
 			style={style}
 		>
-			<span>{t('Laden...')}</span>
+			<span>{t('modules/shared/components/loading/loading___laden')}</span>
 		</div>
 	);
 };

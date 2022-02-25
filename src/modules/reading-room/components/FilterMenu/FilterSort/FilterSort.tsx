@@ -30,7 +30,7 @@ const FilterSort: FC<FilterSortProps> = ({
 			>
 				<DropdownButton>
 					<FilterButton
-						icon={activeSort?.order === 'desc' ? 'sort-down' : 'sort-up'}
+						icon={activeSort?.orderDirection === 'desc' ? 'sort-down' : 'sort-up'}
 						isActive={sortOptionsOpen}
 						label={activeSortLabel}
 						type="sort"
