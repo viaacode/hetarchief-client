@@ -1,26 +1,21 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, ContentInput, FormControl } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { Controller, useForm } from 'react-hook-form';
 
-import { CREATE_COLLECTION_FORM_SCHEMA } from '@account/const';
+import { CreateCollectionButton } from '@account/components';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
-import { collectionsService } from '@account/services/collections';
-import { Collection, CreateCollectionFormState } from '@account/types';
+import { Collection } from '@account/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { Icon, ListNavigationItem } from '@shared/components';
+import { ListNavigationItem } from '@shared/components';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES } from '@shared/const';
 import { capitalise } from '@shared/helpers';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
-import { toastService } from '@shared/services';
 import { createPageTitle } from '@shared/utils';
 
 type ListNavigationCollectionItem = ListNavigationItem & Collection;
@@ -29,25 +24,6 @@ const AccountMyCollections: NextPage = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 	const { collectionSlug } = router.query;
-
-	/**
-	 * Form
-	 */
-
-	const defaultName = t('pages/account/mijn-mappen/collection-slug/index___nieuwe-map-aanmaken');
-
-	const {
-		control,
-		formState: { errors },
-		handleSubmit,
-		setValue,
-		resetField,
-	} = useForm<CreateCollectionFormState>({
-		resolver: yupResolver(CREATE_COLLECTION_FORM_SCHEMA()),
-		defaultValues: {
-			name: defaultName,
-		},
-	});
 
 	/**
 	 * Data
@@ -83,31 +59,6 @@ const AccountMyCollections: NextPage = () => {
 		[sidebarLinks]
 	);
 
-	/**
-	 * Events
-	 */
-
-	const resetForm = () => resetField('name');
-	const clearForm = () => setValue('name', '');
-
-	const onFormSubmit = () => {
-		handleSubmit<CreateCollectionFormState>((values) => {
-			collectionsService.create(values).then(() => {
-				refetch();
-
-				toastService.notify({
-					title: t(
-						'pages/account/mijn-mappen/collection-slug/index___name-is-aangemaakt',
-						values
-					),
-					description: t(
-						'pages/account/mijn-mappen/collection-slug/index___je-nieuwe-map-is-succesvol-aangemaakt'
-					),
-				});
-			});
-		})();
-	};
-
 	return (
 		<>
 			<Head>
@@ -135,40 +86,7 @@ const AccountMyCollections: NextPage = () => {
 						{
 							id: 'p-account-my-collections__new-collection',
 							variants: ['c-list-navigation__item--no-interaction'],
-							node: (
-								<FormControl className="u-px-24" errors={[errors.name?.message]}>
-									<Controller
-										name="name"
-										control={control}
-										render={({ field }) => (
-											<ContentInput
-												{...field}
-												onClose={resetForm}
-												onOpen={clearForm}
-												onConfirm={onFormSubmit}
-												iconStart={
-													<Button
-														variants={['platinum', 'sm']}
-														icon={<Icon name="plus" />}
-													/>
-												}
-												nodeSubmit={
-													<Button
-														variants={['black', 'sm']}
-														icon={<Icon name="check" />}
-													/>
-												}
-												nodeCancel={
-													<Button
-														variants={['silver', 'sm']}
-														icon={<Icon name="times" />}
-													/>
-												}
-											/>
-										)}
-									/>
-								</FormControl>
-							),
+							node: <CreateCollectionButton afterSubmit={refetch} />,
 							hasDivider: true,
 						},
 					]}

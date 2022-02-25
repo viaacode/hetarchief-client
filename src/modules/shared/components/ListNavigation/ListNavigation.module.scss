@@ -6,6 +6,9 @@ $teal-24: color.adjust($teal, $alpha: -0.76);
 $component: "c-list-navigation";
 
 .#{$component} {
+	max-width: 100%;
+	min-width: 0; // avoid flex-pushing
+
 	&__list {
 		@extend %reset-list;
 	}
