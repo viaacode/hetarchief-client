@@ -30,6 +30,7 @@ $pt: (
 
 // Bottom
 $pb: (
+	"0": 0,
 	"8": $spacer-xs,
 	"24": $spacer-md,
 	"48": $spacer-48,
@@ -53,6 +54,7 @@ $pr: (
 
 // Top / Bottom
 $py: (
+	"8": $spacer-xs,
 	"16": $spacer-sm,
 	"24": $spacer-md,
 	"48": $spacer-md * 2,
@@ -107,3 +109,9 @@ $mr: (
 	"8": $spacer-xs,
 );
 @include generate-utils("mr", "margin-right", $mr);
+
+// Left / Right
+$mx: (
+	"-32": - $spacer-lg,
+);
+@include generate-utils("mx", ("margin-left", "margin-right"), $mx);

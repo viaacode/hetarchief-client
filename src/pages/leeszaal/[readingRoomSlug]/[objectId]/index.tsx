@@ -4,13 +4,21 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
 import { withI18n } from '@i18n/wrappers';
+import { dynamicActionMenuMock } from '@media/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
+import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
 import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
-import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
-import { dynamicActionMenuMock } from 'modules/media/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
+import {
+	DynamicActionMenu,
+	Metadata,
+	MetadataItem,
+	ObjectPlaceholder,
+	RelatedObject,
+	RelatedObjectProps,
+} from 'modules/media/components';
 import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
@@ -42,6 +50,41 @@ const ObjectDetailPage: NextPage = () => {
 	];
 
 	/**
+	 * Metadata
+	 */
+	const renderInterestingListItem = (data: RelatedObjectProps) => (
+		<li className="u-py-8">
+			<RelatedObject {...data} />
+		</li>
+	);
+
+	const metaData: MetadataItem[] = [
+		...metadataMock.metadata,
+		{
+			title: t('pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'),
+			data: (
+				<TagList
+					className="u-pt-12"
+					tags={tags}
+					onTagClicked={(id) => console.log(id)}
+					variants={['clickable', 'silver', 'medium']}
+				/>
+			),
+		},
+		{
+			title: t('pages/leeszaal/reading-room-slug/object-id/index___ook-interessant'),
+			data: (
+				<ul className="u-list-reset u-bg-platinum u-mx--32 u-px-32 u-py-24 u-mt-24">
+					{renderInterestingListItem(relatedObjectVideoMock)}
+					{renderInterestingListItem(relatedObjectVideoMock)}
+					{renderInterestingListItem(relatedObjectVideoMock)}
+				</ul>
+			),
+			className: 'u-pb-0',
+		},
+	];
+
+	/**
 	 * Render
 	 */
 
@@ -65,51 +108,39 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 				/>
 				<div className="p-object-detail__metadata">
-					<div className="u-px-32">
-						{/* TODO: bind content to state */}
-						<h3 className="u-pt-32 u-pb-24">Op de koop toe: schepijs (1993)</h3>
-						<p className="u-pb-24">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-							consectetur rutrum molestie. Mauris volutpat commodo velit, id fringilla
-							neque. Integer at fringilla orci, eget hendrerit lorem. Donec malesuada
-							non dui a elementum. Pellentesque habitant morbi tristique senectus et
-							netus et malesuada fames ac turpis egestas. Vivamus convallis aliquet
-							tellus a rutrum. Suspendisse ut posuere lectus, vel elementum sapien.
-						</p>
-						<div className="u-pb-24 p-object-detail__actions">
-							<Button
-								className="p-object-detail__export"
-								iconStart={<Icon name="export" />}
-							>
-								<span className="u-text-ellipsis u-display-none u-display-block:md">
-									{t(
-										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
-									)}
-								</span>
-								<span className="u-text-ellipsis u-display-none:md">
-									{t(
-										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
-									)}
-								</span>
-							</Button>
-							<DynamicActionMenu {...dynamicActionMenuMock} />
+					<div>
+						<div className="u-px-32">
+							{/* TODO: bind content to state */}
+							<h3 className="u-pt-32 u-pb-24">Op de koop toe: schepijs (1993)</h3>
+							<p className="u-pb-24">
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+								consectetur rutrum molestie. Mauris volutpat commodo velit, id
+								fringilla neque. Integer at fringilla orci, eget hendrerit lorem.
+								Donec malesuada non dui a elementum. Pellentesque habitant morbi
+								tristique senectus et netus et malesuada fames ac turpis egestas.
+								Vivamus convallis aliquet tellus a rutrum. Suspendisse ut posuere
+								lectus, vel elementum sapien.
+							</p>
+							<div className="u-pb-24 p-object-detail__actions">
+								<Button
+									className="p-object-detail__export"
+									iconStart={<Icon name="export" />}
+								>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{t(
+											'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+										)}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{t(
+											'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+										)}
+									</span>
+								</Button>
+								<DynamicActionMenu {...dynamicActionMenuMock} />
+							</div>
 						</div>
-						<Metadata
-							metadata={[
-								...metadataMock.metadata,
-								{
-									title: 'Trefwoorden',
-									data: (
-										<TagList
-											className="u-pt-12"
-											tags={tags}
-											onTagClicked={(id) => console.log(id)}
-											variants={['clickable', 'silver', 'medium']}
-										/>
-									),
-								},
-							]}
-						/>
+						<Metadata className="u-px-32" metadata={metaData} />
 					</div>
 				</div>
 			</article>

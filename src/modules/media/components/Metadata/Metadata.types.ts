@@ -10,4 +10,5 @@ export interface MetadataProps extends DefaultComponentProps {
 export interface MetadataItem {
 	title: string;
 	data: string | ReactNode;
+	className?: string;
 }
