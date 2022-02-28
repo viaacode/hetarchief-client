@@ -4,13 +4,13 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
 import { withI18n } from '@i18n/wrappers';
+import { MEDIA_ACTIONS } from '@media/const';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
 import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
 import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
-import { dynamicActionMenuMock } from 'modules/media/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
 import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
@@ -92,7 +92,7 @@ const ObjectDetailPage: NextPage = () => {
 									)}
 								</span>
 							</Button>
-							<DynamicActionMenu {...dynamicActionMenuMock} />
+							<DynamicActionMenu {...MEDIA_ACTIONS} />
 						</div>
 						<Metadata
 							metadata={[
