@@ -17,6 +17,12 @@ class CollectionsService extends ApiService {
 	public async create(json: Partial<Pick<Collection, 'name'>>): Promise<Partial<Collection>> {
 		return await ApiService.getApi().post(`${COLLECTIONS_SERVICE_BASE_URL}`, { json }).json();
 	}
+
+	public async update(id: string, json: Partial<Pick<Collection, 'name'>>): Promise<Collection> {
+		return await ApiService.getApi()
+			.put(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
+			.json();
+	}
 }
 
 export const collectionsService = new CollectionsService();

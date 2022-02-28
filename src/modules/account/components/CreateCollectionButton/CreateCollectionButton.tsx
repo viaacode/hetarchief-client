@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { CREATE_COLLECTION_FORM_SCHEMA } from '@account/const';
+import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { collectionsService } from '@account/services/collections';
 import { CreateCollectionFormState } from '@account/types';
 import { Icon } from '@shared/components';
@@ -34,7 +34,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 		setValue,
 		resetField,
 	} = useForm<CreateCollectionFormState>({
-		resolver: yupResolver(CREATE_COLLECTION_FORM_SCHEMA()),
+		resolver: yupResolver(COLLECTION_FORM_SCHEMA()),
 		defaultValues: {
 			name: defaultName,
 		},
@@ -61,11 +61,11 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 
 				toastService.notify({
 					title: t(
-						'pages/account/mijn-mappen/collection-slug/index___name-is-aangemaakt',
+						'modules/account/components/create-collection-button/create-collection-button___name-is-aangemaakt',
 						values
 					),
 					description: t(
-						'pages/account/mijn-mappen/collection-slug/index___je-nieuwe-map-is-succesvol-aangemaakt'
+						'modules/account/components/create-collection-button/create-collection-button___je-nieuwe-map-is-succesvol-aangemaakt'
 					),
 				});
 			});
@@ -83,9 +83,13 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 				render={({ field }) => (
 					<ContentInput
 						{...field}
+						placeholder={t(
+							'modules/account/components/create-collection-button/create-collection-button___een-map'
+						)}
 						onClose={resetForm}
 						onOpen={clearForm}
 						onConfirm={onFormSubmit}
+						variants={['normal']}
 						iconStart={
 							!isOpen ? (
 								<Button variants={['platinum', 'sm']} icon={<Icon name="plus" />} />

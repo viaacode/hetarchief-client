@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "2.8.8",
-    "@meemoo/react-components": "2.9.8",
+    "@meemoo/react-components": "2.10.1",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "1.7.1",
     "clsx": "1.1.1",

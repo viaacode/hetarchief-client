@@ -3,21 +3,35 @@ import { object, SchemaOf, string } from 'yup';
 
 import { CreateCollectionFormState } from '@account/types';
 
-export const CREATE_COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormState> => {
+export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormState> => {
 	const nameLengthMin = 3;
+	const nameLengthMax = 90;
 
 	return object({
-		name: string().test(
-			'name',
-			i18n?.t(
-				'modules/account/const/my-collections___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
-				{
-					count: nameLengthMin,
+		name: string()
+			.test(
+				'name',
+				i18n?.t(
+					'modules/account/const/my-collections___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
+					{
+						count: nameLengthMin,
+					}
+				) || '',
+				(val) => {
+					return (val || '').length >= nameLengthMin;
 				}
-			) || '',
-			(val) => {
-				return (val || '').length >= 3;
-			}
-		),
+			)
+			.test(
+				'name',
+				i18n?.t(
+					'modules/account/const/my-collections___de-naam-van-een-map-mag-niet-meer-dan-count-tekens-lang-zijn',
+					{
+						count: nameLengthMax,
+					}
+				) || '',
+				(val) => {
+					return (val || '').length <= nameLengthMax;
+				}
+			),
 	});
 };

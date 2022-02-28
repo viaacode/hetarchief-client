@@ -3,12 +3,14 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { CreateCollectionButton } from '@account/components';
+import { EditCollectionTitle } from '@account/components/EditCollectionTitle';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
 import { Collection } from '@account/types';
+import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { ListNavigationItem } from '@shared/components';
@@ -29,11 +31,13 @@ const AccountMyCollections: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: collections, isFetching, refetch } = useGetCollections();
+	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
+	const { data: collections, refetch } = useGetCollections();
 	const sidebarLinks: ListNavigationCollectionItem[] = useMemo(
 		() =>
 			(collections?.items || []).map((collection) => {
-				const href = `${ROUTES.myCollections}/${collection.name.toLowerCase()}`;
+				const slug = createCollectionSlug(collection);
+				const href = `${ROUTES.myCollections}/${slug}`;
 
 				return {
 					...collection,
@@ -44,7 +48,7 @@ const AccountMyCollections: NextPage = () => {
 							</a>
 						</Link>
 					),
-					active: collection.name.toLowerCase() === collectionSlug,
+					active: decodeURIComponent(slug) === collectionSlug,
 				};
 			}),
 		[collections, collectionSlug]
@@ -58,6 +62,31 @@ const AccountMyCollections: NextPage = () => {
 		() => sidebarLinks.find((link) => link.active),
 		[sidebarLinks]
 	);
+
+	/**
+	 * Effects
+	 */
+
+	useEffect(() => {
+		if (!activeCollection && collections) {
+			const favorites = collections?.items.find((col) => col.isDefault);
+			!blockFallbackRedirect && favorites && router.push(createCollectionSlug(favorites));
+		}
+	}, [activeCollection, collections, router, blockFallbackRedirect]);
+
+	/**
+	 * Events
+	 */
+
+	const onCollectionTitleChanged = (collection: Collection) => {
+		setBlockFallbackRedirect(true);
+
+		refetch().then(() => {
+			router.push(createCollectionSlug(collection)).then(() => {
+				setBlockFallbackRedirect(false);
+			});
+		});
+	};
 
 	return (
 		<>
@@ -91,11 +120,17 @@ const AccountMyCollections: NextPage = () => {
 						},
 					]}
 				>
-					<div className="l-container u-mt-64 u-mb-48">
-						<SidebarLayoutTitle>
-							{isFetching ? capitalise(collectionSlug) : activeCollection?.name}
-						</SidebarLayoutTitle>
-					</div>
+					{activeCollection && (
+						<div className="l-container u-mt-64 u-mb-48">
+							<SidebarLayoutTitle>
+								<EditCollectionTitle
+									key={activeCollection.id}
+									collection={activeCollection}
+									afterSubmit={onCollectionTitleChanged}
+								/>
+							</SidebarLayoutTitle>
+						</div>
+					)}
 				</SidebarLayout>
 			</AccountLayout>
 		</>

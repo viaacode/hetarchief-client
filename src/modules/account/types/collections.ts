@@ -10,3 +10,5 @@ export interface Collection {
 export interface CreateCollectionFormState {
 	name?: string;
 }
+
+export type EditCollectionFormState = CreateCollectionFormState;
