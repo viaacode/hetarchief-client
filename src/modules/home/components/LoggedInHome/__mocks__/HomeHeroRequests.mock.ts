@@ -1,25 +1,10 @@
-import { HeroProps, HeroRequest } from '../Hero.types';
+import { ReadingRoom } from '@shared/components';
 
-export const heroTitle = 'Welkom in de digitale leeszaal';
+export interface HeroRequest extends ReadingRoom {
+	status: 'access' | 'planned' | 'requested';
+}
 
-export const heroDescription =
-	'Plan een nieuw bezoek, stap fysiek binnen en krijg meteen toegang tot het digitale archief van de leeszaal. Benieuwd hoe het werkt?';
-
-export const heroLink = {
-	label: 'Hier kom je er alles over te weten.',
-	to: 'https://www.test.com',
-};
-
-export const heroImage = { src: '/images/hero.png', alt: 'hero image' };
-
-export const heroMock: HeroProps = {
-	title: heroTitle,
-	description: heroDescription,
-	link: heroLink,
-	image: heroImage,
-};
-
-export const heroRequests: HeroRequest[] = [
+export const homeHeroRequests: HeroRequest[] = [
 	// Access
 	{
 		description:

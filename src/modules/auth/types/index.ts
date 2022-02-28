@@ -3,5 +3,5 @@ export interface UserSchema {
 	firstName: string;
 	id: string;
 	lastName: string;
-	acceptedTosAt?: string;
+	acceptedTosAt: string | null;
 }

@@ -1,0 +1,155 @@
+@use "sass:map";
+@use "styles/abstracts" as *;
+
+$c-hero-access-card-min-width: 57.2rem;
+
+.c-hero {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: $spacer-2xl clamp(calc(54rem - $spacer-2xl), 40vw, calc(70rem - $spacer-2xl));
+  padding: 0 calc($spacer-1xl * 3);
+  color: $white;
+  background-color: $black;
+
+  &__header {
+	display: grid;
+	grid-template-columns: 1fr;
+	column-gap: $spacer-lg;
+	align-items: center;
+
+	@include respond-at(md) {
+	  grid-template-columns: repeat(2, 1fr);
+	}
+  }
+
+  &__title {
+	max-width: 32rem;
+	padding-bottom: $spacer-1xl;
+	line-height: $line-height-md;
+  }
+
+  &__description {
+	max-width: 48.8rem;
+	color: $neutral;
+	line-height: $line-height-1xl;
+  }
+
+  &__section {
+	&-title {
+	  @include respond-to(md) {
+		font-size: $font-size-sm;
+	  }
+	}
+
+	&:not(:last-child) {
+	  margin-bottom: $spacer-lg;
+	}
+
+	&--access {
+	  &:not(:last-child) {
+		margin-bottom: $spacer-lg;
+
+		@include respond-at(md) {
+		  margin-bottom: $spacer-lg * 2;
+		}
+	  }
+	}
+  }
+
+  &__access-cards {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-gap: $spacer-md $spacer-lg;
+
+	@include respond-at(md) {
+	  grid-template-columns: repeat(auto-fill, minmax($c-hero-access-card-min-width, 1fr));
+	}
+  }
+
+  &__requests {
+	> *:not(:last-child) {
+	  margin-bottom: $spacer-xxs;
+	}
+  }
+
+  @include respond-to(xl) {
+	padding: 0 $spacer-2xl;
+
+	&__content {
+	  padding-left: $spacer-2xl;
+	}
+
+	&__title {
+	  font-size: $font-size-3xl;
+	  max-width: 25rem;
+	}
+  }
+
+  @include respond-to(lg) {
+	grid-template-rows: $spacer-lg calc(54rem - $spacer-lg);
+	padding: 0 $spacer-lg;
+
+	&__content {
+	  padding-left: $spacer-lg;
+	}
+
+	&__title {
+	  padding-bottom: $spacer-sm;
+	}
+  }
+
+  @include respond-to(md) {
+	grid-template-columns: auto;
+	grid-template-rows: 2fr 1fr 1fr;
+	padding: $spacer-lg $spacer-md;
+
+	&__content {
+	  grid-column: 1 / 2;
+	  grid-row: 2 / 4;
+	  justify-self: center;
+	  padding-left: 0;
+	}
+
+	&__description {
+	  max-width: 45rem
+	}
+
+	&__image {
+	  grid-row: 1 / 3;
+
+	  img {
+		object-position: center top;
+	  }
+	}
+  }
+
+  &--logged-in {
+	display: flex;
+	flex-direction: column;
+	padding: $spacer-1xl 0 $spacer-lg;
+	background-color: $platinum;
+	color: $black;
+
+	@include respond-at(md) {
+	  padding: $spacer-2xl 0;
+	}
+
+	.c-hero__title {
+	  max-width: none;
+	  padding-bottom: 0;
+	  padding-right: $spacer-md;
+
+	  @include respond-to(md) {
+		margin-bottom: $spacer-md;
+		font-size: $font-size-3xl;
+		text-align: left;
+	  }
+	}
+
+	.c-hero__description {
+	  @include respond-at(md) {
+		max-width: 48.8rem;
+	  }
+	}
+  }
+}
