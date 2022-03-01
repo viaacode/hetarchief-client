@@ -1,0 +1,26 @@
+@use "../../abstracts" as *;
+
+$component: "p-account-my-collections";
+
+.#{$component} {
+    &__export--label {
+		@include respond-to("xl") {
+			display: none;
+		}
+	}
+
+	&__export--icon {
+		@include respond-at("xl") {
+			display: none;
+		}
+	}
+
+    // Avoid clicks on container triggering events
+    .c-content-input__icon--end {
+        pointer-events: none;
+
+        & > button {
+            pointer-events: all;
+        }
+    }
+}

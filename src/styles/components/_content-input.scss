@@ -54,6 +54,16 @@ $component: "c-content-input";
 		&--start {
 			margin-right: $spacer-xxs;
 		}
+
+		&--end {
+			.c-button {
+				margin-left: $spacer-xs;
+
+				@include respond-at("md") {
+					margin-left: $spacer-sm;
+				}
+			}
+		}
 	}
 
 	&--normal {
@@ -61,7 +71,7 @@ $component: "c-content-input";
 			&__field,
 			&__value {
 				font-size: $font-size-base;
-				height: $button-height-sm;
+				min-height: $button-height-sm;
 				line-height: $button-height-sm;
 			}
 		}
@@ -73,8 +83,17 @@ $component: "c-content-input";
 			&__value {
 				font-size: $font-size-3xl;
 				font-weight: $font-weight-bold;
-				height: $font-size-3xl * (math.div(56, 48));
+				min-height: $font-size-3xl * (math.div(56, 48));
+			}
+
+			&__value {
 				line-height: $font-size-3xl * (math.div(56, 48));
+			}
+
+			// Avoid cut-off of "g, q, p, ..."
+			&__field {
+				line-height: $line-height-2xl;
+				transform: translateY(-0.075em);
 			}
 		}
 	}

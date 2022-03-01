@@ -6,4 +6,8 @@ export interface EditCollectionTitleProps {
 	onOpenNode?: ReactNode | null;
 	collection: Collection;
 	afterSubmit?: (values: Collection) => void;
+	buttons: Array<{
+		before: boolean;
+		node: ReactNode;
+	}>;
 }

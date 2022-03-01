@@ -23,6 +23,10 @@ class CollectionsService extends ApiService {
 			.put(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
 			.json();
 	}
+
+	public async delete(id: string): Promise<number> {
+		return await ApiService.getApi().delete(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`).json();
+	}
 }
 
 export const collectionsService = new CollectionsService();

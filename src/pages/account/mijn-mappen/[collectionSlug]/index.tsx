@@ -1,3 +1,4 @@
+import { Button } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -9,11 +10,13 @@ import { CreateCollectionButton } from '@account/components';
 import { EditCollectionTitle } from '@account/components/EditCollectionTitle';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
+import { collectionsService } from '@account/services/collections';
 import { Collection } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { ListNavigationItem } from '@shared/components';
+import { Icon, ListNavigationItem } from '@shared/components';
+import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES } from '@shared/const';
 import { capitalise } from '@shared/helpers';
@@ -30,8 +33,9 @@ const AccountMyCollections: NextPage = () => {
 	/**
 	 * Data
 	 */
-
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
+	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+
 	const { data: collections, refetch } = useGetCollections();
 	const sidebarLinks: ListNavigationCollectionItem[] = useMemo(
 		() =>
@@ -88,13 +92,71 @@ const AccountMyCollections: NextPage = () => {
 		});
 	};
 
+	/**
+	 * Render
+	 */
+
+	const renderTitleButtons = useMemo(
+		() => [
+			{
+				before: true,
+				node: (
+					<Button
+						className="p-account-my-collections__export--label"
+						variants={['black']}
+						name={t('Metadata exporteren')}
+						label={t('Metadata exporteren')}
+						iconStart={<Icon name="export" />}
+						onClick={(e) => {
+							e.stopPropagation();
+						}}
+					/>
+				),
+			},
+			{
+				before: true,
+				node: (
+					<Button
+						className="p-account-my-collections__export--icon"
+						variants={['black']}
+						name={t('Metadata exporteren')}
+						icon={<Icon name="export" />}
+						onClick={(e) => {
+							e.stopPropagation();
+						}}
+					/>
+				),
+			},
+			...(activeCollection && !activeCollection.isDefault
+				? [
+						{
+							before: false,
+							node: (
+								<Button
+									className="p-account-my-collections__delete"
+									variants={['silver']}
+									icon={<Icon name="trash" />}
+									name={t('Map verwijderen')}
+									onClick={(e) => {
+										e.stopPropagation();
+										setShowConfirmDelete(true);
+									}}
+								/>
+							),
+						},
+				  ]
+				: []),
+		],
+		[t, activeCollection]
+	);
+
 	return (
 		<>
 			<Head>
 				<title>
 					{createPageTitle(
 						t('pages/account/mijn-mappen/index___mijn-mappen') +
-							` | ${capitalise(collectionSlug)}`
+							` | ${activeCollection?.name || collectionSlug}`
 					)}
 				</title>
 
@@ -121,18 +183,36 @@ const AccountMyCollections: NextPage = () => {
 					]}
 				>
 					{activeCollection && (
-						<div className="l-container u-mt-64 u-mb-48">
-							<SidebarLayoutTitle>
-								<EditCollectionTitle
-									key={activeCollection.id}
-									collection={activeCollection}
-									afterSubmit={onCollectionTitleChanged}
-								/>
-							</SidebarLayoutTitle>
-						</div>
+						<>
+							<div className="l-container u-mt-64 u-mb-48">
+								<SidebarLayoutTitle>
+									<EditCollectionTitle
+										key={activeCollection.id}
+										collection={activeCollection}
+										afterSubmit={onCollectionTitleChanged}
+										buttons={renderTitleButtons}
+									/>
+								</SidebarLayoutTitle>
+							</div>
+							<div className="l-container">Content</div>
+						</>
 					)}
 				</SidebarLayout>
 			</AccountLayout>
+
+			<ConfirmationModal
+				isOpen={activeCollection && showConfirmDelete}
+				onClose={() => setShowConfirmDelete(false)}
+				onCancel={() => setShowConfirmDelete(false)}
+				onConfirm={() => {
+					setShowConfirmDelete(false);
+
+					activeCollection &&
+						collectionsService.delete(activeCollection.id).then(() => {
+							refetch();
+						});
+				}}
+			/>
 		</>
 	);
 };

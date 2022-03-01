@@ -14,9 +14,10 @@ import styles from './EditCollectionTitle.module.scss';
 import { EditCollectionTitleProps } from './EditCollectionTitle.types';
 
 const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
-	onOpenNode = null,
-	collection,
 	afterSubmit = () => null,
+	buttons = [],
+	collection,
+	onOpenNode = null,
 }) => {
 	const { t } = useTranslation();
 	const [isOpen, setIsOpen] = useState(false);
@@ -86,6 +87,27 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		})();
 	};
 
+	/**
+	 * Render
+	 */
+
+	const renderButtons = () => {
+		return (
+			<>
+				{buttons.filter((b) => b.before).map((b) => b.node)}
+				<Button
+					className={styles['c-edit-collection-title__edit']}
+					variants={['silver']}
+					name={t(
+						'modules/account/components/edit-collection-title/edit-collection-title___map-aanpassen'
+					)}
+					icon={<Icon name="edit" />}
+				/>
+				{buttons.filter((b) => !b.before).map((b) => b.node)}
+			</>
+		);
+	};
+
 	return (
 		<FormControl className={styles['c-edit-collection-title']}>
 			<Controller
@@ -98,13 +120,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 						onOpen={clearForm}
 						onConfirm={onFormSubmit}
 						variants={['title']}
-						iconEnd={
-							!isOpen ? (
-								<Button variants={['silver']} icon={<Icon name="edit" />} />
-							) : (
-								onOpenNode
-							)
-						}
+						iconEnd={!isOpen ? renderButtons() : onOpenNode}
 						nodeSubmit={<Button variants={['black']} icon={<Icon name="check" />} />}
 						nodeCancel={<Button variants={['silver']} icon={<Icon name="times" />} />}
 					/>

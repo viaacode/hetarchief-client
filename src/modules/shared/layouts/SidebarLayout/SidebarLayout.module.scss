@@ -36,12 +36,6 @@ $l-sub-sidebar-width: 27.5rem;
 			&__sidebar {
 				width: $l-sub-sidebar-width;
 			}
-
-			&__main {
-				:global(.l-container) {
-					max-width: 78.4rem; // 912 - (64*2)
-				}
-			}
 		}
 	}
 }
