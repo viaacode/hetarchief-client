@@ -1,7 +1,9 @@
 import { Button, TagList } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
@@ -15,6 +17,8 @@ import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metada
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
+	const [expandMetadata, setExpandMetadata] = useState(true);
+
 	const { t } = useTranslation();
 	useStickyLayout();
 	useNavigationBorder();
@@ -54,7 +58,21 @@ const ObjectDetailPage: NextPage = () => {
 			{/* TODO: bind title to state */}
 			{/* TODO: use correct left and right sections */}
 			<ReadingRoomNavigation title={'Leeszaal'} />
-			<article className="p-object-detail__wrapper">
+			<article
+				className={clsx(
+					'p-object-detail__wrapper',
+					expandMetadata && 'p-object-detail__wrapper--expanded'
+				)}
+			>
+				<Button
+					className={clsx(
+						'p-object-detail__expand-button',
+						expandMetadata && 'p-object-detail__expand-button--expanded'
+					)}
+					icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
+					onClick={() => setExpandMetadata(!expandMetadata)}
+					variants="white"
+				/>
 				<ObjectPlaceholder
 					{...objectPlaceholderMock}
 					openModalButtonLabel={t(
@@ -64,7 +82,12 @@ const ObjectDetailPage: NextPage = () => {
 						'pages/leeszaal/reading-room-slug/object-id/index___sluit'
 					)}
 				/>
-				<div className="p-object-detail__metadata">
+				<div
+					className={clsx(
+						'p-object-detail__metadata',
+						expandMetadata && 'p-object-detail__metadata--expanded'
+					)}
+				>
 					<div className="u-px-32">
 						{/* TODO: bind content to state */}
 						<h3 className="u-pt-32 u-pb-24">Op de koop toe: schepijs (1993)</h3>
@@ -95,6 +118,7 @@ const ObjectDetailPage: NextPage = () => {
 							<DynamicActionMenu {...dynamicActionMenuMock} />
 						</div>
 						<Metadata
+							columns={expandMetadata ? 2 : 1}
 							metadata={[
 								...metadataMock.metadata,
 								{

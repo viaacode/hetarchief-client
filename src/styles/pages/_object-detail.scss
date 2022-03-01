@@ -1,5 +1,8 @@
 @use "styles/abstracts" as *;
 
+$metadata-expanded-width: 72vw;
+$metadata-collapsed-width: 36vw;
+
 .p-object-detail {
 	flex-grow: 1;
 	min-height: 0;
@@ -16,12 +19,37 @@
 		grid-auto-rows: 1fr;
 
 		@include respond-at(md) {
-			grid-template-columns: repeat(2, 1fr);
+			grid-template-columns: 1fr min-content;
+		}
+
+	}
+
+	&__expand-button {
+		z-index: get-z-layer("foreground");
+		position: absolute;
+		width: 3.2rem;
+		height: 3.2rem;
+		right: $metadata-collapsed-width;
+		transform: translate(50%, 3.5rem);
+		box-shadow: $shadow-12-black-16;
+		transition: right $animate-default;
+
+		&--expanded {
+			right: $metadata-expanded-width;
 		}
 	}
 
 	&__metadata {
 		overflow-y: scroll;
+		position: relative;
+
+		// Use width for toggle because grid-template-column animation is only supported on Firefox
+		width: $metadata-collapsed-width;
+		transition: width $animate-default;
+
+		&--expanded {
+			width: $metadata-expanded-width;
+		}
 	}
 
 	&__actions {
