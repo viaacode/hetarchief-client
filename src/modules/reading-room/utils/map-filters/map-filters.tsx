@@ -2,7 +2,11 @@ import { SelectOption, TagInfo } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { DecodedValueMap } from 'use-query-params';
 
-import { AdvancedFilterFormState } from '@reading-room/components';
+import {
+	AdvancedFilterFieldsQueryValues,
+	AdvancedFilterFieldsState,
+	AdvancedFilterFormState,
+} from '@reading-room/components';
 import { METADATA_PROP_OPTIONS } from '@reading-room/components/forms/AdvancedFilterForm/AdvancedFilterFields';
 import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
 import { AdvancedFilterQueryValue, ReadingRoomFilterId } from '@reading-room/types';
@@ -27,6 +31,7 @@ export const mapFiltersToTags = (
 				</span>
 			),
 			value: keyword as string,
+			prop: 'search',
 		}));
 
 	const advancedFilters = (query.advanced ?? []).map((advanced: AdvancedFilterQueryValue) => ({
@@ -37,6 +42,7 @@ export const mapFiltersToTags = (
 			</span>
 		),
 		value: advanced.val,
+		prop: ReadingRoomFilterId.Advanced,
 	}));
 
 	return searchFilters.concat(advancedFilters);
@@ -58,6 +64,27 @@ export const mapFiltersToQuery = (
 						prop: item.metadataProp ?? '',
 						op: item.operator ?? '',
 						val: item.value ?? '',
+				  }))
+				: undefined;
+		}
+
+		default:
+			return undefined;
+	}
+};
+
+export const mapQueryToFields = (
+	id: ReadingRoomFilterId,
+	values: unknown
+): AdvancedFilterFieldsState[] | undefined => {
+	switch (id) {
+		case ReadingRoomFilterId.Advanced: {
+			const filters = values as AdvancedFilterFieldsQueryValues[];
+			return filters.length
+				? filters.map((value: AdvancedFilterFieldsQueryValues) => ({
+						metadataProp: value.prop,
+						operator: value.op,
+						value: value.val,
 				  }))
 				: undefined;
 		}
