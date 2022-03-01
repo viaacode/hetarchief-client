@@ -7,10 +7,12 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { RequestAccessBlade } from '@home/components';
+import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
+import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
 import { AccessGranted } from '@shared/components/ReadingRoomCard/__mocks__/reading-room-card';
+import { toastService } from '@shared/services';
 import { createPageTitle } from '@shared/utils';
 
 import styles from './LoggedInHome.module.scss';
@@ -23,8 +25,11 @@ const LoggedInHome: FC = () => {
 	});
 
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
+	const [readingRoomId, setReadingRoomId] = useState<string | null>(null);
 
 	const user = useSelector(selectUser);
+
+	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
@@ -41,15 +46,59 @@ const LoggedInHome: FC = () => {
 		if (query.returnToRequestAccess) {
 			setQuery({ returnToRequestAccess: undefined });
 		}
+		setReadingRoomId(null);
 		setIsOpenRequestAccessBlade(false);
 	};
 
-	const onRequestAccessSubmit = () => {
-		// TODO: add create request call here
-		setIsOpenRequestAccessBlade(false);
+	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
+		try {
+			if (!user) {
+				toastService.notify({
+					title: t('Je bent niet ingelogd'),
+					description: t('Je bent niet ingelogd, log opnieuw in en probeer opnieuw.'),
+				});
+				return;
+			}
+			if (!readingRoomId) {
+				toastService.notify({
+					title: t('Selecteer eerst een leeszaal'),
+					description: t(
+						'De leeszaal waarvoor je een aanvraag wil indienen is niet ingesteld.'
+					),
+				});
+				return;
+			}
+			await createVisitRequest({
+				acceptedTos: values.acceptTerms,
+				reason: values.requestReason,
+				spaceId: readingRoomId,
+				timeframe: values.visitTime,
+				userProfileId: user?.id,
+			});
+			toastService.notify({
+				title: t('Success'),
+				description: t('Je aanvraag is verstuurd'),
+			});
+
+			setReadingRoomId(null);
+			setIsOpenRequestAccessBlade(false);
+		} catch (err) {
+			console.error({
+				message: 'Failed to create visit request',
+				error: err,
+				info: values,
+			});
+			toastService.notify({
+				title: t('Error'),
+				description: t(
+					'Er ging iets mis bij het versturen van je aanvraag, probeer het later opnieuw of contacteer de support.'
+				),
+			});
+		}
 	};
 
-	const onRequestAccess = () => {
+	const onRequestAccess = (readingRoomId: string) => {
+		setReadingRoomId(readingRoomId);
 		setIsOpenRequestAccessBlade(true);
 	};
 
