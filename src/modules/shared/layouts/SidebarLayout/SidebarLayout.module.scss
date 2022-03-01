@@ -36,6 +36,10 @@ $l-sub-sidebar-width: 27.5rem;
 			&__sidebar {
 				width: $l-sub-sidebar-width;
 			}
+
+			:global(.l-container) {
+				padding: 0 $spacer-lg * 2;
+			}
 		}
 	}
 }

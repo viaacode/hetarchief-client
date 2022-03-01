@@ -8,7 +8,8 @@ import {
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
 } from '@reading-room/components';
-import { Icon, IconProps } from '@shared/components';
+import { Icon } from '@shared/components';
+import { VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection } from '@shared/types';
 
 import {
@@ -55,16 +56,7 @@ export const READING_ROOM_TABS = (): TabProps[] => [
 	},
 ];
 
-export const READING_ROOM_VIEW_TOGGLE_OPTIONS = [
-	{
-		id: 'grid',
-		iconName: 'grid-view' as IconProps['name'],
-	},
-	{
-		id: 'list',
-		iconName: 'list-view' as IconProps['name'],
-	},
-];
+export const READING_ROOM_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
 export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{

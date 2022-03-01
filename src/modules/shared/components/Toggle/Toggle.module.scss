@@ -5,30 +5,33 @@ $c-toggle-black-32: color.adjust($black, $alpha: -0.68);
 $c-toggle-white-40: color.adjust($white, $alpha: -0.60);
 $c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
 
+/* stylelint-disable no-descending-specificity */
 .c-toggle {
 	display: inline-flex;
 	align-items: center;
 	height: 4.8rem;
 	padding: 0 1.2rem;
 
-	&__option {
-		width: 4rem;
-		height: 4rem;
-
-		&:global(.c-button) {
-			outline: none;
-
-			&:not(:active,:hover):focus {
+	.c-toggle {
+		&__option {
+			width: 4rem;
+			height: 4rem;
+	
+			&:global(.c-button) {
 				outline: none;
+	
+				&:not(:active,:hover):focus {
+					outline: none;
+				}
 			}
-		}
-
-		&--active {
-			color: $c-toggle-black-32;
-
-			&:hover {
+	
+			&--active {
 				color: $c-toggle-black-32;
-				cursor: default;
+	
+				&:hover {
+					color: $c-toggle-black-32;
+					cursor: default;
+				}
 			}
 		}
 	}
@@ -41,7 +44,6 @@ $c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
 	&--dark {
 		background-color: $black;
 
-		/* stylelint-disable-next-line no-descending-specificity */
 		.c-toggle__option {
 			color: $white;
 
@@ -60,3 +62,4 @@ $c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
 		}
 	}
 }
+/* stylelint-enable no-descending-specificity */

@@ -15,11 +15,16 @@ import { Collection } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { Icon, ListNavigationItem } from '@shared/components';
+import {
+	Icon,
+	ListNavigationItem,
+	MediaCardViewMode,
+	Toggle,
+	ToggleOption,
+} from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTES } from '@shared/const';
-import { capitalise } from '@shared/helpers';
+import { ROUTES, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { createPageTitle } from '@shared/utils';
 
@@ -35,6 +40,7 @@ const AccountMyCollections: NextPage = () => {
 	 */
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
 	const { data: collections, refetch } = useGetCollections();
 	const sidebarLinks: ListNavigationCollectionItem[] = useMemo(
@@ -65,6 +71,15 @@ const AccountMyCollections: NextPage = () => {
 	const activeCollection = useMemo(
 		() => sidebarLinks.find((link) => link.active),
 		[sidebarLinks]
+	);
+
+	const toggleOptions: ToggleOption[] = useMemo(
+		() =>
+			VIEW_TOGGLE_OPTIONS.map((option) => ({
+				...option,
+				active: option.id === viewMode,
+			})),
+		[viewMode]
 	);
 
 	/**
@@ -194,7 +209,15 @@ const AccountMyCollections: NextPage = () => {
 									/>
 								</SidebarLayoutTitle>
 							</div>
-							<div className="l-container">Content</div>
+
+							<div className="l-container">
+								<Toggle
+									bordered
+									className="p-account-my-collections__toggle u-bg-white"
+									options={toggleOptions}
+									onChange={(id) => setViewMode(id as MediaCardViewMode)}
+								/>
+							</div>
 						</>
 					)}
 				</SidebarLayout>
