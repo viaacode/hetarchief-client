@@ -21,11 +21,10 @@ import { homeHeroRequests } from './__mocks__/HomeHeroRequests.mock';
 const LoggedInHome: FC = () => {
 	const { t } = useTranslation();
 	const [query, setQuery] = useQueryParams({
-		returnToRequestAccess: StringParam,
+		readingRoomId: StringParam,
 	});
 
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
-	const [readingRoomId, setReadingRoomId] = useState<string | null>(null);
 
 	const user = useSelector(selectUser);
 
@@ -33,20 +32,19 @@ const LoggedInHome: FC = () => {
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
-		if (query.returnToRequestAccess) {
+		if (query.readingRoomId) {
 			setIsOpenRequestAccessBlade(true);
 		}
-	}, [query.returnToRequestAccess]);
+	}, [query.readingRoomId]);
 
 	/**
 	 * Methods
 	 */
 
 	const onCloseRequestBlade = () => {
-		if (query.returnToRequestAccess) {
-			setQuery({ returnToRequestAccess: undefined });
+		if (query.readingRoomId) {
+			setQuery({ readingRoomId: undefined });
 		}
-		setReadingRoomId(null);
 		setIsOpenRequestAccessBlade(false);
 	};
 
@@ -59,7 +57,7 @@ const LoggedInHome: FC = () => {
 				});
 				return;
 			}
-			if (!readingRoomId) {
+			if (!query.readingRoomId) {
 				toastService.notify({
 					title: t('Selecteer eerst een leeszaal'),
 					description: t(
@@ -71,7 +69,7 @@ const LoggedInHome: FC = () => {
 			await createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
-				spaceId: readingRoomId,
+				spaceId: query.readingRoomId,
 				timeframe: values.visitTime,
 				userProfileId: user?.id,
 			});
@@ -80,7 +78,7 @@ const LoggedInHome: FC = () => {
 				description: t('Je aanvraag is verstuurd'),
 			});
 
-			setReadingRoomId(null);
+			setQuery({ readingRoomId: undefined });
 			setIsOpenRequestAccessBlade(false);
 		} catch (err) {
 			console.error({
@@ -98,7 +96,7 @@ const LoggedInHome: FC = () => {
 	};
 
 	const onRequestAccess = (readingRoomId: string) => {
-		setReadingRoomId(readingRoomId);
+		setQuery({ readingRoomId });
 		setIsOpenRequestAccessBlade(true);
 	};
 
