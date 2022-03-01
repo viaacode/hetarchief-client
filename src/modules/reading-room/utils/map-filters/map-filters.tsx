@@ -1,10 +1,18 @@
-import { TagInfo } from '@meemoo/react-components';
+import { SelectOption, TagInfo } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { DecodedValueMap } from 'use-query-params';
 
 import { AdvancedFilterFormState } from '@reading-room/components';
+import { METADATA_PROP_OPTIONS } from '@reading-room/components/forms/AdvancedFilterForm/AdvancedFilterFields';
 import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
 import { AdvancedFilterQueryValue, ReadingRoomFilterId } from '@reading-room/types';
+
+const getSelectLabel = (
+	options: SelectOption[],
+	optionValue: string | undefined
+): string | undefined => {
+	return options.find((option) => option.value === optionValue)?.label;
+};
 
 export const mapFiltersToTags = (
 	query: Partial<DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>>
@@ -24,7 +32,8 @@ export const mapFiltersToTags = (
 	const advancedFilters = (query.advanced ?? []).map((advanced: AdvancedFilterQueryValue) => ({
 		label: (
 			<span>
-				{advanced.prop}: <strong>{advanced.val}</strong>
+				{getSelectLabel(METADATA_PROP_OPTIONS(), advanced.prop)}:{' '}
+				<strong>{advanced.val}</strong>
 			</span>
 		),
 		value: advanced.val,
