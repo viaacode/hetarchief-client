@@ -2,10 +2,12 @@ import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 
 import { withI18n } from '@i18n/wrappers';
-import { dynamicActionMenuMock } from '@media/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
+import { MEDIA_ACTIONS } from '@media/const';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
 import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
@@ -24,6 +26,7 @@ import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholde
 
 const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
 	useStickyLayout();
 	useNavigationBorder();
 
@@ -61,12 +64,21 @@ const ObjectDetailPage: NextPage = () => {
 	const metaData: MetadataItem[] = [
 		...metadataMock.metadata,
 		{
-			title: t('pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'),
+			title: 'Trefwoorden',
 			data: (
 				<TagList
 					className="u-pt-12"
 					tags={tags}
-					onTagClicked={(id) => console.log(id)}
+					onTagClicked={(id) => {
+						router.push(
+							stringifyUrl({
+								url: `/leeszaal/${router.query.readingRoomSlug}`,
+								query: {
+									search: id,
+								},
+							})
+						);
+					}}
 					variants={['clickable', 'silver', 'medium']}
 				/>
 			),
@@ -137,7 +149,7 @@ const ObjectDetailPage: NextPage = () => {
 										)}
 									</span>
 								</Button>
-								<DynamicActionMenu {...dynamicActionMenuMock} />
+								<DynamicActionMenu {...MEDIA_ACTIONS} />
 							</div>
 						</div>
 						<Metadata className="u-px-32" metadata={metaData} />
