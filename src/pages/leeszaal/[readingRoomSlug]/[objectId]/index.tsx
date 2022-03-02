@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { stringify } from 'query-string';
+import { stringifyUrl } from 'query-string';
 
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
@@ -108,11 +108,12 @@ const ObjectDetailPage: NextPage = () => {
 											tags={tags}
 											onTagClicked={(id) => {
 												router.push(
-													`/leeszaal/${
-														router.query.readingRoomSlug
-													}?${stringify({
-														search: id,
-													})}`
+													stringifyUrl({
+														url: `/leeszaal/${router.query.readingRoomSlug}`,
+														query: {
+															search: id,
+														},
+													})
 												);
 											}}
 											variants={['clickable', 'silver', 'medium']}
