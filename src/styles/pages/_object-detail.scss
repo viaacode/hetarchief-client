@@ -21,6 +21,18 @@ $metadata-collapsed-width: 36vw;
 
 	&__nav {
 		flex-shrink: 0;
+
+		&::after {
+			content: "";
+			position: absolute;
+			z-index: get-z-layer("foreground");
+			bottom: 0;
+			left: 2rem;
+			right: 2rem;
+			height: 1px;
+			background-color: $shade;
+			opacity: 0.64;
+		}
 	}
 
 	&__tabs {
