@@ -3,14 +3,14 @@ import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
 import { OBJECT_DETAIL_TABS } from '@media/const';
 import { ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
-import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
+import { useElementSize, useNavigationBorder, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
 import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
@@ -26,6 +26,9 @@ const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
 	useStickyLayout();
 	useNavigationBorder();
+
+	const metadataRef = useRef<HTMLDivElement>(null);
+	const metadataSize = useElementSize(metadataRef);
 
 	/**
 	 * Variables
@@ -123,6 +126,7 @@ const ObjectDetailPage: NextPage = () => {
 					/>
 				</div>
 				<div
+					ref={metadataRef}
 					className={clsx(
 						'p-object-detail__metadata',
 						expandMetadata && 'p-object-detail__metadata--expanded'
@@ -158,7 +162,9 @@ const ObjectDetailPage: NextPage = () => {
 							<DynamicActionMenu {...dynamicActionMenuMock} />
 						</div>
 						<Metadata
-							columns={expandMetadata ? 2 : 1}
+							columns={
+								expandMetadata && metadataSize && metadataSize?.width > 500 ? 2 : 1
+							}
 							metadata={[
 								...metadataMock.metadata,
 								{
