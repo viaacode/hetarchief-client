@@ -11,6 +11,7 @@ import { ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize, useNavigationBorder, useStickyLayout } from '@shared/hooks';
+import { useFooter } from '@shared/hooks/use-footer';
 import { createPageTitle } from '@shared/utils';
 
 import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
@@ -26,6 +27,7 @@ const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
 	useStickyLayout();
 	useNavigationBorder();
+	useFooter();
 
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
