@@ -44,7 +44,7 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 				//
 				// When the user is present in the response, they've not logged out and they *have* accepted the TOS previously
 
-				if (!isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos.updatedAt)) {
+				if (!isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos.updatedAt.updated_at)) {
 					//
 					// When the user accepted a previous version of the TOS
 
