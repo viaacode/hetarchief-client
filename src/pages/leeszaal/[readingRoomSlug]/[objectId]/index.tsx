@@ -2,6 +2,8 @@ import { Button, TagList } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 
 import { withI18n } from '@i18n/wrappers';
 import { MEDIA_ACTIONS } from '@media/const';
@@ -16,6 +18,7 @@ import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholde
 
 const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
 	useStickyLayout();
 	useNavigationBorder();
 
@@ -103,7 +106,16 @@ const ObjectDetailPage: NextPage = () => {
 										<TagList
 											className="u-pt-12"
 											tags={tags}
-											onTagClicked={(id) => console.log(id)}
+											onTagClicked={(id) => {
+												router.push(
+													stringifyUrl({
+														url: `/leeszaal/${router.query.readingRoomSlug}`,
+														query: {
+															search: id,
+														},
+													})
+												);
+											}}
 											variants={['clickable', 'silver', 'medium']}
 										/>
 									),
