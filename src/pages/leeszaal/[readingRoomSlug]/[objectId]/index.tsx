@@ -45,7 +45,7 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	const onClickToggle = () => {
-		setActiveTab(expandMetadata ? ObjectDetailTabs.Video : ObjectDetailTabs.Metadata);
+		setActiveTab(expandMetadata ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata);
 	};
 
 	/**
@@ -72,7 +72,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	const tabs: TabProps[] = useMemo(
 		() =>
-			OBJECT_DETAIL_TABS().map((tab) => ({
+			OBJECT_DETAIL_TABS(null).map((tab) => ({
 				...tab,
 				label: <TabLabel label={tab.label} />,
 				active: tab.id === activeTab,
@@ -104,7 +104,7 @@ const ObjectDetailPage: NextPage = () => {
 					'p-object-detail__wrapper',
 					expandMetadata && 'p-object-detail__wrapper--expanded',
 					activeTab === ObjectDetailTabs.Metadata && 'p-object-detail__wrapper--metadata',
-					activeTab === ObjectDetailTabs.Video && 'p-object-detail__wrapper--video'
+					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
 				)}
 			>
 				<Button

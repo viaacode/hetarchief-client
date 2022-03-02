@@ -32,7 +32,9 @@ export class MediaSearchFilters {
 	query?: string;
 }
 
+export type MediaTypes = 'video' | 'audio' | null;
+
 export enum ObjectDetailTabs {
-	Video = 'video',
+	Media = 'media',
 	Metadata = 'metadata',
 }
