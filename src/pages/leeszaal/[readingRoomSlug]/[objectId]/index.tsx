@@ -1,13 +1,15 @@
-import { Button, TagList } from '@meemoo/react-components';
+import { Button, TabProps, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
+import { OBJECT_DETAIL_TABS } from '@media/const';
+import { ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
-import { Icon } from '@shared/components';
+import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
 import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
@@ -17,11 +19,29 @@ import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metada
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
-	const [expandMetadata, setExpandMetadata] = useState(true);
-
+	/**
+	 * Hooks
+	 */
+	const [activeTab, setActiveTab] = useState<string | number>(ObjectDetailTabs.Metadata);
 	const { t } = useTranslation();
 	useStickyLayout();
 	useNavigationBorder();
+
+	/**
+	 * Variables
+	 */
+	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+
+	/**
+	 * Callbacks
+	 */
+	const onTabClick = (id: string | number) => {
+		setActiveTab(id);
+	};
+
+	const onClickToggle = () => {
+		setActiveTab(expandMetadata ? ObjectDetailTabs.Video : ObjectDetailTabs.Metadata);
+	};
 
 	/**
 	 * Mock data
@@ -45,6 +65,16 @@ const ObjectDetailPage: NextPage = () => {
 		},
 	];
 
+	const tabs: TabProps[] = useMemo(
+		() =>
+			OBJECT_DETAIL_TABS().map((tab) => ({
+				...tab,
+				label: <TabLabel label={tab.label} />,
+				active: tab.id === activeTab,
+			})),
+		[activeTab]
+	);
+
 	/**
 	 * Render
 	 */
@@ -57,11 +87,19 @@ const ObjectDetailPage: NextPage = () => {
 			</Head>
 			{/* TODO: bind title to state */}
 			{/* TODO: use correct left and right sections */}
-			<ReadingRoomNavigation title={'Leeszaal'} />
+			<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
+			<ScrollableTabs
+				className="p-object-detail__tabs"
+				variants={['dark']}
+				tabs={tabs}
+				onClick={onTabClick}
+			/>
 			<article
 				className={clsx(
 					'p-object-detail__wrapper',
-					expandMetadata && 'p-object-detail__wrapper--expanded'
+					expandMetadata && 'p-object-detail__wrapper--expanded',
+					activeTab === ObjectDetailTabs.Metadata && 'p-object-detail__wrapper--metadata',
+					activeTab === ObjectDetailTabs.Video && 'p-object-detail__wrapper--video'
 				)}
 			>
 				<Button
@@ -70,18 +108,20 @@ const ObjectDetailPage: NextPage = () => {
 						expandMetadata && 'p-object-detail__expand-button--expanded'
 					)}
 					icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
-					onClick={() => setExpandMetadata(!expandMetadata)}
+					onClick={onClickToggle}
 					variants="white"
 				/>
-				<ObjectPlaceholder
-					{...objectPlaceholderMock}
-					openModalButtonLabel={t(
-						'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-					)}
-					closeModalButtonLabel={t(
-						'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-					)}
-				/>
+				<div className="p-object-detail__video">
+					<ObjectPlaceholder
+						{...objectPlaceholderMock}
+						openModalButtonLabel={t(
+							'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+						)}
+						closeModalButtonLabel={t(
+							'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+						)}
+					/>
+				</div>
 				<div
 					className={clsx(
 						'p-object-detail__metadata',

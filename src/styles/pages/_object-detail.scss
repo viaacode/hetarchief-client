@@ -14,17 +14,68 @@ $metadata-collapsed-width: 36vw;
 		min-height: 0;
 		display: grid;
 
-		// temporary mobile layout
-		grid-template-columns: auto;
-		grid-auto-rows: 1fr;
-
 		@include respond-at(md) {
 			grid-template-columns: 1fr min-content;
 		}
+	}
 
+	&__nav {
+		flex-shrink: 0;
+	}
+
+	&__tabs {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+
+		.c-tab {
+			justify-content: center;
+			height: 8rem;
+			font-size: $font-size-md;
+
+			&__icon {
+				font-size: $font-size-lg;
+			}
+		}
+
+		@include respond-at(md) {
+			display: none;
+		}
+	}
+
+	&__metadata {
+		overflow-y: scroll;
+
+		@include respond-at(md) {
+			// Use width for toggle because grid-template-column animation is only supported on Firefox
+			width: $metadata-collapsed-width;
+			transition: width $animate-default;
+
+			&--expanded {
+				width: $metadata-expanded-width;
+			}
+		}
+	}
+
+	&__wrapper--metadata {
+		.p-object-detail__video {
+			display: none;
+		}
+	}
+
+	&__wrapper--video {
+		.p-object-detail__metadata {
+			display: none;
+		}
+	}
+
+	@include respond-at(md) {
+		.p-object-detail__metadata, .p-object-detail__video {
+			display: block;
+		}
 	}
 
 	&__expand-button {
+		visibility: hidden;
 		z-index: get-z-layer("foreground");
 		position: absolute;
 		width: 3.2rem;
@@ -37,18 +88,9 @@ $metadata-collapsed-width: 36vw;
 		&--expanded {
 			right: $metadata-expanded-width;
 		}
-	}
 
-	&__metadata {
-		overflow-y: scroll;
-		position: relative;
-
-		// Use width for toggle because grid-template-column animation is only supported on Firefox
-		width: $metadata-collapsed-width;
-		transition: width $animate-default;
-
-		&--expanded {
-			width: $metadata-expanded-width;
+		@include respond-at(md) {
+			visibility: visible;
 		}
 	}
 
