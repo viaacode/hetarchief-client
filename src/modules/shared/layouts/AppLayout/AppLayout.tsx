@@ -15,10 +15,18 @@ import {
 } from '@navigation/components/Footer/__mocks__/footer';
 import { MOCK_ITEMS_LEFT } from '@navigation/components/Navigation/__mocks__/navigation';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
-import { Notification, NotificationCenter, notificationCenterMock } from '@shared/components';
+import { NotificationCenter } from '@shared/components';
+import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
+import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
+import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
+import { NotificationStatus } from '@shared/services/notifications-service/notifications.types';
 import { useAppDispatch } from '@shared/store';
-import { getTosAction } from '@shared/store/tos';
-import { selectIsStickyLayout, setShowAuthModal } from '@shared/store/ui';
+import { getTosAction } from '@shared/store/tos/tos.slice';
+import {
+	selectIsStickyLayout,
+	selectShowNavigationBorder,
+	setShowAuthModal,
+} from '@shared/store/ui/';
 
 const AppLayout: FC = ({ children }) => {
 	const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -29,14 +37,16 @@ const AppLayout: FC = ({ children }) => {
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
 
+	const showBorder = useSelector(selectShowNavigationBorder);
+
 	useEffect(() => {
 		dispatch(checkLoginAction());
 		dispatch(getTosAction());
 	}, [dispatch]);
 
-	const anyUnreadNotifications = notificationCenterMock.notifications.some(
-		(notification: Notification) => !notification.read
-	);
+	const { data: notificationResponse } = useGetNotifications();
+	const anyUnreadNotifications =
+		notificationResponse?.pages?.[0]?.items?.[0]?.status === NotificationStatus.UNREAD;
 	const userName = (user?.firstName as string) ?? '';
 
 	const onLoginRegisterClick = useCallback(() => dispatch(setShowAuthModal(true)), [dispatch]);
@@ -77,7 +87,7 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
-			<Navigation>
+			<Navigation showBorder={showBorder}>
 				<Navigation.Left
 					currentPath={asPath}
 					hamburgerProps={
@@ -100,9 +110,11 @@ const AppLayout: FC = ({ children }) => {
 				{children}
 
 				<NotificationCenter
-					{...notificationCenterMock}
 					isOpen={notificationsOpen}
 					onClose={() => setNotificationsOpen(false)}
+					useGetNotificationsHook={useGetNotifications}
+					useMarkOneNotificationsAsReadHook={useMarkOneNotificationsAsRead}
+					useMarkAllNotificationsAsReadHook={useMarkAllNotificationsAsRead}
 				/>
 			</main>
 

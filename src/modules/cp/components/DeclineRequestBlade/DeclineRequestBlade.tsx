@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade } from '@shared/components';
-import { toastService } from '@shared/services';
+import { toastService } from '@shared/services/toast-service';
 import { visitsService } from '@visits/services';
 import { VisitStatus } from '@visits/types';
 

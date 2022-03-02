@@ -4,12 +4,15 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
+import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
 import { MEDIA_ACTIONS } from '@media/const';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
-import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
+import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
+import { selectShowNavigationBorder } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
 import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
@@ -22,6 +25,7 @@ const ObjectDetailPage: NextPage = () => {
 	useStickyLayout();
 	useNavigationBorder();
 
+	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	/**
 	 * Mock data
 	 */
@@ -56,7 +60,7 @@ const ObjectDetailPage: NextPage = () => {
 			</Head>
 			{/* TODO: bind title to state */}
 			{/* TODO: use correct left and right sections */}
-			<ReadingRoomNavigation title={'Leeszaal'} />
+			<ReadingRoomNavigation title={'Leeszaal'} showBorder={showNavigationBorder} />
 			<article className="p-object-detail__wrapper">
 				<ObjectPlaceholder
 					{...objectPlaceholderMock}

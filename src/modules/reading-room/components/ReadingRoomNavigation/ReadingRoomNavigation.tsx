@@ -3,10 +3,12 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Navigation } from '@navigation/components';
 import { Icon } from '@shared/components';
 import { CopyButton } from '@shared/components/CopyButton';
+import { selectShowNavigationBorder } from '@shared/store/ui';
 
 import styles from './ReadingRoomNavigation.module.scss';
 import { ReadingRoomNavigationProps } from './ReadingRoomNavigation.types';
@@ -14,6 +16,7 @@ import { ReadingRoomNavigationProps } from './ReadingRoomNavigation.types';
 const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 	const { t } = useTranslation();
 	const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
+	const showBorder = useSelector(selectShowNavigationBorder);
 
 	// TODO: replace with model
 	const { phone, email } = {
@@ -22,7 +25,7 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 	};
 
 	return (
-		<Navigation contextual>
+		<Navigation contextual showBorder={showBorder}>
 			<Navigation.Left placement="left">
 				<Link href="/" passHref={true}>
 					<a>

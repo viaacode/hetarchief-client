@@ -1,18 +1,17 @@
-import { ReactNode } from 'react';
+import { UseInfiniteQueryResult, UseMutationResult } from 'react-query';
 
-import { DefaultComponentProps } from '@shared/types';
+import {
+	MarkAllAsReadResult,
+	Notification,
+} from '@shared/services/notifications-service/notifications.types';
+import { ApiResponseWrapper, DefaultComponentProps } from '@shared/types';
 
 export interface NotificationCenterProps extends DefaultComponentProps {
-	notifications: Notification[];
 	isOpen: boolean;
 	onClose: () => void;
-	onClickNotification: (id: string) => void;
-	onClickButton: () => void;
-}
 
-export interface Notification {
-	title: string;
-	description: ReactNode;
-	read: boolean;
-	id: string;
+	// Pass hook for mocking purposes
+	useGetNotificationsHook: () => UseInfiniteQueryResult<ApiResponseWrapper<Notification>>;
+	useMarkAllNotificationsAsReadHook: () => UseMutationResult<MarkAllAsReadResult, unknown, void>;
+	useMarkOneNotificationsAsReadHook: () => UseMutationResult<Notification, unknown, string>;
 }

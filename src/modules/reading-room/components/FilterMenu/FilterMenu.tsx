@@ -6,7 +6,8 @@ import { FC, useEffect, useState } from 'react';
 import { READING_ROOM_ACTIVE_SORT_MAP } from '@reading-room/const';
 import { ReadingRoomSort } from '@reading-room/types';
 import { Icon, IconLightNames, Toggle } from '@shared/components';
-import { useScrollLock, useWindowSizeContext } from '@shared/hooks';
+import { useScrollLock } from '@shared/hooks/use-scroll-lock';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
 import styles from './FilterMenu.module.scss';
@@ -29,6 +30,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onMenuToggle,
 	onSortClick,
 	onViewToggle = () => null,
+	showNavigationBorder,
 }) => {
 	const [activeFilter, setActiveFilter] = useState<string | null>(null);
 	const [lockScroll, setLockScroll] = useState<boolean>(false);
@@ -155,6 +157,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onSortClick={onSortClick}
 				onFilterReset={onFilterFormReset}
 				onFilterSubmit={onFilterFormSubmit}
+				showNavigationBorder={showNavigationBorder}
 			/>
 		</div>
 	);

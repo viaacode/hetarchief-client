@@ -1,13 +1,13 @@
 import { stringifyUrl } from 'query-string';
 
-import { ApiService } from '@shared/services';
+import { ApiService } from '@shared/services/api-service';
 import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { PatchVisit, VisitInfo } from '@visits/types';
 
 import { VISITS_SERVICE_BASE_URL } from './visits.service.const';
 
-class VisitsService extends ApiService {
+class VisitsService {
 	public async getAll(
 		searchInput = '',
 		status: string | undefined,

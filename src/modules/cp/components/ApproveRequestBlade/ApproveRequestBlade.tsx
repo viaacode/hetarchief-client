@@ -25,7 +25,7 @@ import { Blade, Icon } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
-import { toastService } from '@shared/services';
+import { toastService } from '@shared/services/toast-service';
 import { visitsService } from '@visits/services';
 import { VisitStatus } from '@visits/types';
 

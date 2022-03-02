@@ -7,7 +7,7 @@ import { ApiService } from '../api-service';
 import { TOS_BASE_URL, USERS_BASE_URL } from './tos.service.const';
 import { GetTermsOfServiceResponse } from './tos.service.types';
 
-export class TosService extends ApiService {
+export class TosService {
 	public static async getTos(options: Options = {}): Promise<GetTermsOfServiceResponse> {
 		return await ApiService.getApi().get(TOS_BASE_URL, options).json();
 	}

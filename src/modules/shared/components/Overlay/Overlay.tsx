@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { useScrollbarWidth } from '@shared/hooks';
+import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 
 import styles from './Overlay.module.scss';
 import { OverlayProps } from './Overlay.types';

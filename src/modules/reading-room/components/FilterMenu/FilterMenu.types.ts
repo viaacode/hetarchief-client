@@ -18,6 +18,7 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	onFilterReset?: OnFilterMenuFormReset;
 	onFilterSubmit?: OnFilterMenuFormSubmit;
 	onViewToggle?: (viewMode: string) => void;
+	showNavigationBorder: boolean;
 }
 
 export interface FilterMenuSortOption {

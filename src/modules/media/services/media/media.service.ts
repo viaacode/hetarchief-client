@@ -1,11 +1,11 @@
-import { ApiService } from '@shared/services';
+import { ApiService } from '@shared/services/api-service';
 import { ApiResponseWrapper, ElasticsearchResponse } from '@shared/types/api';
 
 import { MediaInfo, MediaSearchFilters } from '../../types';
 
 import { MEDIA_SERVICE_BASE_URL } from './media.service.const';
 
-export class MediaService extends ApiService {
+export class MediaService {
 	public static async getAll(
 		filters: MediaSearchFilters = {},
 		from = 0,
