@@ -20,6 +20,7 @@ $platinum: #f8f8f8;
  * Derived Colors
  */
 
+$zinc-66: color.adjust($zinc, $alpha: -0.34);
 $zinc-40: color.adjust($zinc, $alpha: -0.6);
 $teal-66: color.adjust($teal, $alpha: -0.34);
 

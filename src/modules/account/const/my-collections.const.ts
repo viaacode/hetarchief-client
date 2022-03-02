@@ -1,7 +1,15 @@
 import { i18n } from 'next-i18next';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { object, SchemaOf, string } from 'yup';
 
 import { CreateCollectionFormState } from '@account/types';
+
+export const CollectionItemListSize = 20;
+
+export const ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG = {
+	search: withDefault(StringParam, undefined),
+	page: withDefault(NumberParam, 1),
+};
 
 export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormState> => {
 	const nameLengthMin = 3;

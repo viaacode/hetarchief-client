@@ -5,9 +5,12 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
+import { useQueryParams } from 'use-query-params';
 
 import { CreateCollectionButton } from '@account/components';
 import { EditCollectionTitle } from '@account/components/EditCollectionTitle';
+import { ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG, CollectionItemListSize } from '@account/const';
+import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
 import { collectionsService } from '@account/services/collections';
@@ -18,7 +21,10 @@ import { withI18n } from '@i18n/wrappers';
 import {
 	Icon,
 	ListNavigationItem,
+	MediaCardList,
 	MediaCardViewMode,
+	PaginationBar,
+	SearchBar,
 	Toggle,
 	ToggleOption,
 } from '@shared/components';
@@ -38,14 +44,25 @@ const AccountMyCollections: NextPage = () => {
 	/**
 	 * Data
 	 */
+	const [filters, setFilters] = useQueryParams(ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG);
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
-	const { data: collections, refetch } = useGetCollections();
+	const collections = useGetCollections();
+
+	const toggleOptions: ToggleOption[] = useMemo(
+		() =>
+			VIEW_TOGGLE_OPTIONS.map((option) => ({
+				...option,
+				active: option.id === viewMode,
+			})),
+		[viewMode]
+	);
+
 	const sidebarLinks: ListNavigationCollectionItem[] = useMemo(
 		() =>
-			(collections?.items || []).map((collection) => {
+			(collections.data?.items || []).map((collection) => {
 				const slug = createCollectionSlug(collection);
 				const href = `${ROUTES.myCollections}/${slug}`;
 
@@ -64,22 +81,13 @@ const AccountMyCollections: NextPage = () => {
 		[collections, collectionSlug]
 	);
 
-	/**
-	 * Computed
-	 */
+	const activeCollection = sidebarLinks.find((link) => link.active);
 
-	const activeCollection = useMemo(
-		() => sidebarLinks.find((link) => link.active),
-		[sidebarLinks]
-	);
-
-	const toggleOptions: ToggleOption[] = useMemo(
-		() =>
-			VIEW_TOGGLE_OPTIONS.map((option) => ({
-				...option,
-				active: option.id === viewMode,
-			})),
-		[viewMode]
+	const collection = useGetCollectionMedia(
+		activeCollection?.id,
+		filters.search,
+		filters.page,
+		CollectionItemListSize
 	);
 
 	/**
@@ -88,10 +96,16 @@ const AccountMyCollections: NextPage = () => {
 
 	useEffect(() => {
 		if (!activeCollection && collections) {
-			const favorites = collections?.items.find((col) => col.isDefault);
+			const favorites = collections.data?.items.find((col) => col.isDefault);
 			!blockFallbackRedirect && favorites && router.push(createCollectionSlug(favorites));
 		}
 	}, [activeCollection, collections, router, blockFallbackRedirect]);
+
+	useEffect(() => {
+		if (!collection.isFetched && activeCollection) {
+			collection.refetch();
+		}
+	}, [collection, activeCollection]);
 
 	/**
 	 * Events
@@ -100,7 +114,7 @@ const AccountMyCollections: NextPage = () => {
 	const onCollectionTitleChanged = (collection: Collection) => {
 		setBlockFallbackRedirect(true);
 
-		refetch().then(() => {
+		collections.refetch().then(() => {
 			router.push(createCollectionSlug(collection)).then(() => {
 				setBlockFallbackRedirect(false);
 			});
@@ -192,7 +206,7 @@ const AccountMyCollections: NextPage = () => {
 						{
 							id: 'p-account-my-collections__new-collection',
 							variants: ['c-list-navigation__item--no-interaction'],
-							node: <CreateCollectionButton afterSubmit={refetch} />,
+							node: <CreateCollectionButton afterSubmit={collections.refetch} />,
 							hasDivider: true,
 						},
 					]}
@@ -210,12 +224,62 @@ const AccountMyCollections: NextPage = () => {
 								</SidebarLayoutTitle>
 							</div>
 
+							<div className="l-container u-mb-24:md u-mb-32">
+								<div className="p-account-my-collections__controls">
+									<Toggle
+										bordered
+										className="p-account-my-collections__toggle u-bg-white"
+										options={toggleOptions}
+										onChange={(id) => setViewMode(id as MediaCardViewMode)}
+									/>
+
+									<SearchBar
+										backspaceRemovesValue={false}
+										className="p-account-my-collections__search"
+										instanceId="collections-search-bar"
+										light={true}
+										placeholder={t('Zoek')}
+										searchValue={filters.search}
+										onClear={() => {
+											setFilters({
+												search: undefined,
+												page: 1,
+											});
+										}}
+										onSearch={(searchValue: string) => {
+											setFilters({
+												search: searchValue,
+												page: 1,
+											});
+										}}
+									/>
+								</div>
+							</div>
+
 							<div className="l-container">
-								<Toggle
-									bordered
-									className="p-account-my-collections__toggle u-bg-white"
-									options={toggleOptions}
-									onChange={(id) => setViewMode(id as MediaCardViewMode)}
+								<MediaCardList
+									keywords={filters.search ? [filters.search] : []}
+									items={collection?.data?.items.map((media) => {
+										return {
+											description: media.id,
+											title: media.name,
+											preview: 'https://cataas.com/cat',
+										};
+									})}
+									view={viewMode}
+								/>
+								<PaginationBar
+									className="u-mb-48"
+									start={(filters.page - 1) * CollectionItemListSize}
+									count={CollectionItemListSize}
+									showBackToTop
+									total={collection.data?.total || 0}
+									onPageChange={(page) =>
+										setFilters({
+											...filters,
+											page: page + 1,
+										})
+									}
 								/>
 							</div>
 						</>
@@ -232,7 +296,7 @@ const AccountMyCollections: NextPage = () => {
 
 					activeCollection &&
 						collectionsService.delete(activeCollection.id).then(() => {
-							refetch();
+							collections.refetch();
 						});
 				}}
 			/>

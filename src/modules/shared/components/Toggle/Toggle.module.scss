@@ -3,7 +3,7 @@
 
 $c-toggle-black-32: color.adjust($black, $alpha: -0.68);
 $c-toggle-white-40: color.adjust($white, $alpha: -0.60);
-$c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
+$c-toggle-zinc: $zinc-66;
 
 /* stylelint-disable no-descending-specificity */
 .c-toggle {
@@ -37,7 +37,7 @@ $c-toggle-zinc-66: color.adjust($zinc, $alpha: -0.34);
 	}
 
 	&--bordered {
-		border: 1px solid $c-toggle-zinc-66;
+		border: 1px solid $c-toggle-zinc;
 		border-radius: 2.4rem;
 	}
 

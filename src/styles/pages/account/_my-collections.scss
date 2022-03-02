@@ -15,6 +15,30 @@ $component: "p-account-my-collections";
 		}
 	}
 
+	&__controls {
+		display: flex;
+		flex-flow: row nowrap;
+	}
+
+	&__toggle {
+		@include respond-to("md") {
+			display: none;
+		}
+	}
+
+	&__search {
+		flex-grow: 1;
+		flex-shrink: 0;
+
+		@include respond-at("md") {
+			margin-left: $spacer-xs;
+		}
+
+		&.c-search-bar.c-tags-input.c-search-bar--light .c-tags-input__control {
+			border-color: $zinc-66;
+		}
+	}
+
     // Avoid clicks on container triggering events
     .c-content-input__icon--end {
         pointer-events: none;

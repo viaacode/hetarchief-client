@@ -33,6 +33,7 @@ $pb: (
 	"8": $spacer-xs,
 	"24": $spacer-md,
 	"48": $spacer-48,
+	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
 @include generate-utils("pb", "padding-bottom", $pb, ("md"));
