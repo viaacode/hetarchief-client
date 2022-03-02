@@ -24,16 +24,20 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__tabs {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		flex-shrink: 0;
 
-		.c-tab {
-			justify-content: center;
-			height: 8rem;
-			font-size: $font-size-md;
+		&-tab {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
 
-			&__icon {
-				font-size: $font-size-lg;
+			.c-tab {
+				justify-content: center;
+				height: 8rem;
+				font-size: $font-size-md;
+
+				&__icon {
+					font-size: $font-size-lg;
+				}
 			}
 		}
 
