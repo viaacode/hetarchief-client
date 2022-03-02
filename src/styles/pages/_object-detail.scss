@@ -29,6 +29,7 @@ $metadata-collapsed-width: 36vw;
 		&-tab {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
+			background-color: $platinum;
 
 			.c-tab {
 				justify-content: center;
@@ -37,6 +38,10 @@ $metadata-collapsed-width: 36vw;
 
 				&__icon {
 					font-size: $font-size-lg;
+				}
+
+				&--active {
+					background-color: $white;
 				}
 			}
 		}
