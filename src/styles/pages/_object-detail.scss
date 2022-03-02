@@ -65,6 +65,7 @@ $metadata-collapsed-width: 36vw;
 
 	&__metadata {
 		overflow-y: scroll;
+		box-shadow: $shadow-24-black-12;
 
 		@include respond-at(md) {
 			// Use width for toggle because grid-template-column animation is only supported on Firefox
