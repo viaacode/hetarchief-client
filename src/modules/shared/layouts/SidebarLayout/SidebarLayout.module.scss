@@ -37,8 +37,10 @@ $l-sub-sidebar-width: 27.5rem;
 				width: $l-sub-sidebar-width;
 			}
 
-			:global(.l-container) {
-				padding: 0 $spacer-lg * 2;
+			@include respond-at("md") {
+				:global(.l-container) {
+					padding: 0 $spacer-lg * 2;
+				}
 			}
 		}
 	}

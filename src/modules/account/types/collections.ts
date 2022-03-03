@@ -9,7 +9,8 @@ export interface Collection {
 
 export interface CollectionMedia {
 	collectionEntryCreatedAt: string;
-	creator: Record<string, unknown> | null;
+	creator: unknown | null;
+	description: string;
 	format: 'video' | string;
 	id: string;
 	name: string;

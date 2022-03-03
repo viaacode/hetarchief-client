@@ -22,15 +22,12 @@ import {
 	Icon,
 	ListNavigationItem,
 	MediaCardList,
-	MediaCardViewMode,
 	PaginationBar,
 	SearchBar,
-	Toggle,
-	ToggleOption,
 } from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTES, VIEW_TOGGLE_OPTIONS } from '@shared/const';
+import { ROUTES } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { createPageTitle } from '@shared/utils';
 
@@ -47,18 +44,8 @@ const AccountMyCollections: NextPage = () => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG);
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
 	const collections = useGetCollections();
-
-	const toggleOptions: ToggleOption[] = useMemo(
-		() =>
-			VIEW_TOGGLE_OPTIONS.map((option) => ({
-				...option,
-				active: option.id === viewMode,
-			})),
-		[viewMode]
-	);
 
 	const sidebarLinks: ListNavigationCollectionItem[] = useMemo(
 		() =>
@@ -78,12 +65,15 @@ const AccountMyCollections: NextPage = () => {
 					active: decodeURIComponent(slug) === collectionSlug,
 				};
 			}),
-		[collections, collectionSlug]
+		[collections.data, collectionSlug]
 	);
 
-	const activeCollection = sidebarLinks.find((link) => link.active);
+	const activeCollection = useMemo(
+		() => sidebarLinks.find((link) => link.active),
+		[sidebarLinks]
+	);
 
-	const collection = useGetCollectionMedia(
+	const collectionMedia = useGetCollectionMedia(
 		activeCollection?.id,
 		filters.search,
 		filters.page,
@@ -102,10 +92,10 @@ const AccountMyCollections: NextPage = () => {
 	}, [activeCollection, collections, router, blockFallbackRedirect]);
 
 	useEffect(() => {
-		if (!collection.isFetched && activeCollection) {
-			collection.refetch();
+		if (activeCollection && collectionMedia.isStale) {
+			collectionMedia.refetch();
 		}
-	}, [collection, activeCollection]);
+	}, [activeCollection]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
 	 * Events
@@ -225,62 +215,60 @@ const AccountMyCollections: NextPage = () => {
 							</div>
 
 							<div className="l-container u-mb-24:md u-mb-32">
-								<div className="p-account-my-collections__controls">
-									<Toggle
-										bordered
-										className="p-account-my-collections__toggle u-bg-white"
-										options={toggleOptions}
-										onChange={(id) => setViewMode(id as MediaCardViewMode)}
-									/>
-
-									<SearchBar
-										backspaceRemovesValue={false}
-										className="p-account-my-collections__search"
-										instanceId="collections-search-bar"
-										light={true}
-										placeholder={t('Zoek')}
-										searchValue={filters.search}
-										onClear={() => {
-											setFilters({
-												search: undefined,
-												page: 1,
-											});
-										}}
-										onSearch={(searchValue: string) => {
-											setFilters({
-												search: searchValue,
-												page: 1,
-											});
-										}}
-									/>
-								</div>
+								<SearchBar
+									backspaceRemovesValue={false}
+									className="p-account-my-collections__search"
+									instanceId="collections-search-bar"
+									light={true}
+									placeholder={t('Zoek')}
+									searchValue={filters.search}
+									onClear={() => {
+										setFilters({
+											search: undefined,
+											page: 1,
+										});
+									}}
+									onSearch={(searchValue: string) => {
+										setFilters({
+											search: searchValue,
+											page: 1,
+										});
+									}}
+								/>
 							</div>
 
 							<div className="l-container">
 								<MediaCardList
 									keywords={filters.search ? [filters.search] : []}
-									items={collection?.data?.items.map((media) => {
+									items={collectionMedia?.data?.items.map((media) => {
 										return {
-											description: media.id,
+											description: media.description,
+											publishedBy: 'Aanbieder', // TODO: bind to data
+											publishedAt: new Date('01 Jan 1970'), // TODO: bind to data
 											title: media.name,
-											preview: 'https://cataas.com/cat',
+											preview: 'https://cataas.com/cat', // TODO: bind to data
+											bookmarkIsSolid: true,
 										};
 									})}
-									view={viewMode}
+									view={'list'}
 								/>
-								<PaginationBar
-									className="u-mb-48"
-									start={(filters.page - 1) * CollectionItemListSize}
-									count={CollectionItemListSize}
-									showBackToTop
-									total={collection.data?.total || 0}
-									onPageChange={(page) =>
-										setFilters({
-											...filters,
-											page: page + 1,
-										})
-									}
-								/>
+
+								{collectionMedia.data &&
+									collectionMedia.data?.total > CollectionItemListSize && (
+										<PaginationBar
+											className="u-mb-48"
+											start={(filters.page - 1) * CollectionItemListSize}
+											count={CollectionItemListSize}
+											showBackToTop
+											total={collectionMedia.data?.total || 0}
+											onPageChange={(page) =>
+												setFilters({
+													...filters,
+													page: page + 1,
+												})
+											}
+										/>
+									)}
 							</div>
 						</>
 					)}

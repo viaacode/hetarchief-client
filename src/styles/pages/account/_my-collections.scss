@@ -15,11 +15,6 @@ $component: "p-account-my-collections";
 		}
 	}
 
-	&__controls {
-		display: flex;
-		flex-flow: row nowrap;
-	}
-
 	&__toggle {
 		@include respond-to("md") {
 			display: none;
@@ -27,13 +22,6 @@ $component: "p-account-my-collections";
 	}
 
 	&__search {
-		flex-grow: 1;
-		flex-shrink: 0;
-
-		@include respond-at("md") {
-			margin-left: $spacer-xs;
-		}
-
 		&.c-search-bar.c-tags-input.c-search-bar--light .c-tags-input__control {
 			border-color: $zinc-66;
 		}

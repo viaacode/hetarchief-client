@@ -1,12 +1,13 @@
 export type MediaCardViewMode = 'list' | 'grid';
 
 export interface MediaCardProps {
+	bookmarkIsSolid?: boolean;
 	description?: string;
-	published_at?: Date;
-	published_by?: string;
-	title?: string;
+	keywords?: string[];
 	preview?: string;
+	publishedAt?: Date;
+	publishedBy?: string;
+	title?: string;
 	type?: 'video' | 'audio';
 	view?: MediaCardViewMode;
-	keywords?: string[];
 }

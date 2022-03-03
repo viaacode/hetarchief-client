@@ -8,7 +8,13 @@ import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 import { MediaCardListProps } from './MediaCardList.types';
 
-const MediaCardList: FC<MediaCardListProps> = ({ items, keywords, view, sidebar }) => {
+const MediaCardList: FC<MediaCardListProps> = ({
+	items,
+	keywords,
+	view,
+	sidebar,
+	breakpoints = MEDIA_CARD_LIST_GRID_BP_COLS,
+}) => {
 	if (!items) {
 		return null;
 	}
@@ -27,7 +33,7 @@ const MediaCardList: FC<MediaCardListProps> = ({ items, keywords, view, sidebar 
 		>
 			{!isMasonryView && renderSidebar()}
 			<Masonry
-				breakpointCols={isMasonryView ? MEDIA_CARD_LIST_GRID_BP_COLS : 1}
+				breakpointCols={isMasonryView ? breakpoints : 1}
 				className={styles['c-media-card-list__content']}
 				columnClassName={styles['c-media-card-list__column']}
 			>

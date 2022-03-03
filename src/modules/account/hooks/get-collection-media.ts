@@ -12,7 +12,15 @@ export function useGetCollectionMedia(
 	page: number,
 	size: number
 ): UseQueryResult<ApiResponseWrapper<CollectionMedia>> {
-	return useQuery([QUERY_KEYS.getCollectionMedia, { searchInput, page, size }], () =>
-		id ? collectionsService.getById(id, searchInput, page, size) : Promise.resolve(null)
+	return useQuery(
+		[QUERY_KEYS.getCollectionMedia, { searchInput, page, size }],
+		() => {
+			if (id) {
+				return collectionsService.getById(id, searchInput, page, size);
+			}
+		},
+		{
+			enabled: !!id,
+		}
 	);
 }

@@ -12,20 +12,27 @@ import { MediaCardProps } from './MediaCard.types';
 import { formatDate } from './MediaCard.utils';
 
 const MediaCard: FC<MediaCardProps> = ({
+	bookmarkIsSolid = false,
 	description,
+	keywords,
 	preview,
-	published_at,
-	published_by,
+	publishedAt,
+	publishedBy,
 	title,
 	type,
 	view,
-	keywords,
 }) => {
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
 			<Button
 				className={styles['c-media-card__icon-button']}
-				icon={<Icon className={styles['c-media-card__icon']} name="bookmark" />}
+				icon={
+					<Icon
+						className={styles['c-media-card__icon']}
+						type={bookmarkIsSolid ? 'solid' : 'light'}
+						name="bookmark"
+					/>
+				}
 				variants={['text', 'xxs']}
 			/>
 
@@ -49,13 +56,13 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderSubtitle = () => {
 		let subtitle = '';
 
-		if (published_by) {
-			subtitle += published_by;
+		if (publishedBy) {
+			subtitle += publishedBy;
 		}
 
-		if (published_at) {
+		if (publishedAt) {
 			// TODO: connect to i18n locale
-			const formatted = formatDate(published_at);
+			const formatted = formatDate(publishedAt);
 
 			subtitle += ` (${formatted})`;
 		}
