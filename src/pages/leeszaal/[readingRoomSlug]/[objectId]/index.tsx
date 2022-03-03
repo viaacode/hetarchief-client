@@ -7,10 +7,9 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
-import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS } from '@media/const';
+import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS, PARSED_METADATA_FIELDS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { MediaTypes, ObjectDetailTabs } from '@media/types';
-import { mapMetadata } from '@media/utils';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize, useNavigationBorder, useStickyLayout, useWindowSize } from '@shared/hooks';
@@ -84,25 +83,6 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Content
 	 */
-	const tags = [
-		{
-			label: 'Schepijs',
-			id: 'schepijs',
-		},
-		{
-			label: 'Op de koop toe',
-			id: 'op de koop toe',
-		},
-		{
-			label: 'Rita Van Neygen',
-			id: 'rita van neygen',
-		},
-		{
-			label: 'Emiel Goelen',
-			id: 'emiel goelen',
-		},
-	];
-
 	const tabs: TabProps[] = useMemo(
 		() =>
 			OBJECT_DETAIL_TABS(mediaType).map((tab) => ({
@@ -201,7 +181,7 @@ const ObjectDetailPage: NextPage = () => {
 										? 2
 										: 1
 								}
-								metadata={mapMetadata(mediaInfo as any)}
+								metadata={PARSED_METADATA_FIELDS(mediaInfo as any)}
 							/>
 						</div>
 					</div>

@@ -1,30 +1,33 @@
-import { metadataMock } from '@media/components/Metadata/__mocks__/metadata';
-import { MediaInfo } from '@media/types';
+import { TagList, TagOption } from '@meemoo/react-components';
+import router from 'next/router';
+import { stringifyUrl } from 'query-string';
+import { ReactNode } from 'react';
 
-export const mapMetadata = (media: MediaInfo) => {
-	return [...metadataMock.metadata];
+export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
+	return keywords.map((trefwoord) => {
+		return {
+			label: trefwoord,
+			id: trefwoord.toLowerCase(),
+		};
+	});
 };
 
-// [
-// 	...metadataMock.metadata,
-// 	{
-// 		title: 'Trefwoorden',
-// 		data: (
-// 			<TagList
-// 				className="u-pt-12"
-// 				tags={tags}
-// 				onTagClicked={(id) => {
-// 					router.push(
-// 						stringifyUrl({
-// 							url: `/leeszaal/${router.query.readingRoomSlug}`,
-// 							query: {
-// 								search: id,
-// 							},
-// 						})
-// 					);
-// 				}}
-// 				variants={['clickable', 'silver', 'medium']}
-// 			/>
-// 		),
-// 	},
-// ]
+export const mapKeywordsToTagList = (keywords: string[]): ReactNode | null => {
+	return keywords ? (
+		<TagList
+			className="u-pt-12"
+			tags={mapKeywordsToTags(keywords)}
+			onTagClicked={(id) => {
+				router.push(
+					stringifyUrl({
+						url: `/leeszaal/${router.query.readingRoomSlug}`,
+						query: {
+							search: id,
+						},
+					})
+				);
+			}}
+			variants={['clickable', 'silver', 'medium']}
+		/>
+	) : null;
+};

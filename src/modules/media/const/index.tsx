@@ -1,10 +1,16 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
-import { MediaTypes, ObjectDetailTabs } from '@media/types';
+import { MetadataItem } from '@media/components';
+import { MediaInfo, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { mapKeywordsToTagList } from '@media/utils';
 import { Icon } from '@shared/components';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
+
+/**
+ * Tabs
+ */
 
 const renderMediaTab = (mediaType: MediaTypes) => {
 	switch (mediaType) {
@@ -37,6 +43,10 @@ export const OBJECT_DETAIL_TABS = (mediaType: MediaTypes): TabProps[] => [
 	},
 	renderMediaTab(mediaType),
 ];
+
+/**
+ * Actions
+ */
 
 export const MEDIA_ACTIONS: DynamicActionMenuProps = {
 	actions: [
@@ -80,3 +90,40 @@ export const MEDIA_ACTIONS: DynamicActionMenuProps = {
 	limit: 2,
 	onClickAction: (id) => console.log(id),
 };
+
+/**
+ * Metadata
+ */
+
+export const PARSED_METADATA_FIELDS = (mediaInfo: MediaInfo): MetadataItem[] => {
+	// Hide empty metadata fields
+	return METADATA_FIELDS(mediaInfo).reduce((metadata: MetadataItem[], field) => {
+		if (field.data) {
+			metadata.push(field);
+		}
+		return metadata;
+	}, []);
+};
+
+const METADATA_FIELDS = (mediaInfo: MediaInfo): MetadataItem[] => [
+	{
+		title: 'Genre',
+		data: (mediaInfo as any).genre,
+	},
+	{
+		title: 'Format',
+		data: (mediaInfo as any).dctermsFormat,
+	},
+	{
+		title: 'language',
+		data: (mediaInfo as any).isLanguage,
+	},
+	{
+		title: 'Lengte',
+		data: (mediaInfo as any).duration,
+	},
+	{
+		title: 'Trefwoorden',
+		data: mapKeywordsToTagList((mediaInfo as any).keywords),
+	},
+];
