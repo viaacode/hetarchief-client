@@ -31,3 +31,10 @@ export interface MediaInfo {
 export class MediaSearchFilters {
 	query?: string;
 }
+
+export type MediaTypes = 'video' | 'audio' | null;
+
+export enum ObjectDetailTabs {
+	Media = 'media',
+	Metadata = 'metadata',
+}

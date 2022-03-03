@@ -4,3 +4,4 @@ export const selectShowAuthModal = (state: AppState): boolean => state.ui.showAu
 export const selectIsStickyLayout = (state: AppState): boolean => state.ui.isStickyLayout;
 export const selectShowNavigationBorder = (state: AppState): boolean =>
 	state.ui.showNavigationBorder;
+export const selectShowFooter = (state: AppState): boolean => state.ui.showFooter;
