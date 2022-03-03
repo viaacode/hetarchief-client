@@ -4,16 +4,16 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
 import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
-import { ObjectDetailTabs } from '@media/types';
+import { MediaTypes, ObjectDetailTabs } from '@media/types';
 import { mapMetadata } from '@media/utils';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
-import { useElementSize, useNavigationBorder, useStickyLayout } from '@shared/hooks';
+import { useElementSize, useNavigationBorder, useStickyLayout, useWindowSize } from '@shared/hooks';
 import { useFooter } from '@shared/hooks/use-footer';
 import { createPageTitle } from '@shared/utils';
 
@@ -26,18 +26,44 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const { t } = useTranslation();
 	const router = useRouter();
+
+	// Internal state
+	const [activeTab, setActiveTab] = useState<string | number | undefined>(undefined);
+	const [mediaType, setMediaType] = useState<MediaTypes>(null);
+
+	// Layout
 	useStickyLayout();
 	useNavigationBorder();
 	useFooter();
+
+	// Sizes
+	const windowSize = useWindowSize();
+	const metadataRef = useRef<HTMLDivElement>(null);
+	const metadataSize = useElementSize(metadataRef);
+
+	// Fetch data
 	const { data: mediaInfo, isLoading: isLoadingMediaInfo } = useGetMediaInfo(
 		router.query.objectId as string
 	);
-	// const hasMedia = !!mediaInfo?.embedUrl;
-	// console.log(mediaInfo, isLoadingMediaInfo);();
-	const [activeTab, setActiveTab] = useState<string | number>(ObjectDetailTabs.Metadata);
+	console.log(isLoadingMediaInfo ? 'loading...' : 'finished!', mediaInfo);
 
-	const metadataRef = useRef<HTMLDivElement>(null);
-	const metadataSize = useElementSize(metadataRef);
+	// Set default view
+	useEffect(() => {
+		setMediaType((mediaInfo as any)?.dctermsFormat);
+
+		if (windowSize.width && windowSize.width < 768) {
+			// Default to metadata tab on mobile
+			setActiveTab(ObjectDetailTabs.Metadata);
+		} else {
+			// Check media content for default tab on desktop
+			setActiveTab(
+				(mediaInfo as any)?.dctermsFormat
+					? ObjectDetailTabs.Media
+					: ObjectDetailTabs.Metadata
+			);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [mediaInfo]);
 
 	/**
 	 * Variables
@@ -56,7 +82,7 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	/**
-	 * Mock data
+	 * Content
 	 */
 	const tags = [
 		{
@@ -79,12 +105,12 @@ const ObjectDetailPage: NextPage = () => {
 
 	const tabs: TabProps[] = useMemo(
 		() =>
-			OBJECT_DETAIL_TABS(null).map((tab) => ({
+			OBJECT_DETAIL_TABS(mediaType).map((tab) => ({
 				...tab,
 				label: <TabLabel label={tab.label} />,
 				active: tab.id === activeTab,
 			})),
-		[activeTab]
+		[activeTab, mediaType]
 	);
 
 	/**
@@ -126,15 +152,19 @@ const ObjectDetailPage: NextPage = () => {
 						variants="white"
 					/>
 					<div className="p-object-detail__video">
-						<ObjectPlaceholder
-							{...objectPlaceholderMock}
-							openModalButtonLabel={t(
-								'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-							)}
-							closeModalButtonLabel={t(
-								'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-							)}
-						/>
+						{mediaType ? (
+							<p>media</p>
+						) : (
+							<ObjectPlaceholder
+								{...objectPlaceholderMock}
+								openModalButtonLabel={t(
+									'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+								)}
+								closeModalButtonLabel={t(
+									'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+								)}
+							/>
+						)}
 					</div>
 					<div
 						ref={metadataRef}
