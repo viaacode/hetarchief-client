@@ -18,22 +18,26 @@ describe('Components', () => {
 		it('Should render notifications', () => {
 			const { queryAllByText } = renderNotificationCenter({});
 
-			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].title);
+			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].description);
 
 			expect(notifications).toHaveLength(NOTIFICATIONS_FIRST_PAGE.items.length);
 		});
-		it('Should render translations', () => {
-			const readTitle = 'Gelezen';
-			const { queryByText } = renderNotificationCenter(notificationCenterMock);
+		it('Should render notification link to reading room', () => {
+			const { queryAllByText } = renderNotificationCenter({});
 
-			const notificationTitle = queryByText(readTitle);
+			const notificationLink = queryAllByText(
+				NOTIFICATIONS_FIRST_PAGE.items[0].description
+			)[0];
 
-			expect(notificationTitle).toBeInTheDocument();
+			expect(notificationLink).toHaveAttribute(
+				'href',
+				'/beheer/aanvragen?visitRequest=' + NOTIFICATIONS_FIRST_PAGE.items[0].visitId
+			);
 		});
 		it('Should render unread and read notifications', () => {
 			const { queryAllByText } = renderNotificationCenter(notificationCenterMock);
 
-			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].title);
+			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].description);
 
 			expect(notifications[0].parentElement).toHaveClass(
 				'c-notification-center__notification--unread'
