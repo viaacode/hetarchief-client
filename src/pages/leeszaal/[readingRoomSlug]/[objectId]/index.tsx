@@ -7,13 +7,15 @@ import { stringifyUrl } from 'query-string';
 
 import { withI18n } from '@i18n/wrappers';
 import { MEDIA_ACTIONS } from '@media/const';
+import { useGetMediaInfo } from '@media/hooks/get-media-info';
+import { MediaInfo } from '@media/types';
+import { mapMetadata } from '@media/utils';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
 import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
 import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
-import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
@@ -21,6 +23,11 @@ const ObjectDetailPage: NextPage = () => {
 	const router = useRouter();
 	useStickyLayout();
 	useNavigationBorder();
+	const { data: mediaInfo, isLoading: isLoadingMediaInfo } = useGetMediaInfo(
+		router.query.objectId as string
+	);
+	// const hasMedia = !!mediaInfo?.embedUrl;
+	// console.log(mediaInfo, isLoadingMediaInfo);
 
 	/**
 	 * Mock data
@@ -57,74 +64,47 @@ const ObjectDetailPage: NextPage = () => {
 			{/* TODO: bind title to state */}
 			{/* TODO: use correct left and right sections */}
 			<ReadingRoomNavigation title={'Leeszaal'} />
-			<article className="p-object-detail__wrapper">
-				<ObjectPlaceholder
-					{...objectPlaceholderMock}
-					openModalButtonLabel={t(
-						'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-					)}
-					closeModalButtonLabel={t(
-						'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-					)}
-				/>
-				<div className="p-object-detail__metadata">
-					<div className="u-px-32">
-						{/* TODO: bind content to state */}
-						<h3 className="u-pt-32 u-pb-24">Op de koop toe: schepijs (1993)</h3>
-						<p className="u-pb-24">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-							consectetur rutrum molestie. Mauris volutpat commodo velit, id fringilla
-							neque. Integer at fringilla orci, eget hendrerit lorem. Donec malesuada
-							non dui a elementum. Pellentesque habitant morbi tristique senectus et
-							netus et malesuada fames ac turpis egestas. Vivamus convallis aliquet
-							tellus a rutrum. Suspendisse ut posuere lectus, vel elementum sapien.
-						</p>
-						<div className="u-pb-24 p-object-detail__actions">
-							<Button
-								className="p-object-detail__export"
-								iconStart={<Icon name="export" />}
-							>
-								<span className="u-text-ellipsis u-display-none u-display-block:md">
-									{t(
-										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
-									)}
-								</span>
-								<span className="u-text-ellipsis u-display-none:md">
-									{t(
-										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
-									)}
-								</span>
-							</Button>
-							<DynamicActionMenu {...MEDIA_ACTIONS} />
+			{!isLoadingMediaInfo && mediaInfo ? (
+				<article className="p-object-detail__wrapper">
+					<ObjectPlaceholder
+						{...objectPlaceholderMock}
+						openModalButtonLabel={t(
+							'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+						)}
+						closeModalButtonLabel={t(
+							'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+						)}
+					/>
+					<div className="p-object-detail__metadata">
+						<div className="u-px-32">
+							{/* TODO: bind content to state */}
+							<h3 className="u-pt-32 u-pb-24">{(mediaInfo as any).name}</h3>
+							<p className="u-pb-24">{(mediaInfo as any).description}</p>
+							<div className="u-pb-24 p-object-detail__actions">
+								<Button
+									className="p-object-detail__export"
+									iconStart={<Icon name="export" />}
+								>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{t(
+											'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+										)}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{t(
+											'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+										)}
+									</span>
+								</Button>
+								<DynamicActionMenu {...MEDIA_ACTIONS} />
+							</div>
+							<Metadata metadata={mapMetadata(mediaInfo as any)} />
 						</div>
-						<Metadata
-							metadata={[
-								...metadataMock.metadata,
-								{
-									title: 'Trefwoorden',
-									data: (
-										<TagList
-											className="u-pt-12"
-											tags={tags}
-											onTagClicked={(id) => {
-												router.push(
-													stringifyUrl({
-														url: `/leeszaal/${router.query.readingRoomSlug}`,
-														query: {
-															search: id,
-														},
-													})
-												);
-											}}
-											variants={['clickable', 'silver', 'medium']}
-										/>
-									),
-								},
-							]}
-						/>
 					</div>
-				</div>
-			</article>
+				</article>
+			) : (
+				<p>Loading...</p>
+			)}
 		</div>
 	);
 };

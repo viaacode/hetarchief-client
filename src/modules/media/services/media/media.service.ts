@@ -28,4 +28,8 @@ export class MediaService extends ApiService {
 			pages: Math.ceil((parsed?.hits?.total?.value || 0) / size),
 		};
 	}
+
+	public static async getById(id: string): Promise<MediaInfo> {
+		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
+	}
 }

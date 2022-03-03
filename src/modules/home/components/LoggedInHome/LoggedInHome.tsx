@@ -7,8 +7,7 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { RequestAccessBlade } from '@home/components';
-import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
+import { ReadingRoomCardsWithSearch, RequestAccessBlade } from '@home/components';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
 import { AccessGranted } from '@shared/components/ReadingRoomCard/__mocks__/reading-room-card';
 import { createPageTitle } from '@shared/utils';
