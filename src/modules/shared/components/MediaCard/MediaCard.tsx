@@ -126,9 +126,13 @@ const MediaCard: FC<MediaCardProps> = ({
 		>
 			{/* // Wrapping this in a conditional ensures TruncateMarkup only renders after the content is received */}
 			{description ? (
-				<TruncateMarkup lines={2}>
-					<span>{description}</span>
-				</TruncateMarkup>
+				typeof description === 'string' ? (
+					<TruncateMarkup lines={2}>
+						<span>{description}</span>
+					</TruncateMarkup>
+				) : (
+					description
+				)
 			) : (
 				// Passing a child to Card ensure whitespacing at the bottom is applied
 				<></>
