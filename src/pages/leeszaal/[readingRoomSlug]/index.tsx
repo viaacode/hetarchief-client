@@ -258,10 +258,10 @@ const ReadingRoomPage: NextPage = () => {
 										(mediaObject): MediaCardProps => ({
 											description: mediaObject.schema_description,
 											title: mediaObject.schema_name,
-											published_at: mediaObject.schema_date_published
+											publishedAt: mediaObject.schema_date_published
 												? new Date(mediaObject.schema_date_published)
 												: undefined,
-											published_by:
+											publishedBy:
 												mediaObject.schema_creator?.Maker?.join(', '),
 											type: mediaObject.dcterms_format || undefined,
 										})
