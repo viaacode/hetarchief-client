@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import { FC, memo } from 'react';
+import { FC, memo, MouseEvent } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { MediaCard } from '../MediaCard';
+import { MediaCardProps } from '../MediaCard/MediaCard.types';
 
 import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
@@ -14,6 +15,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	view,
 	sidebar,
 	breakpoints = MEDIA_CARD_LIST_GRID_BP_COLS,
+	onItemBookmark = () => null,
 }) => {
 	if (!items) {
 		return null;
@@ -23,6 +25,10 @@ const MediaCardList: FC<MediaCardListProps> = ({
 
 	const renderSidebar = () =>
 		sidebar && <div className={styles['c-media-card-list__sidebar']}>{sidebar}</div>;
+
+	const onBookmark = (e: MouseEvent<HTMLButtonElement>, item: MediaCardProps) => {
+		onItemBookmark({ e, item });
+	};
 
 	return (
 		<div
@@ -39,7 +45,13 @@ const MediaCardList: FC<MediaCardListProps> = ({
 			>
 				{isMasonryView && renderSidebar()}
 				{items.map((item, i) => (
-					<MediaCard key={i} {...item} keywords={keywords} view={view} />
+					<MediaCard
+						key={i}
+						{...item}
+						keywords={keywords}
+						view={view}
+						onBookmark={(e) => onBookmark(e, item)}
+					/>
 				))}
 			</Masonry>
 		</div>

@@ -21,11 +21,13 @@ const MediaCard: FC<MediaCardProps> = ({
 	title,
 	type,
 	view,
+	onBookmark = () => null,
 }) => {
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
 			<Button
 				className={styles['c-media-card__icon-button']}
+				onClick={onBookmark}
 				icon={
 					<Icon
 						className={styles['c-media-card__icon']}
