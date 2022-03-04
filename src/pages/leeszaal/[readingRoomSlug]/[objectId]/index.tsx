@@ -3,10 +3,12 @@ import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 import { useMemo, useRef, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
-import { OBJECT_DETAIL_TABS } from '@media/const';
+import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS } from '@media/const';
 import { ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
@@ -15,7 +17,6 @@ import { useFooter } from '@shared/hooks/use-footer';
 import { createPageTitle } from '@shared/utils';
 
 import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
-import { dynamicActionMenuMock } from 'modules/media/components/DynamicActionMenu/__mocks__/dynamic-action-menu';
 import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
@@ -25,6 +26,7 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const [activeTab, setActiveTab] = useState<string | number>(ObjectDetailTabs.Metadata);
 	const { t } = useTranslation();
+	const router = useRouter();
 	useStickyLayout();
 	useNavigationBorder();
 	useFooter();
@@ -161,7 +163,7 @@ const ObjectDetailPage: NextPage = () => {
 									)}
 								</span>
 							</Button>
-							<DynamicActionMenu {...dynamicActionMenuMock} />
+							<DynamicActionMenu {...MEDIA_ACTIONS} />
 						</div>
 						<Metadata
 							columns={
@@ -175,7 +177,16 @@ const ObjectDetailPage: NextPage = () => {
 										<TagList
 											className="u-pt-12"
 											tags={tags}
-											onTagClicked={(id) => console.log(id)}
+											onTagClicked={(id) => {
+												router.push(
+													stringifyUrl({
+														url: `/leeszaal/${router.query.readingRoomSlug}`,
+														query: {
+															search: id,
+														},
+													})
+												);
+											}}
 											variants={['clickable', 'silver', 'medium']}
 										/>
 									),

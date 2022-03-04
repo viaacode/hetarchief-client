@@ -1,13 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 
-const useScrollbarWidth = (): number => {
-	const scrollbarWidth = useRef(0);
+const useScrollbarWidth = (trigger: boolean): number => {
+	const [scrollbarWidth, setScrollbarWidth] = useState(0);
+
 	useEffect(() => {
-		if (!scrollbarWidth.current && window && document) {
-			scrollbarWidth.current = document.body.offsetWidth - document.body.clientWidth;
-		}
-	});
-	return scrollbarWidth.current;
+		setScrollbarWidth(document.body.offsetWidth - document.body.clientWidth);
+	}, [trigger]);
+
+	return scrollbarWidth;
 };
 
 export default useScrollbarWidth;
