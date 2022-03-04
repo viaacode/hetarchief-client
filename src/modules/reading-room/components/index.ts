@@ -1,3 +1,4 @@
+export * from './AddToCollectionBlade';
 export * from './FilterMenu';
-export * from './ReadingRoomNavigation';
 export * from './forms';
+export * from './ReadingRoomNavigation';
