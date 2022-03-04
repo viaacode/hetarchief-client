@@ -76,8 +76,12 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				error: err,
 			});
 			toastService.notify({
-				title: t('Error'),
-				description: t('Het markeren van alle notificaties al gelezen is mislukt.'),
+				title: t(
+					'modules/shared/components/notification-center/notification-center___error'
+				),
+				description: t(
+					'modules/shared/components/notification-center/notification-center___het-markeren-van-alle-notificaties-al-gelezen-is-mislukt'
+				),
 			});
 		}
 	};
@@ -88,8 +92,12 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			await refetchNotifications();
 			setNotificationReadStatus({});
 			toastService.notify({
-				title: t('Success'),
-				description: t('Alle notificaties zijn gemarkeerd als gelezen'),
+				title: t(
+					'modules/shared/components/notification-center/notification-center___success'
+				),
+				description: t(
+					'modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-gemarkeerd-als-gelezen'
+				),
 			});
 		} catch (err) {
 			console.error({
@@ -97,8 +105,12 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				error: err,
 			});
 			toastService.notify({
-				title: t('Error'),
-				description: t('Het markeren van alle notificaties al gelezen is mislukt.'),
+				title: t(
+					'modules/shared/components/notification-center/notification-center___error'
+				),
+				description: t(
+					'modules/shared/components/notification-center/notification-center___het-markeren-van-alle-notificaties-al-gelezen-is-mislukt'
+				),
 			});
 		}
 	};
@@ -143,7 +155,9 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 					<Button
 						onClick={() => onMarkOneAsRead(notification.id)}
 						className={clsx(styles['c-notification-center__notification-icon'])}
-						title={t('Markeer als gelezen')}
+						title={t(
+							'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
+						)}
 						icon={<Icon name="check" />}
 						variants="text"
 					/>
@@ -188,8 +202,12 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			iconStart={<Icon name="check" />}
 			title={
 				unreadNotifications.length > 0
-					? t('Markeer alle notificaties als gelezen')
-					: t('Alle notificaties zijn reeds gelezen')
+					? t(
+							'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
+					  )
+					: t(
+							'modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-reeds-gelezen'
+					  )
 			}
 			label={t(
 				'modules/shared/components/notification-center/notification-center___markeer-alles-als-gelezen'
@@ -207,7 +225,13 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			footer={renderFooter()}
 		>
 			{isLoading && <Loading />}
-			{isError && <div>{t('Er ging iets mis bij het ophalen van je notificaties.')}</div>}
+			{isError && (
+				<div>
+					{t(
+						'modules/shared/components/notification-center/notification-center___er-ging-iets-mis-bij-het-ophalen-van-je-notificaties'
+					)}
+				</div>
+			)}
 			{!isLoading && !isError && (
 				<InfiniteScroll
 					className={styles['c-notification-center__infinite-scroll']}

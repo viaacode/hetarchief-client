@@ -47,7 +47,10 @@ export abstract class NotificationsService {
 				toastService.notify({
 					title: newNotifications[0].title,
 					description: newNotifications[0].description,
-					buttonLabel: i18n?.t('Bekijk') || 'Bekijk',
+					buttonLabel:
+						i18n?.t(
+							'modules/shared/services/notifications-service/notifications___bekijk'
+						) || 'Bekijk',
 					onClose: () => {
 						this.router?.push(
 							stringifyUrl({
@@ -61,16 +64,21 @@ export abstract class NotificationsService {
 				// multiple
 				toastService.notify({
 					title:
-						i18n?.t('Er zijn {{amount}} nieuwe notificaties', {
-							amount: newNotifications.length,
-						}) || `Er zijn ${newNotifications.length} nieuwe notificaties`,
+						i18n?.t(
+							'modules/shared/services/notifications-service/notifications___er-zijn-amount-nieuwe-notificaties',
+							{
+								amount: newNotifications.length,
+							}
+						) || `Er zijn ${newNotifications.length} nieuwe notificaties`,
 					description:
 						i18n?.t(
-							'Er zijn {{aantal}} nieuwe notificaties. Bekijk ze in het notificatie overzicht.',
+							'modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht',
 							{ amount: newNotifications.length }
 						) ||
 						`Er zijn ${newNotifications.length} nieuwe notificaties. Bekijk ze in het notificatie overzicht.`,
-					buttonLabel: i18n?.t('Bekijk'),
+					buttonLabel: i18n?.t(
+						'modules/shared/services/notifications-service/notifications___bekijk'
+					),
 					onClose: () => {
 						this.router?.push(
 							stringifyUrl({
