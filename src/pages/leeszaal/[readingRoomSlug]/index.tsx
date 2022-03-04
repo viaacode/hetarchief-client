@@ -9,7 +9,7 @@ import { useQueryParams } from 'use-query-params';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
-import { FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
+import { AddToCollectionBlade, FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
 	READING_ROOM_FILTERS,
 	READING_ROOM_ITEM_COUNT,
@@ -22,8 +22,8 @@ import {
 import { ReadingRoomFilterId, ReadingRoomMediaType } from '@reading-room/types';
 import { mapFiltersToQuery, mapFiltersToTags } from '@reading-room/utils';
 import {
+	IdentifiableMediaCard,
 	MediaCardList,
-	MediaCardProps,
 	MediaCardViewMode,
 	PaginationBar,
 	Placeholder,
@@ -39,19 +39,33 @@ import { OrderDirection, SortObject } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
-	// State
-	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
-	// We need 2 different states for the filter menu for different viewport sizes
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const { t } = useTranslation();
-
-	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 	const windowSize = useWindowSize();
+
 	useNavigationBorder();
 
-	const hasSearched = !!query?.search?.length || query?.mediaType !== ReadingRoomMediaType.All; // TODO add other filters once available
+	/**
+	 * State
+	 */
 
-	// Data
+	// We need 2 different states for the filter menu for different viewport sizes
+	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
+
+	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
+	const [isAddToCollectionBladeOpen, setAddToCollectionBladeOpen] = useState(false);
+
+	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+
+	// TODO add other filters once available
+	const hasSearched = !!query?.search?.length || query?.mediaType !== ReadingRoomMediaType.All;
+
+	/**
+	 * Data
+	 */
+
 	const { data: mediaResultInfo } = useGetMediaObjects(
 		{
 			query: (query.search || []).join(' '),
@@ -65,10 +79,9 @@ const ReadingRoomPage: NextPage = () => {
 		[ReadingRoomMediaType.Video]: 789,
 	});
 
-	// Display
-	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
-
-	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
+	/**
+	 * Display
+	 */
 
 	const tabs: TabProps[] = useMemo(
 		() =>
@@ -143,10 +156,16 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
+	const onMediaBookmark = (item: IdentifiableMediaCard) => {
+		setSelected(item);
+		setAddToCollectionBladeOpen(true);
+	};
+
 	/**
 	 * Computed
 	 */
 
+	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
@@ -188,106 +207,127 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	return (
-		<div className="p-reading-room">
-			<Head>
-				<title>{createPageTitle('Leeszaal')}</title>
-				<meta name="description" content="Leeszaal omschrijving" />
-			</Head>
+		<>
+			<div className="p-reading-room">
+				<Head>
+					<title>{createPageTitle('Leeszaal')}</title>
+					<meta name="description" content="Leeszaal omschrijving" />
+				</Head>
 
-			{/* TODO: bind title to state */}
-			<ReadingRoomNavigation title={'Leeszaal'} />
+				{/* TODO: bind title to state */}
+				<ReadingRoomNavigation title={'Leeszaal'} />
 
-			<section className="u-bg-black u-pt-8">
-				<div className="l-container">
-					<SearchBar
-						allowCreate
-						className="u-mb-24"
-						clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
-						instanceId="reading-room-search-bar"
-						isMulti
-						size="lg"
-						placeholder={t('pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder')}
-						syncSearchValue={false}
-						valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
-						value={activeFilters}
-						onClear={onResetFilters}
-						onRemoveValue={onRemoveKeyword}
-						onSearch={onSearch}
-					/>
-					<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
-				</div>
-			</section>
+				<section className="u-bg-black u-pt-8">
+					<div className="l-container">
+						<SearchBar
+							allowCreate
+							className="u-mb-24"
+							clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
+							instanceId="reading-room-search-bar"
+							isMulti
+							size="lg"
+							placeholder={t(
+								'pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder'
+							)}
+							syncSearchValue={false}
+							valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
+							value={activeFilters}
+							onClear={onResetFilters}
+							onRemoveValue={onRemoveKeyword}
+							onSearch={onSearch}
+						/>
+						<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
+					</div>
+				</section>
 
-			<section
-				className={clsx('p-reading-room__results u-bg-platinum u-py-24 u-py-48:md', {
-					'p-reading-room__results--placeholder': showInitialView || showNoResults,
-				})}
-			>
-				<div className="l-container">
-					{showInitialView && (
-						<>
-							{renderFilterMenu()}
+				<section
+					className={clsx('p-reading-room__results u-bg-platinum u-py-24 u-py-48:md', {
+						'p-reading-room__results--placeholder': showInitialView || showNoResults,
+					})}
+				>
+					<div className="l-container">
+						{showInitialView && (
+							<>
+								{renderFilterMenu()}
 
-							<Placeholder
-								className="p-reading-room__placeholder"
-								img="/images/lightbulb.svg"
-								title="Start je zoektocht!"
-								description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
-							/>
-						</>
-					)}
-					{showNoResults && (
-						<>
-							{renderFilterMenu()}
+								<Placeholder
+									className="p-reading-room__placeholder"
+									img="/images/lightbulb.svg"
+									title="Start je zoektocht!"
+									description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+								/>
+							</>
+						)}
+						{showNoResults && (
+							<>
+								{renderFilterMenu()}
 
-							<Placeholder
-								className="p-reading-room__placeholder"
-								img="/images/looking-glass.svg"
-								title="Geen resultaten"
-								description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
-							/>
-						</>
-					)}
-					{showResults && (
-						<>
-							<MediaCardList
-								items={mediaResultInfo?.items
-									// TODO: check why these 'empty' results are there
-									?.filter((mediaObject) => mediaObject.type !== 'SOLR')
-									.map(
-										(mediaObject): MediaCardProps => ({
-											description: mediaObject.schema_description,
-											title: mediaObject.schema_name,
-											publishedAt: mediaObject.schema_date_published
-												? new Date(mediaObject.schema_date_published)
-												: undefined,
-											publishedBy:
-												mediaObject.schema_creator?.Maker?.join(', '),
-											type: mediaObject.dcterms_format || undefined,
+								<Placeholder
+									className="p-reading-room__placeholder"
+									img="/images/looking-glass.svg"
+									title="Geen resultaten"
+									description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
+								/>
+							</>
+						)}
+						{showResults && (
+							<>
+								<MediaCardList
+									items={mediaResultInfo?.items
+										// TODO: check why these 'empty' results are there
+										?.filter((mediaObject) => mediaObject.type !== 'SOLR')
+										.map(
+											(mediaObject): IdentifiableMediaCard => ({
+												id: mediaObject.schema_identifier,
+												description: mediaObject.schema_description,
+												title: mediaObject.schema_name,
+												publishedAt: mediaObject.schema_date_published
+													? new Date(mediaObject.schema_date_published)
+													: undefined,
+												publishedBy:
+													mediaObject.schema_creator?.Maker?.join(', '),
+												type: mediaObject.dcterms_format || undefined,
+											})
+										)}
+									keywords={keywords}
+									sidebar={renderFilterMenu()}
+									onItemBookmark={({ item }) =>
+										onMediaBookmark(item as IdentifiableMediaCard)
+									}
+									view={viewMode}
+								/>
+								<PaginationBar
+									className="u-mb-48"
+									start={query.start}
+									count={READING_ROOM_ITEM_COUNT}
+									showBackToTop
+									total={mediaCount[query.mediaType as ReadingRoomMediaType]}
+									onPageChange={(page) =>
+										setQuery({
+											...query,
+											start: page * READING_ROOM_ITEM_COUNT,
 										})
-									)}
-								keywords={keywords}
-								sidebar={renderFilterMenu()}
-								view={viewMode}
-							/>
-							<PaginationBar
-								className="u-mb-48"
-								start={query.start}
-								count={READING_ROOM_ITEM_COUNT}
-								showBackToTop
-								total={mediaCount[query.mediaType as ReadingRoomMediaType]}
-								onPageChange={(page) =>
-									setQuery({
-										...query,
-										start: page * READING_ROOM_ITEM_COUNT,
-									})
-								}
-							/>
-						</>
-					)}
-				</div>
-			</section>
-		</div>
+									}
+								/>
+							</>
+						)}
+					</div>
+				</section>
+			</div>
+
+			<AddToCollectionBlade
+				isOpen={isAddToCollectionBladeOpen}
+				selected={selected || undefined}
+				onClose={() => {
+					setAddToCollectionBladeOpen(false);
+					setSelected(null);
+				}}
+				onSubmit={() => {
+					setAddToCollectionBladeOpen(false);
+					setSelected(null);
+				}}
+			/>
+		</>
 	);
 };
 
