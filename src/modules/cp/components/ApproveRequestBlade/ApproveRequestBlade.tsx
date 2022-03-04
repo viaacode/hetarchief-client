@@ -120,7 +120,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-16">
+			<div className="u-px-32 u-py-24">
 				<Button
 					label={t(
 						'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
