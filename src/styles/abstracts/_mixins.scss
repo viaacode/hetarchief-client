@@ -236,8 +236,9 @@
 
 	.c-#{$type}__check-icon {
 		position: absolute;
-		top: 1px;
-		left: 0;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 		width: $c-check-radio-size;
 		height: $c-check-radio-size;
 		border: 2px solid $black;
