@@ -83,9 +83,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 				render={({ field }) => (
 					<ContentInput
 						{...field}
-						placeholder={t(
-							'modules/account/components/create-collection-button/create-collection-button___een-map'
-						)}
+						placeholder={t('Nieuwe map')}
 						onClose={resetForm}
 						onOpen={clearForm}
 						onConfirm={onFormSubmit}
