@@ -16,6 +16,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	sidebar,
 	breakpoints = MEDIA_CARD_LIST_GRID_BP_COLS,
 	onItemBookmark = () => null,
+	onItemTitleClick,
 }) => {
 	if (!items) {
 		return null;
@@ -28,6 +29,10 @@ const MediaCardList: FC<MediaCardListProps> = ({
 
 	const onBookmark = (e: MouseEvent<HTMLButtonElement>, item: MediaCardProps) => {
 		onItemBookmark({ e, item });
+	};
+
+	const onTitleClick = (item: MediaCardProps) => {
+		onItemTitleClick?.({ item });
 	};
 
 	return (
@@ -51,6 +56,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 						keywords={keywords}
 						view={view}
 						onBookmark={(e) => onBookmark(e, item)}
+						{...(onItemTitleClick ? { onTitleClick: () => onTitleClick(item) } : {})}
 					/>
 				))}
 			</Masonry>

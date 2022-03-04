@@ -20,6 +20,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import {
 	Icon,
+	IdentifiableMediaCard,
 	ListNavigationItem,
 	MediaCardList,
 	PaginationBar,
@@ -239,9 +240,17 @@ const AccountMyCollections: NextPage = () => {
 
 							<div className="l-container">
 								<MediaCardList
+									onItemTitleClick={({ item }) =>
+										router.push(
+											`/${ROUTES.spaces}/TODO/${
+												(item as IdentifiableMediaCard).id
+											}`
+										)
+									}
 									keywords={filters.search ? [filters.search] : []}
 									items={collectionMedia?.data?.items.map((media) => {
 										return {
+											id: media.id,
 											description: media.description,
 											publishedBy: 'Aanbieder', // TODO: bind to data
 											publishedAt: new Date('01 Jan 1970'), // TODO: bind to data

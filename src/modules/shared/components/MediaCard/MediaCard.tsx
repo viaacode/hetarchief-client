@@ -22,6 +22,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	type,
 	view,
 	onBookmark = () => null,
+	onTitleClick,
 }) => {
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
@@ -53,6 +54,16 @@ const MediaCard: FC<MediaCardProps> = ({
 				}
 			/> */}
 		</div>
+	);
+
+	const renderTitle = () => (
+		<b
+			className={clsx({
+				[styles['c-media-card__title--interactable']]: !!onTitleClick,
+			})}
+		>
+			{keywords?.length ? highlighted(title ?? '') : title}
+		</b>
 	);
 
 	const renderSubtitle = () => {
@@ -120,11 +131,12 @@ const MediaCard: FC<MediaCardProps> = ({
 	return (
 		<Card
 			orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
-			title={<b>{keywords?.length ? highlighted(title ?? '') : title}</b>}
+			title={renderTitle()}
 			image={renderHeader()}
 			subtitle={keywords?.length ? highlighted(renderSubtitle() ?? '') : renderSubtitle()}
 			toolbar={renderToolbar()}
 			padding="both"
+			{...(onTitleClick ? { onTitleClick } : {})}
 		>
 			{/* // Wrapping this in a conditional ensures TruncateMarkup only renders after the content is received */}
 			{description ? (

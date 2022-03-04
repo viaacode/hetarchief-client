@@ -71,4 +71,10 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		flex-direction: row;
 		flex-shrink: 0;
 	}
+
+	&__title {
+		&--interactable {
+			cursor: pointer;
+		}
+	}
 }

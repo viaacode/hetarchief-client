@@ -8,4 +8,5 @@ export interface MediaCardListProps extends Pick<MediaCardProps, 'view'> {
 	sidebar?: ReactNode;
 	breakpoints?: Record<number | 'default', number>;
 	onItemBookmark?: (data: { e: MouseEvent<HTMLButtonElement>; item: MediaCardProps }) => void;
+	onItemTitleClick?: (data: { item: MediaCardProps }) => void;
 }

@@ -9,6 +9,7 @@ import { withI18n } from '@i18n/wrappers';
 import { MEDIA_ACTIONS } from '@media/const';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon } from '@shared/components';
+import { ROUTES } from '@shared/const';
 import { useNavigationBorder, useStickyLayout } from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
@@ -109,7 +110,7 @@ const ObjectDetailPage: NextPage = () => {
 											onTagClicked={(id) => {
 												router.push(
 													stringifyUrl({
-														url: `/leeszaal/${router.query.readingRoomSlug}`,
+														url: `/${ROUTES.spaces}/${router.query.readingRoomSlug}`,
 														query: {
 															search: id,
 														},

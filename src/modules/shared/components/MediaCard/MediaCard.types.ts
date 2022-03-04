@@ -13,6 +13,7 @@ export interface MediaCardProps {
 	type?: 'video' | 'audio';
 	view?: MediaCardViewMode;
 	onBookmark?: MouseEventHandler<HTMLButtonElement>;
+	onTitleClick?: () => void;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & { id: string };
