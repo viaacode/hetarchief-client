@@ -11,7 +11,7 @@ const Metadata: FC<MetadataProps> = ({ className, metadata, columns = 1 }) => {
 		return (
 			<li
 				key={`metadata-${index}-${item.title}`}
-				className={styles['c-metadata__item']}
+				className={clsx(styles['c-metadata__item'], item.className)}
 				role="listitem"
 			>
 				<b className={styles['c-metadata__item-title']}>{item.title}</b>
