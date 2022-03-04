@@ -1,7 +1,7 @@
-import { Button, Card } from '@meemoo/react-components';
+import { Button, Card, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import TruncateMarkup from 'react-truncate-markup';
 
@@ -23,7 +23,30 @@ const MediaCard: FC<MediaCardProps> = ({
 	view,
 	onBookmark = () => null,
 	onTitleClick,
+	actions,
 }) => {
+	const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+	const renderDropdown = () =>
+		actions ? (
+			<Dropdown isOpen={isDropdownOpen}>
+				<DropdownButton>
+					<Button
+						className={clsx(
+							styles['c-media-card__icon-button'],
+							'c-button--text c-button--icon c-button--xxs'
+						)}
+						icon={
+							<Icon className={styles['c-media-card__icon']} name="dots-vertical" />
+						}
+						onClick={() => setDropdownOpen(!isDropdownOpen)}
+					/>
+				</DropdownButton>
+
+				<DropdownContent>{actions}</DropdownContent>
+			</Dropdown>
+		) : null;
+
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
 			<Button
@@ -39,20 +62,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				variants={['text', 'xxs']}
 			/>
 
-			{/* TODO: uncomment & switch to dropdown / action / ... once more actions are required on a MediaCard
-			see: https://meemoo.atlassian.net/browse/ARC-206?focusedCommentId=24402 */}
-			{/* <Button
-				className={clsx(
-					styles['c-media-card__icon-button'],
-					'c-button--text c-button--icon c-button--xxs'
-				)}
-				icon={
-					<Icon
-						className={styles['c-media-card__icon']}
-						name="dots-vertical"
-					/>
-				}
-			/> */}
+			{renderDropdown()}
 		</div>
 	);
 

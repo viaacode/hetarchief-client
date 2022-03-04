@@ -2,7 +2,7 @@ import { MouseEvent, ReactNode } from 'react';
 
 import { MediaCardProps } from '../MediaCard/MediaCard.types';
 
-export interface MediaCardListProps extends Pick<MediaCardProps, 'view'> {
+export interface MediaCardListProps extends Pick<MediaCardProps, 'view' | 'actions'> {
 	items?: MediaCardProps[];
 	keywords?: string[];
 	sidebar?: ReactNode;

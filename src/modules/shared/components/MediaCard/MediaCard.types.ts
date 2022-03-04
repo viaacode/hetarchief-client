@@ -14,6 +14,7 @@ export interface MediaCardProps {
 	view?: MediaCardViewMode;
 	onBookmark?: MouseEventHandler<HTMLButtonElement>;
 	onTitleClick?: () => void;
+	actions?: ReactNode;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & { id: string };

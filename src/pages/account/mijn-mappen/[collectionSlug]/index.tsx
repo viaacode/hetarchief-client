@@ -170,6 +170,13 @@ const AccountMyCollections: NextPage = () => {
 		[t, activeCollection]
 	);
 
+	const renderActions = () => (
+		<>
+			<Button label={t('Verwijderen')} />
+			<Button label={t('Verplaatsen')} />
+		</>
+	);
+
 	return (
 		<>
 			<Head>
@@ -260,6 +267,7 @@ const AccountMyCollections: NextPage = () => {
 										};
 									})}
 									view={'list'}
+									actions={renderActions()}
 								/>
 
 								{collectionMedia.data &&
