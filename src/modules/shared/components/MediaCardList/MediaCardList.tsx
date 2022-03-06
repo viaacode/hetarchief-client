@@ -17,7 +17,6 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	breakpoints = MEDIA_CARD_LIST_GRID_BP_COLS,
 	onItemBookmark = () => null,
 	onItemTitleClick,
-	actions,
 }) => {
 	if (!items) {
 		return null;
@@ -52,13 +51,12 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				{isMasonryView && renderSidebar()}
 				{items.map((item, i) => (
 					<MediaCard
-						key={i}
+						key={Buffer.from(item.title || i.toString(), 'base64').toString()}
 						{...item}
 						keywords={keywords}
 						view={view}
 						onBookmark={(e) => onBookmark(e, item)}
 						{...(onItemTitleClick ? { onTitleClick: () => onTitleClick(item) } : {})}
-						actions={actions}
 					/>
 				))}
 			</Masonry>

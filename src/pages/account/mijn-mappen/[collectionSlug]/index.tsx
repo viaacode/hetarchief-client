@@ -14,10 +14,11 @@ import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
 import { collectionsService } from '@account/services/collections';
-import { Collection } from '@account/types';
+import { Collection, CollectionMedia } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { AddToCollectionBlade } from '@reading-room/components';
 import {
 	Icon,
 	IdentifiableMediaCard,
@@ -45,6 +46,8 @@ const AccountMyCollections: NextPage = () => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG);
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
+	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 
 	const collections = useGetCollections();
 
@@ -112,6 +115,17 @@ const AccountMyCollections: NextPage = () => {
 		});
 	};
 
+	const onMoveCollection = (item: IdentifiableMediaCard) => {
+		setSelected(item);
+		setShowAddToCollectionBlade(true);
+	};
+
+	const onRemoveFromCollection = (item: IdentifiableMediaCard, collection: Collection) => {
+		collectionsService.removeFromCollection(collection.id, item.id).then(() => {
+			collectionMedia.refetch();
+		});
+	};
+
 	/**
 	 * Render
 	 */
@@ -170,10 +184,18 @@ const AccountMyCollections: NextPage = () => {
 		[t, activeCollection]
 	);
 
-	const renderActions = () => (
+	const renderActions = (item: IdentifiableMediaCard, collection: Collection) => (
 		<>
-			<Button label={t('Verwijderen')} />
-			<Button label={t('Verplaatsen')} />
+			<Button
+				variants={['text']}
+				label={t('Verwijderen')}
+				onClick={() => onRemoveFromCollection(item, collection)}
+			/>
+			<Button
+				variants={['text']}
+				label={t('Verplaatsen')}
+				onClick={() => onMoveCollection(item)}
+			/>
 		</>
 	);
 
@@ -256,7 +278,7 @@ const AccountMyCollections: NextPage = () => {
 									}
 									keywords={filters.search ? [filters.search] : []}
 									items={collectionMedia?.data?.items.map((media) => {
-										return {
+										const base: IdentifiableMediaCard = {
 											id: media.id,
 											description: media.description,
 											publishedBy: 'Aanbieder', // TODO: bind to data
@@ -265,9 +287,13 @@ const AccountMyCollections: NextPage = () => {
 											preview: 'https://cataas.com/cat', // TODO: bind to data
 											bookmarkIsSolid: true,
 										};
+
+										return {
+											...base,
+											actions: renderActions(base, activeCollection),
+										};
 									})}
 									view={'list'}
-									actions={renderActions()}
 								/>
 
 								{collectionMedia.data &&
@@ -303,6 +329,19 @@ const AccountMyCollections: NextPage = () => {
 						collectionsService.delete(activeCollection.id).then(() => {
 							collections.refetch();
 						});
+				}}
+			/>
+
+			<AddToCollectionBlade
+				isOpen={isAddToCollectionBladeOpen}
+				selected={selected || undefined}
+				onClose={() => {
+					setShowAddToCollectionBlade(false);
+					setSelected(null);
+				}}
+				onSubmit={() => {
+					setShowAddToCollectionBlade(false);
+					setSelected(null);
 				}}
 			/>
 		</>

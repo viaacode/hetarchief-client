@@ -192,6 +192,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						checked={pair.checked}
 						checkIcon={<Icon name="check" />}
 						onClick={() => onCheckboxClick(pair)}
+						variants={['no-label']}
 					/>
 
 					<span className={styles['c-add-to-collection-blade__list-item__label']}>

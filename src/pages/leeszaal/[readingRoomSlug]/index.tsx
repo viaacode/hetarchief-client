@@ -55,7 +55,7 @@ const ReadingRoomPage: NextPage = () => {
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
-	const [isAddToCollectionBladeOpen, setAddToCollectionBladeOpen] = useState(false);
+	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 
@@ -158,7 +158,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onMediaBookmark = (item: IdentifiableMediaCard) => {
 		setSelected(item);
-		setAddToCollectionBladeOpen(true);
+		setShowAddToCollectionBlade(true);
 	};
 
 	/**
@@ -319,11 +319,11 @@ const ReadingRoomPage: NextPage = () => {
 				isOpen={isAddToCollectionBladeOpen}
 				selected={selected || undefined}
 				onClose={() => {
-					setAddToCollectionBladeOpen(false);
+					setShowAddToCollectionBlade(false);
 					setSelected(null);
 				}}
 				onSubmit={() => {
-					setAddToCollectionBladeOpen(false);
+					setShowAddToCollectionBlade(false);
 					setSelected(null);
 				}}
 			/>
