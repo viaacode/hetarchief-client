@@ -7,7 +7,7 @@ import { isBrowser } from '@shared/utils';
 import styles from './ScrollableTabs.module.scss';
 
 const ScrollableTabs: FC<TabsProps> = (props) => {
-	const { tabs: items } = props;
+	const { tabs: items, className } = props;
 
 	/**
 	 * Hooks
@@ -162,6 +162,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 		<div
 			ref={scrollContainerRef}
 			className={clsx(
+				className,
 				styles['c-scrollable-tabs'],
 				{
 					[styles['c-scrollable-tabs--gradient-left']]: showLeftGradient,
@@ -173,7 +174,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 			)}
 			style={{ height: `${tabsHeight}px` }}
 		>
-			<Tabs {...props} />
+			<Tabs {...props} className={`${className}-tab`} />
 		</div>
 	);
 };
