@@ -190,12 +190,10 @@ const ObjectDetailPage: NextPage = () => {
 					<div className="p-object-detail__video">
 						{/* http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4 */}
 						{/* https://via.placeholder.com/1920x1080 */}
-						{/* https://via.placeholder.com/100x100 */}
 						<FlowPlayer
 							className="p-object-detail__flowplayer"
 							src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
 							poster="https://via.placeholder.com/1920x1080"
-							logo="https://via.placeholder.com/100x100"
 							title="Elephants dream"
 						/>
 						{/* <ObjectPlaceholder
