@@ -3,6 +3,7 @@
 $component: "c-tab";
 
 .#{$component} {
+	background-color: inherit;
 	display: inline-flex;
 	align-items: center;
 	min-height: $tab-min-height;
