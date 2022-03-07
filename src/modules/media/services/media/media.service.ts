@@ -1,5 +1,9 @@
 import { ApiService } from '@shared/services';
-import { ApiResponseWrapper, ElasticsearchResponse } from '@shared/types/api';
+import {
+	ApiResponseWrapper,
+	ElasticsearchAggregations,
+	ElasticsearchResponse,
+} from '@shared/types/api';
 
 import { MediaInfo, MediaSearchFilters } from '../../types';
 
@@ -8,15 +12,15 @@ import { MEDIA_SERVICE_BASE_URL } from './media.service.const';
 export class MediaService extends ApiService {
 	public static async getAll(
 		filters: MediaSearchFilters = {},
-		from = 0,
+		page = 0,
 		size = 20
-	): Promise<ApiResponseWrapper<MediaInfo>> {
+	): Promise<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
 		const parsed = (await ApiService.getApi()
 			.post(MEDIA_SERVICE_BASE_URL, {
 				body: JSON.stringify({
 					filters,
 					size,
-					from,
+					page,
 				}),
 			})
 			.json()) as ElasticsearchResponse<MediaInfo>;
@@ -24,8 +28,9 @@ export class MediaService extends ApiService {
 			items: parsed?.hits?.hits.map((item) => item._source),
 			total: parsed?.hits?.total?.value,
 			size: size,
-			page: Math.floor(from / size),
+			page: Math.floor(page / size),
 			pages: Math.ceil((parsed?.hits?.total?.value || 0) / size),
+			aggregations: parsed.aggregations,
 		};
 	}
 }
