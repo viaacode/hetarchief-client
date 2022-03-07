@@ -244,16 +244,16 @@ const ObjectDetailPage: NextPage = () => {
 									</Button>
 									<DynamicActionMenu {...MEDIA_ACTIONS} />
 								</div>
-								<Metadata
-									className="u-px-32"
-									columns={
-										expandMetadata && metadataSize && metadataSize?.width > 500
-											? 2
-											: 1
-									}
-									metadata={metaData}
-								/>
 							</div>
+							<Metadata
+								className="u-px-32"
+								columns={
+									expandMetadata && metadataSize && metadataSize?.width > 500
+										? 2
+										: 1
+								}
+								metadata={metaData}
+							/>
 						</div>
 					</div>
 				</article>

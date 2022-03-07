@@ -96,7 +96,11 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	@include respond-at(md) {
-		.p-object-detail__metadata, .p-object-detail__video {
+		.p-object-detail__metadata {
+			display: block;
+		}
+
+		.p-object-detail__video {
 			display: grid;
 		}
 	}
