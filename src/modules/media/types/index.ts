@@ -1,3 +1,5 @@
+export type MediaFormat = 'video' | 'audio' | null;
+
 export interface MediaInfo {
 	schema_in_language: unknown | null;
 	dcterms_available: string;
@@ -22,7 +24,7 @@ export interface MediaInfo {
 	schema_maintainer: {
 		schema_identifier: string;
 	}[];
-	dcterms_format: 'video' | 'audio' | null;
+	dcterms_format: MediaFormat;
 	schema_name: string;
 	// TODO: See if this is still necessary once resolved in proxy
 	type?: string;
@@ -30,4 +32,17 @@ export interface MediaInfo {
 
 export class MediaSearchFilters {
 	query?: string;
+}
+
+export interface MediaSearchAggregationPair {
+	key: MediaFormat;
+	doc_count: number;
+}
+
+export interface MediaSearchAggregations {
+	dcterms_format: {
+		buckets: MediaSearchAggregationPair[];
+		doc_count_error_upper_bound: number;
+		sum_other_doc_count: number;
+	};
 }

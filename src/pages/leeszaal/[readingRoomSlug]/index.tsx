@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -53,6 +53,11 @@ const ReadingRoomPage: NextPage = () => {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
+	const [mediaCount, setMediaCount] = useState({
+		[ReadingRoomMediaType.All]: 0,
+		[ReadingRoomMediaType.Audio]: 0,
+		[ReadingRoomMediaType.Video]: 0,
+	});
 
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
@@ -73,11 +78,28 @@ const ReadingRoomPage: NextPage = () => {
 		query.start || 0,
 		20
 	);
-	const [mediaCount] = useState({
-		[ReadingRoomMediaType.All]: 1245,
-		[ReadingRoomMediaType.Audio]: 456,
-		[ReadingRoomMediaType.Video]: 789,
-	});
+
+	/**
+	 * Effects
+	 */
+
+	useEffect(() => {
+		const buckets = mediaResultInfo?.aggregations.dcterms_format.buckets || [
+			{ key: 'video', doc_count: 0 }, // Provid mock value for reduce
+		];
+
+		setMediaCount({
+			[ReadingRoomMediaType.All]: buckets
+				.map((pair) => pair.doc_count)
+				.reduce((p, c) => {
+					return p + c;
+				}),
+			[ReadingRoomMediaType.Audio]:
+				buckets.find((bucket) => bucket.key === ReadingRoomMediaType.Audio)?.doc_count || 0,
+			[ReadingRoomMediaType.Video]:
+				buckets.find((bucket) => bucket.key === ReadingRoomMediaType.Video)?.doc_count || 0,
+		});
+	}, [mediaResultInfo?.aggregations]);
 
 	/**
 	 * Display
