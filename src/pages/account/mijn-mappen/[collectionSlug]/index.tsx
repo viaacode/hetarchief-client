@@ -138,8 +138,12 @@ const AccountMyCollections: NextPage = () => {
 					<Button
 						className="p-account-my-collections__export--label"
 						variants={['black']}
-						name={t('Metadata exporteren')}
-						label={t('Metadata exporteren')}
+						name={t(
+							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+						)}
+						label={t(
+							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+						)}
 						iconStart={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
@@ -153,7 +157,9 @@ const AccountMyCollections: NextPage = () => {
 					<Button
 						className="p-account-my-collections__export--icon"
 						variants={['black']}
-						name={t('Metadata exporteren')}
+						name={t(
+							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+						)}
 						icon={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
@@ -170,7 +176,9 @@ const AccountMyCollections: NextPage = () => {
 									className="p-account-my-collections__delete"
 									variants={['silver']}
 									icon={<Icon name="trash" />}
-									name={t('Map verwijderen')}
+									name={t(
+										'pages/account/mijn-mappen/collection-slug/index___map-verwijderen'
+									)}
 									onClick={(e) => {
 										e.stopPropagation();
 										setShowConfirmDelete(true);
@@ -188,12 +196,12 @@ const AccountMyCollections: NextPage = () => {
 		<>
 			<Button
 				variants={['text']}
-				label={t('Verwijderen')}
+				label={t('pages/account/mijn-mappen/collection-slug/index___verwijderen')}
 				onClick={() => onRemoveFromCollection(item, collection)}
 			/>
 			<Button
 				variants={['text']}
-				label={t('Verplaatsen')}
+				label={t('pages/account/mijn-mappen/collection-slug/index___verplaatsen')}
 				onClick={() => onMoveCollection(item)}
 			/>
 		</>
@@ -250,7 +258,9 @@ const AccountMyCollections: NextPage = () => {
 									className="p-account-my-collections__search"
 									instanceId="collections-search-bar"
 									light={true}
-									placeholder={t('Zoek')}
+									placeholder={t(
+										'pages/account/mijn-mappen/collection-slug/index___zoek'
+									)}
 									searchValue={filters.search}
 									onClear={() => {
 										setFilters({
@@ -319,6 +329,10 @@ const AccountMyCollections: NextPage = () => {
 			</AccountLayout>
 
 			<ConfirmationModal
+				text={{
+					yes: t('pages/account/mijn-mappen/collection-slug/index___verwijderen'),
+					no: t('pages/account/mijn-mappen/collection-slug/index___annuleren'),
+				}}
 				isOpen={activeCollection && showConfirmDelete}
 				onClose={() => setShowConfirmDelete(false)}
 				onCancel={() => setShowConfirmDelete(false)}

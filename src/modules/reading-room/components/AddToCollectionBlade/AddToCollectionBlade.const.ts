@@ -12,7 +12,11 @@ export const ADD_TO_COLLECTION_FORM_SCHEMA = (): SchemaOf<AddToCollectionFormSta
 		pairs: array()
 			.of(
 				object().shape({
-					id: string().required(i18n?.t('De geselecteerde map bestaat niet')),
+					id: string().required(
+						i18n?.t(
+							'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___de-geselecteerde-map-bestaat-niet'
+						)
+					),
 					checked: boolean(),
 				})
 			)

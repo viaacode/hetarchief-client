@@ -80,8 +80,12 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 
 		toastService.notify({
 			maxLines: 3,
-			title: t('⚠️ Er ging iets mis'),
-			description: t('Er is een fout opgetreden tijdens het opslaan, probeer opnieuw.'),
+			title: t(
+				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___⚠️-er-ging-iets-mis'
+			),
+			description: t(
+				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
+			),
 		});
 	};
 
@@ -103,11 +107,16 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						.then(() => {
 							toastService.notify({
 								maxLines: 3,
-								title: t('Item toegevoegd aan map'),
-								description: t('"{{item}}" is toegevoegd aan "{{collection}}".', {
-									item: selected.title,
-									collection: collection?.name || t('Onbekend'),
-								}),
+								title: t(
+									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-toegevoegd-aan-map'
+								),
+								description: t(
+									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collection',
+									{
+										item: selected.title,
+										collection: collection?.name || t('Onbekend'),
+									}
+								),
 							});
 						});
 				} else {
@@ -117,11 +126,16 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						.then(() => {
 							toastService.notify({
 								maxLines: 3,
-								title: t('Item verwijderd uit map'),
-								description: t('"{{item}}" is verwijderd uit "{{collection}}".', {
-									item: selected.title,
-									collection: collection?.name || t('Onbekend'),
-								}),
+								title: t(
+									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-verwijderd-uit-map'
+								),
+								description: t(
+									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collection',
+									{
+										item: selected.title,
+										collection: collection?.name || t('Onbekend'),
+									}
+								),
 							});
 						});
 				}
@@ -157,13 +171,17 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-24">
 				<Button
-					label={t('Voeg toe')}
+					label={t(
+						'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___voeg-toe'
+					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
 				/>
 
 				<Button
-					label={t('Annuleer')}
+					label={t(
+						'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___annuleer'
+					)}
 					variants={['block', 'text']}
 					onClick={props.onClose}
 				/>
@@ -200,7 +218,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 					</span>
 
 					<span className={styles['c-add-to-collection-blade__list-item__count']}>
-						{count === 1 ? t('1 item') : t('{{count}} items', { count })}
+						{count === 1
+							? t(
+									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___1-item'
+							  )
+							: t(
+									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___count-items',
+									{ count }
+							  )}
 					</span>
 				</li>
 			);
@@ -213,7 +238,9 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={renderFooter()}
-			title={t('Voeg toe aan map')}
+			title={t(
+				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___voeg-toe-aan-map'
+			)}
 			className={clsx(props.className, styles['c-add-to-collection-blade'])}
 		>
 			<div className="u-px-32">

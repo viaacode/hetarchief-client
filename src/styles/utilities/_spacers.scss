@@ -111,3 +111,9 @@ $mr: (
 	"8": $spacer-xs,
 );
 @include generate-utils("mr", "margin-right", $mr);
+
+// Left / Right
+$mx: (
+	"4": $spacer-xxs,
+);
+@include generate-utils("mx", ("margin-left", "margin-right"), $mx);
