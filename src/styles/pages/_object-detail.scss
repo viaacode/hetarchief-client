@@ -20,6 +20,11 @@
 		}
 	}
 
+	&__flowplayer {
+		height: min-content;
+    	align-self: center;
+	}
+
 	&__metadata {
 		overflow-y: scroll;
 	}
