@@ -68,6 +68,10 @@ $metadata-collapsed-width: 36vw;
     	align-self: center;
 	}
 
+	&__video {
+		display: grid;
+	}
+
 	&__metadata {
 		overflow-y: scroll;
 		box-shadow: $shadow-24-black-12;
