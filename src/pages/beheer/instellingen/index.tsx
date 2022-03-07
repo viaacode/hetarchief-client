@@ -2,6 +2,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
+import { withAuth } from '@auth/wrappers/with-auth';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { createPageTitle } from '@shared/utils';
@@ -37,4 +38,4 @@ const CPSettingsPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default CPSettingsPage;
+export default withAuth(CPSettingsPage);

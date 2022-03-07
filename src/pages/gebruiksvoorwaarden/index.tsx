@@ -12,7 +12,6 @@ import { useQueryParams } from 'use-query-params';
 import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
 import {
-	LOCAL_STORAGE,
 	REDIRECT_TO_QUERY_KEY,
 	RICH_TEXT_SANITIZATION,
 	ROUTES,
@@ -55,8 +54,8 @@ const TermsOfService: NextPage = () => {
 		}
 	}, [scrollable]);
 
-	const onCancelClick = useCallback(() => {
-		router.push(localStorage.getItem(LOCAL_STORAGE.previousPage) || ROUTES.home);
+	const onCancelClick = useCallback(async () => {
+		await router.push(ROUTES.home);
 
 		toastService.notify({
 			title: t(

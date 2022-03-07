@@ -26,11 +26,11 @@ export const withAuth = (
 			};
 
 			const toTermsOfService = async () => {
-				return router.push(`${ROUTES.termsOfService}?${stringify(params)}`);
+				return router.replace(`${ROUTES.termsOfService}?${stringify(params)}`);
 			};
 
 			const toHome = async () => {
-				return router.push(
+				return router.replace(
 					`${ROUTES.home}?${stringify({
 						...params,
 						[SHOW_AUTH_QUERY_KEY]: '1',
