@@ -3,6 +3,7 @@
 $component: "c-tab";
 
 .#{$component} {
+	background-color: inherit;
 	display: inline-flex;
 	align-items: center;
 	min-height: $tab-min-height;
@@ -32,7 +33,7 @@ $component: "c-tab";
 	* Modifiers
 	*/
 
-	&--dark {
+	&.#{$component}--dark {
 		background-color: $black;
 		color: $white;
 
@@ -49,7 +50,7 @@ $component: "c-tab";
 		}
 	}
 
-	&--light {
+	&.#{$component}--light {
 		position: relative;
 		color: $neutral;
 
