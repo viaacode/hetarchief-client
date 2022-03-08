@@ -18,7 +18,7 @@ import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from 
 import { Notification, NotificationCenter, notificationCenterMock } from '@shared/components';
 import { useAppDispatch } from '@shared/store';
 import { getTosAction } from '@shared/store/tos';
-import { selectIsStickyLayout, setShowAuthModal } from '@shared/store/ui';
+import { selectIsStickyLayout, selectShowFooter, setShowAuthModal } from '@shared/store/ui';
 
 const AppLayout: FC = ({ children }) => {
 	const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -28,6 +28,7 @@ const AppLayout: FC = ({ children }) => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
+	const showFooter = useSelector(selectShowFooter);
 
 	useEffect(() => {
 		dispatch(checkLoginAction());
@@ -116,7 +117,9 @@ const AppLayout: FC = ({ children }) => {
 				transition={Slide}
 			/>
 
-			<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
+			{showFooter && (
+				<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
+			)}
 		</div>
 	);
 };
