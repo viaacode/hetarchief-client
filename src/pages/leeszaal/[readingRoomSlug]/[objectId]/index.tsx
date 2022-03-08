@@ -16,11 +16,11 @@ import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavig
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
 import {
 	useElementSize,
+	useHideFooter,
 	useNavigationBorder,
 	useStickyLayout,
 	useWindowSizeContext,
 } from '@shared/hooks';
-import { useFooter } from '@shared/hooks/use-footer';
 import { createPageTitle } from '@shared/utils';
 
 import {
@@ -45,7 +45,7 @@ const ObjectDetailPage: NextPage = () => {
 	const windowSize = useWindowSizeContext();
 	useStickyLayout();
 	useNavigationBorder();
-	useFooter();
+	useHideFooter();
 
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
