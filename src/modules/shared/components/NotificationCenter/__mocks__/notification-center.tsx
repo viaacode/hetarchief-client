@@ -26,7 +26,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:53:48.880887',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -38,7 +37,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:54:01.328785',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -50,7 +48,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:54:03.791078',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -62,7 +59,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:24.361032',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -74,7 +70,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:25.500478',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -86,7 +81,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:37.908251',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -98,7 +92,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:37.338439',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -110,7 +103,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:34.666981',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -122,7 +114,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:36.136993',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -134,7 +125,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:36.723444',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -146,7 +136,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -158,7 +147,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -170,7 +158,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -182,7 +169,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -194,7 +180,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -206,7 +191,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -218,7 +202,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -230,7 +213,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -242,7 +224,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 		{
@@ -254,7 +235,6 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			showAt: '2022-02-25T17:21:58.937169',
 			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
 		},
 	],

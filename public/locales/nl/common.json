@@ -122,7 +122,7 @@
   "modules/shared/const/navigation___sluit": "Sluit",
   "modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren": "Inloggen of registreren",
   "modules/shared/services/notifications-service/notifications___bekijk": "Bekijk",
-  "modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht": "Er zijn {{aantal}} nieuwe notificaties. Bekijk ze in het notificatie overzicht.",
+  "modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht": "Er zijn {{amount}} nieuwe notificaties. Bekijk ze in het notificatie overzicht.",
   "modules/shared/services/notifications-service/notifications___er-zijn-amount-nieuwe-notificaties": "Er zijn {{amount}} nieuwe notificaties",
   "modules/shared/services/toast-service/toast___ok": "Ok",
   "pages/account/mijn-historiek/index___mijn-historiek": "Mijn historiek",

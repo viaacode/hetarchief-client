@@ -1,7 +1,8 @@
 import { i18n } from 'next-i18next';
-import { Router } from 'next/router';
+import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 
+import { NOTIFICATION_TYPE_TO_PATH } from '@shared/components/NotificationCenter/NotificationCenter.consts';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import { ApiResponseWrapper } from '@shared/types';
@@ -10,37 +11,59 @@ import { MarkAllAsReadResult, Notification, NotificationStatus } from './notific
 
 export abstract class NotificationsService {
 	private static pollingTimer: number | null = null;
-	private static mostRecentVisibleNotification: Notification | null = null;
-	private static router: Router | null = null;
+	private static lastFetchedUnreadNotifications: Notification[] | null = null;
+	private static router: NextRouter | null = null;
+	private static showNotificationsCenter: ((show: boolean) => void) | null = null;
+	private static setHasUnreadNotifications: ((hasUnreadNotifications: boolean) => void) | null =
+		null;
 
-	public static initPolling(router: Router): void {
+	public static async initPolling(
+		router: NextRouter,
+		showNotificationsCenter: (show: boolean) => void,
+		setHasUnreadNotifications: (hasUnreadNotifications: boolean) => void
+	): Promise<void> {
 		this.router = router;
+		this.showNotificationsCenter = showNotificationsCenter;
+		this.setHasUnreadNotifications = setHasUnreadNotifications;
 		if (!this.pollingTimer) {
-			NotificationsService.pollingTimer = window.setInterval(this.checkNotifications, 60000);
+			NotificationsService.pollingTimer = window.setInterval(this.checkNotifications, 15000);
+			await this.checkNotifications();
 		}
 	}
 
+	public static stopPolling(): void {
+		if (this.pollingTimer) {
+			clearInterval(this.pollingTimer);
+		}
+	}
+
+	private static getPath(notification: Notification): string | null {
+		return (
+			NOTIFICATION_TYPE_TO_PATH[notification.type]
+				?.replace('{visitRequestId}', notification.visitId)
+				?.replace('{readingRoomId}', notification.readingRoomId) || null
+		);
+	}
+
 	public static async checkNotifications(): Promise<void> {
-		const lastCheckNotificationTime = NotificationsService.mostRecentVisibleNotification?.showAt
-			? new Date(NotificationsService.mostRecentVisibleNotification?.showAt).getTime()
+		const mostRecent = NotificationsService.lastFetchedUnreadNotifications?.[0];
+		const lastCheckNotificationTime = mostRecent?.createdAt
+			? new Date(mostRecent?.createdAt).getTime()
 			: 0;
 		const notificationResponse = await NotificationsService.getNotifications(1, 20);
 		const notifications = notificationResponse.items;
-		const visibleNotifications = notifications.filter(
-			(notification) => new Date(notification.showAt).getTime() < new Date().getTime()
-		);
-		const visibleUnreadNotifications = visibleNotifications.filter(
+		const unreadNotifications = notifications.filter(
 			(notification) => notification.status === NotificationStatus.UNREAD
 		);
 
 		if (
-			visibleUnreadNotifications.length > 0 &&
-			lastCheckNotificationTime < new Date(visibleUnreadNotifications[0].showAt).getTime()
+			unreadNotifications.length > 0 &&
+			lastCheckNotificationTime < new Date(unreadNotifications[0].createdAt).getTime()
 		) {
 			// A more recent notification exists, we should notify the user of the new notifications
-			const newNotifications = visibleUnreadNotifications.filter(
+			const newNotifications = unreadNotifications.filter(
 				(notification) =>
-					new Date(notification.showAt).getTime() > lastCheckNotificationTime
+					new Date(notification.createdAt).getTime() > lastCheckNotificationTime
 			);
 			if (newNotifications.length === 1) {
 				// one => show details on the one notification
@@ -52,12 +75,14 @@ export abstract class NotificationsService {
 							'modules/shared/services/notifications-service/notifications___bekijk'
 						) || 'Bekijk',
 					onClose: () => {
-						this.router?.push(
-							stringifyUrl({
-								url: '/beheer/aanvragen',
-								query: { visitRequest: newNotifications[0].visitId },
-							})
-						);
+						const url = NotificationsService.getPath(newNotifications[0]);
+						if (url) {
+							// Go to page
+							NotificationsService?.router?.push?.(url);
+						} else {
+							// Notification not clickable => open notification center
+							NotificationsService.showNotificationsCenter?.(true);
+						}
 					},
 				});
 			} else {
@@ -80,15 +105,14 @@ export abstract class NotificationsService {
 						'modules/shared/services/notifications-service/notifications___bekijk'
 					),
 					onClose: () => {
-						this.router?.push(
-							stringifyUrl({
-								url: this.router?.asPath,
-								query: { showNotifications: true },
-							})
-						);
+						NotificationsService.showNotificationsCenter?.(true);
 					},
 				});
 			}
+		}
+		if (unreadNotifications.length > 0) {
+			NotificationsService.setHasUnreadNotifications?.(true);
+			NotificationsService.lastFetchedUnreadNotifications = unreadNotifications;
 		}
 	}
 
@@ -106,6 +130,9 @@ export abstract class NotificationsService {
 		const response: Notification = await ApiService.getApi()
 			.patch(`notifications/${notificationId}/mark-as-read`)
 			.json();
+		if ((NotificationsService.lastFetchedUnreadNotifications?.length || 0) <= 1) {
+			NotificationsService.setHasUnreadNotifications?.(false);
+		}
 		return response;
 	}
 
@@ -113,6 +140,7 @@ export abstract class NotificationsService {
 		const response: MarkAllAsReadResult = await ApiService.getApi()
 			.patch('notifications/mark-as-read')
 			.json();
+		NotificationsService.setHasUnreadNotifications?.(false);
 		return response;
 	}
 }

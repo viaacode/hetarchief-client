@@ -116,7 +116,6 @@ $clear-button-height: 9.3rem;
 
 	&-link,
 	button {
-	  text-decoration: none;
 	  background-color: transparent;
 	  border: none;
 	  text-align: left;
@@ -124,19 +123,31 @@ $clear-button-height: 9.3rem;
 	  padding: $spacer-md 2rem $spacer-md 2rem;
 	  height: 100%;
 	  flex-grow: 1;
+	  font-size: 1.4rem;
 
 	  @include respond-at(sm) {
 		padding: $spacer-lg;
 	  }
 
+	  &-clickable {
+		&:hover {
+		  background-color: $silver;
+		  cursor: pointer;
+		}
+	  }
+
+	  a {
+		text-decoration: none;
+	  }
+
 	  &:first-child {
 		padding-right: $spacer-xs;
 	  }
+	}
 
-	  &:hover {
-		background-color: $silver;
-		cursor: pointer;
-	  }
+	button:hover {
+	  background-color: $silver;
+	  cursor: pointer;
 	}
 
 	.c-notification-center__notification-icon {
@@ -150,6 +161,8 @@ $clear-button-height: 9.3rem;
 
 	&--unread {
 	  .c-notification-center__notification-title {
+		font-size: 1.6px;
+
 		&::before {
 		  background-color: $teal;
 		}

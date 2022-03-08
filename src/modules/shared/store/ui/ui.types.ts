@@ -3,4 +3,6 @@ export interface UIState {
 	isStickyLayout: boolean;
 	showNavigationBorder: boolean;
 	showFooter: boolean;
+	showNotificationsCenter: boolean;
+	hasUnreadNotifications: boolean;
 }

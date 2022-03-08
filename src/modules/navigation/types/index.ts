@@ -1,9 +1,7 @@
-import { Dispatch, SetStateAction } from 'react';
-
 export interface NavItemsRightLoggedIn {
-	anyUnreadNotifications: boolean;
+	hasUnreadNotifications: boolean;
 	notificationsOpen: boolean;
 	userName: string;
 	onLogOutClick: () => void;
-	setNotificationsOpen: Dispatch<SetStateAction<boolean>>;
+	setNotificationsOpen: (show: boolean) => void;
 }

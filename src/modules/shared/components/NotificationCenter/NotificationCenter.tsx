@@ -120,10 +120,49 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		onClose();
 	};
 
-	const getPath = (notification: Notification) => {
-		return NOTIFICATION_TYPE_TO_PATH[notification.type]
-			.replace('{visitRequestId}', notification.visitId)
-			.replace('{readingRoomId}', notification.readingRoomId);
+	const getPath = (notification: Notification): string | null => {
+		return (
+			NOTIFICATION_TYPE_TO_PATH[notification.type]
+				?.replace('{visitRequestId}', notification.visitId)
+				?.replace('{readingRoomId}', notification.readingRoomId) || null
+		);
+	};
+
+	const renderNotificationLink = (notification: Notification) => {
+		const notificationLinkContent = (
+			<>
+				<b
+					className={clsx(
+						'u-font-size-14',
+						styles['c-notification-center__notification-title']
+					)}
+				>
+					{notification.title}
+				</b>
+				{notification.description}
+			</>
+		);
+
+		// Wrap in link if notification should link to somewhere
+		const notificationLink: string | null = getPath(notification);
+		return (
+			<div
+				className={clsx(styles['c-notification-center__notification-link'], {
+					[styles['c-notification-center__notification-link-clickable']]:
+						notificationLink,
+				})}
+			>
+				{notificationLink ? (
+					<Link passHref href={notificationLink}>
+						<a onClick={() => onClickNotificationLink(notification)}>
+							{notificationLinkContent}
+						</a>
+					</Link>
+				) : (
+					notificationLinkContent
+				)}
+			</div>
+		);
 	};
 
 	const renderNotification = (notification: Notification) => {
@@ -136,22 +175,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 					)}
 					key={`notification-${notification.id}`}
 				>
-					<Link passHref href={getPath(notification)}>
-						<a
-							onClick={() => onClickNotificationLink(notification)}
-							className={styles['c-notification-center__notification-link']}
-						>
-							<b
-								className={clsx(
-									'u-font-size-14',
-									styles['c-notification-center__notification-title']
-								)}
-							>
-								{notification.title}
-							</b>
-							{notification.description}
-						</a>
-					</Link>
+					{renderNotificationLink(notification)}
 					<Button
 						onClick={() => onMarkOneAsRead(notification.id)}
 						className={clsx(styles['c-notification-center__notification-icon'])}
@@ -172,22 +196,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 					)}
 					key={`notification-${notification.id}`}
 				>
-					<Link href={getPath(notification)}>
-						<a
-							onClick={() => onClickNotificationLink(notification)}
-							className={styles['c-notification-center__notification-link']}
-						>
-							<b
-								className={clsx(
-									'u-font-size-14',
-									styles['c-notification-center__notification-title']
-								)}
-							>
-								{notification.title}
-							</b>
-							{notification.description}
-						</a>
-					</Link>
+					{renderNotificationLink(notification)}
 				</div>
 			);
 		}
