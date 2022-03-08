@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { stringifyUrl } from 'query-string';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
@@ -14,7 +14,12 @@ import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS } from '@media/const';
 import { ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
-import { useElementSize, useNavigationBorder, useStickyLayout } from '@shared/hooks';
+import {
+	useElementSize,
+	useNavigationBorder,
+	useStickyLayout,
+	useWindowSizeContext,
+} from '@shared/hooks';
 import { useFooter } from '@shared/hooks/use-footer';
 import { createPageTitle } from '@shared/utils';
 
@@ -33,9 +38,11 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Hooks
 	 */
-	const [activeTab, setActiveTab] = useState<string | number>(ObjectDetailTabs.Metadata);
+	const [activeTab, setActiveTab] = useState<string | number>(ObjectDetailTabs.Media);
+	const [pauseMedia, setPauseMedia] = useState(true);
 	const { t } = useTranslation();
 	const router = useRouter();
+	const windowSize = useWindowSizeContext();
 	useStickyLayout();
 	useNavigationBorder();
 	useFooter();
@@ -47,6 +54,16 @@ const ObjectDetailPage: NextPage = () => {
 	 * Variables
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+
+	/**
+	 * Effects
+	 */
+	useEffect(() => {
+		// Pause media if metadata tab is shown on mobile
+		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
+			setPauseMedia(true);
+		}
+	}, [activeTab, windowSize.width]);
 
 	/**
 	 * Callbacks
@@ -195,6 +212,8 @@ const ObjectDetailPage: NextPage = () => {
 							src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
 							poster="https://via.placeholder.com/1920x1080"
 							title="Elephants dream"
+							pause={pauseMedia}
+							onPlay={() => setPauseMedia(false)}
 						/>
 						{/* <ObjectPlaceholder
 					{...objectPlaceholderMock}
