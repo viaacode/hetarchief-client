@@ -40,6 +40,7 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const [activeTab, setActiveTab] = useState<string | number>(ObjectDetailTabs.Media);
 	const [pauseMedia, setPauseMedia] = useState(true);
+	const [isMediaFullscreen, setIsMediaFullscreen] = useState(false);
 	const { t } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
@@ -176,7 +177,6 @@ const ObjectDetailPage: NextPage = () => {
 					<meta name="description" content="Object detail omschrijving" />
 				</Head>
 				{/* TODO: bind title to state */}
-				{/* TODO: use correct left and right sections */}
 				<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
 				<ScrollableTabs
 					className="p-object-detail__tabs"
@@ -203,6 +203,12 @@ const ObjectDetailPage: NextPage = () => {
 						variants="white"
 					/>
 					<div className="p-object-detail__video">
+						<Button
+							className="p-object-detail__flowplayer-fullscreen-button"
+							icon={<Icon name="expand" />}
+							variants={['black']}
+							onClick={() => setIsMediaFullscreen(true)}
+						/>
 						{/* http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4 */}
 						{/* https://via.placeholder.com/1920x1080 */}
 						<FlowPlayer
@@ -212,6 +218,18 @@ const ObjectDetailPage: NextPage = () => {
 							title="Elephants dream"
 							pause={pauseMedia}
 							onPlay={() => setPauseMedia(false)}
+							fullscreen={isMediaFullscreen}
+							onToggleFullscreen={(isFullscreen) =>
+								setIsMediaFullscreen(isFullscreen)
+							}
+							customControls={
+								<Button
+									className="p-object-detail__flowplayer-fullscreen-button p-object-detail__flowplayer-fullscreen-button--exit"
+									icon={<Icon name="compress" />}
+									variants={['white']}
+									onClick={() => setIsMediaFullscreen(false)}
+								/>
+							}
 						/>
 						{/* <ObjectPlaceholder
 					{...objectPlaceholderMock}

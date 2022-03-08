@@ -66,10 +66,37 @@ $metadata-collapsed-width: 36vw;
 	&__flowplayer {
 		height: min-content;
     	align-self: center;
+
+		&-fullscreen-button {
+			z-index: get-z-layer("modal"); // Current highest
+			position: absolute;
+			bottom: $spacer-md;
+			right: $spacer-md;
+
+			&--exit {
+				display: none;
+				bottom: $spacer-lg;
+				right: $spacer-lg;
+
+				.c-button__icon {
+					color: $black;
+				}
+			}
+		}
+
+		& .is-fullscreen &-fullscreen-button--exit{
+			display: block;
+		}
+
+		& .is-hovered &-fullscreen-button--exit,
+		& .is-paused &-fullscreen-button--exit{
+			bottom: calc($spacer-lg + 5.8rem); // Add height of controls bar
+		}
 	}
 
 	&__video {
 		display: grid;
+		position: relative;
 	}
 
 	&__metadata {
