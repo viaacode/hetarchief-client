@@ -9,6 +9,7 @@ export interface FilterFormProps extends DefaultComponentProps {
 	form: FC<DefaultFilterFormProps> | null;
 	id: string;
 	title: string;
+	values?: unknown;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	onFormReset: OnFilterMenuFormReset;
 }

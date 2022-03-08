@@ -15,10 +15,10 @@ export function useGetMediaObjects(
 				format: ReadingRoomMediaType;
 		  }
 		| undefined,
-	from: number,
+	page: number,
 	size: number
 ): UseQueryResult<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
-	return useQuery([QUERY_KEYS.getMediaObjects, { filters, from, size }], () => {
+	return useQuery([QUERY_KEYS.getMediaObjects, { filters, page, size }], () => {
 		const { format, ...rest } = filters || {};
 		const mediaFormat: MediaFormat | undefined =
 			format !== ReadingRoomMediaType.All ? format : undefined;
@@ -26,8 +26,8 @@ export function useGetMediaObjects(
 		// TODO: improve (?)
 		// Run two queries to fetch aggregates across formats
 		return Promise.all([
-			MediaService.getAll({ ...rest, format: mediaFormat }, from, size),
-			MediaService.getAll(rest, from, size),
+			MediaService.getAll({ ...rest, format: mediaFormat }, page, size),
+			MediaService.getAll(rest, page, size),
 		]).then((responses) => {
 			const [results, noFormat] = responses;
 

@@ -11,7 +11,11 @@ export function useGetReadingRooms(
 	page: number,
 	size: number
 ): UseQueryResult<ApiResponseWrapper<ReadingRoomInfo>> {
-	return useQuery([QUERY_KEYS.getReadingRooms, { searchInput, page, size }], () =>
-		ReadingRoomService.getAll(searchInput, page, size)
+	return useQuery(
+		[QUERY_KEYS.getReadingRooms, { searchInput, page, size }],
+		() => ReadingRoomService.getAll(searchInput, page, size),
+		{
+			keepPreviousData: true,
+		}
 	);
 }

@@ -3,7 +3,7 @@ import { UserSchema } from '@auth/types';
 type AcceptTermsOfService = UserSchema;
 
 interface GetTermsOfService {
-	updatedAt: { updated_at: string };
+	updatedAt: string;
 }
 
 export type AcceptTermsOfServiceResponse = AcceptTermsOfService | undefined;

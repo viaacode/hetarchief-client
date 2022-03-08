@@ -47,3 +47,10 @@ export interface MediaSearchAggregations {
 		sum_other_doc_count: number;
 	};
 }
+
+export type MediaTypes = 'video' | 'audio' | null;
+
+export enum ObjectDetailTabs {
+	Media = 'media',
+	Metadata = 'metadata',
+}
