@@ -14,7 +14,6 @@ import { withI18n } from '@i18n/wrappers';
 import {
 	REDIRECT_TO_QUERY_KEY,
 	RICH_TEXT_SANITIZATION,
-	ROUTES,
 	TOS_INDEX_QUERY_PARAM_CONFIG,
 } from '@shared/const';
 import { useTermsOfService } from '@shared/hooks';
@@ -55,8 +54,6 @@ const TermsOfService: NextPage = () => {
 	}, [scrollable]);
 
 	const onCancelClick = useCallback(async () => {
-		await router.push(ROUTES.home);
-
 		toastService.notify({
 			title: t(
 				'pages/gebruiksvoorwaarden/index___je-koos-ervoor-om-niet-in-te-stemmen-met-de-gebruiksvoorwaarden'
@@ -66,7 +63,7 @@ const TermsOfService: NextPage = () => {
 			),
 			maxLines: 3,
 		});
-	}, [t, router]);
+	}, [t]);
 
 	const onConfirmClick = () => {
 		if (user) {

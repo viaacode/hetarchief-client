@@ -8,8 +8,7 @@ export function isCurrentTosAccepted(
 		return false;
 	}
 	if (!updatedAt) {
-		console.error('No TOS_LAST_UPDATED_AT was set in the database. Allowing user to enter.');
-		return true;
+		throw new Error('No TOS_LAST_UPDATED_AT was set in the database.');
 	}
 	return isAfter(new Date(acceptedAt), new Date(updatedAt));
 }
