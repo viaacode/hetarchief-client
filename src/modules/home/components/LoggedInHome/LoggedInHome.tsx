@@ -201,4 +201,4 @@ const LoggedInHome: FC = () => {
 	);
 };
 
-export default withAuth(LoggedInHome);
+export default withAuth(LoggedInHome, false);

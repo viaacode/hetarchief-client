@@ -1,5 +1,4 @@
 export * from './form';
 export * from './routes';
 export * from './sanitize';
-export * from './storage';
 export * from './tos';
