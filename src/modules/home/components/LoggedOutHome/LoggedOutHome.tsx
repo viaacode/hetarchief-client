@@ -21,11 +21,11 @@ const LoggedOutHome: FC = () => {
 	 * Methods
 	 */
 
-	const onRequestAccess = (ReadingRoomId: string) => {
+	const onRequestAccess = (readingRoomId: string) => {
 		return router.push(
 			`${ROUTES.home}?${stringify({
 				[SHOW_AUTH_QUERY_KEY]: '1',
-				returnToRequestAccess: ReadingRoomId,
+				readingRoomId,
 			})}`
 		);
 	};

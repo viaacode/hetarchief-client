@@ -12,7 +12,7 @@ export interface VisitInfo {
 	userProfileId: string;
 	timeframe: string; // free-text indication of when
 	reason: string;
-	acceptedTosAt: string;
+	acceptedTos: boolean;
 	status: VisitStatus;
 	startAt: string;
 	endAt: string;
