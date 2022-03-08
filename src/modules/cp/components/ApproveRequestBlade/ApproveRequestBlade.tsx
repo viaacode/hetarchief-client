@@ -65,7 +65,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const onFormSubmit = (values: ApproveRequestFormState) => {
 		selected &&
-			VisitsService.putById(selected.id, {
+			VisitsService.patchById(selected.id, {
 				...selected,
 				status: VisitStatus.APPROVED,
 				startAt: values.accessFrom?.toISOString(),

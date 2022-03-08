@@ -14,7 +14,7 @@ export class TosService {
 
 	public static async acceptTos(uuid: string, options: Options = {}): Promise<UserSchema> {
 		return await ApiService.getApi()
-			.put(`${USERS_BASE_URL}/${uuid}/accepted-tos`, {
+			.patch(`${USERS_BASE_URL}/${uuid}/accepted-tos`, {
 				...options,
 				json: { acceptedTosAt: new Date() },
 			})
