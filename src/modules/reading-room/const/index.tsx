@@ -22,14 +22,14 @@ import {
 export const READING_ROOM_ITEM_COUNT = 100;
 
 export const READING_ROOM_QUERY_PARAM_INIT = {
-	mediaType: ReadingRoomMediaType.All,
+	format: ReadingRoomMediaType.All,
 	orderProp: ReadingRoomSort.Relevance,
 	start: 0,
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	// Filters
-	mediaType: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.mediaType),
+	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
 	search: ArrayParam,
 	[ReadingRoomFilterId.Advanced]: JsonParam,
 	// Pagination
