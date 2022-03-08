@@ -23,7 +23,7 @@ export const READING_ROOM_ITEM_COUNT = 100;
 export const READING_ROOM_QUERY_PARAM_INIT = {
 	mediaType: ReadingRoomMediaType.All,
 	orderProp: ReadingRoomSort.Relevance,
-	start: 0,
+	page: 1,
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
@@ -32,7 +32,7 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	search: ArrayParam,
 	[ReadingRoomFilterId.Advanced]: JsonParam,
 	// Pagination
-	start: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.start),
+	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
 	// Sorting
 	orderProp: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.orderProp),
 	orderDirection: StringParam,
