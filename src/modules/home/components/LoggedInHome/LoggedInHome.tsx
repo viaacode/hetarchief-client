@@ -71,7 +71,6 @@ const LoggedInHome: FC = () => {
 				reason: values.requestReason,
 				spaceId: query.readingRoomId,
 				timeframe: values.visitTime,
-				userProfileId: user?.id,
 			});
 			toastService.notify({
 				title: t('Success'),
