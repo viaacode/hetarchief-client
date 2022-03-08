@@ -1,5 +1,6 @@
 import { Options } from 'ky/distribution/types/options';
 import getConfig from 'next/config';
+import { NextRouter } from 'next/router';
 import { StringifiableRecord, stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
@@ -13,34 +14,44 @@ export class AuthService {
 		return await ApiService.getApi().get(`auth/check-login`, options).json();
 	}
 
-	public static redirectToLoginHetArchief(query: StringifiableRecord): void {
+	public static async redirectToLoginHetArchief(
+		query: StringifiableRecord,
+		router: NextRouter
+	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
 			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
-		window.location.href = stringifyUrl({
-			url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/login`,
-			query: {
-				returnToUrl,
-			},
-		});
+		await router.replace(
+			stringifyUrl({
+				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/login`,
+				query: {
+					returnToUrl,
+				},
+			})
+		);
 	}
 
-	public static redirectToLoginMeemoo(query: StringifiableRecord): void {
+	public static async redirectToLoginMeemoo(
+		query: StringifiableRecord,
+		router: NextRouter
+	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
 			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
-		window.location.href = stringifyUrl({
-			url: `${publicRuntimeConfig.PROXY_URL}/auth/meemoo/login`,
-			query: {
-				returnToUrl,
-			},
-		});
+		await router.replace(
+			stringifyUrl({
+				url: `${publicRuntimeConfig.PROXY_URL}/auth/meemoo/login`,
+				query: {
+					returnToUrl,
+				},
+			})
+		);
 	}
 
 	public static logout(): void {

@@ -13,21 +13,22 @@ import { AuthModalProps } from './AuthModal.types';
 const AuthModal: FC<AuthModalProps> = (props) => {
 	const { query } = useRouter();
 	const { t } = useTranslation();
+	const router = useRouter();
 
 	/**
 	 * Methods
 	 */
 
-	const onLoginHetArchief = () => {
+	const onLoginHetArchief = async () => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { showAuth, ...queryParams } = query;
-		AuthService.redirectToLoginHetArchief(queryParams);
+		await AuthService.redirectToLoginHetArchief(queryParams, router);
 	};
 
-	const onLoginMeemoo = () => {
+	const onLoginMeemoo = async () => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { showAuth, ...queryParams } = query;
-		AuthService.redirectToLoginMeemoo(queryParams);
+		await AuthService.redirectToLoginMeemoo(queryParams, router);
 	};
 
 	/**

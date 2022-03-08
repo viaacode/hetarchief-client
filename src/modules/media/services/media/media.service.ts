@@ -8,7 +8,7 @@ import { MEDIA_SERVICE_BASE_URL } from './media.service.const';
 export class MediaService {
 	public static async getAll(
 		filters: MediaSearchFilters = {},
-		from = 0,
+		page = 1,
 		size = 20
 	): Promise<ApiResponseWrapper<MediaInfo>> {
 		const parsed = (await ApiService.getApi()
@@ -16,7 +16,7 @@ export class MediaService {
 				body: JSON.stringify({
 					filters,
 					size,
-					from,
+					page,
 				}),
 			})
 			.json()) as ElasticsearchResponse<MediaInfo>;
@@ -24,7 +24,7 @@ export class MediaService {
 			items: parsed?.hits?.hits.map((item) => item._source),
 			total: parsed?.hits?.total?.value,
 			size: size,
-			page: Math.floor(from / size),
+			page: page,
 			pages: Math.ceil((parsed?.hits?.total?.value || 0) / size),
 		};
 	}
