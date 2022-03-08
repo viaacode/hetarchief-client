@@ -174,8 +174,6 @@ const ObjectDetailPage: NextPage = () => {
 				<Head>
 					<title>{createPageTitle('Object detail')}</title>
 					<meta name="description" content="Object detail omschrijving" />
-					{/* eslint-disable-next-line @next/next/no-css-tags */}
-					<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
 				</Head>
 				{/* TODO: bind title to state */}
 				{/* TODO: use correct left and right sections */}
