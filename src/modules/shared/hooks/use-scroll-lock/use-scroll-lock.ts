@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 
-import useScrollbarWidth from '../use-scrollbar-width/use-scrollbar-width';
-
 import { UseScrollLock } from './use-scroll-lock.types';
 
 const useScrollLock: UseScrollLock = (lock, element) => {
-	const scrollbarWidth = useScrollbarWidth();
-
 	useEffect(() => {
+		const scrollbarWidth =
+			document && window ? document.body.offsetWidth - document.body.clientWidth : 0;
+
 		const elementToLock = element ?? document.body;
 		let prevOverflowStyle = '';
 		let prevMarginStyle = '';
@@ -33,7 +32,7 @@ const useScrollLock: UseScrollLock = (lock, element) => {
 			elementToLock.style.overflow = prevOverflowStyle;
 			elementToLock.style.marginRight = prevMarginStyle;
 		};
-	}, [element, lock, scrollbarWidth]);
+	}, [element, lock]);
 };
 
 export default useScrollLock;

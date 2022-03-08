@@ -5,6 +5,8 @@ import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
+import { ReadingRoomFilterId } from '@reading-room/types';
+import { mapQueryToFields } from '@reading-room/utils';
 import { Icon } from '@shared/components';
 
 import { AdvancedFilterFields, MetadataProp, Operator } from './AdvancedFilterFields';
@@ -21,10 +23,12 @@ const initialFields = (): AdvancedFilterFieldsState => ({
 	value: '',
 });
 
-const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className }) => {
+const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, values }) => {
 	const { control, getValues, reset } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
-			advanced: [initialFields()],
+			advanced: values?.advanced
+				? mapQueryToFields(ReadingRoomFilterId.Advanced, values.advanced)
+				: [initialFields()],
 		},
 		resolver: yupResolver(ADVANCED_FILTER_FORM_SCHEMA()),
 	});
