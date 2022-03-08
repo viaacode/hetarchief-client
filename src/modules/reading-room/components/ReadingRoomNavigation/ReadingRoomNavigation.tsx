@@ -13,7 +13,7 @@ import { selectShowNavigationBorder } from '@shared/store/ui';
 import styles from './ReadingRoomNavigation.module.scss';
 import { ReadingRoomNavigationProps } from './ReadingRoomNavigation.types';
 
-const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
+const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title, className }) => {
 	const { t } = useTranslation();
 	const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
 	const showBorder = useSelector(selectShowNavigationBorder);
@@ -25,7 +25,7 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 	};
 
 	return (
-		<Navigation contextual showBorder={showBorder}>
+		<Navigation contextual className={className} showBorder={showBorder}>
 			<Navigation.Left placement="left">
 				<Link href="/" passHref={true}>
 					<a>

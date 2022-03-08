@@ -23,7 +23,7 @@ const Modal: FC<ModalProps> = ({
 	excludeScrollbar = true,
 }) => {
 	const [ready, setReady] = useState(false);
-	const scrollbarWidth = useScrollbarWidth();
+	const scrollbarWidth = useScrollbarWidth(!!isOpen);
 	useScrollLock(isOpen ?? false);
 
 	// See https://github.com/reactjs/react-modal#examples

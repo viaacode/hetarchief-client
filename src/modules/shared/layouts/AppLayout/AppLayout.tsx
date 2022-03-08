@@ -24,6 +24,7 @@ import { useAppDispatch } from '@shared/store';
 import { getTosAction } from '@shared/store/tos/tos.slice';
 import {
 	selectIsStickyLayout,
+	selectShowFooter,
 	selectShowNavigationBorder,
 	setShowAuthModal,
 } from '@shared/store/ui/';
@@ -36,6 +37,7 @@ const AppLayout: FC = ({ children }) => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
+	const showFooter = useSelector(selectShowFooter);
 
 	const showBorder = useSelector(selectShowNavigationBorder);
 
@@ -128,7 +130,9 @@ const AppLayout: FC = ({ children }) => {
 				transition={Slide}
 			/>
 
-			<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
+			{showFooter && (
+				<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
+			)}
 		</div>
 	);
 };

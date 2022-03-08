@@ -1,0 +1,9 @@
+@use "styles/abstracts" as *;
+
+.c-request-access-blade {
+	:global(.c-input--textarea .c-input__field) {
+		@include respond-to("sm") {
+			min-height: 10rem;
+		}
+	}
+}

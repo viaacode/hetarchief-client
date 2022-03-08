@@ -20,6 +20,7 @@ $align: (left, right, center);
 
  $size: (
 	"14": $font-size-sm,
+	"22": 2.2rem,
 	"24": $font-size-lg,
  );
  @include generate-utils("font-size", "font-size", $size);
@@ -38,6 +39,7 @@ $align: (left, right, center);
  */
 
  $height: (
+	"12_5" :$line-height-1xl,
 	"13": $line-height-2xl,
  );
  @include generate-utils("line-height", "line-height", $height);

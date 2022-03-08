@@ -130,11 +130,19 @@ const CPRequestsPage: NextPage = () => {
 							size="md"
 							onClear={() => {
 								setFilters({
-									search: undefined,
+									search: '',
 									page: 1,
 								});
 							}}
 							onSearch={(searchValue: string) => {
+								// Force rerender
+								if (filters.search === searchValue) {
+									setFilters({
+										search: '',
+										page: 1,
+									});
+								}
+
 								setFilters({
 									search: searchValue,
 									page: 1,

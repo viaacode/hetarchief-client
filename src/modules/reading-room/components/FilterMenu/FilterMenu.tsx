@@ -20,6 +20,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	activeSort,
 	className,
 	filters = [],
+	filterValues,
 	label,
 	isMobileOpen = false,
 	isOpen = true,
@@ -138,6 +139,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 							key={`filter-menu-option-${option.id}`}
 							className={styles['c-filter-menu__option']}
 							activeFilter={activeFilter}
+							values={filterValues?.[option.id]}
 							onClick={onFilterClick}
 							onFormReset={onFilterFormReset}
 							onFormSubmit={onFilterFormSubmit}
