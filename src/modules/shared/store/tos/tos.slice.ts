@@ -33,7 +33,7 @@ export const tosSlice = createSlice({
 				state.updatedAt = undefined;
 			})
 			.addCase(getTosAction.fulfilled, (state, action) => {
-				state.updatedAt = action.payload?.updatedAt.updated_at;
+				state.updatedAt = action.payload?.updatedAt;
 			})
 			.addCase(getTosAction.rejected, (state) => {
 				state.updatedAt = undefined;
