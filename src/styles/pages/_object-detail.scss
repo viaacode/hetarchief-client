@@ -4,10 +4,13 @@ $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
 
 .p-object-detail {
+	visibility: visible;
 	flex-grow: 1;
 	min-height: 0;
 	display: flex;
 	flex-flow: column;
+
+	// Elements
 
 	&__wrapper {
 		flex-grow: 1;
@@ -125,6 +128,14 @@ $metadata-collapsed-width: 36vw;
 			display: none;
 		}
 	}
+
+	// Modifiers
+
+	&--loading {
+		display: none;
+	}
+
+	// Media queries
 
 	@include respond-at(md) {
 		.p-object-detail__metadata {

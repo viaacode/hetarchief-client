@@ -14,7 +14,7 @@ import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS, PARSED_METADATA_FIELDS } from '@medi
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { MediaTypes, ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
-import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
+import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import {
 	useElementSize,
 	useHideFooter,
@@ -181,68 +181,68 @@ const ObjectDetailPage: NextPage = () => {
 				strategy="beforeInteractive"
 				src="/flowplayer/plugins/google-analytics.min.js"
 			/>
-			{!isLoadingMediaInfo && mediaInfo ? (
-				<div className="p-object-detail">
-					<Head>
-						<title>{createPageTitle('Object detail')}</title>
-						<meta name="description" content="Object detail omschrijving" />
-					</Head>
-					{/* TODO: bind title to state */}
-					<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
-					<ScrollableTabs
-						className="p-object-detail__tabs"
-						variants={['dark']}
-						tabs={tabs}
-						onClick={onTabClick}
-					/>
-					<article
+			<div className={'p-object-detail'}>
+				<Head>
+					<title>{createPageTitle('Object detail')}</title>
+					<meta name="description" content="Object detail omschrijving" />
+				</Head>
+				{/* TODO: bind title to state */}
+				<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
+				<ScrollableTabs
+					className="p-object-detail__tabs"
+					variants={['dark']}
+					tabs={tabs}
+					onClick={onTabClick}
+				/>
+				{isLoadingMediaInfo && <Loading />}
+				<article
+					className={clsx(
+						'p-object-detail__wrapper',
+						isLoadingMediaInfo && 'p-object-detail--loading',
+						expandMetadata && 'p-object-detail__wrapper--expanded',
+						activeTab === ObjectDetailTabs.Metadata &&
+							'p-object-detail__wrapper--metadata',
+						activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
+					)}
+				>
+					<Button
 						className={clsx(
-							'p-object-detail__wrapper',
-							expandMetadata && 'p-object-detail__wrapper--expanded',
-							activeTab === ObjectDetailTabs.Metadata &&
-								'p-object-detail__wrapper--metadata',
-							activeTab === ObjectDetailTabs.Media &&
-								'p-object-detail__wrapper--video'
+							'p-object-detail__expand-button',
+							expandMetadata && 'p-object-detail__expand-button--expanded'
 						)}
-					>
-						<Button
-							className={clsx(
-								'p-object-detail__expand-button',
-								expandMetadata && 'p-object-detail__expand-button--expanded'
-							)}
-							icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
-							onClick={onClickToggle}
-							variants="white"
-						/>
-						<div className="p-object-detail__video">
-							{mediaType ? (
-								<p>media</p>
-							) : (
-								<>
-									<Button
-										className="p-object-detail__flowplayer-fullscreen-button"
-										icon={<Icon name="expand" />}
-										variants={['black']}
-										onClick={() => setIsMediaFullscreen(true)}
-									/>
-									<FlowPlayer
-										className="p-object-detail__flowplayer"
-										src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-										poster="https://via.placeholder.com/1920x1080"
-										title="Elephants dream"
-										pause={pauseMedia}
-										onPlay={() => setPauseMedia(false)}
-										fullscreen={isMediaFullscreen}
-										customControls={
-											<Button
-												className="p-object-detail__flowplayer-fullscreen-button p-object-detail__flowplayer-fullscreen-button--exit"
-												icon={<Icon name="compress" />}
-												variants={['white']}
-												onClick={() => setIsMediaFullscreen(false)}
-											/>
-										}
-									/>
-									{/* <ObjectPlaceholder
+						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
+						onClick={onClickToggle}
+						variants="white"
+					/>
+					<div className="p-object-detail__video">
+						{mediaType ? (
+							<p>media</p>
+						) : (
+							<>
+								<Button
+									className="p-object-detail__flowplayer-fullscreen-button"
+									icon={<Icon name="expand" />}
+									variants={['black']}
+									onClick={() => setIsMediaFullscreen(true)}
+								/>
+								<FlowPlayer
+									className="p-object-detail__flowplayer"
+									src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+									poster="https://via.placeholder.com/1920x1080"
+									title="Elephants dream"
+									pause={pauseMedia}
+									onPlay={() => setPauseMedia(false)}
+									fullscreen={isMediaFullscreen}
+									customControls={
+										<Button
+											className="p-object-detail__flowplayer-fullscreen-button p-object-detail__flowplayer-fullscreen-button--exit"
+											icon={<Icon name="compress" />}
+											variants={['white']}
+											onClick={() => setIsMediaFullscreen(false)}
+										/>
+									}
+								/>
+								{/* <ObjectPlaceholder
 								{...objectPlaceholderMock}
 								openModalButtonLabel={t(
 									'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
@@ -251,40 +251,41 @@ const ObjectDetailPage: NextPage = () => {
 									'pages/leeszaal/reading-room-slug/object-id/index___sluit'
 								)}
 							/> */}
-								</>
-							)}
-						</div>
-						<div
-							ref={metadataRef}
-							className={clsx(
-								'p-object-detail__metadata',
-								expandMetadata && 'p-object-detail__metadata--expanded'
-							)}
-						>
-							<div>
-								<div className="u-px-32">
-									{/* TODO: bind content to state */}
-									<h3 className="u-pt-32 u-pb-24">{mediaInfo.name}</h3>
-									<p className="u-pb-24">{mediaInfo.description}</p>
-									<div className="u-pb-24 p-object-detail__actions">
-										<Button
-											className="p-object-detail__export"
-											iconStart={<Icon name="export" />}
-										>
-											<span className="u-text-ellipsis u-display-none u-display-block:md">
-												{t(
-													'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
-												)}
-											</span>
-											<span className="u-text-ellipsis u-display-none:md">
-												{t(
-													'pages/leeszaal/reading-room-slug/object-id/index___metadata'
-												)}
-											</span>
-										</Button>
-										<DynamicActionMenu {...MEDIA_ACTIONS} />
-									</div>
+							</>
+						)}
+					</div>
+					<div
+						ref={metadataRef}
+						className={clsx(
+							'p-object-detail__metadata',
+							expandMetadata && 'p-object-detail__metadata--expanded'
+						)}
+					>
+						<div>
+							<div className="u-px-32">
+								{/* TODO: bind content to state */}
+								<h3 className="u-pt-32 u-pb-24">{mediaInfo?.name}</h3>
+								<p className="u-pb-24">{mediaInfo?.description}</p>
+								<div className="u-pb-24 p-object-detail__actions">
+									<Button
+										className="p-object-detail__export"
+										iconStart={<Icon name="export" />}
+									>
+										<span className="u-text-ellipsis u-display-none u-display-block:md">
+											{t(
+												'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+											)}
+										</span>
+										<span className="u-text-ellipsis u-display-none:md">
+											{t(
+												'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+											)}
+										</span>
+									</Button>
+									<DynamicActionMenu {...MEDIA_ACTIONS} />
 								</div>
+							</div>
+							{mediaInfo && (
 								<Metadata
 									className="u-px-32"
 									columns={
@@ -294,13 +295,11 @@ const ObjectDetailPage: NextPage = () => {
 									}
 									metadata={PARSED_METADATA_FIELDS(mediaInfo)}
 								/>
-							</div>
+							)}
 						</div>
-					</article>
-				</div>
-			) : (
-				<p>Loading...</p>
-			)}
+					</div>
+				</article>
+			</div>
 		</>
 	);
 };
