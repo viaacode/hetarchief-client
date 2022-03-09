@@ -176,7 +176,6 @@ const ObjectDetailPage: NextPage = () => {
 					<meta name="description" content="Object detail omschrijving" />
 				</Head>
 				{/* TODO: bind title to state */}
-				{/* TODO: use correct left and right sections */}
 				<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
 				<ScrollableTabs
 					className="p-object-detail__tabs"
@@ -203,8 +202,6 @@ const ObjectDetailPage: NextPage = () => {
 						variants="white"
 					/>
 					<div className="p-object-detail__video">
-						{/* http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4 */}
-						{/* https://via.placeholder.com/1920x1080 */}
 						<FlowPlayer
 							className="p-object-detail__flowplayer"
 							src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
