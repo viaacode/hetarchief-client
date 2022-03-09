@@ -15,7 +15,8 @@
 	border-radius: 4rem;
 	color: $white;
 	cursor: pointer;
-	transition: all $animate-default;
+	outline: 2px solid transparent;
+	transition: color $animate-default, background-color $animate-default, border-color $animate-default;
 
 	&:hover {
 		background-color: $shade;

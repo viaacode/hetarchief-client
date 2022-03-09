@@ -4,7 +4,7 @@ import { Collection, CollectionMedia } from '@account/types';
 import { ApiService } from '@shared/services';
 import { ApiResponseWrapper } from '@shared/types';
 
-import { COLLECTIONS_SERVICE_BASE_URL } from './collections.const';
+import { COLLECTIONS_SERVICE_BASE_URL, COLLECTIONS_SERVICE_OBJECTS_URL } from './collections.const';
 
 class CollectionsService extends ApiService {
 	public async getAll(): Promise<ApiResponseWrapper<Collection>> {
@@ -38,12 +38,28 @@ class CollectionsService extends ApiService {
 
 	public async update(id: string, json: Partial<Pick<Collection, 'name'>>): Promise<Collection> {
 		return await ApiService.getApi()
-			.put(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
+			.patch(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
 			.json();
 	}
 
 	public async delete(id: string): Promise<number> {
 		return await ApiService.getApi().delete(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`).json();
+	}
+
+	public async addToCollection(collection: string, item: string): Promise<unknown> {
+		return await ApiService.getApi()
+			.post(
+				`${COLLECTIONS_SERVICE_BASE_URL}/${collection}/${COLLECTIONS_SERVICE_OBJECTS_URL}/${item}`
+			)
+			.json();
+	}
+
+	public async removeFromCollection(collection: string, item: string): Promise<unknown> {
+		return await ApiService.getApi()
+			.delete(
+				`${COLLECTIONS_SERVICE_BASE_URL}/${collection}/${COLLECTIONS_SERVICE_OBJECTS_URL}/${item}`
+			)
+			.json();
 	}
 }
 

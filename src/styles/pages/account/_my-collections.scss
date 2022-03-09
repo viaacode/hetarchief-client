@@ -3,7 +3,7 @@
 $component: "p-account-my-collections";
 
 .#{$component} {
-    &__export--label {
+	&__export--label {
 		@include respond-to("xl") {
 			display: none;
 		}
@@ -27,12 +27,12 @@ $component: "p-account-my-collections";
 		}
 	}
 
-    // Avoid clicks on container triggering events
-    .c-content-input__icon--end {
-        pointer-events: none;
+	// Avoid clicks on container triggering events
+	.c-content-input__icon--end {
+		pointer-events: none;
 
-        & > button {
-            pointer-events: all;
-        }
-    }
+		& > button {
+			pointer-events: all;
+		}
+	}
 }

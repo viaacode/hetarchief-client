@@ -7,34 +7,37 @@ import { Modal } from '../Modal';
 import { ConfirmationModalProps } from './ConfirmationModal.types';
 
 const ConfirmationModal: FC<ConfirmationModalProps> = ({
-	title,
-	description,
+	text = {},
 	onConfirm,
 	onCancel,
 	onClose,
 	isOpen,
 }) => {
 	const [t] = useTranslation();
+	const { title, description, yes, no } = text;
 
 	const renderButtons = () => {
 		return (
 			<div className="u-text-center u-mb-48">
 				<Button
-					label={t(
-						'modules/shared/components/confirmation-modal/confirmation-modal___ja'
-					)}
-					name={'Ja'}
-					onClick={onConfirm}
-					variants={['black']}
-				/>
-				<Button
-					label={t(
-						'modules/shared/components/confirmation-modal/confirmation-modal___nee'
-					)}
-					className="u-ml-8"
-					name={'Ja'}
+					label={
+						no ||
+						t('modules/shared/components/confirmation-modal/confirmation-modal___nee')
+					}
+					className="u-mx-4"
+					name={'cancel'}
 					onClick={onCancel}
 					variants={['white']}
+				/>
+				<Button
+					label={
+						yes ||
+						t('modules/shared/components/confirmation-modal/confirmation-modal___ja')
+					}
+					className="u-mx-4"
+					name={'confirm'}
+					onClick={onConfirm}
+					variants={['black']}
 				/>
 			</div>
 		);
@@ -42,6 +45,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 
 	return (
 		<Modal
+			className="c-confirmation-modal"
 			onClose={onClose}
 			isOpen={isOpen}
 			title={

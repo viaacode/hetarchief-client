@@ -83,26 +83,34 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 				render={({ field }) => (
 					<ContentInput
 						{...field}
-						placeholder={t(
-							'modules/account/components/create-collection-button/create-collection-button___een-map'
-						)}
-						onClose={resetForm}
-						onOpen={clearForm}
-						onConfirm={onFormSubmit}
-						variants={['normal']}
-						iconStart={
-							!isOpen ? (
-								<Button variants={['platinum', 'sm']} icon={<Icon name="plus" />} />
+						autoCapitalize="off"
+						autoComplete="off"
+						autoCorrect="off"
+						iconStart={(handler) => {
+							return !isOpen ? (
+								<Button
+									variants={['platinum', 'sm']}
+									onClick={handler}
+									icon={<Icon name="plus" />}
+								/>
 							) : (
 								onOpenNode
-							)
-						}
+							);
+						}}
 						nodeSubmit={
 							<Button variants={['black', 'sm']} icon={<Icon name="check" />} />
 						}
 						nodeCancel={
 							<Button variants={['silver', 'sm']} icon={<Icon name="times" />} />
 						}
+						onClose={resetForm}
+						onConfirm={onFormSubmit}
+						onOpen={clearForm}
+						placeholder={t(
+							'modules/account/components/create-collection-button/create-collection-button___nieuwe-map'
+						)}
+						spellCheck="false"
+						variants={['normal']}
 					/>
 				)}
 			/>

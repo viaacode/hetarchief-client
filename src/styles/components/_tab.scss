@@ -3,11 +3,12 @@
 $component: "c-tab";
 
 .#{$component} {
-	display: inline-flex;
 	align-items: center;
+	background-color: inherit;
+	cursor: pointer;
+	display: inline-flex;
 	min-height: $tab-min-height;
 	padding: $tab-vertical-padding 1.2rem;
-	cursor: pointer;
 	transition: background-color $animate-default, color $animate-default;
 
 	@include respond-to("md") {
@@ -32,7 +33,7 @@ $component: "c-tab";
 	* Modifiers
 	*/
 
-	&--dark {
+	&.#{$component}--dark {
 		background-color: $black;
 		color: $white;
 
@@ -49,7 +50,7 @@ $component: "c-tab";
 		}
 	}
 
-	&--light {
+	&.#{$component}--light {
 		position: relative;
 		color: $neutral;
 

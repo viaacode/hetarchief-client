@@ -5,6 +5,7 @@ export interface Collection {
 	name: string;
 	updatedAt: string;
 	userProfileId: string;
+	objects?: Pick<CollectionMedia, 'id'>[];
 }
 
 export interface CollectionMedia {

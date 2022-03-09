@@ -6,6 +6,6 @@ import { Collection } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { ApiResponseWrapper } from '@shared/types';
 
-export function useGetCollections(): UseQueryResult<ApiResponseWrapper<Collection>> {
-	return useQuery([QUERY_KEYS.getCollections], () => collectionsService.getAll());
+export function useGetCollections(enabled = true): UseQueryResult<ApiResponseWrapper<Collection>> {
+	return useQuery([QUERY_KEYS.getCollections], () => collectionsService.getAll(), { enabled });
 }

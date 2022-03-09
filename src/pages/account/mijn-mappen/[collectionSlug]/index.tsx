@@ -14,12 +14,14 @@ import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
 import { collectionsService } from '@account/services/collections';
-import { Collection } from '@account/types';
+import { Collection, CollectionMedia } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { AddToCollectionBlade } from '@reading-room/components';
 import {
 	Icon,
+	IdentifiableMediaCard,
 	ListNavigationItem,
 	MediaCardList,
 	PaginationBar,
@@ -44,6 +46,8 @@ const AccountMyCollections: NextPage = () => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG);
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
+	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 
 	const collections = useGetCollections();
 
@@ -111,6 +115,17 @@ const AccountMyCollections: NextPage = () => {
 		});
 	};
 
+	const onMoveCollection = (item: IdentifiableMediaCard) => {
+		setSelected(item);
+		setShowAddToCollectionBlade(true);
+	};
+
+	const onRemoveFromCollection = (item: IdentifiableMediaCard, collection: Collection) => {
+		collectionsService.removeFromCollection(collection.id, item.id).then(() => {
+			collectionMedia.refetch();
+		});
+	};
+
 	/**
 	 * Render
 	 */
@@ -121,10 +136,15 @@ const AccountMyCollections: NextPage = () => {
 				before: true,
 				node: (
 					<Button
+						key={'export-collection'}
 						className="p-account-my-collections__export--label"
 						variants={['black']}
-						name={t('Metadata exporteren')}
-						label={t('Metadata exporteren')}
+						name={t(
+							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+						)}
+						label={t(
+							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+						)}
 						iconStart={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
@@ -136,9 +156,12 @@ const AccountMyCollections: NextPage = () => {
 				before: true,
 				node: (
 					<Button
+						key={'export-collection-mobile'}
 						className="p-account-my-collections__export--icon"
 						variants={['black']}
-						name={t('Metadata exporteren')}
+						name={t(
+							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+						)}
 						icon={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
@@ -152,10 +175,13 @@ const AccountMyCollections: NextPage = () => {
 							before: false,
 							node: (
 								<Button
+									key={'delete-collection'}
 									className="p-account-my-collections__delete"
 									variants={['silver']}
 									icon={<Icon name="trash" />}
-									name={t('Map verwijderen')}
+									name={t(
+										'pages/account/mijn-mappen/collection-slug/index___map-verwijderen'
+									)}
 									onClick={(e) => {
 										e.stopPropagation();
 										setShowConfirmDelete(true);
@@ -167,6 +193,21 @@ const AccountMyCollections: NextPage = () => {
 				: []),
 		],
 		[t, activeCollection]
+	);
+
+	const renderActions = (item: IdentifiableMediaCard, collection: Collection) => (
+		<>
+			<Button
+				variants={['text']}
+				label={t('pages/account/mijn-mappen/collection-slug/index___verwijderen')}
+				onClick={() => onRemoveFromCollection(item, collection)}
+			/>
+			<Button
+				variants={['text']}
+				label={t('pages/account/mijn-mappen/collection-slug/index___verplaatsen')}
+				onClick={() => onMoveCollection(item)}
+			/>
+		</>
 	);
 
 	return (
@@ -216,19 +257,27 @@ const AccountMyCollections: NextPage = () => {
 
 							<div className="l-container u-mb-24:md u-mb-32">
 								<SearchBar
+									isDisabled={collectionMedia.isFetching}
 									backspaceRemovesValue={false}
 									className="p-account-my-collections__search"
 									instanceId="collections-search-bar"
 									light={true}
-									placeholder={t('Zoek')}
+									placeholder={t(
+										'pages/account/mijn-mappen/collection-slug/index___zoek'
+									)}
 									searchValue={filters.search}
 									onClear={() => {
 										setFilters({
-											search: undefined,
+											search: '',
 											page: 1,
 										});
 									}}
 									onSearch={(searchValue: string) => {
+										// TODO: avoid rerender
+										// Force rerender to avoid visual disconnect in edge-case
+										searchValue === filters.search &&
+											setFilters({ search: '' });
+
 										setFilters({
 											search: searchValue,
 											page: 1,
@@ -239,15 +288,28 @@ const AccountMyCollections: NextPage = () => {
 
 							<div className="l-container">
 								<MediaCardList
+									onItemTitleClick={({ item }) =>
+										router.push(
+											`/${ROUTES.spaces}/TODO/${
+												(item as IdentifiableMediaCard).id
+											}`
+										)
+									}
 									keywords={filters.search ? [filters.search] : []}
 									items={collectionMedia?.data?.items.map((media) => {
-										return {
+										const base: IdentifiableMediaCard = {
+											id: media.id,
 											description: media.description,
 											publishedBy: 'Aanbieder', // TODO: bind to data
 											publishedAt: new Date('01 Jan 1970'), // TODO: bind to data
 											title: media.name,
 											preview: 'https://cataas.com/cat', // TODO: bind to data
 											bookmarkIsSolid: true,
+										};
+
+										return {
+											...base,
+											actions: renderActions(base, activeCollection),
 										};
 									})}
 									view={'list'}
@@ -276,6 +338,10 @@ const AccountMyCollections: NextPage = () => {
 			</AccountLayout>
 
 			<ConfirmationModal
+				text={{
+					yes: t('pages/account/mijn-mappen/collection-slug/index___verwijderen'),
+					no: t('pages/account/mijn-mappen/collection-slug/index___annuleren'),
+				}}
 				isOpen={activeCollection && showConfirmDelete}
 				onClose={() => setShowConfirmDelete(false)}
 				onCancel={() => setShowConfirmDelete(false)}
@@ -286,6 +352,19 @@ const AccountMyCollections: NextPage = () => {
 						collectionsService.delete(activeCollection.id).then(() => {
 							collections.refetch();
 						});
+				}}
+			/>
+
+			<AddToCollectionBlade
+				isOpen={isAddToCollectionBladeOpen}
+				selected={selected || undefined}
+				onClose={() => {
+					setShowAddToCollectionBlade(false);
+					setSelected(null);
+				}}
+				onSubmit={() => {
+					setShowAddToCollectionBlade(false);
+					setSelected(null);
 				}}
 			/>
 		</>
