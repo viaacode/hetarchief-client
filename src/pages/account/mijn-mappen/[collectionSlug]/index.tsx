@@ -136,6 +136,7 @@ const AccountMyCollections: NextPage = () => {
 				before: true,
 				node: (
 					<Button
+						key={'export-collection'}
 						className="p-account-my-collections__export--label"
 						variants={['black']}
 						name={t(
@@ -155,6 +156,7 @@ const AccountMyCollections: NextPage = () => {
 				before: true,
 				node: (
 					<Button
+						key={'export-collection-mobile'}
 						className="p-account-my-collections__export--icon"
 						variants={['black']}
 						name={t(
@@ -173,6 +175,7 @@ const AccountMyCollections: NextPage = () => {
 							before: false,
 							node: (
 								<Button
+									key={'delete-collection'}
 									className="p-account-my-collections__delete"
 									variants={['silver']}
 									icon={<Icon name="trash" />}
@@ -254,6 +257,7 @@ const AccountMyCollections: NextPage = () => {
 
 							<div className="l-container u-mb-24:md u-mb-32">
 								<SearchBar
+									isDisabled={collectionMedia.isFetching}
 									backspaceRemovesValue={false}
 									className="p-account-my-collections__search"
 									instanceId="collections-search-bar"
@@ -264,11 +268,16 @@ const AccountMyCollections: NextPage = () => {
 									searchValue={filters.search}
 									onClear={() => {
 										setFilters({
-											search: undefined,
+											search: '',
 											page: 1,
 										});
 									}}
 									onSearch={(searchValue: string) => {
+										// TODO: avoid rerender
+										// Force rerender to avoid visual disconnect in edge-case
+										searchValue === filters.search &&
+											setFilters({ search: '' });
+
 										setFilters({
 											search: searchValue,
 											page: 1,

@@ -23,6 +23,7 @@ import { ReadingRoomFilterId, ReadingRoomMediaType } from '@reading-room/types';
 import { mapFiltersToQuery, mapFiltersToTags } from '@reading-room/utils';
 import {
 	IdentifiableMediaCard,
+	Loading,
 	MediaCardList,
 	MediaCardViewMode,
 	PaginationBar,
@@ -65,15 +66,16 @@ const ReadingRoomPage: NextPage = () => {
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 
 	// TODO add other filters once available
-	const hasSearched = !!query?.search?.length || query?.mediaType !== ReadingRoomMediaType.All;
+	const hasSearched = !!query?.search?.length || query?.format !== ReadingRoomMediaType.All;
 
 	/**
 	 * Data
 	 */
 
-	const { data: mediaResultInfo } = useGetMediaObjects(
+	const { isFetching, data: mediaResultInfo } = useGetMediaObjects(
 		{
 			query: (query.search || []).join(' '),
+			format: (query.format as ReadingRoomMediaType) || READING_ROOM_QUERY_PARAM_INIT.format,
 		},
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT
@@ -84,9 +86,13 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
-		const buckets = mediaResultInfo?.aggregations.dcterms_format.buckets || [
-			{ key: 'video', doc_count: 0 }, // Provide mock value for reduce
-		];
+		let buckets = mediaResultInfo?.aggregations.dcterms_format.buckets;
+
+		if (!buckets || buckets.length === 0) {
+			buckets = [
+				{ key: 'video', doc_count: 0 }, // Provide mock value for reduce
+			];
+		}
 
 		setMediaCount({
 			[ReadingRoomMediaType.All]: buckets
@@ -115,9 +121,9 @@ const ReadingRoomPage: NextPage = () => {
 						count={mediaCount[tab.id as ReadingRoomMediaType]}
 					/>
 				),
-				active: tab.id === query.mediaType,
+				active: tab.id === query.format,
 			})),
-		[query.mediaType, mediaCount]
+		[query.format, mediaCount]
 	);
 
 	const toggleOptions: ToggleOption[] = useMemo(
@@ -174,7 +180,7 @@ const ReadingRoomPage: NextPage = () => {
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
 		setQuery({ orderProp, orderDirection });
 
-	const onTabClick = (tabId: string | number) => setQuery({ mediaType: String(tabId) });
+	const onTabClick = (tabId: string | number) => setQuery({ format: String(tabId) });
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
@@ -228,6 +234,45 @@ const ReadingRoomPage: NextPage = () => {
 			</div>
 		);
 	};
+
+	const renderResults = () => (
+		<>
+			<MediaCardList
+				items={mediaResultInfo?.items
+					// TODO: check why these 'empty' results are there
+					?.filter((mediaObject) => mediaObject.type !== 'SOLR')
+					.map(
+						(mediaObject): IdentifiableMediaCard => ({
+							id: mediaObject.schema_identifier,
+							description: mediaObject.schema_description,
+							title: mediaObject.schema_name,
+							publishedAt: mediaObject.schema_date_published
+								? new Date(mediaObject.schema_date_published)
+								: undefined,
+							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
+							type: mediaObject.dcterms_format || undefined,
+						})
+					)}
+				keywords={keywords}
+				sidebar={renderFilterMenu()}
+				onItemBookmark={({ item }) => onMediaBookmark(item as IdentifiableMediaCard)}
+				view={viewMode}
+			/>
+			<PaginationBar
+				className="u-mb-48"
+				start={query.page * READING_ROOM_ITEM_COUNT}
+				count={READING_ROOM_ITEM_COUNT}
+				showBackToTop
+				total={mediaCount[query.format as ReadingRoomMediaType]}
+				onPageChange={(page) =>
+					setQuery({
+						...query,
+						page: page,
+					})
+				}
+			/>
+		</>
+	);
 
 	return (
 		<>
@@ -293,47 +338,7 @@ const ReadingRoomPage: NextPage = () => {
 								/>
 							</>
 						)}
-						{showResults && (
-							<>
-								<MediaCardList
-									items={mediaResultInfo?.items
-										// TODO: check why these 'empty' results are there
-										?.filter((mediaObject) => mediaObject.type !== 'SOLR')
-										.map(
-											(mediaObject): IdentifiableMediaCard => ({
-												id: mediaObject.schema_identifier,
-												description: mediaObject.schema_description,
-												title: mediaObject.schema_name,
-												publishedAt: mediaObject.schema_date_published
-													? new Date(mediaObject.schema_date_published)
-													: undefined,
-												publishedBy:
-													mediaObject.schema_creator?.Maker?.join(', '),
-												type: mediaObject.dcterms_format || undefined,
-											})
-										)}
-									keywords={keywords}
-									sidebar={renderFilterMenu()}
-									onItemBookmark={({ item }) =>
-										onMediaBookmark(item as IdentifiableMediaCard)
-									}
-									view={viewMode}
-								/>
-								<PaginationBar
-									className="u-mb-48"
-									start={query.page * READING_ROOM_ITEM_COUNT}
-									count={READING_ROOM_ITEM_COUNT}
-									showBackToTop
-									total={mediaCount[query.mediaType as ReadingRoomMediaType]}
-									onPageChange={(page) =>
-										setQuery({
-											...query,
-											page: page,
-										})
-									}
-								/>
-							</>
-						)}
+						{showResults && (isFetching ? <Loading /> : renderResults())}
 					</div>
 				</section>
 			</div>

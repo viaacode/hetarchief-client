@@ -38,7 +38,7 @@ class CollectionsService extends ApiService {
 
 	public async update(id: string, json: Partial<Pick<Collection, 'name'>>): Promise<Collection> {
 		return await ApiService.getApi()
-			.put(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
+			.patch(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
 			.json();
 	}
 

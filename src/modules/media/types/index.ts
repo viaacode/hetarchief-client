@@ -32,6 +32,7 @@ export interface MediaInfo {
 
 export class MediaSearchFilters {
 	query?: string;
+	format?: MediaTypes;
 }
 
 export interface MediaSearchAggregationPair {
