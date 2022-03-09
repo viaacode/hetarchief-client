@@ -1,9 +1,10 @@
-import { Button, TabProps, TagList } from '@meemoo/react-components';
+import { Button, FlowPlayer, TabProps, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import Script from 'next/script';
 import { stringifyUrl } from 'query-string';
 import { useMemo, useRef, useState } from 'react';
 
@@ -21,12 +22,12 @@ import {
 	DynamicActionMenu,
 	Metadata,
 	MetadataItem,
-	ObjectPlaceholder,
+	// ObjectPlaceholder,
 	RelatedObject,
 	RelatedObjectProps,
 } from 'modules/media/components';
 import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
-import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
+// import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
 	/**
@@ -139,98 +140,125 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	return (
-		<div className="p-object-detail">
-			<Head>
-				<title>{createPageTitle('Object detail')}</title>
-				<meta name="description" content="Object detail omschrijving" />
-			</Head>
-			{/* TODO: bind title to state */}
-			{/* TODO: use correct left and right sections */}
-			<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
-			<ScrollableTabs
-				className="p-object-detail__tabs"
-				variants={['dark']}
-				tabs={tabs}
-				onClick={onTabClick}
+		<>
+			{/* <!-- Flowplayer --> */}
+			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/chromecast.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/airplay.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
+			<Script
+				strategy="beforeInteractive"
+				src="/flowplayer/plugins/google-analytics.min.js"
 			/>
-			<article
-				className={clsx(
-					'p-object-detail__wrapper',
-					expandMetadata && 'p-object-detail__wrapper--expanded',
-					activeTab === ObjectDetailTabs.Metadata && 'p-object-detail__wrapper--metadata',
-					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
-				)}
-			>
-				<Button
-					className={clsx(
-						'p-object-detail__expand-button',
-						expandMetadata && 'p-object-detail__expand-button--expanded'
-					)}
-					icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
-					onClick={onClickToggle}
-					variants="white"
+			<div className="p-object-detail">
+				<Head>
+					<title>{createPageTitle('Object detail')}</title>
+					<meta name="description" content="Object detail omschrijving" />
+					{/* eslint-disable-next-line @next/next/no-css-tags */}
+					<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
+				</Head>
+				{/* TODO: bind title to state */}
+				{/* TODO: use correct left and right sections */}
+				<ReadingRoomNavigation title={'Leeszaal'} />
+				<ScrollableTabs
+					className="p-object-detail__tabs"
+					variants={['dark']}
+					tabs={tabs}
+					onClick={onTabClick}
 				/>
-				<div className="p-object-detail__video">
-					<ObjectPlaceholder
-						{...objectPlaceholderMock}
-						openModalButtonLabel={t(
-							'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-						)}
-						closeModalButtonLabel={t(
-							'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-						)}
-					/>
-				</div>
-				<div
-					ref={metadataRef}
+				<article
 					className={clsx(
-						'p-object-detail__metadata',
-						expandMetadata && 'p-object-detail__metadata--expanded'
+						'p-object-detail__wrapper',
+						expandMetadata && 'p-object-detail__wrapper--expanded',
+						activeTab === ObjectDetailTabs.Metadata &&
+							'p-object-detail__wrapper--metadata',
+						activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
 					)}
 				>
-					<div>
-						<div className="u-px-32">
-							{/* TODO: bind content to state */}
-							<h3 className="u-pt-32 u-pb-24">Op de koop toe: schepijs (1993)</h3>
-							<p className="u-pb-24">
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-								consectetur rutrum molestie. Mauris volutpat commodo velit, id
-								fringilla neque. Integer at fringilla orci, eget hendrerit lorem.
-								Donec malesuada non dui a elementum. Pellentesque habitant morbi
-								tristique senectus et netus et malesuada fames ac turpis egestas.
-								Vivamus convallis aliquet tellus a rutrum. Suspendisse ut posuere
-								lectus, vel elementum sapien.
-							</p>
-							<div className="u-pb-24 p-object-detail__actions">
-								<Button
-									className="p-object-detail__export"
-									iconStart={<Icon name="export" />}
-								>
-									<span className="u-text-ellipsis u-display-none u-display-block:md">
-										{t(
-											'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
-										)}
-									</span>
-									<span className="u-text-ellipsis u-display-none:md">
-										{t(
-											'pages/leeszaal/reading-room-slug/object-id/index___metadata'
-										)}
-									</span>
-								</Button>
-								<DynamicActionMenu {...MEDIA_ACTIONS()} />
-							</div>
-						</div>
-						<Metadata
-							className="u-px-32"
-							columns={
-								expandMetadata && metadataSize && metadataSize?.width > 500 ? 2 : 1
-							}
-							metadata={metaData}
+					<Button
+						className={clsx(
+							'p-object-detail__expand-button',
+							expandMetadata && 'p-object-detail__expand-button--expanded'
+						)}
+						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
+						onClick={onClickToggle}
+						variants="white"
+					/>
+					<div className="p-object-detail__video">
+						{/* http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4 */}
+						{/* https://via.placeholder.com/1920x1080 */}
+						<FlowPlayer
+							className="p-object-detail__flowplayer"
+							src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+							poster="https://via.placeholder.com/1920x1080"
+							title="Elephants dream"
 						/>
+						{/* <ObjectPlaceholder
+							{...objectPlaceholderMock}
+							openModalButtonLabel={t(
+								'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+							)}
+							closeModalButtonLabel={t(
+								'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+							)}
+						/> */}
 					</div>
-				</div>
-			</article>
-		</div>
+					<div
+						ref={metadataRef}
+						className={clsx(
+							'p-object-detail__metadata',
+							expandMetadata && 'p-object-detail__metadata--expanded'
+						)}
+					>
+						<div>
+							<div className="u-px-32">
+								{/* TODO: bind content to state */}
+								<h3 className="u-pt-32 u-pb-24">Op de koop toe: schepijs (1993)</h3>
+								<p className="u-pb-24">
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+									consectetur rutrum molestie. Mauris volutpat commodo velit, id
+									fringilla neque. Integer at fringilla orci, eget hendrerit
+									lorem. Donec malesuada non dui a elementum. Pellentesque
+									habitant morbi tristique senectus et netus et malesuada fames ac
+									turpis egestas. Vivamus convallis aliquet tellus a rutrum.
+									Suspendisse ut posuere lectus, vel elementum sapien.
+								</p>
+								<div className="u-pb-24 p-object-detail__actions">
+									<Button
+										className="p-object-detail__export"
+										iconStart={<Icon name="export" />}
+									>
+										<span className="u-text-ellipsis u-display-none u-display-block:md">
+											{t(
+												'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+											)}
+										</span>
+										<span className="u-text-ellipsis u-display-none:md">
+											{t(
+												'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+											)}
+										</span>
+									</Button>
+									<DynamicActionMenu {...MEDIA_ACTIONS()} />
+								</div>
+							</div>
+							<Metadata
+								className="u-px-32"
+								columns={
+									expandMetadata && metadataSize && metadataSize?.width > 500
+										? 2
+										: 1
+								}
+								metadata={metaData}
+							/>
+						</div>
+					</div>
+				</article>
+			</div>
+		</>
 	);
 };
 

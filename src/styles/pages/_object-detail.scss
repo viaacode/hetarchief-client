@@ -52,7 +52,7 @@ $metadata-collapsed-width: 36vw;
 					font-size: $font-size-lg;
 				}
 
-				&--active {
+				&.c-tab--active {
 					background-color: $white;
 				}
 			}
@@ -61,6 +61,16 @@ $metadata-collapsed-width: 36vw;
 		@include respond-at(md) {
 			display: none;
 		}
+	}
+
+	&__flowplayer {
+		height: min-content;
+    	align-self: center;
+	}
+
+	&__video {
+		display: grid;
+		background-color: $silver;
 	}
 
 	&__metadata {
@@ -91,8 +101,12 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	@include respond-at(md) {
-		.p-object-detail__metadata, .p-object-detail__video {
+		.p-object-detail__metadata {
 			display: block;
+		}
+
+		.p-object-detail__video {
+			display: grid;
 		}
 	}
 
