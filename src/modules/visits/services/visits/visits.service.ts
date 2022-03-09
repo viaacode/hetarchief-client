@@ -4,14 +4,15 @@ import { CreateVisitRequest } from '@reading-room/services/reading-room/reading-
 import { ApiService } from '@shared/services/api-service';
 import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
-import { PatchVisit, VisitInfo } from '@visits/types';
+import { PatchVisit, VisitInfo, VisitStatus, VisitTimeframe } from '@visits/types';
 
 import { VISITS_SERVICE_BASE_URL } from './visits.service.const';
 
 export class VisitsService {
 	public static async getAll(
 		searchInput = '',
-		status: string | undefined,
+		status: VisitStatus | undefined,
+		timeframe: VisitTimeframe | undefined,
 		page = 0,
 		size = 20,
 		orderProp: keyof VisitInfo = 'startAt',
@@ -24,6 +25,7 @@ export class VisitsService {
 					query: {
 						query: `%${searchInput}%`,
 						status,
+						timeframe,
 						page,
 						size,
 						orderProp,
