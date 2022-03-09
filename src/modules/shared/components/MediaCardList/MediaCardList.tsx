@@ -3,7 +3,7 @@ import { FC, memo, MouseEvent } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { MediaCard } from '../MediaCard';
-import { MediaCardProps } from '../MediaCard/MediaCard.types';
+import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
 
 import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
@@ -51,7 +51,10 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				{isMasonryView && renderSidebar()}
 				{items.map((item, i) => (
 					<MediaCard
-						key={Buffer.from(item.title || i.toString(), 'base64').toString()}
+						key={
+							(item as IdentifiableMediaCard).id ||
+							`${encodeURIComponent(item.title || 'card')}--${i}`
+						}
 						{...item}
 						keywords={keywords}
 						view={view}
