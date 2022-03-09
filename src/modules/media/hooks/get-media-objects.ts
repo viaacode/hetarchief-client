@@ -6,7 +6,7 @@ import { ReadingRoomMediaType } from '@reading-room/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { ApiResponseWrapper, ElasticsearchAggregations } from '@shared/types/api';
 
-import { MediaFormat, MediaInfo } from '../types';
+import { MediaInfo, MediaTypes } from '../types';
 
 export function useGetMediaObjects(
 	filters:
@@ -20,7 +20,7 @@ export function useGetMediaObjects(
 ): UseQueryResult<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
 	return useQuery([QUERY_KEYS.getMediaObjects, { filters, page, size }], () => {
 		const { format, ...rest } = filters || {};
-		const mediaFormat: MediaFormat | undefined =
+		const mediaFormat: MediaTypes | undefined =
 			format !== ReadingRoomMediaType.All ? format : undefined;
 
 		// TODO: improve (?)
