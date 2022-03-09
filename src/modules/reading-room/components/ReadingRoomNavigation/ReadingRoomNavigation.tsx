@@ -11,7 +11,7 @@ import { CopyButton } from '@shared/components/CopyButton';
 import styles from './ReadingRoomNavigation.module.scss';
 import { ReadingRoomNavigationProps } from './ReadingRoomNavigation.types';
 
-const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
+const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title, className }) => {
 	const { t } = useTranslation();
 	const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
 
@@ -22,7 +22,7 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({ title }) => {
 	};
 
 	return (
-		<Navigation contextual>
+		<Navigation className={className} contextual>
 			<Navigation.Left placement="left">
 				<Link href="/" passHref={true}>
 					<a>

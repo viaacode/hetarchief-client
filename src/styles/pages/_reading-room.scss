@@ -39,5 +39,6 @@
 
 	@include respond-at("md") {
 		margin: auto 0;
+		margin-left: $spacer-md;
 	}
 }

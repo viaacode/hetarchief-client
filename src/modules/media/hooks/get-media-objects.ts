@@ -13,10 +13,10 @@ export function useGetMediaObjects(
 				query: string | undefined;
 		  }
 		| undefined,
-	from: number,
+	page: number,
 	size: number
 ): UseQueryResult<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
-	return useQuery([QUERY_KEYS.getMediaObjects, { filters, from, size }], () =>
-		MediaService.getAll(filters, from, size)
+	return useQuery([QUERY_KEYS.getMediaObjects, { filters, page, size }], () =>
+		MediaService.getAll(filters, page, size)
 	);
 }

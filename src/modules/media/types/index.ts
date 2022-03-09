@@ -1,4 +1,4 @@
-export type MediaFormat = 'video' | 'audio' | null;
+export type MediaTypes = 'video' | 'audio' | null;
 
 export interface MediaInfo {
 	schema_in_language: unknown | null;
@@ -24,7 +24,7 @@ export interface MediaInfo {
 	schema_maintainer: {
 		schema_identifier: string;
 	}[];
-	dcterms_format: MediaFormat;
+	dcterms_format: MediaTypes;
 	schema_name: string;
 	// TODO: See if this is still necessary once resolved in proxy
 	type?: string;
@@ -35,7 +35,7 @@ export class MediaSearchFilters {
 }
 
 export interface MediaSearchAggregationPair {
-	key: MediaFormat;
+	key: MediaTypes;
 	doc_count: number;
 }
 
@@ -45,4 +45,9 @@ export interface MediaSearchAggregations {
 		doc_count_error_upper_bound: number;
 		sum_other_doc_count: number;
 	};
+}
+
+export enum ObjectDetailTabs {
+	Media = 'media',
+	Metadata = 'metadata',
 }

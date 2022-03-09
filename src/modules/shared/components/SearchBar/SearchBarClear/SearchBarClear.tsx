@@ -24,6 +24,7 @@ const SearchBarClear: FC<SearchBarClearProps> = ({
 				if (e.key === 'Enter') {
 					clearValue();
 				}
+				e.stopPropagation();
 			}}
 			className={cx(dropdownIndicatorCxState, className)}
 			tabIndex={0}

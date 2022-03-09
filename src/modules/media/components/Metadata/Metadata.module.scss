@@ -5,12 +5,12 @@ $black-20: color.adjust($black, $alpha: -0.8);
 $metadata-border: 0.1rem solid $black-20;
 
 .c-metadata {
-	border-top: $metadata-border;
 	overflow-y: hidden;
 
 	&__list {
 		@extend %reset-list;
 
+		border-top: $metadata-border;
 		margin-top: -0.1rem; // move top borders of first items in a column outside parent container to prevent double border
 		column-gap: $spacer-lg;
 	}
