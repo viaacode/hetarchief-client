@@ -17,26 +17,28 @@
 
 	@if not $min-bp {
 		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_min, $breakpoints) {}
+		@if map-property-not-found($_min, $breakpoints) {
+		}
 	}
 
 	@media screen and (min-width: $min-bp) {
 		@content;
 	}
-};
+}
 
 @mixin respond-to($_max) {
 	$max-bp: map.get($breakpoints, $_max);
 
 	@if not $max-bp {
 		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_max, $breakpoints) {}
+		@if map-property-not-found($_max, $breakpoints) {
+		}
 	}
 
 	@media screen and (max-width: calc($max-bp - 1px)) {
 		@content;
 	}
-};
+}
 
 @mixin respond-between($_min, $_max) {
 	$min-bp: map.get($breakpoints, $_min);
@@ -44,12 +46,14 @@
 
 	@if not $min-bp {
 		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_min, $breakpoints) {}
+		@if map-property-not-found($_min, $breakpoints) {
+		}
 	}
 
 	@if not $max-bp {
 		/* stylelint-disable-next-line block-no-empty */
-		@if map-property-not-found($_max, $breakpoints) {}
+		@if map-property-not-found($_max, $breakpoints) {
+		}
 	}
 
 	@if $min-bp >= $max-bp {
@@ -59,7 +63,7 @@
 	@media screen and (min-width: $min-bp) and (max-width: calc($max-bp - 1px)) {
 		@content;
 	}
-};
+}
 
 /**
  * Generators
@@ -73,7 +77,7 @@
 			#{$_prop}: $_value !important;
 		}
 	}
-};
+}
 
 /**
  * Utility class generator
@@ -100,7 +104,6 @@
 	@include generate-utils('text', 'text-align', $align, ("sm", "xl"));
 	// output: u-text-left, u-text-left:sm, u-text-left:xl
  */
-
 
 @mixin generate-utils($_name, $_properties, $_values, $_bps: null) {
 	@each $_key, $_value in $_values {
@@ -147,13 +150,14 @@
 		float: left;
 		height: 0;
 		padding-top: $height / $width * 100%;
-	  }
+	}
 
-	  &::after { /* to clear float */
+	&::after {
+		/* to clear float */
 		content: "";
 		display: table;
 		clear: both;
-	  }
+	}
 }
 
 @mixin text-ellipsis($block: false) {
@@ -171,13 +175,12 @@
  */
 
 @mixin generate-button-small {
-	height: 3.6rem;
+	height: $button-height-sm;
 	padding: 0.9rem 2rem;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-normal;
 	line-height: $line-height-base;
 }
-
 
 /**
  * Inputs
@@ -263,7 +266,6 @@
 			transform: translate(-50%, -50%);
 		}
 
-
 		// Background hover
 		&::before {
 			content: "";
@@ -279,7 +281,7 @@
 		// Radio button icon
 		&::after {
 			@if $type == "radio-button" {
-				content: ""
+				content: "";
 			}
 
 			z-index: get-z-layer("foreground");
@@ -307,7 +309,7 @@
 			background-color: $black;
 
 			&::after,
-			> span  {
+			> span {
 				opacity: 1;
 			}
 		}
@@ -324,13 +326,29 @@
 			}
 		}
 
-
 		&.c-#{$type}--checked {
 			.c-#{$type}__check-icon {
 				background-color: $zinc;
 			}
 		}
 	}
+
+	.c-#{$type}--no-label {
+		.c-#{$type}__check-icon {
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+}
+
+@mixin reset-input-field {
+	border-radius: 0;
+	color: $black;
+	display: block;
+	font-family: $font-family-primary;
+	transition: outline-color $animate-default, border-color $animate-default;
+	width: 100%;
 }
 
 /**
@@ -377,9 +395,7 @@
 	.#{$_root}__option {
 		border-right: 4px solid transparent;
 		color: $black;
-		transition:
-			background-color $animate-default,
-			border-color $animate-default,
+		transition: background-color $animate-default, border-color $animate-default,
 			border-right-width $animate-sm-in;
 
 		&--is-focused,
@@ -404,15 +420,15 @@
  */
 
 @mixin tabs-border-radius() {
-	border-radius: math.div(math.max(
-		$tab-line-size + ($tab-vertical-padding * 2),
-		$tab-min-height
-	), 2);
+	border-radius: math.div(
+		math.max($tab-line-size + ($tab-vertical-padding * 2), $tab-min-height),
+		2
+	);
 
 	@include respond-at("md") {
-		border-radius: math.div(math.max(
-			$tab-line-size-md + ($tab-vertical-padding-md * 2),
-			$tab-min-height-md
-		), 2);
+		border-radius: math.div(
+			math.max($tab-line-size-md + ($tab-vertical-padding-md * 2), $tab-min-height-md),
+			2
+		);
 	}
 }

@@ -19,6 +19,8 @@ import { NotificationCenter } from '@shared/components';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
+import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
 import { getTosAction } from '@shared/store/tos/tos.slice';
@@ -43,7 +45,7 @@ const AppLayout: FC = ({ children }) => {
 	const showFooter = useSelector(selectShowFooter);
 	const showNotificationsCenter = useSelector(selectShowNotificationsCenter);
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
-
+	const windowSize = useWindowSize();
 	const showBorder = useSelector(selectShowNavigationBorder);
 
 	const setNotificationsOpen = useCallback(
@@ -133,8 +135,9 @@ const AppLayout: FC = ({ children }) => {
 			</Navigation>
 
 			<main className="l-app__main">
-				{children}
-
+				<WindowSizeContext.Provider value={windowSize}>
+					{children}
+				</WindowSizeContext.Provider>
 				<NotificationCenter
 					isOpen={showNotificationsCenter}
 					onClose={() => setNotificationsOpen(false)}

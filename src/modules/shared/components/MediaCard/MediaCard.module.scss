@@ -70,5 +70,29 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		display: flex;
 		flex-direction: row;
 		flex-shrink: 0;
+
+		:global(.c-dropdown__content-open) {
+			box-shadow: $shadow-24-black-12;
+
+			:global(.c-menu) {
+				display: flex;
+				flex-flow: column nowrap;
+				padding: 0;
+
+				button {
+					border-radius: 0;
+
+					&:not(:last-child) {
+						border-bottom: 1px solid $silver;
+					}
+				}
+			}
+		}
+	}
+
+	&__title {
+		&--interactable {
+			cursor: pointer;
+		}
 	}
 }

@@ -20,8 +20,10 @@ $platinum: #f8f8f8;
  * Derived Colors
  */
 
-$zinc-40: color.adjust($zinc, $alpha: -0.6);
+$black-20: color.adjust($black, $alpha: -0.8);
 $teal-66: color.adjust($teal, $alpha: -0.34);
+$zinc-66: color.adjust($zinc, $alpha: -0.34);
+$zinc-40: color.adjust($zinc, $alpha: -0.6);
 
 /**
  * Shadow
@@ -168,6 +170,7 @@ $card-offset: 2rem;
  */
 
 $button-horizontal-whitespace: $spacer-md;
+$button-height-sm: $font-size-md * 2;
 
 /**
  * Dividers

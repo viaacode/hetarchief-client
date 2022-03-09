@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks';
 
-import useFooter from './use-footer';
+import useHideFooter from './use-hide-footer';
 
 let mockDispatch = jest.fn();
 jest.mock('react-redux', () => ({
@@ -9,10 +9,10 @@ jest.mock('react-redux', () => ({
 }));
 
 describe('Hooks', () => {
-	describe('useFooter', () => {
+	describe('useHideFooter', () => {
 		it('Should set showFooter in the store', () => {
 			mockDispatch = jest.fn();
-			renderHook(() => useFooter());
+			renderHook(() => useHideFooter());
 
 			expect(mockDispatch).toHaveBeenCalled();
 			expect(mockDispatch).toHaveBeenCalledTimes(1);
@@ -24,7 +24,7 @@ describe('Hooks', () => {
 
 		it('Should unset showFooter in the store', () => {
 			mockDispatch = jest.fn();
-			renderHook(() => useFooter(true));
+			renderHook(() => useHideFooter(true));
 
 			expect(mockDispatch).toHaveBeenCalled();
 			expect(mockDispatch).toHaveBeenCalledTimes(1);

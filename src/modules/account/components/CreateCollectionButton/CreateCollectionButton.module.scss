@@ -1,0 +1,9 @@
+@use "styles/abstracts" as *;
+
+$component: "c-create-collection-button";
+
+.#{$component} {
+    :global(.c-form-control__errors) {
+        font-size: $font-size-sm;
+    }
+}
