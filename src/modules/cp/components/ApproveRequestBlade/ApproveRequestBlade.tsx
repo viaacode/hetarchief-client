@@ -26,7 +26,7 @@ import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
 import { toastService } from '@shared/services';
-import { visitsService } from '@visits/services';
+import { VisitsService } from '@visits/services';
 import { VisitStatus } from '@visits/types';
 
 import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
@@ -65,26 +65,24 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const onFormSubmit = (values: ApproveRequestFormState) => {
 		selected &&
-			visitsService
-				.putById(selected.id, {
-					...selected,
-					status: VisitStatus.APPROVED,
-					startAt: values.accessFrom?.toISOString(),
-					endAt: values.accessTo?.toISOString(),
-					// TODO: remarks
-				})
-				.then(() => {
-					onSubmit?.(values);
+			VisitsService.patchById(selected.id, {
+				...selected,
+				status: VisitStatus.APPROVED,
+				startAt: values.accessFrom?.toISOString(),
+				endAt: values.accessTo?.toISOString(),
+				// TODO: remarks
+			}).then(() => {
+				onSubmit?.(values);
 
-					toastService.notify({
-						title: t(
-							'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
-						),
-						description: t(
-							'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
-						),
-					});
+				toastService.notify({
+					title: t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
+					),
+					description: t(
+						'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
+					),
 				});
+			});
 	};
 
 	const onSimpleDateChange = (
