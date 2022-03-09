@@ -12,4 +12,5 @@ export interface ActionItem {
 	iconName: IconLightNames;
 	id: string;
 	ariaLabel: string;
+	tooltip?: string;
 }

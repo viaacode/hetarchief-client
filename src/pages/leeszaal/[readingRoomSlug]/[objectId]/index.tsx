@@ -219,6 +219,7 @@ const ObjectDetailPage: NextPage = () => {
 							pause={pauseMedia}
 							onPlay={() => setPauseMedia(false)}
 							fullscreen={isMediaFullscreen}
+							onToggleFullscreen={(fullscreen) => setIsMediaFullscreen(fullscreen)}
 							customControls={
 								<Button
 									className="p-object-detail__flowplayer-fullscreen-button p-object-detail__flowplayer-fullscreen-button--exit"
@@ -274,7 +275,7 @@ const ObjectDetailPage: NextPage = () => {
 											)}
 										</span>
 									</Button>
-									<DynamicActionMenu {...MEDIA_ACTIONS} />
+									<DynamicActionMenu {...MEDIA_ACTIONS()} />
 								</div>
 							</div>
 							<Metadata
