@@ -3,7 +3,8 @@ import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { default as ReactModal } from 'react-modal';
 
-import { useScrollbarWidth, useScrollLock } from '@shared/hooks';
+import { useScrollLock } from '@shared/hooks/use-scroll-lock';
+import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 
 import { Icon } from '../Icon';
 
@@ -22,7 +23,7 @@ const Modal: FC<ModalProps> = ({
 	excludeScrollbar = true,
 }) => {
 	const [ready, setReady] = useState(false);
-	const scrollbarWidth = useScrollbarWidth();
+	const scrollbarWidth = useScrollbarWidth(!!isOpen);
 	useScrollLock(isOpen ?? false);
 
 	// See https://github.com/reactjs/react-modal#examples

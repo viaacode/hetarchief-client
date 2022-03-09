@@ -41,6 +41,12 @@ const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onReq
 	};
 
 	const onSearch = (searchValue: string) => {
+		// Force rerender
+		if (query.search === searchValue) {
+			setQuery({
+				search: '',
+			});
+		}
 		setQuery({ search: searchValue });
 	};
 

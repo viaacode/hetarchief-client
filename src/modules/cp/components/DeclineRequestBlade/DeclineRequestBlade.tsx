@@ -5,8 +5,8 @@ import { FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade } from '@shared/components';
-import { toastService } from '@shared/services';
-import { visitsService } from '@visits/services';
+import { toastService } from '@shared/services/toast-service';
+import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitStatus } from '@visits/types';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
@@ -26,29 +26,27 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 
 	const onFormSubmit = (values: DeclineRequestFormState) => {
 		selected &&
-			visitsService
-				.putById(selected.id, {
-					...selected,
-					status: VisitStatus.DENIED,
-					// TODO: reason
-				})
-				.then(() => {
-					onSubmit?.(values);
+			VisitsService.patchById(selected.id, {
+				...selected,
+				status: VisitStatus.DENIED,
+				// TODO: reason
+			}).then(() => {
+				onSubmit?.(values);
 
-					toastService.notify({
-						title: t(
-							'modules/cp/components/decline-request-blade/decline-request-blade___de-aanvraag-is-afgekeurd'
-						),
-						description: t(
-							'modules/cp/components/decline-request-blade/decline-request-blade___deze-aanvraag-werd-succesvol-afgekeurd'
-						),
-					});
+				toastService.notify({
+					title: t(
+						'modules/cp/components/decline-request-blade/decline-request-blade___de-aanvraag-is-afgekeurd'
+					),
+					description: t(
+						'modules/cp/components/decline-request-blade/decline-request-blade___deze-aanvraag-werd-succesvol-afgekeurd'
+					),
 				});
+			});
 	};
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-16">
+			<div className="u-px-32 u-py-24">
 				<Button
 					label={t(
 						'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'

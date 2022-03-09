@@ -20,13 +20,16 @@ $platinum: #f8f8f8;
  * Derived Colors
  */
 
-$zinc-40: color.adjust($zinc, $alpha: -0.6);
+$black-20: color.adjust($black, $alpha: -0.8);
 $teal-66: color.adjust($teal, $alpha: -0.34);
+$zinc-66: color.adjust($zinc, $alpha: -0.34);
+$zinc-40: color.adjust($zinc, $alpha: -0.6);
 
 /**
  * Shadow
  */
 
+$shadow-12-black-16: 0 0 12px color.adjust($black, $alpha: -0.84);
 $shadow-24-black-61: 0 0 24px color.adjust($black, $alpha: -0.39);
 $shadow-24-black-24: 0 0 24px color.adjust($black, $alpha: -0.76);
 $shadow-24-black-12: 0 0 24px color.adjust($black, $alpha: -0.88);
@@ -167,6 +170,7 @@ $card-offset: 2rem;
  */
 
 $button-horizontal-whitespace: $spacer-md;
+$button-height-sm: $font-size-md * 2;
 
 /**
  * Dividers

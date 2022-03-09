@@ -9,7 +9,10 @@ import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
 import { TosService } from '@shared/services/tos-service';
 import { isCurrentTosAccepted } from '@shared/utils';
 
-export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
+export const withAuth = (
+	WrappedComponent: ComponentType,
+	requireTosAccepted = true
+): ComponentType => {
 	return function ComponentWithAuth(props: Record<string, unknown>) {
 		const router = useRouter();
 		const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
@@ -23,11 +26,11 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 			};
 
 			const toTermsOfService = async () => {
-				return router.push(`${ROUTES.termsOfService}?${stringify(params)}`);
+				return router.replace(`${ROUTES.termsOfService}?${stringify(params)}`);
 			};
 
 			const toHome = async () => {
-				return router.push(
+				return router.replace(
 					`${ROUTES.home}?${stringify({
 						...params,
 						[SHOW_AUTH_QUERY_KEY]: '1',
@@ -36,21 +39,19 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 			};
 
 			if (!login?.userInfo || login.message === AuthMessage.LoggedOut) {
-				//
 				// When the user isn't present in the response or the response states they've logged out
-
 				await toHome();
-			} else if (tos) {
-				//
-				// When the user is present in the response, they've not logged out and they *have* accepted the TOS previously
-
-				if (!isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos.updatedAt)) {
-					//
-					// When the user accepted a previous version of the TOS
-
-					await toTermsOfService();
-				} else {
+			} else {
+				// When the user is present in the response, they've not logged out
+				if (
+					!requireTosAccepted ||
+					isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos?.updatedAt)
+				) {
+					// Page does not require accepting the TOS or the user accepted the latest version of the TOS
 					setIsLoggedIn(true);
+				} else {
+					// When the user has not accepted the TOS or accepted a previous version of the TOS
+					await toTermsOfService();
 				}
 			}
 		}, []); // eslint-disable-line react-hooks/exhaustive-deps

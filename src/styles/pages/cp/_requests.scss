@@ -2,6 +2,8 @@
 
 $page: "p-cp-requests";
 
+// TODO: make styles reusable (see visitors)
+
 .#{$page} {
 	&__header {
 		@include respond-at("md") {

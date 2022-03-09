@@ -2,7 +2,8 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { useBladeManagerContext, useScrollLock } from '@shared/hooks';
+import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
+import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 
 import { Icon } from '../Icon';
 import { Overlay } from '../Overlay';

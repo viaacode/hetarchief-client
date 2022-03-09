@@ -4,15 +4,13 @@ export enum RequestStatusAll {
 	ALL = 'all',
 }
 
-export type RequestStatus = VisitStatus & RequestStatusAll;
-
 export interface VisitInfo {
 	id: string;
 	spaceId: string;
 	userProfileId: string;
 	timeframe: string; // free-text indication of when
 	reason: string;
-	acceptedTosAt: string;
+	acceptedTos: boolean;
 	status: VisitStatus;
 	startAt: string;
 	endAt: string;

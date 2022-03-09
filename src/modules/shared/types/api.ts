@@ -1,4 +1,6 @@
-export interface ElasticsearchResponse<T> {
+import { MediaSearchAggregations } from '@media/types';
+
+export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 	took: number;
 	timed_out: boolean;
 	_shards: {
@@ -21,6 +23,10 @@ export interface ElasticsearchResponse<T> {
 			_source: T;
 		}[];
 	};
+}
+
+export interface ElasticsearchAggregations {
+	aggregations: MediaSearchAggregations;
 }
 
 export interface ApiResponseWrapper<T> {

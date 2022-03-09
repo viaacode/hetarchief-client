@@ -16,7 +16,7 @@
 	color: $white;
 	cursor: pointer;
 	outline: 2px solid transparent;
-	transition: all $animate-default;
+	transition: color $animate-default, background-color $animate-default, border-color $animate-default;
 
 	&:hover {
 		background-color: $shade;
@@ -28,9 +28,24 @@
 		border-color: $teal-dark;
 	}
 
-	&:not(:active,:hover):focus {
-		outline: 2px solid $black;
+	/**
+		* Cross-browser styles for explicit focus via
+		* keyboard-based (eg Tab) navigation or the
+		* .focus-visible utility class.
+		*/
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $black;
+		}
+
+	/**
+	* Remove focus styles for non-keyboard focus.
+	*/
+	&:focus:not(:focus-visible) {
+		outline: 0;
+		box-shadow: none;
 	}
+
 }
 
 /**
@@ -67,7 +82,13 @@
 	background-color: $black;
 	border-color: $black;
 
-	&:not(:active,:hover):focus {
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
 	}
 }
@@ -89,7 +110,13 @@
 		color: $white;
 	}
 
-	&:not(:active,:hover):focus {
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
 	}
 }
@@ -98,6 +125,35 @@
 .c-button--silver {
 	background-color: $silver;
 	border-color: $silver;
+	color: $black;
+
+	&:hover {
+		background-color: $shade;
+		border-color: $shade;
+		color: $white;
+	}
+
+	&:active {
+		background-color: $teal-dark;
+		border-color: $teal-dark;
+		color: $white;
+	}
+
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
+		outline: 2px solid $teal;
+	}
+}
+
+// Silver
+.c-button--platinum {
+	background-color: $platinum;
+	border-color: $platinum;
 	color: $black;
 
 	&:hover {
@@ -143,9 +199,19 @@
 		color: $white;
 	}
 
-	&:not(:active,:hover):focus {
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
 		outline: 2px solid $teal;
+	}
+
+	&:focus:not(:focus-visible) {
+		border-color: $black;
 	}
 }
 
@@ -165,8 +231,14 @@
 		color: $teal-dark;
 	}
 
-	&:not(:active,:hover):focus {
-		outline: 1px solid $teal;
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
+		outline: 2px solid $teal;
 	}
 
 	&.c-button--neutral {
@@ -236,7 +308,13 @@
 		color: $zinc;
 	}
 
-	&:not(:active,:hover):focus {
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
 		outline: none;
 	}
 
@@ -246,6 +324,10 @@
 		color: $zinc;
 
 		&:not(:active,:hover):focus {
+			border-color: $zinc;
+		}
+
+		&:focus:not(:focus-visible) {
 			border-color: $zinc;
 		}
 	}

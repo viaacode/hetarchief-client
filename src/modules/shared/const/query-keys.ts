@@ -1,5 +1,8 @@
 export enum QUERY_KEYS {
-	getReadingRooms = 'getReadingRooms',
+	getCollectionMedia = 'getCollectionMedia',
+	getCollections = 'getCollections',
 	getMediaObjects = 'getMediaObjects',
+	getNotifications = 'getNotifications',
+	getReadingRooms = 'getReadingRooms',
 	getVisits = 'getVisits',
 }

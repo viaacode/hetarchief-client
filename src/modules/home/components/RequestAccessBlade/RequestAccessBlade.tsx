@@ -8,6 +8,7 @@ import { Blade, Icon } from '@shared/components';
 import { OPTIONAL_LABEL } from '@shared/const';
 
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
+import styles from './RequestAccessBlade.module.scss';
 import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccessBlade.types';
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladeProps }) => {
@@ -26,7 +27,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-16">
+			<div className="u-px-32 u-py-24">
 				<FormControl className="u-mb-24" errors={[errors.acceptTerms?.message]}>
 					<Controller
 						name="acceptTerms"
@@ -70,6 +71,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 			)}
 			footer={renderFooter()}
+			className={styles['c-request-access-blade']}
 		>
 			<div className="u-px-32">
 				<FormControl

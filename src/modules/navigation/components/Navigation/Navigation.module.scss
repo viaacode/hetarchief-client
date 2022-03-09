@@ -423,6 +423,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			@include respond-to(md) {
 				display: flex;
 				justify-self: center;
+				margin-bottom: 0.7rem // Equal to other menu items 0.6 + 0.1 (border + margin)
 			}
 		}
 	}

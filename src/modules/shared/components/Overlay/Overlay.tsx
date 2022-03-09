@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 
-import { useScrollbarWidth } from '@shared/hooks';
+import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 
 import styles from './Overlay.module.scss';
 import { OverlayProps } from './Overlay.types';
@@ -15,7 +15,7 @@ const Overlay: FC<OverlayProps> = ({
 	onClick = () => null,
 	excludeScrollbar = true,
 }) => {
-	const scrollbarWidth = useScrollbarWidth();
+	const scrollbarWidth = useScrollbarWidth(visible);
 
 	return (
 		<div

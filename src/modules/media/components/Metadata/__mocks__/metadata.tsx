@@ -1,5 +1,3 @@
-import { Icon } from '@shared/components';
-
 export const metadataMock = {
 	metadata: [
 		{
@@ -21,10 +19,6 @@ export const metadataMock = {
 		{
 			title: 'Licentie',
 			data: 'Creative Commons 0',
-		},
-		{
-			title: 'Ook interessant',
-			data: <Icon name="no-video" />,
 		},
 	],
 };
