@@ -3,13 +3,13 @@ import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { ApiService } from '@shared/services';
+import { ApiService } from '@shared/services/api-service';
 
 import { CheckLoginResponse } from './auth.service.types';
 
 const { publicRuntimeConfig } = getConfig();
 
-export class AuthService extends ApiService {
+export class AuthService {
 	public static async checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
 		return await ApiService.getApi().get(`auth/check-login`, options).json();
 	}

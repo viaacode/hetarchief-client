@@ -5,3 +5,7 @@ export const selectIsStickyLayout = (state: AppState): boolean => state.ui.isSti
 export const selectShowNavigationBorder = (state: AppState): boolean =>
 	state.ui.showNavigationBorder;
 export const selectShowFooter = (state: AppState): boolean => state.ui.showFooter;
+export const selectShowNotificationsCenter = (state: AppState): boolean =>
+	state.ui.showNotificationsCenter;
+export const selectHasUnreadNotifications = (state: AppState): boolean =>
+	state.ui.hasUnreadNotifications;

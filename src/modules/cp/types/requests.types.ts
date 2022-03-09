@@ -4,8 +4,6 @@ export enum RequestStatusAll {
 	ALL = 'all',
 }
 
-export type RequestStatus = VisitStatus & RequestStatusAll;
-
 export interface VisitInfo {
 	id: string;
 	spaceId: string;

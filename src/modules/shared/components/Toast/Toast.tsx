@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { FC } from 'react';
 import TruncateMarkup from 'react-truncate-markup';
 
-import { useHover } from '../../hooks';
+import { useHover } from '../../hooks/use-hover';
 
 import styles from './Toast.module.scss';
 import { ToastProps } from './Toast.types';

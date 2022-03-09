@@ -21,3 +21,4 @@ export * from './Tabs';
 export * from './TagsInput';
 export * from './Toast';
 export * from './Toggle';
+export * from './UnreadMarker';

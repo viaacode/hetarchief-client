@@ -10,7 +10,7 @@ import { useGetCollections } from '@account/hooks/get-collections';
 import { collectionsService } from '@account/services/collections';
 import { Collection } from '@account/types';
 import { Blade, Icon } from '@shared/components';
-import { toastService } from '@shared/services';
+import { toastService } from '@shared/services/toast-service';
 
 import { ADD_TO_COLLECTION_FORM_SCHEMA } from './AddToCollectionBlade.const';
 import styles from './AddToCollectionBlade.module.scss';

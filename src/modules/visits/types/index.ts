@@ -4,6 +4,12 @@ export enum VisitStatus {
 	DENIED = 'DENIED',
 }
 
+export enum VisitTimeframe {
+	ACTIVE = 'ACTIVE',
+	PAST = 'PAST',
+	FUTURE = 'FUTURE',
+}
+
 export interface VisitInfo {
 	id: string;
 	spaceId: string;

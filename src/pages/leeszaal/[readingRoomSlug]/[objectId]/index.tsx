@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { stringifyUrl } from 'query-string';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
@@ -14,13 +15,12 @@ import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS } from '@media/const';
 import { ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
-import {
-	useElementSize,
-	useHideFooter,
-	useNavigationBorder,
-	useStickyLayout,
-	useWindowSizeContext,
-} from '@shared/hooks';
+import { useElementSize } from '@shared/hooks/use-element-size';
+import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectShowNavigationBorder } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
 import {
@@ -46,6 +46,8 @@ const ObjectDetailPage: NextPage = () => {
 	useStickyLayout();
 	useNavigationBorder();
 	useHideFooter();
+
+	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
@@ -176,7 +178,11 @@ const ObjectDetailPage: NextPage = () => {
 					<meta name="description" content="Object detail omschrijving" />
 				</Head>
 				{/* TODO: bind title to state */}
-				<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
+				<ReadingRoomNavigation
+					showBorder={showNavigationBorder}
+					className="p-object-detail__nav"
+					title={'Leeszaal'}
+				/>
 				<ScrollableTabs
 					className="p-object-detail__tabs"
 					variants={['dark']}

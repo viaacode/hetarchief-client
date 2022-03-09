@@ -7,6 +7,8 @@ const initialState: UIState = {
 	isStickyLayout: false,
 	showNavigationBorder: false,
 	showFooter: true,
+	showNotificationsCenter: false,
+	hasUnreadNotifications: false,
 };
 
 export const uiSlice = createSlice({
@@ -25,8 +27,20 @@ export const uiSlice = createSlice({
 		setShowFooter(state, action: PayloadAction<boolean>) {
 			state.showFooter = action.payload;
 		},
+		setShowNotificationsCenter(state, action: PayloadAction<boolean>) {
+			state.showNotificationsCenter = action.payload;
+		},
+		setHasUnreadNotifications(state, action: PayloadAction<boolean>) {
+			state.hasUnreadNotifications = action.payload;
+		},
 	},
 });
 
-export const { setShowAuthModal, setIsStickyLayout, setShowNavigationBorder, setShowFooter } =
-	uiSlice.actions;
+export const {
+	setShowAuthModal,
+	setIsStickyLayout,
+	setShowNavigationBorder,
+	setShowFooter,
+	setShowNotificationsCenter,
+	setHasUnreadNotifications,
+} = uiSlice.actions;
