@@ -34,14 +34,12 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { WindowSizeContext } from '@shared/context/WindowSizeContext';
-import { useNavigationBorder, useWindowSize } from '@shared/hooks';
+import { useNavigationBorder } from '@shared/hooks';
 import { OrderDirection, SortObject } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
 	const { t } = useTranslation();
-	const windowSize = useWindowSize();
 
 	useNavigationBorder();
 
@@ -64,6 +62,8 @@ const ReadingRoomPage: NextPage = () => {
 	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+
+	useNavigationBorder();
 
 	// TODO add other filters once available
 	const hasSearched = !!query?.search?.length || query?.format !== ReadingRoomMediaType.All;
@@ -214,23 +214,21 @@ const ReadingRoomPage: NextPage = () => {
 
 		return (
 			<div className={filterMenuCls}>
-				<WindowSizeContext.Provider value={windowSize}>
-					<FilterMenu
-						activeSort={activeSort}
-						filters={READING_ROOM_FILTERS()}
-						filterValues={query}
-						label={t('pages/leeszaal/reading-room-slug/index___filters')}
-						isOpen={filterMenuOpen}
-						isMobileOpen={mobileMenuOpen}
-						sortOptions={READING_ROOM_SORT_OPTIONS()}
-						toggleOptions={toggleOptions}
-						onSortClick={onSortClick}
-						onMenuToggle={onFilterMenuToggle}
-						onViewToggle={onViewToggle}
-						onFilterReset={onResetFilter}
-						onFilterSubmit={onSubmitFilter}
-					/>
-				</WindowSizeContext.Provider>
+				<FilterMenu
+					activeSort={activeSort}
+					filters={READING_ROOM_FILTERS()}
+					filterValues={query}
+					label={t('pages/leeszaal/reading-room-slug/index___filters')}
+					isOpen={filterMenuOpen}
+					isMobileOpen={mobileMenuOpen}
+					sortOptions={READING_ROOM_SORT_OPTIONS()}
+					toggleOptions={toggleOptions}
+					onSortClick={onSortClick}
+					onMenuToggle={onFilterMenuToggle}
+					onViewToggle={onViewToggle}
+					onFilterReset={onResetFilter}
+					onFilterSubmit={onSubmitFilter}
+				/>
 			</div>
 		);
 	};

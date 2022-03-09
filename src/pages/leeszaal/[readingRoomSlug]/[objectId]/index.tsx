@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { stringifyUrl } from 'query-string';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
@@ -14,8 +14,13 @@ import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS } from '@media/const';
 import { ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
-import { useElementSize, useNavigationBorder, useStickyLayout } from '@shared/hooks';
-import { useFooter } from '@shared/hooks/use-footer';
+import {
+	useElementSize,
+	useHideFooter,
+	useNavigationBorder,
+	useStickyLayout,
+	useWindowSizeContext,
+} from '@shared/hooks';
 import { createPageTitle } from '@shared/utils';
 
 import {
@@ -33,12 +38,14 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Hooks
 	 */
-	const [activeTab, setActiveTab] = useState<string | number>(ObjectDetailTabs.Metadata);
+	const [activeTab, setActiveTab] = useState<string | number>(ObjectDetailTabs.Media);
+	const [pauseMedia, setPauseMedia] = useState(true);
 	const { t } = useTranslation();
 	const router = useRouter();
+	const windowSize = useWindowSizeContext();
 	useStickyLayout();
 	useNavigationBorder();
-	useFooter();
+	useHideFooter();
 
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
@@ -47,6 +54,16 @@ const ObjectDetailPage: NextPage = () => {
 	 * Variables
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+
+	/**
+	 * Effects
+	 */
+	useEffect(() => {
+		// Pause media if metadata tab is shown on mobile
+		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
+			setPauseMedia(true);
+		}
+	}, [activeTab, windowSize.width]);
 
 	/**
 	 * Callbacks
@@ -157,12 +174,9 @@ const ObjectDetailPage: NextPage = () => {
 				<Head>
 					<title>{createPageTitle('Object detail')}</title>
 					<meta name="description" content="Object detail omschrijving" />
-					{/* eslint-disable-next-line @next/next/no-css-tags */}
-					<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
 				</Head>
 				{/* TODO: bind title to state */}
-				{/* TODO: use correct left and right sections */}
-				<ReadingRoomNavigation title={'Leeszaal'} />
+				<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
 				<ScrollableTabs
 					className="p-object-detail__tabs"
 					variants={['dark']}
@@ -188,23 +202,23 @@ const ObjectDetailPage: NextPage = () => {
 						variants="white"
 					/>
 					<div className="p-object-detail__video">
-						{/* http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4 */}
-						{/* https://via.placeholder.com/1920x1080 */}
 						<FlowPlayer
 							className="p-object-detail__flowplayer"
 							src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
 							poster="https://via.placeholder.com/1920x1080"
 							title="Elephants dream"
+							pause={pauseMedia}
+							onPlay={() => setPauseMedia(false)}
 						/>
 						{/* <ObjectPlaceholder
-							{...objectPlaceholderMock}
-							openModalButtonLabel={t(
-								'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-							)}
-							closeModalButtonLabel={t(
-								'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-							)}
-						/> */}
+					{...objectPlaceholderMock}
+					openModalButtonLabel={t(
+						'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+					)}
+					closeModalButtonLabel={t(
+						'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+					)}
+				/> */}
 					</div>
 					<div
 						ref={metadataRef}

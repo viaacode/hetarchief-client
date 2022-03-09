@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 
 import { setShowFooter } from '@shared/store/ui';
 
-import { UseFooter } from './use-footer.types';
+import { UseHideFooter } from './use-hide-footer.types';
 
-const useFooter: UseFooter = (showFooter = false) => {
+const useHideFooter: UseHideFooter = (showFooter = false) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -16,4 +16,4 @@ const useFooter: UseFooter = (showFooter = false) => {
 	}, [dispatch, showFooter]);
 };
 
-export default useFooter;
+export default useHideFooter;

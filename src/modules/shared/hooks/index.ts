@@ -1,5 +1,6 @@
 export * from './use-blade-manager-context';
 export * from './use-element-size';
+export * from './use-hide-footer';
 export * from './use-hover';
 export * from './use-navigation-border';
 export * from './use-scroll-lock';
