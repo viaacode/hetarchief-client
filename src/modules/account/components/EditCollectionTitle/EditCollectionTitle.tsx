@@ -1,5 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, ContentInput, FormControl } from '@meemoo/react-components';
+import {
+	Button,
+	ContentInput,
+	FormControl,
+	StopPropagationFunction,
+} from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -91,11 +96,13 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	 * Render
 	 */
 
-	const renderButtons = () => {
+	const renderButtons = (handler: StopPropagationFunction) => {
 		return (
 			<>
 				{buttons.filter((b) => b.before).map((b) => b.node)}
 				<Button
+					key={'edit-title'}
+					onClick={handler}
 					className={styles['c-edit-collection-title__edit']}
 					variants={['silver']}
 					name={t(
@@ -116,13 +123,17 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 				render={({ field }) => (
 					<ContentInput
 						{...field}
-						onClose={resetForm}
-						onOpen={clearForm}
-						onConfirm={onFormSubmit}
-						variants={['title']}
-						iconEnd={!isOpen ? renderButtons() : onOpenNode}
-						nodeSubmit={<Button variants={['black']} icon={<Icon name="check" />} />}
+						autoCapitalize="off"
+						autoComplete="off"
+						autoCorrect="off"
+						iconEnd={(handler) => (!isOpen ? renderButtons(handler) : onOpenNode)}
 						nodeCancel={<Button variants={['silver']} icon={<Icon name="times" />} />}
+						nodeSubmit={<Button variants={['black']} icon={<Icon name="check" />} />}
+						onClose={resetForm}
+						onConfirm={onFormSubmit}
+						onOpen={clearForm}
+						spellCheck="false"
+						variants={['title']}
 					/>
 				)}
 			/>
