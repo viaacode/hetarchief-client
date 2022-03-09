@@ -24,7 +24,9 @@ export function useGetMediaObjects(
 			format !== ReadingRoomMediaType.All ? format : undefined;
 
 		// TODO: improve (?)
-		// Run two queries to fetch aggregates across formats
+		// Run two queries:
+		//     - One to fetch the aggregates across formats
+		//     - And one to fetch te results for a specific tab (format)
 		return Promise.all([
 			MediaService.getAll({ ...rest, format: mediaFormat }, page, size),
 			MediaService.getAll(rest, page, size),
