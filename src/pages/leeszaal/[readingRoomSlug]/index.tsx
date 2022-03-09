@@ -89,7 +89,7 @@ const ReadingRoomPage: NextPage = () => {
 
 		if (!buckets || buckets.length === 0) {
 			buckets = [
-				{ key: 'video', doc_count: 0 }, // Provid mock value for reduce
+				{ key: 'video', doc_count: 0 }, // Provide mock value for reduce
 			];
 		}
 
