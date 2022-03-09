@@ -6,6 +6,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
@@ -130,11 +131,19 @@ const CPRequestsPage: NextPage = () => {
 							size="md"
 							onClear={() => {
 								setFilters({
-									search: undefined,
+									search: '',
 									page: 1,
 								});
 							}}
 							onSearch={(searchValue: string) => {
+								// Force rerender
+								if (filters.search === searchValue) {
+									setFilters({
+										search: '',
+										page: 1,
+									});
+								}
+
 								setFilters({
 									search: searchValue,
 									page: 1,
@@ -217,4 +226,4 @@ const CPRequestsPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default CPRequestsPage;
+export default withAuth(CPRequestsPage);

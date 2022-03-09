@@ -56,8 +56,8 @@ const ReadingRoomPage: NextPage = () => {
 		{
 			query: (query.search || []).join(' '),
 		},
-		query.start || 0,
-		20
+		query.page || 0,
+		READING_ROOM_ITEM_COUNT
 	);
 	const [mediaCount] = useState({
 		[ReadingRoomMediaType.All]: 1245,
@@ -171,6 +171,7 @@ const ReadingRoomPage: NextPage = () => {
 					<FilterMenu
 						activeSort={activeSort}
 						filters={READING_ROOM_FILTERS()}
+						filterValues={query}
 						label={t('pages/leeszaal/reading-room-slug/index___filters')}
 						isOpen={filterMenuOpen}
 						isMobileOpen={mobileMenuOpen}
@@ -272,14 +273,14 @@ const ReadingRoomPage: NextPage = () => {
 							/>
 							<PaginationBar
 								className="u-mb-48"
-								start={query.start}
+								start={query.page * READING_ROOM_ITEM_COUNT}
 								count={READING_ROOM_ITEM_COUNT}
 								showBackToTop
 								total={mediaCount[query.mediaType as ReadingRoomMediaType]}
 								onPageChange={(page) =>
 									setQuery({
 										...query,
-										start: page * READING_ROOM_ITEM_COUNT,
+										page: page,
 									})
 								}
 							/>

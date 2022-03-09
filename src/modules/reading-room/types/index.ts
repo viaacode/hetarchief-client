@@ -36,6 +36,7 @@ export interface DefaultFilterFormChildrenParams<Values = unknown> {
 
 export interface DefaultFilterFormProps<Values = unknown> extends DefaultComponentProps {
 	children: ({ values, reset }: DefaultFilterFormChildrenParams<Values>) => ReactNode;
+	values?: Values;
 }
 
 export interface ReadingRoomInfo {
