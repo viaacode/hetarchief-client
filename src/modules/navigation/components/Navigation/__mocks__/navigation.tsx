@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ReactNode } from 'react';
 
 import { Icon } from '@shared/components';
+import { ROUTES } from '@shared/const';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -80,7 +81,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				hasDivider: 'md',
 			},
 			{
-				node: renderLink('Leeszaal 8', '/leeszaal/leeszaal-8', {
+				node: renderLink('Leeszaal 8', `/${ROUTES.spaces}/leeszaal-8`, {
 					iconEnd: (
 						<Icon
 							className={clsx(
@@ -98,7 +99,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				id: 'leeszaal 8',
 			},
 			{
-				node: renderLink('Leeszaal 12', '/leeszaal/leeszaal-12', {
+				node: renderLink('Leeszaal 12', `/${ROUTES.spaces}/leeszaal-8`, {
 					iconEnd: (
 						<Icon
 							className={clsx(

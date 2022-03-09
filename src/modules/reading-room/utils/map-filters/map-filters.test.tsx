@@ -8,7 +8,7 @@ describe('Utils', () => {
 		it('should map search query to tags', () => {
 			const query = {
 				search: ['test1', 'test2'],
-				mediaType: '',
+				format: '',
 				start: 0,
 			};
 			const filters = mapFiltersToTags(query);
@@ -21,7 +21,7 @@ describe('Utils', () => {
 			const value = 'test';
 			const query = {
 				search: [null, value],
-				mediaType: '',
+				format: '',
 				start: 0,
 			};
 			const filters = mapFiltersToTags(query);

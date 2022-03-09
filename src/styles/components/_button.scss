@@ -15,7 +15,8 @@
 	border-radius: 4rem;
 	color: $white;
 	cursor: pointer;
-	transition: all $animate-default;
+	outline: 2px solid transparent;
+	transition: color $animate-default, background-color $animate-default, border-color $animate-default;
 
 	&:hover {
 		background-color: $shade;
@@ -145,6 +146,29 @@
 	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
+		outline: 2px solid $teal;
+	}
+}
+
+// Silver
+.c-button--platinum {
+	background-color: $platinum;
+	border-color: $platinum;
+	color: $black;
+
+	&:hover {
+		background-color: $shade;
+		border-color: $shade;
+		color: $white;
+	}
+
+	&:active {
+		background-color: $teal-dark;
+		border-color: $teal-dark;
+		color: $white;
+	}
+
+	&:not(:active,:hover):focus {
 		outline: 2px solid $teal;
 	}
 }

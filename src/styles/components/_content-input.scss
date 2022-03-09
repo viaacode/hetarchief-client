@@ -1,0 +1,116 @@
+@use "sass:math";
+@use "styles/abstracts" as *;
+
+$component: "c-content-input";
+
+@mixin hide-without-interaction-loss {
+	position: absolute;
+	pointer-events: none;
+	opacity: 0;
+	max-width: 0;
+	max-height: 0;
+	overflow: hidden;
+}
+
+.#{$component} {
+	display: flex;
+	flex-flow: row nowrap;
+
+	&__field,
+	&__value {
+		@include reset-input-field;
+
+		background: none;
+		border: none;
+		flex-grow: 1;
+		outline: none;
+		padding: 0;
+		word-break: normal;
+		line-break: inherit;
+
+		&::first-line {
+			vertical-align: middle;
+		}
+	}
+
+	&__value {
+		cursor: text;
+	}
+
+	&__submit,
+	&__cancel,
+	&__icon {
+		display: flex;
+	}
+
+	&__submit,
+	&__cancel {
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-left: $spacer-xs;
+	}
+
+	&__icon {
+		&--start {
+			margin-right: $spacer-xxs;
+		}
+
+		&--end {
+			.c-button {
+				margin-left: $spacer-xs;
+
+				@include respond-at("md") {
+					margin-left: $spacer-sm;
+				}
+			}
+		}
+	}
+
+	&--normal {
+		.#{$component} {
+			&__field,
+			&__value {
+				font-size: $font-size-base;
+				min-height: $button-height-sm;
+				line-height: $button-height-sm;
+			}
+		}
+	}
+
+	&--title {
+		.#{$component} {
+			&__field,
+			&__value {
+				font-size: $font-size-3xl;
+				font-weight: $font-weight-bold;
+				min-height: $font-size-3xl * (math.div(56, 48));
+			}
+
+			&__value {
+				line-height: $font-size-3xl * (math.div(56, 48));
+			}
+
+			// Avoid cut-off of "g, q, p, ..."
+			&__field {
+				line-height: $line-height-2xl;
+				transform: translateY(-0.075em);
+			}
+		}
+	}
+
+	&--open {
+		.#{$component} {
+			&__value {
+				@include hide-without-interaction-loss;
+			}
+		}
+	}
+
+	&--closed {
+		.#{$component} {
+			&__field {
+				@include hide-without-interaction-loss;
+			}
+		}
+	}
+}

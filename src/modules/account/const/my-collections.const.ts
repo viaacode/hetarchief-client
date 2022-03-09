@@ -1,0 +1,45 @@
+import { i18n } from 'next-i18next';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
+import { object, SchemaOf, string } from 'yup';
+
+import { CreateCollectionFormState } from '@account/types';
+
+export const CollectionItemListSize = 20;
+
+export const ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG = {
+	search: withDefault(StringParam, undefined),
+	page: withDefault(NumberParam, 1),
+};
+
+export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormState> => {
+	const nameLengthMin = 3;
+	const nameLengthMax = 90;
+
+	return object({
+		name: string()
+			.test(
+				'name',
+				i18n?.t(
+					'modules/account/const/my-collections___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
+					{
+						count: nameLengthMin,
+					}
+				) || '',
+				(val) => {
+					return (val || '').length >= nameLengthMin;
+				}
+			)
+			.test(
+				'name',
+				i18n?.t(
+					'modules/account/const/my-collections___de-naam-van-een-map-mag-niet-meer-dan-count-tekens-lang-zijn',
+					{
+						count: nameLengthMax,
+					}
+				) || '',
+				(val) => {
+					return (val || '').length <= nameLengthMax;
+				}
+			),
+	});
+};
