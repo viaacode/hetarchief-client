@@ -28,6 +28,62 @@ export interface MediaInfo {
 	type?: string;
 }
 
+// Mapped intelectual entity object
+export interface Media {
+	id: string;
+	premisIdentifier: any;
+	premisRelationship: string;
+	isPartOf: string;
+	partOfArchive: string;
+	partOfEpisode: string;
+	partOfSeason: string;
+	partOfSeries: string;
+	maintainerId: string;
+	contactInfo: ContactInfo;
+	copyrightHolder: string;
+	copyrightNotice: string;
+	durationInSeconds: number;
+	numberOfPages: number;
+	datePublished: string;
+	dctermsAvailable: string;
+	name: string;
+	description: string;
+	abstract: string;
+	creator: any;
+	actor: any;
+	contributor: any;
+	publisher: any;
+	spatial: string;
+	temporal: string;
+	keywords: string[];
+	genre: string;
+	dctermsFormat: string;
+	inLanguage: string;
+	thumbnailUrl: string;
+	embedUrl: string;
+	alternateName: string;
+	duration: string;
+	license: any;
+	meemooFragmentId: string;
+	meemooMediaObjectId: string;
+	dateCreated: string;
+	dateCreatedLowerBound: string;
+	ebucoreObjectType: string;
+}
+
+export interface ContactInfo {
+	email: string;
+	telephone: string;
+	address: Address;
+}
+
+export interface Address {
+	street: string;
+	postalCode: string;
+	locality: string;
+	postOfficeBoxNumber: string;
+}
+
 export class MediaSearchFilters {
 	query?: string;
 }

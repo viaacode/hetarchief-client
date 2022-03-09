@@ -2,7 +2,7 @@ import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
 import { MetadataItem } from '@media/components';
-import { MediaInfo, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { Media, MediaTypes, ObjectDetailTabs } from '@media/types';
 import { mapKeywordsToTagList } from '@media/utils';
 import { Icon } from '@shared/components';
 
@@ -95,7 +95,7 @@ export const MEDIA_ACTIONS: DynamicActionMenuProps = {
  * Metadata
  */
 
-export const PARSED_METADATA_FIELDS = (mediaInfo: MediaInfo): MetadataItem[] => {
+export const PARSED_METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => {
 	// Hide empty metadata fields
 	return METADATA_FIELDS(mediaInfo).reduce((metadata: MetadataItem[], field) => {
 		if (field.data) {
@@ -105,25 +105,29 @@ export const PARSED_METADATA_FIELDS = (mediaInfo: MediaInfo): MetadataItem[] => 
 	}, []);
 };
 
-const METADATA_FIELDS = (mediaInfo: MediaInfo): MetadataItem[] => [
+const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
+	// {
+	// 	title: i18n?.t('Oorsprong') ?? '',
+	// 	data: // Geen DB veld gelinkt
+	// },
 	{
-		title: 'Genre',
-		data: (mediaInfo as any).genre,
+		title: i18n?.t('Genre') ?? '',
+		data: mediaInfo.genre,
 	},
 	{
-		title: 'Format',
-		data: (mediaInfo as any).dctermsFormat,
+		title: i18n?.t('Formaat') ?? '',
+		data: mediaInfo.dctermsFormat,
 	},
 	{
-		title: 'language',
-		data: (mediaInfo as any).isLanguage,
+		title: i18n?.t('Taal') ?? '',
+		data: mediaInfo.inLanguage,
 	},
 	{
-		title: 'Lengte',
-		data: (mediaInfo as any).duration,
+		title: i18n?.t('Duur') ?? '',
+		data: mediaInfo.duration,
 	},
 	{
-		title: 'Trefwoorden',
-		data: mapKeywordsToTagList((mediaInfo as any).keywords),
+		title: i18n?.t('Trefwoorden') ?? '',
+		data: mapKeywordsToTagList(mediaInfo.keywords),
 	},
 ];

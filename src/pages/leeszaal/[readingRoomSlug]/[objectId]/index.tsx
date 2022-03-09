@@ -66,7 +66,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	// Set default view
 	useEffect(() => {
-		setMediaType((mediaInfo as any)?.dctermsFormat);
+		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
 		if (windowSize.width && windowSize.width < 768) {
 			// Default to metadata tab on mobile
@@ -74,9 +74,7 @@ const ObjectDetailPage: NextPage = () => {
 		} else {
 			// Check media content for default tab on desktop
 			setActiveTab(
-				(mediaInfo as any)?.dctermsFormat
-					? ObjectDetailTabs.Media
-					: ObjectDetailTabs.Metadata
+				mediaInfo?.dctermsFormat ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata
 			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -266,8 +264,8 @@ const ObjectDetailPage: NextPage = () => {
 							<div>
 								<div className="u-px-32">
 									{/* TODO: bind content to state */}
-									<h3 className="u-pt-32 u-pb-24">{(mediaInfo as any).name}</h3>
-									<p className="u-pb-24">{(mediaInfo as any).description}</p>
+									<h3 className="u-pt-32 u-pb-24">{mediaInfo.name}</h3>
+									<p className="u-pb-24">{mediaInfo.description}</p>
 									<div className="u-pb-24 p-object-detail__actions">
 										<Button
 											className="p-object-detail__export"
@@ -294,7 +292,7 @@ const ObjectDetailPage: NextPage = () => {
 											? 2
 											: 1
 									}
-									metadata={PARSED_METADATA_FIELDS(mediaInfo as any)}
+									metadata={PARSED_METADATA_FIELDS(mediaInfo)}
 								/>
 							</div>
 						</div>
