@@ -38,7 +38,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		isError,
 		isLoading,
 		refetch: refetchNotifications,
-	} = useGetNotificationsHook();
+	} = useGetNotificationsHook(isOpen);
 	const { mutateAsync: markOneNotificationAsRead } = useMarkOneNotificationsAsReadHook();
 	const { mutateAsync: markAllNotificationsAsRead } = useMarkAllNotificationsAsReadHook();
 

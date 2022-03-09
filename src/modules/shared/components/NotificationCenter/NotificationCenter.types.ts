@@ -11,7 +11,9 @@ export interface NotificationCenterProps extends DefaultComponentProps {
 	onClose: () => void;
 
 	// Pass hook for mocking purposes
-	useGetNotificationsHook: () => UseInfiniteQueryResult<ApiResponseWrapper<Notification>>;
+	useGetNotificationsHook: (
+		enabled: boolean
+	) => UseInfiniteQueryResult<ApiResponseWrapper<Notification>>;
 	useMarkAllNotificationsAsReadHook: () => UseMutationResult<MarkAllAsReadResult, unknown, void>;
 	useMarkOneNotificationsAsReadHook: () => UseMutationResult<Notification, unknown, string>;
 }

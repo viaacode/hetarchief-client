@@ -1,8 +1,10 @@
 import { i18n } from 'next-i18next';
 import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
+import { QueryClient } from 'react-query';
 
 import { NOTIFICATION_TYPE_TO_PATH } from '@shared/components/NotificationCenter/NotificationCenter.consts';
+import { QUERY_KEYS } from '@shared/const/query-keys';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import { ApiResponseWrapper } from '@shared/types';
@@ -16,6 +18,8 @@ export abstract class NotificationsService {
 	private static showNotificationsCenter: ((show: boolean) => void) | null = null;
 	private static setHasUnreadNotifications: ((hasUnreadNotifications: boolean) => void) | null =
 		null;
+
+	private static queryClient = new QueryClient();
 
 	public static async initPolling(
 		router: NextRouter,
@@ -74,7 +78,7 @@ export abstract class NotificationsService {
 						i18n?.t(
 							'modules/shared/services/notifications-service/notifications___bekijk'
 						) || 'Bekijk',
-					onClose: () => {
+					onClose: async () => {
 						const url = NotificationsService.getPath(newNotifications[0]);
 						if (url) {
 							// Go to page
@@ -83,6 +87,7 @@ export abstract class NotificationsService {
 							// Notification not clickable => open notification center
 							NotificationsService.showNotificationsCenter?.(true);
 						}
+						await NotificationsService.markOneAsRead(newNotifications[0].id);
 					},
 				});
 			} else {
@@ -111,8 +116,9 @@ export abstract class NotificationsService {
 			}
 		}
 		if (unreadNotifications.length > 0) {
-			NotificationsService.setHasUnreadNotifications?.(true);
 			NotificationsService.lastFetchedUnreadNotifications = unreadNotifications;
+			NotificationsService.setHasUnreadNotifications?.(true);
+			await NotificationsService.queryClient.invalidateQueries(QUERY_KEYS.getNotifications);
 		}
 	}
 
