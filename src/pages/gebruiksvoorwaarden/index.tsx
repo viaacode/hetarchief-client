@@ -12,10 +12,8 @@ import { useQueryParams } from 'use-query-params';
 import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
 import {
-	LOCAL_STORAGE,
 	REDIRECT_TO_QUERY_KEY,
 	RICH_TEXT_SANITIZATION,
-	ROUTES,
 	TOS_INDEX_QUERY_PARAM_CONFIG,
 } from '@shared/const';
 import { useTermsOfService } from '@shared/hooks';
@@ -55,9 +53,7 @@ const TermsOfService: NextPage = () => {
 		}
 	}, [scrollable]);
 
-	const onCancelClick = useCallback(() => {
-		router.push(localStorage.getItem(LOCAL_STORAGE.previousPage) || ROUTES.home);
-
+	const onCancelClick = useCallback(async () => {
 		toastService.notify({
 			title: t(
 				'pages/gebruiksvoorwaarden/index___je-koos-ervoor-om-niet-in-te-stemmen-met-de-gebruiksvoorwaarden'
@@ -67,7 +63,7 @@ const TermsOfService: NextPage = () => {
 			),
 			maxLines: 3,
 		});
-	}, [t, router]);
+	}, [t]);
 
 	const onConfirmClick = () => {
 		if (user) {

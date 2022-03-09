@@ -259,7 +259,7 @@ const ObjectDetailPage: NextPage = () => {
 											)}
 										</span>
 									</Button>
-									<DynamicActionMenu {...MEDIA_ACTIONS} />
+									<DynamicActionMenu {...MEDIA_ACTIONS()} />
 								</div>
 							</div>
 							<Metadata

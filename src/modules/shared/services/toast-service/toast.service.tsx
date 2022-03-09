@@ -9,6 +9,7 @@ class ToastService {
 		{
 			buttonLabel = i18n?.t('modules/shared/services/toast-service/toast___ok') ?? '',
 			onClose,
+			maxLines = 5,
 			...toastProps
 		}: Optional<ToastProps, 'maxLines' | 'buttonLabel' | 'onClose'>,
 		toastOptions?: ToastOptions
@@ -22,6 +23,7 @@ class ToastService {
 			({ closeToast }) => (
 				<Toast
 					{...toastProps}
+					maxLines={maxLines}
 					buttonLabel={buttonLabel}
 					visible
 					onClose={() => onToastClose(closeToast)}
