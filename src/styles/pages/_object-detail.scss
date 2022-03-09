@@ -52,7 +52,7 @@ $metadata-collapsed-width: 36vw;
 					font-size: $font-size-lg;
 				}
 
-				&--active {
+				&.c-tab--active {
 					background-color: $white;
 				}
 			}
@@ -61,6 +61,42 @@ $metadata-collapsed-width: 36vw;
 		@include respond-at(md) {
 			display: none;
 		}
+	}
+
+	&__flowplayer {
+		height: min-content;
+    	align-self: center;
+
+		&-fullscreen-button {
+			z-index: get-z-layer("modal"); // Current highest
+			position: absolute;
+			bottom: $spacer-md;
+			right: $spacer-md;
+
+			&--exit {
+				display: none;
+				bottom: $spacer-lg;
+				right: $spacer-lg;
+
+				.c-button__icon {
+					color: $black;
+				}
+			}
+		}
+
+		& .is-fullscreen &-fullscreen-button--exit{
+			display: block;
+		}
+
+		& .is-hovered &-fullscreen-button--exit,
+		& .is-paused &-fullscreen-button--exit{
+			bottom: calc($spacer-lg + 5.8rem); // Add height of controls bar
+		}
+	}
+
+	&__video {
+		display: grid;
+		position: relative;
 	}
 
 	&__metadata {
@@ -91,8 +127,12 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	@include respond-at(md) {
-		.p-object-detail__metadata, .p-object-detail__video {
+		.p-object-detail__metadata {
 			display: block;
+		}
+
+		.p-object-detail__video {
+			display: grid;
 		}
 	}
 

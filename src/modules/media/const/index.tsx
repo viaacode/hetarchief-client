@@ -17,19 +17,19 @@ const renderMediaTab = (mediaType: MediaTypes) => {
 		case 'audio':
 			return {
 				id: ObjectDetailTabs.Media,
-				label: i18n?.t('Audio'),
+				label: i18n?.t('modules/media/const/index___audio'),
 				icon: <Icon name="audio" />,
 			};
 		case 'video':
 			return {
 				id: ObjectDetailTabs.Media,
-				label: i18n?.t('Video'),
+				label: i18n?.t('modules/media/const/index___video'),
 				icon: <Icon name="video" />,
 			};
 		default:
 			return {
 				id: ObjectDetailTabs.Media,
-				label: i18n?.t('Video'),
+				label: i18n?.t('modules/media/const/index___video'),
 				icon: <Icon name="no-video" />,
 			};
 	}
@@ -38,7 +38,7 @@ const renderMediaTab = (mediaType: MediaTypes) => {
 export const OBJECT_DETAIL_TABS = (mediaType: MediaTypes): TabProps[] => [
 	{
 		id: ObjectDetailTabs.Metadata,
-		label: i18n?.t('Metadata'),
+		label: i18n?.t('modules/media/const/index___metadata'),
 		icon: <Icon name="info" />,
 	},
 	renderMediaTab(mediaType),

@@ -16,6 +16,8 @@ import {
 import { MOCK_ITEMS_LEFT } from '@navigation/components/Navigation/__mocks__/navigation';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { Notification, NotificationCenter, notificationCenterMock } from '@shared/components';
+import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useWindowSize } from '@shared/hooks';
 import { useAppDispatch } from '@shared/store';
 import { getTosAction } from '@shared/store/tos';
 import { selectIsStickyLayout, selectShowFooter, setShowAuthModal } from '@shared/store/ui';
@@ -29,6 +31,7 @@ const AppLayout: FC = ({ children }) => {
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
 	const showFooter = useSelector(selectShowFooter);
+	const windowSize = useWindowSize();
 
 	useEffect(() => {
 		dispatch(checkLoginAction());
@@ -98,8 +101,9 @@ const AppLayout: FC = ({ children }) => {
 			</Navigation>
 
 			<main className="l-app__main">
-				{children}
-
+				<WindowSizeContext.Provider value={windowSize}>
+					{children}
+				</WindowSizeContext.Provider>
 				<NotificationCenter
 					{...notificationCenterMock}
 					isOpen={notificationsOpen}

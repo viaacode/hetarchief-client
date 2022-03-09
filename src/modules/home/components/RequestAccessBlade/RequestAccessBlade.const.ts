@@ -11,9 +11,17 @@ export const REQUEST_ACCESS_FORM_SCHEMA = (): SchemaOf<RequestAccessFormState> =
 			)
 		),
 		visitTime: string().defined(),
-		acceptTerms: boolean().required(
-			i18n?.t(
-				'modules/home/components/request-access-blade/request-access-blade___termen-accepteren-is-verplicht'
+		acceptTerms: boolean()
+			.required(
+				i18n?.t(
+					'modules/home/components/request-access-blade/request-access-blade___termen-accepteren-is-verplicht'
+				)
 			)
-		),
+
+			.oneOf(
+				[true],
+				i18n?.t(
+					'modules/home/components/request-access-blade/request-access-blade___termen-accepteren-is-verplicht'
+				)
+			),
 	});
