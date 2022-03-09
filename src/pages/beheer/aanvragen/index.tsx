@@ -32,14 +32,15 @@ const CPRequestsPage: NextPage = () => {
 		data: visits,
 		refetch,
 		isFetching,
-	} = useGetVisits(
-		filters.search,
-		filters.status === RequestStatusAll.ALL ? undefined : filters.status,
-		filters.page,
-		RequestTablePageSize,
-		filters.orderProp as keyof VisitInfo,
-		filters.orderDirection as OrderDirection
-	);
+	} = useGetVisits({
+		searchInput: filters.search,
+		status:
+			filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
+		page: filters.page,
+		size: RequestTablePageSize,
+		orderProp: filters.orderProp as keyof VisitInfo,
+		orderDirection: filters.orderDirection as OrderDirection,
+	});
 
 	// Filters
 
