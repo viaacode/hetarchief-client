@@ -82,12 +82,12 @@ export abstract class NotificationsService {
 						const url = NotificationsService.getPath(newNotifications[0]);
 						if (url) {
 							// Go to page
+							await NotificationsService.markOneAsRead(newNotifications[0].id);
 							NotificationsService?.router?.push?.(url);
 						} else {
 							// Notification not clickable => open notification center
 							NotificationsService.showNotificationsCenter?.(true);
 						}
-						await NotificationsService.markOneAsRead(newNotifications[0].id);
 					},
 				});
 			} else {
