@@ -1,0 +1,19 @@
+@use "styles/abstracts" as *;
+
+$component: "c-edit-collection-title";
+
+.#{$component} {
+	:global(.c-content-input__submit),
+	:global(.c-content-input__cancel),
+	:global(.c-content-input__icon) {
+		margin-top: $spacer-xs;
+		margin-bottom: $spacer-xs;
+		align-items: flex-start;
+	}
+
+	&__edit {
+		@include respond-to("md") {
+			display: none;
+		}
+	}
+}

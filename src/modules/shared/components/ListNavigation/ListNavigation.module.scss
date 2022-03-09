@@ -3,24 +3,39 @@
 @use "styles/abstracts" as *;
 
 $teal-24: color.adjust($teal, $alpha: -0.76);
+$component: "c-list-navigation";
 
-.c-list-navigation {
+.#{$component} {
+	max-width: 100%;
+	min-width: 0; // avoid flex-pushing
+
 	&__list {
 		@extend %reset-list;
 	}
 
 	&__item {
+		&--active {
+			font-weight: 700;
+		}
+
 		&:hover {
 			background-color: $silver;
 			cursor: pointer;
 		}
 
-		&--active {
-			font-weight: 700;
+		&:not(:active, :hover):focus {
+			outline: 1px solid $teal;
 		}
 
-		&:not(:active,:hover):focus {
-			outline: 1px solid $teal;
+		&--no-interaction {
+			&:hover {
+				background-color: inherit;
+				cursor: default;
+			}
+
+			&:not(:active, :hover):focus {
+				outline: inherit;
+			}
 		}
 	}
 
@@ -44,7 +59,7 @@ $teal-24: color.adjust($teal, $alpha: -0.76);
 		background-color: $silver;
 	}
 
-	&--primary {
+	&--white {
 		.c-list-navigation__item--active {
 			background-color: $teal-24;
 			border-right: 0.4rem solid $teal;
@@ -55,7 +70,7 @@ $teal-24: color.adjust($teal, $alpha: -0.76);
 		}
 	}
 
-	&--secondary {
+	&--platinum {
 		/* stylelint-disable-next-line no-descending-specificity */
 		.c-list-navigation__item--active {
 			background-color: $black;
