@@ -6,6 +6,13 @@ $component: "c-tabs";
 .#{$component} {
 	display: flex;
 
+	button {
+		font-size: inherit;
+		line-height: inherit;
+		font-weight: inherit;
+		font-family: inherit;
+	}
+
 	/**
 	* Modifiers
 	*/
