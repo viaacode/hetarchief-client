@@ -45,7 +45,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		return collections.map(({ id, objects }) => {
 			return {
 				id,
-				checked: !!objects.find((obj) => obj.id === selected.id),
+				checked: !!(objects || []).find((obj) => obj.id === selected.id),
 			};
 		});
 	};
@@ -197,7 +197,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		return field.value.map((pair) => {
 			const collection = getCollection(pair.id);
 			const count =
-				Math.max((collection?.objects.length || 0) - 1, 0) + (pair.checked ? 1 : 0);
+				Math.max((collection?.objects?.length || 0) - 1, 0) + (pair.checked ? 1 : 0);
 
 			return (
 				<li
