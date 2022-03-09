@@ -1,86 +1,87 @@
-@use "../abstracts/" as *;
+@use "../abstracts" as *;
 
 $component: "c-tab";
 
 .#{$component} {
+  display: inline-flex;
+  align-items: center;
+  min-height: $tab-min-height;
+  padding: $tab-vertical-padding 1.2rem;
+  background-color: inherit;
+  cursor: pointer;
+  transition: background-color $animate-default, color $animate-default;
+
+  @include respond-to("md") {
+	font-size: $font-size-sm;
+  }
+
+  /**
+  * Elements
+  */
+
+  &__icon {
 	display: inline-flex;
-	align-items: center;
-	min-height: $tab-min-height;
-	padding: $tab-vertical-padding 1.2rem;
-	cursor: pointer;
-	transition: background-color $animate-default, color $animate-default;
+	font-size: $font-size-base;
+	margin-right: $spacer-xs;
 
-	@include respond-to("md") {
-		font-size: $font-size-sm;
+	@include respond-at("md") {
+	  font-size: $font-size-lg;
+	}
+  }
+
+  /**
+  * Modifiers
+  */
+
+  &.#{$component}--dark {
+	background-color: $black;
+	color: $white;
+
+	@include respond-at("md") {
+	  min-height: $tab-min-height-md;
+	  padding: $tab-vertical-padding-md $spacer-md;
 	}
 
-	/**
-	* Elements
-	*/
+	&.#{$component} {
+	  &--active {
+		background-color: $platinum;
+		color: $black;
+	  }
+	}
+  }
 
-	&__icon {
-		display: inline-flex;
-		font-size: $font-size-base;
-		margin-right: $spacer-xs;
+  &.#{$component}--light {
+	position: relative;
+	color: $neutral;
 
-		@include respond-at("md") {
-			font-size: $font-size-lg;
-		}
+	@include respond-at("md") {
+	  min-height: $tab-min-height-md;
+	  padding: $tab-vertical-padding-md $spacer-sm;
 	}
 
-	/**
-	* Modifiers
-	*/
+	&.#{$component} {
+	  &--active {
+		color: $black;
+		font-weight: $font-weight-bold;
 
-	&--dark {
-		background-color: $black;
-		color: $white;
-
-		@include respond-at("md") {
-			min-height: $tab-min-height-md;
-			padding: $tab-vertical-padding-md $spacer-md;
+		&::after {
+		  content: "";
+		  display: block;
+		  position: absolute;
+		  inset: 0 0 0 0;
+		  top: auto;
+		  height: 2px;
+		  background: $teal;
 		}
 
-		&.#{$component} {
-			&--active {
-				background-color: $platinum;
-				color: $black;
-			}
+		&.#{$component}--bordered {
+		  bottom: 2px;
 		}
+	  }
 	}
+  }
 
-	&--light {
-		position: relative;
-		color: $neutral;
-
-		@include respond-at("md") {
-			min-height: $tab-min-height-md;
-			padding: $tab-vertical-padding-md $spacer-sm;
-		}
-
-		&.#{$component} {
-			&--active {
-				color: $black;
-				font-weight: $font-weight-bold;
-
-				&::after {
-					content: "";
-					display: block;
-					position: absolute;
-					inset: 0 0 0 0;
-					top: auto;
-					height: 2px;
-					background: $teal;
-				}
-
-				&.#{$component}--bordered {
-					bottom: 2px;
-				}
-			}
-		}
-	}
-
-	&--medium {
-		min-height: $tab-min-height-medium;
-	}
+  &--medium {
+	min-height: $tab-min-height-medium;
+  }
 }
