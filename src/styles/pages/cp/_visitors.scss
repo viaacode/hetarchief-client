@@ -1,8 +1,8 @@
 @use "styles/abstracts" as *;
 
-$page: "p-cp-requests";
+$page: "p-cp-visitors";
 
-// TODO: make styles reusable (see visitors)
+// TODO: make styles reusable (see requests)
 
 .#{$page} {
 	&__header {
@@ -33,7 +33,7 @@ $page: "p-cp-requests";
 		transform: translateY(0.2rem); // shift if to center on single-line
 	}
 
-	&__link {
+    &__link {
 		text-decoration: none;
 		transition: color $animate-default;
 
@@ -46,32 +46,15 @@ $page: "p-cp-requests";
 	}
 
 	tr {
-		@include respond-to("lg") {
-			td,
-			th {
-				&:nth-child(2),
-				&:nth-child(3) {
-					display: none;
-				}
-			}
-		}
-
 		td, th {
-			&:nth-last-child(1) {
-				display: none; // Hidden, see ARC-409
-				padding-left: 0;
-			}
-		}
-
-		td:nth-last-child(2) {
-			padding-right: 0;
-			border-left: 1px solid $silver;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
 		}
 	}
 
-	tbody {
-		tr {
-			cursor: pointer;
-		}
-	}
+	// tbody {
+	// 	tr {
+	// 		cursor: pointer;
+	// 	}
+	// }
 }

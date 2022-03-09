@@ -119,11 +119,11 @@ const CPVisitorsPage: NextPage = () => {
 				contentTitle={t('pages/beheer/bezoekers/index___bezoekers')}
 			>
 				<div className="l-container">
-					<div className="p-cp-requests__header">
+					<div className="p-cp-visitors__header">
 						<SearchBar
 							backspaceRemovesValue={false}
-							className="p-cp-requests__search"
-							instanceId="requests-search-bar"
+							className="p-cp-visitors__search"
+							instanceId="visitors-search-bar"
 							light={true}
 							placeholder={t('pages/beheer/aanvragen/index___zoek')}
 							searchValue={filters.search}
@@ -151,7 +151,7 @@ const CPVisitorsPage: NextPage = () => {
 						/>
 
 						<ScrollableTabs
-							className="p-cp-requests__status-filter"
+							className="p-cp-visitors__status-filter"
 							tabs={statusFilters}
 							variants={['rounded', 'light', 'bordered', 'medium']}
 							onClick={(tabId) =>
