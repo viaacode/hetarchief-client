@@ -3,7 +3,7 @@ import { i18n } from 'next-i18next';
 
 import { MetadataItem } from '@media/components';
 import { Media, MediaTypes, ObjectDetailTabs } from '@media/types';
-import { mapKeywordsToTagList } from '@media/utils';
+import { mapDataToMetadata, mapKeywordsToTagList } from '@media/utils';
 import { Icon } from '@shared/components';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
@@ -98,7 +98,7 @@ export const MEDIA_ACTIONS: DynamicActionMenuProps = {
 export const PARSED_METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => {
 	// Hide empty metadata fields
 	return METADATA_FIELDS(mediaInfo).reduce((metadata: MetadataItem[], field) => {
-		if (field.data) {
+		if (field.data && (field.data as any[]).length) {
 			metadata.push(field);
 		}
 		return metadata;
@@ -111,23 +111,127 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 	// 	data: // Geen DB veld gelinkt
 	// },
 	{
+		title: i18n?.t('PID') ?? '',
+		data: mediaInfo.id,
+	},
+	{
+		title: i18n?.t('External ID') ?? '',
+		data: mediaInfo.meemooFragmentId,
+	},
+	// {
+	// 	title: i18n?.t('Hoofd lokale CP ID') ?? '',
+	// 	data: mediaInfo.premisIdentifier,
+	// },
+	// {
+	// 	title: i18n?.t('Overige lokale CP ID') ?? '',
+	// 	data: mediaInfo.premisIdentifier,
+	// },
+	{
+		title: i18n?.t('CP naam') ?? '',
+		data: mediaInfo.maintainerId, // TODO: get name
+	},
+	{
+		title: i18n?.t('Secundaire titel') ?? '',
+		data:
+			mediaInfo.alternateName ??
+			mediaInfo.partOfArchive ??
+			mediaInfo.partOfEpisode ??
+			mediaInfo.partOfSeason ??
+			mediaInfo.partOfSeries,
+	},
+	{
+		title: i18n?.t('Bestandstype') ?? '',
+		data: mediaInfo.dctermsFormat,
+	},
+	{
+		title: i18n?.t('Formaat') ?? '',
+		data: mediaInfo.dctermsFormat, // ?
+	},
+	{
+		title: i18n?.t('Objecttype') ?? '',
+		data: mediaInfo.ebucoreObjectType,
+	},
+	{
+		title: i18n?.t('Duur') ?? '',
+		data: mediaInfo.duration, // TODO: format?
+	},
+	{
+		title: i18n?.t('Datum creatie') ?? '',
+		data: mediaInfo.dateCreated, // TODO: format?
+	},
+	{
+		title: i18n?.t('Datum uitzending/uitgave') ?? '',
+		data: mediaInfo.datePublished, // TODO: format?
+	},
+	...mapDataToMetadata(mediaInfo.creator),
+	...mapDataToMetadata(mediaInfo.publisher),
+	{
+		title: i18n?.t('Uitgebreide beschrijving') ?? '',
+		data: mediaInfo.abstract,
+	},
+	// {
+	// 	title: i18n?.t('Programmabeschrijving') ?? '',
+	// 	data: // Geen DB veld
+	// },
+	{
+		title: i18n?.t('Cast') ?? '',
+		data: mediaInfo.actor,
+	},
+	{
 		title: i18n?.t('Genre') ?? '',
 		data: mediaInfo.genre,
 	},
 	{
-		title: i18n?.t('Formaat') ?? '',
-		data: mediaInfo.dctermsFormat,
+		title: i18n?.t('Coverage: ruimte') ?? '',
+		data: mediaInfo.spatial,
+	},
+	{
+		title: i18n?.t('Coverage: tijd') ?? '',
+		data: mediaInfo.temporal,
+	},
+	{
+		title: i18n?.t('Trefwoorden') ?? '',
+		data: mapKeywordsToTagList(mediaInfo.keywords),
 	},
 	{
 		title: i18n?.t('Taal') ?? '',
 		data: mediaInfo.inLanguage,
 	},
+	// Geen DB velden
+	// {
+	// 	title: i18n?.t('Film: type') ?? '',
+	// 	data: mediaInfo.premisIdentifier,
+	// },
+	// {
+	// 	title: i18n?.t('Film: base') ?? '',
+	// 	data: mediaInfo.premisIdentifier,
+	// },
+	// {
+	// 	title: i18n?.t('Film: image/sound') ?? '',
+	// 	data: mediaInfo.premisIdentifier,
+	// },
+	// {
+	// 	title: i18n?.t('Film: kleur') ?? '',
+	// 	data: mediaInfo.premisIdentifier,
+	// },
+	// {
+	// 	title: i18n?.t('Film: ondertitels') ?? '',
+	// 	data: mediaInfo.premisIdentifier,
+	// },
+	// {
+	// 	title: i18n?.t('Film: ondertitels (taal)') ?? '',
+	// 	data: mediaInfo.premisIdentifier,
+	// },
 	{
-		title: i18n?.t('Duur') ?? '',
-		data: mediaInfo.duration,
+		title: i18n?.t('Is deel van') ?? '',
+		data: mediaInfo.isPartOf,
 	},
+	// {
+	// 	title: i18n?.t('Bevat') ?? '',
+	// 	data: // Niet in type?
+	// },
 	{
-		title: i18n?.t('Trefwoorden') ?? '',
-		data: mapKeywordsToTagList(mediaInfo.keywords),
+		title: i18n?.t('Verwant') ?? '',
+		data: mediaInfo.premisRelationship,
 	},
 ];
