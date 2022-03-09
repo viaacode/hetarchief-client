@@ -1,54 +1,54 @@
 @use "sass:math";
-@use "../abstracts/" as *;
+@use "../abstracts" as *;
 
 $component: "c-tabs";
 
 .#{$component} {
-	display: flex;
+  display: flex;
 
-	/**
-	* Modifiers
-	*/
+  /**
+  * Modifiers
+  */
 
-	&--dark {
-		background-color: $black;
+  &--dark {
+	background-color: $black;
 
-		.#{$component} {
-			&__item {
-				&:not(:last-child) {
-					@include respond-at("md") {
-						margin-right: $spacer-md;
-					}
-				}
-			}
+	.#{$component} {
+	  &__item {
+		&:not(:last-child) {
+		  @include respond-at("md") {
+			margin-right: $spacer-md;
+		  }
 		}
+	  }
+	}
+  }
+
+  &--light {
+	background-color: $white;
+  }
+
+  &--rounded {
+	@include tabs-border-radius;
+
+	padding: 0 $tabs-rounded-size;
+
+	@include respond-at("md") {
+	  padding: 0 $tabs-rounded-size-md;
 	}
 
-	&--light {
-		background-color: $white;
-	}
+	&.#{$component} {
+	  &--medium {
+		padding: 0 math.div($tab-min-height-medium, 2);
 
-	&--rounded {
-		@include tabs-border-radius;
-
-		padding: 0 $tabs-rounded-size;
-
-		@include respond-at("md") {
-			padding: 0 $tabs-rounded-size-md;
+		@include respond-to("md") {
+		  border-radius: math.div($tab-min-height-medium, 2);
 		}
-
-		&.#{$component} {
-			&--medium {
-				padding: 0 math.div($tab-min-height-medium, 2);
-				
-				@include respond-to("md") {
-					border-radius: math.div($tab-min-height-medium, 2);
-				}
-			}
-		}
+	  }
 	}
+  }
 
-	&--bordered {
-		border: $tabs-border-width solid $zinc;
-	}
+  &--bordered {
+	border: $tabs-border-width solid $zinc;
+  }
 }

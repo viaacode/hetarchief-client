@@ -12,7 +12,7 @@ import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSea
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
 import { AccessGranted } from '@shared/components/ReadingRoomCard/__mocks__/reading-room-card';
-import { toastService } from '@shared/services';
+import { toastService } from '@shared/services/toast-service';
 import { createPageTitle } from '@shared/utils';
 
 import styles from './LoggedInHome.module.scss';

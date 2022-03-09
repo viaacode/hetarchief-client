@@ -4,6 +4,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -34,7 +35,8 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { useNavigationBorder } from '@shared/hooks';
+import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, SortObject } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
@@ -50,6 +52,7 @@ const ReadingRoomPage: NextPage = () => {
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 	const [mediaCount, setMediaCount] = useState({
@@ -221,6 +224,7 @@ const ReadingRoomPage: NextPage = () => {
 					label={t('pages/leeszaal/reading-room-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileMenuOpen}
+					showNavigationBorder={showNavigationBorder}
 					sortOptions={READING_ROOM_SORT_OPTIONS()}
 					toggleOptions={toggleOptions}
 					onSortClick={onSortClick}
@@ -281,7 +285,7 @@ const ReadingRoomPage: NextPage = () => {
 				</Head>
 
 				{/* TODO: bind title to state */}
-				<ReadingRoomNavigation title={'Leeszaal'} />
+				<ReadingRoomNavigation title={'Leeszaal'} showBorder={showNavigationBorder} />
 
 				<section className="u-bg-black u-pt-8">
 					<div className="l-container">

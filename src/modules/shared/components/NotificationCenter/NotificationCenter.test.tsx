@@ -1,8 +1,8 @@
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 import NotificationCenter from './NotificationCenter';
 import { NotificationCenterProps } from './NotificationCenter.types';
-import { notificationCenterMock, notificationsMock } from './__mocks__/notification-center';
+import { notificationCenterMock, NOTIFICATIONS_FIRST_PAGE } from './__mocks__/notification-center';
 
 const renderNotificationCenter = (args: Partial<NotificationCenterProps>) => {
 	return render(<NotificationCenter {...notificationCenterMock} {...args} />);
@@ -18,63 +18,33 @@ describe('Components', () => {
 		it('Should render notifications', () => {
 			const { queryAllByText } = renderNotificationCenter({});
 
-			const notifications = queryAllByText(notificationCenterMock.notifications[0].title);
+			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].description);
 
-			expect(notifications).toHaveLength(notificationCenterMock.notifications.length);
+			expect(notifications).toHaveLength(NOTIFICATIONS_FIRST_PAGE.items.length);
 		});
-		it('Should render translations', () => {
-			const readTitle = 'Gelezen';
-			const { queryByText } = renderNotificationCenter({
-				notifications: [{ title: readTitle, description: '', read: true, id: '123' }],
-			});
+		it('Should render notification link to reading room', () => {
+			const { queryAllByText } = renderNotificationCenter({});
 
-			const notificationTitle = queryByText(readTitle);
+			const notificationLink = queryAllByText(
+				NOTIFICATIONS_FIRST_PAGE.items[0].description
+			)[0];
 
-			expect(notificationTitle).toBeInTheDocument();
+			expect(notificationLink).toHaveAttribute(
+				'href',
+				'/beheer/aanvragen?visitRequest=' + NOTIFICATIONS_FIRST_PAGE.items[0].visitId
+			);
 		});
 		it('Should render unread and read notifications', () => {
-			const { queryAllByText } = renderNotificationCenter({
-				notifications: notificationsMock,
-			});
+			const { queryAllByText } = renderNotificationCenter(notificationCenterMock);
 
-			const notifications = queryAllByText(notificationsMock[0].title);
+			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].description);
 
 			expect(notifications[0].parentElement).toHaveClass(
 				'c-notification-center__notification--unread'
 			);
-			expect(notifications[1].parentElement).toHaveClass(
+			expect(notifications[19].parentElement).toHaveClass(
 				'c-notification-center__notification--read'
 			);
-		});
-		it('Should call onClickNotification when a notification check has been clicked', () => {
-			const onClickNotification = jest.fn();
-			const { queryAllByText } = renderNotificationCenter({
-				notifications: notificationsMock,
-				onClickNotification,
-			});
-
-			const notificationButton = queryAllByText(
-				notificationsMock[0].title
-			)[0].parentElement?.querySelector('.c-button');
-
-			fireEvent.click(notificationButton as Element);
-
-			expect(onClickNotification).toHaveBeenCalled();
-			expect(onClickNotification).toHaveBeenCalledTimes(1);
-			expect(onClickNotification).toHaveBeenCalledWith(notificationsMock[0].id);
-		});
-		it('Should call onClickButton when the footer button has been clicked', () => {
-			const onClickButton = jest.fn();
-			const { container } = renderNotificationCenter({
-				onClickButton,
-			});
-
-			const button = container.querySelector('.c-notification-center__button');
-
-			fireEvent.click(button as Element);
-
-			expect(onClickButton).toHaveBeenCalled();
-			expect(onClickButton).toHaveBeenCalledTimes(1);
 		});
 	});
 });

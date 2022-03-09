@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { BladeManagerContext } from '@shared/context/BladeManagerContext';
-import { useScrollLock } from '@shared/hooks';
+import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 
 import { BladeManagerProps } from './BladeManager.types';
 

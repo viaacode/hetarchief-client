@@ -1,7 +1,7 @@
 import { stringifyUrl } from 'query-string';
 
 import { Collection, CollectionMedia } from '@account/types';
-import { ApiService } from '@shared/services';
+import { ApiService } from '@shared/services/api-service';
 import { ApiResponseWrapper } from '@shared/types';
 
 import { COLLECTIONS_SERVICE_BASE_URL, COLLECTIONS_SERVICE_OBJECTS_URL } from './collections.const';

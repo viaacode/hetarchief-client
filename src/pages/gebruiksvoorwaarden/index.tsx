@@ -16,9 +16,9 @@ import {
 	RICH_TEXT_SANITIZATION,
 	TOS_INDEX_QUERY_PARAM_CONFIG,
 } from '@shared/const';
-import { useTermsOfService } from '@shared/hooks';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
-import { toastService } from '@shared/services';
+import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
+import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { createPageTitle } from '@shared/utils';
 

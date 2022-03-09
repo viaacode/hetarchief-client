@@ -13,7 +13,7 @@ import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { collectionsService } from '@account/services/collections';
 import { EditCollectionFormState } from '@account/types';
 import { Icon } from '@shared/components';
-import { toastService } from '@shared/services';
+import { toastService } from '@shared/services/toast-service';
 
 import styles from './EditCollectionTitle.module.scss';
 import { EditCollectionTitleProps } from './EditCollectionTitle.types';

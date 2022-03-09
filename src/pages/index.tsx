@@ -9,7 +9,7 @@ import LoggedInHome from '@home/components/LoggedInHome/LoggedInHome';
 import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
 import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
-import { useNavigationBorder } from '@shared/hooks';
+import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 
 const Home: NextPage = () => {

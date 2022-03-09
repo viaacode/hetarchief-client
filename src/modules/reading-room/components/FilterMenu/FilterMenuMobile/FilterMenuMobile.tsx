@@ -26,6 +26,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	onSortClick,
 	onFilterReset,
 	onFilterSubmit,
+	showNavigationBorder,
 }) => {
 	const [isSortActive, setIsSortActive] = useState(false);
 	const { t } = useTranslation();
@@ -63,7 +64,10 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		>
 			{showInitialScreen && (
 				<>
-					<Navigation className={styles['c-filter-menu-mobile__nav']}>
+					<Navigation
+						className={styles['c-filter-menu-mobile__nav']}
+						showBorder={showNavigationBorder}
+					>
 						<Button
 							key="filter-menu-mobile-nav-close"
 							className={styles['c-filter-menu-mobile__back']}
@@ -109,7 +113,10 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			)}
 			{showFilterOrSort && (
 				<>
-					<Navigation className={styles['c-filter-menu-mobile__nav']}>
+					<Navigation
+						className={styles['c-filter-menu-mobile__nav']}
+						showBorder={showNavigationBorder}
+					>
 						<Button
 							key="filter-menu-mobile-nav-filter"
 							className={styles['c-filter-menu-mobile__back']}

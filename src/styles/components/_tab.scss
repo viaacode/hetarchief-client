@@ -1,4 +1,4 @@
-@use "../abstracts/" as *;
+@use "../abstracts" as *;
 
 $component: "c-tab";
 
@@ -16,8 +16,8 @@ $component: "c-tab";
 	}
 
 	/**
-	* Elements
-	*/
+     * Elements
+     */
 
 	&__icon {
 		display: inline-flex;
@@ -30,8 +30,8 @@ $component: "c-tab";
 	}
 
 	/**
-	* Modifiers
-	*/
+     * Modifiers
+     */
 
 	&.#{$component}--dark {
 		background-color: $black;
