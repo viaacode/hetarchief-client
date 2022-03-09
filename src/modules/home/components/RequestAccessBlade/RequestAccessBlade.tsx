@@ -27,7 +27,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-16">
+			<div className="u-px-32 u-py-24">
 				<FormControl className="u-mb-24" errors={[errors.acceptTerms?.message]}>
 					<Controller
 						name="acceptTerms"

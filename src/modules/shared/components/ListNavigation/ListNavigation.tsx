@@ -7,7 +7,7 @@ import { ListNavigationItem, ListNavigationProps } from './ListNavigation.types'
 const ListNavigation: FC<ListNavigationProps> = ({
 	listItems,
 	className,
-	type = 'primary',
+	color = 'white',
 	onClick,
 }) => {
 	const nodeProps = {
@@ -27,7 +27,8 @@ const ListNavigation: FC<ListNavigationProps> = ({
 							<div
 								className={clsx(
 									styles['c-list-navigation__item'],
-									item.active && styles['c-list-navigation__item--active']
+									item.active && styles['c-list-navigation__item--active'],
+									(item.variants || []).map((variant) => styles[variant])
 								)}
 							>
 								<div style={{ paddingLeft: `${layer * 3.2}rem` }}>
@@ -49,7 +50,7 @@ const ListNavigation: FC<ListNavigationProps> = ({
 			className={clsx(
 				className,
 				styles['c-list-navigation'],
-				styles[`c-list-navigation--${type}`]
+				styles[`c-list-navigation--${color}`]
 			)}
 		>
 			{renderChildrenRecursively(listItems)}

@@ -10,7 +10,7 @@ describe('Component: <MediaCard />', () => {
 	let rendered: RenderResult;
 
 	beforeEach(() => {
-		rendered = render(<MediaCard view="grid" published_at={now} published_by={author} />);
+		rendered = render(<MediaCard view="grid" publishedAt={now} publishedBy={author} />);
 	});
 
 	it('Should apply the vertical orientation when rendered in grid view', () => {
