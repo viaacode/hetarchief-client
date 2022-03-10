@@ -2,7 +2,7 @@ import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
 import { MetadataItem } from '@media/components';
-import { Media, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { Media, MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
 import { mapDataToMetadata, mapKeywordsToTagList } from '@media/utils';
 import { Icon } from '@shared/components';
 
@@ -51,42 +51,42 @@ export const OBJECT_DETAIL_TABS = (mediaType: MediaTypes): TabProps[] => [
 export const MEDIA_ACTIONS = (): DynamicActionMenuProps => ({
 	actions: [
 		{
-			label: 'Quotes',
+			label: i18n?.t('modules/media/const/index___quotes') ?? '',
 			iconName: 'quotes',
 			id: 'quotes',
 			ariaLabel: 'copies quotes',
 			tooltip: i18n?.t('modules/media/const/index___quotes') ?? '',
 		},
 		{
-			label: 'Description',
+			label: i18n?.t('modules/media/const/index___description') ?? '',
 			iconName: 'description',
 			id: 'description',
 			ariaLabel: 'shows description',
 			tooltip: i18n?.t('modules/media/const/index___description') ?? '',
 		},
 		{
-			label: 'Bookmark',
+			label: i18n?.t('modules/media/const/index___bookmark') ?? '',
 			iconName: 'bookmark',
-			id: 'bookmark',
+			id: MediaActions.Bookmark,
 			ariaLabel: 'bookmarks item',
 			tooltip: i18n?.t('modules/media/const/index___bookmark') ?? '',
 		},
 		{
-			label: 'Contact',
+			label: i18n?.t('modules/media/const/index___contact') ?? '',
 			iconName: 'contact',
 			id: 'contact',
 			ariaLabel: 'contact reading room',
 			tooltip: i18n?.t('modules/media/const/index___contact') ?? '',
 		},
 		{
-			label: 'Calendar',
+			label: i18n?.t('modules/media/const/index___calendar') ?? '',
 			iconName: 'calendar',
 			id: 'calendar',
 			ariaLabel: 'copy date',
 			tooltip: i18n?.t('modules/media/const/index___calendar') ?? '',
 		},
 		{
-			label: 'Related-objects',
+			label: i18n?.t('modules/media/const/index___related-objects') ?? '',
 			iconName: 'related-objects',
 			id: 'related-objects',
 			ariaLabel: 'access related objects',

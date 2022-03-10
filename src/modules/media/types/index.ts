@@ -121,3 +121,7 @@ export enum ObjectDetailTabs {
 	Media = 'media',
 	Metadata = 'metadata',
 }
+
+export enum MediaActions {
+	Bookmark = 'bookmark',
+}

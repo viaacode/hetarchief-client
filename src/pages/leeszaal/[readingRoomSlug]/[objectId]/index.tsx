@@ -12,7 +12,8 @@ import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS, PARSED_METADATA_FIELDS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
-import { MediaTypes, ObjectDetailTabs } from '@media/types';
+import { MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { AddToCollectionBlade } from '@reading-room/components';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
@@ -41,6 +42,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | undefined>(undefined);
+	const [activeBlade, setActiveBlade] = useState<MediaActions | undefined>(undefined);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
 
@@ -233,7 +235,10 @@ const ObjectDetailPage: NextPage = () => {
 											)}
 										</span>
 									</Button>
-									<DynamicActionMenu {...MEDIA_ACTIONS()} />
+									<DynamicActionMenu
+										{...MEDIA_ACTIONS()}
+										onClickAction={(id) => setActiveBlade(id as MediaActions)}
+									/>
 								</div>
 							</div>
 							{mediaInfo && (
@@ -277,6 +282,19 @@ const ObjectDetailPage: NextPage = () => {
 					</div>
 				</article>
 			</div>
+			<AddToCollectionBlade
+				isOpen={activeBlade === MediaActions.Bookmark}
+				selected={{
+					id: mediaInfo?.meemooFragmentId ?? '',
+					title: mediaInfo?.name,
+				}}
+				onClose={() => {
+					setActiveBlade(undefined);
+				}}
+				onSubmit={() => {
+					setActiveBlade(undefined);
+				}}
+			/>
 		</>
 	);
 };
