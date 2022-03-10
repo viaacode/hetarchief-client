@@ -174,7 +174,7 @@ const CPVisitorsPage: NextPage = () => {
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: VisitsTableColumns(t) as Column<object>[],
+									columns: VisitsTableColumns({ t }) as Column<object>[],
 									data: visits?.items || [],
 									initialState: {
 										pageSize: RequestTablePageSize,

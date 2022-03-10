@@ -45,13 +45,15 @@ export const requestStatusFilters = (): TabProps[] => {
 	];
 };
 
-export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
+export const RequestTableColumns = (
+	i18n: { t: TFunction } = { t: (x: string) => x }
+): Column<VisitInfo>[] => [
 	{
-		Header: t?.('Naam') || '',
+		Header: i18n.t('modules/cp/const/requests___naam') || '',
 		accessor: 'visitorName',
 	},
 	{
-		Header: t?.('Emailadres') || '',
+		Header: i18n.t('modules/cp/const/requests___emailadres') || '',
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
@@ -66,7 +68,7 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		},
 	},
 	{
-		Header: t?.('Tijdstip') || '',
+		Header: i18n.t('modules/cp/const/requests___tijdstip') || '',
 		accessor: 'createdAt',
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
@@ -77,7 +79,7 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		},
 	},
 	{
-		Header: t?.('Status') || '',
+		Header: i18n.t('modules/cp/const/requests___status') || '',
 		accessor: 'status',
 		Cell: ({ row }: VisitInfoRow) => {
 			return <RequestStatusBadge status={row.original.status} />;
@@ -117,13 +119,15 @@ export const visitsStatusFilters = (): TabProps[] => {
 	];
 };
 
-export const VisitsTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
+export const VisitsTableColumns = (
+	i18n: { t: TFunction } = { t: (x: string) => x }
+): Column<VisitInfo>[] => [
 	{
-		Header: t?.('Naam') || '',
+		Header: i18n.t('modules/cp/const/requests___naam') || '',
 		accessor: 'visitorName',
 	},
 	{
-		Header: t?.('Emailadres') || '',
+		Header: i18n.t('modules/cp/const/requests___emailadres') || '',
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
@@ -138,7 +142,7 @@ export const VisitsTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		},
 	},
 	{
-		Header: t?.('Toegang') || '',
+		Header: i18n.t('modules/cp/const/requests___toegang') || '',
 		accessor: 'startAt',
 		Cell: ({ row }: VisitInfoRow) => {
 			const active = isWithinInterval(new Date(), {
@@ -156,7 +160,7 @@ export const VisitsTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		},
 	},
 	{
-		Header: t?.('Goedgekeurd door') || '',
+		Header: i18n.t('modules/cp/const/requests___goedgekeurd-door') || '',
 		accessor: 'status',
 		Cell: () => {
 			return <span className="u-color-neutral">Noah Peeters</span>; // TODO Add column to database to track updatedBy

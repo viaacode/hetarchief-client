@@ -16,7 +16,8 @@ export class VisitsService {
 		page = 0,
 		size = 20,
 		orderProp: keyof VisitInfo = 'startAt',
-		orderDirection: OrderDirection = OrderDirection.desc
+		orderDirection: OrderDirection = OrderDirection.desc,
+		userProfileId?: string
 	): Promise<ApiResponseWrapper<VisitInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
@@ -30,6 +31,7 @@ export class VisitsService {
 						size,
 						orderProp,
 						orderDirection,
+						userProfileId,
 					},
 				})
 			)
