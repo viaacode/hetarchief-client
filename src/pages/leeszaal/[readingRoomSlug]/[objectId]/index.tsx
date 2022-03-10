@@ -9,6 +9,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
+import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS, PARSED_METADATA_FIELDS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { MediaTypes, ObjectDetailTabs } from '@media/types';
@@ -22,7 +23,13 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
-import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
+import {
+	DynamicActionMenu,
+	Metadata,
+	ObjectPlaceholder,
+	RelatedObject,
+	RelatedObjectProps,
+} from 'modules/media/components';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
@@ -113,11 +120,11 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Metadata
 	 */
-	// const renderInterestingListItem = (data: RelatedObjectProps) => (
-	// 	<li className="u-py-8">
-	// 		<RelatedObject {...data} />
-	// 	</li>
-	// );
+	const renderInterestingListItem = (data: RelatedObjectProps) => (
+		<li className="u-py-8">
+			<RelatedObject {...data} />
+		</li>
+	);
 
 	/**
 	 * Render
@@ -230,15 +237,40 @@ const ObjectDetailPage: NextPage = () => {
 								</div>
 							</div>
 							{mediaInfo && (
-								<Metadata
-									className="u-px-32"
-									columns={
-										expandMetadata && metadataSize && metadataSize?.width > 500
-											? 2
-											: 1
-									}
-									metadata={PARSED_METADATA_FIELDS(mediaInfo)}
-								/>
+								<>
+									<Metadata
+										className="u-px-32"
+										columns={
+											expandMetadata &&
+											metadataSize &&
+											metadataSize?.width > 500
+												? 2
+												: 1
+										}
+										metadata={PARSED_METADATA_FIELDS(mediaInfo)}
+									/>
+									<Metadata
+										className="u-px-32"
+										metadata={[
+											{
+												title: 'Ook interessant',
+												data: (
+													<ul className="u-list-reset u-bg-platinum u-mx--32 u-px-32 u-py-24 u-mt-24">
+														{renderInterestingListItem(
+															relatedObjectVideoMock
+														)}
+														{renderInterestingListItem(
+															relatedObjectVideoMock
+														)}
+														{renderInterestingListItem(
+															relatedObjectVideoMock
+														)}
+													</ul>
+												),
+											},
+										]}
+									/>
+								</>
 							)}
 						</div>
 					</div>
