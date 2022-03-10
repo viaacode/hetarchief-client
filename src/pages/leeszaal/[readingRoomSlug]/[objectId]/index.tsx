@@ -172,15 +172,17 @@ const ObjectDetailPage: NextPage = () => {
 						activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
 					)}
 				>
-					<Button
-						className={clsx(
-							'p-object-detail__expand-button',
-							expandMetadata && 'p-object-detail__expand-button--expanded'
-						)}
-						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
-						onClick={onClickToggle}
-						variants="white"
-					/>
+					{mediaType && (
+						<Button
+							className={clsx(
+								'p-object-detail__expand-button',
+								expandMetadata && 'p-object-detail__expand-button--expanded'
+							)}
+							icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
+							onClick={onClickToggle}
+							variants="white"
+						/>
+					)}
 					<div className="p-object-detail__video">
 						{mediaType ? (
 							<FlowPlayer
