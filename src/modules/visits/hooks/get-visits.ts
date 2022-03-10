@@ -2,10 +2,10 @@ import { useQuery } from 'react-query';
 import { UseQueryResult } from 'react-query/types/react/types';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { OrderDirection } from '@shared/types';
+import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { VisitsService } from '@visits/services';
-import { VisitInfo, VisitStatus, VisitTimeframe } from '@visits/types';
+import { VisitTimeframe } from '@visits/types';
 
 export function useGetVisits({
 	searchInput,

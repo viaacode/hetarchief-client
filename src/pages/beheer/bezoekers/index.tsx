@@ -17,10 +17,10 @@ import { CPAdminLayout } from '@cp/layouts';
 import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
-import { OrderDirection } from '@shared/types';
+import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
-import { VisitInfo, VisitStatus, VisitTimeframe } from '@visits/types';
+import { VisitTimeframe } from '@visits/types';
 
 const CPVisitorsPage: NextPage = () => {
 	const { t } = useTranslation();

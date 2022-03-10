@@ -6,10 +6,11 @@ import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusBadge } from '@cp/components';
-import { RequestStatusAll, RequestTableArgs, VisitInfo } from '@cp/types';
+import { RequestStatusAll } from '@cp/types';
 import { Icon, UnreadMarker } from '@shared/components';
 import { SortDirectionParam } from '@shared/helpers';
-import { VisitStatus, VisitTimeframe } from '@visits/types';
+import { VisitInfo, VisitInfoRow, VisitStatus } from '@shared/types';
+import { VisitTimeframe } from '@visits/types';
 
 import styles from './requests.module.scss';
 
@@ -52,7 +53,7 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 	{
 		Header: t?.('Emailadres') || '',
 		accessor: 'visitorMail',
-		Cell: ({ row }: RequestTableArgs) => {
+		Cell: ({ row }: VisitInfoRow) => {
 			return (
 				<a
 					className="u-color-neutral p-cp-requests__link"
@@ -67,7 +68,7 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 	{
 		Header: t?.('Tijdstip') || '',
 		accessor: 'createdAt',
-		Cell: ({ row }: RequestTableArgs) => {
+		Cell: ({ row }: VisitInfoRow) => {
 			return (
 				<span className="u-color-neutral">
 					{new Date(row.original.createdAt).toLocaleString('nl-be')}
@@ -78,7 +79,7 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 	{
 		Header: t?.('Status') || '',
 		accessor: 'status',
-		Cell: ({ row }: RequestTableArgs) => {
+		Cell: ({ row }: VisitInfoRow) => {
 			return <RequestStatusBadge status={row.original.status} />;
 		},
 	},
@@ -124,7 +125,7 @@ export const VisitsTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 	{
 		Header: t?.('Emailadres') || '',
 		accessor: 'visitorMail',
-		Cell: ({ row }: RequestTableArgs) => {
+		Cell: ({ row }: VisitInfoRow) => {
 			return (
 				<a
 					className="u-color-neutral p-cp-visitors__link"
@@ -139,17 +140,17 @@ export const VisitsTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 	{
 		Header: t?.('Toegang') || '',
 		accessor: 'startAt',
-		Cell: ({ row }: RequestTableArgs) => {
+		Cell: ({ row }: VisitInfoRow) => {
 			const active = isWithinInterval(new Date(), {
-				start: new Date(row.original.startAt),
-				end: new Date(row.original.endAt),
+				start: new Date(row.original.startAt || ''),
+				end: new Date(row.original.endAt || ''),
 			});
 			return (
 				<span className={clsx('u-color-neutral', styles['p-visits__access'])}>
 					<UnreadMarker active={active} />
-					{format(new Date(row.original.startAt), 'dd/MM/yyyy HH:mm') +
+					{format(new Date(row.original.startAt || ''), 'dd/MM/yyyy HH:mm') +
 						' - ' +
-						format(new Date(row.original.endAt), 'dd/MM/yyyy HH:mm')}
+						format(new Date(row.original.endAt || ''), 'dd/MM/yyyy HH:mm')}
 				</span>
 			);
 		},
