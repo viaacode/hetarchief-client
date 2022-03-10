@@ -9,8 +9,12 @@ export interface AdvancedFilterFieldsProps {
 }
 
 export enum MetadataProp {
-	Title = 'title',
-	SecondaryTitle = 'secondary_title',
+	Everything = 'alles',
+	Description = 'beschrijving',
+	Title = 'titel',
+	Era = 'tijdsperiode',
+	Publisher = 'publisher',
+	Location = 'locatie',
 }
 
 export enum Operator {

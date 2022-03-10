@@ -8,16 +8,44 @@ export const METADATA_PROP_OPTIONS = (): SelectOption[] => [
 	{
 		label:
 			i18n?.t(
-				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___hoofdtitel'
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___alles'
+			) ?? '',
+		value: MetadataProp.Everything,
+	},
+	{
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___beschrijving'
+			) ?? '',
+		value: MetadataProp.Description,
+	},
+	{
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___titel'
 			) ?? '',
 		value: MetadataProp.Title,
 	},
 	{
 		label:
 			i18n?.t(
-				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___secundaire-titel'
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___tijdsperiode-van-de-inhoud'
 			) ?? '',
-		value: MetadataProp.SecondaryTitle,
+		value: MetadataProp.Era,
+	},
+	{
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___publisher'
+			) ?? '',
+		value: MetadataProp.Publisher,
+	},
+	{
+		label:
+			i18n?.t(
+				'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-fields/advanced-filter-fields___locatie-van-de-inhoud'
+			) ?? '',
+		value: MetadataProp.Location,
 	},
 ];
 
@@ -53,6 +81,10 @@ export const OPERATOR_OPTIONS = (): SelectOption[] => [
 ];
 
 export const METADATA_FIELD_MAP = {
+	[MetadataProp.Everything]: TextInput,
+	[MetadataProp.Description]: TextInput,
 	[MetadataProp.Title]: TextInput,
-	[MetadataProp.SecondaryTitle]: TextInput,
+	[MetadataProp.Era]: TextInput,
+	[MetadataProp.Publisher]: TextInput,
+	[MetadataProp.Location]: TextInput,
 };
