@@ -113,9 +113,9 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 ];
 
 export const READING_ROOM_ACTIVE_SORT_MAP = (): { [key in ReadingRoomSort]: string } => ({
-	date: i18n?.t('modules/reading-room/const/index___sorteer-op-datum') ?? '',
-	relevance: i18n?.t('modules/reading-room/const/index___sorteer-op-relevantie') ?? '',
-	title: i18n?.t('modules/reading-room/const/index___sorteer-op-titel') ?? '',
+	schema_date_created: i18n?.t('modules/reading-room/const/index___sorteer-op-datum') ?? '',
+	['_score']: i18n?.t('modules/reading-room/const/index___sorteer-op-relevantie') ?? '',
+	['schema_name.keyword']: i18n?.t('modules/reading-room/const/index___sorteer-op-titel') ?? '',
 });
 
 export const READING_ROOM_SORT_OPTIONS = (): FilterMenuSortOption[] => [

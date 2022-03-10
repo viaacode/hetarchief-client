@@ -1,4 +1,6 @@
+import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
+import { SortObject } from '@shared/types';
 import {
 	ApiResponseWrapper,
 	ElasticsearchAggregations,
@@ -13,14 +15,18 @@ export class MediaService {
 	public static async getAll(
 		filters: MediaSearchFilters = {},
 		page = 1,
-		size = 20
+		size = 20,
+		sort?: SortObject
 	): Promise<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
+		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
+
 		const parsed = (await ApiService.getApi()
 			.post(MEDIA_SERVICE_BASE_URL, {
 				body: JSON.stringify({
 					filters,
 					size,
 					page,
+					...parsedSort,
 				}),
 			})
 			.json()) as ElasticsearchResponse<MediaInfo>;

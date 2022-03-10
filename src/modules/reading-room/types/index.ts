@@ -11,9 +11,9 @@ export enum ReadingRoomMediaType {
 }
 
 export enum ReadingRoomSort {
-	Date = 'date',
-	Relevance = 'relevance',
-	Title = 'title',
+	Date = 'schema_date_created',
+	Relevance = '_score',
+	Title = 'schema_name.keyword',
 }
 
 export enum ReadingRoomFilterId {

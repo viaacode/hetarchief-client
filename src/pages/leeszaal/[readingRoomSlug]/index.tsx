@@ -71,6 +71,11 @@ const ReadingRoomPage: NextPage = () => {
 	// TODO add other filters once available
 	const hasSearched = !!query?.search?.length || query?.format !== ReadingRoomMediaType.All;
 
+	const activeSort: SortObject = {
+		orderProp: query.orderProp,
+		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
+	};
+
 	/**
 	 * Data
 	 */
@@ -81,7 +86,8 @@ const ReadingRoomPage: NextPage = () => {
 			format: (query.format as ReadingRoomMediaType) || READING_ROOM_QUERY_PARAM_INIT.format,
 		},
 		query.page || 0,
-		READING_ROOM_ITEM_COUNT
+		READING_ROOM_ITEM_COUNT,
+		activeSort
 	);
 
 	/**
@@ -197,10 +203,6 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
-	const activeSort: SortObject = {
-		orderProp: query.orderProp,
-		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
-	};
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
