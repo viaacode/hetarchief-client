@@ -104,7 +104,7 @@ export const MEDIA_ACTIONS = (): DynamicActionMenuProps => ({
 export const PARSED_METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => {
 	// Hide empty metadata fields
 	return METADATA_FIELDS(mediaInfo).reduce((metadata: MetadataItem[], field) => {
-		if (field.data && (field.data as any[]).length) {
+		if (field.data) {
 			metadata.push(field);
 		}
 		return metadata;
@@ -124,14 +124,7 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 		title: i18n?.t('External ID') ?? '',
 		data: mediaInfo.meemooFragmentId,
 	},
-	// {
-	// 	title: i18n?.t('Hoofd lokale CP ID') ?? '',
-	// 	data: mediaInfo.premisIdentifier,
-	// },
-	// {
-	// 	title: i18n?.t('Overige lokale CP ID') ?? '',
-	// 	data: mediaInfo.premisIdentifier,
-	// },
+	...mapDataToMetadata(mediaInfo.premisIdentifier),
 	{
 		title: i18n?.t('CP naam') ?? '',
 		data: mediaInfo.maintainerId, // TODO: get name
@@ -185,7 +178,7 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 	},
 	{
 		title: i18n?.t('Genre') ?? '',
-		data: mediaInfo.genre,
+		data: mediaInfo.genre.length ? mediaInfo.genre : null,
 	},
 	{
 		title: i18n?.t('Coverage: ruimte') ?? '',

@@ -71,6 +71,7 @@ export interface Media {
 	dateCreated: string;
 	dateCreatedLowerBound: string;
 	ebucoreObjectType: string;
+	representations: Representation[];
 }
 
 export interface ContactInfo {
@@ -84,6 +85,18 @@ export interface Address {
 	postalCode: string;
 	locality: string;
 	postOfficeBoxNumber: string;
+}
+
+export interface Representation {
+	name: string;
+	alternateName: string;
+	description: string;
+	meemooFragmentId: string;
+	dctermsFormat: string;
+	transcript: string;
+	dateCreated: string;
+	id: string;
+	files: File[];
 }
 
 export class MediaSearchFilters {

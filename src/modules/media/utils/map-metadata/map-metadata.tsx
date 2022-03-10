@@ -15,7 +15,7 @@ export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 };
 
 export const mapKeywordsToTagList = (keywords: string[]): ReactNode | null => {
-	return keywords ? (
+	return keywords.length ? (
 		<TagList
 			className="u-pt-12"
 			tags={mapKeywordsToTags(keywords)}
