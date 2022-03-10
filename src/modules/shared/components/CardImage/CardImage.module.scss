@@ -57,9 +57,9 @@ $component: "c-card-image";
 
 		&--small {
 			height: 100%;
-			min-height: 72px;
-			min-width: 20px;
-			width: 20px;
+			min-height: $card-image-small-height;
+			min-width: $card-image-small-width;
+			width: $card-image-small-width;
 
 			.#{$component} {
 				&__logo {
@@ -68,8 +68,8 @@ $component: "c-card-image";
 			}
 
 			@include respond-at("md") {
-				min-width: 96px;
-				width: 96px;
+				min-width: $card-image-small-width-md;
+				width: $card-image-small-width-md;
 
 				.#{$component} {
 					&__logo {
