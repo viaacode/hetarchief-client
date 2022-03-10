@@ -151,7 +151,7 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 	},
 	{
 		title: i18n?.t('Formaat') ?? '',
-		data: mediaInfo.dctermsFormat, // ?
+		data: mediaInfo.dctermsFormat,
 	},
 	{
 		title: i18n?.t('Objecttype') ?? '',
@@ -159,15 +159,15 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 	},
 	{
 		title: i18n?.t('Duur') ?? '',
-		data: mediaInfo.duration, // TODO: format?
+		data: mediaInfo.duration,
 	},
 	{
 		title: i18n?.t('Datum creatie') ?? '',
-		data: mediaInfo.dateCreated, // TODO: format?
+		data: mediaInfo.dateCreatedLowerBound,
 	},
 	{
 		title: i18n?.t('Datum uitzending/uitgave') ?? '',
-		data: mediaInfo.datePublished, // TODO: format?
+		data: mediaInfo.datePublished,
 	},
 	...mapDataToMetadata(mediaInfo.creator),
 	...mapDataToMetadata(mediaInfo.publisher),
