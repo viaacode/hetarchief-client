@@ -22,12 +22,8 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
-import {
-	DynamicActionMenu,
-	Metadata,
-	// ObjectPlaceholder,
-} from 'modules/media/components';
-// import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
+import { DynamicActionMenu, Metadata, ObjectPlaceholder } from 'modules/media/components';
+import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
 	/**
@@ -180,26 +176,25 @@ const ObjectDetailPage: NextPage = () => {
 					/>
 					<div className="p-object-detail__video">
 						{mediaType ? (
-							<p>media</p>
+							<FlowPlayer
+								className="p-object-detail__flowplayer"
+								src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+								poster="https://via.placeholder.com/1920x1080"
+								title="Elephants dream"
+								pause={pauseMedia}
+								onPlay={() => setPauseMedia(false)}
+							/>
 						) : (
 							<>
-								<FlowPlayer
-									className="p-object-detail__flowplayer"
-									src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-									poster="https://via.placeholder.com/1920x1080"
-									title="Elephants dream"
-									pause={pauseMedia}
-									onPlay={() => setPauseMedia(false)}
+								<ObjectPlaceholder
+									{...objectPlaceholderMock}
+									openModalButtonLabel={t(
+										'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+									)}
+									closeModalButtonLabel={t(
+										'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+									)}
 								/>
-								{/* <ObjectPlaceholder
-								{...objectPlaceholderMock}
-								openModalButtonLabel={t(
-									'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-								)}
-								closeModalButtonLabel={t(
-									'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-								)}
-							/> */}
 							</>
 						)}
 					</div>
