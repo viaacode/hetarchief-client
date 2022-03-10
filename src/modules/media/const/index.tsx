@@ -3,7 +3,7 @@ import { i18n } from 'next-i18next';
 
 import { MetadataItem } from '@media/components';
 import { Media, MediaTypes, ObjectDetailTabs } from '@media/types';
-import { mapDataToMetadata, mapKeywordsToTagList } from '@media/utils';
+import { mapKeywordsToTagList, mapObjectToMetadata } from '@media/utils';
 import { Icon } from '@shared/components';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
@@ -124,7 +124,7 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 		title: i18n?.t('External ID') ?? '',
 		data: mediaInfo.meemooFragmentId,
 	},
-	...mapDataToMetadata(mediaInfo.premisIdentifier),
+	...mapObjectToMetadata(mediaInfo.premisIdentifier),
 	{
 		title: i18n?.t('CP naam') ?? '',
 		data: mediaInfo.maintainerId, // TODO: get name
@@ -162,8 +162,8 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 		title: i18n?.t('Datum uitzending/uitgave') ?? '',
 		data: mediaInfo.datePublished,
 	},
-	...mapDataToMetadata(mediaInfo.creator),
-	...mapDataToMetadata(mediaInfo.publisher),
+	...mapObjectToMetadata(mediaInfo.creator),
+	...mapObjectToMetadata(mediaInfo.publisher),
 	{
 		title: i18n?.t('Uitgebreide beschrijving') ?? '',
 		data: mediaInfo.abstract,
