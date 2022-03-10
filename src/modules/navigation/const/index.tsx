@@ -32,7 +32,7 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 };
 
 export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
-	anyUnreadNotifications,
+	hasUnreadNotifications,
 	notificationsOpen,
 	userName,
 	onLogOutClick,
@@ -53,7 +53,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 							? `${badgeCls}--white u-color-teal`
 							: `${badgeCls}--teal u-color-white`,
 						{
-							[badgeCls]: anyUnreadNotifications,
+							[badgeCls]: hasUnreadNotifications,
 						}
 					)}
 					icon={<Icon type="solid" name="notification" />}

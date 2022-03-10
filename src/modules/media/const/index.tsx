@@ -48,48 +48,54 @@ export const OBJECT_DETAIL_TABS = (mediaType: MediaTypes): TabProps[] => [
  * Actions
  */
 
-export const MEDIA_ACTIONS: DynamicActionMenuProps = {
+export const MEDIA_ACTIONS = (): DynamicActionMenuProps => ({
 	actions: [
 		{
-			label: 'quotes',
+			label: 'Quotes',
 			iconName: 'quotes',
 			id: 'quotes',
 			ariaLabel: 'copies quotes',
+			tooltip: i18n?.t('modules/media/const/index___quotes') ?? '',
 		},
 		{
-			label: 'description',
+			label: 'Description',
 			iconName: 'description',
 			id: 'description',
 			ariaLabel: 'shows description',
+			tooltip: i18n?.t('modules/media/const/index___description') ?? '',
 		},
 		{
-			label: 'bookmark',
+			label: 'Bookmark',
 			iconName: 'bookmark',
 			id: 'bookmark',
 			ariaLabel: 'bookmarks item',
+			tooltip: i18n?.t('modules/media/const/index___bookmark') ?? '',
 		},
 		{
-			label: 'contact',
+			label: 'Contact',
 			iconName: 'contact',
 			id: 'contact',
 			ariaLabel: 'contact reading room',
+			tooltip: i18n?.t('modules/media/const/index___contact') ?? '',
 		},
 		{
-			label: 'calendar',
+			label: 'Calendar',
 			iconName: 'calendar',
 			id: 'calendar',
 			ariaLabel: 'copy date',
+			tooltip: i18n?.t('modules/media/const/index___calendar') ?? '',
 		},
 		{
-			label: 'related-objects',
+			label: 'Related-objects',
 			iconName: 'related-objects',
 			id: 'related-objects',
 			ariaLabel: 'access related objects',
+			tooltip: i18n?.t('modules/media/const/index___related-objects') ?? '',
 		},
 	],
 	limit: 2,
 	onClickAction: (id) => console.log(id),
-};
+});
 
 /**
  * Metadata

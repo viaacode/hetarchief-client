@@ -2,7 +2,7 @@ import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-compone
 import clsx from 'clsx';
 import { FC, ReactNode } from 'react';
 
-import { useScrollLock } from '@shared/hooks';
+import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';

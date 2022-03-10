@@ -1,0 +1,14 @@
+@use "styles/abstracts" as *;
+@use "sass:math";
+
+$component: "c-sidebar-layout-title";
+
+.#{$component} {
+	font-size: 2.8rem;
+	line-height: $line-height-md;
+
+	@include respond-at("md") {
+		font-size: $font-size-3xl;
+		line-height: $font-size-3xl * (math.div(56, 48));
+	}
+}

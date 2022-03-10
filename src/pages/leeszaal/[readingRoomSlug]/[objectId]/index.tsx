@@ -1,38 +1,32 @@
-import { Button, FlowPlayer, TabProps, TagList } from '@meemoo/react-components';
+import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
-import { stringifyUrl } from 'query-string';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
-import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS, PARSED_METADATA_FIELDS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { MediaTypes, ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
-import {
-	useElementSize,
-	useHideFooter,
-	useNavigationBorder,
-	useStickyLayout,
-	useWindowSizeContext,
-} from '@shared/hooks';
+import { useElementSize } from '@shared/hooks/use-element-size';
+import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectShowNavigationBorder } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
 import {
 	DynamicActionMenu,
 	Metadata,
-	MetadataItem,
 	// ObjectPlaceholder,
-	RelatedObject,
-	RelatedObjectProps,
 } from 'modules/media/components';
-import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
 // import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
@@ -46,7 +40,6 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeTab, setActiveTab] = useState<string | number | undefined>(undefined);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
-	const [isMediaFullscreen, setIsMediaFullscreen] = useState(false);
 
 	// Layout
 	useStickyLayout();
@@ -55,6 +48,8 @@ const ObjectDetailPage: NextPage = () => {
 
 	// Sizes
 	const windowSize = useWindowSizeContext();
+	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
 
@@ -122,46 +117,11 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Metadata
 	 */
-	const renderInterestingListItem = (data: RelatedObjectProps) => (
-		<li className="u-py-8">
-			<RelatedObject {...data} />
-		</li>
-	);
-
-	const metaData: MetadataItem[] = [
-		...metadataMock.metadata,
-		{
-			title: 'Trefwoorden',
-			data: (
-				<TagList
-					className="u-pt-12"
-					tags={[]}
-					onTagClicked={(id) => {
-						router.push(
-							stringifyUrl({
-								url: `/leeszaal/${router.query.readingRoomSlug}`,
-								query: {
-									search: id,
-								},
-							})
-						);
-					}}
-					variants={['clickable', 'silver', 'medium']}
-				/>
-			),
-		},
-		{
-			title: t('pages/leeszaal/reading-room-slug/object-id/index___ook-interessant'),
-			data: (
-				<ul className="u-list-reset u-bg-platinum u-mx--32 u-px-32 u-py-24 u-mt-24">
-					{renderInterestingListItem(relatedObjectVideoMock)}
-					{renderInterestingListItem(relatedObjectVideoMock)}
-					{renderInterestingListItem(relatedObjectVideoMock)}
-				</ul>
-			),
-			className: 'u-pb-0',
-		},
-	];
+	// const renderInterestingListItem = (data: RelatedObjectProps) => (
+	// 	<li className="u-py-8">
+	// 		<RelatedObject {...data} />
+	// 	</li>
+	// );
 
 	/**
 	 * Render
@@ -187,7 +147,11 @@ const ObjectDetailPage: NextPage = () => {
 					<meta name="description" content="Object detail omschrijving" />
 				</Head>
 				{/* TODO: bind title to state */}
-				<ReadingRoomNavigation className="p-object-detail__nav" title={'Leeszaal'} />
+				<ReadingRoomNavigation
+					showBorder={showNavigationBorder}
+					className="p-object-detail__nav"
+					title={'Leeszaal'}
+				/>
 				<ScrollableTabs
 					className="p-object-detail__tabs"
 					variants={['dark']}
@@ -219,12 +183,6 @@ const ObjectDetailPage: NextPage = () => {
 							<p>media</p>
 						) : (
 							<>
-								<Button
-									className="p-object-detail__flowplayer-fullscreen-button"
-									icon={<Icon name="expand" />}
-									variants={['black']}
-									onClick={() => setIsMediaFullscreen(true)}
-								/>
 								<FlowPlayer
 									className="p-object-detail__flowplayer"
 									src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
@@ -232,15 +190,6 @@ const ObjectDetailPage: NextPage = () => {
 									title="Elephants dream"
 									pause={pauseMedia}
 									onPlay={() => setPauseMedia(false)}
-									fullscreen={isMediaFullscreen}
-									customControls={
-										<Button
-											className="p-object-detail__flowplayer-fullscreen-button p-object-detail__flowplayer-fullscreen-button--exit"
-											icon={<Icon name="compress" />}
-											variants={['white']}
-											onClick={() => setIsMediaFullscreen(false)}
-										/>
-									}
 								/>
 								{/* <ObjectPlaceholder
 								{...objectPlaceholderMock}
@@ -282,7 +231,7 @@ const ObjectDetailPage: NextPage = () => {
 											)}
 										</span>
 									</Button>
-									<DynamicActionMenu {...MEDIA_ACTIONS} />
+									<DynamicActionMenu {...MEDIA_ACTIONS()} />
 								</div>
 							</div>
 							{mediaInfo && (

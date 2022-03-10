@@ -1,12 +1,20 @@
+import { MouseEventHandler, ReactNode } from 'react';
+
 export type MediaCardViewMode = 'list' | 'grid';
 
 export interface MediaCardProps {
-	description?: string;
-	published_at?: Date;
-	published_by?: string;
-	title?: string;
+	bookmarkIsSolid?: boolean;
+	description?: ReactNode;
+	keywords?: string[];
 	preview?: string;
+	publishedAt?: Date;
+	publishedBy?: string;
+	title?: string;
 	type?: 'video' | 'audio';
 	view?: MediaCardViewMode;
-	keywords?: string[];
+	onBookmark?: MouseEventHandler<HTMLButtonElement>;
+	onTitleClick?: () => void;
+	actions?: ReactNode;
 }
+
+export type IdentifiableMediaCard = MediaCardProps & { id: string };

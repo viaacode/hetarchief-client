@@ -6,6 +6,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
 import {
 	CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
@@ -31,14 +32,15 @@ const CPRequestsPage: NextPage = () => {
 		data: visits,
 		refetch,
 		isFetching,
-	} = useGetVisits(
-		filters.search,
-		filters.status === RequestStatusAll.ALL ? undefined : filters.status,
-		filters.page,
-		RequestTablePageSize,
-		filters.orderProp as keyof VisitInfo,
-		filters.orderDirection as OrderDirection
-	);
+	} = useGetVisits({
+		searchInput: filters.search,
+		status:
+			filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
+		page: filters.page,
+		size: RequestTablePageSize,
+		orderProp: filters.orderProp as keyof VisitInfo,
+		orderDirection: filters.orderDirection as OrderDirection,
+	});
 
 	// Filters
 
@@ -225,4 +227,4 @@ const CPRequestsPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default CPRequestsPage;
+export default withAuth(CPRequestsPage);

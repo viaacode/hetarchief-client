@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { FC, useRef, useState } from 'react';
 
 import { Icon, IconLightNames } from '@shared/components';
-import { useElementSize } from '@shared/hooks';
+import { useElementSize } from '@shared/hooks/use-element-size';
 
 import {
 	DYNAMIC_ACTION_BOX,
@@ -65,6 +65,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					icon={renderIcon(action.iconName)}
 					variants={['silver']}
 					aria-label={action.ariaLabel}
+					title={action.tooltip}
 				/>
 			</li>
 		);

@@ -1,0 +1,38 @@
+@use "../../abstracts" as *;
+
+$component: "p-account-my-collections";
+
+.#{$component} {
+	&__export--label {
+		@include respond-to("xl") {
+			display: none;
+		}
+	}
+
+	&__export--icon {
+		@include respond-at("xl") {
+			display: none;
+		}
+	}
+
+	&__toggle {
+		@include respond-to("md") {
+			display: none;
+		}
+	}
+
+	&__search {
+		&.c-search-bar.c-tags-input.c-search-bar--light .c-tags-input__control {
+			border-color: $zinc-66;
+		}
+	}
+
+	// Avoid clicks on container triggering events
+	.c-content-input__icon--end {
+		pointer-events: none;
+
+		& > button {
+			pointer-events: all;
+		}
+	}
+}

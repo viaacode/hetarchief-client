@@ -13,7 +13,7 @@ export default {
 } as ComponentMeta<typeof Navigation>;
 
 const Template: ComponentStory<typeof Navigation> = (args) => (
-	<Navigation {...args}>
+	<Navigation {...args} showBorder>
 		<Navigation.Left
 			placement="left"
 			renderHamburger={true}

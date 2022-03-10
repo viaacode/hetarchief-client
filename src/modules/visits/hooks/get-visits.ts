@@ -4,19 +4,41 @@ import { UseQueryResult } from 'react-query/types/react/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
-import { visitsService } from '@visits/services';
-import { VisitInfo } from '@visits/types';
+import { VisitsService } from '@visits/services';
+import { VisitInfo, VisitStatus, VisitTimeframe } from '@visits/types';
 
-export function useGetVisits(
-	searchInput: string | undefined,
-	status: string | undefined,
-	page: number,
-	size: number,
-	orderProp: keyof VisitInfo,
-	orderDirection: OrderDirection
-): UseQueryResult<ApiResponseWrapper<VisitInfo>> {
+export function useGetVisits({
+	searchInput,
+	status,
+	timeframe,
+	page,
+	size,
+	orderProp,
+	orderDirection,
+}: {
+	searchInput?: string | undefined;
+	status?: VisitStatus | undefined;
+	timeframe?: VisitTimeframe | undefined;
+	page: number;
+	size: number;
+	orderProp?: keyof VisitInfo;
+	orderDirection?: OrderDirection;
+}): UseQueryResult<ApiResponseWrapper<VisitInfo>> {
 	return useQuery(
-		[QUERY_KEYS.getVisits, { searchInput, status, page, size, orderProp, orderDirection }],
-		() => visitsService.getAll(searchInput, status, page, size, orderProp, orderDirection)
+		[
+			QUERY_KEYS.getVisits,
+			{ searchInput, status, timeframe, page, size, orderProp, orderDirection },
+		],
+		() =>
+			VisitsService.getAll(
+				searchInput,
+				status,
+				timeframe,
+				page,
+				size,
+				orderProp,
+				orderDirection
+			),
+		{ keepPreviousData: true }
 	);
 }

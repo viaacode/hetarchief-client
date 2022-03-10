@@ -12,4 +12,5 @@ export interface FilterMenuMobileProps
 	onFilterClick?: (id: string) => void;
 	onFilterReset: OnFilterMenuFormReset;
 	onFilterSubmit: OnFilterMenuFormSubmit;
+	showNavigationBorder: boolean;
 }

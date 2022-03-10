@@ -1,10 +1,17 @@
 @use "sass:math";
-@use "../abstracts/" as *;
+@use "../abstracts" as *;
 
 $component: "c-tabs";
 
 .#{$component} {
 	display: flex;
+
+	button {
+		font-size: inherit;
+		line-height: inherit;
+		font-weight: inherit;
+		font-family: inherit;
+	}
 
 	/**
 	* Modifiers
@@ -40,7 +47,7 @@ $component: "c-tabs";
 		&.#{$component} {
 			&--medium {
 				padding: 0 math.div($tab-min-height-medium, 2);
-				
+
 				@include respond-to("md") {
 					border-radius: math.div($tab-min-height-medium, 2);
 				}
