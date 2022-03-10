@@ -8,6 +8,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { RequestStatusBadge } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
 import { Icon, UnreadMarker } from '@shared/components';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow, VisitStatus } from '@shared/types';
 import { VisitTimeframe } from '@visits/types';
@@ -18,7 +19,7 @@ export const RequestTablePageSize = 20;
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, RequestStatusAll.ALL),
-	search: withDefault(StringParam, undefined),
+	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, undefined),
 	orderDirection: withDefault(SortDirectionParam, undefined),
@@ -96,7 +97,7 @@ export const RequestTableColumns = (
 
 export const CP_ADMIN_VISITS_QUERY_PARAM_CONFIG = {
 	timeframe: withDefault(StringParam, RequestStatusAll.ALL),
-	search: withDefault(StringParam, undefined),
+	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, undefined),
 	orderDirection: withDefault(SortDirectionParam, undefined),

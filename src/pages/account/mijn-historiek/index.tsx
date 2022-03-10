@@ -10,6 +10,8 @@ import { useQueryParams } from 'use-query-params';
 import {
 	ACCOUNT_HISTORY_QUERY_PARAM_CONFIG,
 	HistoryItemListSize,
+	HistoryTableAccessComboId,
+	HistoryTableAccessFrom,
 	HistoryTableColumns,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
@@ -51,9 +53,13 @@ const AccountMyHistory: NextPage = () => {
 
 	const onSortChange = useCallback(
 		(rules) => {
+			let orderProp = rules[0]?.id || undefined;
+			orderProp =
+				orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
+
 			setFilters({
 				...filters,
-				orderProp: rules[0]?.id || undefined,
+				orderProp,
 				orderDirection: rules[0]
 					? rules[0].desc
 						? OrderDirection.desc
@@ -90,7 +96,7 @@ const AccountMyHistory: NextPage = () => {
 				contentTitle={t('pages/account/mijn-historiek/index___mijn-historiek')}
 			>
 				{(visits.data?.items?.length || 0) > 0 ? (
-					<div className="l-container p-cp__edgeless-container--lg">
+					<div className="l-container l-container--edgeless-to-lg">
 						<Table
 							className="u-mt-24"
 							options={
@@ -128,7 +134,7 @@ const AccountMyHistory: NextPage = () => {
 						/>
 					</div>
 				) : (
-					<div className="l-container p-cp__edgeless-container--lg u-text-center u-color-neutral u-py-48">
+					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
 						{visits.isFetching ? <Loading /> : renderEmptyMessage()}
 					</div>
 				)}
