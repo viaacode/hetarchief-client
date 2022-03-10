@@ -60,7 +60,6 @@ const ObjectDetailPage: NextPage = () => {
 	const { data: mediaInfo, isLoading: isLoadingMediaInfo } = useGetMediaInfo(
 		router.query.objectId as string
 	);
-	console.log(isLoadingMediaInfo ? 'loading...' : 'finished!', mediaInfo);
 
 	// Set default view
 	useEffect(() => {
@@ -77,6 +76,15 @@ const ObjectDetailPage: NextPage = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
+
+	useEffect(() => {
+		if (mediaType === null) {
+			if (windowSize.width && windowSize.width >= 768) {
+				// Always expand metadata on desktop if media is not defined
+				setActiveTab(ObjectDetailTabs.Metadata);
+			}
+		}
+	}, [windowSize, mediaType]);
 
 	/**
 	 * Variables
