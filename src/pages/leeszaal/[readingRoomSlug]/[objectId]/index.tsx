@@ -267,6 +267,7 @@ const ObjectDetailPage: NextPage = () => {
 														)}
 													</ul>
 												),
+												className: 'u-pb-0',
 											},
 										]}
 									/>
