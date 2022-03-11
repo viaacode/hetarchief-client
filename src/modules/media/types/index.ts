@@ -39,7 +39,7 @@ export interface Media {
 	partOfArchive: string;
 	partOfEpisode: string;
 	partOfSeason: string;
-	partOfSeries: string;
+	partOfSeries: string[];
 	maintainerId: string;
 	contactInfo: ContactInfo;
 	copyrightHolder: string;

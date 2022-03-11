@@ -130,23 +130,23 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 	// 	data: mediaInfo.maintainerId, // TODO: get name
 	// },
 	{
-		title: i18n?.t('Alternatief') ?? '',
+		title: i18n?.t('modules/media/const/index___alternatief') ?? '',
 		data: mediaInfo.alternateName,
 	},
 	{
-		title: i18n?.t('Archief') ?? '',
+		title: i18n?.t('modules/media/const/index___archief') ?? '',
 		data: mediaInfo.partOfArchive,
 	},
 	{
-		title: i18n?.t('Serie') ?? '',
-		data: mediaInfo.partOfSeries,
+		title: i18n?.t('modules/media/const/index___serie') ?? '',
+		data: mediaInfo.partOfSeries.join(', '),
 	},
 	{
-		title: i18n?.t('Episode') ?? '',
+		title: i18n?.t('modules/media/const/index___episode') ?? '',
 		data: mediaInfo.partOfEpisode,
 	},
 	{
-		title: i18n?.t('Seizoen') ?? '',
+		title: i18n?.t('modules/media/const/index___seizoen') ?? '',
 		data: mediaInfo.partOfSeason,
 	},
 	{
