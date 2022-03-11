@@ -3,7 +3,7 @@ import { i18n } from 'next-i18next';
 
 import { MetadataItem } from '@media/components';
 import { Media, MediaTypes, ObjectDetailTabs } from '@media/types';
-import { mapKeywordsToTagList, mapObjectToMetadata } from '@media/utils';
+import { mapArrayToMetadataData, mapKeywordsToTagList, mapObjectToMetadata } from '@media/utils';
 import { Icon } from '@shared/components';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
@@ -120,34 +120,27 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 		title: i18n?.t('modules/media/const/index___meemoo-identifier') ?? '',
 		data: mediaInfo.id,
 	},
-	{
-		title: i18n?.t('modules/media/const/index___external-id') ?? '',
-		data: mediaInfo.meemooFragmentId,
-	},
-	...mapObjectToMetadata(mediaInfo.premisIdentifier),
-	// {
-	// 	title: i18n?.t('modules/media/const/index___cp-naam') ?? '',
-	// 	data: mediaInfo.maintainerId, // TODO: get name
-	// },
+	// TODO: Hoofd lokale CP (Identifier bij aanbieder)
+	...mapObjectToMetadata(mediaInfo.premisIdentifier), // Overige ID's contentpartner
 	{
 		title: i18n?.t('modules/media/const/index___alternatief') ?? '',
 		data: mediaInfo.alternateName,
 	},
 	{
 		title: i18n?.t('modules/media/const/index___archief') ?? '',
-		data: mediaInfo.partOfArchive,
+		data: mapArrayToMetadataData(mediaInfo.partOfArchive),
 	},
 	{
 		title: i18n?.t('modules/media/const/index___serie') ?? '',
-		data: mediaInfo.partOfSeries.join(', '),
+		data: mapArrayToMetadataData(mediaInfo.partOfSeries),
 	},
 	{
 		title: i18n?.t('modules/media/const/index___episode') ?? '',
-		data: mediaInfo.partOfEpisode,
+		data: mapArrayToMetadataData(mediaInfo.partOfEpisode),
 	},
 	{
 		title: i18n?.t('modules/media/const/index___seizoen') ?? '',
-		data: mediaInfo.partOfSeason,
+		data: mapArrayToMetadataData(mediaInfo.partOfSeason),
 	},
 	{
 		title: i18n?.t('modules/media/const/index___bestandstype') ?? '',
@@ -179,25 +172,30 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 		title: i18n?.t('modules/media/const/index___uitgebreide-beschrijving') ?? '',
 		data: mediaInfo.abstract,
 	},
+	{
+		title: i18n?.t('transcriptie') ?? '',
+		data: mediaInfo.representations[0].transcript, // TODO: Update voor andere representations?
+	},
+	// {
+	// 	title: i18n?.t('Ondertitels') ?? '',
+	// 	data: // Niet in representations
+	// },
 	// {
 	// 	title: i18n?.t('modules/media/const/index___programmabeschrijving') ?? '',
 	// 	data: // Geen DB veld
 	// },
-	{
-		title: i18n?.t('modules/media/const/index___cast') ?? '',
-		data: mediaInfo.actor,
-	},
+	...mapObjectToMetadata(mediaInfo.actor),
 	{
 		title: i18n?.t('modules/media/const/index___genre') ?? '',
-		data: mediaInfo.genre.length ? mediaInfo.genre : null,
+		data: mapArrayToMetadataData(mediaInfo.genre),
 	},
 	{
 		title: i18n?.t('modules/media/const/index___locatie-van-de-inhoud') ?? '',
-		data: mediaInfo.spatial,
+		data: mapArrayToMetadataData(mediaInfo.spatial),
 	},
 	{
 		title: i18n?.t('modules/media/const/index___tijdsperiode-van-de-inhoud') ?? '',
-		data: mediaInfo.temporal,
+		data: mapArrayToMetadataData(mediaInfo.temporal),
 	},
 	{
 		title: i18n?.t('modules/media/const/index___trefwoorden') ?? '',
@@ -205,31 +203,31 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 	},
 	{
 		title: i18n?.t('modules/media/const/index___taal') ?? '',
-		data: mediaInfo.inLanguage,
+		data: mapArrayToMetadataData(mediaInfo.inLanguage),
 	},
 	// Geen DB velden
 	// {
-	// 	title: i18n?.t('modules/media/const/index___film-type') ?? '',
+	// 	title: i18n?.t('Type') ?? '',
 	// 	data: mediaInfo.premisIdentifier,
 	// },
 	// {
-	// 	title: i18n?.t('modules/media/const/index___film-base') ?? '',
+	// 	title: i18n?.t('filmbasis') ?? '',
 	// 	data: mediaInfo.premisIdentifier,
 	// },
 	// {
-	// 	title: i18n?.t('modules/media/const/index___film-image-sound') ?? '',
+	// 	title: i18n?.t('Beeld/Geluid') ?? '',
 	// 	data: mediaInfo.premisIdentifier,
 	// },
 	// {
-	// 	title: i18n?.t('modules/media/const/index___film-kleur') ?? '',
+	// 	title: i18n?.t('Kleur/Zwart-wit') ?? '',
 	// 	data: mediaInfo.premisIdentifier,
 	// },
 	// {
-	// 	title: i18n?.t('modules/media/const/index___film-ondertitels') ?? '',
+	// 	title: i18n?.t('Ondertitels') ?? '',
 	// 	data: mediaInfo.premisIdentifier,
 	// },
 	// {
-	// 	title: i18n?.t('modules/media/const/index___film-ondertitels-taal') ?? '',
+	// 	title: i18n?.t('Taal ondertitels') ?? '',
 	// 	data: mediaInfo.premisIdentifier,
 	// },
 	{
