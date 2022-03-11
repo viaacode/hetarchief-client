@@ -1,6 +1,6 @@
 import { TFunction } from 'next-i18next';
 import Link from 'next/link';
-import { Column } from 'react-table';
+import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { formatHistoryDates } from '@account/utils';
@@ -19,9 +19,11 @@ export const ACCOUNT_HISTORY_QUERY_PARAM_CONFIG = {
 export const HistoryTableAccessComboId = 'account-history-from-to';
 export const HistoryTableAccessFrom = 'startAt';
 
+export type HistoryTableColumnProps = Column<VisitInfo> & UseSortByColumnOptions<VisitInfo>;
+
 export const HistoryTableColumns = (
 	i18n: { t: TFunction } = { t: (x: string) => x }
-): Column<VisitInfo>[] => [
+): HistoryTableColumnProps[] => [
 	{
 		Header: i18n.t('modules/account/const/my-history___leeszaal') || '',
 		accessor: 'spaceName',
@@ -32,8 +34,12 @@ export const HistoryTableColumns = (
 	},
 	{
 		Header: i18n.t('modules/account/const/my-history___adres') || '',
-		id: 'cp-requests-address', // Replace with accessor
-		Cell: () => <span className="u-color-neutral">TODO</span>,
+		accessor: 'spaceAddress',
+		disableSortBy: true, // space.schema_maintainer.information is an array and can not be sorted on
+		Cell: (data: VisitInfoRow) => {
+			const visit = data.row.original;
+			return <span className="u-color-neutral">{visit.spaceAddress}</span>;
+		},
 	},
 	{
 		Header: i18n.t('modules/account/const/my-history___toegang-van') || '',

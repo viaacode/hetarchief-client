@@ -16,6 +16,7 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { selectUserProfileId } from '@auth/store/user';
+import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
@@ -145,4 +146,4 @@ const AccountMyHistory: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default AccountMyHistory;
+export default withAuth(AccountMyHistory);
