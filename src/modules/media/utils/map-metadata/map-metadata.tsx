@@ -34,7 +34,7 @@ export const mapKeywordsToTagList = (keywords: string[]): ReactNode | null => {
 	) : null;
 };
 
-export const mapDataToMetadata = (data: Record<string, string[]>): MetadataItem[] => {
+export const mapObjectToMetadata = (data: Record<string, string[]>): MetadataItem[] => {
 	if (!data) return [];
 
 	return Object.keys(data).map((key) => {

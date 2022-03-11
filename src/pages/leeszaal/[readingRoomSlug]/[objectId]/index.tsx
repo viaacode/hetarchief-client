@@ -62,7 +62,6 @@ const ObjectDetailPage: NextPage = () => {
 	const { data: mediaInfo, isLoading: isLoadingMediaInfo } = useGetMediaInfo(
 		router.query.objectId as string
 	);
-	console.log(isLoadingMediaInfo ? 'loading...' : 'finished!', mediaInfo);
 
 	// Set default view
 	useEffect(() => {
@@ -79,6 +78,15 @@ const ObjectDetailPage: NextPage = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
+
+	useEffect(() => {
+		if (mediaType === null) {
+			if (windowSize.width && windowSize.width >= 768) {
+				// Always expand metadata on desktop if media is not defined
+				setActiveTab(ObjectDetailTabs.Metadata);
+			}
+		}
+	}, [windowSize, mediaType]);
 
 	/**
 	 * Variables
@@ -174,15 +182,17 @@ const ObjectDetailPage: NextPage = () => {
 						activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
 					)}
 				>
-					<Button
-						className={clsx(
-							'p-object-detail__expand-button',
-							expandMetadata && 'p-object-detail__expand-button--expanded'
-						)}
-						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
-						onClick={onClickToggle}
-						variants="white"
-					/>
+					{mediaType && (
+						<Button
+							className={clsx(
+								'p-object-detail__expand-button',
+								expandMetadata && 'p-object-detail__expand-button--expanded'
+							)}
+							icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
+							onClick={onClickToggle}
+							variants="white"
+						/>
+					)}
 					<div className="p-object-detail__video">
 						{mediaType ? (
 							<FlowPlayer
