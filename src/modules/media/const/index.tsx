@@ -130,13 +130,24 @@ const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 	// 	data: mediaInfo.maintainerId, // TODO: get name
 	// },
 	{
-		title: i18n?.t('modules/media/const/index___secundaire-titel') ?? '',
-		data:
-			mediaInfo.alternateName ??
-			mediaInfo.partOfArchive ??
-			mediaInfo.partOfEpisode ??
-			mediaInfo.partOfSeason ??
-			mediaInfo.partOfSeries,
+		title: i18n?.t('Alternatief') ?? '',
+		data: mediaInfo.alternateName,
+	},
+	{
+		title: i18n?.t('Archief') ?? '',
+		data: mediaInfo.partOfArchive,
+	},
+	{
+		title: i18n?.t('Serie') ?? '',
+		data: mediaInfo.partOfSeries,
+	},
+	{
+		title: i18n?.t('Episode') ?? '',
+		data: mediaInfo.partOfEpisode,
+	},
+	{
+		title: i18n?.t('Seizoen') ?? '',
+		data: mediaInfo.partOfSeason,
 	},
 	{
 		title: i18n?.t('modules/media/const/index___bestandstype') ?? '',
