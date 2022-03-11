@@ -3,10 +3,9 @@ import Link from 'next/link';
 import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { formatHistoryDates } from '@account/utils';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow } from '@shared/types';
-import { createHomeWithReadingRoomFilterUrl } from '@shared/utils';
+import { createHomeWithReadingRoomFilterUrl, formatAccessDates } from '@shared/utils';
 
 export const HistoryItemListSize = 20;
 
@@ -48,7 +47,7 @@ export const HistoryTableColumns = (
 			const visit = data.row.original;
 			return (
 				<span className="u-color-neutral">
-					{formatHistoryDates(visit.startAt, undefined)}
+					{formatAccessDates(visit.startAt, undefined)}
 				</span>
 			);
 		},
@@ -59,9 +58,7 @@ export const HistoryTableColumns = (
 		Cell: (data: VisitInfoRow) => {
 			const visit = data.row.original;
 			return (
-				<span className="u-color-neutral">
-					{formatHistoryDates(undefined, visit.endAt)}
-				</span>
+				<span className="u-color-neutral">{formatAccessDates(undefined, visit.endAt)}</span>
 			);
 		},
 	},
@@ -73,7 +70,7 @@ export const HistoryTableColumns = (
 			const visit = data.row.original;
 			return (
 				<span className="u-color-neutral">
-					{formatHistoryDates(visit.startAt, visit.endAt)}
+					{formatAccessDates(visit.startAt, visit.endAt)}
 				</span>
 			);
 		},

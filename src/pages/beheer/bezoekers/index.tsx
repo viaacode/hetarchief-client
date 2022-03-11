@@ -7,12 +7,12 @@ import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { RequestTablePageSize } from '@cp/const/requests.const';
 import {
-	CP_ADMIN_VISITS_QUERY_PARAM_CONFIG,
-	RequestTablePageSize,
-	visitsStatusFilters,
-	VisitsTableColumns,
-} from '@cp/const/requests.const';
+	CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG,
+	visitorsStatusFilters,
+	VisitorsTableColumns,
+} from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
@@ -25,7 +25,7 @@ import { VisitTimeframe } from '@visits/types';
 
 const CPVisitorsPage: NextPage = () => {
 	const { t } = useTranslation();
-	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITS_QUERY_PARAM_CONFIG);
+	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	// const [selected, setSelected] = useState<string | number | null>(null);
 
 	const { data: visits, isFetching } = useGetVisits({
@@ -45,7 +45,7 @@ const CPVisitorsPage: NextPage = () => {
 
 	const statusFilters = useMemo(
 		() =>
-			visitsStatusFilters().map((filter) => {
+			visitorsStatusFilters().map((filter) => {
 				return {
 					...filter,
 					active: filter.id === filters.timeframe,
@@ -175,7 +175,7 @@ const CPVisitorsPage: NextPage = () => {
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: VisitsTableColumns({ t }) as Column<object>[],
+									columns: VisitorsTableColumns({ t }) as Column<object>[],
 									data: visits?.items || [],
 									initialState: {
 										pageSize: RequestTablePageSize,
