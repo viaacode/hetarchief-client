@@ -1,5 +1,5 @@
 import { TabProps } from '@meemoo/react-components';
-import { format, isWithinInterval } from 'date-fns';
+import { isWithinInterval } from 'date-fns';
 import { i18n, TFunction } from 'next-i18next';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
@@ -24,15 +24,15 @@ export const visitorsStatusFilters = (): TabProps[] => {
 	return [
 		{
 			id: RequestStatusAll.ALL,
-			label: i18n?.t('modules/cp/const/requests___alle'),
+			label: i18n?.t('modules/cp/const/visitors___alle'),
 		},
 		{
 			id: VisitTimeframe.ACTIVE,
-			label: i18n?.t('modules/cp/const/requests___actief'),
+			label: i18n?.t('modules/cp/const/visitors___actief'),
 		},
 		{
 			id: VisitTimeframe.PAST,
-			label: i18n?.t('modules/cp/const/requests___historiek'),
+			label: i18n?.t('modules/cp/const/visitors___historiek'),
 		},
 	];
 };
@@ -41,11 +41,11 @@ export const VisitorsTableColumns = (
 	i18n: { t: TFunction } = { t: (x: string) => x }
 ): Column<VisitInfo>[] => [
 	{
-		Header: i18n.t('modules/cp/const/requests___naam') || '',
+		Header: i18n.t('modules/cp/const/visitors___naam') || '',
 		accessor: 'visitorName',
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___emailadres') || '',
+		Header: i18n.t('modules/cp/const/visitors___emailadres') || '',
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
@@ -60,7 +60,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___toegang') || '',
+		Header: i18n.t('modules/cp/const/visitors___toegang') || '',
 		accessor: 'startAt',
 		Cell: ({ row }: VisitInfoRow) => {
 			const start = row.original.startAt;
@@ -84,7 +84,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___goedgekeurd-door') || '',
+		Header: i18n.t('modules/cp/const/visitors___goedgekeurd-door') || '',
 		accessor: 'status',
 		Cell: () => {
 			return <span className="u-color-neutral">Noah Peeters</span>; // TODO: Add column to database to track updatedBy

@@ -2,7 +2,7 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 

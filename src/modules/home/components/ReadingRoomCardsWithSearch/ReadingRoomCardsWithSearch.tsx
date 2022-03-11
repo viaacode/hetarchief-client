@@ -34,7 +34,7 @@ const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onReq
 		if (query[SEARCH_QUERY_KEY] && resultsAnchor) {
 			document.body.scrollTo({ top: resultsAnchor.current?.offsetTop, behavior: 'smooth' });
 		}
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
 	 * Methods
