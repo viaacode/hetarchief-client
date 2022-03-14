@@ -2,6 +2,7 @@ import { Button, FlowPlayer, TabProps, TagList } from '@meemoo/react-components'
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -33,6 +34,8 @@ import {
 } from 'modules/media/components';
 import { metadataMock } from 'modules/media/components/Metadata/__mocks__/metadata';
 // import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
+
+const { publicRuntimeConfig } = getConfig();
 
 const ObjectDetailPage: NextPage = () => {
 	/**
@@ -215,6 +218,8 @@ const ObjectDetailPage: NextPage = () => {
 							title="Elephants dream"
 							pause={pauseMedia}
 							onPlay={() => setPauseMedia(false)}
+							token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
+							dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 						/>
 						{/* <ObjectPlaceholder
 					{...objectPlaceholderMock}
