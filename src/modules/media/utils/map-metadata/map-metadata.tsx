@@ -6,10 +6,10 @@ import { ReactNode } from 'react';
 import { MetadataItem } from '@media/components';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
-	return keywords.map((trefwoord) => {
+	return keywords.map((item) => {
 		return {
-			label: trefwoord,
-			id: trefwoord.toLowerCase(),
+			label: item,
+			id: item.toLowerCase(),
 		};
 	});
 };
