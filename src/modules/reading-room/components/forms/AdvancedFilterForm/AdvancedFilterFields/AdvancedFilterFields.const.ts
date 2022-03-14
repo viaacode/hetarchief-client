@@ -1,6 +1,7 @@
 import { Select, SelectOption, TextInput } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
+import { DurationInput } from '@shared/components/DurationInput';
 import { Timepicker } from '@shared/components/Timepicker';
 
 import { MetadataProp, Operator } from './AdvancedFilterFields.types';
@@ -142,7 +143,7 @@ export const METADATA_FIELD_MAP = {
 	[MetadataProp.CreatedAt]: TextInput, // TODO: Create DateRangePicker
 	[MetadataProp.Creator]: TextInput,
 	[MetadataProp.Description]: TextInput,
-	[MetadataProp.Duration]: TextInput, // TODO: Create DurationInput (TextInput with format)
+	[MetadataProp.Duration]: DurationInput,
 	[MetadataProp.Era]: TextInput,
 	[MetadataProp.Everything]: TextInput,
 	[MetadataProp.Mediatype]: Select, // TODO: add options (MediaTypes)
