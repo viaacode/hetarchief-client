@@ -1,10 +1,9 @@
 import {
 	RichTextEditor as RichTextEditorComponent,
 	RichTextEditorControl,
+	RichTextEditorProps,
 } from '@meemoo/react-components';
 import React, { FC } from 'react';
-
-import { RichTextEditorProps } from '@shared/components/RichTextEditor/RichTextEditor.types';
 
 import styles from './RichTextEditor.module.scss';
 
