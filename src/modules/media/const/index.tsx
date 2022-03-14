@@ -111,6 +111,7 @@ export const PARSED_METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => {
 	}, []);
 };
 
+// TODO: complete mapping
 const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] => [
 	// {
 	// 	title: i18n?.t('modules/media/const/index___oorsprong') ?? '',
