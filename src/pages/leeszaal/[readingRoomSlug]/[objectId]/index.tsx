@@ -42,7 +42,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | undefined>(undefined);
-	const [activeBlade, setActiveBlade] = useState<MediaActions | undefined>(undefined);
+	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
 
@@ -112,6 +112,10 @@ const ObjectDetailPage: NextPage = () => {
 
 	const onClickToggle = () => {
 		setActiveTab(expandMetadata ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata);
+	};
+
+	const onCloseBlade = () => {
+		setActiveBlade(null);
 	};
 
 	/**
@@ -299,10 +303,10 @@ const ObjectDetailPage: NextPage = () => {
 					title: mediaInfo?.name,
 				}}
 				onClose={() => {
-					setActiveBlade(undefined);
+					onCloseBlade();
 				}}
 				onSubmit={() => {
-					setActiveBlade(undefined);
+					onCloseBlade();
 				}}
 			/>
 		</>
