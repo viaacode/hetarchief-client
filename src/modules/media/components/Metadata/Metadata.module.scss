@@ -27,4 +27,8 @@ $metadata-border: 0.1rem solid $black-20;
 		padding-bottom: $spacer-xxs;
 		font-size: $font-size-md;
 	}
+
+	&__item-text {
+		overflow-wrap: break-word;
+	}
 }
