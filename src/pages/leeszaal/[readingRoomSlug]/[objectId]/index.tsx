@@ -302,12 +302,8 @@ const ObjectDetailPage: NextPage = () => {
 					id: mediaInfo?.id ?? '',
 					title: mediaInfo?.name,
 				}}
-				onClose={() => {
-					onCloseBlade();
-				}}
-				onSubmit={() => {
-					onCloseBlade();
-				}}
+				onClose={onCloseBlade}
+				onSubmit={onCloseBlade}
 			/>
 		</>
 	);
