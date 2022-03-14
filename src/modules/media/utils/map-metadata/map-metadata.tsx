@@ -44,3 +44,9 @@ export const mapObjectToMetadata = (data: Record<string, string[]>): MetadataIte
 		};
 	});
 };
+
+export const mapArrayToMetadataData = (data: string[]): string | null => {
+	if (!data || !data.length) return null;
+
+	return data.join(', ');
+};
