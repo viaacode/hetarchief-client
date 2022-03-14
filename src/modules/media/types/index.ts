@@ -123,5 +123,10 @@ export enum ObjectDetailTabs {
 }
 
 export enum MediaActions {
+	Quotes = 'quotes',
+	Description = 'description',
 	Bookmark = 'bookmark',
+	Contact = 'contact',
+	Calendar = 'calendar',
+	RelatedObjects = 'related-objects',
 }

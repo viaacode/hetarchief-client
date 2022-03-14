@@ -118,6 +118,14 @@ const ObjectDetailPage: NextPage = () => {
 		setActiveBlade(null);
 	};
 
+	const onClickAction = (id: MediaActions) => {
+		switch (id) {
+			case MediaActions.Bookmark:
+				setActiveBlade(MediaActions.Bookmark);
+				break;
+		}
+	};
+
 	/**
 	 * Content
 	 */
@@ -251,7 +259,7 @@ const ObjectDetailPage: NextPage = () => {
 									</Button>
 									<DynamicActionMenu
 										{...MEDIA_ACTIONS()}
-										onClickAction={(id) => setActiveBlade(id as MediaActions)}
+										onClickAction={onClickAction}
 									/>
 								</div>
 							</div>
