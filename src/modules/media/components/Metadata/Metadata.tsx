@@ -15,13 +15,11 @@ const Metadata: FC<MetadataProps> = ({ className, metadata, columns = 1 }) => {
 				role="listitem"
 			>
 				<b className={styles['c-metadata__item-title']}>{item.title}</b>
-				<div>
-					{isString(item.data) ? (
-						<p className={styles['c-metadata__item-text']}>{item.data}</p>
-					) : (
-						item.data
-					)}
-				</div>
+				{isString(item.data) ? (
+					<p className={styles['c-metadata__item-text']}>{item.data}</p>
+				) : (
+					item.data
+				)}
 			</li>
 		);
 	};

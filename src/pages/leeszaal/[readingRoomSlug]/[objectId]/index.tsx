@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
-import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS, PARSED_METADATA_FIELDS } from '@media/const';
+import { MEDIA_ACTIONS, METADATA_FIELDS, OBJECT_DETAIL_TABS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { MediaTypes, ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
@@ -40,7 +40,7 @@ const ObjectDetailPage: NextPage = () => {
 	const router = useRouter();
 
 	// Internal state
-	const [activeTab, setActiveTab] = useState<string | number | undefined>(undefined);
+	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
 
@@ -76,15 +76,6 @@ const ObjectDetailPage: NextPage = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
-
-	useEffect(() => {
-		if (mediaType === null) {
-			if (windowSize.width && windowSize.width >= 768) {
-				// Always expand metadata on desktop if media is not defined
-				setActiveTab(ObjectDetailTabs.Metadata);
-			}
-		}
-	}, [windowSize, mediaType]);
 
 	/**
 	 * Variables
@@ -152,7 +143,7 @@ const ObjectDetailPage: NextPage = () => {
 				strategy="beforeInteractive"
 				src="/flowplayer/plugins/google-analytics.min.js"
 			/>
-			<div className={'p-object-detail'}>
+			<div className="p-object-detail">
 				<Head>
 					<title>{createPageTitle('Object detail')}</title>
 					<meta name="description" content="Object detail omschrijving" />
@@ -161,7 +152,7 @@ const ObjectDetailPage: NextPage = () => {
 				<ReadingRoomNavigation
 					showBorder={showNavigationBorder}
 					className="p-object-detail__nav"
-					title={'Leeszaal'}
+					title={mediaInfo?.maintainerName ?? ''}
 				/>
 				<ScrollableTabs
 					className="p-object-detail__tabs"
@@ -219,7 +210,8 @@ const ObjectDetailPage: NextPage = () => {
 						ref={metadataRef}
 						className={clsx(
 							'p-object-detail__metadata',
-							expandMetadata && 'p-object-detail__metadata--expanded'
+							expandMetadata && 'p-object-detail__metadata--expanded',
+							!mediaType && 'p-object-detail__metadata--no-media'
 						)}
 					>
 						<div>
@@ -257,7 +249,7 @@ const ObjectDetailPage: NextPage = () => {
 												? 2
 												: 1
 										}
-										metadata={PARSED_METADATA_FIELDS(mediaInfo)}
+										metadata={METADATA_FIELDS(mediaInfo)}
 									/>
 									<Metadata
 										className="u-px-32"
