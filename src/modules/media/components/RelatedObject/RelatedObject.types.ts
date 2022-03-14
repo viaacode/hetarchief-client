@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { DefaultComponentProps } from '@shared/types';
 
 export interface MediaObject {
@@ -5,7 +7,7 @@ export interface MediaObject {
 	title: string;
 	subtitle: string;
 	description: string;
-	thumbnail: string;
+	thumbnail?: string | ReactNode;
 	id: string;
 }
 
