@@ -93,14 +93,16 @@ const CPVisitorsPage: NextPage = () => {
 	const renderEmptyMessage = (): string => {
 		switch (filters.timeframe) {
 			case RequestStatusAll.ALL:
-				return t('Er zijn nog geen bezoekers');
+				return t('pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers');
 
 			case VisitTimeframe.ACTIVE:
-				return t('Er zijn geen actieve bezoekers');
+				return t('pages/beheer/bezoekers/index___er-zijn-geen-actieve-bezoekers');
 
 			case VisitTimeframe.PAST:
 			default:
-				return t('Er zijn nog geen bezoekers in de historiek');
+				return t(
+					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-historiek'
+				);
 		}
 	};
 

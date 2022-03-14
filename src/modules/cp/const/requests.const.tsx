@@ -103,15 +103,15 @@ export const visitsStatusFilters = (): TabProps[] => {
 	return [
 		{
 			id: RequestStatusAll.ALL,
-			label: i18n?.t('Alle'),
+			label: i18n?.t('modules/cp/const/requests___alle'),
 		},
 		{
 			id: VisitTimeframe.ACTIVE,
-			label: i18n?.t('Actief'),
+			label: i18n?.t('modules/cp/const/requests___actief'),
 		},
 		{
 			id: VisitTimeframe.PAST,
-			label: i18n?.t('Historiek'),
+			label: i18n?.t('modules/cp/const/requests___historiek'),
 		},
 	];
 };
