@@ -31,6 +31,7 @@ import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
+import { Breakpoints } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 type ListNavigationCollectionItem = ListNavigationItem & Collection;
@@ -229,6 +230,7 @@ const AccountMyCollections: NextPage = () => {
 			<AccountLayout className="p-account-my-collections">
 				<SidebarLayout
 					color="platinum"
+					responsiveTo={Breakpoints.md}
 					sidebarTitle={t(
 						'pages/account/mijn-mappen/collection-slug/index___mijn-mappen'
 					)}
