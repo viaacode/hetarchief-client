@@ -120,6 +120,12 @@ $metadata-collapsed-width: 36vw;
 			&--expanded {
 				width: $metadata-expanded-width;
 			}
+
+			@include respond-at("md") {
+				&--no-media {
+					width: $metadata-expanded-width;
+				}
+			}
 		}
 	}
 

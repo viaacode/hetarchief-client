@@ -41,7 +41,8 @@ export interface Media {
 	partOfSeason: string[];
 	partOfSeries: string[];
 	maintainerId: string;
-	contactInfo: ContactInfo;
+	maintainerName: string;
+	contactInfo: MediaContactInfo;
 	copyrightHolder: string;
 	copyrightNotice: string;
 	durationInSeconds: number;
@@ -71,23 +72,23 @@ export interface Media {
 	dateCreated: string;
 	dateCreatedLowerBound: string;
 	ebucoreObjectType: string;
-	representations: Representation[];
+	representations: MediaRepresentation[];
 }
 
-export interface ContactInfo {
+export interface MediaContactInfo {
 	email: string;
 	telephone: string;
-	address: Address;
+	address: MediaAddress;
 }
 
-export interface Address {
+export interface MediaAddress {
 	street: string;
 	postalCode: string;
 	locality: string;
 	postOfficeBoxNumber: string;
 }
 
-export interface Representation {
+export interface MediaRepresentation {
 	name: string;
 	alternateName: string;
 	description: string;

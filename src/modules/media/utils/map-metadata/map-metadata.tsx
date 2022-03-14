@@ -4,12 +4,13 @@ import { stringifyUrl } from 'query-string';
 import { ReactNode } from 'react';
 
 import { MetadataItem } from '@media/components';
+import { ROUTES } from '@shared/const';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
-	return keywords.map((trefwoord) => {
+	return keywords.map((item) => {
 		return {
-			label: trefwoord,
-			id: trefwoord.toLowerCase(),
+			label: item,
+			id: item.toLowerCase(),
 		};
 	});
 };
@@ -22,7 +23,7 @@ export const mapKeywordsToTagList = (keywords: string[]): ReactNode | null => {
 			onTagClicked={(id) => {
 				router.push(
 					stringifyUrl({
-						url: `/leeszaal/${router.query.readingRoomSlug}`,
+						url: `/${ROUTES.spaces}/${router.query.readingRoomSlug}`,
 						query: {
 							search: id,
 						},
