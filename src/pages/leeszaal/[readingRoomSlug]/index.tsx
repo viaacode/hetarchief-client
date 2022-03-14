@@ -34,6 +34,7 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
+import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, SortObject } from '@shared/types';
@@ -74,7 +75,7 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { isFetching, data: mediaResultInfo } = useGetMediaObjects(
+	const { data: mediaResultInfo } = useGetMediaObjects(
 		{
 			query: (query.search || []).join(' '),
 			format: (query.format as ReadingRoomMediaType) || READING_ROOM_QUERY_PARAM_INIT.format,
@@ -252,6 +253,7 @@ const ReadingRoomPage: NextPage = () => {
 								: undefined,
 							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
 							type: mediaObject.dcterms_format || undefined,
+							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer[0].schema_identifier}/${mediaObject.schema_identifier}`,
 						})
 					)}
 				keywords={keywords}

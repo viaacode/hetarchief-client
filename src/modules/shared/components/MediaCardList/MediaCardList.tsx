@@ -27,7 +27,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	const renderSidebar = () =>
 		sidebar && <div className={styles['c-media-card-list__sidebar']}>{sidebar}</div>;
 
-	const onBookmark = (e: MouseEvent<HTMLButtonElement>, item: MediaCardProps) => {
+	const onBookmark = (e: MouseEvent, item: MediaCardProps) => {
 		onItemBookmark({ e, item });
 	};
 
