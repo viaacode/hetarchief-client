@@ -44,7 +44,7 @@ const LoggedOutHome: FC = () => {
 			<div className={styles['c-hero']}>
 				<div className={styles['c-hero__image']}>
 					<Image
-						src="/images/hero.png"
+						src="/images/hero.jpg"
 						layout="fill"
 						alt="Hero image"
 						objectFit="contain"

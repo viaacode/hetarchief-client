@@ -150,7 +150,7 @@
   "modules/shared/components/copy-button/copy-button___success": "Success",
   "modules/shared/components/copy-button/copy-button___text-was-copied-to-your-clipboard": "\"{{text}}\" was copied to your clipboard",
   "modules/shared/components/hero/hero___aanvragen": "Aanvragen",
-  "modules/shared/components/hero/hero___dag-user": "Dag, {{user}}",
+  "modules/shared/components/hero/hero___dag-user": "Dag {{user}},",
   "modules/shared/components/hero/hero___geplande-bezoeken": "Geplande bezoeken",
   "modules/shared/components/hero/hero___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-leeszaal": "Plan een nieuw bezoek, stap fysiek binnen en krijg meteen toegang tot het digitale archief van de leeszaal.",
   "modules/shared/components/loading/loading___laden": "Laden...",
