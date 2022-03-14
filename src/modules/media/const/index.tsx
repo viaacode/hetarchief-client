@@ -101,6 +101,7 @@ export const MEDIA_ACTIONS = (): DynamicActionMenuProps => ({
  * Metadata
  */
 
+// TODO: complete mapping
 export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 	[
 		// {
