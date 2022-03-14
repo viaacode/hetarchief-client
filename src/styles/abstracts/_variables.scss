@@ -22,6 +22,7 @@ $platinum: #f8f8f8;
 
 $black-20: color.adjust($black, $alpha: -0.8);
 $teal-66: color.adjust($teal, $alpha: -0.34);
+$teal-30: color.adjust($teal, $alpha: -0.7);
 $zinc-66: color.adjust($zinc, $alpha: -0.34);
 $zinc-40: color.adjust($zinc, $alpha: -0.6);
 
@@ -87,11 +88,11 @@ $line-height-sm: 0.625;
  */
 
 $breakpoints: (
-	"xs": 390px,
-	"sm": 576px,
-	"md": 768px,
-	"lg": 992px,
-	"xl": 1200px,
+		"xs": 390px,
+		"sm": 576px,
+		"md": 768px,
+		"lg": 992px,
+		"xl": 1200px,
 );
 
 /**
@@ -101,16 +102,16 @@ $breakpoints: (
  */
 
 $z-layers: (
-	"modal": 8,
-	"blade": 7,
-	"filter-menu-mobile": 6,
-	"filter": 5,
-	"filter-overlay": 4,
-	"nav-hamburger": 3,
-	"nav-dropdown": 2,
-	"foreground": 1,
-	"base": 0,
-	"background": -1,
+		"modal": 8,
+		"blade": 7,
+		"filter-menu-mobile": 6,
+		"filter": 5,
+		"filter-overlay": 4,
+		"nav-hamburger": 3,
+		"nav-dropdown": 2,
+		"foreground": 1,
+		"base": 0,
+		"background": -1,
 );
 
 /**
