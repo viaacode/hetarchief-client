@@ -157,8 +157,8 @@ export const VisitsTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 	{
 		Header: t?.('Goedgekeurd door') || '',
 		accessor: 'status',
-		Cell: () => {
-			return <span className="u-color-neutral">Noah Peeters</span>; // TODO Add column to database to track updatedBy
+		Cell: ({ row }: RequestTableArgs) => {
+			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
 		},
 	},
 	{

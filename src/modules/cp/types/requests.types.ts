@@ -19,6 +19,8 @@ export interface VisitInfo {
 	visitorName: string;
 	visitorMail: string;
 	visitorId: string;
+	updatedById: string;
+	updatedByName: string;
 }
 
 export type RequestTableArgs = { row: { original: VisitInfo } };
