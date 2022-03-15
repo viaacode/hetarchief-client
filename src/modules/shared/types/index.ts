@@ -33,6 +33,18 @@ export interface SortObject {
 	orderDirection?: OrderDirection;
 }
 
+export enum Operator {
+	Contains = 'contains',
+	ContainsNot = 'contains-not',
+	Equals = 'equals',
+	EqualsNot = 'equals-not',
+	LessThanOrEqual = 'less-than', // shorter (duration) or until (date)
+	GreaterThan = 'greater-than', // longer (duration) or after (date)
+	Between = 'between', // duration & date
+}
+
+export type MediaTypes = 'video' | 'audio' | null;
+
 /**
  * UI
  */

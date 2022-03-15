@@ -8,8 +8,10 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { ReadingRoomFilterId } from '@reading-room/types';
 import { mapQueryToFields } from '@reading-room/utils';
 import { Icon } from '@shared/components';
+import { Operator } from '@shared/types';
 
-import { AdvancedFilterFields, MetadataProp, Operator } from './AdvancedFilterFields';
+import { AdvancedFilterFields, MetadataProp } from '../AdvancedFilterFields';
+
 import { ADVANCED_FILTER_FORM_SCHEMA } from './AdvancedFilterForm.const';
 import {
 	AdvancedFilterFieldsState,
@@ -24,6 +26,7 @@ const initialFields = (): AdvancedFilterFieldsState => ({
 });
 
 const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, values }) => {
+	const { t } = useTranslation();
 	const { control, getValues, reset } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
 			advanced: values?.advanced
@@ -36,8 +39,6 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, 
 		name: 'advanced',
 		control,
 	});
-
-	const { t } = useTranslation();
 
 	return (
 		<>

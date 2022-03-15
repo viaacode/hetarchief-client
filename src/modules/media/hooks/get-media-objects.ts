@@ -4,9 +4,10 @@ import { UseQueryResult } from 'react-query/types/react/types';
 import { MediaService } from '@media/services';
 import { ReadingRoomMediaType } from '@reading-room/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { MediaTypes } from '@shared/types';
 import { ApiResponseWrapper, ElasticsearchAggregations } from '@shared/types/api';
 
-import { MediaInfo, MediaTypes } from '../types';
+import { MediaInfo } from '../types';
 
 export function useGetMediaObjects(
 	filters:

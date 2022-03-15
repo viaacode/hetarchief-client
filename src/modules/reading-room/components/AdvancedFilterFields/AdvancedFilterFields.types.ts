@@ -1,4 +1,4 @@
-import { AdvancedFilterFieldsState } from '../AdvancedFilterForm.types';
+import { AdvancedFilterFieldsState } from '../AdvancedFilterForm/AdvancedFilterForm.types';
 
 export interface AdvancedFilterFieldsProps {
 	id: string;
@@ -23,11 +23,4 @@ export enum MetadataProp {
 	PublishedAt = 'uitzenddatum',
 	Publisher = 'publisher',
 	Title = 'titel',
-}
-
-export enum Operator {
-	Contains = 'contains',
-	ContainsNot = 'contains-not',
-	Equals = 'equals',
-	EqualsNot = 'equals-not',
 }

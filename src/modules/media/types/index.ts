@@ -1,4 +1,4 @@
-export type MediaTypes = 'video' | 'audio' | null;
+import { MediaTypes } from '@shared/types';
 
 export interface MediaInfo {
 	schema_in_language: unknown | null;

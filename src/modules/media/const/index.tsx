@@ -1,8 +1,9 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
-import { MediaTypes, ObjectDetailTabs } from '@media/types';
+import { ObjectDetailTabs } from '@media/types';
 import { Icon } from '@shared/components';
+import { MediaTypes } from '@shared/types';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 

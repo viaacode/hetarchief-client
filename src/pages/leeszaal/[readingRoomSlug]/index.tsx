@@ -74,7 +74,7 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { isFetching, data: mediaResultInfo } = useGetMediaObjects(
+	const { data: mediaResultInfo } = useGetMediaObjects(
 		{
 			query: (query.search || []).join(' '),
 			format: (query.format as ReadingRoomMediaType) || READING_ROOM_QUERY_PARAM_INIT.format,
@@ -161,9 +161,12 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onResetFilters = () => {
 		setQuery({
-			...READING_ROOM_QUERY_PARAM_INIT,
-			search: undefined,
+			advanced: undefined,
+			format: undefined,
 			orderDirection: undefined,
+			orderProp: undefined,
+			page: undefined,
+			search: undefined,
 		});
 	};
 

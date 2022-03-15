@@ -6,10 +6,13 @@ import {
 	AdvancedFilterFieldsQueryValues,
 	AdvancedFilterFieldsState,
 	AdvancedFilterFormState,
+	MetadataProp,
 } from '@reading-room/components';
-import { METADATA_PROP_OPTIONS } from '@reading-room/components/forms/AdvancedFilterForm/AdvancedFilterFields';
+import { METADATA_PROP_OPTIONS } from '@reading-room/components/AdvancedFilterFields';
 import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
 import { AdvancedFilterQueryValue, ReadingRoomFilterId } from '@reading-room/types';
+
+import { getOperators } from '../get-operators';
 
 const getSelectLabel = (
 	options: SelectOption[],
@@ -38,6 +41,10 @@ export const mapFiltersToTags = (
 		label: (
 			<span>
 				{getSelectLabel(METADATA_PROP_OPTIONS(), advanced.prop)}:{' '}
+				{`"${getSelectLabel(
+					getOperators(advanced.prop as MetadataProp),
+					advanced.op
+				)?.toLowerCase()}" `}
 				<strong>{advanced.val}</strong>
 			</span>
 		),

@@ -1,6 +1,7 @@
+import { SelectOption } from '@meemoo/react-components';
 import { ReactNode } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
+import { DefaultComponentProps, MediaTypes, Operator } from '@shared/types';
 
 export * from './filters';
 
@@ -64,3 +65,17 @@ export interface ReadingRoomInfo {
 	createdAt: string;
 	updatedAt: string;
 }
+
+export type MediaTypeOptions = Array<
+	SelectOption & {
+		label: string;
+		value: MediaTypes;
+	}
+>;
+
+export type OperatorOptions = Array<
+	SelectOption & {
+		label: string;
+		value: Operator;
+	}
+>;
