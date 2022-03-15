@@ -1,3 +1,5 @@
+import { stringifyUrl } from 'query-string';
+
 import { ApiService } from '@shared/services/api-service';
 import {
 	ApiResponseWrapper,
@@ -7,7 +9,7 @@ import {
 
 import { MediaInfo, MediaSearchFilters } from '../../types';
 
-import { MEDIA_SERVICE_BASE_URL } from './media.service.const';
+import { MEDIA_SERVICE_BASE_URL, MEDIA_SERVICE_TICKET_URL } from './media.service.const';
 
 export class MediaService {
 	public static async getAll(
@@ -36,5 +38,20 @@ export class MediaService {
 
 	public static async getById(id: string): Promise<MediaInfo> {
 		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
+	}
+
+	public static async getPlayableUrl(
+		id: string // Reference id
+	): Promise<string> {
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${MEDIA_SERVICE_BASE_URL}/${MEDIA_SERVICE_TICKET_URL}`,
+					query: {
+						id,
+					},
+				})
+			)
+			.text();
 	}
 }
