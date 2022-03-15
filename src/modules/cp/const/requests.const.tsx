@@ -1,6 +1,6 @@
 import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { format, isWithinInterval } from 'date-fns';
+import { format, isWithinInterval, parseISO } from 'date-fns';
 import { i18n, TFunction } from 'next-i18next';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
@@ -9,6 +9,7 @@ import { RequestStatusBadge } from '@cp/components';
 import { RequestStatusAll, RequestTableArgs, VisitInfo } from '@cp/types';
 import { Icon, UnreadMarker } from '@shared/components';
 import { SortDirectionParam } from '@shared/helpers';
+import { formatAsBelgianDate } from '@shared/helpers/format-belgian-date';
 import { VisitStatus, VisitTimeframe } from '@visits/types';
 
 import styles from './requests.module.scss';
@@ -141,15 +142,15 @@ export const VisitsTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		accessor: 'startAt',
 		Cell: ({ row }: RequestTableArgs) => {
 			const active = isWithinInterval(new Date(), {
-				start: new Date(row.original.startAt),
-				end: new Date(row.original.endAt),
+				start: parseISO(row.original.startAt),
+				end: parseISO(row.original.endAt),
 			});
 			return (
 				<span className={clsx('u-color-neutral', styles['p-visits__access'])}>
 					<UnreadMarker active={active} />
-					{format(new Date(row.original.startAt), 'dd/MM/yyyy HH:mm') +
+					{formatAsBelgianDate(row.original.startAt) +
 						' - ' +
-						format(new Date(row.original.endAt), 'dd/MM/yyyy HH:mm')}
+						formatAsBelgianDate(row.original.endAt)}
 				</span>
 			);
 		},
