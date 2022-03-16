@@ -190,7 +190,7 @@ const LoggedInHome: FC = () => {
 	};
 
 	return (
-		<div className="p-home">
+		<div className="p-home u-page-bottom-margin">
 			<Head>
 				<title>{createPageTitle('Home')}</title>
 				<meta name="description" content="TODO: Home meta description" />

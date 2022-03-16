@@ -312,9 +312,13 @@ const ReadingRoomPage: NextPage = () => {
 				</section>
 
 				<section
-					className={clsx('p-reading-room__results u-bg-platinum u-py-24 u-py-48:md', {
-						'p-reading-room__results--placeholder': showInitialView || showNoResults,
-					})}
+					className={clsx(
+						'p-reading-room__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+						{
+							'p-reading-room__results--placeholder':
+								showInitialView || showNoResults,
+						}
+					)}
 				>
 					<div className="l-container">
 						{showInitialView && (

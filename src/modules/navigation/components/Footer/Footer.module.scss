@@ -12,7 +12,6 @@
 	padding: $spacer-md $spacer-sm $spacer-sm $spacer-sm;
 	color: $neutral;
 	background-color: $white;
-	margin-top: 6rem;
 
 	@include respond-at(xl) {
 		padding-left: $spacer-lg;
