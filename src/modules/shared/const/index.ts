@@ -5,3 +5,4 @@ export * from './sanitize';
 export * from './tos';
 
 export const SEARCH_QUERY_KEY = 'search';
+export const SEPARATOR = '|';

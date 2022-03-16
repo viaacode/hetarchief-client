@@ -1,25 +1,26 @@
 import { TextInputProps } from '@meemoo/react-components';
 import { ChangeEvent, FC, SyntheticEvent } from 'react';
 
+import { SEPARATOR } from '@shared/const';
+
 import { DateInput } from '../DateInput';
 
 import styles from './DateRangeInput.module.scss';
 
 const DateRangeInput: FC<TextInputProps> = (props) => {
-	const separator = '|';
-	const from = (props.value || '').toString().split(separator, 2)[0];
-	const to = (props.value || '').toString().split(separator, 2)[1];
+	const from = (props.value || '').toString().split(SEPARATOR, 2)[0];
+	const to = (props.value || '').toString().split(SEPARATOR, 2)[1];
 
 	const onChange = (date: Date | null, e: SyntheticEvent | undefined, type: 'from' | 'to') => {
-		let value = `${from}${separator}${to}`;
+		let value = `${from}${SEPARATOR}${to}`;
 
 		switch (type) {
 			case 'from':
-				value = `${date?.toISOString()}${separator}${to}`;
+				value = `${date?.toISOString()}${SEPARATOR}${to}`;
 				break;
 
 			case 'to':
-				value = `${from}${separator}${date?.toISOString()}`;
+				value = `${from}${SEPARATOR}${date?.toISOString()}`;
 				break;
 
 			default:
