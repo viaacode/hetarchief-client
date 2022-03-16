@@ -11,12 +11,14 @@ import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
 
+import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+
 const AccountMyProfile: NextPage = () => {
 	const user = useSelector(selectUser);
 	const { t } = useTranslation();
 
 	return (
-		<>
+		<VisitorLayout>
 			<Head>
 				<title>
 					{createPageTitle(t('pages/account/mijn-profiel/index___mijn-profiel'))}
@@ -56,7 +58,7 @@ const AccountMyProfile: NextPage = () => {
 					</Box>
 				</div>
 			</AccountLayout>
-		</>
+		</VisitorLayout>
 	);
 };
 

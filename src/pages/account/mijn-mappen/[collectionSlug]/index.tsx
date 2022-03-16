@@ -34,6 +34,8 @@ import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { Breakpoints } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
+import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+
 type ListNavigationCollectionItem = ListNavigationItem & Collection;
 
 const AccountMyCollections: NextPage = () => {
@@ -212,7 +214,7 @@ const AccountMyCollections: NextPage = () => {
 	);
 
 	return (
-		<>
+		<VisitorLayout>
 			<Head>
 				<title>
 					{createPageTitle(
@@ -369,7 +371,7 @@ const AccountMyCollections: NextPage = () => {
 					setSelected(null);
 				}}
 			/>
-		</>
+		</VisitorLayout>
 	);
 };
 

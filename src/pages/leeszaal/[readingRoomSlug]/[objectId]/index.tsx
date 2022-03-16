@@ -31,6 +31,7 @@ import {
 	RelatedObjectProps,
 } from 'modules/media/components';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
+import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
 
 const ObjectDetailPage: NextPage = () => {
 	/**
@@ -130,7 +131,7 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	return (
-		<>
+		<VisitorLayout>
 			{/* <!-- Flowplayer --> */}
 			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
@@ -279,7 +280,7 @@ const ObjectDetailPage: NextPage = () => {
 					</div>
 				</article>
 			</div>
-		</>
+		</VisitorLayout>
 	);
 };
 

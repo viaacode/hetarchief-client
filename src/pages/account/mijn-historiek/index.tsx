@@ -6,11 +6,13 @@ import { AccountLayout } from '@account/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { createPageTitle } from '@shared/utils';
 
+import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+
 const AccountMyHistory: NextPage = () => {
 	const { t } = useTranslation();
 
 	return (
-		<>
+		<VisitorLayout>
 			<Head>
 				<title>
 					{createPageTitle(t('pages/account/mijn-historiek/index___mijn-historiek'))}
@@ -29,7 +31,7 @@ const AccountMyHistory: NextPage = () => {
 			>
 				<div className="l-container">History table</div>
 			</AccountLayout>
-		</>
+		</VisitorLayout>
 	);
 };
 

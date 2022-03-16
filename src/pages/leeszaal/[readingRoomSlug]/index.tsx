@@ -39,6 +39,8 @@ import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, SortObject } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
+import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+
 const ReadingRoomPage: NextPage = () => {
 	const { t } = useTranslation();
 
@@ -276,7 +278,7 @@ const ReadingRoomPage: NextPage = () => {
 	);
 
 	return (
-		<>
+		<VisitorLayout>
 			<div className="p-reading-room">
 				<Head>
 					<title>{createPageTitle('Leeszaal')}</title>
@@ -356,7 +358,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(null);
 				}}
 			/>
-		</>
+		</VisitorLayout>
 	);
 };
 
