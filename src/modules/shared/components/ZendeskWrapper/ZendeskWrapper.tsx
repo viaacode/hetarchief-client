@@ -29,7 +29,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 		const zendeskMarginRight = 31;
 		const updateFooterHeight = () => {
 			footerHeight = get(
-				document.querySelector('.c-global-footer'),
+				document.querySelector('[class^="Footer_c-footer"]'),
 				'clientHeight',
 				footerHeight
 			);
@@ -51,6 +51,8 @@ const ZendeskWrapper: FunctionComponent = () => {
 				}
 			}
 		};
+		updateFooterHeight();
+		updateMargin();
 		document.body.addEventListener('scroll', updateMargin);
 		window.addEventListener('resize', () => {
 			updateFooterHeight();
