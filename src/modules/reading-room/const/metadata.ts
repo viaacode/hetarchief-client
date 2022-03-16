@@ -1,4 +1,10 @@
-import { ReactSelect, ReactSelectProps, TextInput, TextInputProps } from '@meemoo/react-components';
+import {
+	DatepickerProps,
+	ReactSelect,
+	ReactSelectProps,
+	TextInput,
+	TextInputProps,
+} from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { FC } from 'react';
 
@@ -6,10 +12,11 @@ import { DurationInput } from '@reading-room/components/DurationInput';
 import { MetadataProp } from '@reading-room/types';
 import { Operator } from '@shared/types';
 
+import { DateInput } from '../components/DateInput';
 import { DurationRangeInput } from '../components/DurationRangeInput';
 import { MediaTypeSelect } from '../components/MediaTypeSelect';
 
-export type MetadataFields = FC<TextInputProps> | FC<ReactSelectProps>;
+export type MetadataFields = FC<TextInputProps> | FC<ReactSelectProps> | FC<DatepickerProps>;
 
 export type MetadataConfig = {
 	[key in MetadataProp]?: {
@@ -61,18 +68,28 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 	};
 
 	return {
+		[MetadataProp.Carrier]: {
+			[Operator.Equals]: {
+				label: dictionary.equals,
+				field: ReactSelect, // TODO: CarrierSelect
+			},
+			[Operator.EqualsNot]: {
+				label: dictionary.differs,
+				field: ReactSelect, // TODO: CarrierSelect
+			},
+		},
 		[MetadataProp.CreatedAt]: {
 			[Operator.GreaterThan]: {
 				label: dictionary.from,
-				field: TextInput,
+				field: DateInput,
 			},
 			[Operator.LessThanOrEqual]: {
 				label: dictionary.until,
-				field: TextInput,
+				field: DateInput,
 			},
 			[Operator.Between]: {
 				label: dictionary.between,
-				field: TextInput,
+				field: TextInput, // TODO: DateRangeInput
 			},
 		},
 		[MetadataProp.Creator]: {
@@ -174,11 +191,11 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 		[MetadataProp.Genre]: {
 			[Operator.Equals]: {
 				label: dictionary.equals,
-				field: ReactSelect,
+				field: ReactSelect, // TODO: GenreSelect
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
-				field: ReactSelect,
+				field: ReactSelect, // TODO: GenreSelect
 			},
 		},
 		[MetadataProp.Language]: {
@@ -209,28 +226,18 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 			},
 		},
-		[MetadataProp.Medium]: {
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: ReactSelect,
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: ReactSelect,
-			},
-		},
 		[MetadataProp.PublishedAt]: {
 			[Operator.GreaterThan]: {
 				label: dictionary.from,
-				field: TextInput,
+				field: DateInput,
 			},
 			[Operator.LessThanOrEqual]: {
 				label: dictionary.until,
-				field: TextInput,
+				field: DateInput,
 			},
 			[Operator.Between]: {
 				label: dictionary.between,
-				field: TextInput,
+				field: TextInput, // TODO: DateRangeInput
 			},
 		},
 		[MetadataProp.Publisher]: {

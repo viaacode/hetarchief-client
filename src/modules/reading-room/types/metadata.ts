@@ -1,4 +1,5 @@
 export enum MetadataProp {
+	Carrier = 'drager',
 	CreatedAt = 'creatiedatum',
 	Creator = 'maker',
 	Description = 'beschrijving',
@@ -9,7 +10,6 @@ export enum MetadataProp {
 	Language = 'taal',
 	Location = 'locatie',
 	Mediatype = 'bestandstype',
-	Medium = 'drager',
 	PublishedAt = 'uitzenddatum',
 	Publisher = 'publisher',
 	Title = 'titel',
