@@ -5,12 +5,12 @@ import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-import { ReadingRoomFilterId } from '@reading-room/types';
+import { MetadataProp, ReadingRoomFilterId } from '@reading-room/types';
 import { mapQueryToFields } from '@reading-room/utils';
 import { Icon } from '@shared/components';
 import { Operator } from '@shared/types';
 
-import { AdvancedFilterFields, MetadataProp } from '../AdvancedFilterFields';
+import { AdvancedFilterFields } from '../AdvancedFilterFields';
 
 import { ADVANCED_FILTER_FORM_SCHEMA } from './AdvancedFilterForm.const';
 import {

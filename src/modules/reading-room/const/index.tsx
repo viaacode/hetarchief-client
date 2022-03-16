@@ -19,6 +19,8 @@ import {
 	ReadingRoomSort,
 } from '../types';
 
+export * from './metadata';
+
 export const READING_ROOM_ITEM_COUNT = 100;
 
 export const READING_ROOM_QUERY_PARAM_INIT = {

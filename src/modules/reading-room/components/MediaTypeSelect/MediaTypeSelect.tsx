@@ -9,11 +9,11 @@ const MediaTypeSelect: FC<ReactSelectProps> = (props) => {
 
 	const options: MediaTypeOptions = [
 		{
-			label: t('Audio'),
+			label: t('modules/reading-room/components/media-type-select/media-type-select___audio'),
 			value: 'audio',
 		},
 		{
-			label: t('Video'),
+			label: t('modules/reading-room/components/media-type-select/media-type-select___video'),
 			value: 'video',
 		},
 	];

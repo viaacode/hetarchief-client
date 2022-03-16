@@ -1,2 +1,2 @@
 export * from './map-filters';
-export * from './get-operators';
+export * from './metadata';

@@ -3,7 +3,10 @@ import { ReactNode } from 'react';
 
 import { DefaultComponentProps, MediaTypes, Operator } from '@shared/types';
 
+import { MetadataProp } from './metadata';
+
 export * from './filters';
+export * from './metadata';
 
 export enum ReadingRoomMediaType {
 	All = 'all',
@@ -77,5 +80,12 @@ export type OperatorOptions = Array<
 	SelectOption & {
 		label: string;
 		value: Operator;
+	}
+>;
+
+export type PropertyOptions = Array<
+	SelectOption & {
+		label: string;
+		value: MetadataProp;
 	}
 >;
