@@ -1,0 +1,57 @@
+@use "styles/abstracts" as *;
+
+.c-fragment-slider{
+	max-width: 14.1rem;
+	justify-self: center;
+
+	&__grid {
+		position: relative;
+		display: grid;
+		grid-template-columns: min-content 1fr min-content;
+		align-items: center;
+		overflow: hidden;
+	}
+
+	&__wrapper {
+		width: 100%;
+	}
+
+	&__item {
+		position: relative;
+		height: 8.2rem;
+		margin: 0 1.25rem;
+	}
+
+	&__nav-button {
+		z-index: get-z-layer("foreground");
+		width: 3.6rem;
+		height: 3.6rem;
+	}
+
+	&__focus-button {
+		z-index: get-z-layer("modal"); // Highest
+		position: absolute;
+		align-self: start;
+		margin-left: 0.5rem;
+		transform: translateY(-4.8rem);
+		transition: transform $animate-default;
+
+		&:focus {
+			transform: translateY(0.5rem); // Outline
+		}
+	}
+
+	:global(.slick-list) {
+		overflow: visible;
+	}
+
+	:global(.slick-current) {
+		.c-fragment-slider__item {
+			span {
+				outline: 4px solid black;
+				outline-offset: 0.2rem;
+			}
+		}
+	}
+}
+

@@ -9,6 +9,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
+import { FragmentSlider } from '@media/components/FragmentSlider';
+import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import { MEDIA_ACTIONS, METADATA_FIELDS, OBJECT_DETAIL_TABS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
@@ -47,6 +49,7 @@ const ObjectDetailPage: NextPage = () => {
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
 	const [mediaUrl, setMediaUrl] = useState<string | undefined>(undefined);
+	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 
 	// Layout
 	useStickyLayout();
@@ -65,9 +68,10 @@ const ObjectDetailPage: NextPage = () => {
 		router.query.objectId as string
 	);
 
-	const { data: playableUrl, isLoading: isLoadingPlayableUrl } = useGetMediaTicketInfo(
+	const { data: playableUrl } = useGetMediaTicketInfo(
 		mediaUrl ?? '',
-		!!mediaUrl
+		!!mediaUrl,
+		() => setFlowPlayerKey(mediaUrl) // Force flowplayer rerender after successful fetch
 	);
 
 	/**
@@ -77,7 +81,8 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
-		setMediaUrl(mediaInfo?.representations[0].id);
+		// setMediaUrl(mediaInfo?.representations[0].id);
+		setMediaUrl(fragmentSliderMock.fragments[0].id);
 
 		// Set default view
 		if (windowSize.width && windowSize.width < 768) {
@@ -211,15 +216,25 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					<div className="p-object-detail__video">
 						{mediaType ? (
-							!isLoadingPlayableUrl && playableUrl ? (
-								<FlowPlayer
-									className="p-object-detail__flowplayer"
-									src={playableUrl}
-									poster="https://via.placeholder.com/1920x1080"
-									title="Elephants dream"
-									pause={pauseMedia}
-									onPlay={() => setPauseMedia(false)}
-								/>
+							playableUrl ? (
+								<>
+									<FlowPlayer
+										className="p-object-detail__flowplayer"
+										key={flowPlayerKey}
+										src={playableUrl}
+										poster="https://via.placeholder.com/1920x1080"
+										title="Elephants dream"
+										pause={pauseMedia}
+										onPlay={() => setPauseMedia(false)}
+									/>
+									<FragmentSlider
+										className="p-object-detail__slider"
+										{...fragmentSliderMock}
+										onChangeFragment={(index) =>
+											setMediaUrl(fragmentSliderMock.fragments[index].id)
+										}
+									/>
+								</>
 							) : (
 								<></>
 							)

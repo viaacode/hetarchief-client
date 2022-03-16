@@ -108,6 +108,11 @@ $metadata-collapsed-width: 36vw;
 		background-color: $silver;
 	}
 
+	&__slider {
+		background-color: $black-8;
+		padding: 2rem 3rem;
+	}
+
 	&__metadata {
 		overflow-y: scroll;
 		box-shadow: $shadow-24-black-12;
@@ -156,6 +161,7 @@ $metadata-collapsed-width: 36vw;
 
 		.p-object-detail__video {
 			display: grid;
+			grid-template-rows: 1fr auto;
 		}
 	}
 
