@@ -9,7 +9,7 @@ import {
 	FilterMenuSortOption,
 } from '@reading-room/components';
 import { Icon } from '@shared/components';
-import { VIEW_TOGGLE_OPTIONS } from '@shared/const';
+import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection } from '@shared/types';
 
 import {
@@ -32,7 +32,7 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	// Filters
 	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
-	search: ArrayParam,
+	[SEARCH_QUERY_KEY]: ArrayParam,
 	[ReadingRoomFilterId.Advanced]: JsonParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),

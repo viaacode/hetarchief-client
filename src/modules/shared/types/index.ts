@@ -1,8 +1,10 @@
 import { CSSProperties } from 'react';
 
-export * from './utils';
-export * from './blade';
 export * from './api';
+export * from './blade';
+export * from './sidebar';
+export * from './utils';
+export * from './visit';
 
 /**
  * Generic components

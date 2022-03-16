@@ -33,18 +33,6 @@ $page: "p-cp-requests";
 		transform: translateY(0.2rem); // shift if to center on single-line
 	}
 
-	&__link {
-		text-decoration: none;
-		transition: color $animate-default;
-
-		&:hover,
-		&:active,
-		&:focus,
-		&:focus-within {
-			color: $teal !important;
-		}
-	}
-
 	tr {
 		@include respond-to("lg") {
 			td,

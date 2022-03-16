@@ -15,6 +15,7 @@ import { MEDIA_ACTIONS, OBJECT_DETAIL_TABS } from '@media/const';
 import { ObjectDetailTabs } from '@media/types';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, ScrollableTabs, TabLabel } from '@shared/components';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -132,7 +133,7 @@ const ObjectDetailPage: NextPage = () => {
 							stringifyUrl({
 								url: `/leeszaal/${router.query.readingRoomSlug}`,
 								query: {
-									search: id,
+									[SEARCH_QUERY_KEY]: id,
 								},
 							})
 						);
