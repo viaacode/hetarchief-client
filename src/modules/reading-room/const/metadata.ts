@@ -8,6 +8,7 @@ import {
 import { i18n } from 'next-i18next';
 import { FC } from 'react';
 
+import { DateRangeInput } from '@reading-room/components/DateRangeInput';
 import { DurationInput } from '@reading-room/components/DurationInput';
 import { MetadataProp } from '@reading-room/types';
 import { Operator } from '@shared/types';
@@ -89,7 +90,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			},
 			[Operator.Between]: {
 				label: dictionary.between,
-				field: TextInput, // TODO: DateRangeInput
+				field: DateRangeInput,
 			},
 		},
 		[MetadataProp.Creator]: {

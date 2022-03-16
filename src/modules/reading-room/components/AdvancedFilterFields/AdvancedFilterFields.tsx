@@ -18,6 +18,7 @@ import { Operator } from '@shared/types';
 
 import { AdvancedFilterFieldsState } from '../AdvancedFilterForm/AdvancedFilterForm.types';
 import { DateInput } from '../DateInput';
+import { DateRangeInput } from '../DateRangeInput';
 import { DurationInput } from '../DurationInput';
 import { DurationRangeInput } from '../DurationRangeInput';
 import { MediaTypeSelect } from '../MediaTypeSelect';
@@ -62,6 +63,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case TextInput:
 			case DurationInput:
 			case DurationRangeInput:
+			case DateRangeInput:
 				Component = Component as FC<TextInputProps>;
 				value = state.value as string;
 
@@ -155,7 +157,10 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				options={operators}
 				value={getSelectValue(operators, state.operator)}
 				onChange={(newValue) =>
-					onFieldChange({ operator: (newValue as SingleValue<SelectOption>)?.value })
+					onFieldChange({
+						operator: (newValue as SingleValue<SelectOption>)?.value,
+						value: undefined,
+					})
 				}
 			/>
 			<div className={styles['c-advanced-filter-fields__field-container']}>
