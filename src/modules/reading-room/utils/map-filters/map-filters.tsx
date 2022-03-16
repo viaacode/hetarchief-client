@@ -35,7 +35,7 @@ export const mapFiltersToTags = (
 			prop: 'search',
 		}));
 
-	const advancedFilters = (query.advanced ?? []).map((advanced: AdvancedFilterQueryValue) => ({
+	const advancedFilters = query.advanced.map((advanced: AdvancedFilterQueryValue) => ({
 		label: (
 			<span>
 				{getSelectLabel(getProperties(), advanced.prop)}:{' '}
