@@ -9,3 +9,4 @@ export const selectShowNotificationsCenter = (state: AppState): boolean =>
 	state.ui.showNotificationsCenter;
 export const selectHasUnreadNotifications = (state: AppState): boolean =>
 	state.ui.hasUnreadNotifications;
+export const selectShowZendesk = (state: AppState): boolean => state.ui.showZendesk;

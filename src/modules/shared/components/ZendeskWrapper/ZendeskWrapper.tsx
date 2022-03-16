@@ -1,13 +1,26 @@
 import { get } from 'lodash-es';
 import getConfig from 'next/config';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Zendesk from 'react-zendesk';
+
+import { selectShowZendesk } from '@shared/store/ui';
 
 const { publicRuntimeConfig } = getConfig();
 
 const ZendeskWrapper: FunctionComponent = () => {
+	const showZendesk = useSelector(selectShowZendesk);
+
+	useEffect(() => {
+		const zendeskWidget: HTMLIFrameElement | null = document.querySelector('iframe#launcher');
+		if (zendeskWidget) {
+			zendeskWidget.style.display = showZendesk ? 'block' : 'none';
+			zendeskWidget.style.width = 'auto';
+		}
+	}, [showZendesk]);
+
 	/**
-	 * Change the bottom margin of the zendesk widget so it doesn't overlap with the footer
+	 * Change the bottom margin of the zendesk widget, so it doesn't overlap with the footer
 	 */
 	const onLoaded = () => {
 		let widget: HTMLIFrameElement | null;
@@ -56,7 +69,9 @@ const ZendeskWrapper: FunctionComponent = () => {
 		getZendeskWidget();
 	};
 
-	return <Zendesk zendeskKey={publicRuntimeConfig.ZENDESK_KEY} onLoaded={onLoaded} />;
+	return showZendesk ? (
+		<Zendesk zendeskKey={publicRuntimeConfig.ZENDESK_KEY} onLoaded={onLoaded} />
+	) : null;
 };
 
 export default ZendeskWrapper;
