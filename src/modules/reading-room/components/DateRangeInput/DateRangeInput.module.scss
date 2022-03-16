@@ -5,6 +5,6 @@ $component: "c-date-range-input";
 .#{$component} {
     width: 100%;
     display: grid;
-	grid-template-rows: repeat(2, 1fr);
+	grid-template-columns: repeat(2, 1fr);
 	gap: $spacer-sm;
 }

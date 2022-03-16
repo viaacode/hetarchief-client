@@ -65,7 +65,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case DurationRangeInput:
 			case DateRangeInput:
 				Component = Component as FC<TextInputProps>;
-				value = state.value as string;
+				value = state.value;
 
 				return (
 					<Component
@@ -105,7 +105,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 			case DateInput:
 				Component = Component as FC<DatepickerProps>;
-				value = state.value ? new Date(state.value) : undefined;
+				value = state.value;
 
 				return (
 					<Component
@@ -113,7 +113,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field'],
 							styles['c-advanced-filter-fields__dynamic-field--datepicker']
 						)}
-						selected={value}
+						value={value}
 						onChange={(e) =>
 							onFieldChange({
 								value: e?.toISOString(),

@@ -5,6 +5,18 @@ import { getLocaleFromi18nLanguage } from './i18n';
 
 // Shared
 
+export const asDate = (input: Date | string | undefined | null): Date | undefined => {
+	const isEmpty = !input;
+	const isInvalidString =
+		typeof input === 'string' && (input.length <= 0 || input === 'undefined');
+
+	if (isEmpty || isInvalidString) {
+		return undefined;
+	}
+
+	return new Date(input);
+};
+
 export const formatWithLocale = (formatString: string, date?: Date): string => {
 	const locale = getLocaleFromi18nLanguage(i18n?.language || '');
 	return date ? format(date, formatString, { locale }) : '';
