@@ -21,7 +21,7 @@ module.exports = {
 		[pathAliasesRegex]: '<rootDir>/src/modules/$1/$2',
 
 		/* Handle deps */
-		'^lodash-es$': '<rootDir>/node_modules/lodash/index.js',
+		'^lodash-es$': '<rootDir>/node_modules/lodash-es/index.js',
 	},
 	/* Report results to the console but also to a junit compatible xml file for Jenkins: ARC-523 */
 	reporters: [

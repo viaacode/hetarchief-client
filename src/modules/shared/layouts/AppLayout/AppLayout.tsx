@@ -19,6 +19,7 @@ import { NotificationCenter } from '@shared/components';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
+import ZendeskWrapper from '@shared/components/ZendeskWrapper/ZendeskWrapper';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
@@ -156,6 +157,8 @@ const AppLayout: FC = ({ children }) => {
 				position="bottom-left"
 				transition={Slide}
 			/>
+
+			<ZendeskWrapper />
 
 			{showFooter && (
 				<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
