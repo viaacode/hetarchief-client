@@ -91,8 +91,7 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
-		// setCurrentRepresentaton(mediaInfo.fragments[0]);
-		setCurrentRepresentaton(fragmentSliderMock.fragments[0]);
+		setCurrentRepresentaton(mediaInfo?.representations[0]);
 
 		// Set default view
 		if (windowSize.width && windowSize.width < 768) {
@@ -279,15 +278,18 @@ const ObjectDetailPage: NextPage = () => {
 							playableUrl && currentRepresentation ? (
 								<>
 									{renderMedia(playableUrl, currentRepresentation)}
-									<FragmentSlider
-										className="p-object-detail__slider"
-										{...fragmentSliderMock}
-										onChangeFragment={(index) =>
-											setCurrentRepresentaton(
-												fragmentSliderMock.fragments[index]
-											)
-										}
-									/>
+									{mediaInfo?.representations &&
+										mediaInfo?.representations.length > 1 && (
+											<FragmentSlider
+												className="p-object-detail__slider"
+												fragments={mediaInfo?.representations ?? []}
+												onChangeFragment={(index) =>
+													setCurrentRepresentaton(
+														mediaInfo?.representations[index]
+													)
+												}
+											/>
+										)}
 								</>
 							) : (
 								<></>
