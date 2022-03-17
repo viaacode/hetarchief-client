@@ -1,5 +1,9 @@
 @use "styles/abstracts" as *;
 
+$fragment-width: 16rem;
+$fragment-spacing: 2.5rem;
+$button-size: 3.6rem;
+
 .c-fragment-slider{
 	max-width: 14.1rem;
 	justify-self: center;
@@ -12,45 +16,51 @@
 		overflow: hidden;
 	}
 
-	&__wrapper {
-		width: 100%;
+	&__items {
+		display: grid;
+		grid-row-start: 1;
+		grid-column: 1 / 4;
+	}
+
+	&__track {
+		display: flex;
+		column-gap: $fragment-spacing;
+		transition: transform $animate-default;
+
+		&--centered {
+			justify-self: center;
+		}
 	}
 
 	&__item {
 		position: relative;
+		width: $fragment-width;
 		height: 8.2rem;
-		margin: 0 1.25rem;
+		grid-row-start: 1;
+
+		&--active {
+			outline: 0.4rem solid $black;
+			outline-offset: 0.2rem;
+		}
+
+		&:focus-visible {
+			outline: 0.4rem solid $teal;
+			outline-offset: 0.2rem;
+		}
 	}
 
 	&__nav-button {
 		z-index: get-z-layer("foreground");
-		width: 3.6rem;
-		height: 3.6rem;
-	}
+		width: $button-size;
+		height: $button-size;
+		grid-row-start: 1;
 
-	&__focus-button {
-		z-index: get-z-layer("modal"); // Highest
-		position: absolute;
-		align-self: start;
-		margin-left: 0.5rem;
-		transform: translateY(-4.8rem);
-		transition: transform $animate-default;
-
-		&:focus {
-			transform: translateY(0.5rem); // Outline
+		&:first-of-type {
+			grid-column-start: 1;
 		}
-	}
 
-	:global(.slick-list) {
-		overflow: visible;
-	}
-
-	:global(.slick-current) {
-		.c-fragment-slider__item {
-			span {
-				outline: 4px solid black;
-				outline-offset: 0.2rem;
-			}
+		&:last-of-type {
+			grid-column-start: 3;
 		}
 	}
 }

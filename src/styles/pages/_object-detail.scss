@@ -104,6 +104,7 @@ $metadata-collapsed-width: 36vw;
 
 	&__video {
 		display: grid;
+		grid-template-rows: 1fr auto;
 		position: relative;
 		background-color: $silver;
 	}
