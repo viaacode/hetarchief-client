@@ -1,5 +1,7 @@
 import { MediaSearchAggregations } from '@media/types';
 
+import { MediaInfo } from './media';
+
 export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 	took: number;
 	timed_out: boolean;
@@ -36,3 +38,5 @@ export interface ApiResponseWrapper<T> {
 	page: number;
 	size: number;
 }
+
+export type GetMedia = ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations;

@@ -2,6 +2,7 @@ import { CSSProperties } from 'react';
 
 export * from './api';
 export * from './blade';
+export * from './media';
 export * from './sidebar';
 export * from './utils';
 export * from './visit';
@@ -45,8 +46,6 @@ export enum Operator {
 	GreaterThan = 'af', // longer (duration) or after (date)
 	Between = 'ag', // duration & date
 }
-
-export type MediaTypes = 'video' | 'audio' | null;
 
 /**
  * UI

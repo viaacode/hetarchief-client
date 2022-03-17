@@ -9,11 +9,13 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import { SingleValue } from 'react-select';
 
 import { AdvancedFilter, MetadataProp } from '@reading-room/types';
 import { getField, getOperators, getProperties } from '@reading-room/utils';
 import { Icon } from '@shared/components';
+import { selectMediaResults } from '@shared/store/media';
 import { Operator } from '@shared/types';
 
 import { DateInput } from '../DateInput';
@@ -31,6 +33,9 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
+	// State
+	const results = useSelector(selectMediaResults);
+
 	// Helpers
 
 	const getSelectValue = (options: SelectOption[], optionValue: string | undefined | null) => {

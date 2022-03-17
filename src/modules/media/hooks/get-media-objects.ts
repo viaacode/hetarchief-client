@@ -1,13 +1,12 @@
 import { useQuery } from 'react-query';
 import { UseQueryResult } from 'react-query/types/react/types';
+import { useDispatch } from 'react-redux';
 
 import { MediaService } from '@media/services';
 import { ReadingRoomMediaType } from '@reading-room/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { MediaTypes } from '@shared/types';
-import { ApiResponseWrapper, ElasticsearchAggregations } from '@shared/types/api';
-
-import { MediaInfo } from '../types';
+import { setResults } from '@shared/store/media';
+import { GetMedia, MediaTypes } from '@shared/types';
 
 export function useGetMediaObjects(
 	filters:
@@ -18,7 +17,9 @@ export function useGetMediaObjects(
 		| undefined,
 	page: number,
 	size: number
-): UseQueryResult<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
+): UseQueryResult<GetMedia> {
+	const dispatch = useDispatch();
+
 	return useQuery(
 		[QUERY_KEYS.getMediaObjects, { filters, page, size }],
 		() => {
@@ -35,11 +36,14 @@ export function useGetMediaObjects(
 				MediaService.getAll(rest, page, size),
 			]).then((responses) => {
 				const [results, noFormat] = responses;
-
-				return {
+				const output = {
 					...results,
 					aggregations: noFormat.aggregations,
 				};
+
+				dispatch(setResults(output));
+
+				return output;
 			});
 		},
 		{

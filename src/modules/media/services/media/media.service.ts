@@ -1,11 +1,8 @@
 import { ApiService } from '@shared/services/api-service';
-import {
-	ApiResponseWrapper,
-	ElasticsearchAggregations,
-	ElasticsearchResponse,
-} from '@shared/types/api';
+import { MediaInfo } from '@shared/types';
+import { ElasticsearchResponse, GetMedia } from '@shared/types/api';
 
-import { MediaInfo, MediaSearchFilters } from '../../types';
+import { MediaSearchFilters } from '../../types';
 
 import { MEDIA_SERVICE_BASE_URL } from './media.service.const';
 
@@ -14,13 +11,14 @@ export class MediaService {
 		filters: MediaSearchFilters = {},
 		page = 1,
 		size = 20
-	): Promise<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
+	): Promise<GetMedia> {
 		const parsed = (await ApiService.getApi()
 			.post(MEDIA_SERVICE_BASE_URL, {
 				body: JSON.stringify({
 					filters,
 					size,
 					page,
+					requestedAggs: ['format', 'genre'],
 				}),
 			})
 			.json()) as ElasticsearchResponse<MediaInfo>;
