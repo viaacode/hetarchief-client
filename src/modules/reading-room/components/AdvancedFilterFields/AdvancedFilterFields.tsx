@@ -22,6 +22,7 @@ import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
 import { DurationInput } from '../DurationInput';
 import { DurationRangeInput } from '../DurationRangeInput';
+import { GenreSelect } from '../GenreSelect';
 import { MediaTypeSelect } from '../MediaTypeSelect';
 
 import styles from './AdvancedFilterFields.module.scss';
@@ -88,6 +89,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 			case ReactSelect:
 			case MediaTypeSelect:
+			case GenreSelect:
 				Component = Component as FC<ReactSelectProps>;
 				props = props as ReactSelectProps;
 				value = getSelectValue(props ? (props.options as SelectOption[]) : [], state.val);

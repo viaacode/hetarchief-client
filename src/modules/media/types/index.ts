@@ -74,17 +74,20 @@ export class MediaSearchFilters {
 	format?: MediaTypes;
 }
 
-export interface MediaSearchAggregationPair {
-	key: MediaTypes;
+export interface MediaSearchAggregationPair<T> {
+	key: T;
 	doc_count: number;
 }
 
+export interface MediaSearchAggregation<T> {
+	buckets: MediaSearchAggregationPair<T>[];
+	doc_count_error_upper_bound: number;
+	sum_other_doc_count: number;
+}
+
 export interface MediaSearchAggregations {
-	dcterms_format: {
-		buckets: MediaSearchAggregationPair[];
-		doc_count_error_upper_bound: number;
-		sum_other_doc_count: number;
-	};
+	dcterms_format: MediaSearchAggregation<MediaTypes>;
+	schema_genre?: MediaSearchAggregation<string>;
 }
 
 export enum ObjectDetailTabs {

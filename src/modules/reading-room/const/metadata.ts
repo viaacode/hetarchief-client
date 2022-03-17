@@ -10,6 +10,7 @@ import { FC } from 'react';
 
 import { DateRangeInput } from '@reading-room/components/DateRangeInput';
 import { DurationInput } from '@reading-room/components/DurationInput';
+import { GenreSelect } from '@reading-room/components/GenreSelect';
 import { MetadataProp } from '@reading-room/types';
 import { Operator } from '@shared/types';
 
@@ -192,11 +193,11 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 		[MetadataProp.Genre]: {
 			[Operator.Equals]: {
 				label: dictionary.equals,
-				field: ReactSelect, // TODO: GenreSelect
+				field: GenreSelect,
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
-				field: ReactSelect, // TODO: GenreSelect
+				field: GenreSelect,
 			},
 		},
 		[MetadataProp.Language]: {
