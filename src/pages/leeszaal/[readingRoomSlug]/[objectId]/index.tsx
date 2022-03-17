@@ -192,7 +192,7 @@ const ObjectDetailPage: NextPage = () => {
 		if (imageFormats.includes(representation.dctermsFormat)) {
 			return (
 				// TODO: replace with real image
-				<div>
+				<div className="p-object-detail__image">
 					<Image
 						src={representation.id}
 						alt={representation.name}

@@ -102,6 +102,10 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
+	&__image {
+		position: relative;
+	}
+
 	&__video {
 		display: grid;
 		grid-template-rows: 1fr auto;
