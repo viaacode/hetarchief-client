@@ -71,7 +71,8 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 					}}
 				/>
 				<div ref={fragmentsRef} className={styles['c-fragment-slider__items']}>
-					<div
+					<ul
+						role="list"
 						className={clsx(
 							styles['c-fragment-slider__track'],
 							!needsScrolling && styles['c-fragment-slider__track--centered']
@@ -93,7 +94,8 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 						}}
 					>
 						{fragments.map((item, index) => (
-							<div
+							<li
+								role="listitem"
 								className={clsx(
 									styles['c-fragment-slider__item'],
 									index === active && styles['c-fragment-slider__item--active']
@@ -139,9 +141,9 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 										objectFit="cover"
 									/>
 								</div>
-							</div>
+							</li>
 						))}
-					</div>
+					</ul>
 				</div>
 				<Button
 					className={styles['c-fragment-slider__nav-button']}
