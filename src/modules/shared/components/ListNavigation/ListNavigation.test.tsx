@@ -14,19 +14,19 @@ describe('Component: <ListNavigation /> (default)', () => {
 
 		expect(container.firstChild).toHaveClass(className);
 	});
-	it('Should render primary type by default', () => {
-		const { container } = renderListNavigation({
-			items: mockListNavigationItem(),
-			type: 'secondary',
-		});
-
-		expect(container.firstChild).toHaveClass('c-list-navigation--secondary');
-	});
-
-	it('Should render secondary type', () => {
+	it('Should render primary color by default', () => {
 		const { container } = renderListNavigation({ items: mockListNavigationItem() });
 
-		expect(container.firstChild).toHaveClass('c-list-navigation--primary');
+		expect(container.firstChild).toHaveClass('c-list-navigation--white');
+	});
+
+	it('Should render platinum color', () => {
+		const { container } = renderListNavigation({
+			items: mockListNavigationItem(),
+			color: 'platinum',
+		});
+
+		expect(container.firstChild).toHaveClass('c-list-navigation--platinum');
 	});
 
 	it('Should render children', () => {

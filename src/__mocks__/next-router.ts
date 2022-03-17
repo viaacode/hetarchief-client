@@ -3,6 +3,7 @@ export default jest.mock('next/router', () => ({
 		return {
 			asPath: 'http://hetarchief.be',
 			push: jest.fn(),
+			replace: jest.fn(),
 		};
 	},
 }));
