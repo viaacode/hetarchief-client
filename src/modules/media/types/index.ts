@@ -30,6 +30,76 @@ export interface MediaInfo {
 	type?: string;
 }
 
+// Mapped intelectual entity object
+export interface Media {
+	id: string;
+	premisIdentifier: any;
+	premisRelationship: string;
+	isPartOf: string;
+	partOfArchive: string[];
+	partOfEpisode: string[];
+	partOfSeason: string[];
+	partOfSeries: string[];
+	maintainerId: string;
+	maintainerName: string;
+	contactInfo: MediaContactInfo;
+	copyrightHolder: string;
+	copyrightNotice: string;
+	durationInSeconds: number;
+	numberOfPages: number;
+	datePublished: string;
+	dctermsAvailable: string;
+	name: string;
+	description: string;
+	abstract: string;
+	creator: any;
+	actor: any;
+	contributor: any;
+	publisher: any;
+	spatial: string[];
+	temporal: string[];
+	keywords: string[];
+	genre: string[];
+	dctermsFormat: string;
+	inLanguage: string[];
+	thumbnailUrl: string;
+	embedUrl: string;
+	alternateName: string;
+	duration: string;
+	license: any;
+	meemooFragmentId: string;
+	meemooMediaObjectId: string;
+	dateCreated: string;
+	dateCreatedLowerBound: string;
+	ebucoreObjectType: string;
+	representations: MediaRepresentation[];
+}
+
+export interface MediaContactInfo {
+	email: string;
+	telephone: string;
+	address: MediaAddress;
+}
+
+export interface MediaAddress {
+	street: string;
+	postalCode: string;
+	locality: string;
+	postOfficeBoxNumber: string;
+}
+
+export interface MediaRepresentation {
+	name: string;
+	alternateName: string;
+	description: string;
+	meemooFragmentId: string;
+	dctermsFormat: string;
+	transcript: string;
+	dateCreated: string;
+	id: string;
+	files: File[];
+}
+
 export class MediaSearchFilters {
 	query?: string;
 	format?: MediaTypes;

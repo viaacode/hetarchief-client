@@ -33,4 +33,8 @@ export class MediaService {
 			aggregations: parsed.aggregations,
 		};
 	}
+
+	public static async getById(id: string): Promise<MediaInfo> {
+		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
+	}
 }
