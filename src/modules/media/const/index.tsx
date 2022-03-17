@@ -13,7 +13,7 @@ import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
  */
 
 export const flowplayerFormats: string[] = ['mp4', 'mp3'];
-export const imageFormats: string[] = ['jpg', 'png'];
+export const imageFormats: string[] = ['png'];
 
 /**
  * Tabs
