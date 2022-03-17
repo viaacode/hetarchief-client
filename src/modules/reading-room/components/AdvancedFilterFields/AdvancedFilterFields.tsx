@@ -11,12 +11,11 @@ import clsx from 'clsx';
 import React, { FC } from 'react';
 import { SingleValue } from 'react-select';
 
-import { MetadataProp } from '@reading-room/types';
+import { AdvancedFilter, MetadataProp } from '@reading-room/types';
 import { getField, getOperators, getProperties } from '@reading-room/utils';
 import { Icon } from '@shared/components';
 import { Operator } from '@shared/types';
 
-import { AdvancedFilterFieldsState } from '../AdvancedFilterForm/AdvancedFilterForm.types';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
 import { DurationInput } from '../DurationInput';
@@ -40,12 +39,12 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	// Computed
 
-	const operators = getOperators(state.metadataProp as MetadataProp);
-	const operator = state.operator || (operators.length > 0 && operators[0].value) || null;
+	const operators = getOperators(state.prop as MetadataProp);
+	const operator = state.op || (operators.length > 0 && operators[0].value) || null;
 
 	// Events
 
-	const onFieldChange = (data: Partial<AdvancedFilterFieldsState>) => {
+	const onFieldChange = (data: Partial<AdvancedFilter>) => {
 		onChange(index, { ...state, ...data });
 	};
 
@@ -53,7 +52,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	const renderField = () => {
 		let Component = operator
-			? getField(state.metadataProp as MetadataProp, operator as Operator)
+			? getField(state.prop as MetadataProp, operator as Operator)
 			: null;
 
 		let value;
@@ -65,7 +64,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case DurationRangeInput:
 			case DateRangeInput:
 				Component = Component as FC<TextInputProps>;
-				value = state.value;
+				value = state.val;
 
 				return (
 					<Component
@@ -76,7 +75,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						value={value}
 						onChange={(e) =>
 							onFieldChange({
-								value: e.target.value,
+								val: e.target.value,
 							})
 						}
 					/>
@@ -86,7 +85,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case MediaTypeSelect:
 				Component = Component as FC<ReactSelectProps>;
 				props = props as ReactSelectProps;
-				value = getSelectValue(props ? (props.options as SelectOption[]) : [], state.value);
+				value = getSelectValue(props ? (props.options as SelectOption[]) : [], state.val);
 
 				return (
 					<Component
@@ -97,7 +96,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						value={value}
 						onChange={(e) =>
 							onFieldChange({
-								value: (e as SingleValue<SelectOption>)?.value ?? undefined,
+								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
 							})
 						}
 					/>
@@ -105,7 +104,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 			case DateInput:
 				Component = Component as FC<DatepickerProps>;
-				value = state.value;
+				value = state.val;
 
 				return (
 					<Component
@@ -116,7 +115,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						value={value}
 						onChange={(e) =>
 							onFieldChange({
-								value: e?.toISOString(),
+								val: e?.valueOf().toString(),
 							})
 						}
 					/>
@@ -126,9 +125,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				break;
 		}
 
-		console.warn(
-			`[WARN][AdvancedFilterFields] No render definition found for ${state.metadataProp}`
-		);
+		console.warn(`[WARN][AdvancedFilterFields] No render definition found for ${state.prop}`);
 
 		return null;
 	};
@@ -138,28 +135,26 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			<ReactSelect
 				components={{ IndicatorSeparator: () => null }}
 				options={getProperties()}
-				value={getSelectValue(getProperties(), state.metadataProp)}
+				value={getSelectValue(getProperties(), state.prop)}
 				onChange={(newValue) => {
-					const metadataProp = (newValue as SingleValue<SelectOption>)?.value;
-					const operators = metadataProp
-						? getOperators(metadataProp as MetadataProp)
-						: [];
+					const prop = (newValue as SingleValue<SelectOption>)?.value;
+					const operators = prop ? getOperators(prop as MetadataProp) : [];
 
 					onFieldChange({
-						metadataProp,
-						operator: operators.length > 0 ? operators[0].value : undefined,
-						value: undefined,
+						prop,
+						op: operators.length > 0 ? operators[0].value : undefined,
+						val: undefined,
 					});
 				}}
 			/>
 			<ReactSelect
 				components={{ IndicatorSeparator: () => null }}
 				options={operators}
-				value={getSelectValue(operators, state.operator)}
+				value={getSelectValue(operators, state.op)}
 				onChange={(newValue) =>
 					onFieldChange({
-						operator: (newValue as SingleValue<SelectOption>)?.value,
-						value: undefined,
+						op: (newValue as SingleValue<SelectOption>)?.value,
+						val: undefined,
 					})
 				}
 			/>

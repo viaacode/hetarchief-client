@@ -35,14 +35,15 @@ export interface SortObject {
 	orderDirection?: OrderDirection;
 }
 
+// 2-letter for url parsing
 export enum Operator {
-	Contains = 'contains',
-	ContainsNot = 'contains-not',
-	Equals = 'equals',
-	EqualsNot = 'equals-not',
-	LessThanOrEqual = 'less-than', // shorter (duration) or until (date)
-	GreaterThan = 'greater-than', // longer (duration) or after (date)
-	Between = 'between', // duration & date
+	Contains = 'aa',
+	ContainsNot = 'ab',
+	Equals = 'ac',
+	EqualsNot = 'ad',
+	LessThanOrEqual = 'ae', // shorter (duration) or until (date)
+	GreaterThan = 'af', // longer (duration) or after (date)
+	Between = 'ag', // duration & date
 }
 
 export type MediaTypes = 'video' | 'audio' | null;

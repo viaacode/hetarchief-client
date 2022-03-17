@@ -1,9 +1,9 @@
-import { AdvancedFilterFieldsState } from '../AdvancedFilterForm/AdvancedFilterForm.types';
+import { AdvancedFilter } from '@reading-room/types';
 
 export interface AdvancedFilterFieldsProps {
 	id: string;
 	index: number;
-	value: AdvancedFilterFieldsState;
-	onChange: (index: number, values: Partial<AdvancedFilterFieldsState>) => void;
+	value: AdvancedFilter;
+	onChange: (index: number, values: Partial<AdvancedFilter>) => void;
 	onRemove: (index: number) => void;
 }

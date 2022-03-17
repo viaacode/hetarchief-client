@@ -16,11 +16,11 @@ const DateRangeInput: FC<TextInputProps> = (props) => {
 
 		switch (type) {
 			case 'from':
-				value = `${date?.toISOString()}${SEPARATOR}${to}`;
+				value = `${date?.valueOf()}${SEPARATOR}${to}`;
 				break;
 
 			case 'to':
-				value = `${from}${SEPARATOR}${date?.toISOString()}`;
+				value = `${from}${SEPARATOR}${date?.valueOf()}`;
 				break;
 
 			default:

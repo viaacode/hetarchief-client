@@ -1,11 +1,10 @@
-import { SelectOption } from '@meemoo/react-components';
+import { SelectOption, TagInfo } from '@meemoo/react-components';
 import { ReactNode } from 'react';
 
 import { DefaultComponentProps, MediaTypes, Operator } from '@shared/types';
 
 import { MetadataProp } from './metadata';
 
-export * from './filters';
 export * from './metadata';
 
 export enum ReadingRoomMediaType {
@@ -89,3 +88,13 @@ export type PropertyOptions = Array<
 		value: MetadataProp;
 	}
 >;
+
+export interface AdvancedFilter {
+	prop?: string; // Which property/field is being filtered on
+	op?: string; // Which operator, see Operator enum
+	val?: string; // stringified value, potentially character-separated
+}
+
+export interface TagIdentity extends Partial<AdvancedFilter>, TagInfo {
+	key: string;
+}

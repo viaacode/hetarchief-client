@@ -19,6 +19,8 @@ import {
 	ReadingRoomSort,
 } from '../types';
 
+import { AdvancedFilterArrayParam } from './query-params';
+
 export * from './metadata';
 
 export const READING_ROOM_ITEM_COUNT = 100;
@@ -33,7 +35,7 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	// Filters
 	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
 	[SEARCH_QUERY_KEY]: ArrayParam,
-	[ReadingRoomFilterId.Advanced]: JsonParam,
+	[ReadingRoomFilterId.Advanced]: AdvancedFilterArrayParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
 	// Sorting

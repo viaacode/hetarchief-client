@@ -1,16 +1,18 @@
-import { SelectOption, TagInfo } from '@meemoo/react-components';
+import { SelectOption } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { DecodedValueMap } from 'use-query-params';
 
-import {
-	AdvancedFilterFieldsQueryValues,
-	AdvancedFilterFieldsState,
-	AdvancedFilterFormState,
-} from '@reading-room/components';
 import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
-import { AdvancedFilterQueryValue, MetadataProp, ReadingRoomFilterId } from '@reading-room/types';
+import {
+	AdvancedFilter,
+	MetadataProp,
+	ReadingRoomFilterId,
+	TagIdentity,
+} from '@reading-room/types';
+import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
+import { Operator } from '@shared/types';
 
-import { getOperators, getProperties } from '../metadata';
+import { formatMetadataDate, getOperators, getProperties } from '../metadata';
 
 const getSelectLabel = (
 	options: SelectOption[],
@@ -19,82 +21,86 @@ const getSelectLabel = (
 	return options.find((option) => option.value === optionValue)?.label;
 };
 
-export const mapFiltersToTags = (
-	query: Partial<DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>>
-): TagInfo[] => {
-	const searchFilters = (query.search ?? [])
+type ReadingRoomQueryParams = Partial<DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>>;
+
+export const mapSearchToTags = (query: Pick<ReadingRoomQueryParams, 'search'>): TagIdentity[] => {
+	return (query.search || [])
 		.filter((keyword) => !!keyword)
-		.map((keyword) => ({
+		.map((keyword) => {
+			const label = i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord');
+
+			return {
+				label: (
+					<span>
+						{`${label}: `}
+						<strong>{keyword}</strong>
+					</span>
+				),
+				value: keyword as string,
+				key: SEARCH_QUERY_KEY,
+			};
+		});
+};
+
+export const mapAdvancedToTags = (
+	query: Pick<ReadingRoomQueryParams, ReadingRoomFilterId.Advanced>
+): TagIdentity[] => {
+	return (query.advanced || []).map((advanced: AdvancedFilter) => {
+		const prop = advanced.prop as MetadataProp;
+		const op = advanced.op as Operator;
+
+		const split = (advanced.val || '').split(SEPARATOR);
+
+		const label = getSelectLabel(getProperties(), prop);
+		let operator = getSelectLabel(getOperators(prop), advanced.op);
+		let value = advanced.val;
+
+		// Convert certain values to be legible
+
+		switch (prop) {
+			case MetadataProp.CreatedAt:
+			case MetadataProp.PublishedAt:
+				if (op === Operator.Between) {
+					value = `${formatMetadataDate(split[0])} - ${formatMetadataDate(split[1])}`;
+					operator = undefined;
+				} else {
+					value = formatMetadataDate(value);
+				}
+				break;
+
+			case MetadataProp.Duration:
+				if (op === Operator.Between) {
+					value = `${split[0]} - ${split[1]}`;
+					operator = undefined;
+				}
+				break;
+
+			default:
+				break;
+		}
+
+		// Define render structure
+
+		return {
 			label: (
 				<span>
-					{i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord')}:{' '}
-					<strong>{keyword}</strong>
+					{`${label}:`}
+					<strong>
+						{operator && ` ${operator?.toLowerCase()}`}
+						{` ${value}`}
+					</strong>
 				</span>
 			),
-			value: keyword as string,
-			prop: 'search',
-		}));
-
-	const advancedFilters = query.advanced.map((advanced: AdvancedFilterQueryValue) => ({
-		label: (
-			<span>
-				{getSelectLabel(getProperties(), advanced.prop)}:{' '}
-				{`"${getSelectLabel(
-					getOperators(advanced.prop as MetadataProp),
-					advanced.op
-				)?.toLowerCase()}" `}
-				<strong>{advanced.val}</strong>
-			</span>
-		),
-		value: advanced.val,
-		prop: ReadingRoomFilterId.Advanced,
-	}));
-
-	return searchFilters.concat(advancedFilters);
+			value: advanced.val || '',
+			key: ReadingRoomFilterId.Advanced,
+			...advanced,
+		};
+	});
 };
 
-export const mapFiltersToQuery = (
-	id: ReadingRoomFilterId,
-	values: unknown
-): AdvancedFilterQueryValue[] | undefined => {
-	switch (id) {
-		case ReadingRoomFilterId.Advanced: {
-			const filters = (values as AdvancedFilterFormState)?.advanced.filter(
-				(filter) => !!filter.value
-			);
+export const mapFiltersToTags = (query: Partial<ReadingRoomQueryParams>): TagIdentity[] => {
+	const searchFilters = mapSearchToTags(query);
+	const advancedFilters = mapAdvancedToTags(query);
 
-			// Map to smaller props to keep query params in url short
-			return filters.length
-				? filters.map((item) => ({
-						prop: item.metadataProp ?? '',
-						op: item.operator ?? '',
-						val: item.value ?? '',
-				  }))
-				: undefined;
-		}
-
-		default:
-			return undefined;
-	}
-};
-
-export const mapQueryToFields = (
-	id: ReadingRoomFilterId,
-	values: unknown
-): AdvancedFilterFieldsState[] | undefined => {
-	switch (id) {
-		case ReadingRoomFilterId.Advanced: {
-			const filters = values as AdvancedFilterFieldsQueryValues[];
-			return filters.length
-				? filters.map((value: AdvancedFilterFieldsQueryValues) => ({
-						metadataProp: value.prop,
-						operator: value.op,
-						value: value.val,
-				  }))
-				: undefined;
-		}
-
-		default:
-			return undefined;
-	}
+	return [...searchFilters, ...advancedFilters];
 };

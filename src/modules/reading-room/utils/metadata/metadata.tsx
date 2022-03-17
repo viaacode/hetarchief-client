@@ -80,5 +80,6 @@ export const getLabel = (prop: MetadataProp): string => {
 	);
 };
 
-export const formatMetadataDate = (value: Date | string | undefined): string =>
-	formatWithLocale('P', asDate(value));
+export const formatMetadataDate = (value: Date | string | undefined): string => {
+	return formatWithLocale('P', asDate(value));
+};

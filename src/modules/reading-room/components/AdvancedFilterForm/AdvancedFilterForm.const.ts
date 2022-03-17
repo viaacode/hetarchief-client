@@ -6,9 +6,9 @@ export const ADVANCED_FILTER_FORM_SCHEMA = (): SchemaOf<AdvancedFilterFormState>
 	object({
 		advanced: array(
 			object({
-				metadataProp: string(),
-				operator: string(),
-				value: string(),
+				prop: string(),
+				op: string(),
+				val: string(),
 			})
 		),
 	});

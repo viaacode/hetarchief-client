@@ -7,6 +7,7 @@ import { getLocaleFromi18nLanguage } from './i18n';
 
 export const asDate = (input: Date | string | undefined | null): Date | undefined => {
 	const isEmpty = !input;
+	const isNumber = !isNaN(Number(input));
 	const isInvalidString =
 		typeof input === 'string' && (input.length <= 0 || input === 'undefined');
 
@@ -14,7 +15,7 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 		return undefined;
 	}
 
-	return new Date(input);
+	return new Date(isNumber ? Number(input) : input);
 };
 
 export const formatWithLocale = (formatString: string, date?: Date): string => {

@@ -5,6 +5,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -20,8 +21,13 @@ import {
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
-import { ReadingRoomFilterId, ReadingRoomMediaType } from '@reading-room/types';
-import { mapFiltersToQuery, mapFiltersToTags } from '@reading-room/utils';
+import {
+	AdvancedFilter,
+	ReadingRoomFilterId,
+	ReadingRoomMediaType,
+	TagIdentity,
+} from '@reading-room/types';
+import { mapFiltersToTags } from '@reading-room/utils';
 import {
 	IdentifiableMediaCard,
 	MediaCardList,
@@ -176,12 +182,29 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: string, values: unknown) => {
-		const parsedQueryValue = mapFiltersToQuery(id as ReadingRoomFilterId, values);
-		setQuery({ [id]: parsedQueryValue });
+		values = (values as Record<string, unknown>)[id] || values;
+		setQuery({ [id]: values });
 	};
 
-	const onRemoveKeyword = (newValue: SearchBarValue<true>) =>
-		setQuery({ [SEARCH_QUERY_KEY]: newValue?.map((tag) => tag.value as string) });
+	const onRemoveKeyword = (newValue: MultiValue<TagIdentity>) => {
+		const search = newValue
+			?.filter((val) => val.key === SEARCH_QUERY_KEY)
+			.map((tag) => tag.value as string);
+
+		const advanced = newValue
+			?.filter((val) => val.key === ReadingRoomFilterId.Advanced)
+			.map((tag) => {
+				const { prop, op, val } = tag;
+				const filter: AdvancedFilter = { prop, op, val };
+
+				return filter;
+			});
+
+		setQuery({
+			[SEARCH_QUERY_KEY]: (search.length > 0 && search) || undefined,
+			[ReadingRoomFilterId.Advanced]: (advanced.length > 0 && advanced) || undefined,
+		});
+	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
 		setQuery({ orderProp, orderDirection });
@@ -303,7 +326,6 @@ const ReadingRoomPage: NextPage = () => {
 								'pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder'
 							)}
 							syncSearchValue={false}
-							valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
 							value={activeFilters}
 							onClear={onResetFilters}
 							onRemoveValue={onRemoveKeyword}

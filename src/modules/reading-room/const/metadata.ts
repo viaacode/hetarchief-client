@@ -238,7 +238,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			},
 			[Operator.Between]: {
 				label: dictionary.between,
-				field: TextInput, // TODO: DateRangeInput
+				field: DateRangeInput,
 			},
 		},
 		[MetadataProp.Publisher]: {
