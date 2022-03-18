@@ -1,6 +1,6 @@
 @use "styles/abstracts" as *;
 
-:global .c-rich-text-editor {
+.c-rich-text-editor {
 	.headings-dropdown .dropdown-content .menu-item:first-child {
 		display: none; // Hide h1 option in headings dropdown
 	}
