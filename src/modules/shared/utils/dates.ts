@@ -8,7 +8,11 @@ import { getLocaleFromi18nLanguage } from './i18n';
 export const parseDatabaseDate = (databaseDate: Date | string): Date => {
 	let dateObj: Date;
 	if (typeof databaseDate === 'string') {
-		dateObj = new Date(databaseDate + (databaseDate.toLowerCase().endsWith('z') ? '' : 'Z'));
+		if (databaseDate.toLowerCase().includes('t') && !databaseDate.toLowerCase().endsWith('z')) {
+			dateObj = new Date(databaseDate + 'Z');
+		} else {
+			dateObj = new Date(databaseDate);
+		}
 	} else {
 		dateObj = databaseDate as Date;
 	}
