@@ -9,7 +9,7 @@ import {
 	FilterMenuSortOption,
 } from '@reading-room/components';
 import { Icon } from '@shared/components';
-import { VIEW_TOGGLE_OPTIONS } from '@shared/const';
+import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection } from '@shared/types';
 
 import {
@@ -30,7 +30,7 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	// Filters
 	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
-	search: ArrayParam,
+	[SEARCH_QUERY_KEY]: ArrayParam,
 	[ReadingRoomFilterId.Advanced]: JsonParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
@@ -113,9 +113,10 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 ];
 
 export const READING_ROOM_ACTIVE_SORT_MAP = (): { [key in ReadingRoomSort]: string } => ({
-	date: i18n?.t('modules/reading-room/const/index___sorteer-op-datum') ?? '',
-	relevance: i18n?.t('modules/reading-room/const/index___sorteer-op-relevantie') ?? '',
-	title: i18n?.t('modules/reading-room/const/index___sorteer-op-titel') ?? '',
+	[ReadingRoomSort.Date]: i18n?.t('modules/reading-room/const/index___sorteer-op-datum') ?? '',
+	[ReadingRoomSort.Relevance]:
+		i18n?.t('modules/reading-room/const/index___sorteer-op-relevantie') ?? '',
+	[ReadingRoomSort.Title]: i18n?.t('modules/reading-room/const/index___sorteer-op-titel') ?? '',
 });
 
 export const READING_ROOM_SORT_OPTIONS = (): FilterMenuSortOption[] => [
@@ -133,14 +134,15 @@ export const READING_ROOM_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 		orderProp: ReadingRoomSort.Date,
 		orderDirection: OrderDirection.desc,
 	},
-	{
-		label: i18n?.t('modules/reading-room/const/index___van-a-tot-z') ?? '',
-		orderProp: ReadingRoomSort.Title,
-		orderDirection: OrderDirection.asc,
-	},
-	{
-		label: i18n?.t('modules/reading-room/const/index___van-z-tot-a') ?? '',
-		orderProp: ReadingRoomSort.Title,
-		orderDirection: OrderDirection.desc,
-	},
+	// schema_name niet sorteerbaar in https://meemoo.atlassian.net/wiki/pages/viewpage.action?pageId=3309174878&pageVersion=3
+	// {
+	// 	label: i18n?.t('modules/reading-room/const/index___van-a-tot-z') ?? '',
+	// 	orderProp: ReadingRoomSort.Title,
+	// 	orderDirection: OrderDirection.asc,
+	// },
+	// {
+	// 	label: i18n?.t('modules/reading-room/const/index___van-z-tot-a') ?? '',
+	// 	orderProp: ReadingRoomSort.Title,
+	// 	orderDirection: OrderDirection.desc,
+	// },
 ];

@@ -18,6 +18,9 @@ export interface CollectionMedia {
 	numberOfPages: unknown;
 	termsAvailable: string;
 	thumbnailUrl: string;
+	maintainerId: string;
+	maintainerName: string;
+	readingRoomId: string;
 }
 
 export interface CreateCollectionFormState {

@@ -26,8 +26,8 @@ import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
+import { VisitStatus } from '@shared/types';
 import { VisitsService } from '@visits/services/visits/visits.service';
-import { VisitStatus } from '@visits/types';
 
 import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
 

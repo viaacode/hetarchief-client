@@ -2,6 +2,7 @@ import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -12,7 +13,8 @@ import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import { MEDIA_ACTIONS, METADATA_FIELDS, OBJECT_DETAIL_TABS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
-import { MediaTypes, ObjectDetailTabs } from '@media/types';
+import { MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { AddToCollectionBlade } from '@reading-room/components';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
@@ -32,6 +34,8 @@ import {
 } from 'modules/media/components';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
+const { publicRuntimeConfig } = getConfig();
+
 const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Hooks
@@ -41,6 +45,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
+	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
 
@@ -103,6 +108,18 @@ const ObjectDetailPage: NextPage = () => {
 		setActiveTab(expandMetadata ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata);
 	};
 
+	const onCloseBlade = () => {
+		setActiveBlade(null);
+	};
+
+	const onClickAction = (id: MediaActions) => {
+		switch (id) {
+			case MediaActions.Bookmark:
+				setActiveBlade(MediaActions.Bookmark);
+				break;
+		}
+	};
+
 	/**
 	 * Content
 	 */
@@ -131,18 +148,6 @@ const ObjectDetailPage: NextPage = () => {
 
 	return (
 		<>
-			{/* <!-- Flowplayer --> */}
-			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/chromecast.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/airplay.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
-			<Script
-				strategy="beforeInteractive"
-				src="/flowplayer/plugins/google-analytics.min.js"
-			/>
 			<div className="p-object-detail">
 				<Head>
 					<title>{createPageTitle('Object detail')}</title>
@@ -191,6 +196,8 @@ const ObjectDetailPage: NextPage = () => {
 								title="Elephants dream"
 								pause={pauseMedia}
 								onPlay={() => setPauseMedia(false)}
+								token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
+								dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 							/>
 						) : (
 							<>
@@ -235,7 +242,10 @@ const ObjectDetailPage: NextPage = () => {
 											)}
 										</span>
 									</Button>
-									<DynamicActionMenu {...MEDIA_ACTIONS()} />
+									<DynamicActionMenu
+										{...MEDIA_ACTIONS()}
+										onClickAction={onClickAction}
+									/>
 								</div>
 							</div>
 							{mediaInfo && (
@@ -279,6 +289,15 @@ const ObjectDetailPage: NextPage = () => {
 					</div>
 				</article>
 			</div>
+			<AddToCollectionBlade
+				isOpen={activeBlade === MediaActions.Bookmark}
+				selected={{
+					id: mediaInfo?.id ?? '',
+					title: mediaInfo?.name,
+				}}
+				onClose={onCloseBlade}
+				onSubmit={onCloseBlade}
+			/>
 		</>
 	);
 };
