@@ -4,7 +4,7 @@ import React, { FC, useState } from 'react';
 
 import { requestCreatedAtFormatter } from '@cp/utils';
 import { Blade, BladeManager, Icon } from '@shared/components';
-import { VisitStatus } from '@visits/types';
+import { VisitStatus } from '@shared/types';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';
 import { DeclineRequestBlade } from '../DeclineRequestBlade';

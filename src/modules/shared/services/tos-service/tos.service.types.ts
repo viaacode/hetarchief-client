@@ -1,6 +1,6 @@
-import { UserSchema } from '@auth/types';
+import { User } from '@auth/types';
 
-type AcceptTermsOfService = UserSchema;
+type AcceptTermsOfService = User;
 
 interface GetTermsOfService {
 	updatedAt: string;

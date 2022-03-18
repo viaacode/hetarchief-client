@@ -1,7 +1,7 @@
-import { UserSchema } from '@auth/types';
+import { User } from '@auth/types';
 
 export interface UserState {
-	user: UserSchema | null;
+	user: User | null;
 	loading: boolean;
 	error: unknown | null;
 }

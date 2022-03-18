@@ -1,6 +1,7 @@
 import { i18n } from 'next-i18next';
 
 export * from './my-collections.const';
+export * from './my-history.const';
 
 export const ACCOUNT_NAVIGATION_LINKS = (): {
 	id: string;

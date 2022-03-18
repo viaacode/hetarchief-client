@@ -7,24 +7,25 @@ import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { RequestTablePageSize } from '@cp/const/requests.const';
 import {
-	CP_ADMIN_VISITS_QUERY_PARAM_CONFIG,
-	RequestTablePageSize,
-	visitsStatusFilters,
-	VisitsTableColumns,
-} from '@cp/const/requests.const';
+	CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG,
+	visitorsStatusFilters,
+	VisitorsTableColumns,
+} from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
-import { OrderDirection } from '@shared/types';
+import { SEARCH_QUERY_KEY } from '@shared/const';
+import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
-import { VisitInfo, VisitStatus, VisitTimeframe } from '@visits/types';
+import { VisitTimeframe } from '@visits/types';
 
 const CPVisitorsPage: NextPage = () => {
 	const { t } = useTranslation();
-	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITS_QUERY_PARAM_CONFIG);
+	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	// const [selected, setSelected] = useState<string | number | null>(null);
 
 	const { data: visits, isFetching } = useGetVisits({
@@ -44,7 +45,7 @@ const CPVisitorsPage: NextPage = () => {
 
 	const statusFilters = useMemo(
 		() =>
-			visitsStatusFilters().map((filter) => {
+			visitorsStatusFilters().map((filter) => {
 				return {
 					...filter,
 					active: filter.id === filters.timeframe,
@@ -132,7 +133,7 @@ const CPVisitorsPage: NextPage = () => {
 							size="md"
 							onClear={() => {
 								setFilters({
-									search: '',
+									[SEARCH_QUERY_KEY]: '',
 									page: 1,
 								});
 							}}
@@ -140,13 +141,13 @@ const CPVisitorsPage: NextPage = () => {
 								// Force rerender
 								if (filters.search === searchValue) {
 									setFilters({
-										search: '',
+										[SEARCH_QUERY_KEY]: '',
 										page: 1,
 									});
 								}
 
 								setFilters({
-									search: searchValue,
+									[SEARCH_QUERY_KEY]: searchValue,
 									page: 1,
 								});
 							}}
@@ -167,14 +168,14 @@ const CPVisitorsPage: NextPage = () => {
 				</div>
 
 				{(visits?.items?.length || 0) > 0 ? (
-					<div className="l-container p-cp__edgeless-container--lg">
+					<div className="l-container l-container--edgeless-to-lg">
 						<Table
 							className="u-mt-24"
 							options={
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: VisitsTableColumns(t) as Column<object>[],
+									columns: VisitorsTableColumns({ t }) as Column<object>[],
 									data: visits?.items || [],
 									initialState: {
 										pageSize: RequestTablePageSize,
@@ -207,7 +208,7 @@ const CPVisitorsPage: NextPage = () => {
 						/>
 					</div>
 				) : (
-					<div className="l-container p-cp__edgeless-container--lg u-text-center u-color-neutral u-py-48">
+					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
 						{isFetching
 							? t('pages/beheer/aanvragen/index___laden')
 							: renderEmptyMessage()}
