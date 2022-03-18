@@ -42,9 +42,6 @@ export const getField = (prop: MetadataProp, op: Operator): MetadataFields | nul
 export const getLabel = (prop: MetadataProp): string => {
 	return (
 		{
-			[MetadataProp.Carrier]: i18n?.t(
-				'modules/reading-room/utils/metadata/metadata___analoge-drager'
-			),
 			[MetadataProp.CreatedAt]: i18n?.t(
 				'modules/reading-room/utils/metadata/metadata___creatiedatum'
 			),
@@ -68,6 +65,9 @@ export const getLabel = (prop: MetadataProp): string => {
 			),
 			[MetadataProp.Mediatype]: i18n?.t(
 				'modules/reading-room/utils/metadata/metadata___bestandstype'
+			),
+			[MetadataProp.Medium]: i18n?.t(
+				'modules/reading-room/utils/metadata/metadata___analoge-drager'
 			),
 			[MetadataProp.PublishedAt]: i18n?.t(
 				'modules/reading-room/utils/metadata/metadata___uitzenddatum'

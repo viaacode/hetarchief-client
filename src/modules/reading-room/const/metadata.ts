@@ -1,6 +1,5 @@
 import {
 	DatepickerProps,
-	ReactSelect,
 	ReactSelectProps,
 	TextInput,
 	TextInputProps,
@@ -8,15 +7,17 @@ import {
 import { i18n } from 'next-i18next';
 import { FC } from 'react';
 
-import { DateRangeInput } from '@reading-room/components/DateRangeInput';
-import { DurationInput } from '@reading-room/components/DurationInput';
-import { GenreSelect } from '@reading-room/components/GenreSelect';
+import {
+	DateInput,
+	DateRangeInput,
+	DurationInput,
+	DurationRangeInput,
+	GenreSelect,
+	MediaTypeSelect,
+	MediumSelect,
+} from '@reading-room/components';
 import { MetadataProp } from '@reading-room/types';
 import { Operator } from '@shared/types';
-
-import { DateInput } from '../components/DateInput';
-import { DurationRangeInput } from '../components/DurationRangeInput';
-import { MediaTypeSelect } from '../components/MediaTypeSelect';
 
 export type MetadataFields = FC<TextInputProps> | FC<ReactSelectProps> | FC<DatepickerProps>;
 
@@ -70,16 +71,6 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 	};
 
 	return {
-		[MetadataProp.Carrier]: {
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: ReactSelect, // TODO: CarrierSelect
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: ReactSelect, // TODO: CarrierSelect
-			},
-		},
 		[MetadataProp.CreatedAt]: {
 			[Operator.GreaterThan]: {
 				label: dictionary.from,
@@ -188,6 +179,16 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: MediaTypeSelect,
+			},
+		},
+		[MetadataProp.Medium]: {
+			[Operator.Equals]: {
+				label: dictionary.equals,
+				field: MediumSelect,
+			},
+			[Operator.EqualsNot]: {
+				label: dictionary.differs,
+				field: MediumSelect,
 			},
 		},
 		[MetadataProp.Genre]: {

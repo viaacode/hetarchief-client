@@ -9,21 +9,21 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { SingleValue } from 'react-select';
 
+import {
+	DateInput,
+	DateRangeInput,
+	DurationInput,
+	DurationRangeInput,
+	GenreSelect,
+	MediaTypeSelect,
+	MediumSelect,
+} from '@reading-room/components';
 import { AdvancedFilter, MetadataProp } from '@reading-room/types';
 import { getField, getOperators, getProperties } from '@reading-room/utils';
 import { Icon } from '@shared/components';
-import { selectMediaResults } from '@shared/store/media';
 import { Operator } from '@shared/types';
-
-import { DateInput } from '../DateInput';
-import { DateRangeInput } from '../DateRangeInput';
-import { DurationInput } from '../DurationInput';
-import { DurationRangeInput } from '../DurationRangeInput';
-import { GenreSelect } from '../GenreSelect';
-import { MediaTypeSelect } from '../MediaTypeSelect';
 
 import styles from './AdvancedFilterFields.module.scss';
 import { AdvancedFilterFieldsProps } from './AdvancedFilterFields.types';
@@ -34,9 +34,6 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
-	// State
-	const results = useSelector(selectMediaResults);
-
 	// Helpers
 
 	const getSelectValue = (options: SelectOption[], optionValue: string | undefined | null) => {
@@ -90,6 +87,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case ReactSelect:
 			case MediaTypeSelect:
 			case GenreSelect:
+			case MediumSelect:
 				Component = Component as FC<ReactSelectProps>;
 				props = props as ReactSelectProps;
 				value = getSelectValue(props ? (props.options as SelectOption[]) : [], state.val);
