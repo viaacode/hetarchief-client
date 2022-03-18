@@ -46,7 +46,7 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
-	const [mediaUrl, setMediaUrl] = useState<string | undefined>(undefined);
+	const [mediaUrl, setMediaUrl] = useState<string>();
 
 	// Layout
 	useStickyLayout();
@@ -220,9 +220,7 @@ const ObjectDetailPage: NextPage = () => {
 									pause={pauseMedia}
 									onPlay={() => setPauseMedia(false)}
 								/>
-							) : (
-								<></>
-							)
+							) : null
 						) : (
 							<>
 								<ObjectPlaceholder
