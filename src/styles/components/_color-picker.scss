@@ -1,0 +1,31 @@
+@use "styles/abstracts" as *;
+
+.c-color-picker {
+  height: 48px;
+  width: 100%;
+
+  .c-color-picker__controls {
+	display: flex;
+  }
+
+  .c-color-picker__trigger {
+	width: 48px;
+	height: 48px;
+	border: 1px solid $zinc;
+  }
+
+  .c-color-picker__input {
+	width: calc(100% - 48px);
+	height: 48px;
+	border: 1px solid $zinc;
+	border-left: 0;
+	padding-left: 1.7rem;
+	font-family: $font-family-primary;
+	font-size: $font-size-base;
+	line-height: $line-height-lg;
+
+	:focus {
+	  border-color: $seagreen;
+	}
+  }
+}
