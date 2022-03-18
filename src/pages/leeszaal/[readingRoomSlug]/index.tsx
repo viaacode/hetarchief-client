@@ -36,7 +36,6 @@ import {
 	Placeholder,
 	ScrollableTabs,
 	SearchBar,
-	SearchBarValue,
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';

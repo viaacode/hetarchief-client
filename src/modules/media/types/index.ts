@@ -27,7 +27,7 @@ export interface MediaRepresentation {
 
 export interface Media {
 	id: string;
-	premisIdentifier: any;
+	premisIdentifier: Record<string, string[]>;
 	premisRelationship: string;
 	isPartOf: string;
 	partOfArchive: string[];
@@ -46,10 +46,10 @@ export interface Media {
 	name: string;
 	description: string;
 	abstract: string;
-	creator: any;
-	actor: any;
-	contributor: any;
-	publisher: any;
+	creator: Record<string, string[]>;
+	actor: Record<string, string[]>;
+	contributor: unknown;
+	publisher: Record<string, string[]>;
 	spatial: string[];
 	temporal: string[];
 	keywords: string[];
@@ -60,7 +60,7 @@ export interface Media {
 	embedUrl: string;
 	alternateName: string;
 	duration: string;
-	license: any;
+	license: unknown;
 	meemooFragmentId: string;
 	meemooMediaObjectId: string;
 	dateCreated: string;

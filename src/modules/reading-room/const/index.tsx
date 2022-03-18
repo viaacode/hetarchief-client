@@ -1,7 +1,7 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 import { FC } from 'react';
-import { ArrayParam, JsonParam, NumberParam, StringParam, withDefault } from 'use-query-params';
+import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import {
 	AdvancedFilterForm,
