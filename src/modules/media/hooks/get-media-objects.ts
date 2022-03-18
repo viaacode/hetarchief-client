@@ -21,7 +21,7 @@ export function useGetMediaObjects(
 	sort?: SortObject
 ): UseQueryResult<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
 	return useQuery(
-		[QUERY_KEYS.getMediaObjects, { filters, page, size }],
+		[QUERY_KEYS.getMediaObjects, { filters, page, size, sort }],
 		() => {
 			const { format, ...rest } = filters || {};
 			const mediaFormat: MediaTypes | undefined =
