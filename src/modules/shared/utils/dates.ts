@@ -5,6 +5,16 @@ import { getLocaleFromi18nLanguage } from './i18n';
 
 // Shared
 
+export const parseDatabaseDate = (databaseDate: Date | string): Date => {
+	let dateObj: Date;
+	if (typeof databaseDate === 'string') {
+		dateObj = new Date(databaseDate + (databaseDate.toLowerCase().endsWith('z') ? '' : 'Z'));
+	} else {
+		dateObj = databaseDate as Date;
+	}
+	return dateObj;
+};
+
 export const formatWithLocale = (formatString: string, date?: Date): string => {
 	const locale = getLocaleFromi18nLanguage(i18n?.language || '');
 	return date ? format(date, formatString, { locale }) : '';
@@ -19,8 +29,8 @@ export const formatAccessDate = (date?: Date): string => {
 // - account/mijn-historiek
 
 export const formatAccessDates = (from?: Date | string, to?: Date | string): string => {
-	const f = from ? new Date(from) : undefined;
-	const t = to ? new Date(to) : undefined;
+	const f = from ? parseDatabaseDate(from) : undefined;
+	const t = to ? parseDatabaseDate(to) : undefined;
 
 	if (f && !t) return formatAccessDate(f);
 	if (!f && t) return formatAccessDate(t);
