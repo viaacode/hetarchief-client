@@ -7,7 +7,6 @@ const Document = (): ReactElement => {
 			<Head>
 				{/* eslint-disable-next-line */}
 				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
-				<link rel="shortcut icon" href="/favicon.ico" />
 			</Head>
 			<body>
 				<Main />
