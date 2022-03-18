@@ -6,6 +6,7 @@ const Document = (): ReactElement => {
 		<Html>
 			<Head>
 				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
+				<link rel="shortcut icon" href="/favicon.ico" />
 			</Head>
 			<body>
 				<Main />
