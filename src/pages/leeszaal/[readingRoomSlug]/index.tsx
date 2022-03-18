@@ -40,7 +40,7 @@ import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, SortObject } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
-import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+import { VisitorLayout } from 'modules/visitors';
 
 const ReadingRoomPage: NextPage = () => {
 	const { t } = useTranslation();

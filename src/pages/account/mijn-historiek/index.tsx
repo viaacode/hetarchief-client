@@ -24,7 +24,7 @@ import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
-import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyHistory: NextPage = () => {
 	const { t } = useTranslation();

@@ -32,7 +32,7 @@ import {
 	RelatedObjectProps,
 } from 'modules/media/components';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
-import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+import { VisitorLayout } from 'modules/visitors';
 
 const ObjectDetailPage: NextPage = () => {
 	/**

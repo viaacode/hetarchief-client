@@ -11,7 +11,7 @@ import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
 
-import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyProfile: NextPage = () => {
 	const user = useSelector(selectUser);

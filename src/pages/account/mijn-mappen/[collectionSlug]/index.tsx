@@ -34,7 +34,7 @@ import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { Breakpoints } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
-import VisitorLayout from 'modules/visitors/layouts/VisitorLayout/VisitorLayout';
+import { VisitorLayout } from 'modules/visitors';
 
 type ListNavigationCollectionItem = ListNavigationItem & Collection;
 

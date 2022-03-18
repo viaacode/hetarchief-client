@@ -1,5 +1,8 @@
 /* stylelint-disable-next-line selector-id-pattern */
 iframe#webWidget {
+	/* Zendesk already adds a 16px margin to their layout. We want the margin to be 31px in total */
 	margin-right: calc(31px - 16px);
+
+	/* Zendesk already adds a 16px margin to their layout. We want the margin to be 21px in total */
 	margin-bottom: calc(21px - 16px);
 }
