@@ -34,7 +34,7 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, SortObject } from '@shared/types';
@@ -71,6 +71,11 @@ const ReadingRoomPage: NextPage = () => {
 	// TODO add other filters once available
 	const hasSearched = !!query?.search?.length || query?.format !== ReadingRoomMediaType.All;
 
+	const activeSort: SortObject = {
+		orderProp: query.orderProp,
+		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
+	};
+
 	/**
 	 * Data
 	 */
@@ -81,7 +86,8 @@ const ReadingRoomPage: NextPage = () => {
 			format: (query.format as ReadingRoomMediaType) || READING_ROOM_QUERY_PARAM_INIT.format,
 		},
 		query.page || 0,
-		READING_ROOM_ITEM_COUNT
+		READING_ROOM_ITEM_COUNT,
+		activeSort
 	);
 
 	/**
@@ -145,7 +151,7 @@ const ReadingRoomPage: NextPage = () => {
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim()) {
 			if (!query.search?.includes(newValue)) {
-				setQuery({ search: (query.search ?? []).concat(newValue) });
+				setQuery({ [SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue) });
 			}
 		}
 	};
@@ -163,7 +169,7 @@ const ReadingRoomPage: NextPage = () => {
 	const onResetFilters = () => {
 		setQuery({
 			...READING_ROOM_QUERY_PARAM_INIT,
-			search: undefined,
+			[SEARCH_QUERY_KEY]: undefined,
 			orderDirection: undefined,
 		});
 	};
@@ -178,7 +184,7 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	const onRemoveKeyword = (newValue: SearchBarValue<true>) =>
-		setQuery({ search: newValue?.map((tag) => tag.value as string) });
+		setQuery({ [SEARCH_QUERY_KEY]: newValue?.map((tag) => tag.value as string) });
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
 		setQuery({ orderProp, orderDirection });
@@ -197,10 +203,6 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
-	const activeSort: SortObject = {
-		orderProp: query.orderProp,
-		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
-	};
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;

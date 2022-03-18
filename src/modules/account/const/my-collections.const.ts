@@ -3,11 +3,12 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { object, SchemaOf, string } from 'yup';
 
 import { CreateCollectionFormState } from '@account/types';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 
 export const CollectionItemListSize = 20;
 
 export const ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG = {
-	search: withDefault(StringParam, undefined),
+	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 };
 

@@ -1,5 +1,6 @@
 import { AdvancedFilterFormState } from '@reading-room/components';
 import { ReadingRoomFilterId } from '@reading-room/types';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 
 import { mapFiltersToQuery, mapFiltersToTags } from './map-filters';
 
@@ -7,7 +8,7 @@ describe('Utils', () => {
 	describe('mapFiltersToTags()', () => {
 		it('should map search query to tags', () => {
 			const query = {
-				search: ['test1', 'test2'],
+				[SEARCH_QUERY_KEY]: ['test1', 'test2'],
 				format: '',
 				start: 0,
 			};
@@ -20,7 +21,7 @@ describe('Utils', () => {
 		it('Should filter out falsey search values', () => {
 			const value = 'test';
 			const query = {
-				search: [null, value],
+				[SEARCH_QUERY_KEY]: [null, value],
 				format: '',
 				start: 0,
 			};

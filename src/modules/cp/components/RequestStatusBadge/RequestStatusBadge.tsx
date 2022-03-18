@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
 import { Icon } from '@shared/components';
-import { VisitStatus } from '@visits/types';
+import { VisitStatus } from '@shared/types';
 
 import styles from './RequestStatusBadge.module.scss';
 import { RequestStatusBadgeProps } from './RequestStatusBadge.types';
