@@ -1,5 +1,4 @@
-import { DefaultComponentProps } from '@shared/types';
-import { VisitStatus } from '@visits/types';
+import { DefaultComponentProps, VisitStatus } from '@shared/types';
 
 export interface RequestStatusBadgeProps extends DefaultComponentProps {
 	status: VisitStatus;
