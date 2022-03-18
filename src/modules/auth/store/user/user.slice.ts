@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { AuthService } from '../../services/auth-service';
-import { UserSchema } from '../../types';
+import { User } from '../../types';
 
 import { UserState } from './user.types';
 
@@ -11,12 +11,12 @@ const initialState: UserState = {
 	error: null,
 };
 
-export const checkLoginAction = createAsyncThunk<UserSchema, undefined, { rejectValue: string }>(
+export const checkLoginAction = createAsyncThunk<User, undefined, { rejectValue: string }>(
 	'users/login',
 	async (_, thunkApi) => {
 		try {
 			const response = await AuthService.checkLogin();
-			return response?.userInfo as UserSchema;
+			return response?.userInfo as User;
 		} catch (error) {
 			return thunkApi.rejectWithValue(error as string);
 		}

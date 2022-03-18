@@ -5,11 +5,28 @@ import React, { FC } from 'react';
 import { Icon } from '@shared/components';
 import { CardImage } from '@shared/components/CardImage';
 
+import { ObjectPlaceholder } from '../ObjectPlaceholder';
+
 import styles from './RelatedObject.module.scss';
 import { RelatedObjectProps } from './RelatedObject.types';
 
 const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
+	const { thumbnail } = object;
 	const rootCls = clsx(className, styles['c-related-object']);
+
+	const renderImage = () => {
+		if (thumbnail) {
+			if (typeof thumbnail === 'string') {
+				return (
+					<CardImage name={object.title} id={object.id} size="small" image={thumbnail} />
+				);
+			} else {
+				return thumbnail;
+			}
+		} else {
+			return <ObjectPlaceholder small />;
+		}
+	};
 
 	return (
 		<Card
@@ -24,14 +41,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 					<strong>{object.title}</strong>
 				</>
 			}
-			image={
-				<CardImage
-					name={object.title}
-					id={object.id}
-					size="small"
-					image={object.thumbnail}
-				/>
-			}
+			image={renderImage()}
 		>
 			{object.description}
 		</Card>

@@ -39,10 +39,10 @@ describe('Components', () => {
 
 			const notifications = queryAllByText(NOTIFICATIONS_FIRST_PAGE.items[0].description);
 
-			expect(notifications[0].parentElement).toHaveClass(
+			expect(notifications[0].parentElement?.parentElement).toHaveClass(
 				'c-notification-center__notification--unread'
 			);
-			expect(notifications[19].parentElement).toHaveClass(
+			expect(notifications[19].parentElement?.parentElement).toHaveClass(
 				'c-notification-center__notification--read'
 			);
 		});

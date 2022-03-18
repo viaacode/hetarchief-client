@@ -104,7 +104,11 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 					return collectionsService
 						.addToCollection(pair.id, selected.id)
 						.catch(onFailedRequest)
-						.then(() => {
+						.then((response) => {
+							if (response === undefined) {
+								return;
+							}
+
 							toastService.notify({
 								maxLines: 3,
 								title: t(
@@ -123,7 +127,11 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 					return collectionsService
 						.removeFromCollection(pair.id, selected.id)
 						.catch(onFailedRequest)
-						.then(() => {
+						.then((response) => {
+							if (response === undefined) {
+								return;
+							}
+
 							toastService.notify({
 								maxLines: 3,
 								title: t(
