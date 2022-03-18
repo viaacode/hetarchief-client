@@ -1,7 +1,7 @@
 @use "styles/abstracts" as *;
 
 :global .c-rich-text-editor {
-	[data-title="Koppen"] + .dropdown-content .menu-item:first-child {
+	.headings-dropdown .dropdown-content .menu-item:first-child {
 		display: none; // Hide h1 option in headings dropdown
 	}
 
@@ -19,15 +19,15 @@
 			background-color: red;
 			display: block;
 			position: absolute;
-			top: 37px;
+			top: 3.6rem;
 			left: 0;
 			border-bottom: 1px solid $zinc;
 		}
 
 		> button,
 		> div > button {
-			padding-left: 10px;
-			padding-right: 10px;
+			padding-left: 0.8rem;
+			padding-right: 0.8rem;
 		}
 
 		> .control-item {
