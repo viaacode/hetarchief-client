@@ -23,6 +23,7 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__nav {
+		z-index: get-z-layer("foreground");
 		flex-shrink: 0;
 
 		&::after {
