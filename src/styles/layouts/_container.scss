@@ -13,4 +13,13 @@ $l-container-padding-xs: 2rem;
 		max-width: 121.6rem + ($l-container-padding * 2);
 		padding: 0 $l-container-padding-xs;
 	}
+
+	&--edgeless {
+        &-to-lg {
+            @include respond-to("lg") {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    }
 }

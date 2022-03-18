@@ -2,9 +2,9 @@ import { stringifyUrl } from 'query-string';
 
 import { CreateVisitRequest } from '@reading-room/services/reading-room/reading-room.service.types';
 import { ApiService } from '@shared/services/api-service';
-import { OrderDirection } from '@shared/types';
+import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
-import { PatchVisit, VisitInfo, VisitStatus, VisitTimeframe } from '@visits/types';
+import { PatchVisit, VisitTimeframe } from '@visits/types';
 
 import { VISITS_SERVICE_BASE_URL } from './visits.service.const';
 
@@ -16,7 +16,8 @@ export class VisitsService {
 		page = 0,
 		size = 20,
 		orderProp: keyof VisitInfo = 'startAt',
-		orderDirection: OrderDirection = OrderDirection.desc
+		orderDirection: OrderDirection = OrderDirection.desc,
+		userProfileId?: string
 	): Promise<ApiResponseWrapper<VisitInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
@@ -30,6 +31,7 @@ export class VisitsService {
 						size,
 						orderProp,
 						orderDirection,
+						userProfileId,
 					},
 				})
 			)
