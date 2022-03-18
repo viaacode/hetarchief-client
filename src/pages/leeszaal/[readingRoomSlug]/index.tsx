@@ -24,7 +24,6 @@ import { ReadingRoomFilterId, ReadingRoomMediaType } from '@reading-room/types';
 import { mapFiltersToQuery, mapFiltersToTags } from '@reading-room/utils';
 import {
 	IdentifiableMediaCard,
-	Loading,
 	MediaCardList,
 	MediaCardViewMode,
 	PaginationBar,
@@ -342,7 +341,7 @@ const ReadingRoomPage: NextPage = () => {
 								/>
 							</>
 						)}
-						{showResults && (isFetching ? <Loading /> : renderResults())}
+						{showResults && renderResults()}
 					</div>
 				</section>
 			</div>

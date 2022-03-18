@@ -18,7 +18,7 @@ import {
 } from './AdvancedFilterForm.types';
 
 const initialFields = (): AdvancedFilterFieldsState => ({
-	metadataProp: MetadataProp.Title,
+	metadataProp: MetadataProp.Everything,
 	operator: Operator.Contains,
 	value: '',
 });

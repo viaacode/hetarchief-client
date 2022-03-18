@@ -183,8 +183,8 @@ pipeline {
 			container('default') {
 				// Archive tets results
 				script {
-					if (fileExists('./tests/test_results.xml')) {
-						junit 'tests/test_results.xml'
+					if (fileExists('./tests/test_results/junit.xml')) {
+						junit 'tests/test_results/junit.xml'
 					} else {
 						echo 'No test results found'
 					}

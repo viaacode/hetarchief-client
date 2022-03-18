@@ -1,12 +1,15 @@
 @use "styles/abstracts" as *;
 
-.c-object-placeholder {
+$component: "c-object-placeholder";
+
+.#{$component} {
 	height: 100%;
 	display: flex;
 	flex-flow: column;
 	justify-content: center;
 	align-items: center;
 	background-color: $silver;
+	position: relative;
 
 	&__page {
 		position: relative;
@@ -66,5 +69,28 @@
 		margin-top: $spacer-1xl;
 		margin-bottom: 5.6rem;
 		min-width: 20rem;
+	}
+
+	&--small {
+		height: 100%;
+		width: $card-image-small-width;
+		min-width: $card-image-small-width;
+		min-height: $card-image-small-height;
+
+		.#{$component}__page {
+			position: absolute;
+			transform: scale(0.334);
+		}
+
+		@include respond-at("md") {
+			width: $card-image-small-width-md;
+			min-width: $card-image-small-width-md;
+		}
+
+		@include respond-to("md") {
+			.#{$component}__page {
+				display: none;
+			}
+		}
 	}
 }
