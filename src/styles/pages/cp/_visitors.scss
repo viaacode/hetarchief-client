@@ -33,6 +33,11 @@ $page: "p-cp-visitors";
 		transform: translateY(0.2rem); // shift if to center on single-line
 	}
 
+	&__access {
+		display: flex;
+		align-items: center;
+    }
+    
 	&__link {
 		text-decoration: none;
 		transition: color $animate-default;

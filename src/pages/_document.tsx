@@ -5,6 +5,7 @@ const Document = (): ReactElement => {
 	return (
 		<Html>
 			<Head>
+				{/* eslint-disable-next-line */}
 				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
 			</Head>
 			<body>

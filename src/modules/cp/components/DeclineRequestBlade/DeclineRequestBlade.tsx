@@ -6,8 +6,8 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { Blade } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
+import { VisitStatus } from '@shared/types';
 import { VisitsService } from '@visits/services/visits/visits.service';
-import { VisitStatus } from '@visits/types';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
 import { DeclineRequestBladeProps, DeclineRequestFormState } from './DeclineRequestBlade.types';
