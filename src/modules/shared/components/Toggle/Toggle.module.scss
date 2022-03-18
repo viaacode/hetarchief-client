@@ -2,7 +2,7 @@
 @use "styles/abstracts" as *;
 
 $c-toggle-black-32: color.adjust($black, $alpha: -0.68);
-$c-toggle-white-40: color.adjust($white, $alpha: -0.60);
+$c-toggle-white-40: color.adjust($white, $alpha: -0.6);
 $c-toggle-zinc: $zinc-66;
 
 /* stylelint-disable no-descending-specificity */
@@ -16,18 +16,18 @@ $c-toggle-zinc: $zinc-66;
 		&__option {
 			width: 4rem;
 			height: 4rem;
-	
+
 			&:global(.c-button) {
 				outline: none;
-	
-				&:not(:active,:hover):focus {
+
+				&:not(:active, :hover):focus {
 					outline: none;
 				}
 			}
-	
+
 			&--active {
 				color: $c-toggle-black-32;
-	
+
 				&:hover {
 					color: $c-toggle-black-32;
 					cursor: default;

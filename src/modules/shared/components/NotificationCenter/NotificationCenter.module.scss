@@ -4,169 +4,170 @@
 $clear-button-height: 9.3rem;
 
 .c-notification-center {
-  height: 100%;
-  display: flex;
-  flex-flow: column;
-
-  &__unread, &__read {
-	padding-top: $spacer-md;
-
-	@include respond-at(sm) {
-	  padding-top: $spacer-lg;
-	}
-
-	> b {
-	  padding: $spacer-md 2rem;
-
-	  @include respond-at(sm) {
-		padding: $spacer-lg;
-	  }
-	}
-  }
-
-  &__read {
-	flex-grow: 1;
-	background-color: $platinum;
-	padding-bottom: calc($spacer-lg + $spacer-lg);
-  }
-
-  &__infinite-scroll-loading {
-	padding: $spacer-md;
-	text-align: center;
-	background-color: $platinum;
-  }
-
-  &__infinite-scroll-end {
-	height: 80px;
-  }
-
-  &__blade {
-	height: calc(100vh - $c-navigation-height-md);
-	top: $c-navigation-height-md;
-
-	@include respond-at(md) {
-	  height: calc(100vh - $c-navigation-height);
-	  top: $c-navigation-height;
-	}
-
-	> div {
-	  overflow-y: visible;
-	}
-
-	.c-notification-center__button {
-	  height: $clear-button-height;
-	  padding: $spacer-md 2rem;
-	  border-radius: 0;
-	  text-align: left;
-
-	  :global(.c-button__icon) {
-		font-size: $font-size-lg;
-	  }
-
-	  @include respond-at(sm) {
-		padding: $spacer-lg;
-	  }
-	}
-  }
-
-  &__infinite-scroll {
-	height: calc(100vh - $c-navigation-height-md - $clear-button-height);
-
-	@include respond-at(md) {
-	  height: calc(100vh - $c-navigation-height - $clear-button-height);
-	}
-  }
-
-  &__notification {
-	position: relative;
+	height: 100%;
 	display: flex;
-	align-items: center;
+	flex-flow: column;
 
-	&::before {
-	  position: absolute;
-	  bottom: 0;
-	  left: $spacer-lg;
-	  content: "";
-	  width: calc(100% - $spacer-lg - $spacer-lg);
-	  height: 1px;
-	  background-color: $silver;
-	}
+	&__unread,
+	&__read {
+		padding-top: $spacer-md;
 
-	&:last-child::before {
-	  display: none;
-	}
-
-	&-title {
-	  position: relative;
-	  display: block;
-	  padding-left: $spacer-sm;
-	  margin-bottom: $spacer-xs;
-
-	  &::before {
-		position: absolute;
-		top: 0.4rem;
-		left: 0;
-		content: "";
-		width: 0.8rem;
-		height: 0.8rem;
-		background-color: $zinc;
-		border-radius: 50%;
-	  }
-	}
-
-	&-link,
-	button {
-	  background-color: transparent;
-	  border: none;
-	  text-align: left;
-	  font-family: $font-family-primary;
-	  padding: $spacer-md 2rem $spacer-md 2rem;
-	  height: 100%;
-	  flex-grow: 1;
-	  font-size: 1.4rem;
-
-	  @include respond-at(sm) {
-		padding: $spacer-lg;
-	  }
-
-	  &-clickable {
-		&:hover {
-		  background-color: $silver;
-		  cursor: pointer;
+		@include respond-at(sm) {
+			padding-top: $spacer-lg;
 		}
-	  }
 
-	  a {
-		text-decoration: none;
-	  }
+		> b {
+			padding: $spacer-md 2rem;
 
-	  &:first-child {
-		padding-right: $spacer-xs;
-	  }
+			@include respond-at(sm) {
+				padding: $spacer-lg;
+			}
+		}
 	}
 
-	button:hover {
-	  background-color: $silver;
-	  cursor: pointer;
+	&__read {
+		flex-grow: 1;
+		background-color: $platinum;
+		padding-bottom: calc($spacer-lg + $spacer-lg);
 	}
 
-	.c-notification-center__notification-icon {
-	  font-size: $font-size-lg;
-	  width: 6rem;
-	  height: 6rem;
-	  border-radius: 0;
-	  flex-grow: 0;
-	  padding: 1.9rem;
+	&__infinite-scroll-loading {
+		padding: $spacer-md;
+		text-align: center;
+		background-color: $platinum;
 	}
 
-	&--unread {
-	  .c-notification-center__notification-title {
-		font-size: 1.6px;
+	&__infinite-scroll-end {
+		height: 80px;
+	}
+
+	&__blade {
+		height: calc(100vh - $c-navigation-height-md);
+		top: $c-navigation-height-md;
+
+		@include respond-at(md) {
+			height: calc(100vh - $c-navigation-height);
+			top: $c-navigation-height;
+		}
+
+		> div {
+			overflow-y: visible;
+		}
+
+		.c-notification-center__button {
+			height: $clear-button-height;
+			padding: $spacer-md 2rem;
+			border-radius: 0;
+			text-align: left;
+
+			:global(.c-button__icon) {
+				font-size: $font-size-lg;
+			}
+
+			@include respond-at(sm) {
+				padding: $spacer-lg;
+			}
+		}
+	}
+
+	&__infinite-scroll {
+		height: calc(100vh - $c-navigation-height-md - $clear-button-height);
+
+		@include respond-at(md) {
+			height: calc(100vh - $c-navigation-height - $clear-button-height);
+		}
+	}
+
+	&__notification {
+		position: relative;
+		display: flex;
+		align-items: center;
 
 		&::before {
-		  background-color: $teal;
+			position: absolute;
+			bottom: 0;
+			left: $spacer-lg;
+			content: "";
+			width: calc(100% - $spacer-lg - $spacer-lg);
+			height: 1px;
+			background-color: $silver;
 		}
-	  }
+
+		&:last-child::before {
+			display: none;
+		}
+
+		&-title {
+			position: relative;
+			display: block;
+			padding-left: $spacer-sm;
+			margin-bottom: $spacer-xs;
+
+			&::before {
+				position: absolute;
+				top: 0.4rem;
+				left: 0;
+				content: "";
+				width: 0.8rem;
+				height: 0.8rem;
+				background-color: $zinc;
+				border-radius: 50%;
+			}
+		}
+
+		&-link,
+		button {
+			background-color: transparent;
+			border: none;
+			text-align: left;
+			font-family: $font-family-primary;
+			padding: $spacer-md 2rem $spacer-md 2rem;
+			height: 100%;
+			flex-grow: 1;
+			font-size: 1.4rem;
+
+			@include respond-at(sm) {
+				padding: $spacer-lg;
+			}
+
+			&-clickable {
+				&:hover {
+					background-color: $silver;
+					cursor: pointer;
+				}
+			}
+
+			a {
+				text-decoration: none;
+			}
+
+			&:first-child {
+				padding-right: $spacer-xs;
+			}
+		}
+
+		button:hover {
+			background-color: $silver;
+			cursor: pointer;
+		}
+
+		.c-notification-center__notification-icon {
+			font-size: $font-size-lg;
+			width: 6rem;
+			height: 6rem;
+			border-radius: 0;
+			flex-grow: 0;
+			padding: 1.9rem;
+		}
+
+		&--unread {
+			.c-notification-center__notification-title {
+				font-size: 1.6px;
+
+				&::before {
+					background-color: $teal;
+				}
+			}
+		}
 	}
-  }
 }

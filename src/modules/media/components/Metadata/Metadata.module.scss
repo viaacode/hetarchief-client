@@ -1,5 +1,5 @@
 @use "sass:color";
- @use "styles/abstracts" as *;
+@use "styles/abstracts" as *;
 
 $black-20: color.adjust($black, $alpha: -0.8);
 $metadata-border: 0.1rem solid $black-20;

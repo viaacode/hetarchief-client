@@ -56,7 +56,8 @@ $page: "p-cp-requests";
 			}
 		}
 
-		td, th {
+		td,
+		th {
 			&:nth-last-child(1) {
 				display: none; // Hidden, see ARC-409
 				padding-left: 0;

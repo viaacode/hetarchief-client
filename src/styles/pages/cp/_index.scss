@@ -4,12 +4,12 @@
 @use "visitors" as *;
 
 .p-cp {
-    &__edgeless-container {
-        &--lg {
-            @include respond-to("lg") {
-                padding-left: 0;
-                padding-right: 0;
-            }
-        }
-    }
+	&__edgeless-container {
+		&--lg {
+			@include respond-to("lg") {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+	}
 }
