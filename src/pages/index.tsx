@@ -49,7 +49,7 @@ const Home: NextPage = () => {
 	 */
 
 	return (
-		<VisitorLayout className="p-home">
+		<VisitorLayout>
 			{isLoggedIn && !!user ? <LoggedInHome /> : <LoggedOutHome />}
 			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 		</VisitorLayout>
