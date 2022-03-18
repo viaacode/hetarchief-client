@@ -29,7 +29,7 @@ export function useGetMediaObjects(
 
 			// TODO: improve (?)
 			// Run two queries:
-			//     - One to fetch te results for a specific tab (format)
+			//     - One to fetch the results for a specific tab (format)
 			//     - and one to fetch the aggregates across formats
 			return Promise.all([
 				MediaService.getAll({ ...rest, format: mediaFormat }, page, size, sort),
