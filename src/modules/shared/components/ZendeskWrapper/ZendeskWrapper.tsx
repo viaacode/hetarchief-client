@@ -39,6 +39,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 				const scrollHeight = document.body.scrollHeight;
 				const screenHeight = document.body.clientHeight;
 				const scrollTop = document.body.scrollTop;
+				widget.style.zIndex = '3'; // Ensure the zendesk widget doesn't show on top of blades
 				widget.style.marginRight = zendeskMarginRight + 'px';
 				if (scrollHeight - screenHeight - scrollTop < footerHeight + zendeskMarginBottom) {
 					widget.style.marginBottom = `${
