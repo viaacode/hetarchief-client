@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { i18n } from 'next-i18next';
 import { useRouter } from 'next/router';
+import Script from 'next/script';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
@@ -115,6 +116,21 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
+			{/* <!-- start Flowplayer imports --> */}
+			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
+			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/chromecast.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/airplay.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
+			<Script
+				strategy="beforeInteractive"
+				src="/flowplayer/plugins/google-analytics.min.js"
+			/>
+			{/* <!-- end Flowplayer imports --> */}
+
 			<Navigation showBorder={showBorder}>
 				<Navigation.Left
 					currentPath={asPath}

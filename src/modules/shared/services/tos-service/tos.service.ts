@@ -1,6 +1,6 @@
 import { Options } from 'ky/distribution/types/options';
 
-import { UserSchema } from '@auth/types';
+import { User } from '@auth/types';
 
 import { ApiService } from '../api-service';
 
@@ -12,7 +12,7 @@ export class TosService {
 		return await ApiService.getApi().get(TOS_BASE_URL, options).json();
 	}
 
-	public static async acceptTos(uuid: string, options: Options = {}): Promise<UserSchema> {
+	public static async acceptTos(uuid: string, options: Options = {}): Promise<User> {
 		return await ApiService.getApi()
 			.patch(`${USERS_BASE_URL}/${uuid}/accepted-tos`, {
 				...options,

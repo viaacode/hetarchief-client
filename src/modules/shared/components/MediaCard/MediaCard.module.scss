@@ -5,6 +5,12 @@ $component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 
 .#{$component} {
+	cursor: pointer;
+
+	&__link {
+		text-decoration: none;
+	}
+
 	&__header,
 	&__no-content {
 		&-wrapper {
@@ -87,12 +93,6 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 					}
 				}
 			}
-		}
-	}
-
-	&__title {
-		&--interactable {
-			cursor: pointer;
 		}
 	}
 }

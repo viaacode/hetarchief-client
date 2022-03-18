@@ -1,4 +1,4 @@
-import { UserSchema } from '@auth/types';
+import { User } from '@auth/types';
 
 export enum AuthMessage {
 	LoggedIn = 'LOGGED_IN',
@@ -6,7 +6,7 @@ export enum AuthMessage {
 }
 
 interface CheckLoginSuccess {
-	userInfo?: UserSchema;
+	userInfo?: User;
 	message: AuthMessage;
 }
 
