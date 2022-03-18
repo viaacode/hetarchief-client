@@ -23,6 +23,7 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__nav {
+		z-index: get-z-layer("foreground");
 		flex-shrink: 0;
 
 		&::after {
@@ -102,10 +103,20 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
+	&__image {
+		position: relative;
+	}
+
 	&__video {
 		display: grid;
+		grid-template-rows: 1fr auto;
 		position: relative;
 		background-color: $silver;
+	}
+
+	&__slider {
+		background-color: $black-8;
+		padding: 2rem 3rem;
 	}
 
 	&__metadata {
@@ -156,6 +167,7 @@ $metadata-collapsed-width: 36vw;
 
 		.p-object-detail__video {
 			display: grid;
+			grid-template-rows: 1fr auto;
 		}
 	}
 

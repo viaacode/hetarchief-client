@@ -3,16 +3,26 @@ import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
+import { FragmentSlider } from '@media/components/FragmentSlider';
+import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
-import { MEDIA_ACTIONS, METADATA_FIELDS, OBJECT_DETAIL_TABS } from '@media/const';
+import {
+	flowplayerFormats,
+	imageFormats,
+	MEDIA_ACTIONS,
+	METADATA_FIELDS,
+	OBJECT_DETAIL_TABS,
+} from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
-import { MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
+import { MediaActions, MediaRepresentation, MediaTypes, ObjectDetailTabs } from '@media/types';
 import { AddToCollectionBlade } from '@reading-room/components';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
@@ -45,6 +55,10 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
+	const [currentRepresentation, setCurrentRepresentaton] = useState<
+		MediaRepresentation | undefined
+	>(undefined);
+	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 
 	// Layout
 	useStickyLayout();
@@ -63,10 +77,31 @@ const ObjectDetailPage: NextPage = () => {
 		router.query.objectId as string
 	);
 
-	// Set default view
+	const { data: playableUrl } = useGetMediaTicketInfo(
+		currentRepresentation?.id ?? '',
+		!!currentRepresentation?.id &&
+			flowplayerFormats.includes(currentRepresentation.dctermsFormat),
+		() => setFlowPlayerKey(currentRepresentation?.id) // Force flowplayer rerender after successful fetch
+	);
+
+	/**
+	 * Effects
+	 */
+
 	useEffect(() => {
+		// Mock representations for slider testing
+		// if (mediaInfo) {
+		// 	mediaInfo.representations = [
+		// 		...mediaInfo.representations,
+		// 		...fragmentSliderMock.fragments,
+		// 	];
+		// }
+
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
+		setCurrentRepresentaton(mediaInfo?.representations[0]);
+
+		// Set default view
 		if (windowSize.width && windowSize.width < 768) {
 			// Default to metadata tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata);
@@ -143,6 +178,56 @@ const ObjectDetailPage: NextPage = () => {
 	 * Render
 	 */
 
+	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
+		// Flowplayer
+		if (flowplayerFormats.includes(representation.dctermsFormat)) {
+			return (
+				// TODO: implement thumbnail
+				<FlowPlayer
+					className="p-object-detail__flowplayer"
+					key={flowPlayerKey}
+					src={playableUrl}
+					poster="https://via.placeholder.com/1920x1080"
+					title="Elephants dream"
+					pause={pauseMedia}
+					onPlay={() => setPauseMedia(false)}
+				/>
+			);
+		}
+
+		// Image
+		if (imageFormats.includes(representation.dctermsFormat)) {
+			return (
+				// TODO: replace with real image
+				<div className="p-object-detail__image">
+					<Image
+						src={representation.id}
+						alt={representation.name}
+						layout="fill"
+						objectFit="contain"
+					/>
+				</div>
+			);
+		}
+
+		// No renderer
+		return (
+			<ObjectPlaceholder
+				description={t('Dit formaat wordt niet ondersteund')}
+				reasonTitle={t('Waarom kan ik dit object niet bekijken?')}
+				reasonDescription={t(
+					'Het formaat van de data wordt op dit moment niet ondersteund.'
+				)}
+				openModalButtonLabel={t(
+					'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
+				)}
+				closeModalButtonLabel={t(
+					'pages/leeszaal/reading-room-slug/object-id/index___sluit'
+				)}
+			/>
+		);
+	};
+
 	return (
 		<>
 			{/* <!-- Flowplayer --> */}
@@ -198,14 +283,25 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					<div className="p-object-detail__video">
 						{mediaType ? (
-							<FlowPlayer
-								className="p-object-detail__flowplayer"
-								src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-								poster="https://via.placeholder.com/1920x1080"
-								title="Elephants dream"
-								pause={pauseMedia}
-								onPlay={() => setPauseMedia(false)}
-							/>
+							playableUrl && currentRepresentation ? (
+								<>
+									{renderMedia(playableUrl, currentRepresentation)}
+									{mediaInfo?.representations &&
+										mediaInfo?.representations.length > 1 && (
+											<FragmentSlider
+												className="p-object-detail__slider"
+												fragments={mediaInfo?.representations ?? []}
+												onChangeFragment={(index) =>
+													setCurrentRepresentaton(
+														mediaInfo?.representations[index]
+													)
+												}
+											/>
+										)}
+								</>
+							) : (
+								<></>
+							)
 						) : (
 							<>
 								<ObjectPlaceholder

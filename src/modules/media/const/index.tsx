@@ -9,6 +9,13 @@ import { Icon } from '@shared/components';
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 
 /**
+ * Render media
+ */
+
+export const flowplayerFormats: string[] = ['mp4', 'mp3'];
+export const imageFormats: string[] = ['png'];
+
+/**
  * Tabs
  */
 

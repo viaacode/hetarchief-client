@@ -1,0 +1,70 @@
+@use "styles/abstracts" as *;
+
+$fragment-width: 16rem;
+$fragment-spacing: 2.5rem;
+$button-size: 3.6rem;
+
+.c-fragment-slider{
+	max-width: 14.1rem;
+	justify-self: center;
+
+	&__grid {
+		position: relative;
+		display: grid;
+		grid-template-columns: min-content 1fr min-content;
+		align-items: center;
+		overflow: hidden;
+	}
+
+	&__items {
+		display: grid;
+		grid-row-start: 1;
+		grid-column: 1 / 4;
+		padding: 0.6rem;
+	}
+
+	&__track {
+		@extend %reset-list;
+
+		display: flex;
+		column-gap: $fragment-spacing;
+		transition: transform $animate-default;
+
+		&--centered {
+			justify-self: center;
+		}
+	}
+
+	&__item {
+		position: relative;
+		width: $fragment-width;
+		height: 8.2rem;
+		grid-row-start: 1;
+
+		&--active {
+			outline: 0.4rem solid $black;
+			outline-offset: 0.2rem;
+		}
+
+		&:focus-visible {
+			outline: 0.4rem solid $teal;
+			outline-offset: 0.2rem;
+		}
+	}
+
+	&__nav-button {
+		z-index: get-z-layer("foreground");
+		width: $button-size;
+		height: $button-size;
+		grid-row-start: 1;
+
+		&:first-of-type {
+			grid-column-start: 1;
+		}
+
+		&:last-of-type {
+			grid-column-start: 3;
+		}
+	}
+}
+
