@@ -9,12 +9,20 @@ export interface AdvancedFilterFieldsProps {
 }
 
 export enum MetadataProp {
-	Everything = 'alles',
+	CreatedAt = 'creatiedatum',
+	Creator = 'maker',
 	Description = 'beschrijving',
-	Title = 'titel',
+	Duration = 'duurtijd',
 	Era = 'tijdsperiode',
-	Publisher = 'publisher',
+	Everything = 'alles',
+	Genre = 'genre',
+	Language = 'taal',
 	Location = 'locatie',
+	Mediatype = 'bestandstype',
+	Medium = 'drager',
+	PublishedAt = 'uitzenddatum',
+	Publisher = 'publisher',
+	Title = 'titel',
 }
 
 export enum Operator {
