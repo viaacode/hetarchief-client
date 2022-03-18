@@ -13,7 +13,7 @@ export enum ReadingRoomMediaType {
 export enum ReadingRoomSort {
 	Date = 'schema_date_created',
 	Relevance = '_score',
-	Title = 'schema_name.keyword',
+	Title = 'schema_name',
 }
 
 export enum ReadingRoomFilterId {
