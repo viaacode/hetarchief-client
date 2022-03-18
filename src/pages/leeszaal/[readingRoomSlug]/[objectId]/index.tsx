@@ -12,7 +12,8 @@ import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import { MEDIA_ACTIONS, METADATA_FIELDS, OBJECT_DETAIL_TABS } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
-import { MediaTypes, ObjectDetailTabs } from '@media/types';
+import { MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { AddToCollectionBlade } from '@reading-room/components';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
@@ -42,6 +43,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
+	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
 
@@ -102,6 +104,18 @@ const ObjectDetailPage: NextPage = () => {
 
 	const onClickToggle = () => {
 		setActiveTab(expandMetadata ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata);
+	};
+
+	const onCloseBlade = () => {
+		setActiveBlade(null);
+	};
+
+	const onClickAction = (id: MediaActions) => {
+		switch (id) {
+			case MediaActions.Bookmark:
+				setActiveBlade(MediaActions.Bookmark);
+				break;
+		}
 	};
 
 	/**
@@ -236,7 +250,10 @@ const ObjectDetailPage: NextPage = () => {
 											)}
 										</span>
 									</Button>
-									<DynamicActionMenu {...MEDIA_ACTIONS()} />
+									<DynamicActionMenu
+										{...MEDIA_ACTIONS()}
+										onClickAction={onClickAction}
+									/>
 								</div>
 							</div>
 							{mediaInfo && (
@@ -280,6 +297,15 @@ const ObjectDetailPage: NextPage = () => {
 					</div>
 				</article>
 			</div>
+			<AddToCollectionBlade
+				isOpen={activeBlade === MediaActions.Bookmark}
+				selected={{
+					id: mediaInfo?.id ?? '',
+					title: mediaInfo?.name,
+				}}
+				onClose={onCloseBlade}
+				onSubmit={onCloseBlade}
+			/>
 		</VisitorLayout>
 	);
 };
