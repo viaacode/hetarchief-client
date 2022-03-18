@@ -9,7 +9,7 @@ import { Icon, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow } from '@shared/types';
-import { formatAccessDates } from '@shared/utils';
+import { formatAccessDates, parseDatabaseDate } from '@shared/utils';
 import { VisitTimeframe } from '@visits/types';
 
 export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
@@ -70,8 +70,8 @@ export const VisitorsTableColumns = (
 				!!start &&
 				!!end &&
 				isWithinInterval(new Date(), {
-					start: new Date(start),
-					end: new Date(end),
+					start: parseDatabaseDate(start),
+					end: parseDatabaseDate(end),
 				});
 
 			return (
@@ -86,8 +86,8 @@ export const VisitorsTableColumns = (
 	{
 		Header: i18n.t('modules/cp/const/visitors___goedgekeurd-door') || '',
 		accessor: 'status',
-		Cell: () => {
-			return <span className="u-color-neutral">Noah Peeters</span>; // TODO: Add column to database to track updatedBy
+		Cell: ({ row }: VisitInfoRow) => {
+			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
 		},
 	},
 	{

@@ -21,6 +21,8 @@ export interface VisitInfo {
 	visitorId: string;
 	visitorMail: string;
 	visitorName: string;
+	updatedById: string;
+	updatedByName: string;
 }
 
 export type VisitInfoRow = { row: { original: VisitInfo } };

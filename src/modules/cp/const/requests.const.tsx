@@ -9,6 +9,7 @@ import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow, VisitStatus } from '@shared/types';
+import { parseDatabaseDate } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
 
@@ -69,7 +70,7 @@ export const RequestTableColumns = (
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
 				<span className="u-color-neutral">
-					{new Date(row.original.createdAt).toLocaleString('nl-be')}
+					{parseDatabaseDate(row.original.createdAt).toLocaleString('nl-be')}
 				</span>
 			);
 		},
