@@ -82,4 +82,16 @@ $c-table-border: 1px solid $silver;
 			}
 		}
 	}
+
+	&__link {
+		text-decoration: none;
+		transition: color $animate-default;
+
+		&:hover,
+		&:active,
+		&:focus,
+		&:focus-within {
+			color: $teal !important;
+		}
+	}
 }

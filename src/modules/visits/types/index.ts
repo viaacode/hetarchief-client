@@ -1,30 +1,9 @@
-export enum VisitStatus {
-	PENDING = 'PENDING',
-	APPROVED = 'APPROVED',
-	DENIED = 'DENIED',
-}
+import { VisitStatus } from '@shared/types';
 
 export enum VisitTimeframe {
 	ACTIVE = 'ACTIVE',
 	PAST = 'PAST',
 	FUTURE = 'FUTURE',
-}
-
-export interface VisitInfo {
-	id: string;
-	spaceId: string;
-	userProfileId: string;
-	timeframe: string;
-	reason: string;
-	acceptedTosAt: string;
-	status: VisitStatus;
-	startAt?: string;
-	endAt?: string;
-	createdAt: string;
-	updatedAt: string;
-	visitorName: string;
-	visitorMail: string;
-	visitorId: string;
 }
 
 export interface PatchVisit {
