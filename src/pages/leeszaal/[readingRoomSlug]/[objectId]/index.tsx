@@ -73,9 +73,11 @@ const ObjectDetailPage: NextPage = () => {
 	const metadataSize = useElementSize(metadataRef);
 
 	// Fetch data
-	const { data: mediaInfo, isLoading: isLoadingMediaInfo } = useGetMediaInfo(
-		router.query.objectId as string
-	);
+	const {
+		data: mediaInfo,
+		isLoading: isLoadingMediaInfo,
+		isError,
+	} = useGetMediaInfo(router.query.objectId as string);
 
 	const { data: playableUrl } = useGetMediaTicketInfo(
 		currentRepresentation?.id ?? '',
@@ -247,7 +249,6 @@ const ObjectDetailPage: NextPage = () => {
 					<title>{createPageTitle('Object detail')}</title>
 					<meta name="description" content="Object detail omschrijving" />
 				</Head>
-				{/* TODO: bind title to state */}
 				<ReadingRoomNavigation
 					showBorder={showNavigationBorder}
 					className="p-object-detail__nav"
@@ -260,10 +261,12 @@ const ObjectDetailPage: NextPage = () => {
 					onClick={onTabClick}
 				/>
 				{isLoadingMediaInfo && <Loading />}
+				{isError && <p>{t('Er ging iets mis.')}</p>} {/* TODO: implement error state */}
 				<article
 					className={clsx(
 						'p-object-detail__wrapper',
-						isLoadingMediaInfo && 'p-object-detail--loading',
+						isLoadingMediaInfo && 'p-object-detail--hidden ',
+						isError && 'p-object-detail--hidden ',
 						expandMetadata && 'p-object-detail__wrapper--expanded',
 						activeTab === ObjectDetailTabs.Metadata &&
 							'p-object-detail__wrapper--metadata',
@@ -299,9 +302,7 @@ const ObjectDetailPage: NextPage = () => {
 											/>
 										)}
 								</>
-							) : (
-								<></>
-							)
+							) : null
 						) : (
 							<>
 								<ObjectPlaceholder
@@ -326,7 +327,6 @@ const ObjectDetailPage: NextPage = () => {
 					>
 						<div>
 							<div className="u-px-32">
-								{/* TODO: bind content to state */}
 								<h3 className="u-pt-32 u-pb-24">{mediaInfo?.name}</h3>
 								<p className="u-pb-24">{mediaInfo?.description}</p>
 								<div className="u-pb-24 p-object-detail__actions">
