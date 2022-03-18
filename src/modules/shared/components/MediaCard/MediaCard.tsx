@@ -1,7 +1,8 @@
 import { Button, Card, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { FC, useState } from 'react';
+import Link from 'next/link';
+import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import TruncateMarkup from 'react-truncate-markup';
 
@@ -16,16 +17,32 @@ const MediaCard: FC<MediaCardProps> = ({
 	description,
 	keywords,
 	preview,
+	detailLink,
 	publishedAt,
 	publishedBy,
 	title,
 	type,
 	view,
-	onBookmark = () => null,
-	onTitleClick,
+	onBookmark,
 	actions,
 }) => {
 	const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+	const handleBookmarkButtonClick = (evt: MouseEvent) => {
+		evt.stopPropagation();
+		evt.nativeEvent.stopImmediatePropagation();
+		if (onBookmark) {
+			onBookmark(evt);
+		}
+	};
+
+	const wrapInLink = (elem: ReactNode) => {
+		return (
+			<Link passHref href={detailLink}>
+				<a className={styles['c-media-card__link']}>{elem}</a>
+			</Link>
+		);
+	};
 
 	const renderDropdown = () =>
 		actions ? (
@@ -39,7 +56,11 @@ const MediaCard: FC<MediaCardProps> = ({
 						icon={
 							<Icon className={styles['c-media-card__icon']} name="dots-vertical" />
 						}
-						onClick={() => setDropdownOpen(!isDropdownOpen)}
+						onClick={(evt) => {
+							evt.stopPropagation();
+							evt.nativeEvent.stopImmediatePropagation();
+							setDropdownOpen(!isDropdownOpen);
+						}}
 					/>
 				</DropdownButton>
 
@@ -51,7 +72,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		<div className={styles['c-media-card__toolbar']}>
 			<Button
 				className={styles['c-media-card__icon-button']}
-				onClick={onBookmark}
+				onClick={handleBookmarkButtonClick}
 				icon={
 					<Icon
 						className={styles['c-media-card__icon']}
@@ -66,17 +87,10 @@ const MediaCard: FC<MediaCardProps> = ({
 		</div>
 	);
 
-	const renderTitle = () => (
-		<b
-			className={clsx({
-				[styles['c-media-card__title--interactable']]: !!onTitleClick,
-			})}
-		>
-			{keywords?.length ? highlighted(title ?? '') : title}
-		</b>
-	);
+	const renderTitle = () =>
+		wrapInLink(<b>{keywords?.length ? highlighted(title ?? '') : title}</b>);
 
-	const renderSubtitle = () => {
+	const renderSubtitle = (): JSX.Element => {
 		let subtitle = '';
 
 		if (publishedBy) {
@@ -92,7 +106,12 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return subtitle.length > 0 ? subtitle : undefined;
+		const subtitleWithHighlighting: ReactNode = keywords?.length ? (
+			highlighted(subtitle)
+		) : (
+			<>{subtitle}</>
+		);
+		return wrapInLink(subtitleWithHighlighting);
 	};
 
 	const renderNoContentIcon = () => (
@@ -120,7 +139,9 @@ const MediaCard: FC<MediaCardProps> = ({
 						styles[`c-media-card__header-wrapper--${view}`]
 					)}
 				>
-					<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
+					{wrapInLink(
+						<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
+					)}
 				</div>
 			);
 		} else {
@@ -143,19 +164,20 @@ const MediaCard: FC<MediaCardProps> = ({
 			orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 			title={renderTitle()}
 			image={renderHeader()}
-			subtitle={keywords?.length ? highlighted(renderSubtitle() ?? '') : renderSubtitle()}
+			subtitle={renderSubtitle()}
 			toolbar={renderToolbar()}
 			padding="both"
-			{...(onTitleClick ? { onTitleClick } : {})}
 		>
 			{/* // Wrapping this in a conditional ensures TruncateMarkup only renders after the content is received */}
 			{description ? (
-				typeof description === 'string' ? (
-					<TruncateMarkup lines={2}>
-						<span>{description}</span>
-					</TruncateMarkup>
-				) : (
-					description
+				wrapInLink(
+					typeof description === 'string' ? (
+						<TruncateMarkup lines={2}>
+							<span>{description}</span>
+						</TruncateMarkup>
+					) : (
+						description
+					)
 				)
 			) : (
 				// Passing a child to Card ensure whitespacing at the bottom is applied
