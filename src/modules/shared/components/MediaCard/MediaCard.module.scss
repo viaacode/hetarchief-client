@@ -5,94 +5,94 @@ $component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 
 .#{$component} {
-  cursor: pointer;
+	cursor: pointer;
 
-  &__link {
-	text-decoration: none;
-  }
-
-  &__header,
-  &__no-content {
-	&-wrapper {
-	  max-width: 100%;
-	  min-width: 100%;
-	  position: relative;
+	&__link {
+		text-decoration: none;
 	}
-  }
 
-  // Override next/image
-  &__header-wrapper {
-	&--list,
-	&--grid {
-	  > span {
-		position: static !important;
-
-		> img {
-		  position: static !important;
-		  height: auto !important;
+	&__header,
+	&__no-content {
+		&-wrapper {
+			max-width: 100%;
+			min-width: 100%;
+			position: relative;
 		}
-	  }
 	}
 
-	&--list {
-	  min-width: 248px;
+	// Override next/image
+	&__header-wrapper {
+		&--list,
+		&--grid {
+			> span {
+				position: static !important;
 
-	  span > img {
-		max-height: unset !important;
-		min-height: unset !important;
-	  }
+				> img {
+					position: static !important;
+					height: auto !important;
+				}
+			}
+		}
+
+		&--list {
+			min-width: 248px;
+
+			span > img {
+				max-height: unset !important;
+				min-height: unset !important;
+			}
+		}
 	}
-  }
 
-  &__no-content {
-	display: block;
-	margin-bottom: $c-media-card-no-video-intended-spacing - $spacer-sm;
+	&__no-content {
+		display: block;
+		margin-bottom: $c-media-card-no-video-intended-spacing - $spacer-sm;
 
-	&-wrapper {
-	  align-items: center;
-	  background-color: $platinum;
-	  color: $zinc;
-	  display: flex;
-	  min-height: 3.2rem;
-	  min-width: 24.8rem;
-	  place-content: center;
+		&-wrapper {
+			align-items: center;
+			background-color: $platinum;
+			color: $zinc;
+			display: flex;
+			min-height: 3.2rem;
+			min-width: 24.8rem;
+			place-content: center;
 
-	  @include respond-at(md) {
-		min-height: 100%;
-	  }
+			@include respond-at(md) {
+				min-height: 100%;
+			}
 
-	  .#{$component}__no-content {
-		transform: translateY(-25%);
-	  }
+			.#{$component}__no-content {
+				transform: translateY(-25%);
+			}
+		}
 	}
-  }
 
-  &__icon {
-	font-size: $font-size-lg * math.div(11, 12);
-	line-height: 1;
-  }
+	&__icon {
+		font-size: $font-size-lg * math.div(11, 12);
+		line-height: 1;
+	}
 
-  &__toolbar {
-	display: flex;
-	flex-direction: row;
-	flex-shrink: 0;
-
-	:global(.c-dropdown__content-open) {
-	  box-shadow: $shadow-24-black-12;
-
-	  :global(.c-menu) {
+	&__toolbar {
 		display: flex;
-		flex-flow: column nowrap;
-		padding: 0;
+		flex-direction: row;
+		flex-shrink: 0;
 
-		button {
-		  border-radius: 0;
+		:global(.c-dropdown__content-open) {
+			box-shadow: $shadow-24-black-12;
 
-		  &:not(:last-child) {
-			border-bottom: 1px solid $silver;
-		  }
+			:global(.c-menu) {
+				display: flex;
+				flex-flow: column nowrap;
+				padding: 0;
+
+				button {
+					border-radius: 0;
+
+					&:not(:last-child) {
+						border-bottom: 1px solid $silver;
+					}
+				}
+			}
 		}
-	  }
 	}
-  }
 }
