@@ -290,23 +290,16 @@ const AccountMyCollections: NextPage = () => {
 
 							<div className="l-container">
 								<MediaCardList
-									onItemTitleClick={({ item }) =>
-										router.push(
-											`/${ROUTES.spaces}/TODO/${
-												(item as IdentifiableMediaCard).id
-											}`
-										)
-									}
 									keywords={filters.search ? [filters.search] : []}
 									items={collectionMedia?.data?.items.map((media) => {
 										const base: IdentifiableMediaCard = {
 											id: media.id,
 											description: media.description,
-											publishedBy: 'Aanbieder', // TODO: bind to data
-											publishedAt: new Date('01 Jan 1970'), // TODO: bind to data
+											publishedBy: media.maintainerName,
+											publishedAt: new Date(media.termsAvailable),
 											title: media.name,
-											preview: 'https://cataas.com/cat', // TODO: bind to data
 											bookmarkIsSolid: true,
+											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.id}`,
 										};
 
 										return {
