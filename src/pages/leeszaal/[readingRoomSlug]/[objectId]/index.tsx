@@ -9,6 +9,7 @@ import Script from 'next/script';
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
@@ -232,18 +233,6 @@ const ObjectDetailPage: NextPage = () => {
 
 	return (
 		<>
-			{/* <!-- Flowplayer --> */}
-			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/chromecast.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/airplay.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
-			<Script
-				strategy="beforeInteractive"
-				src="/flowplayer/plugins/google-analytics.min.js"
-			/>
 			<div className="p-object-detail">
 				<Head>
 					<title>{createPageTitle('Object detail')}</title>
@@ -407,4 +396,4 @@ const ObjectDetailPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default ObjectDetailPage;
+export default withAuth(ObjectDetailPage);
