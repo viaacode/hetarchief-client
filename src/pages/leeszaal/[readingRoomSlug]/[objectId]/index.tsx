@@ -15,6 +15,7 @@ import { FragmentSlider } from '@media/components/FragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
 	flowplayerFormats,
+	formatErrorPlaceholder,
 	imageFormats,
 	MEDIA_ACTIONS,
 	METADATA_FIELDS,
@@ -224,23 +225,7 @@ const ObjectDetailPage: NextPage = () => {
 		}
 
 		// No renderer
-		return (
-			<ObjectPlaceholder
-				description={t('Dit formaat wordt niet ondersteund. ({{format}})', {
-					format: representation.dctermsFormat,
-				})}
-				reasonTitle={t('Waarom kan ik dit object niet bekijken?')}
-				reasonDescription={t(
-					'Het formaat van de data wordt op dit moment niet ondersteund.'
-				)}
-				openModalButtonLabel={t(
-					'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-				)}
-				closeModalButtonLabel={t(
-					'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-				)}
-			/>
-		);
+		return <ObjectPlaceholder {...formatErrorPlaceholder(representation.dctermsFormat)} />;
 	};
 
 	const renderMediaPlaceholder = (): ReactNode => {
@@ -273,7 +258,11 @@ const ObjectDetailPage: NextPage = () => {
 					onClick={onTabClick}
 				/>
 				{isLoadingMediaInfo && <Loading />}
-				{isError && <p>{t('Er ging iets mis.')}</p>} {/* TODO: implement error state */}
+				{isError && (
+					<p>
+						{t('pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis')}
+					</p>
+				)}{' '}
 				<article
 					className={clsx(
 						'p-object-detail__wrapper',
