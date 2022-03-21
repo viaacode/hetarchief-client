@@ -2,10 +2,10 @@ import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
 import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -20,6 +20,8 @@ import {
 	MEDIA_ACTIONS,
 	METADATA_FIELDS,
 	OBJECT_DETAIL_TABS,
+	objectPlaceholder,
+	ticketErrorPlaceholder,
 } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
@@ -42,7 +44,6 @@ import {
 	RelatedObject,
 	RelatedObjectProps,
 } from 'modules/media/components';
-import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const ObjectDetailPage: NextPage = () => {
 	/**
@@ -80,10 +81,12 @@ const ObjectDetailPage: NextPage = () => {
 		isError,
 	} = useGetMediaInfo(router.query.objectId as string);
 
-	const { data: playableUrl } = useGetMediaTicketInfo(
-		currentRepresentation?.id ?? '',
-		!!currentRepresentation?.id &&
-			flowplayerFormats.includes(currentRepresentation.dctermsFormat),
+	const {
+		data: playableUrl,
+		isLoading: isLoadingPlayableUrl,
+		isError: isErrorPlayableUrl,
+	} = useGetMediaTicketInfo(
+		currentRepresentation?.id ?? null,
 		() => setFlowPlayerKey(currentRepresentation?.id) // Force flowplayer rerender after successful fetch
 	);
 
@@ -93,12 +96,12 @@ const ObjectDetailPage: NextPage = () => {
 
 	useEffect(() => {
 		// Mock representations for slider testing
-		// if (mediaInfo) {
-		// 	mediaInfo.representations = [
-		// 		...mediaInfo.representations,
-		// 		...fragmentSliderMock.fragments,
-		// 	];
-		// }
+		if (mediaInfo) {
+			mediaInfo.representations = [
+				...mediaInfo.representations,
+				...fragmentSliderMock.fragments,
+			];
+		}
 
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
@@ -191,7 +194,7 @@ const ObjectDetailPage: NextPage = () => {
 					key={flowPlayerKey}
 					src={playableUrl}
 					poster="https://via.placeholder.com/1920x1080"
-					title="Elephants dream"
+					title={representation.name}
 					pause={pauseMedia}
 					onPlay={() => setPauseMedia(false)}
 				/>
@@ -229,6 +232,17 @@ const ObjectDetailPage: NextPage = () => {
 				)}
 			/>
 		);
+	};
+
+	const renderMediaPlaceholder = (): ReactNode => {
+		if (isLoadingPlayableUrl) {
+			return null;
+		}
+		if (isErrorPlayableUrl) {
+			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
+		}
+
+		return null;
 	};
 
 	return (
@@ -275,34 +289,30 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					<div className="p-object-detail__video">
 						{mediaType ? (
-							playableUrl && currentRepresentation ? (
-								<>
-									{renderMedia(playableUrl, currentRepresentation)}
-									{mediaInfo?.representations &&
-										mediaInfo?.representations.length > 1 && (
-											<FragmentSlider
-												className="p-object-detail__slider"
-												fragments={mediaInfo?.representations ?? []}
-												onChangeFragment={(index) =>
-													setCurrentRepresentaton(
-														mediaInfo?.representations[index]
-													)
-												}
-											/>
-										)}
-								</>
-							) : null
+							<>
+								{playableUrl && currentRepresentation ? (
+									// Flowplayer/image/not playable
+									renderMedia(playableUrl, currentRepresentation)
+								) : (
+									// Loading/error
+									<div>{renderMediaPlaceholder()}</div>
+								)}
+								{mediaInfo?.representations &&
+									mediaInfo?.representations.length > 1 && (
+										<FragmentSlider
+											className="p-object-detail__slider"
+											fragments={mediaInfo?.representations ?? []}
+											onChangeFragment={(index) =>
+												setCurrentRepresentaton(
+													mediaInfo?.representations[index]
+												)
+											}
+										/>
+									)}
+							</>
 						) : (
 							<>
-								<ObjectPlaceholder
-									{...objectPlaceholderMock}
-									openModalButtonLabel={t(
-										'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-									)}
-									closeModalButtonLabel={t(
-										'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-									)}
-								/>
+								<ObjectPlaceholder {...objectPlaceholder()} />
 							</>
 						)}
 					</div>

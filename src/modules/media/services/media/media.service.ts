@@ -46,15 +46,16 @@ export class MediaService {
 		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async getPlayableUrl(
-		id: string // Reference id
-	): Promise<string> {
+	public static async getPlayableUrl(referenceId: string | null): Promise<string | null> {
+		if (!referenceId) {
+			return null;
+		}
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: `${MEDIA_SERVICE_BASE_URL}/${MEDIA_SERVICE_TICKET_URL}`,
 					query: {
-						id,
+						id: referenceId,
 					},
 				})
 			)
