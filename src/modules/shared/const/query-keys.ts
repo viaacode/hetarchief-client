@@ -3,6 +3,7 @@ export enum QUERY_KEYS {
 	getCollections = 'getCollections',
 	getMediaObjects = 'getMediaObjects',
 	getMediaInfo = 'getMediaInfo',
+	getMediaTicketUrl = 'getMediaTicketUrl',
 	getNotifications = 'getNotifications',
 	getReadingRooms = 'getReadingRooms',
 	getVisits = 'getVisits',

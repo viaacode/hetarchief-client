@@ -1,3 +1,5 @@
+import { stringifyUrl } from 'query-string';
+
 import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import { SortObject } from '@shared/types';
@@ -9,7 +11,7 @@ import {
 
 import { MediaInfo, MediaSearchFilters } from '../../types';
 
-import { MEDIA_SERVICE_BASE_URL } from './media.service.const';
+import { MEDIA_SERVICE_BASE_URL, MEDIA_SERVICE_TICKET_URL } from './media.service.const';
 
 export class MediaService {
 	public static async getAll(
@@ -42,5 +44,21 @@ export class MediaService {
 
 	public static async getById(id: string): Promise<MediaInfo> {
 		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
+	}
+
+	public static async getPlayableUrl(referenceId: string | null): Promise<string | null> {
+		if (!referenceId) {
+			return null;
+		}
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${MEDIA_SERVICE_BASE_URL}/${MEDIA_SERVICE_TICKET_URL}`,
+					query: {
+						id: referenceId,
+					},
+				})
+			)
+			.text();
 	}
 }
