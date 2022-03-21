@@ -1,7 +1,8 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
-import { MetadataItem } from '@media/components';
+import { MetadataItem, ObjectPlaceholderProps } from '@media/components';
+import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { Media, MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapKeywordsToTagList, mapObjectToMetadata } from '@media/utils';
 import { Icon } from '@shared/components';
@@ -14,6 +15,28 @@ import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 
 export const flowplayerFormats: string[] = ['mp4', 'mp3', 'm4a', 'ogv', 'ogg', 'webm', 'm3u8'];
 export const imageFormats: string[] = ['png', 'jpg', 'jpeg', 'gif'];
+
+/**
+ * Object placeholders
+ */
+export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
+	description: 'Ophalen van afspeel-token is mislukt.',
+	reasonTitle: 'Waarom kan ik dit object niet bekijken?',
+	reasonDescription:
+		'Sed augue ipsum, egestas nec, vestibulum et, malesuada adipiscing, dui. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Mauris sollicitudin fermentum libero. Praesent nonummy mi in odio. Nunc interdum lacus sit amet orci. Vestibulum rutrum, mi nec elementum vehicula, eros quam gravida nisl, id fringilla neque ante vel mi. Morbi mollis tellus ac sapien. Phasellus volutpat, metus eget egestas mollis, lacus lacus blandit dui',
+	openModalButtonLabel:
+		i18n?.t('pages/leeszaal/reading-room-slug/object-id/index___meer-info') || '',
+	closeModalButtonLabel:
+		i18n?.t('pages/leeszaal/reading-room-slug/object-id/index___sluit') || '',
+});
+
+export const objectPlaceholder = (): ObjectPlaceholderProps => ({
+	...objectPlaceholderMock,
+	openModalButtonLabel:
+		i18n?.t('pages/leeszaal/reading-room-slug/object-id/index___meer-info') || '',
+	closeModalButtonLabel:
+		i18n?.t('pages/leeszaal/reading-room-slug/object-id/index___sluit') || '',
+});
 
 /**
  * Tabs

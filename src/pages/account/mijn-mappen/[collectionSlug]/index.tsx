@@ -29,10 +29,10 @@ import {
 } from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTES } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { Breakpoints } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
+import { createPageTitle, parseDatabaseDate } from '@shared/utils';
 
 type ListNavigationCollectionItem = ListNavigationItem & Collection;
 
@@ -270,7 +270,7 @@ const AccountMyCollections: NextPage = () => {
 									searchValue={filters.search}
 									onClear={() => {
 										setFilters({
-											search: '',
+											[SEARCH_QUERY_KEY]: '',
 											page: 1,
 										});
 									}}
@@ -278,10 +278,10 @@ const AccountMyCollections: NextPage = () => {
 										// TODO: avoid rerender
 										// Force rerender to avoid visual disconnect in edge-case
 										searchValue === filters.search &&
-											setFilters({ search: '' });
+											setFilters({ [SEARCH_QUERY_KEY]: '' });
 
 										setFilters({
-											search: searchValue,
+											[SEARCH_QUERY_KEY]: searchValue,
 											page: 1,
 										});
 									}}
@@ -290,23 +290,16 @@ const AccountMyCollections: NextPage = () => {
 
 							<div className="l-container">
 								<MediaCardList
-									onItemTitleClick={({ item }) =>
-										router.push(
-											`/${ROUTES.spaces}/TODO/${
-												(item as IdentifiableMediaCard).id
-											}`
-										)
-									}
 									keywords={filters.search ? [filters.search] : []}
 									items={collectionMedia?.data?.items.map((media) => {
 										const base: IdentifiableMediaCard = {
 											id: media.id,
 											description: media.description,
-											publishedBy: 'Aanbieder', // TODO: bind to data
-											publishedAt: new Date('01 Jan 1970'), // TODO: bind to data
+											publishedBy: media.maintainerName,
+											publishedAt: parseDatabaseDate(media.termsAvailable),
 											title: media.name,
-											preview: 'https://cataas.com/cat', // TODO: bind to data
 											bookmarkIsSolid: true,
+											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.id}`,
 										};
 
 										return {

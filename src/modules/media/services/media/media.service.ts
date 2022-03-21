@@ -1,6 +1,8 @@
 import { stringifyUrl } from 'query-string';
 
+import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
+import { SortObject } from '@shared/types';
 import {
 	ApiResponseWrapper,
 	ElasticsearchAggregations,
@@ -15,14 +17,18 @@ export class MediaService {
 	public static async getAll(
 		filters: MediaSearchFilters = {},
 		page = 1,
-		size = 20
+		size = 20,
+		sort?: SortObject
 	): Promise<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
+		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
+
 		const parsed = (await ApiService.getApi()
 			.post(MEDIA_SERVICE_BASE_URL, {
 				body: JSON.stringify({
 					filters,
 					size,
 					page,
+					...parsedSort,
 				}),
 			})
 			.json()) as ElasticsearchResponse<MediaInfo>;
@@ -40,15 +46,16 @@ export class MediaService {
 		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async getPlayableUrl(
-		id: string // Reference id
-	): Promise<string> {
+	public static async getPlayableUrl(referenceId: string | null): Promise<string | null> {
+		if (!referenceId) {
+			return null;
+		}
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: `${MEDIA_SERVICE_BASE_URL}/${MEDIA_SERVICE_TICKET_URL}`,
 					query: {
-						id,
+						id: referenceId,
 					},
 				})
 			)

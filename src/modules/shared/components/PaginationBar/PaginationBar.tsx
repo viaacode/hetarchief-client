@@ -26,7 +26,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	const renderProgress = () => {
 		const end = start + count;
 
-		return <PaginationProgress {...{ start, end, total }} />;
+		return <PaginationProgress {...{ start: start + 1, end, total }} />;
 	};
 
 	const renderPagination = () => (

@@ -9,7 +9,14 @@ import { wrapper } from '@shared/store';
 
 import 'styles/main.scss';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false,
+			keepPreviousData: true,
+		},
+	},
+});
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
 	return (
