@@ -60,7 +60,7 @@ export abstract class NotificationsService {
 		const unreadNotifications = notifications.filter(
 			(notification) => notification.status === NotificationStatus.UNREAD
 		);
-		const firstUnread = asDate(unreadNotifications[0].createdAt);
+		const firstUnread = asDate(unreadNotifications[0]?.createdAt);
 
 		if (
 			unreadNotifications.length > 0 &&
