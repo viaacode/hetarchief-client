@@ -18,7 +18,7 @@ export const fragmentSliderMock: FragmentSliderProps = {
 			alternateName: 'item',
 			description: 'item',
 			meemooFragmentId: 'id',
-			dctermsFormat: 'mdp3',
+			dctermsFormat: '<format>',
 			transcript: 'item',
 			dateCreated: 'item',
 			id: '09f17b37445c4ce59f645c2d5db9dbf8dbee79eba623459caa8c6496108641a0900618cb6ceb4e9b8ad907e47b980ee3/mp4',

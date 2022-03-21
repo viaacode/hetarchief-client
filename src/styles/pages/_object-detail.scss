@@ -92,6 +92,10 @@ $metadata-collapsed-width: 36vw;
 			}
 		}
 
+		.flowplayer {
+			max-height: calc(100vh - 15.1rem); // 28.5rem: navs height
+		}
+
 		& .is-fullscreen &-fullscreen-button--exit{
 			display: block;
 		}
@@ -103,7 +107,7 @@ $metadata-collapsed-width: 36vw;
 
 		&--with-slider {
 			.flowplayer {
-				max-height: calc(100vh - 28.5rem); // 28.5rem: slider + navs
+				max-height: calc(100vh - 28.5rem); // 28.5rem: slider + navs height
 			}
 		}
 	}
