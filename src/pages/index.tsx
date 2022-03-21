@@ -12,6 +12,8 @@ import { withI18n } from '@i18n/wrappers';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 
+import VisitorLayout from '../modules/visitors/layouts/VisitorLayout/VisitorLayout';
+
 const Home: NextPage = () => {
 	const dispatch = useDispatch();
 	const [query, setQuery] = useQueryParams({
@@ -47,10 +49,10 @@ const Home: NextPage = () => {
 	 */
 
 	return (
-		<div className="p-home">
+		<VisitorLayout>
 			{isLoggedIn && !!user ? <LoggedInHome /> : <LoggedOutHome />}
 			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
-		</div>
+		</VisitorLayout>
 	);
 };
 

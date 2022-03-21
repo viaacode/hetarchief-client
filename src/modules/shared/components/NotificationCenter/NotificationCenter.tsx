@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { partition } from 'lodash';
+import { partition } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC, useState } from 'react';
