@@ -12,8 +12,8 @@ import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
  * Render media
  */
 
-export const flowplayerFormats: string[] = ['mp4', 'mp3'];
-export const imageFormats: string[] = ['png'];
+export const flowplayerFormats: string[] = ['mp4', 'mp3', 'm4a', 'ogv', 'ogg', 'webm', 'm3u8'];
+export const imageFormats: string[] = ['png', 'jpg', 'jpeg', 'gif'];
 
 /**
  * Tabs
