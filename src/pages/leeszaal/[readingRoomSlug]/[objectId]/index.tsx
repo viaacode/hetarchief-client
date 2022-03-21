@@ -10,8 +10,15 @@ import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
-import { MEDIA_ACTIONS, METADATA_FIELDS, OBJECT_DETAIL_TABS } from '@media/const';
+import {
+	MEDIA_ACTIONS,
+	METADATA_FIELDS,
+	OBJECT_DETAIL_TABS,
+	objectPlaceholder,
+	ticketErrorPlaceholder,
+} from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
+import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, ObjectDetailTabs } from '@media/types';
 import { AddToCollectionBlade } from '@reading-room/components';
 import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
@@ -32,7 +39,6 @@ import {
 	RelatedObject,
 	RelatedObjectProps,
 } from 'modules/media/components';
-import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -48,6 +54,7 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
+	const [mediaUrl, setMediaUrl] = useState<string>();
 
 	// Layout
 	useStickyLayout();
@@ -66,10 +73,22 @@ const ObjectDetailPage: NextPage = () => {
 		router.query.objectId as string
 	);
 
-	// Set default view
+	const {
+		data: playableUrl,
+		isLoading: isLoadingPlayableUrl,
+		isError: isErrorPlayableUrl,
+	} = useGetMediaTicketInfo(mediaUrl ?? null);
+
+	/**
+	 * Effects
+	 */
+
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
+		setMediaUrl(mediaInfo?.representations[0].id);
+
+		// Set default view
 		if (windowSize.width && windowSize.width < 768) {
 			// Default to metadata tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata);
@@ -189,27 +208,23 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					<div className="p-object-detail__video">
 						{mediaType ? (
-							<FlowPlayer
-								className="p-object-detail__flowplayer"
-								src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-								poster="https://via.placeholder.com/1920x1080"
-								title="Elephants dream"
-								pause={pauseMedia}
-								onPlay={() => setPauseMedia(false)}
-								token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
-								dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
-							/>
+							!isLoadingPlayableUrl && !isErrorPlayableUrl && playableUrl ? (
+								<FlowPlayer
+									className="p-object-detail__flowplayer"
+									src={playableUrl}
+									poster="https://via.placeholder.com/1920x1080"
+									title="Elephants dream"
+									pause={pauseMedia}
+									onPlay={() => setPauseMedia(false)}
+									token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
+									dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
+								/>
+							) : (
+								<ObjectPlaceholder {...ticketErrorPlaceholder()} />
+							)
 						) : (
 							<>
-								<ObjectPlaceholder
-									{...objectPlaceholderMock}
-									openModalButtonLabel={t(
-										'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-									)}
-									closeModalButtonLabel={t(
-										'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-									)}
-								/>
+								<ObjectPlaceholder {...objectPlaceholder()} />
 							</>
 						)}
 					</div>
