@@ -118,6 +118,7 @@ const ObjectDetailPage: NextPage = () => {
 	 * Variables
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
 
 	/**
 	 * Effects
@@ -184,7 +185,10 @@ const ObjectDetailPage: NextPage = () => {
 			return (
 				// TODO: implement thumbnail
 				<FlowPlayer
-					className="p-object-detail__flowplayer"
+					className={clsx(
+						'p-object-detail__flowplayer',
+						showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+					)}
 					key={flowPlayerKey}
 					src={playableUrl}
 					poster="https://via.placeholder.com/1920x1080"
@@ -286,18 +290,17 @@ const ObjectDetailPage: NextPage = () => {
 							playableUrl && currentRepresentation ? (
 								<>
 									{renderMedia(playableUrl, currentRepresentation)}
-									{mediaInfo?.representations &&
-										mediaInfo?.representations.length > 1 && (
-											<FragmentSlider
-												className="p-object-detail__slider"
-												fragments={mediaInfo?.representations ?? []}
-												onChangeFragment={(index) =>
-													setCurrentRepresentaton(
-														mediaInfo?.representations[index]
-													)
-												}
-											/>
-										)}
+									{showFragmentSlider && (
+										<FragmentSlider
+											className="p-object-detail__slider"
+											fragments={mediaInfo?.representations ?? []}
+											onChangeFragment={(index) =>
+												setCurrentRepresentaton(
+													mediaInfo?.representations[index]
+												)
+											}
+										/>
+									)}
 								</>
 							) : (
 								<></>
