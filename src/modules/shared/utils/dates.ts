@@ -15,7 +15,11 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 		return undefined;
 	}
 
-	return new Date(isNumber ? Number(input) : input);
+	const lowercased = typeof input === 'string' && input.toLowerCase();
+	const timezoned =
+		lowercased && lowercased.includes('t') && !lowercased.endsWith('z') ? `${input}Z` : input;
+
+	return new Date(isNumber ? Number(timezoned) : timezoned);
 };
 
 export const formatWithLocale = (formatString: string, date?: Date): string => {
@@ -32,8 +36,8 @@ export const formatAccessDate = (date?: Date): string => {
 // - account/mijn-historiek
 
 export const formatAccessDates = (from?: Date | string, to?: Date | string): string => {
-	const f = from ? new Date(from) : undefined;
-	const t = to ? new Date(to) : undefined;
+	const f = from ? asDate(from) : undefined;
+	const t = to ? asDate(to) : undefined;
 
 	if (f && !t) return formatAccessDate(f);
 	if (!f && t) return formatAccessDate(t);

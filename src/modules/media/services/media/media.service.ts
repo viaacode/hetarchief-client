@@ -1,5 +1,6 @@
+import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
-import { MediaInfo } from '@shared/types';
+import { MediaInfo, SortObject } from '@shared/types';
 import { ElasticsearchResponse, GetMedia } from '@shared/types/api';
 
 import { MediaSearchFilters } from '../../types';
@@ -10,8 +11,10 @@ export class MediaService {
 	public static async getAll(
 		filters: MediaSearchFilters = {},
 		page = 1,
-		size = 20
+		size = 20,
+		sort?: SortObject
 	): Promise<GetMedia> {
+		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
 		const parsed = (await ApiService.getApi()
 			.post(MEDIA_SERVICE_BASE_URL, {
 				body: JSON.stringify({
@@ -19,6 +22,7 @@ export class MediaService {
 					size,
 					page,
 					requestedAggs: ['format', 'genre'],
+					...parsedSort,
 				}),
 			})
 			.json()) as ElasticsearchResponse<MediaInfo>;

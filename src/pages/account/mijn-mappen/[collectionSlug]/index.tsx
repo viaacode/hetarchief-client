@@ -32,7 +32,7 @@ import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { Breakpoints } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
+import { asDate, createPageTitle } from '@shared/utils';
 
 type ListNavigationCollectionItem = ListNavigationItem & Collection;
 
@@ -290,23 +290,16 @@ const AccountMyCollections: NextPage = () => {
 
 							<div className="l-container">
 								<MediaCardList
-									onItemTitleClick={({ item }) =>
-										router.push(
-											`/${ROUTES.spaces}/TODO/${
-												(item as IdentifiableMediaCard).id
-											}`
-										)
-									}
 									keywords={filters.search ? [filters.search] : []}
 									items={collectionMedia?.data?.items.map((media) => {
 										const base: IdentifiableMediaCard = {
 											id: media.id,
 											description: media.description,
-											publishedBy: 'Aanbieder', // TODO: bind to data
-											publishedAt: new Date('01 Jan 1970'), // TODO: bind to data
+											publishedBy: media.maintainerName,
+											publishedAt: asDate(media.termsAvailable),
 											title: media.name,
-											preview: 'https://cataas.com/cat', // TODO: bind to data
 											bookmarkIsSolid: true,
+											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.id}`,
 										};
 
 										return {

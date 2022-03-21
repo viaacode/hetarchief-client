@@ -2,7 +2,7 @@ import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
 import { MetadataItem } from '@media/components';
-import { Media, ObjectDetailTabs } from '@media/types';
+import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapKeywordsToTagList, mapObjectToMetadata } from '@media/utils';
 import { Icon } from '@shared/components';
 import { MediaTypes } from '@shared/types';
@@ -52,44 +52,44 @@ export const OBJECT_DETAIL_TABS = (mediaType: MediaTypes): TabProps[] => [
 export const MEDIA_ACTIONS = (): DynamicActionMenuProps => ({
 	actions: [
 		{
-			label: 'Quotes',
+			label: i18n?.t('modules/media/const/index___quotes') ?? '',
 			iconName: 'quotes',
-			id: 'quotes',
+			id: MediaActions.Quotes,
 			ariaLabel: 'copies quotes',
 			tooltip: i18n?.t('modules/media/const/index___quotes') ?? '',
 		},
 		{
-			label: 'Description',
+			label: i18n?.t('modules/media/const/index___description') ?? '',
 			iconName: 'description',
-			id: 'description',
+			id: MediaActions.Description,
 			ariaLabel: 'shows description',
 			tooltip: i18n?.t('modules/media/const/index___description') ?? '',
 		},
 		{
-			label: 'Bookmark',
+			label: i18n?.t('modules/media/const/index___bookmark') ?? '',
 			iconName: 'bookmark',
-			id: 'bookmark',
+			id: MediaActions.Bookmark,
 			ariaLabel: 'bookmarks item',
 			tooltip: i18n?.t('modules/media/const/index___bookmark') ?? '',
 		},
 		{
-			label: 'Contact',
+			label: i18n?.t('modules/media/const/index___contact') ?? '',
 			iconName: 'contact',
-			id: 'contact',
+			id: MediaActions.Contact,
 			ariaLabel: 'contact reading room',
 			tooltip: i18n?.t('modules/media/const/index___contact') ?? '',
 		},
 		{
-			label: 'Calendar',
+			label: i18n?.t('modules/media/const/index___calendar') ?? '',
 			iconName: 'calendar',
-			id: 'calendar',
+			id: MediaActions.Calendar,
 			ariaLabel: 'copy date',
 			tooltip: i18n?.t('modules/media/const/index___calendar') ?? '',
 		},
 		{
-			label: 'Related-objects',
+			label: i18n?.t('modules/media/const/index___related-objects') ?? '',
 			iconName: 'related-objects',
-			id: 'related-objects',
+			id: MediaActions.RelatedObjects,
 			ariaLabel: 'access related objects',
 			tooltip: i18n?.t('modules/media/const/index___related-objects') ?? '',
 		},

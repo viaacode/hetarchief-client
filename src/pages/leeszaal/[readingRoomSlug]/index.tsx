@@ -39,11 +39,11 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, SortObject } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
+import { asDate, createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
 	const { t } = useTranslation();
@@ -76,6 +76,11 @@ const ReadingRoomPage: NextPage = () => {
 	// TODO add other filters once available
 	const hasSearched = !!query?.search?.length || query?.format !== ReadingRoomMediaType.All;
 
+	const activeSort: SortObject = {
+		orderProp: query.orderProp,
+		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
+	};
+
 	/**
 	 * Data
 	 */
@@ -86,7 +91,8 @@ const ReadingRoomPage: NextPage = () => {
 			format: (query.format as ReadingRoomMediaType) || READING_ROOM_QUERY_PARAM_INIT.format,
 		},
 		query.page || 0,
-		READING_ROOM_ITEM_COUNT
+		READING_ROOM_ITEM_COUNT,
+		activeSort
 	);
 
 	/**
@@ -222,10 +228,6 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
-	const activeSort: SortObject = {
-		orderProp: query.orderProp,
-		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
-	};
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
@@ -274,10 +276,11 @@ const ReadingRoomPage: NextPage = () => {
 							description: mediaObject.schema_description,
 							title: mediaObject.schema_name,
 							publishedAt: mediaObject.schema_date_published
-								? new Date(mediaObject.schema_date_published)
+								? asDate(mediaObject.schema_date_published)
 								: undefined,
 							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
 							type: mediaObject.dcterms_format || undefined,
+							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer[0].schema_identifier}/${mediaObject.schema_identifier}`,
 						})
 					)}
 				keywords={keywords}

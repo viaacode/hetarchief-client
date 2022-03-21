@@ -9,7 +9,7 @@ import { Icon, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow } from '@shared/types';
-import { formatAccessDates } from '@shared/utils';
+import { asDate, formatAccessDates } from '@shared/utils';
 import { VisitTimeframe } from '@visits/types';
 
 export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
@@ -63,16 +63,10 @@ export const VisitorsTableColumns = (
 		Header: i18n.t('modules/cp/const/visitors___toegang') || '',
 		accessor: 'startAt',
 		Cell: ({ row }: VisitInfoRow) => {
-			const start = row.original.startAt;
-			const end = row.original.endAt;
+			const start = asDate(row.original.startAt);
+			const end = asDate(row.original.endAt);
 
-			const active =
-				!!start &&
-				!!end &&
-				isWithinInterval(new Date(), {
-					start: new Date(start),
-					end: new Date(end),
-				});
+			const active = start && end && isWithinInterval(new Date(), { start, end });
 
 			return (
 				<span className="u-color-neutral p-cp-visitors__access">
@@ -86,8 +80,8 @@ export const VisitorsTableColumns = (
 	{
 		Header: i18n.t('modules/cp/const/visitors___goedgekeurd-door') || '',
 		accessor: 'status',
-		Cell: () => {
-			return <span className="u-color-neutral">Noah Peeters</span>; // TODO: Add column to database to track updatedBy
+		Cell: ({ row }: VisitInfoRow) => {
+			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
 		},
 	},
 	{

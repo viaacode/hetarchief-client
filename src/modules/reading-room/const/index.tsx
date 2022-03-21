@@ -117,9 +117,10 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 ];
 
 export const READING_ROOM_ACTIVE_SORT_MAP = (): { [key in ReadingRoomSort]: string } => ({
-	date: i18n?.t('modules/reading-room/const/index___sorteer-op-datum') ?? '',
-	relevance: i18n?.t('modules/reading-room/const/index___sorteer-op-relevantie') ?? '',
-	title: i18n?.t('modules/reading-room/const/index___sorteer-op-titel') ?? '',
+	[ReadingRoomSort.Date]: i18n?.t('modules/reading-room/const/index___sorteer-op-datum') ?? '',
+	[ReadingRoomSort.Relevance]:
+		i18n?.t('modules/reading-room/const/index___sorteer-op-relevantie') ?? '',
+	[ReadingRoomSort.Title]: i18n?.t('modules/reading-room/const/index___sorteer-op-titel') ?? '',
 });
 
 export const READING_ROOM_SORT_OPTIONS = (): FilterMenuSortOption[] => [
@@ -137,14 +138,15 @@ export const READING_ROOM_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 		orderProp: ReadingRoomSort.Date,
 		orderDirection: OrderDirection.desc,
 	},
-	{
-		label: i18n?.t('modules/reading-room/const/index___van-a-tot-z') ?? '',
-		orderProp: ReadingRoomSort.Title,
-		orderDirection: OrderDirection.asc,
-	},
-	{
-		label: i18n?.t('modules/reading-room/const/index___van-z-tot-a') ?? '',
-		orderProp: ReadingRoomSort.Title,
-		orderDirection: OrderDirection.desc,
-	},
+	// schema_name niet sorteerbaar in https://meemoo.atlassian.net/wiki/pages/viewpage.action?pageId=3309174878&pageVersion=3
+	// {
+	// 	label: i18n?.t('modules/reading-room/const/index___van-a-tot-z') ?? '',
+	// 	orderProp: ReadingRoomSort.Title,
+	// 	orderDirection: OrderDirection.asc,
+	// },
+	// {
+	// 	label: i18n?.t('modules/reading-room/const/index___van-z-tot-a') ?? '',
+	// 	orderProp: ReadingRoomSort.Title,
+	// 	orderDirection: OrderDirection.desc,
+	// },
 ];
