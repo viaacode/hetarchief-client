@@ -5,13 +5,18 @@ import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withI18n } from '@i18n/wrappers';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
-import { MEDIA_ACTIONS, METADATA_FIELDS, OBJECT_DETAIL_TABS } from '@media/const';
+import {
+	MEDIA_ACTIONS,
+	METADATA_FIELDS,
+	OBJECT_DETAIL_TABS,
+	objectPlaceholder,
+	ticketErrorPlaceholder,
+} from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
@@ -33,7 +38,6 @@ import {
 	RelatedObject,
 	RelatedObjectProps,
 } from 'modules/media/components';
-import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -68,10 +72,11 @@ const ObjectDetailPage: NextPage = () => {
 		router.query.objectId as string
 	);
 
-	const { data: playableUrl, isLoading: isLoadingPlayableUrl } = useGetMediaTicketInfo(
-		mediaUrl ?? '',
-		!!mediaUrl
-	);
+	const {
+		data: playableUrl,
+		isLoading: isLoadingPlayableUrl,
+		isError: isErrorPlayableUrl,
+	} = useGetMediaTicketInfo(mediaUrl ?? null);
 
 	/**
 	 * Effects
@@ -202,7 +207,7 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					<div className="p-object-detail__video">
 						{mediaType ? (
-							!isLoadingPlayableUrl && playableUrl ? (
+							!isLoadingPlayableUrl && !isErrorPlayableUrl && playableUrl ? (
 								<FlowPlayer
 									className="p-object-detail__flowplayer"
 									src={playableUrl}
@@ -213,18 +218,12 @@ const ObjectDetailPage: NextPage = () => {
 									token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
 									dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 								/>
-							) : null
+							) : (
+								<ObjectPlaceholder {...ticketErrorPlaceholder()} />
+							)
 						) : (
 							<>
-								<ObjectPlaceholder
-									{...objectPlaceholderMock}
-									openModalButtonLabel={t(
-										'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
-									)}
-									closeModalButtonLabel={t(
-										'pages/leeszaal/reading-room-slug/object-id/index___sluit'
-									)}
-								/>
+								<ObjectPlaceholder {...objectPlaceholder()} />
 							</>
 						)}
 					</div>
