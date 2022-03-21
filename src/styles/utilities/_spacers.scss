@@ -120,6 +120,6 @@ $mx: (
 );
 @include generate-utils("mx", ("margin-left", "margin-right"), $mx);
 
-.u-page-bottom-margin {
+.u-page-bottom-padding {
 	padding-bottom: $spacer-1xl;
 }

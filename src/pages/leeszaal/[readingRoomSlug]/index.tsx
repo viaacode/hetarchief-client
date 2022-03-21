@@ -38,7 +38,7 @@ import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, SortObject } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
+import { createPageTitle, parseDatabaseDate } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -253,7 +253,7 @@ const ReadingRoomPage: NextPage = () => {
 							description: mediaObject.schema_description,
 							title: mediaObject.schema_name,
 							publishedAt: mediaObject.schema_date_published
-								? new Date(mediaObject.schema_date_published)
+								? parseDatabaseDate(mediaObject.schema_date_published)
 								: undefined,
 							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
 							type: mediaObject.dcterms_format || undefined,
