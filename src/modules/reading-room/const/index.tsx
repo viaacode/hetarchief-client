@@ -10,14 +10,9 @@ import {
 } from '@reading-room/components';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
-import { OrderDirection } from '@shared/types';
+import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
 
-import {
-	DefaultFilterFormProps,
-	ReadingRoomFilterId,
-	ReadingRoomMediaType,
-	ReadingRoomSort,
-} from '../types';
+import { DefaultFilterFormProps, ReadingRoomFilterId, ReadingRoomSort } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
 

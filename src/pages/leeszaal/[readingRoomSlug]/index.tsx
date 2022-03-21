@@ -11,6 +11,7 @@ import { useQueryParams } from 'use-query-params';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
+import { MediaSearchFilterField, MediaSearchOperator } from '@media/types';
 import { AddToCollectionBlade, FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
 	READING_ROOM_FILTERS,
@@ -21,12 +22,7 @@ import {
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
-import {
-	AdvancedFilter,
-	ReadingRoomFilterId,
-	ReadingRoomMediaType,
-	TagIdentity,
-} from '@reading-room/types';
+import { AdvancedFilter, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
 import { mapFiltersToTags } from '@reading-room/utils';
 import {
 	IdentifiableMediaCard,
@@ -42,7 +38,7 @@ import {
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { OrderDirection, SortObject } from '@shared/types';
+import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {
@@ -86,10 +82,18 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const { data: mediaResultInfo } = useGetMediaObjects(
-		{
-			query: (query.search || []).join(' '),
-			format: (query.format as ReadingRoomMediaType) || READING_ROOM_QUERY_PARAM_INIT.format,
-		},
+		[
+			{
+				field: MediaSearchFilterField.QUERY,
+				operator: MediaSearchOperator.CONTAINS,
+				value: query.search !== null ? query.search?.toString() : '',
+			},
+			{
+				field: MediaSearchFilterField.FORMAT,
+				operator: MediaSearchOperator.IS,
+				value: query.format || READING_ROOM_QUERY_PARAM_INIT.format,
+			},
+		],
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
 		activeSort

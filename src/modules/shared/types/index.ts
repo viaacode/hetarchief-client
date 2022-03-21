@@ -43,7 +43,7 @@ export enum Operator {
 	Equals = 'ac',
 	EqualsNot = 'ad',
 	LessThanOrEqual = 'ae', // shorter (duration) or until (date)
-	GreaterThan = 'af', // longer (duration) or after (date)
+	GreaterThanOrEqual = 'af', // longer (duration) or after (date)
 	Between = 'ag', // duration & date
 }
 

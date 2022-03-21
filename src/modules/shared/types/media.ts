@@ -1,5 +1,11 @@
 export type MediaTypes = 'video' | 'audio' | null;
 
+export enum ReadingRoomMediaType {
+	All = 'all',
+	Audio = 'audio',
+	Video = 'video',
+}
+
 export interface MediaInfo {
 	schema_in_language: unknown | null;
 	dcterms_available: string;

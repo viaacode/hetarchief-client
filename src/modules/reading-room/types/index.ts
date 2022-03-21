@@ -7,12 +7,6 @@ import { MetadataProp } from './metadata';
 
 export * from './metadata';
 
-export enum ReadingRoomMediaType {
-	All = 'all',
-	Audio = 'audio',
-	Video = 'video',
-}
-
 export enum ReadingRoomSort {
 	Date = 'schema_date_created',
 	Relevance = '_score',

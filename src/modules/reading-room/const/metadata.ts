@@ -72,7 +72,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 
 	return {
 		[MetadataProp.CreatedAt]: {
-			[Operator.GreaterThan]: {
+			[Operator.GreaterThanOrEqual]: {
 				label: dictionary.from,
 				field: DateInput,
 			},
@@ -126,7 +126,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				label: dictionary.shorter,
 				field: DurationInput,
 			},
-			[Operator.GreaterThan]: {
+			[Operator.GreaterThanOrEqual]: {
 				label: dictionary.longer,
 				field: DurationInput,
 			},
@@ -230,7 +230,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			},
 		},
 		[MetadataProp.PublishedAt]: {
-			[Operator.GreaterThan]: {
+			[Operator.GreaterThanOrEqual]: {
 				label: dictionary.from,
 				field: DateInput,
 			},

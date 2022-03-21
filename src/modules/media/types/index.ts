@@ -1,30 +1,79 @@
-import { MediaTypes } from '@shared/types';
+import { MediaTypes, Operator } from '@shared/types';
 
-export interface MediaContactInfo {
-	email: string;
-	telephone: string;
-	address: MediaAddress;
+// Input
+export enum MediaSearchFilterField {
+	QUERY = 'query',
+	ADVANCED_QUERY = 'advancedQuery',
+	FORMAT = 'format',
+	DURATION = 'duration',
+	CREATED = 'created',
+	PUBLISHED = 'published',
+	CREATOR = 'creator',
+	GENRE = 'genre',
+	KEYWORD = 'keyword',
+	NAME = 'name',
 }
 
-export interface MediaAddress {
-	street: string;
-	postalCode: string;
-	locality: string;
-	postOfficeBoxNumber: string;
+export enum MediaSearchOperator {
+	CONTAINS = 'contains',
+	CONTAINS_NOT = 'containsNot',
+	IS = 'is',
+	IS_NOT = 'isNot',
+	GTE = 'gte',
+	LTE = 'lte',
 }
 
-export interface MediaRepresentation {
-	name: string;
-	alternateName: string;
-	description: string;
-	meemooFragmentId: string;
-	dctermsFormat: string;
-	transcript: string;
-	dateCreated: string;
-	id: string;
-	files: File[];
+export const MediaSearchOperatorMap = {
+	[Operator.Contains]: MediaSearchOperator.CONTAINS,
+	[Operator.ContainsNot]: MediaSearchOperator.CONTAINS_NOT,
+	[Operator.Equals]: MediaSearchOperator.IS,
+	[Operator.EqualsNot]: [MediaSearchOperator.IS_NOT],
+	[Operator.GreaterThanOrEqual]: [MediaSearchOperator.GTE],
+	[Operator.LessThanOrEqual]: [MediaSearchOperator.LTE],
+};
+
+export interface MediaSearchFilter {
+	field: MediaSearchFilterField;
+	multiValue?: string[];
+	value?: string;
+	operator: unknown;
 }
 
+export type MediaSearchFilters = MediaSearchFilter[];
+
+// Output
+
+export interface MediaInfo {
+	schema_in_language: unknown | null;
+	dcterms_available: string;
+	schema_creator?: {
+		Archiefvormer?: string[];
+		productionCompany?: string[];
+		Maker?: string[];
+	};
+	schema_identifier: string;
+	schema_description?: string;
+	schema_publisher?: {
+		Publisher: string[];
+	};
+	schema_duration: string;
+	schema_abstract?: string;
+	premis_identifier: string;
+	schema_genre?: string;
+	schema_date_published?: string;
+	schema_license?: string[];
+	schema_date_created?: string;
+	schema_contributor: unknown | null;
+	schema_maintainer: {
+		schema_identifier: string;
+	}[];
+	dcterms_format: MediaTypes;
+	schema_name: string;
+	// TODO: See if this is still necessary once resolved in proxy
+	type?: string;
+}
+
+// Mapped intellectual entity object
 export interface Media {
 	id: string;
 	premisIdentifier: Record<string, string[]>;
@@ -69,9 +118,29 @@ export interface Media {
 	representations: MediaRepresentation[];
 }
 
-export class MediaSearchFilters {
-	query?: string;
-	format?: MediaTypes;
+export interface MediaContactInfo {
+	email: string;
+	telephone: string;
+	address: MediaAddress;
+}
+
+export interface MediaAddress {
+	street: string;
+	postalCode: string;
+	locality: string;
+	postOfficeBoxNumber: string;
+}
+
+export interface MediaRepresentation {
+	name: string;
+	alternateName: string;
+	description: string;
+	meemooFragmentId: string;
+	dctermsFormat: string;
+	transcript: string;
+	dateCreated: string;
+	id: string;
+	files: File[];
 }
 
 export interface MediaSearchAggregationPair<T> {
@@ -89,6 +158,8 @@ export interface MediaSearchAggregations {
 	dcterms_format: MediaSearchAggregation<MediaTypes>;
 	schema_genre?: MediaSearchAggregation<string>;
 }
+
+// UI
 
 export enum ObjectDetailTabs {
 	Media = 'media',

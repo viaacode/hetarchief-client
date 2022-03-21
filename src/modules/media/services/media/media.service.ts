@@ -2,25 +2,38 @@ import { stringifyUrl } from 'query-string';
 
 import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
-import { MediaInfo, SortObject } from '@shared/types';
+import { MediaInfo, ReadingRoomMediaType, SortObject } from '@shared/types';
 import { ElasticsearchResponse, GetMedia } from '@shared/types/api';
 
-import { MediaSearchFilters } from '../../types';
+import { MediaSearchFilterField, MediaSearchFilters, MediaSearchOperator } from '../../types';
 
 import { MEDIA_SERVICE_BASE_URL, MEDIA_SERVICE_TICKET_URL } from './media.service.const';
 
 export class MediaService {
 	public static async getAll(
-		filters: MediaSearchFilters = {},
+		filters: MediaSearchFilters = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject
 	): Promise<GetMedia> {
 		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
+		const filtered = filters.filter((item) => {
+			// Don't send filters with no value
+			const noValue = !item.value;
+
+			// Don't send the "All" filter for FORMAT.IS
+			const isFormatAllFilter =
+				item.field === MediaSearchFilterField.FORMAT &&
+				item.operator === MediaSearchOperator.IS &&
+				item.value === ReadingRoomMediaType.All;
+
+			return !noValue && !isFormatAllFilter;
+		});
+
 		const parsed = (await ApiService.getApi()
 			.post(MEDIA_SERVICE_BASE_URL, {
 				body: JSON.stringify({
-					filters,
+					filters: filtered,
 					size,
 					page,
 					requestedAggs: ['format', 'genre'],
