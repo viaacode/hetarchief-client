@@ -2,6 +2,7 @@ import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -32,6 +33,8 @@ import {
 	RelatedObjectProps,
 } from 'modules/media/components';
 import { objectPlaceholderMock } from 'modules/media/components/ObjectPlaceholder/__mocks__/object-placeholder';
+
+const { publicRuntimeConfig } = getConfig();
 
 const ObjectDetailPage: NextPage = () => {
 	/**
@@ -145,18 +148,6 @@ const ObjectDetailPage: NextPage = () => {
 
 	return (
 		<>
-			{/* <!-- Flowplayer --> */}
-			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/chromecast.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/airplay.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
-			<Script
-				strategy="beforeInteractive"
-				src="/flowplayer/plugins/google-analytics.min.js"
-			/>
 			<div className="p-object-detail">
 				<Head>
 					<title>{createPageTitle('Object detail')}</title>
@@ -205,6 +196,8 @@ const ObjectDetailPage: NextPage = () => {
 								title="Elephants dream"
 								pause={pauseMedia}
 								onPlay={() => setPauseMedia(false)}
+								token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
+								dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 							/>
 						) : (
 							<>
