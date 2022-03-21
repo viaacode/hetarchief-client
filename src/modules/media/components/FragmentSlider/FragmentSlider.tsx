@@ -83,6 +83,7 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 		<>
 			<div className={clsx(className, styles['c-fragment-slider__grid'])}>
 				<Button
+					tabIndex={-1}
 					className={styles['c-fragment-slider__nav-button']}
 					icon={<Icon name="angle-left" />}
 					variants="black"
@@ -161,6 +162,7 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 					</ul>
 				</div>
 				<Button
+					tabIndex={-1}
 					className={styles['c-fragment-slider__nav-button']}
 					icon={<Icon name="angle-right" />}
 					variants="black"

@@ -12,7 +12,6 @@ import { useSelector } from 'react-redux';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
-import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
 	flowplayerFormats,
@@ -44,6 +43,8 @@ import {
 	RelatedObject,
 	RelatedObjectProps,
 } from 'modules/media/components';
+
+const { publicRuntimeConfig } = getConfig();
 
 const ObjectDetailPage: NextPage = () => {
 	/**
@@ -96,12 +97,12 @@ const ObjectDetailPage: NextPage = () => {
 
 	useEffect(() => {
 		// Mock representations for slider testing
-		if (mediaInfo) {
-			mediaInfo.representations = [
-				...mediaInfo.representations,
-				...fragmentSliderMock.fragments,
-			];
-		}
+		// if (mediaInfo) {
+		// 	mediaInfo.representations = [
+		// 		...mediaInfo.representations,
+		// 		...fragmentSliderMock.fragments,
+		// 	];
+		// }
 
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
@@ -124,6 +125,7 @@ const ObjectDetailPage: NextPage = () => {
 	 * Variables
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
 
 	/**
 	 * Effects
@@ -190,13 +192,18 @@ const ObjectDetailPage: NextPage = () => {
 			return (
 				// TODO: implement thumbnail
 				<FlowPlayer
-					className="p-object-detail__flowplayer"
+					className={clsx(
+						'p-object-detail__flowplayer',
+						showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+					)}
 					key={flowPlayerKey}
 					src={playableUrl}
 					poster="https://via.placeholder.com/1920x1080"
 					title={representation.name}
 					pause={pauseMedia}
 					onPlay={() => setPauseMedia(false)}
+					token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
+					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 				/>
 			);
 		}
@@ -219,7 +226,9 @@ const ObjectDetailPage: NextPage = () => {
 		// No renderer
 		return (
 			<ObjectPlaceholder
-				description={t('Dit formaat wordt niet ondersteund')}
+				description={t('Dit formaat wordt niet ondersteund. ({{format}})', {
+					format: representation.dctermsFormat,
+				})}
 				reasonTitle={t('Waarom kan ik dit object niet bekijken?')}
 				reasonDescription={t(
 					'Het formaat van de data wordt op dit moment niet ondersteund.'
@@ -297,18 +306,17 @@ const ObjectDetailPage: NextPage = () => {
 									// Loading/error
 									<div>{renderMediaPlaceholder()}</div>
 								)}
-								{mediaInfo?.representations &&
-									mediaInfo?.representations.length > 1 && (
-										<FragmentSlider
-											className="p-object-detail__slider"
-											fragments={mediaInfo?.representations ?? []}
-											onChangeFragment={(index) =>
-												setCurrentRepresentaton(
-													mediaInfo?.representations[index]
-												)
-											}
-										/>
-									)}
+								{showFragmentSlider && (
+									<FragmentSlider
+										className="p-object-detail__slider"
+										fragments={mediaInfo?.representations ?? []}
+										onChangeFragment={(index) =>
+											setCurrentRepresentaton(
+												mediaInfo?.representations[index]
+											)
+										}
+									/>
+								)}
 							</>
 						) : (
 							<>
