@@ -217,7 +217,9 @@ const ObjectDetailPage: NextPage = () => {
 		// No renderer
 		return (
 			<ObjectPlaceholder
-				description={t('Dit formaat wordt niet ondersteund')}
+				description={t('Dit formaat wordt niet ondersteund. ({{format}})', {
+					format: representation.dctermsFormat,
+				})}
 				reasonTitle={t('Waarom kan ik dit object niet bekijken?')}
 				reasonDescription={t(
 					'Het formaat van de data wordt op dit moment niet ondersteund.'
