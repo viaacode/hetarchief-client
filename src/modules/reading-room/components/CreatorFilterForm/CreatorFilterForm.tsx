@@ -19,7 +19,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 	// State
 
 	const [query] = useQueryParams(CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string | undefined>(undefined);
+	const [search, setSearch] = useState<string>('');
 	const [selection, setSelection] = useState<string[]>(() =>
 		query.creator && query.creator !== null
 			? (query.creator.filter((item) => item !== null) as string[])
@@ -54,12 +54,17 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 
 				<CheckboxList
 					className="u-my-16"
-					items={buckets.map((bucket) => ({
-						...bucket,
-						value: bucket.key,
-						label: bucket.key,
-						checked: selection.indexOf(bucket.key) !== -1,
-					}))}
+					items={buckets
+						.filter(
+							(bucket) =>
+								bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1
+						)
+						.map((bucket) => ({
+							...bucket,
+							value: bucket.key,
+							label: bucket.key,
+							checked: selection.indexOf(bucket.key) !== -1,
+						}))}
 					onItemClick={(checked, value) => {
 						onItemClick(!checked, value as string);
 					}}

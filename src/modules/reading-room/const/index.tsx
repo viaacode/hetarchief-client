@@ -25,6 +25,11 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 	format: ReadingRoomMediaType.All,
 	orderProp: ReadingRoomSort.Relevance,
 	page: 1,
+	advanced: undefined,
+	creator: undefined,
+	medium: undefined,
+	orderDirection: undefined,
+	search: undefined,
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {

@@ -1,6 +1,7 @@
 import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { format } from 'date-fns';
+import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -89,8 +90,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	useNavigationBorder();
 
-	// TODO add other filters once available
-	const hasSearched = !!query?.search?.length || query?.format !== ReadingRoomMediaType.All;
+	const hasSearched = useMemo(() => !isEqual(READING_ROOM_QUERY_PARAM_INIT, query), [query]);
 
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
