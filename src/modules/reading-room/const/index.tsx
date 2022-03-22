@@ -8,6 +8,7 @@ import {
 	FilterMenuSortOption,
 	MediumFilterForm,
 } from '@reading-room/components';
+import { CreatorFilterForm } from '@reading-room/components/CreatorFilterForm';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
@@ -32,6 +33,7 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	[SEARCH_QUERY_KEY]: ArrayParam,
 	[ReadingRoomFilterId.Advanced]: AdvancedFilterArrayParam,
 	[ReadingRoomFilterId.Medium]: ArrayParam,
+	[ReadingRoomFilterId.Creator]: ArrayParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
 	// Sorting
@@ -82,7 +84,7 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Creator,
 		label: i18n?.t('modules/reading-room/const/index___maker') ?? '',
-		form: () => null,
+		form: CreatorFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Genre,

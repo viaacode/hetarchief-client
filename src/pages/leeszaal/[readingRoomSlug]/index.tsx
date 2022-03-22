@@ -16,9 +16,10 @@ import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
 	FilterMenu,
+	MediumFilterFormState,
 	ReadingRoomNavigation,
 } from '@reading-room/components';
-import { MediumFilterFormState } from '@reading-room/components/MediumFilterForm/MediumFilterForm.types';
+import { CreatorFilterFormState } from '@reading-room/components/CreatorFilterForm';
 import {
 	getMetadataSearchFilters,
 	READING_ROOM_FILTERS,
@@ -102,16 +103,25 @@ const ReadingRoomPage: NextPage = () => {
 
 	const { data: mediaResultInfo } = useGetMediaObjects(
 		[
+			// Searchbar
 			{
 				field: MediaSearchFilterField.QUERY,
 				operator: MediaSearchOperator.CONTAINS,
 				value: query.search !== null ? query.search?.toString() : '',
 			},
+			// Tabs
 			{
 				field: MediaSearchFilterField.FORMAT,
 				operator: MediaSearchOperator.IS,
 				value: query.format || READING_ROOM_QUERY_PARAM_INIT.format,
 			},
+			// Creator
+			{
+				field: MediaSearchFilterField.CREATOR,
+				operator: MediaSearchOperator.IS,
+				multiValue: (query.creator || []).filter((item) => item !== null) as string[],
+			},
+			// Advanced
 			...(query.advanced || [])
 				.map((item) => {
 					const values = (item.val || '').split(SEPARATOR);
@@ -246,6 +256,11 @@ const ReadingRoomPage: NextPage = () => {
 			case ReadingRoomFilterId.Medium:
 				cast = values as MediumFilterFormState;
 				setQuery({ [id]: cast.mediums });
+				break;
+
+			case ReadingRoomFilterId.Creator:
+				cast = values as CreatorFilterFormState;
+				setQuery({ [id]: cast.creators });
 				break;
 
 			case ReadingRoomFilterId.Advanced:
