@@ -10,6 +10,7 @@ declare global {
 			readonly PORT: string;
 			readonly PROXY_URL: string;
 			readonly DEBUG_TOOLS: 'true' | 'false';
+			readonly ZENDESK_KEY: string;
 			readonly FLOWPLAYER_TOKEN: string;
 			readonly FLOW_PLAYER_ID: string;
 		}

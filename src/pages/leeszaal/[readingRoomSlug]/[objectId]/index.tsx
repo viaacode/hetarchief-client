@@ -42,6 +42,7 @@ import {
 	RelatedObject,
 	RelatedObjectProps,
 } from 'modules/media/components';
+import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -241,7 +242,7 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	return (
-		<>
+		<VisitorLayout>
 			<div className="p-object-detail">
 				<Head>
 					<title>{createPageTitle('Object detail')}</title>
@@ -395,7 +396,7 @@ const ObjectDetailPage: NextPage = () => {
 				onClose={onCloseBlade}
 				onSubmit={onCloseBlade}
 			/>
-		</>
+		</VisitorLayout>
 	);
 };
 

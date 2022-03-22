@@ -86,7 +86,7 @@ $c-filter-menu-flyout-top-padding: 6.4rem;
 			border-color: $white;
 		}
 
-		&:not(:active,:hover):focus {
+		&:not(:active, :hover):focus {
 			outline: none;
 		}
 	}

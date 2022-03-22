@@ -11,7 +11,10 @@
 	overflow: hidden;
 	width: 100%;
 
-	&:focus, &:active, &:focus-visible, &:focus-within {
+	&:focus,
+	&:active,
+	&:focus-visible,
+	&:focus-within {
 		outline: none;
 	}
 

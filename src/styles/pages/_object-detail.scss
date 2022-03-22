@@ -73,6 +73,7 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__flowplayer {
+		height: min-content;
 		align-self: center;
 
 		&-fullscreen-button {
@@ -96,12 +97,12 @@ $metadata-collapsed-width: 36vw;
 			max-height: calc(100vh - 15.1rem); // 28.5rem: navs height
 		}
 
-		& .is-fullscreen &-fullscreen-button--exit{
+		& .is-fullscreen &-fullscreen-button--exit {
 			display: block;
 		}
 
 		& .is-hovered &-fullscreen-button--exit,
-		& .is-paused &-fullscreen-button--exit{
+		& .is-paused &-fullscreen-button--exit {
 			bottom: calc($spacer-lg + 5.8rem); // Add height of controls bar
 		}
 

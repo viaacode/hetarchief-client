@@ -3,12 +3,12 @@
 $component: "c-request-status-badge";
 
 .#{$component} {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    min-height: $spacer-md;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	min-height: $spacer-md;
 
-    :global(.c-badge) {
-        margin-right: $spacer-xs;
-    }
+	:global(.c-badge) {
+		margin-right: $spacer-xs;
+	}
 }
