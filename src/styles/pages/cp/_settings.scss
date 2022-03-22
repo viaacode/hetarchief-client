@@ -37,6 +37,11 @@
 		line-height: $line-height-3xl;
 	}
 
+	&__cancel-save {
+		padding-top: 2rem;
+		text-align: right;
+	}
+
 	&__leeszaal {
 		&-controls {
 			display: grid;

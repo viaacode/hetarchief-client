@@ -12,13 +12,50 @@ import { RichTextEditor } from '@shared/components/RichTextEditor';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
+	/**
+	 * Hooks
+	 */
 	const { t } = useTranslation();
+
+	/**
+	 * Form state
+	 */
+
+	// Leeszaal
 	const [color, setColor] = useState<string>('#00857d');
-	const [wachtzaalEditorState, setWachtzaalEditorState] = useState<RichEditorState>();
-	const [aanvraagEditorState, setAanvraagEditorState] = useState<RichEditorState>();
+
+	// Wachtzaal
+	const [previousWachtzaalState, setPreviousWachtzaalState] = useState<RichEditorState>(); // Save unedited state
+	const [currentWachtzaalState, setCurrentWachtzaalState] = useState<RichEditorState>();
+
+	// Aanvraag
+	const [previousAanvraagState, setPreviousAanvraagState] = useState<RichEditorState>(); // Save unedited state
+	const [currentAanvraagState, setCurrentAanvraagState] = useState<RichEditorState>();
 
 	const minWidth = 400;
 	const minHeight = 320;
+
+	/**
+	 * Helpers
+	 */
+	const isEqual = (a?: RichEditorState, b?: RichEditorState): boolean => {
+		if (!a || !b) {
+			return true;
+		}
+
+		return a.toHTML() === b.toHTML();
+	};
+
+	/**
+	 * Render
+	 */
+
+	const renderCancelSaveButtons = (onCancel: () => void, onSave: () => void) => (
+		<div className="p-cp-settings__cancel-save">
+			<Button label={t('Annuleer')} variants="text" onClick={onCancel} />
+			<Button label={t('Bewaar wijzigingen')} variants="black" onClick={onSave} />
+		</div>
+	);
 
 	return (
 		<>
@@ -107,10 +144,20 @@ const CPSettingsPage: NextPage = () => {
 								)}
 							</p>
 							<RichTextEditor
-								onChange={setWachtzaalEditorState}
-								initialHtml={'<b>test</b>'}
-								state={wachtzaalEditorState}
+								onChange={(state) => {
+									if (!previousWachtzaalState) {
+										setPreviousWachtzaalState(state);
+									}
+									setCurrentWachtzaalState(state);
+								}}
+								initialHtml={'<p><strong>test</strong></p>'}
+								state={currentWachtzaalState}
 							/>
+							{!isEqual(currentWachtzaalState, previousWachtzaalState) &&
+								renderCancelSaveButtons(
+									() => setCurrentWachtzaalState(previousWachtzaalState),
+									() => console.log(currentWachtzaalState?.toHTML())
+								)}
 						</Box>
 					</article>
 
@@ -126,10 +173,20 @@ const CPSettingsPage: NextPage = () => {
 								)}
 							</p>
 							<RichTextEditor
-								onChange={setAanvraagEditorState}
+								onChange={(state) => {
+									if (!previousAanvraagState) {
+										setPreviousAanvraagState(state);
+									}
+									setCurrentAanvraagState(state);
+								}}
 								initialHtml={'<b>test</b>'}
-								state={aanvraagEditorState}
+								state={currentAanvraagState}
 							/>
+							{!isEqual(currentAanvraagState, previousAanvraagState) &&
+								renderCancelSaveButtons(
+									() => setCurrentAanvraagState(previousAanvraagState),
+									() => console.log(currentAanvraagState?.toHTML())
+								)}
 						</Box>
 					</article>
 				</div>
