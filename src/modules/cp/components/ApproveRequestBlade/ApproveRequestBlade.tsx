@@ -169,6 +169,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							const now = new Date();
 
 							// Disabled by request of Ineke, 21/03/2022
+							// https://meemoo.atlassian.net/browse/ARC-652 + https://github.com/viaacode/hetarchief-client/pull/193
 							// const minTime =
 							// 	field.value && !isSameDay(field.value, now)
 							// 		? defaultAccessFrom(startOfDay(field.value))
@@ -223,6 +224,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							const now = new Date();
 
 							// Disabled by request of Ineke, 21/03/2022
+							// https://meemoo.atlassian.net/browse/ARC-652 + https://github.com/viaacode/hetarchief-client/pull/193
 							// const minTime =
 							// 	field.value && accessFrom && isSameDay(field.value, accessFrom)
 							// 		? addHours(accessFrom || now, 1)
