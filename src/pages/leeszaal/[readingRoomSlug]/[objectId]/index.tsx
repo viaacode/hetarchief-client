@@ -259,8 +259,8 @@ const ObjectDetailPage: NextPage = () => {
 				/>
 				{isLoadingMediaInfo && <Loading />}
 				{isError && (
-					<p>
-						{t('pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis')}
+					<p className={'p-object-detail__error'}>
+						{t('Er ging iets mis bij het ophalen van de data.')}
 					</p>
 				)}{' '}
 				<article
