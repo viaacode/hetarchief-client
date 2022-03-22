@@ -26,8 +26,7 @@ import {
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, MediaRepresentation, MediaTypes, ObjectDetailTabs } from '@media/types';
-import { AddToCollectionBlade } from '@reading-room/components';
-import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
+import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -35,7 +34,8 @@ import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { createPageTitle } from '@shared/utils';
+import { createPageTitle, formatAccessDate, parseDatabaseDate } from '@shared/utils';
+import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
 	DynamicActionMenu,
@@ -92,6 +92,10 @@ const ObjectDetailPage: NextPage = () => {
 		() => setFlowPlayerKey(currentRepresentation?.id) // Force flowplayer rerender after successful fetch
 	);
 
+	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
+		router.query.readingRoomSlug as string
+	);
+
 	/**
 	 * Effects
 	 */
@@ -127,6 +131,10 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
+	const accessEndDate =
+		visitStatus && visitStatus.endAt
+			? formatAccessDate(parseDatabaseDate(visitStatus.endAt))
+			: '';
 
 	/**
 	 * Effects
@@ -248,8 +256,15 @@ const ObjectDetailPage: NextPage = () => {
 				</Head>
 				<ReadingRoomNavigation
 					showBorder={showNavigationBorder}
-					className="p-object-detail__nav"
 					title={mediaInfo?.maintainerName ?? ''}
+					showAccessEndDate={
+						accessEndDate
+							? t(
+									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+									{ accessEndDate }
+							  )
+							: ''
+					}
 				/>
 				<ScrollableTabs
 					className="p-object-detail__tabs"
@@ -260,7 +275,9 @@ const ObjectDetailPage: NextPage = () => {
 				{isLoadingMediaInfo && <Loading />}
 				{isError && (
 					<p className={'p-object-detail__error'}>
-						{t('Er ging iets mis bij het ophalen van de data.')}
+						{t(
+							'pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+						)}
 					</p>
 				)}{' '}
 				<article
