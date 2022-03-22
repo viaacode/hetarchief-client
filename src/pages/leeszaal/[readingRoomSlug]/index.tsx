@@ -1,5 +1,6 @@
 import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { format } from 'date-fns';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -115,7 +116,24 @@ const ReadingRoomPage: NextPage = () => {
 									item.op as Operator
 							  )
 							: [];
-					return filters.map((filter, i) => ({ ...filter, value: values[i] }));
+
+					// Format data for Elastic
+					return filters.map((filter, i) => {
+						let parsed;
+
+						switch (item.prop) {
+							case MetadataProp.CreatedAt:
+							case MetadataProp.PublishedAt:
+								parsed = asDate(values[i]);
+								values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
+								break;
+
+							default:
+								break;
+						}
+
+						return { ...filter, value: values[i] };
+					});
 				})
 				.reduce((prev, filters) => prev.concat(filters), []),
 		],
