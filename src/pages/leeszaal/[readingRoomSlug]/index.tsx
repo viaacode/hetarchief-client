@@ -21,6 +21,7 @@ import {
 	ReadingRoomNavigation,
 } from '@reading-room/components';
 import { CreatorFilterFormState } from '@reading-room/components/CreatorFilterForm';
+import { LanguageFilterFormState } from '@reading-room/components/LanguageFilterForm';
 import {
 	getMetadataSearchFilters,
 	READING_ROOM_FILTERS,
@@ -261,6 +262,11 @@ const ReadingRoomPage: NextPage = () => {
 			case ReadingRoomFilterId.Creator:
 				cast = values as CreatorFilterFormState;
 				setQuery({ [id]: cast.creators });
+				break;
+
+			case ReadingRoomFilterId.Language:
+				cast = values as LanguageFilterFormState;
+				setQuery({ [id]: cast.languages });
 				break;
 
 			case ReadingRoomFilterId.Advanced:

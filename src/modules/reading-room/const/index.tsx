@@ -9,6 +9,7 @@ import {
 	MediumFilterForm,
 } from '@reading-room/components';
 import { CreatorFilterForm } from '@reading-room/components/CreatorFilterForm';
+import { LanguageFilterForm } from '@reading-room/components/LanguageFilterForm';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
@@ -30,6 +31,7 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 	medium: undefined,
 	orderDirection: undefined,
 	search: undefined,
+	language: undefined,
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
@@ -39,6 +41,7 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	[ReadingRoomFilterId.Advanced]: AdvancedFilterArrayParam,
 	[ReadingRoomFilterId.Medium]: ArrayParam,
 	[ReadingRoomFilterId.Creator]: ArrayParam,
+	[ReadingRoomFilterId.Language]: ArrayParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
 	// Sorting
@@ -69,7 +72,7 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Medium,
 		label: i18n?.t('modules/reading-room/const/index___analoge-drager') ?? '',
-		form: MediumFilterForm, // Checkbox list
+		form: MediumFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Duration,
@@ -104,7 +107,7 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Language,
 		label: i18n?.t('modules/reading-room/const/index___taal') ?? '',
-		form: () => null, // Text input
+		form: LanguageFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Advanced,
