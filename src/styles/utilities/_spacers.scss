@@ -99,7 +99,6 @@ $mb: (
 );
 @include generate-utils("mb", "margin-bottom", $mb, ("md"));
 
-
 // Left
 $ml: (
 	"4": $spacer-xxs,
@@ -120,3 +119,7 @@ $mx: (
 	"-32": - $spacer-lg,
 );
 @include generate-utils("mx", ("margin-left", "margin-right"), $mx);
+
+.u-page-bottom-padding {
+	padding-bottom: $spacer-1xl;
+}

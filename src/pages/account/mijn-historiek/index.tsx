@@ -24,6 +24,8 @@ import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
+import { VisitorLayout } from 'modules/visitors';
+
 const AccountMyHistory: NextPage = () => {
 	const { t } = useTranslation();
 	const userProfileId = useSelector(selectUserProfileId);
@@ -79,7 +81,7 @@ const AccountMyHistory: NextPage = () => {
 	};
 
 	return (
-		<>
+		<VisitorLayout>
 			<Head>
 				<title>
 					{createPageTitle(t('pages/account/mijn-historiek/index___mijn-historiek'))}
@@ -140,7 +142,7 @@ const AccountMyHistory: NextPage = () => {
 					</div>
 				)}
 			</AccountLayout>
-		</>
+		</VisitorLayout>
 	);
 };
 
