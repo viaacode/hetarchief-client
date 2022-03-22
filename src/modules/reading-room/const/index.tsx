@@ -1,18 +1,18 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
-import { FC } from 'react';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import {
 	AdvancedFilterForm,
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
+	MediumFilterForm,
 } from '@reading-room/components';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
 
-import { DefaultFilterFormProps, ReadingRoomFilterId, ReadingRoomSort } from '../types';
+import { ReadingRoomFilterId, ReadingRoomSort } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
 
@@ -59,14 +59,14 @@ export const READING_ROOM_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
 export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
-		id: ReadingRoomFilterId.Format,
+		id: ReadingRoomFilterId.Medium,
 		label: i18n?.t('modules/reading-room/const/index___analoge-drager') ?? '',
-		form: () => null, // Checkbox list
+		form: MediumFilterForm, // Checkbox list
 	},
 	{
 		id: ReadingRoomFilterId.Duration,
 		label: i18n?.t('modules/reading-room/const/index___duurtijd') ?? '',
-		form: () => null, // Timepicker hh:mm:ss:SSSS
+		form: () => null, // Duration hh:mm:ss
 	},
 	{
 		id: ReadingRoomFilterId.Created,
@@ -99,15 +99,10 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 		form: () => null, // Text input
 	},
 	{
-		id: ReadingRoomFilterId.ImageSound,
-		label: i18n?.t('modules/reading-room/const/index___beeld-geluid') ?? '',
-		form: () => null, // Boolean yes / no
-	},
-	{
 		id: ReadingRoomFilterId.Advanced,
 		icon: 'dots-horizontal',
 		label: i18n?.t('modules/reading-room/const/index___geavanceerd') ?? '',
-		form: AdvancedFilterForm as FC<DefaultFilterFormProps>, // Custom advanced form
+		form: AdvancedFilterForm,
 	},
 ];
 

@@ -8,5 +8,6 @@ export * from './DurationRangeInput';
 export * from './FilterMenu';
 export * from './GenreSelect';
 export * from './MediaTypeSelect';
+export * from './MediumFilterForm';
 export * from './MediumSelect';
 export * from './ReadingRoomNavigation';

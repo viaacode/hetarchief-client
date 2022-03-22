@@ -14,16 +14,15 @@ export enum ReadingRoomSort {
 }
 
 export enum ReadingRoomFilterId {
-	Format = 'format',
-	Duration = 'duration',
+	Advanced = 'advanced',
 	Created = 'created',
-	Published = 'published',
 	Creator = 'creator',
+	Duration = 'duration',
 	Genre = 'genre',
 	Keywords = 'keywords',
 	Language = 'language',
-	ImageSound = 'image-sound',
-	Advanced = 'advanced',
+	Medium = 'medium',
+	Published = 'published',
 }
 
 export interface DefaultFilterFormChildrenParams<Values = unknown> {
