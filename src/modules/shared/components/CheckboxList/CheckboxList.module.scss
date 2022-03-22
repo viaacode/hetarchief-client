@@ -11,11 +11,13 @@ $component: "c-checkbox-list";
         align-items: center;
         cursor: pointer;
         outline-color: $teal;
+        user-select: none;
 
         :global(.c-checkbox) {
             padding: $spacer-xs;
             box-sizing: content-box;
             margin-right: $spacer-xs;
+            pointer-events: none;
         }
 
         :global(.c-checkbox__check-icon) {
