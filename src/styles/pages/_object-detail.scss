@@ -73,7 +73,7 @@ $metadata-collapsed-width: 36vw;
 
 	&__flowplayer {
 		height: min-content;
-    	align-self: center;
+		align-self: center;
 
 		&-fullscreen-button {
 			z-index: get-z-layer("modal"); // Current highest
@@ -92,12 +92,12 @@ $metadata-collapsed-width: 36vw;
 			}
 		}
 
-		& .is-fullscreen &-fullscreen-button--exit{
+		& .is-fullscreen &-fullscreen-button--exit {
 			display: block;
 		}
 
 		& .is-hovered &-fullscreen-button--exit,
-		& .is-paused &-fullscreen-button--exit{
+		& .is-paused &-fullscreen-button--exit {
 			bottom: calc($spacer-lg + 5.8rem); // Add height of controls bar
 		}
 	}
