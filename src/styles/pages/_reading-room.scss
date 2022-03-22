@@ -1,44 +1,44 @@
 @use "../abstracts" as *;
 
 .p-reading-room {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
 }
 
 .p-reading-room__results {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
 
-  &--placeholder {
-	.l-container {
-	  display: flex;
-	  flex: 1 1 auto;
+	&--placeholder {
+		.l-container {
+			display: flex;
+			flex: 1 1 auto;
 
-	  @include respond-to("md") {
-		flex-direction: column;
-	  }
+			@include respond-to("md") {
+				flex-direction: column;
+			}
+		}
+
+		.p-reading-room__filter-menu {
+			flex-shrink: 0;
+
+			@include respond-at("md") {
+				width: calc(100% / 3 - 2.2rem);
+			}
+			@include respond-at("lg") {
+				width: calc(25% - 2.4rem);
+			}
+		}
 	}
-
-	.p-reading-room__filter-menu {
-	  flex-shrink: 0;
-
-	  @include respond-at("md") {
-		width: calc(100% / 3 - 2.2rem);
-	  }
-	  @include respond-at("lg") {
-		width: calc(25% - 2.4rem);
-	  }
-	}
-  }
 }
 
 .p-reading-room__placeholder {
-  margin: $spacer-md 0 auto;
+	margin: $spacer-md 0 auto;
 
-  @include respond-at("md") {
-	margin: auto 0;
-	margin-left: $spacer-md;
-  }
+	@include respond-at("md") {
+		margin: auto 0;
+		margin-left: $spacer-md;
+	}
 }

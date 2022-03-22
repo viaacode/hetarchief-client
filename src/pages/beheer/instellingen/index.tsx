@@ -1,14 +1,18 @@
+import { RichEditorState } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useState } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
+import { RichTextEditor } from '@shared/components/RichTextEditor';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
 	const { t } = useTranslation();
+	const [editorState, setEditorState] = useState<RichEditorState>();
 
 	return (
 		<>
@@ -31,6 +35,11 @@ const CPSettingsPage: NextPage = () => {
 				contentTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">Settings table</div>
+				<RichTextEditor
+					onChange={setEditorState}
+					initialHtml={'<b>test</b>'}
+					state={editorState}
+				/>
 			</CPAdminLayout>
 		</>
 	);
