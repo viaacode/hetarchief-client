@@ -23,8 +23,8 @@ export class MediaService {
 	): Promise<GetMedia> {
 		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
 		const filtered = filters.filter((item) => {
-			// Don't send filters with no value
-			const noValue = !item.value;
+			// Don't send filters with no value(s)
+			const noValue = !item.value && !item.multiValue;
 
 			// Don't send the "All" filter for FORMAT.IS
 			const isFormatAllFilter =
@@ -41,7 +41,7 @@ export class MediaService {
 					filters: filtered,
 					size,
 					page,
-					requestedAggs: ['format', 'genre'],
+					requestedAggs: ['format', 'genre', 'creator'],
 					...parsedSort,
 				}),
 			})
