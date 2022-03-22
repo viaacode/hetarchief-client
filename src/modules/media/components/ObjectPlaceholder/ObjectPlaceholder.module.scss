@@ -23,7 +23,8 @@ $component: "c-object-placeholder";
 		&::before {
 			content: "";
 			position: absolute;
-			top: 0; right: 0;
+			top: 0;
+			right: 0;
 			border-top: 3rem solid $silver;
 			border-left: 3rem solid $zinc;
 			width: 0;

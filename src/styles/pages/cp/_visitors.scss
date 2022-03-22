@@ -36,12 +36,25 @@ $page: "p-cp-visitors";
 	&__access {
 		display: flex;
 		align-items: center;
+    }
+    
+	&__link {
+		text-decoration: none;
+		transition: color $animate-default;
+
+		&:hover,
+		&:active,
+		&:focus,
+		&:focus-within {
+			color: $teal !important;
+		}
 	}
 
 	tr {
-		td, th {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
+		td,
+		th {
+			padding-top: 2rem;
+			padding-bottom: 2rem;
 		}
 	}
 

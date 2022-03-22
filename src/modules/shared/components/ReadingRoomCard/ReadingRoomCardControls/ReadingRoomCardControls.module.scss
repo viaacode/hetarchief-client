@@ -131,7 +131,9 @@ $component: "c-reading-room-card-controls";
 			align-items: unset;
 		}
 
-		ul, button, div {
+		ul,
+		button,
+		div {
 			&:not(:last-child) {
 				@include respond-to("sm") {
 					margin-bottom: $spacer-xs;

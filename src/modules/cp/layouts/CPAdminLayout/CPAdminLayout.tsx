@@ -1,16 +1,20 @@
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { CP_ADMIN_NAVIGATION_LINKS } from '@cp/const';
 import { ListNavigationItem } from '@shared/components';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
+import { setShowZendesk } from '@shared/store/ui';
 
 import { CPAdminLayoutProps } from './CPAdminLayout.types';
 
 const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, contentTitle }) => {
 	const { asPath } = useRouter();
+	const dispatch = useDispatch();
+
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
 			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href }) => ({
@@ -28,6 +32,10 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, contentTit
 	);
 
 	const { t } = useTranslation();
+
+	useEffect(() => {
+		dispatch(setShowZendesk(false));
+	}, [dispatch]);
 
 	return (
 		<SidebarLayout

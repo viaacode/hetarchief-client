@@ -35,7 +35,7 @@ const LoggedOutHome: FC = () => {
 	 */
 
 	return (
-		<div className="p-home">
+		<div className="p-home u-page-bottom-padding">
 			<Head>
 				<title>{createPageTitle('Home')}</title>
 				<meta name="description" content="TODO: Home meta description" />
