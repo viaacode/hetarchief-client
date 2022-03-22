@@ -27,3 +27,4 @@ export * from './Timepicker';
 export * from './Toast';
 export * from './Toggle';
 export * from './UnreadMarker';
+export * from './ZendeskWrapper';

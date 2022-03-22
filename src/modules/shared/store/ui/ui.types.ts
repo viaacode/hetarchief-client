@@ -5,4 +5,5 @@ export interface UIState {
 	showFooter: boolean;
 	showNotificationsCenter: boolean;
 	hasUnreadNotifications: boolean;
+	showZendesk: boolean;
 }

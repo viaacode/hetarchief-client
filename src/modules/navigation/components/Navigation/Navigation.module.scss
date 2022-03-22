@@ -5,7 +5,7 @@
 $c-navigation-height-contextual: 6.4rem;
 $c-navigation-height-contextual-md: 4.8rem;
 $c-navigation-border-height: 0.6rem;
-$c-navigation-list-divider-color: #4E4E4E;
+$c-navigation-list-divider-color: #4e4e4e;
 $c-navigation-divider-size: 0.1rem;
 $c-navigation-item-spacing: $spacer-md;
 $c-navigation-item-spacing-lg: 4.8rem;
@@ -27,7 +27,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 	}
 
-	@if $_offset2 != 0  {
+	@if $_offset2 != 0 {
 		$offset2-border: if($_offset2 == 0, 0, calc($_offset2 + 0.1rem));
 
 		.c-navigation__border-decoration:last-of-type {
@@ -296,7 +296,8 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	}
 
 	&:not(&--active):hover {
-		.c-navigation__link, .c-navigation__link+span {
+		.c-navigation__link,
+		.c-navigation__link + span {
 			color: color.adjust($white, $alpha: -0.3);
 			transition: color $animate-md-in;
 		}
@@ -423,9 +424,8 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			@include respond-to(md) {
 				display: flex;
 				justify-self: center;
-				margin-bottom: 0.7rem // Equal to other menu items 0.6 + 0.1 (border + margin)
+				margin-bottom: 0.7rem; // Equal to other menu items 0.6 + 0.1 (border + margin)
 			}
 		}
 	}
 }
-
