@@ -73,7 +73,6 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__flowplayer {
-		height: min-content;
 		align-self: center;
 
 		&-fullscreen-button {
@@ -94,7 +93,7 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		.flowplayer {
-			max-height: calc(100vh - 15.1rem); // 28.5rem: navs height
+			max-height: calc(100vh - 15.1rem); // 15.1rem: navs height
 		}
 
 		& .is-fullscreen &-fullscreen-button--exit {
