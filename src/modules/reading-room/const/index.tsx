@@ -4,12 +4,13 @@ import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-par
 
 import {
 	AdvancedFilterForm,
+	CreatorFilterForm,
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
+	GenreFilterForm,
+	LanguageFilterForm,
 	MediumFilterForm,
 } from '@reading-room/components';
-import { CreatorFilterForm } from '@reading-room/components/CreatorFilterForm';
-import { LanguageFilterForm } from '@reading-room/components/LanguageFilterForm';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
@@ -97,7 +98,7 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Genre,
 		label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
-		form: () => null, // Checkbox list
+		form: GenreFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Keywords,

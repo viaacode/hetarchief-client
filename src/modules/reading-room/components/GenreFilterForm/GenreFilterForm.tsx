@@ -1,0 +1,79 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import clsx from 'clsx';
+import { FC, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { useQueryParams } from 'use-query-params';
+
+import { SearchBar } from '@shared/components';
+import { CheckboxList } from '@shared/components/CheckboxList';
+import { selectMediaResults } from '@shared/store/media';
+
+import {
+	GENRE_FILTER_FORM_QUERY_PARAM_CONFIG,
+	GENRE_FILTER_FORM_SCHEMA,
+} from './GenreFilterForm.const';
+import { GenreFilterFormProps, GenreFilterFormState } from './GenreFilterForm.types';
+
+const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
+	// State
+
+	const [query] = useQueryParams(GENRE_FILTER_FORM_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>('');
+	const [selection, setSelection] = useState<string[]>(() =>
+		query.genre && query.genre !== null
+			? (query.genre.filter((item) => item !== null) as string[])
+			: []
+	);
+
+	const { setValue, getValues, reset } = useForm<GenreFilterFormState>({
+		resolver: yupResolver(GENRE_FILTER_FORM_SCHEMA()),
+	});
+
+	const buckets = useSelector(selectMediaResults)?.aggregations.schema_genre.buckets || [];
+
+	// Events
+
+	const onItemClick = (add: boolean, value: string) => {
+		const selected = add ? [...selection, value] : selection.filter((item) => item !== value);
+
+		setValue('genres', selected);
+		setSelection(selected);
+	};
+
+	return (
+		<>
+			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
+				<SearchBar
+					searchValue={search}
+					onSearch={setSearch}
+					onClear={() => {
+						setSearch('');
+					}}
+				/>
+
+				<CheckboxList
+					className="u-my-16"
+					items={buckets
+						.filter(
+							(bucket) =>
+								bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1
+						)
+						.map((bucket) => ({
+							...bucket,
+							value: bucket.key,
+							label: bucket.key,
+							checked: selection.indexOf(bucket.key) !== -1,
+						}))}
+					onItemClick={(checked, value) => {
+						onItemClick(!checked, value as string);
+					}}
+				/>
+			</div>
+
+			{children({ values: getValues(), reset })}
+		</>
+	);
+};
+
+export default GenreFilterForm;
