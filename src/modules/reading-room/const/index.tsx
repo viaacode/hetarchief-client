@@ -33,6 +33,7 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 	orderDirection: undefined,
 	search: undefined,
 	language: undefined,
+	genre: undefined,
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
@@ -43,6 +44,7 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	[ReadingRoomFilterId.Medium]: ArrayParam,
 	[ReadingRoomFilterId.Creator]: ArrayParam,
 	[ReadingRoomFilterId.Language]: ArrayParam,
+	[ReadingRoomFilterId.Genre]: ArrayParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
 	// Sorting
