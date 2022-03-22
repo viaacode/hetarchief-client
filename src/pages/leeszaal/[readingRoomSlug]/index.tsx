@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
@@ -57,6 +58,8 @@ import { VisitorLayout } from 'modules/visitors';
 
 const ReadingRoomPage: NextPage = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
+	const { readingRoomSlug } = router.query;
 
 	useNavigationBorder();
 
@@ -96,6 +99,7 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const { data: mediaResultInfo } = useGetMediaObjects(
+		readingRoomSlug as string,
 		[
 			{
 				field: MediaSearchFilterField.QUERY,

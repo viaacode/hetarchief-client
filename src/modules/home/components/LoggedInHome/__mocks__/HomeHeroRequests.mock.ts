@@ -1,6 +1,6 @@
-import { ReadingRoom } from '@shared/components';
+import { ReadingRoomInfo } from '@reading-room/types';
 
-export interface HeroRequest extends ReadingRoom {
+export interface HeroRequest extends Partial<ReadingRoomInfo> {
 	status: 'access' | 'planned' | 'requested';
 }
 
