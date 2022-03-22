@@ -13,8 +13,8 @@ import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
-	flowplayerFormats,
-	imageFormats,
+	FLOWPLAYER_FORMATS,
+	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
 	METADATA_FIELDS,
 	OBJECT_DETAIL_TABS,
@@ -185,7 +185,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
 		// Flowplayer
-		if (flowplayerFormats.includes(representation.dctermsFormat)) {
+		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
 			return (
 				// TODO: implement thumbnail
 				<FlowPlayer
@@ -206,7 +206,7 @@ const ObjectDetailPage: NextPage = () => {
 		}
 
 		// Image
-		if (imageFormats.includes(representation.dctermsFormat)) {
+		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
 			return (
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
