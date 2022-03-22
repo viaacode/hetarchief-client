@@ -189,11 +189,11 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			data: mediaInfo.abstract,
 		},
 		{
-			title: i18n?.t('transcriptie') ?? '',
+			title: i18n?.t('modules/media/const/index___transcriptie') ?? '',
 			data: mediaInfo.representations[0].transcript, // TODO: Update voor andere representations?
 		},
 		// {
-		// 	title: i18n?.t('Ondertitels') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___ondertitels') ?? '',
 		// 	data: // Niet in representations
 		// },
 		// {
@@ -223,27 +223,27 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		},
 		// Geen DB velden
 		// {
-		// 	title: i18n?.t('Type') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___type') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('filmbasis') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___filmbasis') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('Beeld/Geluid') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___beeld-geluid') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('Kleur/Zwart-wit') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___kleur-zwart-wit') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('Ondertitels') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___ondertitels') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('Taal ondertitels') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___taal-ondertitels') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		{

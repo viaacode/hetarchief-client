@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -16,6 +17,8 @@ import {
 import { GenreFilterFormProps, GenreFilterFormState } from './GenreFilterForm.types';
 
 const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
+	const { t } = useTranslation();
+
 	// State
 
 	const [query] = useQueryParams(GENRE_FILTER_FORM_QUERY_PARAM_CONFIG);
@@ -30,7 +33,9 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 		resolver: yupResolver(GENRE_FILTER_FORM_SCHEMA()),
 	});
 
-	const buckets = useSelector(selectMediaResults)?.aggregations.schema_genre.buckets || [];
+	const buckets = (
+		useSelector(selectMediaResults)?.aggregations.schema_genre.buckets || []
+	).filter((bucket) => bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1);
 
 	// Events
 
@@ -52,19 +57,22 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 					}}
 				/>
 
+				{buckets.length === 0 && (
+					<p className="u-color-neutral u-text-center u-my-16">
+						{t(
+							'modules/reading-room/components/genre-filter-form/genre-filter-form___geen-genres-gevonden'
+						)}
+					</p>
+				)}
+
 				<CheckboxList
 					className="u-my-16"
-					items={buckets
-						.filter(
-							(bucket) =>
-								bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1
-						)
-						.map((bucket) => ({
-							...bucket,
-							value: bucket.key,
-							label: bucket.key,
-							checked: selection.indexOf(bucket.key) !== -1,
-						}))}
+					items={buckets.map((bucket) => ({
+						...bucket,
+						value: bucket.key,
+						label: bucket.key,
+						checked: selection.indexOf(bucket.key) !== -1,
+					}))}
 					onItemClick={(checked, value) => {
 						onItemClick(!checked, value as string);
 					}}

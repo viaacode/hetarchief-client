@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
@@ -14,7 +15,7 @@ import {
 import { MediumFilterFormProps, MediumFilterFormState } from './MediumFilterForm.types';
 
 const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) => {
-	// const { t } = useTranslation();
+	const { t } = useTranslation();
 
 	// State
 
@@ -33,7 +34,9 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		resolver: yupResolver(MEDIUM_FILTER_FORM_SCHEMA()),
 	});
 
-	// const buckets = useSelector(selectMediaResults)?.aggregations.schema_creator.buckets || [];
+	// const buckets = (
+	// 	useSelector(selectMediaResults)?.aggregations.schema_creator.buckets || []
+	// ).filter((bucket) => bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1);
 
 	// Events
 
@@ -51,7 +54,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 
 	// 	switch (medium) {
 	// 		// case 'foo':
-	// 		// 	translation = t('Foo');
+	// 		// 	translation = t('modules/reading-room/components/medium-filter-form/medium-filter-form___foo');
 	// 		// 	break;
 
 	// 		default:
@@ -62,18 +65,16 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 	// };
 
 	// const getItems = () => {
-	// 	return buckets
-	// 		.filter((bucket) => bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1)
-	// 		.map((bucket) => {
-	// 			const value = bucket.key || '';
+	// 	return buckets.map((bucket) => {
+	// 		const value = bucket.key || '';
 
-	// 			return {
-	// 				...bucket,
-	// 				checked: selection.indexOf(value) !== -1,
-	// 				label: getMediumTranslation(value),
-	// 				value,
-	// 			};
-	// 		});
+	// 		return {
+	// 			...bucket,
+	// 			checked: selection.indexOf(value) !== -1,
+	// 			label: getMediumTranslation(value),
+	// 			value,
+	// 		};
+	// 	});
 	// };
 
 	return (
@@ -89,7 +90,9 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 
 				{/* https://meemoo.atlassian.net/wiki/spaces/HA2/pages/3402891314/Geavanceerde+search+BZT+versie+1?focusedCommentId=3417604098#comment-3417604098 */}
 				<p className="u-color-neutral u-text-center u-my-16">
-					{'Missing "dcterms_medium"'}
+					{t(
+						'modules/reading-room/components/medium-filter-form/medium-filter-form___geen-analoge-dragers-gevonden'
+					)}
 				</p>
 
 				<CheckboxList
