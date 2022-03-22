@@ -2,11 +2,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
 
-import { MEDIUM_FILTER_FORM_SCHEMA } from './MediumFilterForm.const';
+import {
+	MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG,
+	MEDIUM_FILTER_FORM_SCHEMA,
+} from './MediumFilterForm.const';
 import { MediumFilterFormProps, MediumFilterFormState } from './MediumFilterForm.types';
 
 const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) => {
@@ -14,8 +18,13 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 
 	// State
 
-	const [query, setQuery] = useState<string | undefined>(undefined);
-	const [selection, setSelection] = useState<string[]>([]);
+	const [query] = useQueryParams(MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>('');
+	const [selection, setSelection] = useState<string[]>(() =>
+		query.medium && query.medium !== null
+			? (query.medium.filter((item) => item !== null) as string[])
+			: []
+	);
 
 	const { setValue, getValues, reset } = useForm<MediumFilterFormState>({
 		defaultValues: {
@@ -24,17 +33,15 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		resolver: yupResolver(MEDIUM_FILTER_FORM_SCHEMA()),
 	});
 
-	// TODO: create selector
-	// const aggregates = useSelector(selectMediaMediumAggregates);
+	// const buckets = useSelector(selectMediaResults)?.aggregations.schema_creator.buckets || [];
 
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
-		add
-			? setSelection([...selection, value])
-			: setSelection(selection.filter((item) => item !== value));
+		const selected = add ? [...selection, value] : selection.filter((item) => item !== value);
 
-		setValue('mediums', selection);
+		setValue('mediums', selected);
+		setSelection(selected);
 	};
 
 	// Helpers
@@ -54,33 +61,29 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 	// 	return translation || '';
 	// };
 
-	const getItems = () => {
-		return [];
-		// TODO: enable when output is available
-		// return (aggregates.buckets || [])
-		// 	.filter((bucket) => {
-		// 		return !query || (query && bucket.key && bucket.key.indexOf(query) >= 0);
-		// 	})
-		// 	.map((bucket) => {
-		// 		const value = bucket.key || '';
+	// const getItems = () => {
+	// 	return buckets
+	// 		.filter((bucket) => bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1)
+	// 		.map((bucket) => {
+	// 			const value = bucket.key || '';
 
-		// 		return {
-		// 			...bucket,
-		// 			checked: selection.indexOf(value) !== -1,
-		// 			label: getMediumTranslation(value),
-		// 			value,
-		// 		};
-		// 	});
-	};
+	// 			return {
+	// 				...bucket,
+	// 				checked: selection.indexOf(value) !== -1,
+	// 				label: getMediumTranslation(value),
+	// 				value,
+	// 			};
+	// 		});
+	// };
 
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
-					searchValue={query}
-					onSearch={setQuery}
+					searchValue={search}
+					onSearch={setSearch}
 					onClear={() => {
-						setQuery('');
+						setSearch('');
 					}}
 				/>
 
@@ -91,7 +94,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 
 				<CheckboxList
 					className="u-my-16"
-					items={getItems()}
+					items={[]}
 					onItemClick={(checked, value) => {
 						onItemClick(!checked, value as string);
 					}}
