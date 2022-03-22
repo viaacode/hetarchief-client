@@ -209,6 +209,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			data: mediaInfo.datePublished,
 		},
 		...mapObjectToMetadata(mediaInfo.creator),
+		...mapObjectToMetadata(mediaInfo.contributor),
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n?.t('modules/media/const/index___uitgebreide-beschrijving') ?? '',
@@ -272,10 +273,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		// 	title: i18n?.t('modules/media/const/index___taal-ondertitels') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
-		{
-			title: i18n?.t('modules/media/const/index___is-deel-van') ?? '',
-			data: mediaInfo.isPartOf,
-		},
+		...mapObjectToMetadata(mediaInfo.isPartOf),
 		// {
 		// 	title: i18n?.t('modules/media/const/index___bevat') ?? '',
 		// 	data: // Niet in type?
