@@ -8,7 +8,7 @@
 	 * Elements
 	 */
 
-	 @include react-select-base("c-tags-input");
+	@include react-select-base("c-tags-input");
 
 	.c-tags-input__multi-value {
 		margin: $spacer-xxs $spacer-xs $spacer-xxs 0;
@@ -23,7 +23,7 @@
 		display: inline-flex;
 		padding: 0.6rem;
 
-		&:not(:active,:hover):focus {
+		&:not(:active, :hover):focus {
 			outline: 2px solid $teal;
 			border-radius: 0.5rem;
 		}

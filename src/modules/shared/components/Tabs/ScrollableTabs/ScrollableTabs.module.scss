@@ -48,7 +48,8 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 		overflow-x: scroll;
 		scrollbar-width: none; /* Firefox */
 
-		&::-webkit-scrollbar { /* WebKit */
+		&::-webkit-scrollbar {
+			/* WebKit */
 			width: 0;
 			height: 0;
 		}
@@ -67,7 +68,6 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 	&--light {
 		&::before {
 			@include scrollable-tabs-gradient(right, $white);
-			
 		}
 
 		&::after {
@@ -77,7 +77,7 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 
 	&--rounded {
 		@include tabs-border-radius;
-		
+
 		&::before,
 		&::after {
 			width: $scrollable-tabs-gradient-width-lg;

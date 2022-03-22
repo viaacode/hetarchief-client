@@ -16,7 +16,7 @@ import {
 } from '@navigation/components/Footer/__mocks__/footer';
 import { MOCK_ITEMS_LEFT } from '@navigation/components/Navigation/__mocks__/navigation';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
-import { NotificationCenter } from '@shared/components';
+import { NotificationCenter, ZendeskWrapper } from '@shared/components';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
@@ -172,6 +172,8 @@ const AppLayout: FC = ({ children }) => {
 				position="bottom-left"
 				transition={Slide}
 			/>
+
+			<ZendeskWrapper />
 
 			{showFooter && (
 				<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />

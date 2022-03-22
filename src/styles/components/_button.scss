@@ -16,7 +16,8 @@
 	color: $white;
 	cursor: pointer;
 	outline: 2px solid transparent;
-	transition: color $animate-default, background-color $animate-default, border-color $animate-default;
+	transition: color $animate-default, background-color $animate-default,
+		border-color $animate-default;
 
 	&:hover {
 		background-color: $shade;
@@ -33,10 +34,10 @@
 		* keyboard-based (eg Tab) navigation or the
 		* .focus-visible utility class.
 		*/
-		&:focus,
-		.focus-visible:focus:not(:focus-visible) {
-			outline: 2px solid $black;
-		}
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
+		outline: 2px solid $black;
+	}
 
 	/**
 	* Remove focus styles for non-keyboard focus.
@@ -45,7 +46,6 @@
 		outline: 0;
 		box-shadow: none;
 	}
-
 }
 
 /**
@@ -168,7 +168,7 @@
 		color: $white;
 	}
 
-	&:not(:active,:hover):focus {
+	&:not(:active, :hover):focus {
 		outline: 2px solid $teal;
 	}
 }
@@ -323,7 +323,7 @@
 		border-color: $zinc;
 		color: $zinc;
 
-		&:not(:active,:hover):focus {
+		&:not(:active, :hover):focus {
 			border-color: $zinc;
 		}
 
