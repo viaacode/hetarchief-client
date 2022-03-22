@@ -144,22 +144,22 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 		},
 		[MetadataProp.Duration]: {
@@ -190,22 +190,22 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 		},
 		[MetadataProp.Everything]: {
@@ -276,12 +276,12 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: MediumSelect, // TODO: populate by aggregate (missing in ES)
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: MediumSelect, // TODO: populate by aggregate (missing in ES)
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 		},
 		[MetadataProp.Genre]: {
@@ -310,34 +310,34 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 		},
 		[MetadataProp.Location]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 		},
 		[MetadataProp.PublishedAt]: {
@@ -380,22 +380,22 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO
+				filters: [], // TODO: Add to proxy
 			},
 		},
 		[MetadataProp.Title]: {
