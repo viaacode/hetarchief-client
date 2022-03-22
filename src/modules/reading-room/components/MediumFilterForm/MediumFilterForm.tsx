@@ -1,19 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
 
 import { SearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
-import { selectMediaFormatAggregates } from '@shared/store/media';
 
 import { MEDIUM_FILTER_FORM_SCHEMA } from './MediumFilterForm.const';
 import { MediumFilterFormProps, MediumFilterFormState } from './MediumFilterForm.types';
 
 const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) => {
-	const { t } = useTranslation();
+	// const { t } = useTranslation();
 
 	// State
 
@@ -27,7 +24,8 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		resolver: yupResolver(MEDIUM_FILTER_FORM_SCHEMA()),
 	});
 
-	const aggregates = useSelector(selectMediaFormatAggregates);
+	// TODO: create selector
+	// const aggregates = useSelector(selectMediaMediumAggregates);
 
 	// Events
 
@@ -35,37 +33,44 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		add
 			? setSelection([...selection, value])
 			: setSelection(selection.filter((item) => item !== value));
-	};
 
-	// Effects
-
-	useEffect(() => {
 		setValue('mediums', selection);
-	}, [setValue, selection]);
+	};
 
 	// Helpers
 
-	const getMediumTranslation = (medium: string): string => {
-		let translation = medium;
+	// const getMediumTranslation = (medium: string): string => {
+	// 	const translation = medium; // TODO: change to 'let' when output is available
 
-		switch (medium) {
-			case 'audio':
-				translation = t('Audio');
-				break;
+	// 	switch (medium) {
+	// 		// case 'foo':
+	// 		// 	translation = t('Foo');
+	// 		// 	break;
 
-			case 'video':
-				translation = t('Video');
-				break;
+	// 		default:
+	// 			break;
+	// 	}
 
-			case 'film':
-				translation = t('Film');
-				break;
+	// 	return translation || '';
+	// };
 
-			default:
-				break;
-		}
+	const getItems = () => {
+		return [];
+		// TODO: enable when output is available
+		// return (aggregates.buckets || [])
+		// 	.filter((bucket) => {
+		// 		return !query || (query && bucket.key && bucket.key.indexOf(query) >= 0);
+		// 	})
+		// 	.map((bucket) => {
+		// 		const value = bucket.key || '';
 
-		return translation || '';
+		// 		return {
+		// 			...bucket,
+		// 			checked: selection.indexOf(value) !== -1,
+		// 			label: getMediumTranslation(value),
+		// 			value,
+		// 		};
+		// 	});
 	};
 
 	return (
@@ -79,24 +84,14 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					}}
 				/>
 
+				{/* https://meemoo.atlassian.net/wiki/spaces/HA2/pages/3402891314/Geavanceerde+search+BZT+versie+1?focusedCommentId=3417604098#comment-3417604098 */}
+				<p className="u-color-neutral u-text-center u-my-16">
+					{'Missing "dcterms_medium"'}
+				</p>
+
 				<CheckboxList
 					className="u-my-16"
-					items={(aggregates?.buckets || [])
-						.filter((bucket) => {
-							return (
-								!query || (query && bucket.key && bucket.key.indexOf(query) >= 0)
-							);
-						})
-						.map((bucket) => {
-							const value = bucket.key || '';
-
-							return {
-								...bucket,
-								checked: selection.indexOf(value) >= 0,
-								label: getMediumTranslation(value),
-								value,
-							};
-						})}
+					items={getItems()}
 					onItemClick={(checked, value) => {
 						onItemClick(!checked, value as string);
 					}}

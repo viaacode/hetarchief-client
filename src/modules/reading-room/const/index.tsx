@@ -31,6 +31,7 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
 	[SEARCH_QUERY_KEY]: ArrayParam,
 	[ReadingRoomFilterId.Advanced]: AdvancedFilterArrayParam,
+	[ReadingRoomFilterId.Medium]: ArrayParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
 	// Sorting

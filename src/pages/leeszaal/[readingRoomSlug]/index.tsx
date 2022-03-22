@@ -12,7 +12,13 @@ import { useQueryParams } from 'use-query-params';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
-import { AddToCollectionBlade, FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
+import {
+	AddToCollectionBlade,
+	AdvancedFilterFormState,
+	FilterMenu,
+	ReadingRoomNavigation,
+} from '@reading-room/components';
+import { MediumFilterFormState } from '@reading-room/components/MediumFilterForm/MediumFilterForm.types';
 import {
 	getMetadataSearchFilters,
 	READING_ROOM_FILTERS,
@@ -233,9 +239,24 @@ const ReadingRoomPage: NextPage = () => {
 		setQuery({ [id]: undefined });
 	};
 
-	const onSubmitFilter = (id: string, values: unknown) => {
-		values = (values as Record<string, unknown>)[id] || values;
-		setQuery({ [id]: values });
+	const onSubmitFilter = (id: ReadingRoomFilterId, values: unknown) => {
+		let cast;
+
+		switch (id) {
+			case ReadingRoomFilterId.Medium:
+				cast = values as MediumFilterFormState;
+				setQuery({ [id]: cast.mediums });
+				break;
+
+			case ReadingRoomFilterId.Advanced:
+				cast = values as AdvancedFilterFormState;
+				setQuery({ [id]: cast.advanced });
+				break;
+
+			default:
+				console.warn(`No submit handler for ${id}`);
+				break;
+		}
 	};
 
 	const onRemoveKeyword = (newValue: MultiValue<TagIdentity>) => {
@@ -305,7 +326,9 @@ const ReadingRoomPage: NextPage = () => {
 					onMenuToggle={onFilterMenuToggle}
 					onViewToggle={onViewToggle}
 					onFilterReset={onResetFilter}
-					onFilterSubmit={onSubmitFilter}
+					onFilterSubmit={(id, values) =>
+						onSubmitFilter(id as ReadingRoomFilterId, values)
+					}
 				/>
 			</div>
 		);
