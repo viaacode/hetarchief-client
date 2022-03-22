@@ -1,0 +1,26 @@
+@use "styles/abstracts" as *;
+
+$component: "c-checkbox-list";
+
+.#{$component} {
+    @extend %reset-list;
+
+    &__item {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        cursor: pointer;
+        outline-color: $teal;
+
+        :global(.c-checkbox) {
+            padding: $spacer-xs;
+            box-sizing: content-box;
+            margin-right: $spacer-xs;
+        }
+
+        :global(.c-checkbox__check-icon) {
+            top: 0;
+            margin: $spacer-xs;
+        }
+    }
+}

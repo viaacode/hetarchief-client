@@ -31,7 +31,7 @@ export interface FilterMenuFilterOption {
 	id: string;
 	icon?: IconProps['name'];
 	label: string;
-	form: FC<DefaultFilterFormProps> | null;
+	form: FC<DefaultFilterFormProps<any>> | null;
 }
 
 export type OnFilterMenuSortClick = (key: ReadingRoomSort, order?: OrderDirection) => void;
