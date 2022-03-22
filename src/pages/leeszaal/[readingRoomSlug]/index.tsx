@@ -11,7 +11,6 @@ import { useQueryParams } from 'use-query-params';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
-import { MediaSearchFilterField, MediaSearchOperator } from '@media/types';
 import { AddToCollectionBlade, FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
 	READING_ROOM_FILTERS,
@@ -38,7 +37,13 @@ import {
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
+import {
+	MediaSearchFilterField,
+	MediaSearchOperator,
+	OrderDirection,
+	ReadingRoomMediaType,
+	SortObject,
+} from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 
 const ReadingRoomPage: NextPage = () => {

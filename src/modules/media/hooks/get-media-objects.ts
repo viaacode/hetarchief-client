@@ -3,10 +3,9 @@ import { UseQueryResult } from 'react-query/types/react/types';
 import { useDispatch } from 'react-redux';
 
 import { MediaService } from '@media/services';
-import { MediaSearchFilterField, MediaSearchFilters } from '@media/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { setResults } from '@shared/store/media';
-import { GetMedia, SortObject } from '@shared/types';
+import { GetMedia, MediaSearchFilterField, MediaSearchFilters, SortObject } from '@shared/types';
 
 export function useGetMediaObjects(
 	filters: MediaSearchFilters,

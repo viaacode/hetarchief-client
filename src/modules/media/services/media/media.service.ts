@@ -2,10 +2,15 @@ import { stringifyUrl } from 'query-string';
 
 import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
-import { MediaInfo, ReadingRoomMediaType, SortObject } from '@shared/types';
+import {
+	MediaInfo,
+	MediaSearchFilterField,
+	MediaSearchFilters,
+	MediaSearchOperator,
+	ReadingRoomMediaType,
+	SortObject,
+} from '@shared/types';
 import { ElasticsearchResponse, GetMedia } from '@shared/types/api';
-
-import { MediaSearchFilterField, MediaSearchFilters, MediaSearchOperator } from '../../types';
 
 import { MEDIA_SERVICE_BASE_URL, MEDIA_SERVICE_TICKET_URL } from './media.service.const';
 

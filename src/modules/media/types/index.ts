@@ -1,45 +1,4 @@
-import { MediaTypes, Operator } from '@shared/types';
-
-// Input
-export enum MediaSearchFilterField {
-	QUERY = 'query',
-	ADVANCED_QUERY = 'advancedQuery',
-	FORMAT = 'format',
-	DURATION = 'duration',
-	CREATED = 'created',
-	PUBLISHED = 'published',
-	CREATOR = 'creator',
-	GENRE = 'genre',
-	KEYWORD = 'keyword',
-	NAME = 'name',
-}
-
-export enum MediaSearchOperator {
-	CONTAINS = 'contains',
-	CONTAINS_NOT = 'containsNot',
-	IS = 'is',
-	IS_NOT = 'isNot',
-	GTE = 'gte',
-	LTE = 'lte',
-}
-
-export const MediaSearchOperatorMap = {
-	[Operator.Contains]: MediaSearchOperator.CONTAINS,
-	[Operator.ContainsNot]: MediaSearchOperator.CONTAINS_NOT,
-	[Operator.Equals]: MediaSearchOperator.IS,
-	[Operator.EqualsNot]: [MediaSearchOperator.IS_NOT],
-	[Operator.GreaterThanOrEqual]: [MediaSearchOperator.GTE],
-	[Operator.LessThanOrEqual]: [MediaSearchOperator.LTE],
-};
-
-export interface MediaSearchFilter {
-	field: MediaSearchFilterField;
-	multiValue?: string[];
-	value?: string;
-	operator: unknown;
-}
-
-export type MediaSearchFilters = MediaSearchFilter[];
+import { MediaTypes } from '@shared/types';
 
 // Output
 
