@@ -16,11 +16,11 @@ const DateRangeInput: FC<TextInputProps> = (props) => {
 
 		switch (type) {
 			case 'from':
-				value = `${date?.valueOf()}${SEPARATOR}${to}`;
+				value = `${date?.setUTCHours(0, 0, 0).valueOf()}${SEPARATOR}${to}`;
 				break;
 
 			case 'to':
-				value = `${from}${SEPARATOR}${date?.valueOf()}`;
+				value = `${from}${SEPARATOR}${date?.setUTCHours(23, 59, 59).valueOf()}`;
 				break;
 
 			default:
