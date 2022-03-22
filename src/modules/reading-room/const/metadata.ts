@@ -442,3 +442,10 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 		},
 	};
 };
+
+export const getMetadataSearchFilters = (
+	prop: MetadataProp,
+	operator: Operator
+): MediaSearchFilters => {
+	return METADATA_CONFIG()[prop]?.[operator]?.filters || [];
+};

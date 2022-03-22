@@ -13,6 +13,7 @@ import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { AddToCollectionBlade, FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
+	getMetadataSearchFilters,
 	READING_ROOM_FILTERS,
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
@@ -21,7 +22,12 @@ import {
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
-import { AdvancedFilter, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
+import {
+	AdvancedFilter,
+	MetadataProp,
+	ReadingRoomFilterId,
+	TagIdentity,
+} from '@reading-room/types';
 import { mapFiltersToTags } from '@reading-room/utils';
 import {
 	IdentifiableMediaCard,
@@ -34,12 +40,13 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	MediaSearchFilterField,
 	MediaSearchOperator,
+	Operator,
 	OrderDirection,
 	ReadingRoomMediaType,
 	SortObject,
@@ -98,6 +105,19 @@ const ReadingRoomPage: NextPage = () => {
 				operator: MediaSearchOperator.IS,
 				value: query.format || READING_ROOM_QUERY_PARAM_INIT.format,
 			},
+			...(query.advanced || [])
+				.map((item) => {
+					const values = (item.val || '').split(SEPARATOR);
+					const filters =
+						item.prop && item.op
+							? getMetadataSearchFilters(
+									item.prop as MetadataProp,
+									item.op as Operator
+							  )
+							: [];
+					return filters.map((filter, i) => ({ ...filter, value: values[i] }));
+				})
+				.reduce((prev, filters) => prev.concat(filters), []),
 		],
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
