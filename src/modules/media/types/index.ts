@@ -115,7 +115,8 @@ export interface MediaSearchAggregation<T> {
 
 export interface MediaSearchAggregations {
 	dcterms_format: MediaSearchAggregation<MediaTypes>;
-	schema_genre?: MediaSearchAggregation<string>;
+	schema_genre: MediaSearchAggregation<string>;
+	schema_creator: MediaSearchAggregation<string>;
 }
 
 // UI
