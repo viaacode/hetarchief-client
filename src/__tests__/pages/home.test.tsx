@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { queryByText, render, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 
@@ -20,10 +20,13 @@ const renderHome = () => {
 };
 
 describe('Page: <Home />', () => {
-	it('Should render a wrapper page', () => {
+	it('Should render a wrapper page', async () => {
 		const { container } = renderHome();
+		await waitFor(() => {
+			expect(queryByText(container, 'Vind een leeszaal')).toBeDefined();
+		});
 		const wrapper = container.querySelector('.p-home');
 
-		expect(wrapper).toBeInTheDocument();
+		expect(wrapper).toBeDefined();
 	});
 });
