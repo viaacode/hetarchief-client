@@ -1,0 +1,75 @@
+@use "styles/abstracts" as *;
+
+.p-cp-settings {
+	&__content-block {
+		padding-bottom: 4.8rem;
+	}
+
+	&__box {
+		padding: $spacer-sm;
+
+		@include respond-at("md") {
+			padding: $spacer-lg;
+		}
+	}
+
+	&__title {
+		font-size: $font-size-lg;
+		padding-bottom: $spacer-sm;
+	}
+
+	&__subtitle {
+		font-weight: 700;
+		padding-bottom: $spacer-sm;
+	}
+
+	&__hint {
+		padding-left: $spacer-sm;
+		font-size: $font-size-sm;
+		font-weight: 400;
+		color: $neutral;
+	}
+
+	&__description {
+		padding-bottom: $spacer-lg;
+		color: $neutral;
+		font-size: $font-size-sm;
+		line-height: $line-height-3xl;
+	}
+
+	&__cancel-save {
+		padding-top: 2rem;
+		text-align: right;
+	}
+
+	&__leeszaal {
+		&-controls {
+			display: grid;
+			gap: $spacer-lg;
+		}
+
+		&-color-picker {
+			align-self: end;
+
+			.c-color-picker {
+				max-width: 20.4rem;
+			}
+		}
+
+		&-image-buttons {
+			display: flex;
+			flex-wrap: wrap;
+			gap: $spacer-sm;
+		}
+
+		@include respond-at("lg") {
+			&-controls {
+				grid-template-columns: 2fr 3fr;
+			}
+
+			&-image {
+				grid-row: 1 / 3;
+			}
+		}
+	}
+}
