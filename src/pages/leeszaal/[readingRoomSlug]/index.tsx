@@ -395,14 +395,14 @@ const ReadingRoomPage: NextPage = () => {
 			/>
 			<PaginationBar
 				className="u-mb-48"
-				start={query.page * READING_ROOM_ITEM_COUNT}
+				start={(query.page - 1) * READING_ROOM_ITEM_COUNT}
 				count={READING_ROOM_ITEM_COUNT}
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
 				onPageChange={(page) =>
 					setQuery({
 						...query,
-						page: page,
+						page: page + 1,
 					})
 				}
 			/>

@@ -26,7 +26,7 @@ export const READING_ROOM_ITEM_COUNT = 100;
 export const READING_ROOM_QUERY_PARAM_INIT = {
 	format: ReadingRoomMediaType.All,
 	orderProp: ReadingRoomSort.Relevance,
-	page: 0,
+	page: 1,
 	advanced: undefined,
 	creator: undefined,
 	medium: undefined,
