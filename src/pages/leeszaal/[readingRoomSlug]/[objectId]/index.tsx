@@ -12,11 +12,12 @@ import { useSelector } from 'react-redux';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
+import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
-	flowplayerFormats,
+	FLOWPLAYER_FORMATS,
 	formatErrorPlaceholder,
-	imageFormats,
+	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
 	METADATA_FIELDS,
 	OBJECT_DETAIL_TABS,
@@ -44,6 +45,7 @@ import {
 	RelatedObject,
 	RelatedObjectProps,
 } from 'modules/media/components';
+import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -102,12 +104,12 @@ const ObjectDetailPage: NextPage = () => {
 
 	useEffect(() => {
 		// Mock representations for slider testing
-		// if (mediaInfo) {
-		// 	mediaInfo.representations = [
-		// 		...mediaInfo.representations,
-		// 		...fragmentSliderMock.fragments,
-		// 	];
-		// }
+		if (mediaInfo) {
+			mediaInfo.representations = [
+				...mediaInfo.representations,
+				...fragmentSliderMock.fragments,
+			];
+		}
 
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
@@ -197,7 +199,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
 		// Flowplayer
-		if (flowplayerFormats.includes(representation.dctermsFormat)) {
+		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
 			return (
 				// TODO: implement thumbnail
 				<FlowPlayer
@@ -218,7 +220,7 @@ const ObjectDetailPage: NextPage = () => {
 		}
 
 		// Image
-		if (imageFormats.includes(representation.dctermsFormat)) {
+		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
 			return (
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
@@ -248,7 +250,7 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	return (
-		<>
+		<VisitorLayout>
 			<div className="p-object-detail">
 				<Head>
 					<title>{createPageTitle('Object detail')}</title>
@@ -414,7 +416,7 @@ const ObjectDetailPage: NextPage = () => {
 				onClose={onCloseBlade}
 				onSubmit={onCloseBlade}
 			/>
-		</>
+		</VisitorLayout>
 	);
 };
 

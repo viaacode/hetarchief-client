@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from 'react';
 
-import { flowplayerFormats, imageFormats } from '@media/const';
+import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@media/const';
 import { MediaRepresentation } from '@media/types';
 import { Icon } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
@@ -61,14 +61,14 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 
 	const renderThumbnail = (representation: MediaRepresentation) => {
 		let image = null;
-		if (flowplayerFormats.includes(representation.dctermsFormat)) {
+		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
 			// TODO: thumbnail from parent
-			image = 'https://via.placeholder.com/1920x1080';
+			image = '/images/bg-shd.png';
 		}
-		if (imageFormats.includes(representation.dctermsFormat)) {
+		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
 			// TODO: image preview
 			// image = representation.id;
-			image = 'https://via.placeholder.com/1080x1920';
+			image = '/images/bg-shd.png';
 		}
 
 		// No renderer
@@ -80,102 +80,100 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 	};
 
 	return (
-		<>
-			<div className={clsx(className, styles['c-fragment-slider__grid'])}>
-				<Button
-					tabIndex={-1}
-					className={styles['c-fragment-slider__nav-button']}
-					icon={<Icon name="angle-left" />}
-					variants="black"
-					disabled={!needsScrolling || offset === 0}
-					onClick={() => {
-						if (offset > 0) {
-							needsScrolling && setOffset(offset - 1);
-							setIsBlurred(false);
-						}
+		<div className={clsx(className, styles['c-fragment-slider__grid'])}>
+			<Button
+				tabIndex={-1}
+				className={styles['c-fragment-slider__nav-button']}
+				icon={<Icon name="angle-left" />}
+				variants="black"
+				disabled={!needsScrolling || offset === 0}
+				onClick={() => {
+					if (offset > 0) {
+						needsScrolling && setOffset(offset - 1);
+						setIsBlurred(false);
+					}
+				}}
+			/>
+			<div ref={fragmentsRef} className={styles['c-fragment-slider__items']}>
+				<ul
+					role="list"
+					className={clsx(
+						styles['c-fragment-slider__track'],
+						!needsScrolling && styles['c-fragment-slider__track--centered']
+					)}
+					style={{
+						transform: `translateX(${
+							needsScrolling
+								? -offset * (fragmentSize + fragmentSpacing) +
+								  (fragmentsSize ? fragmentsSize?.width / 20 : 0) -
+								  fragmentSize / 2
+								: -offset * (fragmentSize + fragmentSpacing)
+						}rem)`,
 					}}
-				/>
-				<div ref={fragmentsRef} className={styles['c-fragment-slider__items']}>
-					<ul
-						role="list"
-						className={clsx(
-							styles['c-fragment-slider__track'],
-							!needsScrolling && styles['c-fragment-slider__track--centered']
-						)}
-						style={{
-							transform: `translateX(${
-								needsScrolling
-									? -offset * (fragmentSize + fragmentSpacing) +
-									  (fragmentsSize ? fragmentsSize?.width / 20 : 0) -
-									  fragmentSize / 2
-									: -offset * (fragmentSize + fragmentSpacing)
-							}rem)`,
-						}}
-						onBlur={() => {
-							setIsBlurred(true);
-						}}
-						onFocus={() => {
-							setIsBlurred(false);
-						}}
-					>
-						{fragments.map((item, index) => (
-							<li
-								role="listitem"
-								className={clsx(
-									styles['c-fragment-slider__item'],
-									index === active && styles['c-fragment-slider__item--active']
-								)}
-								key={`fragment-${index}`}
-								tabIndex={0}
-								data-index={index}
-								onClick={(e) => {
-									const index = parseInt(
+					onBlur={() => {
+						setIsBlurred(true);
+					}}
+					onFocus={() => {
+						setIsBlurred(false);
+					}}
+				>
+					{fragments.map((item, index) => (
+						<li
+							role="listitem"
+							className={clsx(
+								styles['c-fragment-slider__item'],
+								index === active && styles['c-fragment-slider__item--active']
+							)}
+							key={`fragment-${index}`}
+							tabIndex={0}
+							data-index={index}
+							onClick={(e) => {
+								const index = parseInt(
+									e.currentTarget.getAttribute('data-index') as string
+								);
+								needsScrolling && setOffset(index);
+								setActive(index);
+								onChangeFragment?.(index);
+							}}
+							onKeyUp={(e) => {
+								if (e.key === 'Tab') {
+									// Scroll through fragments
+									const offsetIndex = parseInt(
 										e.currentTarget.getAttribute('data-index') as string
 									);
-									needsScrolling && setOffset(index);
-									setActive(index);
+									needsScrolling && setOffset(offsetIndex);
+								}
+								if (e.key === 'Enter') {
+									// Select fragment
+									const activeIndex = parseInt(
+										e.currentTarget.getAttribute('data-index') as string
+									);
+									setActive(activeIndex);
 									onChangeFragment?.(index);
-								}}
-								onKeyUp={(e) => {
-									if (e.key === 'Tab') {
-										// Scroll through fragments
-										const offsetIndex = parseInt(
-											e.currentTarget.getAttribute('data-index') as string
-										);
-										needsScrolling && setOffset(offsetIndex);
-									}
-									if (e.key === 'Enter') {
-										// Select fragment
-										const activeIndex = parseInt(
-											e.currentTarget.getAttribute('data-index') as string
-										);
-										setActive(activeIndex);
-										onChangeFragment?.(index);
-									}
-								}}
-							>
-								<div className={styles['c-fragment-slider__item-image-wrapper']}>
-									{renderThumbnail(item)}
-								</div>
-							</li>
-						))}
-					</ul>
-				</div>
-				<Button
-					tabIndex={-1}
-					className={styles['c-fragment-slider__nav-button']}
-					icon={<Icon name="angle-right" />}
-					variants="black"
-					disabled={!needsScrolling || offset === totalFragments - 1}
-					onClick={() => {
-						if (offset < totalFragments - 1) {
-							needsScrolling && setOffset(offset + 1);
-							setIsBlurred(false);
-						}
-					}}
-				/>
+								}
+							}}
+						>
+							<div className={styles['c-fragment-slider__item-image-wrapper']}>
+								{renderThumbnail(item)}
+							</div>
+						</li>
+					))}
+				</ul>
 			</div>
-		</>
+			<Button
+				tabIndex={-1}
+				className={styles['c-fragment-slider__nav-button']}
+				icon={<Icon name="angle-right" />}
+				variants="black"
+				disabled={!needsScrolling || offset === totalFragments - 1}
+				onClick={() => {
+					if (offset < totalFragments - 1) {
+						needsScrolling && setOffset(offset + 1);
+						setIsBlurred(false);
+					}
+				}}
+			/>
+		</div>
 	);
 };
 export default Metadata;

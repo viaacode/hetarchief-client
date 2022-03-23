@@ -19,7 +19,8 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 		&__column {
 			padding-left: $gutter; /* gutter size */
 
-			& > div, article {
+			& > div,
+			article {
 				margin-bottom: $gutter;
 			}
 		}

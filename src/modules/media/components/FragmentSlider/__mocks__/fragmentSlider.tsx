@@ -32,7 +32,7 @@ export const fragmentSliderMock: FragmentSliderProps = {
 			dctermsFormat: 'png',
 			transcript: 'item',
 			dateCreated: 'item',
-			id: 'https://via.placeholder.com/1920x1080',
+			id: '/images/bg-shd.png',
 			files: [],
 		},
 		// {

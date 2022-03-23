@@ -1,0 +1,47 @@
+@use "styles/abstracts" as *;
+
+.c-rich-text-editor {
+	.headings-dropdown .dropdown-content .menu-item:first-child {
+		display: none; // Hide h1 option in headings dropdown
+	}
+
+	.bf-controlbar {
+		background-color: $teal-30;
+		border: 1px solid $zinc;
+		border-bottom: none;
+		padding: 0;
+		box-shadow: none;
+
+		&::before {
+			content: "";
+			width: 100%;
+			height: 1px;
+			background-color: red;
+			display: block;
+			position: absolute;
+			top: 3.6rem;
+			left: 0;
+			border-bottom: 1px solid $zinc;
+		}
+
+		> button,
+		> div > button {
+			padding-left: 0.8rem;
+			padding-right: 0.8rem;
+		}
+
+		> .control-item {
+			margin: 0;
+		}
+
+		.separator-line {
+			margin: 0;
+			height: 3.6rem;
+			background-color: $zinc;
+		}
+	}
+
+	.bf-content {
+		border: 1px solid $zinc;
+	}
+}

@@ -33,7 +33,6 @@
 	}
 }
 
-
 /**
  * Modifiers
  */
@@ -99,10 +98,10 @@
 
 		&:active {
 			background-color: $teal-66;
-			color: $black
+			color: $black;
 		}
 
-		&:not(:active,:hover):focus {
+		&:not(:active, :hover):focus {
 			outline: 2px solid $black;
 		}
 
@@ -115,15 +114,14 @@
 
 			&:active {
 				background-color: $seagreen;
-				color: $white
+				color: $white;
 			}
 
-			&:not(:active,:hover):focus {
+			&:not(:active, :hover):focus {
 				outline: 2px solid $teal-66;
 			}
 		}
 	}
-
 }
 
 .c-tag--disabled {

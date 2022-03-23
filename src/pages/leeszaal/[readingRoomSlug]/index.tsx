@@ -40,6 +40,8 @@ import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, SortObject } from '@shared/types';
 import { createPageTitle, parseDatabaseDate } from '@shared/utils';
 
+import { VisitorLayout } from 'modules/visitors';
+
 const ReadingRoomPage: NextPage = () => {
 	const { t } = useTranslation();
 
@@ -280,7 +282,7 @@ const ReadingRoomPage: NextPage = () => {
 	);
 
 	return (
-		<>
+		<VisitorLayout>
 			<div className="p-reading-room">
 				<Head>
 					<title>{createPageTitle('Leeszaal')}</title>
@@ -314,9 +316,13 @@ const ReadingRoomPage: NextPage = () => {
 				</section>
 
 				<section
-					className={clsx('p-reading-room__results u-bg-platinum u-py-24 u-py-48:md', {
-						'p-reading-room__results--placeholder': showInitialView || showNoResults,
-					})}
+					className={clsx(
+						'p-reading-room__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+						{
+							'p-reading-room__results--placeholder':
+								showInitialView || showNoResults,
+						}
+					)}
 				>
 					<div className="l-container">
 						{showInitialView && (
@@ -360,7 +366,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(null);
 				}}
 			/>
-		</>
+		</VisitorLayout>
 	);
 };
 

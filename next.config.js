@@ -35,7 +35,7 @@ module.exports = withTM({
 		tsconfigPath: './tsconfig.build.json',
 	},
 	images: {
-		domains: ['assets.viaa.be', 'via.placeholder.com'],
+		domains: ['assets.viaa.be', 'via.placeholder.com'], // TODO: remove via.placeholder.com once thumbnails are available
 	},
 	productionBrowserSourceMaps: process.env.DEBUG_TOOLS === 'true',
 	publicRuntimeConfig: {
@@ -46,6 +46,7 @@ module.exports = withTM({
 		SSUM_EDIT_ACCOUNT_URL: process.env.SSUM_EDIT_ACCOUNT_URL,
 		PROXY_URL: process.env.PROXY_URL,
 		DEBUG_TOOLS: process.env.DEBUG_TOOLS,
+		ZENDESK_KEY: process.env.ZENDESK_KEY,
 		FLOW_PLAYER_TOKEN: process.env.FLOW_PLAYER_TOKEN,
 		FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
 	},
