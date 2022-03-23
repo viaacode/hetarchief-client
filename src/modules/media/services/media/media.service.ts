@@ -24,8 +24,12 @@ export class MediaService {
 	): Promise<GetMedia> {
 		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
 		const filtered = filters.filter((item) => {
-			// Don't send filters with no value
-			const noValue = !item.value;
+			// Don't send filters with no value(s)
+			const hasValue = !!item.value || !!item.multiValue;
+			const eitherValue = item.multiValue || item.value;
+
+			// Don't send filters with an empty array/string
+			const hasLength = eitherValue && eitherValue.length > 0;
 
 			// Don't send the "All" filter for FORMAT.IS
 			const isFormatAllFilter =
@@ -33,7 +37,7 @@ export class MediaService {
 				item.operator === MediaSearchOperator.IS &&
 				item.value === ReadingRoomMediaType.All;
 
-			return !noValue && !isFormatAllFilter;
+			return hasValue && hasLength && !isFormatAllFilter;
 		});
 
 		const parsed = (await ApiService.getApi()
@@ -42,7 +46,7 @@ export class MediaService {
 					filters: filtered,
 					size,
 					page,
-					requestedAggs: ['format', 'genre'],
+					requestedAggs: ['format', 'genre', 'creator', 'language'],
 					...parsedSort,
 				}),
 			})

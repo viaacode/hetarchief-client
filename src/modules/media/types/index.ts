@@ -37,7 +37,7 @@ export interface Media {
 	id: string;
 	premisIdentifier: Record<string, string[]>;
 	premisRelationship: string;
-	isPartOf: string;
+	isPartOf: any;
 	partOfArchive: string[];
 	partOfEpisode: string[];
 	partOfSeason: string[];
@@ -56,7 +56,7 @@ export interface Media {
 	abstract: string;
 	creator: Record<string, string[]>;
 	actor: Record<string, string[]>;
-	contributor: unknown;
+	contributor: Record<string, string[]>;
 	publisher: Record<string, string[]>;
 	spatial: string[];
 	temporal: string[];
@@ -68,7 +68,7 @@ export interface Media {
 	embedUrl: string;
 	alternateName: string;
 	duration: string;
-	license: unknown;
+	license: string[];
 	meemooFragmentId: string;
 	meemooMediaObjectId: string;
 	dateCreated: string;
@@ -114,8 +114,10 @@ export interface MediaSearchAggregation<T> {
 }
 
 export interface MediaSearchAggregations {
-	dcterms_format: MediaSearchAggregation<MediaTypes>;
-	schema_genre?: MediaSearchAggregation<string>;
+	dcterms_format: MediaSearchAggregation<string>;
+	schema_genre: MediaSearchAggregation<string>;
+	schema_creator: MediaSearchAggregation<string>;
+	schema_in_language: MediaSearchAggregation<string>;
 }
 
 // UI

@@ -1,18 +1,21 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
-import { FC } from 'react';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import {
 	AdvancedFilterForm,
+	CreatorFilterForm,
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
+	GenreFilterForm,
+	LanguageFilterForm,
+	MediumFilterForm,
 } from '@reading-room/components';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
 
-import { DefaultFilterFormProps, ReadingRoomFilterId, ReadingRoomSort } from '../types';
+import { ReadingRoomFilterId, ReadingRoomSort } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
 
@@ -24,12 +27,23 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 	format: ReadingRoomMediaType.All,
 	orderProp: ReadingRoomSort.Relevance,
 	page: 1,
+	advanced: undefined,
+	creator: undefined,
+	medium: undefined,
+	orderDirection: undefined,
+	search: undefined,
+	language: undefined,
+	genre: undefined,
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	// Filters
 	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
 	[SEARCH_QUERY_KEY]: ArrayParam,
+	[ReadingRoomFilterId.Medium]: ArrayParam,
+	[ReadingRoomFilterId.Creator]: ArrayParam,
+	[ReadingRoomFilterId.Genre]: ArrayParam,
+	[ReadingRoomFilterId.Language]: ArrayParam,
 	[ReadingRoomFilterId.Advanced]: AdvancedFilterArrayParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
@@ -59,14 +73,14 @@ export const READING_ROOM_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
 export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
-		id: ReadingRoomFilterId.Format,
+		id: ReadingRoomFilterId.Medium,
 		label: i18n?.t('modules/reading-room/const/index___analoge-drager') ?? '',
-		form: () => null, // Checkbox list
+		form: MediumFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Duration,
 		label: i18n?.t('modules/reading-room/const/index___duurtijd') ?? '',
-		form: () => null, // Timepicker hh:mm:ss:SSSS
+		form: () => null, // Duration hh:mm:ss
 	},
 	{
 		id: ReadingRoomFilterId.Created,
@@ -81,12 +95,12 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Creator,
 		label: i18n?.t('modules/reading-room/const/index___maker') ?? '',
-		form: () => null,
+		form: CreatorFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Genre,
 		label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
-		form: () => null, // Checkbox list
+		form: GenreFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Keywords,
@@ -96,18 +110,13 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Language,
 		label: i18n?.t('modules/reading-room/const/index___taal') ?? '',
-		form: () => null, // Text input
-	},
-	{
-		id: ReadingRoomFilterId.ImageSound,
-		label: i18n?.t('modules/reading-room/const/index___beeld-geluid') ?? '',
-		form: () => null, // Boolean yes / no
+		form: LanguageFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Advanced,
 		icon: 'dots-horizontal',
 		label: i18n?.t('modules/reading-room/const/index___geavanceerd') ?? '',
-		form: AdvancedFilterForm as FC<DefaultFilterFormProps>, // Custom advanced form
+		form: AdvancedFilterForm,
 	},
 ];
 

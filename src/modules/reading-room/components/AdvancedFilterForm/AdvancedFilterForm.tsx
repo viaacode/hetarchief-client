@@ -35,7 +35,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, 
 
 	return (
 		<>
-			<div className={clsx(className, 'c-advanced-filter-form')}>
+			<div className={clsx(className, 'u-overflow-auto')}>
 				<p className="u-px-20 u-px-32:md u-mt-40 u-mb-32">
 					{t(
 						'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-form___stel-je-eigen-geavanceerde-filter-samen-aan-de-hand-van-deze-metadata-velden-en-waarden'

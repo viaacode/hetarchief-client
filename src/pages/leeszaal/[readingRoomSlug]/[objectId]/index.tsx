@@ -4,13 +4,20 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
 import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { FragmentSlider } from '@media/components/FragmentSlider';
+import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
+	FLOWPLAYER_FORMATS,
+	formatErrorPlaceholder,
+	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
 	METADATA_FIELDS,
 	OBJECT_DETAIL_TABS,
@@ -19,9 +26,8 @@ import {
 } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
-import { MediaActions, ObjectDetailTabs } from '@media/types';
-import { AddToCollectionBlade } from '@reading-room/components';
-import { ReadingRoomNavigation } from '@reading-room/components/ReadingRoomNavigation';
+import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
+import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -30,7 +36,8 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
+import { asDate, createPageTitle, formatAccessDate } from '@shared/utils';
+import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
 	DynamicActionMenu,
@@ -55,7 +62,10 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
-	const [mediaUrl, setMediaUrl] = useState<string>();
+	const [currentRepresentation, setCurrentRepresentaton] = useState<
+		MediaRepresentation | undefined
+	>(undefined);
+	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 
 	// Layout
 	useStickyLayout();
@@ -70,24 +80,41 @@ const ObjectDetailPage: NextPage = () => {
 	const metadataSize = useElementSize(metadataRef);
 
 	// Fetch data
-	const { data: mediaInfo, isLoading: isLoadingMediaInfo } = useGetMediaInfo(
-		router.query.objectId as string
-	);
+	const {
+		data: mediaInfo,
+		isLoading: isLoadingMediaInfo,
+		isError,
+	} = useGetMediaInfo(router.query.objectId as string);
 
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetMediaTicketInfo(mediaUrl ?? null);
+	} = useGetMediaTicketInfo(
+		currentRepresentation?.id ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.id) // Force flowplayer rerender after successful fetch
+	);
+
+	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
+		router.query.readingRoomSlug as string
+	);
 
 	/**
 	 * Effects
 	 */
 
 	useEffect(() => {
+		// Mock representations for slider testing
+		if (mediaInfo) {
+			mediaInfo.representations = [
+				...mediaInfo.representations,
+				...fragmentSliderMock.fragments,
+			];
+		}
+
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
-		setMediaUrl(mediaInfo?.representations[0].id);
+		setCurrentRepresentaton(mediaInfo?.representations[0]);
 
 		// Set default view
 		if (windowSize.width && windowSize.width < 768) {
@@ -106,6 +133,9 @@ const ObjectDetailPage: NextPage = () => {
 	 * Variables
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
+	const accessEndDate =
+		visitStatus && visitStatus.endAt ? formatAccessDate(asDate(visitStatus.endAt)) : '';
 
 	/**
 	 * Effects
@@ -166,6 +196,58 @@ const ObjectDetailPage: NextPage = () => {
 	 * Render
 	 */
 
+	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
+		// Flowplayer
+		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
+			return (
+				// TODO: implement thumbnail
+				<FlowPlayer
+					className={clsx(
+						'p-object-detail__flowplayer',
+						showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+					)}
+					key={flowPlayerKey}
+					src={playableUrl}
+					poster="https://via.placeholder.com/1920x1080"
+					title={representation.name}
+					pause={pauseMedia}
+					onPlay={() => setPauseMedia(false)}
+					token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
+					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
+				/>
+			);
+		}
+
+		// Image
+		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
+			return (
+				// TODO: replace with real image
+				<div className="p-object-detail__image">
+					<Image
+						src={representation.id}
+						alt={representation.name}
+						layout="fill"
+						objectFit="contain"
+					/>
+				</div>
+			);
+		}
+
+		// No renderer
+		return <ObjectPlaceholder {...formatErrorPlaceholder(representation.dctermsFormat)} />;
+	};
+
+	const renderMediaPlaceholder = (): ReactNode => {
+		if (isLoadingPlayableUrl) {
+			return null;
+		}
+		if (isErrorPlayableUrl) {
+			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
+		}
+
+		return null;
+	};
+
 	return (
 		<VisitorLayout>
 			<div className="p-object-detail">
@@ -173,11 +255,17 @@ const ObjectDetailPage: NextPage = () => {
 					<title>{createPageTitle('Object detail')}</title>
 					<meta name="description" content="Object detail omschrijving" />
 				</Head>
-				{/* TODO: bind title to state */}
 				<ReadingRoomNavigation
 					showBorder={showNavigationBorder}
-					className="p-object-detail__nav"
 					title={mediaInfo?.maintainerName ?? ''}
+					showAccessEndDate={
+						accessEndDate
+							? t(
+									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+									{ accessEndDate }
+							  )
+							: ''
+					}
 				/>
 				<ScrollableTabs
 					className="p-object-detail__tabs"
@@ -186,10 +274,18 @@ const ObjectDetailPage: NextPage = () => {
 					onClick={onTabClick}
 				/>
 				{isLoadingMediaInfo && <Loading />}
+				{isError && (
+					<p className={'p-object-detail__error'}>
+						{t(
+							'pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+						)}
+					</p>
+				)}{' '}
 				<article
 					className={clsx(
 						'p-object-detail__wrapper',
-						isLoadingMediaInfo && 'p-object-detail--loading',
+						isLoadingMediaInfo && 'p-object-detail--hidden ',
+						isError && 'p-object-detail--hidden ',
 						expandMetadata && 'p-object-detail__wrapper--expanded',
 						activeTab === ObjectDetailTabs.Metadata &&
 							'p-object-detail__wrapper--metadata',
@@ -209,20 +305,26 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					<div className="p-object-detail__video">
 						{mediaType ? (
-							!isLoadingPlayableUrl && !isErrorPlayableUrl && playableUrl ? (
-								<FlowPlayer
-									className="p-object-detail__flowplayer"
-									src={playableUrl}
-									poster="https://via.placeholder.com/1920x1080"
-									title="Elephants dream"
-									pause={pauseMedia}
-									onPlay={() => setPauseMedia(false)}
-									token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
-									dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
-								/>
-							) : (
-								<ObjectPlaceholder {...ticketErrorPlaceholder()} />
-							)
+							<>
+								{playableUrl && currentRepresentation ? (
+									// Flowplayer/image/not playable
+									renderMedia(playableUrl, currentRepresentation)
+								) : (
+									// Loading/error
+									<div>{renderMediaPlaceholder()}</div>
+								)}
+								{showFragmentSlider && (
+									<FragmentSlider
+										className="p-object-detail__slider"
+										fragments={mediaInfo?.representations ?? []}
+										onChangeFragment={(index) =>
+											setCurrentRepresentaton(
+												mediaInfo?.representations[index]
+											)
+										}
+									/>
+								)}
+							</>
 						) : (
 							<>
 								<ObjectPlaceholder {...objectPlaceholder()} />
@@ -239,7 +341,6 @@ const ObjectDetailPage: NextPage = () => {
 					>
 						<div>
 							<div className="u-px-32">
-								{/* TODO: bind content to state */}
 								<h3 className="u-pt-32 u-pb-24">{mediaInfo?.name}</h3>
 								<p className="u-pb-24">{mediaInfo?.description}</p>
 								<div className="u-pb-24 p-object-detail__actions">
@@ -320,4 +421,4 @@ const ObjectDetailPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default ObjectDetailPage;
+export default withAuth(ObjectDetailPage);
