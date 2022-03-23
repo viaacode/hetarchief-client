@@ -26,7 +26,7 @@ const NavigationOverview: FC = () => {
 
 	return (
 		<div>
-			<h2 className="u-mb-40">Navigation overview</h2>
+			<h2 className="u-mb-40">Navigatie</h2>
 			<Table
 				sortingIcons={sortingIcons}
 				options={
