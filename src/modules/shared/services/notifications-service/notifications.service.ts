@@ -8,7 +8,7 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import { ApiResponseWrapper } from '@shared/types';
-import { parseDatabaseDate } from '@shared/utils';
+import { asDate } from '@shared/utils';
 
 import { MarkAllAsReadResult, Notification, NotificationStatus } from './notifications.types';
 
@@ -51,20 +51,21 @@ export abstract class NotificationsService {
 	}
 
 	public static async checkNotifications(): Promise<void> {
-		const mostRecent = NotificationsService.lastFetchedUnreadNotifications?.[0];
-		const lastCheckNotificationTime = mostRecent?.createdAt
-			? parseDatabaseDate(mostRecent?.createdAt).getTime()
-			: 0;
+		const mostRecent = asDate(
+			NotificationsService.lastFetchedUnreadNotifications?.[0].createdAt
+		);
+		const lastCheckNotificationTime = mostRecent ? mostRecent.getTime() : 0;
 		const notificationResponse = await NotificationsService.getNotifications(1, 20);
 		const notifications = notificationResponse.items;
 		const unreadNotifications = notifications.filter(
 			(notification) => notification.status === NotificationStatus.UNREAD
 		);
+		const firstUnread = asDate(unreadNotifications[0]?.createdAt);
 
 		if (
 			unreadNotifications.length > 0 &&
-			lastCheckNotificationTime <
-				parseDatabaseDate(unreadNotifications[0].createdAt).getTime()
+			firstUnread &&
+			lastCheckNotificationTime < firstUnread.getTime()
 		) {
 			// A more recent notification exists, we should notify the user of the new notifications
 			const newNotifications = unreadNotifications.filter(

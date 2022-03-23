@@ -26,7 +26,7 @@ import {
 } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
-import { MediaActions, MediaRepresentation, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
@@ -35,7 +35,8 @@ import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { createPageTitle, formatAccessDate, parseDatabaseDate } from '@shared/utils';
+import { MediaTypes } from '@shared/types';
+import { asDate, createPageTitle, formatAccessDate } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -134,9 +135,7 @@ const ObjectDetailPage: NextPage = () => {
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
 	const accessEndDate =
-		visitStatus && visitStatus.endAt
-			? formatAccessDate(parseDatabaseDate(visitStatus.endAt))
-			: '';
+		visitStatus && visitStatus.endAt ? formatAccessDate(asDate(visitStatus.endAt)) : '';
 
 	/**
 	 * Effects

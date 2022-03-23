@@ -110,6 +110,7 @@
 		"jest": "27.5.1",
 		"jest-junit": "13.0.0",
 		"lint-staged": "12.1.2",
+		"lodash": "4.17.21",
 		"postcss-flexbugs-fixes": "5.0.2",
 		"postcss-normalize": "10.0.1",
 		"postcss-preset-env": "7.0.1",

@@ -1,6 +1,5 @@
-import { ReadingRoomMediaType } from '@reading-room/types';
-
-import { Icon } from '../../Icon';
+import { Icon } from '@shared/components/Icon';
+import { ReadingRoomMediaType } from '@shared/types';
 
 export const mockTabs = [
 	{

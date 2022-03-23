@@ -3,9 +3,10 @@ import { i18n } from 'next-i18next';
 
 import { MetadataItem, ObjectPlaceholderProps } from '@media/components';
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
-import { Media, MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapKeywordsToTagList, mapObjectToMetadata } from '@media/utils';
 import { Icon } from '@shared/components';
+import { MediaTypes } from '@shared/types';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 

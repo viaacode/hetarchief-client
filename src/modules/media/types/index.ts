@@ -1,4 +1,6 @@
-export type MediaTypes = 'video' | 'audio' | null;
+import { MediaTypes } from '@shared/types';
+
+// Output
 
 export interface MediaInfo {
 	schema_in_language: unknown | null;
@@ -30,10 +32,10 @@ export interface MediaInfo {
 	type?: string;
 }
 
-// Mapped intelectual entity object
+// Mapped intellectual entity object
 export interface Media {
 	id: string;
-	premisIdentifier: any;
+	premisIdentifier: Record<string, string[]>;
 	premisRelationship: string;
 	isPartOf: any;
 	partOfArchive: string[];
@@ -52,10 +54,10 @@ export interface Media {
 	name: string;
 	description: string;
 	abstract: string;
-	creator: any;
-	actor: any;
-	contributor: any;
-	publisher: any;
+	creator: Record<string, string[]>;
+	actor: Record<string, string[]>;
+	contributor: Record<string, string[]>;
+	publisher: Record<string, string[]>;
 	spatial: string[];
 	temporal: string[];
 	keywords: string[];
@@ -66,7 +68,7 @@ export interface Media {
 	embedUrl: string;
 	alternateName: string;
 	duration: string;
-	license: any;
+	license: string[];
 	meemooFragmentId: string;
 	meemooMediaObjectId: string;
 	dateCreated: string;
@@ -100,23 +102,25 @@ export interface MediaRepresentation {
 	files: File[];
 }
 
-export class MediaSearchFilters {
-	query?: string;
-	format?: MediaTypes;
-}
-
-export interface MediaSearchAggregationPair {
-	key: MediaTypes;
+export interface MediaSearchAggregationPair<T> {
+	key: T;
 	doc_count: number;
 }
 
-export interface MediaSearchAggregations {
-	dcterms_format: {
-		buckets: MediaSearchAggregationPair[];
-		doc_count_error_upper_bound: number;
-		sum_other_doc_count: number;
-	};
+export interface MediaSearchAggregation<T> {
+	buckets: MediaSearchAggregationPair<T>[];
+	doc_count_error_upper_bound: number;
+	sum_other_doc_count: number;
 }
+
+export interface MediaSearchAggregations {
+	dcterms_format: MediaSearchAggregation<string>;
+	schema_genre: MediaSearchAggregation<string>;
+	schema_creator: MediaSearchAggregation<string>;
+	schema_in_language: MediaSearchAggregation<string>;
+}
+
+// UI
 
 export enum ObjectDetailTabs {
 	Media = 'media',
