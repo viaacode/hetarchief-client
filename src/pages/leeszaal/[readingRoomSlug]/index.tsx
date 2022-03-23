@@ -118,12 +118,30 @@ const ReadingRoomPage: NextPage = () => {
 				operator: MediaSearchOperator.IS,
 				value: query.format || READING_ROOM_QUERY_PARAM_INIT.format,
 			},
+			// Medium TODO
+			// {
+			// 	field: MediaSearchFilterField.MEDIUM,
+			// 	operator: MediaSearchOperator.IS,
+			// 	multiValue: (query.medium || []).filter((item) => item !== null) as string[],
+			// },
 			// Creator
 			{
 				field: MediaSearchFilterField.CREATOR,
 				operator: MediaSearchOperator.IS,
 				multiValue: (query.creator || []).filter((item) => item !== null) as string[],
 			},
+			// Genre
+			{
+				field: MediaSearchFilterField.GENRE,
+				operator: MediaSearchOperator.IS,
+				multiValue: (query.genre || []).filter((item) => item !== null) as string[],
+			},
+			// Language TODO
+			// {
+			// 	field: MediaSearchFilterField.LANGUAGE,
+			// 	operator: MediaSearchOperator.IS,
+			// 	multiValue: (query.language || []).filter((item) => item !== null) as string[],
+			// },
 			// Advanced
 			...(query.advanced || []).flatMap((item) => {
 				const values = (item.val || '').split(SEPARATOR);
