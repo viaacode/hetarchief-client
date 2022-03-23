@@ -1,35 +1,38 @@
-import { Button, ColorPicker, FormControl, RichEditorState } from '@meemoo/react-components';
+import { Button, ColorPicker, FormControl } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { CardImage, Icon } from '@shared/components';
 
+import styles from './ReadingRoomSettingsForm.module.scss';
 import {
 	ReadingRoomFormState,
 	ReadingRoomSettingsFormProps,
 } from './ReadingRoomSettingsForm.types';
 
-const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit }) => {
+const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit, renderCancelSaveButtons }) => {
 	const { t } = useTranslation();
 
-	const { control, handleSubmit, setValue, watch } = useForm<ReadingRoomFormState>();
-	const color = watch('color');
+	const { control, handleSubmit, setValue, watch } = useForm<ReadingRoomFormState>({
+		defaultValues: {
+			color: '#00857d',
+		},
+	});
+	const currentState = watch();
 
-	const [savedState, setSavedState] = useState<ReadingRoomFormState>();
+	const [savedState, setSavedState] = useState<ReadingRoomFormState>({
+		color: '#00857d',
+	});
 
-	const onFormSubmit = (state: ReadingRoomFormState) => {
-		// onSubmit?.(state);
-		setSavedState(state);
+	const isStateUpdated = (): boolean => {
+		return currentState.color !== savedState.color || currentState.image !== savedState.image;
 	};
 
-	// dupe?
-	const renderCancelSaveButtons = (onCancel: () => void, onSave: () => void) => (
-		<div className="p-cp-settings__cancel-save">
-			<Button label={t('Annuleer')} variants="text" onClick={onCancel} />
-			<Button label={t('Bewaar wijzigingen')} variants="black" onClick={onSave} />
-		</div>
-	);
+	const onFormSubmit = (state: ReadingRoomFormState) => {
+		onSubmit?.(state);
+		setSavedState(state);
+	};
 
 	const minWidth = 400;
 	const minHeight = 320;
@@ -37,8 +40,8 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit }) => {
 	return (
 		<>
 			<CardImage
-				className="p-cp-settings__leeszaal-image"
-				color={color}
+				className={styles['c-reading-room-settings-form__image']}
+				color={currentState.color}
 				logo="/images/logo-shd--small.svg"
 				id="placeholder id"
 				name={'placeholder name' || ''}
@@ -51,10 +54,12 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit }) => {
 					control={control}
 					render={() => {
 						return (
-							<div className="p-cp-settings__leeszaal-color-picker">
-								<p className="p-cp-settings__subtitle">{t('Achtergrondkleur')}</p>
+							<div className={styles['c-reading-room-settings-form__color-picker']}>
+								<p className={styles['c-reading-room-settings-form__label']}>
+									{t('Achtergrondkleur')}
+								</p>
 								<ColorPicker
-									color={color ?? ''}
+									color={currentState.color}
 									onChange={(color) => {
 										if (!savedState) {
 											setSavedState({
@@ -68,32 +73,50 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit }) => {
 						);
 					}}
 				/>
-				<div className="p-cp-settings__leeszaal-image-controls">
-					<p className="p-cp-settings__subtitle">
-						{t('Achtergrond afbeelding')}
-						<span className="p-cp-settings__hint">
-							(
-							{t('Minimum {{minWidth}}px x {{minHeight}}px, max 500kb.', {
-								minWidth,
-								minHeight,
-							})}
-							)
-						</span>
-					</p>
-					<div className="p-cp-settings__leeszaal-image-buttons">
-						<Button label={t('Upload nieuwe afbeelding')} variants="outline" />
-						<Button
-							label={t('Verwijderen')}
-							iconStart={<Icon name="trash" />}
-							variants="text"
-						/>
-					</div>
-				</div>
-				{renderCancelSaveButtons(
+			</FormControl>
+			<FormControl>
+				<Controller
+					name="image"
+					control={control}
+					render={() => {
+						return (
+							<>
+								<p className={styles['c-reading-room-settings-form__label']}>
+									{t('Achtergrond afbeelding')}
+									<span className={styles['c-reading-room-settings-form__hint']}>
+										(
+										{t('Minimum {{minWidth}}px x {{minHeight}}px, max 500kb.', {
+											minWidth,
+											minHeight,
+										})}
+										)
+									</span>
+								</p>
+								<div
+									className={
+										styles['c-reading-room-settings-form__image-buttons']
+									}
+								>
+									<Button
+										label={t('Upload nieuwe afbeelding')}
+										variants="outline"
+									/>
+									<Button
+										label={t('Verwijderen')}
+										iconStart={<Icon name="trash" />}
+										variants="text"
+									/>
+								</div>
+							</>
+						);
+					}}
+				/>
+			</FormControl>
+			{isStateUpdated() &&
+				renderCancelSaveButtons(
 					() => setValue('color', savedState?.color),
 					handleSubmit(onFormSubmit)
 				)}
-			</FormControl>
 		</>
 	);
 };

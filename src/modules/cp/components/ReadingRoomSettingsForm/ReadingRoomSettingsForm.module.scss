@@ -1,0 +1,44 @@
+@use "styles/abstracts" as *;
+
+.c-reading-room-settings-form {
+	&__label {
+		font-weight: 700;
+		padding-bottom: $spacer-sm;
+	}
+
+	&__hint {
+		padding-left: $spacer-sm;
+		font-size: $font-size-sm;
+		font-weight: 400;
+		color: $neutral;
+	}
+
+	&__controls {
+		display: grid;
+		gap: $spacer-lg;
+	}
+
+	&__color-picker {
+		align-self: end;
+
+		:global(.c-color-picker) {
+			max-width: 20.4rem;
+		}
+	}
+
+	&__image-buttons {
+		display: flex;
+		flex-wrap: wrap;
+		gap: $spacer-sm;
+	}
+
+	@include respond-at("lg") {
+		&__controls {
+			grid-template-columns: 2fr 3fr;
+		}
+
+		&__image {
+			grid-row: 1 / 3;
+		}
+	}
+}

@@ -1,14 +1,11 @@
-import { Button, FormControl, RichEditorState, RichTextEditor } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
+import { FormControl, RichEditorState, RichTextEditor } from '@meemoo/react-components';
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { RichTextFormProps, RichTextFormState } from './RichTextForm.types';
 import { isEqualHtml } from './RichTextForm.utils';
 
-const RichTextForm: FC<RichTextFormProps> = ({ onSubmit }) => {
-	const { t } = useTranslation();
-
+const RichTextForm: FC<RichTextFormProps> = ({ onSubmit, renderCancelSaveButtons }) => {
 	const { control, handleSubmit, setValue, watch } = useForm<RichTextFormState>();
 	const [savedState, setSavedState] = useState<RichEditorState>();
 
@@ -16,13 +13,6 @@ const RichTextForm: FC<RichTextFormProps> = ({ onSubmit }) => {
 		onSubmit?.(state.toHTML());
 		setSavedState(state);
 	};
-
-	const renderCancelSaveButtons = (onCancel: () => void, onSave: () => void) => (
-		<div className="p-cp-settings__cancel-save">
-			<Button label={t('Annuleer')} variants="text" onClick={onCancel} />
-			<Button label={t('Bewaar wijzigingen')} variants="black" onClick={onSave} />
-		</div>
-	);
 
 	return (
 		<FormControl>

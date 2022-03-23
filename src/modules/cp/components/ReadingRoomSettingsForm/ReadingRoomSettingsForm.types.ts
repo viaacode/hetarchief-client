@@ -1,7 +1,9 @@
 export interface ReadingRoomSettingsFormProps {
-	onSubmit?: (html: string) => void;
+	renderCancelSaveButtons: (onCancel: () => void, onSave: () => void) => void;
+	onSubmit?: (values: ReadingRoomFormState) => void;
 }
 
 export interface ReadingRoomFormState {
-	color?: string;
+	color: string;
+	image?: unknown;
 }

@@ -18,18 +18,6 @@
 		padding-bottom: $spacer-sm;
 	}
 
-	&__subtitle {
-		font-weight: 700;
-		padding-bottom: $spacer-sm;
-	}
-
-	&__hint {
-		padding-left: $spacer-sm;
-		font-size: $font-size-sm;
-		font-weight: 400;
-		color: $neutral;
-	}
-
 	&__description {
 		padding-bottom: $spacer-lg;
 		color: $neutral;
@@ -38,6 +26,7 @@
 	}
 
 	&__cancel-save {
+		grid-column: 1 / 3;
 		padding-top: 2rem;
 		text-align: right;
 	}

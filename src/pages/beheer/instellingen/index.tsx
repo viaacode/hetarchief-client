@@ -1,15 +1,12 @@
-import { Box, Button, ColorPicker, RichEditorState } from '@meemoo/react-components';
+import { Box, Button } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useState } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettingsForm, RichTextForm } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { CardImage, Icon } from '@shared/components';
-import { RichTextEditor } from '@shared/components/RichTextEditor';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
@@ -17,10 +14,6 @@ const CPSettingsPage: NextPage = () => {
 	 * Hooks
 	 */
 	const { t } = useTranslation();
-
-	// Leeszaal
-	const [savedColor, setSavedColor] = useState<string>('#00857d'); // Save unedited state
-	const [newColor, setNewColor] = useState<string>('#00857d');
 
 	/**
 	 * Render
@@ -64,7 +57,9 @@ const CPSettingsPage: NextPage = () => {
 								)}
 							</p>
 							<div className="p-cp-settings__leeszaal-controls">
-								<ReadingRoomSettingsForm />
+								<ReadingRoomSettingsForm
+									renderCancelSaveButtons={renderCancelSaveButtons}
+								/>
 							</div>
 						</Box>
 					</article>
@@ -78,7 +73,10 @@ const CPSettingsPage: NextPage = () => {
 									'Dit is de wachtzaalomschrijving die bezoekers kunnen lezen op de detailpagina van je leeszaal. Leg uit waar je leeszaal om gaat, welke info men er kan vinden, vertel de bezoeker over je collectie.'
 								)}
 							</p>
-							<RichTextForm onSubmit={(html) => console.log(html)} />
+							<RichTextForm
+								onSubmit={(html) => console.log(html)}
+								renderCancelSaveButtons={renderCancelSaveButtons}
+							/>
 						</Box>
 					</article>
 
@@ -93,7 +91,10 @@ const CPSettingsPage: NextPage = () => {
 									'Als bezoekers een aanvraag doen, kunnen zij een klein tekstje lezen met extra info over het bezoek. Bv: “Vraag meer info aan balie 2 bij aankomst.” of “Elke dag geopend van 10:00 tot 17:00.”'
 								)}
 							</p>
-							<RichTextForm onSubmit={(html) => console.log(html)} />
+							<RichTextForm
+								onSubmit={(html) => console.log(html)}
+								renderCancelSaveButtons={renderCancelSaveButtons}
+							/>
 						</Box>
 					</article>
 				</div>
