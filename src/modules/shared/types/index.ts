@@ -38,13 +38,13 @@ export interface SortObject {
 
 // 2-letter for url parsing
 export enum Operator {
-	Contains = 'aa',
-	ContainsNot = 'ab',
-	Equals = 'ac',
-	EqualsNot = 'ad',
-	LessThanOrEqual = 'ae', // shorter (duration) or until (date)
-	GreaterThanOrEqual = 'af', // longer (duration) or after (date)
-	Between = 'ag', // duration & date
+	Contains = 'co',
+	ContainsNot = 'nc',
+	Equals = 'eq',
+	EqualsNot = 'ne',
+	LessThanOrEqual = 'lt', // shorter (duration) or until (date)
+	GreaterThanOrEqual = 'gt', // longer (duration) or after (date)
+	Between = 'bt', // duration & date
 }
 
 /**

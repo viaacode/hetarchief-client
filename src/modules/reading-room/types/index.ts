@@ -8,22 +8,21 @@ import { MetadataProp } from './metadata';
 export * from './metadata';
 
 export enum ReadingRoomSort {
-	Date = 'schema_date_created',
-	Relevance = '_score',
-	Title = 'schema_name',
+	Date = 'created',
+	Relevance = 'relevance',
+	Title = 'name',
 }
 
 export enum ReadingRoomFilterId {
-	Format = 'format',
-	Duration = 'duration',
+	Advanced = 'advanced',
 	Created = 'created',
-	Published = 'published',
 	Creator = 'creator',
+	Duration = 'duration',
 	Genre = 'genre',
 	Keywords = 'keywords',
 	Language = 'language',
-	ImageSound = 'image-sound',
-	Advanced = 'advanced',
+	Medium = 'medium',
+	Published = 'published',
 }
 
 export interface DefaultFilterFormChildrenParams<Values = unknown> {

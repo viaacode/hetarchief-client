@@ -44,7 +44,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	// Computed
 
 	const operators = getOperators(state.prop as MetadataProp);
-	const operator = state.op || (operators.length > 0 && operators[0].value) || null;
+	const operator = state.op || operators?.[0]?.value || null;
 
 	// Events
 
@@ -140,12 +140,11 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				);
 
 			default:
-				break;
+				console.warn(
+					`[WARN][AdvancedFilterFields] No render definition found for ${state.prop}`
+				);
+				return null;
 		}
-
-		console.warn(`[WARN][AdvancedFilterFields] No render definition found for ${state.prop}`);
-
-		return null;
 	};
 
 	return (

@@ -18,12 +18,14 @@ export function useGetMediaObjects(
 	return useQuery(
 		[QUERY_KEYS.getMediaObjects, { filters, page, size, sort }],
 		() => {
-			// TODO: improve (?)
-			// Run two queries:
-			//     - One to fetch the results for a specific tab (format)
-			//     - and one to fetch the aggregates across formats
+			// TODO: improve ⚠️
+			// Run three queries:
+			//     - One to fetch the results for a specific tab (results),
+			//     - one to fetch the aggregates without any criteria to populate filters (noFilters)
+			//     - and one to fetch the aggregates across tabs (noFormat)
 			return Promise.all([
 				MediaService.getAll(filters, page, size, sort),
+				MediaService.getAll([], page, size, sort),
 				MediaService.getAll(
 					filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
 					page,
@@ -31,10 +33,13 @@ export function useGetMediaObjects(
 					sort
 				),
 			]).then((responses) => {
-				const [results, noFormat] = responses;
+				const [results, noFilters, noFormat] = responses;
 				const output = {
 					...results,
-					aggregations: noFormat.aggregations,
+					aggregations: {
+						...noFilters.aggregations,
+						dcterms_format: noFormat.aggregations.dcterms_format,
+					},
 				};
 
 				dispatch(setResults(output));

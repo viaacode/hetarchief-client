@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectMediaResults } from '@shared/store/media';
 
 const GenreSelect: FC<ReactSelectProps> = (props) => {
-	const aggregates = useSelector(selectMediaResults)?.aggregations.schema_genre?.buckets;
+	const aggregates = useSelector(selectMediaResults)?.aggregations.schema_genre.buckets;
 
 	const options = (aggregates || []).map((bucket) => ({
 		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results

@@ -68,7 +68,7 @@ export interface Media {
 	embedUrl: string;
 	alternateName: string;
 	duration: string;
-	license: unknown;
+	license: string[];
 	meemooFragmentId: string;
 	meemooMediaObjectId: string;
 	dateCreated: string;
@@ -114,8 +114,10 @@ export interface MediaSearchAggregation<T> {
 }
 
 export interface MediaSearchAggregations {
-	dcterms_format: MediaSearchAggregation<MediaTypes>;
-	schema_genre?: MediaSearchAggregation<string>;
+	dcterms_format: MediaSearchAggregation<string>;
+	schema_genre: MediaSearchAggregation<string>;
+	schema_creator: MediaSearchAggregation<string>;
+	schema_in_language: MediaSearchAggregation<string>;
 }
 
 // UI
