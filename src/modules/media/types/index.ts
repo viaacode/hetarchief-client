@@ -68,7 +68,7 @@ export interface Media {
 	embedUrl: string;
 	alternateName: string;
 	duration: string;
-	license: unknown;
+	license: string[];
 	meemooFragmentId: string;
 	meemooMediaObjectId: string;
 	dateCreated: string;

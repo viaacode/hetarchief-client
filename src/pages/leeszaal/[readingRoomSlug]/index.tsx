@@ -277,7 +277,7 @@ const ReadingRoomPage: NextPage = () => {
 				break;
 
 			default:
-				console.warn(`No submit handler for ${id}`);
+				console.warn(`[WARN][ReadingRoomPage] No submit handler for ${id}`);
 				break;
 		}
 	};
