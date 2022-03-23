@@ -166,7 +166,9 @@ const CPSettingsPage: NextPage = () => {
 									}
 									setNewWachtzaalState(state);
 								}}
-								initialHtml={'<p><strong>test</strong></p>'}
+								initialHtml={
+									'<p><strong>Leeszaal 8</strong></p><p></p><h4><strong>Praktische informatie</strong></h4><p></p><p>In deze leeszaal vind je alles ...</p>'
+								}
 								state={newWachtzaalState}
 							/>
 							{!isEqualHtml(newWachtzaalState, savedWachtzaalState) &&
@@ -195,7 +197,9 @@ const CPSettingsPage: NextPage = () => {
 									}
 									setNewAanvraagState(state);
 								}}
-								initialHtml={'<b>test</b>'}
+								initialHtml={
+									'<p>Elke dag geopend van 10:00 tot 17:00. Vraag meer info aan balie 2 bij aankomst.</p>'
+								}
 								state={newAanvraagState}
 							/>
 							{!isEqualHtml(newAanvraagState, savedAanvraagState) &&
