@@ -8,6 +8,7 @@ import { setResults } from '@shared/store/media';
 import { GetMedia, MediaSearchFilterField, MediaSearchFilters, SortObject } from '@shared/types';
 
 export function useGetMediaObjects(
+	readingRoomSlug: string,
 	filters: MediaSearchFilters,
 	page: number,
 	size: number,
@@ -24,9 +25,10 @@ export function useGetMediaObjects(
 			//     - one to fetch the aggregates without any criteria to populate filters (noFilters)
 			//     - and one to fetch the aggregates across tabs (noFormat)
 			return Promise.all([
-				MediaService.getAll(filters, page, size, sort),
-				MediaService.getAll([], page, size, sort),
-				MediaService.getAll(
+				MediaService.getBySpace(readingRoomSlug, filters, page, size, sort),
+				MediaService.getBySpace(readingRoomSlug, [], page, size, sort),
+				MediaService.getBySpace(
+					readingRoomSlug,
 					filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
 					page,
 					size,
