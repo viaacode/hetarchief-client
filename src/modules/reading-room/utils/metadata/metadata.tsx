@@ -70,7 +70,7 @@ export const getLabel = (prop: MetadataProp): string => {
 				'modules/reading-room/utils/metadata/metadata___analoge-drager'
 			),
 			[MetadataProp.PublishedAt]: i18n?.t(
-				'modules/reading-room/utils/metadata/metadata___uitzenddatum'
+				'modules/reading-room/utils/metadata/metadata___publicatiedatum'
 			),
 			[MetadataProp.Publisher]: i18n?.t(
 				'modules/reading-room/utils/metadata/metadata___publisher'

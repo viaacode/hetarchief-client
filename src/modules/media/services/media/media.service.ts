@@ -1,4 +1,3 @@
-import { isArray } from 'lodash';
 import { stringifyUrl } from 'query-string';
 
 import { ReadingRoomSort } from '@reading-room/types';
@@ -31,19 +30,13 @@ export class MediaService {
 			// Don't send filters with an empty array/string
 			const hasLength = eitherValue && eitherValue.length > 0;
 
-			// Don't send range filters which have the string value "undefined"
-			const isUndefined =
-				(item.operator === MediaSearchOperator.GTE ||
-					item.operator === MediaSearchOperator.LTE) &&
-				eitherValue === 'undefined';
-
 			// Don't send the "All" filter for FORMAT.IS
 			const isFormatAllFilter =
 				item.field === MediaSearchFilterField.FORMAT &&
 				item.operator === MediaSearchOperator.IS &&
 				item.value === ReadingRoomMediaType.All;
 
-			return hasValue && hasLength && !isUndefined && !isFormatAllFilter;
+			return hasValue && hasLength && !isFormatAllFilter;
 		});
 
 		const parsed = (await ApiService.getApi()

@@ -225,12 +225,17 @@ const ObjectDetailPage: NextPage = () => {
 		// No renderer
 		return (
 			<ObjectPlaceholder
-				description={t('Dit formaat wordt niet ondersteund. ({{format}})', {
-					format: representation.dctermsFormat,
-				})}
-				reasonTitle={t('Waarom kan ik dit object niet bekijken?')}
+				description={t(
+					'pages/leeszaal/reading-room-slug/object-id/index___dit-formaat-wordt-niet-ondersteund-format',
+					{
+						format: representation.dctermsFormat,
+					}
+				)}
+				reasonTitle={t(
+					'pages/leeszaal/reading-room-slug/object-id/index___waarom-kan-ik-dit-object-niet-bekijken'
+				)}
 				reasonDescription={t(
-					'Het formaat van de data wordt op dit moment niet ondersteund.'
+					'pages/leeszaal/reading-room-slug/object-id/index___het-formaat-van-de-data-wordt-op-dit-moment-niet-ondersteund'
 				)}
 				openModalButtonLabel={t(
 					'pages/leeszaal/reading-room-slug/object-id/index___meer-info'
