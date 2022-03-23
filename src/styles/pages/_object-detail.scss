@@ -161,9 +161,17 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
+	&__error {
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: $neutral;
+	}
+
 	// Modifiers
 
-	&--loading {
+	&--hidden {
 		display: none;
 	}
 

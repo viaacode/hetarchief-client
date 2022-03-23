@@ -37,7 +37,7 @@ export interface Media {
 	id: string;
 	premisIdentifier: Record<string, string[]>;
 	premisRelationship: string;
-	isPartOf: string;
+	isPartOf: any;
 	partOfArchive: string[];
 	partOfEpisode: string[];
 	partOfSeason: string[];
@@ -56,7 +56,7 @@ export interface Media {
 	abstract: string;
 	creator: Record<string, string[]>;
 	actor: Record<string, string[]>;
-	contributor: unknown;
+	contributor: Record<string, string[]>;
 	publisher: Record<string, string[]>;
 	spatial: string[];
 	temporal: string[];

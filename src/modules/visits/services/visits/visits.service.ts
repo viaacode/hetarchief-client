@@ -6,7 +6,7 @@ import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { PatchVisit, VisitTimeframe } from '@visits/types';
 
-import { VISITS_SERVICE_BASE_URL } from './visits.service.const';
+import { VISITS_SERVICE_ACTIVE_SPACE_URL, VISITS_SERVICE_BASE_URL } from './visits.service.const';
 
 export class VisitsService {
 	public static async getAll(
@@ -63,6 +63,15 @@ export class VisitsService {
 	public static async create(visitRequest: CreateVisitRequest): Promise<VisitInfo> {
 		return await ApiService.getApi()
 			.post(VISITS_SERVICE_BASE_URL, { body: JSON.stringify(visitRequest) })
+			.json();
+	}
+
+	public static async getActiveVisitForUserAndSpace(spaceId: string): Promise<VisitInfo | null> {
+		if (!spaceId) {
+			return null;
+		}
+		return await ApiService.getApi()
+			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${spaceId}`)
 			.json();
 	}
 }
