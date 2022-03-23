@@ -22,15 +22,16 @@ const CPSettingsPage: NextPage = () => {
 	 */
 
 	// Leeszaal
-	const [color, setColor] = useState<string>('#00857d');
+	const [savedColor, setSavedColor] = useState<string>('#00857d'); // Save unedited state
+	const [newColor, setNewColor] = useState<string>('#00857d');
 
 	// Wachtzaal
-	const [previousWachtzaalState, setPreviousWachtzaalState] = useState<RichEditorState>(); // Save unedited state
-	const [currentWachtzaalState, setCurrentWachtzaalState] = useState<RichEditorState>();
+	const [savedWachtzaalState, setSavedWachtzaalState] = useState<RichEditorState>(); // Save unedited state
+	const [newWachtzaalState, setNewWachtzaalState] = useState<RichEditorState>();
 
 	// Aanvraag
-	const [previousAanvraagState, setPreviousAanvraagState] = useState<RichEditorState>(); // Save unedited state
-	const [currentAanvraagState, setCurrentAanvraagState] = useState<RichEditorState>();
+	const [savedAanvraagState, setSavedAanvraagState] = useState<RichEditorState>(); // Save unedited state
+	const [newAanvraagState, setNewAanvraagState] = useState<RichEditorState>();
 
 	const minWidth = 400;
 	const minHeight = 320;
@@ -38,7 +39,7 @@ const CPSettingsPage: NextPage = () => {
 	/**
 	 * Helpers
 	 */
-	const isEqual = (a?: RichEditorState, b?: RichEditorState): boolean => {
+	const isEqualHtml = (a?: RichEditorState, b?: RichEditorState): boolean => {
 		if (!a || !b) {
 			return true;
 		}
@@ -90,7 +91,7 @@ const CPSettingsPage: NextPage = () => {
 							<div className="p-cp-settings__leeszaal-controls">
 								<CardImage
 									className="p-cp-settings__leeszaal-image"
-									color={color}
+									color={newColor}
 									logo="/images/logo-shd--small.svg"
 									id="placeholder id"
 									name={'placeholder name' || ''}
@@ -101,7 +102,17 @@ const CPSettingsPage: NextPage = () => {
 									<p className="p-cp-settings__subtitle">
 										{t('Achtergrondkleur')}
 									</p>
-									<ColorPicker color={color} onChange={setColor} />
+									<ColorPicker
+										color={newColor}
+										onChange={(color) => {
+											if (!savedColor) {
+												console.log(color);
+
+												setSavedColor(color);
+											}
+											setNewColor(color);
+										}}
+									/>
 								</div>
 								<div className="p-cp-settings__leeszaal-image-controls">
 									<p className="p-cp-settings__subtitle">
@@ -131,6 +142,11 @@ const CPSettingsPage: NextPage = () => {
 									</div>
 								</div>
 							</div>
+							{newColor !== savedColor &&
+								renderCancelSaveButtons(
+									() => setNewColor(savedColor),
+									() => setSavedColor(newColor)
+								)}
 						</Box>
 					</article>
 
@@ -145,18 +161,18 @@ const CPSettingsPage: NextPage = () => {
 							</p>
 							<RichTextEditor
 								onChange={(state) => {
-									if (!previousWachtzaalState) {
-										setPreviousWachtzaalState(state);
+									if (!savedWachtzaalState) {
+										setSavedWachtzaalState(state);
 									}
-									setCurrentWachtzaalState(state);
+									setNewWachtzaalState(state);
 								}}
 								initialHtml={'<p><strong>test</strong></p>'}
-								state={currentWachtzaalState}
+								state={newWachtzaalState}
 							/>
-							{!isEqual(currentWachtzaalState, previousWachtzaalState) &&
+							{!isEqualHtml(newWachtzaalState, savedWachtzaalState) &&
 								renderCancelSaveButtons(
-									() => setCurrentWachtzaalState(previousWachtzaalState),
-									() => console.log(currentWachtzaalState?.toHTML())
+									() => setNewWachtzaalState(savedWachtzaalState),
+									() => setSavedWachtzaalState(newWachtzaalState)
 								)}
 						</Box>
 					</article>
@@ -174,18 +190,18 @@ const CPSettingsPage: NextPage = () => {
 							</p>
 							<RichTextEditor
 								onChange={(state) => {
-									if (!previousAanvraagState) {
-										setPreviousAanvraagState(state);
+									if (!savedAanvraagState) {
+										setSavedAanvraagState(state);
 									}
-									setCurrentAanvraagState(state);
+									setNewAanvraagState(state);
 								}}
 								initialHtml={'<b>test</b>'}
-								state={currentAanvraagState}
+								state={newAanvraagState}
 							/>
-							{!isEqual(currentAanvraagState, previousAanvraagState) &&
+							{!isEqualHtml(newAanvraagState, savedAanvraagState) &&
 								renderCancelSaveButtons(
-									() => setCurrentAanvraagState(previousAanvraagState),
-									() => console.log(currentAanvraagState?.toHTML())
+									() => setNewAanvraagState(savedAanvraagState),
+									() => setSavedAanvraagState(newAanvraagState)
 								)}
 						</Box>
 					</article>
