@@ -15,8 +15,8 @@ export function useGetVisits({
 	size,
 	orderProp,
 	orderDirection,
-	userProfileId,
 	enabled = true,
+	personal = false,
 }: {
 	searchInput?: string | undefined;
 	status?: VisitStatus | undefined;
@@ -27,6 +27,7 @@ export function useGetVisits({
 	orderDirection?: OrderDirection;
 	userProfileId?: string;
 	enabled?: boolean;
+	personal?: boolean;
 }): UseQueryResult<ApiResponseWrapper<VisitInfo>> {
 	return useQuery(
 		[
@@ -42,7 +43,7 @@ export function useGetVisits({
 				size,
 				orderProp,
 				orderDirection,
-				userProfileId
+				personal
 			),
 		{ keepPreviousData: true, enabled }
 	);
