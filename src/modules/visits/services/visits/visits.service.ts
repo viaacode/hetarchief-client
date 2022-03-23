@@ -17,12 +17,12 @@ export class VisitsService {
 		size = 20,
 		orderProp: keyof VisitInfo = 'startAt',
 		orderDirection: OrderDirection = OrderDirection.desc,
-		userProfileId?: string
+		personal?: boolean
 	): Promise<ApiResponseWrapper<VisitInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: VISITS_SERVICE_BASE_URL,
+					url: personal ? `${VISITS_SERVICE_BASE_URL}/personal` : VISITS_SERVICE_BASE_URL,
 					query: {
 						query: `%${searchInput}%`,
 						status,
@@ -31,7 +31,6 @@ export class VisitsService {
 						size,
 						orderProp,
 						orderDirection,
-						userProfileId,
 					},
 				})
 			)

@@ -3,7 +3,6 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -15,7 +14,6 @@ import {
 	HistoryTableColumns,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
-import { selectUserProfileId } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
@@ -28,7 +26,6 @@ import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyHistory: NextPage = () => {
 	const { t } = useTranslation();
-	const userProfileId = useSelector(selectUserProfileId);
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 
 	const visits = useGetVisits({
@@ -39,8 +36,7 @@ const AccountMyHistory: NextPage = () => {
 		size: HistoryItemListSize,
 		orderProp: filters.orderProp as keyof VisitInfo,
 		orderDirection: filters.orderDirection as OrderDirection,
-		userProfileId: userProfileId !== null ? userProfileId : undefined,
-		enabled: userProfileId !== null,
+		personal: true,
 	});
 
 	const sortFilters = useMemo(() => {
