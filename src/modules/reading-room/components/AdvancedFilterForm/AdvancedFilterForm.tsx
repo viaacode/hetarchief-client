@@ -5,43 +5,37 @@ import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-import { ReadingRoomFilterId } from '@reading-room/types';
-import { mapQueryToFields } from '@reading-room/utils';
+import { AdvancedFilter, MetadataProp, ReadingRoomFilterId } from '@reading-room/types';
 import { Icon } from '@shared/components';
+import { Operator } from '@shared/types';
 
-import { AdvancedFilterFields, MetadataProp, Operator } from './AdvancedFilterFields';
+import { AdvancedFilterFields } from '../AdvancedFilterFields';
+
 import { ADVANCED_FILTER_FORM_SCHEMA } from './AdvancedFilterForm.const';
-import {
-	AdvancedFilterFieldsState,
-	AdvancedFilterFormProps,
-	AdvancedFilterFormState,
-} from './AdvancedFilterForm.types';
+import { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
-const initialFields = (): AdvancedFilterFieldsState => ({
-	metadataProp: MetadataProp.Everything,
-	operator: Operator.Contains,
-	value: '',
+const initialFields = (): AdvancedFilter => ({
+	prop: MetadataProp.Everything,
+	op: Operator.Contains,
+	val: '',
 });
 
 const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, values }) => {
+	const { t } = useTranslation();
 	const { control, getValues, reset } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
-			advanced: values?.advanced
-				? mapQueryToFields(ReadingRoomFilterId.Advanced, values.advanced)
-				: [initialFields()],
+			advanced: values?.advanced ? values.advanced : [initialFields()],
 		},
 		resolver: yupResolver(ADVANCED_FILTER_FORM_SCHEMA()),
 	});
 	const { append, fields, remove, update } = useFieldArray({
-		name: 'advanced',
+		name: ReadingRoomFilterId.Advanced,
 		control,
 	});
 
-	const { t } = useTranslation();
-
 	return (
 		<>
-			<div className={clsx(className, 'c-advanced-filter-form')}>
+			<div className={clsx(className, 'u-overflow-auto')}>
 				<p className="u-px-20 u-px-32:md u-mt-40 u-mb-32">
 					{t(
 						'modules/reading-room/components/forms/advanced-filter-form/advanced-filter-form___stel-je-eigen-geavanceerde-filter-samen-aan-de-hand-van-deze-metadata-velden-en-waarden'

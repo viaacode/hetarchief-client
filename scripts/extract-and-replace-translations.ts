@@ -29,7 +29,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import glob from 'glob';
-import { intersection, kebabCase, keys, without } from 'lodash-es';
+import { intersection, kebabCase, keys, without } from 'lodash';
 // import fetch from 'node-fetch';
 import sortObject from 'sort-object-keys';
 

@@ -1,5 +1,6 @@
 import { stringifyUrl } from 'query-string';
 
+import { AccessType } from '@reading-room/services/reading-room/reading-room.service.types';
 import { ReadingRoomInfo } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import { ApiResponseWrapper } from '@shared/types/api';
@@ -17,7 +18,7 @@ export class ReadingRoomService {
 				stringifyUrl({
 					url: READING_ROOM_SERVICE_BASE_URL,
 					query: {
-						query: `%${searchInput}%`,
+						query: searchInput ? `%${searchInput}%` : undefined,
 						page,
 						size,
 					},
@@ -25,6 +26,22 @@ export class ReadingRoomService {
 			)
 			.json();
 		return parsed as ApiResponseWrapper<ReadingRoomInfo>;
+	}
+
+	public static async getAllAccessible(page = 0, size = 20): Promise<ReadingRoomInfo[]> {
+		const parsed = (await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: READING_ROOM_SERVICE_BASE_URL,
+					query: {
+						accessType: AccessType.ACTIVE,
+						page,
+						size,
+					},
+				})
+			)
+			.json()) as ApiResponseWrapper<ReadingRoomInfo>;
+		return parsed.items;
 	}
 
 	public static async getById(roomId: string): Promise<unknown> {

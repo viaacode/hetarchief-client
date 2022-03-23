@@ -5,18 +5,21 @@ import { getLocaleFromi18nLanguage } from './i18n';
 
 // Shared
 
-export const parseDatabaseDate = (databaseDate: Date | string): Date => {
-	let dateObj: Date;
-	if (typeof databaseDate === 'string') {
-		if (databaseDate.toLowerCase().includes('t') && !databaseDate.toLowerCase().endsWith('z')) {
-			dateObj = new Date(databaseDate + 'Z');
-		} else {
-			dateObj = new Date(databaseDate);
-		}
-	} else {
-		dateObj = databaseDate as Date;
+export const asDate = (input: Date | string | undefined | null): Date | undefined => {
+	const isEmpty = !input;
+	const isNumber = !isNaN(Number(input));
+	const isInvalidString =
+		typeof input === 'string' && (input.length <= 0 || input === 'undefined');
+
+	if (isEmpty || isInvalidString) {
+		return undefined;
 	}
-	return dateObj;
+
+	const lowercased = typeof input === 'string' && input.toLowerCase();
+	const timezoned =
+		lowercased && lowercased.includes('t') && !lowercased.endsWith('z') ? `${input}Z` : input;
+
+	return new Date(isNumber ? Number(timezoned) : timezoned);
 };
 
 export const formatWithLocale = (formatString: string, date?: Date): string => {
@@ -33,8 +36,8 @@ export const formatAccessDate = (date?: Date): string => {
 // - account/mijn-historiek
 
 export const formatAccessDates = (from?: Date | string, to?: Date | string): string => {
-	const f = from ? parseDatabaseDate(from) : undefined;
-	const t = to ? parseDatabaseDate(to) : undefined;
+	const f = from ? asDate(from) : undefined;
+	const t = to ? asDate(to) : undefined;
 
 	if (f && !t) return formatAccessDate(f);
 	if (!f && t) return formatAccessDate(t);

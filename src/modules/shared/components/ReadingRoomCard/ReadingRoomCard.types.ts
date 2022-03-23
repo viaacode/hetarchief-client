@@ -1,13 +1,6 @@
-import { ReadingRoomCardType } from './ReadingRoomCard.const';
+import { ReadingRoomInfo } from '@reading-room/types';
 
-export interface ReadingRoom {
-	color?: string;
-	description?: string;
-	id: string | number;
-	image?: string;
-	logo?: string;
-	name?: string;
-}
+import { ReadingRoomCardType } from './ReadingRoomCard.const';
 
 export interface ReadingRoomAccess {
 	granted?: boolean;
@@ -18,9 +11,9 @@ export interface ReadingRoomAccess {
 
 export interface ReadingRoomCardProps {
 	access?: ReadingRoomAccess;
-	onAccessRequest?: (room: ReadingRoom) => void;
-	onContactClick?: (room: ReadingRoom) => void;
-	onVisitClick?: (room: ReadingRoom) => void;
-	room: ReadingRoom;
+	onAccessRequest?: (room: Partial<ReadingRoomInfo>) => void;
+	onContactClick?: (room: Partial<ReadingRoomInfo>) => void;
+	onVisitClick?: (room: Partial<ReadingRoomInfo>) => void;
+	room: Partial<ReadingRoomInfo>;
 	type: ReadingRoomCardType;
 }

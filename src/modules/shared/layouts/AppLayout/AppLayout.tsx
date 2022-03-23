@@ -14,7 +14,8 @@ import {
 	footerLinks,
 	footerRightItem,
 } from '@navigation/components/Footer/__mocks__/footer';
-import { MOCK_ITEMS_LEFT } from '@navigation/components/Navigation/__mocks__/navigation';
+import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
+import { useGetAccessibleReadingRooms } from '@navigation/components/Navigation/hooks/get-accessible-reading-rooms';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NotificationCenter, ZendeskWrapper } from '@shared/components';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
@@ -48,6 +49,7 @@ const AppLayout: FC = ({ children }) => {
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
 	const showBorder = useSelector(selectShowNavigationBorder);
+	const { data: accessibleReadingRooms } = useGetAccessibleReadingRooms();
 
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
@@ -137,7 +139,7 @@ const AppLayout: FC = ({ children }) => {
 					hamburgerProps={
 						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
 					}
-					items={MOCK_ITEMS_LEFT}
+					items={getNavigationItemsLeft(accessibleReadingRooms || [])}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}

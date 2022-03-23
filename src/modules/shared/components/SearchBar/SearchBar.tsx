@@ -121,7 +121,6 @@ const SearchBar = <IsMulti extends boolean>({
 			isClearable={isClearable}
 			isMulti={isMulti}
 			menuIsOpen={showMenu}
-			onChange={onSearchChange}
 			onCreateOption={onCreate}
 			onInputChange={onSearchInputChange}
 			onKeyDown={onSearchKeyDown}
@@ -136,6 +135,8 @@ const SearchBar = <IsMulti extends boolean>({
 			valuePlaceholder={valuePlaceholder}
 			// @ts-ignore
 			onSearch={onSafeSearchSingle}
+			// @ts-ignore
+			onChange={onSearchChange}
 			/* eslint-enable @typescript-eslint/ban-ts-comment */
 		/>
 	);

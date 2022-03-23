@@ -113,9 +113,15 @@ $mr: (
 );
 @include generate-utils("mr", "margin-right", $mr);
 
+// Top / Bottom
+$my: (
+	"16": $spacer-sm,
+);
+@include generate-utils("my", ("margin-top", "margin-bottom"), $my);
+
 // Left / Right
 $mx: (
-	"4": $spacer-xxs,
+	"16": $spacer-xxs,
 	"-32": - $spacer-lg,
 );
 @include generate-utils("mx", ("margin-left", "margin-right"), $mx);
