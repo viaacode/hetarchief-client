@@ -23,12 +23,14 @@ const getSelectLabel = (
 
 type ReadingRoomQueryParams = Partial<DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>>;
 
-export const mapSearchToTags = (query: Pick<ReadingRoomQueryParams, 'search'>): TagIdentity[] => {
-	return (query.search || [])
+export const mapArrayParamToTags = (
+	values: (string | null)[],
+	label: string,
+	key: string
+): TagIdentity[] => {
+	return values
 		.filter((keyword) => !!keyword)
 		.map((keyword) => {
-			const label = i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord');
-
 			return {
 				label: (
 					<span>
@@ -37,7 +39,7 @@ export const mapSearchToTags = (query: Pick<ReadingRoomQueryParams, 'search'>): 
 					</span>
 				),
 				value: keyword as string,
-				key: SEARCH_QUERY_KEY,
+				key,
 			};
 		});
 };
@@ -99,8 +101,32 @@ export const mapAdvancedToTags = (
 };
 
 export const mapFiltersToTags = (query: Partial<ReadingRoomQueryParams>): TagIdentity[] => {
-	const searchFilters = mapSearchToTags(query);
-	const advancedFilters = mapAdvancedToTags(query);
-
-	return [...searchFilters, ...advancedFilters];
+	return [
+		...mapArrayParamToTags(
+			query.search || [],
+			i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord') || '',
+			SEARCH_QUERY_KEY
+		),
+		...mapArrayParamToTags(
+			query.medium || [],
+			i18n?.t('modules/reading-room/utils/map-filters/map-filters___analoge-drager') || '',
+			ReadingRoomFilterId.Medium
+		),
+		...mapArrayParamToTags(
+			query.creator || [],
+			i18n?.t('modules/reading-room/utils/map-filters/map-filters___maker') || '',
+			ReadingRoomFilterId.Creator
+		),
+		...mapArrayParamToTags(
+			query.genre || [],
+			i18n?.t('modules/reading-room/utils/map-filters/map-filters___genre') || '',
+			ReadingRoomFilterId.Genre
+		),
+		...mapArrayParamToTags(
+			query.language || [],
+			i18n?.t('modules/reading-room/utils/map-filters/map-filters___taal') || '',
+			ReadingRoomFilterId.Language
+		),
+		...mapAdvancedToTags(query),
+	];
 };

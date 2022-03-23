@@ -40,11 +40,11 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	// Filters
 	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
 	[SEARCH_QUERY_KEY]: ArrayParam,
-	[ReadingRoomFilterId.Advanced]: AdvancedFilterArrayParam,
 	[ReadingRoomFilterId.Medium]: ArrayParam,
 	[ReadingRoomFilterId.Creator]: ArrayParam,
-	[ReadingRoomFilterId.Language]: ArrayParam,
 	[ReadingRoomFilterId.Genre]: ArrayParam,
+	[ReadingRoomFilterId.Language]: ArrayParam,
+	[ReadingRoomFilterId.Advanced]: AdvancedFilterArrayParam,
 	// Pagination
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
 	// Sorting
