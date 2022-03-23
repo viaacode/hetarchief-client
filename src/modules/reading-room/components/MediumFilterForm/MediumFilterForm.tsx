@@ -35,7 +35,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 	});
 
 	// const buckets = (
-	// 	useSelector(selectMediaResults)?.aggregations.schema_creator.buckets || []
+	// 	useSelector(selectMediaResults)?.aggregations.dcterms_medium.buckets || []
 	// ).filter((bucket) => bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1);
 
 	// Events
@@ -46,36 +46,6 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		setValue('mediums', selected);
 		setSelection(selected);
 	};
-
-	// Helpers
-
-	// const getMediumTranslation = (medium: string): string => {
-	// 	const translation = medium; // TODO: change to 'let' when output is available
-
-	// 	switch (medium) {
-	// 		// case 'foo':
-	// 		// 	translation = t('modules/reading-room/components/medium-filter-form/medium-filter-form___foo');
-	// 		// 	break;
-
-	// 		default:
-	// 			break;
-	// 	}
-
-	// 	return translation || '';
-	// };
-
-	// const getItems = () => {
-	// 	return buckets.map((bucket) => {
-	// 		const value = bucket.key || '';
-
-	// 		return {
-	// 			...bucket,
-	// 			checked: selection.indexOf(value) !== -1,
-	// 			label: getMediumTranslation(value),
-	// 			value,
-	// 		};
-	// 	});
-	// };
 
 	return (
 		<>
@@ -98,6 +68,12 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 				<CheckboxList
 					className="u-my-16"
 					items={[]}
+					// items={buckets.map((bucket) => ({
+					// 	...bucket,
+					// 	checked: selection.indexOf(bucket.key) !== -1,
+					// 	label: bucket.key,
+					// 	value: bucket.key,
+					// }))}
 					onItemClick={(checked, value) => {
 						onItemClick(!checked, value as string);
 					}}
