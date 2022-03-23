@@ -252,14 +252,7 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	const onResetFilters = () => {
-		setQuery({
-			[SEARCH_QUERY_KEY]: undefined,
-			advanced: undefined,
-			format: undefined,
-			orderDirection: undefined,
-			orderProp: undefined,
-			page: undefined,
-		});
+		setQuery(READING_ROOM_QUERY_PARAM_INIT);
 	};
 
 	const onResetFilter = (id: string) => {
