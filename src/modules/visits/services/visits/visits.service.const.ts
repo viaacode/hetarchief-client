@@ -1,1 +1,2 @@
 export const VISITS_SERVICE_BASE_URL = 'visits';
+export const VISITS_SERVICE_ACTIVE_SPACE_URL = 'ACTIVE-FOR-SPACE';

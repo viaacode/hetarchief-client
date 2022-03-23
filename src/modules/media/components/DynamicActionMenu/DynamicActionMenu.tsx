@@ -8,6 +8,7 @@ import {
 import clsx from 'clsx';
 import { FC, useRef, useState } from 'react';
 
+import { MediaActions } from '@media/types';
 import { Icon, IconLightNames } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 
@@ -96,7 +97,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 					<MenuContent
 						rootClassName="c-dropdown-menu"
 						menuItems={mappedActions}
-						onClick={(id) => onClickAction(id as string)}
+						onClick={(id) => onClickAction(id as MediaActions)}
 					/>
 				</DropdownContent>
 			</Dropdown>

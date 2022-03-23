@@ -3,9 +3,9 @@
 $component: "c-pagination-progress";
 
 .#{$component} {
-    @include text-ellipsis(true);
+	@include text-ellipsis(true);
 
-    color: $neutral;
-    font-size: $font-size-sm;
-    line-height: $line-height-3xl;
+	color: $neutral;
+	font-size: $font-size-sm;
+	line-height: $line-height-3xl;
 }

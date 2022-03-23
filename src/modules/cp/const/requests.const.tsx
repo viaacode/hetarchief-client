@@ -1,23 +1,21 @@
 import { TabProps } from '@meemoo/react-components';
-import clsx from 'clsx';
-import { format, isWithinInterval } from 'date-fns';
 import { i18n, TFunction } from 'next-i18next';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusBadge } from '@cp/components';
-import { RequestStatusAll, RequestTableArgs, VisitInfo } from '@cp/types';
-import { Icon, UnreadMarker } from '@shared/components';
+import { RequestStatusAll } from '@cp/types';
+import { requestCreatedAtFormatter } from '@cp/utils';
+import { Icon } from '@shared/components';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { VisitStatus, VisitTimeframe } from '@visits/types';
-
-import styles from './requests.module.scss';
+import { VisitInfo, VisitInfoRow, VisitStatus } from '@shared/types';
 
 export const RequestTablePageSize = 20;
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, RequestStatusAll.ALL),
-	search: withDefault(StringParam, undefined),
+	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, undefined),
 	orderDirection: withDefault(SortDirectionParam, undefined),
@@ -44,18 +42,20 @@ export const requestStatusFilters = (): TabProps[] => {
 	];
 };
 
-export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
+export const RequestTableColumns = (
+	i18n: { t: TFunction } = { t: (x: string) => x }
+): Column<VisitInfo>[] => [
 	{
-		Header: t?.('Naam') || '',
+		Header: i18n.t('modules/cp/const/requests___naam') || '',
 		accessor: 'visitorName',
 	},
 	{
-		Header: t?.('Emailadres') || '',
+		Header: i18n.t('modules/cp/const/requests___emailadres') || '',
 		accessor: 'visitorMail',
-		Cell: ({ row }: RequestTableArgs) => {
+		Cell: ({ row }: VisitInfoRow) => {
 			return (
 				<a
-					className="u-color-neutral p-cp-requests__link"
+					className="u-color-neutral c-table__link"
 					href={`mailto:${row.original.visitorMail}`}
 					onClick={(e) => e.stopPropagation()}
 				>
@@ -65,20 +65,20 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		},
 	},
 	{
-		Header: t?.('Tijdstip') || '',
+		Header: i18n.t('modules/cp/const/requests___tijdstip') || '',
 		accessor: 'createdAt',
-		Cell: ({ row }: RequestTableArgs) => {
+		Cell: ({ row }: VisitInfoRow) => {
 			return (
 				<span className="u-color-neutral">
-					{new Date(row.original.createdAt).toLocaleString('nl-be')}
+					{requestCreatedAtFormatter(row.original.createdAt)}
 				</span>
 			);
 		},
 	},
 	{
-		Header: t?.('Status') || '',
+		Header: i18n.t('modules/cp/const/requests___status') || '',
 		accessor: 'status',
-		Cell: ({ row }: RequestTableArgs) => {
+		Cell: ({ row }: VisitInfoRow) => {
 			return <RequestStatusBadge status={row.original.status} />;
 		},
 	},
@@ -87,85 +87,6 @@ export const RequestTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
 		id: 'cp-requests-table-actions',
 		Cell: () => {
 			return <Icon className="p-cp-requests__actions" name="dots-vertical" />;
-		},
-	},
-];
-
-export const CP_ADMIN_VISITS_QUERY_PARAM_CONFIG = {
-	timeframe: withDefault(StringParam, RequestStatusAll.ALL),
-	search: withDefault(StringParam, undefined),
-	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, undefined),
-	orderDirection: withDefault(SortDirectionParam, undefined),
-};
-
-export const visitsStatusFilters = (): TabProps[] => {
-	return [
-		{
-			id: RequestStatusAll.ALL,
-			label: i18n?.t('Alle'),
-		},
-		{
-			id: VisitTimeframe.ACTIVE,
-			label: i18n?.t('Actief'),
-		},
-		{
-			id: VisitTimeframe.PAST,
-			label: i18n?.t('Historiek'),
-		},
-	];
-};
-
-export const VisitsTableColumns = (t?: TFunction): Column<VisitInfo>[] => [
-	{
-		Header: t?.('Naam') || '',
-		accessor: 'visitorName',
-	},
-	{
-		Header: t?.('Emailadres') || '',
-		accessor: 'visitorMail',
-		Cell: ({ row }: RequestTableArgs) => {
-			return (
-				<a
-					className="u-color-neutral p-cp-visitors__link"
-					href={`mailto:${row.original.visitorMail}`}
-					onClick={(e) => e.stopPropagation()}
-				>
-					{row.original.visitorMail}
-				</a>
-			);
-		},
-	},
-	{
-		Header: t?.('Toegang') || '',
-		accessor: 'startAt',
-		Cell: ({ row }: RequestTableArgs) => {
-			const active = isWithinInterval(new Date(), {
-				start: new Date(row.original.startAt),
-				end: new Date(row.original.endAt),
-			});
-			return (
-				<span className={clsx('u-color-neutral', styles['p-visits__access'])}>
-					<UnreadMarker active={active} />
-					{format(new Date(row.original.startAt), 'dd/MM/yyyy HH:mm') +
-						' - ' +
-						format(new Date(row.original.endAt), 'dd/MM/yyyy HH:mm')}
-				</span>
-			);
-		},
-	},
-	{
-		Header: t?.('Goedgekeurd door') || '',
-		accessor: 'status',
-		Cell: () => {
-			return <span className="u-color-neutral">Noah Peeters</span>; // TODO Add column to database to track updatedBy
-		},
-	},
-	{
-		Header: '',
-		id: 'cp-visitors-histories-table-actions',
-		Cell: () => {
-			return <Icon className="p-cp-visitors-histories__actions" name="dots-vertical" />;
 		},
 	},
 ];

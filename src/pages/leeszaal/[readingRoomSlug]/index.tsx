@@ -1,17 +1,31 @@
 import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { format } from 'date-fns';
+import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
-import { AddToCollectionBlade, FilterMenu, ReadingRoomNavigation } from '@reading-room/components';
 import {
+	AddToCollectionBlade,
+	AdvancedFilterFormState,
+	FilterMenu,
+	GenreFilterFormState,
+	MediumFilterFormState,
+	ReadingRoomNavigation,
+} from '@reading-room/components';
+import { CreatorFilterFormState } from '@reading-room/components/CreatorFilterForm';
+import { LanguageFilterFormState } from '@reading-room/components/LanguageFilterForm';
+import {
+	getMetadataSearchFilters,
 	READING_ROOM_FILTERS,
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
@@ -20,28 +34,43 @@ import {
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
-import { ReadingRoomFilterId, ReadingRoomMediaType } from '@reading-room/types';
-import { mapFiltersToQuery, mapFiltersToTags } from '@reading-room/utils';
+import {
+	AdvancedFilter,
+	MetadataProp,
+	ReadingRoomFilterId,
+	TagIdentity,
+} from '@reading-room/types';
+import { mapFiltersToTags } from '@reading-room/utils';
 import {
 	IdentifiableMediaCard,
-	Loading,
 	MediaCardList,
 	MediaCardViewMode,
 	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
 	SearchBar,
-	SearchBarValue,
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
+import { ROUTES, SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { OrderDirection, SortObject } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
+import {
+	MediaSearchFilterField,
+	MediaSearchOperator,
+	Operator,
+	OrderDirection,
+	ReadingRoomMediaType,
+	SortObject,
+} from '@shared/types';
+import { asDate, createPageTitle } from '@shared/utils';
+
+import { VisitorLayout } from 'modules/visitors';
 
 const ReadingRoomPage: NextPage = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
+	const { readingRoomSlug } = router.query;
 
 	useNavigationBorder();
 
@@ -68,20 +97,86 @@ const ReadingRoomPage: NextPage = () => {
 
 	useNavigationBorder();
 
-	// TODO add other filters once available
-	const hasSearched = !!query?.search?.length || query?.format !== ReadingRoomMediaType.All;
+	const hasSearched = useMemo(() => !isEqual(READING_ROOM_QUERY_PARAM_INIT, query), [query]);
+
+	const activeSort: SortObject = {
+		orderProp: query.orderProp,
+		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
+	};
 
 	/**
 	 * Data
 	 */
 
-	const { isFetching, data: mediaResultInfo } = useGetMediaObjects(
-		{
-			query: (query.search || []).join(' '),
-			format: (query.format as ReadingRoomMediaType) || READING_ROOM_QUERY_PARAM_INIT.format,
-		},
+	const { data: mediaResultInfo } = useGetMediaObjects(
+		readingRoomSlug as string,
+		[
+			// Searchbar
+			{
+				field: MediaSearchFilterField.QUERY,
+				operator: MediaSearchOperator.CONTAINS,
+				value: query.search !== null ? query.search?.toString() : '',
+			},
+			// Tabs
+			{
+				field: MediaSearchFilterField.FORMAT,
+				operator: MediaSearchOperator.IS,
+				value: query.format || READING_ROOM_QUERY_PARAM_INIT.format,
+			},
+			// Medium TODO
+			// {
+			// 	field: MediaSearchFilterField.MEDIUM,
+			// 	operator: MediaSearchOperator.IS,
+			// 	multiValue: (query.medium || []).filter((item) => item !== null) as string[],
+			// },
+			// Creator
+			{
+				field: MediaSearchFilterField.CREATOR,
+				operator: MediaSearchOperator.IS,
+				multiValue: (query.creator || []).filter((item) => item !== null) as string[],
+			},
+			// Genre
+			{
+				field: MediaSearchFilterField.GENRE,
+				operator: MediaSearchOperator.IS,
+				multiValue: (query.genre || []).filter((item) => item !== null) as string[],
+			},
+			// Language TODO
+			// {
+			// 	field: MediaSearchFilterField.LANGUAGE,
+			// 	operator: MediaSearchOperator.IS,
+			// 	multiValue: (query.language || []).filter((item) => item !== null) as string[],
+			// },
+			// Advanced
+			...(query.advanced || []).flatMap((item) => {
+				const values = (item.val || '').split(SEPARATOR);
+				const filters =
+					item.prop && item.op
+						? getMetadataSearchFilters(item.prop as MetadataProp, item.op as Operator)
+						: [];
+
+				// Format data for Elastic
+				return filters.map((filter, i) => {
+					let parsed;
+
+					switch (item.prop) {
+						case MetadataProp.CreatedAt:
+						case MetadataProp.PublishedAt:
+							parsed = asDate(values[i]);
+							values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
+							break;
+
+						default:
+							break;
+					}
+
+					return { ...filter, value: values[i] };
+				});
+			}),
+		],
 		query.page || 0,
-		READING_ROOM_ITEM_COUNT
+		READING_ROOM_ITEM_COUNT,
+		activeSort
 	);
 
 	/**
@@ -145,7 +240,7 @@ const ReadingRoomPage: NextPage = () => {
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim()) {
 			if (!query.search?.includes(newValue)) {
-				setQuery({ search: (query.search ?? []).concat(newValue) });
+				setQuery({ [SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue) });
 			}
 		}
 	};
@@ -161,24 +256,67 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	const onResetFilters = () => {
-		setQuery({
-			...READING_ROOM_QUERY_PARAM_INIT,
-			search: undefined,
-			orderDirection: undefined,
-		});
+		setQuery(READING_ROOM_QUERY_PARAM_INIT);
 	};
 
 	const onResetFilter = (id: string) => {
 		setQuery({ [id]: undefined });
 	};
 
-	const onSubmitFilter = (id: string, values: unknown) => {
-		const parsedQueryValue = mapFiltersToQuery(id as ReadingRoomFilterId, values);
-		setQuery({ [id]: parsedQueryValue });
+	const onSubmitFilter = (id: ReadingRoomFilterId, values: unknown) => {
+		let cast;
+
+		switch (id) {
+			case ReadingRoomFilterId.Medium:
+				cast = values as MediumFilterFormState;
+				setQuery({ [id]: cast.mediums });
+				break;
+
+			case ReadingRoomFilterId.Creator:
+				cast = values as CreatorFilterFormState;
+				setQuery({ [id]: cast.creators });
+				break;
+
+			case ReadingRoomFilterId.Genre:
+				cast = values as GenreFilterFormState;
+				setQuery({ [id]: cast.genres });
+				break;
+
+			case ReadingRoomFilterId.Language:
+				cast = values as LanguageFilterFormState;
+				setQuery({ [id]: cast.languages });
+				break;
+
+			case ReadingRoomFilterId.Advanced:
+				cast = values as AdvancedFilterFormState;
+				setQuery({ [id]: cast.advanced });
+				break;
+
+			default:
+				console.warn(`[WARN][ReadingRoomPage] No submit handler for ${id}`);
+				break;
+		}
 	};
 
-	const onRemoveKeyword = (newValue: SearchBarValue<true>) =>
-		setQuery({ search: newValue?.map((tag) => tag.value as string) });
+	const onRemoveKeyword = (newValue: MultiValue<TagIdentity>) => {
+		const search = newValue
+			?.filter((val) => val.key === SEARCH_QUERY_KEY)
+			.map((tag) => tag.value as string);
+
+		const advanced = newValue
+			?.filter((val) => val.key === ReadingRoomFilterId.Advanced)
+			.map((tag) => {
+				const { prop, op, val } = tag;
+				const filter: AdvancedFilter = { prop, op, val };
+
+				return filter;
+			});
+
+		setQuery({
+			[SEARCH_QUERY_KEY]: (search.length > 0 && search) || undefined,
+			[ReadingRoomFilterId.Advanced]: (advanced.length > 0 && advanced) || undefined,
+		});
+	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
 		setQuery({ orderProp, orderDirection });
@@ -197,10 +335,6 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
-	const activeSort: SortObject = {
-		orderProp: query.orderProp,
-		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
-	};
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
@@ -231,7 +365,9 @@ const ReadingRoomPage: NextPage = () => {
 					onMenuToggle={onFilterMenuToggle}
 					onViewToggle={onViewToggle}
 					onFilterReset={onResetFilter}
-					onFilterSubmit={onSubmitFilter}
+					onFilterSubmit={(id, values) =>
+						onSubmitFilter(id as ReadingRoomFilterId, values)
+					}
 				/>
 			</div>
 		);
@@ -249,10 +385,11 @@ const ReadingRoomPage: NextPage = () => {
 							description: mediaObject.schema_description,
 							title: mediaObject.schema_name,
 							publishedAt: mediaObject.schema_date_published
-								? new Date(mediaObject.schema_date_published)
+								? asDate(mediaObject.schema_date_published)
 								: undefined,
 							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
 							type: mediaObject.dcterms_format || undefined,
+							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer[0].schema_identifier}/${mediaObject.schema_identifier}`,
 						})
 					)}
 				keywords={keywords}
@@ -262,14 +399,14 @@ const ReadingRoomPage: NextPage = () => {
 			/>
 			<PaginationBar
 				className="u-mb-48"
-				start={query.page * READING_ROOM_ITEM_COUNT}
+				start={(query.page - 1) * READING_ROOM_ITEM_COUNT}
 				count={READING_ROOM_ITEM_COUNT}
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
 				onPageChange={(page) =>
 					setQuery({
 						...query,
-						page: page,
+						page: page + 1,
 					})
 				}
 			/>
@@ -277,7 +414,7 @@ const ReadingRoomPage: NextPage = () => {
 	);
 
 	return (
-		<>
+		<VisitorLayout>
 			<div className="p-reading-room">
 				<Head>
 					<title>{createPageTitle('Leeszaal')}</title>
@@ -300,7 +437,6 @@ const ReadingRoomPage: NextPage = () => {
 								'pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder'
 							)}
 							syncSearchValue={false}
-							valuePlaceholder={t('pages/leeszaal/slug___zoek-naar')}
 							value={activeFilters}
 							onClear={onResetFilters}
 							onRemoveValue={onRemoveKeyword}
@@ -311,9 +447,13 @@ const ReadingRoomPage: NextPage = () => {
 				</section>
 
 				<section
-					className={clsx('p-reading-room__results u-bg-platinum u-py-24 u-py-48:md', {
-						'p-reading-room__results--placeholder': showInitialView || showNoResults,
-					})}
+					className={clsx(
+						'p-reading-room__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+						{
+							'p-reading-room__results--placeholder':
+								showInitialView || showNoResults,
+						}
+					)}
 				>
 					<div className="l-container">
 						{showInitialView && (
@@ -340,7 +480,7 @@ const ReadingRoomPage: NextPage = () => {
 								/>
 							</>
 						)}
-						{showResults && (isFetching ? <Loading /> : renderResults())}
+						{showResults && renderResults()}
 					</div>
 				</section>
 			</div>
@@ -357,7 +497,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(null);
 				}}
 			/>
-		</>
+		</VisitorLayout>
 	);
 };
 

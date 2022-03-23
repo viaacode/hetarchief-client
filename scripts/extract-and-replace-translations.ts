@@ -23,7 +23,7 @@ We can now give the src/shared/translations/nl.json file to team meemoo to enter
 
 In the future we could add a build step to replace the translate tags with the actual translations,
 so we don't have to load the translation framework anymore and do the bindings at runtime, but this is a nice to have.
-*/
+ */
 
 import * as fs from 'fs';
 import * as path from 'path';
@@ -88,10 +88,9 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 		try {
 			const absoluteFilePath = path.resolve(__dirname, '../src', relativeFilePath);
 			const content: string = fs.readFileSync(absoluteFilePath).toString();
-			let newContent = '';
 
 			// Replace Trans objects
-			newContent = content.replace(
+			let newContent = content.replace(
 				/<Trans( i18nKey="([^"]+)")?>([\s\S]*?)<\/Trans>/g,
 				(match: string, keyAttribute: string, key: string, translation: string) => {
 					let formattedKey: string | undefined = key;
@@ -239,7 +238,7 @@ function checkTranslationsForKeysAsValue(translationJson: string) {
 
 async function updateTranslations(): Promise<void> {
 	// const onlineTranslations = await getOnlineTranslations();
-	const onlineTranslations = {};
+	const onlineTranslations: Record<string, string> = {};
 
 	// Extract translations from code and replace code by reference to translation key
 	const codeFiles = await getFilesByGlob('**/*.@(ts|tsx)');

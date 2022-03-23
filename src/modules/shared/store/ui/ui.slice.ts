@@ -9,6 +9,7 @@ const initialState: UIState = {
 	showFooter: true,
 	showNotificationsCenter: false,
 	hasUnreadNotifications: false,
+	showZendesk: true,
 };
 
 export const uiSlice = createSlice({
@@ -33,6 +34,9 @@ export const uiSlice = createSlice({
 		setHasUnreadNotifications(state, action: PayloadAction<boolean>) {
 			state.hasUnreadNotifications = action.payload;
 		},
+		setShowZendesk(state, action: PayloadAction<boolean>) {
+			state.showZendesk = action.payload;
+		},
 	},
 });
 
@@ -43,4 +47,5 @@ export const {
 	setShowFooter,
 	setShowNotificationsCenter,
 	setHasUnreadNotifications,
+	setShowZendesk,
 } = uiSlice.actions;

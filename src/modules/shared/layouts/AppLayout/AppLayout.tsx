@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { i18n } from 'next-i18next';
 import { useRouter } from 'next/router';
+import Script from 'next/script';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
@@ -13,9 +14,10 @@ import {
 	footerLinks,
 	footerRightItem,
 } from '@navigation/components/Footer/__mocks__/footer';
-import { MOCK_ITEMS_LEFT } from '@navigation/components/Navigation/__mocks__/navigation';
+import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
+import { useGetAccessibleReadingRooms } from '@navigation/components/Navigation/hooks/get-accessible-reading-rooms';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
-import { NotificationCenter } from '@shared/components';
+import { NotificationCenter, ZendeskWrapper } from '@shared/components';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
@@ -47,6 +49,7 @@ const AppLayout: FC = ({ children }) => {
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
 	const showBorder = useSelector(selectShowNavigationBorder);
+	const { data: accessibleReadingRooms } = useGetAccessibleReadingRooms();
 
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
@@ -68,7 +71,7 @@ const AppLayout: FC = ({ children }) => {
 		} else {
 			NotificationsService.stopPolling();
 		}
-	}, [router, user, setNotificationsOpen]);
+	}, [router, user, setNotificationsOpen, setUnreadNotifications]);
 
 	useEffect(() => {
 		dispatch(checkLoginAction());
@@ -115,13 +118,28 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
+			{/* <!-- start Flowplayer imports --> */}
+			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
+			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/chromecast.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/airplay.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
+			<Script
+				strategy="beforeInteractive"
+				src="/flowplayer/plugins/google-analytics.min.js"
+			/>
+			{/* <!-- end Flowplayer imports --> */}
+
 			<Navigation showBorder={showBorder}>
 				<Navigation.Left
 					currentPath={asPath}
 					hamburgerProps={
 						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
 					}
-					items={MOCK_ITEMS_LEFT}
+					items={getNavigationItemsLeft(accessibleReadingRooms || [])}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}
@@ -156,6 +174,8 @@ const AppLayout: FC = ({ children }) => {
 				position="bottom-left"
 				transition={Slide}
 			/>
+
+			<ZendeskWrapper />
 
 			{showFooter && (
 				<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />

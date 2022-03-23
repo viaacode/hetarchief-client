@@ -1,0 +1,7 @@
+@use "styles/abstracts" as *;
+
+$component: "c-date-input";
+
+.#{$component} {
+    width: 100%;
+}

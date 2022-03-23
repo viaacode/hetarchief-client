@@ -35,4 +35,12 @@ $component: "p-account-my-collections";
 			pointer-events: all;
 		}
 	}
+
+	@include respond-to("lg") {
+		// Hide top-level sidebar a bit earlier
+		// > :global(.l-sidebar__navigation) {
+		> div:first-child {
+			display: none;
+		}
+	}
 }

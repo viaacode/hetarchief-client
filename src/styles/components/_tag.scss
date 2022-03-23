@@ -8,9 +8,10 @@
 	height: 3.2rem;
 	padding: $spacer-xs $spacer-sm;
 	border-radius: 1.6rem;
-	font-weight: 700;
 	background-color: $teal-66;
 	color: $black;
+
+	// font-weight: 700; // Tags shouldn't default to being bold
 }
 
 /**
@@ -32,7 +33,6 @@
 		color: color.adjust($black, $alpha: -0.3);
 	}
 }
-
 
 /**
  * Modifiers
@@ -99,10 +99,10 @@
 
 		&:active {
 			background-color: $teal-66;
-			color: $black
+			color: $black;
 		}
 
-		&:not(:active,:hover):focus {
+		&:not(:active, :hover):focus {
 			outline: 2px solid $black;
 		}
 
@@ -115,15 +115,14 @@
 
 			&:active {
 				background-color: $seagreen;
-				color: $white
+				color: $white;
 			}
 
-			&:not(:active,:hover):focus {
+			&:not(:active, :hover):focus {
 				outline: 2px solid $teal-66;
 			}
 		}
 	}
-
 }
 
 .c-tag--disabled {

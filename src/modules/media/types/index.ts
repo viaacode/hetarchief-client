@@ -1,4 +1,6 @@
-export type MediaTypes = 'video' | 'audio' | null;
+import { MediaTypes } from '@shared/types';
+
+// Output
 
 export interface MediaInfo {
 	schema_in_language: unknown | null;
@@ -30,25 +32,106 @@ export interface MediaInfo {
 	type?: string;
 }
 
-export class MediaSearchFilters {
-	query?: string;
-	format?: MediaTypes;
+// Mapped intellectual entity object
+export interface Media {
+	id: string;
+	premisIdentifier: Record<string, string[]>;
+	premisRelationship: string;
+	isPartOf: any;
+	partOfArchive: string[];
+	partOfEpisode: string[];
+	partOfSeason: string[];
+	partOfSeries: string[];
+	maintainerId: string;
+	maintainerName: string;
+	contactInfo: MediaContactInfo;
+	copyrightHolder: string;
+	copyrightNotice: string;
+	durationInSeconds: number;
+	numberOfPages: number;
+	datePublished: string;
+	dctermsAvailable: string;
+	name: string;
+	description: string;
+	abstract: string;
+	creator: Record<string, string[]>;
+	actor: Record<string, string[]>;
+	contributor: Record<string, string[]>;
+	publisher: Record<string, string[]>;
+	spatial: string[];
+	temporal: string[];
+	keywords: string[];
+	genre: string[];
+	dctermsFormat: string;
+	inLanguage: string[];
+	thumbnailUrl: string;
+	embedUrl: string;
+	alternateName: string;
+	duration: string;
+	license: string[];
+	meemooFragmentId: string;
+	meemooMediaObjectId: string;
+	dateCreated: string;
+	dateCreatedLowerBound: string;
+	ebucoreObjectType: string;
+	representations: MediaRepresentation[];
 }
 
-export interface MediaSearchAggregationPair {
-	key: MediaTypes;
+export interface MediaContactInfo {
+	email: string;
+	telephone: string;
+	address: MediaAddress;
+}
+
+export interface MediaAddress {
+	street: string;
+	postalCode: string;
+	locality: string;
+	postOfficeBoxNumber: string;
+}
+
+export interface MediaRepresentation {
+	name: string;
+	alternateName: string;
+	description: string;
+	meemooFragmentId: string;
+	dctermsFormat: string;
+	transcript: string;
+	dateCreated: string;
+	id: string;
+	files: File[];
+}
+
+export interface MediaSearchAggregationPair<T> {
+	key: T;
 	doc_count: number;
 }
 
-export interface MediaSearchAggregations {
-	dcterms_format: {
-		buckets: MediaSearchAggregationPair[];
-		doc_count_error_upper_bound: number;
-		sum_other_doc_count: number;
-	};
+export interface MediaSearchAggregation<T> {
+	buckets: MediaSearchAggregationPair<T>[];
+	doc_count_error_upper_bound: number;
+	sum_other_doc_count: number;
 }
+
+export interface MediaSearchAggregations {
+	dcterms_format: MediaSearchAggregation<string>;
+	schema_genre: MediaSearchAggregation<string>;
+	schema_creator: MediaSearchAggregation<string>;
+	schema_in_language: MediaSearchAggregation<string>;
+}
+
+// UI
 
 export enum ObjectDetailTabs {
 	Media = 'media',
 	Metadata = 'metadata',
+}
+
+export enum MediaActions {
+	Quotes = 'quotes',
+	Description = 'description',
+	Bookmark = 'bookmark',
+	Contact = 'contact',
+	Calendar = 'calendar',
+	RelatedObjects = 'related-objects',
 }

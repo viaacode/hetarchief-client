@@ -1,0 +1,40 @@
+@use "../../abstracts" as *;
+
+$component: "p-account-my-history";
+
+.#{$component} {
+    tr {
+		@include respond-to("lg") {
+			td,
+			th {
+				&:nth-child(2),
+				&:nth-child(3),
+                &:nth-child(4), {
+					display: none;
+				}
+			}
+        }
+
+		@include respond-at("lg") {
+			td,
+			th {
+                &:nth-child(5), {
+					display: none;
+				}
+			}
+		}
+
+        // Hide placeholder column
+        td, th {
+			&:nth-last-child(1) {
+				display: none;
+			}
+		}
+	}
+
+	// tbody {
+	// 	tr {
+	// 		cursor: pointer;
+	// 	}
+	// }
+}

@@ -20,8 +20,10 @@ $platinum: #f8f8f8;
  * Derived Colors
  */
 
+$black-8: color.adjust($black, $alpha: -0.92);
 $black-20: color.adjust($black, $alpha: -0.8);
 $teal-66: color.adjust($teal, $alpha: -0.34);
+$teal-30: color.adjust($teal, $alpha: -0.7);
 $zinc-66: color.adjust($zinc, $alpha: -0.34);
 $zinc-40: color.adjust($zinc, $alpha: -0.6);
 
@@ -164,6 +166,14 @@ $modal-title-margin-left-md: $modal-close-size + ($modal-close-margin-md * 2);
 
 $card-edge-size: 1px;
 $card-offset: 2rem;
+
+/**
+ * Card Image
+ */
+
+$card-image-small-height: 72px;
+$card-image-small-width: 20px;
+$card-image-small-width-md: 96px;
 
 /**
  * Button

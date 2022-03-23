@@ -2,11 +2,11 @@ import { stringifyUrl } from 'query-string';
 
 import { CreateVisitRequest } from '@reading-room/services/reading-room/reading-room.service.types';
 import { ApiService } from '@shared/services/api-service';
-import { OrderDirection } from '@shared/types';
+import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
-import { PatchVisit, VisitInfo, VisitStatus, VisitTimeframe } from '@visits/types';
+import { PatchVisit, VisitTimeframe } from '@visits/types';
 
-import { VISITS_SERVICE_BASE_URL } from './visits.service.const';
+import { VISITS_SERVICE_ACTIVE_SPACE_URL, VISITS_SERVICE_BASE_URL } from './visits.service.const';
 
 export class VisitsService {
 	public static async getAll(
@@ -16,12 +16,13 @@ export class VisitsService {
 		page = 0,
 		size = 20,
 		orderProp: keyof VisitInfo = 'startAt',
-		orderDirection: OrderDirection = OrderDirection.desc
+		orderDirection: OrderDirection = OrderDirection.desc,
+		personal?: boolean
 	): Promise<ApiResponseWrapper<VisitInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: VISITS_SERVICE_BASE_URL,
+					url: personal ? `${VISITS_SERVICE_BASE_URL}/personal` : VISITS_SERVICE_BASE_URL,
 					query: {
 						query: `%${searchInput}%`,
 						status,
@@ -61,6 +62,15 @@ export class VisitsService {
 	public static async create(visitRequest: CreateVisitRequest): Promise<VisitInfo> {
 		return await ApiService.getApi()
 			.post(VISITS_SERVICE_BASE_URL, { body: JSON.stringify(visitRequest) })
+			.json();
+	}
+
+	public static async getActiveVisitForUserAndSpace(spaceId: string): Promise<VisitInfo | null> {
+		if (!spaceId) {
+			return null;
+		}
+		return await ApiService.getApi()
+			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${spaceId}`)
 			.json();
 	}
 }
