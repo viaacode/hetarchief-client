@@ -109,6 +109,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								return;
 							}
 
+							const descriptionVariables = {
+								item: selected.title,
+								collection:
+									collection?.name ||
+									t(
+										'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___onbekend'
+									),
+							};
 							toastService.notify({
 								maxLines: 3,
 								title: t(
@@ -116,10 +124,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								),
 								description: t(
 									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collection',
-									{
-										item: selected.title,
-										collection: collection?.name || t('Onbekend'),
-									}
+									descriptionVariables
 								),
 							});
 						});
@@ -132,6 +137,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								return;
 							}
 
+							const descriptionVariables = {
+								item: selected.title,
+								collection:
+									collection?.name ||
+									t(
+										'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___onbekend'
+									),
+							};
 							toastService.notify({
 								maxLines: 3,
 								title: t(
@@ -139,10 +152,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								),
 								description: t(
 									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collection',
-									{
-										item: selected.title,
-										collection: collection?.name || t('Onbekend'),
-									}
+									descriptionVariables
 								),
 							});
 						});

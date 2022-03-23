@@ -5,7 +5,8 @@ import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusAll } from '@cp/types';
-import { Icon, UnreadMarker } from '@shared/components';
+import { UnreadMarker } from '@shared/components';
+import { DropdownMenu } from '@shared/components/Dropdown/DropdownMenu';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow } from '@shared/types';
@@ -38,7 +39,9 @@ export const visitorsStatusFilters = (): TabProps[] => {
 };
 
 export const VisitorsTableColumns = (
-	i18n: { t: TFunction } = { t: (x: string) => x }
+	i18n: { t: TFunction } = { t: (x: string) => x },
+	denyVisitRequest: (visitRequest: VisitInfo) => void,
+	editVisitRequest: (visitRequest: VisitInfo) => void
 ): Column<VisitInfo>[] => [
 	{
 		Header: i18n.t('modules/cp/const/visitors___naam') || '',
@@ -87,8 +90,29 @@ export const VisitorsTableColumns = (
 	{
 		Header: '',
 		id: 'cp-visitors-histories-table-actions',
-		Cell: () => {
-			return <Icon className="p-cp-visitors-histories__actions" name="dots-vertical" />;
+		Cell: ({ row }: VisitInfoRow) => {
+			return (
+				<DropdownMenu
+					menuItems={[
+						{
+							id: 'deny',
+							label: i18n.t('modules/cp/const/visitors___toegang-intrekken'),
+						},
+						{
+							id: 'edit',
+							label: i18n.t('modules/cp/const/visitors___toegang-aanpassen'),
+						},
+					]}
+					onMenuItemClicked={(actionId: string | number) => {
+						if (actionId === 'deny') {
+							denyVisitRequest(row.original);
+						}
+						if (actionId === 'edit') {
+							editVisitRequest(row.original);
+						}
+					}}
+				/>
+			);
 		},
 	},
 ];
