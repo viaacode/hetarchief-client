@@ -10,6 +10,13 @@ import { Icon } from '@shared/components';
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 
 /**
+ * Render media
+ */
+
+export const FLOWPLAYER_FORMATS: string[] = ['mp4', 'mp3', 'm4a', 'ogv', 'ogg', 'webm', 'm3u8'];
+export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
+
+/**
  * Object placeholders
  */
 export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
