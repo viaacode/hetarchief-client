@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
+import { compact, without } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,11 +22,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 
 	const [query] = useQueryParams(MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [selection, setSelection] = useState<string[]>(() =>
-		query.medium && query.medium !== null
-			? (query.medium.filter((item) => item !== null) as string[])
-			: []
-	);
+	const [selection, setSelection] = useState<string[]>(() => compact(query.medium || []));
 
 	const { setValue, getValues, reset } = useForm<MediumFilterFormState>({
 		defaultValues: {
@@ -36,12 +33,12 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 
 	// const buckets = (
 	// 	useSelector(selectMediaResults)?.aggregations.dcterms_medium.buckets || []
-	// ).filter((bucket) => bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1);
+	// ).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
-		const selected = add ? [...selection, value] : selection.filter((item) => item !== value);
+		const selected = add ? [...selection, value] : without(selection, value);
 
 		setValue('mediums', selected);
 		setSelection(selected);
@@ -53,9 +50,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 				<SearchBar
 					searchValue={search}
 					onSearch={setSearch}
-					onClear={() => {
-						setSearch('');
-					}}
+					onClear={() => setSearch('')}
 				/>
 
 				{/* https://meemoo.atlassian.net/wiki/spaces/HA2/pages/3402891314/Geavanceerde+search+BZT+versie+1?focusedCommentId=3417604098#comment-3417604098 */}
@@ -70,7 +65,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					items={[]}
 					// items={buckets.map((bucket) => ({
 					// 	...bucket,
-					// 	checked: selection.indexOf(bucket.key) !== -1,
+					// 	checked: selection.includes(bucket.key),
 					// 	label: bucket.key,
 					// 	value: bucket.key,
 					// }))}

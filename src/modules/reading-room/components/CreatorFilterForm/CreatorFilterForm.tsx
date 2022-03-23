@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
+import { compact, without } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,11 +24,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 
 	const [query] = useQueryParams(CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [selection, setSelection] = useState<string[]>(() =>
-		query.creator && query.creator !== null
-			? (query.creator.filter((item) => item !== null) as string[])
-			: []
-	);
+	const [selection, setSelection] = useState<string[]>(() => compact(query.creator || []));
 
 	const { setValue, getValues, reset } = useForm<CreatorFilterFormState>({
 		resolver: yupResolver(CREATOR_FILTER_FORM_SCHEMA()),
@@ -35,12 +32,12 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 
 	const buckets = (
 		useSelector(selectMediaResults)?.aggregations.schema_creator.buckets || []
-	).filter((bucket) => bucket.key.toLowerCase().indexOf(search.toLowerCase()) !== -1);
+	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
-		const selected = add ? [...selection, value] : selection.filter((item) => item !== value);
+		const selected = add ? [...selection, value] : without(selection, value);
 
 		setValue('creators', selected);
 		setSelection(selected);
@@ -52,9 +49,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 				<SearchBar
 					searchValue={search}
 					onSearch={setSearch}
-					onClear={() => {
-						setSearch('');
-					}}
+					onClear={() => setSearch('')}
 				/>
 
 				{buckets.length === 0 && (
@@ -71,7 +66,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 						...bucket,
 						value: bucket.key,
 						label: bucket.key,
-						checked: selection.indexOf(bucket.key) !== -1,
+						checked: selection.includes(bucket.key),
 					}))}
 					onItemClick={(checked, value) => {
 						onItemClick(!checked, value as string);

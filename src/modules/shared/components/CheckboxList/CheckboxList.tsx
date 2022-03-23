@@ -10,7 +10,7 @@ const CheckboxList: FC<CheckboxListProps<unknown>> = ({ items, className, onItem
 		<ul className={clsx(className, styles['c-checkbox-list'])}>
 			{items.map((item, i) => {
 				const value = item.value;
-				const isChecked = item.checked;
+				const isChecked = !!item.checked;
 
 				return (
 					<li
@@ -19,12 +19,12 @@ const CheckboxList: FC<CheckboxListProps<unknown>> = ({ items, className, onItem
 						tabIndex={0}
 						onKeyDown={(e) =>
 							onKey(e, [...keysEnter, ...keysSpacebar], () =>
-								onItemClick(!!isChecked, value)
+								onItemClick(isChecked, value)
 							)
 						}
-						onClick={() => onItemClick(!!isChecked, value)}
+						onClick={() => onItemClick(isChecked, value)}
 					>
-						<Checkbox checked={!!isChecked} tabIndex={-1} />
+						<Checkbox checked={isChecked} tabIndex={-1} />
 						<span>{item.label}</span>
 					</li>
 				);
