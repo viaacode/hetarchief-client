@@ -35,7 +35,7 @@ export interface Media {
 	id: string;
 	premisIdentifier: any;
 	premisRelationship: string;
-	isPartOf: string;
+	isPartOf: any;
 	partOfArchive: string[];
 	partOfEpisode: string[];
 	partOfSeason: string[];

@@ -41,6 +41,14 @@ $button-size: 3.6rem;
 		height: 8.2rem;
 		grid-row-start: 1;
 
+		&-image-wrapper {
+			height: 100%;
+		}
+
+		&-image {
+			width: 100%;
+		}
+
 		&--active {
 			outline: 0.4rem solid $black;
 			outline-offset: 0.2rem;

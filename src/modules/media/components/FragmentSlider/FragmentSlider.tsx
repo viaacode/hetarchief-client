@@ -3,8 +3,12 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@media/const';
+import { MediaRepresentation } from '@media/types';
 import { Icon } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
+
+import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './FragmentSlider.module.scss';
 import { FragmentSliderProps } from './FragmentSlider.types';
@@ -54,6 +58,26 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fragmentsSize, totalFragments]);
+
+	const renderThumbnail = (representation: MediaRepresentation) => {
+		let image = null;
+		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
+			// TODO: thumbnail from parent
+			image = '/images/bg-shd.png';
+		}
+		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
+			// TODO: image preview
+			// image = representation.id;
+			image = '/images/bg-shd.png';
+		}
+
+		// No renderer
+		return image ? (
+			<Image src={image} alt="placeholder" layout="fill" objectFit="cover" />
+		) : (
+			<ObjectPlaceholder className={styles['c-fragment-slider__item-image']} small />
+		);
+	};
 
 	return (
 		<div className={clsx(className, styles['c-fragment-slider__grid'])}>
@@ -129,17 +153,8 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 								}
 							}}
 						>
-							<div>
-								<Image
-									src={
-										index % 2 === 0
-											? 'https://via.placeholder.com/1920x1080'
-											: 'https://via.placeholder.com/1080x1920'
-									}
-									alt="placeholder"
-									layout="fill"
-									objectFit="cover"
-								/>
+							<div className={styles['c-fragment-slider__item-image-wrapper']}>
+								{renderThumbnail(item)}
 							</div>
 						</li>
 					))}
