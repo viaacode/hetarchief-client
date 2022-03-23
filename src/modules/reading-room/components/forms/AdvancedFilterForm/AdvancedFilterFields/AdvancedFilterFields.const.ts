@@ -1,8 +1,6 @@
 import { Select, SelectOption, TextInput } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
 
-import { Timepicker } from '@shared/components/Timepicker';
-
 import { MetadataProp, Operator } from './AdvancedFilterFields.types';
 
 // TODO: replace values with actual metadata property
