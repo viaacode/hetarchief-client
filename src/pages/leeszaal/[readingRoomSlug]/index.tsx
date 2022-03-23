@@ -17,6 +17,7 @@ import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
 	FilterMenu,
+	GenreFilterFormState,
 	MediumFilterFormState,
 	ReadingRoomNavigation,
 } from '@reading-room/components';
@@ -277,6 +278,11 @@ const ReadingRoomPage: NextPage = () => {
 			case ReadingRoomFilterId.Creator:
 				cast = values as CreatorFilterFormState;
 				setQuery({ [id]: cast.creators });
+				break;
+
+			case ReadingRoomFilterId.Genre:
+				cast = values as GenreFilterFormState;
+				setQuery({ [id]: cast.genres });
 				break;
 
 			case ReadingRoomFilterId.Language:
