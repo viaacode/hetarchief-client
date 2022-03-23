@@ -8,9 +8,9 @@ import { MetadataProp } from './metadata';
 export * from './metadata';
 
 export enum ReadingRoomSort {
-	Date = 'schema_date_created',
-	Relevance = '_score',
-	Title = 'schema_name',
+	Date = 'created',
+	Relevance = 'relevance',
+	Title = 'name',
 }
 
 export enum ReadingRoomFilterId {
