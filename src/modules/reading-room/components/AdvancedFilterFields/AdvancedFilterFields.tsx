@@ -23,6 +23,7 @@ import {
 import { AdvancedFilter, MetadataProp } from '@reading-room/types';
 import { getField, getOperators, getProperties } from '@reading-room/utils';
 import { Icon } from '@shared/components';
+import { SEPARATOR } from '@shared/const';
 import { Operator } from '@shared/types';
 
 import styles from './AdvancedFilterFields.module.scss';
@@ -43,7 +44,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	// Computed
 
 	const operators = getOperators(state.prop as MetadataProp);
-	const operator = state.op || (operators.length > 0 && operators[0].value) || null;
+	const operator = state.op || operators?.[0]?.value || null;
 
 	// Events
 
@@ -52,6 +53,21 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	};
 
 	// Render
+
+	const renderTextField = (Component: FC<TextInputProps>, value?: string) => (
+		<Component
+			className={clsx(
+				styles['c-advanced-filter-fields__dynamic-field'],
+				styles['c-advanced-filter-fields__dynamic-field--text']
+			)}
+			value={value}
+			onChange={(e) =>
+				onFieldChange({
+					val: e.target.value,
+				})
+			}
+		/>
+	);
 
 	const renderField = () => {
 		let Component = operator
@@ -63,26 +79,23 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 		switch (Component) {
 			case TextInput:
-			case DurationInput:
-			case DurationRangeInput:
 			case DateRangeInput:
-				Component = Component as FC<TextInputProps>;
 				value = state.val;
+				Component = Component as FC<TextInputProps>;
 
-				return (
-					<Component
-						className={clsx(
-							styles['c-advanced-filter-fields__dynamic-field'],
-							styles['c-advanced-filter-fields__dynamic-field--text']
-						)}
-						value={value}
-						onChange={(e) =>
-							onFieldChange({
-								val: e.target.value,
-							})
-						}
-					/>
-				);
+				return renderTextField(Component, value);
+
+			case DurationInput:
+				value = state.val || '00:00:00'; // Ensure initial value is hh:mm:ss
+				Component = Component as FC<TextInputProps>;
+
+				return renderTextField(Component, value);
+
+			case DurationRangeInput:
+				value = state.val || `00:00:00${SEPARATOR}00:00:00`; // Ensure initial value is hh:mm:ss for both fields
+				Component = Component as FC<TextInputProps>;
+
+				return renderTextField(Component, value);
 
 			case ReactSelect:
 			case MediaTypeSelect:
@@ -127,12 +140,11 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				);
 
 			default:
-				break;
+				console.warn(
+					`[WARN][AdvancedFilterFields] No render definition found for ${state.prop}`
+				);
+				return null;
 		}
-
-		console.warn(`[WARN][AdvancedFilterFields] No render definition found for ${state.prop}`);
-
-		return null;
 	};
 
 	return (

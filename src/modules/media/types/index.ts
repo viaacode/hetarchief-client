@@ -1,30 +1,38 @@
 import { MediaTypes } from '@shared/types';
 
-export interface MediaContactInfo {
-	email: string;
-	telephone: string;
-	address: MediaAddress;
+// Output
+
+export interface MediaInfo {
+	schema_in_language: unknown | null;
+	dcterms_available: string;
+	schema_creator?: {
+		Archiefvormer?: string[];
+		productionCompany?: string[];
+		Maker?: string[];
+	};
+	schema_identifier: string;
+	schema_description?: string;
+	schema_publisher?: {
+		Publisher: string[];
+	};
+	schema_duration: string;
+	schema_abstract?: string;
+	premis_identifier: string;
+	schema_genre?: string;
+	schema_date_published?: string;
+	schema_license?: string[];
+	schema_date_created?: string;
+	schema_contributor: unknown | null;
+	schema_maintainer: {
+		schema_identifier: string;
+	}[];
+	dcterms_format: MediaTypes;
+	schema_name: string;
+	// TODO: See if this is still necessary once resolved in proxy
+	type?: string;
 }
 
-export interface MediaAddress {
-	street: string;
-	postalCode: string;
-	locality: string;
-	postOfficeBoxNumber: string;
-}
-
-export interface MediaRepresentation {
-	name: string;
-	alternateName: string;
-	description: string;
-	meemooFragmentId: string;
-	dctermsFormat: string;
-	transcript: string;
-	dateCreated: string;
-	id: string;
-	files: File[];
-}
-
+// Mapped intellectual entity object
 export interface Media {
 	id: string;
 	premisIdentifier: Record<string, string[]>;
@@ -60,7 +68,7 @@ export interface Media {
 	embedUrl: string;
 	alternateName: string;
 	duration: string;
-	license: unknown;
+	license: string[];
 	meemooFragmentId: string;
 	meemooMediaObjectId: string;
 	dateCreated: string;
@@ -69,9 +77,29 @@ export interface Media {
 	representations: MediaRepresentation[];
 }
 
-export class MediaSearchFilters {
-	query?: string;
-	format?: MediaTypes;
+export interface MediaContactInfo {
+	email: string;
+	telephone: string;
+	address: MediaAddress;
+}
+
+export interface MediaAddress {
+	street: string;
+	postalCode: string;
+	locality: string;
+	postOfficeBoxNumber: string;
+}
+
+export interface MediaRepresentation {
+	name: string;
+	alternateName: string;
+	description: string;
+	meemooFragmentId: string;
+	dctermsFormat: string;
+	transcript: string;
+	dateCreated: string;
+	id: string;
+	files: File[];
 }
 
 export interface MediaSearchAggregationPair<T> {
@@ -86,9 +114,13 @@ export interface MediaSearchAggregation<T> {
 }
 
 export interface MediaSearchAggregations {
-	dcterms_format: MediaSearchAggregation<MediaTypes>;
-	schema_genre?: MediaSearchAggregation<string>;
+	dcterms_format: MediaSearchAggregation<string>;
+	schema_genre: MediaSearchAggregation<string>;
+	schema_creator: MediaSearchAggregation<string>;
+	schema_in_language: MediaSearchAggregation<string>;
 }
+
+// UI
 
 export enum ObjectDetailTabs {
 	Media = 'media',

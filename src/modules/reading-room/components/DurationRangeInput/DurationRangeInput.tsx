@@ -8,8 +8,8 @@ import { DurationInput } from '../DurationInput';
 import styles from './DurationRangeInput.module.scss';
 
 const DurationRangeInput: FC<TextInputProps> = (props) => {
-	const from = (props.value || '').toString().split(SEPARATOR, 2)[0];
-	const to = (props.value || '').toString().split(SEPARATOR, 2)[1];
+	const from = (props.value || '').toString().split(SEPARATOR, 2)[0] || '';
+	const to = (props.value || '').toString().split(SEPARATOR, 2)[1] || '';
 
 	const onChange = (e: ChangeEvent<HTMLInputElement>, type: 'from' | 'to') => {
 		let value = `${from}${SEPARATOR}${to}`;

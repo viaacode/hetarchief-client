@@ -2,7 +2,7 @@ import { QueryParamConfig } from 'use-query-params';
 
 import { AdvancedFilter } from '@reading-room/types';
 
-const divider = '--';
+const divider = ',';
 export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undefined> = {
 	encode(filters) {
 		return filters
@@ -10,7 +10,7 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 					.map((filter) => {
 						const { prop, op, val } = filter;
 
-						return `${prop}${op}${val}`;
+						return `${prop}${op}${encodeURIComponent(val || '')}`;
 					})
 					.join(divider)
 			: undefined;
@@ -21,7 +21,7 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 			? stringified.split(divider).map((filter: string) => {
 					const prop = filter.slice(0, 2);
 					const op = filter.slice(2, 4);
-					const val = filter.slice(4);
+					const val = decodeURIComponent(filter.slice(4));
 
 					return { prop, op, val };
 			  })

@@ -3,18 +3,12 @@ import { UseQueryResult } from 'react-query/types/react/types';
 import { useDispatch } from 'react-redux';
 
 import { MediaService } from '@media/services';
-import { ReadingRoomMediaType } from '@reading-room/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { setResults } from '@shared/store/media';
-import { GetMedia, MediaTypes, SortObject } from '@shared/types';
+import { GetMedia, MediaSearchFilterField, MediaSearchFilters, SortObject } from '@shared/types';
 
 export function useGetMediaObjects(
-	filters:
-		| {
-				query: string | undefined;
-				format: ReadingRoomMediaType;
-		  }
-		| undefined,
+	filters: MediaSearchFilters,
 	page: number,
 	size: number,
 	sort?: SortObject
@@ -24,22 +18,28 @@ export function useGetMediaObjects(
 	return useQuery(
 		[QUERY_KEYS.getMediaObjects, { filters, page, size, sort }],
 		() => {
-			const { format, ...rest } = filters || {};
-			const mediaFormat: MediaTypes | undefined =
-				format !== ReadingRoomMediaType.All ? format : undefined;
-
-			// TODO: improve (?)
-			// Run two queries:
-			//     - One to fetch the results for a specific tab (format)
-			//     - and one to fetch the aggregates across formats
+			// TODO: improve ⚠️
+			// Run three queries:
+			//     - One to fetch the results for a specific tab (results),
+			//     - one to fetch the aggregates without any criteria to populate filters (noFilters)
+			//     - and one to fetch the aggregates across tabs (noFormat)
 			return Promise.all([
-				MediaService.getAll({ ...rest, format: mediaFormat }, page, size, sort),
-				MediaService.getAll(rest, page, size, sort),
+				MediaService.getAll(filters, page, size, sort),
+				MediaService.getAll([], page, size, sort),
+				MediaService.getAll(
+					filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
+					page,
+					size,
+					sort
+				),
 			]).then((responses) => {
-				const [results, noFormat] = responses;
+				const [results, noFilters, noFormat] = responses;
 				const output = {
 					...results,
-					aggregations: noFormat.aggregations,
+					aggregations: {
+						...noFilters.aggregations,
+						dcterms_format: noFormat.aggregations.dcterms_format,
+					},
 				};
 
 				dispatch(setResults(output));
