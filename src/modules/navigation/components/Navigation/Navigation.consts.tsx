@@ -75,7 +75,7 @@ export const getNavigationItemsLeft = (
 					className: dropdownCls(['u-display-none', 'u-display-block:md']),
 				}),
 				id: 'alle leeszalen',
-				hasDivider: 'md',
+				hasDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
 			},
 			...accessibleReadingRooms.map(
 				(readingRoom: ReadingRoomInfo): NavigationItem => ({
