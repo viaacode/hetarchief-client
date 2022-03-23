@@ -125,36 +125,31 @@ const ReadingRoomPage: NextPage = () => {
 				multiValue: (query.creator || []).filter((item) => item !== null) as string[],
 			},
 			// Advanced
-			...(query.advanced || [])
-				.map((item) => {
-					const values = (item.val || '').split(SEPARATOR);
-					const filters =
-						item.prop && item.op
-							? getMetadataSearchFilters(
-									item.prop as MetadataProp,
-									item.op as Operator
-							  )
-							: [];
+			...(query.advanced || []).flatMap((item) => {
+				const values = (item.val || '').split(SEPARATOR);
+				const filters =
+					item.prop && item.op
+						? getMetadataSearchFilters(item.prop as MetadataProp, item.op as Operator)
+						: [];
 
-					// Format data for Elastic
-					return filters.map((filter, i) => {
-						let parsed;
+				// Format data for Elastic
+				return filters.map((filter, i) => {
+					let parsed;
 
-						switch (item.prop) {
-							case MetadataProp.CreatedAt:
-							case MetadataProp.PublishedAt:
-								parsed = asDate(values[i]);
-								values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
-								break;
+					switch (item.prop) {
+						case MetadataProp.CreatedAt:
+						case MetadataProp.PublishedAt:
+							parsed = asDate(values[i]);
+							values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
+							break;
 
-							default:
-								break;
-						}
+						default:
+							break;
+					}
 
-						return { ...filter, value: values[i] };
-					});
-				})
-				.reduce((prev, filters) => prev.concat(filters), []),
+					return { ...filter, value: values[i] };
+				});
+			}),
 		],
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
