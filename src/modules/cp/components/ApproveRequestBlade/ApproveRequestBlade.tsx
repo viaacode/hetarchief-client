@@ -13,7 +13,6 @@ import {
 	endOfDay,
 	isAfter,
 	isSameDay,
-	isToday,
 	roundToNearestMinutes,
 	startOfDay,
 } from 'date-fns';
@@ -169,6 +168,13 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						render={({ field }) => {
 							const now = new Date();
 
+							// Disabled by request of Ineke, 21/03/2022
+							// https://meemoo.atlassian.net/browse/ARC-652 + https://github.com/viaacode/hetarchief-client/pull/193
+							// const minTime =
+							// 	field.value && !isSameDay(field.value, now)
+							// 		? defaultAccessFrom(startOfDay(field.value))
+							// 		: defaultAccessFrom(now);
+
 							return (
 								<>
 									<Datepicker
@@ -186,8 +192,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 									<Timepicker
 										{...timepicker}
-										maxTime={endOfDay(now)}
-										minTime={defaultAccessFrom(now)}
+										maxTime={endOfDay(field.value || now)}
+										minTime={startOfDay(field.value || now)}
 										name={field.name}
 										onBlur={field.onBlur}
 										onChange={(date) => onFromDateChange(date, field)}
@@ -217,6 +223,13 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							const { accessFrom } = getValues();
 							const now = new Date();
 
+							// Disabled by request of Ineke, 21/03/2022
+							// https://meemoo.atlassian.net/browse/ARC-652 + https://github.com/viaacode/hetarchief-client/pull/193
+							// const minTime =
+							// 	field.value && accessFrom && isSameDay(field.value, accessFrom)
+							// 		? addHours(accessFrom || now, 1)
+							// 		: startOfDay(field.value || now);
+
 							return (
 								<>
 									<Datepicker
@@ -235,12 +248,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 									<Timepicker
 										{...timepicker}
-										maxTime={endOfDay(accessFrom || now)}
-										minTime={
-											isToday(field.value || now)
-												? addHours(accessFrom || now, 1)
-												: startOfDay(field.value || now)
-										}
+										maxTime={endOfDay(field.value || now)}
+										minTime={startOfDay(field.value || now)}
 										name={field.name}
 										onBlur={field.onBlur}
 										onChange={(date) => onSimpleDateChange(date, field)}
