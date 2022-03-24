@@ -4,6 +4,6 @@ export interface ReadingRoomSettingsFormProps {
 }
 
 export interface ReadingRoomFormState {
-	color: string;
+	color?: string;
 	image?: unknown;
 }

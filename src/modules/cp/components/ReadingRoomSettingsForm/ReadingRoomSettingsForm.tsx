@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ColorPicker, FormControl } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
@@ -5,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { CardImage, Icon } from '@shared/components';
 
+import { READING_ROOM_SETTINGS_SCHEMA } from './ReadingRoomSettingsForm.const';
 import styles from './ReadingRoomSettingsForm.module.scss';
 import {
 	ReadingRoomFormState,
@@ -14,7 +16,14 @@ import {
 const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit, renderCancelSaveButtons }) => {
 	const { t } = useTranslation();
 
-	const { control, handleSubmit, setValue, watch } = useForm<ReadingRoomFormState>({
+	const {
+		control,
+		formState: { errors },
+		handleSubmit,
+		setValue,
+		watch,
+	} = useForm<ReadingRoomFormState>({
+		resolver: yupResolver(READING_ROOM_SETTINGS_SCHEMA()),
 		defaultValues: {
 			color: '#00857d',
 		},
@@ -48,7 +57,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit, renderCancel
 				// image="/images/bg-shd.png"
 				size="short"
 			/>
-			<FormControl>
+			<FormControl errors={[errors.color?.message]}>
 				<Controller
 					name="color"
 					control={control}
@@ -59,7 +68,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit, renderCancel
 									{t('Achtergrondkleur')}
 								</p>
 								<ColorPicker
-									color={currentState.color}
+									color={currentState.color ?? ''}
 									onChange={(color) => {
 										if (!savedState) {
 											setSavedState({
