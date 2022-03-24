@@ -8,6 +8,8 @@ import { ReadingRoomSettingsForm, RichTextForm } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRoomInfo } from '@reading-room/hooks/get-reading-room-info';
+import { ReadingRoomService } from '@reading-room/services';
+import { UpdateReadingRoomSettings } from '@reading-room/services/reading-room/reading-room.service.types';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
@@ -20,6 +22,18 @@ const CPSettingsPage: NextPage = () => {
 	 * Data
 	 */
 	const { data: readingRoomInfo } = useGetReadingRoomInfo('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21');
+
+	const updateSpace = (values: Partial<UpdateReadingRoomSettings>) => {
+		if (readingRoomInfo) {
+			ReadingRoomService.update('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21', {
+				description: readingRoomInfo.description,
+				color: readingRoomInfo.color,
+				serviceDescription: readingRoomInfo.serviceDescription,
+				image: readingRoomInfo.image,
+				...values,
+			});
+		}
+	};
 
 	/**
 	 * Render
@@ -78,7 +92,11 @@ const CPSettingsPage: NextPage = () => {
 								initialColor={
 									readingRoomInfo ? readingRoomInfo?.color ?? '#00857d' : null
 								}
+								initialImage={readingRoomInfo?.image}
 								renderCancelSaveButtons={renderCancelSaveButtons}
+								onSubmit={(values) => {
+									updateSpace(values);
+								}}
 							/>
 						</Box>
 					</article>
@@ -98,7 +116,7 @@ const CPSettingsPage: NextPage = () => {
 								initialHTML={
 									readingRoomInfo && `<p>${readingRoomInfo.description}</p>`
 								}
-								onSubmit={(html) => console.log(html)}
+								onSubmit={(html) => updateSpace({ description: html })}
 								renderCancelSaveButtons={renderCancelSaveButtons}
 							/>
 						</Box>
@@ -120,7 +138,7 @@ const CPSettingsPage: NextPage = () => {
 									readingRoomInfo &&
 									`<p>${readingRoomInfo.serviceDescription}</p>`
 								}
-								onSubmit={(html) => console.log(html)}
+								onSubmit={(html) => updateSpace({ serviceDescription: html })}
 								renderCancelSaveButtons={renderCancelSaveButtons}
 							/>
 						</Box>
