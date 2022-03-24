@@ -153,6 +153,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			Promise.all(promises).then(() => {
 				collections.refetch().then(() => {
 					onSubmit?.(values);
+					reset();
 				});
 			});
 		}

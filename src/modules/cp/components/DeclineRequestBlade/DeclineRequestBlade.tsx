@@ -19,6 +19,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 		control,
 		formState: { errors },
 		handleSubmit,
+		reset,
 	} = useForm<DeclineRequestFormState>({
 		resolver: yupResolver(DECLINE_REQUEST_FORM_SCHEMA()),
 	});
@@ -41,6 +42,8 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 						'modules/cp/components/decline-request-blade/decline-request-blade___deze-aanvraag-werd-succesvol-afgekeurd'
 					),
 				});
+
+				reset();
 			});
 	};
 

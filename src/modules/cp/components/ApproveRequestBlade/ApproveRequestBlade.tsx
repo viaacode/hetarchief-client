@@ -52,6 +52,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		handleSubmit,
 		getValues,
 		setValue,
+		reset,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
 		defaultValues: {
@@ -81,6 +82,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
 					),
 				});
+
+				reset();
 			});
 	};
 

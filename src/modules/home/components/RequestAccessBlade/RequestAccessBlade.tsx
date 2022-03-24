@@ -16,6 +16,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 		control,
 		formState: { errors },
 		handleSubmit,
+		reset,
 	} = useForm<RequestAccessFormState>({
 		resolver: yupResolver(REQUEST_ACCESS_FORM_SCHEMA()),
 	});
@@ -23,6 +24,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 
 	const onFormSubmit = (values: RequestAccessFormState) => {
 		onSubmit?.(values);
+		reset();
 	};
 
 	const renderFooter = () => {
