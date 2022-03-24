@@ -22,6 +22,7 @@ import {
 } from '@reading-room/components';
 import { AdvancedFilter, MetadataProp } from '@reading-room/types';
 import { getField, getOperators, getProperties } from '@reading-room/utils';
+import { getSelectValue } from '@reading-room/utils/select';
 import { Icon } from '@shared/components';
 import { SEPARATOR } from '@shared/const';
 import { Operator } from '@shared/types';
@@ -35,12 +36,6 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
-	// Helpers
-
-	const getSelectValue = (options: SelectOption[], optionValue: string | undefined | null) => {
-		return options.find((option) => option.value === optionValue);
-	};
-
 	// Computed
 
 	const operators = getOperators(state.prop as MetadataProp);

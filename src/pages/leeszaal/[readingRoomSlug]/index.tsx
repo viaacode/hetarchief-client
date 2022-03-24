@@ -17,6 +17,7 @@ import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
+	DurationFilterFormState,
 	FilterMenu,
 	GenreFilterFormState,
 	MediumFilterFormState,
@@ -277,6 +278,18 @@ const ReadingRoomPage: NextPage = () => {
 				data = (values as MediumFilterFormState).mediums;
 				break;
 
+			case ReadingRoomFilterId.Duration:
+				data = values as DurationFilterFormState;
+				data = [
+					{
+						prop: MetadataProp.Duration,
+						op: data.operator,
+						val: data.duration,
+					},
+				];
+				console.info(values, ...data);
+				break;
+
 			case ReadingRoomFilterId.Creator:
 				data = (values as CreatorFilterFormState).creators;
 				break;
@@ -389,7 +402,7 @@ const ReadingRoomPage: NextPage = () => {
 							: undefined,
 						publishedBy: item.schema_creator?.Maker?.join(', '),
 						type: item.dcterms_format || undefined,
-						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer[0].schema_identifier}/${item.schema_identifier}`,
+						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer?.[0].schema_identifier}/${item.schema_identifier}`,
 					})
 				)}
 				keywords={keywords}

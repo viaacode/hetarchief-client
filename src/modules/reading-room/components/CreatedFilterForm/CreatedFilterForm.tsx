@@ -20,7 +20,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
-				<div className="u-my-32">Created</div>
+				<div className="u-mb-32">Created</div>
 			</div>
 
 			{children({ values: getValues(), reset })}

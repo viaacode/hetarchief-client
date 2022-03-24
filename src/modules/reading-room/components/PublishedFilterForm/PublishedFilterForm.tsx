@@ -20,7 +20,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
-				<div className="u-my-32">Published</div>
+				<div className="u-mb-32">Published</div>
 			</div>
 
 			{children({ values: getValues(), reset })}
