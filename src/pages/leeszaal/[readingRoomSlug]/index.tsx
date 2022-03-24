@@ -65,6 +65,7 @@ import {
 } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 
+import { useGetSpace } from 'modules/spaces/hooks/get-space';
 import { VisitorLayout } from 'modules/visitors';
 
 const ReadingRoomPage: NextPage = () => {
@@ -108,7 +109,12 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: mediaResultInfo } = useGetMediaObjects(
+	const { data: space } = useGetSpace(
+		readingRoomSlug as string,
+		typeof readingRoomSlug === 'string'
+	);
+
+	const { data: media } = useGetMediaObjects(
 		readingRoomSlug as string,
 		[
 			// Searchbar
@@ -184,7 +190,7 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
-		let buckets = mediaResultInfo?.aggregations.dcterms_format.buckets;
+		let buckets = media?.aggregations.dcterms_format.buckets;
 
 		if (!buckets || buckets.length === 0) {
 			buckets = [
@@ -203,7 +209,7 @@ const ReadingRoomPage: NextPage = () => {
 			[ReadingRoomMediaType.Video]:
 				buckets.find((bucket) => bucket.key === ReadingRoomMediaType.Video)?.doc_count || 0,
 		});
-	}, [mediaResultInfo?.aggregations]);
+	}, [media?.aggregations]);
 
 	/**
 	 * Display
@@ -337,8 +343,8 @@ const ReadingRoomPage: NextPage = () => {
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched;
-	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
-	const showResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length > 0;
+	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
+	const showResults = hasSearched && !!media && media?.items?.length > 0;
 
 	/**
 	 * Render
@@ -376,22 +382,19 @@ const ReadingRoomPage: NextPage = () => {
 	const renderResults = () => (
 		<>
 			<MediaCardList
-				items={mediaResultInfo?.items
-					// TODO: check why these 'empty' results are there
-					?.filter((mediaObject) => mediaObject.type !== 'SOLR')
-					.map(
-						(mediaObject): IdentifiableMediaCard => ({
-							id: mediaObject.schema_identifier,
-							description: mediaObject.schema_description,
-							title: mediaObject.schema_name,
-							publishedAt: mediaObject.schema_date_published
-								? asDate(mediaObject.schema_date_published)
-								: undefined,
-							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
-							type: mediaObject.dcterms_format || undefined,
-							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer[0].schema_identifier}/${mediaObject.schema_identifier}`,
-						})
-					)}
+				items={media?.items.map(
+					(item): IdentifiableMediaCard => ({
+						id: item.schema_identifier,
+						description: item.schema_description,
+						title: item.schema_name,
+						publishedAt: item.schema_date_published
+							? asDate(item.schema_date_published)
+							: undefined,
+						publishedBy: item.schema_creator?.Maker?.join(', '),
+						type: item.dcterms_format || undefined,
+						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer[0].schema_identifier}/${item.schema_identifier}`,
+					})
+				)}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
 				onItemBookmark={({ item }) => onMediaBookmark(item as IdentifiableMediaCard)}
@@ -421,8 +424,7 @@ const ReadingRoomPage: NextPage = () => {
 					<meta name="description" content="Leeszaal omschrijving" />
 				</Head>
 
-				{/* TODO: bind title to state */}
-				<ReadingRoomNavigation title={'Leeszaal'} showBorder={showNavigationBorder} />
+				<ReadingRoomNavigation title={space?.name} showBorder={showNavigationBorder} />
 
 				<section className="u-bg-black u-pt-8">
 					<div className="l-container">
