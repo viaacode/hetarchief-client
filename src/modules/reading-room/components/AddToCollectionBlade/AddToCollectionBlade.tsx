@@ -100,6 +100,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			const promises = dirty.map((pair) => {
 				const collection = getCollection(pair.id);
 
+				const descriptionVariables = {
+					item: selected.title,
+					collection:
+						collection?.name ||
+						t(
+							'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___onbekend'
+						),
+				};
 				if (pair.checked) {
 					return collectionsService
 						.addToCollection(pair.id, selected.id)
@@ -108,15 +116,6 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 							if (response === undefined) {
 								return;
 							}
-
-							const descriptionVariables = {
-								item: selected.title,
-								collection:
-									collection?.name ||
-									t(
-										'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___onbekend'
-									),
-							};
 							toastService.notify({
 								maxLines: 3,
 								title: t(
@@ -137,14 +136,6 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								return;
 							}
 
-							const descriptionVariables = {
-								item: selected.title,
-								collection:
-									collection?.name ||
-									t(
-										'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___onbekend'
-									),
-							};
 							toastService.notify({
 								maxLines: 3,
 								title: t(

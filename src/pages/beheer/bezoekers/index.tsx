@@ -121,14 +121,18 @@ const CPVisitorsPage: NextPage = () => {
 			});
 			await refetchVisitRequests();
 			toastService.notify({
-				title: 'De toegang is ingetrokken',
-				description: 'Deze gebruiker heeft nu geen toegang meer',
+				title: t('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
+				description: t(
+					'pages/beheer/bezoekers/index___deze-gebruiker-heeft-nu-geen-toegang-meer'
+				),
 			});
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: 'Error',
-				description: 'Het updaten van de bezoekersaanvraag is mislukt',
+				title: t('pages/beheer/bezoekers/index___error'),
+				description: t(
+					'pages/beheer/bezoekers/index___het-updaten-van-de-bezoekersaanvraag-is-mislukt'
+				),
 			});
 		}
 	};
@@ -234,7 +238,7 @@ const CPVisitorsPage: NextPage = () => {
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
 									columns: VisitorsTableColumns(
-										{ t },
+										t,
 										denyVisitRequest,
 										editVisitRequest
 									) as Column<object>[],

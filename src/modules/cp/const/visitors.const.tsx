@@ -39,16 +39,16 @@ export const visitorsStatusFilters = (): TabProps[] => {
 };
 
 export const VisitorsTableColumns = (
-	i18n: { t: TFunction } = { t: (x: string) => x },
+	t: TFunction,
 	denyVisitRequest: (visitRequest: VisitInfo) => void,
 	editVisitRequest: (visitRequest: VisitInfo) => void
 ): Column<VisitInfo>[] => [
 	{
-		Header: i18n.t('modules/cp/const/visitors___naam') || '',
+		Header: t('modules/cp/const/visitors___naam') || '',
 		accessor: 'visitorName',
 	},
 	{
-		Header: i18n.t('modules/cp/const/visitors___emailadres') || '',
+		Header: t('modules/cp/const/visitors___emailadres') || '',
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
@@ -63,7 +63,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/cp/const/visitors___toegang') || '',
+		Header: t('modules/cp/const/visitors___toegang') || '',
 		accessor: 'startAt',
 		Cell: ({ row }: VisitInfoRow) => {
 			const start = asDate(row.original.startAt);
@@ -81,7 +81,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/cp/const/visitors___goedgekeurd-door') || '',
+		Header: t('modules/cp/const/visitors___goedgekeurd-door') || '',
 		accessor: 'status',
 		Cell: ({ row }: VisitInfoRow) => {
 			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
@@ -96,11 +96,11 @@ export const VisitorsTableColumns = (
 					menuItems={[
 						{
 							id: 'deny',
-							label: i18n.t('modules/cp/const/visitors___toegang-intrekken'),
+							label: t('modules/cp/const/visitors___toegang-intrekken'),
 						},
 						{
 							id: 'edit',
-							label: i18n.t('modules/cp/const/visitors___toegang-aanpassen'),
+							label: t('modules/cp/const/visitors___toegang-aanpassen'),
 						},
 					]}
 					onMenuItemClicked={(actionId: string | number) => {
