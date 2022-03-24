@@ -1,11 +1,11 @@
 import { stringifyUrl } from 'query-string';
 
-import { AccessType } from '@reading-room/services/reading-room/reading-room.service.types';
 import { ReadingRoomInfo } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import { ApiResponseWrapper } from '@shared/types/api';
 
 import { READING_ROOM_SERVICE_BASE_URL } from './reading-room.service.const';
+import { AccessType, UpdateReadingRoomSettings } from './reading-room.service.types';
 
 export class ReadingRoomService {
 	public static async getAll(
@@ -45,6 +45,15 @@ export class ReadingRoomService {
 	}
 
 	public static async getById(roomId: string): Promise<unknown> {
-		return await ApiService.getApi().get(roomId).json();
+		return await ApiService.getApi().get(`${READING_ROOM_SERVICE_BASE_URL}/${roomId}`).json();
+	}
+
+	public static async update(
+		roomId: string,
+		json: UpdateReadingRoomSettings
+	): Promise<ReadingRoomInfo> {
+		return await ApiService.getApi()
+			.post(`${READING_ROOM_SERVICE_BASE_URL}/${roomId}`, { json })
+			.json();
 	}
 }

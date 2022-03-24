@@ -7,6 +7,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettingsForm, RichTextForm } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
+import { useGetReadingRoomInfo } from '@reading-room/hooks/get-reading-room-info';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
@@ -14,6 +15,11 @@ const CPSettingsPage: NextPage = () => {
 	 * Hooks
 	 */
 	const { t } = useTranslation();
+
+	/**
+	 * Data
+	 */
+	const { data: readingRoomInfo } = useGetReadingRoomInfo('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21');
 
 	/**
 	 * Render
@@ -66,11 +72,14 @@ const CPSettingsPage: NextPage = () => {
 									'pages/beheer/instellingen/index___personaliseer-hoe-jouw-leeszaal-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
 								)}
 							</p>
-							<div className="p-cp-settings__leeszaal-controls">
-								<ReadingRoomSettingsForm
-									renderCancelSaveButtons={renderCancelSaveButtons}
-								/>
-							</div>
+
+							<ReadingRoomSettingsForm
+								className="p-cp-settings__leeszaal-controls"
+								initialColor={
+									readingRoomInfo ? readingRoomInfo?.color ?? '#00857d' : null
+								}
+								renderCancelSaveButtons={renderCancelSaveButtons}
+							/>
 						</Box>
 					</article>
 
@@ -86,6 +95,9 @@ const CPSettingsPage: NextPage = () => {
 								)}
 							</p>
 							<RichTextForm
+								initialHTML={
+									readingRoomInfo && `<p>${readingRoomInfo.description}</p>`
+								}
 								onSubmit={(html) => console.log(html)}
 								renderCancelSaveButtons={renderCancelSaveButtons}
 							/>
@@ -104,6 +116,10 @@ const CPSettingsPage: NextPage = () => {
 								)}
 							</p>
 							<RichTextForm
+								initialHTML={
+									readingRoomInfo &&
+									`<p>${readingRoomInfo.serviceDescription}</p>`
+								}
 								onSubmit={(html) => console.log(html)}
 								renderCancelSaveButtons={renderCancelSaveButtons}
 							/>

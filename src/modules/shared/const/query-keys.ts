@@ -8,5 +8,6 @@ export enum QUERY_KEYS {
 	getMediaTicketUrl = 'getMediaTicketUrl',
 	getNotifications = 'getNotifications',
 	getReadingRooms = 'getReadingRooms',
+	getReadingRoomInfo = 'getReadingRoomInfo',
 	getVisits = 'getVisits',
 }

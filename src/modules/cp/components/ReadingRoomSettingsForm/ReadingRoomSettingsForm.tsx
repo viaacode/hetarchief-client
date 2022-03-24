@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ColorPicker, FormControl } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { CardImage, Icon } from '@shared/components';
@@ -13,7 +13,12 @@ import {
 	ReadingRoomSettingsFormProps,
 } from './ReadingRoomSettingsForm.types';
 
-const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit, renderCancelSaveButtons }) => {
+const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
+	className,
+	initialColor,
+	onSubmit,
+	renderCancelSaveButtons,
+}) => {
 	const { t } = useTranslation();
 
 	const {
@@ -25,14 +30,22 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit, renderCancel
 	} = useForm<ReadingRoomFormState>({
 		resolver: yupResolver(READING_ROOM_SETTINGS_SCHEMA()),
 		defaultValues: {
-			color: '#00857d',
+			color: initialColor ?? '',
 		},
 	});
 	const currentState = watch();
 
 	const [savedState, setSavedState] = useState<ReadingRoomFormState>({
-		color: '#00857d',
+		color: initialColor ?? '',
 	});
+
+	useEffect(() => {
+		setSavedState({
+			color: initialColor ?? '',
+		});
+		setValue('color', initialColor ?? '');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initialColor]);
 
 	const isStateUpdated = (): boolean => {
 		return currentState.color !== savedState.color || currentState.image !== savedState.image;
@@ -47,7 +60,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit, renderCancel
 	const minHeight = 320;
 
 	return (
-		<>
+		<div className={className}>
 			<CardImage
 				className={styles['c-reading-room-settings-form__image']}
 				color={currentState.color}
@@ -126,7 +139,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({ onSubmit, renderCancel
 					() => setValue('color', savedState?.color),
 					handleSubmit(onFormSubmit)
 				)}
-		</>
+		</div>
 	);
 };
 

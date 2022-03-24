@@ -1,6 +1,9 @@
 import { RichEditorState } from '@meemoo/react-components';
 
-export interface RichTextFormProps {
+import { DefaultComponentProps } from '@shared/types';
+
+export interface RichTextFormProps extends DefaultComponentProps {
+	initialHTML?: string;
 	renderCancelSaveButtons: (onCancel: () => void, onSave: () => void) => void;
 	onSubmit?: (html: string) => void;
 }

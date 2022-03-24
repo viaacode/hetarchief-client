@@ -5,7 +5,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { RichTextFormProps, RichTextFormState } from './RichTextForm.types';
 import { isEqualHtml } from './RichTextForm.utils';
 
-const RichTextForm: FC<RichTextFormProps> = ({ onSubmit, renderCancelSaveButtons }) => {
+const RichTextForm: FC<RichTextFormProps> = ({
+	className,
+	initialHTML,
+	onSubmit,
+	renderCancelSaveButtons,
+}) => {
 	const { control, handleSubmit, setValue, watch } = useForm<RichTextFormState>();
 	const [savedState, setSavedState] = useState<RichEditorState>();
 
@@ -15,7 +20,7 @@ const RichTextForm: FC<RichTextFormProps> = ({ onSubmit, renderCancelSaveButtons
 	};
 
 	return (
-		<FormControl>
+		<FormControl className={className}>
 			<Controller
 				name="richText"
 				control={control}
@@ -32,7 +37,7 @@ const RichTextForm: FC<RichTextFormProps> = ({ onSubmit, renderCancelSaveButtons
 
 									setValue('richText', state);
 								}}
-								initialHtml={'<p><strong>initial HTML</strong></p>'}
+								initialHtml={initialHTML}
 								state={currentState}
 							/>
 							{!isEqualHtml(currentState, savedState) &&
