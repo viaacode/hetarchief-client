@@ -270,38 +270,35 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: ReadingRoomFilterId, values: unknown) => {
-		let cast;
+		let data;
 
 		switch (id) {
 			case ReadingRoomFilterId.Medium:
-				cast = values as MediumFilterFormState;
-				setQuery({ [id]: cast.mediums });
+				data = (values as MediumFilterFormState).mediums;
 				break;
 
 			case ReadingRoomFilterId.Creator:
-				cast = values as CreatorFilterFormState;
-				setQuery({ [id]: cast.creators });
+				data = (values as CreatorFilterFormState).creators;
 				break;
 
 			case ReadingRoomFilterId.Genre:
-				cast = values as GenreFilterFormState;
-				setQuery({ [id]: cast.genres });
+				data = (values as GenreFilterFormState).genres;
 				break;
 
 			case ReadingRoomFilterId.Language:
-				cast = values as LanguageFilterFormState;
-				setQuery({ [id]: cast.languages });
+				data = (values as LanguageFilterFormState).languages;
 				break;
 
 			case ReadingRoomFilterId.Advanced:
-				cast = values as AdvancedFilterFormState;
-				setQuery({ [id]: cast.advanced });
+				data = (values as AdvancedFilterFormState).advanced;
 				break;
 
 			default:
 				console.warn(`[WARN][ReadingRoomPage] No submit handler for ${id}`);
 				break;
 		}
+
+		data && setQuery({ [id]: data });
 	};
 
 	const onRemoveKeyword = (newValue: MultiValue<TagIdentity>) => {
@@ -424,7 +421,12 @@ const ReadingRoomPage: NextPage = () => {
 					<meta name="description" content="Leeszaal omschrijving" />
 				</Head>
 
-				<ReadingRoomNavigation title={space?.name} showBorder={showNavigationBorder} />
+				<ReadingRoomNavigation
+					title={space?.name}
+					phone={space?.contactInfo.telephone || ''}
+					email={space?.contactInfo.email || ''}
+					showBorder={showNavigationBorder}
+				/>
 
 				<section className="u-bg-black u-pt-8">
 					<div className="l-container">
