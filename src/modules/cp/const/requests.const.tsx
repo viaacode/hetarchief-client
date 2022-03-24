@@ -5,11 +5,11 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusBadge } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
+import { requestCreatedAtFormatter } from '@cp/utils';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow, VisitStatus } from '@shared/types';
-import { parseDatabaseDate } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
 
@@ -70,7 +70,7 @@ export const RequestTableColumns = (
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
 				<span className="u-color-neutral">
-					{parseDatabaseDate(row.original.createdAt).toLocaleString('nl-be')}
+					{requestCreatedAtFormatter(row.original.createdAt)}
 				</span>
 			);
 		},

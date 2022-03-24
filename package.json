@@ -1,6 +1,6 @@
 {
 	"name": "hetarchief-client",
-	"version": "0.4.1",
+	"version": "0.5.0",
 	"private": true,
 	"contributors": [
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
@@ -30,7 +30,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
-		"@meemoo/react-components": "2.12.12",
+		"@meemoo/react-components": "2.12.14",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
 		"clsx": "1.1.1",
@@ -88,6 +88,7 @@
 		"@types/react-datepicker": "4.3.4",
 		"@types/react-highlight-words": "0.16.4",
 		"@types/react-modal": "3.13.1",
+		"@types/react-router": "5.1.18",
 		"@types/react-router-dom": "5.3.3",
 		"@types/react-table": "7.7.9",
 		"@types/sort-object-keys": "1.1.0",
@@ -110,11 +111,13 @@
 		"jest": "27.5.1",
 		"jest-junit": "13.0.0",
 		"lint-staged": "12.1.2",
+		"lodash": "4.17.21",
 		"postcss-flexbugs-fixes": "5.0.2",
 		"postcss-normalize": "10.0.1",
 		"postcss-preset-env": "7.0.1",
 		"prettier": "2.4.1",
 		"raf": "3.4.1",
+		"react-router": "5.2.1",
 		"sass": "1.43.4",
 		"sass-loader": "12.4.0",
 		"sort-object-keys": "1.1.3",

@@ -3,20 +3,31 @@ import { i18n } from 'next-i18next';
 
 import { MetadataItem, ObjectPlaceholderProps } from '@media/components';
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
-import { Media, MediaActions, MediaTypes, ObjectDetailTabs } from '@media/types';
+import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapKeywordsToTagList, mapObjectToMetadata } from '@media/utils';
 import { Icon } from '@shared/components';
+import { MediaTypes } from '@shared/types';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
+
+/**
+ * Render media
+ */
+
+export const FLOWPLAYER_FORMATS: string[] = ['mp4', 'mp3', 'm4a', 'ogv', 'ogg', 'webm', 'm3u8'];
+export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
 
 /**
  * Object placeholders
  */
 export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
-	description: 'Ophalen van afspeel-token is mislukt.',
-	reasonTitle: 'Waarom kan ik dit object niet bekijken?',
+	description: i18n?.t('modules/media/const/index___ophalen-van-afspeel-token-mislukt') || '',
+	reasonTitle:
+		i18n?.t('modules/media/const/index___waarom-kan-ik-dit-object-niet-bekijken') || '',
 	reasonDescription:
-		'Sed augue ipsum, egestas nec, vestibulum et, malesuada adipiscing, dui. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc, vitae euismod ligula urna in dolor. Mauris sollicitudin fermentum libero. Praesent nonummy mi in odio. Nunc interdum lacus sit amet orci. Vestibulum rutrum, mi nec elementum vehicula, eros quam gravida nisl, id fringilla neque ante vel mi. Morbi mollis tellus ac sapien. Phasellus volutpat, metus eget egestas mollis, lacus lacus blandit dui',
+		i18n?.t(
+			'modules/media/const/index___er-ging-iets-mis-bij-het-ophalen-van-het-afspeel-token'
+		) || '',
 	openModalButtonLabel:
 		i18n?.t('pages/leeszaal/reading-room-slug/object-id/index___meer-info') || '',
 	closeModalButtonLabel:
@@ -25,6 +36,23 @@ export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
 
 export const objectPlaceholder = (): ObjectPlaceholderProps => ({
 	...objectPlaceholderMock,
+	openModalButtonLabel:
+		i18n?.t('pages/leeszaal/reading-room-slug/object-id/index___meer-info') || '',
+	closeModalButtonLabel:
+		i18n?.t('pages/leeszaal/reading-room-slug/object-id/index___sluit') || '',
+});
+
+export const formatErrorPlaceholder = (format: string): ObjectPlaceholderProps => ({
+	description:
+		i18n?.t('modules/media/const/index___dit-formaat-wordt-niet-ondersteund-format', {
+			format,
+		}) || '',
+	reasonTitle:
+		i18n?.t('modules/media/const/index___waarom-kan-ik-dit-object-niet-bekijken') || '',
+	reasonDescription:
+		i18n?.t(
+			'modules/media/const/index___het-formaat-van-de-data-wordt-op-dit-moment-niet-ondersteund'
+		) || '',
 	openModalButtonLabel:
 		i18n?.t('pages/leeszaal/reading-room-slug/object-id/index___meer-info') || '',
 	closeModalButtonLabel:
@@ -182,17 +210,18 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			data: mediaInfo.datePublished,
 		},
 		...mapObjectToMetadata(mediaInfo.creator),
+		...mapObjectToMetadata(mediaInfo.contributor),
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n?.t('modules/media/const/index___uitgebreide-beschrijving') ?? '',
 			data: mediaInfo.abstract,
 		},
 		{
-			title: i18n?.t('transcriptie') ?? '',
+			title: i18n?.t('modules/media/const/index___transcriptie') ?? '',
 			data: mediaInfo.representations[0].transcript, // TODO: Update voor andere representations?
 		},
 		// {
-		// 	title: i18n?.t('Ondertitels') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___ondertitels') ?? '',
 		// 	data: // Niet in representations
 		// },
 		// {
@@ -222,33 +251,30 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		},
 		// Geen DB velden
 		// {
-		// 	title: i18n?.t('Type') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___type') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('filmbasis') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___filmbasis') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('Beeld/Geluid') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___beeld-geluid') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('Kleur/Zwart-wit') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___kleur-zwart-wit') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('Ondertitels') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___ondertitels') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
 		// {
-		// 	title: i18n?.t('Taal ondertitels') ?? '',
+		// 	title: i18n?.t('modules/media/const/index___taal-ondertitels') ?? '',
 		// 	data: mediaInfo.premisIdentifier,
 		// },
-		{
-			title: i18n?.t('modules/media/const/index___is-deel-van') ?? '',
-			data: mediaInfo.isPartOf,
-		},
+		...mapObjectToMetadata(mediaInfo.isPartOf),
 		// {
 		// 	title: i18n?.t('modules/media/const/index___bevat') ?? '',
 		// 	data: // Niet in type?

@@ -2,6 +2,7 @@ import { CSSProperties } from 'react';
 
 export * from './api';
 export * from './blade';
+export * from './media';
 export * from './sidebar';
 export * from './utils';
 export * from './visit';
@@ -33,6 +34,17 @@ export enum OrderDirection {
 export interface SortObject {
 	orderProp: string;
 	orderDirection?: OrderDirection;
+}
+
+// 2-letter for url parsing
+export enum Operator {
+	Contains = 'co',
+	ContainsNot = 'nc',
+	Equals = 'eq',
+	EqualsNot = 'ne',
+	LessThanOrEqual = 'lt', // shorter (duration) or until (date)
+	GreaterThanOrEqual = 'gt', // longer (duration) or after (date)
+	Between = 'bt', // duration & date
 }
 
 /**

@@ -21,8 +21,16 @@ const CPSettingsPage: NextPage = () => {
 
 	const renderCancelSaveButtons = (onCancel: () => void, onSave: () => void) => (
 		<div className="p-cp-settings__cancel-save">
-			<Button label={t('Annuleer')} variants="text" onClick={onCancel} />
-			<Button label={t('Bewaar wijzigingen')} variants="black" onClick={onSave} />
+			<Button
+				label={t('pages/beheer/instellingen/index___annuleer')}
+				variants="text"
+				onClick={onCancel}
+			/>
+			<Button
+				label={t('pages/beheer/instellingen/index___bewaar-wijzigingen')}
+				variants="black"
+				onClick={onSave}
+			/>
 		</div>
 	);
 
@@ -49,11 +57,13 @@ const CPSettingsPage: NextPage = () => {
 				<div className="l-container">
 					{/* Leeszaal */}
 					<article className="p-cp-settings__content-block">
-						<h2 className="p-cp-settings__title">{t('Leeszaal')}</h2>
+						<h2 className="p-cp-settings__title">
+							{t('pages/beheer/instellingen/index___leeszaal')}
+						</h2>
 						<Box className="p-cp-settings__box">
 							<p className="p-cp-settings__description">
 								{t(
-									'Personaliseer hoe jouw leeszaal in het aanbod mag verschijnen op het Leeszalen overzicht. Naast een standaard achtergrondkleur kan je ook een thematische achtergrond afbeelding instellen.'
+									'pages/beheer/instellingen/index___personaliseer-hoe-jouw-leeszaal-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
 								)}
 							</p>
 							<div className="p-cp-settings__leeszaal-controls">
@@ -66,11 +76,13 @@ const CPSettingsPage: NextPage = () => {
 
 					{/* Wachtzaal */}
 					<article className="p-cp-settings__content-block">
-						<h2 className="p-cp-settings__title">{t('Omschrijving wachtzaal')}</h2>
+						<h2 className="p-cp-settings__title">
+							{t('pages/beheer/instellingen/index___omschrijving-wachtzaal')}
+						</h2>
 						<Box className="p-cp-settings__box">
 							<p className="p-cp-settings__description">
 								{t(
-									'Dit is de wachtzaalomschrijving die bezoekers kunnen lezen op de detailpagina van je leeszaal. Leg uit waar je leeszaal om gaat, welke info men er kan vinden, vertel de bezoeker over je collectie.'
+									'pages/beheer/instellingen/index___dit-is-de-wachtzaalomschrijving-die-bezoekers-kunnen-lezen-op-de-detailpagina-van-je-leeszaal-leg-uit-waar-je-leeszaal-om-gaat-welke-info-men-er-kan-vinden-vertel-de-bezoeker-over-je-collectie'
 								)}
 							</p>
 							<RichTextForm
@@ -83,12 +95,12 @@ const CPSettingsPage: NextPage = () => {
 					{/* Aanvraag */}
 					<article className="p-cp-settings__content-block">
 						<h2 className="p-cp-settings__title">
-							{t('Omschrijving leeszaal aanvraag')}
+							{t('pages/beheer/instellingen/index___omschrijving-leeszaal-aanvraag')}
 						</h2>
 						<Box className="p-cp-settings__box">
 							<p className="p-cp-settings__description">
 								{t(
-									'Als bezoekers een aanvraag doen, kunnen zij een klein tekstje lezen met extra info over het bezoek. Bv: “Vraag meer info aan balie 2 bij aankomst.” of “Elke dag geopend van 10:00 tot 17:00.”'
+									'pages/beheer/instellingen/index___als-bezoekers-een-aanvraag-doen-kunnen-zij-een-klein-tekstje-lezen-met-extra-info-over-het-bezoek-bv-vraag-meer-info-aan-balie-2-bij-aankomst-of-elke-dag-geopend-van-10-00-tot-17-00'
 								)}
 							</p>
 							<RichTextForm

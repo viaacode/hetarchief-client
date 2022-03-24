@@ -26,7 +26,7 @@ const CardImage: FC<CardImageProps> = ({
 			)}
 			style={{
 				...style,
-				backgroundColor: color,
+				...(color ? { backgroundColor: color } : {}),
 			}}
 		>
 			{image && (

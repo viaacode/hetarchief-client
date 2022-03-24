@@ -2,32 +2,51 @@ import { stringifyUrl } from 'query-string';
 
 import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
-import { SortObject } from '@shared/types';
 import {
-	ApiResponseWrapper,
-	ElasticsearchAggregations,
-	ElasticsearchResponse,
-} from '@shared/types/api';
-
-import { MediaInfo, MediaSearchFilters } from '../../types';
+	MediaInfo,
+	MediaSearchFilterField,
+	MediaSearchFilters,
+	MediaSearchOperator,
+	ReadingRoomMediaType,
+	SortObject,
+} from '@shared/types';
+import { ElasticsearchResponse, GetMedia } from '@shared/types/api';
 
 import { MEDIA_SERVICE_BASE_URL, MEDIA_SERVICE_TICKET_URL } from './media.service.const';
 
 export class MediaService {
-	public static async getAll(
-		filters: MediaSearchFilters = {},
+	public static async getBySpace(
+		readingRoomSlug: string,
+		filters: MediaSearchFilters = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject
-	): Promise<ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations> {
+	): Promise<GetMedia> {
 		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
+		const filtered = filters.filter((item) => {
+			// Don't send filters with no value(s)
+			const hasValue = !!item.value || !!item.multiValue;
+			const eitherValue = item.multiValue || item.value;
+
+			// Don't send filters with an empty array/string
+			const hasLength = eitherValue && eitherValue.length > 0;
+
+			// Don't send the "All" filter for FORMAT.IS
+			const isFormatAllFilter =
+				item.field === MediaSearchFilterField.FORMAT &&
+				item.operator === MediaSearchOperator.IS &&
+				item.value === ReadingRoomMediaType.All;
+
+			return hasValue && hasLength && !isFormatAllFilter;
+		});
 
 		const parsed = (await ApiService.getApi()
-			.post(MEDIA_SERVICE_BASE_URL, {
+			.post(`${MEDIA_SERVICE_BASE_URL}/${readingRoomSlug}`, {
 				body: JSON.stringify({
-					filters,
+					filters: filtered,
 					size,
 					page,
+					requestedAggs: ['format', 'genre', 'creator', 'language'],
 					...parsedSort,
 				}),
 			})

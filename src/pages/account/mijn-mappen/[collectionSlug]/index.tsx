@@ -32,7 +32,7 @@ import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { Breakpoints } from '@shared/types';
-import { createPageTitle, parseDatabaseDate } from '@shared/utils';
+import { asDate, createPageTitle } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -298,7 +298,7 @@ const AccountMyCollections: NextPage = () => {
 											id: media.id,
 											description: media.description,
 											publishedBy: media.maintainerName,
-											publishedAt: parseDatabaseDate(media.termsAvailable),
+											publishedAt: asDate(media.termsAvailable),
 											title: media.name,
 											bookmarkIsSolid: true,
 											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.id}`,

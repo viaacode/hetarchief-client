@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { userSlice } from '@auth/store/user';
+import { mediaSlice } from '@shared/store/media';
 import { tosSlice } from '@shared/store/tos';
 
 import { AppStore } from './store.types';
@@ -14,6 +15,7 @@ export const makeStore = () =>
 			[uiSlice.name]: uiSlice.reducer,
 			[userSlice.name]: userSlice.reducer,
 			[tosSlice.name]: tosSlice.reducer,
+			[mediaSlice.name]: mediaSlice.reducer,
 		},
 		devTools: process.env.DEBUG_TOOLS === 'true',
 	});
