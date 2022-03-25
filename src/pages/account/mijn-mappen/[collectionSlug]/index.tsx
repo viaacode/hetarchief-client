@@ -124,7 +124,7 @@ const AccountMyCollections: NextPage = () => {
 	};
 
 	const onRemoveFromCollection = (item: IdentifiableMediaCard, collection: Collection) => {
-		collectionsService.removeFromCollection(collection.id, item.id).then(() => {
+		collectionsService.removeFromCollection(collection.id, item.meemooFragmentId).then(() => {
 			collectionMedia.refetch();
 		});
 	};
@@ -295,13 +295,14 @@ const AccountMyCollections: NextPage = () => {
 									keywords={filters.search ? [filters.search] : []}
 									items={collectionMedia?.data?.items.map((media) => {
 										const base: IdentifiableMediaCard = {
-											id: media.id,
+											meemooFragmentId: media.meemooFragmentId,
 											description: media.description,
 											publishedBy: media.maintainerName,
 											publishedAt: asDate(media.termsAvailable),
 											title: media.name,
+											type: media.format,
 											bookmarkIsSolid: true,
-											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.id}`,
+											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.meemooFragmentId}`,
 										};
 
 										return {

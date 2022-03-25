@@ -35,7 +35,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		}, [selected, pairs]),
 	});
 
-	const collections = useGetCollections(!!selected?.id);
+	const collections = useGetCollections(!!selected?.meemooFragmentId);
 
 	/**
 	 * Methods
@@ -45,7 +45,9 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		return collections.map(({ id, objects }) => {
 			return {
 				id,
-				checked: !!(objects || []).find((obj) => obj.id === selected.id),
+				checked: !!(objects || []).find(
+					(obj) => obj.meemooFragmentId === selected.meemooFragmentId
+				),
 			};
 		});
 	};
@@ -58,11 +60,11 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	 */
 
 	useEffect(() => {
-		selected && setValue('selected.id', selected.id);
+		selected && setValue('selected.meemooFragmentId', selected.meemooFragmentId);
 	}, [setValue, selected]);
 
 	useEffect(() => {
-		if (selected && selected.id && collections.data) {
+		if (selected?.meemooFragmentId && collections.data) {
 			setPairs(mapToPairs(collections.data?.items || [], selected));
 		}
 	}, [setValue, reset, collections.data, selected]);
@@ -110,7 +112,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 				};
 				if (pair.checked) {
 					return collectionsService
-						.addToCollection(pair.id, selected.id)
+						.addToCollection(pair.id, selected.meemooFragmentId)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -129,7 +131,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						});
 				} else {
 					return collectionsService
-						.removeFromCollection(pair.id, selected.id)
+						.removeFromCollection(pair.id, selected.meemooFragmentId)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
