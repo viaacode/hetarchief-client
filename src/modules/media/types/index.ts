@@ -56,6 +56,17 @@ export interface MediaAddress {
 	postOfficeBoxNumber: string;
 }
 
+export interface MediaFile {
+	id: string;
+	name: string;
+	alternateName: string;
+	description: string;
+	schemaIdentifier: string;
+	ebucoreMediaType: string;
+	ebucoreIsMediaFragmentOf: string;
+	embedUrl: string;
+}
+
 export interface MediaRepresentation {
 	schemaIdentifier: string;
 	name: string;
@@ -64,7 +75,7 @@ export interface MediaRepresentation {
 	dctermsFormat: string;
 	transcript: string;
 	dateCreated: string;
-	files: File[];
+	files: MediaFile[];
 }
 
 export interface MediaSearchAggregationPair<T> {

@@ -91,7 +91,7 @@ const ObjectDetailPage: NextPage = () => {
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.schemaIdentifier ?? null,
+		currentRepresentation?.files?.[0]?.schemaIdentifier ?? null,
 		() => setFlowPlayerKey(currentRepresentation?.schemaIdentifier) // Force flowplayer rerender after successful fetch
 	);
 
