@@ -1,6 +1,5 @@
 import { MediaSearchAggregations } from '@media/types';
-
-import { MediaInfo } from './media';
+import { MediaInfo } from '@shared/types/media';
 
 export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 	took: number;
