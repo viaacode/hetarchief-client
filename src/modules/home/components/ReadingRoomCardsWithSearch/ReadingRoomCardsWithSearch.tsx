@@ -1,13 +1,14 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
-import { FC, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
 import { ReadingRoomInfo } from '@reading-room/types';
 import { ReadingRoomCardList, ReadingRoomCardProps, SearchBar } from '@shared/components';
 import { ReadingRoomCardType } from '@shared/components/ReadingRoomCard';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 
 const NUMBER_OF_READING_ROOMS = 6;
 
@@ -18,15 +19,22 @@ interface ReadingRoomCardsWithSearchProps {
 const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onRequestAccess }) => {
 	const { t } = useTranslation();
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
+		[SEARCH_QUERY_KEY]: StringParam,
 	});
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
+	const resultsAnchor = useRef<HTMLDivElement | null>(null);
 
 	const { data: readingRoomInfo, isLoading: isLoadingReadingRooms } = useGetReadingRooms(
 		query.search || undefined,
 		0,
 		areAllReadingRoomsVisible ? 200 : NUMBER_OF_READING_ROOMS
 	);
+
+	useEffect(() => {
+		if (query[SEARCH_QUERY_KEY] && resultsAnchor) {
+			document.body.scrollTo({ top: resultsAnchor.current?.offsetTop, behavior: 'smooth' });
+		}
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
 	 * Methods
@@ -37,17 +45,17 @@ const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onReq
 	};
 
 	const onClearSearch = () => {
-		setQuery({ search: '' });
+		setQuery({ [SEARCH_QUERY_KEY]: '' });
 	};
 
 	const onSearch = (searchValue: string) => {
 		// Force rerender
-		if (query.search === searchValue) {
+		if (query[SEARCH_QUERY_KEY] === searchValue) {
 			setQuery({
-				search: '',
+				[SEARCH_QUERY_KEY]: '',
 			});
 		}
-		setQuery({ search: searchValue });
+		setQuery({ [SEARCH_QUERY_KEY]: searchValue });
 	};
 
 	/**
@@ -64,6 +72,7 @@ const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onReq
 
 	return (
 		<div className="l-container u-pt-32 u-pt-80:md u-pb-48 u-pb-80:md">
+			<div id="p-home__results-anchor" ref={resultsAnchor} />
 			<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
 				<h3 className="p-home__subtitle">{t('pages/index___vind-een-leeszaal')}</h3>
 
@@ -91,10 +100,10 @@ const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onReq
 						(room: ReadingRoomInfo): ReadingRoomCardProps => {
 							return {
 								room: {
-									color: room.color || undefined,
-									description: room.description || undefined,
+									color: room.color,
+									description: room.description,
 									id: room.id,
-									image: room.image || undefined,
+									image: room.image,
 									name: room.name,
 									logo: room.logo,
 								},

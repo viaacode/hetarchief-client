@@ -1,32 +1,28 @@
+import { SelectOption, TagInfo } from '@meemoo/react-components';
 import { ReactNode } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
+import { DefaultComponentProps, MediaTypes, Operator } from '@shared/types';
 
-export * from './filters';
+import { MetadataProp } from './metadata';
 
-export enum ReadingRoomMediaType {
-	All = 'all',
-	Audio = 'audio',
-	Video = 'video',
-}
+export * from './metadata';
 
 export enum ReadingRoomSort {
-	Date = 'date',
+	Date = 'created',
 	Relevance = 'relevance',
-	Title = 'title',
+	Title = 'name',
 }
 
 export enum ReadingRoomFilterId {
-	Format = 'format',
-	Duration = 'duration',
+	Advanced = 'advanced',
 	Created = 'created',
-	Published = 'published',
 	Creator = 'creator',
+	Duration = 'duration',
 	Genre = 'genre',
 	Keywords = 'keywords',
 	Language = 'language',
-	ImageSound = 'image-sound',
-	Advanced = 'advanced',
+	Medium = 'medium',
+	Published = 'published',
 }
 
 export interface DefaultFilterFormChildrenParams<Values = unknown> {
@@ -63,4 +59,35 @@ export interface ReadingRoomInfo {
 	publishedAt: string | null;
 	createdAt: string;
 	updatedAt: string;
+}
+
+export type MediaTypeOptions = Array<
+	SelectOption & {
+		label: string;
+		value: MediaTypes;
+	}
+>;
+
+export type OperatorOptions = Array<
+	SelectOption & {
+		label: string;
+		value: Operator;
+	}
+>;
+
+export type PropertyOptions = Array<
+	SelectOption & {
+		label: string;
+		value: MetadataProp;
+	}
+>;
+
+export interface AdvancedFilter {
+	prop?: string; // Which property/field is being filtered on
+	op?: string; // Which operator, see Operator enum
+	val?: string; // stringified value, potentially character-separated
+}
+
+export interface TagIdentity extends Partial<AdvancedFilter>, TagInfo {
+	key: string;
 }

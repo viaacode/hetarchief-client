@@ -1,4 +1,5 @@
 import { MediaSearchAggregations } from '@media/types';
+import { MediaInfo } from '@shared/types/media';
 
 export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 	took: number;
@@ -36,3 +37,5 @@ export interface ApiResponseWrapper<T> {
 	page: number;
 	size: number;
 }
+
+export type GetMedia = ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations;

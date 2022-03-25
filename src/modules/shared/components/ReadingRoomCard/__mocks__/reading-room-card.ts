@@ -3,7 +3,7 @@ import { ReadingRoomAccess, ReadingRoomCardProps } from '../ReadingRoomCard.type
 
 export const mockReadingRoomCardProps: ReadingRoomCardProps = {
 	room: {
-		id: 78912,
+		id: '78912',
 		color: '#220538',
 		image: '/images/bg-shd.png',
 		logo: '/images/logo-shd--small.svg',

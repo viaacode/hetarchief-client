@@ -4,3 +4,8 @@ export interface CreateVisitRequest {
 	reason: string;
 	acceptedTos: boolean;
 }
+
+export enum AccessType {
+	ACTIVE = 'ACTIVE',
+	NO_ACCESS = 'NO_ACCESS',
+}

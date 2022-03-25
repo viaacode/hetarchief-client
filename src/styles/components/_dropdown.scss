@@ -32,7 +32,7 @@
 			color: $white;
 		}
 
-		&:not(:active,:hover):focus {
+		&:not(:active, :hover):focus {
 			border-color: transparent;
 			outline: 2px solid $teal;
 		}

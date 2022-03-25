@@ -9,7 +9,7 @@ export interface AddToCollectionFormState {
 }
 
 export interface AddToCollectionSelected {
-	id: string;
+	schemaIdentifier: string;
 	title?: string;
 }
 

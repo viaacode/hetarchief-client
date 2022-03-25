@@ -18,10 +18,10 @@ import { CPAdminLayout } from '@cp/layouts';
 import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
-import { OrderDirection } from '@shared/types';
+import { SEARCH_QUERY_KEY } from '@shared/const';
+import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
-import { VisitInfo, VisitStatus } from '@visits/types';
 
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
@@ -132,7 +132,7 @@ const CPRequestsPage: NextPage = () => {
 							size="md"
 							onClear={() => {
 								setFilters({
-									search: '',
+									[SEARCH_QUERY_KEY]: '',
 									page: 1,
 								});
 							}}
@@ -140,13 +140,13 @@ const CPRequestsPage: NextPage = () => {
 								// Force rerender
 								if (filters.search === searchValue) {
 									setFilters({
-										search: '',
+										[SEARCH_QUERY_KEY]: '',
 										page: 1,
 									});
 								}
 
 								setFilters({
-									search: searchValue,
+									[SEARCH_QUERY_KEY]: searchValue,
 									page: 1,
 								});
 							}}
@@ -167,14 +167,14 @@ const CPRequestsPage: NextPage = () => {
 				</div>
 
 				{(visits?.items?.length || 0) > 0 ? (
-					<div className="l-container p-cp__edgeless-container--lg">
+					<div className="l-container l-container--edgeless-to-lg">
 						<Table
 							className="u-mt-24"
 							options={
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: RequestTableColumns(t) as Column<object>[],
+									columns: RequestTableColumns({ t }) as Column<object>[],
 									data: visits?.items || [],
 									initialState: {
 										pageSize: RequestTablePageSize,
@@ -207,7 +207,7 @@ const CPRequestsPage: NextPage = () => {
 						/>
 					</div>
 				) : (
-					<div className="l-container p-cp__edgeless-container--lg u-text-center u-color-neutral u-py-48">
+					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
 						{isFetching
 							? t('pages/beheer/aanvragen/index___laden')
 							: renderEmptyMessage()}

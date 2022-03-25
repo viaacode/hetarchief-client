@@ -52,16 +52,22 @@ const LoggedInHome: FC = () => {
 		try {
 			if (!user) {
 				toastService.notify({
-					title: t('Je bent niet ingelogd'),
-					description: t('Je bent niet ingelogd, log opnieuw in en probeer opnieuw.'),
+					title: t(
+						'modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd'
+					),
+					description: t(
+						'modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
+					),
 				});
 				return;
 			}
 			if (!query.readingRoomId) {
 				toastService.notify({
-					title: t('Selecteer eerst een leeszaal'),
+					title: t(
+						'modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-leeszaal'
+					),
 					description: t(
-						'De leeszaal waarvoor je een aanvraag wil indienen is niet ingesteld.'
+						'modules/home/components/logged-in-home/logged-in-home___de-leeszaal-waarvoor-je-een-aanvraag-wil-indienen-is-niet-ingesteld'
 					),
 				});
 				return;
@@ -73,8 +79,10 @@ const LoggedInHome: FC = () => {
 				timeframe: values.visitTime,
 			});
 			toastService.notify({
-				title: t('Success'),
-				description: t('Je aanvraag is verstuurd'),
+				title: t('modules/home/components/logged-in-home/logged-in-home___success'),
+				description: t(
+					'modules/home/components/logged-in-home/logged-in-home___je-aanvraag-is-verstuurd'
+				),
 			});
 
 			setQuery({ readingRoomId: undefined });
@@ -86,9 +94,9 @@ const LoggedInHome: FC = () => {
 				info: values,
 			});
 			toastService.notify({
-				title: t('Error'),
+				title: t('modules/home/components/logged-in-home/logged-in-home___error'),
 				description: t(
-					'Er ging iets mis bij het versturen van je aanvraag, probeer het later opnieuw of contacteer de support.'
+					'modules/home/components/logged-in-home/logged-in-home___er-ging-iets-mis-bij-het-versturen-van-je-aanvraag-probeer-het-later-opnieuw-of-contacteer-de-support'
 				),
 			});
 		}
@@ -182,7 +190,7 @@ const LoggedInHome: FC = () => {
 	};
 
 	return (
-		<div className="p-home">
+		<div className="p-home u-page-bottom-padding">
 			<Head>
 				<title>{createPageTitle('Home')}</title>
 				<meta name="description" content="TODO: Home meta description" />

@@ -1,4 +1,3 @@
-
 @use "../abstracts" as *;
 
 .u-text-ellipsis {
@@ -18,31 +17,31 @@ $align: (left, right, center);
  * Size
  */
 
- $size: (
+$size: (
 	"14": $font-size-sm,
 	"22": 2.2rem,
 	"24": $font-size-lg,
- );
- @include generate-utils("font-size", "font-size", $size);
+);
+@include generate-utils("font-size", "font-size", $size);
 
 /**
  * Weight
  */
 
- $weight: (
+$weight: (
 	"400": $font-weight-normal,
- );
- @include generate-utils("font-weight", "font-weight", $weight);
+);
+@include generate-utils("font-weight", "font-weight", $weight);
 
- /**
+/**
  * Line-height
  */
 
- $height: (
-	"12_5" :$line-height-1xl,
+$height: (
+	"12_5": $line-height-1xl,
 	"13": $line-height-2xl,
- );
- @include generate-utils("line-height", "line-height", $height);
+);
+@include generate-utils("line-height", "line-height", $height);
 
 /**
  * Whitespace

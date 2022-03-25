@@ -1,8 +1,10 @@
+@use "sass:map";
 @use "styles/abstracts" as *;
 
 $component: "l-sidebar";
 $l-sidebar-width: 25.4rem;
 $l-sub-sidebar-width: 27.5rem;
+$l-sidebar-collapse-to: "md";
 
 .#{$component} {
 	display: flex;
@@ -11,11 +13,12 @@ $l-sub-sidebar-width: 27.5rem;
 	height: 100%;
 
 	&__navigation {
+		display: none;
 		width: $l-sidebar-width;
 		border-right: $divider-grey;
 
-		@include respond-to("lg") {
-			display: none;
+		@include respond-at("md") {
+			display: initial;
 		}
 	}
 
@@ -37,9 +40,76 @@ $l-sub-sidebar-width: 27.5rem;
 				width: $l-sub-sidebar-width;
 			}
 
+			&__navigation {
+				display: initial;
+			}
+
 			@include respond-at("md") {
 				:global(.l-container) {
 					padding: 0 $spacer-lg * 2;
+				}
+			}
+		}
+	}
+
+	&__content-header {
+		cursor: pointer;
+		display: flex;
+		flex-flow: row nowrap;
+		align-items: center;
+
+		// Icon
+		& > span {
+			font-size: $font-size-md;
+			margin-right: $spacer-xxs;
+		}
+	}
+
+	&--collapse-to-#{map.get($breakpoints, $l-sidebar-collapse-to)} {
+		@include respond-to($l-sidebar-collapse-to) {
+			position: relative;
+
+			.#{$component} {
+				&__navigation,
+				&__sidebar {
+					height: 100%;
+					width: 100%;
+				}
+
+				&__navigation,
+				&__main {
+					transition: transform $animate-default, visibility $animate-default;
+				}
+
+				&__navigation {
+					z-index: get-z-layer("blade");
+					position: absolute;
+					border-right: none;
+				}
+			}
+
+			&.#{$component}--open {
+				.#{$component} {
+					&__main {
+						transform: translateX(100%);
+					}
+				}
+			}
+
+			&:not(.#{$component}--open) {
+				.#{$component} {
+					&__navigation {
+						visibility: hidden;
+						transform: translateX(-100%);
+					}
+				}
+			}
+		}
+
+		@include respond-at($l-sidebar-collapse-to) {
+			.#{$component} {
+				&__content-header {
+					display: none;
 				}
 			}
 		}

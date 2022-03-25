@@ -1,4 +1,6 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
+
+import { MediaTypes } from '@shared/types';
 
 export type MediaCardViewMode = 'list' | 'grid';
 
@@ -6,15 +8,17 @@ export interface MediaCardProps {
 	bookmarkIsSolid?: boolean;
 	description?: ReactNode;
 	keywords?: string[];
+	detailLink: string;
 	preview?: string;
 	publishedAt?: Date;
 	publishedBy?: string;
 	title?: string;
-	type?: 'video' | 'audio';
+	type: MediaTypes;
 	view?: MediaCardViewMode;
-	onBookmark?: MouseEventHandler<HTMLButtonElement>;
-	onTitleClick?: () => void;
+	onBookmark?: (evt: MouseEvent) => void;
 	actions?: ReactNode;
 }
 
-export type IdentifiableMediaCard = MediaCardProps & { id: string };
+export type IdentifiableMediaCard = MediaCardProps & {
+	schemaIdentifier: string;
+};

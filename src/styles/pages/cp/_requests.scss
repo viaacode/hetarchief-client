@@ -33,18 +33,6 @@ $page: "p-cp-requests";
 		transform: translateY(0.2rem); // shift if to center on single-line
 	}
 
-	&__link {
-		text-decoration: none;
-		transition: color $animate-default;
-
-		&:hover,
-		&:active,
-		&:focus,
-		&:focus-within {
-			color: $teal !important;
-		}
-	}
-
 	tr {
 		@include respond-to("lg") {
 			td,
@@ -56,7 +44,8 @@ $page: "p-cp-requests";
 			}
 		}
 
-		td, th {
+		td,
+		th {
 			&:nth-last-child(1) {
 				display: none; // Hidden, see ARC-409
 				padding-left: 0;
