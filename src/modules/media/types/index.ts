@@ -1,7 +1,7 @@
 // Mapped intellectual entity object
 export interface Media {
-	meemooFragmentId: string; // Unique id per object
-	schemaIdentifier: string; // PID (DON'T use this for identification of an object)
+	schemaIdentifier: string; // Unique id per object
+	meemooIdentifier: string; // PID (DON'T use this for identification of an object)
 	premisIdentifier: Record<string, string[]>;
 	premisRelationship: string;
 	isPartOf: any;
@@ -57,14 +57,13 @@ export interface MediaAddress {
 }
 
 export interface MediaRepresentation {
+	schemaIdentifier: string;
 	name: string;
 	alternateName: string;
 	description: string;
-	meemooFragmentId: string;
 	dctermsFormat: string;
 	transcript: string;
 	dateCreated: string;
-	id: string;
 	files: File[];
 }
 

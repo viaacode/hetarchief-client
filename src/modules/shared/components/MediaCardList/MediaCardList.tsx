@@ -47,7 +47,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				{items.map((item, i) => (
 					<MediaCard
 						key={
-							(item as IdentifiableMediaCard).meemooFragmentId ||
+							(item as IdentifiableMediaCard).schemaIdentifier ||
 							`${encodeURIComponent(item.title || 'card')}--${i}`
 						}
 						{...item}

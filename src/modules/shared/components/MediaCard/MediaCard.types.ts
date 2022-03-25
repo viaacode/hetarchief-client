@@ -20,5 +20,5 @@ export interface MediaCardProps {
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {
-	meemooFragmentId: string;
+	schemaIdentifier: string;
 };

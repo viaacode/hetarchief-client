@@ -91,8 +91,8 @@ const ObjectDetailPage: NextPage = () => {
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.id ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.id) // Force flowplayer rerender after successful fetch
+		currentRepresentation?.schemaIdentifier ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.schemaIdentifier) // Force flowplayer rerender after successful fetch
 	);
 
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
@@ -224,7 +224,7 @@ const ObjectDetailPage: NextPage = () => {
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
-						src={representation.id}
+						src={representation.schemaIdentifier}
 						alt={representation.name}
 						layout="fill"
 						objectFit="contain"
@@ -409,7 +409,7 @@ const ObjectDetailPage: NextPage = () => {
 			<AddToCollectionBlade
 				isOpen={activeBlade === MediaActions.Bookmark}
 				selected={{
-					meemooFragmentId: mediaInfo?.meemooFragmentId ?? '',
+					schemaIdentifier: mediaInfo?.schemaIdentifier ?? '',
 					title: mediaInfo?.name,
 				}}
 				onClose={onCloseBlade}
