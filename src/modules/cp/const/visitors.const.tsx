@@ -1,4 +1,4 @@
-import { TabProps } from '@meemoo/react-components';
+import { Button, TabProps } from '@meemoo/react-components';
 import { isWithinInterval } from 'date-fns';
 import { i18n, TFunction } from 'next-i18next';
 import { Column } from 'react-table';
@@ -92,26 +92,18 @@ export const VisitorsTableColumns = (
 		id: 'cp-visitors-histories-table-actions',
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
-				<DropdownMenu
-					menuItems={[
-						{
-							id: 'deny',
-							label: t('modules/cp/const/visitors___toegang-intrekken'),
-						},
-						{
-							id: 'edit',
-							label: t('modules/cp/const/visitors___toegang-aanpassen'),
-						},
-					]}
-					onMenuItemClicked={(actionId: string | number) => {
-						if (actionId === 'deny') {
-							denyVisitRequest(row.original);
-						}
-						if (actionId === 'edit') {
-							editVisitRequest(row.original);
-						}
-					}}
-				/>
+				<DropdownMenu>
+					<Button
+						variants="text"
+						label={t('modules/cp/const/visitors___toegang-intrekken')}
+						onClick={() => denyVisitRequest(row.original)}
+					/>
+					<Button
+						variants="text"
+						label={t('modules/cp/const/visitors___toegang-aanpassen')}
+						onClick={() => editVisitRequest(row.original)}
+					/>
+				</DropdownMenu>
 			);
 		},
 	},

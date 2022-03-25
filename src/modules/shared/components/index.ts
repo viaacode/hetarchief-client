@@ -4,6 +4,7 @@ export * from './CardImage';
 export * from './ConfirmationModal';
 export * from './CopyButton';
 export * from './Datepicker';
+export * from './Dropdown';
 export * from './Icon';
 export * from './ListNavigation';
 export * from './Loading';

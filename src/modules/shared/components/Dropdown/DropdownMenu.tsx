@@ -5,27 +5,19 @@ import {
 	DropdownButton,
 	DropdownContent,
 	DropdownProps,
-	MenuItemInfo,
 	useClickOutside,
 } from '@meemoo/react-components';
-import { FC, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 
 import { Icon } from '../Icon';
 
 import styles from './DropdownMenu.module.scss';
 
-type DropdownMenuProps = Omit<DropdownProps, 'isOpen' | 'children'> & {
-	triggerButtonProps?: ButtonProps;
-	menuItems: MenuItemInfo[];
-	onMenuItemClicked: (id: string | number) => void;
+type DropdownMenuProps = Omit<DropdownProps, 'isOpen'> & {
+	triggerButtonProps?: ButtonProps & { onClick: (evt: MouseEvent) => void };
 };
 
-export const DropdownMenu: FC<DropdownMenuProps> = ({
-	triggerButtonProps,
-	menuItems,
-	onMenuItemClicked,
-	...rest
-}) => {
+export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, children, ...rest }) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [menuContentRef, setMenuContentRef] = useState<HTMLElement | null>(null);
 
@@ -41,10 +33,11 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
 				<Button
 					icon={<Icon name="dots-vertical" />}
 					variants="text"
-					onClick={() => {
-						setIsOpen(!isOpen);
-					}}
 					{...triggerButtonProps}
+					onClick={(evt: MouseEvent) => {
+						setIsOpen(!isOpen);
+						triggerButtonProps?.onClick?.(evt);
+					}}
 				/>
 			</DropdownButton>
 			<DropdownContent>
@@ -52,15 +45,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({
 					className={styles['c-dropdown-menu--menu-content-wrapper']}
 					ref={setMenuContentRef}
 				>
-					{menuItems.map((item: MenuItemInfo) => (
-						<Button
-							className={styles['c-dropdown-menu--menu-button']}
-							key={`menu-option-${item.id}`}
-							variants="text"
-							label={item.label}
-							onClick={() => onMenuItemClicked(item.id)}
-						/>
-					))}
+					{children}
 				</div>
 			</DropdownContent>
 		</Dropdown>
