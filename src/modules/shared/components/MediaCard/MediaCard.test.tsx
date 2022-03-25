@@ -57,7 +57,7 @@ describe('Component: <MediaCard />', () => {
 				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
 			/>
 		);
-		expect(screen.getByText('no-audio')).toBeDefined();
+		expect(screen.getAllByText('no-audio')[0]).toBeDefined();
 
 		rendered = render(
 			<MediaCard
@@ -66,6 +66,6 @@ describe('Component: <MediaCard />', () => {
 				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
 			/>
 		);
-		expect(screen.getByText('no-video')).toBeDefined();
+		expect(screen.getAllByText('no-video')[0]).toBeDefined();
 	});
 });
