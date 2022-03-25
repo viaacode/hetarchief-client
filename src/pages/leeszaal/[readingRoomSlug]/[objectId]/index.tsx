@@ -409,7 +409,7 @@ const ObjectDetailPage: NextPage = () => {
 			<AddToCollectionBlade
 				isOpen={activeBlade === MediaActions.Bookmark}
 				selected={{
-					id: mediaInfo?.id ?? '',
+					meemooFragmentId: mediaInfo?.meemooFragmentId ?? '',
 					title: mediaInfo?.name,
 				}}
 				onClose={onCloseBlade}

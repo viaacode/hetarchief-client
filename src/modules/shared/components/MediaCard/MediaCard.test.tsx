@@ -17,7 +17,7 @@ describe('Component: <MediaCard />', () => {
 				view="grid"
 				publishedAt={now}
 				publishedBy={author}
-				detailLink={`/${ROUTES.spaces}/leeszaal-8/8s4jm2514q`}
+				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
 			/>
 		);
 	});
@@ -30,7 +30,10 @@ describe('Component: <MediaCard />', () => {
 
 	it('Should apply the horizontal--at-md orientation when rendered in list view', () => {
 		rendered = render(
-			<MediaCard view="list" detailLink={`/${ROUTES.spaces}/leeszaal-8/8s4jm2514q`} />
+			<MediaCard
+				view="list"
+				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
+			/>
 		);
 
 		const element = rendered.container.getElementsByClassName(
@@ -49,7 +52,7 @@ describe('Component: <MediaCard />', () => {
 			<MediaCard
 				view="list"
 				type="audio"
-				detailLink={`/${ROUTES.spaces}/leeszaal-8/8s4jm2514q`}
+				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
 			/>
 		);
 		expect(screen.getByText('no-audio')).toBeDefined();
@@ -58,7 +61,7 @@ describe('Component: <MediaCard />', () => {
 			<MediaCard
 				view="grid"
 				type="video"
-				detailLink={`/${ROUTES.spaces}/leeszaal-8/8s4jm2514q`}
+				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
 			/>
 		);
 		expect(screen.getByText('no-video')).toBeDefined();

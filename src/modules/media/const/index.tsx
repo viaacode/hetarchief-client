@@ -161,7 +161,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		// },
 		{
 			title: i18n?.t('modules/media/const/index___meemoo-identifier') ?? '',
-			data: mediaInfo.id,
+			data: mediaInfo.schemaIdentifier,
 		},
 		// TODO: Hoofd lokale CP (Identifier bij aanbieder)
 		...mapObjectToMetadata(mediaInfo.premisIdentifier), // Overige ID's contentpartner

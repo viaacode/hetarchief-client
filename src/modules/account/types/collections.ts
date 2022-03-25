@@ -5,15 +5,15 @@ export interface Collection {
 	name: string;
 	updatedAt: string;
 	userProfileId: string;
-	objects?: Pick<CollectionMedia, 'id'>[];
+	objects?: Pick<CollectionMedia, 'meemooFragmentId'>[];
 }
 
 export interface CollectionMedia {
 	collectionEntryCreatedAt: string;
 	creator: unknown | null;
 	description: string;
-	format: 'video' | string;
-	id: string;
+	format: 'video' | 'audio' | 'film' | string; // TODO extend with all options
+	meemooFragmentId: string;
 	name: string;
 	numberOfPages: unknown;
 	termsAvailable: string;

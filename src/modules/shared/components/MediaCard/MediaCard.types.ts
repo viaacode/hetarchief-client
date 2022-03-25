@@ -17,4 +17,6 @@ export interface MediaCardProps {
 	actions?: ReactNode;
 }
 
-export type IdentifiableMediaCard = MediaCardProps & { id: string };
+export type IdentifiableMediaCard = MediaCardProps & {
+	meemooFragmentId: string;
+};

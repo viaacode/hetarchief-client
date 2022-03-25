@@ -3,6 +3,8 @@ import { MediaTypes } from '@shared/types';
 // Output
 
 export interface MediaInfo {
+	meemoo_fragment_id: string; // Unique id per object
+	schema_identifier: string; // PID (this is not unique per objects)
 	schema_in_language: unknown | null;
 	dcterms_available: string;
 	schema_creator?: {
@@ -10,7 +12,6 @@ export interface MediaInfo {
 		productionCompany?: string[];
 		Maker?: string[];
 	};
-	schema_identifier: string;
 	schema_description?: string;
 	schema_publisher?: {
 		Publisher: string[];
@@ -34,7 +35,8 @@ export interface MediaInfo {
 
 // Mapped intellectual entity object
 export interface Media {
-	id: string;
+	meemooFragmentId: string; // Unique id per object
+	schemaIdentifier: string; // PID (DON'T use this for identification of an object)
 	premisIdentifier: Record<string, string[]>;
 	premisRelationship: string;
 	isPartOf: any;
@@ -69,7 +71,6 @@ export interface Media {
 	alternateName: string;
 	duration: string;
 	license: string[];
-	meemooFragmentId: string;
 	meemooMediaObjectId: string;
 	dateCreated: string;
 	dateCreatedLowerBound: string;
