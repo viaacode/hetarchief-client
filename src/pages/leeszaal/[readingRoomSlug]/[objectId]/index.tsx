@@ -105,12 +105,12 @@ const ObjectDetailPage: NextPage = () => {
 
 	useEffect(() => {
 		// Mock representations for slider testing
-		if (mediaInfo) {
-			mediaInfo.representations = [
-				...mediaInfo.representations,
-				...fragmentSliderMock.fragments,
-			];
-		}
+		// if (mediaInfo) {
+		// 	mediaInfo.representations = [
+		// 		...mediaInfo.representations,
+		// 		...fragmentSliderMock.fragments,
+		// 	];
+		// }
 
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
