@@ -58,6 +58,7 @@ import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	MediaSearchFilterField,
 	MediaSearchOperator,
+	MediaTypes,
 	Operator,
 	OrderDirection,
 	ReadingRoomMediaType,
@@ -388,7 +389,7 @@ const ReadingRoomPage: NextPage = () => {
 								? asDate(mediaObject.schema_date_published)
 								: undefined,
 							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
-							type: mediaObject.dcterms_format || undefined,
+							type: mediaObject.dcterms_format,
 							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer[0].schema_identifier}/${mediaObject.meemoo_fragment_id}`,
 						})
 					)}

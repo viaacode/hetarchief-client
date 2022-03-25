@@ -17,6 +17,7 @@ describe('Component: <MediaCard />', () => {
 				view="grid"
 				publishedAt={now}
 				publishedBy={author}
+				type="video"
 				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
 			/>
 		);
@@ -32,6 +33,7 @@ describe('Component: <MediaCard />', () => {
 		rendered = render(
 			<MediaCard
 				view="list"
+				type="video"
 				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
 			/>
 		);

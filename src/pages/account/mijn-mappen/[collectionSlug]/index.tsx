@@ -300,6 +300,7 @@ const AccountMyCollections: NextPage = () => {
 											publishedBy: media.maintainerName,
 											publishedAt: asDate(media.termsAvailable),
 											title: media.name,
+											type: media.format,
 											bookmarkIsSolid: true,
 											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.meemooFragmentId}`,
 										};

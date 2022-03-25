@@ -1,9 +1,9 @@
 import { stringifyUrl } from 'query-string';
 
-import { MediaInfo } from '@media/types';
 import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import {
+	MediaInfo,
 	MediaSearchFilterField,
 	MediaSearchFilters,
 	MediaSearchOperator,

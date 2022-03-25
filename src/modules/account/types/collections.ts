@@ -1,3 +1,5 @@
+import { MediaTypes } from '@shared/types';
+
 export interface Collection {
 	createdAt: string;
 	id: string;
@@ -12,7 +14,7 @@ export interface CollectionMedia {
 	collectionEntryCreatedAt: string;
 	creator: unknown | null;
 	description: string;
-	format: 'video' | 'audio' | 'film' | string; // TODO extend with all options
+	format: MediaTypes;
 	meemooFragmentId: string;
 	name: string;
 	numberOfPages: unknown;
