@@ -1,6 +1,5 @@
 import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { format } from 'date-fns';
 import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -26,7 +25,6 @@ import {
 import { CreatorFilterFormState } from '@reading-room/components/CreatorFilterForm';
 import { LanguageFilterFormState } from '@reading-room/components/LanguageFilterForm';
 import {
-	getMetadataSearchFilters,
 	READING_ROOM_FILTERS,
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
@@ -35,13 +33,8 @@ import {
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
-import {
-	AdvancedFilter,
-	MetadataProp,
-	ReadingRoomFilterId,
-	TagIdentity,
-} from '@reading-room/types';
-import { mapFiltersToTags } from '@reading-room/utils';
+import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
+import { mapAdvancedToElastic, mapFiltersToTags } from '@reading-room/utils';
 import {
 	IdentifiableMediaCard,
 	MediaCardList,
@@ -53,13 +46,12 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	MediaSearchFilterField,
 	MediaSearchOperator,
-	Operator,
 	OrderDirection,
 	ReadingRoomMediaType,
 	SortObject,
@@ -136,6 +128,8 @@ const ReadingRoomPage: NextPage = () => {
 			// 	operator: MediaSearchOperator.IS,
 			// 	multiValue: (query.medium || []).filter((item) => item !== null) as string[],
 			// },
+			// Duration
+			...(query.duration || []).flatMap(mapAdvancedToElastic),
 			// Creator
 			{
 				field: MediaSearchFilterField.CREATOR,
@@ -155,31 +149,7 @@ const ReadingRoomPage: NextPage = () => {
 			// 	multiValue: (query.language || []).filter((item) => item !== null) as string[],
 			// },
 			// Advanced
-			...(query.advanced || []).flatMap((item) => {
-				const values = (item.val || '').split(SEPARATOR);
-				const filters =
-					item.prop && item.op
-						? getMetadataSearchFilters(item.prop as MetadataProp, item.op as Operator)
-						: [];
-
-				// Format data for Elastic
-				return filters.map((filter, i) => {
-					let parsed;
-
-					switch (item.prop) {
-						case MetadataProp.CreatedAt:
-						case MetadataProp.PublishedAt:
-							parsed = asDate(values[i]);
-							values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
-							break;
-
-						default:
-							break;
-					}
-
-					return { ...filter, value: values[i] };
-				});
-			}),
+			...(query.advanced || []).flatMap(mapAdvancedToElastic),
 		],
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
@@ -287,7 +257,6 @@ const ReadingRoomPage: NextPage = () => {
 						val: data.duration,
 					},
 				];
-				console.info(values, ...data);
 				break;
 
 			case ReadingRoomFilterId.Creator:
@@ -314,24 +283,33 @@ const ReadingRoomPage: NextPage = () => {
 		data && setQuery({ [id]: data });
 	};
 
-	const onRemoveKeyword = (newValue: MultiValue<TagIdentity>) => {
-		const search = newValue
-			?.filter((val) => val.key === SEARCH_QUERY_KEY)
-			.map((tag) => tag.value as string);
+	const onRemoveKeyword = (tags: MultiValue<TagIdentity>) => {
+		const query: Record<string, unknown> = {};
 
-		const advanced = newValue
-			?.filter((val) => val.key === ReadingRoomFilterId.Advanced)
-			.map((tag) => {
-				const { prop, op, val } = tag;
-				const filter: AdvancedFilter = { prop, op, val };
+		tags.forEach((tag) => {
+			switch (tag.key) {
+				case SEARCH_QUERY_KEY:
+					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag.value];
+					break;
 
-				return filter;
-			});
+				case ReadingRoomFilterId.Advanced:
+				case ReadingRoomFilterId.Duration:
+					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag];
+					break;
 
-		setQuery({
-			[SEARCH_QUERY_KEY]: (search.length > 0 && search) || undefined,
-			[ReadingRoomFilterId.Advanced]: (advanced.length > 0 && advanced) || undefined,
+				default:
+					query[tag.key] = tag.value;
+					break;
+			}
 		});
+
+		// Destructure to keyword-able filters
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { format, orderProp, orderDirection, page, ...rest } = {
+			...READING_ROOM_QUERY_PARAM_INIT,
+		};
+
+		setQuery({ ...rest, ...query });
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>

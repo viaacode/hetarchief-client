@@ -5,4 +5,6 @@ const DurationInput: FC<TextInputProps> = (props) => (
 	<Base {...props} type="time" pattern="([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])" step="1" />
 );
 
+export const defaultValue = '00:00:00';
+
 export default DurationInput;

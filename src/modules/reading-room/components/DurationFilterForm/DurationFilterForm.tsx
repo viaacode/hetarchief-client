@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
@@ -13,6 +13,7 @@ import { SEPARATOR } from '@shared/const';
 import { Operator } from '@shared/types';
 
 import { DurationInput } from '../DurationInput';
+import { defaultValue } from '../DurationInput/DurationInput';
 import { DurationRangeInput } from '../DurationRangeInput';
 
 import {
@@ -27,7 +28,11 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 
 	const [showRange, setShowRange] = useState(initial && initial.op === Operator.Between);
 
-	const { control, getValues, setValue, reset, formState } = useForm<DurationFilterFormState>({
+	const [form, setForm] = useState<DurationFilterFormState>({
+		operator: (initial?.op as Operator) || Operator.LessThanOrEqual,
+		duration: initial?.val || defaultValue,
+	});
+	const { control, setValue, reset, formState } = useForm<DurationFilterFormState>({
 		resolver: yupResolver(DURATION_FILTER_FORM_SCHEMA()),
 	});
 
@@ -35,9 +40,13 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 	const errors = formState.errors;
 
 	useEffect(() => {
-		setValue('duration', initial?.val || '00:00:00');
-		setValue('operator', (initial?.op as Operator) || Operator.LessThanOrEqual);
-	}, []);
+		setValue('duration', form.duration);
+		setValue('operator', form.operator);
+	}, [form, setValue]);
+
+	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
+		setForm({ ...form, duration: e.target.value });
+	};
 
 	return (
 		<>
@@ -57,8 +66,8 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 										const value = (newValue as SingleValue<SelectOption>)
 											?.value as Operator;
 
-										if (value !== field.value) {
-											setValue('operator', value);
+										if (value !== form.operator) {
+											setForm({ duration: defaultValue, operator: value });
 											setShowRange(value === Operator.Between);
 										}
 									}}
@@ -78,10 +87,20 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 								return showRange ? (
 									<DurationRangeInput
 										{...refless}
-										value={field.value || `00:00:00${SEPARATOR}00:00:00`}
+										value={
+											form.duration ||
+											`${defaultValue}${SEPARATOR}${defaultValue}`
+										}
+										onChange={onChangeDuration}
+										placeholder={form.duration}
 									/>
 								) : (
-									<DurationInput {...refless} value={field.value || '00:00:00'} />
+									<DurationInput
+										{...refless}
+										value={form.duration || defaultValue}
+										onChange={onChangeDuration}
+										placeholder={form.duration}
+									/>
 								);
 							}}
 						/>
@@ -89,7 +108,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 				</div>
 			</div>
 
-			{children({ values: getValues(), reset })}
+			{children({ values: form, reset })}
 		</>
 	);
 };
