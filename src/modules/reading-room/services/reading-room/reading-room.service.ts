@@ -55,7 +55,7 @@ export class ReadingRoomService {
 		console.log('values', values);
 		const formData = new FormData();
 		values.file && formData.append('file', values.file);
-		values.color && formData.append('color', values.color);
+		formData.append('color', values.color ?? '');
 		values.description && formData.append('description', values.description);
 		values.serviceDescription &&
 			formData.append('serviceDescription', values.serviceDescription);

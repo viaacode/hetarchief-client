@@ -28,8 +28,8 @@ const CPSettingsPage: NextPage = () => {
 	const updateSpace = (values: Partial<UpdateReadingRoomSettings>) => {
 		if (readingRoomInfo) {
 			ReadingRoomService.update('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21', {
+				color: readingRoomInfo.color,
 				...values,
-				// image: values.file || values.color ? null : values.image,
 			});
 		}
 	};
