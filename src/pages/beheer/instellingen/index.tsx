@@ -134,6 +134,7 @@ const CPSettingsPage: NextPage = () => {
 								)}
 							</p>
 							<RichTextForm
+								className="p-cp-settings__rich-text--no-heading"
 								initialHTML={
 									readingRoomInfo &&
 									`<p>${readingRoomInfo.serviceDescription}</p>`

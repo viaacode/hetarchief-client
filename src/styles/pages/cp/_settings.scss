@@ -52,6 +52,16 @@
 		}
 	}
 
+	&__rich-text {
+		&--no-heading {
+			.c-rich-text-editor {
+				.headings-dropdown {
+					display: none; // Hide h1 option in headings dropdown
+				}
+			}
+		}
+	}
+
 	@include respond-at("lg") {
 		&__cancel-save {
 			grid-column: 1 / 3;
