@@ -50,10 +50,22 @@ export class ReadingRoomService {
 
 	public static async update(
 		roomId: string,
-		json: UpdateReadingRoomSettings
+		values: Partial<UpdateReadingRoomSettings>
 	): Promise<ReadingRoomInfo> {
+		console.log('values', values);
+		const formData = new FormData();
+		values.file && formData.append('file', values.file);
+		values.color && formData.append('color', values.color);
+		values.description && formData.append('description', values.description);
+		values.serviceDescription &&
+			formData.append('serviceDescription', values.serviceDescription);
+		values.image && formData.append('image', values.image);
+		const headers = {
+			/* DO NOT SET THIS, WILL NOT WORK "Content-Type": "multipart/form-data", */
+		};
+
 		return await ApiService.getApi()
-			.post(`${READING_ROOM_SERVICE_BASE_URL}/${roomId}`, { json })
+			.patch(`${READING_ROOM_SERVICE_BASE_URL}/${roomId}`, { body: formData, headers })
 			.json();
 	}
 }

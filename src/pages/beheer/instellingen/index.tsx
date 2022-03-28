@@ -23,14 +23,13 @@ const CPSettingsPage: NextPage = () => {
 	 */
 	const { data: readingRoomInfo } = useGetReadingRoomInfo('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21');
 
+	console.log(readingRoomInfo);
+
 	const updateSpace = (values: Partial<UpdateReadingRoomSettings>) => {
 		if (readingRoomInfo) {
 			ReadingRoomService.update('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21', {
-				description: readingRoomInfo.description,
-				color: readingRoomInfo.color,
-				serviceDescription: readingRoomInfo.serviceDescription,
-				image: readingRoomInfo.image,
 				...values,
+				// image: values.file || values.color ? null : values.image,
 			});
 		}
 	};
@@ -89,9 +88,7 @@ const CPSettingsPage: NextPage = () => {
 
 							<ReadingRoomSettingsForm
 								className="p-cp-settings__leeszaal-controls"
-								initialColor={
-									readingRoomInfo ? readingRoomInfo?.color ?? '#00857d' : null
-								}
+								initialColor={readingRoomInfo ? readingRoomInfo?.color : null}
 								initialImage={readingRoomInfo?.image}
 								renderCancelSaveButtons={renderCancelSaveButtons}
 								onSubmit={(values) => {
@@ -114,7 +111,7 @@ const CPSettingsPage: NextPage = () => {
 							</p>
 							<RichTextForm
 								initialHTML={
-									readingRoomInfo && `<p>${readingRoomInfo.description}</p>`
+									(readingRoomInfo && readingRoomInfo.description) ?? '<p></p>'
 								}
 								onSubmit={(html) => updateSpace({ description: html })}
 								renderCancelSaveButtons={renderCancelSaveButtons}
@@ -136,8 +133,8 @@ const CPSettingsPage: NextPage = () => {
 							<RichTextForm
 								className="p-cp-settings__rich-text--no-heading"
 								initialHTML={
-									readingRoomInfo &&
-									`<p>${readingRoomInfo.serviceDescription}</p>`
+									(readingRoomInfo && readingRoomInfo.serviceDescription) ??
+									'<p></p>'
 								}
 								onSubmit={(html) => updateSpace({ serviceDescription: html })}
 								renderCancelSaveButtons={renderCancelSaveButtons}
