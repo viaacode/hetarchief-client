@@ -117,6 +117,7 @@ export const mapFiltersToTags = (query: Partial<ReadingRoomQueryParams>): TagIde
 		),
 		...mapAdvancedToTags(query.duration || [], ReadingRoomFilterId.Duration),
 		...mapAdvancedToTags(query.created || [], ReadingRoomFilterId.Created),
+		...mapAdvancedToTags(query.published || [], ReadingRoomFilterId.Published),
 		...mapArrayParamToTags(
 			query.creator || [],
 			i18n?.t('modules/reading-room/utils/map-filters/map-filters___maker') || '',

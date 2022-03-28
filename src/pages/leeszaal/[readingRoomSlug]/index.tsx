@@ -134,6 +134,8 @@ const ReadingRoomPage: NextPage = () => {
 			...(query.duration || []).flatMap(mapAdvancedToElastic),
 			// Created
 			...(query.created || []).flatMap(mapAdvancedToElastic),
+			// Published
+			...(query.published || []).flatMap(mapAdvancedToElastic),
 			// Creator
 			{
 				field: MediaSearchFilterField.CREATOR,
