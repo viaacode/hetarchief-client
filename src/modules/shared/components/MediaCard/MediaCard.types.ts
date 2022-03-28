@@ -1,5 +1,7 @@
 import { MouseEvent, ReactNode } from 'react';
 
+import { MediaTypes } from '@shared/types';
+
 export type MediaCardViewMode = 'list' | 'grid';
 
 export interface MediaCardProps {
@@ -11,10 +13,12 @@ export interface MediaCardProps {
 	publishedAt?: Date;
 	publishedBy?: string;
 	title?: string;
-	type?: 'video' | 'audio';
+	type: MediaTypes;
 	view?: MediaCardViewMode;
 	onBookmark?: (evt: MouseEvent) => void;
 	actions?: ReactNode;
 }
 
-export type IdentifiableMediaCard = MediaCardProps & { id: string };
+export type IdentifiableMediaCard = MediaCardProps & {
+	schemaIdentifier: string;
+};

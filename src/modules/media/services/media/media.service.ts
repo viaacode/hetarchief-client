@@ -52,7 +52,10 @@ export class MediaService {
 			})
 			.json()) as ElasticsearchResponse<MediaInfo>;
 		return {
-			items: parsed?.hits?.hits.map((item) => item._source),
+			items: parsed?.hits?.hits.map((item) => ({
+				...item._source,
+				meemoo_fragment_id: item._id,
+			})),
 			total: parsed?.hits?.total?.value,
 			size: size,
 			page: page,

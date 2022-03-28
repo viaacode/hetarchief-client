@@ -58,6 +58,7 @@ import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	MediaSearchFilterField,
 	MediaSearchOperator,
+	MediaTypes,
 	Operator,
 	OrderDirection,
 	ReadingRoomMediaType,
@@ -381,15 +382,15 @@ const ReadingRoomPage: NextPage = () => {
 					?.filter((mediaObject) => mediaObject.type !== 'SOLR')
 					.map(
 						(mediaObject): IdentifiableMediaCard => ({
-							id: mediaObject.schema_identifier,
+							schemaIdentifier: mediaObject.schema_identifier,
 							description: mediaObject.schema_description,
 							title: mediaObject.schema_name,
 							publishedAt: mediaObject.schema_date_published
 								? asDate(mediaObject.schema_date_published)
 								: undefined,
 							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
-							type: mediaObject.dcterms_format || undefined,
-							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer[0].schema_identifier}/${mediaObject.schema_identifier}`,
+							type: mediaObject.dcterms_format,
+							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer[0].schema_identifier}/${mediaObject.meemoo_fragment_id}`,
 						})
 					)}
 				keywords={keywords}
