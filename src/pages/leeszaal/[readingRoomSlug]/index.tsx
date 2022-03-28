@@ -16,10 +16,12 @@ import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
+	CreatedFilterFormState,
 	DurationFilterFormState,
 	FilterMenu,
 	GenreFilterFormState,
 	MediumFilterFormState,
+	PublishedFilterFormState,
 	ReadingRoomNavigation,
 } from '@reading-room/components';
 import { CreatorFilterFormState } from '@reading-room/components/CreatorFilterForm';
@@ -130,6 +132,8 @@ const ReadingRoomPage: NextPage = () => {
 			// },
 			// Duration
 			...(query.duration || []).flatMap(mapAdvancedToElastic),
+			// Created
+			...(query.created || []).flatMap(mapAdvancedToElastic),
 			// Creator
 			{
 				field: MediaSearchFilterField.CREATOR,
@@ -259,6 +263,30 @@ const ReadingRoomPage: NextPage = () => {
 				];
 				break;
 
+			case ReadingRoomFilterId.Created:
+				data = values as CreatedFilterFormState;
+				data = [
+					{
+						prop: MetadataProp.CreatedAt,
+						op: data.operator,
+						val: data.created,
+					},
+				];
+
+				break;
+
+			case ReadingRoomFilterId.Published:
+				data = values as PublishedFilterFormState;
+				data = [
+					{
+						prop: MetadataProp.PublishedAt,
+						op: data.operator,
+						val: data.published,
+					},
+				];
+
+				break;
+
 			case ReadingRoomFilterId.Creator:
 				data = (values as CreatorFilterFormState).creators;
 				break;
@@ -294,6 +322,8 @@ const ReadingRoomPage: NextPage = () => {
 
 				case ReadingRoomFilterId.Advanced:
 				case ReadingRoomFilterId.Duration:
+				case ReadingRoomFilterId.Created:
+				case ReadingRoomFilterId.Published:
 					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag];
 					break;
 
@@ -408,8 +438,8 @@ const ReadingRoomPage: NextPage = () => {
 		<VisitorLayout>
 			<div className="p-reading-room">
 				<Head>
-					<title>{createPageTitle('Leeszaal')}</title>
-					<meta name="description" content="Leeszaal omschrijving" />
+					<title>{createPageTitle(space?.name)}</title>
+					<meta name="description" content={space?.description || 'Een leeszaal'} />
 				</Head>
 
 				<ReadingRoomNavigation

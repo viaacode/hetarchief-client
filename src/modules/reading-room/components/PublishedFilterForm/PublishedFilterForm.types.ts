@@ -5,5 +5,5 @@ export type PublishedFilterFormProps = DefaultFilterFormProps<PublishedFilterFor
 
 export interface PublishedFilterFormState {
 	operator: Operator;
-	values: string[];
+	published: string;
 }

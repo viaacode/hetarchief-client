@@ -5,5 +5,5 @@ export type CreatedFilterFormProps = DefaultFilterFormProps<CreatedFilterFormSta
 
 export interface CreatedFilterFormState {
 	operator: Operator;
-	values: string[];
+	created: string;
 }

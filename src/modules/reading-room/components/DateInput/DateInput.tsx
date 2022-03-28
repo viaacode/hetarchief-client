@@ -1,4 +1,4 @@
-import { DatepickerProps, TextInput } from '@meemoo/react-components';
+import { DatepickerProps, historicDatepicker, TextInput } from '@meemoo/react-components';
 import { FC } from 'react';
 
 import { formatMetadataDate } from '@reading-room/utils';
@@ -13,6 +13,8 @@ import styles from './DateInput.module.scss';
 const DateInput: FC<DatepickerProps> = (props) => (
 	<div className={styles['c-date-input']}>
 		<Datepicker
+			{...historicDatepicker}
+			maxDate={null}
 			{...props}
 			value={formatMetadataDate(props.value)}
 			selected={asDate(props.value)}

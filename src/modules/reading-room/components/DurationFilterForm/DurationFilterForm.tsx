@@ -32,12 +32,16 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 		operator: (initial?.op as Operator) || Operator.LessThanOrEqual,
 		duration: initial?.val || defaultValue,
 	});
-	const { control, setValue, reset, formState } = useForm<DurationFilterFormState>({
+	const {
+		control,
+		setValue,
+		reset,
+		formState: { errors },
+	} = useForm<DurationFilterFormState>({
 		resolver: yupResolver(DURATION_FILTER_FORM_SCHEMA()),
 	});
 
 	const operators = useMemo(() => getOperators(MetadataProp.Duration), []);
-	const errors = formState.errors;
 
 	useEffect(() => {
 		setValue('duration', form.duration);
