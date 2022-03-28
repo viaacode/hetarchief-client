@@ -212,7 +212,7 @@ const ObjectDetailPage: NextPage = () => {
 					title={representation.name}
 					pause={pauseMedia}
 					onPlay={() => setPauseMedia(false)}
-					token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
+					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 				/>
 			);
