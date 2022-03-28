@@ -1,3 +1,5 @@
+import { MediaTypes } from '@shared/types';
+
 export interface Collection {
 	createdAt: string;
 	id: string;
@@ -5,15 +7,15 @@ export interface Collection {
 	name: string;
 	updatedAt: string;
 	userProfileId: string;
-	objects?: Pick<CollectionMedia, 'id'>[];
+	objects?: Pick<CollectionMedia, 'schemaIdentifier'>[];
 }
 
 export interface CollectionMedia {
 	collectionEntryCreatedAt: string;
 	creator: unknown | null;
 	description: string;
-	format: 'video' | string;
-	id: string;
+	format: MediaTypes;
+	schemaIdentifier: string;
 	name: string;
 	numberOfPages: unknown;
 	termsAvailable: string;

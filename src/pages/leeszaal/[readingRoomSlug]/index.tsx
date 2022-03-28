@@ -372,15 +372,15 @@ const ReadingRoomPage: NextPage = () => {
 			<MediaCardList
 				items={media?.items.map(
 					(item): IdentifiableMediaCard => ({
-						id: item.schema_identifier,
+						schemaIdentifier: item.schema_identifier,
 						description: item.schema_description,
 						title: item.schema_name,
 						publishedAt: item.schema_date_published
 							? asDate(item.schema_date_published)
 							: undefined,
 						publishedBy: item.schema_creator?.Maker?.join(', '),
-						type: item.dcterms_format || undefined,
-						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer?.[0].schema_identifier}/${item.schema_identifier}`,
+						type: item.dcterms_format,
+						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer?.[0].schema_identifier}/${item.meemoo_fragment_id}`,
 					})
 				)}
 				keywords={keywords}
