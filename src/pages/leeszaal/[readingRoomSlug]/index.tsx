@@ -380,7 +380,7 @@ const ReadingRoomPage: NextPage = () => {
 							: undefined,
 						publishedBy: item.schema_creator?.Maker?.join(', '),
 						type: item.dcterms_format,
-						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer?.[0].schema_identifier}/${item.meemoo_fragment_id}`,
+						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer?.[0]?.schema_identifier}/${item.meemoo_fragment_id}`,
 					})
 				)}
 				keywords={keywords}
