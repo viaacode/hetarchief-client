@@ -382,7 +382,7 @@ const ReadingRoomPage: NextPage = () => {
 					?.filter((mediaObject) => mediaObject.type !== 'SOLR')
 					.map(
 						(mediaObject): IdentifiableMediaCard => ({
-							meemooFragmentId: mediaObject.meemoo_fragment_id,
+							schemaIdentifier: mediaObject.schema_identifier,
 							description: mediaObject.schema_description,
 							title: mediaObject.schema_name,
 							publishedAt: mediaObject.schema_date_published

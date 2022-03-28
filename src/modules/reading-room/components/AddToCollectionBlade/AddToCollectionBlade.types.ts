@@ -9,7 +9,7 @@ export interface AddToCollectionFormState {
 }
 
 export interface AddToCollectionSelected {
-	meemooFragmentId: string;
+	schemaIdentifier: string;
 	title?: string;
 }
 

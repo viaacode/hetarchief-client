@@ -1,7 +1,7 @@
 // Mapped intellectual entity object
 export interface Media {
-	meemooFragmentId: string; // Unique id per object
-	schemaIdentifier: string; // PID (DON'T use this for identification of an object)
+	schemaIdentifier: string; // Unique id per object
+	meemooIdentifier: string; // PID (DON'T use this for identification of an object)
 	premisIdentifier: Record<string, string[]>;
 	premisRelationship: string;
 	isPartOf: any;
@@ -56,16 +56,26 @@ export interface MediaAddress {
 	postOfficeBoxNumber: string;
 }
 
-export interface MediaRepresentation {
+export interface MediaFile {
+	id: string;
 	name: string;
 	alternateName: string;
 	description: string;
-	meemooFragmentId: string;
+	schemaIdentifier: string;
+	ebucoreMediaType: string;
+	ebucoreIsMediaFragmentOf: string;
+	embedUrl: string;
+}
+
+export interface MediaRepresentation {
+	schemaIdentifier: string;
+	name: string;
+	alternateName: string;
+	description: string;
 	dctermsFormat: string;
 	transcript: string;
 	dateCreated: string;
-	id: string;
-	files: File[];
+	files: MediaFile[];
 }
 
 export interface MediaSearchAggregationPair<T> {
