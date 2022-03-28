@@ -21,5 +21,6 @@ export const READING_ROOM_SETTINGS_SCHEMA = (): SchemaOf<ReadingRoomFormState> =
 				i18n?.t('Dit formaat wordt niet ondersteund.') ?? 'Format not supported',
 				checkFileType
 			),
+		image: string(),
 	});
 };

@@ -52,16 +52,18 @@ export class ReadingRoomService {
 		roomId: string,
 		values: Partial<UpdateReadingRoomSettings>
 	): Promise<ReadingRoomInfo> {
-		console.log('values', values);
 		const formData = new FormData();
-		values.file && formData.append('file', values.file);
+
+		// Set form data
 		formData.append('color', values.color ?? '');
+		formData.append('image', values.image ?? '');
+		values.file && formData.append('file', values.file);
 		values.description && formData.append('description', values.description);
 		values.serviceDescription &&
 			formData.append('serviceDescription', values.serviceDescription);
-		values.image && formData.append('image', values.image);
+
 		const headers = {
-			/* DO NOT SET THIS, WILL NOT WORK "Content-Type": "multipart/form-data", */
+			'Content-Type': undefined, // Overwrite application/json
 		};
 
 		return await ApiService.getApi()

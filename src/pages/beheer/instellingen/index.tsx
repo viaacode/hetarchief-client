@@ -23,12 +23,11 @@ const CPSettingsPage: NextPage = () => {
 	 */
 	const { data: readingRoomInfo } = useGetReadingRoomInfo('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21');
 
-	console.log(readingRoomInfo);
-
 	const updateSpace = (values: Partial<UpdateReadingRoomSettings>) => {
 		if (readingRoomInfo) {
 			ReadingRoomService.update('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21', {
 				color: readingRoomInfo.color,
+				image: readingRoomInfo.image,
 				...values,
 			});
 		}

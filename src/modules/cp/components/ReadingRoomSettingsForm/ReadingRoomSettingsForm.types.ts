@@ -10,4 +10,5 @@ export interface ReadingRoomSettingsFormProps extends DefaultComponentProps {
 export interface ReadingRoomFormState {
 	color?: string;
 	file?: File | null;
+	image?: string;
 }

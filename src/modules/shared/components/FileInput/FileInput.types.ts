@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, RefObject } from 'react';
 
 import { DefaultComponentProps } from '@shared/types';
 
