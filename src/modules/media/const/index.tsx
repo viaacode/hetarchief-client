@@ -218,7 +218,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		},
 		{
 			title: i18n?.t('modules/media/const/index___transcriptie') ?? '',
-			data: mediaInfo.representations[0].transcript, // TODO: Update voor andere representations?
+			data: mediaInfo?.representations?.[0]?.transcript, // TODO: Update voor andere representations?
 		},
 		// {
 		// 	title: i18n?.t('modules/media/const/index___ondertitels') ?? '',
