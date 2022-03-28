@@ -12,7 +12,7 @@ export abstract class ApiService {
 			this.api = ky.create({
 				prefixUrl: publicRuntimeConfig.PROXY_URL,
 				headers: {
-					// 'content-type': 'application/json',
+					'content-type': 'application/json',
 				},
 				credentials: 'include', // TODO change to same-origin once working on server
 			});

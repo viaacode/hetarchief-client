@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { DEFAULT_READING_ROOM_COLOR } from '@reading-room/const';
 import { CardImage, Icon } from '@shared/components';
+import FileInput from '@shared/components/FileInput/FileInput';
 
 import { READING_ROOM_SETTINGS_SCHEMA } from './ReadingRoomSettingsForm.const';
 import styles from './ReadingRoomSettingsForm.module.scss';
@@ -72,7 +73,10 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 				image={initialImage ?? ''}
 				size="short"
 			/>
-			<FormControl errors={[errors.color?.message]}>
+			<FormControl
+				className={styles['c-reading-room-settings-form__color-control']}
+				errors={[errors.color?.message]}
+			>
 				<Controller
 					name="color"
 					control={control}
@@ -97,7 +101,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 				<Controller
 					name="file"
 					control={control}
-					render={(field) => {
+					render={() => {
 						return (
 							<>
 								<p className={styles['c-reading-room-settings-form__label']}>
@@ -116,18 +120,11 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 										styles['c-reading-room-settings-form__image-buttons']
 									}
 								>
-									<input
-										{...field}
-										type="file"
+									<FileInput
 										onChange={(e) =>
 											e.currentTarget.files?.[0] &&
 											setValue('file', e.currentTarget.files[0])
 										}
-									/>
-									<Button
-										label={t('Verwijderen')}
-										iconStart={<Icon name="trash" />}
-										variants="text"
 									/>
 								</div>
 							</>

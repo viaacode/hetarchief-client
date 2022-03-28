@@ -18,6 +18,10 @@
 		gap: $spacer-lg;
 	}
 
+	&__color-control {
+		display: flex;
+	}
+
 	&__color-picker {
 		align-self: end;
 
