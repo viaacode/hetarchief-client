@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormControl, TextArea } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade } from '@shared/components';
@@ -13,6 +13,7 @@ import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
 import { DeclineRequestBladeProps, DeclineRequestFormState } from './DeclineRequestBlade.types';
 
 const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
+	const { t } = useTranslation();
 	const { onSubmit, selected } = props;
 
 	const {
@@ -23,7 +24,10 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 	} = useForm<DeclineRequestFormState>({
 		resolver: yupResolver(DECLINE_REQUEST_FORM_SCHEMA()),
 	});
-	const { t } = useTranslation();
+
+	useEffect(() => {
+		props.isOpen && reset();
+	}, [props.isOpen, reset]);
 
 	const onFormSubmit = (values: DeclineRequestFormState) => {
 		selected &&
@@ -46,6 +50,8 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 				reset();
 			});
 	};
+
+	// Render
 
 	const renderFooter = () => {
 		return (
