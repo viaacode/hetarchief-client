@@ -86,6 +86,12 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 		);
 	};
 
+	const resetFileInput = () => {
+		if (fileInputRef.current) {
+			fileInputRef.current.value = '';
+		}
+	};
+
 	const resetValues = () => {
 		reset({
 			color: savedState.color,
@@ -93,15 +99,13 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 			image: savedState.image,
 		});
 
-		// Reset file input
-		if (fileInputRef.current) {
-			fileInputRef.current.value = '';
-		}
+		resetFileInput();
 	};
 
 	const onFormSubmit = (state: ReadingRoomFormState) => {
 		onSubmit?.(state);
 		setSavedState(state);
+		resetFileInput();
 	};
 
 	return (
@@ -159,6 +163,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 								>
 									<FileInput
 										{...field}
+										hasFile={!!fileInputRef.current?.value}
 										ref={fileInputRef}
 										onChange={(e) => {
 											e.currentTarget.files?.[0] &&
