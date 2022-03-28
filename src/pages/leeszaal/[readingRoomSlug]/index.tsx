@@ -20,6 +20,7 @@ import {
 	DurationFilterFormState,
 	FilterMenu,
 	GenreFilterFormState,
+	KeywordsFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
 	ReadingRoomNavigation,
@@ -147,6 +148,12 @@ const ReadingRoomPage: NextPage = () => {
 				field: MediaSearchFilterField.GENRE,
 				operator: MediaSearchOperator.IS,
 				multiValue: (query.genre || []).filter((item) => item !== null) as string[],
+			},
+			// Keywords
+			{
+				field: MediaSearchFilterField.KEYWORD,
+				operator: MediaSearchOperator.IS,
+				multiValue: (query.keywords || []).filter((item) => item !== null) as string[],
 			},
 			// Language TODO
 			// {
@@ -295,6 +302,10 @@ const ReadingRoomPage: NextPage = () => {
 
 			case ReadingRoomFilterId.Genre:
 				data = (values as GenreFilterFormState).genres;
+				break;
+
+			case ReadingRoomFilterId.Keywords:
+				data = (values as KeywordsFilterFormState).values;
 				break;
 
 			case ReadingRoomFilterId.Language:

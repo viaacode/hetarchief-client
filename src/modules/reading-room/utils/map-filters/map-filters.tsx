@@ -129,6 +129,11 @@ export const mapFiltersToTags = (query: Partial<ReadingRoomQueryParams>): TagIde
 			ReadingRoomFilterId.Genre
 		),
 		...mapArrayParamToTags(
+			query.keywords || [],
+			i18n?.t('Trefwoord') || '',
+			ReadingRoomFilterId.Keywords
+		),
+		...mapArrayParamToTags(
 			query.language || [],
 			i18n?.t('modules/reading-room/utils/map-filters/map-filters___taal') || '',
 			ReadingRoomFilterId.Language

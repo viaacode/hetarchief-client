@@ -1,6 +1,6 @@
+import { ArrayParam } from 'use-query-params';
 import { array, object, SchemaOf, string } from 'yup';
 
-import { AdvancedFilterArrayParam } from '@reading-room/const/query-params';
 import { ReadingRoomFilterId } from '@reading-room/types';
 
 import { KeywordsFilterFormState } from './KeywordsFilterForm.types';
@@ -11,5 +11,5 @@ export const KEYWORDS_FILTER_FORM_SCHEMA = (): SchemaOf<KeywordsFilterFormState>
 	});
 
 export const KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG = {
-	[ReadingRoomFilterId.Keywords]: AdvancedFilterArrayParam,
+	[ReadingRoomFilterId.Keywords]: ArrayParam,
 };
