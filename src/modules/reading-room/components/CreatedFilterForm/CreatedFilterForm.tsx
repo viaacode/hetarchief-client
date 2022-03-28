@@ -9,7 +9,6 @@ import { useQueryParams } from 'use-query-params';
 import { MetadataProp } from '@reading-room/types';
 import { getOperators } from '@reading-room/utils';
 import { getSelectValue } from '@reading-room/utils/select';
-import { SEPARATOR } from '@shared/const';
 import { Operator } from '@shared/types';
 
 import { DateInput } from '../DateInput';
