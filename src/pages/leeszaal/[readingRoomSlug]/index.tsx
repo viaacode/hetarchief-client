@@ -53,13 +53,7 @@ import {
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import {
-	MediaSearchFilterField,
-	MediaSearchOperator,
-	OrderDirection,
-	ReadingRoomMediaType,
-	SortObject,
-} from '@shared/types';
+import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 
 import { useGetSpace } from 'modules/spaces/hooks/get-space';
@@ -274,18 +268,23 @@ const ReadingRoomPage: NextPage = () => {
 		data && setQuery({ [id]: data });
 	};
 
-	const onRemoveKeyword = (tags: MultiValue<TagIdentity>) => {
+	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
 		const query: Record<string, unknown> = {};
 
 		tags.forEach((tag) => {
 			switch (tag.key) {
+				case ReadingRoomFilterId.Creator:
+				case ReadingRoomFilterId.Genre:
+				case ReadingRoomFilterId.Keywords:
+				case ReadingRoomFilterId.Language:
+				case ReadingRoomFilterId.Medium:
 				case SEARCH_QUERY_KEY:
 					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag.value];
 					break;
 
 				case ReadingRoomFilterId.Advanced:
-				case ReadingRoomFilterId.Duration:
 				case ReadingRoomFilterId.Created:
+				case ReadingRoomFilterId.Duration:
 				case ReadingRoomFilterId.Published:
 					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag];
 					break;
@@ -427,7 +426,7 @@ const ReadingRoomPage: NextPage = () => {
 							syncSearchValue={false}
 							value={activeFilters}
 							onClear={onResetFilters}
-							onRemoveValue={onRemoveKeyword}
+							onRemoveValue={onRemoveTag}
 							onSearch={onSearch}
 						/>
 						<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
