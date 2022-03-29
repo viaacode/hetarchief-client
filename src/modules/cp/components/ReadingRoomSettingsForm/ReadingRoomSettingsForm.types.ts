@@ -1,8 +1,8 @@
+import { ReadingRoomInfo } from '@reading-room/types';
 import { DefaultComponentProps } from '@shared/types';
 
 export interface ReadingRoomSettingsFormProps extends DefaultComponentProps {
-	initialColor?: string | null;
-	initialImage?: string | null;
+	room: ReadingRoomInfo;
 	renderCancelSaveButtons: (onCancel: () => void, onSave: () => void) => void;
 	onSubmit?: (values: ReadingRoomFormState) => void;
 }

@@ -17,8 +17,7 @@ import {
 
 const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 	className,
-	initialColor,
-	initialImage,
+	room,
 	onSubmit,
 	renderCancelSaveButtons,
 }) => {
@@ -45,9 +44,9 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 	} = useForm<ReadingRoomFormState>({
 		resolver: yupResolver(READING_ROOM_SETTINGS_SCHEMA()),
 		defaultValues: {
-			color: initialColor ?? '',
+			color: '',
 			file: undefined,
-			image: initialImage ?? '',
+			image: '',
 		},
 	});
 	const currentState = watch();
@@ -66,14 +65,14 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 	useEffect(() => {
 		setSavedState({
 			...savedState,
-			color: initialColor ?? '',
-			image: initialImage ?? '',
+			color: room.color ?? '',
+			image: room.image ?? '',
 		});
-		setValue('color', initialColor ?? '');
-		setValue('image', initialImage ?? '');
+		setValue('color', room.color ?? '');
+		setValue('image', room.image ?? '');
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [initialColor, initialImage]);
+	}, [room]);
 
 	/**
 	 * Callbacks
@@ -117,9 +116,9 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 					currentState.image && styles['c-reading-room-settings-form__image--no-border']
 				)}
 				color=""
-				logo="/images/logo-shd--small.svg"
-				id="placeholder id"
-				name={'placeholder name' || ''}
+				logo={room.logo}
+				id={room.id}
+				name={room.name}
 				image={currentState.image}
 				size="short"
 			/>

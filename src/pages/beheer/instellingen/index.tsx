@@ -10,6 +10,7 @@ import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRoomInfo } from '@reading-room/hooks/get-reading-room-info';
 import { ReadingRoomService } from '@reading-room/services';
 import { UpdateReadingRoomSettings } from '@reading-room/services/reading-room/reading-room.service.types';
+import { Loading } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
@@ -21,7 +22,9 @@ const CPSettingsPage: NextPage = () => {
 	/**
 	 * Data
 	 */
-	const { data: readingRoomInfo } = useGetReadingRoomInfo('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21');
+	const { data: readingRoomInfo, isLoading } = useGetReadingRoomInfo(
+		'52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21'
+	);
 
 	const updateSpace = (values: Partial<UpdateReadingRoomSettings>) => {
 		if (readingRoomInfo) {
@@ -52,7 +55,9 @@ const CPSettingsPage: NextPage = () => {
 		</div>
 	);
 
-	return (
+	return isLoading ? (
+		<Loading />
+	) : (
 		<>
 			<Head>
 				<title>
@@ -84,16 +89,16 @@ const CPSettingsPage: NextPage = () => {
 									'pages/beheer/instellingen/index___personaliseer-hoe-jouw-leeszaal-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
 								)}
 							</p>
-
-							<ReadingRoomSettingsForm
-								className="p-cp-settings__leeszaal-controls"
-								initialColor={readingRoomInfo ? readingRoomInfo?.color : null}
-								initialImage={readingRoomInfo?.image}
-								renderCancelSaveButtons={renderCancelSaveButtons}
-								onSubmit={(values) => {
-									updateSpace(values);
-								}}
-							/>
+							{readingRoomInfo && (
+								<ReadingRoomSettingsForm
+									className="p-cp-settings__leeszaal-controls"
+									room={readingRoomInfo}
+									renderCancelSaveButtons={renderCancelSaveButtons}
+									onSubmit={(values) => {
+										updateSpace(values);
+									}}
+								/>
+							)}
 						</Box>
 					</article>
 
