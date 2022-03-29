@@ -17,7 +17,7 @@ export function useGetMediaObjects(
 	const dispatch = useDispatch();
 
 	return useQuery(
-		[QUERY_KEYS.getMediaObjects, { filters, page, size, sort }],
+		[QUERY_KEYS.getMediaObjects, { readingRoomSlug, filters, page, size, sort }],
 		() => {
 			// TODO: improve ⚠️
 			// Run three queries:

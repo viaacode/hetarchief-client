@@ -10,7 +10,7 @@ export const REQUEST_ACCESS_FORM_SCHEMA = (): SchemaOf<RequestAccessFormState> =
 				'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag-is-een-verplicht-veld'
 			)
 		),
-		visitTime: string().defined(),
+		visitTime: string().optional(),
 		acceptTerms: boolean()
 			.required(
 				i18n?.t(

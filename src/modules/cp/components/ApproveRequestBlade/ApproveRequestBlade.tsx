@@ -17,7 +17,7 @@ import {
 	startOfDay,
 } from 'date-fns';
 import { useTranslation } from 'next-i18next';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
 import { Blade, Icon } from '@shared/components';
@@ -52,6 +52,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		handleSubmit,
 		getValues,
 		setValue,
+		reset,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
 		defaultValues: {
@@ -59,6 +60,10 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			accessTo: defaultAccessTo(new Date()),
 		},
 	});
+
+	useEffect(() => {
+		props.isOpen && reset();
+	}, [props.isOpen, reset]);
 
 	// Events
 
@@ -81,6 +86,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
 					),
 				});
+
+				reset();
 			});
 	};
 
