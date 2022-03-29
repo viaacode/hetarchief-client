@@ -6,6 +6,10 @@
 	font-size: 62.5%;
 }
 
+html {
+	overflow-y: overlay;
+}
+
 body {
 	min-height: 100vh;
 	margin: 0;
