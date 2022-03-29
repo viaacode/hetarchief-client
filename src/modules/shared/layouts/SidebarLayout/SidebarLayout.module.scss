@@ -82,7 +82,7 @@ $l-sidebar-collapse-to: "md";
 				}
 
 				&__navigation {
-					z-index: get-z-layer("blade");
+					z-index: get-z-layer("foreground");
 					position: absolute;
 					border-right: none;
 				}

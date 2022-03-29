@@ -73,6 +73,10 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		setValue('pairs', pairs);
 	}, [setValue, pairs]);
 
+	useEffect(() => {
+		props.isOpen && reset();
+	}, [props.isOpen, reset]);
+
 	/**
 	 * Events
 	 */
@@ -155,6 +159,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			Promise.all(promises).then(() => {
 				collections.refetch().then(() => {
 					onSubmit?.(values);
+					reset();
 				});
 			});
 		}
