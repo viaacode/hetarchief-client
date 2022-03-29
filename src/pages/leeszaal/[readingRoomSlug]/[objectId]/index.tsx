@@ -27,6 +27,7 @@ import {
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
+import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
@@ -382,6 +383,10 @@ const ObjectDetailPage: NextPage = () => {
 									<Metadata
 										className="u-px-32"
 										metadata={[
+											{
+												title: t('modules/media/const/index___trefwoorden'),
+												data: mapKeywordsToTagList(mediaInfo.keywords),
+											},
 											{
 												title: 'Ook interessant',
 												data: (

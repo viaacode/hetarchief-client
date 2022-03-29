@@ -241,10 +241,11 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			title: i18n?.t('modules/media/const/index___tijdsperiode-van-de-inhoud') ?? '',
 			data: mapArrayToMetadataData(mediaInfo.temporal),
 		},
-		{
-			title: i18n?.t('modules/media/const/index___trefwoorden') ?? '',
-			data: mapKeywordsToTagList(mediaInfo.keywords),
-		},
+		// In second metadata component
+		// {
+		// 	title: i18n?.t('modules/media/const/index___trefwoorden') ?? '',
+		// 	data: mapKeywordsToTagList(mediaInfo.keywords),
+		// },
 		{
 			title: i18n?.t('modules/media/const/index___taal') ?? '',
 			data: mapArrayToMetadataData(mediaInfo.inLanguage),
