@@ -37,7 +37,8 @@ import {
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
 import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
-import { mapAdvancedToElastic, mapFiltersToTags } from '@reading-room/utils';
+import { mapFiltersToTags } from '@reading-room/utils';
+import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
 	IdentifiableMediaCard,
 	MediaCardList,
@@ -112,58 +113,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	const { data: media } = useGetMediaObjects(
 		readingRoomSlug as string,
-		[
-			// Searchbar
-			{
-				field: MediaSearchFilterField.QUERY,
-				operator: MediaSearchOperator.CONTAINS,
-				value: query.search !== null ? query.search?.toString() : '',
-			},
-			// Tabs
-			{
-				field: MediaSearchFilterField.FORMAT,
-				operator: MediaSearchOperator.IS,
-				value: query.format || READING_ROOM_QUERY_PARAM_INIT.format,
-			},
-			// Medium TODO
-			// {
-			// 	field: MediaSearchFilterField.MEDIUM,
-			// 	operator: MediaSearchOperator.IS,
-			// 	multiValue: (query.medium || []).filter((item) => item !== null) as string[],
-			// },
-			// Duration
-			...(query.duration || []).flatMap(mapAdvancedToElastic),
-			// Created
-			...(query.created || []).flatMap(mapAdvancedToElastic),
-			// Published
-			...(query.published || []).flatMap(mapAdvancedToElastic),
-			// Creator
-			{
-				field: MediaSearchFilterField.CREATOR,
-				operator: MediaSearchOperator.IS,
-				multiValue: (query.creator || []).filter((item) => item !== null) as string[],
-			},
-			// Genre
-			{
-				field: MediaSearchFilterField.GENRE,
-				operator: MediaSearchOperator.IS,
-				multiValue: (query.genre || []).filter((item) => item !== null) as string[],
-			},
-			// Keywords
-			{
-				field: MediaSearchFilterField.KEYWORD,
-				operator: MediaSearchOperator.IS,
-				multiValue: (query.keywords || []).filter((item) => item !== null) as string[],
-			},
-			// Language TODO
-			// {
-			// 	field: MediaSearchFilterField.LANGUAGE,
-			// 	operator: MediaSearchOperator.IS,
-			// 	multiValue: (query.language || []).filter((item) => item !== null) as string[],
-			// },
-			// Advanced
-			...(query.advanced || []).flatMap(mapAdvancedToElastic),
-		],
+		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
 		activeSort

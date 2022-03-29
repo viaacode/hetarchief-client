@@ -1,13 +1,13 @@
 import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
 import { i18n } from 'next-i18next';
-import { DecodedValueMap } from 'use-query-params';
 
-import { getMetadataSearchFilters, READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
+import { getMetadataSearchFilters } from '@reading-room/const';
 import {
 	AdvancedFilter,
 	MetadataProp,
 	ReadingRoomFilterId,
+	ReadingRoomQueryParams,
 	TagIdentity,
 } from '@reading-room/types';
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
@@ -22,8 +22,6 @@ const getSelectLabel = (
 ): string | undefined => {
 	return options.find((option) => option.value === optionValue)?.label;
 };
-
-type ReadingRoomQueryParams = Partial<DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>>;
 
 export const mapArrayParamToTags = (
 	values: (string | null)[],
@@ -103,7 +101,7 @@ export const mapAdvancedToTags = (
 	});
 };
 
-export const mapFiltersToTags = (query: Partial<ReadingRoomQueryParams>): TagIdentity[] => {
+export const mapFiltersToTags = (query: ReadingRoomQueryParams): TagIdentity[] => {
 	return [
 		...mapArrayParamToTags(
 			query.search || [],
