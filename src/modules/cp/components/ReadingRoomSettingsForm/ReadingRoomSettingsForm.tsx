@@ -1,10 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ColorPicker, FormControl } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { DEFAULT_READING_ROOM_COLOR } from '@reading-room/const';
 import { CardImage, Icon } from '@shared/components';
 import FileInput from '@shared/components/FileInput/FileInput';
 
@@ -69,8 +69,9 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 			color: initialColor ?? '',
 			image: initialImage ?? '',
 		});
-		setValue('color', initialColor ?? '');
-		setValue('image', initialImage ?? '');
+		initialColor && setValue('color', initialColor);
+		initialImage && setValue('image', initialImage);
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [initialColor, initialImage]);
 
@@ -111,8 +112,11 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 	return (
 		<div className={className}>
 			<CardImage
-				className={styles['c-reading-room-settings-form__image']}
-				color={currentState.color ? currentState.color : DEFAULT_READING_ROOM_COLOR}
+				className={clsx(
+					styles['c-reading-room-settings-form__image'],
+					currentState.image && styles['c-reading-room-settings-form__image--no-border']
+				)}
+				color=""
 				logo="/images/logo-shd--small.svg"
 				id="placeholder id"
 				name={'placeholder name' || ''}
@@ -166,19 +170,28 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 										hasFile={!!fileInputRef.current?.value}
 										ref={fileInputRef}
 										onChange={(e) => {
-											e.currentTarget.files?.[0] &&
+											e.currentTarget.files &&
 												setValue(
 													'file',
 													e.currentTarget.files[0] ?? undefined
 												);
+											setValue(
+												'image',
+												e.currentTarget.files &&
+													e.currentTarget.files.length
+													? URL.createObjectURL(e.currentTarget.files[0])
+													: savedState.image
+											);
 										}}
 									/>
-									{currentState.image && (
+									{savedState.image && (
 										<Button
 											label={t('Verwijderen')}
 											iconStart={<Icon name="trash" />}
 											variants="text"
-											onClick={() => setValue('image', '')}
+											onClick={() => {
+												setValue('image', '');
+											}}
 										/>
 									)}
 								</div>

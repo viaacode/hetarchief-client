@@ -18,8 +18,17 @@
 		gap: $spacer-lg;
 	}
 
+	&__image {
+		background-color: $platinum;
+		border: 0.2rem dashed $neutral;
+
+		&--no-border {
+			border: none;
+		}
+	}
+
 	&__color-control {
-		display: flex;
+		padding-top: $spacer-xs;
 	}
 
 	&__color-picker {

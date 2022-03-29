@@ -2,6 +2,7 @@ import { FormControl, RichEditorState, RichTextEditor } from '@meemoo/react-comp
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import styles from './RichTextForm.module.scss';
 import { RichTextFormProps, RichTextFormState } from './RichTextForm.types';
 import { isEqualHtml } from './RichTextForm.utils';
 
@@ -27,7 +28,7 @@ const RichTextForm: FC<RichTextFormProps> = ({
 				render={({ field }) => {
 					const currentState = watch('richText');
 					return (
-						<>
+						<div className={styles['c-rich-text-form__wrapper']}>
 							<RichTextEditor
 								onBlur={field.onBlur}
 								onChange={(state) => {
@@ -47,7 +48,7 @@ const RichTextForm: FC<RichTextFormProps> = ({
 										onFormSubmit(richText as RichEditorState)
 									)
 								)}
-						</>
+						</div>
 					);
 				}}
 			/>
