@@ -84,13 +84,15 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 	};
 
 	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-		input &&
+		if (input) {
 			onKey(e, [...keysEnter, ...keysSpacebar], () => {
 				setForm({
-					values: [...(form.values || []), input],
+					values: [...(form.values || []), input.toLowerCase()],
 				});
+
 				setInput('');
 			});
+		}
 	};
 
 	return (
