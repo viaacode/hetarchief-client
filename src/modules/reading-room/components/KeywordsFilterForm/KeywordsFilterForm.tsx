@@ -1,12 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-	FormControl,
-	keysEnter,
-	keysSpacebar,
-	onKey,
-	TagInfo,
-	TagsInput,
-} from '@meemoo/react-components';
+import { FormControl, keysEnter, onKey, TagInfo, TagsInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, KeyboardEvent, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -85,7 +78,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (input) {
-			onKey(e, [...keysEnter, ...keysSpacebar], () => {
+			onKey(e, [...keysEnter], () => {
 				setForm({
 					values: [...(form.values || []), input.toLowerCase()],
 				});
