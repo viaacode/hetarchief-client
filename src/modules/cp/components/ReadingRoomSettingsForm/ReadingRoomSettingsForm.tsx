@@ -69,8 +69,8 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 			color: initialColor ?? '',
 			image: initialImage ?? '',
 		});
-		initialColor && setValue('color', initialColor);
-		initialImage && setValue('image', initialImage);
+		setValue('color', initialColor ?? '');
+		setValue('image', initialImage ?? '');
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [initialColor, initialImage]);
