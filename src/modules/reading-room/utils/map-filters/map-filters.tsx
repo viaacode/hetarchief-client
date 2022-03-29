@@ -128,7 +128,7 @@ export const mapFiltersToTags = (query: ReadingRoomQueryParams): TagIdentity[] =
 		),
 		...mapArrayParamToTags(
 			query.keywords || [],
-			i18n?.t('Trefwoord') || '',
+			i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord') || '',
 			ReadingRoomFilterId.Keywords
 		),
 		...mapArrayParamToTags(

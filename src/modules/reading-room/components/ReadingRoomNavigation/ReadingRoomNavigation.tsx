@@ -122,7 +122,9 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 						</DropdownContent>
 					</Dropdown>
 				) : (
-					t('Geen contactinformatie beschikbaar')
+					t(
+						'modules/reading-room/components/reading-room-navigation/reading-room-navigation___geen-contactinformatie-beschikbaar'
+					)
 				)}
 			</Navigation.Right>
 		</Navigation>

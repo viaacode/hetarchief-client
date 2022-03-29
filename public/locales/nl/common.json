@@ -167,6 +167,7 @@
   "modules/reading-room/components/media-type-select/media-type-select___video": "Video",
   "modules/reading-room/components/medium-filter-form/medium-filter-form___geen-analoge-dragers-gevonden": "Geen analoge dragers gevonden.",
   "modules/reading-room/components/reading-room-navigation/reading-room-navigation___contacteer": "Contacteer",
+  "modules/reading-room/components/reading-room-navigation/reading-room-navigation___geen-contactinformatie-beschikbaar": "Geen contactinformatie beschikbaar",
   "modules/reading-room/const/index___alles": "Alles",
   "modules/reading-room/const/index___analoge-drager": "Analoge drager",
   "modules/reading-room/const/index___audio": "Audio",
