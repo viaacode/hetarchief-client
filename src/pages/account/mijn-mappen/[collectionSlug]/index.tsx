@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { CreateCollectionButton } from '@account/components';
@@ -14,11 +14,12 @@ import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
 import { collectionsService } from '@account/services/collections';
-import { Collection } from '@account/types';
+import { Collection, CollectionMedia } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { AddToCollectionBlade } from '@reading-room/components';
+import { formatMetadataDate } from '@reading-room/utils';
 import {
 	Icon,
 	IdentifiableMediaCard,
@@ -213,6 +214,54 @@ const AccountMyCollections: NextPage = () => {
 		</>
 	);
 
+	const renderDescription = (item: CollectionMedia): ReactNode => {
+		const items: { label: string; value: ReactNode }[] = [
+			{
+				label: t('pages/account/mijn-mappen/collection-slug/index___programma'),
+				value: item.series.join(', '),
+			},
+			{
+				label: t('pages/account/mijn-mappen/collection-slug/index___serie'),
+				value: item.programs.join(', '),
+			},
+			{
+				label: t('pages/account/mijn-mappen/collection-slug/index___type'),
+				value: item.format,
+			},
+			{
+				label: t('pages/account/mijn-mappen/collection-slug/index___creatiedatum'),
+				value: formatMetadataDate(asDate(item.dateCreatedLowerBound)),
+			},
+			{
+				label: t('pages/account/mijn-mappen/collection-slug/index___uitzenddatum'),
+				value: formatMetadataDate(asDate(item.datePublished)),
+			},
+			{
+				label: t('pages/account/mijn-mappen/collection-slug/index___identifier-bij-meemoo'),
+				value: item.meemooIdentifier,
+			},
+			{
+				label: t(
+					'pages/account/mijn-mappen/collection-slug/index___identifier-bij-aanbieder'
+				),
+				value: item.schemaIdentifier,
+			},
+		];
+
+		return (
+			<>
+				{items.map((item, i) => {
+					return item.value ? (
+						<p key={i} className="u-mt-4">
+							<b>{item.label}: </b>
+							{item.value}
+						</p>
+					) : null;
+				})}
+			</>
+		);
+	};
+
 	return (
 		<VisitorLayout>
 			<Head>
@@ -296,9 +345,7 @@ const AccountMyCollections: NextPage = () => {
 									items={collectionMedia?.data?.items.map((media) => {
 										const base: IdentifiableMediaCard = {
 											schemaIdentifier: media.schemaIdentifier,
-											description: media.description,
-											publishedBy: media.maintainerName,
-											publishedAt: asDate(media.termsAvailable),
+											description: renderDescription(media),
 											title: media.name,
 											type: media.format,
 											bookmarkIsSolid: true,
