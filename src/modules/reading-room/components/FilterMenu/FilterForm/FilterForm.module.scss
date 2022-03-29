@@ -26,6 +26,13 @@
 }
 
 .c-filter-form__body {
+	max-height: 100%;
+	overflow: auto;
+
+	// Allow "overflowing" effects on input fields
+	padding-top: $spacer-xxs;
+	margin-top: -$spacer-xxs;
+
 	@include respond-to(md) {
 		flex-grow: 1;
 	}

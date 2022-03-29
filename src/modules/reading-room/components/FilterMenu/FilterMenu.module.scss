@@ -93,6 +93,10 @@ $c-filter-menu-flyout-top-padding: 6.4rem;
 }
 
 .c-filter-menu__flyout {
+	&:global(.c-dropdown__content-closed) {
+		position: fixed !important; // Prevent poppers from pushing when hidden
+	}
+
 	&:global(.c-dropdown__content-open) {
 		z-index: get-z-layer("filter");
 	}
