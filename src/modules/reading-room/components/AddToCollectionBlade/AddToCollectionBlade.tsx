@@ -73,6 +73,10 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		setValue('pairs', pairs);
 	}, [setValue, pairs]);
 
+	useEffect(() => {
+		props.isOpen && reset();
+	}, [props.isOpen, reset]);
+
 	/**
 	 * Events
 	 */

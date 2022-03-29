@@ -104,6 +104,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				title={getTitle()}
 				footer={selected?.status === VisitStatus.PENDING ? renderFooter() : undefined}
 				layer={1}
+				isOpen={getCurrentLayer() === 1}
 			>
 				{selected && (
 					<>
@@ -158,7 +159,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 			</Blade>
 
 			<ApproveRequestBlade
-				isOpen={false}
+				isOpen={getCurrentLayer() === (showApprove ? 2 : 9999)}
 				layer={showApprove ? 2 : 9999}
 				selected={selected}
 				onClose={() => setShowApprove(false)}
@@ -166,7 +167,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 			/>
 
 			<DeclineRequestBlade
-				isOpen={false}
+				isOpen={getCurrentLayer() === (showDecline ? 2 : 9999)}
 				layer={showDecline ? 2 : 9999}
 				selected={selected}
 				onClose={() => setShowDecline(false)}
