@@ -10,15 +10,16 @@ jest.mock('react-redux', () => ({
 
 describe('Hooks', () => {
 	describe('useHistory', () => {
-		it('Should set isStickyLayout in the store', () => {
+		it('Should set history in the store', () => {
 			mockDispatch = jest.fn();
-			renderHook(() => useHistory());
+			const path = '/';
+			renderHook(() => useHistory(path, []));
 
 			expect(mockDispatch).toHaveBeenCalled();
 			expect(mockDispatch).toHaveBeenCalledTimes(1);
 			expect(mockDispatch).toHaveBeenCalledWith({
-				payload: true,
-				type: 'ui/setIsStickyLayout',
+				payload: [undefined, path],
+				type: 'history/setHistory',
 			});
 		});
 	});

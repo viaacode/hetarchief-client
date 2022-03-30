@@ -1,25 +1,24 @@
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { selectHistory, setHistory } from '@shared/store/history';
+import { setHistory } from '@shared/store/history';
 
 import { UseHistory } from './use-history.types';
 
-const useHistory: UseHistory = () => {
+const useHistory: UseHistory = (path, history) => {
 	const dispatch = useDispatch();
-	const { asPath } = useRouter();
-	const history = useSelector(selectHistory);
 
 	useEffect(() => {
+		const newHistory = [history[history.length - 1], path];
+
 		// Only save previous link
-		dispatch(setHistory([history[history.length - 1], asPath]));
+		dispatch(setHistory(newHistory));
 
 		return () => {
-			dispatch(setHistory([history[history.length - 1], asPath]));
+			dispatch(setHistory(newHistory));
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [asPath]);
+	}, [path, dispatch]);
 };
 
 export default useHistory;

@@ -1,1 +1,1 @@
-export type UseHistory = () => void;
+export type UseHistory = (path: string, history: string[]) => void;
