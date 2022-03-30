@@ -25,14 +25,15 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	const { t } = useTranslation();
 	const { onSubmit, selected } = props;
 	const [pairs, setPairs] = useState<AddToCollectionFormStatePair[]>([]);
-	const { control, handleSubmit, setValue, reset } = useForm<AddToCollectionFormState>({
+	const {
+		control,
+		handleSubmit,
+		setValue,
+		reset,
+		formState: { errors },
+	} = useForm<AddToCollectionFormState>({
 		resolver: yupResolver(ADD_TO_COLLECTION_FORM_SCHEMA()),
-		defaultValues: useMemo(() => {
-			return {
-				pairs,
-				...(selected ? { selected } : {}),
-			};
-		}, [selected, pairs]),
+		defaultValues: useMemo(() => ({ pairs }), [pairs]),
 	});
 
 	const collections = useGetCollections(!!selected?.schemaIdentifier);
@@ -58,10 +59,6 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	/**
 	 * Effects
 	 */
-
-	useEffect(() => {
-		selected && setValue('selected.schemaIdentifier', selected.schemaIdentifier);
-	}, [setValue, selected]);
 
 	useEffect(() => {
 		if (selected?.schemaIdentifier && collections.data) {
@@ -190,7 +187,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___voeg-toe'
 					)}
 					variants={['block', 'black']}
-					onClick={handleSubmit(onFormSubmit)}
+					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
 				/>
 
 				<Button
