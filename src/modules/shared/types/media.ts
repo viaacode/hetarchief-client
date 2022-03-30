@@ -61,7 +61,7 @@ export interface MediaInfo {
 	schema_contributor: unknown | null;
 	schema_maintainer?: {
 		schema_identifier: string;
-	};
+	}[];
 	dcterms_format: MediaTypes;
 	schema_name: string;
 	// TODO: See if this is still necessary once resolved in proxy

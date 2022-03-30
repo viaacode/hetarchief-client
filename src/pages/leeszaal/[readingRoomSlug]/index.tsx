@@ -1,10 +1,9 @@
-import { Button, TabProps } from '@meemoo/react-components';
+import { TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -41,7 +40,6 @@ import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/ty
 import { mapFiltersToTags } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
-	Icon,
 	IdentifiableMediaCard,
 	MediaCardList,
 	MediaCardViewMode,
@@ -313,6 +311,11 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
+	const onMediaBookmark = (item: IdentifiableMediaCard) => {
+		setSelected(item);
+		setShowAddToCollectionBlade(true);
+	};
+
 	/**
 	 * Computed
 	 */
@@ -369,39 +372,13 @@ const ReadingRoomPage: NextPage = () => {
 							: undefined,
 						publishedBy: item.schema_creator?.Maker?.join(', '),
 						type: item.dcterms_format,
+						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer?.[0]?.schema_identifier}/${item.meemoo_fragment_id}`,
 					})
 				)}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
+				onItemBookmark={({ item }) => onMediaBookmark(item as IdentifiableMediaCard)}
 				view={viewMode}
-				buttons={(item) => (
-					<Button
-						onClick={(e) => {
-							// Avoid navigating to detail when opening
-							e.preventDefault();
-							e.stopPropagation();
-
-							setSelected(item as IdentifiableMediaCard);
-							setShowAddToCollectionBlade(true);
-						}}
-						icon={<Icon type="light" name="bookmark" />}
-						variants={['text', 'xxs']}
-					/>
-				)}
-				wrapper={(card, item) => {
-					const cast = item as IdentifiableMediaCard;
-					const source = media?.items.find(
-						(media) => media.schema_identifier === cast.schemaIdentifier
-					);
-
-					return (
-						<Link
-							href={`/${ROUTES.spaces}/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`}
-						>
-							<a className="u-text-no-decoration">{card}</a>
-						</Link>
-					);
-				}}
 			/>
 			<PaginationBar
 				className="u-mb-48"
@@ -424,13 +401,7 @@ const ReadingRoomPage: NextPage = () => {
 			<div className="p-reading-room">
 				<Head>
 					<title>{createPageTitle(space?.name)}</title>
-					<meta
-						name="description"
-						content={
-							space?.description ||
-							t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
-						}
-					/>
+					<meta name="description" content={space?.description || 'Een leeszaal'} />
 				</Head>
 
 				<ReadingRoomNavigation
@@ -479,12 +450,8 @@ const ReadingRoomPage: NextPage = () => {
 								<Placeholder
 									className="p-reading-room__placeholder"
 									img="/images/lightbulb.svg"
-									title={t(
-										'pages/leeszaal/reading-room-slug/index___start-je-zoektocht'
-									)}
-									description={t(
-										'pages/leeszaal/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
-									)}
+									title="Start je zoektocht!"
+									description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
 								/>
 							</>
 						)}
@@ -495,12 +462,8 @@ const ReadingRoomPage: NextPage = () => {
 								<Placeholder
 									className="p-reading-room__placeholder"
 									img="/images/looking-glass.svg"
-									title={t(
-										'pages/leeszaal/reading-room-slug/index___geen-resultaten'
-									)}
-									description={t(
-										'pages/leeszaal/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
-									)}
+									title="Geen resultaten"
+									description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
 								/>
 							</>
 						)}

@@ -25,15 +25,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	const { t } = useTranslation();
 	const { onSubmit, selected } = props;
 	const [pairs, setPairs] = useState<AddToCollectionFormStatePair[]>([]);
-	const {
-		control,
-		handleSubmit,
-		setValue,
-		reset,
-		formState: { errors },
-	} = useForm<AddToCollectionFormState>({
+	const { control, handleSubmit, setValue, reset } = useForm<AddToCollectionFormState>({
 		resolver: yupResolver(ADD_TO_COLLECTION_FORM_SCHEMA()),
-		defaultValues: useMemo(() => ({ pairs }), [pairs]),
+		defaultValues: useMemo(() => {
+			return {
+				pairs,
+				...(selected ? { selected } : {}),
+			};
+		}, [selected, pairs]),
 	});
 
 	const collections = useGetCollections(!!selected?.schemaIdentifier);
@@ -61,6 +60,10 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	 */
 
 	useEffect(() => {
+		selected && setValue('selected.schemaIdentifier', selected.schemaIdentifier);
+	}, [setValue, selected]);
+
+	useEffect(() => {
 		if (selected?.schemaIdentifier && collections.data) {
 			setPairs(mapToPairs(collections.data?.items || [], selected));
 		}
@@ -84,7 +87,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		toastService.notify({
 			maxLines: 3,
 			title: t(
-				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-ging-iets-mis'
+				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___⚠️-er-ging-iets-mis'
 			),
 			description: t(
 				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
@@ -188,7 +191,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___voeg-toe'
 					)}
 					variants={['block', 'black']}
-					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
+					onClick={handleSubmit(onFormSubmit)}
 				/>
 
 				<Button

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, memo } from 'react';
+import { FC, memo, MouseEvent } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { MediaCard } from '../MediaCard';
@@ -15,9 +15,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	view,
 	sidebar,
 	breakpoints = MEDIA_CARD_LIST_GRID_BP_COLS,
-	buttons,
-	actions,
-	wrapper = (card) => card,
+	onItemBookmark = () => null,
 }) => {
 	if (!items) {
 		return null;
@@ -28,18 +26,8 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	const renderSidebar = () =>
 		sidebar && <div className={styles['c-media-card-list__sidebar']}>{sidebar}</div>;
 
-	const getKey = (item: MediaCardProps, i: number) => {
-		let key = (item as IdentifiableMediaCard).schemaIdentifier;
-
-		if (key === undefined) {
-			if (typeof item.title === 'string') {
-				key = `${encodeURIComponent(item.title || 'card')}--${i}`;
-			} else {
-				key = i.toString();
-			}
-		}
-
-		return key;
+	const onBookmark = (e: MouseEvent, item: MediaCardProps) => {
+		onItemBookmark({ e, item });
 	};
 
 	return (
@@ -56,19 +44,18 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				columnClassName={styles['c-media-card-list__column']}
 			>
 				{isMasonryView && renderSidebar()}
-				{items.map((item, i) =>
-					wrapper(
-						<MediaCard
-							key={getKey(item, i)}
-							buttons={buttons?.(item)}
-							actions={actions?.(item)}
-							{...item}
-							keywords={keywords}
-							view={view}
-						/>,
-						item
-					)
-				)}
+				{items.map((item, i) => (
+					<MediaCard
+						key={
+							(item as IdentifiableMediaCard).schemaIdentifier ||
+							`${encodeURIComponent(item.title || 'card')}--${i}`
+						}
+						{...item}
+						keywords={keywords}
+						view={view}
+						onBookmark={(e) => onBookmark(e, item)}
+					/>
+				))}
 			</Masonry>
 		</div>
 	);

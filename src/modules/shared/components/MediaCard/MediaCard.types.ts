@@ -1,20 +1,22 @@
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 
 import { MediaTypes } from '@shared/types';
 
 export type MediaCardViewMode = 'list' | 'grid';
 
 export interface MediaCardProps {
+	bookmarkIsSolid?: boolean;
 	description?: ReactNode;
 	keywords?: string[];
+	detailLink: string;
 	preview?: string;
 	publishedAt?: Date;
 	publishedBy?: string;
-	title?: string | ReactNode;
+	title?: string;
 	type: MediaTypes;
 	view?: MediaCardViewMode;
+	onBookmark?: (evt: MouseEvent) => void;
 	actions?: ReactNode;
-	buttons?: ReactNode;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

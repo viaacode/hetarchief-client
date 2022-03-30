@@ -5,6 +5,10 @@ import { AddToCollectionFormState } from './AddToCollectionBlade.types';
 
 export const ADD_TO_COLLECTION_FORM_SCHEMA = (): SchemaOf<AddToCollectionFormState> => {
 	return object({
+		selected: object().shape({
+			schemaIdentifier: string().required(),
+			title: string().optional(),
+		}),
 		pairs: array()
 			.of(
 				object().shape({

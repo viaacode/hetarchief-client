@@ -5,7 +5,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import Highlighter from 'react-highlight-words';
 import { useQueryParams } from 'use-query-params';
 
 import { CreateCollectionButton } from '@account/components';
@@ -88,8 +87,6 @@ const AccountMyCollections: NextPage = () => {
 		filters.page,
 		CollectionItemListSize
 	);
-
-	const keywords = useMemo(() => (filters.search ? [filters.search] : []), [filters.search]);
 
 	/**
 	 * Effects
@@ -215,21 +212,6 @@ const AccountMyCollections: NextPage = () => {
 				onClick={() => onMoveCollection(item)}
 			/>
 		</>
-	);
-
-	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
-	const renderTitle = (item: CollectionMedia): ReactNode => (
-		<Link href={`/${ROUTES.spaces}/${item.maintainerId}/${item.schemaIdentifier}`}>
-			<a className="u-text-no-decoration" title={item.schemaIdentifier}>
-				<b>
-					<Highlighter
-						searchWords={keywords}
-						autoEscape={true}
-						textToHighlight={item.name}
-					/>
-				</b>
-			</a>
-		</Link>
 	);
 
 	const renderDescription = (item: CollectionMedia): ReactNode => {
@@ -359,13 +341,15 @@ const AccountMyCollections: NextPage = () => {
 
 							<div className="l-container">
 								<MediaCardList
-									keywords={keywords}
+									keywords={filters.search ? [filters.search] : []}
 									items={collectionMedia?.data?.items.map((media) => {
 										const base: IdentifiableMediaCard = {
 											schemaIdentifier: media.schemaIdentifier,
 											description: renderDescription(media),
-											title: renderTitle(media),
+											title: media.name,
 											type: media.format,
+											bookmarkIsSolid: true,
+											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.schemaIdentifier}`,
 										};
 
 										return {
