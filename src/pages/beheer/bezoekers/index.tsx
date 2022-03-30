@@ -35,10 +35,9 @@ import { VisitTimeframe } from '@visits/types';
 const CPVisitorsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
-	const [selectedVisitRequest, setSelectedVisitRequest] = useState<VisitInfo | null>(null);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
-	// const [selected, setSelected] = useState<string | number | null>(null);
+	const [selected, setSelected] = useState<string | number | null>(null);
 
 	const {
 		data: visits,
@@ -58,6 +57,10 @@ const CPVisitorsPage: NextPage = () => {
 	});
 
 	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
+	const selectedItem = useMemo(
+		() => visits?.items.find((item) => item.id === selected),
+		[visits, selected]
+	);
 
 	// Filters
 
@@ -100,23 +103,23 @@ const CPVisitorsPage: NextPage = () => {
 	);
 
 	const denyVisitRequest = (visitRequest: VisitInfo) => {
-		setSelectedVisitRequest(visitRequest);
+		setSelected(visitRequest.id);
 		setShowDenyVisitRequestModal(true);
 	};
 
 	const editVisitRequest = (visitRequest: VisitInfo) => {
-		setSelectedVisitRequest(visitRequest);
+		setSelected(visitRequest.id);
 		setShowEditVisitRequestModal(true);
 	};
 
 	const handleDenyVisitRequestConfirmed = async () => {
 		try {
 			setShowDenyVisitRequestModal(false);
-			if (!selectedVisitRequest) {
+			if (!selected) {
 				return;
 			}
 			await updateVisitRequest({
-				id: selectedVisitRequest.id,
+				id: selected.toString(),
 				updatedProps: { status: VisitStatus.DENIED },
 			});
 			await refetchVisitRequests();
@@ -138,18 +141,10 @@ const CPVisitorsPage: NextPage = () => {
 	};
 
 	const handleEditVisitRequestFinished = async () => {
-		setSelectedVisitRequest(null);
+		setSelected(null);
 		setShowEditVisitRequestModal(false);
 		await refetchVisitRequests();
 	};
-
-	// const onRowClick = useCallback(
-	// 	(e, row) => {
-	// 		const request = (row as { original: VisitInfo }).original;
-	// 		setSelected(request.id);
-	// 	},
-	// 	[setSelected]
-	// );
 
 	// Render
 
@@ -250,7 +245,6 @@ const CPVisitorsPage: NextPage = () => {
 								} as TableOptions<object>
 								/* eslint-enable @typescript-eslint/ban-types */
 							}
-							// onRowClick={onRowClick}
 							onSortChange={onSortChange}
 							sortingIcons={sortingIcons}
 							pagination={({ gotoPage }) => {
@@ -283,12 +277,12 @@ const CPVisitorsPage: NextPage = () => {
 				<ConfirmationModal
 					isOpen={showDenyVisitRequestModal}
 					onClose={() => {
-						setSelectedVisitRequest(null);
+						setSelected(null);
 						setShowDenyVisitRequestModal(false);
 					}}
 					onConfirm={handleDenyVisitRequestConfirmed}
 					onCancel={() => {
-						setSelectedVisitRequest(null);
+						setSelected(null);
 						setShowDenyVisitRequestModal(false);
 					}}
 				/>
@@ -302,9 +296,9 @@ const CPVisitorsPage: NextPage = () => {
 						'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
 					)}
 					isOpen={showEditVisitRequestModal}
-					selected={selectedVisitRequest || undefined}
+					selected={selectedItem}
 					onClose={() => {
-						setSelectedVisitRequest(null);
+						setSelected(null);
 						setShowEditVisitRequestModal(false);
 					}}
 					onSubmit={handleEditVisitRequestFinished}
