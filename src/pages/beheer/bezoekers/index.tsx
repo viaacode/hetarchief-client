@@ -2,11 +2,12 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { ApproveRequestBlade } from '@cp/components';
 import { RequestTablePageSize } from '@cp/const/requests.const';
 import {
 	CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG,
@@ -16,19 +17,33 @@ import {
 import { CPAdminLayout } from '@cp/layouts';
 import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
-import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
+import {
+	ConfirmationModal,
+	PaginationBar,
+	ScrollableTabs,
+	SearchBar,
+	sortingIcons,
+} from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
+import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { VisitTimeframe } from '@visits/types';
 
 const CPVisitorsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
-	// const [selected, setSelected] = useState<string | number | null>(null);
+	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
+	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
+	const [selected, setSelected] = useState<string | number | null>(null);
 
-	const { data: visits, isFetching } = useGetVisits({
+	const {
+		data: visits,
+		isFetching,
+		refetch: refetchVisitRequests,
+	} = useGetVisits({
 		searchInput: filters.search,
 		status: VisitStatus.APPROVED,
 		timeframe:
@@ -40,6 +55,12 @@ const CPVisitorsPage: NextPage = () => {
 		orderProp: filters.orderProp as keyof VisitInfo,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
+
+	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
+	const selectedItem = useMemo(
+		() => visits?.items.find((item) => item.id === selected),
+		[visits, selected]
+	);
 
 	// Filters
 
@@ -81,13 +102,49 @@ const CPVisitorsPage: NextPage = () => {
 		[filters, setFilters]
 	);
 
-	// const onRowClick = useCallback(
-	// 	(e, row) => {
-	// 		const request = (row as { original: VisitInfo }).original;
-	// 		setSelected(request.id);
-	// 	},
-	// 	[setSelected]
-	// );
+	const denyVisitRequest = (visitRequest: VisitInfo) => {
+		setSelected(visitRequest.id);
+		setShowDenyVisitRequestModal(true);
+	};
+
+	const editVisitRequest = (visitRequest: VisitInfo) => {
+		setSelected(visitRequest.id);
+		setShowEditVisitRequestModal(true);
+	};
+
+	const handleDenyVisitRequestConfirmed = async () => {
+		try {
+			setShowDenyVisitRequestModal(false);
+			if (!selected) {
+				return;
+			}
+			await updateVisitRequest({
+				id: selected.toString(),
+				updatedProps: { status: VisitStatus.DENIED },
+			});
+			await refetchVisitRequests();
+			toastService.notify({
+				title: t('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
+				description: t(
+					'pages/beheer/bezoekers/index___deze-gebruiker-heeft-nu-geen-toegang-meer'
+				),
+			});
+		} catch (err) {
+			console.error(err);
+			toastService.notify({
+				title: t('pages/beheer/bezoekers/index___error'),
+				description: t(
+					'pages/beheer/bezoekers/index___het-updaten-van-de-bezoekersaanvraag-is-mislukt'
+				),
+			});
+		}
+	};
+
+	const handleEditVisitRequestFinished = async () => {
+		setSelected(null);
+		setShowEditVisitRequestModal(false);
+		await refetchVisitRequests();
+	};
 
 	// Render
 
@@ -170,12 +227,16 @@ const CPVisitorsPage: NextPage = () => {
 				{(visits?.items?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
 						<Table
-							className="u-mt-24"
+							className="u-mt-24 c-table--no-padding-last-column"
 							options={
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: VisitorsTableColumns({ t }) as Column<object>[],
+									columns: VisitorsTableColumns(
+										t,
+										denyVisitRequest,
+										editVisitRequest
+									) as Column<object>[],
 									data: visits?.items || [],
 									initialState: {
 										pageSize: RequestTablePageSize,
@@ -184,7 +245,6 @@ const CPVisitorsPage: NextPage = () => {
 								} as TableOptions<object>
 								/* eslint-enable @typescript-eslint/ban-types */
 							}
-							// onRowClick={onRowClick}
 							onSortChange={onSortChange}
 							sortingIcons={sortingIcons}
 							pagination={({ gotoPage }) => {
@@ -214,6 +274,35 @@ const CPVisitorsPage: NextPage = () => {
 							: renderEmptyMessage()}
 					</div>
 				)}
+				<ConfirmationModal
+					isOpen={showDenyVisitRequestModal}
+					onClose={() => {
+						setSelected(null);
+						setShowDenyVisitRequestModal(false);
+					}}
+					onConfirm={handleDenyVisitRequestConfirmed}
+					onCancel={() => {
+						setSelected(null);
+						setShowDenyVisitRequestModal(false);
+					}}
+				/>
+				<ApproveRequestBlade
+					title={t('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
+					approveButtonLabel={t('pages/beheer/bezoekers/index___aanpassen')}
+					successTitle={t(
+						'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
+					)}
+					successDescription={t(
+						'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
+					)}
+					isOpen={showEditVisitRequestModal}
+					selected={selectedItem}
+					onClose={() => {
+						setSelected(null);
+						setShowEditVisitRequestModal(false);
+					}}
+					onSubmit={handleEditVisitRequestFinished}
+				/>
 			</CPAdminLayout>
 		</>
 	);
