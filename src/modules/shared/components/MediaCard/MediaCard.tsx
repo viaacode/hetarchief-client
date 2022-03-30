@@ -77,7 +77,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return keywords?.length ? highlighted(subtitle) : <>{subtitle}</>;
+		return keywords?.length ? highlighted(subtitle) : subtitle;
 	};
 
 	const renderNoContentIcon = () => (
