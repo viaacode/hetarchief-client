@@ -252,7 +252,7 @@ const AccountMyCollections: NextPage = () => {
 			<>
 				{items.map((item, i) => {
 					return item.value ? (
-						<p key={i} className="u-mt-4">
+						<p key={i} className="u-mt-4 u-pr-24 u-text-break">
 							<b>{item.label}: </b>
 							{item.value}
 						</p>

@@ -4,6 +4,10 @@
 	@include text-ellipsis;
 }
 
+.u-text-break {
+	word-break: break-all;
+}
+
 /**
  * Alignment
  *
