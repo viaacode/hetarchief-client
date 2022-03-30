@@ -5,8 +5,7 @@ import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusAll } from '@cp/types';
-import { UnreadMarker } from '@shared/components';
-import { DropdownMenu } from '@shared/components/Dropdown/DropdownMenu';
+import { DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow } from '@shared/types';
