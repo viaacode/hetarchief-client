@@ -25,7 +25,11 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
 							onChange?.(e);
 						}}
 					/>
-					{hasFile ? t('Upload nieuwe afbeelding') : t('Upload afbeelding')}
+					{hasFile
+						? t(
+								'modules/shared/components/file-input/file-input___upload-nieuwe-afbeelding'
+						  )
+						: t('modules/shared/components/file-input/file-input___upload-afbeelding')}
 				</label>
 			</>
 		);

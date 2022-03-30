@@ -5,6 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { DEFAULT_READING_ROOM_COLOR } from '@reading-room/const';
 import { CardImage, Icon } from '@shared/components';
 import FileInput from '@shared/components/FileInput/FileInput';
 
@@ -44,7 +45,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 	} = useForm<ReadingRoomFormState>({
 		resolver: yupResolver(READING_ROOM_SETTINGS_SCHEMA()),
 		defaultValues: {
-			color: '',
+			color: DEFAULT_READING_ROOM_COLOR,
 			file: undefined,
 			image: '',
 		},
@@ -53,7 +54,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 
 	// Save original form state
 	const [savedState, setSavedState] = useState<ReadingRoomFormState>({
-		color: '',
+		color: DEFAULT_READING_ROOM_COLOR,
 		image: '',
 		file: undefined,
 	});
@@ -65,11 +66,11 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 	useEffect(() => {
 		setSavedState({
 			...savedState,
-			color: room.color ?? '',
-			image: room.image ?? '',
+			color: room.color || DEFAULT_READING_ROOM_COLOR,
+			image: room.image || '',
 		});
-		setValue('color', room.color ?? '');
-		setValue('image', room.image ?? '');
+		setValue('color', room.color || DEFAULT_READING_ROOM_COLOR);
+		setValue('image', room.image || '');
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [room]);
@@ -103,6 +104,11 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 	};
 
 	const onFormSubmit = (state: ReadingRoomFormState) => {
+		// Default color if color picker is empty
+		if (!state.color) {
+			setValue('color', DEFAULT_READING_ROOM_COLOR);
+			state.color = DEFAULT_READING_ROOM_COLOR;
+		}
 		onSubmit?.(state);
 		setSavedState(state);
 		resetFileInput();
@@ -113,9 +119,10 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 			<CardImage
 				className={clsx(
 					styles['c-reading-room-settings-form__image'],
-					currentState.image && styles['c-reading-room-settings-form__image--no-border']
+					(currentState.image || currentState.color) &&
+						styles['c-reading-room-settings-form__image--no-border']
 				)}
-				color=""
+				color={currentState.color}
 				logo={room.logo}
 				id={room.id}
 				name={room.name}
@@ -133,7 +140,9 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 						return (
 							<div className={styles['c-reading-room-settings-form__color-picker']}>
 								<p className={styles['c-reading-room-settings-form__label']}>
-									{t('Achtergrondkleur')}
+									{t(
+										'modules/cp/components/reading-room-settings-form/reading-room-settings-form___achtergrondkleur'
+									)}
 								</p>
 								<ColorPicker
 									color={currentState.color ?? ''}
@@ -154,9 +163,15 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 						return (
 							<>
 								<p className={styles['c-reading-room-settings-form__label']}>
-									{t('Achtergrond afbeelding')}
+									{t(
+										'modules/cp/components/reading-room-settings-form/reading-room-settings-form___achtergrond-afbeelding'
+									)}
 									<span className={styles['c-reading-room-settings-form__hint']}>
-										({t('Max 500kb.')})
+										(
+										{t(
+											'modules/cp/components/reading-room-settings-form/reading-room-settings-form___max-500-kb'
+										)}
+										)
 									</span>
 								</p>
 								<div
@@ -166,7 +181,10 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 								>
 									<FileInput
 										{...field}
-										hasFile={!!fileInputRef.current?.value}
+										hasFile={
+											(!!savedState.image || !!fileInputRef.current?.value) &&
+											!!currentState.image
+										}
 										ref={fileInputRef}
 										onChange={(e) => {
 											e.currentTarget.files &&
@@ -185,7 +203,9 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 									/>
 									{savedState.image && (
 										<Button
-											label={t('Verwijderen')}
+											label={t(
+												'modules/cp/components/reading-room-settings-form/reading-room-settings-form___verwijder-afbeelding'
+											)}
 											iconStart={<Icon name="trash" />}
 											variants="text"
 											onClick={() => {
