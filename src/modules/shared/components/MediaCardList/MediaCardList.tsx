@@ -17,6 +17,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	breakpoints = MEDIA_CARD_LIST_GRID_BP_COLS,
 	buttons,
 	actions,
+	wrapper = (card) => card,
 }) => {
 	if (!items) {
 		return null;
@@ -55,16 +56,19 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				columnClassName={styles['c-media-card-list__column']}
 			>
 				{isMasonryView && renderSidebar()}
-				{items.map((item, i) => (
-					<MediaCard
-						key={getKey(item, i)}
-						buttons={buttons?.(item)}
-						actions={actions?.(item)}
-						{...item}
-						keywords={keywords}
-						view={view}
-					/>
-				))}
+				{items.map((item, i) =>
+					wrapper(
+						<MediaCard
+							key={getKey(item, i)}
+							buttons={buttons?.(item)}
+							actions={actions?.(item)}
+							{...item}
+							keywords={keywords}
+							view={view}
+						/>,
+						item
+					)
+				)}
 			</Masonry>
 		</div>
 	);

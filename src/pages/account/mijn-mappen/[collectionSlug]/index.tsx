@@ -220,7 +220,7 @@ const AccountMyCollections: NextPage = () => {
 	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
 	const renderTitle = (item: CollectionMedia): ReactNode => (
 		<Link href={`/${ROUTES.spaces}/${item.maintainerId}/${item.schemaIdentifier}`}>
-			<a title={item.schemaIdentifier}>
+			<a className="u-text-no-decoration" title={item.schemaIdentifier}>
 				<b>
 					<Highlighter
 						searchWords={keywords}

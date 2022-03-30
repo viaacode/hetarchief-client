@@ -8,4 +8,5 @@ export interface MediaCardListProps extends Pick<MediaCardProps, 'view' | 'keywo
 	breakpoints?: Record<number | 'default', number>;
 	buttons?: (item: MediaCardProps) => ReactNode;
 	actions?: (item: MediaCardProps) => ReactNode;
+	wrapper?: (card: ReactNode, item: MediaCardProps) => ReactNode;
 }

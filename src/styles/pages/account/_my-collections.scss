@@ -36,10 +36,6 @@ $component: "p-account-my-collections";
 		}
 	}
 
-	.c-card__title-wrapper > a {
-		text-decoration: none;
-	}
-
 	@include respond-to("lg") {
 		// Hide top-level sidebar a bit earlier
 		// > :global(.l-sidebar__navigation) {

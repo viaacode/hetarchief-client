@@ -4,6 +4,7 @@ import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -51,7 +52,7 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
@@ -375,7 +376,11 @@ const ReadingRoomPage: NextPage = () => {
 				view={viewMode}
 				buttons={(item) => (
 					<Button
-						onClick={() => {
+						onClick={(e) => {
+							// Avoid navigating to detail when opening
+							e.preventDefault();
+							e.stopPropagation();
+
 							setSelected(item as IdentifiableMediaCard);
 							setShowAddToCollectionBlade(true);
 						}}
@@ -383,6 +388,20 @@ const ReadingRoomPage: NextPage = () => {
 						variants={['text', 'xxs']}
 					/>
 				)}
+				wrapper={(card, item) => {
+					const cast = item as IdentifiableMediaCard;
+					const source = media?.items.find(
+						(media) => media.schema_identifier === cast.schemaIdentifier
+					);
+
+					return (
+						<Link
+							href={`/${ROUTES.spaces}/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`}
+						>
+							<a className="u-text-no-decoration">{card}</a>
+						</Link>
+					);
+				}}
 			/>
 			<PaginationBar
 				className="u-mb-48"
