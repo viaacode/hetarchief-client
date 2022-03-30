@@ -1,6 +1,8 @@
 @use "sass:color";
 @use "../abstracts" as *;
 
+$teal-64: color.adjust($teal, $alpha: -0.36);
+
 h1,
 h2,
 h3,
