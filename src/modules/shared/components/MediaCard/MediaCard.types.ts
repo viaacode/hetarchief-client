@@ -10,7 +10,7 @@ export interface MediaCardProps {
 	preview?: string;
 	publishedAt?: Date;
 	publishedBy?: string;
-	title?: string;
+	title?: string | ReactNode;
 	type: MediaTypes;
 	view?: MediaCardViewMode;
 	actions?: ReactNode;

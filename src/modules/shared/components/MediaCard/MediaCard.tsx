@@ -50,7 +50,17 @@ const MediaCard: FC<MediaCardProps> = ({
 		</div>
 	);
 
-	const renderTitle = () => <b>{keywords?.length ? highlighted(title ?? '') : title}</b>;
+	const renderTitle = (): ReactNode => {
+		if (typeof title === 'string') {
+			return <b>{keywords?.length ? highlighted(title ?? '') : title}</b>;
+		}
+
+		if (keywords && keywords.length > 0) {
+			console.warn('[WARN][MediaCard] Title could not be highlighted.');
+		}
+
+		return title;
+	};
 
 	const renderSubtitle = (): ReactNode => {
 		let subtitle = '';
@@ -95,7 +105,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						styles[`c-media-card__header-wrapper--${view}`]
 					)}
 				>
-					<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
+					<Image src={preview} alt={''} unoptimized={true} layout="fill" />
 				</div>
 			);
 		} else {
