@@ -69,6 +69,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		handleSubmit,
 		getValues,
 		setValue,
+		reset,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
 		defaultValues: {
@@ -79,17 +80,15 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	useEffect(() => {
 		if (selected) {
-			if (selected.startAt) {
-				setValue('accessFrom', asDate(selected.startAt));
-			}
-			if (selected.endAt) {
-				setValue('accessTo', asDate(selected.endAt));
-			}
-			if (selected.note) {
-				setValue('accessRemark', selected.note);
-			}
+			selected.note && setValue('accessRemark', selected.note);
+			selected.endAt && setValue('accessTo', asDate(selected.endAt));
+			selected.startAt && setValue('accessFrom', asDate(selected.startAt));
 		}
 	}, [selected, setValue]);
+
+	useEffect(() => {
+		props.isOpen && reset();
+	}, [props.isOpen, reset]);
 
 	// Events
 
@@ -108,6 +107,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					title: successTitle as string,
 					description: successDescription as string,
 				});
+
+				reset();
 			});
 	};
 

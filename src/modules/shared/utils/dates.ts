@@ -17,7 +17,12 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 
 	const lowercased = typeof input === 'string' && input.toLowerCase();
 	const timezoned =
-		lowercased && lowercased.includes('t') && !lowercased.endsWith('z') ? `${input}Z` : input;
+		lowercased &&
+		lowercased.includes('t') &&
+		!lowercased.endsWith('z') &&
+		!lowercased.includes('+')
+			? `${input}Z`
+			: input;
 
 	return new Date(isNumber ? Number(timezoned) : timezoned);
 };

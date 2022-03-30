@@ -382,7 +382,7 @@ const ReadingRoomPage: NextPage = () => {
 					?.filter((mediaObject) => mediaObject.type !== 'SOLR')
 					.map(
 						(mediaObject): IdentifiableMediaCard => ({
-							meemooFragmentId: mediaObject.meemoo_fragment_id,
+							schemaIdentifier: mediaObject.schema_identifier,
 							description: mediaObject.schema_description,
 							title: mediaObject.schema_name,
 							publishedAt: mediaObject.schema_date_published
@@ -390,7 +390,7 @@ const ReadingRoomPage: NextPage = () => {
 								: undefined,
 							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
 							type: mediaObject.dcterms_format,
-							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer[0].schema_identifier}/${mediaObject.meemoo_fragment_id}`,
+							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer?.[0]?.schema_identifier}/${mediaObject.meemoo_fragment_id}`,
 						})
 					)}
 				keywords={keywords}

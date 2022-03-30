@@ -35,7 +35,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		}, [selected, pairs]),
 	});
 
-	const collections = useGetCollections(!!selected?.meemooFragmentId);
+	const collections = useGetCollections(!!selected?.schemaIdentifier);
 
 	/**
 	 * Methods
@@ -46,7 +46,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			return {
 				id,
 				checked: !!(objects || []).find(
-					(obj) => obj.meemooFragmentId === selected.meemooFragmentId
+					(obj) => obj.schemaIdentifier === selected.schemaIdentifier
 				),
 			};
 		});
@@ -60,11 +60,11 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	 */
 
 	useEffect(() => {
-		selected && setValue('selected.meemooFragmentId', selected.meemooFragmentId);
+		selected && setValue('selected.schemaIdentifier', selected.schemaIdentifier);
 	}, [setValue, selected]);
 
 	useEffect(() => {
-		if (selected?.meemooFragmentId && collections.data) {
+		if (selected?.schemaIdentifier && collections.data) {
 			setPairs(mapToPairs(collections.data?.items || [], selected));
 		}
 	}, [setValue, reset, collections.data, selected]);
@@ -72,6 +72,10 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	useEffect(() => {
 		setValue('pairs', pairs);
 	}, [setValue, pairs]);
+
+	useEffect(() => {
+		props.isOpen && reset();
+	}, [props.isOpen, reset]);
 
 	/**
 	 * Events
@@ -112,7 +116,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 				};
 				if (pair.checked) {
 					return collectionsService
-						.addToCollection(pair.id, selected.meemooFragmentId)
+						.addToCollection(pair.id, selected.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -131,7 +135,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						});
 				} else {
 					return collectionsService
-						.removeFromCollection(pair.id, selected.meemooFragmentId)
+						.removeFromCollection(pair.id, selected.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -156,6 +160,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			Promise.all(promises).then(() => {
 				collections.refetch().then(() => {
 					onSubmit?.(values);
+					reset();
 				});
 			});
 		}

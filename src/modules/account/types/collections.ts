@@ -7,7 +7,7 @@ export interface Collection {
 	name: string;
 	updatedAt: string;
 	userProfileId: string;
-	objects?: Pick<CollectionMedia, 'meemooFragmentId'>[];
+	objects?: Pick<CollectionMedia, 'schemaIdentifier'>[];
 }
 
 export interface CollectionMedia {
@@ -15,7 +15,7 @@ export interface CollectionMedia {
 	creator: unknown | null;
 	description: string;
 	format: MediaTypes;
-	meemooFragmentId: string;
+	schemaIdentifier: string;
 	name: string;
 	numberOfPages: unknown;
 	termsAvailable: string;
