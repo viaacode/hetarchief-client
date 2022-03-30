@@ -1,18 +1,17 @@
-import { Button, Card, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
-import Link from 'next/link';
-import { FC, MouseEvent, ReactNode, useState } from 'react';
+import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 import TruncateMarkup from 'react-truncate-markup';
 
+import { DropdownMenu } from '@shared/components';
 import { formatWithLocale } from '@shared/utils';
 
 import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
 import { MediaCardProps } from './MediaCard.types';
-import { formatDate } from './MediaCard.utils';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,
@@ -26,30 +25,22 @@ const MediaCard: FC<MediaCardProps> = ({
 	actions,
 	buttons,
 }) => {
-	const [isDropdownOpen, setDropdownOpen] = useState(false);
-
 	const renderDropdown = () =>
 		actions ? (
-			<Dropdown isOpen={isDropdownOpen}>
-				<DropdownButton>
-					<Button
-						className={clsx(
-							styles['c-media-card__icon-button'],
-							'c-button--text c-button--icon c-button--xxs'
-						)}
-						icon={
-							<Icon className={styles['c-media-card__icon']} name="dots-vertical" />
-						}
-						onClick={(evt) => {
-							evt.stopPropagation();
-							evt.nativeEvent.stopImmediatePropagation();
-							setDropdownOpen(!isDropdownOpen);
-						}}
-					/>
-				</DropdownButton>
-
-				<DropdownContent>{actions}</DropdownContent>
-			</Dropdown>
+			<DropdownMenu
+				triggerButtonProps={{
+					className: clsx(
+						styles['c-media-card__icon-button'],
+						'c-button--text c-button--icon c-button--xxs'
+					),
+					onClick: (evt: MouseEvent) => {
+						evt.stopPropagation();
+						evt.nativeEvent.stopImmediatePropagation();
+					},
+				}}
+			>
+				{actions}
+			</DropdownMenu>
 		) : null;
 
 	const renderToolbar = () => (

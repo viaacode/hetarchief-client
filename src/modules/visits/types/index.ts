@@ -7,9 +7,14 @@ export enum VisitTimeframe {
 }
 
 export interface PatchVisit {
-	status: VisitStatus;
+	status?: VisitStatus;
 	startAt?: string;
 	endAt?: string;
 	remark?: string;
 	denial?: string;
+}
+
+export interface UpdateVisit {
+	id: string;
+	updatedProps: PatchVisit;
 }

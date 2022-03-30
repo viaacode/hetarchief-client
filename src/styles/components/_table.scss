@@ -95,3 +95,8 @@ $c-table-border: 1px solid $silver;
 		}
 	}
 }
+
+.c-table--no-padding-last-column td:last-child {
+	padding-top: 0;
+	padding-bottom: 0;
+}

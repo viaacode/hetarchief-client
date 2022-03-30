@@ -42,7 +42,7 @@ export class VisitsService {
 		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async patchById(id: string, visit: VisitInfo): Promise<VisitInfo> {
+	public static async patchById(id: string, visit: PatchVisit): Promise<VisitInfo> {
 		const { status, startAt, endAt } = visit;
 		const json: PatchVisit = {
 			status,
