@@ -1,11 +1,11 @@
-import { MouseEvent, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { MediaCardProps } from '../MediaCard/MediaCard.types';
 
-export interface MediaCardListProps extends Pick<MediaCardProps, 'view'> {
+export interface MediaCardListProps extends Pick<MediaCardProps, 'view' | 'keywords'> {
 	items?: MediaCardProps[];
-	keywords?: string[];
 	sidebar?: ReactNode;
 	breakpoints?: Record<number | 'default', number>;
-	onItemBookmark?: (data: { e: MouseEvent; item: MediaCardProps }) => void;
+	buttons?: (item: MediaCardProps) => ReactNode;
+	actions?: (item: MediaCardProps) => ReactNode;
 }

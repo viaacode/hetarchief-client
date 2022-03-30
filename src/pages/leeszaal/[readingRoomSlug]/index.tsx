@@ -1,4 +1,4 @@
-import { TabProps } from '@meemoo/react-components';
+import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
@@ -40,6 +40,7 @@ import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/ty
 import { mapFiltersToTags } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
+	Icon,
 	IdentifiableMediaCard,
 	MediaCardList,
 	MediaCardViewMode,
@@ -50,7 +51,7 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
@@ -311,11 +312,6 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
-	const onMediaBookmark = (item: IdentifiableMediaCard) => {
-		setSelected(item);
-		setShowAddToCollectionBlade(true);
-	};
-
 	/**
 	 * Computed
 	 */
@@ -372,13 +368,21 @@ const ReadingRoomPage: NextPage = () => {
 							: undefined,
 						publishedBy: item.schema_creator?.Maker?.join(', '),
 						type: item.dcterms_format,
-						detailLink: `/${ROUTES.spaces}/${item.schema_maintainer?.[0]?.schema_identifier}/${item.meemoo_fragment_id}`,
 					})
 				)}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
-				onItemBookmark={({ item }) => onMediaBookmark(item as IdentifiableMediaCard)}
 				view={viewMode}
+				buttons={(item) => (
+					<Button
+						onClick={() => {
+							setSelected(item as IdentifiableMediaCard);
+							setShowAddToCollectionBlade(true);
+						}}
+						icon={<Icon type="light" name="bookmark" />}
+						variants={['text', 'xxs']}
+					/>
+				)}
 			/>
 			<PaginationBar
 				className="u-mb-48"

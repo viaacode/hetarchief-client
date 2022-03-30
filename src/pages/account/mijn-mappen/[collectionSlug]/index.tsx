@@ -348,8 +348,6 @@ const AccountMyCollections: NextPage = () => {
 											description: renderDescription(media),
 											title: media.name,
 											type: media.format,
-											bookmarkIsSolid: true,
-											detailLink: `/${ROUTES.spaces}/${media.maintainerId}/${media.schemaIdentifier}`,
 										};
 
 										return {

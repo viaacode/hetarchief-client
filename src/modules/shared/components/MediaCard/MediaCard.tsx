@@ -6,6 +6,8 @@ import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import TruncateMarkup from 'react-truncate-markup';
 
+import { formatWithLocale } from '@shared/utils';
+
 import Icon from '../Icon/Icon';
 
 import styles from './MediaCard.module.scss';
@@ -13,36 +15,18 @@ import { MediaCardProps } from './MediaCard.types';
 import { formatDate } from './MediaCard.utils';
 
 const MediaCard: FC<MediaCardProps> = ({
-	bookmarkIsSolid = false,
 	description,
 	keywords,
 	preview,
-	detailLink,
 	publishedAt,
 	publishedBy,
 	title,
 	type,
 	view,
-	onBookmark,
 	actions,
+	buttons,
 }) => {
 	const [isDropdownOpen, setDropdownOpen] = useState(false);
-
-	const handleBookmarkButtonClick = (evt: MouseEvent) => {
-		evt.stopPropagation();
-		evt.nativeEvent.stopImmediatePropagation();
-		if (onBookmark) {
-			onBookmark(evt);
-		}
-	};
-
-	const wrapInLink = (elem: ReactNode) => {
-		return (
-			<Link passHref href={detailLink}>
-				<a className={styles['c-media-card__link']}>{elem}</a>
-			</Link>
-		);
-	};
 
 	const renderDropdown = () =>
 		actions ? (
@@ -70,27 +54,14 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
-			<Button
-				className={styles['c-media-card__icon-button']}
-				onClick={handleBookmarkButtonClick}
-				icon={
-					<Icon
-						className={styles['c-media-card__icon']}
-						type={bookmarkIsSolid ? 'solid' : 'light'}
-						name="bookmark"
-					/>
-				}
-				variants={['text', 'xxs']}
-			/>
-
+			{buttons}
 			{renderDropdown()}
 		</div>
 	);
 
-	const renderTitle = () =>
-		wrapInLink(<b>{keywords?.length ? highlighted(title ?? '') : title}</b>);
+	const renderTitle = () => <b>{keywords?.length ? highlighted(title ?? '') : title}</b>;
 
-	const renderSubtitle = (): JSX.Element => {
+	const renderSubtitle = (): ReactNode => {
 		let subtitle = '';
 
 		if (publishedBy) {
@@ -98,20 +69,14 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		if (publishedAt) {
-			// TODO: connect to i18n locale
-			const formatted = formatDate(publishedAt);
+			const formatted = formatWithLocale('P', publishedAt);
 
 			subtitle += ` (${formatted})`;
 		}
 
 		subtitle = subtitle.trim();
 
-		const subtitleWithHighlighting: ReactNode = keywords?.length ? (
-			highlighted(subtitle)
-		) : (
-			<>{subtitle}</>
-		);
-		return wrapInLink(subtitleWithHighlighting);
+		return keywords?.length ? highlighted(subtitle) : <>{subtitle}</>;
 	};
 
 	const renderNoContentIcon = () => (
@@ -139,9 +104,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						styles[`c-media-card__header-wrapper--${view}`]
 					)}
 				>
-					{wrapInLink(
-						<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
-					)}
+					<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
 				</div>
 			);
 		} else {
@@ -170,14 +133,12 @@ const MediaCard: FC<MediaCardProps> = ({
 		>
 			{/* // Wrapping this in a conditional ensures TruncateMarkup only renders after the content is received */}
 			{description ? (
-				wrapInLink(
-					typeof description === 'string' ? (
-						<TruncateMarkup lines={2}>
-							<span>{description}</span>
-						</TruncateMarkup>
-					) : (
-						description
-					)
+				typeof description === 'string' ? (
+					<TruncateMarkup lines={2}>
+						<span>{description}</span>
+					</TruncateMarkup>
+				) : (
+					description
 				)
 			) : (
 				// Passing a child to Card ensure whitespacing at the bottom is applied
