@@ -26,6 +26,7 @@ import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
+import { asDate } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
 
 import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
@@ -43,9 +44,25 @@ const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
 const defaultAccessTo = (accessFrom: Date) => addHours(roundToNearestQuarter(accessFrom), 1);
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
-	const { selected, onClose, onSubmit } = props;
-
 	const { t } = useTranslation();
+	const {
+		selected,
+		onClose,
+		onSubmit,
+		title = t(
+			'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
+		),
+		approveButtonLabel = t(
+			'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
+		),
+		successTitle = t(
+			'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
+		),
+		successDescription = t(
+			'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
+		),
+	} = props;
+
 	const {
 		control,
 		formState: { errors },
@@ -56,10 +73,18 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
 		defaultValues: {
-			accessFrom: defaultAccessFrom(new Date()),
-			accessTo: defaultAccessTo(new Date()),
+			accessFrom: asDate(selected?.startAt) || defaultAccessFrom(new Date()),
+			accessTo: asDate(selected?.endAt) || defaultAccessTo(new Date()),
 		},
 	});
+
+	useEffect(() => {
+		if (selected) {
+			selected.note && setValue('accessRemark', selected.note);
+			selected.endAt && setValue('accessTo', asDate(selected.endAt));
+			selected.startAt && setValue('accessFrom', asDate(selected.startAt));
+		}
+	}, [selected, setValue]);
 
 	useEffect(() => {
 		props.isOpen && reset();
@@ -79,12 +104,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				onSubmit?.(values);
 
 				toastService.notify({
-					title: t(
-						'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
-					),
-					description: t(
-						'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
-					),
+					title: successTitle as string,
+					description: successDescription as string,
 				});
 
 				reset();
@@ -126,9 +147,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-24">
 				<Button
-					label={t(
-						'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
-					)}
+					label={approveButtonLabel}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
 				/>
@@ -145,13 +164,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	};
 
 	return (
-		<Blade
-			{...props}
-			footer={renderFooter()}
-			title={t(
-				'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
-			)}
-		>
+		<Blade {...props} footer={renderFooter()} title={title}>
 			<div className={parentStyles['c-process-request-blade__details']}>
 				<strong>
 					{t(
