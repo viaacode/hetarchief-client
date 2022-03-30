@@ -11,6 +11,7 @@ import { useGetReadingRoomInfo } from '@reading-room/hooks/get-reading-room-info
 import { ReadingRoomService } from '@reading-room/services';
 import { UpdateReadingRoomSettings } from '@reading-room/services/reading-room/reading-room.service.types';
 import { Loading } from '@shared/components';
+import { toastService } from '@shared/services/toast-service';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
@@ -22,17 +23,43 @@ const CPSettingsPage: NextPage = () => {
 	/**
 	 * Data
 	 */
-	const { data: readingRoomInfo, isLoading } = useGetReadingRoomInfo(
-		'52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21'
-	);
+	const {
+		data: readingRoomInfo,
+		isLoading,
+		refetch,
+	} = useGetReadingRoomInfo('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21');
 
-	const updateSpace = (values: Partial<UpdateReadingRoomSettings>) => {
+	const onFailedRequest = () => {
+		refetch();
+
+		toastService.notify({
+			maxLines: 3,
+			title: t('⚠️ er ging iets mis'),
+			description: t('er is een fout opgetreden tijdens het opslaan probeer opnieuw'),
+		});
+	};
+
+	const updateSpace = (values: Partial<UpdateReadingRoomSettings>, afterSubmit?: () => void) => {
 		if (readingRoomInfo) {
 			ReadingRoomService.update('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21', {
 				color: readingRoomInfo.color,
 				image: readingRoomInfo.image,
 				...values,
-			});
+			})
+				.catch(onFailedRequest)
+				.then((response) => {
+					if (response === undefined) {
+						return;
+					}
+
+					afterSubmit?.();
+
+					toastService.notify({
+						maxLines: 3,
+						title: t('succes'),
+						description: t('de wijzigingen werden succesvol opgeslagen'),
+					});
+				});
 		}
 	};
 
@@ -94,8 +121,8 @@ const CPSettingsPage: NextPage = () => {
 									className="p-cp-settings__leeszaal-controls"
 									room={readingRoomInfo}
 									renderCancelSaveButtons={renderCancelSaveButtons}
-									onSubmit={(values) => {
-										updateSpace(values);
+									onSubmit={(values, afterSubmit) => {
+										updateSpace(values, afterSubmit);
 									}}
 								/>
 							)}
@@ -117,7 +144,9 @@ const CPSettingsPage: NextPage = () => {
 								initialHTML={
 									(readingRoomInfo && readingRoomInfo.description) ?? '<p></p>'
 								}
-								onSubmit={(html) => updateSpace({ description: html })}
+								onSubmit={(html, afterSubmit) =>
+									updateSpace({ description: html }, afterSubmit)
+								}
 								renderCancelSaveButtons={renderCancelSaveButtons}
 							/>
 						</Box>
@@ -140,7 +169,9 @@ const CPSettingsPage: NextPage = () => {
 									(readingRoomInfo && readingRoomInfo.serviceDescription) ??
 									'<p></p>'
 								}
-								onSubmit={(html) => updateSpace({ serviceDescription: html })}
+								onSubmit={(html, afterSubmit) =>
+									updateSpace({ serviceDescription: html }, afterSubmit)
+								}
 								renderCancelSaveButtons={renderCancelSaveButtons}
 							/>
 						</Box>

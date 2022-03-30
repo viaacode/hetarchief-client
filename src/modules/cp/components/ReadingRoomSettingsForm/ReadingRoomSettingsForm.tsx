@@ -109,8 +109,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 			setValue('color', DEFAULT_READING_ROOM_COLOR);
 			state.color = DEFAULT_READING_ROOM_COLOR;
 		}
-		onSubmit?.(state);
-		setSavedState(state);
+		onSubmit?.(state, () => setSavedState(state));
 		resetFileInput();
 	};
 

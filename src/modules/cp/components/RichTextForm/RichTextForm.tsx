@@ -16,8 +16,7 @@ const RichTextForm: FC<RichTextFormProps> = ({
 	const [savedState, setSavedState] = useState<RichEditorState>();
 
 	const onFormSubmit = (state: RichEditorState) => {
-		onSubmit?.(state.toHTML());
-		setSavedState(state);
+		onSubmit?.(state.toHTML(), () => setSavedState(state));
 	};
 
 	return (
