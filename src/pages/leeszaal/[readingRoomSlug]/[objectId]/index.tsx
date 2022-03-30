@@ -12,7 +12,6 @@ import { useSelector } from 'react-redux';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
-import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
 	FLOWPLAYER_FORMATS,
@@ -35,6 +34,7 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes } from '@shared/types';
 import { asDate, createPageTitle, formatAccessDate } from '@shared/utils';
@@ -57,6 +57,7 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const { t } = useTranslation();
 	const router = useRouter();
+	const previousUrl = useSelector(selectPreviousUrl);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -260,6 +261,11 @@ const ObjectDetailPage: NextPage = () => {
 					className="p-object-detail__nav"
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
+					backLink={
+						previousUrl?.startsWith('/leeszaal/')
+							? previousUrl
+							: `/leeszaal/${router.query.readingRoomSlug}`
+					}
 					showAccessEndDate={
 						accessEndDate
 							? t(

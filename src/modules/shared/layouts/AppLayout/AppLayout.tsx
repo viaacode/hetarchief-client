@@ -22,6 +22,7 @@ import { useGetNotifications } from '@shared/components/NotificationCenter/hooks
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useHistory } from '@shared/hooks/use-history';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
@@ -50,6 +51,8 @@ const AppLayout: FC = ({ children }) => {
 	const windowSize = useWindowSize();
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleReadingRooms } = useGetAccessibleReadingRooms();
+
+	useHistory();
 
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {

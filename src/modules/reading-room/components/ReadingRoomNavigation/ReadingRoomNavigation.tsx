@@ -15,6 +15,7 @@ import { ReadingRoomNavigationProps } from './ReadingRoomNavigation.types';
 
 const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 	title,
+	backLink = '/',
 	showAccessEndDate,
 	className,
 }) => {
@@ -31,7 +32,7 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 	return (
 		<Navigation contextual className={className} showBorder={showBorder}>
 			<Navigation.Left placement="left">
-				<Link href="/" passHref={true}>
+				<Link href={backLink} passHref={true}>
 					<a>
 						<Button
 							icon={<Icon name="arrow-left" />}
