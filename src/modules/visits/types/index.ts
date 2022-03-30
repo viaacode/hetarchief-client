@@ -13,3 +13,8 @@ export interface PatchVisit {
 	remark?: string;
 	denial?: string;
 }
+
+export interface UpdateVisit {
+	id: string;
+	updatedProps: PatchVisit;
+}
