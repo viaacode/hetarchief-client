@@ -1,10 +1,8 @@
 import { render, RenderResult, screen } from '@testing-library/react';
 
-import { ROUTES } from '@shared/const';
 import { formatWithLocale } from '@shared/utils';
 
 import MediaCard from './MediaCard';
-import { formatDate } from './MediaCard.utils';
 
 const author = 'Author';
 const now = new Date();

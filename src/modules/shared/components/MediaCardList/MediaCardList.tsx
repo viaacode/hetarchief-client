@@ -1,9 +1,9 @@
 import clsx from 'clsx';
-import { FC, memo, MouseEvent, useMemo } from 'react';
+import { FC, memo } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { MediaCard } from '../MediaCard';
-import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
+import { IdentifiableMediaCard } from '../MediaCard/MediaCard.types';
 
 import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';

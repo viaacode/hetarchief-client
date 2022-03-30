@@ -405,7 +405,13 @@ const ReadingRoomPage: NextPage = () => {
 			<div className="p-reading-room">
 				<Head>
 					<title>{createPageTitle(space?.name)}</title>
-					<meta name="description" content={space?.description || 'Een leeszaal'} />
+					<meta
+						name="description"
+						content={
+							space?.description ||
+							t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
+						}
+					/>
 				</Head>
 
 				<ReadingRoomNavigation
@@ -454,8 +460,12 @@ const ReadingRoomPage: NextPage = () => {
 								<Placeholder
 									className="p-reading-room__placeholder"
 									img="/images/lightbulb.svg"
-									title="Start je zoektocht!"
-									description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+									title={t(
+										'pages/leeszaal/reading-room-slug/index___start-je-zoektocht'
+									)}
+									description={t(
+										'pages/leeszaal/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
+									)}
 								/>
 							</>
 						)}
@@ -466,8 +476,12 @@ const ReadingRoomPage: NextPage = () => {
 								<Placeholder
 									className="p-reading-room__placeholder"
 									img="/images/looking-glass.svg"
-									title="Geen resultaten"
-									description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
+									title={t(
+										'pages/leeszaal/reading-room-slug/index___geen-resultaten'
+									)}
+									description={t(
+										'pages/leeszaal/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
+									)}
 								/>
 							</>
 						)}

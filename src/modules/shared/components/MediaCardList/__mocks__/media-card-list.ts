@@ -1,5 +1,4 @@
 import { MediaCardProps } from '@shared/components';
-import { ROUTES } from '@shared/const';
 
 import { MediaCardListProps } from '../MediaCardList.types';
 
