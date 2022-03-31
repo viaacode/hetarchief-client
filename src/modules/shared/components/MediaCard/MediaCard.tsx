@@ -2,7 +2,7 @@ import { Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC, MouseEvent, ReactNode, useState } from 'react';
+import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 import TruncateMarkup from 'react-truncate-markup';
 
@@ -126,16 +126,14 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderHeader = () => {
 		if (preview) {
-			return (
+			return wrapInLink(
 				<div
 					className={clsx(
 						styles['c-media-card__header-wrapper'],
 						styles[`c-media-card__header-wrapper--${view}`]
 					)}
 				>
-					{wrapInLink(
-						<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
-					)}
+					<Image src={preview} alt={title || ''} unoptimized layout="fill" />
 				</div>
 			);
 		} else {

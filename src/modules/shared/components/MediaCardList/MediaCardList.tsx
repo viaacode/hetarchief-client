@@ -54,6 +54,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 						keywords={keywords}
 						view={view}
 						onBookmark={(e) => onBookmark(e, item)}
+						preview={item.preview}
 					/>
 				))}
 			</Masonry>

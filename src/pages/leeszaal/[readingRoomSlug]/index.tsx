@@ -391,6 +391,7 @@ const ReadingRoomPage: NextPage = () => {
 							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
 							type: mediaObject.dcterms_format,
 							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer?.[0]?.schema_identifier}/${mediaObject.meemoo_fragment_id}`,
+							preview: mediaObject.schema_thumbnail_url,
 						})
 					)}
 				keywords={keywords}
