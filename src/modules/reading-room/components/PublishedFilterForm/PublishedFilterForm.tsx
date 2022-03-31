@@ -28,7 +28,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 	const operators = useMemo(() => getOperators(MetadataProp.PublishedAt), []);
 
 	const initial = query?.published?.[0];
-	const initialPublished = useMemo(() => initial?.val || '', [initial]);
+	const initialPublished = useMemo(() => initial?.val || new Date().toISOString(), [initial]);
 
 	// State
 
