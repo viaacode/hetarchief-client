@@ -62,20 +62,22 @@ import { asDate, createPageTitle } from '@shared/utils';
 import { VisitorLayout } from 'modules/visitors';
 
 const ReadingRoomPage: NextPage = () => {
+	useNavigationBorder();
+
 	const { t } = useTranslation();
 	const router = useRouter();
-	const { readingRoomSlug } = router.query;
 
-	useNavigationBorder();
+	const { readingRoomSlug } = router.query;
 
 	/**
 	 * State
 	 */
 
+	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 	const [mediaCount, setMediaCount] = useState({
@@ -89,8 +91,6 @@ const ReadingRoomPage: NextPage = () => {
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 
-	useNavigationBorder();
-
 	const hasSearched = useMemo(() => !isEqual(READING_ROOM_QUERY_PARAM_INIT, query), [query]);
 
 	const activeSort: SortObject = {
@@ -102,7 +102,7 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: space } = useGetReadingRoom(
+	const { data: readingRoom } = useGetReadingRoom(
 		readingRoomSlug as string,
 		typeof readingRoomSlug === 'string'
 	);
@@ -423,20 +423,20 @@ const ReadingRoomPage: NextPage = () => {
 		<VisitorLayout>
 			<div className="p-reading-room">
 				<Head>
-					<title>{createPageTitle(space?.name)}</title>
+					<title>{createPageTitle(readingRoom?.name)}</title>
 					<meta
 						name="description"
 						content={
-							space?.description ||
+							readingRoom?.description ||
 							t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
 						}
 					/>
 				</Head>
 
 				<ReadingRoomNavigation
-					title={space?.name}
-					phone={space?.contactInfo.telephone || ''}
-					email={space?.contactInfo.email || ''}
+					title={readingRoom?.name}
+					phone={readingRoom?.contactInfo.telephone || ''}
+					email={readingRoom?.contactInfo.email || ''}
 					showBorder={showNavigationBorder}
 				/>
 
