@@ -35,7 +35,7 @@ module.exports = withTM({
 		tsconfigPath: './tsconfig.build.json',
 	},
 	images: {
-		domains: ['assets.viaa.be', 'via.placeholder.com'], // TODO: remove via.placeholder.com once thumbnails are available
+		domains: ['assets.viaa.be', 'assets-int.hetarchief.be', 'media-int.viaa.be'], // TODO: remove via.placeholder.com once thumbnails are available
 	},
 	productionBrowserSourceMaps: process.env.DEBUG_TOOLS === 'true',
 	publicRuntimeConfig: {

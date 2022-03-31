@@ -13,7 +13,12 @@ import { ObjectPlaceholder } from '../ObjectPlaceholder';
 import styles from './FragmentSlider.module.scss';
 import { FragmentSliderProps } from './FragmentSlider.types';
 
-const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragment }) => {
+const Metadata: FC<FragmentSliderProps> = ({
+	className,
+	thumbnail,
+	fragments,
+	onChangeFragment,
+}) => {
 	const [offset, setOffset] = useState<number>(0);
 	const [active, setActive] = useState<number>(0);
 	const [isBlurred, setIsBlurred] = useState<boolean>(true);
@@ -62,18 +67,16 @@ const Metadata: FC<FragmentSliderProps> = ({ className, fragments, onChangeFragm
 	const renderThumbnail = (representation: MediaRepresentation) => {
 		let image = null;
 		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
-			// TODO: thumbnail from parent
-			image = '/images/bg-shd.png';
+			image = thumbnail || '';
 		}
 		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
 			// TODO: image preview
-			// image = representation.id;
-			image = '/images/bg-shd.png';
+			image = undefined; // Currently no images in representations
 		}
 
 		// No renderer
 		return image ? (
-			<Image src={image} alt="placeholder" layout="fill" objectFit="cover" />
+			<Image src={image} alt={representation.alternateName} layout="fill" objectFit="cover" />
 		) : (
 			<ObjectPlaceholder className={styles['c-fragment-slider__item-image']} small />
 		);

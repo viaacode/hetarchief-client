@@ -68,14 +68,24 @@ export interface MediaFile {
 }
 
 export interface MediaRepresentation {
-	schemaIdentifier: string;
 	name: string;
 	alternateName: string;
 	description: string;
 	dctermsFormat: string;
 	transcript: string;
 	dateCreated: string;
-	files: MediaFile[];
+	schemaIdentifier: string;
+	files: MediaRepresentationFile[];
+}
+
+export interface MediaRepresentationFile {
+	name: string;
+	alternateName: string;
+	description: string;
+	ebucoreIsMediaFragmentOf: string;
+	EbucoreMediaType: string;
+	embedUrl: string;
+	schemaIdentifier: string;
 }
 
 export interface MediaSearchAggregationPair<T> {
