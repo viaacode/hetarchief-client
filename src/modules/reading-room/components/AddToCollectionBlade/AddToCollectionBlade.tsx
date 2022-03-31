@@ -35,7 +35,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		}, [selected, pairs]),
 	});
 
-	const collections = useGetCollections(!!selected?.id);
+	const collections = useGetCollections(!!selected?.schemaIdentifier);
 
 	/**
 	 * Methods
@@ -45,7 +45,9 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		return collections.map(({ id, objects }) => {
 			return {
 				id,
-				checked: !!(objects || []).find((obj) => obj.id === selected.id),
+				checked: !!(objects || []).find(
+					(obj) => obj.schemaIdentifier === selected.schemaIdentifier
+				),
 			};
 		});
 	};
@@ -58,11 +60,11 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	 */
 
 	useEffect(() => {
-		selected && setValue('selected.id', selected.id);
+		selected && setValue('selected.schemaIdentifier', selected.schemaIdentifier);
 	}, [setValue, selected]);
 
 	useEffect(() => {
-		if (selected && selected.id && collections.data) {
+		if (selected?.schemaIdentifier && collections.data) {
 			setPairs(mapToPairs(collections.data?.items || [], selected));
 		}
 	}, [setValue, reset, collections.data, selected]);
@@ -70,6 +72,10 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	useEffect(() => {
 		setValue('pairs', pairs);
 	}, [setValue, pairs]);
+
+	useEffect(() => {
+		props.isOpen && reset();
+	}, [props.isOpen, reset]);
 
 	/**
 	 * Events
@@ -100,15 +106,22 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			const promises = dirty.map((pair) => {
 				const collection = getCollection(pair.id);
 
+				const descriptionVariables = {
+					item: selected.title,
+					collection:
+						collection?.name ||
+						t(
+							'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___onbekend'
+						),
+				};
 				if (pair.checked) {
 					return collectionsService
-						.addToCollection(pair.id, selected.id)
+						.addToCollection(pair.id, selected.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
 								return;
 							}
-
 							toastService.notify({
 								maxLines: 3,
 								title: t(
@@ -116,16 +129,13 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								),
 								description: t(
 									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collection',
-									{
-										item: selected.title,
-										collection: collection?.name || t('Onbekend'),
-									}
+									descriptionVariables
 								),
 							});
 						});
 				} else {
 					return collectionsService
-						.removeFromCollection(pair.id, selected.id)
+						.removeFromCollection(pair.id, selected.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -139,10 +149,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								),
 								description: t(
 									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collection',
-									{
-										item: selected.title,
-										collection: collection?.name || t('Onbekend'),
-									}
+									descriptionVariables
 								),
 							});
 						});
@@ -153,6 +160,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			Promise.all(promises).then(() => {
 				collections.refetch().then(() => {
 					onSubmit?.(values);
+					reset();
 				});
 			});
 		}

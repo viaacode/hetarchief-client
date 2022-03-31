@@ -2,7 +2,7 @@ import { ReadingRoomInfo } from '@reading-room/types';
 
 export interface CreateVisitRequest {
 	spaceId: string;
-	timeframe: string;
+	timeframe?: string;
 	reason: string;
 	acceptedTos: boolean;
 }

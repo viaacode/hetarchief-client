@@ -91,8 +91,8 @@ const ObjectDetailPage: NextPage = () => {
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.id ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.id) // Force flowplayer rerender after successful fetch
+		currentRepresentation?.files?.[0]?.schemaIdentifier ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.schemaIdentifier) // Force flowplayer rerender after successful fetch
 	);
 
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
@@ -105,12 +105,12 @@ const ObjectDetailPage: NextPage = () => {
 
 	useEffect(() => {
 		// Mock representations for slider testing
-		if (mediaInfo) {
-			mediaInfo.representations = [
-				...mediaInfo.representations,
-				...fragmentSliderMock.fragments,
-			];
-		}
+		// if (mediaInfo) {
+		// 	mediaInfo.representations = [
+		// 		...mediaInfo.representations,
+		// 		...fragmentSliderMock.fragments,
+		// 	];
+		// }
 
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
@@ -212,7 +212,7 @@ const ObjectDetailPage: NextPage = () => {
 					title={representation.name}
 					pause={pauseMedia}
 					onPlay={() => setPauseMedia(false)}
-					token={publicRuntimeConfig.FLOWPLAYER_TOKEN}
+					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 				/>
 			);
@@ -224,7 +224,7 @@ const ObjectDetailPage: NextPage = () => {
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
-						src={representation.id}
+						src={representation.schemaIdentifier}
 						alt={representation.name}
 						layout="fill"
 						objectFit="contain"
@@ -409,7 +409,7 @@ const ObjectDetailPage: NextPage = () => {
 			<AddToCollectionBlade
 				isOpen={activeBlade === MediaActions.Bookmark}
 				selected={{
-					id: mediaInfo?.id ?? '',
+					schemaIdentifier: mediaInfo?.schemaIdentifier ?? '',
 					title: mediaInfo?.name,
 				}}
 				onClose={onCloseBlade}

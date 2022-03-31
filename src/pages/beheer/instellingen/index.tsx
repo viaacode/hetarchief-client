@@ -34,8 +34,10 @@ const CPSettingsPage: NextPage = () => {
 
 		toastService.notify({
 			maxLines: 3,
-			title: t('⚠️ er ging iets mis'),
-			description: t('er is een fout opgetreden tijdens het opslaan probeer opnieuw'),
+			title: t('pages/beheer/instellingen/index___⚠️-er-ging-iets-mis'),
+			description: t(
+				'pages/beheer/instellingen/index___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
+			),
 		});
 	};
 
@@ -56,8 +58,10 @@ const CPSettingsPage: NextPage = () => {
 
 					toastService.notify({
 						maxLines: 3,
-						title: t('succes'),
-						description: t('de wijzigingen werden succesvol opgeslagen'),
+						title: t('pages/beheer/instellingen/index___succes'),
+						description: t(
+							'pages/beheer/instellingen/index___de-wijzigingen-werden-succesvol-opgeslagen'
+						),
 					});
 				});
 		}
