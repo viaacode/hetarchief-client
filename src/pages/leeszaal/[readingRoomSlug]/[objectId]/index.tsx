@@ -86,8 +86,6 @@ const ObjectDetailPage: NextPage = () => {
 		isError,
 	} = useGetMediaInfo(router.query.objectId as string);
 
-	console.log(mediaInfo);
-
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
