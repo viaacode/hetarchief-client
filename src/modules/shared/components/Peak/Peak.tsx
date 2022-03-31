@@ -14,46 +14,54 @@ const Peak: FC<PeakProps> = ({ json }) => {
 	const data = json || fallback;
 
 	useEffect(() => {
+		data && setWaveform(WaveformData.create(data));
+	}, [data]);
+
+	useEffect(() => {
 		const draw = () => {
 			const ctx = canvas.current?.getContext('2d');
+
 			if (!ctx || !waveform) {
 				return;
 			}
 
-			const scaleY = (amplitude: number, height?: number) => {
-				const h = height || 0;
-				const range = 256;
-				const offset = 128;
+			const step = 8;
+			const spacing = step * 0.5;
 
-				return h - ((amplitude + offset) * h) / range;
+			const scaleY = (amplitude: number, height: number) => {
+				const range = 128;
+				const offset = 64;
+
+				return height - ((amplitude + offset) * height) / range;
 			};
 
-			ctx?.beginPath();
+			ctx.clearRect(0, 0, canvas.current?.width || 0, canvas.current?.height || 0);
+			ctx.fillStyle = '#ADADAD';
 
 			const channel = waveform.channel(0);
+			const half = (canvas.current?.height || 0) / 2;
 
-			// Loop forwards, drawing the upper half of the waveform
-			for (let x = 0; x < waveform.length; x++) {
+			// Draw the upper half of the waveform
+			for (let x = 0; x < waveform.length; x = x + step) {
 				const val = channel.max_sample(x);
+				const h = scaleY(val, half);
 
-				ctx.lineTo(x + 0.5, scaleY(val, canvas.current?.height) + 0.5);
+				ctx.rect(x, half - h, spacing, h);
 			}
 
-			// Loop backwards, drawing the lower half of the waveform
-			for (let x = waveform.length - 1; x >= 0; x--) {
+			// Draw the lower half of the waveform
+			for (let x = 0; x < waveform.length; x = x + step) {
 				const val = channel.min_sample(x);
+				const h = scaleY(val, half);
 
-				ctx.lineTo(x + 0.5, scaleY(val, canvas.current?.height) + 0.5);
+				ctx.rect(x, half, spacing, h);
 			}
 
-			ctx.closePath();
-			ctx.stroke();
 			ctx.fill();
 		};
 
-		data && waveform === undefined && setWaveform(WaveformData.create(data));
 		draw();
-	}, [data, waveform]);
+	}, [waveform]);
 
 	return (
 		<div className="c-peak">
