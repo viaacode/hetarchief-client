@@ -37,6 +37,7 @@ import {
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
+import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
 import { mapFiltersToTags } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
@@ -58,7 +59,6 @@ import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 
-import { useGetSpace } from 'modules/spaces/hooks/get-space';
 import { VisitorLayout } from 'modules/visitors';
 
 const ReadingRoomPage: NextPage = () => {
@@ -102,7 +102,7 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: space } = useGetSpace(
+	const { data: space } = useGetReadingRoom(
 		readingRoomSlug as string,
 		typeof readingRoomSlug === 'string'
 	);
