@@ -76,7 +76,13 @@ const Metadata: FC<FragmentSliderProps> = ({
 
 		// No renderer
 		return image ? (
-			<Image src={image} alt={representation.alternateName} layout="fill" objectFit="cover" />
+			<Image
+				unoptimized
+				src={image}
+				alt={representation.alternateName}
+				layout="fill"
+				objectFit="cover"
+			/>
 		) : (
 			<ObjectPlaceholder className={styles['c-fragment-slider__item-image']} small />
 		);
