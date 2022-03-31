@@ -107,7 +107,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				return renderImage();
 
 			default:
-				return null;
+				return renderNoContent();
 		}
 	};
 
