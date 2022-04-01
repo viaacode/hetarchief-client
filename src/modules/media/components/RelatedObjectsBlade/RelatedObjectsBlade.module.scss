@@ -1,0 +1,53 @@
+@use "styles/abstracts" as *;
+
+$component: "c-related-objects-blade";
+
+.#{$component} {
+	width: 36vw;
+	max-height: 8.8rem;
+	background-color: $black;
+	transition: max-height $animate-default;
+
+	&__toggle {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		padding: $spacer-lg;
+		border: none;
+		color: $white;
+		border-bottom: $divider-white;
+		background-color: transparent;
+
+		&:focus-visible {
+			outline: 0.2rem solid $teal;
+			outline-offset: -0.2rem;
+		}
+	}
+
+	&__icon {
+		font-size: $font-size-lg;
+		margin-right: 1rem;
+	}
+
+	&__title {
+		font-size: $font-size-md;
+	}
+
+	&__arrow {
+		margin-left: auto;
+		font-size: $font-size-md;
+	}
+
+	&__list {
+		@extend %reset-list;
+
+		display: flex;
+		flex-flow: column;
+		row-gap: $spacer-sm;
+		padding: $spacer-lg;
+	}
+
+	&--open {
+		max-height: 100vh;
+	}
+}

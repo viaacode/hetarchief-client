@@ -8,12 +8,16 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
+import {
+	relatedObjectsBladeMock,
+	relatedObjectsBladeObjects,
+} from '@media/components/RelatedObjectsBlade/__mocks__/related-objects-blade';
 import {
 	FLOWPLAYER_FORMATS,
 	formatErrorPlaceholder,
@@ -45,10 +49,11 @@ import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit
 
 import {
 	DynamicActionMenu,
+	MediaObject,
 	Metadata,
 	ObjectPlaceholder,
 	RelatedObject,
-	RelatedObjectProps,
+	RelatedObjectsBlade,
 } from 'modules/media/components';
 import { VisitorLayout } from 'modules/visitors';
 
@@ -72,7 +77,7 @@ const ObjectDetailPage: NextPage = () => {
 		MediaRepresentation | undefined
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
-	const [similar, setSimilar] = useState<RelatedObjectProps[]>([]);
+	const [similar, setSimilar] = useState<MediaObject[]>([]);
 
 	// Layout
 	useStickyLayout();
@@ -133,14 +138,6 @@ const ObjectDetailPage: NextPage = () => {
 	}, [previousUrl, router.query.readingRoomSlug]);
 
 	useEffect(() => {
-		// Mock representations for slider testing
-		// if (mediaInfo) {
-		// 	mediaInfo.representations = [
-		// 		...mediaInfo.representations,
-		// 		...fragmentSliderMock.fragments,
-		// 	];
-		// }
-
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
 		setCurrentRepresentaton(mediaInfo?.representations[0]);
@@ -163,21 +160,17 @@ const ObjectDetailPage: NextPage = () => {
 			setSimilar(
 				similarData.hits.hits.map((hit) => {
 					return {
-						object: {
-							type: hit._source.dcterms_format as MediaTypes,
-							title: hit._source.schema_name,
-							subtitle: `(${
-								hit._source.schema_date_published
-									? formatWithLocale(
-											'PP',
-											asDate(hit._source.schema_date_published)
-									  )
-									: undefined
-							})`,
-							description: hit._source.schema_description || '',
-							// thumbnail: hit._source.schema_thumbnail_url,
-							id: hit._source.schema_identifier,
-						},
+						type: hit._source.dcterms_format as MediaTypes,
+						title: hit._source.schema_name,
+						subtitle: `(${
+							hit._source.schema_date_published
+								? formatWithLocale('PP', asDate(hit._source.schema_date_published))
+								: undefined
+						})`,
+						description: hit._source.schema_description || '',
+						// thumbnail: hit._source.schema_thumbnail_url,
+						id: hit._source.schema_identifier,
+						maintainer_id: hit._source.schema_maintainer?.schema_identifier,
 					};
 				})
 			);
@@ -293,20 +286,29 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	// Metadata
-	const renderSimilarItems = (items: RelatedObjectProps[]) => (
-		<ul className="u-list-reset u-bg-platinum u-mx--32 u-px-32 u-py-24 u-mt-24">
-			{items.map((item) => {
+	const renderCard = (item: MediaObject, isHidden: boolean) => (
+		<li>
+			<Link passHref href={`/${ROUTES.spaces}/${item.maintainer_id}/${item.id}`}>
+				<a tabIndex={isHidden ? -1 : 0} className={`p-object-detail__metadata-card-link`}>
+					{<RelatedObject object={item} />}
+				</a>
+			</Link>
+		</li>
+	);
+
+	const renderMetadataCards = (
+		type: 'similar' | 'related',
+		items: MediaObject[],
+		isHidden = false
+	): ReactNode => (
+		<ul
+			className={`u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
+		>
+			{items.map((item, index) => {
 				return (
-					<li className="u-py-8" key={`similar-object-${item.object.id}`}>
-						<Link
-							passHref
-							href={`/${ROUTES.spaces}/${router.query.readingRoomSlug}/${item.object.id}`}
-						>
-							<a className="p-object-detail__similar-link">
-								{<RelatedObject {...item} />}
-							</a>
-						</Link>
-					</li>
+					<Fragment key={`${type}-object-${item.id}-${index}`}>
+						{renderCard(item, isHidden)}
+					</Fragment>
 				);
 			})}
 		</ul>
@@ -455,7 +457,7 @@ const ObjectDetailPage: NextPage = () => {
 												},
 												{
 													title: 'Ook interessant',
-													data: renderSimilarItems(similar),
+													data: renderMetadataCards('similar', similar),
 													className: 'u-pb-0',
 												},
 											]}
@@ -465,6 +467,13 @@ const ObjectDetailPage: NextPage = () => {
 							)}
 						</div>
 					</div>
+					<RelatedObjectsBlade
+						icon={<Icon className="u-font-size-24 u-mr-10" name="related-objects" />}
+						title={`${relatedObjectsBladeObjects.length} ${t('gerelateerde objecten')}`}
+						content={(hidden) =>
+							renderMetadataCards('related', relatedObjectsBladeObjects, hidden)
+						}
+					/>
 				</article>
 			</div>
 			<AddToCollectionBlade
