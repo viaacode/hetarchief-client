@@ -14,7 +14,6 @@ import { useSelector } from 'react-redux';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
-import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
 	FLOWPLAYER_FORMATS,
 	formatErrorPlaceholder,
@@ -64,6 +63,7 @@ const ObjectDetailPage: NextPage = () => {
 	const previousUrl = useSelector(selectPreviousUrl);
 
 	// Internal state
+	const [backlink, setBackLink] = useState(`/${ROUTES.spaces}/${router.query.readingRoomSlug}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
@@ -117,6 +117,19 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		let backLink = `/${ROUTES.spaces}/${router.query.readingRoomSlug}`;
+		if (previousUrl) {
+			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
+			const validBacklink = subgroups?.length === 2 && subgroups[0] === ROUTES.spaces;
+
+			if (validBacklink) {
+				backLink = previousUrl;
+			}
+		}
+		setBackLink(backLink);
+	}, [previousUrl, router.query.readingRoomSlug]);
 
 	useEffect(() => {
 		// Mock representations for slider testing
@@ -309,11 +322,7 @@ const ObjectDetailPage: NextPage = () => {
 					className="p-object-detail__nav"
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
-					backLink={
-						previousUrl?.startsWith(`/${ROUTES.spaces}/`)
-							? previousUrl
-							: `/${ROUTES.spaces}/${router.query.readingRoomSlug}`
-					}
+					backLink={backlink}
 					showAccessEndDate={
 						accessEndDate
 							? t(
