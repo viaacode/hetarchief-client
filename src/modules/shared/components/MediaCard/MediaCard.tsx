@@ -126,14 +126,16 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderHeader = () => {
 		if (preview) {
-			return wrapInLink(
+			return (
 				<div
 					className={clsx(
 						styles['c-media-card__header-wrapper'],
 						styles[`c-media-card__header-wrapper--${view}`]
 					)}
 				>
-					<Image src={preview} alt={title || ''} unoptimized layout="fill" />
+					{wrapInLink(
+						<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
+					)}
 				</div>
 			);
 		} else {
