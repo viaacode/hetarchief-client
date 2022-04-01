@@ -12,7 +12,6 @@ import { useSelector } from 'react-redux';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
-import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
 	FLOWPLAYER_FORMATS,
@@ -27,13 +26,16 @@ import {
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
+import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
+import { ROUTES } from '@shared/const';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes } from '@shared/types';
 import { asDate, createPageTitle, formatAccessDate } from '@shared/utils';
@@ -56,6 +58,7 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const { t } = useTranslation();
 	const router = useRouter();
+	const previousUrl = useSelector(selectPreviousUrl);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -255,8 +258,14 @@ const ObjectDetailPage: NextPage = () => {
 					<meta name="description" content="Object detail omschrijving" />
 				</Head>
 				<ReadingRoomNavigation
+					className="p-object-detail__nav"
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
+					backLink={
+						previousUrl?.startsWith(`/${ROUTES.spaces}/`)
+							? previousUrl
+							: `/${ROUTES.spaces}/${router.query.readingRoomSlug}`
+					}
 					showAccessEndDate={
 						accessEndDate
 							? t(
@@ -381,6 +390,10 @@ const ObjectDetailPage: NextPage = () => {
 									<Metadata
 										className="u-px-32"
 										metadata={[
+											{
+												title: t('modules/media/const/index___trefwoorden'),
+												data: mapKeywordsToTagList(mediaInfo.keywords),
+											},
 											{
 												title: 'Ook interessant',
 												data: (

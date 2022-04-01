@@ -51,6 +51,7 @@ export class MediaService {
 				}),
 			})
 			.json()) as ElasticsearchResponse<MediaInfo>;
+
 		return {
 			items: parsed?.hits?.hits.map((item) => ({
 				...item._source,

@@ -8,9 +8,6 @@
       "@auth/*": [
         "modules/auth/*"
       ],
-      "@config/*": [
-        "modules/config/*"
-      ],
       "@cp/*": [
         "modules/cp/*"
       ],
@@ -29,12 +26,18 @@
       "@reading-room/*": [
         "modules/reading-room/*"
       ],
+      "@shared/*": [
+        "modules/shared/*"
+      ],
+      "@spaces/*": [
+        "modules/spaces/*"
+      ],
+      "@visitors/*": [
+        "modules/visitors/*"
+      ],
       "@visits/*": [
         "modules/visits/*"
       ],
-      "@shared/*": [
-        "modules/shared/*"
-      ]
     },
     "target": "es5",
     "lib": [

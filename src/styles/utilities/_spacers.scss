@@ -78,6 +78,7 @@ $px: (
 
 // Top
 $mt: (
+	"4": $spacer-xs,
 	"8": $spacer-xs,
 	"16": $spacer-sm,
 	"24": $spacer-md,
@@ -116,6 +117,7 @@ $mr: (
 // Top / Bottom
 $my: (
 	"16": $spacer-sm,
+	"32": $spacer-lg
 );
 @include generate-utils("my", ("margin-top", "margin-bottom"), $my);
 

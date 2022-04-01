@@ -4,13 +4,17 @@ import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-par
 
 import {
 	AdvancedFilterForm,
+	CreatedFilterForm,
 	CreatorFilterForm,
+	DurationFilterForm,
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
 	GenreFilterForm,
 	LanguageFilterForm,
 	MediumFilterForm,
+	PublishedFilterForm,
 } from '@reading-room/components';
+import KeywordsFilterForm from '@reading-room/components/KeywordsFilterForm/KeywordsFilterForm';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
@@ -24,16 +28,23 @@ export * from './metadata';
 export const READING_ROOM_ITEM_COUNT = 100;
 
 export const READING_ROOM_QUERY_PARAM_INIT = {
+	// Filters
 	format: ReadingRoomMediaType.All,
-	orderProp: ReadingRoomSort.Relevance,
+	[SEARCH_QUERY_KEY]: undefined,
+	[ReadingRoomFilterId.Medium]: undefined,
+	[ReadingRoomFilterId.Duration]: undefined,
+	[ReadingRoomFilterId.Created]: undefined,
+	[ReadingRoomFilterId.Published]: undefined,
+	[ReadingRoomFilterId.Creator]: undefined,
+	[ReadingRoomFilterId.Genre]: undefined,
+	[ReadingRoomFilterId.Keywords]: undefined,
+	[ReadingRoomFilterId.Language]: undefined,
+	[ReadingRoomFilterId.Advanced]: undefined,
+	// Pagination
 	page: 1,
-	advanced: undefined,
-	creator: undefined,
-	medium: undefined,
+	// Sorting
+	orderProp: ReadingRoomSort.Relevance,
 	orderDirection: undefined,
-	search: undefined,
-	language: undefined,
-	genre: undefined,
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
@@ -41,8 +52,12 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
 	[SEARCH_QUERY_KEY]: ArrayParam,
 	[ReadingRoomFilterId.Medium]: ArrayParam,
+	[ReadingRoomFilterId.Duration]: AdvancedFilterArrayParam,
+	[ReadingRoomFilterId.Created]: AdvancedFilterArrayParam,
+	[ReadingRoomFilterId.Published]: AdvancedFilterArrayParam,
 	[ReadingRoomFilterId.Creator]: ArrayParam,
 	[ReadingRoomFilterId.Genre]: ArrayParam,
+	[ReadingRoomFilterId.Keywords]: ArrayParam,
 	[ReadingRoomFilterId.Language]: ArrayParam,
 	[ReadingRoomFilterId.Advanced]: AdvancedFilterArrayParam,
 	// Pagination
@@ -80,17 +95,17 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Duration,
 		label: i18n?.t('modules/reading-room/const/index___duurtijd') ?? '',
-		form: () => null, // Duration hh:mm:ss
+		form: DurationFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Created,
 		label: i18n?.t('modules/reading-room/const/index___creatiedatum') ?? '',
-		form: () => null, // Datetime
+		form: CreatedFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Published,
 		label: i18n?.t('modules/reading-room/const/index___publicatiedatum') ?? '',
-		form: () => null, // Datetime
+		form: PublishedFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Creator,
@@ -105,7 +120,7 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: ReadingRoomFilterId.Keywords,
 		label: i18n?.t('modules/reading-room/const/index___trefwoorden') ?? '',
-		form: () => null, // Text input
+		form: KeywordsFilterForm,
 	},
 	{
 		id: ReadingRoomFilterId.Language,

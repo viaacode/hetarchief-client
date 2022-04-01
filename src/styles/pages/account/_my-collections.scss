@@ -27,6 +27,13 @@ $component: "p-account-my-collections";
 		}
 	}
 
+	&__card-description {
+		p {
+			font-size: $font-size-xs;
+			line-height: $line-height-4xl;
+		}
+	}
+
 	// Avoid clicks on container triggering events
 	.c-content-input__icon--end {
 		pointer-events: none;

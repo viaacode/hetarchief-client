@@ -4,7 +4,7 @@ import { i18n } from 'next-i18next';
 import { MetadataItem, ObjectPlaceholderProps } from '@media/components';
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
-import { mapArrayToMetadataData, mapKeywordsToTagList, mapObjectToMetadata } from '@media/utils';
+import { mapArrayToMetadataData, mapObjectToMetadata } from '@media/utils';
 import { Icon } from '@shared/components';
 import { MediaTypes } from '@shared/types';
 
@@ -102,50 +102,15 @@ export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
 export const MEDIA_ACTIONS = (): DynamicActionMenuProps => ({
 	actions: [
 		{
-			label: i18n?.t('modules/media/const/index___quotes') ?? '',
-			iconName: 'quotes',
-			id: MediaActions.Quotes,
-			ariaLabel: 'copies quotes',
-			tooltip: i18n?.t('modules/media/const/index___quotes') ?? '',
-		},
-		{
-			label: i18n?.t('modules/media/const/index___description') ?? '',
-			iconName: 'description',
-			id: MediaActions.Description,
-			ariaLabel: 'shows description',
-			tooltip: i18n?.t('modules/media/const/index___description') ?? '',
-		},
-		{
 			label: i18n?.t('modules/media/const/index___bookmark') ?? '',
 			iconName: 'bookmark',
 			id: MediaActions.Bookmark,
 			ariaLabel: 'bookmarks item',
 			tooltip: i18n?.t('modules/media/const/index___bookmark') ?? '',
 		},
-		{
-			label: i18n?.t('modules/media/const/index___contact') ?? '',
-			iconName: 'contact',
-			id: MediaActions.Contact,
-			ariaLabel: 'contact reading room',
-			tooltip: i18n?.t('modules/media/const/index___contact') ?? '',
-		},
-		{
-			label: i18n?.t('modules/media/const/index___calendar') ?? '',
-			iconName: 'calendar',
-			id: MediaActions.Calendar,
-			ariaLabel: 'copy date',
-			tooltip: i18n?.t('modules/media/const/index___calendar') ?? '',
-		},
-		{
-			label: i18n?.t('modules/media/const/index___related-objects') ?? '',
-			iconName: 'related-objects',
-			id: MediaActions.RelatedObjects,
-			ariaLabel: 'access related objects',
-			tooltip: i18n?.t('modules/media/const/index___related-objects') ?? '',
-		},
 	],
 	limit: 2,
-	onClickAction: (id) => console.log(id),
+	onClickAction: () => null,
 });
 
 /**
@@ -241,10 +206,11 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			title: i18n?.t('modules/media/const/index___tijdsperiode-van-de-inhoud') ?? '',
 			data: mapArrayToMetadataData(mediaInfo.temporal),
 		},
-		{
-			title: i18n?.t('modules/media/const/index___trefwoorden') ?? '',
-			data: mapKeywordsToTagList(mediaInfo.keywords),
-		},
+		// In second metadata component
+		// {
+		// 	title: i18n?.t('modules/media/const/index___trefwoorden') ?? '',
+		// 	data: mapKeywordsToTagList(mediaInfo.keywords),
+		// },
 		{
 			title: i18n?.t('modules/media/const/index___taal') ?? '',
 			data: mapArrayToMetadataData(mediaInfo.inLanguage),

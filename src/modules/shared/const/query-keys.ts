@@ -9,4 +9,5 @@ export enum QUERY_KEYS {
 	getNotifications = 'getNotifications',
 	getReadingRooms = 'getReadingRooms',
 	getVisits = 'getVisits',
+	getSpace = 'getSpace',
 }
