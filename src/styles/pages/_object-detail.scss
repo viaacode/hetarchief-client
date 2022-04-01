@@ -161,6 +161,10 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
+	&__similar-link {
+		text-decoration: none;
+	}
+
 	&__error {
 		height: 100%;
 		display: flex;
