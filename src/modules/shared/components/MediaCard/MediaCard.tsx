@@ -9,6 +9,7 @@ import { DropdownMenu } from '@shared/components';
 import { formatWithLocale } from '@shared/utils';
 
 import Icon from '../Icon/Icon';
+import { Peak } from '../Peak';
 
 import styles from './MediaCard.module.scss';
 import { MediaCardProps } from './MediaCard.types';
@@ -97,21 +98,34 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 
 	const renderHeader = () => {
-		if (preview) {
-			return (
-				<div
-					className={clsx(
-						styles['c-media-card__header-wrapper'],
-						styles[`c-media-card__header-wrapper--${view}`]
-					)}
-				>
-					<Image src={preview} alt={''} unoptimized={true} layout="fill" />
-				</div>
-			);
-		} else {
-			return renderNoContent();
+		switch (type) {
+			case 'audio':
+				return renderPeak();
+				break;
+
+			case 'video':
+				return renderImage();
+
+			default:
+				return renderNoContent();
 		}
 	};
+
+	const renderImage = () =>
+		preview ? (
+			<div
+				className={clsx(
+					styles['c-media-card__header-wrapper'],
+					styles[`c-media-card__header-wrapper--${view}`]
+				)}
+			>
+				<Image src={preview} alt={''} unoptimized={true} layout="fill" />
+			</div>
+		) : (
+			renderNoContent()
+		);
+
+	const renderPeak = () => <Peak />;
 
 	const highlighted = (toHighlight: string) => {
 		return (
