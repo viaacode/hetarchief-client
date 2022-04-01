@@ -28,7 +28,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 	const operators = useMemo(() => getOperators(MetadataProp.CreatedAt), []);
 
 	const initial = query?.created?.[0];
-	const initialCreated = useMemo(() => initial?.val || '', [initial]);
+	const initialCreated = useMemo(() => initial?.val || new Date().toISOString(), [initial]);
 
 	// State
 
