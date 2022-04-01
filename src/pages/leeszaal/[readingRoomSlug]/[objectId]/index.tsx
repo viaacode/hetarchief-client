@@ -106,7 +106,8 @@ const ObjectDetailPage: NextPage = () => {
 	// ook interessant
 	const { data: similarData } = useGetMediaSimilar(
 		router.query.objectId as string,
-		toLower(router.query.readingRoomSlug as string)
+		toLower(mediaInfo?.maintainerId),
+		!!mediaInfo
 	);
 
 	// visit info
