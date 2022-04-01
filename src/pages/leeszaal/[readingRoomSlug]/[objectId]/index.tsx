@@ -29,6 +29,7 @@ import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/type
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
+import { ROUTES } from '@shared/const';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -262,9 +263,9 @@ const ObjectDetailPage: NextPage = () => {
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
 					backLink={
-						previousUrl?.startsWith('/leeszaal/')
+						previousUrl?.startsWith(`/${ROUTES.spaces}/`)
 							? previousUrl
-							: `/leeszaal/${router.query.readingRoomSlug}`
+							: `/${ROUTES.spaces}/${router.query.readingRoomSlug}`
 					}
 					showAccessEndDate={
 						accessEndDate
