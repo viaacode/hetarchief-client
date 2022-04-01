@@ -235,6 +235,10 @@ const AccountMyCollections: NextPage = () => {
 	const renderDescription = (item: CollectionMedia): ReactNode => {
 		const items: { label: string; value: ReactNode }[] = [
 			{
+				label: t('pages/account/mijn-mappen/collection-slug/index___aanbieder'),
+				value: item.maintainerName,
+			},
+			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___programma'),
 				value: item.series.join(', '),
 			},
@@ -267,16 +271,16 @@ const AccountMyCollections: NextPage = () => {
 		];
 
 		return (
-			<>
+			<div className="p-account-my-collections__card-description">
 				{items.map((item, i) => {
 					return item.value ? (
-						<p key={i} className="u-mt-4 u-pr-24 u-text-break">
+						<p key={i} className="u-pr-24 u-text-break">
 							<b>{item.label}: </b>
 							{item.value}
 						</p>
 					) : null;
 				})}
-			</>
+			</div>
 		);
 	};
 
