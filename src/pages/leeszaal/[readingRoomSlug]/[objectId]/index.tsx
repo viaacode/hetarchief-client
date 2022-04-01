@@ -94,8 +94,8 @@ const ObjectDetailPage: NextPage = () => {
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.files?.[0]?.schemaIdentifier ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.schemaIdentifier) // Force flowplayer rerender after successful fetch
+		currentRepresentation?.files[0].schemaIdentifier ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.files[0].schemaIdentifier) // Force flowplayer rerender after successful fetch
 	);
 
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
@@ -203,7 +203,6 @@ const ObjectDetailPage: NextPage = () => {
 		// Flowplayer
 		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
 			return (
-				// TODO: implement thumbnail
 				<FlowPlayer
 					className={clsx(
 						'p-object-detail__flowplayer',
@@ -211,7 +210,7 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					key={flowPlayerKey}
 					src={playableUrl}
-					poster="https://via.placeholder.com/1920x1080"
+					poster={mediaInfo?.thumbnailUrl || undefined}
 					title={representation.name}
 					pause={pauseMedia}
 					onPlay={() => setPauseMedia(false)}
@@ -227,7 +226,7 @@ const ObjectDetailPage: NextPage = () => {
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
-						src={representation.schemaIdentifier}
+						src={representation.files[0].schemaIdentifier}
 						alt={representation.name}
 						layout="fill"
 						objectFit="contain"
@@ -324,6 +323,7 @@ const ObjectDetailPage: NextPage = () => {
 								)}
 								{showFragmentSlider && (
 									<FragmentSlider
+										thumbnail={mediaInfo.thumbnailUrl}
 										className="p-object-detail__slider"
 										fragments={mediaInfo?.representations ?? []}
 										onChangeFragment={(index) =>

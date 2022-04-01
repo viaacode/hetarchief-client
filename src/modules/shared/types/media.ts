@@ -66,5 +66,6 @@ export interface MediaInfo {
 	schema_name: string;
 	// TODO: See if this is still necessary once resolved in proxy
 	type?: string;
+	schema_thumbnail_url: string;
 	schema_keywords: string[];
 }

@@ -63,7 +63,7 @@ export const formatErrorPlaceholder = (format: string): ObjectPlaceholderProps =
  * Tabs
  */
 
-const renderMediaTab = (mediaType: MediaTypes) => {
+const renderMediaTab = (mediaType?: MediaTypes) => {
 	switch (mediaType) {
 		case 'audio':
 			return {
@@ -86,7 +86,7 @@ const renderMediaTab = (mediaType: MediaTypes) => {
 	}
 };
 
-export const OBJECT_DETAIL_TABS = (mediaType: MediaTypes): TabProps[] => [
+export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
 	{
 		id: ObjectDetailTabs.Metadata,
 		label: i18n?.t('modules/media/const/index___metadata'),
