@@ -22,9 +22,12 @@ import {
 } from '@reading-room/components';
 import { AdvancedFilter, MetadataProp } from '@reading-room/types';
 import { getField, getOperators, getProperties } from '@reading-room/utils';
+import { getSelectValue } from '@reading-room/utils/select';
 import { Icon } from '@shared/components';
 import { SEPARATOR } from '@shared/const';
 import { Operator } from '@shared/types';
+
+import { defaultValue } from '../DurationInput/DurationInput';
 
 import styles from './AdvancedFilterFields.module.scss';
 import { AdvancedFilterFieldsProps } from './AdvancedFilterFields.types';
@@ -35,12 +38,6 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
-	// Helpers
-
-	const getSelectValue = (options: SelectOption[], optionValue: string | undefined | null) => {
-		return options.find((option) => option.value === optionValue);
-	};
-
 	// Computed
 
 	const operators = getOperators(state.prop as MetadataProp);
@@ -86,13 +83,13 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				return renderTextField(Component, value);
 
 			case DurationInput:
-				value = state.val || '00:00:00'; // Ensure initial value is hh:mm:ss
+				value = state.val || defaultValue; // Ensure initial value is hh:mm:ss
 				Component = Component as FC<TextInputProps>;
 
 				return renderTextField(Component, value);
 
 			case DurationRangeInput:
-				value = state.val || `00:00:00${SEPARATOR}00:00:00`; // Ensure initial value is hh:mm:ss for both fields
+				value = state.val || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
 				Component = Component as FC<TextInputProps>;
 
 				return renderTextField(Component, value);

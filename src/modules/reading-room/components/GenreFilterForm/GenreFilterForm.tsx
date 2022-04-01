@@ -52,26 +52,28 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 					onClear={() => setSearch('')}
 				/>
 
-				{buckets.length === 0 && (
-					<p className="u-color-neutral u-text-center u-my-16">
-						{t(
-							'modules/reading-room/components/genre-filter-form/genre-filter-form___geen-genres-gevonden'
-						)}
-					</p>
-				)}
+				<div className="u-my-32">
+					{buckets.length === 0 && (
+						<p className="u-color-neutral u-text-center u-my-16">
+							{t(
+								'modules/reading-room/components/genre-filter-form/genre-filter-form___geen-genres-gevonden'
+							)}
+						</p>
+					)}
 
-				<CheckboxList
-					className="u-my-16"
-					items={buckets.map((bucket) => ({
-						...bucket,
-						value: bucket.key,
-						label: bucket.key,
-						checked: selection.includes(bucket.key),
-					}))}
-					onItemClick={(checked, value) => {
-						onItemClick(!checked, value as string);
-					}}
-				/>
+					<CheckboxList
+						className="u-my-16"
+						items={buckets.map((bucket) => ({
+							...bucket,
+							value: bucket.key,
+							label: bucket.key,
+							checked: selection.includes(bucket.key),
+						}))}
+						onItemClick={(checked, value) => {
+							onItemClick(!checked, value as string);
+						}}
+					/>
+				</div>
 			</div>
 
 			{children({ values: getValues(), reset })}

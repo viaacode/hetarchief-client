@@ -1,16 +1,18 @@
 import { SelectOption } from '@meemoo/react-components';
+import { format } from 'date-fns';
 import { i18n } from 'next-i18next';
-import { DecodedValueMap } from 'use-query-params';
 
-import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
+import { getMetadataSearchFilters } from '@reading-room/const';
 import {
 	AdvancedFilter,
 	MetadataProp,
 	ReadingRoomFilterId,
+	ReadingRoomQueryParams,
 	TagIdentity,
 } from '@reading-room/types';
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
-import { Operator } from '@shared/types';
+import { MediaSearchFilters, Operator } from '@shared/types';
+import { asDate } from '@shared/utils';
 
 import { formatMetadataDate, getOperators, getProperties } from '../metadata';
 
@@ -20,8 +22,6 @@ const getSelectLabel = (
 ): string | undefined => {
 	return options.find((option) => option.value === optionValue)?.label;
 };
-
-type ReadingRoomQueryParams = Partial<DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>>;
 
 export const mapArrayParamToTags = (
 	values: (string | null)[],
@@ -45,9 +45,10 @@ export const mapArrayParamToTags = (
 };
 
 export const mapAdvancedToTags = (
-	query: Pick<ReadingRoomQueryParams, ReadingRoomFilterId.Advanced>
+	advanced: Array<AdvancedFilter>,
+	key: ReadingRoomFilterId = ReadingRoomFilterId.Advanced
 ): TagIdentity[] => {
-	return (query.advanced || []).map((advanced: AdvancedFilter) => {
+	return advanced.map((advanced: AdvancedFilter) => {
 		const prop = advanced.prop as MetadataProp;
 		const op = advanced.op as Operator;
 
@@ -94,13 +95,13 @@ export const mapAdvancedToTags = (
 				</span>
 			),
 			value: advanced.val || '',
-			key: ReadingRoomFilterId.Advanced,
+			key,
 			...advanced,
 		};
 	});
 };
 
-export const mapFiltersToTags = (query: Partial<ReadingRoomQueryParams>): TagIdentity[] => {
+export const mapFiltersToTags = (query: ReadingRoomQueryParams): TagIdentity[] => {
 	return [
 		...mapArrayParamToTags(
 			query.search || [],
@@ -112,6 +113,9 @@ export const mapFiltersToTags = (query: Partial<ReadingRoomQueryParams>): TagIde
 			i18n?.t('modules/reading-room/utils/map-filters/map-filters___analoge-drager') || '',
 			ReadingRoomFilterId.Medium
 		),
+		...mapAdvancedToTags(query.duration || [], ReadingRoomFilterId.Duration),
+		...mapAdvancedToTags(query.created || [], ReadingRoomFilterId.Created),
+		...mapAdvancedToTags(query.published || [], ReadingRoomFilterId.Published),
 		...mapArrayParamToTags(
 			query.creator || [],
 			i18n?.t('modules/reading-room/utils/map-filters/map-filters___maker') || '',
@@ -123,10 +127,41 @@ export const mapFiltersToTags = (query: Partial<ReadingRoomQueryParams>): TagIde
 			ReadingRoomFilterId.Genre
 		),
 		...mapArrayParamToTags(
+			query.keywords || [],
+			i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord') || '',
+			ReadingRoomFilterId.Keywords
+		),
+		...mapArrayParamToTags(
 			query.language || [],
 			i18n?.t('modules/reading-room/utils/map-filters/map-filters___taal') || '',
 			ReadingRoomFilterId.Language
 		),
-		...mapAdvancedToTags(query),
+		...mapAdvancedToTags(query.advanced || []),
 	];
+};
+
+export const mapAdvancedToElastic = (item: AdvancedFilter): MediaSearchFilters => {
+	const values = (item.val || '').split(SEPARATOR);
+	const filters =
+		item.prop && item.op
+			? getMetadataSearchFilters(item.prop as MetadataProp, item.op as Operator)
+			: [];
+
+	// Format data for Elastic
+	return filters.map((filter, i) => {
+		let parsed;
+
+		switch (item.prop) {
+			case MetadataProp.CreatedAt:
+			case MetadataProp.PublishedAt:
+				parsed = asDate(values[i]);
+				values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
+				break;
+
+			default:
+				break;
+		}
+
+		return { ...filter, value: values[i] };
+	});
 };

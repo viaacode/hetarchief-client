@@ -1,11 +1,11 @@
-import { TabProps } from '@meemoo/react-components';
+import { Button, TabProps } from '@meemoo/react-components';
 import { isWithinInterval } from 'date-fns';
 import { i18n, TFunction } from 'next-i18next';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusAll } from '@cp/types';
-import { Icon, UnreadMarker } from '@shared/components';
+import { DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { VisitInfo, VisitInfoRow } from '@shared/types';
@@ -38,14 +38,16 @@ export const visitorsStatusFilters = (): TabProps[] => {
 };
 
 export const VisitorsTableColumns = (
-	i18n: { t: TFunction } = { t: (x: string) => x }
+	t: TFunction,
+	denyVisitRequest: (visitRequest: VisitInfo) => void,
+	editVisitRequest: (visitRequest: VisitInfo) => void
 ): Column<VisitInfo>[] => [
 	{
-		Header: i18n.t('modules/cp/const/visitors___naam') || '',
+		Header: t('modules/cp/const/visitors___naam') || '',
 		accessor: 'visitorName',
 	},
 	{
-		Header: i18n.t('modules/cp/const/visitors___emailadres') || '',
+		Header: t('modules/cp/const/visitors___emailadres') || '',
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitInfoRow) => {
 			return (
@@ -60,7 +62,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/cp/const/visitors___toegang') || '',
+		Header: t('modules/cp/const/visitors___toegang') || '',
 		accessor: 'startAt',
 		Cell: ({ row }: VisitInfoRow) => {
 			const start = asDate(row.original.startAt);
@@ -78,8 +80,8 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/cp/const/visitors___goedgekeurd-door') || '',
-		accessor: 'status',
+		Header: t('modules/cp/const/visitors___goedgekeurd-door') || '',
+		accessor: 'updatedByName',
 		Cell: ({ row }: VisitInfoRow) => {
 			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
 		},
@@ -87,8 +89,21 @@ export const VisitorsTableColumns = (
 	{
 		Header: '',
 		id: 'cp-visitors-histories-table-actions',
-		Cell: () => {
-			return <Icon className="p-cp-visitors-histories__actions" name="dots-vertical" />;
+		Cell: ({ row }: VisitInfoRow) => {
+			return (
+				<DropdownMenu>
+					<Button
+						variants="text"
+						label={t('modules/cp/const/visitors___toegang-intrekken')}
+						onClick={() => denyVisitRequest(row.original)}
+					/>
+					<Button
+						variants="text"
+						label={t('modules/cp/const/visitors___toegang-aanpassen')}
+						onClick={() => editVisitRequest(row.original)}
+					/>
+				</DropdownMenu>
+			);
 		},
 	},
 ];

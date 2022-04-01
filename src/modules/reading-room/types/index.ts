@@ -1,11 +1,17 @@
 import { SelectOption, TagInfo } from '@meemoo/react-components';
 import { ReactNode } from 'react';
+import { DecodedValueMap } from 'use-query-params';
 
+import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
 import { DefaultComponentProps, MediaTypes, Operator } from '@shared/types';
 
 import { MetadataProp } from './metadata';
 
 export * from './metadata';
+
+export type ReadingRoomQueryParams = Partial<
+	DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>
+>;
 
 export enum ReadingRoomSort {
 	Date = 'created',

@@ -1,0 +1,16 @@
+@use "styles/abstracts" as *;
+
+.c-dropdown-menu--menu-content > div {
+	padding: 0;
+}
+
+.c-dropdown-menu--menu-content-wrapper {
+	display: flex;
+	flex-direction: column;
+	box-shadow: $shadow-24-black-08;
+}
+
+.c-dropdown-menu--menu-button {
+	text-align: left;
+	padding-right: 70px;
+}
