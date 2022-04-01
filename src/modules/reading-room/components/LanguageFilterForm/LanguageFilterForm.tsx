@@ -52,26 +52,27 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					onClear={() => setSearch('')}
 				/>
 
-				{buckets.length === 0 && (
-					<p className="u-color-neutral u-text-center u-my-16">
-						{t(
-							'modules/reading-room/components/language-filter-form/language-filter-form___geen-talen-gevonden'
-						)}
-					</p>
-				)}
+				<div className="u-my-32">
+					{buckets.length === 0 && (
+						<p className="u-color-neutral u-text-center">
+							{t(
+								'modules/reading-room/components/language-filter-form/language-filter-form___geen-talen-gevonden'
+							)}
+						</p>
+					)}
 
-				<CheckboxList
-					className="u-my-16"
-					items={buckets.map((bucket) => ({
-						...bucket,
-						value: bucket.key,
-						label: bucket.key,
-						checked: selection.includes(bucket.key),
-					}))}
-					onItemClick={(checked, value) => {
-						onItemClick(!checked, value as string);
-					}}
-				/>
+					<CheckboxList
+						items={buckets.map((bucket) => ({
+							...bucket,
+							value: bucket.key,
+							label: bucket.key,
+							checked: selection.includes(bucket.key),
+						}))}
+						onItemClick={(checked, value) => {
+							onItemClick(!checked, value as string);
+						}}
+					/>
+				</div>
 			</div>
 
 			{children({ values: getValues(), reset })}

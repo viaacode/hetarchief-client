@@ -1,9 +1,8 @@
 import { render, RenderResult, screen } from '@testing-library/react';
 
-import { ROUTES } from '@shared/const';
+import { formatWithLocale } from '@shared/utils';
 
 import MediaCard from './MediaCard';
-import { formatDate } from './MediaCard.utils';
 
 const author = 'Author';
 const now = new Date();
@@ -13,13 +12,7 @@ describe('Component: <MediaCard />', () => {
 
 	beforeEach(() => {
 		rendered = render(
-			<MediaCard
-				view="grid"
-				publishedAt={now}
-				publishedBy={author}
-				type="video"
-				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
-			/>
+			<MediaCard view="grid" publishedAt={now} publishedBy={author} type="video" />
 		);
 	});
 
@@ -30,13 +23,7 @@ describe('Component: <MediaCard />', () => {
 	});
 
 	it('Should apply the horizontal--at-md orientation when rendered in list view', () => {
-		rendered = render(
-			<MediaCard
-				view="list"
-				type="video"
-				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
-			/>
-		);
+		rendered = render(<MediaCard view="list" type="video" />);
 
 		const element = rendered.container.getElementsByClassName(
 			'c-card--orientation-horizontal--at-md'
@@ -46,26 +33,14 @@ describe('Component: <MediaCard />', () => {
 	});
 
 	it('Should render the date and author in a specific format', () => {
-		expect(screen.getByText(`${author} (${formatDate(now)})`)).toBeDefined();
+		expect(screen.getByText(`${author} (${formatWithLocale('P', now)})`)).toBeDefined();
 	});
 
 	it('Should show placeholder icons based on the type of card in either view mode', () => {
-		rendered = render(
-			<MediaCard
-				view="list"
-				type="audio"
-				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
-			/>
-		);
+		rendered = render(<MediaCard view="list" type="audio" />);
 		expect(screen.getAllByText('no-audio')[0]).toBeDefined();
 
-		rendered = render(
-			<MediaCard
-				view="grid"
-				type="video"
-				detailLink={`/${ROUTES.spaces}/leeszaal-8/b1f60efadf5243d78c7c91512adaa6cefe52723ff35848268894c7861d852b79c3609554ce4f43d182ca36be53584d60`}
-			/>
-		);
+		rendered = render(<MediaCard view="grid" type="video" />);
 		expect(screen.getAllByText('no-video')[0]).toBeDefined();
 	});
 });

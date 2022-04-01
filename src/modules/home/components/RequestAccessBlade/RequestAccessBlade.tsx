@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade, Icon } from '@shared/components';
@@ -12,18 +12,25 @@ import styles from './RequestAccessBlade.module.scss';
 import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccessBlade.types';
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladeProps }) => {
+	const { t } = useTranslation();
+
 	const {
 		control,
 		formState: { errors },
 		handleSubmit,
+		reset,
 	} = useForm<RequestAccessFormState>({
 		resolver: yupResolver(REQUEST_ACCESS_FORM_SCHEMA()),
 	});
-	const { t } = useTranslation();
 
 	const onFormSubmit = (values: RequestAccessFormState) => {
 		onSubmit?.(values);
+		reset();
 	};
+
+	useEffect(() => {
+		bladeProps.isOpen && reset();
+	}, [bladeProps.isOpen, reset]);
 
 	const renderFooter = () => {
 		return (

@@ -20,6 +20,7 @@
 
 	:global(.c-button) {
 		margin-left: $spacer-sm;
+		flex-shrink: 0;
 	}
 }
 

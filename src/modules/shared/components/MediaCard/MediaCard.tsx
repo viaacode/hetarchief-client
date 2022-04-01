@@ -1,96 +1,69 @@
-import { Button, Card, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
-import Link from 'next/link';
-import { FC, MouseEvent, ReactNode, useState } from 'react';
+import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 import TruncateMarkup from 'react-truncate-markup';
 
+import { DropdownMenu } from '@shared/components';
+import { formatWithLocale } from '@shared/utils';
+
 import Icon from '../Icon/Icon';
+import { Peak } from '../Peak';
 
 import styles from './MediaCard.module.scss';
 import { MediaCardProps } from './MediaCard.types';
-import { formatDate } from './MediaCard.utils';
 
 const MediaCard: FC<MediaCardProps> = ({
-	bookmarkIsSolid = false,
 	description,
 	keywords,
 	preview,
-	detailLink,
 	publishedAt,
 	publishedBy,
 	title,
 	type,
 	view,
-	onBookmark,
 	actions,
+	buttons,
 }) => {
-	const [isDropdownOpen, setDropdownOpen] = useState(false);
-
-	const handleBookmarkButtonClick = (evt: MouseEvent) => {
-		evt.stopPropagation();
-		evt.nativeEvent.stopImmediatePropagation();
-		if (onBookmark) {
-			onBookmark(evt);
-		}
-	};
-
-	const wrapInLink = (elem: ReactNode) => {
-		return (
-			<Link passHref href={detailLink}>
-				<a className={styles['c-media-card__link']}>{elem}</a>
-			</Link>
-		);
-	};
-
 	const renderDropdown = () =>
 		actions ? (
-			<Dropdown isOpen={isDropdownOpen}>
-				<DropdownButton>
-					<Button
-						className={clsx(
-							styles['c-media-card__icon-button'],
-							'c-button--text c-button--icon c-button--xxs'
-						)}
-						icon={
-							<Icon className={styles['c-media-card__icon']} name="dots-vertical" />
-						}
-						onClick={(evt) => {
-							evt.stopPropagation();
-							evt.nativeEvent.stopImmediatePropagation();
-							setDropdownOpen(!isDropdownOpen);
-						}}
-					/>
-				</DropdownButton>
-
-				<DropdownContent>{actions}</DropdownContent>
-			</Dropdown>
+			<DropdownMenu
+				triggerButtonProps={{
+					className: clsx(
+						styles['c-media-card__icon-button'],
+						'c-button--text c-button--icon c-button--xxs'
+					),
+					onClick: (evt: MouseEvent) => {
+						evt.stopPropagation();
+						evt.nativeEvent.stopImmediatePropagation();
+					},
+				}}
+			>
+				{actions}
+			</DropdownMenu>
 		) : null;
 
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
-			<Button
-				className={styles['c-media-card__icon-button']}
-				onClick={handleBookmarkButtonClick}
-				icon={
-					<Icon
-						className={styles['c-media-card__icon']}
-						type={bookmarkIsSolid ? 'solid' : 'light'}
-						name="bookmark"
-					/>
-				}
-				variants={['text', 'xxs']}
-			/>
-
+			{buttons}
 			{renderDropdown()}
 		</div>
 	);
 
-	const renderTitle = () =>
-		wrapInLink(<b>{keywords?.length ? highlighted(title ?? '') : title}</b>);
+	const renderTitle = (): ReactNode => {
+		if (typeof title === 'string') {
+			return <b>{keywords?.length ? highlighted(title ?? '') : title}</b>;
+		}
 
-	const renderSubtitle = (): JSX.Element => {
+		if (keywords && keywords.length > 0) {
+			console.warn('[WARN][MediaCard] Title could not be highlighted.');
+		}
+
+		return title;
+	};
+
+	const renderSubtitle = (): ReactNode => {
 		let subtitle = '';
 
 		if (publishedBy) {
@@ -98,20 +71,14 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		if (publishedAt) {
-			// TODO: connect to i18n locale
-			const formatted = formatDate(publishedAt);
+			const formatted = formatWithLocale('P', publishedAt);
 
 			subtitle += ` (${formatted})`;
 		}
 
 		subtitle = subtitle.trim();
 
-		const subtitleWithHighlighting: ReactNode = keywords?.length ? (
-			highlighted(subtitle)
-		) : (
-			<>{subtitle}</>
-		);
-		return wrapInLink(subtitleWithHighlighting);
+		return keywords?.length ? highlighted(subtitle) : subtitle;
 	};
 
 	const renderNoContentIcon = () => (
@@ -131,23 +98,34 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 
 	const renderHeader = () => {
-		if (preview) {
-			return (
-				<div
-					className={clsx(
-						styles['c-media-card__header-wrapper'],
-						styles[`c-media-card__header-wrapper--${view}`]
-					)}
-				>
-					{wrapInLink(
-						<Image src={preview} alt={title || ''} unoptimized={true} layout="fill" />
-					)}
-				</div>
-			);
-		} else {
-			return renderNoContent();
+		switch (type) {
+			case 'audio':
+				return renderPeak();
+				break;
+
+			case 'video':
+				return renderImage();
+
+			default:
+				return renderNoContent();
 		}
 	};
+
+	const renderImage = () =>
+		preview ? (
+			<div
+				className={clsx(
+					styles['c-media-card__header-wrapper'],
+					styles[`c-media-card__header-wrapper--${view}`]
+				)}
+			>
+				<Image src={preview} alt={''} unoptimized={true} layout="fill" />
+			</div>
+		) : (
+			renderNoContent()
+		);
+
+	const renderPeak = renderNoContent;
 
 	const highlighted = (toHighlight: string) => {
 		return (
@@ -170,14 +148,12 @@ const MediaCard: FC<MediaCardProps> = ({
 		>
 			{/* // Wrapping this in a conditional ensures TruncateMarkup only renders after the content is received */}
 			{description ? (
-				wrapInLink(
-					typeof description === 'string' ? (
-						<TruncateMarkup lines={2}>
-							<span>{description}</span>
-						</TruncateMarkup>
-					) : (
-						description
-					)
+				typeof description === 'string' ? (
+					<TruncateMarkup lines={2}>
+						<span>{description}</span>
+					</TruncateMarkup>
+				) : (
+					description
 				)
 			) : (
 				// Passing a child to Card ensure whitespacing at the bottom is applied

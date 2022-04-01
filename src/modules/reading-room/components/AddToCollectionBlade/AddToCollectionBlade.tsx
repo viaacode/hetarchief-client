@@ -25,14 +25,15 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	const { t } = useTranslation();
 	const { onSubmit, selected } = props;
 	const [pairs, setPairs] = useState<AddToCollectionFormStatePair[]>([]);
-	const { control, handleSubmit, setValue, reset } = useForm<AddToCollectionFormState>({
+	const {
+		control,
+		handleSubmit,
+		setValue,
+		reset,
+		formState: { errors },
+	} = useForm<AddToCollectionFormState>({
 		resolver: yupResolver(ADD_TO_COLLECTION_FORM_SCHEMA()),
-		defaultValues: useMemo(() => {
-			return {
-				pairs,
-				...(selected ? { selected } : {}),
-			};
-		}, [selected, pairs]),
+		defaultValues: useMemo(() => ({ pairs }), [pairs]),
 	});
 
 	const collections = useGetCollections(!!selected?.schemaIdentifier);
@@ -60,10 +61,6 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	 */
 
 	useEffect(() => {
-		selected && setValue('selected.schemaIdentifier', selected.schemaIdentifier);
-	}, [setValue, selected]);
-
-	useEffect(() => {
 		if (selected?.schemaIdentifier && collections.data) {
 			setPairs(mapToPairs(collections.data?.items || [], selected));
 		}
@@ -72,6 +69,10 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	useEffect(() => {
 		setValue('pairs', pairs);
 	}, [setValue, pairs]);
+
+	useEffect(() => {
+		props.isOpen && reset();
+	}, [props.isOpen, reset]);
 
 	/**
 	 * Events
@@ -83,7 +84,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		toastService.notify({
 			maxLines: 3,
 			title: t(
-				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___⚠️-er-ging-iets-mis'
+				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-ging-iets-mis'
 			),
 			description: t(
 				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
@@ -102,6 +103,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			const promises = dirty.map((pair) => {
 				const collection = getCollection(pair.id);
 
+				const descriptionVariables = {
+					item: selected.title,
+					collection:
+						collection?.name ||
+						t(
+							'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___onbekend'
+						),
+				};
 				if (pair.checked) {
 					return collectionsService
 						.addToCollection(pair.id, selected.schemaIdentifier)
@@ -110,7 +119,6 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 							if (response === undefined) {
 								return;
 							}
-
 							toastService.notify({
 								maxLines: 3,
 								title: t(
@@ -118,10 +126,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								),
 								description: t(
 									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collection',
-									{
-										item: selected.title,
-										collection: collection?.name || t('Onbekend'),
-									}
+									descriptionVariables
 								),
 							});
 						});
@@ -141,10 +146,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								),
 								description: t(
 									'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collection',
-									{
-										item: selected.title,
-										collection: collection?.name || t('Onbekend'),
-									}
+									descriptionVariables
 								),
 							});
 						});
@@ -155,6 +157,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			Promise.all(promises).then(() => {
 				collections.refetch().then(() => {
 					onSubmit?.(values);
+					reset();
 				});
 			});
 		}
@@ -185,7 +188,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___voeg-toe'
 					)}
 					variants={['block', 'black']}
-					onClick={handleSubmit(onFormSubmit)}
+					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
 				/>
 
 				<Button
