@@ -81,7 +81,7 @@ export const VisitorsTableColumns = (
 	},
 	{
 		Header: t('modules/cp/const/visitors___goedgekeurd-door') || '',
-		accessor: 'status',
+		accessor: 'updatedByName',
 		Cell: ({ row }: VisitInfoRow) => {
 			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
 		},

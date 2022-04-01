@@ -26,13 +26,16 @@ import {
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
+import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
+import { ROUTES } from '@shared/const';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes } from '@shared/types';
 import { asDate, createPageTitle, formatAccessDate } from '@shared/utils';
@@ -55,6 +58,7 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const { t } = useTranslation();
 	const router = useRouter();
+	const previousUrl = useSelector(selectPreviousUrl);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -90,8 +94,8 @@ const ObjectDetailPage: NextPage = () => {
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.files?.[0]?.schemaIdentifier ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.schemaIdentifier) // Force flowplayer rerender after successful fetch
+		currentRepresentation?.files[0].schemaIdentifier ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.files[0].schemaIdentifier) // Force flowplayer rerender after successful fetch
 	);
 
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
@@ -199,7 +203,6 @@ const ObjectDetailPage: NextPage = () => {
 		// Flowplayer
 		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
 			return (
-				// TODO: implement thumbnail
 				<FlowPlayer
 					className={clsx(
 						'p-object-detail__flowplayer',
@@ -207,7 +210,7 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					key={flowPlayerKey}
 					src={playableUrl}
-					poster="https://via.placeholder.com/1920x1080"
+					poster={mediaInfo?.thumbnailUrl || undefined}
 					title={representation.name}
 					pause={pauseMedia}
 					onPlay={() => setPauseMedia(false)}
@@ -223,7 +226,7 @@ const ObjectDetailPage: NextPage = () => {
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
-						src={representation.schemaIdentifier}
+						src={representation.files[0].schemaIdentifier}
 						alt={representation.name}
 						layout="fill"
 						objectFit="contain"
@@ -255,8 +258,14 @@ const ObjectDetailPage: NextPage = () => {
 					<meta name="description" content="Object detail omschrijving" />
 				</Head>
 				<ReadingRoomNavigation
+					className="p-object-detail__nav"
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
+					backLink={
+						previousUrl?.startsWith(`/${ROUTES.spaces}/`)
+							? previousUrl
+							: `/${ROUTES.spaces}/${router.query.readingRoomSlug}`
+					}
 					showAccessEndDate={
 						accessEndDate
 							? t(
@@ -314,6 +323,7 @@ const ObjectDetailPage: NextPage = () => {
 								)}
 								{showFragmentSlider && (
 									<FragmentSlider
+										thumbnail={mediaInfo.thumbnailUrl}
 										className="p-object-detail__slider"
 										fragments={mediaInfo?.representations ?? []}
 										onChangeFragment={(index) =>
@@ -380,6 +390,10 @@ const ObjectDetailPage: NextPage = () => {
 									<Metadata
 										className="u-px-32"
 										metadata={[
+											{
+												title: t('modules/media/const/index___trefwoorden'),
+												data: mapKeywordsToTagList(mediaInfo.keywords),
+											},
 											{
 												title: 'Ook interessant',
 												data: (
