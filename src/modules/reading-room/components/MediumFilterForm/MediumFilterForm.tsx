@@ -53,26 +53,27 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					onClear={() => setSearch('')}
 				/>
 
-				{/* https://meemoo.atlassian.net/wiki/spaces/HA2/pages/3402891314/Geavanceerde+search+BZT+versie+1?focusedCommentId=3417604098#comment-3417604098 */}
-				<p className="u-color-neutral u-text-center u-my-16">
-					{t(
-						'modules/reading-room/components/medium-filter-form/medium-filter-form___geen-analoge-dragers-gevonden'
-					)}
-				</p>
+				<div className="u-my-32">
+					{/* https://meemoo.atlassian.net/wiki/spaces/HA2/pages/3402891314/Geavanceerde+search+BZT+versie+1?focusedCommentId=3417604098#comment-3417604098 */}
+					<p className="u-color-neutral u-text-center">
+						{t(
+							'modules/reading-room/components/medium-filter-form/medium-filter-form___geen-analoge-dragers-gevonden'
+						)}
+					</p>
 
-				<CheckboxList
-					className="u-my-16"
-					items={[]}
-					// items={buckets.map((bucket) => ({
-					// 	...bucket,
-					// 	checked: selection.includes(bucket.key),
-					// 	label: bucket.key,
-					// 	value: bucket.key,
-					// }))}
-					onItemClick={(checked, value) => {
-						onItemClick(!checked, value as string);
-					}}
-				/>
+					<CheckboxList
+						items={[]}
+						// items={buckets.map((bucket) => ({
+						// 	...bucket,
+						// 	checked: selection.includes(bucket.key),
+						// 	label: bucket.key,
+						// 	value: bucket.key,
+						// }))}
+						onItemClick={(checked, value) => {
+							onItemClick(!checked, value as string);
+						}}
+					/>
+				</div>
 			</div>
 
 			{children({ values: getValues(), reset })}

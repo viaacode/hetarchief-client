@@ -1,10 +1,10 @@
-import { TabProps } from '@meemoo/react-components';
+import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { format } from 'date-fns';
 import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,15 +17,18 @@ import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
+	CreatedFilterFormState,
+	DurationFilterFormState,
 	FilterMenu,
 	GenreFilterFormState,
+	KeywordsFilterFormState,
 	MediumFilterFormState,
+	PublishedFilterFormState,
 	ReadingRoomNavigation,
 } from '@reading-room/components';
 import { CreatorFilterFormState } from '@reading-room/components/CreatorFilterForm';
 import { LanguageFilterFormState } from '@reading-room/components/LanguageFilterForm';
 import {
-	getMetadataSearchFilters,
 	READING_ROOM_FILTERS,
 	READING_ROOM_ITEM_COUNT,
 	READING_ROOM_QUERY_PARAM_CONFIG,
@@ -34,14 +37,12 @@ import {
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
 } from '@reading-room/const';
-import {
-	AdvancedFilter,
-	MetadataProp,
-	ReadingRoomFilterId,
-	TagIdentity,
-} from '@reading-room/types';
+import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
 import { mapFiltersToTags } from '@reading-room/utils';
+import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
+	Icon,
 	IdentifiableMediaCard,
 	MediaCardList,
 	MediaCardViewMode,
@@ -52,18 +53,10 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import {
-	MediaSearchFilterField,
-	MediaSearchOperator,
-	MediaTypes,
-	Operator,
-	OrderDirection,
-	ReadingRoomMediaType,
-	SortObject,
-} from '@shared/types';
+import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -109,72 +102,14 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: mediaResultInfo } = useGetMediaObjects(
+	const { data: space } = useGetReadingRoom(
 		readingRoomSlug as string,
-		[
-			// Searchbar
-			{
-				field: MediaSearchFilterField.QUERY,
-				operator: MediaSearchOperator.CONTAINS,
-				value: query.search !== null ? query.search?.toString() : '',
-			},
-			// Tabs
-			{
-				field: MediaSearchFilterField.FORMAT,
-				operator: MediaSearchOperator.IS,
-				value: query.format || READING_ROOM_QUERY_PARAM_INIT.format,
-			},
-			// Medium TODO
-			// {
-			// 	field: MediaSearchFilterField.MEDIUM,
-			// 	operator: MediaSearchOperator.IS,
-			// 	multiValue: (query.medium || []).filter((item) => item !== null) as string[],
-			// },
-			// Creator
-			{
-				field: MediaSearchFilterField.CREATOR,
-				operator: MediaSearchOperator.IS,
-				multiValue: (query.creator || []).filter((item) => item !== null) as string[],
-			},
-			// Genre
-			{
-				field: MediaSearchFilterField.GENRE,
-				operator: MediaSearchOperator.IS,
-				multiValue: (query.genre || []).filter((item) => item !== null) as string[],
-			},
-			// Language TODO
-			// {
-			// 	field: MediaSearchFilterField.LANGUAGE,
-			// 	operator: MediaSearchOperator.IS,
-			// 	multiValue: (query.language || []).filter((item) => item !== null) as string[],
-			// },
-			// Advanced
-			...(query.advanced || []).flatMap((item) => {
-				const values = (item.val || '').split(SEPARATOR);
-				const filters =
-					item.prop && item.op
-						? getMetadataSearchFilters(item.prop as MetadataProp, item.op as Operator)
-						: [];
+		typeof readingRoomSlug === 'string'
+	);
 
-				// Format data for Elastic
-				return filters.map((filter, i) => {
-					let parsed;
-
-					switch (item.prop) {
-						case MetadataProp.CreatedAt:
-						case MetadataProp.PublishedAt:
-							parsed = asDate(values[i]);
-							values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
-							break;
-
-						default:
-							break;
-					}
-
-					return { ...filter, value: values[i] };
-				});
-			}),
-		],
+	const { data: media } = useGetMediaObjects(
+		readingRoomSlug as string,
+		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
 		activeSort
@@ -185,7 +120,7 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
-		let buckets = mediaResultInfo?.aggregations.dcterms_format.buckets;
+		let buckets = media?.aggregations.dcterms_format.buckets;
 
 		if (!buckets || buckets.length === 0) {
 			buckets = [
@@ -204,7 +139,7 @@ const ReadingRoomPage: NextPage = () => {
 			[ReadingRoomMediaType.Video]:
 				buckets.find((bucket) => bucket.key === ReadingRoomMediaType.Video)?.doc_count || 0,
 		});
-	}, [mediaResultInfo?.aggregations]);
+	}, [media?.aggregations]);
 
 	/**
 	 * Display
@@ -265,58 +200,110 @@ const ReadingRoomPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: ReadingRoomFilterId, values: unknown) => {
-		let cast;
+		let data;
 
 		switch (id) {
 			case ReadingRoomFilterId.Medium:
-				cast = values as MediumFilterFormState;
-				setQuery({ [id]: cast.mediums });
+				data = (values as MediumFilterFormState).mediums;
+				break;
+
+			case ReadingRoomFilterId.Duration:
+				data = values as DurationFilterFormState;
+				data = [
+					{
+						prop: MetadataProp.Duration,
+						op: data.operator,
+						val: data.duration,
+					},
+				];
+				break;
+
+			case ReadingRoomFilterId.Created:
+				data = values as CreatedFilterFormState;
+				data = [
+					{
+						prop: MetadataProp.CreatedAt,
+						op: data.operator,
+						val: data.created,
+					},
+				];
+
+				break;
+
+			case ReadingRoomFilterId.Published:
+				data = values as PublishedFilterFormState;
+				data = [
+					{
+						prop: MetadataProp.PublishedAt,
+						op: data.operator,
+						val: data.published,
+					},
+				];
+
 				break;
 
 			case ReadingRoomFilterId.Creator:
-				cast = values as CreatorFilterFormState;
-				setQuery({ [id]: cast.creators });
+				data = (values as CreatorFilterFormState).creators;
 				break;
 
 			case ReadingRoomFilterId.Genre:
-				cast = values as GenreFilterFormState;
-				setQuery({ [id]: cast.genres });
+				data = (values as GenreFilterFormState).genres;
+				break;
+
+			case ReadingRoomFilterId.Keywords:
+				data = (values as KeywordsFilterFormState).values;
 				break;
 
 			case ReadingRoomFilterId.Language:
-				cast = values as LanguageFilterFormState;
-				setQuery({ [id]: cast.languages });
+				data = (values as LanguageFilterFormState).languages;
 				break;
 
 			case ReadingRoomFilterId.Advanced:
-				cast = values as AdvancedFilterFormState;
-				setQuery({ [id]: cast.advanced });
+				data = (values as AdvancedFilterFormState).advanced;
 				break;
 
 			default:
 				console.warn(`[WARN][ReadingRoomPage] No submit handler for ${id}`);
 				break;
 		}
+
+		data && setQuery({ [id]: data });
 	};
 
-	const onRemoveKeyword = (newValue: MultiValue<TagIdentity>) => {
-		const search = newValue
-			?.filter((val) => val.key === SEARCH_QUERY_KEY)
-			.map((tag) => tag.value as string);
+	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
+		const query: Record<string, unknown> = {};
 
-		const advanced = newValue
-			?.filter((val) => val.key === ReadingRoomFilterId.Advanced)
-			.map((tag) => {
-				const { prop, op, val } = tag;
-				const filter: AdvancedFilter = { prop, op, val };
+		tags.forEach((tag) => {
+			switch (tag.key) {
+				case ReadingRoomFilterId.Creator:
+				case ReadingRoomFilterId.Genre:
+				case ReadingRoomFilterId.Keywords:
+				case ReadingRoomFilterId.Language:
+				case ReadingRoomFilterId.Medium:
+				case SEARCH_QUERY_KEY:
+					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag.value];
+					break;
 
-				return filter;
-			});
+				case ReadingRoomFilterId.Advanced:
+				case ReadingRoomFilterId.Created:
+				case ReadingRoomFilterId.Duration:
+				case ReadingRoomFilterId.Published:
+					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag];
+					break;
 
-		setQuery({
-			[SEARCH_QUERY_KEY]: (search.length > 0 && search) || undefined,
-			[ReadingRoomFilterId.Advanced]: (advanced.length > 0 && advanced) || undefined,
+				default:
+					query[tag.key] = tag.value;
+					break;
+			}
 		});
+
+		// Destructure to keyword-able filters
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { format, orderProp, orderDirection, page, ...rest } = {
+			...READING_ROOM_QUERY_PARAM_INIT,
+		};
+
+		setQuery({ ...rest, ...query });
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
@@ -326,11 +313,6 @@ const ReadingRoomPage: NextPage = () => {
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
-	const onMediaBookmark = (item: IdentifiableMediaCard) => {
-		setSelected(item);
-		setShowAddToCollectionBlade(true);
-	};
-
 	/**
 	 * Computed
 	 */
@@ -338,8 +320,8 @@ const ReadingRoomPage: NextPage = () => {
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showInitialView = !hasSearched;
-	const showNoResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length === 0;
-	const showResults = hasSearched && !!mediaResultInfo && mediaResultInfo?.items?.length > 0;
+	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
+	const showResults = hasSearched && !!media && media?.items?.length > 0;
 
 	/**
 	 * Render
@@ -377,26 +359,49 @@ const ReadingRoomPage: NextPage = () => {
 	const renderResults = () => (
 		<>
 			<MediaCardList
-				items={mediaResultInfo?.items
-					// TODO: check why these 'empty' results are there
-					?.filter((mediaObject) => mediaObject.type !== 'SOLR')
-					.map(
-						(mediaObject): IdentifiableMediaCard => ({
-							schemaIdentifier: mediaObject.schema_identifier,
-							description: mediaObject.schema_description,
-							title: mediaObject.schema_name,
-							publishedAt: mediaObject.schema_date_published
-								? asDate(mediaObject.schema_date_published)
-								: undefined,
-							publishedBy: mediaObject.schema_creator?.Maker?.join(', '),
-							type: mediaObject.dcterms_format,
-							detailLink: `/${ROUTES.spaces}/${mediaObject.schema_maintainer?.[0]?.schema_identifier}/${mediaObject.meemoo_fragment_id}`,
-						})
-					)}
+				items={media?.items.map(
+					(item): IdentifiableMediaCard => ({
+						schemaIdentifier: item.schema_identifier,
+						description: item.schema_description,
+						title: item.schema_name,
+						publishedAt: item.schema_date_published
+							? asDate(item.schema_date_published)
+							: undefined,
+						publishedBy: item.schema_creator?.Maker?.join(', '),
+						type: item.dcterms_format,
+					})
+				)}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
-				onItemBookmark={({ item }) => onMediaBookmark(item as IdentifiableMediaCard)}
 				view={viewMode}
+				buttons={(item) => (
+					<Button
+						onClick={(e) => {
+							// Avoid navigating to detail when opening
+							e.preventDefault();
+							e.stopPropagation();
+
+							setSelected(item as IdentifiableMediaCard);
+							setShowAddToCollectionBlade(true);
+						}}
+						icon={<Icon type="light" name="bookmark" />}
+						variants={['text', 'xxs']}
+					/>
+				)}
+				wrapper={(card, item) => {
+					const cast = item as IdentifiableMediaCard;
+					const source = media?.items.find(
+						(media) => media.schema_identifier === cast.schemaIdentifier
+					);
+
+					return (
+						<Link
+							href={`/${ROUTES.spaces}/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`}
+						>
+							<a className="u-text-no-decoration">{card}</a>
+						</Link>
+					);
+				}}
 			/>
 			<PaginationBar
 				className="u-mb-48"
@@ -418,12 +423,22 @@ const ReadingRoomPage: NextPage = () => {
 		<VisitorLayout>
 			<div className="p-reading-room">
 				<Head>
-					<title>{createPageTitle('Leeszaal')}</title>
-					<meta name="description" content="Leeszaal omschrijving" />
+					<title>{createPageTitle(space?.name)}</title>
+					<meta
+						name="description"
+						content={
+							space?.description ||
+							t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
+						}
+					/>
 				</Head>
 
-				{/* TODO: bind title to state */}
-				<ReadingRoomNavigation title={'Leeszaal'} showBorder={showNavigationBorder} />
+				<ReadingRoomNavigation
+					title={space?.name}
+					phone={space?.contactInfo.telephone || ''}
+					email={space?.contactInfo.email || ''}
+					showBorder={showNavigationBorder}
+				/>
 
 				<section className="u-bg-black u-pt-8">
 					<div className="l-container">
@@ -440,7 +455,7 @@ const ReadingRoomPage: NextPage = () => {
 							syncSearchValue={false}
 							value={activeFilters}
 							onClear={onResetFilters}
-							onRemoveValue={onRemoveKeyword}
+							onRemoveValue={onRemoveTag}
 							onSearch={onSearch}
 						/>
 						<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
@@ -464,8 +479,12 @@ const ReadingRoomPage: NextPage = () => {
 								<Placeholder
 									className="p-reading-room__placeholder"
 									img="/images/lightbulb.svg"
-									title="Start je zoektocht!"
-									description="Zoek op trefwoorden, jaartallen, aanbieders… en start je research."
+									title={t(
+										'pages/leeszaal/reading-room-slug/index___start-je-zoektocht'
+									)}
+									description={t(
+										'pages/leeszaal/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
+									)}
 								/>
 							</>
 						)}
@@ -476,8 +495,12 @@ const ReadingRoomPage: NextPage = () => {
 								<Placeholder
 									className="p-reading-room__placeholder"
 									img="/images/looking-glass.svg"
-									title="Geen resultaten"
-									description="Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten."
+									title={t(
+										'pages/leeszaal/reading-room-slug/index___geen-resultaten'
+									)}
+									description={t(
+										'pages/leeszaal/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
+									)}
 								/>
 							</>
 						)}

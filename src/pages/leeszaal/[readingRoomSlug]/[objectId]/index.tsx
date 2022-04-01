@@ -12,7 +12,6 @@ import { useSelector } from 'react-redux';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
-import { fragmentSliderMock } from '@media/components/FragmentSlider/__mocks__/fragmentSlider';
 import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
 	FLOWPLAYER_FORMATS,

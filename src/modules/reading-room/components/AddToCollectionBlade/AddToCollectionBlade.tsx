@@ -84,7 +84,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		toastService.notify({
 			maxLines: 3,
 			title: t(
-				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___⚠️-er-ging-iets-mis'
+				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-ging-iets-mis'
 			),
 			description: t(
 				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
