@@ -44,8 +44,8 @@ export class ReadingRoomService {
 		return parsed.items;
 	}
 
-	public static async getById(roomId: string): Promise<unknown> {
-		return await ApiService.getApi().get(`${READING_ROOM_SERVICE_BASE_URL}/${roomId}`).json();
+	public static async getBySlug(slug: string): Promise<ReadingRoomInfo> {
+		return await ApiService.getApi().get(`${READING_ROOM_SERVICE_BASE_URL}/${slug}`).json();
 	}
 
 	public static async update(

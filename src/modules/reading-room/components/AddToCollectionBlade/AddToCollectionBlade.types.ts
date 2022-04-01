@@ -1,16 +1,18 @@
+import { ReactNode } from 'react';
+
 import { FormBladeProps } from '@shared/types';
 
-export type AddToCollectionBladeProps = FormBladeProps<AddToCollectionFormState> &
-	Partial<Pick<AddToCollectionFormState, 'selected'>>;
+export type AddToCollectionBladeProps = FormBladeProps<AddToCollectionFormState> & {
+	selected?: AddToCollectionSelected;
+};
 
 export interface AddToCollectionFormState {
-	selected: AddToCollectionSelected;
 	pairs: AddToCollectionFormStatePair[];
 }
 
 export interface AddToCollectionSelected {
 	schemaIdentifier: string;
-	title?: string;
+	title?: string | ReactNode;
 }
 
 export interface AddToCollectionFormStatePair {

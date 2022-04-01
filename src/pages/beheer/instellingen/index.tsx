@@ -7,7 +7,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettingsForm, RichTextForm } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { useGetReadingRoomInfo } from '@reading-room/hooks/get-reading-room-info';
+import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { ReadingRoomService } from '@reading-room/services';
 import { UpdateReadingRoomSettings } from '@reading-room/services/reading-room/reading-room.service.types';
 import { Loading } from '@shared/components';
@@ -23,11 +23,7 @@ const CPSettingsPage: NextPage = () => {
 	/**
 	 * Data
 	 */
-	const {
-		data: readingRoomInfo,
-		isLoading,
-		refetch,
-	} = useGetReadingRoomInfo('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21');
+	const { data: readingRoomInfo, isLoading, refetch } = useGetReadingRoom('OR-154dn75');
 
 	const onFailedRequest = () => {
 		refetch();
