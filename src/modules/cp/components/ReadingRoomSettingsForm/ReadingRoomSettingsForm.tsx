@@ -200,7 +200,7 @@ const RichTextForm: FC<ReadingRoomSettingsFormProps> = ({
 											);
 										}}
 									/>
-									{savedState.image && (
+									{currentState.image && (
 										<Button
 											label={t(
 												'modules/cp/components/reading-room-settings-form/reading-room-settings-form___verwijder-afbeelding'
