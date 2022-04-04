@@ -53,7 +53,7 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
@@ -67,7 +67,7 @@ const ReadingRoomPage: NextPage = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 
-	const { readingRoomSlug } = router.query;
+	const { slug } = router.query;
 
 	/**
 	 * State
@@ -102,13 +102,10 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: readingRoom } = useGetReadingRoom(
-		readingRoomSlug as string,
-		typeof readingRoomSlug === 'string'
-	);
+	const { data: readingRoom } = useGetReadingRoom(slug as string, typeof slug === 'string');
 
 	const { data: media } = useGetMediaObjects(
-		readingRoomSlug as string,
+		slug as string,
 		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
@@ -400,10 +397,10 @@ const ReadingRoomPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
+					const href = `/${source?.schema_maintainer?.[0]?.schema_identifier}/${source?.meemoo_fragment_id}`;
+
 					return (
-						<Link
-							href={`/${ROUTES.spaces}/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`}
-						>
+						<Link href={href.toLowerCase()}>
 							<a className="u-text-no-decoration">{card}</a>
 						</Link>
 					);

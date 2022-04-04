@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { ReactNode } from 'react';
 
 import { Icon } from '@shared/components';
-import { ROUTES } from '@shared/const';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -81,7 +80,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				hasDivider: 'md',
 			},
 			{
-				node: renderLink('Leeszaal 8', `/${ROUTES.spaces}/leeszaal-8`, {
+				node: renderLink('VRT', `/OR-vrt123`, {
 					iconEnd: (
 						<Icon
 							className={clsx(
@@ -96,10 +95,10 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					),
 					className: dropdownCls(),
 				}),
-				id: 'leeszaal 8',
+				id: 'vrt',
 			},
 			{
-				node: renderLink('Leeszaal 12', `/${ROUTES.spaces}/leeszaal-8`, {
+				node: renderLink('Huis van Alijn', `/OR-huisvanalijn456`, {
 					iconEnd: (
 						<Icon
 							className={clsx(
@@ -114,7 +113,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					),
 					className: dropdownCls(),
 				}),
-				id: 'leeszaal 12',
+				id: 'huisvanalijn',
 			},
 		],
 	},
