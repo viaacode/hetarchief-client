@@ -181,6 +181,7 @@ const ObjectDetailPage: NextPage = () => {
 						// thumbnail: hit._source.schema_thumbnail_url,
 						id: hit._source.schema_identifier,
 						maintainer_id: hit._source.schema_maintainer?.schema_identifier,
+						thumbnail: hit._source.schema_thumbnail_url,
 					};
 				})
 			);
@@ -202,6 +203,7 @@ const ObjectDetailPage: NextPage = () => {
 						// thumbnail: item.thumbnailUrl,
 						id: item.schemaIdentifier,
 						maintainer_id: item.maintainerId,
+						thumbnail: item.thumbnailUrl,
 					};
 				})
 			);

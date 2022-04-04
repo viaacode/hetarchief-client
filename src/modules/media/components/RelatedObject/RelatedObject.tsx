@@ -18,7 +18,13 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 		if (thumbnail) {
 			if (typeof thumbnail === 'string') {
 				return (
-					<CardImage name={object.title} id={object.id} size="small" image={thumbnail} />
+					<CardImage
+						unoptimized
+						name={object.title}
+						id={object.id}
+						size="small"
+						image={thumbnail}
+					/>
 				);
 			} else {
 				return thumbnail;
