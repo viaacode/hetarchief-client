@@ -6,7 +6,12 @@ import { Icon } from '@shared/components';
 import styles from './RelatedObjectsBlade.module.scss';
 import { RelatedObjectsBladeProps } from './RelatedObjectsBlade.types';
 
-const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({ className, icon, title, content }) => {
+const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
+	className,
+	icon,
+	title,
+	renderContent,
+}) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const rootCls = clsx(
@@ -28,7 +33,7 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({ className, icon, ti
 					name={isOpen ? 'angle-down' : 'angle-up'}
 				/>
 			</button>
-			{content(!isOpen)}
+			{renderContent(!isOpen)}
 		</div>
 	);
 };

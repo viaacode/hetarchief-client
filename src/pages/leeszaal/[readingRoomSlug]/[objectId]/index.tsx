@@ -470,7 +470,7 @@ const ObjectDetailPage: NextPage = () => {
 					<RelatedObjectsBlade
 						icon={<Icon className="u-font-size-24 u-mr-10" name="related-objects" />}
 						title={`${relatedObjectsBladeObjects.length} ${t('gerelateerde objecten')}`}
-						content={(hidden) =>
+						renderContent={(hidden) =>
 							renderMetadataCards('related', relatedObjectsBladeObjects, hidden)
 						}
 					/>

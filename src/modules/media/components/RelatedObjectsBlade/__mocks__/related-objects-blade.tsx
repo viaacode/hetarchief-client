@@ -6,7 +6,7 @@ import { RelatedObjectsBladeProps } from '../RelatedObjectsBlade.types';
 export const relatedObjectsBladeMock: RelatedObjectsBladeProps = {
 	icon: <Icon className="u-font-size-24" name="related-objects" />,
 	title: '3 gerelateerde objecten',
-	content: () => <div>content</div>,
+	renderContent: () => <div>content</div>,
 };
 
 export const relatedObjectsBladeObjects: MediaObject[] = [
