@@ -174,11 +174,6 @@ $metadata-collapsed-width: 36vw;
 		padding: $spacer-lg;
 	}
 
-	&__related {
-		height: 10rem;
-		background-color: aquamarine;
-	}
-
 	&__wrapper--metadata {
 		.p-object-detail__video {
 			display: none;
@@ -186,7 +181,8 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__wrapper--video {
-		.p-object-detail__metadata {
+		.p-object-detail__metadata,
+		.p-object-detail__related {
 			display: none;
 		}
 	}
@@ -218,7 +214,8 @@ $metadata-collapsed-width: 36vw;
 	// Media queries
 
 	@include respond-at(md) {
-		.p-object-detail__metadata {
+		.p-object-detail__metadata,
+		.p-object-detail__related {
 			display: block;
 		}
 

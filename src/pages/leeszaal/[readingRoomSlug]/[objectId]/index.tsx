@@ -504,6 +504,7 @@ const ObjectDetailPage: NextPage = () => {
 					{!!related.length && (
 						<RelatedObjectsBlade
 							className={clsx(
+								'p-object-detail__related',
 								'p-object-detail__metadata--collapsed',
 								expandMetadata && 'p-object-detail__metadata--expanded'
 							)}
