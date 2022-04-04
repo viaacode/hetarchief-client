@@ -124,7 +124,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		return (
 			NOTIFICATION_TYPE_TO_PATH[notification.type]
 				?.replace('{visitRequestId}', notification.visitId)
-				?.replace('{readingRoomId}', notification.readingRoomId) || null
+				?.replace('{slug}', notification.readingRoomId) || null
 		);
 	};
 

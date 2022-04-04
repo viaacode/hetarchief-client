@@ -29,7 +29,6 @@ import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/type
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
-import { ROUTES } from '@shared/const';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -87,7 +86,7 @@ const ObjectDetailPage: NextPage = () => {
 		data: mediaInfo,
 		isLoading: isLoadingMediaInfo,
 		isError,
-	} = useGetMediaInfo(router.query.objectId as string);
+	} = useGetMediaInfo(router.query.ie as string);
 
 	const {
 		data: playableUrl,
@@ -98,9 +97,7 @@ const ObjectDetailPage: NextPage = () => {
 		() => setFlowPlayerKey(currentRepresentation?.files[0].schemaIdentifier) // Force flowplayer rerender after successful fetch
 	);
 
-	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
-		router.query.readingRoomSlug as string
-	);
+	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
 
 	/**
 	 * Effects
@@ -262,9 +259,9 @@ const ObjectDetailPage: NextPage = () => {
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
 					backLink={
-						previousUrl?.startsWith(`/${ROUTES.spaces}/`)
+						previousUrl?.startsWith(`/${router.query.slug}/`)
 							? previousUrl
-							: `/${ROUTES.spaces}/${router.query.readingRoomSlug}`
+							: `/${router.query.slug}`
 					}
 					showAccessEndDate={
 						accessEndDate
