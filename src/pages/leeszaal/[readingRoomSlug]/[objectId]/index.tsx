@@ -37,7 +37,7 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { MediaTypes } from '@shared/types';
+import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import { asDate, createPageTitle, formatAccessDate } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
@@ -107,15 +107,14 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
-		// Mock representations for slider testing
-		// if (mediaInfo) {
-		// 	mediaInfo.representations = [
-		// 		...mediaInfo.representations,
-		// 		...fragmentSliderMock.fragments,
-		// 	];
-		// }
-
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
+
+		// Filter out peak files if type === video
+		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
+			mediaInfo.representations = mediaInfo?.representations.filter(
+				(object) => object.dctermsFormat !== 'peak'
+			);
+		}
 
 		setCurrentRepresentaton(mediaInfo?.representations[0]);
 
