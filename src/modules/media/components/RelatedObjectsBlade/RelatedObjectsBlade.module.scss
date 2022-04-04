@@ -3,7 +3,6 @@
 $component: "c-related-objects-blade";
 
 .#{$component} {
-	width: 36vw;
 	max-height: 8.8rem;
 	background-color: $black;
 	transition: max-height $animate-default;

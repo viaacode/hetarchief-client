@@ -435,6 +435,7 @@ const ObjectDetailPage: NextPage = () => {
 						ref={metadataRef}
 						className={clsx(
 							'p-object-detail__metadata',
+							'p-object-detail__metadata--collapsed',
 							expandMetadata && 'p-object-detail__metadata--expanded',
 							!mediaType && 'p-object-detail__metadata--no-media'
 						)}
@@ -483,7 +484,9 @@ const ObjectDetailPage: NextPage = () => {
 											className="u-px-32"
 											metadata={[
 												{
-													title: t('trefwoorden'),
+													title: t(
+														'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
+													),
 													data: mapKeywordsToTagList(mediaInfo.keywords),
 												},
 												{
@@ -500,15 +503,24 @@ const ObjectDetailPage: NextPage = () => {
 					</div>
 					{!!related.length && (
 						<RelatedObjectsBlade
+							className={clsx(
+								'p-object-detail__metadata--collapsed',
+								expandMetadata && 'p-object-detail__metadata--expanded'
+							)}
 							icon={
 								<Icon className="u-font-size-24 u-mr-10" name="related-objects" />
 							}
 							title={
 								related.length === 1
-									? t('1 gerelateerd object')
-									: t('{{amount}} gerelateerde objecten', {
-											amount: related.length,
-									  })
+									? t(
+											'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
+									  )
+									: t(
+											'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+											{
+												amount: related.length,
+											}
+									  )
 							}
 							renderContent={(hidden) =>
 								renderMetadataCards('related', related, hidden)

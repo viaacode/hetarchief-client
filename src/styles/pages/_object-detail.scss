@@ -139,9 +139,11 @@ $metadata-collapsed-width: 36vw;
 		box-shadow: $shadow-24-black-12;
 
 		@include respond-at(md) {
-			// Use width for toggle because grid-template-column animation is only supported on Firefox
-			width: $metadata-collapsed-width;
-			transition: width $animate-default;
+			&--collapsed {
+				// Use width for toggle because grid-template-column animation is only supported on Firefox
+				width: $metadata-collapsed-width;
+				transition: width $animate-default;
+			}
 
 			&--expanded {
 				width: $metadata-expanded-width;

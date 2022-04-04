@@ -14,26 +14,28 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const rootCls = clsx(
-		className,
-		styles['c-related-objects-blade'],
-		isOpen && styles['c-related-objects-blade--open']
-	);
-
 	return (
-		<div className={rootCls}>
-			<button
-				className={styles['c-related-objects-blade__toggle']}
-				onClick={() => setIsOpen(!isOpen)}
+		// Wrapped to avoid conflicting css transitions and jerky motion
+		<div className={className}>
+			<div
+				className={clsx(
+					styles['c-related-objects-blade'],
+					isOpen && styles['c-related-objects-blade--open']
+				)}
 			>
-				{icon && icon}
-				<b className={styles['c-related-objects-blade__title']}>{title}</b>
-				<Icon
-					className={styles['c-related-objects-blade__arrow']}
-					name={isOpen ? 'angle-down' : 'angle-up'}
-				/>
-			</button>
-			{renderContent(!isOpen)}
+				<button
+					className={styles['c-related-objects-blade__toggle']}
+					onClick={() => setIsOpen(!isOpen)}
+				>
+					{icon && icon}
+					<b className={styles['c-related-objects-blade__title']}>{title}</b>
+					<Icon
+						className={styles['c-related-objects-blade__arrow']}
+						name={isOpen ? 'angle-down' : 'angle-up'}
+					/>
+				</button>
+				{renderContent(!isOpen)}
+			</div>
 		</div>
 	);
 };
