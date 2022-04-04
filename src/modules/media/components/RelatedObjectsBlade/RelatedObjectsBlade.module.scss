@@ -9,6 +9,7 @@ $component: "c-related-objects-blade";
 	transition: max-height $animate-default;
 
 	&__toggle {
+		cursor: pointer;
 		display: flex;
 		align-items: center;
 		width: 100%;

@@ -29,6 +29,7 @@ import {
 	ticketErrorPlaceholder,
 } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
+import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
@@ -78,6 +79,7 @@ const ObjectDetailPage: NextPage = () => {
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
+	const [related, setRelated] = useState<MediaObject[]>([]);
 
 	// Layout
 	useStickyLayout();
@@ -112,6 +114,14 @@ const ObjectDetailPage: NextPage = () => {
 	const { data: similarData } = useGetMediaSimilar(
 		router.query.objectId as string,
 		toLower(mediaInfo?.maintainerId),
+		!!mediaInfo
+	);
+
+	// gerelateerd
+	const { data: relatedData } = useGetMediaRelated(
+		router.query.objectId as string,
+		mediaInfo?.maintainerId ?? '',
+		mediaInfo?.meemooIdentifier ?? '',
 		!!mediaInfo
 	);
 
@@ -175,6 +185,27 @@ const ObjectDetailPage: NextPage = () => {
 				})
 			);
 	}, [similarData]);
+
+	useEffect(() => {
+		relatedData &&
+			setRelated(
+				relatedData.items.map((item) => {
+					return {
+						type: item.dctermsFormat as MediaTypes,
+						title: item.name,
+						subtitle: `(${
+							item.datePublished
+								? formatWithLocale('PP', asDate(item.datePublished))
+								: undefined
+						})`,
+						description: item.description,
+						// thumbnail: item.thumbnailUrl,
+						id: item.schemaIdentifier,
+						maintainer_id: item.maintainerId,
+					};
+				})
+			);
+	}, [relatedData]);
 
 	/**
 	 * Variables
@@ -467,13 +498,23 @@ const ObjectDetailPage: NextPage = () => {
 							)}
 						</div>
 					</div>
-					<RelatedObjectsBlade
-						icon={<Icon className="u-font-size-24 u-mr-10" name="related-objects" />}
-						title={`${relatedObjectsBladeObjects.length} ${t('gerelateerde objecten')}`}
-						renderContent={(hidden) =>
-							renderMetadataCards('related', relatedObjectsBladeObjects, hidden)
-						}
-					/>
+					{!!related.length && (
+						<RelatedObjectsBlade
+							icon={
+								<Icon className="u-font-size-24 u-mr-10" name="related-objects" />
+							}
+							title={
+								related.length === 1
+									? t('1 gerelateerd object')
+									: t('{{amount}} gerelateerde objecten', {
+											amount: related.length,
+									  })
+							}
+							renderContent={(hidden) =>
+								renderMetadataCards('related', related, hidden)
+							}
+						/>
+					)}
 				</article>
 			</div>
 			<AddToCollectionBlade
