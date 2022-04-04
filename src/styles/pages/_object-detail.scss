@@ -20,6 +20,9 @@ $metadata-collapsed-width: 36vw;
 		@include respond-at(md) {
 			grid-template-columns: 1fr min-content;
 		}
+
+		// TODO: if related objects
+		grid-template-rows: 1fr min-content;
 	}
 
 	&__nav {
@@ -121,6 +124,9 @@ $metadata-collapsed-width: 36vw;
 		grid-template-rows: 1fr auto;
 		position: relative;
 		background-color: $silver;
+
+		// TODO: if related objects
+		grid-row: 1 / 3;
 	}
 
 	&__slider {
@@ -133,9 +139,11 @@ $metadata-collapsed-width: 36vw;
 		box-shadow: $shadow-24-black-12;
 
 		@include respond-at(md) {
-			// Use width for toggle because grid-template-column animation is only supported on Firefox
-			width: $metadata-collapsed-width;
-			transition: width $animate-default;
+			&--collapsed {
+				// Use width for toggle because grid-template-column animation is only supported on Firefox
+				width: $metadata-collapsed-width;
+				transition: width $animate-default;
+			}
 
 			&--expanded {
 				width: $metadata-expanded-width;
@@ -149,6 +157,23 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
+	&__metadata-list {
+		display: flex;
+		flex-direction: column;
+		row-gap: $spacer-sm;
+	}
+
+	&__metadata-list--similar {
+		margin: 0 - $spacer-lg;
+		margin-top: $spacer-md;
+		padding: $spacer-md $spacer-lg;
+		background-color: $platinum;
+	}
+
+	&__metadata-list--related {
+		padding: $spacer-lg;
+	}
+
 	&__wrapper--metadata {
 		.p-object-detail__video {
 			display: none;
@@ -156,8 +181,19 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__wrapper--video {
-		.p-object-detail__metadata {
+		.p-object-detail__metadata,
+		.p-object-detail__related {
 			display: none;
+		}
+	}
+
+	&__metadata-card-link {
+		display: block;
+		text-decoration: none;
+
+		&:not(:active, :hover):focus {
+			outline: 0.2rem solid $teal;
+			background-color: red;
 		}
 	}
 
@@ -178,7 +214,8 @@ $metadata-collapsed-width: 36vw;
 	// Media queries
 
 	@include respond-at(md) {
-		.p-object-detail__metadata {
+		.p-object-detail__metadata,
+		.p-object-detail__related {
 			display: block;
 		}
 

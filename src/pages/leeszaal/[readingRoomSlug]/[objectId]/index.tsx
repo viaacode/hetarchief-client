@@ -1,18 +1,23 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { toLower } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
-import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
+import {
+	relatedObjectsBladeMock,
+	relatedObjectsBladeObjects,
+} from '@media/components/RelatedObjectsBlade/__mocks__/related-objects-blade';
 import {
 	FLOWPLAYER_FORMATS,
 	formatErrorPlaceholder,
@@ -24,6 +29,8 @@ import {
 	ticketErrorPlaceholder,
 } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
+import { useGetMediaRelated } from '@media/hooks/get-media-related';
+import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
 import { mapKeywordsToTagList } from '@media/utils';
@@ -38,15 +45,16 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes } from '@shared/types';
-import { asDate, createPageTitle, formatAccessDate } from '@shared/utils';
+import { asDate, createPageTitle, formatAccessDate, formatWithLocale } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
 	DynamicActionMenu,
+	MediaObject,
 	Metadata,
 	ObjectPlaceholder,
 	RelatedObject,
-	RelatedObjectProps,
+	RelatedObjectsBlade,
 } from 'modules/media/components';
 import { VisitorLayout } from 'modules/visitors';
 
@@ -61,6 +69,7 @@ const ObjectDetailPage: NextPage = () => {
 	const previousUrl = useSelector(selectPreviousUrl);
 
 	// Internal state
+	const [backlink, setBackLink] = useState(`/${ROUTES.spaces}/${router.query.readingRoomSlug}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
@@ -69,6 +78,8 @@ const ObjectDetailPage: NextPage = () => {
 		MediaRepresentation | undefined
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
+	const [similar, setSimilar] = useState<MediaObject[]>([]);
+	const [related, setRelated] = useState<MediaObject[]>([]);
 
 	// Layout
 	useStickyLayout();
@@ -82,13 +93,14 @@ const ObjectDetailPage: NextPage = () => {
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
 
-	// Fetch data
+	// Fetch object
 	const {
 		data: mediaInfo,
 		isLoading: isLoadingMediaInfo,
 		isError,
 	} = useGetMediaInfo(router.query.objectId as string);
 
+	// playable url
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
@@ -98,6 +110,22 @@ const ObjectDetailPage: NextPage = () => {
 		() => setFlowPlayerKey(currentRepresentation?.files[0].schemaIdentifier) // Force flowplayer rerender after successful fetch
 	);
 
+	// ook interessant
+	const { data: similarData } = useGetMediaSimilar(
+		router.query.objectId as string,
+		toLower(mediaInfo?.maintainerId),
+		!!mediaInfo
+	);
+
+	// gerelateerd
+	const { data: relatedData } = useGetMediaRelated(
+		router.query.objectId as string,
+		mediaInfo?.maintainerId ?? '',
+		mediaInfo?.meemooIdentifier ?? '',
+		!!mediaInfo
+	);
+
+	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
 		router.query.readingRoomSlug as string
 	);
@@ -107,14 +135,19 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
-		// Mock representations for slider testing
-		// if (mediaInfo) {
-		// 	mediaInfo.representations = [
-		// 		...mediaInfo.representations,
-		// 		...fragmentSliderMock.fragments,
-		// 	];
-		// }
+		let backLink = `/${ROUTES.spaces}/${router.query.readingRoomSlug}`;
+		if (previousUrl) {
+			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
+			const validBacklink = subgroups?.length === 2 && subgroups[0] === ROUTES.spaces;
 
+			if (validBacklink) {
+				backLink = previousUrl;
+			}
+		}
+		setBackLink(backLink);
+	}, [previousUrl, router.query.readingRoomSlug]);
+
+	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
 		setCurrentRepresentaton(mediaInfo?.representations[0]);
@@ -131,6 +164,48 @@ const ObjectDetailPage: NextPage = () => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mediaInfo]);
+
+	useEffect(() => {
+		similarData &&
+			setSimilar(
+				similarData.hits.hits.map((hit) => {
+					return {
+						type: hit._source.dcterms_format as MediaTypes,
+						title: hit._source.schema_name,
+						subtitle: `(${
+							hit._source.schema_date_published
+								? formatWithLocale('PP', asDate(hit._source.schema_date_published))
+								: undefined
+						})`,
+						description: hit._source.schema_description || '',
+						// thumbnail: hit._source.schema_thumbnail_url,
+						id: hit._source.schema_identifier,
+						maintainer_id: hit._source.schema_maintainer?.schema_identifier,
+					};
+				})
+			);
+	}, [similarData]);
+
+	useEffect(() => {
+		relatedData &&
+			setRelated(
+				relatedData.items.map((item) => {
+					return {
+						type: item.dctermsFormat as MediaTypes,
+						title: item.name,
+						subtitle: `(${
+							item.datePublished
+								? formatWithLocale('PP', asDate(item.datePublished))
+								: undefined
+						})`,
+						description: item.description,
+						// thumbnail: item.thumbnailUrl,
+						id: item.schemaIdentifier,
+						maintainer_id: item.maintainerId,
+					};
+				})
+			);
+	}, [relatedData]);
 
 	/**
 	 * Variables
@@ -184,15 +259,6 @@ const ObjectDetailPage: NextPage = () => {
 				active: tab.id === activeTab,
 			})),
 		[activeTab, mediaType]
-	);
-
-	/**
-	 * Metadata
-	 */
-	const renderInterestingListItem = (data: RelatedObjectProps) => (
-		<li className="u-py-8">
-			<RelatedObject {...data} />
-		</li>
 	);
 
 	/**
@@ -250,6 +316,35 @@ const ObjectDetailPage: NextPage = () => {
 		return null;
 	};
 
+	// Metadata
+	const renderCard = (item: MediaObject, isHidden: boolean) => (
+		<li>
+			<Link passHref href={`/${ROUTES.spaces}/${item.maintainer_id}/${item.id}`}>
+				<a tabIndex={isHidden ? -1 : 0} className={`p-object-detail__metadata-card-link`}>
+					{<RelatedObject object={item} />}
+				</a>
+			</Link>
+		</li>
+	);
+
+	const renderMetadataCards = (
+		type: 'similar' | 'related',
+		items: MediaObject[],
+		isHidden = false
+	): ReactNode => (
+		<ul
+			className={`u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
+		>
+			{items.map((item, index) => {
+				return (
+					<Fragment key={`${type}-object-${item.id}-${index}`}>
+						{renderCard(item, isHidden)}
+					</Fragment>
+				);
+			})}
+		</ul>
+	);
+
 	return (
 		<VisitorLayout>
 			<div className="p-object-detail">
@@ -261,11 +356,7 @@ const ObjectDetailPage: NextPage = () => {
 					className="p-object-detail__nav"
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
-					backLink={
-						previousUrl?.startsWith(`/${ROUTES.spaces}/`)
-							? previousUrl
-							: `/${ROUTES.spaces}/${router.query.readingRoomSlug}`
-					}
+					backLink={backlink}
 					showAccessEndDate={
 						accessEndDate
 							? t(
@@ -344,6 +435,7 @@ const ObjectDetailPage: NextPage = () => {
 						ref={metadataRef}
 						className={clsx(
 							'p-object-detail__metadata',
+							'p-object-detail__metadata--collapsed',
 							expandMetadata && 'p-object-detail__metadata--expanded',
 							!mediaType && 'p-object-detail__metadata--no-media'
 						)}
@@ -387,36 +479,55 @@ const ObjectDetailPage: NextPage = () => {
 										}
 										metadata={METADATA_FIELDS(mediaInfo)}
 									/>
-									<Metadata
-										className="u-px-32"
-										metadata={[
-											{
-												title: t('modules/media/const/index___trefwoorden'),
-												data: mapKeywordsToTagList(mediaInfo.keywords),
-											},
-											{
-												title: 'Ook interessant',
-												data: (
-													<ul className="u-list-reset u-bg-platinum u-mx--32 u-px-32 u-py-24 u-mt-24">
-														{renderInterestingListItem(
-															relatedObjectVideoMock
-														)}
-														{renderInterestingListItem(
-															relatedObjectVideoMock
-														)}
-														{renderInterestingListItem(
-															relatedObjectVideoMock
-														)}
-													</ul>
-												),
-												className: 'u-pb-0',
-											},
-										]}
-									/>
+									{!!similar.length && (
+										<Metadata
+											className="u-px-32"
+											metadata={[
+												{
+													title: t(
+														'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
+													),
+													data: mapKeywordsToTagList(mediaInfo.keywords),
+												},
+												{
+													title: 'Ook interessant',
+													data: renderMetadataCards('similar', similar),
+													className: 'u-pb-0',
+												},
+											]}
+										/>
+									)}
 								</>
 							)}
 						</div>
 					</div>
+					{!!related.length && (
+						<RelatedObjectsBlade
+							className={clsx(
+								'p-object-detail__related',
+								'p-object-detail__metadata--collapsed',
+								expandMetadata && 'p-object-detail__metadata--expanded'
+							)}
+							icon={
+								<Icon className="u-font-size-24 u-mr-10" name="related-objects" />
+							}
+							title={
+								related.length === 1
+									? t(
+											'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
+									  )
+									: t(
+											'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+											{
+												amount: related.length,
+											}
+									  )
+							}
+							renderContent={(hidden) =>
+								renderMetadataCards('related', related, hidden)
+							}
+						/>
+					)}
 				</article>
 			</div>
 			<AddToCollectionBlade
