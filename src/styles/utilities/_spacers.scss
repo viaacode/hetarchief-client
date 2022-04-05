@@ -13,6 +13,7 @@ $spacer-64: $spacer-lg * 2;
 
 $p: (
 	"0": 0,
+	"16": $spacer-sm,
 	"20": $spacer-20,
 	"24": $spacer-md,
 	"32": $spacer-lg,
@@ -43,6 +44,7 @@ $pb: (
 $pl: (
 	"8": $spacer-xs,
 	"24": $spacer-md,
+	"32": $spacer-lg,
 );
 @include generate-utils("pl", "padding-left", $pl, ("sm"));
 

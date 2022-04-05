@@ -31,18 +31,7 @@ const Admin: FC = () => {
 		},
 		{
 			id: 'leeszalenbeheer',
-			node: ({ linkClassName }) => (
-				<Link
-					className={linkClassName}
-					to={generatePath(ADMIN_PATHS.readingRooms.overview)}
-				>
-					{t('Leeszalenbeheer')}
-				</Link>
-			),
-			active: !!matchPath(window.location.pathname, {
-				path: `/admin${generatePath(ADMIN_PATHS.readingRooms.overview)}`,
-				exact: true,
-			}),
+			node: <div className={'u-p-16 u-pl-32'}>{t('Leeszalenbeheer')}</div>,
 			children: [
 				{
 					id: 'alleleeszalen',
