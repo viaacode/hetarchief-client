@@ -1,16 +1,21 @@
+import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
-import { BrowserRouter, Link, matchPath, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, generatePath, Link, matchPath, Route, Switch } from 'react-router-dom';
 
 import { ListNavigationItem } from '@shared/components';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 
 import { NAVIGATION_ROUTES } from './navigation';
 import { NAVIGATION_PATHS } from './navigation/const';
+import { READING_ROOMS_ROUTES } from './readingRooms';
+import { READING_ROOMS_PATHS } from './readingRooms/const';
 
-const ADMIN_ROUTES = [...NAVIGATION_ROUTES];
-const ADMIN_PATHS = { navigation: NAVIGATION_PATHS };
+const ADMIN_ROUTES = [...NAVIGATION_ROUTES, ...READING_ROOMS_ROUTES];
+const ADMIN_PATHS = { navigation: NAVIGATION_PATHS, readingRooms: READING_ROOMS_PATHS };
 
 const Admin: FC = () => {
+	const { t } = useTranslation();
+
 	const sidebarLinks: ListNavigationItem[] = [
 		{
 			id: 'navigation',
@@ -24,6 +29,61 @@ const Admin: FC = () => {
 				exact: false,
 			}),
 		},
+		{
+			id: 'leeszalenbeheer',
+			node: ({ linkClassName }) => (
+				<Link
+					className={linkClassName}
+					to={generatePath(ADMIN_PATHS.readingRooms.overview)}
+				>
+					{t('Leeszalenbeheer')}
+				</Link>
+			),
+			active: !!matchPath(window.location.pathname, {
+				path: `/admin${generatePath(ADMIN_PATHS.readingRooms.overview)}`,
+				exact: true,
+			}),
+			children: [
+				{
+					id: 'alleleeszalen',
+					node: ({ linkClassName }) => (
+						<Link
+							className={linkClassName}
+							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
+								pageName: 'alleleeszalen',
+							})}
+						>
+							{t('Alle leeszalen')}
+						</Link>
+					),
+					active: !!matchPath(window.location.pathname, {
+						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
+							pageName: 'alleleeszalen',
+						})}`,
+						exact: false,
+					}),
+				},
+				{
+					id: 'aanvragen',
+					node: ({ linkClassName }) => (
+						<Link
+							className={linkClassName}
+							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
+								pageName: 'aanvragen',
+							})}
+						>
+							{t('Aanvragen')}
+						</Link>
+					),
+					active: !!matchPath(window.location.pathname, {
+						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
+							pageName: 'aanvragen',
+						})}`,
+						exact: false,
+					}),
+				},
+			],
+		},
 	];
 
 	return (
@@ -35,7 +95,7 @@ const Admin: FC = () => {
 					<Switch>
 						{/* {routes?.length > 0 && AdminCore.routes.render(routes)} */}
 						{ADMIN_ROUTES.map(({ path, component }) => (
-							<Route key={path} path={path} component={component} />
+							<Route key={path} path={path} component={component} exact />
 						))}
 					</Switch>
 				</div>
