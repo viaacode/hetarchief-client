@@ -1,6 +1,5 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { toLower } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -27,7 +26,7 @@ import {
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
-import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
+import { MediaActions, MediaRepresentation, MediaSimilarHit, ObjectDetailTabs } from '@media/types';
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
@@ -106,7 +105,7 @@ const ObjectDetailPage: NextPage = () => {
 	// ook interessant
 	const { data: similarData } = useGetMediaSimilar(
 		router.query.objectId as string,
-		toLower(mediaInfo?.maintainerId),
+		mediaInfo?.maintainerId || '',
 		!!mediaInfo
 	);
 
@@ -118,6 +117,13 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		// Pause media if metadata tab is shown on mobile
+		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
+			setPauseMedia(true);
+		}
+	}, [activeTab, windowSize.width]);
 
 	useEffect(() => {
 		let backLink = `/${ROUTES.spaces}/${router.query.readingRoomSlug}`;
@@ -159,28 +165,7 @@ const ObjectDetailPage: NextPage = () => {
 	}, [mediaInfo]);
 
 	useEffect(() => {
-		similarData &&
-			setSimilar(
-				similarData.hits.hits.map((hit) => {
-					return {
-						object: {
-							type: hit._source.dcterms_format as MediaTypes,
-							title: hit._source.schema_name,
-							subtitle: `(${
-								hit._source.schema_date_published
-									? formatWithLocale(
-											'PP',
-											asDate(hit._source.schema_date_published)
-									  )
-									: undefined
-							})`,
-							description: hit._source.schema_description || '',
-							// thumbnail: hit._source.schema_thumbnail_url,
-							id: hit._source.schema_identifier,
-						},
-					};
-				})
-			);
+		similarData && setSimilar(mapSimilarData(similarData.hits.hits));
 	}, [similarData]);
 
 	/**
@@ -192,14 +177,26 @@ const ObjectDetailPage: NextPage = () => {
 		visitStatus && visitStatus.endAt ? formatAccessDate(asDate(visitStatus.endAt)) : '';
 
 	/**
-	 * Effects
+	 * Mapping
 	 */
-	useEffect(() => {
-		// Pause media if metadata tab is shown on mobile
-		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
-			setPauseMedia(true);
-		}
-	}, [activeTab, windowSize.width]);
+	const mapSimilarData = (data: MediaSimilarHit[]): RelatedObjectProps[] => {
+		return data.map((hit) => {
+			return {
+				object: {
+					type: hit._source.dcterms_format as MediaTypes,
+					title: hit._source.schema_name,
+					subtitle: `(${
+						hit._source.schema_date_published
+							? formatWithLocale('PP', asDate(hit._source.schema_date_published))
+							: undefined
+					})`,
+					description: hit._source.schema_description || '',
+					// thumbnail: hit._source.schema_thumbnail_url,
+					id: hit._source.schema_identifier,
+				},
+			};
+		});
+	};
 
 	/**
 	 * Callbacks
@@ -302,9 +299,7 @@ const ObjectDetailPage: NextPage = () => {
 							passHref
 							href={`/${ROUTES.spaces}/${router.query.readingRoomSlug}/${item.object.id}`}
 						>
-							<a className="p-object-detail__similar-link">
-								{<RelatedObject {...item} />}
-							</a>
+							<a className="u-text-no-decoration">{<RelatedObject {...item} />}</a>
 						</Link>
 					</li>
 				);
@@ -454,7 +449,7 @@ const ObjectDetailPage: NextPage = () => {
 													data: mapKeywordsToTagList(mediaInfo.keywords),
 												},
 												{
-													title: 'Ook interessant',
+													title: t('Ook interessant'),
 													data: renderSimilarItems(similar),
 													className: 'u-pb-0',
 												},
