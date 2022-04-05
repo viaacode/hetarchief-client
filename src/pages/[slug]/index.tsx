@@ -102,7 +102,7 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: readingRoom } = useGetReadingRoom(slug as string, typeof slug === 'string');
+	const { data: space } = useGetReadingRoom(slug as string, typeof slug === 'string');
 
 	const { data: media } = useGetMediaObjects(
 		slug as string,
@@ -426,20 +426,20 @@ const ReadingRoomPage: NextPage = () => {
 		<VisitorLayout>
 			<div className="p-reading-room">
 				<Head>
-					<title>{createPageTitle(readingRoom?.name)}</title>
+					<title>{createPageTitle(space?.name)}</title>
 					<meta
 						name="description"
 						content={
-							readingRoom?.description ||
+							space?.description ||
 							t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
 						}
 					/>
 				</Head>
 
 				<ReadingRoomNavigation
-					title={readingRoom?.name}
-					phone={readingRoom?.contactInfo.telephone || ''}
-					email={readingRoom?.contactInfo.email || ''}
+					title={space?.name}
+					phone={space?.contactInfo.telephone || ''}
+					email={space?.contactInfo.email || ''}
 					showBorder={showNavigationBorder}
 				/>
 
