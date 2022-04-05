@@ -333,7 +333,7 @@ const ObjectDetailPage: NextPage = () => {
 		isHidden = false
 	): ReactNode => (
 		<ul
-			className={`u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
+			className={`u-list-reset u-bg-platinum p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
 		>
 			{items.map((item, index) => {
 				return (
@@ -508,9 +508,7 @@ const ObjectDetailPage: NextPage = () => {
 								'p-object-detail__metadata--collapsed',
 								expandMetadata && 'p-object-detail__metadata--expanded'
 							)}
-							icon={
-								<Icon className="u-font-size-24 u-mr-10" name="related-objects" />
-							}
+							icon={<Icon className="u-font-size-24 u-mr-8" name="related-objects" />}
 							title={
 								related.length === 1
 									? t(

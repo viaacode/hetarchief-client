@@ -21,7 +21,6 @@ $metadata-collapsed-width: 36vw;
 			grid-template-columns: 1fr min-content;
 		}
 
-		// TODO: if related objects
 		grid-template-rows: 1fr min-content;
 	}
 
@@ -124,8 +123,6 @@ $metadata-collapsed-width: 36vw;
 		grid-template-rows: 1fr auto;
 		position: relative;
 		background-color: $silver;
-
-		// TODO: if related objects
 		grid-row: 1 / 3;
 	}
 
@@ -167,7 +164,6 @@ $metadata-collapsed-width: 36vw;
 		margin: 0 - $spacer-lg;
 		margin-top: $spacer-md;
 		padding: $spacer-md $spacer-lg;
-		background-color: $platinum;
 	}
 
 	&__metadata-list--related {
@@ -193,7 +189,6 @@ $metadata-collapsed-width: 36vw;
 
 		&:not(:active, :hover):focus {
 			outline: 0.2rem solid $teal;
-			background-color: red;
 		}
 	}
 
