@@ -24,6 +24,7 @@ $pt: (
 	"8": $spacer-xs,
 	"12": math.div($spacer-md, 2),
 	"32": $spacer-lg,
+	"56": $spacer-md + $spacer-lg,
 	"80": $spacer-2xl,
 );
 @include generate-utils("pt", "padding-top", $pt, ("md"));
@@ -34,6 +35,7 @@ $pb: (
 	"8": $spacer-xs,
 	"24": $spacer-md,
 	"48": $spacer-48,
+	"56": $spacer-md + $spacer-lg,
 	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
@@ -58,7 +60,7 @@ $py: (
 	"8": $spacer-xs,
 	"16": $spacer-sm,
 	"24": $spacer-md,
-	"48": $spacer-md * 2,
+	"48": $spacer-48,
 );
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
 
@@ -83,6 +85,8 @@ $mt: (
 	"16": $spacer-sm,
 	"24": $spacer-md,
 	"32": $spacer-lg,
+	"48": $spacer-48,
+	"56": $spacer-md + $spacer-lg,
 	"64": $spacer-64,
 	"80": $spacer-2xl,
 );
@@ -94,8 +98,9 @@ $mb: (
 	"24": $spacer-md,
 	"32": $spacer-lg,
 	"40": $spacer-1xl,
-	"48": $spacer-md * 2,
-	"64": $spacer-lg * 2,
+	"48": $spacer-48,
+	"56": $spacer-md + $spacer-lg,
+	"64": $spacer-64,
 	"80": $spacer-2xl,
 );
 @include generate-utils("mb", "margin-bottom", $mb, ("md"));

@@ -101,7 +101,7 @@ const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onReq
 							return {
 								room: {
 									color: room.color,
-									description: room.description,
+									description: room.info,
 									id: room.id,
 									image: room.image,
 									name: room.name,

@@ -430,7 +430,7 @@ const ReadingRoomPage: NextPage = () => {
 					<meta
 						name="description"
 						content={
-							space?.description ||
+							space?.info ||
 							t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
 						}
 					/>
