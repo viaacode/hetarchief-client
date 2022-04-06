@@ -13,8 +13,8 @@ export const READING_ROOMS_OVERVIEW_MOCK = {
 			audienceType: 'PUBLIC',
 			publicAccess: false,
 			contactInfo: {
-				email: null,
-				telephone: null,
+				email: 'email@example.com',
+				telephone: '0455 00 00 00',
 				address: {
 					street: 'Pijndersstraat 28',
 					postalCode: '9000',
@@ -40,8 +40,8 @@ export const READING_ROOMS_OVERVIEW_MOCK = {
 			audienceType: 'PRIVATE',
 			publicAccess: false,
 			contactInfo: {
-				email: null,
-				telephone: null,
+				email: 'email@example.com',
+				telephone: '0455 00 00 00',
 				address: {
 					street: 'Arduinkaai 28',
 					postalCode: '1000',
@@ -67,8 +67,8 @@ export const READING_ROOMS_OVERVIEW_MOCK = {
 			audienceType: 'PRIVATE',
 			publicAccess: false,
 			contactInfo: {
-				email: null,
-				telephone: null,
+				email: 'email@example.com',
+				telephone: '0455 00 00 00',
 				address: {
 					street: 'Botermarkt 1',
 					postalCode: '9000',
@@ -94,8 +94,8 @@ export const READING_ROOMS_OVERVIEW_MOCK = {
 			audienceType: 'PRIVATE',
 			publicAccess: false,
 			contactInfo: {
-				email: null,
-				telephone: null,
+				email: 'email@example.com',
+				telephone: '0455 00 00 00',
 				address: {
 					street: 'Botermarkt 1',
 					postalCode: '9000',
@@ -121,8 +121,8 @@ export const READING_ROOMS_OVERVIEW_MOCK = {
 			audienceType: 'PRIVATE',
 			publicAccess: false,
 			contactInfo: {
-				email: null,
-				telephone: null,
+				email: 'email@example.com',
+				telephone: '0455 00 00 00',
 				address: {
 					street: 'Leuvenseweg 86',
 					postalCode: '1000',
@@ -148,8 +148,8 @@ export const READING_ROOMS_OVERVIEW_MOCK = {
 			audienceType: 'PRIVATE',
 			publicAccess: false,
 			contactInfo: {
-				email: null,
-				telephone: null,
+				email: 'email@example.com',
+				telephone: '0455 00 00 00',
 				address: {
 					street: 'Auguste Reyerslaan 52',
 					postalCode: '1043',

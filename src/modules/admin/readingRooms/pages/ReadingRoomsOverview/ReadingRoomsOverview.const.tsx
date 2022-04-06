@@ -55,6 +55,13 @@ export const ReadingRoomsOverviewTableColumns = (
 			) || '',
 		id: 'admin-reading-rooms-overview-email',
 		accessor: (row) => row.contactInfo.email,
+		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+			return (
+				<span className="u-color-neutral" title={row.original.contactInfo.email || ''}>
+					{row.original.contactInfo.email}
+				</span>
+			);
+		},
 	},
 	{
 		Header:
@@ -63,6 +70,13 @@ export const ReadingRoomsOverviewTableColumns = (
 			) || '',
 		id: 'admin-reading-rooms-overview-telephone',
 		accessor: (row) => row.contactInfo.telephone,
+		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+			return (
+				<span className="u-color-neutral" title={row.original.contactInfo.telephone || ''}>
+					{row.original.contactInfo.telephone}
+				</span>
+			);
+		},
 	},
 	{
 		Header:
@@ -72,16 +86,24 @@ export const ReadingRoomsOverviewTableColumns = (
 		accessor: 'status',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			// TODO: update when backend is up to date
+			let status = '';
 			switch (row.original.status) {
 				case ReadingRoomStatus.Active:
-					return 'actief';
+					status = 'actief';
+					break;
 				case ReadingRoomStatus.Inactive:
-					return 'inactief';
+					status = 'inactief';
+					break;
 				case ReadingRoomStatus.Requested:
-					return 'in aanvraag';
-				default:
-					return '';
+					status = 'in aanvraag';
+					break;
 			}
+
+			return (
+				<span className="u-color-neutral" title={status}>
+					{status}
+				</span>
+			);
 		},
 	},
 	{
@@ -98,9 +120,15 @@ export const ReadingRoomsOverviewTableColumns = (
 							pageName: row.original.maintainerId,
 						})}
 					>
-						<Button variants="text" icon={<Icon name="edit" />} />
+						<Button
+							className="u-color-neutral"
+							variants="text"
+							icon={<Icon name="edit" />}
+						/>
 					</Link>
-					<DropdownMenu className=" u-color-neutral">
+					<DropdownMenu
+						triggerButtonProps={{ onClick: () => null, className: 'u-color-neutral' }}
+					>
 						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Requested].includes(
 							status
 						) && (
