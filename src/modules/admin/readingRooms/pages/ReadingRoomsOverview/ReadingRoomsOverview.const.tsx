@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import { TFunction } from 'next-i18next';
+import { generatePath, Link } from 'react-router-dom';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
@@ -9,6 +10,7 @@ import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { asDate, formatWithLocale } from '@shared/utils';
 
+import { READING_ROOMS_PATHS } from '../../const';
 import { AdminReadingRoomInfoRow } from '../../types';
 
 export const ReadingRoomsOverviewTablePageSize = 20;
@@ -53,6 +55,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		Header: i18n.t('Publicatiestatus') || '',
 		accessor: 'isPublished',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+			// TODO: update when backend is up to date
 			switch (row.original.isPublished) {
 				case true:
 					return 'actief';
@@ -67,30 +70,40 @@ export const ReadingRoomsOverviewTableColumns = (
 		Header: '',
 		id: 'admin-reading-rooms-overview-table-actions',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+			// TODO: update when backend is up to date
+			const published = row.original.isPublished;
+
 			return (
 				<>
-					<Button variants="text" icon={<Icon name="edit" />} />
+					<Link
+						to={generatePath(READING_ROOMS_PATHS.edit, {
+							pageName: row.original.maintainerId,
+						})}
+					>
+						<Button variants="text" icon={<Icon name="edit" />} />
+					</Link>
 					<DropdownMenu className=" u-color-neutral">
-						<Button
-							className="u-text-left"
-							variants="text"
-							label={i18n.t('Bewerken')}
-						/>
-						<Button
-							className="u-text-left"
-							variants="text"
-							label={i18n.t('Activeren')}
-						/>
-						<Button
-							className="u-text-left"
-							variants="text"
-							label={i18n.t('Deactiveren')}
-						/>
-						<Button
-							className="u-text-left"
-							variants="text"
-							label={i18n.t('Terug naar "in aanvraag"')}
-						/>
+						{!published && (
+							<Button
+								className="u-text-left"
+								variants="text"
+								label={i18n.t('Activeren')}
+							/>
+						)}
+						{(published || published === null) && (
+							<Button
+								className="u-text-left"
+								variants="text"
+								label={i18n.t('Deactiveren')}
+							/>
+						)}
+						{published !== null && (
+							<Button
+								className="u-text-left"
+								variants="text"
+								label={i18n.t('Terug naar "in aanvraag"')}
+							/>
+						)}
 					</DropdownMenu>
 				</>
 			);
