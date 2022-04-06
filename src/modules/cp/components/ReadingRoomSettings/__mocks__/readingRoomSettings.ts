@@ -1,4 +1,6 @@
-export const READING_ROOM_MOCK = {
+import { ReadingRoomInfo, ReadingRoomStatus } from '@reading-room/types';
+
+export const READING_ROOM_MOCK: ReadingRoomInfo = {
 	id: '52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21',
 	maintainerId: 'OR-154dn75',
 	name: 'Amsab-ISG',
@@ -17,10 +19,9 @@ export const READING_ROOM_MOCK = {
 			street: 'Pijndersstraat 28',
 			postalCode: '9000',
 			locality: 'Gent',
-			postOfficeBoxNumber: null,
 		},
 	},
-	isPublished: false,
+	status: ReadingRoomStatus.Active,
 	publishedAt: null,
 	createdAt: '2022-01-13T13:10:14.41978',
 	updatedAt: '2022-01-13T13:10:14.41978',

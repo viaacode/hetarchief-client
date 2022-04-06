@@ -1,3 +1,5 @@
+import { ReadingRoomStatus } from '@reading-room/types';
+
 import { ReadingRoomImageFormProps } from '../ReadingRoomImageForm.types';
 
 export const READING_ROOM_IMAGE_FORM_MOCK: ReadingRoomImageFormProps = {
@@ -22,7 +24,7 @@ export const READING_ROOM_IMAGE_FORM_MOCK: ReadingRoomImageFormProps = {
 				locality: 'Gent',
 			},
 		},
-		isPublished: false,
+		status: ReadingRoomStatus.Active,
 		publishedAt: null,
 		createdAt: '2022-01-13T13:10:14.41978',
 		updatedAt: '2022-01-13T13:10:14.41978',

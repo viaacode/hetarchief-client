@@ -19,7 +19,7 @@ describe('Components', () => {
 		it('Should show reading room color', () => {
 			const { getByDisplayValue } = renderReadingRoomSettings({});
 
-			const color = getByDisplayValue(READING_ROOM_MOCK.color);
+			const color = getByDisplayValue(READING_ROOM_MOCK.color ?? '');
 
 			expect(color).toBeInTheDocument();
 		});
@@ -35,7 +35,7 @@ describe('Components', () => {
 		it('Should show reading room description', () => {
 			const { getByText } = renderReadingRoomSettings({});
 
-			const description = getByText(READING_ROOM_MOCK.description);
+			const description = getByText(READING_ROOM_MOCK.description ?? '');
 
 			expect(description).toBeInTheDocument();
 		});
@@ -43,7 +43,7 @@ describe('Components', () => {
 		it('Should show reading room serviceDescription', () => {
 			const { getByText } = renderReadingRoomSettings({});
 
-			const serviceDescription = getByText(READING_ROOM_MOCK.serviceDescription);
+			const serviceDescription = getByText(READING_ROOM_MOCK.serviceDescription ?? '');
 
 			expect(serviceDescription).toBeInTheDocument();
 		});

@@ -11,9 +11,9 @@ export interface ReadingRoomAccess {
 
 export interface ReadingRoomCardProps {
 	access?: ReadingRoomAccess;
-	onAccessRequest?: (room: Partial<ReadingRoomInfo>) => void;
-	onContactClick?: (room: Partial<ReadingRoomInfo>) => void;
-	onVisitClick?: (room: Partial<ReadingRoomInfo>) => void;
-	room: Partial<ReadingRoomInfo>;
+	onAccessRequest?: (room: Partial<Omit<ReadingRoomInfo, 'status'>>) => void;
+	onContactClick?: (room: Partial<Omit<ReadingRoomInfo, 'status'>>) => void;
+	onVisitClick?: (room: Partial<Omit<ReadingRoomInfo, 'status'>>) => void;
+	room: Partial<Omit<ReadingRoomInfo, 'status'>>;
 	type: ReadingRoomCardType;
 }

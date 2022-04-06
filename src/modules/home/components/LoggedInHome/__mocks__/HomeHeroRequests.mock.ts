@@ -1,6 +1,6 @@
 import { ReadingRoomInfo } from '@reading-room/types';
 
-export interface HeroRequest extends Partial<ReadingRoomInfo> {
+export interface HeroRequest extends Partial<Omit<ReadingRoomInfo, 'status'>> {
 	status: 'access' | 'planned' | 'requested';
 }
 

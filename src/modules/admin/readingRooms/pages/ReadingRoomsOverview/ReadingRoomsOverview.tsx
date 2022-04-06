@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
+import { ReadingRoomStatus } from '@reading-room/types';
 import { PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { OrderDirection } from '@shared/types';
@@ -46,6 +47,21 @@ const ReadingRoomsOverview: FC = () => {
 		},
 		[filters, setFilters]
 	);
+
+	// Callbacks
+	const updateRoomStatus = (status: ReadingRoomStatus) => {
+		switch (status) {
+			case ReadingRoomStatus.Active:
+				// Activeer space
+				break;
+			case ReadingRoomStatus.Inactive:
+				// Deactiveer space
+				break;
+			case ReadingRoomStatus.Requested:
+				// Space naar 'in aanvraag'
+				break;
+		}
+	};
 
 	// Render
 
@@ -114,9 +130,10 @@ const ReadingRoomsOverview: FC = () => {
 							// TODO: fix type hinting
 							/* eslint-disable @typescript-eslint/ban-types */
 							{
-								columns: ReadingRoomsOverviewTableColumns({
+								columns: ReadingRoomsOverviewTableColumns(
 									t,
-								}) as Column<object>[],
+									updateRoomStatus
+								) as Column<object>[],
 								data: READING_ROOMS_OVERVIEW_MOCK.items || [],
 								initialState: {
 									pageSize: ReadingRoomsOverviewTablePageSize,

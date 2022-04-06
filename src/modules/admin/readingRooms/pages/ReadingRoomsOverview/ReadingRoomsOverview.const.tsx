@@ -4,7 +4,7 @@ import { generatePath, Link } from 'react-router-dom';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { ReadingRoomInfo } from '@reading-room/types';
+import { ReadingRoomInfo, ReadingRoomStatus } from '@reading-room/types';
 import { DropdownMenu, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
@@ -23,18 +23,19 @@ export const ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG = {
 };
 
 export const ReadingRoomsOverviewTableColumns = (
-	i18n: { t: TFunction } = { t: (x: string) => x }
+	t: TFunction,
+	updateRoomState: (state: ReadingRoomStatus) => void
 ): Column<ReadingRoomInfo>[] => [
 	{
 		Header:
-			i18n.t(
+			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___leeszaal'
 			) || '',
 		accessor: 'name',
 	},
 	{
 		Header:
-			i18n.t(
+			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geactiveerd-op'
 			) || '',
 		accessor: 'createdAt',
@@ -49,7 +50,7 @@ export const ReadingRoomsOverviewTableColumns = (
 	},
 	{
 		Header:
-			i18n.t(
+			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___emailadres'
 			) || '',
 		id: 'admin-reading-rooms-overview-email',
@@ -57,7 +58,7 @@ export const ReadingRoomsOverviewTableColumns = (
 	},
 	{
 		Header:
-			i18n.t(
+			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___telefoonnummer'
 			) || '',
 		id: 'admin-reading-rooms-overview-telephone',
@@ -65,19 +66,21 @@ export const ReadingRoomsOverviewTableColumns = (
 	},
 	{
 		Header:
-			i18n.t(
+			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___publicatiestatus'
 			) || '',
-		accessor: 'isPublished',
+		accessor: 'status',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			// TODO: update when backend is up to date
-			switch (row.original.isPublished) {
-				case true:
+			switch (row.original.status) {
+				case ReadingRoomStatus.Active:
 					return 'actief';
-				case false:
+				case ReadingRoomStatus.Inactive:
 					return 'inactief';
-				default:
+				case ReadingRoomStatus.Requested:
 					return 'in aanvraag';
+				default:
+					return '';
 			}
 		},
 	},
@@ -86,7 +89,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		id: 'admin-reading-rooms-overview-table-actions',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			// TODO: update when backend is up to date
-			const published = row.original.isPublished;
+			const status = row.original.status;
 
 			return (
 				<>
@@ -98,31 +101,40 @@ export const ReadingRoomsOverviewTableColumns = (
 						<Button variants="text" icon={<Icon name="edit" />} />
 					</Link>
 					<DropdownMenu className=" u-color-neutral">
-						{!published && (
+						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Requested].includes(
+							status
+						) && (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={i18n.t(
+								label={t(
 									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___activeren'
 								)}
+								onClick={() => updateRoomState(ReadingRoomStatus.Active)}
 							/>
 						)}
-						{(published || published === null) && (
+						{[ReadingRoomStatus.Active, ReadingRoomStatus.Requested].includes(
+							status
+						) && (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={i18n.t(
+								label={t(
 									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___deactiveren'
 								)}
+								onClick={() => updateRoomState(ReadingRoomStatus.Inactive)}
 							/>
 						)}
-						{published !== null && (
+						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Active].includes(
+							status
+						) && (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={i18n.t(
+								label={t(
 									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___terug-naar-in-aanvraag'
 								)}
+								onClick={() => updateRoomState(ReadingRoomStatus.Requested)}
 							/>
 						)}
 					</DropdownMenu>
