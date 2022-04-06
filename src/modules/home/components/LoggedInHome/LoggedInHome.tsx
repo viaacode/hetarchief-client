@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
@@ -9,9 +10,11 @@ import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
+import { READING_ROOM_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
 import { AccessGranted } from '@shared/components/ReadingRoomCard/__mocks__/reading-room-card';
+import { ROUTES } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { createPageTitle } from '@shared/utils';
 
@@ -20,8 +23,10 @@ import { homeHeroRequests } from './__mocks__/HomeHeroRequests.mock';
 
 const LoggedInHome: FC = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
+
 	const [query, setQuery] = useQueryParams({
-		readingRoomId: StringParam,
+		[READING_ROOM_QUERY_KEY]: StringParam,
 	});
 
 	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
@@ -32,18 +37,18 @@ const LoggedInHome: FC = () => {
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
-		if (query.readingRoomId) {
+		if (query[READING_ROOM_QUERY_KEY]) {
 			setIsOpenRequestAccessBlade(true);
 		}
-	}, [query.readingRoomId]);
+	}, [query]);
 
 	/**
 	 * Methods
 	 */
 
 	const onCloseRequestBlade = () => {
-		if (query.readingRoomId) {
-			setQuery({ readingRoomId: undefined });
+		if (query[READING_ROOM_QUERY_KEY]) {
+			setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
 		}
 		setIsOpenRequestAccessBlade(false);
 	};
@@ -61,7 +66,8 @@ const LoggedInHome: FC = () => {
 				});
 				return;
 			}
-			if (!query.readingRoomId) {
+
+			if (!query[READING_ROOM_QUERY_KEY]) {
 				toastService.notify({
 					title: t(
 						'modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-leeszaal'
@@ -72,21 +78,18 @@ const LoggedInHome: FC = () => {
 				});
 				return;
 			}
-			await createVisitRequest({
+
+			createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
-				spaceId: query.readingRoomId,
+				spaceId: query[READING_ROOM_QUERY_KEY] as string,
 				timeframe: values.visitTime,
-			});
-			toastService.notify({
-				title: t('modules/home/components/logged-in-home/logged-in-home___success'),
-				description: t(
-					'modules/home/components/logged-in-home/logged-in-home___je-aanvraag-is-verstuurd'
-				),
-			});
+			}).then((res) => {
+				setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
+				setIsOpenRequestAccessBlade(false);
 
-			setQuery({ readingRoomId: undefined });
-			setIsOpenRequestAccessBlade(false);
+				router.push(ROUTES.visitRequested.replace(':slug', res.spaceSlug));
+			});
 		} catch (err) {
 			console.error({
 				message: 'Failed to create visit request',
@@ -102,8 +105,8 @@ const LoggedInHome: FC = () => {
 		}
 	};
 
-	const onRequestAccess = (readingRoomId: string) => {
-		setQuery({ readingRoomId });
+	const onRequestAccess = (id: string) => {
+		setQuery({ [READING_ROOM_QUERY_KEY]: id });
 		setIsOpenRequestAccessBlade(true);
 	};
 

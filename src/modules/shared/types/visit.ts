@@ -11,6 +11,7 @@ export interface VisitInfo {
 	note: string | null;
 	reason: string;
 	spaceId: string;
+	spaceSlug: string;
 	spaceName?: string;
 	spaceAddress?: string;
 	startAt?: string;

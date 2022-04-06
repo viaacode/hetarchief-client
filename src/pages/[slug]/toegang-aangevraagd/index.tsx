@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { READING_ROOM_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
@@ -53,6 +54,7 @@ const VisitRequestedPage: NextPage = () => {
 					phone={space?.contactInfo.telephone || ''}
 					email={space?.contactInfo.email || ''}
 					showBorder={showNavigationBorder}
+					backLink={`/?${READING_ROOM_QUERY_KEY}=${slug}`}
 				/>
 
 				{/* I'm choosing to duplicate the above instead of splitting to a separate layout because back-button functionality on this page differs from the `[slug]` page */}
@@ -80,9 +82,11 @@ const VisitRequestedPage: NextPage = () => {
 								/>
 							</div>
 							<div className="p-visit-requested__bottom u-pt-56:md">
-								<p className="p-visit-requested__info">
-									<b>{space.info}</b>
-								</p>
+								{space.info && (
+									<p className="p-visit-requested__info">
+										<b>{space.info}</b>
+									</p>
+								)}
 
 								{space.description && (
 									<div
