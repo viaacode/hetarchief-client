@@ -134,8 +134,8 @@ const ReadingRoomPage: NextPage = () => {
 		onError(accessError, 404, () => {
 			router.push(ROUTES.home).finally(() => {
 				toastService.notify({
-					title: t('Geen toegang'),
-					description: t('Je hebt geen toegang tot deze ruimte.'),
+					title: t('pages/slug/index___geen-toegang'),
+					description: t('pages/slug/index___je-hebt-geen-toegang-tot-deze-ruimte'),
 				});
 			});
 		});

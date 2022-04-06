@@ -64,7 +64,12 @@ const VisitRequestedPage: NextPage = () => {
 					<title>{createPageTitle(space?.name)}</title>
 					<meta
 						name="description"
-						content={space?.info || t('Beschrijving van een leeszaal')}
+						content={
+							space?.info ||
+							t(
+								'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-leeszaal'
+							)
+						}
 					/>
 				</Head>
 
@@ -83,12 +88,14 @@ const VisitRequestedPage: NextPage = () => {
 						<section className="p-visit-requested__grid">
 							<div className="p-visit-requested__top">
 								<h1 className="p-visit-requested__title">
-									{t('We hebben je aanvraag ontvangen')}
+									{t(
+										'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
+									)}
 								</h1>
 
 								<p className="p-visit-requested__instructions u-color-neutral u-mt-24 u-mt-32:md u-mb-56:md">
 									{t(
-										'Je kan de status van je aanvraag volgen op de Leeszalen pagina. Je ontvangt ook meteen een e-mailmelding als je aanvraag behandeld werd.'
+										'pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-leeszalen-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd'
 									)}
 								</p>
 							</div>

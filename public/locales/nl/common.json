@@ -77,11 +77,9 @@
   "modules/home/components/logged-in-home/logged-in-home___de-leeszaal-waarvoor-je-een-aanvraag-wil-indienen-is-niet-ingesteld": "De leeszaal waarvoor je een aanvraag wil indienen is niet ingesteld.",
   "modules/home/components/logged-in-home/logged-in-home___er-ging-iets-mis-bij-het-versturen-van-je-aanvraag-probeer-het-later-opnieuw-of-contacteer-de-support": "Er ging iets mis bij het versturen van je aanvraag, probeer het later opnieuw of contacteer de support.",
   "modules/home/components/logged-in-home/logged-in-home___error": "Error",
-  "modules/home/components/logged-in-home/logged-in-home___je-aanvraag-is-verstuurd": "Je aanvraag is verstuurd",
   "modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd": "Je bent niet ingelogd",
   "modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw": "Je bent niet ingelogd, log opnieuw in en probeer opnieuw.",
   "modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-leeszaal": "Selecteer eerst een leeszaal",
-  "modules/home/components/logged-in-home/logged-in-home___success": "Success",
   "modules/home/components/request-access-blade/request-access-blade___annuleer": "Annuleer",
   "modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie": "Ik verklaar deze toegang aan te vragen met het oog op onderzoeksdoeleinden of privé studie.",
   "modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag": "Reden van aanvraag",
@@ -331,5 +329,10 @@
   "pages/leeszaal/reading-room-slug/object-id/index___sluit": "Sluit",
   "pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date": "Toegang tot {{accessEndDate}}",
   "pages/leeszaal/slug___wis-volledige-zoekopdracht": "Wis volledige zoekopdracht",
-  "pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder": "Zoek op trefwoord, jaartal, aanbieder..."
+  "pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder": "Zoek op trefwoord, jaartal, aanbieder...",
+  "pages/slug/index___geen-toegang": "Geen toegang",
+  "pages/slug/index___je-hebt-geen-toegang-tot-deze-ruimte": "Je hebt geen toegang tot deze ruimte.",
+  "pages/slug/toegang-aangevraagd/index___beschrijving-van-een-leeszaal": "Beschrijving van een leeszaal",
+  "pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-leeszalen-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd": "Je kan de status van je aanvraag volgen op de Leeszalen pagina. Je ontvangt ook meteen een e-mailmelding als je aanvraag behandeld werd.",
+  "pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen": "We hebben je aanvraag ontvangen"
 }
