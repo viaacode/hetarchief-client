@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { READING_ROOM_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
@@ -93,6 +92,7 @@ const VisitRequestedPage: NextPage = () => {
 									)}
 								</p>
 							</div>
+
 							<div className="p-visit-requested__image">
 								<CardImage
 									id={space.id}
@@ -101,6 +101,7 @@ const VisitRequestedPage: NextPage = () => {
 									logo={space.logo}
 								/>
 							</div>
+
 							<div className="p-visit-requested__bottom u-pt-56:md">
 								{space.info && (
 									<p className="p-visit-requested__info">
