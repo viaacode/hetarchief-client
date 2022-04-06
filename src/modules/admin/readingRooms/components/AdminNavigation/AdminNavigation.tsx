@@ -38,12 +38,12 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 			node: <div className={'u-p-16 u-pl-32'}>{t('Leeszalenbeheer')}</div>,
 			children: [
 				{
-					id: 'alleleeszalen',
+					id: 'leeszalen',
 					node: ({ linkClassName }) => (
 						<Link
 							className={linkClassName}
 							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
-								pageName: 'alleleeszalen',
+								pageName: 'leeszalen',
 							})}
 						>
 							{t('Alle leeszalen')}
@@ -51,7 +51,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 					),
 					active: !!matchPath(window.location.pathname, {
 						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
-							pageName: 'alleleeszalen',
+							pageName: 'leeszalen',
 						})}`,
 						exact: false,
 					}),
@@ -80,12 +80,12 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 	];
 
 	return (
-		<SidebarLayout key={pathname} sidebarTitle="Admin" sidebarLinks={sidebarLinks}>
+		<SidebarLayout sidebarTitle="Admin" sidebarLinks={sidebarLinks}>
 			<div className="l-container u-mt-64 u-mb-48">
 				<Switch>
 					{/* {routes?.length > 0 && AdminCore.routes.render(routes)} */}
 					{ADMIN_ROUTES.map(({ path, component }) => (
-						<Route key={path} path={path} component={component} exact />
+						<Route key={pathname} path={path} component={component} exact />
 					))}
 				</Switch>
 			</div>

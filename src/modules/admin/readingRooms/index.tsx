@@ -1,8 +1,26 @@
+import { generatePath } from 'react-router-dom';
+
 import { READING_ROOMS_PATHS } from './const';
-import { ReadingRoomsOverview, Requests } from './pages';
+import { ReadingRoomEdit, ReadingRoomsOverview, Requests } from './pages';
 
 export const READING_ROOMS_ROUTES = [
 	{ path: READING_ROOMS_PATHS.overview, component: ReadingRoomsOverview },
-	{ path: `${READING_ROOMS_PATHS.overview}/alleleeszalen`, component: ReadingRoomsOverview },
-	{ path: `${READING_ROOMS_PATHS.overview}/aanvragen`, component: Requests },
+	{
+		path: generatePath(READING_ROOMS_PATHS.detail, {
+			pageName: 'leeszalen',
+		}),
+		component: ReadingRoomsOverview,
+	},
+	{
+		path: generatePath(READING_ROOMS_PATHS.edit, {
+			pageName: ':id',
+		}),
+		component: ReadingRoomEdit,
+	},
+	{
+		path: generatePath(READING_ROOMS_PATHS.detail, {
+			pageName: 'aanvragen',
+		}),
+		component: Requests,
+	},
 ];
