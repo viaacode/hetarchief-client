@@ -26,11 +26,17 @@ export const ReadingRoomsOverviewTableColumns = (
 	i18n: { t: TFunction } = { t: (x: string) => x }
 ): Column<ReadingRoomInfo>[] => [
 	{
-		Header: i18n.t('Leeszaal') || '',
+		Header:
+			i18n.t(
+				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___leeszaal'
+			) || '',
 		accessor: 'name',
 	},
 	{
-		Header: i18n.t('Geactiveerd op') || '',
+		Header:
+			i18n.t(
+				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geactiveerd-op'
+			) || '',
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			const formattedDate = formatWithLocale('PPP', asDate(row.original.createdAt));
@@ -42,17 +48,26 @@ export const ReadingRoomsOverviewTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('Emailadres') || '',
+		Header:
+			i18n.t(
+				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___emailadres'
+			) || '',
 		id: 'admin-reading-rooms-overview-email',
 		accessor: (row) => row.contactInfo.email,
 	},
 	{
-		Header: i18n.t('Telefoonnummer') || '',
+		Header:
+			i18n.t(
+				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___telefoonnummer'
+			) || '',
 		id: 'admin-reading-rooms-overview-telephone',
 		accessor: (row) => row.contactInfo.telephone,
 	},
 	{
-		Header: i18n.t('Publicatiestatus') || '',
+		Header:
+			i18n.t(
+				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___publicatiestatus'
+			) || '',
 		accessor: 'isPublished',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			// TODO: update when backend is up to date
@@ -87,21 +102,27 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={i18n.t('Activeren')}
+								label={i18n.t(
+									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___activeren'
+								)}
 							/>
 						)}
 						{(published || published === null) && (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={i18n.t('Deactiveren')}
+								label={i18n.t(
+									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___deactiveren'
+								)}
 							/>
 						)}
 						{published !== null && (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={i18n.t('Terug naar "in aanvraag"')}
+								label={i18n.t(
+									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___terug-naar-in-aanvraag'
+								)}
 							/>
 						)}
 					</DropdownMenu>

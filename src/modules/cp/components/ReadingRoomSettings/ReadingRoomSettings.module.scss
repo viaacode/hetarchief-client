@@ -1,6 +1,8 @@
 @use "styles/abstracts" as *;
 
-.p-cp-settings {
+$component: "c-cp-settings";
+
+.#{$component} {
 	&__content-block {
 		padding-bottom: 4.8rem;
 	}

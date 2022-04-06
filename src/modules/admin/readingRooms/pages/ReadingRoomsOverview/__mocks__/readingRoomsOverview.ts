@@ -49,7 +49,7 @@ export const READING_ROOMS_OVERVIEW_MOCK = {
 					postOfficeBoxNumber: null,
 				},
 			},
-			isPublished: null,
+			isPublished: true,
 			publishedAt: null,
 			createdAt: '2022-01-19T10:25:51.320763',
 			updatedAt: '2022-01-19T10:25:51.320763',

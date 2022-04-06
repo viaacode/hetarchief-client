@@ -6,7 +6,9 @@ const ReadingRoomsOverview: FC = () => {
 
 	return (
 		<div>
-			<h2 className="u-mb-40">{t('Aanvragen')}</h2>
+			<h2 className="u-mb-40">
+				{t('modules/admin/reading-rooms/pages/requests/requests___aanvragen')}
+			</h2>
 		</div>
 	);
 };

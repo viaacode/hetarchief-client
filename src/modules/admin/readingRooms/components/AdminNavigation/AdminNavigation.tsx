@@ -24,7 +24,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 		{
 			id: 'navigation',
 			node: ({ linkClassName }) => (
-				<Link className={linkClassName} to={ADMIN_PATHS.navigation.overview}>
+				<Link key={pathname} className={linkClassName} to={ADMIN_PATHS.navigation.overview}>
 					Navigatie
 				</Link>
 			),
@@ -35,37 +35,57 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 		},
 		{
 			id: 'leeszalenbeheer',
-			node: <div className={'u-p-16 u-pl-32'}>{t('Leeszalenbeheer')}</div>,
+			node: (
+				<div className={'u-p-16 u-pl-32'}>
+					{t(
+						'modules/admin/reading-rooms/components/admin-navigation/admin-navigation___leeszalenbeheer'
+					)}
+				</div>
+			),
 			children: [
 				{
 					id: 'leeszalen',
 					node: ({ linkClassName }) => (
 						<Link
+							key={pathname}
 							className={linkClassName}
 							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
 								pageName: 'leeszalen',
 							})}
 						>
-							{t('Alle leeszalen')}
+							{t(
+								'modules/admin/reading-rooms/components/admin-navigation/admin-navigation___alle-leeszalen'
+							)}
 						</Link>
 					),
-					active: !!matchPath(window.location.pathname, {
-						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
-							pageName: 'leeszalen',
-						})}`,
-						exact: false,
-					}),
+					active:
+						!!matchPath(window.location.pathname, {
+							path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
+								pageName: 'leeszalen',
+							})}`,
+							exact: false,
+						}) ||
+						// Match edit state
+						!!matchPath(window.location.pathname, {
+							path: `/admin${generatePath(ADMIN_PATHS.readingRooms.edit, {
+								pageName: ':id',
+							})}`,
+							exact: false,
+						}),
 				},
 				{
 					id: 'aanvragen',
 					node: ({ linkClassName }) => (
 						<Link
+							key={pathname}
 							className={linkClassName}
 							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
 								pageName: 'aanvragen',
 							})}
 						>
-							{t('Aanvragen')}
+							{t(
+								'modules/admin/reading-rooms/components/admin-navigation/admin-navigation___aanvragen'
+							)}
 						</Link>
 					),
 					active: !!matchPath(window.location.pathname, {
@@ -85,7 +105,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 				<Switch>
 					{/* {routes?.length > 0 && AdminCore.routes.render(routes)} */}
 					{ADMIN_ROUTES.map(({ path, component }) => (
-						<Route key={pathname} path={path} component={component} exact />
+						<Route key={path} path={path} component={component} exact />
 					))}
 				</Switch>
 			</div>

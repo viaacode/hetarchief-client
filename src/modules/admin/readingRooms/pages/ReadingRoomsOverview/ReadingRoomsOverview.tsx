@@ -61,47 +61,53 @@ const ReadingRoomsOverview: FC = () => {
 		// 	default:
 		// 		return t('pages/beheer/aanvragen/index___er-zijn-geen-openstaande-aanvragen');
 		// }
-		return t('Geen leeszalen gevonden');
+		return t(
+			'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geen-leeszalen-gevonden'
+		);
 	};
 
 	return (
 		<div>
-			<h2 className="u-mb-40">{t('Alle leeszalen')}</h2>
-			<div className="l-container">
-				<div className="p-admin-reading-rooms__header">
-					<SearchBar
-						backspaceRemovesValue={false}
-						className="p-admin-reading-rooms__search"
-						instanceId="admin-reading-rooms-search-bar"
-						light={true}
-						placeholder={t('zoek')}
-						searchValue={filters.search}
-						size="md"
-						onClear={() => {
+			<h2 className="u-mb-40">
+				{t(
+					'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___alle-leeszalen'
+				)}
+			</h2>
+			<div className="p-admin-reading-rooms__header">
+				<SearchBar
+					backspaceRemovesValue={false}
+					className="p-admin-reading-rooms__search"
+					instanceId="admin-reading-rooms-search-bar"
+					light={true}
+					placeholder={t(
+						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___zoek'
+					)}
+					searchValue={filters.search}
+					size="md"
+					onClear={() => {
+						setFilters({
+							[SEARCH_QUERY_KEY]: '',
+							page: 1,
+						});
+					}}
+					onSearch={(searchValue: string) => {
+						// Force rerender
+						if (filters.search === searchValue) {
 							setFilters({
 								[SEARCH_QUERY_KEY]: '',
 								page: 1,
 							});
-						}}
-						onSearch={(searchValue: string) => {
-							// Force rerender
-							if (filters.search === searchValue) {
-								setFilters({
-									[SEARCH_QUERY_KEY]: '',
-									page: 1,
-								});
-							}
+						}
 
-							setFilters({
-								[SEARCH_QUERY_KEY]: searchValue,
-								page: 1,
-							});
-						}}
-					/>
-				</div>
+						setFilters({
+							[SEARCH_QUERY_KEY]: searchValue,
+							page: 1,
+						});
+					}}
+				/>
 			</div>
 			{(READING_ROOMS_OVERVIEW_MOCK.items.length || 0) > 0 ? (
-				<div className="l-container l-container--edgeless-to-lg">
+				<div className="l-container--edgeless-to-lg">
 					<Table
 						className="u-mt-24"
 						options={

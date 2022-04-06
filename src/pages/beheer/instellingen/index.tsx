@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ReadingRoomSettingsForm, RichTextForm } from '@cp/components';
+import { ReadingRoomImageForm, ReadingRooomSettings, RichTextForm } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
@@ -25,62 +25,9 @@ const CPSettingsPage: NextPage = () => {
 	 */
 	const { data: readingRoomInfo, isLoading, refetch } = useGetReadingRoom('OR-154dn75');
 
-	const onFailedRequest = () => {
-		refetch();
-
-		toastService.notify({
-			maxLines: 3,
-			title: t('pages/beheer/instellingen/index___⚠️-er-ging-iets-mis'),
-			description: t(
-				'pages/beheer/instellingen/index___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
-			),
-		});
-	};
-
-	const updateSpace = (values: Partial<UpdateReadingRoomSettings>, afterSubmit?: () => void) => {
-		if (readingRoomInfo) {
-			ReadingRoomService.update('52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21', {
-				color: readingRoomInfo.color,
-				image: readingRoomInfo.image,
-				...values,
-			})
-				.catch(onFailedRequest)
-				.then((response) => {
-					if (response === undefined) {
-						return;
-					}
-
-					afterSubmit?.();
-
-					toastService.notify({
-						maxLines: 3,
-						title: t('pages/beheer/instellingen/index___succes'),
-						description: t(
-							'pages/beheer/instellingen/index___de-wijzigingen-werden-succesvol-opgeslagen'
-						),
-					});
-				});
-		}
-	};
-
 	/**
 	 * Render
 	 */
-
-	const renderCancelSaveButtons = (onCancel: () => void, onSave: () => void) => (
-		<div className="p-cp-settings__cancel-save">
-			<Button
-				label={t('pages/beheer/instellingen/index___annuleer')}
-				variants="text"
-				onClick={onCancel}
-			/>
-			<Button
-				label={t('pages/beheer/instellingen/index___bewaar-wijzigingen')}
-				variants="black"
-				onClick={onSave}
-			/>
-		</div>
-	);
 
 	return isLoading ? (
 		<Loading />
@@ -105,77 +52,9 @@ const CPSettingsPage: NextPage = () => {
 				contentTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">
-					{/* Leeszaal */}
-					<article className="p-cp-settings__content-block">
-						<h2 className="p-cp-settings__title">
-							{t('pages/beheer/instellingen/index___leeszaal')}
-						</h2>
-						<Box className="p-cp-settings__box">
-							<p className="p-cp-settings__description">
-								{t(
-									'pages/beheer/instellingen/index___personaliseer-hoe-jouw-leeszaal-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
-								)}
-							</p>
-							{readingRoomInfo && (
-								<ReadingRoomSettingsForm
-									className="p-cp-settings__leeszaal-controls"
-									room={readingRoomInfo}
-									renderCancelSaveButtons={renderCancelSaveButtons}
-									onSubmit={(values, afterSubmit) => {
-										updateSpace(values, afterSubmit);
-									}}
-								/>
-							)}
-						</Box>
-					</article>
-
-					{/* Wachtzaal */}
-					<article className="p-cp-settings__content-block">
-						<h2 className="p-cp-settings__title">
-							{t('pages/beheer/instellingen/index___omschrijving-wachtzaal')}
-						</h2>
-						<Box className="p-cp-settings__box">
-							<p className="p-cp-settings__description">
-								{t(
-									'pages/beheer/instellingen/index___dit-is-de-wachtzaalomschrijving-die-bezoekers-kunnen-lezen-op-de-detailpagina-van-je-leeszaal-leg-uit-waar-je-leeszaal-om-gaat-welke-info-men-er-kan-vinden-vertel-de-bezoeker-over-je-collectie'
-								)}
-							</p>
-							<RichTextForm
-								initialHTML={
-									(readingRoomInfo && readingRoomInfo.description) ?? '<p></p>'
-								}
-								onSubmit={(html, afterSubmit) =>
-									updateSpace({ description: html }, afterSubmit)
-								}
-								renderCancelSaveButtons={renderCancelSaveButtons}
-							/>
-						</Box>
-					</article>
-
-					{/* Aanvraag */}
-					<article className="p-cp-settings__content-block">
-						<h2 className="p-cp-settings__title">
-							{t('pages/beheer/instellingen/index___omschrijving-leeszaal-aanvraag')}
-						</h2>
-						<Box className="p-cp-settings__box">
-							<p className="p-cp-settings__description">
-								{t(
-									'pages/beheer/instellingen/index___als-bezoekers-een-aanvraag-doen-kunnen-zij-een-klein-tekstje-lezen-met-extra-info-over-het-bezoek-bv-vraag-meer-info-aan-balie-2-bij-aankomst-of-elke-dag-geopend-van-10-00-tot-17-00'
-								)}
-							</p>
-							<RichTextForm
-								className="p-cp-settings__rich-text--no-heading"
-								initialHTML={
-									(readingRoomInfo && readingRoomInfo.serviceDescription) ??
-									'<p></p>'
-								}
-								onSubmit={(html, afterSubmit) =>
-									updateSpace({ serviceDescription: html }, afterSubmit)
-								}
-								renderCancelSaveButtons={renderCancelSaveButtons}
-							/>
-						</Box>
-					</article>
+					{readingRoomInfo && (
+						<ReadingRooomSettings room={readingRoomInfo} refetch={refetch} />
+					)}
 				</div>
 			</CPAdminLayout>
 		</>
