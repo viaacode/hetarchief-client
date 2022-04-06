@@ -125,7 +125,19 @@ pipeline {
             """
           }
         }
-        agent { label 'node' }
+      }
+      post {
+        always {
+          jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
+        }
+      }
+    }
+    stage(e2e) {
+    agent { label 'node' }
+      when {
+        anyOf { branch 'develop'; branch 'development' }
+      }
+      steps {
         script {
             withCredentials([usernamePassword(credentialsId: 'end2endhetarchief', usernameVariable: 'TEST_ACCOUNT_USERNAME', passwordVariable: 'TEST_ACCOUNT_PASSWORD')]) {
                 docker.image('mcr.microsoft.com/playwright:v1.19.2').inside('-e TEST_ENDPOINT=https://bezoek-tst.private.cloud.meemoo.be -e CLIENT_URL=https://bezoek-tst.private.cloud.meemoo.be  -e NEXT_PUBLIC_ORIGIN=https://bezoek-tst.private.cloud.meemoo.be  -e PROXY_URL=https://proxy-hetarchief-tst.private.cloud.meemoo.be')
@@ -148,11 +160,6 @@ pipeline {
               }
             }
         } //end script
-      }
-      post {
-        always {
-          jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
-        }
       }
     }
     stage('Deploy QAS') {
