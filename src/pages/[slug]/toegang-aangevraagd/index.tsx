@@ -3,6 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -11,10 +12,11 @@ import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { CardImage } from '@shared/components';
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
+import { RICH_TEXT_SANITIZATION, ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
+import { useGetPendingVisitCountForUserBySlug } from '@visits/hooks/get-pending-visit-count-for-user-by-slug';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -36,7 +38,25 @@ const VisitRequestedPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: space } = useGetReadingRoom(slug as string, typeof slug === 'string');
+	const enabled = typeof slug === 'string';
+	const { data: pending } = useGetPendingVisitCountForUserBySlug(slug as string, enabled);
+	const { data: space } = useGetReadingRoom(slug as string, enabled && (pending?.count || 0) > 0);
+
+	/**
+	 * Computed
+	 */
+
+	const backLink = space ? `${ROUTES.home}?${READING_ROOM_QUERY_KEY}=${space.id}` : ROUTES.home;
+
+	/**
+	 * Effects
+	 */
+
+	useEffect(() => {
+		if (pending && pending.count === 0) {
+			router.push(backLink);
+		}
+	}, [pending, router, backLink]);
 
 	return (
 		<VisitorLayout>
@@ -54,7 +74,7 @@ const VisitRequestedPage: NextPage = () => {
 					phone={space?.contactInfo.telephone || ''}
 					email={space?.contactInfo.email || ''}
 					showBorder={showNavigationBorder}
-					backLink={`/?${READING_ROOM_QUERY_KEY}=${slug}`}
+					backLink={backLink}
 				/>
 
 				{/* I'm choosing to duplicate the above instead of splitting to a separate layout because back-button functionality on this page differs from the `[slug]` page */}

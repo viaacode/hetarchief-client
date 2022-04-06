@@ -27,3 +27,8 @@ export interface VisitInfo {
 }
 
 export type VisitInfoRow = { row: { original: VisitInfo } };
+
+export interface VisitSpaceCount {
+	count: number;
+	id?: string;
+}

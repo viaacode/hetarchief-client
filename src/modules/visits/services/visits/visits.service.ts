@@ -6,7 +6,11 @@ import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { PatchVisit, VisitTimeframe } from '@visits/types';
 
-import { VISITS_SERVICE_ACTIVE_SPACE_URL, VISITS_SERVICE_BASE_URL } from './visits.service.const';
+import {
+	VISITS_SERVICE_ACTIVE_SPACE_URL,
+	VISITS_SERVICE_BASE_URL,
+	VISITS_SERVICE_PENDING_COUNT_URL,
+} from './visits.service.const';
 
 export class VisitsService {
 	public static async getAll(
@@ -71,6 +75,15 @@ export class VisitsService {
 		}
 		return await ApiService.getApi()
 			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${spaceId}`)
+			.json();
+	}
+
+	public static async getPendingVisitCountForUserBySlug(slug: string): Promise<VisitInfo | null> {
+		if (!slug) {
+			return null;
+		}
+		return await ApiService.getApi()
+			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_PENDING_COUNT_URL}/${slug}`)
 			.json();
 	}
 }
