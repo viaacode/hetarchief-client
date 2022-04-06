@@ -1,173 +1,85 @@
 @use "sass:map";
+@use "sass:math";
+
 @use "styles/abstracts" as *;
 
-$clear-button-height: 9.3rem;
+$component: "c-notification-center";
 
-.c-notification-center {
-	height: 100%;
-	display: flex;
-	flex-flow: column;
+.#{$component} {
+    margin-top: $c-navigation-height-md;
+
+    @include respond-at("md") {
+        margin-top: $c-navigation-height;
+    }
 
 	&__unread,
-	&__read {
+    &__read {
+		padding-left: $spacer-md;
+		padding-right: $spacer-md;
+        padding-bottom: $spacer-md;
+	}
+
+    &__unread {
 		padding-top: $spacer-md;
+    }
 
-		@include respond-at(sm) {
-			padding-top: $spacer-lg;
-		}
+    &__read {
+        padding-top: $spacer-lg;
+        background-color: $platinum;
+        padding-bottom: $spacer-md;
+    }
 
-		> b {
-			padding: $spacer-md 2rem;
-
-			@include respond-at(sm) {
-				padding: $spacer-lg;
-			}
-		}
+	&__header {
+		margin-bottom: $spacer-md;
+        font-size: $font-size-base;
+        line-height: $line-height-1xl;
 	}
 
-	&__read {
-		flex-grow: 1;
-		background-color: $platinum;
-		padding-bottom: calc($spacer-lg + $spacer-lg);
-	}
-
-	&__infinite-scroll-loading {
-		padding: $spacer-md;
-		text-align: center;
-		background-color: $platinum;
-	}
-
-	&__infinite-scroll-end {
-		height: 80px;
-	}
-
-	&__blade {
-		height: calc(100vh - $c-navigation-height-md);
-		top: $c-navigation-height-md;
-
-		@include respond-at(md) {
-			height: calc(100vh - $c-navigation-height);
-			top: $c-navigation-height;
-		}
-
-		> div {
-			overflow-y: visible;
-		}
-
-		.c-notification-center__button {
-			height: $clear-button-height;
-			padding: $spacer-md 2rem;
-			border-radius: 0;
-			text-align: left;
-
-			:global(.c-button__icon) {
-				font-size: $font-size-lg;
-			}
-
-			@include respond-at(sm) {
-				padding: $spacer-lg;
-			}
-		}
-	}
-
-	&__infinite-scroll {
-		height: calc(100vh - $c-navigation-height-md - $clear-button-height);
-
-		@include respond-at(md) {
-			height: calc(100vh - $c-navigation-height - $clear-button-height);
-		}
-	}
-
-	&__notification {
-		position: relative;
-		display: flex;
+	&__row {
+        position: relative;
 		align-items: center;
+		display: grid;
+        font-size: $font-size-xs;
+        line-height: $line-height-2xl;
+		grid-template-columns: auto $button-height-sm;
 
-		&::before {
-			position: absolute;
-			bottom: 0;
-			left: $spacer-lg;
-			content: "";
-			width: calc(100% - $spacer-lg - $spacer-lg);
-			height: 1px;
-			background-color: $silver;
-		}
+        &:not(:last-child) {
+		    padding-bottom: $spacer-md;
 
-		&:last-child::before {
-			display: none;
-		}
+            &::after {
+                content: "";
+                display: block;
+                height: 1px;
+                width: 100%;
+                background: $silver;
+                bottom: 0;
+                position: absolute;
+            }
+        }
+
+        &:not(:nth-child(2)) {
+		    padding-top: $spacer-md;
+        }
 
 		&-title {
-			position: relative;
-			display: block;
-			padding-left: $spacer-sm;
 			margin-bottom: $spacer-xs;
-
-			&::before {
-				position: absolute;
-				top: 0.4rem;
-				left: 0;
-				content: "";
-				width: 0.8rem;
-				height: 0.8rem;
-				background-color: $zinc;
-				border-radius: 50%;
-			}
+            font-size: $font-size-sm;
+            line-height: $line-height-4xl;
 		}
 
-		&-link,
-		button {
-			background-color: transparent;
-			border: none;
-			text-align: left;
-			font-family: $font-family-primary;
-			padding: $spacer-md 2rem $spacer-md 2rem;
-			height: 100%;
-			flex-grow: 1;
-			font-size: 1.4rem;
+        &-marker {
+            display: inline-block;
+        }
+	}
 
-			@include respond-at(sm) {
-				padding: $spacer-lg;
-			}
+	button.#{$component}__button {
+		border-radius: 0;
+		text-align: left;
+        height: $spacer-md * 3;
 
-			&-clickable {
-				&:hover {
-					background-color: $silver;
-					cursor: pointer;
-				}
-			}
-
-			a {
-				text-decoration: none;
-			}
-
-			&:first-child {
-				padding-right: $spacer-xs;
-			}
-		}
-
-		button:hover {
-			background-color: $silver;
-			cursor: pointer;
-		}
-
-		.c-notification-center__notification-icon {
-			font-size: $font-size-lg;
-			width: 6rem;
-			height: 6rem;
-			border-radius: 0;
-			flex-grow: 0;
-			padding: 1.9rem;
-		}
-
-		&--unread {
-			.c-notification-center__notification-title {
-				font-size: 1.6px;
-
-				&::before {
-					background-color: $teal;
-				}
-			}
-		}
+        :global(.c-button__icon) {
+            font-size: $spacer-md;
+            margin-right: $spacer-xs;
+        }
 	}
 }
