@@ -46,7 +46,7 @@ const VisitRequestedPage: NextPage = () => {
 	 * Computed
 	 */
 
-	const backLink = space ? `${ROUTES.home}?${READING_ROOM_QUERY_KEY}=${space.id}` : ROUTES.home;
+	const backLink = ROUTES.home;
 
 	/**
 	 * Effects
