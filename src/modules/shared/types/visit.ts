@@ -4,7 +4,7 @@ export enum VisitStatus {
 	DENIED = 'DENIED',
 }
 
-export interface VisitInfo {
+export interface Visit {
 	createdAt: string;
 	endAt?: string;
 	id: string;
@@ -26,7 +26,7 @@ export interface VisitInfo {
 	updatedByName: string;
 }
 
-export type VisitInfoRow = { row: { original: VisitInfo } };
+export type VisitRow = { row: { original: Visit } };
 
 export interface VisitSpaceCount {
 	count: number;

@@ -1,10 +1,10 @@
 import { useMutation, UseMutationResult } from 'react-query';
 
 import { CreateVisitRequest } from '@reading-room/services/reading-room/reading-room.service.types';
-import { VisitInfo } from '@shared/types';
+import { Visit } from '@shared/types';
 import { VisitsService } from '@visits/services';
 
-export function useCreateVisitRequest(): UseMutationResult<VisitInfo, unknown, CreateVisitRequest> {
+export function useCreateVisitRequest(): UseMutationResult<Visit, unknown, CreateVisitRequest> {
 	return useMutation((createVisitRequest: CreateVisitRequest) =>
 		VisitsService.create(createVisitRequest)
 	);

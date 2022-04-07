@@ -2,7 +2,7 @@ import { stringifyUrl } from 'query-string';
 
 import { CreateVisitRequest } from '@reading-room/services/reading-room/reading-room.service.types';
 import { ApiService } from '@shared/services/api-service';
-import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { PatchVisit, VisitTimeframe } from '@visits/types';
 
@@ -19,10 +19,10 @@ export class VisitsService {
 		timeframe: VisitTimeframe | undefined,
 		page = 0,
 		size = 20,
-		orderProp: keyof VisitInfo = 'startAt',
+		orderProp: keyof Visit = 'startAt',
 		orderDirection: OrderDirection = OrderDirection.desc,
 		personal?: boolean
-	): Promise<ApiResponseWrapper<VisitInfo>> {
+	): Promise<ApiResponseWrapper<Visit>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -39,14 +39,14 @@ export class VisitsService {
 				})
 			)
 			.json();
-		return parsed as ApiResponseWrapper<VisitInfo>;
+		return parsed as ApiResponseWrapper<Visit>;
 	}
 
-	public static async getById(id: string): Promise<VisitInfo> {
+	public static async getById(id: string): Promise<Visit> {
 		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async patchById(id: string, visit: PatchVisit): Promise<VisitInfo> {
+	public static async patchById(id: string, visit: PatchVisit): Promise<Visit> {
 		const { status, startAt, endAt } = visit;
 		const json: PatchVisit = {
 			status,
@@ -63,13 +63,13 @@ export class VisitsService {
 			.json();
 	}
 
-	public static async create(visitRequest: CreateVisitRequest): Promise<VisitInfo> {
+	public static async create(visitRequest: CreateVisitRequest): Promise<Visit> {
 		return await ApiService.getApi()
 			.post(VISITS_SERVICE_BASE_URL, { body: JSON.stringify(visitRequest) })
 			.json();
 	}
 
-	public static async getActiveVisitForUserAndSpace(spaceId: string): Promise<VisitInfo | null> {
+	public static async getActiveVisitForUserAndSpace(spaceId: string): Promise<Visit | null> {
 		if (!spaceId) {
 			return null;
 		}
@@ -78,7 +78,7 @@ export class VisitsService {
 			.json();
 	}
 
-	public static async getPendingVisitCountForUserBySlug(slug: string): Promise<VisitInfo | null> {
+	public static async getPendingVisitCountForUserBySlug(slug: string): Promise<Visit | null> {
 		if (!slug) {
 			return null;
 		}
