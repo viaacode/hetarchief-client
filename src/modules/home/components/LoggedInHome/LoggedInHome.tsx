@@ -185,8 +185,11 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={{
+											image: visit.spaceImage,
+											logo: visit.spaceLogo,
+											color: visit.spaceColor,
 											name: visit.spaceName,
-											info: 'TODO',
+											info: visit.spaceInfo,
 										}}
 										type={ReadingRoomCardType.access}
 									/>
@@ -210,8 +213,11 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={{
+											image: visit.spaceImage,
+											logo: visit.spaceLogo,
+											color: visit.spaceColor,
 											name: visit.spaceName,
-											info: 'TODO',
+											info: visit.spaceInfo,
 										}}
 										type={ReadingRoomCardType.futureApproved}
 									/>
@@ -236,8 +242,11 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={{
+											image: visit.spaceImage,
+											logo: visit.spaceLogo,
+											color: visit.spaceColor,
 											name: visit.spaceName,
-											info: 'TODO',
+											info: visit.spaceInfo,
 										}}
 										type={ReadingRoomCardType.futureRequested}
 									/>

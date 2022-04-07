@@ -14,6 +14,10 @@ export interface Visit {
 	spaceSlug: string;
 	spaceName?: string;
 	spaceAddress?: string;
+	spaceColor?: string;
+	spaceImage?: string;
+	spaceLogo?: string;
+	spaceInfo?: string;
 	startAt?: string;
 	status: VisitStatus;
 	timeframe: string;
