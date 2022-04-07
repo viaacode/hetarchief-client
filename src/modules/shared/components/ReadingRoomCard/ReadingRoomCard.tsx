@@ -103,6 +103,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 			padding={padding}
 			title={!flat && renderTitle()}
 			shadow={flat}
+			onClick={props.onClick}
 		>
 			<div
 				className={clsx(

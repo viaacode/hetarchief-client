@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import React, { FC, useState } from 'react';
 
 import { requestCreatedAtFormatter } from '@cp/utils';
-import { Blade, BladeManager, Icon } from '@shared/components';
+import { Blade, BladeManager, Icon, VisitSummary } from '@shared/components';
 import { VisitStatus } from '@shared/types';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';
@@ -132,28 +132,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 							</ul>
 						</div>
 
-						<div className={styles['c-process-request-blade__details']}>
-							<strong>
-								{t(
-									'modules/cp/components/process-request-blade/process-request-blade___aanvrager'
-								)}
-							</strong>
-							<p>{selected.visitorName}</p>
-
-							<strong>
-								{t(
-									'modules/cp/components/process-request-blade/process-request-blade___reden-van-aanvraag'
-								)}
-							</strong>
-							<p>{selected.reason}</p>
-
-							<strong>
-								{t(
-									'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-leeszaal-bezoeken'
-								)}
-							</strong>
-							<p>{selected.timeframe}</p>
-						</div>
+						<VisitSummary {...selected} />
 					</>
 				)}
 			</Blade>

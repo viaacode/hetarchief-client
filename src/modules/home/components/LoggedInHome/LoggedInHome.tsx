@@ -20,7 +20,12 @@ import { asDate, createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
+import ProcessVisitBlade from '../ProcessVisitBlade/ProcessVisitBlade';
+import { ProcessVisitBladeProps } from '../ProcessVisitBlade/ProcessVisitBlade.types';
+
 import styles from './LoggedInHome.module.scss';
+
+type SelectedVisit = ProcessVisitBladeProps['selected'];
 
 const LoggedInHome: FC = () => {
 	const { t } = useTranslation();
@@ -35,7 +40,11 @@ const LoggedInHome: FC = () => {
 	 */
 
 	const user = useSelector(selectUser);
-	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
+
+	const [selected, setSelected] = useState<SelectedVisit | undefined>();
+
+	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
+	const [isProcessVisitBladeOpen, setIsProcessVisitBladeOpen] = useState(false);
 
 	/**
 	 * Data
@@ -74,7 +83,7 @@ const LoggedInHome: FC = () => {
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
 		if (query[READING_ROOM_QUERY_KEY]) {
-			setIsOpenRequestAccessBlade(true);
+			setIsRequestAccessBladeOpen(true);
 		}
 	}, [query]);
 
@@ -86,7 +95,12 @@ const LoggedInHome: FC = () => {
 		if (query[READING_ROOM_QUERY_KEY]) {
 			setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
 		}
-		setIsOpenRequestAccessBlade(false);
+
+		setIsRequestAccessBladeOpen(false);
+	};
+
+	const onCloseProcessVisitBlade = () => {
+		setIsProcessVisitBladeOpen(false);
 	};
 
 	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
@@ -122,7 +136,7 @@ const LoggedInHome: FC = () => {
 				timeframe: values.visitTime,
 			}).then((res) => {
 				setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
-				setIsOpenRequestAccessBlade(false);
+				setIsRequestAccessBladeOpen(false);
 
 				router.push(ROUTES.visitRequested.replace(':slug', res.spaceSlug));
 			});
@@ -143,7 +157,12 @@ const LoggedInHome: FC = () => {
 
 	const onRequestAccess = (id: string) => {
 		setQuery({ [READING_ROOM_QUERY_KEY]: id });
-		setIsOpenRequestAccessBlade(true);
+		setIsRequestAccessBladeOpen(true);
+	};
+
+	const onProcessVisit = (visit: SelectedVisit) => {
+		setSelected(visit);
+		setIsProcessVisitBladeOpen(true);
 	};
 
 	/**
@@ -206,6 +225,7 @@ const LoggedInHome: FC = () => {
 							<div className={styles['c-hero__requests']}>
 								{(future?.items || []).map((visit, i) => (
 									<ReadingRoomCard
+										onClick={() => onProcessVisit(visit)}
 										key={`hero-planned-${i}`}
 										access={{
 											granted: true,
@@ -234,6 +254,7 @@ const LoggedInHome: FC = () => {
 							<div className={styles['c-hero__requests']}>
 								{(pending?.items || []).map((visit, i) => (
 									<ReadingRoomCard
+										onClick={() => onProcessVisit(visit)}
 										key={`hero-requested-${i}`}
 										access={{
 											granted: false,
@@ -260,22 +281,30 @@ const LoggedInHome: FC = () => {
 	};
 
 	return (
-		<div className="p-home u-page-bottom-padding">
-			<Head>
-				<title>{createPageTitle('Home')}</title>
-				<meta name="description" content="TODO: Home meta description" />
-			</Head>
+		<>
+			<div className="p-home u-page-bottom-padding">
+				<Head>
+					<title>{createPageTitle('Home')}</title>
+					<meta name="description" content="TODO: Home meta description" />
+				</Head>
 
-			{renderHero()}
+				{renderHero()}
 
-			<ReadingRoomCardsWithSearch onRequestAccess={onRequestAccess} />
+				<ReadingRoomCardsWithSearch onRequestAccess={onRequestAccess} />
 
-			<RequestAccessBlade
-				isOpen={isOpenRequestAccessBlade}
-				onClose={onCloseRequestBlade}
-				onSubmit={onRequestAccessSubmit}
+				<RequestAccessBlade
+					isOpen={isRequestAccessBladeOpen}
+					onClose={onCloseRequestBlade}
+					onSubmit={onRequestAccessSubmit}
+				/>
+			</div>
+
+			<ProcessVisitBlade
+				selected={selected}
+				isOpen={!!selected && isProcessVisitBladeOpen}
+				onClose={onCloseProcessVisitBlade}
 			/>
-		</div>
+		</>
 	);
 };
 

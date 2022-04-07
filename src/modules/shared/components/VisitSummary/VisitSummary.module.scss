@@ -1,0 +1,22 @@
+@use "styles/abstracts" as *;
+
+$component: "c-visit-summary";
+
+.#{$component} {
+    padding: 0 $spacer-sm;
+
+    @include respond-at("md") {
+        padding: 0 $spacer-lg;
+    }
+
+    strong {
+        display: block;
+        margin-bottom: $spacer-sm;
+    }
+
+    p {
+        color: $neutral;
+        font-size: $font-size-sm;
+        margin-bottom: $spacer-1xl;
+    }
+}
