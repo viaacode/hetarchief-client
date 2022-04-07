@@ -13,13 +13,14 @@ import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSea
 import { READING_ROOM_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
-import { AccessGranted } from '@shared/components/ReadingRoomCard/__mocks__/reading-room-card';
 import { ROUTES } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
-import { createPageTitle } from '@shared/utils';
+import { VisitStatus } from '@shared/types';
+import { asDate, createPageTitle } from '@shared/utils';
+import { useGetVisits } from '@visits/hooks/get-visits';
+import { VisitTimeframe } from '@visits/types';
 
 import styles from './LoggedInHome.module.scss';
-import { homeHeroRequests } from './__mocks__/HomeHeroRequests.mock';
 
 const LoggedInHome: FC = () => {
 	const { t } = useTranslation();
@@ -29,11 +30,46 @@ const LoggedInHome: FC = () => {
 		[READING_ROOM_QUERY_KEY]: StringParam,
 	});
 
-	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
+	/**
+	 * State
+	 */
 
 	const user = useSelector(selectUser);
+	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
+
+	/**
+	 * Data
+	 */
+
+	const defaultGetVisitsParams = {
+		searchInput: '%',
+		personal: true,
+		page: 0,
+		size: 1000,
+	};
+
+	const { data: active } = useGetVisits({
+		...defaultGetVisitsParams,
+		status: VisitStatus.APPROVED,
+		timeframe: VisitTimeframe.ACTIVE,
+	});
+
+	const { data: future } = useGetVisits({
+		...defaultGetVisitsParams,
+		status: VisitStatus.APPROVED,
+		timeframe: VisitTimeframe.FUTURE,
+	});
+
+	const { data: pending } = useGetVisits({
+		...defaultGetVisitsParams,
+		status: VisitStatus.PENDING,
+	});
 
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+
+	/**
+	 * Effects
+	 */
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
@@ -115,10 +151,6 @@ const LoggedInHome: FC = () => {
 	 */
 
 	const renderHero = () => {
-		const accessGranted = homeHeroRequests.filter((request) => request.status === 'access');
-		const planned = homeHeroRequests.filter((request) => request.status === 'planned');
-		const requested = homeHeroRequests.filter((request) => request.status === 'requested');
-
 		return (
 			<header className={clsx(styles['c-hero'], styles['c-hero--logged-in'])}>
 				<div className="l-container">
@@ -128,13 +160,15 @@ const LoggedInHome: FC = () => {
 								user: user?.firstName,
 							})}
 						</h1>
+
 						<p className={styles['c-hero__description']}>
 							{t(
 								'modules/shared/components/hero/hero___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-leeszaal'
 							)}
 						</p>
 					</section>
-					{accessGranted.length > 0 && (
+
+					{(active?.items || []).length > 0 && (
 						<section
 							className={clsx(
 								styles['c-hero__section'],
@@ -142,45 +176,69 @@ const LoggedInHome: FC = () => {
 							)}
 						>
 							<div className={styles['c-hero__access-cards']}>
-								{accessGranted.map((room, i) => (
+								{(active?.items || []).map((visit, i) => (
 									<ReadingRoomCard
 										key={`hero-access-${i}`}
-										access={AccessGranted}
-										room={room}
+										access={{
+											granted: true,
+											until: asDate(visit.endAt),
+											from: asDate(visit.startAt),
+										}}
+										room={{
+											name: visit.spaceName,
+											info: 'TODO',
+										}}
 										type={ReadingRoomCardType.access}
 									/>
 								))}
 							</div>
 						</section>
 					)}
-					{planned.length > 0 && (
+
+					{(future?.items || []).length > 0 && (
 						<section className={clsx(styles['c-hero__section'])}>
 							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
 								{t('modules/shared/components/hero/hero___geplande-bezoeken')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
-								{planned.map((room, i) => (
+								{(future?.items || []).map((visit, i) => (
 									<ReadingRoomCard
 										key={`hero-planned-${i}`}
-										access={AccessGranted}
-										room={room}
+										access={{
+											granted: true,
+											until: asDate(visit.endAt),
+											from: asDate(visit.startAt),
+										}}
+										room={{
+											name: visit.spaceName,
+											info: 'TODO',
+										}}
 										type={ReadingRoomCardType.futureApproved}
 									/>
 								))}
 							</div>
 						</section>
 					)}
-					{requested.length > 0 && (
+
+					{(pending?.items || []).length > 0 && (
 						<section className={clsx(styles['c-hero__section'])}>
 							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
 								{t('modules/shared/components/hero/hero___aanvragen')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
-								{requested.map((room, i) => (
+								{(pending?.items || []).map((visit, i) => (
 									<ReadingRoomCard
 										key={`hero-requested-${i}`}
-										access={AccessGranted}
-										room={room}
+										access={{
+											granted: false,
+											pending: true,
+											until: asDate(visit.endAt),
+											from: asDate(visit.startAt),
+										}}
+										room={{
+											name: visit.spaceName,
+											info: 'TODO',
+										}}
 										type={ReadingRoomCardType.futureRequested}
 									/>
 								))}
