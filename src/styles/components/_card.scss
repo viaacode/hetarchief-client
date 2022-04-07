@@ -172,6 +172,12 @@ $component: "c-card";
 
 		&-content {
 			@extend %s-card-content-whitespace;
+
+			.#{$component} {
+				&__title-wrapper {
+					margin-left: 0;
+				}
+			}
 		}
 
 		&-vertical {
