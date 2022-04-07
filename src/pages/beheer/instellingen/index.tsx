@@ -1,17 +1,13 @@
-import { Box, Button } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ReadingRoomImageForm, ReadingRooomSettings, RichTextForm } from '@cp/components';
+import { ReadingRooomSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
-import { ReadingRoomService } from '@reading-room/services';
-import { UpdateReadingRoomSettings } from '@reading-room/services/reading-room/reading-room.service.types';
 import { Loading } from '@shared/components';
-import { toastService } from '@shared/services/toast-service';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
