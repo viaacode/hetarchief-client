@@ -432,3 +432,26 @@
 		);
 	}
 }
+
+/**
+ * Blade
+ */
+
+@mixin blade-text-styling() {
+	strong {
+        display: block;
+        margin-bottom: $spacer-sm;
+    }
+
+    p {
+        color: $neutral;
+        font-size: $font-size-sm;
+        line-height: $line-height-3xl;
+        margin-bottom: $spacer-1xl;
+
+        @include respond-at("md") {
+            font-size: $font-size-base;
+            line-height: $line-height-1xl;
+        }
+    }
+}
