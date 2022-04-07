@@ -47,13 +47,12 @@ export class VisitsService {
 	}
 
 	public static async patchById(id: string, visit: PatchVisit): Promise<Visit> {
-		const { status, startAt, endAt } = visit;
+		const { status, startAt, endAt, note } = visit;
 		const json: PatchVisit = {
 			status,
 			startAt,
 			endAt,
-			// remark: 'TODO',
-			// denial: 'TODO'
+			note,
 		};
 
 		return await ApiService.getApi()

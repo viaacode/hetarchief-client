@@ -9,7 +9,7 @@ export interface Visit {
 	endAt?: string;
 	id: string;
 	note: string | null;
-	reason: string;
+	reason?: string;
 	spaceId: string;
 	spaceSlug: string;
 	spaceName?: string;
@@ -18,14 +18,16 @@ export interface Visit {
 	spaceImage?: string;
 	spaceLogo?: string;
 	spaceInfo?: string;
+	spaceDescription?: string;
+	spaceServiceDescription?: string;
 	startAt?: string;
 	status: VisitStatus;
-	timeframe: string;
+	timeframe?: string;
 	updatedAt: string;
 	userProfileId: string;
 	visitorId: string;
 	visitorMail: string;
-	visitorName: string;
+	visitorName?: string;
 	updatedById: string;
 	updatedByName: string;
 }

@@ -20,8 +20,7 @@ import { asDate, createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
-import ProcessVisitBlade from '../ProcessVisitBlade/ProcessVisitBlade';
-import { ProcessVisitBladeProps } from '../ProcessVisitBlade/ProcessVisitBlade.types';
+import { ProcessVisitBlade, ProcessVisitBladeProps } from '../ProcessVisitBlade';
 
 import styles from './LoggedInHome.module.scss';
 
@@ -57,19 +56,19 @@ const LoggedInHome: FC = () => {
 		size: 1000,
 	};
 
-	const { data: active } = useGetVisits({
+	const { data: active, refetch: refetchActive } = useGetVisits({
 		...defaultGetVisitsParams,
 		status: VisitStatus.APPROVED,
 		timeframe: VisitTimeframe.ACTIVE,
 	});
 
-	const { data: future } = useGetVisits({
+	const { data: future, refetch: refetchFuture } = useGetVisits({
 		...defaultGetVisitsParams,
 		status: VisitStatus.APPROVED,
 		timeframe: VisitTimeframe.FUTURE,
 	});
 
-	const { data: pending } = useGetVisits({
+	const { data: pending, refetch: refetchPending } = useGetVisits({
 		...defaultGetVisitsParams,
 		status: VisitStatus.PENDING,
 	});
@@ -303,6 +302,11 @@ const LoggedInHome: FC = () => {
 				selected={selected}
 				isOpen={!!selected && isProcessVisitBladeOpen}
 				onClose={onCloseProcessVisitBlade}
+				onFinish={() => {
+					refetchActive();
+					refetchFuture();
+					refetchPending();
+				}}
 			/>
 		</>
 	);

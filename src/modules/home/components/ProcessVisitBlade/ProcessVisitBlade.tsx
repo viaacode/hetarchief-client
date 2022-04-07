@@ -5,6 +5,8 @@ import { FC, useState } from 'react';
 import { Blade, BladeManager, Icon, VisitSummary } from '@shared/components';
 import { VisitStatus } from '@shared/types';
 
+import { CancelVisitBlade } from '../CancelVisitBlade';
+
 import { ProcessVisitBladeProps } from './ProcessVisitBlade.types';
 
 const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
@@ -52,6 +54,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-24">
 				<Button
+					className="u-mb-16"
 					label={t('Annuleer bezoek')}
 					iconStart={<Icon name="forbidden" />}
 					variants={['block', 'outline']}
@@ -85,8 +88,16 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				layer={1}
 				isOpen={getCurrentLayer() === 1}
 			>
-				{selected && <VisitSummary {...selected} />}
+				{selected && <VisitSummary preview {...selected} />}
 			</Blade>
+
+			<CancelVisitBlade
+				isOpen={getCurrentLayer() === (showCancel ? 2 : 9999)}
+				layer={showCancel ? 2 : 9999}
+				selected={selected}
+				onClose={() => setShowCancel(false)}
+				onFinish={() => finish(setShowCancel)}
+			/>
 		</BladeManager>
 	);
 };
