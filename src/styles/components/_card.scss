@@ -175,7 +175,9 @@ $component: "c-card";
 
 			.#{$component} {
 				&__title-wrapper {
-					margin-left: 0;
+					@include respond-at("md") {
+						margin-left: 0;
+					}
 				}
 			}
 		}
