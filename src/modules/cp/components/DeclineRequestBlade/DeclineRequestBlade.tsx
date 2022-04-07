@@ -34,7 +34,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 			VisitsService.patchById(selected.id, {
 				...selected,
 				status: VisitStatus.DENIED,
-				// TODO: reason
+				note: values.reasonForDenial, // TODO check throughput
 			}).then(() => {
 				onSubmit?.(values);
 
@@ -57,6 +57,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-24">
 				<Button
+					className="u-mb-16"
 					label={t(
 						'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
 					)}
