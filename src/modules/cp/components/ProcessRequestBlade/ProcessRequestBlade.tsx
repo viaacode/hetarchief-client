@@ -67,6 +67,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-24">
 				<Button
+					className="u-mb-16"
 					label={t(
 						'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
 					)}
