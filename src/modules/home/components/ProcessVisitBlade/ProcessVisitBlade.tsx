@@ -40,10 +40,14 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 	const getTitle = (): string => {
 		switch (selected?.status) {
 			case VisitStatus.PENDING:
-				return t('Detail aanvraag');
+				return t(
+					'modules/home/components/process-visit-blade/process-visit-blade___detail-aanvraag'
+				);
 
 			case VisitStatus.APPROVED:
-				return t('Detail gepland bezoek');
+				return t(
+					'modules/home/components/process-visit-blade/process-visit-blade___detail-gepland-bezoek'
+				);
 
 			default:
 				return ''; // this causes brief visual "despawn" but isn't very noticable
@@ -55,14 +59,18 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={t('Annuleer bezoek')}
+					label={t(
+						'modules/home/components/process-visit-blade/process-visit-blade___annuleer-bezoek'
+					)}
 					iconStart={<Icon name="forbidden" />}
 					variants={['block', 'outline']}
 					onClick={() => setShowCancel(true)}
 				/>
 
 				<Button
-					label={t('Sluit')}
+					label={t(
+						'modules/home/components/process-visit-blade/process-visit-blade___sluit'
+					)}
 					variants={['block', 'text']}
 					onClick={() => props.onClose?.()}
 				/>

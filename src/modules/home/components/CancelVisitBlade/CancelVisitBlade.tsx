@@ -22,13 +22,15 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 		VisitsService.patchById(selected.id, {
 			status: VisitStatus.DENIED,
 			note: `[${new Date().toISOString()}] ${t(
-				'Deze aanvraag is geannuleerd door de gebruiker'
+				'modules/home/components/cancel-visit-blade/cancel-visit-blade___deze-aanvraag-is-geannuleerd-door-de-gebruiker'
 			)}`,
 		}).then(() => {
 			toastService.notify({
-				title: t('Je aanvraag tot annulatie is verstuurd.'),
+				title: t(
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-aanvraag-tot-annulatie-is-verstuurd'
+				),
 				description: t(
-					'Je hebt zelf je bezoek geannuleerd, dit wordt ogenblikkelijk verwerkt.'
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-hebt-zelf-je-bezoek-geannuleerd-dit-wordt-ogenblikkelijk-verwerkt'
 				),
 			});
 
@@ -43,12 +45,20 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={t('Ja, annuleer bezoek')}
+					label={t(
+						'modules/home/components/cancel-visit-blade/cancel-visit-blade___ja-annuleer-bezoek'
+					)}
 					variants={['block', 'black']}
 					onClick={onFormSubmit}
 				/>
 
-				<Button label={t('Sluit')} variants={['block', 'text']} onClick={props.onClose} />
+				<Button
+					label={t(
+						'modules/home/components/cancel-visit-blade/cancel-visit-blade___sluit'
+					)}
+					variants={['block', 'text']}
+					onClick={props.onClose}
+				/>
 			</div>
 		);
 	};
@@ -58,14 +68,20 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 			className={styles['c-cancel-visit-blade']}
 			{...props}
 			footer={renderFooter()}
-			title={t('Bezoek annuleren')}
+			title={t(
+				'modules/home/components/cancel-visit-blade/cancel-visit-blade___bezoek-annuleren'
+			)}
 		>
 			<div className="u-px-16 u-px-32:md u-pr-56:md">
-				<strong>{t('Ben je zeker dat je je bezoek wil annuleren?')}</strong>
+				<strong>
+					{t(
+						'modules/home/components/cancel-visit-blade/cancel-visit-blade___ben-je-zeker-dat-je-je-bezoek-wil-annuleren'
+					)}
+				</strong>
 
 				<p>
 					{t(
-						'Je zal op de ingeplande dag geen toegang hebben tot het materiaal. Een nieuw bezoek inplannen kan steeds.'
+						'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-zal-op-de-ingeplande-dag-geen-toegang-hebben-tot-het-materiaal-een-nieuw-bezoek-inplannen-kan-steeds'
 					)}
 				</p>
 			</div>

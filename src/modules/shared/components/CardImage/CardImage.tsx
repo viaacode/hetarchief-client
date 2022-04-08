@@ -15,6 +15,7 @@ const CardImage: FC<CardImageProps> = ({
 	shadow,
 	style,
 	className,
+	unoptimized = false,
 }) => {
 	return (
 		<div
@@ -32,6 +33,7 @@ const CardImage: FC<CardImageProps> = ({
 			{image && (
 				<div className={styles['c-card-image__background--image']}>
 					<Image
+						unoptimized={unoptimized}
 						src={image}
 						alt={name || id.toString()}
 						layout="fill"
@@ -43,6 +45,7 @@ const CardImage: FC<CardImageProps> = ({
 			{logo && (
 				<div className={styles['c-card-image__logo']}>
 					<Image
+						unoptimized={unoptimized}
 						className={styles['c-card-image__logo-image']}
 						src={logo || ''}
 						alt={name || id.toString()}
