@@ -3,80 +3,80 @@
 $component: "c-notification-center";
 
 .#{$component} {
-    margin-top: $c-navigation-height-md;
+	margin-top: $c-navigation-height-md;
 
-    @include respond-at("md") {
-        margin-top: $c-navigation-height;
-    }
-
-	&__unread,
-    &__read {
-		padding-left: $spacer-md;
-		padding-right: $spacer-md;
-        padding-bottom: $spacer-md;
+	@include respond-at("md") {
+		margin-top: $c-navigation-height;
 	}
 
-    &__unread {
-		padding-top: $spacer-md;
-    }
+	&__unread,
+	&__read {
+		padding-left: $spacer-md;
+		padding-right: $spacer-md;
+		padding-bottom: $spacer-md;
+	}
 
-    &__read {
-        padding-top: $spacer-lg;
-        background-color: $platinum;
-        padding-bottom: $spacer-md;
-    }
+	&__unread {
+		padding-top: $spacer-md;
+	}
+
+	&__read {
+		padding-top: $spacer-lg;
+		background-color: $platinum;
+		padding-bottom: $spacer-md;
+	}
 
 	&__header {
 		margin-bottom: $spacer-md;
-        font-size: $font-size-base;
-        line-height: $line-height-1xl;
+		font-size: $font-size-base;
+		line-height: $line-height-1xl;
 	}
 
 	&__row {
-        position: relative;
+		position: relative;
 		align-items: center;
 		display: grid;
-        font-size: $font-size-xs;
-        line-height: $line-height-2xl;
+		font-size: $font-size-xs;
+		line-height: $line-height-2xl;
 		grid-template-columns: auto $button-height-sm;
 
-        &:not(:last-child) {
-		    padding-bottom: $spacer-md;
+		&:not(:last-child) {
+			padding-bottom: $spacer-md;
 
-            &::after {
-                content: "";
-                display: block;
-                height: 1px;
-                width: 100%;
-                background: $silver;
-                bottom: 0;
-                position: absolute;
-            }
-        }
+			&::after {
+				content: "";
+				display: block;
+				height: 1px;
+				width: 100%;
+				background: $silver;
+				bottom: 0;
+				position: absolute;
+			}
+		}
 
-        &:not(:nth-child(2)) {
-		    padding-top: $spacer-md;
-        }
+		&:not(:nth-child(2)) {
+			padding-top: $spacer-md;
+		}
 
 		&-title {
 			margin-bottom: $spacer-xs;
-            font-size: $font-size-sm;
-            line-height: $line-height-4xl;
+			font-size: $font-size-sm;
+			line-height: $line-height-4xl;
 		}
 
-        &-marker {
-            display: inline-block;
-        }
+		&-marker {
+			display: inline-block;
+		}
 	}
 
 	button.#{$component}__button {
 		border-radius: 0;
 		text-align: left;
-        height: $spacer-md * 3;
+		height: $spacer-md * 3;
 
-        :global(.c-button__icon) {
-            font-size: $spacer-md;
-            margin-right: $spacer-xs;
-        }
+		:global(.c-button__icon) {
+			font-size: $spacer-md;
+			margin-right: $spacer-xs;
+		}
 	}
 }
