@@ -1,5 +1,6 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { HTTPError } from 'ky';
 import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -55,27 +56,31 @@ import {
 } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import { toastService } from '@shared/services/toast-service';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
+import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
 
 const ReadingRoomPage: NextPage = () => {
+	useNavigationBorder();
+
 	const { t } = useTranslation();
 	const router = useRouter();
-	const { readingRoomSlug } = router.query;
 
-	useNavigationBorder();
+	const { slug } = router.query;
 
 	/**
 	 * State
 	 */
 
+	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 	const [mediaCount, setMediaCount] = useState({
@@ -89,8 +94,6 @@ const ReadingRoomPage: NextPage = () => {
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 
-	useNavigationBorder();
-
 	const hasSearched = useMemo(() => !isEqual(READING_ROOM_QUERY_PARAM_INIT, query), [query]);
 
 	const activeSort: SortObject = {
@@ -102,22 +105,41 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: space } = useGetReadingRoom(
-		readingRoomSlug as string,
-		typeof readingRoomSlug === 'string'
-	);
+	const {
+		error: accessError,
+		isError: hasAccessError,
+		data: access,
+	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
+
+	const { data: space } = useGetReadingRoom(slug as string, access !== undefined);
 
 	const { data: media } = useGetMediaObjects(
-		readingRoomSlug as string,
+		slug as string,
 		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
-		activeSort
+		activeSort,
+		space !== undefined
 	);
 
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		if (!hasAccessError) {
+			return;
+		}
+
+		onError(accessError, 404, () => {
+			router.push(ROUTES.home).finally(() => {
+				toastService.notify({
+					title: t('pages/slug/index___geen-toegang'),
+					description: t('pages/slug/index___je-hebt-geen-toegang-tot-deze-ruimte'),
+				});
+			});
+		});
+	}, [hasAccessError, accessError, router, t]);
 
 	useEffect(() => {
 		let buckets = media?.aggregations.dcterms_format.buckets;
@@ -172,6 +194,14 @@ const ReadingRoomPage: NextPage = () => {
 	/**
 	 * Methods
 	 */
+
+	const onError = (e: unknown, code: number, callback?: () => void) => {
+		const cast = e as HTTPError;
+
+		if (cast.response && cast.response.status === code) {
+			callback?.();
+		}
+	};
 
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim()) {
@@ -375,6 +405,7 @@ const ReadingRoomPage: NextPage = () => {
 								: undefined,
 							publishedBy: item.schema_creator?.Maker?.join(', '),
 							type: item.dcterms_format,
+							preview: item.schema_thumbnail_url,
 						})
 					)}
 				keywords={keywords}
@@ -400,10 +431,10 @@ const ReadingRoomPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
+					const href = `/${source?.schema_maintainer?.[0]?.schema_identifier}/${source?.meemoo_fragment_id}`;
+
 					return (
-						<Link
-							href={`/${ROUTES.spaces}/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`}
-						>
+						<Link href={href.toLowerCase()}>
 							<a className="u-text-no-decoration">{card}</a>
 						</Link>
 					);
@@ -427,106 +458,109 @@ const ReadingRoomPage: NextPage = () => {
 
 	return (
 		<VisitorLayout>
-			<div className="p-reading-room">
-				<Head>
-					<title>{createPageTitle(space?.name)}</title>
-					<meta
-						name="description"
-						content={
-							space?.description ||
-							t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
-						}
-					/>
-				</Head>
-
-				<ReadingRoomNavigation
-					title={space?.name}
-					phone={space?.contactInfo.telephone || ''}
-					email={space?.contactInfo.email || ''}
-					showBorder={showNavigationBorder}
+			<Head>
+				<title>{createPageTitle(space?.name)}</title>
+				<meta
+					name="description"
+					content={
+						space?.info || t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
+					}
 				/>
+			</Head>
 
-				<section className="u-bg-black u-pt-8">
-					<div className="l-container">
-						<SearchBar
-							allowCreate
-							className="u-mb-24"
-							clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
-							instanceId="reading-room-search-bar"
-							isMulti
-							size="lg"
-							placeholder={t(
-								'pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder'
+			{space && (
+				<div className="p-reading-room">
+					<ReadingRoomNavigation
+						title={space?.name}
+						phone={space?.contactInfo.telephone || ''}
+						email={space?.contactInfo.email || ''}
+						showBorder={showNavigationBorder}
+					/>
+
+					<section className="u-bg-black u-pt-8">
+						<div className="l-container">
+							<SearchBar
+								allowCreate
+								className="u-mb-24"
+								clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
+								instanceId="reading-room-search-bar"
+								isMulti
+								size="lg"
+								placeholder={t(
+									'pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder'
+								)}
+								syncSearchValue={false}
+								value={activeFilters}
+								onClear={onResetFilters}
+								onRemoveValue={onRemoveTag}
+								onSearch={onSearch}
+							/>
+							<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
+						</div>
+					</section>
+
+					<section
+						className={clsx(
+							'p-reading-room__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+							{
+								'p-reading-room__results--placeholder':
+									showInitialView || showNoResults,
+							}
+						)}
+					>
+						<div className="l-container">
+							{showInitialView && (
+								<>
+									{renderFilterMenu()}
+
+									<Placeholder
+										className="p-reading-room__placeholder"
+										img="/images/lightbulb.svg"
+										title={t(
+											'pages/leeszaal/reading-room-slug/index___start-je-zoektocht'
+										)}
+										description={t(
+											'pages/leeszaal/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
+										)}
+									/>
+								</>
 							)}
-							syncSearchValue={false}
-							value={activeFilters}
-							onClear={onResetFilters}
-							onRemoveValue={onRemoveTag}
-							onSearch={onSearch}
-						/>
-						<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
-					</div>
-				</section>
+							{showNoResults && (
+								<>
+									{renderFilterMenu()}
 
-				<section
-					className={clsx(
-						'p-reading-room__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
-						{
-							'p-reading-room__results--placeholder':
-								showInitialView || showNoResults,
-						}
-					)}
-				>
-					<div className="l-container">
-						{showInitialView && (
-							<>
-								{renderFilterMenu()}
+									<Placeholder
+										className="p-reading-room__placeholder"
+										img="/images/looking-glass.svg"
+										title={t(
+											'pages/leeszaal/reading-room-slug/index___geen-resultaten'
+										)}
+										description={t(
+											'pages/leeszaal/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
+										)}
+									/>
+								</>
+							)}
+							{showResults && renderResults()}
+						</div>
+					</section>
+				</div>
+			)}
 
-								<Placeholder
-									className="p-reading-room__placeholder"
-									img="/images/lightbulb.svg"
-									title={t(
-										'pages/leeszaal/reading-room-slug/index___start-je-zoektocht'
-									)}
-									description={t(
-										'pages/leeszaal/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
-									)}
-								/>
-							</>
-						)}
-						{showNoResults && (
-							<>
-								{renderFilterMenu()}
-
-								<Placeholder
-									className="p-reading-room__placeholder"
-									img="/images/looking-glass.svg"
-									title={t(
-										'pages/leeszaal/reading-room-slug/index___geen-resultaten'
-									)}
-									description={t(
-										'pages/leeszaal/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
-									)}
-								/>
-							</>
-						)}
-						{showResults && renderResults()}
-					</div>
-				</section>
-			</div>
-
-			<AddToCollectionBlade
-				isOpen={isAddToCollectionBladeOpen}
-				selected={selected || undefined}
-				onClose={() => {
-					setShowAddToCollectionBlade(false);
-					setSelected(null);
-				}}
-				onSubmit={() => {
-					setShowAddToCollectionBlade(false);
-					setSelected(null);
-				}}
-			/>
+			{space && (
+				<AddToCollectionBlade
+					isOpen={isAddToCollectionBladeOpen}
+					selected={selected || undefined}
+					onClose={() => {
+						setShowAddToCollectionBlade(false);
+						setSelected(null);
+					}}
+					onSubmit={() => {
+						setShowAddToCollectionBlade(false);
+						setSelected(null);
+					}}
+				/>
+			)}
 		</VisitorLayout>
 	);
 };

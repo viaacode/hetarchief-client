@@ -9,7 +9,7 @@ import { requestCreatedAtFormatter } from '@cp/utils';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { VisitInfo, VisitInfoRow, VisitStatus } from '@shared/types';
+import { Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatWithLocale } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
@@ -45,7 +45,7 @@ export const requestStatusFilters = (): TabProps[] => {
 
 export const RequestTableColumns = (
 	i18n: { t: TFunction } = { t: (x: string) => x }
-): Column<VisitInfo>[] => [
+): Column<Visit>[] => [
 	{
 		Header: i18n.t('modules/cp/const/requests___naam') || '',
 		accessor: 'visitorName',
@@ -53,7 +53,7 @@ export const RequestTableColumns = (
 	{
 		Header: i18n.t('modules/cp/const/requests___emailadres') || '',
 		accessor: 'visitorMail',
-		Cell: ({ row }: VisitInfoRow) => {
+		Cell: ({ row }: VisitRow) => {
 			return (
 				<a
 					className="u-color-neutral c-table__link"
@@ -68,7 +68,7 @@ export const RequestTableColumns = (
 	{
 		Header: i18n.t('modules/cp/const/requests___tijdstip') || '',
 		accessor: 'createdAt',
-		Cell: ({ row }: VisitInfoRow) => {
+		Cell: ({ row }: VisitRow) => {
 			return (
 				<span
 					className="u-color-neutral"
@@ -82,7 +82,7 @@ export const RequestTableColumns = (
 	{
 		Header: i18n.t('modules/cp/const/requests___status') || '',
 		accessor: 'status',
-		Cell: ({ row }: VisitInfoRow) => {
+		Cell: ({ row }: VisitRow) => {
 			return <RequestStatusBadge status={row.original.status} />;
 		},
 	},

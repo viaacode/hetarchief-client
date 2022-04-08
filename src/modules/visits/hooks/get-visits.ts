@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { UseQueryResult } from 'react-query/types/react/types';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { VisitsService } from '@visits/services';
 import { VisitTimeframe } from '@visits/types';
@@ -23,12 +23,12 @@ export function useGetVisits({
 	timeframe?: VisitTimeframe | undefined;
 	page: number;
 	size: number;
-	orderProp?: keyof VisitInfo;
+	orderProp?: keyof Visit;
 	orderDirection?: OrderDirection;
 	userProfileId?: string;
 	enabled?: boolean;
 	personal?: boolean;
-}): UseQueryResult<ApiResponseWrapper<VisitInfo>> {
+}): UseQueryResult<ApiResponseWrapper<Visit>> {
 	return useQuery(
 		[
 			QUERY_KEYS.getVisits,

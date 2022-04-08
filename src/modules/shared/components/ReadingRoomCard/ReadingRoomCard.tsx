@@ -83,7 +83,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 					flat && styles['c-reading-room-card__description--flat']
 				)}
 			>
-				{room?.description}
+				{room?.info}
 			</p>
 		</TruncateMarkup>
 	);
@@ -103,6 +103,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 			padding={padding}
 			title={!flat && renderTitle()}
 			shadow={flat}
+			onClick={props.onClick}
 		>
 			<div
 				className={clsx(
