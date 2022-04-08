@@ -1,6 +1,5 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { toLower } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -28,7 +27,7 @@ import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
-import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
+import { MediaActions, MediaRepresentation, MediaSimilarHit, ObjectDetailTabs } from '@media/types';
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
@@ -109,7 +108,7 @@ const ObjectDetailPage: NextPage = () => {
 	// ook interessant
 	const { data: similarData } = useGetMediaSimilar(
 		router.query.objectId as string,
-		toLower(mediaInfo?.maintainerId),
+		mediaInfo?.maintainerId || '',
 		!!mediaInfo
 	);
 
@@ -129,6 +128,13 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		// Pause media if metadata tab is shown on mobile
+		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
+			setPauseMedia(true);
+		}
+	}, [activeTab, windowSize.width]);
 
 	useEffect(() => {
 		let backLink = `/${ROUTES.spaces}/${router.query.readingRoomSlug}`;
@@ -169,25 +175,7 @@ const ObjectDetailPage: NextPage = () => {
 	}, [mediaInfo]);
 
 	useEffect(() => {
-		similarData &&
-			setSimilar(
-				similarData.hits.hits.map((hit) => {
-					return {
-						type: hit._source.dcterms_format as MediaTypes,
-						title: hit._source.schema_name,
-						subtitle: `(${
-							hit._source.schema_date_published
-								? formatWithLocale('PP', asDate(hit._source.schema_date_published))
-								: undefined
-						})`,
-						description: hit._source.schema_description || '',
-						// thumbnail: hit._source.schema_thumbnail_url,
-						id: hit._source.schema_identifier,
-						maintainer_id: hit._source.schema_maintainer?.schema_identifier,
-						thumbnail: hit._source.schema_thumbnail_url,
-					};
-				})
-			);
+		similarData && setSimilar(mapSimilarData(similarData.hits.hits));
 	}, [similarData]);
 
 	useEffect(() => {
@@ -221,14 +209,24 @@ const ObjectDetailPage: NextPage = () => {
 		visitStatus && visitStatus.endAt ? formatAccessDate(asDate(visitStatus.endAt)) : '';
 
 	/**
-	 * Effects
+	 * Mapping
 	 */
-	useEffect(() => {
-		// Pause media if metadata tab is shown on mobile
-		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
-			setPauseMedia(true);
-		}
-	}, [activeTab, windowSize.width]);
+	const mapSimilarData = (data: MediaSimilarHit[]): MediaObject[] => {
+		return data.map((hit) => {
+			return {
+				type: hit._source.dcterms_format as MediaTypes,
+				title: hit._source.schema_name,
+				subtitle: `(${
+					hit._source.schema_date_published
+						? formatWithLocale('PP', asDate(hit._source.schema_date_published))
+						: undefined
+				})`,
+				description: hit._source.schema_description || '',
+				// thumbnail: hit._source.schema_thumbnail_url,
+				id: hit._source.schema_identifier,
+			};
+		});
+	};
 
 	/**
 	 * Callbacks
@@ -325,7 +323,10 @@ const ObjectDetailPage: NextPage = () => {
 	const renderCard = (item: MediaObject, isHidden: boolean) => (
 		<li>
 			<Link passHref href={`/${ROUTES.spaces}/${item.maintainer_id}/${item.id}`}>
-				<a tabIndex={isHidden ? -1 : 0} className={`p-object-detail__metadata-card-link`}>
+				<a
+					tabIndex={isHidden ? -1 : 0}
+					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
+				>
 					{<RelatedObject object={item} />}
 				</a>
 			</Link>

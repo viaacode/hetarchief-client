@@ -15,7 +15,6 @@ export function useGetMediaSimilar(
 		[QUERY_KEYS.getMediaSimilar, { id }],
 		() => MediaService.getSimilar(id, esIndex),
 		{
-			keepPreviousData: true,
 			enabled,
 		}
 	);

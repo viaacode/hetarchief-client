@@ -187,13 +187,12 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
+	// here
 	&__metadata-card-link {
 		display: block;
-		text-decoration: none;
 
 		&:not(:active, :hover):focus {
 			outline: 0.2rem solid $teal;
-			background-color: red;
 		}
 	}
 
