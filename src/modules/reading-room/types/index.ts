@@ -45,6 +45,7 @@ export interface ReadingRoomInfo {
 	id: string;
 	maintainerId: string;
 	name: string;
+	info: string | null;
 	description: string | null;
 	serviceDescription: string | null;
 	image: string | null;

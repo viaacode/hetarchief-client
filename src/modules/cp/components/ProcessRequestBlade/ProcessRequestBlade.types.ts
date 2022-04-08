@@ -1,7 +1,7 @@
 import { BladeProps } from '@shared/components';
-import { VisitInfo } from '@shared/types';
+import { Visit } from '@shared/types';
 
 export interface ProcessRequestBladeProps extends BladeProps {
-	selected?: VisitInfo;
+	selected?: Visit;
 	onFinish?: () => void;
 }

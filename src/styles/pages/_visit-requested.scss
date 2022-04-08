@@ -1,0 +1,138 @@
+@use "../abstracts" as *;
+@use "sass:math";
+
+$page: "p-visit-requested";
+$page-breakpoint: "md";
+$image-size: 16rem;
+
+.#{$page} {
+	display: flex;
+	flex-flow: column nowrap;
+	min-height: 100%;
+	overflow: hidden;
+
+	&__content {
+		flex-grow: 1;
+	}
+
+	&__grid {
+		display: grid;
+		min-height: 100%;
+	}
+
+	&__bottom {
+		position: relative;
+
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 0;
+			right:0;
+			left: 0;
+			bottom: -56px;
+			transform-origin: top;
+			transform: scale(5);
+			background: $platinum;
+			z-index: -1;
+		}
+	}
+
+	@include respond-to($page-breakpoint) {
+		&__grid {
+			grid-template-rows: minmax(56px, auto) min-content min-content min-content minmax(56px, auto);
+			grid-template-columns: 1fr;
+		}
+
+		&__top {
+			grid-row: 2;
+			margin-bottom: $spacer-1xl;
+		}
+
+		&__image {
+			grid-row: 3;
+			z-index: 1;
+
+			> div {
+				height: $image-size;
+				margin-bottom: ($image-size / 2) * -1;
+			}
+		}
+
+		&__bottom {
+			padding-top: ($image-size / 2) + $spacer-1xl;
+			grid-row: 4;
+
+			// z-index: 0;
+		}
+	}
+
+	@include respond-at($page-breakpoint) {
+		&__grid {
+			grid-template-rows: minmax(56px, auto) min-content min-content auto 56px;
+			grid-template-columns: 384px 1fr;
+		}
+
+		&__top,
+		&__bottom {
+			padding-left: $spacer-lg * 2;
+			padding-right: $spacer-lg * 2;
+		}
+
+		&__image {
+			grid-row: 3 / 5;
+			grid-column: 1;
+
+			> div {
+				height: 100%;
+				max-height: 56.1rem;
+			}
+		}
+
+		&__top {
+			grid-row: 3 / 4;
+			grid-column: 2;
+		}
+
+		&__bottom {
+			grid-row: 4 / 5;
+			grid-column: 2;
+		}
+	}
+
+	// Typography
+
+	&__title {
+		font-size: $font-size-1xl;
+		line-height: $line-height-lg;
+		text-align: center;
+
+		@include respond-at($page-breakpoint) {
+			font-size: $font-size-3xl;
+			line-height: $line-height-lg;
+			text-align: initial;
+		}
+	}
+
+	&__instructions {
+		font-size: $font-size-sm;
+		line-height: $line-height-3xl;
+		text-align: center;
+
+		@include respond-at($page-breakpoint) {
+			font-size: $font-size-base;
+			line-height: $line-height-1xl;
+			text-align: initial;
+		}
+	}
+
+	&__info {
+		font-size: $font-size-base;
+		line-height: $line-height-3xl;
+
+		@include respond-at($page-breakpoint) {
+			font-size: $font-size-md;
+			line-height: $line-height-md;
+		}
+	}
+}

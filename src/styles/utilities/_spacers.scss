@@ -19,11 +19,31 @@ $p: (
 );
 @include generate-utils("p", "padding", $p, ("md"));
 
+// Top / Bottom
+$py: (
+	"8": $spacer-xs,
+	"16": $spacer-sm,
+	"24": $spacer-md,
+	"48": $spacer-48,
+);
+@include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
+
+// Left / Right
+$px: (
+	"8": $spacer-xs,
+	"12": $spacer-12,
+	"20": $spacer-20,
+	"24": $spacer-md,
+	"32": $spacer-lg,
+);
+@include generate-utils("px", ("padding-left", "padding-right"), $px, ("md"));
+
 // Top
 $pt: (
 	"8": $spacer-xs,
 	"12": math.div($spacer-md, 2),
 	"32": $spacer-lg,
+	"56": $spacer-md + $spacer-lg,
 	"80": $spacer-2xl,
 );
 @include generate-utils("pt", "padding-top", $pt, ("md"));
@@ -34,6 +54,7 @@ $pb: (
 	"8": $spacer-xs,
 	"24": $spacer-md,
 	"48": $spacer-48,
+	"56": $spacer-md + $spacer-lg,
 	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
@@ -50,27 +71,9 @@ $pl: (
 $pr: (
 	"8": $spacer-xs,
 	"24": $spacer-md,
+	"56": $spacer-md + $spacer-lg,
 );
-@include generate-utils("pr", "padding-right", $pr, ("sm"));
-
-// Top / Bottom
-$py: (
-	"8": $spacer-xs,
-	"16": $spacer-sm,
-	"24": $spacer-md,
-	"48": $spacer-md * 2,
-);
-@include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
-
-// Left / Right
-$px: (
-	"8": $spacer-xs,
-	"12": $spacer-12,
-	"20": $spacer-20,
-	"24": $spacer-md,
-	"32": $spacer-lg,
-);
-@include generate-utils("px", ("padding-left", "padding-right"), $px, ("md"));
+@include generate-utils("pr", "padding-right", $pr, ("sm", "md"));
 
 /**
  * Margin
@@ -83,6 +86,8 @@ $mt: (
 	"16": $spacer-sm,
 	"24": $spacer-md,
 	"32": $spacer-lg,
+	"48": $spacer-48,
+	"56": $spacer-md + $spacer-lg,
 	"64": $spacer-64,
 	"80": $spacer-2xl,
 );
@@ -90,12 +95,14 @@ $mt: (
 
 // Bottom
 $mb: (
+	"8": $spacer-xs,
 	"16": $spacer-sm,
 	"24": $spacer-md,
 	"32": $spacer-lg,
 	"40": $spacer-1xl,
-	"48": $spacer-md * 2,
-	"64": $spacer-lg * 2,
+	"48": $spacer-48,
+	"56": $spacer-md + $spacer-lg,
+	"64": $spacer-64,
 	"80": $spacer-2xl,
 );
 @include generate-utils("mb", "margin-bottom", $mb, ("md"));

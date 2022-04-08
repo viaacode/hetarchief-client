@@ -8,7 +8,7 @@ import { RequestStatusAll } from '@cp/types';
 import { DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { VisitInfo, VisitInfoRow } from '@shared/types';
+import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatAccessDates } from '@shared/utils';
 import { VisitTimeframe } from '@visits/types';
 
@@ -39,9 +39,9 @@ export const visitorsStatusFilters = (): TabProps[] => {
 
 export const VisitorsTableColumns = (
 	t: TFunction,
-	denyVisitRequest: (visitRequest: VisitInfo) => void,
-	editVisitRequest: (visitRequest: VisitInfo) => void
-): Column<VisitInfo>[] => [
+	denyVisitRequest: (visitRequest: Visit) => void,
+	editVisitRequest: (visitRequest: Visit) => void
+): Column<Visit>[] => [
 	{
 		Header: t('modules/cp/const/visitors___naam') || '',
 		accessor: 'visitorName',
@@ -49,7 +49,7 @@ export const VisitorsTableColumns = (
 	{
 		Header: t('modules/cp/const/visitors___emailadres') || '',
 		accessor: 'visitorMail',
-		Cell: ({ row }: VisitInfoRow) => {
+		Cell: ({ row }: VisitRow) => {
 			return (
 				<a
 					className="u-color-neutral c-table__link"
@@ -64,7 +64,7 @@ export const VisitorsTableColumns = (
 	{
 		Header: t('modules/cp/const/visitors___toegang') || '',
 		accessor: 'startAt',
-		Cell: ({ row }: VisitInfoRow) => {
+		Cell: ({ row }: VisitRow) => {
 			const start = asDate(row.original.startAt);
 			const end = asDate(row.original.endAt);
 
@@ -82,14 +82,14 @@ export const VisitorsTableColumns = (
 	{
 		Header: t('modules/cp/const/visitors___goedgekeurd-door') || '',
 		accessor: 'updatedByName',
-		Cell: ({ row }: VisitInfoRow) => {
+		Cell: ({ row }: VisitRow) => {
 			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
 		},
 	},
 	{
 		Header: '',
 		id: 'cp-visitors-histories-table-actions',
-		Cell: ({ row }: VisitInfoRow) => {
+		Cell: ({ row }: VisitRow) => {
 			return (
 				<DropdownMenu>
 					<Button

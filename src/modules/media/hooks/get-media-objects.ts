@@ -12,12 +12,13 @@ export function useGetMediaObjects(
 	filters: MediaSearchFilters,
 	page: number,
 	size: number,
-	sort?: SortObject
+	sort?: SortObject,
+	enabled = true
 ): UseQueryResult<GetMedia> {
 	const dispatch = useDispatch();
 
 	return useQuery(
-		[QUERY_KEYS.getMediaObjects, { slug, filters, page, size, sort }],
+		[QUERY_KEYS.getMediaObjects, { slug, filters, page, size, sort, enabled }],
 		() => {
 			// TODO: improve ⚠️
 			// Run three queries:
@@ -51,6 +52,7 @@ export function useGetMediaObjects(
 		},
 		{
 			keepPreviousData: true,
+			enabled,
 		}
 	);
 }

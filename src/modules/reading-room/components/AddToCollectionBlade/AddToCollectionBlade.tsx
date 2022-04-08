@@ -184,6 +184,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-24">
 				<Button
+					className="u-mb-16"
 					label={t(
 						'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___voeg-toe'
 					)}
