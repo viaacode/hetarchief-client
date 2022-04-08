@@ -7,7 +7,7 @@ const useScrollLock: UseScrollLock = (lock, element) => {
 		const scrollbarWidth =
 			document && window ? document.body.offsetWidth - document.body.clientWidth : 0;
 
-		const elementToLock = element ?? document.body;
+		const elementToLock = element ?? document.body.parentElement ?? document.body;
 		let prevOverflowStyle = '';
 		let prevMarginStyle = '';
 
