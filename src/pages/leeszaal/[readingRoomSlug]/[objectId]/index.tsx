@@ -445,11 +445,15 @@ const ObjectDetailPage: NextPage = () => {
 											className="u-px-32"
 											metadata={[
 												{
-													title: t('trefwoorden'),
+													title: t(
+														'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
+													),
 													data: mapKeywordsToTagList(mediaInfo.keywords),
 												},
 												{
-													title: t('Ook interessant'),
+													title: t(
+														'pages/leeszaal/reading-room-slug/object-id/index___ook-interessant'
+													),
 													data: renderSimilarItems(similar),
 													className: 'u-pb-0',
 												},
