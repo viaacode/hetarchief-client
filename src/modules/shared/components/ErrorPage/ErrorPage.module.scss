@@ -1,0 +1,30 @@
+@use "styles/abstracts" as *;
+
+$component: "c-error-page";
+
+.#{$component} {
+	height: 100%;
+	display: grid;
+	grid-template-rows: 2fr 1fr;
+	grid-template-columns: 1fr minmax(auto, 144rem) 1fr;
+	justify-content: center;
+
+	&__title,
+	&__image-wrapper,
+	&__description,
+	&__button {
+		grid-column: 2;
+	}
+
+	&__title {
+		grid-row: 1;
+		z-index: get-z-layer("foreground");
+		color: white;
+	}
+
+	&__image-wrapper {
+		position: relative;
+		grid-row: 1;
+	}
+
+}
