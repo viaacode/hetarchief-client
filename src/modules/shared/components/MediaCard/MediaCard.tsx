@@ -125,7 +125,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			renderNoContent()
 		);
 
-	const renderPeak = () => <Peak />;
+	const renderPeak = renderNoContent;
 
 	const highlighted = (toHighlight: string) => {
 		return (
