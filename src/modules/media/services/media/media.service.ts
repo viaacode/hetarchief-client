@@ -1,5 +1,6 @@
 import { stringifyUrl } from 'query-string';
 
+import { MediaSimilar } from '@media/types';
 import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import {
@@ -12,7 +13,12 @@ import {
 } from '@shared/types';
 import { ElasticsearchResponse, GetMedia } from '@shared/types/api';
 
-import { MEDIA_SERVICE_BASE_URL, MEDIA_SERVICE_TICKET_URL } from './media.service.const';
+import {
+	MEDIA_SERVICE_BASE_URL,
+	MEDIA_SERVICE_RELATED,
+	MEDIA_SERVICE_SIMILAR,
+	MEDIA_SERVICE_TICKET_URL,
+} from './media.service.const';
 
 export class MediaService {
 	public static async getBySpace(
@@ -83,5 +89,21 @@ export class MediaService {
 				})
 			)
 			.text();
+	}
+
+	public static async getSimilar(id: string, esIndex: string): Promise<MediaSimilar> {
+		return await ApiService.getApi()
+			.get(`${MEDIA_SERVICE_BASE_URL}/${esIndex}/${id}/${MEDIA_SERVICE_SIMILAR}`)
+			.json();
+	}
+
+	public static async getRelated(
+		id: string,
+		esIndex: string,
+		meemooId: string
+	): Promise<MediaSimilar> {
+		return await ApiService.getApi()
+			.get(`${MEDIA_SERVICE_BASE_URL}/${esIndex}/${id}/${MEDIA_SERVICE_RELATED}/${meemooId}`)
+			.json();
 	}
 }
