@@ -122,6 +122,10 @@ $component: "c-card";
 .#{$component} {
 	display: flex;
 
+	&[role="button"] {
+		cursor:pointer;
+	}
+
 	// Elements
 
 	&__header-wrapper {
@@ -172,6 +176,14 @@ $component: "c-card";
 
 		&-content {
 			@extend %s-card-content-whitespace;
+
+			.#{$component} {
+				&__title-wrapper {
+					@include respond-at("md") {
+						margin-left: 0;
+					}
+				}
+			}
 		}
 
 		&-vertical {
@@ -253,7 +265,7 @@ $component: "c-card";
 				&__image {
 					&-wrapper {
 						align-self: flex-start;
-						box-shadow: $shadow-24-black-61;
+						box-shadow: $shadow-24-black-24;
 						transform: translate(-($card-offset * 0.8), -($card-offset * 0.8));
 					}
 				}

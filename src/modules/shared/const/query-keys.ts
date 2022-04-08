@@ -12,4 +12,5 @@ export enum QUERY_KEYS {
 	getReadingRooms = 'getReadingRooms',
 	getVisits = 'getVisits',
 	getSpace = 'getSpace',
+	getPendingVisitCountForUserBySlug = 'getPendingVisitCountForUserBySlug',
 }

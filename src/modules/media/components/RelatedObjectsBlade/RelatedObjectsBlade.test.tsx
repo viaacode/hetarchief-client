@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 
 import { Icon } from '@shared/components';
-import { ICON_LIGHT } from '@shared/components/Icon/Icon.const';
 
 import RelatedObjectsBlade from './RelatedObjectsBlade';
 import { relatedObjectsBladeMock } from './__mocks__/related-objects-blade';

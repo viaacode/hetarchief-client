@@ -31,7 +31,6 @@ import { MediaActions, MediaRepresentation, MediaSimilarHit, ObjectDetailTabs } 
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
-import { ROUTES } from '@shared/const';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -64,7 +63,7 @@ const ObjectDetailPage: NextPage = () => {
 	const previousUrl = useSelector(selectPreviousUrl);
 
 	// Internal state
-	const [backlink, setBackLink] = useState(`/${ROUTES.spaces}/${router.query.readingRoomSlug}`);
+	const [backlink, setBackLink] = useState(`/${router.query.slug}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
@@ -93,7 +92,7 @@ const ObjectDetailPage: NextPage = () => {
 		data: mediaInfo,
 		isLoading: isLoadingMediaInfo,
 		isError,
-	} = useGetMediaInfo(router.query.objectId as string);
+	} = useGetMediaInfo(router.query.ie as string);
 
 	// playable url
 	const {
@@ -107,23 +106,21 @@ const ObjectDetailPage: NextPage = () => {
 
 	// ook interessant
 	const { data: similarData } = useGetMediaSimilar(
-		router.query.objectId as string,
+		router.query.ie as string,
 		mediaInfo?.maintainerId || '',
 		!!mediaInfo
 	);
 
 	// gerelateerd
 	const { data: relatedData } = useGetMediaRelated(
-		router.query.objectId as string,
+		router.query.ie as string,
 		mediaInfo?.maintainerId ?? '',
 		mediaInfo?.meemooIdentifier ?? '',
 		!!mediaInfo
 	);
 
 	// visit info
-	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
-		router.query.readingRoomSlug as string
-	);
+	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
 
 	/**
 	 * Effects
@@ -137,17 +134,17 @@ const ObjectDetailPage: NextPage = () => {
 	}, [activeTab, windowSize.width]);
 
 	useEffect(() => {
-		let backLink = `/${ROUTES.spaces}/${router.query.readingRoomSlug}`;
+		let backLink = `/${router.query.slug}`;
 		if (previousUrl) {
 			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
-			const validBacklink = subgroups?.length === 2 && subgroups[0] === ROUTES.spaces;
+			const validBacklink = subgroups?.length === 2 && subgroups[0] === router.query.slug;
 
 			if (validBacklink) {
 				backLink = previousUrl;
 			}
 		}
 		setBackLink(backLink);
-	}, [previousUrl, router.query.readingRoomSlug]);
+	}, [previousUrl, router.query.slug]);
 
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
@@ -322,7 +319,7 @@ const ObjectDetailPage: NextPage = () => {
 	// Metadata
 	const renderCard = (item: MediaObject, isHidden: boolean) => (
 		<li>
-			<Link passHref href={`/${ROUTES.spaces}/${item.maintainer_id}/${item.id}`}>
+			<Link passHref href={`/${item.maintainer_id}/${item.id}`}>
 				<a
 					tabIndex={isHidden ? -1 : 0}
 					className={`p-object-detail__metadata-card-link u-text-no-decoration`}

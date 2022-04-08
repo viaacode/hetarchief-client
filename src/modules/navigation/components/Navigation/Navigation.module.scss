@@ -50,14 +50,14 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	display: grid;
 	align-items: center;
 	grid-template-columns: auto 1fr 2fr;
-	height: $c-navigation-height-md;
+	min-height: $c-navigation-height-md;
 	padding: 0 2rem;
 	margin-bottom: -0.1rem; // Note: prevent fine line artefact between navigation and header; better fix welcome
 	background-color: $black;
 	color: $white;
 
 	@include respond-at(md) {
-		height: $c-navigation-height;
+		min-height: $c-navigation-height;
 		padding: 0 3.2rem;
 	}
 
@@ -379,7 +379,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 
 .c-navigation--sm {
 	grid-template-columns: 1fr 2fr 1fr;
-	height: $c-navigation-height-contextual;
+	min-height: $c-navigation-height-contextual;
 	padding: 0 2.8rem;
 
 	&::after {
@@ -387,7 +387,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	}
 
 	@include respond-to(md) {
-		height: $c-navigation-height-contextual-md;
+		min-height: $c-navigation-height-contextual-md;
 	}
 
 	.c-navigation__title {

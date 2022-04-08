@@ -9,7 +9,6 @@ import { DropdownMenu } from '@shared/components';
 import { formatWithLocale } from '@shared/utils';
 
 import Icon from '../Icon/Icon';
-import { Peak } from '../Peak';
 
 import styles from './MediaCard.module.scss';
 import { MediaCardProps } from './MediaCard.types';

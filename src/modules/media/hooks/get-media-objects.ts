@@ -8,16 +8,17 @@ import { setResults } from '@shared/store/media';
 import { GetMedia, MediaSearchFilterField, MediaSearchFilters, SortObject } from '@shared/types';
 
 export function useGetMediaObjects(
-	readingRoomSlug: string,
+	slug: string,
 	filters: MediaSearchFilters,
 	page: number,
 	size: number,
-	sort?: SortObject
+	sort?: SortObject,
+	enabled = true
 ): UseQueryResult<GetMedia> {
 	const dispatch = useDispatch();
 
 	return useQuery(
-		[QUERY_KEYS.getMediaObjects, { readingRoomSlug, filters, page, size, sort }],
+		[QUERY_KEYS.getMediaObjects, { slug, filters, page, size, sort, enabled }],
 		() => {
 			// TODO: improve ⚠️
 			// Run three queries:
@@ -25,10 +26,10 @@ export function useGetMediaObjects(
 			//     - one to fetch the aggregates without any criteria to populate filters (noFilters)
 			//     - and one to fetch the aggregates across tabs (noFormat)
 			return Promise.all([
-				MediaService.getBySpace(readingRoomSlug, filters, page, size, sort),
-				MediaService.getBySpace(readingRoomSlug, [], page, size, sort),
+				MediaService.getBySpace(slug, filters, page, size, sort),
+				MediaService.getBySpace(slug, [], page, size, sort),
 				MediaService.getBySpace(
-					readingRoomSlug,
+					slug,
 					filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
 					page,
 					size,
@@ -51,6 +52,7 @@ export function useGetMediaObjects(
 		},
 		{
 			keepPreviousData: true,
+			enabled,
 		}
 	);
 }
