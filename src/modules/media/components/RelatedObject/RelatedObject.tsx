@@ -2,7 +2,7 @@ import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconLightNames } from '@shared/components';
 import { CardImage } from '@shared/components/CardImage';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
@@ -18,7 +18,13 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 		if (thumbnail) {
 			if (typeof thumbnail === 'string') {
 				return (
-					<CardImage name={object.title} id={object.id} size="small" image={thumbnail} />
+					<CardImage
+						unoptimized
+						name={object.title}
+						id={object.id}
+						size="small"
+						image={thumbnail}
+					/>
 				);
 			} else {
 				return thumbnail;
@@ -37,7 +43,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 			subtitle={object.subtitle}
 			title={
 				<>
-					<Icon name={object.type} />
+					<Icon name={object.type as IconLightNames} />
 					<strong>{object.title}</strong>
 				</>
 			}

@@ -122,6 +122,10 @@ $component: "c-card";
 .#{$component} {
 	display: flex;
 
+	&[role="button"] {
+		cursor:pointer;
+	}
+
 	// Elements
 
 	&__header-wrapper {

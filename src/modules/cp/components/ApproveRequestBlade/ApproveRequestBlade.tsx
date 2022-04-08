@@ -99,7 +99,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				status: VisitStatus.APPROVED,
 				startAt: values.accessFrom?.toISOString(),
 				endAt: values.accessTo?.toISOString(),
-				// TODO: remarks
+				note: values.accessRemark, // TODO check throughput
 			}).then(() => {
 				onSubmit?.(values);
 
@@ -147,6 +147,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		return (
 			<div className="u-px-32 u-py-24">
 				<Button
+					className="u-mb-16"
 					label={approveButtonLabel}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
