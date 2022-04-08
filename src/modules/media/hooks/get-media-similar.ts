@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query';
 import { UseQueryResult } from 'react-query/types/react/types';
 
-import { MediaService } from '@media/services';
-import { MediaSimilar } from '@media/types';
 import { QUERY_KEYS } from '@shared/const';
+
+import { MediaService } from '../services';
+import { MediaSimilar } from '../types';
 
 export function useGetMediaSimilar(
 	id: string,

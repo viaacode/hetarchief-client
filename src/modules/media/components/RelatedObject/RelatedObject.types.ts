@@ -9,6 +9,7 @@ export interface MediaObject {
 	description: string;
 	thumbnail?: string | ReactNode;
 	id: string;
+	maintainer_id?: string;
 }
 
 export interface RelatedObjectProps extends DefaultComponentProps {

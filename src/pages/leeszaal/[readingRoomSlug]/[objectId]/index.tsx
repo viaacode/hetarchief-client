@@ -7,7 +7,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -24,6 +24,7 @@ import {
 	ticketErrorPlaceholder,
 } from '@media/const';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
+import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaActions, MediaRepresentation, MediaSimilarHit, ObjectDetailTabs } from '@media/types';
@@ -38,16 +39,17 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { MediaTypes } from '@shared/types';
+import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import { asDate, createPageTitle, formatAccessDate, formatWithLocale } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
 	DynamicActionMenu,
+	MediaObject,
 	Metadata,
 	ObjectPlaceholder,
 	RelatedObject,
-	RelatedObjectProps,
+	RelatedObjectsBlade,
 } from 'modules/media/components';
 import { VisitorLayout } from 'modules/visitors';
 
@@ -71,7 +73,8 @@ const ObjectDetailPage: NextPage = () => {
 		MediaRepresentation | undefined
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
-	const [similar, setSimilar] = useState<RelatedObjectProps[]>([]);
+	const [similar, setSimilar] = useState<MediaObject[]>([]);
+	const [related, setRelated] = useState<MediaObject[]>([]);
 
 	// Layout
 	useStickyLayout();
@@ -109,6 +112,14 @@ const ObjectDetailPage: NextPage = () => {
 		!!mediaInfo
 	);
 
+	// gerelateerd
+	const { data: relatedData } = useGetMediaRelated(
+		router.query.objectId as string,
+		mediaInfo?.maintainerId ?? '',
+		mediaInfo?.meemooIdentifier ?? '',
+		!!mediaInfo
+	);
+
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(
 		router.query.readingRoomSlug as string
@@ -139,15 +150,14 @@ const ObjectDetailPage: NextPage = () => {
 	}, [previousUrl, router.query.readingRoomSlug]);
 
 	useEffect(() => {
-		// Mock representations for slider testing
-		// if (mediaInfo) {
-		// 	mediaInfo.representations = [
-		// 		...mediaInfo.representations,
-		// 		...fragmentSliderMock.fragments,
-		// 	];
-		// }
-
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
+
+		// Filter out peak files if type === video
+		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
+			mediaInfo.representations = mediaInfo?.representations.filter(
+				(object) => object.dctermsFormat !== 'peak'
+			);
+		}
 
 		setCurrentRepresentaton(mediaInfo?.representations[0]);
 
@@ -168,6 +178,28 @@ const ObjectDetailPage: NextPage = () => {
 		similarData && setSimilar(mapSimilarData(similarData.hits.hits));
 	}, [similarData]);
 
+	useEffect(() => {
+		relatedData &&
+			setRelated(
+				relatedData.items.map((item) => {
+					return {
+						type: item.dctermsFormat as MediaTypes,
+						title: item.name,
+						subtitle: `(${
+							item.datePublished
+								? formatWithLocale('PP', asDate(item.datePublished))
+								: undefined
+						})`,
+						description: item.description,
+						// thumbnail: item.thumbnailUrl,
+						id: item.schemaIdentifier,
+						maintainer_id: item.maintainerId,
+						thumbnail: item.thumbnailUrl,
+					};
+				})
+			);
+	}, [relatedData]);
+
 	/**
 	 * Variables
 	 */
@@ -179,21 +211,19 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Mapping
 	 */
-	const mapSimilarData = (data: MediaSimilarHit[]): RelatedObjectProps[] => {
+	const mapSimilarData = (data: MediaSimilarHit[]): MediaObject[] => {
 		return data.map((hit) => {
 			return {
-				object: {
-					type: hit._source.dcterms_format as MediaTypes,
-					title: hit._source.schema_name,
-					subtitle: `(${
-						hit._source.schema_date_published
-							? formatWithLocale('PP', asDate(hit._source.schema_date_published))
-							: undefined
-					})`,
-					description: hit._source.schema_description || '',
-					// thumbnail: hit._source.schema_thumbnail_url,
-					id: hit._source.schema_identifier,
-				},
+				type: hit._source.dcterms_format as MediaTypes,
+				title: hit._source.schema_name,
+				subtitle: `(${
+					hit._source.schema_date_published
+						? formatWithLocale('PP', asDate(hit._source.schema_date_published))
+						: undefined
+				})`,
+				description: hit._source.schema_description || '',
+				// thumbnail: hit._source.schema_thumbnail_url,
+				id: hit._source.schema_identifier,
 			};
 		});
 	};
@@ -290,18 +320,32 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	// Metadata
-	const renderSimilarItems = (items: RelatedObjectProps[]) => (
-		<ul className="u-list-reset u-bg-platinum u-mx--32 u-px-32 u-py-24 u-mt-24">
-			{items.map((item) => {
+	const renderCard = (item: MediaObject, isHidden: boolean) => (
+		<li>
+			<Link passHref href={`/${ROUTES.spaces}/${item.maintainer_id}/${item.id}`}>
+				<a
+					tabIndex={isHidden ? -1 : 0}
+					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
+				>
+					{<RelatedObject object={item} />}
+				</a>
+			</Link>
+		</li>
+	);
+
+	const renderMetadataCards = (
+		type: 'similar' | 'related',
+		items: MediaObject[],
+		isHidden = false
+	): ReactNode => (
+		<ul
+			className={`u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
+		>
+			{items.map((item, index) => {
 				return (
-					<li className="u-py-8" key={`similar-object-${item.object.id}`}>
-						<Link
-							passHref
-							href={`/${ROUTES.spaces}/${router.query.readingRoomSlug}/${item.object.id}`}
-						>
-							<a className="u-text-no-decoration">{<RelatedObject {...item} />}</a>
-						</Link>
-					</li>
+					<Fragment key={`${type}-object-${item.id}-${index}`}>
+						{renderCard(item, isHidden)}
+					</Fragment>
 				);
 			})}
 		</ul>
@@ -397,6 +441,7 @@ const ObjectDetailPage: NextPage = () => {
 						ref={metadataRef}
 						className={clsx(
 							'p-object-detail__metadata',
+							'p-object-detail__metadata--collapsed',
 							expandMetadata && 'p-object-detail__metadata--expanded',
 							!mediaType && 'p-object-detail__metadata--no-media'
 						)}
@@ -451,10 +496,8 @@ const ObjectDetailPage: NextPage = () => {
 													data: mapKeywordsToTagList(mediaInfo.keywords),
 												},
 												{
-													title: t(
-														'pages/leeszaal/reading-room-slug/object-id/index___ook-interessant'
-													),
-													data: renderSimilarItems(similar),
+													title: 'Ook interessant',
+													data: renderMetadataCards('similar', similar),
 													className: 'u-pb-0',
 												},
 											]}
@@ -464,6 +507,33 @@ const ObjectDetailPage: NextPage = () => {
 							)}
 						</div>
 					</div>
+					{!!related.length && (
+						<RelatedObjectsBlade
+							className={clsx(
+								'p-object-detail__related',
+								'p-object-detail__metadata--collapsed',
+								expandMetadata && 'p-object-detail__metadata--expanded'
+							)}
+							icon={
+								<Icon className="u-font-size-24 u-mr-10" name="related-objects" />
+							}
+							title={
+								related.length === 1
+									? t(
+											'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
+									  )
+									: t(
+											'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+											{
+												amount: related.length,
+											}
+									  )
+							}
+							renderContent={(hidden) =>
+								renderMetadataCards('related', related, hidden)
+							}
+						/>
+					)}
 				</article>
 			</div>
 			<AddToCollectionBlade
