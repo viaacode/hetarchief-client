@@ -23,7 +23,6 @@ import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCe
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHistory } from '@shared/hooks/use-history';
-import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
