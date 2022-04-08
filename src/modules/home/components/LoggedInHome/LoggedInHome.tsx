@@ -15,7 +15,7 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
-import { VisitStatus } from '@shared/types';
+import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
@@ -164,6 +164,14 @@ const LoggedInHome: FC = () => {
 		setIsProcessVisitBladeOpen(true);
 	};
 
+	const mapVisitToRoom = (visit: Visit) => ({
+		image: visit.spaceImage,
+		logo: visit.spaceLogo,
+		color: visit.spaceColor,
+		name: visit.spaceName,
+		info: visit.spaceInfo,
+	});
+
 	/**
 	 * Render
 	 */
@@ -202,13 +210,7 @@ const LoggedInHome: FC = () => {
 											until: asDate(visit.endAt),
 											from: asDate(visit.startAt),
 										}}
-										room={{
-											image: visit.spaceImage,
-											logo: visit.spaceLogo,
-											color: visit.spaceColor,
-											name: visit.spaceName,
-											info: visit.spaceInfo,
-										}}
+										room={mapVisitToRoom(visit)}
 										type={ReadingRoomCardType.access}
 									/>
 								))}
@@ -231,13 +233,7 @@ const LoggedInHome: FC = () => {
 											until: asDate(visit.endAt),
 											from: asDate(visit.startAt),
 										}}
-										room={{
-											image: visit.spaceImage,
-											logo: visit.spaceLogo,
-											color: visit.spaceColor,
-											name: visit.spaceName,
-											info: visit.spaceInfo,
-										}}
+										room={mapVisitToRoom(visit)}
 										type={ReadingRoomCardType.futureApproved}
 									/>
 								))}
@@ -261,13 +257,7 @@ const LoggedInHome: FC = () => {
 											until: asDate(visit.endAt),
 											from: asDate(visit.startAt),
 										}}
-										room={{
-											image: visit.spaceImage,
-											logo: visit.spaceLogo,
-											color: visit.spaceColor,
-											name: visit.spaceName,
-											info: visit.spaceInfo,
-										}}
+										room={mapVisitToRoom(visit)}
 										type={ReadingRoomCardType.futureRequested}
 									/>
 								))}
