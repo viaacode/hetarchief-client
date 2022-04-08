@@ -1,14 +1,15 @@
 import { ReactNode } from 'react';
 
-import { DefaultComponentProps } from '@shared/types';
+import { DefaultComponentProps, MediaTypes } from '@shared/types';
 
 export interface MediaObject {
-	type: 'video' | 'audio';
+	type: MediaTypes;
 	title: string;
 	subtitle: string;
 	description: string;
 	thumbnail?: string | ReactNode;
 	id: string;
+	maintainer_id?: string;
 }
 
 export interface RelatedObjectProps extends DefaultComponentProps {
