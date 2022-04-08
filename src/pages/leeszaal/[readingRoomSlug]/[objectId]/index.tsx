@@ -1,6 +1,5 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { toLower } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -15,10 +14,6 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
-	relatedObjectsBladeMock,
-	relatedObjectsBladeObjects,
-} from '@media/components/RelatedObjectsBlade/__mocks__/related-objects-blade';
-import {
 	FLOWPLAYER_FORMATS,
 	formatErrorPlaceholder,
 	IMAGE_FORMATS,
@@ -32,7 +27,7 @@ import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
-import { MediaActions, MediaRepresentation, ObjectDetailTabs } from '@media/types';
+import { MediaActions, MediaRepresentation, MediaSimilarHit, ObjectDetailTabs } from '@media/types';
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
@@ -44,7 +39,7 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { MediaTypes } from '@shared/types';
+import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import { asDate, createPageTitle, formatAccessDate, formatWithLocale } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
@@ -113,7 +108,7 @@ const ObjectDetailPage: NextPage = () => {
 	// ook interessant
 	const { data: similarData } = useGetMediaSimilar(
 		router.query.objectId as string,
-		toLower(mediaInfo?.maintainerId),
+		mediaInfo?.maintainerId || '',
 		!!mediaInfo
 	);
 
@@ -135,6 +130,13 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
+		// Pause media if metadata tab is shown on mobile
+		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
+			setPauseMedia(true);
+		}
+	}, [activeTab, windowSize.width]);
+
+	useEffect(() => {
 		let backLink = `/${ROUTES.spaces}/${router.query.readingRoomSlug}`;
 		if (previousUrl) {
 			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
@@ -149,6 +151,13 @@ const ObjectDetailPage: NextPage = () => {
 
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
+
+		// Filter out peak files if type === video
+		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
+			mediaInfo.representations = mediaInfo?.representations.filter(
+				(object) => object.dctermsFormat !== 'peak'
+			);
+		}
 
 		setCurrentRepresentaton(mediaInfo?.representations[0]);
 
@@ -166,24 +175,7 @@ const ObjectDetailPage: NextPage = () => {
 	}, [mediaInfo]);
 
 	useEffect(() => {
-		similarData &&
-			setSimilar(
-				similarData.hits.hits.map((hit) => {
-					return {
-						type: hit._source.dcterms_format as MediaTypes,
-						title: hit._source.schema_name,
-						subtitle: `(${
-							hit._source.schema_date_published
-								? formatWithLocale('PP', asDate(hit._source.schema_date_published))
-								: undefined
-						})`,
-						description: hit._source.schema_description || '',
-						// thumbnail: hit._source.schema_thumbnail_url,
-						id: hit._source.schema_identifier,
-						maintainer_id: hit._source.schema_maintainer?.schema_identifier,
-					};
-				})
-			);
+		similarData && setSimilar(mapSimilarData(similarData.hits.hits));
 	}, [similarData]);
 
 	useEffect(() => {
@@ -202,6 +194,7 @@ const ObjectDetailPage: NextPage = () => {
 						// thumbnail: item.thumbnailUrl,
 						id: item.schemaIdentifier,
 						maintainer_id: item.maintainerId,
+						thumbnail: item.thumbnailUrl,
 					};
 				})
 			);
@@ -216,14 +209,24 @@ const ObjectDetailPage: NextPage = () => {
 		visitStatus && visitStatus.endAt ? formatAccessDate(asDate(visitStatus.endAt)) : '';
 
 	/**
-	 * Effects
+	 * Mapping
 	 */
-	useEffect(() => {
-		// Pause media if metadata tab is shown on mobile
-		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
-			setPauseMedia(true);
-		}
-	}, [activeTab, windowSize.width]);
+	const mapSimilarData = (data: MediaSimilarHit[]): MediaObject[] => {
+		return data.map((hit) => {
+			return {
+				type: hit._source.dcterms_format as MediaTypes,
+				title: hit._source.schema_name,
+				subtitle: `(${
+					hit._source.schema_date_published
+						? formatWithLocale('PP', asDate(hit._source.schema_date_published))
+						: undefined
+				})`,
+				description: hit._source.schema_description || '',
+				// thumbnail: hit._source.schema_thumbnail_url,
+				id: hit._source.schema_identifier,
+			};
+		});
+	};
 
 	/**
 	 * Callbacks
@@ -320,7 +323,10 @@ const ObjectDetailPage: NextPage = () => {
 	const renderCard = (item: MediaObject, isHidden: boolean) => (
 		<li>
 			<Link passHref href={`/${ROUTES.spaces}/${item.maintainer_id}/${item.id}`}>
-				<a tabIndex={isHidden ? -1 : 0} className={`p-object-detail__metadata-card-link`}>
+				<a
+					tabIndex={isHidden ? -1 : 0}
+					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
+				>
 					{<RelatedObject object={item} />}
 				</a>
 			</Link>
