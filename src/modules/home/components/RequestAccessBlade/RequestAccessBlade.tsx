@@ -54,6 +54,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 				</FormControl>
 
 				<Button
+					className="u-mb-16"
 					label={t(
 						'modules/home/components/request-access-blade/request-access-blade___verstuur'
 					)}

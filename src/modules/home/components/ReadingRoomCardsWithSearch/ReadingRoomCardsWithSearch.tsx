@@ -99,7 +99,7 @@ const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onReq
 					items={(readingRoomInfo?.items || []).map(
 						(room: ReadingRoomInfo): ReadingRoomCardProps => {
 							return {
-								room,
+								room: { ...room, color: room.color || undefined },
 								type: ReadingRoomCardType.noAccess, // TODO change this based on current logged in user
 								onAccessRequest: () => onRequestAccess(room.id),
 							};

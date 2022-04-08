@@ -13,13 +13,18 @@ import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSea
 import { READING_ROOM_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
-import { AccessGranted } from '@shared/components/ReadingRoomCard/__mocks__/reading-room-card';
 import { ROUTES } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
-import { createPageTitle } from '@shared/utils';
+import { Visit, VisitStatus } from '@shared/types';
+import { asDate, createPageTitle } from '@shared/utils';
+import { useGetVisits } from '@visits/hooks/get-visits';
+import { VisitTimeframe } from '@visits/types';
+
+import { ProcessVisitBlade, ProcessVisitBladeProps } from '../ProcessVisitBlade';
 
 import styles from './LoggedInHome.module.scss';
-import { homeHeroRequests } from './__mocks__/HomeHeroRequests.mock';
+
+type SelectedVisit = ProcessVisitBladeProps['selected'];
 
 const LoggedInHome: FC = () => {
 	const { t } = useTranslation();
@@ -29,16 +34,55 @@ const LoggedInHome: FC = () => {
 		[READING_ROOM_QUERY_KEY]: StringParam,
 	});
 
-	const [isOpenRequestAccessBlade, setIsOpenRequestAccessBlade] = useState(false);
+	/**
+	 * State
+	 */
 
 	const user = useSelector(selectUser);
 
+	const [selected, setSelected] = useState<SelectedVisit | undefined>();
+
+	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
+	const [isProcessVisitBladeOpen, setIsProcessVisitBladeOpen] = useState(false);
+
+	/**
+	 * Data
+	 */
+
+	const defaultGetVisitsParams = {
+		searchInput: '%',
+		personal: true,
+		page: 0,
+		size: 1000,
+	};
+
+	const { data: active, refetch: refetchActive } = useGetVisits({
+		...defaultGetVisitsParams,
+		status: VisitStatus.APPROVED,
+		timeframe: VisitTimeframe.ACTIVE,
+	});
+
+	const { data: future, refetch: refetchFuture } = useGetVisits({
+		...defaultGetVisitsParams,
+		status: VisitStatus.APPROVED,
+		timeframe: VisitTimeframe.FUTURE,
+	});
+
+	const { data: pending, refetch: refetchPending } = useGetVisits({
+		...defaultGetVisitsParams,
+		status: VisitStatus.PENDING,
+	});
+
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+
+	/**
+	 * Effects
+	 */
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
 		if (query[READING_ROOM_QUERY_KEY]) {
-			setIsOpenRequestAccessBlade(true);
+			setIsRequestAccessBladeOpen(true);
 		}
 	}, [query]);
 
@@ -50,7 +94,12 @@ const LoggedInHome: FC = () => {
 		if (query[READING_ROOM_QUERY_KEY]) {
 			setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
 		}
-		setIsOpenRequestAccessBlade(false);
+
+		setIsRequestAccessBladeOpen(false);
+	};
+
+	const onCloseProcessVisitBlade = () => {
+		setIsProcessVisitBladeOpen(false);
 	};
 
 	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
@@ -86,7 +135,7 @@ const LoggedInHome: FC = () => {
 				timeframe: values.visitTime,
 			}).then((res) => {
 				setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
-				setIsOpenRequestAccessBlade(false);
+				setIsRequestAccessBladeOpen(false);
 
 				router.push(ROUTES.visitRequested.replace(':slug', res.spaceSlug));
 			});
@@ -107,18 +156,27 @@ const LoggedInHome: FC = () => {
 
 	const onRequestAccess = (id: string) => {
 		setQuery({ [READING_ROOM_QUERY_KEY]: id });
-		setIsOpenRequestAccessBlade(true);
+		setIsRequestAccessBladeOpen(true);
 	};
+
+	const onProcessVisit = (visit: SelectedVisit) => {
+		setSelected(visit);
+		setIsProcessVisitBladeOpen(true);
+	};
+
+	const mapVisitToRoom = (visit: Visit) => ({
+		image: visit.spaceImage,
+		logo: visit.spaceLogo,
+		color: visit.spaceColor,
+		name: visit.spaceName,
+		info: visit.spaceInfo,
+	});
 
 	/**
 	 * Render
 	 */
 
 	const renderHero = () => {
-		const accessGranted = homeHeroRequests.filter((request) => request.status === 'access');
-		const planned = homeHeroRequests.filter((request) => request.status === 'planned');
-		const requested = homeHeroRequests.filter((request) => request.status === 'requested');
-
 		return (
 			<header className={clsx(styles['c-hero'], styles['c-hero--logged-in'])}>
 				<div className="l-container">
@@ -128,13 +186,15 @@ const LoggedInHome: FC = () => {
 								user: user?.firstName,
 							})}
 						</h1>
+
 						<p className={styles['c-hero__description']}>
 							{t(
 								'modules/shared/components/hero/hero___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-leeszaal'
 							)}
 						</p>
 					</section>
-					{accessGranted.length > 0 && (
+
+					{(active?.items || []).length > 0 && (
 						<section
 							className={clsx(
 								styles['c-hero__section'],
@@ -142,45 +202,62 @@ const LoggedInHome: FC = () => {
 							)}
 						>
 							<div className={styles['c-hero__access-cards']}>
-								{accessGranted.map((room, i) => (
+								{(active?.items || []).map((visit, i) => (
 									<ReadingRoomCard
 										key={`hero-access-${i}`}
-										access={AccessGranted}
-										room={room}
+										access={{
+											granted: true,
+											until: asDate(visit.endAt),
+											from: asDate(visit.startAt),
+										}}
+										room={mapVisitToRoom(visit)}
 										type={ReadingRoomCardType.access}
 									/>
 								))}
 							</div>
 						</section>
 					)}
-					{planned.length > 0 && (
+
+					{(future?.items || []).length > 0 && (
 						<section className={clsx(styles['c-hero__section'])}>
 							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
 								{t('modules/shared/components/hero/hero___geplande-bezoeken')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
-								{planned.map((room, i) => (
+								{(future?.items || []).map((visit, i) => (
 									<ReadingRoomCard
+										onClick={() => onProcessVisit(visit)}
 										key={`hero-planned-${i}`}
-										access={AccessGranted}
-										room={room}
+										access={{
+											granted: true,
+											until: asDate(visit.endAt),
+											from: asDate(visit.startAt),
+										}}
+										room={mapVisitToRoom(visit)}
 										type={ReadingRoomCardType.futureApproved}
 									/>
 								))}
 							</div>
 						</section>
 					)}
-					{requested.length > 0 && (
+
+					{(pending?.items || []).length > 0 && (
 						<section className={clsx(styles['c-hero__section'])}>
 							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
 								{t('modules/shared/components/hero/hero___aanvragen')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
-								{requested.map((room, i) => (
+								{(pending?.items || []).map((visit, i) => (
 									<ReadingRoomCard
+										onClick={() => onProcessVisit(visit)}
 										key={`hero-requested-${i}`}
-										access={AccessGranted}
-										room={room}
+										access={{
+											granted: false,
+											pending: true,
+											until: asDate(visit.endAt),
+											from: asDate(visit.startAt),
+										}}
+										room={mapVisitToRoom(visit)}
 										type={ReadingRoomCardType.futureRequested}
 									/>
 								))}
@@ -193,22 +270,35 @@ const LoggedInHome: FC = () => {
 	};
 
 	return (
-		<div className="p-home u-page-bottom-padding">
-			<Head>
-				<title>{createPageTitle('Home')}</title>
-				<meta name="description" content="TODO: Home meta description" />
-			</Head>
+		<>
+			<div className="p-home u-page-bottom-padding">
+				<Head>
+					<title>{createPageTitle('Home')}</title>
+					<meta name="description" content="TODO: Home meta description" />
+				</Head>
 
-			{renderHero()}
+				{renderHero()}
 
-			<ReadingRoomCardsWithSearch onRequestAccess={onRequestAccess} />
+				<ReadingRoomCardsWithSearch onRequestAccess={onRequestAccess} />
 
-			<RequestAccessBlade
-				isOpen={isOpenRequestAccessBlade}
-				onClose={onCloseRequestBlade}
-				onSubmit={onRequestAccessSubmit}
+				<RequestAccessBlade
+					isOpen={isRequestAccessBladeOpen}
+					onClose={onCloseRequestBlade}
+					onSubmit={onRequestAccessSubmit}
+				/>
+			</div>
+
+			<ProcessVisitBlade
+				selected={selected}
+				isOpen={!!selected && isProcessVisitBladeOpen}
+				onClose={onCloseProcessVisitBlade}
+				onFinish={() => {
+					refetchActive();
+					refetchFuture();
+					refetchPending();
+				}}
 			/>
-		</div>
+		</>
 	);
 };
 

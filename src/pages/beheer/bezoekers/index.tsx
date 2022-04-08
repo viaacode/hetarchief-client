@@ -26,7 +26,7 @@ import {
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
-import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
@@ -52,7 +52,7 @@ const CPVisitorsPage: NextPage = () => {
 				: (filters.timeframe as VisitTimeframe),
 		page: filters.page,
 		size: RequestTablePageSize,
-		orderProp: filters.orderProp as keyof VisitInfo,
+		orderProp: filters.orderProp as keyof Visit,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
 
@@ -102,12 +102,12 @@ const CPVisitorsPage: NextPage = () => {
 		[filters, setFilters]
 	);
 
-	const denyVisitRequest = (visitRequest: VisitInfo) => {
+	const denyVisitRequest = (visitRequest: Visit) => {
 		setSelected(visitRequest.id);
 		setShowDenyVisitRequestModal(true);
 	};
 
-	const editVisitRequest = (visitRequest: VisitInfo) => {
+	const editVisitRequest = (visitRequest: Visit) => {
 		setSelected(visitRequest.id);
 		setShowEditVisitRequestModal(true);
 	};

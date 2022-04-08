@@ -17,7 +17,7 @@ import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
-import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
@@ -34,7 +34,7 @@ const AccountMyHistory: NextPage = () => {
 		timeframe: VisitTimeframe.PAST,
 		page: filters.page,
 		size: HistoryItemListSize,
-		orderProp: filters.orderProp as keyof VisitInfo,
+		orderProp: filters.orderProp as keyof Visit,
 		orderDirection: filters.orderDirection as OrderDirection,
 		personal: true,
 	});

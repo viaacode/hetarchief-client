@@ -370,6 +370,7 @@ const AccountMyCollections: NextPage = () => {
 											description: renderDescription(media),
 											title: renderTitle(media),
 											type: media.format,
+											preview: media.thumbnailUrl,
 										};
 
 										return {
