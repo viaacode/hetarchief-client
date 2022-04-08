@@ -338,7 +338,7 @@ const ObjectDetailPage: NextPage = () => {
 		isHidden = false
 	): ReactNode => (
 		<ul
-			className={`u-list-reset u-bg-platinum p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
+			className={`u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
 		>
 			{items.map((item, index) => {
 				return (
