@@ -8,12 +8,12 @@ const Error404: FC = () => {
 	const { t } = useTranslation();
 	return (
 		<ErrorPage
-			title="404"
+			title="Oeps, we liggen er even uit."
 			description={t(
-				'Sorry! Deze pagina konden we niet terugvinden. De link die je volgde kan stuk zijn of de pagina kan niet meer bestaan.'
+				'We doen er alles aan om dit zo snel mogelijk op te lossen. Meer hulp of informatie nodig?'
 			)}
 			button={<Button label={t('Ga naar de homepage')} variants="black" />}
-			image="/images/bg-shd.png"
+			image="/images/oops-offline.svg"
 		/>
 	);
 };

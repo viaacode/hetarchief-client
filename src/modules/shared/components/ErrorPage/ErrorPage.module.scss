@@ -6,25 +6,84 @@ $component: "c-error-page";
 	height: 100%;
 	display: grid;
 	grid-template-rows: 2fr 1fr;
-	grid-template-columns: 1fr minmax(auto, 144rem) 1fr;
-	justify-content: center;
-
-	&__title,
-	&__image-wrapper,
-	&__description,
-	&__button {
-		grid-column: 2;
-	}
+	grid-template-columns: minmax($spacer-sm, 1fr) auto minmax($spacer-sm, 1fr);
 
 	&__title {
-		grid-row: 1;
 		z-index: get-z-layer("foreground");
+		max-width: 63rem;
+		grid-row: 3;
 		color: white;
+		text-align: center;
+		margin: 0 auto;
+		padding: 0 $spacer-sm;
+		align-self: center;
+		font-size: 2.8rem;
+		line-height: $line-height-2xl;
+
+		@include respond-at("md") {
+			font-size: $font-size-4xl;
+		}
+	}
+
+	&__image-background {
+		background-color: $black;
+		grid-row: 1;
+		grid-column: 1 / 4;
+		display: grid;
+		grid-template-rows: 1fr 8rem 2fr;
+		justify-content: center;
+
+		@include respond-at("md") {
+			grid-template-rows: 1fr 1fr 2fr;
+		}
 	}
 
 	&__image-wrapper {
 		position: relative;
-		grid-row: 1;
+		height: 100%;
+		width: 100vw;
+		max-width: 144rem;
+		grid-row: 2;
+
+		img {
+			object-fit: cover;
+		}
+
+		@include respond-at("md") {
+			img {
+				object-fit: contain;
+			}
+		}
+
 	}
 
+	&__info {
+		grid-column: 2;
+		display: grid;
+		justify-items: center;
+		row-gap: $spacer-md;
+		padding: $spacer-lg 0;
+
+		@include respond-at("md") {
+			grid-template-rows: 1fr auto auto 2fr;
+		}
+	}
+
+	&__description {
+		text-align: center;
+		align-self: end;
+		color: $neutral;
+		line-height: $line-height-4xl;
+
+		@include respond-at("md") {
+			grid-row: 2;
+			max-width: 53rem;
+		}
+	}
+
+	&__button {
+		@include respond-at("md") {
+			grid-row: 3;
+		}
+	}
 }
