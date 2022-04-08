@@ -15,10 +15,6 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
-	relatedObjectsBladeMock,
-	relatedObjectsBladeObjects,
-} from '@media/components/RelatedObjectsBlade/__mocks__/related-objects-blade';
-import {
 	FLOWPLAYER_FORMATS,
 	formatErrorPlaceholder,
 	IMAGE_FORMATS,
@@ -44,7 +40,7 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { MediaTypes } from '@shared/types';
+import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import { asDate, createPageTitle, formatAccessDate, formatWithLocale } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
@@ -149,6 +145,13 @@ const ObjectDetailPage: NextPage = () => {
 
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
+
+		// Filter out peak files if type === video
+		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
+			mediaInfo.representations = mediaInfo?.representations.filter(
+				(object) => object.dctermsFormat !== 'peak'
+			);
+		}
 
 		setCurrentRepresentaton(mediaInfo?.representations[0]);
 
