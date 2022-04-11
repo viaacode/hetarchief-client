@@ -1,9 +1,9 @@
 import { Button } from '@meemoo/react-components';
-import { GetStaticProps } from 'next';
+import { GetStaticProps, GetStaticPropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
-import { withI18nStatic } from '@i18n/wrappers/with-i18n/with-i18n-static';
+import { withI18n } from '@i18n/wrappers';
 import { ErrorPage } from '@shared/components';
 
 const Error404: FC = () => {
@@ -24,6 +24,6 @@ const Error404: FC = () => {
 	);
 };
 
-export const getStaticProps: GetStaticProps = withI18nStatic();
+export const getStaticProps: GetStaticProps = withI18n();
 
 export default Error404;
