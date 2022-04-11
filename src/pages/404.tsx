@@ -1,7 +1,9 @@
 import { Button } from '@meemoo/react-components';
+import { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
+import { withI18nStatic } from '@i18n/wrappers/with-i18n/with-i18n-static';
 import { ErrorPage } from '@shared/components';
 
 const Error404: FC = () => {
@@ -9,9 +11,9 @@ const Error404: FC = () => {
 
 	return (
 		<ErrorPage
-			title={t('404')}
+			title={t('pages/404___404')}
 			description={t(
-				'Sorry! Deze pagina konden we niet terugvinden. De link die je volgde kan stuk zijn of de pagina kan niet meer bestaan.'
+				'pages/404___sorry-deze-pagina-konden-we-niet-terugvinden-de-link-die-je-volgde-kan-stuk-zijn-of-de-pagina-kan-niet-meer-bestaan'
 			)}
 			link={{
 				component: <Button label={t('pages/404___ga-naar-de-homepage')} variants="black" />,
@@ -21,5 +23,7 @@ const Error404: FC = () => {
 		/>
 	);
 };
+
+export const getStaticProps: GetStaticProps = withI18nStatic();
 
 export default Error404;
