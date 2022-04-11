@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 
 import ReadingRoomImageForm from './ReadingRoomImageForm';
-import { READING_ROOM_IMAGE_FORM_MOCK } from './__mocks__/readingRoomImageFrom';
+import { READING_ROOM_IMAGE_FORM_MOCK } from './__mocks__/readingRoomImageForm';
 
 const renderReadingRoomImageForm = ({ ...rest }) => {
 	return render(<ReadingRoomImageForm {...READING_ROOM_IMAGE_FORM_MOCK} {...rest} />);

@@ -95,6 +95,26 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 						exact: false,
 					}),
 				},
+				{
+					id: 'actieve-bezoekers',
+					node: ({ linkClassName }) => (
+						<Link
+							key={pathname}
+							className={linkClassName}
+							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
+								pageName: 'bezoekers',
+							})}
+						>
+							{t('Actieve bezoekers')}
+						</Link>
+					),
+					active: !!matchPath(window.location.pathname, {
+						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
+							pageName: 'bezoekers',
+						})}`,
+						exact: false,
+					}),
+				},
 			],
 		},
 	];

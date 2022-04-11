@@ -1,7 +1,7 @@
 import { generatePath } from 'react-router-dom';
 
 import { READING_ROOMS_PATHS } from './const';
-import { ReadingRoomEdit, ReadingRoomsOverview, Requests } from './pages';
+import { ReadingRoomEdit, ReadingRoomsOverview, Requests, Visitors } from './pages';
 
 export const READING_ROOMS_ROUTES = [
 	{ path: READING_ROOMS_PATHS.overview, component: ReadingRoomsOverview },
@@ -22,5 +22,11 @@ export const READING_ROOMS_ROUTES = [
 			pageName: 'aanvragen',
 		}),
 		component: Requests,
+	},
+	{
+		path: generatePath(READING_ROOMS_PATHS.detail, {
+			pageName: 'bezoekers',
+		}),
+		component: Visitors,
 	},
 ];

@@ -28,6 +28,7 @@ export const READING_ROOM_IMAGE_FORM_MOCK: ReadingRoomImageFormProps = {
 		publishedAt: null,
 		createdAt: '2022-01-13T13:10:14.41978',
 		updatedAt: '2022-01-13T13:10:14.41978',
+		info: 'info',
 	},
 	renderCancelSaveButtons: (onCancel, onSave) => (
 		<>
