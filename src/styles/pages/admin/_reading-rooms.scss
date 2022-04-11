@@ -1,0 +1,14 @@
+@use "styles/abstracts" as *;
+
+$page: "p-admin-reading-rooms";
+
+.#{$page} {
+	&__header {
+		height: 4.8rem;
+		display: flex;
+	}
+
+	&__search {
+		width: 100%;
+	}
+}
