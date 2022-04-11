@@ -13,7 +13,12 @@ const ErrorPage: FC<ErrorPageProps> = ({ className, title, description, button, 
 				<div className={styles['c-error-page__image-background']}>
 					{title && <h1 className={styles['c-error-page__title']}>{title}</h1>}
 					<div className={styles['c-error-page__image-wrapper']}>
-						<Image src={image} alt="" layout="fill" />
+						<Image
+							src={image.image}
+							alt=""
+							layout="fill"
+							objectPosition={image.left ? 'left' : undefined}
+						/>
 					</div>
 				</div>
 			)}

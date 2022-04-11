@@ -6,14 +6,15 @@ import { ErrorPage } from '@shared/components';
 
 const Error404: FC = () => {
 	const { t } = useTranslation();
+
 	return (
 		<ErrorPage
-			title="Oeps, we liggen er even uit."
+			title={t('404')}
 			description={t(
-				'We doen er alles aan om dit zo snel mogelijk op te lossen. Meer hulp of informatie nodig?'
+				'Sorry! Deze pagina konden we niet terugvinden. De link die je volgde kan stuk zijn of de pagina kan niet meer bestaan.'
 			)}
 			button={<Button label={t('Ga naar de homepage')} variants="black" />}
-			image="/images/oops-offline.svg"
+			image={{ image: '/images/404.svg', left: true }}
 		/>
 	);
 };

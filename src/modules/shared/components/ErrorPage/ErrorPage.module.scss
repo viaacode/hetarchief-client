@@ -34,7 +34,7 @@ $component: "c-error-page";
 		justify-content: center;
 
 		@include respond-at("md") {
-			grid-template-rows: 1fr 1fr 2fr;
+			grid-template-rows: 1fr 15rem 2fr;
 		}
 	}
 
@@ -48,13 +48,6 @@ $component: "c-error-page";
 		img {
 			object-fit: cover;
 		}
-
-		@include respond-at("md") {
-			img {
-				object-fit: contain;
-			}
-		}
-
 	}
 
 	&__info {
