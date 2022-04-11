@@ -13,7 +13,10 @@ const Error404: FC = () => {
 			description={t(
 				'Sorry! Deze pagina konden we niet terugvinden. De link die je volgde kan stuk zijn of de pagina kan niet meer bestaan.'
 			)}
-			button={<Button label={t('Ga naar de homepage')} variants="black" />}
+			link={{
+				component: <Button label={t('pages/404___ga-naar-de-homepage')} variants="black" />,
+				to: '/',
+			}}
 			image={{ image: '/images/404.svg', left: true }}
 		/>
 	);
