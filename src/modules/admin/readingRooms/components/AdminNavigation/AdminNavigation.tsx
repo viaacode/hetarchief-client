@@ -105,7 +105,9 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 								pageName: 'bezoekers',
 							})}
 						>
-							{t('Actieve bezoekers')}
+							{t(
+								'modules/admin/reading-rooms/components/admin-navigation/admin-navigation___actieve-bezoekers'
+							)}
 						</Link>
 					),
 					active: !!matchPath(window.location.pathname, {

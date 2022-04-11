@@ -118,19 +118,23 @@ const ReadingRoomsOverview: FC = () => {
 	// Render
 
 	const renderEmptyMessage = (): string => {
-		return t('er zijn geen actieve bezoekers');
+		return t(
+			'modules/admin/reading-rooms/pages/visitors/visitors___er-zijn-geen-actieve-bezoekers'
+		);
 	};
 
 	return (
 		<div className="p-admin-visitors">
-			<h2 className="u-mb-40">{t('Actieve bezoekers')}</h2>
+			<h2 className="u-mb-40">
+				{t('modules/admin/reading-rooms/pages/visitors/visitors___actieve-bezoekers')}
+			</h2>
 			<div className="p-admin-visitors__header">
 				<SearchBar
 					backspaceRemovesValue={false}
 					className="p-admin-visitors__search"
 					instanceId="visitors-search-bar"
 					light={true}
-					placeholder={t('zoek')}
+					placeholder={t('modules/admin/reading-rooms/pages/visitors/visitors___zoek')}
 					searchValue={filters.search}
 					size="md"
 					onClear={() => {
@@ -201,7 +205,9 @@ const ReadingRoomsOverview: FC = () => {
 				</div>
 			) : (
 				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					{isFetching ? t('laden') : renderEmptyMessage()}
+					{isFetching
+						? t('modules/admin/reading-rooms/pages/visitors/visitors___laden')
+						: renderEmptyMessage()}
 				</div>
 			)}
 			<ConfirmationModal

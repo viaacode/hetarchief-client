@@ -47,11 +47,11 @@ export const RequestTableColumns = (
 	i18n: { t: TFunction } = { t: (x: string) => x }
 ): Column<Visit>[] => [
 	{
-		Header: i18n.t('Leeszaal') || '',
+		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___leeszaal') || '',
 		accessor: 'spaceName',
 	},
 	{
-		Header: i18n.t('Naam') || '',
+		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___naam') || '',
 		accessor: 'visitorName',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -62,7 +62,7 @@ export const RequestTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('Emailadres') || '',
+		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___emailadres') || '',
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -77,7 +77,7 @@ export const RequestTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('Tijdstip') || '',
+		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___tijdstip') || '',
 		accessor: 'createdAt',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -91,7 +91,7 @@ export const RequestTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('Status') || '',
+		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___status') || '',
 		accessor: 'status',
 		Cell: ({ row }: VisitRow) => {
 			return <RequestStatusBadge status={row.original.status} />;

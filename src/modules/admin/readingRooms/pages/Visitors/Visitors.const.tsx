@@ -25,15 +25,15 @@ export const VisitorsTableColumns = (
 	editVisitRequest: (visitRequest: Visit) => void
 ): Column<Visit>[] => [
 	{
-		Header: t('Leeszaal') || '',
+		Header: t('modules/admin/reading-rooms/pages/visitors/visitors___leeszaal') || '',
 		accessor: 'spaceName',
 	},
 	{
-		Header: t('Naam') || '',
+		Header: t('modules/admin/reading-rooms/pages/visitors/visitors___naam') || '',
 		accessor: 'visitorName',
 	},
 	{
-		Header: t('Goedgekeurd door') || '',
+		Header: t('modules/admin/reading-rooms/pages/visitors/visitors___goedgekeurd-door') || '',
 		accessor: 'updatedByName',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -44,7 +44,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: t('toegang') || '',
+		Header: t('modules/admin/reading-rooms/pages/visitors/visitors___toegang') || '',
 		accessor: 'startAt',
 		Cell: ({ row }: VisitRow) => {
 			const start = asDate(row.original.startAt);
