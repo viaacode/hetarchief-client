@@ -43,7 +43,7 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 
 			<Navigation.Right placement="right">
 				{showAccessEndDate !== undefined ? (
-					<span>{showAccessEndDate}</span>
+					<span className="u-py-8">{showAccessEndDate}</span>
 				) : !!phone || !!email ? (
 					<Dropdown
 						isOpen={isContactDropdownOpen}
@@ -123,9 +123,11 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 						</DropdownContent>
 					</Dropdown>
 				) : (
-					t(
-						'modules/reading-room/components/reading-room-navigation/reading-room-navigation___geen-contactinformatie-beschikbaar'
-					)
+					<span className="u-py-8">
+						{t(
+							'modules/reading-room/components/reading-room-navigation/reading-room-navigation___geen-contactinformatie-beschikbaar'
+						)}
+					</span>
 				)}
 			</Navigation.Right>
 		</Navigation>

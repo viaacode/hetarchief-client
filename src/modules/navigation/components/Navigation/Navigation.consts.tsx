@@ -7,7 +7,6 @@ import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { ReadingRoomInfo } from '@reading-room/types';
 import { Icon } from '@shared/components';
-import { ROUTES } from '@shared/const';
 
 const linkCls = (classNames: string[] = []) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -82,7 +81,7 @@ export const getNavigationItemsLeft = (
 					// TODO update the link to use the readingRoom.slug instead of the id
 					node: renderLink(
 						readingRoom.name || '---',
-						`/${ROUTES.spaces}/${readingRoom.maintainerId.toLowerCase()}`,
+						`/${readingRoom.maintainerId.toLowerCase()}`,
 						{
 							iconEnd: (
 								<Icon

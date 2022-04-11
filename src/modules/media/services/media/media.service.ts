@@ -22,7 +22,7 @@ import {
 
 export class MediaService {
 	public static async getBySpace(
-		readingRoomSlug: string,
+		slug: string,
 		filters: MediaSearchFilters = [],
 		page = 1,
 		size = 20,
@@ -47,7 +47,7 @@ export class MediaService {
 		});
 
 		const parsed = (await ApiService.getApi()
-			.post(`${MEDIA_SERVICE_BASE_URL}/${readingRoomSlug}`, {
+			.post(`${MEDIA_SERVICE_BASE_URL}/${slug}`, {
 				body: JSON.stringify({
 					filters: filtered,
 					size,
