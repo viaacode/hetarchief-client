@@ -58,6 +58,11 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 					'modules/cp/components/process-request-blade/process-request-blade___geweigerde-aanvraag'
 				);
 
+			case VisitStatus.CANCELLED_BY_VISITOR:
+				return t(
+					'modules/cp/components/process-request-blade/process-request-blade___geannuleerde-aanvraag'
+				);
+
 			default:
 				return ''; // this causes brief visual "despawn" but isn't very noticable
 		}
