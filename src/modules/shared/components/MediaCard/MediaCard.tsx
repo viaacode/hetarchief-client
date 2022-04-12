@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
-import TruncateMarkup from 'react-truncate-markup';
 
 import { DropdownMenu } from '@shared/components';
 import { formatWithLocale } from '@shared/utils';
@@ -145,18 +144,12 @@ const MediaCard: FC<MediaCardProps> = ({
 			toolbar={renderToolbar()}
 			padding="both"
 		>
-			{/* // Wrapping this in a conditional ensures TruncateMarkup only renders after the content is received */}
-			{description ? (
-				typeof description === 'string' ? (
-					<TruncateMarkup lines={2}>
-						<span>{description}</span>
-					</TruncateMarkup>
-				) : (
-					description
-				)
+			{typeof description === 'string' ? (
+				<div className="u-text-ellipsis--2">
+					<span>{description}</span>
+				</div>
 			) : (
-				// Passing a child to Card ensure whitespacing at the bottom is applied
-				<></>
+				<>{description}</>
 			)}
 		</Card>
 	);
