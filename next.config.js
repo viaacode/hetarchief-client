@@ -6,7 +6,7 @@
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-const withTM = require('next-transpile-modules')([]);
+const withTM = require('next-transpile-modules')(['@meemoo/react-admin', 'ky-universal']);
 
 const { i18n } = require('./next-i18next.config');
 
@@ -23,14 +23,19 @@ module.exports = withTM({
 		 */
 		esmExternals: 'loose',
 	},
-	async rewrites() {
-		return [
-			{
-				source: '/admin/:path*',
-				destination: '/admin',
-			},
-		];
+	webpack: (config) => {
+		// Required for ky-universal top level await used in admin core inside the api service
+		config.experiments = { topLevelAwait: true };
+		return config;
 	},
+	// async rewrites() {
+	// 	return [
+	// 		{
+	// 			source: '/admin/:path*',
+	// 			destination: '/admin',
+	// 		},
+	// 	];
+	// },
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
 	},

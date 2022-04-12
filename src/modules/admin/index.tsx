@@ -1,3 +1,4 @@
+import { CONTENT_PAGE_ROUTES } from '@meemoo/react-admin';
 import { FC } from 'react';
 import { BrowserRouter, Link, matchPath, Route, Switch } from 'react-router-dom';
 
@@ -7,7 +8,7 @@ import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { NAVIGATION_ROUTES } from './navigation';
 import { NAVIGATION_PATHS } from './navigation/const';
 
-const ADMIN_ROUTES = [...NAVIGATION_ROUTES];
+const ADMIN_ROUTES = [...NAVIGATION_ROUTES, ...CONTENT_PAGE_ROUTES];
 const ADMIN_PATHS = { navigation: NAVIGATION_PATHS };
 
 const Admin: FC = () => {
