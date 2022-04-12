@@ -1,7 +1,9 @@
 import clsx from 'clsx';
 import { FC, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
+import { selectHistory } from '@shared/store/history';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -10,20 +12,15 @@ import { NavigationDropdown } from '../NavigationDropdown';
 import { NavigationListProps } from './NavigationList.types';
 
 const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOpenDropdowns }) => {
-	const prevPath = useRef<string | null>(null);
 	const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+	const history = useSelector(selectHistory);
 
 	// Close dropdowns when the url path changed
 	useEffect(() => {
-		// Make sure prevPath is not null when checking for the first time
-		if (!prevPath.current) {
-			prevPath.current = currentPath;
-		}
-		if (prevPath.current !== currentPath && openDropdown) {
+		if (history[1] !== currentPath && openDropdown) {
 			setOpenDropdown(null);
-			prevPath.current = currentPath;
 		}
-	}, [currentPath, openDropdown]);
+	}, [history, currentPath, openDropdown]);
 
 	const openDropdowns = (id: string) => {
 		setOpenDropdown(id);
