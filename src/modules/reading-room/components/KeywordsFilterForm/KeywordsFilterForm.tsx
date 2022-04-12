@@ -21,6 +21,10 @@ const components = {
 	DropdownIndicator: () => <div className="u-pr-8" />,
 };
 
+const defaultValues = {
+	values: [],
+};
+
 const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {
 	const [query] = useQueryParams(KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [input, setInput] = useState<string | undefined>(undefined);
@@ -32,8 +36,10 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 		control,
 		reset,
 		formState: { errors },
+		handleSubmit,
 	} = useForm<KeywordsFilterFormState>({
 		resolver: yupResolver(KEYWORDS_FILTER_FORM_SCHEMA()),
+		defaultValues,
 	});
 
 	// Computed
@@ -117,7 +123,14 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 				</div>
 			</div>
 
-			{children({ values: form, reset })}
+			{children({
+				values: form,
+				reset: () => {
+					reset();
+					setForm(defaultValues);
+				},
+				handleSubmit,
+			})}
 		</>
 	);
 };

@@ -30,8 +30,11 @@
 	overflow: auto;
 
 	// Allow "overflowing" effects on input fields
+	// Allow three-option dropdowns to not be cut off
 	padding-top: $spacer-xxs;
+	padding-bottom: $spacer-xxs;
 	margin-top: -$spacer-xxs;
+	margin-bottom: -$spacer-xxs;
 
 	@include respond-to(md) {
 		flex-grow: 1;

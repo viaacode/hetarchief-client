@@ -10,7 +10,7 @@ import { MetadataProp } from '@reading-room/types';
 import { getOperators } from '@reading-room/utils';
 import { getSelectValue } from '@reading-room/utils/select';
 import { SEPARATOR } from '@shared/const';
-import { Operator } from '@shared/types';
+import { isRange, Operator } from '@shared/types';
 
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
@@ -22,31 +22,51 @@ import {
 } from './DurationFilterForm.const';
 import { DurationFilterFormProps, DurationFilterFormState } from './DurationFilterForm.types';
 
+const defaultValues = {
+	operator: Operator.LessThanOrEqual,
+	duration: undefined,
+};
+
 const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }) => {
 	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
+
 	const initial = query?.duration?.[0];
 
-	const [showRange, setShowRange] = useState(initial && initial.op === Operator.Between);
+	const [showRange, setShowRange] = useState(isRange(initial?.op));
+	const [form, setForm] = useState<DurationFilterFormState>(defaultValues);
 
-	const [form, setForm] = useState<DurationFilterFormState>({
-		operator: (initial?.op as Operator) || Operator.LessThanOrEqual,
-		duration: initial?.val || defaultValue,
-	});
 	const {
+		clearErrors,
 		control,
-		setValue,
-		reset,
 		formState: { errors },
+		handleSubmit,
+		setValue,
 	} = useForm<DurationFilterFormState>({
 		resolver: yupResolver(DURATION_FILTER_FORM_SCHEMA()),
+		defaultValues,
 	});
 
 	const operators = useMemo(() => getOperators(MetadataProp.Duration), []);
 
+	// Effects
+
 	useEffect(() => {
 		setValue('duration', form.duration);
 		setValue('operator', form.operator);
+
+		setShowRange(isRange(form.operator));
 	}, [form, setValue]);
+
+	useEffect(() => {
+		if (initial) {
+			const { val, op } = initial;
+
+			val && setForm((f) => ({ ...f, duration: val }));
+			op && setForm((f) => ({ ...f, operator: op as Operator }));
+		}
+	}, [initial]);
+
+	// Events
 
 	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
 		setForm({ ...form, duration: e.target.value });
@@ -71,8 +91,10 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 											?.value as Operator;
 
 										if (value !== form.operator) {
-											setForm({ duration: defaultValue, operator: value });
-											setShowRange(value === Operator.Between);
+											setForm({
+												duration: defaultValues.duration,
+												operator: value,
+											});
 										}
 									}}
 								/>
@@ -112,7 +134,14 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 				</div>
 			</div>
 
-			{children({ values: form, reset })}
+			{children({
+				values: form,
+				reset: () => {
+					setForm(defaultValues);
+					clearErrors();
+				},
+				handleSubmit,
+			})}
 		</>
 	);
 };

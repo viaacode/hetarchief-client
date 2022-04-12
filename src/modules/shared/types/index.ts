@@ -47,6 +47,8 @@ export enum Operator {
 	Between = 'bt', // duration & date
 }
 
+export const isRange = (op?: string): boolean => op === Operator.Between;
+
 /**
  * UI
  */

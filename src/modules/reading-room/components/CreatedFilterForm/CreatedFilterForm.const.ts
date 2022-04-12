@@ -9,7 +9,7 @@ import { CreatedFilterFormState } from './CreatedFilterForm.types';
 export const CREATED_FILTER_FORM_SCHEMA = (): SchemaOf<CreatedFilterFormState> =>
 	object({
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
-		created: string().required(),
+		created: string().optional(),
 	});
 
 export const CREATED_FILTER_FORM_QUERY_PARAM_CONFIG = {
