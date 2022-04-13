@@ -72,10 +72,7 @@ $component: "c-tab";
 					top: auto;
 					height: 2px;
 					background: $teal;
-				}
-
-				&.#{$component}--bordered {
-					bottom: 2px;
+					transform: translateY(-2px);
 				}
 			}
 		}

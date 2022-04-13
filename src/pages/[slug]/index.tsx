@@ -94,7 +94,11 @@ const ReadingRoomPage: NextPage = () => {
 
 	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
 
-	const hasSearched = useMemo(() => !isEqual(READING_ROOM_QUERY_PARAM_INIT, query), [query]);
+	const hasSearched = useMemo(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { filter, ...rest } = query; // Don't include UI state
+		return !isEqual(READING_ROOM_QUERY_PARAM_INIT, rest);
+	}, [query]);
 
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
@@ -225,10 +229,6 @@ const ReadingRoomPage: NextPage = () => {
 		setQuery(READING_ROOM_QUERY_PARAM_INIT);
 	};
 
-	const onResetFilter = (id: string) => {
-		setQuery({ [id]: undefined });
-	};
-
 	const onSubmitFilter = (id: ReadingRoomFilterId, values: unknown) => {
 		let data;
 
@@ -239,37 +239,41 @@ const ReadingRoomPage: NextPage = () => {
 
 			case ReadingRoomFilterId.Duration:
 				data = values as DurationFilterFormState;
-				data = [
-					{
-						prop: MetadataProp.Duration,
-						op: data.operator,
-						val: data.duration,
-					},
-				];
+				data = data.duration
+					? [
+							{
+								prop: MetadataProp.Duration,
+								op: data.operator,
+								val: data.duration,
+							},
+					  ]
+					: undefined;
 				break;
 
 			case ReadingRoomFilterId.Created:
 				data = values as CreatedFilterFormState;
-				data = [
-					{
-						prop: MetadataProp.CreatedAt,
-						op: data.operator,
-						val: data.created,
-					},
-				];
-
+				data = data.created
+					? [
+							{
+								prop: MetadataProp.CreatedAt,
+								op: data.operator,
+								val: data.created,
+							},
+					  ]
+					: undefined;
 				break;
 
 			case ReadingRoomFilterId.Published:
 				data = values as PublishedFilterFormState;
-				data = [
-					{
-						prop: MetadataProp.PublishedAt,
-						op: data.operator,
-						val: data.published,
-					},
-				];
-
+				data = data.published
+					? [
+							{
+								prop: MetadataProp.PublishedAt,
+								op: data.operator,
+								val: data.published,
+							},
+					  ]
+					: undefined;
 				break;
 
 			case ReadingRoomFilterId.Creator:
@@ -297,7 +301,7 @@ const ReadingRoomPage: NextPage = () => {
 				break;
 		}
 
-		data && setQuery({ [id]: data });
+		setQuery({ [id]: data, filter: undefined });
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -377,7 +381,6 @@ const ReadingRoomPage: NextPage = () => {
 					onSortClick={onSortClick}
 					onMenuToggle={onFilterMenuToggle}
 					onViewToggle={onViewToggle}
-					onFilterReset={onResetFilter}
 					onFilterSubmit={(id, values) =>
 						onSubmitFilter(id as ReadingRoomFilterId, values)
 					}
@@ -431,7 +434,7 @@ const ReadingRoomPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${source?.schema_maintainer?.[0]?.schema_identifier}/${source?.meemoo_fragment_id}`;
+					const href = `/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`;
 
 					return (
 						<Link href={href.toLowerCase()}>

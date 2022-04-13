@@ -2,8 +2,9 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { Trans } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
+import { useQueryParams } from 'use-query-params';
 
-import { READING_ROOM_ACTIVE_SORT_MAP } from '@reading-room/const';
+import { READING_ROOM_ACTIVE_SORT_MAP, READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
 import { ReadingRoomSort } from '@reading-room/types';
 import { Icon, IconLightNames, Toggle } from '@shared/components';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
@@ -33,7 +34,10 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onViewToggle = () => null,
 	showNavigationBorder,
 }) => {
-	const [activeFilter, setActiveFilter] = useState<string | null>(null);
+	const [query, setQuery] = useQueryParams({
+		filter: READING_ROOM_QUERY_PARAM_CONFIG.filter,
+	});
+
 	const [lockScroll, setLockScroll] = useState<boolean>(false);
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
@@ -57,17 +61,15 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	 */
 
 	const onFilterClick = (filterId: string) => {
-		const nextActive = filterId === activeFilter ? null : filterId;
-		setActiveFilter(nextActive);
+		const filter = filterId === query.filter ? undefined : filterId;
+		setQuery({ filter });
 	};
 
 	const onFilterFormReset = (id: string) => {
-		setActiveFilter(null);
 		onFilterReset(id);
 	};
 
 	const onFilterFormSubmit = (id: string, values: unknown) => {
-		setActiveFilter(null);
 		onFilterSubmit(id, values);
 	};
 
@@ -76,7 +78,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 
 		if (openState) {
 			// Remove active filter when closing the menu
-			setActiveFilter(null);
+			setQuery({ filter: undefined });
 		}
 
 		onMenuToggle?.(nextOpen, isMobile);
@@ -138,7 +140,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 							{...option}
 							key={`filter-menu-option-${option.id}`}
 							className={styles['c-filter-menu__option']}
-							activeFilter={activeFilter}
+							activeFilter={query.filter}
 							values={filterValues?.[option.id]}
 							onClick={onFilterClick}
 							onFormReset={onFilterFormReset}
@@ -148,7 +150,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				</div>
 			)}
 			<FilterMenuMobile
-				activeFilter={activeFilter}
+				activeFilter={query.filter}
 				activeSort={activeSort}
 				activeSortLabel={renderActiveSortLabel()}
 				filters={filters}

@@ -9,7 +9,7 @@ import { DurationFilterFormState } from './DurationFilterForm.types';
 export const DURATION_FILTER_FORM_SCHEMA = (): SchemaOf<DurationFilterFormState> =>
 	object({
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
-		duration: string().required(),
+		duration: string().optional(),
 	});
 
 export const DURATION_FILTER_FORM_QUERY_PARAM_CONFIG = {
