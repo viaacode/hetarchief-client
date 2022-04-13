@@ -3,7 +3,8 @@
 @use "styles/abstracts" as *;
 
 @mixin scrollable-tabs-gradient($direction, $color) {
-	background: linear-gradient(to $direction, color.adjust($color), rgb(255 255 255 / 0.001%) ); // Set gradient color close to transparent. Fixes Safari issue where gradients turned grey
+	// Set gradient color close to transparent. Fixes Safari issue where gradients turned grey
+	background: linear-gradient(to $direction, color.adjust($color), transparentize($color, 0.999));
 }
 
 $component: "c-scrollable-tabs";
