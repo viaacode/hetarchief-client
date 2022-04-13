@@ -49,21 +49,39 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 		value,
 	}));
 
+	// Methods
+
+	const saveInput = () => {
+		if (input && input.length > 0) {
+			setForm((f) => ({
+				values: [...(f.values || []), input.toLowerCase()],
+			}));
+
+			setInput('');
+		}
+	};
+
 	// Events
 
 	const onTagsChange = (value: multi | SingleValue<TagInfo>, meta: ActionMeta<TagInfo>) => {
-		let cast;
+		const mapValues = () => {
+			if (value && (value as multi).length >= 0) {
+				const cast = value as multi;
+
+				setForm({
+					values: cast.map((item) => item.value.toString()),
+				});
+			}
+		};
+
 		switch (meta.action) {
 			case 'remove-value':
 			case 'pop-value':
+				mapValues();
+				break;
 			case 'clear':
-				if (value && (value as multi).length >= 0) {
-					cast = value as multi;
-
-					setForm({
-						values: cast.map((item) => item.value.toString()),
-					});
-				}
+				mapValues();
+				setInput('');
 				break;
 
 			default:
@@ -82,17 +100,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 		}
 	};
 
-	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-		if (input) {
-			onKey(e, [...keysEnter], () => {
-				setForm({
-					values: [...(form.values || []), input.toLowerCase()],
-				});
-
-				setInput('');
-			});
-		}
-	};
+	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => onKey(e, [...keysEnter], saveInput);
 
 	return (
 		<>
@@ -112,6 +120,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 									onChange={onTagsChange}
 									onInputChange={onInputChange}
 									onKeyDown={onKeyDown}
+									onBlur={saveInput}
 									isClearable={true}
 									isMulti={true} // always `multi`
 									value={getTags}

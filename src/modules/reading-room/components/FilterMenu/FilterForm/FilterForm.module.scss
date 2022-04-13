@@ -11,10 +11,10 @@
  */
 
 .c-filter-form__header {
-	padding: $spacer-md 2rem;
+	padding: $spacer-sm 2rem;
 
 	@include respond-at(md) {
-		padding: 0 $spacer-lg 4.8rem;
+		padding: 0 $spacer-lg $spacer-1xl;
 	}
 }
 
@@ -30,11 +30,10 @@
 	overflow: auto;
 
 	// Allow "overflowing" effects on input fields
+	padding-top: $spacer-xs;
+
 	// Allow three-option dropdowns to not be cut off
-	padding-top: $spacer-xxs;
-	padding-bottom: $spacer-xxs;
-	margin-top: -$spacer-xxs;
-	margin-bottom: -$spacer-xxs;
+	padding-bottom: $spacer-xs;
 
 	@include respond-to(md) {
 		flex-grow: 1;
