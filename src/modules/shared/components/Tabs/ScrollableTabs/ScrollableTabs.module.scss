@@ -3,7 +3,8 @@
 @use "styles/abstracts" as *;
 
 @mixin scrollable-tabs-gradient($direction, $color) {
-	background: linear-gradient(to $direction, color.adjust($color), transparent);
+	// Set gradient color close to transparent. Fixes Safari issue where gradients turned grey
+	background: linear-gradient(to $direction, color.adjust($color), color.adjust($color, $alpha: -0.999));
 }
 
 $component: "c-scrollable-tabs";
@@ -14,8 +15,13 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 	overflow: hidden;
 	position: relative;
 
+	// Fix gradient clipping issues in Safari
+	// Source: https://stackoverflow.com/a/58283449/16900139
+	transform: translateZ(0);
+
 	&::before,
 	&::after {
+		z-index: get-z-layer("foreground");
 		position: absolute;
 		top: 0;
 		width: $scrollable-tabs-gradient-width;
@@ -37,7 +43,7 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 
 	// Above :global
 	&--bordered {
-		border: 1px solid $zinc;
+		border: 1px solid $silver;
 
 		:global(.c-tabs--bordered) {
 			border: 0;
