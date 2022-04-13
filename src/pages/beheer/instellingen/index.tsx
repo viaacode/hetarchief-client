@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ReadingRooomSettings } from '@cp/components';
+import { ReadingRoomSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
@@ -49,7 +49,7 @@ const CPSettingsPage: NextPage = () => {
 			>
 				<div className="l-container">
 					{readingRoomInfo && (
-						<ReadingRooomSettings room={readingRoomInfo} refetch={refetch} />
+						<ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />
 					)}
 				</div>
 			</CPAdminLayout>

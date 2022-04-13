@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
@@ -17,7 +17,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 
 	// Close dropdowns when the url path changed
 	useEffect(() => {
-		if (history[1] !== currentPath && openDropdown) {
+		if (history?.[1] !== currentPath && openDropdown) {
 			setOpenDropdown(null);
 		}
 	}, [history, currentPath, openDropdown]);

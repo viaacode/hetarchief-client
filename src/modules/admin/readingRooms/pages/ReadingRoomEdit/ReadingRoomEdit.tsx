@@ -2,7 +2,7 @@ import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { ReadingRooomSettings } from '@cp/components';
+import { ReadingRoomSettings } from '@cp/components';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { Loading } from '@shared/components';
 
@@ -20,7 +20,7 @@ const ReadingRoomEdit: FC = () => {
 				)}
 			</h2>
 			{isLoading && <Loading />}
-			{readingRoomInfo && <ReadingRooomSettings room={readingRoomInfo} refetch={refetch} />}
+			{readingRoomInfo && <ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />}
 		</div>
 	);
 };
