@@ -1,0 +1,28 @@
+@use "styles/abstracts" as *;
+
+$component: "c-visit-summary";
+
+.#{$component} {
+    @include blade-text-styling;
+
+    padding: 0 $spacer-sm;
+
+    @include respond-at("md") {
+        padding: 0 $spacer-lg;
+    }
+
+    &__preview {
+        display: grid;
+        grid-template-columns: 7.2rem auto;
+        align-items: center;
+        min-height: 4.8rem;
+
+        > div {
+            height: 100%
+        }
+
+        > strong {
+            margin: 0;
+        }
+    }
+}

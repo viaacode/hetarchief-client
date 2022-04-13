@@ -19,7 +19,7 @@ import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
-import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 
@@ -38,7 +38,7 @@ const CPRequestsPage: NextPage = () => {
 			filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
 		page: filters.page,
 		size: RequestTablePageSize,
-		orderProp: filters.orderProp as keyof VisitInfo,
+		orderProp: filters.orderProp as keyof Visit,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
 
@@ -84,7 +84,7 @@ const CPRequestsPage: NextPage = () => {
 
 	const onRowClick = useCallback(
 		(e, row) => {
-			const request = (row as { original: VisitInfo }).original;
+			const request = (row as { original: Visit }).original;
 			setSelected(request.id);
 		},
 		[setSelected]

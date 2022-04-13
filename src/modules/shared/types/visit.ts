@@ -4,25 +4,37 @@ export enum VisitStatus {
 	DENIED = 'DENIED',
 }
 
-export interface VisitInfo {
+export interface Visit {
 	createdAt: string;
 	endAt?: string;
 	id: string;
 	note: string | null;
-	reason: string;
+	reason?: string;
 	spaceId: string;
+	spaceSlug: string;
 	spaceName?: string;
 	spaceAddress?: string;
+	spaceColor?: string;
+	spaceImage?: string;
+	spaceLogo?: string;
+	spaceInfo?: string;
+	spaceDescription?: string;
+	spaceServiceDescription?: string;
 	startAt?: string;
 	status: VisitStatus;
-	timeframe: string;
+	timeframe?: string;
 	updatedAt: string;
 	userProfileId: string;
 	visitorId: string;
 	visitorMail: string;
-	visitorName: string;
+	visitorName?: string;
 	updatedById: string;
 	updatedByName: string;
 }
 
-export type VisitInfoRow = { row: { original: VisitInfo } };
+export type VisitRow = { row: { original: Visit } };
+
+export interface VisitSpaceCount {
+	count: number;
+	id?: string;
+}

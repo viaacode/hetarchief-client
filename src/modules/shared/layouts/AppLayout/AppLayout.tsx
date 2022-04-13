@@ -82,6 +82,13 @@ const AppLayout: FC = ({ children }) => {
 		dispatch(checkLoginAction());
 		dispatch(getTosAction());
 	}, [dispatch]);
+
+	useEffect(() => {
+		if (showNotificationsCenter) {
+			document.body.parentElement?.scrollTo({ top: 0 });
+		}
+	}, [showNotificationsCenter]);
+
 	const userName = (user?.firstName as string) ?? '';
 
 	const onLoginRegisterClick = useCallback(() => dispatch(setShowAuthModal(true)), [dispatch]);

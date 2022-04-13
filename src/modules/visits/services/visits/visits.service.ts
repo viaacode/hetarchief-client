@@ -2,11 +2,15 @@ import { stringifyUrl } from 'query-string';
 
 import { CreateVisitRequest } from '@reading-room/services/reading-room/reading-room.service.types';
 import { ApiService } from '@shared/services/api-service';
-import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { PatchVisit, VisitTimeframe } from '@visits/types';
 
-import { VISITS_SERVICE_ACTIVE_SPACE_URL, VISITS_SERVICE_BASE_URL } from './visits.service.const';
+import {
+	VISITS_SERVICE_ACTIVE_SPACE_URL,
+	VISITS_SERVICE_BASE_URL,
+	VISITS_SERVICE_PENDING_COUNT_URL,
+} from './visits.service.const';
 
 export class VisitsService {
 	public static async getAll(
@@ -15,10 +19,10 @@ export class VisitsService {
 		timeframe: VisitTimeframe | undefined,
 		page = 0,
 		size = 20,
-		orderProp: keyof VisitInfo = 'startAt',
+		orderProp: keyof Visit = 'startAt',
 		orderDirection: OrderDirection = OrderDirection.desc,
 		personal?: boolean
-	): Promise<ApiResponseWrapper<VisitInfo>> {
+	): Promise<ApiResponseWrapper<Visit>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -35,21 +39,20 @@ export class VisitsService {
 				})
 			)
 			.json();
-		return parsed as ApiResponseWrapper<VisitInfo>;
+		return parsed as ApiResponseWrapper<Visit>;
 	}
 
-	public static async getById(id: string): Promise<VisitInfo> {
+	public static async getById(id: string): Promise<Visit> {
 		return await ApiService.getApi().get(`${VISITS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async patchById(id: string, visit: PatchVisit): Promise<VisitInfo> {
-		const { status, startAt, endAt } = visit;
+	public static async patchById(id: string, visit: PatchVisit): Promise<Visit> {
+		const { status, startAt, endAt, note } = visit;
 		const json: PatchVisit = {
 			status,
 			startAt,
 			endAt,
-			// remark: 'TODO',
-			// denial: 'TODO'
+			note,
 		};
 
 		return await ApiService.getApi()
@@ -59,18 +62,27 @@ export class VisitsService {
 			.json();
 	}
 
-	public static async create(visitRequest: CreateVisitRequest): Promise<VisitInfo> {
+	public static async create(visitRequest: CreateVisitRequest): Promise<Visit> {
 		return await ApiService.getApi()
 			.post(VISITS_SERVICE_BASE_URL, { body: JSON.stringify(visitRequest) })
 			.json();
 	}
 
-	public static async getActiveVisitForUserAndSpace(spaceId: string): Promise<VisitInfo | null> {
+	public static async getActiveVisitForUserAndSpace(spaceId: string): Promise<Visit | null> {
 		if (!spaceId) {
 			return null;
 		}
 		return await ApiService.getApi()
 			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${spaceId}`)
+			.json();
+	}
+
+	public static async getPendingVisitCountForUserBySlug(slug: string): Promise<Visit | null> {
+		if (!slug) {
+			return null;
+		}
+		return await ApiService.getApi()
+			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_PENDING_COUNT_URL}/${slug}`)
 			.json();
 	}
 }

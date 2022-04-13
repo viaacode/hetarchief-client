@@ -6,7 +6,7 @@ import styles from './CardImage.module.scss';
 import { CardImageProps } from './CardImage.types';
 
 const CardImage: FC<CardImageProps> = ({
-	color = '#009690',
+	color,
 	image,
 	logo,
 	name,
@@ -15,7 +15,10 @@ const CardImage: FC<CardImageProps> = ({
 	shadow,
 	style,
 	className,
+	unoptimized = false,
 }) => {
+	color = color || '#009690'; // Set default, accounting for `null`
+
 	return (
 		<div
 			className={clsx(
@@ -32,6 +35,7 @@ const CardImage: FC<CardImageProps> = ({
 			{image && (
 				<div className={styles['c-card-image__background--image']}>
 					<Image
+						unoptimized={unoptimized}
 						src={image}
 						alt={name || id.toString()}
 						layout="fill"
@@ -43,6 +47,7 @@ const CardImage: FC<CardImageProps> = ({
 			{logo && (
 				<div className={styles['c-card-image__logo']}>
 					<Image
+						unoptimized={unoptimized}
 						className={styles['c-card-image__logo-image']}
 						src={logo || ''}
 						alt={name || id.toString()}

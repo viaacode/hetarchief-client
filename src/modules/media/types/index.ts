@@ -1,3 +1,5 @@
+import { MediaInfo } from '@shared/types';
+
 // Mapped intellectual entity object
 export interface Media {
 	schemaIdentifier: string; // Unique id per object
@@ -97,6 +99,37 @@ export interface MediaSearchAggregation<T> {
 	buckets: MediaSearchAggregationPair<T>[];
 	doc_count_error_upper_bound: number;
 	sum_other_doc_count: number;
+}
+
+export interface MediaSimilar {
+	hits: MediaSimilarHits;
+	timed_out: boolean;
+	took: number;
+	_shards: MediaSimilarShards;
+}
+
+export interface MediaSimilarShards {
+	failed: number;
+	skipped: number;
+	successful: number;
+	total: number;
+}
+
+export interface MediaSimilarHits {
+	hits: MediaSimilarHit[];
+	max_score: number;
+	total: {
+		relation: string;
+		value: number;
+	};
+}
+
+export interface MediaSimilarHit {
+	_id: string;
+	_ignored: string[];
+	_index: string;
+	_source: MediaInfo;
+	_type: string;
 }
 
 export interface MediaSearchAggregations {

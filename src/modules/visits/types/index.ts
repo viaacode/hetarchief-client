@@ -10,8 +10,7 @@ export interface PatchVisit {
 	status?: VisitStatus;
 	startAt?: string;
 	endAt?: string;
-	remark?: string;
-	denial?: string;
+	note?: string;
 }
 
 export interface UpdateVisit {

@@ -7,8 +7,6 @@ import { FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Loading } from '@shared/components';
-import { NOTIFICATION_TYPE_TO_PATH } from '@shared/components/NotificationCenter/NotificationCenter.consts';
-import { useWindowSize } from '@shared/hooks/use-window-size';
 import {
 	Notification,
 	NotificationStatus,
@@ -17,7 +15,9 @@ import { toastService } from '@shared/services/toast-service';
 
 import { Blade } from '../Blade';
 import { Icon } from '../Icon';
+import { UnreadMarker } from '../UnreadMarker';
 
+import { NOTIFICATION_TYPE_TO_PATH } from './NotificationCenter.consts';
 import styles from './NotificationCenter.module.scss';
 import { NotificationCenterProps } from './NotificationCenter.types';
 
@@ -30,7 +30,6 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 	useMarkAllNotificationsAsReadHook,
 }) => {
 	const { t } = useTranslation();
-	const windowSize = useWindowSize();
 
 	const {
 		data: notificationResponse,
@@ -39,6 +38,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		isLoading,
 		refetch: refetchNotifications,
 	} = useGetNotificationsHook(isOpen);
+
 	const { mutateAsync: markOneNotificationAsRead } = useMarkOneNotificationsAsReadHook();
 	const { mutateAsync: markAllNotificationsAsRead } = useMarkAllNotificationsAsReadHook();
 
@@ -56,25 +56,26 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 
 	const notifications =
 		notificationResponse?.pages?.flatMap((notificationPage) => notificationPage.items) || [];
-	const [unreadNotifications, readNotifications] = partition(
-		notifications || [],
+
+	const [unread, read] = partition(
+		notifications,
 		(notification) => getNotificationStatus(notification) === NotificationStatus.UNREAD
 	);
 
 	const onMarkOneAsRead = async (notificationId: string) => {
 		try {
 			await markOneNotificationAsRead(notificationId);
-			setNotificationReadStatus((oldValue) => {
-				return {
-					...oldValue,
-					[notificationId]: NotificationStatus.READ,
-				};
-			});
+
+			setNotificationReadStatus((oldValue) => ({
+				...oldValue,
+				[notificationId]: NotificationStatus.READ,
+			}));
 		} catch (err) {
 			console.error({
 				message: 'Failed to mark all notifications as read',
 				error: err,
 			});
+
 			toastService.notify({
 				title: t(
 					'modules/shared/components/notification-center/notification-center___error'
@@ -90,7 +91,9 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		try {
 			await markAllNotificationsAsRead();
 			await refetchNotifications();
+
 			setNotificationReadStatus({});
+
 			toastService.notify({
 				title: t(
 					'modules/shared/components/notification-center/notification-center___success'
@@ -104,6 +107,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				message: 'Failed to mark all notifications as read',
 				error: err,
 			});
+
 			toastService.notify({
 				title: t(
 					'modules/shared/components/notification-center/notification-center___error'
@@ -117,100 +121,59 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 
 	const onClickNotificationLink = async (notification: Notification) => {
 		await onMarkOneAsRead(notification.id);
+
 		onClose();
 	};
 
-	const getPath = (notification: Notification): string | null => {
-		return (
-			NOTIFICATION_TYPE_TO_PATH[notification.type]
-				?.replace('{visitRequestId}', notification.visitId)
-				?.replace('{readingRoomId}', notification.readingRoomId) || null
-		);
-	};
+	const getPath = (notification: Notification): string | null =>
+		NOTIFICATION_TYPE_TO_PATH[notification.type]
+			?.replace('{visitRequestId}', notification.visitId)
+			?.replace('{readingRoomId}', notification.readingRoomId) || null;
 
-	const renderNotificationLink = (notification: Notification) => {
-		const notificationLinkContent = (
-			<>
-				<b
-					className={clsx(
-						'u-font-size-14',
-						styles['c-notification-center__notification-title']
-					)}
-				>
+	const renderLink = (notification: Notification) => {
+		const content = (
+			<article className={styles['c-notification-center__row-content']}>
+				<h5 className={styles['c-notification-center__row-title']}>
+					<UnreadMarker
+						className={styles['c-notification-center__row-marker']}
+						active={getNotificationStatus(notification) === NotificationStatus.UNREAD}
+					/>
+
 					{notification.title}
-				</b>
-				{notification.description}
-			</>
+				</h5>
+
+				<span className="u-color-neutral">{notification.description}</span>
+			</article>
 		);
 
 		// Wrap in link if notification should link to somewhere
-		const notificationLink: string | null = getPath(notification);
-		return (
-			<div
-				className={clsx(styles['c-notification-center__notification-link'], {
-					[styles['c-notification-center__notification-link-clickable']]:
-						notificationLink,
-				})}
-			>
-				{notificationLink ? (
-					<Link passHref href={notificationLink}>
-						<a onClick={() => onClickNotificationLink(notification)}>
-							{notificationLinkContent}
-						</a>
-					</Link>
-				) : (
-					notificationLinkContent
-				)}
-			</div>
-		);
-	};
+		const path: string | null = getPath(notification);
 
-	const renderNotification = (notification: Notification) => {
-		if (getNotificationStatus(notification) === NotificationStatus.UNREAD) {
-			return (
-				<div
-					className={clsx(
-						styles['c-notification-center__notification'],
-						styles['c-notification-center__notification--unread']
-					)}
-					key={`notification-${notification.id}`}
-				>
-					{renderNotificationLink(notification)}
-					<Button
-						onClick={() => onMarkOneAsRead(notification.id)}
-						className={clsx(styles['c-notification-center__notification-icon'])}
-						title={t(
-							'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
-						)}
-						icon={<Icon name="check" />}
-						variants="text"
-					/>
-				</div>
-			);
-		} else {
-			return (
-				<div
-					className={clsx(
-						styles['c-notification-center__notification'],
-						styles['c-notification-center__notification--read']
-					)}
-					key={`notification-${notification.id}`}
-				>
-					{renderNotificationLink(notification)}
-				</div>
-			);
+		if (!path) {
+			return content;
 		}
+
+		return (
+			<Link passHref href={path}>
+				<a
+					className="u-text-no-decoration"
+					onClick={() => onClickNotificationLink(notification)}
+				>
+					{content}
+				</a>
+			</Link>
+		);
 	};
 
 	const renderFooter = () => (
 		<Button
-			disabled={!unreadNotifications.length}
+			disabled={!unread.length}
 			onClick={onMarkAllAsRead}
 			className={styles['c-notification-center__button']}
 			variants={['black', 'block']}
 			iconStart={<Icon name="check" />}
 			title={
-				unreadNotifications.length > 0
+				unread.length > 0
 					? t(
 							'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
 					  )
@@ -224,23 +187,24 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		/>
 	);
 
-	const scrollableHeight = (windowSize?.height || 929) - 88 - 93; // Header and mark all as read button
 	return (
 		<Blade
-			className={clsx(className, styles['c-notification-center__blade'])}
+			className={clsx(className, styles['c-notification-center'])}
 			isOpen={isOpen}
 			onClose={onClose}
 			hideCloseButton
 			footer={renderFooter()}
 		>
 			{isLoading && <Loading />}
+
 			{isError && (
-				<div>
+				<p>
 					{t(
 						'modules/shared/components/notification-center/notification-center___er-ging-iets-mis-bij-het-ophalen-van-je-notificaties'
 					)}
-				</div>
+				</p>
 			)}
+
 			{!isLoading && !isError && (
 				<InfiniteScroll
 					className={styles['c-notification-center__infinite-scroll']}
@@ -252,30 +216,62 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 							className={styles['c-notification-center__infinite-scroll-loading']}
 						/>
 					}
-					height={scrollableHeight}
 				>
-					<div className={styles['c-notification-center']}>
-						{!!unreadNotifications.length && (
-							<div className={styles['c-notification-center__unread']}>
-								<b>
-									{t(
-										'modules/shared/components/notification-center/notification-center___ongelezen'
+					{!!unread.length && (
+						<div className={styles['c-notification-center__unread']}>
+							<h4 className={styles['c-notification-center__header']}>
+								{t(
+									'modules/shared/components/notification-center/notification-center___ongelezen'
+								)}
+							</h4>
+
+							{unread.map((notification) => (
+								<div
+									className={clsx(
+										styles['c-notification-center__row'],
+										styles['c-notification-center__row--unread']
 									)}
-								</b>
-								{unreadNotifications.map(renderNotification)}
-							</div>
-						)}
-						{!!readNotifications.length && (
-							<div className={styles['c-notification-center__read']}>
-								<b>
-									{t(
-										'modules/shared/components/notification-center/notification-center___gelezen'
+									key={`notification-${notification.id}`}
+								>
+									{renderLink(notification)}
+
+									<Button
+										onClick={() => onMarkOneAsRead(notification.id)}
+										className={clsx(
+											styles['c-notification-center__row-button']
+										)}
+										title={t(
+											'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
+										)}
+										icon={<Icon name="check" />}
+										variants={['icon', 'sm', 'white']}
+									/>
+								</div>
+							))}
+						</div>
+					)}
+
+					{!!read.length && (
+						<div className={styles['c-notification-center__read']}>
+							<h4 className={styles['c-notification-center__header']}>
+								{t(
+									'modules/shared/components/notification-center/notification-center___gelezen'
+								)}
+							</h4>
+
+							{read.map((notification) => (
+								<div
+									className={clsx(
+										styles['c-notification-center__row'],
+										styles['c-notification-center__row--read']
 									)}
-								</b>
-								{readNotifications.map(renderNotification)}
-							</div>
-						)}
-					</div>
+									key={`notification-${notification.id}`}
+								>
+									{renderLink(notification)}
+								</div>
+							))}
+						</div>
+					)}
 				</InfiniteScroll>
 			)}
 		</Blade>
