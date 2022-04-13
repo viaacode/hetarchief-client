@@ -19,7 +19,6 @@
   "modules/account/layouts/account-layout/account-layout___account": "Account",
   "modules/admin/reading-rooms/components/admin-navigation/admin-navigation___aanvragen": "Aanvragen",
   "modules/admin/reading-rooms/components/admin-navigation/admin-navigation___actieve-bezoekers": "Actieve bezoekers",
-  "modules/admin/reading-rooms/components/admin-navigation/admin-navigation___alle-leeszalen": "Alle leeszalen",
   "modules/admin/reading-rooms/components/admin-navigation/admin-navigation___leeszalenbeheer": "Leeszalenbeheer",
   "modules/admin/reading-rooms/pages/reading-room-edit/reading-room-edit___instellingen": "Instellingen",
   "modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___activeren": "Activeren",
