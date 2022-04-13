@@ -10,29 +10,14 @@ import { READING_ROOMS_PATHS } from '../../const';
 
 import { AdminNavigationProps } from './AdminNavigation.types';
 
-import { NAVIGATION_ROUTES } from 'modules/admin/navigation';
-import { NAVIGATION_PATHS } from 'modules/admin/navigation/const';
-
-const ADMIN_ROUTES = [...NAVIGATION_ROUTES, ...READING_ROOMS_ROUTES];
-const ADMIN_PATHS = { navigation: NAVIGATION_PATHS, readingRooms: READING_ROOMS_PATHS };
+const ADMIN_ROUTES = [...READING_ROOMS_ROUTES];
+const ADMIN_PATHS = { readingRooms: READING_ROOMS_PATHS };
 
 const AdminNavigation: FC<AdminNavigationProps> = () => {
 	const { t } = useTranslation();
 	const { pathname } = useLocation();
 
 	const sidebarLinks: ListNavigationItem[] = [
-		{
-			id: 'navigation',
-			node: ({ linkClassName }) => (
-				<Link key={pathname} className={linkClassName} to={ADMIN_PATHS.navigation.overview}>
-					Navigatie
-				</Link>
-			),
-			active: !!matchPath(window.location.pathname, {
-				path: `/admin${ADMIN_PATHS.navigation.overview}`,
-				exact: false,
-			}),
-		},
 		{
 			id: 'leeszalenbeheer',
 			node: (
@@ -43,43 +28,43 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 				</div>
 			),
 			children: [
-				{
-					id: 'leeszalen',
-					node: ({ linkClassName }) => (
-						<Link
-							key={pathname}
-							className={linkClassName}
-							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
-								pageName: 'leeszalen',
-							})}
-						>
-							{t(
-								'modules/admin/reading-rooms/components/admin-navigation/admin-navigation___alle-leeszalen'
-							)}
-						</Link>
-					),
-					active:
-						!!matchPath(window.location.pathname, {
-							path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
-								pageName: 'leeszalen',
-							})}`,
-							exact: false,
-						}) ||
-						// Match edit state
-						!!matchPath(window.location.pathname, {
-							path: `/admin${generatePath(ADMIN_PATHS.readingRooms.edit, {
-								pageName: ':id',
-							})}`,
-							exact: false,
-						}),
-				},
+				// {
+				// 	id: 'leeszalen',
+				// 	node: ({ linkClassName }) => (
+				// 		<Link
+				// 			key={pathname}
+				// 			className={linkClassName}
+				// 			to={generatePath(ADMIN_PATHS.readingRooms.detail, {
+				// 				pageName: 'leeszalen',
+				// 			})}
+				// 		>
+				// 			{t(
+				// 				'modules/admin/reading-rooms/components/admin-navigation/admin-navigation___alle-leeszalen'
+				// 			)}
+				// 		</Link>
+				// 	),
+				// 	active:
+				// 		!!matchPath(window.location.pathname, {
+				// 			path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
+				// 				pageName: 'leeszalen',
+				// 			})}`,
+				// 			exact: false,
+				// 		}) ||
+				// 		// Match edit state
+				// 		!!matchPath(window.location.pathname, {
+				// 			path: `/admin${generatePath(ADMIN_PATHS.readingRooms.edit, {
+				// 				pageName: ':id',
+				// 			})}`,
+				// 			exact: false,
+				// 		}),
+				// },
 				{
 					id: 'aanvragen',
 					node: ({ linkClassName }) => (
 						<Link
 							key={pathname}
 							className={linkClassName}
-							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
+							to={generatePath(ADMIN_PATHS.readingRooms.aanvragen, {
 								pageName: 'aanvragen',
 							})}
 						>
@@ -89,7 +74,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 						</Link>
 					),
 					active: !!matchPath(window.location.pathname, {
-						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
+						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.aanvragen, {
 							pageName: 'aanvragen',
 						})}`,
 						exact: false,
@@ -101,7 +86,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 						<Link
 							key={pathname}
 							className={linkClassName}
-							to={generatePath(ADMIN_PATHS.readingRooms.detail, {
+							to={generatePath(ADMIN_PATHS.readingRooms.bezoekers, {
 								pageName: 'bezoekers',
 							})}
 						>
@@ -111,7 +96,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 						</Link>
 					),
 					active: !!matchPath(window.location.pathname, {
-						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
+						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.bezoekers, {
 							pageName: 'bezoekers',
 						})}`,
 						exact: false,
