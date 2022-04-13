@@ -434,7 +434,7 @@ const ReadingRoomPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${source?.schema_maintainer?.[0]?.schema_identifier}/${source?.meemoo_fragment_id}`;
+					const href = `/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`;
 
 					return (
 						<Link href={href.toLowerCase()}>
