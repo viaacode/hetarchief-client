@@ -6,7 +6,11 @@
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-const withTM = require('next-transpile-modules')(['@meemoo/react-admin', 'ky-universal']);
+const withTM = require('next-transpile-modules')([
+	'@meemoo/react-admin',
+	'@meemoo/react-admin/node_modules/@viaa/avo2-components',
+	'ky-universal',
+]);
 
 const { i18n } = require('./next-i18next.config');
 

@@ -1,11 +1,11 @@
-const ROOT = 'navigatie';
-const DETAIL = ':navigationName';
+const NAVIGATION = 'navigatie';
+const NAME = ':navigationName';
 
 export const NAVIGATION_PATHS = {
-	overview: `/${ROOT}`,
-	detail: `/${ROOT}/${DETAIL}`,
-	create: `/${ROOT}/${DETAIL}/aanmaken`,
-	edit: `/${ROOT}/${DETAIL}/bewerken`,
+	overview: `/${NAVIGATION}`,
+	detail: `/${NAVIGATION}/${NAME}`,
+	create: `/${NAVIGATION}/${NAME}/maak`,
+	edit: `/${NAVIGATION}/${NAME}/bewerk`,
 };
 
 export const NAVIGATION_CONFIG = {
