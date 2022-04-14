@@ -10,6 +10,7 @@ export enum QUERY_KEYS {
 	getMediaRelated = 'getMediaRelated',
 	getNotifications = 'getNotifications',
 	getReadingRooms = 'getReadingRooms',
+	getReadingRoomInfo = 'getReadingRoomInfo',
 	getVisits = 'getVisits',
 	getSpace = 'getSpace',
 	getPendingVisitCountForUserBySlug = 'getPendingVisitCountForUserBySlug',

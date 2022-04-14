@@ -5,5 +5,5 @@ export type DurationFilterFormProps = DefaultFilterFormProps<DurationFilterFormS
 
 export interface DurationFilterFormState {
 	operator: Operator;
-	duration: string;
+	duration?: string;
 }

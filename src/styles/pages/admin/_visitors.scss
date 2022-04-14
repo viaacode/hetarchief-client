@@ -1,0 +1,50 @@
+@use "styles/abstracts" as *;
+
+$page: "p-admin-visitors";
+
+// TODO: make styles reusable (see visitors)
+
+.#{$page} {
+	&__header {
+		height: 5.6rem;
+		display: flex;
+
+		@include respond-at("md") {
+			display: flex;
+			flex-flow: row-reverse nowrap;
+
+			// Can't use &__status-filter here due to ScrollableTabs implementation
+			& > div:last-child {
+				flex-grow: 1;
+			}
+		}
+	}
+
+	&__search {
+		margin-bottom: $spacer-md;
+
+		@include respond-at("md") {
+			flex-basis: 34.1rem;
+			margin-bottom: 0;
+		}
+	}
+
+	&__actions {
+		cursor: pointer;
+		font-size: $font-size-lg;
+		transform: translateY(0.2rem); // shift if to center on single-line
+	}
+
+	&__access {
+		display: flex;
+		align-items: center;
+    }
+
+	tr {
+		td,
+		th {
+			padding-top: 2rem;
+			padding-bottom: 2rem;
+		}
+	}
+}

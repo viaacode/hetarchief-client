@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { compact, without } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -17,6 +17,10 @@ import {
 } from './CreatorFilterForm.const';
 import { CreatorFilterFormProps, CreatorFilterFormState } from './CreatorFilterForm.types';
 
+const defaultValues = {
+	creators: [],
+};
+
 const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) => {
 	const { t } = useTranslation();
 
@@ -26,20 +30,25 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 	const [search, setSearch] = useState<string>('');
 	const [selection, setSelection] = useState<string[]>(() => compact(query.creator || []));
 
-	const { setValue, getValues, reset } = useForm<CreatorFilterFormState>({
+	const { setValue, reset, handleSubmit } = useForm<CreatorFilterFormState>({
 		resolver: yupResolver(CREATOR_FILTER_FORM_SCHEMA()),
+		defaultValues,
 	});
 
 	const buckets = (
 		useSelector(selectMediaResults)?.aggregations.schema_creator.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
+	// Effects
+
+	useEffect(() => {
+		setValue('creators', selection);
+	}, [selection, setValue]);
+
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
 		const selected = add ? [...selection, value] : without(selection, value);
-
-		setValue('creators', selected);
 		setSelection(selected);
 	};
 
@@ -75,7 +84,14 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 				</div>
 			</div>
 
-			{children({ values: getValues(), reset })}
+			{children({
+				values: { creators: selection },
+				reset: () => {
+					reset();
+					setSelection(defaultValues.creators);
+				},
+				handleSubmit,
+			})}
 		</>
 	);
 };

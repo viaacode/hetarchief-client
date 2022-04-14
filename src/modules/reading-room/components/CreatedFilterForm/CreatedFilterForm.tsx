@@ -9,7 +9,7 @@ import { useQueryParams } from 'use-query-params';
 import { MetadataProp } from '@reading-room/types';
 import { getOperators } from '@reading-room/utils';
 import { getSelectValue } from '@reading-room/utils/select';
-import { Operator } from '@shared/types';
+import { isRange, Operator } from '@shared/types';
 
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
@@ -20,39 +20,49 @@ import {
 } from './CreatedFilterForm.const';
 import { CreatedFilterFormProps, CreatedFilterFormState } from './CreatedFilterForm.types';
 
+const defaultValues = {
+	operator: Operator.GreaterThanOrEqual,
+	created: undefined,
+};
+
 const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) => {
 	const [query] = useQueryParams(CREATED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
-	// Computed
-
-	const operators = useMemo(() => getOperators(MetadataProp.CreatedAt), []);
-
 	const initial = query?.created?.[0];
-	const initialCreated = useMemo(() => initial?.val || new Date().toISOString(), [initial]);
 
-	// State
+	const [showRange, setShowRange] = useState(isRange(initial?.op));
+	const [form, setForm] = useState<CreatedFilterFormState>(defaultValues);
 
-	const [showRange, setShowRange] = useState(initial && initial.op === Operator.Between);
-
-	const [form, setForm] = useState<CreatedFilterFormState>({
-		operator: (initial?.op as Operator) || Operator.GreaterThanOrEqual,
-		created: initialCreated,
-	});
 	const {
+		clearErrors,
 		control,
-		reset,
 		formState: { errors },
+		handleSubmit,
 		setValue,
 	} = useForm<CreatedFilterFormState>({
 		resolver: yupResolver(CREATED_FILTER_FORM_SCHEMA()),
+		defaultValues,
 	});
+
+	const operators = useMemo(() => getOperators(MetadataProp.CreatedAt), []);
 
 	// Effects
 
 	useEffect(() => {
 		setValue('created', form.created);
 		setValue('operator', form.operator);
+
+		setShowRange(isRange(form.operator));
 	}, [form, setValue]);
+
+	useEffect(() => {
+		if (initial) {
+			const { val, op } = initial;
+
+			val && setForm((f) => ({ ...f, created: val }));
+			op && setForm((f) => ({ ...f, operator: op as Operator }));
+		}
+	}, [initial]);
 
 	// Events
 
@@ -81,9 +91,8 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 										if (value !== form.operator) {
 											setForm({
 												operator: value,
-												created: '',
+												created: defaultValues.created,
 											});
-											setShowRange(value === Operator.Between);
 										}
 									}}
 								/>
@@ -117,7 +126,14 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 				</div>
 			</div>
 
-			{children({ values: form, reset })}
+			{children({
+				values: form,
+				reset: () => {
+					setForm(defaultValues);
+					clearErrors();
+				},
+				handleSubmit,
+			})}
 		</>
 	);
 };

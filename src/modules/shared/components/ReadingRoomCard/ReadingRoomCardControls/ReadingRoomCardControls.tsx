@@ -2,7 +2,6 @@ import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, ReactNode } from 'react';
-import TruncateMarkup from 'react-truncate-markup';
 
 import { Icon, IconLightNames } from '../../Icon';
 import { ReadingRoomCardType } from '../ReadingRoomCard.const';
@@ -34,7 +33,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 			<div className={styles['c-reading-room-card-controls__label']}>
 				<Icon className={styles['c-reading-room-card-controls__label-icon']} name={icon} />
 
-				<TruncateMarkup lines={2}>
+				<div className="u-text-ellipsis--2">
 					<p
 						className={clsx(
 							styles['c-reading-room-card-controls__label-text'],
@@ -43,7 +42,7 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 					>
 						{text}
 					</p>
-				</TruncateMarkup>
+				</div>
 			</div>
 		);
 	};

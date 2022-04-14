@@ -7,7 +7,7 @@ import {
 } from '../FilterMenu.types';
 
 export interface FilterOptionProps extends DefaultComponentProps, FilterMenuFilterOption {
-	activeFilter: string | null;
+	activeFilter: string | null | undefined;
 	values?: unknown;
 	onClick?: (filterId: string) => void;
 	onFormSubmit: OnFilterMenuFormSubmit;

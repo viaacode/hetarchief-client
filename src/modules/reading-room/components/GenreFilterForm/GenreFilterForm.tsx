@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { compact, without } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -17,6 +17,10 @@ import {
 } from './GenreFilterForm.const';
 import { GenreFilterFormProps, GenreFilterFormState } from './GenreFilterForm.types';
 
+const defaultValues = {
+	genres: [],
+};
+
 const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 	const { t } = useTranslation();
 
@@ -26,20 +30,25 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 	const [search, setSearch] = useState<string>('');
 	const [selection, setSelection] = useState<string[]>(() => compact(query.genre || []));
 
-	const { setValue, getValues, reset } = useForm<GenreFilterFormState>({
+	const { setValue, reset, handleSubmit } = useForm<GenreFilterFormState>({
 		resolver: yupResolver(GENRE_FILTER_FORM_SCHEMA()),
+		defaultValues,
 	});
 
 	const buckets = (
 		useSelector(selectMediaResults)?.aggregations.schema_genre.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
+	// Effects
+
+	useEffect(() => {
+		setValue('genres', selection);
+	}, [selection, setValue]);
+
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
 		const selected = add ? [...selection, value] : without(selection, value);
-
-		setValue('genres', selected);
 		setSelection(selected);
 	};
 
@@ -76,7 +85,14 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 				</div>
 			</div>
 
-			{children({ values: getValues(), reset })}
+			{children({
+				values: { genres: selection },
+				reset: () => {
+					reset();
+					setSelection(defaultValues.genres);
+				},
+				handleSubmit,
+			})}
 		</>
 	);
 };

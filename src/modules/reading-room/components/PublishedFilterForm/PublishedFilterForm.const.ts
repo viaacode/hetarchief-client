@@ -9,7 +9,7 @@ import { PublishedFilterFormState } from './PublishedFilterForm.types';
 export const PUBLISHED_FILTER_FORM_SCHEMA = (): SchemaOf<PublishedFilterFormState> =>
 	object({
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
-		published: string().required(),
+		published: string().optional(),
 	});
 
 export const PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG = {

@@ -58,6 +58,7 @@ const AppLayout: FC = ({ children }) => {
 
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
+			show && window.scrollTo(0, 0);
 			dispatch(setShowNotificationsCenter(show));
 		},
 		[dispatch]
@@ -82,12 +83,6 @@ const AppLayout: FC = ({ children }) => {
 		dispatch(checkLoginAction());
 		dispatch(getTosAction());
 	}, [dispatch]);
-
-	useEffect(() => {
-		if (showNotificationsCenter) {
-			document.body.parentElement?.scrollTo({ top: 0 });
-		}
-	}, [showNotificationsCenter]);
 
 	const userName = (user?.firstName as string) ?? '';
 

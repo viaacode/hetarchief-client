@@ -37,7 +37,7 @@ const FilterForm: FC<FilterFormProps> = ({
 			</div>
 
 			<FormComponent className={styles['c-filter-form__body']} values={{ [id]: values }}>
-				{({ reset, values }) => (
+				{({ reset, values, handleSubmit }) => (
 					<div className={styles['c-filter-form__footer']}>
 						<Button
 							className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
@@ -54,7 +54,12 @@ const FilterForm: FC<FilterFormProps> = ({
 								'modules/reading-room/components/filter-menu/filter-form/filter-form___pas-toe'
 							)}
 							variants={['black']}
-							onClick={() => onFilterFormSubmit(id, values)}
+							onClick={() => {
+								handleSubmit(
+									() => onFilterFormSubmit(id, values),
+									(...args) => console.error(args)
+								)();
+							}}
 						/>
 					</div>
 				)}

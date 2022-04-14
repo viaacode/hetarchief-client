@@ -1,0 +1,8 @@
+.c-rich-text-form {
+	&__wrapper {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto 4.8rem;
+		row-gap: 2rem;
+	}
+}

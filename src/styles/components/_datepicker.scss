@@ -26,7 +26,7 @@ $datepicker-border-color: $zinc;
 
 		&-popper {
 			border-top: 1px solid $datepicker-border-color;
-			overflow-x: scroll;
+			overflow-x: auto;
 			max-width: 100%;
 
 			&[data-placement^="bottom"] {
@@ -35,7 +35,7 @@ $datepicker-border-color: $zinc;
 			}
 
 			&[data-placement^="top"] {
-				bottom: -5px !important;
+				bottom: -6px !important;
 				padding-bottom: 0;
 			}
 		}

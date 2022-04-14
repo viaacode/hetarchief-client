@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { compact, without } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -17,6 +17,10 @@ import {
 } from './LanguageFilterForm.const';
 import { LanguageFilterFormProps, LanguageFilterFormState } from './LanguageFilterForm.types';
 
+const defaultValues = {
+	languages: [],
+};
+
 const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }) => {
 	const { t } = useTranslation();
 
@@ -26,20 +30,25 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	const [search, setSearch] = useState<string>('');
 	const [selection, setSelection] = useState<string[]>(() => compact(query.language || []));
 
-	const { setValue, getValues, reset } = useForm<LanguageFilterFormState>({
+	const { setValue, reset, handleSubmit } = useForm<LanguageFilterFormState>({
 		resolver: yupResolver(LANGUAGE_FILTER_FORM_SCHEMA()),
+		defaultValues,
 	});
 
 	const buckets = (
 		useSelector(selectMediaResults)?.aggregations.schema_in_language.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
+	// Effects
+
+	useEffect(() => {
+		setValue('languages', selection);
+	}, [selection, setValue]);
+
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
 		const selected = add ? [...selection, value] : without(selection, value);
-
-		setValue('languages', selected);
 		setSelection(selected);
 	};
 
@@ -75,7 +84,14 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 				</div>
 			</div>
 
-			{children({ values: getValues(), reset })}
+			{children({
+				values: { languages: selection },
+				reset: () => {
+					reset();
+					setSelection(defaultValues.languages);
+				},
+				handleSubmit,
+			})}
 		</>
 	);
 };

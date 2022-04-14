@@ -1,7 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
-import TruncateMarkup from 'react-truncate-markup';
 
 import { useHover } from '../../hooks/use-hover';
 
@@ -29,16 +28,16 @@ const Toast: FC<ToastProps> = ({
 			)}
 			aria-hidden={!visible}
 		>
-			<TruncateMarkup lines={maxLines}>
+			<div className={`u-text-ellipsis--${maxLines}`}>
 				<p data-testid="toast-title" className={styles['c-toast__title']}>
 					{title}
 				</p>
-			</TruncateMarkup>
-			<TruncateMarkup lines={maxLines}>
+			</div>
+			<div className={`u-text-ellipsis--${maxLines}`}>
 				<p data-testid="toast-description" className={styles['c-toast__description']}>
 					{description}
 				</p>
-			</TruncateMarkup>
+			</div>
 			<div {...hoverProps} className={styles['c-toast__button-wrapper']}>
 				<Button
 					className={styles['c-toast__button']}

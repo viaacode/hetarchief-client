@@ -22,7 +22,7 @@ const initialFields = (): AdvancedFilter => ({
 
 const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, values }) => {
 	const { t } = useTranslation();
-	const { control, getValues, reset } = useForm<AdvancedFilterFormState>({
+	const { control, getValues, reset, handleSubmit } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
 			advanced: values?.advanced ? values.advanced : [initialFields()],
 		},
@@ -66,7 +66,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, 
 				</div>
 			</div>
 
-			{children({ values: getValues(), reset })}
+			{children({ values: getValues(), reset, handleSubmit })}
 		</>
 	);
 };
