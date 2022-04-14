@@ -161,4 +161,34 @@ export const getNavigationItemsLeft = (
 			},
 		],
 	},
+	{
+		node: renderLink('Admin', '/admin/leeszalenbeheer/aanvragen', {
+			className: linkCls([
+				'u-color-black',
+				'u-color-white:md',
+				styles['c-navigation__link--dropdown'],
+			]),
+		}),
+		id: 'nav__admin',
+		children: [
+			// {
+			// 	node: renderLink('Alle leeszalen', '/admin/leeszalenbeheer/leeszalen', {
+			// 		className: dropdownCls(),
+			// 	}),
+			// 	id: 'nav__admin--leeszalen',
+			// },
+			// {
+			// 	node: renderLink('Aanvragen', '/admin/leeszalenbeheer/aanvragen', {
+			// 		className: dropdownCls(),
+			// 	}),
+			// 	id: 'nav__admin--aanvragen',
+			// },
+			// {
+			// 	node: renderLink('Actieve bezoekers', '/admin/leeszalenbeheer/bezoekers', {
+			// 		className: dropdownCls(),
+			// 	}),
+			// 	id: 'nav__admin--bezoekers',
+			// },
+		],
+	},
 ];

@@ -68,10 +68,16 @@ export interface ReadingRoomInfo {
 			locality: string;
 		};
 	};
-	isPublished: boolean;
+	status: ReadingRoomStatus;
 	publishedAt: string | null;
 	createdAt: string;
 	updatedAt: string;
+}
+
+export enum ReadingRoomStatus {
+	Active = 'ACTIVE',
+	Inactive = 'INACTIVE',
+	Requested = 'REQUESTED',
 }
 
 export type MediaTypeOptions = Array<

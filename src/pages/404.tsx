@@ -1,5 +1,5 @@
 import { Button } from '@meemoo/react-components';
-import { GetStaticProps, GetStaticPropsContext } from 'next';
+import { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
