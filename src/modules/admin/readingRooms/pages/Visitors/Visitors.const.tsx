@@ -8,7 +8,7 @@ import { DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { Visit, VisitRow } from '@shared/types';
-import { asDate, formatAccessDates } from '@shared/utils';
+import { asDate, formatSameDayRange } from '@shared/utils';
 
 export const VisitorsTablePageSize = 20;
 
@@ -56,7 +56,7 @@ export const VisitorsTableColumns = (
 				<span className="u-color-neutral p-admin-visitors__access">
 					<UnreadMarker active={active} />
 
-					{formatAccessDates(start, end)}
+					{formatSameDayRange(start, end)}
 				</span>
 			);
 		},

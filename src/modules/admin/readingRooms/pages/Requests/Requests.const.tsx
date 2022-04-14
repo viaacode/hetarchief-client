@@ -10,7 +10,7 @@ import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { Visit, VisitRow, VisitStatus } from '@shared/types';
-import { asDate, formatWithLocale } from '@shared/utils';
+import { asDate, formatMediumDateWithTime } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
 
@@ -83,7 +83,7 @@ export const RequestTableColumns = (
 			return (
 				<span
 					className="u-color-neutral"
-					title={formatWithLocale('PPpp', asDate(row.original.createdAt))}
+					title={formatMediumDateWithTime(asDate(row.original.createdAt))}
 				>
 					{requestCreatedAtFormatter(row.original.createdAt)}
 				</span>

@@ -32,23 +32,33 @@ export const formatWithLocale = (formatString: string, date?: Date): string => {
 	return date ? format(date, formatString, { locale }) : '';
 };
 
-export const formatAccessDate = (date?: Date): string => {
-	return formatWithLocale('PPp', date);
-};
+// 09:30
+export const formatTime = (date?: Date): string => formatWithLocale('p', date);
 
-// Used in:
-// - beheer/bezoekers
-// - account/mijn-historiek
+// 13/04/2022
+export const formatDate = (date?: Date): string => formatWithLocale('P', date);
 
-export const formatAccessDates = (from?: Date | string, to?: Date | string): string => {
+// 13 apr. 2022
+export const formatMediumDate = (date?: Date): string => formatWithLocale('PP', date);
+
+// 13 apr. 2022, 09:30
+export const formatMediumDateWithTime = (date?: Date): string => formatWithLocale('PPp', date);
+
+// 13 april 2022
+export const formatLongDate = (date?: Date): string => formatWithLocale('PPP', date);
+
+// 13 apr. 2022, 09:30
+// 13 apr. 2022, 09:30 - 10:30
+// 13 apr. 2022, 09:30 - 23 apr. 2033, 10:30
+export const formatSameDayRange = (from?: Date | string, to?: Date | string): string => {
 	const f = from ? asDate(from) : undefined;
 	const t = to ? asDate(to) : undefined;
 
-	if (f && !t) return formatAccessDate(f);
-	if (!f && t) return formatAccessDate(t);
+	if (f && !t) return formatMediumDateWithTime(f);
+	if (!f && t) return formatMediumDateWithTime(t);
 
-	const start = formatAccessDate(f);
-	const end = f && t && isSameDay(f, t) ? formatWithLocale('p', t) : formatAccessDate(t);
+	const start = formatMediumDateWithTime(f);
+	const end = f && t && isSameDay(f, t) ? formatTime(t) : formatMediumDateWithTime(t);
 
 	return `${start} - ${end}`;
 };

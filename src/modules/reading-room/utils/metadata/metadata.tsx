@@ -3,7 +3,6 @@ import { i18n } from 'next-i18next';
 import { METADATA_CONFIG, MetadataFields } from '@reading-room/const';
 import { MetadataProp, OperatorOptions, PropertyOptions } from '@reading-room/types';
 import { Operator } from '@shared/types';
-import { asDate, formatWithLocale } from '@shared/utils';
 
 export const getProperties = (): PropertyOptions => {
 	return Object.keys(METADATA_CONFIG()).map((key) => {
@@ -78,8 +77,4 @@ export const getLabel = (prop: MetadataProp): string => {
 			[MetadataProp.Title]: i18n?.t('modules/reading-room/utils/metadata/metadata___titel'),
 		}[prop] || ''
 	);
-};
-
-export const formatMetadataDate = (value: Date | string | undefined): string => {
-	return formatWithLocale('P', asDate(value));
 };
