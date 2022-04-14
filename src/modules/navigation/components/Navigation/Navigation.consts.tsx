@@ -116,6 +116,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'over leeszalen',
+		active: currentPath === '/over-leeszalen', // TODO: update once route is implemented
 	},
 	{
 		node: renderLink('Vaak gestelde vragen', '#', {
@@ -126,6 +127,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'vragen',
+		active: currentPath === '/vragen', // TODO: update once route is implemented
 	},
 	{
 		node: renderLink('Beheer', '', {
