@@ -183,6 +183,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			title: i18n?.t('modules/media/const/index___uitgebreide-beschrijving') ?? '',
 			data: (
 				<div
+					className="u-color-neutral"
 					dangerouslySetInnerHTML={{
 						__html: String(
 							DOMPurify.sanitize(
