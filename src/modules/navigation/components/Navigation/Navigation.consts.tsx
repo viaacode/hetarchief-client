@@ -170,6 +170,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'nav__admin',
+		active: currentPath.startsWith('/admin'),
 		children: [
 			// {
 			// 	node: renderLink('Alle leeszalen', '/admin/leeszalenbeheer/leeszalen', {
