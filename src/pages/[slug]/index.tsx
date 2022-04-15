@@ -408,7 +408,7 @@ const ReadingRoomPage: NextPage = () => {
 								: undefined,
 							publishedBy: item.schema_creator?.Maker?.join(', '),
 							type: item.dcterms_format,
-							preview: item.schema_thumbnail_url,
+							preview: item.schema_thumbnail_url || undefined,
 						})
 					)}
 				keywords={keywords}
