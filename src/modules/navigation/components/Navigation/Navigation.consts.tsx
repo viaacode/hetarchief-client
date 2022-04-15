@@ -1,5 +1,6 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { toLower } from 'lodash-es';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
@@ -7,6 +8,7 @@ import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { ReadingRoomInfo } from '@reading-room/types';
 import { Icon } from '@shared/components';
+import { ROUTES } from '@shared/const';
 
 const linkCls = (classNames: string[] = []) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -51,6 +53,7 @@ const renderLink = (
 };
 
 export const getNavigationItemsLeft = (
+	currentPath: string,
 	accessibleReadingRooms: ReadingRoomInfo[]
 ): NavigationItem[] => [
 	{
@@ -67,7 +70,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'leeszalen',
-		active: true,
+		active: currentPath === ROUTES.home || toLower(currentPath).startsWith('/or-'),
 		children: [
 			{
 				node: renderLink('Alle leeszalen', '/', {
@@ -113,6 +116,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'over leeszalen',
+		active: currentPath === '/over-leeszalen', // TODO: update once route is implemented
 	},
 	{
 		node: renderLink('Vaak gestelde vragen', '#', {
@@ -123,6 +127,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'vragen',
+		active: currentPath === '/vragen', // TODO: update once route is implemented
 	},
 	{
 		node: renderLink('Beheer', '', {
@@ -133,6 +138,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'nav__beheer',
+		active: currentPath.startsWith('/beheer'),
 		hasDivider: 'md',
 		children: [
 			{
@@ -164,6 +170,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'nav__admin',
+		active: currentPath.startsWith('/admin'),
 		children: [
 			// {
 			// 	node: renderLink('Alle leeszalen', '/admin/leeszalenbeheer/leeszalen', {
