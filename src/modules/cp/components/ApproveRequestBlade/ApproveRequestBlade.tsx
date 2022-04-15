@@ -26,7 +26,7 @@ import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
-import { asDate } from '@shared/utils';
+import { asDate, formatDate, formatTime } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
 
 import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
@@ -34,10 +34,6 @@ import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss
 import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
 import styles from './ApproveRequestBlade.module.scss';
 import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
-import {
-	formatApproveRequestAccessDate,
-	formatApproveRequestAccessTime,
-} from './ApproveRequestBlade.utils';
 
 const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
 const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
@@ -204,7 +200,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										name={field.name}
 										onBlur={field.onBlur}
 										onChange={(date) => onFromDateChange(date, field)}
-										value={formatApproveRequestAccessDate(field.value)}
+										value={formatDate(field.value)}
 										selected={field.value}
 										customInput={
 											<TextInput iconStart={<Icon name="calendar" />} />
@@ -218,7 +214,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										name={field.name}
 										onBlur={field.onBlur}
 										onChange={(date) => onFromDateChange(date, field)}
-										value={formatApproveRequestAccessTime(field.value)}
+										value={formatTime(field.value)}
 										selected={field.value}
 										customInput={
 											<TextInput iconStart={<Icon name="clock" />} />
@@ -260,7 +256,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										name={field.name}
 										onBlur={field.onBlur}
 										onChange={(date) => onSimpleDateChange(date, field)}
-										value={formatApproveRequestAccessDate(field.value)}
+										value={formatDate(field.value)}
 										selected={field.value}
 										customInput={
 											<TextInput iconStart={<Icon name="calendar" />} />
@@ -274,7 +270,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 										name={field.name}
 										onBlur={field.onBlur}
 										onChange={(date) => onSimpleDateChange(date, field)}
-										value={formatApproveRequestAccessTime(field.value)}
+										value={formatTime(field.value)}
 										selected={field.value}
 										customInput={
 											<TextInput iconStart={<Icon name="clock" />} />

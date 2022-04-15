@@ -1,7 +1,6 @@
 import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
-import TruncateMarkup from 'react-truncate-markup';
 
 import { CardImage } from '../CardImage';
 
@@ -76,7 +75,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 	};
 
 	const renderDescription = () => (
-		<TruncateMarkup lines={flat ? 2 : 3}>
+		<div className={`u-text-ellipsis--${flat ? 2 : 3}`}>
 			<p
 				className={clsx(
 					styles['c-reading-room-card__description'],
@@ -85,7 +84,7 @@ const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
 			>
 				{room?.info}
 			</p>
-		</TruncateMarkup>
+		</div>
 	);
 
 	const mode = typeAccessGranted ? 'dark' : 'light';

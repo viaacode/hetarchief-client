@@ -17,6 +17,16 @@ const Overlay: FC<OverlayProps> = ({
 }) => {
 	const scrollbarWidth = useScrollbarWidth(visible);
 
+	const getWidth = (): { width?: string } => {
+		if (excludeScrollbar && scrollbarWidth > 0) {
+			return {
+				width: `calc(100vw - ${scrollbarWidth}px)`,
+			};
+		}
+
+		return { width: undefined };
+	};
+
 	return (
 		<div
 			className={clsx(
@@ -28,7 +38,7 @@ const Overlay: FC<OverlayProps> = ({
 			)}
 			style={{
 				...style,
-				width: excludeScrollbar ? `calc(100vw - ${scrollbarWidth}px)` : 'auto',
+				...getWidth(),
 			}}
 			onClick={onClick}
 		/>

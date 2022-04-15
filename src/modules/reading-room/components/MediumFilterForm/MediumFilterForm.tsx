@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { compact, without } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
@@ -15,6 +15,10 @@ import {
 } from './MediumFilterForm.const';
 import { MediumFilterFormProps, MediumFilterFormState } from './MediumFilterForm.types';
 
+const defaultValues = {
+	mediums: [],
+};
+
 const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) => {
 	const { t } = useTranslation();
 
@@ -24,23 +28,25 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 	const [search, setSearch] = useState<string>('');
 	const [selection, setSelection] = useState<string[]>(() => compact(query.medium || []));
 
-	const { setValue, getValues, reset } = useForm<MediumFilterFormState>({
-		defaultValues: {
-			mediums: [],
-		},
+	const { setValue, reset, handleSubmit } = useForm<MediumFilterFormState>({
 		resolver: yupResolver(MEDIUM_FILTER_FORM_SCHEMA()),
+		defaultValues,
 	});
 
 	// const buckets = (
 	// 	useSelector(selectMediaResults)?.aggregations.dcterms_medium.buckets || []
 	// ).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
+	// Effects
+
+	useEffect(() => {
+		setValue('mediums', selection);
+	}, [selection, setValue]);
+
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
 		const selected = add ? [...selection, value] : without(selection, value);
-
-		setValue('mediums', selected);
 		setSelection(selected);
 	};
 
@@ -76,7 +82,14 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 				</div>
 			</div>
 
-			{children({ values: getValues(), reset })}
+			{children({
+				values: { mediums: selection },
+				reset: () => {
+					reset();
+					setSelection(defaultValues.mediums);
+				},
+				handleSubmit,
+			})}
 		</>
 	);
 };

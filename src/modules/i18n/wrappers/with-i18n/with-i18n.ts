@@ -1,12 +1,18 @@
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import {
+	GetServerSideProps,
+	GetServerSidePropsContext,
+	GetStaticProps,
+	GetStaticPropsContext,
+} from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { DEFAULT_LOCALE } from '../../const';
 
 import { WithI18n } from './with-i18n.types';
 
-export const withI18n = (gssp?: GetServerSideProps<WithI18n>): GetServerSideProps<WithI18n> => {
-	return async (context: GetServerSidePropsContext) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const withI18n = (gssp?: GetServerSideProps<WithI18n> | GetStaticProps<WithI18n>): any => {
+	return async (context: GetServerSidePropsContext | GetStaticPropsContext) => {
 		const { locale = DEFAULT_LOCALE } = context;
 		const ssrTranslations = await serverSideTranslations(locale);
 		const propsWithI18n = { props: { ...ssrTranslations } };
@@ -15,7 +21,8 @@ export const withI18n = (gssp?: GetServerSideProps<WithI18n>): GetServerSideProp
 			return propsWithI18n;
 		}
 
-		const props = await gssp(context);
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const props = await gssp(context as any);
 
 		return {
 			props: {

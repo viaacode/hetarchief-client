@@ -1,5 +1,6 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -27,7 +28,13 @@ import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
-import { MediaActions, MediaRepresentation, MediaSimilarHit, ObjectDetailTabs } from '@media/types';
+import {
+	Media,
+	MediaActions,
+	MediaRepresentation,
+	MediaSimilarHit,
+	ObjectDetailTabs,
+} from '@media/types';
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
@@ -39,7 +46,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
-import { asDate, createPageTitle, formatAccessDate, formatWithLocale } from '@shared/utils';
+import { asDate, createPageTitle, formatMediumDate, formatMediumDateWithTime } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -63,7 +70,7 @@ const ObjectDetailPage: NextPage = () => {
 	const previousUrl = useSelector(selectPreviousUrl);
 
 	// Internal state
-	const [backlink, setBackLink] = useState(`/${router.query.slug}`);
+	const [backLink, setBackLink] = useState(`/${router.query.slug}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
@@ -137,7 +144,8 @@ const ObjectDetailPage: NextPage = () => {
 		let backLink = `/${router.query.slug}`;
 		if (previousUrl) {
 			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
-			const validBacklink = subgroups?.length === 2 && subgroups[0] === router.query.slug;
+			const validBacklink =
+				subgroups?.length === 1 && lowerCase(subgroups[0]).startsWith('or-');
 
 			if (validBacklink) {
 				backLink = previousUrl;
@@ -176,25 +184,7 @@ const ObjectDetailPage: NextPage = () => {
 	}, [similarData]);
 
 	useEffect(() => {
-		relatedData &&
-			setRelated(
-				relatedData.items.map((item) => {
-					return {
-						type: item.dctermsFormat as MediaTypes,
-						title: item.name,
-						subtitle: `(${
-							item.datePublished
-								? formatWithLocale('PP', asDate(item.datePublished))
-								: undefined
-						})`,
-						description: item.description,
-						// thumbnail: item.thumbnailUrl,
-						id: item.schemaIdentifier,
-						maintainer_id: item.maintainerId,
-						thumbnail: item.thumbnailUrl,
-					};
-				})
-			);
+		relatedData && setRelated(mapRelatedData(relatedData.items));
 	}, [relatedData]);
 
 	/**
@@ -203,7 +193,7 @@ const ObjectDetailPage: NextPage = () => {
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
 	const accessEndDate =
-		visitStatus && visitStatus.endAt ? formatAccessDate(asDate(visitStatus.endAt)) : '';
+		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
 
 	/**
 	 * Mapping
@@ -215,12 +205,29 @@ const ObjectDetailPage: NextPage = () => {
 				title: hit._source.schema_name,
 				subtitle: `(${
 					hit._source.schema_date_published
-						? formatWithLocale('PP', asDate(hit._source.schema_date_published))
+						? formatMediumDate(asDate(hit._source.schema_date_published))
 						: undefined
 				})`,
 				description: hit._source.schema_description || '',
-				// thumbnail: hit._source.schema_thumbnail_url,
-				id: hit._source.schema_identifier,
+				thumbnail: hit._source.schema_thumbnail_url,
+				id: hit._id,
+				maintainer_id: hit._source.schema_maintainer?.schema_identifier || '',
+			};
+		});
+	};
+
+	const mapRelatedData = (data: Media[]): MediaObject[] => {
+		return data.map((item) => {
+			return {
+				type: item.dctermsFormat as MediaTypes,
+				title: item.name,
+				subtitle: `(${
+					item.datePublished ? formatMediumDate(asDate(item.datePublished)) : undefined
+				})`,
+				description: item.description,
+				id: item.schemaIdentifier,
+				maintainer_id: item.maintainerId,
+				thumbnail: item.thumbnailUrl,
 			};
 		});
 	};
@@ -359,7 +366,7 @@ const ObjectDetailPage: NextPage = () => {
 					className="p-object-detail__nav"
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
-					backLink={backlink}
+					backLink={backLink}
 					showAccessEndDate={
 						accessEndDate
 							? t(
@@ -446,7 +453,9 @@ const ObjectDetailPage: NextPage = () => {
 						<div>
 							<div className="u-px-32">
 								<h3 className="u-pt-32 u-pb-24">{mediaInfo?.name}</h3>
-								<p className="u-pb-24">{mediaInfo?.description}</p>
+								<p className="u-pb-24 u-line-height-1-4">
+									{mediaInfo?.description}
+								</p>
 								<div className="u-pb-24 p-object-detail__actions">
 									<Button
 										className="p-object-detail__export"
