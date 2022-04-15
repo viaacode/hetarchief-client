@@ -22,7 +22,6 @@ const CPSettingsPage: NextPage = () => {
 	 * Data
 	 */
 	const user = useSelector(selectUser);
-	console.log(user);
 
 	const {
 		data: readingRoomInfo,
@@ -36,9 +35,11 @@ const CPSettingsPage: NextPage = () => {
 
 	const renderErrorMessage = () => {
 		if (!user?.maintainerId) {
-			return t('Geen maintainer-id gevonden.');
+			return t('pages/beheer/instellingen/index___geen-maintainer-id-gevonden');
 		}
-		return t('Er ging iets mis bij het ophalen van de instellingen.');
+		return t(
+			'pages/beheer/instellingen/index___er-ging-iets-mis-bij-het-ophalen-van-de-instellingen'
+		);
 	};
 
 	return isLoading ? (
