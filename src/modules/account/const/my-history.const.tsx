@@ -5,7 +5,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
 import { Visit, VisitRow } from '@shared/types';
-import { createHomeWithReadingRoomFilterUrl, formatAccessDates } from '@shared/utils';
+import { createHomeWithReadingRoomFilterUrl, formatSameDayRange } from '@shared/utils';
 
 export const HistoryItemListSize = 20;
 
@@ -47,7 +47,7 @@ export const HistoryTableColumns = (
 			const visit = data.row.original;
 			return (
 				<span className="u-color-neutral">
-					{formatAccessDates(visit.startAt, undefined)}
+					{formatSameDayRange(visit.startAt, undefined)}
 				</span>
 			);
 		},
@@ -58,7 +58,9 @@ export const HistoryTableColumns = (
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
 			return (
-				<span className="u-color-neutral">{formatAccessDates(undefined, visit.endAt)}</span>
+				<span className="u-color-neutral">
+					{formatSameDayRange(undefined, visit.endAt)}
+				</span>
 			);
 		},
 	},
@@ -70,7 +72,7 @@ export const HistoryTableColumns = (
 			const visit = data.row.original;
 			return (
 				<span className="u-color-neutral">
-					{formatAccessDates(visit.startAt, visit.endAt)}
+					{formatSameDayRange(visit.startAt, visit.endAt)}
 				</span>
 			);
 		},

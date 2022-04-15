@@ -1,9 +1,8 @@
 import { DatepickerProps, historicDatepicker, TextInput } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { formatMetadataDate } from '@reading-room/utils';
 import { Datepicker, Icon } from '@shared/components';
-import { asDate } from '@shared/utils';
+import { asDate, formatDate } from '@shared/utils';
 
 import styles from './DateInput.module.scss';
 
@@ -16,7 +15,7 @@ const DateInput: FC<DatepickerProps> = (props) => (
 			{...historicDatepicker}
 			maxDate={null}
 			{...props}
-			value={formatMetadataDate(props.value)}
+			value={formatDate(asDate(props.value))}
 			selected={asDate(props.value)}
 			customInput={<TextInput iconStart={<Icon name="calendar" />} />}
 		/>

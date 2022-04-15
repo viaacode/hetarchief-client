@@ -20,7 +20,6 @@ import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { AddToCollectionBlade } from '@reading-room/components';
-import { formatMetadataDate } from '@reading-room/utils';
 import {
 	Icon,
 	IdentifiableMediaCard,
@@ -34,7 +33,7 @@ import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { Breakpoints } from '@shared/types';
-import { asDate, createPageTitle } from '@shared/utils';
+import { asDate, createPageTitle, formatDate } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -252,11 +251,11 @@ const AccountMyCollections: NextPage = () => {
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___creatiedatum'),
-				value: formatMetadataDate(asDate(item.dateCreatedLowerBound)),
+				value: formatDate(asDate(item.dateCreatedLowerBound)),
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___uitzenddatum'),
-				value: formatMetadataDate(asDate(item.datePublished)),
+				value: formatDate(asDate(item.datePublished)),
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___identifier-bij-meemoo'),
