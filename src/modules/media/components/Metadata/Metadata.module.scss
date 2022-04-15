@@ -29,6 +29,7 @@ $metadata-border: 0.1rem solid $black-20;
 	}
 
 	&__item-text {
+		color: $neutral;
 		overflow-wrap: break-word;
 	}
 }
