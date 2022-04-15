@@ -1,0 +1,30 @@
+import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
+import { FC } from 'react';
+
+import styles from './Callout.module.scss';
+import { CalloutProps } from './Callout.types';
+
+const Callout: FC<CalloutProps> = ({ className, icon, text, action }) => {
+	const rootCls = clsx(className, styles['c-callout']);
+
+	return (
+		<div className={rootCls}>
+			{icon && <div className={styles['c-callout__icon']}>{icon}</div>}
+			<div>
+				<span>{text}</span>
+				{action && (
+					<span className={styles['c-callout__button']}>
+						<Button
+							label={action.label}
+							variants={['text', 'underline']}
+							onClick={action.onClick}
+						/>
+					</span>
+				)}
+			</div>
+		</div>
+	);
+};
+
+export default Callout;
