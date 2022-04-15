@@ -1,7 +1,9 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
@@ -19,11 +21,25 @@ const CPSettingsPage: NextPage = () => {
 	/**
 	 * Data
 	 */
-	const { data: readingRoomInfo, isLoading, refetch } = useGetReadingRoom('OR-154dn75');
+	const user = useSelector(selectUser);
+	console.log(user);
+
+	const {
+		data: readingRoomInfo,
+		isLoading,
+		refetch,
+	} = useGetReadingRoom(user?.maintainerId || null, !!user?.maintainerId);
 
 	/**
 	 * Render
 	 */
+
+	const renderErrorMessage = () => {
+		if (!user?.maintainerId) {
+			return t('Geen maintainer-id gevonden.');
+		}
+		return t('Er ging iets mis bij het ophalen van de instellingen.');
+	};
 
 	return isLoading ? (
 		<Loading />
@@ -48,8 +64,10 @@ const CPSettingsPage: NextPage = () => {
 				contentTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">
-					{readingRoomInfo && (
+					{readingRoomInfo ? (
 						<ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />
+					) : (
+						<p className="u-color-neutral">{renderErrorMessage()}</p>
 					)}
 				</div>
 			</CPAdminLayout>
