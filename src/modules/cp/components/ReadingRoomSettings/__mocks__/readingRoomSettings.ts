@@ -1,7 +1,8 @@
-import { ReadingRoomInfo, ReadingRoomStatus } from '@reading-room/types';
+import { ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
 
-export const READING_ROOM_MOCK: ReadingRoomInfo = {
+export const VISITOR_SPACE_MOCK: VisitorSpaceInfo = {
 	id: '52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21',
+	slug: 'amsab',
 	maintainerId: 'OR-154dn75',
 	name: 'Amsab-ISG',
 	description:

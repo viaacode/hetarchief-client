@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 
 import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
-import { ReadingRoomInfo } from '@reading-room/types';
+import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon } from '@shared/components';
 
 const linkCls = (classNames: string[] = []) => {
@@ -51,7 +51,7 @@ const renderLink = (
 };
 
 export const getNavigationItemsLeft = (
-	accessibleReadingRooms: ReadingRoomInfo[]
+	accessibleReadingRooms: VisitorSpaceInfo[]
 ): NavigationItem[] => [
 	{
 		node: renderLink('Leeszalen', '', {
@@ -77,28 +77,23 @@ export const getNavigationItemsLeft = (
 				hasDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
 			},
 			...accessibleReadingRooms.map(
-				(readingRoom: ReadingRoomInfo): NavigationItem => ({
-					// TODO update the link to use the readingRoom.slug instead of the id
-					node: renderLink(
-						readingRoom.name || '---',
-						`/${readingRoom.maintainerId.toLowerCase()}`,
-						{
-							iconEnd: (
-								<Icon
-									className={clsx(
-										'u-font-size-24',
-										'u-text-left',
-										'u-visibility-hidden',
-										'u-visibility-visible:md',
-										styles['c-navigation__dropdown-icon--end']
-									)}
-									name="angle-right"
-								/>
-							),
-							className: dropdownCls(),
-						}
-					),
-					id: readingRoom.id,
+				(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
+					node: renderLink(visitorSpace.name || '---', `/${visitorSpace.slug}`, {
+						iconEnd: (
+							<Icon
+								className={clsx(
+									'u-font-size-24',
+									'u-text-left',
+									'u-visibility-hidden',
+									'u-visibility-visible:md',
+									styles['c-navigation__dropdown-icon--end']
+								)}
+								name="angle-right"
+							/>
+						),
+						className: dropdownCls(),
+					}),
+					id: visitorSpace.id,
 				})
 			),
 		],

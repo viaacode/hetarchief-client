@@ -19,7 +19,7 @@ const CPSettingsPage: NextPage = () => {
 	/**
 	 * Data
 	 */
-	const { data: readingRoomInfo, isLoading, refetch } = useGetReadingRoom('OR-154dn75');
+	const { data: readingRoomInfo, isLoading, refetch } = useGetReadingRoom('amsab');
 
 	/**
 	 * Render

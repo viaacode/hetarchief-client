@@ -10,7 +10,7 @@ import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
-import { READING_ROOM_QUERY_KEY } from '@home/const';
+import { VISITOR_SPACE_ID_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
 import { ROUTES } from '@shared/const';
@@ -31,7 +31,7 @@ const LoggedInHome: FC = () => {
 	const router = useRouter();
 
 	const [query, setQuery] = useQueryParams({
-		[READING_ROOM_QUERY_KEY]: StringParam,
+		[VISITOR_SPACE_ID_QUERY_KEY]: StringParam,
 	});
 
 	/**
@@ -81,7 +81,7 @@ const LoggedInHome: FC = () => {
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
-		if (query[READING_ROOM_QUERY_KEY]) {
+		if (query[VISITOR_SPACE_ID_QUERY_KEY]) {
 			setIsRequestAccessBladeOpen(true);
 		}
 	}, [query]);
@@ -91,8 +91,8 @@ const LoggedInHome: FC = () => {
 	 */
 
 	const onCloseRequestBlade = () => {
-		if (query[READING_ROOM_QUERY_KEY]) {
-			setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
+		if (query[VISITOR_SPACE_ID_QUERY_KEY]) {
+			setQuery({ [VISITOR_SPACE_ID_QUERY_KEY]: undefined });
 		}
 
 		setIsRequestAccessBladeOpen(false);
@@ -116,7 +116,7 @@ const LoggedInHome: FC = () => {
 				return;
 			}
 
-			if (!query[READING_ROOM_QUERY_KEY]) {
+			if (!query[VISITOR_SPACE_ID_QUERY_KEY]) {
 				toastService.notify({
 					title: t(
 						'modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-leeszaal'
@@ -131,13 +131,13 @@ const LoggedInHome: FC = () => {
 			createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
-				spaceId: query[READING_ROOM_QUERY_KEY] as string,
+				spaceId: query[VISITOR_SPACE_ID_QUERY_KEY] as string,
 				timeframe: values.visitTime,
-			}).then((res) => {
-				setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
+			}).then((createdVisitRequest) => {
+				setQuery({ [VISITOR_SPACE_ID_QUERY_KEY]: undefined });
 				setIsRequestAccessBladeOpen(false);
 
-				router.push(ROUTES.visitRequested.replace(':slug', res.spaceSlug));
+				router.push(ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug));
 			});
 		} catch (err) {
 			console.error({
@@ -154,8 +154,8 @@ const LoggedInHome: FC = () => {
 		}
 	};
 
-	const onRequestAccess = (id: string) => {
-		setQuery({ [READING_ROOM_QUERY_KEY]: id });
+	const onRequestAccess = (visitorSpaceId: string) => {
+		setQuery({ [VISITOR_SPACE_ID_QUERY_KEY]: visitorSpaceId });
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -170,6 +170,7 @@ const LoggedInHome: FC = () => {
 		color: visit.spaceColor,
 		name: visit.spaceName,
 		info: visit.spaceInfo,
+		slug: visit.spaceSlug,
 	});
 
 	/**
