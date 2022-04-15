@@ -455,7 +455,9 @@ const ObjectDetailPage: NextPage = () => {
 						<div>
 							<div className="u-px-32">
 								<h3 className="u-pt-32 u-pb-24">{mediaInfo?.name}</h3>
-								<p className="u-pb-24">{mediaInfo?.description}</p>
+								<p className="u-pb-24 u-line-height-1-4">
+									{mediaInfo?.description}
+								</p>
 								<div className="u-pb-24 p-object-detail__actions">
 									<Button
 										className="p-object-detail__export"
