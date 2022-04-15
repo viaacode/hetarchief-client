@@ -1,4 +1,5 @@
 import { TabProps } from '@meemoo/react-components';
+import DOMPurify from 'dompurify';
 import { i18n } from 'next-i18next';
 
 import { MetadataItem, ObjectPlaceholderProps } from '@media/components';
@@ -6,6 +7,7 @@ import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__moc
 import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapObjectToMetadata } from '@media/utils';
 import { Icon } from '@shared/components';
+import { RICH_TEXT_SANITIZATION } from '@shared/const';
 import { MediaTypes } from '@shared/types';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
@@ -179,7 +181,19 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n?.t('modules/media/const/index___uitgebreide-beschrijving') ?? '',
-			data: mediaInfo.abstract,
+			data: (
+				<div
+					className="u-color-neutral"
+					dangerouslySetInnerHTML={{
+						__html: String(
+							DOMPurify.sanitize(
+								mediaInfo.abstract.replaceAll('\n', '<br/><br/>'),
+								RICH_TEXT_SANITIZATION
+							)
+						),
+					}}
+				/>
+			),
 		},
 		{
 			title: i18n?.t('modules/media/const/index___transcriptie') ?? '',
