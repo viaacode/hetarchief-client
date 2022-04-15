@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
@@ -38,6 +39,7 @@ import {
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
+import Callout from '@shared/components/Callout/Callout';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -90,6 +92,7 @@ const ObjectDetailPage: NextPage = () => {
 	// Sizes
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+	const user = useSelector(selectUser);
 
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
@@ -188,12 +191,13 @@ const ObjectDetailPage: NextPage = () => {
 	}, [relatedData]);
 
 	/**
-	 * Variables
+	 * Computed
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
 	const accessEndDate =
 		visitStatus && visitStatus.endAt ? formatAccessDate(asDate(visitStatus.endAt)) : '';
+	const isKioskUser = user?.groupName === 'KIOSK_VISITOR';
 
 	/**
 	 * Mapping
@@ -454,7 +458,23 @@ const ObjectDetailPage: NextPage = () => {
 					>
 						<div>
 							<div className="u-px-32">
-								<h3 className="u-pt-32 u-pb-24">{mediaInfo?.name}</h3>
+								{isKioskUser && (
+									<Callout
+										className="p-object-detail__callout u-pt-32 u-pb-24"
+										icon={<Icon name="info" />}
+										text={t(
+											'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.'
+										)}
+									/>
+								)}
+								<h3
+									className={clsx('u-pb-24', {
+										'u-pt-24': isKioskUser,
+										'u-pt-32': !isKioskUser,
+									})}
+								>
+									{mediaInfo?.name}
+								</h3>
 								<p className="u-pb-24">{mediaInfo?.description}</p>
 								<div className="u-pb-24 p-object-detail__actions">
 									<Button

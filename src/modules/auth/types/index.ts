@@ -10,4 +10,5 @@ export interface User {
 	lastName: string;
 	acceptedTosAt: string | null;
 	idp: Idp;
+	groupName: string;
 }

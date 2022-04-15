@@ -255,4 +255,8 @@ $metadata-collapsed-width: 36vw;
 			width: 100%;
 		}
 	}
+
+	&__callout {
+		border-bottom: $divider-black;
+	}
 }

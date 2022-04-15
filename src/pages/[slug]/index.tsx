@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
@@ -54,6 +55,7 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
+import Callout from '@shared/components/Callout/Callout';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { toastService } from '@shared/services/toast-service';
@@ -77,6 +79,7 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+	const user = useSelector(selectUser);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -356,6 +359,7 @@ const ReadingRoomPage: NextPage = () => {
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
 	const showResults = hasSearched && !!media && media?.items?.length > 0;
+	const isKioskUser = user?.groupName === 'KIOSK_VISITOR';
 
 	/**
 	 * Render
@@ -502,12 +506,27 @@ const ReadingRoomPage: NextPage = () => {
 						</div>
 					</section>
 
+					{isKioskUser && (
+						<aside className="l-container u-bg-platinum u-py-32 u-flex u-justify-center">
+							<Callout
+								icon={<Icon name="info" />}
+								text={t(
+									'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.'
+								)}
+								action={{
+									label: t('Meer info'),
+									onClick: () => router.push('#'),
+								}}
+							/>
+						</aside>
+					)}
 					<section
 						className={clsx(
 							'p-reading-room__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
 							{
 								'p-reading-room__results--placeholder':
 									showInitialView || showNoResults,
+								'u-pt-0': isKioskUser,
 							}
 						)}
 					>
