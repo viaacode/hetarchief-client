@@ -8,6 +8,7 @@ $layout: "l-app";
 
 	&--sticky {
 		height: 100vh;
+		min-height: 72rem;
 		overflow: hidden;
 
 		.#{$layout}__main {

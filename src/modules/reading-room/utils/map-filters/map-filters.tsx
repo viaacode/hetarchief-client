@@ -12,9 +12,9 @@ import {
 } from '@reading-room/types';
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
 import { MediaSearchFilters, Operator } from '@shared/types';
-import { asDate } from '@shared/utils';
+import { asDate, formatDate } from '@shared/utils';
 
-import { formatMetadataDate, getOperators, getProperties } from '../metadata';
+import { getOperators, getProperties } from '../metadata';
 
 const getSelectLabel = (
 	options: SelectOption[],
@@ -64,10 +64,10 @@ export const mapAdvancedToTags = (
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
 				if (op === Operator.Between) {
-					value = `${formatMetadataDate(split[0])} - ${formatMetadataDate(split[1])}`;
+					value = `${formatDate(asDate(split[0]))} - ${formatDate(asDate(split[1]))}`;
 					operator = undefined;
 				} else {
-					value = formatMetadataDate(value);
+					value = formatDate(asDate(value));
 				}
 				break;
 

@@ -112,6 +112,10 @@ $c-filter-menu-flyout-top-padding: 6.4rem;
 			padding: $c-filter-menu-flyout-top-padding 0 0;
 		}
 	}
+
+	&[data-popper-placement="bottom-start"] {
+		padding-left: $spacer-xs;
+	}
 }
 
 .c-filter-menu__flyout-close {

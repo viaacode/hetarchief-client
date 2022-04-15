@@ -345,6 +345,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		&.c-navigation__link--variant-4 {
 			@include navigation-link-border-decoration(0, 0.6rem);
 		}
+
+		&.c-navigation__link--variant-5 {
+			@include navigation-link-border-decoration(0, 0.6rem);
+		}
 	}
 }
 

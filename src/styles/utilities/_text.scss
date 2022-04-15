@@ -62,8 +62,8 @@ $weight: (
  */
 
 $height: (
-	"12_5": $line-height-1xl,
-	"13": $line-height-2xl,
+	"1-25": $line-height-1xl,
+	"1-4": $line-height-3xl,
 );
 @include generate-utils("line-height", "line-height", $height);
 

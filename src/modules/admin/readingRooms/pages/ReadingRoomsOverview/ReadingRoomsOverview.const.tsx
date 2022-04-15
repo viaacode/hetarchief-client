@@ -8,7 +8,7 @@ import { ReadingRoomInfo, ReadingRoomStatus } from '@reading-room/types';
 import { DropdownMenu, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { asDate, formatWithLocale } from '@shared/utils';
+import { asDate, formatLongDate } from '@shared/utils';
 
 import { READING_ROOMS_PATHS } from '../../const';
 import { AdminReadingRoomInfoRow } from '../../types';
@@ -40,10 +40,10 @@ export const ReadingRoomsOverviewTableColumns = (
 			) || '',
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
-			const formattedDate = formatWithLocale('PPP', asDate(row.original.createdAt));
+			const formatted = formatLongDate(asDate(row.original.createdAt));
 			return (
-				<span className="u-color-neutral" title={formattedDate}>
-					{formattedDate}
+				<span className="u-color-neutral" title={formatted}>
+					{formatted}
 				</span>
 			);
 		},
