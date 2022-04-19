@@ -118,12 +118,12 @@ const ReadingRoomPage: NextPage = () => {
 	const { data: space } = useGetReadingRoom(slug as string, access !== undefined);
 
 	const { data: media } = useGetMediaObjects(
-		slug as string,
+		space?.maintainerId?.toLocaleLowerCase() as string,
 		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
 		activeSort,
-		space !== undefined
+		space?.maintainerId !== undefined
 	);
 
 	/**

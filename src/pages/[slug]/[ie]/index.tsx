@@ -384,7 +384,7 @@ const ObjectDetailPage: NextPage = () => {
 					tabs={tabs}
 					onClick={onTabClick}
 				/>
-				{isLoadingMediaInfo && <Loading />}
+				{isLoadingMediaInfo && <Loading fullscreen />}
 				{isError && (
 					<p className={'p-object-detail__error'}>
 						{t(
