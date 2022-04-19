@@ -4,7 +4,7 @@ import { generatePath, Link } from 'react-router-dom';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { ReadingRoomInfo, ReadingRoomStatus } from '@reading-room/types';
+import { ReadingRoomInfo, ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
 import { DropdownMenu, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
@@ -31,6 +31,7 @@ export const ReadingRoomsOverviewTableColumns = (
 			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___leeszaal'
 			) || '',
+		id: ReadingRoomOrderProps.ContentPartnerName,
 		accessor: 'name',
 	},
 	{
@@ -38,6 +39,7 @@ export const ReadingRoomsOverviewTableColumns = (
 			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geactiveerd-op'
 			) || '',
+		id: ReadingRoomOrderProps.CreatedAt,
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			const formattedDate = formatWithLocale('PPP', asDate(row.original.createdAt));
@@ -53,8 +55,8 @@ export const ReadingRoomsOverviewTableColumns = (
 			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___emailadres'
 			) || '',
-		id: 'admin-reading-rooms-overview-email',
-		accessor: (row) => row.contactInfo.email,
+		id: 'email',
+		accessor: 'contactInfo.email',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.email || ''}>
@@ -62,14 +64,16 @@ export const ReadingRoomsOverviewTableColumns = (
 				</span>
 			);
 		},
-	},
+		disableSortBy: true,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} as any,
 	{
 		Header:
 			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___telefoonnummer'
 			) || '',
-		id: 'admin-reading-rooms-overview-telephone',
-		accessor: (row) => row.contactInfo.telephone,
+		id: 'telephone',
+		accessor: 'contactInfo.telephone',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.telephone || ''}>
@@ -77,12 +81,15 @@ export const ReadingRoomsOverviewTableColumns = (
 				</span>
 			);
 		},
-	},
+		disableSortBy: true,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} as any,
 	{
 		Header:
 			t(
 				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___publicatiestatus'
 			) || '',
+		id: ReadingRoomOrderProps.Status,
 		accessor: 'status',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			// TODO: update when backend is up to date

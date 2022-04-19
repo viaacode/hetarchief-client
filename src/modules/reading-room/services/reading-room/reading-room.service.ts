@@ -1,7 +1,8 @@
 import { stringifyUrl } from 'query-string';
 
-import { ReadingRoomInfo } from '@reading-room/types';
+import { ReadingRoomInfo, ReadingRoomOrderProps } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
+import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 
 import { READING_ROOM_SERVICE_BASE_URL } from './reading-room.service.const';
@@ -11,7 +12,9 @@ export class ReadingRoomService {
 	public static async getAll(
 		searchInput = '',
 		page = 0,
-		size = 20
+		size = 20,
+		orderProp: ReadingRoomOrderProps = ReadingRoomOrderProps.CreatedAt,
+		orderDirection: OrderDirection = OrderDirection.desc
 	): Promise<ApiResponseWrapper<ReadingRoomInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
@@ -21,6 +24,8 @@ export class ReadingRoomService {
 						query: searchInput ? `%${searchInput}%` : undefined,
 						page,
 						size,
+						orderProp,
+						orderDirection,
 					},
 				})
 			)

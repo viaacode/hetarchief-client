@@ -3,8 +3,9 @@ import { useTranslation } from 'next-i18next';
 import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { ReadingRoomStatus } from '@reading-room/types';
-import { PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
+import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
+import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { OrderDirection } from '@shared/types';
 
@@ -13,11 +14,18 @@ import {
 	ReadingRoomsOverviewTableColumns,
 	ReadingRoomsOverviewTablePageSize,
 } from './ReadingRoomsOverview.const';
-import { READING_ROOMS_OVERVIEW_MOCK } from './__mocks__/readingRoomsOverview';
 
 const ReadingRoomsOverview: FC = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG);
+
+	const { data: readingRooms, isLoading } = useGetReadingRooms(
+		filters.search,
+		filters.page,
+		ReadingRoomsOverviewTablePageSize,
+		filters.orderProp as ReadingRoomOrderProps,
+		filters.orderDirection as OrderDirection
+	);
 
 	// Filters
 
@@ -66,17 +74,6 @@ const ReadingRoomsOverview: FC = () => {
 	// Render
 
 	const renderEmptyMessage = (): string => {
-		// switch (filters.status) {
-		// 	case VisitStatus.APPROVED:
-		// 		return t('pages/beheer/aanvragen/index___er-zijn-geen-goedgekeurde-aanvragen');
-
-		// 	case VisitStatus.DENIED:
-		// 		return t('pages/beheer/aanvragen/index___er-zijn-geen-geweigerde-aanvragen');
-
-		// 	case VisitStatus.PENDING:
-		// 	default:
-		// 		return t('pages/beheer/aanvragen/index___er-zijn-geen-openstaande-aanvragen');
-		// }
 		return t(
 			'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geen-leeszalen-gevonden'
 		);
@@ -89,89 +86,90 @@ const ReadingRoomsOverview: FC = () => {
 					'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___alle-leeszalen'
 				)}
 			</h2>
-			<div className="p-admin-reading-rooms__header">
-				<SearchBar
-					backspaceRemovesValue={false}
-					className="p-admin-reading-rooms__search"
-					instanceId="admin-reading-rooms-search-bar"
-					light={true}
-					placeholder={t(
-						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___zoek'
-					)}
-					searchValue={filters.search}
-					size="md"
-					onClear={() => {
-						setFilters({
-							[SEARCH_QUERY_KEY]: '',
-							page: 1,
-						});
-					}}
-					onSearch={(searchValue: string) => {
-						// Force rerender
-						if (filters.search === searchValue) {
-							setFilters({
-								[SEARCH_QUERY_KEY]: '',
-								page: 1,
-							});
-						}
+			{!isLoading && readingRooms ? (
+				<>
+					<div className="p-admin-reading-rooms__header">
+						<SearchBar
+							backspaceRemovesValue={false}
+							className="p-admin-reading-rooms__search"
+							instanceId="admin-reading-rooms-search-bar"
+							light={true}
+							placeholder={t(
+								'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___zoek'
+							)}
+							searchValue={filters.search}
+							size="md"
+							onClear={() => {
+								setFilters({
+									[SEARCH_QUERY_KEY]: '',
+									page: 1,
+								});
+							}}
+							onSearch={(searchValue: string) => {
+								// Force rerender
+								if (filters.search === searchValue) {
+									setFilters({
+										[SEARCH_QUERY_KEY]: '',
+										page: 1,
+									});
+								}
 
-						setFilters({
-							[SEARCH_QUERY_KEY]: searchValue,
-							page: 1,
-						});
-					}}
-				/>
-			</div>
-			{(READING_ROOMS_OVERVIEW_MOCK.items.length || 0) > 0 ? (
-				<div className="l-container--edgeless-to-lg">
-					<Table
-						className="u-mt-24"
-						options={
-							// TODO: fix type hinting
-							/* eslint-disable @typescript-eslint/ban-types */
-							{
-								columns: ReadingRoomsOverviewTableColumns(
-									t,
-									updateRoomStatus
-								) as Column<object>[],
-								data: READING_ROOMS_OVERVIEW_MOCK.items || [],
-								initialState: {
-									pageSize: ReadingRoomsOverviewTablePageSize,
-									sortBy: sortFilters,
-								},
-							} as TableOptions<object>
-							/* eslint-enable @typescript-eslint/ban-types */
-						}
-						// onRowClick={onRowClick}
-						onSortChange={onSortChange}
-						sortingIcons={sortingIcons}
-						pagination={({ gotoPage }) => {
-							return (
-								<PaginationBar
-									className="u-mt-16 u-mb-16"
-									count={ReadingRoomsOverviewTablePageSize}
-									start={
-										Math.max(0, filters.page - 1) *
-										ReadingRoomsOverviewTablePageSize
-									}
-									total={READING_ROOMS_OVERVIEW_MOCK.total || 0}
-									onPageChange={(pageZeroBased) => {
-										gotoPage(pageZeroBased);
-										// setSelected(null);
-										setFilters({
-											...filters,
-											page: pageZeroBased + 1,
-										});
-									}}
-								/>
-							);
-						}}
-					/>
-				</div>
+								setFilters({
+									[SEARCH_QUERY_KEY]: searchValue,
+									page: 1,
+								});
+							}}
+						/>
+					</div>
+
+					<div className="l-container--edgeless-to-lg">
+						<Table
+							className="u-mt-24"
+							options={
+								// TODO: fix type hinting
+								/* eslint-disable @typescript-eslint/ban-types */
+								{
+									columns: ReadingRoomsOverviewTableColumns(
+										t,
+										updateRoomStatus
+									) as Column<object>[],
+									data: readingRooms.items || [],
+									initialState: {
+										pageSize: ReadingRoomsOverviewTablePageSize,
+										sortBy: sortFilters,
+									},
+								} as TableOptions<object>
+								/* eslint-enable @typescript-eslint/ban-types */
+							}
+							onSortChange={onSortChange}
+							sortingIcons={sortingIcons}
+							pagination={({ gotoPage }) => {
+								return (
+									<PaginationBar
+										className="u-mt-16 u-mb-16"
+										count={ReadingRoomsOverviewTablePageSize}
+										start={
+											Math.max(0, filters.page - 1) *
+											ReadingRoomsOverviewTablePageSize
+										}
+										total={readingRooms.total || 0}
+										onPageChange={(pageZeroBased) => {
+											gotoPage(pageZeroBased);
+											// setSelected(null);
+											setFilters({
+												...filters,
+												page: pageZeroBased + 1,
+											});
+										}}
+									/>
+								);
+							}}
+						/>
+					</div>
+				</>
 			) : (
 				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					{/* {isFetching ? t('pages/beheer/aanvragen/index___laden') : renderEmptyMessage()} */}
-					{renderEmptyMessage()}
+					{isLoading ? <Loading /> : renderEmptyMessage()}
 				</div>
 			)}
 		</div>

@@ -7,7 +7,7 @@ import { ProcessRequestBlade } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
-import { OrderDirection, VisitInfo, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { useGetVisits } from '@visits/hooks/get-visits';
 
 import {
@@ -32,7 +32,7 @@ const ReadingRoomsOverview: FC = () => {
 			filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
 		page: filters.page,
 		size: RequestTablePageSize,
-		orderProp: filters.orderProp as keyof VisitInfo,
+		orderProp: filters.orderProp as keyof Visit,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
 
@@ -78,7 +78,7 @@ const ReadingRoomsOverview: FC = () => {
 
 	const onRowClick = useCallback(
 		(e, row) => {
-			const request = (row as { original: VisitInfo }).original;
+			const request = (row as { original: Visit }).original;
 			setSelected(request.id);
 		},
 		[setSelected]

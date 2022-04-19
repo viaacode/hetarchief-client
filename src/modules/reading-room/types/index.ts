@@ -31,6 +31,22 @@ export enum ReadingRoomFilterId {
 	Published = 'published',
 }
 
+export enum ReadingRoomOrderProps {
+	Id = 'id',
+	Image = 'schema_image',
+	Color = 'schema_color',
+	Audience = 'schema_audience_type',
+	Description = 'schema_description',
+	PublicAccess = 'schema_public_access',
+	ServiceDescription = 'schema_service_description',
+	Status = 'status',
+	PublishedAt = 'published_at',
+	CreatedAt = 'created_at',
+	UpdatedAt = 'updated_at',
+	ContentPartnerName = 'content_partner.schema_name',
+	ContentPartnerId = 'content_partner.schema_identifier',
+}
+
 export interface DefaultFilterFormChildrenParams<Values = unknown> {
 	values: Values;
 	reset: () => void;
