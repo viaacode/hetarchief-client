@@ -181,7 +181,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n?.t('modules/media/const/index___uitgebreide-beschrijving') ?? '',
-			data: (
+			data: mediaInfo.abstract ? (
 				<div
 					className="u-color-neutral"
 					dangerouslySetInnerHTML={{
@@ -193,7 +193,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 						),
 					}}
 				/>
-			),
+			) : null,
 		},
 		{
 			title: i18n?.t('modules/media/const/index___transcriptie') ?? '',
