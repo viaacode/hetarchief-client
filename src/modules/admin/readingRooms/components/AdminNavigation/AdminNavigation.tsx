@@ -28,36 +28,36 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 				</div>
 			),
 			children: [
-				// {
-				// 	id: 'leeszalen',
-				// 	node: ({ linkClassName }) => (
-				// 		<Link
-				// 			key={pathname}
-				// 			className={linkClassName}
-				// 			to={generatePath(ADMIN_PATHS.readingRooms.detail, {
-				// 				pageName: 'leeszalen',
-				// 			})}
-				// 		>
-				// 			{t(
-				// 				'modules/admin/reading-rooms/components/admin-navigation/admin-navigation___alle-leeszalen'
-				// 			)}
-				// 		</Link>
-				// 	),
-				// 	active:
-				// 		!!matchPath(window.location.pathname, {
-				// 			path: `/admin${generatePath(ADMIN_PATHS.readingRooms.detail, {
-				// 				pageName: 'leeszalen',
-				// 			})}`,
-				// 			exact: false,
-				// 		}) ||
-				// 		// Match edit state
-				// 		!!matchPath(window.location.pathname, {
-				// 			path: `/admin${generatePath(ADMIN_PATHS.readingRooms.edit, {
-				// 				pageName: ':id',
-				// 			})}`,
-				// 			exact: false,
-				// 		}),
-				// },
+				{
+					id: 'leeszalen',
+					node: ({ linkClassName }) => (
+						<Link
+							key={pathname}
+							className={linkClassName}
+							to={generatePath(ADMIN_PATHS.readingRooms.leeszalen, {
+								pageName: 'leeszalen',
+							})}
+						>
+							{t(
+								'modules/admin/reading-rooms/components/admin-navigation/admin-navigation___alle-leeszalen'
+							)}
+						</Link>
+					),
+					active:
+						!!matchPath(window.location.pathname, {
+							path: `/admin${generatePath(ADMIN_PATHS.readingRooms.leeszalen, {
+								pageName: 'leeszalen',
+							})}`,
+							exact: false,
+						}) ||
+						// Match edit state
+						!!matchPath(window.location.pathname, {
+							path: `/admin${generatePath(ADMIN_PATHS.readingRooms.edit, {
+								pageName: ':id',
+							})}`,
+							exact: false,
+						}),
+				},
 				{
 					id: 'aanvragen',
 					node: ({ linkClassName }) => (
