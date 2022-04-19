@@ -1,12 +1,14 @@
 $layout: "l-app";
 
 .#{$layout} {
+	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
-	height: 100vh;
+	min-height: 100vh;
 
 	&--sticky {
 		height: 100vh;
+		min-height: 72rem;
 		overflow: hidden;
 
 		.#{$layout}__main {

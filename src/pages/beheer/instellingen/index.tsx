@@ -1,14 +1,15 @@
-import { Box, Button, ColorPicker, RichEditorState } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { ReadingRoomSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { CardImage, Icon } from '@shared/components';
-import { RichTextEditor } from '@shared/components/RichTextEditor';
+import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { Loading } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
@@ -18,55 +19,32 @@ const CPSettingsPage: NextPage = () => {
 	const { t } = useTranslation();
 
 	/**
-	 * Form state
+	 * Data
 	 */
+	const user = useSelector(selectUser);
 
-	// Leeszaal
-	const [savedColor, setSavedColor] = useState<string>('#00857d'); // Save unedited state
-	const [newColor, setNewColor] = useState<string>('#00857d');
-
-	// Wachtzaal
-	const [savedWachtzaalState, setSavedWachtzaalState] = useState<RichEditorState>(); // Save unedited state
-	const [newWachtzaalState, setNewWachtzaalState] = useState<RichEditorState>();
-
-	// Aanvraag
-	const [savedAanvraagState, setSavedAanvraagState] = useState<RichEditorState>(); // Save unedited state
-	const [newAanvraagState, setNewAanvraagState] = useState<RichEditorState>();
-
-	const minWidth = 400;
-	const minHeight = 320;
-
-	/**
-	 * Helpers
-	 */
-	const isEqualHtml = (a?: RichEditorState, b?: RichEditorState): boolean => {
-		if (!a || !b) {
-			return true;
-		}
-
-		return a.toHTML() === b.toHTML();
-	};
+	const {
+		data: readingRoomInfo,
+		isLoading,
+		refetch,
+	} = useGetReadingRoom(user?.maintainerId || null, !!user?.maintainerId);
 
 	/**
 	 * Render
 	 */
 
-	const renderCancelSaveButtons = (onCancel: () => void, onSave: () => void) => (
-		<div className="p-cp-settings__cancel-save">
-			<Button
-				label={t('pages/beheer/instellingen/index___annuleer')}
-				variants="text"
-				onClick={onCancel}
-			/>
-			<Button
-				label={t('pages/beheer/instellingen/index___bewaar-wijzigingen')}
-				variants="black"
-				onClick={onSave}
-			/>
-		</div>
-	);
+	const renderErrorMessage = () => {
+		if (!user?.maintainerId) {
+			return t('pages/beheer/instellingen/index___geen-maintainer-id-gevonden');
+		}
+		return t(
+			'pages/beheer/instellingen/index___er-ging-iets-mis-bij-het-ophalen-van-de-instellingen'
+		);
+	};
 
-	return (
+	return isLoading ? (
+		<Loading />
+	) : (
 		<>
 			<Head>
 				<title>
@@ -87,144 +65,11 @@ const CPSettingsPage: NextPage = () => {
 				contentTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">
-					{/* Leeszaal */}
-					<article className="p-cp-settings__content-block">
-						<h2 className="p-cp-settings__title">
-							{t('pages/beheer/instellingen/index___leeszaal')}
-						</h2>
-						<Box className="p-cp-settings__box">
-							<p className="p-cp-settings__description">
-								{t(
-									'pages/beheer/instellingen/index___personaliseer-hoe-jouw-leeszaal-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
-								)}
-							</p>
-							<div className="p-cp-settings__leeszaal-controls">
-								<CardImage
-									className="p-cp-settings__leeszaal-image"
-									color={newColor}
-									logo="/images/logo-shd--small.svg"
-									id="placeholder id"
-									name={'placeholder name' || ''}
-									// image="/images/bg-shd.png"
-									size="short"
-								/>
-								<div className="p-cp-settings__leeszaal-color-picker">
-									<p className="p-cp-settings__subtitle">
-										{t('pages/beheer/instellingen/index___achtergrondkleur')}
-									</p>
-									<ColorPicker
-										color={newColor}
-										onChange={(color) => {
-											if (!savedColor) {
-												setSavedColor(color);
-											}
-											setNewColor(color);
-										}}
-									/>
-								</div>
-								<div className="p-cp-settings__leeszaal-image-controls">
-									<p className="p-cp-settings__subtitle">
-										{t(
-											'pages/beheer/instellingen/index___achtergrond-afbeelding'
-										)}
-										<span className="p-cp-settings__hint">
-											(
-											{t(
-												'pages/beheer/instellingen/index___minimum-min-width-px-x-min-height-px-max-500-kb',
-												{
-													minWidth,
-													minHeight,
-												}
-											)}
-											)
-										</span>
-									</p>
-									<div className="p-cp-settings__leeszaal-image-buttons">
-										<Button
-											label={t(
-												'pages/beheer/instellingen/index___upload-nieuwe-afbeelding'
-											)}
-											variants="outline"
-										/>
-										<Button
-											label={t(
-												'pages/beheer/instellingen/index___verwijderen'
-											)}
-											iconStart={<Icon name="trash" />}
-											variants="text"
-										/>
-									</div>
-								</div>
-							</div>
-							{newColor !== savedColor &&
-								renderCancelSaveButtons(
-									() => setNewColor(savedColor),
-									() => setSavedColor(newColor)
-								)}
-						</Box>
-					</article>
-
-					{/* Wachtzaal */}
-					<article className="p-cp-settings__content-block">
-						<h2 className="p-cp-settings__title">
-							{t('pages/beheer/instellingen/index___omschrijving-wachtzaal')}
-						</h2>
-						<Box className="p-cp-settings__box">
-							<p className="p-cp-settings__description">
-								{t(
-									'pages/beheer/instellingen/index___dit-is-de-wachtzaalomschrijving-die-bezoekers-kunnen-lezen-op-de-detailpagina-van-je-leeszaal-leg-uit-waar-je-leeszaal-om-gaat-welke-info-men-er-kan-vinden-vertel-de-bezoeker-over-je-collectie'
-								)}
-							</p>
-							<RichTextEditor
-								onChange={(state) => {
-									if (!savedWachtzaalState) {
-										setSavedWachtzaalState(state);
-									}
-									setNewWachtzaalState(state);
-								}}
-								initialHtml={
-									'<p><strong>Leeszaal 8</strong></p><p></p><h4><strong>Praktische informatie</strong></h4><p></p><p>In deze leeszaal vind je alles ...</p>'
-								}
-								state={newWachtzaalState}
-							/>
-							{!isEqualHtml(newWachtzaalState, savedWachtzaalState) &&
-								renderCancelSaveButtons(
-									() => setNewWachtzaalState(savedWachtzaalState),
-									() => setSavedWachtzaalState(newWachtzaalState)
-								)}
-						</Box>
-					</article>
-
-					{/* Aanvraag */}
-					<article className="p-cp-settings__content-block">
-						<h2 className="p-cp-settings__title">
-							{t('pages/beheer/instellingen/index___omschrijving-leeszaal-aanvraag')}
-						</h2>
-						<Box className="p-cp-settings__box">
-							<p className="p-cp-settings__description">
-								{t(
-									'pages/beheer/instellingen/index___als-bezoekers-een-aanvraag-doen-kunnen-zij-een-klein-tekstje-lezen-met-extra-info-over-het-bezoek-bv-vraag-meer-info-aan-balie-2-bij-aankomst-of-elke-dag-geopend-van-10-00-tot-17-00'
-								)}
-							</p>
-							<RichTextEditor
-								onChange={(state) => {
-									if (!savedAanvraagState) {
-										setSavedAanvraagState(state);
-									}
-									setNewAanvraagState(state);
-								}}
-								initialHtml={
-									'<p>Elke dag geopend van 10:00 tot 17:00. Vraag meer info aan balie 2 bij aankomst.</p>'
-								}
-								state={newAanvraagState}
-							/>
-							{!isEqualHtml(newAanvraagState, savedAanvraagState) &&
-								renderCancelSaveButtons(
-									() => setNewAanvraagState(savedAanvraagState),
-									() => setSavedAanvraagState(newAanvraagState)
-								)}
-						</Box>
-					</article>
+					{readingRoomInfo ? (
+						<ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />
+					) : (
+						<p className="u-color-neutral">{renderErrorMessage()}</p>
+					)}
 				</div>
 			</CPAdminLayout>
 		</>

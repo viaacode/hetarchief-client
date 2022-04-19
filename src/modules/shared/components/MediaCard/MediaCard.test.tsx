@@ -1,6 +1,6 @@
 import { render, RenderResult, screen } from '@testing-library/react';
 
-import { formatWithLocale } from '@shared/utils';
+import { formatDate } from '@shared/utils';
 
 import MediaCard from './MediaCard';
 
@@ -33,7 +33,7 @@ describe('Component: <MediaCard />', () => {
 	});
 
 	it('Should render the date and author in a specific format', () => {
-		expect(screen.getByText(`${author} (${formatWithLocale('P', now)})`)).toBeDefined();
+		expect(screen.getByText(`${author} (${formatDate(now)})`)).toBeDefined();
 	});
 
 	it('Should show placeholder icons based on the type of card in either view mode', () => {

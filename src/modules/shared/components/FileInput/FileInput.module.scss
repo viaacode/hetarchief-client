@@ -1,0 +1,12 @@
+@use "styles/abstracts" as *;
+
+.c-file-input {
+	&:focus-within {
+		border-color: transparent;
+		outline: 2px solid $teal;
+	}
+
+	input[type="file"] {
+		width: 0; // Only hide element visually to keep keyboard a11y
+	}
+}

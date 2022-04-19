@@ -51,7 +51,7 @@ export function useGetMediaObjects(
 			});
 		},
 		{
-			keepPreviousData: true,
+			keepPreviousData: false,
 			enabled,
 		}
 	);

@@ -5,7 +5,10 @@ import { ReadingRoomService } from '@reading-room/services';
 import { ReadingRoomInfo } from '@reading-room/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
-export function useGetReadingRoom(slug: string, enabled = true): UseQueryResult<ReadingRoomInfo> {
+export function useGetReadingRoom(
+	slug: string | null,
+	enabled = true
+): UseQueryResult<ReadingRoomInfo> {
 	return useQuery([QUERY_KEYS.getMediaInfo, { slug }], () => ReadingRoomService.getBySlug(slug), {
 		enabled,
 	});
