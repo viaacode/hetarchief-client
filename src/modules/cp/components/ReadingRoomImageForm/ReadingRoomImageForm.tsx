@@ -163,11 +163,9 @@ const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
 										'modules/cp/components/reading-room-image-form/reading-room-image-form___achtergrond-afbeelding'
 									)}
 									<span className={styles['c-reading-room-image-form__hint']}>
-										(
-										{t(
+										{`(${t(
 											'modules/cp/components/reading-room-image-form/reading-room-image-form___max-500-kb'
-										)}
-										)
+										)})`}
 									</span>
 								</p>
 								<div className={styles['c-reading-room-image-form__image-buttons']}>

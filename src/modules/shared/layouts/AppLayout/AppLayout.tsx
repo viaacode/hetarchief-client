@@ -58,6 +58,7 @@ const AppLayout: FC = ({ children }) => {
 
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
+			show && window.scrollTo(0, 0);
 			dispatch(setShowNotificationsCenter(show));
 		},
 		[dispatch]
@@ -82,12 +83,6 @@ const AppLayout: FC = ({ children }) => {
 		dispatch(checkLoginAction());
 		dispatch(getTosAction());
 	}, [dispatch]);
-
-	useEffect(() => {
-		if (showNotificationsCenter) {
-			document.body.parentElement?.scrollTo({ top: 0 });
-		}
-	}, [showNotificationsCenter]);
 
 	const userName = (user?.firstName as string) ?? '';
 
@@ -151,7 +146,7 @@ const AppLayout: FC = ({ children }) => {
 					hamburgerProps={
 						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
 					}
-					items={getNavigationItemsLeft(accessibleReadingRooms || [])}
+					items={getNavigationItemsLeft(asPath, accessibleReadingRooms || [])}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}

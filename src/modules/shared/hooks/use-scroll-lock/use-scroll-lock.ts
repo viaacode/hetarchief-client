@@ -1,38 +1,47 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+
+import { useScrollbarWidth } from '../use-scrollbar-width';
 
 import { UseScrollLock } from './use-scroll-lock.types';
 
-const useScrollLock: UseScrollLock = (lock, element) => {
+const useScrollLock: UseScrollLock = (lock) => {
+	const scrollbarWidth = useScrollbarWidth(lock);
+
+	// This function makes sure we're on the same height before and after lock
+	const scroll = (y?: string) => {
+		const parsed = parseInt(y || '0');
+		parsed > 0 && window.scrollTo(0, parsed);
+	};
+
+	const disable = useCallback(
+		(el: HTMLElement) => {
+			// Use the element as a one-shot state machine
+			if (!el.dataset.depth) {
+				el.dataset.depth = `${window.scrollY}`;
+			}
+
+			el.style.overflowY = 'hidden';
+			el.style.marginRight = `${scrollbarWidth}px`;
+
+			// Use that state to go to the right depth
+			scroll(el.dataset.depth);
+		},
+		[scrollbarWidth]
+	);
+
+	const restore = useCallback((el: HTMLElement) => {
+		el.style.overflowY = '';
+		el.style.marginRight = '';
+
+		scroll(el.dataset.depth);
+
+		// Wipe our state once we're done
+		el.removeAttribute('data-depth');
+	}, []);
+
 	useEffect(() => {
-		const scrollbarWidth =
-			document && window ? document.body.offsetWidth - document.body.clientWidth : 0;
-
-		const elementToLock = element ?? document.body.parentElement ?? document.body;
-		let prevOverflowStyle = '';
-		let prevMarginStyle = '';
-
-		if (!prevOverflowStyle) {
-			prevOverflowStyle = elementToLock.style.overflow;
-		}
-		if (!prevMarginStyle) {
-			prevMarginStyle = elementToLock.style.marginRight;
-		}
-
-		if (lock) {
-			elementToLock.style.overflow = 'hidden';
-			elementToLock.style.marginRight = prevMarginStyle
-				? `${prevMarginStyle + scrollbarWidth}px`
-				: `${scrollbarWidth}px`;
-		} else {
-			elementToLock.style.overflow = prevOverflowStyle;
-			elementToLock.style.marginRight = prevMarginStyle;
-		}
-
-		return () => {
-			elementToLock.style.overflow = prevOverflowStyle;
-			elementToLock.style.marginRight = prevMarginStyle;
-		};
-	}, [element, lock]);
+		lock ? disable(document.body) : restore(document.body);
+	}, [lock, disable, restore]);
 };
 
 export default useScrollLock;

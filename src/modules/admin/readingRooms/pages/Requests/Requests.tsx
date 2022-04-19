@@ -105,54 +105,52 @@ const ReadingRoomsOverview: FC = () => {
 			<h2 className="u-mb-40">
 				{t('modules/admin/reading-rooms/pages/requests/requests___aanvragen')}
 			</h2>
-			<div className="l-container">
-				<div className="p-admin-requests__header">
-					<SearchBar
-						backspaceRemovesValue={false}
-						className="p-admin-requests__search"
-						instanceId="requests-search-bar"
-						light={true}
-						placeholder={t('pages/beheer/aanvragen/index___zoek')}
-						searchValue={filters.search}
-						size="md"
-						onClear={() => {
+			<div className="p-admin-requests__header">
+				<SearchBar
+					backspaceRemovesValue={false}
+					className="p-admin-requests__search"
+					instanceId="requests-search-bar"
+					light={true}
+					placeholder={t('pages/beheer/aanvragen/index___zoek')}
+					searchValue={filters.search}
+					size="md"
+					onClear={() => {
+						setFilters({
+							[SEARCH_QUERY_KEY]: '',
+							page: 1,
+						});
+					}}
+					onSearch={(searchValue: string) => {
+						// Force rerender
+						if (filters.search === searchValue) {
 							setFilters({
 								[SEARCH_QUERY_KEY]: '',
 								page: 1,
 							});
-						}}
-						onSearch={(searchValue: string) => {
-							// Force rerender
-							if (filters.search === searchValue) {
-								setFilters({
-									[SEARCH_QUERY_KEY]: '',
-									page: 1,
-								});
-							}
-
-							setFilters({
-								[SEARCH_QUERY_KEY]: searchValue,
-								page: 1,
-							});
-						}}
-					/>
-
-					<ScrollableTabs
-						className="p-admin-requests__status-filter"
-						tabs={statusFilters}
-						variants={['rounded', 'light', 'bordered', 'medium']}
-						onClick={(tabId) =>
-							setFilters({
-								status: tabId.toString(),
-								page: 1,
-							})
 						}
-					/>
-				</div>
+
+						setFilters({
+							[SEARCH_QUERY_KEY]: searchValue,
+							page: 1,
+						});
+					}}
+				/>
+
+				<ScrollableTabs
+					className="p-admin-requests__status-filter"
+					tabs={statusFilters}
+					variants={['rounded', 'light', 'bordered', 'medium']}
+					onClick={(tabId) =>
+						setFilters({
+							status: tabId.toString(),
+							page: 1,
+						})
+					}
+				/>
 			</div>
 
 			{(visits?.items?.length || 0) > 0 ? (
-				<div className="l-container l-container--edgeless-to-lg">
+				<div className="l-container--edgeless-to-lg">
 					<Table
 						className="u-mt-24"
 						options={

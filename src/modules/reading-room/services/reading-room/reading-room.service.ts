@@ -49,7 +49,10 @@ export class ReadingRoomService {
 		return parsed.items;
 	}
 
-	public static async getBySlug(slug: string): Promise<ReadingRoomInfo> {
+	public static async getBySlug(slug: string | null): Promise<ReadingRoomInfo | null> {
+		if (!slug) {
+			return null;
+		}
 		return await ApiService.getApi().get(`${READING_ROOM_SERVICE_BASE_URL}/${slug}`).json();
 	}
 

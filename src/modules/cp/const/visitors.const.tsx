@@ -9,7 +9,7 @@ import { DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { Visit, VisitRow } from '@shared/types';
-import { asDate, formatAccessDates } from '@shared/utils';
+import { asDate, formatSameDayRange } from '@shared/utils';
 import { VisitTimeframe } from '@visits/types';
 
 export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
@@ -74,7 +74,7 @@ export const VisitorsTableColumns = (
 				<span className="u-color-neutral p-cp-visitors__access">
 					<UnreadMarker active={active} />
 
-					{formatAccessDates(start, end)}
+					{formatSameDayRange(start, end)}
 				</span>
 			);
 		},

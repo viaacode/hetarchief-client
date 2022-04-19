@@ -5,20 +5,17 @@ import useScrollLock from './use-scroll-lock';
 describe('Hooks', () => {
 	describe('useScrollLock', () => {
 		it('Should lock and unlock scroll ', () => {
-			const initialOverflow = 'scroll';
-			const initialHeight = '500px';
-			const el = document.createElement('div');
-			el.style.overflow = initialOverflow;
-			el.style.height = initialHeight;
-
-			const { rerender } = renderHook(({ lock }) => useScrollLock(lock, el), {
+			const { rerender } = renderHook(({ lock }) => useScrollLock(lock), {
 				initialProps: { lock: true },
 			});
 
-			expect(el).toHaveStyle({ overflow: 'hidden' });
+			expect(document.body).toHaveStyle({ overflowY: 'hidden' });
+			expect(document.body).toHaveAttribute('data-depth');
 
 			rerender({ lock: false });
-			expect(el).toHaveStyle({ overflow: initialOverflow, height: initialHeight });
+
+			expect(document.body).not.toHaveStyle({ overflowY: 'hidden' });
+			expect(document.body).not.toHaveAttribute('data-depth');
 		});
 	});
 });

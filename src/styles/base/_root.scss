@@ -1,15 +1,11 @@
 @use "../abstracts" as *;
 
 :root {
-	min-height: 100vh;
-	overflow-x: hidden;
-	overflow-y: auto;
 	font-size: 62.5%;
 }
 
 
 body {
-	min-height: 100%;
 	margin: 0;
 	font-family: $font-family-primary;
 	font-size: $font-size-base;

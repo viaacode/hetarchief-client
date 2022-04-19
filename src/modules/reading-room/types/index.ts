@@ -1,5 +1,6 @@
 import { SelectOption, TagInfo } from '@meemoo/react-components';
 import { ReactNode } from 'react';
+import { UseFormHandleSubmit } from 'react-hook-form';
 import { DecodedValueMap } from 'use-query-params';
 
 import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
@@ -50,10 +51,15 @@ export enum ReadingRoomOrderProps {
 export interface DefaultFilterFormChildrenParams<Values = unknown> {
 	values: Values;
 	reset: () => void;
+	handleSubmit: UseFormHandleSubmit<Values>;
 }
 
 export interface DefaultFilterFormProps<Values = unknown> extends DefaultComponentProps {
-	children: ({ values, reset }: DefaultFilterFormChildrenParams<Values>) => ReactNode;
+	children: ({
+		values,
+		reset,
+		handleSubmit,
+	}: DefaultFilterFormChildrenParams<Values>) => ReactNode;
 	values?: Values;
 }
 

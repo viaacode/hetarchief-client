@@ -1,6 +1,12 @@
 import { TabProps } from '@meemoo/react-components';
 import { i18n } from 'next-i18next';
-import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
+import {
+	ArrayParam,
+	DecodedValueMap,
+	NumberParam,
+	StringParam,
+	withDefault,
+} from 'use-query-params';
 
 import {
 	AdvancedFilterForm,
@@ -67,7 +73,10 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	// Sorting
 	orderProp: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.orderProp),
 	orderDirection: StringParam,
+	// UI
+	filter: StringParam,
 };
+export type READING_ROOM_QUERY_PARAM_TYPE = DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>;
 
 export const READING_ROOM_TABS = (): TabProps[] => [
 	{

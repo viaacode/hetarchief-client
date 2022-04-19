@@ -1,1 +1,1 @@
-export { default as ReadingRooomSettings } from './ReadingRoomSettings';
+export { default as ReadingRoomSettings } from './ReadingRoomSettings';
