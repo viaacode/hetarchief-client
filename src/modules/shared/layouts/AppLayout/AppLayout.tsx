@@ -16,7 +16,9 @@ import {
 } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import { useGetAccessibleReadingRooms } from '@navigation/components/Navigation/hooks/get-accessible-reading-rooms';
+import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
+import { NavigationPlacement } from '@navigation/services/navigation-service';
 import { NotificationCenter, ZendeskWrapper } from '@shared/components';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
@@ -53,6 +55,7 @@ const AppLayout: FC = ({ children }) => {
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleReadingRooms } = useGetAccessibleReadingRooms();
 	const history = useSelector(selectHistory);
+	const { data: navigationItems } = useGetNavigationItems();
 
 	useHistory(asPath, history);
 
@@ -146,7 +149,11 @@ const AppLayout: FC = ({ children }) => {
 					hamburgerProps={
 						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
 					}
-					items={getNavigationItemsLeft(asPath, accessibleReadingRooms || [])}
+					items={getNavigationItemsLeft(
+						asPath,
+						accessibleReadingRooms || [],
+						navigationItems?.[NavigationPlacement.HeaderLeft] || []
+					)}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}
@@ -185,7 +192,11 @@ const AppLayout: FC = ({ children }) => {
 			<ZendeskWrapper />
 
 			{showFooter && (
-				<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
+				<Footer
+					leftItem={footerLeftItem}
+					links={footerLinks(navigationItems?.[NavigationPlacement.FooterCenter] || [])}
+					rightItem={footerRightItem}
+				/>
 			)}
 		</div>
 	);
