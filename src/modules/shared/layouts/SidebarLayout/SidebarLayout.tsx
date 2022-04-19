@@ -16,7 +16,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 	color = 'white',
 	responsiveTo = undefined,
 }) => {
-	const [isExpanded, setExpanded] = useState(false);
+	const [isExpanded, setExpanded] = useState(true);
 	const isResponsive = !!responsiveTo;
 
 	return (

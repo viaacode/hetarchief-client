@@ -4,11 +4,15 @@ export enum Idp {
 }
 
 export interface User {
+	acceptedTosAt: string | null;
 	email: string;
 	firstName: string;
-	id: string;
 	lastName: string;
-	acceptedTosAt: string | null;
-	idp: Idp;
+	fullName: string;
+	groupId: string;
 	groupName: string;
+	id: string;
+	idp: Idp;
+	maintainerId: string | null;
+	permissions: string[];
 }

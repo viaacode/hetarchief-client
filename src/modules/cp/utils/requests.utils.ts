@@ -1,7 +1,7 @@
 import { differenceInDays, formatDistanceToNow } from 'date-fns';
 import { i18n } from 'next-i18next';
 
-import { asDate, formatWithLocale, getLocaleFromi18nLanguage } from '@shared/utils';
+import { asDate, formatMediumDateWithTime, getLocaleFromi18nLanguage } from '@shared/utils';
 
 export const requestCreatedAtFormatter = (input: Date | string): string => {
 	const date = asDate(input);
@@ -13,5 +13,5 @@ export const requestCreatedAtFormatter = (input: Date | string): string => {
 		});
 	}
 
-	return date ? formatWithLocale('PPpp', date) : '';
+	return date ? formatMediumDateWithTime(date) : '';
 };
