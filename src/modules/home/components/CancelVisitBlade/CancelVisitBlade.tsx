@@ -20,7 +20,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 		}
 
 		VisitsService.patchById(selected.id, {
-			status: VisitStatus.DENIED,
+			status: VisitStatus.CANCELLED_BY_VISITOR,
 			note: `[${new Date().toISOString()}] ${t(
 				'modules/home/components/cancel-visit-blade/cancel-visit-blade___deze-aanvraag-is-geannuleerd-door-de-gebruiker'
 			)}`,
