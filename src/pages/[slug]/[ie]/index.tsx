@@ -46,7 +46,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
-import { asDate, createPageTitle, formatAccessDate, formatWithLocale } from '@shared/utils';
+import { asDate, createPageTitle, formatMediumDate, formatMediumDateWithTime } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -193,7 +193,7 @@ const ObjectDetailPage: NextPage = () => {
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
 	const accessEndDate =
-		visitStatus && visitStatus.endAt ? formatAccessDate(asDate(visitStatus.endAt)) : '';
+		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
 
 	/**
 	 * Mapping
@@ -205,7 +205,7 @@ const ObjectDetailPage: NextPage = () => {
 				title: hit._source.schema_name,
 				subtitle: `(${
 					hit._source.schema_date_published
-						? formatWithLocale('PP', asDate(hit._source.schema_date_published))
+						? formatMediumDate(asDate(hit._source.schema_date_published))
 						: undefined
 				})`,
 				description: hit._source.schema_description || '',
@@ -222,9 +222,7 @@ const ObjectDetailPage: NextPage = () => {
 				type: item.dctermsFormat as MediaTypes,
 				title: item.name,
 				subtitle: `(${
-					item.datePublished
-						? formatWithLocale('PP', asDate(item.datePublished))
-						: undefined
+					item.datePublished ? formatMediumDate(asDate(item.datePublished)) : undefined
 				})`,
 				description: item.description,
 				id: item.schemaIdentifier,
@@ -455,7 +453,9 @@ const ObjectDetailPage: NextPage = () => {
 						<div>
 							<div className="u-px-32">
 								<h3 className="u-pt-32 u-pb-24">{mediaInfo?.name}</h3>
-								<p className="u-pb-24">{mediaInfo?.description}</p>
+								<p className="u-pb-24 u-line-height-1-4">
+									{mediaInfo?.description}
+								</p>
 								<div className="u-pb-24 p-object-detail__actions">
 									<Button
 										className="p-object-detail__export"

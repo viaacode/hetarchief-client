@@ -4,8 +4,8 @@ import { VisitorSpaceInfo } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import { ApiResponseWrapper } from '@shared/types/api';
 
-import { VISITOR_SPACE_SERVICE_BASE_URL } from './reading-room.service.const';
-import { AccessType, UpdateReadingRoomSettings } from './reading-room.service.types';
+import { VISITOR_SPACE_SERVICE_BASE_URL } from './visitor-space.service.const';
+import { AccessType, UpdateReadingRoomSettings } from './visitor-space.service.types';
 
 export class VistorSpaceService {
 	public static async getAll(
@@ -44,7 +44,10 @@ export class VistorSpaceService {
 		return parsed.items;
 	}
 
-	public static async getBySlug(slug: string): Promise<VisitorSpaceInfo> {
+	public static async getBySlug(slug: string | null): Promise<VisitorSpaceInfo | null> {
+		if (!slug) {
+			return null;
+		}
 		return await ApiService.getApi().get(`${VISITOR_SPACE_SERVICE_BASE_URL}/${slug}`).json();
 	}
 

@@ -13,7 +13,7 @@ import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSea
 import { VISITOR_SPACE_ID_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
@@ -85,6 +85,19 @@ const LoggedInHome: FC = () => {
 			setIsRequestAccessBladeOpen(true);
 		}
 	}, [query]);
+
+	// Divert users to the TOS if they try to request access before accepting
+	useEffect(() => {
+		if (isRequestAccessBladeOpen) {
+			if (user && !user.acceptedTosAt) {
+				router.push(
+					`/${ROUTES.termsOfService}?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(
+						router.asPath
+					)}`
+				);
+			}
+		}
+	}, [isRequestAccessBladeOpen, router, user]);
 
 	/**
 	 * Methods

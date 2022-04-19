@@ -408,7 +408,7 @@ const ReadingRoomPage: NextPage = () => {
 								: undefined,
 							publishedBy: item.schema_creator?.Maker?.join(', '),
 							type: item.dcterms_format,
-							preview: item.schema_thumbnail_url,
+							preview: item.schema_thumbnail_url || undefined,
 						})
 					)}
 				keywords={keywords}
@@ -434,7 +434,7 @@ const ReadingRoomPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`;
+					const href = `/${slug}/${source?.meemoo_fragment_id}`;
 
 					return (
 						<Link href={href.toLowerCase()}>

@@ -146,7 +146,7 @@ const AppLayout: FC = ({ children }) => {
 					hamburgerProps={
 						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
 					}
-					items={getNavigationItemsLeft(accessibleReadingRooms || [])}
+					items={getNavigationItemsLeft(asPath, accessibleReadingRooms || [])}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}

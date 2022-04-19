@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
 import { VistorSpaceService } from '@reading-room/services';
-import { UpdateReadingRoomSettings } from '@reading-room/services/reading-room/reading-room.service.types';
+import { UpdateReadingRoomSettings } from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { toastService } from '@shared/services/toast-service';
 
 import { ReadingRoomImageForm } from '../ReadingRoomImageForm';
