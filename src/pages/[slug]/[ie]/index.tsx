@@ -1,5 +1,6 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isToday } from 'date-fns/esm';
 import { lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -46,7 +47,14 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
-import { asDate, createPageTitle, formatMediumDate, formatMediumDateWithTime } from '@shared/utils';
+import {
+	asDate,
+	createPageTitle,
+	formatDate,
+	formatMediumDate,
+	formatMediumDateWithTime,
+	formatTime,
+} from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -192,8 +200,15 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
+	const isMobile = windowSize.width && windowSize.width > 700;
 	const accessEndDate =
 		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
+	const accessEndDateMobile =
+		visitStatus && visitStatus.endAt
+			? isToday(asDate(visitStatus.endAt) ?? 0)
+				? formatTime(asDate(visitStatus.endAt))
+				: formatDate(asDate(visitStatus.endAt))
+			: '';
 
 	/**
 	 * Mapping
@@ -368,12 +383,16 @@ const ObjectDetailPage: NextPage = () => {
 					title={mediaInfo?.maintainerName ?? ''}
 					backLink={backLink}
 					showAccessEndDate={
-						accessEndDate
-							? t(
-									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
-									{ accessEndDate }
-							  )
-							: ''
+						accessEndDate || accessEndDateMobile
+							? isMobile
+								? t(
+										'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+										{ accessEndDate }
+								  )
+								: t('pages/slug/ie/index___tot-access-end-date-mobile', {
+										accessEndDateMobile,
+								  })
+							: undefined
 					}
 				/>
 				<ScrollableTabs
