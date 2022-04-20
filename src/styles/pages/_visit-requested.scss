@@ -8,16 +8,16 @@ $image-size: 16rem;
 .#{$page} {
 	display: flex;
 	flex-flow: column nowrap;
-	min-height: 100%;
+	flex-grow: 1;
 	overflow: hidden;
 
 	&__content {
+		display: flex; // this also centers
 		flex-grow: 1;
 	}
 
 	&__grid {
 		display: grid;
-		min-height: 100%;
 	}
 
 	&__bottom {
@@ -35,6 +35,14 @@ $image-size: 16rem;
 			transform: scale(5);
 			background: $platinum;
 			z-index: -1;
+		}
+	}
+
+	&__description {
+		@include respond-at($page-breakpoint) {
+			&[class*="u-mt-"]{
+				margin-top: 0 !important;
+			}
 		}
 	}
 
@@ -69,8 +77,8 @@ $image-size: 16rem;
 
 	@include respond-at($page-breakpoint) {
 		&__grid {
-			grid-template-rows: minmax(56px, auto) min-content min-content auto 56px;
-			grid-template-columns: 384px 1fr;
+			grid-template-rows: minmax(5.6rem, auto) min-content auto minmax(5.6rem, auto);
+			grid-template-columns: 38.4rem 1fr;
 		}
 
 		&__top,
@@ -80,22 +88,24 @@ $image-size: 16rem;
 		}
 
 		&__image {
-			grid-row: 3 / 5;
+			position: relative;
+			grid-row: 2 / 4;
 			grid-column: 1;
 
 			> div {
-				height: 100%;
-				max-height: 56.1rem;
+				position: absolute;
+				width: 100%;
+				height: 56.1rem;
 			}
 		}
 
 		&__top {
-			grid-row: 3 / 4;
+			grid-row: 2 / 3;
 			grid-column: 2;
 		}
 
 		&__bottom {
-			grid-row: 4 / 5;
+			grid-row: 3 / 4;
 			grid-column: 2;
 		}
 	}
