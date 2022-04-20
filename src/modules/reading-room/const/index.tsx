@@ -15,12 +15,10 @@ import {
 	DurationFilterForm,
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
-	GenreFilterForm,
 	LanguageFilterForm,
 	MediumFilterForm,
 	PublishedFilterForm,
 } from '@reading-room/components';
-import KeywordsFilterForm from '@reading-room/components/KeywordsFilterForm/KeywordsFilterForm';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
