@@ -21,6 +21,7 @@ export function useGetCollectionMedia(
 		},
 		{
 			enabled: !!id,
+			retry: false, // Avoid delay when API returns 404 due to empty list
 		}
 	);
 }
