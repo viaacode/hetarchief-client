@@ -123,16 +123,18 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 		label: i18n?.t('modules/reading-room/const/index___maker') ?? '',
 		form: CreatorFilterForm,
 	},
-	{
-		id: ReadingRoomFilterId.Genre,
-		label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
-		form: GenreFilterForm,
-	},
-	{
-		id: ReadingRoomFilterId.Keywords,
-		label: i18n?.t('modules/reading-room/const/index___trefwoorden') ?? '',
-		form: KeywordsFilterForm,
-	},
+	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
+	// {
+	// 	id: ReadingRoomFilterId.Genre,
+	// 	label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
+	// 	form: GenreFilterForm,
+	// },
+	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
+	// {
+	// 	id: ReadingRoomFilterId.Keywords,
+	// 	label: i18n?.t('modules/reading-room/const/index___trefwoorden') ?? '',
+	// 	form: KeywordsFilterForm,
+	// },
 	{
 		id: ReadingRoomFilterId.Language,
 		label: i18n?.t('modules/reading-room/const/index___taal') ?? '',
