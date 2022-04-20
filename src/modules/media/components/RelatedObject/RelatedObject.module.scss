@@ -4,6 +4,7 @@ $component: "c-related-object";
 
 .#{$component} {
 	:global(.c-card__header-wrapper) {
+		margin-left: $spacer-sm;
 		margin-bottom: 0;
 	}
 
