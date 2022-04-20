@@ -6,11 +6,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import save from 'save-file';
 import { useQueryParams } from 'use-query-params';
 
 import { CreateCollectionButton } from '@account/components';
 import { EditCollectionTitle } from '@account/components/EditCollectionTitle';
 import { ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG, CollectionItemListSize } from '@account/const';
+import { useGetCollectionExport } from '@account/hooks/get-collection-export';
 import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
@@ -88,6 +90,12 @@ const AccountMyCollections: NextPage = () => {
 		CollectionItemListSize
 	);
 
+	// export
+	const { data: metadataExport, isError: metaDataExportError } = useGetCollectionExport(
+		activeCollection?.id,
+		!!activeCollection?.id
+	);
+
 	const keywords = useMemo(() => (filters.search ? [filters.search] : []), [filters.search]);
 
 	/**
@@ -154,7 +162,9 @@ const AccountMyCollections: NextPage = () => {
 						iconStart={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
+							save(metadataExport, `${activeCollection?.name || 'colection'}.xml`);
 						}}
+						disabled={metaDataExportError || !metadataExport}
 					/>
 				),
 			},
@@ -171,7 +181,9 @@ const AccountMyCollections: NextPage = () => {
 						icon={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
+							save(metadataExport, `${activeCollection?.name || 'colection'}.xml`);
 						}}
+						disabled={metaDataExportError || !metadataExport}
 					/>
 				),
 			},
@@ -198,7 +210,7 @@ const AccountMyCollections: NextPage = () => {
 				  ]
 				: []),
 		],
-		[t, activeCollection]
+		[t, metaDataExportError, metadataExport, activeCollection]
 	);
 
 	const renderActions = (item: IdentifiableMediaCard, collection: Collection) => (

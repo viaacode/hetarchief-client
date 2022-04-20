@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import save from 'save-file';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
@@ -24,6 +25,7 @@ import {
 	objectPlaceholder,
 	ticketErrorPlaceholder,
 } from '@media/const';
+import { useGetMediaExport } from '@media/hooks/get-media-export';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
@@ -124,6 +126,11 @@ const ObjectDetailPage: NextPage = () => {
 		mediaInfo?.maintainerId ?? '',
 		mediaInfo?.meemooIdentifier ?? '',
 		!!mediaInfo
+	);
+
+	// export
+	const { data: metadataExport, isError: metaDataExportError } = useGetMediaExport(
+		router.query.ie as string
 	);
 
 	// visit info
@@ -458,8 +465,15 @@ const ObjectDetailPage: NextPage = () => {
 								</p>
 								<div className="u-pb-24 p-object-detail__actions">
 									<Button
+										disabled={!!metaDataExportError || !metadataExport}
 										className="p-object-detail__export"
 										iconStart={<Icon name="export" />}
+										onClick={() => {
+											save(
+												metadataExport,
+												`${mediaInfo?.name || 'metadata'}.xml`
+											);
+										}}
 									>
 										<span className="u-text-ellipsis u-display-none u-display-block:md">
 											{t(
