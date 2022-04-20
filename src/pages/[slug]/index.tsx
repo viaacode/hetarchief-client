@@ -115,7 +115,7 @@ const ReadingRoomPage: NextPage = () => {
 		data: access,
 	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
 
-	const { data: space } = useGetReadingRoom(slug as string, access !== undefined);
+	const { data: space } = useGetReadingRoom(slug as string, { enabled: access !== undefined });
 
 	const { data: media } = useGetMediaObjects(
 		space?.maintainerId?.toLocaleLowerCase() as string,
