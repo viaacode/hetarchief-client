@@ -1,6 +1,7 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { toLower } from 'lodash-es';
+import { i18n } from 'next-i18next';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
@@ -81,21 +82,25 @@ export const getNavigationItemsLeft = (
 			},
 			...accessibleReadingRooms.map(
 				(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
-					node: renderLink(visitorSpace.name || '---', `/${visitorSpace.slug}`, {
-						iconEnd: (
-							<Icon
-								className={clsx(
-									'u-font-size-24',
-									'u-text-left',
-									'u-visibility-hidden',
-									'u-visibility-visible:md',
-									styles['c-navigation__dropdown-icon--end']
-								)}
-								name="angle-right"
-							/>
-						),
-						className: dropdownCls(),
-					}),
+					node: renderLink(
+						visitorSpace.name || i18n?.t('Bezoekersruimte') || '',
+						`/${visitorSpace.slug}`,
+						{
+							iconEnd: (
+								<Icon
+									className={clsx(
+										'u-font-size-24',
+										'u-text-left',
+										'u-visibility-hidden',
+										'u-visibility-visible:md',
+										styles['c-navigation__dropdown-icon--end']
+									)}
+									name="angle-right"
+								/>
+							),
+							className: dropdownCls(),
+						}
+					),
 					id: visitorSpace.id,
 				})
 			),
