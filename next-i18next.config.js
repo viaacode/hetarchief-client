@@ -11,7 +11,6 @@ module.exports = {
 	},
 	use: [I18NextHttpBackend],
 	ns: ['common'],
-	debug: true,
 	serializeConfig: false,
 	parseMissingKeyHandler: (key) => {
 		if (key.includes('___')) {
