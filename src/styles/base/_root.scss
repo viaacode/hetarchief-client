@@ -1,6 +1,8 @@
 @use "../abstracts" as *;
 
 :root {
+	--toastify-z-index: get-z-layer("blade") - 1;
+
 	font-size: 62.5%;
 }
 
