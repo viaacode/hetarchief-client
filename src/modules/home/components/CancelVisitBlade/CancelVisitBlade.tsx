@@ -20,17 +20,17 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 		}
 
 		VisitsService.patchById(selected.id, {
-			status: VisitStatus.DENIED,
+			status: VisitStatus.CANCELLED_BY_VISITOR,
 			note: `[${new Date().toISOString()}] ${t(
 				'modules/home/components/cancel-visit-blade/cancel-visit-blade___deze-aanvraag-is-geannuleerd-door-de-gebruiker'
 			)}`,
 		}).then(() => {
 			toastService.notify({
 				title: t(
-					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-aanvraag-tot-annulatie-is-verstuurd'
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-aanvraag-is-geannuleerd'
 				),
 				description: t(
-					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-hebt-zelf-je-bezoek-geannuleerd-dit-wordt-ogenblikkelijk-verwerkt'
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-hebt-zelf-je-bezoek-geannuleerd-je-zal-geen-toegang-krijgen'
 				),
 			});
 
