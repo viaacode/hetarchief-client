@@ -43,6 +43,7 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { EventsService, LogEventType } from '@shared/services/events-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
@@ -75,7 +76,8 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
-	const [currentRepresentation, setCurrentRepresentaton] = useState<
+	const [isPlayEventFired, setIsPlayEventFired] = useState(false);
+	const [currentRepresentation, setCurrentRepresentation] = useState<
 		MediaRepresentation | undefined
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
@@ -134,6 +136,14 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
+		if (router.query.ie) {
+			EventsService.triggerEvent(LogEventType.ITEM_VIEW, window.location.href, {
+				schema_identifier: router.query.ie as string,
+			});
+		}
+	}, [router.query.ie]);
+
+	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
 		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
 			setPauseMedia(true);
@@ -164,7 +174,7 @@ const ObjectDetailPage: NextPage = () => {
 			);
 		}
 
-		setCurrentRepresentaton(mediaInfo?.representations[0]);
+		setCurrentRepresentation(mediaInfo?.representations[0]);
 
 		// Set default view
 		if (windowSize.width && windowSize.width < 768) {
@@ -255,6 +265,16 @@ const ObjectDetailPage: NextPage = () => {
 		}
 	};
 
+	const handleOnPlay = () => {
+		setPauseMedia(false);
+		if (!isPlayEventFired) {
+			setIsPlayEventFired(true);
+			EventsService.triggerEvent(LogEventType.ITEM_PLAY, window.location.href, {
+				schema_identifier: router.query.ie as string,
+			});
+		}
+	};
+
 	/**
 	 * Content
 	 */
@@ -286,7 +306,7 @@ const ObjectDetailPage: NextPage = () => {
 					poster={mediaInfo?.thumbnailUrl || undefined}
 					title={representation.name}
 					pause={pauseMedia}
-					onPlay={() => setPauseMedia(false)}
+					onPlay={handleOnPlay}
 					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 				/>
@@ -428,7 +448,7 @@ const ObjectDetailPage: NextPage = () => {
 										className="p-object-detail__slider"
 										fragments={mediaInfo?.representations ?? []}
 										onChangeFragment={(index) =>
-											setCurrentRepresentaton(
+											setCurrentRepresentation(
 												mediaInfo?.representations[index]
 											)
 										}
