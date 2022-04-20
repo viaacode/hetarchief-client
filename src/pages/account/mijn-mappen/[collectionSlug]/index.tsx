@@ -361,24 +361,26 @@ const AccountMyCollections: NextPage = () => {
 							</div>
 
 							<div className="l-container">
-								<MediaCardList
-									keywords={keywords}
-									items={collectionMedia?.data?.items.map((media) => {
-										const base: IdentifiableMediaCard = {
-											schemaIdentifier: media.schemaIdentifier,
-											description: renderDescription(media),
-											title: renderTitle(media),
-											type: media.format,
-											preview: media.thumbnailUrl,
-										};
+								{!collectionMedia?.isError && (
+									<MediaCardList
+										keywords={keywords}
+										items={collectionMedia?.data?.items.map((media) => {
+											const base: IdentifiableMediaCard = {
+												schemaIdentifier: media.schemaIdentifier,
+												description: renderDescription(media),
+												title: renderTitle(media),
+												type: media.format,
+												preview: media.thumbnailUrl,
+											};
 
-										return {
-											...base,
-											actions: renderActions(base, activeCollection),
-										};
-									})}
-									view={'list'}
-								/>
+											return {
+												...base,
+												actions: renderActions(base, activeCollection),
+											};
+										})}
+										view={'list'}
+									/>
+								)}
 
 								{collectionMedia.data &&
 									collectionMedia.data?.total > CollectionItemListSize && (

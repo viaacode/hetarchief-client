@@ -100,6 +100,9 @@ const CPRequestsPage: NextPage = () => {
 			case VisitStatus.DENIED:
 				return t('pages/beheer/aanvragen/index___er-zijn-geen-geweigerde-aanvragen');
 
+			case VisitStatus.CANCELLED_BY_VISITOR:
+				return t('pages/beheer/aanvragen/index___er-zijn-geen-geannuleerde-aanvragen');
+
 			case VisitStatus.PENDING:
 			default:
 				return t('pages/beheer/aanvragen/index___er-zijn-geen-openstaande-aanvragen');
