@@ -30,7 +30,7 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
 					{icon && icon}
 					<b className={styles['c-related-objects-blade__title']}>{title}</b>
 					<Icon
-						className={styles['c-related-objects-blade__arrow']}
+						className={clsx(styles['c-related-objects-blade__arrow'], 'u-text-left')}
 						name={isOpen ? 'angle-down' : 'angle-up'}
 					/>
 				</button>

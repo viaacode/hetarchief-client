@@ -1,6 +1,6 @@
 {
 	"name": "hetarchief-client",
-	"version": "0.9.0",
+	"version": "0.9.2",
 	"private": true,
 	"contributors": [
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
@@ -36,13 +36,14 @@
 		"clsx": "1.1.1",
 		"copy-to-clipboard": "3.3.1",
 		"date-fns": "2.28.0",
+		"i18next-http-backend": "1.4.0",
 		"isomorphic-dompurify": "0.17.0",
 		"konva": "8.3.5",
 		"ky": "0.28.7",
 		"ky-universal": "0.9.1",
 		"lodash-es": "4.17.21",
 		"next": "12.1.0",
-		"next-i18next": "10.0.1",
+		"next-i18next": "11.0.0",
 		"next-redux-wrapper": "7.0.5",
 		"next-transpile-modules": "9.0.0",
 		"peaks.js": "1.0.0",

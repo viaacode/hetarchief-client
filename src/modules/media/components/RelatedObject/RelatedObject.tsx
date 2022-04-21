@@ -19,6 +19,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 			if (typeof thumbnail === 'string') {
 				return (
 					<CardImage
+						className={styles['c-related-object__image']}
 						unoptimized
 						name={object.title}
 						id={object.id}

@@ -1,5 +1,6 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isToday } from 'date-fns';
 import { HTTPError } from 'ky';
 import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
@@ -59,11 +60,18 @@ import {
 import Callout from '@shared/components/Callout/Callout';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
 import { AppState } from '@shared/store';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
-import { asDate, createPageTitle } from '@shared/utils';
+import {
+	asDate,
+	createPageTitle,
+	formatDate,
+	formatMediumDateWithTime,
+	formatTime,
+} from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -73,6 +81,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	const { t } = useTranslation();
 	const router = useRouter();
+	const windowSize = useWindowSizeContext();
 
 	const { slug } = router.query;
 
@@ -132,6 +141,9 @@ const ReadingRoomPage: NextPage = () => {
 		activeSort,
 		space !== undefined
 	);
+
+	// visit info
+	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
 
 	/**
 	 * Effects
@@ -363,6 +375,15 @@ const ReadingRoomPage: NextPage = () => {
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
 	const showResults = hasSearched && !!media && media?.items?.length > 0;
+	const isMobile = windowSize.width && windowSize.width > 700;
+	const accessEndDate =
+		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
+	const accessEndDateMobile =
+		visitStatus && visitStatus.endAt
+			? isToday(asDate(visitStatus.endAt) ?? 0)
+				? formatTime(asDate(visitStatus.endAt))
+				: formatDate(asDate(visitStatus.endAt))
+			: '';
 
 	/**
 	 * Render
@@ -485,6 +506,18 @@ const ReadingRoomPage: NextPage = () => {
 						phone={space?.contactInfo.telephone || ''}
 						email={space?.contactInfo.email || ''}
 						showBorder={showNavigationBorder}
+						showAccessEndDate={
+							accessEndDate || accessEndDateMobile
+								? isMobile
+									? t(
+											'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+											{ accessEndDate }
+									  )
+									: t('pages/slug/index___tot-access-end-date-mobile', {
+											accessEndDateMobile,
+									  })
+								: undefined
+						}
 					/>
 
 					<section className="u-bg-black u-pt-8">

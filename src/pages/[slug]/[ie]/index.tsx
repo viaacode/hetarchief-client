@@ -1,5 +1,6 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isToday } from 'date-fns/esm';
 import { lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -12,7 +13,7 @@ import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
-import { selectHasPermission, selectUser } from '@auth/store/user';
+import { selectHasPermission } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
@@ -46,11 +47,19 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { EventsService, LogEventType } from '@shared/services/events-service';
 import { AppState } from '@shared/store';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
-import { asDate, createPageTitle, formatMediumDate, formatMediumDateWithTime } from '@shared/utils';
+import {
+	asDate,
+	createPageTitle,
+	formatDate,
+	formatMediumDate,
+	formatMediumDateWithTime,
+	formatTime,
+} from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -82,7 +91,8 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
-	const [currentRepresentation, setCurrentRepresentaton] = useState<
+	const [isPlayEventFired, setIsPlayEventFired] = useState(false);
+	const [currentRepresentation, setCurrentRepresentation] = useState<
 		MediaRepresentation | undefined
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
@@ -141,6 +151,14 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
+		if (router.query.ie) {
+			EventsService.triggerEvent(LogEventType.ITEM_VIEW, window.location.href, {
+				schema_identifier: router.query.ie as string,
+			});
+		}
+	}, [router.query.ie]);
+
+	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
 		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
 			setPauseMedia(true);
@@ -171,7 +189,7 @@ const ObjectDetailPage: NextPage = () => {
 			);
 		}
 
-		setCurrentRepresentaton(mediaInfo?.representations[0]);
+		setCurrentRepresentation(mediaInfo?.representations[0]);
 
 		// Set default view
 		if (windowSize.width && windowSize.width < 768) {
@@ -199,8 +217,16 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
+	const isMobile = windowSize.width && windowSize.width > 700;
 	const accessEndDate =
 		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
+	const accessEndDateMobile =
+		visitStatus && visitStatus.endAt
+			? isToday(asDate(visitStatus.endAt) ?? 0)
+				? formatTime(asDate(visitStatus.endAt))
+				: formatDate(asDate(visitStatus.endAt))
+			: '';
+
 	/**
 	 * Mapping
 	 */
@@ -261,6 +287,16 @@ const ObjectDetailPage: NextPage = () => {
 		}
 	};
 
+	const handleOnPlay = () => {
+		setPauseMedia(false);
+		if (!isPlayEventFired) {
+			setIsPlayEventFired(true);
+			EventsService.triggerEvent(LogEventType.ITEM_PLAY, window.location.href, {
+				schema_identifier: router.query.ie as string,
+			});
+		}
+	};
+
 	/**
 	 * Content
 	 */
@@ -292,7 +328,7 @@ const ObjectDetailPage: NextPage = () => {
 					poster={mediaInfo?.thumbnailUrl || undefined}
 					title={representation.name}
 					pause={pauseMedia}
-					onPlay={() => setPauseMedia(false)}
+					onPlay={handleOnPlay}
 					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 				/>
@@ -374,12 +410,16 @@ const ObjectDetailPage: NextPage = () => {
 					title={mediaInfo?.maintainerName ?? ''}
 					backLink={backLink}
 					showAccessEndDate={
-						accessEndDate
-							? t(
-									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
-									{ accessEndDate }
-							  )
-							: ''
+						accessEndDate || accessEndDateMobile
+							? isMobile
+								? t(
+										'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+										{ accessEndDate }
+								  )
+								: t('pages/slug/ie/index___tot-access-end-date-mobile', {
+										accessEndDateMobile,
+								  })
+							: undefined
 					}
 				/>
 				<ScrollableTabs
@@ -434,7 +474,7 @@ const ObjectDetailPage: NextPage = () => {
 										className="p-object-detail__slider"
 										fragments={mediaInfo?.representations ?? []}
 										onChangeFragment={(index) =>
-											setCurrentRepresentaton(
+											setCurrentRepresentation(
 												mediaInfo?.representations[index]
 											)
 										}
@@ -542,7 +582,12 @@ const ObjectDetailPage: NextPage = () => {
 								'p-object-detail__metadata--collapsed',
 								expandMetadata && 'p-object-detail__metadata--expanded'
 							)}
-							icon={<Icon className="u-font-size-24 u-mr-8" name="related-objects" />}
+							icon={
+								<Icon
+									className="u-font-size-24 u-mr-8 u-text-left"
+									name="related-objects"
+								/>
+							}
 							title={
 								related.length === 1
 									? t(

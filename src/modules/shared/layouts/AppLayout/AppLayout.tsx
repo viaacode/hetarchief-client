@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { i18n } from 'next-i18next';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { FC, useCallback, useEffect, useMemo } from 'react';
@@ -38,6 +39,8 @@ import {
 	setShowAuthModal,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
+
+const { publicRuntimeConfig } = getConfig();
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
@@ -125,6 +128,26 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
+			{/* start Google Analytics */}
+			{publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID && (
+				<>
+					<Script
+						src={`https://www.googletagmanager.com/gtag/js?id=${publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID}`}
+						strategy="afterInteractive"
+					/>
+					<Script id="google-analytics" strategy="afterInteractive">
+						{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '${publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID}');
+        `}
+					</Script>
+				</>
+			)}
+			{/* end Google Analytics */}
+
 			{/* <!-- start Flowplayer imports --> */}
 			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
 			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
