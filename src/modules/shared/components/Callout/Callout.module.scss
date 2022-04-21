@@ -12,13 +12,4 @@ $component: "c-callout";
 	&__icon {
 		transform: translateY(0.2rem); // Account for default icon offset
 	}
-
-	&__button {
-		button {
-			height: auto;
-			padding: 0 $spacer-xs;
-			color: $neutral;
-			font-size: $font-size-sm;
-		}
-	}
 }

@@ -1,4 +1,3 @@
-import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
 
@@ -13,15 +12,7 @@ const Callout: FC<CalloutProps> = ({ className, icon, text, action }) => {
 			{icon && <div className={styles['c-callout__icon']}>{icon}</div>}
 			<div>
 				<span>{text}</span>
-				{action && (
-					<span className={styles['c-callout__button']}>
-						<Button
-							label={action.label}
-							variants={['text', 'underline']}
-							onClick={action.onClick}
-						/>
-					</span>
-				)}
+				{action && action}
 			</div>
 		</div>
 	);

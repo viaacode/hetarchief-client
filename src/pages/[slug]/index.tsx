@@ -508,16 +508,22 @@ const ReadingRoomPage: NextPage = () => {
 
 					{isKioskUser && (
 						<aside className="l-container u-bg-platinum u-py-32 u-flex u-justify-center">
-							<Callout
-								icon={<Icon name="info" />}
-								text={t(
-									'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.'
-								)}
-								action={{
-									label: t('Meer info'),
-									onClick: () => router.push('#'),
-								}}
-							/>
+							<div className="l-container u-flex u-justify-center u-py-32">
+								<Callout
+									icon={<Icon name="info" />}
+									text={t(
+										'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.'
+									)}
+									action={
+										<Button
+											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+											label={t('Meer info')}
+											variants={['text', 'underline']}
+											onClick={() => router.push('#')}
+										/>
+									}
+								/>
+							</div>
 						</aside>
 					)}
 					<section
