@@ -507,7 +507,7 @@ const ReadingRoomPage: NextPage = () => {
 					</section>
 
 					{isKioskUser && (
-						<aside className="l-container u-bg-platinum u-py-32 u-flex u-justify-center">
+						<aside className="u-bg-platinum">
 							<div className="l-container u-flex u-justify-center u-py-32">
 								<Callout
 									icon={<Icon name="info" />}
