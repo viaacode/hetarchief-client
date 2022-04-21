@@ -126,6 +126,7 @@
   "modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd": "Je bent niet ingelogd.",
   "modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw": "Je bent niet ingelogd, log opnieuw in en probeer opnieuw.",
   "modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-leeszaal": "Selecteer eerst een leeszaal.",
+  "modules/home/components/logged-out-home/logged-out-home___hero-alt": "hero-alt",
   "modules/home/components/process-visit-blade/process-visit-blade___annuleer-bezoek": "Annuleer bezoek",
   "modules/home/components/process-visit-blade/process-visit-blade___detail-aanvraag": "Detail aanvraag",
   "modules/home/components/process-visit-blade/process-visit-blade___detail-gepland-bezoek": "Detail gepland bezoek",

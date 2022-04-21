@@ -1,14 +1,43 @@
 import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { selectIsScrollLocked, setLockScroll } from '@shared/store/ui';
 import { findParentByClass } from '@shared/utils';
 
 import { useScrollbarWidth } from '../use-scrollbar-width';
 
 import { UseScrollLock } from './use-scroll-lock.types';
 
-const useScrollLock: UseScrollLock = (lock) => {
-	const scrollbarWidth = useScrollbarWidth(lock);
+const useScrollLock: UseScrollLock = (lock, id) => {
+	// Ensure state is synced first, before any operations
+	const dispatch = useDispatch();
 
+	useEffect(() => {
+		dispatch(setLockScroll({ [id]: lock }));
+	}, [dispatch, lock, id]);
+
+	/**
+	 * Values
+	 */
+
+	const scrollbarWidth = useScrollbarWidth(lock);
+	const isLocked = useSelector(selectIsScrollLocked);
+
+	/**
+	 * Methods
+	 */
+
+	// wrapper for window.scrollTo
+	const scroll = (y?: string, behavior?: ScrollBehavior) => {
+		const parsed = parseInt(y || '0');
+		window.scrollTo({
+			top: parsed,
+			left: 0,
+			behavior,
+		});
+	};
+
+	// Block wheel events outside of blade body (needed for Safari)
 	const preventWheel = useCallback((e?: WheelEvent) => {
 		const target = e?.target as HTMLElement | null;
 		const inBlade = findParentByClass('c-blade__body-wrapper', target);
@@ -24,15 +53,13 @@ const useScrollLock: UseScrollLock = (lock) => {
 			}
 		}
 
-		scroll(document.body.dataset.depth);
+		scroll(document.body.dataset.depth, 'smooth');
 		e?.preventDefault();
 	}, []);
 
-	// This function makes sure we're on the same height before and after lock
-	const scroll = (y?: string) => {
-		const parsed = parseInt(y || '0');
-		window.scrollTo(0, parsed);
-	};
+	/**
+	 * Actions
+	 */
 
 	const disable = useCallback(
 		(el: HTMLElement) => {
@@ -43,7 +70,7 @@ const useScrollLock: UseScrollLock = (lock) => {
 
 			el.style.overflowY = 'hidden';
 			el.style.marginRight = `${scrollbarWidth}px`;
-			window.addEventListener('wheel', preventWheel, { passive: false });
+			window.onwheel = preventWheel;
 
 			// Use that state to go to the right depth
 			scroll(el.dataset.depth);
@@ -51,23 +78,24 @@ const useScrollLock: UseScrollLock = (lock) => {
 		[scrollbarWidth, preventWheel]
 	);
 
-	const restore = useCallback(
-		(el: HTMLElement) => {
-			el.style.overflowY = '';
-			el.style.marginRight = '';
-			window.removeEventListener('wheel', preventWheel);
+	const enable = useCallback((el: HTMLElement) => {
+		el.style.overflowY = '';
+		el.style.marginRight = '';
+		window.onwheel = null;
 
-			scroll(el.dataset.depth);
+		scroll(el.dataset.depth);
 
-			// Wipe our state once we're done
-			el.removeAttribute('data-depth');
-		},
-		[preventWheel]
-	);
+		// Wipe our state once we're done
+		el.removeAttribute('data-depth');
+	}, []);
+
+	/**
+	 * Switch
+	 */
 
 	useEffect(() => {
-		lock ? disable(document.body) : restore(document.body);
-	}, [lock, disable, restore]);
+		isLocked ? disable(document.body) : enable(document.body);
+	}, [isLocked, disable, enable]);
 };
 
 export default useScrollLock;
