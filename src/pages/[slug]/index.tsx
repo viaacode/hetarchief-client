@@ -12,7 +12,8 @@ import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
-import { selectUser } from '@auth/store/user';
+import { Permission } from '@account/const';
+import { selectHasPermission, selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
@@ -59,6 +60,7 @@ import Callout from '@shared/components/Callout/Callout';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { toastService } from '@shared/services/toast-service';
+import { AppState } from '@shared/store';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
@@ -79,7 +81,9 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
-	const user = useSelector(selectUser);
+	const showResearchWarning = useSelector((state: AppState) =>
+		selectHasPermission(state, Permission.SHOW_RESEARCH_WARNING)
+	);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -359,7 +363,6 @@ const ReadingRoomPage: NextPage = () => {
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
 	const showResults = hasSearched && !!media && media?.items?.length > 0;
-	const isKioskUser = user?.groupName === 'KIOSK_VISITOR';
 
 	/**
 	 * Render
@@ -506,7 +509,7 @@ const ReadingRoomPage: NextPage = () => {
 						</div>
 					</section>
 
-					{isKioskUser && (
+					{showResearchWarning && (
 						<aside className="u-bg-platinum">
 							<div className="l-container u-flex u-justify-center u-py-32">
 								<Callout
@@ -532,7 +535,7 @@ const ReadingRoomPage: NextPage = () => {
 							{
 								'p-reading-room__results--placeholder':
 									showInitialView || showNoResults,
-								'u-pt-0': isKioskUser,
+								'u-pt-0': showResearchWarning,
 							}
 						)}
 					>
