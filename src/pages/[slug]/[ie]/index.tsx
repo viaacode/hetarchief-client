@@ -522,7 +522,7 @@ const ObjectDetailPage: NextPage = () => {
 										className="p-object-detail__callout u-pt-32 u-pb-24"
 										icon={<Icon name="info" />}
 										text={t(
-											'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.'
+											'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 										)}
 									/>
 								)}

@@ -1,7 +1,7 @@
 import { Table } from '@meemoo/react-components';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
-import { Navigation, navigationService } from '@navigation/services/navigation-service';
+import { NavigationInfo, navigationService } from '@navigation/services/navigation-service';
 import { sortingIcons } from '@shared/components';
 
 import { NAVIGATION_CONFIG } from '../../const';
@@ -9,15 +9,17 @@ import { NAVIGATION_CONFIG } from '../../const';
 import { NAVIGATION_OVERVIEW_COLS } from './NavigationOverview.const';
 
 const NavigationOverview: FC = () => {
-	const [navigations, setNavigations] = useState<Navigation[]>([]);
+	const [navigations, setNavigations] = useState<NavigationInfo[]>([]);
 
 	const fetchNavigations = useCallback(async () => {
 		const response = await navigationService.getAll();
 
-		if (!response?.length) {
+		const navigationItems: NavigationInfo[] = Object.values(response).flat();
+
+		if (!navigationItems?.length) {
 			// TODO: Set error view
 		}
-		setNavigations(response ?? []);
+		setNavigations(navigationItems ?? []);
 	}, []);
 
 	useEffect(() => {

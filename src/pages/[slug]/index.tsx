@@ -14,7 +14,7 @@ import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
-import { selectHasPermission, selectUser } from '@auth/store/user';
+import { selectHasPermission } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
@@ -548,12 +548,12 @@ const ReadingRoomPage: NextPage = () => {
 								<Callout
 									icon={<Icon name="info" />}
 									text={t(
-										'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.'
+										'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 									)}
 									action={
 										<Button
 											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-											label={t('Meer info')}
+											label={t('pages/slug/index___meer-info')}
 											variants={['text', 'underline']}
 											onClick={() => router.push('#')}
 										/>

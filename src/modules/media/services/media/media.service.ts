@@ -1,10 +1,8 @@
-import { i18n } from 'next-i18next';
 import { stringifyUrl } from 'query-string';
 
 import { MediaSimilar } from '@media/types';
 import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
-import { toastService } from '@shared/services/toast-service';
 import {
 	MediaInfo,
 	MediaSearchFilterField,

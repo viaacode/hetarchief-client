@@ -1,9 +1,7 @@
-import { i18n } from 'next-i18next';
 import { stringifyUrl } from 'query-string';
 
 import { Collection, CollectionMedia } from '@account/types';
 import { ApiService } from '@shared/services/api-service';
-import { toastService } from '@shared/services/toast-service';
 import { ApiResponseWrapper } from '@shared/types';
 
 import {

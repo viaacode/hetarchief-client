@@ -4,13 +4,14 @@ import React from 'react';
 import { generatePath, Link } from 'react-router-dom';
 import { Column } from 'react-table';
 
-import { Navigation } from '@navigation/services/navigation-service';
 import { Icon } from '@shared/components';
 
 import { NAVIGATION_PATHS } from '../../const';
-import { NavigationOverviewCellProps } from '../../types';
+import { NavigationElement, NavigationOverviewCellProps } from '../../types';
 
-export const NAVIGATION_OVERVIEW_COLS = (headers: Record<string, string>): Column<Navigation>[] => [
+export const NAVIGATION_OVERVIEW_COLS = (
+	headers: Record<string, string>
+): Column<NavigationElement>[] => [
 	{
 		id: 'name',
 		Header: headers.name,
