@@ -1,7 +1,7 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isToday } from 'date-fns/esm';
-import { lowerCase } from 'lodash-es';
+import { kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import save from 'save-file';
 
 import { Permission } from '@account/const';
 import { selectHasPermission } from '@auth/store/user';
@@ -27,6 +28,7 @@ import {
 	objectPlaceholder,
 	ticketErrorPlaceholder,
 } from '@media/const';
+import { useGetMediaExport } from '@media/hooks/get-media-export';
 import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
@@ -48,6 +50,7 @@ import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
+import { toastService } from '@shared/services/toast-service';
 import { AppState } from '@shared/store';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
@@ -142,6 +145,9 @@ const ObjectDetailPage: NextPage = () => {
 		mediaInfo?.meemooIdentifier ?? '',
 		!!mediaInfo
 	);
+
+	// export
+	const { mutateAsync: getMediaExport } = useGetMediaExport();
 
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
@@ -284,6 +290,19 @@ const ObjectDetailPage: NextPage = () => {
 			case MediaActions.Bookmark:
 				setActiveBlade(MediaActions.Bookmark);
 				break;
+		}
+	};
+
+	const onExportClick = async () => {
+		const xmlBlob = await getMediaExport(router.query.ie as string);
+
+		if (xmlBlob) {
+			save(xmlBlob, `${kebabCase(mediaInfo?.name) || 'metadata'}.xml`);
+		} else {
+			toastService.notify({
+				title: t('pages/slug/ie/index___error') || 'error',
+				description: t('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
+			});
 		}
 	};
 
@@ -522,6 +541,7 @@ const ObjectDetailPage: NextPage = () => {
 									<Button
 										className="p-object-detail__export"
 										iconStart={<Icon name="export" />}
+										onClick={onExportClick}
 									>
 										<span className="u-text-ellipsis u-display-none u-display-block:md">
 											{t(

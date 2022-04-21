@@ -4,7 +4,11 @@ import { Collection, CollectionMedia } from '@account/types';
 import { ApiService } from '@shared/services/api-service';
 import { ApiResponseWrapper } from '@shared/types';
 
-import { COLLECTIONS_SERVICE_BASE_URL, COLLECTIONS_SERVICE_OBJECTS_URL } from './collections.const';
+import {
+	COLLECTIONS_SERVICE_BASE_URL,
+	COLLECTIONS_SERVICE_EXPORT_URL,
+	COLLECTIONS_SERVICE_OBJECTS_URL,
+} from './collections.const';
 
 class CollectionsService extends ApiService {
 	public async getAll(): Promise<ApiResponseWrapper<Collection>> {
@@ -60,6 +64,15 @@ class CollectionsService extends ApiService {
 				`${COLLECTIONS_SERVICE_BASE_URL}/${collection}/${COLLECTIONS_SERVICE_OBJECTS_URL}/${item}`
 			)
 			.json();
+	}
+
+	public async getExport(id?: string): Promise<Blob | null> {
+		if (!id) {
+			return null;
+		}
+		return await ApiService.getApi()
+			.get(`${COLLECTIONS_SERVICE_BASE_URL}/${id}/${COLLECTIONS_SERVICE_EXPORT_URL}`)
+			.then((r) => r.blob());
 	}
 }
 
