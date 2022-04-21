@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { MediaService } from '@media/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setResults } from '@shared/store/media';
 import { GetMedia, MediaSearchFilterField, MediaSearchFilters, SortObject } from '@shared/types';
 
@@ -46,6 +47,15 @@ export function useGetMediaObjects(
 				};
 
 				dispatch(setResults(output));
+
+				// Log event
+				EventsService.triggerEvent(LogEventType.SEARCH, window.location.href, {
+					slug,
+					filters,
+					page,
+					size,
+					sort,
+				});
 
 				return output;
 			});

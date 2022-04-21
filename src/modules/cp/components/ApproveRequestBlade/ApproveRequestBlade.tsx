@@ -17,10 +17,11 @@ import {
 	startOfDay,
 } from 'date-fns';
 import { useTranslation } from 'next-i18next';
-import { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
-import { Blade, Icon } from '@shared/components';
+import { requestCreatedAtFormatter } from '@cp/utils';
+import { Blade, Icon, VisitSummary } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
@@ -162,14 +163,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	return (
 		<Blade {...props} footer={renderFooter()} title={title}>
-			<div className={parentStyles['c-process-request-blade__details']}>
-				<strong>
-					{t(
-						'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-leeszaal-bezoeken'
-					)}
-				</strong>
-				<p>{selected?.timeframe}</p>
-			</div>
+			{selected && <VisitSummary {...selected} />}
 
 			<div className="u-px-32">
 				<FormControl
