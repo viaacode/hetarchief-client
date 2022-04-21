@@ -1,8 +1,10 @@
+import { i18n } from 'next-i18next';
 import { stringifyUrl } from 'query-string';
 
 import { MediaSimilar } from '@media/types';
 import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
+import { toastService } from '@shared/services/toast-service';
 import {
 	MediaInfo,
 	MediaSearchFilterField,
@@ -108,12 +110,18 @@ export class MediaService {
 			.json();
 	}
 
-	public static async getExport(id?: string): Promise<Blob | null> {
+	public static async getExport(id?: string): Promise<Blob | null | void> {
 		if (!id) {
 			return null;
 		}
 		return await ApiService.getApi()
 			.get(`${MEDIA_SERVICE_BASE_URL}/${id}/${MEDIA_SERVICE_EXPORT}`)
-			.then((r) => r.blob());
+			.then((r) => r.blob())
+			.catch((error) =>
+				toastService.notify({
+					title: i18n?.t('Er ging iets mis') || 'error',
+					description: error,
+				})
+			);
 	}
 }
