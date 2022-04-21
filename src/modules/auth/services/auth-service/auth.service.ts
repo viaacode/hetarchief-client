@@ -34,6 +34,26 @@ export class AuthService {
 		);
 	}
 
+	public static async redirectToRegisterHetArchief(
+		query: StringifiableRecord,
+		router: NextRouter
+	): Promise<void> {
+		const { redirectTo, ...otherQueryParams } = query;
+		const returnToUrl = stringifyUrl({
+			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
+			query: otherQueryParams,
+		});
+
+		await router.replace(
+			stringifyUrl({
+				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/register`,
+				query: {
+					returnToUrl,
+				},
+			})
+		);
+	}
+
 	public static async redirectToLoginMeemoo(
 		query: StringifiableRecord,
 		router: NextRouter
