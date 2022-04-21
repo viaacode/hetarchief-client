@@ -50,7 +50,7 @@ export function useGetMediaObjects(
 
 				// Log event
 				EventsService.triggerEvent(LogEventType.SEARCH, window.location.href, {
-					slug,
+					orgId,
 					filters,
 					page,
 					size,

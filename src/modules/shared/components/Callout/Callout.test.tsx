@@ -1,3 +1,4 @@
+import { Button } from '@meemoo/react-components';
 import { fireEvent, render } from '@testing-library/react';
 
 import { Icon } from '../Icon';
@@ -37,29 +38,24 @@ describe('Component: <Callout /> (default)', () => {
 	});
 
 	it('Should render action button', () => {
-		const action = {
-			label: 'button',
-			onClick: () => null,
-		};
+		const action = <Button label="foo" />;
 		const { getByText } = renderCallout({ ...calloutMock, action });
 
-		const button = getByText(action.label);
+		const button = getByText('foo');
 
 		expect(button).toBeInTheDocument();
 	});
 
 	it('Should handle action click', () => {
-		const action = {
-			label: 'button',
-			onClick: jest.fn(),
-		};
+		const onClick = jest.fn();
+		const action = <Button label="foo" onClick={onClick} />;
 		const { getByText } = renderCallout({ ...calloutMock, action });
 
-		const button = getByText(action.label);
+		const button = getByText('foo');
 
 		fireEvent.click(button);
 
-		expect(action.onClick).toHaveBeenCalled();
-		expect(action.onClick).toHaveBeenCalledTimes(1);
+		expect(onClick).toHaveBeenCalled();
+		expect(onClick).toHaveBeenCalledTimes(1);
 	});
 });
