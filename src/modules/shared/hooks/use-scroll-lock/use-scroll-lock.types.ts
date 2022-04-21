@@ -1,1 +1,1 @@
-export type UseScrollLock = (lock: boolean) => void;
+export type UseScrollLock = (lock: boolean, id: string) => void;

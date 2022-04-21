@@ -10,6 +10,7 @@ const initialState: UIState = {
 	showNotificationsCenter: false,
 	hasUnreadNotifications: false,
 	showZendesk: true,
+	lockScroll: {},
 };
 
 export const uiSlice = createSlice({
@@ -37,6 +38,15 @@ export const uiSlice = createSlice({
 		setShowZendesk(state, action: PayloadAction<boolean>) {
 			state.showZendesk = action.payload;
 		},
+		setLockScroll(state, action: PayloadAction<UIState['lockScroll']>) {
+			const hasDifferent = Object.keys(action.payload).find(
+				(key) => action.payload[key] !== state.lockScroll[key]
+			);
+
+			if (hasDifferent) {
+				state.lockScroll = { ...state.lockScroll, ...action.payload };
+			}
+		},
 	},
 });
 
@@ -48,4 +58,5 @@ export const {
 	setShowNotificationsCenter,
 	setHasUnreadNotifications,
 	setShowZendesk,
+	setLockScroll,
 } = uiSlice.actions;

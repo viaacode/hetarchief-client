@@ -294,13 +294,13 @@ const LoggedInHome: FC = () => {
 				{renderHero()}
 
 				<ReadingRoomCardsWithSearch onRequestAccess={onRequestAccess} />
-
-				<RequestAccessBlade
-					isOpen={isRequestAccessBladeOpen}
-					onClose={onCloseRequestBlade}
-					onSubmit={onRequestAccessSubmit}
-				/>
 			</div>
+
+			<RequestAccessBlade
+				isOpen={isRequestAccessBladeOpen}
+				onClose={onCloseRequestBlade}
+				onSubmit={onRequestAccessSubmit}
+			/>
 
 			<ProcessVisitBlade
 				selected={selected}

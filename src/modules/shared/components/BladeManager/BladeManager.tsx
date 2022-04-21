@@ -11,7 +11,7 @@ const BladeManager: FC<BladeManagerProps> = ({
 	opacityStep = 0.1,
 	onCloseBlade = () => null,
 }) => {
-	useScrollLock(currentLayer > 0);
+	useScrollLock(currentLayer > 0, 'BladeManager');
 
 	return (
 		<BladeManagerContext.Provider
