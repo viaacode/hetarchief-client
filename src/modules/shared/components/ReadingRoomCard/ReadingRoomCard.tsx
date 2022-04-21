@@ -6,10 +6,10 @@ import { CardImage } from '../CardImage';
 
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 import styles from './ReadingRoomCard.module.scss';
-import { ReadingRoomCardProps } from './ReadingRoomCard.types';
+import { VisitorSpaceCardProps } from './ReadingRoomCard.types';
 import { ReadingRoomCardControls } from './ReadingRoomCardControls';
 
-const ReadingRoomCard: FC<ReadingRoomCardProps> = (props) => {
+const ReadingRoomCard: FC<VisitorSpaceCardProps> = (props) => {
 	const { room, type } = props;
 
 	const typeNoAccess = type === ReadingRoomCardType.noAccess;

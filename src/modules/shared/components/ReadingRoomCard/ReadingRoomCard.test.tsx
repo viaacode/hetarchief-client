@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'; //eslint-disable-line
 
 import ReadingRoomCard from './ReadingRoomCard';
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
-import { ReadingRoomCardProps } from './ReadingRoomCard.types';
+import { VisitorSpaceCardProps } from './ReadingRoomCard.types';
 import {
 	AccessGranted,
 	AccessRequested,
@@ -10,7 +10,7 @@ import {
 } from './__mocks__/reading-room-card';
 
 describe('Component: <ReadingRoomCard />', () => {
-	const template = (args?: ReadingRoomCardProps) => (
+	const template = (args?: VisitorSpaceCardProps) => (
 		<ReadingRoomCard {...mockReadingRoomCardProps} {...args} />
 	);
 

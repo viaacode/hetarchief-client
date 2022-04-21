@@ -25,6 +25,12 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 		await AuthService.redirectToLoginHetArchief(queryParams, router);
 	};
 
+	const onRegisterHetArchief = async () => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { showAuth, ...queryParams } = query;
+		await AuthService.redirectToRegisterHetArchief(queryParams, router);
+	};
+
 	const onLoginMeemoo = async () => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { showAuth, ...queryParams } = query;
@@ -85,6 +91,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 					className="u-mb-48"
 					label={t('modules/auth/components/auth-modal/auth-modal___registreer-je-hier')}
 					variants="outline"
+					onClick={onRegisterHetArchief}
 				/>
 			</div>
 		</Modal>

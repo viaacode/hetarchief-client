@@ -17,3 +17,5 @@ export type IconTypes =
 export type IconLightNames = typeof ICON_LIGHT[number];
 
 export type IconSolidNames = typeof ICON_SOLID[number];
+
+export type IconName = IconLightNames & IconSolidNames;

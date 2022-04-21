@@ -49,5 +49,6 @@ module.exports = withTM({
 		ZENDESK_KEY: process.env.ZENDESK_KEY,
 		FLOW_PLAYER_TOKEN: process.env.FLOW_PLAYER_TOKEN,
 		FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
+		GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
 	},
 });

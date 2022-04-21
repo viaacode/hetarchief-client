@@ -1,6 +1,6 @@
 import { stringifyUrl } from 'query-string';
 
-import { CreateVisitRequest } from '@reading-room/services/reading-room/reading-room.service.types';
+import { CreateVisitRequest } from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { ApiService } from '@shared/services/api-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';

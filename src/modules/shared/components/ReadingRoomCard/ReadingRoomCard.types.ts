@@ -1,6 +1,6 @@
 import { CardProps } from '@meemoo/react-components/dist/esm/components/Card/Card.types';
 
-import { ReadingRoomInfo } from '@reading-room/types';
+import { VisitorSpaceInfo } from '@reading-room/types';
 
 import { ReadingRoomCardType } from './ReadingRoomCard.const';
 
@@ -11,11 +11,10 @@ export interface ReadingRoomAccess {
 	until?: Date;
 }
 
-export interface ReadingRoomCardProps extends CardProps {
+export interface VisitorSpaceCardProps extends CardProps {
 	access?: ReadingRoomAccess;
-	onAccessRequest?: (room: Partial<Omit<ReadingRoomInfo, 'status'>>) => void;
-	onContactClick?: (room: Partial<Omit<ReadingRoomInfo, 'status'>>) => void;
-	onVisitClick?: (room: Partial<Omit<ReadingRoomInfo, 'status'>>) => void;
-	room: Partial<Omit<ReadingRoomInfo, 'status'>>;
+	onAccessRequest?: (room: Partial<Omit<VisitorSpaceInfo, 'status'>>) => void;
+	onContactClick?: (room: Partial<Omit<VisitorSpaceInfo, 'status'>>) => void;
+	room: Partial<Omit<VisitorSpaceInfo, 'status'>> & { slug: string };
 	type: ReadingRoomCardType;
 }

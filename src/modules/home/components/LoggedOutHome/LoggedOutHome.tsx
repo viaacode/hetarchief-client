@@ -7,7 +7,7 @@ import { stringify } from 'query-string';
 import { FC } from 'react';
 
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
-import { READING_ROOM_QUERY_KEY, SHOW_AUTH_QUERY_KEY } from '@home/const';
+import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_ID_QUERY_KEY } from '@home/const';
 import { ROUTES } from '@shared/const';
 import { createPageTitle } from '@shared/utils';
 
@@ -21,11 +21,11 @@ const LoggedOutHome: FC = () => {
 	 * Methods
 	 */
 
-	const onRequestAccess = (id: string) => {
+	const onRequestAccess = (visitorSpaceId: string) => {
 		return router.push(
 			`${ROUTES.home}?${stringify({
 				[SHOW_AUTH_QUERY_KEY]: '1',
-				[READING_ROOM_QUERY_KEY]: id,
+				[VISITOR_SPACE_ID_QUERY_KEY]: visitorSpaceId,
 			})}`
 		);
 	};
