@@ -1,10 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormControl, TextArea } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
-import { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { Blade } from '@shared/components';
+import styles from '@cp/components/ProcessRequestBlade/ProcessRequestBlade.module.scss';
+import { requestCreatedAtFormatter } from '@cp/utils';
+import { Blade, VisitSummary } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
 import { VisitsService } from '@visits/services/visits/visits.service';
@@ -84,6 +86,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 				'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
 			)}
 		>
+			{selected && <VisitSummary {...selected} />}
 			<div className="u-px-32">
 				<FormControl
 					className="u-mb-24"

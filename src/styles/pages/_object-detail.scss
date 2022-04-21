@@ -132,6 +132,7 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__metadata {
+		max-width: 100vw;
 		overflow-y: scroll;
 		box-shadow: $shadow-24-black-12;
 
@@ -152,6 +153,10 @@ $metadata-collapsed-width: 36vw;
 				}
 			}
 		}
+	}
+
+	&__related {
+		max-width: 100vw;
 	}
 
 	&__metadata-list {

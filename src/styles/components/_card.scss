@@ -176,14 +176,6 @@ $component: "c-card";
 
 		&-content {
 			@extend %s-card-content-whitespace;
-
-			.#{$component} {
-				&__title-wrapper {
-					@include respond-at("md") {
-						margin-left: 0;
-					}
-				}
-			}
 		}
 
 		&-vertical {
