@@ -3,21 +3,23 @@
 
 $page: "p-visit-requested";
 $page-breakpoint: "md";
+$page-padding: $spacer-md + $spacer-lg;
 $image-size: 16rem;
+$image-size-md: 56.1rem;
 
 .#{$page} {
 	display: flex;
 	flex-flow: column nowrap;
-	min-height: 100%;
+	flex-grow: 1;
 	overflow: hidden;
 
 	&__content {
+		display: flex; // this also centers
 		flex-grow: 1;
 	}
 
 	&__grid {
 		display: grid;
-		min-height: 100%;
 	}
 
 	&__bottom {
@@ -28,9 +30,9 @@ $image-size: 16rem;
 			display: block;
 			position: absolute;
 			top: 0;
-			right:0;
+			right: 0;
 			left: 0;
-			bottom: -56px;
+			bottom: 0 - $page-padding;
 			transform-origin: top;
 			transform: scale(5);
 			background: $platinum;
@@ -38,9 +40,22 @@ $image-size: 16rem;
 		}
 	}
 
+	&__description {
+		@include respond-at($page-breakpoint) {
+			min-height: 23rem; // magic value; minimum height required for __image to reach its max-height;
+
+			&[class*="u-mt-"] {
+				margin-top: 0 !important;
+			}
+		}
+	}
+
 	@include respond-to($page-breakpoint) {
 		&__grid {
-			grid-template-rows: minmax(56px, auto) min-content min-content min-content minmax(56px, auto);
+			grid-template-rows: minmax($page-padding, auto) min-content min-content min-content minmax(
+					$page-padding,
+					auto
+				);
 			grid-template-columns: 1fr;
 		}
 
@@ -69,8 +84,11 @@ $image-size: 16rem;
 
 	@include respond-at($page-breakpoint) {
 		&__grid {
-			grid-template-rows: minmax(56px, auto) min-content min-content auto 56px;
-			grid-template-columns: 384px 1fr;
+			grid-template-rows: minmax($page-padding, auto) min-content auto minmax(
+					$page-padding,
+					auto
+				);
+			grid-template-columns: 38.4rem 1fr;
 		}
 
 		&__top,
@@ -80,22 +98,22 @@ $image-size: 16rem;
 		}
 
 		&__image {
-			grid-row: 3 / 5;
+			grid-row: 2 / 4;
 			grid-column: 1;
 
 			> div {
 				height: 100%;
-				max-height: 56.1rem;
+				max-height: $image-size-md;
 			}
 		}
 
 		&__top {
-			grid-row: 3 / 4;
+			grid-row: 2 / 3;
 			grid-column: 2;
 		}
 
 		&__bottom {
-			grid-row: 4 / 5;
+			grid-row: 3 / 4;
 			grid-column: 2;
 		}
 	}
