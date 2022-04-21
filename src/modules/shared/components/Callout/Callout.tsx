@@ -12,7 +12,7 @@ const Callout: FC<CalloutProps> = ({ className, icon, text, action }) => {
 			{icon && <div className={styles['c-callout__icon']}>{icon}</div>}
 			<div>
 				<span>{text}</span>
-				{action && action}
+				{action || null}
 			</div>
 		</div>
 	);
