@@ -1,5 +1,7 @@
 import { useCallback, useEffect } from 'react';
 
+import { findParentByClass } from '@shared/utils';
+
 import { useScrollbarWidth } from '../use-scrollbar-width';
 
 import { UseScrollLock } from './use-scroll-lock.types';
@@ -7,10 +9,29 @@ import { UseScrollLock } from './use-scroll-lock.types';
 const useScrollLock: UseScrollLock = (lock) => {
 	const scrollbarWidth = useScrollbarWidth(lock);
 
+	const preventWheel = useCallback((e?: WheelEvent) => {
+		const target = e?.target as HTMLElement | null;
+		const inBlade = findParentByClass('c-blade__body-wrapper', target);
+
+		if (inBlade) {
+			const { scrollHeight: total, clientHeight: size, scrollTop: depth } = inBlade;
+			const goingUp = (e?.deltaY || 0) < 0;
+			const goingDown = (e?.deltaY || 0) > 0;
+			const atBottom = total === size + depth;
+
+			if (goingUp || (goingDown && !atBottom)) {
+				return;
+			}
+		}
+
+		scroll(document.body.dataset.depth);
+		e?.preventDefault();
+	}, []);
+
 	// This function makes sure we're on the same height before and after lock
 	const scroll = (y?: string) => {
 		const parsed = parseInt(y || '0');
-		parsed > 0 && window.scrollTo(0, parsed);
+		window.scrollTo(0, parsed);
 	};
 
 	const disable = useCallback(
@@ -22,22 +43,27 @@ const useScrollLock: UseScrollLock = (lock) => {
 
 			el.style.overflowY = 'hidden';
 			el.style.marginRight = `${scrollbarWidth}px`;
+			window.addEventListener('wheel', preventWheel, { passive: false });
 
 			// Use that state to go to the right depth
 			scroll(el.dataset.depth);
 		},
-		[scrollbarWidth]
+		[scrollbarWidth, preventWheel]
 	);
 
-	const restore = useCallback((el: HTMLElement) => {
-		el.style.overflowY = '';
-		el.style.marginRight = '';
+	const restore = useCallback(
+		(el: HTMLElement) => {
+			el.style.overflowY = '';
+			el.style.marginRight = '';
+			window.removeEventListener('wheel', preventWheel);
 
-		scroll(el.dataset.depth);
+			scroll(el.dataset.depth);
 
-		// Wipe our state once we're done
-		el.removeAttribute('data-depth');
-	}, []);
+			// Wipe our state once we're done
+			el.removeAttribute('data-depth');
+		},
+		[preventWheel]
+	);
 
 	useEffect(() => {
 		lock ? disable(document.body) : restore(document.body);
