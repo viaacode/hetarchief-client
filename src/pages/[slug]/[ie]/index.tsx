@@ -1,6 +1,6 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { lowerCase } from 'lodash-es';
+import { kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -471,7 +471,7 @@ const ObjectDetailPage: NextPage = () => {
 										onClick={() => {
 											save(
 												metadataExport,
-												`${mediaInfo?.name || 'metadata'}.xml`
+												`${kebabCase(mediaInfo?.name) || 'metadata'}.xml`
 											);
 										}}
 									>

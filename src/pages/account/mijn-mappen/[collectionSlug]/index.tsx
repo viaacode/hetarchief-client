@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -162,7 +163,10 @@ const AccountMyCollections: NextPage = () => {
 						iconStart={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
-							save(metadataExport, `${activeCollection?.name || 'colection'}.xml`);
+							save(
+								metadataExport,
+								`${kebabCase(activeCollection?.name) || 'colectie'}.xml`
+							);
 						}}
 						disabled={metaDataExportError || !metadataExport}
 					/>
