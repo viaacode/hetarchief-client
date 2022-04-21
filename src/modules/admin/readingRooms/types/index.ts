@@ -1,3 +1,3 @@
-import { ReadingRoomInfo } from '@reading-room/types';
+import { VisitorSpaceInfo } from '@reading-room/types';
 
-export type AdminReadingRoomInfoRow = { row: { original: ReadingRoomInfo } };
+export type AdminReadingRoomInfoRow = { row: { original: VisitorSpaceInfo } };

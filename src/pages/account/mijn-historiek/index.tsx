@@ -134,7 +134,7 @@ const AccountMyHistory: NextPage = () => {
 					</div>
 				) : (
 					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-						{visits.isFetching ? <Loading /> : renderEmptyMessage()}
+						{visits.isFetching ? <Loading fullscreen /> : renderEmptyMessage()}
 					</div>
 				)}
 			</AccountLayout>

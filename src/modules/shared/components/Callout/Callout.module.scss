@@ -1,0 +1,15 @@
+@use "styles/abstracts" as *;
+
+$component: "c-callout";
+
+.#{$component} {
+	display: flex;
+	column-gap: $spacer-xxs;
+	color: $neutral;
+	font-size: $font-size-sm;
+	line-height: $line-height-3xl;
+
+	&__icon {
+		transform: translateY(0.2rem); // Account for default icon offset
+	}
+}

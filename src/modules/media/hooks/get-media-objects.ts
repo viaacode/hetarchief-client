@@ -9,7 +9,7 @@ import { setResults } from '@shared/store/media';
 import { GetMedia, MediaSearchFilterField, MediaSearchFilters, SortObject } from '@shared/types';
 
 export function useGetMediaObjects(
-	slug: string,
+	orgId: string,
 	filters: MediaSearchFilters,
 	page: number,
 	size: number,
@@ -19,7 +19,7 @@ export function useGetMediaObjects(
 	const dispatch = useDispatch();
 
 	return useQuery(
-		[QUERY_KEYS.getMediaObjects, { slug, filters, page, size, sort, enabled }],
+		[QUERY_KEYS.getMediaObjects, { slug: orgId, filters, page, size, sort, enabled }],
 		() => {
 			// TODO: improve ⚠️
 			// Run three queries:
@@ -27,10 +27,10 @@ export function useGetMediaObjects(
 			//     - one to fetch the aggregates without any criteria to populate filters (noFilters)
 			//     - and one to fetch the aggregates across tabs (noFormat)
 			return Promise.all([
-				MediaService.getBySpace(slug, filters, page, size, sort),
-				MediaService.getBySpace(slug, [], page, size, sort),
+				MediaService.getBySpace(orgId, filters, page, size, sort),
+				MediaService.getBySpace(orgId, [], page, size, sort),
 				MediaService.getBySpace(
-					slug,
+					orgId,
 					filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
 					page,
 					size,
@@ -50,7 +50,7 @@ export function useGetMediaObjects(
 
 				// Log event
 				EventsService.triggerEvent(LogEventType.SEARCH, window.location.href, {
-					slug,
+					orgId,
 					filters,
 					page,
 					size,

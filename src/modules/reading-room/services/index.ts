@@ -1,1 +1,1 @@
-export * from './reading-room';
+export * from './visitor-space';

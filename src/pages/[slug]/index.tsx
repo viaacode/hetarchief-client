@@ -13,6 +13,8 @@ import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { Permission } from '@account/const';
+import { selectHasPermission, selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
@@ -55,10 +57,12 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
+import Callout from '@shared/components/Callout/Callout';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
+import { AppState } from '@shared/store';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
@@ -86,6 +90,9 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+	const showResearchWarning = useSelector((state: AppState) =>
+		selectHasPermission(state, Permission.SHOW_RESEARCH_WARNING)
+	);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -127,12 +134,12 @@ const ReadingRoomPage: NextPage = () => {
 	const { data: space } = useGetReadingRoom(slug as string, access !== undefined);
 
 	const { data: media } = useGetMediaObjects(
-		slug as string,
+		space?.maintainerId?.toLocaleLowerCase() as string,
 		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
 		activeSort,
-		space !== undefined
+		space?.maintainerId !== undefined
 	);
 
 	// visit info
@@ -455,7 +462,7 @@ const ReadingRoomPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`;
+					const href = `/${slug}/${source?.meemoo_fragment_id}`;
 
 					return (
 						<Link href={href.toLowerCase()}>
@@ -535,12 +542,33 @@ const ReadingRoomPage: NextPage = () => {
 						</div>
 					</section>
 
+					{showResearchWarning && (
+						<aside className="u-bg-platinum">
+							<div className="l-container u-flex u-justify-center u-py-32">
+								<Callout
+									icon={<Icon name="info" />}
+									text={t(
+										'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+									)}
+									action={
+										<Button
+											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+											label={t('pages/slug/index___meer-info')}
+											variants={['text', 'underline']}
+											onClick={() => router.push('#')}
+										/>
+									}
+								/>
+							</div>
+						</aside>
+					)}
 					<section
 						className={clsx(
 							'p-reading-room__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
 							{
 								'p-reading-room__results--placeholder':
 									showInitialView || showNoResults,
+								'u-pt-0': showResearchWarning,
 							}
 						)}
 					>

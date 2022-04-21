@@ -14,5 +14,6 @@ export interface User {
 	id: string;
 	idp: Idp;
 	maintainerId: string | null;
+	visitorSpaceSlug?: string;
 	permissions: string[];
 }
