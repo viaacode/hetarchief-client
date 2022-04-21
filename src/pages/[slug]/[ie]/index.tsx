@@ -45,6 +45,7 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
@@ -263,7 +264,14 @@ const ObjectDetailPage: NextPage = () => {
 	const onExportClick = async () => {
 		const xmlBlob = await getMediaExport(router.query.ie as string);
 
-		xmlBlob && save(xmlBlob, `${kebabCase(mediaInfo?.name) || 'metadata'}.xml`);
+		if (xmlBlob) {
+			save(xmlBlob, `${kebabCase(mediaInfo?.name) || 'metadata'}.xml`);
+		} else {
+			toastService.notify({
+				title: t('pages/slug/ie/index___error') || 'error',
+				description: t('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
+			});
+		}
 	};
 
 	/**

@@ -35,6 +35,7 @@ import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
+import { toastService } from '@shared/services/toast-service';
 import { Breakpoints } from '@shared/types';
 import { asDate, createPageTitle, formatDate } from '@shared/utils';
 
@@ -147,7 +148,17 @@ const AccountMyCollections: NextPage = () => {
 			if (activeCollection?.id) {
 				const xmlBlob = await getCollectionExport(activeCollection?.id);
 
-				xmlBlob && save(xmlBlob, `${kebabCase(activeCollection?.name) || 'map'}.xml`);
+				if (xmlBlob) {
+					save(xmlBlob, `${kebabCase(activeCollection?.name) || 'map'}.xml`);
+				} else {
+					toastService.notify({
+						title:
+							t('pages/account/mijn-mappen/collection-slug/index___error') || 'error',
+						description: t(
+							'pages/account/mijn-mappen/collection-slug/index___het-ophalen-van-de-metadata-is-mislukt'
+						),
+					});
+				}
 			}
 		};
 

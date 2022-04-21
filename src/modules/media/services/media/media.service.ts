@@ -116,14 +116,6 @@ export class MediaService {
 		}
 		return await ApiService.getApi()
 			.get(`${MEDIA_SERVICE_BASE_URL}/${id}/${MEDIA_SERVICE_EXPORT}`)
-			.then((r) => r.blob())
-			.catch((error) => {
-				toastService.notify({
-					title:
-						i18n?.t('modules/media/services/media/media___er-ging-iets-mis') || 'error',
-					description: error,
-				});
-				return null;
-			});
+			.then((r) => r.blob());
 	}
 }
