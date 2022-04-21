@@ -20,7 +20,6 @@ import { useTranslation } from 'next-i18next';
 import React, { FC, useEffect } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
-import { requestCreatedAtFormatter } from '@cp/utils';
 import { Blade, Icon, VisitSummary } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
@@ -29,8 +28,6 @@ import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
 import { asDate, formatDate, formatTime } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
-
-import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
 
 import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
 import styles from './ApproveRequestBlade.module.scss';
