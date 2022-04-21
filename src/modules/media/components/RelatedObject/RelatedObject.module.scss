@@ -3,6 +3,10 @@
 $component: "c-related-object";
 
 .#{$component} {
+	&__image {
+		width: 12rem;
+	}
+
 	:global(.c-card__header-wrapper) {
 		margin-bottom: 0;
 	}

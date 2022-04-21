@@ -520,7 +520,12 @@ const ObjectDetailPage: NextPage = () => {
 								'p-object-detail__metadata--collapsed',
 								expandMetadata && 'p-object-detail__metadata--expanded'
 							)}
-							icon={<Icon className="u-font-size-24 u-mr-8" name="related-objects" />}
+							icon={
+								<Icon
+									className="u-font-size-24 u-mr-8 u-text-left"
+									name="related-objects"
+								/>
+							}
 							title={
 								related.length === 1
 									? t(
