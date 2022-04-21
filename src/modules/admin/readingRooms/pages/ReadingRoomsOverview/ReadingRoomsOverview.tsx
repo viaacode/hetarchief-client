@@ -4,6 +4,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
+import { ReadingRoomService } from '@reading-room/services';
 import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
 import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
@@ -19,7 +20,11 @@ const ReadingRoomsOverview: FC = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG);
 
-	const { data: readingRooms, isLoading } = useGetReadingRooms(
+	const {
+		data: readingRooms,
+		isLoading,
+		refetch,
+	} = useGetReadingRooms(
 		filters.search,
 		filters.page,
 		ReadingRoomsOverviewTablePageSize,
@@ -57,18 +62,11 @@ const ReadingRoomsOverview: FC = () => {
 	);
 
 	// Callbacks
-	const updateRoomStatus = (status: ReadingRoomStatus) => {
-		switch (status) {
-			case ReadingRoomStatus.Active:
-				// Activeer space
-				break;
-			case ReadingRoomStatus.Inactive:
-				// Deactiveer space
-				break;
-			case ReadingRoomStatus.Requested:
-				// Space naar 'in aanvraag'
-				break;
-		}
+	const updateRoomStatus = (roomId: string, status: ReadingRoomStatus) => {
+		ReadingRoomService.update(roomId, {
+			status: status,
+		});
+		refetch();
 	};
 
 	// Render

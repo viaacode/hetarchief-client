@@ -63,12 +63,13 @@ export class ReadingRoomService {
 		const formData = new FormData();
 
 		// Set form data
-		formData.append('color', values.color ?? '');
-		formData.append('image', values.image ?? '');
+		values.color && formData.append('color', values.color ?? '');
+		values.image && formData.append('image', values.image ?? '');
 		values.file && formData.append('file', values.file);
 		values.description && formData.append('description', values.description);
 		values.serviceDescription &&
 			formData.append('serviceDescription', values.serviceDescription);
+		values.status && formData.append('status', values.status);
 
 		const headers = {
 			'Content-Type': undefined, // Overwrite application/json

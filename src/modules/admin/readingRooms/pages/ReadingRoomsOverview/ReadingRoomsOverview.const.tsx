@@ -24,7 +24,7 @@ export const ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG = {
 
 export const ReadingRoomsOverviewTableColumns = (
 	t: TFunction,
-	updateRoomState: (state: ReadingRoomStatus) => void
+	updateRoomState: (roomId: string, state: ReadingRoomStatus) => void
 ): Column<ReadingRoomInfo>[] => [
 	{
 		Header:
@@ -145,7 +145,9 @@ export const ReadingRoomsOverviewTableColumns = (
 								label={t(
 									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___activeren'
 								)}
-								onClick={() => updateRoomState(ReadingRoomStatus.Active)}
+								onClick={() =>
+									updateRoomState(row.original.id, ReadingRoomStatus.Active)
+								}
 							/>
 						)}
 						{[ReadingRoomStatus.Active, ReadingRoomStatus.Requested].includes(
@@ -157,7 +159,9 @@ export const ReadingRoomsOverviewTableColumns = (
 								label={t(
 									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___deactiveren'
 								)}
-								onClick={() => updateRoomState(ReadingRoomStatus.Inactive)}
+								onClick={() =>
+									updateRoomState(row.original.id, ReadingRoomStatus.Inactive)
+								}
 							/>
 						)}
 						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Active].includes(
@@ -169,7 +173,9 @@ export const ReadingRoomsOverviewTableColumns = (
 								label={t(
 									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___terug-naar-in-aanvraag'
 								)}
-								onClick={() => updateRoomState(ReadingRoomStatus.Requested)}
+								onClick={() =>
+									updateRoomState(row.original.id, ReadingRoomStatus.Requested)
+								}
 							/>
 						)}
 					</DropdownMenu>
