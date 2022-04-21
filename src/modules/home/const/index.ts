@@ -4,7 +4,7 @@ import { SEARCH_QUERY_KEY } from '@shared/const';
 
 // Should match the key in query config below
 export const SHOW_AUTH_QUERY_KEY = 'showAuth';
-export const READING_ROOM_QUERY_KEY = 'readingRoomId';
+export const VISITOR_SPACE_ID_QUERY_KEY = 'visitorSpace';
 
 export const HOME_QUERY_PARAM_CONFIG = {
 	returnToRequestAccess: BooleanParam,

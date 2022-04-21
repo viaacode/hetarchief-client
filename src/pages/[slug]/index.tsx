@@ -134,12 +134,12 @@ const ReadingRoomPage: NextPage = () => {
 	const { data: space } = useGetReadingRoom(slug as string, access !== undefined);
 
 	const { data: media } = useGetMediaObjects(
-		slug as string,
+		space?.maintainerId?.toLocaleLowerCase() as string,
 		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
 		activeSort,
-		space !== undefined
+		space?.maintainerId !== undefined
 	);
 
 	// visit info
@@ -462,7 +462,7 @@ const ReadingRoomPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${source?.schema_maintainer?.schema_identifier}/${source?.meemoo_fragment_id}`;
+					const href = `/${slug}/${source?.meemoo_fragment_id}`;
 
 					return (
 						<Link href={href.toLowerCase()}>

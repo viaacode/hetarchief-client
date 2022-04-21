@@ -47,8 +47,9 @@ export interface DefaultFilterFormProps<Values = unknown> extends DefaultCompone
 	values?: Values;
 }
 
-export interface ReadingRoomInfo {
+export interface VisitorSpaceInfo {
 	id: string;
+	slug: string;
 	maintainerId: string;
 	name: string;
 	info: string | null;

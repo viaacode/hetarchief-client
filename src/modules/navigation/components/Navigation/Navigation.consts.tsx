@@ -1,12 +1,13 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { toLower } from 'lodash-es';
+import { i18n } from 'next-i18next';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
 import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
-import { ReadingRoomInfo } from '@reading-room/types';
+import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon } from '@shared/components';
 import { ROUTES } from '@shared/const';
 
@@ -54,7 +55,7 @@ const renderLink = (
 
 export const getNavigationItemsLeft = (
 	currentPath: string,
-	accessibleReadingRooms: ReadingRoomInfo[]
+	accessibleReadingRooms: VisitorSpaceInfo[]
 ): NavigationItem[] => [
 	{
 		node: renderLink('Leeszalen', '', {
@@ -80,11 +81,10 @@ export const getNavigationItemsLeft = (
 				hasDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
 			},
 			...accessibleReadingRooms.map(
-				(readingRoom: ReadingRoomInfo): NavigationItem => ({
-					// TODO update the link to use the readingRoom.slug instead of the id
+				(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
 					node: renderLink(
-						readingRoom.name || '---',
-						`/${readingRoom.maintainerId.toLowerCase()}`,
+						visitorSpace.name || i18n?.t('Bezoekersruimte') || '',
+						`/${visitorSpace.slug}`,
 						{
 							iconEnd: (
 								<Icon
@@ -101,7 +101,7 @@ export const getNavigationItemsLeft = (
 							className: dropdownCls(),
 						}
 					),
-					id: readingRoom.id,
+					id: visitorSpace.id,
 				})
 			),
 		],

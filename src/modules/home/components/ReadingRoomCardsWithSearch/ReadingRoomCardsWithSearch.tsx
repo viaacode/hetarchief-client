@@ -5,18 +5,18 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
-import { ReadingRoomInfo } from '@reading-room/types';
-import { ReadingRoomCardList, ReadingRoomCardProps, SearchBar } from '@shared/components';
+import { VisitorSpaceInfo } from '@reading-room/types';
+import { ReadingRoomCardList, SearchBar, VisitorSpaceCardProps } from '@shared/components';
 import { ReadingRoomCardType } from '@shared/components/ReadingRoomCard';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 
 const NUMBER_OF_READING_ROOMS = 6;
 
-interface ReadingRoomCardsWithSearchProps {
-	onRequestAccess: (ReadingRoomId: string) => void;
+interface VisitorSpaceCardsWithSearchProps {
+	onRequestAccess: (VisitorSpaceSlug: string) => void;
 }
 
-const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onRequestAccess }) => {
+const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRequestAccess }) => {
 	const { t } = useTranslation();
 	const [query, setQuery] = useQueryParams({
 		[SEARCH_QUERY_KEY]: StringParam,
@@ -97,7 +97,7 @@ const ReadingRoomCardsWithSearch: FC<ReadingRoomCardsWithSearchProps> = ({ onReq
 						'u-mb-64': showLoadMore,
 					})}
 					items={(readingRoomInfo?.items || []).map(
-						(room: ReadingRoomInfo): ReadingRoomCardProps => {
+						(room: VisitorSpaceInfo): VisitorSpaceCardProps => {
 							return {
 								room,
 								type: ReadingRoomCardType.noAccess, // TODO change this based on current logged in user

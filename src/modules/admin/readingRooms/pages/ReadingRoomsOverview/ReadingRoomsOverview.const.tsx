@@ -4,7 +4,7 @@ import { generatePath, Link } from 'react-router-dom';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { ReadingRoomInfo, ReadingRoomStatus } from '@reading-room/types';
+import { ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
 import { DropdownMenu, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
@@ -25,7 +25,7 @@ export const ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG = {
 export const ReadingRoomsOverviewTableColumns = (
 	t: TFunction,
 	updateRoomState: (state: ReadingRoomStatus) => void
-): Column<ReadingRoomInfo>[] => [
+): Column<VisitorSpaceInfo>[] => [
 	{
 		Header:
 			t(

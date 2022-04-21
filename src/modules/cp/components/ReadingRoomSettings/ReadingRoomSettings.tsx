@@ -2,8 +2,8 @@ import { Box, Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
-import { ReadingRoomService } from '@reading-room/services';
-import { UpdateReadingRoomSettings } from '@reading-room/services/reading-room/reading-room.service.types';
+import { VistorSpaceService } from '@reading-room/services';
+import { UpdateReadingRoomSettings } from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { toastService } from '@shared/services/toast-service';
 
 import { ReadingRoomImageForm } from '../ReadingRoomImageForm';
@@ -33,7 +33,7 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 
 	const updateSpace = (values: Partial<UpdateReadingRoomSettings>, afterSubmit?: () => void) => {
 		if (room) {
-			ReadingRoomService.update(room.id, {
+			VistorSpaceService.update(room.id, {
 				color: room.color,
 				image: room.image,
 				...values,
