@@ -6,4 +6,5 @@ export interface UIState {
 	showNotificationsCenter: boolean;
 	hasUnreadNotifications: boolean;
 	showZendesk: boolean;
+	lockScroll: Record<string, boolean>;
 }

@@ -45,7 +45,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	const isMobile = windowSize.width ? windowSize.width < Breakpoints.md : false;
 	const openIcon: IconLightNames = isMobile ? 'filter' : isOpen ? 'angle-up' : 'angle-down';
 
-	useScrollLock(lockScroll);
+	useScrollLock(lockScroll, 'FilterMenu');
 
 	useEffect(() => {
 		if (!isMobile) {

@@ -20,7 +20,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 	onOpen,
 	onClose,
 }) => {
-	useScrollLock(lockScroll ? isOpen : false);
+	useScrollLock(lockScroll ? isOpen : false, 'NavigationDropdown');
 
 	const renderChildrenRecursively = (items: NavigationItem[], layer = 0): ReactNode => {
 		return (
