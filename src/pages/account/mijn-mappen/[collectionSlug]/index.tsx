@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -6,11 +7,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import save from 'save-file';
 import { useQueryParams } from 'use-query-params';
 
 import { CreateCollectionButton } from '@account/components';
 import { EditCollectionTitle } from '@account/components/EditCollectionTitle';
 import { ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG, CollectionItemListSize } from '@account/const';
+import { useGetCollectionExport } from '@account/hooks/get-collection-export';
 import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
@@ -32,6 +35,7 @@ import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
+import { toastService } from '@shared/services/toast-service';
 import { Breakpoints } from '@shared/types';
 import { asDate, createPageTitle, formatDate } from '@shared/utils';
 
@@ -88,6 +92,9 @@ const AccountMyCollections: NextPage = () => {
 		CollectionItemListSize
 	);
 
+	// export
+	const { mutateAsync: getCollectionExport } = useGetCollectionExport();
+
 	const keywords = useMemo(() => (filters.search ? [filters.search] : []), [filters.search]);
 
 	/**
@@ -136,8 +143,26 @@ const AccountMyCollections: NextPage = () => {
 	 * Render
 	 */
 
-	const renderTitleButtons = useMemo(
-		() => [
+	const renderTitleButtons = useMemo(() => {
+		const onExportClick = async () => {
+			if (activeCollection?.id) {
+				const xmlBlob = await getCollectionExport(activeCollection?.id);
+
+				if (xmlBlob) {
+					save(xmlBlob, `${kebabCase(activeCollection?.name) || 'map'}.xml`);
+				} else {
+					toastService.notify({
+						title:
+							t('pages/account/mijn-mappen/collection-slug/index___error') || 'error',
+						description: t(
+							'pages/account/mijn-mappen/collection-slug/index___het-ophalen-van-de-metadata-is-mislukt'
+						),
+					});
+				}
+			}
+		};
+
+		return [
 			{
 				before: true,
 				node: (
@@ -154,6 +179,7 @@ const AccountMyCollections: NextPage = () => {
 						iconStart={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
+							onExportClick();
 						}}
 					/>
 				),
@@ -171,6 +197,7 @@ const AccountMyCollections: NextPage = () => {
 						icon={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
+							onExportClick();
 						}}
 					/>
 				),
@@ -197,9 +224,8 @@ const AccountMyCollections: NextPage = () => {
 						},
 				  ]
 				: []),
-		],
-		[t, activeCollection]
-	);
+		];
+	}, [t, activeCollection, getCollectionExport]);
 
 	const renderActions = (item: IdentifiableMediaCard, collection: Collection) => (
 		<>

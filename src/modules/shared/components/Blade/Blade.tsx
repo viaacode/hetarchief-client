@@ -25,7 +25,7 @@ const Blade: FC<BladeProps> = ({
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 
-	useScrollLock(!isManaged && isOpen);
+	useScrollLock(!isManaged && isOpen, 'Blade');
 
 	const isLayered = isManaged && layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
