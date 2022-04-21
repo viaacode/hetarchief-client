@@ -5,7 +5,7 @@ import useScrollLock from './use-scroll-lock';
 describe('Hooks', () => {
 	describe('useScrollLock', () => {
 		it('Should lock and unlock scroll ', () => {
-			const { rerender } = renderHook(({ lock }) => useScrollLock(lock), {
+			const { rerender } = renderHook(({ lock }) => useScrollLock(lock, 'Hooks'), {
 				initialProps: { lock: true },
 			});
 
