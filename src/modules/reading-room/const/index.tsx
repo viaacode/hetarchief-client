@@ -15,12 +15,10 @@ import {
 	DurationFilterForm,
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
-	GenreFilterForm,
 	LanguageFilterForm,
 	MediumFilterForm,
 	PublishedFilterForm,
 } from '@reading-room/components';
-import KeywordsFilterForm from '@reading-room/components/KeywordsFilterForm/KeywordsFilterForm';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
@@ -123,16 +121,18 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 		label: i18n?.t('modules/reading-room/const/index___maker') ?? '',
 		form: CreatorFilterForm,
 	},
-	{
-		id: ReadingRoomFilterId.Genre,
-		label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
-		form: GenreFilterForm,
-	},
-	{
-		id: ReadingRoomFilterId.Keywords,
-		label: i18n?.t('modules/reading-room/const/index___trefwoorden') ?? '',
-		form: KeywordsFilterForm,
-	},
+	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
+	// {
+	// 	id: ReadingRoomFilterId.Genre,
+	// 	label: i18n?.t('modules/reading-room/const/index___genre') ?? '',
+	// 	form: GenreFilterForm,
+	// },
+	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
+	// {
+	// 	id: ReadingRoomFilterId.Keywords,
+	// 	label: i18n?.t('modules/reading-room/const/index___trefwoorden') ?? '',
+	// 	form: KeywordsFilterForm,
+	// },
 	{
 		id: ReadingRoomFilterId.Language,
 		label: i18n?.t('modules/reading-room/const/index___taal') ?? '',

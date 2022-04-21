@@ -46,7 +46,9 @@ const LoggedOutHome: FC = () => {
 					<Image
 						src="/images/hero.jpg"
 						layout="fill"
-						alt="Hero image"
+						alt={t(
+							'modules/home/components/logged-out-home/logged-out-home___hero-alt'
+						)}
 						objectFit="contain"
 					/>
 				</div>

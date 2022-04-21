@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
-import { ComponentType, useCallback, useEffect, useState } from 'react';
+import { ComponentType, useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
+import { selectIsLoggedIn } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import Loading from '@shared/components/Loading/Loading';
 import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
@@ -15,7 +17,7 @@ export const withAuth = (
 ): ComponentType => {
 	return function ComponentWithAuth(props: Record<string, unknown>) {
 		const router = useRouter();
-		const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+		const isLoggedIn = useSelector(selectIsLoggedIn);
 
 		const checkLoginStatus = useCallback(async (): Promise<void> => {
 			const login = await AuthService.checkLogin();
@@ -44,12 +46,9 @@ export const withAuth = (
 			} else {
 				// When the user is present in the response, they've not logged out
 				if (
-					!requireTosAccepted ||
-					isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos?.updatedAt)
+					requireTosAccepted &&
+					!isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos?.updatedAt)
 				) {
-					// Page does not require accepting the TOS or the user accepted the latest version of the TOS
-					setIsLoggedIn(true);
-				} else {
 					// When the user has not accepted the TOS or accepted a previous version of the TOS
 					await toTermsOfService();
 				}
@@ -60,10 +59,11 @@ export const withAuth = (
 			checkLoginStatus();
 		}, [checkLoginStatus]);
 
-		if (!isLoggedIn) {
-			return <Loading fullscreen />;
-		}
-
-		return <WrappedComponent {...props} />;
+		return (
+			<>
+				{!isLoggedIn && <Loading fullscreen />}
+				<WrappedComponent {...props} />
+			</>
+		);
 	};
 };
