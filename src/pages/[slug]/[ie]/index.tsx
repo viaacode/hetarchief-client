@@ -129,9 +129,7 @@ const ObjectDetailPage: NextPage = () => {
 	);
 
 	// export
-	const { data: metadataExport, isError: metaDataExportError } = useGetMediaExport(
-		router.query.ie as string
-	);
+	const { mutateAsync: getMediaExport } = useGetMediaExport();
 
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
@@ -260,6 +258,12 @@ const ObjectDetailPage: NextPage = () => {
 				setActiveBlade(MediaActions.Bookmark);
 				break;
 		}
+	};
+
+	const onExportClick = async () => {
+		const xmlBlob = await getMediaExport(router.query.ie as string);
+
+		xmlBlob && save(xmlBlob, `${kebabCase(mediaInfo?.name) || 'metadata'}.xml`);
 	};
 
 	/**
@@ -465,15 +469,9 @@ const ObjectDetailPage: NextPage = () => {
 								</p>
 								<div className="u-pb-24 p-object-detail__actions">
 									<Button
-										disabled={!!metaDataExportError || !metadataExport}
 										className="p-object-detail__export"
 										iconStart={<Icon name="export" />}
-										onClick={() => {
-											save(
-												metadataExport,
-												`${kebabCase(mediaInfo?.name) || 'metadata'}.xml`
-											);
-										}}
+										onClick={onExportClick}
 									>
 										<span className="u-text-ellipsis u-display-none u-display-block:md">
 											{t(

@@ -92,10 +92,7 @@ const AccountMyCollections: NextPage = () => {
 	);
 
 	// export
-	const { data: metadataExport, isError: metaDataExportError } = useGetCollectionExport(
-		activeCollection?.id,
-		!!activeCollection?.id
-	);
+	const { mutateAsync: getCollectionExport } = useGetCollectionExport();
 
 	const keywords = useMemo(() => (filters.search ? [filters.search] : []), [filters.search]);
 
@@ -145,8 +142,16 @@ const AccountMyCollections: NextPage = () => {
 	 * Render
 	 */
 
-	const renderTitleButtons = useMemo(
-		() => [
+	const renderTitleButtons = useMemo(() => {
+		const onExportClick = async () => {
+			if (activeCollection?.id) {
+				const xmlBlob = await getCollectionExport(activeCollection?.id);
+
+				xmlBlob && save(xmlBlob, `${kebabCase(activeCollection?.name) || 'colectie'}.xml`);
+			}
+		};
+
+		return [
 			{
 				before: true,
 				node: (
@@ -163,12 +168,8 @@ const AccountMyCollections: NextPage = () => {
 						iconStart={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
-							save(
-								metadataExport,
-								`${kebabCase(activeCollection?.name) || 'colectie'}.xml`
-							);
+							onExportClick();
 						}}
-						disabled={metaDataExportError || !metadataExport}
 					/>
 				),
 			},
@@ -185,9 +186,8 @@ const AccountMyCollections: NextPage = () => {
 						icon={<Icon name="export" />}
 						onClick={(e) => {
 							e.stopPropagation();
-							save(metadataExport, `${activeCollection?.name || 'colection'}.xml`);
+							onExportClick();
 						}}
-						disabled={metaDataExportError || !metadataExport}
 					/>
 				),
 			},
@@ -213,9 +213,8 @@ const AccountMyCollections: NextPage = () => {
 						},
 				  ]
 				: []),
-		],
-		[t, metaDataExportError, metadataExport, activeCollection]
-	);
+		];
+	}, [t, activeCollection, getCollectionExport]);
 
 	const renderActions = (item: IdentifiableMediaCard, collection: Collection) => (
 		<>

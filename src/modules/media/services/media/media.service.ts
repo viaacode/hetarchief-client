@@ -110,18 +110,19 @@ export class MediaService {
 			.json();
 	}
 
-	public static async getExport(id?: string): Promise<Blob | null | void> {
+	public static async getExport(id?: string): Promise<Blob | null> {
 		if (!id) {
 			return null;
 		}
 		return await ApiService.getApi()
 			.get(`${MEDIA_SERVICE_BASE_URL}/${id}/${MEDIA_SERVICE_EXPORT}`)
 			.then((r) => r.blob())
-			.catch((error) =>
+			.catch((error) => {
 				toastService.notify({
 					title: i18n?.t('Er ging iets mis') || 'error',
 					description: error,
-				})
-			);
+				});
+				return null;
+			});
 	}
 }

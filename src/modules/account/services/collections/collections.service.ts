@@ -68,19 +68,20 @@ class CollectionsService extends ApiService {
 			.json();
 	}
 
-	public async getExport(id?: string): Promise<Blob | null | void> {
+	public async getExport(id?: string): Promise<Blob | null> {
 		if (!id) {
 			return null;
 		}
 		return await ApiService.getApi()
 			.get(`${COLLECTIONS_SERVICE_BASE_URL}/${id}/${COLLECTIONS_SERVICE_EXPORT_URL}`)
 			.then((r) => r.blob())
-			.catch((error) =>
+			.catch((error) => {
 				toastService.notify({
 					title: i18n?.t('Er ging iets mis') || 'error',
 					description: error,
-				})
-			);
+				});
+				return null;
+			});
 	}
 }
 
