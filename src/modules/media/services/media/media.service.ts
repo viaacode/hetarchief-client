@@ -119,7 +119,8 @@ export class MediaService {
 			.then((r) => r.blob())
 			.catch((error) => {
 				toastService.notify({
-					title: i18n?.t('Er ging iets mis') || 'error',
+					title:
+						i18n?.t('modules/media/services/media/media___er-ging-iets-mis') || 'error',
 					description: error,
 				});
 				return null;

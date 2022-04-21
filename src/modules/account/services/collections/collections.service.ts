@@ -77,7 +77,10 @@ class CollectionsService extends ApiService {
 			.then((r) => r.blob())
 			.catch((error) => {
 				toastService.notify({
-					title: i18n?.t('Er ging iets mis') || 'error',
+					title:
+						i18n?.t(
+							'modules/account/services/collections/collections___er-ging-iets-mis'
+						) || 'error',
 					description: error,
 				});
 				return null;

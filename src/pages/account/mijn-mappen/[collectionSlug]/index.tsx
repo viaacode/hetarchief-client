@@ -147,7 +147,7 @@ const AccountMyCollections: NextPage = () => {
 			if (activeCollection?.id) {
 				const xmlBlob = await getCollectionExport(activeCollection?.id);
 
-				xmlBlob && save(xmlBlob, `${kebabCase(activeCollection?.name) || 'colectie'}.xml`);
+				xmlBlob && save(xmlBlob, `${kebabCase(activeCollection?.name) || 'map'}.xml`);
 			}
 		};
 
