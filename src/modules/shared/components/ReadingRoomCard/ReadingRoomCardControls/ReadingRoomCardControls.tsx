@@ -1,20 +1,20 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
 import { FC, ReactNode } from 'react';
 
 import { Icon, IconLightNames } from '../../Icon';
 import { ReadingRoomCardType } from '../ReadingRoomCard.const';
-import { ReadingRoomCardProps } from '../ReadingRoomCard.types';
+import { VisitorSpaceCardProps } from '../ReadingRoomCard.types';
 import { formatDateTime } from '../ReadingRoomCard.utils';
 
 import styles from './ReadingRoomCardControls.module.scss';
 
-const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
+const ReadingRoomCardControls: FC<VisitorSpaceCardProps> = ({
 	access,
 	onAccessRequest,
 	onContactClick,
-	onVisitClick,
 	room,
 	type,
 }) => {
@@ -71,14 +71,15 @@ const ReadingRoomCardControls: FC<ReadingRoomCardProps> = ({
 					</>
 				)}
 
-				<Button
-					variants={['lg', 'white']}
-					onClick={() => onVisitClick && onVisitClick(room)}
-				>
-					{t(
-						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___bezoek-dit-digitaal-archief'
-					)}
-				</Button>
+				<Link href={`/${room.slug}`} passHref>
+					<a>
+						<Button variants={['lg', 'white']}>
+							{t(
+								'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___bezoek-dit-digitaal-archief'
+							)}
+						</Button>
+					</a>
+				</Link>
 			</>
 		);
 	};

@@ -1,12 +1,12 @@
 import { render, RenderResult } from '@testing-library/react';
 
-import { ReadingRoomCardProps } from '../ReadingRoomCard/ReadingRoomCard.types';
+import { VisitorSpaceCardProps } from '../ReadingRoomCard/ReadingRoomCard.types';
 
 import ReadingRoomCardList from './ReadingRoomCardList';
 import { sixItems } from './__mocks__/reading-room-card-list';
 
 describe('Component: <MediaCardList />', () => {
-	const data: ReadingRoomCardProps[] = sixItems;
+	const data: VisitorSpaceCardProps[] = sixItems;
 	const containerClass = '.c-reading-room-card-list';
 
 	let rendered: RenderResult | undefined;

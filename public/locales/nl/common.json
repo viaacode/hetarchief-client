@@ -394,8 +394,10 @@
   "pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder": "Zoek op trefwoord, jaartal, aanbieder...",
   "pages/slug/ie/index___error": "error",
   "pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt": "Het ophalen van de metadata is mislukt.",
+  "pages/slug/ie/index___tot-access-end-date-mobile": "tot {{accessEndDateMobile}}",
   "pages/slug/index___geen-toegang": "Geen toegang",
   "pages/slug/index___je-hebt-geen-toegang-tot-deze-ruimte": "Je hebt geen toegang tot deze ruimte.",
+  "pages/slug/index___tot-access-end-date-mobile": "tot {{accessEndDateMobile}}",
   "pages/slug/toegang-aangevraagd/index___beschrijving-van-een-leeszaal": "Beschrijving van een leeszaal",
   "pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-leeszalen-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd": "Je kan de status van je aanvraag volgen op de Leeszalen pagina. Je ontvangt ook meteen een e-mailmelding als je aanvraag behandeld werd.",
   "pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen": "We hebben je aanvraag ontvangen"

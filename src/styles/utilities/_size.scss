@@ -1,0 +1,10 @@
+@use "../abstracts" as *;
+
+/**
+ * height
+ */
+
+ $height: (
+	"auto": auto,
+);
+@include generate-utils("height", "height", $height);

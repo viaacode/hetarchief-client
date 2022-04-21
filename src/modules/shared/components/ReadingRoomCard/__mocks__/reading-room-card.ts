@@ -1,9 +1,10 @@
 import { ReadingRoomCardType } from '../ReadingRoomCard.const';
-import { ReadingRoomAccess, ReadingRoomCardProps } from '../ReadingRoomCard.types';
+import { ReadingRoomAccess, VisitorSpaceCardProps } from '../ReadingRoomCard.types';
 
-export const mockReadingRoomCardProps: ReadingRoomCardProps = {
+export const mockReadingRoomCardProps: VisitorSpaceCardProps = {
 	room: {
 		id: '78912',
+		slug: 'amsab',
 		color: '#220538',
 		image: '/images/bg-shd.png',
 		logo: '/images/logo-shd--small.svg',

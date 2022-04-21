@@ -188,6 +188,7 @@ $button-height-sm: $font-size-md * 2;
  * Dividers
  */
 
+$divider-black: 0.1rem solid color.adjust($black, $alpha: -0.8);
 $divider-grey: solid 1px $silver;
 $divider-white: solid 1px rgb(255 255 255 / 20%);
 

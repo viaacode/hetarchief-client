@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import * as NextImage from 'next/image'
+import * as NextImage from 'next/image';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 
 import nlJson from '../public/locales/nl/common.json';
@@ -38,11 +38,9 @@ export const parameters = {
 
 // Allow Storybook to load unoptimized images, removing the dependency on the Next server
 // src: https://github.com/vercel/next.js/issues/18393#issuecomment-909636489
-const OriginalNextImage = NextImage.default
+const OriginalNextImage = NextImage.default;
 
 Object.defineProperty(NextImage, 'default', {
-  configurable: true,
-  value: (props) => (
-    <OriginalNextImage {...props} unoptimized loader={({ src }) => src} />
-  ),
-})
+	configurable: true,
+	value: (props) => <OriginalNextImage {...props} unoptimized loader={({ src }) => src} />,
+});

@@ -7,6 +7,7 @@ export * from './Datepicker';
 export * from './DropdownMenu';
 export * from './ErrorPage';
 export * from './Icon';
+export * from './Callout';
 export * from './ListNavigation';
 export * from './Loading';
 export * from './MediaCard';

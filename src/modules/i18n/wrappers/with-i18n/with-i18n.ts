@@ -14,7 +14,7 @@ import { WithI18n } from './with-i18n.types';
 export const withI18n = (gssp?: GetServerSideProps<WithI18n> | GetStaticProps<WithI18n>): any => {
 	return async (context: GetServerSidePropsContext | GetStaticPropsContext) => {
 		const { locale = DEFAULT_LOCALE } = context;
-		const ssrTranslations = await serverSideTranslations(locale);
+		const ssrTranslations = await serverSideTranslations(locale, ['common']);
 		const propsWithI18n = { props: { ...ssrTranslations } };
 
 		if (!gssp) {
