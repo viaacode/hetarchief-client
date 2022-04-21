@@ -40,6 +40,10 @@ export const requestStatusFilters = (): TabProps[] => {
 			id: VisitStatus.DENIED,
 			label: i18n?.t('modules/cp/const/requests___geweigerd'),
 		},
+		{
+			id: VisitStatus.CANCELLED_BY_VISITOR,
+			label: i18n?.t('modules/cp/const/requests___geannuleerd'),
+		},
 	];
 };
 
