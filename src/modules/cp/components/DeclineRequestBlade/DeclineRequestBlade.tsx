@@ -4,8 +4,6 @@ import { useTranslation } from 'next-i18next';
 import React, { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import styles from '@cp/components/ProcessRequestBlade/ProcessRequestBlade.module.scss';
-import { requestCreatedAtFormatter } from '@cp/utils';
 import { Blade, VisitSummary } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
