@@ -1,5 +1,6 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { i18n } from 'next-i18next';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
@@ -63,18 +64,23 @@ export const getNavigationItemsLeft = (
 ): NavigationItem[] => {
 	return [
 		{
-			node: renderLink('Bezoekersruimtes', '', {
-				badge:
-					accessibleReadingRooms.length > 0 ? (
-						<Badge text={accessibleReadingRooms.length} />
-					) : null,
-				className: linkCls([
-					'u-color-black',
-					'u-color-white:md',
-					'u-whitespace-nowrap',
-					styles['c-navigation__link--dropdown'],
-				]),
-			}),
+			node: renderLink(
+				i18n?.t('modules/navigation/components/navigation/navigation___bezoekersruimtes') ||
+					'Bezoekersruimtes',
+				'',
+				{
+					badge:
+						accessibleReadingRooms.length > 0 ? (
+							<Badge text={accessibleReadingRooms.length} />
+						) : null,
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						'u-whitespace-nowrap',
+						styles['c-navigation__link--dropdown'],
+					]),
+				}
+			),
 			id: 'visitor-spaces',
 			active: currentPath === ROUTES.home,
 			children: [
