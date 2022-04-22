@@ -64,7 +64,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	&--bordered::after {
 		content: "";
 		position: absolute;
-		z-index: get-z-layer("foreground");
+		z-index: get-z-layer("nav-hamburger");
 		bottom: 0;
 		left: 2rem;
 		right: 2rem;
