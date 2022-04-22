@@ -1,17 +1,15 @@
 import { Button } from '@meemoo/react-components';
 import { TFunction } from 'next-i18next';
-import { generatePath, Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
+import { AdminReadingRoomInfoRow } from '@admin/types';
 import { ReadingRoomOrderProps, ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
 import { DropdownMenu, Icon } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { asDate, formatLongDate } from '@shared/utils';
-
-import { READING_ROOMS_PATHS } from '../../const';
-import { AdminReadingRoomInfoRow } from '../../types';
 
 export const ReadingRoomsOverviewTablePageSize = 20;
 
@@ -27,18 +25,12 @@ export const ReadingRoomsOverviewTableColumns = (
 	updateRoomState: (roomId: string, state: ReadingRoomStatus) => void
 ): Column<VisitorSpaceInfo>[] => [
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___leeszaal'
-			) || '',
+		Header: t('modules/admin/const/spaces___leeszaal') || '',
 		id: ReadingRoomOrderProps.ContentPartnerName,
 		accessor: 'name',
 	},
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geactiveerd-op'
-			) || '',
+		Header: t('modules/admin/const/spaces___geactiveerd-op') || '',
 		id: ReadingRoomOrderProps.CreatedAt,
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
@@ -51,10 +43,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		},
 	},
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___emailadres'
-			) || '',
+		Header: t('modules/admin/const/spaces___emailadres') || '',
 		id: 'email',
 		accessor: 'contactInfo.email',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
@@ -68,10 +57,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} as any,
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___telefoonnummer'
-			) || '',
+		Header: t('modules/admin/const/spaces___telefoonnummer') || '',
 		id: 'telephone',
 		accessor: 'contactInfo.telephone',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
@@ -85,10 +71,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} as any,
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___publicatiestatus'
-			) || '',
+		Header: t('modules/admin/const/spaces___publicatiestatus') || '',
 		id: ReadingRoomOrderProps.Status,
 		accessor: 'status',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
@@ -123,15 +106,12 @@ export const ReadingRoomsOverviewTableColumns = (
 			return (
 				<>
 					<Link
-						to={generatePath(READING_ROOMS_PATHS.edit, {
-							slug: row.original.slug,
-						})}
+						href={`/${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
+						passHref={true}
 					>
-						<Button
-							className="u-color-neutral"
-							variants="text"
-							icon={<Icon name="edit" />}
-						/>
+						<a className="u-color-neutral u-font-size-24">
+							<Icon name="edit" />
+						</a>
 					</Link>
 					<DropdownMenu
 						triggerButtonProps={{ onClick: () => null, className: 'u-color-neutral' }}
@@ -142,9 +122,7 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t(
-									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___activeren'
-								)}
+								label={t('modules/admin/const/spaces___activeren')}
 								onClick={() =>
 									updateRoomState(row.original.id, ReadingRoomStatus.Active)
 								}
@@ -156,9 +134,7 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t(
-									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___deactiveren'
-								)}
+								label={t('modules/admin/const/spaces___deactiveren')}
 								onClick={() =>
 									updateRoomState(row.original.id, ReadingRoomStatus.Inactive)
 								}
@@ -170,9 +146,7 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t(
-									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___terug-naar-in-aanvraag'
-								)}
+								label={t('modules/admin/const/spaces___terug-naar-in-aanvraag')}
 								onClick={() =>
 									updateRoomState(row.original.id, ReadingRoomStatus.Requested)
 								}
