@@ -43,7 +43,7 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 
 			<Navigation.Right placement="right">
 				{showAccessEndDate !== undefined ? (
-					<span className="u-py-8">{showAccessEndDate}</span>
+					<span className="u-py-8 u-text-right">{showAccessEndDate}</span>
 				) : !!phone || !!email ? (
 					<Dropdown
 						isOpen={isContactDropdownOpen}

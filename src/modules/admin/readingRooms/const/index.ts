@@ -1,5 +1,5 @@
 const ROOT = 'leeszalenbeheer';
-const DETAIL = ':pageName';
+const DETAIL = ':slug';
 
 export const READING_ROOMS_PATHS = {
 	overview: `/${ROOT}`,

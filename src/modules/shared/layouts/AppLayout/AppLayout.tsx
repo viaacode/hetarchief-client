@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { i18n } from 'next-i18next';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { FC, useCallback, useEffect, useMemo } from 'react';
@@ -16,7 +17,9 @@ import {
 } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import { useGetAccessibleReadingRooms } from '@navigation/components/Navigation/hooks/get-accessible-reading-rooms';
+import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
+import { NavigationPlacement } from '@navigation/services/navigation-service';
 import { NotificationCenter, ZendeskWrapper } from '@shared/components';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
@@ -39,6 +42,8 @@ import {
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
 
+const { publicRuntimeConfig } = getConfig();
+
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -53,6 +58,7 @@ const AppLayout: FC = ({ children }) => {
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleReadingRooms } = useGetAccessibleReadingRooms();
 	const history = useSelector(selectHistory);
+	const { data: navigationItems } = useGetNavigationItems();
 
 	useHistory(asPath, history);
 
@@ -125,6 +131,26 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
+			{/* start Google Analytics */}
+			{publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID && (
+				<>
+					<Script
+						src={`https://www.googletagmanager.com/gtag/js?id=${publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID}`}
+						strategy="afterInteractive"
+					/>
+					<Script id="google-analytics" strategy="afterInteractive">
+						{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '${publicRuntimeConfig.GOOGLE_TAG_MANAGER_ID}');
+        `}
+					</Script>
+				</>
+			)}
+			{/* end Google Analytics */}
+
 			{/* <!-- start Flowplayer imports --> */}
 			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
 			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
@@ -146,7 +172,11 @@ const AppLayout: FC = ({ children }) => {
 					hamburgerProps={
 						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
 					}
-					items={getNavigationItemsLeft(asPath, accessibleReadingRooms || [])}
+					items={getNavigationItemsLeft(
+						asPath,
+						accessibleReadingRooms || [],
+						navigationItems?.[NavigationPlacement.HeaderLeft] || []
+					)}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}
@@ -185,7 +215,11 @@ const AppLayout: FC = ({ children }) => {
 			<ZendeskWrapper />
 
 			{showFooter && (
-				<Footer leftItem={footerLeftItem} links={footerLinks} rightItem={footerRightItem} />
+				<Footer
+					leftItem={footerLeftItem}
+					links={footerLinks(navigationItems?.[NavigationPlacement.FooterCenter] || [])}
+					rightItem={footerRightItem}
+				/>
 			)}
 		</div>
 	);

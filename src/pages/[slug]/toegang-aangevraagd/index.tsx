@@ -39,7 +39,9 @@ const VisitRequestedPage: NextPage = () => {
 
 	const enabled = typeof slug === 'string';
 	const { data: pending } = useGetPendingVisitCountForUserBySlug(slug as string, enabled);
-	const { data: space } = useGetReadingRoom(slug as string, enabled && (pending?.count || 0) > 0);
+	const { data: space } = useGetReadingRoom(slug as string, {
+		enabled: enabled && (pending?.count || 0) > 0,
+	});
 
 	/**
 	 * Computed
@@ -87,7 +89,7 @@ const VisitRequestedPage: NextPage = () => {
 					<div className="l-container p-visit-requested__content">
 						<section className="p-visit-requested__grid">
 							<div className="p-visit-requested__top">
-								<h1 className="p-visit-requested__title">
+								<h1 className="p-visit-requested__title u-mt-32:md">
 									{t(
 										'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
 									)}
@@ -118,7 +120,7 @@ const VisitRequestedPage: NextPage = () => {
 
 								{space.description && (
 									<div
-										className="p-visit-requested__description u-mt-32 u-mt-48:md"
+										className="p-visit-requested__description u-mt-32"
 										dangerouslySetInnerHTML={{
 											__html: String(
 												DOMPurify.sanitize(

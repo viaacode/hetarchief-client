@@ -22,9 +22,11 @@ $p: (
 
 // Top / Bottom
 $py: (
+	"0": 0,
 	"8": $spacer-xs,
 	"16": $spacer-sm,
 	"24": $spacer-md,
+	"32": $spacer-lg,
 	"48": $spacer-48,
 );
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
@@ -41,8 +43,10 @@ $px: (
 
 // Top
 $pt: (
+	"0": 0,
 	"8": $spacer-xs,
 	"12": math.div($spacer-md, 2),
+	"24": $spacer-md,
 	"32": $spacer-lg,
 	"56": $spacer-md + $spacer-lg,
 	"80": $spacer-2xl,

@@ -10,8 +10,9 @@ import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
-import { READING_ROOM_QUERY_KEY } from '@home/const';
+import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
 import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
@@ -31,7 +32,7 @@ const LoggedInHome: FC = () => {
 	const router = useRouter();
 
 	const [query, setQuery] = useQueryParams({
-		[READING_ROOM_QUERY_KEY]: StringParam,
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
 	/**
@@ -75,16 +76,32 @@ const LoggedInHome: FC = () => {
 
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 
+	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetReadingRoom(
+		query[VISITOR_SPACE_SLUG_QUERY_KEY] as string,
+		{ enabled: !!query[VISITOR_SPACE_SLUG_QUERY_KEY], retry: false }
+	);
+
 	/**
 	 * Effects
 	 */
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
-		if (query[READING_ROOM_QUERY_KEY]) {
+		if (query[VISITOR_SPACE_SLUG_QUERY_KEY] && visitorSpaceInfo) {
 			setIsRequestAccessBladeOpen(true);
 		}
-	}, [query]);
+	}, [query, visitorSpaceInfo]);
+
+	useEffect(() => {
+		if (isErrorGetVisitorSpace) {
+			toastService.notify({
+				title: t('modules/home/components/logged-in-home/logged-in-home___error'),
+				description: t(
+					'modules/home/components/logged-in-home/logged-in-home___deze-bezoekersruimte-bestaat-niet'
+				),
+			});
+		}
+	}, [isErrorGetVisitorSpace, t]);
 
 	// Divert users to the TOS if they try to request access before accepting
 	useEffect(() => {
@@ -104,8 +121,8 @@ const LoggedInHome: FC = () => {
 	 */
 
 	const onCloseRequestBlade = () => {
-		if (query[READING_ROOM_QUERY_KEY]) {
-			setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
+		if (query[VISITOR_SPACE_SLUG_QUERY_KEY]) {
+			setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
 		}
 
 		setIsRequestAccessBladeOpen(false);
@@ -129,7 +146,7 @@ const LoggedInHome: FC = () => {
 				return;
 			}
 
-			if (!query[READING_ROOM_QUERY_KEY]) {
+			if (!query[VISITOR_SPACE_SLUG_QUERY_KEY]) {
 				toastService.notify({
 					title: t(
 						'modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-leeszaal'
@@ -144,13 +161,13 @@ const LoggedInHome: FC = () => {
 			createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
-				spaceId: query[READING_ROOM_QUERY_KEY] as string,
+				visitorSpaceSlug: query[VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 				timeframe: values.visitTime,
-			}).then((res) => {
-				setQuery({ [READING_ROOM_QUERY_KEY]: undefined });
+			}).then((createdVisitRequest) => {
+				setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
 				setIsRequestAccessBladeOpen(false);
 
-				router.push(ROUTES.visitRequested.replace(':slug', res.spaceSlug));
+				router.push(ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug));
 			});
 		} catch (err) {
 			console.error({
@@ -167,8 +184,8 @@ const LoggedInHome: FC = () => {
 		}
 	};
 
-	const onRequestAccess = (id: string) => {
-		setQuery({ [READING_ROOM_QUERY_KEY]: id });
+	const onRequestAccess = (visitorSpaceSlug: string) => {
+		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -183,6 +200,7 @@ const LoggedInHome: FC = () => {
 		color: visit.spaceColor,
 		name: visit.spaceName,
 		info: visit.spaceInfo,
+		slug: visit.spaceSlug,
 	});
 
 	/**
@@ -293,13 +311,13 @@ const LoggedInHome: FC = () => {
 				{renderHero()}
 
 				<ReadingRoomCardsWithSearch onRequestAccess={onRequestAccess} />
-
-				<RequestAccessBlade
-					isOpen={isRequestAccessBladeOpen}
-					onClose={onCloseRequestBlade}
-					onSubmit={onRequestAccessSubmit}
-				/>
 			</div>
+
+			<RequestAccessBlade
+				isOpen={isRequestAccessBladeOpen}
+				onClose={onCloseRequestBlade}
+				onSubmit={onRequestAccessSubmit}
+			/>
 
 			<ProcessVisitBlade
 				selected={selected}

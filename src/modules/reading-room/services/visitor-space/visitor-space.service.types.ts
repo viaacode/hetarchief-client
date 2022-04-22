@@ -1,14 +1,14 @@
-import { ReadingRoomInfo } from '@reading-room/types';
+import { VisitorSpaceInfo } from '@reading-room/types';
 
 export interface CreateVisitRequest {
-	spaceId: string;
+	visitorSpaceSlug: string;
 	timeframe?: string;
 	reason: string;
 	acceptedTos: boolean;
 }
 
 export type ReadingRoomSettings = Pick<
-	ReadingRoomInfo,
+	VisitorSpaceInfo,
 	'description' | 'color' | 'serviceDescription' | 'image' | 'status'
 >;
 

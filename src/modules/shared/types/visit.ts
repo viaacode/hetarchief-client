@@ -2,6 +2,7 @@ export enum VisitStatus {
 	PENDING = 'PENDING',
 	APPROVED = 'APPROVED',
 	DENIED = 'DENIED',
+	CANCELLED_BY_VISITOR = 'CANCELLED_BY_VISITOR',
 }
 
 export interface Visit {

@@ -17,10 +17,10 @@ import {
 	startOfDay,
 } from 'date-fns';
 import { useTranslation } from 'next-i18next';
-import { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
-import { Blade, Icon } from '@shared/components';
+import { Blade, Icon, VisitSummary } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
@@ -28,8 +28,6 @@ import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
 import { asDate, formatDate, formatTime } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
-
-import parentStyles from '../ProcessRequestBlade/ProcessRequestBlade.module.scss';
 
 import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
 import styles from './ApproveRequestBlade.module.scss';
@@ -162,14 +160,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	return (
 		<Blade {...props} footer={renderFooter()} title={title}>
-			<div className={parentStyles['c-process-request-blade__details']}>
-				<strong>
-					{t(
-						'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-leeszaal-bezoeken'
-					)}
-				</strong>
-				<p>{selected?.timeframe}</p>
-			</div>
+			{selected && <VisitSummary {...selected} />}
 
 			<div className="u-px-32">
 				<FormControl

@@ -35,7 +35,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 							key={pathname}
 							className={linkClassName}
 							to={generatePath(ADMIN_PATHS.readingRooms.leeszalen, {
-								pageName: 'leeszalen',
+								slug: 'leeszalen',
 							})}
 						>
 							{t(
@@ -46,14 +46,14 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 					active:
 						!!matchPath(window.location.pathname, {
 							path: `/admin${generatePath(ADMIN_PATHS.readingRooms.leeszalen, {
-								pageName: 'leeszalen',
+								slug: 'leeszalen',
 							})}`,
 							exact: false,
 						}) ||
 						// Match edit state
 						!!matchPath(window.location.pathname, {
 							path: `/admin${generatePath(ADMIN_PATHS.readingRooms.edit, {
-								pageName: ':id',
+								slug: ':id',
 							})}`,
 							exact: false,
 						}),
@@ -65,7 +65,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 							key={pathname}
 							className={linkClassName}
 							to={generatePath(ADMIN_PATHS.readingRooms.aanvragen, {
-								pageName: 'aanvragen',
+								slug: 'aanvragen',
 							})}
 						>
 							{t(
@@ -75,7 +75,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 					),
 					active: !!matchPath(window.location.pathname, {
 						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.aanvragen, {
-							pageName: 'aanvragen',
+							slug: 'aanvragen',
 						})}`,
 						exact: false,
 					}),
@@ -87,7 +87,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 							key={pathname}
 							className={linkClassName}
 							to={generatePath(ADMIN_PATHS.readingRooms.bezoekers, {
-								pageName: 'bezoekers',
+								slug: 'bezoekers',
 							})}
 						>
 							{t(
@@ -97,7 +97,7 @@ const AdminNavigation: FC<AdminNavigationProps> = () => {
 					),
 					active: !!matchPath(window.location.pathname, {
 						path: `/admin${generatePath(ADMIN_PATHS.readingRooms.bezoekers, {
-							pageName: 'bezoekers',
+							slug: 'bezoekers',
 						})}`,
 						exact: false,
 					}),

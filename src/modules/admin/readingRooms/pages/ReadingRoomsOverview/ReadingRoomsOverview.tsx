@@ -4,7 +4,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
-import { ReadingRoomService } from '@reading-room/services';
+import { VistorSpaceService } from '@reading-room/services';
 import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
 import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
@@ -74,7 +74,7 @@ const ReadingRoomsOverview: FC = () => {
 	};
 
 	const updateRoomStatus = (roomId: string, status: ReadingRoomStatus) => {
-		ReadingRoomService.update(roomId, {
+		VistorSpaceService.update(roomId, {
 			status: status,
 		})
 			.catch(onFailedRequest)

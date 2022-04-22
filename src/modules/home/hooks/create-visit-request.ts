@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult } from 'react-query';
 
-import { CreateVisitRequest } from '@reading-room/services/reading-room/reading-room.service.types';
+import { CreateVisitRequest } from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { Visit } from '@shared/types';
 import { VisitsService } from '@visits/services';
 

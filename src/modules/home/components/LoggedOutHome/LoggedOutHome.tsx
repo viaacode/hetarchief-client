@@ -7,7 +7,7 @@ import { stringify } from 'query-string';
 import { FC } from 'react';
 
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
-import { READING_ROOM_QUERY_KEY, SHOW_AUTH_QUERY_KEY } from '@home/const';
+import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { ROUTES } from '@shared/const';
 import { createPageTitle } from '@shared/utils';
 
@@ -21,11 +21,11 @@ const LoggedOutHome: FC = () => {
 	 * Methods
 	 */
 
-	const onRequestAccess = (id: string) => {
+	const onRequestAccess = (visitorSpaceSlug: string) => {
 		return router.push(
 			`${ROUTES.home}?${stringify({
 				[SHOW_AUTH_QUERY_KEY]: '1',
-				[READING_ROOM_QUERY_KEY]: id,
+				[VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
 			})}`
 		);
 	};
@@ -46,7 +46,9 @@ const LoggedOutHome: FC = () => {
 					<Image
 						src="/images/hero.jpg"
 						layout="fill"
-						alt="Hero image"
+						alt={t(
+							'modules/home/components/logged-out-home/logged-out-home___hero-alt'
+						)}
 						objectFit="contain"
 					/>
 				</div>

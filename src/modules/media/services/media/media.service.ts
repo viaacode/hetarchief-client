@@ -15,6 +15,7 @@ import { ElasticsearchResponse, GetMedia } from '@shared/types/api';
 
 import {
 	MEDIA_SERVICE_BASE_URL,
+	MEDIA_SERVICE_EXPORT,
 	MEDIA_SERVICE_RELATED,
 	MEDIA_SERVICE_SIMILAR,
 	MEDIA_SERVICE_TICKET_URL,
@@ -22,7 +23,7 @@ import {
 
 export class MediaService {
 	public static async getBySpace(
-		slug: string,
+		orgId: string,
 		filters: MediaSearchFilters = [],
 		page = 1,
 		size = 20,
@@ -47,7 +48,7 @@ export class MediaService {
 		});
 
 		const parsed = (await ApiService.getApi()
-			.post(`${MEDIA_SERVICE_BASE_URL}/${slug}`, {
+			.post(`${MEDIA_SERVICE_BASE_URL}/${orgId}`, {
 				body: JSON.stringify({
 					filters: filtered,
 					size,
@@ -105,5 +106,14 @@ export class MediaService {
 		return await ApiService.getApi()
 			.get(`${MEDIA_SERVICE_BASE_URL}/${esIndex}/${id}/${MEDIA_SERVICE_RELATED}/${meemooId}`)
 			.json();
+	}
+
+	public static async getExport(id?: string): Promise<Blob | null> {
+		if (!id) {
+			return null;
+		}
+		return await ApiService.getApi()
+			.get(`${MEDIA_SERVICE_BASE_URL}/${id}/${MEDIA_SERVICE_EXPORT}`)
+			.then((r) => r.blob());
 	}
 }

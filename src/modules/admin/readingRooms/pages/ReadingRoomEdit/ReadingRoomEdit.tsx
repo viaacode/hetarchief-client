@@ -8,7 +8,7 @@ import { Loading } from '@shared/components';
 
 const ReadingRoomEdit: FC = () => {
 	const { t } = useTranslation();
-	const { pageName: slug } = useParams<{ pageName: string }>();
+	const { slug } = useParams<{ slug: string }>();
 
 	const { data: readingRoomInfo, isLoading, refetch } = useGetReadingRoom(slug);
 

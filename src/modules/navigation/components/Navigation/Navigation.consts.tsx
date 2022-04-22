@@ -1,13 +1,14 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { toLower } from 'lodash-es';
+import { i18n } from 'next-i18next';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
 import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
-import { ReadingRoomInfo } from '@reading-room/types';
-import { Icon } from '@shared/components';
+import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
+import { VisitorSpaceInfo } from '@reading-room/types';
+import { Icon, IconName } from '@shared/components';
 import { ROUTES } from '@shared/const';
 
 const linkCls = (classNames: string[] = []) => {
@@ -26,16 +27,20 @@ const renderLink = (
 		iconStart,
 		iconEnd,
 		className,
+		tooltip,
+		target,
 	}: {
 		badge?: ReactNode;
 		iconStart?: ReactNode;
 		iconEnd?: ReactNode;
 		className?: string;
+		tooltip?: string;
+		target?: string;
 	} = {}
 ): ReactNode => {
 	return href ? (
 		<Link href={href}>
-			<a className={className} role="menuitem" tabIndex={0}>
+			<a className={className} role="menuitem" tabIndex={0} title={tooltip} target={target}>
 				{iconStart && iconStart}
 				{label}
 				{badge && badge}
@@ -43,7 +48,7 @@ const renderLink = (
 			</a>
 		</Link>
 	) : (
-		<a className={className} role="menuitem" tabIndex={0}>
+		<a className={className} role="menuitem" tabIndex={0} title={tooltip} target={target}>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}
@@ -54,37 +59,52 @@ const renderLink = (
 
 export const getNavigationItemsLeft = (
 	currentPath: string,
-	accessibleReadingRooms: ReadingRoomInfo[]
+	accessibleReadingRooms: VisitorSpaceInfo[],
+	navigationItems: NavigationInfo[]
 ): NavigationItem[] => [
 	{
-		node: renderLink('Leeszalen', '', {
-			badge:
-				accessibleReadingRooms.length > 0 ? (
-					<Badge text={accessibleReadingRooms.length} />
-				) : null,
-			className: linkCls([
-				'u-color-black',
-				'u-color-white:md',
-				'u-whitespace-nowrap',
-				styles['c-navigation__link--dropdown'],
-			]),
-		}),
-		id: 'leeszalen',
-		active: currentPath === ROUTES.home || toLower(currentPath).startsWith('/or-'),
+		node: renderLink(
+			i18n?.t('modules/navigation/components/navigation/navigation___bezoekersruimtes') ||
+				'Bezoekersruimtes',
+			'',
+			{
+				badge:
+					accessibleReadingRooms.length > 0 ? (
+						<Badge text={accessibleReadingRooms.length} />
+					) : null,
+				className: linkCls([
+					'u-color-black',
+					'u-color-white:md',
+					'u-whitespace-nowrap',
+					styles['c-navigation__link--dropdown'],
+				]),
+			}
+		),
+		id: 'visitor-spaces',
+		active: currentPath === ROUTES.home,
 		children: [
 			{
-				node: renderLink('Alle leeszalen', '/', {
-					className: dropdownCls(['u-display-none', 'u-display-block:md']),
-				}),
-				id: 'alle leeszalen',
+				node: renderLink(
+					i18n?.t(
+						'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
+					) || 'Alle bezoekersruimtes',
+					'/',
+					{
+						className: dropdownCls(['u-display-none', 'u-display-block:md']),
+					}
+				),
+				id: 'all-visitor-spaces',
 				hasDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
 			},
 			...accessibleReadingRooms.map(
-				(readingRoom: ReadingRoomInfo): NavigationItem => ({
-					// TODO update the link to use the readingRoom.slug instead of the id
+				(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
 					node: renderLink(
-						readingRoom.name || '---',
-						`/${readingRoom.maintainerId.toLowerCase()}`,
+						visitorSpace.name ||
+							i18n?.t(
+								'modules/navigation/components/navigation/navigation___bezoekersruimte'
+							) ||
+							'',
+						`/${visitorSpace.slug}`,
 						{
 							iconEnd: (
 								<Icon
@@ -101,34 +121,30 @@ export const getNavigationItemsLeft = (
 							className: dropdownCls(),
 						}
 					),
-					id: readingRoom.id,
+					id: visitorSpace.id,
 				})
 			),
 		],
 	},
-	// TODO replace this with links from the /navigations endpoint
-	{
-		node: renderLink('Over de leeszalen', '#', {
-			className: linkCls([
-				'u-color-black',
-				'u-color-white:md',
-				styles['c-navigation__link--dropdown'],
-			]),
-		}),
-		id: 'over leeszalen',
-		active: currentPath === '/over-leeszalen', // TODO: update once route is implemented
-	},
-	{
-		node: renderLink('Vaak gestelde vragen', '#', {
-			className: linkCls([
-				'u-color-black',
-				'u-color-white:md',
-				styles['c-navigation__link--dropdown'],
-			]),
-		}),
-		id: 'vragen',
-		active: currentPath === '/vragen', // TODO: update once route is implemented
-	},
+	...navigationItems.map((navigationItem: NavigationInfo): NavigationItem => {
+		return {
+			active: currentPath === navigationItem.contentPath,
+			id: navigationItem.id,
+			node: renderLink(navigationItem.label, navigationItem.contentPath, {
+				target: navigationItem.linkTarget || undefined,
+				iconStart: navigationItem.iconName ? (
+					<Icon name={navigationItem.iconName as IconName} />
+				) : null,
+				tooltip: navigationItem.tooltip || undefined,
+				className: linkCls([
+					'u-color-black',
+					'u-color-white:md',
+					'u-whitespace-nowrap',
+					styles['c-navigation__link--dropdown'],
+				]),
+			}),
+		};
+	}),
 	{
 		node: renderLink('Beheer', '', {
 			className: linkCls([
@@ -171,25 +187,5 @@ export const getNavigationItemsLeft = (
 		}),
 		id: 'nav__admin',
 		active: currentPath.startsWith('/admin'),
-		children: [
-			// {
-			// 	node: renderLink('Alle leeszalen', '/admin/leeszalenbeheer/leeszalen', {
-			// 		className: dropdownCls(),
-			// 	}),
-			// 	id: 'nav__admin--leeszalen',
-			// },
-			// {
-			// 	node: renderLink('Aanvragen', '/admin/leeszalenbeheer/aanvragen', {
-			// 		className: dropdownCls(),
-			// 	}),
-			// 	id: 'nav__admin--aanvragen',
-			// },
-			// {
-			// 	node: renderLink('Actieve bezoekers', '/admin/leeszalenbeheer/bezoekers', {
-			// 		className: dropdownCls(),
-			// 	}),
-			// 	id: 'nav__admin--bezoekers',
-			// },
-		],
 	},
 ];

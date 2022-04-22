@@ -199,10 +199,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	.c-navigation__list-overlay {
 		width: 100vw;
 		position: absolute;
-		top: $c-navigation-height-md;
+		padding-top: $c-navigation-height-md;
 
 		@include respond-at(md) {
-			top: $c-navigation-height;
+			padding-top: $c-navigation-height;
 		}
 	}
 
@@ -275,15 +275,16 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 }
 
 .c-navigation__item {
+	z-index: get-z-layer("nav-dropdown") + 1;
 	display: inline-flex;
 	align-items: center;
-	height: $c-navigation-height - $c-navigation-divider-size;
 	border-bottom: $c-navigation-border-height solid transparent;
 	margin-bottom: $c-navigation-divider-size;
 	transition: border-color $animate-md-out, color $animate-md-out;
 
 	@include respond-at(md) {
 		position: relative;
+		height: $c-navigation-height - $c-navigation-divider-size;
 	}
 
 	&:not(:last-child) {

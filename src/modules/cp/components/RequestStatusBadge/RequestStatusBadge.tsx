@@ -39,6 +39,16 @@ const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, sta
 					</>
 				);
 
+			case VisitStatus.CANCELLED_BY_VISITOR:
+				return (
+					<>
+						<Badge type="error" text={<Icon name="trash" />} variants="icon" />
+						{t(
+							'modules/cp/components/request-status-badge/request-status-badge___geannuleerd'
+						)}
+					</>
+				);
+
 			default:
 				return null;
 		}

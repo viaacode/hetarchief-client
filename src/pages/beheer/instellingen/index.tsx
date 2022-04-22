@@ -24,17 +24,17 @@ const CPSettingsPage: NextPage = () => {
 	const user = useSelector(selectUser);
 
 	const {
-		data: readingRoomInfo,
+		data: visitorSpaceInfo,
 		isLoading,
 		refetch,
-	} = useGetReadingRoom(user?.maintainerId || null, !!user?.maintainerId);
+	} = useGetReadingRoom(user?.visitorSpaceSlug || null, { enabled: !!user?.visitorSpaceSlug });
 
 	/**
 	 * Render
 	 */
 
 	const renderErrorMessage = () => {
-		if (!user?.maintainerId) {
+		if (!user?.visitorSpaceSlug) {
 			return t('pages/beheer/instellingen/index___geen-maintainer-id-gevonden');
 		}
 		return t(
@@ -43,7 +43,7 @@ const CPSettingsPage: NextPage = () => {
 	};
 
 	return isLoading ? (
-		<Loading />
+		<Loading fullscreen />
 	) : (
 		<>
 			<Head>
@@ -65,8 +65,8 @@ const CPSettingsPage: NextPage = () => {
 				contentTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">
-					{readingRoomInfo ? (
-						<ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />
+					{visitorSpaceInfo ? (
+						<ReadingRoomSettings room={visitorSpaceInfo} refetch={refetch} />
 					) : (
 						<p className="u-color-neutral">{renderErrorMessage()}</p>
 					)}

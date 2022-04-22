@@ -2,7 +2,12 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
 import Footer from './Footer';
-import { footerLeftItem, footerLinks, footerRightItem } from './__mocks__/footer';
+import {
+	footerCenterNavigationItems,
+	footerLeftItem,
+	footerLinks,
+	footerRightItem,
+} from './__mocks__/footer';
 
 export default {
 	title: 'Components/Footer',
@@ -13,7 +18,7 @@ const Template: ComponentStory<typeof Footer> = (args) => <Footer {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-	links: footerLinks,
+	links: footerLinks(footerCenterNavigationItems),
 	leftItem: footerLeftItem,
 	rightItem: footerRightItem,
 };

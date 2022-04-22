@@ -63,8 +63,9 @@ export interface DefaultFilterFormProps<Values = unknown> extends DefaultCompone
 	values?: Values;
 }
 
-export interface ReadingRoomInfo {
+export interface VisitorSpaceInfo {
 	id: string;
+	slug: string;
 	maintainerId: string;
 	name: string;
 	info: string | null;
@@ -88,7 +89,6 @@ export interface ReadingRoomInfo {
 	publishedAt: string | null;
 	createdAt: string;
 	updatedAt: string;
-	slug: string;
 }
 
 export enum ReadingRoomStatus {
