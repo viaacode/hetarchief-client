@@ -58,10 +58,9 @@ import {
 	ToggleOption,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { toastService } from '@shared/services/toast-service';
 import { AppState } from '@shared/store';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
@@ -73,6 +72,8 @@ import {
 	formatTime,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
+
+import Error404 from '../404';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -125,11 +126,10 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const {
-		error: accessError,
-		isError: hasAccessError,
-		data: access,
-	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
+	const { error: accessError, data: access } = useGetActiveVisitForUserAndSpace(
+		slug as string,
+		typeof slug === 'string'
+	);
 
 	const { data: space } = useGetReadingRoom(slug as string, { enabled: access !== undefined });
 
@@ -148,21 +148,6 @@ const ReadingRoomPage: NextPage = () => {
 	/**
 	 * Effects
 	 */
-
-	useEffect(() => {
-		if (!hasAccessError) {
-			return;
-		}
-
-		onError(accessError, 404, () => {
-			router.push(ROUTES.home).finally(() => {
-				toastService.notify({
-					title: t('pages/slug/index___geen-toegang'),
-					description: t('pages/slug/index___je-hebt-geen-toegang-tot-deze-ruimte'),
-				});
-			});
-		});
-	}, [hasAccessError, accessError, router, t]);
 
 	useEffect(() => {
 		let buckets = media?.aggregations.dcterms_format.buckets;
@@ -218,13 +203,7 @@ const ReadingRoomPage: NextPage = () => {
 	 * Methods
 	 */
 
-	const onError = (e: unknown, code: number, callback?: () => void) => {
-		const cast = e as HTTPError;
-
-		if (cast.response && cast.response.status === code) {
-			callback?.();
-		}
-	};
+	const is404Error = (accessError as HTTPError)?.response?.status === 404;
 
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim()) {
@@ -487,7 +466,7 @@ const ReadingRoomPage: NextPage = () => {
 		</>
 	);
 
-	return (
+	const renderVisitorSpace = () => (
 		<VisitorLayout>
 			<Head>
 				<title>{createPageTitle(space?.name)}</title>
@@ -627,6 +606,12 @@ const ReadingRoomPage: NextPage = () => {
 			)}
 		</VisitorLayout>
 	);
+
+	if (is404Error) {
+		return <Error404 />;
+	} else {
+		return renderVisitorSpace();
+	}
 };
 
 export const getServerSideProps: GetServerSideProps = withI18n();
