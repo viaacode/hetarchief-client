@@ -1,6 +1,7 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isToday } from 'date-fns';
+import { HTTPError } from 'ky';
 import { kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -65,6 +66,8 @@ import {
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
+import Error404 from '../../404';
+
 import {
 	DynamicActionMenu,
 	MediaObject,
@@ -117,8 +120,9 @@ const ObjectDetailPage: NextPage = () => {
 	// Fetch object
 	const {
 		data: mediaInfo,
-		isLoading: isLoadingMediaInfo,
-		isError,
+		isLoading: mediaInfoIsLoading,
+		isError: mediaInfoIsError,
+		error: mediaInfoError,
 	} = useGetMediaInfo(router.query.ie as string);
 
 	// playable url
@@ -150,7 +154,19 @@ const ObjectDetailPage: NextPage = () => {
 	const { mutateAsync: getMediaExport } = useGetMediaExport();
 
 	// visit info
-	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+	const {
+		data: visitRequest,
+		error: visitRequestError,
+		isLoading: visitRequestIsLoading,
+	} = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	/**
+	 * Computed
+	 */
+
+	const is404Error =
+		(visitRequestError as HTTPError)?.response?.status === 404 ||
+		(mediaInfoError as HTTPError)?.response?.status === 404;
 
 	/**
 	 * Effects
@@ -225,12 +241,14 @@ const ObjectDetailPage: NextPage = () => {
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
 	const isMobile = windowSize.width && windowSize.width > 700;
 	const accessEndDate =
-		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
+		visitRequest && visitRequest.endAt
+			? formatMediumDateWithTime(asDate(visitRequest.endAt))
+			: '';
 	const accessEndDateMobile =
-		visitStatus && visitStatus.endAt
-			? isToday(asDate(visitStatus.endAt) ?? 0)
-				? formatTime(asDate(visitStatus.endAt))
-				: formatDate(asDate(visitStatus.endAt))
+		visitRequest && visitRequest.endAt
+			? isToday(asDate(visitRequest.endAt) ?? 0)
+				? formatTime(asDate(visitRequest.endAt))
+				: formatDate(asDate(visitRequest.endAt))
 			: '';
 
 	/**
@@ -416,217 +434,201 @@ const ObjectDetailPage: NextPage = () => {
 		</ul>
 	);
 
-	return (
-		<VisitorLayout>
-			<div className="p-object-detail">
-				<Head>
-					<title>{createPageTitle('Object detail')}</title>
-					<meta name="description" content="Object detail omschrijving" />
-				</Head>
-				<ReadingRoomNavigation
-					className="p-object-detail__nav"
-					showBorder={showNavigationBorder}
-					title={mediaInfo?.maintainerName ?? ''}
-					backLink={backLink}
-					showAccessEndDate={
-						accessEndDate || accessEndDateMobile
-							? isMobile
-								? t(
-										'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
-										{ accessEndDate }
-								  )
-								: t('pages/slug/ie/index___tot-access-end-date-mobile', {
-										accessEndDateMobile,
-								  })
-							: undefined
-					}
-				/>
-				<ScrollableTabs
-					className="p-object-detail__tabs"
-					variants={['dark']}
-					tabs={tabs}
-					onClick={onTabClick}
-				/>
-				{isLoadingMediaInfo && <Loading fullscreen />}
-				{isError && (
-					<p className={'p-object-detail__error'}>
-						{t(
-							'pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+	const renderObjectDetail = () => (
+		<>
+			<ReadingRoomNavigation
+				className="p-object-detail__nav"
+				showBorder={showNavigationBorder}
+				title={mediaInfo?.maintainerName ?? ''}
+				backLink={backLink}
+				showAccessEndDate={
+					accessEndDate || accessEndDateMobile
+						? isMobile
+							? t(
+									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+									{ accessEndDate }
+							  )
+							: t('pages/slug/ie/index___tot-access-end-date-mobile', {
+									accessEndDateMobile,
+							  })
+						: undefined
+				}
+			/>
+			<ScrollableTabs
+				className="p-object-detail__tabs"
+				variants={['dark']}
+				tabs={tabs}
+				onClick={onTabClick}
+			/>
+			{mediaInfoIsError && (
+				<p className={'p-object-detail__error'}>
+					{t(
+						'pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+					)}
+				</p>
+			)}
+			<article
+				className={clsx(
+					'p-object-detail__wrapper',
+					mediaInfoIsLoading && 'p-object-detail--hidden ',
+					mediaInfoIsError && 'p-object-detail--hidden ',
+					expandMetadata && 'p-object-detail__wrapper--expanded',
+					activeTab === ObjectDetailTabs.Metadata && 'p-object-detail__wrapper--metadata',
+					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
+				)}
+			>
+				{mediaType && (
+					<Button
+						className={clsx(
+							'p-object-detail__expand-button',
+							expandMetadata && 'p-object-detail__expand-button--expanded'
 						)}
-					</p>
-				)}{' '}
-				<article
+						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
+						onClick={onClickToggle}
+						variants="white"
+					/>
+				)}
+				<div className="p-object-detail__video">
+					{mediaType ? (
+						<>
+							{playableUrl && currentRepresentation ? (
+								// Flowplayer/image/not playable
+								renderMedia(playableUrl, currentRepresentation)
+							) : (
+								// Loading/error
+								<div>{renderMediaPlaceholder()}</div>
+							)}
+							{showFragmentSlider && (
+								<FragmentSlider
+									thumbnail={mediaInfo.thumbnailUrl}
+									className="p-object-detail__slider"
+									fragments={mediaInfo?.representations ?? []}
+									onChangeFragment={(index) =>
+										setCurrentRepresentation(mediaInfo?.representations[index])
+									}
+								/>
+							)}
+						</>
+					) : (
+						<>
+							<ObjectPlaceholder {...objectPlaceholder()} />
+						</>
+					)}
+				</div>
+				<div
+					ref={metadataRef}
 					className={clsx(
-						'p-object-detail__wrapper',
-						isLoadingMediaInfo && 'p-object-detail--hidden ',
-						isError && 'p-object-detail--hidden ',
-						expandMetadata && 'p-object-detail__wrapper--expanded',
-						activeTab === ObjectDetailTabs.Metadata &&
-							'p-object-detail__wrapper--metadata',
-						activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
+						'p-object-detail__metadata',
+						'p-object-detail__metadata--collapsed',
+						expandMetadata && 'p-object-detail__metadata--expanded',
+						!mediaType && 'p-object-detail__metadata--no-media'
 					)}
 				>
-					{mediaType && (
-						<Button
-							className={clsx(
-								'p-object-detail__expand-button',
-								expandMetadata && 'p-object-detail__expand-button--expanded'
+					<div>
+						<div className="u-px-32">
+							{showResearchWarning && (
+								<Callout
+									className="p-object-detail__callout u-pt-32 u-pb-24"
+									icon={<Icon name="info" />}
+									text={t(
+										'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+									)}
+								/>
 							)}
-							icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
-							onClick={onClickToggle}
-							variants="white"
-						/>
-					)}
-					<div className="p-object-detail__video">
-						{mediaType ? (
-							<>
-								{playableUrl && currentRepresentation ? (
-									// Flowplayer/image/not playable
-									renderMedia(playableUrl, currentRepresentation)
-								) : (
-									// Loading/error
-									<div>{renderMediaPlaceholder()}</div>
-								)}
-								{showFragmentSlider && (
-									<FragmentSlider
-										thumbnail={mediaInfo.thumbnailUrl}
-										className="p-object-detail__slider"
-										fragments={mediaInfo?.representations ?? []}
-										onChangeFragment={(index) =>
-											setCurrentRepresentation(
-												mediaInfo?.representations[index]
-											)
-										}
-									/>
-								)}
-							</>
-						) : (
-							<>
-								<ObjectPlaceholder {...objectPlaceholder()} />
-							</>
-						)}
-					</div>
-					<div
-						ref={metadataRef}
-						className={clsx(
-							'p-object-detail__metadata',
-							'p-object-detail__metadata--collapsed',
-							expandMetadata && 'p-object-detail__metadata--expanded',
-							!mediaType && 'p-object-detail__metadata--no-media'
-						)}
-					>
-						<div>
-							<div className="u-px-32">
-								{showResearchWarning && (
-									<Callout
-										className="p-object-detail__callout u-pt-32 u-pb-24"
-										icon={<Icon name="info" />}
-										text={t(
-											'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
-										)}
-									/>
-								)}
-								<h3
-									className={clsx('u-pb-24', {
-										'u-pt-24': showResearchWarning,
-										'u-pt-32': !showResearchWarning,
-									})}
+							<h3
+								className={clsx('u-pb-24', {
+									'u-pt-24': showResearchWarning,
+									'u-pt-32': !showResearchWarning,
+								})}
+							>
+								{mediaInfo?.name}
+							</h3>
+							<p className="u-pb-24 u-line-height-1-4">{mediaInfo?.description}</p>
+							<div className="u-pb-24 p-object-detail__actions">
+								<Button
+									className="p-object-detail__export"
+									iconStart={<Icon name="export" />}
+									onClick={onExportClick}
 								>
-									{mediaInfo?.name}
-								</h3>
-								<p className="u-pb-24 u-line-height-1-4">
-									{mediaInfo?.description}
-								</p>
-								<div className="u-pb-24 p-object-detail__actions">
-									<Button
-										className="p-object-detail__export"
-										iconStart={<Icon name="export" />}
-										onClick={onExportClick}
-									>
-										<span className="u-text-ellipsis u-display-none u-display-block:md">
-											{t(
-												'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
-											)}
-										</span>
-										<span className="u-text-ellipsis u-display-none:md">
-											{t(
-												'pages/leeszaal/reading-room-slug/object-id/index___metadata'
-											)}
-										</span>
-									</Button>
-									<DynamicActionMenu
-										{...MEDIA_ACTIONS()}
-										onClickAction={onClickAction}
-									/>
-								</div>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{t(
+											'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+										)}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{t(
+											'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+										)}
+									</span>
+								</Button>
+								<DynamicActionMenu
+									{...MEDIA_ACTIONS()}
+									onClickAction={onClickAction}
+								/>
 							</div>
-							{mediaInfo && (
-								<>
+						</div>
+						{mediaInfo && (
+							<>
+								<Metadata
+									className="u-px-32"
+									columns={
+										expandMetadata && metadataSize && metadataSize?.width > 500
+											? 2
+											: 1
+									}
+									metadata={METADATA_FIELDS(mediaInfo)}
+								/>
+								{!!similar.length && (
 									<Metadata
 										className="u-px-32"
-										columns={
-											expandMetadata &&
-											metadataSize &&
-											metadataSize?.width > 500
-												? 2
-												: 1
-										}
-										metadata={METADATA_FIELDS(mediaInfo)}
-									/>
-									{!!similar.length && (
-										<Metadata
-											className="u-px-32"
-											metadata={[
-												{
-													title: t(
-														'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
-													),
-													data: mapKeywordsToTagList(mediaInfo.keywords),
-												},
-												{
-													title: 'Ook interessant',
-													data: renderMetadataCards('similar', similar),
-													className: 'u-pb-0',
-												},
-											]}
-										/>
-									)}
-								</>
-							)}
-						</div>
-					</div>
-					{!!related.length && (
-						<RelatedObjectsBlade
-							className={clsx(
-								'p-object-detail__related',
-								'p-object-detail__metadata--collapsed',
-								expandMetadata && 'p-object-detail__metadata--expanded'
-							)}
-							icon={
-								<Icon
-									className="u-font-size-24 u-mr-8 u-text-left"
-									name="related-objects"
-								/>
-							}
-							title={
-								related.length === 1
-									? t(
-											'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
-									  )
-									: t(
-											'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+										metadata={[
 											{
-												amount: related.length,
-											}
-									  )
-							}
-							renderContent={(hidden) =>
-								renderMetadataCards('related', related, hidden)
-							}
-						/>
-					)}
-				</article>
-			</div>
+												title: t(
+													'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
+												),
+												data: mapKeywordsToTagList(mediaInfo.keywords),
+											},
+											{
+												title: 'Ook interessant',
+												data: renderMetadataCards('similar', similar),
+												className: 'u-pb-0',
+											},
+										]}
+									/>
+								)}
+							</>
+						)}
+					</div>
+				</div>
+				{!!related.length && (
+					<RelatedObjectsBlade
+						className={clsx(
+							'p-object-detail__related',
+							'p-object-detail__metadata--collapsed',
+							expandMetadata && 'p-object-detail__metadata--expanded'
+						)}
+						icon={
+							<Icon
+								className="u-font-size-24 u-mr-8 u-text-left"
+								name="related-objects"
+							/>
+						}
+						title={
+							related.length === 1
+								? t(
+										'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
+								  )
+								: t(
+										'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+										{
+											amount: related.length,
+										}
+								  )
+						}
+						renderContent={(hidden) => renderMetadataCards('related', related, hidden)}
+					/>
+				)}
+			</article>
 			<AddToCollectionBlade
 				isOpen={activeBlade === MediaActions.Bookmark}
 				selected={{
@@ -636,6 +638,26 @@ const ObjectDetailPage: NextPage = () => {
 				onClose={onCloseBlade}
 				onSubmit={onCloseBlade}
 			/>
+		</>
+	);
+
+	const renderPageContent = () => {
+		if (mediaInfoIsLoading || visitRequestIsLoading) {
+			return <Loading fullscreen />;
+		}
+		if (is404Error) {
+			return <Error404 />;
+		}
+		return <div className="p-object-detail">{renderObjectDetail()}</div>;
+	};
+
+	return (
+		<VisitorLayout>
+			<Head>
+				<title>{createPageTitle('Object detail')}</title>
+				<meta name="description" content="Object detail omschrijving" />
+			</Head>
+			{renderPageContent()}
 		</VisitorLayout>
 	);
 };

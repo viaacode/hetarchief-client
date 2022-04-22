@@ -48,6 +48,7 @@ import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
 	Icon,
 	IdentifiableMediaCard,
+	Loading,
 	MediaCardList,
 	MediaCardViewMode,
 	PaginationBar,
@@ -126,24 +127,34 @@ const ReadingRoomPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { error: accessError, data: access } = useGetActiveVisitForUserAndSpace(
+	const {
+		error: visitRequestError,
+		data: visitRequest,
+		isLoading: visitRequestIsLoading,
+	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
+
+	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetReadingRoom(
 		slug as string,
-		typeof slug === 'string'
+		{ enabled: visitRequest !== undefined }
 	);
 
-	const { data: space } = useGetReadingRoom(slug as string, { enabled: access !== undefined });
-
 	const { data: media } = useGetMediaObjects(
-		space?.maintainerId?.toLocaleLowerCase() as string,
+		visitorSpace?.maintainerId?.toLocaleLowerCase() as string,
 		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
 		activeSort,
-		space?.maintainerId !== undefined
+		visitorSpace?.maintainerId !== undefined
 	);
 
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	/**
+	 * Computed
+	 */
+
+	const is404Error = (visitRequestError as HTTPError)?.response?.status === 404;
 
 	/**
 	 * Effects
@@ -202,8 +213,6 @@ const ReadingRoomPage: NextPage = () => {
 	/**
 	 * Methods
 	 */
-
-	const is404Error = (accessError as HTTPError)?.response?.status === 404;
 
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim()) {
@@ -467,23 +476,13 @@ const ReadingRoomPage: NextPage = () => {
 	);
 
 	const renderVisitorSpace = () => (
-		<VisitorLayout>
-			<Head>
-				<title>{createPageTitle(space?.name)}</title>
-				<meta
-					name="description"
-					content={
-						space?.info || t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
-					}
-				/>
-			</Head>
-
-			{space && (
+		<>
+			{visitorSpace && (
 				<div className="p-reading-room">
 					<ReadingRoomNavigation
-						title={space?.name}
-						phone={space?.contactInfo.telephone || ''}
-						email={space?.contactInfo.email || ''}
+						title={visitorSpace?.name}
+						phone={visitorSpace?.contactInfo.telephone || ''}
+						email={visitorSpace?.contactInfo.email || ''}
 						showBorder={showNavigationBorder}
 						showAccessEndDate={
 							accessEndDate || accessEndDateMobile
@@ -590,7 +589,7 @@ const ReadingRoomPage: NextPage = () => {
 				</div>
 			)}
 
-			{space && (
+			{visitorSpace && (
 				<AddToCollectionBlade
 					isOpen={isAddToCollectionBladeOpen}
 					selected={selected || undefined}
@@ -604,14 +603,34 @@ const ReadingRoomPage: NextPage = () => {
 					}}
 				/>
 			)}
-		</VisitorLayout>
+		</>
 	);
 
-	if (is404Error) {
-		return <Error404 />;
-	} else {
+	const renderPageContent = () => {
+		if (visitRequestIsLoading || visitorSpaceIsLoading) {
+			return <Loading fullscreen />;
+		}
+		if (is404Error) {
+			return <Error404 />;
+		}
 		return renderVisitorSpace();
-	}
+	};
+
+	return (
+		<VisitorLayout>
+			<Head>
+				<title>{createPageTitle(visitorSpace?.name)}</title>
+				<meta
+					name="description"
+					content={
+						visitorSpace?.info ||
+						t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
+					}
+				/>
+			</Head>
+			{renderPageContent()}
+		</VisitorLayout>
+	);
 };
 
 export const getServerSideProps: GetServerSideProps = withI18n();
