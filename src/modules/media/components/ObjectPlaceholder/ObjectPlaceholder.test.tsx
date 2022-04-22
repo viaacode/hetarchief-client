@@ -1,10 +1,16 @@
 import { fireEvent, render } from '@testing-library/react';
+import { Provider } from 'react-redux';
 
+import { mockStore } from './../../../../__mocks__/store';
 import ObjectPlaceholder from './ObjectPlaceholder';
 import { objectPlaceholderMock } from './__mocks__/object-placeholder';
 
 const renderObjectPlaceholder = ({ ...rest }) => {
-	return render(<ObjectPlaceholder {...objectPlaceholderMock} {...rest} />);
+	return render(
+		<Provider store={mockStore}>
+			<ObjectPlaceholder {...objectPlaceholderMock} {...rest} />
+		</Provider>
+	);
 };
 
 describe('Components', () => {
