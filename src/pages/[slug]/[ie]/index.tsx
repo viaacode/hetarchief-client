@@ -1,6 +1,6 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isToday } from 'date-fns/esm';
+import { isToday } from 'date-fns';
 import { kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
