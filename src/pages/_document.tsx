@@ -32,7 +32,7 @@ const Document = (): ReactElement => {
 					type="text/javascript"
 				/>
 				{/* eslint-disable-next-line */}
-				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />,
+				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
 			</CustomHead>
 			<body>
 				<Main />
