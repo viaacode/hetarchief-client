@@ -1,12 +1,18 @@
 import { fireEvent, render } from '@testing-library/react';
 import { ReactNode } from 'react';
+import { Provider } from 'react-redux';
 
+import { mockStore } from './../../../../__mocks__/store';
 import Blade from './Blade';
 import { BladeProps } from './Blade.types';
 import { bladeMock } from './__mocks__/blade';
 
 const renderBlade = (mock: BladeProps = bladeMock, children: ReactNode = <p>some child</p>) => {
-	return render(<Blade {...mock}>{children}</Blade>);
+	return render(
+		<Provider store={mockStore}>
+			<Blade {...mock}>{children}</Blade>
+		</Provider>
+	);
 };
 
 describe('Component: <Blade /> (default)', () => {

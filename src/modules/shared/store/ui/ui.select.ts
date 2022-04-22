@@ -13,4 +13,4 @@ export const selectShowZendesk = (state: AppState): boolean => state.ui.showZend
 export const selectLockScrollRecord = (state: AppState): AppState['ui']['lockScroll'] =>
 	state.ui.lockScroll;
 export const selectIsScrollLocked = (state: AppState): boolean =>
-	!!Object.values(state.ui.lockScroll).find((val) => val === true);
+	!!Object.values(state.ui.lockScroll || {}).find((val) => val === true);

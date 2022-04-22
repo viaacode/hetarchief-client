@@ -5,17 +5,24 @@ import useScrollLock from './use-scroll-lock';
 describe('Hooks', () => {
 	describe('useScrollLock', () => {
 		it('Should lock and unlock scroll ', () => {
-			const { rerender } = renderHook(({ lock }) => useScrollLock(lock, 'Hooks'), {
-				initialProps: { lock: true },
+			const { rerender, waitForNextUpdate } = renderHook(
+				({ lock }) => useScrollLock(lock, 'Hooks'),
+				{
+					initialProps: { lock: true },
+				}
+			);
+
+			waitForNextUpdate().then(() => {
+				expect(document.body).toHaveStyle({ overflowY: 'hidden' });
+				expect(document.body).toHaveAttribute('data-depth');
+
+				rerender({ lock: false });
+
+				waitForNextUpdate().then(() => {
+					expect(document.body).not.toHaveStyle({ overflowY: 'hidden' });
+					expect(document.body).not.toHaveAttribute('data-depth');
+				});
 			});
-
-			expect(document.body).toHaveStyle({ overflowY: 'hidden' });
-			expect(document.body).toHaveAttribute('data-depth');
-
-			rerender({ lock: false });
-
-			expect(document.body).not.toHaveStyle({ overflowY: 'hidden' });
-			expect(document.body).not.toHaveAttribute('data-depth');
 		});
 	});
 });
