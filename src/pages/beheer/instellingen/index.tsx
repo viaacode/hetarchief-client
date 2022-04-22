@@ -27,7 +27,7 @@ const CPSettingsPage: NextPage = () => {
 		data: visitorSpaceInfo,
 		isLoading,
 		refetch,
-	} = useGetReadingRoom(user?.visitorSpaceSlug || null, !!user?.visitorSpaceSlug);
+	} = useGetReadingRoom(user?.visitorSpaceSlug || null, { enabled: !!user?.visitorSpaceSlug });
 
 	/**
 	 * Render

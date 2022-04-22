@@ -121,6 +121,7 @@
   "modules/home/components/cancel-visit-blade/cancel-visit-blade___je-zal-op-de-ingeplande-dag-geen-toegang-hebben-tot-het-materiaal-een-nieuw-bezoek-inplannen-kan-steeds": "Je zal op de ingeplande dag geen toegang hebben tot het materiaal. Een nieuw bezoek inplannen kan steeds.",
   "modules/home/components/cancel-visit-blade/cancel-visit-blade___sluit": "Sluit",
   "modules/home/components/logged-in-home/logged-in-home___de-leeszaal-waarvoor-je-een-aanvraag-wil-indienen-is-niet-ingesteld": "De leeszaal waarvoor je een aanvraag wil indienen is niet ingesteld.",
+  "modules/home/components/logged-in-home/logged-in-home___deze-bezoekersruimte-bestaat-niet": "Deze bezoekersruimte bestaat niet",
   "modules/home/components/logged-in-home/logged-in-home___er-ging-iets-mis-bij-het-versturen-van-je-aanvraag-probeer-het-later-opnieuw-of-contacteer-de-support": "Er ging iets mis bij het versturen van je aanvraag, probeer het later opnieuw of contacteer de support.",
   "modules/home/components/logged-in-home/logged-in-home___error": "Error",
   "modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd": "Je bent niet ingelogd.",
