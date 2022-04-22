@@ -178,7 +178,7 @@ export const getNavigationItemsLeft = (
 		],
 	},
 	{
-		node: renderLink('Admin', '/admin/leeszalenbeheer/aanvragen', {
+		node: renderLink('Admin', '/admin/leeszalenbeheer/leeszalen', {
 			className: linkCls([
 				'u-color-black',
 				'u-color-white:md',
