@@ -108,7 +108,7 @@ const LoggedInHome: FC = () => {
 		if (isRequestAccessBladeOpen) {
 			if (user && !user.acceptedTosAt) {
 				router.push(
-					`/${ROUTES.termsOfService}?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(
+					`${ROUTES.termsOfService}?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(
 						router.asPath
 					)}`
 				);
