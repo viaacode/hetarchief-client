@@ -88,6 +88,7 @@ export interface ReadingRoomInfo {
 	publishedAt: string | null;
 	createdAt: string;
 	updatedAt: string;
+	slug: string;
 }
 
 export enum ReadingRoomStatus {

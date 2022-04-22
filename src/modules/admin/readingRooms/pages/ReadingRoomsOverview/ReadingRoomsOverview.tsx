@@ -8,6 +8,7 @@ import { ReadingRoomService } from '@reading-room/services';
 import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
 import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 
 import {
@@ -62,11 +63,34 @@ const ReadingRoomsOverview: FC = () => {
 	);
 
 	// Callbacks
+	const onFailedRequest = () => {
+		refetch();
+
+		toastService.notify({
+			maxLines: 3,
+			title: t('er ging iets mis'),
+			description: t('er is een fout opgetreden tijdens het aanpassen van de status'),
+		});
+	};
+
 	const updateRoomStatus = (roomId: string, status: ReadingRoomStatus) => {
 		ReadingRoomService.update(roomId, {
 			status: status,
-		});
-		refetch();
+		})
+			.catch(onFailedRequest)
+			.then((response) => {
+				if (response === undefined) {
+					return;
+				}
+
+				refetch();
+
+				toastService.notify({
+					maxLines: 3,
+					title: t('succes'),
+					description: t('de status werd succesvol aangepast'),
+				});
+			});
 	};
 
 	// Render

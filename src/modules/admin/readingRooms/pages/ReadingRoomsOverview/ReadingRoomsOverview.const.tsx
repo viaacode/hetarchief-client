@@ -124,7 +124,7 @@ export const ReadingRoomsOverviewTableColumns = (
 				<>
 					<Link
 						to={generatePath(READING_ROOMS_PATHS.edit, {
-							pageName: row.original.maintainerId,
+							pageName: row.original.slug,
 						})}
 					>
 						<Button
