@@ -5,8 +5,13 @@ import { MediaService } from '@media/services';
 import { Media } from '@media/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
-export function useGetMediaInfo(id: string): UseQueryResult<Media> {
+export function useGetMediaInfo(
+	id: string,
+	onError: (err: unknown) => void
+): UseQueryResult<Media> {
 	return useQuery([QUERY_KEYS.getMediaInfo, { id }], () => MediaService.getById(id), {
 		keepPreviousData: false,
+		retry: false,
+		onError,
 	});
 }

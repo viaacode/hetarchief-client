@@ -115,11 +115,16 @@ const ObjectDetailPage: NextPage = () => {
 	const metadataSize = useElementSize(metadataRef);
 
 	// Fetch object
+	const onError = (error: unknown) => {
+		(error as { response: { status: number } }).response.status === 404 &&
+			router.replace('/404');
+	};
+
 	const {
 		data: mediaInfo,
 		isLoading: isLoadingMediaInfo,
 		isError,
-	} = useGetMediaInfo(router.query.ie as string);
+	} = useGetMediaInfo(router.query.ie as string, onError);
 
 	// playable url
 	const {
