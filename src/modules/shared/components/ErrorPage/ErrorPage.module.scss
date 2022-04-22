@@ -32,6 +32,7 @@ $component: "c-error-page";
 		display: grid;
 		grid-template-rows: 1fr 8rem 2fr;
 		justify-content: center;
+		padding-bottom: $spacer-2xl;
 
 		@include respond-at("md") {
 			grid-template-rows: 1fr 15rem 2fr;

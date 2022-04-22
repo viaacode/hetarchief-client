@@ -43,7 +43,14 @@ import {
 } from '@media/types';
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
-import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
+import {
+	ErrorNotFound,
+	ErrorSpaceNoAccess,
+	Icon,
+	Loading,
+	ScrollableTabs,
+	TabLabel,
+} from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -65,8 +72,6 @@ import {
 	formatTime,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
-
-import Error404 from '../../404';
 
 import {
 	DynamicActionMenu,
@@ -164,9 +169,10 @@ const ObjectDetailPage: NextPage = () => {
 	 * Computed
 	 */
 
-	const is404Error =
+	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
+	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 
 	/**
 	 * Effects
@@ -645,8 +651,11 @@ const ObjectDetailPage: NextPage = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading) {
 			return <Loading fullscreen />;
 		}
-		if (is404Error) {
-			return <Error404 />;
+		if (isErrorNotFound) {
+			return <ErrorNotFound />;
+		}
+		if (isErrorSpaceNoAccess) {
+			return <ErrorSpaceNoAccess visitorSpaceSlug={router.query.slug as string} />;
 		}
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};

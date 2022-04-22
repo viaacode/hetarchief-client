@@ -46,6 +46,9 @@ import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/ty
 import { mapFiltersToTags } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
+	Callout,
+	ErrorNotFound,
+	ErrorSpaceNoAccess,
 	Icon,
 	IdentifiableMediaCard,
 	Loading,
@@ -58,7 +61,6 @@ import {
 	TabLabel,
 	ToggleOption,
 } from '@shared/components';
-import Callout from '@shared/components/Callout/Callout';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -73,8 +75,6 @@ import {
 	formatTime,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
-
-import Error404 from '../404';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -154,7 +154,8 @@ const ReadingRoomPage: NextPage = () => {
 	 * Computed
 	 */
 
-	const is404Error = (visitRequestError as HTTPError)?.response?.status === 404;
+	const isNotFoundError = (visitRequestError as HTTPError)?.response?.status === 404;
+	const isNoAccessError = (visitRequestError as HTTPError)?.response?.status === 403;
 
 	/**
 	 * Effects
@@ -610,8 +611,11 @@ const ReadingRoomPage: NextPage = () => {
 		if (visitRequestIsLoading || visitorSpaceIsLoading) {
 			return <Loading fullscreen />;
 		}
-		if (is404Error) {
-			return <Error404 />;
+		if (isNotFoundError) {
+			return <ErrorNotFound />;
+		}
+		if (isNoAccessError) {
+			return <ErrorSpaceNoAccess visitorSpaceSlug={slug as string} />;
 		}
 		return renderVisitorSpace();
 	};
