@@ -39,7 +39,9 @@ const VisitRequestedPage: NextPage = () => {
 
 	const enabled = typeof slug === 'string';
 	const { data: pending } = useGetPendingVisitCountForUserBySlug(slug as string, enabled);
-	const { data: space } = useGetReadingRoom(slug as string, enabled && (pending?.count || 0) > 0);
+	const { data: space } = useGetReadingRoom(slug as string, {
+		enabled: enabled && (pending?.count || 0) > 0,
+	});
 
 	/**
 	 * Computed

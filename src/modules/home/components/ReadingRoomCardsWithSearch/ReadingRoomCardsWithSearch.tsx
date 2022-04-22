@@ -101,7 +101,7 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRe
 							return {
 								room,
 								type: ReadingRoomCardType.noAccess, // TODO change this based on current logged in user
-								onAccessRequest: () => onRequestAccess(room.id),
+								onAccessRequest: () => onRequestAccess(room.slug),
 							};
 						}
 					)}
