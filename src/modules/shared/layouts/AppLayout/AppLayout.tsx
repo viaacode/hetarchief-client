@@ -62,6 +62,8 @@ const AppLayout: FC = ({ children }) => {
 	const history = useSelector(selectHistory);
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
+	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
 
 	useHistory(asPath, history);
 
@@ -181,7 +183,8 @@ const AppLayout: FC = ({ children }) => {
 					items={getNavigationItemsLeft(
 						asPath,
 						accessibleReadingRooms || [],
-						navigationItems?.[NavigationPlacement.HeaderLeft] || []
+						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
+						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null
 					)}
 					placement="left"
 					renderHamburger={true}

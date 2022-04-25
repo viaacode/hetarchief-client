@@ -57,75 +57,100 @@ const renderLink = (
 	);
 };
 
+const getVisitorSpacesDropdown = (
+	currentPath: string,
+	accessibleReadingRooms: VisitorSpaceInfo[],
+	linkedSpaceSlug: string | null
+): NavigationItem => {
+	if (linkedSpaceSlug) {
+		// Single link to go to linked visitor space (kiosk visitor)
+		return {
+			node: renderLink(i18n?.t('bezoekersruimte') || '', '/' + linkedSpaceSlug, {
+				badge: null,
+				className: linkCls(['u-color-black', 'u-color-white:md', 'u-whitespace-nowrap']),
+			}),
+			id: 'visitor-spaces',
+			active: currentPath === '/' + linkedSpaceSlug,
+		};
+	} else {
+		// Show dropdown list with homepage and accessible visitor spaces
+		return {
+			node: renderLink(
+				i18n?.t('modules/navigation/components/navigation/navigation___bezoekersruimtes') ||
+					'Bezoekersruimtes',
+				'',
+				{
+					badge:
+						accessibleReadingRooms.length > 0 ? (
+							<Badge text={accessibleReadingRooms.length} />
+						) : null,
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						'u-whitespace-nowrap',
+						styles['c-navigation__link--dropdown'],
+					]),
+				}
+			),
+			id: 'visitor-spaces',
+			active: currentPath === ROUTES.home,
+			children: [
+				{
+					node: renderLink(
+						i18n?.t(
+							'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
+						) || 'Alle bezoekersruimtes',
+						'/',
+						{
+							className: dropdownCls(['u-display-none', 'u-display-block:md']),
+						}
+					),
+					id: 'all-visitor-spaces',
+					hasDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
+				},
+				...accessibleReadingRooms.map(
+					(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
+						node: renderLink(
+							visitorSpace.name ||
+								i18n?.t(
+									'modules/navigation/components/navigation/navigation___bezoekersruimte'
+								) ||
+								'',
+							`/${visitorSpace.slug}`,
+							{
+								iconEnd: (
+									<Icon
+										className={clsx(
+											'u-font-size-24',
+											'u-text-left',
+											'u-visibility-hidden',
+											'u-visibility-visible:md',
+											styles['c-navigation__dropdown-icon--end']
+										)}
+										name="angle-right"
+									/>
+								),
+								className: dropdownCls(),
+							}
+						),
+						id: visitorSpace.id,
+					})
+				),
+			],
+		};
+	}
+};
+
 export const getNavigationItemsLeft = (
 	currentPath: string,
 	accessibleReadingRooms: VisitorSpaceInfo[],
-	navigationItems: NavigationInfo[]
+	navigationItems: NavigationInfo[],
+	linkedSpaceSlug: string | null
 ): NavigationItem[] => [
-	{
-		node: renderLink(
-			i18n?.t('modules/navigation/components/navigation/navigation___bezoekersruimtes') ||
-				'Bezoekersruimtes',
-			'',
-			{
-				badge:
-					accessibleReadingRooms.length > 0 ? (
-						<Badge text={accessibleReadingRooms.length} />
-					) : null,
-				className: linkCls([
-					'u-color-black',
-					'u-color-white:md',
-					'u-whitespace-nowrap',
-					styles['c-navigation__link--dropdown'],
-				]),
-			}
-		),
-		id: 'visitor-spaces',
-		active: currentPath === ROUTES.home,
-		children: [
-			{
-				node: renderLink(
-					i18n?.t(
-						'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
-					) || 'Alle bezoekersruimtes',
-					'/',
-					{
-						className: dropdownCls(['u-display-none', 'u-display-block:md']),
-					}
-				),
-				id: 'all-visitor-spaces',
-				hasDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
-			},
-			...accessibleReadingRooms.map(
-				(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
-					node: renderLink(
-						visitorSpace.name ||
-							i18n?.t(
-								'modules/navigation/components/navigation/navigation___bezoekersruimte'
-							) ||
-							'',
-						`/${visitorSpace.slug}`,
-						{
-							iconEnd: (
-								<Icon
-									className={clsx(
-										'u-font-size-24',
-										'u-text-left',
-										'u-visibility-hidden',
-										'u-visibility-visible:md',
-										styles['c-navigation__dropdown-icon--end']
-									)}
-									name="angle-right"
-								/>
-							),
-							className: dropdownCls(),
-						}
-					),
-					id: visitorSpace.id,
-				})
-			),
-		],
-	},
+	// Visitor space dropdown
+	getVisitorSpacesDropdown(currentPath, accessibleReadingRooms, linkedSpaceSlug),
+
+	// Some dynamic links from navigations table in database
 	...navigationItems.map((navigationItem: NavigationInfo): NavigationItem => {
 		return {
 			active: currentPath === navigationItem.contentPath,
@@ -145,6 +170,8 @@ export const getNavigationItemsLeft = (
 			}),
 		};
 	}),
+
+	// CP Admin dropdown link
 	{
 		node: renderLink('Beheer', '', {
 			className: linkCls([
@@ -177,6 +204,8 @@ export const getNavigationItemsLeft = (
 			},
 		],
 	},
+
+	// Meemoo admin link
 	{
 		node: renderLink('Admin', '/admin/leeszalenbeheer/aanvragen', {
 			className: linkCls([

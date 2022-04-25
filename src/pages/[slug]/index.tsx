@@ -86,6 +86,7 @@ const ReadingRoomPage: NextPage = () => {
 	const { slug } = router.query;
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 
 	/**
 	 * State
@@ -493,6 +494,20 @@ const ReadingRoomPage: NextPage = () => {
 		</>
 	);
 
+	const getAccessEndDate = () => {
+		if ((!accessEndDate && !accessEndDateMobile) || showLinkedSpaceAsHomepage) {
+			return undefined;
+		}
+		if (isMobile) {
+			return t('pages/slug/index___tot-access-end-date-mobile', {
+				accessEndDateMobile,
+			});
+		}
+		return t('pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date', {
+			accessEndDate,
+		});
+	};
+
 	return (
 		<VisitorLayout>
 			<Head>
@@ -512,18 +527,7 @@ const ReadingRoomPage: NextPage = () => {
 						phone={space?.contactInfo.telephone || ''}
 						email={space?.contactInfo.email || ''}
 						showBorder={showNavigationBorder}
-						showAccessEndDate={
-							accessEndDate || accessEndDateMobile
-								? isMobile
-									? t(
-											'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
-											{ accessEndDate }
-									  )
-									: t('pages/slug/index___tot-access-end-date-mobile', {
-											accessEndDateMobile,
-									  })
-								: undefined
-						}
+						showAccessEndDate={getAccessEndDate()}
 					/>
 
 					<section className="u-bg-black u-pt-8">
