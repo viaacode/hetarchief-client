@@ -12,7 +12,11 @@ import { useQueryParams } from 'use-query-params';
 
 import { CreateCollectionButton } from '@account/components';
 import { EditCollectionTitle } from '@account/components/EditCollectionTitle';
-import { ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG, CollectionItemListSize } from '@account/const';
+import {
+	ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG,
+	CollectionItemListSize,
+	Permission,
+} from '@account/const';
 import { useGetCollectionExport } from '@account/hooks/get-collection-export';
 import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
 import { useGetCollections } from '@account/hooks/get-collections';
@@ -27,6 +31,7 @@ import {
 	Icon,
 	IdentifiableMediaCard,
 	ListNavigationItem,
+	Loading,
 	MediaCardList,
 	PaginationBar,
 	SearchBar,
@@ -34,6 +39,7 @@ import {
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { Breakpoints } from '@shared/types';
@@ -47,6 +53,18 @@ const AccountMyCollections: NextPage = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 	const { collectionSlug } = router.query;
+	const canManageAccount: boolean | null = useHasAllPermission(Permission.MANAGE_ACCOUNT);
+	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+
+	useEffect(() => {
+		if (!canManageAccount) {
+			toastService.notify({
+				title: t('Geen toegang'),
+				description: t('Je hebt geen rechten om deze pagina te bekijken'),
+			});
+			router.replace('/');
+		}
+	}, [canManageAccount, router]);
 
 	/**
 	 * Data
@@ -163,45 +181,49 @@ const AccountMyCollections: NextPage = () => {
 		};
 
 		return [
-			{
-				before: true,
-				node: (
-					<Button
-						key={'export-collection'}
-						className="p-account-my-collections__export--label"
-						variants={['black']}
-						name={t(
-							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
-						)}
-						label={t(
-							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
-						)}
-						iconStart={<Icon name="export" />}
-						onClick={(e) => {
-							e.stopPropagation();
-							onExportClick();
-						}}
-					/>
-				),
-			},
-			{
-				before: true,
-				node: (
-					<Button
-						key={'export-collection-mobile'}
-						className="p-account-my-collections__export--icon"
-						variants={['black']}
-						name={t(
-							'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
-						)}
-						icon={<Icon name="export" />}
-						onClick={(e) => {
-							e.stopPropagation();
-							onExportClick();
-						}}
-					/>
-				),
-			},
+			...(canDownloadMetadata
+				? [
+						{
+							before: true,
+							node: (
+								<Button
+									key={'export-collection'}
+									className="p-account-my-collections__export--label"
+									variants={['black']}
+									name={t(
+										'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+									)}
+									label={t(
+										'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+									)}
+									iconStart={<Icon name="export" />}
+									onClick={(e) => {
+										e.stopPropagation();
+										onExportClick();
+									}}
+								/>
+							),
+						},
+						{
+							before: true,
+							node: (
+								<Button
+									key={'export-collection-mobile'}
+									className="p-account-my-collections__export--icon"
+									variants={['black']}
+									name={t(
+										'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+									)}
+									icon={<Icon name="export" />}
+									onClick={(e) => {
+										e.stopPropagation();
+										onExportClick();
+									}}
+								/>
+							),
+						},
+				  ]
+				: []),
 			...(activeCollection && !activeCollection.isDefault
 				? [
 						{
@@ -225,7 +247,7 @@ const AccountMyCollections: NextPage = () => {
 				  ]
 				: []),
 		];
-	}, [t, activeCollection, getCollectionExport]);
+	}, [t, activeCollection, getCollectionExport, canDownloadMetadata]);
 
 	const renderActions = (item: IdentifiableMediaCard, collection: Collection) => (
 		<>
@@ -308,6 +330,10 @@ const AccountMyCollections: NextPage = () => {
 			</div>
 		);
 	};
+
+	if (!canManageAccount) {
+		return <Loading fullscreen />;
+	}
 
 	return (
 		<VisitorLayout>

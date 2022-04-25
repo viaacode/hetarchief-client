@@ -8,13 +8,12 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
-import { selectHasPermission } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
@@ -49,6 +48,7 @@ import {
 	Icon,
 	IdentifiableMediaCard,
 	MediaCardList,
+	MediaCardProps,
 	MediaCardViewMode,
 	PaginationBar,
 	Placeholder,
@@ -59,10 +59,10 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { toastService } from '@shared/services/toast-service';
-import { AppState } from '@shared/store';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
@@ -84,15 +84,14 @@ const ReadingRoomPage: NextPage = () => {
 	const windowSize = useWindowSizeContext();
 
 	const { slug } = router.query;
+	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
+	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 
 	/**
 	 * State
 	 */
 
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
-	const showResearchWarning = useSelector((state: AppState) =>
-		selectHasPermission(state, Permission.SHOW_RESEARCH_WARNING)
-	);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -417,6 +416,26 @@ const ReadingRoomPage: NextPage = () => {
 		);
 	};
 
+	const getCardButtons = (item: MediaCardProps): ReactNode => {
+		if (!canManageFolders) {
+			return null;
+		}
+		return (
+			<Button
+				onClick={(e) => {
+					// Avoid navigating to detail when opening
+					e.preventDefault();
+					e.stopPropagation();
+
+					setSelected(item as IdentifiableMediaCard);
+					setShowAddToCollectionBlade(true);
+				}}
+				icon={<Icon type="light" name="bookmark" />}
+				variants={['text', 'xxs']}
+			/>
+		);
+	};
+
 	const renderResults = () => (
 		<>
 			<MediaCardList
@@ -442,20 +461,7 @@ const ReadingRoomPage: NextPage = () => {
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
 				view={viewMode}
-				buttons={(item) => (
-					<Button
-						onClick={(e) => {
-							// Avoid navigating to detail when opening
-							e.preventDefault();
-							e.stopPropagation();
-
-							setSelected(item as IdentifiableMediaCard);
-							setShowAddToCollectionBlade(true);
-						}}
-						icon={<Icon type="light" name="bookmark" />}
-						variants={['text', 'xxs']}
-					/>
-				)}
+				buttons={getCardButtons}
 				wrapper={(card, item) => {
 					const cast = item as IdentifiableMediaCard;
 					const source = media?.items.find(

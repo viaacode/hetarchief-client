@@ -2,7 +2,8 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -12,11 +13,14 @@ import {
 	HistoryTableAccessComboId,
 	HistoryTableAccessFrom,
 	HistoryTableColumns,
+	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
@@ -27,6 +31,18 @@ import { VisitorLayout } from 'modules/visitors';
 const AccountMyHistory: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
+	const canManageAccount: boolean | null = useHasAllPermission(Permission.MANAGE_ACCOUNT);
+	const router = useRouter();
+
+	useEffect(() => {
+		if (!canManageAccount) {
+			toastService.notify({
+				title: t('Geen toegang'),
+				description: t('Je hebt geen rechten om deze pagina te bekijken'),
+			});
+			router.replace('/');
+		}
+	}, [canManageAccount, router]);
 
 	const visits = useGetVisits({
 		searchInput: undefined,
@@ -75,6 +91,10 @@ const AccountMyHistory: NextPage = () => {
 	const renderEmptyMessage = (): string => {
 		return t('pages/account/mijn-historiek/index___geen-historiek');
 	};
+
+	if (!canManageAccount) {
+		return <Loading fullscreen />;
+	}
 
 	return (
 		<VisitorLayout>
