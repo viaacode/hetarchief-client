@@ -16,7 +16,7 @@ export interface AddToCollectionSelected {
 }
 
 export interface AddToCollectionFormStatePair {
-	collection: string;
+	folder: string;
 	ie: string;
 	checked?: boolean;
 }

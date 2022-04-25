@@ -8,7 +8,7 @@ export const ADD_TO_COLLECTION_FORM_SCHEMA = (): SchemaOf<AddToCollectionFormSta
 		pairs: array()
 			.of(
 				object().shape({
-					collection: string().required(
+					folder: string().required(
 						i18n?.t(
 							'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___de-geselecteerde-map-bestaat-niet'
 						)
