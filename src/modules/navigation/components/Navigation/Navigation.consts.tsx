@@ -1,8 +1,10 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { intersection } from 'lodash-es';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
+import { Permission } from '@account/const';
 import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
@@ -114,7 +116,7 @@ const getVisitorSpacesDropdown = (
 						}
 					),
 					id: 'all-visitor-spaces',
-					hasDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
+					isDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
 				},
 				...accessibleReadingRooms.map(
 					(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
@@ -154,17 +156,8 @@ const getVisitorSpacesDropdown = (
 	}
 };
 
-export const getNavigationItemsLeft = (
-	currentPath: string,
-	accessibleReadingRooms: VisitorSpaceInfo[],
-	navigationItems: NavigationInfo[],
-	linkedSpaceSlug: string | null
-): NavigationItem[] => [
-	// Visitor space dropdown
-	getVisitorSpacesDropdown(currentPath, accessibleReadingRooms, linkedSpaceSlug),
-
-	// Some dynamic links from navigations table in database
-	...navigationItems.map((navigationItem: NavigationInfo): NavigationItem => {
+const getDynamicHeaderLinks = (currentPath: string, navigationItems: NavigationInfo[]) => {
+	return navigationItems.map((navigationItem: NavigationInfo): NavigationItem => {
 		return {
 			active: currentPath === navigationItem.contentPath,
 			id: navigationItem.id,
@@ -182,52 +175,133 @@ export const getNavigationItemsLeft = (
 				]),
 			}),
 		};
-	}),
+	});
+};
 
-	// CP Admin dropdown link
-	{
-		node: renderLink('Beheer', '', {
-			className: linkCls([
-				'u-color-black',
-				'u-color-white:md',
-				styles['c-navigation__link--dropdown'],
-			]),
-		}),
-		id: 'nav__beheer',
-		active: currentPath.startsWith('/beheer'),
-		hasDivider: 'md',
-		children: [
-			{
-				node: renderLink('Aanvragen', '/beheer/aanvragen', {
-					className: dropdownCls(),
-				}),
-				id: 'nav__beheer--aanvragen',
-			},
-			{
-				node: renderLink('Bezoekers', '/beheer/bezoekers', {
-					className: dropdownCls(),
-				}),
-				id: 'nav__beheer--bezoekers',
-			},
-			{
-				node: renderLink('Instellingen', '/beheer/instellingen', {
-					className: dropdownCls(),
-				}),
-				id: 'nav__beheer--instellingen',
-			},
-		],
-	},
+const getCpAdminManagementDropdown = (
+	currentPath: string,
+	permissions: Permission[]
+): NavigationItem[] => {
+	if (
+		intersection(permissions, [
+			Permission.APPROVE_DENY_CP_VISIT_REQUESTS,
+			Permission.READ_CP_VISIT_REQUESTS,
+			Permission.UPDATE_OWN_SPACE,
+		]).length === 0
+	) {
+		// User does not have access to any of the cp admin screens
+		return [];
+	}
+	return [
+		{
+			node: renderLink('Beheer', '', {
+				className: linkCls([
+					'u-color-black',
+					'u-color-white:md',
+					styles['c-navigation__link--dropdown'],
+				]),
+			}),
+			id: 'nav__beheer',
+			active: currentPath.startsWith('/beheer'),
+			children: [
+				...(permissions.includes(Permission.APPROVE_DENY_CP_VISIT_REQUESTS)
+					? [
+							{
+								node: renderLink('Aanvragen', '/beheer/aanvragen', {
+									className: dropdownCls(),
+								}),
+								id: 'nav__beheer--aanvragen',
+							},
+					  ]
+					: []),
+				...(permissions.includes(Permission.READ_CP_VISIT_REQUESTS)
+					? [
+							{
+								node: renderLink('Bezoekers', '/beheer/bezoekers', {
+									className: dropdownCls(),
+								}),
+								id: 'nav__beheer--bezoekers',
+							},
+					  ]
+					: []),
+				...(permissions.includes(Permission.UPDATE_OWN_SPACE)
+					? [
+							{
+								node: renderLink('Instellingen', '/beheer/instellingen', {
+									className: dropdownCls(),
+								}),
+								id: 'nav__beheer--instellingen',
+							},
+					  ]
+					: []),
+			],
+		},
+	];
+};
 
-	// Meemoo admin link
-	{
-		node: renderLink('Admin', '/admin/leeszalenbeheer/aanvragen', {
-			className: linkCls([
-				'u-color-black',
-				'u-color-white:md',
-				styles['c-navigation__link--dropdown'],
-			]),
-		}),
-		id: 'nav__admin',
-		active: currentPath.startsWith('/admin'),
-	},
-];
+const getMeemooAdminManagementDropdown = (
+	currentPath: string,
+	permissions: Permission[]
+): NavigationItem[] => {
+	if (
+		intersection(permissions, [
+			Permission.APPROVE_DENY_ALL_VISIT_REQUESTS,
+			Permission.EDIT_ANY_CONTENT_PAGES,
+			Permission.READ_ALL_SPACES,
+			Permission.READ_ALL_VISIT_REQUESTS,
+			Permission.UPDATE_ALL_SPACES,
+		]).length === 0
+	) {
+		// User does not have access to any of the meemoo admin screens
+		return [];
+	}
+	return [
+		{
+			node: renderLink('Admin', '/admin/leeszalenbeheer/aanvragen', {
+				className: linkCls([
+					'u-color-black',
+					'u-color-white:md',
+					styles['c-navigation__link--dropdown'],
+				]),
+			}),
+			id: 'nav__admin',
+			active: currentPath.startsWith('/admin'),
+		},
+	];
+};
+
+export const getNavigationItemsLeft = (
+	currentPath: string,
+	accessibleReadingRooms: VisitorSpaceInfo[],
+	navigationItems: NavigationInfo[],
+	permissions: Permission[],
+	linkedSpaceSlug: string | null
+): NavigationItem[] => {
+	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions);
+	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
+
+	return [
+		// Visitor space dropdown
+		getVisitorSpacesDropdown(currentPath, accessibleReadingRooms, linkedSpaceSlug),
+
+		// Some dynamic links from navigations table in database
+		...getDynamicHeaderLinks(currentPath, navigationItems),
+
+		// Divider separate from the other items, since items can be hidden because of permissions
+		...((cpAdminLinks.length > 0 || meemooAdminLinks.length > 0
+			? [
+					{
+						node: null,
+						id: 'divider-before-admin-routes',
+						isDivider: 'md',
+					},
+			  ]
+			: []) as NavigationItem[]),
+
+		// CP Admin dropdown link
+		...cpAdminLinks,
+
+		// Meemoo admin link
+		...meemooAdminLinks,
+	];
+};

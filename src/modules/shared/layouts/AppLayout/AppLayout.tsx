@@ -184,6 +184,7 @@ const AppLayout: FC = ({ children }) => {
 						asPath,
 						accessibleReadingRooms || [],
 						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
+						user?.permissions || [],
 						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null
 					)}
 					placement="left"
