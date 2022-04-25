@@ -416,7 +416,7 @@ const ReadingRoomPage: NextPage = () => {
 		);
 	};
 
-	const getCardButtons = (item: MediaCardProps): ReactNode => {
+	const renderCardButtons = (item: MediaCardProps): ReactNode => {
 		if (!canManageFolders) {
 			return null;
 		}
