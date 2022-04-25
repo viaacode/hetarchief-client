@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import { CP_ADMIN_NAVIGATION_LINKS } from '@cp/const';
 import { ListNavigationItem } from '@shared/components';
-import ErrorBoundary from '@shared/components/ErrorBoundry/ErrorBoundry';
+import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 
