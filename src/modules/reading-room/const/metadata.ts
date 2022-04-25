@@ -4,7 +4,6 @@ import {
 	TextInput,
 	TextInputProps,
 } from '@meemoo/react-components';
-import { i18n } from 'next-i18next';
 import { FC } from 'react';
 
 import {
@@ -17,6 +16,7 @@ import {
 	MediumSelect,
 } from '@reading-room/components';
 import { MetadataProp } from '@reading-room/types';
+import { i18n } from '@shared/helpers/i18n';
 import {
 	MediaSearchFilterField,
 	MediaSearchFilters,
@@ -38,42 +38,33 @@ export type MetadataConfig = {
 
 export const METADATA_CONFIG = (): MetadataConfig => {
 	const dictionary = {
-		from:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___vanaf'
-			) ?? '',
-		until:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
-			) ?? '',
-		between:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___tussen'
-			) ?? '',
-		contains:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___bevat'
-			) ?? '',
-		excludes:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
-			) ?? '',
-		equals:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___is'
-			) ?? '',
-		differs:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___is-niet'
-			) ?? '',
-		shorter:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
-			) ?? '',
-		longer:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
-			) ?? '',
+		from: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___vanaf'
+		),
+		until: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
+		),
+		between: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___tussen'
+		),
+		contains: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___bevat'
+		),
+		excludes: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
+		),
+		equals: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___is'
+		),
+		differs: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___is-niet'
+		),
+		shorter: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
+		),
+		longer: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
+		),
 	};
 
 	return {
