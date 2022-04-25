@@ -29,6 +29,7 @@ const renderLink = (
 		className,
 		tooltip,
 		target,
+		onClick,
 	}: {
 		badge?: ReactNode;
 		iconStart?: ReactNode;
@@ -36,11 +37,19 @@ const renderLink = (
 		className?: string;
 		tooltip?: string;
 		target?: string;
+		onClick?: () => void;
 	} = {}
 ): ReactNode => {
 	return href ? (
 		<Link href={href}>
-			<a className={className} role="menuitem" tabIndex={0} title={tooltip} target={target}>
+			<a
+				className={className}
+				role="menuitem"
+				tabIndex={0}
+				title={tooltip}
+				target={target}
+				onClick={onClick}
+			>
 				{iconStart && iconStart}
 				{label}
 				{badge && badge}
@@ -98,29 +107,35 @@ export const getNavigationItemsLeft = (
 			},
 			...accessibleReadingRooms.map(
 				(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
-					node: renderLink(
-						visitorSpace.name ||
-							i18n?.t(
-								'modules/navigation/components/navigation/navigation___bezoekersruimte'
-							) ||
-							'',
-						`/${visitorSpace.slug}`,
-						{
-							iconEnd: (
-								<Icon
-									className={clsx(
-										'u-font-size-24',
-										'u-text-left',
-										'u-visibility-hidden',
-										'u-visibility-visible:md',
-										styles['c-navigation__dropdown-icon--end']
-									)}
-									name="angle-right"
-								/>
-							),
-							className: dropdownCls(),
-						}
-					),
+					node: ({ closeDropdowns }) =>
+						renderLink(
+							visitorSpace.name ||
+								i18n?.t(
+									'modules/navigation/components/navigation/navigation___bezoekersruimte'
+								) ||
+								'',
+							`/${visitorSpace.slug}`,
+							{
+								iconEnd: (
+									<Icon
+										className={clsx(
+											'u-font-size-24',
+											'u-text-left',
+											'u-visibility-hidden',
+											'u-visibility-visible:md',
+											styles['c-navigation__dropdown-icon--end']
+										)}
+										name="angle-right"
+									/>
+								),
+								className: dropdownCls(),
+								onClick: () => {
+									if (currentPath === `/${visitorSpace.slug}`) {
+										closeDropdowns?.();
+									}
+								},
+							}
+						),
 					id: visitorSpace.id,
 				})
 			),
