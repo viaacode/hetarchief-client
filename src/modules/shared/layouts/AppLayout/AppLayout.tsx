@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -26,6 +25,7 @@ import { useGetNotifications } from '@shared/components/NotificationCenter/hooks
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { i18n } from '@shared/helpers/i18n';
 import { useHistory } from '@shared/hooks/use-history';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
@@ -98,17 +98,16 @@ const AppLayout: FC = ({ children }) => {
 	const onLogOutClick = useCallback(() => AuthService.logout(), []);
 
 	const rightNavItems: NavigationItem[] = useMemo(() => {
-		return isLoggedIn
-			? NAV_ITEMS_RIGHT_LOGGED_IN({
-					hasUnreadNotifications,
-					notificationsOpen: showNotificationsCenter,
-					userName,
-					onLogOutClick,
-					setNotificationsOpen,
-			  })
-			: i18n
-			? NAV_ITEMS_RIGHT(onLoginRegisterClick)
-			: [];
+		if (isLoggedIn) {
+			return NAV_ITEMS_RIGHT_LOGGED_IN({
+				hasUnreadNotifications,
+				notificationsOpen: showNotificationsCenter,
+				userName,
+				onLogOutClick,
+				setNotificationsOpen,
+			});
+		}
+		return i18n ? NAV_ITEMS_RIGHT(onLoginRegisterClick) : [];
 	}, [
 		hasUnreadNotifications,
 		isLoggedIn,
