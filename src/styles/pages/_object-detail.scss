@@ -183,8 +183,7 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__wrapper--video {
-		.p-object-detail__metadata,
-		.p-object-detail__related {
+		.p-object-detail__metadata {
 			display: none;
 		}
 	}
@@ -215,8 +214,7 @@ $metadata-collapsed-width: 36vw;
 	// Media queries
 
 	@include respond-at(md) {
-		.p-object-detail__metadata,
-		.p-object-detail__related {
+		.p-object-detail__metadata {
 			display: block;
 		}
 
