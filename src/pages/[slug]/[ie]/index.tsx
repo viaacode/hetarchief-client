@@ -1,6 +1,6 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isToday } from 'date-fns/esm';
+import { isToday } from 'date-fns';
 import { kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -534,7 +534,7 @@ const ObjectDetailPage: NextPage = () => {
 								>
 									{mediaInfo?.name}
 								</h3>
-								<p className="u-pb-24 u-line-height-1-4">
+								<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
 									{mediaInfo?.description}
 								</p>
 								<div className="u-pb-24 p-object-detail__actions">

@@ -95,8 +95,10 @@ const LoggedInHome: FC = () => {
 	useEffect(() => {
 		if (isErrorGetVisitorSpace) {
 			toastService.notify({
-				title: t('Error'),
-				description: t('Deze bezoekersruimte bestaat niet'),
+				title: t('modules/home/components/logged-in-home/logged-in-home___error'),
+				description: t(
+					'modules/home/components/logged-in-home/logged-in-home___deze-bezoekersruimte-bestaat-niet'
+				),
 			});
 		}
 	}, [isErrorGetVisitorSpace, t]);
@@ -106,7 +108,7 @@ const LoggedInHome: FC = () => {
 		if (isRequestAccessBladeOpen) {
 			if (user && !user.acceptedTosAt) {
 				router.push(
-					`/${ROUTES.termsOfService}?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(
+					`${ROUTES.termsOfService}?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(
 						router.asPath
 					)}`
 				);
