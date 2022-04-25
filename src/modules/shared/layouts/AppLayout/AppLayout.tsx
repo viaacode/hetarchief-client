@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -26,6 +25,7 @@ import { useGetNotifications } from '@shared/components/NotificationCenter/hooks
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { i18n } from '@shared/helpers/i18n';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
 import { useWindowSize } from '@shared/hooks/use-window-size';
