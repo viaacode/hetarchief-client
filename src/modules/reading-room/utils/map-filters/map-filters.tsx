@@ -1,6 +1,5 @@
 import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
-import { i18n } from 'next-i18next';
 
 import { getMetadataSearchFilters } from '@reading-room/const';
 import {
@@ -11,6 +10,7 @@ import {
 	TagIdentity,
 } from '@reading-room/types';
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
+import { i18n } from '@shared/helpers/i18n';
 import { MediaSearchFilters, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 
@@ -105,12 +105,12 @@ export const mapFiltersToTags = (query: ReadingRoomQueryParams): TagIdentity[] =
 	return [
 		...mapArrayParamToTags(
 			query.search || [],
-			i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord') || '',
+			i18n.t('modules/reading-room/utils/map-filters/map-filters___trefwoord'),
 			SEARCH_QUERY_KEY
 		),
 		...mapArrayParamToTags(
 			query.medium || [],
-			i18n?.t('modules/reading-room/utils/map-filters/map-filters___analoge-drager') || '',
+			i18n.t('modules/reading-room/utils/map-filters/map-filters___analoge-drager'),
 			ReadingRoomFilterId.Medium
 		),
 		...mapAdvancedToTags(query.duration || [], ReadingRoomFilterId.Duration),
@@ -118,22 +118,22 @@ export const mapFiltersToTags = (query: ReadingRoomQueryParams): TagIdentity[] =
 		...mapAdvancedToTags(query.published || [], ReadingRoomFilterId.Published),
 		...mapArrayParamToTags(
 			query.creator || [],
-			i18n?.t('modules/reading-room/utils/map-filters/map-filters___maker') || '',
+			i18n.t('modules/reading-room/utils/map-filters/map-filters___maker'),
 			ReadingRoomFilterId.Creator
 		),
 		...mapArrayParamToTags(
 			query.genre || [],
-			i18n?.t('modules/reading-room/utils/map-filters/map-filters___genre') || '',
+			i18n.t('modules/reading-room/utils/map-filters/map-filters___genre'),
 			ReadingRoomFilterId.Genre
 		),
 		...mapArrayParamToTags(
 			query.keywords || [],
-			i18n?.t('modules/reading-room/utils/map-filters/map-filters___trefwoord') || '',
+			i18n.t('modules/reading-room/utils/map-filters/map-filters___trefwoord'),
 			ReadingRoomFilterId.Keywords
 		),
 		...mapArrayParamToTags(
 			query.language || [],
-			i18n?.t('modules/reading-room/utils/map-filters/map-filters___taal') || '',
+			i18n.t('modules/reading-room/utils/map-filters/map-filters___taal'),
 			ReadingRoomFilterId.Language
 		),
 		...mapAdvancedToTags(query.advanced || []),

@@ -1,7 +1,6 @@
-import { i18n } from 'next-i18next';
-
 import { METADATA_CONFIG, MetadataFields } from '@reading-room/const';
 import { MetadataProp, OperatorOptions, PropertyOptions } from '@reading-room/types';
+import { i18n } from '@shared/helpers/i18n';
 import { Operator } from '@shared/types';
 
 export const getProperties = (): PropertyOptions => {
@@ -41,40 +40,40 @@ export const getField = (prop: MetadataProp, op: Operator): MetadataFields | nul
 export const getLabel = (prop: MetadataProp): string => {
 	return (
 		{
-			[MetadataProp.CreatedAt]: i18n?.t(
+			[MetadataProp.CreatedAt]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___creatiedatum'
 			),
-			[MetadataProp.Creator]: i18n?.t('modules/reading-room/utils/metadata/metadata___maker'),
-			[MetadataProp.Description]: i18n?.t(
+			[MetadataProp.Creator]: i18n.t('modules/reading-room/utils/metadata/metadata___maker'),
+			[MetadataProp.Description]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___beschrijving'
 			),
-			[MetadataProp.Duration]: i18n?.t(
+			[MetadataProp.Duration]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___duurtijd'
 			),
-			[MetadataProp.Era]: i18n?.t(
+			[MetadataProp.Era]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___tijdsperiode-van-de-inhoud'
 			),
-			[MetadataProp.Everything]: i18n?.t(
+			[MetadataProp.Everything]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___alles'
 			),
-			[MetadataProp.Genre]: i18n?.t('modules/reading-room/utils/metadata/metadata___genre'),
-			[MetadataProp.Language]: i18n?.t('modules/reading-room/utils/metadata/metadata___taal'),
-			[MetadataProp.Location]: i18n?.t(
+			[MetadataProp.Genre]: i18n.t('modules/reading-room/utils/metadata/metadata___genre'),
+			[MetadataProp.Language]: i18n.t('modules/reading-room/utils/metadata/metadata___taal'),
+			[MetadataProp.Location]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___locatie-van-de-inhoud'
 			),
-			[MetadataProp.Mediatype]: i18n?.t(
+			[MetadataProp.Mediatype]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___bestandstype'
 			),
-			[MetadataProp.Medium]: i18n?.t(
+			[MetadataProp.Medium]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___analoge-drager'
 			),
-			[MetadataProp.PublishedAt]: i18n?.t(
+			[MetadataProp.PublishedAt]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___publicatiedatum'
 			),
-			[MetadataProp.Publisher]: i18n?.t(
+			[MetadataProp.Publisher]: i18n.t(
 				'modules/reading-room/utils/metadata/metadata___publisher'
 			),
-			[MetadataProp.Title]: i18n?.t('modules/reading-room/utils/metadata/metadata___titel'),
+			[MetadataProp.Title]: i18n.t('modules/reading-room/utils/metadata/metadata___titel'),
 		}[prop] || ''
 	);
 };
