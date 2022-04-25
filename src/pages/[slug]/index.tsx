@@ -417,7 +417,7 @@ const ReadingRoomPage: NextPage = () => {
 		);
 	};
 
-	const getCardButtons = (item: MediaCardProps): ReactNode => {
+	const renderCardButtons = (item: MediaCardProps): ReactNode => {
 		if (!canManageFolders) {
 			return null;
 		}
@@ -462,7 +462,7 @@ const ReadingRoomPage: NextPage = () => {
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
 				view={viewMode}
-				buttons={getCardButtons}
+				buttons={renderCardButtons}
 				wrapper={(card, item) => {
 					const cast = item as IdentifiableMediaCard;
 					const source = media?.items.find(
