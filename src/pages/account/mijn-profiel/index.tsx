@@ -33,12 +33,14 @@ const AccountMyProfile: NextPage = () => {
 	useEffect(() => {
 		if (!canManageAccount) {
 			toastService.notify({
-				title: t('Geen toegang'),
-				description: t('Je hebt geen rechten om deze pagina te bekijken'),
+				title: t('pages/account/mijn-profiel/index___geen-toegang'),
+				description: t(
+					'pages/account/mijn-profiel/index___je-hebt-geen-rechten-om-deze-pagina-te-bekijken'
+				),
 			});
 			router.replace('/');
 		}
-	}, [canManageAccount, router]);
+	}, [canManageAccount, router, t]);
 
 	if (!canManageAccount) {
 		return <Loading fullscreen />;

@@ -461,7 +461,7 @@ const ReadingRoomPage: NextPage = () => {
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
 				view={viewMode}
-				buttons={getCardButtons}
+				buttons={renderCardButtons}
 				wrapper={(card, item) => {
 					const cast = item as IdentifiableMediaCard;
 					const source = media?.items.find(

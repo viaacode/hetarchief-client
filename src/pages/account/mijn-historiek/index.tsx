@@ -37,12 +37,14 @@ const AccountMyHistory: NextPage = () => {
 	useEffect(() => {
 		if (!canManageAccount) {
 			toastService.notify({
-				title: t('Geen toegang'),
-				description: t('Je hebt geen rechten om deze pagina te bekijken'),
+				title: t('pages/account/mijn-historiek/index___geen-toegang'),
+				description: t(
+					'pages/account/mijn-historiek/index___je-hebt-geen-rechten-om-deze-pagina-te-bekijken'
+				),
 			});
 			router.replace('/');
 		}
-	}, [canManageAccount, router]);
+	}, [canManageAccount, router, t]);
 
 	const visits = useGetVisits({
 		searchInput: undefined,
