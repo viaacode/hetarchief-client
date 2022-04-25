@@ -157,7 +157,7 @@ const ReadingRoomsOverview: FC = () => {
 							// TODO: fix type hinting
 							/* eslint-disable @typescript-eslint/ban-types */
 							{
-								columns: RequestTableColumns({ t }) as Column<object>[],
+								columns: RequestTableColumns() as Column<object>[],
 								data: visits?.items || [],
 								initialState: {
 									pageSize: RequestTablePageSize,

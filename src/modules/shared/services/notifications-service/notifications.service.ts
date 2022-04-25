@@ -1,10 +1,10 @@
-import { i18n } from 'next-i18next';
 import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { QueryClient } from 'react-query';
 
 import { NOTIFICATION_TYPE_TO_PATH } from '@shared/components/NotificationCenter/NotificationCenter.consts';
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { i18n } from '@shared/helpers/i18n';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import { ApiResponseWrapper } from '@shared/types';
@@ -60,12 +60,12 @@ export abstract class NotificationsService {
 		const unreadNotifications = notifications.filter(
 			(notification) => notification.status === NotificationStatus.UNREAD
 		);
-		const firstUnread = asDate(unreadNotifications[0]?.createdAt);
+		const firstUnread = asDate(unreadNotifications?.[0]?.createdAt);
 
 		if (
-			unreadNotifications.length > 0 &&
-			firstUnread &&
-			lastCheckNotificationTime < firstUnread.getTime()
+			!!mostRecent && // Do not show notifications if this is the first time we check since loading the site
+			firstUnread && // There is at least one unread notification
+			lastCheckNotificationTime < firstUnread.getTime() // The most recent unread notification was added since the last time we checked
 		) {
 			// A more recent notification exists, we should notify the user of the new notifications
 			const newNotifications = unreadNotifications.filter(
@@ -77,10 +77,9 @@ export abstract class NotificationsService {
 				toastService.notify({
 					title: newNotifications[0].title,
 					description: newNotifications[0].description,
-					buttonLabel:
-						i18n?.t(
-							'modules/shared/services/notifications-service/notifications___bekijk'
-						) || 'Bekijk',
+					buttonLabel: i18n.t(
+						'modules/shared/services/notifications-service/notifications___bekijk'
+					),
 					onClose: async () => {
 						const url = NotificationsService.getPath(newNotifications[0]);
 						if (url) {
@@ -96,20 +95,17 @@ export abstract class NotificationsService {
 			} else {
 				// multiple
 				toastService.notify({
-					title:
-						i18n?.t(
-							'modules/shared/services/notifications-service/notifications___er-zijn-amount-nieuwe-notificaties',
-							{
-								amount: newNotifications.length,
-							}
-						) || `Er zijn ${newNotifications.length} nieuwe notificaties`,
-					description:
-						i18n?.t(
-							'modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht',
-							{ amount: newNotifications.length }
-						) ||
-						`Er zijn ${newNotifications.length} nieuwe notificaties. Bekijk ze in het notificatie overzicht.`,
-					buttonLabel: i18n?.t(
+					title: i18n.t(
+						'modules/shared/services/notifications-service/notifications___er-zijn-amount-nieuwe-notificaties',
+						{
+							amount: newNotifications.length,
+						}
+					),
+					description: i18n.t(
+						'modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht',
+						{ amount: newNotifications.length }
+					),
+					buttonLabel: i18n.t(
 						'modules/shared/services/notifications-service/notifications___bekijk'
 					),
 					onClose: () => {
