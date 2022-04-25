@@ -515,8 +515,8 @@ const ObjectDetailPage: NextPage = () => {
 							!mediaType && 'p-object-detail__metadata--no-media'
 						)}
 					>
-						<div>
-							<div className="u-px-32">
+						<div className="p-object-detail__metadata-content">
+							<div>
 								{showResearchWarning && (
 									<Callout
 										className="p-object-detail__callout u-pt-32 u-pb-24"
@@ -563,7 +563,6 @@ const ObjectDetailPage: NextPage = () => {
 							{mediaInfo && (
 								<>
 									<Metadata
-										className="u-px-32"
 										columns={
 											expandMetadata &&
 											metadataSize &&
@@ -573,9 +572,8 @@ const ObjectDetailPage: NextPage = () => {
 										}
 										metadata={METADATA_FIELDS(mediaInfo)}
 									/>
-									{!!similar.length && (
+									{(!!similar.length || !!mediaInfo.keywords.length) && (
 										<Metadata
-											className="u-px-32"
 											metadata={[
 												{
 													title: t(
@@ -585,10 +583,12 @@ const ObjectDetailPage: NextPage = () => {
 												},
 												{
 													title: 'Ook interessant',
-													data: renderMetadataCards('similar', similar),
+													data: similar.length
+														? renderMetadataCards('similar', similar)
+														: null,
 													className: 'u-pb-0',
 												},
-											]}
+											].filter((field) => !!field.data)}
 										/>
 									)}
 								</>

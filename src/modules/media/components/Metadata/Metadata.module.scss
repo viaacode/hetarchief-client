@@ -3,11 +3,11 @@
 
 .c-metadata {
 	overflow-y: hidden;
+	border-top: $divider-black;
 
 	&__list {
 		@extend %reset-list;
 
-		border-top: $divider-black;
 		margin-top: -0.1rem; // move top borders of first items in a column outside parent container to prevent double border
 		column-gap: $spacer-lg;
 	}
