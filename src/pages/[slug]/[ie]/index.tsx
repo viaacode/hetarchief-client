@@ -415,7 +415,6 @@ const ObjectDetailPage: NextPage = () => {
 			})}
 		</ul>
 	);
-	console.log(showNavigationBorder);
 
 	return (
 		<VisitorLayout>
