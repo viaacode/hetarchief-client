@@ -1,4 +1,5 @@
 import { Column, Table, TableOptions } from '@meemoo/react-components';
+import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import React, { FC, useCallback, useMemo } from 'react';
@@ -10,6 +11,8 @@ import {
 	ReadingRoomsOverviewTablePageSize,
 } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
+import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
 import { VistorSpaceService } from '@reading-room/services';
 import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
@@ -219,4 +222,6 @@ const ReadingRoomsOverview: FC = () => {
 	);
 };
 
-export default ReadingRoomsOverview;
+export const getServerSideProps: GetServerSideProps = withI18n();
+
+export default withAuth(ReadingRoomsOverview);

@@ -1,4 +1,5 @@
 import { Column, Table, TableOptions } from '@meemoo/react-components';
+import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import React, { FC, useCallback, useMemo, useState } from 'react';
@@ -11,15 +12,17 @@ import {
 	RequestTablePageSize,
 } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
+import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
+import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 
-const ReadingRoomsOverview: FC = () => {
+const Requests: FC = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selected, setSelected] = useState<string | number | null>(null);
@@ -225,4 +228,6 @@ const ReadingRoomsOverview: FC = () => {
 	);
 };
 
-export default ReadingRoomsOverview;
+export const getServerSideProps: GetServerSideProps = withI18n();
+
+export default withAuth(Requests);

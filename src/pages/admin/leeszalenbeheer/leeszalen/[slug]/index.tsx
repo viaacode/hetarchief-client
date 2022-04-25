@@ -1,10 +1,13 @@
+import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
 import { AdminLayout } from '@admin/layouts';
+import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettings } from '@cp/components';
+import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { Loading } from '@shared/components';
 import { createPageTitle } from '@shared/utils';
@@ -12,7 +15,7 @@ import { createPageTitle } from '@shared/utils';
 const ReadingRoomEdit: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
-	const slug = router.query.slug;
+	const { slug } = router.query;
 
 	const { data: readingRoomInfo, isLoading, refetch } = useGetReadingRoom(slug as string);
 
@@ -35,7 +38,7 @@ const ReadingRoomEdit: FC = () => {
 			<AdminLayout
 				contentTitle={t('pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen')}
 			>
-				<div>
+				<div className="l-container">
 					{isLoading && <Loading />}
 					{readingRoomInfo && (
 						<ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />
@@ -46,4 +49,6 @@ const ReadingRoomEdit: FC = () => {
 	);
 };
 
-export default ReadingRoomEdit;
+export const getServerSideProps: GetServerSideProps = withI18n();
+
+export default withAuth(ReadingRoomEdit);
