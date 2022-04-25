@@ -26,8 +26,8 @@ module.exports = withTM({
 	async rewrites() {
 		return [
 			{
-				source: '/admin/:path*',
-				destination: '/admin',
+				source: '/:slug',
+				destination: '/spaces/:slug',
 			},
 		];
 	},
