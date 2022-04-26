@@ -665,7 +665,7 @@ const ObjectDetailPage: NextPage = () => {
 	return (
 		<VisitorLayout>
 			<Head>
-				<title>{createPageTitle('Object detail')}</title>
+				<title>{createPageTitle(t('pages/slug/ie/index___object-detail-titel'))}</title>
 				<meta
 					name="description"
 					content={t('pages/slug/ie/index___object-detail-omschrijving')}
