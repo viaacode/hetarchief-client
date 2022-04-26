@@ -68,6 +68,7 @@
   "modules/cp/components/decline-request-blade/decline-request-blade___deze-aanvraag-werd-succesvol-afgekeurd": "Deze aanvraag werd succesvol afgekeurd.",
   "modules/cp/components/decline-request-blade/decline-request-blade___keur-af": "Keur af",
   "modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring": "Reden voor afkeuring",
+  "modules/cp/components/process-request-blade/process-request-blade___aanpassen": "Aanpassen",
   "modules/cp/components/process-request-blade/process-request-blade___aanvrager": "Aanvrager",
   "modules/cp/components/process-request-blade/process-request-blade___emailadres": "Emailadres",
   "modules/cp/components/process-request-blade/process-request-blade___geannuleerde-aanvraag": "Geannuleerde aanvraag",

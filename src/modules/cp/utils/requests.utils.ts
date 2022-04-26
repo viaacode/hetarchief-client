@@ -6,7 +6,7 @@ import { asDate, formatMediumDateWithTime, getLocaleFromi18nLanguage } from '@sh
 export const requestCreatedAtFormatter = (input: Date | string): string => {
 	const date = asDate(input);
 
-	if (date && differenceInDays(new Date(), date) <= 5) {
+	if (date && differenceInDays(new Date(), date) <= 1) {
 		return formatDistanceToNow(date, {
 			addSuffix: true,
 			locale: getLocaleFromi18nLanguage(i18n?.language || ''),
