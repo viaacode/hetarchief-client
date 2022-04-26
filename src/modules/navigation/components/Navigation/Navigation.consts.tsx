@@ -3,12 +3,13 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
+import { ADMIN_SPACES_LINKS } from '@admin/const';
 import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
 import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon, IconName } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 
 const linkCls = (classNames: string[] = []) => {
@@ -90,7 +91,14 @@ export const getNavigationItemsLeft = (
 			}
 		),
 		id: 'visitor-spaces',
-		active: currentPath === ROUTES.home,
+		active:
+			currentPath === ROUTES.home ||
+			Object.keys(ROUTE_PREFIXES).every(
+				(key) =>
+					!currentPath.startsWith(
+						`/${(ROUTE_PREFIXES as { [key: string]: string })[key]}`
+					)
+			),
 		children: [
 			{
 				node: renderLink(
@@ -169,7 +177,7 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'nav__beheer',
-		active: currentPath.startsWith('/beheer'),
+		active: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
 		hasDivider: 'md',
 		children: [
 			{
@@ -193,7 +201,7 @@ export const getNavigationItemsLeft = (
 		],
 	},
 	{
-		node: renderLink('Admin', '', {
+		node: renderLink('Admin', ADMIN_SPACES_LINKS()[0].href, {
 			className: linkCls([
 				'u-color-black',
 				'u-color-white:md',
@@ -201,26 +209,6 @@ export const getNavigationItemsLeft = (
 			]),
 		}),
 		id: 'nav__admin',
-		active: currentPath.startsWith('/admin'),
-		children: [
-			{
-				node: renderLink('Alle leeszalen', '/admin/leeszalenbeheer/leeszalen', {
-					className: dropdownCls(),
-				}),
-				id: 'nav__admin--leeszalen',
-			},
-			{
-				node: renderLink('Aanvragen', '/admin/leeszalenbeheer/aanvragen', {
-					className: dropdownCls(),
-				}),
-				id: 'nav__admin--aanvragen',
-			},
-			{
-				node: renderLink('Actieve bezoekers', '/admin/leeszalenbeheer/bezoekers', {
-					className: dropdownCls(),
-				}),
-				id: 'nav__admin--bezoekers',
-			},
-		],
+		active: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
 	},
 ];
