@@ -10,7 +10,7 @@ import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
 import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon, IconName } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 
 const linkCls = (classNames: string[] = []) => {
@@ -76,10 +76,18 @@ const getVisitorSpacesDropdown = (
 	if (linkedSpaceSlug) {
 		// Single link to go to linked visitor space (kiosk visitor)
 		return {
-			node: renderLink(i18n.t('bezoekersruimte'), '/' + linkedSpaceSlug, {
-				badge: null,
-				className: linkCls(['u-color-black', 'u-color-white:md', 'u-whitespace-nowrap']),
-			}),
+			node: renderLink(
+				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimte'),
+				'/' + linkedSpaceSlug,
+				{
+					badge: null,
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						'u-whitespace-nowrap',
+					]),
+				}
+			),
 			id: 'visitor-spaces',
 			active: currentPath === '/' + linkedSpaceSlug,
 		};
@@ -194,22 +202,32 @@ const getCpAdminManagementDropdown = (
 	}
 	return [
 		{
-			node: renderLink('Beheer', '', {
-				className: linkCls([
-					'u-color-black',
-					'u-color-white:md',
-					styles['c-navigation__link--dropdown'],
-				]),
-			}),
+			node: renderLink(
+				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
+				'/beheer',
+				{
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						styles['c-navigation__link--dropdown'],
+					]),
+				}
+			),
 			id: 'nav__beheer',
-			active: currentPath.startsWith('/beheer'),
+			active: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
 			children: [
 				...(permissions.includes(Permission.APPROVE_DENY_CP_VISIT_REQUESTS)
 					? [
 							{
-								node: renderLink('Aanvragen', '/beheer/aanvragen', {
-									className: dropdownCls(),
-								}),
+								node: renderLink(
+									i18n.t(
+										'modules/navigation/components/navigation/navigation___aanvragen'
+									),
+									'/beheer/aanvragen',
+									{
+										className: dropdownCls(),
+									}
+								),
 								id: 'nav__beheer--aanvragen',
 							},
 					  ]
@@ -217,9 +235,15 @@ const getCpAdminManagementDropdown = (
 				...(permissions.includes(Permission.READ_CP_VISIT_REQUESTS)
 					? [
 							{
-								node: renderLink('Bezoekers', '/beheer/bezoekers', {
-									className: dropdownCls(),
-								}),
+								node: renderLink(
+									i18n.t(
+										'modules/navigation/components/navigation/navigation___bezoekers'
+									),
+									'/beheer/bezoekers',
+									{
+										className: dropdownCls(),
+									}
+								),
 								id: 'nav__beheer--bezoekers',
 							},
 					  ]
@@ -227,9 +251,15 @@ const getCpAdminManagementDropdown = (
 				...(permissions.includes(Permission.UPDATE_OWN_SPACE)
 					? [
 							{
-								node: renderLink('Instellingen', '/beheer/instellingen', {
-									className: dropdownCls(),
-								}),
+								node: renderLink(
+									i18n.t(
+										'modules/navigation/components/navigation/navigation___instellingen'
+									),
+									'/beheer/instellingen',
+									{
+										className: dropdownCls(),
+									}
+								),
 								id: 'nav__beheer--instellingen',
 							},
 					  ]
@@ -257,15 +287,19 @@ const getMeemooAdminManagementDropdown = (
 	}
 	return [
 		{
-			node: renderLink('Admin', '/admin/leeszalenbeheer/aanvragen', {
-				className: linkCls([
-					'u-color-black',
-					'u-color-white:md',
-					styles['c-navigation__link--dropdown'],
-				]),
-			}),
+			node: renderLink(
+				i18n.t('modules/navigation/components/navigation/navigation___admin'),
+				'/admin/leeszalenbeheer/aanvragen',
+				{
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						styles['c-navigation__link--dropdown'],
+					]),
+				}
+			),
 			id: 'nav__admin',
-			active: currentPath.startsWith('/admin'),
+			active: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
 		},
 	];
 };
