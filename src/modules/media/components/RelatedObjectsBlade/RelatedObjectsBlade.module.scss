@@ -3,16 +3,20 @@
 $component: "c-related-objects-blade";
 
 .#{$component} {
-	max-height: 8.8rem;
+	max-height: 6.5rem;
 	background-color: $black;
 	transition: max-height $animate-default;
+
+	@include respond-at("md") {
+		max-height: 8.8rem;
+	}
 
 	&__toggle {
 		cursor: pointer;
 		display: flex;
 		align-items: center;
 		width: 100%;
-		padding: $spacer-lg;
+		padding: 2rem;
 		border: none;
 		color: $white;
 		border-bottom: $divider-white;
@@ -21,6 +25,10 @@ $component: "c-related-objects-blade";
 		&:focus-visible {
 			outline: 0.2rem solid $teal;
 			outline-offset: -0.2rem;
+		}
+
+		@include respond-at("md") {
+			padding: $spacer-lg;
 		}
 	}
 
