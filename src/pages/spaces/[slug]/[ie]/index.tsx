@@ -1,7 +1,8 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isToday } from 'date-fns';
-import { kebabCase, lowerCase } from 'lodash-es';
+import { HTTPError } from 'ky';
+import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -10,7 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { Permission } from '@account/const';
@@ -41,7 +42,14 @@ import {
 } from '@media/types';
 import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
-import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
+import {
+	ErrorNotFound,
+	ErrorSpaceNoAccess,
+	Icon,
+	Loading,
+	ScrollableTabs,
+	TabLabel,
+} from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useElementSize } from '@shared/hooks/use-element-size';
@@ -52,7 +60,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
-import { selectShowNavigationBorder } from '@shared/store/ui';
+import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import {
 	asDate,
@@ -82,6 +90,7 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const { t } = useTranslation();
 	const router = useRouter();
+	const dispatch = useDispatch();
 	const previousUrl = useSelector(selectPreviousUrl);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
@@ -116,8 +125,9 @@ const ObjectDetailPage: NextPage = () => {
 	// Fetch object
 	const {
 		data: mediaInfo,
-		isLoading: isLoadingMediaInfo,
-		isError,
+		isLoading: mediaInfoIsLoading,
+		isError: mediaInfoIsError,
+		error: mediaInfoError,
 	} = useGetMediaInfo(router.query.ie as string);
 
 	// playable url
@@ -149,11 +159,28 @@ const ObjectDetailPage: NextPage = () => {
 	const { mutateAsync: getMediaExport } = useGetMediaExport();
 
 	// visit info
-	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+	const {
+		data: visitRequest,
+		error: visitRequestError,
+		isLoading: visitRequestIsLoading,
+	} = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	/**
+	 * Computed
+	 */
+
+	const isErrorNotFound =
+		(visitRequestError as HTTPError)?.response?.status === 404 ||
+		(mediaInfoError as HTTPError)?.response?.status === 404;
+	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		dispatch(setShowZendesk(false));
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (router.query.ie) {
@@ -175,7 +202,7 @@ const ObjectDetailPage: NextPage = () => {
 		if (previousUrl) {
 			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
 			const validBacklink =
-				subgroups?.length === 1 && lowerCase(subgroups[0]).startsWith('or-');
+				subgroups?.length === 1 && subgroups[0]?.startsWith(router.query.slug as string);
 
 			if (validBacklink) {
 				backLink = previousUrl;
@@ -224,12 +251,14 @@ const ObjectDetailPage: NextPage = () => {
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
 	const isMobile = windowSize.width && windowSize.width > 700;
 	const accessEndDate =
-		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
+		visitRequest && visitRequest.endAt
+			? formatMediumDateWithTime(asDate(visitRequest.endAt))
+			: '';
 	const accessEndDateMobile =
-		visitStatus && visitStatus.endAt
-			? isToday(asDate(visitStatus.endAt) ?? 0)
-				? formatTime(asDate(visitStatus.endAt))
-				: formatDate(asDate(visitStatus.endAt))
+		visitRequest && visitRequest.endAt
+			? isToday(asDate(visitRequest.endAt) ?? 0)
+				? formatTime(asDate(visitRequest.endAt))
+				: formatDate(asDate(visitRequest.endAt))
 			: '';
 
 	/**
@@ -415,221 +444,212 @@ const ObjectDetailPage: NextPage = () => {
 		</ul>
 	);
 
-	return (
-		<VisitorLayout>
-			<div className="p-object-detail">
-				<Head>
-					<title>{createPageTitle('Object detail')}</title>
-					<meta name="description" content="Object detail omschrijving" />
-				</Head>
-				<ReadingRoomNavigation
-					className="p-object-detail__nav"
-					showBorder={showNavigationBorder}
-					title={mediaInfo?.maintainerName ?? ''}
-					backLink={backLink}
-					showAccessEndDate={
-						accessEndDate || accessEndDateMobile
-							? isMobile
-								? t(
-										'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
-										{ accessEndDate }
-								  )
-								: t('pages/slug/ie/index___tot-access-end-date-mobile', {
-										accessEndDateMobile,
-								  })
-							: undefined
-					}
-				/>
-				<ScrollableTabs
-					className="p-object-detail__tabs"
-					variants={['dark']}
-					tabs={tabs}
-					onClick={onTabClick}
-				/>
-				{isLoadingMediaInfo && <Loading fullscreen />}
-				{isError && (
-					<p className={'p-object-detail__error'}>
-						{t(
-							'pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
-						)}
+	const renderMetaData = () => {
+		return (
+			<div>
+				<div className="p-object-detail__metadata-content">
+					{showResearchWarning && (
+						<Callout
+							className="p-object-detail__callout u-pt-32 u-pb-24"
+							icon={<Icon name="info" />}
+							text={t(
+								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+							)}
+						/>
+					)}
+					<h3
+						className={clsx('u-pb-24', {
+							'u-pt-24': showResearchWarning,
+							'u-pt-32': !showResearchWarning,
+						})}
+					>
+						{mediaInfo?.name}
+					</h3>
+					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
+						{mediaInfo?.description}
 					</p>
-				)}{' '}
-				<article
+					<div className="u-pb-24 p-object-detail__actions">
+						{canDownloadMetadata && (
+							<Button
+								className="p-object-detail__export"
+								iconStart={<Icon name="export" />}
+								onClick={onExportClick}
+							>
+								<span className="u-text-ellipsis u-display-none u-display-block:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+									)}
+								</span>
+								<span className="u-text-ellipsis u-display-none:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+									)}
+								</span>
+							</Button>
+						)}
+						<DynamicActionMenu
+							{...MEDIA_ACTIONS(canManageFolders)}
+							onClickAction={onClickAction}
+						/>
+					</div>
+				</div>
+				{mediaInfo && (
+					<>
+						<Metadata
+							className="u-px-32"
+							columns={
+								expandMetadata && metadataSize && metadataSize?.width > 500 ? 2 : 1
+							}
+							metadata={METADATA_FIELDS(mediaInfo)}
+						/>
+						{(!!similar.length || !!mediaInfo.keywords.length) && (
+							<Metadata
+								className="u-px-32"
+								metadata={[
+									{
+										title: t(
+											'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
+										),
+										data: mapKeywordsToTagList(mediaInfo.keywords),
+									},
+									{
+										title: 'Ook interessant',
+										data: renderMetadataCards('similar', similar),
+										className: 'u-pb-0',
+									},
+								].filter((field) => !!field.data)}
+							/>
+						)}
+					</>
+				)}
+			</div>
+		);
+	};
+
+	const renderRelatedObjectsBlade = () => {
+		if (!related.length) {
+			return null;
+		}
+		return (
+			<RelatedObjectsBlade
+				className={clsx(
+					'p-object-detail__related',
+					'p-object-detail__metadata--collapsed',
+					expandMetadata && 'p-object-detail__metadata--expanded'
+				)}
+				icon={<Icon className="u-font-size-24 u-mr-8 u-text-left" name="related-objects" />}
+				title={
+					related.length === 1
+						? t(
+								'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
+						  )
+						: t(
+								'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+								{
+									amount: related.length,
+								}
+						  )
+				}
+				renderContent={(hidden) => renderMetadataCards('related', related, hidden)}
+			/>
+		);
+	};
+
+	const renderObjectMedia = () => {
+		if (mediaType) {
+			return (
+				<>
+					{playableUrl && currentRepresentation ? (
+						// Flowplayer/image/not playable
+						renderMedia(playableUrl, currentRepresentation)
+					) : (
+						// Loading/error
+						<div>{renderMediaPlaceholder()}</div>
+					)}
+					{showFragmentSlider && (
+						<FragmentSlider
+							thumbnail={mediaInfo.thumbnailUrl}
+							className="p-object-detail__slider"
+							fragments={mediaInfo?.representations ?? []}
+							onChangeFragment={(index) =>
+								setCurrentRepresentation(mediaInfo?.representations[index])
+							}
+						/>
+					)}
+				</>
+			);
+		}
+		return <ObjectPlaceholder {...objectPlaceholder()} />;
+	};
+
+	const renderObjectDetail = () => (
+		<>
+			<ReadingRoomNavigation
+				className="p-object-detail__nav"
+				showBorder={showNavigationBorder}
+				title={mediaInfo?.maintainerName ?? ''}
+				backLink={backLink}
+				showAccessEndDate={
+					accessEndDate || accessEndDateMobile
+						? isMobile
+							? t(
+									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+									{ accessEndDate }
+							  )
+							: t('pages/slug/ie/index___tot-access-end-date-mobile', {
+									accessEndDateMobile,
+							  })
+						: undefined
+				}
+			/>
+			<ScrollableTabs
+				className="p-object-detail__tabs"
+				variants={['dark']}
+				tabs={tabs}
+				onClick={onTabClick}
+			/>
+			{mediaInfoIsError && (
+				<p className={'p-object-detail__error'}>
+					{t(
+						'pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+					)}
+				</p>
+			)}
+			<article
+				className={clsx(
+					'p-object-detail__wrapper',
+					mediaInfoIsLoading && 'p-object-detail--hidden ',
+					mediaInfoIsError && 'p-object-detail--hidden ',
+					expandMetadata && 'p-object-detail__wrapper--expanded',
+					activeTab === ObjectDetailTabs.Metadata && 'p-object-detail__wrapper--metadata',
+					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
+				)}
+			>
+				{mediaType && (
+					<Button
+						className={clsx(
+							'p-object-detail__expand-button',
+							expandMetadata && 'p-object-detail__expand-button--expanded'
+						)}
+						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
+						onClick={onClickToggle}
+						variants="white"
+					/>
+				)}
+				<div className="p-object-detail__video">{renderObjectMedia()}</div>
+				<div
+					ref={metadataRef}
 					className={clsx(
-						'p-object-detail__wrapper',
-						isLoadingMediaInfo && 'p-object-detail--hidden ',
-						isError && 'p-object-detail--hidden ',
-						expandMetadata && 'p-object-detail__wrapper--expanded',
-						activeTab === ObjectDetailTabs.Metadata &&
-							'p-object-detail__wrapper--metadata',
-						activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
+						'p-object-detail__metadata',
+						'p-object-detail__metadata--collapsed',
+						expandMetadata && 'p-object-detail__metadata--expanded',
+						!mediaType && 'p-object-detail__metadata--no-media'
 					)}
 				>
-					{mediaType && (
-						<Button
-							className={clsx(
-								'p-object-detail__expand-button',
-								expandMetadata && 'p-object-detail__expand-button--expanded'
-							)}
-							icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
-							onClick={onClickToggle}
-							variants="white"
-						/>
-					)}
-					<div className="p-object-detail__video">
-						{mediaType ? (
-							<>
-								{playableUrl && currentRepresentation ? (
-									// Flowplayer/image/not playable
-									renderMedia(playableUrl, currentRepresentation)
-								) : (
-									// Loading/error
-									<div>{renderMediaPlaceholder()}</div>
-								)}
-								{showFragmentSlider && (
-									<FragmentSlider
-										thumbnail={mediaInfo.thumbnailUrl}
-										className="p-object-detail__slider"
-										fragments={mediaInfo?.representations ?? []}
-										onChangeFragment={(index) =>
-											setCurrentRepresentation(
-												mediaInfo?.representations[index]
-											)
-										}
-									/>
-								)}
-							</>
-						) : (
-							<>
-								<ObjectPlaceholder {...objectPlaceholder()} />
-							</>
-						)}
-					</div>
-					<div
-						ref={metadataRef}
-						className={clsx(
-							'p-object-detail__metadata',
-							'p-object-detail__metadata--collapsed',
-							expandMetadata && 'p-object-detail__metadata--expanded',
-							!mediaType && 'p-object-detail__metadata--no-media'
-						)}
-					>
-						<div>
-							<div className="u-px-32">
-								{showResearchWarning && (
-									<Callout
-										className="p-object-detail__callout u-pt-32 u-pb-24"
-										icon={<Icon name="info" />}
-										text={t(
-											'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
-										)}
-									/>
-								)}
-								<h3
-									className={clsx('u-pb-24', {
-										'u-pt-24': showResearchWarning,
-										'u-pt-32': !showResearchWarning,
-									})}
-								>
-									{mediaInfo?.name}
-								</h3>
-								<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
-									{mediaInfo?.description}
-								</p>
-								{(canDownloadMetadata || canManageFolders) && (
-									<div className="u-pb-24 p-object-detail__actions">
-										{canDownloadMetadata && (
-											<Button
-												className="p-object-detail__export"
-												iconStart={<Icon name="export" />}
-												onClick={onExportClick}
-											>
-												<span className="u-text-ellipsis u-display-none u-display-block:md">
-													{t(
-														'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
-													)}
-												</span>
-												<span className="u-text-ellipsis u-display-none:md">
-													{t(
-														'pages/leeszaal/reading-room-slug/object-id/index___metadata'
-													)}
-												</span>
-											</Button>
-										)}
-										<DynamicActionMenu
-											{...MEDIA_ACTIONS(canManageFolders)}
-											onClickAction={onClickAction}
-										/>
-									</div>
-								)}
-							</div>
-							{mediaInfo && (
-								<>
-									<Metadata
-										className="u-px-32"
-										columns={
-											expandMetadata &&
-											metadataSize &&
-											metadataSize?.width > 500
-												? 2
-												: 1
-										}
-										metadata={METADATA_FIELDS(mediaInfo)}
-									/>
-									{!!similar.length && (
-										<Metadata
-											className="u-px-32"
-											metadata={[
-												{
-													title: t(
-														'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
-													),
-													data: mapKeywordsToTagList(mediaInfo.keywords),
-												},
-												{
-													title: 'Ook interessant',
-													data: renderMetadataCards('similar', similar),
-													className: 'u-pb-0',
-												},
-											]}
-										/>
-									)}
-								</>
-							)}
-						</div>
-					</div>
-					{!!related.length && (
-						<RelatedObjectsBlade
-							className={clsx(
-								'p-object-detail__related',
-								'p-object-detail__metadata--collapsed',
-								expandMetadata && 'p-object-detail__metadata--expanded'
-							)}
-							icon={
-								<Icon
-									className="u-font-size-24 u-mr-8 u-text-left"
-									name="related-objects"
-								/>
-							}
-							title={
-								related.length === 1
-									? t(
-											'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
-									  )
-									: t(
-											'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
-											{
-												amount: related.length,
-											}
-									  )
-							}
-							renderContent={(hidden) =>
-								renderMetadataCards('related', related, hidden)
-							}
-						/>
-					)}
-				</article>
-			</div>
+					{renderMetaData()}
+				</div>
+				{renderRelatedObjectsBlade()}
+			</article>
 			{canManageFolders && (
 				<AddToCollectionBlade
 					isOpen={activeBlade === MediaActions.Bookmark}
@@ -641,6 +661,32 @@ const ObjectDetailPage: NextPage = () => {
 					onSubmit={onCloseBlade}
 				/>
 			)}
+		</>
+	);
+
+	const renderPageContent = () => {
+		if (mediaInfoIsLoading || visitRequestIsLoading) {
+			return <Loading fullscreen />;
+		}
+		if (isErrorNotFound) {
+			return <ErrorNotFound />;
+		}
+		if (isErrorSpaceNoAccess) {
+			return <ErrorSpaceNoAccess visitorSpaceSlug={router.query.slug as string} />;
+		}
+		return <div className="p-object-detail">{renderObjectDetail()}</div>;
+	};
+
+	return (
+		<VisitorLayout>
+			<Head>
+				<title>{createPageTitle(t('pages/slug/ie/index___object-detail-titel'))}</title>
+				<meta
+					name="description"
+					content={t('pages/slug/ie/index___object-detail-omschrijving')}
+				/>
+			</Head>
+			{renderPageContent()}
 		</VisitorLayout>
 	);
 };

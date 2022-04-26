@@ -10,7 +10,7 @@ import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
 import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon, IconName } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 
 const linkCls = (classNames: string[] = []) => {
@@ -202,15 +202,19 @@ const getCpAdminManagementDropdown = (
 	}
 	return [
 		{
-			node: renderLink('Beheer', '', {
-				className: linkCls([
-					'u-color-black',
-					'u-color-white:md',
-					styles['c-navigation__link--dropdown'],
-				]),
-			}),
+			node: renderLink(
+				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
+				'/beheer',
+				{
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						styles['c-navigation__link--dropdown'],
+					]),
+				}
+			),
 			id: 'nav__beheer',
-			active: currentPath.startsWith('/beheer'),
+			active: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
 			children: [
 				...(permissions.includes(Permission.APPROVE_DENY_CP_VISIT_REQUESTS)
 					? [
@@ -291,7 +295,7 @@ const getMeemooAdminManagementDropdown = (
 				}
 			),
 			id: 'nav__admin',
-			active: currentPath.startsWith('/admin'),
+			active: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
 		},
 	];
 };

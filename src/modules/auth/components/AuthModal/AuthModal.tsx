@@ -74,7 +74,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 				</p>
 
 				<Button
-					iconStart={<Icon name="log-in" />}
+					iconStart={<Icon className="u-text-left" name="log-in" />}
 					label={t(
 						'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 					)}
