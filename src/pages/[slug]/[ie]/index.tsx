@@ -198,7 +198,7 @@ const ObjectDetailPage: NextPage = () => {
 		if (previousUrl) {
 			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
 			const validBacklink =
-				subgroups?.length === 1 && lowerCase(subgroups[0]).startsWith('or-');
+				subgroups?.length === 1 && subgroups[0]?.startsWith(router.query.slug as string);
 
 			if (validBacklink) {
 				backLink = previousUrl;
