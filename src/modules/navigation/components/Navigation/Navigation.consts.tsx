@@ -76,10 +76,18 @@ const getVisitorSpacesDropdown = (
 	if (linkedSpaceSlug) {
 		// Single link to go to linked visitor space (kiosk visitor)
 		return {
-			node: renderLink(i18n.t('bezoekersruimte'), '/' + linkedSpaceSlug, {
-				badge: null,
-				className: linkCls(['u-color-black', 'u-color-white:md', 'u-whitespace-nowrap']),
-			}),
+			node: renderLink(
+				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimte'),
+				'/' + linkedSpaceSlug,
+				{
+					badge: null,
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						'u-whitespace-nowrap',
+					]),
+				}
+			),
 			id: 'visitor-spaces',
 			active: currentPath === '/' + linkedSpaceSlug,
 		};
@@ -207,9 +215,15 @@ const getCpAdminManagementDropdown = (
 				...(permissions.includes(Permission.APPROVE_DENY_CP_VISIT_REQUESTS)
 					? [
 							{
-								node: renderLink('Aanvragen', '/beheer/aanvragen', {
-									className: dropdownCls(),
-								}),
+								node: renderLink(
+									i18n.t(
+										'modules/navigation/components/navigation/navigation___aanvragen'
+									),
+									'/beheer/aanvragen',
+									{
+										className: dropdownCls(),
+									}
+								),
 								id: 'nav__beheer--aanvragen',
 							},
 					  ]
@@ -217,9 +231,15 @@ const getCpAdminManagementDropdown = (
 				...(permissions.includes(Permission.READ_CP_VISIT_REQUESTS)
 					? [
 							{
-								node: renderLink('Bezoekers', '/beheer/bezoekers', {
-									className: dropdownCls(),
-								}),
+								node: renderLink(
+									i18n.t(
+										'modules/navigation/components/navigation/navigation___bezoekers'
+									),
+									'/beheer/bezoekers',
+									{
+										className: dropdownCls(),
+									}
+								),
 								id: 'nav__beheer--bezoekers',
 							},
 					  ]
@@ -227,9 +247,15 @@ const getCpAdminManagementDropdown = (
 				...(permissions.includes(Permission.UPDATE_OWN_SPACE)
 					? [
 							{
-								node: renderLink('Instellingen', '/beheer/instellingen', {
-									className: dropdownCls(),
-								}),
+								node: renderLink(
+									i18n.t(
+										'modules/navigation/components/navigation/navigation___instellingen'
+									),
+									'/beheer/instellingen',
+									{
+										className: dropdownCls(),
+									}
+								),
 								id: 'nav__beheer--instellingen',
 							},
 					  ]
@@ -257,13 +283,13 @@ const getMeemooAdminManagementDropdown = (
 	}
 	return [
 		{
-			node: renderLink('Admin', '/admin/leeszalenbeheer/aanvragen', {
-				className: linkCls([
-					'u-color-black',
-					'u-color-white:md',
-					styles['c-navigation__link--dropdown'],
-				]),
-			}),
+			node: renderLink(
+				i18n.t('modules/navigation/components/navigation/navigation___admin'),
+				'/admin/leeszalenbeheer/aanvragen',
+				{
+					className: linkCls(['u-color-black', 'u-color-white:md']),
+				}
+			),
 			id: 'nav__admin',
 			active: currentPath.startsWith('/admin'),
 		},

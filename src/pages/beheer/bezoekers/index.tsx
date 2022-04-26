@@ -6,6 +6,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ApproveRequestBlade } from '@cp/components';
 import { RequestTablePageSize } from '@cp/const/requests.const';
@@ -25,6 +26,7 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -309,4 +311,6 @@ const CPVisitorsPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(CPVisitorsPage);
+export default withAuth(
+	withAllRequiredPermissions(CPVisitorsPage, Permission.READ_CP_VISIT_REQUESTS)
+);

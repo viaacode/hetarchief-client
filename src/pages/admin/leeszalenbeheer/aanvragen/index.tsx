@@ -5,6 +5,7 @@ import Head from 'next/head';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
+import { Permission } from '@account/const';
 import {
 	ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
 	requestStatusFilters,
@@ -18,6 +19,9 @@ import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
@@ -26,6 +30,9 @@ const Requests: FC = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selected, setSelected] = useState<string | number | null>(null);
+	const canEditVisitRequests: boolean | null = useHasAllPermission(
+		Permission.APPROVE_DENY_ALL_VISIT_REQUESTS
+	);
 
 	const {
 		data: visits,
@@ -83,10 +90,19 @@ const Requests: FC = () => {
 
 	const onRowClick = useCallback(
 		(e, row) => {
+			if (!canEditVisitRequests) {
+				toastService.notify({
+					title: t('pages/admin/leeszalenbeheer/aanvragen/index___geen-rechten'),
+					description: t(
+						'pages/admin/leeszalenbeheer/aanvragen/index___je-hebt-geen-rechten-om-bezoekaanvragen-te-bewerken'
+					),
+				});
+				return;
+			}
 			const request = (row as { original: Visit }).original;
 			setSelected(request.id);
 		},
-		[setSelected]
+		[setSelected, canEditVisitRequests, t]
 	);
 
 	// Render
@@ -230,4 +246,4 @@ const Requests: FC = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(Requests);
+export default withAuth(withAllRequiredPermissions(Requests, Permission.READ_ALL_VISIT_REQUESTS));

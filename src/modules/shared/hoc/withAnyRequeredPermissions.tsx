@@ -26,7 +26,7 @@ export const withAnyRequiredPermissions = (
 					),
 				});
 			}
-		}, [router, hasRequiredPermissions]);
+		}, [router, hasRequiredPermissions, t]);
 
 		if (!hasRequiredPermissions) {
 			return <Loading fullscreen />;

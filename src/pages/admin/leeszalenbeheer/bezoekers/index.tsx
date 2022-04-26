@@ -5,6 +5,7 @@ import Head from 'next/head';
 import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
+import { Permission } from '@account/const';
 import {
 	ADMIN_VISITORS_QUERY_PARAM_CONFIG,
 	VisitorsTableColumns,
@@ -16,6 +17,7 @@ import { ApproveRequestBlade } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
 import { ConfirmationModal, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -272,4 +274,4 @@ const Visitors: FC = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(Visitors);
+export default withAuth(withAllRequiredPermissions(Visitors, Permission.READ_ALL_VISIT_REQUESTS));
