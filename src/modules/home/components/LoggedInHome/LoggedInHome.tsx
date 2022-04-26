@@ -14,7 +14,7 @@ import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
-import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
+import { ROUTES } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
@@ -102,19 +102,6 @@ const LoggedInHome: FC = () => {
 			});
 		}
 	}, [isErrorGetVisitorSpace, t]);
-
-	// Divert users to the TOS if they try to request access before accepting
-	useEffect(() => {
-		if (isRequestAccessBladeOpen) {
-			if (user && !user.acceptedTosAt) {
-				router.push(
-					`${ROUTES.termsOfService}?${REDIRECT_TO_QUERY_KEY}=${encodeURIComponent(
-						router.asPath
-					)}`
-				);
-			}
-		}
-	}, [isRequestAccessBladeOpen, router, user]);
 
 	/**
 	 * Methods
@@ -333,4 +320,4 @@ const LoggedInHome: FC = () => {
 	);
 };
 
-export default withAuth(LoggedInHome, false);
+export default withAuth(LoggedInHome);
