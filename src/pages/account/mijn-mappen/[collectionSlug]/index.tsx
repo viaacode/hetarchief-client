@@ -31,7 +31,6 @@ import {
 	Icon,
 	IdentifiableMediaCard,
 	ListNavigationItem,
-	Loading,
 	MediaCardList,
 	PaginationBar,
 	SearchBar,
@@ -39,6 +38,7 @@ import {
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
@@ -53,20 +53,7 @@ const AccountMyCollections: NextPage = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 	const { collectionSlug } = router.query;
-	const canManageAccount: boolean | null = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
-
-	useEffect(() => {
-		if (!canManageAccount) {
-			toastService.notify({
-				title: t('pages/account/mijn-mappen/collection-slug/index___geen-toegang'),
-				description: t(
-					'pages/account/mijn-mappen/collection-slug/index___je-hebt-geen-rechten-om-deze-pagina-te-bekijken'
-				),
-			});
-			router.replace('/');
-		}
-	}, [canManageAccount, router, t]);
 
 	/**
 	 * Data
@@ -333,10 +320,6 @@ const AccountMyCollections: NextPage = () => {
 		);
 	};
 
-	if (!canManageAccount) {
-		return <Loading fullscreen />;
-	}
-
 	return (
 		<VisitorLayout>
 			<Head>
@@ -494,4 +477,6 @@ const AccountMyCollections: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(AccountMyCollections);
+export default withAuth(
+	withAllRequiredPermissions(AccountMyCollections, Permission.MANAGE_ACCOUNT)
+);

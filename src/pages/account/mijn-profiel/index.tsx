@@ -4,9 +4,7 @@ import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
@@ -15,9 +13,8 @@ import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { Icon, Loading } from '@shared/components';
-import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { toastService } from '@shared/services/toast-service';
+import { Icon } from '@shared/components';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { createPageTitle } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -27,24 +24,6 @@ const { publicRuntimeConfig } = getConfig();
 const AccountMyProfile: NextPage = () => {
 	const user = useSelector(selectUser);
 	const { t } = useTranslation();
-	const canManageAccount: boolean = useHasAllPermission(Permission.MANAGE_ACCOUNT);
-	const router = useRouter();
-
-	useEffect(() => {
-		if (!canManageAccount) {
-			toastService.notify({
-				title: t('pages/account/mijn-profiel/index___geen-toegang'),
-				description: t(
-					'pages/account/mijn-profiel/index___je-hebt-geen-rechten-om-deze-pagina-te-bekijken'
-				),
-			});
-			router.replace('/');
-		}
-	}, [canManageAccount, router, t]);
-
-	if (!canManageAccount) {
-		return <Loading fullscreen />;
-	}
 
 	return (
 		<VisitorLayout>
@@ -118,4 +97,4 @@ const AccountMyProfile: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(AccountMyProfile);
+export default withAuth(withAllRequiredPermissions(AccountMyProfile, Permission.MANAGE_ACCOUNT));
