@@ -1,5 +1,4 @@
 import { TabProps } from '@meemoo/react-components';
-import { i18n, TFunction } from 'next-i18next';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
@@ -9,6 +8,7 @@ import { requestCreatedAtFormatter } from '@cp/utils';
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
+import { i18n } from '@shared/helpers/i18n';
 import { Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDateWithTime } from '@shared/utils';
 
@@ -43,9 +43,7 @@ export const requestStatusFilters = (): TabProps[] => {
 	];
 };
 
-export const RequestTableColumns = (
-	i18n: { t: TFunction } = { t: (x: string) => x }
-): Column<Visit>[] => [
+export const RequestTableColumns = (): Column<Visit>[] => [
 	{
 		Header: i18n.t('modules/admin/const/requests___leeszaal') || '',
 		accessor: 'spaceName',

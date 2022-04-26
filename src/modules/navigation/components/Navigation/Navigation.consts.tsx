@@ -1,6 +1,5 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { i18n } from 'next-i18next';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
@@ -10,6 +9,7 @@ import { NavigationInfo } from '@navigation/services/navigation-service/navigati
 import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon, IconName } from '@shared/components';
 import { ROUTES } from '@shared/const';
+import { i18n } from '@shared/helpers/i18n';
 
 const linkCls = (classNames: string[] = []) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -29,6 +29,7 @@ const renderLink = (
 		className,
 		tooltip,
 		target,
+		onClick,
 	}: {
 		badge?: ReactNode;
 		iconStart?: ReactNode;
@@ -36,11 +37,19 @@ const renderLink = (
 		className?: string;
 		tooltip?: string;
 		target?: string;
+		onClick?: () => void;
 	} = {}
 ): ReactNode => {
 	return href ? (
 		<Link href={href}>
-			<a className={className} role="menuitem" tabIndex={0} title={tooltip} target={target}>
+			<a
+				className={className}
+				role="menuitem"
+				tabIndex={0}
+				title={tooltip}
+				target={target}
+				onClick={onClick}
+			>
 				{iconStart && iconStart}
 				{label}
 				{badge && badge}
@@ -64,7 +73,7 @@ export const getNavigationItemsLeft = (
 ): NavigationItem[] => [
 	{
 		node: renderLink(
-			i18n?.t('modules/navigation/components/navigation/navigation___bezoekersruimtes') ||
+			i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes') ||
 				'Bezoekersruimtes',
 			'',
 			{
@@ -85,9 +94,9 @@ export const getNavigationItemsLeft = (
 		children: [
 			{
 				node: renderLink(
-					i18n?.t(
+					i18n.t(
 						'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
-					) || 'Alle bezoekersruimtes',
+					),
 					'/',
 					{
 						className: dropdownCls(['u-display-none', 'u-display-block:md']),
@@ -98,29 +107,35 @@ export const getNavigationItemsLeft = (
 			},
 			...accessibleReadingRooms.map(
 				(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
-					node: renderLink(
-						visitorSpace.name ||
-							i18n?.t(
-								'modules/navigation/components/navigation/navigation___bezoekersruimte'
-							) ||
-							'',
-						`/${visitorSpace.slug}`,
-						{
-							iconEnd: (
-								<Icon
-									className={clsx(
-										'u-font-size-24',
-										'u-text-left',
-										'u-visibility-hidden',
-										'u-visibility-visible:md',
-										styles['c-navigation__dropdown-icon--end']
-									)}
-									name="angle-right"
-								/>
-							),
-							className: dropdownCls(),
-						}
-					),
+					node: ({ closeDropdowns }) =>
+						renderLink(
+							visitorSpace.name ||
+								i18n.t(
+									'modules/navigation/components/navigation/navigation___bezoekersruimte'
+								) ||
+								'',
+							`/${visitorSpace.slug}`,
+							{
+								iconEnd: (
+									<Icon
+										className={clsx(
+											'u-font-size-24',
+											'u-text-left',
+											'u-visibility-hidden',
+											'u-visibility-visible:md',
+											styles['c-navigation__dropdown-icon--end']
+										)}
+										name="angle-right"
+									/>
+								),
+								className: dropdownCls(),
+								onClick: () => {
+									if (currentPath === `/${visitorSpace.slug}`) {
+										closeDropdowns?.();
+									}
+								},
+							}
+						),
 					id: visitorSpace.id,
 				})
 			),

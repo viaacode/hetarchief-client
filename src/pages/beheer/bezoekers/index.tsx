@@ -233,7 +233,6 @@ const CPVisitorsPage: NextPage = () => {
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
 									columns: VisitorsTableColumns(
-										t,
 										denyVisitRequest,
 										editVisitRequest
 									) as Column<object>[],
