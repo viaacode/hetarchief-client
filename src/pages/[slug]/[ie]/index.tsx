@@ -2,7 +2,7 @@ import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isToday } from 'date-fns';
 import { HTTPError } from 'ky';
-import { kebabCase, lowerCase } from 'lodash-es';
+import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -11,7 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { Permission } from '@account/const';
@@ -61,7 +61,7 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { AppState } from '@shared/store';
 import { selectPreviousUrl } from '@shared/store/history';
-import { selectShowNavigationBorder } from '@shared/store/ui';
+import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import {
 	asDate,
@@ -91,6 +91,7 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 	const { t } = useTranslation();
 	const router = useRouter();
+	const dispatch = useDispatch();
 	const previousUrl = useSelector(selectPreviousUrl);
 	const showResearchWarning = useSelector((state: AppState) =>
 		selectHasPermission(state, Permission.SHOW_RESEARCH_WARNING)
@@ -177,6 +178,10 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		dispatch(setShowZendesk(false));
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (router.query.ie) {
@@ -531,7 +536,7 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 				>
 					<div>
-						<div className="u-px-32">
+						<div className="p-object-detail__metadata-content">
 							{showResearchWarning && (
 								<Callout
 									className="p-object-detail__callout u-pt-32 u-pb-24"
@@ -586,7 +591,7 @@ const ObjectDetailPage: NextPage = () => {
 									}
 									metadata={METADATA_FIELDS(mediaInfo)}
 								/>
-								{!!similar.length && (
+								{(!!similar.length || !!mediaInfo.keywords.length) && (
 									<Metadata
 										className="u-px-32"
 										metadata={[
@@ -601,7 +606,7 @@ const ObjectDetailPage: NextPage = () => {
 												data: renderMetadataCards('similar', similar),
 												className: 'u-pb-0',
 											},
-										]}
+										].filter((field) => !!field.data)}
 									/>
 								)}
 							</>
