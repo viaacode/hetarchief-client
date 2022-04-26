@@ -14,7 +14,6 @@ import { useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { Permission } from '@account/const';
-import { selectHasPermission } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
@@ -44,6 +43,7 @@ import { mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import { Icon, Loading, ScrollableTabs, TabLabel } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -51,7 +51,6 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { AppState } from '@shared/store';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
@@ -84,9 +83,9 @@ const ObjectDetailPage: NextPage = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 	const previousUrl = useSelector(selectPreviousUrl);
-	const showResearchWarning = useSelector((state: AppState) =>
-		selectHasPermission(state, Permission.SHOW_RESEARCH_WARNING)
-	);
+	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
+	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
+	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	// Internal state
 	const [backLink, setBackLink] = useState(`/${router.query.slug}`);
@@ -537,28 +536,32 @@ const ObjectDetailPage: NextPage = () => {
 								<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
 									{mediaInfo?.description}
 								</p>
-								<div className="u-pb-24 p-object-detail__actions">
-									<Button
-										className="p-object-detail__export"
-										iconStart={<Icon name="export" />}
-										onClick={onExportClick}
-									>
-										<span className="u-text-ellipsis u-display-none u-display-block:md">
-											{t(
-												'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
-											)}
-										</span>
-										<span className="u-text-ellipsis u-display-none:md">
-											{t(
-												'pages/leeszaal/reading-room-slug/object-id/index___metadata'
-											)}
-										</span>
-									</Button>
-									<DynamicActionMenu
-										{...MEDIA_ACTIONS()}
-										onClickAction={onClickAction}
-									/>
-								</div>
+								{(canDownloadMetadata || canManageFolders) && (
+									<div className="u-pb-24 p-object-detail__actions">
+										{canDownloadMetadata && (
+											<Button
+												className="p-object-detail__export"
+												iconStart={<Icon name="export" />}
+												onClick={onExportClick}
+											>
+												<span className="u-text-ellipsis u-display-none u-display-block:md">
+													{t(
+														'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+													)}
+												</span>
+												<span className="u-text-ellipsis u-display-none:md">
+													{t(
+														'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+													)}
+												</span>
+											</Button>
+										)}
+										<DynamicActionMenu
+											{...MEDIA_ACTIONS(canManageFolders)}
+											onClickAction={onClickAction}
+										/>
+									</div>
+								)}
 							</div>
 							{mediaInfo && (
 								<>
@@ -627,15 +630,17 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 				</article>
 			</div>
-			<AddToCollectionBlade
-				isOpen={activeBlade === MediaActions.Bookmark}
-				selected={{
-					schemaIdentifier: mediaInfo?.schemaIdentifier ?? '',
-					title: mediaInfo?.name,
-				}}
-				onClose={onCloseBlade}
-				onSubmit={onCloseBlade}
-			/>
+			{canManageFolders && (
+				<AddToCollectionBlade
+					isOpen={activeBlade === MediaActions.Bookmark}
+					selected={{
+						schemaIdentifier: mediaInfo?.schemaIdentifier ?? '',
+						title: mediaInfo?.name,
+					}}
+					onClose={onCloseBlade}
+					onSubmit={onCloseBlade}
+				/>
+			)}
 		</VisitorLayout>
 	);
 };

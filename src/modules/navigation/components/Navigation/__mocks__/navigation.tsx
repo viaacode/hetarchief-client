@@ -77,7 +77,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					className: dropdownCls(['u-display-none', 'u-display-block:md']),
 				}),
 				id: 'alle leeszalen',
-				hasDivider: 'md',
+				isDivider: 'md',
 			},
 			{
 				node: renderLink('VRT', `/OR-vrt123`, {
@@ -146,7 +146,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			]),
 		}),
 		id: 'nav__beheer',
-		hasDivider: 'md',
+		isDivider: 'md',
 		children: [
 			{
 				node: renderLink('Aanvragen', '/beheer/aanvragen', {
@@ -208,7 +208,7 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 					),
 				}),
 				id: 'auth log uit',
-				hasDivider: true,
+				isDivider: true,
 			},
 		],
 	},
