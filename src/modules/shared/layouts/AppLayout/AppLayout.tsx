@@ -20,6 +20,7 @@ import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/g
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
 import { NotificationCenter, ZendeskWrapper } from '@shared/components';
+import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
@@ -190,7 +191,7 @@ const AppLayout: FC = ({ children }) => {
 
 			<main className="l-app__main">
 				<WindowSizeContext.Provider value={windowSize}>
-					{children}
+					<ErrorBoundary>{children}</ErrorBoundary>
 				</WindowSizeContext.Provider>
 				<NotificationCenter
 					isOpen={showNotificationsCenter}
