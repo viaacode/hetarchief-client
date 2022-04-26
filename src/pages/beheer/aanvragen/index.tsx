@@ -84,7 +84,7 @@ const CPRequestsPage: NextPage = () => {
 	const onRowClick = useCallback(
 		(_, row) => {
 			const request = (row as { original: Visit }).original;
-			setFilters({ request: request.id });
+			setFilters({ visitRequest: request.id });
 		},
 		[setFilters]
 	);
@@ -200,7 +200,7 @@ const CPRequestsPage: NextPage = () => {
 											setFilters({
 												...filters,
 												page: pageZeroBased + 1,
-												request: undefined,
+												visitRequest: undefined,
 											});
 										}}
 									/>
@@ -218,9 +218,9 @@ const CPRequestsPage: NextPage = () => {
 			</CPAdminLayout>
 
 			<ProcessRequestBlade
-				isOpen={!!filters.request}
-				selected={visits?.items?.find((x) => x.id === filters.request)}
-				onClose={() => setFilters({ request: undefined })}
+				isOpen={!!filters.visitRequest}
+				selected={visits?.items?.find((x) => x.id === filters.visitRequest)}
+				onClose={() => setFilters({ visitRequest: undefined })}
 				onFinish={refetch}
 			/>
 		</>
