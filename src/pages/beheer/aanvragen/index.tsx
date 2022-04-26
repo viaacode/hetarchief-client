@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
-import { useQueryParams } from 'use-query-params';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
@@ -26,7 +26,6 @@ import { useGetVisits } from '@visits/hooks/get-visits';
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
-	const [selected, setSelected] = useState<string | number | null>(null);
 
 	const {
 		data: visits,
@@ -83,11 +82,11 @@ const CPRequestsPage: NextPage = () => {
 	);
 
 	const onRowClick = useCallback(
-		(e, row) => {
+		(_, row) => {
 			const request = (row as { original: Visit }).original;
-			setSelected(request.id);
+			setFilters({ request: request.id });
 		},
-		[setSelected]
+		[setFilters]
 	);
 
 	// Render
@@ -198,10 +197,10 @@ const CPRequestsPage: NextPage = () => {
 										total={visits?.total || 0}
 										onPageChange={(pageZeroBased) => {
 											gotoPage(pageZeroBased);
-											setSelected(null);
 											setFilters({
 												...filters,
 												page: pageZeroBased + 1,
+												request: undefined,
 											});
 										}}
 									/>
@@ -219,9 +218,9 @@ const CPRequestsPage: NextPage = () => {
 			</CPAdminLayout>
 
 			<ProcessRequestBlade
-				isOpen={selected !== null}
-				selected={visits?.items?.find((x) => x.id === selected)}
-				onClose={() => setSelected(null)}
+				isOpen={!!filters.request}
+				selected={visits?.items?.find((x) => x.id === filters.request)}
+				onClose={() => setFilters({ request: undefined })}
 				onFinish={refetch}
 			/>
 		</>

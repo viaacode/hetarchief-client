@@ -15,6 +15,7 @@ import { asDate, formatMediumDateWithTime } from '@shared/utils';
 export const RequestTablePageSize = 20;
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
+	request: withDefault(StringParam, undefined),
 	status: withDefault(StringParam, RequestStatusAll.ALL),
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
