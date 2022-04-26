@@ -13,8 +13,8 @@ export class VistorSpaceService {
 		searchInput = '',
 		page = 0,
 		size = 20,
-		orderProp: ReadingRoomOrderProps = ReadingRoomOrderProps.CreatedAt,
-		orderDirection: OrderDirection = OrderDirection.desc
+		orderProp?: ReadingRoomOrderProps,
+		orderDirection?: OrderDirection
 	): Promise<ApiResponseWrapper<VisitorSpaceInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
@@ -63,8 +63,8 @@ export class VistorSpaceService {
 		const formData = new FormData();
 
 		// Set form data
-		values.color && formData.append('color', values.color ?? '');
-		values.image && formData.append('image', values.image ?? '');
+		values.color && formData.append('color', values.color);
+		values.image && formData.append('image', values.image);
 		values.file && formData.append('file', values.file);
 		values.description && formData.append('description', values.description);
 		values.serviceDescription &&

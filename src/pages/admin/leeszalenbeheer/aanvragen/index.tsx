@@ -109,18 +109,18 @@ const Requests: FC = () => {
 		<>
 			<Head>
 				<title>
-					{createPageTitle(t('pages/admin/leeszalenbeheer/aanvragen/index___actieve'))}
+					{createPageTitle(t('pages/admin/leeszalenbeheer/aanvragen/index___aanvragen'))}
 				</title>
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/aanvragen/index___actieve-meta-omscrhijving'
+						'pages/admin/leeszalenbeheer/aanvragen/index___aanvragen-meta-omscrhijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				contentTitle={t('pages/admin/leeszalenbeheer/aanvragen/index___actieve-bezoekers')}
+				contentTitle={t('pages/admin/leeszalenbeheer/aanvragen/index___aanvragen')}
 			>
 				<div className="p-admin-requests l-container">
 					<div className="p-admin-requests__header">

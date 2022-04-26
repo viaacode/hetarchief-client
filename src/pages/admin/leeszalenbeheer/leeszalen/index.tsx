@@ -29,6 +29,7 @@ const ReadingRoomsOverview: FC = () => {
 	const {
 		data: readingRooms,
 		isLoading,
+		isError,
 		refetch,
 	} = useGetReadingRooms(
 		filters.search,
@@ -86,7 +87,7 @@ const ReadingRoomsOverview: FC = () => {
 		})
 			.catch(onFailedRequest)
 			.then((response) => {
-				if (response === undefined) {
+				if (!response) {
 					return;
 				}
 
@@ -104,10 +105,110 @@ const ReadingRoomsOverview: FC = () => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
-		return t(
-			'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geen-leeszalen-gevonden'
-		);
+	const renderVisitorSpaces = () => (
+		<>
+			<div className="p-admin-reading-rooms__header">
+				<SearchBar
+					backspaceRemovesValue={false}
+					className="p-admin-reading-rooms__search"
+					instanceId="admin-reading-rooms-search-bar"
+					light={true}
+					placeholder={t(
+						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___zoek'
+					)}
+					searchValue={filters.search}
+					size="md"
+					onClear={() => {
+						setFilters({
+							[SEARCH_QUERY_KEY]: '',
+							page: 1,
+						});
+					}}
+					onSearch={(searchValue: string) => {
+						// Force rerender
+						if (filters.search === searchValue) {
+							setFilters({
+								[SEARCH_QUERY_KEY]: '',
+								page: 1,
+							});
+						}
+
+						setFilters({
+							[SEARCH_QUERY_KEY]: searchValue,
+							page: 1,
+						});
+					}}
+				/>
+			</div>
+
+			<div className="l-container--edgeless-to-lg">
+				<Table
+					className="u-mt-24"
+					options={
+						// TODO: fix type hinting
+						/* eslint-disable @typescript-eslint/ban-types */
+						{
+							columns: ReadingRoomsOverviewTableColumns(
+								updateRoomStatus
+							) as Column<object>[],
+							data: readingRooms?.items || [],
+							initialState: {
+								pageSize: ReadingRoomsOverviewTablePageSize,
+								sortBy: sortFilters,
+							},
+						} as TableOptions<object>
+						/* eslint-enable @typescript-eslint/ban-types */
+					}
+					onSortChange={onSortChange}
+					sortingIcons={sortingIcons}
+					pagination={({ gotoPage }) => {
+						return (
+							<PaginationBar
+								className="u-mt-16 u-mb-16"
+								count={ReadingRoomsOverviewTablePageSize}
+								start={
+									Math.max(0, filters.page - 1) *
+									ReadingRoomsOverviewTablePageSize
+								}
+								total={readingRooms?.total || 0}
+								onPageChange={(pageZeroBased) => {
+									gotoPage(pageZeroBased);
+									setFilters({
+										...filters,
+										page: pageZeroBased + 1,
+									});
+								}}
+							/>
+						);
+					}}
+				/>
+			</div>
+		</>
+	);
+
+	const renderPageContent = () => {
+		if (isLoading) {
+			return <Loading />;
+		}
+		if (isError) {
+			return (
+				<p className="p-admin-reading-rooms__error">
+					{t(
+						'pages/admin/leeszalenbeheer/leeszalen/index___er-ging-iets-mis-bij-het-ophalen-van-de-leeszalen'
+					)}
+				</p>
+			);
+		}
+		if (!readingRooms) {
+			return (
+				<p className="p-admin-reading-rooms__error">
+					{t(
+						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geen-leeszalen-gevonden'
+					)}
+				</p>
+			);
+		}
+		return renderVisitorSpaces();
 	};
 
 	return (
@@ -129,94 +230,7 @@ const ReadingRoomsOverview: FC = () => {
 			<AdminLayout
 				contentTitle={t('pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen')}
 			>
-				<div className="l-container">
-					{!isLoading && readingRooms ? (
-						<>
-							<div className="p-admin-reading-rooms__header">
-								<SearchBar
-									backspaceRemovesValue={false}
-									className="p-admin-reading-rooms__search"
-									instanceId="admin-reading-rooms-search-bar"
-									light={true}
-									placeholder={t(
-										'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___zoek'
-									)}
-									searchValue={filters.search}
-									size="md"
-									onClear={() => {
-										setFilters({
-											[SEARCH_QUERY_KEY]: '',
-											page: 1,
-										});
-									}}
-									onSearch={(searchValue: string) => {
-										// Force rerender
-										if (filters.search === searchValue) {
-											setFilters({
-												[SEARCH_QUERY_KEY]: '',
-												page: 1,
-											});
-										}
-
-										setFilters({
-											[SEARCH_QUERY_KEY]: searchValue,
-											page: 1,
-										});
-									}}
-								/>
-							</div>
-
-							<div className="l-container--edgeless-to-lg">
-								<Table
-									className="u-mt-24"
-									options={
-										// TODO: fix type hinting
-										/* eslint-disable @typescript-eslint/ban-types */
-										{
-											columns: ReadingRoomsOverviewTableColumns(
-												t,
-												updateRoomStatus
-											) as Column<object>[],
-											data: readingRooms.items || [],
-											initialState: {
-												pageSize: ReadingRoomsOverviewTablePageSize,
-												sortBy: sortFilters,
-											},
-										} as TableOptions<object>
-										/* eslint-enable @typescript-eslint/ban-types */
-									}
-									onSortChange={onSortChange}
-									sortingIcons={sortingIcons}
-									pagination={({ gotoPage }) => {
-										return (
-											<PaginationBar
-												className="u-mt-16 u-mb-16"
-												count={ReadingRoomsOverviewTablePageSize}
-												start={
-													Math.max(0, filters.page - 1) *
-													ReadingRoomsOverviewTablePageSize
-												}
-												total={readingRooms.total || 0}
-												onPageChange={(pageZeroBased) => {
-													gotoPage(pageZeroBased);
-													// setSelected(null);
-													setFilters({
-														...filters,
-														page: pageZeroBased + 1,
-													});
-												}}
-											/>
-										);
-									}}
-								/>
-							</div>
-						</>
-					) : (
-						<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-							{isLoading ? <Loading /> : renderEmptyMessage()}
-						</div>
-					)}
-				</div>
+				<div className="l-container">{renderPageContent()}</div>
 			</AdminLayout>
 		</>
 	);

@@ -133,19 +133,19 @@ const Visitors: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/admin/leeszalenbeheer/bezoekers/index___alle-leeszalen')
+						t('pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers')
 					)}
 				</title>
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/bezoekers/index___alle-leeszalen-meta-omscrhijving'
+						'pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers-meta-omscrhijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				contentTitle={t('pages/admin/leeszalenbeheer/bezoekers/index___alle-leeszalen')}
+				contentTitle={t('pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers')}
 			>
 				<div className="p-admin-visitors l-container">
 					<div className="p-admin-visitors__header">
@@ -191,7 +191,6 @@ const Visitors: FC = () => {
 									/* eslint-disable @typescript-eslint/ban-types */
 									{
 										columns: VisitorsTableColumns(
-											t,
 											denyVisitRequest,
 											editVisitRequest
 										) as Column<object>[],

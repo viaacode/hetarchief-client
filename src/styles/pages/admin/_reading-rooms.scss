@@ -13,12 +13,7 @@ $page: "p-admin-reading-rooms";
 	}
 
 	&__error {
-		&__error {
-			height: 100%;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			color: $neutral;
-		}
+		text-align: center;
+		color: $neutral;
 	}
 }
