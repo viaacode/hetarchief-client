@@ -188,6 +188,7 @@
   "modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___de-geselecteerde-map-bestaat-niet": "De geselecteerde map bestaat niet",
   "modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-ging-iets-mis": "Er ging iets mis",
   "modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw": "Er is een fout opgetreden tijdens het opslaan, probeer opnieuw.",
+  "modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___het-geselecteerde-item-bestaat-niet": "Het geselecteerde item bestaat niet",
   "modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collection": "\"{{item}}\" is toegevoegd aan \"{{collection}}\".",
   "modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collection": "\"{{item}}\" is verwijderd uit \"{{collection}}\".",
   "modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___item-toegevoegd-aan-map": "Item toegevoegd aan map",
