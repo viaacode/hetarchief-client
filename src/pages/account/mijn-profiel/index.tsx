@@ -7,12 +7,14 @@ import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import { useSelector } from 'react-redux';
 
+import { Permission } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { createPageTitle } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -95,4 +97,4 @@ const AccountMyProfile: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(AccountMyProfile);
+export default withAuth(withAllRequiredPermissions(AccountMyProfile, Permission.MANAGE_ACCOUNT));
