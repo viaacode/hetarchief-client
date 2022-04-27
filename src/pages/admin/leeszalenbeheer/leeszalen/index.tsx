@@ -5,6 +5,7 @@ import Head from 'next/head';
 import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
+import { Permission } from '@account/const';
 import {
 	ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG,
 	ReadingRoomsOverviewTableColumns,
@@ -18,6 +19,7 @@ import { VistorSpaceService } from '@reading-room/services';
 import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
 import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequeredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -238,4 +240,6 @@ const ReadingRoomsOverview: FC = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(ReadingRoomsOverview);
+export default withAuth(
+	withAnyRequiredPermissions(ReadingRoomsOverview, Permission.READ_ALL_SPACES)
+);

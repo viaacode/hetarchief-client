@@ -4,12 +4,14 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
+import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettings } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { Loading } from '@shared/components';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomEdit: FC = () => {
@@ -51,4 +53,4 @@ const ReadingRoomEdit: FC = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(ReadingRoomEdit);
+export default withAuth(withAllRequiredPermissions(ReadingRoomEdit, Permission.UPDATE_ALL_SPACES));
