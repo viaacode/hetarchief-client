@@ -73,18 +73,30 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={t(
-						'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
-					)}
+					label={
+						selected && selected?.status === VisitStatus.APPROVED
+							? t(
+									'modules/cp/components/process-request-blade/process-request-blade___aanpassen'
+							  )
+							: t(
+									'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
+							  )
+					}
 					iconStart={<Icon name="check" />}
 					variants={['block', 'black']}
 					onClick={() => setShowApprove(true)}
 				/>
 
 				<Button
-					label={t(
-						'modules/cp/components/process-request-blade/process-request-blade___weigeren'
-					)}
+					label={
+						selected && selected?.status === VisitStatus.DENIED
+							? t(
+									'modules/cp/components/process-request-blade/process-request-blade___aanpassen'
+							  )
+							: t(
+									'modules/cp/components/process-request-blade/process-request-blade___weigeren'
+							  )
+					}
 					iconStart={<Icon name="forbidden" />}
 					variants={['block', 'text']}
 					onClick={() => setShowDecline(true)}
@@ -92,6 +104,13 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 			</div>
 		);
 	};
+
+	// Decide when to show process buttons
+	const footer =
+		selected &&
+		[VisitStatus.APPROVED, VisitStatus.DENIED, VisitStatus.PENDING].includes(selected.status)
+			? renderFooter()
+			: undefined;
 
 	return (
 		<BladeManager
@@ -108,7 +127,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 			<Blade
 				{...props}
 				title={getTitle()}
-				footer={selected?.status === VisitStatus.PENDING ? renderFooter() : undefined}
+				footer={footer}
 				layer={1}
 				isOpen={getCurrentLayer() === 1}
 			>
