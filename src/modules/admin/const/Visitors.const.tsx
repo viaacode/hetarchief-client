@@ -7,6 +7,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
+import { i18n } from '@shared/helpers/i18n';
 import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
 
@@ -20,20 +21,19 @@ export const ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
 };
 
 export const VisitorsTableColumns = (
-	t: TFunction,
 	denyVisitRequest: (visitRequest: Visit) => void,
 	editVisitRequest: (visitRequest: Visit) => void
 ): Column<Visit>[] => [
 	{
-		Header: t('modules/admin/reading-rooms/pages/visitors/visitors___leeszaal') || '',
+		Header: i18n.t('modules/admin/const/visitors___leeszaal'),
 		accessor: 'spaceName',
 	},
 	{
-		Header: t('modules/admin/reading-rooms/pages/visitors/visitors___naam') || '',
+		Header: i18n.t('modules/admin/const/visitors___naam'),
 		accessor: 'visitorName',
 	},
 	{
-		Header: t('modules/admin/reading-rooms/pages/visitors/visitors___goedgekeurd-door') || '',
+		Header: i18n.t('modules/admin/const/visitors___goedgekeurd-door'),
 		accessor: 'updatedByName',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -44,7 +44,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: t('modules/admin/reading-rooms/pages/visitors/visitors___toegang') || '',
+		Header: i18n.t('modules/admin/const/visitors___toegang'),
 		accessor: 'startAt',
 		Cell: ({ row }: VisitRow) => {
 			const start = asDate(row.original.startAt);
@@ -69,12 +69,12 @@ export const VisitorsTableColumns = (
 				<DropdownMenu>
 					<Button
 						variants="text"
-						label={t('modules/cp/const/visitors___toegang-intrekken')}
+						label={i18n.t('modules/cp/const/visitors___toegang-intrekken')}
 						onClick={() => denyVisitRequest(row.original)}
 					/>
 					<Button
 						variants="text"
-						label={t('modules/cp/const/visitors___toegang-aanpassen')}
+						label={i18n.t('modules/cp/const/visitors___toegang-aanpassen')}
 						onClick={() => editVisitRequest(row.original)}
 					/>
 				</DropdownMenu>
