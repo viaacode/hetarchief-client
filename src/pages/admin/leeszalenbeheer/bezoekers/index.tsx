@@ -139,7 +139,7 @@ const Visitors: FC = () => {
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers-meta-omscrhijving'
+						'pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
 					)}
 				/>
 			</Head>

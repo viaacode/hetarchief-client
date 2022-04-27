@@ -114,7 +114,7 @@ const Requests: FC = () => {
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/aanvragen/index___aanvragen-meta-omscrhijving'
+						'pages/admin/leeszalenbeheer/aanvragen/index___aanvragen-meta-omschrijving'
 					)}
 				/>
 			</Head>

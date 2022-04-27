@@ -30,7 +30,7 @@ const ReadingRoomEdit: FC = () => {
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen-meta-omscrhijving'
+						'pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen-meta-omschrijving'
 					)}
 				/>
 			</Head>

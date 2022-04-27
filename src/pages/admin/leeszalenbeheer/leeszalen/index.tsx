@@ -222,7 +222,7 @@ const ReadingRoomsOverview: FC = () => {
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen-meta-omscrhijving'
+						'pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen-meta-omschrijving'
 					)}
 				/>
 			</Head>
