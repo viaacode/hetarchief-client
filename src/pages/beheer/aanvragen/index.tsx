@@ -103,7 +103,7 @@ const CPRequestsPage: NextPage = () => {
 			const request = (row as { original: Visit }).original;
 			setSelected(request.id);
 		},
-		[setSelected]
+		[setSelected, canUpdateVisitRequests, t]
 	);
 
 	// Render

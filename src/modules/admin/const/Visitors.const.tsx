@@ -1,6 +1,5 @@
 import { Button } from '@meemoo/react-components';
 import { isWithinInterval } from 'date-fns';
-import { TFunction } from 'next-i18next';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
