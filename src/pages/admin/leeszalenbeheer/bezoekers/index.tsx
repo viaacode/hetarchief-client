@@ -23,6 +23,7 @@ import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
+import { VisitTimeframe } from '@visits/types';
 
 const Visitors: FC = () => {
 	const { t } = useTranslation();
@@ -37,7 +38,7 @@ const Visitors: FC = () => {
 		refetch: refetchVisitRequests,
 	} = useGetVisits({
 		searchInput: filters.search,
-		status: VisitStatus.APPROVED,
+		timeframe: VisitTimeframe.ACTIVE,
 		page: filters.page,
 		size: VisitorsTablePageSize,
 		orderProp: filters.orderProp as keyof Visit,
