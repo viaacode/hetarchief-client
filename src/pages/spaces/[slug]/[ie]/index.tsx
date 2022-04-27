@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { Permission } from '@account/const';
-import { selectHasPermission } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
@@ -52,6 +51,7 @@ import {
 	TabLabel,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -59,7 +59,6 @@ import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { AppState } from '@shared/store';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
@@ -93,9 +92,9 @@ const ObjectDetailPage: NextPage = () => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const previousUrl = useSelector(selectPreviousUrl);
-	const showResearchWarning = useSelector((state: AppState) =>
-		selectHasPermission(state, Permission.SHOW_RESEARCH_WARNING)
-	);
+	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
+	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
+	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	// Internal state
 	const [backLink, setBackLink] = useState(`/${router.query.slug}`);
@@ -445,6 +444,144 @@ const ObjectDetailPage: NextPage = () => {
 		</ul>
 	);
 
+	const renderMetaData = () => {
+		return (
+			<div>
+				<div className="p-object-detail__metadata-content">
+					{showResearchWarning && (
+						<Callout
+							className="p-object-detail__callout u-pt-32 u-pb-24"
+							icon={<Icon name="info" />}
+							text={t(
+								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+							)}
+						/>
+					)}
+					<h3
+						className={clsx('u-pb-24', {
+							'u-pt-24': showResearchWarning,
+							'u-pt-32': !showResearchWarning,
+						})}
+					>
+						{mediaInfo?.name}
+					</h3>
+					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
+						{mediaInfo?.description}
+					</p>
+					<div className="u-pb-24 p-object-detail__actions">
+						{canDownloadMetadata && (
+							<Button
+								className="p-object-detail__export"
+								iconStart={<Icon name="export" />}
+								onClick={onExportClick}
+							>
+								<span className="u-text-ellipsis u-display-none u-display-block:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+									)}
+								</span>
+								<span className="u-text-ellipsis u-display-none:md">
+									{t(
+										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+									)}
+								</span>
+							</Button>
+						)}
+						<DynamicActionMenu
+							{...MEDIA_ACTIONS(canManageFolders)}
+							onClickAction={onClickAction}
+						/>
+					</div>
+				</div>
+				{mediaInfo && (
+					<>
+						<Metadata
+							className="u-px-32"
+							columns={
+								expandMetadata && metadataSize && metadataSize?.width > 500 ? 2 : 1
+							}
+							metadata={METADATA_FIELDS(mediaInfo)}
+						/>
+						{(!!similar.length || !!mediaInfo.keywords.length) && (
+							<Metadata
+								className="u-px-32"
+								metadata={[
+									{
+										title: t(
+											'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
+										),
+										data: mapKeywordsToTagList(mediaInfo.keywords),
+									},
+									{
+										title: 'Ook interessant',
+										data: renderMetadataCards('similar', similar),
+										className: 'u-pb-0',
+									},
+								].filter((field) => !!field.data)}
+							/>
+						)}
+					</>
+				)}
+			</div>
+		);
+	};
+
+	const renderRelatedObjectsBlade = () => {
+		if (!related.length) {
+			return null;
+		}
+		return (
+			<RelatedObjectsBlade
+				className={clsx(
+					'p-object-detail__related',
+					'p-object-detail__metadata--collapsed',
+					expandMetadata && 'p-object-detail__metadata--expanded'
+				)}
+				icon={<Icon className="u-font-size-24 u-mr-8 u-text-left" name="related-objects" />}
+				title={
+					related.length === 1
+						? t(
+								'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
+						  )
+						: t(
+								'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+								{
+									amount: related.length,
+								}
+						  )
+				}
+				renderContent={(hidden) => renderMetadataCards('related', related, hidden)}
+			/>
+		);
+	};
+
+	const renderObjectMedia = () => {
+		if (mediaType) {
+			return (
+				<>
+					{playableUrl && currentRepresentation ? (
+						// Flowplayer/image/not playable
+						renderMedia(playableUrl, currentRepresentation)
+					) : (
+						// Loading/error
+						<div>{renderMediaPlaceholder()}</div>
+					)}
+					{showFragmentSlider && (
+						<FragmentSlider
+							thumbnail={mediaInfo.thumbnailUrl}
+							className="p-object-detail__slider"
+							fragments={mediaInfo?.representations ?? []}
+							onChangeFragment={(index) =>
+								setCurrentRepresentation(mediaInfo?.representations[index])
+							}
+						/>
+					)}
+				</>
+			);
+		}
+		return <ObjectPlaceholder {...objectPlaceholder()} />;
+	};
+
 	const renderObjectDetail = () => (
 		<>
 			<ReadingRoomNavigation
@@ -499,33 +636,7 @@ const ObjectDetailPage: NextPage = () => {
 						variants="white"
 					/>
 				)}
-				<div className="p-object-detail__video">
-					{mediaType ? (
-						<>
-							{playableUrl && currentRepresentation ? (
-								// Flowplayer/image/not playable
-								renderMedia(playableUrl, currentRepresentation)
-							) : (
-								// Loading/error
-								<div>{renderMediaPlaceholder()}</div>
-							)}
-							{showFragmentSlider && (
-								<FragmentSlider
-									thumbnail={mediaInfo.thumbnailUrl}
-									className="p-object-detail__slider"
-									fragments={mediaInfo?.representations ?? []}
-									onChangeFragment={(index) =>
-										setCurrentRepresentation(mediaInfo?.representations[index])
-									}
-								/>
-							)}
-						</>
-					) : (
-						<>
-							<ObjectPlaceholder {...objectPlaceholder()} />
-						</>
-					)}
-				</div>
+				<div className="p-object-detail__video">{renderObjectMedia()}</div>
 				<div
 					ref={metadataRef}
 					className={clsx(
@@ -535,122 +646,21 @@ const ObjectDetailPage: NextPage = () => {
 						!mediaType && 'p-object-detail__metadata--no-media'
 					)}
 				>
-					<div>
-						<div className="p-object-detail__metadata-content">
-							{showResearchWarning && (
-								<Callout
-									className="p-object-detail__callout u-pt-32 u-pb-24"
-									icon={<Icon name="info" />}
-									text={t(
-										'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
-									)}
-								/>
-							)}
-							<h3
-								className={clsx('u-pb-24', {
-									'u-pt-24': showResearchWarning,
-									'u-pt-32': !showResearchWarning,
-								})}
-							>
-								{mediaInfo?.name}
-							</h3>
-							<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
-								{mediaInfo?.description}
-							</p>
-							<div className="u-pb-24 p-object-detail__actions">
-								<Button
-									className="p-object-detail__export"
-									iconStart={<Icon name="export" />}
-									onClick={onExportClick}
-								>
-									<span className="u-text-ellipsis u-display-none u-display-block:md">
-										{t(
-											'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
-										)}
-									</span>
-									<span className="u-text-ellipsis u-display-none:md">
-										{t(
-											'pages/leeszaal/reading-room-slug/object-id/index___metadata'
-										)}
-									</span>
-								</Button>
-								<DynamicActionMenu
-									{...MEDIA_ACTIONS()}
-									onClickAction={onClickAction}
-								/>
-							</div>
-						</div>
-						{mediaInfo && (
-							<>
-								<Metadata
-									className="u-px-32"
-									columns={
-										expandMetadata && metadataSize && metadataSize?.width > 500
-											? 2
-											: 1
-									}
-									metadata={METADATA_FIELDS(mediaInfo)}
-								/>
-								{(!!similar.length || !!mediaInfo.keywords.length) && (
-									<Metadata
-										className="u-px-32"
-										metadata={[
-											{
-												title: t(
-													'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
-												),
-												data: mapKeywordsToTagList(mediaInfo.keywords),
-											},
-											{
-												title: 'Ook interessant',
-												data: renderMetadataCards('similar', similar),
-												className: 'u-pb-0',
-											},
-										].filter((field) => !!field.data)}
-									/>
-								)}
-							</>
-						)}
-					</div>
+					{renderMetaData()}
 				</div>
-				{!!related.length && (
-					<RelatedObjectsBlade
-						className={clsx(
-							'p-object-detail__metadata',
-							'p-object-detail__metadata--collapsed',
-							expandMetadata && 'p-object-detail__metadata--expanded'
-						)}
-						icon={
-							<Icon
-								className="u-font-size-24 u-mr-8 u-text-left"
-								name="related-objects"
-							/>
-						}
-						title={
-							related.length === 1
-								? t(
-										'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
-								  )
-								: t(
-										'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
-										{
-											amount: related.length,
-										}
-								  )
-						}
-						renderContent={(hidden) => renderMetadataCards('related', related, hidden)}
-					/>
-				)}
+				{renderRelatedObjectsBlade()}
 			</article>
-			<AddToCollectionBlade
-				isOpen={activeBlade === MediaActions.Bookmark}
-				selected={{
-					schemaIdentifier: mediaInfo?.schemaIdentifier ?? '',
-					title: mediaInfo?.name,
-				}}
-				onClose={onCloseBlade}
-				onSubmit={onCloseBlade}
-			/>
+			{canManageFolders && (
+				<AddToCollectionBlade
+					isOpen={activeBlade === MediaActions.Bookmark}
+					selected={{
+						schemaIdentifier: mediaInfo?.schemaIdentifier ?? '',
+						title: mediaInfo?.name,
+					}}
+					onClose={onCloseBlade}
+					onSubmit={onCloseBlade}
+				/>
+			)}
 		</>
 	);
 

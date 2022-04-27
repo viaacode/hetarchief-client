@@ -6,6 +6,7 @@ import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 
+import { Permission } from '@account/const';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
@@ -26,6 +27,7 @@ import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCe
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { i18n } from '@shared/helpers/i18n';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
@@ -60,6 +62,9 @@ const AppLayout: FC = ({ children }) => {
 	const { data: accessibleReadingRooms } = useGetAccessibleReadingRooms();
 	const history = useSelector(selectHistory);
 	const { data: navigationItems } = useGetNavigationItems();
+	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
+	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
 
 	useHistory(asPath, history);
 
@@ -99,6 +104,9 @@ const AppLayout: FC = ({ children }) => {
 
 	const rightNavItems: NavigationItem[] = useMemo(() => {
 		if (isLoggedIn) {
+			if (!canManageAccount) {
+				return [];
+			}
 			return NAV_ITEMS_RIGHT_LOGGED_IN({
 				hasUnreadNotifications,
 				notificationsOpen: showNotificationsCenter,
@@ -107,7 +115,7 @@ const AppLayout: FC = ({ children }) => {
 				setNotificationsOpen,
 			});
 		}
-		return i18n ? NAV_ITEMS_RIGHT(onLoginRegisterClick) : [];
+		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
 		hasUnreadNotifications,
 		isLoggedIn,
@@ -116,6 +124,7 @@ const AppLayout: FC = ({ children }) => {
 		onLoginRegisterClick,
 		onLogOutClick,
 		setNotificationsOpen,
+		canManageAccount,
 	]);
 
 	const onOpenNavDropdowns = () => {
@@ -175,7 +184,9 @@ const AppLayout: FC = ({ children }) => {
 					items={getNavigationItemsLeft(
 						asPath,
 						accessibleReadingRooms || [],
-						navigationItems?.[NavigationPlacement.HeaderLeft] || []
+						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
+						user?.permissions || [],
+						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null
 					)}
 					placement="left"
 					renderHamburger={true}
