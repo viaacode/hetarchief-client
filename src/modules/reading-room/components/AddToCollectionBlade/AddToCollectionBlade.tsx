@@ -45,7 +45,8 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	const mapToPairs = (collections: Collection[], selected: AddToCollectionSelected) => {
 		return collections.map(({ id, objects }) => {
 			return {
-				id,
+				folder: id,
+				ie: selected.schemaIdentifier,
 				checked: !!(objects || []).find(
 					(obj) => obj.schemaIdentifier === selected.schemaIdentifier
 				),
@@ -82,7 +83,6 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		collections.refetch();
 
 		toastService.notify({
-			maxLines: 3,
 			title: t(
 				'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___er-ging-iets-mis'
 			),
@@ -96,12 +96,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		if (selected) {
 			const original = mapToPairs(collections.data?.items || [], selected);
 			const dirty = values.pairs.filter((current) => {
-				return current.checked !== original.find((o) => o.id === current.id)?.checked;
+				return (
+					current.checked !== original.find((o) => o.folder === current.folder)?.checked
+				);
 			});
 
 			// Define our promises
 			const promises = dirty.map((pair) => {
-				const collection = getCollection(pair.id);
+				const collection = getCollection(pair.folder);
 
 				const descriptionVariables = {
 					item: selected.title,
@@ -113,7 +115,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 				};
 				if (pair.checked) {
 					return collectionsService
-						.addToCollection(pair.id, selected.schemaIdentifier)
+						.addToCollection(pair.folder, selected.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -132,7 +134,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 						});
 				} else {
 					return collectionsService
-						.removeFromCollection(pair.id, selected.schemaIdentifier)
+						.removeFromCollection(pair.folder, selected.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -167,7 +169,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		// immutably update state, form state updated by effect
 		setPairs(
 			pairs.map((item) => {
-				if (item.id === pair.id) {
+				if (item.folder === pair.folder) {
 					item.checked = !pair.checked;
 				}
 
@@ -209,17 +211,20 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		const { field } = data;
 
 		return field.value.map((pair) => {
-			const collection = getCollection(pair.id);
-			const count =
-				Math.max((collection?.objects?.length || 0) - 1, 0) + (pair.checked ? 1 : 0);
+			const collection = getCollection(pair.folder);
+			const others = (collection?.objects || []).filter(
+				(object) => object.schemaIdentifier !== pair.ie
+			);
+
+			const count = others.length + (pair.checked ? 1 : 0);
 
 			return (
 				<li
-					key={`item--${pair.id}`}
+					key={`item--${pair.folder}`}
 					className={styles['c-add-to-collection-blade__list-item']}
 				>
 					<Checkbox
-						value={`add-to--${pair.id}`}
+						value={`add-to--${pair.folder}`}
 						className={styles['c-add-to-collection-blade__list-item__checkbox']}
 						checked={pair.checked}
 						checkIcon={<Icon name="check" />}
