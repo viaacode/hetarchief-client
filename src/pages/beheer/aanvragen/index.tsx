@@ -2,9 +2,9 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
-import { StringParam, useQueryParams } from 'use-query-params';
+import { useQueryParams } from 'use-query-params';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
@@ -19,13 +19,18 @@ import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
+import { useGetVisit } from '@visits/hooks/get-visit';
 import { useGetVisits } from '@visits/hooks/get-visits';
 
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
+	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
+		undefined
+	);
 
 	const {
 		data: visits,
@@ -40,6 +45,40 @@ const CPRequestsPage: NextPage = () => {
 		orderProp: filters.orderProp as keyof Visit,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
+
+	const { mutateAsync: getVisit } = useGetVisit();
+
+	// Effects
+
+	useEffect(() => {
+		const fetchVisit = async (id: string) => {
+			return await getVisit(id);
+		};
+
+		if (visits) {
+			const selectedOnCurrentPage = !!visits?.items.some(
+				(x) => x.id === filters.visitRequest
+			);
+
+			if (!selectedOnCurrentPage && filters.visitRequest) {
+				// Check if visitrequest exists
+				fetchVisit(filters.visitRequest)
+					.then((response) => {
+						if (response) {
+							setSelectedNotOnCurrentPage(response);
+						}
+					})
+					.catch(() => {
+						setFilters({ visitRequest: undefined });
+						setSelectedNotOnCurrentPage(undefined);
+						toastService.notify({
+							title: t('Error'),
+							description: t('Deze aanvraag bestaat niet'),
+						});
+					});
+			}
+		}
+	}, [visits, filters.visitRequest, setFilters, getVisit, t]);
 
 	// Filters
 
@@ -202,6 +241,7 @@ const CPRequestsPage: NextPage = () => {
 												page: pageZeroBased + 1,
 												visitRequest: undefined,
 											});
+											setSelectedNotOnCurrentPage(undefined);
 										}}
 									/>
 								);
@@ -218,9 +258,19 @@ const CPRequestsPage: NextPage = () => {
 			</CPAdminLayout>
 
 			<ProcessRequestBlade
-				isOpen={!!filters.visitRequest}
-				selected={visits?.items?.find((x) => x.id === filters.visitRequest)}
-				onClose={() => setFilters({ visitRequest: undefined })}
+				isOpen={
+					(!!filters.visitRequest &&
+						!!visits?.items.some((x) => x.id === filters.visitRequest)) ||
+					!!selectedNotOnCurrentPage
+				}
+				selected={
+					visits?.items?.find((x) => x.id === filters.visitRequest) ??
+					selectedNotOnCurrentPage
+				}
+				onClose={() => {
+					setFilters({ visitRequest: undefined });
+					setSelectedNotOnCurrentPage(undefined);
+				}}
 				onFinish={refetch}
 			/>
 		</>
