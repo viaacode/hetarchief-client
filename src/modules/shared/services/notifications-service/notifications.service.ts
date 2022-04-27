@@ -135,7 +135,11 @@ export abstract class NotificationsService {
 		const response: Notification = await ApiService.getApi()
 			.patch(`notifications/${notificationId}/mark-as-read`)
 			.json();
-		if ((NotificationsService.lastFetchedUnreadNotifications?.length || 0) <= 1) {
+		if (
+			(NotificationsService.lastFetchedUnreadNotifications?.filter(
+				(notif) => notif.id !== notificationId
+			)?.length || 0) === 0
+		) {
 			NotificationsService.setHasUnreadNotifications?.(false);
 		}
 		return response;
