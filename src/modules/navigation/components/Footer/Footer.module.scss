@@ -60,6 +60,10 @@
 		padding: 0 $spacer-md;
 	}
 
+	&__image-link {
+		display: inline-flex;
+	}
+
 	&__left,
 	&__right {
 		display: flex;

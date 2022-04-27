@@ -94,7 +94,7 @@ export const footerRightItem: FooterItem = {
 		name: 'logo_vlaanderen.png',
 		alt: 'Vlaanderen logo',
 		width: 89,
-		height: 39,
+		height: 44,
 	},
 	link: {
 		label: '',
