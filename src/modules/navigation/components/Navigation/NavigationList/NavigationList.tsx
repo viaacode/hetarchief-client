@@ -56,7 +56,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 						styles[`c-navigation__link--variant-${index + 1}`],
 						{
 							[styles['c-navigation__item--active']]: item.active,
-							[styles['c-navigation__item--divider']]: item.hasDivider,
+							[styles['c-navigation__item--divider']]: item.isDivider,
 						}
 					);
 
