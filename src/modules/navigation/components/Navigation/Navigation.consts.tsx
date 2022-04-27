@@ -91,17 +91,31 @@ const getVisitorSpacesDropdown = (
 			id: 'visitor-spaces',
 			active: currentPath === '/' + linkedSpaceSlug,
 		};
-	} else {
-		// Show dropdown list with homepage and accessible visitor spaces
+	} else if (accessibleReadingRooms.length === 0) {
+		// No visitor spaces available => show link to homepage without dropdown
 		return {
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
 				'/',
 				{
-					badge:
-						accessibleReadingRooms.length > 0 ? (
-							<Badge text={accessibleReadingRooms.length} />
-						) : null,
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						'u-whitespace-nowrap',
+					]),
+				}
+			),
+			id: 'visitor-spaces',
+			active: currentPath === ROUTES.home,
+		};
+	} else {
+		// Show dropdown list with homepage and accessible visitor spaces
+		return {
+			node: renderLink(
+				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
+				'',
+				{
+					badge: <Badge text={accessibleReadingRooms.length} />,
 					className: linkCls([
 						'u-color-black',
 						'u-color-white:md',
@@ -204,7 +218,7 @@ const getCpAdminManagementDropdown = (
 		{
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
-				'/beheer',
+				'',
 				{
 					className: linkCls([
 						'u-color-black',
