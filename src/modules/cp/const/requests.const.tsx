@@ -9,7 +9,7 @@ import { CopyButton, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
-import { Visit, VisitRow, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDateWithTime } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
@@ -19,7 +19,7 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, 'createdAt'),
-	orderDirection: withDefault(SortDirectionParam, 'desc'),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
 export const requestStatusFilters = (): TabProps[] => {

@@ -5,6 +5,7 @@ import { FC, ReactElement, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
 import { Icon } from '@shared/components';
+import { OrderDirection } from '@shared/types';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -99,7 +100,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						{sortOptions.length > 0 && (
 							<FilterButton
 								icon={
-									activeSort?.orderDirection === 'desc' ? 'sort-down' : 'sort-up'
+									activeSort?.orderDirection === OrderDirection.desc
+										? 'sort-down'
+										: 'sort-up'
 								}
 								isActive={isSortActive}
 								label={activeSortLabel}
