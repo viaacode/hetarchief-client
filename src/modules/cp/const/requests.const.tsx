@@ -4,13 +4,12 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusBadge } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
-import { requestCreatedAtFormatter } from '@cp/utils';
 import { CopyButton, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
 import { Visit, VisitRow, VisitStatus } from '@shared/types';
-import { asDate, formatMediumDateWithTime } from '@shared/utils';
+import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
 
@@ -75,7 +74,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 					className="u-color-neutral"
 					title={formatMediumDateWithTime(asDate(row.original.createdAt))}
 				>
-					{requestCreatedAtFormatter(row.original.createdAt)}
+					{formatDistanceToday(row.original.createdAt)}
 				</span>
 			);
 		},

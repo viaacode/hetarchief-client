@@ -2,9 +2,9 @@ import { Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import React, { FC, useState } from 'react';
 
-import { requestCreatedAtFormatter } from '@cp/utils';
 import { Blade, BladeManager, Icon, VisitSummary } from '@shared/components';
 import { VisitStatus } from '@shared/types';
+import { formatDistanceToday } from '@shared/utils';
 
 import { ApproveRequestBlade } from '../ApproveRequestBlade';
 import { DeclineRequestBlade } from '../DeclineRequestBlade';
@@ -152,7 +152,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 										)}
 										:
 									</strong>{' '}
-									{requestCreatedAtFormatter(selected.createdAt)}
+									{formatDistanceToday(selected.createdAt)}
 								</li>
 							</ul>
 						</div>
