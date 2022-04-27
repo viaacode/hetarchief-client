@@ -6,7 +6,7 @@ import styles from './cookie-policy.module.scss';
 
 const CookiePolicy: NextPage = () => {
 	return (
-		<div className={styles['cookie-policy__wrapper']}>
+		<div className={styles['p-cookie-policy__wrapper']}>
 			<Script
 				src="https://consent.cookiebot.com/8fb68e92-94b2-4334-bc47-7bcda08bc9c7/cd.js"
 				id="CookieDeclaration"
