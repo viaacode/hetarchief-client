@@ -2,7 +2,6 @@ import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { QueryClient } from 'react-query';
 
-import { NOTIFICATION_TYPE_TO_PATH } from '@shared/components/NotificationCenter/NotificationCenter.consts';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { i18n } from '@shared/helpers/i18n';
 import { ApiService } from '@shared/services/api-service';
@@ -10,6 +9,7 @@ import { toastService } from '@shared/services/toast-service';
 import { ApiResponseWrapper } from '@shared/types';
 import { asDate } from '@shared/utils';
 
+import { NOTIFICATION_TYPE_TO_PATH } from './notifications.consts';
 import { MarkAllAsReadResult, Notification, NotificationStatus } from './notifications.types';
 
 export abstract class NotificationsService {
@@ -42,11 +42,11 @@ export abstract class NotificationsService {
 		}
 	}
 
-	private static getPath(notification: Notification): string | null {
+	public static getPath(notification: Notification): string | null {
 		return (
 			NOTIFICATION_TYPE_TO_PATH[notification.type]
 				?.replace('{visitRequestId}', notification.visitId)
-				?.replace('{slug}', notification.readingRoomId) || null
+				?.replace('{slug}', notification.visitorSpaceSlug) || null
 		);
 	}
 
