@@ -21,8 +21,8 @@ import {
 	ConfirmationModal,
 	PaginationBar,
 	ScrollableTabs,
-	SearchBar,
 	sortingIcons,
+	TagSearchBar,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
@@ -180,7 +180,7 @@ const CPVisitorsPage: NextPage = () => {
 			>
 				<div className="l-container">
 					<div className="p-cp-visitors__header">
-						<SearchBar
+						<TagSearchBar
 							backspaceRemovesValue={false}
 							className="p-cp-visitors__search"
 							instanceId="visitors-search-bar"

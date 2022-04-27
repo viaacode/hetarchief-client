@@ -5,20 +5,25 @@ import { InputActionMeta } from 'react-select';
 
 import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
 
-import { OnSearchSingle, SearchBarMeta, SearchBarProps, SearchBarValue } from './SearchBar.types';
-import { SearchBarButton } from './SearchBarButton';
-import { SearchBarClear } from './SearchBarClear';
-import { SearchBarValueContainer } from './SearchBarValueContainer';
+import {
+	OnSearchSingle,
+	TagSearchBarMeta,
+	TagSearchBarProps,
+	TagSearchBarValue,
+} from './TagSearchBar.types';
+import { TagSearchBarButton } from './TagSearchBarButton';
+import { TagSearchBarClear } from './TagSearchBarClear';
+import { TagSearchBarValueContainer } from './TagSearchBarValueContainer';
 
 const components = {
 	...TAGS_INPUT_COMPONENTS,
-	ClearIndicator: SearchBarClear,
-	DropdownIndicator: SearchBarButton,
-	ValueContainer: SearchBarValueContainer,
+	ClearIndicator: TagSearchBarClear,
+	DropdownIndicator: TagSearchBarButton,
+	ValueContainer: TagSearchBarValueContainer,
 };
 
 // Wrap TagsInput with default props and custom search button
-const SearchBar = <IsMulti extends boolean>({
+const TagSearchBar = <IsMulti extends boolean>({
 	className,
 	clearLabel,
 	isClearable = true,
@@ -36,7 +41,7 @@ const SearchBar = <IsMulti extends boolean>({
 	onRemoveValue,
 	onSearch,
 	...tagsInputProps
-}: SearchBarProps<IsMulti>): ReactElement => {
+}: TagSearchBarProps<IsMulti>): ReactElement => {
 	const [inputValue, setInputValue] = useState(searchValue);
 	const selectValue = useMemo(
 		() => (inputValue ? { label: inputValue, value: inputValue } : null),
@@ -53,7 +58,10 @@ const SearchBar = <IsMulti extends boolean>({
 	 * Methods
 	 */
 
-	const onSearchChange = (newValue: SearchBarValue<IsMulti>, actionMeta: SearchBarMeta): void => {
+	const onSearchChange = (
+		newValue: TagSearchBarValue<IsMulti>,
+		actionMeta: TagSearchBarMeta
+	): void => {
 		if (['pop-value', 'remove-value'].includes(actionMeta.action)) {
 			onRemoveValue?.(newValue);
 		}
@@ -100,10 +108,10 @@ const SearchBar = <IsMulti extends boolean>({
 	 * Computed
 	 */
 
-	const rootCls = clsx(className, 'c-search-bar', {
-		[`c-search-bar--${size}`]: size,
-		['c-search-bar--has-value-placeholder']: !!valuePlaceholder,
-		['c-search-bar--light']: light,
+	const rootCls = clsx(className, 'c-tag-search-bar', {
+		[`c-tag-search-bar--${size}`]: size,
+		['c-tag-search-bar--has-value-placeholder']: !!valuePlaceholder,
+		['c-tag-search-bar--light']: light,
 	});
 	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 	const value = isMulti ? tagsInputProps.value : selectValue;
@@ -142,4 +150,4 @@ const SearchBar = <IsMulti extends boolean>({
 	);
 };
 
-export default SearchBar;
+export default TagSearchBar;

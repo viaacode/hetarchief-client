@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
-import { SearchBar } from '@shared/components';
+import { TagSearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
 import { selectMediaResults } from '@shared/store/media';
 
@@ -55,7 +55,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
-				<SearchBar
+				<TagSearchBar
 					searchValue={search}
 					onSearch={setSearch}
 					onClear={() => setSearch('')}

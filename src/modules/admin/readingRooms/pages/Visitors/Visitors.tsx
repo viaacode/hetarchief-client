@@ -4,7 +4,7 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { ApproveRequestBlade } from '@cp/components';
-import { ConfirmationModal, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import { ConfirmationModal, PaginationBar, sortingIcons, TagSearchBar } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
@@ -129,7 +129,7 @@ const ReadingRoomsOverview: FC = () => {
 				{t('modules/admin/reading-rooms/pages/visitors/visitors___actieve-bezoekers')}
 			</h2>
 			<div className="p-admin-visitors__header">
-				<SearchBar
+				<TagSearchBar
 					backspaceRemovesValue={false}
 					className="p-admin-visitors__search"
 					instanceId="visitors-search-bar"

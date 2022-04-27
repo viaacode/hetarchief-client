@@ -22,7 +22,7 @@ $component: "p-account-my-collections";
 	}
 
 	&__search {
-		&.c-search-bar.c-tags-input.c-search-bar--light .c-tags-input__control {
+		&.c-tag-search-bar.c-tags-input.c-tag-search-bar--light .c-tags-input__control {
 			border-color: $zinc-66;
 		}
 	}

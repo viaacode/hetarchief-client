@@ -5,7 +5,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { ProcessRequestBlade } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
-import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
+import { PaginationBar, ScrollableTabs, sortingIcons, TagSearchBar } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { useGetVisits } from '@visits/hooks/get-visits';
@@ -106,7 +106,7 @@ const ReadingRoomsOverview: FC = () => {
 				{t('modules/admin/reading-rooms/pages/requests/requests___aanvragen')}
 			</h2>
 			<div className="p-admin-requests__header">
-				<SearchBar
+				<TagSearchBar
 					backspaceRemovesValue={false}
 					className="p-admin-requests__search"
 					instanceId="requests-search-bar"

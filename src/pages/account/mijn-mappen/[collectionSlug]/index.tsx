@@ -29,7 +29,7 @@ import {
 	ListNavigationItem,
 	MediaCardList,
 	PaginationBar,
-	SearchBar,
+	TagSearchBar,
 } from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
@@ -356,7 +356,7 @@ const AccountMyCollections: NextPage = () => {
 							</div>
 
 							<div className="l-container u-mb-24:md u-mb-32">
-								<SearchBar
+								<TagSearchBar
 									isDisabled={collectionMedia.isFetching}
 									backspaceRemovesValue={false}
 									className="p-account-my-collections__search"

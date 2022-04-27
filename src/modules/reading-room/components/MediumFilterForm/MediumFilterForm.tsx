@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
-import { SearchBar } from '@shared/components';
+import { TagSearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
 
 import {
@@ -53,7 +53,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
-				<SearchBar
+				<TagSearchBar
 					searchValue={search}
 					onSearch={setSearch}
 					onClear={() => setSearch('')}

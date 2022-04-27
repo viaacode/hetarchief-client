@@ -4,7 +4,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { ReadingRoomStatus } from '@reading-room/types';
-import { PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import { PaginationBar, sortingIcons, TagSearchBar } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { OrderDirection } from '@shared/types';
 
@@ -90,7 +90,7 @@ const ReadingRoomsOverview: FC = () => {
 				)}
 			</h2>
 			<div className="p-admin-reading-rooms__header">
-				<SearchBar
+				<TagSearchBar
 					backspaceRemovesValue={false}
 					className="p-admin-reading-rooms__search"
 					instanceId="admin-reading-rooms-search-bar"
