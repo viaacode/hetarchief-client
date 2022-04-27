@@ -89,7 +89,7 @@ const getVisitorSpacesDropdown = (
 				}
 			),
 			id: 'visitor-spaces',
-			active: currentPath === '/' + linkedSpaceSlug,
+			active: currentPath.startsWith('/' + linkedSpaceSlug),
 		};
 	} else if (accessibleReadingRooms.length === 0) {
 		// No visitor spaces available => show link to homepage without dropdown
