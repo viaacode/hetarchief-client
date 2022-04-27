@@ -1,3 +1,5 @@
+import { Permission } from '@account/const';
+
 export enum Idp {
 	HETARCHIEF = 'HETARCHIEF',
 	MEEMOO = 'MEEMOO',
@@ -15,5 +17,5 @@ export interface User {
 	idp: Idp;
 	maintainerId: string | null;
 	visitorSpaceSlug?: string;
-	permissions: string[];
+	permissions: Permission[];
 }

@@ -308,6 +308,15 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 
 		@include respond-at(lg) {
 			margin-left: $c-navigation-item-spacing-lg;
+			margin-right: 0;
+		}
+
+		&:not(:last-child) {
+			margin-right: 0;
+
+			@include respond-at(lg) {
+				margin-right: 0;
+			}
 		}
 
 		&::before {
