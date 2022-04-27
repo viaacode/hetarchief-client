@@ -239,7 +239,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 											'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
 										)}
 										icon={<Icon name="check" />}
-										variants={['icon', 'white']}
+										variants={['icon', 'sm', 'white']}
 									/>
 								</div>
 							))}

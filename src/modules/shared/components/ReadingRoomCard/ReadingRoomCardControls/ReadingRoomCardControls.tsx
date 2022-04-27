@@ -51,7 +51,7 @@ const ReadingRoomCardControls: FC<VisitorSpaceCardProps> = ({
 		<div>
 			<Button
 				icon={<Icon name="contact" />}
-				variants={['silver']}
+				variants={['silver', 'sm']}
 				onClick={() => onContactClick && onContactClick(room)}
 			/>
 		</div>
