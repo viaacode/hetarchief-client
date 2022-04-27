@@ -15,6 +15,11 @@ import { AdminLayoutProps } from './AdminLayout.types';
 const AdminLayout: FC<AdminLayoutProps> = ({ children, className, contentTitle }) => {
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
+
+	useEffect(() => {
+		dispatch(setShowZendesk(false));
+	}, [dispatch]);
 
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
@@ -42,12 +47,6 @@ const AdminLayout: FC<AdminLayoutProps> = ({ children, className, contentTitle }
 			})),
 		[asPath]
 	);
-
-	const { t } = useTranslation();
-
-	useEffect(() => {
-		dispatch(setShowZendesk(false));
-	}, [dispatch]);
 
 	return (
 		<SidebarLayout

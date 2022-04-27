@@ -1,5 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import { TFunction } from 'next-i18next';
 import Link from 'next/link';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
@@ -9,6 +8,8 @@ import { ReadingRoomOrderProps, ReadingRoomStatus, VisitorSpaceInfo } from '@rea
 import { DropdownMenu, Icon } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
+import { i18n } from '@shared/helpers/i18n';
+import { OrderDirection } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
 
 export const ReadingRoomsOverviewTablePageSize = 20;
@@ -16,21 +17,20 @@ export const ReadingRoomsOverviewTablePageSize = 20;
 export const ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG = {
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, undefined),
-	orderDirection: withDefault(SortDirectionParam, undefined),
+	orderProp: withDefault(StringParam, ReadingRoomOrderProps.CreatedAt),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
 export const ReadingRoomsOverviewTableColumns = (
-	t: TFunction,
-	updateRoomState: (roomId: string, state: ReadingRoomStatus) => void
+	updateVisitorSpaceState: (roomId: string, state: ReadingRoomStatus) => void
 ): Column<VisitorSpaceInfo>[] => [
 	{
-		Header: t('modules/admin/const/spaces___leeszaal') || '',
+		Header: i18n.t('modules/admin/const/spaces___leeszaal'),
 		id: ReadingRoomOrderProps.ContentPartnerName,
 		accessor: 'name',
 	},
 	{
-		Header: t('modules/admin/const/spaces___geactiveerd-op') || '',
+		Header: i18n.t('modules/admin/const/spaces___geactiveerd-op'),
 		id: ReadingRoomOrderProps.CreatedAt,
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
@@ -43,7 +43,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		},
 	},
 	{
-		Header: t('modules/admin/const/spaces___emailadres') || '',
+		Header: i18n.t('modules/admin/const/spaces___emailadres'),
 		id: 'email',
 		accessor: 'contactInfo.email',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
@@ -57,7 +57,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} as any,
 	{
-		Header: t('modules/admin/const/spaces___telefoonnummer') || '',
+		Header: i18n.t('modules/admin/const/spaces___telefoonnummer'),
 		id: 'telephone',
 		accessor: 'contactInfo.telephone',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
@@ -71,7 +71,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} as any,
 	{
-		Header: t('modules/admin/const/spaces___publicatiestatus') || '',
+		Header: i18n.t('modules/admin/const/spaces___publicatiestatus'),
 		id: ReadingRoomOrderProps.Status,
 		accessor: 'status',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
@@ -122,9 +122,12 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t('modules/admin/const/spaces___activeren')}
+								label={i18n.t('modules/admin/const/spaces___activeren')}
 								onClick={() =>
-									updateRoomState(row.original.id, ReadingRoomStatus.Active)
+									updateVisitorSpaceState(
+										row.original.id,
+										ReadingRoomStatus.Active
+									)
 								}
 							/>
 						)}
@@ -134,9 +137,12 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t('modules/admin/const/spaces___deactiveren')}
+								label={i18n.t('modules/admin/const/spaces___deactiveren')}
 								onClick={() =>
-									updateRoomState(row.original.id, ReadingRoomStatus.Inactive)
+									updateVisitorSpaceState(
+										row.original.id,
+										ReadingRoomStatus.Inactive
+									)
 								}
 							/>
 						)}
@@ -146,9 +152,14 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t('modules/admin/const/spaces___terug-naar-in-aanvraag')}
+								label={i18n.t(
+									'modules/admin/const/spaces___terug-naar-in-aanvraag'
+								)}
 								onClick={() =>
-									updateRoomState(row.original.id, ReadingRoomStatus.Requested)
+									updateVisitorSpaceState(
+										row.original.id,
+										ReadingRoomStatus.Requested
+									)
 								}
 							/>
 						)}
