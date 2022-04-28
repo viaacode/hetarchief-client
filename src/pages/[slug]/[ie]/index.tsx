@@ -533,7 +533,7 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	const renderRelatedObjectsBlade = () => {
-		if (!related.length) {
+		if (!related.length || (!expandMetadata && isMobile)) {
 			return null;
 		}
 		return (
