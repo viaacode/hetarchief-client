@@ -18,7 +18,6 @@ import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
-import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
 	FLOWPLAYER_FORMATS,
 	formatErrorPlaceholder,
@@ -441,12 +440,7 @@ const ObjectDetailPage: NextPage = () => {
 				p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
 			`}
 		>
-			{[
-				relatedObjectVideoMock.object,
-				relatedObjectVideoMock.object,
-				relatedObjectVideoMock.object,
-				relatedObjectVideoMock.object,
-			].map((item, index) => {
+			{similar.map((item, index) => {
 				return (
 					<Fragment key={`${type}-object-${item.id}-${index}`}>
 						{renderCard(item, isHidden)}
@@ -524,7 +518,9 @@ const ObjectDetailPage: NextPage = () => {
 									},
 									{
 										title: 'Ook interessant',
-										data: renderMetadataCards('similar', similar),
+										data: similar.length
+											? renderMetadataCards('similar', similar)
+											: null,
 										className: 'u-pb-0',
 									},
 								].filter((field) => !!field.data)}
