@@ -440,7 +440,7 @@ const ObjectDetailPage: NextPage = () => {
 				p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
 			`}
 		>
-			{similar.map((item, index) => {
+			{items.map((item, index) => {
 				return (
 					<Fragment key={`${type}-object-${item.id}-${index}`}>
 						{renderCard(item, isHidden)}
