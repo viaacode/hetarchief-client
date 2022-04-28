@@ -31,7 +31,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 				return thumbnail;
 			}
 		} else {
-			return <ObjectPlaceholder small />;
+			return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
 		}
 	};
 
