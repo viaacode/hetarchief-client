@@ -1,7 +1,8 @@
+import { VISIT_REQUEST_ID_QUERY_KEY } from '@cp/const/requests.const';
 import { NotificationType } from '@shared/services/notifications-service/notifications.types';
 
 export const NOTIFICATION_TYPE_TO_PATH: Record<NotificationType, string | null> = {
-	[NotificationType.NEW_VISIT_REQUEST]: '/beheer/aanvragen?visitRequest={visitRequestId}',
+	[NotificationType.NEW_VISIT_REQUEST]: `/beheer/aanvragen?${VISIT_REQUEST_ID_QUERY_KEY}={visitRequestId}`,
 	[NotificationType.VISIT_REQUEST_APPROVED]: '/{slug}',
 	[NotificationType.VISIT_REQUEST_DENIED]: null,
 	[NotificationType.VISIT_REQUEST_CANCELLED]: null,
