@@ -276,10 +276,7 @@ const CPRequestsPage: NextPage = () => {
 					(!!filters[VISIT_REQUEST_ID_QUERY_KEY] && !!selectedOnCurrentPage) ||
 					!!selectedNotOnCurrentPage
 				}
-				selected={
-					visits?.items?.find((x) => x.id === filters[VISIT_REQUEST_ID_QUERY_KEY]) ??
-					selectedNotOnCurrentPage
-				}
+				selected={selectedOnCurrentPage ?? selectedNotOnCurrentPage}
 				onClose={() => {
 					setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: undefined });
 					setSelectedNotOnCurrentPage(undefined);
