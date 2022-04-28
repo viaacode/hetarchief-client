@@ -2,13 +2,19 @@
 @use "styles/abstracts" as *;
 
 .c-metadata {
-	overflow-y: hidden;
-	border-top: $divider-black;
+	overflow: hidden;
+
+	&::before {
+		content: "";
+		display: block;
+		height: 0.1rem;
+		background-color: $black-20;
+	}
 
 	&__list {
 		@extend %reset-list;
 
-		margin-top: -0.1rem; // move top borders of first items in a column outside parent container to prevent double border
+		margin-top: -0.2rem; // move top borders of first items in a column outside parent container to prevent double border
 		column-gap: $spacer-lg;
 	}
 

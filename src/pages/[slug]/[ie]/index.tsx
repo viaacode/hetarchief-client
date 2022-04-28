@@ -18,6 +18,7 @@ import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
+import { relatedObjectVideoMock } from '@media/components/RelatedObject/__mocks__/related-object';
 import {
 	FLOWPLAYER_FORMATS,
 	formatErrorPlaceholder,
@@ -100,6 +101,7 @@ const ObjectDetailPage: NextPage = () => {
 	const [backLink, setBackLink] = useState(`/${router.query.slug}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
+	const [metadataColumns, setMetadataColumns] = useState<number>(1);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
 	const [isPlayEventFired, setIsPlayEventFired] = useState(false);
@@ -173,6 +175,19 @@ const ObjectDetailPage: NextPage = () => {
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
+	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
+	const isMobile = windowSize.width && windowSize.width < 768;
+	const accessEndDate =
+		visitRequest && visitRequest.endAt
+			? formatMediumDateWithTime(asDate(visitRequest.endAt))
+			: '';
+	const accessEndDateMobile =
+		visitRequest && visitRequest.endAt
+			? isToday(asDate(visitRequest.endAt) ?? 0)
+				? formatTime(asDate(visitRequest.endAt))
+				: formatDate(asDate(visitRequest.endAt))
+			: '';
 
 	/**
 	 * Effects
@@ -189,6 +204,11 @@ const ObjectDetailPage: NextPage = () => {
 			});
 		}
 	}, [router.query.ie]);
+
+	useEffect(() => {
+		metadataSize &&
+			setMetadataColumns(expandMetadata && !isMobile && metadataSize?.width > 500 ? 2 : 1);
+	}, [expandMetadata, isMobile, metadataSize]);
 
 	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
@@ -243,23 +263,6 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		relatedData && setRelated(mapRelatedData(relatedData.items));
 	}, [relatedData]);
-
-	/**
-	 * Computed
-	 */
-	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
-	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
-	const isMobile = windowSize.width && windowSize.width > 700;
-	const accessEndDate =
-		visitRequest && visitRequest.endAt
-			? formatMediumDateWithTime(asDate(visitRequest.endAt))
-			: '';
-	const accessEndDateMobile =
-		visitRequest && visitRequest.endAt
-			? isToday(asDate(visitRequest.endAt) ?? 0)
-				? formatTime(asDate(visitRequest.endAt))
-				: formatDate(asDate(visitRequest.endAt))
-			: '';
 
 	/**
 	 * Mapping
@@ -432,9 +435,18 @@ const ObjectDetailPage: NextPage = () => {
 		isHidden = false
 	): ReactNode => (
 		<ul
-			className={`u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
+			className={`
+				u-list-reset p-object-detail__metadata-list
+				p-object-detail__metadata-list--${type}
+				p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
+			`}
 		>
-			{items.map((item, index) => {
+			{[
+				relatedObjectVideoMock.object,
+				relatedObjectVideoMock.object,
+				relatedObjectVideoMock.object,
+				relatedObjectVideoMock.object,
+			].map((item, index) => {
 				return (
 					<Fragment key={`${type}-object-${item.id}-${index}`}>
 						{renderCard(item, isHidden)}
@@ -496,15 +508,13 @@ const ObjectDetailPage: NextPage = () => {
 				{mediaInfo && (
 					<>
 						<Metadata
-							className="u-px-32"
-							columns={
-								expandMetadata && metadataSize && metadataSize?.width > 500 ? 2 : 1
-							}
+							columns={metadataColumns}
+							className="p-object-detail__metadata-component"
 							metadata={METADATA_FIELDS(mediaInfo)}
 						/>
 						{(!!similar.length || !!mediaInfo.keywords.length) && (
 							<Metadata
-								className="u-px-32"
+								className="p-object-detail__metadata-component"
 								metadata={[
 									{
 										title: t(
@@ -592,13 +602,13 @@ const ObjectDetailPage: NextPage = () => {
 				showAccessEndDate={
 					accessEndDate || accessEndDateMobile
 						? isMobile
-							? t(
+							? t('pages/slug/ie/index___tot-access-end-date-mobile', {
+									accessEndDateMobile,
+							  })
+							: t(
 									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
 									{ accessEndDate }
 							  )
-							: t('pages/slug/ie/index___tot-access-end-date-mobile', {
-									accessEndDateMobile,
-							  })
 						: undefined
 				}
 			/>
