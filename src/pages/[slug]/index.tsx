@@ -74,6 +74,7 @@ import {
 	formatMediumDateWithTime,
 	formatTime,
 } from '@shared/utils';
+import { scrollToTop } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -473,12 +474,13 @@ const ReadingRoomPage: NextPage = () => {
 				count={READING_ROOM_ITEM_COUNT}
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
-				onPageChange={(page) =>
+				onPageChange={(page) => {
+					scrollToTop();
 					setQuery({
 						...query,
 						page: page + 1,
-					})
-				}
+					});
+				}}
 			/>
 		</>
 	);
