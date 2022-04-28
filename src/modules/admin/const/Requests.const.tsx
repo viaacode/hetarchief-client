@@ -5,7 +5,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { RequestStatusBadge } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
 import { requestCreatedAtFormatter } from '@cp/utils';
-import { Icon } from '@shared/components';
+import { CopyButton, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
@@ -26,30 +26,30 @@ export const requestStatusFilters = (): TabProps[] => {
 	return [
 		{
 			id: RequestStatusAll.ALL,
-			label: i18n.t('modules/cp/const/requests___alle'),
+			label: i18n.t('modules/admin/const/requests___alle'),
 		},
 		{
 			id: VisitStatus.PENDING,
-			label: i18n.t('modules/cp/const/requests___open'),
+			label: i18n.t('modules/admin/const/requests___open'),
 		},
 		{
 			id: VisitStatus.APPROVED,
-			label: i18n.t('modules/cp/const/requests___goedgekeurd'),
+			label: i18n.t('modules/admin/const/requests___goedgekeurd'),
 		},
 		{
 			id: VisitStatus.DENIED,
-			label: i18n.t('modules/cp/const/requests___geweigerd'),
+			label: i18n.t('modules/admin/const/requests___geweigerd'),
 		},
 	];
 };
 
 export const RequestTableColumns = (): Column<Visit>[] => [
 	{
-		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___leeszaal'),
+		Header: i18n.t('modules/admin/const/requests___leeszaal'),
 		accessor: 'spaceName',
 	},
 	{
-		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___naam'),
+		Header: i18n.t('modules/admin/const/requests___naam'),
 		accessor: 'visitorName',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -60,22 +60,21 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		},
 	},
 	{
-		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___emailadres'),
+		Header: i18n.t('modules/admin/const/requests___emailadres'),
 		accessor: 'visitorMail',
-		Cell: ({ row }: VisitRow) => {
-			return (
-				<a
-					className="u-color-neutral c-table__link"
-					href={`mailto:${row.original.visitorMail}`}
-					onClick={(e) => e.stopPropagation()}
-				>
-					{row.original.visitorMail}
-				</a>
-			);
-		},
+		Cell: ({ row }: VisitRow) => (
+			<CopyButton
+				className="u-color-neutral u-p-0 c-table__copy"
+				icon={undefined}
+				variants={['text', 'no-height']}
+				text={row.original.visitorMail}
+			>
+				{row.original.visitorMail}
+			</CopyButton>
+		),
 	},
 	{
-		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___tijdstip'),
+		Header: i18n.t('modules/admin/const/requests___tijdstip'),
 		accessor: 'createdAt',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -89,7 +88,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		},
 	},
 	{
-		Header: i18n.t('modules/admin/reading-rooms/pages/requests/requests___status'),
+		Header: i18n.t('modules/admin/const/requests___status'),
 		accessor: 'status',
 		Cell: ({ row }: VisitRow) => {
 			return <RequestStatusBadge status={row.original.status} />;

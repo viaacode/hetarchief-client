@@ -89,19 +89,33 @@ const getVisitorSpacesDropdown = (
 				}
 			),
 			id: 'visitor-spaces',
-			active: currentPath === '/' + linkedSpaceSlug,
+			active: currentPath.startsWith('/' + linkedSpaceSlug),
+		};
+	} else if (accessibleReadingRooms.length === 0) {
+		// No visitor spaces available => show link to homepage without dropdown
+		return {
+			node: renderLink(
+				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
+				'/',
+				{
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						'u-whitespace-nowrap',
+					]),
+				}
+			),
+			id: 'visitor-spaces',
+			active: currentPath === ROUTES.home,
 		};
 	} else {
 		// Show dropdown list with homepage and accessible visitor spaces
 		return {
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
-				'/',
+				'',
 				{
-					badge:
-						accessibleReadingRooms.length > 0 ? (
-							<Badge text={accessibleReadingRooms.length} />
-						) : null,
+					badge: <Badge text={accessibleReadingRooms.length} />,
 					className: linkCls([
 						'u-color-black',
 						'u-color-white:md',
@@ -204,7 +218,7 @@ const getCpAdminManagementDropdown = (
 		{
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
-				'/beheer',
+				'',
 				{
 					className: linkCls([
 						'u-color-black',
@@ -291,11 +305,7 @@ const getMeemooAdminManagementDropdown = (
 				i18n.t('modules/navigation/components/navigation/navigation___admin'),
 				'/admin/leeszalenbeheer/aanvragen',
 				{
-					className: linkCls([
-						'u-color-black',
-						'u-color-white:md',
-						styles['c-navigation__link--dropdown'],
-					]),
+					className: linkCls(['u-color-black', 'u-color-white:md']),
 				}
 			),
 			id: 'nav__admin',

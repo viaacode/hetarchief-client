@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
 import {
@@ -20,6 +21,8 @@ import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -31,6 +34,9 @@ const CPRequestsPage: NextPage = () => {
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
 		undefined
+	);
+	const canUpdateVisitRequests: boolean | null = useHasAllPermission(
+		Permission.APPROVE_DENY_CP_VISIT_REQUESTS
 	);
 
 	const {
@@ -120,11 +126,20 @@ const CPRequestsPage: NextPage = () => {
 	);
 
 	const onRowClick = useCallback(
-		(_, row) => {
+		(e, row) => {
+			if (!canUpdateVisitRequests) {
+				toastService.notify({
+					title: t('pages/beheer/aanvragen/index___geen-rechten'),
+					description: t(
+						'pages/beheer/aanvragen/index___je-hebt-geen-rechten-om-bezoekaanvragen-te-bewerken'
+					),
+				});
+				return;
+			}
 			const request = (row as { original: Visit }).original;
 			setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: request.id });
 		},
-		[setFilters]
+		[canUpdateVisitRequests, setFilters, t]
 	);
 
 	// Render
@@ -277,4 +292,6 @@ const CPRequestsPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(CPRequestsPage);
+export default withAuth(
+	withAllRequiredPermissions(CPRequestsPage, Permission.READ_CP_VISIT_REQUESTS)
+);

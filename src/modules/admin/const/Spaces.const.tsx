@@ -1,43 +1,37 @@
 import { Button } from '@meemoo/react-components';
-import { TFunction } from 'next-i18next';
-import { generatePath, Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
+import { AdminReadingRoomInfoRow } from '@admin/types';
+import { ReadingRoomOrderProps, ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
 import { DropdownMenu, Icon } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
+import { i18n } from '@shared/helpers/i18n';
+import { OrderDirection } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
-
-import { READING_ROOMS_PATHS } from '../../const';
-import { AdminReadingRoomInfoRow } from '../../types';
 
 export const ReadingRoomsOverviewTablePageSize = 20;
 
 export const ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG = {
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, undefined),
-	orderDirection: withDefault(SortDirectionParam, undefined),
+	orderProp: withDefault(StringParam, ReadingRoomOrderProps.CreatedAt),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
 export const ReadingRoomsOverviewTableColumns = (
-	t: TFunction,
-	updateRoomState: (state: ReadingRoomStatus) => void
+	updateVisitorSpaceState: (roomId: string, state: ReadingRoomStatus) => void
 ): Column<VisitorSpaceInfo>[] => [
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___leeszaal'
-			) || '',
+		Header: i18n.t('modules/admin/const/spaces___leeszaal'),
+		id: ReadingRoomOrderProps.ContentPartnerName,
 		accessor: 'name',
 	},
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geactiveerd-op'
-			) || '',
+		Header: i18n.t('modules/admin/const/spaces___geactiveerd-op'),
+		id: ReadingRoomOrderProps.CreatedAt,
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			const formatted = formatLongDate(asDate(row.original.createdAt));
@@ -49,12 +43,9 @@ export const ReadingRoomsOverviewTableColumns = (
 		},
 	},
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___emailadres'
-			) || '',
-		id: 'admin-reading-rooms-overview-email',
-		accessor: (row) => row.contactInfo.email,
+		Header: i18n.t('modules/admin/const/spaces___emailadres'),
+		id: 'email',
+		accessor: 'contactInfo.email',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.email || ''}>
@@ -62,14 +53,13 @@ export const ReadingRoomsOverviewTableColumns = (
 				</span>
 			);
 		},
-	},
+		disableSortBy: true,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} as any,
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___telefoonnummer'
-			) || '',
-		id: 'admin-reading-rooms-overview-telephone',
-		accessor: (row) => row.contactInfo.telephone,
+		Header: i18n.t('modules/admin/const/spaces___telefoonnummer'),
+		id: 'telephone',
+		accessor: 'contactInfo.telephone',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.telephone || ''}>
@@ -77,12 +67,12 @@ export const ReadingRoomsOverviewTableColumns = (
 				</span>
 			);
 		},
-	},
+		disableSortBy: true,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	} as any,
 	{
-		Header:
-			t(
-				'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___publicatiestatus'
-			) || '',
+		Header: i18n.t('modules/admin/const/spaces___publicatiestatus'),
+		id: ReadingRoomOrderProps.Status,
 		accessor: 'status',
 		Cell: ({ row }: AdminReadingRoomInfoRow) => {
 			// TODO: update when backend is up to date
@@ -116,15 +106,12 @@ export const ReadingRoomsOverviewTableColumns = (
 			return (
 				<>
 					<Link
-						to={generatePath(READING_ROOMS_PATHS.edit, {
-							pageName: row.original.maintainerId,
-						})}
+						href={`/${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
+						passHref={true}
 					>
-						<Button
-							className="u-color-neutral"
-							variants="text"
-							icon={<Icon name="edit" />}
-						/>
+						<a className="u-color-neutral u-font-size-24">
+							<Icon name="edit" />
+						</a>
 					</Link>
 					<DropdownMenu
 						triggerButtonProps={{ onClick: () => null, className: 'u-color-neutral' }}
@@ -135,10 +122,13 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t(
-									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___activeren'
-								)}
-								onClick={() => updateRoomState(ReadingRoomStatus.Active)}
+								label={i18n.t('modules/admin/const/spaces___activeren')}
+								onClick={() =>
+									updateVisitorSpaceState(
+										row.original.id,
+										ReadingRoomStatus.Active
+									)
+								}
 							/>
 						)}
 						{[ReadingRoomStatus.Active, ReadingRoomStatus.Requested].includes(
@@ -147,10 +137,13 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t(
-									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___deactiveren'
-								)}
-								onClick={() => updateRoomState(ReadingRoomStatus.Inactive)}
+								label={i18n.t('modules/admin/const/spaces___deactiveren')}
+								onClick={() =>
+									updateVisitorSpaceState(
+										row.original.id,
+										ReadingRoomStatus.Inactive
+									)
+								}
 							/>
 						)}
 						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Active].includes(
@@ -159,10 +152,15 @@ export const ReadingRoomsOverviewTableColumns = (
 							<Button
 								className="u-text-left"
 								variants="text"
-								label={t(
-									'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___terug-naar-in-aanvraag'
+								label={i18n.t(
+									'modules/admin/const/spaces___terug-naar-in-aanvraag'
 								)}
-								onClick={() => updateRoomState(ReadingRoomStatus.Requested)}
+								onClick={() =>
+									updateVisitorSpaceState(
+										row.original.id,
+										ReadingRoomStatus.Requested
+									)
+								}
 							/>
 						)}
 					</DropdownMenu>

@@ -23,14 +23,6 @@ module.exports = withTM({
 		 */
 		esmExternals: 'loose',
 	},
-	async rewrites() {
-		return [
-			{
-				source: '/admin/:path*',
-				destination: '/admin',
-			},
-		];
-	},
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
 	},

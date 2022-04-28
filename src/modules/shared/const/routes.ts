@@ -14,4 +14,5 @@ export const ROUTES = {
 	termsOfService: '/gebruiksvoorwaarden',
 	myCollections: '/account/mijn-mappen',
 	visitRequested: '/:slug/toegang-aangevraagd',
+	adminEditSpace: 'admin/leeszalenbeheer/leeszalen/:slug',
 };

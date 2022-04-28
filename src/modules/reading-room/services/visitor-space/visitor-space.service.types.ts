@@ -9,7 +9,7 @@ export interface CreateVisitRequest {
 
 export type ReadingRoomSettings = Pick<
 	VisitorSpaceInfo,
-	'description' | 'color' | 'serviceDescription' | 'image'
+	'description' | 'color' | 'serviceDescription' | 'image' | 'status'
 >;
 
 export interface UpdateReadingRoomSettings extends ReadingRoomSettings {

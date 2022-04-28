@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useSelector } from 'react-redux';
 
+import { Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettings } from '@cp/components';
@@ -10,6 +11,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { Loading } from '@shared/components';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
@@ -78,4 +80,4 @@ const CPSettingsPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(CPSettingsPage);
+export default withAuth(withAllRequiredPermissions(CPSettingsPage, Permission.UPDATE_OWN_SPACE));
