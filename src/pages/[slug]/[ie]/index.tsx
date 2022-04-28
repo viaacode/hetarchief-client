@@ -680,11 +680,8 @@ const ObjectDetailPage: NextPage = () => {
 	return (
 		<VisitorLayout>
 			<Head>
-				<title>{createPageTitle(t('pages/slug/ie/index___object-detail-titel'))}</title>
-				<meta
-					name="description"
-					content={t('pages/slug/ie/index___object-detail-omschrijving')}
-				/>
+				<title>{createPageTitle(mediaInfo?.name)}</title>
+				<meta name="description" content={mediaInfo?.maintainerName} />
 			</Head>
 			{renderPageContent()}
 		</VisitorLayout>
