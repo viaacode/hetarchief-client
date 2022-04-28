@@ -289,9 +289,9 @@ const ObjectDetailPage: NextPage = () => {
 			return {
 				type: item.dctermsFormat as MediaTypes,
 				title: item.name,
-				subtitle: `(${
-					item.datePublished ? formatMediumDate(asDate(item.datePublished)) : undefined
-				})`,
+				subtitle: `${item.maintainerName ?? ''} ${
+					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''
+				}`,
 				description: item.description,
 				id: item.schemaIdentifier,
 				maintainer_id: item.maintainerId,
