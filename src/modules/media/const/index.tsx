@@ -1,12 +1,11 @@
 import { TabProps } from '@meemoo/react-components';
-import DOMPurify from 'dompurify';
 
 import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@media/components';
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapObjectToMetadata } from '@media/utils';
+import { renderWithNewLines } from '@media/utils/render-with-new-lines';
 import { Icon } from '@shared/components';
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 import { MediaTypes } from '@shared/types';
 
@@ -174,19 +173,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
-			data: mediaInfo.abstract ? (
-				<div
-					className="u-color-neutral"
-					dangerouslySetInnerHTML={{
-						__html: String(
-							DOMPurify.sanitize(
-								mediaInfo.abstract.replaceAll('\n', '<br/><br/>'),
-								RICH_TEXT_SANITIZATION
-							)
-						),
-					}}
-				/>
-			) : null,
+			data: renderWithNewLines(mediaInfo?.abstract, 'u-color-neutral'),
 		},
 		{
 			title: i18n.t('modules/media/const/index___transcriptie'),
