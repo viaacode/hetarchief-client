@@ -4,7 +4,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { ReadingRoomStatus } from '@reading-room/types';
-import { PaginationBar, sortingIcons, TagSearchBar } from '@shared/components';
+import { PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { OrderDirection } from '@shared/types';
 
@@ -90,36 +90,16 @@ const ReadingRoomsOverview: FC = () => {
 				)}
 			</h2>
 			<div className="p-admin-reading-rooms__header">
-				<TagSearchBar
-					backspaceRemovesValue={false}
+				<SearchBar
+					default={filters[SEARCH_QUERY_KEY]}
 					className="p-admin-reading-rooms__search"
-					instanceId="admin-reading-rooms-search-bar"
-					light={true}
 					placeholder={t(
 						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___zoek'
 					)}
-					searchValue={filters.search}
-					size="md"
-					onClear={() => {
-						setFilters({
-							[SEARCH_QUERY_KEY]: '',
-							page: 1,
-						});
-					}}
-					onSearch={(searchValue: string) => {
-						// Force rerender
-						if (filters.search === searchValue) {
-							setFilters({
-								[SEARCH_QUERY_KEY]: '',
-								page: 1,
-							});
-						}
-
-						setFilters({
-							[SEARCH_QUERY_KEY]: searchValue,
-							page: 1,
-						});
-					}}
+					onSearch={(value) =>
+						(typeof value === 'string' || value == undefined) &&
+						setFilters({ [SEARCH_QUERY_KEY]: value })
+					}
 				/>
 			</div>
 			{(READING_ROOMS_OVERVIEW_MOCK.items.length || 0) > 0 ? (

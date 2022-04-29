@@ -43,6 +43,12 @@
 	}
 }
 
+.c-input--md {
+	.c-input__field {
+		height: 5.6rem;
+	}
+}
+
 //  Variants
 .c-input--icon-start {
 	.c-input__field {
@@ -84,6 +90,12 @@
 		}
 	}
 
+	&.c-input--md {
+		.c-input__field {
+			border-radius: 2.8rem;
+		}
+	}
+
 	&.c-input--icon-start {
 		.c-input__field {
 			padding-left: 5.4rem;
@@ -105,11 +117,30 @@
 	}
 }
 
+.c-input--icon--double {
+	&.c-input--icon-end {
+		.c-input__icon .c-button:not(:last-child) {
+			margin-right: $spacer-xxs;
+		}
+	}
+}
+
 // Colors
 .c-input--grey {
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-input__field {
 		background-color: $silver;
+		border-color: $silver;
+
+		&:focus {
+			border-color: $teal;
+		}
+	}
+}
+
+.c-input--grey-border {
+	/* stylelint-disable-next-line no-descending-specificity */
+	.c-input__field {
 		border-color: $silver;
 
 		&:focus {

@@ -6,7 +6,7 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
 import { VisitorSpaceInfo } from '@reading-room/types';
-import { ReadingRoomCardList, TagSearchBar, VisitorSpaceCardProps } from '@shared/components';
+import { ReadingRoomCardList, SearchBar, VisitorSpaceCardProps } from '@shared/components';
 import { ReadingRoomCardType } from '@shared/components/ReadingRoomCard';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 
@@ -44,20 +44,6 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRe
 		setAreAllReadingRoomsVisible(true);
 	};
 
-	const onClearSearch = () => {
-		setQuery({ [SEARCH_QUERY_KEY]: '' });
-	};
-
-	const onSearch = (searchValue: string) => {
-		// Force rerender
-		if (query[SEARCH_QUERY_KEY] === searchValue) {
-			setQuery({
-				[SEARCH_QUERY_KEY]: '',
-			});
-		}
-		setQuery({ [SEARCH_QUERY_KEY]: searchValue });
-	};
-
 	/**
 	 * Computed
 	 */
@@ -76,14 +62,15 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRe
 			<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
 				<h3 className="p-home__subtitle">{t('pages/index___vind-een-leeszaal')}</h3>
 
-				<TagSearchBar
-					className="p-home__search"
-					backspaceRemovesValue={false}
-					instanceId="home-seach-bar"
-					placeholder={t('pages/index___zoek')}
-					searchValue={query.search ?? ''}
-					onClear={onClearSearch}
-					onSearch={onSearch}
+				<SearchBar
+					default={query[SEARCH_QUERY_KEY] || undefined}
+					placeholder={t(
+						'modules/home/components/reading-room-cards-with-search/reading-room-cards-with-search___zoek'
+					)}
+					onSearch={(value) =>
+						(typeof value === 'string' || value == undefined) &&
+						setQuery({ [SEARCH_QUERY_KEY]: value })
+					}
 				/>
 			</div>
 

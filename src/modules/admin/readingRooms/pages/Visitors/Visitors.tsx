@@ -4,7 +4,7 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { ApproveRequestBlade } from '@cp/components';
-import { ConfirmationModal, PaginationBar, sortingIcons, TagSearchBar } from '@shared/components';
+import { ConfirmationModal, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
@@ -129,34 +129,14 @@ const ReadingRoomsOverview: FC = () => {
 				{t('modules/admin/reading-rooms/pages/visitors/visitors___actieve-bezoekers')}
 			</h2>
 			<div className="p-admin-visitors__header">
-				<TagSearchBar
-					backspaceRemovesValue={false}
+				<SearchBar
+					default={filters[SEARCH_QUERY_KEY]}
 					className="p-admin-visitors__search"
-					instanceId="visitors-search-bar"
-					light={true}
 					placeholder={t('modules/admin/reading-rooms/pages/visitors/visitors___zoek')}
-					searchValue={filters.search}
-					size="md"
-					onClear={() => {
-						setFilters({
-							[SEARCH_QUERY_KEY]: '',
-							page: 1,
-						});
-					}}
-					onSearch={(searchValue: string) => {
-						// Force rerender
-						if (filters.search === searchValue) {
-							setFilters({
-								[SEARCH_QUERY_KEY]: '',
-								page: 1,
-							});
-						}
-
-						setFilters({
-							[SEARCH_QUERY_KEY]: searchValue,
-							page: 1,
-						});
-					}}
+					onSearch={(value) =>
+						(typeof value === 'string' || value == undefined) &&
+						setFilters({ [SEARCH_QUERY_KEY]: value })
+					}
 				/>
 			</div>
 

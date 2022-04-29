@@ -29,7 +29,7 @@ import {
 	ListNavigationItem,
 	MediaCardList,
 	PaginationBar,
-	TagSearchBar,
+	SearchBar,
 } from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
@@ -356,33 +356,16 @@ const AccountMyCollections: NextPage = () => {
 							</div>
 
 							<div className="l-container u-mb-24:md u-mb-32">
-								<TagSearchBar
-									isDisabled={collectionMedia.isFetching}
-									backspaceRemovesValue={false}
+								<SearchBar
+									default={filters[SEARCH_QUERY_KEY]}
 									className="p-account-my-collections__search"
-									instanceId="collections-search-bar"
-									light={true}
 									placeholder={t(
 										'pages/account/mijn-mappen/collection-slug/index___zoek'
 									)}
-									searchValue={filters.search}
-									onClear={() => {
-										setFilters({
-											[SEARCH_QUERY_KEY]: '',
-											page: 1,
-										});
-									}}
-									onSearch={(searchValue: string) => {
-										// TODO: avoid rerender
-										// Force rerender to avoid visual disconnect in edge-case
-										searchValue === filters.search &&
-											setFilters({ [SEARCH_QUERY_KEY]: '' });
-
-										setFilters({
-											[SEARCH_QUERY_KEY]: searchValue,
-											page: 1,
-										});
-									}}
+									onSearch={(value) =>
+										(typeof value === 'string' || value == undefined) &&
+										setFilters({ [SEARCH_QUERY_KEY]: value })
+									}
 								/>
 							</div>
 
