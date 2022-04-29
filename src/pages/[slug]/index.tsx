@@ -64,6 +64,7 @@ import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
@@ -147,6 +148,8 @@ const ReadingRoomPage: NextPage = () => {
 
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	const collections = useSelector(selectCollections);
 
 	/**
 	 * Computed
@@ -403,6 +406,13 @@ const ReadingRoomPage: NextPage = () => {
 			return null;
 		}
 
+		const isInAFolder = (collections?.items || []).some((collection) => {
+			return collection.objects?.find(
+				(object) =>
+					object.schemaIdentifier === (item as IdentifiableMediaCard).schemaIdentifier
+			);
+		});
+
 		return (
 			<Button
 				onClick={(e) => {
@@ -413,7 +423,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(item as IdentifiableMediaCard);
 					setShowAddToCollectionBlade(true);
 				}}
-				icon={<Icon type="light" name="bookmark" />}
+				icon={<Icon type={isInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
 			/>
 		);
