@@ -52,7 +52,6 @@ import {
 	TabLabel,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
-import { Peak } from '@shared/components/Peak';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -106,14 +105,15 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
-	const [pauseMedia, setPauseMedia] = useState(true);
-	const [isPlayEventFired, setIsPlayEventFired] = useState(false);
+	const [isMediaPaused, setIsMediaPaused] = useState(true);
+	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [currentRepresentation, setCurrentRepresentation] = useState<
 		MediaRepresentation | undefined
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
+	const [percentagePlayed, setPercentagePlayed] = useState<number>(0);
 
 	// Layout
 	useStickyLayout();
@@ -208,7 +208,7 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
 		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
-			setPauseMedia(true);
+			setIsMediaPaused(true);
 		}
 	}, [activeTab, windowSize.width]);
 
@@ -233,11 +233,11 @@ const ObjectDetailPage: NextPage = () => {
 		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Audio) {
 			mediaInfo.representations = mediaInfo?.representations.filter((object) => {
 				if (object.dctermsFormat === 'peak') {
-					// Peak file containing the audio wave form in json format
+					// Ignore peak file containing the audio wave form in json format
 					return false;
 				}
 				if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
-					// Video files containing the speaker and audio
+					// Ignore video files containing the speaker and audio
 					return false;
 				}
 				// Actual video files and mp3 files and images
@@ -359,13 +359,17 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	const handleOnPlay = () => {
-		setPauseMedia(false);
-		if (!isPlayEventFired) {
-			setIsPlayEventFired(true);
+		setIsMediaPaused(false);
+		if (!hasMediaPlayed) {
+			setHasMediaPlayed(true);
 			EventsService.triggerEvent(LogEventType.ITEM_PLAY, window.location.href, {
 				schema_identifier: router.query.ie as string,
 			});
 		}
+	};
+
+	const handleOnPause = () => {
+		setIsMediaPaused(true);
 	};
 
 	/**
@@ -398,38 +402,42 @@ const ObjectDetailPage: NextPage = () => {
 					src={playableUrl}
 					poster={mediaInfo?.thumbnailUrl || undefined}
 					title={representation.name}
-					pause={pauseMedia}
+					pause={isMediaPaused}
 					onPlay={handleOnPlay}
+					onPause={handleOnPause}
 					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
+					plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
 				/>
 			);
 		}
 		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			return (
 				<div className={styles['c-audio-player-wrapper']}>
-					<FlowPlayer
-						className={clsx(
-							'p-object-detail__flowplayer',
-							showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
-						)}
-						key={flowPlayerKey}
-						src={[
-							{
-								src: 'https://file-examples.com/storage/fef12739526267ac9a2b543/2017/11/file_example_MP3_1MG.mp3',
-								// src: playableUrl,
-								type: 'audio/mp3',
-							},
-						]}
-						poster={mediaInfo?.thumbnailUrl || undefined}
-						title={representation.name}
-						pause={pauseMedia}
-						onPlay={handleOnPlay}
-						token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
-						dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
-					/>
-					{!isLoadingPeak && !errorPeak && (
-						<Peak json={peakJson} className={styles['c-peak-visualisation']} />
+					{!errorPeak && !isLoadingPeak && (
+						<FlowPlayer
+							className={clsx(
+								'p-object-detail__flowplayer',
+								showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+							)}
+							key={flowPlayerKey}
+							src={[
+								{
+									src: 'https://file-examples.com/storage/fef12739526267ac9a2b543/2017/11/file_example_MP3_1MG.mp3',
+									// src: playableUrl,
+									type: 'audio/mp3',
+								},
+							]}
+							title={representation.name}
+							pause={isMediaPaused}
+							onPlay={handleOnPlay}
+							onPause={handleOnPause}
+							onTimeUpdate={(_time, percentage) => setPercentagePlayed(percentage)}
+							token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
+							dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
+							plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
+							peakJson={!errorPeak && !isLoadingPeak ? peakJson : undefined}
+						/>
 					)}
 				</div>
 			);
