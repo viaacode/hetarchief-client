@@ -53,11 +53,6 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 			checkLoginStatus();
 		}, [checkLoginStatus]);
 
-		return (
-			<>
-				{!tosAccepted && <Loading fullscreen />}
-				<WrappedComponent {...props} />
-			</>
-		);
+		return tosAccepted ? <WrappedComponent {...props} /> : <Loading fullscreen />;
 	};
 };
