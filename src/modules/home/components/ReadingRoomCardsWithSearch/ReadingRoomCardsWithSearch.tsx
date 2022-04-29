@@ -67,10 +67,7 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRe
 					placeholder={t(
 						'modules/home/components/reading-room-cards-with-search/reading-room-cards-with-search___zoek'
 					)}
-					onSearch={(value) =>
-						(typeof value === 'string' || value == undefined) &&
-						setQuery({ [SEARCH_QUERY_KEY]: value })
-					}
+					onSearch={(value) => setQuery({ [SEARCH_QUERY_KEY]: value })}
 				/>
 			</div>
 

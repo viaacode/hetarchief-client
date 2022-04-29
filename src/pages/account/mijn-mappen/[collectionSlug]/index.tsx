@@ -373,10 +373,7 @@ const AccountMyCollections: NextPage = () => {
 									placeholder={t(
 										'pages/account/mijn-mappen/collection-slug/index___zoek'
 									)}
-									onSearch={(value) =>
-										(typeof value === 'string' || value == undefined) &&
-										setFilters({ [SEARCH_QUERY_KEY]: value })
-									}
+									onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 								/>
 							</div>
 

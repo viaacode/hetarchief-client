@@ -61,9 +61,7 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 					placeholder={t(
 						'modules/reading-room/components/genre-filter-form/genre-filter-form___zoek'
 					)}
-					onSearch={(value) =>
-						(typeof value === 'string' || value == undefined) && setSearch(value || '')
-					}
+					onSearch={(value) => setSearch(value || '')}
 				/>
 
 				<div className="u-my-32">

@@ -155,10 +155,7 @@ const Visitors: FC = () => {
 							default={filters[SEARCH_QUERY_KEY]}
 							className="p-admin-visitors__search"
 							placeholder={t('pages/admin/leeszalenbeheer/bezoekers/index___zoek')}
-							onSearch={(value) =>
-								(typeof value === 'string' || value == undefined) &&
-								setFilters({ [SEARCH_QUERY_KEY]: value })
-							}
+							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 					</div>
 

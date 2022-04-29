@@ -61,9 +61,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					placeholder={t(
 						'modules/reading-room/components/language-filter-form/language-filter-form___zoek'
 					)}
-					onSearch={(value) =>
-						(typeof value === 'string' || value == undefined) && setSearch(value || '')
-					}
+					onSearch={(value) => setSearch(value || '')}
 				/>
 
 				<div className="u-my-32">

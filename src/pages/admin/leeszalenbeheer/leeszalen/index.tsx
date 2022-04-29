@@ -114,10 +114,7 @@ const ReadingRoomsOverview: FC = () => {
 					default={filters[SEARCH_QUERY_KEY]}
 					className="p-admin-reading-rooms__search"
 					placeholder={t('pages/admin/leeszalenbeheer/leeszalen/index___zoek')}
-					onSearch={(value) =>
-						(typeof value === 'string' || value == undefined) &&
-						setFilters({ [SEARCH_QUERY_KEY]: value })
-					}
+					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 				/>
 			</div>
 

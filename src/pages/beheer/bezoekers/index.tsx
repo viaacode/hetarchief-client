@@ -186,10 +186,7 @@ const CPVisitorsPage: NextPage = () => {
 							default={filters[SEARCH_QUERY_KEY]}
 							className="p-cp-visitors__search"
 							placeholder={t('pages/beheer/bezoekers/index___zoek')}
-							onSearch={(value) =>
-								(typeof value === 'string' || value == undefined) &&
-								setFilters({ [SEARCH_QUERY_KEY]: value })
-							}
+							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 
 						<ScrollableTabs

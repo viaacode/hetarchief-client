@@ -144,10 +144,7 @@ const Requests: FC = () => {
 							default={filters[SEARCH_QUERY_KEY]}
 							className="p-admin-requests__search"
 							placeholder={t('pages/admin/leeszalenbeheer/aanvragen/index___zoek')}
-							onSearch={(value) =>
-								(typeof value === 'string' || value == undefined) &&
-								setFilters({ [SEARCH_QUERY_KEY]: value })
-							}
+							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 
 						<ScrollableTabs

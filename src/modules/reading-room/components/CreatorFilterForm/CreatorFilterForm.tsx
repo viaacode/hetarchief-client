@@ -61,9 +61,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 					placeholder={t(
 						'modules/reading-room/components/creator-filter-form/creator-filter-form___zoek'
 					)}
-					onSearch={(value) =>
-						(typeof value === 'string' || value == undefined) && setSearch(value || '')
-					}
+					onSearch={(value) => setSearch(value || '')}
 				/>
 
 				<div className="u-my-32">
