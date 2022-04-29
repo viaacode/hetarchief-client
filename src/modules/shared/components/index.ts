@@ -27,6 +27,7 @@ export * from './Sidebar';
 export * from './SidebarLayoutTitle';
 export * from './Table';
 export * from './Tabs';
+export * from './TagSearchBar';
 export * from './TagsInput';
 export * from './Timepicker';
 export * from './Toast';

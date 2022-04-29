@@ -44,20 +44,6 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRe
 		setAreAllReadingRoomsVisible(true);
 	};
 
-	const onClearSearch = () => {
-		setQuery({ [SEARCH_QUERY_KEY]: '' });
-	};
-
-	const onSearch = (searchValue: string) => {
-		// Force rerender
-		if (query[SEARCH_QUERY_KEY] === searchValue) {
-			setQuery({
-				[SEARCH_QUERY_KEY]: '',
-			});
-		}
-		setQuery({ [SEARCH_QUERY_KEY]: searchValue });
-	};
-
 	/**
 	 * Computed
 	 */
@@ -77,13 +63,12 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRe
 				<h3 className="p-home__subtitle">{t('pages/index___vind-een-leeszaal')}</h3>
 
 				<SearchBar
-					className="p-home__search"
-					backspaceRemovesValue={false}
-					instanceId="home-seach-bar"
-					placeholder={t('pages/index___zoek')}
-					searchValue={query.search ?? ''}
-					onClear={onClearSearch}
-					onSearch={onSearch}
+					default={query[SEARCH_QUERY_KEY] || undefined}
+					variants={['rounded', 'grey', 'icon--double']}
+					placeholder={t(
+						'modules/home/components/reading-room-cards-with-search/reading-room-cards-with-search___zoek'
+					)}
+					onSearch={(value) => setQuery({ [SEARCH_QUERY_KEY]: value })}
 				/>
 			</div>
 
