@@ -26,7 +26,11 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	const isMasonryView = view === 'grid';
 
 	const renderSidebar = () =>
-		sidebar && <div className={styles['c-media-card-list__sidebar']}>{sidebar}</div>;
+		sidebar && (
+			<div key={'MediaCardList--sidebar'} className={styles['c-media-card-list__sidebar']}>
+				{sidebar}
+			</div>
+		);
 
 	const getKey = (item: MediaCardProps, i: number) => {
 		let key = (item as IdentifiableMediaCard).schemaIdentifier;

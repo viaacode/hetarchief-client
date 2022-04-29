@@ -453,7 +453,7 @@ const ReadingRoomPage: NextPage = () => {
 					const href = `/${slug}/${source?.meemoo_fragment_id}`;
 
 					return (
-						<Link href={href.toLowerCase()}>
+						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
 							<a className="u-text-no-decoration">{card}</a>
 						</Link>
 					);
