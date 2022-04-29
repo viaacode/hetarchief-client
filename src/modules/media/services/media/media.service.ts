@@ -53,7 +53,13 @@ export class MediaService {
 					filters: filtered,
 					size,
 					page,
-					requestedAggs: ['format', 'genre', 'creator', 'language'],
+					requestedAggs: [
+						MediaSearchFilterField.FORMAT,
+						MediaSearchFilterField.GENRE,
+						MediaSearchFilterField.CREATOR,
+						MediaSearchFilterField.LANGUAGE,
+						MediaSearchFilterField.MEDIUM,
+					],
 					...parsedSort,
 				}),
 			})

@@ -8,12 +8,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 
 import { Permission } from '@account/const';
 import { AuthService } from '@auth/services/auth-service';
-import {
-	checkLoginAction,
-	selectCheckLoginLoading,
-	selectIsLoggedIn,
-	selectUser,
-} from '@auth/store/user';
+import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import {
 	footerLeftItem,

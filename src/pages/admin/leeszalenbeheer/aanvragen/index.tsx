@@ -6,6 +6,13 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
+import {
+	ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
+	requestStatusFilters,
+	RequestTableColumns,
+	RequestTablePageSize,
+} from '@admin/const';
+import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
@@ -18,14 +25,6 @@ import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
-
-import {
-	ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
-	requestStatusFilters,
-	RequestTableColumns,
-	RequestTablePageSize,
-} from '@admin/const';
-import { AdminLayout } from '@admin/layouts';
 
 const Requests: FC = () => {
 	const { t } = useTranslation();

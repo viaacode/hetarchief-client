@@ -6,6 +6,12 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
+import {
+	ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG,
+	ReadingRoomsOverviewTableColumns,
+	ReadingRoomsOverviewTablePageSize,
+} from '@admin/const';
+import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
@@ -17,13 +23,6 @@ import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequeredPermissio
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
-
-import {
-	ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG,
-	ReadingRoomsOverviewTableColumns,
-	ReadingRoomsOverviewTablePageSize,
-} from '@admin/const';
-import { AdminLayout } from '@admin/layouts';
 
 const ReadingRoomsOverview: FC = () => {
 	const { t } = useTranslation();

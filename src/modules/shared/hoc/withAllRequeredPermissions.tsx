@@ -37,7 +37,7 @@ export const withAllRequiredPermissions = (
 					),
 				});
 			}
-		}, [router, hasRequiredPermissions, t, checkLoginLoading, checkLoginLoading, dispatch]);
+		}, [router, hasRequiredPermissions, t, hasCheckedLogin, checkLoginLoading, dispatch]);
 
 		if (!hasRequiredPermissions) {
 			return <Loading fullscreen />;
