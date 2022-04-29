@@ -137,8 +137,8 @@ const ObjectDetailPage: NextPage = () => {
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.files[0].schemaIdentifier ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.files[0].schemaIdentifier) // Force flowplayer rerender after successful fetch
+		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
 	);
 
 	// ook interessant
@@ -390,7 +390,7 @@ const ObjectDetailPage: NextPage = () => {
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
-						src={representation.files[0].schemaIdentifier}
+						src={representation.files[0]?.schemaIdentifier ?? null}
 						alt={representation.name}
 						layout="fill"
 						objectFit="contain"
@@ -506,7 +506,7 @@ const ObjectDetailPage: NextPage = () => {
 							className="p-object-detail__metadata-component"
 							metadata={METADATA_FIELDS(mediaInfo)}
 						/>
-						{(!!similar.length || !!mediaInfo.keywords.length) && (
+						{(!!similar.length || !!mediaInfo.keywords?.length) && (
 							<Metadata
 								className="p-object-detail__metadata-component"
 								metadata={[
