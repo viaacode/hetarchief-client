@@ -15,6 +15,8 @@ export interface VisitorSpaceCardProps extends CardProps {
 	access?: ReadingRoomAccess;
 	onAccessRequest?: (room: Partial<Omit<VisitorSpaceInfo, 'status'>>) => void;
 	onContactClick?: (room: Partial<Omit<VisitorSpaceInfo, 'status'>>) => void;
-	room: Partial<Omit<VisitorSpaceInfo, 'status'>> & { slug: string };
+	room: Pick<VisitorSpaceInfo, 'logo' | 'id' | 'color' | 'image' | 'name' | 'info'> & {
+		slug: string;
+	};
 	type: ReadingRoomCardType;
 }

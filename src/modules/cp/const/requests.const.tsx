@@ -13,8 +13,10 @@ import { OrderDirection, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDateWithTime } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
+export const VISIT_REQUEST_ID_QUERY_KEY = 'aanvraag';
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
+	[VISIT_REQUEST_ID_QUERY_KEY]: withDefault(StringParam, undefined),
 	status: withDefault(StringParam, RequestStatusAll.ALL),
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),

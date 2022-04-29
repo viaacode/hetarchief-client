@@ -6,12 +6,14 @@ export const ROUTE_PREFIXES = {
 	about: 'over-leeszalen',
 	faq: 'faq',
 	gebruiksvoorwaarden: 'gebruiksvoorwaarden',
+	cookiebeleid: 'cookiebeleid',
 	notFound: '404',
 };
 
 export const ROUTES = {
 	home: '/',
 	termsOfService: '/gebruiksvoorwaarden',
+	cookiePolicy: '/cookiebeleid',
 	myCollections: '/account/mijn-mappen',
 	visitRequested: '/:slug/toegang-aangevraagd',
 	adminEditSpace: 'admin/leeszalenbeheer/leeszalen/:slug',
