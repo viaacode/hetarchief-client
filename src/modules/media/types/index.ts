@@ -134,6 +134,7 @@ export interface MediaSimilarHit {
 
 export interface MediaSearchAggregations {
 	dcterms_format: MediaSearchAggregation<string>;
+	dcterms_medium: MediaSearchAggregation<string>;
 	schema_genre: MediaSearchAggregation<string>;
 	schema_creator: MediaSearchAggregation<string>;
 	schema_in_language: MediaSearchAggregation<string>;

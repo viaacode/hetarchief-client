@@ -78,8 +78,8 @@ const CPRequestsPage: NextPage = () => {
 					setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: undefined });
 					setSelectedNotOnCurrentPage(undefined);
 					toastService.notify({
-						title: t('Error'),
-						description: t('Deze aanvraag bestaat niet'),
+						title: t('pages/beheer/aanvragen/index___error'),
+						description: t('pages/beheer/aanvragen/index___deze-aanvraag-bestaat-niet'),
 					});
 				});
 		}
