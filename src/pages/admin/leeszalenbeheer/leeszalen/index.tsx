@@ -111,35 +111,10 @@ const ReadingRoomsOverview: FC = () => {
 		<>
 			<div className="p-admin-reading-rooms__header">
 				<SearchBar
-					backspaceRemovesValue={false}
+					default={filters[SEARCH_QUERY_KEY]}
 					className="p-admin-reading-rooms__search"
-					instanceId="admin-reading-rooms-search-bar"
-					light={true}
-					placeholder={t(
-						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___zoek'
-					)}
-					searchValue={filters.search}
-					size="md"
-					onClear={() => {
-						setFilters({
-							[SEARCH_QUERY_KEY]: '',
-							page: 1,
-						});
-					}}
-					onSearch={(searchValue: string) => {
-						// Force rerender
-						if (filters.search === searchValue) {
-							setFilters({
-								[SEARCH_QUERY_KEY]: '',
-								page: 1,
-							});
-						}
-
-						setFilters({
-							[SEARCH_QUERY_KEY]: searchValue,
-							page: 1,
-						});
-					}}
+					placeholder={t('pages/admin/leeszalenbeheer/leeszalen/index___zoek')}
+					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 				/>
 			</div>
 

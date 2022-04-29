@@ -5,7 +5,7 @@
 * Elements
 */
 
-.c-search-bar.c-tags-input {
+.c-tag-search-bar.c-tags-input {
 	.c-tags-input__control {
 		border-radius: 2.4rem;
 		background-color: $silver;
@@ -29,7 +29,7 @@
 	* Modifiers
 	*/
 
-	&.c-search-bar--md {
+	&.c-tag-search-bar--md {
 		.c-tags-input__control {
 			@include tabs-border-radius;
 
@@ -42,7 +42,7 @@
 		}
 	}
 
-	&.c-search-bar--lg {
+	&.c-tag-search-bar--lg {
 		.c-tags-input__control {
 			min-height: 4.8rem;
 			border-radius: 2.4rem;
@@ -76,7 +76,7 @@
 		}
 	}
 
-	&.c-search-bar--light {
+	&.c-tag-search-bar--light {
 		.c-tags-input__control {
 			background-color: $white;
 			border-color: $silver;
@@ -89,7 +89,7 @@
 	}
 }
 
-.c-search-bar__value-placeholder {
+.c-tag-search-bar__value-placeholder {
 	color: $neutral;
 	margin-right: 1.4rem;
 
@@ -98,6 +98,6 @@
 	}
 }
 
-.c-search-bar__clear-label {
+.c-tag-search-bar__clear-label {
 	text-decoration: underline;
 }
