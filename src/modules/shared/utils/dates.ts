@@ -1,4 +1,4 @@
-import { format, isSameDay } from 'date-fns';
+import { differenceInDays, format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
 import { i18n } from 'next-i18next';
 
 import { getLocaleFromi18nLanguage } from './i18n';
@@ -27,7 +27,8 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 	return new Date(isNumber ? Number(timezoned) : timezoned);
 };
 
-export const formatWithLocale = (formatString: string, date?: Date): string => {
+// Do not export to contain all user-facing formatters here
+const formatWithLocale = (formatString: string, date?: Date): string => {
 	const locale = getLocaleFromi18nLanguage(i18n?.language || '');
 	return date ? format(date, formatString, { locale }) : '';
 };
@@ -61,4 +62,26 @@ export const formatSameDayRange = (from?: Date | string, to?: Date | string): st
 	const end = f && t && isSameDay(f, t) ? formatTime(t) : formatMediumDateWithTime(t);
 
 	return `${start} - ${end}`;
+};
+
+// 10 minuten geleden
+// 3 uur geleden
+// 13 apr. 2022, 09:30
+export const formatDistanceToday = (input: Date | string): string => {
+	const date = asDate(input);
+
+	if (date && differenceInDays(new Date(), date) <= 1) {
+		return formatDistanceToNow(date, {
+			addSuffix: true,
+			locale: getLocaleFromi18nLanguage(i18n?.language || ''),
+		});
+	}
+
+	return date ? formatMediumDateWithTime(date) : '';
+};
+
+// 09:30
+// 13/04/2022
+export const formatSameDayTimeOrDate = (date?: Date): string => {
+	return date && isToday(date) ? formatTime(date) : formatDate(date);
 };

@@ -42,7 +42,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 
-	const isMobile = windowSize.width ? windowSize.width < Breakpoints.md : false;
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const openIcon: IconLightNames = isMobile ? 'filter' : isOpen ? 'angle-up' : 'angle-down';
 
 	useScrollLock(lockScroll, 'FilterMenu');
