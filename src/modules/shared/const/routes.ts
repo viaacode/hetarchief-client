@@ -15,6 +15,8 @@ export const ROUTES = {
 	termsOfService: '/gebruiksvoorwaarden',
 	cookiePolicy: '/cookiebeleid',
 	myCollections: '/account/mijn-mappen',
+	myHistory: '/account/mijn-historiek',
 	visitRequested: '/:slug/toegang-aangevraagd',
-	adminEditSpace: 'admin/leeszalenbeheer/leeszalen/:slug',
+	adminEditSpace: '/admin/leeszalenbeheer/leeszalen/:slug',
+	beheerRequests: '/beheer/aanvragen',
 };

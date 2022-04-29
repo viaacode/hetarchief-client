@@ -7,6 +7,7 @@ import { FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Loading } from '@shared/components';
+import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import {
 	Notification,
 	NotificationStatus,
@@ -17,7 +18,6 @@ import { Blade } from '../Blade';
 import { Icon } from '../Icon';
 import { UnreadMarker } from '../UnreadMarker';
 
-import { NOTIFICATION_TYPE_TO_PATH } from './NotificationCenter.consts';
 import styles from './NotificationCenter.module.scss';
 import { NotificationCenterProps } from './NotificationCenter.types';
 
@@ -125,11 +125,6 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		onClose();
 	};
 
-	const getPath = (notification: Notification): string | null =>
-		NOTIFICATION_TYPE_TO_PATH[notification.type]
-			?.replace('{visitRequestId}', notification.visitId)
-			?.replace('{readingRoomId}', notification.readingRoomId) || null;
-
 	const renderLink = (notification: Notification) => {
 		const content = (
 			<article className={styles['c-notification-center__row-content']}>
@@ -147,7 +142,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		);
 
 		// Wrap in link if notification should link to somewhere
-		const path: string | null = getPath(notification);
+		const path: string | null = NotificationsService.getPath(notification);
 
 		if (!path) {
 			return content;
