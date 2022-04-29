@@ -1,6 +1,5 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isToday } from 'date-fns';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
@@ -61,14 +60,13 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
+import { Breakpoints, MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
-	formatDate,
 	formatMediumDate,
 	formatMediumDateWithTime,
-	formatTime,
+	formatSameDayTimeOrDate,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
@@ -176,17 +174,9 @@ const ObjectDetailPage: NextPage = () => {
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
-	const isMobile = windowSize.width && windowSize.width < 768;
-	const accessEndDate =
-		visitRequest && visitRequest.endAt
-			? formatMediumDateWithTime(asDate(visitRequest.endAt))
-			: '';
-	const accessEndDateMobile =
-		visitRequest && visitRequest.endAt
-			? isToday(asDate(visitRequest.endAt) ?? 0)
-				? formatTime(asDate(visitRequest.endAt))
-				: formatDate(asDate(visitRequest.endAt))
-			: '';
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
+	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
 
 	/**
 	 * Effects
@@ -211,10 +201,10 @@ const ObjectDetailPage: NextPage = () => {
 
 	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
-		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
+		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
 			setPauseMedia(true);
 		}
-	}, [activeTab, windowSize.width]);
+	}, [activeTab, isMobile]);
 
 	useEffect(() => {
 		let backLink = `/${router.query.slug}`;
@@ -243,7 +233,7 @@ const ObjectDetailPage: NextPage = () => {
 		setCurrentRepresentation(mediaInfo?.representations[0]);
 
 		// Set default view
-		if (windowSize.width && windowSize.width < 768) {
+		if (isMobile) {
 			// Default to metadata tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata);
 		} else {
