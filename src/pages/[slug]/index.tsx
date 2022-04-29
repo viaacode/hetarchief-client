@@ -402,6 +402,7 @@ const ReadingRoomPage: NextPage = () => {
 		if (!canManageFolders) {
 			return null;
 		}
+
 		return (
 			<Button
 				onClick={(e) => {
