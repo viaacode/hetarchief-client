@@ -64,6 +64,7 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRe
 
 				<SearchBar
 					default={query[SEARCH_QUERY_KEY] || undefined}
+					variants={['rounded', 'grey', 'icon--double']}
 					placeholder={t(
 						'modules/home/components/reading-room-cards-with-search/reading-room-cards-with-search___zoek'
 					)}

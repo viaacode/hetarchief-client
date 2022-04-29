@@ -149,6 +149,17 @@
 	}
 }
 
+.c-input--black-border {
+		/* stylelint-disable-next-line no-descending-specificity */
+		.c-input__field {
+			border-color: $black;
+	
+			&:focus {
+				border-color: $teal;
+			}
+		}
+}
+
 // States
 
 /* stylelint-disable-next-line no-duplicate-selectors */

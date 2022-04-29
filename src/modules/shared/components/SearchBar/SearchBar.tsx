@@ -12,12 +12,24 @@ const SearchBar: FC<SearchBarProps> = ({
 }) => {
 	const [search, setSearch] = useState<string | undefined>(rest.default);
 
+	const getVariants = () => {
+		let modifiers: string[] = [];
+
+		if (typeof variants === 'string') {
+			modifiers = [variants];
+		} else {
+			modifiers = variants;
+		}
+
+		return [...modifiers, ...(search ? ['black-border'] : [])];
+	};
+
 	return (
 		<TextInput
 			{...rest}
 			value={search}
 			onChange={(e) => setSearch(e.target.value)}
-			variants={variants}
+			variants={getVariants()}
 			onKeyDown={(e) => onKey(e, [...keysEnter], () => onSearch(search))}
 			iconEnd={
 				<>
