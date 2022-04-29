@@ -299,6 +299,11 @@
 	}
 }
 
+.c-button--fill {
+	border-radius: 0;
+	height: auto;
+}
+
 // States
 .c-button--disabled {
 	background-color: $silver;
