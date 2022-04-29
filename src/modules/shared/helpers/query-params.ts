@@ -1,6 +1,8 @@
 import { decodeString, encodeString, QueryParamConfig } from 'use-query-params';
 
-const QUERY_PARAM_SORT_DIRECTIONS = ['asc', 'desc'] as const;
+import { OrderDirection } from '@shared/types';
+
+const QUERY_PARAM_SORT_DIRECTIONS = [OrderDirection.asc, OrderDirection.desc] as const;
 type SortDirectionTuple = typeof QUERY_PARAM_SORT_DIRECTIONS;
 type SortDirection = SortDirectionTuple[number];
 

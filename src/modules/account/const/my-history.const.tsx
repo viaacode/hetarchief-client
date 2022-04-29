@@ -4,15 +4,15 @@ import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
-import { Visit, VisitRow } from '@shared/types';
+import { OrderDirection, Visit, VisitRow } from '@shared/types';
 import { createHomeWithReadingRoomFilterUrl, formatSameDayRange } from '@shared/utils';
 
 export const HistoryItemListSize = 20;
 
 export const ACCOUNT_HISTORY_QUERY_PARAM_CONFIG = {
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, undefined),
-	orderDirection: withDefault(SortDirectionParam, undefined),
+	orderProp: withDefault(StringParam, 'startAt'),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
 export const HistoryTableAccessComboId = 'account-history-from-to';

@@ -1,4 +1,4 @@
-import { differenceInDays, format, formatDistanceToNow, isSameDay } from 'date-fns';
+import { differenceInDays, format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
 import { i18n } from 'next-i18next';
 
 import { getLocaleFromi18nLanguage } from './i18n';
@@ -78,4 +78,10 @@ export const formatDistanceToday = (input: Date | string): string => {
 	}
 
 	return date ? formatMediumDateWithTime(date) : '';
+};
+
+// 09:30
+// 13/04/2022
+export const formatSameDayTimeOrDate = (date?: Date): string => {
+	return date && isToday(date) ? formatTime(date) : formatDate(date);
 };

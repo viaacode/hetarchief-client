@@ -83,7 +83,7 @@ export const footerLeftItem: FooterItem = {
 	},
 	link: {
 		label: '',
-		to: 'https://www.test.com',
+		to: 'https://meemoo.be',
 		external: true,
 	},
 };
@@ -91,14 +91,14 @@ export const footerLeftItem: FooterItem = {
 export const footerRightItem: FooterItem = {
 	label: 'Gesteund door',
 	image: {
-		name: 'logo_vlaanderen.png',
+		name: 'logo_vlaanderen.svg',
 		alt: 'Vlaanderen logo',
 		width: 89,
 		height: 39,
 	},
 	link: {
 		label: '',
-		to: 'https://www.test.com',
+		to: 'https://www.vlaanderen.be',
 		external: true,
 	},
 };
