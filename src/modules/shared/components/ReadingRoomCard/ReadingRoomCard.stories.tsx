@@ -28,7 +28,7 @@ const TemplateWithNoBg: ComponentStory<typeof ReadingRoomCard> = (args) => (
 	<>
 		<ReadingRoomCard {...args} />
 		<div className="u-pt-32">
-			<ReadingRoomCard {...args} room={{ ...args.room, color: undefined, image: '' }} />
+			<ReadingRoomCard {...args} room={{ ...args.room, color: null, image: '' }} />
 		</div>
 	</>
 );
@@ -38,8 +38,8 @@ Logo.args = {
 	...mockReadingRoomCardProps,
 	room: {
 		...mockReadingRoomCardProps.room,
-		color: undefined,
-		image: undefined,
+		color: null,
+		image: null,
 	},
 };
 
@@ -48,7 +48,7 @@ Color.args = {
 	...mockReadingRoomCardProps,
 	room: {
 		...mockReadingRoomCardProps.room,
-		image: undefined,
+		image: null,
 	},
 };
 

@@ -13,7 +13,7 @@ import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSea
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
-import { ReadingRoomCard, ReadingRoomCardType } from '@shared/components';
+import { ReadingRoomCard, ReadingRoomCardType, VisitorSpaceCardProps } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
@@ -181,13 +181,14 @@ const LoggedInHome: FC = () => {
 		setIsProcessVisitBladeOpen(true);
 	};
 
-	const mapVisitToRoom = (visit: Visit) => ({
-		image: visit.spaceImage,
-		logo: visit.spaceLogo,
-		color: visit.spaceColor,
-		name: visit.spaceName,
-		info: visit.spaceInfo,
+	const mapVisitToRoom = (visit: Visit): VisitorSpaceCardProps['room'] => ({
+		image: visit.spaceImage || null,
+		logo: visit.spaceLogo || '',
+		color: visit.spaceColor || null,
+		name: visit.spaceName || '',
+		info: visit.spaceInfo || '',
 		slug: visit.spaceSlug,
+		id: visit.spaceId,
 	});
 
 	/**
