@@ -106,7 +106,7 @@ export const ReadingRoomsOverviewTableColumns = (
 			return (
 				<>
 					<Link
-						href={`/${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
+						href={`${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
 						passHref={true}
 					>
 						<a className="u-color-neutral u-font-size-24">

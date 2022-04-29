@@ -8,7 +8,7 @@ import { CopyButton, DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
-import { Visit, VisitRow } from '@shared/types';
+import { OrderDirection, Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
 import { VisitTimeframe } from '@visits/types';
 
@@ -16,8 +16,8 @@ export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
 	timeframe: withDefault(StringParam, RequestStatusAll.ALL),
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, undefined),
-	orderDirection: withDefault(SortDirectionParam, undefined),
+	orderProp: withDefault(StringParam, 'startAt'),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
 export const visitorsStatusFilters = (): TabProps[] => {
