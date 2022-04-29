@@ -14,7 +14,7 @@ import { Icon } from '../Icon';
 import styles from './DropdownMenu.module.scss';
 
 type DropdownMenuProps = Omit<DropdownProps, 'isOpen'> & {
-	triggerButtonProps?: ButtonProps & { onClick: (evt: MouseEvent) => void };
+	triggerButtonProps?: ButtonProps & { onClick?: (evt: MouseEvent) => void };
 };
 
 export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, children, ...rest }) => {

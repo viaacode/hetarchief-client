@@ -17,7 +17,7 @@ import {
 	startOfDay,
 } from 'date-fns';
 import { useTranslation } from 'next-i18next';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
 import { Blade, Icon, VisitSummary } from '@shared/components';
@@ -57,6 +57,17 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		),
 	} = props;
 
+	const defaultValues = useMemo(
+		() => ({
+			accessFrom: asDate(selected?.startAt) || defaultAccessFrom(new Date()),
+			accessTo: asDate(selected?.endAt) || defaultAccessTo(new Date()),
+			accessRemark: selected?.note || undefined,
+		}),
+		[selected]
+	);
+
+	const [form, setForm] = useState<ApproveRequestFormState>(defaultValues);
+
 	const {
 		control,
 		formState: { errors },
@@ -66,19 +77,23 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		reset,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
-		defaultValues: {
-			accessFrom: asDate(selected?.startAt) || defaultAccessFrom(new Date()),
-			accessTo: asDate(selected?.endAt) || defaultAccessTo(new Date()),
-		},
+		defaultValues,
 	});
 
 	useEffect(() => {
-		if (selected) {
-			selected.note && setValue('accessRemark', selected.note);
-			selected.endAt && setValue('accessTo', asDate(selected.endAt));
-			selected.startAt && setValue('accessFrom', asDate(selected.startAt));
-		}
-	}, [selected, setValue]);
+		selected &&
+			setForm({
+				accessFrom: asDate(selected.startAt) || defaultValues.accessFrom,
+				accessTo: asDate(selected.endAt) || defaultValues.accessTo,
+				accessRemark: selected.note || defaultValues.accessRemark,
+			});
+	}, [selected, defaultValues, setForm]);
+
+	useEffect(() => {
+		setValue('accessFrom', form.accessFrom);
+		setValue('accessTo', form.accessTo);
+		setValue('accessRemark', form.accessRemark);
+	}, [form, setValue]);
 
 	useEffect(() => {
 		props.isOpen && reset();

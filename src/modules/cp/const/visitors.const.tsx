@@ -1,13 +1,13 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import { isWithinInterval } from 'date-fns';
-import { i18n, TFunction } from 'next-i18next';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusAll } from '@cp/types';
-import { DropdownMenu, UnreadMarker } from '@shared/components';
+import { CopyButton, DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
+import { i18n } from '@shared/helpers/i18n';
 import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
 import { VisitTimeframe } from '@visits/types';
@@ -24,45 +24,43 @@ export const visitorsStatusFilters = (): TabProps[] => {
 	return [
 		{
 			id: RequestStatusAll.ALL,
-			label: i18n?.t('modules/cp/const/visitors___alle'),
+			label: i18n.t('modules/cp/const/visitors___alle'),
 		},
 		{
 			id: VisitTimeframe.ACTIVE,
-			label: i18n?.t('modules/cp/const/visitors___actief'),
+			label: i18n.t('modules/cp/const/visitors___actief'),
 		},
 		{
 			id: VisitTimeframe.PAST,
-			label: i18n?.t('modules/cp/const/visitors___historiek'),
+			label: i18n.t('modules/cp/const/visitors___historiek'),
 		},
 	];
 };
 
 export const VisitorsTableColumns = (
-	t: TFunction,
 	denyVisitRequest: (visitRequest: Visit) => void,
 	editVisitRequest: (visitRequest: Visit) => void
 ): Column<Visit>[] => [
 	{
-		Header: t('modules/cp/const/visitors___naam') || '',
+		Header: i18n.t('modules/cp/const/visitors___naam'),
 		accessor: 'visitorName',
 	},
 	{
-		Header: t('modules/cp/const/visitors___emailadres') || '',
+		Header: i18n.t('modules/cp/const/visitors___emailadres'),
 		accessor: 'visitorMail',
-		Cell: ({ row }: VisitRow) => {
-			return (
-				<a
-					className="u-color-neutral c-table__link"
-					href={`mailto:${row.original.visitorMail}`}
-					onClick={(e) => e.stopPropagation()}
-				>
-					{row.original.visitorMail}
-				</a>
-			);
-		},
+		Cell: ({ row }: VisitRow) => (
+			<CopyButton
+				className="u-color-neutral u-p-0 c-table__copy"
+				icon={undefined}
+				variants={['text', 'no-height']}
+				text={row.original.visitorMail}
+			>
+				{row.original.visitorMail}
+			</CopyButton>
+		),
 	},
 	{
-		Header: t('modules/cp/const/visitors___toegang') || '',
+		Header: i18n.t('modules/cp/const/visitors___toegang'),
 		accessor: 'startAt',
 		Cell: ({ row }: VisitRow) => {
 			const start = asDate(row.original.startAt);
@@ -80,7 +78,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: t('modules/cp/const/visitors___goedgekeurd-door') || '',
+		Header: i18n.t('modules/cp/const/visitors___goedgekeurd-door'),
 		accessor: 'updatedByName',
 		Cell: ({ row }: VisitRow) => {
 			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
@@ -94,12 +92,12 @@ export const VisitorsTableColumns = (
 				<DropdownMenu>
 					<Button
 						variants="text"
-						label={t('modules/cp/const/visitors___toegang-intrekken')}
+						label={i18n.t('modules/cp/const/visitors___toegang-intrekken')}
 						onClick={() => denyVisitRequest(row.original)}
 					/>
 					<Button
 						variants="text"
-						label={t('modules/cp/const/visitors___toegang-aanpassen')}
+						label={i18n.t('modules/cp/const/visitors___toegang-aanpassen')}
 						onClick={() => editVisitRequest(row.original)}
 					/>
 				</DropdownMenu>

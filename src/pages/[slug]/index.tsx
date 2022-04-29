@@ -8,13 +8,12 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
-import { selectHasPermission } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
@@ -46,9 +45,14 @@ import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/ty
 import { mapFiltersToTags } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
+	Callout,
+	ErrorNotFound,
+	ErrorSpaceNoAccess,
 	Icon,
 	IdentifiableMediaCard,
+	Loading,
 	MediaCardList,
+	MediaCardProps,
 	MediaCardViewMode,
 	PaginationBar,
 	Placeholder,
@@ -57,12 +61,10 @@ import {
 	TagSearchBar,
 	ToggleOption,
 } from '@shared/components';
-import Callout from '@shared/components/Callout/Callout';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { SEARCH_QUERY_KEY } from '@shared/const';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { toastService } from '@shared/services/toast-service';
-import { AppState } from '@shared/store';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
@@ -84,15 +86,15 @@ const ReadingRoomPage: NextPage = () => {
 	const windowSize = useWindowSizeContext();
 
 	const { slug } = router.query;
+	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
+	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 
 	/**
 	 * State
 	 */
 
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
-	const showResearchWarning = useSelector((state: AppState) =>
-		selectHasPermission(state, Permission.SHOW_RESEARCH_WARNING)
-	);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -126,43 +128,38 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const {
-		error: accessError,
-		isError: hasAccessError,
-		data: access,
+		error: visitRequestError,
+		data: visitRequest,
+		isLoading: visitRequestIsLoading,
 	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
 
-	const { data: space } = useGetReadingRoom(slug as string, { enabled: access !== undefined });
+	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetReadingRoom(
+		slug as string,
+		{ enabled: visitRequest !== undefined }
+	);
 
 	const { data: media } = useGetMediaObjects(
-		space?.maintainerId?.toLocaleLowerCase() as string,
+		visitorSpace?.maintainerId?.toLocaleLowerCase() as string,
 		mapFiltersToElastic(query),
 		query.page || 0,
 		READING_ROOM_ITEM_COUNT,
 		activeSort,
-		space?.maintainerId !== undefined
+		visitorSpace?.maintainerId !== undefined
 	);
 
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
 
 	/**
-	 * Effects
+	 * Computed
 	 */
 
-	useEffect(() => {
-		if (!hasAccessError) {
-			return;
-		}
+	const isNotFoundError = (visitRequestError as HTTPError)?.response?.status === 404;
+	const isNoAccessError = (visitRequestError as HTTPError)?.response?.status === 403;
 
-		onError(accessError, 404, () => {
-			router.push(ROUTES.home).finally(() => {
-				toastService.notify({
-					title: t('pages/slug/index___geen-toegang'),
-					description: t('pages/slug/index___je-hebt-geen-toegang-tot-deze-ruimte'),
-				});
-			});
-		});
-	}, [hasAccessError, accessError, router, t]);
+	/**
+	 * Effects
+	 */
 
 	useEffect(() => {
 		let buckets = media?.aggregations.dcterms_format.buckets;
@@ -217,14 +214,6 @@ const ReadingRoomPage: NextPage = () => {
 	/**
 	 * Methods
 	 */
-
-	const onError = (e: unknown, code: number, callback?: () => void) => {
-		const cast = e as HTTPError;
-
-		if (cast.response && cast.response.status === code) {
-			callback?.();
-		}
-	};
 
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim()) {
@@ -417,6 +406,26 @@ const ReadingRoomPage: NextPage = () => {
 		);
 	};
 
+	const renderCardButtons = (item: MediaCardProps): ReactNode => {
+		if (!canManageFolders) {
+			return null;
+		}
+		return (
+			<Button
+				onClick={(e) => {
+					// Avoid navigating to detail when opening
+					e.preventDefault();
+					e.stopPropagation();
+
+					setSelected(item as IdentifiableMediaCard);
+					setShowAddToCollectionBlade(true);
+				}}
+				icon={<Icon type="light" name="bookmark" />}
+				variants={['text', 'xxs']}
+			/>
+		);
+	};
+
 	const renderResults = () => (
 		<>
 			<MediaCardList
@@ -442,20 +451,7 @@ const ReadingRoomPage: NextPage = () => {
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
 				view={viewMode}
-				buttons={(item) => (
-					<Button
-						onClick={(e) => {
-							// Avoid navigating to detail when opening
-							e.preventDefault();
-							e.stopPropagation();
-
-							setSelected(item as IdentifiableMediaCard);
-							setShowAddToCollectionBlade(true);
-						}}
-						icon={<Icon type="light" name="bookmark" />}
-						variants={['text', 'xxs']}
-					/>
-				)}
+				buttons={renderCardButtons}
 				wrapper={(card, item) => {
 					const cast = item as IdentifiableMediaCard;
 					const source = media?.items.find(
@@ -487,37 +483,30 @@ const ReadingRoomPage: NextPage = () => {
 		</>
 	);
 
-	return (
-		<VisitorLayout>
-			<Head>
-				<title>{createPageTitle(space?.name)}</title>
-				<meta
-					name="description"
-					content={
-						space?.info || t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
-					}
-				/>
-			</Head>
+	const getAccessEndDate = () => {
+		if ((!accessEndDate && !accessEndDateMobile) || showLinkedSpaceAsHomepage) {
+			return undefined;
+		}
+		if (isMobile) {
+			return t('pages/slug/index___tot-access-end-date-mobile', {
+				accessEndDateMobile,
+			});
+		}
+		return t('pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date', {
+			accessEndDate,
+		});
+	};
 
-			{space && (
+	const renderVisitorSpace = () => (
+		<>
+			{visitorSpace && (
 				<div className="p-reading-room">
 					<ReadingRoomNavigation
-						title={space?.name}
-						phone={space?.contactInfo.telephone || ''}
-						email={space?.contactInfo.email || ''}
+						title={visitorSpace?.name}
+						phone={visitorSpace?.contactInfo.telephone || ''}
+						email={visitorSpace?.contactInfo.email || ''}
 						showBorder={showNavigationBorder}
-						showAccessEndDate={
-							accessEndDate || accessEndDateMobile
-								? isMobile
-									? t(
-											'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
-											{ accessEndDate }
-									  )
-									: t('pages/slug/index___tot-access-end-date-mobile', {
-											accessEndDateMobile,
-									  })
-								: undefined
-						}
+						showAccessEndDate={getAccessEndDate()}
 					/>
 
 					<section className="u-bg-black u-pt-8">
@@ -611,7 +600,7 @@ const ReadingRoomPage: NextPage = () => {
 				</div>
 			)}
 
-			{space && (
+			{visitorSpace && (
 				<AddToCollectionBlade
 					isOpen={isAddToCollectionBladeOpen}
 					selected={selected || undefined}
@@ -625,6 +614,35 @@ const ReadingRoomPage: NextPage = () => {
 					}}
 				/>
 			)}
+		</>
+	);
+
+	const renderPageContent = () => {
+		if (visitRequestIsLoading || visitorSpaceIsLoading) {
+			return <Loading fullscreen />;
+		}
+		if (isNotFoundError) {
+			return <ErrorNotFound />;
+		}
+		if (isNoAccessError) {
+			return <ErrorSpaceNoAccess visitorSpaceSlug={slug as string} />;
+		}
+		return renderVisitorSpace();
+	};
+
+	return (
+		<VisitorLayout>
+			<Head>
+				<title>{createPageTitle(visitorSpace?.name)}</title>
+				<meta
+					name="description"
+					content={
+						visitorSpace?.info ||
+						t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
+					}
+				/>
+			</Head>
+			{renderPageContent()}
 		</VisitorLayout>
 	);
 };

@@ -1,5 +1,6 @@
 import { Button, Pagination } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
 import { Icon } from '../Icon';
@@ -16,11 +17,13 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	start,
 	total,
 }) => {
+	const { t } = useTranslation();
+
 	const pageCount = Math.ceil(total / count);
 	const currentPage = start / count;
 
 	const scrollToTop = () => {
-		document.body.scrollTo({ top: 0, behavior: 'smooth' });
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
 	const renderProgress = () => {
@@ -37,7 +40,9 @@ const PaginationBar: FC<PaginationBarProps> = ({
 						className="u-pl-24:sm u-pl-8"
 						disabled={currentPage + 1 === pageCount}
 						variants={['text', 'neutral']}
-						label="Volgende"
+						label={t(
+							'modules/shared/components/pagination-bar/pagination-bar___volgende'
+						)}
 						iconEnd={<Icon name="angle-right" />}
 					/>
 				),
@@ -46,7 +51,9 @@ const PaginationBar: FC<PaginationBarProps> = ({
 						className="u-pr-24:sm u-pr-8"
 						disabled={currentPage + 1 === 1}
 						variants={['text', 'neutral']}
-						label="Vorige"
+						label={t(
+							'modules/shared/components/pagination-bar/pagination-bar___vorige'
+						)}
 						iconStart={<Icon name="angle-left" />}
 					/>
 				),
@@ -75,7 +82,9 @@ const PaginationBar: FC<PaginationBarProps> = ({
 					<Button
 						className={styles['c-pagination-bar__back-to-top']}
 						variants={['text', 'neutral']}
-						label="Terug naar boven"
+						label={t(
+							'modules/shared/components/pagination-bar/pagination-bar___terug-naar-boven'
+						)}
 						iconEnd={<Icon name="arrow-up" />}
 						onClick={scrollToTop}
 					/>

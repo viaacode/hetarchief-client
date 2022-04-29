@@ -74,6 +74,7 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 					}
 					onOpen={() => {
 						setIsHamburgerMenuOpen(true);
+						onOpenDropdowns?.();
 					}}
 					onClose={() => {
 						setIsHamburgerMenuOpen(false);

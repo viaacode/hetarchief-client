@@ -1,2 +1,2 @@
-export { default as Info } from './Callout';
+export { default as Callout } from './Callout';
 export * from './Callout.types';

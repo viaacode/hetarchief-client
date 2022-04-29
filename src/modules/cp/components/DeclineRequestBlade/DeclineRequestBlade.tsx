@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade, VisitSummary } from '@shared/components';
+import { OPTIONAL_LABEL } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
 import { VisitsService } from '@visits/services/visits/visits.service';
@@ -92,6 +93,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 					label={t(
 						'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'
 					)}
+					suffix={OPTIONAL_LABEL()}
 				>
 					<Controller
 						name="reasonForDenial"
