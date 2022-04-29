@@ -6,12 +6,6 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
-import {
-	ADMIN_VISITORS_QUERY_PARAM_CONFIG,
-	VisitorsTableColumns,
-	VisitorsTablePageSize,
-} from '@admin/const';
-import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ApproveRequestBlade } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
@@ -23,6 +17,13 @@ import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
+
+import {
+	ADMIN_VISITORS_QUERY_PARAM_CONFIG,
+	VisitorsTableColumns,
+	VisitorsTablePageSize,
+} from '@admin/const';
+import { AdminLayout } from '@admin/layouts';
 
 const Visitors: FC = () => {
 	const { t } = useTranslation();
