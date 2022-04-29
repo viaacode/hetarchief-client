@@ -19,7 +19,8 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
-	FLOWPLAYER_FORMATS,
+	FLOWPLAYER_AUDIO_FORMATS,
+	FLOWPLAYER_VIDEO__FORMATS,
 	formatErrorPlaceholder,
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
@@ -51,8 +52,10 @@ import {
 	TabLabel,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { Peak } from '@shared/components/Peak';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useElementSize } from '@shared/hooks/use-element-size';
+import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
@@ -71,6 +74,8 @@ import {
 	formatTime,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
+
+import styles from './index.module.scss';
 
 import {
 	DynamicActionMenu,
@@ -130,14 +135,24 @@ const ObjectDetailPage: NextPage = () => {
 		error: mediaInfoError,
 	} = useGetMediaInfo(router.query.ie as string);
 
+	const {
+		data: peakJson,
+		isLoading: isLoadingPeak,
+		error: errorPeak,
+	} = useGetPeakFile(
+		mediaInfo?.representations?.find(
+			(representation) => representation.dctermsFormat === 'peak'
+		)?.files?.[0]?.schemaIdentifier || null
+	);
+
 	// playable url
 	const {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.files[0].schemaIdentifier ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.files[0].schemaIdentifier) // Force flowplayer rerender after successful fetch
+		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier) // Force flowplayer rerender after successful fetch
 	);
 
 	// ook interessant
@@ -214,11 +229,20 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
-		// Filter out peak files if type === video
-		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
-			mediaInfo.representations = mediaInfo?.representations.filter(
-				(object) => object.dctermsFormat !== 'peak'
-			);
+		// Filter out peak files if type === audio
+		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Audio) {
+			mediaInfo.representations = mediaInfo?.representations.filter((object) => {
+				if (object.dctermsFormat === 'peak') {
+					// Peak file containing the audio wave form in json format
+					return false;
+				}
+				if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
+					// Video files containing the speaker and audio
+					return false;
+				}
+				// Actual video files and mp3 files and images
+				return true;
+			});
 		}
 
 		setCurrentRepresentation(mediaInfo?.representations[0]);
@@ -363,7 +387,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
 		// Flowplayer
-		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
+		if (FLOWPLAYER_VIDEO__FORMATS.includes(representation.dctermsFormat)) {
 			return (
 				<FlowPlayer
 					className={clsx(
@@ -379,6 +403,35 @@ const ObjectDetailPage: NextPage = () => {
 					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 				/>
+			);
+		}
+		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
+			return (
+				<div className={styles['c-audio-player-wrapper']}>
+					<FlowPlayer
+						className={clsx(
+							'p-object-detail__flowplayer',
+							showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+						)}
+						key={flowPlayerKey}
+						src={[
+							{
+								src: 'https://file-examples.com/storage/fef12739526267ac9a2b543/2017/11/file_example_MP3_1MG.mp3',
+								// src: playableUrl,
+								type: 'audio/mp3',
+							},
+						]}
+						poster={mediaInfo?.thumbnailUrl || undefined}
+						title={representation.name}
+						pause={pauseMedia}
+						onPlay={handleOnPlay}
+						token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
+						dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
+					/>
+					{!isLoadingPeak && !errorPeak && (
+						<Peak json={peakJson} className={styles['c-peak-visualisation']} />
+					)}
+				</div>
 			);
 		}
 

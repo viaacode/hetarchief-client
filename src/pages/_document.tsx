@@ -24,13 +24,13 @@ const Document = (): ReactElement => {
 		<Html>
 			<CustomHead>
 				{/* eslint-disable-next-line */}
-				<script
-					id="Cookiebot"
-					src="https://consent.cookiebot.com/uc.js"
-					data-cbid="e17bca33-78a0-484e-a204-e05274a65598"
-					data-blockingmode="auto"
-					type="text/javascript"
-				/>
+				{/*<script*/}
+				{/*	id="Cookiebot"*/}
+				{/*	src="https://consent.cookiebot.com/uc.js"*/}
+				{/*	data-cbid="e17bca33-78a0-484e-a204-e05274a65598"*/}
+				{/*	data-blockingmode="auto"*/}
+				{/*	type="text/javascript"*/}
+				{/*/>*/}
 				{/* eslint-disable-next-line */}
 				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
 			</CustomHead>
