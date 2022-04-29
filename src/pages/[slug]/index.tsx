@@ -1,6 +1,5 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isToday } from 'date-fns';
 import { HTTPError } from 'ky';
 import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
@@ -66,13 +65,12 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
+import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
-	formatDate,
 	formatMediumDateWithTime,
-	formatTime,
+	formatSameDayTimeOrDate,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
@@ -364,15 +362,9 @@ const ReadingRoomPage: NextPage = () => {
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
 	const showResults = hasSearched && !!media && media?.items?.length > 0;
-	const isMobile = windowSize.width && windowSize.width > 700;
-	const accessEndDate =
-		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
-	const accessEndDateMobile =
-		visitStatus && visitStatus.endAt
-			? isToday(asDate(visitStatus.endAt) ?? 0)
-				? formatTime(asDate(visitStatus.endAt))
-				: formatDate(asDate(visitStatus.endAt))
-			: '';
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const accessEndDate = formatMediumDateWithTime(asDate(visitStatus?.endAt));
+	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitStatus?.endAt));
 
 	/**
 	 * Render

@@ -1,4 +1,4 @@
-import { format, isSameDay } from 'date-fns';
+import { format, isSameDay, isToday } from 'date-fns';
 import { i18n } from 'next-i18next';
 
 import { getLocaleFromi18nLanguage } from './i18n';
@@ -61,4 +61,8 @@ export const formatSameDayRange = (from?: Date | string, to?: Date | string): st
 	const end = f && t && isSameDay(f, t) ? formatTime(t) : formatMediumDateWithTime(t);
 
 	return `${start} - ${end}`;
+};
+
+export const formatSameDayTimeOrDate = (date?: Date): string => {
+	return date && isToday(date) ? formatTime(date) : formatDate(date);
 };
