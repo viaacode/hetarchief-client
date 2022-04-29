@@ -1,12 +1,12 @@
-import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Navigation } from '@navigation/components';
-import { Icon } from '@shared/components';
+import { DropdownMenu, Icon } from '@shared/components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 
@@ -22,7 +22,6 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 	title,
 }) => {
 	const { t } = useTranslation();
-	const [isContactDropdownOpen, setIsContactDropdownOpen] = useState(false);
 	const showBorder = useSelector(selectShowNavigationBorder);
 
 	return (
@@ -45,83 +44,48 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 				{showAccessEndDate !== undefined ? (
 					<span className="u-py-8 u-text-right">{showAccessEndDate}</span>
 				) : !!phone || !!email ? (
-					<Dropdown
-						isOpen={isContactDropdownOpen}
+					<DropdownMenu
 						placement="bottom-end"
-						onOpen={() => setIsContactDropdownOpen(true)}
-						onClose={() => setIsContactDropdownOpen(false)}
+						triggerButtonProps={{
+							className: clsx(
+								'u-color-white',
+								'u-px-12',
+								styles['c-reading-room-navigation__contact-button']
+							),
+							icon: undefined,
+							iconStart: <Icon className="u-font-size-24" name="contact" />,
+							label: t(
+								'modules/reading-room/components/reading-room-navigation/reading-room-navigation___contacteer'
+							),
+							variants: 'text',
+						}}
 					>
-						<DropdownButton>
-							<Button
-								className={clsx(
-									'u-color-white',
-									'u-px-12',
-									styles['c-reading-room-navigation__contact-button']
-								)}
-								iconStart={<Icon className="u-font-size-24" name="contact" />}
-								label={t(
-									'modules/reading-room/components/reading-room-navigation/reading-room-navigation___contacteer'
-								)}
-								variants="text"
-							/>
-						</DropdownButton>
+						<ul className={styles['c-reading-room-navigation__contact-list']}>
+							{email && (
+								<li className={styles['c-reading-room-navigation__contact-item']}>
+									<Button
+										className="u-text-left"
+										variants={['text', 'block', 'sm']}
+										label={email}
+									/>
 
-						<DropdownContent>
-							<ul className={styles['c-reading-room-navigation__contact-list']}>
-								{email && (
-									<li
-										className={
-											styles['c-reading-room-navigation__contact-item']
-										}
-									>
-										<Link href={`mailto:${email}`} passHref={true}>
-											<a>
-												<Button
-													className="u-text-left"
-													iconStart={
-														<Icon
-															className="u-font-size-24 u-mr-8"
-															name="email"
-														/>
-													}
-													variants={['text', 'block', 'sm']}
-													label={email}
-												/>
-											</a>
-										</Link>
+									<CopyButton text={email} variants={['sm', 'text']} />
+								</li>
+							)}
 
-										<CopyButton text={email} variants={['sm', 'text']} />
-									</li>
-								)}
+							{phone && (
+								<li className={styles['c-reading-room-navigation__contact-item']}>
+									<Button
+										className="u-text-left"
+										variants={['text', 'block', 'sm']}
+										label={phone}
+									/>
 
-								{phone && (
-									<li
-										className={
-											styles['c-reading-room-navigation__contact-item']
-										}
-									>
-										<Link href={`tel:${phone}`} passHref={true}>
-											<a>
-												<Button
-													className="u-text-left"
-													iconStart={
-														<Icon
-															className="u-font-size-24 u-mr-8"
-															name="phone"
-														/>
-													}
-													variants={['text', 'block', 'sm']}
-													label={phone}
-												/>
-											</a>
-										</Link>
-
-										<CopyButton text={phone} variants={['sm', 'text']} />
-									</li>
-								)}
-							</ul>
-						</DropdownContent>
-					</Dropdown>
+									<CopyButton text={phone} variants={['sm', 'text']} />
+								</li>
+							)}
+						</ul>
+					</DropdownMenu>
 				) : (
 					<span className="u-py-8">
 						{t(

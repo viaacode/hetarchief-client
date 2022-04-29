@@ -12,11 +12,13 @@ import {
 	HistoryTableAccessComboId,
 	HistoryTableAccessFrom,
 	HistoryTableColumns,
+	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
@@ -144,4 +146,4 @@ const AccountMyHistory: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(AccountMyHistory);
+export default withAuth(withAllRequiredPermissions(AccountMyHistory, Permission.MANAGE_ACCOUNT));
