@@ -6,13 +6,6 @@ import React, { FC, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
-import {
-	ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
-	requestStatusFilters,
-	RequestTableColumns,
-	RequestTablePageSize,
-} from '@admin/const';
-import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
@@ -25,6 +18,14 @@ import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
+
+import {
+	ADMIN_REQUESTS_QUERY_PARAM_CONFIG,
+	requestStatusFilters,
+	RequestTableColumns,
+	RequestTablePageSize,
+} from '@admin/const';
+import { AdminLayout } from '@admin/layouts';
 
 const Requests: FC = () => {
 	const { t } = useTranslation();
@@ -141,33 +142,10 @@ const Requests: FC = () => {
 				<div className="p-admin-requests l-container">
 					<div className="p-admin-requests__header">
 						<SearchBar
-							backspaceRemovesValue={false}
+							default={filters[SEARCH_QUERY_KEY]}
 							className="p-admin-requests__search"
-							instanceId="requests-search-bar"
-							light={true}
-							placeholder={t('pages/beheer/aanvragen/index___zoek')}
-							searchValue={filters.search}
-							size="md"
-							onClear={() => {
-								setFilters({
-									[SEARCH_QUERY_KEY]: '',
-									page: 1,
-								});
-							}}
-							onSearch={(searchValue: string) => {
-								// Force rerender
-								if (filters.search === searchValue) {
-									setFilters({
-										[SEARCH_QUERY_KEY]: '',
-										page: 1,
-									});
-								}
-
-								setFilters({
-									[SEARCH_QUERY_KEY]: searchValue,
-									page: 1,
-								});
-							}}
+							placeholder={t('pages/admin/leeszalenbeheer/aanvragen/index___zoek')}
+							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 
 						<ScrollableTabs
