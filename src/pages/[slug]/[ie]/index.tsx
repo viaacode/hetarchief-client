@@ -48,6 +48,7 @@ import {
 	Loading,
 	ScrollableTabs,
 	TabLabel,
+	TextWithNewLines,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -462,7 +463,10 @@ const ObjectDetailPage: NextPage = () => {
 						{mediaInfo?.name}
 					</h3>
 					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
-						{mediaInfo?.description}
+						<TextWithNewLines
+							text={mediaInfo?.description}
+							className="u-color-neutral"
+						/>
 					</p>
 					<div className="u-pb-24 p-object-detail__actions">
 						{canDownloadMetadata && (
