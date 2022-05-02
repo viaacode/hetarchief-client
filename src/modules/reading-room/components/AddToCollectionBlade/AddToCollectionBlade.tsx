@@ -222,13 +222,16 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 				<li
 					key={`item--${pair.folder}`}
 					className={styles['c-add-to-collection-blade__list-item']}
+					onClick={() => onCheckboxClick(pair)}
+					tabIndex={0}
+					role="button"
 				>
 					<Checkbox
 						value={`add-to--${pair.folder}`}
 						className={styles['c-add-to-collection-blade__list-item__checkbox']}
 						checked={pair.checked}
 						checkIcon={<Icon name="check" />}
-						onClick={() => onCheckboxClick(pair)}
+						onClick={(e) => e.stopPropagation()}
 						variants={['no-label']}
 					/>
 
