@@ -1,11 +1,6 @@
-import clsx from 'clsx';
-import DOMPurify from 'dompurify';
 import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
-
-import { CardImage } from '../CardImage';
 import SpacePreview from '../SpacePreview/SpacePreview';
 
 import styles from './VisitSummary.module.scss';
