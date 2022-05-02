@@ -276,11 +276,11 @@ const AccountMyCollections: NextPage = () => {
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___programma'),
-				value: item.series.join(', '),
+				value: item.programs.join(', '),
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___serie'),
-				value: item.programs.join(', '),
+				value: item.series.join(', '),
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___type'),
