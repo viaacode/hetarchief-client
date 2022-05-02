@@ -16,6 +16,7 @@ import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
+import { isInAFolder } from '@media/utils';
 import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
@@ -406,12 +407,10 @@ const ReadingRoomPage: NextPage = () => {
 			return null;
 		}
 
-		const isInAFolder = (collections?.items || []).some((collection) => {
-			return collection.objects?.find(
-				(object) =>
-					object.schemaIdentifier === (item as IdentifiableMediaCard).schemaIdentifier
-			);
-		});
+		const itemIsInAFolder = isInAFolder(
+			collections,
+			(item as IdentifiableMediaCard).schemaIdentifier
+		);
 
 		return (
 			<Button
@@ -423,7 +422,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(item as IdentifiableMediaCard);
 					setShowAddToCollectionBlade(true);
 				}}
-				icon={<Icon type={isInAFolder ? 'solid' : 'light'} name="bookmark" />}
+				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
 			/>
 		);
