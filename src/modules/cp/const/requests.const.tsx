@@ -4,13 +4,12 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusBadge } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
-import { requestCreatedAtFormatter } from '@cp/utils';
 import { CopyButton, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
-import { Visit, VisitRow, VisitStatus } from '@shared/types';
-import { asDate, formatMediumDateWithTime } from '@shared/utils';
+import { OrderDirection, Visit, VisitRow, VisitStatus } from '@shared/types';
+import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
 export const VISIT_REQUEST_ID_QUERY_KEY = 'aanvraag';
@@ -20,8 +19,8 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	status: withDefault(StringParam, RequestStatusAll.ALL),
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, undefined),
-	orderDirection: withDefault(SortDirectionParam, undefined),
+	orderProp: withDefault(StringParam, 'createdAt'),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
 export const requestStatusFilters = (): TabProps[] => {
@@ -77,7 +76,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 					className="u-color-neutral"
 					title={formatMediumDateWithTime(asDate(row.original.createdAt))}
 				>
-					{requestCreatedAtFormatter(row.original.createdAt)}
+					{formatDistanceToday(row.original.createdAt)}
 				</span>
 			);
 		},

@@ -78,8 +78,8 @@ const CPRequestsPage: NextPage = () => {
 					setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: undefined });
 					setSelectedNotOnCurrentPage(undefined);
 					toastService.notify({
-						title: t('Error'),
-						description: t('Deze aanvraag bestaat niet'),
+						title: t('pages/beheer/aanvragen/index___error'),
+						description: t('pages/beheer/aanvragen/index___deze-aanvraag-bestaat-niet'),
 					});
 				});
 		}
@@ -178,33 +178,10 @@ const CPRequestsPage: NextPage = () => {
 				<div className="l-container">
 					<div className="p-cp-requests__header">
 						<SearchBar
-							backspaceRemovesValue={false}
+							default={filters[SEARCH_QUERY_KEY]}
 							className="p-cp-requests__search"
-							instanceId="requests-search-bar"
-							light={true}
 							placeholder={t('pages/beheer/aanvragen/index___zoek')}
-							searchValue={filters.search}
-							size="md"
-							onClear={() => {
-								setFilters({
-									[SEARCH_QUERY_KEY]: '',
-									page: 1,
-								});
-							}}
-							onSearch={(searchValue: string) => {
-								// Force rerender
-								if (filters.search === searchValue) {
-									setFilters({
-										[SEARCH_QUERY_KEY]: '',
-										page: 1,
-									});
-								}
-
-								setFilters({
-									[SEARCH_QUERY_KEY]: searchValue,
-									page: 1,
-								});
-							}}
+							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 
 						<ScrollableTabs

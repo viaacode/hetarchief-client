@@ -1,6 +1,5 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isToday } from 'date-fns';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
@@ -63,14 +62,13 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
+import { Breakpoints, MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
-	formatDate,
 	formatMediumDate,
 	formatMediumDateWithTime,
-	formatTime,
+	formatSameDayTimeOrDate,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
@@ -104,6 +102,7 @@ const ObjectDetailPage: NextPage = () => {
 	const [backLink, setBackLink] = useState(`/${router.query.slug}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
+	const [metadataColumns, setMetadataColumns] = useState<number>(1);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
@@ -113,7 +112,6 @@ const ObjectDetailPage: NextPage = () => {
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
-	const [percentagePlayed, setPercentagePlayed] = useState<number>(0);
 
 	// Layout
 	useStickyLayout();
@@ -135,15 +133,31 @@ const ObjectDetailPage: NextPage = () => {
 		error: mediaInfoError,
 	} = useGetMediaInfo(router.query.ie as string);
 
-	const {
-		data: peakJson,
-		isLoading: isLoadingPeak,
-		error: errorPeak,
-	} = useGetPeakFile(
+	// peak file
+	const peakFileId =
 		mediaInfo?.representations?.find(
 			(representation) => representation.dctermsFormat === 'peak'
-		)?.files?.[0]?.schemaIdentifier || null
-	);
+		)?.files?.[0]?.schemaIdentifier || null;
+
+	console.log('mediaInfo: ', {
+		mediaInfo,
+		peakFileId,
+	});
+
+	// media info
+	const { data: peakJson } = useGetPeakFile(peakFileId);
+	const representationsToDisplay = (mediaInfo?.representations || [])?.filter((object) => {
+		if (object.dctermsFormat === 'peak') {
+			// Ignore peak file containing the audio wave form in json format
+			return false;
+		}
+		if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
+			// Ignore video files containing the speaker and audio
+			return false;
+		}
+		// Actual video files and mp3 files and images
+		return true;
+	});
 
 	// playable url
 	const {
@@ -152,7 +166,7 @@ const ObjectDetailPage: NextPage = () => {
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
 		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier) // Force flowplayer rerender after successful fetch
+		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
 	);
 
 	// ook interessant
@@ -188,6 +202,11 @@ const ObjectDetailPage: NextPage = () => {
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
+	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+	const showFragmentSlider = representationsToDisplay.length > 1;
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
+	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
 
 	/**
 	 * Effects
@@ -206,11 +225,16 @@ const ObjectDetailPage: NextPage = () => {
 	}, [router.query.ie]);
 
 	useEffect(() => {
+		metadataSize &&
+			setMetadataColumns(expandMetadata && !isMobile && metadataSize?.width > 500 ? 2 : 1);
+	}, [expandMetadata, isMobile, metadataSize]);
+
+	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
-		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
+		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
 			setIsMediaPaused(true);
 		}
-	}, [activeTab, windowSize.width]);
+	}, [activeTab, isMobile]);
 
 	useEffect(() => {
 		let backLink = `/${router.query.slug}`;
@@ -229,26 +253,10 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
-		// Filter out peak files if type === audio
-		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Audio) {
-			mediaInfo.representations = mediaInfo?.representations.filter((object) => {
-				if (object.dctermsFormat === 'peak') {
-					// Ignore peak file containing the audio wave form in json format
-					return false;
-				}
-				if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
-					// Ignore video files containing the speaker and audio
-					return false;
-				}
-				// Actual video files and mp3 files and images
-				return true;
-			});
-		}
-
-		setCurrentRepresentation(mediaInfo?.representations[0]);
+		setCurrentRepresentation(representationsToDisplay[0]);
 
 		// Set default view
-		if (windowSize.width && windowSize.width < 768) {
+		if (isMobile) {
 			// Default to metadata tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata);
 		} else {
@@ -267,23 +275,6 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		relatedData && setRelated(mapRelatedData(relatedData.items));
 	}, [relatedData]);
-
-	/**
-	 * Computed
-	 */
-	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
-	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
-	const isMobile = windowSize.width && windowSize.width > 700;
-	const accessEndDate =
-		visitRequest && visitRequest.endAt
-			? formatMediumDateWithTime(asDate(visitRequest.endAt))
-			: '';
-	const accessEndDateMobile =
-		visitRequest && visitRequest.endAt
-			? isToday(asDate(visitRequest.endAt) ?? 0)
-				? formatTime(asDate(visitRequest.endAt))
-				: formatDate(asDate(visitRequest.endAt))
-			: '';
 
 	/**
 	 * Mapping
@@ -311,9 +302,9 @@ const ObjectDetailPage: NextPage = () => {
 			return {
 				type: item.dctermsFormat as MediaTypes,
 				title: item.name,
-				subtitle: `(${
-					item.datePublished ? formatMediumDate(asDate(item.datePublished)) : undefined
-				})`,
+				subtitle: `${item.maintainerName ?? ''} ${
+					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''
+				}`,
 				description: item.description,
 				id: item.schemaIdentifier,
 				maintainer_id: item.maintainerId,
@@ -412,9 +403,9 @@ const ObjectDetailPage: NextPage = () => {
 			);
 		}
 		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
-			return (
-				<div className={styles['c-audio-player-wrapper']}>
-					{!errorPeak && !isLoadingPeak && (
+			if (!peakFileId || !!peakJson) {
+				return (
+					<div className={styles['c-audio-player-wrapper']}>
 						<FlowPlayer
 							className={clsx(
 								'p-object-detail__flowplayer',
@@ -423,7 +414,7 @@ const ObjectDetailPage: NextPage = () => {
 							key={flowPlayerKey}
 							src={[
 								{
-									src: 'https://file-examples.com/storage/fef12739526267ac9a2b543/2017/11/file_example_MP3_1MG.mp3',
+									src: 'https://bertyhell.s3.eu-central-1.amazonaws.com/projects/test-files/road-to-joy.mp3',
 									// src: playableUrl,
 									type: 'audio/mp3',
 								},
@@ -432,15 +423,14 @@ const ObjectDetailPage: NextPage = () => {
 							pause={isMediaPaused}
 							onPlay={handleOnPlay}
 							onPause={handleOnPause}
-							onTimeUpdate={(_time, percentage) => setPercentagePlayed(percentage)}
 							token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 							dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 							plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
-							peakJson={!errorPeak && !isLoadingPeak ? peakJson : undefined}
+							peakJson={peakJson || undefined}
 						/>
-					)}
-				</div>
-			);
+					</div>
+				);
+			}
 		}
 
 		// Image
@@ -449,7 +439,7 @@ const ObjectDetailPage: NextPage = () => {
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
-						src={representation.files[0].schemaIdentifier}
+						src={representation.files[0]?.schemaIdentifier ?? null}
 						alt={representation.name}
 						layout="fill"
 						objectFit="contain"
@@ -493,7 +483,11 @@ const ObjectDetailPage: NextPage = () => {
 		isHidden = false
 	): ReactNode => (
 		<ul
-			className={`u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
+			className={`
+				u-list-reset p-object-detail__metadata-list
+				p-object-detail__metadata-list--${type}
+				p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
+			`}
 		>
 			{items.map((item, index) => {
 				return (
@@ -557,15 +551,13 @@ const ObjectDetailPage: NextPage = () => {
 				{mediaInfo && (
 					<>
 						<Metadata
-							className="u-px-32"
-							columns={
-								expandMetadata && metadataSize && metadataSize?.width > 500 ? 2 : 1
-							}
+							columns={metadataColumns}
+							className="p-object-detail__metadata-component"
 							metadata={METADATA_FIELDS(mediaInfo)}
 						/>
-						{(!!similar.length || !!mediaInfo.keywords.length) && (
+						{(!!similar.length || !!mediaInfo.keywords?.length) && (
 							<Metadata
-								className="u-px-32"
+								className="p-object-detail__metadata-component"
 								metadata={[
 									{
 										title: t(
@@ -575,7 +567,9 @@ const ObjectDetailPage: NextPage = () => {
 									},
 									{
 										title: 'Ook interessant',
-										data: renderMetadataCards('similar', similar),
+										data: similar.length
+											? renderMetadataCards('similar', similar)
+											: null,
 										className: 'u-pb-0',
 									},
 								].filter((field) => !!field.data)}
@@ -588,7 +582,7 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	const renderRelatedObjectsBlade = () => {
-		if (!related.length) {
+		if (!related.length || (!expandMetadata && isMobile)) {
 			return null;
 		}
 		return (
@@ -629,11 +623,11 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					{showFragmentSlider && (
 						<FragmentSlider
-							thumbnail={mediaInfo.thumbnailUrl}
+							thumbnail={mediaInfo?.thumbnailUrl}
 							className="p-object-detail__slider"
-							fragments={mediaInfo?.representations ?? []}
+							fragments={representationsToDisplay}
 							onChangeFragment={(index) =>
-								setCurrentRepresentation(mediaInfo?.representations[index])
+								setCurrentRepresentation(representationsToDisplay[index])
 							}
 						/>
 					)}
@@ -653,13 +647,13 @@ const ObjectDetailPage: NextPage = () => {
 				showAccessEndDate={
 					accessEndDate || accessEndDateMobile
 						? isMobile
-							? t(
+							? t('pages/slug/ie/index___tot-access-end-date-mobile', {
+									accessEndDateMobile,
+							  })
+							: t(
 									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
 									{ accessEndDate }
 							  )
-							: t('pages/slug/ie/index___tot-access-end-date-mobile', {
-									accessEndDateMobile,
-							  })
 						: undefined
 				}
 			/>
@@ -741,11 +735,8 @@ const ObjectDetailPage: NextPage = () => {
 	return (
 		<VisitorLayout>
 			<Head>
-				<title>{createPageTitle(t('pages/slug/ie/index___object-detail-titel'))}</title>
-				<meta
-					name="description"
-					content={t('pages/slug/ie/index___object-detail-omschrijving')}
-				/>
+				<title>{createPageTitle(mediaInfo?.name)}</title>
+				<meta name="description" content={mediaInfo?.maintainerName} />
 			</Head>
 			{renderPageContent()}
 		</VisitorLayout>

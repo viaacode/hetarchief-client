@@ -56,9 +56,12 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
-					searchValue={search}
-					onSearch={setSearch}
-					onClear={() => setSearch('')}
+					default={search}
+					variants={['rounded', 'grey', 'icon--double']}
+					placeholder={t(
+						'modules/reading-room/components/genre-filter-form/genre-filter-form___zoek'
+					)}
+					onSearch={(value) => setSearch(value || '')}
 				/>
 
 				<div className="u-my-32">

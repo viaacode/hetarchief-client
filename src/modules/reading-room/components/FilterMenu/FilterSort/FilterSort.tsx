@@ -2,6 +2,7 @@ import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-compone
 import { FC, useState } from 'react';
 
 import { Overlay } from '@shared/components';
+import { OrderDirection } from '@shared/types';
 
 import { FilterButton } from '../FilterButton';
 import styles from '../FilterMenu.module.scss';
@@ -30,7 +31,11 @@ const FilterSort: FC<FilterSortProps> = ({
 			>
 				<DropdownButton>
 					<FilterButton
-						icon={activeSort?.orderDirection === 'desc' ? 'sort-down' : 'sort-up'}
+						icon={
+							activeSort?.orderDirection === OrderDirection.desc
+								? 'sort-down'
+								: 'sort-up'
+						}
 						isActive={sortOptionsOpen}
 						label={activeSortLabel}
 						type="sort"

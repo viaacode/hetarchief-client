@@ -9,6 +9,7 @@ import { Icon } from '@shared/components';
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 import { MediaTypes } from '@shared/types';
+import { asDate, formatLongDate } from '@shared/utils';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 
@@ -168,11 +169,11 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		},
 		{
 			title: i18n.t('modules/media/const/index___creatiedatum'),
-			data: mediaInfo.dateCreatedLowerBound,
+			data: formatLongDate(asDate(mediaInfo.dateCreatedLowerBound)),
 		},
 		{
 			title: i18n.t('modules/media/const/index___publicatiedatum'),
-			data: mediaInfo.datePublished,
+			data: formatLongDate(asDate(mediaInfo.datePublished)),
 		},
 		...mapObjectToMetadata(mediaInfo.creator),
 		...mapObjectToMetadata(mediaInfo.contributor),

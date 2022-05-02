@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { components } from 'react-select';
 
-import { SearchBarValueContainerProps } from './SearchBarValueContainer.types';
+import { TagSearchBarValueContainerProps } from './TagSearchBarValueContainer.types';
 
 const { ValueContainer } = components;
 
-const SearchBarValueContainer: FC<SearchBarValueContainerProps> = ({
+const TagSearchBarValueContainer: FC<TagSearchBarValueContainerProps> = ({
 	children,
 	...valueContainerProps
 }) => {
@@ -18,11 +18,11 @@ const SearchBarValueContainer: FC<SearchBarValueContainerProps> = ({
 	return (
 		<ValueContainer {...valueContainerProps}>
 			{showPlaceholder && (
-				<span className="c-search-bar__value-placeholder">{valuePlaceholder}</span>
+				<span className="c-tag-search-bar__value-placeholder">{valuePlaceholder}</span>
 			)}
 			{children}
 		</ValueContainer>
 	);
 };
 
-export default SearchBarValueContainer;
+export default TagSearchBarValueContainer;
