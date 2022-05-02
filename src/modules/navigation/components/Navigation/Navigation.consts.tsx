@@ -227,11 +227,7 @@ const getCpAdminManagementDropdown = (
 				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
 				'',
 				{
-					className: linkCls([
-						'u-color-black',
-						'u-color-white:md',
-						styles['c-navigation__link--dropdown'],
-					]),
+					className: linkCls(['u-color-black', 'u-color-white:md']),
 				}
 			),
 			id: 'nav__beheer',
@@ -312,7 +308,12 @@ const getMeemooAdminManagementDropdown = (
 				i18n.t('modules/navigation/components/navigation/navigation___admin'),
 				'/admin/leeszalenbeheer/aanvragen',
 				{
-					className: linkCls(['u-color-black', 'u-color-white:md']),
+					className: linkCls([
+						'u-color-black',
+						'u-color-white:md',
+						'u-whitespace-nowrap',
+						styles['c-navigation__link--dropdown'],
+					]),
 				}
 			),
 			id: 'nav__admin',
