@@ -1,4 +1,4 @@
-import { i18n } from 'next-i18next';
+import { i18n } from '@shared/helpers/i18n';
 
 export * from './my-collections.const';
 export * from './my-history.const';
@@ -11,17 +11,17 @@ export const ACCOUNT_NAVIGATION_LINKS = (): {
 }[] => [
 	{
 		id: 'account-profile',
-		label: i18n?.t('modules/account/const/index___mijn-profiel') ?? '',
+		label: i18n.t('modules/account/const/index___mijn-profiel'),
 		href: '/account/mijn-profiel',
 	},
 	{
 		id: 'account-collections',
-		label: i18n?.t('modules/account/const/index___mijn-mappen') ?? '',
+		label: i18n.t('modules/account/const/index___mijn-mappen'),
 		href: '/account/mijn-mappen',
 	},
 	{
 		id: 'account-history',
-		label: i18n?.t('modules/account/const/index___mijn-historiek') ?? '',
+		label: i18n.t('modules/account/const/index___mijn-historiek'),
 		href: '/account/mijn-historiek',
 		hasDivider: true,
 	},
@@ -41,7 +41,7 @@ export enum Permission {
 	SEARCH_OBJECTS = 'SEARCH_OBJECTS',
 	EXPORT_OBJECT = 'EXPORT_OBJECT',
 	// Collections
-	MANAGE_COLLECTIONS = 'MANAGE_COLLECTIONS',
+	MANAGE_FOLDERS = 'MANAGE_FOLDERS',
 	// Spaces
 	/** Spaces */
 	READ_ALL_SPACES = 'READ_ALL_SPACES',
@@ -53,4 +53,6 @@ export enum Permission {
 	SEARCH = 'SEARCH',
 	// Kiosk
 	SHOW_RESEARCH_WARNING = 'SHOW_RESEARCH_WARNING',
+	MANAGE_ACCOUNT = 'MANAGE_ACCOUNT',
+	SHOW_LINKED_SPACE_AS_HOMEPAGE = 'SHOW_LINKED_SPACE_AS_HOMEPAGE',
 }

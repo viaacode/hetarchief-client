@@ -37,7 +37,7 @@ const CardImage: FC<CardImageProps> = ({
 					<Image
 						unoptimized={unoptimized}
 						src={image}
-						alt={name || id.toString()}
+						alt={name || id || 'background'}
 						layout="fill"
 						objectFit="cover"
 					/>
@@ -49,8 +49,8 @@ const CardImage: FC<CardImageProps> = ({
 					<Image
 						unoptimized={unoptimized}
 						className={styles['c-card-image__logo-image']}
-						src={logo || ''}
-						alt={name || id.toString()}
+						src={logo}
+						alt={name || id || 'logo'}
 						layout="fill"
 						objectFit="contain"
 					/>

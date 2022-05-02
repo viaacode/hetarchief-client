@@ -9,6 +9,7 @@ import { useCallback, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
+import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
 import {
@@ -54,16 +55,8 @@ const TermsOfService: NextPage = () => {
 	}, [scrollable]);
 
 	const onCancelClick = useCallback(async () => {
-		toastService.notify({
-			title: t(
-				'pages/gebruiksvoorwaarden/index___je-koos-ervoor-om-niet-in-te-stemmen-met-de-gebruiksvoorwaarden'
-			),
-			description: t(
-				'pages/gebruiksvoorwaarden/index___het-aanvaarden-van-de-voorwaarden-is-noodzakelijk-voor-volledige-toegang-tot-het-platform'
-			),
-			maxLines: 3,
-		});
-	}, [t]);
+		AuthService.logout();
+	}, []);
 
 	const onConfirmClick = () => {
 		if (user) {

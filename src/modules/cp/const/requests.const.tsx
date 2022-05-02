@@ -1,76 +1,74 @@
 import { TabProps } from '@meemoo/react-components';
-import { i18n, TFunction } from 'next-i18next';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusBadge } from '@cp/components';
 import { RequestStatusAll } from '@cp/types';
-import { requestCreatedAtFormatter } from '@cp/utils';
-import { Icon } from '@shared/components';
+import { CopyButton, Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { Visit, VisitRow, VisitStatus } from '@shared/types';
-import { asDate, formatMediumDateWithTime } from '@shared/utils';
+import { i18n } from '@shared/helpers/i18n';
+import { OrderDirection, Visit, VisitRow, VisitStatus } from '@shared/types';
+import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
 export const RequestTablePageSize = 20;
+export const VISIT_REQUEST_ID_QUERY_KEY = 'aanvraag';
 
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
+	[VISIT_REQUEST_ID_QUERY_KEY]: withDefault(StringParam, undefined),
 	status: withDefault(StringParam, RequestStatusAll.ALL),
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, undefined),
-	orderDirection: withDefault(SortDirectionParam, undefined),
+	orderProp: withDefault(StringParam, 'createdAt'),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
 export const requestStatusFilters = (): TabProps[] => {
 	return [
 		{
 			id: RequestStatusAll.ALL,
-			label: i18n?.t('modules/cp/const/requests___alle'),
+			label: i18n.t('modules/cp/const/requests___alle'),
 		},
 		{
 			id: VisitStatus.PENDING,
-			label: i18n?.t('modules/cp/const/requests___open'),
+			label: i18n.t('modules/cp/const/requests___open'),
 		},
 		{
 			id: VisitStatus.APPROVED,
-			label: i18n?.t('modules/cp/const/requests___goedgekeurd'),
+			label: i18n.t('modules/cp/const/requests___goedgekeurd'),
 		},
 		{
 			id: VisitStatus.DENIED,
-			label: i18n?.t('modules/cp/const/requests___geweigerd'),
+			label: i18n.t('modules/cp/const/requests___geweigerd'),
 		},
 		{
 			id: VisitStatus.CANCELLED_BY_VISITOR,
-			label: i18n?.t('modules/cp/const/requests___geannuleerd'),
+			label: i18n.t('modules/cp/const/requests___geannuleerd'),
 		},
 	];
 };
 
-export const RequestTableColumns = (
-	i18n: { t: TFunction } = { t: (x: string) => x }
-): Column<Visit>[] => [
+export const RequestTableColumns = (): Column<Visit>[] => [
 	{
-		Header: i18n.t('modules/cp/const/requests___naam') || '',
+		Header: i18n.t('modules/cp/const/requests___naam'),
 		accessor: 'visitorName',
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___emailadres') || '',
+		Header: i18n.t('modules/cp/const/requests___emailadres'),
 		accessor: 'visitorMail',
-		Cell: ({ row }: VisitRow) => {
-			return (
-				<a
-					className="u-color-neutral c-table__link"
-					href={`mailto:${row.original.visitorMail}`}
-					onClick={(e) => e.stopPropagation()}
-				>
-					{row.original.visitorMail}
-				</a>
-			);
-		},
+		Cell: ({ row }: VisitRow) => (
+			<CopyButton
+				className="u-color-neutral u-p-0 c-table__copy"
+				icon={undefined}
+				variants={['text', 'no-height']}
+				text={row.original.visitorMail}
+			>
+				{row.original.visitorMail}
+			</CopyButton>
+		),
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___tijdstip') || '',
+		Header: i18n.t('modules/cp/const/requests___tijdstip'),
 		accessor: 'createdAt',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -78,13 +76,13 @@ export const RequestTableColumns = (
 					className="u-color-neutral"
 					title={formatMediumDateWithTime(asDate(row.original.createdAt))}
 				>
-					{requestCreatedAtFormatter(row.original.createdAt)}
+					{formatDistanceToday(row.original.createdAt)}
 				</span>
 			);
 		},
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___status') || '',
+		Header: i18n.t('modules/cp/const/requests___status'),
 		accessor: 'status',
 		Cell: ({ row }: VisitRow) => {
 			return <RequestStatusBadge status={row.original.status} />;

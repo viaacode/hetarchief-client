@@ -23,7 +23,7 @@ describe('Component: <Footer /> (default)', () => {
 	it('should set the href attribute on the meemoo reference', () => {
 		const link = screen.getByAltText('Meemoo logo').closest('a');
 
-		expect(link).toHaveAttribute('href', 'https://www.test.com');
+		expect(link).toHaveAttribute('href', 'https://meemoo.be');
 	});
 
 	it('should set the target attribute on the meemoo reference', () => {
@@ -43,7 +43,7 @@ describe('Component: <Footer /> (default)', () => {
 	it('should set the href attribute on the vlaanderen reference', () => {
 		const link = screen.getByAltText('Vlaanderen logo').closest('a');
 
-		expect(link).toHaveAttribute('href', 'https://www.test.com');
+		expect(link).toHaveAttribute('href', 'https://www.vlaanderen.be');
 	});
 
 	it('should set the target attribute on the vlaanderen reference', () => {
@@ -92,7 +92,7 @@ describe('Component: <Footer /> (simple)', () => {
 	it('should set the href attribute on the meemoo reference', () => {
 		const link = screen.getByAltText('Meemoo logo').closest('a');
 
-		expect(link).toHaveAttribute('href', 'https://www.test.com');
+		expect(link).toHaveAttribute('href', 'https://meemoo.be');
 	});
 
 	it('should set the target attribute on the meemoo reference', () => {
@@ -112,7 +112,7 @@ describe('Component: <Footer /> (simple)', () => {
 	it('should set the href attribute on the vlaanderen reference', () => {
 		const link = screen.getByAltText('Vlaanderen logo').closest('a');
 
-		expect(link).toHaveAttribute('href', 'https://www.test.com');
+		expect(link).toHaveAttribute('href', 'https://www.vlaanderen.be');
 	});
 
 	it('should set the target attribute on the vlaanderen reference', () => {

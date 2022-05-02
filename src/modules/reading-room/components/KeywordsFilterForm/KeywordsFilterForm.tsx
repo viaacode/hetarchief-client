@@ -16,11 +16,6 @@ import { KeywordsFilterFormProps, KeywordsFilterFormState } from './KeywordsFilt
 
 type multi = MultiValue<TagInfo>;
 
-const components = {
-	...TAGS_INPUT_COMPONENTS,
-	DropdownIndicator: () => <div className="u-pr-8" />,
-};
-
 const defaultValues = {
 	values: [],
 };
@@ -102,6 +97,10 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => onKey(e, [...keysEnter], saveInput);
 
+	const components = {
+		...TAGS_INPUT_COMPONENTS,
+		DropdownIndicator: () => <div className="u-pr-8" />,
+	};
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>

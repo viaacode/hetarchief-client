@@ -4,7 +4,6 @@ import {
 	TextInput,
 	TextInputProps,
 } from '@meemoo/react-components';
-import { i18n } from 'next-i18next';
 import { FC } from 'react';
 
 import {
@@ -17,6 +16,7 @@ import {
 	MediumSelect,
 } from '@reading-room/components';
 import { MetadataProp } from '@reading-room/types';
+import { i18n } from '@shared/helpers/i18n';
 import {
 	MediaSearchFilterField,
 	MediaSearchFilters,
@@ -38,42 +38,33 @@ export type MetadataConfig = {
 
 export const METADATA_CONFIG = (): MetadataConfig => {
 	const dictionary = {
-		from:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___vanaf'
-			) ?? '',
-		until:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
-			) ?? '',
-		between:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___tussen'
-			) ?? '',
-		contains:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___bevat'
-			) ?? '',
-		excludes:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
-			) ?? '',
-		equals:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___is'
-			) ?? '',
-		differs:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___is-niet'
-			) ?? '',
-		shorter:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
-			) ?? '',
-		longer:
-			i18n?.t(
-				'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
-			) ?? '',
+		from: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___vanaf'
+		),
+		until: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
+		),
+		between: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___tussen'
+		),
+		contains: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___bevat'
+		),
+		excludes: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
+		),
+		equals: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___is'
+		),
+		differs: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___is-niet'
+		),
+		shorter: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
+		),
+		longer: i18n.t(
+			'modules/reading-room/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
+		),
 	};
 
 	return {
@@ -144,22 +135,42 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.DESCRIPTION,
+						operator: MediaSearchOperator.CONTAINS,
+					},
+				],
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.DESCRIPTION,
+						operator: MediaSearchOperator.CONTAINS_NOT,
+					},
+				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.DESCRIPTION,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.DESCRIPTION,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.Duration]: {
@@ -186,26 +197,47 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 		},
+		// "Temporal" missing in ES, src/modules/media/types.ts:84
 		[MetadataProp.Era]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.ERA,
+						operator: MediaSearchOperator.CONTAINS,
+					},
+				],
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.ERA,
+						operator: MediaSearchOperator.CONTAINS_NOT,
+					},
+				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.ERA,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.ERA,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.Everything]: {
@@ -275,13 +307,23 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 		[MetadataProp.Medium]: {
 			[Operator.Equals]: {
 				label: dictionary.equals,
-				field: MediumSelect, // TODO: populate by aggregate (missing in ES)
-				filters: [], // TODO: Add to proxy
+				field: MediumSelect,
+				filters: [
+					{
+						field: MediaSearchFilterField.MEDIUM,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
-				field: MediumSelect, // TODO: populate by aggregate (missing in ES)
-				filters: [], // TODO: Add to proxy
+				field: MediumSelect,
+				filters: [
+					{
+						field: MediaSearchFilterField.MEDIUM,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.Genre]: {
@@ -310,34 +352,65 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LANGUAGE,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LANGUAGE,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
+		// "Spatial" missing in ES, src/modules/media/types.ts:83
 		[MetadataProp.Location]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LOCATION,
+						operator: MediaSearchOperator.CONTAINS,
+					},
+				],
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LOCATION,
+						operator: MediaSearchOperator.CONTAINS_NOT,
+					},
+				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LOCATION,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LOCATION,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.PublishedAt]: {
@@ -380,22 +453,42 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.PUBLISHER,
+						operator: MediaSearchOperator.CONTAINS,
+					},
+				],
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.PUBLISHER,
+						operator: MediaSearchOperator.CONTAINS_NOT,
+					},
+				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.PUBLISHER,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.PUBLISHER,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.Title]: {

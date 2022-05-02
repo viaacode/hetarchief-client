@@ -1,8 +1,0 @@
-@use "styles/abstracts" as *;
-
-.c-search-bar-button {
-	&:not(:active, :hover):focus {
-		outline: 2px solid $teal;
-		border-radius: 0.5rem;
-	}
-}

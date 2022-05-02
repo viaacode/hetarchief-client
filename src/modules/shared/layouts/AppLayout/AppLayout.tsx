@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -7,6 +6,7 @@ import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 
+import { Permission } from '@account/const';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
@@ -21,10 +21,13 @@ import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/g
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
 import { NotificationCenter, ZendeskWrapper } from '@shared/components';
+import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { i18n } from '@shared/helpers/i18n';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
@@ -41,6 +44,7 @@ import {
 	setShowAuthModal,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
+import { scrollToTop } from '@shared/utils/scroll-to-top';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -59,12 +63,15 @@ const AppLayout: FC = ({ children }) => {
 	const { data: accessibleReadingRooms } = useGetAccessibleReadingRooms();
 	const history = useSelector(selectHistory);
 	const { data: navigationItems } = useGetNavigationItems();
+	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
+	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
 
 	useHistory(asPath, history);
 
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
-			show && window.scrollTo(0, 0);
+			show && scrollToTop();
 			dispatch(setShowNotificationsCenter(show));
 		},
 		[dispatch]
@@ -97,17 +104,19 @@ const AppLayout: FC = ({ children }) => {
 	const onLogOutClick = useCallback(() => AuthService.logout(), []);
 
 	const rightNavItems: NavigationItem[] = useMemo(() => {
-		return isLoggedIn
-			? NAV_ITEMS_RIGHT_LOGGED_IN({
-					hasUnreadNotifications,
-					notificationsOpen: showNotificationsCenter,
-					userName,
-					onLogOutClick,
-					setNotificationsOpen,
-			  })
-			: i18n
-			? NAV_ITEMS_RIGHT(onLoginRegisterClick)
-			: [];
+		if (isLoggedIn) {
+			if (!canManageAccount) {
+				return [];
+			}
+			return NAV_ITEMS_RIGHT_LOGGED_IN({
+				hasUnreadNotifications,
+				notificationsOpen: showNotificationsCenter,
+				userName,
+				onLogOutClick,
+				setNotificationsOpen,
+			});
+		}
+		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
 		hasUnreadNotifications,
 		isLoggedIn,
@@ -116,6 +125,7 @@ const AppLayout: FC = ({ children }) => {
 		onLoginRegisterClick,
 		onLogOutClick,
 		setNotificationsOpen,
+		canManageAccount,
 	]);
 
 	const onOpenNavDropdowns = () => {
@@ -175,7 +185,9 @@ const AppLayout: FC = ({ children }) => {
 					items={getNavigationItemsLeft(
 						asPath,
 						accessibleReadingRooms || [],
-						navigationItems?.[NavigationPlacement.HeaderLeft] || []
+						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
+						user?.permissions || [],
+						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null
 					)}
 					placement="left"
 					renderHamburger={true}
@@ -191,7 +203,7 @@ const AppLayout: FC = ({ children }) => {
 
 			<main className="l-app__main">
 				<WindowSizeContext.Provider value={windowSize}>
-					{children}
+					<ErrorBoundary>{children}</ErrorBoundary>
 				</WindowSizeContext.Provider>
 				<NotificationCenter
 					isOpen={showNotificationsCenter}

@@ -1,11 +1,13 @@
-export const HET_ARCHIEF_PAGE_TITLE = 'Het Archief';
+import { truncate } from 'lodash-es';
+
+import { i18n } from '@shared/helpers/i18n';
 
 export const createPageTitle = (title?: string): string => {
 	if (!title) {
-		// TODO: add to translations
-		return HET_ARCHIEF_PAGE_TITLE;
+		return i18n.t('modules/shared/utils/seo/create-page-title/create-page-title___het-archief');
 	}
 
-	// TODO: add to translations
-	return `${title} | ${HET_ARCHIEF_PAGE_TITLE}`;
+	return `${truncate(title, { length: 50, omission: '...' })} | ${i18n.t(
+		'modules/shared/utils/seo/create-page-title/create-page-title___het-archief'
+	)}`;
 };

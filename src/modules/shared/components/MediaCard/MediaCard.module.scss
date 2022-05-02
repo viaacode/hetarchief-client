@@ -76,6 +76,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		display: flex;
 		flex-direction: row;
 		flex-shrink: 0;
+		position: relative;
 
 		:global(.c-dropdown__content-open) {
 			box-shadow: $shadow-24-black-12;
