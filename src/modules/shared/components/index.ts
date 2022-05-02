@@ -28,6 +28,7 @@ export * from './SidebarLayoutTitle';
 export * from './Table';
 export * from './Tabs';
 export * from './TagsInput';
+export * from './TextWithNewLines';
 export * from './Timepicker';
 export * from './Toast';
 export * from './Toggle';

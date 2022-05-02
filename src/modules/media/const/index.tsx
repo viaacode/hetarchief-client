@@ -4,8 +4,7 @@ import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@media/compone
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapObjectToMetadata } from '@media/utils';
-import { renderWithNewLines } from '@media/utils/render-with-new-lines';
-import { Icon } from '@shared/components';
+import { Icon, TextWithNewLines } from '@shared/components';
 import { i18n } from '@shared/helpers/i18n';
 import { MediaTypes } from '@shared/types';
 
@@ -173,7 +172,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
-			data: renderWithNewLines(mediaInfo?.abstract, 'u-color-neutral'),
+			data: <TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />,
 		},
 		{
 			title: i18n.t('modules/media/const/index___transcriptie'),

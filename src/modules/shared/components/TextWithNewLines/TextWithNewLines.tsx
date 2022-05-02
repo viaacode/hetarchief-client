@@ -1,9 +1,14 @@
 import DOMPurify from 'dompurify';
-import { ReactNode } from 'react';
+import { FC } from 'react';
 
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
 
-export function renderWithNewLines(text: string | null | undefined, className?: string): ReactNode {
+interface TextWithNewLinesProps {
+	text: string | null | undefined;
+	className?: string;
+}
+
+const TextWithNewLines: FC<TextWithNewLinesProps> = ({ text, className }) => {
 	if (!text) {
 		return null;
 	}
@@ -21,4 +26,6 @@ export function renderWithNewLines(text: string | null | undefined, className?: 
 			}}
 		/>
 	);
-}
+};
+
+export default TextWithNewLines;
