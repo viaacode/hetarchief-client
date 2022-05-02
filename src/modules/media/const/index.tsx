@@ -1,12 +1,10 @@
 import { TabProps } from '@meemoo/react-components';
-import DOMPurify from 'dompurify';
 
 import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@media/components';
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapObjectToMetadata } from '@media/utils';
-import { Icon } from '@shared/components';
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
+import { Icon, TextWithNewLines } from '@shared/components';
 import { i18n } from '@shared/helpers/i18n';
 import { MediaTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
@@ -175,19 +173,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
-			data: mediaInfo.abstract ? (
-				<div
-					className="u-color-neutral"
-					dangerouslySetInnerHTML={{
-						__html: String(
-							DOMPurify.sanitize(
-								mediaInfo.abstract.replaceAll('\n', '<br/><br/>'),
-								RICH_TEXT_SANITIZATION
-							)
-						),
-					}}
-				/>
-			) : null,
+			data: <TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />,
 		},
 		{
 			title: i18n.t('modules/media/const/index___transcriptie'),
