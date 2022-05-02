@@ -1,8 +1,10 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, Fragment, useState } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { Icon, IconProps, Overlay } from '@shared/components';
+import { selectHistory } from '@shared/store/history';
 
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
@@ -21,6 +23,14 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 }) => {
 	// Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+	const history = useSelector(selectHistory);
+
+	// Close dropdowns when the url path changed
+	useEffect(() => {
+		if (history?.[1] !== currentPath && isHamburgerMenuOpen) {
+			setIsHamburgerMenuOpen(false);
+		}
+	}, [history, currentPath, isHamburgerMenuOpen]);
 
 	const renderHamburgerMenu = () => {
 		return (
