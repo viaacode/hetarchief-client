@@ -2,7 +2,7 @@ import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { intersection } from 'lodash-es';
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
 import { NavigationItem } from '@navigation/components';
@@ -12,6 +12,7 @@ import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon, IconName } from '@shared/components';
 import { ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
+import { Breakpoints } from '@shared/types';
 
 const linkCls = (classNames: string[] = []) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -39,7 +40,7 @@ const renderLink = (
 		className?: string;
 		tooltip?: string;
 		target?: string;
-		onClick?: () => void;
+		onClick?: MouseEventHandler<HTMLAnchorElement>;
 	} = {}
 ): ReactNode => {
 	return href ? (
@@ -113,7 +114,7 @@ const getVisitorSpacesDropdown = (
 		return {
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
-				'',
+				'/',
 				{
 					badge: <Badge text={accessibleReadingRooms.length} />,
 					className: linkCls([
@@ -122,6 +123,12 @@ const getVisitorSpacesDropdown = (
 						'u-whitespace-nowrap',
 						styles['c-navigation__link--dropdown'],
 					]),
+					// Make link clickable in hamburger menu
+					onClick: (e) => {
+						if (window.innerWidth > Breakpoints.md) {
+							e.preventDefault();
+						}
+					},
 				}
 			),
 			id: 'visitor-spaces',
