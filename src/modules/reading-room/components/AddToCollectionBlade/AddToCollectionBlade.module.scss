@@ -44,7 +44,6 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			display: flex;
 			flex-flow: row nowrap;
 			align-items: center;
-			cursor: pointer;
 
 			&__checkbox {
 				flex-shrink: 0;
