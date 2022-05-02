@@ -1,5 +1,6 @@
+import { ReactNode } from 'react';
+
 import { MediaActions } from '@media/types';
-import { IconLightNames } from '@shared/components';
 import { DefaultComponentProps } from '@shared/types';
 
 export interface DynamicActionMenuProps extends DefaultComponentProps {
@@ -10,7 +11,7 @@ export interface DynamicActionMenuProps extends DefaultComponentProps {
 
 export interface ActionItem {
 	label: string;
-	iconName: IconLightNames;
+	icon: ReactNode;
 	id: MediaActions;
 	ariaLabel: string;
 	tooltip?: string;

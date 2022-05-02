@@ -29,8 +29,8 @@ describe('Components', () => {
 
 			const buttons = getAllByRole('button');
 
-			buttons.forEach((button, index) => {
-				expect(button.textContent).toBe(dynamicActionMenuMock.actions[index].iconName);
+			buttons.forEach((button) => {
+				expect(button.querySelector('.c-icon')).toBeInTheDocument();
 			});
 		});
 
