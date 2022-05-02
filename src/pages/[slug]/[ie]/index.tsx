@@ -135,8 +135,8 @@ const ObjectDetailPage: NextPage = () => {
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.files[0].schemaIdentifier ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.files[0].schemaIdentifier) // Force flowplayer rerender after successful fetch
+		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
 	);
 
 	// ook interessant
@@ -279,9 +279,9 @@ const ObjectDetailPage: NextPage = () => {
 			return {
 				type: item.dctermsFormat as MediaTypes,
 				title: item.name,
-				subtitle: `(${
-					item.datePublished ? formatMediumDate(asDate(item.datePublished)) : undefined
-				})`,
+				subtitle: `${item.maintainerName ?? ''} ${
+					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''
+				}`,
 				description: item.description,
 				id: item.schemaIdentifier,
 				maintainer_id: item.maintainerId,
@@ -380,7 +380,7 @@ const ObjectDetailPage: NextPage = () => {
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
-						src={representation.files[0].schemaIdentifier}
+						src={representation.files[0]?.schemaIdentifier ?? null}
 						alt={representation.name}
 						layout="fill"
 						objectFit="contain"
@@ -430,7 +430,7 @@ const ObjectDetailPage: NextPage = () => {
 				p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
 			`}
 		>
-			{similar.map((item, index) => {
+			{items.map((item, index) => {
 				return (
 					<Fragment key={`${type}-object-${item.id}-${index}`}>
 						{renderCard(item, isHidden)}
@@ -496,7 +496,7 @@ const ObjectDetailPage: NextPage = () => {
 							className="p-object-detail__metadata-component"
 							metadata={METADATA_FIELDS(mediaInfo)}
 						/>
-						{(!!similar.length || !!mediaInfo.keywords.length) && (
+						{(!!similar.length || !!mediaInfo.keywords?.length) && (
 							<Metadata
 								className="p-object-detail__metadata-component"
 								metadata={[
@@ -523,7 +523,7 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	const renderRelatedObjectsBlade = () => {
-		if (!related.length) {
+		if (!related.length || (!expandMetadata && isMobile)) {
 			return null;
 		}
 		return (
@@ -676,11 +676,8 @@ const ObjectDetailPage: NextPage = () => {
 	return (
 		<VisitorLayout>
 			<Head>
-				<title>{createPageTitle(t('pages/slug/ie/index___object-detail-titel'))}</title>
-				<meta
-					name="description"
-					content={t('pages/slug/ie/index___object-detail-omschrijving')}
-				/>
+				<title>{createPageTitle(mediaInfo?.name)}</title>
+				<meta name="description" content={mediaInfo?.maintainerName} />
 			</Head>
 			{renderPageContent()}
 		</VisitorLayout>

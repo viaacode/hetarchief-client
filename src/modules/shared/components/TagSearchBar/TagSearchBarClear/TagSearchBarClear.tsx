@@ -4,9 +4,9 @@ import { FC } from 'react';
 import { Icon } from '../../Icon';
 import { dropdownIndicatorCxState } from '../../TagsInput';
 
-import { SearchBarClearProps } from './SearchBarClear.types';
+import { TagSearchBarClearProps } from './TagSearchBarClear.types';
 
-const SearchBarClear: FC<SearchBarClearProps> = ({
+const TagSearchBarClear: FC<TagSearchBarClearProps> = ({
 	className,
 	cx,
 	innerProps,
@@ -31,7 +31,7 @@ const SearchBarClear: FC<SearchBarClearProps> = ({
 		>
 			{clearLabel ? (
 				<>
-					<span className="c-search-bar__clear-label u-display-none u-display-inline-block:lg">
+					<span className="c-tag-search-bar__clear-label u-display-none u-display-inline-block:lg">
 						{clearLabel}
 					</span>
 					<Icon
@@ -46,4 +46,4 @@ const SearchBarClear: FC<SearchBarClearProps> = ({
 	);
 };
 
-export default SearchBarClear;
+export default TagSearchBarClear;

@@ -7,32 +7,38 @@ export enum ReadingRoomMediaType {
 }
 
 export enum MediaSearchFilterField {
-	QUERY = 'query',
 	ADVANCED_QUERY = 'advancedQuery',
-	FORMAT = 'format',
-	DURATION = 'duration',
 	CREATED = 'created',
-	PUBLISHED = 'published',
 	CREATOR = 'creator',
+	DESCRIPTION = 'description',
+	DURATION = 'duration',
+	ERA = 'era',
+	FORMAT = 'format',
 	GENRE = 'genre',
 	KEYWORD = 'keyword',
+	LANGUAGE = 'language',
+	LOCATION = 'location',
+	MEDIUM = 'medium',
 	NAME = 'name',
+	PUBLISHED = 'published',
+	PUBLISHER = 'publisher',
+	QUERY = 'query',
 }
 
 export enum MediaSearchOperator {
 	CONTAINS = 'contains',
 	CONTAINS_NOT = 'containsNot',
+	GTE = 'gte',
 	IS = 'is',
 	IS_NOT = 'isNot',
-	GTE = 'gte',
 	LTE = 'lte',
 }
 
 export interface MediaSearchFilter {
 	field: MediaSearchFilterField;
 	multiValue?: string[];
-	value?: string;
 	operator: MediaSearchOperator;
+	value?: string;
 }
 
 export type MediaSearchFilters = MediaSearchFilter[];

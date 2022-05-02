@@ -56,8 +56,8 @@ import {
 	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
-	SearchBar,
 	TabLabel,
+	TagSearchBar,
 	ToggleOption,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
@@ -464,7 +464,7 @@ const ReadingRoomPage: NextPage = () => {
 					const href = `/${slug}/${source?.meemoo_fragment_id}`;
 
 					return (
-						<Link href={href.toLowerCase()}>
+						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
 							<a className="u-text-no-decoration">{card}</a>
 						</Link>
 					);
@@ -514,7 +514,7 @@ const ReadingRoomPage: NextPage = () => {
 
 					<section className="u-bg-black u-pt-8">
 						<div className="l-container">
-							<SearchBar
+							<TagSearchBar
 								allowCreate
 								className="u-mb-24"
 								clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
