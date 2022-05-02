@@ -1,6 +1,5 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isToday } from 'date-fns';
 import { HTTPError } from 'ky';
 import { isEqual } from 'lodash';
 import { GetServerSideProps, NextPage } from 'next';
@@ -57,8 +56,8 @@ import {
 	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
-	SearchBar,
 	TabLabel,
+	TagSearchBar,
 	ToggleOption,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
@@ -66,13 +65,12 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
+import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
-	formatDate,
 	formatMediumDateWithTime,
-	formatTime,
+	formatSameDayTimeOrDate,
 } from '@shared/utils';
 import { scrollToTop } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
@@ -365,15 +363,9 @@ const ReadingRoomPage: NextPage = () => {
 	const showInitialView = !hasSearched;
 	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
 	const showResults = hasSearched && !!media && media?.items?.length > 0;
-	const isMobile = windowSize.width && windowSize.width > 700;
-	const accessEndDate =
-		visitStatus && visitStatus.endAt ? formatMediumDateWithTime(asDate(visitStatus.endAt)) : '';
-	const accessEndDateMobile =
-		visitStatus && visitStatus.endAt
-			? isToday(asDate(visitStatus.endAt) ?? 0)
-				? formatTime(asDate(visitStatus.endAt))
-				: formatDate(asDate(visitStatus.endAt))
-			: '';
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const accessEndDate = formatMediumDateWithTime(asDate(visitStatus?.endAt));
+	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitStatus?.endAt));
 
 	/**
 	 * Render
@@ -462,7 +454,7 @@ const ReadingRoomPage: NextPage = () => {
 					const href = `/${slug}/${source?.meemoo_fragment_id}`;
 
 					return (
-						<Link href={href.toLowerCase()}>
+						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
 							<a className="u-text-no-decoration">{card}</a>
 						</Link>
 					);
@@ -513,7 +505,7 @@ const ReadingRoomPage: NextPage = () => {
 
 					<section className="u-bg-black u-pt-8">
 						<div className="l-container">
-							<SearchBar
+							<TagSearchBar
 								allowCreate
 								className="u-mb-24"
 								clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}

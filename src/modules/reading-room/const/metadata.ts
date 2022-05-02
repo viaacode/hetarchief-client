@@ -135,22 +135,42 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.DESCRIPTION,
+						operator: MediaSearchOperator.CONTAINS,
+					},
+				],
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.DESCRIPTION,
+						operator: MediaSearchOperator.CONTAINS_NOT,
+					},
+				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.DESCRIPTION,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.DESCRIPTION,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.Duration]: {
@@ -177,26 +197,47 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 		},
+		// "Temporal" missing in ES, src/modules/media/types.ts:84
 		[MetadataProp.Era]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.ERA,
+						operator: MediaSearchOperator.CONTAINS,
+					},
+				],
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.ERA,
+						operator: MediaSearchOperator.CONTAINS_NOT,
+					},
+				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.ERA,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.ERA,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.Everything]: {
@@ -266,13 +307,23 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 		[MetadataProp.Medium]: {
 			[Operator.Equals]: {
 				label: dictionary.equals,
-				field: MediumSelect, // TODO: populate by aggregate (missing in ES)
-				filters: [], // TODO: Add to proxy
+				field: MediumSelect,
+				filters: [
+					{
+						field: MediaSearchFilterField.MEDIUM,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
-				field: MediumSelect, // TODO: populate by aggregate (missing in ES)
-				filters: [], // TODO: Add to proxy
+				field: MediumSelect,
+				filters: [
+					{
+						field: MediaSearchFilterField.MEDIUM,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.Genre]: {
@@ -301,34 +352,65 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LANGUAGE,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LANGUAGE,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
+		// "Spatial" missing in ES, src/modules/media/types.ts:83
 		[MetadataProp.Location]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LOCATION,
+						operator: MediaSearchOperator.CONTAINS,
+					},
+				],
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LOCATION,
+						operator: MediaSearchOperator.CONTAINS_NOT,
+					},
+				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LOCATION,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.LOCATION,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.PublishedAt]: {
@@ -371,22 +453,42 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.PUBLISHER,
+						operator: MediaSearchOperator.CONTAINS,
+					},
+				],
 			},
 			[Operator.ContainsNot]: {
 				label: dictionary.excludes,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.PUBLISHER,
+						operator: MediaSearchOperator.CONTAINS_NOT,
+					},
+				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.PUBLISHER,
+						operator: MediaSearchOperator.IS,
+					},
+				],
 			},
 			[Operator.EqualsNot]: {
 				label: dictionary.differs,
 				field: TextInput,
-				filters: [], // TODO: Add to proxy
+				filters: [
+					{
+						field: MediaSearchFilterField.PUBLISHER,
+						operator: MediaSearchOperator.IS_NOT,
+					},
+				],
 			},
 		},
 		[MetadataProp.Title]: {

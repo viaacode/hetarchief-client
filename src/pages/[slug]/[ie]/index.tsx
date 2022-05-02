@@ -1,6 +1,5 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isToday } from 'date-fns';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
@@ -61,14 +60,13 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { MediaTypes, ReadingRoomMediaType } from '@shared/types';
+import { Breakpoints, MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
-	formatDate,
 	formatMediumDate,
 	formatMediumDateWithTime,
-	formatTime,
+	formatSameDayTimeOrDate,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
@@ -100,6 +98,7 @@ const ObjectDetailPage: NextPage = () => {
 	const [backLink, setBackLink] = useState(`/${router.query.slug}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
+	const [metadataColumns, setMetadataColumns] = useState<number>(1);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
 	const [pauseMedia, setPauseMedia] = useState(true);
 	const [isPlayEventFired, setIsPlayEventFired] = useState(false);
@@ -136,8 +135,8 @@ const ObjectDetailPage: NextPage = () => {
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetMediaTicketInfo(
-		currentRepresentation?.files[0].schemaIdentifier ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.files[0].schemaIdentifier) // Force flowplayer rerender after successful fetch
+		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
+		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
 	);
 
 	// ook interessant
@@ -173,6 +172,11 @@ const ObjectDetailPage: NextPage = () => {
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
+	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
+	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
+	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
 
 	/**
 	 * Effects
@@ -191,11 +195,16 @@ const ObjectDetailPage: NextPage = () => {
 	}, [router.query.ie]);
 
 	useEffect(() => {
+		metadataSize &&
+			setMetadataColumns(expandMetadata && !isMobile && metadataSize?.width > 500 ? 2 : 1);
+	}, [expandMetadata, isMobile, metadataSize]);
+
+	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
-		if (windowSize.width && windowSize.width < 768 && activeTab === ObjectDetailTabs.Metadata) {
+		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
 			setPauseMedia(true);
 		}
-	}, [activeTab, windowSize.width]);
+	}, [activeTab, isMobile]);
 
 	useEffect(() => {
 		let backLink = `/${router.query.slug}`;
@@ -224,7 +233,7 @@ const ObjectDetailPage: NextPage = () => {
 		setCurrentRepresentation(mediaInfo?.representations[0]);
 
 		// Set default view
-		if (windowSize.width && windowSize.width < 768) {
+		if (isMobile) {
 			// Default to metadata tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata);
 		} else {
@@ -243,23 +252,6 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		relatedData && setRelated(mapRelatedData(relatedData.items));
 	}, [relatedData]);
-
-	/**
-	 * Computed
-	 */
-	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
-	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
-	const isMobile = windowSize.width && windowSize.width > 700;
-	const accessEndDate =
-		visitRequest && visitRequest.endAt
-			? formatMediumDateWithTime(asDate(visitRequest.endAt))
-			: '';
-	const accessEndDateMobile =
-		visitRequest && visitRequest.endAt
-			? isToday(asDate(visitRequest.endAt) ?? 0)
-				? formatTime(asDate(visitRequest.endAt))
-				: formatDate(asDate(visitRequest.endAt))
-			: '';
 
 	/**
 	 * Mapping
@@ -287,9 +279,9 @@ const ObjectDetailPage: NextPage = () => {
 			return {
 				type: item.dctermsFormat as MediaTypes,
 				title: item.name,
-				subtitle: `(${
-					item.datePublished ? formatMediumDate(asDate(item.datePublished)) : undefined
-				})`,
+				subtitle: `${item.maintainerName ?? ''} ${
+					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''
+				}`,
 				description: item.description,
 				id: item.schemaIdentifier,
 				maintainer_id: item.maintainerId,
@@ -388,7 +380,7 @@ const ObjectDetailPage: NextPage = () => {
 				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
-						src={representation.files[0].schemaIdentifier}
+						src={representation.files[0]?.schemaIdentifier ?? null}
 						alt={representation.name}
 						layout="fill"
 						objectFit="contain"
@@ -432,7 +424,11 @@ const ObjectDetailPage: NextPage = () => {
 		isHidden = false
 	): ReactNode => (
 		<ul
-			className={`u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type}`}
+			className={`
+				u-list-reset p-object-detail__metadata-list
+				p-object-detail__metadata-list--${type}
+				p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
+			`}
 		>
 			{items.map((item, index) => {
 				return (
@@ -496,15 +492,13 @@ const ObjectDetailPage: NextPage = () => {
 				{mediaInfo && (
 					<>
 						<Metadata
-							className="u-px-32"
-							columns={
-								expandMetadata && metadataSize && metadataSize?.width > 500 ? 2 : 1
-							}
+							columns={metadataColumns}
+							className="p-object-detail__metadata-component"
 							metadata={METADATA_FIELDS(mediaInfo)}
 						/>
-						{(!!similar.length || !!mediaInfo.keywords.length) && (
+						{(!!similar.length || !!mediaInfo.keywords?.length) && (
 							<Metadata
-								className="u-px-32"
+								className="p-object-detail__metadata-component"
 								metadata={[
 									{
 										title: t(
@@ -514,7 +508,9 @@ const ObjectDetailPage: NextPage = () => {
 									},
 									{
 										title: 'Ook interessant',
-										data: renderMetadataCards('similar', similar),
+										data: similar.length
+											? renderMetadataCards('similar', similar)
+											: null,
 										className: 'u-pb-0',
 									},
 								].filter((field) => !!field.data)}
@@ -527,7 +523,7 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	const renderRelatedObjectsBlade = () => {
-		if (!related.length) {
+		if (!related.length || (!expandMetadata && isMobile)) {
 			return null;
 		}
 		return (
@@ -592,13 +588,13 @@ const ObjectDetailPage: NextPage = () => {
 				showAccessEndDate={
 					accessEndDate || accessEndDateMobile
 						? isMobile
-							? t(
+							? t('pages/slug/ie/index___tot-access-end-date-mobile', {
+									accessEndDateMobile,
+							  })
+							: t(
 									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
 									{ accessEndDate }
 							  )
-							: t('pages/slug/ie/index___tot-access-end-date-mobile', {
-									accessEndDateMobile,
-							  })
 						: undefined
 				}
 			/>
@@ -680,11 +676,8 @@ const ObjectDetailPage: NextPage = () => {
 	return (
 		<VisitorLayout>
 			<Head>
-				<title>{createPageTitle(t('pages/slug/ie/index___object-detail-titel'))}</title>
-				<meta
-					name="description"
-					content={t('pages/slug/ie/index___object-detail-omschrijving')}
-				/>
+				<title>{createPageTitle(mediaInfo?.name)}</title>
+				<meta name="description" content={mediaInfo?.maintainerName} />
 			</Head>
 			{renderPageContent()}
 		</VisitorLayout>

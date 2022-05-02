@@ -50,7 +50,7 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 	page: 1,
 	// Sorting
 	orderProp: ReadingRoomSort.Relevance,
-	orderDirection: undefined,
+	orderDirection: OrderDirection.desc,
 };
 
 export const READING_ROOM_QUERY_PARAM_CONFIG = {
@@ -70,7 +70,7 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	page: withDefault(NumberParam, READING_ROOM_QUERY_PARAM_INIT.page),
 	// Sorting
 	orderProp: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.orderProp),
-	orderDirection: StringParam,
+	orderDirection: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.orderDirection),
 	// UI
 	filter: StringParam,
 };

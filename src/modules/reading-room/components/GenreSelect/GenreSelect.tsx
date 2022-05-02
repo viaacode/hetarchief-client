@@ -1,10 +1,12 @@
 import { ReactSelect, ReactSelectProps } from '@meemoo/react-components';
+import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import { selectMediaResults } from '@shared/store/media';
 
 const GenreSelect: FC<ReactSelectProps> = (props) => {
+	const { t } = useTranslation();
 	const aggregates = useSelector(selectMediaResults)?.aggregations.schema_genre.buckets;
 
 	const options = (aggregates || []).map((bucket) => ({
@@ -16,7 +18,19 @@ const GenreSelect: FC<ReactSelectProps> = (props) => {
 	// Bind to defaultProps to access externally
 	GenreSelect.defaultProps = { options };
 
-	return <ReactSelect {...props} options={GenreSelect.defaultProps.options} />;
+	const getPlaceholder = (): string | undefined => {
+		return options.length > 0
+			? t('modules/reading-room/components/genre-select/genre-select___geen-genres-gevonden')
+			: t('modules/reading-room/components/genre-select/genre-select___kies-een-genre');
+	};
+
+	return (
+		<ReactSelect
+			{...props}
+			placeholder={getPlaceholder()}
+			options={GenreSelect.defaultProps.options}
+		/>
+	);
 };
 
 export default GenreSelect;

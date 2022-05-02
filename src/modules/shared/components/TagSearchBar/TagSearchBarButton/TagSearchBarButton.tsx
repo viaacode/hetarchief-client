@@ -4,14 +4,19 @@ import { FC } from 'react';
 import { Icon } from '../../Icon';
 import { dropdownIndicatorCxState } from '../../TagsInput';
 
-import styles from './SearchBarButton.module.scss';
-import { SearchBarButtonProps } from './SearchBarButton.types';
+import styles from './TagSearchBarButton.module.scss';
+import { TagSearchBarButtonProps } from './TagSearchBarButton.types';
 
-const SearchBarButton: FC<SearchBarButtonProps> = ({ className, cx, innerProps, selectProps }) => {
+const TagSearchBarButton: FC<TagSearchBarButtonProps> = ({
+	className,
+	cx,
+	innerProps,
+	selectProps,
+}) => {
 	return (
 		<span
 			{...innerProps}
-			className={clsx(dropdownIndicatorCxState, className, styles['c-search-bar-button'])}
+			className={clsx(dropdownIndicatorCxState, className, styles['c-tag-search-bar-button'])}
 			tabIndex={0}
 			/* eslint-disable @typescript-eslint/ban-ts-comment */
 			// @ts-ignore
@@ -34,4 +39,4 @@ const SearchBarButton: FC<SearchBarButtonProps> = ({ className, cx, innerProps, 
 	);
 };
 
-export default SearchBarButton;
+export default TagSearchBarButton;

@@ -141,33 +141,10 @@ const Requests: FC = () => {
 				<div className="p-admin-requests l-container">
 					<div className="p-admin-requests__header">
 						<SearchBar
-							backspaceRemovesValue={false}
+							default={filters[SEARCH_QUERY_KEY]}
 							className="p-admin-requests__search"
-							instanceId="requests-search-bar"
-							light={true}
-							placeholder={t('pages/beheer/aanvragen/index___zoek')}
-							searchValue={filters.search}
-							size="md"
-							onClear={() => {
-								setFilters({
-									[SEARCH_QUERY_KEY]: '',
-									page: 1,
-								});
-							}}
-							onSearch={(searchValue: string) => {
-								// Force rerender
-								if (filters.search === searchValue) {
-									setFilters({
-										[SEARCH_QUERY_KEY]: '',
-										page: 1,
-									});
-								}
-
-								setFilters({
-									[SEARCH_QUERY_KEY]: searchValue,
-									page: 1,
-								});
-							}}
+							placeholder={t('pages/admin/leeszalenbeheer/aanvragen/index___zoek')}
+							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 
 						<ScrollableTabs

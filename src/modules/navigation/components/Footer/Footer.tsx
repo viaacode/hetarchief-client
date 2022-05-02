@@ -28,7 +28,10 @@ const Footer: FC<FooterProps> = ({ links, leftItem, rightItem }) => {
 			<div className={styles[`c-footer__${side}`]}>
 				<p data-testid="vlaanderen-text">{item.label}</p>
 				<Link href={item.link.to}>
-					<a target={item.link.external ? '_blank' : '_self'}>
+					<a
+						className={styles['c-footer__image-link']}
+						target={item.link.external ? '_blank' : '_self'}
+					>
 						{/* Image will not display in Storybook. Open issue: https://github.com/vercel/next.js/issues/18393*/}
 						{/* Images work fine in the next.js app */}
 						<Image
@@ -36,6 +39,8 @@ const Footer: FC<FooterProps> = ({ links, leftItem, rightItem }) => {
 							alt={item.image.alt}
 							width={item.image.width}
 							height={item.image.height}
+							objectFit="contain"
+							objectPosition="center"
 						/>
 					</a>
 				</Link>

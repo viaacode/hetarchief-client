@@ -40,7 +40,7 @@ const ReadingRoomCard: FC<VisitorSpaceCardProps> = (props) => {
 				color={room.color}
 				logo={room.logo}
 				name={room.name}
-				id={room.id as string}
+				id={room.id}
 				image={room.image}
 				size={size || 'short'}
 				shadow={typeNoAccess}
