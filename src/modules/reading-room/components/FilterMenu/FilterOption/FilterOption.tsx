@@ -1,6 +1,6 @@
 import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { Icon, Overlay } from '@shared/components';
 
@@ -28,6 +28,13 @@ const FilterOption: FC<FilterOptionProps> = ({
 	);
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
+	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
+
+	// re-render form to ensure correct state
+	// e.g. open -> reset -> close -> open === values in url, in form
+	useEffect(() => {
+		setOpenedAt(new Date().valueOf());
+	}, [filterIsActive]);
 
 	return (
 		<>
@@ -55,6 +62,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 						onClick={onFilterToggle}
 					/>
 					<FilterForm
+						key={openedAt}
 						className={styles['c-filter-menu__form']}
 						form={form}
 						id={id}

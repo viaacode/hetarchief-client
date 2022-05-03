@@ -23,6 +23,7 @@ import {
 	DurationFilterFormState,
 	FilterMenu,
 	GenreFilterFormState,
+	initialFields,
 	KeywordsFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
@@ -303,7 +304,15 @@ const ReadingRoomPage: NextPage = () => {
 				break;
 
 			case ReadingRoomFilterId.Advanced:
-				data = (values as AdvancedFilterFormState).advanced;
+				data = (values as AdvancedFilterFormState).advanced.filter(
+					(advanced) => advanced.val !== initialFields().val
+				);
+
+				if (data.length === 0) {
+					setQuery({ [id]: undefined, filter: undefined });
+					return;
+				}
+
 				break;
 
 			default:
