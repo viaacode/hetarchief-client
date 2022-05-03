@@ -332,7 +332,10 @@ const LoggedInHome: FC = () => {
 
 				{renderHero()}
 				<div ref={searchRef}>
-					<ReadingRoomCardsWithSearch onRequestAccess={onRequestAccess} />
+					<ReadingRoomCardsWithSearch
+						onRequestAccess={onRequestAccess}
+						onSearch={() => setHasScrolledToSearch(true)}
+					/>
 				</div>
 			</div>
 

@@ -21,6 +21,7 @@ import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createHomeWithReadingRoomFilterUrl, createPageTitle } from '@shared/utils';
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
@@ -78,22 +79,31 @@ const AccountMyHistory: NextPage = () => {
 		[filters, setFilters]
 	);
 
-	const onClickRow = (visit: Visit) => {
-		getAccessStatus(visit.spaceId)
-			.then((response) => {
-				switch (response?.status) {
-					case VisitStatus.APPROVED:
-						router.push(`/${visit.spaceSlug}`);
-						break;
-					case VisitStatus.PENDING:
-						router.push(ROUTES.visitRequested.replace(':slug', visit.spaceSlug));
-						break;
-					default:
-						router.push(createHomeWithReadingRoomFilterUrl(visit));
-						break;
-				}
-			})
-			.catch(() => router.push(createHomeWithReadingRoomFilterUrl(visit)));
+	const onClickRow = async (visit: Visit) => {
+		try {
+			const response = await getAccessStatus(visit.spaceId);
+			switch (response?.status) {
+				case VisitStatus.APPROVED:
+					router.push(`/${visit.spaceSlug}`);
+					break;
+				case VisitStatus.PENDING:
+					router.push(ROUTES.visitRequested.replace(':slug', visit.spaceSlug));
+					break;
+				default:
+					router.push(createHomeWithReadingRoomFilterUrl(visit));
+					break;
+			}
+		} catch (err) {
+			console.error(err);
+			toastService.notify({
+				title: t('Error'),
+				maxLines: 2,
+				description: t(
+					'Het controleren van je toegang tot deze bezoekersruimte is mislukt.'
+				),
+			});
+			router.push(createHomeWithReadingRoomFilterUrl(visit));
+		}
 	};
 
 	// Render
