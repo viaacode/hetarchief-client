@@ -29,7 +29,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 				> img {
 					position: static !important;
-					height: auto !important;
+					height: calc(238px / 16 * 9) !important;
 				}
 			}
 		}
