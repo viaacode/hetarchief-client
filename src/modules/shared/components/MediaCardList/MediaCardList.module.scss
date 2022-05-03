@@ -37,6 +37,10 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 		background-clip: padding-box;
 	}
 
+	&__fake-height-spacer {
+		height: 0;
+	}
+
 	// Modifiers
 
 	&--sidebar {
