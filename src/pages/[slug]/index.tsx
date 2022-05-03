@@ -56,14 +56,15 @@ import {
 	PaginationBar,
 	Placeholder,
 	ScrollableTabs,
-	SearchBar,
 	TabLabel,
+	TagSearchBar,
 	ToggleOption,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
@@ -72,6 +73,7 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
+import { scrollToTop } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -147,6 +149,8 @@ const ReadingRoomPage: NextPage = () => {
 
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	const collections = useSelector(selectCollections);
 
 	/**
 	 * Computed
@@ -402,6 +406,14 @@ const ReadingRoomPage: NextPage = () => {
 		if (!canManageFolders) {
 			return null;
 		}
+
+		const isInAFolder = (collections?.items || []).some((collection) => {
+			return collection.objects?.find(
+				(object) =>
+					object.schemaIdentifier === (item as IdentifiableMediaCard).schemaIdentifier
+			);
+		});
+
 		return (
 			<Button
 				onClick={(e) => {
@@ -412,7 +424,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(item as IdentifiableMediaCard);
 					setShowAddToCollectionBlade(true);
 				}}
-				icon={<Icon type="light" name="bookmark" />}
+				icon={<Icon type={isInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
 			/>
 		);
@@ -453,7 +465,7 @@ const ReadingRoomPage: NextPage = () => {
 					const href = `/${slug}/${source?.meemoo_fragment_id}`;
 
 					return (
-						<Link href={href.toLowerCase()}>
+						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
 							<a className="u-text-no-decoration">{card}</a>
 						</Link>
 					);
@@ -465,12 +477,13 @@ const ReadingRoomPage: NextPage = () => {
 				count={READING_ROOM_ITEM_COUNT}
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
-				onPageChange={(page) =>
+				onPageChange={(page) => {
+					scrollToTop();
 					setQuery({
 						...query,
 						page: page + 1,
-					})
-				}
+					});
+				}}
 			/>
 		</>
 	);
@@ -503,7 +516,7 @@ const ReadingRoomPage: NextPage = () => {
 
 					<section className="u-bg-black u-pt-8">
 						<div className="l-container">
-							<SearchBar
+							<TagSearchBar
 								allowCreate
 								className="u-mb-24"
 								clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}

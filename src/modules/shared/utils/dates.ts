@@ -27,10 +27,13 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 	return new Date(isNumber ? Number(timezoned) : timezoned);
 };
 
+export const localisedOptions = {
+	locale: getLocaleFromi18nLanguage(i18n?.language || ''),
+};
+
 // Do not export to contain all user-facing formatters here
 const formatWithLocale = (formatString: string, date?: Date): string => {
-	const locale = getLocaleFromi18nLanguage(i18n?.language || '');
-	return date ? format(date, formatString, { locale }) : '';
+	return date ? format(date, formatString, { ...localisedOptions }) : '';
 };
 
 // 09:30
@@ -72,8 +75,8 @@ export const formatDistanceToday = (input: Date | string): string => {
 
 	if (date && differenceInDays(new Date(), date) <= 1) {
 		return formatDistanceToNow(date, {
+			...localisedOptions,
 			addSuffix: true,
-			locale: getLocaleFromi18nLanguage(i18n?.language || ''),
 		});
 	}
 
