@@ -286,9 +286,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								{renderPairFields(data)}
 
 								<li className={styles['c-add-to-collection-blade__list-button']}>
-									<CreateCollectionButton
-										afterSubmit={() => getCollections.refetch()}
-									/>
+									<CreateCollectionButton afterSubmit={getCollections.refetch} />
 								</li>
 							</>
 						)}
