@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
+import { scrollToTop } from '@shared/utils/scroll-to-top';
+
 import { Icon } from '../Icon';
 import { PaginationProgress } from '../PaginationProgress';
 
@@ -21,10 +23,6 @@ const PaginationBar: FC<PaginationBarProps> = ({
 
 	const pageCount = Math.ceil(total / count);
 	const currentPage = start / count;
-
-	const scrollToTop = () => {
-		window.scrollTo({ top: 0, behavior: 'smooth' });
-	};
 
 	const renderProgress = () => {
 		const end = start + count;

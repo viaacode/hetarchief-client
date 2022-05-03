@@ -3,7 +3,8 @@
 $component: "c-related-object";
 
 .#{$component} {
-	&__image {
+	&__image,
+	&__placeholder {
 		width: 12rem;
 	}
 
