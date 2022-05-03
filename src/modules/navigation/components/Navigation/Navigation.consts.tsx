@@ -89,7 +89,8 @@ const getVisitorSpacesDropdown = (
 				}
 			),
 			id: 'visitor-spaces',
-			active: currentPath.startsWith('/' + linkedSpaceSlug),
+			activeDesktop: currentPath.startsWith('/' + linkedSpaceSlug),
+			activeMobile: currentPath.startsWith('/' + linkedSpaceSlug),
 		};
 	} else if (accessibleReadingRooms.length === 0) {
 		// No visitor spaces available => show link to homepage without dropdown
@@ -106,7 +107,8 @@ const getVisitorSpacesDropdown = (
 				}
 			),
 			id: 'visitor-spaces',
-			active: currentPath === ROUTES.home,
+			activeDesktop: currentPath === ROUTES.home,
+			activeMobile: currentPath === ROUTES.home,
 		};
 	} else {
 		// Show dropdown list with homepage and accessible visitor spaces
@@ -125,7 +127,12 @@ const getVisitorSpacesDropdown = (
 				}
 			),
 			id: 'visitor-spaces',
-			active: currentPath === ROUTES.home,
+			activeDesktop:
+				currentPath === ROUTES.home ||
+				!!accessibleReadingRooms.find((visitorSpace) =>
+					currentPath.startsWith(`/${visitorSpace.slug}`)
+				),
+			activeMobile: currentPath === ROUTES.home,
 			children: [
 				{
 					node: renderLink(
@@ -171,6 +178,7 @@ const getVisitorSpacesDropdown = (
 								}
 							),
 						id: visitorSpace.id,
+						activeMobile: currentPath.startsWith(`/${visitorSpace.slug}`),
 					})
 				),
 			],
@@ -181,7 +189,8 @@ const getVisitorSpacesDropdown = (
 const getDynamicHeaderLinks = (currentPath: string, navigationItems: NavigationInfo[]) => {
 	return navigationItems.map((navigationItem: NavigationInfo): NavigationItem => {
 		return {
-			active: currentPath === navigationItem.contentPath,
+			activeDesktop: currentPath === navigationItem.contentPath,
+			activeMobile: currentPath === navigationItem.contentPath,
 			id: navigationItem.id,
 			node: renderLink(navigationItem.label, navigationItem.contentPath, {
 				target: navigationItem.linkTarget || undefined,
@@ -228,7 +237,7 @@ const getCpAdminManagementDropdown = (
 				}
 			),
 			id: 'nav__beheer',
-			active: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
+			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
 			children: [
 				...(permissions.includes(Permission.APPROVE_DENY_CP_VISIT_REQUESTS)
 					? [
@@ -243,6 +252,7 @@ const getCpAdminManagementDropdown = (
 									}
 								),
 								id: 'nav__beheer--aanvragen',
+								activeMobile: currentPath.startsWith('/beheer/aanvragen'),
 							},
 					  ]
 					: []),
@@ -259,6 +269,7 @@ const getCpAdminManagementDropdown = (
 									}
 								),
 								id: 'nav__beheer--bezoekers',
+								activeMobile: currentPath.startsWith('/beheer/bezoekers'),
 							},
 					  ]
 					: []),
@@ -275,6 +286,7 @@ const getCpAdminManagementDropdown = (
 									}
 								),
 								id: 'nav__beheer--instellingen',
+								activeMobile: currentPath.startsWith('/beheer/instellingen'),
 							},
 					  ]
 					: []),
@@ -309,7 +321,8 @@ const getMeemooAdminManagementDropdown = (
 				}
 			),
 			id: 'nav__admin',
-			active: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
+			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
+			activeMobile: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
 		},
 	];
 };

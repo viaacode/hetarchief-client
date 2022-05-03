@@ -196,6 +196,16 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 	}
 
+	.c-navigation__dropdown-item--active-mobile {
+		> a {
+			font-weight: 700;
+
+			@include respond-at ("md") {
+				font-weight: 400;
+			}
+		}
+	}
+
 	.c-navigation__list-overlay {
 		width: 100vw;
 		position: absolute;
@@ -295,7 +305,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 	}
 
-	&:not(&--active):hover {
+	&:not(&--active-desktop):hover {
 		.c-navigation__link,
 		.c-navigation__link + span {
 			color: color.adjust($white, $alpha: -0.3);
@@ -335,7 +345,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 	}
 
-	&--active {
+	&--active-desktop {
 		z-index: get-z-layer("nav-dropdown");
 		border-bottom-color: $teal;
 		font-weight: $font-weight-bold;
