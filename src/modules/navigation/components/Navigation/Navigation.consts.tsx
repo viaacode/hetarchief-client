@@ -86,6 +86,7 @@ const getVisitorSpacesDropdown = (
 						'u-color-black',
 						'u-color-white:md',
 						'u-whitespace-nowrap',
+						styles['c-navigation__link--dropdown'],
 					]),
 				}
 			),
@@ -103,6 +104,7 @@ const getVisitorSpacesDropdown = (
 						'u-color-black',
 						'u-color-white:md',
 						'u-whitespace-nowrap',
+						styles['c-navigation__link--dropdown'],
 					]),
 				}
 			),

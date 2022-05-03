@@ -23,14 +23,6 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 }) => {
 	// Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
-	const history = useSelector(selectHistory);
-
-	// Close dropdowns when the url path changed
-	useEffect(() => {
-		if (history?.[1] !== currentPath && isHamburgerMenuOpen) {
-			setIsHamburgerMenuOpen(false);
-		}
-	}, [history, currentPath, isHamburgerMenuOpen]);
 
 	const renderHamburgerMenu = () => {
 		return (
