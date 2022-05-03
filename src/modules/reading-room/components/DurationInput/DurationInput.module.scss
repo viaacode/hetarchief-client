@@ -1,0 +1,15 @@
+@use "styles/abstracts" as *;
+
+.c-duration-input {
+	position: relative;
+}
+
+.c-duration-input--placeholder {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	height: auto;
+	padding: 1.4rem 1.6rem;
+	color: $zinc;
+}
