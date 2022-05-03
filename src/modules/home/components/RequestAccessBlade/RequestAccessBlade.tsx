@@ -16,10 +16,10 @@ import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccess
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladeProps }) => {
 	const { t } = useTranslation();
-	const [{ bezoekersruimte }] = useQueryParams({
+	const [query] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
-	const { data: space } = useGetReadingRoom(bezoekersruimte);
+	const { data: space } = useGetReadingRoom(query[VISITOR_SPACE_SLUG_QUERY_KEY]);
 
 	const {
 		control,
