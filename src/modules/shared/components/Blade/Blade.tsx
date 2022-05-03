@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import FocusTrap from 'focus-trap-react';
 import { FC } from 'react';
 
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
@@ -37,9 +38,48 @@ const Blade: FC<BladeProps> = ({
 				icon={<Icon name="times" />}
 				variants="text"
 				onClick={isLayered && onCloseBlade ? () => onCloseBlade(layer) : onClose}
+				disabled={!isOpen}
 			/>
 		);
 	};
+
+	const renderContent = (hide: boolean) => {
+		return (
+			<div
+				role="dialog"
+				aria-modal={isBladeOpen}
+				aria-labelledby="bladeTitle"
+				className={clsx(
+					className,
+					styles['c-blade'],
+					isBladeOpen && styles['c-blade--visible'],
+					isLayered && [styles['c-blade--managed']]
+				)}
+				// offset underlying blades
+				style={
+					isLayered && layer < currentLayer
+						? {
+								transform: `translateX(-${(currentLayer - layer) * 5.6}rem)`,
+								visibility: hide ? 'hidden' : 'visible',
+						  }
+						: { visibility: hide ? 'hidden' : 'visible' }
+				}
+			>
+				{!hideCloseButton && renderCloseButton()}
+				<div className={styles['c-blade__title-wrapper']}>
+					{heading ||
+						(title && (
+							<h3 id="bladeTitle" className={styles['c-blade__title']}>
+								{title}
+							</h3>
+						))}
+				</div>
+				<div className={styles['c-blade__body-wrapper']}>{children}</div>
+				<div className={styles['c-blade__footer-wrapper']}>{footer || <></>}</div>
+			</div>
+		);
+	};
+
 	return (
 		<>
 			{!hideOverlay && (
@@ -63,35 +103,14 @@ const Blade: FC<BladeProps> = ({
 					type={isLayered && layer > 1 ? 'light' : 'dark'}
 				/>
 			)}
-			<div
-				role="dialog"
-				aria-modal={isBladeOpen}
-				aria-labelledby="bladeTitle"
-				className={clsx(
-					className,
-					styles['c-blade'],
-					isBladeOpen && styles['c-blade--visible'],
-					isLayered && [styles['c-blade--managed']]
-				)}
-				// offset underlying blades
-				style={
-					isLayered && layer < currentLayer
-						? { transform: `translateX(-${(currentLayer - layer) * 5.6}rem)` }
-						: {}
-				}
-			>
-				{!hideCloseButton && renderCloseButton()}
-				<div className={styles['c-blade__title-wrapper']}>
-					{heading ||
-						(title && (
-							<h3 id="bladeTitle" className={styles['c-blade__title']}>
-								{title}
-							</h3>
-						))}
-				</div>
-				<div className={styles['c-blade__body-wrapper']}>{children}</div>
-				<div className={styles['c-blade__footer-wrapper']}>{footer || <></>}</div>
-			</div>
+			{
+				<FocusTrap
+					active={isBladeOpen}
+					focusTrapOptions={{ clickOutsideDeactivates: true }}
+				>
+					{renderContent(false)}
+				</FocusTrap>
+			}
 		</>
 	);
 };
