@@ -29,6 +29,7 @@ export * from './Table';
 export * from './Tabs';
 export * from './TagSearchBar';
 export * from './TagsInput';
+export * from './TextWithNewLines';
 export * from './Timepicker';
 export * from './Toast';
 export * from './Toggle';
