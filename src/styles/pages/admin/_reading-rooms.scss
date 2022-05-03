@@ -11,4 +11,9 @@ $page: "p-admin-reading-rooms";
 	&__search {
 		width: 100%;
 	}
+
+	&__error {
+		text-align: center;
+		color: $neutral;
+	}
 }

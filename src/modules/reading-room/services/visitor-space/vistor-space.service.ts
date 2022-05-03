@@ -1,7 +1,8 @@
 import { stringifyUrl } from 'query-string';
 
-import { VisitorSpaceInfo } from '@reading-room/types';
+import { ReadingRoomOrderProps, VisitorSpaceInfo } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
+import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 
 import { VISITOR_SPACE_SERVICE_BASE_URL } from './visitor-space.service.const';
@@ -11,7 +12,9 @@ export class VistorSpaceService {
 	public static async getAll(
 		searchInput = '',
 		page = 0,
-		size = 20
+		size = 20,
+		orderProp?: ReadingRoomOrderProps,
+		orderDirection?: OrderDirection
 	): Promise<ApiResponseWrapper<VisitorSpaceInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
@@ -21,6 +24,8 @@ export class VistorSpaceService {
 						query: searchInput ? `%${searchInput}%` : undefined,
 						page,
 						size,
+						orderProp,
+						orderDirection,
 					},
 				})
 			)
@@ -58,12 +63,13 @@ export class VistorSpaceService {
 		const formData = new FormData();
 
 		// Set form data
-		formData.append('color', values.color ?? '');
-		formData.append('image', values.image ?? '');
+		values.color && formData.append('color', values.color);
+		values.image && formData.append('image', values.image);
 		values.file && formData.append('file', values.file);
 		values.description && formData.append('description', values.description);
 		values.serviceDescription &&
 			formData.append('serviceDescription', values.serviceDescription);
+		values.status && formData.append('status', values.status);
 
 		const headers = {
 			'Content-Type': undefined, // Overwrite application/json

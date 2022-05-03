@@ -156,25 +156,61 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
+	&__metadata-content {
+		padding: 0 2rem;
+
+		@include respond-at("md") {
+			padding: 0 $spacer-lg;
+		}
+	}
+
+	&__metadata-component {
+		padding: 0 2rem;
+
+		@include respond-at("md") {
+			padding: 0 $spacer-lg;
+		}
+	}
+
 	&__related {
 		max-width: 100vw;
 	}
 
 	&__metadata-list {
-		display: flex;
-		flex-direction: column;
-		row-gap: $spacer-sm;
+		display: grid;
+		gap: $spacer-sm;
+
+		&--expanded {
+			grid-template-columns: repeat(2, calc(50% - $spacer-sm / 2));
+		}
+
+		&--collapsed {
+			grid-template-columns: 100%;
+		}
 	}
 
 	&__metadata-list--similar {
-		margin: 0 - $spacer-lg;
+		// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
+		margin-left: - $spacer-md;
+		margin-right: - $spacer-md;
 		margin-top: $spacer-md;
-		padding: $spacer-md $spacer-lg;
+		padding: $spacer-md;
 		background-color: $platinum;
+
+		@include respond-at("md") {
+			// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
+			margin-left: - $spacer-lg;
+			margin-right: - $spacer-lg;
+			padding: $spacer-md $spacer-lg;
+		}
 	}
 
 	&__metadata-list--related {
-		padding: $spacer-lg;
+		padding: 2rem;
+
+		@include respond-at("md") {
+			padding: $spacer-lg;
+		}
 	}
 
 	&__wrapper--metadata {
@@ -184,8 +220,7 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__wrapper--video {
-		.p-object-detail__metadata,
-		.p-object-detail__related {
+		.p-object-detail__metadata {
 			display: none;
 		}
 	}
@@ -216,8 +251,7 @@ $metadata-collapsed-width: 36vw;
 	// Media queries
 
 	@include respond-at(md) {
-		.p-object-detail__metadata,
-		.p-object-detail__related {
+		.p-object-detail__metadata {
 			display: block;
 		}
 

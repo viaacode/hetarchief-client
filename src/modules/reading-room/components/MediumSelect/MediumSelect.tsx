@@ -1,10 +1,13 @@
 import { ReactSelect, ReactSelectProps } from '@meemoo/react-components';
+import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
+import { useSelector } from 'react-redux';
 
-import { MediaSearchAggregationPair } from '@media/types';
+import { selectMediaResults } from '@shared/store/media';
 
 const MediumSelect: FC<ReactSelectProps> = (props) => {
-	const aggregates: MediaSearchAggregationPair<string>[] = [];
+	const { t } = useTranslation();
+	const aggregates = useSelector(selectMediaResults)?.aggregations.dcterms_medium.buckets;
 
 	const options = (aggregates || []).map((bucket) => ({
 		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results
@@ -15,10 +18,20 @@ const MediumSelect: FC<ReactSelectProps> = (props) => {
 	// Bind to defaultProps to access externally
 	MediumSelect.defaultProps = { options };
 
+	const getPlaceholder = (): string | undefined => {
+		return options.length > 0
+			? t(
+					'modules/reading-room/components/medium-select/medium-select___geen-analoge-dragers-gevonden'
+			  )
+			: t(
+					'modules/reading-room/components/medium-select/medium-select___kies-een-analoge-drager'
+			  );
+	};
+
 	return (
 		<ReactSelect
 			{...props}
-			placeholder='Missing "dcterms_medium"' // https://meemoo.atlassian.net/wiki/spaces/HA2/pages/3402891314/Geavanceerde+search+BZT+versie+1?focusedCommentId=3417604098#comment-3417604098
+			placeholder={getPlaceholder()}
 			options={MediumSelect.defaultProps.options}
 		/>
 	);

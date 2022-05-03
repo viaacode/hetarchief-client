@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from '@meemoo/react-components';
 import copy from 'copy-to-clipboard';
 import { useTranslation } from 'next-i18next';
-import { FC, useCallback } from 'react';
+import { FC, MouseEvent, useCallback } from 'react';
 
 import { toastService } from '@shared/services/toast-service';
 
@@ -12,7 +12,10 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 	const { onClick, text, enableToast = true } = props;
 
 	const clickHandler = useCallback(
-		(e) => {
+		(e: MouseEvent<HTMLButtonElement>) => {
+			e.preventDefault();
+			e.stopPropagation();
+
 			const copied = copy(text);
 
 			if (copied && enableToast) {
