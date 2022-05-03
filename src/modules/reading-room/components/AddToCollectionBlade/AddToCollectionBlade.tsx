@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { Trans, useTranslation } from 'next-i18next';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 import { CreateCollectionButton } from '@account/components';
 import { useGetCollections } from '@account/hooks/get-collections';
@@ -11,6 +12,7 @@ import { collectionsService } from '@account/services/collections';
 import { Collection } from '@account/types';
 import { Blade, Icon } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
+import { selectCollections } from '@shared/store/media';
 
 import { ADD_TO_COLLECTION_FORM_SCHEMA } from './AddToCollectionBlade.const';
 import styles from './AddToCollectionBlade.module.scss';
@@ -36,7 +38,8 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		defaultValues: useMemo(() => ({ pairs }), [pairs]),
 	});
 
-	const collections = useGetCollections(!!selected?.schemaIdentifier);
+	const getCollections = useGetCollections();
+	const collections = useSelector(selectCollections);
 
 	/**
 	 * Methods
@@ -55,17 +58,17 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	};
 
 	const getCollection = (id: string) =>
-		(collections.data?.items || []).find((collection) => collection.id === id);
+		(collections?.items || []).find((collection) => collection.id === id);
 
 	/**
 	 * Effects
 	 */
 
 	useEffect(() => {
-		if (selected?.schemaIdentifier && collections.data) {
-			setPairs(mapToPairs(collections.data?.items || [], selected));
+		if (selected?.schemaIdentifier && collections) {
+			setPairs(mapToPairs(collections?.items || [], selected));
 		}
-	}, [setValue, reset, collections.data, selected]);
+	}, [setValue, reset, collections, selected]);
 
 	useEffect(() => {
 		setValue('pairs', pairs);
@@ -80,7 +83,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	 */
 
 	const onFailedRequest = () => {
-		collections.refetch();
+		getCollections.refetch();
 
 		toastService.notify({
 			title: t(
@@ -94,7 +97,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 
 	const onFormSubmit = (values: AddToCollectionFormState) => {
 		if (selected) {
-			const original = mapToPairs(collections.data?.items || [], selected);
+			const original = mapToPairs(collections?.items || [], selected);
 			const dirty = values.pairs.filter((current) => {
 				return (
 					current.checked !== original.find((o) => o.folder === current.folder)?.checked
@@ -157,7 +160,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 
 			// Execute calls
 			Promise.all(promises).then(() => {
-				collections.refetch().then(() => {
+				getCollections.refetch().then(() => {
 					onSubmit?.(values);
 					reset();
 				});
@@ -284,7 +287,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 
 								<li className={styles['c-add-to-collection-blade__list-button']}>
 									<CreateCollectionButton
-										afterSubmit={() => collections.refetch()}
+										afterSubmit={() => getCollections.refetch()}
 									/>
 								</li>
 							</>

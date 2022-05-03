@@ -1,11 +1,21 @@
-import { useQuery } from 'react-query';
-import { UseQueryResult } from 'react-query/types/react/types';
+import { useQuery, UseQueryResult } from 'react-query';
+import { useDispatch } from 'react-redux';
 
 import { collectionsService } from '@account/services/collections';
-import { Collection } from '@account/types';
+import { GetCollections } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { ApiResponseWrapper } from '@shared/types';
+import { setCollections } from '@shared/store/media';
 
-export function useGetCollections(enabled = true): UseQueryResult<ApiResponseWrapper<Collection>> {
-	return useQuery([QUERY_KEYS.getCollections], () => collectionsService.getAll(), { enabled });
+export function useGetCollections(enabled = true): UseQueryResult<GetCollections> {
+	const dispatch = useDispatch();
+
+	return useQuery(
+		[QUERY_KEYS.getCollections],
+		() =>
+			collectionsService.getAll().then((res) => {
+				dispatch(setCollections(res));
+				return res;
+			}),
+		{ enabled }
+	);
 }
