@@ -27,7 +27,7 @@ class CollectionsService extends ApiService {
 				stringifyUrl({
 					url: `${COLLECTIONS_SERVICE_BASE_URL}/${id}`,
 					query: {
-						query: `%${searchInput}%`,
+						...(searchInput ? { query: `%${searchInput}%` } : {}),
 						page,
 						size,
 					},

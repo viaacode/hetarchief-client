@@ -26,7 +26,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:53:48.880887',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'e1c4c9e3-3e6e-4783-8324-0b6d78b5bd14',
@@ -37,7 +37,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:54:01.328785',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'huis-van-alijn',
 		},
 		{
 			id: 'c19e9e7e-047a-4be7-8d06-4e71fae6f747',
@@ -48,7 +48,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:54:03.791078',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'e3b87067-4001-4c3b-b73f-d496e3494a62',
@@ -59,7 +59,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:24.361032',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'b1a40094-c31f-471d-9239-4f4d54578062',
@@ -70,7 +70,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:25.500478',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'amsab',
 		},
 		{
 			id: '4b1e9195-ee7d-4676-ba84-28091fc1473d',
@@ -81,7 +81,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:37.908251',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: '6a045f7a-33c0-444d-beb6-98ff10610980',
@@ -92,7 +92,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:37.338439',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'b9b44488-9b5a-4ee3-a231-6ee263230b11',
@@ -103,7 +103,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:34.666981',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'huis-van-alijn',
 		},
 		{
 			id: '08d6a4ee-8ea0-4a0d-b0da-5557837f8f94',
@@ -114,7 +114,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:36.136993',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'amsab',
 		},
 		{
 			id: 'e861235a-a95e-44ed-a48d-192762378532',
@@ -125,7 +125,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-03-02T17:52:36.723444',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'bfcae082-2370-4a2b-9f66-a55c869addfb',
@@ -136,7 +136,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'c609a045-fbe8-463f-8c41-ce4dfd8858f9',
@@ -147,7 +147,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: '2945d515-0378-46a5-b102-c34d6c1e650d',
@@ -158,7 +158,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: '972ef654-9ba5-40cf-8db5-bec713f5a6fc',
@@ -169,7 +169,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: '3665d1b7-1762-4939-9a47-1c1765b02576',
@@ -180,7 +180,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'af0d1847-0404-481f-83af-e53df2bfb750',
@@ -191,7 +191,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: '888fbe32-703c-4717-b622-c1d65e4ceb1c',
@@ -202,7 +202,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'e2db281b-7c99-4337-8d71-610f3c4efff6',
@@ -213,7 +213,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: '631fd24f-52cb-4004-afd3-6bd1deb0b6ea',
@@ -224,7 +224,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 		{
 			id: 'e69f9ec9-21ec-4310-9a8c-5180c48fe6a7',
@@ -235,7 +235,7 @@ export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 			createdAt: '2022-02-25T17:21:58.937169+00:00',
 			updatedAt: '2022-02-28T17:54:59.894586',
 			type: NotificationType.NEW_VISIT_REQUEST,
-			readingRoomId: 'c3857d2a-a818-4bec-b420-2fe0275604ff',
+			visitorSpaceSlug: 'vrt',
 		},
 	],
 	total: 59,

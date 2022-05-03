@@ -1,0 +1,10 @@
+@use "styles/abstracts" as *;
+
+.c-tag-search-bar-button {
+	display: inline-flex;
+
+	&:not(:active, :hover):focus {
+		outline: 2px solid $teal;
+		border-radius: 0.5rem;
+	}
+}

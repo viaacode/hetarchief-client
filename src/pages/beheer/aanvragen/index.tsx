@@ -2,10 +2,11 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ProcessRequestBlade } from '@cp/components';
 import {
@@ -13,20 +14,30 @@ import {
 	requestStatusFilters,
 	RequestTableColumns,
 	RequestTablePageSize,
+	VISIT_REQUEST_ID_QUERY_KEY,
 } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import { PaginationBar, ScrollableTabs, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
+import { useGetVisit } from '@visits/hooks/get-visit';
 import { useGetVisits } from '@visits/hooks/get-visits';
 
 const CPRequestsPage: NextPage = () => {
 	const { t } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
-	const [selected, setSelected] = useState<string | number | null>(null);
+	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
+		undefined
+	);
+	const canUpdateVisitRequests: boolean | null = useHasAllPermission(
+		Permission.APPROVE_DENY_CP_VISIT_REQUESTS
+	);
 
 	const {
 		data: visits,
@@ -41,6 +52,38 @@ const CPRequestsPage: NextPage = () => {
 		orderProp: filters.orderProp as keyof Visit,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
+
+	const { mutateAsync: getVisit } = useGetVisit();
+
+	// Computed
+
+	const selectedOnCurrentPage = visits?.items.find(
+		(x) => x.id === filters[VISIT_REQUEST_ID_QUERY_KEY]
+	);
+
+	// Effects
+
+	useEffect(() => {
+		const requestId = filters[VISIT_REQUEST_ID_QUERY_KEY];
+
+		if (visits && !selectedOnCurrentPage && requestId) {
+			// Check if visitrequest exists
+			getVisit(requestId)
+				.then((response) => {
+					if (response) {
+						setSelectedNotOnCurrentPage(response);
+					}
+				})
+				.catch(() => {
+					setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: undefined });
+					setSelectedNotOnCurrentPage(undefined);
+					toastService.notify({
+						title: t('pages/beheer/aanvragen/index___error'),
+						description: t('pages/beheer/aanvragen/index___deze-aanvraag-bestaat-niet'),
+					});
+				});
+		}
+	}, [visits, setFilters, getVisit, t, selectedOnCurrentPage, filters]);
 
 	// Filters
 
@@ -84,10 +127,19 @@ const CPRequestsPage: NextPage = () => {
 
 	const onRowClick = useCallback(
 		(e, row) => {
+			if (!canUpdateVisitRequests) {
+				toastService.notify({
+					title: t('pages/beheer/aanvragen/index___geen-rechten'),
+					description: t(
+						'pages/beheer/aanvragen/index___je-hebt-geen-rechten-om-bezoekaanvragen-te-bewerken'
+					),
+				});
+				return;
+			}
 			const request = (row as { original: Visit }).original;
-			setSelected(request.id);
+			setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: request.id });
 		},
-		[setSelected]
+		[canUpdateVisitRequests, setFilters, t]
 	);
 
 	// Render
@@ -126,33 +178,10 @@ const CPRequestsPage: NextPage = () => {
 				<div className="l-container">
 					<div className="p-cp-requests__header">
 						<SearchBar
-							backspaceRemovesValue={false}
+							default={filters[SEARCH_QUERY_KEY]}
 							className="p-cp-requests__search"
-							instanceId="requests-search-bar"
-							light={true}
 							placeholder={t('pages/beheer/aanvragen/index___zoek')}
-							searchValue={filters.search}
-							size="md"
-							onClear={() => {
-								setFilters({
-									[SEARCH_QUERY_KEY]: '',
-									page: 1,
-								});
-							}}
-							onSearch={(searchValue: string) => {
-								// Force rerender
-								if (filters.search === searchValue) {
-									setFilters({
-										[SEARCH_QUERY_KEY]: '',
-										page: 1,
-									});
-								}
-
-								setFilters({
-									[SEARCH_QUERY_KEY]: searchValue,
-									page: 1,
-								});
-							}}
+							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 
 						<ScrollableTabs
@@ -198,11 +227,12 @@ const CPRequestsPage: NextPage = () => {
 										total={visits?.total || 0}
 										onPageChange={(pageZeroBased) => {
 											gotoPage(pageZeroBased);
-											setSelected(null);
 											setFilters({
 												...filters,
 												page: pageZeroBased + 1,
+												[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
 											});
+											setSelectedNotOnCurrentPage(undefined);
 										}}
 									/>
 								);
@@ -219,9 +249,15 @@ const CPRequestsPage: NextPage = () => {
 			</CPAdminLayout>
 
 			<ProcessRequestBlade
-				isOpen={selected !== null}
-				selected={visits?.items?.find((x) => x.id === selected)}
-				onClose={() => setSelected(null)}
+				isOpen={
+					(!!filters[VISIT_REQUEST_ID_QUERY_KEY] && !!selectedOnCurrentPage) ||
+					!!selectedNotOnCurrentPage
+				}
+				selected={selectedOnCurrentPage ?? selectedNotOnCurrentPage}
+				onClose={() => {
+					setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: undefined });
+					setSelectedNotOnCurrentPage(undefined);
+				}}
 				onFinish={refetch}
 			/>
 		</>
@@ -230,4 +266,6 @@ const CPRequestsPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(CPRequestsPage);
+export default withAuth(
+	withAllRequiredPermissions(CPRequestsPage, Permission.READ_CP_VISIT_REQUESTS)
+);

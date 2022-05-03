@@ -5,6 +5,7 @@ import { FC, ReactElement, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
 import { Icon } from '@shared/components';
+import { OrderDirection } from '@shared/types';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -71,7 +72,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						<Button
 							key="filter-menu-mobile-nav-close"
 							className={styles['c-filter-menu-mobile__back']}
-							iconStart={<Icon name="arrow-left" />}
+							iconStart={<Icon className="u-text-left" name="arrow-left" />}
 							label={t(
 								'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten'
 							)}
@@ -99,7 +100,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						{sortOptions.length > 0 && (
 							<FilterButton
 								icon={
-									activeSort?.orderDirection === 'desc' ? 'sort-down' : 'sort-up'
+									activeSort?.orderDirection === OrderDirection.desc
+										? 'sort-down'
+										: 'sort-up'
 								}
 								isActive={isSortActive}
 								label={activeSortLabel}

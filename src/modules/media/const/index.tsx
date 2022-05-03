@@ -1,14 +1,13 @@
 import { TabProps } from '@meemoo/react-components';
-import DOMPurify from 'dompurify';
 
-import { MetadataItem, ObjectPlaceholderProps } from '@media/components';
+import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@media/components';
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapObjectToMetadata } from '@media/utils';
-import { Icon } from '@shared/components';
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
+import { Icon, TextWithNewLines } from '@shared/components';
 import { i18n } from '@shared/helpers/i18n';
 import { MediaTypes } from '@shared/types';
+import { asDate, formatLongDate } from '@shared/utils';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 
@@ -90,15 +89,19 @@ export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
  * Actions
  */
 
-export const MEDIA_ACTIONS = (): DynamicActionMenuProps => ({
+export const MEDIA_ACTIONS = (canManageFolders: boolean): DynamicActionMenuProps => ({
 	actions: [
-		{
-			label: i18n.t('modules/media/const/index___bookmark'),
-			iconName: 'bookmark',
-			id: MediaActions.Bookmark,
-			ariaLabel: 'bookmarks item',
-			tooltip: i18n.t('modules/media/const/index___bookmark'),
-		},
+		...((canManageFolders
+			? [
+					{
+						label: i18n.t('modules/media/const/index___bookmark'),
+						iconName: 'bookmark',
+						id: MediaActions.Bookmark,
+						ariaLabel: 'bookmarks item',
+						tooltip: i18n.t('modules/media/const/index___bookmark'),
+					},
+			  ]
+			: []) as ActionItem[]),
 	],
 	limit: 2,
 	onClickAction: () => null,
@@ -159,30 +162,18 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		},
 		{
 			title: i18n.t('modules/media/const/index___creatiedatum'),
-			data: mediaInfo.dateCreatedLowerBound,
+			data: formatLongDate(asDate(mediaInfo.dateCreatedLowerBound)),
 		},
 		{
 			title: i18n.t('modules/media/const/index___publicatiedatum'),
-			data: mediaInfo.datePublished,
+			data: formatLongDate(asDate(mediaInfo.datePublished)),
 		},
 		...mapObjectToMetadata(mediaInfo.creator),
 		...mapObjectToMetadata(mediaInfo.contributor),
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
-			data: mediaInfo.abstract ? (
-				<div
-					className="u-color-neutral"
-					dangerouslySetInnerHTML={{
-						__html: String(
-							DOMPurify.sanitize(
-								mediaInfo.abstract.replaceAll('\n', '<br/><br/>'),
-								RICH_TEXT_SANITIZATION
-							)
-						),
-					}}
-				/>
-			) : null,
+			data: <TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />,
 		},
 		{
 			title: i18n.t('modules/media/const/index___transcriptie'),

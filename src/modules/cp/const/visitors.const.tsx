@@ -4,11 +4,11 @@ import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { RequestStatusAll } from '@cp/types';
-import { DropdownMenu, UnreadMarker } from '@shared/components';
+import { CopyButton, DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
-import { Visit, VisitRow } from '@shared/types';
+import { OrderDirection, Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
 import { VisitTimeframe } from '@visits/types';
 
@@ -16,8 +16,8 @@ export const CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
 	timeframe: withDefault(StringParam, RequestStatusAll.ALL),
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, undefined),
-	orderDirection: withDefault(SortDirectionParam, undefined),
+	orderProp: withDefault(StringParam, 'startAt'),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
 export const visitorsStatusFilters = (): TabProps[] => {
@@ -48,17 +48,16 @@ export const VisitorsTableColumns = (
 	{
 		Header: i18n.t('modules/cp/const/visitors___emailadres'),
 		accessor: 'visitorMail',
-		Cell: ({ row }: VisitRow) => {
-			return (
-				<a
-					className="u-color-neutral c-table__link"
-					href={`mailto:${row.original.visitorMail}`}
-					onClick={(e) => e.stopPropagation()}
-				>
-					{row.original.visitorMail}
-				</a>
-			);
-		},
+		Cell: ({ row }: VisitRow) => (
+			<CopyButton
+				className="u-color-neutral u-p-0 c-table__copy"
+				icon={undefined}
+				variants={['text', 'no-height']}
+				text={row.original.visitorMail}
+			>
+				{row.original.visitorMail}
+			</CopyButton>
+		),
 	},
 	{
 		Header: i18n.t('modules/cp/const/visitors___toegang'),

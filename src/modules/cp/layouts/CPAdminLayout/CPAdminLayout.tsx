@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 
 import { CP_ADMIN_NAVIGATION_LINKS } from '@cp/const';
 import { ListNavigationItem } from '@shared/components';
+import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 
@@ -44,7 +45,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, contentTit
 			sidebarLinks={sidebarLinks}
 			sidebarTitle={t('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
 		>
-			{children}
+			<ErrorBoundary>{children}</ErrorBoundary>
 		</SidebarLayout>
 	);
 };

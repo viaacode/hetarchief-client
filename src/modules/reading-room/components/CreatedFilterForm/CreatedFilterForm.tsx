@@ -51,7 +51,6 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 	useEffect(() => {
 		setValue('created', form.created);
 		setValue('operator', form.operator);
-
 		setShowRange(isRange(form.operator));
 	}, [form, setValue]);
 
@@ -59,8 +58,10 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 		if (initial) {
 			const { val, op } = initial;
 
-			val && setForm((f) => ({ ...f, created: val }));
 			op && setForm((f) => ({ ...f, operator: op as Operator }));
+			val && setForm((f) => ({ ...f, created: val }));
+
+			setShowRange(isRange(op)); // Not covered by other effect in time
 		}
 	}, [initial]);
 
