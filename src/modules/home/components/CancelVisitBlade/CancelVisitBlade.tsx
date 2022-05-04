@@ -50,6 +50,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 					)}
 					variants={['block', 'black']}
 					onClick={onFormSubmit}
+					disabled={!props.isOpen}
 				/>
 
 				<Button
@@ -58,6 +59,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 					)}
 					variants={['block', 'text']}
 					onClick={props.onClose}
+					disabled={!props.isOpen}
 				/>
 			</div>
 		);
