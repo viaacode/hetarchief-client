@@ -2,11 +2,11 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useDispatch } from 'react-redux';
 
 import { collectionsService } from '@account/services/collections';
-import { GetCollections } from '@account/types';
+import { GetCollectionsResponse } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { setCollections } from '@shared/store/media';
 
-export function useGetCollections(enabled = true): UseQueryResult<GetCollections> {
+export function useGetCollections(enabled = true): UseQueryResult<GetCollectionsResponse> {
 	const dispatch = useDispatch();
 
 	return useQuery(
