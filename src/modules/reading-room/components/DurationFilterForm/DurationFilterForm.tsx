@@ -74,19 +74,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 	// Events
 
 	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
-		const newDuration = e.target.value;
-
-		const durationRegexp = new RegExp(`^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g');
-		if (!durationRegexp.test(newDuration)) {
-			setError('duration', {
-				message: t(
-					'modules/reading-room/components/duration-filter-form/duration-filter-form___invoer-is-ongeldig-dit-moet-een-geldige-tijd-zijn-bv-00-15-30'
-				),
-			});
-		} else {
-			setError('duration', {});
-		}
-		setForm({ ...form, duration: newDuration });
+		setForm({ ...form, duration: e.target.value });
 	};
 
 	return (
