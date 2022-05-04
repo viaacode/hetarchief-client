@@ -89,13 +89,22 @@ export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
  * Actions
  */
 
-export const MEDIA_ACTIONS = (canManageFolders: boolean): DynamicActionMenuProps => ({
+export const MEDIA_ACTIONS = (
+	canManageFolders: boolean,
+	isInAFolder: boolean
+): DynamicActionMenuProps => ({
 	actions: [
 		...((canManageFolders
 			? [
 					{
 						label: i18n.t('modules/media/const/index___bookmark'),
-						iconName: 'bookmark',
+						icon: (
+							<Icon
+								className="u-font-size-24 u-text-left"
+								name="bookmark"
+								type={isInAFolder ? 'solid' : 'light'}
+							/>
+						),
 						id: MediaActions.Bookmark,
 						ariaLabel: 'bookmarks item',
 						tooltip: i18n.t('modules/media/const/index___bookmark'),
