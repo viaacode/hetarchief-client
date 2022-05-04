@@ -1,4 +1,6 @@
-import { MediaTypes } from '@shared/types';
+import { ApiResponseWrapper, MediaTypes } from '@shared/types';
+
+export type GetCollectionsResponse = ApiResponseWrapper<Collection>;
 
 export interface Collection {
 	createdAt: string;

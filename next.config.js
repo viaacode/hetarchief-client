@@ -27,7 +27,17 @@ module.exports = withTM({
 		tsconfigPath: './tsconfig.build.json',
 	},
 	images: {
-		domains: ['assets.viaa.be', 'assets-int.hetarchief.be', 'media-int.viaa.be'],
+		domains: [
+			'assets.viaa.be',
+			'assets-int.hetarchief.be',
+			'assets-tst.hetarchief.be',
+			'assets-qas.hetarchief.be',
+			'assets.hetarchief.be',
+			'media-int.viaa.be',
+			'media-tst.viaa.be',
+			'media-qas.viaa.be',
+			'media.viaa.be',
+		],
 	},
 	productionBrowserSourceMaps: process.env.DEBUG_TOOLS === 'true',
 	publicRuntimeConfig: {
