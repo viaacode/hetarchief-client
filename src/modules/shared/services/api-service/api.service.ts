@@ -22,7 +22,7 @@ export abstract class ApiService {
 						(_request, _options, response) => {
 							if (response.status === 401) {
 								// user is unauthorized and should login again
-								AuthService.logout();
+								AuthService.logout(true); // true: return to current page after login
 							}
 						},
 					],
