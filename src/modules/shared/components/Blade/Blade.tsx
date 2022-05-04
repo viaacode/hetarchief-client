@@ -103,14 +103,9 @@ const Blade: FC<BladeProps> = ({
 					type={isLayered && layer > 1 ? 'light' : 'dark'}
 				/>
 			)}
-			{
-				<FocusTrap
-					active={isBladeOpen}
-					focusTrapOptions={{ clickOutsideDeactivates: true }}
-				>
-					{renderContent(false)}
-				</FocusTrap>
-			}
+			<FocusTrap active={isBladeOpen} focusTrapOptions={{ clickOutsideDeactivates: true }}>
+				{renderContent(false)}
+			</FocusTrap>
 		</>
 	);
 };
