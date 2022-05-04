@@ -389,6 +389,7 @@ const AccountMyCollections: NextPage = () => {
 												schemaIdentifier: media.schemaIdentifier,
 												description: renderDescription(media),
 												title: renderTitle(media),
+												name: media.name,
 												type: media.format,
 												preview: media.thumbnailUrl,
 											};
@@ -444,7 +445,14 @@ const AccountMyCollections: NextPage = () => {
 
 			<AddToCollectionBlade
 				isOpen={isAddToCollectionBladeOpen}
-				selected={selected || undefined}
+				selected={
+					selected
+						? {
+								schemaIdentifier: selected.schemaIdentifier,
+								title: selected.name,
+						  }
+						: undefined
+				}
 				onClose={() => {
 					setShowAddToCollectionBlade(false);
 					setSelected(null);
