@@ -35,7 +35,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, contentTit
 	const { t } = useTranslation();
 
 	useEffect(() => {
-		dispatch(setShowZendesk(false));
+		dispatch(setShowZendesk(true));
 	}, [dispatch]);
 
 	return (
