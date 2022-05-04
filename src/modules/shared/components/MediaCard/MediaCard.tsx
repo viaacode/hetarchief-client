@@ -99,7 +99,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		switch (type) {
 			case 'audio':
 				return renderPeak();
-				break;
 
 			case 'video':
 				return renderImage();
@@ -123,7 +122,18 @@ const MediaCard: FC<MediaCardProps> = ({
 			renderNoContent()
 		);
 
-	const renderPeak = renderNoContent;
+	const renderPeak = () => {
+		return (
+			<div
+				className={clsx(
+					styles['c-media-card__header-wrapper'],
+					styles[`c-media-card__header-wrapper--${view}`]
+				)}
+			>
+				<Image src={'/images/waveform.svg'} alt={''} unoptimized={true} layout="fill" />
+			</div>
+		);
+	};
 
 	const highlighted = (toHighlight: string) => {
 		return (
