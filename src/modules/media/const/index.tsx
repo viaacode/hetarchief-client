@@ -182,7 +182,9 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
-			data: <TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />,
+			data: mediaInfo?.abstract ? (
+				<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
+			) : null,
 		},
 		{
 			title: i18n.t('modules/media/const/index___transcriptie'),
