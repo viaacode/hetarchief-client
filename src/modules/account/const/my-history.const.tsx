@@ -38,7 +38,7 @@ export const HistoryTableColumns = (
 		disableSortBy: true, // space.schema_maintainer.information is an array and can not be sorted on
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
-			return <span className="u-color-neutral">{visit.spaceAddress || '-'}</span>;
+			return <span className="u-color-neutral">{visit.spaceAddress || ''}</span>;
 		},
 	},
 	{

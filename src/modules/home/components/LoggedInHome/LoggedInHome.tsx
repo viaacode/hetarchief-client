@@ -18,6 +18,7 @@ import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
@@ -110,10 +111,11 @@ const LoggedInHome: FC = () => {
 			!isLoadingPending &&
 			!query[VISITOR_SPACE_SLUG_QUERY_KEY]
 		) {
-			searchRef.current?.offsetTop &&
+			const offset = searchRef.current?.offsetTop;
+			offset &&
 				// Small timeout so page is rendered before scrolling to search
 				setTimeout(() => {
-					window.scrollTo({ top: searchRef.current?.offsetTop, behavior: 'smooth' });
+					scrollTo(offset);
 					setHasScrolledToSearch(true); // Only allow scrollTo once
 				}, 300);
 		}

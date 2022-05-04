@@ -96,10 +96,10 @@ const AccountMyHistory: NextPage = () => {
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('Error'),
+				title: t('pages/account/mijn-historiek/index___error'),
 				maxLines: 2,
 				description: t(
-					'Het controleren van je toegang tot deze bezoekersruimte is mislukt.'
+					'pages/account/mijn-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
 				),
 			});
 			router.push(createHomeWithReadingRoomFilterUrl(visit));

@@ -89,7 +89,7 @@ export class VisitsService {
 	}
 
 	public static async getAccessStatusBySpaceId(id: string): Promise<VisitAccessStatus | null> {
-		if (!id) {
+		if (id.length === 0) {
 			return null;
 		}
 		return await ApiService.getApi()
