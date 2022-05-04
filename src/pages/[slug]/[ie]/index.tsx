@@ -39,7 +39,7 @@ import {
 	MediaSimilarHit,
 	ObjectDetailTabs,
 } from '@media/types';
-import { mapKeywordsToTagList } from '@media/utils';
+import { isInAFolder, mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import {
 	ErrorNotFound,
@@ -60,6 +60,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
+import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import {
@@ -118,6 +119,7 @@ const ObjectDetailPage: NextPage = () => {
 	// Sizes
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+	const collections = useSelector(selectCollections);
 
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
@@ -226,12 +228,12 @@ const ObjectDetailPage: NextPage = () => {
 
 		// Filter out peak files if type === video
 		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
-			mediaInfo.representations = mediaInfo?.representations.filter(
+			mediaInfo.representations = mediaInfo?.representations?.filter(
 				(object) => object.dctermsFormat !== 'peak'
 			);
 		}
 
-		setCurrentRepresentation(mediaInfo?.representations[0]);
+		setCurrentRepresentation(mediaInfo?.representations?.[0]);
 
 		// Set default view
 		if (isMobile) {
@@ -488,7 +490,10 @@ const ObjectDetailPage: NextPage = () => {
 							</Button>
 						)}
 						<DynamicActionMenu
-							{...MEDIA_ACTIONS(canManageFolders)}
+							{...MEDIA_ACTIONS(
+								canManageFolders,
+								isInAFolder(collections, mediaInfo?.schemaIdentifier)
+							)}
 							onClickAction={onClickAction}
 						/>
 					</div>

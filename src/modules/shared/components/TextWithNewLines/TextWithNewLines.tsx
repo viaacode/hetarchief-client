@@ -19,7 +19,7 @@ const TextWithNewLines: FC<TextWithNewLinesProps> = ({ text, className }) => {
 				__html: String(
 					DOMPurify.sanitize(
 						// Replace new lines and literal new lines (description and abstract are encoded differently)
-						text.replaceAll('\\n', '<br/><br/>').replaceAll('\n', '<br/><br/>'),
+						text.replaceAll('\\n', '<br/>').replaceAll('\n', '<br/>'),
 						RICH_TEXT_SANITIZATION
 					)
 				),

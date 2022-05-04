@@ -24,7 +24,10 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 
 	const renderChildrenRecursively = (items: NavigationItem[], layer = 0): ReactNode => {
 		return (
-			<div className={clsx(layer > 0 && styles['c-navigation__dropdown-submenu'])}>
+			<div
+				className={clsx(layer > 0 && styles['c-navigation__dropdown-submenu'])}
+				onClick={() => onClose?.()} // Close dropdown on item click
+			>
 				{items.map((item) => {
 					return (
 						<div

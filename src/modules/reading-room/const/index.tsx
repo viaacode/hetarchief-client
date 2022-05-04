@@ -31,7 +31,7 @@ export * from './metadata';
 
 export const DEFAULT_READING_ROOM_COLOR = '#00c8aa';
 
-export const READING_ROOM_ITEM_COUNT = 100;
+export const READING_ROOM_ITEM_COUNT = 40;
 
 export const READING_ROOM_QUERY_PARAM_INIT = {
 	// Filters
