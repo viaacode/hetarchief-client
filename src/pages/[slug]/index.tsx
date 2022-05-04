@@ -446,7 +446,7 @@ const ReadingRoomPage: NextPage = () => {
 							publishedAt: item.schema_date_published
 								? asDate(item.schema_date_published)
 								: undefined,
-							publishedBy: item.schema_creator?.Maker?.join(', '),
+							publishedBy: item.schema_maintainer?.schema_name ?? '',
 							type: item.dcterms_format,
 							preview: item.schema_thumbnail_url || undefined,
 						})
