@@ -6,7 +6,12 @@ import { MediaService } from '@media/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setResults } from '@shared/store/media';
-import { GetMedia, MediaSearchFilterField, MediaSearchFilters, SortObject } from '@shared/types';
+import {
+	GetMediaResponse,
+	MediaSearchFilterField,
+	MediaSearchFilters,
+	SortObject,
+} from '@shared/types';
 
 export function useGetMediaObjects(
 	orgId: string,
@@ -15,7 +20,7 @@ export function useGetMediaObjects(
 	size: number,
 	sort?: SortObject,
 	enabled = true
-): UseQueryResult<GetMedia> {
+): UseQueryResult<GetMediaResponse> {
 	const dispatch = useDispatch();
 
 	return useQuery(

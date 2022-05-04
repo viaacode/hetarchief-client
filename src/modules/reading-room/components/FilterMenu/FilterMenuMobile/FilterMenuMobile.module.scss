@@ -31,7 +31,10 @@
 .c-filter-menu-mobile__back {
 	margin-left: -$spacer-md;
 	font-size: $font-size-md;
-	color: $white;
+
+	span {
+		color: $white;
+	}
 }
 
 .c-filter-menu-mobile__filters {
