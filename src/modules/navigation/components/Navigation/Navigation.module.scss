@@ -197,11 +197,9 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	}
 
 	.c-navigation__dropdown-item--active-mobile {
+		@include respond-to ("md") {
 		> a {
-			font-weight: 700;
-
-			@include respond-at ("md") {
-				font-weight: 400;
+				font-weight: 700;
 			}
 		}
 	}
