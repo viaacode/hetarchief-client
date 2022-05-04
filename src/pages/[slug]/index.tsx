@@ -42,7 +42,7 @@ import {
 } from '@reading-room/const';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
-import { mapFiltersToTags } from '@reading-room/utils';
+import { mapFiltersToTags, tagPrefix } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
 	Callout,
@@ -326,7 +326,10 @@ const ReadingRoomPage: NextPage = () => {
 				case ReadingRoomFilterId.Language:
 				case ReadingRoomFilterId.Medium:
 				case SEARCH_QUERY_KEY:
-					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag.value];
+					query[tag.key] = [
+						...((query[tag.key] as Array<unknown>) || []),
+						`${tag.value}`.replace(tagPrefix(tag.key), ''),
+					];
 					break;
 
 				case ReadingRoomFilterId.Advanced:

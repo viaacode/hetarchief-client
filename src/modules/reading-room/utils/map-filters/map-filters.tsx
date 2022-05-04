@@ -24,6 +24,8 @@ const getSelectLabel = (
 	return options.find((option) => option.value === optionValue)?.label;
 };
 
+export const tagPrefix = (key: string): string => `${key}--`;
+
 export const mapArrayParamToTags = (
 	values: (string | null)[],
 	label: string,
@@ -39,7 +41,7 @@ export const mapArrayParamToTags = (
 						<strong>{keyword}</strong>
 					</span>
 				),
-				value: `${key}--${keyword}`,
+				value: `${tagPrefix(key)}${keyword}`,
 				key,
 			};
 		});
@@ -95,7 +97,7 @@ export const mapAdvancedToTags = (
 					</strong>
 				</span>
 			),
-			value: `${key}--${AdvancedFilterArrayParam.encode([advanced])}`,
+			value: `${tagPrefix(key)}${AdvancedFilterArrayParam.encode([advanced])}`,
 			key,
 			...advanced,
 		};
