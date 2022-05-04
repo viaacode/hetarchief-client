@@ -1,12 +1,10 @@
 import { TabProps } from '@meemoo/react-components';
-import DOMPurify from 'dompurify';
 
 import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@media/components';
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
 import { mapArrayToMetadataData, mapObjectToMetadata } from '@media/utils';
-import { Icon } from '@shared/components';
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
+import { Icon, TextWithNewLines } from '@shared/components';
 import { i18n } from '@shared/helpers/i18n';
 import { MediaTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
@@ -96,13 +94,22 @@ export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
  * Actions
  */
 
-export const MEDIA_ACTIONS = (canManageFolders: boolean): DynamicActionMenuProps => ({
+export const MEDIA_ACTIONS = (
+	canManageFolders: boolean,
+	isInAFolder: boolean
+): DynamicActionMenuProps => ({
 	actions: [
 		...((canManageFolders
 			? [
 					{
 						label: i18n.t('modules/media/const/index___bookmark'),
-						iconName: 'bookmark',
+						icon: (
+							<Icon
+								className="u-font-size-24 u-text-left"
+								name="bookmark"
+								type={isInAFolder ? 'solid' : 'light'}
+							/>
+						),
 						id: MediaActions.Bookmark,
 						ariaLabel: 'bookmarks item',
 						tooltip: i18n.t('modules/media/const/index___bookmark'),
@@ -180,18 +187,8 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
-			data: mediaInfo.abstract ? (
-				<div
-					className="u-color-neutral"
-					dangerouslySetInnerHTML={{
-						__html: String(
-							DOMPurify.sanitize(
-								mediaInfo.abstract.replaceAll('\n', '<br/><br/>'),
-								RICH_TEXT_SANITIZATION
-							)
-						),
-					}}
-				/>
+			data: mediaInfo?.abstract ? (
+				<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
 			) : null,
 		},
 		{

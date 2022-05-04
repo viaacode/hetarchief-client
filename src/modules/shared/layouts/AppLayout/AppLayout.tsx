@@ -44,6 +44,7 @@ import {
 	setShowAuthModal,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
+import { scrollToTop } from '@shared/utils/scroll-to-top';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -70,7 +71,7 @@ const AppLayout: FC = ({ children }) => {
 
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
-			show && window.scrollTo(0, 0);
+			show && scrollToTop();
 			dispatch(setShowNotificationsCenter(show));
 		},
 		[dispatch]

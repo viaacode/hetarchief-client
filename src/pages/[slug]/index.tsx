@@ -16,6 +16,7 @@ import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
+import { isInAFolder } from '@media/utils';
 import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
@@ -64,6 +65,7 @@ import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
@@ -72,6 +74,7 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
+import { scrollToTop } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -147,6 +150,8 @@ const ReadingRoomPage: NextPage = () => {
 
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	const collections = useSelector(selectCollections);
 
 	/**
 	 * Computed
@@ -402,6 +407,12 @@ const ReadingRoomPage: NextPage = () => {
 		if (!canManageFolders) {
 			return null;
 		}
+
+		const itemIsInAFolder = isInAFolder(
+			collections,
+			(item as IdentifiableMediaCard).schemaIdentifier
+		);
+
 		return (
 			<Button
 				onClick={(e) => {
@@ -412,7 +423,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(item as IdentifiableMediaCard);
 					setShowAddToCollectionBlade(true);
 				}}
-				icon={<Icon type="light" name="bookmark" />}
+				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
 			/>
 		);
@@ -465,12 +476,13 @@ const ReadingRoomPage: NextPage = () => {
 				count={READING_ROOM_ITEM_COUNT}
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
-				onPageChange={(page) =>
+				onPageChange={(page) => {
+					scrollToTop();
 					setQuery({
 						...query,
 						page: page + 1,
-					})
-				}
+					});
+				}}
 			/>
 		</>
 	);
