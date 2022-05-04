@@ -13,12 +13,12 @@ export const DURATION_FILTER_FORM_SCHEMA = (): SchemaOf<DurationFilterFormState>
 	object({
 		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
 		duration: string()
-			.required()
+			.optional()
 			.test(
 				'duration',
 				i18n.t('Invoer is ongeldig, dit moet een geldige tijd zijn. bv: 00:15:30'),
 				(value: string | undefined) =>
-					new RegExp(`^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g').test(
+					new RegExp(`^$|^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g').test(
 						value || ''
 					)
 			),
