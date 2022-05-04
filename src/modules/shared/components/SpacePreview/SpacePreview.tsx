@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import DOMPurify from 'dompurify';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
@@ -12,37 +11,27 @@ import { SpacePreviewProps } from './SpacePreview.types';
 
 const SpacePreview: FC<SpacePreviewProps> = ({
 	className,
-	spaceId,
-	spaceImage,
-	spaceLogo,
-	spaceName,
-	spaceColor,
-	spaceServiceDescription,
+	space: { id, image, logo, name, color, serviceDescription },
 }) => {
-	const canPreview = spaceImage || spaceLogo || spaceName;
+	const canPreview = image || logo?.length > 0 || name?.length > 0;
 
 	return (
 		<div className={clsx(className, styles['c-space-preview'])}>
 			{canPreview && (
 				<div className={clsx(styles['c-space-preview__summary'], 'u-mb-24')}>
-					<CardImage
-						id={spaceId}
-						color={spaceColor}
-						image={spaceImage}
-						logo={spaceLogo}
-					/>
+					<CardImage id={id} color={color} image={image} logo={logo} />
 
-					{spaceName && <strong className="u-px-12 u-mb-0">{spaceName}</strong>}
+					{name && <strong className="u-px-12 u-mb-0">{name}</strong>}
 				</div>
 			)}
 
-			{spaceServiceDescription && spaceServiceDescription.length > 0 && canPreview && (
+			{serviceDescription && serviceDescription.length > 0 && canPreview && (
 				<div
 					className="u-mb-40 u-color-neutral"
 					dangerouslySetInnerHTML={{
 						__html: String(
 							DOMPurify.sanitize(
-								spaceServiceDescription, // rich-text content
+								serviceDescription, // rich-text content
 								RICH_TEXT_SANITIZATION
 							)
 						),

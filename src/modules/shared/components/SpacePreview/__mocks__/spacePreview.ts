@@ -1,8 +1,12 @@
-export const SPACE_PREVIEW_PROPS_MOCK = {
-	spaceId: 'id',
-	spaceImage: '/image',
-	spaceLogo: '/logo',
-	spaceName: 'name',
-	spaceColor: '#ff0000',
-	spaceServiceDescription: 'service description',
+import { SpacePreviewProps } from '../SpacePreview.types';
+
+export const SPACE_PREVIEW_PROPS_MOCK: SpacePreviewProps = {
+	space: {
+		id: 'id',
+		image: '/image',
+		logo: '/logo',
+		name: 'name',
+		color: '#ff0000',
+		serviceDescription: 'service description',
+	},
 };

@@ -89,16 +89,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 			className={styles['c-request-access-blade']}
 		>
 			<div className="u-px-32">
-				{space && (
-					<SpacePreview
-						spaceId={space.id}
-						spaceImage={space.image || undefined}
-						spaceLogo={space.logo}
-						spaceName={space.name}
-						spaceColor={space.color || undefined}
-						spaceServiceDescription={space.serviceDescription || undefined}
-					/>
-				)}
+				{space && <SpacePreview space={space} />}
 				<FormControl
 					className="u-mb-24"
 					errors={[errors.requestReason?.message]}

@@ -1,10 +1,11 @@
+import { VisitorSpaceInfo } from '@reading-room/types';
 import { DefaultComponentProps } from '@shared/types';
 
 export interface SpacePreviewProps extends DefaultComponentProps {
-	spaceId?: string;
-	spaceImage?: string;
-	spaceLogo?: string;
-	spaceName?: string;
-	spaceColor?: string;
-	spaceServiceDescription?: string;
+	space: SpacePreviewSpace;
 }
+
+export type SpacePreviewSpace = Pick<
+	VisitorSpaceInfo,
+	'id' | 'image' | 'logo' | 'name' | 'color' | 'serviceDescription'
+>;

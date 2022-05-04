@@ -1,52 +1,64 @@
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
+
+import { SpacePreviewSpace } from '..';
 
 import SpacePreview from './SpacePreview';
 import { SPACE_PREVIEW_PROPS_MOCK } from './__mocks__/spacePreview';
 
-const renderSpacePreview = ({ ...args }) => {
-	return render(<SpacePreview {...SPACE_PREVIEW_PROPS_MOCK} {...args} />);
+const renderSpacePreview = ({ ...args }: SpacePreviewSpace, className = '') => {
+	return render(
+		<SpacePreview space={(SPACE_PREVIEW_PROPS_MOCK.space, args)} className={className} />
+	);
 };
 
 describe('Component: <SpacePreview /> (default)', () => {
 	it('Should render space name', () => {
-		const spaceName = 'my spaceName';
-		const { getByText } = renderSpacePreview({ spaceName });
+		const name = 'my name';
+		const { getByText } = renderSpacePreview({ ...SPACE_PREVIEW_PROPS_MOCK.space, name });
 
-		const spaceNameNode = getByText(spaceName);
+		const nameNode = getByText(name);
 
-		expect(spaceNameNode).toBeInTheDocument();
+		expect(nameNode).toBeInTheDocument();
 	});
 
 	it('Should render the correct class name', () => {
 		const className = 'my class';
-		const { container } = renderSpacePreview({ className });
+		const { container } = renderSpacePreview({ ...SPACE_PREVIEW_PROPS_MOCK.space }, className);
 
 		expect(container.firstChild).toHaveClass(className);
 	});
 
 	it('Should render the service description', () => {
-		const spaceServiceDescription = 'my service description';
-		const { getByText } = renderSpacePreview({ spaceServiceDescription });
+		const serviceDescription = 'my service description';
+		const { getByText } = renderSpacePreview({
+			...SPACE_PREVIEW_PROPS_MOCK.space,
+			serviceDescription,
+		});
 
-		const spaceServiceDescriptionNode = getByText(spaceServiceDescription);
+		const serviceDescriptionNode = getByText(serviceDescription);
 
-		expect(spaceServiceDescriptionNode).toBeInTheDocument();
+		expect(serviceDescriptionNode).toBeInTheDocument();
 	});
 
 	it('Should render the card image', () => {
-		const spaceId = 'my id';
-		const { getAllByAltText } = renderSpacePreview({ spaceId });
+		const id = 'my id';
+		const { getAllByAltText } = renderSpacePreview({ ...SPACE_PREVIEW_PROPS_MOCK.space, id });
 
-		const cardImageNode = getAllByAltText(spaceId)[0];
+		const cardImageNode = getAllByAltText(id)[0];
 
 		expect(cardImageNode).toBeInTheDocument();
 	});
 
 	it('Should not render with insufficient props', () => {
-		const spaceImage = undefined;
-		const spaceLogo = undefined;
-		const spaceName = undefined;
-		const { container } = renderSpacePreview({ spaceImage, spaceLogo, spaceName });
+		const image = null;
+		const logo = '';
+		const name = '';
+		const { container } = renderSpacePreview({
+			...SPACE_PREVIEW_PROPS_MOCK.space,
+			image,
+			logo,
+			name,
+		});
 
 		expect(container.firstChild?.firstChild).not.toBeInTheDocument();
 	});

@@ -24,12 +24,14 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 		<div className={styles['c-visit-summary']}>
 			{preview && (
 				<SpacePreview
-					spaceId={spaceId}
-					spaceImage={spaceImage}
-					spaceLogo={spaceLogo}
-					spaceName={spaceName}
-					spaceColor={spaceColor}
-					spaceServiceDescription={spaceServiceDescription}
+					space={{
+						id: spaceId,
+						image: spaceImage || '',
+						logo: spaceLogo || '',
+						name: spaceName || '',
+						color: spaceColor || '',
+						serviceDescription: spaceServiceDescription || '',
+					}}
 				/>
 			)}
 
