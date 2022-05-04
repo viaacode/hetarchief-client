@@ -19,7 +19,7 @@ import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
-	FLOWPLAYER_VIDEO__FORMATS,
+	FLOWPLAYER_VIDEO_FORMATS,
 	formatErrorPlaceholder,
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
@@ -141,11 +141,6 @@ const ObjectDetailPage: NextPage = () => {
 		mediaInfo?.representations?.find(
 			(representation) => representation.dctermsFormat === 'peak'
 		)?.files?.[0]?.schemaIdentifier || null;
-
-	console.log('mediaInfo: ', {
-		mediaInfo,
-		peakFileId,
-	});
 
 	// media info
 	const { data: peakJson } = useGetPeakFile(peakFileId);
@@ -385,7 +380,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
 		// Flowplayer
-		if (FLOWPLAYER_VIDEO__FORMATS.includes(representation.dctermsFormat)) {
+		if (FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
 			return (
 				<FlowPlayer
 					className={clsx(
@@ -418,7 +413,7 @@ const ObjectDetailPage: NextPage = () => {
 							src={[
 								{
 									src: 'https://bertyhell.s3.eu-central-1.amazonaws.com/projects/test-files/road-to-joy.mp3',
-									// src: playableUrl,
+									// src: playableUrl, // TODO uncomment this before merging the PR (for PR review purposes)
 									type: 'audio/mp3',
 								},
 							]}
