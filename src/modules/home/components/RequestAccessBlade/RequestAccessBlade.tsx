@@ -48,6 +48,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 								checked={field.value}
 								checkIcon={<Icon name="check" />}
 								value="accept-terms"
+								disabled={!bladeProps.isOpen}
 							/>
 						)}
 					/>
@@ -60,6 +61,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
+					disabled={!bladeProps.isOpen}
 				/>
 				<Button
 					label={t(
@@ -67,6 +69,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					)}
 					variants={['block', 'text']}
 					onClick={bladeProps.onClose}
+					disabled={!bladeProps.isOpen}
 				/>
 			</div>
 		);
@@ -92,7 +95,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					<Controller
 						name="requestReason"
 						control={control}
-						render={({ field }) => <TextArea {...field} />}
+						render={({ field }) => (
+							<TextArea {...field} disabled={!bladeProps.isOpen} />
+						)}
 					/>
 				</FormControl>
 
@@ -105,7 +110,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					<Controller
 						name="visitTime"
 						control={control}
-						render={({ field }) => <TextInput {...field} />}
+						render={({ field }) => (
+							<TextInput {...field} disabled={!bladeProps.isOpen} />
+						)}
 					/>
 				</FormControl>
 			</div>

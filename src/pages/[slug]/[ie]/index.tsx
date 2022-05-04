@@ -228,12 +228,12 @@ const ObjectDetailPage: NextPage = () => {
 
 		// Filter out peak files if type === video
 		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
-			mediaInfo.representations = mediaInfo?.representations.filter(
+			mediaInfo.representations = mediaInfo?.representations?.filter(
 				(object) => object.dctermsFormat !== 'peak'
 			);
 		}
 
-		setCurrentRepresentation(mediaInfo?.representations[0]);
+		setCurrentRepresentation(mediaInfo?.representations?.[0]);
 
 		// Set default view
 		if (isMobile) {
