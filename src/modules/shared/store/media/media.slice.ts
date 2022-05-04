@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { GetCollections } from '@account/types';
-import { GetMedia } from '@shared/types';
+import { GetCollectionsResponse } from '@account/types';
+import { GetMediaResponse } from '@shared/types';
 
 import { MediaState } from './media.types';
 
@@ -14,10 +14,10 @@ export const mediaSlice = createSlice({
 	name: 'media',
 	initialState,
 	reducers: {
-		setResults(state, action: PayloadAction<GetMedia>) {
+		setResults(state, action: PayloadAction<GetMediaResponse>) {
 			state.results = action.payload;
 		},
-		setCollections(state, action: PayloadAction<GetCollections>) {
+		setCollections(state, action: PayloadAction<GetCollectionsResponse>) {
 			state.collections = action.payload;
 		},
 	},
