@@ -2,6 +2,7 @@ import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
 
 import { getMetadataSearchFilters } from '@reading-room/const';
+import { AdvancedFilterArrayParam } from '@reading-room/const/query-params';
 import {
 	AdvancedFilter,
 	MetadataProp,
@@ -38,7 +39,7 @@ export const mapArrayParamToTags = (
 						<strong>{keyword}</strong>
 					</span>
 				),
-				value: keyword as string,
+				value: `${key}--${keyword}`,
 				key,
 			};
 		});
@@ -94,7 +95,7 @@ export const mapAdvancedToTags = (
 					</strong>
 				</span>
 			),
-			value: advanced.val || '',
+			value: `${key}--${AdvancedFilterArrayParam.encode([advanced])}`,
 			key,
 			...advanced,
 		};
