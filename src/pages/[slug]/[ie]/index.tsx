@@ -262,11 +262,11 @@ const ObjectDetailPage: NextPage = () => {
 			return {
 				type: hit._source.dcterms_format as MediaTypes,
 				title: hit._source.schema_name,
-				subtitle: `(${
+				subtitle: `${hit._source.schema_maintainer?.schema_name ?? ''} ${
 					hit._source.schema_date_published
-						? formatMediumDate(asDate(hit._source.schema_date_published))
-						: undefined
-				})`,
+						? `(${formatMediumDate(asDate(hit._source.schema_date_published))})`
+						: ''
+				}`,
 				description: hit._source.schema_description || '',
 				thumbnail: hit._source.schema_thumbnail_url,
 				id: hit._id,
