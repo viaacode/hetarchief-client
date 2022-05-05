@@ -1,11 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { durationRegex } from '@reading-room/components/DurationInput/DurationInput.consts';
 import { MetadataProp } from '@reading-room/types';
 import { getOperators } from '@reading-room/utils';
 import { getSelectValue } from '@reading-room/utils/select';
@@ -28,6 +30,7 @@ const defaultValues = {
 };
 
 const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }) => {
+	const { t } = useTranslation();
 	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.duration?.[0];
@@ -41,9 +44,11 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 		formState: { errors },
 		handleSubmit,
 		setValue,
+		setError,
 	} = useForm<DurationFilterFormState>({
 		resolver: yupResolver(DURATION_FILTER_FORM_SCHEMA()),
 		defaultValues,
+		reValidateMode: 'onChange',
 	});
 
 	const operators = useMemo(() => getOperators(MetadataProp.Duration), []);

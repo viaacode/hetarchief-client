@@ -1,0 +1,9 @@
+@use "styles/abstracts" as *;
+
+.c-duration-input--placeholder {
+	width: 100%;
+	text-align: right;
+	pointer-events: none;
+	color: $zinc;
+	font-size: 16px;
+}
