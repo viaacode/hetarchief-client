@@ -16,13 +16,13 @@ import { KeywordsFilterFormProps, KeywordsFilterFormState } from './KeywordsFilt
 
 type multi = MultiValue<TagInfo>;
 
+const defaultValues = {
+	values: [],
+};
+
 const components = {
 	...TAGS_INPUT_COMPONENTS,
 	DropdownIndicator: () => <div className="u-pr-8" />,
-};
-
-const defaultValues = {
-	values: [],
 };
 
 const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {

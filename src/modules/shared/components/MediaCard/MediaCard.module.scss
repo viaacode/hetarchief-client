@@ -35,11 +35,13 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		}
 
 		&--list {
-			min-width: 248px;
-
 			span > img {
 				max-height: unset !important;
 				min-height: unset !important;
+			}
+
+			@include respond-at("md") {
+				min-width: 248px;
 			}
 		}
 	}
@@ -53,7 +55,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 			background-color: $platinum;
 			color: $zinc;
 			display: flex;
-			min-height: 3.2rem;
+			min-height: 16rem;
 			min-width: 24.8rem;
 			place-content: center;
 

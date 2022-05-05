@@ -162,6 +162,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onFilterReset={onFilterFormReset}
 				onFilterSubmit={onFilterFormSubmit}
 				showNavigationBorder={showNavigationBorder}
+				filterValues={filterValues}
 			/>
 		</div>
 	);
