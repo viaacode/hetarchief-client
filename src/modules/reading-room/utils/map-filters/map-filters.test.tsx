@@ -1,6 +1,6 @@
 import { SEARCH_QUERY_KEY } from '@shared/const';
 
-import { mapFiltersToTags } from './map-filters';
+import { mapFiltersToTags, tagPrefix } from './map-filters';
 
 describe('Utils', () => {
 	describe('mapFiltersToTags()', () => {
@@ -13,7 +13,7 @@ describe('Utils', () => {
 			const filters = mapFiltersToTags(query);
 
 			expect(filters).toHaveLength(query.search.length);
-			expect(filters[0].value).toBe(query.search[0]);
+			expect(filters[0].value).toBe(tagPrefix(SEARCH_QUERY_KEY) + query.search[0]);
 		});
 
 		it('Should filter out falsey search values', () => {
@@ -26,7 +26,7 @@ describe('Utils', () => {
 			const filters = mapFiltersToTags(query);
 
 			expect(filters).toHaveLength(1);
-			expect(filters[0].value).toBe(value);
+			expect(filters[0].value).toBe(tagPrefix(SEARCH_QUERY_KEY) + value);
 		});
 	});
 });

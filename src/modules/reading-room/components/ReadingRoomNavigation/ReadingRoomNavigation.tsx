@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
+import { Permission } from '@account/const';
 import { Navigation } from '@navigation/components';
 import { DropdownMenu, Icon } from '@shared/components';
 import { CopyButton } from '@shared/components/CopyButton';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 
 import styles from './ReadingRoomNavigation.module.scss';
@@ -23,19 +25,22 @@ const ReadingRoomNavigation: FC<ReadingRoomNavigationProps> = ({
 }) => {
 	const { t } = useTranslation();
 	const showBorder = useSelector(selectShowNavigationBorder);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 
 	return (
 		<Navigation contextual className={className} showBorder={showBorder}>
 			<Navigation.Left placement="left">
-				<Link href={backLink} passHref={true}>
-					<a>
-						<Button
-							icon={<Icon name="arrow-left" />}
-							variants="text"
-							className="u-color-white u-ml--12"
-						/>
-					</a>
-				</Link>
+				{showLinkedSpaceAsHomepage ? null : (
+					<Link href={backLink} passHref={true}>
+						<a>
+							<Button
+								icon={<Icon name="arrow-left" />}
+								variants="text"
+								className="u-color-white u-ml--12"
+							/>
+						</a>
+					</Link>
+				)}
 			</Navigation.Left>
 
 			<Navigation.Center title={title} />

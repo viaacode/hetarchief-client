@@ -4,7 +4,10 @@ import { OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '..';
 import { FilterMenuProps } from '../FilterMenu.types';
 
 export interface FilterMenuMobileProps
-	extends Pick<FilterMenuProps, 'activeSort' | 'filters' | 'sortOptions' | 'onSortClick'> {
+	extends Pick<
+		FilterMenuProps,
+		'activeSort' | 'filters' | 'sortOptions' | 'onSortClick' | 'filterValues'
+	> {
 	activeFilter: string | null | undefined;
 	activeSortLabel: ReactNode;
 	isOpen: boolean;
