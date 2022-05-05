@@ -18,7 +18,8 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
-	FLOWPLAYER_FORMATS,
+	FLOWPLAYER_AUDIO_FORMATS,
+	FLOWPLAYER_VIDEO_FORMATS,
 	formatErrorPlaceholder,
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
@@ -53,6 +54,7 @@ import {
 import Callout from '@shared/components/Callout/Callout';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useElementSize } from '@shared/hooks/use-element-size';
+import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
@@ -71,6 +73,8 @@ import {
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
+
+import styles from './index.module.scss';
 
 import {
 	DynamicActionMenu,
@@ -102,8 +106,8 @@ const ObjectDetailPage: NextPage = () => {
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [metadataColumns, setMetadataColumns] = useState<number>(1);
 	const [mediaType, setMediaType] = useState<MediaTypes>(null);
-	const [pauseMedia, setPauseMedia] = useState(true);
-	const [isPlayEventFired, setIsPlayEventFired] = useState(false);
+	const [isMediaPaused, setIsMediaPaused] = useState(true);
+	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [currentRepresentation, setCurrentRepresentation] = useState<
 		MediaRepresentation | undefined
 	>(undefined);
@@ -131,6 +135,27 @@ const ObjectDetailPage: NextPage = () => {
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
 	} = useGetMediaInfo(router.query.ie as string);
+
+	// peak file
+	const peakFileId =
+		mediaInfo?.representations?.find(
+			(representation) => representation.dctermsFormat === 'peak'
+		)?.files?.[0]?.schemaIdentifier || null;
+
+	// media info
+	const { data: peakJson } = useGetPeakFile(peakFileId);
+	const representationsToDisplay = (mediaInfo?.representations || [])?.filter((object) => {
+		if (object.dctermsFormat === 'peak') {
+			// Ignore peak file containing the audio wave form in json format
+			return false;
+		}
+		if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
+			// Ignore video files containing the speaker and audio
+			return false;
+		}
+		// Actual video files and mp3 files and images
+		return true;
+	});
 
 	// playable url
 	const {
@@ -176,7 +201,7 @@ const ObjectDetailPage: NextPage = () => {
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
-	const showFragmentSlider = mediaInfo?.representations && mediaInfo?.representations.length > 1;
+	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
 	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
@@ -205,7 +230,7 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
 		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
-			setPauseMedia(true);
+			setIsMediaPaused(true);
 		}
 	}, [activeTab, isMobile]);
 
@@ -233,8 +258,7 @@ const ObjectDetailPage: NextPage = () => {
 			);
 		}
 
-		setCurrentRepresentation(mediaInfo?.representations?.[0]);
-
+		setCurrentRepresentation(representationsToDisplay[0]);
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
@@ -330,13 +354,17 @@ const ObjectDetailPage: NextPage = () => {
 	};
 
 	const handleOnPlay = () => {
-		setPauseMedia(false);
-		if (!isPlayEventFired) {
-			setIsPlayEventFired(true);
+		setIsMediaPaused(false);
+		if (!hasMediaPlayed) {
+			setHasMediaPlayed(true);
 			EventsService.triggerEvent(LogEventType.ITEM_PLAY, window.location.href, {
 				schema_identifier: router.query.ie as string,
 			});
 		}
+	};
+
+	const handleOnPause = () => {
+		setIsMediaPaused(true);
 	};
 
 	/**
@@ -358,7 +386,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
 		// Flowplayer
-		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
+		if (FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
 			return (
 				<FlowPlayer
 					className={clsx(
@@ -369,12 +397,44 @@ const ObjectDetailPage: NextPage = () => {
 					src={playableUrl}
 					poster={mediaInfo?.thumbnailUrl || undefined}
 					title={representation.name}
-					pause={pauseMedia}
+					pause={isMediaPaused}
 					onPlay={handleOnPlay}
+					onPause={handleOnPause}
 					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
+					plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
 				/>
 			);
+		}
+		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
+			if (!peakFileId || !!peakJson) {
+				return (
+					<div className={styles['c-audio-player-wrapper']}>
+						<FlowPlayer
+							className={clsx(
+								'p-object-detail__flowplayer',
+								showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+							)}
+							key={flowPlayerKey}
+							src={[
+								{
+									src: 'https://bertyhell.s3.eu-central-1.amazonaws.com/projects/test-files/road-to-joy.mp3',
+									// src: playableUrl, // TODO uncomment this before merging the PR (for PR review purposes)
+									type: 'audio/mp3',
+								},
+							]}
+							title={representation.name}
+							pause={isMediaPaused}
+							onPlay={handleOnPlay}
+							onPause={handleOnPause}
+							token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
+							dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
+							plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
+							waveformData={peakJson?.data || undefined}
+						/>
+					</div>
+				);
+			}
 		}
 
 		// Image
@@ -573,11 +633,11 @@ const ObjectDetailPage: NextPage = () => {
 					)}
 					{showFragmentSlider && (
 						<FragmentSlider
-							thumbnail={mediaInfo.thumbnailUrl}
+							thumbnail={mediaInfo?.thumbnailUrl}
 							className="p-object-detail__slider"
-							fragments={mediaInfo?.representations ?? []}
+							fragments={representationsToDisplay}
 							onChangeFragment={(index) =>
-								setCurrentRepresentation(mediaInfo?.representations[index])
+								setCurrentRepresentation(representationsToDisplay[index])
 							}
 						/>
 					)}

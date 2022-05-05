@@ -22,7 +22,7 @@ const Document = (): ReactElement => {
 	return (
 		<Html>
 			<CustomHead>
-				{/* eslint-disable-next-line */}
+				{/*eslint-disable-next-line*/}
 				<script
 					id="Cookiebot"
 					src="https://consent.cookiebot.com/uc.js"
@@ -30,7 +30,7 @@ const Document = (): ReactElement => {
 					data-blockingmode="auto"
 					type="text/javascript"
 				/>
-				{/* eslint-disable-next-line */}
+				{/*eslint-disable-next-line*/}
 				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
 			</CustomHead>
 			<body>
