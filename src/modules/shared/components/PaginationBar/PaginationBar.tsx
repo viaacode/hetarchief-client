@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
-import { scrollToTop } from '@shared/utils/scroll-to-top';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import { Icon } from '../Icon';
 import { PaginationProgress } from '../PaginationProgress';
@@ -84,7 +84,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 							'modules/shared/components/pagination-bar/pagination-bar___terug-naar-boven'
 						)}
 						iconEnd={<Icon name="arrow-up" />}
-						onClick={scrollToTop}
+						onClick={() => scrollTo(0)}
 					/>
 				</div>
 			)}

@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -79,7 +80,10 @@ const AccountMyCollections: NextPage = () => {
 					...collection,
 					node: ({ linkClassName }) => (
 						<Link href={href}>
-							<a className={linkClassName} title={collection.name}>
+							<a
+								className={clsx(linkClassName, 'p-account-my-collections__link')}
+								title={collection.name}
+							>
 								{collection.name}
 							</a>
 						</Link>
@@ -389,6 +393,7 @@ const AccountMyCollections: NextPage = () => {
 												schemaIdentifier: media.schemaIdentifier,
 												description: renderDescription(media),
 												title: renderTitle(media),
+												name: media.name,
 												type: media.format,
 												preview: media.thumbnailUrl,
 											};
@@ -444,7 +449,14 @@ const AccountMyCollections: NextPage = () => {
 
 			<AddToCollectionBlade
 				isOpen={isAddToCollectionBladeOpen}
-				selected={selected || undefined}
+				selected={
+					selected
+						? {
+								schemaIdentifier: selected.schemaIdentifier,
+								title: selected.name,
+						  }
+						: undefined
+				}
 				onClose={() => {
 					setShowAddToCollectionBlade(false);
 					setSelected(null);

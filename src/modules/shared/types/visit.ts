@@ -39,3 +39,9 @@ export interface VisitSpaceCount {
 	count: number;
 	id?: string;
 }
+
+export interface VisitAccessStatus {
+	spaceId: string;
+	status: VisitStatus;
+	visitorId: string;
+}

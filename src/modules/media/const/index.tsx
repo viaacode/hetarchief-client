@@ -15,7 +15,12 @@ import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
  * Render media
  */
 
-export const FLOWPLAYER_FORMATS: string[] = ['mp4', 'mp3', 'm4a', 'ogv', 'ogg', 'webm', 'm3u8'];
+export const FLOWPLAYER_VIDEO_FORMATS: string[] = ['mp4', 'ogv', 'webm', 'm3u8'];
+export const FLOWPLAYER_AUDIO_FORMATS: string[] = ['mp3', 'm4a', 'aac'];
+export const FLOWPLAYER_FORMATS: string[] = [
+	...FLOWPLAYER_VIDEO_FORMATS,
+	...FLOWPLAYER_AUDIO_FORMATS,
+];
 export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
 
 /**
