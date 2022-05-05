@@ -25,7 +25,6 @@ const Blade: FC<BladeProps> = ({
 	layer,
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
-
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
 	const isLayered = isManaged && layer;
@@ -37,7 +36,13 @@ const Blade: FC<BladeProps> = ({
 				className={styles['c-blade__close-button']}
 				icon={<Icon name="times" />}
 				variants="text"
-				onClick={isLayered && onCloseBlade ? () => onCloseBlade(layer) : onClose}
+				onClick={() => {
+					if (isLayered && onCloseBlade) {
+						onCloseBlade(layer);
+					} else if (onClose) {
+						onClose();
+					}
+				}}
 				disabled={!isOpen}
 			/>
 		);
@@ -103,7 +108,10 @@ const Blade: FC<BladeProps> = ({
 					type={isLayered && layer > 1 ? 'light' : 'dark'}
 				/>
 			)}
-			<FocusTrap active={isBladeOpen} focusTrapOptions={{ clickOutsideDeactivates: true }}>
+			<FocusTrap
+				active={isBladeOpen && process.env.NODE_ENV !== 'test'}
+				focusTrapOptions={{ clickOutsideDeactivates: true }}
+			>
 				{renderContent(false)}
 			</FocusTrap>
 		</>
