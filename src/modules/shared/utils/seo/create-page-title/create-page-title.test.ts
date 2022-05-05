@@ -5,14 +5,14 @@ describe('Utils', () => {
 		it('Should return a default title', () => {
 			const pageTitle = createPageTitle();
 
-			expect(pageTitle).toBe('Het archief ***');
+			expect(pageTitle).toBe('het archief ***');
 		});
 
 		it('Should return a title based on a given param', () => {
 			const page = 'About';
 			const pageTitle = createPageTitle(page);
 
-			expect(pageTitle).toBe(`${page} | Het archief ***`);
+			expect(pageTitle).toBe(`${page} | het archief ***`);
 		});
 
 		it('Should return a title based on a given param', () => {
@@ -21,7 +21,7 @@ describe('Utils', () => {
 			const pageTitle = createPageTitle(page);
 
 			expect(pageTitle).toBe(
-				`A very long title with Lorem ipsum dolor sit am... | Het archief ***`
+				`A very long title with Lorem ipsum dolor sit am... | het archief ***`
 			);
 		});
 	});

@@ -96,7 +96,11 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		.flowplayer {
-			max-height: calc(100vh - 15.1rem); // 15.1rem: navs height
+			height: calc(100vh - $c-navigation-height - $c-navigation-height-contextual + 1px);
+
+			@include respond-to("md") {
+				height: calc(100vh - $c-navigation-height-md - $c-navigation-height-contextual-md - $c-navigation-height-md + 1px);
+			}
 		}
 
 		& .is-fullscreen &-fullscreen-button--exit {
@@ -191,16 +195,16 @@ $metadata-collapsed-width: 36vw;
 
 	&__metadata-list--similar {
 		// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
-		margin-left: - $spacer-md;
-		margin-right: - $spacer-md;
+		margin-left: -$spacer-md;
+		margin-right: -$spacer-md;
 		margin-top: $spacer-md;
 		padding: $spacer-md;
 		background-color: $platinum;
 
 		@include respond-at("md") {
 			// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
-			margin-left: - $spacer-lg;
-			margin-right: - $spacer-lg;
+			margin-left: -$spacer-lg;
+			margin-right: -$spacer-lg;
 			padding: $spacer-md $spacer-lg;
 		}
 	}

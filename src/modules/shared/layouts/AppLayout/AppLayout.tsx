@@ -172,8 +172,6 @@ const AppLayout: FC = ({ children }) => {
 			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
 			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/chromecast.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/airplay.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
