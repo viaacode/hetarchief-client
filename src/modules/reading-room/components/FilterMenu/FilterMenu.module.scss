@@ -2,81 +2,79 @@
 @use "styles/abstracts" as *;
 
 $c-filter-menu-flyout-top-padding: 6.4rem;
+$c-filter-menu-border-color: color.adjust($white, $alpha: -0.8);
+$component: "c-filter-menu";
 
-.c-filter-menu {
+.#{$component} {
 	background-color: $black;
-}
 
-/**
- * Elements
- */
-
-.c-filter-menu__header {
-	display: flex;
-	height: 5.2rem;
-	overflow: hidden;
-}
-
-.c-filter-menu__toggle,
-.c-filter-menu__button {
-	border-radius: 0;
-	outline: none;
-
-	:global(.c-button__content) {
+	&__header {
 		display: flex;
-		justify-content: space-between;
+		max-height: 5.2rem;
 	}
-}
 
-.c-filter-menu__toggle {
-	flex: 2 0 auto;
-	height: 100%;
-	padding-right: 1.2rem;
-	text-align: left;
+	&__view-toggle {
+		padding: 0;
 
-	@include respond-to("md") {
-		font-size: $font-size-md;
+		:global(.c-button) {
+			width: 4rem;
+			height: 4rem;
+		}
+
+		&-container {
+			border-left: 1px solid rgb(255 255 255 / 10%);
+		}
 	}
-}
 
-.c-filter-menu__view-toggle-container {
-	border-left: 1px solid rgb(255 255 255 / 10%);
-}
-
-.c-filter-menu__view-toggle {
-	padding: 0;
-
-	:global(.c-button) {
-		width: 4rem;
-		height: 4rem;
+	&__option {
+		position: relative;
+		width: 100%;
 	}
-}
 
-.c-filter-menu__option {
-	position: relative;
-	width: 100%;
-}
+	&__toggle:global(.c-button),
+	&__button:global(.c-button) {
+		border-radius: 0;
+		outline: none;
 
-.c-filter-menu__button {
-	position: relative;
-	padding-right: $spacer-sm;
-	font-weight: $font-weight-normal;
-	border-bottom: 0.1rem solid color.adjust($white, $alpha: -0.8);
+		:global(.c-button__content) {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
 
-	&--sort {
+	&__toggle {
+		flex: 2 0 auto;
+		height: 100%;
+		padding-right: 1.2rem;
+		text-align: left;
+
+		@include respond-to("md") {
+			font-size: $font-size-md;
+		}
+	}
+
+	&__button:global(.c-button) {
+		position: relative;
+		padding-right: $spacer-sm;
+		font-weight: $font-weight-normal;
+		border-bottom: 0.1rem solid $c-filter-menu-border-color;
+
+		&:active {
+			border-color: $black;
+		}
+
+		&:global(.c-button__icon) {
+			font-size: $font-size-lg;
+		}
+	}
+
+	&__button--sort:global(.c-button) {
 		background-color: $shade;
 		border-color: $shade;
+		border-bottom-color: $c-filter-menu-border-color;
 	}
 
-	&:active {
-		border-color: $black;
-	}
-
-	:global(.c-button__icon) {
-		font-size: $font-size-lg;
-	}
-
-	&--active {
+	&__button--active:global(.c-button) {
 		z-index: get-z-layer("filter");
 		background-color: $white;
 		border-color: $white;
@@ -91,47 +89,47 @@ $c-filter-menu-flyout-top-padding: 6.4rem;
 			outline: none;
 		}
 	}
-}
 
-.c-filter-menu__flyout {
-	&:global(.c-dropdown__content-closed) {
-		position: fixed !important; // Prevent poppers from pushing when hidden
-	}
+	&__flyout {
+		&:global(.c-dropdown__content-closed) {
+			position: fixed !important; // Prevent poppers from pushing when hidden
+		}
 
-	&:global(.c-dropdown__content-open) {
-		z-index: get-z-layer("filter");
-	}
+		&:global(.c-dropdown__content-open) {
+			z-index: get-z-layer("filter");
+		}
 
-	&--filter {
-		max-width: 46.4rem;
+		&[data-popper-placement="bottom-start"] {
+			padding-left: $spacer-xs;
+		}
 
-		// Overwrite popper styles
-		min-width: 46.4rem !important;
-		max-height: 100vh;
+		&--filter {
+			max-width: 46.4rem;
 
-		:global(.c-menu) {
-			padding: $c-filter-menu-flyout-top-padding 0 0;
+			// Overwrite popper styles
+			min-width: 46.4rem !important;
+			max-height: 100vh;
+
+			&:global(.c-menu) {
+				padding: $c-filter-menu-flyout-top-padding 0 0;
+			}
+		}
+
+		&-close {
+			position: absolute;
+			inset: 1.2rem 1.2rem auto auto;
+			top: 1.2rem;
+			right: 1.2rem;
+			bottom: auto;
+			left: auto;
 		}
 	}
 
-	&[data-popper-placement="bottom-start"] {
-		padding-left: $spacer-xs;
+	&__overlay {
+		z-index: get-z-layer("filter-overlay");
 	}
-}
 
-.c-filter-menu__flyout-close {
-	position: absolute;
-	inset: 1.2rem 1.2rem auto auto;
-	top: 1.2rem;
-	right: 1.2rem;
-	bottom: auto;
-	left: auto;
-}
-
-.c-filter-menu__overlay {
-	z-index: get-z-layer("filter-overlay");
-}
-
-.c-filter-menu__form {
-	max-height: calc(100vh - $c-filter-menu-flyout-top-padding);
+	&__form {
+		max-height: calc(100vh - $c-filter-menu-flyout-top-padding);
+	}
 }
