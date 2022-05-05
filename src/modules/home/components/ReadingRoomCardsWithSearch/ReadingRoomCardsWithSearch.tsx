@@ -14,9 +14,13 @@ const NUMBER_OF_READING_ROOMS = 6;
 
 interface VisitorSpaceCardsWithSearchProps {
 	onRequestAccess: (VisitorSpaceSlug: string) => void;
+	onSearch?: (value?: string) => void;
 }
 
-const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRequestAccess }) => {
+const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
+	onRequestAccess,
+	onSearch,
+}) => {
 	const { t } = useTranslation();
 	const [query, setQuery] = useQueryParams({
 		[SEARCH_QUERY_KEY]: StringParam,
@@ -68,7 +72,10 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({ onRe
 					placeholder={t(
 						'modules/home/components/reading-room-cards-with-search/reading-room-cards-with-search___zoek'
 					)}
-					onSearch={(value) => setQuery({ [SEARCH_QUERY_KEY]: value })}
+					onSearch={(value) => {
+						setQuery({ [SEARCH_QUERY_KEY]: value });
+						onSearch?.(value);
+					}}
 				/>
 			</div>
 
