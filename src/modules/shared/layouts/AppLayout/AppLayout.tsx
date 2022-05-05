@@ -46,6 +46,8 @@ import {
 } from '@shared/store/ui/';
 import { scrollToTop } from '@shared/utils/scroll-to-top';
 
+import packageJson from '../../../../../package.json';
+
 const { publicRuntimeConfig } = getConfig();
 
 const AppLayout: FC = ({ children }) => {
@@ -83,6 +85,11 @@ const AppLayout: FC = ({ children }) => {
 		},
 		[dispatch]
 	);
+
+	useEffect(() => {
+		// Set the build version on the window object
+		(window as any).HETARCHIEF_VERSION = packageJson.version;
+	}, []);
 
 	useEffect(() => {
 		if (router && user) {

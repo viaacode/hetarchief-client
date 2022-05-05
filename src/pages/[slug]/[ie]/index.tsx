@@ -251,8 +251,14 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
-		setCurrentRepresentation(representationsToDisplay[0]);
+		// Filter out peak files if type === video
+		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
+			mediaInfo.representations = mediaInfo?.representations?.filter(
+				(object) => object.dctermsFormat !== 'peak'
+			);
+		}
 
+		setCurrentRepresentation(representationsToDisplay[0]);
 		// Set default view
 		if (isMobile) {
 			// Default to metadata tab on mobile
@@ -282,11 +288,11 @@ const ObjectDetailPage: NextPage = () => {
 			return {
 				type: hit._source.dcterms_format as MediaTypes,
 				title: hit._source.schema_name,
-				subtitle: `(${
+				subtitle: `${hit._source.schema_maintainer?.schema_name ?? ''} ${
 					hit._source.schema_date_published
-						? formatMediumDate(asDate(hit._source.schema_date_published))
-						: undefined
-				})`,
+						? `(${formatMediumDate(asDate(hit._source.schema_date_published))})`
+						: ''
+				}`,
 				description: hit._source.schema_description || '',
 				thumbnail: hit._source.schema_thumbnail_url,
 				id: hit._id,
@@ -424,7 +430,7 @@ const ObjectDetailPage: NextPage = () => {
 							token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
 							dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
 							plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
-							peakJson={peakJson || undefined}
+							waveformData={peakJson?.data || undefined}
 						/>
 					</div>
 				);
