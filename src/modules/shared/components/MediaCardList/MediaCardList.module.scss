@@ -3,11 +3,11 @@
 $component: "c-media-card-list";
 
 // Sidebar
-$media-card-list-sidebar-gutter: $spacer-md;
-$media-card-list-sidebar-gutter-md: $spacer-sm;
+$media-card-list-two-columns-gutter: $spacer-md;
+$media-card-list-two-columns-gutter-md: $spacer-sm;
 
 // Masonry
-$media-card-list-masonry-gutter: $media-card-list-sidebar-gutter;
+$media-card-list-masonry-gutter: $media-card-list-two-columns-gutter;
 $media-card-list-masonry-gutter-md: $spacer-lg;
 
 @mixin media-card-list-gutters($gutter) {
@@ -25,6 +25,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 	&__content {
 		display: flex;
 		width: 100%;
+		min-width: 0;
 	}
 
 	&__column {
@@ -34,19 +35,27 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 	// Modifiers
 
 	// two-column grid
-	&--sidebar {
-		@include media-card-list-gutters($media-card-list-sidebar-gutter);
+	&--two-columns {
+		@include media-card-list-gutters($media-card-list-two-columns-gutter);
 
-		display: grid;
-		grid-template-columns: 27.8rem 1fr;
-		gap: $media-card-list-sidebar-gutter * 2;
-		margin-bottom: $media-card-list-sidebar-gutter;
+		margin-bottom: $media-card-list-two-columns-gutter;
+
+		.#{$component} {
+			&__sidebar {
+				margin-bottom: $media-card-list-two-columns-gutter;
+			}
+		}
 
 		@include respond-at("md") {
-			@include media-card-list-gutters($media-card-list-sidebar-gutter-md);
+			@include media-card-list-gutters($media-card-list-two-columns-gutter-md);
 
-			gap: $media-card-list-sidebar-gutter-md * 2;
-			margin-bottom: $media-card-list-sidebar-gutter-md;
+			margin-bottom: $media-card-list-two-columns-gutter-md;
+
+			&:not(.c-media-card-list--no-sidebar) {
+				display: grid;
+				grid-template-columns: 27.8rem 1fr;
+				gap: $media-card-list-two-columns-gutter-md * 2;
+			}
 		}
 	}
 

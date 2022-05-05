@@ -50,7 +50,8 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		<div
 			className={clsx(
 				styles['c-media-card-list'],
-				styles[`c-media-card-list--${isMasonryView ? 'masonry' : 'sidebar'}`]
+				styles[`c-media-card-list--${isMasonryView ? 'masonry' : 'two-columns'}`],
+				!sidebar && styles[`c-media-card-list--no-sidebar`]
 			)}
 		>
 			{!isMasonryView && renderSidebar()}
