@@ -20,6 +20,11 @@ const defaultValues = {
 	values: [],
 };
 
+const components = {
+	...TAGS_INPUT_COMPONENTS,
+	DropdownIndicator: () => <div className="u-pr-8" />,
+};
+
 const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {
 	const [query] = useQueryParams(KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [input, setInput] = useState<string | undefined>(undefined);
@@ -97,10 +102,6 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => onKey(e, [...keysEnter], saveInput);
 
-	const components = {
-		...TAGS_INPUT_COMPONENTS,
-		DropdownIndicator: () => <div className="u-pr-8" />,
-	};
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
