@@ -148,9 +148,6 @@ const ReadingRoomPage: NextPage = () => {
 		visitorSpace?.maintainerId !== undefined
 	);
 
-	// visit info
-	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
-
 	const collections = useSelector(selectCollections);
 
 	/**
@@ -368,8 +365,8 @@ const ReadingRoomPage: NextPage = () => {
 	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
 	const showResults = hasSearched && !!media && media?.items?.length > 0;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const accessEndDate = formatMediumDateWithTime(asDate(visitStatus?.endAt));
-	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitStatus?.endAt));
+	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
+	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
 
 	/**
 	 * Render
