@@ -3,8 +3,11 @@ import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/reac
 import { useTranslation } from 'next-i18next';
 import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { StringParam, useQueryParams } from 'use-query-params';
 
-import { Blade, Icon } from '@shared/components';
+import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
+import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { Blade, Icon, SpacePreview } from '@shared/components';
 import { OPTIONAL_LABEL } from '@shared/const';
 
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
@@ -13,6 +16,10 @@ import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccess
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladeProps }) => {
 	const { t } = useTranslation();
+	const [query] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	});
+	const { data: space } = useGetReadingRoom(query[VISITOR_SPACE_SLUG_QUERY_KEY]);
 
 	const {
 		control,
@@ -85,6 +92,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 			className={styles['c-request-access-blade']}
 		>
 			<div className="u-px-32">
+				{space && <SpacePreview space={space} />}
 				<FormControl
 					className="u-mb-24"
 					errors={[errors.requestReason?.message]}
