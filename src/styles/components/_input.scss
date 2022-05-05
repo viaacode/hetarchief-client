@@ -30,6 +30,7 @@
 	display: inline-flex;
 	font-size: $font-size-lg;
 	color: $neutral;
+	pointer-events: none;
 }
 
 /**
@@ -150,14 +151,14 @@
 }
 
 .c-input--black-border {
-		/* stylelint-disable-next-line no-descending-specificity */
-		.c-input__field {
-			border-color: $black;
-	
-			&:focus {
-				border-color: $teal;
-			}
+	/* stylelint-disable-next-line no-descending-specificity */
+	.c-input__field {
+		border-color: $black;
+
+		&:focus {
+			border-color: $teal;
 		}
+	}
 }
 
 // States

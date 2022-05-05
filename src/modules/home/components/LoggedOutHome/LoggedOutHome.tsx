@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
@@ -16,6 +17,11 @@ import styles from './LoggedOutHome.module.scss';
 const LoggedOutHome: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
+
+	const [query] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+	});
 
 	/**
 	 * Methods
@@ -29,6 +35,17 @@ const LoggedOutHome: FC = () => {
 			})}`
 		);
 	};
+
+	useEffect(() => {
+		if (query[VISITOR_SPACE_SLUG_QUERY_KEY] && !query[SHOW_AUTH_QUERY_KEY]) {
+			router.push(
+				`${ROUTES.home}?${stringify({
+					[SHOW_AUTH_QUERY_KEY]: '1',
+					[VISITOR_SPACE_SLUG_QUERY_KEY]: query[VISITOR_SPACE_SLUG_QUERY_KEY],
+				})}`
+			);
+		}
+	}, [query, router]);
 
 	/**
 	 * Render

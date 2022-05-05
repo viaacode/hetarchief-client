@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -7,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import { useSelector } from 'react-redux';
 import save from 'save-file';
 import { useQueryParams } from 'use-query-params';
 
@@ -42,6 +44,7 @@ import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissio
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
+import { selectCollections } from '@shared/store/media';
 import { Breakpoints } from '@shared/types';
 import { asDate, createPageTitle, formatDate } from '@shared/utils';
 
@@ -64,11 +67,12 @@ const AccountMyCollections: NextPage = () => {
 	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 
-	const collections = useGetCollections();
+	const getCollections = useGetCollections();
+	const collections = useSelector(selectCollections);
 
 	const sidebarLinks: ListNavigationCollectionItem[] = useMemo(
 		() =>
-			(collections.data?.items || []).map((collection) => {
+			(collections?.items || []).map((collection) => {
 				const slug = createCollectionSlug(collection);
 				const href = `${ROUTES.myCollections}/${slug}`;
 
@@ -76,7 +80,10 @@ const AccountMyCollections: NextPage = () => {
 					...collection,
 					node: ({ linkClassName }) => (
 						<Link href={href}>
-							<a className={linkClassName} title={collection.name}>
+							<a
+								className={clsx(linkClassName, 'p-account-my-collections__link')}
+								title={collection.name}
+							>
 								{collection.name}
 							</a>
 						</Link>
@@ -84,7 +91,7 @@ const AccountMyCollections: NextPage = () => {
 					active: decodeURIComponent(slug) === collectionSlug,
 				};
 			}),
-		[collections.data, collectionSlug]
+		[collections, collectionSlug]
 	);
 
 	const activeCollection = useMemo(
@@ -110,7 +117,7 @@ const AccountMyCollections: NextPage = () => {
 
 	useEffect(() => {
 		if (!activeCollection && collections) {
-			const favorites = collections.data?.items.find((col) => col.isDefault);
+			const favorites = collections?.items.find((col) => col.isDefault);
 			!blockFallbackRedirect && favorites && router.push(createCollectionSlug(favorites));
 		}
 	}, [activeCollection, collections, router, blockFallbackRedirect]);
@@ -128,7 +135,7 @@ const AccountMyCollections: NextPage = () => {
 	const onCollectionTitleChanged = (collection: Collection) => {
 		setBlockFallbackRedirect(true);
 
-		collections.refetch().then(() => {
+		getCollections.refetch().then(() => {
 			router.push(createCollectionSlug(collection)).then(() => {
 				setBlockFallbackRedirect(false);
 			});
@@ -348,7 +355,7 @@ const AccountMyCollections: NextPage = () => {
 						{
 							id: 'p-account-my-collections__new-collection',
 							variants: ['c-list-navigation__item--no-interaction'],
-							node: <CreateCollectionButton afterSubmit={collections.refetch} />,
+							node: <CreateCollectionButton afterSubmit={getCollections.refetch} />,
 							hasDivider: true,
 						},
 					]}
@@ -386,6 +393,7 @@ const AccountMyCollections: NextPage = () => {
 												schemaIdentifier: media.schemaIdentifier,
 												description: renderDescription(media),
 												title: renderTitle(media),
+												name: media.name,
 												type: media.format,
 												preview: media.thumbnailUrl,
 											};
@@ -434,14 +442,21 @@ const AccountMyCollections: NextPage = () => {
 
 					activeCollection &&
 						collectionsService.delete(activeCollection.id).then(() => {
-							collections.refetch();
+							getCollections.refetch();
 						});
 				}}
 			/>
 
 			<AddToCollectionBlade
 				isOpen={isAddToCollectionBladeOpen}
-				selected={selected || undefined}
+				selected={
+					selected
+						? {
+								schemaIdentifier: selected.schemaIdentifier,
+								title: selected.name,
+						  }
+						: undefined
+				}
 				onClose={() => {
 					setShowAddToCollectionBlade(false);
 					setSelected(null);

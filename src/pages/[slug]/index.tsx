@@ -16,6 +16,7 @@ import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
+import { isInAFolder } from '@media/utils';
 import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
@@ -23,6 +24,7 @@ import {
 	DurationFilterFormState,
 	FilterMenu,
 	GenreFilterFormState,
+	initialFields,
 	KeywordsFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
@@ -41,7 +43,7 @@ import {
 } from '@reading-room/const';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
-import { mapFiltersToTags } from '@reading-room/utils';
+import { mapFiltersToTags, tagPrefix } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
 	Callout,
@@ -64,6 +66,7 @@ import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
 import {
@@ -72,7 +75,7 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
-import { scrollToTop } from '@shared/utils/scroll-to-top';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -148,6 +151,8 @@ const ReadingRoomPage: NextPage = () => {
 
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	const collections = useSelector(selectCollections);
 
 	/**
 	 * Computed
@@ -300,7 +305,15 @@ const ReadingRoomPage: NextPage = () => {
 				break;
 
 			case ReadingRoomFilterId.Advanced:
-				data = (values as AdvancedFilterFormState).advanced;
+				data = (values as AdvancedFilterFormState).advanced.filter(
+					(advanced) => advanced.val !== initialFields().val
+				);
+
+				if (data.length === 0) {
+					setQuery({ [id]: undefined, filter: undefined });
+					return;
+				}
+
 				break;
 
 			default:
@@ -322,7 +335,10 @@ const ReadingRoomPage: NextPage = () => {
 				case ReadingRoomFilterId.Language:
 				case ReadingRoomFilterId.Medium:
 				case SEARCH_QUERY_KEY:
-					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag.value];
+					query[tag.key] = [
+						...((query[tag.key] as Array<unknown>) || []),
+						`${tag.value}`.replace(tagPrefix(tag.key), ''),
+					];
 					break;
 
 				case ReadingRoomFilterId.Advanced:
@@ -403,6 +419,12 @@ const ReadingRoomPage: NextPage = () => {
 		if (!canManageFolders) {
 			return null;
 		}
+
+		const itemIsInAFolder = isInAFolder(
+			collections,
+			(item as IdentifiableMediaCard).schemaIdentifier
+		);
+
 		return (
 			<Button
 				onClick={(e) => {
@@ -413,7 +435,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(item as IdentifiableMediaCard);
 					setShowAddToCollectionBlade(true);
 				}}
-				icon={<Icon type="light" name="bookmark" />}
+				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
 			/>
 		);
@@ -436,9 +458,10 @@ const ReadingRoomPage: NextPage = () => {
 							publishedAt: item.schema_date_published
 								? asDate(item.schema_date_published)
 								: undefined,
-							publishedBy: item.schema_creator?.Maker?.join(', '),
+							publishedBy: item.schema_maintainer?.schema_name ?? '',
 							type: item.dcterms_format,
 							preview: item.schema_thumbnail_url || undefined,
+							name: item.schema_name,
 						})
 					)}
 				keywords={keywords}
@@ -467,7 +490,7 @@ const ReadingRoomPage: NextPage = () => {
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
 				onPageChange={(page) => {
-					scrollToTop();
+					scrollTo(0);
 					setQuery({
 						...query,
 						page: page + 1,
@@ -597,7 +620,14 @@ const ReadingRoomPage: NextPage = () => {
 			{visitorSpace && (
 				<AddToCollectionBlade
 					isOpen={isAddToCollectionBladeOpen}
-					selected={selected || undefined}
+					selected={
+						selected
+							? {
+									schemaIdentifier: selected.schemaIdentifier,
+									title: selected.name,
+							  }
+							: undefined
+					}
 					onClose={() => {
 						setShowAddToCollectionBlade(false);
 						setSelected(null);

@@ -1,6 +1,6 @@
 import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { Icon, Overlay } from '@shared/components';
 
@@ -12,7 +12,6 @@ import { FilterOptionProps } from './FilterOption.types';
 
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,
-	values,
 	form,
 	icon,
 	id,
@@ -20,6 +19,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 	onClick,
 	onFormReset,
 	onFormSubmit,
+	values,
 }) => {
 	const filterIsActive = id === activeFilter;
 	const flyoutCls = clsx(
@@ -28,17 +28,24 @@ const FilterOption: FC<FilterOptionProps> = ({
 	);
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
+	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
+
+	// re-render form to ensure correct state
+	// e.g. open -> reset -> close -> open === values in url, in form
+	useEffect(() => {
+		setOpenedAt(new Date().valueOf());
+	}, [filterIsActive]);
 
 	return (
 		<>
 			<Dropdown
-				key={`filter-menu-btn-${id}`}
 				className={styles['c-filter-menu__option']}
 				flyoutClassName={flyoutCls}
 				isOpen={filterIsActive}
-				placement="right"
-				onOpen={onFilterToggle}
+				key={`filter-menu-btn-${id}`}
 				onClose={onFilterToggle}
+				onOpen={onFilterToggle}
+				placement="right"
 			>
 				<DropdownButton>
 					<FilterButton
@@ -51,17 +58,18 @@ const FilterOption: FC<FilterOptionProps> = ({
 					<Button
 						className={styles['c-filter-menu__flyout-close']}
 						icon={<Icon name="times" />}
-						variants="text"
 						onClick={onFilterToggle}
+						variants="text"
 					/>
 					<FilterForm
 						className={styles['c-filter-menu__form']}
 						form={form}
 						id={id}
-						title={label}
-						values={values}
+						key={openedAt}
 						onFormReset={onFormReset}
 						onFormSubmit={onFormSubmit}
+						title={label}
+						values={values}
 					/>
 				</DropdownContent>
 			</Dropdown>

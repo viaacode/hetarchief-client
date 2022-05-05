@@ -1,4 +1,5 @@
 import { MediaActions } from '@media/types';
+import { Icon } from '@shared/components';
 
 import { DynamicActionMenuProps } from '../DynamicActionMenu.types';
 
@@ -6,37 +7,37 @@ export const dynamicActionMenuMock: DynamicActionMenuProps = {
 	actions: [
 		{
 			label: 'quotes',
-			iconName: 'quotes',
+			icon: <Icon name="quotes" />,
 			id: MediaActions.Quotes,
 			ariaLabel: 'copies quotes',
 		},
 		{
 			label: 'description',
-			iconName: 'description',
+			icon: <Icon name="description" />,
 			id: MediaActions.Description,
 			ariaLabel: 'shows description',
 		},
 		{
 			label: 'bookmark',
-			iconName: 'bookmark',
+			icon: <Icon name="bookmark" />,
 			id: MediaActions.Bookmark,
 			ariaLabel: 'bookmarks item',
 		},
 		{
 			label: 'contact',
-			iconName: 'contact',
+			icon: <Icon name="contact" />,
 			id: MediaActions.Contact,
 			ariaLabel: 'contact reading room',
 		},
 		{
 			label: 'calendar',
-			iconName: 'calendar',
+			icon: <Icon name="calendar" />,
 			id: MediaActions.Calendar,
 			ariaLabel: 'copy date',
 		},
 		{
 			label: 'related-objects',
-			iconName: 'related-objects',
+			icon: <Icon name="related-objects" />,
 			id: MediaActions.RelatedObjects,
 			ariaLabel: 'access related objects',
 		},

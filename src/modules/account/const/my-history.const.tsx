@@ -1,11 +1,11 @@
+import { Button } from '@meemoo/react-components';
 import { TFunction } from 'next-i18next';
-import Link from 'next/link';
 import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
 import { OrderDirection, Visit, VisitRow } from '@shared/types';
-import { createHomeWithReadingRoomFilterUrl, formatSameDayRange } from '@shared/utils';
+import { formatSameDayRange } from '@shared/utils';
 
 export const HistoryItemListSize = 20;
 
@@ -21,14 +21,15 @@ export const HistoryTableAccessFrom = 'startAt';
 export type HistoryTableColumnProps = Column<Visit> & UseSortByColumnOptions<Visit>;
 
 export const HistoryTableColumns = (
-	i18n: { t: TFunction } = { t: (x: string) => x }
+	i18n: { t: TFunction } = { t: (x: string) => x },
+	onClickRow: (visit: Visit) => void
 ): HistoryTableColumnProps[] => [
 	{
 		Header: i18n.t('modules/account/const/my-history___leeszaal') || '',
 		accessor: 'spaceName',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
-			return <Link href={createHomeWithReadingRoomFilterUrl(visit)}>{visit.spaceName}</Link>;
+			return <span>{visit.spaceName}</span>;
 		},
 	},
 	{
@@ -37,7 +38,7 @@ export const HistoryTableColumns = (
 		disableSortBy: true, // space.schema_maintainer.information is an array and can not be sorted on
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
-			return <span className="u-color-neutral">{visit.spaceAddress}</span>;
+			return <span className="u-color-neutral">{visit.spaceAddress || ''}</span>;
 		},
 	},
 	{
@@ -80,6 +81,17 @@ export const HistoryTableColumns = (
 	{
 		Header: '',
 		id: 'account-history-placeholder',
-		Cell: () => null,
+		Cell: (data: VisitRow) => {
+			const visit = data.row.original;
+			return (
+				<Button
+					className="u-font-size-14 u-py-16 u-text-left"
+					variants={['text', 'block', 'fill']}
+					onClick={() => onClickRow(visit)}
+				>
+					{i18n.t('modules/account/const/my-history___bezoek')}
+				</Button>
+			);
+		},
 	},
 ];

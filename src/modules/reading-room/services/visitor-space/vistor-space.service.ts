@@ -49,7 +49,7 @@ export class VistorSpaceService {
 		return parsed.items;
 	}
 
-	public static async getBySlug(slug: string | null): Promise<VisitorSpaceInfo | null> {
+	public static async getBySlug(slug?: string | null): Promise<VisitorSpaceInfo | null> {
 		if (!slug) {
 			return null;
 		}
