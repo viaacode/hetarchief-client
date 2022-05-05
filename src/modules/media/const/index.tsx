@@ -15,7 +15,12 @@ import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
  * Render media
  */
 
-export const FLOWPLAYER_FORMATS: string[] = ['mp4', 'mp3', 'm4a', 'ogv', 'ogg', 'webm', 'm3u8'];
+export const FLOWPLAYER_VIDEO_FORMATS: string[] = ['mp4', 'ogv', 'webm', 'm3u8'];
+export const FLOWPLAYER_AUDIO_FORMATS: string[] = ['mp3', 'm4a', 'aac'];
+export const FLOWPLAYER_FORMATS: string[] = [
+	...FLOWPLAYER_VIDEO_FORMATS,
+	...FLOWPLAYER_AUDIO_FORMATS,
+];
 export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
 
 /**
@@ -89,13 +94,22 @@ export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
  * Actions
  */
 
-export const MEDIA_ACTIONS = (canManageFolders: boolean): DynamicActionMenuProps => ({
+export const MEDIA_ACTIONS = (
+	canManageFolders: boolean,
+	isInAFolder: boolean
+): DynamicActionMenuProps => ({
 	actions: [
 		...((canManageFolders
 			? [
 					{
 						label: i18n.t('modules/media/const/index___bookmark'),
-						iconName: 'bookmark',
+						icon: (
+							<Icon
+								className="u-font-size-24 u-text-left"
+								name="bookmark"
+								type={isInAFolder ? 'solid' : 'light'}
+							/>
+						),
 						id: MediaActions.Bookmark,
 						ariaLabel: 'bookmarks item',
 						tooltip: i18n.t('modules/media/const/index___bookmark'),
@@ -173,7 +187,9 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
-			data: <TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />,
+			data: mediaInfo?.abstract ? (
+				<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
+			) : null,
 		},
 		{
 			title: i18n.t('modules/media/const/index___transcriptie'),

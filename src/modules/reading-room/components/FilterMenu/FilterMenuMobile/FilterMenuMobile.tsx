@@ -1,7 +1,7 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
 import { Icon } from '@shared/components';
@@ -19,22 +19,39 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	activeFilter,
 	activeSort,
 	activeSortLabel,
-	isOpen,
 	filters = [],
-	sortOptions = [],
+	isOpen,
 	onClose,
 	onFilterClick = () => null,
-	onSortClick,
 	onFilterReset,
 	onFilterSubmit,
+	onSortClick,
 	showNavigationBorder,
+	sortOptions = [],
+	filterValues,
 }) => {
+	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
 	const [isSortActive, setIsSortActive] = useState(false);
 	const { t } = useTranslation();
+
+	// re-render form to ensure correct state
+	// e.g. open -> reset -> close -> open === values in url, in form
+	useEffect(() => {
+		setOpenedAt(new Date().valueOf());
+	}, [isOpen]);
 
 	if (!isOpen) {
 		return null;
 	}
+
+	const selectedFilter = filters.find((filter) => filter.id === activeFilter);
+	const showFilterOrSort = activeFilter || isSortActive;
+	const showInitialScreen = !activeFilter && !isSortActive;
+	const goBackToInitial = activeFilter
+		? () => onFilterClick(activeFilter)
+		: () => setIsSortActive(false);
+
+	// Render
 
 	const renderFilterButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement => {
 		const filterIsActive = id === activeFilter;
@@ -49,13 +66,6 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			/>
 		);
 	};
-
-	const selectedFilter = filters.find((filter) => filter.id === activeFilter);
-	const showInitialScreen = !activeFilter && !isSortActive;
-	const showFilterOrSort = activeFilter || isSortActive;
-	const goBackToInitial = activeFilter
-		? () => onFilterClick(activeFilter)
-		: () => setIsSortActive(false);
 
 	return (
 		<div
@@ -89,10 +99,10 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						</h4>
 
 						<TagList
-							closeIcon={<Icon name="times" />}
+							closeIcon={<Icon className="u-text-left" name="times" />}
+							onTagClosed={() => null}
 							tags={[]}
 							variants="large"
-							onTagClosed={() => null}
 						/>
 					</div>
 
@@ -123,7 +133,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						<Button
 							key="filter-menu-mobile-nav-filter"
 							className={styles['c-filter-menu-mobile__back']}
-							iconStart={<Icon name="arrow-left" />}
+							iconStart={<Icon className="u-text-left" name="arrow-left" />}
 							label={t(
 								'modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
 							)}
@@ -137,9 +147,11 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							className={styles['c-filter-menu-mobile__form']}
 							form={selectedFilter.form}
 							id={selectedFilter.id}
-							title={selectedFilter.label}
+							key={openedAt}
 							onFormReset={onFilterReset}
 							onFormSubmit={onFilterSubmit}
+							title={selectedFilter.label}
+							values={filterValues?.[selectedFilter.id]}
 						/>
 					)}
 					{isSortActive && !activeFilter && (

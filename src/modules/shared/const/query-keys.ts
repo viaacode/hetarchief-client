@@ -18,4 +18,5 @@ export enum QUERY_KEYS {
 	getSpace = 'getSpace',
 	getPendingVisitCountForUserBySlug = 'getPendingVisitCountForUserBySlug',
 	getNavigationItems = 'getNavigationItems',
+	getPeakFile = 'getPeakFile',
 }

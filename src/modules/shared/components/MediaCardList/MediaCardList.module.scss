@@ -3,22 +3,16 @@
 $component: "c-media-card-list";
 
 // Sidebar
-$media-card-list-sidebar-gutter: $spacer-md;
-$media-card-list-sidebar-gutter-md: $spacer-sm;
+$media-card-list-two-columns-gutter: $spacer-md;
+$media-card-list-two-columns-gutter-md: $spacer-sm;
 
 // Masonry
-$media-card-list-masonry-gutter: $media-card-list-sidebar-gutter;
+$media-card-list-masonry-gutter: $media-card-list-two-columns-gutter;
 $media-card-list-masonry-gutter-md: $spacer-lg;
 
 @mixin media-card-list-gutters($gutter) {
 	.#{$component} {
-		&__content {
-			margin-left: 0 - $gutter; /* gutter size offset */
-		}
-
 		&__column {
-			padding-left: $gutter; /* gutter size */
-
 			& > div,
 			article {
 				margin-bottom: $gutter;
@@ -31,6 +25,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 	&__content {
 		display: flex;
 		width: 100%;
+		min-width: 0;
 	}
 
 	&__column {
@@ -43,36 +38,54 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 
 	// Modifiers
 
-	&--sidebar {
-		@include media-card-list-gutters($media-card-list-sidebar-gutter);
+	// two-column grid
+	&--two-columns {
+		@include media-card-list-gutters($media-card-list-two-columns-gutter);
+
+		margin-bottom: $media-card-list-two-columns-gutter;
 
 		.#{$component} {
 			&__sidebar {
-				flex-shrink: 0;
-				margin-bottom: $media-card-list-sidebar-gutter;
-
-				@include respond-at("md") {
-					width: calc(100% / 3 - 2.2rem);
-					margin-right: $media-card-list-masonry-gutter-md; /* Same spacing as for masonry */
-				}
-				@include respond-at("lg") {
-					width: calc(25% - 2.4rem);
-				}
+				margin-bottom: $media-card-list-two-columns-gutter;
 			}
 		}
 
 		@include respond-at("md") {
-			@include media-card-list-gutters($media-card-list-sidebar-gutter-md);
+			@include media-card-list-gutters($media-card-list-two-columns-gutter-md);
 
-			display: flex;
+			margin-bottom: $media-card-list-two-columns-gutter-md;
+
+			&:not(.c-media-card-list--no-sidebar) {
+				display: grid;
+				grid-template-columns: 27.8rem 1fr;
+				gap: $media-card-list-two-columns-gutter-md * 2;
+			}
 		}
 	}
 
+	// container offset, column-based grid
+	// replace when/if switching masonry libraries
 	&--masonry {
 		@include media-card-list-gutters($media-card-list-masonry-gutter);
 
+		margin: 0 (0 - $media-card-list-masonry-gutter / 2);
+
+		.#{$component} {
+			&__column {
+				padding: 0 $media-card-list-masonry-gutter / 2;
+			}
+		}
+
 		@include respond-at("md") {
 			@include media-card-list-gutters($media-card-list-masonry-gutter-md);
+
+			margin: 0 (0 - $media-card-list-masonry-gutter-md / 2);
+
+			.#{$component} {
+				&__column {
+					padding: 0 $media-card-list-masonry-gutter-md / 2;
+				}
+			}
 		}
 	}
 }

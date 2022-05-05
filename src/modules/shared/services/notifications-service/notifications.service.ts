@@ -14,7 +14,7 @@ import { MarkAllAsReadResult, Notification, NotificationStatus } from './notific
 
 export abstract class NotificationsService {
 	private static pollingTimer: number | null = null;
-	private static lastFetchedUnreadNotifications: Notification[] | null = null;
+	private static lastNotifications: Notification[] | null = null;
 	private static router: NextRouter | null = null;
 	private static showNotificationsCenter: ((show: boolean) => void) | null = null;
 	private static setHasUnreadNotifications: ((hasUnreadNotifications: boolean) => void) | null =
@@ -30,7 +30,7 @@ export abstract class NotificationsService {
 		this.router = router;
 		this.showNotificationsCenter = showNotificationsCenter;
 		this.setHasUnreadNotifications = setHasUnreadNotifications;
-		if (!this.pollingTimer) {
+		if (!this.pollingTimer && process.env.NODE_ENV !== 'test') {
 			NotificationsService.pollingTimer = window.setInterval(this.checkNotifications, 15000);
 			await this.checkNotifications();
 		}
@@ -42,6 +42,14 @@ export abstract class NotificationsService {
 		}
 	}
 
+	public static resetService(): void {
+		this.pollingTimer = null;
+		this.lastNotifications = null;
+		this.router = null;
+		this.showNotificationsCenter = null;
+		this.setHasUnreadNotifications = null;
+	}
+
 	public static getPath(notification: Notification): string | null {
 		return (
 			NOTIFICATION_TYPE_TO_PATH[notification.type]
@@ -51,9 +59,7 @@ export abstract class NotificationsService {
 	}
 
 	public static async checkNotifications(): Promise<void> {
-		const mostRecent = asDate(
-			NotificationsService.lastFetchedUnreadNotifications?.[0].createdAt
-		);
+		const mostRecent = asDate(NotificationsService.lastNotifications?.[0]?.createdAt);
 		const lastCheckNotificationTime = mostRecent ? mostRecent.getTime() : 0;
 		const notificationResponse = await NotificationsService.getNotifications(1, 20);
 		const notifications = notificationResponse.items;
@@ -63,9 +69,9 @@ export abstract class NotificationsService {
 		const firstUnread = asDate(unreadNotifications?.[0]?.createdAt);
 
 		if (
-			!!mostRecent && // Do not show notifications if this is the first time we check since loading the site
+			!!NotificationsService.lastNotifications && // Do not show notifications if this is the first time we check since loading the site
 			firstUnread && // There is at least one unread notification
-			lastCheckNotificationTime < firstUnread.getTime() // The most recent unread notification was added since the last time we checked
+			(!mostRecent || lastCheckNotificationTime < firstUnread.getTime()) // The most recent unread notification was added since the last time we checked
 		) {
 			// A more recent notification exists, we should notify the user of the new notifications
 			const newNotifications = unreadNotifications.filter(
@@ -114,8 +120,8 @@ export abstract class NotificationsService {
 				});
 			}
 		}
+		NotificationsService.lastNotifications = notifications;
 		if (unreadNotifications.length > 0) {
-			NotificationsService.lastFetchedUnreadNotifications = unreadNotifications;
 			NotificationsService.setHasUnreadNotifications?.(true);
 			await NotificationsService.queryClient.invalidateQueries(QUERY_KEYS.getNotifications);
 		}
@@ -136,8 +142,8 @@ export abstract class NotificationsService {
 			.patch(`notifications/${notificationId}/mark-as-read`)
 			.json();
 		if (
-			(NotificationsService.lastFetchedUnreadNotifications?.filter(
-				(notif) => notif.id !== notificationId
+			(NotificationsService.lastNotifications?.filter(
+				(notif) => notif.id !== notificationId && notif.status === NotificationStatus.UNREAD
 			)?.length || 0) === 0
 		) {
 			NotificationsService.setHasUnreadNotifications?.(false);
