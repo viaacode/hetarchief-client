@@ -65,6 +65,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 					iconStart={<Icon name="forbidden" />}
 					variants={['block', 'outline']}
 					onClick={() => setShowCancel(true)}
+					disabled={!props.isOpen}
 				/>
 
 				<Button
@@ -73,6 +74,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 					)}
 					variants={['block', 'text']}
 					onClick={() => props.onClose?.()}
+					disabled={!props.isOpen}
 				/>
 			</div>
 		);
