@@ -6,14 +6,14 @@ import { VisitorSpaceInfo } from '@reading-room/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 export function useGetReadingRoom(
-	slug: string | null,
+	slug?: string | null,
 	options?: Partial<
 		Omit<
 			UseQueryOptions<
 				VisitorSpaceInfo | null,
 				unknown,
 				VisitorSpaceInfo | null,
-				[QUERY_KEYS, { slug: string | null }]
+				[QUERY_KEYS, { slug?: string | null }]
 			>,
 			'queryKey' | 'queryFn'
 		>

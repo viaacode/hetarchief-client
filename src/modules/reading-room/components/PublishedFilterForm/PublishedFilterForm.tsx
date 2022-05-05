@@ -51,7 +51,6 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 	useEffect(() => {
 		setValue('published', form.published);
 		setValue('operator', form.operator);
-
 		setShowRange(isRange(form.operator));
 	}, [form, setValue]);
 
@@ -61,6 +60,8 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 
 			val && setForm((f) => ({ ...f, published: val }));
 			op && setForm((f) => ({ ...f, operator: op as Operator }));
+
+			setShowRange(isRange(op)); // Not covered by other effect in time
 		}
 	}, [initial]);
 

@@ -2,14 +2,16 @@ import { stringifyUrl } from 'query-string';
 
 import { CreateVisitRequest } from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { ApiService } from '@shared/services/api-service';
-import { OrderDirection, Visit, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitAccessStatus, VisitStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { PatchVisit, VisitTimeframe } from '@visits/types';
 
 import {
+	VISITS_SERVICE_ACCESS_STATUS_URL,
 	VISITS_SERVICE_ACTIVE_SPACE_URL,
 	VISITS_SERVICE_BASE_URL,
 	VISITS_SERVICE_PENDING_COUNT_URL,
+	VISITS_SERVICE_SPACE_URL,
 } from './visits.service.const';
 
 export class VisitsService {
@@ -83,6 +85,17 @@ export class VisitsService {
 		}
 		return await ApiService.getApi()
 			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_PENDING_COUNT_URL}/${slug}`)
+			.json();
+	}
+
+	public static async getAccessStatusBySpaceId(id: string): Promise<VisitAccessStatus | null> {
+		if (id.length === 0) {
+			return null;
+		}
+		return await ApiService.getApi()
+			.get(
+				`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_SPACE_URL}/${id}/${VISITS_SERVICE_ACCESS_STATUS_URL}`
+			)
 			.json();
 	}
 }

@@ -74,7 +74,7 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
-import { scrollToTop } from '@shared/utils/scroll-to-top';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -446,7 +446,7 @@ const ReadingRoomPage: NextPage = () => {
 							publishedAt: item.schema_date_published
 								? asDate(item.schema_date_published)
 								: undefined,
-							publishedBy: item.schema_creator?.Maker?.join(', '),
+							publishedBy: item.schema_maintainer?.schema_name ?? '',
 							type: item.dcterms_format,
 							preview: item.schema_thumbnail_url || undefined,
 						})
@@ -477,7 +477,7 @@ const ReadingRoomPage: NextPage = () => {
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
 				onPageChange={(page) => {
-					scrollToTop();
+					scrollTo(0);
 					setQuery({
 						...query,
 						page: page + 1,
