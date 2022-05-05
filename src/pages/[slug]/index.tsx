@@ -24,6 +24,7 @@ import {
 	DurationFilterFormState,
 	FilterMenu,
 	GenreFilterFormState,
+	initialFields,
 	KeywordsFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
@@ -74,7 +75,7 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
-import { scrollToTop } from '@shared/utils/scroll-to-top';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -304,7 +305,15 @@ const ReadingRoomPage: NextPage = () => {
 				break;
 
 			case ReadingRoomFilterId.Advanced:
-				data = (values as AdvancedFilterFormState).advanced;
+				data = (values as AdvancedFilterFormState).advanced.filter(
+					(advanced) => advanced.val !== initialFields().val
+				);
+
+				if (data.length === 0) {
+					setQuery({ [id]: undefined, filter: undefined });
+					return;
+				}
+
 				break;
 
 			default:
@@ -477,7 +486,7 @@ const ReadingRoomPage: NextPage = () => {
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
 				onPageChange={(page) => {
-					scrollToTop();
+					scrollTo(0);
 					setQuery({
 						...query,
 						page: page + 1,

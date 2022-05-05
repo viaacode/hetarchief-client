@@ -34,6 +34,15 @@ $component: "p-account-my-collections";
 		}
 	}
 
+	// Hide links active state on mobile
+	&__link {
+		@include respond-to("md") {
+			background-color: $platinum;
+			color: $black;
+			font-weight: 400;
+		}
+	}
+
 	// Avoid clicks on container triggering events
 	.c-content-input__icon--end {
 		pointer-events: none;

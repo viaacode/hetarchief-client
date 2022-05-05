@@ -25,6 +25,7 @@ export * from './ReadingRoomCardList';
 export * from './SearchBar';
 export * from './Sidebar';
 export * from './SidebarLayoutTitle';
+export * from './SpacePreview';
 export * from './Table';
 export * from './Tabs';
 export * from './TagSearchBar';
