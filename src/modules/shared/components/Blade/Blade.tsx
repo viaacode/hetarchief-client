@@ -21,6 +21,7 @@ const Blade: FC<BladeProps> = ({
 	footer,
 	hideOverlay = false,
 	hideCloseButton = false,
+	showCloseButtonOnTop = false,
 	onClose,
 	layer,
 }) => {
@@ -33,7 +34,9 @@ const Blade: FC<BladeProps> = ({
 	const renderCloseButton = () => {
 		return (
 			<Button
-				className={styles['c-blade__close-button']}
+				className={clsx(styles['c-blade__close-button'], {
+					[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
+				})}
 				icon={<Icon name="times" />}
 				variants="text"
 				onClick={() => {
