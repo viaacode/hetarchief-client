@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { FC, useRef, useState } from 'react';
 
 import { MediaActions } from '@media/types';
-import { Icon, IconLightNames } from '@shared/components';
+import { Icon, IconLightNames, IconSolidNames } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 
 import {
@@ -50,10 +50,6 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	const visibleActions = itemsToHide > 1 ? actions.slice(0, -itemsToHide) : actions;
 	const hiddenActions = itemsToHide > 1 ? actions.slice(-itemsToHide) : [];
 
-	const renderIcon = (name: IconLightNames) => (
-		<Icon className="u-font-size-24 u-text-left" name={name} />
-	);
-
 	const renderButton = (action: ActionItem) => {
 		return (
 			<li
@@ -63,7 +59,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			>
 				<Button
 					onClick={() => onClickAction(action.id)}
-					icon={renderIcon(action.iconName)}
+					icon={action.icon}
 					variants={['silver']}
 					aria-label={action.ariaLabel}
 					title={action.tooltip}
@@ -76,7 +72,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		const mappedActions = dropdownActions.map((action) => {
 			return {
 				...action,
-				iconStart: renderIcon(action.iconName),
+				iconStart: action.icon,
 			};
 		});
 		return (
@@ -89,7 +85,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				<DropdownButton>
 					<Button
 						className={styles['c-dynamic-action-menu__dropdown-button']}
-						icon={renderIcon('dots-horizontal')}
+						icon={<Icon name="dots-horizontal" />}
 						variants={['silver']}
 					/>
 				</DropdownButton>
