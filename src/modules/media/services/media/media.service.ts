@@ -11,7 +11,7 @@ import {
 	ReadingRoomMediaType,
 	SortObject,
 } from '@shared/types';
-import { ElasticsearchResponse, GetMedia } from '@shared/types/api';
+import { ElasticsearchResponse, GetMediaResponse } from '@shared/types/api';
 
 import {
 	MEDIA_SERVICE_BASE_URL,
@@ -28,7 +28,7 @@ export class MediaService {
 		page = 1,
 		size = 20,
 		sort?: SortObject
-	): Promise<GetMedia> {
+	): Promise<GetMediaResponse> {
 		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
 		const filtered = filters.filter((item) => {
 			// Don't send filters with no value(s)

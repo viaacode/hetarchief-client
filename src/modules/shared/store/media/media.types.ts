@@ -1,7 +1,7 @@
-import { GetCollections } from '@account/types';
-import { GetMedia } from '@shared/types';
+import { GetCollectionsResponse } from '@account/types';
+import { GetMediaResponse } from '@shared/types';
 
 export interface MediaState {
-	results?: GetMedia;
-	collections?: GetCollections;
+	results?: GetMediaResponse;
+	collections?: GetCollectionsResponse;
 }
