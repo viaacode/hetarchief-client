@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
@@ -14,10 +14,11 @@ import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { ReadingRoomCard, ReadingRoomCardType, VisitorSpaceCardProps } from '@shared/components';
-import { ROUTES } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
@@ -30,9 +31,11 @@ type SelectedVisit = ProcessVisitBladeProps['selected'];
 const LoggedInHome: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
+	const searchRef = useRef<HTMLDivElement>(null);
 
 	const [query, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[SEARCH_QUERY_KEY]: StringParam,
 	});
 
 	/**
@@ -45,6 +48,7 @@ const LoggedInHome: FC = () => {
 
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 	const [isProcessVisitBladeOpen, setIsProcessVisitBladeOpen] = useState(false);
+	const [hasScrolledToSearch, setHasScrolledToSearch] = useState(false);
 
 	/**
 	 * Data
@@ -57,19 +61,31 @@ const LoggedInHome: FC = () => {
 		size: 1000,
 	};
 
-	const { data: active, refetch: refetchActive } = useGetVisits({
+	const {
+		data: active,
+		refetch: refetchActive,
+		isLoading: isLoadingActive,
+	} = useGetVisits({
 		...defaultGetVisitsParams,
 		status: VisitStatus.APPROVED,
 		timeframe: VisitTimeframe.ACTIVE,
 	});
 
-	const { data: future, refetch: refetchFuture } = useGetVisits({
+	const {
+		data: future,
+		refetch: refetchFuture,
+		isLoading: isLoadingFuture,
+	} = useGetVisits({
 		...defaultGetVisitsParams,
 		status: VisitStatus.APPROVED,
 		timeframe: VisitTimeframe.FUTURE,
 	});
 
-	const { data: pending, refetch: refetchPending } = useGetVisits({
+	const {
+		data: pending,
+		refetch: refetchPending,
+		isLoading: isLoadingPending,
+	} = useGetVisits({
 		...defaultGetVisitsParams,
 		status: VisitStatus.PENDING,
 	});
@@ -84,6 +100,26 @@ const LoggedInHome: FC = () => {
 	/**
 	 * Effects
 	 */
+
+	// Scroll to ReadingRoomCardsWithSearch when search is present in query
+	useEffect(() => {
+		if (
+			!hasScrolledToSearch &&
+			query[SEARCH_QUERY_KEY] &&
+			!isLoadingActive &&
+			!isLoadingFuture &&
+			!isLoadingPending &&
+			!query[VISITOR_SPACE_SLUG_QUERY_KEY]
+		) {
+			const offset = searchRef.current?.offsetTop;
+			offset &&
+				// Small timeout so page is rendered before scrolling to search
+				setTimeout(() => {
+					scrollTo(offset);
+					setHasScrolledToSearch(true); // Only allow scrollTo once
+				}, 300);
+		}
+	}, [hasScrolledToSearch, isLoadingActive, isLoadingFuture, isLoadingPending, query]);
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
@@ -297,8 +333,12 @@ const LoggedInHome: FC = () => {
 				</Head>
 
 				{renderHero()}
-
-				<ReadingRoomCardsWithSearch onRequestAccess={onRequestAccess} />
+				<div ref={searchRef}>
+					<ReadingRoomCardsWithSearch
+						onRequestAccess={onRequestAccess}
+						onSearch={() => setHasScrolledToSearch(true)}
+					/>
+				</div>
 			</div>
 
 			<RequestAccessBlade

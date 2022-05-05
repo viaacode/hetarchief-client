@@ -16,6 +16,7 @@ import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
+import { isInAFolder } from '@media/utils';
 import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
@@ -74,7 +75,7 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
-import { scrollToTop } from '@shared/utils/scroll-to-top';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -416,12 +417,10 @@ const ReadingRoomPage: NextPage = () => {
 			return null;
 		}
 
-		const isInAFolder = (collections?.items || []).some((collection) => {
-			return collection.objects?.find(
-				(object) =>
-					object.schemaIdentifier === (item as IdentifiableMediaCard).schemaIdentifier
-			);
-		});
+		const itemIsInAFolder = isInAFolder(
+			collections,
+			(item as IdentifiableMediaCard).schemaIdentifier
+		);
 
 		return (
 			<Button
@@ -433,7 +432,7 @@ const ReadingRoomPage: NextPage = () => {
 					setSelected(item as IdentifiableMediaCard);
 					setShowAddToCollectionBlade(true);
 				}}
-				icon={<Icon type={isInAFolder ? 'solid' : 'light'} name="bookmark" />}
+				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
 			/>
 		);
@@ -456,7 +455,7 @@ const ReadingRoomPage: NextPage = () => {
 							publishedAt: item.schema_date_published
 								? asDate(item.schema_date_published)
 								: undefined,
-							publishedBy: item.schema_creator?.Maker?.join(', '),
+							publishedBy: item.schema_maintainer?.schema_name ?? '',
 							type: item.dcterms_format,
 							preview: item.schema_thumbnail_url || undefined,
 						})
@@ -487,7 +486,7 @@ const ReadingRoomPage: NextPage = () => {
 				showBackToTop
 				total={mediaCount[query.format as ReadingRoomMediaType]}
 				onPageChange={(page) => {
-					scrollToTop();
+					scrollTo(0);
 					setQuery({
 						...query,
 						page: page + 1,
