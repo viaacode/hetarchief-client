@@ -96,10 +96,10 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		.flowplayer {
-			height: calc(100vh - $c-navigation-height - $c-navigation-height-contextual);
+			height: calc(100vh - $c-navigation-height - $c-navigation-height-contextual + 1px);
 
-			@include respond-at("md") {
-				margin-top: calc(100vh - $c-navigation-height-md - $c-navigation-height-contextual-md);
+			@include respond-to("md") {
+				height: calc(100vh - $c-navigation-height-md - $c-navigation-height-contextual-md - $c-navigation-height-md + 1px);
 			}
 		}
 
