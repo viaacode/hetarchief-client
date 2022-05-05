@@ -196,14 +196,6 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 	}
 
-	.c-navigation__dropdown-item--active-mobile {
-		@include respond-to ("md") {
-		> a {
-				font-weight: 700;
-			}
-		}
-	}
-
 	.c-navigation__list-overlay {
 		width: 100vw;
 		position: absolute;
@@ -303,7 +295,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 	}
 
-	&:not(&--active-desktop):hover {
+	&:not(&--active):hover {
 		.c-navigation__link,
 		.c-navigation__link + span {
 			color: color.adjust($white, $alpha: -0.3);
@@ -343,11 +335,17 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		}
 	}
 
-	&--active-desktop {
+	&--active {
 		z-index: get-z-layer("nav-dropdown");
 		border-bottom-color: $teal;
 		font-weight: $font-weight-bold;
 		transition: border-color $animate-md-in;
+
+		@include respond-to ("md") {
+			> :global(.c-dropdown-menu__item) {
+				font-weight: 700;
+			}
+		}
 
 		&.c-navigation__link--variant-1 {
 			@include navigation-link-border-decoration;
