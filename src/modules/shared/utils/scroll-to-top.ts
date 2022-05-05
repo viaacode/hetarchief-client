@@ -1,3 +1,3 @@
-export function scrollToTop(): void {
-	window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+export function scrollTo(yLocation = 0): void {
+	window.scrollTo({ top: yLocation, left: 0, behavior: 'smooth' });
 }

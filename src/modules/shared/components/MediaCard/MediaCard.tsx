@@ -98,32 +98,29 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderHeader = () => {
 		switch (type) {
 			case 'audio':
-				return renderPeak();
-				break;
+				return renderImage('/images/waveform.svg');
 
 			case 'video':
-				return renderImage();
+				return renderImage(preview);
 
 			default:
 				return renderNoContent();
 		}
 	};
 
-	const renderImage = () =>
-		preview ? (
+	const renderImage = (imgPath: string | undefined) =>
+		imgPath ? (
 			<div
 				className={clsx(
 					styles['c-media-card__header-wrapper'],
 					styles[`c-media-card__header-wrapper--${view}`]
 				)}
 			>
-				<Image src={preview} alt={''} unoptimized={true} layout="fill" />
+				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
 			</div>
 		) : (
 			renderNoContent()
 		);
-
-	const renderPeak = renderNoContent;
 
 	const highlighted = (toHighlight: string) => {
 		return (
