@@ -74,8 +74,18 @@ export class AuthService {
 		);
 	}
 
-	public static logout(): void {
-		const returnToUrl = publicRuntimeConfig.CLIENT_URL;
+	public static logout(shouldRedirectToOriginalPage = false): void {
+		let returnToUrl = publicRuntimeConfig.CLIENT_URL;
+		if (shouldRedirectToOriginalPage) {
+			const path = window.location.href.substring(publicRuntimeConfig.CLIENT_URL.length);
+			returnToUrl = stringifyUrl({
+				url: publicRuntimeConfig.CLIENT_URL,
+				query: {
+					redirectTo: path,
+					showAuth: 1,
+				},
+			});
+		}
 
 		window.location.href = stringifyUrl({
 			url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
