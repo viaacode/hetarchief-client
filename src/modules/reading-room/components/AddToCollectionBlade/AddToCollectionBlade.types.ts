@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { FormBladeProps } from '@shared/types';
 
 export type AddToCollectionBladeProps = FormBladeProps<AddToCollectionFormState> & {
@@ -12,7 +10,7 @@ export interface AddToCollectionFormState {
 
 export interface AddToCollectionSelected {
 	schemaIdentifier: string;
-	title?: string | ReactNode;
+	title?: string; // string-only, not ReactNode
 }
 
 export interface AddToCollectionFormStatePair {

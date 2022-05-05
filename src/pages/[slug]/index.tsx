@@ -461,6 +461,7 @@ const ReadingRoomPage: NextPage = () => {
 							publishedBy: item.schema_maintainer?.schema_name ?? '',
 							type: item.dcterms_format,
 							preview: item.schema_thumbnail_url || undefined,
+							name: item.schema_name,
 						})
 					)}
 				keywords={keywords}
@@ -619,7 +620,14 @@ const ReadingRoomPage: NextPage = () => {
 			{visitorSpace && (
 				<AddToCollectionBlade
 					isOpen={isAddToCollectionBladeOpen}
-					selected={selected || undefined}
+					selected={
+						selected
+							? {
+									schemaIdentifier: selected.schemaIdentifier,
+									title: selected.name,
+							  }
+							: undefined
+					}
 					onClose={() => {
 						setShowAddToCollectionBlade(false);
 						setSelected(null);

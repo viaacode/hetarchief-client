@@ -718,10 +718,14 @@ const ObjectDetailPage: NextPage = () => {
 			{canManageFolders && (
 				<AddToCollectionBlade
 					isOpen={activeBlade === MediaActions.Bookmark}
-					selected={{
-						schemaIdentifier: mediaInfo?.schemaIdentifier ?? '',
-						title: mediaInfo?.name,
-					}}
+					selected={
+						mediaInfo
+							? {
+									schemaIdentifier: mediaInfo.schemaIdentifier,
+									title: mediaInfo.name,
+							  }
+							: undefined
+					}
 					onClose={onCloseBlade}
 					onSubmit={onCloseBlade}
 				/>
