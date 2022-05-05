@@ -6,7 +6,7 @@ import { BooleanParam, useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
-import { selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import LoggedInHome from '@home/components/LoggedInHome/LoggedInHome';
 import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
 import { SHOW_AUTH_QUERY_KEY } from '@home/const';
@@ -26,6 +26,7 @@ const Home: NextPage = () => {
 
 	const router = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const user = useSelector(selectUser);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -62,6 +63,9 @@ const Home: NextPage = () => {
 	 */
 
 	const renderPageContent = () => {
+		if (!hasCheckedLogin) {
+			return <Loading fullscreen />;
+		}
 		if (isLoggedIn && !!user) {
 			if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
 				return <Loading fullscreen />;

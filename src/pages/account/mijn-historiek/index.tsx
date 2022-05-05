@@ -2,6 +2,7 @@ import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -18,9 +19,12 @@ import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
+import { createHomeWithReadingRoomFilterUrl, createPageTitle } from '@shared/utils';
+import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
@@ -28,6 +32,7 @@ import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyHistory: NextPage = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 
 	const visits = useGetVisits({
@@ -40,6 +45,8 @@ const AccountMyHistory: NextPage = () => {
 		orderDirection: filters.orderDirection as OrderDirection,
 		personal: true,
 	});
+
+	const { mutateAsync: getAccessStatus } = useGetVisitAccessStatus();
 
 	const sortFilters = useMemo(() => {
 		return [
@@ -71,6 +78,33 @@ const AccountMyHistory: NextPage = () => {
 		},
 		[filters, setFilters]
 	);
+
+	const onClickRow = async (visit: Visit) => {
+		try {
+			const response = await getAccessStatus(visit.spaceId);
+			switch (response?.status) {
+				case VisitStatus.APPROVED:
+					router.push(`/${visit.spaceSlug}`);
+					break;
+				case VisitStatus.PENDING:
+					router.push(ROUTES.visitRequested.replace(':slug', visit.spaceSlug));
+					break;
+				default:
+					router.push(createHomeWithReadingRoomFilterUrl(visit));
+					break;
+			}
+		} catch (err) {
+			console.error(err);
+			toastService.notify({
+				title: t('pages/account/mijn-historiek/index___error'),
+				maxLines: 2,
+				description: t(
+					'pages/account/mijn-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
+				),
+			});
+			router.push(createHomeWithReadingRoomFilterUrl(visit));
+		}
+	};
 
 	// Render
 
@@ -104,7 +138,10 @@ const AccountMyHistory: NextPage = () => {
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: HistoryTableColumns({ t }) as Column<object>[],
+									columns: HistoryTableColumns(
+										{ t },
+										onClickRow
+									) as Column<object>[],
 									data: visits.data?.items || [],
 									initialState: {
 										pageSize: HistoryItemListSize,
