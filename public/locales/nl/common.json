@@ -293,6 +293,7 @@
   "modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-gemarkeerd-als-gelezen": "Alle notificaties zijn gemarkeerd als gelezen",
   "modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-reeds-gelezen": "Alle notificaties zijn reeds gelezen",
   "modules/shared/components/notification-center/notification-center___er-ging-iets-mis-bij-het-ophalen-van-je-notificaties": "Er ging iets mis bij het ophalen van je notificaties.",
+  "modules/shared/components/notification-center/notification-center___er-zijn-nog-geen-notificaties": "Er zijn nog geen notificaties",
   "modules/shared/components/notification-center/notification-center___error": "Error",
   "modules/shared/components/notification-center/notification-center___gelezen": "Gelezen",
   "modules/shared/components/notification-center/notification-center___het-markeren-van-alle-notificaties-al-gelezen-is-mislukt": "Het markeren van alle notificaties al gelezen is mislukt.",

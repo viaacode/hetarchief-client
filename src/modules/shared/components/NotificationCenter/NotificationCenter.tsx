@@ -201,7 +201,9 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			return (
 				<div className={styles['c-notification-center__empty']}>
 					<h4 className={styles['c-notification-center__header']}>
-						{t('Er zijn nog geen notificaties')}
+						{t(
+							'modules/shared/components/notification-center/notification-center___er-zijn-nog-geen-notificaties'
+						)}
 					</h4>
 				</div>
 			);
