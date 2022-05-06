@@ -281,7 +281,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			className={clsx(className, styles['c-notification-center'])}
 			isOpen={isOpen}
 			onClose={onClose}
-			hideCloseButton
+			showCloseButtonOnTop
 			footer={renderFooter()}
 		>
 			{renderBladeContent()}

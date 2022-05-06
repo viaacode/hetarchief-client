@@ -22,6 +22,12 @@
 		justify-self: end;
 		margin: 2rem;
 		grid-row-start: 1;
+
+		&--absolute {
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
 	}
 
 	&__title {
