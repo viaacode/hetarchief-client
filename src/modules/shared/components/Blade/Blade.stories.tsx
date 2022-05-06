@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import Blade from './Blade';
 import { BladeProps } from './Blade.types';
-import { bladeMock } from './__mocks__/blade';
+import { mockBladeProps } from './__mocks__/blade';
 
 const BladeStoryComponent = ({ args }: { args: BladeProps }) => {
 	const [isOpen, setOpen] = useState(false);
@@ -40,20 +40,20 @@ const Template: ComponentStory<typeof Blade> = (args) => <BladeStoryComponent ar
 
 export const Default = Template.bind({});
 Default.args = {
-	...bladeMock,
+	...mockBladeProps,
 	children: <div style={{ backgroundColor: 'beige', height: '100%' }}>This is the content</div>,
 };
 
 export const WithoutOverlay = Template.bind({});
 WithoutOverlay.args = {
-	...bladeMock,
+	...mockBladeProps,
 	children: <div style={{ backgroundColor: 'beige', height: '100%' }}>This is the content</div>,
 	hideOverlay: true,
 };
 
 export const WithoutCloseButton = Template.bind({});
 WithoutCloseButton.args = {
-	...bladeMock,
+	...mockBladeProps,
 	children: <div style={{ backgroundColor: 'beige', height: '100%' }}>This is the content</div>,
 	hideCloseButton: true,
 };
@@ -77,7 +77,7 @@ WithCustomTitle.args = {
 
 export const WithScrollingContent = Template.bind({});
 WithScrollingContent.args = {
-	...bladeMock,
+	...mockBladeProps,
 	children: (
 		<div style={{ backgroundColor: 'beige' }}>
 			<p>
