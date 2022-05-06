@@ -24,6 +24,7 @@ import {
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
 	METADATA_FIELDS,
+	noLicensePlaceholder,
 	OBJECT_DETAIL_TABS,
 	objectPlaceholder,
 	ticketErrorPlaceholder,
@@ -64,7 +65,7 @@ import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, MediaTypes, ReadingRoomMediaType } from '@shared/types';
+import { Breakpoints, License, MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
@@ -200,6 +201,8 @@ const ObjectDetailPage: NextPage = () => {
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
+	const isErrorNoLicense =
+		!mediaInfo?.representations && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -458,6 +461,9 @@ const ObjectDetailPage: NextPage = () => {
 	const renderMediaPlaceholder = (): ReactNode => {
 		if (isLoadingPlayableUrl) {
 			return null;
+		}
+		if (isErrorNoLicense) {
+			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
 		}
 		if (isErrorPlayableUrl) {
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;

@@ -34,6 +34,11 @@ export enum MediaSearchOperator {
 	LTE = 'lte',
 }
 
+export enum License {
+	BEZOEKERTOOL_CONTENT = 'BEZOEKERTOOL-CONTENT',
+	BEZOEKERTOOL_METADATA_ALL = 'BEZOEKERTOOL-METADATA-ALL',
+}
+
 export interface MediaSearchFilter {
 	field: MediaSearchFilterField;
 	multiValue?: string[];

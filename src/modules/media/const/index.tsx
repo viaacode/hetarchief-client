@@ -54,6 +54,18 @@ export const formatErrorPlaceholder = (format: string): ObjectPlaceholderProps =
 	closeModalButtonLabel: i18n.t('pages/leeszaal/reading-room-slug/object-id/index___sluit'),
 });
 
+export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
+	description: i18n.t(
+		'modules/media/const/index___je-kan-het-object-enkel-bekijken-tijdens-een-fysiek-bezoek-aan-de-leeszaal'
+	),
+	reasonTitle: i18n.t('modules/media/const/index___waarom-kan-ik-dit-object-niet-bekijken'),
+	reasonDescription: i18n.t(
+		'modules/media/const/index___dit-object-bevat-geen-licentie-voor-online-raadpleging-breng-een-bezoek-aan-de-leeszaal'
+	),
+	openModalButtonLabel: i18n.t('pages/leeszaal/reading-room-slug/object-id/index___meer-info'),
+	closeModalButtonLabel: i18n.t('pages/leeszaal/reading-room-slug/object-id/index___sluit'),
+});
+
 /**
  * Tabs
  */
