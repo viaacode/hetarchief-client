@@ -36,11 +36,11 @@ import { LanguageFilterFormState } from '@reading-room/components/LanguageFilter
 import {
 	READING_ROOM_FILTERS,
 	READING_ROOM_ITEM_COUNT,
-	READING_ROOM_QUERY_PARAM_CONFIG,
 	READING_ROOM_QUERY_PARAM_INIT,
-	READING_ROOM_SORT_OPTIONS,
 	READING_ROOM_TABS,
 	READING_ROOM_VIEW_TOGGLE_OPTIONS,
+	VISITOR_SPACE_QUERY_PARAM_CONFIG,
+	VISITOR_SPACE_SORT_OPTIONS,
 } from '@reading-room/const';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
 import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
@@ -107,7 +107,7 @@ const ReadingRoomPage: NextPage = () => {
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const [mobileFilterMenuOpen, setMobileFilterMenuOpen] = useState(false);
 
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
 	const [mediaCount, setMediaCount] = useState({
@@ -119,7 +119,7 @@ const ReadingRoomPage: NextPage = () => {
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
 
-	const [query, setQuery] = useQueryParams(READING_ROOM_QUERY_PARAM_CONFIG);
+	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
 	const hasSearched = useMemo(() => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -242,7 +242,7 @@ const ReadingRoomPage: NextPage = () => {
 		const nextOpenState =
 			typeof nextOpen !== 'undefined' ? nextOpen : (prevOpen: boolean) => !prevOpen;
 		if (isMobile) {
-			setMobileMenuOpen(nextOpenState);
+			setMobileFilterMenuOpen(nextOpenState);
 		} else {
 			setFilterMenuOpen(nextOpenState);
 		}
@@ -374,8 +374,9 @@ const ReadingRoomPage: NextPage = () => {
 		setQuery({ ...rest, ...query });
 	};
 
-	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
+	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
 		setQuery({ orderProp, orderDirection });
+	};
 
 	const onTabClick = (tabId: string | number) => setQuery({ format: String(tabId) });
 
@@ -411,9 +412,9 @@ const ReadingRoomPage: NextPage = () => {
 					filterValues={query}
 					label={t('pages/leeszaal/reading-room-slug/index___filters')}
 					isOpen={filterMenuOpen}
-					isMobileOpen={mobileMenuOpen}
+					isMobileOpen={mobileFilterMenuOpen}
 					showNavigationBorder={showNavigationBorder}
-					sortOptions={READING_ROOM_SORT_OPTIONS()}
+					sortOptions={VISITOR_SPACE_SORT_OPTIONS()}
 					toggleOptions={toggleOptions}
 					onSortClick={onSortClick}
 					onMenuToggle={onFilterMenuToggle}

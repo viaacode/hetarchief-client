@@ -23,7 +23,7 @@ import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 import { OrderDirection, ReadingRoomMediaType } from '@shared/types';
 
-import { ReadingRoomFilterId, ReadingRoomSort } from '../types';
+import { ReadingRoomFilterId, VisitorSpaceSort } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
 
@@ -49,11 +49,11 @@ export const READING_ROOM_QUERY_PARAM_INIT = {
 	// Pagination
 	page: 1,
 	// Sorting
-	orderProp: ReadingRoomSort.Relevance,
+	orderProp: VisitorSpaceSort.Relevance,
 	orderDirection: OrderDirection.desc,
 };
 
-export const READING_ROOM_QUERY_PARAM_CONFIG = {
+export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	// Filters
 	format: withDefault(StringParam, READING_ROOM_QUERY_PARAM_INIT.format),
 	[SEARCH_QUERY_KEY]: ArrayParam,
@@ -74,7 +74,9 @@ export const READING_ROOM_QUERY_PARAM_CONFIG = {
 	// UI
 	filter: StringParam,
 };
-export type READING_ROOM_QUERY_PARAM_TYPE = DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>;
+export type READING_ROOM_QUERY_PARAM_TYPE = DecodedValueMap<
+	typeof VISITOR_SPACE_QUERY_PARAM_CONFIG
+>;
 
 export const READING_ROOM_TABS = (): TabProps[] => [
 	{
@@ -146,25 +148,27 @@ export const READING_ROOM_FILTERS = (): FilterMenuFilterOption[] => [
 	},
 ];
 
-export const READING_ROOM_ACTIVE_SORT_MAP = (): { [key in ReadingRoomSort]: string } => ({
-	[ReadingRoomSort.Date]: i18n.t('modules/reading-room/const/index___sorteer-op-datum'),
-	[ReadingRoomSort.Relevance]: i18n.t('modules/reading-room/const/index___sorteer-op-relevantie'),
-	[ReadingRoomSort.Title]: i18n.t('modules/reading-room/const/index___sorteer-op-titel'),
+export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in VisitorSpaceSort]: string } => ({
+	[VisitorSpaceSort.Date]: i18n.t('modules/reading-room/const/index___sorteer-op-datum'),
+	[VisitorSpaceSort.Relevance]: i18n.t(
+		'modules/reading-room/const/index___sorteer-op-relevantie'
+	),
+	[VisitorSpaceSort.Title]: i18n.t('modules/reading-room/const/index___sorteer-op-titel'),
 });
 
-export const READING_ROOM_SORT_OPTIONS = (): FilterMenuSortOption[] => [
+export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	{
 		label: i18n.t('modules/reading-room/const/index___relevantie'),
-		orderProp: ReadingRoomSort.Relevance,
+		orderProp: VisitorSpaceSort.Relevance,
 	},
 	{
 		label: i18n.t('modules/reading-room/const/index___datum-oplopend'),
-		orderProp: ReadingRoomSort.Date,
+		orderProp: VisitorSpaceSort.Date,
 		orderDirection: OrderDirection.asc,
 	},
 	{
 		label: i18n.t('modules/reading-room/const/index___datum-aflopend'),
-		orderProp: ReadingRoomSort.Date,
+		orderProp: VisitorSpaceSort.Date,
 		orderDirection: OrderDirection.desc,
 	},
 	// schema_name niet sorteerbaar in https://meemoo.atlassian.net/wiki/pages/viewpage.action?pageId=3309174878&pageVersion=3

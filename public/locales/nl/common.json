@@ -221,6 +221,7 @@
   "modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters": "Filters",
   "modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___sorteer-op": "Sorteer op",
   "modules/reading-room/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten": "Zoekresultaten",
+  "modules/reading-room/components/filter-menu/filter-menu___sorteer-op": "Sorteer op:",
   "modules/reading-room/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling": "Nieuwe stelling",
   "modules/reading-room/components/forms/advanced-filter-form/advanced-filter-form___stel-je-eigen-geavanceerde-filter-samen-aan-de-hand-van-deze-metadata-velden-en-waarden": "Stel je eigen geavanceerde filter samen aan de hand van deze metadata velden en waarden.",
   "modules/reading-room/components/genre-filter-form/genre-filter-form___geen-genres-gevonden": "Geen genres gevonden.",
