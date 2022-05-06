@@ -12,7 +12,7 @@ import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
 import { ReadingRoomCard, ReadingRoomCardType, VisitorSpaceCardProps } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
@@ -92,7 +92,7 @@ const LoggedInHome: FC = () => {
 
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 
-	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetReadingRoom(
+	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetVisitorSpace(
 		query[VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 		{ enabled: !!query[VISITOR_SPACE_SLUG_QUERY_KEY], retry: false }
 	);

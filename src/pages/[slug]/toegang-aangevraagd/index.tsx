@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { ReadingRoomNavigation } from '@reading-room/components';
-import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
 import { CardImage } from '@shared/components';
 import { RICH_TEXT_SANITIZATION, ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -39,7 +39,7 @@ const VisitRequestedPage: NextPage = () => {
 
 	const enabled = typeof slug === 'string';
 	const { data: pending } = useGetPendingVisitCountForUserBySlug(slug as string, enabled);
-	const { data: space } = useGetReadingRoom(slug as string, {
+	const { data: space } = useGetVisitorSpace(slug as string, {
 		enabled: enabled && (pending?.count || 0) > 0,
 	});
 
