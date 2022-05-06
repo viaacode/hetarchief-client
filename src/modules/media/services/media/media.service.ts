@@ -5,8 +5,8 @@ import { ReadingRoomSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import {
 	MediaInfo,
+	MediaSearchFilter,
 	MediaSearchFilterField,
-	MediaSearchFilters,
 	MediaSearchOperator,
 	ReadingRoomMediaType,
 	SortObject,
@@ -24,7 +24,7 @@ import {
 export class MediaService {
 	public static async getBySpace(
 		orgId: string,
-		filters: MediaSearchFilters = [],
+		filters: MediaSearchFilter[] = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject

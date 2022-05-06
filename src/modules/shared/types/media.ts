@@ -41,8 +41,6 @@ export interface MediaSearchFilter {
 	value?: string;
 }
 
-export type MediaSearchFilters = MediaSearchFilter[];
-
 export interface MediaInfo {
 	meemoo_fragment_id: string; // Unique id per object
 	schema_identifier: string; // PID (this is not unique per objects)

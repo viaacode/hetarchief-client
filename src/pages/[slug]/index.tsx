@@ -15,6 +15,7 @@ import { useQueryParams } from 'use-query-params';
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
 import {
@@ -68,7 +69,13 @@ import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
+import {
+	Breakpoints,
+	MediaInfo,
+	OrderDirection,
+	ReadingRoomMediaType,
+	SortObject,
+} from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
@@ -149,6 +156,10 @@ const ReadingRoomPage: NextPage = () => {
 		visitorSpace?.maintainerId !== undefined
 	);
 
+	const { data: filterOptions } = useGetMediaFilterOptions(
+		visitorSpace?.maintainerId?.toLocaleLowerCase() as string | undefined
+	);
+
 	// visit info
 	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
 
@@ -166,7 +177,7 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
-		let buckets = media?.aggregations.dcterms_format.buckets;
+		let buckets = filterOptions?.dcterms_format.buckets;
 
 		if (!buckets || buckets.length === 0) {
 			buckets = [
@@ -185,7 +196,7 @@ const ReadingRoomPage: NextPage = () => {
 			[ReadingRoomMediaType.Video]:
 				buckets.find((bucket) => bucket.key === ReadingRoomMediaType.Video)?.doc_count || 0,
 		});
-	}, [media?.aggregations]);
+	}, [filterOptions]);
 
 	/**
 	 * Display
@@ -445,6 +456,13 @@ const ReadingRoomPage: NextPage = () => {
 		<>
 			<MediaCardList
 				items={media?.items
+					.filter((mediaObject: MediaInfo) => {
+						if (query.format && query.format !== 'all') {
+							return mediaObject.dcterms_format === query.format;
+						} else {
+							return true;
+						}
+					})
 					.filter((mediaObject) => {
 						const isSOLR = mediaObject.type === 'SOLR';
 						isSOLR && alert('SOLR item detected') && console.error(mediaObject);
