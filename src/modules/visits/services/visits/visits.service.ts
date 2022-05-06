@@ -18,7 +18,7 @@ export class VisitsService {
 	public static async getAll(
 		searchInput = '',
 		status: VisitStatus | undefined,
-		timeframe: VisitTimeframe | undefined,
+		timeframe: VisitTimeframe | VisitTimeframe[] | undefined,
 		page = 0,
 		size = 20,
 		orderProp: keyof Visit = 'startAt',
