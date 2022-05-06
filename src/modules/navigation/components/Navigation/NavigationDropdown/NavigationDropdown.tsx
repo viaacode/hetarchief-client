@@ -36,6 +36,7 @@ const NavigationDropdown: FC<NavigationDropdownProps> = ({
 								[styles['c-navigation__dropdown-item--divider']]: item.isDivider,
 								[styles['c-navigation__dropdown-item--divider:md']]:
 									item.isDivider === 'md',
+								[styles['c-navigation__item--active']]: item.activeMobile,
 							})}
 						>
 							{typeof item.node === 'function'
