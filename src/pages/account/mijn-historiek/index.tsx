@@ -19,7 +19,7 @@ import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';

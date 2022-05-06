@@ -2,7 +2,7 @@ import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { isEqual } from 'lodash';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -14,7 +14,6 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
 import {
@@ -47,8 +46,8 @@ import { mapFiltersToTags, tagPrefix } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
 	Callout,
+	ErrorNoAccess,
 	ErrorNotFound,
-	ErrorSpaceNoAccess,
 	Icon,
 	IdentifiableMediaCard,
 	Loading,
@@ -643,7 +642,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			return <Loading fullscreen />;
 		}
 		if (isVisitorSpaceNoAccessError) {
-			return <ErrorSpaceNoAccess visitorSpaceSlug={slug as string} />;
+			return <ErrorNoAccess visitorSpaceSlug={slug as string} />;
 		}
 		return renderVisitorSpace();
 	};
