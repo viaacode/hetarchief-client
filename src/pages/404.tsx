@@ -1,24 +1,12 @@
-import { NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 
+import { withI18n } from '@i18n/wrappers';
 import { ErrorNotFound } from '@shared/components';
-import { ApiService } from '@shared/services/api-service';
 
-interface NotFoundPageProps {
-	nlTranslations: Record<string, string>;
-}
-
-const NotFoundPage: NextPage<NotFoundPageProps> = ({ nlTranslations }) => {
-	return <ErrorNotFound nlTranslations={nlTranslations} />;
+const NotFoundPage: NextPage = () => {
+	return <ErrorNotFound />;
 };
 
-export async function getStaticProps(): Promise<{ props: unknown }> {
-	const response = await ApiService.getApi().get('translations/nl.json');
-
-	return {
-		props: {
-			nlTranslations: await response.json(),
-		},
-	};
-}
+export const getStaticProps: GetStaticProps = withI18n();
 
 export default NotFoundPage;

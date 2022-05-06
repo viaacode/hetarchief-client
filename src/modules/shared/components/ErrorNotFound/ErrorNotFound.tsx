@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
-import { i18n, useTranslation } from 'next-i18next';
-import { FC, useEffect } from 'react';
+import { useTranslation } from 'next-i18next';
+import { FC } from 'react';
 
 import { ErrorPage } from '@shared/components';
 
@@ -8,12 +8,8 @@ interface ErrorNotFoundProps {
 	nlTranslations?: Record<string, string>;
 }
 
-const ErrorNotFound: FC<ErrorNotFoundProps> = ({ nlTranslations = {} }) => {
+const ErrorNotFound: FC<ErrorNotFoundProps> = () => {
 	const { t } = useTranslation();
-
-	useEffect(() => {
-		i18n?.addResources('nl', 'common', nlTranslations);
-	}, [nlTranslations]);
 
 	return (
 		<ErrorPage
