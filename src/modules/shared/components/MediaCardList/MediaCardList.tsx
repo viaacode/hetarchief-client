@@ -1,6 +1,9 @@
 import clsx from 'clsx';
-import { FC, memo } from 'react';
+import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
+
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { Breakpoints } from '@shared/types';
 
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
@@ -19,6 +22,8 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	actions,
 	wrapper = (card) => card,
 }) => {
+	const windowSize = useWindowSizeContext();
+
 	if (!items) {
 		return null;
 	}
@@ -46,6 +51,89 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		return key;
 	};
 
+	/**
+	 * This function inserts a fake item to avoid the extra item under the sidebar
+	 *
+	 * This shows the problem:
+	 *  ┌───┐ ┌───┐ ┌───┐ ┌───┐
+	 *  │   │ │   │ │   │ │   │
+	 *  │   │ │   │ │   │ │   │
+	 *  │   │ │   │ │   │ │   │
+	 *  │   │ └───┘ └───┘ └───┘
+	 *  │   │ ┌───┐ ┌───┐ ┌───┐
+	 *  │   │ │   │ │   │ │   │
+	 *  │   │ │   │ │   │ │   │
+	 *  └───┘ │   │ │   │ │   │
+	 *  ┌───┐ └───┘ └───┘ └───┘
+	 *  │   │ ┌───┐ ┌───┐ ┌───┐
+	 *  │   │ │   │ │   │ │   │
+	 *  │   │ │   │ │   │ │   │
+	 *  └───┘ │   │ │   │ │   │
+	 *  ┌───┐ └───┘ └───┘ └───┘
+	 *  │   │
+	 *  │   │
+	 *  │   │
+	 *  └───┘
+	 *
+	 * This show the solution with an inserted fake item with zero height:
+	 * ┌───┐ ┌───┐ ┌───┐ ┌───┐
+	 * │   │ │   │ │   │ │   │
+	 * │   │ │   │ │   │ │   │
+	 * │   │ │   │ │   │ │   │
+	 * │   │ └───┘ └───┘ └───┘
+	 * │   │ ┌───┐ ┌───┐ ┌───┐
+	 * │   │ │   │ │   │ │   │
+	 * │   │ │   │ │   │ │   │
+	 * └───┘ │   │ │   │ │   │
+	 *  fake └───┘ └───┘ └───┘
+	 *  item ┌───┐ ┌───┐ ┌───┐
+	 * ┌───┐ │   │ │   │ │   │
+	 * │   │ │   │ │   │ │   │
+	 * │   │ │   │ │   │ │   │
+	 * │   │ └───┘ └───┘ └───┘
+	 * └───┘ ┌───┐
+	 *       │   │
+	 *       │   │
+	 *       │   │
+	 *       └───┘
+	 * @param tiles
+	 */
+	const insertFakeHeightItem = (tiles: ReactNode[]): ReactNode => {
+		// Figure out how many columns the masonry has, to know where to insert the fake item
+		let widthSegment: keyof typeof MEDIA_CARD_LIST_GRID_BP_COLS = 'default';
+		if (windowSize.width && windowSize.width < Breakpoints.sm) {
+			widthSegment = Breakpoints.sm;
+		}
+		if (windowSize.width && windowSize.width < Breakpoints.md) {
+			widthSegment = Breakpoints.md;
+		}
+		if (windowSize.width && windowSize.width < Breakpoints.lg) {
+			widthSegment = Breakpoints.lg;
+		}
+		const numberOfColumns = MEDIA_CARD_LIST_GRID_BP_COLS[widthSegment];
+		return [
+			...tiles.slice(0, numberOfColumns - 1),
+			<span
+				key="fake-zero-height-card-list-item"
+				className={styles['c-media-card-list__fake-height-spacer']}
+			/>,
+			...tiles.slice(numberOfColumns - 1),
+		];
+	};
+
+	const tiles = items.map((item, i) =>
+		wrapper(
+			<MediaCard
+				key={getKey(item, i)}
+				buttons={buttons?.(item)}
+				actions={actions?.(item)}
+				{...item}
+				keywords={keywords}
+				view={view}
+			/>,
+			item
+		)
+	);
 	return (
 		<div
 			className={clsx(
@@ -61,19 +149,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				columnClassName={styles['c-media-card-list__column']}
 			>
 				{isMasonryView && renderSidebar()}
-				{items.map((item, i) =>
-					wrapper(
-						<MediaCard
-							key={getKey(item, i)}
-							buttons={buttons?.(item)}
-							actions={actions?.(item)}
-							{...item}
-							keywords={keywords}
-							view={view}
-						/>,
-						item
-					)
-				)}
+				{insertFakeHeightItem(tiles)}
 			</Masonry>
 		</div>
 	);
