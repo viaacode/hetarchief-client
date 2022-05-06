@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { FC, useRef, useState } from 'react';
 
 import { MediaActions } from '@media/types';
-import { Icon, IconLightNames, IconSolidNames } from '@shared/components';
+import { Icon } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 
 import {

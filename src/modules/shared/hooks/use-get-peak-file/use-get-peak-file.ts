@@ -30,13 +30,8 @@ export function useGetPeakFile(
 			throw new Error('Failed to get peak file url with token');
 		}
 
-		// TODO REMOVE mock once there are peak file examples on INT/localhost
-		const peakFileResponse = await ky.get(
-			'https://archief-media-qas.viaa.be/viaa/KULEUVENKADOC/c7ccfe6fb5db4ae6a8d697a6b01cc7c264c803ee96ea40dc9b832c3be8ff0528/peak-0.json'
-		);
-		// const peakFileResponse = await ky.get(jsonFileUrl);
+		const peakFileResponse = await ky.get(jsonFileUrl);
 		const peakFileJson = (await peakFileResponse.json()) as JsonWaveformData;
-		console.log(peakFileJson);
 		return peakFileJson;
 	});
 }

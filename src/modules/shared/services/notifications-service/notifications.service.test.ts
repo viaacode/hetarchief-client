@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { Notification } from '@shared/services/notifications-service/notifications.types';
 import { toastService } from '@shared/services/toast-service';

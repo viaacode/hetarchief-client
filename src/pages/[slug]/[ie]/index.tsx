@@ -418,8 +418,7 @@ const ObjectDetailPage: NextPage = () => {
 							key={flowPlayerKey}
 							src={[
 								{
-									src: 'https://bertyhell.s3.eu-central-1.amazonaws.com/projects/test-files/road-to-joy.mp3',
-									// src: playableUrl, // TODO uncomment this before merging the PR (for PR review purposes)
+									src: playableUrl,
 									type: 'audio/mp3',
 								},
 							]}

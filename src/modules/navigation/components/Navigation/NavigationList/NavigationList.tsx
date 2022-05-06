@@ -55,7 +55,8 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 						styles['c-navigation__item'],
 						styles[`c-navigation__link--variant-${index + 1}`],
 						{
-							[styles['c-navigation__item--active']]: item.active,
+							[styles['c-navigation__item--active']]:
+								item.activeDesktop || item.activeMobile,
 							[styles['c-navigation__item--divider']]: item.isDivider,
 						}
 					);
@@ -81,7 +82,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 							) : (
 								item.node
 							)}
-							{item.active && (
+							{item.activeDesktop && (
 								<>
 									<span className={styles['c-navigation__border-decoration']} />
 									<span className={styles['c-navigation__border-decoration']} />
