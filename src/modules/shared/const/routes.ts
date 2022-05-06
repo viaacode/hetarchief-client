@@ -12,6 +12,7 @@ export const ROUTE_PREFIXES = {
 
 export const ROUTES = {
 	home: '/',
+	space: '/:slug',
 	termsOfService: '/gebruiksvoorwaarden',
 	cookiePolicy: '/cookiebeleid',
 	myCollections: '/account/mijn-mappen',

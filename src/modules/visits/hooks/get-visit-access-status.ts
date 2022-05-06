@@ -4,11 +4,20 @@ import { QUERY_KEYS } from '@shared/const';
 import { VisitAccessStatus } from '@shared/types';
 import { VisitsService } from '@visits/services';
 
-export function useGetVisitAccessStatus(slug: string): UseQueryResult<VisitAccessStatus | null> {
-	return useQuery([QUERY_KEYS.getVisitAccessStatus, { slug }], () =>
-		VisitsService.getAccessStatusBySpaceSlug(slug)
+// Query
+
+export function useGetVisitAccessStatus(
+	slug: string,
+	enabled = true
+): UseQueryResult<VisitAccessStatus | null> {
+	return useQuery(
+		[QUERY_KEYS.getVisitAccessStatus, { slug }],
+		() => VisitsService.getAccessStatusBySpaceSlug(slug),
+		{ enabled }
 	);
 }
+
+// Mutation
 
 export function useGetVisitAccessStatusMutation(): UseMutationResult<
 	VisitAccessStatus | null,

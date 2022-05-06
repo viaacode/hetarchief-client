@@ -18,3 +18,4 @@ export * from './MediumFilterForm';
 export * from './MediumSelect';
 export * from './PublishedFilterForm';
 export * from './ReadingRoomNavigation';
+export * from './WaitingPage';

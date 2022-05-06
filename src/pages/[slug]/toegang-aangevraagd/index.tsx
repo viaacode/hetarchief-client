@@ -1,46 +1,40 @@
-import DOMPurify from 'dompurify';
 import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { ReadingRoomNavigation } from '@reading-room/components';
+import { WaitingPage } from '@reading-room/components';
 import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
-import { CardImage } from '@shared/components';
-import { RICH_TEXT_SANITIZATION, ROUTES } from '@shared/const';
+import { Loading } from '@shared/components';
+import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
-import { selectShowNavigationBorder } from '@shared/store/ui';
-import { createPageTitle } from '@shared/utils';
-import { useGetPendingVisitCountForUserBySlug } from '@visits/hooks/get-pending-visit-count-for-user-by-slug';
+import { AccessStatus } from '@shared/types';
+import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 
 import { VisitorLayout } from 'modules/visitors';
 
 const VisitRequestedPage: NextPage = () => {
 	useNavigationBorder();
 
-	const { t } = useTranslation();
 	const router = useRouter();
 
 	const { slug } = router.query;
-
-	/**
-	 * State
-	 */
-
-	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 
 	/**
 	 * Data
 	 */
 
 	const enabled = typeof slug === 'string';
-	const { data: pending } = useGetPendingVisitCountForUserBySlug(slug as string, enabled);
-	const { data: space } = useGetReadingRoom(slug as string, {
-		enabled: enabled && (pending?.count || 0) > 0,
+	const { data: accessStatus, isLoading: isLoadingAccessStatus } = useGetVisitAccessStatus(
+		slug as string,
+		typeof slug === 'string'
+	);
+
+	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
+
+	const { data: space, isLoading: isLoadingSpace } = useGetReadingRoom(slug as string, {
+		enabled: enabled && hasPendingRequest,
 	});
 
 	/**
@@ -48,96 +42,37 @@ const VisitRequestedPage: NextPage = () => {
 	 */
 
 	const backLink = ROUTES.home;
+	const spaceLink = ROUTES.space.replace(':slug', slug as string);
 
 	/**
 	 * Effects
 	 */
 
 	useEffect(() => {
-		if (pending && pending.count === 0) {
-			router.push(backLink);
+		if (!hasPendingRequest) {
+			switch (accessStatus?.status) {
+				case AccessStatus.NO_ACCESS:
+					router.push(backLink);
+					break;
+				case AccessStatus.ACCESS:
+					router.push(spaceLink);
+					break;
+			}
 		}
-	}, [pending, router, backLink]);
+	}, [router, backLink, accessStatus?.status, spaceLink, hasPendingRequest]);
 
-	return (
-		<VisitorLayout>
-			<div className="p-visit-requested">
-				<Head>
-					<title>{createPageTitle(space?.name)}</title>
-					<meta
-						name="description"
-						content={
-							space?.info ||
-							t(
-								'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-leeszaal'
-							)
-						}
-					/>
-				</Head>
+	/**
+	 * Render
+	 */
 
-				<ReadingRoomNavigation
-					title={space?.name}
-					phone={space?.contactInfo.telephone || ''}
-					email={space?.contactInfo.email || ''}
-					showBorder={showNavigationBorder}
-					backLink={backLink}
-				/>
+	const renderPageContent = () => {
+		if (isLoadingAccessStatus || isLoadingSpace || !hasPendingRequest) {
+			return <Loading fullscreen />;
+		}
+		return <WaitingPage space={space} />;
+	};
 
-				{/* I'm choosing to duplicate the above instead of splitting to a separate layout because back-button functionality on this page differs from the `[slug]` page */}
-
-				{space && (
-					<div className="l-container p-visit-requested__content">
-						<section className="p-visit-requested__grid">
-							<div className="p-visit-requested__top">
-								<h1 className="p-visit-requested__title u-mt-32:md">
-									{t(
-										'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
-									)}
-								</h1>
-
-								<p className="p-visit-requested__instructions u-color-neutral u-mt-24 u-mt-32:md u-mb-56:md">
-									{t(
-										'pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-leeszalen-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd'
-									)}
-								</p>
-							</div>
-
-							<div className="p-visit-requested__image">
-								<CardImage
-									id={space.id}
-									image={space.image}
-									color={space.color || '#00c8aa'}
-									logo={space.logo}
-								/>
-							</div>
-
-							<div className="p-visit-requested__bottom u-pt-56:md">
-								{space.info && (
-									<p className="p-visit-requested__info">
-										<b>{space.info}</b>
-									</p>
-								)}
-
-								{space.description && (
-									<div
-										className="p-visit-requested__description u-mt-32"
-										dangerouslySetInnerHTML={{
-											__html: String(
-												DOMPurify.sanitize(
-													space.description, // rich-text content
-													RICH_TEXT_SANITIZATION
-												)
-											),
-										}}
-									/>
-								)}
-							</div>
-						</section>
-					</div>
-				)}
-			</div>
-		</VisitorLayout>
-	);
+	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps = withI18n();
