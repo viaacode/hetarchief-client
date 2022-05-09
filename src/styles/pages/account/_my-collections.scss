@@ -36,10 +36,24 @@ $component: "p-account-my-collections";
 
 	// Hide links active state on mobile
 	&__link {
+		padding-right: $spacer-md;
+
+		// Hide icon on desktop
+		span {
+			visibility: hidden;
+		}
+
 		@include respond-to("md") {
 			background-color: $platinum;
 			color: $black;
 			font-weight: 400;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			span {
+				visibility: visible;
+			}
 		}
 	}
 
