@@ -22,10 +22,12 @@ import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
+import { Permission } from '@account/const';
 import { Blade, Icon, VisitSummary } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
+import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { asDate, formatDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
@@ -42,6 +44,9 @@ const defaultAccessTo = (accessFrom: Date) => addHours(roundToNearestQuarter(acc
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { t } = useTranslation();
+	const canViewAddVisitRequests: boolean = useHasAnyPermission(
+		Permission.READ_ALL_VISIT_REQUESTS
+	);
 	const {
 		selected,
 		onClose,
@@ -78,7 +83,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		handleSubmit,
 		getValues,
 		setValue,
-		setError,
 		reset,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
@@ -115,23 +119,25 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			OrderDirection.desc,
 			true
 		);
-		const overlappingRequests = visitResponse.items.filter((visit) =>
-			areIntervalsOverlapping(
-				{
-					start: form.accessFrom as Date,
-					end: form.accessTo as Date,
-				},
-				{
-					start: asDate(visit.startAt as string) as Date,
-					end: asDate(visit.endAt as string) as Date,
-				}
+		const overlappingRequests = visitResponse.items
+			.filter((visit) =>
+				areIntervalsOverlapping(
+					{
+						start: form.accessFrom as Date,
+						end: form.accessTo as Date,
+					},
+					{
+						start: asDate(visit.startAt as string) as Date,
+						end: asDate(visit.endAt as string) as Date,
+					}
+				)
 			)
-		);
+			.filter((visit) => visit.id !== selected?.id);
 
 		setOverlappingRequests(overlappingRequests);
 
 		return overlappingRequests;
-	}, [setError, t, form.accessFrom, form.accessTo]);
+	}, [form.accessFrom, form.accessTo]);
 
 	useEffect(() => {
 		checkOverlappingRequests();
@@ -144,6 +150,12 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const onFormSubmit = async (values: ApproveRequestFormState) => {
 		const overlappingVisitRequests = await checkOverlappingRequests();
 		if (overlappingVisitRequests.length) {
+			toastService.notify({
+				title: t('Conflict'),
+				description: t(
+					'Je kan geen 2 aanvragen goedkeuren die overlappen. Pas de andere aanvraag aan.'
+				),
+			});
 			return;
 		}
 		selected &&
@@ -342,8 +354,15 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						{formatMediumDateWithTime(asDate(overlappingRequests[0].endAt))}
 						<br />
 						<br />
-						<Link href={'/admin/leeszalenbeheer/aanvragen'} passHref>
-							<a>{t('Bekijk deze aanvraag')}</a>
+						<Link
+							href={
+								canViewAddVisitRequests
+									? `/admin/leeszalenbeheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
+									: `/beheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
+							}
+							passHref
+						>
+							<a onClick={onClose}>{t('Bekijk deze aanvraag')}</a>
 						</Link>
 					</p>
 				)}
