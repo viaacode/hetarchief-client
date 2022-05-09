@@ -137,7 +137,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		setOverlappingRequests(overlappingRequests);
 
 		return overlappingRequests;
-	}, [form.accessFrom, form.accessTo]);
+	}, [selected?.id, form.accessFrom, form.accessTo]);
 
 	useEffect(() => {
 		checkOverlappingRequests();
