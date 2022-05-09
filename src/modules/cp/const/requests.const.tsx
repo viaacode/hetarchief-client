@@ -2,14 +2,13 @@ import { TabProps } from '@meemoo/react-components';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { RequestStatusBadge } from '@cp/components';
-import { RequestStatusAll } from '@cp/types';
-import { CopyButton, Icon } from '@shared/components';
+import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
 import { OrderDirection, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
+import { RequestStatusAll } from '@visits/types';
 
 export const RequestTablePageSize = 20;
 export const VISIT_REQUEST_ID_QUERY_KEY = 'aanvraag';

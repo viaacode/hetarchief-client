@@ -31,3 +31,8 @@ $component: "c-approve-request-blade";
 		}
 	}
 }
+
+.c-form-control__errors {
+	margin-top: -$spacer-sm !important;
+	margin-bottom: $spacer-lg !important;
+}

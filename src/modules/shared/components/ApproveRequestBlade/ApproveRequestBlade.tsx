@@ -18,6 +18,7 @@ import {
 	startOfDay,
 } from 'date-fns';
 import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
@@ -77,6 +78,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		handleSubmit,
 		getValues,
 		setValue,
+		setError,
 		reset,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
@@ -129,7 +131,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		setOverlappingRequests(overlappingRequests);
 
 		return overlappingRequests;
-	}, [form.accessFrom, form.accessTo]);
+	}, [setError, t, form.accessFrom, form.accessTo]);
 
 	useEffect(() => {
 		checkOverlappingRequests();
@@ -330,6 +332,22 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					/>
 				</FormControl>
 
+				{!!overlappingRequests.length && (
+					<p className={clsx('c-form-control__errors', styles['c-form-control__errors'])}>
+						{t('Er is reeds een goedgekeurde aanvraag voor deze periode: ')}
+						<br />
+						<br />
+						{formatMediumDateWithTime(asDate(overlappingRequests[0].startAt))}
+						{' - '}
+						{formatMediumDateWithTime(asDate(overlappingRequests[0].endAt))}
+						<br />
+						<br />
+						<Link href={'/admin/leeszalenbeheer/aanvragen'} passHref>
+							<a>{t('Bekijk deze aanvraag')}</a>
+						</Link>
+					</p>
+				)}
+
 				<FormControl
 					label={t(
 						'modules/cp/components/approve-request-blade/approve-request-blade___opmerkingen'
@@ -342,14 +360,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						render={({ field }) => <TextInput {...field} />}
 					/>
 				</FormControl>
-
-				{!!overlappingRequests.length && (
-					<p>
-						{t('Er is reeds een goedgekeurde aanvraag voor deze periode: ')}{' '}
-						{formatMediumDateWithTime(asDate(overlappingRequests[0].startAt))} -{' '}
-						{formatMediumDateWithTime(asDate(overlappingRequests[0].endAt))}
-					</p>
-				)}
 			</div>
 		</Blade>
 	);

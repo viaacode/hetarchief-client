@@ -13,9 +13,14 @@ import {
 } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ApproveRequestBlade } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
-import { ConfirmationModal, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import {
+	ApproveRequestBlade,
+	ConfirmationModal,
+	PaginationBar,
+	SearchBar,
+	sortingIcons,
+} from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
 import { toastService } from '@shared/services/toast-service';

@@ -30,7 +30,7 @@ export class VisitsService {
 				stringifyUrl({
 					url: personal ? `${VISITS_SERVICE_BASE_URL}/personal` : VISITS_SERVICE_BASE_URL,
 					query: {
-						query: `%${searchInput}%`,
+						...(searchInput?.trim() ? { query: `%${searchInput}%` } : {}),
 						status,
 						timeframe,
 						page,

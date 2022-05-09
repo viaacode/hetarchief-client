@@ -4,10 +4,10 @@ import { FC } from 'react';
 
 import { VistorSpaceService } from '@reading-room/services';
 import { UpdateReadingRoomSettings } from '@reading-room/services/visitor-space/visitor-space.service.types';
+import { RichTextForm } from '@shared/components/RichTextForm';
 import { toastService } from '@shared/services/toast-service';
 
 import { ReadingRoomImageForm } from '../ReadingRoomImageForm';
-import { RichTextForm } from '../RichTextForm';
 
 import styles from './ReadingRoomSettings.module.scss';
 import { ReadingRoomSettingsProps } from './ReadingRoomSettings.types';
