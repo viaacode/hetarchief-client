@@ -410,6 +410,7 @@ const ReadingRoomPage: NextPage = () => {
 					onFilterSubmit={(id, values) =>
 						onSubmitFilter(id as ReadingRoomFilterId, values)
 					}
+					onRemoveValue={onRemoveTag}
 				/>
 			</div>
 		);

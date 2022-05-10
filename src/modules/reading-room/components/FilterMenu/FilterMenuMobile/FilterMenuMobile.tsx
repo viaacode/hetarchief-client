@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
+import { mapFiltersToTags } from '@reading-room/utils';
 import { Icon } from '@shared/components';
 import { OrderDirection } from '@shared/types';
 
@@ -26,6 +27,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	onFilterReset,
 	onFilterSubmit,
 	onSortClick,
+	onRemoveValue,
 	showNavigationBorder,
 	sortOptions = [],
 	filterValues,
@@ -50,6 +52,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const goBackToInitial = activeFilter
 		? () => onFilterClick(activeFilter)
 		: () => setIsSortActive(false);
+	const tags = filterValues ? mapFiltersToTags(filterValues) : [];
 
 	// Render
 
@@ -99,9 +102,12 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						</h4>
 
 						<TagList
+							className={styles['c-filter-menu-mobile__tags']}
 							closeIcon={<Icon className="u-text-left" name="times" />}
-							onTagClosed={() => null}
-							tags={[]}
+							onTagClosed={(id) =>
+								onRemoveValue?.(tags.filter((tag) => tag.id !== id))
+							}
+							tags={tags}
 							variants="large"
 						/>
 					</div>

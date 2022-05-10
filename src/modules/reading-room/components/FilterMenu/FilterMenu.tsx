@@ -32,6 +32,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onMenuToggle,
 	onSortClick,
 	onViewToggle = () => null,
+	onRemoveValue,
 	showNavigationBorder,
 }) => {
 	const [query, setQuery] = useQueryParams({
@@ -163,6 +164,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onFilterSubmit={onFilterFormSubmit}
 				showNavigationBorder={showNavigationBorder}
 				filterValues={filterValues}
+				onRemoveValue={onRemoveValue}
 			/>
 		</div>
 	);

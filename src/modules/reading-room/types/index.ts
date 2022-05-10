@@ -126,4 +126,5 @@ export interface AdvancedFilter {
 
 export interface TagIdentity extends Partial<AdvancedFilter>, TagInfo {
 	key: string;
+	id: string | number;
 }

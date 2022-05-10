@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { DefaultFilterFormProps, ReadingRoomSort } from '@reading-room/types';
+import { DefaultFilterFormProps, ReadingRoomSort, TagIdentity } from '@reading-room/types';
 import { IconProps, ToggleOption } from '@shared/components';
 import { DefaultComponentProps, OrderDirection, SortObject } from '@shared/types';
 
@@ -18,6 +18,7 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	onFilterReset?: OnFilterMenuFormReset;
 	onFilterSubmit?: OnFilterMenuFormSubmit;
 	onViewToggle?: (viewMode: string) => void;
+	onRemoveValue?: (tags: TagIdentity[]) => void;
 	showNavigationBorder: boolean;
 }
 

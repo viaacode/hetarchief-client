@@ -1,5 +1,6 @@
 import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
+import { keysIn } from 'lodash';
 
 import { getMetadataSearchFilters } from '@reading-room/const';
 import { AdvancedFilterArrayParam } from '@reading-room/const/query-params';
@@ -43,6 +44,7 @@ export const mapArrayParamToTags = (
 				),
 				value: `${tagPrefix(key)}${keyword}`,
 				key,
+				id: key,
 			};
 		});
 };
@@ -99,6 +101,7 @@ export const mapAdvancedToTags = (
 			),
 			value: `${tagPrefix(key)}${AdvancedFilterArrayParam.encode([advanced])}`,
 			key,
+			id: key,
 			...advanced,
 		};
 	});
