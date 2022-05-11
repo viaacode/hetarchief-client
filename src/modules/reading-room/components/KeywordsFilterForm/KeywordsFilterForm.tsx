@@ -1,8 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, keysEnter, onKey, TagInfo, TagsInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, KeyboardEvent, useState } from 'react';
+import { FC, KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 import { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -15,11 +16,6 @@ import {
 import { KeywordsFilterFormProps, KeywordsFilterFormState } from './KeywordsFilterForm.types';
 
 type multi = MultiValue<TagInfo>;
-
-const components = {
-	...TAGS_INPUT_COMPONENTS,
-	DropdownIndicator: () => <div className="u-pr-8" />,
-};
 
 const defaultValues = {
 	values: [],
@@ -102,6 +98,19 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => onKey(e, [...keysEnter], saveInput);
 
+	// Must be inside component otherwise we get this error:
+	//	index.js:456 ReferenceError: Cannot access '$r' before initialization
+	//     at Object.TAGS_INPUT_COMPONENTS (_app-adc1b2d2d2ee133a.js:1:550587)
+	//     at Object.58297 (KeywordsFilterForm.tsx:24:5)
+	//     at t (bootstrap:21:33)
+	//     at Object.43133 (_app-adc1b2d2d2ee133a.js:1:516231)
+	//     at t (bootstrap:21:33)
+	const components = useMemo(() => {
+		return {
+			...TAGS_INPUT_COMPONENTS,
+			DropdownIndicator: () => <div className="u-pr-8" />,
+		};
+	}, []);
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>

@@ -70,7 +70,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			]),
 		}),
 		id: 'leeszalen',
-		active: true,
+		activeDesktop: true,
 		children: [
 			{
 				node: renderLink('Alle leeszalen', '/', {

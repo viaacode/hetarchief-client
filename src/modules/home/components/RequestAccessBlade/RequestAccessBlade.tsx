@@ -3,16 +3,23 @@ import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/reac
 import { useTranslation } from 'next-i18next';
 import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { StringParam, useQueryParams } from 'use-query-params';
 
-import { Blade, Icon } from '@shared/components';
+import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
+import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { Blade, Icon, SpacePreview } from '@shared/components';
 import { OPTIONAL_LABEL } from '@shared/const';
 
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
 import styles from './RequestAccessBlade.module.scss';
 import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccessBlade.types';
 
-const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladeProps }) => {
+const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
 	const { t } = useTranslation();
+	const [query] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	});
+	const { data: space } = useGetReadingRoom(query[VISITOR_SPACE_SLUG_QUERY_KEY]);
 
 	const {
 		control,
@@ -25,12 +32,11 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 
 	const onFormSubmit = (values: RequestAccessFormState) => {
 		onSubmit?.(values);
-		reset();
 	};
 
 	useEffect(() => {
-		bladeProps.isOpen && reset();
-	}, [bladeProps.isOpen, reset]);
+		isOpen && reset();
+	}, [isOpen, reset]);
 
 	const renderFooter = () => {
 		return (
@@ -48,7 +54,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 								checked={field.value}
 								checkIcon={<Icon name="check" />}
 								value="accept-terms"
-								disabled={!bladeProps.isOpen}
+								disabled={!isOpen}
 							/>
 						)}
 					/>
@@ -61,7 +67,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
-					disabled={!bladeProps.isOpen}
+					disabled={!isOpen}
 				/>
 				<Button
 					label={t(
@@ -69,7 +75,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					)}
 					variants={['block', 'text']}
 					onClick={bladeProps.onClose}
-					disabled={!bladeProps.isOpen}
+					disabled={!isOpen}
 				/>
 			</div>
 		);
@@ -78,6 +84,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 	return (
 		<Blade
 			{...bladeProps}
+			isOpen={isOpen}
 			title={t(
 				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 			)}
@@ -85,6 +92,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 			className={styles['c-request-access-blade']}
 		>
 			<div className="u-px-32">
+				{space && <SpacePreview space={space} />}
 				<FormControl
 					className="u-mb-24"
 					errors={[errors.requestReason?.message]}
@@ -95,9 +103,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					<Controller
 						name="requestReason"
 						control={control}
-						render={({ field }) => (
-							<TextArea {...field} disabled={!bladeProps.isOpen} />
-						)}
+						render={({ field }) => <TextArea {...field} disabled={!isOpen} />}
 					/>
 				</FormControl>
 
@@ -110,9 +116,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					<Controller
 						name="visitTime"
 						control={control}
-						render={({ field }) => (
-							<TextInput {...field} disabled={!bladeProps.isOpen} />
-						)}
+						render={({ field }) => <TextInput {...field} disabled={!isOpen} />}
 					/>
 				</FormControl>
 			</div>

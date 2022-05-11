@@ -9,6 +9,7 @@ $component: "c-notification-center";
 		margin-top: $c-navigation-height;
 	}
 
+	&__empty,
 	&__unread,
 	&__read {
 		padding-left: $spacer-md;
@@ -16,8 +17,16 @@ $component: "c-notification-center";
 		padding-bottom: $spacer-md;
 	}
 
+	&__empty,
 	&__unread {
 		padding-top: $spacer-md;
+	}
+
+	&__empty {
+		width: 46.4rem;
+		padding-top: 8rem;
+		text-align: center;
+		color: $neutral;
 	}
 
 	&__read {

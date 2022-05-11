@@ -88,7 +88,7 @@ const AppLayout: FC = ({ children }) => {
 
 	useEffect(() => {
 		// Set the build version on the window object
-		(window as any).HETARCHIEF_VERSION = packageJson.version;
+		(window as unknown as Record<string, unknown>).HETARCHIEF_VERSION = packageJson.version;
 	}, []);
 
 	useEffect(() => {
@@ -172,8 +172,6 @@ const AppLayout: FC = ({ children }) => {
 			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
 			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/chromecast.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/airplay.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />

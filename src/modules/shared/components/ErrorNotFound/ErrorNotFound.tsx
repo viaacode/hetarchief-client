@@ -4,14 +4,18 @@ import { FC } from 'react';
 
 import { ErrorPage } from '@shared/components';
 
-const ErrorNotFound: FC = () => {
+interface ErrorNotFoundProps {
+	nlTranslations?: Record<string, string>;
+}
+
+const ErrorNotFound: FC<ErrorNotFoundProps> = () => {
 	const { t } = useTranslation();
 
 	return (
 		<ErrorPage
-			title={t('pages/404___404')}
+			title={t('modules/shared/components/error-not-found/error-not-found___404')}
 			description={t(
-				'pages/404___sorry-deze-pagina-konden-we-niet-terugvinden-de-link-die-je-volgde-kan-stuk-zijn-of-de-pagina-kan-niet-meer-bestaan'
+				'modules/shared/components/error-not-found/error-not-found___sorry-deze-pagina-konden-we-niet-terugvinden-de-link-die-je-volgde-kan-stuk-zijn-of-de-pagina-kan-niet-meer-bestaan'
 			)}
 			link={{
 				component: <Button label={t('pages/404___ga-naar-de-homepage')} variants="black" />,

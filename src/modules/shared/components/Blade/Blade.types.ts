@@ -9,6 +9,7 @@ export interface BladeProps extends DefaultComponentProps {
 	isOpen: boolean;
 	hideOverlay?: boolean;
 	hideCloseButton?: boolean;
+	showCloseButtonOnTop?: boolean;
 	onClose?: () => void;
 	// manager types
 	layer?: number;

@@ -5,24 +5,17 @@ import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-import { AdvancedFilter, MetadataProp, ReadingRoomFilterId } from '@reading-room/types';
+import { ReadingRoomFilterId } from '@reading-room/types';
 import { Icon } from '@shared/components';
-import { Operator } from '@shared/types';
 
 import { AdvancedFilterFields } from '../AdvancedFilterFields';
 
-import { ADVANCED_FILTER_FORM_SCHEMA } from './AdvancedFilterForm.const';
+import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
 import { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
-
-const initialFields = (): AdvancedFilter => ({
-	prop: MetadataProp.Everything,
-	op: Operator.Contains,
-	val: '',
-});
 
 const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, values }) => {
 	const { t } = useTranslation();
-	const { control, getValues, reset, handleSubmit } = useForm<AdvancedFilterFormState>({
+	const { control, getValues, setValue, handleSubmit } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
 			advanced: values?.advanced ? values.advanced : [initialFields()],
 		},
@@ -66,7 +59,11 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, 
 				</div>
 			</div>
 
-			{children({ values: getValues(), reset, handleSubmit })}
+			{children({
+				values: getValues(),
+				reset: () => setValue('advanced', [initialFields()]),
+				handleSubmit,
+			})}
 		</>
 	);
 };

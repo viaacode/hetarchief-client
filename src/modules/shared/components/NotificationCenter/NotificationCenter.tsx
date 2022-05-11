@@ -182,93 +182,109 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 		/>
 	);
 
-	return (
-		<Blade
-			className={clsx(className, styles['c-notification-center'])}
-			isOpen={isOpen}
-			onClose={onClose}
-			hideCloseButton
-			footer={renderFooter()}
-		>
-			{isLoading && <Loading />}
+	const renderBladeContent = () => {
+		if (isLoading) {
+			return <Loading />;
+		}
 
-			{isError && (
+		if (isError) {
+			return (
 				<p>
 					{t(
 						'modules/shared/components/notification-center/notification-center___er-ging-iets-mis-bij-het-ophalen-van-je-notificaties'
 					)}
 				</p>
-			)}
+			);
+		}
 
-			{!isLoading && !isError && (
-				<InfiniteScroll
-					className={styles['c-notification-center__infinite-scroll']}
-					dataLength={notifications?.length || 0}
-					next={() => fetchNextPage()}
-					hasMore={(notificationResponse?.pages[0].total || 0) > notifications.length}
-					loader={
-						<Loading
-							className={styles['c-notification-center__infinite-scroll-loading']}
-						/>
-					}
-				>
-					{!!unread.length && (
-						<div className={styles['c-notification-center__unread']}>
-							<h4 className={styles['c-notification-center__header']}>
-								{t(
-									'modules/shared/components/notification-center/notification-center___ongelezen'
+		if (notifications.length === 0) {
+			return (
+				<div className={styles['c-notification-center__empty']}>
+					<h4 className={styles['c-notification-center__header']}>
+						{t(
+							'modules/shared/components/notification-center/notification-center___er-zijn-nog-geen-notificaties'
+						)}
+					</h4>
+				</div>
+			);
+		}
+
+		return (
+			<InfiniteScroll
+				className={styles['c-notification-center__infinite-scroll']}
+				dataLength={notifications?.length || 0}
+				next={() => fetchNextPage()}
+				hasMore={(notificationResponse?.pages[0].total || 0) > notifications.length}
+				loader={
+					<Loading className={styles['c-notification-center__infinite-scroll-loading']} />
+				}
+			>
+				{!!unread.length && (
+					<div className={styles['c-notification-center__unread']}>
+						<h4 className={styles['c-notification-center__header']}>
+							{t(
+								'modules/shared/components/notification-center/notification-center___ongelezen'
+							)}
+						</h4>
+
+						{unread.map((notification) => (
+							<div
+								className={clsx(
+									styles['c-notification-center__row'],
+									styles['c-notification-center__row--unread']
 								)}
-							</h4>
+								key={`notification-${notification.id}`}
+							>
+								{renderLink(notification)}
 
-							{unread.map((notification) => (
-								<div
-									className={clsx(
-										styles['c-notification-center__row'],
-										styles['c-notification-center__row--unread']
+								<Button
+									onClick={() => onMarkOneAsRead(notification.id)}
+									className={clsx(styles['c-notification-center__row-button'])}
+									title={t(
+										'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
 									)}
-									key={`notification-${notification.id}`}
-								>
-									{renderLink(notification)}
+									icon={<Icon name="check" />}
+									variants={['icon', 'sm', 'white']}
+								/>
+							</div>
+						))}
+					</div>
+				)}
 
-									<Button
-										onClick={() => onMarkOneAsRead(notification.id)}
-										className={clsx(
-											styles['c-notification-center__row-button']
-										)}
-										title={t(
-											'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
-										)}
-										icon={<Icon name="check" />}
-										variants={['icon', 'sm', 'white']}
-									/>
-								</div>
-							))}
-						</div>
-					)}
+				{!!read.length && (
+					<div className={styles['c-notification-center__read']}>
+						<h4 className={styles['c-notification-center__header']}>
+							{t(
+								'modules/shared/components/notification-center/notification-center___gelezen'
+							)}
+						</h4>
 
-					{!!read.length && (
-						<div className={styles['c-notification-center__read']}>
-							<h4 className={styles['c-notification-center__header']}>
-								{t(
-									'modules/shared/components/notification-center/notification-center___gelezen'
+						{read.map((notification) => (
+							<div
+								className={clsx(
+									styles['c-notification-center__row'],
+									styles['c-notification-center__row--read']
 								)}
-							</h4>
+								key={`notification-${notification.id}`}
+							>
+								{renderLink(notification)}
+							</div>
+						))}
+					</div>
+				)}
+			</InfiniteScroll>
+		);
+	};
 
-							{read.map((notification) => (
-								<div
-									className={clsx(
-										styles['c-notification-center__row'],
-										styles['c-notification-center__row--read']
-									)}
-									key={`notification-${notification.id}`}
-								>
-									{renderLink(notification)}
-								</div>
-							))}
-						</div>
-					)}
-				</InfiniteScroll>
-			)}
+	return (
+		<Blade
+			className={clsx(className, styles['c-notification-center'])}
+			isOpen={isOpen}
+			onClose={onClose}
+			showCloseButtonOnTop
+			footer={renderFooter()}
+		>
+			{renderBladeContent()}
 		</Blade>
 	);
 };

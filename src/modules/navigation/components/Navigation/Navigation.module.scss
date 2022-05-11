@@ -2,8 +2,6 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
-$c-navigation-height-contextual: 6.4rem;
-$c-navigation-height-contextual-md: 4.8rem;
 $c-navigation-border-height: 0.6rem;
 $c-navigation-list-divider-color: #4e4e4e;
 $c-navigation-divider-size: 0.1rem;
@@ -340,6 +338,12 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		border-bottom-color: $teal;
 		font-weight: $font-weight-bold;
 		transition: border-color $animate-md-in;
+
+		@include respond-to ("md") {
+			> :global(.c-dropdown-menu__item) {
+				font-weight: 700;
+			}
+		}
 
 		&.c-navigation__link--variant-1 {
 			@include navigation-link-border-decoration;

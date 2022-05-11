@@ -1,6 +1,6 @@
 {
 	"name": "hetarchief-client",
-	"version": "0.11.0",
+	"version": "0.12.0",
 	"private": true,
 	"contributors": [
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
@@ -20,8 +20,6 @@
 		"test:e2e": "npx playwright test",
 		"test:e2e:debug": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=firefox --headed --workers=1 --retries=0 --maxFailures=1 tests/auth/login-with-redirect.spec.ts",
 		"type-check": "tsc --noEmit",
-		"cy:open": "cypress open",
-		"cy:run": "cypress run",
 		"prepare": "husky install",
 		"storybook": "start-storybook -p 6006",
 		"build:storybook": "build-storybook",
@@ -30,7 +28,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
-		"@meemoo/react-components": "2.14.1",
+		"@meemoo/react-components": "2.15.0",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
 		"clsx": "1.1.1",
@@ -66,7 +64,6 @@
 		"save-file": "2.3.1",
 		"sharp": "0.29.3",
 		"use-query-params": "1.2.3",
-		"waveform-data": "4.3.0",
 		"yup": "0.32.11"
 	},
 	"devDependencies": {
@@ -102,7 +99,6 @@
 		"babel-loader": "8.2.3",
 		"cross-env": "7.0.3",
 		"css-loader": "6.5.1",
-		"cypress": "9.1.1",
 		"dotenv-cli": "5.0.0",
 		"eslint": "7.32.0",
 		"eslint-config-next": "12.0.4",

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { Notification } from '@shared/services/notifications-service/notifications.types';
 import { toastService } from '@shared/services/toast-service';
@@ -187,7 +188,7 @@ describe('NotificationService', () => {
 			expect(mockedNotifyFunc).toBeCalledTimes(1);
 			expect(mockedNotifyFunc).toBeCalledWith(
 				expect.objectContaining({
-					buttonLabel: 'Bekijk ***',
+					buttonLabel: 'bekijk ***',
 					description: 'Je toegang vervalt terug op 03/05/2022 19:30',
 					title: 'Je hebt nu toegang tot de leeszaal AMVB',
 				})
@@ -238,10 +239,10 @@ describe('NotificationService', () => {
 			expect(mockedNotifyFunc).toBeCalledTimes(1);
 			expect(mockedNotifyFunc).toBeCalledWith(
 				expect.objectContaining({
-					buttonLabel: 'Bekijk ***',
+					buttonLabel: 'bekijk ***',
 					description:
-						'Er zijn aantal nieuwe notificaties bekijk ze in het notificatie overzicht ***',
-					title: 'Er zijn amount nieuwe notificaties ***',
+						'er zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht ***',
+					title: 'er zijn-amount-nieuwe-notificaties ***',
 				})
 			);
 
