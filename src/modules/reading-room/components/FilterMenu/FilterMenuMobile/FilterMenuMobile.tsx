@@ -55,7 +55,6 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const tags = filterValues ? mapFiltersToTags(filterValues) : [];
 
 	// Render
-
 	const renderFilterButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement => {
 		const filterIsActive = id === activeFilter;
 
@@ -102,7 +101,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						</h4>
 
 						<TagList
-							className={styles['c-filter-menu-mobile__tags']}
+							className={clsx(styles['c-filter-menu-mobile__tags'], 'u-mb-0')}
 							closeIcon={<Icon className="u-text-left" name="times" />}
 							onTagClosed={(id) =>
 								onRemoveValue?.(tags.filter((tag) => tag.id !== id))

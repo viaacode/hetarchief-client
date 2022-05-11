@@ -580,37 +580,30 @@ const ReadingRoomPage: NextPage = () => {
 						)}
 					>
 						<div className="l-container">
+							{!showResults && renderFilterMenu()}
 							{showInitialView && (
-								<>
-									{renderFilterMenu()}
-
-									<Placeholder
-										className="p-reading-room__placeholder"
-										img="/images/lightbulb.svg"
-										title={t(
-											'pages/leeszaal/reading-room-slug/index___start-je-zoektocht'
-										)}
-										description={t(
-											'pages/leeszaal/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
-										)}
-									/>
-								</>
+								<Placeholder
+									className="p-reading-room__placeholder"
+									img="/images/lightbulb.svg"
+									title={t(
+										'pages/leeszaal/reading-room-slug/index___start-je-zoektocht'
+									)}
+									description={t(
+										'pages/leeszaal/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
+									)}
+								/>
 							)}
 							{showNoResults && (
-								<>
-									{renderFilterMenu()}
-
-									<Placeholder
-										className="p-reading-room__placeholder"
-										img="/images/looking-glass.svg"
-										title={t(
-											'pages/leeszaal/reading-room-slug/index___geen-resultaten'
-										)}
-										description={t(
-											'pages/leeszaal/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
-										)}
-									/>
-								</>
+								<Placeholder
+									className="p-reading-room__placeholder"
+									img="/images/looking-glass.svg"
+									title={t(
+										'pages/leeszaal/reading-room-slug/index___geen-resultaten'
+									)}
+									description={t(
+										'pages/leeszaal/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
+									)}
+								/>
 							)}
 							{showResults && renderResults()}
 						</div>
