@@ -55,9 +55,7 @@ The available commands for testing the project are:
 | test         | Run all the unit tests.                                                                              |
 | test:ci      | Run all the unit tests for CI environment.                                                           |
 | test:watch   | Run all the unit tests in watch mode.                                                                |
-| test:cov     | Run all the unit tests with coverage collected.                                                      |
-| cy:open      | Open Cypress test runnner.                                                                           |
-| cy:run       | Run all the E2E tests in Cypress.                                                                    |
+| test:cov     | Run all the unit tests with coverage collected.                                                      |                                                                   |
 
 <br>
 
