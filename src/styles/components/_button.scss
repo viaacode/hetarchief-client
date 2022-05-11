@@ -45,13 +45,6 @@
 		outline: 0;
 		box-shadow: none;
 	}
-
-	/* stylelint-disable-next-line no-descending-specificity */
-	&:not(.c-button--no-height) {
-		&:not(.c-button--sm):not(.c-button--xs):not(.c-button--xxs) {
-			height: 4.8rem;
-		}
-	}
 }
 
 /**
@@ -187,6 +180,10 @@
 
 .c-button--sm {
 	@include generate-button-small;
+}
+
+.c-button--md {
+	height: 4.8rem;
 }
 
 // Variants

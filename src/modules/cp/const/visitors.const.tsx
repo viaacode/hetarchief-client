@@ -52,7 +52,7 @@ export const VisitorsTableColumns = (
 			<CopyButton
 				className="u-color-neutral u-p-0 c-table__copy"
 				icon={undefined}
-				variants={['text', 'no-height']}
+				variants="text"
 				text={row.original.visitorMail}
 			>
 				{row.original.visitorMail}
