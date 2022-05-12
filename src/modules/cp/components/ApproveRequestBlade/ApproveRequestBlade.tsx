@@ -11,9 +11,9 @@ import {
 	addHours,
 	differenceInMinutes,
 	endOfDay,
+	isSameDay,
 	roundToNearestMinutes,
 	startOfDay,
-	subMinutes,
 } from 'date-fns';
 import { useTranslation } from 'next-i18next';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -175,22 +175,36 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				const { accessTo } = form;
 
 				if (date && accessTo) {
+					const minimum = 60;
+
 					// if difference is negative => start time is after end time
 					const difference = differenceInMinutes(accessTo, date);
 
-					if (difference <= 0) {
-						// 6PM, today
+					// 1h in the future
+					// Aligns with `minTime` of the `accessTo` `Timepicker`-component
+					const oneHour = (date: Date) =>
 						setForm((original) => ({
 							...original,
-							accessTo: defaultAccessTo(date),
+							accessTo: addHours(roundToNearestQuarter(date), 1),
 						}));
-					} else if (difference < 60) {
-						// 1h in the future
-						// Aligns with `minTime` of the `accessTo` `Timepicker`-component
-						setForm((original) => ({
-							...original,
-							accessTo: addHours(subMinutes(defaultAccessTo(date), difference), 1),
-						}));
+
+					if (difference <= 0 && !isSameDay(accessTo, date)) {
+						// 6PM on the selected accessFrom
+						const sixPM = defaultAccessTo(date);
+
+						if (differenceInMinutes(sixPM, date) >= minimum) {
+							// at least an hour, set to sixPM
+							setForm((original) => ({
+								...original,
+								accessTo: sixPM,
+							}));
+						} else {
+							// less than an hour, set to accessFrom + 1h
+							oneHour(date);
+						}
+					} else if (difference < minimum) {
+						// less than an hour, set to accessFrom + 1h
+						oneHour(date);
 					}
 				}
 			};
