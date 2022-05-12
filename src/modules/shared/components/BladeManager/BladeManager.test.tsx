@@ -2,16 +2,16 @@ import { Button } from '@meemoo/react-components';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 
+import { mockStore } from '../../../../__mocks__/store';
 import { Blade } from '../Blade';
 
-import { mockStore } from './../../../../__mocks__/store';
 import BladeManager from './BladeManager';
 
 const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 	return render(
 		<Provider store={mockStore}>
 			<BladeManager currentLayer={currentBlade} onCloseBlade={onClose}>
-				<Blade isOpen={false} title="Blade 1" layer={1}>
+				<Blade isOpen={true} title="Blade 1" layer={1}>
 					<Button label="Open second blade" />
 				</Blade>
 				<Blade isOpen={false} title="Blade 2" layer={2}>

@@ -339,6 +339,12 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		font-weight: $font-weight-bold;
 		transition: border-color $animate-md-in;
 
+		@include respond-to ("md") {
+			> :global(.c-dropdown-menu__item) {
+				font-weight: 700;
+			}
+		}
+
 		&.c-navigation__link--variant-1 {
 			@include navigation-link-border-decoration;
 		}

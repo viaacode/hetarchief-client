@@ -88,7 +88,7 @@ const AppLayout: FC = ({ children }) => {
 
 	useEffect(() => {
 		// Set the build version on the window object
-		(window as any).HETARCHIEF_VERSION = packageJson.version;
+		(window as unknown as Record<string, unknown>).HETARCHIEF_VERSION = packageJson.version;
 	}, []);
 
 	useEffect(() => {
