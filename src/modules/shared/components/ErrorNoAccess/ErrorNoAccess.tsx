@@ -15,9 +15,13 @@ const ErrorNoAccess: FC<ErrorSpaceNoAccessProps> = ({ visitorSpaceSlug }) => {
 
 	return (
 		<ErrorPage
-			title={t(
-				'modules/shared/components/error-space-no-access/error-space-no-access___geen-toegang-bezoekersruimte'
-			)}
+			title={
+				visitorSpaceSlug
+					? t(
+							'modules/shared/components/error-space-no-access/error-space-no-access___geen-toegang-bezoekersruimte'
+					  )
+					: t('modules/shared/components/error-no-access/error-no-access___geen-toegang')
+			}
 			description={
 				visitorSpaceSlug
 					? t(

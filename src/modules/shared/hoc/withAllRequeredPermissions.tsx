@@ -32,6 +32,7 @@ export const withAllRequiredPermissions = (
 		if (hasCheckedLogin && !hasRequiredPermissions) {
 			return <ErrorNoAccess visitorSpaceSlug={null} />;
 		}
+
 		if (!hasRequiredPermissions) {
 			return <Loading fullscreen />;
 		}

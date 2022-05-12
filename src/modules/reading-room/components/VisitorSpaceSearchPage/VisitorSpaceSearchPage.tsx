@@ -47,7 +47,6 @@ import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';
 import {
 	Callout,
 	ErrorNoAccess,
-	ErrorNotFound,
 	Icon,
 	IdentifiableMediaCard,
 	Loading,
