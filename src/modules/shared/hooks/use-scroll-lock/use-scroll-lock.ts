@@ -8,7 +8,7 @@ import { useScrollbarWidth } from '../use-scrollbar-width';
 
 import { UseScrollLock } from './use-scroll-lock.types';
 
-type scrollState = { __scrollDepth: number };
+type scrollState = { __scrollDepth?: number };
 
 const useScrollLock: UseScrollLock = (lock, id) => {
 	// Ensure state is synced first, before any operations
@@ -92,7 +92,9 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 
 			// Wipe our state asynchronously once every hook instance is done
 			// Known issue: when rapidly (<50ms) toggling blades, the scrollDepth is lost
-			setTimeout(() => ((document as unknown as scrollState).__scrollDepth = 0), 50);
+			setTimeout(() => {
+				delete (document as unknown as scrollState).__scrollDepth;
+			}, 50);
 		},
 		[scroll]
 	);
