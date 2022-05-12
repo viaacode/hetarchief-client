@@ -9,8 +9,6 @@ import { selectShowZendesk } from '@shared/store/ui';
 
 const { publicRuntimeConfig } = getConfig();
 
-const DEFAULT_FOOTER_HEIGHT = 88;
-
 const ZendeskWrapper: FunctionComponent = () => {
 	const router = useRouter();
 	const showZendesk = useSelector(selectShowZendesk);
@@ -32,7 +30,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 			get(
 				document.querySelector('[class^="Footer_c-footer"]'),
 				'clientHeight',
-				DEFAULT_FOOTER_HEIGHT
+				0 // 0 when no footer is found
 			)
 		);
 	}, [setFooterHeight]);
