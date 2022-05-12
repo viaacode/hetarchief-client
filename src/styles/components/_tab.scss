@@ -80,5 +80,9 @@ $component: "c-tab";
 
 	&--medium {
 		min-height: $tab-min-height-medium;
+
+		&:focus {
+			outline-offset: -6px;
+		}
 	}
 }

@@ -85,6 +85,7 @@ const AccountMyCollections: NextPage = () => {
 								title={collection.name}
 							>
 								{collection.name}
+								<Icon className="u-font-size-24 u-text-left" name="angle-right" />
 							</a>
 						</Link>
 					),

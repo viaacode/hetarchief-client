@@ -10,7 +10,12 @@ import { ApiResponseWrapper } from '@shared/types';
 import { asDate } from '@shared/utils';
 
 import { NOTIFICATION_TYPE_TO_PATH } from './notifications.consts';
-import { MarkAllAsReadResult, Notification, NotificationStatus } from './notifications.types';
+import {
+	MarkAllAsReadResult,
+	Notification,
+	NotificationStatus,
+	NotificationType,
+} from './notifications.types';
 
 export abstract class NotificationsService {
 	private static pollingTimer: number | null = null;
@@ -21,6 +26,10 @@ export abstract class NotificationsService {
 		null;
 
 	private static queryClient = new QueryClient();
+
+	public static async setQueryClient(queryClient: QueryClient): Promise<void> {
+		this.queryClient = queryClient;
+	}
 
 	public static async initPolling(
 		router: NextRouter,
@@ -78,6 +87,23 @@ export abstract class NotificationsService {
 				(notification) =>
 					new Date(notification.createdAt).getTime() > lastCheckNotificationTime
 			);
+
+			// Refetch spaces on notification
+			if (newNotifications.length) {
+				const hasSpaceNotification = !!newNotifications.find((notification) => {
+					return [
+						NotificationType.ACCESS_PERIOD_READING_ROOM_ENDED,
+						NotificationType.ACCESS_PERIOD_READING_ROOM_STARTED,
+						NotificationType.VISIT_REQUEST_DENIED,
+					].includes(notification.type);
+				});
+
+				hasSpaceNotification &&
+					(await NotificationsService.queryClient.invalidateQueries(
+						QUERY_KEYS.getAccessibleReadingRooms
+					));
+			}
+
 			if (newNotifications.length === 1) {
 				// one => show details on the one notification
 				toastService.notify({

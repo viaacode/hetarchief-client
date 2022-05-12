@@ -29,6 +29,7 @@ import {
 	MediumFilterFormState,
 	PublishedFilterFormState,
 	ReadingRoomNavigation,
+	WaitingPage,
 } from '@reading-room/components';
 import { CreatorFilterFormState } from '@reading-room/components/CreatorFilterForm';
 import { LanguageFilterFormState } from '@reading-room/components/LanguageFilterForm';
@@ -68,7 +69,13 @@ import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
+import {
+	AccessStatus,
+	Breakpoints,
+	OrderDirection,
+	ReadingRoomMediaType,
+	SortObject,
+} from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
@@ -77,6 +84,7 @@ import {
 } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
+import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -135,9 +143,14 @@ const ReadingRoomPage: NextPage = () => {
 		isLoading: visitRequestIsLoading,
 	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
 
+	const { data: accessStatus } = useGetVisitAccessStatus(
+		slug as string,
+		typeof slug === 'string'
+	);
+
 	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetReadingRoom(
 		slug as string,
-		{ enabled: visitRequest !== undefined }
+		{ enabled: visitRequest !== undefined || accessStatus?.status === AccessStatus.PENDING }
 	);
 
 	const { data: media } = useGetMediaObjects(
@@ -149,9 +162,6 @@ const ReadingRoomPage: NextPage = () => {
 		visitorSpace?.maintainerId !== undefined
 	);
 
-	// visit info
-	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
-
 	const collections = useSelector(selectCollections);
 
 	/**
@@ -159,7 +169,12 @@ const ReadingRoomPage: NextPage = () => {
 	 */
 
 	const isNotFoundError = (visitRequestError as HTTPError)?.response?.status === 404;
-	const isNoAccessError = (visitRequestError as HTTPError)?.response?.status === 403;
+	const isNoAccessError =
+		(visitRequestError as HTTPError)?.response?.status === 403 &&
+		accessStatus?.status === AccessStatus.NO_ACCESS;
+	const isAccessPendingError =
+		(visitRequestError as HTTPError)?.response?.status === 403 &&
+		accessStatus?.status === AccessStatus.PENDING;
 
 	/**
 	 * Effects
@@ -380,8 +395,8 @@ const ReadingRoomPage: NextPage = () => {
 	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
 	const showResults = hasSearched && !!media && media?.items?.length > 0;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const accessEndDate = formatMediumDateWithTime(asDate(visitStatus?.endAt));
-	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitStatus?.endAt));
+	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
+	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
 
 	/**
 	 * Render
@@ -650,6 +665,9 @@ const ReadingRoomPage: NextPage = () => {
 		}
 		if (isNoAccessError) {
 			return <ErrorSpaceNoAccess visitorSpaceSlug={slug as string} />;
+		}
+		if (isAccessPendingError) {
+			return <WaitingPage space={visitorSpace ?? undefined} />;
 		}
 		return renderVisitorSpace();
 	};
