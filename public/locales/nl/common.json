@@ -153,7 +153,7 @@
   "modules/media/const/index___bookmark": "Bookmark",
   "modules/media/const/index___creatiedatum": "Creatiedatum",
   "modules/media/const/index___dit-formaat-wordt-niet-ondersteund-format": "Het \"{{format}}\"-formaat wordt niet ondersteund.",
-  "modules/media/const/index___dit-object-bevat-geen-licentie-voor-online-raadpleging-breng-een-bezoek-aan-de-leeszaal": "Dit object bevat geen licentie voor online raadpleging. Breng een bezoek aan de leeszaal.",
+  "modules/media/const/index___dit-object-bevat-geen-licentie-voor-online-raadpleging-breng-een-bezoek-aan-de-leeszaal": "Dit object bevat geen licentie voor online raadpleging. Breng een bezoek aan de bezoekersruimte.",
   "modules/media/const/index___duurtijd": "Duurtijd",
   "modules/media/const/index___episode": "Episode",
   "modules/media/const/index___er-ging-iets-mis-bij-het-ophalen-van-het-afspeel-token": "Er ging iets mis bij het ophalen van het afspeel-token.",
