@@ -14,7 +14,7 @@ import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
 import styles from './RequestAccessBlade.module.scss';
 import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccessBlade.types';
 
-const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladeProps }) => {
+const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
 	const { t } = useTranslation();
 	const [query] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
@@ -32,12 +32,11 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 
 	const onFormSubmit = (values: RequestAccessFormState) => {
 		onSubmit?.(values);
-		reset();
 	};
 
 	useEffect(() => {
-		bladeProps.isOpen && reset();
-	}, [bladeProps.isOpen, reset]);
+		isOpen && reset();
+	}, [isOpen, reset]);
 
 	const renderFooter = () => {
 		return (
@@ -55,7 +54,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 								checked={field.value}
 								checkIcon={<Icon name="check" />}
 								value="accept-terms"
-								disabled={!bladeProps.isOpen}
+								disabled={!isOpen}
 							/>
 						)}
 					/>
@@ -68,7 +67,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
-					disabled={!bladeProps.isOpen}
+					disabled={!isOpen}
 				/>
 				<Button
 					label={t(
@@ -76,7 +75,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					)}
 					variants={['block', 'text']}
 					onClick={bladeProps.onClose}
-					disabled={!bladeProps.isOpen}
+					disabled={!isOpen}
 				/>
 			</div>
 		);
@@ -85,6 +84,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 	return (
 		<Blade
 			{...bladeProps}
+			isOpen={isOpen}
 			title={t(
 				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 			)}
@@ -103,9 +103,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					<Controller
 						name="requestReason"
 						control={control}
-						render={({ field }) => (
-							<TextArea {...field} disabled={!bladeProps.isOpen} />
-						)}
+						render={({ field }) => <TextArea {...field} disabled={!isOpen} />}
 					/>
 				</FormControl>
 
@@ -118,9 +116,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, ...bladePro
 					<Controller
 						name="visitTime"
 						control={control}
-						render={({ field }) => (
-							<TextInput {...field} disabled={!bladeProps.isOpen} />
-						)}
+						render={({ field }) => <TextInput {...field} disabled={!isOpen} />}
 					/>
 				</FormControl>
 			</div>

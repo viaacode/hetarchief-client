@@ -5,11 +5,6 @@
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-/cypress/screenshots/*
-/cypress/videos/*
-
 # next.js
 /.next/
 /out/
