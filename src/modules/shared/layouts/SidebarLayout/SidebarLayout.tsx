@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import { FC, useState } from 'react';
 
 import { Icon, ListNavigation, Sidebar } from '@shared/components';
-import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 
 import styles from './SidebarLayout.module.scss';
 import { SidebarLayoutProps } from './SidebarLayout.types';
@@ -10,7 +9,6 @@ import { SidebarLayoutProps } from './SidebarLayout.types';
 const SidebarLayout: FC<SidebarLayoutProps> = ({
 	children,
 	className,
-	contentTitle,
 	sidebarLinks,
 	sidebarTitle,
 	color = 'white',
@@ -58,18 +56,6 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 						{sidebarTitle}
 					</div>
 				)}
-
-				{contentTitle && (
-					<div
-						className={clsx(
-							styles['l-sidebar__content'],
-							'l-container u-mt-32 u-mt-64:md'
-						)}
-					>
-						<SidebarLayoutTitle>{contentTitle}</SidebarLayoutTitle>
-					</div>
-				)}
-
 				{children}
 			</div>
 		</div>

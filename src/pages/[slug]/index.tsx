@@ -1,7 +1,7 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';

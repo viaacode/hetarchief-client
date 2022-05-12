@@ -1,0 +1,19 @@
+.c-admin__header {
+	display: flex;
+	align-items: center;
+	padding-bottom: 4rem;
+}
+
+.c-admin__page-title {
+	flex-grow: 1;
+}
+
+.c-admin__actions {
+	display: flex;
+
+	> *  {
+		&:not(:last-child) {
+			margin-right: 0.8rem;
+		}
+	}
+}
