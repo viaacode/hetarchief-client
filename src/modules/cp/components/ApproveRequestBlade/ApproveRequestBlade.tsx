@@ -9,9 +9,8 @@ import {
 import clsx from 'clsx';
 import {
 	addHours,
-	differenceInHours,
+	differenceInMinutes,
 	endOfDay,
-	isAfter,
 	isSameDay,
 	roundToNearestMinutes,
 	startOfDay,
@@ -35,7 +34,7 @@ import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequ
 
 const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
 const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
-const defaultAccessTo = (accessFrom: Date) => addHours(roundToNearestQuarter(accessFrom), 1);
+const defaultAccessTo = (accessFrom: Date) => addHours(startOfDay(accessFrom), 18);
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { t } = useTranslation();
@@ -72,7 +71,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		control,
 		formState: { errors },
 		handleSubmit,
-		getValues,
 		setValue,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
@@ -174,16 +172,39 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			) => {
 				onSimpleDateChange(date, field);
 
-				const { accessTo } = getValues();
+				const { accessTo } = form;
 
 				if (date && accessTo) {
-					// Access must be at least 1h in the future
+					const minimum = 60;
+
+					// if difference is negative => start time is after end time
+					const difference = differenceInMinutes(accessTo, date);
+
+					// 1h in the future
 					// Aligns with `minTime` of the `accessTo` `Timepicker`-component
-					if (
-						(isSameDay(date, accessTo) && differenceInHours(date, accessTo) <= 1) ||
-						isAfter(date, accessTo)
-					) {
-						setValue('accessTo', defaultAccessTo(date));
+					const oneHour = (date: Date) =>
+						setForm((original) => ({
+							...original,
+							accessTo: addHours(roundToNearestQuarter(date), 1),
+						}));
+
+					if (difference <= 0 && !isSameDay(accessTo, date)) {
+						// 6PM on the selected accessFrom
+						const sixPM = defaultAccessTo(date);
+
+						if (differenceInMinutes(sixPM, date) >= minimum) {
+							// at least an hour, set to sixPM
+							setForm((original) => ({
+								...original,
+								accessTo: sixPM,
+							}));
+						} else {
+							// less than an hour, set to accessFrom + 1h
+							oneHour(date);
+						}
+					} else if (difference < minimum) {
+						// less than an hour, set to accessFrom + 1h
+						oneHour(date);
 					}
 				}
 			};
@@ -222,12 +243,12 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[form, getValues, setValue, onSimpleDateChange]
+		[form, onSimpleDateChange]
 	);
 
 	const renderAccessTo = useCallback(
 		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessTo'> }) => {
-			const { accessFrom } = getValues();
+			const { accessFrom } = form;
 			const now = new Date();
 
 			// Disabled by request of Ineke, 21/03/2022
@@ -265,7 +286,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[form, getValues, onSimpleDateChange]
+		[form, onSimpleDateChange]
 	);
 
 	const renderAccessRemark = ({
