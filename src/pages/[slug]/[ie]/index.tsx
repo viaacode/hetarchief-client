@@ -700,7 +700,7 @@ const ObjectDetailPage: NextPage = () => {
 						)}
 						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
 						onClick={onClickToggle}
-						variants={['white', 'no-height']}
+						variants="white"
 					/>
 				)}
 				<div className="p-object-detail__video">{renderObjectMedia()}</div>
