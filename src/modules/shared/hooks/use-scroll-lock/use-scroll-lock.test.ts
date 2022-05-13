@@ -14,13 +14,13 @@ describe('Hooks', () => {
 
 			waitForNextUpdate().then(() => {
 				expect(document.body).toHaveStyle({ overflowY: 'hidden' });
-				expect(document.body).toHaveAttribute('data-depth');
+				expect(document).toHaveProperty('__scrollDepth');
 
 				rerender({ lock: false });
 
 				waitForNextUpdate().then(() => {
 					expect(document.body).not.toHaveStyle({ overflowY: 'hidden' });
-					expect(document.body).not.toHaveAttribute('data-depth');
+					expect(document).not.toHaveProperty('__scrollDepth');
 				});
 			});
 		});
