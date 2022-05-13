@@ -34,6 +34,8 @@ export const mapArrayParamToTags = (
 	return values
 		.filter((keyword) => !!keyword)
 		.map((keyword) => {
+			const unique = `${tagPrefix(key)}${keyword}`;
+
 			return {
 				label: (
 					<span>
@@ -41,8 +43,9 @@ export const mapArrayParamToTags = (
 						<strong>{keyword}</strong>
 					</span>
 				),
-				value: `${tagPrefix(key)}${keyword}`,
+				value: unique,
 				key,
+				id: unique,
 			};
 		});
 };
@@ -86,6 +89,7 @@ export const mapAdvancedToTags = (
 		}
 
 		// Define render structure
+		const unique = `${tagPrefix(key)}${AdvancedFilterArrayParam.encode([advanced])}`;
 
 		return {
 			label: (
@@ -97,8 +101,9 @@ export const mapAdvancedToTags = (
 					</strong>
 				</span>
 			),
-			value: `${tagPrefix(key)}${AdvancedFilterArrayParam.encode([advanced])}`,
+			value: unique,
 			key,
+			id: unique,
 			...advanced,
 		};
 	});
