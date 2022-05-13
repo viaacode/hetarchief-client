@@ -1,13 +1,13 @@
 import { TagOption } from '@meemoo/react-components';
 
-import { ReadingRoomSort } from '@reading-room/types';
+import { VisitorSpaceSort } from '@reading-room/types';
 
 import { FilterMenuFilterOption, FilterMenuSortOption } from '../FilterMenu.types';
 
 export const sortOptionsMock: FilterMenuSortOption[] = [
 	{
 		label: 'Relevantie',
-		orderProp: ReadingRoomSort.Relevance,
+		orderProp: VisitorSpaceSort.Relevance,
 	},
 ];
 

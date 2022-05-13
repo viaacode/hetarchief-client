@@ -19,7 +19,7 @@ import { VistorSpaceService } from '@reading-room/services';
 import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
 import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
-import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequeredPermissions';
+import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';

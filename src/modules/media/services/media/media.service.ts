@@ -1,12 +1,12 @@
 import { stringifyUrl } from 'query-string';
 
 import { MediaSimilar } from '@media/types';
-import { ReadingRoomSort } from '@reading-room/types';
+import { VisitorSpaceSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import {
 	MediaInfo,
+	MediaSearchFilter,
 	MediaSearchFilterField,
-	MediaSearchFilters,
 	MediaSearchOperator,
 	ReadingRoomMediaType,
 	SortObject,
@@ -24,12 +24,12 @@ import {
 export class MediaService {
 	public static async getBySpace(
 		orgId: string,
-		filters: MediaSearchFilters = [],
+		filters: MediaSearchFilter[] = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject
 	): Promise<GetMediaResponse> {
-		const parsedSort = !sort || sort.orderProp === ReadingRoomSort.Relevance ? {} : sort;
+		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
 		const filtered = filters.filter((item) => {
 			// Don't send filters with no value(s)
 			const hasValue = !!item.value || !!item.multiValue;
