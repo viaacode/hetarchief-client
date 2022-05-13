@@ -40,7 +40,7 @@ import {
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';

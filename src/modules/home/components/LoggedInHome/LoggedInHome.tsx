@@ -188,8 +188,6 @@ const LoggedInHome: FC = () => {
 				timeframe: values.visitTime,
 			}).then((createdVisitRequest) => {
 				setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
-				setIsRequestAccessBladeOpen(false);
-
 				router.push(ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug));
 			});
 		} catch (err) {

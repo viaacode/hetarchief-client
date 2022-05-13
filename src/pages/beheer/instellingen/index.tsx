@@ -11,7 +11,7 @@ import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
 import { Loading } from '@shared/components';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
