@@ -43,8 +43,8 @@ import {
 import { isInAFolder, mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import {
+	ErrorNoAccess,
 	ErrorNotFound,
-	ErrorSpaceNoAccess,
 	Icon,
 	Loading,
 	ScrollableTabs,
@@ -740,7 +740,7 @@ const ObjectDetailPage: NextPage = () => {
 			return <ErrorNotFound />;
 		}
 		if (isErrorSpaceNoAccess) {
-			return <ErrorSpaceNoAccess visitorSpaceSlug={router.query.slug as string} />;
+			return <ErrorNoAccess visitorSpaceSlug={router.query.slug as string} />;
 		}
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};

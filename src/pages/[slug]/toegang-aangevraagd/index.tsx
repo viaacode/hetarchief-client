@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { WaitingPage } from '@reading-room/components';
-import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
 import { Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -33,7 +33,7 @@ const VisitRequestedPage: NextPage = () => {
 
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
 
-	const { data: space, isLoading: isLoadingSpace } = useGetReadingRoom(slug as string, {
+	const { data: space, isLoading: isLoadingSpace } = useGetVisitorSpace(slug as string, {
 		enabled: enabled && hasPendingRequest,
 	});
 

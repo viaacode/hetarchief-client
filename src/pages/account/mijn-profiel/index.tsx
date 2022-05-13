@@ -14,7 +14,7 @@ import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
