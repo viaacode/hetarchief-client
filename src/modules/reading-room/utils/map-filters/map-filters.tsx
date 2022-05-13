@@ -1,6 +1,5 @@
 import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
-import { keysIn } from 'lodash';
 
 import { getMetadataSearchFilters } from '@reading-room/const';
 import { AdvancedFilterArrayParam } from '@reading-room/const/query-params';
@@ -35,6 +34,8 @@ export const mapArrayParamToTags = (
 	return values
 		.filter((keyword) => !!keyword)
 		.map((keyword) => {
+			const unique = `${tagPrefix(key)}${keyword}`;
+
 			return {
 				label: (
 					<span>
@@ -42,9 +43,9 @@ export const mapArrayParamToTags = (
 						<strong>{keyword}</strong>
 					</span>
 				),
-				value: `${tagPrefix(key)}${keyword}`,
+				value: unique,
 				key,
-				id: key,
+				id: unique,
 			};
 		});
 };
@@ -88,6 +89,7 @@ export const mapAdvancedToTags = (
 		}
 
 		// Define render structure
+		const unique = `${tagPrefix(key)}${AdvancedFilterArrayParam.encode([advanced])}`;
 
 		return {
 			label: (
@@ -99,9 +101,9 @@ export const mapAdvancedToTags = (
 					</strong>
 				</span>
 			),
-			value: `${tagPrefix(key)}${AdvancedFilterArrayParam.encode([advanced])}`,
+			value: unique,
 			key,
-			id: key,
+			id: unique,
 			...advanced,
 		};
 	});
