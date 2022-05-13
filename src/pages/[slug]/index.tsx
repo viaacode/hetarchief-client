@@ -30,6 +30,7 @@ const DynamicRouteResolver: NextPage = () => {
 	/**
 	 * Data
 	 */
+
 	const { error: visitorSpaceError, isLoading: isVisitorSpaceLoading } = useGetVisitorSpace(
 		slug as string
 	);

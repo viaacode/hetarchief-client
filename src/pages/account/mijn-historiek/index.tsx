@@ -22,9 +22,9 @@ import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { toastService } from '@shared/services/toast-service';
-import { OrderDirection, Visit, VisitStatus } from '@shared/types';
+import { AccessStatus, OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createHomeWithReadingRoomFilterUrl, createPageTitle } from '@shared/utils';
-import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
+import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
@@ -46,7 +46,7 @@ const AccountMyHistory: NextPage = () => {
 		personal: true,
 	});
 
-	const { mutateAsync: getAccessStatus } = useGetVisitAccessStatus();
+	const { mutateAsync: getAccessStatus } = useGetVisitAccessStatusMutation();
 
 	const sortFilters = useMemo(() => {
 		return [
@@ -81,12 +81,12 @@ const AccountMyHistory: NextPage = () => {
 
 	const onClickRow = async (visit: Visit) => {
 		try {
-			const response = await getAccessStatus(visit.spaceId);
+			const response = await getAccessStatus(visit.spaceSlug);
 			switch (response?.status) {
-				case VisitStatus.APPROVED:
+				case AccessStatus.ACCESS:
 					router.push(`/${visit.spaceSlug}`);
 					break;
-				case VisitStatus.PENDING:
+				case AccessStatus.PENDING:
 					router.push(ROUTES.visitRequested.replace(':slug', visit.spaceSlug));
 					break;
 				default:

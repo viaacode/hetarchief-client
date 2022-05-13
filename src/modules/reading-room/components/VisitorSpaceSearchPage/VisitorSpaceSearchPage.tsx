@@ -14,6 +14,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
 import {
@@ -66,7 +67,13 @@ import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { Breakpoints, OrderDirection, ReadingRoomMediaType, SortObject } from '@shared/types';
+import {
+	AccessStatus,
+	Breakpoints,
+	OrderDirection,
+	ReadingRoomMediaType,
+	SortObject,
+} from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
@@ -75,6 +82,9 @@ import {
 } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
+import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
+
+import { WaitingPage } from '../WaitingPage';
 
 const VisitorSpaceSearchPage: NextPage = () => {
 	useNavigationBorder();
@@ -125,16 +135,22 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { data: visitRequest } = useGetActiveVisitForUserAndSpace(
+	const { error: visitRequestError, data: visitRequest } = useGetActiveVisitForUserAndSpace(
 		slug as string,
 		typeof slug === 'string'
 	);
 
-	const {
-		data: visitorSpace,
-		error: visitRequestError,
-		isLoading: visitorSpaceIsLoading,
-	} = useGetVisitorSpace(slug as string, { enabled: visitRequest !== undefined });
+	const { data: accessStatus } = useGetVisitAccessStatus(
+		slug as string,
+		typeof slug === 'string'
+	);
+
+	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
+		slug as string,
+		{
+			enabled: visitRequest !== undefined || accessStatus?.status === AccessStatus.PENDING,
+		}
+	);
 
 	const { data: media } = useGetMediaObjects(
 		visitorSpace?.maintainerId?.toLocaleLowerCase() as string,
@@ -145,8 +161,9 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		visitorSpace?.maintainerId !== undefined
 	);
 
-	// visit info
-	const { data: visitStatus } = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+	const { data: filterOptions } = useGetMediaFilterOptions(
+		visitorSpace?.maintainerId?.toLocaleLowerCase() as string | undefined
+	);
 
 	const collections = useSelector(selectCollections);
 
@@ -154,14 +171,19 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 * Computed
 	 */
 
-	const isVisitorSpaceNoAccessError = (visitRequestError as HTTPError)?.response?.status === 403;
+	const isNoAccessError =
+		(visitRequestError as HTTPError)?.response?.status === 403 &&
+		accessStatus?.status === AccessStatus.NO_ACCESS;
+	const isAccessPendingError =
+		(visitRequestError as HTTPError)?.response?.status === 403 &&
+		accessStatus?.status === AccessStatus.PENDING;
 
 	/**
 	 * Effects
 	 */
 
 	useEffect(() => {
-		let buckets = media?.aggregations.dcterms_format.buckets;
+		let buckets = filterOptions?.dcterms_format.buckets;
 
 		if (!buckets || buckets.length === 0) {
 			buckets = [
@@ -180,7 +202,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			[ReadingRoomMediaType.Video]:
 				buckets.find((bucket) => bucket.key === ReadingRoomMediaType.Video)?.doc_count || 0,
 		});
-	}, [media?.aggregations]);
+	}, [filterOptions?.dcterms_format.buckets]);
 
 	/**
 	 * Display
@@ -358,8 +380,9 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		setQuery({ ...rest, ...query });
 	};
 
-	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) =>
+	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
 		setQuery({ orderProp, orderDirection });
+	};
 
 	const onTabClick = (tabId: string | number) => setQuery({ format: String(tabId) });
 
@@ -375,8 +398,8 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
 	const showResults = hasSearched && !!media && media?.items?.length > 0;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const accessEndDate = formatMediumDateWithTime(asDate(visitStatus?.endAt));
-	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitStatus?.endAt));
+	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
+	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
 
 	/**
 	 * Render
@@ -640,9 +663,15 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		if (visitorSpaceIsLoading) {
 			return <Loading fullscreen />;
 		}
-		if (isVisitorSpaceNoAccessError) {
+
+		if (isNoAccessError) {
 			return <ErrorNoAccess visitorSpaceSlug={slug as string} />;
 		}
+
+		if (isAccessPendingError) {
+			return <WaitingPage space={visitorSpace ?? undefined} />;
+		}
+
 		return renderVisitorSpace();
 	};
 
