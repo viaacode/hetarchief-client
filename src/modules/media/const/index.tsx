@@ -68,7 +68,7 @@ export const formatErrorPlaceholder = (format: string): ObjectPlaceholderProps =
 
 export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
 	description: i18n.t(
-		'modules/media/const/index___je-kan-het-object-enkel-bekijken-tijdens-een-fysiek-bezoek-aan-de-bezoekersruimte'
+		'modules/media/const/index___je-kan-dit-object-enkel-bekijken-tijdens-een-fysiek-bezoek-aan-de-bezoekersruimte'
 	),
 	reasonTitle: i18n.t('modules/media/const/index___waarom-kan-ik-dit-object-niet-bekijken'),
 	reasonDescription: i18n.t(
