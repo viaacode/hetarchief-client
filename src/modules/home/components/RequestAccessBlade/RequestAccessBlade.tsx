@@ -109,7 +109,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 
 				<FormControl
 					label={t(
-						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-leeszaal-bezoeken'
+						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
 					)}
 					suffix={OPTIONAL_LABEL()}
 				>

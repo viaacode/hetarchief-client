@@ -125,7 +125,7 @@ const ReadingRoomCardControls: FC<VisitorSpaceCardProps> = ({
 				{renderLabel(
 					'not-available',
 					t(
-						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___momenteel-is-er-geen-toegang-mogelijk-tot-deze-leeszaal'
+						'modules/shared/components/reading-room-card/reading-room-card-controls/reading-room-card-controls___momenteel-is-er-geen-toegang-mogelijk-tot-deze-bezoekersruimte'
 					)
 				)}
 

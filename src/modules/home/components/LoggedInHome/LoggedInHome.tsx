@@ -172,10 +172,10 @@ const LoggedInHome: FC = () => {
 			if (!query[VISITOR_SPACE_SLUG_QUERY_KEY]) {
 				toastService.notify({
 					title: t(
-						'modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-leeszaal'
+						'modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-bezoekersruimte'
 					),
 					description: t(
-						'modules/home/components/logged-in-home/logged-in-home___de-leeszaal-waarvoor-je-een-aanvraag-wil-indienen-is-niet-ingesteld'
+						'modules/home/components/logged-in-home/logged-in-home___de-bezoekersruimte-waarvoor-je-een-aanvraag-wil-indienen-is-niet-ingesteld'
 					),
 				});
 				return;
@@ -242,7 +242,7 @@ const LoggedInHome: FC = () => {
 
 						<p className={styles['c-hero__description']}>
 							{t(
-								'modules/shared/components/hero/hero___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-leeszaal'
+								'modules/shared/components/hero/hero___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-bezoekersruimte'
 							)}
 						</p>
 					</section>

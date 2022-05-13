@@ -25,7 +25,7 @@ export const ReadingRoomsOverviewTableColumns = (
 	updateVisitorSpaceState: (roomId: string, state: ReadingRoomStatus) => void
 ): Column<VisitorSpaceInfo>[] => [
 	{
-		Header: i18n.t('modules/admin/const/spaces___leeszaal'),
+		Header: i18n.t('modules/admin/const/spaces___bezoekersruimte'),
 		id: ReadingRoomOrderProps.ContentPartnerName,
 		accessor: 'name',
 	},
