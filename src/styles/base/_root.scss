@@ -2,7 +2,6 @@
 
 :root {
 	font-size: 62.5%;
-	overflow: hidden;
 }
 
 body {
@@ -11,7 +10,6 @@ body {
 	line-height: $line-height-lg;
 	margin: 0;
 	overflow-y: scroll;
-	max-height: 100vh;
 }
 
 *,
