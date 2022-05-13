@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
+import { VisitorSpaceSort } from '@reading-room/types';
 import { Icon } from '@shared/components';
 import { OrderDirection } from '@shared/types';
 
@@ -50,6 +51,11 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const goBackToInitial = activeFilter
 		? () => onFilterClick(activeFilter)
 		: () => setIsSortActive(false);
+
+	const handleSortClick = (key: VisitorSpaceSort, order?: OrderDirection) => {
+		onSortClick?.(key, order);
+		setIsSortActive(false);
+	};
 
 	// Render
 
@@ -164,7 +170,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							<FilterSortList
 								activeSort={activeSort}
 								options={sortOptions}
-								onOptionClick={onSortClick}
+								onOptionClick={handleSortClick}
 							/>
 						</>
 					)}
