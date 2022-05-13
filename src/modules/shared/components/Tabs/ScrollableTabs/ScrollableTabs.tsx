@@ -43,9 +43,8 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 	const scrollToActive = useCallback(() => {
 		if (activeEl && tabsRef.current) {
 			const tabsEl = tabsRef.current;
-			const rect = activeEl.getBoundingClientRect();
 			// - 20 = width of gradient, so the active tab will be fully visible
-			const newX = rect.left + tabsEl.scrollLeft - 20;
+			const newX = (activeEl as HTMLDivElement).offsetLeft - 20;
 
 			// scrollTo is not supported on IE and Safari (iOS)
 			if (tabsEl.scrollTo) {

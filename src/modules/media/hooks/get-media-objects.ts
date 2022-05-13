@@ -8,14 +8,14 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setResults } from '@shared/store/media';
 import {
 	GetMediaResponse,
+	MediaSearchFilter,
 	MediaSearchFilterField,
-	MediaSearchFilters,
 	SortObject,
 } from '@shared/types';
 
 export function useGetMediaObjects(
 	orgId: string,
-	filters: MediaSearchFilters,
+	filters: MediaSearchFilter[],
 	page: number,
 	size: number,
 	sort?: SortObject,
@@ -25,48 +25,48 @@ export function useGetMediaObjects(
 
 	return useQuery(
 		[QUERY_KEYS.getMediaObjects, { slug: orgId, filters, page, size, sort, enabled }],
-		() => {
-			// TODO: improve ⚠️
-			// Run three queries:
-			//     - One to fetch the results for a specific tab (results),
-			//     - one to fetch the aggregates without any criteria to populate filters (noFilters)
-			//     - and one to fetch the aggregates across tabs (noFormat)
-			return Promise.all([
-				MediaService.getBySpace(orgId, filters, page, size, sort),
-				MediaService.getBySpace(orgId, [], page, size, sort),
-				MediaService.getBySpace(
-					orgId,
-					filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
-					page,
-					size,
-					sort
-				),
-			]).then((responses) => {
-				const [results, noFilters, noFormat] = responses;
-				const output = {
+		async () => {
+			let searchResults: GetMediaResponse;
+			if (filters.length) {
+				// Run 2 queries:
+				//     - One to fetch the results for a specific tab (results),
+				//     - and one to fetch the aggregates across tabs (noFormat)
+				const responses = await Promise.all([
+					MediaService.getBySpace(orgId, filters, page, size, sort),
+					MediaService.getBySpace(
+						orgId,
+						filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
+						page,
+						0,
+						sort
+					),
+				]);
+				const [results, noFormat] = responses;
+				searchResults = {
 					...results,
 					aggregations: {
-						...noFilters.aggregations,
-						dcterms_format: noFormat.aggregations.dcterms_format,
+						...noFormat.aggregations,
 					},
 				};
+			} else {
+				searchResults = await MediaService.getBySpace(orgId, [], page, size, sort);
+			}
 
-				dispatch(setResults(output));
+			dispatch(setResults(searchResults));
 
-				// Log event
-				EventsService.triggerEvent(LogEventType.SEARCH, window.location.href, {
-					orgId,
-					filters,
-					page,
-					size,
-					sort,
-				});
-
-				return output;
+			// Log event
+			EventsService.triggerEvent(LogEventType.SEARCH, window.location.href, {
+				orgId,
+				filters,
+				page,
+				size,
+				sort,
 			});
+
+			return searchResults;
 		},
 		{
-			keepPreviousData: false,
+			keepPreviousData: true,
 			enabled,
 		}
 	);

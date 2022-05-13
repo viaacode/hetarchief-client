@@ -18,7 +18,7 @@ export const mockNames = [
 export const mockData = [1, 2, 3, 4, 5, 6, 7, 8].map((data) => {
 	const name = mockNames[data - 1];
 	const email = `${name.replaceAll(' ', '').toLowerCase()}@gmail.be`;
-	const room = 'Leeszaal 1';
+	const room = 'Bezoekersruimte 1';
 
 	return {
 		id: data,

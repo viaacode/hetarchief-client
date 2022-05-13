@@ -37,6 +37,13 @@
 	}
 }
 
+.c-filter-menu-mobile__tags {
+	:global(.c-tag) {
+		padding-right: 0;
+		background-color: $teal;
+	}
+}
+
 .c-filter-menu-mobile__filters {
 	.c-filter-menu__filter {
 		width: 100%;
