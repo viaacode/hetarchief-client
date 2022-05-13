@@ -68,7 +68,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 	}, [setWidget, updateFooterHeight, updateMargin]);
 
 	const initListeners = useCallback(() => {
-		document.getElementsByTagName('body')[0].addEventListener('scroll', updateMargin);
+		document.addEventListener('scroll', updateMargin);
 		window.addEventListener('resize', () => {
 			updateFooterHeight();
 			updateMargin();
