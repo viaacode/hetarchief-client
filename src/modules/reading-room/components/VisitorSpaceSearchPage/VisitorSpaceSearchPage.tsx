@@ -462,26 +462,20 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const renderResults = () => (
 		<>
 			<MediaCardList
-				items={media?.items
-					.filter((mediaObject) => {
-						const isSOLR = mediaObject.type === 'SOLR';
-						isSOLR && alert('SOLR item detected') && console.error(mediaObject);
-						return !isSOLR;
+				items={media?.items.map(
+					(item): IdentifiableMediaCard => ({
+						schemaIdentifier: item.schema_identifier,
+						description: item.schema_description,
+						title: item.schema_name,
+						publishedAt: item.schema_date_published
+							? asDate(item.schema_date_published)
+							: undefined,
+						publishedBy: item.schema_maintainer?.schema_name ?? '',
+						type: item.dcterms_format,
+						preview: item.schema_thumbnail_url || undefined,
+						name: item.schema_name,
 					})
-					.map(
-						(item): IdentifiableMediaCard => ({
-							schemaIdentifier: item.schema_identifier,
-							description: item.schema_description,
-							title: item.schema_name,
-							publishedAt: item.schema_date_published
-								? asDate(item.schema_date_published)
-								: undefined,
-							publishedBy: item.schema_maintainer?.schema_name ?? '',
-							type: item.dcterms_format,
-							preview: item.schema_thumbnail_url || undefined,
-							name: item.schema_name,
-						})
-					)}
+				)}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
 				view={viewMode}
