@@ -44,7 +44,7 @@ export const requestStatusFilters = (): TabProps[] => {
 
 export const RequestTableColumns = (): Column<Visit>[] => [
 	{
-		Header: i18n.t('modules/admin/const/requests___leeszaal'),
+		Header: i18n.t('modules/admin/const/requests___bezoekersruimte'),
 		accessor: 'spaceName',
 	},
 	{

@@ -414,7 +414,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					activeSort={activeSort}
 					filters={READING_ROOM_FILTERS()}
 					filterValues={query}
-					label={t('pages/leeszaal/reading-room-slug/index___filters')}
+					label={t('pages/bezoekersruimte/reading-room-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileFilterMenuOpen}
 					showNavigationBorder={showNavigationBorder}
@@ -519,9 +519,12 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				accessEndDateMobile,
 			});
 		}
-		return t('pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date', {
-			accessEndDate,
-		});
+		return t(
+			'pages/bezoekersruimte/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+			{
+				accessEndDate,
+			}
+		);
 	};
 
 	const renderVisitorSpace = () => (
@@ -541,12 +544,14 @@ const VisitorSpaceSearchPage: NextPage = () => {
 							<TagSearchBar
 								allowCreate
 								className="u-mb-24"
-								clearLabel={t('pages/leeszaal/slug___wis-volledige-zoekopdracht')}
+								clearLabel={t(
+									'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
+								)}
 								instanceId="reading-room-search-bar"
 								isMulti
 								size="lg"
 								placeholder={t(
-									'pages/leeszaal/slug___zoek-op-trefwoord-jaartal-aanbieder'
+									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 								)}
 								syncSearchValue={false}
 								value={activeFilters}
@@ -597,10 +602,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 										className="p-reading-room__placeholder"
 										img="/images/lightbulb.svg"
 										title={t(
-											'pages/leeszaal/reading-room-slug/index___start-je-zoektocht'
+											'pages/bezoekersruimte/reading-room-slug/index___start-je-zoektocht'
 										)}
 										description={t(
-											'pages/leeszaal/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
+											'pages/bezoekersruimte/reading-room-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
 										)}
 									/>
 								</>
@@ -613,10 +618,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 										className="p-reading-room__placeholder"
 										img="/images/looking-glass.svg"
 										title={t(
-											'pages/leeszaal/reading-room-slug/index___geen-resultaten'
+											'pages/bezoekersruimte/reading-room-slug/index___geen-resultaten'
 										)}
 										description={t(
-											'pages/leeszaal/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
+											'pages/bezoekersruimte/reading-room-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
 										)}
 									/>
 								</>
@@ -675,7 +680,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					name="description"
 					content={
 						visitorSpace?.info ||
-						t('pages/leeszaal/reading-room-slug/index___een-leeszaal')
+						t('pages/bezoekersruimte/reading-room-slug/index___een-bezoekersruimte')
 					}
 				/>
 			</Head>

@@ -541,12 +541,12 @@ const ObjectDetailPage: NextPage = () => {
 							>
 								<span className="u-text-ellipsis u-display-none u-display-block:md">
 									{t(
-										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+										'pages/bezoekersruimte/reading-room-slug/object-id/index___exporteer-metadata'
 									)}
 								</span>
 								<span className="u-text-ellipsis u-display-none:md">
 									{t(
-										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+										'pages/bezoekersruimte/reading-room-slug/object-id/index___metadata'
 									)}
 								</span>
 							</Button>
@@ -573,7 +573,7 @@ const ObjectDetailPage: NextPage = () => {
 								metadata={[
 									{
 										title: t(
-											'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
+											'pages/bezoekersruimte/reading-room-slug/object-id/index___trefwoorden'
 										),
 										data: mapKeywordsToTagList(mediaInfo.keywords),
 									},
@@ -608,10 +608,10 @@ const ObjectDetailPage: NextPage = () => {
 				title={
 					related.length === 1
 						? t(
-								'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
+								'pages/bezoekersruimte/reading-room-slug/object-id/index___1-gerelateerd-object'
 						  )
 						: t(
-								'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+								'pages/bezoekersruimte/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
 								{
 									amount: related.length,
 								}
@@ -663,7 +663,7 @@ const ObjectDetailPage: NextPage = () => {
 									accessEndDateMobile,
 							  })
 							: t(
-									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+									'pages/bezoekersruimte/reading-room-slug/object-id/index___toegang-tot-access-end-date',
 									{ accessEndDate }
 							  )
 						: undefined
@@ -678,7 +678,7 @@ const ObjectDetailPage: NextPage = () => {
 			{mediaInfoIsError && (
 				<p className={'p-object-detail__error'}>
 					{t(
-						'pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+						'pages/bezoekersruimte/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
 					)}
 				</p>
 			)}
