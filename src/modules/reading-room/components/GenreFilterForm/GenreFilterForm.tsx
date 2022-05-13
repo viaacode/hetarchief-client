@@ -9,7 +9,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
-import { selectMediaResults } from '@shared/store/media';
+import { selectMediaFilterOptions } from '@shared/store/media';
 
 import {
 	GENRE_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -35,9 +35,9 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 		defaultValues,
 	});
 
-	const buckets = (
-		useSelector(selectMediaResults)?.aggregations.schema_genre.buckets || []
-	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
+	const buckets = (useSelector(selectMediaFilterOptions)?.schema_genre.buckets || []).filter(
+		(bucket) => bucket.key.toLowerCase().includes(search.toLowerCase())
+	);
 
 	// Effects
 

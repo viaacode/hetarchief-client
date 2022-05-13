@@ -16,7 +16,9 @@ export const DURATION_FILTER_FORM_SCHEMA = (): SchemaOf<DurationFilterFormState>
 			.optional()
 			.test(
 				'duration',
-				i18n.t('Invoer is ongeldig, dit moet een geldige tijd zijn. bv: 00:15:30'),
+				i18n.t(
+					'modules/reading-room/components/duration-filter-form/duration-filter-form___invoer-is-ongeldig-dit-moet-een-geldige-tijd-zijn-bv-00-15-30'
+				),
 				(value: string | undefined) =>
 					new RegExp(`^$|^${durationRegex}(${SEPARATOR}${durationRegex})?$`, 'g').test(
 						value || ''

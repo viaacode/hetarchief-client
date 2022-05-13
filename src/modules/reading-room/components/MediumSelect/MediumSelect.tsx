@@ -3,11 +3,11 @@ import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectMediaResults } from '@shared/store/media';
+import { selectMediaFilterOptions } from '@shared/store/media';
 
 const MediumSelect: FC<ReactSelectProps> = (props) => {
 	const { t } = useTranslation();
-	const aggregates = useSelector(selectMediaResults)?.aggregations.dcterms_medium.buckets;
+	const aggregates = useSelector(selectMediaFilterOptions)?.dcterms_medium.buckets;
 
 	const options = (aggregates || []).map((bucket) => ({
 		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results

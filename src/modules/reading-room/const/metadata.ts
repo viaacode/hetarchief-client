@@ -18,8 +18,8 @@ import {
 import { MetadataProp } from '@reading-room/types';
 import { i18n } from '@shared/helpers/i18n';
 import {
+	MediaSearchFilter,
 	MediaSearchFilterField,
-	MediaSearchFilters,
 	MediaSearchOperator,
 	Operator,
 } from '@shared/types';
@@ -31,7 +31,7 @@ export type MetadataConfig = {
 		[key in Operator]?: {
 			label: string;
 			field: MetadataFields;
-			filters?: MediaSearchFilters;
+			filters?: MediaSearchFilter[];
 		};
 	};
 };
@@ -539,6 +539,6 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 export const getMetadataSearchFilters = (
 	prop: MetadataProp,
 	operator: Operator
-): MediaSearchFilters => {
+): MediaSearchFilter[] => {
 	return METADATA_CONFIG()[prop]?.[operator]?.filters || [];
 };
