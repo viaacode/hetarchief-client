@@ -31,7 +31,7 @@ const ContextualTemplate: ComponentStory<typeof Navigation> = (args) => (
 				<Icon name="arrow-left" />
 			</a>
 		</Navigation.Left>
-		<Navigation.Center title="Leeszaal 8" />
+		<Navigation.Center title="Bezoekersruimte 8" />
 		<Navigation.Right placement="right">
 			<Button
 				className="u-color-white u-px-12"

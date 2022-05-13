@@ -12,7 +12,7 @@ import {
 } from '@reading-room/types';
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
-import { MediaSearchFilters, Operator } from '@shared/types';
+import { MediaSearchFilter, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 
 import { getOperators, getProperties } from '../metadata';
@@ -148,7 +148,7 @@ export const mapFiltersToTags = (query: ReadingRoomQueryParams): TagIdentity[] =
 	];
 };
 
-export const mapAdvancedToElastic = (item: AdvancedFilter): MediaSearchFilters => {
+export const mapAdvancedToElastic = (item: AdvancedFilter): MediaSearchFilter[] => {
 	const values = (item.val || '').split(SEPARATOR);
 	const filters =
 		item.prop && item.op
@@ -156,7 +156,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): MediaSearchFilters =
 			: [];
 
 	// Format data for Elastic
-	return filters.map((filter, i) => {
+	return filters.map((filter: MediaSearchFilter, i: number) => {
 		let parsed;
 
 		switch (item.prop) {

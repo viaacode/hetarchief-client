@@ -1,6 +1,8 @@
-import { NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import Script from 'next/script';
 import React from 'react';
+
+import { withI18n } from '@i18n/wrappers';
 
 import styles from './cookie-policy.module.scss';
 
@@ -15,5 +17,7 @@ const CookiePolicy: NextPage = () => {
 		</div>
 	);
 };
+
+export const getStaticProps: GetStaticProps = withI18n();
 
 export default CookiePolicy;

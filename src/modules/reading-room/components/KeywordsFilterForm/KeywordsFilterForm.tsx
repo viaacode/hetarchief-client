@@ -3,7 +3,6 @@ import { FormControl, keysEnter, onKey, TagInfo, TagsInput } from '@meemoo/react
 import clsx from 'clsx';
 import { FC, KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
 import { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 

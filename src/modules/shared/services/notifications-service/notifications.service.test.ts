@@ -11,8 +11,8 @@ const newestDate = '2022-05-05T16:30:48.824352+00:00';
 const mockReadNotification = {
 	id: '66f12986-a17a-44be-9b1d-1966fa28ee65',
 	description:
-		'Je aanvraag voor leeszaal AMVB is goedgekeurd. Je zal toegang hebben van 03/05/2022 17:45 tot 03/05/2022 19:30',
-	title: 'Je aanvraag voor leeszaal AMVB is goedgekeurd',
+		'Je aanvraag voor bezoekersruimte AMVB is goedgekeurd. Je zal toegang hebben van 03/05/2022 17:45 tot 03/05/2022 19:30',
+	title: 'Je aanvraag voor bezoekersruimte AMVB is goedgekeurd',
 	status: 'READ',
 	visitId: '8ad7d557-5dd0-42a6-99e8-4da9c65e35fe',
 	createdAt: oldDate,
@@ -24,7 +24,7 @@ const mockReadNotification = {
 const mockUnreadNotification = {
 	id: '5467ed49-23d7-40a2-b5cc-4408a98f268b',
 	description: 'Je toegang vervalt terug op 03/05/2022 19:30',
-	title: 'Je hebt nu toegang tot de leeszaal AMVB',
+	title: 'Je hebt nu toegang tot de bezoekersruimte AMVB',
 	status: 'UNREAD',
 	visitId: '8ad7d557-5dd0-42a6-99e8-4da9c65e35fe',
 	createdAt: oldDate,
@@ -36,7 +36,7 @@ const mockUnreadNotification = {
 const mockNewUnreadNotification = {
 	id: '5467ed49-23d7-40a2-b5cc-4408a98f268b',
 	description: 'Je toegang vervalt terug op 03/05/2022 19:30',
-	title: 'Je hebt nu toegang tot de leeszaal AMVB',
+	title: 'Je hebt nu toegang tot de bezoekersruimte AMVB',
 	status: 'UNREAD',
 	visitId: '8ad7d557-5dd0-42a6-99e8-4da9c65e35fe',
 	createdAt: newDate,
@@ -190,7 +190,7 @@ describe('NotificationService', () => {
 				expect.objectContaining({
 					buttonLabel: 'bekijk ***',
 					description: 'Je toegang vervalt terug op 03/05/2022 19:30',
-					title: 'Je hebt nu toegang tot de leeszaal AMVB',
+					title: 'Je hebt nu toegang tot de bezoekersruimte AMVB',
 				})
 			);
 
