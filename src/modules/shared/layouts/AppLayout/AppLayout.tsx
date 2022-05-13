@@ -3,6 +3,7 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { FC, useCallback, useEffect, useMemo } from 'react';
+import { useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 
@@ -52,6 +53,7 @@ const { publicRuntimeConfig } = getConfig();
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
+	const queryClient = useQueryClient();
 	const router = useRouter();
 	const { asPath } = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
@@ -93,6 +95,7 @@ const AppLayout: FC = ({ children }) => {
 
 	useEffect(() => {
 		if (router && user) {
+			NotificationsService.setQueryClient(queryClient);
 			NotificationsService.initPolling(router, setNotificationsOpen, setUnreadNotifications);
 		} else {
 			NotificationsService.stopPolling();

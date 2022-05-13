@@ -43,8 +43,8 @@ import {
 import { isInAFolder, mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import {
+	ErrorNoAccess,
 	ErrorNotFound,
-	ErrorSpaceNoAccess,
 	Icon,
 	Loading,
 	ScrollableTabs,
@@ -524,10 +524,7 @@ const ObjectDetailPage: NextPage = () => {
 						{mediaInfo?.name}
 					</h3>
 					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
-						<TextWithNewLines
-							text={mediaInfo?.description}
-							className="u-color-neutral"
-						/>
+						<TextWithNewLines text={mediaInfo?.description} />
 					</p>
 					<div className="u-pb-24 p-object-detail__actions">
 						{canDownloadMetadata && (
@@ -740,7 +737,7 @@ const ObjectDetailPage: NextPage = () => {
 			return <ErrorNotFound />;
 		}
 		if (isErrorSpaceNoAccess) {
-			return <ErrorSpaceNoAccess visitorSpaceSlug={router.query.slug as string} />;
+			return <ErrorNoAccess visitorSpaceSlug={router.query.slug as string} />;
 		}
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};

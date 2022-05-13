@@ -3,7 +3,6 @@ import { useQuery } from 'react-query';
 import { UseQueryResult } from 'react-query/types/react/types';
 
 import { MediaService } from '@media/services';
-import { Media } from '@media/types';
 import { QUERY_KEYS } from '@shared/const';
 
 export interface JsonWaveformData {
@@ -31,7 +30,6 @@ export function useGetPeakFile(
 		}
 
 		const peakFileResponse = await ky.get(jsonFileUrl);
-		const peakFileJson = (await peakFileResponse.json()) as JsonWaveformData;
-		return peakFileJson;
+		return (await peakFileResponse.json()) as JsonWaveformData;
 	});
 }
