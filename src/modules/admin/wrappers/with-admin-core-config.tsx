@@ -5,6 +5,7 @@ import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 
+import { PermissionsService, UserGroupsService } from '@admin/services';
 import { navigationService } from '@navigation/services/navigation-service';
 import { sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
@@ -91,6 +92,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						fetchEducationOrganisations: () => Promise.resolve([]),
 					},
 					router: routerConfig as any,
+					UserGroupsService,
+					PermissionsService,
 				},
 				database: {
 					databaseApplicationType: AvoOrHetArchief.hetArchief,
