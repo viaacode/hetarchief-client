@@ -24,5 +24,5 @@ test('Should redirect to login page and redirect after login', async ({ page }) 
 	// Check redirect back to the home page
 	expect(await page.title()).toEqual('Home | Het Archief');
 	expect(page.url()).toContain(process.env.TEST_ENDPOINT as string);
-	await expect(await page.locator('text=Vind een leeszaal')).toBeVisible();
+	await expect(await page.locator('text=Vind een bezoekersruimte')).toBeVisible();
 });

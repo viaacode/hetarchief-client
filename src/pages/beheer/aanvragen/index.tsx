@@ -7,7 +7,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestTableColumns } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 import VisitRequestsOverview from '@visits/components/VisitRequestsOverview/VisitRequestsOverview';
 

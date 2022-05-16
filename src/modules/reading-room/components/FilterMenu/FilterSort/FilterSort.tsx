@@ -1,6 +1,7 @@
 import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import { FC, useState } from 'react';
 
+import { VisitorSpaceSort } from '@reading-room/types';
 import { Overlay } from '@shared/components';
 import { OrderDirection } from '@shared/types';
 
@@ -19,6 +20,11 @@ const FilterSort: FC<FilterSortProps> = ({
 	const [sortOptionsOpen, setSortOptionsOpen] = useState(false);
 
 	const onCloseDropdown = () => setSortOptionsOpen(false);
+
+	const handleOptionClick = (key: VisitorSpaceSort, order?: OrderDirection) => {
+		onOptionClick?.(key, order);
+		setSortOptionsOpen(false);
+	};
 
 	return (
 		<>
@@ -45,7 +51,7 @@ const FilterSort: FC<FilterSortProps> = ({
 					<FilterSortList
 						activeSort={activeSort}
 						options={options}
-						onOptionClick={onOptionClick}
+						onOptionClick={handleOptionClick}
 					/>
 				</DropdownContent>
 			</Dropdown>

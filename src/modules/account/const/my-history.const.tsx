@@ -25,7 +25,7 @@ export const HistoryTableColumns = (
 	onClickRow: (visit: Visit) => void
 ): HistoryTableColumnProps[] => [
 	{
-		Header: i18n.t('modules/account/const/my-history___leeszaal') || '',
+		Header: i18n.t('modules/account/const/my-history___bezoekersruimte') || '',
 		accessor: 'spaceName',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;

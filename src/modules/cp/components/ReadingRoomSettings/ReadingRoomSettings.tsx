@@ -78,20 +78,20 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 
 	return (
 		<div className={className}>
-			{/* Leeszaal */}
+			{/* Bezoekersruimte */}
 			<article className={styles['c-cp-settings__content-block']}>
 				<h2 className={styles['c-cp-settings__title']}>
-					{t('pages/beheer/instellingen/index___leeszaal')}
+					{t('pages/beheer/instellingen/index___bezoekersruimte')}
 				</h2>
 				<Box className={styles['c-cp-settings__box']}>
 					<p className={styles['c-cp-settings__description']}>
 						{t(
-							'pages/beheer/instellingen/index___personaliseer-hoe-jouw-leeszaal-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
+							'pages/beheer/instellingen/index___personaliseer-hoe-jouw-bezoekersruimte-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
 						)}
 					</p>
 					{room && (
 						<ReadingRoomImageForm
-							className={styles['c-cp-settings__leeszaal-controls']}
+							className={styles['c-cp-settings__bezoekersruimte-controls']}
 							room={room}
 							renderCancelSaveButtons={renderCancelSaveButtons}
 							onSubmit={(values, afterSubmit) => {
@@ -110,7 +110,7 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 				<Box className={styles['c-cp-settings__box']}>
 					<p className={styles['c-cp-settings__description']}>
 						{t(
-							'pages/beheer/instellingen/index___dit-is-de-wachtzaalomschrijving-die-bezoekers-kunnen-lezen-op-de-detailpagina-van-je-leeszaal-leg-uit-waar-je-leeszaal-om-gaat-welke-info-men-er-kan-vinden-vertel-de-bezoeker-over-je-collectie'
+							'pages/beheer/instellingen/index___dit-is-de-wachtzaalomschrijving-die-bezoekers-kunnen-lezen-op-de-detailpagina-van-je-bezoekersruimte-leg-uit-waar-je-bezoekersruimte-om-gaat-welke-info-men-er-kan-vinden-vertel-de-bezoeker-over-je-collectie'
 						)}
 					</p>
 					<RichTextForm
@@ -126,7 +126,7 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 			{/* Aanvraag */}
 			<article className={styles['c-cp-settings__content-block']}>
 				<h2 className={styles['c-cp-settings__title']}>
-					{t('pages/beheer/instellingen/index___omschrijving-leeszaal-aanvraag')}
+					{t('pages/beheer/instellingen/index___omschrijving-bezoekersruimte-aanvraag')}
 				</h2>
 				<Box className={styles['c-cp-settings__box']}>
 					<p className={styles['c-cp-settings__description']}>

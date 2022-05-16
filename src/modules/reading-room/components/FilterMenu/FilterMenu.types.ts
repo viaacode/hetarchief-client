@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { DefaultFilterFormProps, ReadingRoomSort } from '@reading-room/types';
+import { DefaultFilterFormProps, TagIdentity, VisitorSpaceSort } from '@reading-room/types';
 import { IconProps, ToggleOption } from '@shared/components';
 import { DefaultComponentProps, OrderDirection, SortObject } from '@shared/types';
 
@@ -18,12 +18,13 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	onFilterReset?: OnFilterMenuFormReset;
 	onFilterSubmit?: OnFilterMenuFormSubmit;
 	onViewToggle?: (viewMode: string) => void;
+	onRemoveValue?: (tags: TagIdentity[]) => void;
 	showNavigationBorder: boolean;
 }
 
 export interface FilterMenuSortOption {
 	label: string;
-	orderProp: ReadingRoomSort;
+	orderProp: VisitorSpaceSort;
 	orderDirection?: OrderDirection;
 }
 
@@ -34,6 +35,6 @@ export interface FilterMenuFilterOption {
 	form: FC<DefaultFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-export type OnFilterMenuSortClick = (key: ReadingRoomSort, order?: OrderDirection) => void;
+export type OnFilterMenuSortClick = (key: VisitorSpaceSort, order?: OrderDirection) => void;
 export type OnFilterMenuFormSubmit = <Values>(id: string, values: Values) => void;
 export type OnFilterMenuFormReset = (id: string) => void;

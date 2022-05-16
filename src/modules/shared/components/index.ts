@@ -10,7 +10,7 @@ export * from './DeclineRequestBlade';
 export * from './DropdownMenu';
 export * from './ErrorNotFound';
 export * from './ErrorPage';
-export * from './ErrorSpaceNoAccess';
+export * from './ErrorNoAccess';
 export * from './Icon';
 export * from './ListNavigation';
 export * from './Loading';

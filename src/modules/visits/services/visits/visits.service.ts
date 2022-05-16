@@ -88,13 +88,15 @@ export class VisitsService {
 			.json();
 	}
 
-	public static async getAccessStatusBySpaceId(id: string): Promise<VisitAccessStatus | null> {
-		if (id.length === 0) {
+	public static async getAccessStatusBySpaceSlug(
+		slug: string
+	): Promise<VisitAccessStatus | null> {
+		if (slug.length === 0) {
 			return null;
 		}
 		return await ApiService.getApi()
 			.get(
-				`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_SPACE_URL}/${id}/${VISITS_SERVICE_ACCESS_STATUS_URL}`
+				`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_SPACE_URL}/${slug}/${VISITS_SERVICE_ACCESS_STATUS_URL}`
 			)
 			.json();
 	}

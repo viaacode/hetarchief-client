@@ -13,7 +13,7 @@ import { NotificationCenterProps } from '../NotificationCenter.types';
 
 const mockTitle = 'Je bezoek aanvraag is goedgekeurd';
 const mockDescription =
-	'Je bezoek aanvraag aan de leeszaal van Gents museum is goedgekeurd, je hebt toegang van 12:00 to 16:00 op 17 feb 2022';
+	'Je bezoek aanvraag aan de bezoekersruimte van Gents museum is goedgekeurd, je hebt toegang van 12:00 to 16:00 op 17 feb 2022';
 
 export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
 	items: [

@@ -8,6 +8,8 @@ import { useScrollbarWidth } from '../use-scrollbar-width';
 
 import { UseScrollLock } from './use-scroll-lock.types';
 
+type scrollState = { __scrollDepth?: number };
+
 const useScrollLock: UseScrollLock = (lock, id) => {
 	// Ensure state is synced first, before any operations
 	const dispatch = useDispatch();
@@ -28,34 +30,36 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 	 */
 
 	// wrapper for window.scrollTo
-	const scroll = (y?: string, behavior?: ScrollBehavior) => {
-		const parsed = parseInt(y || '0');
+	const scroll = useCallback((behavior?: ScrollBehavior) => {
 		window.scrollTo({
-			top: parsed,
+			top: (document as unknown as scrollState).__scrollDepth,
 			left: 0,
 			behavior,
 		});
-	};
+	}, []);
 
 	// Block wheel events outside of blade body (needed for Safari)
-	const preventWheel = useCallback((e?: WheelEvent) => {
-		const target = e?.target as HTMLElement | null;
-		const inBlade = findParentByClass('c-blade__body-wrapper', target);
+	const preventWheel = useCallback(
+		(e?: WheelEvent) => {
+			const target = e?.target as HTMLElement | null;
+			const inBlade = findParentByClass('c-blade__body-wrapper', target);
 
-		if (inBlade) {
-			const { scrollHeight: total, clientHeight: size, scrollTop: depth } = inBlade;
-			const goingUp = (e?.deltaY || 0) < 0;
-			const goingDown = (e?.deltaY || 0) > 0;
-			const atBottom = total === size + depth;
+			if (inBlade) {
+				const { scrollHeight: total, clientHeight: size, scrollTop: depth } = inBlade;
+				const goingUp = (e?.deltaY || 0) < 0;
+				const goingDown = (e?.deltaY || 0) > 0;
+				const atBottom = total === size + depth;
 
-			if (goingUp || (goingDown && !atBottom)) {
-				return;
+				if (goingUp || (goingDown && !atBottom)) {
+					return;
+				}
 			}
-		}
 
-		scroll(document.body.dataset.depth, 'smooth');
-		e?.preventDefault();
-	}, []);
+			scroll('smooth');
+			e?.stopImmediatePropagation();
+		},
+		[scroll]
+	);
 
 	/**
 	 * Actions
@@ -63,9 +67,9 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 
 	const disable = useCallback(
 		(el: HTMLElement) => {
-			// Use the element as a one-shot state machine
-			if (!el.dataset.depth) {
-				el.dataset.depth = `${window.scrollY}`;
+			// Use the document as a one-shot state machine
+			if (!(document as unknown as scrollState).__scrollDepth) {
+				(document as unknown as scrollState).__scrollDepth = window.scrollY;
 			}
 
 			el.style.overflowY = 'hidden';
@@ -73,21 +77,27 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 			window.onwheel = preventWheel;
 
 			// Use that state to go to the right depth
-			scroll(el.dataset.depth);
+			scroll();
 		},
-		[scrollbarWidth, preventWheel]
+		[scrollbarWidth, scroll, preventWheel]
 	);
 
-	const enable = useCallback((el: HTMLElement) => {
-		el.style.overflowY = '';
-		el.style.marginRight = '';
-		window.onwheel = null;
+	const enable = useCallback(
+		(el: HTMLElement) => {
+			el.style.overflowY = '';
+			el.style.marginRight = '';
+			window.onwheel = null;
 
-		scroll(el.dataset.depth);
+			scroll();
 
-		// Wipe our state once we're done
-		el.removeAttribute('data-depth');
-	}, []);
+			// Wipe our state asynchronously once every hook instance is done
+			// Known issue: when rapidly (<50ms) toggling blades, the scrollDepth is lost
+			setTimeout(() => {
+				delete (document as unknown as scrollState).__scrollDepth;
+			}, 50);
+		},
+		[scroll]
+	);
 
 	/**
 	 * Switch
