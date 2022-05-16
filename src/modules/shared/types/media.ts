@@ -34,14 +34,17 @@ export enum MediaSearchOperator {
 	LTE = 'lte',
 }
 
+export enum License {
+	BEZOEKERTOOL_CONTENT = 'BEZOEKERTOOL-CONTENT',
+	BEZOEKERTOOL_METADATA_ALL = 'BEZOEKERTOOL-METADATA-ALL',
+}
+
 export interface MediaSearchFilter {
 	field: MediaSearchFilterField;
 	multiValue?: string[];
 	operator: MediaSearchOperator;
 	value?: string;
 }
-
-export type MediaSearchFilters = MediaSearchFilter[];
 
 export interface MediaInfo {
 	meemoo_fragment_id: string; // Unique id per object

@@ -23,7 +23,7 @@ describe('Page: <Home />', () => {
 	it('Should render a wrapper page', async () => {
 		const { container } = renderHome();
 		await waitFor(() => {
-			expect(queryByText(container, 'Vind een leeszaal')).toBeDefined();
+			expect(queryByText(container, 'Vind een bezoekersruimte')).toBeDefined();
 		});
 		const wrapper = container.querySelector('.p-home');
 

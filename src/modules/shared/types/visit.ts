@@ -15,7 +15,7 @@ export interface Visit {
 	createdAt: string;
 	endAt?: string;
 	id: string;
-	note: string | null;
+	note?: VisitNote;
 	reason?: string;
 	spaceId: string;
 	spaceSlug: string;
@@ -37,6 +37,13 @@ export interface Visit {
 	visitorName?: string;
 	updatedById: string;
 	updatedByName: string;
+}
+
+export interface VisitNote {
+	authorName: string;
+	createdAt: string;
+	id: string;
+	note: string;
 }
 
 export type VisitRow = { row: { original: Visit } };

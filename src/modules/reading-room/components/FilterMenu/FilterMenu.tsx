@@ -1,12 +1,15 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { Trans } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { READING_ROOM_ACTIVE_SORT_MAP, READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
-import { ReadingRoomSort } from '@reading-room/types';
+import {
+	VISITOR_SPACE_ACTIVE_SORT_MAP,
+	VISITOR_SPACE_QUERY_PARAM_CONFIG,
+} from '@reading-room/const';
+import { VisitorSpaceSort } from '@reading-room/types';
 import { Icon, IconLightNames, Toggle } from '@shared/components';
+import { i18n } from '@shared/helpers/i18n';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
@@ -32,10 +35,11 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onMenuToggle,
 	onSortClick,
 	onViewToggle = () => null,
+	onRemoveValue,
 	showNavigationBorder,
 }) => {
 	const [query, setQuery] = useQueryParams({
-		filter: READING_ROOM_QUERY_PARAM_CONFIG.filter,
+		filter: VISITOR_SPACE_QUERY_PARAM_CONFIG.filter,
 	});
 
 	const [lockScroll, setLockScroll] = useState<boolean>(false);
@@ -91,15 +95,14 @@ const FilterMenu: FC<FilterMenuProps> = ({
 
 	const renderActiveSortLabel = () => {
 		const sortBtnLabel = activeSort
-			? READING_ROOM_ACTIVE_SORT_MAP()[activeSort.orderProp as ReadingRoomSort]
+			? VISITOR_SPACE_ACTIVE_SORT_MAP()[activeSort.orderProp as VisitorSpaceSort]
 			: '';
 
 		return (
-			<Trans
-				i18nKey="modules/reading-room/components/filter-menu/filter-menu___sorteer-op"
-				values={{ sorted: sortBtnLabel }}
-				defaults="Sorteer op: <strong>{{ sorted }}</strong>"
-			/>
+			<>
+				{i18n.t('modules/reading-room/components/filter-menu/filter-menu___sorteer-op')}{' '}
+				<strong>{sortBtnLabel}</strong>
+			</>
 		);
 	};
 
@@ -163,6 +166,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onFilterSubmit={onFilterFormSubmit}
 				showNavigationBorder={showNavigationBorder}
 				filterValues={filterValues}
+				onRemoveValue={onRemoveValue}
 			/>
 		</div>
 	);

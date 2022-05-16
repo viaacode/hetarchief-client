@@ -28,7 +28,9 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 					name="description"
 					content={
 						space?.info ||
-						t('pages/slug/toegang-aangevraagd/index___beschrijving-van-een-leeszaal')
+						t(
+							'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
+						)
 					}
 				/>
 			</Head>

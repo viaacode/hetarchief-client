@@ -24,7 +24,7 @@ export const VisitorsTableColumns = (
 	editVisitRequest: (visitRequest: Visit) => void
 ): Column<Visit>[] => [
 	{
-		Header: i18n.t('modules/admin/const/visitors___leeszaal'),
+		Header: i18n.t('modules/admin/const/visitors___bezoekersruimte'),
 		accessor: 'spaceName',
 	},
 	{

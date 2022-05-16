@@ -9,9 +9,9 @@ import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettings } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
-import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
 import { Loading } from '@shared/components';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomEdit: FC = () => {
@@ -19,7 +19,7 @@ const ReadingRoomEdit: FC = () => {
 	const router = useRouter();
 	const { slug } = router.query;
 
-	const { data: readingRoomInfo, isLoading, refetch } = useGetReadingRoom(slug as string);
+	const { data: readingRoomInfo, isLoading, refetch } = useGetVisitorSpace(slug as string);
 
 	return (
 		<>

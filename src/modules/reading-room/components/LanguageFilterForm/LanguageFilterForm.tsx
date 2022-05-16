@@ -9,7 +9,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
-import { selectMediaResults } from '@shared/store/media';
+import { selectMediaFilterOptions } from '@shared/store/media';
 
 import {
 	LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -36,7 +36,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	});
 
 	const buckets = (
-		useSelector(selectMediaResults)?.aggregations.schema_in_language.buckets || []
+		useSelector(selectMediaFilterOptions)?.schema_in_language.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Effects

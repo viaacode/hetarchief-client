@@ -24,6 +24,7 @@ import {
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
 	METADATA_FIELDS,
+	noLicensePlaceholder,
 	OBJECT_DETAIL_TABS,
 	objectPlaceholder,
 	ticketErrorPlaceholder,
@@ -43,8 +44,8 @@ import {
 import { isInAFolder, mapKeywordsToTagList } from '@media/utils';
 import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import {
+	ErrorNoAccess,
 	ErrorNotFound,
-	ErrorSpaceNoAccess,
 	Icon,
 	Loading,
 	ScrollableTabs,
@@ -64,7 +65,7 @@ import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, MediaTypes, ReadingRoomMediaType } from '@shared/types';
+import { Breakpoints, License, MediaTypes, ReadingRoomMediaType } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
@@ -200,6 +201,8 @@ const ObjectDetailPage: NextPage = () => {
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
+	const isErrorNoLicense =
+		!mediaInfo?.representations && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -459,6 +462,9 @@ const ObjectDetailPage: NextPage = () => {
 		if (isLoadingPlayableUrl) {
 			return null;
 		}
+		if (isErrorNoLicense) {
+			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
+		}
 		if (isErrorPlayableUrl) {
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
 		}
@@ -535,12 +541,12 @@ const ObjectDetailPage: NextPage = () => {
 							>
 								<span className="u-text-ellipsis u-display-none u-display-block:md">
 									{t(
-										'pages/leeszaal/reading-room-slug/object-id/index___exporteer-metadata'
+										'pages/bezoekersruimte/reading-room-slug/object-id/index___exporteer-metadata'
 									)}
 								</span>
 								<span className="u-text-ellipsis u-display-none:md">
 									{t(
-										'pages/leeszaal/reading-room-slug/object-id/index___metadata'
+										'pages/bezoekersruimte/reading-room-slug/object-id/index___metadata'
 									)}
 								</span>
 							</Button>
@@ -567,7 +573,7 @@ const ObjectDetailPage: NextPage = () => {
 								metadata={[
 									{
 										title: t(
-											'pages/leeszaal/reading-room-slug/object-id/index___trefwoorden'
+											'pages/bezoekersruimte/reading-room-slug/object-id/index___trefwoorden'
 										),
 										data: mapKeywordsToTagList(mediaInfo.keywords),
 									},
@@ -602,10 +608,10 @@ const ObjectDetailPage: NextPage = () => {
 				title={
 					related.length === 1
 						? t(
-								'pages/leeszaal/reading-room-slug/object-id/index___1-gerelateerd-object'
+								'pages/bezoekersruimte/reading-room-slug/object-id/index___1-gerelateerd-object'
 						  )
 						: t(
-								'pages/leeszaal/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+								'pages/bezoekersruimte/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
 								{
 									amount: related.length,
 								}
@@ -657,7 +663,7 @@ const ObjectDetailPage: NextPage = () => {
 									accessEndDateMobile,
 							  })
 							: t(
-									'pages/leeszaal/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+									'pages/bezoekersruimte/reading-room-slug/object-id/index___toegang-tot-access-end-date',
 									{ accessEndDate }
 							  )
 						: undefined
@@ -672,7 +678,7 @@ const ObjectDetailPage: NextPage = () => {
 			{mediaInfoIsError && (
 				<p className={'p-object-detail__error'}>
 					{t(
-						'pages/leeszaal/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+						'pages/bezoekersruimte/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
 					)}
 				</p>
 			)}
@@ -694,7 +700,7 @@ const ObjectDetailPage: NextPage = () => {
 						)}
 						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
 						onClick={onClickToggle}
-						variants={['white', 'no-height']}
+						variants="white"
 					/>
 				)}
 				<div className="p-object-detail__video">{renderObjectMedia()}</div>
@@ -737,7 +743,7 @@ const ObjectDetailPage: NextPage = () => {
 			return <ErrorNotFound />;
 		}
 		if (isErrorSpaceNoAccess) {
-			return <ErrorSpaceNoAccess visitorSpaceSlug={router.query.slug as string} />;
+			return <ErrorNoAccess visitorSpaceSlug={router.query.slug as string} />;
 		}
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};

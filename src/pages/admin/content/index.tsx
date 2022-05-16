@@ -12,7 +12,7 @@ import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequeredPermissions';
+import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { createPageTitle } from '@shared/utils';
 

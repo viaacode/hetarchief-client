@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import { TagIdentity } from '@reading-room/types';
+
 import { OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '..';
 import { FilterMenuProps } from '../FilterMenu.types';
 
@@ -15,5 +17,6 @@ export interface FilterMenuMobileProps
 	onFilterClick?: (id: string) => void;
 	onFilterReset: OnFilterMenuFormReset;
 	onFilterSubmit: OnFilterMenuFormSubmit;
+	onRemoveValue?: (removedValue: TagIdentity[]) => void;
 	showNavigationBorder: boolean;
 }
