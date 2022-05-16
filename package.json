@@ -6,6 +6,7 @@
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
 	],
 	"scripts": {
+		"preinstall": "npx npm-force-resolutions",
 		"dev": "next dev -p 3200",
 		"build": "next build",
 		"start": "next start",
@@ -32,7 +33,7 @@
 		"@meemoo/react-components": "2.15.0",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
-		"@viaa/avo2-components": "1.84.0",
+		"@viaa/avo2-components": "2.0.0",
 		"@viaa/avo2-types": "2.36.1",
 		"capture-stack-trace": "1.0.1",
 		"clsx": "1.1.1",
@@ -45,13 +46,14 @@
 		"konva": "8.3.5",
 		"ky": "^0.30.0",
 		"ky-universal": "^0.10.1",
-		"lodash-es": "^4.17.21",
 		"lodash": "^4.17.21",
+		"lodash-es": "^4.17.21",
 		"moment": "2.29.2",
 		"next": "12.1.0",
 		"next-i18next": "11.0.0",
 		"next-redux-wrapper": "7.0.5",
 		"next-transpile-modules": "9.0.0",
+		"npm-force-resolutions": "0.0.10",
 		"peaks.js": "1.0.0",
 		"query-string": "7.0.1",
 		"react": "17.0.2",
@@ -146,5 +148,9 @@
 		"not ie 11",
 		"not dead",
 		"not op_mini all"
-	]
+	],
+	"resolutions": {
+		"react": "17.0.2",
+		"react-dom": "17.0.2"
+	}
 }

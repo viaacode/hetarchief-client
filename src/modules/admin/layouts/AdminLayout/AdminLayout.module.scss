@@ -11,7 +11,7 @@
 .c-admin__actions {
 	display: flex;
 
-	> *  {
+	> :global(*) {
 		&:not(:last-child) {
 			margin-right: 0.8rem;
 		}

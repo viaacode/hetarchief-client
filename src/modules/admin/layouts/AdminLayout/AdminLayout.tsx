@@ -17,6 +17,7 @@ import { setShowZendesk } from '@shared/store/ui';
 
 import { ADMIN_NAVIGATION_LINKS } from '../../const';
 
+import styles from './AdminLayout.module.scss';
 import { AdminLayoutComponent } from './AdminLayout.types';
 
 const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) => {
@@ -66,9 +67,9 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 			sidebarLinks={sidebarLinks}
 			sidebarTitle={t('modules/admin/layouts/admin-layout/admin-layout___admin')}
 		>
-			<header className="c-admin__header">
-				<h2 className="c-admin__page-title">{pageTitle}</h2>
-				<div className="c-admin__actions">{actions}</div>
+			<header className={styles['c-admin__header']}>
+				<h2 className={styles['c-admin__page-title']}>{pageTitle}</h2>
+				<div className={styles['c-admin__actions']}>{actions}</div>
 			</header>
 
 			<div className="c-admin__filter-bar">
