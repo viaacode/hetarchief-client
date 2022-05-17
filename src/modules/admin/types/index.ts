@@ -7,6 +7,7 @@ export type AdminReadingRoomInfoRow = { row: { original: VisitorSpaceInfo } };
 export interface UserGroupOverviewRef {
 	onCancel: () => void;
 	onSave: () => void;
+	onSearch: (value?: string) => void;
 }
 
 export interface UserGroupArchief {

@@ -11,6 +11,7 @@ import { UserGroupOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { Icon } from '@shared/components';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
@@ -23,11 +24,34 @@ const PermissionsOverview: FC = () => {
 	const [hasChanges, setHasChanges] = useState<boolean>(false);
 
 	// Render
+	const renderSearchButtons = (search?: string) => {
+		return (
+			<>
+				{search && (
+					<Button
+						variants={['text', 'icon', 'xxs']}
+						icon={<Icon name="times" />}
+						onClick={() => {
+							permissionsRef.current?.onSearch(undefined);
+						}}
+					/>
+				)}
+				<Button
+					variants={['text', 'icon', 'xxs']}
+					icon={<Icon name="search" />}
+					onClick={() => permissionsRef.current?.onSearch(search)}
+				/>
+			</>
+		);
+	};
+
 	const renderPermissions = () => (
 		<>
 			<UserGroupOverview
+				className="u-mb-40"
 				ref={permissionsRef}
 				onChangePermissions={(value) => setHasChanges(value)}
+				renderSearchButtons={renderSearchButtons}
 			/>
 		</>
 	);
