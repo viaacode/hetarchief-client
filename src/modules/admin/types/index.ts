@@ -4,6 +4,11 @@ export type AdminReadingRoomInfoRow = { row: { original: VisitorSpaceInfo } };
 
 // User groups
 
+export interface UserGroupOverviewRef {
+	onCancel: () => void;
+	onSave: () => void;
+}
+
 export interface UserGroupArchief {
 	id: number | string;
 	name: string;

@@ -1,11 +1,13 @@
 import { UserGroupOverview } from '@meemoo/react-admin';
+import { Button } from '@meemoo/react-components';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import React, { FC } from 'react';
+import React, { FC, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
+import { UserGroupOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
@@ -15,10 +17,18 @@ import { createPageTitle } from '@shared/utils';
 const PermissionsOverview: FC = () => {
 	const { t } = useTranslation();
 
+	// Access child functions
+	const permissionsRef = useRef<UserGroupOverviewRef>();
+
+	const [hasChanges, setHasChanges] = useState<boolean>(false);
+
 	// Render
 	const renderPermissions = () => (
 		<>
-			<UserGroupOverview />
+			<UserGroupOverview
+				ref={permissionsRef}
+				onChangePermissions={(value) => setHasChanges(value)}
+			/>
 		</>
 	);
 
@@ -34,6 +44,20 @@ const PermissionsOverview: FC = () => {
 			</Head>
 
 			<AdminLayout pageTitle={t('Groepen en permissies')}>
+				<AdminLayout.Actions>
+					{hasChanges && (
+						<>
+							<Button
+								onClick={() => permissionsRef.current?.onCancel()}
+								label={t('Annuleren')}
+							/>
+							<Button
+								onClick={() => permissionsRef.current?.onSave()}
+								label={t('Wijzigingen opslaan')}
+							/>
+						</>
+					)}
+				</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>
 				</AdminLayout.Content>
