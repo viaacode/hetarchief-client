@@ -92,4 +92,9 @@ const PermissionsOverview: FC = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(withAdminCoreConfig(PermissionsOverview));
+export default withAuth(
+	withAnyRequiredPermissions(
+		withAdminCoreConfig(PermissionsOverview),
+		Permission.EDIT_PERMISSION_GROUPS
+	)
+);
