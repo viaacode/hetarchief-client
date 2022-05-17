@@ -42,7 +42,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 		if (widget) {
 			const scrollHeight = document.body.scrollHeight;
 			const screenHeight = window.innerHeight;
-			const scrollTop = document.body.scrollTop;
+			const scrollTop = window.scrollY;
 			widget.style.zIndex = '3'; // Ensure the zendesk widget doesn't show on top of blades
 			widget.style.marginRight = zendeskMarginRight + 'px';
 			if (scrollHeight - screenHeight - scrollTop < footerHeight + zendeskMarginBottom) {
@@ -58,14 +58,12 @@ const ZendeskWrapper: FunctionComponent = () => {
 	const getZendeskWidget = useCallback(() => {
 		const zendeskWidget: HTMLIFrameElement | null =
 			(document.querySelector('iframe#launcher') as HTMLIFrameElement) || null;
-		setWidget(zendeskWidget);
 		if (!zendeskWidget) {
 			setTimeout(getZendeskWidget, 100);
 		} else {
-			updateFooterHeight();
-			updateMargin();
+			setWidget(zendeskWidget);
 		}
-	}, [setWidget, updateFooterHeight, updateMargin]);
+	}, [setWidget]);
 
 	const initListeners = useCallback(() => {
 		document.addEventListener('scroll', updateMargin);
