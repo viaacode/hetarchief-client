@@ -101,7 +101,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				// Only render the waveform if the thumbnail is available
 				// The thumbnail is an ugly speaker icon that we never want to show
 				// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
-				return renderImage(undefined);
+				return renderImage(preview ? '/images/waveform.svg' : undefined);
 
 			case 'video':
 				return renderImage(preview);
