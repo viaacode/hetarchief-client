@@ -1,5 +1,7 @@
 import { VisitStatus } from '@shared/types';
 
+export * from './requests.types';
+
 export enum VisitTimeframe {
 	ACTIVE = 'ACTIVE',
 	PAST = 'PAST',

@@ -1,25 +1,11 @@
 import { TabProps } from '@meemoo/react-components';
 import { Column } from 'react-table';
-import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { RequestStatusBadge } from '@cp/components';
-import { RequestStatusAll } from '@cp/types';
-import { CopyButton, Icon } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
-import { SortDirectionParam } from '@shared/helpers';
+import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
 import { i18n } from '@shared/helpers/i18n';
-import { OrderDirection, Visit, VisitRow, VisitStatus } from '@shared/types';
+import { Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
-
-export const RequestTablePageSize = 20;
-
-export const ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
-	status: withDefault(StringParam, RequestStatusAll.ALL),
-	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
-	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, 'createdAt'),
-	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
-};
+import { RequestStatusAll } from '@visits/types';
 
 export const requestStatusFilters = (): TabProps[] => {
 	return [

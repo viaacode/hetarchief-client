@@ -8,7 +8,6 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ApproveRequestBlade } from '@cp/components';
 import { RequestTablePageSize } from '@cp/const/requests.const';
 import {
 	CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG,
@@ -16,9 +15,9 @@ import {
 	VisitorsTableColumns,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
-import { RequestStatusAll } from '@cp/types';
 import { withI18n } from '@i18n/wrappers';
 import {
+	ApproveRequestBlade,
 	ConfirmationModal,
 	PaginationBar,
 	ScrollableTabs,
@@ -32,7 +31,7 @@ import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
-import { VisitTimeframe } from '@visits/types';
+import { RequestStatusAll, VisitTimeframe } from '@visits/types';
 
 const CPVisitorsPage: NextPage = () => {
 	const { t } = useTranslation();

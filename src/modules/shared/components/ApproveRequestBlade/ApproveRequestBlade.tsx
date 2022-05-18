@@ -9,6 +9,7 @@ import {
 import clsx from 'clsx';
 import {
 	addHours,
+	areIntervalsOverlapping,
 	differenceInMinutes,
 	endOfDay,
 	isSameDay,
@@ -16,17 +17,21 @@ import {
 	startOfDay,
 } from 'date-fns';
 import { useTranslation } from 'next-i18next';
+import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
+import { Permission } from '@account/const';
 import { Blade, Icon, VisitSummary } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL } from '@shared/const';
+import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
-import { VisitStatus } from '@shared/types';
-import { asDate, formatDate, formatTime } from '@shared/utils';
+import { OrderDirection, Visit, VisitStatus } from '@shared/types';
+import { asDate, formatDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
+import { VisitTimeframe } from '@visits/types';
 
 import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
 import styles from './ApproveRequestBlade.module.scss';
@@ -38,6 +43,9 @@ const defaultAccessTo = (accessFrom: Date) => addHours(startOfDay(accessFrom), 1
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { t } = useTranslation();
+	const canViewAddVisitRequests: boolean = useHasAnyPermission(
+		Permission.READ_ALL_VISIT_REQUESTS
+	);
 	const {
 		selected,
 		onClose,
@@ -66,6 +74,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 
 	const [form, setForm] = useState<ApproveRequestFormState>(defaultValues);
+	const [overlappingRequests, setOverlappingRequests] = useState<Visit[]>([]);
 
 	const {
 		control,
@@ -101,9 +110,56 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		props.isOpen && reset();
 	}, [props.isOpen, reset]);
 
-	// Events
+	const checkOverlappingRequests = useCallback(async (): Promise<Visit[]> => {
+		const visitResponse = await VisitsService.getAll(
+			undefined,
+			VisitStatus.APPROVED,
+			[VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
+			1,
+			20,
+			'startAt',
+			OrderDirection.desc,
+			true
+		);
+		const overlappingRequests = visitResponse.items
+			.filter((visit) =>
+				areIntervalsOverlapping(
+					{
+						start: form.accessFrom as Date,
+						end: form.accessTo as Date,
+					},
+					{
+						start: asDate(visit.startAt as string) as Date,
+						end: asDate(visit.endAt as string) as Date,
+					}
+				)
+			)
+			.filter((visit) => visit.id !== selected?.id);
 
-	const onFormSubmit = (values: ApproveRequestFormState) => {
+		setOverlappingRequests(overlappingRequests);
+
+		return overlappingRequests;
+	}, [selected?.id, form.accessFrom, form.accessTo]);
+
+	useEffect(() => {
+		checkOverlappingRequests();
+	}, [checkOverlappingRequests]);
+
+	/**
+	 * Events
+	 */
+
+	const onFormSubmit = async (values: ApproveRequestFormState) => {
+		const overlappingVisitRequests = await checkOverlappingRequests();
+		if (overlappingVisitRequests.length) {
+			toastService.notify({
+				title: t('Conflict'),
+				description: t(
+					'Je kan geen 2 aanvragen goedkeuren die overlappen. Pas de andere aanvraag aan.'
+				),
+			});
+			return;
+		}
 		selected &&
 			VisitsService.patchById(selected.id, {
 				...selected,
@@ -319,6 +375,29 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				>
 					<Controller name="accessTo" control={control} render={renderAccessTo} />
 				</FormControl>
+
+				{!!overlappingRequests.length && (
+					<p className={clsx('c-form-control__errors', styles['c-form-control__errors'])}>
+						{t('Er is reeds een goedgekeurde aanvraag voor deze periode: ')}
+						<br />
+						<br />
+						{formatMediumDateWithTime(asDate(overlappingRequests[0].startAt))}
+						{' - '}
+						{formatMediumDateWithTime(asDate(overlappingRequests[0].endAt))}
+						<br />
+						<br />
+						<Link
+							href={
+								canViewAddVisitRequests
+									? `/admin/leeszalenbeheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
+									: `/beheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
+							}
+							passHref
+						>
+							<a onClick={onClose}>{t('Bekijk deze aanvraag')}</a>
+						</Link>
+					</p>
+				)}
 
 				<FormControl
 					label={t(
