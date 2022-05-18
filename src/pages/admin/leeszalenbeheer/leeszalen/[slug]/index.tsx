@@ -38,14 +38,16 @@ const ReadingRoomEdit: FC = () => {
 			</Head>
 
 			<AdminLayout
-				contentTitle={t('pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen')}
+				pageTitle={t('pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen')}
 			>
-				<div className="l-container">
-					{isLoading && <Loading />}
-					{readingRoomInfo && (
-						<ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />
-					)}
-				</div>
+				<AdminLayout.Content>
+					<div className="l-container">
+						{isLoading && <Loading />}
+						{readingRoomInfo && (
+							<ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />
+						)}
+					</div>
+				</AdminLayout.Content>
 			</AdminLayout>
 		</>
 	);

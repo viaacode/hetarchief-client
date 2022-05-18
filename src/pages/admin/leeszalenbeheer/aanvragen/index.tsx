@@ -135,87 +135,90 @@ const Requests: FC = () => {
 				/>
 			</Head>
 
-			<AdminLayout
-				contentTitle={t('pages/admin/leeszalenbeheer/aanvragen/index___aanvragen')}
-			>
-				<div className="p-admin-requests l-container">
-					<div className="p-admin-requests__header">
-						<SearchBar
-							default={filters[SEARCH_QUERY_KEY]}
-							className="p-admin-requests__search"
-							placeholder={t('pages/admin/leeszalenbeheer/aanvragen/index___zoek')}
-							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
-						/>
+			<AdminLayout pageTitle={t('pages/admin/leeszalenbeheer/aanvragen/index___aanvragen')}>
+				<AdminLayout.Content>
+					<div className="p-admin-requests l-container">
+						<div className="p-admin-requests__header">
+							<SearchBar
+								default={filters[SEARCH_QUERY_KEY]}
+								className="p-admin-requests__search"
+								placeholder={t(
+									'pages/admin/leeszalenbeheer/aanvragen/index___zoek'
+								)}
+								onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
+							/>
 
-						<ScrollableTabs
-							className="p-admin-requests__status-filter"
-							tabs={statusFilters}
-							variants={['rounded', 'light', 'bordered', 'medium']}
-							onClick={(tabId) =>
-								setFilters({
-									status: tabId.toString(),
-									page: 1,
-								})
-							}
-						/>
-					</div>
-
-					{(visits?.items?.length || 0) > 0 ? (
-						<div className="l-container--edgeless-to-lg">
-							<Table
-								className="u-mt-24"
-								options={
-									// TODO: fix type hinting
-									/* eslint-disable @typescript-eslint/ban-types */
-									{
-										columns: RequestTableColumns() as Column<object>[],
-										data: visits?.items || [],
-										initialState: {
-											pageSize: RequestTablePageSize,
-											sortBy: sortFilters,
-										},
-									} as TableOptions<object>
-									/* eslint-enable @typescript-eslint/ban-types */
+							<ScrollableTabs
+								className="p-admin-requests__status-filter"
+								tabs={statusFilters}
+								variants={['rounded', 'light', 'bordered', 'medium']}
+								onClick={(tabId) =>
+									setFilters({
+										status: tabId.toString(),
+										page: 1,
+									})
 								}
-								onRowClick={onRowClick}
-								onSortChange={onSortChange}
-								sortingIcons={sortingIcons}
-								pagination={({ gotoPage }) => {
-									return (
-										<PaginationBar
-											className="u-mt-16 u-mb-16"
-											count={RequestTablePageSize}
-											start={
-												Math.max(0, filters.page - 1) * RequestTablePageSize
-											}
-											total={visits?.total || 0}
-											onPageChange={(pageZeroBased) => {
-												gotoPage(pageZeroBased);
-												setSelected(null);
-												setFilters({
-													...filters,
-													page: pageZeroBased + 1,
-												});
-											}}
-										/>
-									);
-								}}
 							/>
 						</div>
-					) : (
-						<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-							{isFetching
-								? t('pages/beheer/aanvragen/index___laden')
-								: renderEmptyMessage()}
-						</div>
-					)}
-					<ProcessRequestBlade
-						isOpen={selected !== null}
-						selected={visits?.items?.find((x) => x.id === selected)}
-						onClose={() => setSelected(null)}
-						onFinish={refetch}
-					/>
-				</div>
+
+						{(visits?.items?.length || 0) > 0 ? (
+							<div className="l-container--edgeless-to-lg">
+								<Table
+									className="u-mt-24"
+									options={
+										// TODO: fix type hinting
+										/* eslint-disable @typescript-eslint/ban-types */
+										{
+											columns: RequestTableColumns() as Column<object>[],
+											data: visits?.items || [],
+											initialState: {
+												pageSize: RequestTablePageSize,
+												sortBy: sortFilters,
+											},
+										} as TableOptions<object>
+										/* eslint-enable @typescript-eslint/ban-types */
+									}
+									onRowClick={onRowClick}
+									onSortChange={onSortChange}
+									sortingIcons={sortingIcons}
+									pagination={({ gotoPage }) => {
+										return (
+											<PaginationBar
+												className="u-mt-16 u-mb-16"
+												count={RequestTablePageSize}
+												start={
+													Math.max(0, filters.page - 1) *
+													RequestTablePageSize
+												}
+												total={visits?.total || 0}
+												onPageChange={(pageZeroBased) => {
+													gotoPage(pageZeroBased);
+													setSelected(null);
+													setFilters({
+														...filters,
+														page: pageZeroBased + 1,
+													});
+												}}
+											/>
+										);
+									}}
+								/>
+							</div>
+						) : (
+							<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+								{isFetching
+									? t('pages/beheer/aanvragen/index___laden')
+									: renderEmptyMessage()}
+							</div>
+						)}
+						<ProcessRequestBlade
+							isOpen={selected !== null}
+							selected={visits?.items?.find((x) => x.id === selected)}
+							onClose={() => setSelected(null)}
+							onFinish={refetch}
+						/>
+					</div>
+				</AdminLayout.Content>
 			</AdminLayout>
 		</>
 	);
