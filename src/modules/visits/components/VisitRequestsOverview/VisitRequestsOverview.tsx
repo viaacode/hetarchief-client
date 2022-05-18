@@ -19,7 +19,7 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
-import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { useGetVisit } from '@visits/hooks/get-visit';
@@ -34,8 +34,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
 		undefined
 	);
-	const canUpdateVisitRequests: boolean | null = useHasAllPermission(
-		Permission.APPROVE_DENY_CP_VISIT_REQUESTS
+	const canUpdateVisitRequests: boolean | null = useHasAnyPermission(
+		Permission.APPROVE_DENY_CP_VISIT_REQUESTS,
+		Permission.APPROVE_DENY_ALL_VISIT_REQUESTS
 	);
 
 	const {
