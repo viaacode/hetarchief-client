@@ -28,7 +28,7 @@ const CPRequestsPage: NextPage = () => {
 				className="p-cp-requests"
 				contentTitle={t('pages/beheer/aanvragen/index___aanvragen')}
 			>
-				<VisitRequestsOverview columns={RequestTableColumns()} />;
+				<VisitRequestsOverview columns={RequestTableColumns()} />
 			</CPAdminLayout>
 		</>
 	);
