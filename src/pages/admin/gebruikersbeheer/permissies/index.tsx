@@ -48,7 +48,7 @@ const PermissionsOverview: FC = () => {
 	const renderPermissions = () => (
 		<>
 			<UserGroupOverview
-				className="u-mb-40"
+				className="p-admin-permissions u-mb-40"
 				ref={permissionsRef}
 				onChangePermissions={(value) => setHasChanges(value)}
 				renderSearchButtons={renderSearchButtons}
