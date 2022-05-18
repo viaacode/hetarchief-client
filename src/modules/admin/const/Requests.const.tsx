@@ -44,7 +44,7 @@ export const requestStatusFilters = (): TabProps[] => {
 
 export const RequestTableColumns = (): Column<Visit>[] => [
 	{
-		Header: i18n.t('modules/admin/const/requests___leeszaal'),
+		Header: i18n.t('modules/admin/const/requests___bezoekersruimte'),
 		accessor: 'spaceName',
 	},
 	{
@@ -65,7 +65,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 			<CopyButton
 				className="u-color-neutral u-p-0 c-table__copy"
 				icon={undefined}
-				variants={['text', 'no-height']}
+				variants="text"
 				text={row.original.visitorMail}
 			>
 				{row.original.visitorMail}

@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
 import { DecodedValueMap } from 'use-query-params';
 
-import { READING_ROOM_QUERY_PARAM_CONFIG } from '@reading-room/const';
+import { VISITOR_SPACE_QUERY_PARAM_CONFIG } from '@reading-room/const';
 import { DefaultComponentProps, MediaTypes, Operator } from '@shared/types';
 
 import { MetadataProp } from './metadata';
@@ -11,10 +11,10 @@ import { MetadataProp } from './metadata';
 export * from './metadata';
 
 export type ReadingRoomQueryParams = Partial<
-	DecodedValueMap<typeof READING_ROOM_QUERY_PARAM_CONFIG>
+	DecodedValueMap<typeof VISITOR_SPACE_QUERY_PARAM_CONFIG>
 >;
 
-export enum ReadingRoomSort {
+export enum VisitorSpaceSort {
 	Date = 'created',
 	Relevance = 'relevance',
 	Title = 'name',
@@ -126,4 +126,5 @@ export interface AdvancedFilter {
 
 export interface TagIdentity extends Partial<AdvancedFilter>, TagInfo {
 	key: string;
+	id: string | number;
 }

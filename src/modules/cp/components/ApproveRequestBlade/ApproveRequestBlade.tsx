@@ -9,15 +9,14 @@ import {
 import clsx from 'clsx';
 import {
 	addHours,
-	differenceInHours,
+	differenceInMinutes,
 	endOfDay,
-	isAfter,
 	isSameDay,
 	roundToNearestMinutes,
 	startOfDay,
 } from 'date-fns';
 import { useTranslation } from 'next-i18next';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
 import { Blade, Icon, VisitSummary } from '@shared/components';
@@ -35,7 +34,7 @@ import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequ
 
 const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
 const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
-const defaultAccessTo = (accessFrom: Date) => addHours(roundToNearestQuarter(accessFrom), 1);
+const defaultAccessTo = (accessFrom: Date) => addHours(startOfDay(accessFrom), 18);
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { t } = useTranslation();
@@ -61,7 +60,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		() => ({
 			accessFrom: asDate(selected?.startAt) || defaultAccessFrom(new Date()),
 			accessTo: asDate(selected?.endAt) || defaultAccessTo(new Date()),
-			accessRemark: selected?.note || undefined,
+			accessRemark: selected?.note?.note || undefined,
 		}),
 		[selected]
 	);
@@ -72,20 +71,23 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		control,
 		formState: { errors },
 		handleSubmit,
-		getValues,
 		setValue,
-		reset,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
 		defaultValues,
 	});
+
+	// We're using useState to store our form and an effect to synchronise it with useForm
+	const reset = useCallback(() => {
+		setForm(defaultValues);
+	}, [defaultValues]);
 
 	useEffect(() => {
 		selected &&
 			setForm({
 				accessFrom: asDate(selected.startAt) || defaultValues.accessFrom,
 				accessTo: asDate(selected.endAt) || defaultValues.accessTo,
-				accessRemark: selected.note || defaultValues.accessRemark,
+				accessRemark: selected.note?.note || defaultValues.accessRemark,
 			});
 	}, [selected, defaultValues, setForm]);
 
@@ -121,34 +123,21 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			});
 	};
 
-	const onSimpleDateChange = (
-		date: Date | null,
-		field:
-			| ControllerRenderProps<ApproveRequestFormState, 'accessTo'>
-			| ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
-	) => {
-		field.onChange(date);
-	};
-
-	const onFromDateChange = (
-		date: Date | null,
-		field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
-	) => {
-		onSimpleDateChange(date, field);
-
-		const { accessTo } = getValues();
-
-		if (date && accessTo) {
-			// Access must be at least 1h in the future
-			// Aligns with `minTime` of the `accessTo` `Timepicker`-component
-			if (
-				(isSameDay(date, accessTo) && differenceInHours(date, accessTo) <= 1) ||
-				isAfter(date, accessTo)
-			) {
-				setValue('accessTo', defaultAccessTo(date));
-			}
-		}
-	};
+	const onSimpleDateChange = useCallback(
+		(
+			date: Date | null,
+			field:
+				| ControllerRenderProps<ApproveRequestFormState, 'accessTo'>
+				| ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
+		) => {
+			field.onChange(date);
+			setForm((original) => ({
+				...original,
+				[field.name]: date || undefined,
+			}));
+		},
+		[setForm]
+	);
 
 	// Render
 
@@ -173,6 +162,139 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		);
 	};
 
+	const renderAccessFrom = useCallback(
+		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'> }) => {
+			const now = new Date();
+
+			const onFromDateChange = (
+				date: Date | null,
+				field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
+			) => {
+				onSimpleDateChange(date, field);
+
+				const { accessTo } = form;
+
+				if (date && accessTo) {
+					const minimum = 60;
+
+					// if difference is negative => start time is after end time
+					const difference = differenceInMinutes(accessTo, date);
+
+					// 1h in the future
+					// Aligns with `minTime` of the `accessTo` `Timepicker`-component
+					const oneHour = (date: Date) =>
+						setForm((original) => ({
+							...original,
+							accessTo: addHours(roundToNearestQuarter(date), 1),
+						}));
+
+					if (difference <= 0 && !isSameDay(accessTo, date)) {
+						// 6PM on the selected accessFrom
+						const sixPM = defaultAccessTo(date);
+
+						if (differenceInMinutes(sixPM, date) >= minimum) {
+							// at least an hour, set to sixPM
+							setForm((original) => ({
+								...original,
+								accessTo: sixPM,
+							}));
+						} else {
+							// less than an hour, set to accessFrom + 1h
+							oneHour(date);
+						}
+					} else if (difference < minimum) {
+						// less than an hour, set to accessFrom + 1h
+						oneHour(date);
+					}
+				}
+			};
+
+			// Disabled by request of Ineke, 21/03/2022
+			// https://meemoo.atlassian.net/browse/ARC-652 + https://github.com/viaacode/hetarchief-client/pull/193
+			// const minTime =
+			// 	field.value && !isSameDay(field.value, now)
+			// 		? defaultAccessFrom(startOfDay(field.value))
+			// 		: defaultAccessFrom(now);
+
+			return (
+				<>
+					<Datepicker
+						{...futureDatepicker}
+						maxDate={null}
+						name={field.name}
+						onBlur={field.onBlur}
+						onChange={(date) => onFromDateChange(date, field)}
+						value={formatDate(form.accessFrom)}
+						selected={form.accessFrom}
+						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+					/>
+
+					<Timepicker
+						{...timepicker}
+						maxTime={endOfDay(field.value || now)}
+						minTime={startOfDay(field.value || now)}
+						name={field.name}
+						onBlur={field.onBlur}
+						onChange={(date) => onFromDateChange(date, field)}
+						value={formatTime(form.accessFrom)}
+						selected={form.accessFrom}
+						customInput={<TextInput iconStart={<Icon name="clock" />} />}
+					/>
+				</>
+			);
+		},
+		[form, onSimpleDateChange]
+	);
+
+	const renderAccessTo = useCallback(
+		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessTo'> }) => {
+			const { accessFrom } = form;
+			const now = new Date();
+
+			// Disabled by request of Ineke, 21/03/2022
+			// https://meemoo.atlassian.net/browse/ARC-652 + https://github.com/viaacode/hetarchief-client/pull/193
+			// const minTime =
+			// 	field.value && accessFrom && isSameDay(field.value, accessFrom)
+			// 		? addHours(accessFrom || now, 1)
+			// 		: startOfDay(field.value || now);
+
+			return (
+				<>
+					<Datepicker
+						{...futureDatepicker}
+						maxDate={null}
+						minDate={accessFrom}
+						name={field.name}
+						onBlur={field.onBlur}
+						onChange={(date) => onSimpleDateChange(date, field)}
+						value={formatDate(form.accessTo)}
+						selected={form.accessTo}
+						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+					/>
+
+					<Timepicker
+						{...timepicker}
+						maxTime={endOfDay(field.value || now)}
+						minTime={startOfDay(field.value || now)}
+						name={field.name}
+						onBlur={field.onBlur}
+						onChange={(date) => onSimpleDateChange(date, field)}
+						value={formatTime(form.accessTo)}
+						selected={form.accessTo}
+						customInput={<TextInput iconStart={<Icon name="clock" />} />}
+					/>
+				</>
+			);
+		},
+		[form, onSimpleDateChange]
+	);
+
+	const renderAccessRemark = ({
+		field,
+	}: {
+		field: ControllerRenderProps<ApproveRequestFormState, 'accessRemark'>;
+	}) => <TextInput {...field} />;
+
 	return (
 		<Blade {...props} footer={renderFooter()} title={title}>
 			{selected && <VisitSummary {...selected} />}
@@ -185,51 +307,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						'modules/cp/components/approve-request-blade/approve-request-blade___van'
 					)}
 				>
-					<Controller
-						name="accessFrom"
-						control={control}
-						render={({ field }) => {
-							const now = new Date();
-
-							// Disabled by request of Ineke, 21/03/2022
-							// https://meemoo.atlassian.net/browse/ARC-652 + https://github.com/viaacode/hetarchief-client/pull/193
-							// const minTime =
-							// 	field.value && !isSameDay(field.value, now)
-							// 		? defaultAccessFrom(startOfDay(field.value))
-							// 		: defaultAccessFrom(now);
-
-							return (
-								<>
-									<Datepicker
-										{...futureDatepicker}
-										maxDate={null}
-										name={field.name}
-										onBlur={field.onBlur}
-										onChange={(date) => onFromDateChange(date, field)}
-										value={formatDate(field.value)}
-										selected={field.value}
-										customInput={
-											<TextInput iconStart={<Icon name="calendar" />} />
-										}
-									/>
-
-									<Timepicker
-										{...timepicker}
-										maxTime={endOfDay(field.value || now)}
-										minTime={startOfDay(field.value || now)}
-										name={field.name}
-										onBlur={field.onBlur}
-										onChange={(date) => onFromDateChange(date, field)}
-										value={formatTime(field.value)}
-										selected={field.value}
-										customInput={
-											<TextInput iconStart={<Icon name="clock" />} />
-										}
-									/>
-								</>
-							);
-						}}
-					/>
+					<Controller name="accessFrom" control={control} render={renderAccessFrom} />
 				</FormControl>
 
 				<FormControl
@@ -239,53 +317,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						'modules/cp/components/approve-request-blade/approve-request-blade___tot'
 					)}
 				>
-					<Controller
-						name="accessTo"
-						control={control}
-						render={({ field }) => {
-							const { accessFrom } = getValues();
-							const now = new Date();
-
-							// Disabled by request of Ineke, 21/03/2022
-							// https://meemoo.atlassian.net/browse/ARC-652 + https://github.com/viaacode/hetarchief-client/pull/193
-							// const minTime =
-							// 	field.value && accessFrom && isSameDay(field.value, accessFrom)
-							// 		? addHours(accessFrom || now, 1)
-							// 		: startOfDay(field.value || now);
-
-							return (
-								<>
-									<Datepicker
-										{...futureDatepicker}
-										maxDate={null}
-										minDate={accessFrom}
-										name={field.name}
-										onBlur={field.onBlur}
-										onChange={(date) => onSimpleDateChange(date, field)}
-										value={formatDate(field.value)}
-										selected={field.value}
-										customInput={
-											<TextInput iconStart={<Icon name="calendar" />} />
-										}
-									/>
-
-									<Timepicker
-										{...timepicker}
-										maxTime={endOfDay(field.value || now)}
-										minTime={startOfDay(field.value || now)}
-										name={field.name}
-										onBlur={field.onBlur}
-										onChange={(date) => onSimpleDateChange(date, field)}
-										value={formatTime(field.value)}
-										selected={field.value}
-										customInput={
-											<TextInput iconStart={<Icon name="clock" />} />
-										}
-									/>
-								</>
-							);
-						}}
-					/>
+					<Controller name="accessTo" control={control} render={renderAccessTo} />
 				</FormControl>
 
 				<FormControl
@@ -294,11 +326,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					)}
 					suffix={OPTIONAL_LABEL()}
 				>
-					<Controller
-						name="accessRemark"
-						control={control}
-						render={({ field }) => <TextInput {...field} />}
-					/>
+					<Controller name="accessRemark" control={control} render={renderAccessRemark} />
 				</FormControl>
 			</div>
 		</Blade>

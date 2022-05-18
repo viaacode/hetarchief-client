@@ -5,11 +5,17 @@ export enum VisitStatus {
 	CANCELLED_BY_VISITOR = 'CANCELLED_BY_VISITOR',
 }
 
+export enum AccessStatus {
+	PENDING = 'PENDING',
+	ACCESS = 'ACCESS',
+	NO_ACCESS = 'NO_ACCESS',
+}
+
 export interface Visit {
 	createdAt: string;
 	endAt?: string;
 	id: string;
-	note: string | null;
+	note?: VisitNote;
 	reason?: string;
 	spaceId: string;
 	spaceSlug: string;
@@ -33,6 +39,13 @@ export interface Visit {
 	updatedByName: string;
 }
 
+export interface VisitNote {
+	authorName: string;
+	createdAt: string;
+	id: string;
+	note: string;
+}
+
 export type VisitRow = { row: { original: Visit } };
 
 export interface VisitSpaceCount {
@@ -41,7 +54,5 @@ export interface VisitSpaceCount {
 }
 
 export interface VisitAccessStatus {
-	spaceId: string;
-	status: VisitStatus;
-	visitorId: string;
+	status: AccessStatus;
 }

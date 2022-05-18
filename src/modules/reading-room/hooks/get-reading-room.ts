@@ -5,7 +5,7 @@ import { VistorSpaceService } from '@reading-room/services';
 import { VisitorSpaceInfo } from '@reading-room/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
-export function useGetReadingRoom(
+export function useGetVisitorSpace(
 	slug?: string | null,
 	options?: Partial<
 		Omit<

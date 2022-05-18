@@ -61,7 +61,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 				<>
 					<strong>
 						{t(
-							'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-leeszaal-bezoeken'
+							'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
 						)}
 					</strong>
 					<p>{timeframe}</p>

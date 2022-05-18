@@ -55,7 +55,7 @@ $component: "c-list-navigation";
 
 	&__divider {
 		height: 0.1rem;
-		margin: $spacer-md;
+		margin: $spacer-xs $spacer-md;
 		background-color: $silver;
 	}
 

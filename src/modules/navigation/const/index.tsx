@@ -47,7 +47,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 				<Button
 					key="nav-notification-center"
 					onClick={() => setNotificationsOpen(!notificationsOpen)}
-					variants="text"
+					variants={['text', 'md']}
 					className={clsx(
 						notificationsOpen
 							? `${badgeCls}--white u-color-teal`

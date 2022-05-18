@@ -9,9 +9,9 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { useGetReadingRoom } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
 import { Loading } from '@shared/components';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequeredPermissions';
+import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
 const CPSettingsPage: NextPage = () => {
@@ -29,7 +29,7 @@ const CPSettingsPage: NextPage = () => {
 		data: visitorSpaceInfo,
 		isLoading,
 		refetch,
-	} = useGetReadingRoom(user?.visitorSpaceSlug || null, { enabled: !!user?.visitorSpaceSlug });
+	} = useGetVisitorSpace(user?.visitorSpaceSlug || null, { enabled: !!user?.visitorSpaceSlug });
 
 	/**
 	 * Render
