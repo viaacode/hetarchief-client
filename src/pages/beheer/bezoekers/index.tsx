@@ -177,7 +177,7 @@ const CPVisitorsPage: NextPage = () => {
 
 			<CPAdminLayout
 				className="p-cp-visitors"
-				contentTitle={t('pages/beheer/bezoekers/index___bezoekers')}
+				pageTitle={t('pages/beheer/bezoekers/index___bezoekers')}
 			>
 				<div className="l-container">
 					<div className="p-cp-visitors__header">
