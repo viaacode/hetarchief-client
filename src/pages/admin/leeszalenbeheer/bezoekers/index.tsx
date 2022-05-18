@@ -153,100 +153,106 @@ const Visitors: FC = () => {
 			</Head>
 
 			<AdminLayout
-				contentTitle={t('pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers')}
+				pageTitle={t('pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers')}
 			>
-				<div className="p-admin-visitors l-container">
-					<div className="p-admin-visitors__header">
-						<SearchBar
-							default={filters[SEARCH_QUERY_KEY]}
-							className="p-admin-visitors__search"
-							placeholder={t('pages/admin/leeszalenbeheer/bezoekers/index___zoek')}
-							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
-						/>
-					</div>
-
-					{(visits?.items?.length || 0) > 0 ? (
-						<div className="l-container--edgeless-to-lg">
-							<Table
-								className="u-mt-24 c-table--no-padding-last-column"
-								options={
-									// TODO: fix type hinting
-									/* eslint-disable @typescript-eslint/ban-types */
-									{
-										columns: VisitorsTableColumns(
-											denyVisitRequest,
-											editVisitRequest
-										) as Column<object>[],
-										data: visits?.items || [],
-										initialState: {
-											pageSize: VisitorsTablePageSize,
-											sortBy: sortFilters,
-										},
-									} as TableOptions<object>
-									/* eslint-enable @typescript-eslint/ban-types */
-								}
-								onSortChange={onSortChange}
-								sortingIcons={sortingIcons}
-								pagination={({ gotoPage }) => {
-									return (
-										<PaginationBar
-											className="u-mt-16 u-mb-16"
-											count={VisitorsTablePageSize}
-											start={
-												Math.max(0, filters.page - 1) *
-												VisitorsTablePageSize
-											}
-											total={visits?.total || 0}
-											onPageChange={(pageZeroBased) => {
-												gotoPage(pageZeroBased);
-												// setSelected(null);
-												setFilters({
-													...filters,
-													page: pageZeroBased + 1,
-												});
-											}}
-										/>
-									);
-								}}
+				<AdminLayout.Content>
+					<div className="p-admin-visitors l-container">
+						<div className="p-admin-visitors__header">
+							<SearchBar
+								default={filters[SEARCH_QUERY_KEY]}
+								className="p-admin-visitors__search"
+								placeholder={t(
+									'pages/admin/leeszalenbeheer/bezoekers/index___zoek'
+								)}
+								onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 							/>
 						</div>
-					) : (
-						<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-							{isFetching
-								? t('modules/admin/reading-rooms/pages/visitors/visitors___laden')
-								: renderEmptyMessage()}
-						</div>
-					)}
-					<ConfirmationModal
-						isOpen={showDenyVisitRequestModal}
-						onClose={() => {
-							setSelected(null);
-							setShowDenyVisitRequestModal(false);
-						}}
-						onConfirm={handleDenyVisitRequestConfirmed}
-						onCancel={() => {
-							setSelected(null);
-							setShowDenyVisitRequestModal(false);
-						}}
-					/>
-					<ApproveRequestBlade
-						title={t('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
-						approveButtonLabel={t('pages/beheer/bezoekers/index___aanpassen')}
-						successTitle={t(
-							'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
+
+						{(visits?.items?.length || 0) > 0 ? (
+							<div className="l-container--edgeless-to-lg">
+								<Table
+									className="u-mt-24 c-table--no-padding-last-column"
+									options={
+										// TODO: fix type hinting
+										/* eslint-disable @typescript-eslint/ban-types */
+										{
+											columns: VisitorsTableColumns(
+												denyVisitRequest,
+												editVisitRequest
+											) as Column<object>[],
+											data: visits?.items || [],
+											initialState: {
+												pageSize: VisitorsTablePageSize,
+												sortBy: sortFilters,
+											},
+										} as TableOptions<object>
+										/* eslint-enable @typescript-eslint/ban-types */
+									}
+									onSortChange={onSortChange}
+									sortingIcons={sortingIcons}
+									pagination={({ gotoPage }) => {
+										return (
+											<PaginationBar
+												className="u-mt-16 u-mb-16"
+												count={VisitorsTablePageSize}
+												start={
+													Math.max(0, filters.page - 1) *
+													VisitorsTablePageSize
+												}
+												total={visits?.total || 0}
+												onPageChange={(pageZeroBased) => {
+													gotoPage(pageZeroBased);
+													// setSelected(null);
+													setFilters({
+														...filters,
+														page: pageZeroBased + 1,
+													});
+												}}
+											/>
+										);
+									}}
+								/>
+							</div>
+						) : (
+							<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+								{isFetching
+									? t(
+											'modules/admin/reading-rooms/pages/visitors/visitors___laden'
+									  )
+									: renderEmptyMessage()}
+							</div>
 						)}
-						successDescription={t(
-							'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
-						)}
-						isOpen={showEditVisitRequestModal}
-						selected={selectedItem}
-						onClose={() => {
-							setSelected(null);
-							setShowEditVisitRequestModal(false);
-						}}
-						onSubmit={handleEditVisitRequestFinished}
-					/>
-				</div>
+						<ConfirmationModal
+							isOpen={showDenyVisitRequestModal}
+							onClose={() => {
+								setSelected(null);
+								setShowDenyVisitRequestModal(false);
+							}}
+							onConfirm={handleDenyVisitRequestConfirmed}
+							onCancel={() => {
+								setSelected(null);
+								setShowDenyVisitRequestModal(false);
+							}}
+						/>
+						<ApproveRequestBlade
+							title={t('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
+							approveButtonLabel={t('pages/beheer/bezoekers/index___aanpassen')}
+							successTitle={t(
+								'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
+							)}
+							successDescription={t(
+								'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
+							)}
+							isOpen={showEditVisitRequestModal}
+							selected={selectedItem}
+							onClose={() => {
+								setSelected(null);
+								setShowEditVisitRequestModal(false);
+							}}
+							onSubmit={handleEditVisitRequestFinished}
+						/>
+					</div>
+				</AdminLayout.Content>
 			</AdminLayout>
 		</>
 	);

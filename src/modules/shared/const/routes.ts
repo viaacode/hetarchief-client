@@ -1,23 +1,46 @@
-// Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
-export const ROUTE_PREFIXES = {
+export const ROUTE_PARTS = Object.freeze({
 	beheer: 'beheer',
 	admin: 'admin',
 	account: 'account',
+	visitRequests: 'aanvragen',
 	about: 'over-leeszalen',
 	faq: 'faq',
-	gebruiksvoorwaarden: 'gebruiksvoorwaarden',
+	userPolicy: 'gebruiksvoorwaarden',
 	cookiebeleid: 'cookiebeleid',
+	user: 'gebruikers',
+	translations: 'vertaling',
+	cookiePolicy: 'cookiebeleid',
 	notFound: '404',
-};
+	accessRequested: 'toegang-aangevraagd',
+	myFolders: 'mijn-mappen',
+	myHistory: 'mijn-historiek',
+	visitorSpaceManagement: 'bezoekersruimtes-beheer',
+	visitorSpaces: 'bezoekersruimtes',
+	content: 'content',
+	create: 'maak',
+	edit: 'bewerk',
+});
 
-export const ROUTES = {
+// Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
+export const ROUTE_PREFIXES = Object.freeze({
+	beheer: ROUTE_PARTS.beheer,
+	admin: ROUTE_PARTS.admin,
+	account: ROUTE_PARTS.account,
+	about: ROUTE_PARTS.about,
+	faq: ROUTE_PARTS.faq,
+	gebruiksvoorwaarden: ROUTE_PARTS.userPolicy,
+	cookiebeleid: ROUTE_PARTS.cookiebeleid,
+	notFound: ROUTE_PARTS.notFound,
+});
+
+export const ROUTES = Object.freeze({
 	home: '/',
 	space: '/:slug',
-	termsOfService: '/gebruiksvoorwaarden',
-	cookiePolicy: '/cookiebeleid',
-	myCollections: '/account/mijn-mappen',
-	myHistory: '/account/mijn-historiek',
-	visitRequested: '/:slug/toegang-aangevraagd',
-	adminEditSpace: '/admin/leeszalenbeheer/leeszalen/:slug',
-	beheerRequests: '/beheer/aanvragen',
-};
+	termsOfService: '/' + ROUTE_PARTS.userPolicy,
+	cookiePolicy: '/' + ROUTE_PARTS.cookiebeleid,
+	myCollections: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
+	myHistory: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
+	visitRequested: `/:slug/${ROUTE_PARTS.accessRequested}`,
+	adminEditSpace: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/:slug`,
+	beheerRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
+});
