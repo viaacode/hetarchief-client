@@ -1,0 +1,12 @@
+@use "styles/abstracts" as *;
+
+.c--account-admin__header {
+	display: flex;
+	align-items: center;
+	padding-top: 6.4rem;
+	padding-bottom: $spacer-1xl;
+}
+
+.c-account-admin__page-title {
+	flex-grow: 1;
+}

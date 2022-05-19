@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -6,11 +7,12 @@ import { FC, useMemo } from 'react';
 import { ListNavigationItem } from '@shared/components';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 
+import styles from './AccountLayout.module.scss';
 import { AccountLayoutProps } from './AccountLayout.types';
 
 import { ACCOUNT_NAVIGATION_LINKS } from 'modules/account/const';
 
-const AccountLayout: FC<AccountLayoutProps> = ({ children, className, contentTitle }) => {
+const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
@@ -33,10 +35,15 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, contentTit
 	return (
 		<SidebarLayout
 			className={className}
-			contentTitle={contentTitle}
+			contentTitle={pageTitle}
 			sidebarLinks={sidebarLinks}
 			sidebarTitle={t('modules/account/layouts/account-layout/account-layout___account')}
 		>
+			{pageTitle && (
+				<header className={clsx(styles['c--account-admin__header'], 'l-container')}>
+					<h2 className={styles['c-account-admin__page-title']}>{pageTitle}</h2>
+				</header>
+			)}
 			{children}
 		</SidebarLayout>
 	);
