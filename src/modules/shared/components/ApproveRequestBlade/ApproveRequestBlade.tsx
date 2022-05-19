@@ -39,7 +39,13 @@ import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequ
 
 const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
 const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
-const defaultAccessTo = (accessFrom: Date) => addHours(startOfDay(accessFrom), 18);
+const defaultAccessTo = (accessFrom: Date) => {
+	let hoursUntilNext1800 = 18; // Same day 18:00
+	if (accessFrom.getHours() >= 18) {
+		hoursUntilNext1800 += 24; // Next day 18:00
+	}
+	return addHours(startOfDay(accessFrom), hoursUntilNext1800);
+};
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { t } = useTranslation();
@@ -124,8 +130,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		const overlappingRequests = visitResponse.items
 			.filter(
 				(visit) =>
-					!visit.startAt ||
-					!visit.endAt ||
+					visit.spaceSlug === selected?.spaceSlug &&
 					areIntervalsOverlapping(
 						{
 							start: form.accessFrom as Date,
