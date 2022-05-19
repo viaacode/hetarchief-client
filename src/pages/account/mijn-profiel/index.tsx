@@ -39,7 +39,7 @@ const AccountMyProfile: NextPage = () => {
 
 			<AccountLayout
 				className="p-account-my-profile"
-				contentTitle={t('pages/account/mijn-profiel/index___mijn-profiel')}
+				pageTitle={t('pages/account/mijn-profiel/index___mijn-profiel')}
 			>
 				<div className="l-container">
 					<Box className="p-account-my-profile__user-data u-p-24">

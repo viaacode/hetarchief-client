@@ -64,7 +64,7 @@ const CPSettingsPage: NextPage = () => {
 
 			<CPAdminLayout
 				className="p-cp-settings"
-				contentTitle={t('pages/beheer/instellingen/index___instellingen')}
+				pageTitle={t('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">
 					{visitorSpaceInfo ? (

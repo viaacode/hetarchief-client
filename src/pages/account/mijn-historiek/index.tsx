@@ -128,7 +128,7 @@ const AccountMyHistory: NextPage = () => {
 
 			<AccountLayout
 				className="p-account-my-history"
-				contentTitle={t('pages/account/mijn-historiek/index___mijn-historiek')}
+				pageTitle={t('pages/account/mijn-historiek/index___mijn-historiek')}
 			>
 				{(visits.data?.items?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">

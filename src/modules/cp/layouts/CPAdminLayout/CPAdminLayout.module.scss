@@ -1,0 +1,12 @@
+@use "styles/abstracts" as *;
+
+.c--cp-admin__header {
+	display: flex;
+	align-items: center;
+	padding-top: 6.4rem;
+	padding-bottom: $spacer-1xl;
+}
+
+.c-cp-admin__page-title {
+	flex-grow: 1;
+}

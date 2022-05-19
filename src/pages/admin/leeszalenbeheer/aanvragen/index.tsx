@@ -31,7 +31,7 @@ const MeemooAdminRequestsPage: NextPage = () => {
 
 			<AdminLayout pageTitle={t('pages/admin/leeszalenbeheer/aanvragen/index___aanvragen')}>
 				<AdminLayout.Content>
-					<VisitRequestsOverview columns={RequestTableColumns()} />;
+					<VisitRequestsOverview columns={RequestTableColumns()} />
 				</AdminLayout.Content>
 			</AdminLayout>
 		</>

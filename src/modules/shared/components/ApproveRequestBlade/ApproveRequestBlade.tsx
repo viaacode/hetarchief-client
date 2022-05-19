@@ -122,17 +122,20 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			true
 		);
 		const overlappingRequests = visitResponse.items
-			.filter((visit) =>
-				areIntervalsOverlapping(
-					{
-						start: form.accessFrom as Date,
-						end: form.accessTo as Date,
-					},
-					{
-						start: asDate(visit.startAt as string) as Date,
-						end: asDate(visit.endAt as string) as Date,
-					}
-				)
+			.filter(
+				(visit) =>
+					!visit.startAt ||
+					!visit.endAt ||
+					areIntervalsOverlapping(
+						{
+							start: form.accessFrom as Date,
+							end: form.accessTo as Date,
+						},
+						{
+							start: asDate(visit.startAt as string) as Date,
+							end: asDate(visit.endAt as string) as Date,
+						}
+					)
 			)
 			.filter((visit) => visit.id !== selected?.id);
 
