@@ -148,6 +148,7 @@ pipeline {
                 catchError() {
                   sh '''ls -ltra
                   export NODE_ENV=dev
+                  export CYPRESS_INSTALL_BINARY=0
                   npm set-script prepare ""
                   npm ci
                   npm install
