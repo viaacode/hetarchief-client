@@ -48,9 +48,11 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 			sidebarTitle={t('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
 		>
 			<ErrorBoundary>
-				<header className={clsx(styles['c--cp-admin__header'], 'l-container')}>
-					<h2 className={styles['c-cp-admin__page-title']}>{pageTitle}</h2>
-				</header>
+				{pageTitle && (
+					<header className={clsx(styles['c--cp-admin__header'], 'l-container')}>
+						<h2 className={styles['c-cp-admin__page-title']}>{pageTitle}</h2>
+					</header>
+				)}
 				{children}
 			</ErrorBoundary>
 		</SidebarLayout>
