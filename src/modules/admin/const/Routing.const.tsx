@@ -20,6 +20,11 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 		label: i18n.t("Content pagina's"),
 		href: '/admin/content',
 	},
+	{
+		id: 'translations-admin',
+		label: i18n.t('translations'),
+		href: '/admin/vertalingen',
+	},
 ];
 
 export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [

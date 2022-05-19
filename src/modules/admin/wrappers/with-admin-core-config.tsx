@@ -91,6 +91,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						fetchEducationOrganisations: () => Promise.resolve([]),
 					},
 					router: routerConfig as any,
+					queryCache: {
+						// eslint-disable-next-line @typescript-eslint/no-unused-vars
+						clear: async (_key: string) => Promise.resolve(),
+					},
 				},
 				database: {
 					databaseApplicationType: AvoOrHetArchief.hetArchief,
