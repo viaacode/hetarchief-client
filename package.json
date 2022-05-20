@@ -29,11 +29,11 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
-		"@meemoo/react-admin": "0.3.3",
+		"@meemoo/react-admin": "0.4.0",
 		"@meemoo/react-components": "2.15.0",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
-		"@viaa/avo2-components": "2.0.3",
+		"@viaa/avo2-components": "2.0.4",
 		"@viaa/avo2-types": "2.36.1",
 		"capture-stack-trace": "1.0.1",
 		"clsx": "1.1.1",
