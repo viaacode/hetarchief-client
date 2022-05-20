@@ -46,6 +46,7 @@
 		"konva": "8.3.5",
 		"ky": "^0.30.0",
 		"ky-universal": "^0.10.1",
+		"lint-staged": "12.4.1",
 		"lodash": "^4.17.21",
 		"lodash-es": "^4.17.21",
 		"moment": "2.29.2",

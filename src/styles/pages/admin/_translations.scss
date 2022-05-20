@@ -1,0 +1,63 @@
+@use "styles/abstracts" as *;
+
+.p-admin-vertalingen {
+	thead {
+		th:last-of-type {
+		width: 60%;
+		padding-left: 1rem;
+	}
+	}
+
+	tr {
+		td:last-of-type {
+			padding-left: 1rem;
+		}
+	}
+
+	.c-keyvalue-label.c-keyvalue-path {
+		font-size: $font-size-sm;
+		color: $neutral;
+	}
+
+	.c-input {
+		resize: none !important;
+
+		@include reset-input-field;
+
+		background-color: $white;
+		border: 1px solid $zinc;
+		font-size: $font-size-base;
+		outline: 1px solid transparent;
+		padding: 1.4rem 1.6rem;
+
+		&:focus {
+			border-color: $teal;
+		}
+	}
+
+	.c-toolbar {
+		padding-bottom: $spacer-1xl;
+
+		.c-toolbar__right {
+			width: 100%;
+			display: block;
+
+			.c-input {
+				height: 5.6rem;
+				border-radius: 2.8rem;
+			}
+
+			.o-svg-icon {
+				position: absolute;
+				top: calc(50% - 1rem);
+				right: 2rem;
+
+				svg {
+					width: 2.4rem;
+					height: 2.4rem;
+				}
+			}
+		}
+	}
+
+}

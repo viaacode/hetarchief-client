@@ -35,7 +35,7 @@ const AdminTranslationsOverview: FC = () => {
 					/>
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
-					<div className="l-container">
+					<div className="l-container u-mb-40 p-admin-vertalingen">
 						<TranslationsOverview ref={translationsRef} />
 					</div>
 				</AdminLayout.Content>
