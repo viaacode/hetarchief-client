@@ -1,14 +1,13 @@
+import { PermissionsService, UserGroupsService } from '@admin/services';
 import { AvoOrHetArchief, Config, ConfigValue, LinkInfo, ToastInfo } from '@meemoo/react-admin';
+import { navigationService } from '@navigation/services/navigation-service';
+import { sortingIcons } from '@shared/components';
+import Loading from '@shared/components/Loading/Loading';
 import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
-
-import { PermissionsService, UserGroupsService } from '@admin/services';
-import { navigationService } from '@navigation/services/navigation-service';
-import { sortingIcons } from '@shared/components';
-import Loading from '@shared/components/Loading/Loading';
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
@@ -92,6 +91,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						fetchEducationOrganisations: () => Promise.resolve([]),
 					},
 					router: routerConfig as any,
+					queryCache: {
+						// eslint-disable-next-line @typescript-eslint/no-unused-vars
+						clear: async (_key: string) => Promise.resolve(),
+					},
 					UserGroupsService,
 					PermissionsService,
 				},
