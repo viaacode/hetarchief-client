@@ -17,13 +17,19 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	},
 	{
 		id: 'content-pages-admin',
-		label: i18n.t("Content pagina's"),
+		label: i18n.t('modules/admin/const/routing___content-paginas'),
 		href: '/admin/content',
 	},
 	{
 		id: 'translations-admin',
 		label: i18n.t('translations'),
 		href: '/admin/vertalingen',
+	},
+	{
+		id: 'users-admin',
+		label: i18n.t('modules/admin/const/routing___gebruikersbeheer'),
+		href: '',
+		children: ADMIN_USERS_LINKS,
 	},
 ];
 
@@ -57,3 +63,11 @@ export const CONTENT_PATH = {
 	PROJECTS: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}?content_type=PROJECT`,
 	OVERVIEWS: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}?content_type=OVERZICHT`,
 };
+
+export const ADMIN_USERS_LINKS = (): AdminNavigationLink[] => [
+	{
+		id: 'permissions',
+		label: i18n.t('modules/admin/const/routing___groepen-en-permissies'),
+		href: '/admin/gebruikersbeheer/permissies',
+	},
+];

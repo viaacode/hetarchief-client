@@ -1,0 +1,9 @@
+@use "styles/abstracts" as *;
+
+$page: "p-admin-permissions";
+
+.#{$page} {
+	.c-table__cell {
+		text-align: left;
+	}
+}

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -10,9 +11,10 @@ import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 
+import styles from './CPAdminLayout.module.scss';
 import { CPAdminLayoutProps } from './CPAdminLayout.types';
 
-const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, contentTitle }) => {
+const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
 
@@ -41,11 +43,18 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, contentTit
 	return (
 		<SidebarLayout
 			className={className}
-			contentTitle={contentTitle}
+			contentTitle={pageTitle}
 			sidebarLinks={sidebarLinks}
 			sidebarTitle={t('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
 		>
-			<ErrorBoundary>{children}</ErrorBoundary>
+			<ErrorBoundary>
+				{pageTitle && (
+					<header className={clsx(styles['c--cp-admin__header'], 'l-container')}>
+						<h2 className={styles['c-cp-admin__page-title']}>{pageTitle}</h2>
+					</header>
+				)}
+				{children}
+			</ErrorBoundary>
 		</SidebarLayout>
 	);
 };

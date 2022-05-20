@@ -1,7 +1,10 @@
+@use "styles/abstracts" as *;
+
 .c-admin__header {
 	display: flex;
 	align-items: center;
-	padding-bottom: 4rem;
+	padding-top: 6.4rem;
+	padding-bottom: $spacer-1xl;
 }
 
 .c-admin__page-title {

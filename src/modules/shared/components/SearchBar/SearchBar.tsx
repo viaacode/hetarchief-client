@@ -7,7 +7,7 @@ import { SearchBarProps } from './SearchBar.types';
 
 const SearchBar: FC<SearchBarProps> = ({
 	onSearch,
-	variants = ['md', 'rounded', 'grey-border', 'icon--double'],
+	variants = ['md', 'rounded', 'grey-border', 'icon--double', 'icon-clickable'],
 	...rest
 }) => {
 	const [search, setSearch] = useState<string | undefined>(rest.default);

@@ -1,4 +1,5 @@
 import { useSlot } from '@viaa/avo2-components';
+import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -67,7 +68,7 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 			sidebarLinks={sidebarLinks}
 			sidebarTitle={t('modules/admin/layouts/admin-layout/admin-layout___admin')}
 		>
-			<header className={styles['c-admin__header']}>
+			<header className={clsx(styles['c-admin__header'], 'l-container')}>
 				<h2 className={styles['c-admin__page-title']}>{pageTitle}</h2>
 				<div className={styles['c-admin__actions']}>{actions}</div>
 			</header>
