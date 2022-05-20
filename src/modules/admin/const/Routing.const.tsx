@@ -66,6 +66,11 @@ export const CONTENT_PATH = {
 
 export const ADMIN_USERS_LINKS = (): AdminNavigationLink[] => [
 	{
+		id: 'users',
+		label: i18n.t('Gebruikers'),
+		href: '/admin/gebruikersbeheer/gebruikers',
+	},
+	{
 		id: 'permissions',
 		label: i18n.t('modules/admin/const/routing___groepen-en-permissies'),
 		href: '/admin/gebruikersbeheer/permissies',
