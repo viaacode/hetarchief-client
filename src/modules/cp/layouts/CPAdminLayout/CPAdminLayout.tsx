@@ -43,7 +43,6 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 	return (
 		<SidebarLayout
 			className={className}
-			contentTitle={pageTitle}
 			sidebarLinks={sidebarLinks}
 			sidebarTitle={t('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
 		>
