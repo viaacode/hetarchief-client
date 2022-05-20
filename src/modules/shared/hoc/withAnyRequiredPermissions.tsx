@@ -23,19 +23,20 @@ export const withAnyRequiredPermissions = (
 		const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
 		const checkLoginLoading: boolean = useSelector(selectCheckLoginLoading);
 
-		useEffect(() => {
-			if (!checkLoginLoading && !hasCheckedLogin) {
-				dispatch(checkLoginAction());
-			}
-		}, [router, hasRequiredPermissions, t, hasCheckedLogin, checkLoginLoading, dispatch]);
-
-		if (hasCheckedLogin && !hasRequiredPermissions) {
-			return <ErrorNoAccess visitorSpaceSlug={null} />;
-		}
-
-		if (!hasRequiredPermissions) {
-			return <Loading fullscreen />;
-		}
+		// TODO enable when database contains permission: Permission.CREATE_CONTENT_PAGES
+		// useEffect(() => {
+		// 	if (!checkLoginLoading && !hasCheckedLogin) {
+		// 		dispatch(checkLoginAction());
+		// 	}
+		// }, [router, hasRequiredPermissions, t, hasCheckedLogin, checkLoginLoading, dispatch]);
+		//
+		// if (hasCheckedLogin && !hasRequiredPermissions) {
+		// 	return <ErrorNoAccess visitorSpaceSlug={null} />;
+		// }
+		//
+		// if (!hasRequiredPermissions) {
+		// 	return <Loading fullscreen />;
+		// }
 		return <WrappedComponent {...props} />;
 	};
 };
