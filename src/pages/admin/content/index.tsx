@@ -23,11 +23,11 @@ const ContentPageOverviewPage: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t("Content pagina's"))}</title>
+				<title>{createPageTitle(t('pages/admin/content/index___content-paginas'))}</title>
 				<meta
 					name="description"
 					content={t(
-						"Overzicht van alle content pagina's die beschikbaar zijn binnen het archief"
+						'pages/admin/content/index___overzicht-van-alle-content-paginas-die-beschikbaar-zijn-binnen-het-archief'
 					)}
 				/>
 			</Head>

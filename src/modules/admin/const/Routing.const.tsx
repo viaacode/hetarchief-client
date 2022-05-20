@@ -17,12 +17,12 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	},
 	{
 		id: 'content-pages-admin',
-		label: i18n.t("Content pagina's"),
+		label: i18n.t('modules/admin/const/routing___content-paginas'),
 		href: '/admin/content',
 	},
 	{
 		id: 'users-admin',
-		label: i18n.t('Gebruikersbeheer'),
+		label: i18n.t('modules/admin/const/routing___gebruikersbeheer'),
 		href: '',
 		children: ADMIN_USERS_LINKS,
 	},
@@ -62,7 +62,7 @@ export const CONTENT_PATH = {
 export const ADMIN_USERS_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'permissions',
-		label: i18n.t('Groepen en Permissies'),
+		label: i18n.t('modules/admin/const/routing___groepen-en-permissies'),
 		href: '/admin/gebruikersbeheer/permissies',
 	},
 ];
