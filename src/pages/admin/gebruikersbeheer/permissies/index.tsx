@@ -63,21 +63,38 @@ const PermissionsOverview: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Groepen en permissies'))}</title>
-				<meta name="description" content={t('Groepen en permissies omschrijving')} />
+				<title>
+					{createPageTitle(
+						t('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies')
+					)}
+				</title>
+				<meta
+					name="description"
+					content={t(
+						'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
+					)}
+				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('Groepen en permissies')}>
+			<AdminLayout
+				pageTitle={t(
+					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
+				)}
+			>
 				<AdminLayout.Actions>
 					{hasChanges && (
 						<>
 							<Button
 								onClick={() => permissionsRef.current?.onCancel()}
-								label={t('Annuleren')}
+								label={t(
+									'pages/admin/gebruikersbeheer/permissies/index___annuleren'
+								)}
 							/>
 							<Button
 								onClick={() => permissionsRef.current?.onSave()}
-								label={t('Wijzigingen opslaan')}
+								label={t(
+									'pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan'
+								)}
 							/>
 						</>
 					)}
