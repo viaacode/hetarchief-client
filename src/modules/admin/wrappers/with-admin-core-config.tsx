@@ -1,13 +1,17 @@
-import { PermissionsService, UserGroupsService } from '@admin/services';
 import { AvoOrHetArchief, Config, ConfigValue, LinkInfo, ToastInfo } from '@meemoo/react-admin';
-import { navigationService } from '@navigation/services/navigation-service';
-import { sortingIcons } from '@shared/components';
-import Loading from '@shared/components/Loading/Loading';
 import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';
 // import { useRouter } from 'next/router';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { PermissionsService, UserGroupsService } from '@admin/services';
+import { selectUser } from '@auth/store/user';
+import { navigationService } from '@navigation/services/navigation-service';
+import { sortingIcons } from '@shared/components';
+import Loading from '@shared/components/Loading/Loading';
+import { AssetsService } from '@shared/services/assets-service/assets.service';
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
@@ -24,6 +28,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 	return function withAdminCoreConfig(props: Record<string, unknown>) {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const [adminCoreConfig, setAdminCoreConfig] = useState<ConfigValue | null>(null);
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		const user = useSelector(selectUser);
 
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const initConfigValue = useCallback(() => {
@@ -97,6 +103,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					},
 					UserGroupsService,
 					PermissionsService,
+					assetService: AssetsService,
 				},
 				database: {
 					databaseApplicationType: AvoOrHetArchief.hetArchief,
@@ -113,10 +120,11 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						// Client decides what should happen when an external link is clicked
 					},
 				},
+				user,
 			};
 			Config.setConfig(config);
 			setAdminCoreConfig(config);
-		}, [setAdminCoreConfig]);
+		}, [user, setAdminCoreConfig]);
 
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useEffect(() => {
