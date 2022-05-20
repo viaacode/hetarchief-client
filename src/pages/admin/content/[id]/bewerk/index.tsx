@@ -20,8 +20,17 @@ const ContentPageEditPage: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Content pagina bewerken'))}</title>
-				<meta name="description" content={t('Bewerk pagina van een content pagina')} />
+				<title>
+					{createPageTitle(
+						t('pages/admin/content/id/bewerk/index___content-pagina-bewerken')
+					)}
+				</title>
+				<meta
+					name="description"
+					content={t(
+						'pages/admin/content/id/bewerk/index___bewerk-pagina-van-een-content-pagina'
+					)}
+				/>
 			</Head>
 
 			<AdminLayout>

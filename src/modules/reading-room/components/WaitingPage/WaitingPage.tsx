@@ -1,8 +1,9 @@
-import DOMPurify from 'dompurify';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
+
+import Html from '@shared/components/Html/Html';
 
 import { CardImage } from '../../../shared/components';
 import { RICH_TEXT_SANITIZATION, ROUTES } from '../../../shared/const';
@@ -79,16 +80,10 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 							)}
 
 							{space.description && (
-								<div
+								<Html
+									type="div"
 									className="p-visit-requested__description u-mt-32"
-									dangerouslySetInnerHTML={{
-										__html: String(
-											DOMPurify.sanitize(
-												space.description, // rich-text content
-												RICH_TEXT_SANITIZATION
-											)
-										),
-									}}
+									content={space.description}
 								/>
 							)}
 						</div>

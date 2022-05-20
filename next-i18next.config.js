@@ -10,7 +10,7 @@ module.exports = {
 		},
 	},
 	use: [I18NextHttpBackend],
-	ns: ['common'],
+	ns: ['common', 'admin_core'],
 	serializeConfig: false,
 	parseMissingKeyHandler: (key) => {
 		if (key.includes('___')) {

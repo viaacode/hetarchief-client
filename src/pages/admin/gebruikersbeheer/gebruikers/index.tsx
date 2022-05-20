@@ -28,11 +28,22 @@ const UsersOverview: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Gebruikers'))}</title>
-				<meta name="description" content={t('Gebruikers omschrijving')} />
+				<title>
+					{createPageTitle(
+						t('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')
+					)}
+				</title>
+				<meta
+					name="description"
+					content={t(
+						'pages/admin/gebruikersbeheer/gebruikers/index___gebruikers-omschrijving'
+					)}
+				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('Gebruikers')}>
+			<AdminLayout
+				pageTitle={t('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
+			>
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>
 				</AdminLayout.Content>

@@ -23,15 +23,18 @@ const AdminTranslationsOverview: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Vertalingen'))}</title>
-				<meta name="description" content={t('Vertalingen')} />
+				<title>{createPageTitle(t('pages/admin/vertalingen/index___vertalingen'))}</title>
+				<meta
+					name="description"
+					content={t('pages/admin/vertalingen/index___vertalingen')}
+				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('Vertalingen')}>
+			<AdminLayout pageTitle={t('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Actions>
 					<Button
 						onClick={() => translationsRef.current?.onSave()}
-						label={t('Wijzigingen opslaan')}
+						label={t('pages/admin/vertalingen/index___wijzigingen-opslaan')}
 					/>
 				</AdminLayout.Actions>
 				<AdminLayout.Content>

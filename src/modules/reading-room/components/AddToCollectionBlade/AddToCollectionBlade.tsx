@@ -11,6 +11,7 @@ import { useGetCollections } from '@account/hooks/get-collections';
 import { collectionsService } from '@account/services/collections';
 import { Collection } from '@account/types';
 import { Blade, Icon } from '@shared/components';
+import Html from '@shared/components/Html/Html';
 import { toastService } from '@shared/services/toast-service';
 import { selectCollections } from '@shared/store/media';
 
@@ -270,9 +271,12 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		>
 			<div className="u-px-32">
 				<p>
-					<Trans title={title}>
-						Kies de map waaraan je <strong>{`"${title}"`}</strong> wil toevoegen.
-					</Trans>
+					<Html
+						content={t(
+							'modules/reading-room/components/add-to-collection-blade/add-to-collection-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
+							{ title }
+						)}
+					/>
 				</p>
 			</div>
 

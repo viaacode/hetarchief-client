@@ -20,8 +20,15 @@ const ContentPageDetailPage: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Content pagina detail'))}</title>
-				<meta name="description" content={t('Detail pagina van een content pagina')} />
+				<title>
+					{createPageTitle(t('pages/admin/content/id/index___content-pagina-detail'))}
+				</title>
+				<meta
+					name="description"
+					content={t(
+						'pages/admin/content/id/index___detail-pagina-van-een-content-pagina'
+					)}
+				/>
 			</Head>
 
 			<AdminLayout>

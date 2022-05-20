@@ -22,7 +22,7 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	},
 	{
 		id: 'translations-admin',
-		label: i18n.t('translations'),
+		label: i18n.t('modules/admin/const/routing___translations'),
 		href: '/admin/vertalingen',
 	},
 	{
@@ -67,7 +67,7 @@ export const CONTENT_PATH = {
 export const ADMIN_USERS_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'users',
-		label: i18n.t('Gebruikers'),
+		label: i18n.t('modules/admin/const/routing___gebruikers'),
 		href: '/admin/gebruikersbeheer/gebruikers',
 	},
 	{

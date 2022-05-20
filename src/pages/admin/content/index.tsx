@@ -59,7 +59,7 @@ const ContentPageOverviewPage: FC = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps: GetServerSideProps = withI18n('admin_core');
 
 export default withAuth(
 	withAnyRequiredPermissions(
