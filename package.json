@@ -29,7 +29,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
-		"@meemoo/react-admin": "0.4.0",
+		"@meemoo/react-admin": "0.5.0",
 		"@meemoo/react-components": "2.15.0",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
@@ -46,7 +46,6 @@
 		"konva": "8.3.5",
 		"ky": "^0.30.0",
 		"ky-universal": "^0.10.1",
-		"lint-staged": "12.4.1",
 		"lodash": "^4.17.21",
 		"lodash-es": "^4.17.21",
 		"moment": "2.29.2",
@@ -126,7 +125,6 @@
 		"identity-obj-proxy": "3.0.0",
 		"jest": "27.5.1",
 		"jest-junit": "13.0.0",
-		"lint-staged": "12.4.1",
 		"postcss-flexbugs-fixes": "5.0.2",
 		"postcss-normalize": "10.0.1",
 		"postcss-preset-env": "7.0.1",
@@ -152,6 +150,7 @@
 	],
 	"resolutions": {
 		"react": "17.0.2",
-		"react-dom": "17.0.2"
+		"react-dom": "17.0.2",
+		"is-fullwidth-code-point": "4.0.0"
 	}
 }
