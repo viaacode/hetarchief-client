@@ -1,10 +1,13 @@
+import { ContentPage } from '@meemoo/react-admin';
 import { HTTPError } from 'ky';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooleanParam, useQueryParams } from 'use-query-params';
 
+import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthModal } from '@auth/components';
+import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import VisitorSpaceSearchPage from '@reading-room/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
@@ -13,13 +16,15 @@ import { ErrorNotFound, Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 
+import { useGetContentPage } from '../../modules/content-page/hooks/get-content-page';
+
 import { VisitorLayout } from 'modules/visitors';
 
 const DynamicRouteResolver: NextPage = () => {
 	useNavigationBorder();
 
 	const router = useRouter();
-
+	const user = useSelector(selectUser);
 	const { slug } = router.query;
 	const dispatch = useDispatch();
 	const showAuthModal = useSelector(selectShowAuthModal);
@@ -31,20 +36,25 @@ const DynamicRouteResolver: NextPage = () => {
 	 * Data
 	 */
 
-	const { error: visitorSpaceError, isLoading: isVisitorSpaceLoading } = useGetVisitorSpace(
-		slug as string
-	);
+	const {
+		error: visitorSpaceError,
+		isLoading: isVisitorSpaceLoading,
+		data: visitorSpaceInfo,
+	} = useGetVisitorSpace(slug as string);
+	const {
+		error: contentPageError,
+		isLoading: isContentPageLoading,
+		data: contentPageInfo,
+	} = useGetContentPage(slug as string);
 
 	/**
 	 * Computed
 	 */
 
 	const isVisitorSpaceNotFoundError = (visitorSpaceError as HTTPError)?.response?.status === 404;
-
-	// TODO make backend call to determine if content page exists and is accessible for the user
 	const isContentPageNotFoundError =
-		router.asPath === '/over-leeszalen' || router.asPath === '/faq';
-	const isContentPageLoading = false;
+		(!!contentPageInfo && contentPageInfo?.exists === false) ||
+		(contentPageError as HTTPError)?.response?.status === 404;
 
 	/**
 	 * Methods
@@ -68,7 +78,12 @@ const DynamicRouteResolver: NextPage = () => {
 		if (isVisitorSpaceNotFoundError && isContentPageNotFoundError) {
 			return <ErrorNotFound />;
 		}
-		return <VisitorSpaceSearchPage />;
+		if (visitorSpaceInfo) {
+			return <VisitorSpaceSearchPage />;
+		}
+		if (contentPageInfo) {
+			return <ContentPage path={('/' + slug) as string} userGroupId={user?.groupId} />;
+		}
 	};
 
 	return (
@@ -81,4 +96,4 @@ const DynamicRouteResolver: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default DynamicRouteResolver;
+export default withAdminCoreConfig(DynamicRouteResolver);
