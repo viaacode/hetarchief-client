@@ -2,27 +2,10 @@
 
 .p-admin-vertalingen {
 	thead {
-		th{
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			position: relative;
-			font-weight: 700;
-			font-size: 1.2rem;
-			line-height: 1.3;
-			color: #727272;
-			user-select: none;
-
-			&:last-of-type {
-				width: 60%;
-				padding-left: 1rem;
-			}
-		}
-
-		.o-svg-icon {
-			width: 1.6rem;
-			height: 1.6rem;
-		}
+		th:last-of-type {
+		width: 60%;
+		padding-left: 1rem;
+	}
 	}
 
 	tr {
@@ -77,15 +60,4 @@
 		}
 	}
 
-}
-
-div[class*="c-pagination__btn"] {
-	color: $zinc;
-}
-
-div[class*="c-pagination__btn--active"] {
-	background-color: #009690;
-    color: #fff;
-    font-weight: 700;
-    border-radius: 50%;
 }
