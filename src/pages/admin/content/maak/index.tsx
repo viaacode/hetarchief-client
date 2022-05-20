@@ -1,4 +1,4 @@
-import { ContentPageDetail } from '@meemoo/react-admin';
+import { ContentPageEdit } from '@meemoo/react-admin';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -13,20 +13,20 @@ import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
-const ContentPageDetailPage: FC = () => {
+const ContentPageEditPage: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Content pagina detail'))}</title>
-				<meta name="description" content={t('Detail pagina van een content pagina')} />
+				<title>{createPageTitle(t('Content pagina bewerken'))}</title>
+				<meta name="description" content={t('Bewerk pagina van een content pagina')} />
 			</Head>
 
 			<AdminLayout>
 				<AdminLayout.Content>
-					<ContentPageDetail id={router.query.id as string} />
+					<ContentPageEdit id={router.query.id as string} />
 				</AdminLayout.Content>
 			</AdminLayout>
 		</>
@@ -37,8 +37,7 @@ export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(
-		withAdminCoreConfig(ContentPageDetailPage),
-		Permission.EDIT_ANY_CONTENT_PAGES,
-		Permission.EDIT_OWN_CONTENT_PAGES
+		withAdminCoreConfig(ContentPageEditPage),
+		Permission.CREATE_CONTENT_PAGES
 	)
 );

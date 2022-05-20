@@ -13,7 +13,7 @@ import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
-const ContentPageOverviewPage: FC = () => {
+const ContentPageEditPage: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 
@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(
-		withAdminCoreConfig(ContentPageOverviewPage),
+		withAdminCoreConfig(ContentPageEditPage),
 		Permission.EDIT_ANY_CONTENT_PAGES,
 		Permission.EDIT_OWN_CONTENT_PAGES
 	)
