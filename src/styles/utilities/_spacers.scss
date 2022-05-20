@@ -118,6 +118,7 @@ $mb: (
 $ml: (
 	"4": $spacer-xxs,
 	"8": $spacer-xs,
+	"20": $spacer-20,
 	"-12": - $spacer-12,
 );
 @include generate-utils("ml", "margin-left", $ml);

@@ -1,6 +1,5 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import DOMPurify from 'isomorphic-dompurify';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -12,6 +11,7 @@ import { useQueryParams } from 'use-query-params';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
+import Html from '@shared/components/Html/Html';
 import {
 	REDIRECT_TO_QUERY_KEY,
 	RICH_TEXT_SANITIZATION,
@@ -107,15 +107,9 @@ const TermsOfService: NextPage = () => {
 						ref={scrollable}
 						onScroll={onContentScroll}
 						className="p-terms-of-service__content"
-						dangerouslySetInnerHTML={{
-							__html: String(
-								DOMPurify.sanitize(
-									lipsum + lipsum, // rich-text content
-									RICH_TEXT_SANITIZATION
-								)
-							),
-						}}
-					/>
+					>
+						<Html content={lipsum + lipsum} />
+					</div>
 				</div>
 			</section>
 

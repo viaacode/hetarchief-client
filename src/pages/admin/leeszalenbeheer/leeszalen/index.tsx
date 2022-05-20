@@ -205,9 +205,11 @@ const ReadingRoomsOverview: FC = () => {
 			</Head>
 
 			<AdminLayout
-				contentTitle={t('pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen')}
+				pageTitle={t('pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen')}
 			>
-				<div className="l-container">{renderPageContent()}</div>
+				<AdminLayout.Content>
+					<div className="l-container">{renderPageContent()}</div>
+				</AdminLayout.Content>
 			</AdminLayout>
 		</>
 	);

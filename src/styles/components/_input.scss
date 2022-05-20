@@ -116,6 +116,12 @@
 			right: 2rem;
 		}
 	}
+
+	&.c-input--icon-clickable {
+		.c-input__icon {
+			pointer-events: all;
+		}
+	}
 }
 
 .c-input--icon--double {
