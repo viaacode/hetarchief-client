@@ -18,7 +18,7 @@ import { createPageTitle } from '@shared/utils';
 
 const ContentPageOverviewPage: FC = () => {
 	const { t } = useTranslation();
-	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES);
+	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
 	return (
 		<>

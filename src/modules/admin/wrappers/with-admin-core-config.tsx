@@ -1,4 +1,12 @@
-import { AvoOrHetArchief, Config, ConfigValue, LinkInfo, ToastInfo } from '@meemoo/react-admin';
+import {
+	AvoOrHetArchief,
+	Config,
+	ConfigValue,
+	ContentBlockType,
+	LinkInfo,
+	ToastInfo,
+} from '@meemoo/react-admin';
+import { CommonUser } from '@meemoo/react-admin/dist/cjs/modules/user/user.types';
 import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -54,6 +62,24 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 			};
 
+			const commonUser: CommonUser = {
+				uid: user?.id,
+				profileId: user?.id as string,
+				userId: user?.id,
+				idp: user?.idp,
+				email: user?.email,
+				acceptedTosAt: user?.acceptedTosAt,
+				userGroup: {
+					name: user?.groupName,
+					id: user?.groupId,
+				},
+				firstName: user?.firstName,
+				lastName: user?.lastName,
+				fullName: user?.fullName,
+				// last_access_at: user.lastAccessAt, // TODO enable once last_access_at field is added to the database
+				permissions: user?.permissions,
+			};
+
 			const config: ConfigValue = {
 				navigation: {
 					service: navigationService,
@@ -62,6 +88,16 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							labels: { tableHeads: {} },
 						},
 					},
+				},
+				contentPage: {
+					availableContentBlocks: [
+						// TODO extend this list when meemoo decides which content blocks that want to use for hetarchief
+						ContentBlockType.Heading,
+						ContentBlockType.RichText,
+						ContentBlockType.RichTextTwoColumns,
+						ContentBlockType.Buttons,
+						ContentBlockType.Image,
+					],
 				},
 				icon: {
 					component: ({ name }: any) => <span>{name}</span>,
@@ -120,7 +156,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						// Client decides what should happen when an external link is clicked
 					},
 				},
-				user,
+				user: commonUser,
 			};
 			Config.setConfig(config);
 			setAdminCoreConfig(config);
