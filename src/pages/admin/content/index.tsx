@@ -50,7 +50,9 @@ const ContentPageOverviewPage: FC = () => {
 					)}
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
-					<ContentPageOverview />
+					<div className="l-container">
+						<ContentPageOverview />
+					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
 		</>
