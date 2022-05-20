@@ -161,9 +161,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		const overlappingVisitRequests = await checkOverlappingRequests();
 		if (overlappingVisitRequests.length) {
 			toastService.notify({
-				title: t('Conflict'),
+				title: t(
+					'modules/shared/components/approve-request-blade/approve-request-blade___conflict'
+				),
 				description: t(
-					'Je kan geen 2 aanvragen goedkeuren die overlappen. Pas de andere aanvraag aan.'
+					'modules/shared/components/approve-request-blade/approve-request-blade___je-kan-geen-2-aanvragen-goedkeuren-die-overlappen-pas-de-andere-aanvraag-aan'
 				),
 			});
 			return;
@@ -386,7 +388,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 				{!!overlappingRequests.length && (
 					<p className={clsx('c-form-control__errors', styles['c-form-control__errors'])}>
-						{t('Er is reeds een goedgekeurde aanvraag voor deze periode: ')}
+						{t(
+							'modules/shared/components/approve-request-blade/approve-request-blade___er-is-reeds-een-goedgekeurde-aanvraag-voor-deze-periode'
+						)}
 						<br />
 						<br />
 						{formatMediumDateWithTime(asDate(overlappingRequests[0].startAt))}
@@ -402,7 +406,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							}
 							passHref
 						>
-							<a onClick={onClose}>{t('Bekijk deze aanvraag')}</a>
+							<a onClick={onClose}>
+								{t(
+									'modules/shared/components/approve-request-blade/approve-request-blade___bekijk-deze-aanvraag'
+								)}
+							</a>
 						</Link>
 					</p>
 				)}

@@ -2,8 +2,11 @@ import { VisitorSpaceInfo } from '@reading-room/types';
 
 export type AdminReadingRoomInfoRow = { row: { original: VisitorSpaceInfo } };
 
-// User groups
+export interface TranslationsOverviewRef {
+	onSave: () => void;
+}
 
+// User groups
 export interface UserGroupOverviewRef {
 	onCancel: () => void;
 	onSave: () => void;

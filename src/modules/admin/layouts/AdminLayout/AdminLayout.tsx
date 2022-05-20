@@ -13,6 +13,7 @@ import {
 	AdminFiltersRight,
 } from '@admin/layouts/AdminLayout/AdminLayout.slots';
 import { ListNavigationItem } from '@shared/components';
+import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 
@@ -30,6 +31,8 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 	const filtersLeft = useSlot(AdminFiltersLeft, children);
 	const filtersRight = useSlot(AdminFiltersRight, children);
 	const content = useSlot(AdminContent, children);
+
+	useHideFooter();
 
 	useEffect(() => {
 		dispatch(setShowZendesk(false));
@@ -68,10 +71,12 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 			sidebarLinks={sidebarLinks}
 			sidebarTitle={t('modules/admin/layouts/admin-layout/admin-layout___admin')}
 		>
-			<header className={clsx(styles['c-admin__header'], 'l-container')}>
-				<h2 className={styles['c-admin__page-title']}>{pageTitle}</h2>
-				<div className={styles['c-admin__actions']}>{actions}</div>
-			</header>
+			{(!!pageTitle || !!actions) && (
+				<header className={clsx(styles['c-admin__header'], 'l-container')}>
+					<h2 className={styles['c-admin__page-title']}>{pageTitle}</h2>
+					<div className={styles['c-admin__actions']}>{actions}</div>
+				</header>
+			)}
 
 			<div className="c-admin__filter-bar">
 				<div className="c-admin__filter-bar-left">{filtersLeft}</div>

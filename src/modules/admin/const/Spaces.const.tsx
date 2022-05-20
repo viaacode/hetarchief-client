@@ -114,7 +114,10 @@ export const ReadingRoomsOverviewTableColumns = (
 						</a>
 					</Link>
 					<DropdownMenu
-						triggerButtonProps={{ onClick: () => null, className: 'u-color-neutral' }}
+						triggerButtonProps={{
+							onClick: () => null,
+							className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
+						}}
 					>
 						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Requested].includes(
 							status

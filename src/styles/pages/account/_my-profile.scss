@@ -1,6 +1,8 @@
 @use "../../abstracts" as *;
 
 .p-account-my-profile__user-data {
+	background-color: $white;
+
 	@include respond-at(md) {
 		display: grid;
 		grid-auto-flow: column;
