@@ -35,7 +35,9 @@ const AdminTranslationsOverview: FC = () => {
 					/>
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
-					<TranslationsOverview ref={translationsRef} />
+					<div className="l-container">
+						<TranslationsOverview ref={translationsRef} />
+					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
 		</>
@@ -45,8 +47,8 @@ const AdminTranslationsOverview: FC = () => {
 export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
-	withAnyRequiredPermissions(
-		withAdminCoreConfig(AdminTranslationsOverview),
-		Permission.EDIT_TRANSLATIONS
-	)
+	// withAnyRequiredPermissions(
+	withAdminCoreConfig(AdminTranslationsOverview)
+	// Permission.EDIT_TRANSLATIONS
+	// )
 );
