@@ -21,6 +21,11 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 		href: '/admin/content',
 	},
 	{
+		id: 'navigation-admin',
+		label: i18n.t('Navigatie'),
+		href: '/admin/navigatie',
+	},
+	{
 		id: 'translations-admin',
 		label: i18n.t('modules/admin/const/routing___translations'),
 		href: '/admin/vertalingen',
