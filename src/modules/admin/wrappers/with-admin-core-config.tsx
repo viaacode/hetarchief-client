@@ -10,6 +10,7 @@ import { CommonUser } from '@meemoo/react-admin/dist/cjs/modules/user/user.types
 import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 // import { useRouter } from 'next/router';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -20,6 +21,7 @@ import { navigationService } from '@navigation/services/navigation-service';
 import { sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
+import { toastService } from '@shared/services/toast-service';
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
@@ -38,29 +40,14 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 		const [adminCoreConfig, setAdminCoreConfig] = useState<ConfigValue | null>(null);
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const user = useSelector(selectUser);
+		// eslint-disable-next-line react-hooks/rules-of-hooks
+		const router = useRouter();
 
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const initConfigValue = useCallback(() => {
 			if (!i18n) {
 				return;
 			}
-
-			const routerConfig: ConfigValue['services']['router'] = {
-				Link: InternalLink as FunctionComponent<LinkInfo>,
-				useHistory: () => ({
-					push: () => {
-						// empty
-					},
-					replace: () => {
-						// empty
-					},
-				}), //useRouter,
-				useParams: () => {
-					// const router = useRouter();
-					// return router.query as Record<string, string>;
-					return {};
-				},
-			};
 
 			const commonUser: CommonUser = {
 				uid: user?.id,
@@ -122,8 +109,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				services: {
 					toastService: {
 						showToast: (toastInfo: ToastInfo) => {
-							// Client decides how the toast messages are shown
-							console.log('show toast: ', toastInfo);
+							toastService.notify({
+								title: toastInfo.title,
+								description: toastInfo.description,
+							});
 						},
 					},
 					i18n,
@@ -132,7 +121,16 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						fetchCities: () => Promise.resolve([]),
 						fetchEducationOrganisations: () => Promise.resolve([]),
 					},
-					router: routerConfig as any,
+					router: {
+						Link: InternalLink as FunctionComponent<LinkInfo>,
+						useHistory: () => ({
+							push: router.push,
+							replace: router.replace,
+						}), //useRouter,
+						useParams: () => {
+							return router.query as Record<string, string>;
+						},
+					},
 					queryCache: {
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						clear: async (_key: string) => Promise.resolve(),

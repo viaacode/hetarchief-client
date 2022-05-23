@@ -18,10 +18,10 @@ const ZendeskWrapper: FunctionComponent = () => {
 	const zendeskMarginRight = 31;
 
 	useEffect(() => {
-		const zendeskWidget: HTMLIFrameElement | null = document.querySelector('iframe#launcher');
-		if (zendeskWidget) {
-			zendeskWidget.style.display = showZendesk ? 'block' : 'none';
-			zendeskWidget.style.width = 'auto';
+		if (showZendesk) {
+			document.body.classList.remove('hide-zendesk-widget');
+		} else {
+			document.body.classList.add('hide-zendesk-widget');
 		}
 	}, [showZendesk]);
 
