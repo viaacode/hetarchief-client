@@ -1,7 +1,8 @@
-import { NavigationOverview } from '@meemoo/react-admin';
+import { NavigationEdit } from '@meemoo/react-admin';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
 import { Permission } from '@account/const';
@@ -12,20 +13,33 @@ import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
-const AdminNavigationOverview: FC = () => {
+const ContentPageEditPage: FC = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
 
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Navigatie'))}</title>
-				<meta name="description" content={t('Navigatie meta tag')} />
+				<title>
+					{createPageTitle(
+						t('pages/admin/content/id/bewerk/index___content-pagina-bewerken')
+					)}
+				</title>
+				<meta
+					name="description"
+					content={t(
+						'pages/admin/content/id/bewerk/index___bewerk-pagina-van-een-content-pagina'
+					)}
+				/>
 			</Head>
 
 			<AdminLayout>
 				<AdminLayout.Content>
-					<div className="l-container u-mb-40 p-admin-navigation">
-						<NavigationOverview />
+					<div className="p-admin-content__edit">
+						<NavigationEdit
+							navigationBarId={router.query.navigationBarId as string}
+							navigationItemId={router.query.navigationItemId as string}
+						/>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
@@ -37,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(
-		withAdminCoreConfig(AdminNavigationOverview),
+		withAdminCoreConfig(ContentPageEditPage),
 		Permission.EDIT_NAVIGATION_BARS
 	)
 );

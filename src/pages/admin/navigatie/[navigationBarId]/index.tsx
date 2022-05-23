@@ -1,4 +1,4 @@
-import { ContentPageEdit } from '@meemoo/react-admin';
+import { NavigationDetail } from '@meemoo/react-admin';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -13,29 +13,23 @@ import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
-const ContentPageEditPage: FC = () => {
+const ContentPageDetailPage: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 
 	return (
 		<>
 			<Head>
-				<title>
-					{createPageTitle(t('pages/admin/content/maak/index___content-pagina-bewerken'))}
-				</title>
+				<title>{createPageTitle(t('Navigatie balk detail'))}</title>
 				<meta
 					name="description"
-					content={t(
-						'pages/admin/content/maak/index___bewerk-pagina-van-een-content-pagina'
-					)}
+					content={t('De detail pagina van een navigatie balk met de navigatie items')}
 				/>
 			</Head>
 
 			<AdminLayout>
 				<AdminLayout.Content>
-					<div className="p-admin-content__create">
-						<ContentPageEdit id={router.query.id as string} />
-					</div>
+					<NavigationDetail navigationBarId={router.query.navigationBarId as string} />
 				</AdminLayout.Content>
 			</AdminLayout>
 		</>
@@ -46,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(
-		withAdminCoreConfig(ContentPageEditPage),
-		Permission.CREATE_CONTENT_PAGES
+		withAdminCoreConfig(ContentPageDetailPage),
+		Permission.EDIT_NAVIGATION_BARS
 	)
 );
