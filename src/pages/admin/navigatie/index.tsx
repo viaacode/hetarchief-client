@@ -22,7 +22,7 @@ const AdminNavigationOverview: FC = () => {
 				<meta name="description" content={t('Navigatie meta tag')} />
 			</Head>
 
-			<AdminLayout>
+			<AdminLayout pageTitle={t('Navigatie')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-navigation">
 						<NavigationOverview />

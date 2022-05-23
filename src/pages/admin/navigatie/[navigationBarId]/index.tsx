@@ -29,7 +29,11 @@ const ContentPageDetailPage: FC = () => {
 
 			<AdminLayout>
 				<AdminLayout.Content>
-					<NavigationDetail navigationBarId={router.query.navigationBarId as string} />
+					<div className="l-container p-admin-navigation__detail">
+						<NavigationDetail
+							navigationBarId={router.query.navigationBarId as string}
+						/>
+					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
 		</>

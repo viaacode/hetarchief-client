@@ -35,7 +35,7 @@ const ContentPageEditPage: FC = () => {
 
 			<AdminLayout>
 				<AdminLayout.Content>
-					<div className="p-admin-content__edit">
+					<div className="l-container p-admin-navigation__edit">
 						<NavigationEdit
 							navigationBarId={router.query.navigationBarId as string}
 							navigationItemId={router.query.navigationItemId as string}
