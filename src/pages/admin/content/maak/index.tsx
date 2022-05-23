@@ -33,7 +33,9 @@ const ContentPageEditPage: FC = () => {
 
 			<AdminLayout>
 				<AdminLayout.Content>
-					<ContentPageEdit id={router.query.id as string} />
+					<div className="p-admin-content__create">
+						<ContentPageEdit id={router.query.id as string} />
+					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
 		</>

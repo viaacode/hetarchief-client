@@ -50,8 +50,8 @@ const AdminTranslationsOverview: FC = () => {
 export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
-	// withAnyRequiredPermissions(
-	withAdminCoreConfig(AdminTranslationsOverview)
-	// Permission.EDIT_TRANSLATIONS
-	// )
+	withAnyRequiredPermissions(
+		withAdminCoreConfig(AdminTranslationsOverview),
+		Permission.EDIT_TRANSLATIONS
+	)
 );

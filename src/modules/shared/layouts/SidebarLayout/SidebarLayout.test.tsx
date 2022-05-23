@@ -39,14 +39,5 @@ describe('Layouts', () => {
 
 			expect(child).toBeInTheDocument();
 		});
-
-		it('Should show a title', () => {
-			const contentTitle = 'Foobar';
-			renderSidebarLayout({ contentTitle });
-
-			const title = screen.getByText(contentTitle);
-
-			expect(title).toBeInTheDocument();
-		});
 	});
 });
