@@ -1,0 +1,30 @@
+@use "styles/abstracts" as *;
+
+.p-admin-content {
+	.c-filter-table thead th,
+	.c-filter-table tbody td {
+		padding: $spacer-sm $spacer-xs;
+	}
+}
+
+.p-admin-content__create,
+.p-admin-content__edit {
+	.o-container--medium {
+		max-width: 100%;
+		padding: $spacer-md;
+	}
+
+	.m-resizable-panels.m-edit-content-blocks {
+		margin-top: $spacer-1xl;
+
+		.resizable-fragment:last-of-type {
+			margin-right: $spacer-md;
+			margin-bottom: $spacer-md;
+			box-shadow: $shadow-24-black-08;
+		}
+
+		// & > div > div:nth-child(2) {
+		// 	background: linear-gradient($silver, $silver) no-repeat center/0.1rem 100%;
+		// }
+	}
+}
