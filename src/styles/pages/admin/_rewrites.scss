@@ -116,8 +116,12 @@ div[class*="c-pagination__btn--active"] {
 }
 
 // Buttons
+.c-content-block-form-group button[class*="c-button"],
+.c-file-upload-button-and-input button[class*="c-button"],
+.c-admin__actions button[class*="c-button"],
 .c-filter-table button[class*="c-button--primary"],
 button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
+.c-accordion__item > .u-spacer-bottom button[class*="c-button"],
 .c-modal .c-toolbar button[class*="c-button"] {
 	display: inline-block;
 	padding: 1.4rem $button-horizontal-whitespace;
@@ -169,6 +173,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 }
 
+.c-admin__actions button[class*="c-button--primary"],
 .c-filter-table button[class*="c-button--primary"] {
 	max-height: 5.6rem;
 	background-color: $teal-dark;
@@ -204,6 +209,39 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 }
 
+.c-admin__actions button[class*="c-button--secondary"],
+.c-accordion__item button[class*="c-button--secondary"],
+.c-content-block-form-group button[class*="c-button--secondary"],
+.c-file-upload-button-and-input button[class*="c-button--secondary"],
+.c-admin__actions button[class*="c-button--tertiary"] {
+	max-height: 5.6rem;
+	background-color: $silver;
+	border-color: $silver;
+	color: $black;
+
+	&:hover {
+		background-color: $shade;
+		border-color: $shade;
+		color: $white;
+	}
+
+	&:active {
+		background-color: $teal-dark;
+		border-color: $teal-dark;
+		color: $white;
+	}
+
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
+		outline: 2px solid $teal;
+	}
+}
+
 // inputs
 .c-filter-table .o-form-group-layout  {
 	align-items: center;
@@ -234,11 +272,6 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 				position: absolute;
 				top: calc(50% - 1rem);
 				right: 2rem;
-
-				svg {
-					width: 2.4rem;
-					height: 2.4rem;
-				}
 			}
 		}
 	}
@@ -381,6 +414,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 			.c-select__menu {
 				color: $black;
+
+				.c-select__option:hover {
+					background-color: $silver;
+				}
 			}
 		}
 
@@ -400,4 +437,14 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			}
 		}
 	}
+}
+
+// other
+
+.c-form-help-text {
+	padding-top: $spacer-xs;
+}
+
+.c-form-help-text--error {
+	color: $cherry;
 }
