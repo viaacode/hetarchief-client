@@ -29,7 +29,7 @@ const AdminNavigationOverview: FC = () => {
 
 			<AdminLayout pageTitle={t('Navigatie')}>
 				<AdminLayout.Content>
-					<div className="l-container u-mb-40 p-admin-vertalingen">
+					<div className="l-container u-mb-40 p-admin-navigation">
 						<NavigationOverview />
 					</div>
 				</AdminLayout.Content>

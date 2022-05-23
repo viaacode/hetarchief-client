@@ -1,0 +1,40 @@
+@use "styles/abstracts" as *;
+
+.p-admin-navigation {
+	.c-button-toolbar {
+		justify-content: flex-end;
+
+		button[class*="c-button"] {
+			width: 3.6rem;
+			height: 3.6rem;
+			padding: 0;
+			border-radius: 1.8rem;
+			background-color: $silver;
+			color: $black;
+			border: none;
+
+			&:hover {
+				background-color: $shade;
+				border-color: $shade;
+				color: $white;
+			}
+
+			&:active {
+				background-color: $teal-dark;
+				border-color: $teal-dark;
+				color: $white;
+			}
+
+			&:focus,
+			.focus-visible:focus:not(:focus-visible) {
+				outline: 2px solid $teal;
+			}
+
+			&:disabled {
+				border: none;
+				background-color: $silver;
+				color: $zinc;
+			}
+		}
+	}
+}

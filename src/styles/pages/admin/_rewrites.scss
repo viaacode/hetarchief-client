@@ -26,7 +26,8 @@ table[class*="c-table--styled"] {
 	}
 }
 
-.c-filter-table {
+.c-filter-table,
+.c-admin__content {
 	table {
 		border-spacing: 0;
 		border-collapse: collapse;
@@ -88,6 +89,16 @@ table[class*="c-table--styled"] {
 	}
 }
 
+.c-admin__content:not(.Table-module_c-table--styled__H4Ms4) tbody td {
+	&:first-child {
+		padding-left: $spacer-md;
+	}
+
+	&:last-child {
+		padding-right: $spacer-md;
+	}
+}
+
 // Pagination
 
 div[class*="c-pagination"]:not(div[class*="c-pagination__btn"]) {
@@ -116,6 +127,7 @@ div[class*="c-pagination__btn--active"] {
 }
 
 // Buttons
+.c-button-toolbar button[class*="c-button"],
 .c-content-block-form-group button[class*="c-button"],
 .c-file-upload-button-and-input button[class*="c-button"],
 .c-admin__actions button[class*="c-button"],
