@@ -21,6 +21,7 @@ import { navigationService } from '@navigation/services/navigation-service';
 import { sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
+import { toastService } from '@shared/services/toast-service';
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
@@ -108,8 +109,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				services: {
 					toastService: {
 						showToast: (toastInfo: ToastInfo) => {
-							// Client decides how the toast messages are shown
-							console.log('show toast: ', toastInfo);
+							toastService.notify({
+								title: toastInfo.title,
+								description: toastInfo.description,
+							});
 						},
 					},
 					i18n,
