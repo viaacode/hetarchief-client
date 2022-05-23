@@ -3,7 +3,7 @@ export const ROUTE_PARTS = Object.freeze({
 	admin: 'admin',
 	account: 'account',
 	visitRequests: 'aanvragen',
-	about: 'over-leeszalen',
+	about: 'over-bezoekersruimtes',
 	faq: 'faq',
 	userPolicy: 'gebruiksvoorwaarden',
 	cookiebeleid: 'cookiebeleid',

@@ -49,7 +49,7 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 						</a>
 					</Link>
 				),
-				active: href ? asPath.includes(href) : false,
+				active: href ? asPath.split('?')[0].endsWith(href) : false,
 				children: children?.().map(({ id, label, href }) => ({
 					id,
 					node: ({ linkClassName }) => (
@@ -59,7 +59,7 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 							</a>
 						</Link>
 					),
-					active: href ? asPath.includes(href) : false,
+					active: href ? asPath.split('?')[0].endsWith(href) : false,
 				})),
 			})),
 		[asPath]

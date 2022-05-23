@@ -4,12 +4,12 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import Html from '@shared/components/Html/Html';
+import { ROUTES } from '@shared/const';
+import { selectShowNavigationBorder } from '@shared/store/ui';
+import { createPageTitle } from '@shared/utils';
 
 import { CardImage } from '../../../shared/components';
-import { RICH_TEXT_SANITIZATION, ROUTES } from '../../../shared/const';
 import { useNavigationBorder } from '../../../shared/hooks/use-navigation-border';
-import { selectShowNavigationBorder } from '../../../shared/store/ui';
-import { createPageTitle } from '../../../shared/utils';
 import { ReadingRoomNavigation } from '../ReadingRoomNavigation';
 
 import { WaitingPageProps } from './WaitingPage.types';
@@ -58,7 +58,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 
 							<p className="p-visit-requested__instructions u-color-neutral u-mt-24 u-mt-32:md u-mb-56:md">
 								{t(
-									'pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-leeszalen-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd'
+									'pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-bezoekersruimtes-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd'
 								)}
 							</p>
 						</div>

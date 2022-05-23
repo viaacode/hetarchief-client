@@ -20,10 +20,16 @@ const ContentPageDetailPage: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Navigatie balk detail'))}</title>
+				<title>
+					{createPageTitle(
+						t('pages/admin/navigatie/navigation-bar-id/index___navigatie-balk-detail')
+					)}
+				</title>
 				<meta
 					name="description"
-					content={t('De detail pagina van een navigatie balk met de navigatie items')}
+					content={t(
+						'pages/admin/navigatie/navigation-bar-id/index___de-detail-pagina-van-een-navigatie-balk-met-de-navigatie-items'
+					)}
 				/>
 			</Head>
 

@@ -320,7 +320,7 @@ const getMeemooAdminManagementDropdown = (
 		{
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___admin'),
-				'/admin/leeszalenbeheer/leeszalen',
+				'/admin/bezoekersruimtesbeheer/bezoekersruimtes',
 				{
 					className: linkCls([
 						'u-color-black',

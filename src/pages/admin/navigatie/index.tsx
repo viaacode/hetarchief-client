@@ -18,11 +18,14 @@ const AdminNavigationOverview: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Navigatie'))}</title>
-				<meta name="description" content={t('Navigatie meta tag')} />
+				<title>{createPageTitle(t('pages/admin/navigatie/index___navigatie'))}</title>
+				<meta
+					name="description"
+					content={t('pages/admin/navigatie/index___navigatie-meta-tag')}
+				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('Navigatie')}>
+			<AdminLayout pageTitle={t('pages/admin/navigatie/index___navigatie')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-navigation">
 						<NavigationOverview />

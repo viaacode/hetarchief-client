@@ -76,9 +76,11 @@ const ReadingRoomsOverview: FC = () => {
 
 		toastService.notify({
 			maxLines: 3,
-			title: t('pages/admin/leeszalenbeheer/leeszalen/index___er-ging-iets-mis'),
+			title: t(
+				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis'
+			),
 			description: t(
-				'pages/admin/leeszalenbeheer/leeszalen/index___er-is-een-fout-opgetreden-tijdens-het-aanpassen-van-de-status'
+				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-is-een-fout-opgetreden-tijdens-het-aanpassen-van-de-status'
 			),
 		});
 	};
@@ -97,9 +99,9 @@ const ReadingRoomsOverview: FC = () => {
 
 				toastService.notify({
 					maxLines: 3,
-					title: t('pages/admin/leeszalenbeheer/leeszalen/index___succes'),
+					title: t('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'),
 					description: t(
-						'pages/admin/leeszalenbeheer/leeszalen/index___de-status-werd-succesvol-aangepast'
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___de-status-werd-succesvol-aangepast'
 					),
 				});
 			});
@@ -113,7 +115,9 @@ const ReadingRoomsOverview: FC = () => {
 				<SearchBar
 					default={filters[SEARCH_QUERY_KEY]}
 					className="p-admin-reading-rooms__search"
-					placeholder={t('pages/admin/leeszalenbeheer/leeszalen/index___zoek')}
+					placeholder={t(
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
+					)}
 					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 				/>
 			</div>
@@ -171,7 +175,7 @@ const ReadingRoomsOverview: FC = () => {
 			return (
 				<p className="p-admin-reading-rooms__error">
 					{t(
-						'pages/admin/leeszalenbeheer/leeszalen/index___er-ging-iets-mis-bij-het-ophalen-van-de-leeszalen'
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis-bij-het-ophalen-van-de-bezoekersruimtes'
 					)}
 				</p>
 			);
@@ -180,7 +184,7 @@ const ReadingRoomsOverview: FC = () => {
 			return (
 				<p className="p-admin-reading-rooms__error">
 					{t(
-						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geen-leeszalen-gevonden'
+						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geen-bezoekersruimtes-gevonden'
 					)}
 				</p>
 			);
@@ -193,19 +197,23 @@ const ReadingRoomsOverview: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen')
+						t(
+							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
+						)
 					)}
 				</title>
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen-meta-omschrijving'
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes-meta-omschrijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				pageTitle={t('pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen')}
+				pageTitle={t(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
+				)}
 			>
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>

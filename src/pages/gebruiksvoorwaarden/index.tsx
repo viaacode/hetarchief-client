@@ -12,11 +12,7 @@ import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
 import Html from '@shared/components/Html/Html';
-import {
-	REDIRECT_TO_QUERY_KEY,
-	RICH_TEXT_SANITIZATION,
-	TOS_INDEX_QUERY_PARAM_CONFIG,
-} from '@shared/const';
+import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import { toastService } from '@shared/services/toast-service';

@@ -26,19 +26,23 @@ const ReadingRoomEdit: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen')
+						t(
+							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
+						)
 					)}
 				</title>
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen-meta-omschrijving'
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen-meta-omschrijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				pageTitle={t('pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen')}
+				pageTitle={t(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
+				)}
 			>
 				<AdminLayout.Content>
 					<div className="l-container">

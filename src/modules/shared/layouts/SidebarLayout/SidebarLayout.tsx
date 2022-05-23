@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 
-import { Icon, ListNavigation, Sidebar, SidebarLayoutTitle } from '@shared/components';
+import { Icon, ListNavigation, Sidebar } from '@shared/components';
 
 import styles from './SidebarLayout.module.scss';
 import { SidebarLayoutProps } from './SidebarLayout.types';

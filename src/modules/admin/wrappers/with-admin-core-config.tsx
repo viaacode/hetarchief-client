@@ -11,7 +11,6 @@ import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-// import { useRouter } from 'next/router';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -87,7 +86,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					],
 				},
 				icon: {
-					component: ({ name }: any) => <span>{name}</span>,
+					component: ({ name }: { name: string }) => <span>{name}</span>,
 					componentProps: {
 						add: { name: 'add' },
 						view: { name: 'view' },
@@ -158,7 +157,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 			};
 			Config.setConfig(config);
 			setAdminCoreConfig(config);
-		}, [user, setAdminCoreConfig]);
+		}, []);
 
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useEffect(() => {

@@ -70,7 +70,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 				<p className="u-mb-24 u-mb-40:md u-font-size-14 u-color-neutral">
 					<Html
 						content={t(
-							'modules/auth/components/auth-modal/auth-modal___klaar-om-een-bezoek-te-plannen-aan-een-van-de-leeszalen-log-dan-meteen-in-met-jouw-het-archief-account'
+							'modules/auth/components/auth-modal/auth-modal___klaar-om-een-bezoek-te-plannen-aan-een-van-de-bezoekersruimtes-log-dan-meteen-in-met-jouw-het-archief-account'
 						)}
 					/>
 				</p>

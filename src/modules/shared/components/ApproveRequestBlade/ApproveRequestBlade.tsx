@@ -401,7 +401,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						<Link
 							href={
 								canViewAddVisitRequests
-									? `/admin/leeszalenbeheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
+									? `/admin/bezoekersruimtesbeheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
 									: `/beheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
 							}
 							passHref

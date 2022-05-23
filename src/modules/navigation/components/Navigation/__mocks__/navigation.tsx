@@ -60,7 +60,7 @@ export const MOCK_HAMBURGER_PROPS: NavigationHamburgerProps = {
 
 export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	{
-		node: renderLink('Leeszalen', '', {
+		node: renderLink('bezoekersruimtes', '', {
 			badge: <Badge text="2" />,
 			className: linkCls([
 				'u-color-black',
@@ -69,14 +69,14 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				styles['c-navigation__link--dropdown'],
 			]),
 		}),
-		id: 'leeszalen',
+		id: 'bezoekersruimtes',
 		activeDesktop: true,
 		children: [
 			{
-				node: renderLink('Alle leeszalen', '/', {
+				node: renderLink('Alle bezoekersruimtes', '/', {
 					className: dropdownCls(['u-display-none', 'u-display-block:md']),
 				}),
-				id: 'alle leeszalen',
+				id: 'alle bezoekersruimtes',
 				isDivider: 'md',
 			},
 			{
@@ -118,14 +118,14 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		],
 	},
 	{
-		node: renderLink('Over de leeszalen', '#', {
+		node: renderLink('Over de bezoekersruimtes', '#', {
 			className: linkCls([
 				'u-color-black',
 				'u-color-white:md',
 				styles['c-navigation__link--dropdown'],
 			]),
 		}),
-		id: 'over leeszalen',
+		id: 'over bezoekersruimtes',
 	},
 	{
 		node: renderLink('Vaak gestelde vragen', '#', {
