@@ -10,7 +10,7 @@ const CookiePolicy: NextPage = () => {
 	return (
 		<div className={styles['p-cookie-policy__wrapper']}>
 			<Script
-				src="https://consent.cookiebot.com/8fb68e92-94b2-4334-bc47-7bcda08bc9c7/cd.js"
+				src="https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cd.js"
 				id="CookieDeclaration"
 				strategy="beforeInteractive"
 			/>
