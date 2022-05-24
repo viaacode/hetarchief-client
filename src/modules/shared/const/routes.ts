@@ -1,23 +1,54 @@
-// Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
-export const ROUTE_PREFIXES = {
-	beheer: 'beheer',
-	admin: 'admin',
+export const ROUTE_PARTS = Object.freeze({
+	about: 'over-bezoekersruimtes',
+	accessRequested: 'toegang-aangevraagd',
 	account: 'account',
-	about: 'over-leeszalen',
+	admin: 'admin',
+	beheer: 'beheer',
+	content: 'content',
+	cookiePolicy: 'cookiebeleid',
+	create: 'maak',
+	edit: 'bewerk',
 	faq: 'faq',
-	gebruiksvoorwaarden: 'gebruiksvoorwaarden',
-	cookiebeleid: 'cookiebeleid',
+	logout: 'uitloggen',
+	myFolders: 'mijn-mappen',
+	myHistory: 'mijn-historiek',
+	myProfile: 'mijn-profiel',
+	navigation: 'navigatie',
 	notFound: '404',
-};
+	permissions: 'permissies',
+	settings: 'instellingen',
+	translations: 'vertalingen',
+	user: 'gebruikers',
+	userManagement: 'gebruikersbeheer',
+	userPolicy: 'gebruiksvoorwaarden',
+	users: 'gebruikers',
+	visitRequest: 'aanvraag',
+	visitRequests: 'aanvragen',
+	visitorSpaceManagement: 'bezoekersruimtesbeheer',
+	visitorSpaces: 'bezoekersruimtes',
+	visitors: 'bezoekers',
+});
 
-export const ROUTES = {
+// Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
+export const ROUTE_PREFIXES = Object.freeze({
+	beheer: ROUTE_PARTS.beheer,
+	admin: ROUTE_PARTS.admin,
+	account: ROUTE_PARTS.account,
+	about: ROUTE_PARTS.about,
+	faq: ROUTE_PARTS.faq,
+	gebruiksvoorwaarden: ROUTE_PARTS.userPolicy,
+	cookiebeleid: ROUTE_PARTS.cookiePolicy,
+	notFound: ROUTE_PARTS.notFound,
+});
+
+export const ROUTES = Object.freeze({
 	home: '/',
 	space: '/:slug',
-	termsOfService: '/gebruiksvoorwaarden',
-	cookiePolicy: '/cookiebeleid',
-	myCollections: '/account/mijn-mappen',
-	myHistory: '/account/mijn-historiek',
-	visitRequested: '/:slug/toegang-aangevraagd',
-	adminEditSpace: '/admin/leeszalenbeheer/leeszalen/:slug',
-	beheerRequests: '/beheer/aanvragen',
-};
+	termsOfService: '/' + ROUTE_PARTS.userPolicy,
+	cookiePolicy: '/' + ROUTE_PARTS.cookiePolicy,
+	myCollections: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
+	myHistory: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
+	visitRequested: `/:slug/${ROUTE_PARTS.accessRequested}`,
+	adminEditSpace: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/:slug`,
+	beheerRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
+});

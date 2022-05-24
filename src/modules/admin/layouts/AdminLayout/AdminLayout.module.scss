@@ -1,0 +1,22 @@
+@use "styles/abstracts" as *;
+
+.c-admin__header {
+	display: flex;
+	align-items: center;
+	padding-top: 6.4rem;
+	padding-bottom: $spacer-1xl;
+}
+
+.c-admin__page-title {
+	flex-grow: 1;
+}
+
+.c-admin__actions {
+	display: flex;
+
+	> :global(*) {
+		&:not(:last-child) {
+			margin-right: 0.8rem;
+		}
+	}
+}

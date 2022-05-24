@@ -1,7 +1,6 @@
-import DOMPurify from 'dompurify';
 import { FC } from 'react';
 
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
+import Html from '@shared/components/Html/Html';
 
 interface TextWithNewLinesProps {
 	text: string | null | undefined;
@@ -12,18 +11,12 @@ const TextWithNewLines: FC<TextWithNewLinesProps> = ({ text, className }) => {
 	if (!text) {
 		return null;
 	}
+
+	// Replace new lines and literal new lines (description and abstract are encoded differently)
 	return (
-		<div
+		<Html
 			className={className}
-			dangerouslySetInnerHTML={{
-				__html: String(
-					DOMPurify.sanitize(
-						// Replace new lines and literal new lines (description and abstract are encoded differently)
-						text.replaceAll('\\n', '<br/>').replaceAll('\n', '<br/>'),
-						RICH_TEXT_SANITIZATION
-					)
-				),
-			}}
+			content={text.replaceAll('\\n', '<br/>').replaceAll('\n', '<br/>')}
 		/>
 	);
 };

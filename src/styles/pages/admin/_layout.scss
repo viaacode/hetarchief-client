@@ -1,0 +1,41 @@
+@use "styles/abstracts" as *;
+
+.c-admin__header {
+	max-width: 121.6rem + ($spacer-sm * 2);
+	width: 100%;
+	display: flex;
+	align-items: center;
+	padding: 0 $spacer-sm;
+	padding-top: 6.4rem;
+	padding-bottom: $spacer-1xl;
+	margin: 0 auto;
+
+	@include respond-at(xs) {
+		max-width: 121.6rem + ($spacer-sm * 2);
+		padding-left: 2rem;
+		padding-right: 2rem;
+	}
+
+	&--edgeless {
+        &-to-lg {
+            @include respond-to("lg") {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+    }
+}
+
+.c-admin__page-title {
+	flex-grow: 1;
+}
+
+.c-admin__actions {
+	display: flex;
+
+	> :global(*) {
+		&:not(:last-child) {
+			margin-right: 0.8rem;
+		}
+	}
+}

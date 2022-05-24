@@ -57,7 +57,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
 					default={search}
-					variants={['rounded', 'grey', 'icon--double']}
+					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={t(
 						'modules/reading-room/components/language-filter-form/language-filter-form___zoek'
 					)}

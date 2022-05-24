@@ -1,10 +1,8 @@
 import clsx from 'clsx';
-import DOMPurify from 'dompurify';
 import { FC } from 'react';
 
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
-
 import { CardImage } from '../CardImage';
+import Html from '../Html/Html';
 
 import styles from './SpacePreview.module.scss';
 import { SpacePreviewProps } from './SpacePreview.types';
@@ -26,17 +24,7 @@ const SpacePreview: FC<SpacePreviewProps> = ({
 			)}
 
 			{serviceDescription && serviceDescription.length > 0 && canPreview && (
-				<div
-					className="u-mb-40 u-color-neutral"
-					dangerouslySetInnerHTML={{
-						__html: String(
-							DOMPurify.sanitize(
-								serviceDescription, // rich-text content
-								RICH_TEXT_SANITIZATION
-							)
-						),
-					}}
-				/>
+				<Html className="u-mb-40 u-color-neutral" content={serviceDescription} type="div" />
 			)}
 		</div>
 	);

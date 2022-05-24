@@ -4,10 +4,10 @@ import { FC } from 'react';
 
 import { VistorSpaceService } from '@reading-room/services';
 import { UpdateReadingRoomSettings } from '@reading-room/services/visitor-space/visitor-space.service.types';
+import { RichTextForm } from '@shared/components/RichTextForm';
 import { toastService } from '@shared/services/toast-service';
 
 import { ReadingRoomImageForm } from '../ReadingRoomImageForm';
-import { RichTextForm } from '../RichTextForm';
 
 import styles from './ReadingRoomSettings.module.scss';
 import { ReadingRoomSettingsProps } from './ReadingRoomSettings.types';
@@ -86,7 +86,7 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 				<Box className={styles['c-cp-settings__box']}>
 					<p className={styles['c-cp-settings__description']}>
 						{t(
-							'pages/beheer/instellingen/index___personaliseer-hoe-jouw-bezoekersruimte-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
+							'pages/beheer/instellingen/index___personaliseer-hoe-jouw-bezoekersruimte-in-het-aanbod-mag-verschijnen-op-het-bezoekersruimtes-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
 						)}
 					</p>
 					{room && (

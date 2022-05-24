@@ -33,7 +33,7 @@ describe('Components', () => {
 				</Navigation>
 			);
 
-			const leftItem = screen.queryAllByText('Over de leeszalen')[0];
+			const leftItem = screen.queryAllByText('Over de bezoekersruimtes')[0];
 			await waitFor(() => {
 				expect(leftItem).toBeInTheDocument();
 			});

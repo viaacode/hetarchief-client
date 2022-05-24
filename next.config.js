@@ -6,7 +6,12 @@
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-const withTM = require('next-transpile-modules')([]);
+const withTM = require('next-transpile-modules')([
+	'@meemoo/react-admin',
+	'@viaa/avo2-components',
+	// '@meemoo/react-admin/node_modules/@viaa/avo2-components',
+	'ky-universal',
+]);
 
 const { i18n } = require('./next-i18next.config');
 
@@ -22,6 +27,11 @@ module.exports = withTM({
 		 *   Solution: https://nextjs.org/docs/messages/import-esm-externals
 		 */
 		esmExternals: 'loose',
+	},
+	webpack: (config) => {
+		// Required for ky-universal top level await used in admin core inside the api service
+		config.experiments = { topLevelAwait: true, layers: true };
+		return config;
 	},
 	typescript: {
 		tsconfigPath: './tsconfig.build.json',
