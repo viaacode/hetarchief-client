@@ -1,7 +1,8 @@
-import { Column, Table, TableOptions } from '@meemoo/react-components';
+import { Button, Column, Table, TableOptions } from '@meemoo/react-components';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
@@ -17,8 +18,8 @@ import { withI18n } from '@i18n/wrappers';
 import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
 import { VistorSpaceService } from '@reading-room/services';
 import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
-import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { Icon, Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
@@ -26,6 +27,7 @@ import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomsOverview: FC = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
 	const [filters, setFilters] = useQueryParams(ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG);
 
 	const {
@@ -207,6 +209,20 @@ const ReadingRoomsOverview: FC = () => {
 			<AdminLayout
 				pageTitle={t('pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen')}
 			>
+				<AdminLayout.Actions>
+					<Button
+						iconStart={<Icon name="plus" />}
+						label={t(
+							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-leeszaal'
+						)}
+						variants="black"
+						onClick={() =>
+							router.push(
+								`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${ROUTE_PARTS.create}`
+							)
+						}
+					/>
+				</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>
 				</AdminLayout.Content>

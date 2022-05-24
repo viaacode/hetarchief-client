@@ -18,12 +18,12 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'content-pages-admin',
 		label: i18n.t('modules/admin/const/routing___content-paginas'),
-		href: '/admin/content',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}`,
 	},
 	{
 		id: 'translations-admin',
 		label: i18n.t('modules/admin/const/routing___translations'),
-		href: '/admin/vertalingen',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
 	},
 	{
 		id: 'users-admin',
@@ -37,17 +37,17 @@ export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'spaces',
 		label: i18n.t('modules/admin/const/routing___alle-leeszalen'),
-		href: '/admin/leeszalenbeheer/leeszalen',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 	},
 	{
 		id: 'requests',
 		label: i18n.t('modules/admin/const/routing___aanvragen'),
-		href: '/admin/leeszalenbeheer/aanvragen',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}`,
 	},
 	{
 		id: 'visitors',
 		label: i18n.t('modules/admin/const/routing___actieve-bezoekers'),
-		href: '/admin/leeszalenbeheer/bezoekers',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitors}`,
 	},
 ];
 
@@ -68,11 +68,11 @@ export const ADMIN_USERS_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'users',
 		label: i18n.t('modules/admin/const/routing___gebruikers'),
-		href: '/admin/gebruikersbeheer/gebruikers',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.user}`,
 	},
 	{
 		id: 'permissions',
 		label: i18n.t('modules/admin/const/routing___groepen-en-permissies'),
-		href: '/admin/gebruikersbeheer/permissies',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.permissions}`,
 	},
 ];

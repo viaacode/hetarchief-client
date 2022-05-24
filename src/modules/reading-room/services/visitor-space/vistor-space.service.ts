@@ -70,6 +70,7 @@ export class VistorSpaceService {
 		values.serviceDescription &&
 			formData.append('serviceDescription', values.serviceDescription);
 		values.status && formData.append('status', values.status);
+		values.slug && formData.append('slug', values.slug);
 
 		const headers = {
 			'Content-Type': undefined, // Overwrite application/json

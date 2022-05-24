@@ -5,14 +5,21 @@ import { FC } from 'react';
 import { VistorSpaceService } from '@reading-room/services';
 import { UpdateReadingRoomSettings } from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { RichTextForm } from '@shared/components/RichTextForm';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 
 import { ReadingRoomImageForm } from '../ReadingRoomImageForm';
+import { SiteSettingsForm } from '../SiteSettingsForm';
 
 import styles from './ReadingRoomSettings.module.scss';
 import { ReadingRoomSettingsProps } from './ReadingRoomSettings.types';
 
-const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, refetch }) => {
+const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({
+	className,
+	room,
+	refetch,
+	action = 'edit',
+}) => {
 	const { t } = useTranslation();
 
 	/**
@@ -20,7 +27,7 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 	 */
 
 	const onFailedRequest = () => {
-		refetch();
+		refetch?.();
 
 		toastService.notify({
 			maxLines: 3,
@@ -78,6 +85,36 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 
 	return (
 		<div className={className}>
+			{/* Site instellingen */}
+			{/* TODO: permission */}
+			{/* {showSiteSettings && ( */}
+			<article className={styles['c-cp-settings__content-block']}>
+				<h2 className={styles['c-cp-settings__title']}>
+					{t(
+						'modules/cp/components/reading-room-settings/reading-room-settings___site-instellingen'
+					)}
+				</h2>
+				<Box className={styles['c-cp-settings__box']}>
+					<p className={styles['c-cp-settings__description']}>
+						{t(
+							'modules/cp/components/reading-room-settings/reading-room-settings___stel-de-naam-en-de-slug-van-een-bezoekersruimte-in'
+						)}
+					</p>
+					{room && (
+						<SiteSettingsForm
+							className={styles['c-cp-settings__site-settings-controls']}
+							room={room}
+							renderCancelSaveButtons={renderCancelSaveButtons}
+							onSubmit={(values, afterSubmit) => {
+								updateSpace(values, afterSubmit);
+							}}
+							disableDropdown={action === 'edit'}
+						/>
+					)}
+				</Box>
+			</article>
+			{/* )} */}
+
 			{/* Bezoekersruimte */}
 			<article className={styles['c-cp-settings__content-block']}>
 				<h2 className={styles['c-cp-settings__title']}>

@@ -10,7 +10,7 @@ import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
 import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon, IconName } from '@shared/components';
-import { ROUTE_PREFIXES, ROUTES } from '@shared/const';
+import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 import { Breakpoints } from '@shared/types';
 
@@ -320,7 +320,7 @@ const getMeemooAdminManagementDropdown = (
 		{
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___admin'),
-				'/admin/leeszalenbeheer/leeszalen',
+				`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 				{
 					className: linkCls([
 						'u-color-black',
