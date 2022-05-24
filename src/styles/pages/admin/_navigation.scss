@@ -6,9 +6,52 @@
 		justify-content: flex-end;
 
 		button[class*="c-button--secondary"] {
+			width: 3.6rem;
+			height: 3.6rem;
 			padding: 0;
-			width: 4.8rem;
-			height: 4.8rem;
+			border-radius: 1.8rem;
+			background-color: $silver;
+			color: $black;
+			border: none;
+
+			path {
+				fill: $black;
+			}
+
+			&:hover {
+				background-color: $shade;
+				border-color: $shade;
+				color: $white;
+
+				path {
+					fill: $white;
+				}
+			}
+
+			&:active {
+				background-color: $teal-dark;
+				border-color: $teal-dark;
+				color: $white;
+
+				path {
+					fill: $white;
+				}
+			}
+
+			&:focus,
+			.focus-visible:focus:not(:focus-visible) {
+				outline: 2px solid $teal;
+			}
+
+			&:disabled {
+				border: none;
+				background-color: $silver;
+				color: $zinc;
+
+				path {
+					fill: $zinc;
+				}
+			}
 		}
 	}
 
@@ -56,12 +99,14 @@
 	}
 }
 
-.p-admin-navigation__create {
+.p-admin-navigation__create,
+.p-admin-navigation__edit {
 	.c-admin__content {
 		button[class*="c-button--borderless"] {
 			max-height: 100%;
 			height: 5.8rem;
 			padding: 1.4rem 1.8rem;
+			border-radius: 2.9rem;
 
 			&:hover, &:active {
 				box-shadow: none;
@@ -84,3 +129,4 @@
 		}
 	}
 }
+

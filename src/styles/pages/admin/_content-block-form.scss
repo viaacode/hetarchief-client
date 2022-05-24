@@ -1,5 +1,16 @@
 @use "styles/abstracts" as *;
 
+.p-admin-content__create,
+.p-admin-content__edit {
+	.c-accordion__header {
+		.c-button-toolbar {
+			button[class*="c-button"] {
+				padding: 0;
+			}
+		}
+	}
+}
+
 .o-form-group-layout--standard.c-content-block-form {
 	h4,
 	label,
@@ -43,7 +54,7 @@
 	}
 
 	.c-toolbar {
-		button {
+		button[class*="c-button--icon"] {
 			width: 3.6rem;
 			height: 3.6rem;
 			border-radius: 1.8rem;
@@ -92,4 +103,3 @@
 		}
 	}
 }
-
