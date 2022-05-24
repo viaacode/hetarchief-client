@@ -17,7 +17,7 @@ export const ROUTE_PARTS = Object.freeze({
 	notFound: '404',
 	permissions: 'permissies',
 	settings: 'instellingen',
-	translations: 'vertaling',
+	translations: 'vertalingen',
 	user: 'gebruikers',
 	userManagement: 'gebruikersbeheer',
 	userPolicy: 'gebruiksvoorwaarden',
