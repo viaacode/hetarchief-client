@@ -5,6 +5,7 @@ export interface SiteSettingsFormProps extends DefaultComponentProps {
 	room: Pick<VisitorSpaceInfo, 'color' | 'image' | 'logo' | 'id' | 'name' | 'slug'>;
 	renderCancelSaveButtons: (onCancel: () => void, onSave: () => void) => void;
 	onSubmit?: (values: SiteSettingsFormState, afterSubmit?: () => void) => void;
+	onUpdate?: (values: SiteSettingsFormState) => void;
 	disableDropdown?: boolean;
 }
 

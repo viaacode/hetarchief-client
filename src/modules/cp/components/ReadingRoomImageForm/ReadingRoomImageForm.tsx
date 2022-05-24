@@ -2,23 +2,23 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ColorPicker, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { DEFAULT_READING_ROOM_COLOR } from '@reading-room/const';
 import { CardImage, Icon } from '@shared/components';
 import FileInput from '@shared/components/FileInput/FileInput';
 
+import { ValidationRef } from '../ReadingRoomSettings/ReadingRoomSettings.types';
+
 import { READING_ROOM_IMAGE_SCHEMA } from './ReadingRoomImageForm.const';
 import styles from './ReadingRoomImageForm.module.scss';
 import { ReadingRoomImageFormProps, ReadingRoomImageFormState } from './ReadingRoomImageForm.types';
 
-const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
-	className,
-	room,
-	onSubmit,
-	renderCancelSaveButtons,
-}) => {
+const ReadingRoomImageForm = forwardRef<
+	ValidationRef<ReadingRoomImageFormState>,
+	ReadingRoomImageFormProps
+>(({ className, room, onSubmit, onUpdate, renderCancelSaveButtons }, ref) => {
 	/**
 	 * Hooks
 	 */
@@ -39,6 +39,7 @@ const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
 		setValue,
 		watch,
 		reset,
+		trigger,
 	} = useForm<ReadingRoomImageFormState>({
 		resolver: yupResolver(READING_ROOM_IMAGE_SCHEMA()),
 		defaultValues: {
@@ -55,6 +56,11 @@ const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
 		image: '',
 		file: undefined,
 	});
+
+	// Trigger from outside
+	useImperativeHandle(ref, () => ({
+		validate: trigger,
+	}));
 
 	/**
 	 * Effects
@@ -92,6 +98,12 @@ const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
 
 	const resetValues = () => {
 		reset({
+			color: savedState.color,
+			file: undefined,
+			image: savedState.image,
+		});
+
+		onUpdate?.({
 			color: savedState.color,
 			file: undefined,
 			image: savedState.image,
@@ -144,6 +156,7 @@ const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
 									color={currentState.color ?? ''}
 									onChange={(color) => {
 										setValue('color', color);
+										onUpdate?.({ color: color });
 									}}
 								/>
 							</div>
@@ -182,13 +195,16 @@ const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
 													'file',
 													e.currentTarget.files[0] ?? undefined
 												);
-											setValue(
-												'image',
+											const newImage =
 												e.currentTarget.files &&
-													e.currentTarget.files.length
+												e.currentTarget.files.length
 													? URL.createObjectURL(e.currentTarget.files[0])
-													: savedState.image
-											);
+													: savedState.image;
+											setValue('image', newImage);
+											onUpdate?.({ image: newImage });
+											onUpdate?.({
+												file: e.currentTarget.files?.[0] ?? undefined,
+											});
 										}}
 									/>
 									{currentState.image && (
@@ -200,6 +216,7 @@ const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
 											variants="text"
 											onClick={() => {
 												setValue('image', '');
+												onUpdate?.({ image: '', file: undefined });
 											}}
 										/>
 									)}
@@ -213,6 +230,8 @@ const ReadingRoomImageForm: FC<ReadingRoomImageFormProps> = ({
 				renderCancelSaveButtons(() => resetValues(), handleSubmit(onFormSubmit))}
 		</div>
 	);
-};
+});
+
+ReadingRoomImageForm.displayName = 'ReadingRoomImageForm';
 
 export default ReadingRoomImageForm;
