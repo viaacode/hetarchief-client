@@ -75,6 +75,26 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						},
 					},
 				},
+				staticPages: [
+					'/',
+					'/404',
+					'/account/mijn-historiek',
+					'/account/mijn-profiel',
+					'/admin/bezoekersruimtesbeheer/aanvragen',
+					'/admin/bezoekersruimtesbeheer/bezoekers',
+					'/admin/bezoekersruimtesbeheer/bezoekersruimtes',
+					'/admin/content',
+					'/admin/gebruikersbeheer/gebruikers',
+					'/admin/gebruikersbeheer/permissies',
+					'/admin/navigatie',
+					'/admin/vertalingen',
+					'/beheer/aanvragen',
+					'/beheer/bezoekers',
+					'/beheer/instellingen',
+					'/cookiebeleid',
+					'/gebruiksvoorwaarden',
+					'/uitloggen',
+				],
 				contentPage: {
 					availableContentBlocks: [
 						// TODO extend this list when meemoo decides which content blocks that want to use for hetarchief
