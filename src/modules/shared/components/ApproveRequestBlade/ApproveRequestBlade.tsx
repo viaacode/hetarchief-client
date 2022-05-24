@@ -25,7 +25,7 @@ import { Permission } from '@account/const';
 import { Blade, Icon, VisitSummary } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
-import { OPTIONAL_LABEL } from '@shared/const';
+import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
@@ -401,8 +401,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						<Link
 							href={
 								canViewAddVisitRequests
-									? `/admin/bezoekersruimtesbeheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
-									: `/beheer/aanvragen?aanvraag=${overlappingRequests[0].id}`
+									? `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
+									: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
 							}
 							passHref
 						>

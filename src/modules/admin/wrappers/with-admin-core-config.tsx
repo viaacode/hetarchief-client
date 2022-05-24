@@ -19,6 +19,7 @@ import { selectUser } from '@auth/store/user';
 import { navigationService } from '@navigation/services/navigation-service';
 import { sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
+import { ROUTE_PARTS } from '@shared/const';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
 
@@ -78,22 +79,23 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				staticPages: [
 					'/',
 					'/404',
-					'/account/mijn-historiek',
-					'/account/mijn-profiel',
-					'/admin/bezoekersruimtesbeheer/aanvragen',
-					'/admin/bezoekersruimtesbeheer/bezoekers',
-					'/admin/bezoekersruimtesbeheer/bezoekersruimtes',
-					'/admin/content',
-					'/admin/gebruikersbeheer/gebruikers',
-					'/admin/gebruikersbeheer/permissies',
-					'/admin/navigatie',
-					'/admin/vertalingen',
-					'/beheer/aanvragen',
-					'/beheer/bezoekers',
-					'/beheer/instellingen',
-					'/cookiebeleid',
-					'/gebruiksvoorwaarden',
-					'/uitloggen',
+					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
+					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}`,
+					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitors}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.users}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.permissions}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
+					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
+					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitors}`,
+					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.settings}`,
+					`/${ROUTE_PARTS.cookiePolicy}`,
+					`/${ROUTE_PARTS.userPolicy}`,
+					`/${ROUTE_PARTS.logout}`,
 				],
 				contentPage: {
 					availableContentBlocks: [

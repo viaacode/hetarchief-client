@@ -42,17 +42,17 @@ export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'spaces',
 		label: i18n.t('modules/admin/const/routing___alle-bezoekersruimtes'),
-		href: '/admin/bezoekersruimtesbeheer/bezoekersruimtes',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 	},
 	{
 		id: 'requests',
 		label: i18n.t('modules/admin/const/routing___aanvragen'),
-		href: '/admin/bezoekersruimtesbeheer/aanvragen',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}`,
 	},
 	{
 		id: 'visitors',
 		label: i18n.t('modules/admin/const/routing___actieve-bezoekers'),
-		href: '/admin/bezoekersruimtesbeheer/bezoekers',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitors}`,
 	},
 ];
 
