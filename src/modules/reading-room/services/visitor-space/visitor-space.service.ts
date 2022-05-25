@@ -8,9 +8,10 @@ import { ApiResponseWrapper } from '@shared/types/api';
 import { VISITOR_SPACE_SERVICE_BASE_URL } from './visitor-space.service.const';
 import { AccessType, UpdateReadingRoomSettings } from './visitor-space.service.types';
 
-export class VistorSpaceService {
+export class VisitorSpaceService {
 	public static async getAll(
 		searchInput = '',
+		status: string[] | undefined = undefined,
 		page = 0,
 		size = 20,
 		orderProp?: ReadingRoomOrderProps,
@@ -22,6 +23,7 @@ export class VistorSpaceService {
 					url: VISITOR_SPACE_SERVICE_BASE_URL,
 					query: {
 						query: searchInput ? `%${searchInput}%` : undefined,
+						...(status ? { status } : {}),
 						page,
 						size,
 						orderProp,

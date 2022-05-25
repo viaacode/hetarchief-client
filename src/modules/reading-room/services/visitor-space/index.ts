@@ -1,1 +1,1 @@
-export * from './vistor-space.service';
+export * from './visitor-space.service';

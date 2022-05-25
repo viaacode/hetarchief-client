@@ -1,4 +1,4 @@
-import { ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
+import { VisitorSpaceInfo, VisitorSpaceStatus } from '@reading-room/types';
 
 export const VISITOR_SPACE_MOCK: VisitorSpaceInfo = {
 	id: '52caf5a2-a6d1-4e54-90cc-1b6e5fb66a21',
@@ -22,7 +22,7 @@ export const VISITOR_SPACE_MOCK: VisitorSpaceInfo = {
 			locality: 'Gent',
 		},
 	},
-	status: ReadingRoomStatus.Active,
+	status: VisitorSpaceStatus.Active,
 	publishedAt: null,
 	createdAt: '2022-01-13T13:10:14.41978',
 	updatedAt: '2022-01-13T13:10:14.41978',

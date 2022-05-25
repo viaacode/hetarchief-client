@@ -85,13 +85,13 @@ export interface VisitorSpaceInfo {
 			locality: string;
 		};
 	};
-	status: ReadingRoomStatus;
+	status: VisitorSpaceStatus;
 	publishedAt: string | null;
 	createdAt: string;
 	updatedAt: string;
 }
 
-export enum ReadingRoomStatus {
+export enum VisitorSpaceStatus {
 	Active = 'ACTIVE',
 	Inactive = 'INACTIVE',
 	Requested = 'REQUESTED',

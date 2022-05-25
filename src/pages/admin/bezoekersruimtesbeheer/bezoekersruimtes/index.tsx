@@ -14,9 +14,9 @@ import {
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
-import { VistorSpaceService } from '@reading-room/services';
-import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
+import { useGetVisitorSpaces } from '@reading-room/hooks/get-reading-rooms';
+import { VisitorSpaceService } from '@reading-room/services';
+import { ReadingRoomOrderProps, VisitorSpaceStatus } from '@reading-room/types';
 import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
@@ -33,8 +33,9 @@ const ReadingRoomsOverview: FC = () => {
 		isLoading,
 		isError,
 		refetch,
-	} = useGetReadingRooms(
+	} = useGetVisitorSpaces(
 		filters.search,
+		[VisitorSpaceStatus.Requested, VisitorSpaceStatus.Active, VisitorSpaceStatus.Inactive],
 		filters.page,
 		ReadingRoomsOverviewTablePageSize,
 		filters.orderProp as ReadingRoomOrderProps,
@@ -85,8 +86,8 @@ const ReadingRoomsOverview: FC = () => {
 		});
 	};
 
-	const updateRoomStatus = (roomId: string, status: ReadingRoomStatus) => {
-		VistorSpaceService.update(roomId, {
+	const updateRoomStatus = (roomId: string, status: VisitorSpaceStatus) => {
+		VisitorSpaceService.update(roomId, {
 			status: status,
 		})
 			.catch(onFailedRequest)
