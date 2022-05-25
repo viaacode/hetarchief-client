@@ -50,7 +50,7 @@ const ContentPageOverviewPage: FC = () => {
 					)}
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
-					<div className="l-container">
+					<div className="l-container p-admin-content">
 						<ContentPageOverview />
 					</div>
 				</AdminLayout.Content>
@@ -59,7 +59,7 @@ const ContentPageOverviewPage: FC = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n('admin_core');
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(

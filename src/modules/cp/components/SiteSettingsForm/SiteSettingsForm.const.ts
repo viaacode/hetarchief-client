@@ -13,9 +13,15 @@ export const SITE_SETTINGS_SCHEMA = (): SchemaOf<SiteSettingsFormState> => {
 		),
 		slug: string()
 			.strict()
-			.lowercase(i18n.t('Slug mag geen hoofdletters bevatten'))
+			.lowercase(
+				i18n.t(
+					'modules/cp/components/site-settings-form/site-settings-form___slug-mag-geen-hoofdletters-bevatten'
+				)
+			)
 			.matches(/^\S*$/i, {
-				message: i18n.t('Slug mag geen spatie bevatten'),
+				message: i18n.t(
+					'modules/cp/components/site-settings-form/site-settings-form___slug-mag-geen-spatie-bevatten'
+				),
 			})
 			.required(
 				i18n.t(

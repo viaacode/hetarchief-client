@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { Trans, useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';

@@ -57,8 +57,12 @@ const ReadingRoomSettings = forwardRef<
 					// afterSubmit?.();
 					toastService.notify({
 						maxLines: 3,
-						title: t('Succes'),
-						description: t('De bezoekersruimte werd succesvol aangemaakt.'),
+						title: t(
+							'modules/cp/components/reading-room-settings/reading-room-settings___succes'
+						),
+						description: t(
+							'modules/cp/components/reading-room-settings/reading-room-settings___de-bezoekersruimte-werd-succesvol-aangemaakt'
+						),
 					});
 				});
 		}
@@ -172,7 +176,7 @@ const ReadingRoomSettings = forwardRef<
 				<Box className={styles['c-cp-settings__box']}>
 					<p className={styles['c-cp-settings__description']}>
 						{t(
-							'pages/beheer/instellingen/index___personaliseer-hoe-jouw-bezoekersruimte-in-het-aanbod-mag-verschijnen-op-het-leeszalen-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
+							'pages/beheer/instellingen/index___personaliseer-hoe-jouw-bezoekersruimte-in-het-aanbod-mag-verschijnen-op-het-bezoekersruimtes-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
 						)}
 					</p>
 					{room && (

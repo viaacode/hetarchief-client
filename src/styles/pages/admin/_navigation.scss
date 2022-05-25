@@ -1,0 +1,132 @@
+@use "styles/abstracts" as *;
+
+.p-admin-navigation,
+.p-admin-navigation__detail {
+	.c-button-toolbar {
+		justify-content: flex-end;
+
+		button[class*="c-button--secondary"] {
+			width: 3.6rem;
+			height: 3.6rem;
+			padding: 0;
+			border-radius: 1.8rem;
+			background-color: $silver;
+			color: $black;
+			border: none;
+
+			path {
+				fill: $black;
+			}
+
+			&:hover {
+				background-color: $shade;
+				border-color: $shade;
+				color: $white;
+
+				path {
+					fill: $white;
+				}
+			}
+
+			&:active {
+				background-color: $teal-dark;
+				border-color: $teal-dark;
+				color: $white;
+
+				path {
+					fill: $white;
+				}
+			}
+
+			&:focus,
+			.focus-visible:focus:not(:focus-visible) {
+				outline: 2px solid $teal;
+			}
+
+			&:disabled {
+				border: none;
+				background-color: $silver;
+				color: $zinc;
+
+				path {
+					fill: $zinc;
+				}
+			}
+		}
+	}
+
+	.c-admin__content {
+		.c-button-toolbar,
+		.c-button-group {
+			button[class*="c-button"] {
+				width: 3.6rem;
+				height: 3.6rem;
+				padding: 0;
+				border-radius: 1.8rem;
+				background-color: $silver;
+				color: $black;
+				border: none;
+
+				&:hover {
+					background-color: $shade;
+					border-color: $shade;
+					color: $white;
+				}
+
+				&:active {
+					background-color: $teal-dark;
+					border-color: $teal-dark;
+					color: $white;
+				}
+
+				&:focus,
+				.focus-visible:focus:not(:focus-visible) {
+					outline: 2px solid $teal;
+				}
+
+				&:disabled {
+					border: none;
+					background-color: $silver;
+					color: $zinc;
+				}
+			}
+		}
+
+		.c-button-group {
+			display: flex;
+			gap: $spacer-xs;
+		}
+	}
+}
+
+.p-admin-navigation__create,
+.p-admin-navigation__edit {
+	.c-admin__content {
+		button[class*="c-button--borderless"] {
+			max-height: 100%;
+			height: 5.8rem;
+			padding: 1.4rem 1.8rem;
+			border-radius: 2.9rem;
+
+			&:hover, &:active {
+				box-shadow: none;
+			}
+		}
+	}
+
+	.m-menu-edit-form {
+		border-radius: 1.9;
+	}
+
+	.o-form-group__controls {
+		div[class*="control"] {
+			height: 5.6rem;
+			border-radius: 2.8rem;
+
+			div[class*="placeholder"] {
+				color: $zinc
+			}
+		}
+	}
+}
+

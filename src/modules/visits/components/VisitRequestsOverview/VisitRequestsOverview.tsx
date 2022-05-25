@@ -19,7 +19,7 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
-import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
+import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { useGetVisit } from '@visits/hooks/get-visit';

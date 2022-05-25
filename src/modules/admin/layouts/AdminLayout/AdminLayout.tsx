@@ -38,6 +38,14 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 		dispatch(setShowZendesk(false));
 	}, [dispatch]);
 
+	const shouldBeActive = (currentPath: string, parentPath: string) => {
+		if (!parentPath) {
+			return false;
+		}
+		const basePath = currentPath.split('?')[0].split('#')[0];
+		return basePath === parentPath || currentPath.startsWith(parentPath + '/');
+	};
+
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
 			ADMIN_NAVIGATION_LINKS().map(({ id, label, href, children }) => ({
@@ -49,7 +57,7 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 						</a>
 					</Link>
 				),
-				active: href ? asPath.includes(href) : false,
+				active: shouldBeActive(asPath, href),
 				children: children?.().map(({ id, label, href }) => ({
 					id,
 					node: ({ linkClassName }) => (
@@ -59,7 +67,7 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 							</a>
 						</Link>
 					),
-					active: href ? asPath.includes(href) : false,
+					active: shouldBeActive(asPath, href),
 				})),
 			})),
 		[asPath]

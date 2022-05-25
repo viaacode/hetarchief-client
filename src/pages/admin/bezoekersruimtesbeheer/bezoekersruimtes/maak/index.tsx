@@ -56,7 +56,9 @@ const ReadingRoomCreate: FC = () => {
 			>
 				<AdminLayout.Actions>
 					<Button
-						label={t('annuleren')}
+						label={t(
+							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___annuleren'
+						)}
 						variants="silver"
 						onClick={() =>
 							router.push(
@@ -65,7 +67,9 @@ const ReadingRoomCreate: FC = () => {
 						}
 					/>
 					<Button
-						label={t('Opslaan')}
+						label={t(
+							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___opslaan'
+						)}
 						variants="black"
 						onClick={() => {
 							formRef.current?.createSpace();

@@ -11,7 +11,7 @@ export interface AdminNavigationLink {
 export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'spaces-admin',
-		label: i18n.t('modules/admin/const/routing___leeszalenbeheer'),
+		label: i18n.t('modules/admin/const/routing___bezoekersruimtesbeheer'),
 		href: '',
 		children: ADMIN_SPACES_LINKS,
 	},
@@ -19,6 +19,11 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 		id: 'content-pages-admin',
 		label: i18n.t('modules/admin/const/routing___content-paginas'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}`,
+	},
+	{
+		id: 'navigation-admin',
+		label: i18n.t('modules/admin/const/routing___navigatie'),
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}`,
 	},
 	{
 		id: 'translations-admin',
@@ -36,7 +41,7 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'spaces',
-		label: i18n.t('modules/admin/const/routing___alle-leeszalen'),
+		label: i18n.t('modules/admin/const/routing___alle-bezoekersruimtes'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 	},
 	{
@@ -68,7 +73,7 @@ export const ADMIN_USERS_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'users',
 		label: i18n.t('modules/admin/const/routing___gebruikers'),
-		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.user}`,
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.users}`,
 	},
 	{
 		id: 'permissions',

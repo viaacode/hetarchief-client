@@ -1,7 +1,8 @@
-import { ContentPageEdit } from '@meemoo/react-admin';
+import { NavigationDetail } from '@meemoo/react-admin';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
 import { Permission } from '@account/const';
@@ -12,27 +13,32 @@ import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
-const ContentPageEditPage: FC = () => {
+const ContentPageDetailPage: FC = () => {
 	const { t } = useTranslation();
+	const router = useRouter();
 
 	return (
 		<>
 			<Head>
 				<title>
-					{createPageTitle(t('pages/admin/content/maak/index___content-pagina-aanmaken'))}
+					{createPageTitle(
+						t('pages/admin/navigatie/navigation-bar-id/index___navigatie-balk-detail')
+					)}
 				</title>
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/content/maak/index___maak-een-nieuwe-content-pagina-adhv-blokken'
+						'pages/admin/navigatie/navigation-bar-id/index___de-detail-pagina-van-een-navigatie-balk-met-de-navigatie-items'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout>
 				<AdminLayout.Content>
-					<div className="p-admin-content__edit">
-						<ContentPageEdit id={undefined} />
+					<div className="l-container p-admin-navigation__detail">
+						<NavigationDetail
+							navigationBarId={router.query.navigationBarId as string}
+						/>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
@@ -44,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(
-		withAdminCoreConfig(ContentPageEditPage),
-		Permission.CREATE_CONTENT_PAGES
+		withAdminCoreConfig(ContentPageDetailPage),
+		Permission.EDIT_NAVIGATION_BARS
 	)
 );

@@ -35,7 +35,6 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 	return (
 		<SidebarLayout
 			className={className}
-			contentTitle={pageTitle}
 			sidebarLinks={sidebarLinks}
 			sidebarTitle={t('modules/account/layouts/account-layout/account-layout___account')}
 		>

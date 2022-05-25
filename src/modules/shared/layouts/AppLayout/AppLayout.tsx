@@ -100,7 +100,7 @@ const AppLayout: FC = ({ children }) => {
 		} else {
 			NotificationsService.stopPolling();
 		}
-	}, [router, user, setNotificationsOpen, setUnreadNotifications]);
+	}, [queryClient, router, user, setNotificationsOpen, setUnreadNotifications]);
 
 	useEffect(() => {
 		dispatch(checkLoginAction());

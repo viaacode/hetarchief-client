@@ -55,8 +55,8 @@ export const mockListNavigationItem = ({
 export const primaryListNavigationMock: ListNavigationProps = {
 	listItems: [
 		{
-			node: renderLink({ label: 'Leeszalenbeheer' }),
-			id: 'leeszalenbeheer',
+			node: renderLink({ label: 'bezoekersruimtesbeheer' }),
+			id: 'bezoekersruimtesbeheer',
 		},
 		{
 			node: renderLink({ label: 'Gebruikersbeheer' }),

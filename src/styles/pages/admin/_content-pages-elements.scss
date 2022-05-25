@@ -1,0 +1,198 @@
+@use "sass:color";
+@use "styles/abstracts" as *;
+
+.c-admin__content .c-navbar {
+	background-color: transparent;
+	border: none;
+
+	.o-container {
+		background-color: $white;
+		border-radius: 2.4rem;
+		border: 0.1rem solid $silver;
+
+		nav[class*="c-tabs"] {
+			padding: 0 $spacer-lg;
+		}
+	}
+
+	.c-tab-item {
+		color: $black;
+	}
+
+	.c-tab-item__active {
+		box-shadow: inset 0 -0.3rem 0 $teal
+	}
+}
+
+.c-admin__content .o-container-vertical.o-container-vertical--small {
+	.o-container {
+		background-color: $white;
+
+		@include respond-at("lg") {
+			box-shadow: $shadow-24-black-08;
+		}
+
+		.c-h4 {
+			padding: $spacer-sm $spacer-md;
+		}
+
+		table {
+			border-spacing: 0;
+			border-collapse: collapse;
+		}
+
+		tr:not(:last-of-type) {
+			border-bottom: 0.1rem solid $silver;
+		}
+
+		th {
+			padding: $spacer-sm $spacer-md;
+		}
+
+		ul[class*="c-tag-list"] {
+			padding: 0;
+			margin: 0;
+		}
+
+		li[class*="c-tag"] {
+			background-color: $silver;
+			color: $black;
+			border: none;
+		}
+	}
+}
+
+.c-select {
+	color: $black;
+
+	.c-select__option--is-selected {
+		background-color: $teal-dark !important;
+	}
+
+	.c-select__option:hover {
+		background-color: $silver;
+	}
+}
+
+.o-form-group-layout--standard {
+	label[class^="o-form-group__label"] {
+		color: $black;
+		font-size: $font-size-sm;
+	}
+
+	.c-input {
+		@include reset-input-field;
+
+		background-color: $white;
+		border: 1px solid $zinc;
+		font-size: $font-size-base;
+		outline: 1px solid transparent;
+		padding: 1.4rem 1.6rem;
+		height: 5.6rem;
+		border-radius: 2.8rem;
+
+		&:focus {
+			border-color: $teal;
+		}
+	}
+
+	textarea[class^="c-input"] {
+		resize: none !important;
+		border-radius: 0;
+	}
+
+	.c-select .c-select__control,
+	.c-tags-input .c-tags-input__control,
+	.c-color-select .react-select__control,
+	.c-icon-picker .react-select__control {
+		height: 5.6rem;
+		border-radius: 2.8rem;
+		background-color: $white;
+		border-color: $zinc;
+
+		.c-select__value-container {
+			padding-left: $spacer-sm;
+		}
+
+		&.c-select__control--is-focused {
+			box-shadow: none;
+			border-color: $teal;
+		}
+
+		.c-select__placeholder,
+		.c-select__indicator svg,
+		.c-tags-input__indicator svg,
+		.react-select__indicator svg {
+			color: $neutral;
+		}
+
+		.c-tags-input__value-container,
+		.react-select__value-container {
+			padding-left: $spacer-sm;
+		}
+
+		.c-tags-input__multi-value {
+			display: flex;
+			align-items: center;
+			height: 3.2rem;
+			padding: $spacer-xs $spacer-sm;
+			border-radius: 1.6rem;
+			background-color: $teal-66;
+			color: $black;
+			border: none;
+			text-decoration: none;
+			margin: 0 1.2rem 0 $spacer-xxs;
+			font-size: $font-size-md;
+			cursor: pointer;
+			transition: color $animate-sm-in;
+
+			&:hover {
+				color: color.adjust($black, $alpha: -0.3);
+			}
+		}
+
+		div[class*="c-tags-input__multi-value__remove"] {
+			background-color: transparent;
+			color: $black;
+
+			&:hover {
+				background-color: $teal-dark;
+				box-shadow: none;
+			}
+		}
+	}
+}
+
+.c-content-edit-view__sidebar>.o-sidebar__content {
+	&>.c-navbar {
+		background-color: $white;
+	}
+
+	&>.c-navbar div[class^="c-select__control"] {
+		border-radius: 1.9rem;
+		background-color: transparent;
+		border-color: $zinc;
+
+		&.c-select__control--is-focused {
+			box-shadow: none;
+			border-color: $teal;
+		}
+
+		.c-select__placeholder,
+		.c-select__indicator svg {
+			color: $neutral;
+		}
+	}
+}
+
+.c-dropdown__content-open {
+	div[class*="c-dropdown__menu"] {
+		border: none;
+		border-radius: 0;
+		color: $black;
+
+		.c-menu__item:not(:last-of-type) {
+			border-bottom: 0.1rem solid $silver;
+		}
+	}
+}

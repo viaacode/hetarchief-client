@@ -33,7 +33,7 @@ module.exports = {
 			},
 		],
 	],
-	/* Don't look for other test files except in src this will avoid running .spec files from cypress */
+	/* Don't look for other test files except in src this will avoid running .spec files from playwright */
 	roots: ['<rootDir>/src'],
 	setupFiles: ['<rootDir>/src/setup-tests.ts'],
 	setupFilesAfterEnv: ['<rootDir>/jest/jest.setup.js'],

@@ -1,12 +1,12 @@
 {
 	"name": "hetarchief-client",
-	"version": "0.14.0",
+	"version": "0.14.2",
 	"private": true,
 	"contributors": [
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
 	],
 	"scripts": {
-		"preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions",
+		"preinstall": "npx npm-force-resolutions",
 		"dev": "next dev -p 3200",
 		"build": "next build",
 		"start": "next start",
@@ -29,7 +29,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
-		"@meemoo/react-admin": "0.6.0",
+		"@meemoo/react-admin": "0.7.2",
 		"@meemoo/react-components": "2.15.0",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
@@ -46,7 +46,6 @@
 		"konva": "8.3.5",
 		"ky": "^0.30.0",
 		"ky-universal": "^0.10.1",
-		"lint-staged": "12.4.1",
 		"lodash": "^4.17.21",
 		"lodash-es": "^4.17.21",
 		"moment": "2.29.2",
@@ -114,6 +113,7 @@
 		"babel-loader": "8.2.3",
 		"cross-env": "7.0.3",
 		"css-loader": "6.5.1",
+		"lint-staged": "11.2.6",
 		"dotenv-cli": "5.0.0",
 		"eslint": "7.32.0",
 		"eslint-config-next": "12.0.4",
@@ -152,6 +152,8 @@
 	"resolutions": {
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
-		"is-fullwidth-code-point": "4.0.0"
+		"is-fullwidth-code-point": "3.0.0",
+		"slice-ansi": "4.0.0",
+		"string-width": "4.2.3"
 	}
 }
