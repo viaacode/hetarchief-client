@@ -3,7 +3,10 @@ import { useTranslation } from 'next-i18next';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import { VistorSpaceService } from '@reading-room/services';
-import { UpdateReadingRoomSettings } from '@reading-room/services/visitor-space/visitor-space.service.types';
+import {
+	CreateReadingRoomSettings,
+	UpdateReadingRoomSettings,
+} from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { RichTextForm } from '@shared/components/RichTextForm';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
@@ -24,16 +27,17 @@ const ReadingRoomSettings = forwardRef<
 	const siteSettingsRef = useRef<ValidationRef<SiteSettingsFormState>>(undefined);
 	const readingRoomImageRef = useRef<ValidationRef<ReadingRoomImageFormState>>(undefined);
 
-	const [formValues, setFormValues] = useState<unknown | undefined>(undefined);
+	const [formValues, setFormValues] = useState<Partial<CreateReadingRoomSettings> | undefined>(
+		undefined
+	);
 
 	/**
 	 * Update
 	 */
 
-	const updateValues = (values: unknown) => {
+	const updateValues = (values: Partial<CreateReadingRoomSettings>) => {
 		if (typeof formValues === 'object' && typeof values === 'object') {
 			setFormValues({ ...formValues, ...values });
-			console.log({ ...formValues, ...values });
 		} else if (typeof values === 'object') {
 			setFormValues(values);
 		}
@@ -41,12 +45,22 @@ const ReadingRoomSettings = forwardRef<
 
 	const createSpace = async () => {
 		// Show errors
-		const siteSettingsErrors = await siteSettingsRef.current?.validate();
-		const readingRoomImageErrors = await readingRoomImageRef.current?.validate();
-		if (!siteSettingsErrors && !readingRoomImageErrors) {
-			// Create space
-			// TODO: validate slug for kebab-case
-			console.log(formValues);
+		const siteSettingsValid = await siteSettingsRef.current?.validate();
+		const readingRoomImageValid = await readingRoomImageRef.current?.validate();
+		if (siteSettingsValid && readingRoomImageValid && !!formValues) {
+			VistorSpaceService.create(formValues)
+				.catch(onFailedRequest)
+				.then((response) => {
+					if (response === undefined) {
+						return;
+					}
+					// afterSubmit?.();
+					toastService.notify({
+						maxLines: 3,
+						title: t('Succes'),
+						description: t('De bezoekersruimte werd succesvol aangemaakt.'),
+					});
+				});
 		}
 	};
 

@@ -24,26 +24,26 @@ export const SITE_SETTINGS_FORM_MOCK: SiteSettingsFormProps = {
 export const OPTIONS_MOCK: SelectOption[] = [
 	{
 		label: 'VRT',
-		value: kebabCase('VRT'),
+		value: 'OR-rf5kdfg',
 	},
 	{
 		label: 'Industriemuseum',
-		value: kebabCase('Industriemuseum'),
+		value: 'OR-rf5ksdf',
 	},
 	{
 		label: 'Vlaams Parmelent',
-		value: kebabCase('Vlaams Parmelent'),
+		value: 'OR-rfghjdf',
 	},
 	{
 		label: 'Huis van Alijn',
-		value: kebabCase('Huis van Alijn'),
+		value: 'OR-rffghdf',
 	},
 	{
 		label: 'AMVB',
-		value: kebabCase('AMVB'),
+		value: 'OR-rfdfgdf',
 	},
 	{
 		label: 'Amsab-ISG',
-		value: kebabCase('Amsab-ISG'),
+		value: 'OR-rsdfsdf',
 	},
 ];

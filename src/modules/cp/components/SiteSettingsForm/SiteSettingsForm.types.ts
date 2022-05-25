@@ -10,6 +10,6 @@ export interface SiteSettingsFormProps extends DefaultComponentProps {
 }
 
 export interface SiteSettingsFormState {
-	name?: string;
+	orId?: string;
 	slug?: string;
 }

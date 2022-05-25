@@ -6,15 +6,21 @@ import { SiteSettingsFormState } from './SiteSettingsForm.types';
 
 export const SITE_SETTINGS_SCHEMA = (): SchemaOf<SiteSettingsFormState> => {
 	return object({
-		name: string().required(
+		orId: string().required(
 			i18n.t(
 				'modules/cp/components/site-settings-form/site-settings-form___naam-is-verplicht'
 			)
 		),
-		slug: string().required(
-			i18n.t(
-				'modules/cp/components/site-settings-form/site-settings-form___slug-is-verplicht'
-			)
-		),
+		slug: string()
+			.strict()
+			.lowercase(i18n.t('Slug mag geen hoofdletters bevatten'))
+			.matches(/^\S*$/i, {
+				message: i18n.t('Slug mag geen spatie bevatten'),
+			})
+			.required(
+				i18n.t(
+					'modules/cp/components/site-settings-form/site-settings-form___slug-is-verplicht'
+				)
+			),
 	});
 };

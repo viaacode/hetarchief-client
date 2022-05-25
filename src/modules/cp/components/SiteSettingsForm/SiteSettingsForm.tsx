@@ -48,7 +48,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 
 		// Save original form state
 		const [savedState, setSavedState] = useState<SiteSettingsFormState>({
-			name: '',
+			orId: '',
 			slug: '',
 		});
 
@@ -64,10 +64,10 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 		useEffect(() => {
 			setSavedState({
 				...savedState,
-				name: room.name || '',
+				orId: room.id || '',
 				slug: room.slug || '',
 			});
-			setValue('name', room.name || '');
+			setValue('orId', room.id || '');
 			setValue('slug', room.slug || '');
 
 			// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +78,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 		 */
 
 		const isStateUpdated = (): boolean => {
-			return currentState.name !== savedState.name || currentState.slug !== savedState.slug;
+			return currentState.orId !== savedState.orId || currentState.slug !== savedState.slug;
 		};
 
 		const resetFileInput = () => {
@@ -89,12 +89,12 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 
 		const resetValues = () => {
 			reset({
-				name: savedState.name,
+				orId: savedState.orId,
 				slug: savedState.slug,
 			});
 
 			onUpdate?.({
-				name: savedState.name,
+				orId: savedState.orId,
 				slug: savedState.slug,
 			});
 
@@ -112,9 +112,9 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 
 		return (
 			<div className={className}>
-				<FormControl errors={[errors.name?.message]}>
+				<FormControl errors={[errors.orId?.message]}>
 					<Controller
-						name="name"
+						name="orId"
 						control={control}
 						render={(field) => {
 							return (
@@ -131,16 +131,20 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 										options={OPTIONS_MOCK}
 										value={getSelectValue(
 											OPTIONS_MOCK,
-											kebabCase(currentState.name)
+											kebabCase(currentState.orId)
 										)}
 										onChange={(newValue) => {
 											const value = (newValue as SingleValue<SelectOption>)
 												?.value as string;
+											const slug = kebabCase(
+												(newValue as SingleValue<SelectOption>)
+													?.label as string
+											);
 
-											if (value !== currentState.name || '') {
-												setValue('name', value);
-												setValue('slug', value);
-												onUpdate?.({ name: value, slug: value });
+											if (value !== currentState.orId || '') {
+												setValue('orId', value);
+												setValue('slug', slug);
+												onUpdate?.({ orId: value, slug: slug });
 											}
 										}}
 									/>

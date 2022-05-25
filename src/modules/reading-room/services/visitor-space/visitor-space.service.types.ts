@@ -9,11 +9,16 @@ export interface CreateVisitRequest {
 
 export type ReadingRoomSettings = Pick<
 	VisitorSpaceInfo,
-	'description' | 'color' | 'serviceDescription' | 'image' | 'status' | 'slug' | 'name'
+	'description' | 'color' | 'serviceDescription' | 'image' | 'status' | 'slug'
 >;
 
 export interface UpdateReadingRoomSettings extends ReadingRoomSettings {
 	file: File | null;
+}
+
+export interface CreateReadingRoomSettings extends ReadingRoomSettings {
+	file: File | null;
+	orId: string;
 }
 
 export enum AccessType {
