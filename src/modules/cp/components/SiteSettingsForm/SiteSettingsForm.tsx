@@ -3,17 +3,18 @@ import { FormControl, ReactSelect, SelectOption, TextInput } from '@meemoo/react
 import { kebabCase } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Controller, useForm, UseFormTrigger } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 
+import { useGetContentPartners } from '@cp/hooks/get-content-partners';
 import { getSelectValue } from '@reading-room/utils/select';
+import { toastService } from '@shared/services/toast-service';
 
 import { ValidationRef } from '../ReadingRoomSettings/ReadingRoomSettings.types';
 
 import { SITE_SETTINGS_SCHEMA } from './SiteSettingsForm.const';
 import styles from './SiteSettingsForm.module.scss';
 import { SiteSettingsFormProps, SiteSettingsFormState } from './SiteSettingsForm.types';
-import { OPTIONS_MOCK } from './__mocks__/siteSettingsForm';
 
 const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSettingsFormProps>(
 	(
@@ -24,6 +25,12 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 		 * Hooks
 		 */
 		const { t } = useTranslation();
+		const { data: contentPartners, isError: isErrorContentPartners } = useGetContentPartners(
+			false,
+			!disableDropdown
+		);
+
+		const [cpOptions, setCpOptions] = useState<SelectOption[] | undefined>(undefined);
 
 		/**
 		 * Refs
@@ -72,6 +79,23 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [room]);
+
+		useEffect(() => {
+			contentPartners &&
+				setCpOptions(
+					contentPartners.items.map((cp) => ({
+						label: cp.name,
+						value: cp.id,
+					}))
+				);
+
+			isErrorContentPartners &&
+				toastService.notify({
+					maxLines: 3,
+					title: t('Error'),
+					description: t('Er ging iets mis bij het ophalen van de content partners'),
+				});
+		}, [contentPartners, isErrorContentPartners, t]);
 
 		/**
 		 * Callbacks
@@ -128,11 +152,15 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 										{...field}
 										isDisabled={disableDropdown}
 										components={{ IndicatorSeparator: () => null }}
-										options={OPTIONS_MOCK}
-										value={getSelectValue(
-											OPTIONS_MOCK,
-											kebabCase(currentState.orId)
-										)}
+										options={cpOptions}
+										value={
+											disableDropdown
+												? { label: room.name, value: room.id }
+												: getSelectValue(
+														cpOptions ?? [],
+														kebabCase(currentState.orId)
+												  )
+										}
 										onChange={(newValue) => {
 											const value = (newValue as SingleValue<SelectOption>)
 												?.value as string;

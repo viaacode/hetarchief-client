@@ -1,5 +1,4 @@
 import { SelectOption } from '@meemoo/react-components';
-import { kebabCase } from 'lodash-es';
 
 import { SiteSettingsFormProps } from '../SiteSettingsForm.types';
 

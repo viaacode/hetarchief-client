@@ -42,3 +42,14 @@ export interface PermissionData {
 	name: string;
 	description: string;
 }
+
+// Content partners
+
+export interface ContentPartner {
+	name: string;
+	id: string;
+}
+
+export interface ContentPartnerResponse {
+	items: ContentPartner[];
+}
