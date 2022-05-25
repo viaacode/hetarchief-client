@@ -2,6 +2,7 @@ import { Box, Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
+import { Permission } from '@account/const';
 import { VistorSpaceService } from '@reading-room/services';
 import {
 	CreateReadingRoomSettings,
@@ -23,6 +24,10 @@ const ReadingRoomSettings = forwardRef<
 	ReadingRoomSettingsProps
 >(({ className, room, refetch, action = 'edit' }, ref) => {
 	const { t } = useTranslation();
+
+	const showSiteSettings = useHasAllPermission(
+		action === 'create' ? Permission.CREATE_SPACES : Permission.UPDATE_ALL_SPACES
+	);
 
 	const siteSettingsRef = useRef<ValidationRef<SiteSettingsFormState>>(undefined);
 	const readingRoomImageRef = useRef<ValidationRef<ReadingRoomImageFormState>>(undefined);
@@ -138,35 +143,35 @@ const ReadingRoomSettings = forwardRef<
 		<div className={className}>
 			{/* Site instellingen */}
 			{/* TODO: permission */}
-			{/* {showSiteSettings && ( */}
-			<article className={styles['c-cp-settings__content-block']}>
-				<h2 className={styles['c-cp-settings__title']}>
-					{t(
-						'modules/cp/components/reading-room-settings/reading-room-settings___site-instellingen'
-					)}
-				</h2>
-				<Box className={styles['c-cp-settings__box']}>
-					<p className={styles['c-cp-settings__description']}>
+			{showSiteSettings && (
+				<article className={styles['c-cp-settings__content-block']}>
+					<h2 className={styles['c-cp-settings__title']}>
 						{t(
-							'modules/cp/components/reading-room-settings/reading-room-settings___stel-de-naam-en-de-slug-van-een-bezoekersruimte-in'
+							'modules/cp/components/reading-room-settings/reading-room-settings___site-instellingen'
 						)}
-					</p>
-					{room && (
-						<SiteSettingsForm
-							ref={siteSettingsRef}
-							className={styles['c-cp-settings__site-settings-controls']}
-							room={room}
-							renderCancelSaveButtons={renderCancelSaveButtons}
-							onSubmit={(values, afterSubmit) => {
-								updateSpace(values, afterSubmit);
-							}}
-							onUpdate={action === 'create' ? updateValues : undefined}
-							disableDropdown={action === 'edit'}
-						/>
-					)}
-				</Box>
-			</article>
-			{/* )} */}
+					</h2>
+					<Box className={styles['c-cp-settings__box']}>
+						<p className={styles['c-cp-settings__description']}>
+							{t(
+								'modules/cp/components/reading-room-settings/reading-room-settings___stel-de-naam-en-de-slug-van-een-bezoekersruimte-in'
+							)}
+						</p>
+						{room && (
+							<SiteSettingsForm
+								ref={siteSettingsRef}
+								className={styles['c-cp-settings__site-settings-controls']}
+								room={room}
+								renderCancelSaveButtons={renderCancelSaveButtons}
+								onSubmit={(values, afterSubmit) => {
+									updateSpace(values, afterSubmit);
+								}}
+								onUpdate={action === 'create' ? updateValues : undefined}
+								disableDropdown={action === 'edit'}
+							/>
+						)}
+					</Box>
+				</article>
+			)}
 
 			{/* Bezoekersruimte */}
 			<article className={styles['c-cp-settings__content-block']}>

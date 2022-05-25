@@ -21,6 +21,7 @@ import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
 import { Icon, Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -28,6 +29,9 @@ import { createPageTitle } from '@shared/utils';
 const ReadingRoomsOverview: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
+
+	const showCreateButton = useHasAllPermission(Permission.CREATE_SPACES);
+
 	const [filters, setFilters] = useQueryParams(ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG);
 
 	const {
@@ -209,20 +213,22 @@ const ReadingRoomsOverview: FC = () => {
 			<AdminLayout
 				pageTitle={t('pages/admin/leeszalenbeheer/leeszalen/index___alle-leeszalen')}
 			>
-				<AdminLayout.Actions>
-					<Button
-						iconStart={<Icon name="plus" />}
-						label={t(
-							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-leeszaal'
-						)}
-						variants="black"
-						onClick={() =>
-							router.push(
-								`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${ROUTE_PARTS.create}`
-							)
-						}
-					/>
-				</AdminLayout.Actions>
+				{showCreateButton && (
+					<AdminLayout.Actions>
+						<Button
+							iconStart={<Icon name="plus" />}
+							label={t(
+								'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-leeszaal'
+							)}
+							variants="black"
+							onClick={() =>
+								router.push(
+									`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${ROUTE_PARTS.create}`
+								)
+							}
+						/>
+					</AdminLayout.Actions>
+				)}
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>
 				</AdminLayout.Content>
