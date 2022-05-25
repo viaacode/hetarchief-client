@@ -1,6 +1,6 @@
 import { stringifyUrl } from 'query-string';
 
-import { ReadingRoomOrderProps, VisitorSpaceInfo } from '@reading-room/types';
+import { ReadingRoomOrderProps, ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
@@ -14,7 +14,8 @@ export class VistorSpaceService {
 		page = 0,
 		size = 20,
 		orderProp?: ReadingRoomOrderProps,
-		orderDirection?: OrderDirection
+		orderDirection?: OrderDirection,
+		status?: ReadingRoomStatus[]
 	): Promise<ApiResponseWrapper<VisitorSpaceInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
@@ -26,6 +27,7 @@ export class VistorSpaceService {
 						size,
 						orderProp,
 						orderDirection,
+						status,
 					},
 				})
 			)

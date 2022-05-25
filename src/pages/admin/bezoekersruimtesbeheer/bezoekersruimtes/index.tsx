@@ -38,7 +38,8 @@ const ReadingRoomsOverview: FC = () => {
 		filters.page,
 		ReadingRoomsOverviewTablePageSize,
 		filters.orderProp as ReadingRoomOrderProps,
-		filters.orderDirection as OrderDirection
+		filters.orderDirection as OrderDirection,
+		[ReadingRoomStatus.Active, ReadingRoomStatus.Inactive, ReadingRoomStatus.Requested]
 	);
 
 	// Filters
