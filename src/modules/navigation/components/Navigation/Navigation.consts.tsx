@@ -8,11 +8,11 @@ import { Permission } from '@account/const';
 import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
-import { VisitorSpaceInfo } from '@reading-room/types';
 import { Icon, IconName } from '@shared/components';
 import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 import { Breakpoints } from '@shared/types';
+import { VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (classNames: string[] = []) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -71,7 +71,7 @@ const renderLink = (
 
 const getVisitorSpacesDropdown = (
 	currentPath: string,
-	accessibleReadingRooms: VisitorSpaceInfo[],
+	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceSlug: string | null
 ): NavigationItem => {
 	if (linkedSpaceSlug) {
@@ -94,7 +94,7 @@ const getVisitorSpacesDropdown = (
 			activeDesktop: currentPath.startsWith('/' + linkedSpaceSlug),
 			activeMobile: currentPath.startsWith('/' + linkedSpaceSlug),
 		};
-	} else if (accessibleReadingRooms.length === 0) {
+	} else if (accessibleVisitorSpaces.length === 0) {
 		// No visitor spaces available => show link to homepage without dropdown
 		return {
 			node: renderLink(
@@ -120,7 +120,7 @@ const getVisitorSpacesDropdown = (
 				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
 				'/',
 				{
-					badge: <Badge text={accessibleReadingRooms.length} />,
+					badge: <Badge text={accessibleVisitorSpaces.length} />,
 					className: linkCls([
 						'u-color-black',
 						'u-color-white:md',
@@ -138,7 +138,7 @@ const getVisitorSpacesDropdown = (
 			id: 'visitor-spaces',
 			activeDesktop:
 				currentPath === ROUTES.home ||
-				!!accessibleReadingRooms.find((visitorSpace) =>
+				!!accessibleVisitorSpaces.find((visitorSpace) =>
 					currentPath.startsWith(`/${visitorSpace.slug}`)
 				),
 			activeMobile: currentPath === ROUTES.home,
@@ -154,9 +154,9 @@ const getVisitorSpacesDropdown = (
 						}
 					),
 					id: 'all-visitor-spaces',
-					isDivider: accessibleReadingRooms.length > 0 ? 'md' : undefined,
+					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 				},
-				...accessibleReadingRooms.map(
+				...accessibleVisitorSpaces.map(
 					(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
 						node: ({ closeDropdowns }) =>
 							renderLink(
@@ -339,7 +339,7 @@ const getMeemooAdminManagementDropdown = (
 
 export const getNavigationItemsLeft = (
 	currentPath: string,
-	accessibleReadingRooms: VisitorSpaceInfo[],
+	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	navigationItems: NavigationInfo[],
 	permissions: Permission[],
 	linkedSpaceSlug: string | null
@@ -349,7 +349,7 @@ export const getNavigationItemsLeft = (
 
 	return [
 		// Visitor space dropdown
-		getVisitorSpacesDropdown(currentPath, accessibleReadingRooms, linkedSpaceSlug),
+		getVisitorSpacesDropdown(currentPath, accessibleVisitorSpaces, linkedSpaceSlug),
 
 		// Some dynamic links from navigations table in database
 		...getDynamicHeaderLinks(currentPath, navigationItems),

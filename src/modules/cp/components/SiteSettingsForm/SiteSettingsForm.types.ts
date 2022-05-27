@@ -1,5 +1,5 @@
-import { VisitorSpaceInfo } from '@reading-room/types';
 import { DefaultComponentProps } from '@shared/types';
+import { VisitorSpaceInfo } from '@visitor-space/types';
 
 export interface SiteSettingsFormProps extends DefaultComponentProps {
 	room: Pick<VisitorSpaceInfo, 'color' | 'image' | 'logo' | 'id' | 'name' | 'slug'>;

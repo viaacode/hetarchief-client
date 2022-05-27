@@ -1,7 +1,8 @@
 import { fireEvent, render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 
-import { mockStore } from './../../../../__mocks__/store';
+import { mockStore } from '../../../../__mocks__/store';
+
 import ObjectPlaceholder from './ObjectPlaceholder';
 import { objectPlaceholderMock } from './__mocks__/object-placeholder';
 

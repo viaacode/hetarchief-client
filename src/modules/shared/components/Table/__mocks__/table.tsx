@@ -2,7 +2,7 @@ import { Badge, Button } from '@meemoo/react-components';
 import React, { ReactNode } from 'react';
 
 import { Icon } from '@shared/components';
-import { formatDateTime } from '@shared/components/ReadingRoomCard/ReadingRoomCard.utils';
+import { formatDateTime } from '@shared/components/VisitorSpaceCard/VisitorSpaceCard.utils';
 
 export const mockNames = [
 	'Jan Verminnen',

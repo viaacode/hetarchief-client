@@ -7,44 +7,48 @@ import React, { FC } from 'react';
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ReadingRoomSettings } from '@cp/components';
+import { VisitorSpaceSettings } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
 import { Loading } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
+import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
-const ReadingRoomEdit: FC = () => {
+const VisitorSpaceEdit: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 	const { slug } = router.query;
 
-	const { data: readingRoomInfo, isLoading, refetch } = useGetVisitorSpace(slug as string);
+	const { data: visitorSpaceInfo, isLoading, refetch } = useGetVisitorSpace(slug as string);
 
 	return (
 		<>
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen')
+						t(
+							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
+						)
 					)}
 				</title>
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen-meta-omschrijving'
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen-meta-omschrijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				pageTitle={t('pages/admin/leeszalenbeheer/leeszalen/slug/index___instellingen')}
+				pageTitle={t(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
+				)}
 			>
 				<AdminLayout.Content>
 					<div className="l-container">
 						{isLoading && <Loading />}
-						{readingRoomInfo && (
-							<ReadingRoomSettings room={readingRoomInfo} refetch={refetch} />
+						{visitorSpaceInfo && (
+							<VisitorSpaceSettings room={visitorSpaceInfo} refetch={refetch} />
 						)}
 					</div>
 				</AdminLayout.Content>
@@ -55,4 +59,4 @@ const ReadingRoomEdit: FC = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default withAuth(withAllRequiredPermissions(ReadingRoomEdit, Permission.UPDATE_ALL_SPACES));
+export default withAuth(withAllRequiredPermissions(VisitorSpaceEdit, Permission.UPDATE_ALL_SPACES));

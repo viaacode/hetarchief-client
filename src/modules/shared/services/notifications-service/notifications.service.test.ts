@@ -29,7 +29,7 @@ const mockUnreadNotification = {
 	visitId: '8ad7d557-5dd0-42a6-99e8-4da9c65e35fe',
 	createdAt: oldDate,
 	updatedAt: oldDate,
-	type: 'ACCESS_PERIOD_READING_ROOM_STARTED',
+	type: 'ACCESS_PERIOD_VISITOR_SPACE_STARTED',
 	visitorSpaceSlug: 'amvb',
 };
 
@@ -41,7 +41,7 @@ const mockNewUnreadNotification = {
 	visitId: '8ad7d557-5dd0-42a6-99e8-4da9c65e35fe',
 	createdAt: newDate,
 	updatedAt: newDate,
-	type: 'ACCESS_PERIOD_READING_ROOM_STARTED',
+	type: 'ACCESS_PERIOD_VISITOR_SPACE_STARTED',
 	visitorSpaceSlug: 'amvb',
 };
 

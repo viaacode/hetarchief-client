@@ -10,13 +10,13 @@ import { AuthModal } from '@auth/components';
 import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
-import VisitorSpaceSearchPage from '@reading-room/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 
 import { useGetContentPage } from '../../modules/content-page/hooks/get-content-page';
+import VisitorSpaceSearchPage from '../../modules/visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
+import { useGetVisitorSpace } from '../../modules/visitor-space/hooks/get-visitor-space';
 
 import { VisitorLayout } from 'modules/visitors';
 

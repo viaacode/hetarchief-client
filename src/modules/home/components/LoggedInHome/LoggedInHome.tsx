@@ -9,16 +9,16 @@ import { StringParam, useQueryParams } from 'use-query-params';
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
+import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
-import { ReadingRoomCard, ReadingRoomCardType, VisitorSpaceCardProps } from '@shared/components';
+import { VisitorSpaceCard, VisitorSpaceCardProps, VisitorSpaceCardType } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
@@ -101,7 +101,7 @@ const LoggedInHome: FC = () => {
 	 * Effects
 	 */
 
-	// Scroll to ReadingRoomCardsWithSearch when search is present in query
+	// Scroll to VisitorSpaceCardsWithSearch when search is present in query
 	useEffect(() => {
 		if (
 			!hasScrolledToSearch &&
@@ -256,7 +256,7 @@ const LoggedInHome: FC = () => {
 						>
 							<div className={styles['c-hero__access-cards']}>
 								{(active?.items || []).map((visit, i) => (
-									<ReadingRoomCard
+									<VisitorSpaceCard
 										key={`hero-access-${i}`}
 										access={{
 											granted: true,
@@ -264,7 +264,7 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={mapVisitToRoom(visit)}
-										type={ReadingRoomCardType.access}
+										type={VisitorSpaceCardType.access}
 									/>
 								))}
 							</div>
@@ -278,7 +278,7 @@ const LoggedInHome: FC = () => {
 							</h5>
 							<div className={styles['c-hero__requests']}>
 								{(future?.items || []).map((visit, i) => (
-									<ReadingRoomCard
+									<VisitorSpaceCard
 										onClick={() => onProcessVisit(visit)}
 										key={`hero-planned-${i}`}
 										access={{
@@ -287,7 +287,7 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={mapVisitToRoom(visit)}
-										type={ReadingRoomCardType.futureApproved}
+										type={VisitorSpaceCardType.futureApproved}
 									/>
 								))}
 							</div>
@@ -301,7 +301,7 @@ const LoggedInHome: FC = () => {
 							</h5>
 							<div className={styles['c-hero__requests']}>
 								{(pending?.items || []).map((visit, i) => (
-									<ReadingRoomCard
+									<VisitorSpaceCard
 										onClick={() => onProcessVisit(visit)}
 										key={`hero-requested-${i}`}
 										access={{
@@ -311,7 +311,7 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={mapVisitToRoom(visit)}
-										type={ReadingRoomCardType.futureRequested}
+										type={VisitorSpaceCardType.futureRequested}
 									/>
 								))}
 							</div>
@@ -332,7 +332,7 @@ const LoggedInHome: FC = () => {
 
 				{renderHero()}
 				<div ref={searchRef}>
-					<ReadingRoomCardsWithSearch
+					<VisitorSpaceCardsWithSearch
 						onRequestAccess={onRequestAccess}
 						onSearch={() => setHasScrolledToSearch(true)}
 					/>

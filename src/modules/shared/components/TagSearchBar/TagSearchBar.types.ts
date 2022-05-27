@@ -2,8 +2,8 @@ import { TagsInputProps } from '@meemoo/react-components';
 import { ReactNode } from 'react';
 import { ActionMeta, InputActionMeta, OnChangeValue } from 'react-select';
 
-import { TagIdentity } from '@reading-room/types';
 import { DefaultComponentProps } from '@shared/types';
+import { TagIdentity } from '@visitor-space/types';
 
 export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponentProps &
 	Omit<TagsInputProps<IsMulti>, 'rootClassName' | 'classNamePrefix' | 'variants'> & {

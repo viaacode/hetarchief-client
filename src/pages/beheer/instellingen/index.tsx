@@ -6,13 +6,14 @@ import { useSelector } from 'react-redux';
 import { Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ReadingRoomSettings } from '@cp/components';
+import { VisitorSpaceSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
 import { Loading } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
+
+import { useGetVisitorSpace } from '../../../modules/visitor-space/hooks/get-visitor-space';
 
 const CPSettingsPage: NextPage = () => {
 	/**
@@ -68,7 +69,7 @@ const CPSettingsPage: NextPage = () => {
 			>
 				<div className="l-container">
 					{visitorSpaceInfo ? (
-						<ReadingRoomSettings room={visitorSpaceInfo} refetch={refetch} />
+						<VisitorSpaceSettings room={visitorSpaceInfo} refetch={refetch} />
 					) : (
 						<p className="u-color-neutral">{renderErrorMessage()}</p>
 					)}
