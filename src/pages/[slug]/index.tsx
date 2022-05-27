@@ -13,10 +13,10 @@ import { withI18n } from '@i18n/wrappers';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
+import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 import { useGetContentPage } from '../../modules/content-page/hooks/get-content-page';
 import VisitorSpaceSearchPage from '../../modules/visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
-import { useGetVisitorSpace } from '../../modules/visitor-space/hooks/get-visitor-space';
 
 import { VisitorLayout } from 'modules/visitors';
 
