@@ -18,7 +18,7 @@ import { SiteSettingsFormProps, SiteSettingsFormState } from './SiteSettingsForm
 
 const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSettingsFormProps>(
 	(
-		{ className, room, onSubmit, onUpdate, renderCancelSaveButtons, disableDropdown = false },
+		{ className, space, onSubmit, onUpdate, renderCancelSaveButtons, disableDropdown = false },
 		ref
 	) => {
 		/**
@@ -71,14 +71,14 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 		useEffect(() => {
 			setSavedState({
 				...savedState,
-				orId: room.id || '',
-				slug: room.slug || '',
+				orId: space.id || '',
+				slug: space.slug || '',
 			});
-			setValue('orId', room.id || '');
-			setValue('slug', room.slug || '');
+			setValue('orId', space.id || '');
+			setValue('slug', space.slug || '');
 
 			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [room]);
+		}, [space]);
 
 		useEffect(() => {
 			contentPartners &&
@@ -157,11 +157,8 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 										options={cpOptions}
 										value={
 											disableDropdown
-												? { label: room.name, value: room.id }
-												: getSelectValue(
-														cpOptions ?? [],
-														kebabCase(currentState.orId)
-												  )
+												? { label: space.name, value: space.id }
+												: getSelectValue(cpOptions ?? [], currentState.orId)
 										}
 										onChange={(newValue) => {
 											const value = (newValue as SingleValue<SelectOption>)
