@@ -15,7 +15,6 @@ import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
 	Blade,
-	ErrorNoAccess,
 	SpacePreview,
 	VisitorSpaceCard,
 	VisitorSpaceCardProps,
