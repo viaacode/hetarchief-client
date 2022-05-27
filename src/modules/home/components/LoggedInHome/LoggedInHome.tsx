@@ -347,11 +347,13 @@ const LoggedInHome: FC = () => {
 					{visitorSpaceInfo && <SpacePreview space={visitorSpaceInfo} />}
 					<p>
 						{t(
-							'Het is niet mogelijk om toegang tot deze bezoekersruimte aan te vragen op dit moment'
+							'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'
 						)}
 					</p>
 					<Button
-						label={t('Ga naar de homepage')}
+						label={t(
+							'modules/home/components/logged-in-home/logged-in-home___ga-naar-de-homepage'
+						)}
 						variants="black"
 						onClick={() => {
 							setIsVisitorSpaceNotAvailable(false);

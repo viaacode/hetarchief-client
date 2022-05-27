@@ -668,7 +668,9 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={slug as string}
-					description={t('Deze bezoekersruimte is momenteel niet beschikbaar')}
+					description={t(
+						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___deze-bezoekersruimte-is-momenteel-niet-beschikbaar'
+					)}
 				/>
 			);
 		}
