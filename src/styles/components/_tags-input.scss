@@ -5,14 +5,24 @@
 // Wrap everything for higher specificity
 .c-tags-input {
 	/**
-	 * Elements
-	 */
+* Elements
+*/
 
 	@include react-select-base("c-tags-input");
 
-	.c-tags-input__multi-value {
+	.c-tags-input__control .c-tags-input__value-container .c-tags-input__multi-value {
 		margin: $spacer-xxs $spacer-xs $spacer-xxs 0;
 		font-size: $font-size-sm;
+		background-color: transparent;
+		border: none;
+		border-radius: 0;
+		padding: 0;
+		display: inherit;
+		align-items: center;
+		text-decoration: none;
+		font-family: inherit;
+		line-height: inherit;
+		color: inherit;
 
 		@include respond-at(md) {
 			margin: $spacer-xxs $spacer-sm $spacer-xxs 0;

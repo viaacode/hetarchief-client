@@ -1,9 +1,11 @@
 import { Box, Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { RichTextForm } from '@shared/components/RichTextForm';
+import { ROUTE_PARTS } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { VisitorSpaceService } from '@visitor-space/services';
@@ -24,6 +26,7 @@ const VisitorSpaceSettings = forwardRef<
 	VisitorSpaceSettingsProps
 >(({ className, room, refetch, action = 'edit' }, ref) => {
 	const { t } = useTranslation();
+	const router = useRouter();
 
 	const showSiteSettings = useHasAllPermission(
 		action === 'create' ? Permission.CREATE_SPACES : Permission.UPDATE_ALL_SPACES
@@ -49,33 +52,37 @@ const VisitorSpaceSettings = forwardRef<
 	};
 
 	const createSpace = async () => {
-		// Show errors
-		const siteSettingsValid = await siteSettingsRef.current?.validate();
-		const visitorSpaceImageValid = await visitorSpaceImageRef.current?.validate();
-		if (siteSettingsValid && visitorSpaceImageValid && !!formValues) {
-			VisitorSpaceService.create(formValues)
-				.catch(onFailedRequest)
-				.then((response) => {
-					if (response === undefined) {
-						return;
-					}
-					// afterSubmit?.();
-					toastService.notify({
-						maxLines: 3,
-						title: t(
-							'modules/cp/components/visitor-space-settings/visitor-space-settings___succes'
-						),
-						description: t(
-							'modules/cp/components/visitor-space-settings/visitor-space-settings___de-bezoekersruimte-werd-succesvol-aangemaakt'
-						),
-					});
+		try {
+			// Show errors
+			const siteSettingsValid = await siteSettingsRef.current?.validate();
+			const visitorSpaceImageValid = await visitorSpaceImageRef.current?.validate();
+			if (siteSettingsValid && visitorSpaceImageValid && !!formValues) {
+				const response = await VisitorSpaceService.create(formValues);
+				if (response === undefined) {
+					return;
+				}
+				toastService.notify({
+					maxLines: 3,
+					title: t(
+						'modules/cp/components/visitor-space-settings/visitor-space-settings___succes'
+					),
+					description: t(
+						'modules/cp/components/visitor-space-settings/visitor-space-settings___de-bezoekersruimte-werd-succesvol-aangemaakt'
+					),
 				});
+				await router.replace(
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${formValues.slug}`
+				);
+			}
+		} catch (err) {
+			onFailedRequest(err);
 		}
 	};
 
-	const onFailedRequest = () => {
+	const onFailedRequest = (err: any) => {
 		refetch?.();
 
+		console.error('Failed to save the visitor space', err);
 		toastService.notify({
 			maxLines: 3,
 			title: t('pages/beheer/instellingen/index___⚠️-er-ging-iets-mis'),
@@ -85,29 +92,40 @@ const VisitorSpaceSettings = forwardRef<
 		});
 	};
 
-	const updateSpace = (values: Partial<UpdateVisitorSpaceSettings>, afterSubmit?: () => void) => {
-		if (room) {
-			VisitorSpaceService.update(room.id, {
-				color: room.color,
-				image: room.image,
-				...values,
-			})
-				.catch(onFailedRequest)
-				.then((response) => {
-					if (response === undefined) {
-						return;
-					}
-
-					afterSubmit?.();
-
-					toastService.notify({
-						maxLines: 3,
-						title: t('pages/beheer/instellingen/index___succes'),
-						description: t(
-							'pages/beheer/instellingen/index___de-wijzigingen-werden-succesvol-opgeslagen'
-						),
-					});
+	const updateSpace = async (
+		values: Partial<UpdateVisitorSpaceSettings>,
+		afterSubmit?: () => void
+	) => {
+		try {
+			if (room) {
+				const response = await VisitorSpaceService.update(room.id, {
+					color: room.color,
+					image: room.image,
+					...values,
 				});
+				if (response === undefined) {
+					return;
+				}
+
+				afterSubmit?.();
+
+				toastService.notify({
+					maxLines: 3,
+					title: t('pages/beheer/instellingen/index___succes'),
+					description: t(
+						'pages/beheer/instellingen/index___de-wijzigingen-werden-succesvol-opgeslagen'
+					),
+				});
+
+				if (values.slug !== room.slug) {
+					// Slug was changed, redirect to the new url
+					await router.replace(
+						`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${values.slug}`
+					);
+				}
+			}
+		} catch (err) {
+			onFailedRequest(err);
 		}
 	};
 
@@ -162,8 +180,8 @@ const VisitorSpaceSettings = forwardRef<
 								className={styles['c-cp-settings__site-settings-controls']}
 								space={room}
 								renderCancelSaveButtons={renderCancelSaveButtons}
-								onSubmit={(values, afterSubmit) => {
-									updateSpace(values, afterSubmit);
+								onSubmit={async (values, afterSubmit) => {
+									await updateSpace(values, afterSubmit);
 								}}
 								onUpdate={action === 'create' ? updateValues : undefined}
 								disableDropdown={action === 'edit'}
@@ -190,8 +208,8 @@ const VisitorSpaceSettings = forwardRef<
 							className={styles['c-cp-settings__bezoekersruimte-controls']}
 							room={room}
 							renderCancelSaveButtons={renderCancelSaveButtons}
-							onSubmit={(values, afterSubmit) => {
-								updateSpace(values, afterSubmit);
+							onSubmit={async (values, afterSubmit) => {
+								await updateSpace(values, afterSubmit);
 							}}
 							onUpdate={action === 'create' ? updateValues : undefined}
 						/>
@@ -212,8 +230,8 @@ const VisitorSpaceSettings = forwardRef<
 					</p>
 					<RichTextForm
 						initialHTML={(room && room.description) ?? '<p></p>'}
-						onSubmit={(html, afterSubmit) =>
-							updateSpace({ description: html }, afterSubmit)
+						onSubmit={async (html, afterSubmit) =>
+							await updateSpace({ description: html }, afterSubmit)
 						}
 						renderCancelSaveButtons={renderCancelSaveButtons}
 						onUpdate={
@@ -239,8 +257,8 @@ const VisitorSpaceSettings = forwardRef<
 					<RichTextForm
 						className={styles['c-cp-settings__rich-text--no-heading']}
 						initialHTML={(room && room.serviceDescription) ?? '<p></p>'}
-						onSubmit={(html, afterSubmit) =>
-							updateSpace({ serviceDescription: html }, afterSubmit)
+						onSubmit={async (html, afterSubmit) =>
+							await updateSpace({ serviceDescription: html }, afterSubmit)
 						}
 						renderCancelSaveButtons={renderCancelSaveButtons}
 						onUpdate={
