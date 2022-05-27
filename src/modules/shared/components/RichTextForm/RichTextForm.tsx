@@ -10,6 +10,7 @@ const RichTextForm: FC<RichTextFormProps> = ({
 	className,
 	initialHTML,
 	onSubmit,
+	onUpdate,
 	renderCancelSaveButtons,
 }) => {
 	const { control, handleSubmit, setValue, watch } = useForm<RichTextFormState>();
@@ -36,6 +37,7 @@ const RichTextForm: FC<RichTextFormProps> = ({
 									}
 
 									setValue('richText', state);
+									onUpdate?.(state.toHTML());
 								}}
 								initialHtml={initialHTML}
 								state={currentState}

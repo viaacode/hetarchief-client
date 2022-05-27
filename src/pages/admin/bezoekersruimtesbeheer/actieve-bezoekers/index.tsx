@@ -141,21 +141,19 @@ const Visitors: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers')
+						t('pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers')
 					)}
 				</title>
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
+						'pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
-					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
-				)}
+				pageTitle={t('pages/admin/leeszalenbeheer/bezoekers/index___actieve-bezoekers')}
 			>
 				<AdminLayout.Content>
 					<div className="p-admin-visitors l-container">
@@ -164,7 +162,7 @@ const Visitors: FC = () => {
 								default={filters[SEARCH_QUERY_KEY]}
 								className="p-admin-visitors__search"
 								placeholder={t(
-									'pages/admin/bezoekersruimtesbeheer/bezoekers/index___zoek'
+									'pages/admin/leeszalenbeheer/bezoekers/index___zoek'
 								)}
 								onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 							/>

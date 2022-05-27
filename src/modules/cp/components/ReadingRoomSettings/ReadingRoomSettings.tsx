@@ -1,26 +1,80 @@
 import { Box, Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
-import { FC } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
+import { Permission } from '@account/const';
 import { VistorSpaceService } from '@reading-room/services';
-import { UpdateReadingRoomSettings } from '@reading-room/services/visitor-space/visitor-space.service.types';
+import {
+	CreateReadingRoomSettings,
+	UpdateReadingRoomSettings,
+} from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { RichTextForm } from '@shared/components/RichTextForm';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 
-import { ReadingRoomImageForm } from '../ReadingRoomImageForm';
+import { ReadingRoomImageForm, ReadingRoomImageFormState } from '../ReadingRoomImageForm';
+import { SiteSettingsForm } from '../SiteSettingsForm';
+import { SiteSettingsFormState } from '../SiteSettingsForm/SiteSettingsForm.types';
 
 import styles from './ReadingRoomSettings.module.scss';
-import { ReadingRoomSettingsProps } from './ReadingRoomSettings.types';
+import { ReadingRoomSettingsProps, ValidationRef } from './ReadingRoomSettings.types';
 
-const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, refetch }) => {
+const ReadingRoomSettings = forwardRef<
+	{ createSpace: () => void } | undefined,
+	ReadingRoomSettingsProps
+>(({ className, room, refetch, action = 'edit' }, ref) => {
 	const { t } = useTranslation();
+
+	const showSiteSettings = useHasAllPermission(
+		action === 'create' ? Permission.CREATE_SPACES : Permission.UPDATE_ALL_SPACES
+	);
+
+	const siteSettingsRef = useRef<ValidationRef<SiteSettingsFormState>>(undefined);
+	const readingRoomImageRef = useRef<ValidationRef<ReadingRoomImageFormState>>(undefined);
+
+	const [formValues, setFormValues] = useState<Partial<CreateReadingRoomSettings> | undefined>(
+		undefined
+	);
 
 	/**
 	 * Update
 	 */
 
+	const updateValues = (values: Partial<CreateReadingRoomSettings>) => {
+		if (typeof formValues === 'object' && typeof values === 'object') {
+			setFormValues({ ...formValues, ...values });
+		} else if (typeof values === 'object') {
+			setFormValues(values);
+		}
+	};
+
+	const createSpace = async () => {
+		// Show errors
+		const siteSettingsValid = await siteSettingsRef.current?.validate();
+		const readingRoomImageValid = await readingRoomImageRef.current?.validate();
+		if (siteSettingsValid && readingRoomImageValid && !!formValues) {
+			VistorSpaceService.create(formValues)
+				.catch(onFailedRequest)
+				.then((response) => {
+					if (response === undefined) {
+						return;
+					}
+					// afterSubmit?.();
+					toastService.notify({
+						maxLines: 3,
+						title: t(
+							'modules/cp/components/reading-room-settings/reading-room-settings___succes'
+						),
+						description: t(
+							'modules/cp/components/reading-room-settings/reading-room-settings___de-bezoekersruimte-werd-succesvol-aangemaakt'
+						),
+					});
+				});
+		}
+	};
+
 	const onFailedRequest = () => {
-		refetch();
+		refetch?.();
 
 		toastService.notify({
 			maxLines: 3,
@@ -58,26 +112,67 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 	};
 
 	/**
+	 * Expose create function to parent
+	 */
+
+	useImperativeHandle(ref, () => ({
+		createSpace,
+	}));
+
+	/**
 	 * Render
 	 */
 
-	const renderCancelSaveButtons = (onCancel: () => void, onSave: () => void) => (
-		<div className={styles['c-cp-settings__cancel-save']}>
-			<Button
-				label={t('pages/beheer/instellingen/index___annuleer')}
-				variants="text"
-				onClick={onCancel}
-			/>
-			<Button
-				label={t('pages/beheer/instellingen/index___bewaar-wijzigingen')}
-				variants="black"
-				onClick={onSave}
-			/>
-		</div>
-	);
+	const renderCancelSaveButtons = (onCancel: () => void, onSave: () => void) =>
+		action === 'edit' ? (
+			<div className={styles['c-cp-settings__cancel-save']}>
+				<Button
+					label={t('pages/beheer/instellingen/index___annuleer')}
+					variants="text"
+					onClick={onCancel}
+				/>
+				<Button
+					label={t('pages/beheer/instellingen/index___bewaar-wijzigingen')}
+					variants="black"
+					onClick={onSave}
+				/>
+			</div>
+		) : null;
 
 	return (
 		<div className={className}>
+			{/* Site instellingen */}
+			{/* TODO: permission */}
+			{showSiteSettings && (
+				<article className={styles['c-cp-settings__content-block']}>
+					<h2 className={styles['c-cp-settings__title']}>
+						{t(
+							'modules/cp/components/reading-room-settings/reading-room-settings___site-instellingen'
+						)}
+					</h2>
+					<Box className={styles['c-cp-settings__box']}>
+						<p className={styles['c-cp-settings__description']}>
+							{t(
+								'modules/cp/components/reading-room-settings/reading-room-settings___stel-de-naam-en-de-slug-van-een-bezoekersruimte-in'
+							)}
+						</p>
+						{room && (
+							<SiteSettingsForm
+								ref={siteSettingsRef}
+								className={styles['c-cp-settings__site-settings-controls']}
+								room={room}
+								renderCancelSaveButtons={renderCancelSaveButtons}
+								onSubmit={(values, afterSubmit) => {
+									updateSpace(values, afterSubmit);
+								}}
+								onUpdate={action === 'create' ? updateValues : undefined}
+								disableDropdown={action === 'edit'}
+							/>
+						)}
+					</Box>
+				</article>
+			)}
+
 			{/* Bezoekersruimte */}
 			<article className={styles['c-cp-settings__content-block']}>
 				<h2 className={styles['c-cp-settings__title']}>
@@ -91,12 +186,14 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 					</p>
 					{room && (
 						<ReadingRoomImageForm
+							ref={readingRoomImageRef}
 							className={styles['c-cp-settings__bezoekersruimte-controls']}
 							room={room}
 							renderCancelSaveButtons={renderCancelSaveButtons}
 							onSubmit={(values, afterSubmit) => {
 								updateSpace(values, afterSubmit);
 							}}
+							onUpdate={action === 'create' ? updateValues : undefined}
 						/>
 					)}
 				</Box>
@@ -119,6 +216,11 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 							updateSpace({ description: html }, afterSubmit)
 						}
 						renderCancelSaveButtons={renderCancelSaveButtons}
+						onUpdate={
+							action === 'create'
+								? (value) => updateValues({ description: value })
+								: undefined
+						}
 					/>
 				</Box>
 			</article>
@@ -141,11 +243,18 @@ const ReadingRoomSettings: FC<ReadingRoomSettingsProps> = ({ className, room, re
 							updateSpace({ serviceDescription: html }, afterSubmit)
 						}
 						renderCancelSaveButtons={renderCancelSaveButtons}
+						onUpdate={
+							action === 'create'
+								? (value) => updateValues({ serviceDescription: value })
+								: undefined
+						}
 					/>
 				</Box>
 			</article>
 		</div>
 	);
-};
+});
+
+ReadingRoomSettings.displayName = 'ReadingRoomSettings';
 
 export default ReadingRoomSettings;

@@ -6,7 +6,11 @@ import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 
 import { VISITOR_SPACE_SERVICE_BASE_URL } from './visitor-space.service.const';
-import { AccessType, UpdateReadingRoomSettings } from './visitor-space.service.types';
+import {
+	AccessType,
+	CreateReadingRoomSettings,
+	UpdateReadingRoomSettings,
+} from './visitor-space.service.types';
 
 export class VistorSpaceService {
 	public static async getAll(
@@ -56,6 +60,31 @@ export class VistorSpaceService {
 		return await ApiService.getApi().get(`${VISITOR_SPACE_SERVICE_BASE_URL}/${slug}`).json();
 	}
 
+	public static async create(
+		values: Partial<CreateReadingRoomSettings>
+	): Promise<VisitorSpaceInfo> {
+		const formData = new FormData();
+
+		// Set form data
+		values.orId && formData.append('orId', values.orId);
+		values.color && formData.append('color', values.color);
+		values.image && formData.append('image', values.image);
+		values.file && formData.append('file', values.file);
+		values.description && formData.append('description', values.description);
+		values.serviceDescription &&
+			formData.append('serviceDescription', values.serviceDescription);
+		values.status && formData.append('status', values.status);
+		values.slug && formData.append('slug', values.slug);
+
+		const headers = {
+			'Content-Type': undefined, // Overwrite application/json
+		};
+
+		return await ApiService.getApi()
+			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
+			.json();
+	}
+
 	public static async update(
 		roomId: string,
 		values: Partial<UpdateReadingRoomSettings>
@@ -70,6 +99,7 @@ export class VistorSpaceService {
 		values.serviceDescription &&
 			formData.append('serviceDescription', values.serviceDescription);
 		values.status && formData.append('status', values.status);
+		values.slug && formData.append('slug', values.slug);
 
 		const headers = {
 			'Content-Type': undefined, // Overwrite application/json

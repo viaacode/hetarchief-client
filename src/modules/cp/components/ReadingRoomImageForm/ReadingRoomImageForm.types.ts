@@ -5,6 +5,7 @@ export interface ReadingRoomImageFormProps extends DefaultComponentProps {
 	room: Pick<VisitorSpaceInfo, 'color' | 'image' | 'logo' | 'id' | 'name'>;
 	renderCancelSaveButtons: (onCancel: () => void, onSave: () => void) => void;
 	onSubmit?: (values: ReadingRoomImageFormState, afterSubmit?: () => void) => void;
+	onUpdate?: (values: ReadingRoomImageFormState) => void;
 }
 
 export interface ReadingRoomImageFormState {

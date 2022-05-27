@@ -19,21 +19,17 @@ const MeemooAdminRequestsPage: NextPage = () => {
 		<>
 			<Head>
 				<title>
-					{createPageTitle(
-						t('pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen')
-					)}
+					{createPageTitle(t('pages/admin/leeszalenbeheer/aanvragen/index___aanvragen'))}
 				</title>
 				<meta
 					name="description"
 					content={t(
-						'pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen-meta-omschrijving'
+						'pages/admin/leeszalenbeheer/aanvragen/index___aanvragen-meta-omschrijving'
 					)}
 				/>
 			</Head>
 
-			<AdminLayout
-				pageTitle={t('pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen')}
-			>
+			<AdminLayout pageTitle={t('pages/admin/leeszalenbeheer/aanvragen/index___aanvragen')}>
 				<AdminLayout.Content>
 					<VisitRequestsOverview columns={RequestTableColumns()} />
 				</AdminLayout.Content>

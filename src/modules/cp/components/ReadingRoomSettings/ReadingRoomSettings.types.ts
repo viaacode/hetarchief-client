@@ -1,7 +1,15 @@
+import { UseFormTrigger } from 'react-hook-form';
+
 import { VisitorSpaceInfo } from '@reading-room/types';
 import { DefaultComponentProps } from '@shared/types';
 
 export interface ReadingRoomSettingsProps extends DefaultComponentProps {
-	room: VisitorSpaceInfo;
-	refetch: () => void;
+	room: Pick<
+		VisitorSpaceInfo,
+		'id' | 'color' | 'image' | 'description' | 'serviceDescription' | 'logo' | 'name' | 'slug'
+	>;
+	refetch?: () => void;
+	action?: 'edit' | 'create';
 }
+
+export type ValidationRef<T> = { validate: UseFormTrigger<T> } | undefined;

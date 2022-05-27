@@ -18,10 +18,14 @@ const ContentPageEditPage: FC = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('Content pagina aanmaken'))}</title>
+				<title>
+					{createPageTitle(t('pages/admin/content/maak/index___content-pagina-aanmaken'))}
+				</title>
 				<meta
 					name="description"
-					content={t('Maak een nieuwe content pagina adhv blokken')}
+					content={t(
+						'pages/admin/content/maak/index___maak-een-nieuwe-content-pagina-adhv-blokken'
+					)}
 				/>
 			</Head>
 

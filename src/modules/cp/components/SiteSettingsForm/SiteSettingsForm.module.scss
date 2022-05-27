@@ -16,13 +16,6 @@ $component: "c-cp-settings";
 				padding-bottom: $spacer-sm;;
 			}
 		}
-
-		&-controls {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			grid-template-rows: auto 4.8rem;
-			gap: $spacer-sm;
-		}
 	}
 
 	&__content-block {
