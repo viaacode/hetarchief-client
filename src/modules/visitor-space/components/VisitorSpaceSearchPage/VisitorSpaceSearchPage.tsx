@@ -7,6 +7,7 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
@@ -14,12 +15,14 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
 import {
 	Callout,
 	ErrorNoAccess,
+	ErrorPage,
 	Icon,
 	IdentifiableMediaCard,
 	Loading,
@@ -60,17 +63,17 @@ import {
 	AddToCollectionBlade,
 	AdvancedFilterFormState,
 	CreatedFilterFormState,
+	CreatorFilterFormState,
 	DurationFilterFormState,
 	FilterMenu,
 	GenreFilterFormState,
 	initialFields,
 	KeywordsFilterFormState,
+	LanguageFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
 	VisitorSpaceNavigation,
 } from '../../components';
-import { CreatorFilterFormState } from '../../components/CreatorFilterForm';
-import { LanguageFilterFormState } from '../../components/LanguageFilterForm';
 import {
 	VISITOR_SPACE_FILTERS,
 	VISITOR_SPACE_ITEM_COUNT,
@@ -81,7 +84,7 @@ import {
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '../../const';
 import { useGetVisitorSpace } from '../../hooks/get-visitor-space';
-import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
+import { MetadataProp, TagIdentity, VisitorSpaceFilterId, VisitorSpaceStatus } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
 import { WaitingPage } from '../WaitingPage';
@@ -177,6 +180,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const isAccessPendingError =
 		(visitRequestError as HTTPError)?.response?.status === 403 &&
 		accessStatus?.status === AccessStatus.PENDING;
+	const isVisitorSpaceInactive = visitorSpace?.status === VisitorSpaceStatus.Inactive;
 
 	/**
 	 * Effects
@@ -660,8 +664,15 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			return <Loading fullscreen />;
 		}
 
-		if (isNoAccessError) {
-			return <ErrorNoAccess visitorSpaceSlug={slug as string} />;
+		if (isNoAccessError || isVisitorSpaceInactive) {
+			return (
+				<ErrorNoAccess
+					visitorSpaceSlug={slug as string}
+					description={t(
+						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___deze-bezoekersruimte-is-momenteel-niet-beschikbaar'
+					)}
+				/>
+			);
 		}
 
 		if (isAccessPendingError) {
