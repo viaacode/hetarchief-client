@@ -184,7 +184,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 					<Controller
 						name="slug"
 						control={control}
-						render={(field) => {
+						render={({ field }) => {
 							return (
 								<div className={styles['c-cp-settings__site-settings-input']}>
 									<label>
