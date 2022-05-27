@@ -2,8 +2,7 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 
-import { UserState } from '@auth/store/user';
-import { AppState, AppStore } from '@shared/store';
+import { AppState } from '@shared/store';
 
 import VisitorSpaceSettings from './VisitorSpaceSettings';
 import { VISITOR_SPACE_MOCK } from './__mocks__/visitorSpaceSettings';
