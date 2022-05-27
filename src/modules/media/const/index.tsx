@@ -33,20 +33,20 @@ export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
 		'modules/media/const/index___er-ging-iets-mis-bij-het-ophalen-van-het-afspeel-token'
 	),
 	openModalButtonLabel: i18n.t(
-		'pages/bezoekersruimte/reading-room-slug/object-id/index___meer-info'
+		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
 	closeModalButtonLabel: i18n.t(
-		'pages/bezoekersruimte/reading-room-slug/object-id/index___sluit'
+		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
 	),
 });
 
 export const objectPlaceholder = (): ObjectPlaceholderProps => ({
 	...objectPlaceholderMock,
 	openModalButtonLabel: i18n.t(
-		'pages/bezoekersruimte/reading-room-slug/object-id/index___meer-info'
+		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
 	closeModalButtonLabel: i18n.t(
-		'pages/bezoekersruimte/reading-room-slug/object-id/index___sluit'
+		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
 	),
 });
 
@@ -59,10 +59,10 @@ export const formatErrorPlaceholder = (format: string): ObjectPlaceholderProps =
 		'modules/media/const/index___het-formaat-van-de-data-wordt-op-dit-moment-niet-ondersteund'
 	),
 	openModalButtonLabel: i18n.t(
-		'pages/bezoekersruimte/reading-room-slug/object-id/index___meer-info'
+		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
 	closeModalButtonLabel: i18n.t(
-		'pages/bezoekersruimte/reading-room-slug/object-id/index___sluit'
+		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
 	),
 });
 
@@ -75,10 +75,10 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
 		'modules/media/const/index___dit-object-bevat-geen-licentie-voor-online-raadpleging-breng-een-bezoek-aan-de-bezoekersruimte'
 	),
 	openModalButtonLabel: i18n.t(
-		'pages/bezoekersruimte/reading-room-slug/object-id/index___meer-info'
+		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
 	closeModalButtonLabel: i18n.t(
-		'pages/bezoekersruimte/reading-room-slug/object-id/index___sluit'
+		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
 	),
 });
 

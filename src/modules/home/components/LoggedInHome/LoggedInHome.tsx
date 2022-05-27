@@ -1,3 +1,4 @@
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -9,16 +10,23 @@ import { StringParam, useQueryParams } from 'use-query-params';
 import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
+import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
-import { ReadingRoomCard, ReadingRoomCardType, VisitorSpaceCardProps } from '@shared/components';
+import {
+	Blade,
+	SpacePreview,
+	VisitorSpaceCard,
+	VisitorSpaceCardProps,
+	VisitorSpaceCardType,
+} from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
+import { VisitorSpaceStatus } from '@visitor-space/types';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
@@ -45,6 +53,7 @@ const LoggedInHome: FC = () => {
 	const user = useSelector(selectUser);
 
 	const [selected, setSelected] = useState<SelectedVisit | undefined>();
+	const [isVisitorSpaceNotAvailable, setIsVisitorSpaceNotAvailable] = useState(false);
 
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 	const [isProcessVisitBladeOpen, setIsProcessVisitBladeOpen] = useState(false);
@@ -101,7 +110,16 @@ const LoggedInHome: FC = () => {
 	 * Effects
 	 */
 
-	// Scroll to ReadingRoomCardsWithSearch when search is present in query
+	useEffect(() => {
+		if (
+			!!query[VISITOR_SPACE_SLUG_QUERY_KEY] &&
+			(isErrorGetVisitorSpace || visitorSpaceInfo?.status === VisitorSpaceStatus.Inactive)
+		) {
+			setIsVisitorSpaceNotAvailable(true);
+		}
+	}, [query, isErrorGetVisitorSpace, visitorSpaceInfo]);
+
+	// Scroll to VisitorSpaceCardsWithSearch when search is present in query
 	useEffect(() => {
 		if (
 			!hasScrolledToSearch &&
@@ -123,21 +141,14 @@ const LoggedInHome: FC = () => {
 
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
-		if (query[VISITOR_SPACE_SLUG_QUERY_KEY] && visitorSpaceInfo) {
+		if (
+			query[VISITOR_SPACE_SLUG_QUERY_KEY] &&
+			visitorSpaceInfo &&
+			visitorSpaceInfo.status !== VisitorSpaceStatus.Inactive
+		) {
 			setIsRequestAccessBladeOpen(true);
 		}
 	}, [query, visitorSpaceInfo]);
-
-	useEffect(() => {
-		if (isErrorGetVisitorSpace) {
-			toastService.notify({
-				title: t('modules/home/components/logged-in-home/logged-in-home___error'),
-				description: t(
-					'modules/home/components/logged-in-home/logged-in-home___deze-bezoekersruimte-bestaat-niet'
-				),
-			});
-		}
-	}, [isErrorGetVisitorSpace, t]);
 
 	/**
 	 * Methods
@@ -256,7 +267,7 @@ const LoggedInHome: FC = () => {
 						>
 							<div className={styles['c-hero__access-cards']}>
 								{(active?.items || []).map((visit, i) => (
-									<ReadingRoomCard
+									<VisitorSpaceCard
 										key={`hero-access-${i}`}
 										access={{
 											granted: true,
@@ -264,7 +275,7 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={mapVisitToRoom(visit)}
-										type={ReadingRoomCardType.access}
+										type={VisitorSpaceCardType.access}
 									/>
 								))}
 							</div>
@@ -278,7 +289,7 @@ const LoggedInHome: FC = () => {
 							</h5>
 							<div className={styles['c-hero__requests']}>
 								{(future?.items || []).map((visit, i) => (
-									<ReadingRoomCard
+									<VisitorSpaceCard
 										onClick={() => onProcessVisit(visit)}
 										key={`hero-planned-${i}`}
 										access={{
@@ -287,7 +298,7 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={mapVisitToRoom(visit)}
-										type={ReadingRoomCardType.futureApproved}
+										type={VisitorSpaceCardType.futureApproved}
 									/>
 								))}
 							</div>
@@ -301,7 +312,7 @@ const LoggedInHome: FC = () => {
 							</h5>
 							<div className={styles['c-hero__requests']}>
 								{(pending?.items || []).map((visit, i) => (
-									<ReadingRoomCard
+									<VisitorSpaceCard
 										onClick={() => onProcessVisit(visit)}
 										key={`hero-requested-${i}`}
 										access={{
@@ -311,7 +322,7 @@ const LoggedInHome: FC = () => {
 											from: asDate(visit.startAt),
 										}}
 										room={mapVisitToRoom(visit)}
-										type={ReadingRoomCardType.futureRequested}
+										type={VisitorSpaceCardType.futureRequested}
 									/>
 								))}
 							</div>
@@ -322,41 +333,78 @@ const LoggedInHome: FC = () => {
 		);
 	};
 
-	return (
-		<>
-			<div className="p-home u-page-bottom-padding">
-				<Head>
-					<title>{createPageTitle('Home')}</title>
-					<meta name="description" content="TODO: Home meta description" />
-				</Head>
-
-				{renderHero()}
-				<div ref={searchRef}>
-					<ReadingRoomCardsWithSearch
-						onRequestAccess={onRequestAccess}
-						onSearch={() => setHasScrolledToSearch(true)}
+	const renderVisitorSpaceNotAvailableBlade = () => {
+		return (
+			<Blade
+				isOpen={isVisitorSpaceNotAvailable}
+				title={t(
+					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
+				)}
+				className={styles['c-visitor-space-not-available-blade']}
+			>
+				<div className="u-px-32">
+					{visitorSpaceInfo && <SpacePreview space={visitorSpaceInfo} />}
+					<p>
+						{t(
+							'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'
+						)}
+					</p>
+					<Button
+						label={t(
+							'modules/home/components/logged-in-home/logged-in-home___ga-naar-de-homepage'
+						)}
+						variants="black"
+						onClick={() => {
+							setIsVisitorSpaceNotAvailable(false);
+							setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
+						}}
 					/>
 				</div>
-			</div>
+			</Blade>
+		);
+	};
 
-			<RequestAccessBlade
-				isOpen={isRequestAccessBladeOpen}
-				onClose={onCloseRequestBlade}
-				onSubmit={onRequestAccessSubmit}
-			/>
+	const renderHomePageContent = () => {
+		return (
+			<>
+				<div className="p-home u-page-bottom-padding">
+					<Head>
+						<title>{createPageTitle('Home')}</title>
+						<meta name="description" content="TODO: Home meta description" />
+					</Head>
 
-			<ProcessVisitBlade
-				selected={selected}
-				isOpen={!!selected && isProcessVisitBladeOpen}
-				onClose={onCloseProcessVisitBlade}
-				onFinish={() => {
-					refetchActive();
-					refetchFuture();
-					refetchPending();
-				}}
-			/>
-		</>
-	);
+					{renderHero()}
+					<div ref={searchRef}>
+						<VisitorSpaceCardsWithSearch
+							onRequestAccess={onRequestAccess}
+							onSearch={() => setHasScrolledToSearch(true)}
+						/>
+					</div>
+				</div>
+
+				<RequestAccessBlade
+					isOpen={isRequestAccessBladeOpen}
+					onClose={onCloseRequestBlade}
+					onSubmit={onRequestAccessSubmit}
+				/>
+
+				{renderVisitorSpaceNotAvailableBlade()}
+
+				<ProcessVisitBlade
+					selected={selected}
+					isOpen={!!selected && isProcessVisitBladeOpen}
+					onClose={onCloseProcessVisitBlade}
+					onFinish={() => {
+						refetchActive();
+						refetchFuture();
+						refetchPending();
+					}}
+				/>
+			</>
+		);
+	};
+
+	return renderHomePageContent();
 };
 
 export default withAuth(LoggedInHome);

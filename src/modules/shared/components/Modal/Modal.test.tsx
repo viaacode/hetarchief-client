@@ -2,7 +2,8 @@ import { fireEvent, render, RenderOptions, screen } from '@testing-library/react
 import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 
-import { mockStore } from './../../../../__mocks__/store';
+import { mockStore } from '../../../../__mocks__/store';
+
 import Modal from './Modal';
 import { ModalProps } from './Modal.types';
 

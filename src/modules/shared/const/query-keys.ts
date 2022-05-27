@@ -1,5 +1,5 @@
 export enum QUERY_KEYS {
-	getAccessibleReadingRooms = 'getAccessibleReadingRooms',
+	getAccessibleVisitorSpaces = 'getAccessibleVisitorSpaces',
 	getActiveVisitForUserAndSpace = 'getActiveVisitForUserAndSpace',
 	getCollectionExport = 'getCollectionExport',
 	getCollectionMedia = 'getCollectionMedia',
@@ -15,11 +15,12 @@ export enum QUERY_KEYS {
 	getNotifications = 'getNotifications',
 	getPeakFile = 'getPeakFile',
 	getPendingVisitCountForUserBySlug = 'getPendingVisitCountForUserBySlug',
-	getReadingRoomInfo = 'getReadingRoomInfo',
-	getReadingRooms = 'getReadingRooms',
+	getVisitorSpaceInfo = 'getVisitorSpaceInfo',
+	getVisitorSpaces = 'getVisitorSpaces',
 	getSpace = 'getSpace',
 	getVisit = 'getVisit',
 	getVisitAccessStatus = 'getVisitAccessStatus',
 	getVisits = 'getVisits',
 	getContentPage = 'getContentPage',
+	getContentPartners = 'getContentPartners',
 }

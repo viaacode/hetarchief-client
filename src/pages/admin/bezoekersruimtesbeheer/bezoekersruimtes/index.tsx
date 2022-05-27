@@ -1,43 +1,52 @@
-import { Column, Table, TableOptions } from '@meemoo/react-components';
+import { Button, Column, Table, TableOptions } from '@meemoo/react-components';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React, { FC, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import {
-	ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG,
-	ReadingRoomsOverviewTableColumns,
-	ReadingRoomsOverviewTablePageSize,
+	ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG,
+	VisitorSpacesOverviewTableColumns,
+	VisitorSpacesOverviewTablePageSize,
 } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
-import { VistorSpaceService } from '@reading-room/services';
-import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
-import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { Icon, Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
+import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
+import { VisitorSpaceService } from '@visitor-space/services';
+import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
-const ReadingRoomsOverview: FC = () => {
+const VisitorSpacesOverview: FC = () => {
 	const { t } = useTranslation();
-	const [filters, setFilters] = useQueryParams(ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG);
+	const router = useRouter();
+
+	const showCreateButton = useHasAllPermission(Permission.CREATE_SPACES);
+	const showEditButton = useHasAllPermission(Permission.UPDATE_ALL_SPACES);
+	const showStatusDropdown = useHasAllPermission(Permission.EDIT_ALL_SPACES_STATUS);
+
+	const [filters, setFilters] = useQueryParams(ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG);
 
 	const {
-		data: readingRooms,
+		data: visitorSpaces,
 		isLoading,
 		isError,
 		refetch,
-	} = useGetReadingRooms(
+	} = useGetVisitorSpaces(
 		filters.search,
+		[VisitorSpaceStatus.Requested, VisitorSpaceStatus.Active, VisitorSpaceStatus.Inactive],
 		filters.page,
-		ReadingRoomsOverviewTablePageSize,
-		filters.orderProp as ReadingRoomOrderProps,
+		VisitorSpacesOverviewTablePageSize,
+		filters.orderProp as VisitorSpaceOrderProps,
 		filters.orderDirection as OrderDirection
 	);
 
@@ -85,8 +94,8 @@ const ReadingRoomsOverview: FC = () => {
 		});
 	};
 
-	const updateRoomStatus = (roomId: string, status: ReadingRoomStatus) => {
-		VistorSpaceService.update(roomId, {
+	const updateRoomStatus = (roomId: string, status: VisitorSpaceStatus) => {
+		VisitorSpaceService.update(roomId, {
 			status: status,
 		})
 			.catch(onFailedRequest)
@@ -111,10 +120,10 @@ const ReadingRoomsOverview: FC = () => {
 
 	const renderVisitorSpaces = () => (
 		<>
-			<div className="p-admin-reading-rooms__header">
+			<div className="p-admin-visitor-spaces__header">
 				<SearchBar
 					default={filters[SEARCH_QUERY_KEY]}
-					className="p-admin-reading-rooms__search"
+					className="p-admin-visitor-spaces__search"
 					placeholder={t(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
 					)}
@@ -129,12 +138,14 @@ const ReadingRoomsOverview: FC = () => {
 						// TODO: fix type hinting
 						/* eslint-disable @typescript-eslint/ban-types */
 						{
-							columns: ReadingRoomsOverviewTableColumns(
-								updateRoomStatus
+							columns: VisitorSpacesOverviewTableColumns(
+								updateRoomStatus,
+								showEditButton,
+								showStatusDropdown
 							) as Column<object>[],
-							data: readingRooms?.items || [],
+							data: visitorSpaces?.items || [],
 							initialState: {
-								pageSize: ReadingRoomsOverviewTablePageSize,
+								pageSize: VisitorSpacesOverviewTablePageSize,
 								sortBy: sortFilters,
 							},
 						} as TableOptions<object>
@@ -146,12 +157,12 @@ const ReadingRoomsOverview: FC = () => {
 						return (
 							<PaginationBar
 								className="u-mt-16 u-mb-16"
-								count={ReadingRoomsOverviewTablePageSize}
+								count={VisitorSpacesOverviewTablePageSize}
 								start={
 									Math.max(0, filters.page - 1) *
-									ReadingRoomsOverviewTablePageSize
+									VisitorSpacesOverviewTablePageSize
 								}
-								total={readingRooms?.total || 0}
+								total={visitorSpaces?.total || 0}
 								onPageChange={(pageZeroBased) => {
 									gotoPage(pageZeroBased);
 									setFilters({
@@ -173,18 +184,18 @@ const ReadingRoomsOverview: FC = () => {
 		}
 		if (isError) {
 			return (
-				<p className="p-admin-reading-rooms__error">
+				<p className="p-admin-visitor-spaces__error">
 					{t(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis-bij-het-ophalen-van-de-bezoekersruimtes'
 					)}
 				</p>
 			);
 		}
-		if (!readingRooms) {
+		if (!visitorSpaces) {
 			return (
-				<p className="p-admin-reading-rooms__error">
+				<p className="p-admin-visitor-spaces__error">
 					{t(
-						'modules/admin/reading-rooms/pages/reading-rooms-overview/reading-rooms-overview___geen-bezoekersruimtes-gevonden'
+						'modules/admin/visitor-spaces/pages/visitor-spaces-overview/visitor-spaces-overview___geen-bezoekersruimtes-gevonden'
 					)}
 				</p>
 			);
@@ -215,6 +226,22 @@ const ReadingRoomsOverview: FC = () => {
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
 				)}
 			>
+				{showCreateButton && (
+					<AdminLayout.Actions>
+						<Button
+							iconStart={<Icon name="plus" />}
+							label={t(
+								'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-bezoekersruimte'
+							)}
+							variants="black"
+							onClick={() =>
+								router.push(
+									`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${ROUTE_PARTS.create}`
+								)
+							}
+						/>
+					</AdminLayout.Actions>
+				)}
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>
 				</AdminLayout.Content>
@@ -226,5 +253,5 @@ const ReadingRoomsOverview: FC = () => {
 export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
-	withAnyRequiredPermissions(ReadingRoomsOverview, Permission.READ_ALL_SPACES)
+	withAnyRequiredPermissions(VisitorSpacesOverview, Permission.READ_ALL_SPACES)
 );

@@ -8,7 +8,7 @@ const pathAliases = [
 	'i18n',
 	'media',
 	'navigation',
-	'reading-room',
+	'visitor-space',
 	'shared',
 	'visits',
 ];

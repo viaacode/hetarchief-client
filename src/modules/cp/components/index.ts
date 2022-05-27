@@ -1,2 +1,2 @@
-export * from './ReadingRoomImageForm';
-export * from './ReadingRoomSettings';
+export * from './VisitorSpaceImageForm';
+export * from './VisitorSpaceSettings';

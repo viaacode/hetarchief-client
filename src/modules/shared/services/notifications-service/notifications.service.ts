@@ -92,15 +92,15 @@ export abstract class NotificationsService {
 			if (newNotifications.length) {
 				const hasSpaceNotification = !!newNotifications.find((notification) => {
 					return [
-						NotificationType.ACCESS_PERIOD_READING_ROOM_ENDED,
-						NotificationType.ACCESS_PERIOD_READING_ROOM_STARTED,
+						NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED,
+						NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED,
 						NotificationType.VISIT_REQUEST_DENIED,
 					].includes(notification.type);
 				});
 
 				hasSpaceNotification &&
 					(await NotificationsService.queryClient.invalidateQueries(
-						QUERY_KEYS.getAccessibleReadingRooms
+						QUERY_KEYS.getAccessibleVisitorSpaces
 					));
 			}
 

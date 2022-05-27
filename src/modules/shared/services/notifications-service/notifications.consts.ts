@@ -7,7 +7,7 @@ export const NOTIFICATION_TYPE_TO_PATH: Record<NotificationType, string | null> 
 	[NotificationType.VISIT_REQUEST_APPROVED]: '/',
 	[NotificationType.VISIT_REQUEST_DENIED]: null,
 	[NotificationType.VISIT_REQUEST_CANCELLED]: null,
-	[NotificationType.ACCESS_PERIOD_READING_ROOM_STARTED]: '/{slug}',
-	[NotificationType.ACCESS_PERIOD_READING_ROOM_END_WARNING]: null,
-	[NotificationType.ACCESS_PERIOD_READING_ROOM_ENDED]: ROUTES.myHistory,
+	[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED]: '/{slug}',
+	[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_END_WARNING]: null,
+	[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED]: ROUTES.myHistory,
 };

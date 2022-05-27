@@ -30,7 +30,14 @@ export const withAllRequiredPermissions = (
 		}, [router, hasRequiredPermissions, t, hasCheckedLogin, checkLoginLoading, dispatch]);
 
 		if (hasCheckedLogin && !hasRequiredPermissions) {
-			return <ErrorNoAccess visitorSpaceSlug={null} />;
+			return (
+				<ErrorNoAccess
+					visitorSpaceSlug={null}
+					description={t(
+						'modules/shared/components/error-no-access/error-no-access___je-hebt-geen-toegang-tot-deze-pagina'
+					)}
+				/>
+			);
 		}
 
 		if (!hasRequiredPermissions) {
