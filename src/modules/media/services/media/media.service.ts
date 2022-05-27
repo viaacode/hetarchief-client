@@ -1,17 +1,17 @@
 import { stringifyUrl } from 'query-string';
 
 import { MediaSimilar } from '@media/types';
-import { VisitorSpaceSort } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import {
 	MediaInfo,
 	MediaSearchFilter,
 	MediaSearchFilterField,
 	MediaSearchOperator,
-	ReadingRoomMediaType,
 	SortObject,
+	VisitorSpaceMediaType,
 } from '@shared/types';
 import { ElasticsearchResponse, GetMediaResponse } from '@shared/types/api';
+import { VisitorSpaceSort } from '@visitor-space/types';
 
 import {
 	MEDIA_SERVICE_BASE_URL,
@@ -42,7 +42,7 @@ export class MediaService {
 			const isFormatAllFilter =
 				item.field === MediaSearchFilterField.FORMAT &&
 				item.operator === MediaSearchOperator.IS &&
-				item.value === ReadingRoomMediaType.All;
+				item.value === VisitorSpaceMediaType.All;
 
 			return hasValue && hasLength && !isFormatAllFilter;
 		});

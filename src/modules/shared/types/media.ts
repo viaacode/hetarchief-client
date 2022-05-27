@@ -1,6 +1,6 @@
 export type MediaTypes = 'video' | 'audio' | 'film' | null;
 
-export enum ReadingRoomMediaType {
+export enum VisitorSpaceMediaType {
 	All = 'all',
 	Audio = 'audio',
 	Video = 'video',

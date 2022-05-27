@@ -10,7 +10,7 @@
 			"@i18n/*": ["modules/i18n/*"],
 			"@media/*": ["modules/media/*"],
 			"@navigation/*": ["modules/navigation/*"],
-			"@reading-room/*": ["modules/reading-room/*"],
+			"@visitor-space/*": ["modules/visitor-space/*"],
 			"@shared/*": ["modules/shared/*"],
 			"@spaces/*": ["modules/spaces/*"],
 			"@visitors/*": ["modules/visitors/*"],

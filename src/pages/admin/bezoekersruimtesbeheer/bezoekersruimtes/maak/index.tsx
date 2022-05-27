@@ -8,13 +8,13 @@ import React, { FC, useRef } from 'react';
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { ReadingRoomSettings } from '@cp/components';
+import { VisitorSpaceSettings } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
 import { ROUTE_PARTS } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
 
-const ReadingRoomCreate: FC = () => {
+const VisitorSpaceCreate: FC = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 
@@ -78,7 +78,7 @@ const ReadingRoomCreate: FC = () => {
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className="l-container">
-						<ReadingRoomSettings ref={formRef} action="create" room={emptyRoom} />
+						<VisitorSpaceSettings ref={formRef} action="create" room={emptyRoom} />
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
@@ -90,5 +90,5 @@ export const getServerSideProps: GetServerSideProps = withI18n();
 
 // TODO: permission
 export default withAuth(
-	withAllRequiredPermissions(ReadingRoomCreate, Permission.UPDATE_ALL_SPACES)
+	withAllRequiredPermissions(VisitorSpaceCreate, Permission.UPDATE_ALL_SPACES)
 );

@@ -7,10 +7,10 @@ import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 
 import { useGetContentPartners } from '@cp/hooks/get-content-partners';
-import { getSelectValue } from '@reading-room/utils/select';
 import { toastService } from '@shared/services/toast-service';
+import { getSelectValue } from '@visitor-space/utils/select';
 
-import { ValidationRef } from '../ReadingRoomSettings/ReadingRoomSettings.types';
+import { ValidationRef } from '../VisitorSpaceSettings/VisitorSpaceSettings.types';
 
 import { SITE_SETTINGS_SCHEMA } from './SiteSettingsForm.const';
 import styles from './SiteSettingsForm.module.scss';
@@ -92,8 +92,10 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 			isErrorContentPartners &&
 				toastService.notify({
 					maxLines: 3,
-					title: t('Error'),
-					description: t('Er ging iets mis bij het ophalen van de content partners'),
+					title: t('modules/cp/components/site-settings-form/site-settings-form___error'),
+					description: t(
+						'modules/cp/components/site-settings-form/site-settings-form___er-ging-iets-mis-bij-het-ophalen-van-de-content-partners'
+					),
 				});
 		}, [contentPartners, isErrorContentPartners, t]);
 

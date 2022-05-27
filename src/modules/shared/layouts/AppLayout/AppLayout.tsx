@@ -17,7 +17,7 @@ import {
 	footerRightItem,
 } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
-import { useGetAccessibleReadingRooms } from '@navigation/components/Navigation/hooks/get-accessible-reading-rooms';
+import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
@@ -64,7 +64,7 @@ const AppLayout: FC = ({ children }) => {
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
 	const showBorder = useSelector(selectShowNavigationBorder);
-	const { data: accessibleReadingRooms } = useGetAccessibleReadingRooms();
+	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
 	const history = useSelector(selectHistory);
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
@@ -192,7 +192,7 @@ const AppLayout: FC = ({ children }) => {
 					}
 					items={getNavigationItemsLeft(
 						asPath,
-						accessibleReadingRooms || [],
+						accessibleVisitorSpaces || [],
 						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
 						user?.permissions || [],
 						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null
