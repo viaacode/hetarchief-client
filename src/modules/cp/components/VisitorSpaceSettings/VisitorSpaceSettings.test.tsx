@@ -1,4 +1,9 @@
 import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+
+import { UserState } from '@auth/store/user';
+import { AppState, AppStore } from '@shared/store';
 
 import VisitorSpaceSettings from './VisitorSpaceSettings';
 import { VISITOR_SPACE_MOCK } from './__mocks__/visitorSpaceSettings';
@@ -8,7 +13,22 @@ const renderVisitorSpaceSettings = ({
 	refetch = () => null,
 	...rest
 }) => {
-	return render(<VisitorSpaceSettings room={room} refetch={refetch} {...rest} />);
+	const initialState: Partial<AppState> = {
+		user: {
+			user: null,
+			loading: false,
+			hasCheckedLogin: false,
+			error: null,
+		},
+	};
+	const mockStore = configureStore();
+	const store = mockStore(initialState);
+
+	return render(
+		<Provider store={store}>
+			<VisitorSpaceSettings room={room} refetch={refetch} {...rest} />
+		</Provider>
+	);
 };
 
 describe('Components', () => {
