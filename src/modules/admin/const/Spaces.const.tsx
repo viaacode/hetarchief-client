@@ -22,7 +22,9 @@ export const ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG = {
 };
 
 export const ReadingRoomsOverviewTableColumns = (
-	updateVisitorSpaceState: (roomId: string, state: ReadingRoomStatus) => void
+	updateVisitorSpaceState: (roomId: string, state: ReadingRoomStatus) => void,
+	showEditButton = false,
+	showStatusDropdown = false
 ): Column<VisitorSpaceInfo>[] => [
 	{
 		Header: i18n.t('modules/admin/const/spaces___bezoekersruimte'),
@@ -105,68 +107,72 @@ export const ReadingRoomsOverviewTableColumns = (
 
 			return (
 				<>
-					<Link
-						href={`${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
-						passHref={true}
-					>
-						<a className="u-color-neutral u-font-size-24">
-							<Icon name="edit" />
-						</a>
-					</Link>
-					<DropdownMenu
-						triggerButtonProps={{
-							onClick: () => null,
-							className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
-						}}
-					>
-						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Requested].includes(
-							status
-						) && (
-							<Button
-								className="u-text-left"
-								variants="text"
-								label={i18n.t('modules/admin/const/spaces___activeren')}
-								onClick={() =>
-									updateVisitorSpaceState(
-										row.original.id,
-										ReadingRoomStatus.Active
-									)
-								}
-							/>
-						)}
-						{[ReadingRoomStatus.Active, ReadingRoomStatus.Requested].includes(
-							status
-						) && (
-							<Button
-								className="u-text-left"
-								variants="text"
-								label={i18n.t('modules/admin/const/spaces___deactiveren')}
-								onClick={() =>
-									updateVisitorSpaceState(
-										row.original.id,
-										ReadingRoomStatus.Inactive
-									)
-								}
-							/>
-						)}
-						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Active].includes(
-							status
-						) && (
-							<Button
-								className="u-text-left"
-								variants="text"
-								label={i18n.t(
-									'modules/admin/const/spaces___terug-naar-in-aanvraag'
-								)}
-								onClick={() =>
-									updateVisitorSpaceState(
-										row.original.id,
-										ReadingRoomStatus.Requested
-									)
-								}
-							/>
-						)}
-					</DropdownMenu>
+					{showEditButton && (
+						<Link
+							href={`${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
+							passHref={true}
+						>
+							<a className="u-color-neutral u-font-size-24">
+								<Icon name="edit" />
+							</a>
+						</Link>
+					)}
+					{showStatusDropdown && (
+						<DropdownMenu
+							triggerButtonProps={{
+								onClick: () => null,
+								className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
+							}}
+						>
+							{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Requested].includes(
+								status
+							) && (
+								<Button
+									className="u-text-left"
+									variants="text"
+									label={i18n.t('modules/admin/const/spaces___activeren')}
+									onClick={() =>
+										updateVisitorSpaceState(
+											row.original.id,
+											ReadingRoomStatus.Active
+										)
+									}
+								/>
+							)}
+							{[ReadingRoomStatus.Active, ReadingRoomStatus.Requested].includes(
+								status
+							) && (
+								<Button
+									className="u-text-left"
+									variants="text"
+									label={i18n.t('modules/admin/const/spaces___deactiveren')}
+									onClick={() =>
+										updateVisitorSpaceState(
+											row.original.id,
+											ReadingRoomStatus.Inactive
+										)
+									}
+								/>
+							)}
+							{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Active].includes(
+								status
+							) && (
+								<Button
+									className="u-text-left"
+									variants="text"
+									label={i18n.t(
+										'modules/admin/const/spaces___terug-naar-in-aanvraag'
+									)}
+									onClick={() =>
+										updateVisitorSpaceState(
+											row.original.id,
+											ReadingRoomStatus.Requested
+										)
+									}
+								/>
+							)}
+						</DropdownMenu>
+					)}
 				</>
 			);
 		},

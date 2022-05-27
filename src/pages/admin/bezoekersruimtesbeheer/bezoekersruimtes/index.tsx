@@ -20,12 +20,17 @@ import { ReadingRoomOrderProps, ReadingRoomStatus } from '@reading-room/types';
 import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 
 const ReadingRoomsOverview: FC = () => {
 	const { t } = useTranslation();
+
+	const showEditButton = useHasAllPermission(Permission.UPDATE_ALL_SPACES);
+	const showStatusDropdown = useHasAllPermission(Permission.EDIT_ALL_SPACES_STATUS);
+
 	const [filters, setFilters] = useQueryParams(ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG);
 
 	const {
@@ -130,7 +135,9 @@ const ReadingRoomsOverview: FC = () => {
 						/* eslint-disable @typescript-eslint/ban-types */
 						{
 							columns: ReadingRoomsOverviewTableColumns(
-								updateRoomStatus
+								updateRoomStatus,
+								showEditButton,
+								showStatusDropdown
 							) as Column<object>[],
 							data: readingRooms?.items || [],
 							initialState: {
