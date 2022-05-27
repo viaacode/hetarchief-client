@@ -16,7 +16,7 @@ export enum QUERY_KEYS {
 	getPeakFile = 'getPeakFile',
 	getPendingVisitCountForUserBySlug = 'getPendingVisitCountForUserBySlug',
 	getReadingRoomInfo = 'getReadingRoomInfo',
-	getReadingRooms = 'getReadingRooms',
+	getVisitorSpaces = 'getVisitorSpaces',
 	getSpace = 'getSpace',
 	getVisit = 'getVisit',
 	getVisitAccessStatus = 'getVisitAccessStatus',

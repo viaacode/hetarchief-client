@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
-import { VistorSpaceService } from '@reading-room/services';
+import { VisitorSpaceService } from '@reading-room/services';
 import {
 	CreateReadingRoomSettings,
 	UpdateReadingRoomSettings,
@@ -53,7 +53,7 @@ const ReadingRoomSettings = forwardRef<
 		const siteSettingsValid = await siteSettingsRef.current?.validate();
 		const readingRoomImageValid = await readingRoomImageRef.current?.validate();
 		if (siteSettingsValid && readingRoomImageValid && !!formValues) {
-			VistorSpaceService.create(formValues)
+			VisitorSpaceService.create(formValues)
 				.catch(onFailedRequest)
 				.then((response) => {
 					if (response === undefined) {
@@ -87,7 +87,7 @@ const ReadingRoomSettings = forwardRef<
 
 	const updateSpace = (values: Partial<UpdateReadingRoomSettings>, afterSubmit?: () => void) => {
 		if (room) {
-			VistorSpaceService.update(room.id, {
+			VisitorSpaceService.update(room.id, {
 				color: room.color,
 				image: room.image,
 				...values,

@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { UseQueryOptions, UseQueryResult } from 'react-query/types/react/types';
 
-import { VistorSpaceService } from '@reading-room/services';
+import { VisitorSpaceService } from '@reading-room/services';
 import { VisitorSpaceInfo } from '@reading-room/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
@@ -21,7 +21,7 @@ export function useGetVisitorSpace(
 ): UseQueryResult<VisitorSpaceInfo | null> {
 	return useQuery(
 		[QUERY_KEYS.getMediaInfo, { slug }],
-		() => VistorSpaceService.getBySlug(slug as string),
+		() => VisitorSpaceService.getBySlug(slug as string),
 		options
 	);
 }

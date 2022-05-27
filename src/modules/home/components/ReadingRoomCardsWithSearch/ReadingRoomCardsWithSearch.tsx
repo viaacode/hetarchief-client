@@ -4,8 +4,8 @@ import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useRef, useState } from 'react';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { useGetReadingRooms } from '@reading-room/hooks/get-reading-rooms';
-import { VisitorSpaceInfo } from '@reading-room/types';
+import { useGetVisitorSpaces } from '@reading-room/hooks/get-reading-rooms';
+import { VisitorSpaceInfo, VisitorSpaceStatus } from '@reading-room/types';
 import { ReadingRoomCardList, SearchBar, VisitorSpaceCardProps } from '@shared/components';
 import { ReadingRoomCardType } from '@shared/components/ReadingRoomCard';
 import { SEARCH_QUERY_KEY } from '@shared/const';
@@ -28,8 +28,9 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	const [areAllReadingRoomsVisible, setAreAllReadingRoomsVisible] = useState(false);
 	const resultsAnchor = useRef<HTMLDivElement | null>(null);
 
-	const { data: readingRoomInfo, isLoading: isLoadingReadingRooms } = useGetReadingRooms(
+	const { data: visitorSpaces, isLoading: isLoadingReadingRooms } = useGetVisitorSpaces(
 		query.search || undefined,
+		[VisitorSpaceStatus.Active],
 		0,
 		areAllReadingRoomsVisible ? 200 : NUMBER_OF_READING_ROOMS
 	);
@@ -52,9 +53,9 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	 * Computed
 	 */
 
-	const readingRoomsLength = readingRoomInfo?.items?.length ?? 0;
+	const readingRoomsLength = visitorSpaces?.items?.length ?? 0;
 	const showLoadMore =
-		!areAllReadingRoomsVisible && (readingRoomInfo?.total ?? 0) > NUMBER_OF_READING_ROOMS;
+		!areAllReadingRoomsVisible && (visitorSpaces?.total ?? 0) > NUMBER_OF_READING_ROOMS;
 
 	/**
 	 * Render
@@ -80,7 +81,7 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 			</div>
 
 			{isLoadingReadingRooms && <p>{t('pages/index___laden')}</p>}
-			{!isLoadingReadingRooms && readingRoomInfo?.items?.length === 0 && (
+			{!isLoadingReadingRooms && visitorSpaces?.items?.length === 0 && (
 				<p>{t('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
 			)}
 			{!isLoadingReadingRooms && readingRoomsLength > 0 && (
@@ -88,7 +89,7 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 					className={clsx('p-home__results', {
 						'u-mb-64': showLoadMore,
 					})}
-					items={(readingRoomInfo?.items || []).map(
+					items={(visitorSpaces?.items || []).map(
 						(room: VisitorSpaceInfo): VisitorSpaceCardProps => {
 							return {
 								room,
@@ -109,7 +110,7 @@ const ReadingRoomCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 						variants={['outline']}
 					>
 						{t('pages/index___toon-alles-amount', {
-							amount: readingRoomInfo?.total,
+							amount: visitorSpaces?.total,
 						})}
 					</Button>
 				</div>

@@ -4,7 +4,7 @@ import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { AdminReadingRoomInfoRow } from '@admin/types';
-import { ReadingRoomOrderProps, ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
+import { ReadingRoomOrderProps, VisitorSpaceInfo, VisitorSpaceStatus } from '@reading-room/types';
 import { DropdownMenu, Icon } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
@@ -22,7 +22,7 @@ export const ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG = {
 };
 
 export const ReadingRoomsOverviewTableColumns = (
-	updateVisitorSpaceState: (roomId: string, state: ReadingRoomStatus) => void,
+	updateVisitorSpaceState: (roomId: string, state: VisitorSpaceStatus) => void,
 	showEditButton = false,
 	showStatusDropdown = false
 ): Column<VisitorSpaceInfo>[] => [
@@ -80,13 +80,13 @@ export const ReadingRoomsOverviewTableColumns = (
 			// TODO: update when backend is up to date
 			let status = '';
 			switch (row.original.status) {
-				case ReadingRoomStatus.Active:
+				case VisitorSpaceStatus.Active:
 					status = 'actief';
 					break;
-				case ReadingRoomStatus.Inactive:
+				case VisitorSpaceStatus.Inactive:
 					status = 'inactief';
 					break;
-				case ReadingRoomStatus.Requested:
+				case VisitorSpaceStatus.Requested:
 					status = 'in aanvraag';
 					break;
 			}
@@ -124,7 +124,7 @@ export const ReadingRoomsOverviewTableColumns = (
 								className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
 							}}
 						>
-							{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Requested].includes(
+							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Requested].includes(
 								status
 							) && (
 								<Button
@@ -134,12 +134,12 @@ export const ReadingRoomsOverviewTableColumns = (
 									onClick={() =>
 										updateVisitorSpaceState(
 											row.original.id,
-											ReadingRoomStatus.Active
+											VisitorSpaceStatus.Active
 										)
 									}
 								/>
 							)}
-							{[ReadingRoomStatus.Active, ReadingRoomStatus.Requested].includes(
+							{[VisitorSpaceStatus.Active, VisitorSpaceStatus.Requested].includes(
 								status
 							) && (
 								<Button
@@ -149,12 +149,12 @@ export const ReadingRoomsOverviewTableColumns = (
 									onClick={() =>
 										updateVisitorSpaceState(
 											row.original.id,
-											ReadingRoomStatus.Inactive
+											VisitorSpaceStatus.Inactive
 										)
 									}
 								/>
 							)}
-							{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Active].includes(
+							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Active].includes(
 								status
 							) && (
 								<Button
@@ -166,7 +166,7 @@ export const ReadingRoomsOverviewTableColumns = (
 									onClick={() =>
 										updateVisitorSpaceState(
 											row.original.id,
-											ReadingRoomStatus.Requested
+											VisitorSpaceStatus.Requested
 										)
 									}
 								/>
