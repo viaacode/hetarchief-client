@@ -160,7 +160,7 @@ const VisitorSpaceSettings = forwardRef<
 							<SiteSettingsForm
 								ref={siteSettingsRef}
 								className={styles['c-cp-settings__site-settings-controls']}
-								room={room}
+								space={room}
 								renderCancelSaveButtons={renderCancelSaveButtons}
 								onSubmit={(values, afterSubmit) => {
 									updateSpace(values, afterSubmit);
