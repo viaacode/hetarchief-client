@@ -747,7 +747,14 @@ const ObjectDetailPage: NextPage = () => {
 			return <ErrorNotFound />;
 		}
 		if (isErrorSpaceNoAccess) {
-			return <ErrorNoAccess visitorSpaceSlug={router.query.slug as string} />;
+			return (
+				<ErrorNoAccess
+					visitorSpaceSlug={router.query.slug as string}
+					description={t(
+						'modules/shared/components/error-space-no-access/error-space-no-access___je-hebt-geen-toegang-tot-deze-bezoekersruimte-dien-een-aanvraag-in-om-deze-te-bezoeken'
+					)}
+				/>
+			);
 		}
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};

@@ -28,8 +28,8 @@ const ErrorPage: FC<ErrorPageProps> = ({ className, title, description, link, im
 					<p className={styles['c-error-page__description']}>{description}</p>
 				)}
 				{link && (
-					<Link href={link.to} passHref={true}>
-						<div className={styles['c-error-page__button']}>{link.component}</div>
+					<Link href={link.to} passHref>
+						<a className={styles['c-error-page__button']}>{link.component}</a>
 					</Link>
 				)}
 			</div>
