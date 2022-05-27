@@ -15,7 +15,7 @@ import {
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { useGetVisitorSpaces } from '@reading-room/hooks/get-reading-rooms';
+import { useGetVisitorSpaces } from '@reading-room/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@reading-room/services';
 import { ReadingRoomOrderProps, VisitorSpaceStatus } from '@reading-room/types';
 import { Icon, Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';

@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { WaitingPage } from '@reading-room/components';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
 import { Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';

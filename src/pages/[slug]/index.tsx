@@ -11,7 +11,7 @@ import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import VisitorSpaceSearchPage from '@reading-room/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';

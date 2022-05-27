@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useRef, useState } from 'react';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { useGetVisitorSpaces } from '@reading-room/hooks/get-reading-rooms';
+import { useGetVisitorSpaces } from '@reading-room/hooks/get-visitor-spaces';
 import { VisitorSpaceInfo, VisitorSpaceStatus } from '@reading-room/types';
 import { ReadingRoomCardList, SearchBar, VisitorSpaceCardProps } from '@shared/components';
 import { ReadingRoomCardType } from '@shared/components/ReadingRoomCard';

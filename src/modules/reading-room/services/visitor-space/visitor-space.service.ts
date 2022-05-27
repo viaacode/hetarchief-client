@@ -1,6 +1,6 @@
 import { stringifyUrl } from 'query-string';
 
-import { ReadingRoomOrderProps, VisitorSpaceInfo } from '@reading-room/types';
+import { ReadingRoomOrderProps, VisitorSpaceInfo, VisitorSpaceStatus } from '@reading-room/types';
 import { ApiService } from '@shared/services/api-service';
 import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
@@ -15,7 +15,7 @@ import {
 export class VisitorSpaceService {
 	public static async getAll(
 		searchInput = '',
-		status: string[] | undefined = undefined,
+		status: VisitorSpaceStatus[] | undefined = undefined,
 		page = 0,
 		size = 20,
 		orderProp?: ReadingRoomOrderProps,
@@ -32,6 +32,7 @@ export class VisitorSpaceService {
 						size,
 						orderProp,
 						orderDirection,
+						status,
 					},
 				})
 			)

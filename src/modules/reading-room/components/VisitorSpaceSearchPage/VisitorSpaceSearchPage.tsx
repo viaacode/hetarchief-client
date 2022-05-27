@@ -41,7 +41,7 @@ import {
 	VISITOR_SPACE_QUERY_PARAM_CONFIG,
 	VISITOR_SPACE_SORT_OPTIONS,
 } from '@reading-room/const';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
 import { MetadataProp, ReadingRoomFilterId, TagIdentity } from '@reading-room/types';
 import { mapFiltersToTags, tagPrefix } from '@reading-room/utils';
 import { mapFiltersToElastic } from '@reading-room/utils/elastic-filters';

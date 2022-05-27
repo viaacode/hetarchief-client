@@ -12,7 +12,7 @@ import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import ReadingRoomCardsWithSearch from '@home/components/ReadingRoomCardsWithSearch/ReadingRoomCardsWithSearch';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
 import { ReadingRoomCard, ReadingRoomCardType, VisitorSpaceCardProps } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { toastService } from '@shared/services/toast-service';

@@ -9,7 +9,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { ReadingRoomSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
-import { useGetVisitorSpace } from '@reading-room/hooks/get-reading-room';
+import { useGetVisitorSpace } from '@reading-room/hooks/get-visitor-space';
 import { Loading } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
