@@ -1,5 +1,7 @@
 import { stringifyUrl } from 'query-string';
+import { QueryClient } from 'react-query';
 
+import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
@@ -14,6 +16,8 @@ import {
 } from './visitor-space.service.types';
 
 export class VisitorSpaceService {
+	private static queryClient = new QueryClient();
+
 	public static async getAll(
 		searchInput = '',
 		status: VisitorSpaceStatus[] | undefined = undefined,
@@ -84,9 +88,13 @@ export class VisitorSpaceService {
 			'Content-Type': undefined, // Overwrite application/json
 		};
 
-		return await ApiService.getApi()
+		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
+
+		await this.queryClient.invalidateQueries(QUERY_KEYS.getContentPartners);
+
+		return response;
 	}
 
 	public static async update(
