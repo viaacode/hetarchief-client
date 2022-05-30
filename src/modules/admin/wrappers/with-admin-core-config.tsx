@@ -1,12 +1,12 @@
 import {
 	AvoOrHetArchief,
+	CommonUser,
 	Config,
 	ConfigValue,
 	ContentBlockType,
 	LinkInfo,
 	ToastInfo,
 } from '@meemoo/react-admin';
-import { CommonUser } from '@meemoo/react-admin/dist/cjs/modules/user/user.types';
 import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';

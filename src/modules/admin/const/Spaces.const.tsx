@@ -3,37 +3,39 @@ import Link from 'next/link';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { AdminReadingRoomInfoRow } from '@admin/types';
-import { ReadingRoomOrderProps, ReadingRoomStatus, VisitorSpaceInfo } from '@reading-room/types';
+import { AdminVisitorSpaceInfoRow } from '@admin/types';
 import { DropdownMenu, Icon } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
 import { OrderDirection } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
+import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
-export const ReadingRoomsOverviewTablePageSize = 20;
+export const VisitorSpacesOverviewTablePageSize = 20;
 
-export const ADMIN_READING_ROOMS_OVERVIEW_QUERY_PARAM_CONFIG = {
+export const ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG = {
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, ReadingRoomOrderProps.CreatedAt),
+	orderProp: withDefault(StringParam, VisitorSpaceOrderProps.CreatedAt),
 	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
-export const ReadingRoomsOverviewTableColumns = (
-	updateVisitorSpaceState: (roomId: string, state: ReadingRoomStatus) => void
+export const VisitorSpacesOverviewTableColumns = (
+	updateVisitorSpaceState: (roomId: string, state: VisitorSpaceStatus) => void,
+	showEditButton = false,
+	showStatusDropdown = false
 ): Column<VisitorSpaceInfo>[] => [
 	{
 		Header: i18n.t('modules/admin/const/spaces___bezoekersruimte'),
-		id: ReadingRoomOrderProps.ContentPartnerName,
+		id: VisitorSpaceOrderProps.ContentPartnerName,
 		accessor: 'name',
 	},
 	{
 		Header: i18n.t('modules/admin/const/spaces___geactiveerd-op'),
-		id: ReadingRoomOrderProps.CreatedAt,
+		id: VisitorSpaceOrderProps.CreatedAt,
 		accessor: 'createdAt',
-		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
 			const formatted = formatLongDate(asDate(row.original.createdAt));
 			return (
 				<span className="u-color-neutral" title={formatted}>
@@ -46,7 +48,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		Header: i18n.t('modules/admin/const/spaces___emailadres'),
 		id: 'email',
 		accessor: 'contactInfo.email',
-		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.email || ''}>
 					{row.original.contactInfo.email}
@@ -60,7 +62,7 @@ export const ReadingRoomsOverviewTableColumns = (
 		Header: i18n.t('modules/admin/const/spaces___telefoonnummer'),
 		id: 'telephone',
 		accessor: 'contactInfo.telephone',
-		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
 			return (
 				<span className="u-color-neutral" title={row.original.contactInfo.telephone || ''}>
 					{row.original.contactInfo.telephone}
@@ -72,19 +74,19 @@ export const ReadingRoomsOverviewTableColumns = (
 	} as any,
 	{
 		Header: i18n.t('modules/admin/const/spaces___publicatiestatus'),
-		id: ReadingRoomOrderProps.Status,
+		id: VisitorSpaceOrderProps.Status,
 		accessor: 'status',
-		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
 			// TODO: update when backend is up to date
 			let status = '';
 			switch (row.original.status) {
-				case ReadingRoomStatus.Active:
+				case VisitorSpaceStatus.Active:
 					status = 'actief';
 					break;
-				case ReadingRoomStatus.Inactive:
+				case VisitorSpaceStatus.Inactive:
 					status = 'inactief';
 					break;
-				case ReadingRoomStatus.Requested:
+				case VisitorSpaceStatus.Requested:
 					status = 'in aanvraag';
 					break;
 			}
@@ -98,75 +100,79 @@ export const ReadingRoomsOverviewTableColumns = (
 	},
 	{
 		Header: '',
-		id: 'admin-reading-rooms-overview-table-actions',
-		Cell: ({ row }: AdminReadingRoomInfoRow) => {
+		id: 'admin-visitor-spaces-overview-table-actions',
+		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
 			// TODO: update when backend is up to date
 			const status = row.original.status;
 
 			return (
 				<>
-					<Link
-						href={`${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
-						passHref={true}
-					>
-						<a className="u-color-neutral u-font-size-24">
-							<Icon name="edit" />
-						</a>
-					</Link>
-					<DropdownMenu
-						triggerButtonProps={{
-							onClick: () => null,
-							className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
-						}}
-					>
-						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Requested].includes(
-							status
-						) && (
-							<Button
-								className="u-text-left"
-								variants="text"
-								label={i18n.t('modules/admin/const/spaces___activeren')}
-								onClick={() =>
-									updateVisitorSpaceState(
-										row.original.id,
-										ReadingRoomStatus.Active
-									)
-								}
-							/>
-						)}
-						{[ReadingRoomStatus.Active, ReadingRoomStatus.Requested].includes(
-							status
-						) && (
-							<Button
-								className="u-text-left"
-								variants="text"
-								label={i18n.t('modules/admin/const/spaces___deactiveren')}
-								onClick={() =>
-									updateVisitorSpaceState(
-										row.original.id,
-										ReadingRoomStatus.Inactive
-									)
-								}
-							/>
-						)}
-						{[ReadingRoomStatus.Inactive, ReadingRoomStatus.Active].includes(
-							status
-						) && (
-							<Button
-								className="u-text-left"
-								variants="text"
-								label={i18n.t(
-									'modules/admin/const/spaces___terug-naar-in-aanvraag'
-								)}
-								onClick={() =>
-									updateVisitorSpaceState(
-										row.original.id,
-										ReadingRoomStatus.Requested
-									)
-								}
-							/>
-						)}
-					</DropdownMenu>
+					{showEditButton && (
+						<Link
+							href={`${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
+							passHref={true}
+						>
+							<a className="u-color-neutral u-font-size-24">
+								<Icon name="edit" />
+							</a>
+						</Link>
+					)}
+					{showStatusDropdown && (
+						<DropdownMenu
+							triggerButtonProps={{
+								onClick: () => null,
+								className: 'u-color-neutral u-width-24 u-height-24 u-ml-20',
+							}}
+						>
+							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Requested].includes(
+								status
+							) && (
+								<Button
+									className="u-text-left"
+									variants="text"
+									label={i18n.t('modules/admin/const/spaces___activeren')}
+									onClick={() =>
+										updateVisitorSpaceState(
+											row.original.id,
+											VisitorSpaceStatus.Active
+										)
+									}
+								/>
+							)}
+							{[VisitorSpaceStatus.Active, VisitorSpaceStatus.Requested].includes(
+								status
+							) && (
+								<Button
+									className="u-text-left"
+									variants="text"
+									label={i18n.t('modules/admin/const/spaces___deactiveren')}
+									onClick={() =>
+										updateVisitorSpaceState(
+											row.original.id,
+											VisitorSpaceStatus.Inactive
+										)
+									}
+								/>
+							)}
+							{[VisitorSpaceStatus.Inactive, VisitorSpaceStatus.Active].includes(
+								status
+							) && (
+								<Button
+									className="u-text-left"
+									variants="text"
+									label={i18n.t(
+										'modules/admin/const/spaces___terug-naar-in-aanvraag'
+									)}
+									onClick={() =>
+										updateVisitorSpaceState(
+											row.original.id,
+											VisitorSpaceStatus.Requested
+										)
+									}
+								/>
+							)}
+						</DropdownMenu>
+					)}
 				</>
 			);
 		},

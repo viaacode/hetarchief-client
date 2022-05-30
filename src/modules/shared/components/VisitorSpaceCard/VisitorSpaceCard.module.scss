@@ -1,0 +1,105 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:color";
+@use "styles/abstracts" as *;
+
+$component: "c-visitor-space-card";
+
+.#{$component} {
+	&__wrapper {
+		&--flat {
+			display: flex;
+			flex-direction: column;
+
+			@include respond-at("md") {
+				flex-direction: row;
+			}
+		}
+	}
+
+	&__content {
+		&--flat {
+			flex-grow: 1;
+			min-width: 0;
+			position: relative;
+
+			@include respond-at("md") {
+				padding-right: $spacer-md;
+
+				&::after {
+					background-color: color.adjust($black, $alpha: -0.8);
+					bottom: 0;
+					content: "";
+					display: block;
+					position: absolute;
+					right: 0;
+					top: $spacer-sm;
+					width: 1px;
+				}
+			}
+
+			@include respond-at("lg") {
+				padding-right: $spacer-2xl;
+			}
+		}
+	}
+
+	&__title {
+		@include text-ellipsis(true);
+
+		font-size: $font-size-md;
+		line-height: math.div($font-size-md, 9) * 10; // 2rem
+
+		&--large {
+			font-size: $font-size-base;
+
+			@include respond-at("md") {
+				font-size: $font-size-1xl;
+				line-height: 1;
+			}
+		}
+
+		&--flat {
+			color: $black;
+			font-size: $font-size-base;
+			margin-bottom: $spacer-xxs;
+			margin-top: $spacer-sm;
+		}
+	}
+
+	&__description {
+		font-size: $font-size-xs;
+		line-height: $font-size-base;
+
+		@include respond-at("md") {
+			font-size: $font-size-sm;
+			line-height: math.div($font-size-md, 9) * 10; // 2rem;
+
+			// Force text to singleline despite truncate to 2 lines
+			&--flat {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+	}
+
+	&__control-icon {
+		font-size: $font-size-lg;
+		margin-right: $spacer-xs;
+	}
+
+	/**
+   * Modifiers
+   */
+
+	&--granted {
+		:global(.c-card__children-wrapper) {
+			@include respond-at(md) {
+				// Overwrite card styles
+				margin-left: 0 !important;
+				margin-right: $spacer-md !important;
+			}
+		}
+	}
+}

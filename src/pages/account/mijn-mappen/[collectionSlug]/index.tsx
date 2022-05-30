@@ -28,7 +28,6 @@ import { Collection, CollectionMedia } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { AddToCollectionBlade } from '@reading-room/components';
 import {
 	Icon,
 	IdentifiableMediaCard,
@@ -47,6 +46,8 @@ import { toastService } from '@shared/services/toast-service';
 import { selectCollections } from '@shared/store/media';
 import { Breakpoints } from '@shared/types';
 import { asDate, createPageTitle, formatDate } from '@shared/utils';
+
+import { AddToCollectionBlade } from '../../../../modules/visitor-space/components';
 
 import { VisitorLayout } from 'modules/visitors';
 

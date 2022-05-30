@@ -1,7 +1,7 @@
 import { useMutation, UseMutationResult } from 'react-query';
 
-import { CreateVisitRequest } from '@reading-room/services/visitor-space/visitor-space.service.types';
 import { Visit } from '@shared/types';
+import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { VisitsService } from '@visits/services';
 
 export function useCreateVisitRequest(): UseMutationResult<Visit, unknown, CreateVisitRequest> {

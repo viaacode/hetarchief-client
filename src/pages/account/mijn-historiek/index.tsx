@@ -23,7 +23,7 @@ import { ROUTES } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, OrderDirection, Visit, VisitStatus } from '@shared/types';
-import { createHomeWithReadingRoomFilterUrl, createPageTitle } from '@shared/utils';
+import { createHomeWithVisitorSpaceFilterUrl, createPageTitle } from '@shared/utils';
 import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
@@ -90,7 +90,7 @@ const AccountMyHistory: NextPage = () => {
 					router.push(ROUTES.visitRequested.replace(':slug', visit.spaceSlug));
 					break;
 				default:
-					router.push(createHomeWithReadingRoomFilterUrl(visit));
+					router.push(createHomeWithVisitorSpaceFilterUrl(visit));
 					break;
 			}
 		} catch (err) {
@@ -102,7 +102,7 @@ const AccountMyHistory: NextPage = () => {
 					'pages/account/mijn-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
 				),
 			});
-			router.push(createHomeWithReadingRoomFilterUrl(visit));
+			router.push(createHomeWithVisitorSpaceFilterUrl(visit));
 		}
 	};
 

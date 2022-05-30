@@ -42,7 +42,6 @@ import {
 	ObjectDetailTabs,
 } from '@media/types';
 import { isInAFolder, mapKeywordsToTagList } from '@media/utils';
-import { AddToCollectionBlade, ReadingRoomNavigation } from '@reading-room/components';
 import {
 	ErrorNoAccess,
 	ErrorNotFound,
@@ -65,7 +64,7 @@ import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, License, MediaTypes, ReadingRoomMediaType } from '@shared/types';
+import { Breakpoints, License, MediaTypes, VisitorSpaceMediaType } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
@@ -74,6 +73,11 @@ import {
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
+
+import {
+	AddToCollectionBlade,
+	VisitorSpaceNavigation,
+} from '../../../modules/visitor-space/components';
 
 import styles from './index.module.scss';
 
@@ -255,7 +259,7 @@ const ObjectDetailPage: NextPage = () => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
 
 		// Filter out peak files if type === video
-		if (mediaInfo?.dctermsFormat === ReadingRoomMediaType.Video) {
+		if (mediaInfo?.dctermsFormat === VisitorSpaceMediaType.Video) {
 			mediaInfo.representations = mediaInfo?.representations?.filter(
 				(object) => object.dctermsFormat !== 'peak'
 			);
@@ -541,12 +545,12 @@ const ObjectDetailPage: NextPage = () => {
 							>
 								<span className="u-text-ellipsis u-display-none u-display-block:md">
 									{t(
-										'pages/bezoekersruimte/reading-room-slug/object-id/index___exporteer-metadata'
+										'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
 									)}
 								</span>
 								<span className="u-text-ellipsis u-display-none:md">
 									{t(
-										'pages/bezoekersruimte/reading-room-slug/object-id/index___metadata'
+										'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
 									)}
 								</span>
 							</Button>
@@ -573,7 +577,7 @@ const ObjectDetailPage: NextPage = () => {
 								metadata={[
 									{
 										title: t(
-											'pages/bezoekersruimte/reading-room-slug/object-id/index___trefwoorden'
+											'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 										),
 										data: mapKeywordsToTagList(mediaInfo.keywords),
 									},
@@ -608,10 +612,10 @@ const ObjectDetailPage: NextPage = () => {
 				title={
 					related.length === 1
 						? t(
-								'pages/bezoekersruimte/reading-room-slug/object-id/index___1-gerelateerd-object'
+								'pages/bezoekersruimte/visitor-space-slug/object-id/index___1-gerelateerd-object'
 						  )
 						: t(
-								'pages/bezoekersruimte/reading-room-slug/object-id/index___amount-gerelateerde-objecten',
+								'pages/bezoekersruimte/visitor-space-slug/object-id/index___amount-gerelateerde-objecten',
 								{
 									amount: related.length,
 								}
@@ -651,7 +655,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	const renderObjectDetail = () => (
 		<>
-			<ReadingRoomNavigation
+			<VisitorSpaceNavigation
 				className="p-object-detail__nav"
 				showBorder={showNavigationBorder}
 				title={mediaInfo?.maintainerName ?? ''}
@@ -663,7 +667,7 @@ const ObjectDetailPage: NextPage = () => {
 									accessEndDateMobile,
 							  })
 							: t(
-									'pages/bezoekersruimte/reading-room-slug/object-id/index___toegang-tot-access-end-date',
+									'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
 									{ accessEndDate }
 							  )
 						: undefined
@@ -678,7 +682,7 @@ const ObjectDetailPage: NextPage = () => {
 			{mediaInfoIsError && (
 				<p className={'p-object-detail__error'}>
 					{t(
-						'pages/bezoekersruimte/reading-room-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
+						'pages/bezoekersruimte/visitor-space-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
 					)}
 				</p>
 			)}
@@ -743,7 +747,14 @@ const ObjectDetailPage: NextPage = () => {
 			return <ErrorNotFound />;
 		}
 		if (isErrorSpaceNoAccess) {
-			return <ErrorNoAccess visitorSpaceSlug={router.query.slug as string} />;
+			return (
+				<ErrorNoAccess
+					visitorSpaceSlug={router.query.slug as string}
+					description={t(
+						'modules/shared/components/error-space-no-access/error-space-no-access___je-hebt-geen-toegang-tot-deze-bezoekersruimte-dien-een-aanvraag-in-om-deze-te-bezoeken'
+					)}
+				/>
+			);
 		}
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};

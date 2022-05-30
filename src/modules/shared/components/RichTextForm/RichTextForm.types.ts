@@ -6,6 +6,7 @@ export interface RichTextFormProps extends DefaultComponentProps {
 	initialHTML?: string;
 	renderCancelSaveButtons: (onCancel: () => void, onSave: () => void) => void;
 	onSubmit?: (html: string, afterSubmit: () => void) => void;
+	onUpdate?: (html: string) => void;
 }
 
 export interface RichTextFormState {

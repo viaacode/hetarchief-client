@@ -1,6 +1,6 @@
-import { VisitorSpaceInfo } from '@reading-room/types';
+import { VisitorSpaceInfo } from '@visitor-space/types';
 
-export type AdminReadingRoomInfoRow = { row: { original: VisitorSpaceInfo } };
+export type AdminVisitorSpaceInfoRow = { row: { original: VisitorSpaceInfo } };
 
 export interface TranslationsOverviewRef {
 	onSave: () => void;
@@ -41,4 +41,15 @@ export interface PermissionData {
 	label: string;
 	name: string;
 	description: string;
+}
+
+// Content partners
+
+export interface ContentPartner {
+	name: string;
+	id: string;
+}
+
+export interface ContentPartnerResponse {
+	items: ContentPartner[];
 }

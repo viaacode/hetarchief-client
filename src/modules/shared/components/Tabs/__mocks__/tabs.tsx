@@ -1,9 +1,9 @@
 import { Icon } from '@shared/components/Icon';
-import { ReadingRoomMediaType } from '@shared/types';
+import { VisitorSpaceMediaType } from '@shared/types';
 
 export const mockTabs = [
 	{
-		id: ReadingRoomMediaType.All,
+		id: VisitorSpaceMediaType.All,
 		label: (
 			<>
 				<strong className="u-mr-8">Alles</strong>
@@ -13,7 +13,7 @@ export const mockTabs = [
 		active: true,
 	},
 	{
-		id: ReadingRoomMediaType.Audio,
+		id: VisitorSpaceMediaType.Audio,
 		label: (
 			<>
 				<strong className="u-mr-8">Audio</strong>
@@ -23,7 +23,7 @@ export const mockTabs = [
 		icon: <Icon name="audio" />,
 	},
 	{
-		id: ReadingRoomMediaType.Video,
+		id: VisitorSpaceMediaType.Video,
 		label: (
 			<>
 				<strong className="u-mr-8">Video</strong>

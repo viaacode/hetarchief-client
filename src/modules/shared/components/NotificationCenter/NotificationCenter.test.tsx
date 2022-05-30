@@ -1,7 +1,8 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 
-import { mockStore } from './../../../../__mocks__/store';
+import { mockStore } from '../../../../__mocks__/store';
+
 import NotificationCenter from './NotificationCenter';
 import { NotificationCenterProps } from './NotificationCenter.types';
 import { notificationCenterMock, NOTIFICATIONS_FIRST_PAGE } from './__mocks__/notification-center';
