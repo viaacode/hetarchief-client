@@ -18,11 +18,11 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): MediaSearch
 		value: query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format,
 	},
 	// Medium TODO
-	// {
-	// 	field: MediaSearchFilterField.MEDIUM,
-	// 	operator: MediaSearchOperator.IS,
-	// 	multiValue: (query.medium || []).filter((item) => item !== null) as string[],
-	// },
+	{
+		field: MediaSearchFilterField.MEDIUM,
+		operator: MediaSearchOperator.IS,
+		multiValue: (query.medium || []).filter((item) => item !== null) as string[],
+	},
 	// Duration
 	...(query.duration || []).flatMap(mapAdvancedToElastic),
 	// Created
