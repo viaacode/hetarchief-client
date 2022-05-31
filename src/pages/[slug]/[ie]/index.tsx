@@ -212,6 +212,7 @@ const ObjectDetailPage: NextPage = () => {
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
 	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
+	const hasContentLicense = mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
 
 	/**
 	 * Effects
@@ -271,9 +272,11 @@ const ObjectDetailPage: NextPage = () => {
 			// Default to metadata tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata);
 		} else {
-			// Check media content for default tab on desktop
+			// Check media content and license for default tab on desktop
 			setActiveTab(
-				mediaInfo?.dctermsFormat ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata
+				mediaInfo?.dctermsFormat && hasContentLicense
+					? ObjectDetailTabs.Media
+					: ObjectDetailTabs.Metadata
 			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -696,7 +699,7 @@ const ObjectDetailPage: NextPage = () => {
 					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
 				)}
 			>
-				{mediaType && (
+				{mediaType && hasContentLicense && (
 					<Button
 						className={clsx(
 							'p-object-detail__expand-button',
