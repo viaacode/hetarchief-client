@@ -34,7 +34,7 @@ const VisitRequestedPage: NextPage = () => {
 
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
 
-	const { data: space, isLoading: isLoadingSpace } = useGetVisitorSpace(slug as string, {
+	const { data: space, isLoading: isLoadingSpace } = useGetVisitorSpace(slug as string, false, {
 		enabled: enabled && hasPendingRequest,
 	});
 

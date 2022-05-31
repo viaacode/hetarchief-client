@@ -19,7 +19,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	const [query] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
-	const { data: space } = useGetVisitorSpace(query[VISITOR_SPACE_SLUG_QUERY_KEY]);
+	const { data: space } = useGetVisitorSpace(query[VISITOR_SPACE_SLUG_QUERY_KEY] || null);
 
 	const {
 		control,
