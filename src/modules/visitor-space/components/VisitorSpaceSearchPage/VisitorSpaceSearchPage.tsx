@@ -143,7 +143,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		typeof slug === 'string'
 	);
 
-	const { data: accessStatus } = useGetVisitAccessStatus(
+	const { data: accessStatus, isLoading: visitAccessStatisIsLoading } = useGetVisitAccessStatus(
 		slug as string,
 		typeof slug === 'string'
 	);
@@ -660,7 +660,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (visitorSpaceIsLoading) {
+		if (visitorSpaceIsLoading || visitAccessStatisIsLoading) {
 			return <Loading fullscreen />;
 		}
 
