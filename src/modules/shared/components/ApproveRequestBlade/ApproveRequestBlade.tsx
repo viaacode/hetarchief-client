@@ -196,7 +196,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				| ControllerRenderProps<ApproveRequestFormState, 'accessTo'>
 				| ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
 		) => {
-			field.onChange(date);
 			setForm((original) => ({
 				...original,
 				[field.name]: date || undefined,
@@ -359,7 +358,19 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		field,
 	}: {
 		field: ControllerRenderProps<ApproveRequestFormState, 'accessRemark'>;
-	}) => <TextInput {...field} />;
+	}) => (
+		<TextInput
+			{...field}
+			onChange={(evt) =>
+				setForm((original) => {
+					return {
+						...original,
+						accessRemark: evt.target.value,
+					};
+				})
+			}
+		/>
+	);
 
 	return (
 		<Blade {...props} footer={renderFooter()} title={title}>
