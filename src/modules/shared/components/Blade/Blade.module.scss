@@ -19,6 +19,7 @@
 	transition: transform $animate-default, visibility $animate-default;
 
 	&__close-button {
+		z-index: get-z-layer("blade");
 		justify-self: end;
 		margin: 2rem;
 		grid-row-start: 1;
