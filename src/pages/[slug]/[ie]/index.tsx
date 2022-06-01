@@ -202,18 +202,18 @@ const ObjectDetailPage: NextPage = () => {
 	 * Computed
 	 */
 
+	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
-		!mediaInfo?.representations && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
+		!hasMedia && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
 	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
-	const hasContentLicense = mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
 
 	/**
 	 * Effects
@@ -275,7 +275,7 @@ const ObjectDetailPage: NextPage = () => {
 		} else {
 			// Check media content and license for default tab on desktop
 			setActiveTab(
-				mediaInfo?.dctermsFormat && hasContentLicense
+				mediaInfo?.dctermsFormat && hasMedia
 					? ObjectDetailTabs.Media
 					: ObjectDetailTabs.Metadata
 			);
@@ -710,7 +710,7 @@ const ObjectDetailPage: NextPage = () => {
 					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
 				)}
 			>
-				{mediaType && hasContentLicense && (
+				{mediaType && hasMedia && (
 					<Button
 						className={clsx(
 							'p-object-detail__expand-button',
