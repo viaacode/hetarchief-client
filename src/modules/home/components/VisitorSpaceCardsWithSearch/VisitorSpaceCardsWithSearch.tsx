@@ -7,10 +7,13 @@ import { StringParam, useQueryParams } from 'use-query-params';
 import { SearchBar, VisitorSpaceCardList, VisitorSpaceCardProps } from '@shared/components';
 import { VisitorSpaceCardType } from '@shared/components/VisitorSpaceCard';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { Breakpoints } from '@shared/types';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceInfo, VisitorSpaceStatus } from '@visitor-space/types';
 
 const NUMBER_OF_VISITOR_SPACES = 6;
+const NUMBER_OF_VISITOR_SPACES_MOBILE = 3;
 
 interface VisitorSpaceCardsWithSearchProps {
 	onRequestAccess: (VisitorSpaceSlug: string) => void;
@@ -35,6 +38,10 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 		areAllVisitorSpacesVisible ? 200 : NUMBER_OF_VISITOR_SPACES
 	);
 
+	// We need different functionalities for different viewport sizes
+	const windowSize = useWindowSizeContext();
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+
 	useEffect(() => {
 		if (query[SEARCH_QUERY_KEY] && resultsAnchor) {
 			document.body.scrollTo({ top: resultsAnchor.current?.offsetTop, behavior: 'smooth' });
@@ -55,7 +62,9 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 
 	const visitorSpacesLength = visitorSpaces?.items?.length ?? 0;
 	const showLoadMore =
-		!areAllVisitorSpacesVisible && (visitorSpaces?.total ?? 0) > NUMBER_OF_VISITOR_SPACES;
+		!areAllVisitorSpacesVisible &&
+		(((visitorSpaces?.total ?? 0) > NUMBER_OF_VISITOR_SPACES && !isMobile) ||
+			((visitorSpaces?.total ?? 0) > NUMBER_OF_VISITOR_SPACES_MOBILE && isMobile));
 
 	/**
 	 * Render

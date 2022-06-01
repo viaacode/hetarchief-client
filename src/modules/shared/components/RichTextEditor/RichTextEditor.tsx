@@ -6,23 +6,21 @@ import {
 import React, { FC } from 'react';
 
 const RICH_TEXT_EDITOR_OPTIONS: RichTextEditorControl[] = [
+	'fullscreen',
+	'separator',
 	'undo',
 	'redo',
 	'separator',
 	'headings',
+	'separator',
 	'bold',
-	'italic',
-	'strike-through',
 	'underline',
+	'italic',
+	'separator',
+	'link',
 	'separator',
 	'list-ul',
 	'list-ol',
-	'separator',
-	'subscript',
-	'superscript',
-	'separator',
-	'link',
-	'remove-styles',
 ];
 
 const RichTextEditor: FC<RichTextEditorProps> = (props) => {

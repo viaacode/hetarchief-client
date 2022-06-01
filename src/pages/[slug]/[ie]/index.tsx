@@ -102,6 +102,7 @@ const ObjectDetailPage: NextPage = () => {
 	const dispatch = useDispatch();
 	const previousUrl = useSelector(selectPreviousUrl);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
@@ -440,6 +441,8 @@ const ObjectDetailPage: NextPage = () => {
 						/>
 					</div>
 				);
+			} else {
+				return <Loading fullscreen />;
 			}
 		}
 
@@ -653,6 +656,23 @@ const ObjectDetailPage: NextPage = () => {
 		return <ObjectPlaceholder {...objectPlaceholder()} />;
 	};
 
+	const getAccessEndDate = () => {
+		if ((!accessEndDate && !accessEndDateMobile) || showLinkedSpaceAsHomepage) {
+			return undefined;
+		}
+		if (isMobile) {
+			return t('pages/slug/index___tot-access-end-date-mobile', {
+				accessEndDateMobile,
+			});
+		}
+		return t(
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
+			{
+				accessEndDate,
+			}
+		);
+	};
+
 	const renderObjectDetail = () => (
 		<>
 			<VisitorSpaceNavigation
@@ -660,18 +680,9 @@ const ObjectDetailPage: NextPage = () => {
 				showBorder={showNavigationBorder}
 				title={mediaInfo?.maintainerName ?? ''}
 				backLink={backLink}
-				showAccessEndDate={
-					accessEndDate || accessEndDateMobile
-						? isMobile
-							? t('pages/slug/ie/index___tot-access-end-date-mobile', {
-									accessEndDateMobile,
-							  })
-							: t(
-									'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
-									{ accessEndDate }
-							  )
-						: undefined
-				}
+				phone={mediaInfo?.contactInfo.telephone || ''}
+				email={mediaInfo?.contactInfo.email || ''}
+				showAccessEndDate={getAccessEndDate()}
 			/>
 			<ScrollableTabs
 				className="p-object-detail__tabs"

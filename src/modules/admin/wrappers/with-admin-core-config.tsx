@@ -105,6 +105,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.RichTextTwoColumns,
 						ContentBlockType.Buttons,
 						ContentBlockType.Image,
+						ContentBlockType.PageOverview,
 					],
 				},
 				icon: {
