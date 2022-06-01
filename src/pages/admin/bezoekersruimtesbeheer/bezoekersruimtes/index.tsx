@@ -15,13 +15,21 @@ import {
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { Icon, Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import {
+	Icon,
+	Loading,
+	PaginationBar,
+	ScrollableTabs,
+	SearchBar,
+	sortingIcons,
+} from '@shared/components';
 import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
+import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
 import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
@@ -41,9 +49,12 @@ const VisitorSpacesOverview: FC = () => {
 		isLoading,
 		isError,
 		refetch,
+		isFetching,
 	} = useGetVisitorSpaces(
 		filters.search,
-		[VisitorSpaceStatus.Requested, VisitorSpaceStatus.Active, VisitorSpaceStatus.Inactive],
+		filters.status === 'ALL'
+			? [VisitorSpaceStatus.Requested, VisitorSpaceStatus.Active, VisitorSpaceStatus.Inactive]
+			: ([filters.status] as VisitorSpaceStatus[]),
 		filters.page,
 		VisitorSpacesOverviewTablePageSize,
 		filters.orderProp as VisitorSpaceOrderProps,
@@ -116,65 +127,124 @@ const VisitorSpacesOverview: FC = () => {
 			});
 	};
 
+	const statusFilters = useMemo(
+		() =>
+			VisitorSpaceStatusOptions().map((filter) => {
+				return {
+					...filter,
+					active: filter.id === filters.status,
+				};
+			}),
+		[filters.status]
+	);
+
 	// Render
+
+	const renderEmptyMessage = (): string => {
+		switch (filters.status) {
+			case VisitorSpaceStatus.Requested:
+				return t(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-bezoekersruimtes-in-aanvraag'
+				);
+
+			case VisitorSpaceStatus.Active:
+				return t(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-gepubliceerde-bezoekersruimtes'
+				);
+
+			case VisitorSpaceStatus.Inactive:
+				return t(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-gedepubliceerde-bezoekersruimtes'
+				);
+
+			default:
+				return t(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-bezoekersruimtes'
+				);
+		}
+	};
+
+	const renderVisitorSpacesTable = () => {
+		if (!visitorSpaces?.items?.length) {
+			return (
+				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+					{isFetching ? t('pages/beheer/aanvragen/index___laden') : renderEmptyMessage()}
+				</div>
+			);
+		}
+		return (
+			<Table
+				className="u-mt-24"
+				options={
+					// TODO: fix type hinting
+					/* eslint-disable @typescript-eslint/ban-types */
+					{
+						columns: VisitorSpacesOverviewTableColumns(
+							updateRoomStatus,
+							showEditButton,
+							showStatusDropdown
+						) as Column<object>[],
+						data: visitorSpaces?.items || [],
+						initialState: {
+							pageSize: VisitorSpacesOverviewTablePageSize,
+							sortBy: sortFilters,
+						},
+					} as TableOptions<object>
+					/* eslint-enable @typescript-eslint/ban-types */
+				}
+				onSortChange={onSortChange}
+				sortingIcons={sortingIcons}
+				pagination={({ gotoPage }) => {
+					return (
+						<PaginationBar
+							className="u-mt-16 u-mb-16"
+							count={VisitorSpacesOverviewTablePageSize}
+							start={
+								Math.max(0, filters.page - 1) * VisitorSpacesOverviewTablePageSize
+							}
+							total={visitorSpaces?.total || 0}
+							onPageChange={(pageZeroBased) => {
+								gotoPage(pageZeroBased);
+								setFilters({
+									...filters,
+									page: pageZeroBased + 1,
+								});
+							}}
+						/>
+					);
+				}}
+			/>
+		);
+	};
 
 	const renderVisitorSpaces = () => (
 		<>
 			<div className="p-admin-visitor-spaces__header">
-				<SearchBar
-					default={filters[SEARCH_QUERY_KEY]}
-					className="p-admin-visitor-spaces__search"
-					placeholder={t(
-						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
-					)}
-					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
-				/>
+				<div className="p-cp-visitor-spaces__header">
+					<SearchBar
+						default={filters[SEARCH_QUERY_KEY]}
+						className="p-cp-visitor-spaces__search"
+						placeholder={t(
+							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
+						)}
+						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
+					/>
+
+					<ScrollableTabs
+						className="p-cp-visitor-spaces__status-filter"
+						tabs={statusFilters}
+						variants={['rounded', 'light', 'bordered', 'medium']}
+						onClick={(tabId) =>
+							setFilters({
+								status: tabId.toString(),
+								page: 1,
+							})
+						}
+					/>
+				</div>
 			</div>
 
-			<div className="l-container--edgeless-to-lg">
-				<Table
-					className="u-mt-24"
-					options={
-						// TODO: fix type hinting
-						/* eslint-disable @typescript-eslint/ban-types */
-						{
-							columns: VisitorSpacesOverviewTableColumns(
-								updateRoomStatus,
-								showEditButton,
-								showStatusDropdown
-							) as Column<object>[],
-							data: visitorSpaces?.items || [],
-							initialState: {
-								pageSize: VisitorSpacesOverviewTablePageSize,
-								sortBy: sortFilters,
-							},
-						} as TableOptions<object>
-						/* eslint-enable @typescript-eslint/ban-types */
-					}
-					onSortChange={onSortChange}
-					sortingIcons={sortingIcons}
-					pagination={({ gotoPage }) => {
-						return (
-							<PaginationBar
-								className="u-mt-16 u-mb-16"
-								count={VisitorSpacesOverviewTablePageSize}
-								start={
-									Math.max(0, filters.page - 1) *
-									VisitorSpacesOverviewTablePageSize
-								}
-								total={visitorSpaces?.total || 0}
-								onPageChange={(pageZeroBased) => {
-									gotoPage(pageZeroBased);
-									setFilters({
-										...filters,
-										page: pageZeroBased + 1,
-									});
-								}}
-							/>
-						);
-					}}
-				/>
-			</div>
+			<div className="l-container--edgeless-to-lg">{renderVisitorSpacesTable()}</div>
 		</>
 	);
 

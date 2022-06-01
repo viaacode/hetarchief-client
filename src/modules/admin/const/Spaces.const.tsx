@@ -16,9 +16,10 @@ export const VisitorSpacesOverviewTablePageSize = 20;
 
 export const ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG = {
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
+	status: withDefault(StringParam, 'ALL'),
 	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, VisitorSpaceOrderProps.CreatedAt),
-	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
+	orderProp: withDefault(StringParam, VisitorSpaceOrderProps.ContentPartnerName),
+	orderDirection: withDefault(SortDirectionParam, OrderDirection.asc),
 };
 
 export const VisitorSpacesOverviewTableColumns = (

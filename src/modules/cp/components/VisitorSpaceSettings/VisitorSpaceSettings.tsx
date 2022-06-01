@@ -79,7 +79,7 @@ const VisitorSpaceSettings = forwardRef<
 		}
 	};
 
-	const onFailedRequest = (err: any) => {
+	const onFailedRequest = (err: unknown) => {
 		refetch?.();
 
 		console.error('Failed to save the visitor space', err);
