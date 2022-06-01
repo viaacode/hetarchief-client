@@ -35,6 +35,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, childr
 					variants="text"
 					{...triggerButtonProps}
 					onClick={(evt: MouseEvent) => {
+						evt.stopPropagation();
 						setIsOpen(!isOpen);
 						triggerButtonProps?.onClick?.(evt);
 					}}

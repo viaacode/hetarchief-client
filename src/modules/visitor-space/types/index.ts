@@ -80,7 +80,7 @@ export interface VisitorSpaceInfo {
 	contactInfo: {
 		email: string | null;
 		telephone: string | null;
-		address: {
+		address?: {
 			street: string;
 			postalCode: string;
 			locality: string;

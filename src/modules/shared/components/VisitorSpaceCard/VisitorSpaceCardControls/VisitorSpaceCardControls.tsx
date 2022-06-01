@@ -4,6 +4,8 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC, ReactNode } from 'react';
 
+import { CopyButton, DropdownMenu } from '@shared/components';
+
 import { Icon, IconLightNames } from '../../Icon';
 import { VisitorSpaceCardType } from '../VisitorSpaceCard.const';
 import { VisitorSpaceCardProps } from '../VisitorSpaceCard.types';
@@ -49,11 +51,40 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 
 	const renderContactIconButton = () => (
 		<div>
-			<Button
-				icon={<Icon name="contact" />}
-				variants={['silver', 'sm']}
-				onClick={() => onContactClick && onContactClick(room)}
-			/>
+			<DropdownMenu
+				placement="bottom-end"
+				triggerButtonProps={{
+					icon: <Icon name="contact" />,
+					variants: ['silver', 'sm'],
+					disabled: !(
+						!!room.contactInfo.email?.length || !!room.contactInfo.telephone?.length
+					),
+				}}
+			>
+				<ul
+					onClick={(e) => e.stopPropagation()}
+					className={styles['c-visitor-space-card-controls__contact-list']}
+				>
+					{room.contactInfo.email && (
+						<li className={styles['c-visitor-space-card-controls__contact-item']}>
+							<p>{room.contactInfo.email}</p>
+
+							<CopyButton text={room.contactInfo.email} variants={['sm', 'text']} />
+						</li>
+					)}
+
+					{room.contactInfo.telephone && (
+						<li className={styles['c-visitor-space-card-controls__contact-item']}>
+							<p>{room.contactInfo.telephone}</p>
+
+							<CopyButton
+								text={room.contactInfo.telephone}
+								variants={['sm', 'text']}
+							/>
+						</li>
+					)}
+				</ul>
+			</DropdownMenu>
 		</div>
 	);
 
