@@ -153,26 +153,6 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 					},
 				],
 			},
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: TextInput,
-				filters: [
-					{
-						field: MediaSearchFilterField.DESCRIPTION,
-						operator: MediaSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: TextInput,
-				filters: [
-					{
-						field: MediaSearchFilterField.DESCRIPTION,
-						operator: MediaSearchOperator.IS_NOT,
-					},
-				],
-			},
 		},
 		[MetadataProp.Duration]: {
 			[Operator.LessThanOrEqual]: {
@@ -259,26 +239,6 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 					{
 						field: MediaSearchFilterField.ADVANCED_QUERY,
 						operator: MediaSearchOperator.CONTAINS_NOT,
-					},
-				],
-			},
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: TextInput,
-				filters: [
-					{
-						field: MediaSearchFilterField.ADVANCED_QUERY,
-						operator: MediaSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: TextInput,
-				filters: [
-					{
-						field: MediaSearchFilterField.ADVANCED_QUERY,
-						operator: MediaSearchOperator.IS_NOT,
 					},
 				],
 			},
