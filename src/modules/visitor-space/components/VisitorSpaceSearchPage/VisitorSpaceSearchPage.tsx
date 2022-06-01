@@ -130,18 +130,20 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { error: visitRequestError, data: visitRequest } = useGetActiveVisitForUserAndSpace(
-		slug as string,
-		typeof slug === 'string'
-	);
+	const {
+		error: visitRequestError,
+		data: visitRequest,
+		isLoading: visitRequestIsLoading,
+	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
 
-	const { data: accessStatus } = useGetVisitAccessStatus(
+	const { data: accessStatus, isLoading: accessStatusIsLoading } = useGetVisitAccessStatus(
 		slug as string,
 		typeof slug === 'string'
 	);
 
 	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
 		slug as string,
+		false,
 		{
 			enabled: visitRequest !== undefined || accessStatus?.status === AccessStatus.PENDING,
 		}
@@ -635,7 +637,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (visitorSpaceIsLoading) {
+		if (visitorSpaceIsLoading || accessStatusIsLoading || visitRequestIsLoading) {
 			return <Loading fullscreen />;
 		}
 

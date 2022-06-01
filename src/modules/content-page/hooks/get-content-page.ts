@@ -8,6 +8,7 @@ import { ContentPageExistsInfo } from '../services/content-page.service.types';
 
 export function useGetContentPage(
 	slug?: string | null,
+	ignoreAuthError = false,
 	options?: Partial<
 		Omit<
 			UseQueryOptions<
@@ -23,7 +24,7 @@ export function useGetContentPage(
 	return useQuery(
 		[QUERY_KEYS.getContentPage, { slug }],
 		() => {
-			return ContentPageService.getBySlug(('/' + slug) as string);
+			return ContentPageService.getBySlug(('/' + slug) as string, ignoreAuthError);
 		},
 		options
 	);
