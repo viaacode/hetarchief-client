@@ -7,7 +7,6 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
@@ -15,14 +14,12 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
 import {
 	Callout,
 	ErrorNoAccess,
-	ErrorPage,
 	Icon,
 	IdentifiableMediaCard,
 	Loading,
@@ -138,18 +135,20 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 * Data
 	 */
 
-	const { error: visitRequestError, data: visitRequest } = useGetActiveVisitForUserAndSpace(
-		slug as string,
-		typeof slug === 'string'
-	);
+	const {
+		error: visitRequestError,
+		data: visitRequest,
+		isLoading: visitRequestIsLoading,
+	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
 
-	const { data: accessStatus } = useGetVisitAccessStatus(
+	const { data: accessStatus, isLoading: accessStatusIsLoading } = useGetVisitAccessStatus(
 		slug as string,
 		typeof slug === 'string'
 	);
 
 	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
 		slug as string,
+		false,
 		{
 			enabled: visitRequest !== undefined || accessStatus?.status === AccessStatus.PENDING,
 		}
@@ -660,7 +659,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (visitorSpaceIsLoading) {
+		if (visitorSpaceIsLoading || accessStatusIsLoading || visitRequestIsLoading) {
 			return <Loading fullscreen />;
 		}
 
