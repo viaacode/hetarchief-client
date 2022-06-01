@@ -9,7 +9,7 @@ const { publicRuntimeConfig } = getConfig();
 export abstract class ApiService {
 	private static api: KyInstance | null = null;
 
-	public static getApi(): KyInstance {
+	public static getApi(ignoreAuthError = false): KyInstance {
 		if (!ApiService.api) {
 			this.api = ky.create({
 				prefixUrl: publicRuntimeConfig.PROXY_URL,
@@ -20,7 +20,7 @@ export abstract class ApiService {
 				hooks: {
 					afterResponse: [
 						(_request, _options, response) => {
-							if (response.status === 401) {
+							if (response.status === 401 && !ignoreAuthError) {
 								// user is unauthorized and should login again
 								AuthService.logout(true); // true: return to current page after login
 							}
