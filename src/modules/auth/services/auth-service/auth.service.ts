@@ -3,6 +3,7 @@ import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { StringifiableRecord, stringifyUrl } from 'query-string';
 
+import { ROUTE_PARTS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 
 import { CheckLoginResponse } from './auth.service.types';
@@ -19,8 +20,12 @@ export class AuthService {
 		router: NextRouter
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
+		let originalUrl: string = redirectTo as string;
+		if ((originalUrl || '').endsWith('/' + ROUTE_PARTS.logout)) {
+			originalUrl = '/';
+		}
 		const returnToUrl = stringifyUrl({
-			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
+			url: `${publicRuntimeConfig.CLIENT_URL}/${originalUrl ?? ''}`,
 			query: otherQueryParams,
 		});
 
@@ -77,11 +82,14 @@ export class AuthService {
 	public static logout(shouldRedirectToOriginalPage = false): void {
 		let returnToUrl = publicRuntimeConfig.CLIENT_URL;
 		if (shouldRedirectToOriginalPage) {
-			const path = window.location.href.substring(publicRuntimeConfig.CLIENT_URL.length);
+			let originalUrl = window.location.href;
+			if (originalUrl.includes('/' + ROUTE_PARTS.logout)) {
+				originalUrl = publicRuntimeConfig.CLIENT_URL;
+			}
 			returnToUrl = stringifyUrl({
 				url: publicRuntimeConfig.CLIENT_URL,
 				query: {
-					redirectTo: path,
+					redirectTo: originalUrl,
 					showAuth: 1,
 				},
 			});
