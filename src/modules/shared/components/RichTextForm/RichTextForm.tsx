@@ -1,6 +1,8 @@
-import { FormControl, RichEditorState, RichTextEditor } from '@meemoo/react-components';
+import { FormControl, RichEditorState } from '@meemoo/react-components';
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+
+import { RichTextEditor } from '../RichTextEditor';
 
 import styles from './RichTextForm.module.scss';
 import { RichTextFormProps, RichTextFormState } from './RichTextForm.types';
