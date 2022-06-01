@@ -148,6 +148,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
 		slug as string,
+		false,
 		{
 			enabled: visitRequest !== undefined || accessStatus?.status === AccessStatus.PENDING,
 		}
