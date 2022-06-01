@@ -61,11 +61,16 @@ export class VisitorSpaceService {
 		return parsed.items;
 	}
 
-	public static async getBySlug(slug?: string | null): Promise<VisitorSpaceInfo | null> {
+	public static async getBySlug(
+		slug: string | null,
+		ignoreAuthError: boolean
+	): Promise<VisitorSpaceInfo | null> {
 		if (!slug) {
 			return null;
 		}
-		return await ApiService.getApi().get(`${VISITOR_SPACE_SERVICE_BASE_URL}/${slug}`).json();
+		return await ApiService.getApi(ignoreAuthError)
+			.get(`${VISITOR_SPACE_SERVICE_BASE_URL}/${slug}`)
+			.json();
 	}
 
 	public static async create(
