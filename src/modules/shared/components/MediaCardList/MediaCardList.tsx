@@ -3,7 +3,7 @@ import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { Breakpoints } from '@shared/types';
+import { Breakpoints, DefaultComponentProps } from '@shared/types';
 
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
@@ -12,7 +12,7 @@ import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 import { MediaCardListProps } from './MediaCardList.types';
 
-const MediaCardList: FC<MediaCardListProps> = ({
+const MediaCardList: FC<MediaCardListProps & DefaultComponentProps> = ({
 	items,
 	keywords,
 	view,
@@ -21,6 +21,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	buttons,
 	actions,
 	wrapper = (card) => card,
+	className,
 }) => {
 	const windowSize = useWindowSizeContext();
 
@@ -137,7 +138,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	return (
 		<div
 			className={clsx(
-				'c-media-card-list',
+				className,
 				styles['c-media-card-list'],
 				styles[`c-media-card-list--${isMasonryView ? 'masonry' : 'two-columns'}`],
 				!sidebar && styles[`c-media-card-list--no-sidebar`]

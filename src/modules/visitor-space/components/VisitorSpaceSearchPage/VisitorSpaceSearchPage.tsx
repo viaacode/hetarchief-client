@@ -483,6 +483,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				sidebar={renderFilterMenu()}
 				view={viewMode}
 				buttons={renderCardButtons}
+				className="p-media-card-list"
 				wrapper={(card, item) => {
 					const cast = item as IdentifiableMediaCard;
 					const source = media?.items.find(
