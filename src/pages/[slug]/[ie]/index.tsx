@@ -9,6 +9,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { parseUrl, stringifyUrl } from 'query-string';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
@@ -107,7 +108,7 @@ const ObjectDetailPage: NextPage = () => {
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	// Internal state
-	const [backLink, setBackLink] = useState(`/${router.query.slug}`);
+	const [backLink, setBackLink] = useState(`/${router.query.slug}?focus=${router.query.ie}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [metadataColumns, setMetadataColumns] = useState<number>(1);
@@ -246,16 +247,18 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		let backLink = `/${router.query.slug}`;
 		if (previousUrl) {
-			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
-			const validBacklink =
-				subgroups?.length === 1 && subgroups[0]?.startsWith(router.query.slug as string);
+			const info = parseUrl(previousUrl);
+			const validBacklink = info?.url?.startsWith(('/' + router.query.slug) as string);
 
 			if (validBacklink) {
-				backLink = previousUrl;
+				backLink = stringifyUrl({
+					url: info?.url,
+					query: { ...info.query, focus: router.query.ie },
+				});
 			}
 		}
 		setBackLink(backLink);
-	}, [previousUrl, router.query.slug]);
+	}, [previousUrl, router.query.slug, router.query.ie]);
 
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);

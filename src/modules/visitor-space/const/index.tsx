@@ -73,6 +73,7 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	orderDirection: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection),
 	// UI
 	filter: StringParam,
+	focus: StringParam,
 };
 export type VISITOR_SPACE_QUERY_PARAM_TYPE = DecodedValueMap<
 	typeof VISITOR_SPACE_QUERY_PARAM_CONFIG

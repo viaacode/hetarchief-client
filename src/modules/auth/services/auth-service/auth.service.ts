@@ -65,7 +65,7 @@ export class AuthService {
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
-			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
+			url: `/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
@@ -84,10 +84,10 @@ export class AuthService {
 		if (shouldRedirectToOriginalPage) {
 			let originalUrl = window.location.href;
 			if (originalUrl.includes('/' + ROUTE_PARTS.logout)) {
-				originalUrl = publicRuntimeConfig.CLIENT_URL;
+				originalUrl = '/';
 			}
 			returnToUrl = stringifyUrl({
-				url: publicRuntimeConfig.CLIENT_URL,
+				url: '/',
 				query: {
 					redirectTo: originalUrl,
 					showAuth: 1,
