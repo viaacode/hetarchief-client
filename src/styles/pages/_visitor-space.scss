@@ -25,20 +25,28 @@
 
 .p-visitor-space__placeholder {
 	margin: $spacer-md 0 auto;
+	width: 100%;
 
 	@include respond-at("md") {
 		margin: auto 0;
 		margin-left: $spacer-md;
+		width: calc(100% / 3 * 2);
+	}
+
+	@include respond-at("lg") {
+		margin: auto 0;
+		margin-left: $spacer-md;
+		width: calc(75%);
 	}
 }
 
 .p-visitor-space__filter-menu {
 	@include respond-at("md") {
-		width: calc(100% / 3 - 12.2rem);
+		width: calc(100% / 3 - 2rem);
 	}
 
 	@include respond-at("lg") {
-		width: calc(25% + 6.9rem);
+		width: calc(25% - 2.4rem);
 	}
 }
 
