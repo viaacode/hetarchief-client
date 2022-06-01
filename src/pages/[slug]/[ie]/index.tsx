@@ -441,6 +441,8 @@ const ObjectDetailPage: NextPage = () => {
 						/>
 					</div>
 				);
+			} else {
+				return <Loading fullscreen />;
 			}
 		}
 
