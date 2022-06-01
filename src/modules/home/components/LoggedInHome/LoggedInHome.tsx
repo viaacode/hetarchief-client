@@ -103,6 +103,7 @@ const LoggedInHome: FC = () => {
 
 	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetVisitorSpace(
 		query[VISITOR_SPACE_SLUG_QUERY_KEY] as string,
+		false,
 		{ enabled: !!query[VISITOR_SPACE_SLUG_QUERY_KEY], retry: false }
 	);
 
