@@ -3,7 +3,7 @@ import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { Breakpoints, DefaultComponentProps } from '@shared/types';
+import { Breakpoints } from '@shared/types';
 
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
@@ -12,7 +12,7 @@ import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 import { MediaCardListProps } from './MediaCardList.types';
 
-const MediaCardList: FC<MediaCardListProps & DefaultComponentProps> = ({
+const MediaCardList: FC<MediaCardListProps> = ({
 	items,
 	keywords,
 	view,

@@ -28,13 +28,13 @@
 	width: 100%;
 
 	@include respond-at("md") {
-		margin: 64px 0 0;
+		margin: $spacer-lg * 2 0 0;
 		margin-left: $spacer-md;
 		width: calc(100% / 3 * 2);
 	}
 
 	@include respond-at("lg") {
-		margin: auto 0;
+		margin: $spacer-lg * 2 0 0;
 		margin-left: $spacer-md;
 		width: calc(75%);
 	}
