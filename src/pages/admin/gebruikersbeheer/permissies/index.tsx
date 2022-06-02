@@ -1,5 +1,6 @@
 import { UserGroupOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -14,6 +15,8 @@ import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
+
+import styles from './index.module.scss';
 
 const PermissionsOverview: FC = () => {
 	const { t } = useTranslation();
@@ -60,6 +63,21 @@ const PermissionsOverview: FC = () => {
 		return renderPermissions();
 	};
 
+	const renderActionButtons = () => {
+		return (
+			<>
+				<Button
+					onClick={() => permissionsRef.current?.onCancel()}
+					label={t('pages/admin/gebruikersbeheer/permissies/index___annuleren')}
+				/>
+				<Button
+					onClick={() => permissionsRef.current?.onSave()}
+					label={t('pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan')}
+				/>
+			</>
+		);
+	};
+
 	return (
 		<>
 			<Head>
@@ -82,25 +100,13 @@ const PermissionsOverview: FC = () => {
 				)}
 			>
 				<AdminLayout.Actions>
-					{hasChanges && (
-						<>
-							<Button
-								onClick={() => permissionsRef.current?.onCancel()}
-								label={t(
-									'pages/admin/gebruikersbeheer/permissies/index___annuleren'
-								)}
-							/>
-							<Button
-								onClick={() => permissionsRef.current?.onSave()}
-								label={t(
-									'pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan'
-								)}
-							/>
-						</>
-					)}
+					{hasChanges && <>{renderActionButtons()}</>}
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>
+					<div className={clsx('l-container', styles['p-action-buttons'])}>
+						{hasChanges && renderActionButtons()}
+					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
 		</>
