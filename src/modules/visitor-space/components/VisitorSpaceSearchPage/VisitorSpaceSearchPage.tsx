@@ -136,7 +136,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		isLoading: visitRequestIsLoading,
 	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
 
-	const { data: accessStatus, isLoading: accessStatusIsLoading } = useGetVisitAccessStatus(
+	const { data: accessStatus, isLoading: visitAccessStatusIsLoading } = useGetVisitAccessStatus(
 		slug as string,
 		typeof slug === 'string'
 	);
@@ -637,7 +637,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (visitorSpaceIsLoading || accessStatusIsLoading || visitRequestIsLoading) {
+		if (visitorSpaceIsLoading || visitAccessStatusIsLoading || visitRequestIsLoading) {
 			return <Loading fullscreen />;
 		}
 
