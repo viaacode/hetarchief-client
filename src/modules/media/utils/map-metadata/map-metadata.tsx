@@ -1,9 +1,11 @@
 import { TagList, TagOption } from '@meemoo/react-components';
+import { lowerCase } from 'lodash-es';
 import router from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { ReactNode } from 'react';
 
 import { MetadataItem } from '@media/components';
+import { capitalise } from '@shared/helpers';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	return keywords.map((item) => {
@@ -39,13 +41,13 @@ export const mapObjectToMetadata = (data: Record<string, string[]>): MetadataIte
 
 	return Object.keys(data).map((key) => {
 		return {
-			title: key,
+			title: capitalise(lowerCase(key)),
 			data: data[key].join(', '),
 		};
 	});
 };
 
-export const mapArrayToMetadataData = (data: string[]): string | null => {
+export const mapArrayToMetadataData = (data: string[] | undefined): string | null => {
 	if (!data || !data.length) return null;
 
 	return data.join(', ');
