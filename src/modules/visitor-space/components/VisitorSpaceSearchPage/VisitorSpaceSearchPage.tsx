@@ -7,8 +7,8 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -35,8 +35,10 @@ import {
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { selectHistory, setHistory } from '@shared/store/history';
 import { selectCollections } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
@@ -92,6 +94,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const { t } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
+	const history = useSelector(selectHistory);
+	const dispatch = useDispatch();
+
+	useScrollToId((router.query.focus as string) || null);
 
 	const { slug } = router.query;
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
@@ -125,6 +131,12 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		orderProp: query.orderProp,
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
 	};
+
+	useEffect(() => {
+		// New search => update history in list
+		dispatch(setHistory([history[history.length - 1], router.asPath]));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [router.asPath, dispatch, query]);
 
 	/**
 	 * Data

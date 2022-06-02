@@ -126,6 +126,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		wrapper(
 			<MediaCard
 				key={getKey(item, i)}
+				id={getKey(item, i)}
 				buttons={buttons?.(item)}
 				actions={actions?.(item)}
 				{...item}
