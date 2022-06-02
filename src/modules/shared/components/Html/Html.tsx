@@ -1,7 +1,10 @@
+import clsx from 'clsx';
 import DOMPurify from 'dompurify';
 import React, { FunctionComponent } from 'react';
 
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
+
+import styles from './Html.module.scss';
 
 export interface HtmlProps {
 	content: string;
@@ -23,7 +26,7 @@ const Html: FunctionComponent<HtmlProps> = ({
 			dangerouslySetInnerHTML={{
 				__html: DOMPurify.sanitize(content, sanitizePreset) as string,
 			}}
-			className={className}
+			className={clsx(styles['c-html-wrapper'], className)}
 		/>
 	);
 };
