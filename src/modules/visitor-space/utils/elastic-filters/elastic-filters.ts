@@ -17,7 +17,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): MediaSearch
 		operator: MediaSearchOperator.IS,
 		value: query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format,
 	},
-	// Medium TODO
+	// Medium
 	{
 		field: MediaSearchFilterField.MEDIUM,
 		operator: MediaSearchOperator.IS,
