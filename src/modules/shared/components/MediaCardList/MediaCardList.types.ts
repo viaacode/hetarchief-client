@@ -1,8 +1,12 @@
 import { ReactNode } from 'react';
 
+import { DefaultComponentProps } from '@shared/types';
+
 import { MediaCardProps } from '../MediaCard/MediaCard.types';
 
-export interface MediaCardListProps extends Pick<MediaCardProps, 'view' | 'keywords'> {
+export interface MediaCardListProps
+	extends Pick<MediaCardProps, 'view' | 'keywords'>,
+		DefaultComponentProps {
 	items?: MediaCardProps[];
 	sidebar?: ReactNode;
 	breakpoints?: Record<number | 'default', number>;

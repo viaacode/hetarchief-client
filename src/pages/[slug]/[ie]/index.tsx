@@ -156,8 +156,8 @@ const ObjectDetailPage: NextPage = () => {
 			// Ignore peak file containing the audio wave form in json format
 			return false;
 		}
-		if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
-			// Ignore video files containing the speaker and audio
+		if (object?.files?.[0]?.schemaIdentifier?.endsWith('/audio_mp4')) {
+			// Ignore video files containing the ugly speaker image and the audio encoded in mp4 format
 			return false;
 		}
 		// Actual video files and mp3 files and images
@@ -247,13 +247,15 @@ const ObjectDetailPage: NextPage = () => {
 	useEffect(() => {
 		let backLink = `/${router.query.slug}`;
 		if (previousUrl) {
-			const info = parseUrl(previousUrl);
-			const validBacklink = info?.url?.startsWith(('/' + router.query.slug) as string);
+			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
+			const validBacklink =
+				subgroups?.length === 1 && subgroups[0]?.startsWith(router.query.slug as string);
 
 			if (validBacklink) {
+				const previousUrlParsed = parseUrl(previousUrl);
 				backLink = stringifyUrl({
-					url: info?.url,
-					query: { ...info.query, focus: router.query.ie },
+					url: previousUrlParsed?.url,
+					query: { ...previousUrlParsed.query, focus: router.query.ie },
 				});
 			}
 		}

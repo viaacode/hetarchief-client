@@ -20,6 +20,8 @@ export interface Visit {
 	spaceId: string;
 	spaceSlug: string;
 	spaceName?: string;
+	spaceMail?: string;
+	spaceTelephone?: string;
 	spaceAddress?: string;
 	spaceColor?: string;
 	spaceImage?: string;

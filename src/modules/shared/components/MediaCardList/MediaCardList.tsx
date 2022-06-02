@@ -21,6 +21,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	buttons,
 	actions,
 	wrapper = (card) => card,
+	className,
 }) => {
 	const windowSize = useWindowSizeContext();
 
@@ -138,6 +139,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	return (
 		<div
 			className={clsx(
+				className,
 				styles['c-media-card-list'],
 				styles[`c-media-card-list--${isMasonryView ? 'masonry' : 'two-columns'}`],
 				!sidebar && styles[`c-media-card-list--no-sidebar`]

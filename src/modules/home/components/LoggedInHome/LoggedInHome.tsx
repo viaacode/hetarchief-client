@@ -235,6 +235,10 @@ const LoggedInHome: FC = () => {
 		info: visit.spaceInfo || '',
 		slug: visit.spaceSlug,
 		id: visit.spaceId,
+		contactInfo: {
+			email: visit.spaceMail || null,
+			telephone: visit.spaceTelephone || null,
+		},
 	});
 
 	/**

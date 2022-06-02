@@ -1,11 +1,5 @@
 import { TabProps } from '@meemoo/react-components';
-import {
-	ArrayParam,
-	DecodedValueMap,
-	NumberParam,
-	StringParam,
-	withDefault,
-} from 'use-query-params';
+import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
@@ -23,7 +17,7 @@ import {
 	MediumFilterForm,
 	PublishedFilterForm,
 } from '../components';
-import { VisitorSpaceFilterId, VisitorSpaceSort } from '../types';
+import { VisitorSpaceFilterId, VisitorSpaceSort, VisitorSpaceStatus } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
 
@@ -75,9 +69,6 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	filter: StringParam,
 	focus: StringParam,
 };
-export type VISITOR_SPACE_QUERY_PARAM_TYPE = DecodedValueMap<
-	typeof VISITOR_SPACE_QUERY_PARAM_CONFIG
->;
 
 export const VISITOR_SPACE_TABS = (): TabProps[] => [
 	{
@@ -184,3 +175,24 @@ export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	// 	orderDirection: OrderDirection.desc,
 	// },
 ];
+
+export const VisitorSpaceStatusOptions = (): TabProps[] => {
+	return [
+		{
+			id: 'ALL',
+			label: i18n.t('modules/visitor-space/const/index___alles'),
+		},
+		{
+			id: VisitorSpaceStatus.Requested,
+			label: i18n.t('modules/visitor-space/const/index___in-aanvraag'),
+		},
+		{
+			id: VisitorSpaceStatus.Active,
+			label: i18n.t('modules/visitor-space/const/index___gepubliceerd'),
+		},
+		{
+			id: VisitorSpaceStatus.Inactive,
+			label: i18n.t('modules/visitor-space/const/index___gedepubliceerd'),
+		},
+	];
+};

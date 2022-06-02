@@ -9,6 +9,7 @@
 	z-index: get-z-layer("filter-menu-mobile");
 	background-color: $black;
 	color: $white;
+	overflow-y: auto;
 
 	:global(.c-tag-list) {
 		margin: $spacer-sm 0 $spacer-md;
