@@ -44,6 +44,7 @@ const Visitors: FC = () => {
 	} = useGetVisits({
 		searchInput: filters.search,
 		timeframe: VisitTimeframe.ACTIVE,
+		status: VisitStatus.APPROVED,
 		page: filters.page,
 		size: VisitorsTablePageSize,
 		orderProp: filters.orderProp as keyof Visit,

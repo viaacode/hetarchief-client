@@ -19,6 +19,10 @@ const useWindowSize: UseWindowSize = () => {
 				width: window.innerWidth,
 				height: window.innerHeight,
 			});
+
+			// Set custom vh css var to exclude browser ui on mobile
+			const vh = window.innerHeight * 0.01;
+			document.documentElement.style.setProperty('--vh', `${vh}px`);
 		};
 		const debouncedResize = debounce(handleResize, WINDOW_RESIZE_TIMEOUT);
 

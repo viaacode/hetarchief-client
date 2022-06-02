@@ -1,13 +1,13 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isEqual } from 'lodash';
+import { isEqual, sum } from 'lodash-es';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
@@ -109,11 +109,6 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [mobileFilterMenuOpen, setMobileFilterMenuOpen] = useState(false);
 
 	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
-	const [mediaCount, setMediaCount] = useState({
-		[VisitorSpaceMediaType.All]: 0,
-		[VisitorSpaceMediaType.Audio]: 0,
-		[VisitorSpaceMediaType.Video]: 0,
-	});
 
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
@@ -141,7 +136,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		isLoading: visitRequestIsLoading,
 	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
 
-	const { data: accessStatus, isLoading: accessStatusIsLoading } = useGetVisitAccessStatus(
+	const { data: accessStatus, isLoading: visitAccessStatusIsLoading } = useGetVisitAccessStatus(
 		slug as string,
 		typeof slug === 'string'
 	);
@@ -163,9 +158,8 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		visitorSpace?.maintainerId !== undefined
 	);
 
-	const { data: filterOptions } = useGetMediaFilterOptions(
-		visitorSpace?.maintainerId?.toLocaleLowerCase() as string | undefined
-	);
+	// The result will be added to the redux store
+	useGetMediaFilterOptions(visitorSpace?.maintainerId?.toLocaleLowerCase() as string | undefined);
 
 	const collections = useSelector(selectCollections);
 
@@ -182,36 +176,20 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const isVisitorSpaceInactive = visitorSpace?.status === VisitorSpaceStatus.Inactive;
 
 	/**
-	 * Effects
-	 */
-
-	useEffect(() => {
-		let buckets = filterOptions?.dcterms_format.buckets;
-
-		if (!buckets || buckets.length === 0) {
-			buckets = [
-				{ key: 'video', doc_count: 0 }, // Provide mock value for reduce
-			];
-		}
-
-		setMediaCount({
-			[VisitorSpaceMediaType.All]: buckets
-				.map((pair) => pair.doc_count)
-				.reduce((p, c) => {
-					return p + c;
-				}),
-			[VisitorSpaceMediaType.Audio]:
-				buckets.find((bucket) => bucket.key === VisitorSpaceMediaType.Audio)?.doc_count ||
-				0,
-			[VisitorSpaceMediaType.Video]:
-				buckets.find((bucket) => bucket.key === VisitorSpaceMediaType.Video)?.doc_count ||
-				0,
-		});
-	}, [filterOptions?.dcterms_format.buckets]);
-
-	/**
 	 * Display
 	 */
+
+	const getItemCounts = useCallback(
+		(type: VisitorSpaceMediaType): number => {
+			const buckets = media?.aggregations?.dcterms_format?.buckets || [];
+			if (type === VisitorSpaceMediaType.All) {
+				return sum(buckets.map((item) => item.doc_count));
+			} else {
+				return buckets.find((bucket) => bucket.key === type)?.doc_count || 0;
+			}
+		},
+		[media]
+	);
 
 	const tabs: TabProps[] = useMemo(
 		() =>
@@ -220,12 +198,12 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				label: (
 					<TabLabel
 						label={tab.label}
-						count={mediaCount[tab.id as VisitorSpaceMediaType]}
+						count={getItemCounts(tab.id as VisitorSpaceMediaType)}
 					/>
 				),
 				active: tab.id === query.format,
 			})),
-		[query.format, mediaCount]
+		[query.format, getItemCounts]
 	);
 
 	const toggleOptions: ToggleOption[] = useMemo(
@@ -484,6 +462,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				sidebar={renderFilterMenu()}
 				view={viewMode}
 				buttons={renderCardButtons}
+				className="p-media-card-list"
 				wrapper={(card, item) => {
 					const cast = item as IdentifiableMediaCard;
 					const source = media?.items.find(
@@ -504,7 +483,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				start={(query.page - 1) * VISITOR_SPACE_ITEM_COUNT}
 				count={VISITOR_SPACE_ITEM_COUNT}
 				showBackToTop
-				total={mediaCount[query.format as VisitorSpaceMediaType]}
+				total={getItemCounts(query.format as VisitorSpaceMediaType)}
 				onPageChange={(page) => {
 					scrollTo(0);
 					setQuery({
@@ -659,7 +638,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (visitorSpaceIsLoading || accessStatusIsLoading || visitRequestIsLoading) {
+		if (visitorSpaceIsLoading || visitAccessStatusIsLoading || visitRequestIsLoading) {
 			return <Loading fullscreen />;
 		}
 
