@@ -96,7 +96,17 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	const renderFutureRequestedControls = () => {
 		return (
 			<>
-				<TagList tags={[{ id: 1, label: 'Aanvraag ingediend' }]} variants={['large']} />
+				<TagList
+					tags={[
+						{
+							id: 1,
+							label: t(
+								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___aanvraag-ingediend'
+							),
+						},
+					]}
+					variants={['large']}
+				/>
 				{renderContactIconButton()}
 			</>
 		);

@@ -167,7 +167,15 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		// TODO: Hoofd lokale CP (Identifier bij aanbieder)
 		...mapObjectToMetadata(mediaInfo.premisIdentifier), // Overige ID's contentpartner
 		{
-			title: i18n.t('modules/media/const/index___alternatief'),
+			title: i18n.t('modules/media/const/index___serie'),
+			data: mapArrayToMetadataData(mediaInfo.series),
+		},
+		{
+			title: i18n.t('modules/media/const/index___programma'),
+			data: mapArrayToMetadataData(mediaInfo.program),
+		},
+		{
+			title: i18n.t('modules/media/const/index___alternatieve-naam'),
 			data: mediaInfo.alternateName,
 		},
 		{
@@ -214,12 +222,6 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.contributor),
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
-			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
-			data: mediaInfo?.abstract ? (
-				<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
-			) : null,
-		},
-		{
 			title: i18n.t('modules/media/const/index___transcriptie'),
 			data: mediaInfo?.representations?.[0]?.transcript, // TODO: Update voor andere representations?
 		},
@@ -231,11 +233,11 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		// 	title: i18n.t('modules/media/const/index___programmabeschrijving'),
 		// 	data: // Geen DB veld
 		// },
-		...mapObjectToMetadata(mediaInfo.actor),
 		{
 			title: i18n.t('modules/media/const/index___genre'),
 			data: mapArrayToMetadataData(mediaInfo.genre),
 		},
+		...mapObjectToMetadata(mediaInfo.actor),
 		{
 			title: i18n.t('modules/media/const/index___locatie-van-de-inhoud'),
 			data: mapArrayToMetadataData(mediaInfo.spatial),
@@ -278,11 +280,16 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		// 	title: i18n.t('modules/media/const/index___taal-ondertitels'),
 		// 	data: mediaInfo.premisIdentifier,
 		// },
-		...mapObjectToMetadata(mediaInfo.isPartOf),
 		// {
 		// 	title: i18n.t('modules/media/const/index___bevat'),
 		// 	data: // Niet in type?
 		// },
+		{
+			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
+			data: mediaInfo?.abstract ? (
+				<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
+			) : null,
+		},
 		{
 			title: i18n.t('modules/media/const/index___verwant'),
 			data: mediaInfo.premisRelationship,

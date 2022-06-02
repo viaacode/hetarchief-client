@@ -6,7 +6,9 @@ export interface Media {
 	meemooIdentifier: string; // PID (DON'T use this for identification of an object)
 	premisIdentifier: Record<string, string[]>;
 	premisRelationship: string;
-	isPartOf: Record<string, string[]>;
+	series?: string[];
+	program?: string[];
+	alternativeName?: string;
 	partOfArchive: string[];
 	partOfEpisode: string[];
 	partOfSeason: string[];
