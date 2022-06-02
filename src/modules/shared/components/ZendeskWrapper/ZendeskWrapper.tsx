@@ -44,6 +44,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 			const screenHeight = window.innerHeight;
 			const scrollTop = window.scrollY;
 			widget.style.zIndex = '3'; // Ensure the zendesk widget doesn't show on top of blades
+			widget.style.width = 'auto';
 			widget.style.marginRight = zendeskMarginRight + 'px';
 			if (scrollHeight - screenHeight - scrollTop < footerHeight + zendeskMarginBottom) {
 				widget.style.marginBottom = `${
@@ -65,16 +66,26 @@ const ZendeskWrapper: FunctionComponent = () => {
 		}
 	}, [setWidget]);
 
+	const onResize = () => {
+		updateFooterHeight();
+		updateMargin();
+	};
+
 	const initListeners = useCallback(() => {
 		document.addEventListener('scroll', updateMargin);
-		window.addEventListener('resize', () => {
-			updateFooterHeight();
-			updateMargin();
-		});
+		window.addEventListener('resize', onResize);
+		const resizeObserver = new ResizeObserver(updateMargin);
+		resizeObserver.observe(document.body);
 		updateFooterHeight();
 		getZendeskWidget();
 		updateMargin();
-	}, [updateFooterHeight, getZendeskWidget, updateMargin]);
+
+		return () => {
+			resizeObserver.disconnect();
+			document.removeEventListener('scroll', updateMargin);
+			window.removeEventListener('resize', onResize);
+		};
+	}, [onResize, updateFooterHeight, getZendeskWidget, updateMargin]);
 
 	useEffect(() => {
 		setTimeout(() => {
@@ -82,9 +93,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 		}, 100);
 	}, [initListeners, widget, router.asPath]);
 
-	return showZendesk ? (
-		<Zendesk zendeskKey={publicRuntimeConfig.ZENDESK_KEY} onLoaded={initListeners} />
-	) : null;
+	return <Zendesk zendeskKey={publicRuntimeConfig.ZENDESK_KEY} onLoaded={initListeners} />;
 };
 
 export default ZendeskWrapper;
