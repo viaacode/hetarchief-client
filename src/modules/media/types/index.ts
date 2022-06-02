@@ -32,6 +32,7 @@ export interface Media {
 	keywords: string[];
 	genre: string[];
 	dctermsFormat: string;
+	dctermsMedium: string;
 	inLanguage: string[];
 	thumbnailUrl: string;
 	embedUrl: string;

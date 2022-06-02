@@ -65,12 +65,13 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 				/>
 
 				<div className="u-my-32">
-					{/* https://meemoo.atlassian.net/wiki/spaces/HA2/pages/3402891314/Geavanceerde+search+BZT+versie+1?focusedCommentId=3417604098#comment-3417604098 */}
-					<p className="u-color-neutral u-text-center">
-						{t(
-							'modules/visitor-space/components/medium-filter-form/medium-filter-form___geen-analoge-dragers-gevonden'
-						)}
-					</p>
+					{buckets.length === 0 && (
+						<p className="u-color-neutral u-text-center">
+							{t(
+								'modules/visitor-space/components/medium-filter-form/medium-filter-form___geen-analoge-dragers-gevonden'
+							)}
+						</p>
+					)}
 
 					<CheckboxList
 						items={buckets.map((bucket) => ({

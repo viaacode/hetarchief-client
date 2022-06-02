@@ -190,10 +190,10 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			title: i18n.t('modules/media/const/index___bestandstype'),
 			data: mediaInfo.dctermsFormat,
 		},
-		// {
-		// 	title: i18n.t('modules/media/const/index___analoge-drager'),
-		// 	data: // Geen DB veld
-		// },
+		{
+			title: i18n.t('modules/media/const/index___analoge-drager'),
+			data: mediaInfo.dctermsMedium,
+		},
 		{
 			title: i18n.t('modules/media/const/index___objecttype'),
 			data: mediaInfo.ebucoreObjectType,
