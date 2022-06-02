@@ -155,8 +155,8 @@ const ObjectDetailPage: NextPage = () => {
 			// Ignore peak file containing the audio wave form in json format
 			return false;
 		}
-		if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
-			// Ignore video files containing the speaker and audio
+		if (object?.files?.[0]?.schemaIdentifier?.endsWith('/audio_mp4')) {
+			// Ignore video files containing the ugly speaker image and the audio encoded in mp4 format
 			return false;
 		}
 		// Actual video files and mp3 files and images
@@ -202,12 +202,13 @@ const ObjectDetailPage: NextPage = () => {
 	 * Computed
 	 */
 
+	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
-		!mediaInfo?.representations && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
+		!hasMedia && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -272,9 +273,11 @@ const ObjectDetailPage: NextPage = () => {
 			// Default to metadata tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata);
 		} else {
-			// Check media content for default tab on desktop
+			// Check media content and license for default tab on desktop
 			setActiveTab(
-				mediaInfo?.dctermsFormat ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata
+				mediaInfo?.dctermsFormat && hasMedia
+					? ObjectDetailTabs.Media
+					: ObjectDetailTabs.Metadata
 			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -441,6 +444,8 @@ const ObjectDetailPage: NextPage = () => {
 						/>
 					</div>
 				);
+			} else {
+				return <Loading fullscreen />;
 			}
 		}
 
@@ -705,7 +710,7 @@ const ObjectDetailPage: NextPage = () => {
 					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
 				)}
 			>
-				{mediaType && (
+				{mediaType && hasMedia && (
 					<Button
 						className={clsx(
 							'p-object-detail__expand-button',

@@ -30,7 +30,9 @@ const CPSettingsPage: NextPage = () => {
 		data: visitorSpaceInfo,
 		isLoading,
 		refetch,
-	} = useGetVisitorSpace(user?.visitorSpaceSlug || null, { enabled: !!user?.visitorSpaceSlug });
+	} = useGetVisitorSpace(user?.visitorSpaceSlug || null, false, {
+		enabled: !!user?.visitorSpaceSlug,
+	});
 
 	/**
 	 * Render

@@ -10,6 +10,10 @@ export const mockVisitorSpaceCardProps: VisitorSpaceCardProps = {
 		logo: '/images/logo-shd--small.svg',
 		name: 'Studio Hyperdrive',
 		info: 'A digital development studio that shoots for the stars. We are a bunch of JavaScript enthusiasts who thrive on getting things done. We are using a solid set of technologies and methodologies we truly believe in as a spearpoint to help you realize your full digital potential.',
+		contactInfo: {
+			email: 'email@example.com',
+			telephone: '0491 23 45 67',
+		},
 	},
 	type: VisitorSpaceCardType.noAccess,
 };
