@@ -155,8 +155,8 @@ const ObjectDetailPage: NextPage = () => {
 			// Ignore peak file containing the audio wave form in json format
 			return false;
 		}
-		if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
-			// Ignore video files containing the speaker and audio
+		if (object?.files?.[0]?.schemaIdentifier?.endsWith('/audio_mp4')) {
+			// Ignore video files containing the ugly speaker image and the audio encoded in mp4 format
 			return false;
 		}
 		// Actual video files and mp3 files and images
