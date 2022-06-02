@@ -219,29 +219,27 @@ const VisitorSpacesOverview: FC = () => {
 
 	const renderVisitorSpaces = () => (
 		<>
-			<div className="p-admin-visitor-spaces__header">
-				<div className="p-cp-visitor-spaces__header">
-					<SearchBar
-						default={filters[SEARCH_QUERY_KEY]}
-						className="p-cp-visitor-spaces__search"
-						placeholder={t(
-							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
-						)}
-						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
-					/>
+			<div className="p-cp-visitor-spaces__header">
+				<SearchBar
+					default={filters[SEARCH_QUERY_KEY]}
+					className="p-cp-visitor-spaces__search"
+					placeholder={t(
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
+					)}
+					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
+				/>
 
-					<ScrollableTabs
-						className="p-cp-visitor-spaces__status-filter"
-						tabs={statusFilters}
-						variants={['rounded', 'light', 'bordered', 'medium']}
-						onClick={(tabId) =>
-							setFilters({
-								status: tabId.toString(),
-								page: 1,
-							})
-						}
-					/>
-				</div>
+				<ScrollableTabs
+					className="p-cp-visitor-spaces__status-filter"
+					tabs={statusFilters}
+					variants={['rounded', 'light', 'bordered', 'medium']}
+					onClick={(tabId) =>
+						setFilters({
+							status: tabId.toString(),
+							page: 1,
+						})
+					}
+				/>
 			</div>
 
 			<div className="l-container--edgeless-to-lg">{renderVisitorSpacesTable()}</div>

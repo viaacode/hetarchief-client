@@ -7,6 +7,8 @@ $page: "p-cp-visitor-spaces";
 .#{$page} {
 	&__header {
 		width: 100%;
+		height: 5.6rem;
+		display: flex;
 
 		@include respond-at("md") {
 			display: flex;
