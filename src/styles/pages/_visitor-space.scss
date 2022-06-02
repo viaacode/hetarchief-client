@@ -20,25 +20,39 @@
 				flex-direction: column;
 			}
 		}
-
-		.p-visitor-space__filter-menu {
-			flex-shrink: 0;
-
-			@include respond-at("md") {
-				width: calc(100% / 3 - 2.2rem);
-			}
-			@include respond-at("lg") {
-				width: calc(25% - 2.4rem);
-			}
-		}
 	}
 }
 
 .p-visitor-space__placeholder {
 	margin: $spacer-lg * 2 0 $spacer-lg * 4;
+	width: 100%;
 
 	@include respond-at("md") {
-		margin: 64px 0 0;
+		margin: $spacer-lg * 2 0 0;
 		margin-left: $spacer-md;
+		width: calc(100% / 3 * 2);
+	}
+
+	@include respond-at("lg") {
+		margin: $spacer-lg * 2 0 0;
+		margin-left: $spacer-md;
+		width: calc(75%);
+	}
+}
+
+.p-visitor-space__filter-menu {
+	@include respond-at("md") {
+		width: calc(100% / 3 - 2rem);
+	}
+
+	@include respond-at("lg") {
+		width: calc(25% - 2.4rem);
+	}
+}
+
+.p-media-card-list {
+	.p-visitor-space__filter-menu {
+		flex-shrink: 0;
+		width: 100%;
 	}
 }
