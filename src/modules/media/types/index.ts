@@ -45,6 +45,13 @@ export interface Media {
 	dateCreated: string;
 	dateCreatedLowerBound: string;
 	ebucoreObjectType: string;
+	meemoofilmColor: boolean;
+	meemoofilmBase: string;
+	meemoofilmImageOrSound: string;
+	meemooLocalId: string;
+	meemooOriginalCp: string;
+	meemooDescriptionProgramme: string;
+	meemooDescriptionCast: string;
 	representations: MediaRepresentation[];
 }
 
