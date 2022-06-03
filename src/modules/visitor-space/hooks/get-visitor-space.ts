@@ -7,7 +7,8 @@ import { VisitorSpaceService } from '../services';
 import { VisitorSpaceInfo } from '../types';
 
 export function useGetVisitorSpace(
-	slug?: string | null,
+	slug: string | null,
+	ignoreAuthError = false,
 	options?: Partial<
 		Omit<
 			UseQueryOptions<
@@ -22,7 +23,7 @@ export function useGetVisitorSpace(
 ): UseQueryResult<VisitorSpaceInfo | null> {
 	return useQuery(
 		[QUERY_KEYS.getMediaInfo, { slug }],
-		() => VisitorSpaceService.getBySlug(slug as string),
+		() => VisitorSpaceService.getBySlug(slug as string, ignoreAuthError),
 		options
 	);
 }

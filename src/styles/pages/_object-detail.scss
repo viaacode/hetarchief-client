@@ -4,7 +4,6 @@ $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
 
 .p-object-detail {
-	z-index: get-z-layer("base");
 	visibility: visible;
 	flex-grow: 1;
 	min-height: 0;

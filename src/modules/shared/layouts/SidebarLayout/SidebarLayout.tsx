@@ -34,7 +34,6 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 					color={color}
 					className={styles['l-sidebar__sidebar']}
 					title={sidebarTitle}
-					heading
 				>
 					<ListNavigation color={color} listItems={sidebarLinks} />
 				</Sidebar>

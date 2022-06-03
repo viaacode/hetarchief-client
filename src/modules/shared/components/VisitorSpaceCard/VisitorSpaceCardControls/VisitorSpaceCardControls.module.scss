@@ -44,6 +44,22 @@ $component: "c-visitor-space-card-controls";
 		}
 	}
 
+	&__contact-list {
+		@extend %reset-list;
+	  }
+
+	  &__contact-item {
+		display: flex;
+		padding-left: $spacer-sm;
+		padding-right: $spacer-sm;
+		justify-content: space-between;
+		align-items: center;
+
+		p {
+			padding: $spacer-sm $spacer-xs;
+		}
+	  }
+
 	&--near {
 		margin-top: $spacer-sm;
 

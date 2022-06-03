@@ -9,6 +9,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { parseUrl, stringifyUrl } from 'query-string';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
@@ -102,11 +103,12 @@ const ObjectDetailPage: NextPage = () => {
 	const dispatch = useDispatch();
 	const previousUrl = useSelector(selectPreviousUrl);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
+	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	// Internal state
-	const [backLink, setBackLink] = useState(`/${router.query.slug}`);
+	const [backLink, setBackLink] = useState(`/${router.query.slug}?focus=${router.query.ie}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [metadataColumns, setMetadataColumns] = useState<number>(1);
@@ -154,8 +156,8 @@ const ObjectDetailPage: NextPage = () => {
 			// Ignore peak file containing the audio wave form in json format
 			return false;
 		}
-		if (object.files[0].schemaIdentifier.endsWith('/audio_mp4')) {
-			// Ignore video files containing the speaker and audio
+		if (object?.files?.[0]?.schemaIdentifier?.endsWith('/audio_mp4')) {
+			// Ignore video files containing the ugly speaker image and the audio encoded in mp4 format
 			return false;
 		}
 		// Actual video files and mp3 files and images
@@ -201,12 +203,13 @@ const ObjectDetailPage: NextPage = () => {
 	 * Computed
 	 */
 
+	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
-		!mediaInfo?.representations && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
+		!hasMedia && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -249,11 +252,15 @@ const ObjectDetailPage: NextPage = () => {
 				subgroups?.length === 1 && subgroups[0]?.startsWith(router.query.slug as string);
 
 			if (validBacklink) {
-				backLink = previousUrl;
+				const previousUrlParsed = parseUrl(previousUrl);
+				backLink = stringifyUrl({
+					url: previousUrlParsed?.url,
+					query: { ...previousUrlParsed.query, focus: router.query.ie },
+				});
 			}
 		}
 		setBackLink(backLink);
-	}, [previousUrl, router.query.slug]);
+	}, [previousUrl, router.query.slug, router.query.ie]);
 
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
@@ -271,9 +278,11 @@ const ObjectDetailPage: NextPage = () => {
 			// Default to metadata tab on mobile
 			setActiveTab(ObjectDetailTabs.Metadata);
 		} else {
-			// Check media content for default tab on desktop
+			// Check media content and license for default tab on desktop
 			setActiveTab(
-				mediaInfo?.dctermsFormat ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata
+				mediaInfo?.dctermsFormat && hasMedia
+					? ObjectDetailTabs.Media
+					: ObjectDetailTabs.Metadata
 			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -440,6 +449,8 @@ const ObjectDetailPage: NextPage = () => {
 						/>
 					</div>
 				);
+			} else {
+				return <Loading fullscreen />;
 			}
 		}
 
@@ -653,6 +664,23 @@ const ObjectDetailPage: NextPage = () => {
 		return <ObjectPlaceholder {...objectPlaceholder()} />;
 	};
 
+	const getAccessEndDate = () => {
+		if ((!accessEndDate && !accessEndDateMobile) || showLinkedSpaceAsHomepage) {
+			return undefined;
+		}
+		if (isMobile) {
+			return t('pages/slug/index___tot-access-end-date-mobile', {
+				accessEndDateMobile,
+			});
+		}
+		return t(
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
+			{
+				accessEndDate,
+			}
+		);
+	};
+
 	const renderObjectDetail = () => (
 		<>
 			<VisitorSpaceNavigation
@@ -660,18 +688,9 @@ const ObjectDetailPage: NextPage = () => {
 				showBorder={showNavigationBorder}
 				title={mediaInfo?.maintainerName ?? ''}
 				backLink={backLink}
-				showAccessEndDate={
-					accessEndDate || accessEndDateMobile
-						? isMobile
-							? t('pages/slug/ie/index___tot-access-end-date-mobile', {
-									accessEndDateMobile,
-							  })
-							: t(
-									'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
-									{ accessEndDate }
-							  )
-						: undefined
-				}
+				phone={mediaInfo?.contactInfo.telephone || ''}
+				email={mediaInfo?.contactInfo.email || ''}
+				showAccessEndDate={getAccessEndDate()}
 			/>
 			<ScrollableTabs
 				className="p-object-detail__tabs"
@@ -696,7 +715,7 @@ const ObjectDetailPage: NextPage = () => {
 					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
 				)}
 			>
-				{mediaType && (
+				{mediaType && hasMedia && (
 					<Button
 						className={clsx(
 							'p-object-detail__expand-button',

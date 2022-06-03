@@ -34,13 +34,14 @@ describe('Component: <Sidebar /> (default)', () => {
 	});
 
 	it('Should render a heading over a title', () => {
-		const mockTitle = 'mock heading';
-		const mockHeading = <h3>{mockTitle}</h3>;
-		const { container } = renderSidebar({ heading: mockHeading });
+		const mockTitle = 'mock title';
+		const mockHeadingTitle = 'mock heading';
+		const mockHeading = <h3>{mockHeadingTitle}</h3>;
+		const { container } = renderSidebar({ heading: mockHeading, title: mockTitle });
 
 		const heading = container.firstChild?.firstChild;
 
-		expect(heading?.textContent).toBe(mockTitle);
+		expect(heading?.textContent).toBe(mockHeadingTitle);
 	});
 
 	it('Should render children', () => {

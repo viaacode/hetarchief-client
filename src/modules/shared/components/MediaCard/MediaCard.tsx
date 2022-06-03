@@ -21,6 +21,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	title,
 	type,
 	view,
+	id,
 	actions,
 	buttons,
 }) => {
@@ -136,22 +137,24 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	return (
-		<Card
-			orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
-			title={renderTitle()}
-			image={renderHeader()}
-			subtitle={renderSubtitle()}
-			toolbar={renderToolbar()}
-			padding="both"
-		>
-			{typeof description === 'string' ? (
-				<div className="u-text-ellipsis--2">
-					<span>{description}</span>
-				</div>
-			) : (
-				<>{description}</>
-			)}
-		</Card>
+		<div id={id}>
+			<Card
+				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
+				title={renderTitle()}
+				image={renderHeader()}
+				subtitle={renderSubtitle()}
+				toolbar={renderToolbar()}
+				padding="both"
+			>
+				{typeof description === 'string' ? (
+					<div className="u-text-ellipsis--2">
+						<span>{description}</span>
+					</div>
+				) : (
+					<>{description}</>
+				)}
+			</Card>
+		</div>
 	);
 };
 
