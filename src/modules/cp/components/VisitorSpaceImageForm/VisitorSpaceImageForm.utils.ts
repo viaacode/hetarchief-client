@@ -3,6 +3,7 @@ export const checkFileSize = (file?: File): boolean => {
 
 	if (file) {
 		const size = file.size / 1024;
+		console.log('file size is: ' + size);
 		if (size > 500) {
 			valid = false;
 		}
