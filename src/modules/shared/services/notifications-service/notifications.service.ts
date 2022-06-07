@@ -150,6 +150,25 @@ export abstract class NotificationsService {
 		if (unreadNotifications.length > 0) {
 			NotificationsService.setHasUnreadNotifications?.(true);
 			await NotificationsService.queryClient.invalidateQueries(QUERY_KEYS.getNotifications);
+
+			if (
+				unreadNotifications
+					.filter(
+						(notification) =>
+							new Date(notification.createdAt).getTime() > lastCheckNotificationTime
+					)
+					.find(
+						(notification) =>
+							notification.type ===
+								NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED ||
+							NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED
+					)
+			) {
+				// Refresh the counter in the navigation bar, showing the number of visitor spaces the user currently has access to
+				await NotificationsService.queryClient.invalidateQueries(
+					QUERY_KEYS.getAccessibleVisitorSpaces
+				);
+			}
 		}
 	}
 
