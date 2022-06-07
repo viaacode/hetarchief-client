@@ -108,6 +108,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.PageOverview,
 					],
 				},
+				navigationBars: { enableIcons: false },
 				icon: {
 					component: ({ name }: { name: string }) => <span>{name}</span>,
 					componentProps: {
