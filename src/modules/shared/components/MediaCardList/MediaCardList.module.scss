@@ -38,6 +38,12 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 
 	// Modifiers
 
+	:global(.c-card__title-wrapper) {
+		overflow: hidden;
+		-webkit-box-orient: vertical;
+		display: box;
+	}
+
 	// two-column grid
 	&--two-columns {
 		@include media-card-list-gutters($media-card-list-two-columns-gutter);
@@ -60,6 +66,10 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 				grid-template-columns: 27.8rem 1fr;
 				gap: $media-card-list-two-columns-gutter-md * 2;
 			}
+		}
+
+		:global(.c-card__title-wrapper) {
+			-webkit-line-clamp: 3;
 		}
 	}
 
@@ -86,6 +96,10 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 					padding: 0 $media-card-list-masonry-gutter-md / 2;
 				}
 			}
+		}
+
+		:global(.c-card__title-wrapper) {
+			-webkit-line-clamp: 7;
 		}
 	}
 }
