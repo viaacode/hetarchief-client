@@ -1,3 +1,4 @@
+/* stylelint-disable no-descending-specificity */
 @use "styles/abstracts" as *;
 
 $c-table-border: 1px solid $silver;
@@ -268,36 +269,43 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 }
 
 // inputs
-.c-filter-table .o-form-group-layout  {
+.c-filter-table .o-form-group-layout,
+.c-modal .o-form-group__controls  {
 	align-items: center;
 
 	.c-content-filters__search {
 		max-width: none;
+	}
 
-		.c-input-with-icon {
-			position: relative;
+	.c-input-with-icon {
+		position: relative;
 
-			.c-input {
-				@include reset-input-field;
+		.c-input {
+			@include reset-input-field;
 
-				background-color: $white;
-				border: 1px solid $zinc;
-				font-size: $font-size-base;
-				outline: 1px solid transparent;
-				padding: 1.4rem 1.6rem;
-				height: 5.6rem;
-				border-radius: 2.8rem;
+			background-color: $white;
+			border: 1px solid $zinc;
+			font-size: $font-size-base;
+			outline: 1px solid transparent;
+			padding: 1.4rem 1.6rem;
+			height: 5.6rem;
+			border-radius: 2.8rem;
 
-				&:focus {
-					border-color: $teal;
-				}
+			&:focus {
+				border-color: $teal;
 			}
 
-			.o-svg-icon {
-				position: absolute;
-				top: calc(50% - 1rem);
-				right: 2rem;
+			&:disabled {
+				cursor: not-allowed;
+				color: $zinc;
+				border-color: $silver;
 			}
+		}
+
+		.o-svg-icon {
+			position: absolute;
+			top: calc(50% - 1rem);
+			right: 2rem;
 		}
 	}
 
@@ -377,6 +385,129 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 		input {
 			margin-right: $spacer-xs;
 		}
+
+		input[type="checkbox"]::after {
+			width: 1.5rem;
+			height: 1.5rem;
+			top: -0.2rem;
+			left: -0.1rem;
+			position: relative;
+			background-color: $white;
+			content: "";
+			display: inline-block;
+			visibility: visible;
+			border: 0.2rem solid black;
+		}
+
+		input[type="checkbox"]:checked::after {
+			width: 1.5rem;
+			height: 1.5rem;
+			top: -0.2rem;
+			left: -0.1rem;
+			position: relative;
+			background-color: $white;
+			content: "";
+			display: inline-block;
+			visibility: visible;
+			border: 0.5rem solid $black;
+		}
+	}
+
+	.c-modal__body {
+		.o-form-group {
+			.c-radio-group {
+				display: flex;
+				flex-direction: column;
+				row-gap: $spacer-sm;
+				padding-top: $spacer-xs;
+				color: $black;
+			}
+
+			.c-radio {
+				label {
+					display: flex;
+					align-items: center;
+				}
+
+				input {
+					margin-right: $spacer-xs;
+				}
+
+				input[type="radio"]::after {
+					width: 1.5rem;
+					height: 1.5rem;
+					border-radius: 0.75rem;
+					top: -0.2rem;
+					left: -0.1rem;
+					position: relative;
+					background-color: $white;
+					content: "";
+					display: inline-block;
+					visibility: visible;
+					border: 0.2rem solid black;
+				}
+
+				input[type="radio"]:checked::after {
+					width: 1.5rem;
+					height: 1.5rem;
+					border-radius: 0.75rem;
+					top: -0.2rem;
+					left: -0.1rem;
+					position: relative;
+					background-color: $white;
+					content: "";
+					display: inline-block;
+					visibility: visible;
+					border: 0.5rem solid $black;
+			}
+		}
+	}
+
+		.o-form-group-layout--standard {
+			margin-top: $spacer-xs;
+		}
+
+		.c-content-page-publish-modal__display-date {
+			.o-form-group__label {
+				display: block;
+				padding-bottom: $spacer-xs;
+			}
+
+			.u-spacer {
+				margin: 0 !important; // override current important flag
+
+				.c-input-with-icon {
+					.o-svg-icon {
+						right: 4rem;
+					}
+				}
+
+				.c-tooltip-trigger {
+					height: 2rem;
+					top: calc(50% - 1rem);
+					right: 1.2rem;
+
+					.a-info-icon {
+						display: block;
+						width: 100%;
+						height: 100%;
+					}
+				}
+
+				.c-tooltip {
+					background-color: $white;
+					border: 0.1rem solid $zinc;
+
+					&--right {
+						margin-left: $spacer-xs;
+					}
+
+					&__arrow {
+						visibility: hidden;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -409,6 +540,60 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 			input {
 				margin-right: $spacer-xs;
+			}
+
+			input[type="radio"]::after {
+				width: 1.5rem;
+				height: 1.5rem;
+				border-radius: 0.75rem;
+				top: -0.2rem;
+				left: -0.1rem;
+				position: relative;
+				background-color: $white;
+				content: "";
+				display: inline-block;
+				visibility: visible;
+				border: 0.2rem solid black;
+			}
+
+			input[type="radio"]:checked::after {
+				width: 1.5rem;
+				height: 1.5rem;
+				border-radius: 0.75rem;
+				top: -0.2rem;
+				left: -0.1rem;
+				position: relative;
+				background-color: $white;
+				content: "";
+				display: inline-block;
+				visibility: visible;
+				border: 0.5rem solid $black;
+			}
+
+			input[type="checkbox"]::after {
+				width: 1.5rem;
+				height: 1.5rem;
+				top: -0.2rem;
+				left: -0.1rem;
+				position: relative;
+				background-color: $white;
+				content: "";
+				display: inline-block;
+				visibility: visible;
+				border: 0.2rem solid black;
+			}
+
+			input[type="checkbox"]:checked::after {
+				width: 1.5rem;
+				height: 1.5rem;
+				top: -0.2rem;
+				left: -0.1rem;
+				position: relative;
+				background-color: $white;
+				content: "";
+				display: inline-block;
+				visibility: visible;
+				border: 0.5rem solid $black;
 			}
 		}
 
