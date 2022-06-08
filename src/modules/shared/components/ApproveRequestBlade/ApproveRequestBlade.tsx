@@ -117,37 +117,42 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	}, [props.isOpen, reset]);
 
 	const checkOverlappingRequests = useCallback(async (): Promise<Visit[]> => {
-		const visitResponse = await VisitsService.getAll(
-			undefined,
-			VisitStatus.APPROVED,
-			[VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
-			1,
-			20,
-			'startAt',
-			OrderDirection.desc,
-			true
-		);
+		const visitResponse = await VisitsService.getAll({
+			status: VisitStatus.APPROVED,
+			timeframe: [VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
+			requesterId: selected?.userProfileId,
+			visitorSpaceSlug: selected?.spaceSlug,
+			page: 1,
+			size: 40,
+			orderProp: 'startAt',
+			orderDirection: OrderDirection.desc,
+			personal: false,
+		});
 		const overlappingRequests = visitResponse.items
-			.filter(
-				(visit) =>
-					visit.spaceSlug === selected?.spaceSlug &&
-					areIntervalsOverlapping(
-						{
-							start: form.accessFrom as Date,
-							end: form.accessTo as Date,
-						},
-						{
-							start: asDate(visit.startAt as string) as Date,
-							end: asDate(visit.endAt as string) as Date,
-						}
-					)
+			.filter((visit) =>
+				areIntervalsOverlapping(
+					{
+						start: form.accessFrom as Date,
+						end: form.accessTo as Date,
+					},
+					{
+						start: asDate(visit.startAt as string) as Date,
+						end: asDate(visit.endAt as string) as Date,
+					}
+				)
 			)
 			.filter((visit) => visit.id !== selected?.id);
 
 		setOverlappingRequests(overlappingRequests);
 
 		return overlappingRequests;
-	}, [selected?.id, form.accessFrom, form.accessTo]);
+	}, [
+		selected?.spaceSlug,
+		selected?.userProfileId,
+		selected?.id,
+		form.accessFrom,
+		form.accessTo,
+	]);
 
 	useEffect(() => {
 		checkOverlappingRequests();
