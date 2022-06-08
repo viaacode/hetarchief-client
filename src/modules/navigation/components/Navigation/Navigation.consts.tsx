@@ -236,7 +236,7 @@ const getCpAdminManagementDropdown = (
 		{
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
-				'',
+				`/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}`,
 				{
 					className: linkCls(['u-color-black', 'u-color-white:md']),
 				}
