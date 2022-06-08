@@ -9,6 +9,7 @@ import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
+import { Icon } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { createPageTitle } from '@shared/utils';
 
@@ -83,6 +84,8 @@ const LoggedOutHome: FC = () => {
 							</a>
 						</Link>
 					</b>
+
+					<Icon name="arrow-down" type="light" className={styles['c-hero__arrow-down']} />
 				</div>
 			</div>
 
