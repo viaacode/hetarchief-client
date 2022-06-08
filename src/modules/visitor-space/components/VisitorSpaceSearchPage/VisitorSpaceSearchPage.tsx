@@ -161,7 +161,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		}
 	);
 
-	const { data: media } = useGetMediaObjects(
+	const {
+		data: media,
+		isLoading: mediaIsLoading,
+		error: mediaError,
+	} = useGetMediaObjects(
 		visitorSpace?.maintainerId?.toLocaleLowerCase() as string,
 		mapFiltersToElastic(query),
 		query.page || 0,
@@ -181,11 +185,12 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const isNoAccessError =
 		(visitRequestError as HTTPError)?.response?.status === 403 &&
-		accessStatus?.status === AccessStatus.NO_ACCESS;
+		(accessStatus?.status === AccessStatus.NO_ACCESS || !accessStatus?.status);
 	const isAccessPendingError =
 		(visitRequestError as HTTPError)?.response?.status === 403 &&
 		accessStatus?.status === AccessStatus.PENDING;
 	const isVisitorSpaceInactive = visitorSpace?.status === VisitorSpaceStatus.Inactive;
+	const mediaNoAccess = (mediaError as HTTPError)?.response?.status === 403;
 
 	/**
 	 * Display
@@ -650,11 +655,16 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (visitorSpaceIsLoading || visitAccessStatusIsLoading || visitRequestIsLoading) {
+		if (
+			visitorSpaceIsLoading ||
+			visitAccessStatusIsLoading ||
+			visitRequestIsLoading ||
+			mediaIsLoading
+		) {
 			return <Loading fullscreen />;
 		}
 
-		if (isNoAccessError || isVisitorSpaceInactive) {
+		if (isNoAccessError || isVisitorSpaceInactive || mediaNoAccess) {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={slug as string}
