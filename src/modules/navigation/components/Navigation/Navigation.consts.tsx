@@ -207,7 +207,8 @@ const getDynamicHeaderLinks = (currentPath: string, navigationItems: NavigationI
 
 const getCpAdminManagementDropdown = (
 	currentPath: string,
-	permissions: Permission[]
+	permissions: Permission[],
+	isMobile: boolean
 ): NavigationItem[] => {
 	if (
 		intersection(permissions, [
@@ -223,7 +224,7 @@ const getCpAdminManagementDropdown = (
 		{
 			node: renderLink(
 				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
-				`/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}`,
+				isMobile ? `/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}` : '',
 				{
 					className: linkCls(
 						'u-color-black',
@@ -328,9 +329,10 @@ export const getNavigationItemsLeft = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	navigationItems: NavigationInfo[],
 	permissions: Permission[],
-	linkedSpaceSlug: string | null
+	linkedSpaceSlug: string | null,
+	isMobile: boolean
 ): NavigationItem[] => {
-	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions);
+	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions, isMobile);
 	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
 
 	return [
