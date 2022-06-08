@@ -2,9 +2,10 @@ import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-import { FC, ReactNode } from 'react';
+import { FC, MouseEvent, ReactNode } from 'react';
 
 import { CopyButton, DropdownMenu } from '@shared/components';
+import { toastService } from '@shared/services/toast-service';
 
 import { Icon, IconLightNames } from '../../Icon';
 import { VisitorSpaceCardType } from '../VisitorSpaceCard.const';
@@ -49,44 +50,64 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 		);
 	};
 
-	const renderContactIconButton = () => (
-		<div>
-			<DropdownMenu
-				placement="bottom-end"
-				triggerButtonProps={{
-					icon: <Icon name="contact" />,
-					variants: ['silver', 'sm'],
-					disabled: !(
-						!!room.contactInfo.email?.length || !!room.contactInfo.telephone?.length
-					),
-				}}
-			>
-				<ul
-					onClick={(e) => e.stopPropagation()}
-					className={styles['c-visitor-space-card-controls__contact-list']}
+	const renderContactIconButton = () => {
+		if (!room.contactInfo.email?.length && !room.contactInfo.telephone?.length) {
+			return (
+				<Button
+					icon={<Icon name="contact" />}
+					variants={['silver', 'sm']}
+					className="c-button--disabled"
+					onClick={(evt: MouseEvent<HTMLButtonElement>) => {
+						evt.stopPropagation();
+						toastService.notify({
+							title: t('Geen contact gegevens'),
+							description: t(
+								'Er zijn geen contactgegevens gekend voor deze bezoekersruimte.'
+							),
+						});
+					}}
+				/>
+			);
+		}
+		return (
+			<div>
+				<DropdownMenu
+					placement="bottom-end"
+					triggerButtonProps={{
+						icon: <Icon name="contact" />,
+						variants: ['silver', 'sm'],
+					}}
 				>
-					{room.contactInfo.email && (
-						<li className={styles['c-visitor-space-card-controls__contact-item']}>
-							<p>{room.contactInfo.email}</p>
+					<ul
+						onClick={(e) => e.stopPropagation()}
+						className={styles['c-visitor-space-card-controls__contact-list']}
+					>
+						{room.contactInfo.email && (
+							<li className={styles['c-visitor-space-card-controls__contact-item']}>
+								<p>{room.contactInfo.email}</p>
 
-							<CopyButton text={room.contactInfo.email} variants={['sm', 'text']} />
-						</li>
-					)}
+								<CopyButton
+									text={room.contactInfo.email}
+									variants={['sm', 'text']}
+								/>
+							</li>
+						)}
 
-					{room.contactInfo.telephone && (
-						<li className={styles['c-visitor-space-card-controls__contact-item']}>
-							<p>{room.contactInfo.telephone}</p>
+						{room.contactInfo.telephone && (
+							<li className={styles['c-visitor-space-card-controls__contact-item']}>
+								<p>{room.contactInfo.telephone}</p>
 
-							<CopyButton
-								text={room.contactInfo.telephone}
-								variants={['sm', 'text']}
-							/>
-						</li>
-					)}
-				</ul>
-			</DropdownMenu>
-		</div>
-	);
+								<CopyButton
+									text={room.contactInfo.telephone}
+									variants={['sm', 'text']}
+								/>
+							</li>
+						)}
+					</ul>
+				</DropdownMenu>
+			</div>
+		);
+	};
 
 	const renderAccessGrantedControls = () => {
 		return (
