@@ -5,7 +5,7 @@ import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 
 import { DropdownMenu } from '@shared/components';
-import { formatDate } from '@shared/utils';
+import { formatMediumDate } from '@shared/utils';
 
 import Icon from '../Icon/Icon';
 
@@ -70,7 +70,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		if (publishedAt) {
-			const formatted = formatDate(publishedAt);
+			const formatted = formatMediumDate(publishedAt);
 
 			subtitle += ` (${formatted})`;
 		}
