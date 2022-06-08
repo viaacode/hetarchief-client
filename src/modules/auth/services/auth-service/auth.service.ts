@@ -20,12 +20,12 @@ export class AuthService {
 		router: NextRouter
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
-		let originalUrl: string = redirectTo as string;
-		if ((originalUrl || '').endsWith('/' + ROUTE_PARTS.logout)) {
-			originalUrl = '/';
+		let originalPath: string = redirectTo as string;
+		if ((originalPath || '').endsWith('/' + ROUTE_PARTS.logout)) {
+			originalPath = '/';
 		}
 		const returnToUrl = stringifyUrl({
-			url: `${publicRuntimeConfig.CLIENT_URL}/${originalUrl ?? ''}`,
+			url: `${publicRuntimeConfig.CLIENT_URL}/${originalPath ?? ''}`,
 			query: otherQueryParams,
 		});
 
@@ -65,7 +65,7 @@ export class AuthService {
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
-			url: `/${redirectTo ?? ''}`,
+			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
@@ -82,14 +82,16 @@ export class AuthService {
 	public static logout(shouldRedirectToOriginalPage = false): void {
 		let returnToUrl = publicRuntimeConfig.CLIENT_URL;
 		if (shouldRedirectToOriginalPage) {
-			let originalUrl = window.location.href;
-			if (originalUrl.includes('/' + ROUTE_PARTS.logout)) {
-				originalUrl = '/';
+			let originalPath = window.location.href.substring(
+				publicRuntimeConfig.CLIENT_URL.length
+			);
+			if (originalPath.startsWith(`/${ROUTE_PARTS.logout}`)) {
+				originalPath = '/';
 			}
 			returnToUrl = stringifyUrl({
-				url: '/',
+				url: publicRuntimeConfig.CLIENT_URL,
 				query: {
-					redirectTo: originalUrl,
+					redirectTo: originalPath,
 					showAuth: 1,
 				},
 			});
