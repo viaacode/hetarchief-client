@@ -185,7 +185,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const isNoAccessError =
 		(visitRequestError as HTTPError)?.response?.status === 403 &&
-		accessStatus?.status === AccessStatus.NO_ACCESS;
+		(accessStatus?.status === AccessStatus.NO_ACCESS || !accessStatus?.status);
 	const isAccessPendingError =
 		(visitRequestError as HTTPError)?.response?.status === 403 &&
 		accessStatus?.status === AccessStatus.PENDING;
