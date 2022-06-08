@@ -55,8 +55,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			return (
 				<Button
 					icon={<Icon name="contact" />}
-					variants={['silver', 'sm']}
-					className="c-button--disabled"
+					variants={['silver', 'sm', 'disabled']}
 					onClick={(evt: MouseEvent<HTMLButtonElement>) => {
 						evt.stopPropagation();
 						toastService.notify({
