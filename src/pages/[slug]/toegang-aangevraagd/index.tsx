@@ -1,10 +1,12 @@
+import { HTTPError } from 'ky';
 import { GetServerSideProps, NextPage } from 'next';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
-import { Loading } from '@shared/components';
+import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { AccessStatus } from '@shared/types';
@@ -19,6 +21,7 @@ const VisitRequestedPage: NextPage = () => {
 	useNavigationBorder();
 
 	const router = useRouter();
+	const { t } = useTranslation();
 
 	const { slug } = router.query;
 
@@ -27,12 +30,14 @@ const VisitRequestedPage: NextPage = () => {
 	 */
 
 	const enabled = typeof slug === 'string';
-	const { data: accessStatus, isLoading: isLoadingAccessStatus } = useGetVisitAccessStatus(
-		slug as string,
-		typeof slug === 'string'
-	);
+	const {
+		data: accessStatus,
+		isLoading: isLoadingAccessStatus,
+		error: accessStatusError,
+	} = useGetVisitAccessStatus(slug as string, typeof slug === 'string');
 
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
+	const isNoAccessError = (accessStatusError as HTTPError)?.response?.status === 403;
 
 	const { data: space, isLoading: isLoadingSpace } = useGetVisitorSpace(slug as string, false, {
 		enabled: enabled && hasPendingRequest,
@@ -42,7 +47,6 @@ const VisitRequestedPage: NextPage = () => {
 	 * Computed
 	 */
 
-	const backLink = ROUTES.home;
 	const spaceLink = ROUTES.space.replace(':slug', slug as string);
 
 	/**
@@ -51,24 +55,29 @@ const VisitRequestedPage: NextPage = () => {
 
 	useEffect(() => {
 		if (!hasPendingRequest) {
-			switch (accessStatus?.status) {
-				case AccessStatus.NO_ACCESS:
-					router.push(backLink);
-					break;
-				case AccessStatus.ACCESS:
-					router.push(spaceLink);
-					break;
+			if (accessStatus?.status === AccessStatus.ACCESS) {
+				router.replace(spaceLink);
 			}
 		}
-	}, [router, backLink, accessStatus?.status, spaceLink, hasPendingRequest]);
+	}, [router, accessStatus?.status, spaceLink, hasPendingRequest]);
 
 	/**
 	 * Render
 	 */
 
 	const renderPageContent = () => {
-		if (isLoadingAccessStatus || isLoadingSpace || !hasPendingRequest) {
+		if (isLoadingAccessStatus || isLoadingSpace) {
 			return <Loading fullscreen />;
+		}
+		if (isNoAccessError) {
+			return (
+				<ErrorNoAccess
+					visitorSpaceSlug={slug as string}
+					description={t(
+						'Deze pagina is niet toegankelijk. Doe een bezoekersaavraag op de startpagina'
+					)}
+				/>
+			);
 		}
 		return <WaitingPage space={space} />;
 	};
