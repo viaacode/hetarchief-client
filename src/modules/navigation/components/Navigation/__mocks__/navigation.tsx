@@ -9,11 +9,11 @@ import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
 import { NavigationHamburgerProps } from '../NavigationSection';
 
-const linkCls = (classNames: string[] = []) => {
+const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
 };
 
-const dropdownCls = (classNames: string[] = []) => {
+const dropdownCls = (...classNames: string[]) => {
 	return clsx('c-dropdown-menu__item', ...classNames);
 };
 
@@ -62,19 +62,19 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	{
 		node: renderLink('bezoekersruimtes', '', {
 			badge: <Badge text="2" />,
-			className: linkCls([
+			className: linkCls(
 				'u-color-black',
 				'u-color-white:md',
 				'u-whitespace-nowrap',
-				styles['c-navigation__link--dropdown'],
-			]),
+				styles['c-navigation__link--dropdown']
+			),
 		}),
 		id: 'bezoekersruimtes',
 		activeDesktop: true,
 		children: [
 			{
 				node: renderLink('Alle bezoekersruimtes', '/', {
-					className: dropdownCls(['u-display-none', 'u-display-block:md']),
+					className: dropdownCls('u-display-none', 'u-display-block:md'),
 				}),
 				id: 'alle bezoekersruimtes',
 				isDivider: 'md',
@@ -119,31 +119,31 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 	},
 	{
 		node: renderLink('Over de bezoekersruimtes', '#', {
-			className: linkCls([
+			className: linkCls(
 				'u-color-black',
 				'u-color-white:md',
-				styles['c-navigation__link--dropdown'],
-			]),
+				styles['c-navigation__link--dropdown']
+			),
 		}),
 		id: 'over bezoekersruimtes',
 	},
 	{
 		node: renderLink('Vaak gestelde vragen', '#', {
-			className: linkCls([
+			className: linkCls(
 				'u-color-black',
 				'u-color-white:md',
-				styles['c-navigation__link--dropdown'],
-			]),
+				styles['c-navigation__link--dropdown']
+			),
 		}),
 		id: 'vragen',
 	},
 	{
 		node: renderLink('Beheer', '', {
-			className: linkCls([
+			className: linkCls(
 				'u-color-black',
 				'u-color-white:md',
-				styles['c-navigation__link--dropdown'],
-			]),
+				styles['c-navigation__link--dropdown']
+			),
 		}),
 		id: 'nav__beheer',
 		isDivider: 'md',
@@ -172,7 +172,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 
 export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 	{
-		node: renderLink('Inloggen of registreren', '#', { className: linkCls(['u-text-right']) }),
+		node: renderLink('Inloggen of registreren', '#', { className: linkCls('u-text-right') }),
 		id: 'auth log in',
 		children: [
 			{

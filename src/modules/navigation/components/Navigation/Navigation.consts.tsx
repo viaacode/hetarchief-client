@@ -14,13 +14,20 @@ import { i18n } from '@shared/helpers/i18n';
 import { Breakpoints } from '@shared/types';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
-const linkCls = (classNames: string[] = []) => {
+const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
 };
 
-const dropdownCls = (classNames: string[] = []) => {
+const dropdownCls = (...classNames: string[]) => {
 	return clsx('c-dropdown-menu__item', ...classNames);
 };
+
+const linkClasses = linkCls(
+	'u-color-black',
+	'u-color-white:md',
+	'u-whitespace-nowrap',
+	styles['c-navigation__link--dropdown']
+);
 
 const renderLink = (
 	label: string,
@@ -82,12 +89,7 @@ const getVisitorSpacesDropdown = (
 				'/' + linkedSpaceSlug,
 				{
 					badge: null,
-					className: linkCls([
-						'u-color-black',
-						'u-color-white:md',
-						'u-whitespace-nowrap',
-						styles['c-navigation__link--dropdown'],
-					]),
+					className: linkClasses,
 				}
 			),
 			id: 'visitor-spaces',
@@ -101,12 +103,7 @@ const getVisitorSpacesDropdown = (
 				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
 				'/',
 				{
-					className: linkCls([
-						'u-color-black',
-						'u-color-white:md',
-						'u-whitespace-nowrap',
-						styles['c-navigation__link--dropdown'],
-					]),
+					className: linkClasses,
 				}
 			),
 			id: 'visitor-spaces',
@@ -121,12 +118,7 @@ const getVisitorSpacesDropdown = (
 				'/',
 				{
 					badge: <Badge text={accessibleVisitorSpaces.length} />,
-					className: linkCls([
-						'u-color-black',
-						'u-color-white:md',
-						'u-whitespace-nowrap',
-						styles['c-navigation__link--dropdown'],
-					]),
+					className: linkClasses,
 					// Make link clickable in hamburger menu
 					onClick: (e) => {
 						if (window.innerWidth > Breakpoints.md) {
@@ -150,7 +142,7 @@ const getVisitorSpacesDropdown = (
 						),
 						'/',
 						{
-							className: dropdownCls(['u-display-none', 'u-display-block:md']),
+							className: dropdownCls('u-display-none', 'u-display-block:md'),
 						}
 					),
 					id: 'all-visitor-spaces',
@@ -207,12 +199,7 @@ const getDynamicHeaderLinks = (currentPath: string, navigationItems: NavigationI
 					<Icon name={navigationItem.iconName as IconName} />
 				) : null,
 				tooltip: navigationItem.tooltip || undefined,
-				className: linkCls([
-					'u-color-black',
-					'u-color-white:md',
-					'u-whitespace-nowrap',
-					styles['c-navigation__link--dropdown'],
-				]),
+				className: linkClasses,
 			}),
 		};
 	});
@@ -238,7 +225,11 @@ const getCpAdminManagementDropdown = (
 				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
 				`/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}`,
 				{
-					className: linkCls(['u-color-black', 'u-color-white:md']),
+					className: linkCls(
+						'u-color-black',
+						'u-color-white:md',
+						styles['c-navigation__link--dropdown']
+					),
 				}
 			),
 			id: 'nav__beheer',
@@ -322,12 +313,7 @@ const getMeemooAdminManagementDropdown = (
 				i18n.t('modules/navigation/components/navigation/navigation___admin'),
 				`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 				{
-					className: linkCls([
-						'u-color-black',
-						'u-color-white:md',
-						'u-whitespace-nowrap',
-						styles['c-navigation__link--dropdown'],
-					]),
+					className: linkClasses,
 				}
 			),
 			id: 'nav__admin',
