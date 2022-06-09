@@ -59,9 +59,11 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 					onClick={(evt: MouseEvent<HTMLButtonElement>) => {
 						evt.stopPropagation();
 						toastService.notify({
-							title: t('Geen contact gegevens'),
+							title: t(
+								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___geen-contact-gegevens'
+							),
 							description: t(
-								'Er zijn geen contactgegevens gekend voor deze bezoekersruimte.'
+								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___er-zijn-geen-contactgegevens-gekend-voor-deze-bezoekersruimte'
 							),
 						});
 					}}
