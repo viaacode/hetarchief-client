@@ -52,7 +52,11 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
-			return <b>{keywords?.length ? highlighted(title ?? '') : title}</b>;
+			return (
+				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
+					{keywords?.length ? highlighted(title ?? '') : title}
+				</b>
+			);
 		}
 
 		if (keywords && keywords.length > 0) {
