@@ -36,6 +36,7 @@ import {
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
+import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
@@ -114,7 +115,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
 	const [mobileFilterMenuOpen, setMobileFilterMenuOpen] = useState(false);
 
-	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
+	const [viewMode, setViewMode] = useLocalStorage('HET_ARCHIEF.search.viewmode', 'grid');
 
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
@@ -479,7 +480,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				)}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
-				view={viewMode}
+				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
 				wrapper={(card, item) => {
