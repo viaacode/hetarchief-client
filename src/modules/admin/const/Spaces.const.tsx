@@ -9,7 +9,7 @@ import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { i18n } from '@shared/helpers/i18n';
 import { OrderDirection } from '@shared/types';
-import { asDate, formatLongDate } from '@shared/utils';
+import { asDate, formatMediumDate } from '@shared/utils';
 import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
 export const VisitorSpacesOverviewTablePageSize = 20;
@@ -37,7 +37,7 @@ export const VisitorSpacesOverviewTableColumns = (
 		id: VisitorSpaceOrderProps.CreatedAt,
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
-			const formatted = formatLongDate(asDate(row.original.createdAt));
+			const formatted = formatMediumDate(asDate(row.original.createdAt));
 			return (
 				<span className="u-color-neutral" title={formatted}>
 					{formatted}
