@@ -17,7 +17,6 @@ import styles from './VisitorSpaceCardControls.module.scss';
 const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	access,
 	onAccessRequest,
-	onContactClick,
 	room,
 	type,
 }) => {

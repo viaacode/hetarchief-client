@@ -268,7 +268,7 @@
   "modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht": "Er zijn {{amount}} nieuwe meldingen. Bekijk ze in het overzicht.",
   "modules/shared/services/notifications-service/notifications___er-zijn-amount-nieuwe-notificaties": "Er zijn {{amount}} nieuwe meldingen.",
   "modules/shared/services/toast-service/toast___ok": "Oké",
-  "modules/shared/utils/seo/create-page-title/create-page-title___het-archief": "Het archief",
+  "modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool": "bezoekertool",
   "modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___1-item": "Eén item",
   "modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___annuleer": "Annuleer",
   "modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___count-items": "{{count}} items",

@@ -345,7 +345,11 @@ const AccountMyCollections: NextPage = () => {
 					return item.value ? (
 						<p key={i} className="u-pr-24 u-text-break">
 							<b>{item.label}: </b>
-							{item.value}
+							<Highlighter
+								searchWords={keywords}
+								autoEscape={true}
+								textToHighlight={item.value as string}
+							/>
 						</p>
 					) : null;
 				})}
