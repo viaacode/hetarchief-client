@@ -226,11 +226,7 @@ const getCpAdminManagementDropdown = (
 				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
 				isMobile ? `/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}` : '',
 				{
-					className: linkCls(
-						'u-color-black',
-						'u-color-white:md',
-						styles['c-navigation__link--dropdown']
-					),
+					className: linkClasses,
 				}
 			),
 			id: 'nav__beheer',
