@@ -123,7 +123,7 @@ $component: "c-card";
 	display: flex;
 
 	&[role="button"] {
-		cursor:pointer;
+		cursor: pointer;
 	}
 
 	// Elements
@@ -232,10 +232,18 @@ $component: "c-card";
 	&--mode {
 		&-light {
 			background-color: $white;
+
+			&:hover {
+				background-color: $platinum;
+			}
 		}
 
 		&-dark {
 			background-color: $black;
+
+			&:hover {
+				background-color: $shade;
+			}
 
 			.#{$component} {
 				&__title,
