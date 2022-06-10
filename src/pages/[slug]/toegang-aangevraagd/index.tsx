@@ -10,10 +10,10 @@ import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { AccessStatus } from '@shared/types';
+import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 
 import { WaitingPage } from '../../../modules/visitor-space/components';
-import { useGetVisitorSpace } from '../../../modules/visitor-space/hooks/get-visitor-space';
 
 import { VisitorLayout } from 'modules/visitors';
 
