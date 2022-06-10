@@ -74,7 +74,7 @@ const VisitRequestedPage: NextPage = () => {
 				<ErrorNoAccess
 					visitorSpaceSlug={slug as string}
 					description={t(
-						'Deze pagina is niet toegankelijk. Doe een bezoekersaavraag op de startpagina'
+						'pages/slug/toegang-aangevraagd/index___deze-pagina-is-niet-toegankelijk-doe-een-bezoekersaavraag-op-de-startpagina'
 					)}
 				/>
 			);
