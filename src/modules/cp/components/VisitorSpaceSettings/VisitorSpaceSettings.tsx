@@ -117,7 +117,7 @@ const VisitorSpaceSettings = forwardRef<
 					),
 				});
 
-				if (values.slug !== room.slug) {
+				if (!!values.slug && values.slug !== room.slug) {
 					// Slug was changed, redirect to the new url
 					await router.replace(
 						`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${values.slug}`
