@@ -194,7 +194,7 @@ const VisitorSpaceImageForm = forwardRef<
 											!!currentState.image
 										}
 										ref={fileInputRef}
-										onChange={(e) => {
+										onChange={async (e) => {
 											e.currentTarget.files &&
 												setValue(
 													'file',
@@ -210,6 +210,8 @@ const VisitorSpaceImageForm = forwardRef<
 											onUpdate?.({
 												file: e.currentTarget.files?.[0] ?? undefined,
 											});
+
+											await trigger('file');
 										}}
 									/>
 									{currentState.image && (
@@ -219,9 +221,11 @@ const VisitorSpaceImageForm = forwardRef<
 											)}
 											iconStart={<Icon name="trash" />}
 											variants="text"
-											onClick={() => {
+											onClick={async () => {
 												setValue('image', '');
+												setValue('file', undefined);
 												onUpdate?.({ image: '', file: undefined });
+												await trigger('file');
 											}}
 										/>
 									)}

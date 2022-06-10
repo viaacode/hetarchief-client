@@ -51,6 +51,25 @@ $c-hero-access-card-min-width: 57.2rem;
 		}
 	}
 
+	@keyframes pulse {
+		from {
+			transform: translateY(0);
+			opacity: 0.3;
+		}
+
+		to {
+			transform: translateY(5px);
+			opacity: 1;
+		}
+	}
+
+	&__arrow-down {
+		display: block;
+		font-size: 3rem;
+		line-height: 2;
+		animation: pulse 1.5s infinite alternate ease-in;
+	}
+
 	@include respond-to(xl) {
 		padding: 0 $spacer-2xl;
 
@@ -65,7 +84,7 @@ $c-hero-access-card-min-width: 57.2rem;
 	}
 
 	@include respond-to(lg) {
-		grid-template-rows: $spacer-lg calc(54rem - $spacer-lg);
+		grid-template-rows: $spacer-lg calc(54rem - #{$spacer-lg});
 		padding: 0 $spacer-lg;
 
 		&__content {

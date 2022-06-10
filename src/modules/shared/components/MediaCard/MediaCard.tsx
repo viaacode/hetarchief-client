@@ -5,7 +5,7 @@ import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 
 import { DropdownMenu } from '@shared/components';
-import { formatDate } from '@shared/utils';
+import { formatMediumDate } from '@shared/utils';
 
 import Icon from '../Icon/Icon';
 
@@ -52,7 +52,11 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
-			return <b>{keywords?.length ? highlighted(title ?? '') : title}</b>;
+			return (
+				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
+					{keywords?.length ? highlighted(title ?? '') : title}
+				</b>
+			);
 		}
 
 		if (keywords && keywords.length > 0) {
@@ -70,7 +74,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		if (publishedAt) {
-			const formatted = formatDate(publishedAt);
+			const formatted = formatMediumDate(publishedAt);
 
 			subtitle += ` (${formatted})`;
 		}
