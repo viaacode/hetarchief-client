@@ -45,6 +45,7 @@ import {
 	setShowAuthModal,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
+import { Breakpoints } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import packageJson from '../../../../../package.json';
@@ -63,6 +64,7 @@ const AppLayout: FC = ({ children }) => {
 	const showNotificationsCenter = useSelector(selectShowNotificationsCenter);
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
 	const history = useSelector(selectHistory);
@@ -195,7 +197,8 @@ const AppLayout: FC = ({ children }) => {
 						accessibleVisitorSpaces || [],
 						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
 						user?.permissions || [],
-						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null
+						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+						isMobile
 					)}
 					placement="left"
 					renderHamburger={true}
