@@ -12,7 +12,7 @@ const CookiePolicy: NextPage = () => {
 			<Script
 				src="https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cd.js"
 				id="CookieDeclaration"
-				strategy="beforeInteractive"
+				strategy="afterInteractive"
 			/>
 		</div>
 	);

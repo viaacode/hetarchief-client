@@ -1,3 +1,5 @@
+import { sortBy } from 'lodash-es';
+
 import { i18n } from '@shared/helpers/i18n';
 import { Operator } from '@shared/types';
 
@@ -5,12 +7,15 @@ import { METADATA_CONFIG, MetadataFields } from '../../const';
 import { MetadataProp, OperatorOptions, PropertyOptions } from '../../types';
 
 export const getProperties = (): PropertyOptions => {
-	return Object.keys(METADATA_CONFIG()).map((key) => {
-		return {
-			label: getLabel(key as MetadataProp),
-			value: key as MetadataProp,
-		};
-	});
+	return sortBy(
+		Object.keys(METADATA_CONFIG()).map((key) => {
+			return {
+				label: getLabel(key as MetadataProp),
+				value: key as MetadataProp,
+			};
+		}),
+		(option) => option.label
+	);
 };
 
 export const getOperators = (prop: MetadataProp): OperatorOptions => {
