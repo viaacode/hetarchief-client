@@ -29,7 +29,7 @@ import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
-import { asDate, formatDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
+import { asDate, formatMediumDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitTimeframe } from '@visits/types';
 
@@ -294,7 +294,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
-						value={formatDate(form.accessFrom)}
+						value={formatMediumDate(form.accessFrom)}
 						selected={form.accessFrom}
 						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
 					/>
@@ -337,7 +337,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
-						value={formatDate(form.accessTo)}
+						value={formatMediumDate(form.accessTo)}
 						selected={form.accessTo}
 						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
 					/>

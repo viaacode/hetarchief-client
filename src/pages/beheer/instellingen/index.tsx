@@ -12,8 +12,7 @@ import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { createPageTitle } from '@shared/utils';
-
-import { useGetVisitorSpace } from '../../../modules/visitor-space/hooks/get-visitor-space';
+import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 const CPSettingsPage: NextPage = () => {
 	/**
