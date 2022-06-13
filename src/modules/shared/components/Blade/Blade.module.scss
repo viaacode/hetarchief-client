@@ -32,13 +32,14 @@
 	}
 
 	&__title {
-		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
+		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
 		font-size: $font-size-sm * 2;
 
 		@include respond-to(md) {
 			text-align: center;
 		}
 		@include respond-at(md) {
+			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
 			font-size: $font-size-3xl;
 
 			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades

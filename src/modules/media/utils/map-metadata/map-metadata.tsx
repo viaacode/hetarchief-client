@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 
 import { MetadataItem } from '@media/components';
 import { capitalise } from '@shared/helpers';
+import { i18n } from '@shared/helpers/i18n';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	return keywords.map((item) => {
@@ -51,4 +52,10 @@ export const mapArrayToMetadataData = (data: string[] | undefined): string | nul
 	if (!data || !data.length) return null;
 
 	return data.join(', ');
+};
+
+export const mapBooleanToMetadataData = (data: boolean | undefined): string | null => {
+	if (data === undefined || data === null) return null;
+
+	return data ? i18n.t('Ja') : i18n.t('Nee');
 };
