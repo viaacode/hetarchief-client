@@ -1,33 +1,9 @@
-
 @use "styles/abstracts" as *;
 
 $l-container-padding: $spacer-sm;
 $l-container-padding-xs: 2rem;
 
 .c-content-page-preview {
-	// sizing
-
-	.c-content-block-preview {
-		max-width: 99.2rem + ($l-container-padding * 2);
-		width: 100%;
-		padding: 0 $l-container-padding;
-		margin: 0 auto;
-
-		@include respond-at(xs) {
-			max-width: 99.2rem + ($l-container-padding-xs * 2);
-			padding: 0 $l-container-padding-xs;
-		}
-
-		&--edgeless {
-			&-to-lg {
-				@include respond-to("lg") {
-					padding-left: 0;
-					padding-right: 0;
-				}
-			}
-		}
-	}
-
 	.c-content-page-preview .c-content-block-preview {
 		padding: 0;
 	}
@@ -42,7 +18,7 @@ $l-container-padding-xs: 2rem;
 		border: none;
 		border-bottom: 0.1rem solid $silver;
 
-		&+.c-accordion {
+		& + .c-accordion {
 			margin-top: 0;
 		}
 
@@ -69,7 +45,10 @@ $l-container-padding-xs: 2rem;
 		color: $neutral !important;
 		border-top: none;
 
-		p, b, a, i {
+		p,
+		b,
+		a,
+		i {
 			line-height: $line-height-3xl;
 		}
 	}
@@ -85,7 +64,9 @@ $l-container-padding-xs: 2rem;
 		color: $neutral;
 	}
 
-	div[style*="background-color: transparent"].content-block-preview-0:not(.c-content-page-preview .c-content-page-preview div[style*="background-color: transparent"].content-block-preview-0) {
+	div[style*="background-color: transparent"].content-block-preview-0:not(.c-content-page-preview
+			.c-content-page-preview
+			div[style*="background-color: transparent"].content-block-preview-0) {
 		background-color: $platinum !important; // override inline style
 		display: grid;
 		grid-template-columns: auto;
@@ -93,7 +74,10 @@ $l-container-padding-xs: 2rem;
 		align-items: center;
 
 		@include respond-at("lg") {
-			grid-template-columns: minmax($l-container-padding, 1fr) minmax(auto, 99.2rem) minmax($l-container-padding, 1fr);
+			grid-template-columns: minmax($l-container-padding, 1fr) minmax(auto, 99.2rem) minmax(
+					$l-container-padding,
+					1fr
+				);
 		}
 
 		.c-content-block-preview {
@@ -120,5 +104,4 @@ $l-container-padding-xs: 2rem;
 			}
 		}
 	}
-
 }
