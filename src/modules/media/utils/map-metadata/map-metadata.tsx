@@ -57,5 +57,7 @@ export const mapArrayToMetadataData = (data: string[] | undefined): string | nul
 export const mapBooleanToMetadataData = (data: boolean | undefined): string | null => {
 	if (data === undefined || data === null) return null;
 
-	return data ? i18n.t('Ja') : i18n.t('Nee');
+	return data
+		? i18n.t('modules/media/utils/map-metadata/map-metadata___ja')
+		: i18n.t('modules/media/utils/map-metadata/map-metadata___nee');
 };
