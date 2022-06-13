@@ -66,10 +66,10 @@ const ZendeskWrapper: FunctionComponent = () => {
 		}
 	}, [setWidget]);
 
-	const onResize = () => {
+	const onResize = useCallback(() => {
 		updateFooterHeight();
 		updateMargin();
-	};
+	}, [updateFooterHeight, updateMargin]);
 
 	const initListeners = useCallback(() => {
 		document.addEventListener('scroll', updateMargin);
