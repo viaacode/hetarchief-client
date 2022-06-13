@@ -542,47 +542,9 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 				margin-right: $spacer-xs;
 			}
 
-			input[type="radio"]::after {
-				width: 1.5rem;
-				height: 1.5rem;
-				border-radius: 0.75rem;
-				top: -0.2rem;
-				left: -0.1rem;
-				position: relative;
-				background-color: $white;
-				content: "";
-				display: inline-block;
-				visibility: visible;
-				border: 0.2rem solid $black;
-			}
-
-			input[type="radio"]:checked::after {
-				width: 1.5rem;
-				height: 1.5rem;
-				border-radius: 0.75rem;
-				top: -0.2rem;
-				left: -0.1rem;
-				position: relative;
-				background-color: $white;
-				content: "";
-				display: inline-block;
-				visibility: visible;
-				border: 0.5rem solid $black;
-			}
-
-			input[type="checkbox"]::after {
-				width: 1.5rem;
-				height: 1.5rem;
-				top: -0.2rem;
-				left: -0.1rem;
-				position: relative;
-				background-color: $white;
-				content: "";
-				display: inline-block;
-				visibility: visible;
-				border: 0.2rem solid $black;
-			}
-
+			input[type="radio"]::after,
+			input[type="radio"]:checked::after,
+			input[type="checkbox"]::after,
 			input[type="checkbox"]:checked::after {
 				width: 1.5rem;
 				height: 1.5rem;
@@ -593,6 +555,23 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 				content: "";
 				display: inline-block;
 				visibility: visible;
+			}
+
+			input[type="radio"]::after {
+				border-radius: 0.75rem;
+				border: 0.2rem solid $black;
+			}
+
+			input[type="radio"]:checked::after {
+				border-radius: 0.75rem;
+				border: 0.5rem solid $black;
+			}
+
+			input[type="checkbox"]::after {
+				border: 0.2rem solid $black;
+			}
+
+			input[type="checkbox"]:checked::after {
 				border: 0.5rem solid $black;
 			}
 		}
