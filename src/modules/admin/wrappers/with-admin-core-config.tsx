@@ -110,6 +110,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.UspGrid,
 						ContentBlockType.Quote,
 					],
+					defaultPageWidth: 'LARGE',
 				},
 				icon: {
 					component: ({ name }: { name: string }) => <span>{name}</span>,

@@ -1,0 +1,107 @@
+@use "styles/abstracts" as *;
+
+$l-container-padding: $spacer-sm;
+$l-container-padding-xs: 2rem;
+
+.c-content-page-preview {
+	.c-content-page-preview .c-content-block-preview {
+		padding: 0;
+	}
+
+	.c-content-block-preview .o-container {
+		width: auto;
+	}
+
+	// accordion
+
+	.c-accordion {
+		border: none;
+		border-bottom: 0.1rem solid $silver;
+
+		& + .c-accordion {
+			margin-top: 0;
+		}
+
+		&:first-of-type {
+			margin-top: $spacer-1xl;
+
+			@include respond-at("lg") {
+				margin-top: $spacer-2xl;
+			}
+		}
+	}
+
+	.c-accordion__header {
+		padding: $spacer-md 0;
+	}
+
+	.c-accordion__header-title {
+		color: $black;
+		font-weight: 700;
+	}
+
+	.c-accordion__body {
+		padding-bottom: $spacer-md;
+		color: $neutral !important;
+		border-top: none;
+
+		p,
+		b,
+		a,
+		i {
+			line-height: $line-height-3xl;
+		}
+	}
+
+	.c-accordion__item {
+		padding: 0;
+	}
+
+	// intro
+
+	.o-container-vertical-intro__intro {
+		padding-top: $spacer-md;
+		color: $neutral;
+	}
+
+	div[style*="background-color: transparent"].content-block-preview-0:not(.c-content-page-preview
+			.c-content-page-preview
+			div[style*="background-color: transparent"].content-block-preview-0) {
+		background-color: $platinum !important; // override inline style
+		display: grid;
+		grid-template-columns: auto;
+		min-height: 24rem;
+		align-items: center;
+
+		@include respond-at("lg") {
+			grid-template-columns: minmax($l-container-padding, 1fr) minmax(auto, 99.2rem) minmax(
+					$l-container-padding,
+					1fr
+				);
+		}
+
+		.c-content-block-preview {
+			padding-bottom: $spacer-sm !important;
+			grid-column-start: 2;
+
+			@include respond-at("lg") {
+				padding-left: 0;
+			}
+		}
+
+		&::after {
+			content: "";
+			display: block;
+			height: auto;
+			grid-column-start: 3;
+			top: 0;
+			right: 0;
+			background-color: $platinum;
+
+			@include respond-at("lg") {
+				height: 32rem;
+				background-image: radial-gradient(circle at 16rem, $platinum 16rem, $white 16rem);
+			}
+		}
+	}
+}
