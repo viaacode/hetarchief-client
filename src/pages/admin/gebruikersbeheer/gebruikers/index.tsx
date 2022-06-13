@@ -10,14 +10,14 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
-import { createPageTitle } from '@shared/utils';
+import { createPageTitle, formatDistanceToday } from '@shared/utils';
 
 const UsersOverview: FC = () => {
 	const { t } = useTranslation();
 
 	const renderUsers = () => (
 		<>
-			<UserOverview />
+			<UserOverview customFormatDate={formatDistanceToday} />
 		</>
 	);
 

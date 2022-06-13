@@ -5,7 +5,7 @@ export interface Media {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID (DON'T use this for identification of an object)
 	premisIdentifier: Record<string, string[]>;
-	premisRelationship: string;
+	premisRelationship: Record<string, string[]>;
 	series?: string[];
 	program?: string[];
 	alternativeName?: string;
@@ -45,6 +45,13 @@ export interface Media {
 	dateCreated: string;
 	dateCreatedLowerBound: string;
 	ebucoreObjectType: string;
+	meemoofilmColor: boolean;
+	meemoofilmBase: string;
+	meemoofilmImageOrSound: string;
+	meemooLocalId: string;
+	meemooOriginalCp: string;
+	meemooDescriptionProgramme: string;
+	meemooDescriptionCast: string;
 	representations: MediaRepresentation[];
 }
 

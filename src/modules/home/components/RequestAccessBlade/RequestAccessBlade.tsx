@@ -40,8 +40,8 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 
 	const renderFooter = () => {
 		return (
-			<div className="u-px-32 u-py-24">
-				<FormControl className="u-mb-24" errors={[errors.acceptTerms?.message]}>
+			<div className="u-px-16 u-py-16 u-px-32:md u-py-24:md">
+				<FormControl className="u-mb-8 u-mb-24:md" errors={[errors.acceptTerms?.message]}>
 					<Controller
 						name="acceptTerms"
 						control={control}
@@ -61,7 +61,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				</FormControl>
 
 				<Button
-					className="u-mb-16"
+					className="u-mb-8 u-mb-16:md"
 					label={t(
 						'modules/home/components/request-access-blade/request-access-blade___verstuur'
 					)}
@@ -85,13 +85,15 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 		<Blade
 			{...bladeProps}
 			isOpen={isOpen}
-			title={t(
-				'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
-			)}
 			footer={renderFooter()}
 			className={styles['c-request-access-blade']}
 		>
-			<div className="u-px-32">
+			<h3 id="bladeTitle" className={styles['c-request-access-blade__title']}>
+				{t(
+					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
+				)}
+			</h3>
+			<div className="u-px-16 u-px-32:md">
 				{space && <SpacePreview space={space} />}
 				<FormControl
 					className="u-mb-24"
