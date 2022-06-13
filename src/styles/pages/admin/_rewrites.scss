@@ -6,7 +6,7 @@ $c-table-border: 1px solid $silver;
 
 table[class*="c-table--styled"] {
 	thead {
-		th{
+		th {
 			@include text-ellipsis;
 
 			padding: 1.6rem 2.4rem;
@@ -119,8 +119,8 @@ div[class*="c-pagination__btn"] {
 div[class*="c-pagination__btn--active"] {
 	background-color: #009690;
 	color: #fff;
-    font-weight: 700;
-    border-radius: 50%;
+	font-weight: 700;
+	border-radius: 50%;
 
 	&:hover {
 		background-color: #009690;
@@ -149,9 +149,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 	cursor: pointer;
 	outline: 2px solid transparent;
 	transition: color $animate-default, background-color $animate-default,
-	border-color $animate-default;
+		border-color $animate-default;
 
-	.c-button__label, div[class*="c-button__label"] {
+	.c-button__label,
+	div[class*="c-button__label"] {
 		font-weight: 400;
 	}
 }
@@ -172,10 +173,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
@@ -207,18 +208,18 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-		* Cross-browser styles for explicit focus via
-		* keyboard-based (eg Tab) navigation or the
-		* .focus-visible utility class.
-		*/
+	  * Cross-browser styles for explicit focus via
+	  * keyboard-based (eg Tab) navigation or the
+	  * .focus-visible utility class.
+	  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $black;
 	}
 
 	/**
-	* Remove focus styles for non-keyboard focus.
-	*/
+  * Remove focus styles for non-keyboard focus.
+  */
 	&:focus:not(:focus-visible) {
 		outline: 0;
 		box-shadow: none;
@@ -250,10 +251,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -268,7 +269,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 }
 
 // inputs
-.c-filter-table .o-form-group-layout  {
+.c-filter-table .o-form-group-layout {
 	align-items: center;
 
 	.c-content-filters__search {
@@ -311,7 +312,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 .c-modal {
 	.c-toolbar {
 		.c-modal__title {
-			font-size: $font-size-3xl;
+			font-size: $font-size-1xl;
 			font-weight: 700;
 		}
 
@@ -348,10 +349,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			}
 
 			/**
-			* Cross-browser styles for explicit focus via
-			* keyboard-based (eg Tab) navigation or the
-			* .focus-visible utility class.
-			*/
+	  * Cross-browser styles for explicit focus via
+	  * keyboard-based (eg Tab) navigation or the
+	  * .focus-visible utility class.
+	  */
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
 				outline: 2px solid $teal;
@@ -390,7 +391,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 		}
 
 		.c-checkbox-group,
-		.c-radio-group--inline,{
+		.c-radio-group--inline {
 			display: flex;
 			flex-direction: column;
 			row-gap: $spacer-sm;
