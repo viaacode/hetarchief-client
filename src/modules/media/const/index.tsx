@@ -169,7 +169,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			data: mediaInfo.meemooIdentifier,
 		},
 		{
-			title: i18n.t('Identifier bij aanbieder'),
+			title: i18n.t('modules/media/const/index___identifier-bij-aanbieder'),
 			data: mediaInfo.meemooLocalId,
 		},
 		...mapObjectToMetadata(mediaInfo.premisIdentifier),
@@ -237,7 +237,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			data: mediaInfo.meemooDescriptionProgramme,
 		},
 		{
-			title: i18n.t('Cast'),
+			title: i18n.t('modules/media/const/index___cast'),
 			data: mediaInfo.meemooDescriptionCast,
 		},
 		{
