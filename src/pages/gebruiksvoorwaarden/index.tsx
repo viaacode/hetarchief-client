@@ -1,3 +1,4 @@
+import { ContentPage } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSideProps, NextPage } from 'next';
@@ -8,19 +9,16 @@ import { useCallback, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
+import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
-import Html from '@shared/components/Html/Html';
 import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { createPageTitle } from '@shared/utils';
-
-const lipsum =
-	'<p>Lorem ipsum dolor sit amet, consectetur <b>adipiscing</b> elit. In cursus quis enim vel consectetur. Mauris imperdiet nibh et tortor eleifend pulvinar. Etiam eget varius ante, sit amet blandit justo. Nam a eleifend tortor. Duis quis risus finibus, efficitur quam ac, tristique ligula. Sed a sollicitudin neque, sed pellentesque justo. Donec suscipit, ex eget volutpat eleifend, purus velit pellentesque massa, et cursus leo metus in odio. Proin facilisis eros sit amet metus scelerisque sodales. Quisque sollicitudin dui lorem, sit amet vestibulum ligula fringilla eu. Vivamus rhoncus erat eu dui mattis lacinia.</p><p><b>Donec a convallis ante. Morbi ac tincidunt ligula, ut vestibulum arcu. Proin at vestibulum tortor. Suspendisse ac ultrices lorem, a aliquam diam. Curabitur consectetur mauris vel lacus pulvinar pharetra. Nam et ante vestibulum, venenatis nisl ut, tincidunt arcu. Phasellus accumsan blandit arcu, vitae condimentum ante varius quis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam erat volutpat. Curabitur eu auctor eros. Aliquam lorem metus, sagittis ac quam sit amet, sagittis tincidunt ex. Donec lobortis luctus mi.</b></p><p>Ut sit amet tortor eu urna interdum dictum in quis libero. Vestibulum condimentum, massa at sodales malesuada, ligula metus blandit lacus, in tincidunt sapien mauris ut nisl. Curabitur molestie dignissim nisl. Aenean eget diam nulla. Morbi mollis mauris felis. Suspendisse porttitor ex in ornare maximus. Curabitur ullamcorper, quam non maximus porta, erat enim rutrum sapien, vitae facilisis ante quam vitae ipsum. Proin mattis consequat sollicitudin. Nunc sit amet lobortis quam. Mauris scelerisque id urna ac facilisis. Suspendisse volutpat diam vel eleifend egestas. Quisque molestie, nunc id sodales aliquet, neque tellus euismod eros, id ullamcorper nisi mi non dui.</p><p>Proin imperdiet, metus ac vestibulum varius, erat arcu eleifend justo, non eleifend arcu mauris a sapien. Nullam viverra, est non finibus porta, ipsum lacus commodo diam, volutpat ultricies risus est et justo. Etiam auctor quam est, pharetra tincidunt nisi iaculis vel. Maecenas malesuada feugiat molestie. Aenean gravida erat non nisi blandit faucibus. Proin diam quam, dignissim in porta nec, volutpat vel risus. Ut ornare, sem vitae volutpat sollicitudin, mi ex tristique urna, eu convallis nisl diam ut tortor.</p><p>In cursus est nec arcu consectetur blandit. Morbi sed tempus lectus. Pellentesque sollicitudin justo a ex sollicitudin, vitae faucibus ante tempus. Donec placerat ac urna eu convallis. Phasellus sit amet sapien a felis suscipit cursus non eu libero. Duis mi neque, viverra id diam vel, varius sodales felis. Sed id nunc ut ligula volutpat vehicula. Ut viverra molestie nibh, in iaculis purus ultricies eget. Sed mauris massa, semper ac tempor eget, consectetur elementum massa. Nunc laoreet maximus arcu, ut molestie lacus aliquet vel. Curabitur eleifend egestas ligula nec ullamcorper.</p>';
 
 const TermsOfService: NextPage = () => {
 	useStickyLayout();
@@ -104,14 +102,17 @@ const TermsOfService: NextPage = () => {
 						onScroll={onContentScroll}
 						className="p-terms-of-service__content"
 					>
-						<Html content={lipsum + lipsum} />
+						<ContentPage
+							path="/gebruikersvoorwaarden-tekst"
+							userGroupId={user?.groupId}
+						/>
 					</div>
 				</div>
 			</section>
 
 			<div
 				className={clsx('p-terms-of-service__gradient', {
-					'p-terms-of-service__gradient--hidden': isAtBottom,
+					'p-terms-of-service__gradient--hidden': isAtBottom || tosAccepted,
 				})}
 			/>
 
@@ -140,4 +141,4 @@ const TermsOfService: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = withI18n();
 
-export default TermsOfService;
+export default withAdminCoreConfig(TermsOfService);

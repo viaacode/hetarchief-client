@@ -9,6 +9,7 @@
 		.c-filter-table thead th,
 		.c-filter-table tbody td {
 			padding: $spacer-sm $spacer-xs;
+			line-height: $line-height-lg;
 		}
 
 		.c-button-toolbar button[class*="c-button"] {

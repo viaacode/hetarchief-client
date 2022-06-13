@@ -71,7 +71,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	&__icon {
 		font-size: $font-size-lg * math.div(11, 12);
-		line-height: 1;
+		line-height: $line-height-lg;
 	}
 
 	&__toolbar {
