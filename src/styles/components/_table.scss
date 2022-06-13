@@ -55,7 +55,7 @@ $c-table-border: 1px solid $silver;
 
 		&--body {
 			font-size: $font-size-sm;
-			line-height: $font-size-base;
+			line-height: $line-height-lg;
 		}
 
 		&--header {
@@ -85,7 +85,7 @@ $c-table-border: 1px solid $silver;
 
 	&__copy {
 		color: $neutral;
-		
+
 		&:hover,
 		&:active,
 		&:focus,
