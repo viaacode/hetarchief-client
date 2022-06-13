@@ -1,7 +1,159 @@
 @use "button" as *;
 
 .c-content {
+	white-space: initial;
+
+	p {
+		margin: 1.5rem 0;
+		min-height: 1em;
+	}
+
 	a {
+		text-decoration: underline;
 		color: #00c8aa;
+	}
+
+	dl {
+		border: 1px solid #d6dee3;
+		border-radius: 0.3rem;
+		overflow: hidden;
+		padding: 1.2rem;
+		margin: 1.5rem 0;
+
+		dt {
+			float: left;
+			width: 30%;
+			clear: left;
+			font-weight: 500;
+		}
+
+		dd {
+			float: left;
+			width: 70%;
+		}
+	}
+
+	ul {
+		list-style: disc;
+	}
+
+	li {
+		padding-left: 0.5rem;
+	}
+
+	ol {
+		list-style: decimal;
+	}
+
+	ul,
+	ol {
+		padding: 0;
+		margin: 1.5rem 0 1.5rem 1.75rem;
+
+		ul,
+		ol {
+			margin: 0;
+			padding-left: 2.25rem;
+		}
+
+		ul {
+			li {
+				list-style: circle;
+			}
+		}
+	}
+
+	blockquote {
+		margin: 0 0 10px;
+		padding: 15px 20px;
+		background-color: #f1f2f3;
+		border-left: solid 5px #ccc;
+		color: #666;
+		font-style: italic;
+	}
+
+	table {
+		width: 100%;
+		margin: 1.5rem 0;
+	}
+
+	table td,
+	table th {
+		padding: 0.8rem;
+	}
+
+	table th {
+		border-bottom: 0.2rem solid #9cafbd;
+		font-weight: 500;
+		text-align: left;
+	}
+
+	table td {
+		border-bottom: 1px solid #d6dee3;
+	}
+
+	strong {
+		font-weight: bold;
+	}
+
+	em {
+		font-style: italic;
+	}
+
+	.c-button {
+		text-decoration: none;
+	}
+
+	pre {
+		background-color: #edeff2;
+		max-width: 100%;
+		max-height: 100%;
+		margin: 10px 0;
+		padding: 15px;
+		overflow: auto;
+		border-radius: 3px;
+		color: #666;
+		font-family: monospace;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 16px;
+		word-wrap: break-word;
+		white-space: pre-wrap;
+	}
+
+	pre,
+	code {
+		font-family: Consolas, "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono",
+			"Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New",
+			Courier, monospace;
+	}
+
+	pre pre {
+		margin: 0;
+		padding: 0;
+	}
+
+	code {
+		font-size: 85%;
+		background-color: #edeff2;
+		padding: 0.2rem;
+		border-radius: 0.2rem;
+		color: #da3f34;
+	}
+
+	// Braft editor output css
+	.image-wrap {
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+
+		&.float-left {
+			margin: 0 10px 0 0;
+		}
+
+		&.float-right {
+			margin: 0 0 0 10px;
+		}
 	}
 }
