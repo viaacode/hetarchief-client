@@ -396,7 +396,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			content: "";
 			display: inline-block;
 			visibility: visible;
-			border: 0.2rem solid black;
+			border: 0.2rem solid $black;
 		}
 
 		input[type="checkbox"]:checked::after {
@@ -444,7 +444,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 					content: "";
 					display: inline-block;
 					visibility: visible;
-					border: 0.2rem solid black;
+					border: 0.2rem solid $black;
 				}
 
 				input[type="radio"]:checked::after {
@@ -553,7 +553,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 				content: "";
 				display: inline-block;
 				visibility: visible;
-				border: 0.2rem solid black;
+				border: 0.2rem solid $black;
 			}
 
 			input[type="radio"]:checked::after {
@@ -580,7 +580,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 				content: "";
 				display: inline-block;
 				visibility: visible;
-				border: 0.2rem solid black;
+				border: 0.2rem solid $black;
 			}
 
 			input[type="checkbox"]:checked::after {
