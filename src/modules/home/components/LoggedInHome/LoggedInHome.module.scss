@@ -74,6 +74,10 @@ $c-hero-access-card-min-width: 57.2rem;
 		> *:not(:last-child) {
 			margin-bottom: $spacer-xxs;
 		}
+
+		:global(.c-card:hover) {
+			background-color: $platinum;
+		}
 	}
 
 	@include respond-to(xl) {
@@ -159,8 +163,8 @@ $c-hero-access-card-min-width: 57.2rem;
 }
 
 .c-visitor-space-not-available-blade {
-  p {
-	line-height: 2.3rem;
-	margin-bottom: 2rem;
-  }
+	p {
+		line-height: 2.3rem;
+		margin-bottom: 2rem;
+	}
 }
