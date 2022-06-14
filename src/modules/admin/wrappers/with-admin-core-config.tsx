@@ -11,6 +11,7 @@ import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -20,8 +21,11 @@ import { navigationService } from '@navigation/services/navigation-service';
 import { sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTE_PARTS } from '@shared/const';
+import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
+
+const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
@@ -32,7 +36,15 @@ const InternalLink = (linkInfo: LinkInfo) => {
 	);
 };
 
-const { publicRuntimeConfig } = getConfig();
+// When a content page is saved, for clear the nextjs cache
+const onSaveContentPage = async (contentPageInfo: { path: string }) => {
+	await ApiService.getApi(false).post(
+		stringifyUrl({
+			url: publicRuntimeConfig.PROXY_URL + '/client-cache/clear-cache',
+			query: { path: contentPageInfo.path },
+		})
+	);
+};
 
 export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentType => {
 	return function withAdminCoreConfig(props: Record<string, unknown>) {
@@ -111,6 +123,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.Quote,
 					],
 					defaultPageWidth: 'LARGE',
+					onSaveContentPage,
 				},
 				navigationBars: { enableIcons: false },
 				icon: {
