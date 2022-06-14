@@ -648,7 +648,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						setShowAddToCollectionBlade(false);
 						setSelected(null);
 					}}
-					onSubmit={() => {
+					onSubmit={async () => {
 						setShowAddToCollectionBlade(false);
 						setSelected(null);
 					}}

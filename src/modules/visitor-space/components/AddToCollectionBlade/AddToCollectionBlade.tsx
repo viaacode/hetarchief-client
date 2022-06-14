@@ -33,7 +33,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		handleSubmit,
 		setValue,
 		reset,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 	} = useForm<AddToCollectionFormState>({
 		resolver: yupResolver(ADD_TO_COLLECTION_FORM_SCHEMA()),
 		defaultValues: useMemo(() => ({ pairs }), [pairs]),
@@ -196,6 +196,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
+					disabled={isSubmitting}
 				/>
 
 				<Button

@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { Blade } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
@@ -13,18 +13,21 @@ import { CancelVisitBladeProps } from './CancelVisitBlade.types';
 const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 	const { t } = useTranslation();
 	const { selected } = props;
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-	const onFormSubmit = () => {
-		if (!selected) {
-			return;
-		}
+	const onFormSubmit = async () => {
+		try {
+			setIsSubmitting(true);
+			if (!selected) {
+				return;
+			}
 
-		VisitsService.patchById(selected.id, {
-			status: VisitStatus.CANCELLED_BY_VISITOR,
-			note: `[${new Date().toISOString()}] ${t(
-				'modules/home/components/cancel-visit-blade/cancel-visit-blade___deze-aanvraag-is-geannuleerd-door-de-gebruiker'
-			)}`,
-		}).then(() => {
+			await VisitsService.patchById(selected.id, {
+				status: VisitStatus.CANCELLED_BY_VISITOR,
+				note: `[${new Date().toISOString()}] ${t(
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___deze-aanvraag-is-geannuleerd-door-de-gebruiker'
+				)}`,
+			});
 			toastService.notify({
 				title: t(
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-aanvraag-is-geannuleerd'
@@ -35,7 +38,14 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 			});
 
 			props.onFinish?.();
-		});
+		} catch (err) {
+			console.error(err);
+			toastService.notify({
+				title: t('Error'),
+				description: t('Het annuleren van de aanvraag is mislukt'),
+			});
+		}
+		setIsSubmitting(false);
 	};
 
 	// Render
@@ -50,7 +60,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 					)}
 					variants={['block', 'black']}
 					onClick={onFormSubmit}
-					disabled={!props.isOpen}
+					disabled={!props.isOpen || isSubmitting}
 				/>
 
 				<Button
