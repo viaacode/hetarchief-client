@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import { useTranslation } from 'next-i18next';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParams } from 'use-query-params';
 
@@ -20,6 +20,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 	const { data: space } = useGetVisitorSpace(query[VISITOR_SPACE_SLUG_QUERY_KEY] || null);
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
 	const {
 		control,
@@ -30,8 +31,10 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 		resolver: yupResolver(REQUEST_ACCESS_FORM_SCHEMA()),
 	});
 
-	const onFormSubmit = (values: RequestAccessFormState) => {
-		onSubmit?.(values);
+	const onFormSubmit = async (values: RequestAccessFormState) => {
+		setIsSubmitting(true);
+		await onSubmit?.(values);
+		setIsSubmitting(false);
 	};
 
 	useEffect(() => {
@@ -67,7 +70,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
-					disabled={!isOpen}
+					disabled={!isOpen || isSubmitting}
 				/>
 				<Button
 					label={t(

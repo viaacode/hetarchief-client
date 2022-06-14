@@ -19,7 +19,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 
 	const {
 		control,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 		handleSubmit,
 		reset,
 	} = useForm<DeclineRequestFormState>({
@@ -64,6 +64,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
+					disabled={isSubmitting}
 				/>
 
 				<Button
