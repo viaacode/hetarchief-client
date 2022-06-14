@@ -84,7 +84,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const {
 		control,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 		handleSubmit,
 		setValue,
 	} = useForm<ApproveRequestFormState>({
@@ -219,6 +219,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					label={approveButtonLabel}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
+					disabled={isSubmitting}
 				/>
 
 				<Button

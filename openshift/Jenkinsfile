@@ -149,8 +149,7 @@ pipeline {
 										sh '''ls -ltra
                   export NODE_ENV=dev
                   npm set-script prepare ""
-                  npm ci
-                  npm install
+                  npm install --force
                   npx playwright install
                   npm install junit-report-builder --save
                   '''

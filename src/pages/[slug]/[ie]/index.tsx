@@ -752,7 +752,7 @@ const ObjectDetailPage: NextPage = () => {
 							: undefined
 					}
 					onClose={onCloseBlade}
-					onSubmit={onCloseBlade}
+					onSubmit={async () => onCloseBlade()}
 				/>
 			)}
 		</>

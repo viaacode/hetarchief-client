@@ -5,5 +5,5 @@ SHELL = /bin/bash
 
 test:
 	chown node:node $${WORKSPACE} -R
-	npm ci
+	npm i --force
 	npm test

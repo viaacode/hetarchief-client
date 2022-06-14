@@ -491,7 +491,7 @@ const AccountMyCollections: NextPage = () => {
 					setShowAddToCollectionBlade(false);
 					setSelected(null);
 				}}
-				onSubmit={() => {
+				onSubmit={async () => {
 					setShowAddToCollectionBlade(false);
 					setSelected(null);
 				}}

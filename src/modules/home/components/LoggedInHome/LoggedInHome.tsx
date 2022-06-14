@@ -193,16 +193,17 @@ const LoggedInHome: FC = () => {
 				return;
 			}
 
-			createVisitRequest({
+			const createdVisitRequest = await createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
 				visitorSpaceSlug: query[VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 				timeframe: values.visitTime,
-			}).then((createdVisitRequest) => {
-				setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
-				onCloseRequestBlade();
-				router.push(ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug));
 			});
+			setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
+			onCloseRequestBlade();
+			await router.push(
+				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+			);
 		} catch (err) {
 			console.error({
 				message: 'Failed to create visit request',

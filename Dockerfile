@@ -9,7 +9,7 @@ COPY package.json package-lock.json ./
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
 RUN npm set-script prepare "" &&\
-    npm ci
+    npm i --force
 
 # Rebuild the source code only when needed
 FROM node:gallium-alpine AS builder
