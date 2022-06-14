@@ -15,6 +15,7 @@ import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
 	Blade,
+	Loading,
 	SpacePreview,
 	VisitorSpaceCard,
 	VisitorSpaceCardProps,
@@ -372,6 +373,9 @@ const LoggedInHome: FC = () => {
 	};
 
 	const renderHomePageContent = () => {
+		if (isLoadingFuture || isLoadingPending || isLoadingActive) {
+			return <Loading fullscreen />;
+		}
 		return (
 			<>
 				<div className="p-home u-page-bottom-padding">
