@@ -254,7 +254,7 @@
 		&::after,
 		> span {
 			opacity: 0;
-			transition: opacity $animate-default;
+			transition: opacity $timing-default linear;
 		}
 
 		&::before,
