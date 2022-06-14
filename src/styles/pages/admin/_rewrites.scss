@@ -630,6 +630,27 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 }
 
+// quote
+
+.c-content-block-preview {
+	.c-quote__text {
+		font-size: $font-size-1xl;
+	}
+
+	.c-quote__author {
+		color: $neutral;
+
+		.c-avatar {
+			width: auto;
+			height: auto;
+
+			.o-svg-icon {
+				display: none;
+			}
+		}
+	}
+}
+
 // other
 
 .c-form-help-text {
