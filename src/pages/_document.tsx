@@ -32,6 +32,10 @@ const Document = (): ReactElement => {
 				/>
 				{/*eslint-disable-next-line*/}
 				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
+				<meta
+					name="google-site-verification"
+					content="yl7dKP6MImaxOwur77DkLJL4SH9Apy2ytk0baoLq99g"
+				/>
 			</CustomHead>
 			<body>
 				<Main />
