@@ -45,7 +45,7 @@ import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectCollections } from '@shared/store/media';
 import { Breakpoints } from '@shared/types';
-import { asDate, createPageTitle, formatDate } from '@shared/utils';
+import { asDate, createPageTitle, formatMediumDate } from '@shared/utils';
 
 import { AddToCollectionBlade } from '../../../../modules/visitor-space/components';
 
@@ -150,9 +150,33 @@ const AccountMyCollections: NextPage = () => {
 	};
 
 	const onRemoveFromCollection = (item: IdentifiableMediaCard, collection: Collection) => {
-		collectionsService.removeFromCollection(collection.id, item.schemaIdentifier).then(() => {
-			collectionMedia.refetch();
-		});
+		collectionsService
+			.removeFromCollection(collection.id, item.schemaIdentifier)
+			.then((response) => {
+				if (response === undefined) {
+					return;
+				}
+
+				collectionMedia.refetch();
+
+				const descriptionVariables = {
+					item: item.name,
+					collection:
+						collection?.name ||
+						t('pages/account/mijn-mappen/collection-slug/index___onbekend'),
+				};
+
+				toastService.notify({
+					maxLines: 3,
+					title: t(
+						'pages/account/mijn-mappen/collection-slug/index___item-verwijderd-uit-map'
+					),
+					description: t(
+						'pages/account/mijn-mappen/collection-slug/index___item-is-verwijderd-uit-collection',
+						descriptionVariables
+					),
+				});
+			});
 	};
 
 	/**
@@ -297,11 +321,11 @@ const AccountMyCollections: NextPage = () => {
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___creatiedatum'),
-				value: formatDate(asDate(item.dateCreatedLowerBound)),
+				value: formatMediumDate(asDate(item.dateCreatedLowerBound)),
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___uitzenddatum'),
-				value: formatDate(asDate(item.datePublished)),
+				value: formatMediumDate(asDate(item.datePublished)),
 			},
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___identifier-bij-meemoo'),
@@ -321,7 +345,11 @@ const AccountMyCollections: NextPage = () => {
 					return item.value ? (
 						<p key={i} className="u-pr-24 u-text-break">
 							<b>{item.label}: </b>
-							{item.value}
+							<Highlighter
+								searchWords={keywords}
+								autoEscape={true}
+								textToHighlight={item.value as string}
+							/>
 						</p>
 					) : null;
 				})}
@@ -463,7 +491,7 @@ const AccountMyCollections: NextPage = () => {
 					setShowAddToCollectionBlade(false);
 					setSelected(null);
 				}}
-				onSubmit={() => {
+				onSubmit={async () => {
 					setShowAddToCollectionBlade(false);
 					setSelected(null);
 				}}

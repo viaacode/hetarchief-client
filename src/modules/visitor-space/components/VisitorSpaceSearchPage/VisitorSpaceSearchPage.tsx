@@ -36,6 +36,7 @@ import {
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
+import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
@@ -114,7 +115,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
 	const [mobileFilterMenuOpen, setMobileFilterMenuOpen] = useState(false);
 
-	const [viewMode, setViewMode] = useState<MediaCardViewMode>('grid');
+	const [viewMode, setViewMode] = useLocalStorage('HET_ARCHIEF.search.viewmode', 'grid');
 
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
@@ -161,10 +162,14 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		}
 	);
 
-	const { data: media } = useGetMediaObjects(
+	const {
+		data: media,
+		isLoading: mediaIsLoading,
+		error: mediaError,
+	} = useGetMediaObjects(
 		visitorSpace?.maintainerId?.toLocaleLowerCase() as string,
 		mapFiltersToElastic(query),
-		query.page || 0,
+		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
 		activeSort,
 		visitorSpace?.maintainerId !== undefined
@@ -181,11 +186,12 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const isNoAccessError =
 		(visitRequestError as HTTPError)?.response?.status === 403 &&
-		accessStatus?.status === AccessStatus.NO_ACCESS;
+		(accessStatus?.status === AccessStatus.NO_ACCESS || !accessStatus?.status);
 	const isAccessPendingError =
 		(visitRequestError as HTTPError)?.response?.status === 403 &&
 		accessStatus?.status === AccessStatus.PENDING;
 	const isVisitorSpaceInactive = visitorSpace?.status === VisitorSpaceStatus.Inactive;
+	const mediaNoAccess = (mediaError as HTTPError)?.response?.status === 403;
 
 	/**
 	 * Display
@@ -233,7 +239,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const onSearch = async (newValue: string) => {
 		if (newValue.trim() && !query.search?.includes(newValue)) {
-			setQuery({ [SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue) });
+			setQuery({ [SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue), page: 1 });
 		}
 	};
 
@@ -320,7 +326,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				);
 
 				if (data.length === 0) {
-					setQuery({ [id]: undefined, filter: undefined });
+					setQuery({ [id]: undefined, filter: undefined, page: 1 });
 					return;
 				}
 
@@ -331,7 +337,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined });
+		setQuery({ [id]: data, filter: undefined, page: 1 });
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -370,14 +376,16 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
 
-		setQuery({ ...rest, ...query });
+		setQuery({ ...rest, ...query, page: 1 });
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
-		setQuery({ orderProp, orderDirection });
+		setQuery({ orderProp, orderDirection, page: 1 });
 	};
 
-	const onTabClick = (tabId: string | number) => setQuery({ format: String(tabId) });
+	const onTabClick = (tabId: string | number) => {
+		setQuery({ format: String(tabId), page: 1 });
+	};
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
@@ -472,7 +480,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				)}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
-				view={viewMode}
+				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
 				wrapper={(card, item) => {
@@ -496,11 +504,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				count={VISITOR_SPACE_ITEM_COUNT}
 				showBackToTop
 				total={getItemCounts(query.format as VisitorSpaceMediaType)}
-				onPageChange={(page) => {
+				onPageChange={(zeroBasedPage) => {
 					scrollTo(0);
 					setQuery({
 						...query,
-						page: page + 1,
+						page: zeroBasedPage + 1,
 					});
 				}}
 			/>
@@ -640,7 +648,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						setShowAddToCollectionBlade(false);
 						setSelected(null);
 					}}
-					onSubmit={() => {
+					onSubmit={async () => {
 						setShowAddToCollectionBlade(false);
 						setSelected(null);
 					}}
@@ -650,11 +658,16 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (visitorSpaceIsLoading || visitAccessStatusIsLoading || visitRequestIsLoading) {
+		if (
+			visitorSpaceIsLoading ||
+			visitAccessStatusIsLoading ||
+			visitRequestIsLoading ||
+			mediaIsLoading
+		) {
 			return <Loading fullscreen />;
 		}
 
-		if (isNoAccessError || isVisitorSpaceInactive) {
+		if (isNoAccessError || isVisitorSpaceInactive || mediaNoAccess) {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={slug as string}

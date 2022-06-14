@@ -3,7 +3,11 @@ import { TabProps } from '@meemoo/react-components';
 import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@media/components';
 import { objectPlaceholderMock } from '@media/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { Media, MediaActions, ObjectDetailTabs } from '@media/types';
-import { mapArrayToMetadataData, mapObjectToMetadata } from '@media/utils';
+import {
+	mapArrayToMetadataData,
+	mapBooleanToMetadataData,
+	mapObjectToMetadata,
+} from '@media/utils';
 import { Icon, TextWithNewLines } from '@shared/components';
 import { i18n } from '@shared/helpers/i18n';
 import { MediaTypes } from '@shared/types';
@@ -156,16 +160,19 @@ export const MEDIA_ACTIONS = (
 // TODO: complete mapping
 export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 	[
-		// {
-		// 	title: i18n.t('modules/media/const/index___oorsprong'),
-		// 	data: // Geen DB veld gelinkt
-		// },
+		{
+			title: i18n.t('modules/media/const/index___oorsprong'),
+			data: mediaInfo.meemooOriginalCp,
+		},
 		{
 			title: i18n.t('modules/media/const/index___meemoo-identifier'),
 			data: mediaInfo.meemooIdentifier,
 		},
-		// TODO: Hoofd lokale CP (Identifier bij aanbieder)
-		...mapObjectToMetadata(mediaInfo.premisIdentifier), // Overige ID's contentpartner
+		{
+			title: i18n.t('modules/media/const/index___identifier-bij-aanbieder'),
+			data: mediaInfo.meemooLocalId,
+		},
+		...mapObjectToMetadata(mediaInfo.premisIdentifier),
 		{
 			title: i18n.t('modules/media/const/index___serie'),
 			data: mapArrayToMetadataData(mediaInfo.series),
@@ -225,14 +232,14 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			title: i18n.t('modules/media/const/index___transcriptie'),
 			data: mediaInfo?.representations?.[0]?.transcript, // TODO: Update voor andere representations?
 		},
-		// {
-		// 	title: i18n.t('modules/media/const/index___ondertitels'),
-		// 	data: // Niet in representations
-		// },
-		// {
-		// 	title: i18n.t('modules/media/const/index___programmabeschrijving'),
-		// 	data: // Geen DB veld
-		// },
+		{
+			title: i18n.t('modules/media/const/index___programmabeschrijving'),
+			data: mediaInfo.meemooDescriptionProgramme,
+		},
+		{
+			title: i18n.t('modules/media/const/index___cast'),
+			data: mediaInfo.meemooDescriptionCast,
+		},
 		{
 			title: i18n.t('modules/media/const/index___genre'),
 			data: mapArrayToMetadataData(mediaInfo.genre),
@@ -246,52 +253,31 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			title: i18n.t('modules/media/const/index___tijdsperiode-van-de-inhoud'),
 			data: mapArrayToMetadataData(mediaInfo.temporal),
 		},
-		// In second metadata component
-		// {
-		// 	title: i18n.t('modules/media/const/index___trefwoorden'),
-		// 	data: mapKeywordsToTagList(mediaInfo.keywords),
-		// },
 		{
 			title: i18n.t('modules/media/const/index___taal'),
 			data: mapArrayToMetadataData(mediaInfo.inLanguage),
 		},
-		// Geen DB velden
-		// {
-		// 	title: i18n.t('modules/media/const/index___type'),
-		// 	data: mediaInfo.premisIdentifier,
-		// },
-		// {
-		// 	title: i18n.t('modules/media/const/index___filmbasis'),
-		// 	data: mediaInfo.premisIdentifier,
-		// },
-		// {
-		// 	title: i18n.t('modules/media/const/index___beeld-geluid'),
-		// 	data: mediaInfo.premisIdentifier,
-		// },
-		// {
-		// 	title: i18n.t('modules/media/const/index___kleur-zwart-wit'),
-		// 	data: mediaInfo.premisIdentifier,
-		// },
-		// {
-		// 	title: i18n.t('modules/media/const/index___ondertitels'),
-		// 	data: mediaInfo.premisIdentifier,
-		// },
-		// {
-		// 	title: i18n.t('modules/media/const/index___taal-ondertitels'),
-		// 	data: mediaInfo.premisIdentifier,
-		// },
-		// {
-		// 	title: i18n.t('modules/media/const/index___bevat'),
-		// 	data: // Niet in type?
-		// },
+		{
+			title: i18n.t('modules/media/const/index___filmbasis'),
+			data: mediaInfo.meemoofilmBase,
+		},
+		{
+			title: i18n.t('modules/media/const/index___beeld-geluid'),
+			data: mediaInfo.meemoofilmImageOrSound,
+		},
+		{
+			title: i18n.t('modules/media/const/index___kleur-zwart-wit'),
+			data: mapBooleanToMetadataData(mediaInfo.meemoofilmColor),
+		},
 		{
 			title: i18n.t('modules/media/const/index___uitgebreide-beschrijving'),
 			data: mediaInfo?.abstract ? (
 				<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
 			) : null,
 		},
-		{
-			title: i18n.t('modules/media/const/index___verwant'),
-			data: mediaInfo.premisRelationship,
-		},
+		// {
+		// 	title: i18n.t('modules/media/const/index___verwant'),
+		// 	data: mediaInfo.premisRelationship,
+		// },
+		...mapObjectToMetadata(mediaInfo.premisRelationship),
 	].filter((field) => !!field.data);

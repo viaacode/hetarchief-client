@@ -1,3 +1,4 @@
+import { capitalize, lowerCase } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -9,7 +10,8 @@ import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { ROUTES } from '@shared/const';
+import { Icon } from '@shared/components';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { createPageTitle } from '@shared/utils';
 
 import styles from './LoggedOutHome.module.scss';
@@ -47,6 +49,17 @@ const LoggedOutHome: FC = () => {
 		}
 	}, [query, router]);
 
+	const getPageDescription = () => {
+		// eg: /vrt/09f17b37445c4ce59f645c2d5db9dbf8dbee79eba623459caa8c6496108641a0900618cb6ceb4e9b8ad907e47b980ee3
+		const redirectTo = router.query.redirectTo as string;
+		const firstUrlPart = redirectTo?.split('/')?.[1];
+		if (!Object.values(ROUTE_PARTS).includes(firstUrlPart)) {
+			// Not a static page => might be visitor space slug
+			return capitalize(lowerCase(firstUrlPart));
+		}
+		return t('pages/index___logged-out-home-description');
+	};
+
 	/**
 	 * Render
 	 */
@@ -55,7 +68,7 @@ const LoggedOutHome: FC = () => {
 		<div className="p-home u-page-bottom-padding">
 			<Head>
 				<title>{createPageTitle('Home')}</title>
-				<meta name="description" content="TODO: Home meta description" />
+				<meta name="description" content={getPageDescription()} />
 			</Head>
 
 			<div className={styles['c-hero']}>
@@ -83,6 +96,8 @@ const LoggedOutHome: FC = () => {
 							</a>
 						</Link>
 					</b>
+
+					<Icon name="arrow-down" type="light" className={styles['c-hero__arrow-down']} />
 				</div>
 			</div>
 

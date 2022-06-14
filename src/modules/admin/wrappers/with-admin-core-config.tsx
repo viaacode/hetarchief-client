@@ -99,15 +99,20 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				],
 				contentPage: {
 					availableContentBlocks: [
-						// TODO extend this list when meemoo decides which content blocks that want to use for hetarchief
 						ContentBlockType.Heading,
+						ContentBlockType.Intro,
 						ContentBlockType.RichText,
 						ContentBlockType.RichTextTwoColumns,
 						ContentBlockType.Buttons,
 						ContentBlockType.Image,
+						ContentBlockType.ImageGrid,
 						ContentBlockType.PageOverview,
+						ContentBlockType.UspGrid,
+						ContentBlockType.Quote,
 					],
+					defaultPageWidth: 'LARGE',
 				},
+				navigationBars: { enableIcons: false },
 				icon: {
 					component: ({ name }: { name: string }) => <span>{name}</span>,
 					componentProps: {

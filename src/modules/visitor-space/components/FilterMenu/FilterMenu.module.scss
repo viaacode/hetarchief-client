@@ -69,7 +69,6 @@ $component: "c-filter-menu";
 	}
 
 	&__button--sort:global(.c-button) {
-		background-color: $shade;
 		border-color: $shade;
 		border-bottom-color: $c-filter-menu-border-color;
 	}

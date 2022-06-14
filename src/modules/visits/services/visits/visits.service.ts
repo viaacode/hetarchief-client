@@ -1,10 +1,11 @@
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { OrderDirection, Visit, VisitAccessStatus, VisitStatus } from '@shared/types';
+import { OrderDirection, Visit, VisitAccessStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
-import { PatchVisit, VisitTimeframe } from '@visits/types';
+import { GetVisitsProps } from '@visits/services/visits/visits.service.types';
+import { PatchVisit } from '@visits/types';
 
 import {
 	VISITS_SERVICE_ACCESS_STATUS_URL,
@@ -15,16 +16,18 @@ import {
 } from './visits.service.const';
 
 export class VisitsService {
-	public static async getAll(
+	public static async getAll({
 		searchInput = '',
-		status: VisitStatus | undefined,
-		timeframe: VisitTimeframe | VisitTimeframe[] | undefined,
+		status,
+		timeframe,
+		requesterId,
+		visitorSpaceSlug,
 		page = 0,
 		size = 20,
-		orderProp: keyof Visit = 'startAt',
-		orderDirection: OrderDirection = OrderDirection.desc,
-		personal?: boolean
-	): Promise<ApiResponseWrapper<Visit>> {
+		orderProp,
+		orderDirection = OrderDirection.desc,
+		personal,
+	}: GetVisitsProps): Promise<ApiResponseWrapper<Visit>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -33,6 +36,8 @@ export class VisitsService {
 						...(searchInput?.trim() ? { query: `%${searchInput}%` } : {}),
 						status,
 						timeframe,
+						requesterId,
+						visitorSpaceSlug,
 						page,
 						size,
 						orderProp,

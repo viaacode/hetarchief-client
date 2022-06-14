@@ -1,3 +1,4 @@
+/* stylelint-disable no-descending-specificity */
 @use "styles/abstracts" as *;
 
 $c-table-border: 1px solid $silver;
@@ -6,7 +7,7 @@ $c-table-border: 1px solid $silver;
 
 table[class*="c-table--styled"] {
 	thead {
-		th{
+		th {
 			@include text-ellipsis;
 
 			padding: 1.6rem 2.4rem;
@@ -14,7 +15,7 @@ table[class*="c-table--styled"] {
 			text-align: left;
 			font-weight: 700;
 			font-size: 1.2rem;
-			line-height: 1.3;
+			line-height: $line-height-1xl;
 			color: #727272;
 			user-select: none;
 		}
@@ -46,7 +47,7 @@ table[class*="c-table--styled"] {
 			text-align: left;
 			padding: $spacer-sm $spacer-md;
 			font-size: $font-size-sm;
-			line-height: $font-size-base;
+			line-height: $line-height-lg;
 		}
 	}
 
@@ -119,8 +120,8 @@ div[class*="c-pagination__btn"] {
 div[class*="c-pagination__btn--active"] {
 	background-color: #009690;
 	color: #fff;
-    font-weight: 700;
-    border-radius: 50%;
+	font-weight: 700;
+	border-radius: 50%;
 
 	&:hover {
 		background-color: #009690;
@@ -149,9 +150,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 	cursor: pointer;
 	outline: 2px solid transparent;
 	transition: color $animate-default, background-color $animate-default,
-	border-color $animate-default;
+		border-color $animate-default;
 
-	.c-button__label, div[class*="c-button__label"] {
+	.c-button__label,
+	div[class*="c-button__label"] {
 		font-weight: 400;
 	}
 }
@@ -172,10 +174,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+* Cross-browser styles for explicit focus via
+* keyboard-based (eg Tab) navigation or the
+* .focus-visible utility class.
+*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
@@ -207,18 +209,18 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-		* Cross-browser styles for explicit focus via
-		* keyboard-based (eg Tab) navigation or the
-		* .focus-visible utility class.
-		*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $black;
 	}
 
 	/**
-	* Remove focus styles for non-keyboard focus.
-	*/
+* Remove focus styles for non-keyboard focus.
+*/
 	&:focus:not(:focus-visible) {
 		outline: 0;
 		box-shadow: none;
@@ -250,10 +252,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+* Cross-browser styles for explicit focus via
+* keyboard-based (eg Tab) navigation or the
+* .focus-visible utility class.
+*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -268,36 +270,43 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 }
 
 // inputs
-.c-filter-table .o-form-group-layout  {
+.c-filter-table .o-form-group-layout,
+.c-modal .o-form-group__controls {
 	align-items: center;
 
 	.c-content-filters__search {
 		max-width: none;
+	}
 
-		.c-input-with-icon {
-			position: relative;
+	.c-input-with-icon {
+		position: relative;
 
-			.c-input {
-				@include reset-input-field;
+		.c-input {
+			@include reset-input-field;
 
-				background-color: $white;
-				border: 1px solid $zinc;
-				font-size: $font-size-base;
-				outline: 1px solid transparent;
-				padding: 1.4rem 1.6rem;
-				height: 5.6rem;
-				border-radius: 2.8rem;
+			background-color: $white;
+			border: 1px solid $zinc;
+			font-size: $font-size-base;
+			outline: 1px solid transparent;
+			padding: 1.4rem 1.6rem;
+			height: 5.6rem;
+			border-radius: 2.8rem;
 
-				&:focus {
-					border-color: $teal;
-				}
+			&:focus {
+				border-color: $teal;
 			}
 
-			.o-svg-icon {
-				position: absolute;
-				top: calc(50% - 1rem);
-				right: 2rem;
+			&:disabled {
+				cursor: not-allowed;
+				color: $zinc;
+				border-color: $silver;
 			}
+		}
+
+		.o-svg-icon {
+			position: absolute;
+			top: calc(50% - 1rem);
+			right: 2rem;
 		}
 	}
 
@@ -311,7 +320,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 .c-modal {
 	.c-toolbar {
 		.c-modal__title {
-			font-size: $font-size-3xl;
+			font-size: $font-size-1xl;
 			font-weight: 700;
 		}
 
@@ -348,10 +357,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			}
 
 			/**
-			* Cross-browser styles for explicit focus via
-			* keyboard-based (eg Tab) navigation or the
-			* .focus-visible utility class.
-			*/
+* Cross-browser styles for explicit focus via
+* keyboard-based (eg Tab) navigation or the
+* .focus-visible utility class.
+*/
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
 				outline: 2px solid $teal;
@@ -377,6 +386,129 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 		input {
 			margin-right: $spacer-xs;
 		}
+
+		input[type="checkbox"]::after {
+			width: 1.5rem;
+			height: 1.5rem;
+			top: -0.2rem;
+			left: -0.1rem;
+			position: relative;
+			background-color: $white;
+			content: "";
+			display: inline-block;
+			visibility: visible;
+			border: 0.2rem solid $black;
+		}
+
+		input[type="checkbox"]:checked::after {
+			width: 1.5rem;
+			height: 1.5rem;
+			top: -0.2rem;
+			left: -0.1rem;
+			position: relative;
+			background-color: $white;
+			content: "";
+			display: inline-block;
+			visibility: visible;
+			border: 0.5rem solid $black;
+		}
+	}
+
+	.c-modal__body {
+		.o-form-group {
+			.c-radio-group {
+				display: flex;
+				flex-direction: column;
+				row-gap: $spacer-sm;
+				padding-top: $spacer-xs;
+				color: $black;
+			}
+
+			.c-radio {
+				label {
+					display: flex;
+					align-items: center;
+				}
+
+				input {
+					margin-right: $spacer-xs;
+				}
+
+				input[type="radio"]::after {
+					width: 1.5rem;
+					height: 1.5rem;
+					border-radius: 0.75rem;
+					top: -0.2rem;
+					left: -0.1rem;
+					position: relative;
+					background-color: $white;
+					content: "";
+					display: inline-block;
+					visibility: visible;
+					border: 0.2rem solid $black;
+				}
+
+				input[type="radio"]:checked::after {
+					width: 1.5rem;
+					height: 1.5rem;
+					border-radius: 0.75rem;
+					top: -0.2rem;
+					left: -0.1rem;
+					position: relative;
+					background-color: $white;
+					content: "";
+					display: inline-block;
+					visibility: visible;
+					border: 0.5rem solid $black;
+				}
+			}
+		}
+
+		.o-form-group-layout--standard {
+			margin-top: $spacer-xs;
+		}
+
+		.c-content-page-publish-modal__display-date {
+			.o-form-group__label {
+				display: block;
+				padding-bottom: $spacer-xs;
+			}
+
+			.u-spacer {
+				margin: 0 !important; // override current important flag
+
+				.c-input-with-icon {
+					.o-svg-icon {
+						right: 4rem;
+					}
+				}
+
+				.c-tooltip-trigger {
+					height: 2rem;
+					top: calc(50% - 1rem);
+					right: 1.2rem;
+
+					.a-info-icon {
+						display: block;
+						width: 100%;
+						height: 100%;
+					}
+				}
+
+				.c-tooltip {
+					background-color: $white;
+					border: 0.1rem solid $zinc;
+
+					&--right {
+						margin-left: $spacer-xs;
+					}
+
+					&__arrow {
+						visibility: hidden;
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -390,7 +522,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 		}
 
 		.c-checkbox-group,
-		.c-radio-group--inline,{
+		.c-radio-group--inline {
 			display: flex;
 			flex-direction: column;
 			row-gap: $spacer-sm;
@@ -409,6 +541,39 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 			input {
 				margin-right: $spacer-xs;
+			}
+
+			input[type="radio"]::after,
+			input[type="radio"]:checked::after,
+			input[type="checkbox"]::after,
+			input[type="checkbox"]:checked::after {
+				width: 1.5rem;
+				height: 1.5rem;
+				top: -0.2rem;
+				left: -0.1rem;
+				position: relative;
+				background-color: $white;
+				content: "";
+				display: inline-block;
+				visibility: visible;
+			}
+
+			input[type="radio"]::after {
+				border-radius: 0.75rem;
+				border: 0.2rem solid $black;
+			}
+
+			input[type="radio"]:checked::after {
+				border-radius: 0.75rem;
+				border: 0.5rem solid $black;
+			}
+
+			input[type="checkbox"]::after {
+				border: 0.2rem solid $black;
+			}
+
+			input[type="checkbox"]:checked::after {
+				border: 0.5rem solid $black;
 			}
 		}
 
@@ -465,6 +630,27 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 }
 
+// quote
+
+.c-content-block-preview {
+	.c-quote__text {
+		font-size: $font-size-1xl;
+	}
+
+	.c-quote__author {
+		color: $neutral;
+
+		.c-avatar {
+			width: auto;
+			height: auto;
+
+			.o-svg-icon {
+				display: none;
+			}
+		}
+	}
+}
+
 // other
 
 .c-form-help-text {
@@ -473,4 +659,8 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 
 .c-form-help-text--error {
 	color: $cherry;
+}
+
+.u-clickable {
+	cursor: pointer;
 }

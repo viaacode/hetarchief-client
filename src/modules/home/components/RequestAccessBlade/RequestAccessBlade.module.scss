@@ -1,9 +1,25 @@
+@use "sass:math";
 @use "styles/abstracts" as *;
 
 .c-request-access-blade {
 	:global(.c-input--textarea .c-input__field) {
 		@include respond-to("sm") {
 			min-height: 10rem;
+		}
+	}
+
+	&__title {
+		text-align: center;
+		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
+		font-size: $font-size-sm * 2;
+
+		@include respond-at(md) {
+			text-align: left;
+			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
+			font-size: $font-size-3xl;
+
+			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades
+			line-height: $font-size-3xl * (math.div(56, 48));
 		}
 	}
 }

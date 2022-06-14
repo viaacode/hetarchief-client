@@ -29,7 +29,7 @@ import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
-import { asDate, formatDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
+import { asDate, formatMediumDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitTimeframe } from '@visits/types';
 
@@ -84,7 +84,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const {
 		control,
-		formState: { errors },
+		formState: { errors, isSubmitting },
 		handleSubmit,
 		setValue,
 	} = useForm<ApproveRequestFormState>({
@@ -117,37 +117,42 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	}, [props.isOpen, reset]);
 
 	const checkOverlappingRequests = useCallback(async (): Promise<Visit[]> => {
-		const visitResponse = await VisitsService.getAll(
-			undefined,
-			VisitStatus.APPROVED,
-			[VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
-			1,
-			20,
-			'startAt',
-			OrderDirection.desc,
-			true
-		);
+		const visitResponse = await VisitsService.getAll({
+			status: VisitStatus.APPROVED,
+			timeframe: [VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
+			requesterId: selected?.userProfileId,
+			visitorSpaceSlug: selected?.spaceSlug,
+			page: 1,
+			size: 40,
+			orderProp: 'startAt',
+			orderDirection: OrderDirection.desc,
+			personal: false,
+		});
 		const overlappingRequests = visitResponse.items
-			.filter(
-				(visit) =>
-					visit.spaceSlug === selected?.spaceSlug &&
-					areIntervalsOverlapping(
-						{
-							start: form.accessFrom as Date,
-							end: form.accessTo as Date,
-						},
-						{
-							start: asDate(visit.startAt as string) as Date,
-							end: asDate(visit.endAt as string) as Date,
-						}
-					)
+			.filter((visit) =>
+				areIntervalsOverlapping(
+					{
+						start: form.accessFrom as Date,
+						end: form.accessTo as Date,
+					},
+					{
+						start: asDate(visit.startAt as string) as Date,
+						end: asDate(visit.endAt as string) as Date,
+					}
+				)
 			)
 			.filter((visit) => visit.id !== selected?.id);
 
 		setOverlappingRequests(overlappingRequests);
 
 		return overlappingRequests;
-	}, [selected?.id, form.accessFrom, form.accessTo]);
+	}, [
+		selected?.spaceSlug,
+		selected?.userProfileId,
+		selected?.id,
+		form.accessFrom,
+		form.accessTo,
+	]);
 
 	useEffect(() => {
 		checkOverlappingRequests();
@@ -214,6 +219,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					label={approveButtonLabel}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
+					disabled={isSubmitting}
 				/>
 
 				<Button
@@ -289,7 +295,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
-						value={formatDate(form.accessFrom)}
+						value={formatMediumDate(form.accessFrom)}
 						selected={form.accessFrom}
 						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
 					/>
@@ -332,7 +338,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
-						value={formatDate(form.accessTo)}
+						value={formatMediumDate(form.accessTo)}
 						selected={form.accessTo}
 						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
 					/>

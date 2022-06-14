@@ -179,7 +179,7 @@
 	padding: 0.9rem 2rem;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-normal;
-	line-height: $line-height-base;
+	line-height: $line-height-lg;
 }
 
 /**
@@ -254,7 +254,7 @@
 		&::after,
 		> span {
 			opacity: 0;
-			transition: opacity $animate-default;
+			transition: opacity $timing-default linear;
 		}
 
 		&::before,

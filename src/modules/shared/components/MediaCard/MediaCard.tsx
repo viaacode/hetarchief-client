@@ -5,7 +5,9 @@ import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 
 import { DropdownMenu } from '@shared/components';
-import { formatDate } from '@shared/utils';
+import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
+import { MediaTypes } from '@shared/types';
+import { formatMediumDate } from '@shared/utils';
 
 import Icon from '../Icon/Icon';
 
@@ -52,7 +54,11 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
-			return <b>{keywords?.length ? highlighted(title ?? '') : title}</b>;
+			return (
+				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
+					{keywords?.length ? highlighted(title ?? '') : title}
+				</b>
+			);
 		}
 
 		if (keywords && keywords.length > 0) {
@@ -70,7 +76,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		if (publishedAt) {
-			const formatted = formatDate(publishedAt);
+			const formatted = formatMediumDate(publishedAt);
 
 			subtitle += ` (${formatted})`;
 		}
@@ -83,7 +89,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderNoContentIcon = () => (
 		<Icon
 			className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'])}
-			name={`no-${type}` as 'no-audio' | 'no-video'}
+			name={TYPE_TO_NO_ICON_MAP[type as Exclude<MediaTypes, null>]}
 		/>
 	);
 
