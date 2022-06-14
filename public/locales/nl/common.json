@@ -193,6 +193,7 @@
   "modules/media/const/index___objecttype": "Objecttype",
   "modules/media/const/index___oorsprong": "Oorsprong",
   "modules/media/const/index___ophalen-van-afspeel-token-mislukt": "Er ging iets mis bij het afspelen. Probeer het opnieuw.",
+  "modules/media/const/index___pid": "PID",
   "modules/media/const/index___programma": "Programma",
   "modules/media/const/index___programmabeschrijving": "Programmabeschrijving",
   "modules/media/const/index___publicatiedatum": "Publicatiedatum",

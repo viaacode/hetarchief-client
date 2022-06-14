@@ -15,6 +15,7 @@ export interface Collection {
 export interface CollectionMedia {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID: not unique per object
+	premisIsPartOf?: string;
 	collectionEntryCreatedAt?: string;
 	creator?: unknown;
 	description: string;
