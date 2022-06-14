@@ -41,8 +41,10 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('Error'),
-				description: t('Het annuleren van de aanvraag is mislukt'),
+				title: t('modules/home/components/cancel-visit-blade/cancel-visit-blade___error'),
+				description: t(
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___het-annuleren-van-de-aanvraag-is-mislukt'
+				),
 			});
 		}
 		setIsSubmitting(false);

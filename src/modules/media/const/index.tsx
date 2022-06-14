@@ -169,6 +169,10 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			data: mediaInfo.meemooIdentifier,
 		},
 		{
+			title: i18n.t('modules/media/const/index___pid'),
+			data: mediaInfo.premisIsPartOf,
+		},
+		{
 			title: i18n.t('modules/media/const/index___identifier-bij-aanbieder'),
 			data: mediaInfo.meemooLocalId,
 		},
