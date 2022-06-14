@@ -74,6 +74,8 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 
 			el.style.overflowY = 'hidden';
 			el.style.marginRight = `${scrollbarWidth}px`;
+			el.style.position = 'fixed';
+			el.style.top = `-${(document as unknown as scrollState).__scrollDepth}px`;
 			window.onwheel = preventWheel;
 
 			// Use that state to go to the right depth
@@ -86,6 +88,8 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 		(el: HTMLElement) => {
 			el.style.overflowY = '';
 			el.style.marginRight = '';
+			el.style.position = 'relative';
+			el.style.top = `0`;
 			window.onwheel = null;
 
 			scroll();
