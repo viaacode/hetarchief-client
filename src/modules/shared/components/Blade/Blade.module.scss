@@ -67,7 +67,7 @@
 			width: calc(46.4rem + 5.6rem);
 			left: auto;
 			transform: translateX(5.6rem);
-			transition: opacity $animate-default, transform $animate-default;
+			transition: opacity $timing-default linear, transform $animate-default;
 		}
 	}
 

@@ -1,8 +1,8 @@
 @use "sass:map";
 @use "styles/abstracts" as *;
 
-$overlay-opacity-dark: 64%;
-$overlay-opacity-light: 40%;
+$overlay-opacity-dark: 0.64;
+$overlay-opacity-light: 0.40;
 
 .c-overlay {
 	z-index: get-z-layer("foreground");
@@ -15,8 +15,20 @@ $overlay-opacity-light: 40%;
 	bottom: 0;
 	background-color: $black;
 
+	@keyframes fade {
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: $overlay-opacity-dark;
+		}
+	}
+
 	&--visible {
 		pointer-events: all;
+
+		// animation: fade 0.2s linear;
 	}
 
 	&--visible.c-overlay--dark {
@@ -29,30 +41,30 @@ $overlay-opacity-light: 40%;
 
 	// animation types
 	&--animate-default {
-		transition: opacity $animate-default;
+		transition: opacity $timing-default linear;
 	}
 
 	&--animate-sm-in {
-		transition: opacity $animate-sm-in;
+		transition: opacity $timing-sm linear;
 	}
 
 	&--animate-sm-out {
-		transition: opacity $animate-sm-out;
+		transition: opacity $timing-sm linear;
 	}
 
 	&--animate-md-in {
-		transition: opacity $animate-md-in;
+		transition: opacity $timing-md-in linear;
 	}
 
 	&--animate-md-out {
-		transition: opacity $animate-md-out;
+		transition: opacity $timing-md-out linear;
 	}
 
 	&--animate-lg-in {
-		transition: opacity $animate-lg-in;
+		transition: opacity $timing-lg-in linear;
 	}
 
 	&--animate-lg-out {
-		transition: opacity $animate-lg-out;
+		transition: opacity $timing-lg-out linear;
 	}
 }
