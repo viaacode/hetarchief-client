@@ -82,7 +82,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 							{space.description && (
 								<Html
 									type="div"
-									className="p-visit-requested__description u-mt-32"
+									className="p-visit-requested__description u-mt-32 c-content u-padding-top-l"
 									content={space.description}
 								/>
 							)}

@@ -24,7 +24,11 @@ const SpacePreview: FC<SpacePreviewProps> = ({
 			)}
 
 			{serviceDescription && serviceDescription.length > 0 && canPreview && (
-				<Html className="u-mb-40 u-color-neutral" content={serviceDescription} type="div" />
+				<Html
+					className="u-mb-40 u-color-neutral c-content"
+					content={serviceDescription}
+					type="div"
+				/>
 			)}
 		</div>
 	);
