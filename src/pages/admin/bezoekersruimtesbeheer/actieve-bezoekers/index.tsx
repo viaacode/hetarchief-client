@@ -167,7 +167,9 @@ const Visitors: FC = () => {
 								placeholder={t(
 									'pages/admin/bezoekersruimtesbeheer/bezoekers/index___zoek'
 								)}
-								onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
+								onSearch={(value) =>
+									setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })
+								}
 							/>
 						</div>
 
