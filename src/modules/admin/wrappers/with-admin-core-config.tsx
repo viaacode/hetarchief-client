@@ -40,7 +40,7 @@ const InternalLink = (linkInfo: LinkInfo) => {
 const onSaveContentPage = async (contentPageInfo: { path: string }) => {
 	await ApiService.getApi(false).post(
 		stringifyUrl({
-			url: publicRuntimeConfig.PROXY_URL + '/client-cache/clear-cache',
+			url: 'client-cache/clear-cache',
 			query: { path: contentPageInfo.path },
 		})
 	);
