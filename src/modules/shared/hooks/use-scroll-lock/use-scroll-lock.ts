@@ -75,6 +75,8 @@ const useScrollLock: UseScrollLock = (lock, id) => {
 			el.style.overflowY = 'hidden';
 			el.style.marginRight = `${scrollbarWidth}px`;
 			el.style.position = 'fixed';
+			el.style.width = '100vw';
+			el.style.overflowX = 'hidden';
 			el.style.top = `-${(document as unknown as scrollState).__scrollDepth}px`;
 			window.onwheel = preventWheel;
 

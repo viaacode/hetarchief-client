@@ -45,11 +45,20 @@
 	.o-form-group {
 		.c-input,
 		.c-select .c-select__control,
-		.c-tags-input .c-tags-input__control,
 		.c-color-select .react-select__control,
 		.c-icon-picker .react-select__control {
 			height: 3.8rem;
 			border-radius: 1.9rem;
+		}
+
+		// Tag inputs
+		.c-tags-input .c-tags-input__control {
+			height: auto;
+			padding: 10px 0;
+
+			.c-tags-input__multi-value {
+				margin-bottom: 15px;
+			}
 		}
 	}
 
