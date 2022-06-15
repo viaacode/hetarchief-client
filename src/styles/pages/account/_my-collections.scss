@@ -40,7 +40,7 @@ $component: "p-account-my-collections";
 
 		// Hide icon on desktop
 		span {
-			visibility: hidden;
+			display: none;
 		}
 
 		@include respond-to("md") {
