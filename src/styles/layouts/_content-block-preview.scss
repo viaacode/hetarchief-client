@@ -6,8 +6,6 @@
 	position: relative;
 
 	> div {
-		z-index: 2;
-
 		.c-content-block__header-bg-color {
 			position: absolute;
 			left: 0;
@@ -34,6 +32,10 @@
 			}
 		}
 	}
+}
+
+.c-content-page-preview .c-content-block > div {
+	z-index: 1; // Below mobile hamburger menu
 }
 
 .c-content-block-preview--dark {
