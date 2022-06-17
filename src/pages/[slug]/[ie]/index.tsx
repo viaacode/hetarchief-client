@@ -106,9 +106,9 @@ const ObjectDetailPage: NextPage = () => {
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 
 	// Internal state
-	const [backLink, setBackLink] = useState(`/${router.query.slug}?focus=${router.query.ie}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [metadataColumns, setMetadataColumns] = useState<number>(1);
@@ -221,6 +221,19 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	useEffect(() => {
+		// Store the first previous url when arriving on this page, so we can return to the visitor space search url with query params
+		// when we click the site's back button in the header
+		if (previousUrl) {
+			const parsedUrl = parseUrl(previousUrl);
+			// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
+			if (/^\/[^/]+$/g.test(parsedUrl.url)) {
+				// Previous url appears to be a visitor space url
+				setVisitorSpaceSearchUrl(previousUrl);
+			}
+		}
+	}, [previousUrl]);
+
+	useEffect(() => {
 		dispatch(setShowZendesk(false));
 	}, [dispatch]);
 
@@ -243,24 +256,6 @@ const ObjectDetailPage: NextPage = () => {
 			setIsMediaPaused(true);
 		}
 	}, [activeTab, isMobile]);
-
-	useEffect(() => {
-		let backLink = `/${router.query.slug}`;
-		if (previousUrl) {
-			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
-			const validBacklink =
-				subgroups?.length === 1 && subgroups[0]?.startsWith(router.query.slug as string);
-
-			if (validBacklink) {
-				const previousUrlParsed = parseUrl(previousUrl);
-				backLink = stringifyUrl({
-					url: previousUrlParsed?.url,
-					query: { ...previousUrlParsed.query, focus: router.query.ie },
-				});
-			}
-		}
-		setBackLink(backLink);
-	}, [previousUrl, router.query.slug, router.query.ie]);
 
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
@@ -547,6 +542,15 @@ const ObjectDetailPage: NextPage = () => {
 					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
 						<TextWithNewLines text={mediaInfo?.description} />
 					</p>
+
+					{/*TODO remove test link*/}
+					<Link
+						passHref
+						href="/vrt/09f17b37445c4ce59f645c2d5db9dbf8dbee79eba623459caa8c6496108641a0900618cb6ceb4e9b8ad907e47b980ee3"
+					>
+						<a>Link to another item</a>
+					</Link>
+
 					<div className="u-pb-24 p-object-detail__actions">
 						{canDownloadMetadata && (
 							<Button
@@ -687,7 +691,7 @@ const ObjectDetailPage: NextPage = () => {
 				className="p-object-detail__nav"
 				showBorder={showNavigationBorder}
 				title={mediaInfo?.maintainerName ?? ''}
-				backLink={backLink}
+				backLink={visitorSpaceSearchUrl || `/${router.query.slug}`}
 				phone={mediaInfo?.contactInfo.telephone || ''}
 				email={mediaInfo?.contactInfo.email || ''}
 				showAccessEndDate={getAccessEndDate()}
