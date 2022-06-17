@@ -543,14 +543,6 @@ const ObjectDetailPage: NextPage = () => {
 						<TextWithNewLines text={mediaInfo?.description} />
 					</p>
 
-					{/*TODO remove test link*/}
-					<Link
-						passHref
-						href="/vrt/09f17b37445c4ce59f645c2d5db9dbf8dbee79eba623459caa8c6496108641a0900618cb6ceb4e9b8ad907e47b980ee3"
-					>
-						<a>Link to another item</a>
-					</Link>
-
 					<div className="u-pb-24 p-object-detail__actions">
 						{canDownloadMetadata && (
 							<Button
