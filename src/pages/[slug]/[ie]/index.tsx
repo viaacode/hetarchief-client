@@ -1,7 +1,7 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { kebabCase } from 'lodash-es';
+import { capitalize, kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -782,7 +782,10 @@ const ObjectDetailPage: NextPage = () => {
 		<VisitorLayout>
 			<Head>
 				<title>{createPageTitle(mediaInfo?.name)}</title>
-				<meta name="description" content={mediaInfo?.maintainerName} />
+				<meta
+					name="description"
+					content={capitalize(lowerCase((router.query.slug as string) || ''))}
+				/>
 			</Head>
 			{renderPageContent()}
 		</VisitorLayout>
