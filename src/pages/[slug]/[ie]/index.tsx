@@ -534,6 +534,17 @@ const ObjectDetailPage: NextPage = () => {
 							text={t(
 								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 							)}
+							action={
+								<Link passHref href="/kiosk-voorwaarden">
+									<a>
+										<Button
+											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+											label={t('pages/slug/index___meer-info')}
+											variants={['text', 'underline']}
+										/>
+									</a>
+								</Link>
+							}
 						/>
 					)}
 					<h3
