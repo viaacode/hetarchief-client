@@ -68,6 +68,10 @@ $component: "c-list-navigation";
 				background-color: $teal-24;
 			}
 		}
+
+		&:active {
+			background-color: $silver;
+		}
 	}
 
 	&--platinum {
