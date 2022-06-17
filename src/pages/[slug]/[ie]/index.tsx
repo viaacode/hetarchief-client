@@ -9,7 +9,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { parseUrl, stringifyUrl } from 'query-string';
+import { parseUrl } from 'query-string';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
