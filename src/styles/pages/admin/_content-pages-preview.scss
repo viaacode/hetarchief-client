@@ -64,6 +64,10 @@ $l-container-padding-xs: 2rem;
 		color: $neutral;
 	}
 
+	.c-content-block-preview > .o-container {
+		padding: 0 $spacer-sm;
+	}
+
 	div[style*="background-color: transparent"].content-block-preview-0:not(.c-content-page-preview
 			.c-content-page-preview
 			div[style*="background-color: transparent"].content-block-preview-0) {
