@@ -2,6 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { FC } from 'react';
 
 import { ListNavigation, ListNavigationItem } from '@shared/components';
+import { OrderDirection } from '@shared/types';
 
 import { FilterMenuSortOption } from '../FilterMenu.types';
 
@@ -10,9 +11,7 @@ import { FilterSortListProps } from './FilterSortList.types';
 const FilterSortList: FC<FilterSortListProps> = ({ activeSort, options, onOptionClick }) => {
 	const checkActiveSort = ({ orderProp, orderDirection }: FilterMenuSortOption) => {
 		const isSortEqual = orderProp === activeSort?.orderProp;
-		return !activeSort?.orderDirection
-			? isSortEqual
-			: isSortEqual && orderDirection === activeSort.orderDirection;
+		return isSortEqual && (orderDirection || OrderDirection.desc) === activeSort.orderDirection;
 	};
 
 	const sortListItems: ListNavigationItem[] = options.map((option) => {

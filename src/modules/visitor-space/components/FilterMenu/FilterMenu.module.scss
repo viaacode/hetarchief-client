@@ -34,7 +34,10 @@ $component: "c-filter-menu";
 	&__toggle:global(.c-button),
 	&__button:global(.c-button) {
 		border-radius: 0;
-		outline: none;
+
+		&:focus {
+			z-index: 1;
+		}
 
 		:global(.c-button__content) {
 			display: flex;
@@ -47,6 +50,10 @@ $component: "c-filter-menu";
 		height: 100%;
 		padding-right: 1.2rem;
 		text-align: left;
+
+		&:focus {
+			z-index: 2;
+		}
 
 		@include respond-to("md") {
 			font-size: $font-size-md;
@@ -69,7 +76,6 @@ $component: "c-filter-menu";
 	}
 
 	&__button--sort:global(.c-button) {
-		border-color: $shade;
 		border-bottom-color: $c-filter-menu-border-color;
 	}
 
@@ -82,10 +88,6 @@ $component: "c-filter-menu";
 		&:hover {
 			background-color: $white;
 			border-color: $white;
-		}
-
-		&:not(:active, :hover):focus {
-			outline: none;
 		}
 	}
 

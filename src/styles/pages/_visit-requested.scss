@@ -43,10 +43,6 @@ $image-size-md: 56.1rem;
 	&__description {
 		@include respond-at($page-breakpoint) {
 			min-height: 23rem; // magic value; minimum height required for __image to reach its max-height;
-
-			&[class*="u-mt-"] {
-				margin-top: 0 !important;
-			}
 		}
 	}
 
