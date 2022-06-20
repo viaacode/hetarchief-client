@@ -209,7 +209,7 @@ const ObjectDetailPage: NextPage = () => {
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
-		!hasMedia && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
+		!hasMedia && !mediaInfo?.license?.includes(License.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
