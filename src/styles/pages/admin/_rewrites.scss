@@ -209,10 +209,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+* Cross-browser styles for explicit focus via
+* keyboard-based (eg Tab) navigation or the
+* .focus-visible utility class.
+*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $black;
@@ -515,6 +515,17 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 // dropdowns
 
 .c-filter-table__toolbar {
+	.c-dropdown__trigger {
+		.c-checkbox-dropdown-modal__trigger {
+			padding: 0.54rem $spacer-md;
+		}
+
+		[class^="TagList-module_c-tag-list"] {
+			margin: 0;
+			padding: 0;
+		}
+	}
+
 	.c-dropdown__menu {
 		.o-form-group__label {
 			font-size: $font-size-sm;
