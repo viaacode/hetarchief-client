@@ -1,28 +1,28 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $component: "c-checkbox-list";
 
 .#{$component} {
-    @extend %reset-list;
+	@extend %reset-list;
 
-    &__item {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        cursor: pointer;
-        outline-color: $teal;
-        user-select: none;
+	&__item {
+		display: flex;
+		flex-flow: row nowrap;
+		align-items: center;
+		cursor: pointer;
+		outline-color: $teal;
+		user-select: none;
 
-        :global(.c-checkbox) {
-            padding: $spacer-xs;
-            box-sizing: content-box;
-            margin-right: $spacer-xs;
-            pointer-events: none;
-        }
+		:global(.c-checkbox) {
+			padding: $spacer-xs;
+			box-sizing: content-box;
+			margin-right: $spacer-xs;
+			pointer-events: none;
+		}
 
-        :global(.c-checkbox__check-icon) {
-            top: 0;
-            margin: $spacer-xs;
-        }
-    }
+		:global(.c-checkbox__check-icon) {
+			top: 0;
+			margin: $spacer-xs;
+		}
+	}
 }

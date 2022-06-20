@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $component: "c-add-to-collection-blade";
 $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;

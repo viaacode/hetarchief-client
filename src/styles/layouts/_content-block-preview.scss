@@ -1,3 +1,5 @@
+@use "src/styles/abstracts" as *;
+
 .c-content-page-overview-block__header {
 	opacity: 0;
 }
@@ -17,7 +19,7 @@
 		}
 
 		.c-content-block-preview {
-			z-index: 1;
+			z-index: get-z-layer("foreground");
 
 			> .o-container {
 				h1,
@@ -35,7 +37,7 @@
 }
 
 .c-content-page-preview .c-content-block > div {
-	z-index: 1; // Below mobile hamburger menu
+	z-index: get-z-layer("foreground"); // Below mobile hamburger menu
 }
 
 .c-content-block-preview--dark {

@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "sass:math";
 @use "sass:color";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $component: "c-visitor-space-card";
 
@@ -90,8 +90,8 @@ $component: "c-visitor-space-card";
 	}
 
 	/**
-   * Modifiers
-   */
+ * Modifiers
+ */
 
 	&--granted {
 		:global(.c-card__children-wrapper) {

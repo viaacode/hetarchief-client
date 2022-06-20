@@ -1,16 +1,16 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 // TODO replace with message: https://xd.adobe.com/view/86b0be3f-d968-4a98-7784-d5d00cd42f98-f081/screen/c880aa07-7f8c-49f3-8038-f3d8990fdb0b/
 .p-error-boundary__message {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - $c-navigation-height-md);
-  text-align: center;
-  line-height: 3rem;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: calc(100vh - #{$c-navigation-height-md});
+	text-align: center;
+	line-height: 3rem;
 
-  @include respond-at(md) {
-	height: calc(100vh - $c-navigation-height);
-  }
+	@include respond-at(md) {
+		height: calc(100vh - #{$c-navigation-height});
+	}
 }

@@ -1,6 +1,6 @@
 @use "sass:map";
 @use "sass:color";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $teal-24: color.adjust($teal, $alpha: -0.76);
 $component: "c-list-navigation";

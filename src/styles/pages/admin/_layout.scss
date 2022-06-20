@@ -1,4 +1,4 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .c-admin__header {
 	max-width: 121.6rem + ($spacer-sm * 2);
@@ -17,13 +17,13 @@
 	}
 
 	&--edgeless {
-        &-to-lg {
-            @include respond-to("lg") {
-                padding-left: 0;
-                padding-right: 0;
-            }
-        }
-    }
+		&-to-lg {
+			@include respond-to("lg") {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+	}
 }
 
 .c-admin__page-title {

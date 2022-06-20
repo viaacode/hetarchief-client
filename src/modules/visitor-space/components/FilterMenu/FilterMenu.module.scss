@@ -1,5 +1,5 @@
 @use "sass:color";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $c-filter-menu-flyout-top-padding: 6.4rem;
 $c-filter-menu-border-color: color.adjust($white, $alpha: -0.8);
@@ -36,7 +36,7 @@ $component: "c-filter-menu";
 		border-radius: 0;
 
 		&:focus {
-			z-index: 1;
+			z-index: get-z-layer("foreground");
 		}
 
 		:global(.c-button__content) {
@@ -131,6 +131,6 @@ $component: "c-filter-menu";
 	}
 
 	&__form {
-		max-height: calc(100vh - $c-filter-menu-flyout-top-padding);
+		max-height: calc(100vh - #{$c-filter-menu-flyout-top-padding});
 	}
 }

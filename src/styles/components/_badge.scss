@@ -1,4 +1,4 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $badge-font-size-sm: 1.2rem;
 $badge-font-size: 1.4rem;
@@ -10,7 +10,7 @@ $badge-font-size: 1.4rem;
 }
 
 @mixin icon-font-size($font-size) {
-	font-size: calc($font-size + 0.6rem);
+	font-size: calc(#{$font-size} + 0.6rem);
 }
 
 /* Component

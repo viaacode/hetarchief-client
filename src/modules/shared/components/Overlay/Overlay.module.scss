@@ -1,8 +1,8 @@
 @use "sass:map";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $overlay-opacity-dark: 0.64;
-$overlay-opacity-light: 0.40;
+$overlay-opacity-light: 0.4;
 
 .c-overlay {
 	z-index: get-z-layer("foreground");
