@@ -1,13 +1,13 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $component: "c-visit-summary";
 
 .#{$component} {
-    @include blade-text-styling;
+	@include blade-text-styling;
 
-    padding: 0 $spacer-sm;
+	padding: 0 $spacer-sm;
 
-    @include respond-at("md") {
-        padding: 0 $spacer-lg;
-    }
+	@include respond-at("md") {
+		padding: 0 $spacer-lg;
+	}
 }

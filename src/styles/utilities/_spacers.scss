@@ -133,7 +133,7 @@ $mr: (
 // Top / Bottom
 $my: (
 	"16": $spacer-sm,
-	"32": $spacer-lg
+	"32": $spacer-lg,
 );
 @include generate-utils("my", ("margin-top", "margin-bottom"), $my);
 

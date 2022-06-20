@@ -1,6 +1,6 @@
 @use "sass:math";
 @use "sass:color";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $terms-of-service-background-color: #ebfbf8;
 
@@ -39,7 +39,7 @@ $terms-of-service-background-color: #ebfbf8;
 		);
 		grid-column: 1 / 2;
 		grid-row: 2 / 3; // 192px after X
-		z-index: 1;
+		z-index: get-z-layer("foreground");
 		transition: opacity $timing-default linear;
 
 		&--hidden {

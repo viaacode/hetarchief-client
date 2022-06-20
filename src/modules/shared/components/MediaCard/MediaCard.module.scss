@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
