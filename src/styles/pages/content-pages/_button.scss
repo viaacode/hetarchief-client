@@ -1,121 +1,122 @@
 /* stylelint-disable no-descending-specificity */
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .c-block-buttons {
-button[class*="c-button"][class*="c-button--primary"],
-button[class*="c-button"][class*="c-button--secondary"],
-button[class*="c-button"][class*="c-button--tertiary"],
-button[class*="c-button"][class*="c-button--link"] {
-	max-height: 5.6rem;
-	display: inline-block;
-	padding: 1.4rem $button-horizontal-whitespace;
-	padding: 1.4rem 2.4rem;
-	border: 1px solid $teal-dark;
-	font-family: $font-family-primary;
-	font-size: $font-size-base;
-	font-weight: $font-weight-bold;
-	line-height: 1.125;
-	text-align: center;
-	background-color: $teal-dark;
-	border-radius: 4rem;
-	color: $white;
-	cursor: pointer;
-	outline: 2px solid transparent;
-	transition: color $animate-default, background-color $animate-default,
-		border-color $animate-default;
-
-	&:hover {
-		background-color: $shade;
-		border-color: $shade;
-	}
-
-	&:active {
+	button[class*="c-button"][class*="c-button--primary"],
+	button[class*="c-button"][class*="c-button--secondary"],
+	button[class*="c-button"][class*="c-button--tertiary"],
+	button[class*="c-button"][class*="c-button--link"] {
+		max-height: 5.6rem;
+		display: inline-block;
+		padding: 1.4rem $button-horizontal-whitespace;
+		padding: 1.4rem 2.4rem;
+		border: 1px solid $teal-dark;
+		font-family: $font-family-primary;
+		font-size: $font-size-base;
+		font-weight: $font-weight-bold;
+		line-height: 1.125;
+		text-align: center;
 		background-color: $teal-dark;
-		border-color: $teal-dark;
-	}
+		border-radius: 4rem;
+		color: $white;
+		cursor: pointer;
+		outline: 2px solid transparent;
+		transition: color $animate-default, background-color $animate-default,
+			border-color $animate-default;
 
-	/**
+		&:hover {
+			background-color: $shade;
+			border-color: $shade;
+		}
+
+		&:active {
+			background-color: $teal-dark;
+			border-color: $teal-dark;
+		}
+
+		/**
 		* Cross-browser styles for explicit focus via
 		* keyboard-based (eg Tab) navigation or the
 		* .focus-visible utility class.
 		*/
-	&:focus,
-	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $black;
-	}
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $black;
+		}
 
-	/**
+		/**
 	* Remove focus styles for non-keyboard focus.
 	*/
-	&:focus:not(:focus-visible) {
-		outline: 0;
-		box-shadow: none;
-	}
-}
-
-/**
- * Elements
- */
-
-.c-button__content {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-	white-space: nowrap;
-}
-
-.c-button__icon {
-	display: inline-flex;
-	font-size: $font-size-md;
-
-	&--start {
-		margin-right: 4px;
-	}
-
-	&--end {
-		margin-left: 4px;
-	}
-}
-
-/**
- * Modifiers
- */
-
-// Silver
-button[class*="c-button"][class*="c-button--secondary"][class*="skins-module_c-button--secondary"] {
-	background-color: $silver;
-	border-color: $silver;
-	color: $black;
-
-	&:hover {
-		background-color: $shade;
-		border-color: $shade;
-		color: $white;
-	}
-
-	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
-		color: $white;
+		&:focus:not(:focus-visible) {
+			outline: 0;
+			box-shadow: none;
+		}
 	}
 
 	/**
+   * Elements
+   */
+
+	.c-button__content {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		white-space: nowrap;
+	}
+
+	.c-button__icon {
+		display: inline-flex;
+		font-size: $font-size-md;
+
+		&--start {
+			margin-right: 4px;
+		}
+
+		&--end {
+			margin-left: 4px;
+		}
+	}
+
+	/**
+   * Modifiers
+   */
+
+	// Silver
+	button[class*="c-button"][class*="c-button--secondary"][class*="skins-module_c-button--secondary"] {
+		background-color: $silver;
+		border-color: $silver;
+		color: $black;
+
+		&:hover {
+			background-color: $shade;
+			border-color: $shade;
+			color: $white;
+		}
+
+		&:active {
+			background-color: $teal-dark;
+			border-color: $teal-dark;
+			color: $white;
+		}
+
+		/**
 	* Cross-browser styles for explicit focus via
 	* keyboard-based (eg Tab) navigation or the
 	* .focus-visible utility class.
 	*/
-	&:focus,
-	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $teal;
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal;
+		}
 	}
-}}
+}
 
 /**
  * Variants
  */
 
- // Outline
+// Outline
 
 button[class*="c-button"][class*="c-button--tertiary"][class*="skins-module_c-button--tertiary"] {
 	background-color: $white;
@@ -133,10 +134,10 @@ button[class*="c-button"][class*="c-button--tertiary"][class*="skins-module_c-bu
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
@@ -148,7 +149,7 @@ button[class*="c-button"][class*="c-button--tertiary"][class*="skins-module_c-bu
 	}
 }
 
- // Link
+// Link
 
 button[class*="c-button"][class*="c-button--link"][class*="skins-module_c-button--link"] {
 	font-weight: $font-weight-normal;
@@ -169,10 +170,10 @@ button[class*="c-button"][class*="c-button--link"][class*="skins-module_c-button
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;

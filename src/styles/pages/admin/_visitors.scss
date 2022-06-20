@@ -1,4 +1,4 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $page: "p-admin-visitors";
 
@@ -38,7 +38,7 @@ $page: "p-admin-visitors";
 	&__access {
 		display: flex;
 		align-items: center;
-    }
+	}
 
 	tr {
 		td,

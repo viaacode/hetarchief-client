@@ -1,15 +1,15 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .p-admin-vertalingen {
 	table {
 		border-spacing: 0;
-    	border-collapse: collapse;
+		border-collapse: collapse;
 	}
 
 	thead {
 		th:last-of-type {
-		width: 60%;
-		padding-left: 1rem;
+			width: 60%;
+			padding-left: 1rem;
 		}
 	}
 
@@ -89,5 +89,4 @@
 			}
 		}
 	}
-
 }

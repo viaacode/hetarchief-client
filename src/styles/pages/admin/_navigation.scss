@@ -1,4 +1,4 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .p-admin-navigation,
 .p-admin-navigation__detail {
@@ -108,7 +108,8 @@
 			padding: 1.4rem 1.8rem;
 			border-radius: 2.9rem;
 
-			&:hover, &:active {
+			&:hover,
+			&:active {
 				box-shadow: none;
 			}
 		}
@@ -124,9 +125,8 @@
 			border-radius: 2.8rem;
 
 			div[class*="placeholder"] {
-				color: $zinc
+				color: $zinc;
 			}
 		}
 	}
 }
-

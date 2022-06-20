@@ -35,7 +35,7 @@
 		}
 	}
 
-	@media screen and (max-width: calc($max-bp - 1px)) {
+	@media screen and (max-width: calc(#{$max-bp} - 1px)) {
 		@content;
 	}
 }
@@ -60,7 +60,7 @@
 		@error "Min width can not be higher than or equal to max width.";
 	}
 
-	@media screen and (min-width: $min-bp) and (max-width: calc($max-bp - 1px)) {
+	@media screen and (min-width: $min-bp) and (max-width: calc(#{$max-bp} - 1px)) {
 		@content;
 	}
 }
@@ -223,8 +223,8 @@
 	}
 
 	/**
-	* Elements
-	*/
+  * Elements
+  */
 
 	.c-#{$type}__input {
 		position: absolute;
@@ -301,8 +301,8 @@
 	}
 
 	/**
-	* Modifiers
-	*/
+  * Modifiers
+  */
 
 	.c-#{$type}--checked {
 		.c-#{$type}__check-icon {
@@ -439,19 +439,19 @@
 
 @mixin blade-text-styling() {
 	strong {
-        display: block;
-        margin-bottom: $spacer-sm;
-    }
+		display: block;
+		margin-bottom: $spacer-sm;
+	}
 
-    p {
-        color: $neutral;
-        font-size: $font-size-sm;
-        line-height: $line-height-3xl;
-        margin-bottom: $spacer-1xl;
+	p {
+		color: $neutral;
+		font-size: $font-size-sm;
+		line-height: $line-height-3xl;
+		margin-bottom: $spacer-1xl;
 
-        @include respond-at("md") {
-            font-size: $font-size-base;
-            line-height: $line-height-1xl;
-        }
-    }
+		@include respond-at("md") {
+			font-size: $font-size-base;
+			line-height: $line-height-1xl;
+		}
+	}
 }

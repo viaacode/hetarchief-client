@@ -1,5 +1,5 @@
 @use "sass:map";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 // Use `hetarchief` prefix to avoid naming conflicts with avo2-components
 .c-hetarchief-modal {

@@ -103,7 +103,9 @@ const PermissionsOverview: FC = () => {
 					{hasChanges && <>{renderActionButtons()}</>}
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
-					<div className="l-container">{renderPageContent()}</div>
+					<div className={clsx('l-container', styles['p-permissions-page'])}>
+						{renderPageContent()}
+					</div>
 					<div className={clsx('l-container', styles['p-action-buttons'])}>
 						{hasChanges && renderActionButtons()}
 					</div>

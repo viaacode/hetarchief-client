@@ -90,8 +90,8 @@ const LoggedOutHome: FC = () => {
 						{t('pages/index___logged-out-home-description')}
 					</p>
 					<b>
-						<Link href="#">
-							<a className={styles['c-hero__link']} target="_self">
+						<Link href="/over-de-bezoekertool">
+							<a className={styles['c-hero__link']}>
 								{t('pages/index___hier-kom-je-er-alles-over-te-weten')}
 							</a>
 						</Link>

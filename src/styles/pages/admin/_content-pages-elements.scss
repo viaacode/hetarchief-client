@@ -1,5 +1,5 @@
 @use "sass:color";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .c-admin__content .c-navbar {
 	background-color: transparent;
@@ -20,7 +20,7 @@
 	}
 
 	.c-tab-item__active {
-		box-shadow: inset 0 -0.3rem 0 $teal
+		box-shadow: inset 0 -0.3rem 0 $teal;
 	}
 }
 
@@ -163,12 +163,12 @@
 	}
 }
 
-.c-content-edit-view__sidebar>.o-sidebar__content {
-	&>.c-navbar {
+.c-content-edit-view__sidebar > .o-sidebar__content {
+	& > .c-navbar {
 		background-color: $white;
 	}
 
-	&>.c-navbar div[class^="c-select__control"] {
+	& > .c-navbar div[class^="c-select__control"] {
 		border-radius: 1.9rem;
 		background-color: transparent;
 		border-color: $zinc;

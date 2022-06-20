@@ -68,10 +68,10 @@
 .c-tag--medium {
 	height: 2.4rem;
 	border-radius: 1.2rem;
-	padding: calc($spacer-xs / 2) $spacer-xs;
+	padding: calc(#{$spacer-xs} / 2) $spacer-xs;
 
 	.c-tag__close {
-		padding: calc($spacer-xs / 2);
+		padding: calc(#{$spacer-xs} / 2);
 		padding-right: $spacer-xs;
 	}
 }
@@ -82,8 +82,8 @@
 	border-radius: 0.75rem;
 
 	.c-tag__close {
-		padding: 0 calc($spacer-xs / 2);
-		padding-right: calc($spacer-xs / 2);
+		padding: 0 calc(#{$spacer-xs} / 2);
+		padding-right: calc(#{$spacer-xs} / 2);
 	}
 }
 

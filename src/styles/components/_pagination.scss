@@ -1,4 +1,4 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .c-pagination {
 	display: flex;
@@ -12,7 +12,7 @@
 		align-items: center;
 		min-width: 3.2rem;
 		min-height: 3.2rem;
-		margin: 0 calc($spacer-xs / 4);
+		margin: 0 calc(#{$spacer-xs} / 4);
 		cursor: pointer;
 
 		&--active {
@@ -40,7 +40,7 @@
 
 	&__ellipsis {
 		color: $zinc;
-		margin: 0 calc($spacer-xs / 4);
+		margin: 0 calc(#{$spacer-xs} / 4);
 	}
 
 	&__icon {

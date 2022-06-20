@@ -1,10 +1,10 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $fragment-width: 16rem;
 $fragment-spacing: 2.5rem;
 $button-size: 3.6rem;
 
-.c-fragment-slider{
+.c-fragment-slider {
 	max-width: 14.1rem;
 	justify-self: center;
 
@@ -75,4 +75,3 @@ $button-size: 3.6rem;
 		}
 	}
 }
-

@@ -1,7 +1,7 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .c-menu {
-	padding: calc($spacer-md / 2) 0;
+	padding: calc(#{$spacer-md} / 2) 0;
 	margin: 0;
 	background-color: $white;
 }
@@ -9,12 +9,12 @@
 .c-dropdown-menu {
 	&__divider {
 		height: 0.1rem;
-		margin: calc($spacer-md / 2) 0;
+		margin: calc(#{$spacer-md} / 2) 0;
 		background-color: $silver;
 	}
 
 	&__item {
-		padding: calc($spacer-md / 2) $spacer-md;
+		padding: calc(#{$spacer-md} / 2) $spacer-md;
 		font-size: $font-size-sm;
 		cursor: pointer;
 
