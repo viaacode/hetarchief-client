@@ -1,4 +1,5 @@
-import { TabProps } from '@meemoo/react-components';
+import { Button, TabProps } from '@meemoo/react-components';
+import React from 'react';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
@@ -91,7 +92,13 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		Header: '',
 		id: 'cp-requests-table-actions',
 		Cell: () => {
-			return <Icon className="p-cp-requests__actions" name="dots-vertical" />;
+			return (
+				<Button
+					className="p-cp-requests__actions"
+					icon={<Icon name="dots-vertical" />}
+					variants={['xxs', 'text']}
+				/>
+			);
 		},
 	},
 ];
