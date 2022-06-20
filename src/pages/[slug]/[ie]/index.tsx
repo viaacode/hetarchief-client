@@ -1,7 +1,7 @@
 import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { kebabCase } from 'lodash-es';
+import { capitalize, kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import getConfig from 'next/config';
@@ -9,7 +9,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { parseUrl, stringifyUrl } from 'query-string';
+import { parseUrl } from 'query-string';
 import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
@@ -106,9 +106,9 @@ const ObjectDetailPage: NextPage = () => {
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 
 	// Internal state
-	const [backLink, setBackLink] = useState(`/${router.query.slug}?focus=${router.query.ie}`);
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [metadataColumns, setMetadataColumns] = useState<number>(1);
@@ -209,7 +209,7 @@ const ObjectDetailPage: NextPage = () => {
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
-		!hasMedia && !mediaInfo?.license.includes(License.BEZOEKERTOOL_CONTENT);
+		!hasMedia && !mediaInfo?.license?.includes(License.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -219,6 +219,19 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		// Store the first previous url when arriving on this page, so we can return to the visitor space search url with query params
+		// when we click the site's back button in the header
+		if (previousUrl) {
+			const parsedUrl = parseUrl(previousUrl);
+			// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
+			if (/^\/[^/]+$/g.test(parsedUrl.url)) {
+				// Previous url appears to be a visitor space url
+				setVisitorSpaceSearchUrl(previousUrl);
+			}
+		}
+	}, [previousUrl]);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(false));
@@ -243,24 +256,6 @@ const ObjectDetailPage: NextPage = () => {
 			setIsMediaPaused(true);
 		}
 	}, [activeTab, isMobile]);
-
-	useEffect(() => {
-		let backLink = `/${router.query.slug}`;
-		if (previousUrl) {
-			const subgroups = previousUrl?.match(/(?:[^/\n]|\/\/)+/gi);
-			const validBacklink =
-				subgroups?.length === 1 && subgroups[0]?.startsWith(router.query.slug as string);
-
-			if (validBacklink) {
-				const previousUrlParsed = parseUrl(previousUrl);
-				backLink = stringifyUrl({
-					url: previousUrlParsed?.url,
-					query: { ...previousUrlParsed.query, focus: router.query.ie },
-				});
-			}
-		}
-		setBackLink(backLink);
-	}, [previousUrl, router.query.slug, router.query.ie]);
 
 	useEffect(() => {
 		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
@@ -534,6 +529,17 @@ const ObjectDetailPage: NextPage = () => {
 							text={t(
 								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 							)}
+							action={
+								<Link passHref href="/kiosk-voorwaarden">
+									<a>
+										<Button
+											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+											label={t('pages/slug/index___meer-info')}
+											variants={['text', 'underline']}
+										/>
+									</a>
+								</Link>
+							}
 						/>
 					)}
 					<h3
@@ -547,6 +553,7 @@ const ObjectDetailPage: NextPage = () => {
 					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
 						<TextWithNewLines text={mediaInfo?.description} />
 					</p>
+
 					<div className="u-pb-24 p-object-detail__actions">
 						{canDownloadMetadata && (
 							<Button
@@ -687,7 +694,7 @@ const ObjectDetailPage: NextPage = () => {
 				className="p-object-detail__nav"
 				showBorder={showNavigationBorder}
 				title={mediaInfo?.maintainerName ?? ''}
-				backLink={backLink}
+				backLink={visitorSpaceSearchUrl || `/${router.query.slug}`}
 				phone={mediaInfo?.contactInfo.telephone || ''}
 				email={mediaInfo?.contactInfo.email || ''}
 				showAccessEndDate={getAccessEndDate()}
@@ -782,7 +789,10 @@ const ObjectDetailPage: NextPage = () => {
 		<VisitorLayout>
 			<Head>
 				<title>{createPageTitle(mediaInfo?.name)}</title>
-				<meta name="description" content={mediaInfo?.maintainerName} />
+				<meta
+					name="description"
+					content={capitalize(lowerCase((router.query.slug as string) || ''))}
+				/>
 			</Head>
 			{renderPageContent()}
 		</VisitorLayout>

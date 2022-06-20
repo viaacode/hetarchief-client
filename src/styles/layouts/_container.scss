@@ -15,11 +15,11 @@ $l-container-padding-xs: 2rem;
 	}
 
 	&--edgeless {
-        &-to-lg {
-            @include respond-to("lg") {
-                padding-left: 0;
-                padding-right: 0;
-            }
-        }
-    }
+		&-to-lg {
+			@include respond-to("lg") {
+				padding-left: 0;
+				padding-right: 0;
+			}
+		}
+	}
 }

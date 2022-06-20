@@ -1,4 +1,4 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $l-container-padding: $spacer-sm;
 $l-container-padding-xs: 2rem;
@@ -62,6 +62,10 @@ $l-container-padding-xs: 2rem;
 	.o-container-vertical-intro__intro {
 		padding-top: $spacer-md;
 		color: $neutral;
+	}
+
+	.c-content-block-preview > .o-container {
+		padding: 0 $spacer-sm;
 	}
 
 	div[style*="background-color: transparent"].content-block-preview-0:not(.c-content-page-preview

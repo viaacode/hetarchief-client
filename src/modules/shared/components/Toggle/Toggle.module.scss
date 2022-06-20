@@ -1,5 +1,5 @@
 @use "sass:color";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $c-toggle-black-32: color.adjust($black, $alpha: -0.68);
 $c-toggle-white-40: color.adjust($white, $alpha: -0.6);
@@ -62,4 +62,5 @@ $c-toggle-zinc: $zinc-66;
 		}
 	}
 }
+
 /* stylelint-enable no-descending-specificity */

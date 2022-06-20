@@ -10,6 +10,7 @@ module.exports = {
 			files: ['**/*.css', '**/*.scss', '**/*.html'],
 			options: {
 				singleQuote: false,
+				printWidth: 1000,
 			},
 		},
 	],

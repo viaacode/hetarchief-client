@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .c-request-access-blade {
 	:global(.c-input--textarea .c-input__field) {

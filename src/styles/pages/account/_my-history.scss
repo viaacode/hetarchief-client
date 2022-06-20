@@ -3,29 +3,29 @@
 $component: "p-account-my-history";
 
 .#{$component} {
-    tr {
+	tr {
 		@include respond-to("lg") {
 			td,
 			th {
 				&:nth-child(2),
 				&:nth-child(3),
-                &:nth-child(4), {
-					display: none;
-				}
-			}
-        }
-
-		@include respond-at("lg") {
-			td,
-			th {
-                &:nth-child(5), {
+				&:nth-child(4) {
 					display: none;
 				}
 			}
 		}
 
-        // Action
-        td:nth-last-child(1) {
+		@include respond-at("lg") {
+			td,
+			th {
+				&:nth-child(5) {
+					display: none;
+				}
+			}
+		}
+
+		// Action
+		td:nth-last-child(1) {
 			padding: 0;
 			border-left: 1px solid $silver;
 		}

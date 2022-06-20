@@ -1,6 +1,6 @@
 @use "sass:map";
 @use "sass:math";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $component: "c-table";
 $c-table-border: 1px solid $silver;

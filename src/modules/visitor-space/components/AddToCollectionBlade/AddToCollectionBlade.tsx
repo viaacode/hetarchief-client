@@ -271,14 +271,12 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			className={clsx(props.className, styles['c-add-to-collection-blade'])}
 		>
 			<div className="u-px-32">
-				<p>
-					<Html
-						content={t(
-							'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
-							{ title }
-						)}
-					/>
-				</p>
+				<Html
+					content={t(
+						'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
+						{ title }
+					)}
+				/>
 			</div>
 
 			<div className="u-px-32 u-bg-platinum">

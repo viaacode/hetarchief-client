@@ -8,7 +8,10 @@ $layout: "l-app";
 
 	&--sticky {
 		height: 100vh; // fallback for browsers that do not support custom css properties
-		height: calc((var(--vh, 1vh) * 100)); // '100vh' for mobile excludes browser ui. Custom --vh prop is set in use-window-size.ts
+		height: calc(
+			(var(--vh, 1vh) * 100)
+		); // '100vh' for mobile excludes browser ui. Custom --vh prop is set in use-window-size.ts
+
 		min-height: 72rem;
 		min-height: calc((var(--vh, 1vh) * 100));
 		overflow: hidden;
