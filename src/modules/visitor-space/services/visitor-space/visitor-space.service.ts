@@ -109,8 +109,10 @@ export class VisitorSpaceService {
 		const formData = new FormData();
 
 		// Set form data
-		values.color && formData.append('color', values.color);
-		values.image && formData.append('image', values.image);
+		if (values.color) {
+			values.color && formData.append('color', values.color);
+			formData.append('image', values.image || '');
+		}
 		values.file && formData.append('file', values.file);
 		values.description && formData.append('description', values.description);
 		values.serviceDescription &&
