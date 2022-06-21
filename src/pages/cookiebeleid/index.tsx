@@ -1,12 +1,31 @@
 import { GetServerSideProps, NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BooleanParam, useQueryParams } from 'use-query-params';
 
+import { AuthModal } from '@auth/components';
+import { selectUser } from '@auth/store/user';
+import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
+import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 
 import styles from './cookie-policy.module.scss';
 
 const CookiePolicy: NextPage = () => {
+	const dispatch = useDispatch();
+	const [query, setQuery] = useQueryParams({
+		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+	});
 	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
+	const showAuthModal = useSelector(selectShowAuthModal);
+	const user = useSelector(selectUser);
+
+	const onCloseAuthModal = () => {
+		if (typeof query.showAuth === 'boolean') {
+			setQuery({ showAuth: undefined });
+		}
+		dispatch(setShowAuthModal(false));
+	};
 
 	useEffect(() => {
 		// Fool cookiebot to inject the html into our react useState
@@ -24,9 +43,12 @@ const CookiePolicy: NextPage = () => {
 	}, []);
 
 	return (
-		<div className={styles['p-cookie-policy__wrapper']}>
-			<div dangerouslySetInnerHTML={{ __html: cookieDeclarationHtml }} />
-		</div>
+		<>
+			<div className={styles['p-cookie-policy__wrapper']}>
+				<div dangerouslySetInnerHTML={{ __html: cookieDeclarationHtml }} />
+			</div>
+			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
+		</>
 	);
 };
 
