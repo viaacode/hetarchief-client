@@ -43,10 +43,6 @@ $image-size-md: 56.1rem;
 	&__description {
 		@include respond-at($page-breakpoint) {
 			min-height: 23rem; // magic value; minimum height required for __image to reach its max-height;
-
-			&[class*="u-mt-"] {
-				margin-top: 0 !important;
-			}
 		}
 	}
 
@@ -66,7 +62,7 @@ $image-size-md: 56.1rem;
 
 		&__image {
 			grid-row: 3;
-			z-index: 1;
+			z-index: get-z-layer("foreground");
 
 			> div {
 				height: $image-size;
@@ -78,7 +74,7 @@ $image-size-md: 56.1rem;
 			padding-top: ($image-size / 2) + $spacer-1xl;
 			grid-row: 4;
 
-			// z-index: 0;
+			// get-z-layer("base");
 		}
 	}
 

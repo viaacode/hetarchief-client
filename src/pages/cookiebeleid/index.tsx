@@ -1,4 +1,4 @@
-import { GetStaticProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 
 import { withI18n } from '@i18n/wrappers';
@@ -30,6 +30,6 @@ const CookiePolicy: NextPage = () => {
 	);
 };
 
-export const getStaticProps: GetStaticProps = withI18n();
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default CookiePolicy;

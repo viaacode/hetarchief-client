@@ -1,10 +1,14 @@
 @use "sass:color";
 @use "sass:math";
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 @mixin scrollable-tabs-gradient($direction, $color) {
 	// Set gradient color close to transparent. Fixes Safari issue where gradients turned grey
-	background: linear-gradient(to $direction, color.adjust($color), color.adjust($color, $alpha: -0.999));
+	background: linear-gradient(
+		to $direction,
+		color.adjust($color),
+		color.adjust($color, $alpha: -0.999)
+	);
 }
 
 $component: "c-scrollable-tabs";

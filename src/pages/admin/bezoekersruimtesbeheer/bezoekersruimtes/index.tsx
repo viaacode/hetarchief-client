@@ -226,7 +226,7 @@ const VisitorSpacesOverview: FC = () => {
 					placeholder={t(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
 					)}
-					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
+					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
 				/>
 
 				<ScrollableTabs

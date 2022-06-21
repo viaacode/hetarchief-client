@@ -169,7 +169,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						default={filters[SEARCH_QUERY_KEY]}
 						className="p-cp-requests__search"
 						placeholder={t('pages/beheer/aanvragen/index___zoek')}
-						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
+						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
 					/>
 
 					<ScrollableTabs

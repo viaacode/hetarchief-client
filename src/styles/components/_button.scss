@@ -1,4 +1,4 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .c-button {
 	display: inline-block;
@@ -29,18 +29,18 @@
 	}
 
 	/**
-		* Cross-browser styles for explicit focus via
-		* keyboard-based (eg Tab) navigation or the
-		* .focus-visible utility class.
-		*/
+	  * Cross-browser styles for explicit focus via
+	  * keyboard-based (eg Tab) navigation or the
+	  * .focus-visible utility class.
+	  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $black;
 	}
 
 	/**
-	* Remove focus styles for non-keyboard focus.
-	*/
+  * Remove focus styles for non-keyboard focus.
+  */
 	&:focus:not(:focus-visible) {
 		outline: 0;
 		box-shadow: none;
@@ -82,10 +82,10 @@
 	border-color: $black;
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -110,10 +110,10 @@
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -139,10 +139,10 @@
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -203,10 +203,10 @@
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
@@ -237,10 +237,10 @@
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -322,10 +322,10 @@
 	}
 
 	/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+  * Cross-browser styles for explicit focus via
+  * keyboard-based (eg Tab) navigation or the
+  * .focus-visible utility class.
+  */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: none;

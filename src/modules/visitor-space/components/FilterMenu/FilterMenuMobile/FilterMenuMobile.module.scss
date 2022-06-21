@@ -1,4 +1,4 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 .c-filter-menu-mobile {
 	position: fixed;
@@ -85,7 +85,7 @@
 }
 
 .c-filter-menu-mobile__form {
-	height: calc(100% - $c-navigation-height-md);
+	height: calc(100% - #{$c-navigation-height-md});
 }
 
 /**

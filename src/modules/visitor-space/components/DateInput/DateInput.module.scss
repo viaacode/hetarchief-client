@@ -1,7 +1,7 @@
-@use "styles/abstracts" as *;
+@use "src/styles/abstracts" as *;
 
 $component: "c-date-input";
 
 .#{$component} {
-    width: 100%;
+	width: 100%;
 }
