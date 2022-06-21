@@ -1,8 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-test('Should redirect to login page and redirect after login', async ({ page }) => {
+test('T04: Test inloggen bestaande basisgebruiker\t\t\t', async ({ page }) => {
 	await page.goto(process.env.TEST_ENDPOINT as string);
-	expect(await page.title()).toEqual('Home | bezoekertool');
+	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+		timeout: 10000,
+	});
 
 	await page.locator('text=Inloggen of registreren').click();
 
@@ -24,5 +26,7 @@ test('Should redirect to login page and redirect after login', async ({ page }) 
 	// Check redirect back to the home page
 	expect(await page.title()).toEqual('Home | bezoekertool');
 	expect(page.url()).toContain(process.env.TEST_ENDPOINT as string);
-	await expect(await page.locator('text=Vind een bezoekersruimte')).toBeVisible();
+	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(await page.locator('text=Admin')).toBeUndefined();
+	await expect(await page.locator('text=Beheer')).toBeUndefined();
 });

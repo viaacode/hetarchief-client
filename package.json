@@ -19,7 +19,7 @@
 		"test:cov": "npm run test -- --coverage",
 		"test:watch": "npm run test -- --watch",
 		"test:e2e": "npx playwright test",
-		"test:e2e:debug": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=firefox --headed --workers=1 --retries=0 --maxFailures=1 tests/auth/login-with-redirect.spec.ts",
+		"test:e2e:debug": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=chrome --headed --workers=1 --retries=0 --maxFailures=1 tests/t01-test-registratie-eerste-keer-inloggen-basisgebruiker.spec.ts",
 		"type-check": "tsc --noEmit",
 		"prepare": "husky install",
 		"storybook": "start-storybook -p 6006",
@@ -83,7 +83,7 @@
 		"@babel/core": "7.16.0",
 		"@commitlint/cli": "15.0.0",
 		"@commitlint/config-conventional": "15.0.0",
-		"@playwright/test": "1.19.1",
+		"@playwright/test": "^1.22.2",
 		"@storybook/addon-a11y": "6.4.19",
 		"@storybook/addon-actions": "6.4.19",
 		"@storybook/addon-essentials": "6.4.19",
@@ -150,7 +150,8 @@
 		"stylelint-config-standard-scss": "3.0.0",
 		"ts-node": "10.4.0",
 		"tsconfig-paths-webpack-plugin": "3.5.2",
-		"typescript": "4.5.2"
+		"typescript": "4.5.2",
+		"uuidv4": "6.2.13"
 	},
 	"browserslist": [
 		">0.3%",
