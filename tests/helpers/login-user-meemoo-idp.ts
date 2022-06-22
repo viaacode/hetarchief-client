@@ -1,6 +1,10 @@
 import { expect, Page } from '@playwright/test';
 
-export async function loginUser(page: Page, username: string, password: string): Promise<void> {
+export async function loginUserMeemooIdp(
+	page: Page,
+	username: string,
+	password: string
+): Promise<void> {
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').click();
 
@@ -11,14 +15,14 @@ export async function loginUser(page: Page, username: string, password: string):
 	expect(authModalHeading).toBeDefined();
 
 	// Click the login button
-	await page.click('text=Inloggen met Het Archief-account');
+	await page.click('text=Meld je aan als beheerder.');
 
 	// Fill in credentials
-	await page.fill('#emailId', username);
-	await page.fill('#passwordId', password);
+	await page.fill('#inputUsername', username);
+	await page.fill('#inputPassword', password);
 
 	// Click the login button
-	await page.click('button[type="submit"]');
+	await page.click('#wp-submit');
 
 	// Wait for the new page to load
 	await page.waitForLoadState('networkidle');

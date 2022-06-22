@@ -2,8 +2,9 @@ import { expect, test } from '@playwright/test';
 import { uuid } from 'uuidv4';
 
 import { USER_PASSWORD } from './consts/tests.consts';
+import { acceptCookies } from './helpers/accept-cookies';
 import { acmConfirmEmail } from './helpers/acm-confirm-email';
-import { loginUser } from './helpers/login-user';
+import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
 test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ page, context }) => {
 	const userId = uuid().replace(/-/g, '');
@@ -18,11 +19,8 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 		timeout: 10000,
 	});
 
-	// Cookie bot opens
-	await expect(await page.locator('#CybotCookiebotDialogBody')).toBeVisible();
-
 	// Accept selected cookies
-	await page.locator('#CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection').click();
+	await acceptCookies(page, 'selection');
 
 	// Check site is still visible:
 	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
@@ -39,7 +37,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	// Click the register button
 	await page.locator('text=Registreer je hier').click();
 
-	// Check the SSUM page is loaded
+	// Check the SSUM page is loaded // TODO
 	expect(page.url()).toContain('https://ssum-int-iam.private.cloud.meemoo.be/account/nieuw');
 
 	// Wait for recaptcha to load
@@ -101,7 +99,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	// 	'hetarchief2.0+ateindgebruikerbztcd39a80cd6144e99a5c6d751005536c2@meemoo.be',
 	// 	USER_PASSWORD
 	// );
-	await loginUser(page, userEmail, USER_PASSWORD);
+	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
 
 	// Check title, content page content and disabled button
 	await expect(await page.locator('.p-terms-of-service__title')).toContainText(
@@ -136,11 +134,11 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(await page.locator('.c-avatar__text')).toHaveText('Test-at');
 
 	// Admin and beheer should not be visible
-	const navigationBar = await page.locator(
-		'.l-app > nav > [class^="Navigation_c-navigation__list"]:first-child'
-	);
-	await expect(navigationBar.innerHTML).not.toContain('Admin');
-	await expect(navigationBar.innerHTML).not.toContain('Beheer');
+	const navigationItemTexts = await page
+		.locator('.l-app a[class^="Navigation_c-navigation__link"]')
+		.allInnerTexts();
+	await expect(navigationItemTexts).not.toContain('Admin');
+	await expect(navigationItemTexts).not.toContain('Beheer');
 
 	// Wait for close to save the videos
 	await context.close();
