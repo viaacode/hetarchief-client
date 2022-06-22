@@ -19,7 +19,7 @@
 		"test:cov": "npm run test -- --coverage",
 		"test:watch": "npm run test -- --watch",
 		"test:e2e": "npx playwright test",
-		"test:e2e:debug": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=chrome --headed --workers=1 --retries=0 --maxFailures=1 tests/t06-test-feedbackbutton-niet-ingelogd.spec.ts",
+		"test:e2e:debug": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=chrome --headed --workers=1 --retries=0 --maxFailures=1 tests/t08-test-toegangsaanvraag-accepteren-weigeren-door-cp-admin.spec.ts",
 		"type-check": "tsc --noEmit",
 		"prepare": "husky install",
 		"storybook": "start-storybook -p 6006",
