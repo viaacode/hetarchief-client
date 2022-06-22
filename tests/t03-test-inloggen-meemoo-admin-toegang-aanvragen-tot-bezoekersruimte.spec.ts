@@ -1,20 +1,22 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
+import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
-import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
 
 test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', async ({
 	page,
 	context,
 }) => {
 	// Go to the hetarchief homepage
-	await page.goto(process.env.TEST_ENDPOINT as string);
+	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
 		timeout: 10000,
 	});
+
+	// Click on login or register
+	await page.locator('text=Inloggen of registreren').click();
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(
@@ -40,43 +42,30 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await expect(navigationItemTexts).not.toContain('Beheer');
 
 	// Click on request access button for VRT
-	const vrtCard = await page.locator('.c-visitor-space-card--name--vrt');
+	const vrtCard = await page.locator('.p-home__results .c-visitor-space-card--name--vrt');
 	await expect(vrtCard).toContainText('VRT');
 	await vrtCard.locator('.c-button--black').click();
 
-	// Check the request visit blade title is visible
-	const bladeTitle = await page.locator(
-		'[class^="c-request-access-blade"] [class^="RequestAccessBlade_c-request-access-blade__title"]'
-	);
-	await expect(bladeTitle).toBeVisible();
-	await expect(bladeTitle).toContainText('Vraag toegang aan');
-
-	// Check the space info shows VRT
-	await expect(
-		await page.locator('[class^="SpacePreview_c-space-preview__summary"]').innerHTML()
-	).toContain('VRT');
-
-	// Fill the form
-	await page.fill('[name="requestReason"]', 'Een geldige reden');
-	await page.check('[name="acceptTerms"]');
-
-	// Click the send button
-	await page.click('text=Verstuur');
+	// Fill in request blade and send
+	await fillRequestVisitBlade(page, 'vrt', 'Een geldige reden', undefined, true);
 
 	// Check that we were redirected to the request pending page
 	await expect(await page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
+	await expect(await page.locator('.p-visit-requested__content').innerHTML()).toContain('VRT');
 
 	// Go to the homepage
 	await page.click('text=Start je bezoek');
 
 	// Check request section is present
 	await expect(
-		await page.locator('.p-home [class^=VisitorSpaceCard_c-visitor-space-card__title--flat]')
+		await page.locator('.p-home [class^=LoggedInHome_c-hero__section-title]')
 	).toContainText('Aanvragen');
 
 	// Check pending request is visible
 	await expect(
-		await page.locator('[class^="VisitorSpaceCard_c-visitor-space-card__title--flat"]')
+		await page.locator(
+			'[class^="LoggedInHome_c-hero__requests"] [class^="VisitorSpaceCard_c-visitor-space-card__title"]'
+		)
 	).toContainText('VRT');
 
 	// Wait for close to save the videos

@@ -12,7 +12,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	console.log('user: ' + userEmail);
 
 	// Go to the hetarchief homepage
-	await page.goto(process.env.TEST_ENDPOINT as string);
+	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
@@ -83,7 +83,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 
 	// Go to the hetarchief homepage
 	await page.goto('https://bezoek-int.private.cloud.meemoo.be/');
-	// await page.goto(process.env.TEST_ENDPOINT as string); // TODO switch back to tst when https://meemoo.atlassian.net/browse/ARC-1050 is fixed
+	// await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); // TODO switch back to tst when https://meemoo.atlassian.net/browse/ARC-1050 is fixed
 
 	// Check page title is the home page
 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
@@ -92,6 +92,9 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 
 	// Cookie bot should not open again
 	await expect(await page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
+
+	// Click on login or register
+	await page.locator('text=Inloggen of registreren').click();
 
 	// Login user
 	// await loginUser(

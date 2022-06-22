@@ -1,11 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
 import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
 
 test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	// Go to the hetarchief homepage
-	await page.goto(process.env.TEST_ENDPOINT as string);
+	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {

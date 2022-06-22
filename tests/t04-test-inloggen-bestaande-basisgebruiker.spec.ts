@@ -2,9 +2,9 @@ import { expect, test } from '@playwright/test';
 
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
-test('T04: Test inloggen bestaande basisgebruiker\t\t\t', async ({ page }) => {
+test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
-	await page.goto(process.env.TEST_ENDPOINT as string);
+	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
@@ -13,6 +13,9 @@ test('T04: Test inloggen bestaande basisgebruiker\t\t\t', async ({ page }) => {
 
 	// Check the homepage show the correct title for searching maintainers
 	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+
+	// Click on login or register
+	await page.locator('text=Inloggen of registreren').click();
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -32,4 +35,7 @@ test('T04: Test inloggen bestaande basisgebruiker\t\t\t', async ({ page }) => {
 		.allInnerTexts();
 	await expect(navigationItemTexts).not.toContain('Admin');
 	await expect(navigationItemTexts).not.toContain('Beheer');
+
+	// Wait for close to save the videos
+	await context.close();
 });

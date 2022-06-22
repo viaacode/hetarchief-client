@@ -1,10 +1,11 @@
 import { expect, Page } from '@playwright/test';
 
-export async function loginUserHetArchiefIdp(page: Page, username: string, password: string): Promise<void> {
-	// Click on login or register
-	await page.locator('text=Inloggen of registreren').click();
-
-	// Check auth modal opens up
+export async function loginUserHetArchiefIdp(
+	page: Page,
+	username: string,
+	password: string
+): Promise<void> {
+	// Check auth modal is open
 	const authModalHeading = await page
 		.locator('[class^="AuthModal_c-auth-modal__heading"]')
 		.first();
