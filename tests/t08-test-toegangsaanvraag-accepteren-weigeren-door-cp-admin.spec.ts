@@ -49,11 +49,16 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
 
-	// Check number of approved on the "all" tab matches number in the approved tab
+	// Check number of approved on the "all" tab
 	const numberOfApproved = await page.locator('.c-badge--success').count();
 
-	// Check number of denied on the "all" tab matches number in the denied tab
+	// Check number of denied on the "all" tab
 	const numberOfDenied = await page.locator('.c-badge--error').count();
+
+	// Check the total number of visit requests on the "all" tab
+	const totalNumberOfRequests = await page
+		.locator('[class^="SidebarLayout_l-sidebar__main"] .c-table__row')
+		.count();
 
 	// Check approved count
 	await page.click('.c-tab__label:has-text("Goedgekeurd")');
@@ -81,10 +86,46 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.fill('.p-cp-requests__header [placeholder="Zoek"]', 'marie.odhiambo@example.com');
 	await page.press('.p-cp-requests__header [placeholder="Zoek"]', 'Enter');
 
-	// There should be 3 requests with this name
+	// The number of requests should be equal to the number without a filter active
 	await expect(
 		await page.locator('[class^="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-3 van 3`);
+	).toContainText(`1-${totalNumberOfRequests} van ${totalNumberOfRequests}`);
+
+	// Clear search term with x button
+	await page.click('text=times');
+
+	// Click the pending visit request
+	await page.locator('[class^="SidebarLayout_l-sidebar__main"] .c-table__row').first().click();
+
+	// Check the blade title
+	await expect(await page.locator('[class^="Blade_c-blade__title"]:visible')).toContainText(
+		'Open aanvraag'
+	);
+
+	// Check request summary contains requester name
+	const summaryHtml = await page
+		.locator('[class^=VisitSummary_c-visit-summary]:visible')
+		.innerHTML();
+	await expect(summaryHtml).toContain('BezoekerVoornaam BezoekerAchternaam');
+	await expect(summaryHtml).toContain('Een geldige reden');
+
+	// Check buttons for approve and deny are visible
+	const approveButton = await page.locator('[role="dialog"] .c-button--black');
+	await expect(approveButton).toBeVisible();
+	await expect(approveButton.innerHTML()).toContain('Goedkeuren');
+	const denyButton = await page.locator('[role="dialog"] .c-button--text');
+	await expect(denyButton).toBeVisible();
+	await expect(denyButton.innerHTML()).toContain('Weigeren');
+
+	// Click the approve button
+	await approveButton.click();
+
+	// Check blade title
+	await expect(
+		await page.locator('[class^="Blade_c-blade--visible"] [class^="Blade_c-blade__title__"]')
+	).toContainText('Aanvraag goedkeuren');
+
+	//
 
 	// Wait for close to save the videos
 	await context.close();

@@ -32,6 +32,7 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 		page.press('input[placeholder="zoek"]', 'Enter'),
 	]);
 	await expect(request).toBeDefined();
+	await page.waitForTimeout(1000);
 
 	// Check all maintainer titles contain the letter "v"
 	const maintainerTitles = await page
@@ -51,7 +52,7 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 		'.c-visitor-space-card--name--vrt [class^=VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list]'
 	);
 	await expect(await contactPopup.innerHTML()).toContain('@vrt.be');
-	await expect(await contactPopup.innerHTML()).toContain('+32');
+	// await expect(await contactPopup.innerHTML()).toContain('+32'); // TODO re-enable when VRT has telephone in the INT org api v2
 
 	// Click on request access button for VRT
 	const vrtCard = await page.locator('.p-home__results .c-visitor-space-card--name--vrt');
