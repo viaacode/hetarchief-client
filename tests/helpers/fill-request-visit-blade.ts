@@ -9,7 +9,7 @@ export async function fillRequestVisitBlade(
 ): Promise<void> {
 	// Check the request visit blade title is visible
 	const bladeTitle = await page.locator(
-		'[role="dialog"] [class*="RequestAccessBlade_c-request-access-blade__title"]'
+		'[class*="Blade_c-blade--visible"] [class*="RequestAccessBlade_c-request-access-blade__title"]'
 	);
 	await expect(bladeTitle).toBeVisible();
 	await expect(bladeTitle).toContainText('Vraag toegang aan');
@@ -18,7 +18,9 @@ export async function fillRequestVisitBlade(
 	await expect(page.url()).toContain(`?bezoekersruimte=${visitorSpaceSlug}`);
 
 	// Fill the form
-	const checkboxLabel = await page.locator('[role="dialog"] .c-checkbox__label');
+	const checkboxLabel = await page.locator(
+		'[class*="Blade_c-blade--visible"] .c-checkbox__label'
+	);
 	await checkboxLabel.waitFor({
 		timeout: 10000,
 		state: 'visible',

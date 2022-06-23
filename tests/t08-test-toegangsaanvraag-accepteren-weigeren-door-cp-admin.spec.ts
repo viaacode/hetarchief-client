@@ -44,13 +44,18 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(activeNavigationItemHtml).toContain('Aanvragen');
 	await expect(activeNavigationItemHtml).toContain('href="/beheer/aanvragen"');
 
-	// Wait until loader dissapears
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	// Wait for results to load
+	await page.waitForFunction(() => document.querySelectorAll('.c-loading').length === 0, null, {
 		timeout: 10000,
 	});
 
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
+
+	// Check number of approved on the "all" tab
+	const numberOfPending = await page
+		.locator('[class*="RequestStatusBadge_c-request-status-badge"]:has-text("Open aanvraag")')
+		.count();
 
 	// Check number of approved on the "all" tab
 	const numberOfApproved = await page.locator('.c-badge--success').count();
@@ -60,8 +65,14 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check the total number of visit requests on the "all" tab
 	const totalNumberOfRequests = await page
-		.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__row')
+		.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row')
 		.count();
+
+	// Check pending count
+	await page.click('.c-tab__label:has-text("Open")');
+	await expect(
+		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
+	).toContainText(`1-${numberOfPending} van ${numberOfPending}`);
 
 	// Check approved count
 	await page.click('.c-tab__label:has-text("Goedgekeurd")');
@@ -89,36 +100,52 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.fill('.p-cp-requests__header [placeholder="Zoek"]', 'marie.odhiambo@example.com');
 	await page.press('.p-cp-requests__header [placeholder="Zoek"]', 'Enter');
 
-	// The number of requests should be equal to the number without a filter active
+	// The number of requests should be 3
 	await expect(
 		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-${totalNumberOfRequests} van ${totalNumberOfRequests}`);
+	).toContainText(`1-3 van 3`);
 
 	// Clear search term with x button
 	await page.click('text=times');
 
+	// Number of results should be equal tot total results from before
+	await expect(
+		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
+	).toContainText(`1-${totalNumberOfRequests} van ${totalNumberOfRequests}`);
+
 	// Click the pending visit request
-	await page.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__row').first().click();
+	await page
+		.locator(
+			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child'
+		)
+		.first()
+		.click();
 
 	// Check the blade title
-	await expect(await page.locator('[class*="Blade_c-blade__title"]:visible')).toContainText(
-		'Open aanvraag'
+	const bladeTitle = await page.locator(
+		'[class*="Blade_c-blade--visible"] h3[class*="Blade_c-blade__title"]'
 	);
+	await expect(bladeTitle).toContainText('Open aanvraag');
+	await expect(bladeTitle).toBeVisible();
 
 	// Check request summary contains requester name
 	const summaryHtml = await page
-		.locator('[class^=VisitSummary_c-visit-summary]:visible')
+		.locator('[class*="Blade_c-blade--visible"] [class*="VisitSummary_c-visit-summary"]')
 		.innerHTML();
 	await expect(summaryHtml).toContain('BezoekerVoornaam BezoekerAchternaam');
 	await expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
-	const approveButton = await page.locator('[role="dialog"] .c-button--black');
+	const approveButton = await page.locator(
+		'[class*="Blade_c-blade--visible"] [class*="Blade_c-blade__footer-wrapper"] .c-button--black'
+	);
 	await expect(approveButton).toBeVisible();
-	await expect(approveButton.innerHTML()).toContain('Goedkeuren');
-	const denyButton = await page.locator('[role="dialog"] .c-button--text');
+	await expect(await approveButton.innerHTML()).toContain('Goedkeuren');
+	const denyButton = await page.locator(
+		'[class*="Blade_c-blade--visible"] [class*="Blade_c-blade__footer-wrapper"] .c-button--text'
+	);
 	await expect(denyButton).toBeVisible();
-	await expect(denyButton.innerHTML()).toContain('Weigeren');
+	await expect(await denyButton.innerHTML()).toContain('Weigeren');
 
 	// Click the approve button
 	await approveButton.click();

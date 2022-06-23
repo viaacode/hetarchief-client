@@ -58,7 +58,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 
 	// Check request section is present
 	await expect(
-		await page.locator('.p-home [class^=LoggedInHome_c-hero__section-title]')
+		await page.locator('.p-home [class*="LoggedInHome_c-hero__section-title"]')
 	).toContainText('Aanvragen');
 
 	// Check pending request is visible

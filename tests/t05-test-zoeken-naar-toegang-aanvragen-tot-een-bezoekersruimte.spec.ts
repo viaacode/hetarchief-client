@@ -49,7 +49,7 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 
 	// Check telephone and email is shown in popup
 	const contactPopup = await page.locator(
-		'.c-visitor-space-card--name--vrt [class^=VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list]'
+		'.c-visitor-space-card--name--vrt [class*="VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list"]'
 	);
 	await expect(await contactPopup.innerHTML()).toContain('@vrt.be');
 	// await expect(await contactPopup.innerHTML()).toContain('+32'); // TODO re-enable when VRT has telephone in the INT org api v2
@@ -62,8 +62,8 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 	// Login
 	await loginUserHetArchiefIdp(
 		page,
-		process.env.TEST_VISITOR_ACCOUNT_USERNAME,
-		process.env.TEST_VISITOR_ACCOUNT_PASSWORD
+		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
 
 	// Fill in request blade and send
@@ -89,7 +89,7 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 
 	// Check request section is present
 	await expect(
-		await page.locator('.p-home [class^=LoggedInHome_c-hero__section-title]')
+		await page.locator('.p-home [class*="LoggedInHome_c-hero__section-title"]')
 	).toContainText('Aanvragen');
 
 	// Check pending request is visible
