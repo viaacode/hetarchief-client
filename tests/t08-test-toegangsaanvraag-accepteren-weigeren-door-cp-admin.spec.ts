@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { checkVisitRequestStatuses } from './helpers/check-visit-request-statuses';
 import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
 
 test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
@@ -52,42 +53,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
 
-	// Check number of approved on the "all" tab
-	const numberOfPending = await page
-		.locator('[class*="RequestStatusBadge_c-request-status-badge"]:has-text("Open aanvraag")')
-		.count();
-
-	// Check number of approved on the "all" tab
-	const numberOfApproved = await page.locator('.c-badge--success').count();
-
-	// Check number of denied on the "all" tab
-	const numberOfDenied = await page.locator('.c-badge--error').count();
-
-	// Check the total number of visit requests on the "all" tab
-	const totalNumberOfRequests = await page
-		.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row')
-		.count();
-
-	// Check pending count
-	await page.click('.c-tab__label:has-text("Open")');
-	await expect(
-		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-${numberOfPending} van ${numberOfPending}`);
-
-	// Check approved count
-	await page.click('.c-tab__label:has-text("Goedgekeurd")');
-	await expect(
-		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-${numberOfApproved} van ${numberOfApproved}`);
-
-	// Check denied count
-	await page.click('.c-tab__label:has-text("Geweigerd")');
-	await expect(
-		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-${numberOfDenied} van ${numberOfDenied}`);
-
-	// Go back to the "All" tab
-	await page.click('.c-tab__label:has-text("Alle")');
+	const counts = await checkVisitRequestStatuses(page);
 
 	// Search for visit requests by name
 	await page.fill('.p-cp-requests__header [placeholder="Zoek"]', 'Martine Tanghe');
@@ -111,7 +77,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Number of results should be equal tot total results from before
 	await expect(
 		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-${totalNumberOfRequests} van ${totalNumberOfRequests}`);
+	).toContainText(`1-${counts.totalNumberOfRequests} van ${counts.totalNumberOfRequests}`);
 
 	// Click the pending visit request
 	await page
@@ -122,27 +88,25 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.click();
 
 	// Check the blade title
-	const bladeTitle = await page.locator(
-		'[class*="Blade_c-blade--visible"] h3[class*="Blade_c-blade__title"]'
-	);
+	const bladeTitle = await page.locator('.c-blade--active h3[class*="Blade_c-blade__title"]');
 	await expect(bladeTitle).toContainText('Open aanvraag');
 	await expect(bladeTitle).toBeVisible();
 
 	// Check request summary contains requester name
 	const summaryHtml = await page
-		.locator('[class*="Blade_c-blade--visible"] [class*="VisitSummary_c-visit-summary"]')
+		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
 		.innerHTML();
 	await expect(summaryHtml).toContain('BezoekerVoornaam BezoekerAchternaam');
 	await expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
 	const approveButton = await page.locator(
-		'[class*="Blade_c-blade--visible"] [class*="Blade_c-blade__footer-wrapper"] .c-button--black'
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black'
 	);
 	await expect(approveButton).toBeVisible();
 	await expect(await approveButton.innerHTML()).toContain('Goedkeuren');
 	const denyButton = await page.locator(
-		'[class*="Blade_c-blade--visible"] [class*="Blade_c-blade__footer-wrapper"] .c-button--text'
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--text'
 	);
 	await expect(denyButton).toBeVisible();
 	await expect(await denyButton.innerHTML()).toContain('Weigeren');
@@ -152,10 +116,34 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check blade title
 	await expect(
-		await page.locator('[class*="Blade_c-blade--visible"] [class*="Blade_c-blade__title__"]')
+		await page.locator('.c-blade--active [class*="Blade_c-blade__title__"]')
 	).toContainText('Aanvraag goedkeuren');
 
-	//
+	// Enter time from: 00:00
+	await page.click('input[name="accessFrom"]');
+	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
+
+	// Click the approve button
+	await page.click('.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black');
+
+	// Blade closes
+	await expect(await page.locator('.c-blade--active')).not.toBeVisible();
+
+	// Toast message
+	await expect(await page.locator('text=De aanvraag is goedgekeurd.')).toBeVisible();
+
+	// Check first row is approved
+	await expect(
+		await page
+			.locator(
+				'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row'
+			)
+			.first()
+			.locator('text=Goedgekeurd')
+	).toBeVisible();
+
+	// Check number of requests for each status
+	await checkVisitRequestStatuses(page);
 
 	// Wait for close to save the videos
 	await context.close();
