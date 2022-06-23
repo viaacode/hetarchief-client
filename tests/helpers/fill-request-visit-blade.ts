@@ -9,7 +9,7 @@ export async function fillRequestVisitBlade(
 ): Promise<void> {
 	// Check the request visit blade title is visible
 	const bladeTitle = await page.locator(
-		'[role="dialog"] [class^="RequestAccessBlade_c-request-access-blade__title"]'
+		'[role="dialog"] [class*="RequestAccessBlade_c-request-access-blade__title"]'
 	);
 	await expect(bladeTitle).toBeVisible();
 	await expect(bladeTitle).toContainText('Vraag toegang aan');

@@ -26,7 +26,7 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 
 	// Admin should not be visible and beheer should be visible
 	const navigationItemTexts = await page
-		.locator('.l-app a[class^="Navigation_c-navigation__link"]')
+		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
 		.allInnerTexts();
 	await expect(navigationItemTexts).not.toContain('Admin');
 	await expect(navigationItemTexts).toContain('Beheer');

@@ -18,7 +18,7 @@ test('T07: Test FAQ raadplegen (niet ingelogd)', async ({ page, context }) => {
 	// Click on FAQ button the navbar
 	await page
 		.locator(
-			'[class^="Navigation_c-navigation__section--responsive-desktop"] a[href="/vragen"]'
+			'[class*="Navigation_c-navigation__section--responsive-desktop"] a[href="/vragen"]'
 		)
 		.click();
 

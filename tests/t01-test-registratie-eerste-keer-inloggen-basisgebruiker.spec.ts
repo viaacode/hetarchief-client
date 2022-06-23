@@ -30,7 +30,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 
 	// Check auth modal opens up
 	const authModalHeading = await page
-		.locator('[class^="AuthModal_c-auth-modal__heading"]')
+		.locator('[class*="AuthModal_c-auth-modal__heading"]')
 		.first();
 	expect(authModalHeading).toBeDefined();
 
@@ -138,7 +138,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 
 	// Admin and beheer should not be visible
 	const navigationItemTexts = await page
-		.locator('.l-app a[class^="Navigation_c-navigation__link"]')
+		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
 		.allInnerTexts();
 	await expect(navigationItemTexts).not.toContain('Admin');
 	await expect(navigationItemTexts).not.toContain('Beheer');

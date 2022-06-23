@@ -36,7 +36,7 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 
 	// Check all maintainer titles contain the letter "v"
 	const maintainerTitles = await page
-		.locator('.p-home__results [class^="VisitorSpaceCard_c-visitor-space-card__title"]')
+		.locator('.p-home__results [class*="VisitorSpaceCard_c-visitor-space-card__title"]')
 		.allInnerTexts();
 	await Promise.all(
 		maintainerTitles.map((maintainerTitle) =>
@@ -95,7 +95,7 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 	// Check pending request is visible
 	await expect(
 		await page.locator(
-			'[class^="LoggedInHome_c-hero__requests"] [class^="VisitorSpaceCard_c-visitor-space-card__title"]'
+			'[class*="LoggedInHome_c-hero__requests"] [class*="VisitorSpaceCard_c-visitor-space-card__title"]'
 		)
 	).toContainText('VRT');
 

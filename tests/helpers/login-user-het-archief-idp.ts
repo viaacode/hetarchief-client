@@ -7,7 +7,7 @@ export async function loginUserHetArchiefIdp(
 ): Promise<void> {
 	// Check auth modal is open
 	const authModalHeading = await page
-		.locator('[class^="AuthModal_c-auth-modal__heading"]')
+		.locator('[class*="AuthModal_c-auth-modal__heading"]')
 		.first();
 	expect(authModalHeading).toBeDefined();
 

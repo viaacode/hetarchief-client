@@ -1,7 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
 
 test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
@@ -14,8 +12,8 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Login as CP admin
 	await loginUserMeemooIdp(
 		page,
-		process.env.TEST_CP_ACCOUNT_USERNAME,
-		process.env.TEST_CP_ACCOUNT_PASSWORD
+		process.env.TEST_CP_ADMIN_ACCOUNT_USERNAME as string,
+		process.env.TEST_CP_ADMIN_ACCOUNT_PASSWORD as string
 	);
 
 	// Check homepage title
@@ -33,18 +31,23 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.click('a[href="/beheer/aanvragen"]');
 
 	// Check page title matches visitor requests page title
-	await expect(await page.title()).toEqual('Aanvragen | bezoekertool');
+	await page.waitForFunction(() => document.title === 'Aanvragen | bezoekertool', null, {
+		timeout: 10000,
+	});
 
 	// Check Visit Requests is active in the sidebar
-	const requestsLink = await page.locator(
-		'[class^="SidebarLayout_l-sidebar__navigation"] a[href="/beheer/aanvragen"]'
+	const activeNavigationItem = await page.locator(
+		'[class*="ListNavigation_c-list-navigation__item--active"]'
 	);
-	const parentNavigationItem = await requestsLink.locator(
-		'ancestor=[class^="ListNavigation_c-list-navigation__item"]'
-	);
-	await expect(parentNavigationItem.getAttribute('class')).toContain(
-		'ListNavigation_c-list-navigation__item--active'
-	);
+	await expect(await activeNavigationItem.count()).toBe(1);
+	const activeNavigationItemHtml = await activeNavigationItem.innerHTML();
+	await expect(activeNavigationItemHtml).toContain('Aanvragen');
+	await expect(activeNavigationItemHtml).toContain('href="/beheer/aanvragen"');
+
+	// Wait until loader dissapears
+	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+		timeout: 10000,
+	});
 
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
@@ -57,19 +60,19 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check the total number of visit requests on the "all" tab
 	const totalNumberOfRequests = await page
-		.locator('[class^="SidebarLayout_l-sidebar__main"] .c-table__row')
+		.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__row')
 		.count();
 
 	// Check approved count
 	await page.click('.c-tab__label:has-text("Goedgekeurd")');
 	await expect(
-		await page.locator('[class^="PaginationProgress_c-pagination-progress"]')
+		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
 	).toContainText(`1-${numberOfApproved} van ${numberOfApproved}`);
 
 	// Check denied count
 	await page.click('.c-tab__label:has-text("Geweigerd")');
 	await expect(
-		await page.locator('[class^="PaginationProgress_c-pagination-progress"]')
+		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
 	).toContainText(`1-${numberOfDenied} van ${numberOfDenied}`);
 
 	// Go back to the "All" tab
@@ -88,17 +91,17 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// The number of requests should be equal to the number without a filter active
 	await expect(
-		await page.locator('[class^="PaginationProgress_c-pagination-progress"]')
+		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
 	).toContainText(`1-${totalNumberOfRequests} van ${totalNumberOfRequests}`);
 
 	// Clear search term with x button
 	await page.click('text=times');
 
 	// Click the pending visit request
-	await page.locator('[class^="SidebarLayout_l-sidebar__main"] .c-table__row').first().click();
+	await page.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__row').first().click();
 
 	// Check the blade title
-	await expect(await page.locator('[class^="Blade_c-blade__title"]:visible')).toContainText(
+	await expect(await page.locator('[class*="Blade_c-blade__title"]:visible')).toContainText(
 		'Open aanvraag'
 	);
 
@@ -122,7 +125,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check blade title
 	await expect(
-		await page.locator('[class^="Blade_c-blade--visible"] [class^="Blade_c-blade__title__"]')
+		await page.locator('[class*="Blade_c-blade--visible"] [class*="Blade_c-blade__title__"]')
 	).toContainText('Aanvraag goedkeuren');
 
 	//

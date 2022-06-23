@@ -31,7 +31,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 
 	// Admin and beheer should not be visible
 	const navigationItemTexts = await page
-		.locator('.l-app a[class^="Navigation_c-navigation__link"]')
+		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
 		.allInnerTexts();
 	await expect(navigationItemTexts).not.toContain('Admin');
 	await expect(navigationItemTexts).not.toContain('Beheer');

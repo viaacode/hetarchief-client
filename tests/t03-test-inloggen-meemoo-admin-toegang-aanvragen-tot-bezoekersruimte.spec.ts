@@ -36,7 +36,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 
 	// Admin should not be visible and beheer should be visible
 	const navigationItemTexts = await page
-		.locator('.l-app a[class^="Navigation_c-navigation__link"]')
+		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
 		.allInnerTexts();
 	await expect(navigationItemTexts).toContain('Admin');
 	await expect(navigationItemTexts).not.toContain('Beheer');
@@ -64,7 +64,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	// Check pending request is visible
 	await expect(
 		await page.locator(
-			'[class^="LoggedInHome_c-hero__requests"] [class^="VisitorSpaceCard_c-visitor-space-card__title"]'
+			'[class*="LoggedInHome_c-hero__requests"] [class*="VisitorSpaceCard_c-visitor-space-card__title"]'
 		)
 	).toContainText('VRT');
 
