@@ -61,6 +61,7 @@ const Blade: FC<BladeProps> = ({
 					className,
 					styles['c-blade'],
 					isBladeOpen && styles['c-blade--visible'],
+					layer === currentLayer && 'c-blade-active',
 					isLayered && [styles['c-blade--managed']]
 				)}
 				// offset underlying blades
