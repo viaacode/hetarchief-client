@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
+import { acceptTos } from './helpers/accept-tos';
 import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
@@ -26,7 +28,10 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	);
 
 	// Accept all cookies
-	// await acceptCookies(page, 'all'); // TODO re-enable once maaike enabled cookiebot for BEZOEK-INT.PRIVATE.CLOUD.MEEMOO.BE
+	await acceptCookies(page, 'all');
+
+	// Check tos is displayed, scroll down and click accept button
+	await acceptTos(page);
 
 	// Check site is still visible:
 	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();

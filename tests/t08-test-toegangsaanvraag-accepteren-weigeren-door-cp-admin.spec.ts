@@ -53,7 +53,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
 
-	const counts = await checkVisitRequestStatuses(page);
+	const countsBeforeApproveDeny = await checkVisitRequestStatuses(page);
 
 	// Search for visit requests by name
 	await page.fill('.p-cp-requests__header [placeholder="Zoek"]', 'Martine Tanghe');
@@ -77,7 +77,13 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Number of results should be equal tot total results from before
 	await expect(
 		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-${counts.totalNumberOfRequests} van ${counts.totalNumberOfRequests}`);
+	).toContainText(
+		`1-${countsBeforeApproveDeny.totalNumberOfRequests} van ${countsBeforeApproveDeny.totalNumberOfRequests}`
+	);
+
+	/**
+	 * Approve request --------------------------------------------------------
+	 */
 
 	// Click the pending visit request
 	await page
@@ -88,24 +94,24 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.click();
 
 	// Check the blade title
-	const bladeTitle = await page.locator('.c-blade--active h3[class*="Blade_c-blade__title"]');
+	let bladeTitle = await page.locator('.c-blade--active h3[class*="Blade_c-blade__title"]');
 	await expect(bladeTitle).toContainText('Open aanvraag');
 	await expect(bladeTitle).toBeVisible();
 
 	// Check request summary contains requester name
-	const summaryHtml = await page
+	let summaryHtml = await page
 		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
 		.innerHTML();
 	await expect(summaryHtml).toContain('BezoekerVoornaam BezoekerAchternaam');
 	await expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
-	const approveButton = await page.locator(
+	let approveButton = await page.locator(
 		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black'
 	);
 	await expect(approveButton).toBeVisible();
 	await expect(await approveButton.innerHTML()).toContain('Goedkeuren');
-	const denyButton = await page.locator(
+	let denyButton = await page.locator(
 		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--text'
 	);
 	await expect(denyButton).toBeVisible();
@@ -120,7 +126,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	).toContainText('Aanvraag goedkeuren');
 
 	// Enter time from: 00:00
-	await page.click('input[name="accessFrom"]');
+	await page.click('.c-datepicker--time input[name="accessFrom"]');
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
 
 	// Click the approve button
@@ -143,7 +149,91 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	).toBeVisible();
 
 	// Check number of requests for each status
-	await checkVisitRequestStatuses(page);
+	const countsAfterOneApprove = await checkVisitRequestStatuses(page);
+
+	// Verify that the numbers changes before and after the approved request
+	await expect(countsBeforeApproveDeny.totalNumberOfRequests).toEqual(
+		countsAfterOneApprove.totalNumberOfRequests
+	);
+	await expect(countsBeforeApproveDeny.numberOfPending).toEqual(
+		countsAfterOneApprove.numberOfPending + 1
+	);
+	await expect(countsBeforeApproveDeny.numberOfApproved).toEqual(
+		countsAfterOneApprove.numberOfApproved - 1
+	);
+	await expect(countsBeforeApproveDeny.numberOfDenied).toEqual(
+		countsAfterOneApprove.numberOfDenied
+	);
+
+	/**
+	 * Deny request --------------------------------------------------------
+	 */
+
+	// Click the pending visit request
+	await page
+		.locator(
+			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child'
+		)
+		.first()
+		.click();
+
+	// Check the blade title
+	bladeTitle = await page.locator('.c-blade--active h3[class*="Blade_c-blade__title"]');
+	await expect(bladeTitle).toContainText('Open aanvraag');
+	await expect(bladeTitle).toBeVisible();
+
+	// Check request summary contains requester name
+	summaryHtml = await page
+		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
+		.innerHTML();
+	await expect(summaryHtml).toContain('BezoekerVoornaam BezoekerAchternaam');
+	await expect(summaryHtml).toContain('Een geldige reden');
+
+	// Check buttons for approve and deny are visible
+	approveButton = await page.locator(
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black'
+	);
+	await expect(approveButton).toBeVisible();
+	await expect(await approveButton.innerHTML()).toContain('Goedkeuren');
+	denyButton = await page.locator(
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--text'
+	);
+	await expect(denyButton).toBeVisible();
+	await expect(await denyButton.innerHTML()).toContain('Weigeren');
+
+	// Click the deny button
+	await denyButton.click();
+
+	// Check blade title
+	await expect(
+		await page.locator('.c-blade--active [class*="Blade_c-blade__title__"]')
+	).toContainText('Aanvraag weigeren');
+
+	// Click the deny button on the second blade
+	await page.click('.c-button__label:has-text("Weigeren")');
+
+	// Blade closes
+	await expect(await page.locator('.c-blade--active')).not.toBeVisible();
+
+	// Toast message
+	await expect(await page.locator('text=De aanvraag is geweigerd.')).toBeVisible();
+
+	// Check number of requests for each status
+	const countsAfterOneApproveAndOneDeny = await checkVisitRequestStatuses(page);
+
+	// Verify that the numbers changes before and after the deny request
+	await expect(countsAfterOneApprove.totalNumberOfRequests).toEqual(
+		countsAfterOneApproveAndOneDeny.totalNumberOfRequests
+	);
+	await expect(countsAfterOneApprove.numberOfPending).toEqual(
+		countsAfterOneApproveAndOneDeny.numberOfPending + 1
+	);
+	await expect(countsAfterOneApprove.numberOfApproved).toEqual(
+		countsAfterOneApproveAndOneDeny.numberOfApproved
+	);
+	await expect(countsAfterOneApprove.numberOfDenied).toEqual(
+		countsAfterOneApproveAndOneDeny.numberOfDenied - 1
+	);
 
 	// Wait for close to save the videos
 	await context.close();

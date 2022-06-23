@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
+import { acceptTos } from './helpers/accept-tos';
 import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
 
 test('T02: Test inloggen CP-admin', async ({ page, context }) => {
@@ -19,7 +21,7 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	);
 
 	// Accept all cookies
-	// await acceptCookies(page, 'all'); // TODO re-enable once maaike enabled cookiebot for BEZOEK-INT.PRIVATE.CLOUD.MEEMOO.BE
+	await acceptCookies(page, 'all');
 
 	// Check logged in status
 	await expect(await page.locator('.c-avatar__text')).toHaveText('Test');
@@ -30,6 +32,9 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 		.allInnerTexts();
 	await expect(navigationItemTexts).not.toContain('Admin');
 	await expect(navigationItemTexts).toContain('Beheer');
+
+	// Check tos is displayed, scroll down and click accept button
+	await acceptTos(page);
 
 	// Wait for close to save the videos
 	await context.close();

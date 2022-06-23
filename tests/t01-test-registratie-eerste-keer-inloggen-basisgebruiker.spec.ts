@@ -3,6 +3,7 @@ import { uuid } from 'uuidv4';
 
 import { USER_PASSWORD } from './consts/tests.consts';
 import { acceptCookies } from './helpers/accept-cookies';
+import { acceptTos } from './helpers/accept-tos';
 import { acmConfirmEmail } from './helpers/acm-confirm-email';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
@@ -104,31 +105,8 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	// );
 	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
 
-	// Check title, content page content and disabled button
-	await expect(await page.locator('.p-terms-of-service__title')).toContainText(
-		'Gebruiksvoorwaarden'
-	);
-	await expect(await page.locator('.c-content-page-preview')).toContainText(
-		'Deze gebruiksvoorwaarden'
-	);
-	const acceptTosButton = await page.locator('.p-terms-of-service__buttons .c-button--black');
-	await expect(acceptTosButton).toHaveClass('c-button c-button--black c-button--disabled');
-
-	// Scroll down
-	await page.evaluate(() => {
-		document.querySelector('.p-terms-of-service__content')?.scrollTo(0, 50000);
-	});
-
-	// Check button becomes active
-	await expect(acceptTosButton).toHaveClass('c-button c-button--black');
-
-	// Click the accept tos button
-	await acceptTosButton.click();
-
-	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-		timeout: 10000,
-	});
+	// Check tos is displayed, scroll down and click accept button
+	await acceptTos(page);
 
 	// Cookie bot should not open again
 	await expect(await page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
