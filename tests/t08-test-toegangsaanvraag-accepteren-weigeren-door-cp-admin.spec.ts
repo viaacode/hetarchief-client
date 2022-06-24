@@ -1,7 +1,10 @@
 import { expect, test } from '@playwright/test';
 
+import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
+import { checkBladeTitle } from './helpers/check-blade-title';
 import { checkVisitRequestStatuses } from './helpers/check-visit-request-statuses';
 import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
+import { waitForLoading } from './helpers/wait-for-loading';
 
 test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
@@ -37,18 +40,10 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	});
 
 	// Check Visit Requests is active in the sidebar
-	const activeNavigationItem = await page.locator(
-		'[class*="ListNavigation_c-list-navigation__item--active"]'
-	);
-	await expect(await activeNavigationItem.count()).toBe(1);
-	const activeNavigationItemHtml = await activeNavigationItem.innerHTML();
-	await expect(activeNavigationItemHtml).toContain('Aanvragen');
-	await expect(activeNavigationItemHtml).toContain('href="/beheer/aanvragen"');
+	await checkActiveSidebarNavigationItem(page, 0, 'Aanvragen', 'href="/beheer/aanvragen"');
 
 	// Wait for results to load
-	await page.waitForFunction(() => document.querySelectorAll('.c-loading').length === 0, null, {
-		timeout: 10000,
-	});
+	await waitForLoading(page);
 
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
@@ -94,9 +89,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.click();
 
 	// Check the blade title
-	let bladeTitle = await page.locator('.c-blade--active h3[class*="Blade_c-blade__title"]');
-	await expect(bladeTitle).toContainText('Open aanvraag');
-	await expect(bladeTitle).toBeVisible();
+	await checkBladeTitle(page, 'Open aanvraag');
 
 	// Check request summary contains requester name
 	let summaryHtml = await page
@@ -121,9 +114,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await approveButton.click();
 
 	// Check blade title
-	await expect(
-		await page.locator('.c-blade--active [class*="Blade_c-blade__title__"]')
-	).toContainText('Aanvraag goedkeuren');
+	await checkBladeTitle(page, 'Aanvraag goedkeuren');
 
 	// Enter time from: 00:00
 	await page.click('.c-datepicker--time input[name="accessFrom"]');
@@ -178,9 +169,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.click();
 
 	// Check the blade title
-	bladeTitle = await page.locator('.c-blade--active h3[class*="Blade_c-blade__title"]');
-	await expect(bladeTitle).toContainText('Open aanvraag');
-	await expect(bladeTitle).toBeVisible();
+	await checkBladeTitle(page, 'Open aanvraag');
 
 	// Check request summary contains requester name
 	summaryHtml = await page
@@ -205,9 +194,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await denyButton.click();
 
 	// Check blade title
-	await expect(
-		await page.locator('.c-blade--active [class*="Blade_c-blade__title__"]')
-	).toContainText('Aanvraag weigeren');
+	await checkBladeTitle(page, 'Aanvraag weigeren');
 
 	// Click the deny button on the second blade
 	await page.click('.c-button__label:has-text("Weigeren")');
@@ -234,6 +221,17 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(countsAfterOneApprove.numberOfDenied).toEqual(
 		countsAfterOneApproveAndOneDeny.numberOfDenied - 1
 	);
+
+	// Check approved and denied requests are visible under their respective tabs
+	// Check approved count
+	await page.click('.c-tab__label:has-text("Goedgekeurd")');
+	await expect(await page.locator('text=hetarchief2.0+ateindgebruikerbzt')).toBeVisible();
+
+	// Check denied count
+	await page.click('.c-tab__label:has-text("Geweigerd")');
+	await expect(
+		await page.locator('text=' + process.env.TEST_MEEMOO_ADMIN_ACCOUNT_USERNAME)
+	).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

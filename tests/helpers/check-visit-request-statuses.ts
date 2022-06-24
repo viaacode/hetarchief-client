@@ -9,7 +9,7 @@ async function checkTotal(page: Page, total: number): Promise<void> {
 		// If there are no entries, no table is shown and no footer with the total is present
 		await expect(
 			await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-		).toEqual('');
+		).not.toBeVisible();
 	}
 }
 

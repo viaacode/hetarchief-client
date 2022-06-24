@@ -1,5 +1,7 @@
 import { expect, Page } from '@playwright/test';
 
+import { checkBladeTitle } from './check-blade-title';
+
 export async function fillRequestVisitBlade(
 	page: Page,
 	visitorSpaceSlug: string,
@@ -8,11 +10,8 @@ export async function fillRequestVisitBlade(
 	checkBox = true
 ): Promise<void> {
 	// Check the request visit blade title is visible
-	const bladeTitle = await page.locator(
-		'.c-blade--active [class*="RequestAccessBlade_c-request-access-blade__title"]'
-	);
-	await expect(bladeTitle).toBeVisible();
-	await expect(bladeTitle).toContainText('Vraag toegang aan');
+
+	await checkBladeTitle(page, 'Vraag toegang aan');
 
 	// Check the blade is for VRT
 	await expect(page.url()).toContain(`?bezoekersruimte=${visitorSpaceSlug}`);
