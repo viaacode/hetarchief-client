@@ -1,5 +1,6 @@
 import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { kebabCase } from 'lodash-es';
 import { FC } from 'react';
 
 import { CardImage } from '../CardImage';
@@ -17,9 +18,13 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 	const typeAccessAccepted = type === VisitorSpaceCardType.futureApproved;
 	const typeAccessRequested = type === VisitorSpaceCardType.futureRequested;
 
-	const rootCls = clsx(styles['c-visitor-space-card'], {
-		[styles['c-visitor-space-card--granted']]: typeAccessGranted,
-	});
+	const rootCls = clsx(
+		styles['c-visitor-space-card'],
+		`c-visitor-space-card--name--${kebabCase(room?.name || room?.id).toLowerCase()}`,
+		{
+			[styles['c-visitor-space-card--granted']]: typeAccessGranted,
+		}
+	);
 
 	const flat = typeAccessAccepted || typeAccessRequested;
 	const hasRequested = typeAccessGranted || typeAccessAccepted || typeAccessRequested;

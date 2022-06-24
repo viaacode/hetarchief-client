@@ -75,7 +75,7 @@
 }
 
 .o-form-group-layout--standard {
-	label[class^="o-form-group__label"] {
+	label[class*="o-form-group__label"] {
 		color: $black;
 		font-size: $font-size-sm;
 	}
@@ -96,7 +96,7 @@
 		}
 	}
 
-	textarea[class^="c-input"] {
+	textarea[class*="c-input"] {
 		resize: none !important;
 		border-radius: 0;
 	}
@@ -168,7 +168,7 @@
 		background-color: $white;
 	}
 
-	& > .c-navbar div[class^="c-select__control"] {
+	& > .c-navbar div[class*="c-select__control"] {
 		border-radius: 1.9rem;
 		background-color: transparent;
 		border-color: $zinc;

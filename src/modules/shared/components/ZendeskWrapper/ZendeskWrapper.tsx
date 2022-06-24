@@ -28,7 +28,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 	const updateFooterHeight = useCallback(() => {
 		setFooterHeight(
 			get(
-				document.querySelector('[class^="Footer_c-footer"]'),
+				document.querySelector('[class*="Footer_c-footer"]'),
 				'clientHeight',
 				0 // 0 when no footer is found
 			)
