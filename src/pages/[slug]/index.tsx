@@ -2,6 +2,7 @@ import { ContentPage } from '@meemoo/react-admin';
 import { HTTPError } from 'ky';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooleanParam, useQueryParams } from 'use-query-params';
 
@@ -12,7 +13,7 @@ import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
-import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
+import { selectShowAuthModal, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
@@ -68,10 +69,20 @@ const DynamicRouteResolver: NextPage = () => {
 	};
 
 	/**
+	 * Effects
+	 */
+
+	useEffect(() => {
+		dispatch(setShowZendesk(true));
+	}, [dispatch]);
+
+	/**
 	 * Render
 	 */
 
 	const renderPageContent = () => {
+		dispatch(setShowZendesk(true));
+
 		if (isVisitorSpaceLoading || isContentPageLoading) {
 			return <Loading fullscreen />;
 		}
@@ -79,6 +90,7 @@ const DynamicRouteResolver: NextPage = () => {
 			return <ErrorNotFound />;
 		}
 		if (visitorSpaceInfo) {
+			dispatch(setShowZendesk(false));
 			return <VisitorSpaceSearchPage />;
 		}
 		if (contentPageInfo) {
