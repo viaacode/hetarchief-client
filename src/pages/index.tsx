@@ -2,14 +2,14 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BooleanParam, useQueryParams } from 'use-query-params';
+import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import LoggedInHome from '@home/components/LoggedInHome/LoggedInHome';
 import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
-import { SHOW_AUTH_QUERY_KEY } from '@home/const';
+import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -22,6 +22,7 @@ const Home: NextPage = () => {
 	const dispatch = useDispatch();
 	const [query, setQuery] = useQueryParams({
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: withDefault(StringParam, undefined),
 	});
 
 	const router = useRouter();
@@ -52,8 +53,11 @@ const Home: NextPage = () => {
 	 */
 
 	const onCloseAuthModal = () => {
-		if (typeof query.showAuth === 'boolean') {
-			setQuery({ showAuth: undefined });
+		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
+			setQuery({
+				[SHOW_AUTH_QUERY_KEY]: undefined,
+				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+			});
 		}
 		dispatch(setShowAuthModal(false));
 	};
