@@ -600,7 +600,7 @@ const ObjectDetailPage: NextPage = () => {
 										data: mapKeywordsToTagList(mediaInfo.keywords),
 									},
 									{
-										title: 'Ook interessant',
+										title: t('pages/slug/ie/index___ook-interessant'),
 										data: similar.length
 											? renderMetadataCards('similar', similar)
 											: null,
