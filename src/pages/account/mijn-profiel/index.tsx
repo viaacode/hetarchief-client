@@ -55,39 +55,40 @@ const AccountMyProfile: NextPage = () => {
 								{user?.email}
 							</dd>
 						</dl>
-						{user?.idp === Idp.HETARCHIEF && (
-							<div className="p-account-my-profile__edit">
-								{/* Redirect to SSUM edit profile page => After SSUM redirect to the logout url => after logout redirect to client profile page */}
-								{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
-								<Link
-									href={stringifyUrl({
-										url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL,
-										query: {
-											redirect_to: stringifyUrl({
-												url:
-													publicRuntimeConfig.PROXY_URL +
-													'/auth/global-logout',
-												query: {
-													returnToUrl: window.location.href,
-												},
-											}),
-										},
-									})}
-									passHref
-								>
-									<a>
-										<Button
-											className="u-p-0"
-											iconStart={<Icon name="edit" />}
-											label={t(
-												'pages/account/mijn-profiel/index___wijzig-mijn-gegevens'
-											)}
-											variants="text"
-										/>
-									</a>
-								</Link>
-							</div>
-						)}
+						{user?.idp === Idp.HETARCHIEF &&
+							user.permissions.includes(Permission.CAN_EDIT_PROFILE_INFO) && (
+								<div className="p-account-my-profile__edit">
+									{/* Redirect to SSUM edit profile page => After SSUM redirect to the logout url => after logout redirect to client profile page */}
+									{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
+									<Link
+										href={stringifyUrl({
+											url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL,
+											query: {
+												redirect_to: stringifyUrl({
+													url:
+														publicRuntimeConfig.PROXY_URL +
+														'/auth/global-logout',
+													query: {
+														returnToUrl: window.location.href,
+													},
+												}),
+											},
+										})}
+										passHref
+									>
+										<a>
+											<Button
+												className="u-p-0"
+												iconStart={<Icon name="edit" />}
+												label={t(
+													'pages/account/mijn-profiel/index___wijzig-mijn-gegevens'
+												)}
+												variants="text"
+											/>
+										</a>
+									</Link>
+								</div>
+							)}
 					</Box>
 				</div>
 			</AccountLayout>
