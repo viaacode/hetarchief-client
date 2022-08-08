@@ -1,7 +1,7 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isEqual, sum } from 'lodash-es';
+import { sum } from 'lodash-es';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
