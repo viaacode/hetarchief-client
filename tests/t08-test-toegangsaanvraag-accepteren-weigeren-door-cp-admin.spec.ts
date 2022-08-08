@@ -40,7 +40,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	});
 
 	// Check Visit Requests is active in the sidebar
-	await checkActiveSidebarNavigationItem(page, 0, 'Aanvragen', 'href="/beheer/aanvragen"');
+	await checkActiveSidebarNavigationItem(page, 0, 'Aanvragen', '/beheer/aanvragen');
 
 	// Wait for results to load
 	await waitForLoading(page);
@@ -95,7 +95,8 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	let summaryHtml = await page
 		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
 		.innerHTML();
-	await expect(summaryHtml).toContain('BezoekerVoornaam BezoekerAchternaam');
+	await expect(summaryHtml).toContain('BezoekerVoornaam');
+	await expect(summaryHtml).toContain('BezoekerAchternaam');
 	await expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible

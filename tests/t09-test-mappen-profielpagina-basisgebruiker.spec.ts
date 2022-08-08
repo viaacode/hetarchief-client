@@ -7,7 +7,7 @@ import { getFolderObjectCounts } from './helpers/get-folder-object-counts';
 import { getSearchTabBarCounts } from './helpers/get-search-tab-bar-counts';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
-test('T09: Test mappen + profielpagina basisgebruiker\t\t\t', async ({ page, context }) => {
+test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
