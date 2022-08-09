@@ -31,6 +31,10 @@
 	font-size: $font-size-lg;
 	color: $neutral;
 	pointer-events: none;
+
+	.c-button__icon {
+		@include more-clickable-element;
+	}
 }
 
 /**
