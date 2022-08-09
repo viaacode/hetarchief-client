@@ -18,7 +18,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	});
 
 	// Click on login or register
-	await page.locator('text=Inloggen of registreren').click();
+	await page.locator('text=Inloggen of registreren').first().click();
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(

@@ -6,7 +6,7 @@ export async function loginUserMeemooIdp(
 	password: string
 ): Promise<void> {
 	// Click on login or register
-	await page.locator('text=Inloggen of registreren').click();
+	await page.locator('text=Inloggen of registreren').first().click();
 
 	// Check auth modal opens up
 	const authModalHeading = await page

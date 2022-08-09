@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from './helpers/check-blade-title';
+import { checkToastMessage } from './helpers/check-toast-message';
 import { checkVisitRequestStatuses } from './helpers/check-visit-request-statuses';
 import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
 import { waitForLoading } from './helpers/wait-for-loading';
@@ -128,7 +129,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(await page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
-	await expect(await page.locator('text=De aanvraag is goedgekeurd.')).toBeVisible();
+	await checkToastMessage(page, 'De aanvraag is goedgekeurd.');
 
 	// Check first row is approved
 	await expect(
@@ -204,7 +205,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(await page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
-	await expect(await page.locator('text=De aanvraag is geweigerd.')).toBeVisible();
+	await checkToastMessage(page, 'De aanvraag is geweigerd.');
 
 	// Check number of requests for each status
 	const countsAfterOneApproveAndOneDeny = await checkVisitRequestStatuses(page);

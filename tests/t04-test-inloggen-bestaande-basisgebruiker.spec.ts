@@ -15,7 +15,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Click on login or register
-	await page.locator('text=Inloggen of registreren').click();
+	await page.locator('text=Inloggen of registreren').first().click();
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(

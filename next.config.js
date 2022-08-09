@@ -9,7 +9,6 @@
 const withTM = require('next-transpile-modules')([
 	'@meemoo/react-admin',
 	'@viaa/avo2-components',
-	// '@meemoo/react-admin/node_modules/@viaa/avo2-components',
 	'ky-universal',
 ]);
 

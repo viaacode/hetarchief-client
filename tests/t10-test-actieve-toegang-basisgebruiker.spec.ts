@@ -16,7 +16,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Click on login or register
-	await page.locator('text=Inloggen of registreren').click();
+	await page.locator('text=Inloggen of registreren').first().click();
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -41,7 +41,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.waitForFunction(
 		() =>
 			document.querySelectorAll('.p-visitor-space__results .p-media-card-list .c-card')
-				.length > 1,
+				.length >= 1,
 		null,
 		{
 			timeout: 10000,

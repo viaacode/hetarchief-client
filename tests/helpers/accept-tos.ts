@@ -9,7 +9,7 @@ export async function acceptTos(page: Page): Promise<void> {
 		'Deze gebruiksvoorwaarden'
 	);
 	const acceptTosButton = await page.locator('.p-terms-of-service__buttons .c-button--black');
-	await expect(acceptTosButton).toHaveClass('c-button c-button--black c-button--disabled');
+	await expect(acceptTosButton).toHaveClass(/c-button--disabled/);
 
 	// Scroll down
 	await page.evaluate(() => {
@@ -17,7 +17,7 @@ export async function acceptTos(page: Page): Promise<void> {
 	});
 
 	// Check button becomes active
-	await expect(acceptTosButton).toHaveClass('c-button c-button--black');
+	await expect(acceptTosButton).not.toHaveClass(/c-button--disabled/);
 
 	// Click the accept tos button
 	await acceptTosButton.click();

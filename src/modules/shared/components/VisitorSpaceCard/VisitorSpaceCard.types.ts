@@ -1,4 +1,4 @@
-import { CardProps } from '@meemoo/react-components/dist/esm/components/Card/Card.types';
+import { CardProps } from '@meemoo/react-components';
 
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
