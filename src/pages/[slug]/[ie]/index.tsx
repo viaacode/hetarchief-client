@@ -80,8 +80,6 @@ import {
 	VisitorSpaceNavigation,
 } from '../../../modules/visitor-space/components';
 
-import styles from './index.module.scss';
-
 import {
 	DynamicActionMenu,
 	MediaObject,
@@ -420,29 +418,27 @@ const ObjectDetailPage: NextPage = () => {
 		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			if (!peakFileId || !!peakJson) {
 				return (
-					<div className={styles['c-audio-player-wrapper']}>
-						<FlowPlayer
-							className={clsx(
-								'p-object-detail__flowplayer',
-								showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
-							)}
-							key={flowPlayerKey}
-							src={[
-								{
-									src: playableUrl,
-									type: 'audio/mp3',
-								},
-							]}
-							title={representation.name}
-							pause={isMediaPaused}
-							onPlay={handleOnPlay}
-							onPause={handleOnPause}
-							token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
-							dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
-							plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
-							waveformData={peakJson?.data || undefined}
-						/>
-					</div>
+					<FlowPlayer
+						className={clsx(
+							'p-object-detail__flowplayer',
+							showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+						)}
+						key={flowPlayerKey}
+						src={[
+							{
+								src: playableUrl,
+								type: 'audio/mp3',
+							},
+						]}
+						title={representation.name}
+						pause={isMediaPaused}
+						onPlay={handleOnPlay}
+						onPause={handleOnPause}
+						token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
+						dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
+						plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
+						waveformData={peakJson?.data || undefined}
+					/>
 				);
 			} else {
 				return <Loading fullscreen />;
