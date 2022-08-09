@@ -1,6 +1,7 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { HTTPError } from 'ky';
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooleanParam, useQueryParams } from 'use-query-params';
@@ -13,6 +14,7 @@ import { withI18n } from '@i18n/wrappers';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
+import { createPageTitle } from '@shared/utils';
 import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
@@ -88,6 +90,9 @@ const DynamicRouteResolver: NextPage = () => {
 
 	return (
 		<VisitorLayout>
+			<Head>
+				<title>{createPageTitle(contentPageInfo?.title || undefined)}</title>
+			</Head>
 			{renderPageContent()}
 			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
 		</VisitorLayout>
