@@ -105,6 +105,15 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 				);
 			});
 
+			const addedToCollections: Array<{
+				toastMessage: { maxLines: number; title: string; description: string };
+				descriptionVariables: Record<string, unknown>;
+			}> = [];
+			const removedFromCollections: Array<{
+				toastMessage: { maxLines: number; title: string; description: string };
+				descriptionVariables: Record<string, unknown>;
+			}> = [];
+
 			// Define our promises
 			const promises = dirty.map((pair) => {
 				const collection = getCollection(pair.folder);
@@ -125,15 +134,19 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 							if (response === undefined) {
 								return;
 							}
-							toastService.notify({
-								maxLines: 3,
-								title: t(
-									'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-toegevoegd-aan-map'
-								),
-								description: t(
-									'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collection',
-									descriptionVariables
-								),
+
+							addedToCollections.push({
+								toastMessage: {
+									maxLines: 3,
+									title: t(
+										'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-toegevoegd-aan-map'
+									),
+									description: t(
+										'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collection',
+										descriptionVariables
+									),
+								},
+								descriptionVariables,
 							});
 						});
 				} else {
@@ -145,15 +158,18 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								return;
 							}
 
-							toastService.notify({
-								maxLines: 3,
-								title: t(
-									'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-verwijderd-uit-map'
-								),
-								description: t(
-									'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collection',
-									descriptionVariables
-								),
+							removedFromCollections.push({
+								toastMessage: {
+									maxLines: 3,
+									title: t(
+										'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-verwijderd-uit-map'
+									),
+									description: t(
+										'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collection',
+										descriptionVariables
+									),
+								},
+								descriptionVariables,
 							});
 						});
 				}
@@ -162,6 +178,48 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			// Execute calls
 			Promise.all(promises).then(() => {
 				getCollections.refetch().then(() => {
+					// bundle add toast messages
+					if (addedToCollections.length > 1) {
+						const collections = addedToCollections
+							.map((obj) => obj.descriptionVariables.collection)
+							.join(', ');
+						toastService.notify({
+							maxLines: 3,
+							title: t(
+								'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-toegevoegd-aan-mappen'
+							),
+							description: t(
+								'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collections',
+								{
+									replace: { collections },
+								}
+							),
+						});
+					} else if (addedToCollections.length === 1) {
+						toastService.notify(addedToCollections[0].toastMessage);
+					}
+
+					// bundle removed toast messages
+					if (removedFromCollections.length > 1) {
+						const collections = addedToCollections
+							.map((obj) => obj.descriptionVariables.collection)
+							.join(', ');
+						toastService.notify({
+							maxLines: 3,
+							title: t(
+								'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-verwijderd-uit-mappen'
+							),
+							description: t(
+								'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collections',
+								{
+									replace: { collections },
+								}
+							),
+						});
+					} else if (removedFromCollections.length === 1) {
+						toastService.notify(removedFromCollections[0].toastMessage);
+					}
+
 					onSubmit?.(values);
 					reset();
 				});
