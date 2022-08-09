@@ -47,7 +47,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): MediaSearch
 		operator: MediaSearchOperator.IS,
 		multiValue: (query.keywords || []).filter((item) => item !== null) as string[],
 	},
-	// Language TODO
+	// Language
 	{
 		field: MediaSearchFilterField.LANGUAGE,
 		operator: MediaSearchOperator.IS,
