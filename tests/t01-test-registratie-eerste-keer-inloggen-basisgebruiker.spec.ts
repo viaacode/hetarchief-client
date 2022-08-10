@@ -7,6 +7,10 @@ import { acceptTos } from './helpers/accept-tos';
 import { acmConfirmEmail } from './helpers/acm-confirm-email';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
+/**
+ * These scenarios are described in https://docs.google.com/spreadsheets/d/1yGNKFkeE-2Kv2mADOvKzDK3BYTvoiSbVO6pAsuoG5P8/edit#gid=286710078
+ */
+
 test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ page, context }) => {
 	const userId = uuid().replace(/-/g, '');
 	const userEmail = `hetarchief2.0+ateindgebruikerbzt${userId}@meemoo.be`;
@@ -94,15 +98,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	// Cookie bot should not open again
 	await expect(await page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
 
-	// Click on login or register
-	await page.locator('text=Inloggen of registreren').first().click();
-
 	// Login user
-	// await loginUser(
-	// 	page,
-	// 	'hetarchief2.0+ateindgebruikerbztcd39a80cd6144e99a5c6d751005536c2@meemoo.be',
-	// 	USER_PASSWORD
-	// );
 	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
 
 	// Check tos is displayed, scroll down and click accept button

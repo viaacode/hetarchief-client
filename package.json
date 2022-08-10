@@ -32,6 +32,7 @@
 		"test:e2e:debug:t10": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=chrome --headed --workers=1 --retries=0 --maxFailures=1 tests/t10-test-actieve-toegang-basisgebruiker.spec.ts",
 		"test:e2e:debug:t11": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=chrome --headed --workers=1 --retries=0 --maxFailures=1 tests/t11-test-detailpagina-object.spec.ts",
 		"test:e2e:debug:t12": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=chrome --headed --workers=1 --retries=0 --maxFailures=1 tests/t12-test-einde-sessie-bezoekertool.spec.ts",
+		"test:e2e:debug:t13": "cross-env PWDEBUG=console dotenv -e .env.local npx playwright test --browser=chrome --headed --workers=1 --retries=0 --maxFailures=1 tests/t13-test-instellingen-cp-beheer.spec.ts",
 		"type-check": "tsc --noEmit",
 		"prepare": "husky install",
 		"storybook": "start-storybook -p 6006",

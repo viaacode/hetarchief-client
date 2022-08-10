@@ -9,6 +9,10 @@ export async function loginUserHetArchiefIdp(
 	const authModalHeading = await page
 		.locator('[class*="AuthModal_c-auth-modal__heading"]')
 		.first();
+	if (authModalHeading) {
+		// Click on login or register
+		await page.locator('text=Inloggen of registreren').first().click();
+	}
 	expect(authModalHeading).toBeDefined();
 
 	// Click the login button

@@ -15,9 +15,6 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Check the homepage show the correct title for searching maintainers
 	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
 
-	// Click on login or register
-	await page.locator('text=Inloggen of registreren').first().click();
-
 	// Login with existing user
 	await loginUserHetArchiefIdp(
 		page,

@@ -21,9 +21,6 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Check the homepage show the correct title for searching maintainers
 	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
 
-	// Click on login or register
-	await page.locator('text=Inloggen of registreren').first().click();
-
 	// Login with end user
 	await loginUserHetArchiefIdp(
 		page,
@@ -61,17 +58,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Logout the end user
 	await logout(page);
 
-	// Wait for homepage to load
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-		timeout: 10000,
-	});
-
 	/**
 	 * Approve visit request as meemoo admin
 	 */
-
-	// Click on login or register
-	await page.locator('text=Inloggen of registreren').first().click();
 
 	// Login as meemoo admin
 	await loginUserHetArchiefIdp(
@@ -102,17 +91,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// logout meemoo admin
 	await logout(page);
 
-	// Wait for homepage to load
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-		timeout: 10000,
-	});
-
 	/**
 	 * Check end date expired as end user
 	 */
-
-	// Click on login or register
-	await page.locator('text=Inloggen of registreren').first().click();
 
 	// Login with end user
 	await loginUserHetArchiefIdp(
