@@ -178,6 +178,9 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await usersSearchField.fill('Marie');
 	await usersSearchField.press('Enter');
 
+	// Wait for search results
+	await page.waitForTimeout(1000);
+
 	// Check first row contains "Marie" and the row with "Ilya" is not visible
 	await expect(await page.locator('table tbody tr', { hasText: 'marie' })).toBeVisible();
 	await expect(await page.locator('table tbody tr', { hasText: 'Ilya' })).not.toBeVisible();

@@ -178,7 +178,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Check user is redirected to the homepage
 	await expect
 		.poll(() => page.url(), { timeout: 10000 })
-		.toEqual(process.env.TEST_CLIENT_ENDPOINT);
+		.toEqual(process.env.TEST_CLIENT_ENDPOINT); // TODO does not work yet, fix in PR for ARC-1043, needs to be deployed to INT before this test will succeed
 
 	/**
 	 * Check detail page after end of visit

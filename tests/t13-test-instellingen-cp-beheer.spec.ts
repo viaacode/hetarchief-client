@@ -54,16 +54,12 @@ test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 	 */
 
 	// Upload file
-	const uploadFileSection = page.locator(
-		'[class*="VisitorSpaceImageForm_c-visitor-space-image-form__image__"]'
-	);
-	const [fileChooser] = await Promise.all([
-		// It is important to call waitForEvent before click to set up waiting.
-		page.waitForEvent('filechooser'),
-		// Opens the file chooser.
-		uploadFileSection.locator('input[type="file"]').click(),
-	]);
-	await fileChooser.setFiles(['tests/fixtures/new-cover-photo.jpg']);
+	const uploadFileSection = page.locator('[class*="VisitorSpaceSettings_c-cp-settings__box__"]', {
+		hasText: 'Achtergrondafbeelding',
+	});
+	const fileUploadField = await uploadFileSection.locator('input[type="file"]');
+	await expect(fileUploadField.first()).toBeDefined();
+	await fileUploadField.setInputFiles(['tests/fixtures/new-cover-photo.jpg']);
 
 	// Check background image is displayed
 	await expect(
@@ -77,10 +73,13 @@ test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 	await expect(await uploadFileSection.locator('text=Bewaar wijzigingen')).toBeVisible();
 
 	// Click save changes button
-	await uploadFileSection.locator('text=Bewaar wijzigingen').click();
+	const saveButton = await uploadFileSection.locator('text=Bewaar wijzigingen');
+	// Ensure the save button isn't hidden behind the feedback button
+	await page.evaluate(() => window.scrollTo(0, 200));
+	await saveButton.click();
 
 	// Check toast message for successful save
-	await checkToastMessage(page, 'Gelukt');
+	await checkToastMessage(page, 'gelukt');
 
 	// Check save buttons disappeared
 	await expect(await uploadFileSection.locator('text=Upload nieuwe afbeelding')).toBeVisible();
@@ -130,21 +129,29 @@ test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 		.click();
 
 	// Save buttons appear:
-	await expect(await descriptionDuringRequestSection.locator('text=Annuleer')).toBeVisible();
 	await expect(
-		await descriptionDuringRequestSection.locator('text=Bewaar wijzigingen')
+		await descriptionDuringRequestSection.locator('.c-button', { hasText: 'Annuleer' })
+	).toBeVisible();
+	await expect(
+		await descriptionDuringRequestSection.locator('.c-button', {
+			hasText: 'Bewaar wijzigingen',
+		})
 	).toBeVisible();
 
 	// Click save changes button
 	await descriptionDuringRequestSection.locator('text=Bewaar wijzigingen').click();
 
 	// Check toast message for successful save
-	await checkToastMessage(page, 'Gelukt');
+	await checkToastMessage(page, 'gelukt');
 
 	// Check save buttons disappeared;
-	await expect(await descriptionDuringRequestSection.locator('text=Annuleer')).not.toBeVisible();
 	await expect(
-		await descriptionDuringRequestSection.locator('text=Bewaar wijzigingen')
+		await descriptionDuringRequestSection.locator('.c-button', { hasText: 'Annuleer' })
+	).not.toBeVisible();
+	await expect(
+		await descriptionDuringRequestSection.locator('.c-button', {
+			hasText: 'Bewaar wijzigingen',
+		})
 	).not.toBeVisible();
 
 	/**
@@ -166,52 +173,73 @@ test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 	await editor2.type('Dit is een automated test. Verschijnt dit op de wachtpagina?');
 
 	// Save buttons appear:
-	await expect(await descriptionOnWaitingForAccessSection.locator('text=Annuleer')).toBeVisible();
 	await expect(
-		await descriptionOnWaitingForAccessSection.locator('text=Bewaar wijzigingen')
+		await descriptionOnWaitingForAccessSection.locator('.c-button', { hasText: 'Annuleer' })
+	).toBeVisible();
+	await expect(
+		await descriptionOnWaitingForAccessSection.locator('.c-button', {
+			hasText: 'Bewaar wijzigingen',
+		})
 	).toBeVisible();
 
 	// Click save changes button
 	await descriptionOnWaitingForAccessSection.locator('text=Bewaar wijzigingen').click();
 
 	// Check toast message for successful save
-	await checkToastMessage(page, 'Gelukt');
+	await checkToastMessage(page, 'gelukt');
 
 	// Check save buttons disappeared;
-	await expect(await descriptionDuringRequestSection.locator('text=Annuleer')).not.toBeVisible();
 	await expect(
-		await descriptionDuringRequestSection.locator('text=Bewaar wijzigingen')
+		await descriptionOnWaitingForAccessSection.locator('.c-button', { hasText: 'Annuleer' })
+	).not.toBeVisible();
+	await expect(
+		await descriptionOnWaitingForAccessSection.locator('.c-button', {
+			hasText: 'Bewaar wijzigingen',
+		})
 	).not.toBeVisible();
 
 	/**
 	 * Check changes are correctly shown during visit request flow
 	 */
 
-	// Go to homepage
-	await page.locator('[class*="Navigation_c-navigation__section--responsive-desktop__"] a', {
-		hasText: 'Start je bezoek',
+	// Go to the hetarchief homepage
+	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
+
+	// Check page title is the home page
+	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+		timeout: 10000,
+	});
+
+	await page.reload();
+
+	// Check page title is the home page
+	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+		timeout: 10000,
 	});
 
 	// Check new background image is visible
 	const vrtCard = await page.locator('.p-home__results .c-card', { hasText: 'VRT' });
-	const backgroundDiv = await (
-		await vrtCard.locator('[class*="CardImage_c-card-image__background--image__"]')
-	).innerHTML();
-	await expect(backgroundDiv).toContain('new-cover-photo');
+	await vrtCard.scrollIntoViewIfNeeded();
+	const vrtCardBackground = await vrtCard.locator(
+		'[class*="CardImage_c-card-image__background--image__"] img'
+	);
+	await expect(vrtCardBackground).toBeVisible();
 
 	// Click request access button
-	await vrtCard.locator('.c-button', { hasText: 'Vraag toegang aan' });
+	await vrtCard.locator('.c-button', { hasText: 'Vraag toegang aan' }).click();
 
 	// Check description text is visible
 	await expect(
-		await page.locator('text=Dit is een automated test. Verschijnt dit in de blade?')
+		await page.locator('text=Dit is een automated test. Verschijnt dit in de blade?').first()
 	).toBeVisible();
 
 	await fillRequestVisitBlade(page, 'vrt', 'checking the description text of the waiting page');
 
 	// Check description text is visible on the waiting page
 	await expect(
-		await page.locator('text=Dit is een automated test. Verschijnt dit op de wachtpagina?')
+		await page
+			.locator('text=Dit is een automated test. Verschijnt dit op de wachtpagina?')
+			.first()
 	).toBeVisible();
 
 	// Wait for close to save the videos
