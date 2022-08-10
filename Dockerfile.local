@@ -1,7 +1,7 @@
 FROM node:gallium-alpine
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm i --force
+RUN npm i --legacy-peer-deps
 COPY . .
 
 EXPOSE 3000
