@@ -16,7 +16,7 @@ export async function checkSpaceVisibilityHomepage(
 	// Search for "searchTerm"
 	const searchFieldHomePage = await page.locator('[placeholder="zoek"]');
 	await searchFieldHomePage.fill(searchTerm);
-	await searchFieldHomePage.press('Enter');
+	await page.locator('.c-input .c-button', { hasText: 'search' }).click();
 
 	if (shouldBeVisible) {
 		// Check searchTerm is shown
@@ -32,4 +32,8 @@ export async function checkSpaceVisibilityHomepage(
 		await expect(card).not.toBeVisible();
 		await expect(card.locator('.c-button', { hasText: 'Vraag toegang aan' })).not.toBeVisible();
 	}
+
+	// Go back to previous page
+	await page.goBack(); // Revert the search url change
+	await page.goBack(); // Revert the "go to homepage" url change
 }
