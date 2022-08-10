@@ -30,7 +30,7 @@
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
 		"@meemoo/react-admin": "0.9.5",
-		"@meemoo/react-components": "2.16.3",
+		"@meemoo/react-components": "2.16.4",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
 		"@viaa/avo2-components": "2.0.5",

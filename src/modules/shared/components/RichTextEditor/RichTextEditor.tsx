@@ -29,6 +29,14 @@ const RichTextEditor: FC<RichTextEditorProps> = (props) => {
 			controls={RICH_TEXT_EDITOR_OPTIONS}
 			className="c-rich-text-editor"
 			{...props}
+			braft={{
+				...props?.braft,
+				draftProps: {
+					ariaAutoComplete: false,
+					ariaMultiline: true,
+					...props?.braft?.draftProps,
+				},
+			}}
 		/>
 	);
 };
