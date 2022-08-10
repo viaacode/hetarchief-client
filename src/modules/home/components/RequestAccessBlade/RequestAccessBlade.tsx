@@ -14,6 +14,12 @@ import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
 import styles from './RequestAccessBlade.module.scss';
 import { RequestAccessBladeProps, RequestAccessFormState } from './RequestAccessBlade.types';
 
+const formKeys: Record<keyof RequestAccessFormState, string> = {
+	acceptTerms: 'RequestAccessBlade__acceptTerms',
+	requestReason: 'RequestAccessBlade__requestReason',
+	visitTime: 'RequestAccessBlade__visitTime',
+};
+
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
 	const { t } = useTranslation();
 	const [query] = useQueryParams({
@@ -44,20 +50,25 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	const renderFooter = () => {
 		return (
 			<div className="u-px-16 u-py-16 u-px-32:md u-py-24:md">
-				<FormControl className="u-mb-8 u-mb-24:md" errors={[errors.acceptTerms?.message]}>
+				<FormControl
+					className="u-mb-8 u-mb-24:md"
+					id={formKeys.acceptTerms}
+					errors={[errors.acceptTerms?.message]}
+				>
 					<Controller
 						name="acceptTerms"
 						control={control}
 						render={({ field }) => (
 							<Checkbox
 								{...field}
+								checked={field.value}
+								checkIcon={<Icon name="check" />}
+								disabled={!isOpen}
+								id={formKeys.acceptTerms}
 								label={t(
 									'modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie'
 								)}
-								checked={field.value}
-								checkIcon={<Icon name="check" />}
 								value="accept-terms"
-								disabled={!isOpen}
 							/>
 						)}
 					/>
@@ -72,6 +83,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					onClick={handleSubmit(onFormSubmit)}
 					disabled={!isOpen || isSubmitting}
 				/>
+
 				<Button
 					label={t(
 						'modules/home/components/request-access-blade/request-access-blade___annuleer'
@@ -96,11 +108,14 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 				)}
 			</h3>
+
 			<div className="u-px-16 u-px-32:md">
 				{space && <SpacePreview space={space} />}
+
 				<FormControl
 					className="u-mb-24"
 					errors={[errors.requestReason?.message]}
+					id={formKeys.requestReason}
 					label={t(
 						'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag'
 					)}
@@ -108,11 +123,14 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					<Controller
 						name="requestReason"
 						control={control}
-						render={({ field }) => <TextArea {...field} disabled={!isOpen} />}
+						render={({ field }) => (
+							<TextArea {...field} id={formKeys.requestReason} disabled={!isOpen} />
+						)}
 					/>
 				</FormControl>
 
 				<FormControl
+					id={formKeys.visitTime}
 					label={t(
 						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
 					)}
@@ -121,7 +139,9 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					<Controller
 						name="visitTime"
 						control={control}
-						render={({ field }) => <TextInput {...field} disabled={!isOpen} />}
+						render={({ field }) => (
+							<TextInput {...field} id={formKeys.visitTime} disabled={!isOpen} />
+						)}
 					/>
 				</FormControl>
 			</div>

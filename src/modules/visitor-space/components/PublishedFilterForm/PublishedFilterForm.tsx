@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
@@ -20,12 +21,18 @@ import {
 } from './PublishedFilterForm.const';
 import { PublishedFilterFormProps, PublishedFilterFormState } from './PublishedFilterForm.types';
 
-const defaultValues = {
+const formKeys: Record<keyof PublishedFilterFormState, string> = {
+	operator: 'PublishedFilterForm__operator',
+	published: 'PublishedFilterForm__published',
+};
+
+const defaultValues: PublishedFilterFormState = {
 	operator: Operator.GreaterThanOrEqual,
 	published: undefined,
 };
 
 const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className }) => {
+	const [t] = useTranslation();
 	const [query] = useQueryParams(PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.published?.[0];
@@ -75,16 +82,22 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<div className="u-mb-32">
-					<FormControl className="u-mb-24" errors={[errors.operator?.message]}>
+					<FormControl
+						className="u-mb-24"
+						errors={[errors.operator?.message]}
+						id={formKeys.operator}
+						label={t(
+							'modules/visitor-space/components/published-filter-form/published-filter-form___operator'
+						)}
+					>
 						<Controller
-							name="operator"
 							control={control}
+							name="operator"
 							render={({ field }) => (
 								<ReactSelect
 									{...field}
 									components={{ IndicatorSeparator: () => null }}
-									options={operators}
-									value={getSelectValue(operators, field.value)}
+									inputId={formKeys.operator}
 									onChange={(newValue) => {
 										const value = (newValue as SingleValue<SelectOption>)
 											?.value as Operator;
@@ -96,23 +109,34 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 											});
 										}
 									}}
+									options={operators}
+									value={getSelectValue(operators, field.value)}
 								/>
 							)}
 						/>
 					</FormControl>
 
-					<FormControl className="u-mb-24" errors={[errors.published?.message]}>
+					<FormControl
+						className="u-mb-24"
+						errors={[errors.published?.message]}
+						id={formKeys.published}
+						label={t(
+							'modules/visitor-space/components/published-filter-form/published-filter-form___waarde'
+						)}
+					>
 						<Controller
-							name="published"
 							control={control}
+							name="published"
 							render={() =>
 								showRange ? (
 									<DateRangeInput
+										id={formKeys.published}
 										onChange={(e) => onChangePublished(e.target.value)}
 										value={form.published}
 									/>
 								) : (
 									<DateInput
+										id={formKeys.published}
 										onChange={(date) => {
 											onChangePublished(
 												(date || new Date()).valueOf().toString()

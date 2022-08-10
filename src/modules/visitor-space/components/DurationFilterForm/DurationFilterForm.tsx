@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
@@ -22,12 +23,18 @@ import {
 } from './DurationFilterForm.const';
 import { DurationFilterFormProps, DurationFilterFormState } from './DurationFilterForm.types';
 
-const defaultValues = {
-	operator: Operator.LessThanOrEqual,
+const formKeys: Record<keyof DurationFilterFormState, string> = {
+	duration: 'DurationFilterForm__duration',
+	operator: 'DurationFilterForm__operator',
+};
+
+const defaultValues: DurationFilterFormState = {
 	duration: undefined,
+	operator: Operator.LessThanOrEqual,
 };
 
 const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }) => {
+	const [t] = useTranslation();
 	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.duration?.[0];
@@ -77,16 +84,22 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<div className="u-mb-32">
-					<FormControl className="u-mb-24" errors={[errors.operator?.message]}>
+					<FormControl
+						className="u-mb-24 c-form-control--label-hidden"
+						errors={[errors.operator?.message]}
+						id={formKeys.operator}
+						label={t(
+							'modules/visitor-space/components/duration-filter-form/duration-filter-form___operator'
+						)}
+					>
 						<Controller
-							name="operator"
 							control={control}
+							name="operator"
 							render={({ field }) => (
 								<ReactSelect
 									{...field}
 									components={{ IndicatorSeparator: () => null }}
-									options={operators}
-									value={getSelectValue(operators, field.value)}
+									inputId={formKeys.operator}
 									onChange={(newValue) => {
 										const value = (newValue as SingleValue<SelectOption>)
 											?.value as Operator;
@@ -98,15 +111,24 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 											});
 										}
 									}}
+									options={operators}
+									value={getSelectValue(operators, field.value)}
 								/>
 							)}
 						/>
 					</FormControl>
 
-					<FormControl className="u-mb-24" errors={[errors.duration?.message]}>
+					<FormControl
+						className="u-mb-24 c-form-control--label-hidden"
+						errors={[errors.duration?.message]}
+						id={formKeys.duration}
+						label={t(
+							'modules/visitor-space/components/duration-filter-form/duration-filter-form___waarde'
+						)}
+					>
 						<Controller
-							name="duration"
 							control={control}
+							name="duration"
 							render={({ field }) => {
 								// eslint-disable-next-line @typescript-eslint/no-unused-vars
 								const { ref, ...refless } = field;

@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
@@ -20,12 +21,18 @@ import {
 } from './CreatedFilterForm.const';
 import { CreatedFilterFormProps, CreatedFilterFormState } from './CreatedFilterForm.types';
 
-const defaultValues = {
-	operator: Operator.GreaterThanOrEqual,
+const formKeys: Record<keyof CreatedFilterFormState, string> = {
+	created: 'CreatedFilterForm__created',
+	operator: 'CreatedFilterForm__operator',
+};
+
+const defaultValues: CreatedFilterFormState = {
 	created: undefined,
+	operator: Operator.GreaterThanOrEqual,
 };
 
 const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) => {
+	const [t] = useTranslation();
 	const [query] = useQueryParams(CREATED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.created?.[0];
@@ -75,16 +82,22 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<div className="u-mb-32">
-					<FormControl className="u-mb-24" errors={[errors.operator?.message]}>
+					<FormControl
+						className="u-mb-24 c-form-control--label-hidden"
+						errors={[errors.operator?.message]}
+						id={formKeys.operator}
+						label={t(
+							'modules/visitor-space/components/created-filter-form/created-filter-form___operator'
+						)}
+					>
 						<Controller
-							name="operator"
 							control={control}
+							name="operator"
 							render={({ field }) => (
 								<ReactSelect
 									{...field}
 									components={{ IndicatorSeparator: () => null }}
-									options={operators}
-									value={getSelectValue(operators, field.value)}
+									inputId={formKeys.operator}
 									onChange={(newValue) => {
 										const value = (newValue as SingleValue<SelectOption>)
 											?.value as Operator;
@@ -96,23 +109,34 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 											});
 										}
 									}}
+									options={operators}
+									value={getSelectValue(operators, field.value)}
 								/>
 							)}
 						/>
 					</FormControl>
 
-					<FormControl className="u-mb-24" errors={[errors.created?.message]}>
+					<FormControl
+						className="u-mb-24 c-form-control--label-hidden"
+						errors={[errors.created?.message]}
+						id={formKeys.created}
+						label={t(
+							'modules/visitor-space/components/created-filter-form/created-filter-form___waarde'
+						)}
+					>
 						<Controller
-							name="created"
 							control={control}
+							name="created"
 							render={() =>
 								showRange ? (
 									<DateRangeInput
+										id={formKeys.created}
 										onChange={(e) => onChangeCreated(e.target.value)}
 										value={form.created}
 									/>
 								) : (
 									<DateInput
+										id={formKeys.created}
 										onChange={(date) => {
 											onChangeCreated(
 												(date || new Date()).valueOf().toString()

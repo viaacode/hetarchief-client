@@ -5,6 +5,7 @@ import {
 	FormControl,
 	StopPropagationFunction,
 } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -17,6 +18,10 @@ import { toastService } from '@shared/services/toast-service';
 
 import styles from './EditCollectionTitle.module.scss';
 import { EditCollectionTitleProps } from './EditCollectionTitle.types';
+
+const formKeys: Record<keyof EditCollectionFormState, string> = {
+	name: 'EditCollectionTitle__name',
+};
 
 const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	afterSubmit = () => null,
@@ -116,7 +121,13 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	};
 
 	return (
-		<FormControl className={styles['c-edit-collection-title']}>
+		<FormControl
+			className={clsx(styles['c-edit-collection-title'], 'c-form-control--label-hidden')}
+			id={formKeys.name}
+			label={t(
+				'modules/account/components/edit-collection-title/edit-collection-title___map-aanpassen'
+			)}
+		>
 			<Controller
 				name="name"
 				control={control}
@@ -127,6 +138,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 						autoComplete="off"
 						autoCorrect="off"
 						iconEnd={(handler) => (!isOpen ? renderButtons(handler) : onOpenNode)}
+						id={formKeys.name}
 						nodeCancel={<Button variants={['silver']} icon={<Icon name="times" />} />}
 						nodeSubmit={<Button variants={['black']} icon={<Icon name="check" />} />}
 						onClose={resetForm}

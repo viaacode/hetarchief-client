@@ -37,6 +37,12 @@ import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
 import styles from './ApproveRequestBlade.module.scss';
 import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
 
+const formKeys: Record<keyof ApproveRequestFormState, string> = {
+	accessFrom: 'ApproveRequestBlade__accessFrom',
+	accessRemark: 'ApproveRequestBlade__accessRemark',
+	accessTo: 'ApproveRequestBlade__accessTo',
+};
+
 const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
 const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
 const defaultAccessTo = (accessFrom: Date) => {
@@ -291,25 +297,27 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<>
 					<Datepicker
 						{...futureDatepicker}
+						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+						id={formKeys.accessFrom}
 						maxDate={null}
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
-						value={formatMediumDate(form.accessFrom)}
 						selected={form.accessFrom}
-						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+						value={formatMediumDate(form.accessFrom)}
 					/>
 
 					<Timepicker
 						{...timepicker}
+						customInput={<TextInput iconStart={<Icon name="clock" />} />}
+						id={formKeys.accessFrom}
 						maxTime={endOfDay(field.value || now)}
 						minTime={startOfDay(field.value || now)}
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
-						value={formatTime(form.accessFrom)}
 						selected={form.accessFrom}
-						customInput={<TextInput iconStart={<Icon name="clock" />} />}
+						value={formatTime(form.accessFrom)}
 					/>
 				</>
 			);
@@ -333,26 +341,28 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<>
 					<Datepicker
 						{...futureDatepicker}
+						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+						id={formKeys.accessTo}
 						maxDate={null}
 						minDate={accessFrom}
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
-						value={formatMediumDate(form.accessTo)}
 						selected={form.accessTo}
-						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+						value={formatMediumDate(form.accessTo)}
 					/>
 
 					<Timepicker
 						{...timepicker}
+						customInput={<TextInput iconStart={<Icon name="clock" />} />}
+						id={formKeys.accessTo}
 						maxTime={endOfDay(field.value || now)}
 						minTime={startOfDay(field.value || now)}
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
-						value={formatTime(form.accessTo)}
 						selected={form.accessTo}
-						customInput={<TextInput iconStart={<Icon name="clock" />} />}
+						value={formatTime(form.accessTo)}
 					/>
 				</>
 			);
@@ -367,6 +377,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	}) => (
 		<TextInput
 			{...field}
+			id={formKeys.accessRemark}
 			onChange={(evt) =>
 				setForm((original) => {
 					return {
@@ -386,6 +397,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessFrom?.message]}
+					id={formKeys.accessFrom}
 					label={t(
 						'modules/cp/components/approve-request-blade/approve-request-blade___van'
 					)}
@@ -396,6 +408,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessTo?.message]}
+					id={formKeys.accessTo}
 					label={t(
 						'modules/cp/components/approve-request-blade/approve-request-blade___tot'
 					)}
@@ -433,6 +446,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				)}
 
 				<FormControl
+					id={formKeys.accessRemark}
 					label={t(
 						'modules/cp/components/approve-request-blade/approve-request-blade___opmerkingen'
 					)}

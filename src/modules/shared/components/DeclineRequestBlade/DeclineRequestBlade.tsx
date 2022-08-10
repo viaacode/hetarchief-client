@@ -13,6 +13,10 @@ import { VisitsService } from '@visits/services/visits/visits.service';
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
 import { DeclineRequestBladeProps, DeclineRequestFormState } from './DeclineRequestBlade.types';
 
+const formKeys: Record<keyof DeclineRequestFormState, string> = {
+	reasonForDenial: 'DeclineRequestBlade__reasonForDenial',
+};
+
 const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 	const { t } = useTranslation();
 	const { onSubmit, selected } = props;
@@ -91,6 +95,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 				<FormControl
 					className="u-mb-24"
 					errors={[errors.reasonForDenial?.message]}
+					id={formKeys.reasonForDenial}
 					label={t(
 						'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'
 					)}
@@ -99,7 +104,9 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 					<Controller
 						name="reasonForDenial"
 						control={control}
-						render={({ field }) => <TextArea {...field} />}
+						render={({ field }) => (
+							<TextArea {...field} id={formKeys.reasonForDenial} />
+						)}
 					/>
 				</FormControl>
 			</div>

@@ -16,6 +16,11 @@ import { SITE_SETTINGS_SCHEMA } from './SiteSettingsForm.const';
 import styles from './SiteSettingsForm.module.scss';
 import { SiteSettingsFormProps, SiteSettingsFormState } from './SiteSettingsForm.types';
 
+const formKeys: Record<keyof SiteSettingsFormState, string> = {
+	slug: 'SiteSettingsForm__slug',
+	orId: 'SiteSettingsForm__orId',
+};
+
 const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSettingsFormProps>(
 	(
 		{ className, space, onSubmit, onUpdate, renderCancelSaveButtons, disableDropdown = false },
@@ -138,74 +143,69 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 
 		return (
 			<div className={className}>
-				<FormControl errors={[errors.orId?.message]}>
+				<FormControl
+					className={styles['c-cp-settings__site-settings-input']}
+					errors={[errors.orId?.message]}
+					id={formKeys.orId}
+					label={t(
+						'modules/cp/components/site-settings-form/site-settings-form___content-partner'
+					)}
+				>
 					<Controller
 						name="orId"
 						control={control}
-						render={(field) => {
-							return (
-								<div className={styles['c-cp-settings__site-settings-input']}>
-									<label>
-										{t(
-											'modules/cp/components/site-settings-form/site-settings-form___content-partner'
-										)}
-									</label>
-									<ReactSelect
-										{...field}
-										isDisabled={disableDropdown}
-										components={{ IndicatorSeparator: () => null }}
-										options={cpOptions}
-										value={
-											disableDropdown
-												? { label: space.name, value: space.id }
-												: getSelectValue(cpOptions ?? [], currentState.orId)
-										}
-										onChange={(newValue) => {
-											const value = (newValue as SingleValue<SelectOption>)
-												?.value as string;
-											const slug = kebabCase(
-												(newValue as SingleValue<SelectOption>)
-													?.label as string
-											);
+						render={(field) => (
+							<ReactSelect
+								{...field}
+								isDisabled={disableDropdown}
+								components={{ IndicatorSeparator: () => null }}
+								options={cpOptions}
+								value={
+									disableDropdown
+										? { label: space.name, value: space.id }
+										: getSelectValue(cpOptions ?? [], currentState.orId)
+								}
+								onChange={(newValue) => {
+									const value = (newValue as SingleValue<SelectOption>)
+										?.value as string;
+									const slug = kebabCase(
+										(newValue as SingleValue<SelectOption>)?.label as string
+									);
 
-											if (value !== currentState.orId || '') {
-												setValue('orId', value);
-												setValue('slug', slug);
-												onUpdate?.({ orId: value, slug: slug });
-											}
-										}}
-									/>
-								</div>
-							);
-						}}
+									if (value !== currentState.orId || '') {
+										setValue('orId', value);
+										setValue('slug', slug);
+										onUpdate?.({ orId: value, slug: slug });
+									}
+								}}
+							/>
+						)}
 					/>
 				</FormControl>
-				<FormControl errors={[errors.slug?.message]}>
+
+				<FormControl
+					className={styles['c-cp-settings__site-settings-input']}
+					errors={[errors.slug?.message]}
+					id={'SiteSettingsForm__slug'}
+					label={t('modules/cp/components/site-settings-form/site-settings-form___slug')}
+				>
 					<Controller
 						name="slug"
 						control={control}
-						render={({ field }) => {
-							return (
-								<div className={styles['c-cp-settings__site-settings-input']}>
-									<label>
-										{t(
-											'modules/cp/components/site-settings-form/site-settings-form___slug'
-										)}
-									</label>
-									<TextInput
-										{...field}
-										value={currentState?.slug}
-										onChange={(e) => {
-											const value = e.currentTarget.value;
-											setValue('slug', value);
-											onUpdate?.({ slug: value });
-										}}
-									/>
-								</div>
-							);
-						}}
+						render={({ field }) => (
+							<TextInput
+								{...field}
+								value={currentState?.slug}
+								onChange={(e) => {
+									const value = e.currentTarget.value;
+									setValue('slug', value);
+									onUpdate?.({ slug: value });
+								}}
+							/>
+						)}
 					/>
 				</FormControl>
+
 				{isStateUpdated() &&
 					renderCancelSaveButtons(() => resetValues(), handleSubmit(onFormSubmit))}
 			</div>
