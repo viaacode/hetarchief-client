@@ -15,6 +15,7 @@ export interface Folder {
 export interface FolderMedia {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID: not unique per object
+	meemooLocalId: string;
 	premisIsPartOf?: string;
 	collectionEntryCreatedAt?: string;
 	creator?: unknown;
