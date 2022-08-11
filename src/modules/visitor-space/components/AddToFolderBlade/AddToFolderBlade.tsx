@@ -9,44 +9,44 @@ import { useSelector } from 'react-redux';
 import { CreateCollectionButton } from '@account/components';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { collectionsService } from '@account/services/collections';
-import { Collection } from '@account/types';
+import { Folder } from '@account/types';
 import { Blade, Icon } from '@shared/components';
 import Html from '@shared/components/Html/Html';
 import { toastService } from '@shared/services/toast-service';
-import { selectCollections } from '@shared/store/media';
+import { selectFolders } from '@shared/store/media';
 
-import { ADD_TO_COLLECTION_FORM_SCHEMA } from './AddToCollectionBlade.const';
-import styles from './AddToCollectionBlade.module.scss';
+import { ADD_TO_FOLDER_FORM_SCHEMA } from './AddToFolderBlade.const';
+import styles from './AddToFolderBlade.module.scss';
 import {
-	AddToCollectionBladeProps,
-	AddToCollectionFormState,
-	AddToCollectionFormStatePair,
-	AddToCollectionSelected,
-} from './AddToCollectionBlade.types';
+	AddToFolderBladeProps,
+	AddToFolderFormState,
+	AddToFolderFormStatePair,
+	AddToFolderSelected,
+} from './AddToFolderBlade.types';
 
-const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
+const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	const { t } = useTranslation();
 	const { onSubmit, selected } = props;
-	const [pairs, setPairs] = useState<AddToCollectionFormStatePair[]>([]);
+	const [pairs, setPairs] = useState<AddToFolderFormStatePair[]>([]);
 	const {
 		control,
 		handleSubmit,
 		setValue,
 		reset,
 		formState: { errors, isSubmitting },
-	} = useForm<AddToCollectionFormState>({
-		resolver: yupResolver(ADD_TO_COLLECTION_FORM_SCHEMA()),
+	} = useForm<AddToFolderFormState>({
+		resolver: yupResolver(ADD_TO_FOLDER_FORM_SCHEMA()),
 		defaultValues: useMemo(() => ({ pairs }), [pairs]),
 	});
 
-	const getCollections = useGetCollections();
-	const collections = useSelector(selectCollections);
+	const getFolders = useGetCollections();
+	const collections = useSelector(selectFolders);
 
 	/**
 	 * Methods
 	 */
 
-	const mapToPairs = (collections: Collection[], selected: AddToCollectionSelected) => {
+	const mapToPairs = (collections: Folder[], selected: AddToFolderSelected) => {
 		return collections.map(({ id, objects }) => {
 			return {
 				folder: id,
@@ -58,7 +58,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		});
 	};
 
-	const getCollection = (id: string) =>
+	const getFolder = (id: string) =>
 		(collections?.items || []).find((collection) => collection.id === id);
 
 	/**
@@ -84,19 +84,19 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	 */
 
 	const onFailedRequest = () => {
-		getCollections.refetch();
+		getFolders.refetch();
 
 		toastService.notify({
 			title: t(
-				'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___er-ging-iets-mis'
+				'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___er-ging-iets-mis'
 			),
 			description: t(
-				'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
+				'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
 			),
 		});
 	};
 
-	const onFormSubmit = (values: AddToCollectionFormState) => {
+	const onFormSubmit = (values: AddToFolderFormState) => {
 		if (selected) {
 			const original = mapToPairs(collections?.items || [], selected);
 			const dirty = values.pairs.filter((current) => {
@@ -105,7 +105,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 				);
 			});
 
-			const addedToCollections: Array<{
+			const addedToFolders: Array<{
 				toastMessage: { maxLines: number; title: string; description: string };
 				descriptionVariables: Record<string, unknown>;
 			}> = [];
@@ -116,14 +116,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 
 			// Define our promises
 			const promises = dirty.map((pair) => {
-				const collection = getCollection(pair.folder);
+				const folder = getFolder(pair.folder);
 
 				const descriptionVariables = {
 					item: selected.title,
-					collection:
-						collection?.name ||
+					folder:
+						folder?.name ||
 						t(
-							'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___onbekend'
+							'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___onbekend'
 						),
 				};
 				if (pair.checked) {
@@ -135,14 +135,14 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								return;
 							}
 
-							addedToCollections.push({
+							addedToFolders.push({
 								toastMessage: {
 									maxLines: 3,
 									title: t(
-										'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-toegevoegd-aan-map'
+										'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___item-toegevoegd-aan-map-titel'
 									),
 									description: t(
-										'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collection',
+										'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___item-is-toegevoegd-aan-map-beschrijving',
 										descriptionVariables
 									),
 								},
@@ -162,10 +162,10 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 								toastMessage: {
 									maxLines: 3,
 									title: t(
-										'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-verwijderd-uit-map'
+										'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___item-verwijderd-uit-map-titel'
 									),
 									description: t(
-										'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collection',
+										'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___item-is-verwijderd-uit-map-beschrijving',
 										descriptionVariables
 									),
 								},
@@ -177,42 +177,42 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 
 			// Execute calls
 			Promise.all(promises).then(() => {
-				getCollections.refetch().then(() => {
+				getFolders.refetch().then(() => {
 					// bundle add toast messages
-					if (addedToCollections.length > 1) {
-						const collections = addedToCollections
+					if (addedToFolders.length > 1) {
+						const folders = addedToFolders
 							.map((obj) => obj.descriptionVariables.collection)
 							.join(', ');
 						toastService.notify({
 							maxLines: 3,
 							title: t(
-								'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-toegevoegd-aan-mappen'
+								'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___item-toegevoegd-aan-mappen-titel'
 							),
 							description: t(
-								'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-toegevoegd-aan-collections',
+								'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___item-is-toegevoegd-aan-mappen-beschrijving',
 								{
-									replace: { collections },
+									folders: { folders },
 								}
 							),
 						});
-					} else if (addedToCollections.length === 1) {
-						toastService.notify(addedToCollections[0].toastMessage);
+					} else if (addedToFolders.length === 1) {
+						toastService.notify(addedToFolders[0].toastMessage);
 					}
 
 					// bundle removed toast messages
 					if (removedFromCollections.length > 1) {
-						const collections = addedToCollections
+						const folders = addedToFolders
 							.map((obj) => obj.descriptionVariables.collection)
 							.join(', ');
 						toastService.notify({
 							maxLines: 3,
 							title: t(
-								'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-verwijderd-uit-mappen'
+								'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___item-verwijderd-uit-mappen-titel'
 							),
 							description: t(
-								'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___item-is-verwijderd-uit-collections',
+								'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___item-is-verwijderd-uit-mappen-beschrijving',
 								{
-									replace: { collections },
+									folders,
 								}
 							),
 						});
@@ -227,7 +227,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 		}
 	};
 
-	const onCheckboxClick = (pair: AddToCollectionFormStatePair) => {
+	const onCheckboxClick = (pair: AddToFolderFormStatePair) => {
 		// immutably update state, form state updated by effect
 		setPairs(
 			pairs.map((item) => {
@@ -250,7 +250,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 				<Button
 					className="u-mb-16"
 					label={t(
-						'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___voeg-toe'
+						'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___voeg-toe'
 					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
@@ -259,7 +259,7 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 
 				<Button
 					label={t(
-						'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___annuleer'
+						'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___annuleer'
 					)}
 					variants={['block', 'text']}
 					onClick={props.onClose}
@@ -269,12 +269,12 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	};
 
 	const renderPairFields = (data: {
-		field: ControllerRenderProps<AddToCollectionFormState, 'pairs'>;
+		field: ControllerRenderProps<AddToFolderFormState, 'pairs'>;
 	}) => {
 		const { field } = data;
 
 		return field.value.map((pair) => {
-			const collection = getCollection(pair.folder);
+			const collection = getFolder(pair.folder);
 			const others = (collection?.objects || []).filter(
 				(object) => object.schemaIdentifier !== pair.ie
 			);
@@ -284,31 +284,31 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			return (
 				<li
 					key={`item--${pair.folder}`}
-					className={styles['c-add-to-collection-blade__list-item']}
+					className={styles['c-add-to-folder-blade__list-item']}
 					onClick={() => onCheckboxClick(pair)}
 					tabIndex={0}
 					role="button"
 				>
 					<Checkbox
 						value={`add-to--${pair.folder}`}
-						className={styles['c-add-to-collection-blade__list-item__checkbox']}
+						className={styles['c-add-to-folder-blade__list-item__checkbox']}
 						checked={pair.checked}
 						checkIcon={<Icon name="check" />}
 						onClick={(e) => e.stopPropagation()}
 						variants={['no-label']}
 					/>
 
-					<span className={styles['c-add-to-collection-blade__list-item__label']}>
+					<span className={styles['c-add-to-folder-blade__list-item__label']}>
 						{collection?.name}
 					</span>
 
-					<span className={styles['c-add-to-collection-blade__list-item__count']}>
+					<span className={styles['c-add-to-folder-blade__list-item__count']}>
 						{count === 1
 							? t(
-									'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___1-item'
+									'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___1-item'
 							  )
 							: t(
-									'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___count-items',
+									'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___count-items',
 									{ count }
 							  )}
 					</span>
@@ -324,21 +324,21 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 			{...props}
 			footer={renderFooter()}
 			title={t(
-				'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___voeg-toe-aan-map'
+				'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___voeg-toe-aan-map'
 			)}
-			className={clsx(props.className, styles['c-add-to-collection-blade'])}
+			className={clsx(props.className, styles['c-add-to-folder-blade'])}
 		>
 			<div className="u-px-32">
 				<Html
 					content={t(
-						'modules/visitor-space/components/add-to-collection-blade/add-to-collection-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
+						'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
 						{ title }
 					)}
 				/>
 			</div>
 
 			<div className="u-px-32 u-bg-platinum">
-				<ul className={clsx(styles['c-add-to-collection-blade__list'])}>
+				<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
 					<Controller
 						name="pairs"
 						control={control}
@@ -346,8 +346,8 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 							<>
 								{renderPairFields(data)}
 
-								<li className={styles['c-add-to-collection-blade__list-button']}>
-									<CreateCollectionButton afterSubmit={getCollections.refetch} />
+								<li className={styles['c-add-to-folder-blade__list-button']}>
+									<CreateCollectionButton afterSubmit={getFolders.refetch} />
 								</li>
 							</>
 						)}
@@ -358,4 +358,4 @@ const AddToCollectionBlade: FC<AddToCollectionBladeProps> = (props) => {
 	);
 };
 
-export default AddToCollectionBlade;
+export default AddToFolderBlade;

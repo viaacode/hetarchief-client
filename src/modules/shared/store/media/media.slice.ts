@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { GetCollectionsResponse } from '@account/types';
+import { GetFoldersResponse } from '@account/types';
 import { MediaSearchAggregations } from '@media/types';
 import { GetMediaResponse } from '@shared/types';
 
@@ -9,7 +9,7 @@ import { MediaState } from './media.types';
 const initialState: MediaState = {
 	results: undefined,
 	filterOptions: undefined,
-	collections: undefined,
+	folders: undefined,
 };
 
 export const mediaSlice = createSlice({
@@ -22,8 +22,8 @@ export const mediaSlice = createSlice({
 		setFilterOptions(state, action: PayloadAction<MediaSearchAggregations>) {
 			state.filterOptions = action.payload;
 		},
-		setCollections(state, action: PayloadAction<GetCollectionsResponse>) {
-			state.collections = action.payload;
+		setCollections(state, action: PayloadAction<GetFoldersResponse>) {
+			state.folders = action.payload;
 		},
 	},
 });

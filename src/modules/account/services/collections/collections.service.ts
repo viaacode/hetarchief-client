@@ -1,6 +1,6 @@
 import { stringifyUrl } from 'query-string';
 
-import { Collection, CollectionMedia } from '@account/types';
+import { Folder, FolderMedia } from '@account/types';
 import { ApiService } from '@shared/services/api-service';
 import { ApiResponseWrapper } from '@shared/types';
 
@@ -11,17 +11,12 @@ import {
 } from './collections.const';
 
 class CollectionsService extends ApiService {
-	public async getAll(): Promise<ApiResponseWrapper<Collection>> {
+	public async getAll(): Promise<ApiResponseWrapper<Folder>> {
 		const parsed = await ApiService.getApi().get(COLLECTIONS_SERVICE_BASE_URL).json();
-		return parsed as ApiResponseWrapper<Collection>;
+		return parsed as ApiResponseWrapper<Folder>;
 	}
 
-	public async getById(
-		id: string,
-		searchInput = '',
-		page = 0,
-		size = 20
-	): Promise<CollectionMedia> {
+	public async getById(id: string, searchInput = '', page = 0, size = 20): Promise<FolderMedia> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -36,11 +31,11 @@ class CollectionsService extends ApiService {
 			.json();
 	}
 
-	public async create(json: Partial<Pick<Collection, 'name'>>): Promise<Partial<Collection>> {
+	public async create(json: Partial<Pick<Folder, 'name'>>): Promise<Partial<Folder>> {
 		return await ApiService.getApi().post(`${COLLECTIONS_SERVICE_BASE_URL}`, { json }).json();
 	}
 
-	public async update(id: string, json: Partial<Pick<Collection, 'name'>>): Promise<Collection> {
+	public async update(id: string, json: Partial<Pick<Folder, 'name'>>): Promise<Folder> {
 		return await ApiService.getApi()
 			.patch(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`, { json })
 			.json();

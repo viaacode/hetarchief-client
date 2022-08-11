@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { collectionsService } from '@account/services/collections';
-import { CreateCollectionFormState } from '@account/types';
+import { CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
 
@@ -33,7 +33,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 		handleSubmit,
 		setValue,
 		resetField,
-	} = useForm<CreateCollectionFormState>({
+	} = useForm<CreateFolderFormState>({
 		resolver: yupResolver(COLLECTION_FORM_SCHEMA()),
 		defaultValues: {
 			name: defaultName,
@@ -55,7 +55,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	};
 
 	const onFormSubmit = () => {
-		handleSubmit<CreateCollectionFormState>((values) => {
+		handleSubmit<CreateFolderFormState>((values) => {
 			collectionsService.create(values).then(() => {
 				afterSubmit();
 

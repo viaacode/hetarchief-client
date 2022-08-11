@@ -11,7 +11,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { collectionsService } from '@account/services/collections';
-import { EditCollectionFormState } from '@account/types';
+import { EditFolderFormState } from '@account/types';
 import { Icon } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
 
@@ -38,7 +38,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		formState: { errors },
 		handleSubmit,
 		resetField,
-	} = useForm<EditCollectionFormState>({
+	} = useForm<EditFolderFormState>({
 		resolver: yupResolver(COLLECTION_FORM_SCHEMA()),
 		defaultValues: {
 			name: defaultName,
@@ -75,7 +75,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	};
 
 	const onFormSubmit = () => {
-		handleSubmit<EditCollectionFormState>((values) => {
+		handleSubmit<EditFolderFormState>((values) => {
 			collectionsService.update(collection.id, values).then((response) => {
 				afterSubmit(response);
 

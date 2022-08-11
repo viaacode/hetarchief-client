@@ -24,7 +24,7 @@ import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
 import { useGetCollections } from '@account/hooks/get-collections';
 import { AccountLayout } from '@account/layouts';
 import { collectionsService } from '@account/services/collections';
-import { Collection, CollectionMedia } from '@account/types';
+import { Folder, FolderMedia } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
@@ -43,15 +43,15 @@ import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissio
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
-import { selectCollections } from '@shared/store/media';
+import { selectFolders } from '@shared/store/media';
 import { Breakpoints } from '@shared/types';
 import { asDate, createPageTitle, formatMediumDate } from '@shared/utils';
 
-import { AddToCollectionBlade } from '../../../../modules/visitor-space/components';
+import { AddToFolderBlade } from '../../../../modules/visitor-space/components';
 
 import { VisitorLayout } from 'modules/visitors';
 
-type ListNavigationCollectionItem = ListNavigationItem & Collection;
+type ListNavigationCollectionItem = ListNavigationItem & Folder;
 
 const AccountMyCollections: NextPage = () => {
 	const { t } = useTranslation();
@@ -65,11 +65,11 @@ const AccountMyCollections: NextPage = () => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG);
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
+	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 
 	const getCollections = useGetCollections();
-	const collections = useSelector(selectCollections);
+	const collections = useSelector(selectFolders);
 
 	const sidebarLinks: ListNavigationCollectionItem[] = useMemo(
 		() =>
@@ -134,7 +134,7 @@ const AccountMyCollections: NextPage = () => {
 	 * Events
 	 */
 
-	const onCollectionTitleChanged = (collection: Collection) => {
+	const onCollectionTitleChanged = (collection: Folder) => {
 		setBlockFallbackRedirect(true);
 
 		getCollections.refetch().then(() => {
@@ -146,10 +146,10 @@ const AccountMyCollections: NextPage = () => {
 
 	const onMoveCollection = (item: IdentifiableMediaCard) => {
 		setSelected(item);
-		setShowAddToCollectionBlade(true);
+		setShowAddToFolderBlade(true);
 	};
 
-	const onRemoveFromCollection = (item: IdentifiableMediaCard, collection: Collection) => {
+	const onRemoveFromCollection = (item: IdentifiableMediaCard, collection: Folder) => {
 		collectionsService
 			.removeFromCollection(collection.id, item.schemaIdentifier)
 			.then((response) => {
@@ -271,7 +271,7 @@ const AccountMyCollections: NextPage = () => {
 		];
 	}, [t, activeCollection, getCollectionExport, canDownloadMetadata]);
 
-	const renderActions = (item: IdentifiableMediaCard, collection: Collection) => (
+	const renderActions = (item: IdentifiableMediaCard, collection: Folder) => (
 		<>
 			<Button
 				variants={['text']}
@@ -287,7 +287,7 @@ const AccountMyCollections: NextPage = () => {
 	);
 
 	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
-	const renderTitle = (item: CollectionMedia): ReactNode => (
+	const renderTitle = (item: FolderMedia): ReactNode => (
 		<Link href={`/${item.visitorSpaceSlug}/${item.schemaIdentifier}`}>
 			<a className="u-text-no-decoration" title={item.schemaIdentifier}>
 				<b>
@@ -301,7 +301,7 @@ const AccountMyCollections: NextPage = () => {
 		</Link>
 	);
 
-	const renderDescription = (item: CollectionMedia): ReactNode => {
+	const renderDescription = (item: FolderMedia): ReactNode => {
 		const items: { label: string; value: ReactNode }[] = [
 			{
 				label: t('pages/account/mijn-mappen/collection-slug/index___aanbieder'),
@@ -477,8 +477,8 @@ const AccountMyCollections: NextPage = () => {
 				}}
 			/>
 
-			<AddToCollectionBlade
-				isOpen={isAddToCollectionBladeOpen}
+			<AddToFolderBlade
+				isOpen={isAddToFolderBladeOpen}
 				selected={
 					selected
 						? {
@@ -488,11 +488,11 @@ const AccountMyCollections: NextPage = () => {
 						: undefined
 				}
 				onClose={() => {
-					setShowAddToCollectionBlade(false);
+					setShowAddToFolderBlade(false);
 					setSelected(null);
 				}}
 				onSubmit={async () => {
-					setShowAddToCollectionBlade(false);
+					setShowAddToFolderBlade(false);
 					setSelected(null);
 				}}
 			/>

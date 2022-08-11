@@ -1,18 +1,18 @@
 import { ApiResponseWrapper, MediaTypes } from '@shared/types';
 
-export type GetCollectionsResponse = ApiResponseWrapper<Collection>;
+export type GetFoldersResponse = ApiResponseWrapper<Folder>;
 
-export interface Collection {
+export interface Folder {
 	createdAt: string;
 	id: string;
 	isDefault: boolean;
 	name: string;
 	updatedAt: string;
 	userProfileId: string;
-	objects?: Pick<CollectionMedia, 'schemaIdentifier'>[];
+	objects?: Pick<FolderMedia, 'schemaIdentifier'>[];
 }
 
-export interface CollectionMedia {
+export interface FolderMedia {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID: not unique per object
 	premisIsPartOf?: string;
@@ -33,8 +33,8 @@ export interface CollectionMedia {
 	dateCreatedLowerBound?: string;
 }
 
-export interface CreateCollectionFormState {
+export interface CreateFolderFormState {
 	name?: string;
 }
 
-export type EditCollectionFormState = CreateCollectionFormState;
+export type EditFolderFormState = CreateFolderFormState;

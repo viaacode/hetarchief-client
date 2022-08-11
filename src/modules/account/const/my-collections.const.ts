@@ -1,7 +1,7 @@
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { object, SchemaOf, string } from 'yup';
 
-import { CreateCollectionFormState } from '@account/types';
+import { CreateFolderFormState } from '@account/types';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 
@@ -12,7 +12,7 @@ export const ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG = {
 	page: withDefault(NumberParam, 1),
 };
 
-export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormState> => {
+export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateFolderFormState> => {
 	const nameLengthMin = 3;
 	const nameLengthMax = 90;
 
