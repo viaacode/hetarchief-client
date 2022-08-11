@@ -11,12 +11,12 @@ export const ADD_TO_FOLDER_FORM_SCHEMA = (): SchemaOf<AddToFolderFormState> => {
 				object().shape({
 					folder: string().required(
 						i18n.t(
-							'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___de-geselecteerde-map-bestaat-niet'
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___de-geselecteerde-map-bestaat-niet'
 						)
 					),
 					ie: string().required(
 						i18n?.t(
-							'modules/visitor-space/components/add-to-collection-blade/add-to-folder-blade___het-geselecteerde-item-bestaat-niet'
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-geselecteerde-item-bestaat-niet'
 						)
 					),
 					checked: boolean(),

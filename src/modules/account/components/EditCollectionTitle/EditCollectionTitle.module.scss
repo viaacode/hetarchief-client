@@ -1,6 +1,6 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-edit-collection-title";
+$component: "c-edit-folder-title";
 
 .#{$component} {
 	:global(.c-content-input__submit),

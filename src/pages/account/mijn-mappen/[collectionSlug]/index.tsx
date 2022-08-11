@@ -101,7 +101,7 @@ const AccountMyCollections: NextPage = () => {
 		[sidebarLinks]
 	);
 
-	const collectionMedia = useGetCollectionMedia(
+	const folderMedia = useGetCollectionMedia(
 		activeCollection?.id,
 		filters.search,
 		filters.page,
@@ -125,8 +125,8 @@ const AccountMyCollections: NextPage = () => {
 	}, [activeCollection, collections, router, blockFallbackRedirect]);
 
 	useEffect(() => {
-		if (activeCollection && collectionMedia.isStale) {
-			collectionMedia.refetch();
+		if (activeCollection && folderMedia.isStale) {
+			folderMedia.refetch();
 		}
 	}, [activeCollection]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -149,30 +149,29 @@ const AccountMyCollections: NextPage = () => {
 		setShowAddToFolderBlade(true);
 	};
 
-	const onRemoveFromCollection = (item: IdentifiableMediaCard, collection: Folder) => {
+	const onRemoveFromCollection = (item: IdentifiableMediaCard, folder: Folder) => {
 		collectionsService
-			.removeFromCollection(collection.id, item.schemaIdentifier)
+			.removeFromCollection(folder.id, item.schemaIdentifier)
 			.then((response) => {
 				if (response === undefined) {
 					return;
 				}
 
-				collectionMedia.refetch();
+				folderMedia.refetch();
 
 				const descriptionVariables = {
 					item: item.name,
-					collection:
-						collection?.name ||
-						t('pages/account/mijn-mappen/collection-slug/index___onbekend'),
+					folder:
+						folder?.name || t('pages/account/mijn-mappen/folder-slug/index___onbekend'),
 				};
 
 				toastService.notify({
 					maxLines: 3,
 					title: t(
-						'pages/account/mijn-mappen/collection-slug/index___item-verwijderd-uit-map'
+						'pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel'
 					),
 					description: t(
-						'pages/account/mijn-mappen/collection-slug/index___item-is-verwijderd-uit-collection',
+						'pages/account/mijn-mappen/folder-slug/index___item-is-verwijderd-uit-map-beschrijving',
 						descriptionVariables
 					),
 				});
@@ -192,10 +191,9 @@ const AccountMyCollections: NextPage = () => {
 					save(xmlBlob, `${kebabCase(activeCollection?.name) || 'map'}.xml`);
 				} else {
 					toastService.notify({
-						title:
-							t('pages/account/mijn-mappen/collection-slug/index___error') || 'error',
+						title: t('pages/account/mijn-mappen/folder-slug/index___error') || 'error',
 						description: t(
-							'pages/account/mijn-mappen/collection-slug/index___het-ophalen-van-de-metadata-is-mislukt'
+							'pages/account/mijn-mappen/folder-slug/index___het-ophalen-van-de-metadata-is-mislukt'
 						),
 					});
 				}
@@ -213,10 +211,10 @@ const AccountMyCollections: NextPage = () => {
 									className="p-account-my-collections__export--label"
 									variants={['black']}
 									name={t(
-										'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
 									label={t(
-										'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
 									iconStart={<Icon name="export" />}
 									onClick={(e) => {
@@ -234,7 +232,7 @@ const AccountMyCollections: NextPage = () => {
 									className="p-account-my-collections__export--icon"
 									variants={['black']}
 									name={t(
-										'pages/account/mijn-mappen/collection-slug/index___metadata-exporteren'
+										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
 									icon={<Icon name="export" />}
 									onClick={(e) => {
@@ -257,7 +255,7 @@ const AccountMyCollections: NextPage = () => {
 									variants={['silver']}
 									icon={<Icon name="trash" />}
 									name={t(
-										'pages/account/mijn-mappen/collection-slug/index___map-verwijderen'
+										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
 									)}
 									onClick={(e) => {
 										e.stopPropagation();
@@ -275,12 +273,12 @@ const AccountMyCollections: NextPage = () => {
 		<>
 			<Button
 				variants={['text']}
-				label={t('pages/account/mijn-mappen/collection-slug/index___verwijderen')}
+				label={t('pages/account/mijn-mappen/folder-slug/index___verwijderen')}
 				onClick={() => onRemoveFromCollection(item, collection)}
 			/>
 			<Button
 				variants={['text']}
-				label={t('pages/account/mijn-mappen/collection-slug/index___verplaatsen')}
+				label={t('pages/account/mijn-mappen/folder-slug/index___verplaatsen')}
 				onClick={() => onMoveCollection(item)}
 			/>
 		</>
@@ -304,37 +302,35 @@ const AccountMyCollections: NextPage = () => {
 	const renderDescription = (item: FolderMedia): ReactNode => {
 		const items: { label: string; value: ReactNode }[] = [
 			{
-				label: t('pages/account/mijn-mappen/collection-slug/index___aanbieder'),
+				label: t('pages/account/mijn-mappen/folder-slug/index___aanbieder'),
 				value: item.maintainerName,
 			},
 			{
-				label: t('pages/account/mijn-mappen/collection-slug/index___programma'),
+				label: t('pages/account/mijn-mappen/folder-slug/index___programma'),
 				value: item.programs.join(', '),
 			},
 			{
-				label: t('pages/account/mijn-mappen/collection-slug/index___serie'),
+				label: t('pages/account/mijn-mappen/folder-slug/index___serie'),
 				value: item.series.join(', '),
 			},
 			{
-				label: t('pages/account/mijn-mappen/collection-slug/index___type'),
+				label: t('pages/account/mijn-mappen/folder-slug/index___type'),
 				value: item.format,
 			},
 			{
-				label: t('pages/account/mijn-mappen/collection-slug/index___creatiedatum'),
+				label: t('pages/account/mijn-mappen/folder-slug/index___creatiedatum'),
 				value: formatMediumDate(asDate(item.dateCreatedLowerBound)),
 			},
 			{
-				label: t('pages/account/mijn-mappen/collection-slug/index___uitzenddatum'),
+				label: t('pages/account/mijn-mappen/folder-slug/index___uitzenddatum'),
 				value: formatMediumDate(asDate(item.datePublished)),
 			},
 			{
-				label: t('pages/account/mijn-mappen/collection-slug/index___identifier-bij-meemoo'),
+				label: t('pages/account/mijn-mappen/folder-slug/index___identifier-bij-meemoo'),
 				value: item.meemooIdentifier,
 			},
 			{
-				label: t(
-					'pages/account/mijn-mappen/collection-slug/index___identifier-bij-aanbieder'
-				),
+				label: t('pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'),
 				value: item.meemooLocalId,
 			},
 		];
@@ -377,9 +373,7 @@ const AccountMyCollections: NextPage = () => {
 				<SidebarLayout
 					color="platinum"
 					responsiveTo={Breakpoints.md}
-					sidebarTitle={t(
-						'pages/account/mijn-mappen/collection-slug/index___mijn-mappen'
-					)}
+					sidebarTitle={t('pages/account/mijn-mappen/folder-slug/index___mijn-mappen')}
 					sidebarLinks={[
 						...sidebarLinks,
 						{
@@ -408,17 +402,17 @@ const AccountMyCollections: NextPage = () => {
 									default={filters[SEARCH_QUERY_KEY]}
 									className="p-account-my-collections__search"
 									placeholder={t(
-										'pages/account/mijn-mappen/collection-slug/index___zoek'
+										'pages/account/mijn-mappen/folder-slug/index___zoek'
 									)}
 									onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 								/>
 							</div>
 
 							<div className="l-container">
-								{!collectionMedia?.isError && (
+								{!folderMedia?.isError && (
 									<MediaCardList
 										keywords={keywords}
-										items={collectionMedia?.data?.items.map((media) => {
+										items={folderMedia?.data?.items.map((media) => {
 											const base: IdentifiableMediaCard = {
 												schemaIdentifier: media.schemaIdentifier,
 												description: renderDescription(media),
@@ -437,14 +431,14 @@ const AccountMyCollections: NextPage = () => {
 									/>
 								)}
 
-								{collectionMedia.data &&
-									collectionMedia.data?.total > CollectionItemListSize && (
+								{folderMedia.data &&
+									folderMedia.data?.total > CollectionItemListSize && (
 										<PaginationBar
 											className="u-mb-48"
 											start={(filters.page - 1) * CollectionItemListSize}
 											count={CollectionItemListSize}
 											showBackToTop
-											total={collectionMedia.data?.total || 0}
+											total={folderMedia.data?.total || 0}
 											onPageChange={(page) =>
 												setFilters({
 													...filters,
@@ -461,8 +455,8 @@ const AccountMyCollections: NextPage = () => {
 
 			<ConfirmationModal
 				text={{
-					yes: t('pages/account/mijn-mappen/collection-slug/index___verwijderen'),
-					no: t('pages/account/mijn-mappen/collection-slug/index___annuleren'),
+					yes: t('pages/account/mijn-mappen/folder-slug/index___verwijderen'),
+					no: t('pages/account/mijn-mappen/folder-slug/index___annuleren'),
 				}}
 				isOpen={activeCollection && showConfirmDelete}
 				onClose={() => setShowConfirmDelete(false)}

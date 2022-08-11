@@ -25,7 +25,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	 * Form
 	 */
 
-	const defaultName = t('pages/account/mijn-mappen/collection-slug/index___nieuwe-map-aanmaken');
+	const defaultName = t('pages/account/mijn-mappen/folder-slug/index___nieuwe-map-aanmaken');
 
 	const {
 		control,
@@ -61,11 +61,11 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 
 				toastService.notify({
 					title: t(
-						'modules/account/components/create-collection-button/create-collection-button___name-is-aangemaakt',
+						'modules/account/components/create-folder-button/create-folder-button___name-is-aangemaakt',
 						values
 					),
 					description: t(
-						'modules/account/components/create-collection-button/create-collection-button___je-nieuwe-map-is-succesvol-aangemaakt'
+						'modules/account/components/create-folder-button/create-folder-button___je-nieuwe-map-is-succesvol-aangemaakt'
 					),
 				});
 			});
@@ -74,7 +74,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 
 	return (
 		<FormControl
-			className={clsx(styles['c-create-collection-button'], 'u-px-24')}
+			className={clsx(styles['c-create-folder-button'], 'u-px-24')}
 			errors={[errors.name?.message]}
 		>
 			<Controller
@@ -107,7 +107,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 						onConfirm={onFormSubmit}
 						onOpen={clearForm}
 						placeholder={t(
-							'modules/account/components/create-collection-button/create-collection-button___nieuwe-map'
+							'modules/account/components/create-folder-button/create-folder-button___nieuwe-map'
 						)}
 						spellCheck="false"
 						variants={['normal']}

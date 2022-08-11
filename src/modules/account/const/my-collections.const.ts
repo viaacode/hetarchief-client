@@ -21,7 +21,7 @@ export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateFolderFormState> => {
 			.test(
 				'name',
 				i18n.t(
-					'modules/account/const/my-collections___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
+					'modules/account/const/my-folders___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
 					{
 						count: nameLengthMin,
 					}
@@ -33,7 +33,7 @@ export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateFolderFormState> => {
 			.test(
 				'name',
 				i18n.t(
-					'modules/account/const/my-collections___de-naam-van-een-map-mag-niet-meer-dan-count-tekens-lang-zijn',
+					'modules/account/const/my-folders___de-naam-van-een-map-mag-niet-meer-dan-count-tekens-lang-zijn',
 					{
 						count: nameLengthMax,
 					}
