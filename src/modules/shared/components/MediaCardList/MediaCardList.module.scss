@@ -76,6 +76,13 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 			}
 		}
 
+		:global(.c-card--padded-content),
+		:global(.c-card--padded-both) {
+			:global(.c-card__header-wrapper) {
+				margin-bottom: $spacer-xxs;
+			}
+		}
+
 		@include respond-at("md") {
 			@include media-card-list-gutters($media-card-list-masonry-gutter-md);
 

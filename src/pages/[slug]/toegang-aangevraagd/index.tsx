@@ -3,12 +3,14 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import { setShowZendesk } from '@shared/store/ui';
 import { AccessStatus } from '@shared/types';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
@@ -22,6 +24,7 @@ const VisitRequestedPage: NextPage = () => {
 
 	const router = useRouter();
 	const { t } = useTranslation();
+	const dispatch = useDispatch();
 
 	const { slug } = router.query;
 
@@ -52,6 +55,10 @@ const VisitRequestedPage: NextPage = () => {
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		dispatch(setShowZendesk(false));
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (!hasPendingRequest) {

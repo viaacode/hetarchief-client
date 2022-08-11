@@ -1,7 +1,7 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isEqual, sum } from 'lodash-es';
+import { sum } from 'lodash-es';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -122,11 +122,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
-	const hasSearched = useMemo(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { filter, ...rest } = query; // Don't include UI state
-		return !isEqual(VISITOR_SPACE_QUERY_PARAM_INIT, rest);
-	}, [query]);
+	const [hasSearched, setHasSearched] = useState<boolean>(false);
 
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
@@ -238,8 +234,13 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 */
 
 	const onSearch = async (newValue: string) => {
+		setHasSearched(true);
 		if (newValue.trim() && !query.search?.includes(newValue)) {
-			setQuery({ [SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue), page: 1 });
+			setQuery({
+				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue),
+				page: 1,
+				hasSearched: true,
+			});
 		}
 	};
 
@@ -258,6 +259,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
+		setHasSearched(true);
 		let data;
 
 		switch (id) {
@@ -337,7 +339,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined, page: 1 });
+		setQuery({ [id]: data, filter: undefined, page: 1, hasSearched: true });
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -457,6 +459,9 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				}}
 				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
+				title={t(
+					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
+				)}
 			/>
 		);
 	};
