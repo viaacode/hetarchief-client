@@ -457,6 +457,9 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				}}
 				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
+				title={t(
+					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
+				)}
 			/>
 		);
 	};

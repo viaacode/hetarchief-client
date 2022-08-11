@@ -4,7 +4,12 @@ import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useRef, useState } from 'react';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { SearchBar, VisitorSpaceCardList, VisitorSpaceCardProps } from '@shared/components';
+import {
+	Loading,
+	SearchBar,
+	VisitorSpaceCardList,
+	VisitorSpaceCardProps,
+} from '@shared/components';
 import { VisitorSpaceCardType } from '@shared/components/VisitorSpaceCard';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -89,7 +94,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 				/>
 			</div>
 
-			{isLoadingVisitorSpaces && <p>{t('pages/index___laden')}</p>}
+			{isLoadingVisitorSpaces && <Loading />}
 			{!isLoadingVisitorSpaces && visitorSpaces?.items?.length === 0 && (
 				<p>{t('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
 			)}
