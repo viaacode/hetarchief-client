@@ -15,12 +15,15 @@
 }
 
 .c-advanced-filter-fields__field-container {
-	display: flex;
 	grid-column: span 2;
 
-	:global(.c-button) {
-		margin-left: $spacer-sm;
-		flex-shrink: 0;
+	:global(.c-form-control__input) {
+		display: flex;
+
+		:global(.c-button) {
+			margin-left: $spacer-sm;
+			flex-shrink: 0;
+		}
 	}
 }
 
