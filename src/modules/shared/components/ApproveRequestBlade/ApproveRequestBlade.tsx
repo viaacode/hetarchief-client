@@ -37,7 +37,7 @@ import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
 import styles from './ApproveRequestBlade.module.scss';
 import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
 
-const formKeys: Record<keyof ApproveRequestFormState, string> = {
+const labelKeys: Record<keyof ApproveRequestFormState, string> = {
 	accessFrom: 'ApproveRequestBlade__accessFrom',
 	accessRemark: 'ApproveRequestBlade__accessRemark',
 	accessTo: 'ApproveRequestBlade__accessTo',
@@ -298,7 +298,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<Datepicker
 						{...futureDatepicker}
 						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
-						id={formKeys.accessFrom}
+						id={labelKeys.accessFrom}
 						maxDate={null}
 						name={field.name}
 						onBlur={field.onBlur}
@@ -310,7 +310,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<Timepicker
 						{...timepicker}
 						customInput={<TextInput iconStart={<Icon name="clock" />} />}
-						id={formKeys.accessFrom}
+						id={labelKeys.accessFrom}
 						maxTime={endOfDay(field.value || now)}
 						minTime={startOfDay(field.value || now)}
 						name={field.name}
@@ -342,7 +342,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<Datepicker
 						{...futureDatepicker}
 						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
-						id={formKeys.accessTo}
+						id={labelKeys.accessTo}
 						maxDate={null}
 						minDate={accessFrom}
 						name={field.name}
@@ -355,7 +355,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<Timepicker
 						{...timepicker}
 						customInput={<TextInput iconStart={<Icon name="clock" />} />}
-						id={formKeys.accessTo}
+						id={labelKeys.accessTo}
 						maxTime={endOfDay(field.value || now)}
 						minTime={startOfDay(field.value || now)}
 						name={field.name}
@@ -377,7 +377,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	}) => (
 		<TextInput
 			{...field}
-			id={formKeys.accessRemark}
+			id={labelKeys.accessRemark}
 			onChange={(evt) =>
 				setForm((original) => {
 					return {
@@ -397,7 +397,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessFrom?.message]}
-					id={formKeys.accessFrom}
+					id={labelKeys.accessFrom}
 					label={t(
 						'modules/cp/components/approve-request-blade/approve-request-blade___van'
 					)}
@@ -408,7 +408,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<FormControl
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessTo?.message]}
-					id={formKeys.accessTo}
+					id={labelKeys.accessTo}
 					label={t(
 						'modules/cp/components/approve-request-blade/approve-request-blade___tot'
 					)}
@@ -446,7 +446,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				)}
 
 				<FormControl
-					id={formKeys.accessRemark}
+					id={labelKeys.accessRemark}
 					label={t(
 						'modules/cp/components/approve-request-blade/approve-request-blade___opmerkingen'
 					)}

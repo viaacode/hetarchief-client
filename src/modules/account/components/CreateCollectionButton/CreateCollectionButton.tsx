@@ -14,7 +14,7 @@ import { toastService } from '@shared/services/toast-service';
 import styles from './CreateCollectionButton.module.scss';
 import { CreateCollectionButtonProps } from './CreateCollectionButton.types';
 
-const formKeys: Record<keyof CreateCollectionFormState, string> = {
+const labelKeys: Record<keyof CreateCollectionFormState, string> = {
 	name: 'CreateCollectionButton__name',
 };
 
@@ -84,7 +84,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 				'c-form-control--label-hidden'
 			)}
 			errors={[errors.name?.message]}
-			id={formKeys.name}
+			id={labelKeys.name}
 			label={defaultName}
 		>
 			<Controller
@@ -107,7 +107,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 								onOpenNode
 							);
 						}}
-						id={formKeys.name}
+						id={labelKeys.name}
 						nodeSubmit={
 							<Button variants={['black', 'sm']} icon={<Icon name="check" />} />
 						}

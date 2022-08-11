@@ -21,7 +21,7 @@ import {
 } from './CreatedFilterForm.const';
 import { CreatedFilterFormProps, CreatedFilterFormState } from './CreatedFilterForm.types';
 
-const formKeys: Record<keyof CreatedFilterFormState, string> = {
+const labelKeys: Record<keyof CreatedFilterFormState, string> = {
 	created: 'CreatedFilterForm__created',
 	operator: 'CreatedFilterForm__operator',
 };
@@ -85,7 +85,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.operator?.message]}
-						id={formKeys.operator}
+						id={labelKeys.operator}
 						label={t(
 							'modules/visitor-space/components/created-filter-form/created-filter-form___operator'
 						)}
@@ -97,7 +97,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 								<ReactSelect
 									{...field}
 									components={{ IndicatorSeparator: () => null }}
-									inputId={formKeys.operator}
+									inputId={labelKeys.operator}
 									onChange={(newValue) => {
 										const value = (newValue as SingleValue<SelectOption>)
 											?.value as Operator;
@@ -119,7 +119,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.created?.message]}
-						id={formKeys.created}
+						id={labelKeys.created}
 						label={t(
 							'modules/visitor-space/components/created-filter-form/created-filter-form___waarde'
 						)}
@@ -130,13 +130,13 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 							render={() =>
 								showRange ? (
 									<DateRangeInput
-										id={formKeys.created}
+										id={labelKeys.created}
 										onChange={(e) => onChangeCreated(e.target.value)}
 										value={form.created}
 									/>
 								) : (
 									<DateInput
-										id={formKeys.created}
+										id={labelKeys.created}
 										onChange={(date) => {
 											onChangeCreated(
 												(date || new Date()).valueOf().toString()

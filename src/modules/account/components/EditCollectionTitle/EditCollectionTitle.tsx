@@ -19,7 +19,7 @@ import { toastService } from '@shared/services/toast-service';
 import styles from './EditCollectionTitle.module.scss';
 import { EditCollectionTitleProps } from './EditCollectionTitle.types';
 
-const formKeys: Record<keyof EditCollectionFormState, string> = {
+const labelKeys: Record<keyof EditCollectionFormState, string> = {
 	name: 'EditCollectionTitle__name',
 };
 
@@ -123,7 +123,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	return (
 		<FormControl
 			className={clsx(styles['c-edit-collection-title'], 'c-form-control--label-hidden')}
-			id={formKeys.name}
+			id={labelKeys.name}
 			label={t(
 				'modules/account/components/edit-collection-title/edit-collection-title___map-aanpassen'
 			)}
@@ -138,7 +138,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 						autoComplete="off"
 						autoCorrect="off"
 						iconEnd={(handler) => (!isOpen ? renderButtons(handler) : onOpenNode)}
-						id={formKeys.name}
+						id={labelKeys.name}
 						nodeCancel={<Button variants={['silver']} icon={<Icon name="times" />} />}
 						nodeSubmit={<Button variants={['black']} icon={<Icon name="check" />} />}
 						onClose={resetForm}

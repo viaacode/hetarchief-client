@@ -20,6 +20,10 @@ import { VisitorSpaceInfo, VisitorSpaceStatus } from '@visitor-space/types';
 const NUMBER_OF_VISITOR_SPACES = 6;
 const NUMBER_OF_VISITOR_SPACES_MOBILE = 3;
 
+const labelKeys = {
+	search: 'VisitorSpaceCardsWithSearch__search',
+};
+
 interface VisitorSpaceCardsWithSearchProps {
 	onRequestAccess: (VisitorSpaceSlug: string) => void;
 	onSearch?: (value?: string) => void;
@@ -79,9 +83,14 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 		<div className="l-container u-pt-32 u-pt-80:md u-pb-48 u-pb-80:md">
 			<div id="p-home__results-anchor" ref={resultsAnchor} />
 			<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
-				<h3 className="p-home__subtitle">{t('pages/index___vind-een-bezoekersruimte')}</h3>
+				<h3 className="p-home__subtitle">
+					<label htmlFor={labelKeys.search}>
+						{t('pages/index___vind-een-bezoekersruimte')}
+					</label>
+				</h3>
 
 				<SearchBar
+					id={labelKeys.search}
 					default={query[SEARCH_QUERY_KEY] || undefined}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={t(

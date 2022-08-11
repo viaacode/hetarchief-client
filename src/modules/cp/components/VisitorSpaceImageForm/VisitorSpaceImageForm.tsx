@@ -18,7 +18,7 @@ import {
 	VisitorSpaceImageFormState,
 } from './VisitorSpaceImageForm.types';
 
-const formKeys: Record<keyof VisitorSpaceImageFormState, string> = {
+const labelKeys: Record<keyof VisitorSpaceImageFormState, string> = {
 	color: 'VisitorSpaceImageForm__color',
 	file: 'VisitorSpaceImageForm__file',
 	image: 'VisitorSpaceImageForm__image',
@@ -150,7 +150,7 @@ const VisitorSpaceImageForm = forwardRef<
 			<FormControl
 				className={styles['c-visitor-space-image-form__color-control']}
 				errors={[errors.color?.message]}
-				id={formKeys.color}
+				id={labelKeys.color}
 				label={t(
 					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrondkleur'
 				)}
@@ -161,7 +161,7 @@ const VisitorSpaceImageForm = forwardRef<
 					render={() => (
 						<ColorPicker
 							input={{
-								id: formKeys.color,
+								id: labelKeys.color,
 							}}
 							color={currentState.color ?? ''}
 							onChange={(color) => {
@@ -175,7 +175,7 @@ const VisitorSpaceImageForm = forwardRef<
 
 			<FormControl
 				errors={[errors.file?.message]}
-				id={formKeys.file}
+				id={labelKeys.file}
 				label={t(
 					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrond-afbeelding'
 				)}
@@ -197,7 +197,7 @@ const VisitorSpaceImageForm = forwardRef<
 								(!!savedState.image || !!fileInputRef.current?.value) &&
 								!!currentState.image
 							}
-							id={formKeys.file}
+							id={labelKeys.file}
 							onChange={async (e) => {
 								e.currentTarget.files &&
 									setValue('file', e.currentTarget.files[0] ?? undefined);

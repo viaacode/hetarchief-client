@@ -21,7 +21,7 @@ import {
 } from './PublishedFilterForm.const';
 import { PublishedFilterFormProps, PublishedFilterFormState } from './PublishedFilterForm.types';
 
-const formKeys: Record<keyof PublishedFilterFormState, string> = {
+const labelKeys: Record<keyof PublishedFilterFormState, string> = {
 	operator: 'PublishedFilterForm__operator',
 	published: 'PublishedFilterForm__published',
 };
@@ -85,7 +85,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 					<FormControl
 						className="u-mb-24"
 						errors={[errors.operator?.message]}
-						id={formKeys.operator}
+						id={labelKeys.operator}
 						label={t(
 							'modules/visitor-space/components/published-filter-form/published-filter-form___operator'
 						)}
@@ -97,7 +97,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 								<ReactSelect
 									{...field}
 									components={{ IndicatorSeparator: () => null }}
-									inputId={formKeys.operator}
+									inputId={labelKeys.operator}
 									onChange={(newValue) => {
 										const value = (newValue as SingleValue<SelectOption>)
 											?.value as Operator;
@@ -119,7 +119,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 					<FormControl
 						className="u-mb-24"
 						errors={[errors.published?.message]}
-						id={formKeys.published}
+						id={labelKeys.published}
 						label={t(
 							'modules/visitor-space/components/published-filter-form/published-filter-form___waarde'
 						)}
@@ -130,13 +130,13 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 							render={() =>
 								showRange ? (
 									<DateRangeInput
-										id={formKeys.published}
+										id={labelKeys.published}
 										onChange={(e) => onChangePublished(e.target.value)}
 										value={form.published}
 									/>
 								) : (
 									<DateInput
-										id={formKeys.published}
+										id={labelKeys.published}
 										onChange={(date) => {
 											onChangePublished(
 												(date || new Date()).valueOf().toString()

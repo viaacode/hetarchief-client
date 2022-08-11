@@ -23,7 +23,7 @@ import {
 	SearchBar,
 	sortingIcons,
 } from '@shared/components';
-import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys, ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
@@ -228,6 +228,7 @@ const VisitorSpacesOverview: FC = () => {
 		<>
 			<div className="p-cp-visitor-spaces__header">
 				<SearchBar
+					id={globalLabelKeys.adminLayout.title}
 					default={filters[SEARCH_QUERY_KEY]}
 					className="p-cp-visitor-spaces__search"
 					placeholder={t(

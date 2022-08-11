@@ -22,6 +22,7 @@ import { VisitorSpaceFilterId, VisitorSpaceSort, VisitorSpaceStatus } from '../t
 import { AdvancedFilterArrayParam } from './query-params';
 
 export * from './metadata';
+export * from './label-keys';
 
 export const DEFAULT_VISITOR_SPACE_COLOR = '#00c8aa';
 

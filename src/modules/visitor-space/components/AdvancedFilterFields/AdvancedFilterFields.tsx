@@ -35,7 +35,7 @@ import { defaultValue } from '../DurationInput/DurationInput';
 import styles from './AdvancedFilterFields.module.scss';
 import { AdvancedFilterFieldsProps } from './AdvancedFilterFields.types';
 
-const formKeys = {
+const labelKeys = {
 	prefix: 'AdvancedFilterFields',
 	property: 'AdvancedFilterFields__field',
 	operator: 'AdvancedFilterFields__operator',
@@ -173,14 +173,14 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 		<div className={styles['c-advanced-filter-fields']}>
 			<FormControl
 				className="c-form-control--label-hidden"
-				id={`${formKeys.property}__${index}`}
+				id={`${labelKeys.property}__${index}`}
 				label={t(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___veldnaam'
 				)}
 			>
 				<ReactSelect
 					components={{ IndicatorSeparator: () => null }}
-					inputId={`${formKeys.property}__${index}`}
+					inputId={`${labelKeys.property}__${index}`}
 					onChange={(newValue) => {
 						const prop = (newValue as SingleValue<SelectOption>)?.value;
 						const operators = prop ? getOperators(prop as MetadataProp) : [];
@@ -198,14 +198,14 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 			<FormControl
 				className="c-form-control--label-hidden"
-				id={`${formKeys.operator}__${index}`}
+				id={`${labelKeys.operator}__${index}`}
 				label={t(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___operator'
 				)}
 			>
 				<ReactSelect
 					components={{ IndicatorSeparator: () => null }}
-					inputId={`${formKeys.operator}__${index}`}
+					inputId={`${labelKeys.operator}__${index}`}
 					onChange={(newValue) =>
 						onFieldChange({
 							op: (newValue as SingleValue<SelectOption>)?.value,
@@ -222,13 +222,13 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					styles['c-advanced-filter-fields__field-container'],
 					'c-form-control--label-hidden'
 				)}
-				id={`${formKeys.value}__${index}`}
+				id={`${labelKeys.value}__${index}`}
 				label={t(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___waarde'
 				)}
 			>
 				{renderField({
-					id: `${formKeys.value}__${index}`,
+					id: `${labelKeys.value}__${index}`,
 				})}
 
 				{index > 0 && (

@@ -17,7 +17,7 @@ import { KeywordsFilterFormProps, KeywordsFilterFormState } from './KeywordsFilt
 
 type multi = MultiValue<TagInfo>;
 
-const formKeys: Record<keyof KeywordsFilterFormState, string> = {
+const labelKeys: Record<keyof KeywordsFilterFormState, string> = {
 	values: 'KeywordsFilterForm__values',
 };
 
@@ -124,7 +124,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={(errors.values || []).map((value) => value.message)}
-						id={formKeys.values}
+						id={labelKeys.values}
 						label={t(
 							'modules/visitor-space/components/keywords-filter-form/keywords-filter-form___waardes'
 						)}
@@ -135,7 +135,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 							render={() => (
 								<TagsInput
 									components={components}
-									inputId={formKeys.values}
+									inputId={labelKeys.values}
 									inputValue={input}
 									isClearable={true}
 									isMulti={true} // always `multi`

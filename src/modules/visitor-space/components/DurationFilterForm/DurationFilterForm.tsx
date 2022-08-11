@@ -23,7 +23,7 @@ import {
 } from './DurationFilterForm.const';
 import { DurationFilterFormProps, DurationFilterFormState } from './DurationFilterForm.types';
 
-const formKeys: Record<keyof DurationFilterFormState, string> = {
+const labelKeys: Record<keyof DurationFilterFormState, string> = {
 	duration: 'DurationFilterForm__duration',
 	operator: 'DurationFilterForm__operator',
 };
@@ -87,7 +87,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.operator?.message]}
-						id={formKeys.operator}
+						id={labelKeys.operator}
 						label={t(
 							'modules/visitor-space/components/duration-filter-form/duration-filter-form___operator'
 						)}
@@ -99,7 +99,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 								<ReactSelect
 									{...field}
 									components={{ IndicatorSeparator: () => null }}
-									inputId={formKeys.operator}
+									inputId={labelKeys.operator}
 									onChange={(newValue) => {
 										const value = (newValue as SingleValue<SelectOption>)
 											?.value as Operator;
@@ -121,7 +121,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.duration?.message]}
-						id={formKeys.duration}
+						id={labelKeys.duration}
 						label={t(
 							'modules/visitor-space/components/duration-filter-form/duration-filter-form___waarde'
 						)}

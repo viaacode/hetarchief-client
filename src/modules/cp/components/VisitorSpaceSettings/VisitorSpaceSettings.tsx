@@ -21,7 +21,7 @@ import { VisitorSpaceImageForm, VisitorSpaceImageFormState } from '../VisitorSpa
 import styles from './VisitorSpaceSettings.module.scss';
 import { ValidationRef, VisitorSpaceSettingsProps } from './VisitorSpaceSettings.types';
 
-const formKeys: Record<keyof CreateVisitorSpaceSettings, string> = {
+const labelKeys: Record<keyof CreateVisitorSpaceSettings, string> = {
 	color: 'VisitorSpaceSettings__color',
 	description: 'VisitorSpaceSettings__description',
 	file: 'VisitorSpaceSettings__file',
@@ -230,7 +230,7 @@ const VisitorSpaceSettings = forwardRef<
 
 			{/* Wachtzaal */}
 			<article className={styles['c-cp-settings__content-block']}>
-				<label htmlFor={formKeys.description} id={`${formKeys.description}__label`}>
+				<label htmlFor={labelKeys.description} id={`${labelKeys.description}__label`}>
 					<h2 className={styles['c-cp-settings__title']}>
 						{t('pages/beheer/instellingen/index___omschrijving-wachtzaal')}
 					</h2>
@@ -239,7 +239,7 @@ const VisitorSpaceSettings = forwardRef<
 				<Box className={styles['c-cp-settings__box']}>
 					<p
 						className={styles['c-cp-settings__description']}
-						id={`${formKeys.description}__description`}
+						id={`${labelKeys.description}__description`}
 					>
 						{t(
 							'pages/beheer/instellingen/index___dit-is-de-wachtzaalomschrijving-die-bezoekers-kunnen-lezen-op-de-detailpagina-van-je-bezoekersruimte-leg-uit-waar-je-bezoekersruimte-om-gaat-welke-info-men-er-kan-vinden-vertel-de-bezoeker-over-je-collectie'
@@ -250,11 +250,11 @@ const VisitorSpaceSettings = forwardRef<
 						editor={{
 							braft: {
 								draftProps: {
-									ariaDescribedBy: `${formKeys.description}__description`,
-									ariaLabelledBy: `${formKeys.description}__label`,
+									ariaDescribedBy: `${labelKeys.description}__description`,
+									ariaLabelledBy: `${labelKeys.description}__label`,
 								},
 							},
-							id: formKeys.description,
+							id: labelKeys.description,
 							initialHtml: (room && room.description) ?? '<p></p>',
 						}}
 						onSubmit={async (html, afterSubmit) =>
@@ -273,8 +273,8 @@ const VisitorSpaceSettings = forwardRef<
 			{/* Aanvraag */}
 			<article className={styles['c-cp-settings__content-block']}>
 				<label
-					htmlFor={formKeys.serviceDescription}
-					id={`${formKeys.serviceDescription}__label`}
+					htmlFor={labelKeys.serviceDescription}
+					id={`${labelKeys.serviceDescription}__label`}
 				>
 					<h2 className={styles['c-cp-settings__title']}>
 						{t(
@@ -286,7 +286,7 @@ const VisitorSpaceSettings = forwardRef<
 				<Box className={styles['c-cp-settings__box']}>
 					<p
 						className={styles['c-cp-settings__description']}
-						id={`${formKeys.serviceDescription}__description`}
+						id={`${labelKeys.serviceDescription}__description`}
 					>
 						{t(
 							'pages/beheer/instellingen/index___als-bezoekers-een-aanvraag-doen-kunnen-zij-een-klein-tekstje-lezen-met-extra-info-over-het-bezoek-bv-vraag-meer-info-aan-balie-2-bij-aankomst-of-elke-dag-geopend-van-10-00-tot-17-00'
@@ -298,11 +298,11 @@ const VisitorSpaceSettings = forwardRef<
 						editor={{
 							braft: {
 								draftProps: {
-									ariaDescribedBy: `${formKeys.serviceDescription}__description`,
-									ariaLabelledBy: `${formKeys.serviceDescription}__label`,
+									ariaDescribedBy: `${labelKeys.serviceDescription}__description`,
+									ariaLabelledBy: `${labelKeys.serviceDescription}__label`,
 								},
 							},
-							id: formKeys.serviceDescription,
+							id: labelKeys.serviceDescription,
 							initialHtml: (room && room.serviceDescription) ?? '<p></p>',
 						}}
 						onSubmit={async (html, afterSubmit) =>

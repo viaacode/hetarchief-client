@@ -19,7 +19,7 @@ import {
 	SearchBar,
 	sortingIcons,
 } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
@@ -227,6 +227,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 			<div className="l-container">
 				<div className="p-cp-requests__header">
 					<SearchBar
+						id={globalLabelKeys.adminLayout.title}
 						default={filters[SEARCH_QUERY_KEY]}
 						className="p-cp-requests__search"
 						placeholder={t('pages/beheer/aanvragen/index___zoek')}
