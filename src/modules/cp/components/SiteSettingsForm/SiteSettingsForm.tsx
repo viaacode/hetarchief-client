@@ -186,7 +186,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 				<FormControl
 					className={styles['c-cp-settings__site-settings-input']}
 					errors={[errors.slug?.message]}
-					id={'SiteSettingsForm__slug'}
+					id={formKeys.slug}
 					label={t('modules/cp/components/site-settings-form/site-settings-form___slug')}
 				>
 					<Controller
@@ -195,12 +195,13 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 						render={({ field }) => (
 							<TextInput
 								{...field}
-								value={currentState?.slug}
+								id={formKeys.slug}
 								onChange={(e) => {
 									const value = e.currentTarget.value;
 									setValue('slug', value);
 									onUpdate?.({ slug: value });
 								}}
+								value={currentState?.slug}
 							/>
 						)}
 					/>
