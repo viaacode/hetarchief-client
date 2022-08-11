@@ -73,6 +73,7 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
+import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -196,6 +197,12 @@ const ObjectDetailPage: NextPage = () => {
 		error: visitRequestError,
 		isLoading: visitRequestIsLoading,
 	} = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	// get visitor space info, used to display contact information
+	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
+		router.query.slug as string,
+		false
+	);
 
 	/**
 	 * Computed
@@ -691,8 +698,8 @@ const ObjectDetailPage: NextPage = () => {
 				showBorder={showNavigationBorder}
 				title={mediaInfo?.maintainerName ?? ''}
 				backLink={visitorSpaceSearchUrl || `/${router.query.slug}`}
-				phone={mediaInfo?.contactInfo.telephone || ''}
-				email={mediaInfo?.contactInfo.email || ''}
+				phone={visitorSpace?.contactInfo.telephone || ''}
+				email={visitorSpace?.contactInfo.email || ''}
 				showAccessEndDate={getAccessEndDate()}
 			/>
 			<ScrollableTabs
@@ -762,7 +769,7 @@ const ObjectDetailPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (mediaInfoIsLoading || visitRequestIsLoading) {
+		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
 			return <Loading fullscreen />;
 		}
 		if (isErrorNotFound) {

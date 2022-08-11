@@ -1,8 +1,8 @@
 import { TabProps } from '@meemoo/react-components';
-import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
+import { ArrayParam, BooleanParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { Icon } from '@shared/components';
-import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
+import { HAS_SEARCHED_KEY, SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 import { OrderDirection, VisitorSpaceMediaType } from '@shared/types';
 
@@ -31,6 +31,7 @@ export const VISITOR_SPACE_ITEM_COUNT = 39;
 export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 	// Filters
 	format: VisitorSpaceMediaType.All,
+	[HAS_SEARCHED_KEY]: undefined,
 	[SEARCH_QUERY_KEY]: undefined,
 	[VisitorSpaceFilterId.Medium]: undefined,
 	[VisitorSpaceFilterId.Duration]: undefined,
@@ -51,6 +52,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	// Filters
 	format: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.format),
+	[HAS_SEARCHED_KEY]: BooleanParam,
 	[SEARCH_QUERY_KEY]: ArrayParam,
 	[VisitorSpaceFilterId.Medium]: ArrayParam,
 	[VisitorSpaceFilterId.Duration]: AdvancedFilterArrayParam,

@@ -7,7 +7,6 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Blade, Icon, SpacePreview } from '@shared/components';
-import { OPTIONAL_LABEL } from '@shared/const';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
@@ -134,7 +133,6 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					label={t(
 						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
 					)}
-					suffix={OPTIONAL_LABEL()}
 				>
 					<Controller
 						name="visitTime"

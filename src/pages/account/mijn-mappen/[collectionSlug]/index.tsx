@@ -339,7 +339,7 @@ const AccountMyCollections: NextPage = () => {
 				label: t(
 					'pages/account/mijn-mappen/collection-slug/index___identifier-bij-aanbieder'
 				),
-				value: item.schemaIdentifier,
+				value: item.meemooLocalId,
 			},
 		];
 

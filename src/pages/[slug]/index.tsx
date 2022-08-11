@@ -1,18 +1,21 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { HTTPError } from 'ky';
 import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BooleanParam, useQueryParams } from 'use-query-params';
+import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthModal } from '@auth/components';
 import { selectUser } from '@auth/store/user';
-import { SHOW_AUTH_QUERY_KEY } from '@home/const';
+import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
-import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
+import { selectShowAuthModal, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { createPageTitle } from '@shared/utils';
 import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
@@ -30,6 +33,7 @@ const DynamicRouteResolver: NextPage = () => {
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const [query, setQuery] = useQueryParams({
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: withDefault(StringParam, undefined),
 	});
 
 	/**
@@ -61,17 +65,30 @@ const DynamicRouteResolver: NextPage = () => {
 	 */
 
 	const onCloseAuthModal = () => {
-		if (typeof query.showAuth === 'boolean') {
-			setQuery({ showAuth: undefined });
+		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
+			setQuery({
+				[SHOW_AUTH_QUERY_KEY]: undefined,
+				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+			});
 		}
 		dispatch(setShowAuthModal(false));
 	};
+
+	/**
+	 * Effects
+	 */
+
+	useEffect(() => {
+		dispatch(setShowZendesk(true));
+	}, [dispatch]);
 
 	/**
 	 * Render
 	 */
 
 	const renderPageContent = () => {
+		dispatch(setShowZendesk(true));
+
 		if (isVisitorSpaceLoading || isContentPageLoading) {
 			return <Loading fullscreen />;
 		}
@@ -79,6 +96,7 @@ const DynamicRouteResolver: NextPage = () => {
 			return <ErrorNotFound />;
 		}
 		if (visitorSpaceInfo) {
+			dispatch(setShowZendesk(false));
 			return <VisitorSpaceSearchPage />;
 		}
 		if (contentPageInfo) {
@@ -88,8 +106,11 @@ const DynamicRouteResolver: NextPage = () => {
 
 	return (
 		<VisitorLayout>
+			<Head>
+				<title>{createPageTitle(contentPageInfo?.title || undefined)}</title>
+			</Head>
 			{renderPageContent()}
-			<AuthModal isOpen={showAuthModal} onClose={onCloseAuthModal} />
+			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 		</VisitorLayout>
 	);
 };
