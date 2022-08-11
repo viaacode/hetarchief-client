@@ -1,11 +1,11 @@
 import { GetServerSideProps, NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BooleanParam, useQueryParams } from 'use-query-params';
+import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
 
 import { AuthModal } from '@auth/components';
 import { selectUser } from '@auth/store/user';
-import { SHOW_AUTH_QUERY_KEY } from '@home/const';
+import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 
@@ -15,21 +15,25 @@ const CookiePolicy: NextPage = () => {
 	const dispatch = useDispatch();
 	const [query, setQuery] = useQueryParams({
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: withDefault(StringParam, undefined),
 	});
 	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const user = useSelector(selectUser);
 
 	const onCloseAuthModal = () => {
-		if (typeof query.showAuth === 'boolean') {
-			setQuery({ showAuth: undefined });
+		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
+			setQuery({
+				[SHOW_AUTH_QUERY_KEY]: undefined,
+				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+			});
 		}
 		dispatch(setShowAuthModal(false));
 	};
 
 	useEffect(() => {
 		// Fool cookiebot to inject the html into our react useState
-		(window as any).CookieDeclaration = {
+		(window as any).CookieDeclaration = { // eslint-disable-line
 			InjectCookieDeclaration: setCookieDeclarationHtml,
 		};
 
