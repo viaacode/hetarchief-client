@@ -33,7 +33,7 @@
 		"@meemoo/react-components": "2.16.1",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
-		"@viaa/avo2-components": "2.0.5",
+		"@viaa/avo2-components": "2.1.4",
 		"@viaa/avo2-types": "2.36.1",
 		"capture-stack-trace": "1.0.1",
 		"clsx": "1.1.1",
