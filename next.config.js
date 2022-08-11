@@ -62,4 +62,13 @@ module.exports = withTM({
 		FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
 		GOOGLE_TAG_MANAGER_ID: process.env.GOOGLE_TAG_MANAGER_ID,
 	},
+	async redirects() {
+		return [
+			{
+				source: '/account',
+				destination: '/account/mijn-profiel',
+				permanent: true,
+			},
+		];
+	},
 });
