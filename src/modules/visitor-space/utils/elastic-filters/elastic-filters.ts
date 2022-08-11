@@ -47,12 +47,12 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): MediaSearch
 		operator: MediaSearchOperator.IS,
 		multiValue: (query.keywords || []).filter((item) => item !== null) as string[],
 	},
-	// Language TODO
-	// {
-	// 	field: MediaSearchFilterField.LANGUAGE,
-	// 	operator: MediaSearchOperator.IS,
-	// 	multiValue: (query.language || []).filter((item) => item !== null) as string[],
-	// },
+	// Language
+	{
+		field: MediaSearchFilterField.LANGUAGE,
+		operator: MediaSearchOperator.IS,
+		multiValue: (query.language || []).filter((item) => item !== null) as string[],
+	},
 	// Advanced
 	...(query.advanced || []).flatMap(mapAdvancedToElastic),
 ];
