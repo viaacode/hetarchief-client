@@ -1,4 +1,4 @@
-import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
+import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
@@ -396,53 +396,39 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
+		const shared: Partial<FlowPlayerProps> = {
+			className: clsx(
+				'p-object-detail__flowplayer',
+				showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+			),
+			poster: mediaInfo?.thumbnailUrl || undefined,
+			title: representation.name,
+			pause: isMediaPaused,
+			onPlay: handleOnPlay,
+			onPause: handleOnPause,
+			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
+			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
+			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
+		};
+
 		// Flowplayer
 		if (FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
-			return (
-				<FlowPlayer
-					className={clsx(
-						'p-object-detail__flowplayer',
-						showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
-					)}
-					key={flowPlayerKey}
-					src={playableUrl}
-					poster={mediaInfo?.thumbnailUrl || undefined}
-					title={representation.name}
-					pause={isMediaPaused}
-					onPlay={handleOnPlay}
-					onPause={handleOnPause}
-					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
-					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
-					plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
-				/>
-			);
+			return <FlowPlayer key={flowPlayerKey} src={playableUrl} {...shared} />;
 		}
 		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			if (!peakFileId || !!peakJson) {
 				return (
-					<div className={styles['c-audio-player-wrapper']}>
-						<FlowPlayer
-							className={clsx(
-								'p-object-detail__flowplayer',
-								showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
-							)}
-							key={flowPlayerKey}
-							src={[
-								{
-									src: playableUrl,
-									type: 'audio/mp3',
-								},
-							]}
-							title={representation.name}
-							pause={isMediaPaused}
-							onPlay={handleOnPlay}
-							onPause={handleOnPause}
-							token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
-							dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
-							plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
-							waveformData={peakJson?.data || undefined}
-						/>
-					</div>
+					<FlowPlayer
+						key={flowPlayerKey}
+						src={[
+							{
+								src: playableUrl,
+								type: 'audio/mp3',
+							},
+						]}
+						waveformData={peakJson?.data || undefined}
+						{...shared}
+					/>
 				);
 			} else {
 				return <Loading fullscreen />;
