@@ -165,10 +165,17 @@ const VisitorSpacesOverview: FC = () => {
 	};
 
 	const renderVisitorSpacesTable = () => {
+		if (isFetching) {
+			return (
+				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+					<Loading />
+				</div>
+			);
+		}
 		if (!visitorSpaces?.items?.length) {
 			return (
 				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					{isFetching ? t('pages/beheer/aanvragen/index___laden') : renderEmptyMessage()}
+					{renderEmptyMessage()}
 				</div>
 			);
 		}

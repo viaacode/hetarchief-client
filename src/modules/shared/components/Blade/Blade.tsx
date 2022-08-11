@@ -1,6 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
+import { isUndefined } from 'lodash-es';
 import { FC } from 'react';
 
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
@@ -61,6 +62,9 @@ const Blade: FC<BladeProps> = ({
 					className,
 					styles['c-blade'],
 					isBladeOpen && styles['c-blade--visible'],
+					isBladeOpen &&
+						(layer === currentLayer || (currentLayer === 0 && isUndefined(layer))) &&
+						'c-blade--active',
 					isLayered && [styles['c-blade--managed']]
 				)}
 				// offset underlying blades

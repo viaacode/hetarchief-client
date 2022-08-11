@@ -19,6 +19,7 @@ import { withI18n } from '@i18n/wrappers';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
+	Loading,
 	PaginationBar,
 	ScrollableTabs,
 	SearchBar,
@@ -165,16 +166,68 @@ const CPVisitorsPage: NextPage = () => {
 		}
 	};
 
-	return (
-		<>
-			<Head>
-				<title>{createPageTitle(t('pages/beheer/bezoekers/index___bezoekers'))}</title>
-				<meta
-					name="description"
-					content={t('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving')}
+	const renderVisitorsTable = () => {
+		if (isFetching) {
+			return (
+				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+					<Loading />
+				</div>
+			);
+		}
+		if ((visits?.items?.length || 0) <= 0) {
+			return (
+				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+					{renderEmptyMessage()}
+				</div>
+			);
+		}
+		return (
+			<div className="l-container l-container--edgeless-to-lg">
+				<Table
+					className="u-mt-24 c-table--no-padding-last-column"
+					options={
+						// TODO: fix type hinting
+						/* eslint-disable @typescript-eslint/ban-types */
+						{
+							columns: VisitorsTableColumns(
+								denyVisitRequest,
+								editVisitRequest
+							) as Column<object>[],
+							data: visits?.items || [],
+							initialState: {
+								pageSize: RequestTablePageSize,
+								sortBy: sortFilters,
+							},
+						} as TableOptions<object>
+						/* eslint-enable @typescript-eslint/ban-types */
+					}
+					onSortChange={onSortChange}
+					sortingIcons={sortingIcons}
+					pagination={({ gotoPage }) => {
+						return (
+							<PaginationBar
+								className="u-mt-16 u-mb-16"
+								count={RequestTablePageSize}
+								start={Math.max(0, filters.page - 1) * RequestTablePageSize}
+								total={visits?.total || 0}
+								onPageChange={(pageZeroBased) => {
+									gotoPage(pageZeroBased);
+									// setSelected(null);
+									setFilters({
+										...filters,
+										page: pageZeroBased + 1,
+									});
+								}}
+							/>
+						);
+					}}
 				/>
-			</Head>
+			</div>
+		);
+	};
 
+	const renderPageContent = () => {
+		return (
 			<CPAdminLayout
 				className="p-cp-visitors"
 				pageTitle={t('pages/beheer/bezoekers/index___bezoekers')}
@@ -202,55 +255,8 @@ const CPVisitorsPage: NextPage = () => {
 					</div>
 				</div>
 
-				{(visits?.items?.length || 0) > 0 ? (
-					<div className="l-container l-container--edgeless-to-lg">
-						<Table
-							className="u-mt-24 c-table--no-padding-last-column"
-							options={
-								// TODO: fix type hinting
-								/* eslint-disable @typescript-eslint/ban-types */
-								{
-									columns: VisitorsTableColumns(
-										denyVisitRequest,
-										editVisitRequest
-									) as Column<object>[],
-									data: visits?.items || [],
-									initialState: {
-										pageSize: RequestTablePageSize,
-										sortBy: sortFilters,
-									},
-								} as TableOptions<object>
-								/* eslint-enable @typescript-eslint/ban-types */
-							}
-							onSortChange={onSortChange}
-							sortingIcons={sortingIcons}
-							pagination={({ gotoPage }) => {
-								return (
-									<PaginationBar
-										className="u-mt-16 u-mb-16"
-										count={RequestTablePageSize}
-										start={Math.max(0, filters.page - 1) * RequestTablePageSize}
-										total={visits?.total || 0}
-										onPageChange={(pageZeroBased) => {
-											gotoPage(pageZeroBased);
-											// setSelected(null);
-											setFilters({
-												...filters,
-												page: pageZeroBased + 1,
-											});
-										}}
-									/>
-								);
-							}}
-						/>
-					</div>
-				) : (
-					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-						{isFetching
-							? t('pages/beheer/aanvragen/index___laden')
-							: renderEmptyMessage()}
-					</div>
-				)}
+				{renderVisitorsTable()}
+
 				<ConfirmationModal
 					isOpen={showDenyVisitRequestModal}
 					onClose={() => {
@@ -281,6 +287,20 @@ const CPVisitorsPage: NextPage = () => {
 					onSubmit={handleEditVisitRequestFinished}
 				/>
 			</CPAdminLayout>
+		);
+	};
+
+	return (
+		<>
+			<Head>
+				<title>{createPageTitle(t('pages/beheer/bezoekers/index___bezoekers'))}</title>
+				<meta
+					name="description"
+					content={t('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving')}
+				/>
+			</Head>
+
+			{renderPageContent()}
 		</>
 	);
 };
