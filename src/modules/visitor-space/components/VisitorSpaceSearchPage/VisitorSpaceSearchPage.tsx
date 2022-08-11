@@ -89,6 +89,10 @@ import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
 import { WaitingPage } from '../WaitingPage';
 
+const labelKeys = {
+	search: 'VisitorSpaceSearchPage__search',
+};
+
 const VisitorSpaceSearchPage: NextPage = () => {
 	useNavigationBorder();
 
@@ -537,7 +541,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			{visitorSpace && (
 				<div className="p-visitor-space">
 					<VisitorSpaceNavigation
-						title={visitorSpace?.name}
+						title={
+							<label htmlFor={`react-select-${labelKeys.search}-input`}>
+								{visitorSpace?.name}
+							</label>
+						}
 						phone={visitorSpace?.contactInfo.telephone || ''}
 						email={visitorSpace?.contactInfo.email || ''}
 						showBorder={showNavigationBorder}
@@ -552,7 +560,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 								clearLabel={t(
 									'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 								)}
-								instanceId="visitor-space-search-bar"
+								instanceId={labelKeys.search}
 								isMulti
 								size="lg"
 								placeholder={t(
