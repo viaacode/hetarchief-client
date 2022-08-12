@@ -81,8 +81,6 @@ import {
 	VisitorSpaceNavigation,
 } from '../../../modules/visitor-space/components';
 
-import styles from './index.module.scss';
-
 import {
 	DynamicActionMenu,
 	MediaObject,
