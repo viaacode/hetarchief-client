@@ -1,4 +1,4 @@
-import { useSlot } from '@viaa/avo2-components';
+import { useSlot } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
