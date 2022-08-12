@@ -4,6 +4,7 @@ import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
 import { FC } from 'react';
 
+import { globalLabelKeys } from '@shared/const';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 
@@ -57,7 +58,7 @@ const Blade: FC<BladeProps> = ({
 			<div
 				role="dialog"
 				aria-modal={isBladeOpen}
-				aria-labelledby="bladeTitle"
+				aria-labelledby={globalLabelKeys.blade.title}
 				className={clsx(
 					className,
 					styles['c-blade'],
@@ -81,7 +82,10 @@ const Blade: FC<BladeProps> = ({
 				<div className={styles['c-blade__title-wrapper']}>
 					{heading ||
 						(title && (
-							<h3 id="bladeTitle" className={styles['c-blade__title']}>
+							<h3
+								id={globalLabelKeys.blade.title}
+								className={styles['c-blade__title']}
+							>
 								{title}
 							</h3>
 						))}
