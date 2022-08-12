@@ -149,8 +149,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 	border-radius: 4rem;
 	cursor: pointer;
 	outline: 2px solid transparent;
-	transition: color $animate-default, background-color $animate-default,
-		border-color $animate-default;
+	transition: color $animate-default, background-color $animate-default, border-color $animate-default;
 
 	.c-button__label,
 	div[class*="c-button__label"] {
@@ -520,7 +519,7 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			padding: 0.54rem $spacer-md;
 		}
 
-		[class^="TagList-module_c-tag-list"] {
+		[class*="TagList-module_c-tag-list"] {
 			margin: 0;
 			padding: 0;
 		}

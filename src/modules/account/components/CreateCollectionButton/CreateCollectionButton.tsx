@@ -7,14 +7,14 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { collectionsService } from '@account/services/collections';
-import { CreateCollectionFormState } from '@account/types';
+import { CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './CreateCollectionButton.module.scss';
 import { CreateCollectionButtonProps } from './CreateCollectionButton.types';
 
-const labelKeys: Record<keyof CreateCollectionFormState, string> = {
+const labelKeys: Record<keyof CreateFolderFormState, string> = {
 	name: 'CreateCollectionButton__name',
 };
 
@@ -29,7 +29,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	 * Form
 	 */
 
-	const defaultName = t('pages/account/mijn-mappen/collection-slug/index___nieuwe-map-aanmaken');
+	const defaultName = t('pages/account/mijn-mappen/folder-slug/index___nieuwe-map-aanmaken');
 
 	const {
 		control,
@@ -37,7 +37,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 		handleSubmit,
 		setValue,
 		resetField,
-	} = useForm<CreateCollectionFormState>({
+	} = useForm<CreateFolderFormState>({
 		resolver: yupResolver(COLLECTION_FORM_SCHEMA()),
 		defaultValues: {
 			name: defaultName,
@@ -59,17 +59,17 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	};
 
 	const onFormSubmit = () => {
-		handleSubmit<CreateCollectionFormState>((values) => {
+		handleSubmit<CreateFolderFormState>((values) => {
 			collectionsService.create(values).then(() => {
 				afterSubmit();
 
 				toastService.notify({
 					title: t(
-						'modules/account/components/create-collection-button/create-collection-button___name-is-aangemaakt',
+						'modules/account/components/create-folder-button/create-folder-button___name-is-aangemaakt',
 						values
 					),
 					description: t(
-						'modules/account/components/create-collection-button/create-collection-button___je-nieuwe-map-is-succesvol-aangemaakt'
+						'modules/account/components/create-folder-button/create-folder-button___je-nieuwe-map-is-succesvol-aangemaakt'
 					),
 				});
 			});
@@ -79,7 +79,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	return (
 		<FormControl
 			className={clsx(
-				styles['c-create-collection-button'],
+				styles['c-create-folder-button'],
 				'u-px-24',
 				'c-form-control--label-hidden'
 			)}
@@ -118,7 +118,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 						onConfirm={onFormSubmit}
 						onOpen={clearForm}
 						placeholder={t(
-							'modules/account/components/create-collection-button/create-collection-button___nieuwe-map'
+							'modules/account/components/create-folder-button/create-folder-button___nieuwe-map'
 						)}
 						spellCheck="false"
 						variants={['normal']}

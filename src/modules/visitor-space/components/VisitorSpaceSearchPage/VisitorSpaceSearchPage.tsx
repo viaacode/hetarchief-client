@@ -40,7 +40,7 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
-import { selectCollections } from '@shared/store/media';
+import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	AccessStatus,
@@ -60,7 +60,7 @@ import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 
 import {
-	AddToCollectionBlade,
+	AddToFolderBlade,
 	AdvancedFilterFormState,
 	CreatedFilterFormState,
 	CreatorFilterFormState,
@@ -122,7 +122,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [viewMode, setViewMode] = useLocalStorage('HET_ARCHIEF.search.viewmode', 'grid');
 
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
-	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
+	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
@@ -178,7 +178,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	// The result will be added to the redux store
 	useGetMediaFilterOptions(visitorSpace?.maintainerId?.toLocaleLowerCase() as string | undefined);
 
-	const collections = useSelector(selectCollections);
+	const collections = useSelector(selectFolders);
 
 	/**
 	 * Computed
@@ -459,7 +459,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					e.stopPropagation();
 
 					setSelected(item as IdentifiableMediaCard);
-					setShowAddToCollectionBlade(true);
+					setShowAddToFolderBlade(true);
 				}}
 				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
@@ -650,8 +650,8 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			)}
 
 			{visitorSpace && (
-				<AddToCollectionBlade
-					isOpen={isAddToCollectionBladeOpen}
+				<AddToFolderBlade
+					isOpen={isAddToFolderBladeOpen}
 					selected={
 						selected
 							? {
@@ -661,11 +661,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 							: undefined
 					}
 					onClose={() => {
-						setShowAddToCollectionBlade(false);
+						setShowAddToFolderBlade(false);
 						setSelected(null);
 					}}
 					onSubmit={async () => {
-						setShowAddToCollectionBlade(false);
+						setShowAddToFolderBlade(false);
 						setSelected(null);
 					}}
 				/>

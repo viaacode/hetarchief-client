@@ -60,7 +60,7 @@
 		}
 	}
 
-	textarea[class^="c-input"] {
+	textarea[class*="c-input"] {
 		border: none;
 		font-size: $font-size-sm;
 	}
