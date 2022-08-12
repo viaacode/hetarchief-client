@@ -86,6 +86,7 @@ export class MediaService {
 		if (!referenceId) {
 			return null;
 		}
+
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({

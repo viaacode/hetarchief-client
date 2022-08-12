@@ -26,6 +26,7 @@ import {
 import { MetadataProp } from '../types';
 
 export type MetadataFields = FC<TextInputProps> | FC<ReactSelectProps> | FC<DatepickerProps>;
+export type MetadataFieldProps = TextInputProps | ReactSelectProps | DatepickerProps;
 
 export type MetadataConfig = {
 	[key in MetadataProp]?: {

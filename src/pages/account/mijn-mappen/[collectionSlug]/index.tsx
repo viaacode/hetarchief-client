@@ -1,4 +1,4 @@
-import { Button } from '@meemoo/react-components';
+import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
 import { GetServerSideProps, NextPage } from 'next';
@@ -52,6 +52,10 @@ import { AddToFolderBlade } from '../../../../modules/visitor-space/components';
 import { VisitorLayout } from 'modules/visitors';
 
 type ListNavigationCollectionItem = ListNavigationItem & Folder;
+
+const labelKeys = {
+	search: 'AccountMyCollections__search',
+};
 
 const AccountMyCollections: NextPage = () => {
 	const { t } = useTranslation();
@@ -398,14 +402,25 @@ const AccountMyCollections: NextPage = () => {
 							</div>
 
 							<div className="l-container u-mb-24:md u-mb-32">
-								<SearchBar
-									default={filters[SEARCH_QUERY_KEY]}
-									className="p-account-my-collections__search"
-									placeholder={t(
-										'pages/account/mijn-mappen/folder-slug/index___zoek'
+								<FormControl
+									className="c-form-control--label-hidden"
+									id={`${labelKeys.search}--${activeCollection.id}`}
+									label={t(
+										'pages/account/mijn-mappen/folder-slug/index___zoeken-in-deze-map'
 									)}
-									onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
-								/>
+								>
+									<SearchBar
+										id={`${labelKeys.search}--${activeCollection.id}`}
+										default={filters[SEARCH_QUERY_KEY]}
+										className="p-account-my-collections__search"
+										placeholder={t(
+											'pages/account/mijn-mappen/folder-slug/index___zoek'
+										)}
+										onSearch={(value) =>
+											setFilters({ [SEARCH_QUERY_KEY]: value })
+										}
+									/>
+								</FormControl>
 							</div>
 
 							<div className="l-container">

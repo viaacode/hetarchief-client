@@ -14,6 +14,10 @@ import { toastService } from '@shared/services/toast-service';
 import styles from './CreateCollectionButton.module.scss';
 import { CreateCollectionButtonProps } from './CreateCollectionButton.types';
 
+const labelKeys: Record<keyof CreateFolderFormState, string> = {
+	name: 'CreateCollectionButton__name',
+};
+
 const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	afterSubmit = () => null,
 	onOpenNode = null,
@@ -74,8 +78,14 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 
 	return (
 		<FormControl
-			className={clsx(styles['c-create-folder-button'], 'u-px-24')}
+			className={clsx(
+				styles['c-create-folder-button'],
+				'u-px-24',
+				'c-form-control--label-hidden'
+			)}
 			errors={[errors.name?.message]}
+			id={labelKeys.name}
+			label={defaultName}
 		>
 			<Controller
 				name="name"
@@ -97,6 +107,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 								onOpenNode
 							);
 						}}
+						id={labelKeys.name}
 						nodeSubmit={
 							<Button variants={['black', 'sm']} icon={<Icon name="check" />} />
 						}

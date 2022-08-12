@@ -25,7 +25,7 @@ import {
 	SearchBar,
 	sortingIcons,
 } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
@@ -235,6 +235,7 @@ const CPVisitorsPage: NextPage = () => {
 				<div className="l-container">
 					<div className="p-cp-visitors__header">
 						<SearchBar
+							id={globalLabelKeys.adminLayout.title}
 							default={filters[SEARCH_QUERY_KEY]}
 							className="p-cp-visitors__search"
 							placeholder={t('pages/beheer/bezoekers/index___zoek')}

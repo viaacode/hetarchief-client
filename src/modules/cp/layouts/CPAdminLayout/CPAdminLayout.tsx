@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { CP_ADMIN_NAVIGATION_LINKS } from '@cp/const';
 import { ListNavigationItem } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
+import { globalLabelKeys } from '@shared/const';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 
@@ -49,7 +50,9 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 			<ErrorBoundary>
 				{pageTitle && (
 					<header className={clsx(styles['c--cp-admin__header'], 'l-container')}>
-						<h2 className={styles['c-cp-admin__page-title']}>{pageTitle}</h2>
+						<h2 className={styles['c-cp-admin__page-title']}>
+							<label htmlFor={globalLabelKeys.adminLayout.title}>{pageTitle}</label>
+						</h2>
 					</header>
 				)}
 				{children}

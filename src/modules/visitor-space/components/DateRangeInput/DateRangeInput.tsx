@@ -9,7 +9,7 @@ import { DateInput } from '../DateInput';
 
 import styles from './DateRangeInput.module.scss';
 
-const DateRangeInput: FC<TextInputProps> = (props) => {
+const DateRangeInput: FC<Omit<TextInputProps, 'onSelect'>> = (props) => {
 	const split = (props.value || '').toString().split(SEPARATOR, 2);
 
 	const from: string | undefined = split[0];
@@ -49,8 +49,8 @@ const DateRangeInput: FC<TextInputProps> = (props) => {
 
 	return (
 		<div className={styles['c-date-range-input']}>
-			<DateInput value={from} onChange={(date, e) => onChange(date, e, 'from')} />
-			<DateInput value={to} onChange={(date, e) => onChange(date, e, 'to')} />
+			<DateInput {...props} value={from} onChange={(date, e) => onChange(date, e, 'from')} />
+			<DateInput {...props} value={to} onChange={(date, e) => onChange(date, e, 'to')} />
 		</div>
 	);
 };

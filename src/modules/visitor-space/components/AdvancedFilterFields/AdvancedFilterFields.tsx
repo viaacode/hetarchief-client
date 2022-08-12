@@ -1,6 +1,7 @@
 import {
 	Button,
 	DatepickerProps,
+	FormControl,
 	ReactSelect,
 	ReactSelectProps,
 	SelectOption,
@@ -8,12 +9,14 @@ import {
 	TextInputProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 import { SingleValue } from 'react-select';
 
 import { Icon } from '@shared/components';
 import { SEPARATOR } from '@shared/const';
 import { Operator } from '@shared/types';
+import { MetadataFieldProps } from '@visitor-space/const';
 
 import {
 	DateInput,
@@ -32,12 +35,21 @@ import { defaultValue } from '../DurationInput/DurationInput';
 import styles from './AdvancedFilterFields.module.scss';
 import { AdvancedFilterFieldsProps } from './AdvancedFilterFields.types';
 
+const labelKeys = {
+	prefix: 'AdvancedFilterFields',
+	property: 'AdvancedFilterFields__field',
+	operator: 'AdvancedFilterFields__operator',
+	value: 'AdvancedFilterFields__value',
+};
+
 const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	index,
 	value: state,
 	onChange,
 	onRemove,
 }) => {
+	const [t] = useTranslation();
+
 	// Computed
 
 	const operators = getOperators(state.prop as MetadataProp);
@@ -51,8 +63,13 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	// Render
 
-	const renderTextField = (Component: FC<TextInputProps>, value?: string) => (
+	const renderTextField = (
+		Component: FC<TextInputProps>,
+		value?: string,
+		props?: TextInputProps
+	) => (
 		<Component
+			{...props}
 			className={clsx(
 				styles['c-advanced-filter-fields__dynamic-field'],
 				styles['c-advanced-filter-fields__dynamic-field--text']
@@ -66,33 +83,41 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 		/>
 	);
 
-	const renderField = () => {
+	const renderField = (config?: MetadataFieldProps) => {
 		let Component = operator
 			? getField(state.prop as MetadataProp, operator as Operator)
 			: null;
 
 		let value;
-		let props = Component && Component.defaultProps;
+		let props =
+			Component &&
+			({
+				...Component.defaultProps,
+				...config,
+			} as MetadataFieldProps);
 
 		switch (Component) {
 			case TextInput:
 			case DateRangeInput:
 				value = state.val;
 				Component = Component as FC<TextInputProps>;
+				props = props as TextInputProps;
 
-				return renderTextField(Component, value);
+				return renderTextField(Component, value, props);
 
 			case DurationInput:
 				value = state.val || defaultValue; // Ensure initial value is hh:mm:ss
 				Component = Component as FC<TextInputProps>;
+				props = props as TextInputProps;
 
-				return renderTextField(Component, value);
+				return renderTextField(Component, value, props);
 
 			case DurationRangeInput:
 				value = state.val || `${defaultValue}${SEPARATOR}${defaultValue}`; // Ensure initial value is hh:mm:ss for both fields
 				Component = Component as FC<TextInputProps>;
+				props = props as TextInputProps;
 
-				return renderTextField(Component, value);
+				return renderTextField(Component, value, props);
 
 			case ReactSelect:
 			case MediaTypeSelect:
@@ -146,34 +171,66 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	return (
 		<div className={styles['c-advanced-filter-fields']}>
-			<ReactSelect
-				components={{ IndicatorSeparator: () => null }}
-				options={getProperties()}
-				value={getSelectValue(getProperties(), state.prop)}
-				onChange={(newValue) => {
-					const prop = (newValue as SingleValue<SelectOption>)?.value;
-					const operators = prop ? getOperators(prop as MetadataProp) : [];
+			<FormControl
+				className="c-form-control--label-hidden"
+				id={`${labelKeys.property}__${index}`}
+				label={t(
+					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___veldnaam'
+				)}
+			>
+				<ReactSelect
+					components={{ IndicatorSeparator: () => null }}
+					inputId={`${labelKeys.property}__${index}`}
+					onChange={(newValue) => {
+						const prop = (newValue as SingleValue<SelectOption>)?.value;
+						const operators = prop ? getOperators(prop as MetadataProp) : [];
 
-					onFieldChange({
-						prop,
-						op: operators.length > 0 ? operators[0].value : undefined,
-						val: undefined,
-					});
-				}}
-			/>
-			<ReactSelect
-				components={{ IndicatorSeparator: () => null }}
-				options={operators}
-				value={getSelectValue(operators, state.op)}
-				onChange={(newValue) =>
-					onFieldChange({
-						op: (newValue as SingleValue<SelectOption>)?.value,
-						val: undefined,
-					})
-				}
-			/>
-			<div className={styles['c-advanced-filter-fields__field-container']}>
-				{renderField()}
+						onFieldChange({
+							prop,
+							op: operators.length > 0 ? operators[0].value : undefined,
+							val: undefined,
+						});
+					}}
+					options={getProperties()}
+					value={getSelectValue(getProperties(), state.prop)}
+				/>
+			</FormControl>
+
+			<FormControl
+				className="c-form-control--label-hidden"
+				id={`${labelKeys.operator}__${index}`}
+				label={t(
+					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___operator'
+				)}
+			>
+				<ReactSelect
+					components={{ IndicatorSeparator: () => null }}
+					inputId={`${labelKeys.operator}__${index}`}
+					onChange={(newValue) =>
+						onFieldChange({
+							op: (newValue as SingleValue<SelectOption>)?.value,
+							val: undefined,
+						})
+					}
+					options={operators}
+					value={getSelectValue(operators, state.op)}
+				/>
+			</FormControl>
+
+			<FormControl
+				className={clsx(
+					styles['c-advanced-filter-fields__field-container'],
+					'c-form-control--label-hidden'
+				)}
+				id={`${labelKeys.value}__${index}`}
+				label={t(
+					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___waarde'
+				)}
+			>
+				{renderField({
+					id: `${labelKeys.value}__${index}`,
+				})}
+
 				{index > 0 && (
 					<Button
 						icon={<Icon name="trash" />}
@@ -181,7 +238,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 						onClick={() => onRemove(index)}
 					/>
 				)}
-			</div>
+			</FormControl>
 		</div>
 	);
 };

@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, keysEnter, onKey, TagInfo, TagsInput } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
@@ -16,11 +17,16 @@ import { KeywordsFilterFormProps, KeywordsFilterFormState } from './KeywordsFilt
 
 type multi = MultiValue<TagInfo>;
 
-const defaultValues = {
+const labelKeys: Record<keyof KeywordsFilterFormState, string> = {
+	values: 'KeywordsFilterForm__values',
+};
+
+const defaultValues: KeywordsFilterFormState = {
 	values: [],
 };
 
 const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {
+	const [t] = useTranslation();
 	const [query] = useQueryParams(KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [input, setInput] = useState<string | undefined>(undefined);
 
@@ -110,29 +116,35 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 			DropdownIndicator: () => <div className="u-pr-8" />,
 		};
 	}, []);
+
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<div className="u-mb-32">
 					<FormControl
-						className="u-mb-24"
+						className="u-mb-24 c-form-control--label-hidden"
 						errors={(errors.values || []).map((value) => value.message)}
+						id={labelKeys.values}
+						label={t(
+							'modules/visitor-space/components/keywords-filter-form/keywords-filter-form___waardes'
+						)}
 					>
 						<Controller
 							name="values"
 							control={control}
 							render={() => (
 								<TagsInput
-									menuIsOpen={false}
 									components={components}
+									inputId={labelKeys.values}
+									inputValue={input}
+									isClearable={true}
+									isMulti={true} // always `multi`
+									menuIsOpen={false}
+									onBlur={saveInput}
 									onChange={onTagsChange}
 									onInputChange={onInputChange}
 									onKeyDown={onKeyDown}
-									onBlur={saveInput}
-									isClearable={true}
-									isMulti={true} // always `multi`
 									value={getTags}
-									inputValue={input}
 								/>
 							)}
 						/>

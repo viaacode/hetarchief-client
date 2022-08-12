@@ -1,19 +1,21 @@
 import { get } from 'lodash-es';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Zendesk from 'react-zendesk';
+import Zendesk, { IZendeskProps } from 'react-zendesk';
 
 import { selectShowZendesk } from '@shared/store/ui';
 
 const { publicRuntimeConfig } = getConfig();
 
-const ZendeskWrapper: FunctionComponent = () => {
+const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 	const router = useRouter();
 	const showZendesk = useSelector(selectShowZendesk);
+
 	const [footerHeight, setFooterHeight] = useState<number>(88);
 	const [widget, setWidget] = useState<HTMLIFrameElement | null>(null);
+
 	const zendeskMarginBottom = 22;
 	const zendeskMarginRight = 31;
 
@@ -43,9 +45,11 @@ const ZendeskWrapper: FunctionComponent = () => {
 			const scrollHeight = document.body.scrollHeight;
 			const screenHeight = window.innerHeight;
 			const scrollTop = window.scrollY;
+
 			widget.style.zIndex = '3'; // Ensure the zendesk widget doesn't show on top of blades
 			widget.style.width = 'auto';
 			widget.style.marginRight = zendeskMarginRight + 'px';
+
 			if (scrollHeight - screenHeight - scrollTop < footerHeight + zendeskMarginBottom) {
 				widget.style.marginBottom = `${
 					footerHeight + zendeskMarginBottom - (scrollHeight - screenHeight - scrollTop)
@@ -59,6 +63,7 @@ const ZendeskWrapper: FunctionComponent = () => {
 	const getZendeskWidget = useCallback(() => {
 		const zendeskWidget: HTMLIFrameElement | null =
 			(document.querySelector('iframe#launcher') as HTMLIFrameElement) || null;
+
 		if (!zendeskWidget) {
 			setTimeout(getZendeskWidget, 100);
 		} else {
@@ -74,14 +79,17 @@ const ZendeskWrapper: FunctionComponent = () => {
 	const initListeners = useCallback(() => {
 		document.addEventListener('scroll', updateMargin);
 		window.addEventListener('resize', onResize);
+
 		const resizeObserver = new ResizeObserver(updateMargin);
 		resizeObserver.observe(document.body);
+
 		updateFooterHeight();
 		getZendeskWidget();
 		updateMargin();
 
 		return () => {
 			resizeObserver.disconnect();
+
 			document.removeEventListener('scroll', updateMargin);
 			window.removeEventListener('resize', onResize);
 		};
@@ -93,7 +101,16 @@ const ZendeskWrapper: FunctionComponent = () => {
 		}, 100);
 	}, [initListeners, widget, router.asPath]);
 
-	return <Zendesk zendeskKey={publicRuntimeConfig.ZENDESK_KEY} onLoaded={initListeners} />;
+	return (
+		<Zendesk
+			{...settings}
+			zendeskKey={publicRuntimeConfig.ZENDESK_KEY}
+			onLoaded={() => {
+				initListeners();
+				settings?.onLoaded?.();
+			}}
+		/>
+	);
 };
 
 export default ZendeskWrapper;
