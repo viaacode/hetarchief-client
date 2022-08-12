@@ -87,21 +87,16 @@ export class MediaService {
 			return null;
 		}
 
-		// DO NOT COMMIT
-		try {
-			return await ApiService.getApi()
-				.get(
-					stringifyUrl({
-						url: `${MEDIA_SERVICE_BASE_URL}/${MEDIA_SERVICE_TICKET_URL}`,
-						query: {
-							id: referenceId,
-						},
-					})
-				)
-				.text();
-		} catch (err) {
-			return await (async () => '')();
-		}
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${MEDIA_SERVICE_BASE_URL}/${MEDIA_SERVICE_TICKET_URL}`,
+					query: {
+						id: referenceId,
+					},
+				})
+			)
+			.text();
 	}
 
 	public static async getSimilar(id: string, esIndex: string): Promise<MediaSimilar> {
