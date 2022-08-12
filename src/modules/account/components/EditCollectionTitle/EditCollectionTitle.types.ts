@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 
-import { Collection } from '@account/types';
+import { Folder } from '@account/types';
 
 export interface EditCollectionTitleProps {
 	onOpenNode?: ReactNode | null;
-	collection: Collection;
-	afterSubmit?: (values: Collection) => void;
+	collection: Folder;
+	afterSubmit?: (values: Folder) => void;
 	buttons: Array<{
 		before: boolean;
 		node: ReactNode;

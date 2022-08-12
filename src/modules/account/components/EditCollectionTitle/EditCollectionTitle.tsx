@@ -11,7 +11,7 @@ import { Controller, useForm } from 'react-hook-form';
 
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { collectionsService } from '@account/services/collections';
-import { EditCollectionFormState } from '@account/types';
+import { EditFolderFormState } from '@account/types';
 import { Icon } from '@shared/components';
 import { toastService } from '@shared/services/toast-service';
 
@@ -38,7 +38,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		formState: { errors },
 		handleSubmit,
 		resetField,
-	} = useForm<EditCollectionFormState>({
+	} = useForm<EditFolderFormState>({
 		resolver: yupResolver(COLLECTION_FORM_SCHEMA()),
 		defaultValues: {
 			name: defaultName,
@@ -54,7 +54,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		description.length > 0 &&
 			toastService.notify({
 				title: t(
-					'modules/account/components/edit-collection-title/edit-collection-title___er-was-een-probleem-bij-het-aanpassen-van-de-titel-van-de-map'
+					'modules/account/components/edit-folder-title/edit-folder-title___er-was-een-probleem-bij-het-aanpassen-van-de-titel-van-de-map'
 				),
 				maxLines: 2,
 				description,
@@ -75,17 +75,17 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	};
 
 	const onFormSubmit = () => {
-		handleSubmit<EditCollectionFormState>((values) => {
+		handleSubmit<EditFolderFormState>((values) => {
 			collectionsService.update(collection.id, values).then((response) => {
 				afterSubmit(response);
 
 				toastService.notify({
 					title: t(
-						'modules/account/components/edit-collection-title/edit-collection-title___name-is-aangepast',
+						'modules/account/components/edit-folder-title/edit-folder-title___name-is-aangepast',
 						values
 					),
 					description: t(
-						'modules/account/components/edit-collection-title/edit-collection-title___deze-map-is-successvol-aangepast'
+						'modules/account/components/edit-folder-title/edit-folder-title___deze-map-is-successvol-aangepast'
 					),
 				});
 			});
@@ -103,10 +103,10 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 				<Button
 					key={'edit-title'}
 					onClick={handler}
-					className={styles['c-edit-collection-title__edit']}
+					className={styles['c-edit-folder-title__edit']}
 					variants={['silver']}
 					name={t(
-						'modules/account/components/edit-collection-title/edit-collection-title___map-aanpassen'
+						'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
 					)}
 					icon={<Icon name="edit" />}
 				/>
@@ -116,7 +116,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	};
 
 	return (
-		<FormControl className={styles['c-edit-collection-title']}>
+		<FormControl className={styles['c-edit-folder-title']}>
 			<Controller
 				name="name"
 				control={control}

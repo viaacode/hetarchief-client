@@ -5,7 +5,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
@@ -18,6 +18,7 @@ import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
+import { setShowZendesk } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
 const TermsOfService: NextPage = () => {
@@ -34,6 +35,10 @@ const TermsOfService: NextPage = () => {
 	const tosAccepted = useTermsOfService();
 
 	const user = useSelector(selectUser);
+
+	useEffect(() => {
+		dispatch(setShowZendesk(false));
+	}, [dispatch]);
 
 	const onContentScroll = useCallback(() => {
 		const el = scrollable.current;
