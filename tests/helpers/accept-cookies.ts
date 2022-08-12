@@ -2,6 +2,7 @@ import { expect, Page } from '@playwright/test';
 
 export async function acceptCookies(page: Page, whichCookies: 'all' | 'selection'): Promise<void> {
 	// TODO enable once cookiebot is configured for https://bezoek-int.private.cloud.meemoo.be/
+	// TODO https://meemoo.atlassian.net/browse/ARC-1074
 	// // Cookie bot opens
 	// await expect(await page.locator('#CybotCookiebotDialogBody')).toBeVisible();
 	//

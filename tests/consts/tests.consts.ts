@@ -1,1 +1,1 @@
-export const USER_PASSWORD = '4wkqpmd9rqMbPkJaz8zF7kRr5k4QUzeq3';
+export const USER_PASSWORD = 'AUTOMATED_TEST_PASSWORD_4wkqpmd9rqMbPkJaz8zF7kRr5k4QUzeq3';
