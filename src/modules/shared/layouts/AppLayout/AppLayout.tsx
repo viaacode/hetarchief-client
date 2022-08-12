@@ -156,14 +156,15 @@ const AppLayout: FC = ({ children }) => {
 			{/* <!-- start Flowplayer imports --> */}
 			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
 			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
 			<Script
 				strategy="beforeInteractive"
 				src="/flowplayer/plugins/google-analytics.min.js"
 			/>
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/keyboard.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
+			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
 			{/* <!-- end Flowplayer imports --> */}
 
 			<Navigation showBorder={showBorder}>
