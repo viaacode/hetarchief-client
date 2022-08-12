@@ -2,6 +2,7 @@ import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { QueryClient } from 'react-query';
 
+import { ROUTES } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { i18n } from '@shared/helpers/i18n';
 import { ApiService } from '@shared/services/api-service';
@@ -102,6 +103,16 @@ export abstract class NotificationsService {
 					(await NotificationsService.queryClient.invalidateQueries(
 						QUERY_KEYS.getAccessibleVisitorSpaces
 					));
+
+				if (
+					newNotifications.find(
+						(notification) =>
+							notification.type === NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED
+					)
+				) {
+					// Redirect the user to the homepage
+					NotificationsService?.router?.push?.(ROUTES.home);
+				}
 			}
 
 			if (newNotifications.length === 1) {

@@ -44,5 +44,5 @@ yarn-error.log*
 tests/test_results/junit.xml
 
 # End to end testing folders
-test-results/
-playwright-report/
+tests/test-results/
+tests/videos/

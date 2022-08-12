@@ -12,6 +12,7 @@ import {
 	VISIT_REQUEST_ID_QUERY_KEY,
 } from '@cp/const/requests.const';
 import {
+	Loading,
 	PaginationBar,
 	ProcessRequestBlade,
 	ScrollableTabs,
@@ -161,32 +162,22 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		}
 	};
 
-	return (
-		<>
-			<div className="l-container">
-				<div className="p-cp-requests__header">
-					<SearchBar
-						default={filters[SEARCH_QUERY_KEY]}
-						className="p-cp-requests__search"
-						placeholder={t('pages/beheer/aanvragen/index___zoek')}
-						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
-					/>
-
-					<ScrollableTabs
-						className="p-cp-requests__status-filter"
-						tabs={statusFilters}
-						variants={['rounded', 'light', 'bordered', 'medium']}
-						onClick={(tabId) =>
-							setFilters({
-								status: tabId.toString(),
-								page: 1,
-							})
-						}
-					/>
+	const renderVisitRequestsTable = () => {
+		if (isFetching) {
+			return (
+				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+					<Loading />
 				</div>
-			</div>
-
-			{(visits?.items?.length || 0) > 0 ? (
+			);
+		}
+		if ((visits?.items?.length || 0) <= 0) {
+			return (
+				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
+					{renderEmptyMessage()}
+				</div>
+			);
+		} else {
+			return (
 				<div className="l-container l-container--edgeless-to-lg">
 					<Table
 						className="u-mt-24"
@@ -227,11 +218,36 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						}}
 					/>
 				</div>
-			) : (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					{isFetching ? t('pages/beheer/aanvragen/index___laden') : renderEmptyMessage()}
+			);
+		}
+	};
+
+	return (
+		<>
+			<div className="l-container">
+				<div className="p-cp-requests__header">
+					<SearchBar
+						default={filters[SEARCH_QUERY_KEY]}
+						className="p-cp-requests__search"
+						placeholder={t('pages/beheer/aanvragen/index___zoek')}
+						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
+					/>
+
+					<ScrollableTabs
+						className="p-cp-requests__status-filter"
+						tabs={statusFilters}
+						variants={['rounded', 'light', 'bordered', 'medium']}
+						onClick={(tabId) =>
+							setFilters({
+								status: tabId.toString(),
+								page: 1,
+							})
+						}
+					/>
 				</div>
-			)}
+			</div>
+
+			{renderVisitRequestsTable()}
 
 			<ProcessRequestBlade
 				isOpen={
