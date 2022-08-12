@@ -76,7 +76,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				lastName: user?.lastName,
 				fullName: user?.fullName,
 				// last_access_at: user.lastAccessAt, // TODO enable once last_access_at field is added to the database
-				permissions: user?.permissions,
+				permissions: user?.permissions as any[],
 			};
 
 			const config: ConfigValue = {

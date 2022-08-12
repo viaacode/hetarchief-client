@@ -1,7 +1,7 @@
-import { Collection } from '@account/types';
+import { Folder } from '@account/types';
 
 export function createCollectionSlug(
-	collection: Pick<Collection, 'id' | 'name' | 'isDefault'>
+	collection: Pick<Folder, 'id' | 'name' | 'isDefault'>
 ): string {
 	const uuidPart = collection.id.split('-', 1)[0];
 

@@ -1,4 +1,4 @@
-export * from './AddToCollectionBlade';
+export * from './AddToFolderBlade';
 export * from './AdvancedFilterFields';
 export * from './AdvancedFilterForm';
 export * from './CreatedFilterForm';

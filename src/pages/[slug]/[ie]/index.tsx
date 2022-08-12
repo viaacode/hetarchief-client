@@ -63,7 +63,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
-import { selectCollections } from '@shared/store/media';
+import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, License, MediaTypes, VisitorSpaceMediaType } from '@shared/types';
 import {
@@ -77,7 +77,7 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
-	AddToCollectionBlade,
+	AddToFolderBlade,
 	VisitorSpaceNavigation,
 } from '../../../modules/visitor-space/components';
 
@@ -131,7 +131,7 @@ const ObjectDetailPage: NextPage = () => {
 	// Sizes
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
-	const collections = useSelector(selectCollections);
+	const collections = useSelector(selectFolders);
 
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
@@ -755,7 +755,7 @@ const ObjectDetailPage: NextPage = () => {
 				{renderRelatedObjectsBlade()}
 			</article>
 			{canManageFolders && (
-				<AddToCollectionBlade
+				<AddToFolderBlade
 					isOpen={activeBlade === MediaActions.Bookmark}
 					selected={
 						mediaInfo
