@@ -104,8 +104,19 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	// USP Block, Image grid block
+	// Image with copyright and description
+	.a-block-image__annotation {
+		h3 {
+			font-size: 1.8rem;
+			line-height: 3rem;
+		}
 
+		.a-block-image__text {
+			font-size: 1.6rem;
+		}
+	}
+
+	// USP Block, Image grid block
 	.c-block-grid {
 		.c-block-grid__text-wrapper {
 			h3,
