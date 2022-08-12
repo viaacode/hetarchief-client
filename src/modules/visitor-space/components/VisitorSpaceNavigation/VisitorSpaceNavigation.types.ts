@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { DefaultComponentProps } from '@shared/types';
 
 export interface VisitorSpaceNavigationProps extends DefaultComponentProps {
@@ -6,5 +8,5 @@ export interface VisitorSpaceNavigationProps extends DefaultComponentProps {
 	phone?: string;
 	showAccessEndDate?: string;
 	showBorder: boolean;
-	title?: string;
+	title?: ReactNode;
 }

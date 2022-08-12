@@ -94,14 +94,6 @@ $metadata-collapsed-width: 36vw;
 			}
 		}
 
-		.flowplayer {
-			height: calc(100vh - #{$c-navigation-height} - #{$c-navigation-height-contextual} + 1px);
-
-			@include respond-to("md") {
-				height: calc(100vh - #{$c-navigation-height-md} - #{$c-navigation-height-contextual-md} - #{$c-navigation-height-md} + 1px);
-			}
-		}
-
 		& .is-fullscreen &-fullscreen-button--exit {
 			display: block;
 		}
@@ -109,12 +101,6 @@ $metadata-collapsed-width: 36vw;
 		& .is-hovered &-fullscreen-button--exit,
 		& .is-paused &-fullscreen-button--exit {
 			bottom: calc(#{$spacer-lg} + 5.8rem); // Add height of controls bar
-		}
-
-		&--with-slider {
-			.flowplayer {
-				max-height: calc(100vh - 28.5rem); // 28.5rem: slider + navs height
-			}
 		}
 	}
 
@@ -140,7 +126,7 @@ $metadata-collapsed-width: 36vw;
 		overflow-y: scroll;
 		box-shadow: $shadow-24-black-12;
 
-		@include respond-at(md) {
+		@include respond-at("md") {
 			&--collapsed {
 				// Use width for toggle because grid-template-column animation is only supported on Firefox
 				width: $metadata-collapsed-width;
@@ -164,6 +150,25 @@ $metadata-collapsed-width: 36vw;
 
 		@include respond-at("md") {
 			padding: 0 $spacer-lg;
+		}
+
+		& > {
+			& h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6,
+			p,
+			span {
+				@include respond-at("md") {
+					word-break: break-all;
+				}
+
+				@include respond-at("lg") {
+					word-break: initial;
+				}
+			}
 		}
 	}
 

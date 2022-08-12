@@ -11,7 +11,7 @@ import styles from './RelatedObject.module.scss';
 import { RelatedObjectProps } from './RelatedObject.types';
 
 const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
-	const { thumbnail } = object;
+	const { thumbnail, type } = object;
 	const rootCls = clsx(className, styles['c-related-object']);
 
 	const renderImage = () => {
@@ -24,7 +24,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 						name={object.title}
 						id={object.id}
 						size="small"
-						image={thumbnail}
+						image={type === 'audio' ? '/images/waveform--white.svg' : thumbnail}
 					/>
 				);
 			} else {

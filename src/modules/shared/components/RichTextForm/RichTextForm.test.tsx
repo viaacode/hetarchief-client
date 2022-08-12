@@ -19,7 +19,7 @@ describe('Components', () => {
 		it('Should show initialHTML', () => {
 			const { getByText } = renderRichTextForm({});
 
-			const content = getByText(RICH_TEXT_FORM_MOCK.initialHTML ?? '');
+			const content = getByText(RICH_TEXT_FORM_MOCK.editor?.initialHtml ?? '');
 
 			expect(content).toBeInTheDocument();
 		});

@@ -3,26 +3,27 @@
 @use "src/styles/abstracts" as *;
 
 .c-blade {
-	position: fixed;
-	top: 0;
-	right: 0;
+	background-color: $white;
 	bottom: 0;
-	z-index: get-z-layer("blade");
-	visibility: hidden;
-	max-width: 46.4rem;
 	display: grid;
 	grid-template-rows: auto auto 1fr auto;
 	margin-left: 4rem;
+	max-height: 100%;
+	max-width: 46.4rem;
 	pointer-events: none;
-	background-color: $white;
+	position: fixed;
+	right: 0;
+	top: 0;
 	transform: translateX(100%);
 	transition: transform $animate-default, visibility $animate-default;
+	visibility: hidden;
+	z-index: get-z-layer("blade");
 
 	&__close-button {
-		z-index: get-z-layer("blade");
+		grid-row-start: 1;
 		justify-self: end;
 		margin: 2rem;
-		grid-row-start: 1;
+		z-index: get-z-layer("blade");
 
 		&--absolute {
 			position: absolute;
@@ -32,15 +33,15 @@
 	}
 
 	&__title {
-		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
 		font-size: $font-size-sm * 2;
+		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
 
 		@include respond-to(md) {
 			text-align: center;
 		}
 		@include respond-at(md) {
-			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
 			font-size: $font-size-3xl;
+			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
 
 			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades
 			line-height: $font-size-3xl * (math.div(56, 48));
@@ -64,17 +65,17 @@
 		z-index: get-z-layer("blade");
 
 		&--managed {
-			width: calc(46.4rem + 5.6rem);
 			left: auto;
 			transform: translateX(5.6rem);
 			transition: opacity $timing-default linear, transform $animate-default;
+			width: calc(46.4rem + 5.6rem);
 		}
 	}
 
 	&--visible {
 		pointer-events: all;
-		visibility: visible;
 		transform: translateX(0);
+		visibility: visible;
 	}
 
 	&--managed {

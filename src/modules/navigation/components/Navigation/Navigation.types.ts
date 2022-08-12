@@ -16,7 +16,7 @@ export interface NavigationProps extends DefaultComponentProps {
 }
 
 export interface NavigationCenterProps {
-	title?: string;
+	title?: ReactNode;
 }
 
 export interface NavigationItemNodeProps {

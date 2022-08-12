@@ -26,4 +26,12 @@ $component: "c-form-control";
 			}
 		}
 	}
+
+	&--label-hidden {
+		.#{$component} {
+			&__label {
+				display: none;
+			}
+		}
+	}
 }

@@ -21,7 +21,7 @@ import {
 	SearchBar,
 	sortingIcons,
 } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
@@ -162,6 +162,7 @@ const Visitors: FC = () => {
 					<div className="p-admin-visitors l-container">
 						<div className="p-admin-visitors__header">
 							<SearchBar
+								id={globalLabelKeys.adminLayout.title}
 								default={filters[SEARCH_QUERY_KEY]}
 								className="p-admin-visitors__search"
 								placeholder={t(

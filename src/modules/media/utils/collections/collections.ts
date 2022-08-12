@@ -1,7 +1,7 @@
-import { GetCollectionsResponse } from '@account/types';
+import { GetFoldersResponse } from '@account/types';
 
 export const isInAFolder = (
-	collections: GetCollectionsResponse | undefined,
+	collections: GetFoldersResponse | undefined,
 	schemaIdentifier?: string
 ): boolean => {
 	if (!schemaIdentifier) {

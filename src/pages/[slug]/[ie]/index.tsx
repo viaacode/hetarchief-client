@@ -1,4 +1,4 @@
-import { Button, FlowPlayer, TabProps } from '@meemoo/react-components';
+import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
@@ -63,7 +63,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
-import { selectCollections } from '@shared/store/media';
+import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, License, MediaTypes, VisitorSpaceMediaType } from '@shared/types';
 import {
@@ -73,14 +73,13 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
+import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
-	AddToCollectionBlade,
+	AddToFolderBlade,
 	VisitorSpaceNavigation,
 } from '../../../modules/visitor-space/components';
-
-import styles from './index.module.scss';
 
 import {
 	DynamicActionMenu,
@@ -130,7 +129,7 @@ const ObjectDetailPage: NextPage = () => {
 	// Sizes
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
-	const collections = useSelector(selectCollections);
+	const collections = useSelector(selectFolders);
 
 	const metadataRef = useRef<HTMLDivElement>(null);
 	const metadataSize = useElementSize(metadataRef);
@@ -198,6 +197,12 @@ const ObjectDetailPage: NextPage = () => {
 		error: visitRequestError,
 		isLoading: visitRequestIsLoading,
 	} = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+
+	// get visitor space info, used to display contact information
+	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
+		router.query.slug as string,
+		false
+	);
 
 	/**
 	 * Computed
@@ -396,53 +401,39 @@ const ObjectDetailPage: NextPage = () => {
 	 */
 
 	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
+		const shared: Partial<FlowPlayerProps> = {
+			className: clsx(
+				'p-object-detail__flowplayer',
+				showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
+			),
+			poster: mediaInfo?.thumbnailUrl || undefined,
+			title: representation.name,
+			pause: isMediaPaused,
+			onPlay: handleOnPlay,
+			onPause: handleOnPause,
+			token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
+			dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
+			plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
+		};
+
 		// Flowplayer
 		if (FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
-			return (
-				<FlowPlayer
-					className={clsx(
-						'p-object-detail__flowplayer',
-						showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
-					)}
-					key={flowPlayerKey}
-					src={playableUrl}
-					poster={mediaInfo?.thumbnailUrl || undefined}
-					title={representation.name}
-					pause={isMediaPaused}
-					onPlay={handleOnPlay}
-					onPause={handleOnPause}
-					token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
-					dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
-					plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
-				/>
-			);
+			return <FlowPlayer key={flowPlayerKey} src={playableUrl} {...shared} />;
 		}
 		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			if (!peakFileId || !!peakJson) {
 				return (
-					<div className={styles['c-audio-player-wrapper']}>
-						<FlowPlayer
-							className={clsx(
-								'p-object-detail__flowplayer',
-								showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
-							)}
-							key={flowPlayerKey}
-							src={[
-								{
-									src: playableUrl,
-									type: 'audio/mp3',
-								},
-							]}
-							title={representation.name}
-							pause={isMediaPaused}
-							onPlay={handleOnPlay}
-							onPause={handleOnPause}
-							token={publicRuntimeConfig.FLOW_PLAYER_TOKEN}
-							dataPlayerId={publicRuntimeConfig.FLOW_PLAYER_ID}
-							plugins={['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio']}
-							waveformData={peakJson?.data || undefined}
-						/>
-					</div>
+					<FlowPlayer
+						key={flowPlayerKey}
+						src={[
+							{
+								src: playableUrl,
+								type: 'audio/mp3',
+							},
+						]}
+						waveformData={peakJson?.data || undefined}
+						{...shared}
+					/>
 				);
 			} else {
 				return <Loading fullscreen />;
@@ -600,7 +591,7 @@ const ObjectDetailPage: NextPage = () => {
 										data: mapKeywordsToTagList(mediaInfo.keywords),
 									},
 									{
-										title: 'Ook interessant',
+										title: t('pages/slug/ie/index___ook-interessant'),
 										data: similar.length
 											? renderMetadataCards('similar', similar)
 											: null,
@@ -695,8 +686,8 @@ const ObjectDetailPage: NextPage = () => {
 				showBorder={showNavigationBorder}
 				title={mediaInfo?.maintainerName ?? ''}
 				backLink={visitorSpaceSearchUrl || `/${router.query.slug}`}
-				phone={mediaInfo?.contactInfo.telephone || ''}
-				email={mediaInfo?.contactInfo.email || ''}
+				phone={visitorSpace?.contactInfo.telephone || ''}
+				email={visitorSpace?.contactInfo.email || ''}
 				showAccessEndDate={getAccessEndDate()}
 			/>
 			<ScrollableTabs
@@ -748,7 +739,7 @@ const ObjectDetailPage: NextPage = () => {
 				{renderRelatedObjectsBlade()}
 			</article>
 			{canManageFolders && (
-				<AddToCollectionBlade
+				<AddToFolderBlade
 					isOpen={activeBlade === MediaActions.Bookmark}
 					selected={
 						mediaInfo
@@ -766,7 +757,7 @@ const ObjectDetailPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (mediaInfoIsLoading || visitRequestIsLoading) {
+		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
 			return <Loading fullscreen />;
 		}
 		if (isErrorNotFound) {
