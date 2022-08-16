@@ -2,8 +2,6 @@ import { expect, request, test } from '@playwright/test';
 import addMinutes from 'date-fns/addMinutes';
 import { kebabCase } from 'lodash';
 
-import { formatMediumDateWithTime } from '../src/modules/shared/utils';
-
 import { checkToastMessage } from './helpers/check-toast-message';
 import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
 import { logout } from './helpers/log-out';

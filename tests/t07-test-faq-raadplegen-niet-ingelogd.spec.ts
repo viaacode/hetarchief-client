@@ -1,8 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
-
 test('T07: Test FAQ raadplegen (niet ingelogd)', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);

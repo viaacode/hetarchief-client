@@ -13,6 +13,9 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Login cp admin using the meemoo idp
 	await loginUserMeemooIdp(
 		page,
@@ -20,11 +23,8 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 		process.env.TEST_CP_ADMIN_ACCOUNT_PASSWORD as string
 	);
 
-	// Accept all cookies
-	await acceptCookies(page, 'all');
-
 	// Check logged in status
-	await expect(await page.locator('.c-avatar__text')).toHaveText('Test');
+	await expect(page.locator('.c-avatar__text')).toContainText('Test');
 
 	// Admin should not be visible and beheer should be visible
 	const navigationItemTexts = await page
