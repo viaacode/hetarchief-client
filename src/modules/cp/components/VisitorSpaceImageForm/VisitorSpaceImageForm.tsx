@@ -18,6 +18,12 @@ import {
 	VisitorSpaceImageFormState,
 } from './VisitorSpaceImageForm.types';
 
+const labelKeys: Record<keyof VisitorSpaceImageFormState, string> = {
+	color: 'VisitorSpaceImageForm__color',
+	file: 'VisitorSpaceImageForm__file',
+	image: 'VisitorSpaceImageForm__image',
+};
+
 const VisitorSpaceImageForm = forwardRef<
 	ValidationRef<VisitorSpaceImageFormState>,
 	VisitorSpaceImageFormProps
@@ -140,101 +146,95 @@ const VisitorSpaceImageForm = forwardRef<
 				image={currentState.image}
 				size="short"
 			/>
+
 			<FormControl
 				className={styles['c-visitor-space-image-form__color-control']}
 				errors={[errors.color?.message]}
+				id={labelKeys.color}
+				label={t(
+					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrondkleur'
+				)}
 			>
 				<Controller
 					name="color"
 					control={control}
-					render={() => {
-						return (
-							<div className={styles['c-visitor-space-image-form__color-picker']}>
-								<p className={styles['c-visitor-space-image-form__label']}>
-									{t(
-										'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrondkleur'
-									)}
-								</p>
-								<ColorPicker
-									color={currentState.color ?? ''}
-									onChange={(color) => {
-										setValue('color', color);
-										onUpdate?.({ color: color });
-									}}
-								/>
-							</div>
-						);
-					}}
+					render={() => (
+						<ColorPicker
+							input={{
+								id: labelKeys.color,
+							}}
+							color={currentState.color ?? ''}
+							onChange={(color) => {
+								setValue('color', color);
+								onUpdate?.({ color: color });
+							}}
+						/>
+					)}
 				/>
 			</FormControl>
-			<FormControl errors={[errors.file?.message]}>
+
+			<FormControl
+				errors={[errors.file?.message]}
+				id={labelKeys.file}
+				label={t(
+					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrond-afbeelding'
+				)}
+				suffix={
+					<span className={styles['c-visitor-space-image-form__hint']}>
+						{`(${t(
+							'modules/cp/components/visitor-space-image-form/visitor-space-image-form___max-500-kb'
+						)})`}
+					</span>
+				}
+			>
 				<Controller
 					name="file"
 					control={control}
-					render={(field) => {
-						return (
-							<>
-								<p className={styles['c-visitor-space-image-form__label']}>
-									{t(
-										'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrond-afbeelding'
-									)}
-									<span className={styles['c-visitor-space-image-form__hint']}>
-										{`(${t(
-											'modules/cp/components/visitor-space-image-form/visitor-space-image-form___max-500-kb'
-										)})`}
-									</span>
-								</p>
-								<div
-									className={styles['c-visitor-space-image-form__image-buttons']}
-								>
-									<FileInput
-										{...field}
-										hasFile={
-											(!!savedState.image || !!fileInputRef.current?.value) &&
-											!!currentState.image
-										}
-										ref={fileInputRef}
-										onChange={async (e) => {
-											e.currentTarget.files &&
-												setValue(
-													'file',
-													e.currentTarget.files[0] ?? undefined
-												);
-											const newImage =
-												e.currentTarget.files &&
-												e.currentTarget.files.length
-													? URL.createObjectURL(e.currentTarget.files[0])
-													: savedState.image;
-											setValue('image', newImage);
-											onUpdate?.({ image: newImage });
-											onUpdate?.({
-												file: e.currentTarget.files?.[0] ?? undefined,
-											});
+					render={(field) => (
+						<FileInput
+							{...field}
+							hasFile={
+								(!!savedState.image || !!fileInputRef.current?.value) &&
+								!!currentState.image
+							}
+							id={labelKeys.file}
+							onChange={async (e) => {
+								e.currentTarget.files &&
+									setValue('file', e.currentTarget.files[0] ?? undefined);
+								const newImage =
+									e.currentTarget.files && e.currentTarget.files.length
+										? URL.createObjectURL(e.currentTarget.files[0])
+										: savedState.image;
+								setValue('image', newImage);
+								onUpdate?.({ image: newImage });
+								onUpdate?.({
+									file: e.currentTarget.files?.[0] ?? undefined,
+								});
 
-											await trigger('file');
-										}}
-									/>
-									{currentState.image && (
-										<Button
-											label={t(
-												'modules/cp/components/visitor-space-image-form/visitor-space-image-form___verwijder-afbeelding'
-											)}
-											iconStart={<Icon name="trash" />}
-											variants="text"
-											onClick={async () => {
-												setValue('image', '');
-												setValue('file', undefined);
-												onUpdate?.({ image: '', file: undefined });
-												await trigger('file');
-											}}
-										/>
-									)}
-								</div>
-							</>
-						);
-					}}
+								await trigger('file');
+							}}
+							ref={fileInputRef}
+						/>
+					)}
 				/>
+
+				{currentState.image && (
+					<Button
+						label={t(
+							'modules/cp/components/visitor-space-image-form/visitor-space-image-form___verwijder-afbeelding'
+						)}
+						iconStart={<Icon name="trash" />}
+						variants="text"
+						onClick={async () => {
+							setValue('image', '');
+							setValue('file', undefined);
+							onUpdate?.({ image: '', file: undefined });
+							await trigger('file');
+						}}
+					/>
+				)}
 			</FormControl>
+
 			{isStateUpdated() &&
 				renderCancelSaveButtons(() => resetValues(), handleSubmit(onFormSubmit))}
 		</div>

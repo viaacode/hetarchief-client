@@ -182,6 +182,18 @@
 	line-height: $line-height-lg;
 }
 
+// makes an element twice as clickable because of bubble-up
+@mixin more-clickable-element() {
+	position: relative;
+
+	&::after {
+		content: "";
+		inset: 0 0 0 0;
+		position: absolute;
+		transform: scale(2);
+	}
+}
+
 /**
  * Inputs
  */
@@ -395,8 +407,7 @@
 	.#{$_root}__option {
 		border-right: 4px solid transparent;
 		color: $black;
-		transition: background-color $animate-default, border-color $animate-default,
-			border-right-width $animate-sm-in;
+		transition: background-color $animate-default, border-color $animate-default, border-right-width $animate-sm-in;
 
 		&--is-focused,
 		&--is-selected,
@@ -420,16 +431,10 @@
  */
 
 @mixin tabs-border-radius() {
-	border-radius: math.div(
-		math.max($tab-line-size + ($tab-vertical-padding * 2), $tab-min-height),
-		2
-	);
+	border-radius: math.div(math.max($tab-line-size + ($tab-vertical-padding * 2), $tab-min-height), 2);
 
 	@include respond-at("md") {
-		border-radius: math.div(
-			math.max($tab-line-size-md + ($tab-vertical-padding-md * 2), $tab-min-height-md),
-			2
-		);
+		border-radius: math.div(math.max($tab-line-size-md + ($tab-vertical-padding-md * 2), $tab-min-height-md), 2);
 	}
 }
 

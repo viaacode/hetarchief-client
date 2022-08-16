@@ -1,4 +1,4 @@
-import { useSlot } from '@viaa/avo2-components';
+import { useSlot } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
@@ -13,6 +13,7 @@ import {
 	AdminFiltersRight,
 } from '@admin/layouts/AdminLayout/AdminLayout.slots';
 import { ListNavigationItem } from '@shared/components';
+import { globalLabelKeys } from '@shared/const';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
@@ -81,7 +82,9 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 		>
 			{(!!pageTitle || !!actions) && (
 				<header className={clsx(styles['c-admin__header'], 'l-container')}>
-					<h2 className={styles['c-admin__page-title']}>{pageTitle}</h2>
+					<h2 className={styles['c-admin__page-title']}>
+						<label htmlFor={globalLabelKeys.adminLayout.title}>{pageTitle}</label>
+					</h2>
 					<div className={styles['c-admin__actions']}>{actions}</div>
 				</header>
 			)}

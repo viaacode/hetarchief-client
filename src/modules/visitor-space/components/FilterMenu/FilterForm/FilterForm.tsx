@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
 import { Icon } from '@shared/components';
+import { visitorSpaceLabelKeys } from '@visitor-space/const';
 
 import styles from './FilterForm.module.scss';
 import { FilterFormProps } from './FilterForm.types';
@@ -33,7 +34,9 @@ const FilterForm: FC<FilterFormProps> = ({
 	return (
 		<div className={clsx(className, styles['c-filter-form'])}>
 			<div className={styles['c-filter-form__header']}>
-				<h2 className={styles['c-filter-form__title']}>{title}</h2>
+				<h2 className={styles['c-filter-form__title']}>
+					<label htmlFor={`${visitorSpaceLabelKeys.filters.title}--${id}`}>{title}</label>
+				</h2>
 			</div>
 
 			<FormComponent className={styles['c-filter-form__body']} values={{ [id]: values }}>

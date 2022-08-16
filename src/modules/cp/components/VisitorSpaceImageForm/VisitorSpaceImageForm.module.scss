@@ -29,10 +29,6 @@
 
 	&__color-control {
 		padding-top: $spacer-xs;
-	}
-
-	&__color-picker {
-		align-self: end;
 
 		:global(.c-color-picker) {
 			max-width: 20.4rem;

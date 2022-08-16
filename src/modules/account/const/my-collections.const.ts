@@ -1,7 +1,7 @@
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { object, SchemaOf, string } from 'yup';
 
-import { CreateCollectionFormState } from '@account/types';
+import { CreateFolderFormState } from '@account/types';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { i18n } from '@shared/helpers/i18n';
 
@@ -12,7 +12,7 @@ export const ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG = {
 	page: withDefault(NumberParam, 1),
 };
 
-export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormState> => {
+export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateFolderFormState> => {
 	const nameLengthMin = 3;
 	const nameLengthMax = 90;
 
@@ -21,7 +21,7 @@ export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormState> =>
 			.test(
 				'name',
 				i18n.t(
-					'modules/account/const/my-collections___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
+					'modules/account/const/my-folders___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
 					{
 						count: nameLengthMin,
 					}
@@ -33,7 +33,7 @@ export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateCollectionFormState> =>
 			.test(
 				'name',
 				i18n.t(
-					'modules/account/const/my-collections___de-naam-van-een-map-mag-niet-meer-dan-count-tekens-lang-zijn',
+					'modules/account/const/my-folders___de-naam-van-een-map-mag-niet-meer-dan-count-tekens-lang-zijn',
 					{
 						count: nameLengthMax,
 					}

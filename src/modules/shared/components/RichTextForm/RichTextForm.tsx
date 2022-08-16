@@ -10,7 +10,8 @@ import { isEqualHtml } from './RichTextForm.utils';
 
 const RichTextForm: FC<RichTextFormProps> = ({
 	className,
-	initialHTML,
+	formControl,
+	editor,
 	onSubmit,
 	onUpdate,
 	renderCancelSaveButtons,
@@ -23,15 +24,17 @@ const RichTextForm: FC<RichTextFormProps> = ({
 	};
 
 	return (
-		<FormControl className={className}>
+		<FormControl className={className} {...formControl}>
 			<Controller
-				name="richText"
 				control={control}
+				name="richText"
 				render={({ field }) => {
 					const currentState = watch('richText');
+
 					return (
 						<div className={styles['c-rich-text-form__wrapper']}>
 							<RichTextEditor
+								{...editor}
 								onBlur={field.onBlur}
 								onChange={(state) => {
 									if (!savedState) {
@@ -40,10 +43,11 @@ const RichTextForm: FC<RichTextFormProps> = ({
 
 									setValue('richText', state);
 									onUpdate?.(state.toHTML());
+									editor?.onChange?.(state);
 								}}
-								initialHtml={initialHTML}
 								state={currentState}
 							/>
+
 							{!isEqualHtml(currentState, savedState) &&
 								renderCancelSaveButtons(
 									() => setValue('richText', savedState),

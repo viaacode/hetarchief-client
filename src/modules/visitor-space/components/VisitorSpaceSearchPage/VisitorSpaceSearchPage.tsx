@@ -1,7 +1,7 @@
 import { Button, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isEqual, sum } from 'lodash-es';
+import { sum } from 'lodash-es';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -40,7 +40,7 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
-import { selectCollections } from '@shared/store/media';
+import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	AccessStatus,
@@ -60,7 +60,7 @@ import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 
 import {
-	AddToCollectionBlade,
+	AddToFolderBlade,
 	AdvancedFilterFormState,
 	CreatedFilterFormState,
 	CreatorFilterFormState,
@@ -88,6 +88,10 @@ import { MetadataProp, TagIdentity, VisitorSpaceFilterId, VisitorSpaceStatus } f
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
 import { WaitingPage } from '../WaitingPage';
+
+const labelKeys = {
+	search: 'VisitorSpaceSearchPage__search',
+};
 
 const VisitorSpaceSearchPage: NextPage = () => {
 	useNavigationBorder();
@@ -118,15 +122,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [viewMode, setViewMode] = useLocalStorage('HET_ARCHIEF.search.viewmode', 'grid');
 
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
-	const [isAddToCollectionBladeOpen, setShowAddToCollectionBlade] = useState(false);
+	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
-	const hasSearched = useMemo(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { filter, ...rest } = query; // Don't include UI state
-		return !isEqual(VISITOR_SPACE_QUERY_PARAM_INIT, rest);
-	}, [query]);
+	const [hasSearched, setHasSearched] = useState<boolean>(false);
 
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
@@ -178,7 +178,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	// The result will be added to the redux store
 	useGetMediaFilterOptions(visitorSpace?.maintainerId?.toLocaleLowerCase() as string | undefined);
 
-	const collections = useSelector(selectCollections);
+	const collections = useSelector(selectFolders);
 
 	/**
 	 * Computed
@@ -238,8 +238,13 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 */
 
 	const onSearch = async (newValue: string) => {
+		setHasSearched(true);
 		if (newValue.trim() && !query.search?.includes(newValue)) {
-			setQuery({ [SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue), page: 1 });
+			setQuery({
+				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue),
+				page: 1,
+				hasSearched: true,
+			});
 		}
 	};
 
@@ -258,6 +263,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
+		setHasSearched(true);
 		let data;
 
 		switch (id) {
@@ -337,7 +343,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined, page: 1 });
+		setQuery({ [id]: data, filter: undefined, page: 1, hasSearched: true });
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -453,10 +459,13 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					e.stopPropagation();
 
 					setSelected(item as IdentifiableMediaCard);
-					setShowAddToCollectionBlade(true);
+					setShowAddToFolderBlade(true);
 				}}
 				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
 				variants={['text', 'xxs']}
+				title={t(
+					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
+				)}
 			/>
 		);
 	};
@@ -537,7 +546,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			{visitorSpace && (
 				<div className="p-visitor-space">
 					<VisitorSpaceNavigation
-						title={visitorSpace?.name}
+						title={
+							<label htmlFor={`react-select-${labelKeys.search}-input`}>
+								{visitorSpace?.name}
+							</label>
+						}
 						phone={visitorSpace?.contactInfo.telephone || ''}
 						email={visitorSpace?.contactInfo.email || ''}
 						showBorder={showNavigationBorder}
@@ -552,7 +565,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 								clearLabel={t(
 									'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 								)}
-								instanceId="visitor-space-search-bar"
+								instanceId={labelKeys.search}
 								isMulti
 								size="lg"
 								placeholder={t(
@@ -637,8 +650,8 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			)}
 
 			{visitorSpace && (
-				<AddToCollectionBlade
-					isOpen={isAddToCollectionBladeOpen}
+				<AddToFolderBlade
+					isOpen={isAddToFolderBladeOpen}
 					selected={
 						selected
 							? {
@@ -648,11 +661,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 							: undefined
 					}
 					onClose={() => {
-						setShowAddToCollectionBlade(false);
+						setShowAddToFolderBlade(false);
 						setSelected(null);
 					}}
 					onSubmit={async () => {
-						setShowAddToCollectionBlade(false);
+						setShowAddToFolderBlade(false);
 						setSelected(null);
 					}}
 				/>
