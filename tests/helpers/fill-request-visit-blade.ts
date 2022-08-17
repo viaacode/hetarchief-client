@@ -8,7 +8,7 @@ import { checkBladeTitle } from './check-blade-title';
  * @param visitorSpaceSlug
  * @param reasonText
  * @param whenText
- * @param checkBox
+ * @param checkbox
  * @return Visit id
  */
 export async function fillRequestVisitBlade(
@@ -16,8 +16,8 @@ export async function fillRequestVisitBlade(
 	visitorSpaceSlug: string,
 	reasonText: string,
 	whenText?: string,
-	checkBox = true
-): Promise<string> {
+	checkbox = true
+): Promise<string | null> {
 	// Check the request visit blade title is visible
 
 	await checkBladeTitle(page, 'Vraag toegang aan');
@@ -26,8 +26,8 @@ export async function fillRequestVisitBlade(
 	await expect(page.url()).toContain(`?bezoekersruimte=${visitorSpaceSlug}`);
 
 	// Fill the form
-	const checkboxLabel = await page.locator('.c-blade--active .c-checkbox__label');
-	await checkboxLabel.waitFor({
+	const checkboxElem = await page.locator('.c-blade--active .c-checkbox__check-icon');
+	await checkboxElem.waitFor({
 		timeout: 10000,
 		state: 'visible',
 	});
@@ -35,22 +35,25 @@ export async function fillRequestVisitBlade(
 	if (whenText) {
 		await page.fill('[name="visitTime"]', whenText);
 	}
-	if (checkBox) {
-		await checkboxLabel.click();
-	}
+	if (checkbox) {
+		await checkboxElem.click();
 
-	// Click the send button and capture the api call response
-	const [response] = await Promise.all([
-		page.waitForResponse(
-			(resp) =>
-				resp.request().method() === 'POST' &&
-				resp.url().includes('/visits') &&
-				resp.status() >= 200 &&
-				resp.status() < 400
-		),
-		page.click('text=Verstuur'),
-	]);
-	const responseBody = (await response.json()) as { id: string };
-	expect(responseBody.id).toBeDefined();
-	return responseBody.id;
+		// Click the send button and capture the api call response
+		const [response] = await Promise.all([
+			page.waitForResponse(
+				(resp) =>
+					resp.request().method() === 'POST' &&
+					resp.url().includes('/visits') &&
+					resp.status() >= 200 &&
+					resp.status() < 400
+			),
+			page.click('text=Verstuur'),
+		]);
+		const responseBody = (await response.json()) as { id: string };
+		expect(responseBody.id).toBeDefined();
+		return responseBody.id;
+	} else {
+		await page.click('text=Verstuur');
+		return null;
+	}
 }
