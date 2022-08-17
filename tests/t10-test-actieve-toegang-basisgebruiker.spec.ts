@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
 import { getSearchTabBarCounts } from './helpers/get-search-tab-bar-counts';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
@@ -12,8 +13,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -34,11 +38,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Click on "start you visit" navigation item
 	await page.click('text=Start je zoekopdracht');
 
-	// Wait for results to load
+	// Wait for search page to be ready
 	await page.waitForFunction(
-		() =>
-			document.querySelectorAll('.p-visitor-space__results .p-media-card-list .c-card')
-				.length >= 1,
+		() => document.querySelectorAll('.p-visitor-space__placeholder').length === 1,
 		null,
 		{
 			timeout: 10000,

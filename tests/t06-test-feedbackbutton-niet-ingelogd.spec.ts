@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
+
 test('T06: Test Feedbackbutton (niet ingelogd)', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
@@ -9,8 +11,11 @@ test('T06: Test Feedbackbutton (niet ingelogd)', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Click the zendesk button
 	const zendeskIframeButton = await page.frameLocator('iframe#launcher');

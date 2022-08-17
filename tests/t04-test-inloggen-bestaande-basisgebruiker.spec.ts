@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
+import { acceptTos } from './helpers/accept-tos';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
 test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
@@ -12,7 +14,10 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	});
 
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+
+	// Accept all cookies
+	await acceptCookies(page, 'all');
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -20,6 +25,9 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
+
+	// Check tos is displayed, scroll down and click accept button
+	await acceptTos(page);
 
 	// Check homepage title
 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {

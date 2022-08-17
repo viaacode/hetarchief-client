@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { format } from 'date-fns';
 
+import { acceptCookies } from './helpers/accept-cookies';
 import { addContentBlock } from './helpers/add-content-block';
 import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
 import { checkSpaceVisibilityHomepage } from './helpers/check-space-visibility-homepage';
@@ -16,6 +17,9 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	/**
 	 * Set amsab space to status pending
 	 */
@@ -28,7 +32,7 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	);
 
 	// Check logged in status
-	await expect(await page.locator('.c-avatar__text')).toHaveText('meemoo');
+	await expect(page.locator('.c-avatar__text')).toHaveText('meemoo');
 
 	/**
 	 * Set amsab space status to pending
@@ -182,8 +186,8 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await page.waitForTimeout(1000);
 
 	// Check first row contains "Marie" and the row with "Ilya" is not visible
-	await expect(await page.locator('table tbody tr', { hasText: 'marie' })).toBeVisible();
-	await expect(await page.locator('table tbody tr', { hasText: 'Ilya' })).not.toBeVisible();
+	await expect(page.locator('table tbody tr', { hasText: 'marie' })).toBeVisible();
+	await expect(page.locator('table tbody tr', { hasText: 'Ilya' })).not.toBeVisible();
 
 	/**
 	 * Groups and permissions
@@ -546,7 +550,7 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await expect(
 		await page.locator('.c-dropdown__trigger', { hasText: 'Contenttype' })
 	).toBeVisible();
-	await expect(await page.locator('.c-dropdown__trigger', { hasText: 'Auteur' })).toBeVisible();
+	await expect(page.locator('.c-dropdown__trigger', { hasText: 'Auteur' })).toBeVisible();
 	await expect(
 		await page.locator('.c-dropdown__trigger', { hasText: 'Gebruikersgroep' })
 	).toBeVisible();
@@ -556,7 +560,7 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await expect(
 		await page.locator('.c-dropdown__trigger', { hasText: 'Bewerkt op' })
 	).toBeVisible();
-	await expect(await page.locator('.c-dropdown__trigger', { hasText: 'Publiek' })).toBeVisible();
+	await expect(page.locator('.c-dropdown__trigger', { hasText: 'Publiek' })).toBeVisible();
 	await expect(
 		await page.locator('.c-dropdown__trigger', { hasText: 'Publicatie' })
 	).toBeVisible();
@@ -566,7 +570,7 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await expect(
 		await page.locator('.c-dropdown__trigger', { hasText: 'Depubliceer op' })
 	).toBeVisible();
-	await expect(await page.locator('.c-dropdown__trigger', { hasText: 'Labels' })).toBeVisible();
+	await expect(page.locator('.c-dropdown__trigger', { hasText: 'Labels' })).toBeVisible();
 
 	/**
 	 * Content pagina toevoegen

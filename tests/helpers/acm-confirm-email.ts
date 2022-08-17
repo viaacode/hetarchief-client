@@ -44,5 +44,5 @@ export async function acmConfirmEmail(page: Page, userEmail: string): Promise<vo
 	await page.click('text=Opslaan');
 
 	// Check that the save was successfull
-	await expect(await page.locator('text=Je wijzigingen zijn opgeslagen')).toBeVisible();
+	await expect(page.locator('text=Je wijzigingen zijn opgeslagen')).toBeVisible();
 }
