@@ -14,7 +14,6 @@ import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ page, context }) => {
 	const userId = uuid().replace(/-/g, '');
 	const userEmail = `hetarchief2.0+ateindgebruikerbzt${userId}@meemoo.be`;
-	console.log('user: ' + userEmail);
 
 	// Go to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);

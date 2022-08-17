@@ -107,10 +107,6 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	// Expect counts to have gone down, or stay the same
 	if (countsBeforeSearch.all > 0) {
-		console.log({
-			countsBeforeSearch,
-			countsAfterSearchByDate,
-		});
 		// Only check counts if there are at least a few items
 		expect(countsBeforeSearch.all > countsAfterSearchByDate.all).toBeTruthy();
 		expect(countsBeforeSearch.video >= countsAfterSearchByDate.video).toBeTruthy();
