@@ -2,30 +2,30 @@ pipeline {
  agent {
   kubernetes {
    defaultContainer 'default'
-   yaml """\
-    apiVersion: v1
-    kind: Pod
-    metadata:
-     labels:
-      component: builder
-      lang: ${getBaseImageName()}
-      app: client
-    spec:
-     containers:
-     - name: default
-      image: ${getImageFromDockerfile()}
-      command:
-      - cat
-      tty: true
-      securityContext:
-       runAsUser: 1000
-     - name: oc
-      image: image-registry.openshift-image-registry.svc:5000/ci-cd/py:3.7
-      command:
-      - cat
-      tty: true
-      imagePullPolicy: Always
-    """.stripIndent()
+			yaml """\
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          labels:
+            component: builder
+            lang: ${getBaseImageName()}
+            app: client
+        spec:
+          containers:
+          - name: default
+            image: ${getImageFromDockerfile()}
+            command:
+            - cat
+            tty: true
+            securityContext:
+              runAsUser: 1000
+          - name: oc
+            image: image-registry.openshift-image-registry.svc:5000/ci-cd/py:3.7
+            command:
+            - cat
+            tty: true
+            imagePullPolicy: Always
+        """.stripIndent()
   }
  }
  options {
