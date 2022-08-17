@@ -117,11 +117,11 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await amsabRow2.locator('.c-button', { hasText: 'dots-vertical' }).click();
 
 	// Check correct options are shown:
-	await expect(amsabRow2.locator('.c-button', { hasText: 'activeren' }).first()).toBeVisible();
+	await expect(amsabRow2.locator('.c-button', { hasText: 'publiceren' }).first()).toBeVisible();
 	await expect(amsabRow2.locator('.c-button', { hasText: 'deactiveren' }).last()).toBeVisible();
 
 	// Click on activate
-	await amsabRow2.locator('.c-button', { hasText: 'activeren' }).first().click();
+	await amsabRow2.locator('.c-button', { hasText: 'publiceren' }).first().click();
 
 	// Check success toast
 	await checkToastMessage(page, 'Succes');
@@ -510,7 +510,7 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	const publishRow = await page
 		.locator('.c-key-value-editor tbody tr', { hasText: 'FRONTEND/modules/admin/const/spaces' })
 		.first();
-	await publishRow.locator('textarea').fill('activeren');
+	await publishRow.locator('textarea').fill('publiceren');
 
 	// Click on save button
 	await page.locator('.c-button', { hasText: 'Wijzigingen opslaan' }).click();
