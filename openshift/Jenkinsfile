@@ -146,6 +146,9 @@ pipeline {
     container('hasura-cli') {
      script {
       withCredentials([string(credentialsId: 'admin_secret', variable: 'ADMIN_SECRET')]) {
+       git branch: 'develop',
+       credentialsId: 'meemoo-ci',
+       url: 'https://github.com/viaacode/hetarchief-hasura.git'
        sh """#!/bin/bash
        pwd
        ls -ltra
@@ -165,7 +168,7 @@ pipeline {
   steps {
     script {
      withCredentials([usernamePassword(credentialsId: 'end2endhetarchief', usernameVariable: 'TEST_ACCOUNT_USERNAME', passwordVariable: 'TEST_ACCOUNT_PASSWORD')]) {
-      docker.image('mcr.microsoft.com/playwright:v1.25.0').inside('-e TEST_CLIENT_ENDPOINT=https://bezoek-tst.private.cloud.meemoo.be -e CLIENT_URL=https://bezoek-tst.private.cloud.meemoo.be  -e NEXT_PUBLIC_ORIGIN=https://bezoek-tst.private.cloud.meemoo.be  -e PROXY_URL=https://proxy-hetarchief-tst.private.cloud.meemoo.be')
+      docker.image('mcr.microsoft.com/playwright:v1.25.0').inside('-e TEST_CLIENT_ENDPOINT=https://bezoek-int.private.cloud.meemoo.be -e CLIENT_URL=https://bezoek-int.private.cloud.meemoo.be  -e NEXT_PUBLIC_ORIGIN=https://bezoek-int.private.cloud.meemoo.be  -e PROXY_URL=https://proxy-hetarchief-int.private.cloud.meemoo.be')
         {
          git branch: 'develop',
            credentialsId: 'meemoo-ci',
