@@ -138,7 +138,7 @@ pipeline {
     }
    }
   }
-  stage(e2e-prepare) {
+  stage('e2e-prepare') {
    when {
     anyOf { branch 'develop'; branch 'development' }
    }
@@ -157,7 +157,7 @@ pipeline {
     }// end container
     }//end steps
   }//end stage
-  stage(e2e) {
+  stage('e2e') {
 			agent { label 'node' }
 			when {
 				anyOf { branch 'develop'; branch 'development' }
