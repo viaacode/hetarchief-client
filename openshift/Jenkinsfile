@@ -153,7 +153,7 @@ pipeline {
        pwd
        ls -ltra
        echo $ADMIN_SECRET
-       hasura-cli seed apply --endpoint=https://hasura-graphql-int-hetarchief.private.cloud.meemoo.be --admin-secret=${ADMIN_SECRET} --database-name hetarchief
+       hasura-cli seed apply --endpoint=https://hasura-graphql-int-hetarchief.private.cloud.meemoo.be --admin-secret=${ADMIN_SECRET} --database-name hetarchief || echo failed ; exit 0
        """
       }///end credentials
      }//end script
