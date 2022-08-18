@@ -292,3 +292,10 @@ void tagNewImage(String environment) {
   oc rollout status deployment/$APP_NAME-${environment} --watch=true --timeout=10m
   """
 }
+void loadEnvironmentVariablesFromFile(String path) {
+    def file = readFile(path)
+    file.split('\n').each { envLine ->
+        def (key, value) = envLine.tokenize('=')
+        env."${key}" = "${value}"
+    }
+}
