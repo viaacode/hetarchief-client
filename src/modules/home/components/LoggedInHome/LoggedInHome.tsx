@@ -292,7 +292,10 @@ const LoggedInHome: FC = () => {
 
 					{(future?.items || []).length > 0 && (
 						<section className={clsx(styles['c-hero__section'])}>
-							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
+							<h5
+								className={clsx(styles['c-hero__section-title'], 'u-mb-16')}
+								id="planned-visits"
+							>
 								{t('modules/shared/components/hero/hero___geplande-bezoeken')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
