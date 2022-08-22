@@ -21,7 +21,8 @@ import {
 	VisitorSpaceCardProps,
 	VisitorSpaceCardType,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SCROLL_TO_SECTION, SEARCH_QUERY_KEY } from '@shared/const';
+import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
@@ -45,6 +46,7 @@ const LoggedInHome: FC = () => {
 	const [query, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 		[SEARCH_QUERY_KEY]: StringParam,
+		[SCROLL_TO_SECTION]: StringParam,
 	});
 
 	/**
@@ -59,6 +61,8 @@ const LoggedInHome: FC = () => {
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 	const [isProcessVisitBladeOpen, setIsProcessVisitBladeOpen] = useState(false);
 	const [hasScrolledToSearch, setHasScrolledToSearch] = useState(false);
+
+	useScrollToId(query[SCROLL_TO_SECTION] || null);
 
 	/**
 	 * Data

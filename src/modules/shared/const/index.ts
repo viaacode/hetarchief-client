@@ -5,6 +5,7 @@ export * from './routes';
 export * from './sanitize';
 export * from './tos';
 
+export const SCROLL_TO_SECTION = 'scrollTo';
 export const SEARCH_QUERY_KEY = 'search';
 export const HAS_SEARCHED_KEY = 'hasSearched';
 export const SEPARATOR = '-';
