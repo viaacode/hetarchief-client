@@ -39,7 +39,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Click "beheer" navigation item
-	await page.click('.c-dropdown [role="menuitem"]');
+	await page.click('nav ul li .c-dropdown a');
 
 	// Click visit requests navigation item
 	await page.click('a[href="/beheer/aanvragen"]');
