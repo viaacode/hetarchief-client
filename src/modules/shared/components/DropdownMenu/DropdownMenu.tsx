@@ -7,6 +7,7 @@ import {
 	DropdownProps,
 	useClickOutside,
 } from '@meemoo/react-components';
+import { useTranslation } from 'next-i18next';
 import { FC, MouseEvent, useState } from 'react';
 
 import { Icon } from '../Icon';
@@ -18,6 +19,7 @@ type DropdownMenuProps = Omit<DropdownProps, 'isOpen'> & {
 };
 
 export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, children, ...rest }) => {
+	const [t] = useTranslation();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [menuContentRef, setMenuContentRef] = useState<HTMLElement | null>(null);
 
@@ -31,7 +33,10 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, childr
 		>
 			<DropdownButton>
 				<Button
-					icon={<Icon name="dots-vertical" />}
+					icon={<Icon name="dots-vertical" aria-hidden />}
+					aria-label={t(
+						'modules/shared/components/dropdown-menu/dropdown-menu___meer-acties'
+					)}
 					variants="text"
 					{...triggerButtonProps}
 					onClick={(evt: MouseEvent) => {

@@ -53,7 +53,10 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 		if (!room.contactInfo.email?.length && !room.contactInfo.telephone?.length) {
 			return (
 				<Button
-					icon={<Icon name="contact" />}
+					icon={<Icon name="contact" aria-hidden />}
+					aria-label={t(
+						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___geen-contactgegevens-beschikbaar'
+					)}
 					variants={['silver', 'sm', 'disabled']}
 					onClick={(evt: MouseEvent<HTMLButtonElement>) => {
 						evt.stopPropagation();

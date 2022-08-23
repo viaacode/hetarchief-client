@@ -6,6 +6,7 @@ import {
 	MenuContent,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, useRef, useState } from 'react';
 
 import { MediaActions } from '@media/types';
@@ -26,6 +27,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	limit = 0,
 	onClickAction,
 }) => {
+	const [t] = useTranslation();
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 	const listRef = useRef<HTMLUListElement>(null);
@@ -85,7 +87,10 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				<DropdownButton>
 					<Button
 						className={styles['c-dynamic-action-menu__dropdown-button']}
-						icon={<Icon name="dots-horizontal" />}
+						icon={<Icon name="dots-vertical" aria-hidden />}
+						aria-label={t(
+							'modules/media/components/dynamic-action-menu/dynamic-action-menu___meer-acties'
+						)}
 						variants={['silver']}
 					/>
 				</DropdownButton>

@@ -34,7 +34,10 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 					<Link href={backLink} passHref={true}>
 						<a>
 							<Button
-								icon={<Icon name="arrow-left" />}
+								icon={<Icon name="arrow-left" aria-hidden />}
+								aria-label={t(
+									'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___naar-vorige-pagina'
+								)}
 								variants="text"
 								className="u-color-white u-ml--12"
 							/>
@@ -58,8 +61,13 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 								styles['c-visitor-space-navigation__contact-button']
 							),
 							icon: undefined,
-							iconStart: <Icon className="u-font-size-24" name="contact" />,
+							iconStart: (
+								<Icon className="u-font-size-24" name="contact" aria-hidden />
+							),
 							label: t(
+								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___contacteer'
+							),
+							'aria-label': t(
 								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___contacteer'
 							),
 							variants: 'text',

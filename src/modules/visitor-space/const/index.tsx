@@ -80,12 +80,12 @@ export const VISITOR_SPACE_TABS = (): TabProps[] => [
 	},
 	{
 		id: VisitorSpaceMediaType.Video,
-		icon: <Icon name="video" />,
+		icon: <Icon name="video" aria-hidden />,
 		label: i18n.t('modules/visitor-space/const/index___videos'),
 	},
 	{
 		id: VisitorSpaceMediaType.Audio,
-		icon: <Icon name="audio" />,
+		icon: <Icon name="audio" aria-hidden />,
 		label: i18n.t('modules/visitor-space/const/index___audio'),
 	},
 ];

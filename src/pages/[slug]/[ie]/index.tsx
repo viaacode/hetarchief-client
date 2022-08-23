@@ -516,7 +516,7 @@ const ObjectDetailPage: NextPage = () => {
 					{showResearchWarning && (
 						<Callout
 							className="p-object-detail__callout u-pt-32 u-pb-24"
-							icon={<Icon name="info" />}
+							icon={<Icon name="info" aria-hidden />}
 							text={t(
 								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 							)}
@@ -549,8 +549,14 @@ const ObjectDetailPage: NextPage = () => {
 						{canDownloadMetadata && (
 							<Button
 								className="p-object-detail__export"
-								iconStart={<Icon name="export" />}
+								iconStart={<Icon name="export" aria-hidden />}
 								onClick={onExportClick}
+								aria-label={t(
+									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+								)}
+								title={t(
+									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+								)}
 							>
 								<span className="u-text-ellipsis u-display-none u-display-block:md">
 									{t(
@@ -617,7 +623,13 @@ const ObjectDetailPage: NextPage = () => {
 					'p-object-detail__metadata--collapsed',
 					expandMetadata && 'p-object-detail__metadata--expanded'
 				)}
-				icon={<Icon className="u-font-size-24 u-mr-8 u-text-left" name="related-objects" />}
+				icon={
+					<Icon
+						className="u-font-size-24 u-mr-8 u-text-left"
+						name="related-objects"
+						aria-hidden
+					/>
+				}
 				title={
 					related.length === 1
 						? t(
@@ -719,7 +731,12 @@ const ObjectDetailPage: NextPage = () => {
 							'p-object-detail__expand-button',
 							expandMetadata && 'p-object-detail__expand-button--expanded'
 						)}
-						icon={<Icon name={expandMetadata ? 'expand-right' : 'expand-left'} />}
+						icon={
+							<Icon
+								name={expandMetadata ? 'expand-right' : 'expand-left'}
+								aria-hidden
+							/>
+						}
 						onClick={onClickToggle}
 						variants="white"
 					/>

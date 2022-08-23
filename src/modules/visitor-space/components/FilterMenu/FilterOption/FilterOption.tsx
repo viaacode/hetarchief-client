@@ -1,5 +1,6 @@
 import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, useCallback, useEffect, useState } from 'react';
 
 import { Icon, Overlay } from '@shared/components';
@@ -21,6 +22,8 @@ const FilterOption: FC<FilterOptionProps> = ({
 	onFormSubmit,
 	values,
 }) => {
+	const [t] = useTranslation();
+
 	const filterIsActive = id === activeFilter;
 	const flyoutCls = clsx(
 		styles['c-filter-menu__flyout'],
@@ -57,7 +60,10 @@ const FilterOption: FC<FilterOptionProps> = ({
 				<DropdownContent>
 					<Button
 						className={styles['c-filter-menu__flyout-close']}
-						icon={<Icon name="times" />}
+						icon={<Icon name="times" aria-hidden />}
+						aria-label={t(
+							'modules/visitor-space/components/filter-menu/filter-option/filter-option___sluiten'
+						)}
 						onClick={onFilterToggle}
 						variants="text"
 					/>

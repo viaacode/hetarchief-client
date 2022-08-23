@@ -35,7 +35,17 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 		[onClick, text, enableToast, t]
 	);
 
-	return <Button icon={<Icon name="copy" />} variants="sm" {...props} onClick={clickHandler} />;
+	return (
+		<Button
+			icon={<Icon name="copy" aria-hidden />}
+			aria-label={t(
+				'modules/shared/components/copy-button/copy-button___kopieer-naar-klembord'
+			)}
+			variants="sm"
+			{...props}
+			onClick={clickHandler}
+		/>
+	);
 };
 
 export default CopyButton;

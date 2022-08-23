@@ -56,7 +56,8 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 							[badgeCls]: hasUnreadNotifications,
 						}
 					)}
-					icon={<Icon type="solid" name="notification" />}
+					icon={<Icon type="solid" name="notification" aria-hidden />}
+					aria-label={i18n.t('modules/navigation/const/index___notificaties')}
 				/>
 			),
 		},

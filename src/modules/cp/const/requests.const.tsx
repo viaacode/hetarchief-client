@@ -95,7 +95,8 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 			return (
 				<Button
 					className="p-cp-requests__actions"
-					icon={<Icon name="dots-vertical" />}
+					icon={<Icon name="dots-vertical" aria-hidden />}
+					aria-label={i18n.t('modules/cp/const/requests___meer-acties')}
 					variants={['xxs', 'text']}
 				/>
 			);

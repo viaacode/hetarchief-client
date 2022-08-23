@@ -233,7 +233,10 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 				{index > 0 && (
 					<Button
-						icon={<Icon name="trash" />}
+						icon={<Icon name="trash" aria-hidden />}
+						aria-label={t(
+							'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___criterium-verwijderen'
+						)}
 						variants="black"
 						onClick={() => onRemove(index)}
 					/>
