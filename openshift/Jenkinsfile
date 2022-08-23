@@ -151,6 +151,7 @@ pipeline {
                   npm set-script prepare ""
                   npm install --force
                   npx playwright install
+                  npx playwright install chrome
                   npm install junit-report-builder --save
                   '''
 										sh "PLAYWRIGHT_JUNIT_OUTPUT_NAME=tests/e2e_test_results.xml npx playwright test --reporter=junit || echo failed && ls tests"

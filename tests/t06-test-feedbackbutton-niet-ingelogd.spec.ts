@@ -1,8 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
-
 test('T06: Test Feedbackbutton (niet ingelogd)', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
@@ -28,7 +25,7 @@ test('T06: Test Feedbackbutton (niet ingelogd)', async ({ page, context }) => {
 	// Fill in zendesk form
 	await zendeskIframeForm
 		.locator('[name="email"]')
-		.fill(process.env.TEST_VISITOR_ACCOUNT_USERNAME);
+		.fill(process.env.TEST_VISITOR_ACCOUNT_USERNAME as string);
 	await zendeskIframeForm.locator('[name="description"]').fill('automated test bezoekertool');
 
 	// Click the zendesk send button and wait for the zendesk response
