@@ -1,9 +1,8 @@
 import { expect, request, test } from '@playwright/test';
 import addMinutes from 'date-fns/addMinutes';
-import { kebabCase } from 'lodash';
+import { kebabCase, trim } from 'lodash';
 
-import { formatMediumDateWithTime } from '../src/modules/shared/utils';
-
+import { acceptCookies } from './helpers/accept-cookies';
 import { checkToastMessage } from './helpers/check-toast-message';
 import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
 import { logout } from './helpers/log-out';
@@ -18,8 +17,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Login with end user
 	await loginUserHetArchiefIdp(
@@ -113,14 +115,12 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	)}"]`;
 	await page.locator(visitorSpaceLink).first().click();
 
-	// Wait for results to load
+	// Wait for search page to be ready
 	await page.waitForFunction(
-		() =>
-			document.querySelectorAll('.p-visitor-space__results .p-media-card-list .c-card')
-				.length >= 1,
+		() => document.querySelectorAll('.p-visitor-space__placeholder').length === 1,
 		null,
 		{
-			timeout: 50000,
+			timeout: 10000,
 		}
 	);
 
@@ -135,15 +135,20 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	 * Add Vlaams parlement object to the Favorites bookmarks folder
 	 */
 
+	// Filter by creation date
+	await page.click('text=Creatiedatum');
+	await page.fill('.c-menu--visible--default .c-input__field', '1 jan. 2000');
+	await page.locator('.c-menu--visible--default').locator('text=Pas toe').click();
+
 	// Click bookmark button of the first search result
 	await page.locator('.c-card .c-button', { hasText: 'bookmark' }).click();
 
 	// Check blade opens
-	await expect(await page.locator('.c-blade--active')).toBeVisible();
+	await expect(page.locator('.c-blade--active')).toBeVisible();
 
 	// Add object to Favorites folder
 	const folderList = await page.locator(
-		'.c-blade--active [class*="AddToCollectionBlade_c-add-to-collection-blade__list__"]'
+		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
 	);
 	const checkboxes = await folderList.locator('.c-checkbox__input');
 	await checkboxes.first().check();
@@ -152,7 +157,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.locator('.c-blade--active').locator('.c-button', { hasText: 'Voeg toe' }).click();
 
 	// Blade closes
-	await expect(await page.locator('.c-blade--active')).not.toBeVisible();
+	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
 	await checkToastMessage(page, 'Item toegevoegd aan map');
@@ -177,8 +182,8 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	// Check user is redirected to the homepage
 	await expect
-		.poll(() => page.url(), { timeout: 10000 })
-		.toEqual(process.env.TEST_CLIENT_ENDPOINT); // TODO does not work yet, fix in PR for ARC-1043, needs to be deployed to INT before this test will succeed
+		.poll(() => trim(page.url(), '/'), { timeout: 10000 })
+		.toEqual(process.env.TEST_CLIENT_ENDPOINT);
 
 	/**
 	 * Check detail page after end of visit
@@ -194,7 +199,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.waitForLoadState('networkidle');
 
 	// Expect the no access message
-	await expect(await page.locator('text=Geen toegang aanbieder')).toBeVisible();
+	await expect(page.locator('text=Geen toegang aanbieder')).toBeVisible();
 
 	// Button to return to homepage
 	await expect(
@@ -234,7 +239,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.waitForLoadState('networkidle');
 
 	// Expect the no access message
-	await expect(await page.locator('text=Geen toegang aanbieder')).toBeVisible();
+	await expect(page.locator('text=Geen toegang aanbieder')).toBeVisible();
 
 	// Button to return to homepage
 	await expect(
