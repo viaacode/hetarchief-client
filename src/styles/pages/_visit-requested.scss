@@ -48,10 +48,7 @@ $image-size-md: 56.1rem;
 
 	@include respond-to($page-breakpoint) {
 		&__grid {
-			grid-template-rows: minmax($page-padding, auto) min-content min-content min-content minmax(
-					$page-padding,
-					auto
-				);
+			grid-template-rows: minmax($page-padding, auto) min-content min-content min-content minmax($page-padding, auto);
 			grid-template-columns: 1fr;
 		}
 
@@ -80,10 +77,7 @@ $image-size-md: 56.1rem;
 
 	@include respond-at($page-breakpoint) {
 		&__grid {
-			grid-template-rows: minmax($page-padding, auto) min-content auto minmax(
-					$page-padding,
-					auto
-				);
+			grid-template-rows: minmax($page-padding, auto) min-content auto minmax($page-padding, auto);
 			grid-template-columns: 38.4rem 1fr;
 		}
 
