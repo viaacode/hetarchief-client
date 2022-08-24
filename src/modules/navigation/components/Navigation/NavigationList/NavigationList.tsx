@@ -36,9 +36,10 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
 		return (
 			<div
-				tabIndex={0}
-				onKeyDown={(e) => onKey(e, keysSpacebar, () => e.preventDefault())}
 				className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}
+				onKeyDown={(e) => onKey(e, keysSpacebar, () => e.preventDefault())}
+				role="button"
+				tabIndex={0}
 			>
 				{item.node}
 				<Icon className="u-text-left u-ml-4" name={iconName} />
