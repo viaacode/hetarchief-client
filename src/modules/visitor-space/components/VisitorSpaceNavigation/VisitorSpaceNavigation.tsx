@@ -32,12 +32,13 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 			<Navigation.Left placement="left">
 				{showLinkedSpaceAsHomepage ? null : (
 					<Link href={backLink} passHref={true}>
-						<a>
+						<a
+							aria-label={t(
+								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___naar-vorige-pagina'
+							)}
+						>
 							<Button
 								icon={<Icon name="arrow-left" aria-hidden />}
-								aria-label={t(
-									'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___naar-vorige-pagina'
-								)}
 								variants="text"
 								className="u-color-white u-ml--12"
 							/>
