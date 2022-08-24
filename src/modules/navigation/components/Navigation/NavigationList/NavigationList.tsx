@@ -1,9 +1,11 @@
+import { keysSpacebar, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 import { selectHistory } from '@shared/store/history';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -33,7 +35,11 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 
 	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
 		return (
-			<div className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}>
+			<div
+				tabIndex={0}
+				onKeyDown={(e) => onKey(e, keysSpacebar, () => e.preventDefault())}
+				className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}
+			>
 				{item.node}
 				<Icon className="u-text-left u-ml-4" name={iconName} />
 			</div>
