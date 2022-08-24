@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
-import { FC } from 'react';
+import { FC, useEffect, useRef } from 'react';
 
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
@@ -28,9 +28,20 @@ const Blade: FC<BladeProps> = ({
 }) => {
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 	useScrollLock(!isManaged && isOpen, 'Blade');
+	const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
 	const isLayered = isManaged && layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
+
+	// Hack to remove ios outline on the close button: https://meemoo.atlassian.net/browse/ARC-1025
+	useEffect(() => {
+		if (isOpen) {
+			closeButtonRef.current?.setAttribute('tabIndex', '-1');
+			setTimeout(() => {
+				closeButtonRef.current?.removeAttribute('tabIndex');
+			}, 10);
+		}
+	}, [isOpen]);
 
 	const renderCloseButton = () => {
 		return (
@@ -48,6 +59,7 @@ const Blade: FC<BladeProps> = ({
 					}
 				}}
 				disabled={!isOpen}
+				buttonRef={closeButtonRef}
 			/>
 		);
 	};
