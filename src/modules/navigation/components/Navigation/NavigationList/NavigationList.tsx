@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 import { Icon, IconLightNames, Overlay } from '@shared/components';
 import { selectHistory } from '@shared/store/history';
-import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
