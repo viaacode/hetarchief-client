@@ -125,7 +125,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case MediumSelect:
 				Component = Component as FC<ReactSelectProps>;
 				props = props as ReactSelectProps;
-				value = getSelectValue(props ? (props.options as SelectOption[]) : [], state.val);
+				value = getSelectValue((props.options || []) as SelectOption[], state.val);
 
 				return (
 					<Component
