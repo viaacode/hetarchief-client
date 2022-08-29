@@ -39,7 +39,7 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	// await checkToastMessage(page, 'Je hebt nu toegang tot VRT', 200000);
 
 	// Check green badge is visible and has value 1
-	const badge = await page.locator('[role="menuitem"] .c-badge').first();
+	const badge = await page.locator('nav ul li a .c-badge').first();
 	await expect(badge).toBeVisible();
 	await expect(badge).toContainText('1');
 
