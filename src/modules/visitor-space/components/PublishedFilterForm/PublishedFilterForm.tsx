@@ -83,7 +83,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<div className="u-mb-32">
 					<FormControl
-						className="u-mb-24"
+						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.operator?.message]}
 						id={labelKeys.operator}
 						label={t(
@@ -117,7 +117,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 					</FormControl>
 
 					<FormControl
-						className="u-mb-24"
+						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.published?.message]}
 						id={labelKeys.published}
 						label={t(
