@@ -19,7 +19,7 @@ const MediumSelect: FC<ReactSelectProps> = (props) => {
 	MediumSelect.defaultProps = { options };
 
 	const getPlaceholder = (): string | undefined => {
-		return options.length > 0
+		return options.length === 0
 			? t(
 					'modules/visitor-space/components/medium-select/medium-select___geen-analoge-dragers-gevonden'
 			  )
