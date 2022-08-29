@@ -105,6 +105,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		<Zendesk
 			{...settings}
 			zendeskKey={publicRuntimeConfig.ZENDESK_KEY}
+			color={{ theme: '#00857d' }} // Ensure a contrast of 4.51:1 with white text
 			onLoaded={() => {
 				initListeners();
 				settings?.onLoaded?.();
