@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { escapeRegExp } from 'lodash';
 
+import { acceptCookies } from './helpers/accept-cookies';
 import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 
@@ -16,8 +17,11 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Enter "v" in the search field for maintainers
 	await page.fill('input[placeholder="zoek"]', 'v');
@@ -75,13 +79,13 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 	);
 
 	// Check error is shown: accepting the conditions is required
-	await expect(await page.locator('text=De voorwaarden accepteren is verplicht.')).toBeVisible();
+	await expect(page.locator('text=De voorwaarden accepteren is verplicht.')).toBeVisible();
 
 	// Fill in request blade and send
 	await fillRequestVisitBlade(page, 'vrt', 'Een geldige reden', undefined, true);
 
 	// Check that we were redirected to the request pending page of the VRT
-	await expect(await page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
+	await expect(page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
 	await expect(await page.locator('.p-visit-requested__content').innerHTML()).toContain('VRT');
 
 	// Go to the homepage
@@ -100,7 +104,7 @@ test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async 
 	).toContainText('VRT');
 
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

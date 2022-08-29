@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
 import { checkToastMessage } from './helpers/check-toast-message';
 import { clickToastMessageButton } from './helpers/click-toast-message-button';
 import { getFolderObjectCounts } from './helpers/get-folder-object-counts';
@@ -14,8 +15,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -72,7 +76,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).click();
 
 	// Check blade opens
-	await expect(await page.locator('.c-blade--active')).toBeVisible();
+	await expect(page.locator('.c-blade--active')).toBeVisible();
 
 	// Check bookmark folder counts
 	const bookmarkFolderCounts1 = await getFolderObjectCounts(page);
@@ -81,7 +85,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	// Add object to Favorites folder
 	const folderList = await page.locator(
-		'.c-blade--active [class*="AddToCollectionBlade_c-add-to-collection-blade__list__"]'
+		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
 	);
 	const checkboxes = await folderList.locator('.c-checkbox__input');
 	expect(await checkboxes.count()).toEqual(2);
@@ -96,7 +100,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.locator('.c-blade--active').locator('.c-button', { hasText: 'Voeg toe' }).click();
 
 	// Blade closes
-	await expect(await page.locator('.c-blade--active')).not.toBeVisible();
+	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
 	await checkToastMessage(page, 'Item toegevoegd aan map');

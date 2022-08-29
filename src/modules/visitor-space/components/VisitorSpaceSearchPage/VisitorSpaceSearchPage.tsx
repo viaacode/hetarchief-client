@@ -126,8 +126,6 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
-	const [hasSearched, setHasSearched] = useState<boolean>(false);
-
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
@@ -238,7 +236,6 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 */
 
 	const onSearch = async (newValue: string) => {
-		setHasSearched(true);
 		if (newValue.trim() && !query.search?.includes(newValue)) {
 			setQuery({
 				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue),
@@ -263,7 +260,6 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
-		setHasSearched(true);
 		let data;
 
 		switch (id) {
@@ -401,9 +397,8 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
-	const showInitialView = !hasSearched;
-	const showNoResults = hasSearched && !!media && media?.items?.length === 0;
-	const showResults = hasSearched && !!media && media?.items?.length > 0;
+	const showNoResults = !!media && media?.items?.length === 0;
+	const showResults = !!media && media?.items?.length > 0;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
 	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
@@ -613,27 +608,12 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						className={clsx(
 							'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
 							{
-								'p-visitor-space__results--placeholder':
-									showInitialView || showNoResults,
 								'u-pt-0': showResearchWarning,
 							}
 						)}
 					>
 						<div className="l-container">
 							{!showResults && renderFilterMenu()}
-
-							{showInitialView && (
-								<Placeholder
-									className="p-visitor-space__placeholder"
-									img="/images/lightbulb.svg"
-									title={t(
-										'pages/bezoekersruimte/visitor-space-slug/index___start-je-zoektocht'
-									)}
-									description={t(
-										'pages/bezoekersruimte/visitor-space-slug/index___zoek-op-trefwoorden-jaartallen-aanbieders-en-start-je-research'
-									)}
-								/>
-							)}
 
 							{showNoResults && (
 								<Placeholder

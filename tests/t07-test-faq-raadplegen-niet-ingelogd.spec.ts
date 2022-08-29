@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
+
 test('T07: Test FAQ raadplegen (niet ingelogd)', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
@@ -9,8 +11,11 @@ test('T07: Test FAQ raadplegen (niet ingelogd)', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Click on FAQ button the navbar
 	await page
@@ -20,9 +25,12 @@ test('T07: Test FAQ raadplegen (niet ingelogd)', async ({ page, context }) => {
 		.click();
 
 	// Check content page title
-	await expect(await page.locator('.content-block-preview-0 h2')).toContainText(
-		'Veelgestelde vragen'
-	);
+	const title = await page.locator('.content-block-preview-0 h2');
+	await title.waitFor({
+		state: 'visible',
+		timeout: 10000,
+	});
+	await expect(title).toContainText('Veelgestelde vragen');
 
 	// Click on the faq item: Wat kan ik via de Bezoekertool vinden?
 	await page.click('text=Wat kan ik via de Bezoekertool vinden?');
@@ -43,7 +51,7 @@ test('T07: Test FAQ raadplegen (niet ingelogd)', async ({ page, context }) => {
 	await page.click('text=Start je bezoek');
 
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();
