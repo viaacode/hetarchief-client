@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
@@ -22,6 +23,7 @@ import {
 	VisitorSpaceCardType,
 } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
 import { asDate, createPageTitle } from '@shared/utils';
@@ -59,6 +61,8 @@ const LoggedInHome: FC = () => {
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 	const [isProcessVisitBladeOpen, setIsProcessVisitBladeOpen] = useState(false);
 	const [hasScrolledToSearch, setHasScrolledToSearch] = useState(false);
+
+	useScrollToId(router?.asPath?.split('#')?.[1] || null);
 
 	/**
 	 * Data
@@ -292,7 +296,10 @@ const LoggedInHome: FC = () => {
 
 					{(future?.items || []).length > 0 && (
 						<section className={clsx(styles['c-hero__section'])}>
-							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
+							<h5
+								className={clsx(styles['c-hero__section-title'], 'u-mb-16')}
+								id="planned-visits"
+							>
 								{t('modules/shared/components/hero/hero___geplande-bezoeken')}
 							</h5>
 							<div className={styles['c-hero__requests']}>

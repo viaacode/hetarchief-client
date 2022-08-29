@@ -4,7 +4,7 @@ import { NotificationType } from '@shared/services/notifications-service/notific
 
 export const NOTIFICATION_TYPE_TO_PATH: Record<NotificationType, string | null> = {
 	[NotificationType.NEW_VISIT_REQUEST]: `${ROUTES.beheerRequests}?${VISIT_REQUEST_ID_QUERY_KEY}={visitRequestId}`,
-	[NotificationType.VISIT_REQUEST_APPROVED]: '/',
+	[NotificationType.VISIT_REQUEST_APPROVED]: '/#planned-visits',
 	[NotificationType.VISIT_REQUEST_DENIED]: null,
 	[NotificationType.VISIT_REQUEST_CANCELLED]: null,
 	[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED]: '/{slug}',

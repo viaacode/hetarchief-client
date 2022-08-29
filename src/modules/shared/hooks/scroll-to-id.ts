@@ -5,7 +5,7 @@ export function useScrollToId(id: string | null): void {
 		if (id) {
 			const item = document.getElementById(id);
 			if (item && item.offsetTop) {
-				window.scrollTo(0, item.offsetTop - 0.4 * window.innerHeight);
+				window.scrollTo(0, item.offsetTop - 0.3 * window.innerHeight);
 			} else {
 				setTimeout(() => {
 					scrollDownToFocusedItem();
