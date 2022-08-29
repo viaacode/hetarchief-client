@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
 import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
 import { checkToastMessage } from './helpers/check-toast-message';
 import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
@@ -15,6 +16,9 @@ test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Login cp admin using the meemoo idp
 	await loginUserMeemooIdp(
 		page,
@@ -23,7 +27,7 @@ test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 	);
 
 	// Check logged in status
-	await expect(await page.locator('.c-avatar__text')).toHaveText('Test');
+	await expect(page.locator('.c-avatar__text')).toHaveText('Test');
 
 	// Admin should not be visible and beheer should be visible
 	const navigationItemTexts = await page

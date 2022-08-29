@@ -31,12 +31,12 @@ const config: PlaywrightTestConfig = {
 	reporter: 'dot',
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
-		launchOptions: {
-			slowMo: 100 /* TODO disable after recording all videos */,
-		},
-		contextOptions: {
-			recordVideo: { dir: 'tests/videos/' } /* TODO disable after recording all videos */,
-		},
+		// launchOptions: {
+		// 	slowMo: 100 /* TODO disable after recording all videos */,
+		// },
+		// contextOptions: {
+		// 	recordVideo: { dir: 'tests/videos/' } /* TODO disable after recording all videos */,
+		// },
 		/* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
 		actionTimeout: 0,
 		/* Base URL to use in actions like `await page.goto('/')`. */

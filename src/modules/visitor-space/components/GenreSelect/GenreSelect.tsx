@@ -19,7 +19,7 @@ const GenreSelect: FC<ReactSelectProps> = (props) => {
 	GenreSelect.defaultProps = { options };
 
 	const getPlaceholder = (): string | undefined => {
-		return options.length > 0
+		return options.length === 0
 			? t('modules/visitor-space/components/genre-select/genre-select___geen-genres-gevonden')
 			: t('modules/visitor-space/components/genre-select/genre-select___kies-een-genre');
 	};

@@ -2,12 +2,8 @@ import { expect, Page } from '@playwright/test';
 
 export async function acceptTos(page: Page): Promise<void> {
 	// Check title, content page content and disabled button
-	await expect(await page.locator('.p-terms-of-service__title')).toContainText(
-		'Gebruiksvoorwaarden'
-	);
-	await expect(await page.locator('.c-content-page-preview')).toContainText(
-		'Deze gebruiksvoorwaarden'
-	);
+	await expect(page.locator('.p-terms-of-service__title')).toContainText('Gebruiksvoorwaarden');
+	await expect(page.locator('.c-content-page-preview')).toContainText('Deze gebruiksvoorwaarden');
 	const acceptTosButton = await page.locator('.p-terms-of-service__buttons .c-button--black');
 	await expect(acceptTosButton).toHaveClass(/c-button--disabled/);
 
