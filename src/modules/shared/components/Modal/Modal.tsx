@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { default as ReactModal } from 'react-modal';
 
+import { globalLabelKeys } from '@shared/const';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 
@@ -58,6 +59,9 @@ const Modal: FC<ModalProps> = ({
 				</div>
 			)}
 			onAfterOpen={onOpen}
+			aria={{
+				labelledby: globalLabelKeys.modal.title,
+			}}
 		>
 			<section className={styles['c-hetarchief-modal__heading']}>
 				<div className={styles['c-hetarchief-modal__title-wrapper']}>{top}</div>
