@@ -480,6 +480,7 @@ const ObjectDetailPage: NextPage = () => {
 				<a
 					tabIndex={isHidden ? -1 : 0}
 					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
+					aria-label={item.title}
 				>
 					{<RelatedObject object={item} />}
 				</a>
@@ -522,7 +523,7 @@ const ObjectDetailPage: NextPage = () => {
 							)}
 							action={
 								<Link passHref href="/kiosk-voorwaarden">
-									<a>
+									<a aria-label={t('pages/slug/index___meer-info')}>
 										<Button
 											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
 											label={t('pages/slug/index___meer-info')}

@@ -53,12 +53,13 @@ const renderLink = (
 	return href ? (
 		<Link href={href}>
 			<a
+				aria-label={tooltip}
 				className={className}
+				onClick={onClick}
 				role="menuitem"
 				tabIndex={0}
-				title={tooltip}
 				target={target}
-				onClick={onClick}
+				title={tooltip}
 			>
 				{iconStart && iconStart}
 				{label}
@@ -67,7 +68,14 @@ const renderLink = (
 			</a>
 		</Link>
 	) : (
-		<a className={className} role="menuitem" tabIndex={0} title={tooltip} target={target}>
+		<a
+			aria-label={tooltip}
+			className={className}
+			role="menuitem"
+			tabIndex={0}
+			target={target}
+			title={tooltip}
+		>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}
