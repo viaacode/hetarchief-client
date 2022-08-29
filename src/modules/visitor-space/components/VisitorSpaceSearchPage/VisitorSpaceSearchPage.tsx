@@ -456,9 +456,14 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					setSelected(item as IdentifiableMediaCard);
 					setShowAddToFolderBlade(true);
 				}}
-				icon={<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" />}
+				icon={
+					<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" aria-hidden />
+				}
 				variants={['text', 'xxs']}
 				title={t(
+					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
+				)}
+				aria-label={t(
 					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
 			/>
@@ -580,7 +585,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						<aside className="u-bg-platinum">
 							<div className="l-container u-flex u-justify-center u-py-32">
 								<Callout
-									icon={<Icon name="info" />}
+									icon={<Icon name="info" aria-hidden />}
 									text={t(
 										'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 									)}

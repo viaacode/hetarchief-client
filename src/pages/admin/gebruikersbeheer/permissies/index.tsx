@@ -33,7 +33,10 @@ const PermissionsOverview: FC = () => {
 				{search && (
 					<Button
 						variants={['text', 'icon', 'xxs']}
-						icon={<Icon name="times" />}
+						icon={<Icon name="times" aria-hidden />}
+						aria-label={t(
+							'pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen'
+						)}
 						onClick={() => {
 							permissionsRef.current?.onSearch(undefined);
 						}}
@@ -41,7 +44,8 @@ const PermissionsOverview: FC = () => {
 				)}
 				<Button
 					variants={['text', 'icon', 'xxs']}
-					icon={<Icon name="search" />}
+					icon={<Icon name="search" aria-hidden />}
+					aria-label={t('pages/admin/gebruikersbeheer/permissies/index___uitvoeren')}
 					onClick={() => permissionsRef.current?.onSearch(search)}
 				/>
 			</>

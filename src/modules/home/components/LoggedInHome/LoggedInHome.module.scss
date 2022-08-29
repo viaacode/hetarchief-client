@@ -6,11 +6,7 @@ $c-hero-access-card-min-width: 57.2rem;
 .c-hero {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: $spacer-2xl clamp(
-			calc(54rem - #{$spacer-2xl}),
-			40vw,
-			calc(70rem - #{$spacer-2xl})
-		);
+	grid-template-rows: $spacer-2xl clamp(calc(54rem - #{$spacer-2xl}), 40vw, calc(70rem - #{$spacer-2xl}));
 	padding: 0 calc(#{$spacer-1xl} * 3);
 	color: $white;
 	background-color: $black;

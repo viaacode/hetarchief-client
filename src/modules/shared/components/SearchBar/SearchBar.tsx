@@ -1,4 +1,5 @@
 import { Button, keysEnter, onKey, TextInput } from '@meemoo/react-components';
+import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
 
 import { Icon } from '../Icon';
@@ -10,6 +11,7 @@ const SearchBar: FC<SearchBarProps> = ({
 	variants = ['md', 'rounded', 'grey-border', 'icon--double', 'icon-clickable'],
 	...rest
 }) => {
+	const [t] = useTranslation();
 	const [search, setSearch] = useState<string | undefined>(rest.default);
 
 	const getVariants = () => {
@@ -36,7 +38,10 @@ const SearchBar: FC<SearchBarProps> = ({
 					{search && (
 						<Button
 							variants={['text', 'icon', 'xxs']}
-							icon={<Icon name="times" />}
+							icon={<Icon name="times" aria-hidden />}
+							aria-label={t(
+								'modules/shared/components/search-bar/search-bar___opnieuw-instellen'
+							)}
 							onClick={() => {
 								setSearch(undefined);
 								onSearch(undefined);
@@ -45,7 +50,10 @@ const SearchBar: FC<SearchBarProps> = ({
 					)}
 					<Button
 						variants={['text', 'icon', 'xxs']}
-						icon={<Icon name="search" />}
+						icon={<Icon name="search" aria-hidden />}
+						aria-label={t(
+							'modules/shared/components/search-bar/search-bar___uitvoeren'
+						)}
 						onClick={() => onSearch(search)}
 					/>
 				</>

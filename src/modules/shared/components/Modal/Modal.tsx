@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { default as ReactModal } from 'react-modal';
 
@@ -23,8 +24,10 @@ const Modal: FC<ModalProps> = ({
 	onOpen,
 	excludeScrollbar = true,
 }) => {
+	const [t] = useTranslation();
 	const [ready, setReady] = useState(false);
 	const scrollbarWidth = useScrollbarWidth(!!isOpen);
+
 	useScrollLock(isOpen ?? false, 'Modal');
 
 	// See https://github.com/reactjs/react-modal#examples
@@ -69,7 +72,8 @@ const Modal: FC<ModalProps> = ({
 				<div className={styles['c-hetarchief-modal__close-wrapper']}>
 					<Button
 						className={styles['c-hetarchief-modal__close']}
-						icon={<Icon name="times" />}
+						icon={<Icon name="times" aria-hidden />}
+						aria-label={t('modules/shared/components/modal/modal___sluiten')}
 						variants={['text']}
 						onClick={onClose}
 					/>
@@ -77,9 +81,8 @@ const Modal: FC<ModalProps> = ({
 			</section>
 
 			<section className={styles['c-hetarchief-modal__content']}>{children}</section>
-			{footer ? (
-				<section className={styles['c-hetarchief-modal__footer']}>{footer}</section>
-			) : null}
+
+			{footer && <section className={styles['c-hetarchief-modal__footer']}>{footer}</section>}
 		</ReactModal>
 	);
 };

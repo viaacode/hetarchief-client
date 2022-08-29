@@ -113,7 +113,10 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 					name={t(
 						'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
 					)}
-					icon={<Icon name="edit" />}
+					icon={<Icon name="edit" aria-hidden />}
+					aria-label={t(
+						'modules/account/components/edit-collection-title/edit-collection-title___titel-aanpassen'
+					)}
 				/>
 				{buttons.filter((b) => !b.before).map((b) => b.node)}
 			</>
@@ -139,8 +142,24 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 						autoCorrect="off"
 						iconEnd={(handler) => (!isOpen ? renderButtons(handler) : onOpenNode)}
 						id={labelKeys.name}
-						nodeCancel={<Button variants={['silver']} icon={<Icon name="times" />} />}
-						nodeSubmit={<Button variants={['black']} icon={<Icon name="check" />} />}
+						nodeCancel={
+							<Button
+								variants={['silver']}
+								icon={<Icon name="times" aria-hidden />}
+								aria-label={t(
+									'modules/account/components/edit-collection-title/edit-collection-title___titel-aanpassen-annuleren'
+								)}
+							/>
+						}
+						nodeSubmit={
+							<Button
+								variants={['black']}
+								icon={<Icon name="check" aria-hidden />}
+								aria-label={t(
+									'modules/account/components/edit-collection-title/edit-collection-title___nieuwe-titel-opslaan'
+								)}
+							/>
+						}
 						onClose={resetForm}
 						onConfirm={onFormSubmit}
 						onOpen={clearForm}

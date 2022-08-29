@@ -24,7 +24,7 @@ const FilterButton: FC<FilterButtonProps> = ({
 	return (
 		<Button
 			className={filterBtnCls}
-			iconEnd={<Icon className="u-text-left" name={icon} />}
+			iconEnd={<Icon className="u-text-left" name={icon} aria-hidden />}
 			label={label}
 			variants={['black', 'block']}
 			onClick={onClick}

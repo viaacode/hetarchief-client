@@ -88,9 +88,14 @@ const AccountMyCollections: NextPage = () => {
 							<a
 								className={clsx(linkClassName, 'p-account-my-collections__link')}
 								title={collection.name}
+								aria-label={collection.name}
 							>
 								{collection.name}
-								<Icon className="u-font-size-24 u-text-left" name="angle-right" />
+								<Icon
+									className="u-font-size-24 u-text-left"
+									name="angle-right"
+									aria-hidden
+								/>
 							</a>
 						</Link>
 					),
@@ -220,7 +225,10 @@ const AccountMyCollections: NextPage = () => {
 									label={t(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
-									iconStart={<Icon name="export" />}
+									aria-label={t(
+										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
+									)}
+									iconStart={<Icon name="export" aria-hidden />}
 									onClick={(e) => {
 										e.stopPropagation();
 										onExportClick();
@@ -238,7 +246,10 @@ const AccountMyCollections: NextPage = () => {
 									name={t(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
-									icon={<Icon name="export" />}
+									icon={<Icon name="export" aria-hidden />}
+									aria-label={t(
+										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
+									)}
 									onClick={(e) => {
 										e.stopPropagation();
 										onExportClick();
@@ -257,7 +268,10 @@ const AccountMyCollections: NextPage = () => {
 									key={'delete-collection'}
 									className="p-account-my-collections__delete"
 									variants={['silver']}
-									icon={<Icon name="trash" />}
+									icon={<Icon name="trash" aria-hidden />}
+									aria-label={t(
+										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+									)}
 									name={t(
 										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
 									)}
