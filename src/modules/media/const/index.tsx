@@ -96,19 +96,19 @@ const renderMediaTab = (mediaType?: MediaTypes) => {
 			return {
 				id: ObjectDetailTabs.Media,
 				label: i18n.t('modules/media/const/index___audio'),
-				icon: <Icon name="audio" />,
+				icon: <Icon name="audio" aria-hidden />,
 			};
 		case 'video':
 			return {
 				id: ObjectDetailTabs.Media,
 				label: i18n.t('modules/media/const/index___video'),
-				icon: <Icon name="video" />,
+				icon: <Icon name="video" aria-hidden />,
 			};
 		default:
 			return {
 				id: ObjectDetailTabs.Media,
 				label: i18n.t('modules/media/const/index___video'),
-				icon: <Icon name="no-video" />,
+				icon: <Icon name="no-video" aria-hidden />,
 			};
 	}
 };
@@ -117,7 +117,7 @@ export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
 	{
 		id: ObjectDetailTabs.Metadata,
 		label: i18n.t('modules/media/const/index___metadata'),
-		icon: <Icon name="info" />,
+		icon: <Icon name="info" aria-hidden />,
 	},
 	renderMediaTab(mediaType),
 ];
@@ -140,10 +140,11 @@ export const MEDIA_ACTIONS = (
 								className="u-font-size-24 u-text-left"
 								name="bookmark"
 								type={isInAFolder ? 'solid' : 'light'}
+								aria-hidden
 							/>
 						),
 						id: MediaActions.Bookmark,
-						ariaLabel: 'bookmarks item',
+						ariaLabel: i18n.t('modules/media/const/index___bookmark'),
 						tooltip: i18n.t('modules/media/const/index___bookmark'),
 					},
 			  ]

@@ -3,4 +3,10 @@ export const globalLabelKeys = {
 	adminLayout: {
 		title: 'AdminTitle',
 	},
+	blade: {
+		title: 'BladeTitle',
+	},
+	modal: {
+		title: 'ModalTitle',
+	},
 };

@@ -243,7 +243,10 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 									title={t(
 										'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
 									)}
-									icon={<Icon name="check" />}
+									icon={<Icon name="check" aria-hidden />}
+									aria-label={t(
+										'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
+									)}
 									variants={['icon', 'sm', 'white']}
 								/>
 							</div>

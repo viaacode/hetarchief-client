@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from 'react';
 
@@ -19,6 +20,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 	fragments,
 	onChangeFragment,
 }) => {
+	const [t] = useTranslation();
 	const [offset, setOffset] = useState<number>(0);
 	const [active, setActive] = useState<number>(0);
 	const [isBlurred, setIsBlurred] = useState<boolean>(true);
@@ -93,7 +95,10 @@ const Metadata: FC<FragmentSliderProps> = ({
 			<Button
 				tabIndex={-1}
 				className={styles['c-fragment-slider__nav-button']}
-				icon={<Icon name="angle-left" />}
+				icon={<Icon name="angle-left" aria-hidden />}
+				aria-label={t(
+					'modules/media/components/fragment-slider/fragment-slider___naar-het-vorige-fragment'
+				)}
 				variants="black"
 				disabled={!needsScrolling || offset === 0}
 				onClick={() => {
@@ -172,7 +177,10 @@ const Metadata: FC<FragmentSliderProps> = ({
 			<Button
 				tabIndex={-1}
 				className={styles['c-fragment-slider__nav-button']}
-				icon={<Icon name="angle-right" />}
+				icon={<Icon name="angle-right" aria-hidden />}
+				aria-label={t(
+					'modules/media/components/fragment-slider/fragment-slider___naar-het-volgende-fragment'
+				)}
 				variants="black"
 				disabled={!needsScrolling || offset === totalFragments - 1}
 				onClick={() => {

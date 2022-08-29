@@ -1,4 +1,5 @@
 import { Options } from 'ky/distribution/types/options';
+import { trimEnd } from 'lodash-es';
 import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { StringifiableRecord, stringifyUrl } from 'query-string';
@@ -19,13 +20,13 @@ export class AuthService {
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
-		const { redirectTo, ...otherQueryParams } = query;
+		const { redirectTo, slug, ...otherQueryParams } = query;
 		let originalPath: string = redirectTo as string;
 		if ((originalPath || '').endsWith('/' + ROUTE_PARTS.logout)) {
 			originalPath = '/';
 		}
 		const returnToUrl = stringifyUrl({
-			url: `${publicRuntimeConfig.CLIENT_URL}/${originalPath ?? ''}`,
+			url: trimEnd(`${publicRuntimeConfig.CLIENT_URL}/${originalPath ?? slug ?? ''}`, '/'),
 			query: otherQueryParams,
 		});
 

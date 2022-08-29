@@ -7,6 +7,7 @@ import { FC } from 'react';
 import { AuthService } from '@auth/services/auth-service';
 import { Icon, Modal } from '@shared/components';
 import Html from '@shared/components/Html/Html';
+import { globalLabelKeys } from '@shared/const';
 
 import styles from './AuthModal.module.scss';
 import { AuthModalProps } from './AuthModal.types';
@@ -44,7 +45,10 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 
 	const renderHeading = () => {
 		return (
-			<h3 className={clsx(styles['c-auth-modal__heading'], 'u-text-center')}>
+			<h3
+				id={globalLabelKeys.modal.title}
+				className={clsx(styles['c-auth-modal__heading'], 'u-text-center')}
+			>
 				{t('modules/auth/components/auth-modal/auth-modal___inloggen-of-registreren')}
 			</h3>
 		);

@@ -2,8 +2,10 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
-import { FC } from 'react';
+import { useTranslation } from 'next-i18next';
+import { FC, useEffect } from 'react';
 
+import { globalLabelKeys } from '@shared/const';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 
@@ -26,11 +28,17 @@ const Blade: FC<BladeProps> = ({
 	onClose,
 	layer,
 }) => {
+	const [t] = useTranslation();
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
 	const isLayered = isManaged && layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
+
+	// Hack to remove ios outline on the close button: https://meemoo.atlassian.net/browse/ARC-1025
+	useEffect(() => {
+		isOpen && (document.activeElement as HTMLElement)?.blur?.();
+	}, [isOpen]);
 
 	const renderCloseButton = () => {
 		return (
@@ -38,7 +46,8 @@ const Blade: FC<BladeProps> = ({
 				className={clsx(styles['c-blade__close-button'], {
 					[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
 				})}
-				icon={<Icon name="times" />}
+				icon={<Icon name="times" aria-hidden />}
+				aria-label={t('modules/shared/components/blade/blade___sluiten')}
 				variants="text"
 				onClick={() => {
 					if (isLayered && onCloseBlade) {
@@ -57,7 +66,7 @@ const Blade: FC<BladeProps> = ({
 			<div
 				role="dialog"
 				aria-modal={isBladeOpen}
-				aria-labelledby="bladeTitle"
+				aria-labelledby={globalLabelKeys.blade.title}
 				className={clsx(
 					className,
 					styles['c-blade'],
@@ -81,7 +90,10 @@ const Blade: FC<BladeProps> = ({
 				<div className={styles['c-blade__title-wrapper']}>
 					{heading ||
 						(title && (
-							<h3 id="bladeTitle" className={styles['c-blade__title']}>
+							<h3
+								id={globalLabelKeys.blade.title}
+								className={styles['c-blade__title']}
+							>
 								{title}
 							</h3>
 						))}

@@ -101,7 +101,10 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 								<Button
 									variants={['platinum', 'sm']}
 									onClick={handler}
-									icon={<Icon name="plus" />}
+									icon={<Icon name="plus" aria-hidden />}
+									aria-label={t(
+										'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken'
+									)}
 								/>
 							) : (
 								onOpenNode
@@ -109,10 +112,22 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 						}}
 						id={labelKeys.name}
 						nodeSubmit={
-							<Button variants={['black', 'sm']} icon={<Icon name="check" />} />
+							<Button
+								variants={['black', 'sm']}
+								icon={<Icon name="check" aria-hidden />}
+								aria-label={t(
+									'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-opslaan'
+								)}
+							/>
 						}
 						nodeCancel={
-							<Button variants={['silver', 'sm']} icon={<Icon name="times" />} />
+							<Button
+								variants={['silver', 'sm']}
+								icon={<Icon name="times" aria-hidden />}
+								aria-label={t(
+									'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken-annuleren'
+								)}
+							/>
 						}
 						onClose={resetForm}
 						onConfirm={onFormSubmit}
