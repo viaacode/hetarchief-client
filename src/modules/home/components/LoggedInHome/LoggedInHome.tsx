@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
@@ -21,7 +22,7 @@ import {
 	VisitorSpaceCardProps,
 	VisitorSpaceCardType,
 } from '@shared/components';
-import { ROUTES, SCROLL_TO_SECTION, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
@@ -46,7 +47,6 @@ const LoggedInHome: FC = () => {
 	const [query, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 		[SEARCH_QUERY_KEY]: StringParam,
-		[SCROLL_TO_SECTION]: StringParam,
 	});
 
 	/**
@@ -62,7 +62,7 @@ const LoggedInHome: FC = () => {
 	const [isProcessVisitBladeOpen, setIsProcessVisitBladeOpen] = useState(false);
 	const [hasScrolledToSearch, setHasScrolledToSearch] = useState(false);
 
-	useScrollToId(query[SCROLL_TO_SECTION] || null);
+	useScrollToId(router?.asPath?.split('#')?.[1] || null);
 
 	/**
 	 * Data
