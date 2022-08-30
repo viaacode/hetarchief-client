@@ -59,10 +59,7 @@ $terms-of-service-background-color: #ebfbf8;
 		margin-top: $spacer-md * 2;
 		font-size: $font-size-lg;
 		line-height: $line-height-3xl;
-
-		@include respond-to("md") {
-			text-align: center;
-		}
+		text-align: center;
 
 		@include respond-at("md") {
 			margin-top: $spacer-lg * 3;
@@ -76,10 +73,15 @@ $terms-of-service-background-color: #ebfbf8;
 		max-height: 100%;
 		min-height: 0;
 		overflow-y: auto;
-		padding-right: $spacer-sm;
 
 		@include respond-at("md") {
 			margin-top: $spacer-lg * 2;
+		}
+
+		.c-content-page-preview {
+			& > .c-content-block {
+				background-color: transparent !important;
+			}
 		}
 	}
 
@@ -92,9 +94,5 @@ $terms-of-service-background-color: #ebfbf8;
 		margin-top: $spacer-sm;
 		display: flex;
 		justify-content: center;
-	}
-
-	.l-container {
-		max-width: 59.2rem;
 	}
 }
