@@ -19,7 +19,7 @@ type DropdownMenuProps = Omit<DropdownProps, 'isOpen'> & {
 };
 
 export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, children, ...rest }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [menuContentRef, setMenuContentRef] = useState<HTMLElement | null>(null);
 

@@ -27,7 +27,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	limit = 0,
 	onClickAction,
 }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
 	const listRef = useRef<HTMLUListElement>(null);

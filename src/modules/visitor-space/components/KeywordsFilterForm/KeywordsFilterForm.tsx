@@ -26,7 +26,7 @@ const defaultValues: KeywordsFilterFormState = {
 };
 
 const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [query] = useQueryParams(KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [input, setInput] = useState<string | undefined>(undefined);
 

@@ -20,7 +20,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 	fragments,
 	onChangeFragment,
 }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [offset, setOffset] = useState<number>(0);
 	const [active, setActive] = useState<number>(0);
 	const [isBlurred, setIsBlurred] = useState<boolean>(true);

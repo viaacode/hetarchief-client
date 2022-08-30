@@ -48,7 +48,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 
 	// Computed
 

@@ -13,7 +13,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 	onClose,
 	isOpen,
 }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const { title, description, yes, no } = text;
 
 	const renderButtons = () => {

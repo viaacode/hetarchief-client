@@ -22,7 +22,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 	onFormSubmit,
 	values,
 }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 
 	const filterIsActive = id === activeFilter;
 	const flyoutCls = clsx(
