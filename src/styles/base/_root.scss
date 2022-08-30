@@ -17,15 +17,3 @@ body {
 *::after {
 	box-sizing: border-box;
 }
-
-// DO NOT COMMIT
-
-// * {
-// 	&:focus {
-// 		color: rgb(255 0 0 / 50%) !important;
-// 		background-color: rgb(255 0 0 / 50%) !important;
-// 		outline: 1px solid hotpink !important;
-// 		z-index: 9999 !important;
-// 		transform: scale(1.2), translateZ(10) !important;
-// 	}
-// }
