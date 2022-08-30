@@ -35,7 +35,9 @@ $component: "c-filter-menu";
 	&__button:global(.c-button) {
 		border-radius: 0;
 
-		&:focus {
+		&:focus,
+		&:focus-visible,
+		&:focus-within {
 			z-index: get-z-layer("foreground");
 		}
 
@@ -51,8 +53,18 @@ $component: "c-filter-menu";
 		padding-right: 1.2rem;
 		text-align: left;
 
-		&:focus {
+		&:focus,
+		&:focus-visible,
+		&:focus-within {
 			z-index: 2;
+		}
+
+		button {
+			&:focus,
+			&:focus-visible,
+			&:focus-within {
+				outline: 2px solid $teal;
+			}
 		}
 
 		@include respond-to("md") {

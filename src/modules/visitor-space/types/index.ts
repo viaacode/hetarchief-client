@@ -61,6 +61,7 @@ export interface DefaultFilterFormProps<Values = unknown> extends DefaultCompone
 		reset,
 		handleSubmit,
 	}: DefaultFilterFormChildrenParams<Values>) => ReactNode;
+	disabled?: boolean;
 	values?: Values;
 }
 

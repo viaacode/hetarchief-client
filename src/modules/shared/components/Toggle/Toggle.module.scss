@@ -17,14 +17,6 @@ $c-toggle-zinc: $zinc-66;
 			width: 4rem;
 			height: 4rem;
 
-			&:global(.c-button) {
-				outline: none;
-
-				&:not(:active, :hover):focus {
-					outline: none;
-				}
-			}
-
 			&--active {
 				color: $c-toggle-black-32;
 
