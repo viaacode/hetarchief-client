@@ -14,7 +14,6 @@ import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
 test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ page, context }) => {
 	const userId = uuid().replace(/-/g, '');
 	const userEmail = `hetarchief2.0+ateindgebruikerbzt${userId}@meemoo.be`;
-	console.log('user: ' + userEmail);
 
 	// Go to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
@@ -28,7 +27,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acceptCookies(page, 'selection');
 
 	// Check site is still visible:
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').first().click();
@@ -77,7 +76,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.waitForLoadState('networkidle');
 
 	// Check the confirmation page has loaded
-	await expect(await page.locator('text=Je account werd aangemaakt')).toBeVisible();
+	await expect(page.locator('text=Je account werd aangemaakt')).toBeVisible();
 
 	// Confirm email in ACM
 	// await acmConfirmEmail(
@@ -96,7 +95,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	});
 
 	// Cookie bot should not open again
-	await expect(await page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
+	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
 
 	// Login user
 	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
@@ -105,10 +104,10 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acceptTos(page);
 
 	// Cookie bot should not open again
-	await expect(await page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
+	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
 
 	// Check logged in status
-	await expect(await page.locator('.c-avatar__text')).toHaveText('Test-at');
+	await expect(page.locator('.c-avatar__text')).toHaveText('Test-at');
 
 	// Admin and beheer should not be visible
 	const navigationItemTexts = await page

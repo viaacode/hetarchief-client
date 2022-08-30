@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
 import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from './helpers/check-blade-title';
 import { checkToastMessage } from './helpers/check-toast-message';
@@ -14,6 +15,14 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
+	// Check homepage title
+	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+		timeout: 10000,
+	});
+
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Login as CP admin
 	await loginUserMeemooIdp(
 		page,
@@ -27,10 +36,10 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	});
 
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Click "beheer" navigation item
-	await page.click('.c-dropdown [role="menuitem"]');
+	await page.click('nav ul li .c-dropdown a');
 
 	// Click visit requests navigation item
 	await page.click('a[href="/beheer/aanvragen"]');
@@ -56,7 +65,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.press('.p-cp-requests__header [placeholder="Zoek"]', 'Enter');
 
 	// There should be zero requests with this name
-	await expect(await page.locator('text=Er zijn geen openstaande aanvragen.')).toBeVisible();
+	await expect(page.locator('text=Er zijn geen openstaande aanvragen.')).toBeVisible();
 
 	// Search for marie.odhiambo@example.com
 	await page.fill('.p-cp-requests__header [placeholder="Zoek"]', 'marie.odhiambo@example.com');
@@ -84,7 +93,8 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Click the pending visit request
 	await page
 		.locator(
-			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child'
+			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child',
+			{ hasText: 'BezoekerVoornaam' }
 		)
 		.first()
 		.click();
@@ -102,15 +112,15 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Check buttons for approve and deny are visible
 	let approveButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black'
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+		{ hasText: 'Goedkeuren' }
 	);
 	await expect(approveButton).toBeVisible();
-	await expect(await approveButton.innerHTML()).toContain('Goedkeuren');
 	let denyButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--text'
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+		{ hasText: 'Weigeren' }
 	);
 	await expect(denyButton).toBeVisible();
-	await expect(await denyButton.innerHTML()).toContain('Weigeren');
 
 	// Click the approve button
 	await approveButton.click();
@@ -126,7 +136,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.click('.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black');
 
 	// Blade closes
-	await expect(await page.locator('.c-blade--active')).not.toBeVisible();
+	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
 	await checkToastMessage(page, 'De aanvraag is goedgekeurd.');
@@ -165,7 +175,8 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Click the pending visit request
 	await page
 		.locator(
-			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child'
+			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child',
+			{ hasText: 'meemoo Admin' }
 		)
 		.first()
 		.click();
@@ -177,20 +188,21 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	summaryHtml = await page
 		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
 		.innerHTML();
-	await expect(summaryHtml).toContain('BezoekerVoornaam BezoekerAchternaam');
+	await expect(summaryHtml).toContain('meemoo');
+	await expect(summaryHtml).toContain('Admin');
 	await expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
 	approveButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--black'
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+		{ hasText: 'Goedkeuren' }
 	);
 	await expect(approveButton).toBeVisible();
-	await expect(await approveButton.innerHTML()).toContain('Goedkeuren');
 	denyButton = await page.locator(
-		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button--text'
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+		{ hasText: 'Weigeren' }
 	);
 	await expect(denyButton).toBeVisible();
-	await expect(await denyButton.innerHTML()).toContain('Weigeren');
 
 	// Click the deny button
 	await denyButton.click();
@@ -199,10 +211,14 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await checkBladeTitle(page, 'Aanvraag weigeren');
 
 	// Click the deny button on the second blade
-	await page.click('.c-button__label:has-text("Weigeren")');
+	await page
+		.locator('.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button', {
+			hasText: 'Weigeren',
+		})
+		.click();
 
 	// Blade closes
-	await expect(await page.locator('.c-blade--active')).not.toBeVisible();
+	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Toast message
 	await checkToastMessage(page, 'De aanvraag is geweigerd.');
@@ -227,7 +243,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check approved and denied requests are visible under their respective tabs
 	// Check approved count
 	await page.click('.c-tab__label:has-text("Goedgekeurd")');
-	await expect(await page.locator('text=hetarchief2.0+ateindgebruikerbzt')).toBeVisible();
+	await expect(page.locator('text=hetarchief2.0+ateindgebruikerbzt')).toBeVisible();
 
 	// Check denied count
 	await page.click('.c-tab__label:has-text("Geweigerd")');

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
 import { useTranslation } from 'next-i18next';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { globalLabelKeys } from '@shared/const';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
@@ -34,6 +34,11 @@ const Blade: FC<BladeProps> = ({
 
 	const isLayered = isManaged && layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
+
+	// Hack to remove ios outline on the close button: https://meemoo.atlassian.net/browse/ARC-1025
+	useEffect(() => {
+		isOpen && (document.activeElement as HTMLElement)?.blur?.();
+	}, [isOpen]);
 
 	const renderCloseButton = () => {
 		return (

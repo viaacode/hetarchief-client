@@ -17,6 +17,9 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(
 		page,
@@ -24,17 +27,14 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 		process.env.TEST_MEEMOO_ADMIN_ACCOUNT_PASSWORD as string
 	);
 
-	// Accept all cookies
-	await acceptCookies(page, 'all');
-
 	// Check tos is displayed, scroll down and click accept button
 	await acceptTos(page);
 
 	// Check site is still visible:
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Check logged in status
-	await expect(await page.locator('.c-avatar__text')).toHaveText('meemoo');
+	await expect(page.locator('.c-avatar__text')).toHaveText('meemoo');
 
 	// Admin should not be visible and beheer should be visible
 	const navigationItemTexts = await page
@@ -52,7 +52,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await fillRequestVisitBlade(page, 'vrt', 'Een geldige reden', undefined, true);
 
 	// Check that we were redirected to the request pending page
-	await expect(await page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
+	await expect(page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
 	await expect(await page.locator('.p-visit-requested__content').innerHTML()).toContain('VRT');
 
 	// Go to the homepage

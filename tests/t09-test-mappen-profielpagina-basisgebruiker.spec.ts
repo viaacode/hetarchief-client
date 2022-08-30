@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 
+import { acceptCookies } from './helpers/accept-cookies';
 import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from './helpers/check-blade-title';
 import { checkToastMessage } from './helpers/check-toast-message';
@@ -16,8 +17,11 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 		timeout: 10000,
 	});
 
+	// Accept all cookies
+	await acceptCookies(page, 'all');
+
 	// Check the homepage show the correct title for searching maintainers
-	await expect(await page.locator('text=Vind een aanbieder')).toBeVisible();
+	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -32,10 +36,10 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	});
 
 	// Check toast message is shown for visitor space access
-	await checkToastMessage(page, 'Je hebt nu toegang tot VRT', 200000);
+	// await checkToastMessage(page, 'Je hebt nu toegang tot VRT', 200000);
 
 	// Check green badge is visible and has value 1
-	const badge = await page.locator('[role="menuitem"] .c-badge').first();
+	const badge = await page.locator('nav ul li a .c-badge').first();
 	await expect(badge).toBeVisible();
 	await expect(badge).toContainText('1');
 
@@ -55,9 +59,9 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	// Click on VRT in the flyout menu
 	await flyout.locator('text=VRT').click();
 
-	// Wait for results to load
+	// Wait for search page to be ready
 	await page.waitForFunction(
-		() => document.querySelectorAll('.p-visitor-space article.c-card').length > 1,
+		() => document.querySelectorAll('.p-visitor-space__placeholder').length === 1,
 		null,
 		{
 			timeout: 10000,
@@ -113,14 +117,14 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 
 	// Get folder list container
 	const folderList = await page.locator(
-		'.c-blade--active [class*="AddToCollectionBlade_c-add-to-collection-blade__list__"]'
+		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
 	);
 
 	// Check folder favorites already exists
 	await expect(await folderList.locator('text=Favorieten')).toBeVisible();
 
 	// Click on create new folder
-	await folderList.locator('text=Nieuwe map aanmaken').click();
+	await folderList.locator('.c-content-input__value', { hasText: 'Nieuwe map aanmaken' }).click();
 
 	// Check input field  and accept and abort buttons are visible
 	await expect(await folderList.locator('input[placeholder="Nieuwe map"]')).toBeVisible();
@@ -251,7 +255,7 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 
 	// Check folder page title
 	let folderTitle = await page.locator(
-		'[class*="EditCollectionTitle_c-edit-collection-title__"] .c-content-input__value'
+		'[class*="EditCollectionTitle_c-edit-folder-title__"] .c-content-input__value'
 	);
 	await expect(folderTitle).toBeVisible();
 	await expect(folderTitle).toContainText('Bestaande map, nieuwe naam');
@@ -261,7 +265,9 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	 */
 
 	// Click the create new folder button
-	await secondaryNav.locator('text=Nieuwe map aanmaken').click();
+	await secondaryNav
+		.locator('.c-content-input__value', { hasText: 'Nieuwe map aanmaken' })
+		.click();
 
 	// Check new folder input and confirm and cancel buttons appear
 	folderNameEdit = await secondaryNav.locator('.c-content-input');
@@ -284,7 +290,7 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 
 	// Check folder page title
 	folderTitle = await page.locator(
-		'[class*="EditCollectionTitle_c-edit-collection-title__"] .c-content-input__value'
+		'[class*="EditCollectionTitle_c-edit-folder-title__"] .c-content-input__value'
 	);
 	await expect(folderTitle).toBeVisible();
 	await expect(folderTitle).toContainText('Nieuwe map automated test');
@@ -323,7 +329,7 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	await checkActiveSidebarNavigationItem(page, 0, 'Mijn historiek', '/account/mijn-historiek');
 
 	// No history is visible
-	await expect(await page.locator('text=Geen historiek')).toBeVisible();
+	await expect(page.locator('.l-container', { hasText: 'Geen historiek' })).toBeVisible();
 
 	/**
 	 * My profile page --------------------------------------------------------------------
@@ -343,11 +349,11 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 
 	// Check profile info
 	const existingFirstName = await page.locator('dd', { hasText: 'BezoekerVoornaam' }).innerHTML();
-	await expect(await page.locator('dt', { hasText: 'Mijn voornaam' })).toBeVisible();
-	await expect(await page.locator('dd', { hasText: 'BezoekerVoornaam' })).toBeVisible();
-	await expect(await page.locator('dt', { hasText: 'Mijn familienaam' })).toBeVisible();
-	await expect(await page.locator('dd', { hasText: 'BezoekerAchternaam' })).toBeVisible();
-	await expect(await page.locator('dt', { hasText: 'Mijn e-mailadres' })).toBeVisible();
+	await expect(page.locator('dt', { hasText: 'Mijn voornaam' })).toBeVisible();
+	await expect(page.locator('dd', { hasText: 'BezoekerVoornaam' })).toBeVisible();
+	await expect(page.locator('dt', { hasText: 'Mijn familienaam' })).toBeVisible();
+	await expect(page.locator('dd', { hasText: 'BezoekerAchternaam' })).toBeVisible();
+	await expect(page.locator('dt', { hasText: 'Mijn e-mailadres' })).toBeVisible();
 	await expect(
 		await page.locator('text=hetarchief2.0+ateindgebruikerbzt@meemoo.be')
 	).toBeVisible();
@@ -370,6 +376,11 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	// Click save button
 	await page.locator('[type="submit"]').click();
 
+	// Wait for redirect to homepage
+	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+		timeout: 10000,
+	});
+
 	// Login with existing user
 	await loginUserHetArchiefIdp(
 		page,
@@ -378,11 +389,11 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	);
 
 	// Check first name changed
-	await expect(await page.locator('dd', { hasText: newFirstName })).toBeVisible();
-	await expect(await page.locator('dd', { hasText: existingFirstName })).not.toBeVisible();
+	await expect(page.locator('dd', { hasText: newFirstName })).toBeVisible();
+	await expect(page.locator('dd', { hasText: existingFirstName })).not.toBeVisible();
 
 	// Check nav bar first name
-	await expect(await page.locator('nav .c-avatar__text')).toContainText(newFirstName);
+	await expect(page.locator('nav .c-avatar__text')).toContainText(newFirstName);
 
 	// Wait for close to save the videos
 	await context.close();

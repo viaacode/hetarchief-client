@@ -56,7 +56,6 @@ const renderLink = (
 				aria-label={tooltip}
 				className={className}
 				onClick={onClick}
-				role="menuitem"
 				tabIndex={0}
 				target={target}
 				title={tooltip}
@@ -68,14 +67,7 @@ const renderLink = (
 			</a>
 		</Link>
 	) : (
-		<a
-			aria-label={tooltip}
-			className={className}
-			role="menuitem"
-			tabIndex={0}
-			target={target}
-			title={tooltip}
-		>
+		<a aria-label={tooltip} className={className} tabIndex={0} target={target} title={tooltip}>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}

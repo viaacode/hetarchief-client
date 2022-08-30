@@ -53,6 +53,7 @@ import {
 	TextWithNewLines,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -231,7 +232,7 @@ const ObjectDetailPage: NextPage = () => {
 		if (previousUrl) {
 			const parsedUrl = parseUrl(previousUrl);
 			// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
-			if (/^\/[^/]+$/g.test(parsedUrl.url)) {
+			if (isVisitorSpaceSearchPage(parsedUrl.url)) {
 				// Previous url appears to be a visitor space url
 				setVisitorSpaceSearchUrl(previousUrl);
 			}

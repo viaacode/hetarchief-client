@@ -9,11 +9,12 @@ import { Permission } from '@account/const';
 import { Navigation } from '@navigation/components';
 import { DropdownMenu, Icon } from '@shared/components';
 import { CopyButton } from '@shared/components/CopyButton';
+import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { selectShowNavigationBorder } from '@shared/store/ui';
+import { VisitorSpaceNavigationProps } from '@visitor-space/components';
 
 import styles from './VisitorSpaceNavigation.module.scss';
-import { VisitorSpaceNavigationProps } from './VisitorSpaceNavigation.types';
 
 const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	backLink = '/',
@@ -26,11 +27,13 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	const { t } = useTranslation();
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
+	// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
+	const isSearchPage = isVisitorSpaceSearchPage(window.location.pathname);
 
 	return (
 		<Navigation contextual className={className} showBorder={showBorder}>
 			<Navigation.Left placement="left">
-				{showLinkedSpaceAsHomepage ? null : (
+				{showLinkedSpaceAsHomepage && isSearchPage ? null : (
 					<Link href={backLink} passHref={true}>
 						<a
 							aria-label={t(
