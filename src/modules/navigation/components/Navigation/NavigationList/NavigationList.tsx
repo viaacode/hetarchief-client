@@ -1,3 +1,4 @@
+import { keysSpacebar, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -33,7 +34,12 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 
 	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
 		return (
-			<div className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}>
+			<div
+				className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}
+				onKeyDown={(e) => onKey(e, keysSpacebar, () => e.preventDefault())}
+				role="button"
+				tabIndex={0}
+			>
 				{item.node}
 				<Icon className="u-text-left u-ml-4" name={iconName} />
 			</div>

@@ -31,6 +31,7 @@ const Footer: FC<FooterProps> = ({ links, leftItem, rightItem }) => {
 					<a
 						className={styles['c-footer__image-link']}
 						target={item.link.external ? '_blank' : '_self'}
+						aria-label={item.label}
 					>
 						{/* Image will not display in Storybook. Open issue: https://github.com/vercel/next.js/issues/18393*/}
 						{/* Images work fine in the next.js app */}

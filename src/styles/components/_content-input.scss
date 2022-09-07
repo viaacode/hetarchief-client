@@ -31,6 +31,12 @@ $component: "c-content-input";
 		&::first-line {
 			vertical-align: middle;
 		}
+
+		&:focus,
+		&:focus-visible,
+		&:focus-within {
+			outline: 2px solid $teal;
+		}
 	}
 
 	&__value {
