@@ -24,7 +24,7 @@ const Modal: FC<ModalProps> = ({
 	onOpen,
 	excludeScrollbar = true,
 }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [ready, setReady] = useState(false);
 	const scrollbarWidth = useScrollbarWidth(!!isOpen);
 

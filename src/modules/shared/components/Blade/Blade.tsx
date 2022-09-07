@@ -28,7 +28,7 @@ const Blade: FC<BladeProps> = ({
 	onClose,
 	layer,
 }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 	useScrollLock(!isManaged && isOpen, 'Blade');
 

@@ -11,7 +11,7 @@ const SearchBar: FC<SearchBarProps> = ({
 	variants = ['md', 'rounded', 'grey-border', 'icon--double', 'icon-clickable'],
 	...rest
 }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [search, setSearch] = useState<string | undefined>(rest.default);
 
 	const getVariants = () => {

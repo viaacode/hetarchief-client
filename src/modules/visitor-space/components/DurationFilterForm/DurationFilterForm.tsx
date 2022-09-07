@@ -34,7 +34,7 @@ const defaultValues: DurationFilterFormState = {
 };
 
 const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.duration?.[0];

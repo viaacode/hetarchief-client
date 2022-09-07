@@ -32,7 +32,7 @@ const defaultValues: CreatedFilterFormState = {
 };
 
 const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [query] = useQueryParams(CREATED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.created?.[0];

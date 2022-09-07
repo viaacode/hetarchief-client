@@ -32,7 +32,7 @@ const defaultValues: PublishedFilterFormState = {
 };
 
 const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className }) => {
-	const [t] = useTranslation();
+	const { t } = useTranslation();
 	const [query] = useQueryParams(PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.published?.[0];
