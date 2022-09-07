@@ -322,7 +322,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	return (
 		<Blade
 			{...props}
-			footer={renderFooter()}
+			footer={props.isOpen && renderFooter()}
 			title={t(
 				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
 			)}
@@ -337,23 +337,25 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 				/>
 			</div>
 
-			<div className="u-px-32 u-bg-platinum">
-				<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
-					<Controller
-						name="pairs"
-						control={control}
-						render={(data) => (
-							<>
-								{renderPairFields(data)}
+			{props.isOpen && (
+				<div className="u-px-32 u-bg-platinum">
+					<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
+						<Controller
+							name="pairs"
+							control={control}
+							render={(data) => (
+								<>
+									{renderPairFields(data)}
 
-								<li className={styles['c-add-to-folder-blade__list-button']}>
-									<CreateCollectionButton afterSubmit={getFolders.refetch} />
-								</li>
-							</>
-						)}
-					/>
-				</ul>
-			</div>
+									<li className={styles['c-add-to-folder-blade__list-button']}>
+										<CreateCollectionButton afterSubmit={getFolders.refetch} />
+									</li>
+								</>
+							)}
+						/>
+					</ul>
+				</div>
+			)}
 		</Blade>
 	);
 };

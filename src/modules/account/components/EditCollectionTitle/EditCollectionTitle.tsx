@@ -144,6 +144,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 						id={labelKeys.name}
 						nodeCancel={
 							<Button
+								tabIndex={-1}
 								variants={['silver']}
 								icon={<Icon name="times" aria-hidden />}
 								aria-label={t(
@@ -153,6 +154,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 						}
 						nodeSubmit={
 							<Button
+								tabIndex={-1}
 								variants={['black']}
 								icon={<Icon name="check" aria-hidden />}
 								aria-label={t(

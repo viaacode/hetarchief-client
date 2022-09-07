@@ -13,7 +13,12 @@ import { AdvancedFilterFields } from '../AdvancedFilterFields';
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
 import { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
-const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, values }) => {
+const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
+	children,
+	className,
+	disabled,
+	values,
+}) => {
 	const { t } = useTranslation();
 	const { control, getValues, setValue, handleSubmit } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
@@ -35,19 +40,21 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({ children, className, 
 					)}
 				</p>
 
-				{fields.map(({ id, ...value }, index) => (
-					<AdvancedFilterFields
-						key={`advanced-filter-${index}`}
-						id={id}
-						index={index}
-						value={value}
-						onChange={update}
-						onRemove={remove}
-					/>
-				))}
+				{!disabled &&
+					fields.map(({ id, ...value }, index) => (
+						<AdvancedFilterFields
+							key={`advanced-filter-${index}`}
+							id={id}
+							index={index}
+							value={value}
+							onChange={update}
+							onRemove={remove}
+						/>
+					))}
 
 				<div className="u-p-20 u-p-32:md u-bg-platinum">
 					<Button
+						disabled={disabled}
 						className="u-p-0"
 						iconStart={<Icon name="plus" />}
 						label={t(

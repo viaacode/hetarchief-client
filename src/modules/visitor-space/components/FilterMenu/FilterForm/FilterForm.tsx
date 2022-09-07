@@ -11,12 +11,13 @@ import { FilterFormProps } from './FilterForm.types';
 
 const FilterForm: FC<FilterFormProps> = ({
 	className,
-	id,
+	disabled,
 	form,
-	title,
-	values,
+	id,
 	onFormReset,
 	onFormSubmit,
+	title,
+	values,
 }) => {
 	const { t } = useTranslation();
 
@@ -39,7 +40,11 @@ const FilterForm: FC<FilterFormProps> = ({
 				</h2>
 			</div>
 
-			<FormComponent className={styles['c-filter-form__body']} values={{ [id]: values }}>
+			<FormComponent
+				disabled={disabled}
+				className={styles['c-filter-form__body']}
+				values={{ [id]: values }}
+			>
 				{({ reset, values, handleSubmit }) => (
 					<div className={styles['c-filter-form__footer']}>
 						<Button
