@@ -1,6 +1,7 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { HTTPError } from 'ky';
 import { GetServerSideProps, NextPage } from 'next';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -12,7 +13,7 @@ import { AuthModal } from '@auth/components';
 import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
-import { ErrorNotFound, Loading } from '@shared/components';
+import { Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
@@ -22,6 +23,8 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetContentPage } from '../../modules/content-page/hooks/get-content-page';
 
 import { VisitorLayout } from 'modules/visitors';
+
+const { publicRuntimeConfig } = getConfig();
 
 const DynamicRouteResolver: NextPage = () => {
 	useNavigationBorder();
@@ -79,6 +82,12 @@ const DynamicRouteResolver: NextPage = () => {
 	 */
 
 	useEffect(() => {
+		if (isVisitorSpaceNotFoundError && isContentPageNotFoundError) {
+			window.open(`${publicRuntimeConfig.PROXY_URL}/not-found`, '_self');
+		}
+	}, [isVisitorSpaceNotFoundError, isContentPageNotFoundError]);
+
+	useEffect(() => {
 		dispatch(setShowZendesk(true));
 	}, [dispatch]);
 
@@ -91,9 +100,6 @@ const DynamicRouteResolver: NextPage = () => {
 
 		if (isVisitorSpaceLoading || isContentPageLoading) {
 			return <Loading fullscreen />;
-		}
-		if (isVisitorSpaceNotFoundError && isContentPageNotFoundError) {
-			return <ErrorNotFound />;
 		}
 		if (visitorSpaceInfo) {
 			dispatch(setShowZendesk(false));
