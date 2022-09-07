@@ -8,7 +8,7 @@ interface TextWithNewLinesProps {
 }
 
 const TextWithNewLines: FC<TextWithNewLinesProps> = ({ text, className }) => {
-	if (!text) {
+	if (typeof text !== 'string') {
 		return null;
 	}
 
