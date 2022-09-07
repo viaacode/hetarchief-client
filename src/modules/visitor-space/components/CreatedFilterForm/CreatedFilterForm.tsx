@@ -31,7 +31,7 @@ const defaultValues: CreatedFilterFormState = {
 	operator: Operator.GreaterThanOrEqual,
 };
 
-const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) => {
+const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, disabled }) => {
 	const { t } = useTranslation();
 	const [query] = useQueryParams(CREATED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
@@ -96,6 +96,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 							render={({ field }) => (
 								<ReactSelect
 									{...field}
+									isDisabled={disabled}
 									components={{ IndicatorSeparator: () => null }}
 									inputId={labelKeys.operator}
 									onChange={(newValue) => {
@@ -130,12 +131,14 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className }) 
 							render={() =>
 								showRange ? (
 									<DateRangeInput
+										disabled={disabled}
 										id={labelKeys.created}
 										onChange={(e) => onChangeCreated(e.target.value)}
 										value={form.created}
 									/>
 								) : (
 									<DateInput
+										disabled={disabled}
 										id={labelKeys.created}
 										onChange={(date) => {
 											onChangeCreated(

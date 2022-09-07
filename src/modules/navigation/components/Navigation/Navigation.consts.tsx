@@ -52,7 +52,14 @@ const renderLink = (
 ): ReactNode => {
 	return href ? (
 		<Link href={href}>
-			<a className={className} tabIndex={0} title={tooltip} target={target} onClick={onClick}>
+			<a
+				aria-label={tooltip}
+				className={className}
+				onClick={onClick}
+				tabIndex={0}
+				target={target}
+				title={tooltip}
+			>
 				{iconStart && iconStart}
 				{label}
 				{badge && badge}
@@ -60,7 +67,7 @@ const renderLink = (
 			</a>
 		</Link>
 	) : (
-		<a className={className} tabIndex={0} title={tooltip} target={target}>
+		<a aria-label={tooltip} className={className} tabIndex={0} target={target} title={tooltip}>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}

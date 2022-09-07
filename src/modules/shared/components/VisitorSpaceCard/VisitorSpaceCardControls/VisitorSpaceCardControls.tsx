@@ -127,7 +127,11 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 				)}
 
 				<Link href={`/${room.slug}`} passHref>
-					<a>
+					<a
+						aria-label={t(
+							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
+						)}
+					>
 						<Button variants={['lg', 'white']}>
 							{t(
 								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'

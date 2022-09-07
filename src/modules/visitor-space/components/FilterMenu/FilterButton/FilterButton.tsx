@@ -23,11 +23,14 @@ const FilterButton: FC<FilterButtonProps> = ({
 
 	return (
 		<Button
+			tabIndex={0}
+			role="button"
 			className={filterBtnCls}
 			iconEnd={<Icon className="u-text-left" name={icon} aria-hidden />}
 			label={label}
 			variants={['black', 'block']}
 			onClick={onClick}
+			type="button"
 		/>
 	);
 };

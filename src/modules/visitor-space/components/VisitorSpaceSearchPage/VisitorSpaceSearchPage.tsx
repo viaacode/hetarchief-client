@@ -1,4 +1,4 @@
-import { Button, TabProps } from '@meemoo/react-components';
+import { Button, FormControl, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { sum } from 'lodash-es';
@@ -501,7 +501,17 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 					return (
 						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
-							<a className="u-text-no-decoration">{card}</a>
+							<a
+								className="u-text-no-decoration"
+								aria-label={t(
+									'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___navigeer-naar-de-detailpagina-van-name',
+									{
+										name: item.title,
+									}
+								)}
+							>
+								{card}
+							</a>
 						</Link>
 					);
 				}}
@@ -545,11 +555,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			{visitorSpace && (
 				<div className="p-visitor-space">
 					<VisitorSpaceNavigation
-						title={
-							<label htmlFor={`react-select-${labelKeys.search}-input`}>
-								{visitorSpace?.name}
-							</label>
-						}
+						title={visitorSpace?.name}
 						phone={visitorSpace?.contactInfo.telephone || ''}
 						email={visitorSpace?.contactInfo.email || ''}
 						showBorder={showNavigationBorder}
@@ -558,24 +564,32 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 					<section className="u-bg-black u-pt-8">
 						<div className="l-container">
-							<TagSearchBar
-								allowCreate
-								className="u-mb-24"
-								clearLabel={t(
-									'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
-								)}
-								instanceId={labelKeys.search}
-								isMulti
-								size="lg"
-								placeholder={t(
+							<FormControl
+								className="c-form-control--label-hidden u-mb-24"
+								id={`react-select-${labelKeys.search}-input`}
+								label={t(
 									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 								)}
-								syncSearchValue={false}
-								value={activeFilters}
-								onClear={onResetFilters}
-								onRemoveValue={onRemoveTag}
-								onSearch={onSearch}
-							/>
+							>
+								<TagSearchBar
+									allowCreate
+									clearLabel={t(
+										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
+									)}
+									instanceId={labelKeys.search}
+									isMulti
+									size="lg"
+									placeholder={t(
+										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+									)}
+									syncSearchValue={false}
+									value={activeFilters}
+									onClear={onResetFilters}
+									onRemoveValue={onRemoveTag}
+									onSearch={onSearch}
+								/>
+							</FormControl>
+
 							<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 						</div>
 					</section>
@@ -590,7 +604,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									)}
 									action={
 										<Link passHref href="/kiosk-voorwaarden">
-											<a>
+											<a aria-label={t('pages/slug/index___meer-info')}>
 												<Button
 													className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
 													label={t('pages/slug/index___meer-info')}

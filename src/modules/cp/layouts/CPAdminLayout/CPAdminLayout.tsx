@@ -25,7 +25,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 				id,
 				node: ({ linkClassName }) => (
 					<Link href={href}>
-						<a className={linkClassName} title={label}>
+						<a className={linkClassName} aria-label={label}>
 							{label}
 						</a>
 					</Link>
