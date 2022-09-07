@@ -76,6 +76,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 						onFormSubmit={onFormSubmit}
 						title={label}
 						values={values}
+						disabled={!filterIsActive}
 					/>
 				</DropdownContent>
 			</Dropdown>

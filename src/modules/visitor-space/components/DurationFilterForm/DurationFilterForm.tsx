@@ -33,7 +33,7 @@ const defaultValues: DurationFilterFormState = {
 	operator: Operator.LessThanOrEqual,
 };
 
-const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }) => {
+const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, disabled }) => {
 	const { t } = useTranslation();
 	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
 
@@ -98,6 +98,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className }
 							render={({ field }) => (
 								<ReactSelect
 									{...field}
+									isDisabled={disabled}
 									components={{ IndicatorSeparator: () => null }}
 									inputId={labelKeys.operator}
 									onChange={(newValue) => {

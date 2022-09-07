@@ -17,7 +17,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		accessor: 'visitorName',
 		Cell: ({ row }: VisitRow) => {
 			return (
-				<span className="u-color-neutral" title={row.original.visitorName}>
+				<span className="u-color-neutral" aria-label={row.original.visitorName}>
 					{row.original.visitorName}
 				</span>
 			);

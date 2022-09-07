@@ -153,6 +153,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				<a
 					className="u-text-no-decoration"
 					onClick={() => onClickNotificationLink(notification)}
+					aria-label={notification.title}
 				>
 					{content}
 				</a>
@@ -167,6 +168,9 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			className={styles['c-notification-center__button']}
 			variants={['black', 'block']}
 			iconStart={<Icon name="check" />}
+			aria-label={t(
+				'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
+			)}
 			title={
 				unread.length > 0
 					? t(

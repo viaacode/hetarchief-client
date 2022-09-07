@@ -53,7 +53,7 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 				id,
 				node: ({ linkClassName }) => (
 					<Link href={href}>
-						<a className={linkClassName} title={label}>
+						<a className={linkClassName} aria-label={label}>
 							{label}
 						</a>
 					</Link>
@@ -63,7 +63,7 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 					id,
 					node: ({ linkClassName }) => (
 						<Link href={href}>
-							<a className={linkClassName} title={label}>
+							<a className={linkClassName} aria-label={label}>
 								{label}
 							</a>
 						</Link>

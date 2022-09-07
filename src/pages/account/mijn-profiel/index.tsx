@@ -76,7 +76,11 @@ const AccountMyProfile: NextPage = () => {
 										})}
 										passHref
 									>
-										<a>
+										<a
+											aria-label={t(
+												'pages/account/mijn-profiel/index___wijzig-mijn-gegevens'
+											)}
+										>
 											<Button
 												className="u-p-0"
 												iconStart={<Icon name="edit" />}
