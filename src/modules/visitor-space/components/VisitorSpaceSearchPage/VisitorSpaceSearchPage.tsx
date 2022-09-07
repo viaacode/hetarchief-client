@@ -240,7 +240,6 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			setQuery({
 				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue),
 				page: 1,
-				hasSearched: true,
 			});
 		}
 	};
@@ -339,7 +338,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined, page: 1, hasSearched: true });
+		setQuery({ [id]: data, filter: undefined, page: 1 });
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -622,6 +621,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						className={clsx(
 							'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
 							{
+								'p-visitor-space__results--placeholder': showNoResults,
 								'u-pt-0': showResearchWarning,
 							}
 						)}
