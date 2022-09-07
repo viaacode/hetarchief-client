@@ -113,7 +113,10 @@ export const VisitorSpacesOverviewTableColumns = (
 							href={`${ROUTES.adminEditSpace.replace(':slug', row.original.slug)}`}
 							passHref={true}
 						>
-							<a className="u-color-neutral u-font-size-24">
+							<a
+								className="u-color-neutral u-font-size-24"
+								aria-label={i18n.t('modules/admin/const/spaces___aanpassen')}
+							>
 								<Icon name="edit" />
 							</a>
 						</Link>

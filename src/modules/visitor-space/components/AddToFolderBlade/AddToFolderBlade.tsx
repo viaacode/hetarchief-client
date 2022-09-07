@@ -322,7 +322,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	return (
 		<Blade
 			{...props}
-			footer={renderFooter()}
+			footer={props.isOpen && renderFooter()}
 			title={t(
 				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
 			)}
@@ -346,9 +346,11 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							<>
 								{renderPairFields(data)}
 
-								<li className={styles['c-add-to-folder-blade__list-button']}>
-									<CreateCollectionButton afterSubmit={getFolders.refetch} />
-								</li>
+								{props.isOpen && (
+									<li className={styles['c-add-to-folder-blade__list-button']}>
+										<CreateCollectionButton afterSubmit={getFolders.refetch} />
+									</li>
+								)}
 							</>
 						)}
 					/>

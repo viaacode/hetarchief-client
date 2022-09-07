@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC } from 'react';
 
@@ -18,6 +19,8 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 	label,
 	onClick,
 }) => {
+	const [t] = useTranslation();
+
 	const rootCls = clsx(
 		className,
 		isDropdownItem ? 'c-dropdown-menu__item' : styles['c-navigtion__link'],
@@ -54,7 +57,14 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 
 	return href ? (
 		<Link href={href} passHref>
-			<a className={rootCls}>{renderLabelWithIcons()}</a>
+			<a
+				className={rootCls}
+				aria-label={t(
+					'modules/navigation/components/navigation/navigation-link/navigation-link___navigeer-naar-een-pagina'
+				)}
+			>
+				{renderLabelWithIcons()}
+			</a>
 		</Link>
 	) : (
 		<span className={rootCls} {...clickProps}>

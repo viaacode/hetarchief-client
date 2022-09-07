@@ -87,7 +87,6 @@ const AccountMyCollections: NextPage = () => {
 						<Link href={href}>
 							<a
 								className={clsx(linkClassName, 'p-account-my-collections__link')}
-								title={collection.name}
 								aria-label={collection.name}
 							>
 								{collection.name}
@@ -305,7 +304,7 @@ const AccountMyCollections: NextPage = () => {
 	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
 	const renderTitle = (item: FolderMedia): ReactNode => (
 		<Link href={`/${item.visitorSpaceSlug}/${item.schemaIdentifier}`}>
-			<a className="u-text-no-decoration" title={item.schemaIdentifier}>
+			<a className="u-text-no-decoration" aria-label={item.schemaIdentifier}>
 				<b>
 					<Highlighter
 						searchWords={keywords}
