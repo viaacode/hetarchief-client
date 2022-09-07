@@ -31,7 +31,7 @@ const defaultValues: PublishedFilterFormState = {
 	published: undefined,
 };
 
-const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className }) => {
+const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className, disabled }) => {
 	const { t } = useTranslation();
 	const [query] = useQueryParams(PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
@@ -96,6 +96,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 							render={({ field }) => (
 								<ReactSelect
 									{...field}
+									isDisabled={disabled}
 									components={{ IndicatorSeparator: () => null }}
 									inputId={labelKeys.operator}
 									onChange={(newValue) => {
@@ -130,12 +131,14 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 							render={() =>
 								showRange ? (
 									<DateRangeInput
+										disabled={disabled}
 										id={labelKeys.published}
 										onChange={(e) => onChangePublished(e.target.value)}
 										value={form.published}
 									/>
 								) : (
 									<DateInput
+										disabled={disabled}
 										id={labelKeys.published}
 										onChange={(date) => {
 											onChangePublished(

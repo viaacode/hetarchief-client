@@ -337,25 +337,25 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 				/>
 			</div>
 
-			<div className="u-px-32 u-bg-platinum">
-				<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
-					<Controller
-						name="pairs"
-						control={control}
-						render={(data) => (
-							<>
-								{renderPairFields(data)}
+			{props.isOpen && (
+				<div className="u-px-32 u-bg-platinum">
+					<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
+						<Controller
+							name="pairs"
+							control={control}
+							render={(data) => (
+								<>
+									{renderPairFields(data)}
 
-								{props.isOpen && (
 									<li className={styles['c-add-to-folder-blade__list-button']}>
 										<CreateCollectionButton afterSubmit={getFolders.refetch} />
 									</li>
-								)}
-							</>
-						)}
-					/>
-				</ul>
-			</div>
+								</>
+							)}
+						/>
+					</ul>
+				</div>
+			)}
 		</Blade>
 	);
 };

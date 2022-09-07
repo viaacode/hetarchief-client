@@ -1,4 +1,4 @@
-import { Button, TabProps } from '@meemoo/react-components';
+import { Button, FormControl, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { sum } from 'lodash-es';
@@ -556,11 +556,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			{visitorSpace && (
 				<div className="p-visitor-space">
 					<VisitorSpaceNavigation
-						title={
-							<label htmlFor={`react-select-${labelKeys.search}-input`}>
-								{visitorSpace?.name}
-							</label>
-						}
+						title={visitorSpace?.name}
 						phone={visitorSpace?.contactInfo.telephone || ''}
 						email={visitorSpace?.contactInfo.email || ''}
 						showBorder={showNavigationBorder}
@@ -569,24 +565,32 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 					<section className="u-bg-black u-pt-8">
 						<div className="l-container">
-							<TagSearchBar
-								allowCreate
-								className="u-mb-24"
-								clearLabel={t(
-									'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
-								)}
-								instanceId={labelKeys.search}
-								isMulti
-								size="lg"
-								placeholder={t(
+							<FormControl
+								className="c-form-control--label-hidden u-mb-24"
+								id={`react-select-${labelKeys.search}-input`}
+								label={t(
 									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 								)}
-								syncSearchValue={false}
-								value={activeFilters}
-								onClear={onResetFilters}
-								onRemoveValue={onRemoveTag}
-								onSearch={onSearch}
-							/>
+							>
+								<TagSearchBar
+									allowCreate
+									clearLabel={t(
+										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
+									)}
+									instanceId={labelKeys.search}
+									isMulti
+									size="lg"
+									placeholder={t(
+										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+									)}
+									syncSearchValue={false}
+									value={activeFilters}
+									onClear={onResetFilters}
+									onRemoveValue={onRemoveTag}
+									onSearch={onSearch}
+								/>
+							</FormControl>
+
 							<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 						</div>
 					</section>
