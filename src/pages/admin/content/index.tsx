@@ -36,7 +36,11 @@ const ContentPageOverviewPage: FC = () => {
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
 						<Link href={CONTENT_PATH.CONTENT_PAGE_CREATE} passHref>
-							<a>
+							<a
+								aria-label={t(
+									'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
+								)}
+							>
 								<Button
 									label={t(
 										'admin/content/views/content-overview___content-toevoegen'

@@ -99,6 +99,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 						iconStart={(handler) => {
 							return !isOpen ? (
 								<Button
+									tabIndex={-1}
 									variants={['platinum', 'sm']}
 									onClick={handler}
 									icon={<Icon name="plus" aria-hidden />}
@@ -113,6 +114,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 						id={labelKeys.name}
 						nodeSubmit={
 							<Button
+								tabIndex={-1}
 								variants={['black', 'sm']}
 								icon={<Icon name="check" aria-hidden />}
 								aria-label={t(
@@ -122,6 +124,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 						}
 						nodeCancel={
 							<Button
+								tabIndex={-1}
 								variants={['silver', 'sm']}
 								icon={<Icon name="times" aria-hidden />}
 								aria-label={t(

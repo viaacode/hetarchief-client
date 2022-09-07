@@ -436,7 +436,12 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							}
 							passHref
 						>
-							<a onClick={onClose}>
+							<a
+								onClick={onClose}
+								aria-label={t(
+									'modules/shared/components/approve-request-blade/approve-request-blade___navigeer-naar-de-reeds-goedgekeurde-aanvraag-voor-deze-periode'
+								)}
+							>
 								{t(
 									'modules/shared/components/approve-request-blade/approve-request-blade___bekijk-deze-aanvraag'
 								)}
