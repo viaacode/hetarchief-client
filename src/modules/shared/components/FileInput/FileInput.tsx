@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { forwardRef } from 'react';
+
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './FileInput.module.scss';
 import { FileInputProps } from './FileInput.types';

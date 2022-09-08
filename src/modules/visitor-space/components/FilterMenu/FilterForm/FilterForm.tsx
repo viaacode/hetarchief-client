@@ -1,9 +1,9 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
 import { Icon } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 
 import styles from './FilterForm.module.scss';

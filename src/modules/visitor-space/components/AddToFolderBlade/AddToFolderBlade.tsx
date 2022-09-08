@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -11,7 +10,7 @@ import { useGetCollections } from '@account/hooks/get-collections';
 import { collectionsService } from '@account/services/collections';
 import { Folder } from '@account/types';
 import { Blade, Icon } from '@shared/components';
-import Html from '@shared/components/Html/Html';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/media';
 
@@ -106,11 +105,19 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 			});
 
 			const addedToFolders: Array<{
-				toastMessage: { maxLines: number; title: string; description: string };
+				toastMessage: {
+					maxLines: number;
+					title: string | ReactNode;
+					description: string | ReactNode;
+				};
 				descriptionVariables: Record<'item' | 'folder', unknown>;
 			}> = [];
 			const removedFromFolders: Array<{
-				toastMessage: { maxLines: number; title: string; description: string };
+				toastMessage: {
+					maxLines: number;
+					title: string | ReactNode;
+					description: string | ReactNode;
+				};
 				descriptionVariables: Record<'item' | 'folder', unknown>;
 			}> = [];
 
@@ -143,7 +150,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 									),
 									description: t(
 										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-map-beschrijving',
-										descriptionVariables
+										descriptionVariables as Record<string, string>
 									),
 								},
 								descriptionVariables,
@@ -166,7 +173,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 									),
 									description: t(
 										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-map-beschrijving',
-										descriptionVariables
+										descriptionVariables as Record<string, string>
 									),
 								},
 								descriptionVariables,
@@ -329,12 +336,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 			className={clsx(props.className, styles['c-add-to-folder-blade'])}
 		>
 			<div className="u-px-32">
-				<Html
-					content={t(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
-						{ title }
-					)}
-				/>
+				{t(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
+					{ title }
+				)}
 			</div>
 
 			{props.isOpen && (

@@ -1,8 +1,8 @@
 import { Button } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
 import { ErrorPage } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 interface ErrorNotFoundProps {
 	nlTranslations?: Record<string, string>;

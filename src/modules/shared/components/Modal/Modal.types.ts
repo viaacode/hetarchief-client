@@ -4,7 +4,7 @@ import { OnAfterOpenCallback } from 'react-modal';
 export interface ModalProps {
 	isOpen?: boolean;
 	className?: string;
-	title?: string;
+	title?: string | ReactNode;
 	heading?: ReactNode;
 	footer?: ReactNode;
 	onClose?: () => void;

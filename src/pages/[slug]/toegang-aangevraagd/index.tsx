@@ -1,15 +1,14 @@
 import { HTTPError } from 'ky';
-import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setShowZendesk } from '@shared/store/ui';
 import { AccessStatus } from '@shared/types';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -91,7 +90,5 @@ const VisitRequestedPage: NextPage = () => {
 
 	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(VisitRequestedPage);

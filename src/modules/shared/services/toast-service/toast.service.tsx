@@ -1,13 +1,15 @@
 import { toast, ToastOptions } from 'react-toastify';
 
 import { Toast, ToastProps } from '@shared/components';
-import { i18n } from '@shared/helpers/i18n';
+import { TranslationService } from '@shared/services/translation-service/transaltion-service';
 import { Optional } from '@shared/types';
 
 class ToastService {
 	public notify(
 		{
-			buttonLabel = i18n.t('modules/shared/services/toast-service/toast___ok'),
+			buttonLabel = TranslationService.getTranslation(
+				'modules/shared/services/toast-service/toast___ok'
+			),
 			onClose,
 			maxLines = 5,
 			...toastProps

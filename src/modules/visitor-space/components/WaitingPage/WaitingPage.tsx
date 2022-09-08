@@ -1,10 +1,10 @@
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import Html from '@shared/components/Html/Html';
 import { ROUTES } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
@@ -17,7 +17,7 @@ import { WaitingPageProps } from './WaitingPage.types';
 const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 	useNavigationBorder();
 
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 
@@ -29,7 +29,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 					name="description"
 					content={
 						space?.info ||
-						t(
+						tText(
 							'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
 						)
 					}

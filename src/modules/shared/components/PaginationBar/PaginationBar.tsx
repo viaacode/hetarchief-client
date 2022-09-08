@@ -1,8 +1,8 @@
 import { Button, Pagination } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import { Icon } from '../Icon';

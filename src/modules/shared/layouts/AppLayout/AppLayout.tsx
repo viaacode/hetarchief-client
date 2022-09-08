@@ -27,11 +27,11 @@ import { useGetNotifications } from '@shared/components/NotificationCenter/hooks
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
-import { i18n } from '@shared/helpers/i18n';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
+import { TranslationService } from '@shared/services/translation-service/transaltion-service';
 import { useAppDispatch } from '@shared/store';
 import { selectHistory } from '@shared/store/history';
 import { getTosAction } from '@shared/store/tos/tos.slice';
@@ -170,9 +170,7 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation showBorder={showBorder}>
 				<Navigation.Left
 					currentPath={asPath}
-					hamburgerProps={
-						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
-					}
+					hamburgerProps={NAV_HAMBURGER_PROPS()}
 					items={getNavigationItemsLeft(
 						asPath,
 						accessibleVisitorSpaces || [],

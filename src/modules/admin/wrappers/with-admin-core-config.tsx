@@ -7,7 +7,6 @@ import {
 	LinkInfo,
 	ToastInfo,
 } from '@meemoo/react-admin';
-import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -21,6 +20,7 @@ import { navigationService } from '@navigation/services/navigation-service';
 import { sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTE_PARTS } from '@shared/const';
+import { t, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
@@ -57,10 +57,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const initConfigValue = useCallback(() => {
-			if (!i18n) {
-				return;
-			}
-
 			const commonUser: CommonUser = {
 				uid: user?.id,
 				profileId: user?.id as string,
@@ -155,7 +151,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							});
 						},
 					},
-					i18n,
+					i18n: { t, tText },
 					educationOrganisationService: {
 						fetchEducationOrganisationName: () => Promise.resolve(null),
 						fetchCities: () => Promise.resolve([]),

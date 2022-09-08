@@ -1,6 +1,5 @@
 import { useSlot } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
@@ -15,6 +14,7 @@ import {
 import { ListNavigationItem } from '@shared/components';
 import { globalLabelKeys } from '@shared/const';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
 

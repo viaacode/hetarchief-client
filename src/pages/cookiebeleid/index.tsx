@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
@@ -6,7 +6,6 @@ import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-quer
 import { AuthModal } from '@auth/components';
 import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { withI18n } from '@i18n/wrappers';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 
 import styles from './cookie-policy.module.scss';
@@ -56,7 +55,5 @@ const CookiePolicy: NextPage = () => {
 		</>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default CookiePolicy;

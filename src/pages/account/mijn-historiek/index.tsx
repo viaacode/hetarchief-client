@@ -1,9 +1,8 @@
 import { Table } from '@meemoo/react-components';
-import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -17,10 +16,10 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createHomeWithVisitorSpaceFilterUrl, createPageTitle } from '@shared/utils';
@@ -31,7 +30,7 @@ import { VisitTimeframe } from '@visits/types';
 import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyHistory: NextPage = () => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const router = useRouter();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 
@@ -108,7 +107,7 @@ const AccountMyHistory: NextPage = () => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
+	const renderEmptyMessage = (): string | ReactNode => {
 		return t('pages/account/mijn-historiek/index___geen-historiek');
 	};
 
@@ -116,11 +115,11 @@ const AccountMyHistory: NextPage = () => {
 		<VisitorLayout>
 			<Head>
 				<title>
-					{createPageTitle(t('pages/account/mijn-historiek/index___mijn-historiek'))}
+					{createPageTitle(tText('pages/account/mijn-historiek/index___mijn-historiek'))}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/account/mijn-historiek/index___mijn-historiek-meta-omschrijving'
 					)}
 				/>
@@ -138,10 +137,7 @@ const AccountMyHistory: NextPage = () => {
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: HistoryTableColumns(
-										{ t },
-										onClickRow
-									) as Column<object>[],
+									columns: HistoryTableColumns(onClickRow) as Column<object>[],
 									data: visits.data?.items || [],
 									initialState: {
 										pageSize: HistoryItemListSize,
@@ -180,7 +176,5 @@ const AccountMyHistory: NextPage = () => {
 		</VisitorLayout>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(AccountMyHistory, Permission.MANAGE_ACCOUNT));

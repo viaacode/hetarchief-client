@@ -1,4 +1,3 @@
-import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -8,6 +7,7 @@ import { checkLoginAction, selectCheckLoginLoading, selectHasCheckedLogin } from
 import { ErrorNoAccess } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useAppDispatch } from '@shared/store';
 
 export const withAllRequiredPermissions = (

@@ -1,8 +1,6 @@
 import { Column, Table, TableOptions } from '@meemoo/react-components';
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -13,7 +11,6 @@ import {
 } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
@@ -23,6 +20,7 @@ import {
 } from '@shared/components';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -31,7 +29,7 @@ import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { VisitTimeframe } from '@visits/types';
 
 const Visitors: FC = () => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
@@ -131,7 +129,7 @@ const Visitors: FC = () => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
+	const renderEmptyMessage = (): string | ReactNode => {
 		return t(
 			'modules/admin/visitor-spaces/pages/visitors/visitors___er-zijn-geen-actieve-bezoekers'
 		);
@@ -142,12 +140,14 @@ const Visitors: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers')
+						tText(
+							'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
+						)
 					)}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
 					)}
 				/>
@@ -165,7 +165,7 @@ const Visitors: FC = () => {
 								id={globalLabelKeys.adminLayout.title}
 								default={filters[SEARCH_QUERY_KEY]}
 								className="p-admin-visitors__search"
-								placeholder={t(
+								placeholder={tText(
 									'pages/admin/bezoekersruimtesbeheer/bezoekers/index___zoek'
 								)}
 								onSearch={(value) =>
@@ -242,7 +242,7 @@ const Visitors: FC = () => {
 						/>
 						<ApproveRequestBlade
 							title={t('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
-							approveButtonLabel={t('pages/beheer/bezoekers/index___aanpassen')}
+							approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
 							successTitle={t(
 								'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
 							)}
@@ -263,7 +263,5 @@ const Visitors: FC = () => {
 		</>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(Visitors, Permission.READ_ALL_VISIT_REQUESTS));

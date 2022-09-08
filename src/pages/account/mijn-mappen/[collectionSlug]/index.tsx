@@ -1,8 +1,7 @@
 import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
-import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -27,7 +26,6 @@ import { collectionsService } from '@account/services/collections';
 import { Folder, FolderMedia } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import {
 	Icon,
 	IdentifiableMediaCard,
@@ -41,6 +39,7 @@ import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/media';
@@ -58,7 +57,7 @@ const labelKeys = {
 };
 
 const AccountMyCollections: NextPage = () => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const router = useRouter();
 	const { collectionSlug } = router.query;
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
@@ -170,7 +169,8 @@ const AccountMyCollections: NextPage = () => {
 				const descriptionVariables = {
 					item: item.name,
 					folder:
-						folder?.name || t('pages/account/mijn-mappen/folder-slug/index___onbekend'),
+						folder?.name ||
+						tText('pages/account/mijn-mappen/folder-slug/index___onbekend'),
 				};
 
 				toastService.notify({
@@ -218,13 +218,13 @@ const AccountMyCollections: NextPage = () => {
 									key={'export-collection'}
 									className="p-account-my-collections__export--label"
 									variants={['black']}
-									name={t(
+									name={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
-									label={t(
+									label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
-									aria-label={t(
+									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
 									iconStart={<Icon name="export" aria-hidden />}
@@ -242,11 +242,11 @@ const AccountMyCollections: NextPage = () => {
 									key={'export-collection-mobile'}
 									className="p-account-my-collections__export--icon"
 									variants={['black']}
-									name={t(
+									name={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
 									icon={<Icon name="export" aria-hidden />}
-									aria-label={t(
+									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
 									onClick={(e) => {
@@ -268,10 +268,10 @@ const AccountMyCollections: NextPage = () => {
 									className="p-account-my-collections__delete"
 									variants={['silver']}
 									icon={<Icon name="trash" aria-hidden />}
-									aria-label={t(
+									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
 									)}
-									name={t(
+									name={tText(
 										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
 									)}
 									onClick={(e) => {
@@ -317,7 +317,7 @@ const AccountMyCollections: NextPage = () => {
 	);
 
 	const renderDescription = (item: FolderMedia): ReactNode => {
-		const items: { label: string; value: ReactNode }[] = [
+		const items: { label: string | ReactNode; value: ReactNode }[] = [
 			{
 				label: t('pages/account/mijn-mappen/folder-slug/index___aanbieder'),
 				value: item.maintainerName,
@@ -375,14 +375,16 @@ const AccountMyCollections: NextPage = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/account/mijn-mappen/index___mijn-mappen') +
+						tText('pages/account/mijn-mappen/index___mijn-mappen') +
 							` | ${activeCollection?.name || collectionSlug}`
 					)}
 				</title>
 
 				<meta
 					name="description"
-					content={t('pages/account/mijn-mappen/index___mijn-mappen-meta-omschrijving')}
+					content={tText(
+						'pages/account/mijn-mappen/index___mijn-mappen-meta-omschrijving'
+					)}
 				/>
 			</Head>
 
@@ -426,7 +428,7 @@ const AccountMyCollections: NextPage = () => {
 										id={`${labelKeys.search}--${activeCollection.id}`}
 										default={filters[SEARCH_QUERY_KEY]}
 										className="p-account-my-collections__search"
-										placeholder={t(
+										placeholder={tText(
 											'pages/account/mijn-mappen/folder-slug/index___zoek'
 										)}
 										onSearch={(value) =>
@@ -521,8 +523,6 @@ const AccountMyCollections: NextPage = () => {
 		</VisitorLayout>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAllRequiredPermissions(AccountMyCollections, Permission.MANAGE_ACCOUNT)

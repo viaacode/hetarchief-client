@@ -1,6 +1,4 @@
 import { UserOverview } from '@meemoo/react-admin';
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import React, { FC } from 'react';
 
@@ -8,12 +6,12 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle, formatDistanceToday } from '@shared/utils';
 
 const UsersOverview: FC = () => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 
 	const renderUsers = () => (
 		<>
@@ -30,12 +28,12 @@ const UsersOverview: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')
+						tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')
 					)}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/gebruikersbeheer/gebruikers/index___gebruikers-omschrijving'
 					)}
 				/>
@@ -51,8 +49,6 @@ const UsersOverview: FC = () => {
 		</>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(withAdminCoreConfig(UsersOverview), Permission.VIEW_USERS)

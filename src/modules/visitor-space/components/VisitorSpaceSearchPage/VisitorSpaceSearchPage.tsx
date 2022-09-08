@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { sum } from 'lodash-es';
 import { NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -38,6 +37,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
@@ -96,7 +96,7 @@ const labelKeys = {
 const VisitorSpaceSearchPage: NextPage = () => {
 	useNavigationBorder();
 
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
 	const history = useSelector(selectHistory);
@@ -417,7 +417,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					activeSort={activeSort}
 					filters={VISITOR_SPACE_FILTERS()}
 					filterValues={query}
-					label={t('pages/bezoekersruimte/visitor-space-slug/index___filters')}
+					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileFilterMenuOpen}
 					showNavigationBorder={showNavigationBorder}
@@ -459,10 +459,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" aria-hidden />
 				}
 				variants={['text', 'xxs']}
-				title={t(
+				title={tText(
 					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
-				aria-label={t(
+				aria-label={tText(
 					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
 			/>
@@ -503,10 +503,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
 							<a
 								className="u-text-no-decoration"
-								aria-label={t(
+								aria-label={tText(
 									'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___navigeer-naar-de-detailpagina-van-name',
 									{
-										name: item.title,
+										name: item.title?.toString(), // TODO double check that this still works
 									}
 								)}
 							>
@@ -579,7 +579,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									instanceId={labelKeys.search}
 									isMulti
 									size="lg"
-									placeholder={t(
+									placeholder={tText(
 										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 									)}
 									syncSearchValue={false}
@@ -604,7 +604,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									)}
 									action={
 										<Link passHref href="/kiosk-voorwaarden">
-											<a aria-label={t('pages/slug/index___meer-info')}>
+											<a aria-label={tText('pages/slug/index___meer-info')}>
 												<Button
 													className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
 													label={t('pages/slug/index___meer-info')}
@@ -708,7 +708,9 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					name="description"
 					content={
 						visitorSpace?.info ||
-						t('pages/bezoekersruimte/visitor-space-slug/index___een-bezoekersruimte')
+						tText(
+							'pages/bezoekersruimte/visitor-space-slug/index___een-bezoekersruimte'
+						)
 					}
 				/>
 			</Head>

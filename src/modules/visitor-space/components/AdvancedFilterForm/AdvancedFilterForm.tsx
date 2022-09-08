@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import { Icon } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { VisitorSpaceFilterId } from '../../types';
 import { AdvancedFilterFields } from '../AdvancedFilterFields';

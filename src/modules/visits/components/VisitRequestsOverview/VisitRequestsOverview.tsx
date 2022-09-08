@@ -1,6 +1,5 @@
 import { Table } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -21,6 +20,7 @@ import {
 } from '@shared/components';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { useGetVisit } from '@visits/hooks/get-visit';
@@ -30,7 +30,7 @@ import { RequestStatusAll } from '@visits/types';
 import { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 
 const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
 		undefined
@@ -145,7 +145,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
+	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.status) {
 			case VisitStatus.APPROVED:
 				return t('pages/beheer/aanvragen/index___er-zijn-geen-goedgekeurde-aanvragen');
@@ -230,7 +230,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						id={globalLabelKeys.adminLayout.title}
 						default={filters[SEARCH_QUERY_KEY]}
 						className="p-cp-requests__search"
-						placeholder={t('pages/beheer/aanvragen/index___zoek')}
+						placeholder={tText('pages/beheer/aanvragen/index___zoek')}
 						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
 					/>
 

@@ -1,13 +1,15 @@
+import { ReactNode } from 'react';
+
 import { FormBladeProps } from '@shared/types';
 
 import { ProcessRequestBladeProps } from '../ProcessRequestBlade';
 
 export type ApproveRequestBladeProps = FormBladeProps<ApproveRequestFormState> &
 	ProcessRequestBladeProps & {
-		title?: string;
+		title?: string | ReactNode;
 		approveButtonLabel?: string;
-		successTitle?: string;
-		successDescription?: string;
+		successTitle?: string | ReactNode;
+		successDescription?: string | ReactNode;
 	};
 
 export interface ApproveRequestFormState {

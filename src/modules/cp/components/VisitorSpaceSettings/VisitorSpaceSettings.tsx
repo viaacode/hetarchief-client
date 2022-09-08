@@ -1,5 +1,4 @@
 import { Box, Button } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
@@ -7,6 +6,7 @@ import { Permission } from '@account/const';
 import { RichTextForm } from '@shared/components/RichTextForm';
 import { ROUTE_PARTS } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { VisitorSpaceService } from '@visitor-space/services';
 import {

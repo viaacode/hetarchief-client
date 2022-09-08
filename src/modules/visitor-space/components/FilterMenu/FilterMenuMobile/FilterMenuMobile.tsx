@@ -1,10 +1,10 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
 import { Icon } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { OrderDirection } from '@shared/types';
 
 import { VisitorSpaceSort } from '../../../types';

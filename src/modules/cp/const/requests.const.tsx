@@ -6,7 +6,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { i18n } from '@shared/helpers/i18n';
+import { TranslationService } from '@shared/services/translation-service/transaltion-service';
 import { OrderDirection, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 import { RequestStatusAll } from '@visits/types';
@@ -27,34 +27,34 @@ export const requestStatusFilters = (): TabProps[] => {
 	return [
 		{
 			id: RequestStatusAll.ALL,
-			label: i18n.t('modules/cp/const/requests___alle'),
+			label: TranslationService.getTranslation('modules/cp/const/requests___alle'),
 		},
 		{
 			id: VisitStatus.PENDING,
-			label: i18n.t('modules/cp/const/requests___open'),
+			label: TranslationService.getTranslation('modules/cp/const/requests___open'),
 		},
 		{
 			id: VisitStatus.APPROVED,
-			label: i18n.t('modules/cp/const/requests___goedgekeurd'),
+			label: TranslationService.getTranslation('modules/cp/const/requests___goedgekeurd'),
 		},
 		{
 			id: VisitStatus.DENIED,
-			label: i18n.t('modules/cp/const/requests___geweigerd'),
+			label: TranslationService.getTranslation('modules/cp/const/requests___geweigerd'),
 		},
 		{
 			id: VisitStatus.CANCELLED_BY_VISITOR,
-			label: i18n.t('modules/cp/const/requests___geannuleerd'),
+			label: TranslationService.getTranslation('modules/cp/const/requests___geannuleerd'),
 		},
 	];
 };
 
 export const RequestTableColumns = (): Column<Visit>[] => [
 	{
-		Header: i18n.t('modules/cp/const/requests___naam'),
+		Header: TranslationService.getTranslation('modules/cp/const/requests___naam'),
 		accessor: 'visitorName',
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___emailadres'),
+		Header: TranslationService.getTranslation('modules/cp/const/requests___emailadres'),
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitRow) => (
 			<CopyButton
@@ -68,7 +68,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		),
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___tijdstip'),
+		Header: TranslationService.getTranslation('modules/cp/const/requests___tijdstip'),
 		accessor: 'createdAt',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -82,7 +82,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		},
 	},
 	{
-		Header: i18n.t('modules/cp/const/requests___status'),
+		Header: TranslationService.getTranslation('modules/cp/const/requests___status'),
 		accessor: 'status',
 		Cell: ({ row }: VisitRow) => {
 			return <RequestStatusBadge status={row.original.status} />;
@@ -96,7 +96,9 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 				<Button
 					className="p-cp-requests__actions"
 					icon={<Icon name="dots-vertical" aria-hidden />}
-					aria-label={i18n.t('modules/cp/const/requests___meer-acties')}
+					aria-label={TranslationService.getTranslation(
+						'modules/cp/const/requests___meer-acties'
+					)}
 					variants={['xxs', 'text']}
 				/>
 			);

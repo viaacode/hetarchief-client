@@ -1,9 +1,7 @@
 import { Button, Column, Table, TableOptions } from '@meemoo/react-components';
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, ReactNode, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -14,7 +12,6 @@ import {
 } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import {
 	Icon,
 	Loading,
@@ -26,6 +23,7 @@ import {
 import { globalLabelKeys, ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -35,7 +33,7 @@ import { VisitorSpaceService } from '@visitor-space/services';
 import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
 const VisitorSpacesOverview: FC = () => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const router = useRouter();
 
 	const showCreateButton = useHasAllPermission(Permission.CREATE_SPACES);
@@ -140,7 +138,7 @@ const VisitorSpacesOverview: FC = () => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
+	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.status) {
 			case VisitorSpaceStatus.Requested:
 				return t(
@@ -231,7 +229,7 @@ const VisitorSpacesOverview: FC = () => {
 					id={globalLabelKeys.adminLayout.title}
 					default={filters[SEARCH_QUERY_KEY]}
 					className="p-cp-visitor-spaces__search"
-					placeholder={t(
+					placeholder={tText(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
 					)}
 					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
@@ -284,14 +282,14 @@ const VisitorSpacesOverview: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t(
+						tText(
 							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
 						)
 					)}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes-meta-omschrijving'
 					)}
 				/>
@@ -325,8 +323,6 @@ const VisitorSpacesOverview: FC = () => {
 		</>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(VisitorSpacesOverview, Permission.READ_ALL_SPACES)

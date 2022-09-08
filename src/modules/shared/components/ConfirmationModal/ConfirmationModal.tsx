@@ -1,6 +1,7 @@
 import { Button } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
+
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { Modal } from '../Modal';
 

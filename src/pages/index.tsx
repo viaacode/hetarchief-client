@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,7 +10,6 @@ import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store
 import LoggedInHome from '@home/components/LoggedInHome/LoggedInHome';
 import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -86,7 +85,5 @@ const Home: NextPage = () => {
 		</VisitorLayout>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default Home;

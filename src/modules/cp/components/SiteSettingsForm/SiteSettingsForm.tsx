@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption, TextInput } from '@meemoo/react-components';
 import { kebabCase } from 'lodash-es';
-import { useTranslation } from 'next-i18next';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 
 import { useGetContentPartners } from '@cp/hooks/get-content-partners';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { getSelectValue } from '@visitor-space/utils/select';
 

@@ -120,7 +120,7 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 				}
 			);
 
-			// Replace t() functions ( including i18n.t() )
+			// Replace t() functions ( including TranslationService.getTranslation() )
 			const beforeTFunction = '([^a-zA-Z])';
 			const tFuncStart = 't\\(';
 			const whitespace = '\\s*';

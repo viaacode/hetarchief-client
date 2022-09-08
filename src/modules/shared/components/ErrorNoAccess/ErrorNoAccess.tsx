@@ -1,12 +1,12 @@
 import { Button } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { ErrorPage } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 interface ErrorSpaceNoAccessProps {
 	visitorSpaceSlug: string | null;
-	description: string;
+	description: string | ReactNode;
 }
 
 const ErrorNoAccess: FC<ErrorSpaceNoAccessProps> = ({ visitorSpaceSlug, description }) => {

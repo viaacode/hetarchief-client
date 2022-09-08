@@ -1,8 +1,7 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -12,10 +11,10 @@ import { useQueryParams } from 'use-query-params';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
-import { withI18n } from '@i18n/wrappers';
 import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
@@ -24,7 +23,7 @@ import { createPageTitle } from '@shared/utils';
 const TermsOfService: NextPage = () => {
 	useStickyLayout();
 
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const router = useRouter();
 	const scrollable = useRef<HTMLDivElement | null>(null);
 	const dispatch = useDispatch();
@@ -88,7 +87,7 @@ const TermsOfService: NextPage = () => {
 				<title>{createPageTitle('Gebruiksvoorwaarden')}</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'
 					)}
 				/>
@@ -143,7 +142,5 @@ const TermsOfService: NextPage = () => {
 		</div>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAdminCoreConfig(TermsOfService);

@@ -1,8 +1,7 @@
 import { Table } from '@meemoo/react-components';
-import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { NextPage } from 'next';
 import Head from 'next/head';
-import { useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -15,7 +14,6 @@ import {
 	VisitorsTableColumns,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
-import { withI18n } from '@i18n/wrappers';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
@@ -27,6 +25,7 @@ import {
 } from '@shared/components';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -35,7 +34,7 @@ import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
 
 const CPVisitorsPage: NextPage = () => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
@@ -150,7 +149,7 @@ const CPVisitorsPage: NextPage = () => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
+	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.timeframe) {
 			case RequestStatusAll.ALL:
 				return t('pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers');
@@ -238,7 +237,7 @@ const CPVisitorsPage: NextPage = () => {
 							id={globalLabelKeys.adminLayout.title}
 							default={filters[SEARCH_QUERY_KEY]}
 							className="p-cp-visitors__search"
-							placeholder={t('pages/beheer/bezoekers/index___zoek')}
+							placeholder={tText('pages/beheer/bezoekers/index___zoek')}
 							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 
@@ -272,7 +271,7 @@ const CPVisitorsPage: NextPage = () => {
 				/>
 				<ApproveRequestBlade
 					title={t('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
-					approveButtonLabel={t('pages/beheer/bezoekers/index___aanpassen')}
+					approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
 					successTitle={t(
 						'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
 					)}
@@ -294,10 +293,12 @@ const CPVisitorsPage: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('pages/beheer/bezoekers/index___bezoekers'))}</title>
+				<title>{createPageTitle(tText('pages/beheer/bezoekers/index___bezoekers'))}</title>
 				<meta
 					name="description"
-					content={t('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving')}
+					content={tText(
+						'pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'
+					)}
 				/>
 			</Head>
 
@@ -305,8 +306,6 @@ const CPVisitorsPage: NextPage = () => {
 		</>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAllRequiredPermissions(CPVisitorsPage, Permission.READ_CP_VISIT_REQUESTS)

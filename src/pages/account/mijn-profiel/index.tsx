@@ -1,6 +1,5 @@
 import { Box, Button } from '@meemoo/react-components';
-import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -12,9 +11,9 @@ import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -23,17 +22,19 @@ const { publicRuntimeConfig } = getConfig();
 
 const AccountMyProfile: NextPage = () => {
 	const user = useSelector(selectUser);
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 
 	return (
 		<VisitorLayout>
 			<Head>
 				<title>
-					{createPageTitle(t('pages/account/mijn-profiel/index___mijn-profiel'))}
+					{createPageTitle(tText('pages/account/mijn-profiel/index___mijn-profiel'))}
 				</title>
 				<meta
 					name="description"
-					content={t('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving')}
+					content={tText(
+						'pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'
+					)}
 				/>
 			</Head>
 
@@ -77,7 +78,7 @@ const AccountMyProfile: NextPage = () => {
 										passHref
 									>
 										<a
-											aria-label={t(
+											aria-label={tText(
 												'pages/account/mijn-profiel/index___wijzig-mijn-gegevens'
 											)}
 										>
@@ -99,7 +100,5 @@ const AccountMyProfile: NextPage = () => {
 		</VisitorLayout>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(AccountMyProfile, Permission.MANAGE_ACCOUNT));

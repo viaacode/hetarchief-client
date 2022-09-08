@@ -1,5 +1,5 @@
 import { ROUTE_PARTS } from '@shared/const/routes';
-import { i18n } from '@shared/helpers/i18n';
+import { TranslationService } from '@shared/services/translation-service/transaltion-service';
 
 export interface AdminNavigationLink {
 	id: string;
@@ -11,28 +11,30 @@ export interface AdminNavigationLink {
 export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'spaces-admin',
-		label: i18n.t('modules/admin/const/routing___bezoekersruimtesbeheer'),
+		label: TranslationService.getTranslation(
+			'modules/admin/const/routing___bezoekersruimtesbeheer'
+		),
 		href: '',
 		children: ADMIN_SPACES_LINKS,
 	},
 	{
 		id: 'content-pages-admin',
-		label: i18n.t('modules/admin/const/routing___content-paginas'),
+		label: TranslationService.getTranslation('modules/admin/const/routing___content-paginas'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}`,
 	},
 	{
 		id: 'navigation-admin',
-		label: i18n.t('modules/admin/const/routing___navigatie'),
+		label: TranslationService.getTranslation('modules/admin/const/routing___navigatie'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}`,
 	},
 	{
 		id: 'translations-admin',
-		label: i18n.t('modules/admin/const/routing___translations'),
+		label: TranslationService.getTranslation('modules/admin/const/routing___translations'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
 	},
 	{
 		id: 'users-admin',
-		label: i18n.t('modules/admin/const/routing___gebruikersbeheer'),
+		label: TranslationService.getTranslation('modules/admin/const/routing___gebruikersbeheer'),
 		href: '',
 		children: ADMIN_USERS_LINKS,
 	},
@@ -41,17 +43,19 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'spaces',
-		label: i18n.t('modules/admin/const/routing___alle-bezoekersruimtes'),
+		label: TranslationService.getTranslation(
+			'modules/admin/const/routing___alle-bezoekersruimtes'
+		),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 	},
 	{
 		id: 'requests',
-		label: i18n.t('modules/admin/const/routing___aanvragen'),
+		label: TranslationService.getTranslation('modules/admin/const/routing___aanvragen'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}`,
 	},
 	{
 		id: 'visitors',
-		label: i18n.t('modules/admin/const/routing___actieve-bezoekers'),
+		label: TranslationService.getTranslation('modules/admin/const/routing___actieve-bezoekers'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitors}`,
 	},
 ];
@@ -72,12 +76,14 @@ export const CONTENT_PATH = {
 export const ADMIN_USERS_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'users',
-		label: i18n.t('modules/admin/const/routing___gebruikers'),
+		label: TranslationService.getTranslation('modules/admin/const/routing___gebruikers'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.users}`,
 	},
 	{
 		id: 'permissions',
-		label: i18n.t('modules/admin/const/routing___groepen-en-permissies'),
+		label: TranslationService.getTranslation(
+			'modules/admin/const/routing___groepen-en-permissies'
+		),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.permissions}`,
 	},
 ];

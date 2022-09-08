@@ -1,9 +1,9 @@
 import { Button } from '@meemoo/react-components';
-import { TFunction } from 'next-i18next';
 import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
+import { TranslationService } from '@shared/services/translation-service/transaltion-service';
 import { OrderDirection, Visit, VisitRow } from '@shared/types';
 import { formatSameDayRange } from '@shared/utils';
 
@@ -21,11 +21,13 @@ export const HistoryTableAccessFrom = 'startAt';
 export type HistoryTableColumnProps = Column<Visit> & UseSortByColumnOptions<Visit>;
 
 export const HistoryTableColumns = (
-	i18n: { t: TFunction } = { t: (x: string) => x },
 	onClickRow: (visit: Visit) => void
 ): HistoryTableColumnProps[] => [
 	{
-		Header: i18n.t('modules/account/const/my-history___bezoekersruimte') || '',
+		Header:
+			TranslationService.getTranslation(
+				'modules/account/const/my-history___bezoekersruimte'
+			) || '',
 		accessor: 'spaceName',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -33,7 +35,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/account/const/my-history___adres') || '',
+		Header: TranslationService.getTranslation('modules/account/const/my-history___adres') || '',
 		accessor: 'spaceAddress',
 		disableSortBy: true, // space.schema_maintainer.information is an array and can not be sorted on
 		Cell: (data: VisitRow) => {
@@ -42,7 +44,9 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/account/const/my-history___toegang-van') || '',
+		Header:
+			TranslationService.getTranslation('modules/account/const/my-history___toegang-van') ||
+			'',
 		accessor: HistoryTableAccessFrom,
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -54,7 +58,9 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/account/const/my-history___toegang-tot') || '',
+		Header:
+			TranslationService.getTranslation('modules/account/const/my-history___toegang-tot') ||
+			'',
 		accessor: 'endAt',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -66,7 +72,8 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/account/const/my-history___toegang') || '',
+		Header:
+			TranslationService.getTranslation('modules/account/const/my-history___toegang') || '',
 		id: HistoryTableAccessComboId,
 		accessor: HistoryTableAccessFrom,
 		Cell: (data: VisitRow) => {
@@ -89,7 +96,7 @@ export const HistoryTableColumns = (
 					variants={['text', 'block', 'fill']}
 					onClick={() => onClickRow(visit)}
 				>
-					{i18n.t('modules/account/const/my-history___bezoek')}
+					{TranslationService.getTranslation('modules/account/const/my-history___bezoek')}
 				</Button>
 			);
 		},

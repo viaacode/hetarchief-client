@@ -1,6 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { FC, useRef } from 'react';
@@ -9,13 +7,13 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
-import { withI18n } from '@i18n/wrappers';
 import { ROUTE_PARTS } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 const VisitorSpaceCreate: FC = () => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const router = useRouter();
 
 	const formRef = useRef<{ createSpace: () => void } | undefined>(undefined);
@@ -36,14 +34,14 @@ const VisitorSpaceCreate: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t(
+						tText(
 							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
 						)
 					)}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte-meta-omschrijving'
 					)}
 				/>
@@ -85,8 +83,6 @@ const VisitorSpaceCreate: FC = () => {
 		</>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 // TODO: permission
 export default withAuth(

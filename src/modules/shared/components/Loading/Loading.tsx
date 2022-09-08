@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultComponentProps } from '@shared/types';
 
 import styles from './Loading.module.scss';

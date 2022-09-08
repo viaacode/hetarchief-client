@@ -6,7 +6,7 @@ import {
 } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { i18n } from '@shared/helpers/i18n';
+import { TranslationService } from '@shared/services/translation-service/transaltion-service';
 import {
 	MediaSearchFilter,
 	MediaSearchFilterField,
@@ -40,31 +40,31 @@ export type MetadataConfig = {
 
 export const METADATA_CONFIG = (): MetadataConfig => {
 	const dictionary = {
-		from: i18n.t(
+		from: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
 		),
-		until: i18n.t(
+		until: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
 		),
-		between: i18n.t(
+		between: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
 		),
-		contains: i18n.t(
+		contains: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
 		),
-		excludes: i18n.t(
+		excludes: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
 		),
-		equals: i18n.t(
+		equals: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
 		),
-		differs: i18n.t(
+		differs: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
 		),
-		shorter: i18n.t(
+		shorter: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
 		),
-		longer: i18n.t(
+		longer: TranslationService.getTranslation(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
 		),
 	};

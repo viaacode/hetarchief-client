@@ -16,7 +16,6 @@ import {
 	roundToNearestMinutes,
 	startOfDay,
 } from 'date-fns';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
@@ -27,6 +26,7 @@ import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
@@ -54,7 +54,7 @@ const defaultAccessTo = (accessFrom: Date) => {
 };
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
 		Permission.READ_ALL_VISIT_REQUESTS
 	);
@@ -438,7 +438,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						>
 							<a
 								onClick={onClose}
-								aria-label={t(
+								aria-label={tText(
 									'modules/shared/components/approve-request-blade/approve-request-blade___navigeer-naar-de-reeds-goedgekeurde-aanvraag-voor-deze-periode'
 								)}
 							>

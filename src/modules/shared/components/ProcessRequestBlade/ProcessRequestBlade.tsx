@@ -1,8 +1,8 @@
 import { Button } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
-import React, { FC, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 
 import { Blade, BladeManager, Icon, VisitSummary } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { VisitStatus } from '@shared/types';
 import { formatDistanceToday } from '@shared/utils';
 
@@ -41,7 +41,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		return 0;
 	};
 
-	const getTitle = (): string => {
+	const getTitle = (): string | ReactNode => {
 		switch (selected?.status) {
 			case VisitStatus.PENDING:
 				return t(

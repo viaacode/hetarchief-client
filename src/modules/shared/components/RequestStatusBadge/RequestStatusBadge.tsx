@@ -1,9 +1,9 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
 import { Icon } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { VisitStatus } from '@shared/types';
 
 import styles from './RequestStatusBadge.module.scss';

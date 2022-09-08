@@ -1,12 +1,12 @@
 import { ReactSelect, ReactSelectProps } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectMediaFilterOptions } from '@shared/store/media';
 
 const GenreSelect: FC<ReactSelectProps> = (props) => {
-	const { t } = useTranslation();
+	const { tText } = useTranslation();
 	const aggregates = useSelector(selectMediaFilterOptions)?.schema_genre.buckets;
 
 	const options = (aggregates || []).map((bucket) => ({
@@ -20,8 +20,10 @@ const GenreSelect: FC<ReactSelectProps> = (props) => {
 
 	const getPlaceholder = (): string | undefined => {
 		return options.length === 0
-			? t('modules/visitor-space/components/genre-select/genre-select___geen-genres-gevonden')
-			: t('modules/visitor-space/components/genre-select/genre-select___kies-een-genre');
+			? tText(
+					'modules/visitor-space/components/genre-select/genre-select___geen-genres-gevonden'
+			  )
+			: tText('modules/visitor-space/components/genre-select/genre-select___kies-een-genre');
 	};
 
 	return (

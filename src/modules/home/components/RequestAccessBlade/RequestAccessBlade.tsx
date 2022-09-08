@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParams } from 'use-query-params';
@@ -8,6 +7,7 @@ import { StringParam, useQueryParams } from 'use-query-params';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Blade, Icon, SpacePreview } from '@shared/components';
 import { globalLabelKeys } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';

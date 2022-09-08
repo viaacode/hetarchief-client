@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormControl, TextArea } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import React, { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade, VisitSummary } from '@shared/components';
 import { OPTIONAL_LABEL } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { VisitStatus } from '@shared/types';
 import { VisitsService } from '@visits/services/visits/visits.service';

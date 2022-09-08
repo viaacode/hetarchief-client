@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ColorPicker, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { CardImage, Icon } from '@shared/components';
 import FileInput from '@shared/components/FileInput/FileInput';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DEFAULT_VISITOR_SPACE_COLOR } from '@visitor-space/const';
 
 import { ValidationRef } from '../VisitorSpaceSettings/VisitorSpaceSettings.types';

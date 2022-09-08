@@ -2,8 +2,7 @@ import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-com
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
-import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
+import { NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -16,7 +15,6 @@ import save from 'save-file';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
@@ -60,6 +58,7 @@ import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-fil
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
@@ -98,7 +97,7 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Hooks
 	 */
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const previousUrl = useSelector(selectPreviousUrl);
@@ -524,7 +523,7 @@ const ObjectDetailPage: NextPage = () => {
 							)}
 							action={
 								<Link passHref href="/kiosk-voorwaarden">
-									<a aria-label={t('pages/slug/index___meer-info')}>
+									<a aria-label={tText('pages/slug/index___meer-info')}>
 										<Button
 											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
 											label={t('pages/slug/index___meer-info')}
@@ -553,10 +552,10 @@ const ObjectDetailPage: NextPage = () => {
 								className="p-object-detail__export"
 								iconStart={<Icon name="export" aria-hidden />}
 								onClick={onExportClick}
-								aria-label={t(
+								aria-label={tText(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
 								)}
-								title={t(
+								title={tText(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
 								)}
 							>
@@ -808,7 +807,5 @@ const ObjectDetailPage: NextPage = () => {
 		</VisitorLayout>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(ObjectDetailPage);

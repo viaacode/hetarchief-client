@@ -1,12 +1,12 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { partition } from 'lodash-es';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Loading } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import {
 	Notification,
@@ -29,7 +29,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 	useMarkOneNotificationsAsReadHook,
 	useMarkAllNotificationsAsReadHook,
 }) => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 
 	const {
 		data: notificationResponse,
@@ -168,15 +168,15 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			className={styles['c-notification-center__button']}
 			variants={['black', 'block']}
 			iconStart={<Icon name="check" />}
-			aria-label={t(
+			aria-label={tText(
 				'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
 			)}
 			title={
 				unread.length > 0
-					? t(
+					? tText(
 							'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
 					  )
-					: t(
+					: tText(
 							'modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-reeds-gelezen'
 					  )
 			}
@@ -244,11 +244,11 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 								<Button
 									onClick={() => onMarkOneAsRead(notification.id)}
 									className={clsx(styles['c-notification-center__row-button'])}
-									title={t(
+									title={tText(
 										'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
 									)}
 									icon={<Icon name="check" aria-hidden />}
-									aria-label={t(
+									aria-label={tText(
 										'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
 									)}
 									variants={['icon', 'sm', 'white']}

@@ -1,8 +1,6 @@
 import { UserGroupOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import React, { FC, useRef, useState } from 'react';
 
@@ -11,15 +9,15 @@ import { AdminLayout } from '@admin/layouts';
 import { UserGroupOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 import styles from './index.module.scss';
 
 const PermissionsOverview: FC = () => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 
 	// Access child functions
 	const permissionsRef = useRef<UserGroupOverviewRef>();
@@ -34,7 +32,7 @@ const PermissionsOverview: FC = () => {
 					<Button
 						variants={['text', 'icon', 'xxs']}
 						icon={<Icon name="times" aria-hidden />}
-						aria-label={t(
+						aria-label={tText(
 							'pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen'
 						)}
 						onClick={() => {
@@ -45,7 +43,7 @@ const PermissionsOverview: FC = () => {
 				<Button
 					variants={['text', 'icon', 'xxs']}
 					icon={<Icon name="search" aria-hidden />}
-					aria-label={t('pages/admin/gebruikersbeheer/permissies/index___uitvoeren')}
+					aria-label={tText('pages/admin/gebruikersbeheer/permissies/index___uitvoeren')}
 					onClick={() => permissionsRef.current?.onSearch(search)}
 				/>
 			</>
@@ -87,12 +85,14 @@ const PermissionsOverview: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies')
+						tText(
+							'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
+						)
 					)}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
 					)}
 				/>
@@ -118,8 +118,6 @@ const PermissionsOverview: FC = () => {
 		</>
 	);
 };
-
-export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(

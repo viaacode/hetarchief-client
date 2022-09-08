@@ -1,10 +1,10 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC, MouseEvent, ReactNode } from 'react';
 
 import { CopyButton, DropdownMenu } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import { Icon, IconLightNames } from '../../Icon';
@@ -20,7 +20,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	room,
 	type,
 }) => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 
 	const typeNoAccess = type === VisitorSpaceCardType.noAccess;
 	const typeAccessGranted = type === VisitorSpaceCardType.access;
@@ -54,7 +54,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			return (
 				<Button
 					icon={<Icon name="contact" aria-hidden />}
-					aria-label={t(
+					aria-label={tText(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___geen-contactgegevens-beschikbaar'
 					)}
 					variants={['silver', 'sm', 'disabled']}
@@ -128,7 +128,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 
 				<Link href={`/${room.slug}`} passHref>
 					<a
-						aria-label={t(
+						aria-label={tText(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 						)}
 					>

@@ -9,12 +9,12 @@ import {
 	TextInputProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 import { SingleValue } from 'react-select';
 
 import { Icon } from '@shared/components';
 import { SEPARATOR } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { Operator } from '@shared/types';
 import { MetadataFieldProps } from '@visitor-space/const';
 
@@ -48,7 +48,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
-	const { t } = useTranslation();
+	const { t, tText } = useTranslation();
 
 	// Computed
 
@@ -234,7 +234,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				{index > 0 && (
 					<Button
 						icon={<Icon name="trash" aria-hidden />}
-						aria-label={t(
+						aria-label={tText(
 							'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___criterium-verwijderen'
 						)}
 						variants="black"
