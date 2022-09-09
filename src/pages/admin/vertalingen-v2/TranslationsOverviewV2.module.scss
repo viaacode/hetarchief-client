@@ -66,6 +66,22 @@
 	:global(.c-rich-text-editor) {
 		margin-top: $spacer-md;
 	}
+
+	:global(.c-button--copy-to-clipboard) {
+		margin-left: -$spacer-md;
+
+		:global(.c-button__content) {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			white-space: initial;
+			text-align: left;
+
+			:global(> div:first-child) {
+				margin-bottom: $spacer-xs;
+			}
+		}
+	}
 }
 
 .c-translations-overview__blade-footer :global(.c-button:first-child) {
