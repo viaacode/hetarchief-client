@@ -55,7 +55,7 @@
 	}
 }
 
-.c-translations-overview__blade {
+.c-translations-overview__blade:global(.c-blade--active) {
 	width: 700px;
 	max-width: 100%;
 }

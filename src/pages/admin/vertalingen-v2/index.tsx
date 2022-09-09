@@ -13,7 +13,7 @@ import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissio
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
-import styles from './TransaltionsOverviewV2.module.scss';
+import styles from './TranslationsOverviewV2.module.scss';
 
 const AdminTranslationsOverviewV2: FC = () => {
 	const { t, tText } = useTranslation();
@@ -53,6 +53,7 @@ const AdminTranslationsOverviewV2: FC = () => {
 				</div>
 			);
 		};
+
 		return (
 			<Blade
 				isOpen={isOpen}
