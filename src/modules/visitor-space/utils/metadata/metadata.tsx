@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash-es';
 
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { Operator } from '@shared/types';
 
 import { METADATA_CONFIG, MetadataFields } from '../../const';

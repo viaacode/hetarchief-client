@@ -1,8 +1,8 @@
 import {
+	AdminConfig,
+	AdminConfigManager,
 	AvoOrHetArchief,
 	CommonUser,
-	Config,
-	ConfigValue,
 	ContentBlockType,
 	LinkInfo,
 	ToastInfo,
@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux';
 import { PermissionsService, UserGroupsService } from '@admin/services';
 import { selectUser } from '@auth/store/user';
 import { navigationService } from '@navigation/services/navigation-service';
-import { sortingIcons } from '@shared/components';
+import { Icon, IconName, IconProps, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTE_PARTS } from '@shared/const';
 import { t, tText } from '@shared/helpers/translate';
@@ -49,7 +49,7 @@ const onSaveContentPage = async (contentPageInfo: { path: string }) => {
 export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentType => {
 	return function withAdminCoreConfig(props: Record<string, unknown>) {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
-		const [adminCoreConfig, setAdminCoreConfig] = useState<ConfigValue | null>(null);
+		const [adminCoreConfig, setAdminCoreConfig] = useState<AdminConfig | null>(null);
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const user = useSelector(selectUser);
 		// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -75,7 +75,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				permissions: user?.permissions as any[],
 			};
 
-			const config: ConfigValue = {
+			const config: AdminConfig = {
 				navigation: {
 					service: navigationService,
 					views: {
@@ -123,15 +123,21 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				navigationBars: { enableIcons: false },
 				icon: {
-					component: ({ name }: { name: string }) => <span>{name}</span>,
+					component: ({ name }: { name: IconName }) => <Icon name={name} />,
 					componentProps: {
-						add: { name: 'add' },
-						view: { name: 'view' },
-						angleDown: { name: 'down' },
-						angleUp: { name: 'up' },
-						delete: { name: 'delete' },
+						add: { name: 'plus' },
+						view: { name: 'show' },
+						angleDown: { name: 'angle-down' },
+						angleUp: { name: 'angle-up' },
+						angleLeft: { name: 'angle-left' },
+						angleRight: { name: 'angle-right' },
+						delete: { name: 'trash' },
 						edit: { name: 'edit' },
-					},
+						filter: { name: 'search' },
+						arrowUp: { name: 'arrow-up' },
+						sortTable: { name: 'sort-table' },
+						arrowDown: { name: 'arrow-down' },
+					} as Record<string, IconProps>,
 					list: [],
 				},
 				components: {
@@ -192,7 +198,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				user: commonUser,
 			};
-			Config.setConfig(config);
+			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
 		}, []);
 

@@ -6,7 +6,7 @@ import {
 } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import {
 	MediaSearchFilter,
 	MediaSearchFilterField,

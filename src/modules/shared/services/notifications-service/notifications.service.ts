@@ -6,7 +6,7 @@ import { ROUTES } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { ApiResponseWrapper } from '@shared/types';
 import { asDate } from '@shared/utils';
 

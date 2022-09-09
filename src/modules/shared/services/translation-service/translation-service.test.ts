@@ -1,5 +1,5 @@
 import { ApiService } from '@shared/services/api-service';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 describe('TranslationService', () => {
 	const mockTranslationsJson = (mockTranslations: Record<string, string>) => {

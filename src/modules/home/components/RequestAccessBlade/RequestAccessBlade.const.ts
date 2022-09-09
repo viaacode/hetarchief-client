@@ -1,6 +1,6 @@
 import { boolean, object, SchemaOf, string } from 'yup';
 
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 import { RequestAccessFormState } from './RequestAccessBlade.types';
 

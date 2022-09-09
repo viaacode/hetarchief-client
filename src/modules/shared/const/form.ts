@@ -1,5 +1,5 @@
 import { IconProps } from '@shared/components';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 export const OPTIONAL_LABEL = (): string =>
 	`(${TranslationService.getTranslation('modules/shared/const/form___optioneel')})`;

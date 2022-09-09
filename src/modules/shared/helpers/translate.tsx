@@ -4,7 +4,7 @@ import Html from '@shared/components/Html/Html';
 import {
 	TranslationParamValue,
 	TranslationService,
-} from '@shared/services/translation-service/transaltion-service';
+} from '@shared/services/translation-service/translation-service';
 
 export function t(key: string, params?: Record<string, TranslationParamValue>): ReactNode {
 	const translatedValue: string = TranslationService.getTranslation(key, params);

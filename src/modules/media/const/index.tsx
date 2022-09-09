@@ -9,7 +9,7 @@ import {
 	mapObjectToMetadata,
 } from '@media/utils';
 import { Icon, TextWithNewLines } from '@shared/components';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { MediaTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
 

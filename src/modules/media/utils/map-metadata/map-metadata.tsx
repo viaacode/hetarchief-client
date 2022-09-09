@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 
 import { MetadataItem } from '@media/components';
 import { capitalise } from '@shared/helpers';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	return keywords.map((item) => {

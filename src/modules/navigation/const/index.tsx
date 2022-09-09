@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import { ACCOUNT_NAVIGATION_LINKS } from '@account/const';
 import { Icon } from '@shared/components';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
 import { NavItemsRightLoggedIn } from '../types';

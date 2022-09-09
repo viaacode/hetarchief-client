@@ -1,5 +1,5 @@
 import { ROUTE_PARTS } from '@shared/const/routes';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 export interface AdminNavigationLink {
 	id: string;
@@ -31,6 +31,11 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 		id: 'translations-admin',
 		label: TranslationService.getTranslation('modules/admin/const/routing___translations'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
+	},
+	{
+		id: 'translations-v2-admin',
+		label: TranslationService.getTranslation('Vertalingen v2'),
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translationsV2}`,
 	},
 	{
 		id: 'users-admin',

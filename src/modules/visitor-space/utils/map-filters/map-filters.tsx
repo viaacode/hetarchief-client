@@ -2,7 +2,7 @@ import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
 
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { MediaSearchFilter, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 

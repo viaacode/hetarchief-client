@@ -1,0 +1,73 @@
+@use "src/styles/abstracts" as *;
+
+.c-translations-overview {
+	:global(.c-input) {
+		padding: 0;
+		background-color: transparent;
+		border: 0;
+
+		:global(.c-input__field) {
+			margin: 0;
+			height: 5.6rem;
+			border-radius: 2.8rem;
+		}
+	}
+
+	:global(.o-svg-icon) {
+		position: absolute;
+		top: calc(50% - 1rem);
+		right: 2rem;
+
+		:global(svg) {
+			width: 2.4rem;
+			height: 2.4rem;
+		}
+	}
+
+	:global(table) {
+		margin-top: $spacer-md;
+
+		:global(.c-table__row:hover) {
+			background-color: $platinum;
+			cursor: pointer;
+		}
+
+		:global(.c-table__row--header) {
+			:global(.c-table__cell--header) {
+				:global(> span) {
+					font-size: 16px;
+				}
+			}
+		}
+
+		:global(.u-text-muted) {
+			color: $neutral;
+		}
+
+		:global(.c-table__cell:last-child) {
+			width: 60px;
+
+			:global(> span) {
+				font-size: 20px;
+				margin-top: 4px;
+			}
+		}
+	}
+}
+
+.c-translations-overview__blade {
+	width: 700px;
+	max-width: 100%;
+}
+
+.c-translations-overview__blade-body {
+	padding: 0 $spacer-lg;
+
+	:global(.c-rich-text-editor) {
+		margin-top: $spacer-md;
+	}
+}
+
+.c-translations-overview__blade-footer :global(.c-button:first-child) {
+	margin-bottom: $spacer-xs;
+}

@@ -19,13 +19,17 @@ export class TranslationService {
 	): string {
 		let translatedText = (TranslationService.translations || {})[key];
 		if (!translatedText || translatedText === key) {
-			if (key === ' modules/shared/components/loading/loading___laden') {
+			if (key === 'modules/shared/components/loading/loading___laden') {
 				// Special case for when the translations are not loaded yet
 				translatedText = 'Laden ...';
 			} else {
 				console.log('Generating fallback for missing translation key: ' + key);
 				// Fallback to key with *** if translation is not found
-				translatedText = key.split('___')[1].replace(/-/g, ' ') + ' ***';
+				if (key.includes('___')) {
+					translatedText = key.split('___')[1].replace(/-/g, ' ') + ' ***';
+				} else {
+					translatedText = key.replace(/-/g, ' ') + ' ***';
+				}
 			}
 		}
 		if (params) {

@@ -3,7 +3,7 @@ import React from 'react';
 import { Column } from 'react-table';
 
 import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 

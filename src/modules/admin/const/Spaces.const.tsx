@@ -7,7 +7,7 @@ import { AdminVisitorSpaceInfoRow } from '@admin/types';
 import { DropdownMenu, Icon } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { OrderDirection } from '@shared/types';
 import { asDate, formatMediumDate } from '@shared/utils';
 import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';

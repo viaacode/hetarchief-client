@@ -1,6 +1,6 @@
 import { mixed, object, SchemaOf, string } from 'yup';
 
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 import { VisitorSpaceImageFormState } from './VisitorSpaceImageForm.types';
 import { checkFileSize, checkFileType } from './VisitorSpaceImageForm.utils';

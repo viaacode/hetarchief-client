@@ -3,7 +3,7 @@ import { object, SchemaOf, string } from 'yup';
 
 import { CreateFolderFormState } from '@account/types';
 import { SEARCH_QUERY_KEY } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 export const CollectionItemListSize = 20;
 

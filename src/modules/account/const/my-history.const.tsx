@@ -3,7 +3,7 @@ import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { OrderDirection, Visit, VisitRow } from '@shared/types';
 import { formatSameDayRange } from '@shared/utils';
 

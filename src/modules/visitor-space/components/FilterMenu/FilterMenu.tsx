@@ -6,7 +6,7 @@ import { useQueryParams } from 'use-query-params';
 import { Icon, IconLightNames, Toggle } from '@shared/components';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { Breakpoints } from '@shared/types';
 
 import { VISITOR_SPACE_ACTIVE_SORT_MAP, VISITOR_SPACE_QUERY_PARAM_CONFIG } from '../../const';

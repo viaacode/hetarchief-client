@@ -3,7 +3,7 @@ import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-par
 
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { OrderDirection, VisitorSpaceMediaType } from '@shared/types';
 
 import {

@@ -1,6 +1,6 @@
 import { array, boolean, object, SchemaOf, string } from 'yup';
 
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 import { AddToFolderFormState } from './AddToFolderBlade.types';
 

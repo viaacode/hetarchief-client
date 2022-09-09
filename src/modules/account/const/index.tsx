@@ -1,4 +1,4 @@
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 export * from './my-collections.const';
 export * from './my-history.const';

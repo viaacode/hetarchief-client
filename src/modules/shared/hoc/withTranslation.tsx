@@ -1,7 +1,7 @@
 import { ComponentType, useCallback, useEffect, useState } from 'react';
 
 import Loading from '@shared/components/Loading/Loading';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 export const withTranslation = (WrappedComponent: ComponentType): ComponentType => {
 	return function ComponentWithTranslations(props: Record<string, unknown>) {

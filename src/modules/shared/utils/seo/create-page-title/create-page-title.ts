@@ -1,6 +1,6 @@
 import { truncate } from 'lodash-es';
 
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 export const createPageTitle = (title?: string): string => {
 	if (!title) {

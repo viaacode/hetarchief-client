@@ -1,7 +1,7 @@
 import { mixed, object, SchemaOf, string } from 'yup';
 
 import { SEPARATOR } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { Operator } from '@shared/types';
 
 import { durationRegex } from '../../components/DurationInput/DurationInput.consts';

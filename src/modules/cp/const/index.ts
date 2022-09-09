@@ -1,4 +1,4 @@
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 export const CP_ADMIN_NAVIGATION_LINKS = (): {
 	id: string;

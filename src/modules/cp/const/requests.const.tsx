@@ -6,7 +6,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { OrderDirection, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 import { RequestStatusAll } from '@visits/types';
