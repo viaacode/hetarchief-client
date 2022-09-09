@@ -9,8 +9,8 @@ import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../com
 import { NavItemsRightLoggedIn } from '../types';
 
 export const NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
-	openLabel: TranslationService.getTranslation('modules/shared/const/navigation___sluit'),
-	closedLabel: TranslationService.getTranslation('modules/shared/const/navigation___menu'),
+	openLabel: TranslationService.t('modules/shared/const/navigation___sluit'),
+	closedLabel: TranslationService.t('modules/shared/const/navigation___menu'),
 });
 
 export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {
@@ -20,7 +20,7 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 			node: (
 				<Button
 					key="nav-auth-button"
-					label={TranslationService.getTranslation(
+					label={TranslationService.t(
 						'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
 					)}
 					variants={['white', 'text']}
@@ -57,7 +57,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 						}
 					)}
 					icon={<Icon type="solid" name="notification" aria-hidden />}
-					aria-label={TranslationService.getTranslation(
+					aria-label={TranslationService.t(
 						'modules/navigation/const/index___notificaties'
 					)}
 				/>
@@ -80,9 +80,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 					node: ({ closeDropdowns }) => (
 						<NavigationLink
 							iconStart="log-out"
-							label={TranslationService.getTranslation(
-								'modules/navigation/const/index___log-uit'
-							)}
+							label={TranslationService.t('modules/navigation/const/index___log-uit')}
 							onClick={() => {
 								onLogOutClick();
 								closeDropdowns();

@@ -9,11 +9,11 @@ import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/u
 
 export const RequestTableColumns = (): Column<Visit>[] => [
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/requests___bezoekersruimte'),
+		Header: TranslationService.t('modules/admin/const/requests___bezoekersruimte'),
 		accessor: 'spaceName',
 	},
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/requests___naam'),
+		Header: TranslationService.t('modules/admin/const/requests___naam'),
 		accessor: 'visitorName',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -24,7 +24,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		},
 	},
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/requests___emailadres'),
+		Header: TranslationService.t('modules/admin/const/requests___emailadres'),
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitRow) => (
 			<CopyButton
@@ -38,7 +38,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		),
 	},
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/requests___tijdstip'),
+		Header: TranslationService.t('modules/admin/const/requests___tijdstip'),
 		accessor: 'createdAt',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -52,7 +52,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		},
 	},
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/requests___status'),
+		Header: TranslationService.t('modules/admin/const/requests___status'),
 		accessor: 'status',
 		Cell: ({ row }: VisitRow) => {
 			return <RequestStatusBadge status={row.original.status} />;
@@ -66,9 +66,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 				<Button
 					className="p-cp-requests__actions"
 					icon={<Icon name="dots-vertical" aria-hidden />}
-					aria-label={TranslationService.getTranslation(
-						'modules/admin/const/requests___meer-acties'
-					)}
+					aria-label={TranslationService.t('modules/admin/const/requests___meer-acties')}
 					variants={['xxs', 'text']}
 				/>
 			);

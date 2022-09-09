@@ -71,7 +71,7 @@ export const mockColumns = [
 		Cell: (
 			<Button
 				icon={<Icon name="dots-vertical" aria-hidden />}
-				aria-label={TranslationService.getTranslation(
+				aria-label={TranslationService.t(
 					'modules/shared/components/table/mocks/table___meer-acties'
 				)}
 				variants={['xxs', 'text']}

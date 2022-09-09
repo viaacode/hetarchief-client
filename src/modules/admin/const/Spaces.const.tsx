@@ -28,12 +28,12 @@ export const VisitorSpacesOverviewTableColumns = (
 	showStatusDropdown = false
 ): Column<VisitorSpaceInfo>[] => [
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/spaces___bezoekersruimte'),
+		Header: TranslationService.t('modules/admin/const/spaces___bezoekersruimte'),
 		id: VisitorSpaceOrderProps.ContentPartnerName,
 		accessor: 'name',
 	},
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/spaces___geactiveerd-op'),
+		Header: TranslationService.t('modules/admin/const/spaces___geactiveerd-op'),
 		id: VisitorSpaceOrderProps.CreatedAt,
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
@@ -46,7 +46,7 @@ export const VisitorSpacesOverviewTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/spaces___emailadres'),
+		Header: TranslationService.t('modules/admin/const/spaces___emailadres'),
 		id: 'email',
 		accessor: 'contactInfo.email',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
@@ -60,7 +60,7 @@ export const VisitorSpacesOverviewTableColumns = (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} as any,
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/spaces___telefoonnummer'),
+		Header: TranslationService.t('modules/admin/const/spaces___telefoonnummer'),
 		id: 'telephone',
 		accessor: 'contactInfo.telephone',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
@@ -74,7 +74,7 @@ export const VisitorSpacesOverviewTableColumns = (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} as any,
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/spaces___publicatiestatus'),
+		Header: TranslationService.t('modules/admin/const/spaces___publicatiestatus'),
 		id: VisitorSpaceOrderProps.Status,
 		accessor: 'status',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
@@ -115,7 +115,7 @@ export const VisitorSpacesOverviewTableColumns = (
 						>
 							<a
 								className="u-color-neutral u-font-size-24"
-								aria-label={TranslationService.getTranslation(
+								aria-label={TranslationService.t(
 									'modules/admin/const/spaces___aanpassen'
 								)}
 							>
@@ -136,7 +136,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
-									label={TranslationService.getTranslation(
+									label={TranslationService.t(
 										'modules/admin/const/spaces___activeren'
 									)}
 									onClick={() =>
@@ -153,7 +153,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
-									label={TranslationService.getTranslation(
+									label={TranslationService.t(
 										'modules/admin/const/spaces___deactiveren'
 									)}
 									onClick={() =>
@@ -170,7 +170,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
-									label={TranslationService.getTranslation(
+									label={TranslationService.t(
 										'modules/admin/const/spaces___terug-naar-in-aanvraag'
 									)}
 									onClick={() =>

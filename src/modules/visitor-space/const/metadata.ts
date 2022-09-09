@@ -40,31 +40,31 @@ export type MetadataConfig = {
 
 export const METADATA_CONFIG = (): MetadataConfig => {
 	const dictionary = {
-		from: TranslationService.getTranslation(
+		from: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
 		),
-		until: TranslationService.getTranslation(
+		until: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
 		),
-		between: TranslationService.getTranslation(
+		between: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
 		),
-		contains: TranslationService.getTranslation(
+		contains: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
 		),
-		excludes: TranslationService.getTranslation(
+		excludes: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
 		),
-		equals: TranslationService.getTranslation(
+		equals: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
 		),
-		differs: TranslationService.getTranslation(
+		differs: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
 		),
-		shorter: TranslationService.getTranslation(
+		shorter: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
 		),
-		longer: TranslationService.getTranslation(
+		longer: TranslationService.t(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
 		),
 	};

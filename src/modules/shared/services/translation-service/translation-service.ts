@@ -13,10 +13,7 @@ export class TranslationService {
 		TranslationService.translations = await response.json();
 	}
 
-	public static getTranslation(
-		key: string,
-		params?: Record<string, TranslationParamValue>
-	): string {
+	public static t(key: string, params?: Record<string, TranslationParamValue>): string {
 		let translatedText = (TranslationService.translations || {})[key];
 		if (!translatedText || translatedText === key) {
 			if (key === 'modules/shared/components/loading/loading___laden') {

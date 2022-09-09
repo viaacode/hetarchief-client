@@ -85,7 +85,7 @@ const getVisitorSpacesDropdown = (
 		// Single link to go to linked visitor space (kiosk visitor)
 		return {
 			node: renderLink(
-				TranslationService.getTranslation(
+				TranslationService.t(
 					'modules/navigation/components/navigation/navigation___bezoekersruimte'
 				),
 				'/' + linkedSpaceSlug,
@@ -102,7 +102,7 @@ const getVisitorSpacesDropdown = (
 		// No visitor spaces available => show link to homepage without dropdown
 		return {
 			node: renderLink(
-				TranslationService.getTranslation(
+				TranslationService.t(
 					'modules/navigation/components/navigation/navigation___bezoekersruimtes'
 				),
 				'/',
@@ -118,7 +118,7 @@ const getVisitorSpacesDropdown = (
 		// Show dropdown list with homepage and accessible visitor spaces
 		return {
 			node: renderLink(
-				TranslationService.getTranslation(
+				TranslationService.t(
 					'modules/navigation/components/navigation/navigation___bezoekersruimtes'
 				),
 				'/',
@@ -143,7 +143,7 @@ const getVisitorSpacesDropdown = (
 			children: [
 				{
 					node: renderLink(
-						TranslationService.getTranslation(
+						TranslationService.t(
 							'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
 						),
 						'/',
@@ -159,7 +159,7 @@ const getVisitorSpacesDropdown = (
 						node: ({ closeDropdowns }) =>
 							renderLink(
 								visitorSpace.name ||
-									TranslationService.getTranslation(
+									TranslationService.t(
 										'modules/navigation/components/navigation/navigation___bezoekersruimte'
 									),
 								`/${visitorSpace.slug}`,
@@ -229,7 +229,7 @@ const getCpAdminManagementDropdown = (
 	return [
 		{
 			node: renderLink(
-				TranslationService.getTranslation(
+				TranslationService.t(
 					'modules/navigation/components/navigation/navigation___beheer'
 				),
 				isMobile ? `/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}` : '',
@@ -244,7 +244,7 @@ const getCpAdminManagementDropdown = (
 					? [
 							{
 								node: renderLink(
-									TranslationService.getTranslation(
+									TranslationService.t(
 										'modules/navigation/components/navigation/navigation___aanvragen'
 									),
 									'/beheer/aanvragen',
@@ -261,7 +261,7 @@ const getCpAdminManagementDropdown = (
 					? [
 							{
 								node: renderLink(
-									TranslationService.getTranslation(
+									TranslationService.t(
 										'modules/navigation/components/navigation/navigation___bezoekers'
 									),
 									'/beheer/bezoekers',
@@ -278,7 +278,7 @@ const getCpAdminManagementDropdown = (
 					? [
 							{
 								node: renderLink(
-									TranslationService.getTranslation(
+									TranslationService.t(
 										'modules/navigation/components/navigation/navigation___instellingen'
 									),
 									'/beheer/instellingen',
@@ -315,9 +315,7 @@ const getMeemooAdminManagementDropdown = (
 	return [
 		{
 			node: renderLink(
-				TranslationService.getTranslation(
-					'modules/navigation/components/navigation/navigation___admin'
-				),
+				TranslationService.t('modules/navigation/components/navigation/navigation___admin'),
 				`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 				{
 					className: linkClasses,

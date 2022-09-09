@@ -58,6 +58,6 @@ export const mapBooleanToMetadataData = (data: boolean | undefined): string | nu
 	if (data === undefined || data === null) return null;
 
 	return data
-		? TranslationService.getTranslation('modules/media/utils/map-metadata/map-metadata___ja')
-		: TranslationService.getTranslation('modules/media/utils/map-metadata/map-metadata___nee');
+		? TranslationService.t('modules/media/utils/map-metadata/map-metadata___ja')
+		: TranslationService.t('modules/media/utils/map-metadata/map-metadata___nee');
 };

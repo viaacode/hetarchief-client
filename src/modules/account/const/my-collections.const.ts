@@ -20,7 +20,7 @@ export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateFolderFormState> => {
 		name: string()
 			.test(
 				'name',
-				TranslationService.getTranslation(
+				TranslationService.t(
 					'modules/account/const/my-folders___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
 					{
 						count: nameLengthMin,
@@ -32,7 +32,7 @@ export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateFolderFormState> => {
 			)
 			.test(
 				'name',
-				TranslationService.getTranslation(
+				TranslationService.t(
 					'modules/account/const/my-folders___de-naam-van-een-map-mag-niet-meer-dan-count-tekens-lang-zijn',
 					{
 						count: nameLengthMax,

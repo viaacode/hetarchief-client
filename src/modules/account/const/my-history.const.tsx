@@ -24,10 +24,7 @@ export const HistoryTableColumns = (
 	onClickRow: (visit: Visit) => void
 ): HistoryTableColumnProps[] => [
 	{
-		Header:
-			TranslationService.getTranslation(
-				'modules/account/const/my-history___bezoekersruimte'
-			) || '',
+		Header: TranslationService.t('modules/account/const/my-history___bezoekersruimte') || '',
 		accessor: 'spaceName',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -35,7 +32,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.getTranslation('modules/account/const/my-history___adres') || '',
+		Header: TranslationService.t('modules/account/const/my-history___adres') || '',
 		accessor: 'spaceAddress',
 		disableSortBy: true, // space.schema_maintainer.information is an array and can not be sorted on
 		Cell: (data: VisitRow) => {
@@ -44,9 +41,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header:
-			TranslationService.getTranslation('modules/account/const/my-history___toegang-van') ||
-			'',
+		Header: TranslationService.t('modules/account/const/my-history___toegang-van') || '',
 		accessor: HistoryTableAccessFrom,
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -58,9 +53,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header:
-			TranslationService.getTranslation('modules/account/const/my-history___toegang-tot') ||
-			'',
+		Header: TranslationService.t('modules/account/const/my-history___toegang-tot') || '',
 		accessor: 'endAt',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -72,8 +65,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header:
-			TranslationService.getTranslation('modules/account/const/my-history___toegang') || '',
+		Header: TranslationService.t('modules/account/const/my-history___toegang') || '',
 		id: HistoryTableAccessComboId,
 		accessor: HistoryTableAccessFrom,
 		Cell: (data: VisitRow) => {
@@ -96,7 +88,7 @@ export const HistoryTableColumns = (
 					variants={['text', 'block', 'fill']}
 					onClick={() => onClickRow(visit)}
 				>
-					{TranslationService.getTranslation('modules/account/const/my-history___bezoek')}
+					{TranslationService.t('modules/account/const/my-history___bezoek')}
 				</Button>
 			);
 		},

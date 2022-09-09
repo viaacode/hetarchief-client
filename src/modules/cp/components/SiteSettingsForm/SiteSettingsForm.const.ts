@@ -7,24 +7,24 @@ import { SiteSettingsFormState } from './SiteSettingsForm.types';
 export const SITE_SETTINGS_SCHEMA = (): SchemaOf<SiteSettingsFormState> => {
 	return object({
 		orId: string().required(
-			TranslationService.getTranslation(
+			TranslationService.t(
 				'modules/cp/components/site-settings-form/site-settings-form___naam-is-verplicht'
 			)
 		),
 		slug: string()
 			.strict()
 			.lowercase(
-				TranslationService.getTranslation(
+				TranslationService.t(
 					'modules/cp/components/site-settings-form/site-settings-form___slug-mag-geen-hoofdletters-bevatten'
 				)
 			)
 			.matches(/^\S*$/i, {
-				message: TranslationService.getTranslation(
+				message: TranslationService.t(
 					'modules/cp/components/site-settings-form/site-settings-form___slug-mag-geen-spatie-bevatten'
 				),
 			})
 			.required(
-				TranslationService.getTranslation(
+				TranslationService.t(
 					'modules/cp/components/site-settings-form/site-settings-form___slug-is-verplicht'
 				)
 			),

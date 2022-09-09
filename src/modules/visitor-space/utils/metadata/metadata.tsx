@@ -46,46 +46,46 @@ export const getField = (prop: MetadataProp, op: Operator): MetadataFields | nul
 export const getLabel = (prop: MetadataProp): string => {
 	return (
 		{
-			[MetadataProp.CreatedAt]: TranslationService.getTranslation(
+			[MetadataProp.CreatedAt]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___creatiedatum'
 			),
-			[MetadataProp.Creator]: TranslationService.getTranslation(
+			[MetadataProp.Creator]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___maker'
 			),
-			[MetadataProp.Description]: TranslationService.getTranslation(
+			[MetadataProp.Description]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___beschrijving'
 			),
-			[MetadataProp.Duration]: TranslationService.getTranslation(
+			[MetadataProp.Duration]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___duurtijd'
 			),
-			[MetadataProp.Era]: TranslationService.getTranslation(
+			[MetadataProp.Era]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___tijdsperiode-van-de-inhoud'
 			),
-			[MetadataProp.Everything]: TranslationService.getTranslation(
+			[MetadataProp.Everything]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___alles'
 			),
-			[MetadataProp.Genre]: TranslationService.getTranslation(
+			[MetadataProp.Genre]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___genre'
 			),
-			[MetadataProp.Language]: TranslationService.getTranslation(
+			[MetadataProp.Language]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___taal'
 			),
-			[MetadataProp.Location]: TranslationService.getTranslation(
+			[MetadataProp.Location]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___locatie-van-de-inhoud'
 			),
-			[MetadataProp.Mediatype]: TranslationService.getTranslation(
+			[MetadataProp.Mediatype]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___bestandstype'
 			),
-			[MetadataProp.Medium]: TranslationService.getTranslation(
+			[MetadataProp.Medium]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___analoge-drager'
 			),
-			[MetadataProp.PublishedAt]: TranslationService.getTranslation(
+			[MetadataProp.PublishedAt]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___publicatiedatum'
 			),
-			[MetadataProp.Publisher]: TranslationService.getTranslation(
+			[MetadataProp.Publisher]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___publisher'
 			),
-			[MetadataProp.Title]: TranslationService.getTranslation(
+			[MetadataProp.Title]: TranslationService.t(
 				'modules/visitor-space/utils/metadata/metadata___titel'
 			),
 		}[prop] || ''

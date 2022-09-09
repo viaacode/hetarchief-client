@@ -24,17 +24,15 @@ export const VisitorsTableColumns = (
 	editVisitRequest: (visitRequest: Visit) => void
 ): Column<Visit>[] => [
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/visitors___bezoekersruimte'),
+		Header: TranslationService.t('modules/admin/const/visitors___bezoekersruimte'),
 		accessor: 'spaceName',
 	},
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/visitors___naam'),
+		Header: TranslationService.t('modules/admin/const/visitors___naam'),
 		accessor: 'visitorName',
 	},
 	{
-		Header: TranslationService.getTranslation(
-			'modules/admin/const/visitors___goedgekeurd-door'
-		),
+		Header: TranslationService.t('modules/admin/const/visitors___goedgekeurd-door'),
 		accessor: 'updatedByName',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -45,7 +43,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.getTranslation('modules/admin/const/visitors___toegang'),
+		Header: TranslationService.t('modules/admin/const/visitors___toegang'),
 		accessor: 'startAt',
 		Cell: ({ row }: VisitRow) => {
 			const start = asDate(row.original.startAt);
@@ -70,14 +68,14 @@ export const VisitorsTableColumns = (
 				<DropdownMenu>
 					<Button
 						variants="text"
-						label={TranslationService.getTranslation(
+						label={TranslationService.t(
 							'modules/cp/const/visitors___toegang-intrekken'
 						)}
 						onClick={() => denyVisitRequest(row.original)}
 					/>
 					<Button
 						variants="text"
-						label={TranslationService.getTranslation(
+						label={TranslationService.t(
 							'modules/cp/const/visitors___toegang-aanpassen'
 						)}
 						onClick={() => editVisitRequest(row.original)}

@@ -98,7 +98,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 
 		return (
 			<>
-				{TranslationService.getTranslation(
+				{TranslationService.t(
 					'modules/visitor-space/components/filter-menu/filter-menu___sorteer-op'
 				)}{' '}
 				<strong>{sortBtnLabel}</strong>

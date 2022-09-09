@@ -7,9 +7,7 @@ import { Optional } from '@shared/types';
 class ToastService {
 	public notify(
 		{
-			buttonLabel = TranslationService.getTranslation(
-				'modules/shared/services/toast-service/toast___ok'
-			),
+			buttonLabel = TranslationService.t('modules/shared/services/toast-service/toast___ok'),
 			onClose,
 			maxLines = 5,
 			...toastProps

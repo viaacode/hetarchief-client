@@ -10,12 +10,12 @@ export const ADD_TO_FOLDER_FORM_SCHEMA = (): SchemaOf<AddToFolderFormState> => {
 			.of(
 				object().shape({
 					folder: string().required(
-						TranslationService.getTranslation(
+						TranslationService.t(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___de-geselecteerde-map-bestaat-niet'
 						)
 					),
 					ie: string().required(
-						TranslationService.getTranslation(
+						TranslationService.t(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-geselecteerde-item-bestaat-niet'
 						)
 					),

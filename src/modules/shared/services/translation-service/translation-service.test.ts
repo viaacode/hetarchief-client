@@ -22,7 +22,9 @@ describe('TranslationService', () => {
 
 		await TranslationService.initTranslations();
 
-		const translation = TranslationService.getTranslation('key1');
+		const translation = TranslationService.t(
+			'modules/shared/services/translation-service/translation-service___test-key-1'
+		);
 
 		expect(translation).toEqual('value1');
 	});
@@ -34,10 +36,13 @@ describe('TranslationService', () => {
 
 		await TranslationService.initTranslations();
 
-		const translation = TranslationService.getTranslation('key2', {
-			param1: 'p1',
-			param2: 'p2',
-		});
+		const translation = TranslationService.t(
+			'modules/shared/services/translation-service/translation-service___test-key-2',
+			{
+				param1: 'p1',
+				param2: 'p2',
+			}
+		);
 
 		expect(translation).toEqual('test with p1 and p2 and {{param3}} and p1.');
 	});
@@ -47,13 +52,10 @@ describe('TranslationService', () => {
 
 		await TranslationService.initTranslations();
 
-		const translation = TranslationService.getTranslation(
-			'path-to-file___key3-with-some-words',
-			{
-				param1: 'p1',
-				param2: 'p2',
-			}
-		);
+		const translation = TranslationService.t('path-to-file___test-key3-with-some-words', {
+			param1: 'p1',
+			param2: 'p2',
+		});
 
 		expect(translation).toEqual('key3 with some words ***');
 	});
