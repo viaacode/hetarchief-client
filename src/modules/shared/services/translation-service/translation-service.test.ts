@@ -22,9 +22,7 @@ describe('TranslationService', () => {
 
 		await TranslationService.initTranslations();
 
-		const translation = TranslationService.t(
-			'modules/shared/services/translation-service/translation-service___test-key-1'
-		);
+		const translation = TranslationService.t('test-key-1');
 
 		expect(translation).toEqual('value1');
 	});
@@ -36,13 +34,10 @@ describe('TranslationService', () => {
 
 		await TranslationService.initTranslations();
 
-		const translation = TranslationService.t(
-			'modules/shared/services/translation-service/translation-service___test-key-2',
-			{
-				param1: 'p1',
-				param2: 'p2',
-			}
-		);
+		const translation = TranslationService.t('test-key-2', {
+			param1: 'p1',
+			param2: 'p2',
+		});
 
 		expect(translation).toEqual('test with p1 and p2 and {{param3}} and p1.');
 	});
