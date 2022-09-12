@@ -28,7 +28,6 @@ export interface Media {
 	abstract: string;
 	creator: Record<string, string[]>;
 	actor: Record<string, string[]>;
-	contributor: Record<string, string[]>;
 	publisher: Record<string, string[]>;
 	spatial: string[];
 	temporal: string[];
