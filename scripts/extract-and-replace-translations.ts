@@ -68,7 +68,7 @@ function getFormattedTranslation(translation: string) {
 async function getFilesByGlob(globPattern: string): Promise<string[]> {
 	return new Promise<string[]>((resolve, reject) => {
 		const options = {
-			ignore: '**/*.d.ts',
+			ignore: ['**/*.d.ts', '**/*.test.ts', '**/*.spec.ts'],
 			cwd: path.join(__dirname, '../src'),
 		};
 		glob(globPattern, options, (err, files) => {
@@ -122,7 +122,7 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 
 			// Replace t() functions ( including TranslationService.getTranslation() )
 			const beforeTFunction = '([^a-zA-Z])';
-			const tFuncStart = 't\\(';
+			const tFuncStart = '(t|tText)\\(';
 			const whitespace = '\\s*';
 			const quote = '[\'"]';
 			const translation = '([\\s\\S]+?)';
@@ -147,6 +147,7 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 				(
 					match: string,
 					prefix: string,
+					tFunction: string,
 					translation: string,
 					translationParams: string | undefined
 				) => {
@@ -170,6 +171,7 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 							{
 								match,
 								prefix,
+								tFunction,
 								translation,
 								translationParams,
 								absoluteFilePath,
@@ -189,7 +191,7 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 					if (hasKeyAlready) {
 						return match;
 					} else {
-						return `${prefix}t('${formattedKey}'${translationParams || ''})`;
+						return `${prefix}${tFunction}('${formattedKey}'${translationParams || ''})`;
 					}
 				}
 			);

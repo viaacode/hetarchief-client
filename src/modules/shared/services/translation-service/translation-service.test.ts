@@ -1,5 +1,5 @@
 import { ApiService } from '@shared/services/api-service';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 describe('TranslationService', () => {
 	const mockTranslationsJson = (mockTranslations: Record<string, string>) => {
@@ -22,7 +22,7 @@ describe('TranslationService', () => {
 
 		await TranslationService.initTranslations();
 
-		const translation = TranslationService.getTranslation('key1');
+		const translation = TranslationService.t('test-key-1');
 
 		expect(translation).toEqual('value1');
 	});
@@ -34,7 +34,7 @@ describe('TranslationService', () => {
 
 		await TranslationService.initTranslations();
 
-		const translation = TranslationService.getTranslation('key2', {
+		const translation = TranslationService.t('test-key-2', {
 			param1: 'p1',
 			param2: 'p2',
 		});
@@ -47,13 +47,10 @@ describe('TranslationService', () => {
 
 		await TranslationService.initTranslations();
 
-		const translation = TranslationService.getTranslation(
-			'path-to-file___key3-with-some-words',
-			{
-				param1: 'p1',
-				param2: 'p2',
-			}
-		);
+		const translation = TranslationService.t('path-to-file___test-key3-with-some-words', {
+			param1: 'p1',
+			param2: 'p2',
+		});
 
 		expect(translation).toEqual('key3 with some words ***');
 	});

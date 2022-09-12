@@ -499,6 +499,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 					const href = `/${slug}/${source?.meemoo_fragment_id}`;
 
+					const name = item.title?.toString(); // TODO double check that this still works
 					return (
 						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
 							<a
@@ -506,7 +507,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 								aria-label={tText(
 									'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___navigeer-naar-de-detailpagina-van-name',
 									{
-										name: item.title?.toString(), // TODO double check that this still works
+										name,
 									}
 								)}
 							>

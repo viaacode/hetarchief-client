@@ -9,7 +9,7 @@ import {
 	mapObjectToMetadata,
 } from '@media/utils';
 import { Icon, TextWithNewLines } from '@shared/components';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { MediaTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
 
@@ -31,68 +31,68 @@ export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
  * Object placeholders
  */
 export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
-	description: TranslationService.getTranslation(
+	description: TranslationService.t(
 		'modules/media/const/index___ophalen-van-afspeel-token-mislukt'
 	),
-	reasonTitle: TranslationService.getTranslation(
+	reasonTitle: TranslationService.t(
 		'modules/media/const/index___waarom-kan-ik-dit-object-niet-bekijken'
 	),
-	reasonDescription: TranslationService.getTranslation(
+	reasonDescription: TranslationService.t(
 		'modules/media/const/index___er-ging-iets-mis-bij-het-ophalen-van-het-afspeel-token'
 	),
-	openModalButtonLabel: TranslationService.getTranslation(
+	openModalButtonLabel: TranslationService.t(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
-	closeModalButtonLabel: TranslationService.getTranslation(
+	closeModalButtonLabel: TranslationService.t(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
 	),
 });
 
 export const objectPlaceholder = (): ObjectPlaceholderProps => ({
 	...objectPlaceholderMock,
-	openModalButtonLabel: TranslationService.getTranslation(
+	openModalButtonLabel: TranslationService.t(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
-	closeModalButtonLabel: TranslationService.getTranslation(
+	closeModalButtonLabel: TranslationService.t(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
 	),
 });
 
 export const formatErrorPlaceholder = (format: string): ObjectPlaceholderProps => ({
-	description: TranslationService.getTranslation(
+	description: TranslationService.t(
 		'modules/media/const/index___dit-formaat-wordt-niet-ondersteund-format',
 		{
 			format,
 		}
 	),
-	reasonTitle: TranslationService.getTranslation(
+	reasonTitle: TranslationService.t(
 		'modules/media/const/index___waarom-kan-ik-dit-object-niet-bekijken'
 	),
-	reasonDescription: TranslationService.getTranslation(
+	reasonDescription: TranslationService.t(
 		'modules/media/const/index___het-formaat-van-de-data-wordt-op-dit-moment-niet-ondersteund'
 	),
-	openModalButtonLabel: TranslationService.getTranslation(
+	openModalButtonLabel: TranslationService.t(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
-	closeModalButtonLabel: TranslationService.getTranslation(
+	closeModalButtonLabel: TranslationService.t(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
 	),
 });
 
 export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
-	description: TranslationService.getTranslation(
+	description: TranslationService.t(
 		'modules/media/const/index___je-kan-dit-object-enkel-bekijken-tijdens-een-fysiek-bezoek-aan-de-bezoekersruimte'
 	),
-	reasonTitle: TranslationService.getTranslation(
+	reasonTitle: TranslationService.t(
 		'modules/media/const/index___waarom-kan-ik-dit-object-niet-bekijken'
 	),
-	reasonDescription: TranslationService.getTranslation(
+	reasonDescription: TranslationService.t(
 		'modules/media/const/index___dit-object-bevat-geen-licentie-voor-online-raadpleging-breng-een-bezoek-aan-de-bezoekersruimte'
 	),
-	openModalButtonLabel: TranslationService.getTranslation(
+	openModalButtonLabel: TranslationService.t(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
-	closeModalButtonLabel: TranslationService.getTranslation(
+	closeModalButtonLabel: TranslationService.t(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
 	),
 });
@@ -106,19 +106,19 @@ const renderMediaTab = (mediaType?: MediaTypes) => {
 		case 'audio':
 			return {
 				id: ObjectDetailTabs.Media,
-				label: TranslationService.getTranslation('modules/media/const/index___audio'),
+				label: TranslationService.t('modules/media/const/index___audio'),
 				icon: <Icon name="audio" aria-hidden />,
 			};
 		case 'video':
 			return {
 				id: ObjectDetailTabs.Media,
-				label: TranslationService.getTranslation('modules/media/const/index___video'),
+				label: TranslationService.t('modules/media/const/index___video'),
 				icon: <Icon name="video" aria-hidden />,
 			};
 		default:
 			return {
 				id: ObjectDetailTabs.Media,
-				label: TranslationService.getTranslation('modules/media/const/index___video'),
+				label: TranslationService.t('modules/media/const/index___video'),
 				icon: <Icon name="no-video" aria-hidden />,
 			};
 	}
@@ -127,7 +127,7 @@ const renderMediaTab = (mediaType?: MediaTypes) => {
 export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
 	{
 		id: ObjectDetailTabs.Metadata,
-		label: TranslationService.getTranslation('modules/media/const/index___metadata'),
+		label: TranslationService.t('modules/media/const/index___metadata'),
 		icon: <Icon name="info" aria-hidden />,
 	},
 	renderMediaTab(mediaType),
@@ -145,9 +145,7 @@ export const MEDIA_ACTIONS = (
 		...((canManageFolders
 			? [
 					{
-						label: TranslationService.getTranslation(
-							'modules/media/const/index___bookmark'
-						),
+						label: TranslationService.t('modules/media/const/index___bookmark'),
 						icon: (
 							<Icon
 								className="u-font-size-24 u-text-left"
@@ -157,12 +155,8 @@ export const MEDIA_ACTIONS = (
 							/>
 						),
 						id: MediaActions.Bookmark,
-						ariaLabel: TranslationService.getTranslation(
-							'modules/media/const/index___bookmark'
-						),
-						tooltip: TranslationService.getTranslation(
-							'modules/media/const/index___bookmark'
-						),
+						ariaLabel: TranslationService.t('modules/media/const/index___bookmark'),
+						tooltip: TranslationService.t('modules/media/const/index___bookmark'),
 					},
 			  ]
 			: []) as ActionItem[]),
@@ -179,134 +173,120 @@ export const MEDIA_ACTIONS = (
 export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 	[
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___oorsprong'),
+			title: TranslationService.t('modules/media/const/index___oorsprong'),
 			data: mediaInfo.meemooOriginalCp,
 		},
 		{
-			title: TranslationService.getTranslation(
-				'modules/media/const/index___meemoo-identifier'
-			),
+			title: TranslationService.t('modules/media/const/index___meemoo-identifier'),
 			data: mediaInfo.meemooIdentifier,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___pid'),
+			title: TranslationService.t('modules/media/const/index___pid'),
 			data: mediaInfo.premisIsPartOf,
 		},
 		{
-			title: TranslationService.getTranslation(
-				'modules/media/const/index___identifier-bij-aanbieder'
-			),
+			title: TranslationService.t('modules/media/const/index___identifier-bij-aanbieder'),
 			data: mediaInfo.meemooLocalId,
 		},
 		...mapObjectToMetadata(mediaInfo.premisIdentifier),
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___serie'),
+			title: TranslationService.t('modules/media/const/index___serie'),
 			data: mapArrayToMetadataData(mediaInfo.series),
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___programma'),
+			title: TranslationService.t('modules/media/const/index___programma'),
 			data: mapArrayToMetadataData(mediaInfo.program),
 		},
 		{
-			title: TranslationService.getTranslation(
-				'modules/media/const/index___alternatieve-naam'
-			),
+			title: TranslationService.t('modules/media/const/index___alternatieve-naam'),
 			data: mediaInfo.alternateName,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___archief'),
+			title: TranslationService.t('modules/media/const/index___archief'),
 			data: mapArrayToMetadataData(mediaInfo.partOfArchive),
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___serie'),
+			title: TranslationService.t('modules/media/const/index___serie'),
 			data: mapArrayToMetadataData(mediaInfo.partOfSeries),
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___episode'),
+			title: TranslationService.t('modules/media/const/index___episode'),
 			data: mapArrayToMetadataData(mediaInfo.partOfEpisode),
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___seizoen'),
+			title: TranslationService.t('modules/media/const/index___seizoen'),
 			data: mapArrayToMetadataData(mediaInfo.partOfSeason),
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___bestandstype'),
+			title: TranslationService.t('modules/media/const/index___bestandstype'),
 			data: mediaInfo.dctermsFormat,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___analoge-drager'),
+			title: TranslationService.t('modules/media/const/index___analoge-drager'),
 			data: mediaInfo.dctermsMedium,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___objecttype'),
+			title: TranslationService.t('modules/media/const/index___objecttype'),
 			data: mediaInfo.ebucoreObjectType,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___duurtijd'),
+			title: TranslationService.t('modules/media/const/index___duurtijd'),
 			data: mediaInfo.duration,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___creatiedatum'),
+			title: TranslationService.t('modules/media/const/index___creatiedatum'),
 			data: formatLongDate(asDate(mediaInfo.dateCreatedLowerBound)),
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___publicatiedatum'),
+			title: TranslationService.t('modules/media/const/index___publicatiedatum'),
 			data: formatLongDate(asDate(mediaInfo.datePublished)),
 		},
 		...mapObjectToMetadata(mediaInfo.creator),
 		...mapObjectToMetadata(mediaInfo.contributor),
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___transcriptie'),
+			title: TranslationService.t('modules/media/const/index___transcriptie'),
 			data: mediaInfo?.representations?.[0]?.transcript, // TODO: Update voor andere representations?
 		},
 		{
-			title: TranslationService.getTranslation(
-				'modules/media/const/index___programmabeschrijving'
-			),
+			title: TranslationService.t('modules/media/const/index___programmabeschrijving'),
 			data: mediaInfo.meemooDescriptionProgramme,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___cast'),
+			title: TranslationService.t('modules/media/const/index___cast'),
 			data: mediaInfo.meemooDescriptionCast,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___genre'),
+			title: TranslationService.t('modules/media/const/index___genre'),
 			data: mapArrayToMetadataData(mediaInfo.genre),
 		},
 		...mapObjectToMetadata(mediaInfo.actor),
 		{
-			title: TranslationService.getTranslation(
-				'modules/media/const/index___locatie-van-de-inhoud'
-			),
+			title: TranslationService.t('modules/media/const/index___locatie-van-de-inhoud'),
 			data: mapArrayToMetadataData(mediaInfo.spatial),
 		},
 		{
-			title: TranslationService.getTranslation(
-				'modules/media/const/index___tijdsperiode-van-de-inhoud'
-			),
+			title: TranslationService.t('modules/media/const/index___tijdsperiode-van-de-inhoud'),
 			data: mapArrayToMetadataData(mediaInfo.temporal),
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___taal'),
+			title: TranslationService.t('modules/media/const/index___taal'),
 			data: mapArrayToMetadataData(mediaInfo.inLanguage),
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___filmbasis'),
+			title: TranslationService.t('modules/media/const/index___filmbasis'),
 			data: mediaInfo.meemoofilmBase,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___beeld-geluid'),
+			title: TranslationService.t('modules/media/const/index___beeld-geluid'),
 			data: mediaInfo.meemoofilmImageOrSound,
 		},
 		{
-			title: TranslationService.getTranslation('modules/media/const/index___kleur-zwart-wit'),
+			title: TranslationService.t('modules/media/const/index___kleur-zwart-wit'),
 			data: mapBooleanToMetadataData(mediaInfo.meemoofilmColor),
 		},
 		{
-			title: TranslationService.getTranslation(
-				'modules/media/const/index___uitgebreide-beschrijving'
-			),
+			title: TranslationService.t('modules/media/const/index___uitgebreide-beschrijving'),
 			data: mediaInfo?.abstract ? (
 				<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
 			) : null,

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import { t, tText } from '@shared/helpers/translate';
-import { TranslationParamValue } from '@shared/services/translation-service/transaltion-service';
+import { TranslationParamValue } from '@shared/services/translation-service/translation-service';
 
 export type useTranslationsResponse = {
 	t: (key: string, params?: Record<string, TranslationParamValue>) => ReactNode;

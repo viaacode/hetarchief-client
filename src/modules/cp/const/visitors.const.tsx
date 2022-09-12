@@ -6,7 +6,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { CopyButton, DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { OrderDirection, Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
@@ -23,15 +23,15 @@ export const visitorsStatusFilters = (): TabProps[] => {
 	return [
 		{
 			id: RequestStatusAll.ALL,
-			label: TranslationService.getTranslation('modules/cp/const/visitors___alle'),
+			label: TranslationService.t('modules/cp/const/visitors___alle'),
 		},
 		{
 			id: VisitTimeframe.ACTIVE,
-			label: TranslationService.getTranslation('modules/cp/const/visitors___actief'),
+			label: TranslationService.t('modules/cp/const/visitors___actief'),
 		},
 		{
 			id: VisitTimeframe.PAST,
-			label: TranslationService.getTranslation('modules/cp/const/visitors___historiek'),
+			label: TranslationService.t('modules/cp/const/visitors___historiek'),
 		},
 	];
 };
@@ -41,11 +41,11 @@ export const VisitorsTableColumns = (
 	editVisitRequest: (visitRequest: Visit) => void
 ): Column<Visit>[] => [
 	{
-		Header: TranslationService.getTranslation('modules/cp/const/visitors___naam'),
+		Header: TranslationService.t('modules/cp/const/visitors___naam'),
 		accessor: 'visitorName',
 	},
 	{
-		Header: TranslationService.getTranslation('modules/cp/const/visitors___emailadres'),
+		Header: TranslationService.t('modules/cp/const/visitors___emailadres'),
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitRow) => (
 			<CopyButton
@@ -59,7 +59,7 @@ export const VisitorsTableColumns = (
 		),
 	},
 	{
-		Header: TranslationService.getTranslation('modules/cp/const/visitors___toegang'),
+		Header: TranslationService.t('modules/cp/const/visitors___toegang'),
 		accessor: 'startAt',
 		Cell: ({ row }: VisitRow) => {
 			const start = asDate(row.original.startAt);
@@ -77,7 +77,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.getTranslation('modules/cp/const/visitors___goedgekeurd-door'),
+		Header: TranslationService.t('modules/cp/const/visitors___goedgekeurd-door'),
 		accessor: 'updatedByName',
 		Cell: ({ row }: VisitRow) => {
 			return <span className="u-color-neutral">{row.original.updatedByName}</span>;
@@ -91,14 +91,14 @@ export const VisitorsTableColumns = (
 				<DropdownMenu>
 					<Button
 						variants="text"
-						label={TranslationService.getTranslation(
+						label={TranslationService.t(
 							'modules/cp/const/visitors___toegang-intrekken'
 						)}
 						onClick={() => denyVisitRequest(row.original)}
 					/>
 					<Button
 						variants="text"
-						label={TranslationService.getTranslation(
+						label={TranslationService.t(
 							'modules/cp/const/visitors___toegang-aanpassen'
 						)}
 						onClick={() => editVisitRequest(row.original)}

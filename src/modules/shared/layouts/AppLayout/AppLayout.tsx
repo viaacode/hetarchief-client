@@ -31,7 +31,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
-import { TranslationService } from '@shared/services/translation-service/transaltion-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { useAppDispatch } from '@shared/store';
 import { selectHistory } from '@shared/store/history';
 import { getTosAction } from '@shared/store/tos/tos.slice';
