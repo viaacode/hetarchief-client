@@ -14,6 +14,7 @@ import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
 import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
+import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import { toastService } from '@shared/services/toast-service';
@@ -23,6 +24,7 @@ import { createPageTitle } from '@shared/utils';
 
 const TermsOfService: NextPage = () => {
 	useStickyLayout();
+	useHideFooter();
 
 	const { t } = useTranslation();
 	const router = useRouter();
