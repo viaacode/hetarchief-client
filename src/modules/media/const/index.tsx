@@ -242,7 +242,6 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 			data: formatLongDate(asDate(mediaInfo.datePublished)),
 		},
 		...mapObjectToMetadata(mediaInfo.creator),
-		...mapObjectToMetadata(mediaInfo.contributor),
 		...mapObjectToMetadata(mediaInfo.publisher),
 		{
 			title: TranslationService.t('modules/media/const/index___transcriptie'),

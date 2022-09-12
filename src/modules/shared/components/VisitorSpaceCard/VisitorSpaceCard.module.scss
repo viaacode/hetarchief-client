@@ -94,6 +94,7 @@ $component: "c-visitor-space-card";
  */
 
 	&--granted {
+		:global(.c-card__title-wrapper),
 		:global(.c-card__children-wrapper) {
 			@include respond-at(md) {
 				// Overwrite card styles
