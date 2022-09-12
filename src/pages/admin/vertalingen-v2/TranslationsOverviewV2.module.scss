@@ -13,17 +13,6 @@
 		}
 	}
 
-	:global(.o-svg-icon) {
-		position: absolute;
-		top: calc(50% - 1rem);
-		right: 2rem;
-
-		:global(svg) {
-			width: 2.4rem;
-			height: 2.4rem;
-		}
-	}
-
 	:global(table) {
 		margin-top: $spacer-md;
 
@@ -35,7 +24,7 @@
 		:global(.c-table__row--header) {
 			:global(.c-table__cell--header) {
 				:global(> span) {
-					font-size: 16px;
+					font-size: $font-size-base;
 				}
 			}
 		}
@@ -45,19 +34,18 @@
 		}
 
 		:global(.c-table__cell:last-child) {
-			width: 60px;
+			width: 6rem;
 
 			:global(> span) {
-				font-size: 20px;
-				margin-top: 4px;
+				font-size: $font-size-2xm;
+				margin-top: 0.4rem;
 			}
 		}
 	}
 }
 
 .c-translations-overview__blade:global(.c-blade--active) {
-	width: 700px;
-	max-width: 100%;
+	width: 70rem;
 }
 
 .c-translations-overview__blade-body {
