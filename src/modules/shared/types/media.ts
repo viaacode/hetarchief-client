@@ -68,7 +68,6 @@ export interface MediaInfo {
 	schema_date_published?: string;
 	schema_license?: string[];
 	schema_date_created?: string;
-	schema_contributor: unknown | null;
 	schema_maintainer?: {
 		schema_identifier: string;
 		schema_name: string;
