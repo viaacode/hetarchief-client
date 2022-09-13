@@ -484,6 +484,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						type: item.dcterms_format,
 						preview: item.schema_thumbnail_url || undefined,
 						name: item.schema_name,
+						hasChildren: (item.related_count || 0) > 0,
 					})
 				)}
 				keywords={keywords}

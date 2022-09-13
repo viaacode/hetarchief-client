@@ -115,6 +115,24 @@ export class MediaService {
 			.json();
 	}
 
+	public static async countRelated(
+		meemooIdentifiers: string[] = []
+	): Promise<Record<string, number>> {
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl(
+					{
+						url: `${MEDIA_SERVICE_BASE_URL}/related/count`,
+						query: { meemooIdentifiers },
+					},
+					{
+						arrayFormat: 'comma',
+					}
+				)
+			)
+			.json();
+	}
+
 	public static async getExport(id?: string): Promise<Blob | null> {
 		if (!id) {
 			return null;

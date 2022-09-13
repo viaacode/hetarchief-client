@@ -128,6 +128,18 @@ $component: "c-card";
 
 	// Elements
 
+	&__top-wrapper {
+		position: relative;
+	}
+
+	&__tags-wrapper {
+		position: absolute;
+		left: 0;
+		right: 0;
+		z-index: get-z-layer("foreground");
+		text-align: right;
+	}
+
 	&__header-wrapper {
 		display: flex;
 		flex-flow: row nowrap;
@@ -169,10 +181,15 @@ $component: "c-card";
 			@extend %s-card-content-whitespace;
 
 			.#{$component} {
-				&__image-wrapper {
+				&__image-wrapper,
+				&__tags-wrapper {
 					@extend %s-card-horizontal-whitespace;
 
 					margin-top: $spacer-sm;
+				}
+
+				&__tags-wrapper {
+					padding: $spacer-xs;
 				}
 			}
 		}
