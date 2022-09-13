@@ -6,10 +6,15 @@
 
 $white: #fff;
 $black: #000;
+$black-light: color.adjust($black, $lightness: 10%);
+$black-pale: color.adjust($black, $lightness: 20%);
 $teal: #00c8aa;
 $teal-dark: #00857d;
+$teal-light: color.adjust($teal, $lightness: 10%);
 $seagreen: #009690;
 $cherry: #d60039;
+$cherry-light: color.adjust($cherry, $lightness: -5%);
+$cherry-pale: color.adjust($cherry, $lightness: -10%);
 $shade: #505050;
 $neutral: #727272;
 $zinc: #adadad;

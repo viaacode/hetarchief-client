@@ -24,6 +24,7 @@ import { t, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
+import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -147,6 +148,40 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					table: {
 						sortingIcons,
 					},
+					buttonTypes: () => [
+						{
+							label: TranslationService.t('Zilver'),
+							value: 'c-admin-core-button--silver',
+						},
+						{
+							label: TranslationService.t('Blauw groen'),
+							value: 'c-admin-core-button--teal',
+						},
+						{
+							label: TranslationService.t('Wit'),
+							value: 'c-admin-core-button--white',
+						},
+						{
+							label: TranslationService.t('Zwart'),
+							value: 'c-admin-core-button--black',
+						},
+						{
+							label: TranslationService.t('Outline'),
+							value: 'c-admin-core-button--outline',
+						},
+						{
+							label: TranslationService.t('Tekst'),
+							value: 'c-admin-core-button--text',
+						},
+						{
+							label: TranslationService.t('Rood'),
+							value: 'c-admin-core-button--red',
+						},
+						{
+							label: TranslationService.t('Link'),
+							value: 'c-admin-core-button--link',
+						},
+					],
 				},
 				services: {
 					toastService: {
