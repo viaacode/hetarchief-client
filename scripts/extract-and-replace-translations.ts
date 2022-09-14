@@ -1,9 +1,13 @@
 /**
- This script runs over all the code and looks for:
-t('Aanvraagformulier')
+ This script runs over all the code and looks for either:
+tHtml('Aanvraagformulier')
+or
+tText('Aanvraagformulier')
 
-and replaces it with:
-t('authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier')
+and replaces them with:
+tHTml('authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier')
+or
+tText('authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier')
 
 
 and it also outputs a json file with the translatable strings:
