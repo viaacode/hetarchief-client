@@ -81,6 +81,7 @@ $terms-of-service-background-color: #ebfbf8;
 		.c-content-page-preview {
 			& > .c-content-block {
 				background-color: transparent !important;
+				word-break: break-word;
 			}
 		}
 	}
