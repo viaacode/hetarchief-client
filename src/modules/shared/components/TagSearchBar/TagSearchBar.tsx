@@ -26,23 +26,26 @@ const components = {
 const TagSearchBar = <IsMulti extends boolean>({
 	className,
 	clearLabel,
+	inputState,
 	isClearable = true,
 	isMulti = false as IsMulti,
 	light = false,
 	menuIsOpen,
-	options,
-	searchValue,
-	size = undefined,
-	syncSearchValue = true,
-	valuePlaceholder,
 	onChange,
 	onClear,
 	onCreate,
 	onRemoveValue,
 	onSearch,
+	options,
+	searchValue,
+	size = undefined,
+	syncSearchValue = true,
+	valuePlaceholder,
 	...tagsInputProps
 }: TagSearchBarProps<IsMulti>): ReactElement => {
-	const [inputValue, setInputValue] = useState(searchValue);
+	const localInputState = useState(searchValue);
+	const [inputValue, setInputValue] = inputState || localInputState;
+
 	const selectValue = useMemo(
 		() => (inputValue ? { label: inputValue, value: inputValue } : null),
 		[inputValue]
@@ -52,7 +55,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 		if (syncSearchValue) {
 			setInputValue(searchValue);
 		}
-	}, [searchValue, syncSearchValue]);
+	}, [searchValue, syncSearchValue, setInputValue]);
 
 	/**
 	 * Methods

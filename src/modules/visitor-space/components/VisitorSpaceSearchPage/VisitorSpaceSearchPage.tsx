@@ -124,6 +124,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
+	const searchBarInputState = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
 	const activeSort: SortObject = {
@@ -235,13 +236,24 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 * Methods
 	 */
 
+	const prepareSearchValue = (value = '') => {
+		if (value.trim() && !query.search?.includes(value)) {
+			return {
+				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(value),
+			};
+		}
+
+		return undefined;
+	};
+
 	const onSearch = async (newValue: string) => {
-		if (newValue.trim() && !query.search?.includes(newValue)) {
+		const value = prepareSearchValue(newValue);
+
+		value &&
 			setQuery({
-				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue),
+				...value,
 				page: 1,
 			});
-		}
 	};
 
 	const onFilterMenuToggle = (nextOpen?: boolean, isMobile?: boolean) => {
@@ -259,6 +271,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
+		const searchValue = prepareSearchValue(searchBarInputState[0]);
 		let data;
 
 		switch (id) {
@@ -338,7 +351,8 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined, page: 1 });
+		setQuery({ [id]: data, filter: undefined, page: 1, ...(searchValue ? searchValue : {}) });
+		searchBarInputState[1](undefined);
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -576,17 +590,18 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									clearLabel={t(
 										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 									)}
+									inputState={searchBarInputState}
 									instanceId={labelKeys.search}
 									isMulti
-									size="lg"
-									placeholder={t(
-										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
-									)}
-									syncSearchValue={false}
-									value={activeFilters}
 									onClear={onResetFilters}
 									onRemoveValue={onRemoveTag}
 									onSearch={onSearch}
+									placeholder={t(
+										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+									)}
+									size="lg"
+									syncSearchValue={false}
+									value={activeFilters}
 								/>
 							</FormControl>
 
