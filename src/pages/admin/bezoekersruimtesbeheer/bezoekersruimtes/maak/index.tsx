@@ -13,7 +13,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 const VisitorSpaceCreate: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
 	const formRef = useRef<{ createSpace: () => void } | undefined>(undefined);
@@ -48,13 +48,13 @@ const VisitorSpaceCreate: FC = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
 				)}
 			>
 				<AdminLayout.Actions>
 					<Button
-						label={t(
+						label={tHtml(
 							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___annuleren'
 						)}
 						variants="silver"
@@ -65,7 +65,7 @@ const VisitorSpaceCreate: FC = () => {
 						}
 					/>
 					<Button
-						label={t(
+						label={tHtml(
 							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___opslaan'
 						)}
 						variants="black"

@@ -11,7 +11,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle, formatDistanceToday } from '@shared/utils';
 
 const UsersOverview: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	const renderUsers = () => (
 		<>
@@ -40,7 +40,7 @@ const UsersOverview: FC = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
+				pageTitle={tHtml('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
 			>
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>

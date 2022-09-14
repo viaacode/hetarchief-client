@@ -17,7 +17,7 @@ import { createPageTitle } from '@shared/utils';
 import styles from './index.module.scss';
 
 const PermissionsOverview: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// Access child functions
 	const permissionsRef = useRef<UserGroupOverviewRef>();
@@ -70,11 +70,13 @@ const PermissionsOverview: FC = () => {
 			<>
 				<Button
 					onClick={() => permissionsRef.current?.onCancel()}
-					label={t('pages/admin/gebruikersbeheer/permissies/index___annuleren')}
+					label={tHtml('pages/admin/gebruikersbeheer/permissies/index___annuleren')}
 				/>
 				<Button
 					onClick={() => permissionsRef.current?.onSave()}
-					label={t('pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan')}
+					label={tHtml(
+						'pages/admin/gebruikersbeheer/permissies/index___wijzigingen-opslaan'
+					)}
 				/>
 			</>
 		);
@@ -99,7 +101,7 @@ const PermissionsOverview: FC = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
 				)}
 			>

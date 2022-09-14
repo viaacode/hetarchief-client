@@ -96,7 +96,7 @@ const labelKeys = {
 const VisitorSpaceSearchPage: NextPage = () => {
 	useNavigationBorder();
 
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
 	const history = useSelector(selectHistory);
@@ -539,11 +539,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			return undefined;
 		}
 		if (isMobile) {
-			return t('pages/slug/index___tot-access-end-date-mobile', {
+			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
 				accessEndDateMobile,
 			});
 		}
-		return t(
+		return tHtml(
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
 			{
 				accessEndDate,
@@ -568,13 +568,13 @@ const VisitorSpaceSearchPage: NextPage = () => {
 							<FormControl
 								className="c-form-control--label-hidden u-mb-24"
 								id={`react-select-${labelKeys.search}-input`}
-								label={t(
+								label={tHtml(
 									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 								)}
 							>
 								<TagSearchBar
 									allowCreate
-									clearLabel={t(
+									clearLabel={tHtml(
 										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 									)}
 									instanceId={labelKeys.search}
@@ -600,7 +600,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 							<div className="l-container u-flex u-justify-center u-py-32">
 								<Callout
 									icon={<Icon name="info" aria-hidden />}
-									text={t(
+									text={tHtml(
 										'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 									)}
 									action={
@@ -608,7 +608,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 											<a aria-label={tText('pages/slug/index___meer-info')}>
 												<Button
 													className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-													label={t('pages/slug/index___meer-info')}
+													label={tHtml('pages/slug/index___meer-info')}
 													variants={['text', 'underline']}
 												/>
 											</a>
@@ -634,10 +634,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 								<Placeholder
 									className="p-visitor-space__placeholder"
 									img="/images/looking-glass.svg"
-									title={t(
+									title={tHtml(
 										'pages/bezoekersruimte/visitor-space-slug/index___geen-resultaten'
 									)}
-									description={t(
+									description={tHtml(
 										'pages/bezoekersruimte/visitor-space-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
 									)}
 								/>
@@ -687,7 +687,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={slug as string}
-					description={t(
+					description={tHtml(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___deze-bezoekersruimte-is-momenteel-niet-beschikbaar'
 					)}
 				/>

@@ -10,7 +10,7 @@ import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
 import { Icon, IconName } from '@shared/components';
 import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { i18n } from '@shared/helpers/i18n';
 import { Breakpoints } from '@shared/types';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
@@ -85,9 +85,7 @@ const getVisitorSpacesDropdown = (
 		// Single link to go to linked visitor space (kiosk visitor)
 		return {
 			node: renderLink(
-				TranslationService.t(
-					'modules/navigation/components/navigation/navigation___bezoekersruimte'
-				),
+				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimte'),
 				'/' + linkedSpaceSlug,
 				{
 					badge: null,
@@ -102,9 +100,7 @@ const getVisitorSpacesDropdown = (
 		// No visitor spaces available => show link to homepage without dropdown
 		return {
 			node: renderLink(
-				TranslationService.t(
-					'modules/navigation/components/navigation/navigation___bezoekersruimtes'
-				),
+				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
 				'/',
 				{
 					className: linkClasses,
@@ -118,9 +114,7 @@ const getVisitorSpacesDropdown = (
 		// Show dropdown list with homepage and accessible visitor spaces
 		return {
 			node: renderLink(
-				TranslationService.t(
-					'modules/navigation/components/navigation/navigation___bezoekersruimtes'
-				),
+				i18n.t('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
 				'/',
 				{
 					badge: <Badge text={accessibleVisitorSpaces.length} />,
@@ -143,7 +137,7 @@ const getVisitorSpacesDropdown = (
 			children: [
 				{
 					node: renderLink(
-						TranslationService.t(
+						i18n.t(
 							'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
 						),
 						'/',
@@ -159,7 +153,7 @@ const getVisitorSpacesDropdown = (
 						node: ({ closeDropdowns }) =>
 							renderLink(
 								visitorSpace.name ||
-									TranslationService.t(
+									i18n.t(
 										'modules/navigation/components/navigation/navigation___bezoekersruimte'
 									),
 								`/${visitorSpace.slug}`,
@@ -229,9 +223,7 @@ const getCpAdminManagementDropdown = (
 	return [
 		{
 			node: renderLink(
-				TranslationService.t(
-					'modules/navigation/components/navigation/navigation___beheer'
-				),
+				i18n.t('modules/navigation/components/navigation/navigation___beheer'),
 				isMobile ? `/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}` : '',
 				{
 					className: linkClasses,
@@ -244,7 +236,7 @@ const getCpAdminManagementDropdown = (
 					? [
 							{
 								node: renderLink(
-									TranslationService.t(
+									i18n.t(
 										'modules/navigation/components/navigation/navigation___aanvragen'
 									),
 									'/beheer/aanvragen',
@@ -261,7 +253,7 @@ const getCpAdminManagementDropdown = (
 					? [
 							{
 								node: renderLink(
-									TranslationService.t(
+									i18n.t(
 										'modules/navigation/components/navigation/navigation___bezoekers'
 									),
 									'/beheer/bezoekers',
@@ -278,7 +270,7 @@ const getCpAdminManagementDropdown = (
 					? [
 							{
 								node: renderLink(
-									TranslationService.t(
+									i18n.t(
 										'modules/navigation/components/navigation/navigation___instellingen'
 									),
 									'/beheer/instellingen',
@@ -315,7 +307,7 @@ const getMeemooAdminManagementDropdown = (
 	return [
 		{
 			node: renderLink(
-				TranslationService.t('modules/navigation/components/navigation/navigation___admin'),
+				i18n.t('modules/navigation/components/navigation/navigation___admin'),
 				`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 				{
 					className: linkClasses,

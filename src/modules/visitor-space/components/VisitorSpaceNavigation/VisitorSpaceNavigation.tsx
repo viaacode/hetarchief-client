@@ -24,7 +24,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	showAccessEndDate,
 	title,
 }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
@@ -68,7 +68,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 							iconStart: (
 								<Icon className="u-font-size-24" name="contact" aria-hidden />
 							),
-							label: t(
+							label: tHtml(
 								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___contacteer'
 							),
 							'aria-label': tText(
@@ -105,7 +105,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 					</DropdownMenu>
 				) : (
 					<span className="u-py-8">
-						{t(
+						{tHtml(
 							'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___geen-contactinformatie-beschikbaar'
 						)}
 					</span>

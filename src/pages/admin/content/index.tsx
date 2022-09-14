@@ -15,7 +15,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 const ContentPageOverviewPage: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
 	return (
@@ -32,7 +32,9 @@ const ContentPageOverviewPage: FC = () => {
 				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('admin/content/views/content-overview___content-overzicht')}>
+			<AdminLayout
+				pageTitle={tHtml('admin/content/views/content-overview___content-overzicht')}
+			>
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
 						<Link href={CONTENT_PATH.CONTENT_PAGE_CREATE} passHref>

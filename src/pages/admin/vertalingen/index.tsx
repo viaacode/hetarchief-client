@@ -13,7 +13,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 const AdminTranslationsOverview: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// Access child functions
 	const translationsRef = useRef<TranslationsOverviewRef>();
@@ -30,11 +30,11 @@ const AdminTranslationsOverview: FC = () => {
 				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('pages/admin/vertalingen/index___vertalingen')}>
+			<AdminLayout pageTitle={tHtml('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Actions>
 					<Button
 						onClick={() => translationsRef.current?.onSave()}
-						label={t('pages/admin/vertalingen/index___wijzigingen-opslaan')}
+						label={tHtml('pages/admin/vertalingen/index___wijzigingen-opslaan')}
 					/>
 				</AdminLayout.Actions>
 				<AdminLayout.Content>

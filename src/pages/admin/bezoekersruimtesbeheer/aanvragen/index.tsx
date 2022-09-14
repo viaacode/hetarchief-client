@@ -12,7 +12,7 @@ import { createPageTitle } from '@shared/utils';
 import VisitRequestsOverview from '@visits/components/VisitRequestsOverview/VisitRequestsOverview';
 
 const MeemooAdminRequestsPage: NextPage = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	return (
 		<>
@@ -31,7 +31,7 @@ const MeemooAdminRequestsPage: NextPage = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t('pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen')}
+				pageTitle={tHtml('pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen')}
 			>
 				<AdminLayout.Content>
 					<VisitRequestsOverview columns={RequestTableColumns()} />

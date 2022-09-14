@@ -1,10 +1,10 @@
 import { truncate } from 'lodash-es';
 
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { i18n } from '@shared/helpers/i18n';
 
 export const createPageTitle = (title?: string): string => {
 	if (!title) {
-		return TranslationService.t(
+		return i18n.t(
 			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
 		);
 	}
@@ -12,7 +12,5 @@ export const createPageTitle = (title?: string): string => {
 	return `${truncate(title, {
 		length: 50,
 		omission: '...',
-	})} | ${TranslationService.t(
-		'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-	)}`;
+	})} | ${i18n.t('modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool')}`;
 };

@@ -65,6 +65,7 @@
 		"lodash-es": "^4.17.21",
 		"moment": "2.29.2",
 		"next": "12.1.0",
+    "next-i18next": "11.0.0",
 		"next-redux-wrapper": "7.0.5",
 		"next-transpile-modules": "9.0.0",
 		"npm-force-resolutions": "0.0.10",

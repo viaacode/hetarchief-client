@@ -33,7 +33,7 @@ import { VisitorSpaceService } from '@visitor-space/services';
 import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
 const VisitorSpacesOverview: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
 	const showCreateButton = useHasAllPermission(Permission.CREATE_SPACES);
@@ -94,10 +94,10 @@ const VisitorSpacesOverview: FC = () => {
 
 		toastService.notify({
 			maxLines: 3,
-			title: t(
+			title: tHtml(
 				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis'
 			),
-			description: t(
+			description: tHtml(
 				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-is-een-fout-opgetreden-tijdens-het-aanpassen-van-de-status'
 			),
 		});
@@ -117,8 +117,10 @@ const VisitorSpacesOverview: FC = () => {
 
 				toastService.notify({
 					maxLines: 3,
-					title: t('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'),
-					description: t(
+					title: tHtml(
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'
+					),
+					description: tHtml(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___de-status-werd-succesvol-aangepast'
 					),
 				});
@@ -141,22 +143,22 @@ const VisitorSpacesOverview: FC = () => {
 	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.status) {
 			case VisitorSpaceStatus.Requested:
-				return t(
+				return tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-bezoekersruimtes-in-aanvraag'
 				);
 
 			case VisitorSpaceStatus.Active:
-				return t(
+				return tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-gepubliceerde-bezoekersruimtes'
 				);
 
 			case VisitorSpaceStatus.Inactive:
-				return t(
+				return tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-gedepubliceerde-bezoekersruimtes'
 				);
 
 			default:
-				return t(
+				return tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-bezoekersruimtes'
 				);
 		}
@@ -259,7 +261,7 @@ const VisitorSpacesOverview: FC = () => {
 		if (isError) {
 			return (
 				<p className="p-admin-visitor-spaces__error">
-					{t(
+					{tHtml(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis-bij-het-ophalen-van-de-bezoekersruimtes'
 					)}
 				</p>
@@ -268,7 +270,7 @@ const VisitorSpacesOverview: FC = () => {
 		if (!visitorSpaces) {
 			return (
 				<p className="p-admin-visitor-spaces__error">
-					{t(
+					{tHtml(
 						'modules/admin/visitor-spaces/pages/visitor-spaces-overview/visitor-spaces-overview___geen-bezoekersruimtes-gevonden'
 					)}
 				</p>
@@ -296,7 +298,7 @@ const VisitorSpacesOverview: FC = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
 				)}
 			>
@@ -304,7 +306,7 @@ const VisitorSpacesOverview: FC = () => {
 					<AdminLayout.Actions>
 						<Button
 							iconStart={<Icon name="plus" />}
-							label={t(
+							label={tHtml(
 								'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-bezoekersruimte'
 							)}
 							variants="black"

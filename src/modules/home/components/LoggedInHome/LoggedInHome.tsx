@@ -40,7 +40,7 @@ import styles from './LoggedInHome.module.scss';
 type SelectedVisit = ProcessVisitBladeProps['selected'];
 
 const LoggedInHome: FC = () => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const router = useRouter();
 	const searchRef = useRef<HTMLDivElement>(null);
 
@@ -176,10 +176,10 @@ const LoggedInHome: FC = () => {
 		try {
 			if (!user) {
 				toastService.notify({
-					title: t(
+					title: tHtml(
 						'modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd'
 					),
-					description: t(
+					description: tHtml(
 						'modules/home/components/logged-in-home/logged-in-home___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
 					),
 				});
@@ -188,10 +188,10 @@ const LoggedInHome: FC = () => {
 
 			if (!query[VISITOR_SPACE_SLUG_QUERY_KEY]) {
 				toastService.notify({
-					title: t(
+					title: tHtml(
 						'modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-bezoekersruimte'
 					),
-					description: t(
+					description: tHtml(
 						'modules/home/components/logged-in-home/logged-in-home___de-bezoekersruimte-waarvoor-je-een-aanvraag-wil-indienen-is-niet-ingesteld'
 					),
 				});
@@ -216,8 +216,8 @@ const LoggedInHome: FC = () => {
 				info: values,
 			});
 			toastService.notify({
-				title: t('modules/home/components/logged-in-home/logged-in-home___error'),
-				description: t(
+				title: tHtml('modules/home/components/logged-in-home/logged-in-home___error'),
+				description: tHtml(
 					'modules/home/components/logged-in-home/logged-in-home___er-ging-iets-mis-bij-het-versturen-van-je-aanvraag-probeer-het-later-opnieuw-of-contacteer-de-support'
 				),
 			});
@@ -258,13 +258,13 @@ const LoggedInHome: FC = () => {
 				<div className="l-container">
 					<section className={clsx(styles['c-hero__header'], 'u-mb-48 u-mb-64:md')}>
 						<h1 className={styles['c-hero__title']}>
-							{t('modules/shared/components/hero/hero___dag-user', {
+							{tHtml('modules/shared/components/hero/hero___dag-user', {
 								user: user?.firstName,
 							})}
 						</h1>
 
 						<p className={styles['c-hero__description']}>
-							{t(
+							{tHtml(
 								'modules/shared/components/hero/hero___plan-een-nieuw-bezoek-stap-fysiek-binnen-en-krijg-meteen-toegang-tot-het-digitale-archief-van-de-bezoekersruimte'
 							)}
 						</p>
@@ -300,7 +300,7 @@ const LoggedInHome: FC = () => {
 								className={clsx(styles['c-hero__section-title'], 'u-mb-16')}
 								id="planned-visits"
 							>
-								{t('modules/shared/components/hero/hero___geplande-bezoeken')}
+								{tHtml('modules/shared/components/hero/hero___geplande-bezoeken')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
 								{(future?.items || []).map((visit, i) => (
@@ -323,7 +323,7 @@ const LoggedInHome: FC = () => {
 					{(pending?.items || []).length > 0 && (
 						<section className={clsx(styles['c-hero__section'])}>
 							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
-								{t('modules/shared/components/hero/hero___aanvragen')}
+								{tHtml('modules/shared/components/hero/hero___aanvragen')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
 								{(pending?.items || []).map((visit, i) => (
@@ -352,7 +352,7 @@ const LoggedInHome: FC = () => {
 		return (
 			<Blade
 				isOpen={isVisitorSpaceNotAvailable}
-				title={t(
+				title={tHtml(
 					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 				)}
 				className={styles['c-visitor-space-not-available-blade']}
@@ -360,12 +360,12 @@ const LoggedInHome: FC = () => {
 				<div className="u-px-32">
 					{visitorSpaceInfo && <SpacePreview space={visitorSpaceInfo} />}
 					<p>
-						{t(
+						{tHtml(
 							'modules/home/components/logged-in-home/logged-in-home___het-is-niet-mogelijk-om-toegang-tot-deze-bezoekersruimte-aan-te-vragen-op-dit-moment'
 						)}
 					</p>
 					<Button
-						label={t(
+						label={tHtml(
 							'modules/home/components/logged-in-home/logged-in-home___ga-naar-de-homepage'
 						)}
 						variants="black"

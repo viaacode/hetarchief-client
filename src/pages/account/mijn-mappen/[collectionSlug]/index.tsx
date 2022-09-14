@@ -57,7 +57,7 @@ const labelKeys = {
 };
 
 const AccountMyCollections: NextPage = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const { collectionSlug } = router.query;
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
@@ -175,10 +175,10 @@ const AccountMyCollections: NextPage = () => {
 
 				toastService.notify({
 					maxLines: 3,
-					title: t(
+					title: tHtml(
 						'pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel'
 					),
-					description: t(
+					description: tHtml(
 						'pages/account/mijn-mappen/folder-slug/index___item-is-verwijderd-uit-map-beschrijving',
 						descriptionVariables
 					),
@@ -199,8 +199,9 @@ const AccountMyCollections: NextPage = () => {
 					save(xmlBlob, `${kebabCase(activeCollection?.name) || 'map'}.xml`);
 				} else {
 					toastService.notify({
-						title: t('pages/account/mijn-mappen/folder-slug/index___error') || 'error',
-						description: t(
+						title:
+							tHtml('pages/account/mijn-mappen/folder-slug/index___error') || 'error',
+						description: tHtml(
 							'pages/account/mijn-mappen/folder-slug/index___het-ophalen-van-de-metadata-is-mislukt'
 						),
 					});
@@ -284,18 +285,18 @@ const AccountMyCollections: NextPage = () => {
 				  ]
 				: []),
 		];
-	}, [t, activeCollection, getCollectionExport, canDownloadMetadata]);
+	}, [tHtml, activeCollection, getCollectionExport, canDownloadMetadata]);
 
 	const renderActions = (item: IdentifiableMediaCard, collection: Folder) => (
 		<>
 			<Button
 				variants={['text']}
-				label={t('pages/account/mijn-mappen/folder-slug/index___verwijderen')}
+				label={tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen')}
 				onClick={() => onRemoveFromCollection(item, collection)}
 			/>
 			<Button
 				variants={['text']}
-				label={t('pages/account/mijn-mappen/folder-slug/index___verplaatsen')}
+				label={tHtml('pages/account/mijn-mappen/folder-slug/index___verplaatsen')}
 				onClick={() => onMoveCollection(item)}
 			/>
 		</>
@@ -319,35 +320,37 @@ const AccountMyCollections: NextPage = () => {
 	const renderDescription = (item: FolderMedia): ReactNode => {
 		const items: { label: string | ReactNode; value: ReactNode }[] = [
 			{
-				label: t('pages/account/mijn-mappen/folder-slug/index___aanbieder'),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___aanbieder'),
 				value: item.maintainerName,
 			},
 			{
-				label: t('pages/account/mijn-mappen/folder-slug/index___programma'),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
 				value: item.programs.join(', '),
 			},
 			{
-				label: t('pages/account/mijn-mappen/folder-slug/index___serie'),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
 				value: item.series.join(', '),
 			},
 			{
-				label: t('pages/account/mijn-mappen/folder-slug/index___type'),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
 				value: item.format,
 			},
 			{
-				label: t('pages/account/mijn-mappen/folder-slug/index___creatiedatum'),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___creatiedatum'),
 				value: formatMediumDate(asDate(item.dateCreatedLowerBound)),
 			},
 			{
-				label: t('pages/account/mijn-mappen/folder-slug/index___uitzenddatum'),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___uitzenddatum'),
 				value: formatMediumDate(asDate(item.datePublished)),
 			},
 			{
-				label: t('pages/account/mijn-mappen/folder-slug/index___identifier-bij-meemoo'),
+				label: tHtml('pages/account/mijn-mappen/folder-slug/index___identifier-bij-meemoo'),
 				value: item.meemooIdentifier,
 			},
 			{
-				label: t('pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'),
+				label: tHtml(
+					'pages/account/mijn-mappen/folder-slug/index___identifier-bij-aanbieder'
+				),
 				value: item.meemooLocalId,
 			},
 		];
@@ -392,7 +395,9 @@ const AccountMyCollections: NextPage = () => {
 				<SidebarLayout
 					color="platinum"
 					responsiveTo={Breakpoints.md}
-					sidebarTitle={t('pages/account/mijn-mappen/folder-slug/index___mijn-mappen')}
+					sidebarTitle={tHtml(
+						'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
+					)}
 					sidebarLinks={[
 						...sidebarLinks,
 						{
@@ -420,7 +425,7 @@ const AccountMyCollections: NextPage = () => {
 								<FormControl
 									className="c-form-control--label-hidden"
 									id={`${labelKeys.search}--${activeCollection.id}`}
-									label={t(
+									label={tHtml(
 										'pages/account/mijn-mappen/folder-slug/index___zoeken-in-deze-map'
 									)}
 								>
@@ -485,8 +490,8 @@ const AccountMyCollections: NextPage = () => {
 
 			<ConfirmationModal
 				text={{
-					yes: t('pages/account/mijn-mappen/folder-slug/index___verwijderen'),
-					no: t('pages/account/mijn-mappen/folder-slug/index___annuleren'),
+					yes: tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen'),
+					no: tHtml('pages/account/mijn-mappen/folder-slug/index___annuleren'),
 				}}
 				isOpen={activeCollection && showConfirmDelete}
 				onClose={() => setShowConfirmDelete(false)}

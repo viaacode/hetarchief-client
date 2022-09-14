@@ -1,13 +1,15 @@
+import { appWithTranslation, UserConfig } from 'next-i18next';
 import { AppProps } from 'next/app';
-import { ComponentType, ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { withTranslation } from '@shared/hoc/withTranslation';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
 
 import 'styles/main.scss';
+
+import NextI18nextConfig from '../../next-i18next.config';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -31,6 +33,4 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 	);
 }
 
-export default wrapper.withRedux(
-	withTranslation(MyApp as ComponentType) as ComponentType<AppProps>
-);
+export default wrapper.withRedux(appWithTranslation(MyApp, NextI18nextConfig as UserConfig));

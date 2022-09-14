@@ -19,7 +19,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 	spaceServiceDescription,
 	preview = false,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	return (
 		<div className={styles['c-visit-summary']}>
@@ -39,7 +39,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 			{visitorName && (
 				<>
 					<strong>
-						{t(
+						{tHtml(
 							'modules/cp/components/process-request-blade/process-request-blade___aanvrager'
 						)}
 					</strong>
@@ -50,7 +50,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 			{reason && (
 				<>
 					<strong>
-						{t(
+						{tHtml(
 							'modules/cp/components/process-request-blade/process-request-blade___reden-van-aanvraag'
 						)}
 					</strong>
@@ -61,7 +61,7 @@ const VisitSummary: FC<VisitSummaryProps> = ({
 			{timeframe && (
 				<>
 					<strong>
-						{t(
+						{tHtml(
 							'modules/cp/components/process-request-blade/process-request-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
 						)}
 					</strong>

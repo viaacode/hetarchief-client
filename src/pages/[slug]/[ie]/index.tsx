@@ -2,7 +2,7 @@ import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-com
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -15,6 +15,7 @@ import save from 'save-file';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
@@ -97,7 +98,7 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Hooks
 	 */
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const previousUrl = useSelector(selectPreviousUrl);
@@ -363,8 +364,8 @@ const ObjectDetailPage: NextPage = () => {
 			save(xmlBlob, `${kebabCase(mediaInfo?.name) || 'metadata'}.xml`);
 		} else {
 			toastService.notify({
-				title: t('pages/slug/ie/index___error') || 'error',
-				description: t('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
+				title: tHtml('pages/slug/ie/index___error') || 'error',
+				description: tHtml('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
 			});
 		}
 	};
@@ -518,7 +519,7 @@ const ObjectDetailPage: NextPage = () => {
 						<Callout
 							className="p-object-detail__callout u-pt-32 u-pb-24"
 							icon={<Icon name="info" aria-hidden />}
-							text={t(
+							text={tHtml(
 								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 							)}
 							action={
@@ -526,7 +527,7 @@ const ObjectDetailPage: NextPage = () => {
 									<a aria-label={tText('pages/slug/index___meer-info')}>
 										<Button
 											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-											label={t('pages/slug/index___meer-info')}
+											label={tHtml('pages/slug/index___meer-info')}
 											variants={['text', 'underline']}
 										/>
 									</a>
@@ -560,12 +561,12 @@ const ObjectDetailPage: NextPage = () => {
 								)}
 							>
 								<span className="u-text-ellipsis u-display-none u-display-block:md">
-									{t(
+									{tHtml(
 										'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
 									)}
 								</span>
 								<span className="u-text-ellipsis u-display-none:md">
-									{t(
+									{tHtml(
 										'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
 									)}
 								</span>
@@ -592,13 +593,13 @@ const ObjectDetailPage: NextPage = () => {
 								className="p-object-detail__metadata-component"
 								metadata={[
 									{
-										title: t(
+										title: tHtml(
 											'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 										),
 										data: mapKeywordsToTagList(mediaInfo.keywords),
 									},
 									{
-										title: t('pages/slug/ie/index___ook-interessant'),
+										title: tHtml('pages/slug/ie/index___ook-interessant'),
 										data: similar.length
 											? renderMetadataCards('similar', similar)
 											: null,
@@ -633,10 +634,10 @@ const ObjectDetailPage: NextPage = () => {
 				}
 				title={
 					related.length === 1
-						? t(
+						? tHtml(
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___1-gerelateerd-object'
 						  )
-						: t(
+						: tHtml(
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___amount-gerelateerde-objecten',
 								{
 									amount: related.length,
@@ -680,11 +681,11 @@ const ObjectDetailPage: NextPage = () => {
 			return undefined;
 		}
 		if (isMobile) {
-			return t('pages/slug/index___tot-access-end-date-mobile', {
+			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
 				accessEndDateMobile,
 			});
 		}
-		return t(
+		return tHtml(
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
 			{
 				accessEndDate,
@@ -711,7 +712,7 @@ const ObjectDetailPage: NextPage = () => {
 			/>
 			{mediaInfoIsError && (
 				<p className={'p-object-detail__error'}>
-					{t(
+					{tHtml(
 						'pages/bezoekersruimte/visitor-space-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
 					)}
 				</p>
@@ -785,7 +786,7 @@ const ObjectDetailPage: NextPage = () => {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={router.query.slug as string}
-					description={t(
+					description={tHtml(
 						'modules/shared/components/error-space-no-access/error-space-no-access___je-hebt-geen-toegang-tot-deze-bezoekersruimte-dien-een-aanvraag-in-om-deze-te-bezoeken'
 					)}
 				/>
@@ -807,5 +808,7 @@ const ObjectDetailPage: NextPage = () => {
 		</VisitorLayout>
 	);
 };
+
+export const getServerSideProps: GetServerSideProps = withI18n();
 
 export default withAuth(ObjectDetailPage);

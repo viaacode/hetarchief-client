@@ -11,7 +11,7 @@ import { createPageTitle } from '@shared/utils';
 import VisitRequestsOverview from '@visits/components/VisitRequestsOverview/VisitRequestsOverview';
 
 const CPRequestsPage: NextPage = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	return (
 		<>
@@ -25,7 +25,7 @@ const CPRequestsPage: NextPage = () => {
 
 			<CPAdminLayout
 				className="p-cp-requests"
-				pageTitle={t('pages/beheer/aanvragen/index___aanvragen')}
+				pageTitle={tHtml('pages/beheer/aanvragen/index___aanvragen')}
 			>
 				<VisitRequestsOverview columns={RequestTableColumns()} />
 			</CPAdminLayout>

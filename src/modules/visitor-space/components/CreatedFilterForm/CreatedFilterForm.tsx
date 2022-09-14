@@ -32,7 +32,7 @@ const defaultValues: CreatedFilterFormState = {
 };
 
 const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, disabled }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(CREATED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.created?.[0];
@@ -86,7 +86,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.operator?.message]}
 						id={labelKeys.operator}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/created-filter-form/created-filter-form___operator'
 						)}
 					>
@@ -121,7 +121,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.created?.message]}
 						id={labelKeys.created}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/created-filter-form/created-filter-form___waarde'
 						)}
 					>

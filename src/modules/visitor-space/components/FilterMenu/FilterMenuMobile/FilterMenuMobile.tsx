@@ -35,7 +35,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 }) => {
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
 	const [isSortActive, setIsSortActive] = useState(false);
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form
@@ -91,7 +91,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							key="filter-menu-mobile-nav-close"
 							className={styles['c-filter-menu-mobile__back']}
 							iconStart={<Icon className="u-text-left" name="arrow-left" />}
-							label={t(
+							label={tHtml(
 								'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten'
 							)}
 							variants={['text']}
@@ -101,7 +101,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 
 					<div className="l-container">
 						<h4 className="u-text-center u-mt-24">
-							{t(
+							{tHtml(
 								'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
 							)}
 						</h4>
@@ -145,7 +145,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							key="filter-menu-mobile-nav-filter"
 							className={styles['c-filter-menu-mobile__back']}
 							iconStart={<Icon className="u-text-left" name="arrow-left" />}
-							label={t(
+							label={tHtml(
 								'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
 							)}
 							variants={['text']}
@@ -168,7 +168,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 					{isSortActive && !activeFilter && (
 						<>
 							<h4 className="u-text-center u-mt-24 u-mb-16">
-								{t(
+								{tHtml(
 									'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___sorteer-op'
 								)}
 							</h4>

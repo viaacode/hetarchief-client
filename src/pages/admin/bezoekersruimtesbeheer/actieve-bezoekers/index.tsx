@@ -29,7 +29,7 @@ import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { VisitTimeframe } from '@visits/types';
 
 const Visitors: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
@@ -105,16 +105,16 @@ const Visitors: FC = () => {
 			});
 			await refetchVisitRequests();
 			toastService.notify({
-				title: t('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
-				description: t(
+				title: tHtml('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
+				description: tHtml(
 					'pages/beheer/bezoekers/index___deze-gebruiker-heeft-nu-geen-toegang-meer'
 				),
 			});
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('pages/beheer/bezoekers/index___error'),
-				description: t(
+				title: tHtml('pages/beheer/bezoekers/index___error'),
+				description: tHtml(
 					'pages/beheer/bezoekers/index___het-updaten-van-de-bezoekersaanvraag-is-mislukt'
 				),
 			});
@@ -130,7 +130,7 @@ const Visitors: FC = () => {
 	// Render
 
 	const renderEmptyMessage = (): string | ReactNode => {
-		return t(
+		return tHtml(
 			'modules/admin/visitor-spaces/pages/visitors/visitors___er-zijn-geen-actieve-bezoekers'
 		);
 	};
@@ -154,7 +154,7 @@ const Visitors: FC = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
 				)}
 			>
@@ -222,7 +222,7 @@ const Visitors: FC = () => {
 						) : (
 							<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
 								{isFetching
-									? t(
+									? tHtml(
 											'modules/admin/visitor-spaces/pages/visitors/visitors___laden'
 									  )
 									: renderEmptyMessage()}
@@ -241,12 +241,12 @@ const Visitors: FC = () => {
 							}}
 						/>
 						<ApproveRequestBlade
-							title={t('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
+							title={tHtml('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
 							approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
-							successTitle={t(
+							successTitle={tHtml(
 								'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
 							)}
-							successDescription={t(
+							successDescription={tHtml(
 								'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
 							)}
 							isOpen={showEditVisitRequestModal}

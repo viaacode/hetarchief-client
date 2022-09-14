@@ -30,7 +30,7 @@ import { VisitTimeframe } from '@visits/types';
 import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyHistory: NextPage = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 
@@ -95,9 +95,9 @@ const AccountMyHistory: NextPage = () => {
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('pages/account/mijn-historiek/index___error'),
+				title: tHtml('pages/account/mijn-historiek/index___error'),
 				maxLines: 2,
-				description: t(
+				description: tHtml(
 					'pages/account/mijn-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
 				),
 			});
@@ -108,7 +108,7 @@ const AccountMyHistory: NextPage = () => {
 	// Render
 
 	const renderEmptyMessage = (): string | ReactNode => {
-		return t('pages/account/mijn-historiek/index___geen-historiek');
+		return tHtml('pages/account/mijn-historiek/index___geen-historiek');
 	};
 
 	return (
@@ -127,7 +127,7 @@ const AccountMyHistory: NextPage = () => {
 
 			<AccountLayout
 				className="p-account-my-history"
-				pageTitle={t('pages/account/mijn-historiek/index___mijn-historiek')}
+				pageTitle={tHtml('pages/account/mijn-historiek/index___mijn-historiek')}
 			>
 				{(visits.data?.items?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">

@@ -1,8 +1,7 @@
 import { IconProps } from '@shared/components';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { i18n } from '@shared/helpers/i18n';
 
-export const OPTIONAL_LABEL = (): string =>
-	`(${TranslationService.t('modules/shared/const/form___optioneel')})`;
+export const OPTIONAL_LABEL = (): string => `(${i18n.t('modules/shared/const/form___optioneel')})`;
 
 export const VIEW_TOGGLE_OPTIONS = [
 	{

@@ -22,7 +22,7 @@ const VisitRequestedPage: NextPage = () => {
 	useNavigationBorder();
 
 	const router = useRouter();
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const dispatch = useDispatch();
 
 	const { slug } = router.query;
@@ -79,7 +79,7 @@ const VisitRequestedPage: NextPage = () => {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={slug as string}
-					description={t(
+					description={tHtml(
 						'pages/slug/toegang-aangevraagd/index___deze-pagina-is-niet-toegankelijk-doe-een-bezoekersaavraag-op-de-startpagina'
 					)}
 				/>

@@ -3,14 +3,14 @@ import clsx from 'clsx';
 
 import { ACCOUNT_NAVIGATION_LINKS } from '@account/const';
 import { Icon } from '@shared/components';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { i18n } from '@shared/helpers/i18n';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
 import { NavItemsRightLoggedIn } from '../types';
 
 export const NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
-	openLabel: TranslationService.t('modules/shared/const/navigation___sluit'),
-	closedLabel: TranslationService.t('modules/shared/const/navigation___menu'),
+	openLabel: i18n.t('modules/shared/const/navigation___sluit'),
+	closedLabel: i18n.t('modules/shared/const/navigation___menu'),
 });
 
 export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {
@@ -20,7 +20,7 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 			node: (
 				<Button
 					key="nav-auth-button"
-					label={TranslationService.t(
+					label={i18n.t(
 						'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
 					)}
 					variants={['white', 'text']}
@@ -57,9 +57,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 						}
 					)}
 					icon={<Icon type="solid" name="notification" aria-hidden />}
-					aria-label={TranslationService.t(
-						'modules/navigation/const/index___notificaties'
-					)}
+					aria-label={i18n.t('modules/navigation/const/index___notificaties')}
 				/>
 			),
 		},
@@ -80,7 +78,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 					node: ({ closeDropdowns }) => (
 						<NavigationLink
 							iconStart="log-out"
-							label={TranslationService.t('modules/navigation/const/index___log-uit')}
+							label={i18n.t('modules/navigation/const/index___log-uit')}
 							onClick={() => {
 								onLogOutClick();
 								closeDropdowns();

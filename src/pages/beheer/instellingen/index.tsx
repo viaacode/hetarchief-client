@@ -17,7 +17,7 @@ const CPSettingsPage: NextPage = () => {
 	/**
 	 * Hooks
 	 */
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	/**
 	 * Data
@@ -38,9 +38,9 @@ const CPSettingsPage: NextPage = () => {
 
 	const renderErrorMessage = () => {
 		if (!user?.visitorSpaceSlug) {
-			return t('pages/beheer/instellingen/index___geen-maintainer-id-gevonden');
+			return tHtml('pages/beheer/instellingen/index___geen-maintainer-id-gevonden');
 		}
-		return t(
+		return tHtml(
 			'pages/beheer/instellingen/index___er-ging-iets-mis-bij-het-ophalen-van-de-instellingen'
 		);
 	};
@@ -65,7 +65,7 @@ const CPSettingsPage: NextPage = () => {
 
 			<CPAdminLayout
 				className="p-cp-settings"
-				pageTitle={t('pages/beheer/instellingen/index___instellingen')}
+				pageTitle={tHtml('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">
 					{visitorSpaceInfo ? (

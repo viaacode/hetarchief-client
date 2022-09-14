@@ -13,7 +13,7 @@ import { createPageTitle } from '@shared/utils';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 const VisitorSpaceEdit: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const { slug } = router.query;
 
@@ -38,7 +38,7 @@ const VisitorSpaceEdit: FC = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
 				)}
 			>

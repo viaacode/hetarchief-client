@@ -3,7 +3,7 @@ import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-par
 
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { i18n } from '@shared/helpers/i18n';
 import { OrderDirection, VisitorSpaceMediaType } from '@shared/types';
 
 import {
@@ -74,17 +74,17 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 export const VISITOR_SPACE_TABS = (): TabProps[] => [
 	{
 		id: VisitorSpaceMediaType.All,
-		label: TranslationService.t('modules/visitor-space/const/index___alles'),
+		label: i18n.t('modules/visitor-space/const/index___alles'),
 	},
 	{
 		id: VisitorSpaceMediaType.Video,
 		icon: <Icon name="video" aria-hidden />,
-		label: TranslationService.t('modules/visitor-space/const/index___videos'),
+		label: i18n.t('modules/visitor-space/const/index___videos'),
 	},
 	{
 		id: VisitorSpaceMediaType.Audio,
 		icon: <Icon name="audio" aria-hidden />,
-		label: TranslationService.t('modules/visitor-space/const/index___audio'),
+		label: i18n.t('modules/visitor-space/const/index___audio'),
 	},
 ];
 
@@ -93,27 +93,27 @@ export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 export const VISITOR_SPACE_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: VisitorSpaceFilterId.Medium,
-		label: TranslationService.t('modules/visitor-space/const/index___analoge-drager'),
+		label: i18n.t('modules/visitor-space/const/index___analoge-drager'),
 		form: MediumFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Duration,
-		label: TranslationService.t('modules/visitor-space/const/index___duurtijd'),
+		label: i18n.t('modules/visitor-space/const/index___duurtijd'),
 		form: DurationFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Created,
-		label: TranslationService.t('modules/visitor-space/const/index___creatiedatum'),
+		label: i18n.t('modules/visitor-space/const/index___creatiedatum'),
 		form: CreatedFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Published,
-		label: TranslationService.t('modules/visitor-space/const/index___publicatiedatum'),
+		label: i18n.t('modules/visitor-space/const/index___publicatiedatum'),
 		form: PublishedFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Creator,
-		label: TranslationService.t('modules/visitor-space/const/index___maker'),
+		label: i18n.t('modules/visitor-space/const/index___maker'),
 		form: CreatorFilterForm,
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
@@ -130,41 +130,37 @@ export const VISITOR_SPACE_FILTERS = (): FilterMenuFilterOption[] => [
 	// },
 	{
 		id: VisitorSpaceFilterId.Language,
-		label: TranslationService.t('modules/visitor-space/const/index___taal'),
+		label: i18n.t('modules/visitor-space/const/index___taal'),
 		form: LanguageFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Advanced,
 		icon: 'dots-horizontal',
-		label: TranslationService.t('modules/visitor-space/const/index___geavanceerd'),
+		label: i18n.t('modules/visitor-space/const/index___geavanceerd'),
 		form: AdvancedFilterForm,
 	},
 ];
 
 export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in VisitorSpaceSort]: string } => ({
-	[VisitorSpaceSort.Date]: TranslationService.t(
-		'modules/visitor-space/const/index___sorteer-op-datum'
-	),
-	[VisitorSpaceSort.Relevance]: TranslationService.t(
+	[VisitorSpaceSort.Date]: i18n.t('modules/visitor-space/const/index___sorteer-op-datum'),
+	[VisitorSpaceSort.Relevance]: i18n.t(
 		'modules/visitor-space/const/index___sorteer-op-relevantie'
 	),
-	[VisitorSpaceSort.Title]: TranslationService.t(
-		'modules/visitor-space/const/index___sorteer-op-titel'
-	),
+	[VisitorSpaceSort.Title]: i18n.t('modules/visitor-space/const/index___sorteer-op-titel'),
 });
 
 export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	{
-		label: TranslationService.t('modules/visitor-space/const/index___relevantie'),
+		label: i18n.t('modules/visitor-space/const/index___relevantie'),
 		orderProp: VisitorSpaceSort.Relevance,
 	},
 	{
-		label: TranslationService.t('modules/visitor-space/const/index___datum-oplopend'),
+		label: i18n.t('modules/visitor-space/const/index___datum-oplopend'),
 		orderProp: VisitorSpaceSort.Date,
 		orderDirection: OrderDirection.asc,
 	},
 	{
-		label: TranslationService.t('modules/visitor-space/const/index___datum-aflopend'),
+		label: i18n.t('modules/visitor-space/const/index___datum-aflopend'),
 		orderProp: VisitorSpaceSort.Date,
 		orderDirection: OrderDirection.desc,
 	},
@@ -185,19 +181,19 @@ export const VisitorSpaceStatusOptions = (): TabProps[] => {
 	return [
 		{
 			id: 'ALL',
-			label: TranslationService.t('modules/visitor-space/const/index___alles'),
+			label: i18n.t('modules/visitor-space/const/index___alles'),
 		},
 		{
 			id: VisitorSpaceStatus.Requested,
-			label: TranslationService.t('modules/visitor-space/const/index___in-aanvraag'),
+			label: i18n.t('modules/visitor-space/const/index___in-aanvraag'),
 		},
 		{
 			id: VisitorSpaceStatus.Active,
-			label: TranslationService.t('modules/visitor-space/const/index___gepubliceerd'),
+			label: i18n.t('modules/visitor-space/const/index___gepubliceerd'),
 		},
 		{
 			id: VisitorSpaceStatus.Inactive,
-			label: TranslationService.t('modules/visitor-space/const/index___gedepubliceerd'),
+			label: i18n.t('modules/visitor-space/const/index___gedepubliceerd'),
 		},
 	];
 };

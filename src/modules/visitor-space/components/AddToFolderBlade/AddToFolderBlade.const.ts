@@ -1,6 +1,6 @@
 import { array, boolean, object, SchemaOf, string } from 'yup';
 
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { i18n } from '@shared/helpers/i18n';
 
 import { AddToFolderFormState } from './AddToFolderBlade.types';
 
@@ -10,12 +10,12 @@ export const ADD_TO_FOLDER_FORM_SCHEMA = (): SchemaOf<AddToFolderFormState> => {
 			.of(
 				object().shape({
 					folder: string().required(
-						TranslationService.t(
+						i18n.t(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___de-geselecteerde-map-bestaat-niet'
 						)
 					),
 					ie: string().required(
-						TranslationService.t(
+						i18n.t(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-geselecteerde-item-bestaat-niet'
 						)
 					),
