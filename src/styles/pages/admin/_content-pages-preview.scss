@@ -154,7 +154,13 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-admin-core-button--silver {
+	[class*="c-button--content-page-button--"] {
+		max-height: none !important;
+		border-radius: 4rem;
+		border-style: solid !important;
+	}
+
+	.c-button--content-page-button--silver {
 		background-color: $silver !important;
 		border-color: $silver !important;
 		color: $black !important;
@@ -185,7 +191,7 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-admin-core-button--teal {
+	.c-button--content-page-button--teal {
 		background-color: $teal !important;
 		border-color: $teal !important;
 		color: $white !important;
@@ -216,7 +222,7 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-admin-core-button--white {
+	.c-button--content-page-button--white {
 		background-color: $white !important;
 		border-color: $white !important;
 		color: $black !important;
@@ -238,7 +244,7 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-admin-core-button--red {
+	.c-button--content-page-button--red {
 		background-color: $cherry !important;
 		border-color: $cherry !important;
 		color: $white !important;
@@ -259,7 +265,7 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-admin-core-button--link {
+	.c-button--content-page-button--link {
 		font-weight: $font-weight-normal !important;
 		background-color: transparent !important;
 		border-color: transparent !important;
@@ -284,7 +290,7 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-admin-core-button--black {
+	.c-button--content-page-button--black {
 		background-color: $black !important;
 		border-color: $black !important;
 		color: $white !important;
@@ -303,7 +309,7 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-admin-core-button--outline {
+	.c-button--content-page-button--outline {
 		background-color: $white !important;
 		border-color: $black !important;
 		color: $black !important;
@@ -329,7 +335,7 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-admin-core-button--text {
+	.c-button--content-page-button--text {
 		font-weight: $font-weight-normal !important;
 		background-color: transparent !important;
 		border-color: transparent !important;

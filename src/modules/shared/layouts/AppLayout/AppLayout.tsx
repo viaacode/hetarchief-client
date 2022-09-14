@@ -154,7 +154,7 @@ const AppLayout: FC = ({ children }) => {
 			})}
 		>
 			{/* <!-- start Flowplayer imports --> */}
-			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
+			{/* Importing these in the root of the app, so they are loaded when the flowplayer component starts to initialise */}
 			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
 			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
 			<Script

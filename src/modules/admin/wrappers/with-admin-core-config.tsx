@@ -151,35 +151,35 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					buttonTypes: () => [
 						{
 							label: TranslationService.t('Zilver'),
-							value: 'c-admin-core-button--silver',
+							value: 'content-page-button--silver',
 						},
 						{
 							label: TranslationService.t('Blauw groen'),
-							value: 'c-admin-core-button--teal',
+							value: 'content-page-button--teal',
 						},
 						{
 							label: TranslationService.t('Wit'),
-							value: 'c-admin-core-button--white',
+							value: 'content-page-button--white',
 						},
 						{
 							label: TranslationService.t('Zwart'),
-							value: 'c-admin-core-button--black',
+							value: 'content-page-button--black',
 						},
 						{
 							label: TranslationService.t('Outline'),
-							value: 'c-admin-core-button--outline',
+							value: 'content-page-button--outline',
 						},
 						{
 							label: TranslationService.t('Tekst'),
-							value: 'c-admin-core-button--text',
+							value: 'content-page-button--text',
 						},
 						{
 							label: TranslationService.t('Rood'),
-							value: 'c-admin-core-button--red',
+							value: 'content-page-button--red',
 						},
 						{
 							label: TranslationService.t('Link'),
-							value: 'c-admin-core-button--link',
+							value: 'content-page-button--link',
 						},
 					],
 				},
