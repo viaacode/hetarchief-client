@@ -26,7 +26,7 @@ const defaultValues: KeywordsFilterFormState = {
 };
 
 const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [input, setInput] = useState<string | undefined>(undefined);
 
@@ -125,7 +125,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={(errors.values || []).map((value) => value.message)}
 						id={labelKeys.values}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/keywords-filter-form/keywords-filter-form___waardes'
 						)}
 					>

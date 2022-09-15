@@ -16,7 +16,7 @@ import { createPageTitle } from '@shared/utils';
 import styles from './TranslationsOverviewV2.module.scss';
 
 const AdminTranslationsOverviewV2: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	const renderPopup = ({
 		title,
@@ -78,7 +78,7 @@ const AdminTranslationsOverviewV2: FC = () => {
 					content={tText('pages/admin/vertalingen/index___vertalingen')}
 				/>
 			</Head>
-			<AdminLayout pageTitle={t('pages/admin/vertalingen/index___vertalingen')}>
+			<AdminLayout pageTitle={tHtml('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-vertalingen">
 						<TranslationsOverviewV2

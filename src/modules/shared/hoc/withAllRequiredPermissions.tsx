@@ -17,7 +17,7 @@ export const withAllRequiredPermissions = (
 	return function ComponentWithPermissions(props: Record<string, unknown>) {
 		const dispatch = useAppDispatch();
 		const router = useRouter();
-		const { t } = useTranslation();
+		const { tHtml } = useTranslation();
 
 		const hasRequiredPermissions: boolean = useHasAllPermission(...requiredPermissions);
 		const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
@@ -27,13 +27,13 @@ export const withAllRequiredPermissions = (
 			if (!checkLoginLoading && !hasCheckedLogin) {
 				dispatch(checkLoginAction());
 			}
-		}, [router, hasRequiredPermissions, t, hasCheckedLogin, checkLoginLoading, dispatch]);
+		}, [router, hasRequiredPermissions, tHtml, hasCheckedLogin, checkLoginLoading, dispatch]);
 
 		if (hasCheckedLogin && !hasRequiredPermissions) {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={null}
-					description={t(
+					description={tHtml(
 						'modules/shared/components/error-no-access/error-no-access___je-hebt-geen-toegang-tot-deze-pagina'
 					)}
 				/>

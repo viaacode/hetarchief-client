@@ -33,7 +33,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	onRequestAccess,
 	onSearch,
 }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [query, setQuery] = useQueryParams({
 		[SEARCH_QUERY_KEY]: StringParam,
 	});
@@ -85,7 +85,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 			<div className="u-flex u-flex-col u-flex-row:md u-align-center u-justify-between:md u-mb-32 u-mb-80:md">
 				<h3 className="p-home__subtitle">
 					<label htmlFor={labelKeys.search}>
-						{t('pages/index___vind-een-bezoekersruimte')}
+						{tHtml('pages/index___vind-een-bezoekersruimte')}
 					</label>
 				</h3>
 
@@ -105,7 +105,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 
 			{isLoadingVisitorSpaces && <Loading />}
 			{!isLoadingVisitorSpaces && visitorSpaces?.items?.length === 0 && (
-				<p>{t('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
+				<p>{tHtml('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
 			)}
 			{!isLoadingVisitorSpaces && visitorSpacesLength > 0 && (
 				<VisitorSpaceCardList
@@ -132,7 +132,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 						onClick={handleLoadAllVisitorSpaces}
 						variants={['outline']}
 					>
-						{t('pages/index___toon-alles-amount', {
+						{tHtml('pages/index___toon-alles-amount', {
 							amount: visitorSpaces?.total,
 						})}
 					</Button>

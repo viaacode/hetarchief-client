@@ -24,7 +24,7 @@ const defaultValues = {
 };
 
 const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// State
 
@@ -70,7 +70,7 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 				<div className="u-my-32">
 					{buckets.length === 0 && (
 						<p className="u-color-neutral u-text-center u-my-16">
-							{t(
+							{tHtml(
 								'modules/visitor-space/components/genre-filter-form/genre-filter-form___geen-genres-gevonden'
 							)}
 						</p>

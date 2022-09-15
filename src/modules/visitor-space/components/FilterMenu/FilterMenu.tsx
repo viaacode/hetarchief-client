@@ -4,9 +4,9 @@ import { FC, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Icon, IconLightNames, Toggle } from '@shared/components';
+import { tText } from '@shared/helpers/translate';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { Breakpoints } from '@shared/types';
 
 import { VISITOR_SPACE_ACTIVE_SORT_MAP, VISITOR_SPACE_QUERY_PARAM_CONFIG } from '../../const';
@@ -98,9 +98,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 
 		return (
 			<>
-				{TranslationService.t(
-					'modules/visitor-space/components/filter-menu/filter-menu___sorteer-op'
-				)}{' '}
+				{tText('modules/visitor-space/components/filter-menu/filter-menu___sorteer-op')}{' '}
 				<strong>{sortBtnLabel}</strong>
 			</>
 		);

@@ -2,7 +2,7 @@ import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
 
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 import { MediaSearchFilter, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 
@@ -113,14 +113,12 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 	return [
 		...mapArrayParamToTags(
 			query.search || [],
-			TranslationService.t('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
+			tText('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
 			SEARCH_QUERY_KEY
 		),
 		...mapArrayParamToTags(
 			query.medium || [],
-			TranslationService.t(
-				'modules/visitor-space/utils/map-filters/map-filters___analoge-drager'
-			),
+			tText('modules/visitor-space/utils/map-filters/map-filters___analoge-drager'),
 			VisitorSpaceFilterId.Medium
 		),
 		...mapAdvancedToTags(query.duration || [], VisitorSpaceFilterId.Duration),
@@ -128,22 +126,22 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 		...mapAdvancedToTags(query.published || [], VisitorSpaceFilterId.Published),
 		...mapArrayParamToTags(
 			query.creator || [],
-			TranslationService.t('modules/visitor-space/utils/map-filters/map-filters___maker'),
+			tText('modules/visitor-space/utils/map-filters/map-filters___maker'),
 			VisitorSpaceFilterId.Creator
 		),
 		...mapArrayParamToTags(
 			query.genre || [],
-			TranslationService.t('modules/visitor-space/utils/map-filters/map-filters___genre'),
+			tText('modules/visitor-space/utils/map-filters/map-filters___genre'),
 			VisitorSpaceFilterId.Genre
 		),
 		...mapArrayParamToTags(
 			query.keywords || [],
-			TranslationService.t('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
+			tText('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
 			VisitorSpaceFilterId.Keywords
 		),
 		...mapArrayParamToTags(
 			query.language || [],
-			TranslationService.t('modules/visitor-space/utils/map-filters/map-filters___taal'),
+			tText('modules/visitor-space/utils/map-filters/map-filters___taal'),
 			VisitorSpaceFilterId.Language
 		),
 		...mapAdvancedToTags(query.advanced || []),

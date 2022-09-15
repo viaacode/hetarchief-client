@@ -54,7 +54,7 @@ const defaultAccessTo = (accessFrom: Date) => {
 };
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
 		Permission.READ_ALL_VISIT_REQUESTS
 	);
@@ -62,16 +62,16 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		selected,
 		onClose,
 		onSubmit,
-		title = t(
+		title = tHtml(
 			'modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren'
 		),
-		approveButtonLabel = t(
+		approveButtonLabel = tHtml(
 			'modules/cp/components/approve-request-blade/approve-request-blade___keur-goed'
 		),
-		successTitle = t(
+		successTitle = tHtml(
 			'modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd'
 		),
-		successDescription = t(
+		successDescription = tHtml(
 			'modules/cp/components/approve-request-blade/approve-request-blade___deze-aanvraag-werd-succesvol-goedgekeurd'
 		),
 	} = props;
@@ -172,10 +172,10 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		const overlappingVisitRequests = await checkOverlappingRequests();
 		if (overlappingVisitRequests.length) {
 			toastService.notify({
-				title: t(
+				title: tHtml(
 					'modules/shared/components/approve-request-blade/approve-request-blade___conflict'
 				),
-				description: t(
+				description: tHtml(
 					'modules/shared/components/approve-request-blade/approve-request-blade___je-kan-geen-2-aanvragen-goedkeuren-die-overlappen-pas-de-andere-aanvraag-aan'
 				),
 			});
@@ -229,7 +229,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				/>
 
 				<Button
-					label={t(
+					label={tHtml(
 						'modules/cp/components/approve-request-blade/approve-request-blade___annuleer'
 					)}
 					variants={['block', 'text']}
@@ -398,7 +398,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessFrom?.message]}
 					id={labelKeys.accessFrom}
-					label={t(
+					label={tHtml(
 						'modules/cp/components/approve-request-blade/approve-request-blade___van'
 					)}
 				>
@@ -409,7 +409,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 					errors={[errors.accessTo?.message]}
 					id={labelKeys.accessTo}
-					label={t(
+					label={tHtml(
 						'modules/cp/components/approve-request-blade/approve-request-blade___tot'
 					)}
 				>
@@ -418,7 +418,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 				{!!overlappingRequests.length && (
 					<p className={clsx('c-form-control__errors', styles['c-form-control__errors'])}>
-						{t(
+						{tHtml(
 							'modules/shared/components/approve-request-blade/approve-request-blade___er-is-reeds-een-goedgekeurde-aanvraag-voor-deze-periode'
 						)}
 						<br />
@@ -442,7 +442,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 									'modules/shared/components/approve-request-blade/approve-request-blade___navigeer-naar-de-reeds-goedgekeurde-aanvraag-voor-deze-periode'
 								)}
 							>
-								{t(
+								{tHtml(
 									'modules/shared/components/approve-request-blade/approve-request-blade___bekijk-deze-aanvraag'
 								)}
 							</a>
@@ -452,7 +452,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 				<FormControl
 					id={labelKeys.accessRemark}
-					label={t(
+					label={tHtml(
 						'modules/cp/components/approve-request-blade/approve-request-blade___opmerkingen'
 					)}
 					suffix={OPTIONAL_LABEL()}

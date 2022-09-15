@@ -20,11 +20,10 @@ import { navigationService } from '@navigation/services/navigation-service';
 import { Icon, IconName, IconProps, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTE_PARTS } from '@shared/const';
-import { t, tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -150,35 +149,35 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					},
 					buttonTypes: () => [
 						{
-							label: TranslationService.t('Zilver'),
+							label: tText('Zilver'),
 							value: 'content-page-button--silver',
 						},
 						{
-							label: TranslationService.t('Blauw groen'),
+							label: tText('Blauw groen'),
 							value: 'content-page-button--teal',
 						},
 						{
-							label: TranslationService.t('Wit'),
+							label: tText('Wit'),
 							value: 'content-page-button--white',
 						},
 						{
-							label: TranslationService.t('Zwart'),
+							label: tText('Zwart'),
 							value: 'content-page-button--black',
 						},
 						{
-							label: TranslationService.t('Outline'),
+							label: tText('Outline'),
 							value: 'content-page-button--outline',
 						},
 						{
-							label: TranslationService.t('Tekst'),
+							label: tText('Tekst'),
 							value: 'content-page-button--text',
 						},
 						{
-							label: TranslationService.t('Rood'),
+							label: tText('Rood'),
 							value: 'content-page-button--red',
 						},
 						{
-							label: TranslationService.t('Link'),
+							label: tText('Link'),
 							value: 'content-page-button--link',
 						},
 					],
@@ -192,7 +191,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							});
 						},
 					},
-					i18n: { t, tText },
+					i18n: { tHtml, tText },
 					educationOrganisationService: {
 						fetchEducationOrganisationName: () => Promise.resolve(null),
 						fetchCities: () => Promise.resolve([]),

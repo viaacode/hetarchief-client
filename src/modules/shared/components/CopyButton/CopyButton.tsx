@@ -8,7 +8,7 @@ import { toastService } from '@shared/services/toast-service';
 import { Icon } from '../Icon';
 
 const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (props) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const { onClick, text, enableToast = true } = props;
 
 	const clickHandler = useCallback(
@@ -20,8 +20,8 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 
 			if (copied && enableToast) {
 				toastService.notify({
-					title: t('modules/shared/components/copy-button/copy-button___success'),
-					description: t(
+					title: tHtml('modules/shared/components/copy-button/copy-button___success'),
+					description: tHtml(
 						'modules/shared/components/copy-button/copy-button___text-was-copied-to-your-clipboard',
 						{
 							text,
@@ -32,7 +32,7 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 
 			onClick?.(e);
 		},
-		[onClick, text, enableToast, t]
+		[onClick, text, enableToast, tHtml]
 	);
 
 	return (

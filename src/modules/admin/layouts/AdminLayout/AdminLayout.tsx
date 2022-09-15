@@ -26,7 +26,7 @@ import { AdminLayoutComponent } from './AdminLayout.types';
 const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) => {
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	const actions = useSlot(AdminActions, children);
 	const filtersLeft = useSlot(AdminFiltersLeft, children);
@@ -78,7 +78,7 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 		<SidebarLayout
 			className={className}
 			sidebarLinks={sidebarLinks}
-			sidebarTitle={t('modules/admin/layouts/admin-layout/admin-layout___admin')}
+			sidebarTitle={tHtml('modules/admin/layouts/admin-layout/admin-layout___admin')}
 		>
 			{(!!pageTitle || !!actions) && (
 				<header className={clsx(styles['c-admin__header'], 'l-container')}>

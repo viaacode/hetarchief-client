@@ -17,7 +17,7 @@ import { createPageTitle } from '@shared/utils';
 import styles from './LoggedOutHome.module.scss';
 
 const LoggedOutHome: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
 	const [query] = useQueryParams({
@@ -84,15 +84,15 @@ const LoggedOutHome: FC = () => {
 				</div>
 				<div className={styles['c-hero__content']}>
 					<h1 className={styles['c-hero__title']}>
-						{t('pages/index___logged-out-home-title')}
+						{tHtml('pages/index___logged-out-home-title')}
 					</h1>
 					<p className={styles['c-hero__description']}>
-						{t('pages/index___logged-out-home-description')}
+						{tHtml('pages/index___logged-out-home-description')}
 					</p>
 					<b>
 						<Link href="/over-de-bezoekertool">
 							<a className={styles['c-hero__link']}>
-								{t('pages/index___hier-kom-je-er-alles-over-te-weten')}
+								{tHtml('pages/index___hier-kom-je-er-alles-over-te-weten')}
 							</a>
 						</Link>
 					</b>

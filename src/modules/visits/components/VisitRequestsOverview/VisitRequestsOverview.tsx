@@ -30,7 +30,7 @@ import { RequestStatusAll } from '@visits/types';
 import { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 
 const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
 		undefined
@@ -79,12 +79,14 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 					setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: undefined });
 					setSelectedNotOnCurrentPage(undefined);
 					toastService.notify({
-						title: t('pages/beheer/aanvragen/index___error'),
-						description: t('pages/beheer/aanvragen/index___deze-aanvraag-bestaat-niet'),
+						title: tHtml('pages/beheer/aanvragen/index___error'),
+						description: tHtml(
+							'pages/beheer/aanvragen/index___deze-aanvraag-bestaat-niet'
+						),
 					});
 				});
 		}
-	}, [visits, setFilters, getVisit, t, selectedOnCurrentPage, filters]);
+	}, [visits, setFilters, getVisit, tHtml, selectedOnCurrentPage, filters]);
 
 	// Filters
 
@@ -130,8 +132,8 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		(e, row) => {
 			if (!canUpdateVisitRequests) {
 				toastService.notify({
-					title: t('pages/beheer/aanvragen/index___geen-rechten'),
-					description: t(
+					title: tHtml('pages/beheer/aanvragen/index___geen-rechten'),
+					description: tHtml(
 						'pages/beheer/aanvragen/index___je-hebt-geen-rechten-om-bezoekaanvragen-te-bewerken'
 					),
 				});
@@ -140,7 +142,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 			const request = (row as { original: Visit }).original;
 			setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: request.id });
 		},
-		[canUpdateVisitRequests, setFilters, t]
+		[canUpdateVisitRequests, setFilters, tHtml]
 	);
 
 	// Render
@@ -148,17 +150,17 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.status) {
 			case VisitStatus.APPROVED:
-				return t('pages/beheer/aanvragen/index___er-zijn-geen-goedgekeurde-aanvragen');
+				return tHtml('pages/beheer/aanvragen/index___er-zijn-geen-goedgekeurde-aanvragen');
 
 			case VisitStatus.DENIED:
-				return t('pages/beheer/aanvragen/index___er-zijn-geen-geweigerde-aanvragen');
+				return tHtml('pages/beheer/aanvragen/index___er-zijn-geen-geweigerde-aanvragen');
 
 			case VisitStatus.CANCELLED_BY_VISITOR:
-				return t('pages/beheer/aanvragen/index___er-zijn-geen-geannuleerde-aanvragen');
+				return tHtml('pages/beheer/aanvragen/index___er-zijn-geen-geannuleerde-aanvragen');
 
 			case VisitStatus.PENDING:
 			default:
-				return t('pages/beheer/aanvragen/index___er-zijn-geen-openstaande-aanvragen');
+				return tHtml('pages/beheer/aanvragen/index___er-zijn-geen-openstaande-aanvragen');
 		}
 	};
 

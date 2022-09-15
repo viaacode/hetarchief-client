@@ -24,7 +24,7 @@ import {
 } from './AddToFolderBlade.types';
 
 const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const { onSubmit, selected } = props;
 	const [pairs, setPairs] = useState<AddToFolderFormStatePair[]>([]);
 	const {
@@ -86,10 +86,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 		getFolders.refetch();
 
 		toastService.notify({
-			title: t(
+			title: tHtml(
 				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___er-ging-iets-mis'
 			),
-			description: t(
+			description: tHtml(
 				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
 			),
 		});
@@ -129,7 +129,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 					item: selected.title,
 					folder:
 						folder?.name ||
-						t(
+						tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
 						),
 				};
@@ -145,10 +145,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							addedToFolders.push({
 								toastMessage: {
 									maxLines: 3,
-									title: t(
+									title: tHtml(
 										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-map-titel'
 									),
-									description: t(
+									description: tHtml(
 										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-map-beschrijving',
 										descriptionVariables as Record<string, string>
 									),
@@ -168,10 +168,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							removedFromFolders.push({
 								toastMessage: {
 									maxLines: 3,
-									title: t(
+									title: tHtml(
 										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-verwijderd-uit-map-titel'
 									),
-									description: t(
+									description: tHtml(
 										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-map-beschrijving',
 										descriptionVariables as Record<string, string>
 									),
@@ -192,10 +192,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							.join(', ');
 						toastService.notify({
 							maxLines: 3,
-							title: t(
+							title: tHtml(
 								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-mappen-titel'
 							),
-							description: t(
+							description: tHtml(
 								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-mappen-beschrijving',
 								{
 									folders,
@@ -213,10 +213,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							.join(', ');
 						toastService.notify({
 							maxLines: 3,
-							title: t(
+							title: tHtml(
 								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-verwijderd-uit-mappen-titel'
 							),
-							description: t(
+							description: tHtml(
 								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-mappen-beschrijving',
 								{
 									folders,
@@ -256,7 +256,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={t(
+					label={tHtml(
 						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
 					)}
 					variants={['block', 'black']}
@@ -265,7 +265,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 				/>
 
 				<Button
-					label={t(
+					label={tHtml(
 						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___annuleer'
 					)}
 					variants={['block', 'text']}
@@ -311,10 +311,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 
 					<span className={styles['c-add-to-folder-blade__list-item__count']}>
 						{count === 1
-							? t(
+							? tHtml(
 									'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___1-item'
 							  )
-							: t(
+							: tHtml(
 									'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-items',
 									{ count }
 							  )}
@@ -330,13 +330,13 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={props.isOpen && renderFooter()}
-			title={t(
+			title={tHtml(
 				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
 			)}
 			className={clsx(props.className, styles['c-add-to-folder-blade'])}
 		>
 			<div className="u-px-32">
-				{t(
+				{tHtml(
 					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
 					{ title }
 				)}

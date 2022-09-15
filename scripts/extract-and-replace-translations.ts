@@ -1,18 +1,18 @@
 /**
  This script runs over all the code and looks for either:
-<Trans>Aanvraagformulier</Trans>
+tHtml('Aanvraagformulier')
 or
-t('Aanvraagformulier')
+tText('Aanvraagformulier')
 
 and replaces them with:
-<Trans i18nKey="authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier">Aanvraagformulier</Trans>
+tHTml('authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier')
 or
-t('authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier')
+tText('authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier')
 
 
 and it also outputs a json file with the translatable strings:
 {
-"authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier": "Aanvraagformulier"
+	"authentication/views/registration-flow/r-4-manual-registration___aanvraagformulier": "Aanvraagformulier"
 }
 
 Every time the `npm run extract-translations` command is run, it will extract new translations that it finds
@@ -20,9 +20,6 @@ Every time the `npm run extract-translations` command is run, it will extract ne
 and add them to the json file without overwriting the existing strings.
 
 We can now give the src/shared/translations/nl.json file to team meemoo to enter the final copy.
-
-In the future we could add a build step to replace the translate tags with the actual translations,
-so we don't have to load the translation framework anymore and do the bindings at runtime, but this is a nice to have.
  */
 
 import * as fs from 'fs';
@@ -89,40 +86,9 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 			const absoluteFilePath = path.resolve(__dirname, '../src', relativeFilePath);
 			const content: string = fs.readFileSync(absoluteFilePath).toString();
 
-			// Replace Trans objects
-			let newContent = content.replace(
-				/<Trans( i18nKey="([^"]+)")?>([\s\S]*?)<\/Trans>/g,
-				(match: string, keyAttribute: string, key: string, translation: string) => {
-					let formattedKey: string | undefined = key;
-
-					const formattedTranslation: string = getFormattedTranslation(translation);
-					if (!key) {
-						// new Trans without a key
-						formattedKey = getFormattedKey(relativeFilePath, formattedTranslation);
-					}
-
-					if (!formattedKey) {
-						return match; // Do not modify the translations, since we cannot generate a key
-					}
-
-					const hasKeyAlready = formattedTranslation.includes('___');
-
-					newTranslations[formattedKey] =
-						(hasKeyAlready
-							? getFormattedTranslation((oldTranslations as keyMap)[formattedKey])
-							: formattedTranslation) || '';
-
-					if (hasKeyAlready) {
-						return match;
-					} else {
-						return `<Trans i18nKey="${formattedKey}">${formattedTranslation}</Trans>`;
-					}
-				}
-			);
-
-			// Replace t() functions ( including TranslationService.t() )
+			// Replace tHtml() and tText() functions
 			const beforeTFunction = '([^a-zA-Z])';
-			const tFuncStart = '(t|tText)\\(';
+			const tFuncStart = '(tHtml|tText)\\(';
 			const whitespace = '\\s*';
 			const quote = '[\'"]';
 			const translation = '([\\s\\S]+?)';
@@ -141,7 +107,7 @@ function extractTranslationsFromCodeFiles(codeFiles: string[]) {
 				tFuncEnd,
 			].join('');
 			const regex = new RegExp(combinedRegex, 'gim');
-			newContent = newContent.replace(
+			const newContent = content.replace(
 				// Match char before t function to make sure it isn't part of a bigger function name, eg: sent()
 				regex,
 				(

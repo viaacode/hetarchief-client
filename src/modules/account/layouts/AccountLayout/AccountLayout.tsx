@@ -30,13 +30,13 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 		[asPath]
 	);
 
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	return (
 		<SidebarLayout
 			className={className}
 			sidebarLinks={sidebarLinks}
-			sidebarTitle={t('modules/account/layouts/account-layout/account-layout___account')}
+			sidebarTitle={tHtml('modules/account/layouts/account-layout/account-layout___account')}
 		>
 			{pageTitle && (
 				<header className={clsx(styles['c--account-admin__header'], 'l-container')}>

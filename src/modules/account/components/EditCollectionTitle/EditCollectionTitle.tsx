@@ -29,7 +29,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	collection,
 	onOpenNode = null,
 }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [isOpen, setIsOpen] = useState(false);
 
 	/**
@@ -58,13 +58,13 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		const description = [errors.name?.message].join(' ');
 		description.length > 0 &&
 			toastService.notify({
-				title: t(
+				title: tHtml(
 					'modules/account/components/edit-folder-title/edit-folder-title___er-was-een-probleem-bij-het-aanpassen-van-de-titel-van-de-map'
 				),
 				maxLines: 2,
 				description,
 			});
-	}, [errors, t]);
+	}, [errors, tHtml]);
 
 	/**
 	 * Events
@@ -85,11 +85,11 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 				afterSubmit(response);
 
 				toastService.notify({
-					title: t(
+					title: tHtml(
 						'modules/account/components/edit-folder-title/edit-folder-title___name-is-aangepast',
 						values
 					),
-					description: t(
+					description: tHtml(
 						'modules/account/components/edit-folder-title/edit-folder-title___deze-map-is-successvol-aangepast'
 					),
 				});
@@ -127,7 +127,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		<FormControl
 			className={clsx(styles['c-edit-folder-title'], 'c-form-control--label-hidden')}
 			id={labelKeys.name}
-			label={t(
+			label={tHtml(
 				'modules/account/components/edit-collection-title/edit-collection-title___map-aanpassen'
 			)}
 		>

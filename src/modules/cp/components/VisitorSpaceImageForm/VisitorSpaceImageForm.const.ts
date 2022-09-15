@@ -1,6 +1,6 @@
 import { mixed, object, SchemaOf, string } from 'yup';
 
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 
 import { VisitorSpaceImageFormState } from './VisitorSpaceImageForm.types';
 import { checkFileSize, checkFileType } from './VisitorSpaceImageForm.utils';
@@ -8,7 +8,7 @@ import { checkFileSize, checkFileType } from './VisitorSpaceImageForm.utils';
 export const VISITOR_SPACE_IMAGE_SCHEMA = (): SchemaOf<VisitorSpaceImageFormState> => {
 	return object({
 		color: string().matches(/^$|^#([0-9A-F]{3}){1,2}$/i, {
-			message: TranslationService.t(
+			message: tText(
 				'modules/cp/components/visitor-space-image-form/visitor-space-image-form___kleur-moet-een-geldige-hex-code-zijn'
 			),
 		}),
@@ -16,14 +16,14 @@ export const VISITOR_SPACE_IMAGE_SCHEMA = (): SchemaOf<VisitorSpaceImageFormStat
 			.nullable()
 			.test(
 				'file-size',
-				TranslationService.t(
+				tText(
 					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___het-bestand-is-groter-dan-500-kb'
 				),
 				checkFileSize
 			)
 			.test(
 				'file-format',
-				TranslationService.t(
+				tText(
 					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___dit-formaat-wordt-niet-ondersteund'
 				),
 				checkFileType

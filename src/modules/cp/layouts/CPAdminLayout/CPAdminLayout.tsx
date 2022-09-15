@@ -35,7 +35,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 		[asPath]
 	);
 
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	useEffect(() => {
 		dispatch(setShowZendesk(true));
@@ -45,7 +45,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 		<SidebarLayout
 			className={className}
 			sidebarLinks={sidebarLinks}
-			sidebarTitle={t('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
+			sidebarTitle={tHtml('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
 		>
 			<ErrorBoundary>
 				{pageTitle && (

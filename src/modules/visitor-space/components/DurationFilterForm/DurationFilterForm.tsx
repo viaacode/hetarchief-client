@@ -34,7 +34,7 @@ const defaultValues: DurationFilterFormState = {
 };
 
 const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, disabled }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(DURATION_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.duration?.[0];
@@ -88,7 +88,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.operator?.message]}
 						id={labelKeys.operator}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/duration-filter-form/duration-filter-form___operator'
 						)}
 					>
@@ -123,7 +123,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.duration?.message]}
 						id={labelKeys.duration}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/duration-filter-form/duration-filter-form___waarde'
 						)}
 					>

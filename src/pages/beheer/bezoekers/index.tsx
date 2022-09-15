@@ -1,5 +1,5 @@
 import { Table } from '@meemoo/react-components';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
@@ -14,6 +14,7 @@ import {
 	VisitorsTableColumns,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
+import { withI18n } from '@i18n/wrappers';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
@@ -34,7 +35,7 @@ import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
 
 const CPVisitorsPage: NextPage = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
@@ -125,16 +126,16 @@ const CPVisitorsPage: NextPage = () => {
 			});
 			await refetchVisitRequests();
 			toastService.notify({
-				title: t('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
-				description: t(
+				title: tHtml('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
+				description: tHtml(
 					'pages/beheer/bezoekers/index___deze-gebruiker-heeft-nu-geen-toegang-meer'
 				),
 			});
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('pages/beheer/bezoekers/index___error'),
-				description: t(
+				title: tHtml('pages/beheer/bezoekers/index___error'),
+				description: tHtml(
 					'pages/beheer/bezoekers/index___het-updaten-van-de-bezoekersaanvraag-is-mislukt'
 				),
 			});
@@ -152,14 +153,14 @@ const CPVisitorsPage: NextPage = () => {
 	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.timeframe) {
 			case RequestStatusAll.ALL:
-				return t('pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers');
+				return tHtml('pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers');
 
 			case VisitTimeframe.ACTIVE:
-				return t('pages/beheer/bezoekers/index___er-zijn-geen-actieve-bezoekers');
+				return tHtml('pages/beheer/bezoekers/index___er-zijn-geen-actieve-bezoekers');
 
 			case VisitTimeframe.PAST:
 			default:
-				return t(
+				return tHtml(
 					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-historiek'
 				);
 		}
@@ -229,7 +230,7 @@ const CPVisitorsPage: NextPage = () => {
 		return (
 			<CPAdminLayout
 				className="p-cp-visitors"
-				pageTitle={t('pages/beheer/bezoekers/index___bezoekers')}
+				pageTitle={tHtml('pages/beheer/bezoekers/index___bezoekers')}
 			>
 				<div className="l-container">
 					<div className="p-cp-visitors__header">
@@ -270,12 +271,12 @@ const CPVisitorsPage: NextPage = () => {
 					}}
 				/>
 				<ApproveRequestBlade
-					title={t('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
+					title={tHtml('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
 					approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
-					successTitle={t(
+					successTitle={tHtml(
 						'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
 					)}
-					successDescription={t(
+					successDescription={tHtml(
 						'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
 					)}
 					isOpen={showEditVisitRequestModal}
@@ -306,6 +307,8 @@ const CPVisitorsPage: NextPage = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAllRequiredPermissions(CPVisitorsPage, Permission.READ_CP_VISIT_REQUESTS)

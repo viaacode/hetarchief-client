@@ -3,7 +3,7 @@ import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 import { OrderDirection, Visit, VisitRow } from '@shared/types';
 import { formatSameDayRange } from '@shared/utils';
 
@@ -24,7 +24,7 @@ export const HistoryTableColumns = (
 	onClickRow: (visit: Visit) => void
 ): HistoryTableColumnProps[] => [
 	{
-		Header: TranslationService.t('modules/account/const/my-history___bezoekersruimte') || '',
+		Header: tText('modules/account/const/my-history___bezoekersruimte') || '',
 		accessor: 'spaceName',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -32,7 +32,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.t('modules/account/const/my-history___adres') || '',
+		Header: tText('modules/account/const/my-history___adres') || '',
 		accessor: 'spaceAddress',
 		disableSortBy: true, // space.schema_maintainer.information is an array and can not be sorted on
 		Cell: (data: VisitRow) => {
@@ -41,7 +41,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.t('modules/account/const/my-history___toegang-van') || '',
+		Header: tText('modules/account/const/my-history___toegang-van') || '',
 		accessor: HistoryTableAccessFrom,
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -53,7 +53,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.t('modules/account/const/my-history___toegang-tot') || '',
+		Header: tText('modules/account/const/my-history___toegang-tot') || '',
 		accessor: 'endAt',
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
@@ -65,7 +65,7 @@ export const HistoryTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.t('modules/account/const/my-history___toegang') || '',
+		Header: tText('modules/account/const/my-history___toegang') || '',
 		id: HistoryTableAccessComboId,
 		accessor: HistoryTableAccessFrom,
 		Cell: (data: VisitRow) => {
@@ -88,7 +88,7 @@ export const HistoryTableColumns = (
 					variants={['text', 'block', 'fill']}
 					onClick={() => onClickRow(visit)}
 				>
-					{TranslationService.t('modules/account/const/my-history___bezoek')}
+					{tText('modules/account/const/my-history___bezoek')}
 				</Button>
 			);
 		},

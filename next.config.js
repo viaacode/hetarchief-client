@@ -12,8 +12,11 @@ const withTM = require('next-transpile-modules')([
 	'ky-universal',
 ]);
 
+const { i18n } = require('./next-i18next.config');
+
 /** @type {import("next").NextConfig} */
 module.exports = withTM({
+	i18n,
 	reactStrictMode: true,
 	experimental: {
 		/**
@@ -27,6 +30,10 @@ module.exports = withTM({
 	webpack: (config) => {
 		// Required for ky-universal top level await used in admin core inside the api service
 		config.experiments = { topLevelAwait: true, layers: true };
+
+		// https://stackoverflow.com/a/68098547/373207
+		config.resolve.fallback = { fs: false, path: false };
+
 		return config;
 	},
 	typescript: {

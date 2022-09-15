@@ -14,7 +14,7 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 	onClose,
 	isOpen,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const { title, description, yes, no } = text;
 
 	const renderButtons = () => {
@@ -23,7 +23,9 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 				<Button
 					label={
 						no ||
-						t('modules/shared/components/confirmation-modal/confirmation-modal___nee')
+						tHtml(
+							'modules/shared/components/confirmation-modal/confirmation-modal___nee'
+						)
 					}
 					className="u-mx-4"
 					name={'cancel'}
@@ -33,7 +35,9 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 				<Button
 					label={
 						yes ||
-						t('modules/shared/components/confirmation-modal/confirmation-modal___ja')
+						tHtml(
+							'modules/shared/components/confirmation-modal/confirmation-modal___ja'
+						)
 					}
 					className="u-mx-4"
 					name={'confirm'}
@@ -51,13 +55,15 @@ const ConfirmationModal: FC<ConfirmationModalProps> = ({
 			isOpen={isOpen}
 			title={
 				title ||
-				t('modules/shared/components/confirmation-modal/confirmation-modal___ben-je-zeker')
+				tHtml(
+					'modules/shared/components/confirmation-modal/confirmation-modal___ben-je-zeker'
+				)
 			}
 			footer={renderButtons()}
 		>
 			{description || (
 				<p className="u-px-24 u-mb-32 u-color-neutral u-text-center">
-					{t(
+					{tHtml(
 						'modules/shared/components/confirmation-modal/confirmation-modal___deze-actie-kan-niet-worden-teruggedraaid'
 					)}
 				</p>

@@ -19,7 +19,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 	disabled,
 	values,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const { control, getValues, setValue, handleSubmit } = useForm<AdvancedFilterFormState>({
 		defaultValues: {
 			advanced: values?.advanced ? values.advanced : [initialFields()],
@@ -35,7 +35,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 		<>
 			<div className={clsx(className, 'u-overflow-auto')}>
 				<p className="u-px-20 u-px-32:md u-mt-40 u-mb-32">
-					{t(
+					{tHtml(
 						'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___stel-je-eigen-geavanceerde-filter-samen-aan-de-hand-van-deze-metadata-velden-en-waarden'
 					)}
 				</p>
@@ -57,7 +57,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 						disabled={disabled}
 						className="u-p-0"
 						iconStart={<Icon name="plus" />}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling'
 						)}
 						variants="text"

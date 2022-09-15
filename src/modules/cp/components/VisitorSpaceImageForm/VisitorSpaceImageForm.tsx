@@ -31,7 +31,7 @@ const VisitorSpaceImageForm = forwardRef<
 	/**
 	 * Hooks
 	 */
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	/**
 	 * Refs
@@ -151,7 +151,7 @@ const VisitorSpaceImageForm = forwardRef<
 				className={styles['c-visitor-space-image-form__color-control']}
 				errors={[errors.color?.message]}
 				id={labelKeys.color}
-				label={t(
+				label={tHtml(
 					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrondkleur'
 				)}
 			>
@@ -176,12 +176,12 @@ const VisitorSpaceImageForm = forwardRef<
 			<FormControl
 				errors={[errors.file?.message]}
 				id={labelKeys.file}
-				label={t(
+				label={tHtml(
 					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrond-afbeelding'
 				)}
 				suffix={
 					<span className={styles['c-visitor-space-image-form__hint']}>
-						{`(${t(
+						{`(${tHtml(
 							'modules/cp/components/visitor-space-image-form/visitor-space-image-form___max-500-kb'
 						)})`}
 					</span>
@@ -220,7 +220,7 @@ const VisitorSpaceImageForm = forwardRef<
 
 				{currentState.image && (
 					<Button
-						label={t(
+						label={tHtml(
 							'modules/cp/components/visitor-space-image-form/visitor-space-image-form___verwijder-afbeelding'
 						)}
 						iconStart={<Icon name="trash" />}

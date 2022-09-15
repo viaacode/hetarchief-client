@@ -11,7 +11,7 @@ import styles from './CancelVisitBlade.module.scss';
 import { CancelVisitBladeProps } from './CancelVisitBlade.types';
 
 const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const { selected } = props;
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -24,15 +24,15 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 
 			await VisitsService.patchById(selected.id, {
 				status: VisitStatus.CANCELLED_BY_VISITOR,
-				note: `[${new Date().toISOString()}] ${t(
+				note: `[${new Date().toISOString()}] ${tHtml(
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___deze-aanvraag-is-geannuleerd-door-de-gebruiker'
 				)}`,
 			});
 			toastService.notify({
-				title: t(
+				title: tHtml(
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-aanvraag-is-geannuleerd'
 				),
-				description: t(
+				description: tHtml(
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-hebt-zelf-je-bezoek-geannuleerd-je-zal-geen-toegang-krijgen'
 				),
 			});
@@ -41,8 +41,10 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('modules/home/components/cancel-visit-blade/cancel-visit-blade___error'),
-				description: t(
+				title: tHtml(
+					'modules/home/components/cancel-visit-blade/cancel-visit-blade___error'
+				),
+				description: tHtml(
 					'modules/home/components/cancel-visit-blade/cancel-visit-blade___het-annuleren-van-de-aanvraag-is-mislukt'
 				),
 			});
@@ -57,7 +59,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={t(
+					label={tHtml(
 						'modules/home/components/cancel-visit-blade/cancel-visit-blade___ja-annuleer-bezoek'
 					)}
 					variants={['block', 'black']}
@@ -66,7 +68,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 				/>
 
 				<Button
-					label={t(
+					label={tHtml(
 						'modules/home/components/cancel-visit-blade/cancel-visit-blade___sluit'
 					)}
 					variants={['block', 'text']}
@@ -82,19 +84,19 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 			className={styles['c-cancel-visit-blade']}
 			{...props}
 			footer={renderFooter()}
-			title={t(
+			title={tHtml(
 				'modules/home/components/cancel-visit-blade/cancel-visit-blade___bezoek-annuleren'
 			)}
 		>
 			<div className="u-px-16 u-px-32:md u-pr-56:md">
 				<strong>
-					{t(
+					{tHtml(
 						'modules/home/components/cancel-visit-blade/cancel-visit-blade___ben-je-zeker-dat-je-je-bezoek-wil-annuleren'
 					)}
 				</strong>
 
 				<p>
-					{t(
+					{tHtml(
 						'modules/home/components/cancel-visit-blade/cancel-visit-blade___je-zal-op-de-ingeplande-dag-geen-toegang-hebben-tot-het-materiaal-een-nieuw-bezoek-inplannen-kan-steeds'
 					)}
 				</p>
