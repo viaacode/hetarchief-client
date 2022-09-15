@@ -13,6 +13,6 @@ const Logout: NextPage = () => {
 	return <Loading fullscreen />;
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default Logout;

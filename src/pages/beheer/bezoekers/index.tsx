@@ -1,8 +1,7 @@
 import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -27,6 +26,7 @@ import {
 } from '@shared/components';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -35,7 +35,7 @@ import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
 
 const CPVisitorsPage: NextPage = () => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
@@ -126,16 +126,16 @@ const CPVisitorsPage: NextPage = () => {
 			});
 			await refetchVisitRequests();
 			toastService.notify({
-				title: t('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
-				description: t(
+				title: tHtml('pages/beheer/bezoekers/index___de-toegang-is-ingetrokken'),
+				description: tHtml(
 					'pages/beheer/bezoekers/index___deze-gebruiker-heeft-nu-geen-toegang-meer'
 				),
 			});
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('pages/beheer/bezoekers/index___error'),
-				description: t(
+				title: tHtml('pages/beheer/bezoekers/index___error'),
+				description: tHtml(
 					'pages/beheer/bezoekers/index___het-updaten-van-de-bezoekersaanvraag-is-mislukt'
 				),
 			});
@@ -150,17 +150,17 @@ const CPVisitorsPage: NextPage = () => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
+	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.timeframe) {
 			case RequestStatusAll.ALL:
-				return t('pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers');
+				return tHtml('pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers');
 
 			case VisitTimeframe.ACTIVE:
-				return t('pages/beheer/bezoekers/index___er-zijn-geen-actieve-bezoekers');
+				return tHtml('pages/beheer/bezoekers/index___er-zijn-geen-actieve-bezoekers');
 
 			case VisitTimeframe.PAST:
 			default:
-				return t(
+				return tHtml(
 					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-historiek'
 				);
 		}
@@ -230,7 +230,7 @@ const CPVisitorsPage: NextPage = () => {
 		return (
 			<CPAdminLayout
 				className="p-cp-visitors"
-				pageTitle={t('pages/beheer/bezoekers/index___bezoekers')}
+				pageTitle={tHtml('pages/beheer/bezoekers/index___bezoekers')}
 			>
 				<div className="l-container">
 					<div className="p-cp-visitors__header">
@@ -238,7 +238,7 @@ const CPVisitorsPage: NextPage = () => {
 							id={globalLabelKeys.adminLayout.title}
 							default={filters[SEARCH_QUERY_KEY]}
 							className="p-cp-visitors__search"
-							placeholder={t('pages/beheer/bezoekers/index___zoek')}
+							placeholder={tText('pages/beheer/bezoekers/index___zoek')}
 							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
 						/>
 
@@ -271,12 +271,12 @@ const CPVisitorsPage: NextPage = () => {
 					}}
 				/>
 				<ApproveRequestBlade
-					title={t('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
-					approveButtonLabel={t('pages/beheer/bezoekers/index___aanpassen')}
-					successTitle={t(
+					title={tHtml('pages/beheer/bezoekers/index___aanvraag-aanpassen')}
+					approveButtonLabel={tText('pages/beheer/bezoekers/index___aanpassen')}
+					successTitle={tHtml(
 						'pages/beheer/bezoekers/index___de-aanpassingen-zijn-opgeslagen'
 					)}
-					successDescription={t(
+					successDescription={tHtml(
 						'pages/beheer/bezoekers/index___de-aanpassingen-aan-de-bezoekersaanvraag-zijn-opgeslagen'
 					)}
 					isOpen={showEditVisitRequestModal}
@@ -294,10 +294,12 @@ const CPVisitorsPage: NextPage = () => {
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('pages/beheer/bezoekers/index___bezoekers'))}</title>
+				<title>{createPageTitle(tText('pages/beheer/bezoekers/index___bezoekers'))}</title>
 				<meta
 					name="description"
-					content={t('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving')}
+					content={tText(
+						'pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'
+					)}
 				/>
 			</Head>
 
@@ -306,7 +308,7 @@ const CPVisitorsPage: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAllRequiredPermissions(CPVisitorsPage, Permission.READ_CP_VISIT_REQUESTS)

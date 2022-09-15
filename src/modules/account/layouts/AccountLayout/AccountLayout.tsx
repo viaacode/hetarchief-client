@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
 
 import { ListNavigationItem } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 
 import styles from './AccountLayout.module.scss';
@@ -30,13 +30,13 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 		[asPath]
 	);
 
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	return (
 		<SidebarLayout
 			className={className}
 			sidebarLinks={sidebarLinks}
-			sidebarTitle={t('modules/account/layouts/account-layout/account-layout___account')}
+			sidebarTitle={tHtml('modules/account/layouts/account-layout/account-layout___account')}
 		>
 			{pageTitle && (
 				<header className={clsx(styles['c--account-admin__header'], 'l-container')}>

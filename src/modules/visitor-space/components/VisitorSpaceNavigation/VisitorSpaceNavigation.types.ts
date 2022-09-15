@@ -6,7 +6,7 @@ export interface VisitorSpaceNavigationProps extends DefaultComponentProps {
 	backLink?: string;
 	email?: string;
 	phone?: string;
-	showAccessEndDate?: string;
+	showAccessEndDate?: string | ReactNode;
 	showBorder: boolean;
 	title?: ReactNode;
 }

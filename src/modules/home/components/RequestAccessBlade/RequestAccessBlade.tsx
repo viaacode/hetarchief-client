@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParams } from 'use-query-params';
@@ -8,6 +7,7 @@ import { StringParam, useQueryParams } from 'use-query-params';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Blade, Icon, SpacePreview } from '@shared/components';
 import { globalLabelKeys } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 import { REQUEST_ACCESS_FORM_SCHEMA } from './RequestAccessBlade.const';
@@ -21,7 +21,7 @@ const labelKeys: Record<keyof RequestAccessFormState, string> = {
 };
 
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const [query] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
@@ -65,7 +65,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 								checkIcon={<Icon name="check" />}
 								disabled={!isOpen}
 								id={labelKeys.acceptTerms}
-								label={t(
+								label={tHtml(
 									'modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie'
 								)}
 								value="accept-terms"
@@ -76,7 +76,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 
 				<Button
 					className="u-mb-8 u-mb-16:md"
-					label={t(
+					label={tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___verstuur'
 					)}
 					variants={['block', 'black']}
@@ -85,7 +85,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				/>
 
 				<Button
-					label={t(
+					label={tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___annuleer'
 					)}
 					variants={['block', 'text']}
@@ -107,7 +107,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 				id={globalLabelKeys.blade.title}
 				className={styles['c-request-access-blade__title']}
 			>
-				{t(
+				{tHtml(
 					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 				)}
 			</h3>
@@ -119,7 +119,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					className="u-mb-24"
 					errors={[errors.requestReason?.message]}
 					id={labelKeys.requestReason}
-					label={t(
+					label={tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag'
 					)}
 				>
@@ -134,7 +134,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 
 				<FormControl
 					id={labelKeys.visitTime}
-					label={t(
+					label={tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___wanneer-wil-je-de-bezoekersruimte-bezoeken'
 					)}
 				>

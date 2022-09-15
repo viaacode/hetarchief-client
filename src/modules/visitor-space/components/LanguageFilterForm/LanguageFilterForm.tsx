@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { compact, without } from 'lodash-es';
-import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -9,6 +8,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectMediaFilterOptions } from '@shared/store/media';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
@@ -24,7 +24,7 @@ const defaultValues = {
 };
 
 const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }) => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// State
 
@@ -61,7 +61,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Language}`}
 					default={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
-					placeholder={t(
+					placeholder={tText(
 						'modules/visitor-space/components/language-filter-form/language-filter-form___zoek'
 					)}
 					onSearch={(value) => setSearch(value || '')}
@@ -70,7 +70,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 				<div className="u-my-32">
 					{buckets.length === 0 && (
 						<p className="u-color-neutral u-text-center">
-							{t(
+							{tHtml(
 								'modules/visitor-space/components/language-filter-form/language-filter-form___geen-talen-gevonden'
 							)}
 						</p>

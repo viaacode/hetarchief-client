@@ -66,7 +66,6 @@ export const ICON_LIGHT = [
 	'skip-back',
 	'skip-forward',
 	'sort-down',
-	'sort-down',
 	'sort-table',
 	'sort-up',
 	'sort',

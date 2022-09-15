@@ -1,7 +1,5 @@
 import { ContentPageOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { FC } from 'react';
@@ -14,38 +12,43 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 const ContentPageOverviewPage: FC = () => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
 	return (
 		<>
 			<Head>
-				<title>{createPageTitle(t('pages/admin/content/index___content-paginas'))}</title>
+				<title>
+					{createPageTitle(tText('pages/admin/content/index___content-paginas'))}
+				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/content/index___overzicht-van-alle-content-paginas-die-beschikbaar-zijn-binnen-het-archief'
 					)}
 				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('admin/content/views/content-overview___content-overzicht')}>
+			<AdminLayout
+				pageTitle={tHtml('admin/content/views/content-overview___content-overzicht')}
+			>
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
 						<Link href={CONTENT_PATH.CONTENT_PAGE_CREATE} passHref>
 							<a
-								aria-label={t(
+								aria-label={tText(
 									'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
 								)}
 							>
 								<Button
-									label={t(
+									label={tText(
 										'admin/content/views/content-overview___content-toevoegen'
 									)}
-									title={t(
+									title={tText(
 										'admin/content/views/content-overview___maak-een-nieuwe-content-pagina-aan'
 									)}
 								/>
@@ -63,7 +66,7 @@ const ContentPageOverviewPage: FC = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(

@@ -1,12 +1,12 @@
 import { ReactSelect, ReactSelectProps } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectMediaFilterOptions } from '@shared/store/media';
 
 const MediumSelect: FC<ReactSelectProps> = (props) => {
-	const { t } = useTranslation();
+	const { tText } = useTranslation();
 	const aggregates = useSelector(selectMediaFilterOptions)?.dcterms_medium.buckets;
 
 	const options = (aggregates || []).map((bucket) => ({
@@ -20,10 +20,10 @@ const MediumSelect: FC<ReactSelectProps> = (props) => {
 
 	const getPlaceholder = (): string | undefined => {
 		return options.length === 0
-			? t(
+			? tText(
 					'modules/visitor-space/components/medium-select/medium-select___geen-analoge-dragers-gevonden'
 			  )
-			: t(
+			: tText(
 					'modules/visitor-space/components/medium-select/medium-select___kies-een-analoge-drager'
 			  );
 	};

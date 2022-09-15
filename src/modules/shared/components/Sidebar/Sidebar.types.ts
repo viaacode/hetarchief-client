@@ -4,7 +4,7 @@ import { DefaultComponentProps } from '@shared/types';
 import { SidebarColor } from '@shared/types/sidebar';
 
 export interface SidebarProps extends DefaultComponentProps {
-	title?: string;
+	title?: string | ReactNode;
 	heading?: ReactNode;
 	color?: SidebarColor;
 }

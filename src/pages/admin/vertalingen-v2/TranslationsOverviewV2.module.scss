@@ -1,0 +1,77 @@
+@use "src/styles/abstracts" as *;
+
+.c-translations-overview {
+	:global(.c-input) {
+		padding: 0;
+		background-color: transparent;
+		border: 0;
+
+		:global(.c-input__field) {
+			margin: 0;
+			height: 5.6rem;
+			border-radius: 2.8rem;
+		}
+	}
+
+	:global(table) {
+		margin-top: $spacer-md;
+
+		:global(.c-table__row:hover) {
+			background-color: $platinum;
+			cursor: pointer;
+		}
+
+		:global(.c-table__row--header) {
+			:global(.c-table__cell--header) {
+				:global(> span) {
+					font-size: $font-size-base;
+				}
+			}
+		}
+
+		:global(.u-text-muted) {
+			color: $neutral;
+		}
+
+		:global(.c-table__cell:last-child) {
+			width: 6rem;
+
+			:global(> span) {
+				font-size: $font-size-2xm;
+				margin-top: 0.4rem;
+			}
+		}
+	}
+}
+
+.c-translations-overview__blade:global(.c-blade--active) {
+	width: 70rem;
+}
+
+.c-translations-overview__blade-body {
+	padding: 0 $spacer-lg;
+
+	:global(.c-rich-text-editor) {
+		margin-top: $spacer-md;
+	}
+
+	:global(.c-button--copy-to-clipboard) {
+		margin-left: -$spacer-md;
+
+		:global(.c-button__content) {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			white-space: initial;
+			text-align: left;
+
+			:global(> div:first-child) {
+				margin-bottom: $spacer-xs;
+			}
+		}
+	}
+}
+
+.c-translations-overview__blade-footer :global(.c-button:first-child) {
+	margin-bottom: $spacer-xs;
+}

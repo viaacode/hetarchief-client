@@ -153,4 +153,209 @@ $l-container-padding-xs: 2rem;
 			}
 		}
 	}
+
+	[class*="c-button--content-page-button--"] {
+		max-height: none !important;
+		border-radius: 4rem;
+		border-style: solid !important;
+	}
+
+	.c-button--content-page-button--silver {
+		background-color: $silver !important;
+		border-color: $silver !important;
+		color: $black !important;
+
+		.o-svg-icon svg * {
+			fill: $black !important;
+		}
+
+		&:hover {
+			background-color: $shade !important;
+			border-color: $shade !important;
+			color: $white !important;
+
+			.o-svg-icon svg * {
+				fill: $white !important;
+			}
+		}
+
+		&:active {
+			background-color: $teal-dark !important;
+			border-color: $teal-dark !important;
+			color: $white !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal;
+		}
+	}
+
+	.c-button--content-page-button--teal {
+		background-color: $teal !important;
+		border-color: $teal !important;
+		color: $white !important;
+
+		.o-svg-icon svg * {
+			fill: $white !important;
+		}
+
+		&:hover {
+			background-color: $shade !important;
+			border-color: $shade !important;
+			color: $white !important;
+
+			.o-svg-icon svg * {
+				fill: $white !important;
+			}
+		}
+
+		&:active {
+			background-color: $teal-dark !important;
+			border-color: $teal-dark !important;
+			color: $white !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal;
+		}
+	}
+
+	.c-button--content-page-button--white {
+		background-color: $white !important;
+		border-color: $white !important;
+		color: $black !important;
+
+		&:hover {
+			background-color: $silver !important;
+			border-color: $silver !important;
+		}
+
+		&:active {
+			background-color: $teal-dark !important;
+			border-color: $teal-dark !important;
+			color: $white !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal !important;
+		}
+	}
+
+	.c-button--content-page-button--red {
+		background-color: $cherry !important;
+		border-color: $cherry !important;
+		color: $white !important;
+
+		&:hover {
+			background-color: $cherry-light !important;
+			border-color: $cherry-light !important;
+		}
+
+		&:active {
+			background-color: $cherry-pale !important;
+			border-color: $cherry-pale !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $cherry !important;
+		}
+	}
+
+	.c-button--content-page-button--link {
+		font-weight: $font-weight-normal !important;
+		background-color: transparent !important;
+		border-color: transparent !important;
+		color: $teal !important;
+		text-decoration: underline;
+
+		&:hover {
+			background-color: transparent !important;
+			border-color: transparent !important;
+			color: $teal-light !important;
+		}
+
+		&:active {
+			color: $teal-dark !important;
+			background-color: transparent !important;
+			border-color: transparent !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal !important;
+		}
+	}
+
+	.c-button--content-page-button--black {
+		background-color: $black !important;
+		border-color: $black !important;
+		color: $white !important;
+
+		&:hover {
+			background-color: $black-light !important;
+		}
+
+		&:active {
+			background-color: $black-pale !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal !important;
+		}
+	}
+
+	.c-button--content-page-button--outline {
+		background-color: $white !important;
+		border-color: $black !important;
+		color: $black !important;
+
+		&:hover {
+			background-color: $silver !important;
+		}
+
+		&:active {
+			background-color: $teal-dark !important;
+			border-color: $teal-dark !important;
+			color: $white !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			border-color: transparent !important;
+			outline: 2px solid $teal !important;
+		}
+
+		&:focus:not(:focus-visible) {
+			border-color: $black !important;
+		}
+	}
+
+	.c-button--content-page-button--text {
+		font-weight: $font-weight-normal !important;
+		background-color: transparent !important;
+		border-color: transparent !important;
+		color: $black !important;
+
+		&:hover {
+			background-color: transparent !important;
+			border-color: transparent !important;
+			color: $neutral !important;
+		}
+
+		&:active {
+			color: $teal-dark !important;
+			background-color: transparent !important;
+			border-color: transparent !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal !important;
+		}
+	}
 }

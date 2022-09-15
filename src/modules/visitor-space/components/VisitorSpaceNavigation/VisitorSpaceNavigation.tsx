@@ -1,6 +1,5 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
@@ -11,6 +10,7 @@ import { DropdownMenu, Icon } from '@shared/components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { VisitorSpaceNavigationProps } from '@visitor-space/components';
 
@@ -24,7 +24,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	showAccessEndDate,
 	title,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
@@ -36,7 +36,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 				{showLinkedSpaceAsHomepage && isSearchPage ? null : (
 					<Link href={backLink} passHref={true}>
 						<a
-							aria-label={t(
+							aria-label={tText(
 								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___naar-vorige-pagina'
 							)}
 						>
@@ -68,10 +68,10 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 							iconStart: (
 								<Icon className="u-font-size-24" name="contact" aria-hidden />
 							),
-							label: t(
+							label: tHtml(
 								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___contacteer'
 							),
-							'aria-label': t(
+							'aria-label': tText(
 								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___contacteer'
 							),
 							variants: 'text',
@@ -105,7 +105,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 					</DropdownMenu>
 				) : (
 					<span className="u-py-8">
-						{t(
+						{tHtml(
 							'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___geen-contactinformatie-beschikbaar'
 						)}
 					</span>

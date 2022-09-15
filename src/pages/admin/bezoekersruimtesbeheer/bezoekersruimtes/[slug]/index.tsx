@@ -1,5 +1,3 @@
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
@@ -11,11 +9,12 @@ import { VisitorSpaceSettings } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 const VisitorSpaceEdit: FC = () => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const { slug } = router.query;
 
@@ -26,21 +25,21 @@ const VisitorSpaceEdit: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t(
+						tText(
 							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
 						)
 					)}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen-meta-omschrijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
 				)}
 			>
@@ -57,6 +56,6 @@ const VisitorSpaceEdit: FC = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(VisitorSpaceEdit, Permission.UPDATE_ALL_SPACES));

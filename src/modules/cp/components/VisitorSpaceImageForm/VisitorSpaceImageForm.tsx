@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ColorPicker, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { CardImage, Icon } from '@shared/components';
 import FileInput from '@shared/components/FileInput/FileInput';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DEFAULT_VISITOR_SPACE_COLOR } from '@visitor-space/const';
 
 import { ValidationRef } from '../VisitorSpaceSettings/VisitorSpaceSettings.types';
@@ -31,7 +31,7 @@ const VisitorSpaceImageForm = forwardRef<
 	/**
 	 * Hooks
 	 */
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	/**
 	 * Refs
@@ -151,7 +151,7 @@ const VisitorSpaceImageForm = forwardRef<
 				className={styles['c-visitor-space-image-form__color-control']}
 				errors={[errors.color?.message]}
 				id={labelKeys.color}
-				label={t(
+				label={tHtml(
 					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrondkleur'
 				)}
 			>
@@ -176,12 +176,12 @@ const VisitorSpaceImageForm = forwardRef<
 			<FormControl
 				errors={[errors.file?.message]}
 				id={labelKeys.file}
-				label={t(
+				label={tHtml(
 					'modules/cp/components/visitor-space-image-form/visitor-space-image-form___achtergrond-afbeelding'
 				)}
 				suffix={
 					<span className={styles['c-visitor-space-image-form__hint']}>
-						{`(${t(
+						{`(${tHtml(
 							'modules/cp/components/visitor-space-image-form/visitor-space-image-form___max-500-kb'
 						)})`}
 					</span>
@@ -220,7 +220,7 @@ const VisitorSpaceImageForm = forwardRef<
 
 				{currentState.image && (
 					<Button
-						label={t(
+						label={tHtml(
 							'modules/cp/components/visitor-space-image-form/visitor-space-image-form___verwijder-afbeelding'
 						)}
 						iconStart={<Icon name="trash" />}
