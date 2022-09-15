@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 import { Icon } from '@shared/components';
 import { formatDateTime } from '@shared/components/VisitorSpaceCard/VisitorSpaceCard.utils';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 
 export const mockNames = [
 	'Jan Verminnen',
@@ -71,9 +71,7 @@ export const mockColumns = [
 		Cell: (
 			<Button
 				icon={<Icon name="dots-vertical" aria-hidden />}
-				aria-label={TranslationService.t(
-					'modules/shared/components/table/mocks/table___meer-acties'
-				)}
+				aria-label={tText('modules/shared/components/table/mocks/table___meer-acties')}
 				variants={['xxs', 'text']}
 			/>
 		),

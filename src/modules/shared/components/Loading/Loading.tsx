@@ -11,7 +11,7 @@ export interface LoadingProps extends DefaultComponentProps {
 }
 
 const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	return (
 		<div
@@ -22,7 +22,7 @@ const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }
 			)}
 			style={style}
 		>
-			<span>{t('modules/shared/components/loading/loading___laden')}</span>
+			<span>{tHtml('modules/shared/components/loading/loading___laden')}</span>
 		</div>
 	);
 };

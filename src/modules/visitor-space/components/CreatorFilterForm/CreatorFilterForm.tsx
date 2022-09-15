@@ -24,7 +24,7 @@ const defaultValues = {
 };
 
 const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// State
 
@@ -70,7 +70,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 				<div className="u-my-32">
 					{buckets.length === 0 && (
 						<p className="u-color-neutral u-text-center">
-							{t(
+							{tHtml(
 								'modules/visitor-space/components/creator-filter-form/creator-filter-form___geen-makers-gevonden'
 							)}
 						</p>

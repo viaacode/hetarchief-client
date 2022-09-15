@@ -29,7 +29,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 		/**
 		 * Hooks
 		 */
-		const { t } = useTranslation();
+		const { tHtml } = useTranslation();
 		const { data: contentPartners, isError: isErrorContentPartners } = useGetContentPartners(
 			false,
 			!disableDropdown
@@ -97,12 +97,14 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 			isErrorContentPartners &&
 				toastService.notify({
 					maxLines: 3,
-					title: t('modules/cp/components/site-settings-form/site-settings-form___error'),
-					description: t(
+					title: tHtml(
+						'modules/cp/components/site-settings-form/site-settings-form___error'
+					),
+					description: tHtml(
 						'modules/cp/components/site-settings-form/site-settings-form___er-ging-iets-mis-bij-het-ophalen-van-de-content-partners'
 					),
 				});
-		}, [contentPartners, isErrorContentPartners, t]);
+		}, [contentPartners, isErrorContentPartners, tHtml]);
 
 		/**
 		 * Callbacks
@@ -147,7 +149,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 					className={styles['c-cp-settings__site-settings-input']}
 					errors={[errors.orId?.message]}
 					id={labelKeys.orId}
-					label={t(
+					label={tHtml(
 						'modules/cp/components/site-settings-form/site-settings-form___content-partner'
 					)}
 				>
@@ -187,7 +189,9 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 					className={styles['c-cp-settings__site-settings-input']}
 					errors={[errors.slug?.message]}
 					id={labelKeys.slug}
-					label={t('modules/cp/components/site-settings-form/site-settings-form___slug')}
+					label={tHtml(
+						'modules/cp/components/site-settings-form/site-settings-form___slug'
+					)}
 				>
 					<Controller
 						name="slug"

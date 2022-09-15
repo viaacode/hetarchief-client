@@ -32,7 +32,7 @@ const defaultValues: PublishedFilterFormState = {
 };
 
 const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className, disabled }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.published?.[0];
@@ -86,7 +86,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.operator?.message]}
 						id={labelKeys.operator}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/published-filter-form/published-filter-form___operator'
 						)}
 					>
@@ -121,7 +121,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.published?.message]}
 						id={labelKeys.published}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/published-filter-form/published-filter-form___waarde'
 						)}
 					>

@@ -22,7 +22,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	afterSubmit = () => null,
 	onOpenNode = null,
 }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [isOpen, setIsOpen] = useState(false);
 
 	/**
@@ -64,11 +64,11 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 				afterSubmit();
 
 				toastService.notify({
-					title: t(
+					title: tHtml(
 						'modules/account/components/create-folder-button/create-folder-button___name-is-aangemaakt',
 						values
 					),
-					description: t(
+					description: tHtml(
 						'modules/account/components/create-folder-button/create-folder-button___je-nieuwe-map-is-succesvol-aangemaakt'
 					),
 				});

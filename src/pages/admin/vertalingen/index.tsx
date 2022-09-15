@@ -8,12 +8,13 @@ import { AdminLayout } from '@admin/layouts';
 import { TranslationsOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 const AdminTranslationsOverview: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// Access child functions
 	const translationsRef = useRef<TranslationsOverviewRef>();
@@ -30,11 +31,11 @@ const AdminTranslationsOverview: FC = () => {
 				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('pages/admin/vertalingen/index___vertalingen')}>
+			<AdminLayout pageTitle={tHtml('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Actions>
 					<Button
 						onClick={() => translationsRef.current?.onSave()}
-						label={t('pages/admin/vertalingen/index___wijzigingen-opslaan')}
+						label={tHtml('pages/admin/vertalingen/index___wijzigingen-opslaan')}
 					/>
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
@@ -46,6 +47,8 @@ const AdminTranslationsOverview: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(

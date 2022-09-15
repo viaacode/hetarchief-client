@@ -6,12 +6,13 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle, formatDistanceToday } from '@shared/utils';
 
 const UsersOverview: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	const renderUsers = () => (
 		<>
@@ -40,7 +41,7 @@ const UsersOverview: FC = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
+				pageTitle={tHtml('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
 			>
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>
@@ -49,6 +50,8 @@ const UsersOverview: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(withAdminCoreConfig(UsersOverview), Permission.VIEW_USERS)

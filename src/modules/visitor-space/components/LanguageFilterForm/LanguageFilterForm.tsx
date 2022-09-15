@@ -24,7 +24,7 @@ const defaultValues = {
 };
 
 const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// State
 
@@ -70,7 +70,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 				<div className="u-my-32">
 					{buckets.length === 0 && (
 						<p className="u-color-neutral u-text-center">
-							{t(
+							{tHtml(
 								'modules/visitor-space/components/language-filter-form/language-filter-form___geen-talen-gevonden'
 							)}
 						</p>

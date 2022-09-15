@@ -1,30 +1,28 @@
 import { object, SchemaOf, string } from 'yup';
 
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 
 import { SiteSettingsFormState } from './SiteSettingsForm.types';
 
 export const SITE_SETTINGS_SCHEMA = (): SchemaOf<SiteSettingsFormState> => {
 	return object({
 		orId: string().required(
-			TranslationService.t(
-				'modules/cp/components/site-settings-form/site-settings-form___naam-is-verplicht'
-			)
+			tText('modules/cp/components/site-settings-form/site-settings-form___naam-is-verplicht')
 		),
 		slug: string()
 			.strict()
 			.lowercase(
-				TranslationService.t(
+				tText(
 					'modules/cp/components/site-settings-form/site-settings-form___slug-mag-geen-hoofdletters-bevatten'
 				)
 			)
 			.matches(/^\S*$/i, {
-				message: TranslationService.t(
+				message: tText(
 					'modules/cp/components/site-settings-form/site-settings-form___slug-mag-geen-spatie-bevatten'
 				),
 			})
 			.required(
-				TranslationService.t(
+				tText(
 					'modules/cp/components/site-settings-form/site-settings-form___slug-is-verplicht'
 				)
 			),

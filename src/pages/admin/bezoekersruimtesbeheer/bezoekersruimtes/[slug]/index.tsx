@@ -6,6 +6,7 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
+import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -13,7 +14,7 @@ import { createPageTitle } from '@shared/utils';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 const VisitorSpaceEdit: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const { slug } = router.query;
 
@@ -38,7 +39,7 @@ const VisitorSpaceEdit: FC = () => {
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
 				)}
 			>
@@ -54,5 +55,7 @@ const VisitorSpaceEdit: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(VisitorSpaceEdit, Permission.UPDATE_ALL_SPACES));

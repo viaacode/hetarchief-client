@@ -9,13 +9,14 @@ import { CONTENT_PATH } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 const ContentPageOverviewPage: FC = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
 	return (
@@ -32,7 +33,9 @@ const ContentPageOverviewPage: FC = () => {
 				/>
 			</Head>
 
-			<AdminLayout pageTitle={t('admin/content/views/content-overview___content-overzicht')}>
+			<AdminLayout
+				pageTitle={tHtml('admin/content/views/content-overview___content-overzicht')}
+			>
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
 						<Link href={CONTENT_PATH.CONTENT_PAGE_CREATE} passHref>
@@ -62,6 +65,8 @@ const ContentPageOverviewPage: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(

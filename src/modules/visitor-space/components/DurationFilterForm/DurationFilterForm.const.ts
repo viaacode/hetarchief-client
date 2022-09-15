@@ -1,7 +1,7 @@
 import { mixed, object, SchemaOf, string } from 'yup';
 
 import { SEPARATOR } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 import { Operator } from '@shared/types';
 
 import { durationRegex } from '../../components/DurationInput/DurationInput.consts';
@@ -17,7 +17,7 @@ export const DURATION_FILTER_FORM_SCHEMA = (): SchemaOf<DurationFilterFormState>
 			.optional()
 			.test(
 				'duration',
-				TranslationService.t(
+				tText(
 					'modules/visitor-space/components/duration-filter-form/duration-filter-form___invoer-is-ongeldig-dit-moet-een-geldige-tijd-zijn-bv-00-15-30'
 				),
 				(value: string | undefined) =>

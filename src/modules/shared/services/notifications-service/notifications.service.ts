@@ -4,9 +4,9 @@ import { QueryClient } from 'react-query';
 
 import { ROUTES } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
 import { ApiResponseWrapper } from '@shared/types';
 import { asDate } from '@shared/utils';
 
@@ -120,7 +120,7 @@ export abstract class NotificationsService {
 				toastService.notify({
 					title: newNotifications[0].title,
 					description: newNotifications[0].description,
-					buttonLabel: TranslationService.t(
+					buttonLabel: tText(
 						'modules/shared/services/notifications-service/notifications___bekijk'
 					),
 					onClose: async () => {
@@ -138,17 +138,17 @@ export abstract class NotificationsService {
 			} else {
 				// multiple
 				toastService.notify({
-					title: TranslationService.t(
+					title: tText(
 						'modules/shared/services/notifications-service/notifications___er-zijn-amount-nieuwe-notificaties',
 						{
 							amount: newNotifications.length,
 						}
 					),
-					description: TranslationService.t(
+					description: tText(
 						'modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht',
 						{ amount: newNotifications.length }
 					),
-					buttonLabel: TranslationService.t(
+					buttonLabel: tText(
 						'modules/shared/services/notifications-service/notifications___bekijk'
 					),
 					onClose: () => {

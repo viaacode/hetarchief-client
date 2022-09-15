@@ -10,7 +10,7 @@ import { CancelVisitBlade } from '../CancelVisitBlade';
 import { ProcessVisitBladeProps } from './ProcessVisitBlade.types';
 
 const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const { selected, onFinish } = props;
 
 	const [showCancel, setShowCancel] = useState(false);
@@ -40,12 +40,12 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 	const getTitle = (): string | ReactNode => {
 		switch (selected?.status) {
 			case VisitStatus.PENDING:
-				return t(
+				return tHtml(
 					'modules/home/components/process-visit-blade/process-visit-blade___detail-aanvraag'
 				);
 
 			case VisitStatus.APPROVED:
-				return t(
+				return tHtml(
 					'modules/home/components/process-visit-blade/process-visit-blade___detail-gepland-bezoek'
 				);
 
@@ -59,7 +59,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={t(
+					label={tHtml(
 						'modules/home/components/process-visit-blade/process-visit-blade___annuleer-bezoek'
 					)}
 					iconStart={<Icon name="forbidden" />}
@@ -69,7 +69,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				/>
 
 				<Button
-					label={t(
+					label={tHtml(
 						'modules/home/components/process-visit-blade/process-visit-blade___sluit'
 					)}
 					variants={['block', 'text']}

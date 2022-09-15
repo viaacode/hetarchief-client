@@ -19,7 +19,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	title,
 	values,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	const FormComponent = form ?? (() => null);
 
@@ -50,7 +50,7 @@ const FilterForm: FC<FilterFormProps> = ({
 						<Button
 							className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
 							iconStart={<Icon className="u-font-size-22" name="redo" />}
-							label={t(
+							label={tHtml(
 								'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
 							)}
 							variants="text"
@@ -58,7 +58,7 @@ const FilterForm: FC<FilterFormProps> = ({
 						/>
 						<Button
 							className={styles['c-filter-form__submit']}
-							label={t(
+							label={tHtml(
 								'modules/visitor-space/components/filter-menu/filter-form/filter-form___pas-toe'
 							)}
 							variants={['black']}

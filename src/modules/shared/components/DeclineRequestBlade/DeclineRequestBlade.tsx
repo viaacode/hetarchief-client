@@ -18,7 +18,7 @@ const labelKeys: Record<keyof DeclineRequestFormState, string> = {
 };
 
 const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const { onSubmit, selected } = props;
 
 	const {
@@ -44,10 +44,10 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 				onSubmit?.(values);
 
 				toastService.notify({
-					title: t(
+					title: tHtml(
 						'modules/cp/components/decline-request-blade/decline-request-blade___de-aanvraag-is-afgekeurd'
 					),
-					description: t(
+					description: tHtml(
 						'modules/cp/components/decline-request-blade/decline-request-blade___deze-aanvraag-werd-succesvol-afgekeurd'
 					),
 				});
@@ -63,7 +63,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={t(
+					label={tHtml(
 						'modules/cp/components/decline-request-blade/decline-request-blade___keur-af'
 					)}
 					variants={['block', 'black']}
@@ -72,7 +72,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 				/>
 
 				<Button
-					label={t(
+					label={tHtml(
 						'modules/cp/components/decline-request-blade/decline-request-blade___annuleer'
 					)}
 					variants={['block', 'text']}
@@ -86,7 +86,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={renderFooter()}
-			title={t(
+			title={tHtml(
 				'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
 			)}
 		>
@@ -96,7 +96,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 					className="u-mb-24"
 					errors={[errors.reasonForDenial?.message]}
 					id={labelKeys.reasonForDenial}
-					label={t(
+					label={tHtml(
 						'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'
 					)}
 					suffix={OPTIONAL_LABEL()}

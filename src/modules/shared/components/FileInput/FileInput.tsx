@@ -8,7 +8,7 @@ import { FileInputProps } from './FileInput.types';
 
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
 	({ className, onChange, hasFile }, ref) => {
-		const { t } = useTranslation();
+		const { tHtml } = useTranslation();
 
 		return (
 			<>
@@ -27,10 +27,12 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
 						}}
 					/>
 					{hasFile
-						? t(
+						? tHtml(
 								'modules/shared/components/file-input/file-input___upload-nieuwe-afbeelding'
 						  )
-						: t('modules/shared/components/file-input/file-input___upload-afbeelding')}
+						: tHtml(
+								'modules/shared/components/file-input/file-input___upload-afbeelding'
+						  )}
 				</label>
 			</>
 		);

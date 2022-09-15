@@ -3,7 +3,7 @@ import { object, SchemaOf, string } from 'yup';
 
 import { CreateFolderFormState } from '@account/types';
 import { SEARCH_QUERY_KEY } from '@shared/const';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 
 export const CollectionItemListSize = 20;
 
@@ -20,7 +20,7 @@ export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateFolderFormState> => {
 		name: string()
 			.test(
 				'name',
-				TranslationService.t(
+				tText(
 					'modules/account/const/my-folders___de-naam-van-een-map-moet-minstens-count-tekens-lang-zijn',
 					{
 						count: nameLengthMin,
@@ -32,7 +32,7 @@ export const COLLECTION_FORM_SCHEMA = (): SchemaOf<CreateFolderFormState> => {
 			)
 			.test(
 				'name',
-				TranslationService.t(
+				tText(
 					'modules/account/const/my-folders___de-naam-van-een-map-mag-niet-meer-dan-count-tekens-lang-zijn',
 					{
 						count: nameLengthMax,

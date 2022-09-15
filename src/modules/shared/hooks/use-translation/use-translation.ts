@@ -1,15 +1,15 @@
+import { TOptions } from 'i18next';
 import { ReactNode } from 'react';
 
-import { t, tText } from '@shared/helpers/translate';
-import { TranslationParamValue } from '@shared/services/translation-service/translation-service';
+import { tHtml, tText } from '@shared/helpers/translate';
 
 export type useTranslationsResponse = {
-	t: (key: string, params?: Record<string, TranslationParamValue>) => ReactNode;
-	tText: (key: string, params?: Record<string, TranslationParamValue>) => string;
+	tHtml: (key: string, params?: TOptions | string | undefined) => ReactNode;
+	tText: (key: string, params?: TOptions | string | undefined) => string;
 };
 
 const useTranslation = (): useTranslationsResponse => {
-	return { t, tText };
+	return { tHtml, tText };
 };
 
 export default useTranslation;

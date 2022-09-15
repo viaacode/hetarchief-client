@@ -1,7 +1,7 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -11,6 +11,7 @@ import { useQueryParams } from 'use-query-params';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
+import { withI18n } from '@i18n/wrappers';
 import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
@@ -25,7 +26,7 @@ const TermsOfService: NextPage = () => {
 	useStickyLayout();
 	useHideFooter();
 
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const scrollable = useRef<HTMLDivElement | null>(null);
 	const dispatch = useDispatch();
@@ -68,10 +69,10 @@ const TermsOfService: NextPage = () => {
 					setTimeout(() =>
 						router.push(query[REDIRECT_TO_QUERY_KEY]).then(() => {
 							toastService.notify({
-								title: t(
+								title: tHtml(
 									'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'
 								),
-								description: t(
+								description: tHtml(
 									'pages/gebruiksvoorwaarden/index___je-geniet-nu-van-volledige-toegang-tot-het-platform'
 								),
 								maxLines: 2,
@@ -100,7 +101,7 @@ const TermsOfService: NextPage = () => {
 			<section className="u-pt-96 p-terms-of-service__text">
 				<div className="l-container">
 					<h1 className="p-terms-of-service__title">
-						{t('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden')}
+						{tHtml('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden')}
 					</h1>
 
 					<div
@@ -127,7 +128,7 @@ const TermsOfService: NextPage = () => {
 					<div className="l-container">
 						<div className="p-terms-of-service__buttons">
 							<Button className="u-mr-8" variants="text" onClick={onCancelClick}>
-								{t('pages/gebruiksvoorwaarden/index___annuleer')}
+								{tHtml('pages/gebruiksvoorwaarden/index___annuleer')}
 							</Button>
 
 							<Button
@@ -135,7 +136,7 @@ const TermsOfService: NextPage = () => {
 								disabled={!hasFinished}
 								onClick={onConfirmClick}
 							>
-								{t('pages/gebruiksvoorwaarden/index___aanvaarden')}
+								{tHtml('pages/gebruiksvoorwaarden/index___aanvaarden')}
 							</Button>
 						</div>
 					</div>
@@ -144,5 +145,7 @@ const TermsOfService: NextPage = () => {
 		</div>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAdminCoreConfig(TermsOfService);

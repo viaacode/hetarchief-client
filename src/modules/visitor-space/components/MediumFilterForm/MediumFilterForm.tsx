@@ -24,7 +24,7 @@ const defaultValues = {
 };
 
 const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// State
 
@@ -70,7 +70,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 				<div className="u-my-32">
 					{buckets.length === 0 && (
 						<p className="u-color-neutral u-text-center">
-							{t(
+							{tHtml(
 								'modules/visitor-space/components/medium-filter-form/medium-filter-form___geen-analoge-dragers-gevonden'
 							)}
 						</p>

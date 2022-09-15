@@ -1,5 +1,5 @@
 import { Table } from '@meemoo/react-components';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactNode, useCallback, useMemo } from 'react';
@@ -16,6 +16,7 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
@@ -30,7 +31,7 @@ import { VisitTimeframe } from '@visits/types';
 import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyHistory: NextPage = () => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 
@@ -95,9 +96,9 @@ const AccountMyHistory: NextPage = () => {
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('pages/account/mijn-historiek/index___error'),
+				title: tHtml('pages/account/mijn-historiek/index___error'),
 				maxLines: 2,
-				description: t(
+				description: tHtml(
 					'pages/account/mijn-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
 				),
 			});
@@ -108,7 +109,7 @@ const AccountMyHistory: NextPage = () => {
 	// Render
 
 	const renderEmptyMessage = (): string | ReactNode => {
-		return t('pages/account/mijn-historiek/index___geen-historiek');
+		return tHtml('pages/account/mijn-historiek/index___geen-historiek');
 	};
 
 	return (
@@ -127,7 +128,7 @@ const AccountMyHistory: NextPage = () => {
 
 			<AccountLayout
 				className="p-account-my-history"
-				pageTitle={t('pages/account/mijn-historiek/index___mijn-historiek')}
+				pageTitle={tHtml('pages/account/mijn-historiek/index___mijn-historiek')}
 			>
 				{(visits.data?.items?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
@@ -176,5 +177,7 @@ const AccountMyHistory: NextPage = () => {
 		</VisitorLayout>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(AccountMyHistory, Permission.MANAGE_ACCOUNT));

@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash-es';
 
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 import { Operator } from '@shared/types';
 
 import { METADATA_CONFIG, MetadataFields } from '../../const';
@@ -46,48 +46,40 @@ export const getField = (prop: MetadataProp, op: Operator): MetadataFields | nul
 export const getLabel = (prop: MetadataProp): string => {
 	return (
 		{
-			[MetadataProp.CreatedAt]: TranslationService.t(
+			[MetadataProp.CreatedAt]: tText(
 				'modules/visitor-space/utils/metadata/metadata___creatiedatum'
 			),
-			[MetadataProp.Creator]: TranslationService.t(
-				'modules/visitor-space/utils/metadata/metadata___maker'
-			),
-			[MetadataProp.Description]: TranslationService.t(
+			[MetadataProp.Creator]: tText('modules/visitor-space/utils/metadata/metadata___maker'),
+			[MetadataProp.Description]: tText(
 				'modules/visitor-space/utils/metadata/metadata___beschrijving'
 			),
-			[MetadataProp.Duration]: TranslationService.t(
+			[MetadataProp.Duration]: tText(
 				'modules/visitor-space/utils/metadata/metadata___duurtijd'
 			),
-			[MetadataProp.Era]: TranslationService.t(
+			[MetadataProp.Era]: tText(
 				'modules/visitor-space/utils/metadata/metadata___tijdsperiode-van-de-inhoud'
 			),
-			[MetadataProp.Everything]: TranslationService.t(
+			[MetadataProp.Everything]: tText(
 				'modules/visitor-space/utils/metadata/metadata___alles'
 			),
-			[MetadataProp.Genre]: TranslationService.t(
-				'modules/visitor-space/utils/metadata/metadata___genre'
-			),
-			[MetadataProp.Language]: TranslationService.t(
-				'modules/visitor-space/utils/metadata/metadata___taal'
-			),
-			[MetadataProp.Location]: TranslationService.t(
+			[MetadataProp.Genre]: tText('modules/visitor-space/utils/metadata/metadata___genre'),
+			[MetadataProp.Language]: tText('modules/visitor-space/utils/metadata/metadata___taal'),
+			[MetadataProp.Location]: tText(
 				'modules/visitor-space/utils/metadata/metadata___locatie-van-de-inhoud'
 			),
-			[MetadataProp.Mediatype]: TranslationService.t(
+			[MetadataProp.Mediatype]: tText(
 				'modules/visitor-space/utils/metadata/metadata___bestandstype'
 			),
-			[MetadataProp.Medium]: TranslationService.t(
+			[MetadataProp.Medium]: tText(
 				'modules/visitor-space/utils/metadata/metadata___analoge-drager'
 			),
-			[MetadataProp.PublishedAt]: TranslationService.t(
+			[MetadataProp.PublishedAt]: tText(
 				'modules/visitor-space/utils/metadata/metadata___publicatiedatum'
 			),
-			[MetadataProp.Publisher]: TranslationService.t(
+			[MetadataProp.Publisher]: tText(
 				'modules/visitor-space/utils/metadata/metadata___publisher'
 			),
-			[MetadataProp.Title]: TranslationService.t(
-				'modules/visitor-space/utils/metadata/metadata___titel'
-			),
+			[MetadataProp.Title]: tText('modules/visitor-space/utils/metadata/metadata___titel'),
 		}[prop] || ''
 	);
 };

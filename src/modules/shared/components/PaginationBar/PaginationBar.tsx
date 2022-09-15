@@ -19,7 +19,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 	start,
 	total,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	const pageCount = Math.ceil(total / count);
 	const currentPage = start / count;
@@ -38,7 +38,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 						className="u-pl-24:sm u-pl-8"
 						disabled={currentPage + 1 === pageCount}
 						variants={['text', 'neutral']}
-						label={t(
+						label={tHtml(
 							'modules/shared/components/pagination-bar/pagination-bar___volgende'
 						)}
 						iconEnd={<Icon name="angle-right" />}
@@ -49,7 +49,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 						className="u-pr-24:sm u-pr-8"
 						disabled={currentPage + 1 === 1}
 						variants={['text', 'neutral']}
-						label={t(
+						label={tHtml(
 							'modules/shared/components/pagination-bar/pagination-bar___vorige'
 						)}
 						iconStart={<Icon name="angle-left" />}
@@ -80,7 +80,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 					<Button
 						className={styles['c-pagination-bar__back-to-top']}
 						variants={['text', 'neutral']}
-						label={t(
+						label={tHtml(
 							'modules/shared/components/pagination-bar/pagination-bar___terug-naar-boven'
 						)}
 						iconEnd={<Icon name="arrow-up" />}

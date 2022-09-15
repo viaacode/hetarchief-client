@@ -1,5 +1,5 @@
 import { Box, Button } from '@meemoo/react-components';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -22,7 +23,7 @@ const { publicRuntimeConfig } = getConfig();
 
 const AccountMyProfile: NextPage = () => {
 	const user = useSelector(selectUser);
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	return (
 		<VisitorLayout>
@@ -40,18 +41,18 @@ const AccountMyProfile: NextPage = () => {
 
 			<AccountLayout
 				className="p-account-my-profile"
-				pageTitle={t('pages/account/mijn-profiel/index___mijn-profiel')}
+				pageTitle={tHtml('pages/account/mijn-profiel/index___mijn-profiel')}
 			>
 				<div className="l-container">
 					<Box className="p-account-my-profile__user-data u-p-24">
 						<dl>
-							<dt>{t('pages/account/mijn-profiel/index___voornaam')}</dt>
+							<dt>{tHtml('pages/account/mijn-profiel/index___voornaam')}</dt>
 							<dd className="u-text-ellipsis u-color-neutral">{user?.firstName}</dd>
 
-							<dt>{t('pages/account/mijn-profiel/index___familienaam')}</dt>
+							<dt>{tHtml('pages/account/mijn-profiel/index___familienaam')}</dt>
 							<dd className="u-text-ellipsis u-color-neutral">{user?.lastName}</dd>
 
-							<dt>{t('pages/account/mijn-profiel/index___email')}</dt>
+							<dt>{tHtml('pages/account/mijn-profiel/index___email')}</dt>
 							<dd className="u-text-ellipsis u-color-neutral" title={user?.email}>
 								{user?.email}
 							</dd>
@@ -85,7 +86,7 @@ const AccountMyProfile: NextPage = () => {
 											<Button
 												className="u-p-0"
 												iconStart={<Icon name="edit" />}
-												label={t(
+												label={tHtml(
 													'pages/account/mijn-profiel/index___wijzig-mijn-gegevens'
 												)}
 												variants="text"
@@ -100,5 +101,7 @@ const AccountMyProfile: NextPage = () => {
 		</VisitorLayout>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(AccountMyProfile, Permission.MANAGE_ACCOUNT));

@@ -6,7 +6,7 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 import { OrderDirection, Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
 
@@ -24,15 +24,15 @@ export const VisitorsTableColumns = (
 	editVisitRequest: (visitRequest: Visit) => void
 ): Column<Visit>[] => [
 	{
-		Header: TranslationService.t('modules/admin/const/visitors___bezoekersruimte'),
+		Header: tText('modules/admin/const/visitors___bezoekersruimte'),
 		accessor: 'spaceName',
 	},
 	{
-		Header: TranslationService.t('modules/admin/const/visitors___naam'),
+		Header: tText('modules/admin/const/visitors___naam'),
 		accessor: 'visitorName',
 	},
 	{
-		Header: TranslationService.t('modules/admin/const/visitors___goedgekeurd-door'),
+		Header: tText('modules/admin/const/visitors___goedgekeurd-door'),
 		accessor: 'updatedByName',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -43,7 +43,7 @@ export const VisitorsTableColumns = (
 		},
 	},
 	{
-		Header: TranslationService.t('modules/admin/const/visitors___toegang'),
+		Header: tText('modules/admin/const/visitors___toegang'),
 		accessor: 'startAt',
 		Cell: ({ row }: VisitRow) => {
 			const start = asDate(row.original.startAt);
@@ -68,16 +68,12 @@ export const VisitorsTableColumns = (
 				<DropdownMenu>
 					<Button
 						variants="text"
-						label={TranslationService.t(
-							'modules/cp/const/visitors___toegang-intrekken'
-						)}
+						label={tText('modules/cp/const/visitors___toegang-intrekken')}
 						onClick={() => denyVisitRequest(row.original)}
 					/>
 					<Button
 						variants="text"
-						label={TranslationService.t(
-							'modules/cp/const/visitors___toegang-aanpassen'
-						)}
+						label={tText('modules/cp/const/visitors___toegang-aanpassen')}
 						onClick={() => editVisitRequest(row.original)}
 					/>
 				</DropdownMenu>

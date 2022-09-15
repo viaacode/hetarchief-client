@@ -48,7 +48,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
-	const { t, tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// Computed
 
@@ -174,7 +174,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			<FormControl
 				className="c-form-control--label-hidden"
 				id={`${labelKeys.property}__${index}`}
-				label={t(
+				label={tHtml(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___veldnaam'
 				)}
 			>
@@ -199,7 +199,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			<FormControl
 				className="c-form-control--label-hidden"
 				id={`${labelKeys.operator}__${index}`}
-				label={t(
+				label={tHtml(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___operator'
 				)}
 			>
@@ -223,7 +223,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					'c-form-control--label-hidden'
 				)}
 				id={`${labelKeys.value}__${index}`}
-				label={t(
+				label={tHtml(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___waarde'
 				)}
 			>

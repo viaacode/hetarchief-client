@@ -20,7 +20,7 @@ import { navigationService } from '@navigation/services/navigation-service';
 import { Icon, IconName, IconProps, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTE_PARTS } from '@shared/const';
-import { t, tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
@@ -157,7 +157,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							});
 						},
 					},
-					i18n: { t, tText },
+					i18n: { tHtml, tText },
 					educationOrganisationService: {
 						fetchEducationOrganisationName: () => Promise.resolve(null),
 						fetchCities: () => Promise.resolve([]),

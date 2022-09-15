@@ -3,17 +3,17 @@ import React from 'react';
 import { Column } from 'react-table';
 
 import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
-import { TranslationService } from '@shared/services/translation-service/translation-service';
+import { tText } from '@shared/helpers/translate';
 import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
 export const RequestTableColumns = (): Column<Visit>[] => [
 	{
-		Header: TranslationService.t('modules/admin/const/requests___bezoekersruimte'),
+		Header: tText('modules/admin/const/requests___bezoekersruimte'),
 		accessor: 'spaceName',
 	},
 	{
-		Header: TranslationService.t('modules/admin/const/requests___naam'),
+		Header: tText('modules/admin/const/requests___naam'),
 		accessor: 'visitorName',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -24,7 +24,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		},
 	},
 	{
-		Header: TranslationService.t('modules/admin/const/requests___emailadres'),
+		Header: tText('modules/admin/const/requests___emailadres'),
 		accessor: 'visitorMail',
 		Cell: ({ row }: VisitRow) => (
 			<CopyButton
@@ -38,7 +38,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		),
 	},
 	{
-		Header: TranslationService.t('modules/admin/const/requests___tijdstip'),
+		Header: tText('modules/admin/const/requests___tijdstip'),
 		accessor: 'createdAt',
 		Cell: ({ row }: VisitRow) => {
 			return (
@@ -52,7 +52,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		},
 	},
 	{
-		Header: TranslationService.t('modules/admin/const/requests___status'),
+		Header: tText('modules/admin/const/requests___status'),
 		accessor: 'status',
 		Cell: ({ row }: VisitRow) => {
 			return <RequestStatusBadge status={row.original.status} />;
@@ -66,7 +66,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 				<Button
 					className="p-cp-requests__actions"
 					icon={<Icon name="dots-vertical" aria-hidden />}
-					aria-label={TranslationService.t('modules/admin/const/requests___meer-acties')}
+					aria-label={tText('modules/admin/const/requests___meer-acties')}
 					variants={['xxs', 'text']}
 				/>
 			);
