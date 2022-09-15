@@ -1,10 +1,11 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestTableColumns } from '@cp/const/requests.const';
 import { CPAdminLayout } from '@cp/layouts';
+import { withI18n } from '@i18n/wrappers';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
@@ -32,6 +33,8 @@ const CPRequestsPage: NextPage = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAllRequiredPermissions(CPRequestsPage, Permission.READ_CP_VISIT_REQUESTS)

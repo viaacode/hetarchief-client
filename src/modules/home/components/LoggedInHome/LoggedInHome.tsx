@@ -13,6 +13,7 @@ import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import { withI18n } from '@i18n/wrappers';
 import {
 	Blade,
 	Loading,
@@ -424,5 +425,7 @@ const LoggedInHome: FC = () => {
 
 	return renderHomePageContent();
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(LoggedInHome);

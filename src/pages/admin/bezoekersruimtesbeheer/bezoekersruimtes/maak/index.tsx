@@ -7,6 +7,7 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
+import { withI18n } from '@i18n/wrappers';
 import { ROUTE_PARTS } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -83,6 +84,8 @@ const VisitorSpaceCreate: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 // TODO: permission
 export default withAuth(

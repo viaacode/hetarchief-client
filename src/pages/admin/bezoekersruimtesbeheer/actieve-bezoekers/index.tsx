@@ -11,6 +11,7 @@ import {
 } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
@@ -263,5 +264,7 @@ const Visitors: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(Visitors, Permission.READ_ALL_VISIT_REQUESTS));

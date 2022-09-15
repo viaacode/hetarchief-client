@@ -1,6 +1,6 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { HTTPError } from 'ky';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -12,6 +12,7 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthModal } from '@auth/components';
 import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
+import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
@@ -119,5 +120,7 @@ const DynamicRouteResolver: NextPage = () => {
 		</VisitorLayout>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAdminCoreConfig(DynamicRouteResolver);

@@ -6,6 +6,7 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
+import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -54,5 +55,7 @@ const VisitorSpaceEdit: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(VisitorSpaceEdit, Permission.UPDATE_ALL_SPACES));

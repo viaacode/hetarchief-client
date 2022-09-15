@@ -1,5 +1,5 @@
 import { Table } from '@meemoo/react-components';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactNode, useCallback, useMemo } from 'react';
@@ -16,6 +16,7 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
@@ -176,5 +177,7 @@ const AccountMyHistory: NextPage = () => {
 		</VisitorLayout>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(AccountMyHistory, Permission.MANAGE_ACCOUNT));

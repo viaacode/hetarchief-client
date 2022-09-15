@@ -13,6 +13,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
@@ -719,5 +720,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(VisitorSpaceSearchPage);

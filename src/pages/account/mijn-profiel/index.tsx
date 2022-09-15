@@ -1,5 +1,5 @@
 import { Box, Button } from '@meemoo/react-components';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -100,5 +101,7 @@ const AccountMyProfile: NextPage = () => {
 		</VisitorLayout>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(AccountMyProfile, Permission.MANAGE_ACCOUNT));

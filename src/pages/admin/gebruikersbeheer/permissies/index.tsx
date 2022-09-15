@@ -9,6 +9,7 @@ import { AdminLayout } from '@admin/layouts';
 import { UserGroupOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -120,6 +121,8 @@ const PermissionsOverview: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(

@@ -1,7 +1,7 @@
 import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -26,6 +26,7 @@ import { collectionsService } from '@account/services/collections';
 import { Folder, FolderMedia } from '@account/types';
 import { createCollectionSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import {
 	Icon,
 	IdentifiableMediaCard,
@@ -528,6 +529,8 @@ const AccountMyCollections: NextPage = () => {
 		</VisitorLayout>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAllRequiredPermissions(AccountMyCollections, Permission.MANAGE_ACCOUNT)

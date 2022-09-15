@@ -1,5 +1,5 @@
 import { Table } from '@meemoo/react-components';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
@@ -14,6 +14,7 @@ import {
 	VisitorsTableColumns,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
+import { withI18n } from '@i18n/wrappers';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
@@ -306,6 +307,8 @@ const CPVisitorsPage: NextPage = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAllRequiredPermissions(CPVisitorsPage, Permission.READ_CP_VISIT_REQUESTS)

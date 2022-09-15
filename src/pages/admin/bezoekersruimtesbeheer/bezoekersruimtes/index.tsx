@@ -12,6 +12,7 @@ import {
 } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import {
 	Icon,
 	Loading,
@@ -325,6 +326,8 @@ const VisitorSpacesOverview: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(VisitorSpacesOverview, Permission.READ_ALL_SPACES)

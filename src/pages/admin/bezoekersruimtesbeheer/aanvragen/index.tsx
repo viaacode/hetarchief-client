@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import React from 'react';
 
@@ -6,6 +6,7 @@ import { Permission } from '@account/const';
 import { RequestTableColumns } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
@@ -40,6 +41,8 @@ const MeemooAdminRequestsPage: NextPage = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAllRequiredPermissions(MeemooAdminRequestsPage, Permission.READ_ALL_VISIT_REQUESTS)

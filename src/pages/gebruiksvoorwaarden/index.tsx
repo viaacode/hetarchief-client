@@ -1,7 +1,7 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -11,6 +11,7 @@ import { useQueryParams } from 'use-query-params';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
+import { withI18n } from '@i18n/wrappers';
 import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
@@ -144,5 +145,7 @@ const TermsOfService: NextPage = () => {
 		</div>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAdminCoreConfig(TermsOfService);

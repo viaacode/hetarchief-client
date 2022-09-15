@@ -809,6 +809,6 @@ const ObjectDetailPage: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default withAuth(ObjectDetailPage);

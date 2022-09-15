@@ -1,10 +1,11 @@
 import { HTTPError } from 'ky';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
@@ -90,5 +91,7 @@ const VisitRequestedPage: NextPage = () => {
 
 	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(VisitRequestedPage);
