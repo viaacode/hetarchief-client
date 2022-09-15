@@ -188,7 +188,7 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 		},
 		{
 			title: tText('modules/media/const/index___alternatieve-naam'),
-			data: mediaInfo.alternateName,
+			data: mapArrayToMetadataData(mediaInfo.alternativeName),
 		},
 		{
 			title: tText('modules/media/const/index___archief'),

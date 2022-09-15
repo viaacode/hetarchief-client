@@ -244,12 +244,13 @@ const ObjectDetailPage: NextPage = () => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		if (router.query.ie) {
+		if (mediaInfo) {
 			EventsService.triggerEvent(LogEventType.ITEM_VIEW, window.location.href, {
-				schema_identifier: router.query.ie as string,
+				schema_identifier: mediaInfo.schemaIdentifier,
+				meemoo_identifier: mediaInfo.meemooIdentifier,
 			});
 		}
-	}, [router.query.ie]);
+	}, [mediaInfo]);
 
 	useEffect(() => {
 		metadataSize &&
@@ -375,7 +376,8 @@ const ObjectDetailPage: NextPage = () => {
 		if (!hasMediaPlayed) {
 			setHasMediaPlayed(true);
 			EventsService.triggerEvent(LogEventType.ITEM_PLAY, window.location.href, {
-				schema_identifier: router.query.ie as string,
+				schema_identifier: mediaInfo?.schemaIdentifier,
+				meemoo_identifier: mediaInfo?.meemooIdentifier,
 			});
 		}
 	};

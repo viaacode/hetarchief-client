@@ -124,7 +124,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 		<TagsInput
 			{...tagsInputProps}
 			className={rootCls}
-			components={components as TagsInputProps<boolean>['components']}
+			components={components as any}
 			inputValue={inputValue}
 			isClearable={isClearable}
 			isMulti={isMulti}
