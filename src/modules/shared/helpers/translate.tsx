@@ -11,9 +11,11 @@ import Html from '@shared/components/Html/Html';
  */
 export function tHtml(key: string, params?: TOptions | string | undefined): ReactNode | string {
 	const translatedValue: string = tText(key, params);
+
 	if (translatedValue.includes('<')) {
 		return <Html content={translatedValue} />;
 	}
+
 	return translatedValue;
 }
 
@@ -29,5 +31,6 @@ export function tText(key: string, params?: TOptions | string | undefined): stri
 	if (!translation || translation === key) {
 		return key.split('___')[1].replace('-', ' ') + ' ***';
 	}
+
 	return translation;
 }
