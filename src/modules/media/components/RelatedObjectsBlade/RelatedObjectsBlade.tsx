@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { FC, useState } from 'react';
+import { default as Scrollbar } from 'react-scrollbars-custom';
 
 import { Icon } from '@shared/components';
 
@@ -34,7 +35,9 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
 						name={isOpen ? 'angle-down' : 'angle-up'}
 					/>
 				</button>
-				{renderContent(!isOpen)}
+				<Scrollbar style={{ width: '100%', height: '500px', maxHeight: '100%' }} noScrollX>
+					{renderContent(!isOpen)}
+				</Scrollbar>
 			</div>
 		</div>
 	);
