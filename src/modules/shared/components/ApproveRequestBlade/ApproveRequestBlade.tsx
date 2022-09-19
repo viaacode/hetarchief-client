@@ -3,6 +3,7 @@ import {
 	Button,
 	FormControl,
 	futureDatepicker,
+	OrderDirection,
 	TextInput,
 	timepicker,
 } from '@meemoo/react-components';
@@ -28,7 +29,7 @@ import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { OrderDirection, Visit, VisitStatus } from '@shared/types';
+import { Visit, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitTimeframe } from '@visits/types';

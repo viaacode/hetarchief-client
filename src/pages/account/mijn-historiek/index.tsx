@@ -1,9 +1,9 @@
-import { Table } from '@meemoo/react-components';
-import { GetServerSideProps, NextPage } from 'next';
+import { OrderDirection, Table } from '@meemoo/react-components';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { ReactNode, useCallback, useMemo } from 'react';
-import { Column, TableOptions } from 'react-table';
+import { ReactNode, useMemo } from 'react';
+import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import {
@@ -22,7 +22,7 @@ import { ROUTES } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { AccessStatus, OrderDirection, Visit, VisitStatus } from '@shared/types';
+import { AccessStatus, Visit, VisitStatus } from '@shared/types';
 import { createHomeWithVisitorSpaceFilterUrl, createPageTitle } from '@shared/utils';
 import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
@@ -59,25 +59,21 @@ const AccountMyHistory: NextPage = () => {
 
 	// Events
 
-	const onSortChange = useCallback(
-		(rules) => {
-			let orderProp = rules[0]?.id || undefined;
-			orderProp =
-				orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
-
+	const onSortChange = (
+		orderProp: string | undefined,
+		orderDirection: OrderDirection | undefined
+	) => {
+		const orderPropResolved =
+			orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
+		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection: rules[0]
-					? rules[0].desc
-						? OrderDirection.desc
-						: OrderDirection.asc
-					: undefined,
+				orderProp: orderPropResolved,
+				orderDirection,
 				page: 1,
 			});
-		},
-		[filters, setFilters]
-	);
+		}
+	};
 
 	const onClickRow = async (visit: Visit) => {
 		try {
@@ -132,21 +128,16 @@ const AccountMyHistory: NextPage = () => {
 			>
 				{(visits.data?.items?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
-						<Table
+						<Table<Visit>
 							className="u-mt-24"
-							options={
-								// TODO: fix type hinting
-								/* eslint-disable @typescript-eslint/ban-types */
-								{
-									columns: HistoryTableColumns(onClickRow) as Column<object>[],
-									data: visits.data?.items || [],
-									initialState: {
-										pageSize: HistoryItemListSize,
-										sortBy: sortFilters,
-									},
-								} as TableOptions<object>
-								/* eslint-enable @typescript-eslint/ban-types */
-							}
+							options={{
+								columns: HistoryTableColumns(onClickRow),
+								data: visits.data?.items || [],
+								initialState: {
+									pageSize: HistoryItemListSize,
+									sortBy: sortFilters,
+								} as TableState<Visit>,
+							}}
 							onSortChange={onSortChange}
 							sortingIcons={sortingIcons}
 							pagination={({ gotoPage }) => {

@@ -1,8 +1,8 @@
+import { OrderDirection } from '@meemoo/react-components';
 import { useQuery } from 'react-query';
 import { UseQueryResult } from 'react-query/types/react/types';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 
 import { VisitorSpaceService } from '../services';

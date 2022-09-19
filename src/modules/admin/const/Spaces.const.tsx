@@ -1,4 +1,4 @@
-import { Button } from '@meemoo/react-components';
+import { Button, OrderDirection } from '@meemoo/react-components';
 import Link from 'next/link';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
@@ -8,7 +8,6 @@ import { DropdownMenu, Icon } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { OrderDirection } from '@shared/types';
 import { asDate, formatMediumDate } from '@shared/utils';
 import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
