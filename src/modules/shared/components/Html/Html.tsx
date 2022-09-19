@@ -4,8 +4,6 @@ import React, { FunctionComponent } from 'react';
 
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
 
-import styles from './Html.module.scss';
-
 export interface HtmlProps {
 	content: string;
 	sanitizePreset?: DOMPurify.Config;
@@ -26,7 +24,9 @@ const Html: FunctionComponent<HtmlProps> = ({
 			dangerouslySetInnerHTML={{
 				__html: DOMPurify.sanitize(content, sanitizePreset) as string,
 			}}
-			className={clsx(styles['c-html-wrapper'], className)}
+			// Avoid module scss file, since next serverside rendering can't add a style block to the document.
+			style={{ overflowWrap: 'break-word' }}
+			className={clsx('c-html-wrapper', className)}
 		/>
 	);
 };
