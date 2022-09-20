@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { uuid } from 'uuidv4';
+import { v4 as uuid } from 'uuid';
 
 import { USER_PASSWORD } from '../consts/tests.consts';
 import { acceptCookies } from '../helpers/accept-cookies';

@@ -46,5 +46,6 @@ tests/test_results/junit.xml
 # End to end testing folders
 tests/test-results/
 tests/videos/
+tests/videos-docker/
 tests/node_modules
 *.local.yml
