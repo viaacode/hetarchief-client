@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption, TextInput } from '@meemoo/react-components';
 import { kebabCase } from 'lodash-es';
-import { useTranslation } from 'next-i18next';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 
 import { useGetContentPartners } from '@cp/hooks/get-content-partners';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { getSelectValue } from '@visitor-space/utils/select';
 
@@ -29,7 +29,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 		/**
 		 * Hooks
 		 */
-		const { t } = useTranslation();
+		const { tHtml } = useTranslation();
 		const { data: contentPartners, isError: isErrorContentPartners } = useGetContentPartners(
 			false,
 			!disableDropdown
@@ -97,12 +97,14 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 			isErrorContentPartners &&
 				toastService.notify({
 					maxLines: 3,
-					title: t('modules/cp/components/site-settings-form/site-settings-form___error'),
-					description: t(
+					title: tHtml(
+						'modules/cp/components/site-settings-form/site-settings-form___error'
+					),
+					description: tHtml(
 						'modules/cp/components/site-settings-form/site-settings-form___er-ging-iets-mis-bij-het-ophalen-van-de-content-partners'
 					),
 				});
-		}, [contentPartners, isErrorContentPartners, t]);
+		}, [contentPartners, isErrorContentPartners, tHtml]);
 
 		/**
 		 * Callbacks
@@ -147,7 +149,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 					className={styles['c-cp-settings__site-settings-input']}
 					errors={[errors.orId?.message]}
 					id={labelKeys.orId}
-					label={t(
+					label={tHtml(
 						'modules/cp/components/site-settings-form/site-settings-form___content-partner'
 					)}
 				>
@@ -187,7 +189,9 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 					className={styles['c-cp-settings__site-settings-input']}
 					errors={[errors.slug?.message]}
 					id={labelKeys.slug}
-					label={t('modules/cp/components/site-settings-form/site-settings-form___slug')}
+					label={tHtml(
+						'modules/cp/components/site-settings-form/site-settings-form___slug'
+					)}
 				>
 					<Controller
 						name="slug"

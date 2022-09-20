@@ -1,5 +1,4 @@
 import { Box, Button } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
@@ -7,6 +6,7 @@ import { Permission } from '@account/const';
 import { RichTextForm } from '@shared/components/RichTextForm';
 import { ROUTE_PARTS } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { VisitorSpaceService } from '@visitor-space/services';
 import {
@@ -36,7 +36,7 @@ const VisitorSpaceSettings = forwardRef<
 	{ createSpace: () => void } | undefined,
 	VisitorSpaceSettingsProps
 >(({ className, room, refetch, action = 'edit' }, ref) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const router = useRouter();
 
 	const showSiteSettings = useHasAllPermission(
@@ -74,10 +74,10 @@ const VisitorSpaceSettings = forwardRef<
 				}
 				toastService.notify({
 					maxLines: 3,
-					title: t(
+					title: tHtml(
 						'modules/cp/components/visitor-space-settings/visitor-space-settings___succes'
 					),
-					description: t(
+					description: tHtml(
 						'modules/cp/components/visitor-space-settings/visitor-space-settings___de-bezoekersruimte-werd-succesvol-aangemaakt'
 					),
 				});
@@ -96,8 +96,8 @@ const VisitorSpaceSettings = forwardRef<
 		console.error('Failed to save the visitor space', err);
 		toastService.notify({
 			maxLines: 3,
-			title: t('pages/beheer/instellingen/index___⚠️-er-ging-iets-mis'),
-			description: t(
+			title: tHtml('pages/beheer/instellingen/index___⚠️-er-ging-iets-mis'),
+			description: tHtml(
 				'pages/beheer/instellingen/index___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
 			),
 		});
@@ -122,8 +122,8 @@ const VisitorSpaceSettings = forwardRef<
 
 				toastService.notify({
 					maxLines: 3,
-					title: t('pages/beheer/instellingen/index___succes'),
-					description: t(
+					title: tHtml('pages/beheer/instellingen/index___succes'),
+					description: tHtml(
 						'pages/beheer/instellingen/index___de-wijzigingen-werden-succesvol-opgeslagen'
 					),
 				});
@@ -156,12 +156,12 @@ const VisitorSpaceSettings = forwardRef<
 		action === 'edit' ? (
 			<div className={styles['c-cp-settings__cancel-save']}>
 				<Button
-					label={t('pages/beheer/instellingen/index___annuleer')}
+					label={tHtml('pages/beheer/instellingen/index___annuleer')}
 					variants="text"
 					onClick={onCancel}
 				/>
 				<Button
-					label={t('pages/beheer/instellingen/index___bewaar-wijzigingen')}
+					label={tHtml('pages/beheer/instellingen/index___bewaar-wijzigingen')}
 					variants="black"
 					onClick={onSave}
 				/>
@@ -175,13 +175,13 @@ const VisitorSpaceSettings = forwardRef<
 			{showSiteSettings && (
 				<article className={styles['c-cp-settings__content-block']}>
 					<h2 className={styles['c-cp-settings__title']}>
-						{t(
+						{tHtml(
 							'modules/cp/components/visitor-space-settings/visitor-space-settings___site-instellingen'
 						)}
 					</h2>
 					<Box className={styles['c-cp-settings__box']}>
 						<p className={styles['c-cp-settings__description']}>
-							{t(
+							{tHtml(
 								'modules/cp/components/visitor-space-settings/visitor-space-settings___stel-de-naam-en-de-slug-van-een-bezoekersruimte-in'
 							)}
 						</p>
@@ -205,11 +205,11 @@ const VisitorSpaceSettings = forwardRef<
 			{/* Bezoekersruimte */}
 			<article className={styles['c-cp-settings__content-block']}>
 				<h2 className={styles['c-cp-settings__title']}>
-					{t('pages/beheer/instellingen/index___bezoekersruimte')}
+					{tHtml('pages/beheer/instellingen/index___bezoekersruimte')}
 				</h2>
 				<Box className={styles['c-cp-settings__box']}>
 					<p className={styles['c-cp-settings__description']}>
-						{t(
+						{tHtml(
 							'pages/beheer/instellingen/index___personaliseer-hoe-jouw-bezoekersruimte-in-het-aanbod-mag-verschijnen-op-het-bezoekersruimtes-overzicht-naast-een-standaard-achtergrondkleur-kan-je-ook-een-thematische-achtergrond-afbeelding-instellen'
 						)}
 					</p>
@@ -232,7 +232,7 @@ const VisitorSpaceSettings = forwardRef<
 			<article className={styles['c-cp-settings__content-block']}>
 				<label htmlFor={labelKeys.description} id={`${labelKeys.description}__label`}>
 					<h2 className={styles['c-cp-settings__title']}>
-						{t('pages/beheer/instellingen/index___omschrijving-wachtzaal')}
+						{tHtml('pages/beheer/instellingen/index___omschrijving-wachtzaal')}
 					</h2>
 				</label>
 
@@ -241,7 +241,7 @@ const VisitorSpaceSettings = forwardRef<
 						className={styles['c-cp-settings__description']}
 						id={`${labelKeys.description}__description`}
 					>
-						{t(
+						{tHtml(
 							'pages/beheer/instellingen/index___dit-is-de-wachtzaalomschrijving-die-bezoekers-kunnen-lezen-op-de-detailpagina-van-je-bezoekersruimte-leg-uit-waar-je-bezoekersruimte-om-gaat-welke-info-men-er-kan-vinden-vertel-de-bezoeker-over-je-collectie'
 						)}
 					</p>
@@ -277,7 +277,7 @@ const VisitorSpaceSettings = forwardRef<
 					id={`${labelKeys.serviceDescription}__label`}
 				>
 					<h2 className={styles['c-cp-settings__title']}>
-						{t(
+						{tHtml(
 							'pages/beheer/instellingen/index___omschrijving-bezoekersruimte-aanvraag'
 						)}
 					</h2>
@@ -288,7 +288,7 @@ const VisitorSpaceSettings = forwardRef<
 						className={styles['c-cp-settings__description']}
 						id={`${labelKeys.serviceDescription}__description`}
 					>
-						{t(
+						{tHtml(
 							'pages/beheer/instellingen/index___als-bezoekers-een-aanvraag-doen-kunnen-zij-een-klein-tekstje-lezen-met-extra-info-over-het-bezoek-bv-vraag-meer-info-aan-balie-2-bij-aankomst-of-elke-dag-geopend-van-10-00-tot-17-00'
 						)}
 					</p>

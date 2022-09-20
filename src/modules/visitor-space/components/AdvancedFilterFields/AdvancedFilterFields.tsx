@@ -9,12 +9,12 @@ import {
 	TextInputProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 import { SingleValue } from 'react-select';
 
 import { Icon } from '@shared/components';
 import { SEPARATOR } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { Operator } from '@shared/types';
 import { MetadataFieldProps } from '@visitor-space/const';
 
@@ -48,7 +48,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onChange,
 	onRemove,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	// Computed
 
@@ -174,7 +174,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			<FormControl
 				className="c-form-control--label-hidden"
 				id={`${labelKeys.property}__${index}`}
-				label={t(
+				label={tHtml(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___veldnaam'
 				)}
 			>
@@ -199,7 +199,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			<FormControl
 				className="c-form-control--label-hidden"
 				id={`${labelKeys.operator}__${index}`}
-				label={t(
+				label={tHtml(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___operator'
 				)}
 			>
@@ -223,7 +223,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					'c-form-control--label-hidden'
 				)}
 				id={`${labelKeys.value}__${index}`}
-				label={t(
+				label={tHtml(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___waarde'
 				)}
 			>
@@ -234,7 +234,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				{index > 0 && (
 					<Button
 						icon={<Icon name="trash" aria-hidden />}
-						aria-label={t(
+						aria-label={tText(
 							'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___criterium-verwijderen'
 						)}
 						variants="black"

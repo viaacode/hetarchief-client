@@ -1,9 +1,8 @@
 import { Table } from '@meemoo/react-components';
 import { GetServerSideProps, NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -21,6 +20,7 @@ import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, OrderDirection, Visit, VisitStatus } from '@shared/types';
 import { createHomeWithVisitorSpaceFilterUrl, createPageTitle } from '@shared/utils';
@@ -31,7 +31,7 @@ import { VisitTimeframe } from '@visits/types';
 import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyHistory: NextPage = () => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 
@@ -96,9 +96,9 @@ const AccountMyHistory: NextPage = () => {
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: t('pages/account/mijn-historiek/index___error'),
+				title: tHtml('pages/account/mijn-historiek/index___error'),
 				maxLines: 2,
-				description: t(
+				description: tHtml(
 					'pages/account/mijn-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
 				),
 			});
@@ -108,19 +108,19 @@ const AccountMyHistory: NextPage = () => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
-		return t('pages/account/mijn-historiek/index___geen-historiek');
+	const renderEmptyMessage = (): string | ReactNode => {
+		return tHtml('pages/account/mijn-historiek/index___geen-historiek');
 	};
 
 	return (
 		<VisitorLayout>
 			<Head>
 				<title>
-					{createPageTitle(t('pages/account/mijn-historiek/index___mijn-historiek'))}
+					{createPageTitle(tText('pages/account/mijn-historiek/index___mijn-historiek'))}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/account/mijn-historiek/index___mijn-historiek-meta-omschrijving'
 					)}
 				/>
@@ -128,7 +128,7 @@ const AccountMyHistory: NextPage = () => {
 
 			<AccountLayout
 				className="p-account-my-history"
-				pageTitle={t('pages/account/mijn-historiek/index___mijn-historiek')}
+				pageTitle={tHtml('pages/account/mijn-historiek/index___mijn-historiek')}
 			>
 				{(visits.data?.items?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
@@ -138,10 +138,7 @@ const AccountMyHistory: NextPage = () => {
 								// TODO: fix type hinting
 								/* eslint-disable @typescript-eslint/ban-types */
 								{
-									columns: HistoryTableColumns(
-										{ t },
-										onClickRow
-									) as Column<object>[],
+									columns: HistoryTableColumns(onClickRow) as Column<object>[],
 									data: visits.data?.items || [],
 									initialState: {
 										pageSize: HistoryItemListSize,
@@ -181,6 +178,6 @@ const AccountMyHistory: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default withAuth(withAllRequiredPermissions(AccountMyHistory, Permission.MANAGE_ACCOUNT));

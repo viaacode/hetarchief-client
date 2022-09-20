@@ -7,7 +7,7 @@ import { AdminVisitorSpaceInfoRow } from '@admin/types';
 import { DropdownMenu, Icon } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
-import { i18n } from '@shared/helpers/i18n';
+import { tText } from '@shared/helpers/translate';
 import { OrderDirection } from '@shared/types';
 import { asDate, formatMediumDate } from '@shared/utils';
 import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
@@ -28,12 +28,12 @@ export const VisitorSpacesOverviewTableColumns = (
 	showStatusDropdown = false
 ): Column<VisitorSpaceInfo>[] => [
 	{
-		Header: i18n.t('modules/admin/const/spaces___bezoekersruimte'),
+		Header: tText('modules/admin/const/spaces___bezoekersruimte'),
 		id: VisitorSpaceOrderProps.ContentPartnerName,
 		accessor: 'name',
 	},
 	{
-		Header: i18n.t('modules/admin/const/spaces___geactiveerd-op'),
+		Header: tText('modules/admin/const/spaces___geactiveerd-op'),
 		id: VisitorSpaceOrderProps.CreatedAt,
 		accessor: 'createdAt',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
@@ -46,7 +46,7 @@ export const VisitorSpacesOverviewTableColumns = (
 		},
 	},
 	{
-		Header: i18n.t('modules/admin/const/spaces___emailadres'),
+		Header: tText('modules/admin/const/spaces___emailadres'),
 		id: 'email',
 		accessor: 'contactInfo.email',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
@@ -60,7 +60,7 @@ export const VisitorSpacesOverviewTableColumns = (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} as any,
 	{
-		Header: i18n.t('modules/admin/const/spaces___telefoonnummer'),
+		Header: tText('modules/admin/const/spaces___telefoonnummer'),
 		id: 'telephone',
 		accessor: 'contactInfo.telephone',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
@@ -74,7 +74,7 @@ export const VisitorSpacesOverviewTableColumns = (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} as any,
 	{
-		Header: i18n.t('modules/admin/const/spaces___publicatiestatus'),
+		Header: tText('modules/admin/const/spaces___publicatiestatus'),
 		id: VisitorSpaceOrderProps.Status,
 		accessor: 'status',
 		Cell: ({ row }: AdminVisitorSpaceInfoRow) => {
@@ -115,7 +115,7 @@ export const VisitorSpacesOverviewTableColumns = (
 						>
 							<a
 								className="u-color-neutral u-font-size-24"
-								aria-label={i18n.t('modules/admin/const/spaces___aanpassen')}
+								aria-label={tText('modules/admin/const/spaces___aanpassen')}
 							>
 								<Icon name="edit" />
 							</a>
@@ -134,7 +134,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
-									label={i18n.t('modules/admin/const/spaces___activeren')}
+									label={tText('modules/admin/const/spaces___activeren')}
 									onClick={() =>
 										updateVisitorSpaceState(
 											row.original.id,
@@ -149,7 +149,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
-									label={i18n.t('modules/admin/const/spaces___deactiveren')}
+									label={tText('modules/admin/const/spaces___deactiveren')}
 									onClick={() =>
 										updateVisitorSpaceState(
 											row.original.id,
@@ -164,7 +164,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
-									label={i18n.t(
+									label={tText(
 										'modules/admin/const/spaces___terug-naar-in-aanvraag'
 									)}
 									onClick={() =>

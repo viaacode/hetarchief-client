@@ -2,12 +2,12 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
-import { useTranslation } from 'next-i18next';
 import { FC, useEffect } from 'react';
 
 import { globalLabelKeys } from '@shared/const';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { Icon } from '../Icon';
 import { Overlay } from '../Overlay';
@@ -28,7 +28,7 @@ const Blade: FC<BladeProps> = ({
 	onClose,
 	layer,
 }) => {
-	const { t } = useTranslation();
+	const { tText } = useTranslation();
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
@@ -47,7 +47,7 @@ const Blade: FC<BladeProps> = ({
 					[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
 				})}
 				icon={<Icon name="times" aria-hidden />}
-				aria-label={t('modules/shared/components/blade/blade___sluiten')}
+				aria-label={tText('modules/shared/components/blade/blade___sluiten')}
 				variants="text"
 				onClick={() => {
 					if (isLayered && onCloseBlade) {

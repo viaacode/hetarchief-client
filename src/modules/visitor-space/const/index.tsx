@@ -1,9 +1,9 @@
 import { TabProps } from '@meemoo/react-components';
-import { ArrayParam, BooleanParam, NumberParam, StringParam, withDefault } from 'use-query-params';
+import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
-import { i18n } from '@shared/helpers/i18n';
+import { tText } from '@shared/helpers/translate';
 import { OrderDirection, VisitorSpaceMediaType } from '@shared/types';
 
 import {
@@ -74,17 +74,17 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 export const VISITOR_SPACE_TABS = (): TabProps[] => [
 	{
 		id: VisitorSpaceMediaType.All,
-		label: i18n.t('modules/visitor-space/const/index___alles'),
+		label: tText('modules/visitor-space/const/index___alles'),
 	},
 	{
 		id: VisitorSpaceMediaType.Video,
 		icon: <Icon name="video" aria-hidden />,
-		label: i18n.t('modules/visitor-space/const/index___videos'),
+		label: tText('modules/visitor-space/const/index___videos'),
 	},
 	{
 		id: VisitorSpaceMediaType.Audio,
 		icon: <Icon name="audio" aria-hidden />,
-		label: i18n.t('modules/visitor-space/const/index___audio'),
+		label: tText('modules/visitor-space/const/index___audio'),
 	},
 ];
 
@@ -93,85 +93,85 @@ export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 export const VISITOR_SPACE_FILTERS = (): FilterMenuFilterOption[] => [
 	{
 		id: VisitorSpaceFilterId.Medium,
-		label: i18n.t('modules/visitor-space/const/index___analoge-drager'),
+		label: tText('modules/visitor-space/const/index___analoge-drager'),
 		form: MediumFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Duration,
-		label: i18n.t('modules/visitor-space/const/index___duurtijd'),
+		label: tText('modules/visitor-space/const/index___duurtijd'),
 		form: DurationFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Created,
-		label: i18n.t('modules/visitor-space/const/index___creatiedatum'),
+		label: tText('modules/visitor-space/const/index___creatiedatum'),
 		form: CreatedFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Published,
-		label: i18n.t('modules/visitor-space/const/index___publicatiedatum'),
+		label: tText('modules/visitor-space/const/index___publicatiedatum'),
 		form: PublishedFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Creator,
-		label: i18n.t('modules/visitor-space/const/index___maker'),
+		label: tText('modules/visitor-space/const/index___maker'),
 		form: CreatorFilterForm,
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
 	// {
 	// 	id: VisitorSpaceFilterId.Genre,
-	// 	label: i18n.t('modules/visitor-space/const/index___genre'),
+	// 	label: tText('modules/visitor-space/const/index___genre'),
 	// 	form: GenreFilterForm,
 	// },
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
 	// {
 	// 	id: VisitorSpaceFilterId.Keywords,
-	// 	label: i18n.t('modules/visitor-space/const/index___trefwoorden'),
+	// 	label: tText('modules/visitor-space/const/index___trefwoorden'),
 	// 	form: KeywordsFilterForm,
 	// },
 	{
 		id: VisitorSpaceFilterId.Language,
-		label: i18n.t('modules/visitor-space/const/index___taal'),
+		label: tText('modules/visitor-space/const/index___taal'),
 		form: LanguageFilterForm,
 	},
 	{
 		id: VisitorSpaceFilterId.Advanced,
 		icon: 'dots-horizontal',
-		label: i18n.t('modules/visitor-space/const/index___geavanceerd'),
+		label: tText('modules/visitor-space/const/index___geavanceerd'),
 		form: AdvancedFilterForm,
 	},
 ];
 
 export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in VisitorSpaceSort]: string } => ({
-	[VisitorSpaceSort.Date]: i18n.t('modules/visitor-space/const/index___sorteer-op-datum'),
-	[VisitorSpaceSort.Relevance]: i18n.t(
+	[VisitorSpaceSort.Date]: tText('modules/visitor-space/const/index___sorteer-op-datum'),
+	[VisitorSpaceSort.Relevance]: tText(
 		'modules/visitor-space/const/index___sorteer-op-relevantie'
 	),
-	[VisitorSpaceSort.Title]: i18n.t('modules/visitor-space/const/index___sorteer-op-titel'),
+	[VisitorSpaceSort.Title]: tText('modules/visitor-space/const/index___sorteer-op-titel'),
 });
 
 export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	{
-		label: i18n.t('modules/visitor-space/const/index___relevantie'),
+		label: tText('modules/visitor-space/const/index___relevantie'),
 		orderProp: VisitorSpaceSort.Relevance,
 	},
 	{
-		label: i18n.t('modules/visitor-space/const/index___datum-oplopend'),
+		label: tText('modules/visitor-space/const/index___datum-oplopend'),
 		orderProp: VisitorSpaceSort.Date,
 		orderDirection: OrderDirection.asc,
 	},
 	{
-		label: i18n.t('modules/visitor-space/const/index___datum-aflopend'),
+		label: tText('modules/visitor-space/const/index___datum-aflopend'),
 		orderProp: VisitorSpaceSort.Date,
 		orderDirection: OrderDirection.desc,
 	},
 	// schema_name niet sorteerbaar in https://meemoo.atlassian.net/wiki/pages/viewpage.action?pageId=3309174878&pageVersion=3
 	// {
-	// 	label: i18n.t('modules/visitor-space/const/index___van-a-tot-z'),
+	// 	label: tText('modules/visitor-space/const/index___van-a-tot-z'),
 	// 	orderProp: VisitorSpaceSort.Title,
 	// 	orderDirection: OrderDirection.asc,
 	// },
 	// {
-	// 	label: i18n.t('modules/visitor-space/const/index___van-z-tot-a'),
+	// 	label: tText('modules/visitor-space/const/index___van-z-tot-a'),
 	// 	orderProp: VisitorSpaceSort.Title,
 	// 	orderDirection: OrderDirection.desc,
 	// },
@@ -181,19 +181,19 @@ export const VisitorSpaceStatusOptions = (): TabProps[] => {
 	return [
 		{
 			id: 'ALL',
-			label: i18n.t('modules/visitor-space/const/index___alles'),
+			label: tText('modules/visitor-space/const/index___alles'),
 		},
 		{
 			id: VisitorSpaceStatus.Requested,
-			label: i18n.t('modules/visitor-space/const/index___in-aanvraag'),
+			label: tText('modules/visitor-space/const/index___in-aanvraag'),
 		},
 		{
 			id: VisitorSpaceStatus.Active,
-			label: i18n.t('modules/visitor-space/const/index___gepubliceerd'),
+			label: tText('modules/visitor-space/const/index___gepubliceerd'),
 		},
 		{
 			id: VisitorSpaceStatus.Inactive,
-			label: i18n.t('modules/visitor-space/const/index___gedepubliceerd'),
+			label: tText('modules/visitor-space/const/index___gedepubliceerd'),
 		},
 	];
 };

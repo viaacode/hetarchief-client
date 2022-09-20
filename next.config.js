@@ -30,6 +30,10 @@ module.exports = withTM({
 	webpack: (config) => {
 		// Required for ky-universal top level await used in admin core inside the api service
 		config.experiments = { topLevelAwait: true, layers: true };
+
+		// https://stackoverflow.com/a/68098547/373207
+		config.resolve.fallback = { fs: false, path: false };
+
 		return config;
 	},
 	typescript: {

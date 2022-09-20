@@ -1,6 +1,5 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from 'react';
 
@@ -8,6 +7,7 @@ import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@media/const';
 import { MediaRepresentation } from '@media/types';
 import { Icon } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
@@ -20,7 +20,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 	fragments,
 	onChangeFragment,
 }) => {
-	const { t } = useTranslation();
+	const { tText } = useTranslation();
 	const [offset, setOffset] = useState<number>(0);
 	const [active, setActive] = useState<number>(0);
 	const [isBlurred, setIsBlurred] = useState<boolean>(true);
@@ -96,7 +96,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 				tabIndex={-1}
 				className={styles['c-fragment-slider__nav-button']}
 				icon={<Icon name="angle-left" aria-hidden />}
-				aria-label={t(
+				aria-label={tText(
 					'modules/media/components/fragment-slider/fragment-slider___naar-het-vorige-fragment'
 				)}
 				variants="black"
@@ -178,7 +178,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 				tabIndex={-1}
 				className={styles['c-fragment-slider__nav-button']}
 				icon={<Icon name="angle-right" aria-hidden />}
-				aria-label={t(
+				aria-label={tText(
 					'modules/media/components/fragment-slider/fragment-slider___naar-het-volgende-fragment'
 				)}
 				variants="black"

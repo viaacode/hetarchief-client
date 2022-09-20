@@ -1,13 +1,12 @@
 import {
+	AdminConfig,
+	AdminConfigManager,
 	AvoOrHetArchief,
 	CommonUser,
-	Config,
-	ConfigValue,
 	ContentBlockType,
 	LinkInfo,
 	ToastInfo,
 } from '@meemoo/react-admin';
-import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,9 +17,10 @@ import { useSelector } from 'react-redux';
 import { PermissionsService, UserGroupsService } from '@admin/services';
 import { selectUser } from '@auth/store/user';
 import { navigationService } from '@navigation/services/navigation-service';
-import { sortingIcons } from '@shared/components';
+import { Icon, IconName, IconProps, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTE_PARTS } from '@shared/const';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
@@ -49,7 +49,7 @@ const onSaveContentPage = async (contentPageInfo: { path: string }) => {
 export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentType => {
 	return function withAdminCoreConfig(props: Record<string, unknown>) {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
-		const [adminCoreConfig, setAdminCoreConfig] = useState<ConfigValue | null>(null);
+		const [adminCoreConfig, setAdminCoreConfig] = useState<AdminConfig | null>(null);
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const user = useSelector(selectUser);
 		// eslint-disable-next-line react-hooks/rules-of-hooks
@@ -57,10 +57,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const initConfigValue = useCallback(() => {
-			if (!i18n) {
-				return;
-			}
-
 			const commonUser: CommonUser = {
 				uid: user?.id,
 				profileId: user?.id as string,
@@ -79,7 +75,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				permissions: user?.permissions as any[],
 			};
 
-			const config: ConfigValue = {
+			const config: AdminConfig = {
 				navigation: {
 					service: navigationService,
 					views: {
@@ -127,15 +123,21 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				navigationBars: { enableIcons: false },
 				icon: {
-					component: ({ name }: { name: string }) => <span>{name}</span>,
+					component: ({ name }: { name: IconName }) => <Icon name={name} />,
 					componentProps: {
-						add: { name: 'add' },
-						view: { name: 'view' },
-						angleDown: { name: 'down' },
-						angleUp: { name: 'up' },
-						delete: { name: 'delete' },
+						add: { name: 'plus' },
+						view: { name: 'show' },
+						angleDown: { name: 'angle-down' },
+						angleUp: { name: 'angle-up' },
+						angleLeft: { name: 'angle-left' },
+						angleRight: { name: 'angle-right' },
+						delete: { name: 'trash' },
 						edit: { name: 'edit' },
-					},
+						filter: { name: 'search' },
+						arrowUp: { name: 'arrow-up' },
+						sortTable: { name: 'sort-table' },
+						arrowDown: { name: 'arrow-down' },
+					} as Record<string, IconProps>,
 					list: [],
 				},
 				components: {
@@ -145,6 +147,40 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					table: {
 						sortingIcons,
 					},
+					buttonTypes: () => [
+						{
+							label: tText('Zilver'),
+							value: 'content-page-button--silver',
+						},
+						{
+							label: tText('Blauw groen'),
+							value: 'content-page-button--teal',
+						},
+						{
+							label: tText('Wit'),
+							value: 'content-page-button--white',
+						},
+						{
+							label: tText('Zwart'),
+							value: 'content-page-button--black',
+						},
+						{
+							label: tText('Outline'),
+							value: 'content-page-button--outline',
+						},
+						{
+							label: tText('Tekst'),
+							value: 'content-page-button--text',
+						},
+						{
+							label: tText('Rood'),
+							value: 'content-page-button--red',
+						},
+						{
+							label: tText('Link'),
+							value: 'content-page-button--link',
+						},
+					],
 				},
 				services: {
 					toastService: {
@@ -155,7 +191,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							});
 						},
 					},
-					i18n,
+					i18n: { tHtml, tText },
 					educationOrganisationService: {
 						fetchEducationOrganisationName: () => Promise.resolve(null),
 						fetchCities: () => Promise.resolve([]),
@@ -196,7 +232,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				user: commonUser,
 			};
-			Config.setConfig(config);
+			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
 		}, []);
 
