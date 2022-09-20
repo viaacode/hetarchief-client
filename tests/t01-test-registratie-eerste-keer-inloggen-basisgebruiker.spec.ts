@@ -60,7 +60,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await recaptcha.click();
 
 	// Wait for recaptcha to show green checkmark
-	const greenCheckmark = await recapchaFrame.locator('.recaptcha-checkbox-checkmark');
+	const greenCheckmark = await recapchaFrame.locator('.recaptcha-checkbox-checked');
 	await greenCheckmark.waitFor({
 		timeout: 10000,
 		state: 'visible',

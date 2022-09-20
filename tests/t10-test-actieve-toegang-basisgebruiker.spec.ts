@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import { acceptCookies } from './helpers/accept-cookies';
 import { getSearchTabBarCounts } from './helpers/get-search-tab-bar-counts';
 import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
+import { waitForSearchResults } from './helpers/wait-for-search-results';
 
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
@@ -39,13 +40,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.click('text=Start je zoekopdracht');
 
 	// Wait for search page to be ready
-	await page.waitForFunction(
-		() => document.querySelectorAll('.p-visitor-space__placeholder').length === 1,
-		null,
-		{
-			timeout: 10000,
-		}
-	);
+	await waitForSearchResults(page);
 
 	// Check VRT in sub navigation
 	const subNavigationTitle = await page.locator(

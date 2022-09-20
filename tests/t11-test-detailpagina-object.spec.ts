@@ -118,6 +118,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Change metadata sidebar size
 	await page.locator('.p-object-detail__wrapper').locator('text=expand-left').click();
 
+	// Wait for animation
+	await page.waitForTimeout(1000);
+
 	// Get sidebar width after expand
 	const sidebarWidthAfterExpand =
 		(await (await page.$('.p-object-detail__metadata'))?.boundingBox())?.width || 0;
