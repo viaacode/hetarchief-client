@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { format } from 'date-fns';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { addContentBlock } from './helpers/add-content-block';
-import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
-import { checkSpaceVisibilityHomepage } from './helpers/check-space-visibility-homepage';
-import { checkToastMessage } from './helpers/check-toast-message';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { addContentBlock } from '../helpers/add-content-block';
+import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
+import { checkSpaceVisibilityHomepage } from '../helpers/check-space-visibility-homepage';
+import { checkToastMessage } from '../helpers/check-toast-message';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, context }) => {
 	// Go to the hetarchief homepage

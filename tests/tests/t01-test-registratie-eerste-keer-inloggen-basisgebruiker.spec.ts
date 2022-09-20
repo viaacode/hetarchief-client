@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { uuid } from 'uuidv4';
 
-import { USER_PASSWORD } from './consts/tests.consts';
-import { acceptCookies } from './helpers/accept-cookies';
-import { acceptTos } from './helpers/accept-tos';
-import { acmConfirmEmail } from './helpers/acm-confirm-email';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
+import { USER_PASSWORD } from '../consts/tests.consts';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { acceptTos } from '../helpers/accept-tos';
+import { acmConfirmEmail } from '../helpers/acm-confirm-email';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 /**
  * These scenarios are described in https://docs.google.com/spreadsheets/d/1yGNKFkeE-2Kv2mADOvKzDK3BYTvoiSbVO6pAsuoG5P8/edit#gid=286710078

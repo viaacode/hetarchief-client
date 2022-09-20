@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
-import { checkBladeTitle } from './helpers/check-blade-title';
-import { checkToastMessage } from './helpers/check-toast-message';
-import { getFolderObjectCounts } from './helpers/get-folder-object-counts';
-import { getSearchTabBarCounts } from './helpers/get-search-tab-bar-counts';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
-import { waitForSearchResults } from './helpers/wait-for-search-results';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
+import { checkBladeTitle } from '../helpers/check-blade-title';
+import { checkToastMessage } from '../helpers/check-toast-message';
+import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
+import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
 test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage

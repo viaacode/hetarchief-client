@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { getSearchTabBarCounts } from './helpers/get-search-tab-bar-counts';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
-import { waitForSearchResults } from './helpers/wait-for-search-results';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage

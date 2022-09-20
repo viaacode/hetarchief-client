@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { checkToastMessage } from './helpers/check-toast-message';
-import { clickToastMessageButton } from './helpers/click-toast-message-button';
-import { getFolderObjectCounts } from './helpers/get-folder-object-counts';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { checkToastMessage } from '../helpers/check-toast-message';
+import { clickToastMessageButton } from '../helpers/click-toast-message-button';
+import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
