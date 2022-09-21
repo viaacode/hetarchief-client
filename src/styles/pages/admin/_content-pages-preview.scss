@@ -152,6 +152,10 @@ $l-container-padding-xs: 2rem;
 				color: black;
 			}
 		}
+
+		a {
+			text-decoration: none;
+		}
 	}
 
 	[class*="c-button--content-page-button--"] {
