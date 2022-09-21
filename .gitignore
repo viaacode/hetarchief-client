@@ -48,4 +48,3 @@ tests/test-results/
 tests/videos/
 tests/videos-docker/
 tests/node_modules
-*.local.yml

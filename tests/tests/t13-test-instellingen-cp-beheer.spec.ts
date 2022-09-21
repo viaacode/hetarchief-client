@@ -63,7 +63,7 @@ test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 	});
 	const fileUploadField = await uploadFileSection.locator('input[type="file"]');
 	await expect(fileUploadField.first()).toBeDefined();
-	await fileUploadField.setInputFiles(['tests/fixtures/new-cover-photo.jpg']);
+	await fileUploadField.setInputFiles(['fixtures/new-cover-photo.jpg']);
 
 	// Check background image is displayed
 	await expect(
