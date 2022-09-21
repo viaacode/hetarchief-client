@@ -1,5 +1,5 @@
 import { Table } from '@meemoo/react-components';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
