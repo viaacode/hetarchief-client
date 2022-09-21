@@ -50,23 +50,25 @@
 		margin-top: $spacer-lg;
 	}
 
-	.c-checkbox-group {
-		border: 1px solid grey;
-		border-radius: $input-border-radius;
-		background-color: $white;
-		padding: 1px;
-
-		.c-checkbox {
-			display: block;
-			padding: 1.5rem;
+	.c-user-group-select {
+		.c-checkbox-group {
+			border: 1px solid grey;
 			border-radius: $input-border-radius;
+			background-color: $white;
+			padding: 1px;
 
-			&:hover {
-				background-color: $platinum;
-			}
+			.c-checkbox {
+				display: block;
+				padding: 1.5rem;
+				border-radius: $input-border-radius;
 
-			.c-checkbox__check-icon {
-				margin: 1.5rem 2.2rem;
+				&:hover {
+					background-color: $platinum;
+				}
+
+				.c-checkbox__check-icon {
+					margin: 1.5rem 2.2rem;
+				}
 			}
 		}
 	}
