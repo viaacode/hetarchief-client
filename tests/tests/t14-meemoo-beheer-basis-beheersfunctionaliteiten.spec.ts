@@ -82,7 +82,7 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await amsabRow1.locator('.c-button', { hasText: 'dots-vertical' }).click();
 
 	// Check the "back to pending" option
-	await amsabRow1.locator('.c-button', { hasText: 'Terug naar in aanvraag' }).click();
+	await amsabRow1.locator('.c-button[name="set-status-pending-space"]').click();
 
 	// Check success toast
 	await checkToastMessage(page, 'Succes');
@@ -117,11 +117,15 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await amsabRow2.locator('.c-button', { hasText: 'dots-vertical' }).click();
 
 	// Check correct options are shown:
-	await expect(amsabRow2.locator('.c-button', { hasText: 'publiceren' }).first()).toBeVisible();
-	await expect(amsabRow2.locator('.c-button', { hasText: 'deactiveren' }).last()).toBeVisible();
+	await expect(
+		amsabRow2.locator('.c-button[name="set-status-activated-space"]').first()
+	).toBeVisible();
+	await expect(
+		amsabRow2.locator('.c-button[name="set-status-deactivated-space"]').last()
+	).toBeVisible();
 
 	// Click on activate
-	await amsabRow2.locator('.c-button', { hasText: 'publiceren' }).first().click();
+	await amsabRow2.locator('.c-button[name="set-status-activated-space"]').first().click();
 
 	// Check success toast
 	await checkToastMessage(page, 'Succes');
@@ -131,6 +135,8 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	 */
 
 	await checkSpaceVisibilityHomepage(page, 'amsab', true);
+
+	await page.waitForTimeout(1000);
 
 	/**
 	 * Users
@@ -605,7 +611,8 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await addContentBlock(page, 'Titel');
 
 	// Check title block config is added
-	const contentBlockForm1 = await page.locator('.o-sidebar__content .c-content-block-form');
+	const contentBlockForm1 = await page.locator('.content-block-sidebar-0 .c-content-block-form');
+	await expect(contentBlockForm1).toBeVisible();
 	await expect(
 		await contentBlockForm1.locator('.c-accordion__header-title', {
 			hasText: 'Titel (1/1)',
@@ -629,9 +636,8 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await addContentBlock(page, 'Tekst');
 
 	// Check tekst block config is added
-	const contentBlockForm2 = await page
-		.locator('.o-sidebar__content .c-content-block-form')
-		.nth(1);
+	const contentBlockForm2 = await page.locator('.content-block-sidebar-1 .c-content-block-form');
+	await expect(contentBlockForm2).toBeVisible();
 	await expect(
 		await contentBlockForm2.locator('.c-accordion__header-title', {
 			hasText: 'Tekst (2/2)',
@@ -778,9 +784,8 @@ test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, contex
 	await addContentBlock(page, 'Tekst');
 
 	// Check tekst block config is added
-	const contentBlockForm3 = await page
-		.locator('.o-sidebar__content .c-content-block-form')
-		.nth(2);
+	const contentBlockForm3 = await page.locator('.content-block-sidebar-2 .c-content-block-form');
+	await expect(contentBlockForm3).toBeVisible();
 	await expect(
 		await contentBlockForm3.locator('.c-accordion__header-title', {
 			hasText: 'Tekst (3/3)',

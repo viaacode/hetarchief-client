@@ -9,7 +9,10 @@ import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
-test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
+test('T12: Test einde sessie bezoekertool', async ({ page, context }) => {
+	// We need to wait for multiple notifications that are only checked every minute
+	test.setTimeout(300 * 1000);
+
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 

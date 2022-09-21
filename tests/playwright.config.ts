@@ -1,5 +1,4 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
-import { devices } from '@playwright/test';
 
 /**
  * Read environment variables from file.
@@ -13,7 +12,7 @@ import { devices } from '@playwright/test';
 const config: PlaywrightTestConfig = {
 	testDir: './tests',
 	/* Maximum time one test can run for. */
-	timeout: 300 * 1000, // High value needed to be able to wait for access approved notifications
+	timeout: 60 * 1000, // T12 makes an exception, for waiting for notifications to come in
 	expect: {
 		/**
 		 * Maximum time expect() should wait for the condition to be met.
