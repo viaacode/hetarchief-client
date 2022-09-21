@@ -116,13 +116,13 @@
 	}
 
 	.m-menu-edit-form {
-		border-radius: 1.9;
+		border-radius: 1.9rem;
 	}
 
 	.o-form-group__controls {
 		div[class*="control"] {
 			height: 5.6rem;
-			border-radius: 2.8rem;
+			border-radius: $input-border-radius;
 
 			div[class*="placeholder"] {
 				color: $zinc;
