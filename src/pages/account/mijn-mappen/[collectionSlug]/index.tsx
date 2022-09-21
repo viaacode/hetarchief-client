@@ -1,7 +1,7 @@
 import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -286,7 +286,7 @@ const AccountMyCollections: NextPage = () => {
 				  ]
 				: []),
 		];
-	}, [tHtml, activeCollection, getCollectionExport, canDownloadMetadata]);
+	}, [canDownloadMetadata, tText, activeCollection, getCollectionExport, tHtml]);
 
 	const renderActions = (item: IdentifiableMediaCard, collection: Folder) => (
 		<>
