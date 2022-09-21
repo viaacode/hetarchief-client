@@ -1,6 +1,6 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { HTTPError } from 'ky';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
