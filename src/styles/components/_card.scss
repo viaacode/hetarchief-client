@@ -28,6 +28,12 @@ $component: "c-card";
 	.#{$component}__bottom-wrapper {
 		flex-grow: 1;
 		min-width: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.#{$component}__children-wrapper {
+		flex-grow: 1;
 	}
 
 	.#{$component}__image-wrapper {
@@ -143,7 +149,6 @@ $component: "c-card";
 	&__header-wrapper {
 		display: flex;
 		flex-flow: row nowrap;
-		flex-grow: 1;
 		min-width: 0;
 	}
 

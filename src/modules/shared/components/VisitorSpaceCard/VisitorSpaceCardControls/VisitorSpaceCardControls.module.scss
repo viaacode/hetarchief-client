@@ -4,14 +4,14 @@
 $component: "c-visitor-space-card-controls";
 
 .#{$component} {
+	align-items: center;
 	color: $black;
 	display: flex;
-	align-items: center;
 	flex-wrap: nowrap;
+	justify-content: space-between;
 
 	@include respond-to("md") {
 		flex-wrap: wrap;
-		justify-content: space-between;
 		row-gap: $spacer-xs;
 	}
 

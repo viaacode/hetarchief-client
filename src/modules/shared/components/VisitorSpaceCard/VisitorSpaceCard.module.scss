@@ -7,9 +7,14 @@ $component: "c-visitor-space-card";
 
 .#{$component} {
 	&__wrapper {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		justify-content: space-between;
+
 		&--flat {
-			display: flex;
-			flex-direction: column;
+			height: initial;
+			justify-content: initial;
 
 			@include respond-at("md") {
 				flex-direction: row;
