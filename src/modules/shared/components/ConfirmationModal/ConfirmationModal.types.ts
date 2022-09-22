@@ -9,8 +9,8 @@ export interface ConfirmationModalProps extends Pick<ModalProps, 'isOpen' | 'onC
 }
 
 export interface ConfirmationModalTranslations {
-	yes?: string;
-	no?: string;
-	title?: string;
+	yes?: string | ReactNode;
+	no?: string | ReactNode;
+	title?: string | ReactNode;
 	description?: ReactNode;
 }

@@ -1,4 +1,4 @@
-import { i18n } from '@shared/helpers/i18n';
+import { tText } from '@shared/helpers/translate';
 
 export * from './my-collections.const';
 export * from './my-history.const';
@@ -11,17 +11,17 @@ export const ACCOUNT_NAVIGATION_LINKS = (): {
 }[] => [
 	{
 		id: 'account-profile',
-		label: i18n.t('modules/account/const/index___mijn-profiel'),
+		label: tText('modules/account/const/index___mijn-profiel'),
 		href: '/account/mijn-profiel',
 	},
 	{
 		id: 'account-collections',
-		label: i18n.t('modules/account/const/index___mijn-mappen'),
+		label: tText('modules/account/const/index___mijn-mappen'),
 		href: '/account/mijn-mappen',
 	},
 	{
 		id: 'account-history',
-		label: i18n.t('modules/account/const/index___mijn-historiek'),
+		label: tText('modules/account/const/index___mijn-historiek'),
 		href: '/account/mijn-historiek',
 		hasDivider: true,
 	},

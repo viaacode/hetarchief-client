@@ -1,5 +1,7 @@
+import { ReactNode } from 'react';
+
 import { DefaultComponentProps } from '@shared/types';
 
 export interface CPAdminLayoutProps extends DefaultComponentProps {
-	pageTitle?: string;
+	pageTitle?: string | ReactNode;
 }

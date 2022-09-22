@@ -6,7 +6,6 @@ import {
 	StopPropagationFunction,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -14,6 +13,7 @@ import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { collectionsService } from '@account/services/collections';
 import { EditFolderFormState } from '@account/types';
 import { Icon } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './EditCollectionTitle.module.scss';
@@ -29,7 +29,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	collection,
 	onOpenNode = null,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [isOpen, setIsOpen] = useState(false);
 
 	/**
@@ -58,13 +58,13 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		const description = [errors.name?.message].join(' ');
 		description.length > 0 &&
 			toastService.notify({
-				title: t(
+				title: tHtml(
 					'modules/account/components/edit-folder-title/edit-folder-title___er-was-een-probleem-bij-het-aanpassen-van-de-titel-van-de-map'
 				),
 				maxLines: 2,
 				description,
 			});
-	}, [errors, t]);
+	}, [errors, tHtml]);
 
 	/**
 	 * Events
@@ -85,11 +85,11 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 				afterSubmit(response);
 
 				toastService.notify({
-					title: t(
+					title: tHtml(
 						'modules/account/components/edit-folder-title/edit-folder-title___name-is-aangepast',
 						values
 					),
-					description: t(
+					description: tHtml(
 						'modules/account/components/edit-folder-title/edit-folder-title___deze-map-is-successvol-aangepast'
 					),
 				});
@@ -110,11 +110,11 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 					onClick={handler}
 					className={styles['c-edit-folder-title__edit']}
 					variants={['silver']}
-					name={t(
+					name={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
 					)}
 					icon={<Icon name="edit" aria-hidden />}
-					aria-label={t(
+					aria-label={tText(
 						'modules/account/components/edit-collection-title/edit-collection-title___titel-aanpassen'
 					)}
 				/>
@@ -127,7 +127,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		<FormControl
 			className={clsx(styles['c-edit-folder-title'], 'c-form-control--label-hidden')}
 			id={labelKeys.name}
-			label={t(
+			label={tHtml(
 				'modules/account/components/edit-collection-title/edit-collection-title___map-aanpassen'
 			)}
 		>
@@ -147,7 +147,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 								tabIndex={-1}
 								variants={['silver']}
 								icon={<Icon name="times" aria-hidden />}
-								aria-label={t(
+								aria-label={tText(
 									'modules/account/components/edit-collection-title/edit-collection-title___titel-aanpassen-annuleren'
 								)}
 							/>
@@ -157,7 +157,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 								tabIndex={-1}
 								variants={['black']}
 								icon={<Icon name="check" aria-hidden />}
-								aria-label={t(
+								aria-label={tText(
 									'modules/account/components/edit-collection-title/edit-collection-title___nieuwe-titel-opslaan'
 								)}
 							/>

@@ -1,21 +1,22 @@
 import { ReactSelect, ReactSelectProps } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
 import { FC } from 'react';
+
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { MediaTypeOptions } from '../../types';
 
 const MediaTypeSelect: FC<ReactSelectProps> = (props) => {
-	const { t } = useTranslation();
+	const { tText } = useTranslation();
 
 	const options: MediaTypeOptions = [
 		{
-			label: t(
+			label: tText(
 				'modules/visitor-space/components/media-type-select/media-type-select___audio'
 			),
 			value: 'audio',
 		},
 		{
-			label: t(
+			label: tText(
 				'modules/visitor-space/components/media-type-select/media-type-select___video'
 			),
 			value: 'video',

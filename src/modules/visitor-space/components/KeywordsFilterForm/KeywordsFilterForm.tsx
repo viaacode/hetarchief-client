@@ -1,13 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, keysEnter, onKey, TagInfo, TagsInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC, KeyboardEvent, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActionMeta, InputActionMeta, MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { TAGS_INPUT_COMPONENTS } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import {
 	KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -26,7 +26,7 @@ const defaultValues: KeywordsFilterFormState = {
 };
 
 const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [input, setInput] = useState<string | undefined>(undefined);
 
@@ -125,7 +125,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={(errors.values || []).map((value) => value.message)}
 						id={labelKeys.values}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/keywords-filter-form/keywords-filter-form___waardes'
 						)}
 					>

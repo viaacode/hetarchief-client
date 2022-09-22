@@ -23,7 +23,7 @@ $component: "c-notification-center";
 	}
 
 	&__empty {
-		width: 46.4rem;
+		width: $blade-max-width;
 		padding-top: 8rem;
 		text-align: center;
 		color: $neutral;

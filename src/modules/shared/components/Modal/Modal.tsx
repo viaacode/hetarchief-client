@@ -1,12 +1,12 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useState } from 'react';
 import { default as ReactModal } from 'react-modal';
 
 import { globalLabelKeys } from '@shared/const';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { Icon } from '../Icon';
 
@@ -24,7 +24,7 @@ const Modal: FC<ModalProps> = ({
 	onOpen,
 	excludeScrollbar = true,
 }) => {
-	const { t } = useTranslation();
+	const { tText } = useTranslation();
 	const [ready, setReady] = useState(false);
 	const scrollbarWidth = useScrollbarWidth(!!isOpen);
 
@@ -73,7 +73,7 @@ const Modal: FC<ModalProps> = ({
 					<Button
 						className={styles['c-hetarchief-modal__close']}
 						icon={<Icon name="times" aria-hidden />}
-						aria-label={t('modules/shared/components/modal/modal___sluiten')}
+						aria-label={tText('modules/shared/components/modal/modal___sluiten')}
 						variants={['text']}
 						onClick={onClose}
 					/>

@@ -38,4 +38,5 @@ export interface ApiResponseWrapper<T> {
 	size: number;
 }
 
-export type GetMediaResponse = ApiResponseWrapper<MediaInfo> & ElasticsearchAggregations;
+export type GetMediaResponse = ApiResponseWrapper<MediaInfo & { related_count?: number }> &
+	ElasticsearchAggregations;

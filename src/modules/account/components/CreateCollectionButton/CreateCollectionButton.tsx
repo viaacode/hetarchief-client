@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ContentInput, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -9,6 +8,7 @@ import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { collectionsService } from '@account/services/collections';
 import { CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './CreateCollectionButton.module.scss';
@@ -22,14 +22,14 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	afterSubmit = () => null,
 	onOpenNode = null,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const [isOpen, setIsOpen] = useState(false);
 
 	/**
 	 * Form
 	 */
 
-	const defaultName = t('pages/account/mijn-mappen/folder-slug/index___nieuwe-map-aanmaken');
+	const defaultName = tText('pages/account/mijn-mappen/folder-slug/index___nieuwe-map-aanmaken');
 
 	const {
 		control,
@@ -64,11 +64,11 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 				afterSubmit();
 
 				toastService.notify({
-					title: t(
+					title: tHtml(
 						'modules/account/components/create-folder-button/create-folder-button___name-is-aangemaakt',
 						values
 					),
-					description: t(
+					description: tHtml(
 						'modules/account/components/create-folder-button/create-folder-button___je-nieuwe-map-is-succesvol-aangemaakt'
 					),
 				});
@@ -103,7 +103,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 									variants={['platinum', 'sm']}
 									onClick={handler}
 									icon={<Icon name="plus" aria-hidden />}
-									aria-label={t(
+									aria-label={tText(
 										'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken'
 									)}
 								/>
@@ -117,7 +117,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 								tabIndex={-1}
 								variants={['black', 'sm']}
 								icon={<Icon name="check" aria-hidden />}
-								aria-label={t(
+								aria-label={tText(
 									'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-opslaan'
 								)}
 							/>
@@ -127,7 +127,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 								tabIndex={-1}
 								variants={['silver', 'sm']}
 								icon={<Icon name="times" aria-hidden />}
-								aria-label={t(
+								aria-label={tText(
 									'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken-annuleren'
 								)}
 							/>
@@ -135,7 +135,7 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 						onClose={resetForm}
 						onConfirm={onFormSubmit}
 						onOpen={clearForm}
-						placeholder={t(
+						placeholder={tText(
 							'modules/account/components/create-folder-button/create-folder-button___nieuwe-map'
 						)}
 						spellCheck="false"
