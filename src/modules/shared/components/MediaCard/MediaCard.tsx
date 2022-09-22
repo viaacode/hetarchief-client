@@ -26,7 +26,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	id,
 	actions,
 	buttons,
-	hasChildren,
+	hasRelated,
 }) => {
 	const renderDropdown = () =>
 		actions ? (
@@ -120,7 +120,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const renderTags = () => {
-		return hasChildren && <Badge variants="small" text={<Icon name="link" />} />;
+		return hasRelated && <Badge variants="small" text={<Icon name="link" />} />;
 	};
 
 	const renderImage = (imgPath: string | undefined) =>

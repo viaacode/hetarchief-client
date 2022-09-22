@@ -484,7 +484,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						type: item.dcterms_format,
 						preview: item.schema_thumbnail_url || undefined,
 						name: item.schema_name,
-						hasChildren: (item.related_count || 0) > 0,
+						hasRelated: (item.related_count || 0) > 0,
 					})
 				)}
 				keywords={keywords}
@@ -498,7 +498,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${slug}/${source?.meemoo_fragment_id}`;
+					const href = `/${slug}/${source?.schema_identifier}`;
 
 					return (
 						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
