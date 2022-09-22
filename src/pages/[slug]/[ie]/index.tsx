@@ -538,7 +538,7 @@ const ObjectDetailPage: NextPage = () => {
 						/>
 					)}
 					<h3
-						className={clsx('u-pb-24', {
+						className={clsx('u-pb-24', 'p-object-detail__title', {
 							'u-pt-24': showResearchWarning,
 							'u-pt-32': !showResearchWarning,
 						})}

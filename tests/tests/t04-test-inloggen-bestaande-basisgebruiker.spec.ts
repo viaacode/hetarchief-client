@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { acceptTos } from './helpers/accept-tos';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { acceptTos } from '../helpers/accept-tos';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage

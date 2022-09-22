@@ -85,31 +85,34 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 	return (
 		<Blade
 			{...props}
-			footer={renderFooter()}
+			footer={props.isOpen && renderFooter()}
 			title={tHtml(
 				'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
 			)}
 		>
 			{selected && <VisitSummary {...selected} />}
-			<div className="u-px-32">
-				<FormControl
-					className="u-mb-24"
-					errors={[errors.reasonForDenial?.message]}
-					id={labelKeys.reasonForDenial}
-					label={tHtml(
-						'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'
-					)}
-					suffix={OPTIONAL_LABEL()}
-				>
-					<Controller
-						name="reasonForDenial"
-						control={control}
-						render={({ field }) => (
-							<TextArea {...field} id={labelKeys.reasonForDenial} />
+
+			{props.isOpen && (
+				<div className="u-px-32">
+					<FormControl
+						className="u-mb-24"
+						errors={[errors.reasonForDenial?.message]}
+						id={labelKeys.reasonForDenial}
+						label={tHtml(
+							'modules/cp/components/decline-request-blade/decline-request-blade___reden-voor-afkeuring'
 						)}
-					/>
-				</FormControl>
-			</div>
+						suffix={OPTIONAL_LABEL()}
+					>
+						<Controller
+							name="reasonForDenial"
+							control={control}
+							render={({ field }) => (
+								<TextArea {...field} id={labelKeys.reasonForDenial} />
+							)}
+						/>
+					</FormControl>
+				</div>
+			)}
 		</Blade>
 	);
 };

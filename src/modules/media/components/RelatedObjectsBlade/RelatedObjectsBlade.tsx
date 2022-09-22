@@ -1,3 +1,4 @@
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC, useState } from 'react';
 
@@ -23,17 +24,22 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
 					isOpen && styles['c-related-objects-blade--open']
 				)}
 			>
-				<button
+				<Button
 					className={styles['c-related-objects-blade__toggle']}
 					onClick={() => setIsOpen(!isOpen)}
-				>
-					{icon && icon}
-					<b className={styles['c-related-objects-blade__title']}>{title}</b>
-					<Icon
-						className={clsx(styles['c-related-objects-blade__arrow'], 'u-text-left')}
-						name={isOpen ? 'angle-down' : 'angle-up'}
-					/>
-				</button>
+					iconStart={icon}
+					iconEnd={
+						<Icon
+							className={clsx(
+								styles['c-related-objects-blade__arrow'],
+								'u-text-left'
+							)}
+							name={isOpen ? 'angle-down' : 'angle-up'}
+						/>
+					}
+					label={title}
+				/>
+
 				{renderContent(!isOpen)}
 			</div>
 		</div>
