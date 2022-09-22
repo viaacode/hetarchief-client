@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 import { escapeRegExp } from 'lodash';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T05: Test zoeken naar + toegang aanvragen tot een bezoekersruimte', async ({
 	page,

@@ -149,35 +149,37 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					},
 					buttonTypes: () => [
 						{
-							label: tText('Zilver'),
+							label: tText('modules/admin/wrappers/with-admin-core-config___zilver'),
 							value: 'content-page-button--silver',
 						},
 						{
-							label: tText('Blauw groen'),
+							label: tText(
+								'modules/admin/wrappers/with-admin-core-config___blauw-groen'
+							),
 							value: 'content-page-button--teal',
 						},
 						{
-							label: tText('Wit'),
+							label: tText('modules/admin/wrappers/with-admin-core-config___wit'),
 							value: 'content-page-button--white',
 						},
 						{
-							label: tText('Zwart'),
+							label: tText('modules/admin/wrappers/with-admin-core-config___zwart'),
 							value: 'content-page-button--black',
 						},
 						{
-							label: tText('Outline'),
+							label: tText('modules/admin/wrappers/with-admin-core-config___outline'),
 							value: 'content-page-button--outline',
 						},
 						{
-							label: tText('Tekst'),
+							label: tText('modules/admin/wrappers/with-admin-core-config___tekst'),
 							value: 'content-page-button--text',
 						},
 						{
-							label: tText('Rood'),
+							label: tText('modules/admin/wrappers/with-admin-core-config___rood'),
 							value: 'content-page-button--red',
 						},
 						{
-							label: tText('Link'),
+							label: tText('modules/admin/wrappers/with-admin-core-config___link'),
 							value: 'content-page-button--link',
 						},
 					],
