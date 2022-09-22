@@ -10,23 +10,23 @@ import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
-import { collectionsService } from '@account/services/collections';
+import { foldersService } from '@account/services/folders';
 import { EditFolderFormState } from '@account/types';
 import { Icon } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
-import styles from './EditCollectionTitle.module.scss';
-import { EditCollectionTitleProps } from './EditCollectionTitle.types';
+import styles from './EditFolderTitle.module.scss';
+import { EditFolderTitleProps } from './EditFolderTitle.types';
 
 const labelKeys: Record<keyof EditFolderFormState, string> = {
-	name: 'EditCollectionTitle__name',
+	name: 'EditFolderTitle__name',
 };
 
-const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
+const EditFolderTitle: FC<EditFolderTitleProps> = ({
 	afterSubmit = () => null,
 	buttons = [],
-	collection,
+	folder,
 	onOpenNode = null,
 }) => {
 	const { tHtml, tText } = useTranslation();
@@ -36,7 +36,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	 * Form
 	 */
 
-	const defaultName = collection.name;
+	const defaultName = folder.name;
 
 	const {
 		control,
@@ -79,10 +79,11 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 		setIsOpen(true);
 	};
 
-	const onFormSubmit = () => {
-		handleSubmit<EditFolderFormState>((values) => {
-			collectionsService.update(collection.id, values).then((response) => {
-				afterSubmit(response);
+	const onFormSubmit = (): Promise<void> => {
+		return new Promise<void>((resolve, reject) => {
+			handleSubmit<EditFolderFormState>(async (values) => {
+				const response = await foldersService.update(folder.id, values);
+				await afterSubmit(response);
 
 				toastService.notify({
 					title: tHtml(
@@ -93,8 +94,9 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 						'modules/account/components/edit-folder-title/edit-folder-title___deze-map-is-successvol-aangepast'
 					),
 				});
-			});
-		})();
+				resolve();
+			}, reject)();
+		});
 	};
 
 	/**
@@ -115,7 +117,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 					)}
 					icon={<Icon name="edit" aria-hidden />}
 					aria-label={tText(
-						'modules/account/components/edit-collection-title/edit-collection-title___titel-aanpassen'
+						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
 					)}
 				/>
 				{buttons.filter((b) => !b.before).map((b) => b.node)}
@@ -128,7 +130,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 			className={clsx(styles['c-edit-folder-title'], 'c-form-control--label-hidden')}
 			id={labelKeys.name}
 			label={tHtml(
-				'modules/account/components/edit-collection-title/edit-collection-title___map-aanpassen'
+				'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
 			)}
 		>
 			<Controller
@@ -148,7 +150,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 								variants={['silver']}
 								icon={<Icon name="times" aria-hidden />}
 								aria-label={tText(
-									'modules/account/components/edit-collection-title/edit-collection-title___titel-aanpassen-annuleren'
+									'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen-annuleren'
 								)}
 							/>
 						}
@@ -158,7 +160,7 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 								variants={['black']}
 								icon={<Icon name="check" aria-hidden />}
 								aria-label={tText(
-									'modules/account/components/edit-collection-title/edit-collection-title___nieuwe-titel-opslaan'
+									'modules/account/components/edit-folder-title/edit-folder-title___nieuwe-titel-opslaan'
 								)}
 							/>
 						}
@@ -174,4 +176,4 @@ const EditCollectionTitle: FC<EditCollectionTitleProps> = ({
 	);
 };
 
-export default EditCollectionTitle;
+export default EditFolderTitle;

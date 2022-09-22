@@ -1,19 +1,19 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { useDispatch } from 'react-redux';
 
-import { collectionsService } from '@account/services/collections';
+import { foldersService } from '@account/services/folders';
 import { GetFoldersResponse } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { setCollections } from '@shared/store/media';
+import { setFolders } from '@shared/store/media';
 
-export function useGetCollections(enabled = true): UseQueryResult<GetFoldersResponse> {
+export function useGetFolders(enabled = true): UseQueryResult<GetFoldersResponse> {
 	const dispatch = useDispatch();
 
 	return useQuery(
 		[QUERY_KEYS.getCollections],
 		() =>
-			collectionsService.getAll().then((res) => {
-				dispatch(setCollections(res));
+			foldersService.getAll().then((res) => {
+				dispatch(setFolders(res));
 				return res;
 			}),
 		{ enabled }

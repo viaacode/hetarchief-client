@@ -1,8 +1,6 @@
 import { Folder } from '@account/types';
 
-export function createCollectionSlug(
-	collection: Pick<Folder, 'id' | 'name' | 'isDefault'>
-): string {
+export function createFolderSlug(collection: Pick<Folder, 'id' | 'name' | 'isDefault'>): string {
 	const uuidPart = collection.id.split('-', 1)[0];
 
 	return encodeURIComponent(

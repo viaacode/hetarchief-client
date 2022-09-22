@@ -22,10 +22,10 @@ export const mediaSlice = createSlice({
 		setFilterOptions(state, action: PayloadAction<MediaSearchAggregations>) {
 			state.filterOptions = action.payload;
 		},
-		setCollections(state, action: PayloadAction<GetFoldersResponse>) {
+		setFolders(state, action: PayloadAction<GetFoldersResponse>) {
 			state.folders = action.payload;
 		},
 	},
 });
 
-export const { setResults, setFilterOptions, setCollections } = mediaSlice.actions;
+export const { setResults, setFilterOptions, setFolders } = mediaSlice.actions;
