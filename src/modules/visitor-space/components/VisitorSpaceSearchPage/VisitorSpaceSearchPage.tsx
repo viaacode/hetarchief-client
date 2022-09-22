@@ -125,7 +125,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
-	const searchBarInputState = useState<string>();
+	const [searchBarInputState, setSearchBarInputState] = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
 	const activeSort: SortObject = {
@@ -237,10 +237,14 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 * Methods
 	 */
 
-	const prepareSearchValue = (value = '') => {
-		if (value.trim() && !query.search?.includes(value)) {
+	const prepareSearchValue = (
+		value = ''
+	): { [SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
+		const trimmed = value.trim();
+
+		if (trimmed && !query.search?.includes(trimmed)) {
 			return {
-				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(value),
+				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(trimmed),
 			};
 		}
 
@@ -272,7 +276,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
-		const searchValue = prepareSearchValue(searchBarInputState[0]);
+		const searchValue = prepareSearchValue(searchBarInputState);
 		let data;
 
 		switch (id) {
@@ -353,7 +357,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		}
 
 		setQuery({ [id]: data, filter: undefined, page: 1, ...(searchValue ? searchValue : {}) });
-		searchBarInputState[1](undefined);
+		setSearchBarInputState(undefined);
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -593,7 +597,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									clearLabel={tHtml(
 										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 									)}
-									inputState={searchBarInputState}
+									inputState={[searchBarInputState, setSearchBarInputState]}
 									instanceId={labelKeys.search}
 									isMulti
 									onClear={onResetFilters}
