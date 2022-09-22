@@ -4,7 +4,6 @@ import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
 import { NextPage } from 'next';
 import getConfig from 'next/config';
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -53,6 +52,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -797,15 +797,11 @@ const ObjectDetailPage: NextPage = () => {
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};
 
+	const title = mediaInfo?.name;
+	const description = capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
 		<VisitorLayout>
-			<Head>
-				<title>{createPageTitle(mediaInfo?.name)}</title>
-				<meta
-					name="description"
-					content={capitalize(lowerCase((router.query.slug as string) || ''))}
-				/>
-			</Head>
+			{renderOgTags(title, description, publicRuntimeConfig.CLIENT_URL)}
 			{renderPageContent()}
 		</VisitorLayout>
 	);

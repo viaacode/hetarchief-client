@@ -2,7 +2,7 @@ import { ContentPage } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { NextPage } from 'next';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
 import { withI18n } from '@i18n/wrappers';
 import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
@@ -20,7 +21,8 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
-import { createPageTitle } from '@shared/utils';
+
+const { publicRuntimeConfig } = getConfig();
 
 const TermsOfService: NextPage = () => {
 	useStickyLayout();
@@ -86,15 +88,11 @@ const TermsOfService: NextPage = () => {
 
 	return (
 		<div className="p-terms-of-service">
-			<Head>
-				<title>{createPageTitle('Gebruiksvoorwaarden')}</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('Gebruiksvoorwaarden'),
+				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<div className="p-terms-of-service__background" />
 

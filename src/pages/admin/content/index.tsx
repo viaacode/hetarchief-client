@@ -1,6 +1,6 @@
 import { ContentPageOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import Link from 'next/link';
 import React, { FC } from 'react';
 
@@ -10,10 +10,12 @@ import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { createPageTitle } from '@shared/utils';
+
+const { publicRuntimeConfig } = getConfig();
 
 const ContentPageOverviewPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
@@ -21,17 +23,13 @@ const ContentPageOverviewPage: FC = () => {
 
 	return (
 		<>
-			<Head>
-				<title>
-					{createPageTitle(tText('pages/admin/content/index___content-paginas'))}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/admin/content/index___overzicht-van-alle-content-paginas-die-beschikbaar-zijn-binnen-het-archief'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/admin/content/index___content-paginas'),
+				tText(
+					'pages/admin/content/index___overzicht-van-alle-content-paginas-die-beschikbaar-zijn-binnen-het-archief'
+				),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AdminLayout
 				pageTitle={tHtml('admin/content/views/content-overview___content-overzicht')}

@@ -1,6 +1,6 @@
 import { Table } from '@meemoo/react-components';
 import { NextPage } from 'next';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -25,14 +25,16 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection, Visit, VisitStatus } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
+
+const { publicRuntimeConfig } = getConfig();
 
 const CPVisitorsPage: NextPage = () => {
 	const { tHtml, tText } = useTranslation();
@@ -293,15 +295,11 @@ const CPVisitorsPage: NextPage = () => {
 
 	return (
 		<>
-			<Head>
-				<title>{createPageTitle(tText('pages/beheer/bezoekers/index___bezoekers'))}</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/beheer/bezoekers/index___bezoekers'),
+				tText('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			{renderPageContent()}
 		</>

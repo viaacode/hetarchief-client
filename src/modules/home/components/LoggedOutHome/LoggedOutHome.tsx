@@ -1,5 +1,5 @@
 import { capitalize, lowerCase } from 'lodash-es';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,10 +11,12 @@ import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithS
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Icon } from '@shared/components';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { createPageTitle } from '@shared/utils';
 
 import styles from './LoggedOutHome.module.scss';
+
+const { publicRuntimeConfig } = getConfig();
 
 const LoggedOutHome: FC = () => {
 	const { tHtml, tText } = useTranslation();
@@ -66,10 +68,7 @@ const LoggedOutHome: FC = () => {
 
 	return (
 		<div className="p-home u-page-bottom-padding">
-			<Head>
-				<title>{createPageTitle('Home')}</title>
-				<meta name="description" content={getPageDescription()} />
-			</Head>
+			{renderOgTags(tText('Home'), getPageDescription(), publicRuntimeConfig.CLIENT_URL)}
 
 			<div className={styles['c-hero']}>
 				<div className={styles['c-hero__image']}>

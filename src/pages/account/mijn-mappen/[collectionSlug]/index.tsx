@@ -2,7 +2,7 @@ import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
 import { NextPage } from 'next';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
@@ -38,6 +38,7 @@ import {
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -45,7 +46,7 @@ import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/media';
 import { Breakpoints } from '@shared/types';
-import { asDate, createPageTitle, formatMediumDate } from '@shared/utils';
+import { asDate, formatMediumDate } from '@shared/utils';
 
 import { AddToFolderBlade } from '../../../../modules/visitor-space/components';
 
@@ -56,6 +57,8 @@ type ListNavigationCollectionItem = ListNavigationItem & Folder;
 const labelKeys = {
 	search: 'AccountMyCollections__search',
 };
+
+const { publicRuntimeConfig } = getConfig();
 
 const AccountMyCollections: NextPage = () => {
 	const { tHtml, tText } = useTranslation();
@@ -376,21 +379,14 @@ const AccountMyCollections: NextPage = () => {
 
 	return (
 		<VisitorLayout>
-			<Head>
-				<title>
-					{createPageTitle(
-						tText('pages/account/mijn-mappen/index___mijn-mappen') +
-							` | ${activeCollection?.name || collectionSlug}`
-					)}
-				</title>
-
-				<meta
-					name="description"
-					content={tText(
-						'pages/account/mijn-mappen/index___mijn-mappen-meta-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText(
+					'pages/account/mijn-mappen/index___mijn-mappen' +
+						` | ${activeCollection?.name || collectionSlug}`
+				),
+				tText('pages/account/mijn-mappen/index___mijn-mappen-meta-omschrijving'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AccountLayout className="p-account-my-collections">
 				<SidebarLayout

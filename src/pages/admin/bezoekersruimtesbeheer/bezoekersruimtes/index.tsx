@@ -1,5 +1,5 @@
 import { Button, Column, Table, TableOptions } from '@meemoo/react-components';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { FC, ReactNode, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
@@ -22,16 +22,18 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import { globalLabelKeys, ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
 import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
+
+const { publicRuntimeConfig } = getConfig();
 
 const VisitorSpacesOverview: FC = () => {
 	const { tHtml, tText } = useTranslation();
@@ -282,21 +284,15 @@ const VisitorSpacesOverview: FC = () => {
 
 	return (
 		<>
-			<Head>
-				<title>
-					{createPageTitle(
-						tText(
-							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
-						)
-					)}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes-meta-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
+				),
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes-meta-omschrijving'
+				),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AdminLayout
 				pageTitle={tHtml(
