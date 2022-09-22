@@ -68,7 +68,7 @@ export class MediaService {
 		return {
 			items: parsed?.hits?.hits.map((item) => ({
 				...item._source,
-				meemoo_fragment_id: item._id,
+				schema_identifier: item._id,
 			})),
 			total: parsed?.hits?.total?.value,
 			size: size,
@@ -112,6 +112,24 @@ export class MediaService {
 	): Promise<MediaSimilar> {
 		return await ApiService.getApi()
 			.get(`${MEDIA_SERVICE_BASE_URL}/${esIndex}/${id}/${MEDIA_SERVICE_RELATED}/${meemooId}`)
+			.json();
+	}
+
+	public static async countRelated(
+		meemooIdentifiers: string[] = []
+	): Promise<Record<string, number>> {
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl(
+					{
+						url: `${MEDIA_SERVICE_BASE_URL}/related/count`,
+						query: { meemooIdentifiers },
+					},
+					{
+						arrayFormat: 'comma',
+					}
+				)
+			)
 			.json();
 	}
 

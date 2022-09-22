@@ -485,6 +485,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						type: item.dcterms_format,
 						preview: item.schema_thumbnail_url || undefined,
 						name: item.schema_name,
+						hasRelated: (item.related_count || 0) > 0,
 					})
 				)}
 				keywords={keywords}
@@ -498,7 +499,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${slug}/${source?.meemoo_fragment_id}`;
+					const href = `/${slug}/${source?.schema_identifier}`;
 
 					const name = item.title?.toString(); // TODO double check that this still works
 					return (
