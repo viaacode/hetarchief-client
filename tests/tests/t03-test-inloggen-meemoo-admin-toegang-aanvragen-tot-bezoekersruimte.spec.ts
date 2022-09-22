@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { acceptTos } from './helpers/accept-tos';
-import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
-import { loginUserHetArchiefIdp } from './helpers/login-user-het-archief-idp';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { acceptTos } from '../helpers/accept-tos';
+import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', async ({
 	page,
