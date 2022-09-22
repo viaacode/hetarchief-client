@@ -187,8 +187,14 @@ $metadata-collapsed-width: 36vw;
 	&__related {
 		max-width: 100vw;
 
-		.ScrollbarsCustom-TrackY > .ScrollbarsCustom-Thumb {
-			background-color: $neutral !important;
+		.ScrollbarsCustom {
+			width: 100% !important;
+			height: 500px !important;
+			max-height: 100% !important;
+
+			.ScrollbarsCustom-TrackY > .ScrollbarsCustom-Thumb {
+				background-color: $neutral !important;
+			}
 		}
 	}
 

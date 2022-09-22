@@ -40,9 +40,7 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
 					}
 					label={title}
 				/>
-				<Scrollbar style={{ width: '100%', height: '500px', maxHeight: '100%' }} noScrollX>
-					{renderContent(!isOpen)}
-				</Scrollbar>
+				<Scrollbar noScrollX>{renderContent(!isOpen)}</Scrollbar>
 			</div>
 		</div>
 	);
