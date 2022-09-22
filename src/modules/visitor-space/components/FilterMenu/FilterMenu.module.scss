@@ -117,10 +117,10 @@ $component: "c-filter-menu";
 		}
 
 		&--filter {
-			max-width: 46.4rem;
+			max-width: $blade-max-width;
 
 			// Overwrite popper styles
-			min-width: 46.4rem !important;
+			min-width: $blade-max-width !important;
 			max-height: 100vh;
 
 			&:global(.c-menu) {

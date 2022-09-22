@@ -1,5 +1,4 @@
 import { capitalize, lowerCase } from 'lodash-es';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,12 +11,13 @@ import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithS
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Icon } from '@shared/components';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 import styles from './LoggedOutHome.module.scss';
 
 const LoggedOutHome: FC = () => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
 	const [query] = useQueryParams({
@@ -57,7 +57,7 @@ const LoggedOutHome: FC = () => {
 			// Not a static page => might be visitor space slug
 			return capitalize(lowerCase(firstUrlPart));
 		}
-		return t('pages/index___logged-out-home-description');
+		return tText('pages/index___logged-out-home-description');
 	};
 
 	/**
@@ -76,7 +76,7 @@ const LoggedOutHome: FC = () => {
 					<Image
 						src="/images/hero.jpg"
 						layout="fill"
-						alt={t(
+						alt={tText(
 							'modules/home/components/logged-out-home/logged-out-home___hero-alt'
 						)}
 						objectFit="contain"
@@ -84,15 +84,15 @@ const LoggedOutHome: FC = () => {
 				</div>
 				<div className={styles['c-hero__content']}>
 					<h1 className={styles['c-hero__title']}>
-						{t('pages/index___logged-out-home-title')}
+						{tHtml('pages/index___logged-out-home-title')}
 					</h1>
 					<p className={styles['c-hero__description']}>
-						{t('pages/index___logged-out-home-description')}
+						{tHtml('pages/index___logged-out-home-description')}
 					</p>
 					<b>
 						<Link href="/over-de-bezoekertool">
 							<a className={styles['c-hero__link']}>
-								{t('pages/index___hier-kom-je-er-alles-over-te-weten')}
+								{tHtml('pages/index___hier-kom-je-er-alles-over-te-weten')}
 							</a>
 						</Link>
 					</b>

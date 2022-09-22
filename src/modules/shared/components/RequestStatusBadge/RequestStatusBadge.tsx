@@ -1,21 +1,21 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import React, { FC } from 'react';
 
 import { Icon } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { VisitStatus } from '@shared/types';
 
 import styles from './RequestStatusBadge.module.scss';
 import { RequestStatusBadgeProps } from './RequestStatusBadge.types';
 
 const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, status }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 
 	const renderBadge = () => {
 		switch (status) {
 			case VisitStatus.PENDING:
-				return t(
+				return tHtml(
 					'modules/cp/components/request-status-chip/request-status-chip___open-aanvraag'
 				);
 
@@ -23,7 +23,7 @@ const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, sta
 				return (
 					<>
 						<Badge type="success" text={<Icon name="check" />} variants="icon" />
-						{t(
+						{tHtml(
 							'modules/cp/components/request-status-chip/request-status-chip___goedgekeurd'
 						)}
 					</>
@@ -33,7 +33,7 @@ const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, sta
 				return (
 					<>
 						<Badge type="error" text={<Icon name="forbidden" />} variants="icon" />
-						{t(
+						{tHtml(
 							'modules/cp/components/request-status-chip/request-status-chip___geweigerd'
 						)}
 					</>
@@ -43,7 +43,7 @@ const RequestStatusBadge: FC<RequestStatusBadgeProps> = ({ className, style, sta
 				return (
 					<>
 						<Badge type="error" text={<Icon name="trash" />} variants="icon" />
-						{t(
+						{tHtml(
 							'modules/cp/components/request-status-badge/request-status-badge___geannuleerd'
 						)}
 					</>

@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
@@ -57,6 +57,6 @@ const CookiePolicy: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default CookiePolicy;

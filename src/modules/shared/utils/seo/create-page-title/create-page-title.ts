@@ -1,15 +1,14 @@
 import { truncate } from 'lodash-es';
 
-import { i18n } from '@shared/helpers/i18n';
+import { tText } from '@shared/helpers/translate';
 
 export const createPageTitle = (title?: string): string => {
 	if (!title) {
-		return i18n.t(
-			'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-		);
+		return tText('modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool');
 	}
 
-	return `${truncate(title, { length: 50, omission: '...' })} | ${i18n.t(
-		'modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool'
-	)}`;
+	return `${truncate(title, {
+		length: 50,
+		omission: '...',
+	})} | ${tText('modules/shared/utils/seo/create-page-title/create-page-title___bezoekertool')}`;
 };

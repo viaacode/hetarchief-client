@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -87,6 +87,6 @@ const Home: NextPage = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default Home;

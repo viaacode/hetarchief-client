@@ -1,5 +1,4 @@
 import { format, formatDistanceToNow, isSameDay, isToday } from 'date-fns';
-import { i18n } from 'next-i18next';
 
 import { getLocaleFromi18nLanguage } from './i18n';
 
@@ -28,7 +27,7 @@ export const asDate = (input: Date | string | undefined | null): Date | undefine
 };
 
 export const localisedOptions = {
-	locale: getLocaleFromi18nLanguage(i18n?.language || ''),
+	locale: getLocaleFromi18nLanguage('nl'),
 };
 
 // Do not export to contain all user-facing formatters here

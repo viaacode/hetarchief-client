@@ -6,7 +6,7 @@ import {
 } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { i18n } from '@shared/helpers/i18n';
+import { tText } from '@shared/helpers/translate';
 import {
 	MediaSearchFilter,
 	MediaSearchFilterField,
@@ -40,31 +40,31 @@ export type MetadataConfig = {
 
 export const METADATA_CONFIG = (): MetadataConfig => {
 	const dictionary = {
-		from: i18n.t(
+		from: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
 		),
-		until: i18n.t(
+		until: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
 		),
-		between: i18n.t(
+		between: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
 		),
-		contains: i18n.t(
+		contains: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
 		),
-		excludes: i18n.t(
+		excludes: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
 		),
-		equals: i18n.t(
+		equals: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
 		),
-		differs: i18n.t(
+		differs: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
 		),
-		shorter: i18n.t(
+		shorter: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
 		),
-		longer: i18n.t(
+		longer: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
 		),
 	};

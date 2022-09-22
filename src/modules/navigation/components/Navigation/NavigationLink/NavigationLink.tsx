@@ -1,9 +1,9 @@
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC } from 'react';
 
 import { Icon, IconProps } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from '../Navigation.module.scss';
 
@@ -19,7 +19,7 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 	label,
 	onClick,
 }) => {
-	const [t] = useTranslation();
+	const { tText } = useTranslation();
 
 	const rootCls = clsx(
 		className,
@@ -59,7 +59,7 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 		<Link href={href} passHref>
 			<a
 				className={rootCls}
-				aria-label={t(
+				aria-label={tText(
 					'modules/navigation/components/navigation/navigation-link/navigation-link___navigeer-naar-een-pagina'
 				)}
 			>

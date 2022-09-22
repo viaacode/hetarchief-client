@@ -50,7 +50,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 				{/* End Google Tag Manager */}
 
 				{/*eslint-disable-next-line*/}
-				<link rel="stylesheet" href="/flowplayer/style/flowplayer.css" />
 				<meta
 					name="google-site-verification"
 					content="yl7dKP6MImaxOwur77DkLJL4SH9Apy2ytk0baoLq99g"

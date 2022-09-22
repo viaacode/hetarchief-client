@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { sum } from 'lodash-es';
 import { NextPage } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,6 +13,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
@@ -38,6 +38,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
@@ -96,7 +97,7 @@ const labelKeys = {
 const VisitorSpaceSearchPage: NextPage = () => {
 	useNavigationBorder();
 
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
 	const history = useSelector(selectHistory);
@@ -431,7 +432,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					activeSort={activeSort}
 					filters={VISITOR_SPACE_FILTERS()}
 					filterValues={query}
-					label={t('pages/bezoekersruimte/visitor-space-slug/index___filters')}
+					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileFilterMenuOpen}
 					showNavigationBorder={showNavigationBorder}
@@ -473,10 +474,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" aria-hidden />
 				}
 				variants={['text', 'xxs']}
-				title={t(
+				title={tText(
 					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
-				aria-label={t(
+				aria-label={tText(
 					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
 			/>
@@ -498,6 +499,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						type: item.dcterms_format,
 						preview: item.schema_thumbnail_url || undefined,
 						name: item.schema_name,
+						hasRelated: (item.related_count || 0) > 0,
 					})
 				)}
 				keywords={keywords}
@@ -511,16 +513,17 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${slug}/${source?.meemoo_fragment_id}`;
+					const href = `/${slug}/${source?.schema_identifier}`;
 
+					const name = item.title?.toString(); // TODO double check that this still works
 					return (
 						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
 							<a
 								className="u-text-no-decoration"
-								aria-label={t(
+								aria-label={tText(
 									'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___navigeer-naar-de-detailpagina-van-name',
 									{
-										name: item.title,
+										name,
 									}
 								)}
 							>
@@ -552,11 +555,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			return undefined;
 		}
 		if (isMobile) {
-			return t('pages/slug/index___tot-access-end-date-mobile', {
+			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
 				accessEndDateMobile,
 			});
 		}
-		return t(
+		return tHtml(
 			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
 			{
 				accessEndDate,
@@ -581,13 +584,13 @@ const VisitorSpaceSearchPage: NextPage = () => {
 							<FormControl
 								className="c-form-control--label-hidden u-mb-24"
 								id={`react-select-${labelKeys.search}-input`}
-								label={t(
+								label={tHtml(
 									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 								)}
 							>
 								<TagSearchBar
 									allowCreate
-									clearLabel={t(
+									clearLabel={tHtml(
 										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 									)}
 									inputState={searchBarInputState}
@@ -596,7 +599,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									onClear={onResetFilters}
 									onRemoveValue={onRemoveTag}
 									onSearch={onSearch}
-									placeholder={t(
+									placeholder={tText(
 										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 									)}
 									size="lg"
@@ -614,15 +617,15 @@ const VisitorSpaceSearchPage: NextPage = () => {
 							<div className="l-container u-flex u-justify-center u-py-32">
 								<Callout
 									icon={<Icon name="info" aria-hidden />}
-									text={t(
+									text={tHtml(
 										'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 									)}
 									action={
 										<Link passHref href="/kiosk-voorwaarden">
-											<a aria-label={t('pages/slug/index___meer-info')}>
+											<a aria-label={tText('pages/slug/index___meer-info')}>
 												<Button
 													className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-													label={t('pages/slug/index___meer-info')}
+													label={tHtml('pages/slug/index___meer-info')}
 													variants={['text', 'underline']}
 												/>
 											</a>
@@ -648,10 +651,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 								<Placeholder
 									className="p-visitor-space__placeholder"
 									img="/images/looking-glass.svg"
-									title={t(
+									title={tHtml(
 										'pages/bezoekersruimte/visitor-space-slug/index___geen-resultaten'
 									)}
-									description={t(
+									description={tHtml(
 										'pages/bezoekersruimte/visitor-space-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
 									)}
 								/>
@@ -701,7 +704,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={slug as string}
-					description={t(
+					description={tHtml(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___deze-bezoekersruimte-is-momenteel-niet-beschikbaar'
 					)}
 				/>
@@ -723,7 +726,9 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					name="description"
 					content={
 						visitorSpace?.info ||
-						t('pages/bezoekersruimte/visitor-space-slug/index___een-bezoekersruimte')
+						tText(
+							'pages/bezoekersruimte/visitor-space-slug/index___een-bezoekersruimte'
+						)
 					}
 				/>
 			</Head>
@@ -731,5 +736,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(VisitorSpaceSearchPage);
