@@ -24,6 +24,7 @@ $component: "c-visitor-space-card-controls";
 
 		&-icon {
 			font-size: $font-size-1xl;
+			margin-right: $spacer-xs;
 
 			@include respond-at("md") {
 				font-size: $font-size-lg;
