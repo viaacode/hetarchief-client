@@ -1,6 +1,4 @@
 import { Button } from '@meemoo/react-components';
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { FC, useRef } from 'react';
@@ -12,10 +10,11 @@ import { VisitorSpaceSettings } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
 import { ROUTE_PARTS } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { createPageTitle } from '@shared/utils';
 
 const VisitorSpaceCreate: FC = () => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
 	const formRef = useRef<{ createSpace: () => void } | undefined>(undefined);
@@ -36,27 +35,27 @@ const VisitorSpaceCreate: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t(
+						tText(
 							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
 						)
 					)}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte-meta-omschrijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
 				)}
 			>
 				<AdminLayout.Actions>
 					<Button
-						label={t(
+						label={tHtml(
 							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___annuleren'
 						)}
 						variants="silver"
@@ -67,7 +66,7 @@ const VisitorSpaceCreate: FC = () => {
 						}
 					/>
 					<Button
-						label={t(
+						label={tHtml(
 							'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___opslaan'
 						)}
 						variants="black"
@@ -86,7 +85,7 @@ const VisitorSpaceCreate: FC = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 // TODO: permission
 export default withAuth(

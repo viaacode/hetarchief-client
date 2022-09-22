@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { DefaultComponentProps } from '@shared/types';
 
 import { IconLightNames, IconTypes } from '../Icon';
@@ -9,8 +11,8 @@ export type PlaceholderProps = DefaultComponentProps &
 export type PlaceholderIcon = IconLightNames | IconTypes;
 
 interface PlaceholderCommonProps {
-	description: string;
-	title: string;
+	description: string | ReactNode;
+	title: string | ReactNode;
 }
 
 type PlaceholderVisualProps =

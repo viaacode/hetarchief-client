@@ -1,10 +1,10 @@
 import { Button, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { FC, MouseEvent, ReactNode } from 'react';
 
 import { CopyButton, DropdownMenu } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import { Icon, IconLightNames } from '../../Icon';
@@ -20,7 +20,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	room,
 	type,
 }) => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	const typeNoAccess = type === VisitorSpaceCardType.noAccess;
 	const typeAccessGranted = type === VisitorSpaceCardType.access;
@@ -54,17 +54,17 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			return (
 				<Button
 					icon={<Icon name="contact" aria-hidden />}
-					aria-label={t(
+					aria-label={tText(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___geen-contactgegevens-beschikbaar'
 					)}
 					variants={['silver', 'sm', 'disabled']}
 					onClick={(evt: MouseEvent<HTMLButtonElement>) => {
 						evt.stopPropagation();
 						toastService.notify({
-							title: t(
+							title: tHtml(
 								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___geen-contact-gegevens'
 							),
-							description: t(
+							description: tHtml(
 								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___er-zijn-geen-contactgegevens-gekend-voor-deze-bezoekersruimte'
 							),
 						});
@@ -118,7 +118,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 				{renderLabel(
 					'timer',
 					<>
-						{t(
+						{tHtml(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___beschikbaar-tot'
 						)}
 						<br />
@@ -128,12 +128,12 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 
 				<Link href={`/${room.slug}`} passHref>
 					<a
-						aria-label={t(
+						aria-label={tText(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 						)}
 					>
 						<Button variants={['lg', 'white']}>
-							{t(
+							{tHtml(
 								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
 							)}
 						</Button>
@@ -159,7 +159,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 					tags={[
 						{
 							id: 1,
-							label: t(
+							label: tHtml(
 								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___aanvraag-ingediend'
 							),
 						},
@@ -178,7 +178,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 					variants={['sm', 'black']}
 					onClick={() => onAccessRequest && onAccessRequest(room)}
 				>
-					{t(
+					{tHtml(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___vraag-toegang-aan'
 					)}
 				</Button>
@@ -193,7 +193,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 			<>
 				{renderLabel(
 					'not-available',
-					t(
+					tHtml(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___momenteel-is-er-geen-toegang-mogelijk-tot-deze-bezoekersruimte'
 					)
 				)}

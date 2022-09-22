@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash-es';
 
-import { i18n } from '@shared/helpers/i18n';
+import { tText } from '@shared/helpers/translate';
 import { Operator } from '@shared/types';
 
 import { METADATA_CONFIG, MetadataFields } from '../../const';
@@ -46,40 +46,40 @@ export const getField = (prop: MetadataProp, op: Operator): MetadataFields | nul
 export const getLabel = (prop: MetadataProp): string => {
 	return (
 		{
-			[MetadataProp.CreatedAt]: i18n.t(
+			[MetadataProp.CreatedAt]: tText(
 				'modules/visitor-space/utils/metadata/metadata___creatiedatum'
 			),
-			[MetadataProp.Creator]: i18n.t('modules/visitor-space/utils/metadata/metadata___maker'),
-			[MetadataProp.Description]: i18n.t(
+			[MetadataProp.Creator]: tText('modules/visitor-space/utils/metadata/metadata___maker'),
+			[MetadataProp.Description]: tText(
 				'modules/visitor-space/utils/metadata/metadata___beschrijving'
 			),
-			[MetadataProp.Duration]: i18n.t(
+			[MetadataProp.Duration]: tText(
 				'modules/visitor-space/utils/metadata/metadata___duurtijd'
 			),
-			[MetadataProp.Era]: i18n.t(
+			[MetadataProp.Era]: tText(
 				'modules/visitor-space/utils/metadata/metadata___tijdsperiode-van-de-inhoud'
 			),
-			[MetadataProp.Everything]: i18n.t(
+			[MetadataProp.Everything]: tText(
 				'modules/visitor-space/utils/metadata/metadata___alles'
 			),
-			[MetadataProp.Genre]: i18n.t('modules/visitor-space/utils/metadata/metadata___genre'),
-			[MetadataProp.Language]: i18n.t('modules/visitor-space/utils/metadata/metadata___taal'),
-			[MetadataProp.Location]: i18n.t(
+			[MetadataProp.Genre]: tText('modules/visitor-space/utils/metadata/metadata___genre'),
+			[MetadataProp.Language]: tText('modules/visitor-space/utils/metadata/metadata___taal'),
+			[MetadataProp.Location]: tText(
 				'modules/visitor-space/utils/metadata/metadata___locatie-van-de-inhoud'
 			),
-			[MetadataProp.Mediatype]: i18n.t(
+			[MetadataProp.Mediatype]: tText(
 				'modules/visitor-space/utils/metadata/metadata___bestandstype'
 			),
-			[MetadataProp.Medium]: i18n.t(
+			[MetadataProp.Medium]: tText(
 				'modules/visitor-space/utils/metadata/metadata___analoge-drager'
 			),
-			[MetadataProp.PublishedAt]: i18n.t(
+			[MetadataProp.PublishedAt]: tText(
 				'modules/visitor-space/utils/metadata/metadata___publicatiedatum'
 			),
-			[MetadataProp.Publisher]: i18n.t(
+			[MetadataProp.Publisher]: tText(
 				'modules/visitor-space/utils/metadata/metadata___publisher'
 			),
-			[MetadataProp.Title]: i18n.t('modules/visitor-space/utils/metadata/metadata___titel'),
+			[MetadataProp.Title]: tText('modules/visitor-space/utils/metadata/metadata___titel'),
 		}[prop] || ''
 	);
 };

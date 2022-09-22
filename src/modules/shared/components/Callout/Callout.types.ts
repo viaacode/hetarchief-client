@@ -4,6 +4,6 @@ import { DefaultComponentProps } from '@shared/types';
 
 export interface CalloutProps extends DefaultComponentProps {
 	icon?: ReactNode;
-	text: string;
+	text: string | ReactNode;
 	action?: ReactNode;
 }

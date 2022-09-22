@@ -1,9 +1,7 @@
 import { Button, Column, Table, TableOptions } from '@meemoo/react-components';
-import { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { FC, ReactNode, useCallback, useMemo } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -26,6 +24,7 @@ import {
 import { globalLabelKeys, ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
@@ -35,7 +34,7 @@ import { VisitorSpaceService } from '@visitor-space/services';
 import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
 const VisitorSpacesOverview: FC = () => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
 	const showCreateButton = useHasAllPermission(Permission.CREATE_SPACES);
@@ -96,10 +95,10 @@ const VisitorSpacesOverview: FC = () => {
 
 		toastService.notify({
 			maxLines: 3,
-			title: t(
+			title: tHtml(
 				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis'
 			),
-			description: t(
+			description: tHtml(
 				'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-is-een-fout-opgetreden-tijdens-het-aanpassen-van-de-status'
 			),
 		});
@@ -119,8 +118,10 @@ const VisitorSpacesOverview: FC = () => {
 
 				toastService.notify({
 					maxLines: 3,
-					title: t('pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'),
-					description: t(
+					title: tHtml(
+						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___succes'
+					),
+					description: tHtml(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___de-status-werd-succesvol-aangepast'
 					),
 				});
@@ -140,25 +141,25 @@ const VisitorSpacesOverview: FC = () => {
 
 	// Render
 
-	const renderEmptyMessage = (): string => {
+	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.status) {
 			case VisitorSpaceStatus.Requested:
-				return t(
+				return tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-bezoekersruimtes-in-aanvraag'
 				);
 
 			case VisitorSpaceStatus.Active:
-				return t(
+				return tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-gepubliceerde-bezoekersruimtes'
 				);
 
 			case VisitorSpaceStatus.Inactive:
-				return t(
+				return tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-gedepubliceerde-bezoekersruimtes'
 				);
 
 			default:
-				return t(
+				return tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-zijn-geen-bezoekersruimtes'
 				);
 		}
@@ -231,7 +232,7 @@ const VisitorSpacesOverview: FC = () => {
 					id={globalLabelKeys.adminLayout.title}
 					default={filters[SEARCH_QUERY_KEY]}
 					className="p-cp-visitor-spaces__search"
-					placeholder={t(
+					placeholder={tText(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
 					)}
 					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
@@ -261,7 +262,7 @@ const VisitorSpacesOverview: FC = () => {
 		if (isError) {
 			return (
 				<p className="p-admin-visitor-spaces__error">
-					{t(
+					{tHtml(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___er-ging-iets-mis-bij-het-ophalen-van-de-bezoekersruimtes'
 					)}
 				</p>
@@ -270,7 +271,7 @@ const VisitorSpacesOverview: FC = () => {
 		if (!visitorSpaces) {
 			return (
 				<p className="p-admin-visitor-spaces__error">
-					{t(
+					{tHtml(
 						'modules/admin/visitor-spaces/pages/visitor-spaces-overview/visitor-spaces-overview___geen-bezoekersruimtes-gevonden'
 					)}
 				</p>
@@ -284,21 +285,21 @@ const VisitorSpacesOverview: FC = () => {
 			<Head>
 				<title>
 					{createPageTitle(
-						t(
+						tText(
 							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
 						)
 					)}
 				</title>
 				<meta
 					name="description"
-					content={t(
+					content={tText(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes-meta-omschrijving'
 					)}
 				/>
 			</Head>
 
 			<AdminLayout
-				pageTitle={t(
+				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
 				)}
 			>
@@ -306,7 +307,7 @@ const VisitorSpacesOverview: FC = () => {
 					<AdminLayout.Actions>
 						<Button
 							iconStart={<Icon name="plus" />}
-							label={t(
+							label={tHtml(
 								'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-bezoekersruimte'
 							)}
 							variants="black"
@@ -326,7 +327,7 @@ const VisitorSpacesOverview: FC = () => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(VisitorSpacesOverview, Permission.READ_ALL_SPACES)

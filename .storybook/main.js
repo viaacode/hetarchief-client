@@ -30,17 +30,13 @@ module.exports = {
 				extensions: config.resolve.extensions,
 			}),
 		];
-
-		// [FIX] src: https://stackoverflow.com/a/67233156
-		// ModuleNotFoundError: Module not found: Error: Can't resolve 'fs'
-		// in '.../hetarchief-client/node_modules/next-i18next/dist/esm/config'
 		config.resolve = {
 			...config.resolve,
 			fallback: {
 				...config.resolve.fallback,
-				fs: false
-			}
-		}
+				fs: false,
+			},
+		};
 
 		return config;
 	},

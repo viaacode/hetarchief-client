@@ -1,10 +1,10 @@
-import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import Html from '@shared/components/Html/Html';
 import { ROUTES } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { createPageTitle } from '@shared/utils';
 
@@ -17,7 +17,7 @@ import { WaitingPageProps } from './WaitingPage.types';
 const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 	useNavigationBorder();
 
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 
@@ -29,7 +29,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 					name="description"
 					content={
 						space?.info ||
-						t(
+						tText(
 							'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
 						)
 					}
@@ -51,13 +51,13 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 					<section className="p-visit-requested__grid">
 						<div className="p-visit-requested__top">
 							<h1 className="p-visit-requested__title u-mt-32:md">
-								{t(
+								{tHtml(
 									'pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen'
 								)}
 							</h1>
 
 							<p className="p-visit-requested__instructions u-color-neutral u-mt-24 u-mt-32:md u-mb-56:md">
-								{t(
+								{tHtml(
 									'pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-bezoekersruimtes-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd'
 								)}
 							</p>

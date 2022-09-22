@@ -1,4 +1,4 @@
-import { i18n } from '@shared/helpers/i18n';
+import { tText } from '@shared/helpers/translate';
 
 export const CP_ADMIN_NAVIGATION_LINKS = (): {
 	id: string;
@@ -7,17 +7,17 @@ export const CP_ADMIN_NAVIGATION_LINKS = (): {
 }[] => [
 	{
 		id: 'requests',
-		label: i18n.t('modules/cp/const/index___aanvragen'),
+		label: tText('modules/cp/const/index___aanvragen'),
 		href: '/beheer/aanvragen',
 	},
 	{
 		id: 'visitors',
-		label: i18n.t('modules/cp/const/index___bezoekers'),
+		label: tText('modules/cp/const/index___bezoekers'),
 		href: '/beheer/bezoekers',
 	},
 	{
 		id: 'settings',
-		label: i18n.t('modules/cp/const/index___instellingen'),
+		label: tText('modules/cp/const/index___instellingen'),
 		href: '/beheer/instellingen',
 	},
 ];

@@ -4,5 +4,6 @@ module.exports = {
 		'selector-class-pattern': null,
 		'selector-pseudo-class-no-unknown': [true, { ignorePseudoClasses: ['global', 'local'] }],
 		'string-quotes': 'double',
+		'no-descending-specificity': null,
 	},
 };

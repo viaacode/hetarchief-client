@@ -7,9 +7,9 @@ import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
 
-import NextI18nextConfig from '../../next-i18next.config';
-
 import 'styles/main.scss';
+
+import NextI18nextConfig from '../../next-i18next.config';
 
 const queryClient = new QueryClient({
 	defaultOptions: {

@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { useTranslation } from 'next-i18next';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
 
 import { MetadataProp } from '../../types';
@@ -32,7 +32,7 @@ const defaultValues: CreatedFilterFormState = {
 };
 
 const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, disabled }) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(CREATED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
 	const initial = query?.created?.[0];
@@ -86,7 +86,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.operator?.message]}
 						id={labelKeys.operator}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/created-filter-form/created-filter-form___operator'
 						)}
 					>
@@ -121,7 +121,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 						className="u-mb-24 c-form-control--label-hidden"
 						errors={[errors.created?.message]}
 						id={labelKeys.created}
-						label={t(
+						label={tHtml(
 							'modules/visitor-space/components/created-filter-form/created-filter-form___waarde'
 						)}
 					>

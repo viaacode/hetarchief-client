@@ -9,7 +9,7 @@ export interface Media {
 	premisIsPartOf?: string;
 	series?: string[];
 	program?: string[];
-	alternativeName?: string;
+	alternativeName?: string[];
 	partOfArchive: string[];
 	partOfEpisode: string[];
 	partOfSeason: string[];

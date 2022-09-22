@@ -1,14 +1,14 @@
 import { Button, ButtonProps } from '@meemoo/react-components';
 import copy from 'copy-to-clipboard';
-import { useTranslation } from 'next-i18next';
 import { FC, MouseEvent, useCallback } from 'react';
 
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import { Icon } from '../Icon';
 
 const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (props) => {
-	const { t } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const { onClick, text, enableToast = true } = props;
 
 	const clickHandler = useCallback(
@@ -20,8 +20,8 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 
 			if (copied && enableToast) {
 				toastService.notify({
-					title: t('modules/shared/components/copy-button/copy-button___success'),
-					description: t(
+					title: tHtml('modules/shared/components/copy-button/copy-button___success'),
+					description: tHtml(
 						'modules/shared/components/copy-button/copy-button___text-was-copied-to-your-clipboard',
 						{
 							text,
@@ -32,13 +32,13 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 
 			onClick?.(e);
 		},
-		[onClick, text, enableToast, t]
+		[onClick, text, enableToast, tHtml]
 	);
 
 	return (
 		<Button
 			icon={<Icon name="copy" aria-hidden />}
-			aria-label={t(
+			aria-label={tText(
 				'modules/shared/components/copy-button/copy-button___kopieer-naar-klembord'
 			)}
 			variants="sm"

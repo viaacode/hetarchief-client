@@ -1,8 +1,8 @@
 import { Button } from '@meemoo/react-components';
-import { useTranslation } from 'next-i18next';
-import React, { FC, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 
 import { Blade, BladeManager, Icon, VisitSummary } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { VisitStatus } from '@shared/types';
 import { formatDistanceToday } from '@shared/utils';
 
@@ -13,7 +13,7 @@ import styles from './ProcessRequestBlade.module.scss';
 import { ProcessRequestBladeProps } from './ProcessRequestBlade.types';
 
 const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
-	const { t } = useTranslation();
+	const { tHtml } = useTranslation();
 	const { selected, onFinish } = props;
 
 	const [showApprove, setShowApprove] = useState(false);
@@ -41,25 +41,25 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		return 0;
 	};
 
-	const getTitle = (): string => {
+	const getTitle = (): string | ReactNode => {
 		switch (selected?.status) {
 			case VisitStatus.PENDING:
-				return t(
+				return tHtml(
 					'modules/cp/components/process-request-blade/process-request-blade___open-aanvraag'
 				);
 
 			case VisitStatus.APPROVED:
-				return t(
+				return tHtml(
 					'modules/cp/components/process-request-blade/process-request-blade___goedgekeurde-aanvraag'
 				);
 
 			case VisitStatus.DENIED:
-				return t(
+				return tHtml(
 					'modules/cp/components/process-request-blade/process-request-blade___geweigerde-aanvraag'
 				);
 
 			case VisitStatus.CANCELLED_BY_VISITOR:
-				return t(
+				return tHtml(
 					'modules/cp/components/process-request-blade/process-request-blade___geannuleerde-aanvraag'
 				);
 
@@ -75,10 +75,10 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 					className="u-mb-16"
 					label={
 						selected && selected?.status === VisitStatus.APPROVED
-							? t(
+							? tHtml(
 									'modules/cp/components/process-request-blade/process-request-blade___aanpassen'
 							  )
-							: t(
+							: tHtml(
 									'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
 							  )
 					}
@@ -90,10 +90,10 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				<Button
 					label={
 						selected && selected?.status === VisitStatus.DENIED
-							? t(
+							? tHtml(
 									'modules/cp/components/process-request-blade/process-request-blade___aanpassen'
 							  )
-							: t(
+							: tHtml(
 									'modules/cp/components/process-request-blade/process-request-blade___weigeren'
 							  )
 					}
@@ -137,7 +137,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 							<ul className={styles['c-process-request-blade__info-list']}>
 								<li className={styles['c-process-request-blade__info-item']}>
 									<strong>
-										{t(
+										{tHtml(
 											'modules/cp/components/process-request-blade/process-request-blade___emailadres'
 										)}
 										:
@@ -147,7 +147,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 
 								<li className={styles['c-process-request-blade__info-item']}>
 									<strong>
-										{t(
+										{tHtml(
 											'modules/cp/components/process-request-blade/process-request-blade___tijdstip'
 										)}
 										:

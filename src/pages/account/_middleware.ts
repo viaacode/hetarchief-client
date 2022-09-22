@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { ROUTES } from '@shared/const';
+import { ROUTES } from '@shared/const/routes';
 
 export async function middleware(req: NextRequest): Promise<NextResponse> {
 	const { pathname } = req.nextUrl;

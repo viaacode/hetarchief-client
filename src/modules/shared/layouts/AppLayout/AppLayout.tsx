@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
@@ -27,7 +26,6 @@ import { useGetNotifications } from '@shared/components/NotificationCenter/hooks
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
-import { i18n } from '@shared/helpers/i18n';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
 import { useWindowSize } from '@shared/hooks/use-window-size';
@@ -153,26 +151,10 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
-			{/* <!-- start Flowplayer imports --> */}
-			{/* Importing these in the root of the app so they are loaded when the flowplayer component starts to initialise */}
-			<Script strategy="beforeInteractive" src="/flowplayer/flowplayer.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/cuepoints.min.js" />
-			<Script
-				strategy="beforeInteractive"
-				src="/flowplayer/plugins/google-analytics.min.js"
-			/>
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/hls.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/keyboard.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/speed.min.js" />
-			<Script strategy="beforeInteractive" src="/flowplayer/plugins/subtitles.min.js" />
-			{/* <!-- end Flowplayer imports --> */}
-
 			<Navigation showBorder={showBorder}>
 				<Navigation.Left
 					currentPath={asPath}
-					hamburgerProps={
-						i18n ? NAV_HAMBURGER_PROPS() : { openLabel: '', closedLabel: '' }
-					}
+					hamburgerProps={NAV_HAMBURGER_PROPS()}
 					items={getNavigationItemsLeft(
 						asPath,
 						accessibleVisitorSpaces || [],

@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import { useEffect } from 'react';
 
 import { AuthService } from '@auth/services/auth-service';
@@ -13,6 +13,6 @@ const Logout: NextPage = () => {
 	return <Loading fullscreen />;
 };
 
-export const getServerSideProps: GetServerSideProps = withI18n();
+export const getServerSideProps = withI18n();
 
 export default Logout;

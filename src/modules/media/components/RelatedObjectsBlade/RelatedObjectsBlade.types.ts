@@ -4,6 +4,6 @@ import { DefaultComponentProps } from '@shared/types';
 
 export interface RelatedObjectsBladeProps extends DefaultComponentProps {
 	icon?: ReactNode;
-	title: string;
+	title: string | ReactNode;
 	renderContent: (hidden: boolean) => ReactNode;
 }
