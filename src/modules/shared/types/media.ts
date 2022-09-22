@@ -47,8 +47,8 @@ export interface MediaSearchFilter {
 }
 
 export interface MediaInfo {
-	meemoo_fragment_id: string; // Unique id per object
-	schema_identifier: string; // PID (this is not unique per objects)
+	schema_identifier: string;
+	meemoo_identifier: string; // PID (this is not unique per objects)
 	schema_in_language: unknown | null;
 	dcterms_available: string;
 	schema_creator?: {
