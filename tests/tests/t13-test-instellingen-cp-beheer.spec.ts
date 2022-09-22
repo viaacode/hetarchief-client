@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
-import { checkToastMessage } from './helpers/check-toast-message';
-import { fillRequestVisitBlade } from './helpers/fill-request-visit-blade';
-import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
-import { selectText } from './helpers/select-text';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
+import { checkToastMessage } from '../helpers/check-toast-message';
+import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
+import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
+import { selectText } from '../helpers/select-text';
 
 test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 	// Go to the hetarchief homepage
@@ -63,7 +63,7 @@ test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
 	});
 	const fileUploadField = await uploadFileSection.locator('input[type="file"]');
 	await expect(fileUploadField.first()).toBeDefined();
-	await fileUploadField.setInputFiles(['tests/fixtures/new-cover-photo.jpg']);
+	await fileUploadField.setInputFiles(['fixtures/new-cover-photo.jpg']);
 
 	// Check background image is displayed
 	await expect(

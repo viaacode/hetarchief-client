@@ -25,7 +25,6 @@ const Html: FunctionComponent<HtmlProps> = ({
 				__html: DOMPurify.sanitize(content, sanitizePreset) as string,
 			}}
 			// Avoid module scss file, since next serverside rendering can't add a style block to the document.
-			style={{ overflowWrap: 'break-word' }}
 			className={clsx('c-html-wrapper', className)}
 		/>
 	);

@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
-import { checkActiveSidebarNavigationItem } from './helpers/check-active-sidebar-navigation-item';
-import { checkBladeTitle } from './helpers/check-blade-title';
-import { checkToastMessage } from './helpers/check-toast-message';
-import { checkVisitRequestStatuses } from './helpers/check-visit-request-statuses';
-import { loginUserMeemooIdp } from './helpers/login-user-meemoo-idp';
-import { waitForLoading } from './helpers/wait-for-loading';
+import { acceptCookies } from '../helpers/accept-cookies';
+import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
+import { checkBladeTitle } from '../helpers/check-blade-title';
+import { checkToastMessage } from '../helpers/check-toast-message';
+import { checkVisitRequestStatuses } from '../helpers/check-visit-request-statuses';
+import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
+import { waitForLoading } from '../helpers/wait-for-loading';
 
 test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
