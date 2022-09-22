@@ -151,6 +151,10 @@ $l-container-padding-xs: 2rem;
 				color: black;
 			}
 		}
+
+		a {
+			text-decoration: none;
+		}
 	}
 
 	[class*="c-button--content-page-button--"] {
@@ -191,8 +195,8 @@ $l-container-padding-xs: 2rem;
 	}
 
 	.c-button--content-page-button--teal {
-		background-color: $teal !important;
-		border-color: $teal !important;
+		background-color: $teal-dark !important;
+		border-color: $teal-dark !important;
 		color: $white !important;
 
 		.o-svg-icon svg * {
@@ -210,14 +214,14 @@ $l-container-padding-xs: 2rem;
 		}
 
 		&:active {
-			background-color: $teal-dark !important;
-			border-color: $teal-dark !important;
+			background-color: $teal-extra-dark !important;
+			border-color: $teal-extra-dark !important;
 			color: $white !important;
 		}
 
 		&:focus,
 		.focus-visible:focus:not(:focus-visible) {
-			outline: 2px solid $teal;
+			outline: 2px solid $teal-dark;
 		}
 	}
 
