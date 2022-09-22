@@ -300,7 +300,7 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	 */
 
 	// Click on delete button
-	await page.click('.p-account-my-collections__delete');
+	await page.click('.p-account-my-folders__delete');
 
 	// Check confirmation modal
 	const modalTitle = await page.locator('.c-confirmation-modal h3');

@@ -5,20 +5,20 @@ import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
-import { collectionsService } from '@account/services/collections';
+import { foldersService } from '@account/services/folders';
 import { CreateFolderFormState } from '@account/types';
 import { Icon } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
-import styles from './CreateCollectionButton.module.scss';
-import { CreateCollectionButtonProps } from './CreateCollectionButton.types';
+import styles from './CreateFolderButton.module.scss';
+import { CreateFolderButtonProps } from './CreateFolderButton.types';
 
 const labelKeys: Record<keyof CreateFolderFormState, string> = {
-	name: 'CreateCollectionButton__name',
+	name: 'CreateFolderButton__name',
 };
 
-const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
+const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 	afterSubmit = () => null,
 	onOpenNode = null,
 }) => {
@@ -58,10 +58,11 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 		setIsOpen(true);
 	};
 
-	const onFormSubmit = () => {
-		handleSubmit<CreateFolderFormState>((values) => {
-			collectionsService.create(values).then(() => {
-				afterSubmit();
+	const onFormSubmit = async () => {
+		return new Promise<void>((resolve, reject) => {
+			handleSubmit<CreateFolderFormState>(async (values) => {
+				await foldersService.create(values);
+				await afterSubmit();
 
 				toastService.notify({
 					title: tHtml(
@@ -72,8 +73,9 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 						'modules/account/components/create-folder-button/create-folder-button___je-nieuwe-map-is-succesvol-aangemaakt'
 					),
 				});
-			});
-		})();
+				resolve();
+			}, reject)();
+		});
 	};
 
 	return (
@@ -147,4 +149,4 @@ const CreateCollectionButton: FC<CreateCollectionButtonProps> = ({
 	);
 };
 
-export default CreateCollectionButton;
+export default CreateFolderButton;

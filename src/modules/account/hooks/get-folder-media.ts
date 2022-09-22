@@ -1,12 +1,12 @@
 import { useQuery } from 'react-query';
 import { UseQueryResult } from 'react-query/types/react/types';
 
-import { collectionsService } from '@account/services/collections';
+import { foldersService } from '@account/services/folders';
 import { FolderMedia } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { ApiResponseWrapper } from '@shared/types';
 
-export function useGetCollectionMedia(
+export function useGetFolderMedia(
 	id: string | undefined,
 	searchInput: string | undefined,
 	page: number,
@@ -16,7 +16,7 @@ export function useGetCollectionMedia(
 		[QUERY_KEYS.getCollectionMedia, { searchInput, page, size }],
 		() => {
 			if (id) {
-				return collectionsService.getById(id, searchInput, page, size);
+				return foldersService.getById(id, searchInput, page, size);
 			}
 		},
 		{

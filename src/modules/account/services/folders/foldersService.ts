@@ -53,7 +53,7 @@ class CollectionsService extends ApiService {
 			.json();
 	}
 
-	public async removeFromCollection(collection: string, item: string): Promise<unknown> {
+	public async removeFromFolder(collection: string, item: string): Promise<unknown> {
 		return await ApiService.getApi()
 			.delete(
 				`${COLLECTIONS_SERVICE_BASE_URL}/${collection}/${COLLECTIONS_SERVICE_OBJECTS_URL}/${item}`
@@ -71,4 +71,4 @@ class CollectionsService extends ApiService {
 	}
 }
 
-export const collectionsService = new CollectionsService();
+export const foldersService = new CollectionsService();

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export interface CreateCollectionButtonProps {
+export interface CreateFolderButtonProps {
 	afterSubmit?: () => void;
 	onOpenNode?: ReactNode | null;
 }
