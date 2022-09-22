@@ -107,6 +107,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 
 	// Decide when to show process buttons
 	const footer =
+		props.isOpen &&
 		selected &&
 		[VisitStatus.APPROVED, VisitStatus.DENIED, VisitStatus.PENDING].includes(selected.status)
 			? renderFooter()

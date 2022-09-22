@@ -1,7 +1,7 @@
 import { ContentPage } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef, useState } from 'react';

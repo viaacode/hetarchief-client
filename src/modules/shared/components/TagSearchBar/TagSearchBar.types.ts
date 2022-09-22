@@ -1,5 +1,5 @@
 import { TagsInputProps } from '@meemoo/react-components';
-import { ReactNode } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { ActionMeta, InputActionMeta, OnChangeValue } from 'react-select';
 
 import { DefaultComponentProps } from '@shared/types';
@@ -8,15 +8,16 @@ import { TagIdentity } from '@visitor-space/types';
 export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponentProps &
 	Omit<TagsInputProps<IsMulti>, 'rootClassName' | 'classNamePrefix' | 'variants'> & {
 		clearLabel?: TagSearchBarClearLabel;
+		inputState?: [string | undefined, Dispatch<SetStateAction<string | undefined>>];
 		light?: boolean;
-		searchValue?: string;
-		size?: 'lg' | 'md';
-		syncSearchValue?: boolean;
-		valuePlaceholder?: TagSearchBarValuePlaceholder;
 		onClear?: () => void;
 		onCreate?: (newValue: string) => void;
 		onRemoveValue?: (removedValue: TagSearchBarValue<IsMulti>) => void;
 		onSearch?: (newValue: string) => void;
+		searchValue?: string;
+		size?: 'lg' | 'md';
+		syncSearchValue?: boolean;
+		valuePlaceholder?: TagSearchBarValuePlaceholder;
 	};
 
 export type TagSearchBarClearLabel = string | ReactNode;

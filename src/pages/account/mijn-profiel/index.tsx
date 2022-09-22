@@ -1,5 +1,5 @@
 import { Box, Button } from '@meemoo/react-components';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Link from 'next/link';
