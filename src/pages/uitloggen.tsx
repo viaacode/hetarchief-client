@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import { useEffect } from 'react';
 
 import { AuthService } from '@auth/services/auth-service';

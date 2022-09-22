@@ -134,6 +134,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
+									name="set-status-activated-space"
 									label={tText('modules/admin/const/spaces___activeren')}
 									onClick={() =>
 										updateVisitorSpaceState(
@@ -149,6 +150,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
+									name="set-status-deactivated-space"
 									label={tText('modules/admin/const/spaces___deactiveren')}
 									onClick={() =>
 										updateVisitorSpaceState(
@@ -164,6 +166,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								<Button
 									className="u-text-left"
 									variants="text"
+									name="set-status-pending-space"
 									label={tText(
 										'modules/admin/const/spaces___terug-naar-in-aanvraag'
 									)}
