@@ -159,8 +159,12 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 					tags={[
 						{
 							id: 1,
-							label: tHtml(
-								'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___aanvraag-ingediend'
+							label: (
+								<b>
+									{tHtml(
+										'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___aanvraag-ingediend'
+									)}
+								</b>
 							),
 						},
 					]}
