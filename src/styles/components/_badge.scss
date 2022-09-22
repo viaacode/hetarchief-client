@@ -38,6 +38,10 @@ $badge-font-size: 1.4rem;
 		@include badge-variant($cherry, $white, 0.6rem);
 	}
 
+	&--dark {
+		@include badge-variant($black, $white, 0.6rem);
+	}
+
 	&--icon {
 		@include icon-font-size($badge-font-size);
 	}

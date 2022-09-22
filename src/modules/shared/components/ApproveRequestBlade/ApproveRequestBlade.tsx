@@ -390,76 +390,87 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 
 	return (
-		<Blade {...props} footer={renderFooter()} title={title}>
+		<Blade {...props} footer={props.isOpen && renderFooter()} title={title}>
 			{selected && <VisitSummary {...selected} />}
 
-			<div className="u-px-32">
-				<FormControl
-					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
-					errors={[errors.accessFrom?.message]}
-					id={labelKeys.accessFrom}
-					label={tHtml(
-						'modules/cp/components/approve-request-blade/approve-request-blade___van'
-					)}
-				>
-					<Controller name="accessFrom" control={control} render={renderAccessFrom} />
-				</FormControl>
-
-				<FormControl
-					className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
-					errors={[errors.accessTo?.message]}
-					id={labelKeys.accessTo}
-					label={tHtml(
-						'modules/cp/components/approve-request-blade/approve-request-blade___tot'
-					)}
-				>
-					<Controller name="accessTo" control={control} render={renderAccessTo} />
-				</FormControl>
-
-				{!!overlappingRequests.length && (
-					<p className={clsx('c-form-control__errors', styles['c-form-control__errors'])}>
-						{tHtml(
-							'modules/shared/components/approve-request-blade/approve-request-blade___er-is-reeds-een-goedgekeurde-aanvraag-voor-deze-periode'
+			{props.isOpen && (
+				<div className="u-px-32">
+					<FormControl
+						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
+						errors={[errors.accessFrom?.message]}
+						id={labelKeys.accessFrom}
+						label={tHtml(
+							'modules/cp/components/approve-request-blade/approve-request-blade___van'
 						)}
-						<br />
-						<br />
-						{formatMediumDateWithTime(asDate(overlappingRequests[0].startAt))}
-						{' - '}
-						{formatMediumDateWithTime(asDate(overlappingRequests[0].endAt))}
-						<br />
-						<br />
-						<Link
-							href={
-								canViewAddVisitRequests
-									? `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
-									: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
-							}
-							passHref
-						>
-							<a
-								onClick={onClose}
-								aria-label={tText(
-									'modules/shared/components/approve-request-blade/approve-request-blade___navigeer-naar-de-reeds-goedgekeurde-aanvraag-voor-deze-periode'
-								)}
-							>
-								{tHtml(
-									'modules/shared/components/approve-request-blade/approve-request-blade___bekijk-deze-aanvraag'
-								)}
-							</a>
-						</Link>
-					</p>
-				)}
+					>
+						<Controller name="accessFrom" control={control} render={renderAccessFrom} />
+					</FormControl>
 
-				<FormControl
-					id={labelKeys.accessRemark}
-					label={tHtml(
-						'modules/cp/components/approve-request-blade/approve-request-blade___opmerkingen'
+					<FormControl
+						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
+						errors={[errors.accessTo?.message]}
+						id={labelKeys.accessTo}
+						label={tHtml(
+							'modules/cp/components/approve-request-blade/approve-request-blade___tot'
+						)}
+					>
+						<Controller name="accessTo" control={control} render={renderAccessTo} />
+					</FormControl>
+
+					{!!overlappingRequests.length && (
+						<p
+							className={clsx(
+								'c-form-control__errors',
+								styles['c-form-control__errors']
+							)}
+						>
+							{tHtml(
+								'modules/shared/components/approve-request-blade/approve-request-blade___er-is-reeds-een-goedgekeurde-aanvraag-voor-deze-periode'
+							)}
+							<br />
+							<br />
+							{formatMediumDateWithTime(asDate(overlappingRequests[0].startAt))}
+							{' - '}
+							{formatMediumDateWithTime(asDate(overlappingRequests[0].endAt))}
+							<br />
+							<br />
+							<Link
+								href={
+									canViewAddVisitRequests
+										? `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
+										: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}?${ROUTE_PARTS.visitRequest}=${overlappingRequests[0].id}`
+								}
+								passHref
+							>
+								<a
+									onClick={onClose}
+									aria-label={tText(
+										'modules/shared/components/approve-request-blade/approve-request-blade___navigeer-naar-de-reeds-goedgekeurde-aanvraag-voor-deze-periode'
+									)}
+								>
+									{tHtml(
+										'modules/shared/components/approve-request-blade/approve-request-blade___bekijk-deze-aanvraag'
+									)}
+								</a>
+							</Link>
+						</p>
 					)}
-					suffix={OPTIONAL_LABEL()}
-				>
-					<Controller name="accessRemark" control={control} render={renderAccessRemark} />
-				</FormControl>
-			</div>
+
+					<FormControl
+						id={labelKeys.accessRemark}
+						label={tHtml(
+							'modules/cp/components/approve-request-blade/approve-request-blade___opmerkingen'
+						)}
+						suffix={OPTIONAL_LABEL()}
+					>
+						<Controller
+							name="accessRemark"
+							control={control}
+							render={renderAccessRemark}
+						/>
+					</FormControl>
+				</div>
+			)}
 		</Blade>
 	);
 };

@@ -12,6 +12,10 @@ $metadata-collapsed-width: 36vw;
 
 	// Elements
 
+	.p-object-detail__title {
+		word-break: break-word;
+	}
+
 	&__wrapper {
 		flex-grow: 1;
 		min-height: 0;

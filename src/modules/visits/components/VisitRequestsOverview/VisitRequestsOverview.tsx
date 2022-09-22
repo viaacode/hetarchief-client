@@ -1,4 +1,5 @@
 import { Table } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Column, TableOptions } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -164,62 +165,52 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		}
 	};
 
-	const renderVisitRequestsTable = () => {
+	const renderContent = () => {
 		if (isFetching) {
-			return (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					<Loading />
-				</div>
-			);
+			return <Loading />;
 		}
 		if ((visits?.items?.length || 0) <= 0) {
-			return (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					{renderEmptyMessage()}
-				</div>
-			);
+			return renderEmptyMessage();
 		} else {
 			return (
-				<div className="l-container l-container--edgeless-to-lg">
-					<Table
-						className="u-mt-24"
-						options={
-							// TODO: fix type hinting
-							/* eslint-disable @typescript-eslint/ban-types */
-							{
-								columns: columns as Column<object>[],
-								data: visits?.items || [],
-								initialState: {
-									pageSize: RequestTablePageSize,
-									sortBy: sortFilters,
-								},
-							} as TableOptions<object>
-							/* eslint-enable @typescript-eslint/ban-types */
-						}
-						onRowClick={onRowClick}
-						onSortChange={onSortChange}
-						sortingIcons={sortingIcons}
-						pagination={({ gotoPage }) => {
-							return (
-								<PaginationBar
-									className="u-mt-16 u-mb-16"
-									count={RequestTablePageSize}
-									start={Math.max(0, filters.page - 1) * RequestTablePageSize}
-									total={visits?.total || 0}
-									onPageChange={(pageZeroBased) => {
-										gotoPage(pageZeroBased);
-										setFilters({
-											...filters,
-											page: pageZeroBased + 1,
-											[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
-										});
-										setSelectedNotOnCurrentPage(undefined);
-									}}
-								/>
-							);
-						}}
-					/>
-				</div>
+				<Table
+					className="u-mt-24"
+					options={
+						// TODO: fix type hinting
+						/* eslint-disable @typescript-eslint/ban-types */
+						{
+							columns: columns as Column<object>[],
+							data: visits?.items || [],
+							initialState: {
+								pageSize: RequestTablePageSize,
+								sortBy: sortFilters,
+							},
+						} as TableOptions<object>
+						/* eslint-enable @typescript-eslint/ban-types */
+					}
+					onRowClick={onRowClick}
+					onSortChange={onSortChange}
+					sortingIcons={sortingIcons}
+					pagination={({ gotoPage }) => {
+						return (
+							<PaginationBar
+								className="u-mt-16 u-mb-16"
+								count={RequestTablePageSize}
+								start={Math.max(0, filters.page - 1) * RequestTablePageSize}
+								total={visits?.total || 0}
+								onPageChange={(pageZeroBased) => {
+									gotoPage(pageZeroBased);
+									setFilters({
+										...filters,
+										page: pageZeroBased + 1,
+										[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
+									});
+									setSelectedNotOnCurrentPage(undefined);
+								}}
+							/>
+						);
+					}}
+				/>
 			);
 		}
 	};
@@ -250,7 +241,14 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 				</div>
 			</div>
 
-			{renderVisitRequestsTable()}
+			<div
+				className={clsx('l-container l-container--edgeless-to-lg', {
+					'u-text-center u-color-neutral u-py-48':
+						isFetching || (visits?.items?.length || 0) <= 0,
+				})}
+			>
+				{renderContent()}
+			</div>
 
 			<ProcessRequestBlade
 				isOpen={

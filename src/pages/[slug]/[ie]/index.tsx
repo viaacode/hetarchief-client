@@ -2,7 +2,7 @@ import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-com
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -538,7 +538,7 @@ const ObjectDetailPage: NextPage = () => {
 						/>
 					)}
 					<h3
-						className={clsx('u-pb-24', {
+						className={clsx('u-pb-24', 'p-object-detail__title', {
 							'u-pt-24': showResearchWarning,
 							'u-pt-32': !showResearchWarning,
 						})}
