@@ -141,17 +141,16 @@ const AccountMyFolders: NextPage = () => {
 
 		// Temp set folders with new name in redux store
 		if (folders) {
-			const newFolders: Folder[] = (folders?.items || []).map((folder): Folder => {
-				if (folder.id === newFolder.id) {
-					return newFolder;
-				} else {
-					return folder;
-				}
-			});
 			dispatch(
 				setFolders({
 					...folders,
-					items: newFolders,
+					items: (folders?.items || []).map((folder): Folder => {
+						if (folder.id === newFolder.id) {
+							return newFolder;
+						} else {
+							return folder;
+						}
+					}),
 				})
 			);
 		}

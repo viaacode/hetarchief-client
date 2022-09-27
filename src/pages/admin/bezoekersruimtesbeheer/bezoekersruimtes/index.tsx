@@ -1,7 +1,8 @@
-import { Button, Column, Table, TableOptions } from '@meemoo/react-components';
+import { Button, OrderDirection, Table } from '@meemoo/react-components';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { FC, ReactNode, useCallback, useMemo } from 'react';
+import React, { FC, ReactNode, useMemo } from 'react';
+import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -26,12 +27,11 @@ import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissio
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { OrderDirection } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
-import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
+import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 
 const VisitorSpacesOverview: FC = () => {
 	const { tHtml, tText } = useTranslation();
@@ -73,21 +73,19 @@ const VisitorSpacesOverview: FC = () => {
 
 	// Events
 
-	const onSortChange = useCallback(
-		(rules) => {
+	const onSortChange = (
+		orderProp: string | undefined,
+		orderDirection: OrderDirection | undefined
+	) => {
+		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp: rules[0]?.id || undefined,
-				orderDirection: rules[0]
-					? rules[0].desc
-						? OrderDirection.desc
-						: OrderDirection.asc
-					: undefined,
+				orderProp,
+				orderDirection,
 				page: 1,
 			});
-		},
-		[filters, setFilters]
-	);
+		}
+	};
 
 	// Callbacks
 	const onFailedRequest = () => {
@@ -181,25 +179,20 @@ const VisitorSpacesOverview: FC = () => {
 			);
 		}
 		return (
-			<Table
+			<Table<VisitorSpaceInfo>
 				className="u-mt-24"
-				options={
-					// TODO: fix type hinting
-					/* eslint-disable @typescript-eslint/ban-types */
-					{
-						columns: VisitorSpacesOverviewTableColumns(
-							updateRoomStatus,
-							showEditButton,
-							showStatusDropdown
-						) as Column<object>[],
-						data: visitorSpaces?.items || [],
-						initialState: {
-							pageSize: VisitorSpacesOverviewTablePageSize,
-							sortBy: sortFilters,
-						},
-					} as TableOptions<object>
-					/* eslint-enable @typescript-eslint/ban-types */
-				}
+				options={{
+					columns: VisitorSpacesOverviewTableColumns(
+						updateRoomStatus,
+						showEditButton,
+						showStatusDropdown
+					),
+					data: visitorSpaces?.items || [],
+					initialState: {
+						pageSize: VisitorSpacesOverviewTablePageSize,
+						sortBy: sortFilters,
+					} as TableState<VisitorSpaceInfo>,
+				}}
 				onSortChange={onSortChange}
 				sortingIcons={sortingIcons}
 				pagination={({ gotoPage }) => {

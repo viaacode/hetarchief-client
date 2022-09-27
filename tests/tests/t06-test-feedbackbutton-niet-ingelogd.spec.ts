@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from './helpers/accept-cookies';
+import { acceptCookies } from '../helpers/accept-cookies';
 
 test('T06: Test Feedbackbutton (niet ingelogd)', async ({ page, context }) => {
 	// GO to the hetarchief homepage

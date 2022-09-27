@@ -1,10 +1,10 @@
-import { TabProps } from '@meemoo/react-components';
+import { OrderDirection, TabProps } from '@meemoo/react-components';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { Icon } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { OrderDirection, VisitorSpaceMediaType } from '@shared/types';
+import { VisitorSpaceMediaType } from '@shared/types';
 
 import {
 	AdvancedFilterForm,

@@ -1,6 +1,7 @@
-import { Column, Table, TableOptions } from '@meemoo/react-components';
+import { OrderDirection, Table } from '@meemoo/react-components';
 import Head from 'next/head';
-import React, { FC, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useMemo, useState } from 'react';
+import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -23,7 +24,7 @@ import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { OrderDirection, Visit, VisitStatus } from '@shared/types';
+import { Visit, VisitStatus } from '@shared/types';
 import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
@@ -68,21 +69,19 @@ const Visitors: FC = () => {
 
 	// Events
 
-	const onSortChange = useCallback(
-		(rules) => {
+	const onSortChange = (
+		orderProp: string | undefined,
+		orderDirection: OrderDirection | undefined
+	) => {
+		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp: rules[0]?.id || undefined,
-				orderDirection: rules[0]
-					? rules[0].desc
-						? OrderDirection.desc
-						: OrderDirection.asc
-					: undefined,
+				orderProp,
+				orderDirection,
 				page: 1,
 			});
-		},
-		[filters, setFilters]
-	);
+		}
+	};
 
 	const denyVisitRequest = (visitRequest: Visit) => {
 		setSelected(visitRequest.id);
@@ -177,24 +176,19 @@ const Visitors: FC = () => {
 
 						{(visits?.items?.length || 0) > 0 ? (
 							<div className="l-container--edgeless-to-lg">
-								<Table
+								<Table<Visit>
 									className="u-mt-24 c-table--no-padding-last-column"
-									options={
-										// TODO: fix type hinting
-										/* eslint-disable @typescript-eslint/ban-types */
-										{
-											columns: VisitorsTableColumns(
-												denyVisitRequest,
-												editVisitRequest
-											) as Column<object>[],
-											data: visits?.items || [],
-											initialState: {
-												pageSize: VisitorsTablePageSize,
-												sortBy: sortFilters,
-											},
-										} as TableOptions<object>
-										/* eslint-enable @typescript-eslint/ban-types */
-									}
+									options={{
+										columns: VisitorsTableColumns(
+											denyVisitRequest,
+											editVisitRequest
+										),
+										data: visits?.items || [],
+										initialState: {
+											pageSize: VisitorsTablePageSize,
+											sortBy: sortFilters,
+										} as TableState<Visit>,
+									}}
 									onSortChange={onSortChange}
 									sortingIcons={sortingIcons}
 									pagination={({ gotoPage }) => {

@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  playwright:
+    container_name: playwright-test
+    build:
+      context: ..
+      dockerfile: docker.Dockerfile
+    environment:
+      - TEST_CLIENT_ENDPOINT
+      - TEST_PROXY_ENDPOINT
+      - TEST_OBJECT_DETAIL_PAGE_VRT
+      - TEST_OBJECT_DETAIL_PAGE_VLAAMS_PARLEMENT
+      - TEST_VISITOR_ACCOUNT_USERNAME
+      - TEST_VISITOR_ACCOUNT_PASSWORD
+      - TEST_CP_ADMIN_ACCOUNT_USERNAME
+      - TEST_CP_ADMIN_ACCOUNT_PASSWORD
+      - TEST_MEEMOO_ADMIN_ACCOUNT_USERNAME
+      - TEST_MEEMOO_ADMIN_ACCOUNT_PASSWORD
+      - TEST_ACM_DASHBOARD
+      - TEST_ACM_DASHBOARD_USERNAME
+      - TEST_ACM_DASHBOARD_PASSWORD
