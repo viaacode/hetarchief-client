@@ -1,7 +1,7 @@
-import { Table } from '@meemoo/react-components';
+import { OrderDirection, Row, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { Column, TableOptions } from 'react-table';
+import { FC, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
+import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -23,7 +23,7 @@ import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { OrderDirection, Visit, VisitStatus } from '@shared/types';
+import { Visit, VisitStatus } from '@shared/types';
 import { useGetVisit } from '@visits/hooks/get-visit';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { RequestStatusAll } from '@visits/types';
@@ -113,38 +113,33 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 	// Events
 
-	const onSortChange = useCallback(
-		(rules) => {
+	const onSortChange = (
+		orderProp: string | undefined,
+		orderDirection: OrderDirection | undefined
+	) => {
+		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp: rules[0]?.id || undefined,
-				orderDirection: rules[0]
-					? rules[0].desc
-						? OrderDirection.desc
-						: OrderDirection.asc
-					: undefined,
+				orderProp,
+				orderDirection,
 				page: 1,
 			});
-		},
-		[filters, setFilters]
-	);
+		}
+	};
 
-	const onRowClick = useCallback(
-		(e, row) => {
-			if (!canUpdateVisitRequests) {
-				toastService.notify({
-					title: tHtml('pages/beheer/aanvragen/index___geen-rechten'),
-					description: tHtml(
-						'pages/beheer/aanvragen/index___je-hebt-geen-rechten-om-bezoekaanvragen-te-bewerken'
-					),
-				});
-				return;
-			}
-			const request = (row as { original: Visit }).original;
-			setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: request.id });
-		},
-		[canUpdateVisitRequests, setFilters, tHtml]
-	);
+	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<Visit>) => {
+		if (!canUpdateVisitRequests) {
+			toastService.notify({
+				title: tHtml('pages/beheer/aanvragen/index___geen-rechten'),
+				description: tHtml(
+					'pages/beheer/aanvragen/index___je-hebt-geen-rechten-om-bezoekaanvragen-te-bewerken'
+				),
+			});
+			return;
+		}
+		const request = row.original;
+		setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: request.id });
+	};
 
 	// Render
 
@@ -173,44 +168,41 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 			return renderEmptyMessage();
 		} else {
 			return (
-				<Table
-					className="u-mt-24"
-					options={
-						// TODO: fix type hinting
-						/* eslint-disable @typescript-eslint/ban-types */
-						{
-							columns: columns as Column<object>[],
+				<div className="l-container l-container--edgeless-to-lg">
+					<Table<Visit>
+						className="u-mt-24"
+						options={{
+							columns: columns,
 							data: visits?.items || [],
 							initialState: {
 								pageSize: RequestTablePageSize,
 								sortBy: sortFilters,
-							},
-						} as TableOptions<object>
-						/* eslint-enable @typescript-eslint/ban-types */
-					}
-					onRowClick={onRowClick}
-					onSortChange={onSortChange}
-					sortingIcons={sortingIcons}
-					pagination={({ gotoPage }) => {
-						return (
-							<PaginationBar
-								className="u-mt-16 u-mb-16"
-								count={RequestTablePageSize}
-								start={Math.max(0, filters.page - 1) * RequestTablePageSize}
-								total={visits?.total || 0}
-								onPageChange={(pageZeroBased) => {
-									gotoPage(pageZeroBased);
-									setFilters({
-										...filters,
-										page: pageZeroBased + 1,
-										[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
-									});
-									setSelectedNotOnCurrentPage(undefined);
-								}}
-							/>
-						);
-					}}
-				/>
+							} as TableState<Visit>,
+						}}
+						onRowClick={onRowClick}
+						onSortChange={onSortChange}
+						sortingIcons={sortingIcons}
+						pagination={({ gotoPage }) => {
+							return (
+								<PaginationBar
+									className="u-mt-16 u-mb-16"
+									count={RequestTablePageSize}
+									start={Math.max(0, filters.page - 1) * RequestTablePageSize}
+									total={visits?.total || 0}
+									onPageChange={(pageZeroBased) => {
+										gotoPage(pageZeroBased);
+										setFilters({
+											...filters,
+											page: pageZeroBased + 1,
+											[VISIT_REQUEST_ID_QUERY_KEY]: undefined,
+										});
+										setSelectedNotOnCurrentPage(undefined);
+									}}
+								/>
+							);
+						}}
+					/>
+				</div>
 			);
 		}
 	};

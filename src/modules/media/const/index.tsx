@@ -90,19 +90,20 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
  * Tabs
  */
 
-const renderMediaTab = (mediaType?: MediaTypes) => {
+const renderMediaTab = (mediaType?: MediaTypes, available = true) => {
 	switch (mediaType) {
 		case 'audio':
 			return {
 				id: ObjectDetailTabs.Media,
 				label: tText('modules/media/const/index___audio'),
-				icon: <Icon name="audio" aria-hidden />,
+				icon: <Icon name={available ? 'audio' : 'no-audio'} aria-hidden />,
 			};
 		case 'video':
+		case 'film':
 			return {
 				id: ObjectDetailTabs.Media,
 				label: tText('modules/media/const/index___video'),
-				icon: <Icon name="video" aria-hidden />,
+				icon: <Icon name={available ? 'video' : 'no-video'} aria-hidden />,
 			};
 		default:
 			return {
@@ -113,13 +114,13 @@ const renderMediaTab = (mediaType?: MediaTypes) => {
 	}
 };
 
-export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes): TabProps[] => [
+export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes, available = true): TabProps[] => [
 	{
 		id: ObjectDetailTabs.Metadata,
 		label: tText('modules/media/const/index___metadata'),
 		icon: <Icon name="info" aria-hidden />,
 	},
-	renderMediaTab(mediaType),
+	renderMediaTab(mediaType, available),
 ];
 
 /**

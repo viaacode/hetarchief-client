@@ -1,8 +1,8 @@
-import { Table } from '@meemoo/react-components';
+import { OrderDirection, Table } from '@meemoo/react-components';
 import { NextPage } from 'next';
 import getConfig from 'next/config';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { Column, TableOptions } from 'react-table';
+import { ReactNode, useMemo, useState } from 'react';
+import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
@@ -29,7 +29,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { OrderDirection, Visit, VisitStatus } from '@shared/types';
+import { Visit, VisitStatus } from '@shared/types';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
@@ -90,21 +90,19 @@ const CPVisitorsPage: NextPage = () => {
 
 	// Events
 
-	const onSortChange = useCallback(
-		(rules) => {
+	const onSortChange = (
+		orderProp: string | undefined,
+		orderDirection: OrderDirection | undefined
+	) => {
+		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp: rules[0]?.id || undefined,
-				orderDirection: rules[0]
-					? rules[0].desc
-						? OrderDirection.desc
-						: OrderDirection.asc
-					: undefined,
+				orderProp,
+				orderDirection,
 				page: 1,
 			});
-		},
-		[filters, setFilters]
-	);
+		}
+	};
 
 	const denyVisitRequest = (visitRequest: Visit) => {
 		setSelected(visitRequest.id);
@@ -185,24 +183,16 @@ const CPVisitorsPage: NextPage = () => {
 		}
 		return (
 			<div className="l-container l-container--edgeless-to-lg">
-				<Table
+				<Table<Visit>
 					className="u-mt-24 c-table--no-padding-last-column"
-					options={
-						// TODO: fix type hinting
-						/* eslint-disable @typescript-eslint/ban-types */
-						{
-							columns: VisitorsTableColumns(
-								denyVisitRequest,
-								editVisitRequest
-							) as Column<object>[],
-							data: visits?.items || [],
-							initialState: {
-								pageSize: RequestTablePageSize,
-								sortBy: sortFilters,
-							},
-						} as TableOptions<object>
-						/* eslint-enable @typescript-eslint/ban-types */
-					}
+					options={{
+						columns: VisitorsTableColumns(denyVisitRequest, editVisitRequest),
+						data: visits?.items || [],
+						initialState: {
+							pageSize: RequestTablePageSize,
+							sortBy: sortFilters,
+						} as TableState<Visit>,
+					}}
 					onSortChange={onSortChange}
 					sortingIcons={sortingIcons}
 					pagination={({ gotoPage }) => {

@@ -1,10 +1,10 @@
-import { Button } from '@meemoo/react-components';
+import { Button, OrderDirection } from '@meemoo/react-components';
 import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { OrderDirection, Visit, VisitRow } from '@shared/types';
+import { Visit, VisitRow } from '@shared/types';
 import { formatSameDayRange } from '@shared/utils';
 
 export const HistoryItemListSize = 20;

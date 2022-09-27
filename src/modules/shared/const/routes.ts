@@ -48,7 +48,7 @@ export const ROUTES = Object.freeze({
 	space: '/:slug',
 	termsOfService: '/' + ROUTE_PARTS.userPolicy,
 	cookiePolicy: '/' + ROUTE_PARTS.cookiePolicy,
-	myCollections: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
+	myFolders: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
 	myHistory: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
 	visitRequested: `/:slug/${ROUTE_PARTS.accessRequested}`,
 	adminEditSpace: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/:slug`,

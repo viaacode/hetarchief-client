@@ -1,1 +1,1 @@
-export * from './CreateCollectionButton';
+export * from './CreateFolderButton';

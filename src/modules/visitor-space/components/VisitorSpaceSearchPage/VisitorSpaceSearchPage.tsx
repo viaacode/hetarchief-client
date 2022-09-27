@@ -1,4 +1,4 @@
-import { Button, FormControl, TabProps } from '@meemoo/react-components';
+import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { sum } from 'lodash-es';
@@ -44,13 +44,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import {
-	AccessStatus,
-	Breakpoints,
-	OrderDirection,
-	SortObject,
-	VisitorSpaceMediaType,
-} from '@shared/types';
+import { AccessStatus, Breakpoints, SortObject, VisitorSpaceMediaType } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
