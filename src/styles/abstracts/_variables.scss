@@ -10,6 +10,7 @@ $black-light: color.adjust($black, $lightness: 10%);
 $black-pale: color.adjust($black, $lightness: 20%);
 $teal: #00c8aa;
 $teal-dark: #00857d;
+$teal-extra-dark: color.adjust(#00857d, $lightness: - 10%);
 $teal-light: color.adjust($teal, $lightness: 10%);
 $seagreen: #009690;
 $cherry: #d60039;

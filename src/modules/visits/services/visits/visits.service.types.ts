@@ -1,6 +1,7 @@
-import { OrderDirection, Visit, VisitStatus } from '@shared/types';
-import { VisitTimeframe } from '@visits/types';
+import { OrderDirection } from '@meemoo/react-components';
 
+import { Visit, VisitStatus } from '@shared/types';
+import { VisitTimeframe } from '@visits/types';
 export interface GetVisitsProps {
 	searchInput?: string | undefined;
 	status?: VisitStatus | undefined;
