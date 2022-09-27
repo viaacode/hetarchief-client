@@ -22,8 +22,8 @@
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
+		background-color: $teal-extra-dark;
+		border-color: $teal-extra-dark;
 	}
 
 	/**
@@ -80,10 +80,10 @@
 	border-color: $black;
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -108,10 +108,10 @@
 	}
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -137,10 +137,10 @@
 	}
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -201,10 +201,10 @@
 	}
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
@@ -235,10 +235,10 @@
 	}
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -320,10 +320,10 @@
 	}
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: none;

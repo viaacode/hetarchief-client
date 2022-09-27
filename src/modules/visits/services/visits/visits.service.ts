@@ -1,7 +1,8 @@
+import { OrderDirection } from '@meemoo/react-components';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { OrderDirection, Visit, VisitAccessStatus } from '@shared/types';
+import { Visit, VisitAccessStatus } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { GetVisitsProps } from '@visits/services/visits/visits.service.types';

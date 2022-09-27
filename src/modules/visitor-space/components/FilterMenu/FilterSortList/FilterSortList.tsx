@@ -1,8 +1,7 @@
-import { Button } from '@meemoo/react-components';
+import { Button, OrderDirection } from '@meemoo/react-components';
 import { FC } from 'react';
 
 import { ListNavigation, ListNavigationItem } from '@shared/components';
-import { OrderDirection } from '@shared/types';
 
 import { FilterMenuSortOption } from '../FilterMenu.types';
 

@@ -1,7 +1,8 @@
+import { OrderDirection } from '@meemoo/react-components';
 import { FC } from 'react';
 
 import { IconProps, ToggleOption } from '@shared/components';
-import { DefaultComponentProps, OrderDirection, SortObject } from '@shared/types';
+import { DefaultComponentProps, SortObject } from '@shared/types';
 
 import { DefaultFilterFormProps, TagIdentity, VisitorSpaceSort } from '../../types';
 
