@@ -35,7 +35,7 @@ describe('Components', () => {
 			const titleNode = getByText(title);
 
 			expect(titleNode).toBeInTheDocument();
-			expect(titleNode).toHaveClass('c-related-objects-blade__title');
+			expect(titleNode).toHaveClass('c-button__label');
 		});
 
 		it('Should render content', () => {
