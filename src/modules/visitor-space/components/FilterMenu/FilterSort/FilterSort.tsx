@@ -1,8 +1,12 @@
-import { Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import {
+	Dropdown,
+	DropdownButton,
+	DropdownContent,
+	OrderDirection,
+} from '@meemoo/react-components';
 import { FC, useState } from 'react';
 
 import { Overlay } from '@shared/components';
-import { OrderDirection } from '@shared/types';
 
 import { VisitorSpaceSort } from '../../../types';
 import { FilterButton } from '../FilterButton';
