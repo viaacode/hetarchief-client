@@ -1,9 +1,9 @@
+import { OrderDirection } from '@meemoo/react-components';
 import { stringifyUrl } from 'query-string';
 import { QueryClient } from 'react-query';
 
 import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
-import { OrderDirection } from '@shared/types';
 import { ApiResponseWrapper } from '@shared/types/api';
 
 import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '../../types';

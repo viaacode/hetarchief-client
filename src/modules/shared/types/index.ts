@@ -1,3 +1,4 @@
+import { OrderDirection } from '@meemoo/react-components';
 import { CSSProperties } from 'react';
 
 export * from './api';
@@ -25,11 +26,6 @@ export interface ComponentLink {
 /**
  * Filter / Sort
  */
-
-export enum OrderDirection {
-	asc = 'asc',
-	desc = 'desc',
-}
 
 export interface SortObject {
 	orderProp: string;

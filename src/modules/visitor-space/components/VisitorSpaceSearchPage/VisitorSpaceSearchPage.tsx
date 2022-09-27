@@ -1,4 +1,4 @@
-import { Button, FormControl, TabProps } from '@meemoo/react-components';
+import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { sum } from 'lodash-es';
@@ -43,13 +43,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import {
-	AccessStatus,
-	Breakpoints,
-	OrderDirection,
-	SortObject,
-	VisitorSpaceMediaType,
-} from '@shared/types';
+import { AccessStatus, Breakpoints, SortObject, VisitorSpaceMediaType } from '@shared/types';
 import {
 	asDate,
 	createPageTitle,
@@ -125,6 +119,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
+	const [searchBarInputState, setSearchBarInputState] = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
 	const activeSort: SortObject = {
@@ -236,13 +231,28 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	 * Methods
 	 */
 
+	const prepareSearchValue = (
+		value = ''
+	): { [SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
+		const trimmed = value.trim();
+
+		if (trimmed && !query.search?.includes(trimmed)) {
+			return {
+				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(trimmed),
+			};
+		}
+
+		return undefined;
+	};
+
 	const onSearch = async (newValue: string) => {
-		if (newValue.trim() && !query.search?.includes(newValue)) {
+		const value = prepareSearchValue(newValue);
+
+		value &&
 			setQuery({
-				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(newValue),
+				...value,
 				page: 1,
 			});
-		}
 	};
 
 	const onFilterMenuToggle = (nextOpen?: boolean, isMobile?: boolean) => {
@@ -260,6 +270,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
+		const searchValue = prepareSearchValue(searchBarInputState);
 		let data;
 
 		switch (id) {
@@ -339,7 +350,8 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined, page: 1 });
+		setQuery({ [id]: data, filter: undefined, page: 1, ...(searchValue ? searchValue : {}) });
+		setSearchBarInputState(undefined);
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -485,6 +497,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						type: item.dcterms_format,
 						preview: item.schema_thumbnail_url || undefined,
 						name: item.schema_name,
+						hasRelated: (item.related_count || 0) > 0,
 					})
 				)}
 				keywords={keywords}
@@ -498,7 +511,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${slug}/${source?.meemoo_fragment_id}`;
+					const href = `/${slug}/${source?.schema_identifier}`;
 
 					const name = item.title?.toString(); // TODO double check that this still works
 					return (
@@ -578,17 +591,18 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									clearLabel={tHtml(
 										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 									)}
+									inputState={[searchBarInputState, setSearchBarInputState]}
 									instanceId={labelKeys.search}
 									isMulti
-									size="lg"
-									placeholder={tText(
-										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
-									)}
-									syncSearchValue={false}
-									value={activeFilters}
 									onClear={onResetFilters}
 									onRemoveValue={onRemoveTag}
 									onSearch={onSearch}
+									placeholder={tText(
+										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+									)}
+									size="lg"
+									syncSearchValue={false}
+									value={activeFilters}
 								/>
 							</FormControl>
 

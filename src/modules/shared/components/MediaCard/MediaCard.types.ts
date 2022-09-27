@@ -17,6 +17,7 @@ export interface MediaCardProps {
 	title?: string | ReactNode;
 	type: MediaTypes;
 	view?: MediaCardViewMode;
+	hasRelated?: boolean;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

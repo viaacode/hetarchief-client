@@ -2,7 +2,7 @@ import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-com
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
-import { GetServerSideProps, NextPage } from 'next';
+import { NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -389,21 +389,40 @@ const ObjectDetailPage: NextPage = () => {
 	/**
 	 * Content
 	 */
-	const tabs: TabProps[] = useMemo(
-		() =>
-			OBJECT_DETAIL_TABS(mediaType).map((tab) => ({
-				...tab,
-				label: <TabLabel label={tab.label} />,
-				active: tab.id === activeTab,
-			})),
-		[activeTab, mediaType]
-	);
+	const tabs: TabProps[] = useMemo(() => {
+		const available =
+			!isErrorNoLicense && !isErrorPlayableUrl && !!playableUrl && !!currentRepresentation;
+		return OBJECT_DETAIL_TABS(mediaType, available).map((tab) => ({
+			...tab,
+			label: <TabLabel label={tab.label} />,
+			active: tab.id === activeTab,
+		}));
+	}, [
+		activeTab,
+		mediaType,
+		isErrorNoLicense,
+		isErrorPlayableUrl,
+		playableUrl,
+		currentRepresentation,
+	]);
 
 	/**
 	 * Render
 	 */
 
-	const renderMedia = (playableUrl: string, representation: MediaRepresentation): ReactNode => {
+	const renderMedia = (
+		playableUrl: string | undefined,
+		representation: MediaRepresentation | undefined
+	): ReactNode => {
+		if (isLoadingPlayableUrl) {
+			return <Loading fullscreen={true} />;
+		}
+		if (isErrorNoLicense) {
+			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
+		}
+		if (isErrorPlayableUrl || !playableUrl || !representation) {
+			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
+		}
 		const shared: Partial<FlowPlayerProps> = {
 			className: clsx(
 				'p-object-detail__flowplayer',
@@ -460,20 +479,6 @@ const ObjectDetailPage: NextPage = () => {
 
 		// No renderer
 		return <ObjectPlaceholder {...formatErrorPlaceholder(representation.dctermsFormat)} />;
-	};
-
-	const renderMediaPlaceholder = (): ReactNode => {
-		if (isLoadingPlayableUrl) {
-			return null;
-		}
-		if (isErrorNoLicense) {
-			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
-		}
-		if (isErrorPlayableUrl) {
-			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
-		}
-
-		return null;
 	};
 
 	// Metadata
@@ -538,7 +543,7 @@ const ObjectDetailPage: NextPage = () => {
 						/>
 					)}
 					<h3
-						className={clsx('u-pb-24', {
+						className={clsx('u-pb-24', 'p-object-detail__title', {
 							'u-pt-24': showResearchWarning,
 							'u-pt-32': !showResearchWarning,
 						})}
@@ -655,13 +660,7 @@ const ObjectDetailPage: NextPage = () => {
 		if (mediaType) {
 			return (
 				<>
-					{playableUrl && currentRepresentation ? (
-						// Flowplayer/image/not playable
-						renderMedia(playableUrl, currentRepresentation)
-					) : (
-						// Loading/error
-						<div>{renderMediaPlaceholder()}</div>
-					)}
+					{renderMedia(playableUrl, currentRepresentation)}
 					{showFragmentSlider && (
 						<FragmentSlider
 							thumbnail={mediaInfo?.thumbnailUrl}

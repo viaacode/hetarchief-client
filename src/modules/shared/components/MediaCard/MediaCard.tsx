@@ -1,4 +1,4 @@
-import { Card } from '@meemoo/react-components';
+import { Badge, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { FC, MouseEvent, ReactNode } from 'react';
@@ -26,6 +26,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	id,
 	actions,
 	buttons,
+	hasRelated,
 }) => {
 	const renderDropdown = () =>
 		actions ? (
@@ -119,6 +120,10 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 	};
 
+	const renderTags = () => {
+		return hasRelated && <Badge variants="small" text={<Icon name="link" />} />;
+	};
+
 	const renderImage = (imgPath: string | undefined) =>
 		imgPath ? (
 			<div
@@ -152,6 +157,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				image={renderHeader()}
 				subtitle={renderSubtitle()}
 				toolbar={renderToolbar()}
+				tags={renderTags()}
 				padding="both"
 			>
 				{typeof description === 'string' ? (
