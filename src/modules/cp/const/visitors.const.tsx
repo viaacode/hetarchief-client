@@ -1,4 +1,4 @@
-import { Button, TabProps } from '@meemoo/react-components';
+import { Button, OrderDirection, TabProps } from '@meemoo/react-components';
 import { isWithinInterval } from 'date-fns';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
@@ -7,7 +7,7 @@ import { CopyButton, DropdownMenu, UnreadMarker } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { OrderDirection, Visit, VisitRow } from '@shared/types';
+import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatSameDayRange } from '@shared/utils';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
 
