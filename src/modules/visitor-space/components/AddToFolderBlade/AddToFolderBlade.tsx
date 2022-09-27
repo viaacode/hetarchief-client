@@ -5,9 +5,9 @@ import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-import { CreateCollectionButton } from '@account/components';
-import { useGetCollections } from '@account/hooks/get-collections';
-import { collectionsService } from '@account/services/collections';
+import { CreateFolderButton } from '@account/components';
+import { useGetFolders } from '@account/hooks/get-folders';
+import { foldersService } from '@account/services/folders';
 import { Folder } from '@account/types';
 import { Blade, Icon } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -38,7 +38,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 		defaultValues: useMemo(() => ({ pairs }), [pairs]),
 	});
 
-	const getFolders = useGetCollections();
+	const getFolders = useGetFolders();
 	const collections = useSelector(selectFolders);
 
 	/**
@@ -134,7 +134,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						),
 				};
 				if (pair.checked) {
-					return collectionsService
+					return foldersService
 						.addToCollection(pair.folder, selected.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
@@ -157,8 +157,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							});
 						});
 				} else {
-					return collectionsService
-						.removeFromCollection(pair.folder, selected.schemaIdentifier)
+					return foldersService
+						.removeFromFolder(pair.folder, selected.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
@@ -353,7 +353,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 									{renderPairFields(data)}
 
 									<li className={styles['c-add-to-folder-blade__list-button']}>
-										<CreateCollectionButton afterSubmit={getFolders.refetch} />
+										<CreateFolderButton afterSubmit={getFolders.refetch} />
 									</li>
 								</>
 							)}

@@ -1,6 +1,6 @@
 @use "../../abstracts" as *;
 
-$component: "p-account-my-collections";
+$component: "p-account-my-folders";
 
 .#{$component} {
 	&__export--label {

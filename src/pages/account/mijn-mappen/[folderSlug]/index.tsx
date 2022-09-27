@@ -7,24 +7,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 import { useQueryParams } from 'use-query-params';
 
-import { CreateCollectionButton } from '@account/components';
-import { EditCollectionTitle } from '@account/components/EditCollectionTitle';
-import {
-	ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG,
-	CollectionItemListSize,
-	Permission,
-} from '@account/const';
-import { useGetCollectionExport } from '@account/hooks/get-collection-export';
-import { useGetCollectionMedia } from '@account/hooks/get-collection-media';
-import { useGetCollections } from '@account/hooks/get-collections';
+import { CreateFolderButton } from '@account/components';
+import { EditFolderTitle } from '@account/components/EditFolderTitle';
+import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } from '@account/const';
+import { useGetFolderExport } from '@account/hooks/get-folder-export';
+import { useGetFolderMedia } from '@account/hooks/get-folder-media';
+import { useGetFolders } from '@account/hooks/get-folders';
 import { AccountLayout } from '@account/layouts';
-import { collectionsService } from '@account/services/collections';
+import { foldersService } from '@account/services/folders';
 import { Folder, FolderMedia } from '@account/types';
-import { createCollectionSlug } from '@account/utils';
+import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import {
@@ -43,7 +39,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/media';
+import { selectFolders, setFolders } from '@shared/store/media';
 import { Breakpoints } from '@shared/types';
 import { asDate, createPageTitle, formatMediumDate } from '@shared/utils';
 
@@ -51,45 +47,46 @@ import { AddToFolderBlade } from '../../../../modules/visitor-space/components';
 
 import { VisitorLayout } from 'modules/visitors';
 
-type ListNavigationCollectionItem = ListNavigationItem & Folder;
+type ListNavigationFolderItem = ListNavigationItem & Folder;
 
 const labelKeys = {
-	search: 'AccountMyCollections__search',
+	search: 'AccountMyFolders__search',
 };
 
-const AccountMyCollections: NextPage = () => {
+const AccountMyFolders: NextPage = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
-	const { collectionSlug } = router.query;
+	const dispatch = useDispatch();
+	const { folderSlug } = router.query;
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	/**
 	 * Data
 	 */
-	const [filters, setFilters] = useQueryParams(ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG);
+	const [filters, setFilters] = useQueryParams(ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG);
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 
-	const getCollections = useGetCollections();
-	const collections = useSelector(selectFolders);
+	const getFolders = useGetFolders();
+	const folders = useSelector(selectFolders);
 
-	const sidebarLinks: ListNavigationCollectionItem[] = useMemo(
+	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
-			(collections?.items || []).map((collection) => {
-				const slug = createCollectionSlug(collection);
-				const href = `${ROUTES.myCollections}/${slug}`;
+			(folders?.items || []).map((folder) => {
+				const slug = createFolderSlug(folder);
+				const href = `${ROUTES.myFolders}/${slug}`;
 
 				return {
-					...collection,
+					...folder,
 					node: ({ linkClassName }) => (
 						<Link href={href}>
 							<a
-								className={clsx(linkClassName, 'p-account-my-collections__link')}
-								aria-label={collection.name}
+								className={clsx(linkClassName, 'p-account-my-folders__link')}
+								aria-label={folder.name}
 							>
-								{collection.name}
+								{folder.name}
 								<Icon
 									className="u-font-size-24 u-text-left"
 									name="angle-right"
@@ -98,26 +95,23 @@ const AccountMyCollections: NextPage = () => {
 							</a>
 						</Link>
 					),
-					active: decodeURIComponent(slug) === collectionSlug,
+					active: decodeURIComponent(slug) === folderSlug,
 				};
 			}),
-		[collections, collectionSlug]
+		[folders, folderSlug]
 	);
 
-	const activeCollection = useMemo(
-		() => sidebarLinks.find((link) => link.active),
-		[sidebarLinks]
-	);
+	const activeFolder = useMemo(() => sidebarLinks.find((link) => link.active), [sidebarLinks]);
 
-	const folderMedia = useGetCollectionMedia(
-		activeCollection?.id,
+	const folderMedia = useGetFolderMedia(
+		activeFolder?.id,
 		filters.search,
 		filters.page,
-		CollectionItemListSize
+		FolderItemListSize
 	);
 
 	// export
-	const { mutateAsync: getCollectionExport } = useGetCollectionExport();
+	const { mutateAsync: getFolderExport } = useGetFolderExport();
 
 	const keywords = useMemo(() => (filters.search ? [filters.search] : []), [filters.search]);
 
@@ -126,65 +120,77 @@ const AccountMyCollections: NextPage = () => {
 	 */
 
 	useEffect(() => {
-		if (!activeCollection && collections) {
-			const favorites = collections?.items.find((col) => col.isDefault);
-			!blockFallbackRedirect && favorites && router.push(createCollectionSlug(favorites));
+		if (!activeFolder && folders) {
+			const favorites = folders?.items.find((col) => col.isDefault);
+			!blockFallbackRedirect && favorites && router.push(createFolderSlug(favorites));
 		}
-	}, [activeCollection, collections, router, blockFallbackRedirect]);
+	}, [activeFolder, folders, router, blockFallbackRedirect]);
 
 	useEffect(() => {
-		if (activeCollection && folderMedia.isStale) {
+		if (activeFolder && folderMedia.isStale) {
 			folderMedia.refetch();
 		}
-	}, [activeCollection]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [activeFolder]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
 	 * Events
 	 */
 
-	const onCollectionTitleChanged = (collection: Folder) => {
+	const onFolderTitleChanged = async (newFolder: Folder) => {
 		setBlockFallbackRedirect(true);
 
-		getCollections.refetch().then(() => {
-			router.push(createCollectionSlug(collection)).then(() => {
-				setBlockFallbackRedirect(false);
-			});
-		});
+		// Temp set folders with new name in redux store
+		if (folders) {
+			dispatch(
+				setFolders({
+					...folders,
+					items: (folders?.items || []).map((folder): Folder => {
+						if (folder.id === newFolder.id) {
+							return newFolder;
+						} else {
+							return folder;
+						}
+					}),
+				})
+			);
+		}
+
+		// Fetch folders from the network
+		await getFolders.refetch();
+		await router.push(createFolderSlug(newFolder));
+		setBlockFallbackRedirect(false);
 	};
 
-	const onMoveCollection = (item: IdentifiableMediaCard) => {
+	const onMoveFolder = (item: IdentifiableMediaCard) => {
 		setSelected(item);
 		setShowAddToFolderBlade(true);
 	};
 
-	const onRemoveFromCollection = (item: IdentifiableMediaCard, folder: Folder) => {
-		collectionsService
-			.removeFromCollection(folder.id, item.schemaIdentifier)
-			.then((response) => {
-				if (response === undefined) {
-					return;
-				}
+	const onRemoveFromFolder = (item: IdentifiableMediaCard, folder: Folder) => {
+		foldersService.removeFromFolder(folder.id, item.schemaIdentifier).then((response) => {
+			if (response === undefined) {
+				return;
+			}
 
-				folderMedia.refetch();
+			folderMedia.refetch();
 
-				const descriptionVariables = {
-					item: item.name,
-					folder:
-						folder?.name ||
-						tText('pages/account/mijn-mappen/folder-slug/index___onbekend'),
-				};
+			const descriptionVariables = {
+				item: item.name,
+				folder:
+					folder?.name || tText('pages/account/mijn-mappen/folder-slug/index___onbekend'),
+			};
 
-				toastService.notify({
-					maxLines: 3,
-					title: tHtml(
-						'pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel'
-					),
-					description: tHtml(
-						'pages/account/mijn-mappen/folder-slug/index___item-is-verwijderd-uit-map-beschrijving',
-						descriptionVariables
-					),
-				});
+			toastService.notify({
+				maxLines: 3,
+				title: tHtml(
+					'pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel'
+				),
+				description: tHtml(
+					'pages/account/mijn-mappen/folder-slug/index___item-is-verwijderd-uit-map-beschrijving',
+					descriptionVariables
+				),
 			});
+		});
 	};
 
 	/**
@@ -193,11 +199,11 @@ const AccountMyCollections: NextPage = () => {
 
 	const renderTitleButtons = useMemo(() => {
 		const onExportClick = async () => {
-			if (activeCollection?.id) {
-				const xmlBlob = await getCollectionExport(activeCollection?.id);
+			if (activeFolder?.id) {
+				const xmlBlob = await getFolderExport(activeFolder?.id);
 
 				if (xmlBlob) {
-					save(xmlBlob, `${kebabCase(activeCollection?.name) || 'map'}.xml`);
+					save(xmlBlob, `${kebabCase(activeFolder?.name) || 'map'}.xml`);
 				} else {
 					toastService.notify({
 						title:
@@ -217,8 +223,8 @@ const AccountMyCollections: NextPage = () => {
 							before: true,
 							node: (
 								<Button
-									key={'export-collection'}
-									className="p-account-my-collections__export--label"
+									key={'export-folder'}
+									className="p-account-my-folders__export--label"
 									variants={['black']}
 									name={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
@@ -241,8 +247,8 @@ const AccountMyCollections: NextPage = () => {
 							before: true,
 							node: (
 								<Button
-									key={'export-collection-mobile'}
-									className="p-account-my-collections__export--icon"
+									key={'export-folder-mobile'}
+									className="p-account-my-folders__export--icon"
 									variants={['black']}
 									name={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
@@ -260,14 +266,14 @@ const AccountMyCollections: NextPage = () => {
 						},
 				  ]
 				: []),
-			...(activeCollection && !activeCollection.isDefault
+			...(activeFolder && !activeFolder.isDefault
 				? [
 						{
 							before: false,
 							node: (
 								<Button
-									key={'delete-collection'}
-									className="p-account-my-collections__delete"
+									key={'delete-folder'}
+									className="p-account-my-folders__delete"
 									variants={['silver']}
 									icon={<Icon name="trash" aria-hidden />}
 									aria-label={tText(
@@ -286,19 +292,19 @@ const AccountMyCollections: NextPage = () => {
 				  ]
 				: []),
 		];
-	}, [canDownloadMetadata, tText, activeCollection, getCollectionExport, tHtml]);
+	}, [canDownloadMetadata, tText, activeFolder, getFolderExport, tHtml]);
 
-	const renderActions = (item: IdentifiableMediaCard, collection: Folder) => (
+	const renderActions = (item: IdentifiableMediaCard, folder: Folder) => (
 		<>
 			<Button
 				variants={['text']}
 				label={tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen')}
-				onClick={() => onRemoveFromCollection(item, collection)}
+				onClick={() => onRemoveFromFolder(item, folder)}
 			/>
 			<Button
 				variants={['text']}
 				label={tHtml('pages/account/mijn-mappen/folder-slug/index___verplaatsen')}
-				onClick={() => onMoveCollection(item)}
+				onClick={() => onMoveFolder(item)}
 			/>
 		</>
 	);
@@ -357,7 +363,7 @@ const AccountMyCollections: NextPage = () => {
 		];
 
 		return (
-			<div className="p-account-my-collections__card-description">
+			<div className="p-account-my-folders__card-description">
 				{items.map((item, i) => {
 					return item.value ? (
 						<p key={i} className="u-pr-24 u-text-break">
@@ -380,7 +386,7 @@ const AccountMyCollections: NextPage = () => {
 				<title>
 					{createPageTitle(
 						tText('pages/account/mijn-mappen/index___mijn-mappen') +
-							` | ${activeCollection?.name || collectionSlug}`
+							` | ${activeFolder?.name || folderSlug}`
 					)}
 				</title>
 
@@ -392,7 +398,7 @@ const AccountMyCollections: NextPage = () => {
 				/>
 			</Head>
 
-			<AccountLayout className="p-account-my-collections">
+			<AccountLayout className="p-account-my-folders">
 				<SidebarLayout
 					color="platinum"
 					responsiveTo={Breakpoints.md}
@@ -402,21 +408,21 @@ const AccountMyCollections: NextPage = () => {
 					sidebarLinks={[
 						...sidebarLinks,
 						{
-							id: 'p-account-my-collections__new-collection',
+							id: 'p-account-my-folders__new-folder',
 							variants: ['c-list-navigation__item--no-interaction'],
-							node: <CreateCollectionButton afterSubmit={getCollections.refetch} />,
+							node: <CreateFolderButton afterSubmit={getFolders.refetch} />,
 							hasDivider: true,
 						},
 					]}
 				>
-					{activeCollection && (
+					{activeFolder && (
 						<>
 							<div className="l-container u-mt-64 u-mb-48">
 								<SidebarLayoutTitle>
-									<EditCollectionTitle
-										key={activeCollection.id}
-										collection={activeCollection}
-										afterSubmit={onCollectionTitleChanged}
+									<EditFolderTitle
+										key={activeFolder.id}
+										folder={activeFolder}
+										afterSubmit={onFolderTitleChanged}
 										buttons={renderTitleButtons}
 									/>
 								</SidebarLayoutTitle>
@@ -425,15 +431,15 @@ const AccountMyCollections: NextPage = () => {
 							<div className="l-container u-mb-24:md u-mb-32">
 								<FormControl
 									className="c-form-control--label-hidden"
-									id={`${labelKeys.search}--${activeCollection.id}`}
+									id={`${labelKeys.search}--${activeFolder.id}`}
 									label={tHtml(
 										'pages/account/mijn-mappen/folder-slug/index___zoeken-in-deze-map'
 									)}
 								>
 									<SearchBar
-										id={`${labelKeys.search}--${activeCollection.id}`}
+										id={`${labelKeys.search}--${activeFolder.id}`}
 										default={filters[SEARCH_QUERY_KEY]}
-										className="p-account-my-collections__search"
+										className="p-account-my-folders__search"
 										placeholder={tText(
 											'pages/account/mijn-mappen/folder-slug/index___zoek'
 										)}
@@ -460,29 +466,28 @@ const AccountMyCollections: NextPage = () => {
 
 											return {
 												...base,
-												actions: renderActions(base, activeCollection),
+												actions: renderActions(base, activeFolder),
 											};
 										})}
 										view={'list'}
 									/>
 								)}
 
-								{folderMedia.data &&
-									folderMedia.data?.total > CollectionItemListSize && (
-										<PaginationBar
-											className="u-mb-48"
-											start={(filters.page - 1) * CollectionItemListSize}
-											count={CollectionItemListSize}
-											showBackToTop
-											total={folderMedia.data?.total || 0}
-											onPageChange={(page) =>
-												setFilters({
-													...filters,
-													page: page + 1,
-												})
-											}
-										/>
-									)}
+								{folderMedia.data && folderMedia.data?.total > FolderItemListSize && (
+									<PaginationBar
+										className="u-mb-48"
+										start={(filters.page - 1) * FolderItemListSize}
+										count={FolderItemListSize}
+										showBackToTop
+										total={folderMedia.data?.total || 0}
+										onPageChange={(page) =>
+											setFilters({
+												...filters,
+												page: page + 1,
+											})
+										}
+									/>
+								)}
 							</div>
 						</>
 					)}
@@ -494,15 +499,15 @@ const AccountMyCollections: NextPage = () => {
 					yes: tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen'),
 					no: tHtml('pages/account/mijn-mappen/folder-slug/index___annuleren'),
 				}}
-				isOpen={activeCollection && showConfirmDelete}
+				isOpen={activeFolder && showConfirmDelete}
 				onClose={() => setShowConfirmDelete(false)}
 				onCancel={() => setShowConfirmDelete(false)}
 				onConfirm={() => {
 					setShowConfirmDelete(false);
 
-					activeCollection &&
-						collectionsService.delete(activeCollection.id).then(() => {
-							getCollections.refetch();
+					activeFolder &&
+						foldersService.delete(activeFolder.id).then(() => {
+							getFolders.refetch();
 						});
 				}}
 			/>
@@ -532,6 +537,4 @@ const AccountMyCollections: NextPage = () => {
 
 export const getServerSideProps = withI18n();
 
-export default withAuth(
-	withAllRequiredPermissions(AccountMyCollections, Permission.MANAGE_ACCOUNT)
-);
+export default withAuth(withAllRequiredPermissions(AccountMyFolders, Permission.MANAGE_ACCOUNT));
