@@ -5,9 +5,9 @@ import { CreateFolderFormState } from '@account/types';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 
-export const CollectionItemListSize = 20;
+export const FolderItemListSize = 20;
 
-export const ACCOUNT_COLLECTIONS_QUERY_PARAM_CONFIG = {
+export const ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG = {
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 };

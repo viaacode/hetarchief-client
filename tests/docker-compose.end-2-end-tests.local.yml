@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  playwright:
+    container_name: playwright-test
+    build:
+      context: .
+      dockerfile: end-2-end-tests.Dockerfile
+    env_file:
+      - ../.env.local
+    volumes:
+      - ./videos-docker:/automation/videos

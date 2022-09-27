@@ -21,10 +21,25 @@ $component: "c-related-objects-blade";
 		color: $white;
 		border-bottom: $divider-white;
 		background-color: transparent;
+		font-size: $font-size-md;
+		border-radius: 0;
 
 		&:focus-visible {
 			outline: 0.2rem solid $teal;
 			outline-offset: -0.2rem;
+		}
+
+		:global(.c-button__content) {
+			width: 100%;
+			justify-content: start;
+		}
+
+		:global(.c-button__icon--end) {
+			margin-left: auto;
+		}
+
+		:global(.c-button__icon--start) {
+			margin-right: 1rem;
 		}
 
 		@include respond-at("md") {
@@ -34,16 +49,6 @@ $component: "c-related-objects-blade";
 
 	&__icon {
 		font-size: $font-size-lg;
-		margin-right: 1rem;
-	}
-
-	&__title {
-		font-size: $font-size-md;
-	}
-
-	&__arrow {
-		margin-left: auto;
-		font-size: $font-size-md;
 	}
 
 	&__list {

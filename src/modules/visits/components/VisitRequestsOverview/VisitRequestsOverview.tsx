@@ -1,4 +1,5 @@
 import { OrderDirection, Row, Table } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { FC, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
 import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -159,20 +160,12 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		}
 	};
 
-	const renderVisitRequestsTable = () => {
+	const renderContent = () => {
 		if (isFetching) {
-			return (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					<Loading />
-				</div>
-			);
+			return <Loading />;
 		}
 		if ((visits?.items?.length || 0) <= 0) {
-			return (
-				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					{renderEmptyMessage()}
-				</div>
-			);
+			return renderEmptyMessage();
 		} else {
 			return (
 				<div className="l-container l-container--edgeless-to-lg">
@@ -240,7 +233,14 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 				</div>
 			</div>
 
-			{renderVisitRequestsTable()}
+			<div
+				className={clsx('l-container l-container--edgeless-to-lg', {
+					'u-text-center u-color-neutral u-py-48':
+						isFetching || (visits?.items?.length || 0) <= 0,
+				})}
+			>
+				{renderContent()}
+			</div>
 
 			<ProcessRequestBlade
 				isOpen={

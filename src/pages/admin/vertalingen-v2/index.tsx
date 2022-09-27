@@ -42,13 +42,13 @@ const AdminTranslationsOverviewV2: FC = () => {
 					<Button
 						variants={['block', 'black']}
 						onClick={onSave}
-						label={tText('Bewaar wijzigingen')}
+						label={tText('pages/admin/vertalingen-v-2/index___bewaar-wijzigingen')}
 					/>
 
 					<Button
 						variants={['block', 'text']}
 						onClick={onClose}
-						label={tText('Annuleer')}
+						label={tText('pages/admin/vertalingen-v-2/index___annuleer')}
 					/>
 				</div>
 			);

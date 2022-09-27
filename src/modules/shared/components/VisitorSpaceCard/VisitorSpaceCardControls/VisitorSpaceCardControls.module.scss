@@ -29,7 +29,8 @@ $component: "c-visitor-space-card-controls";
 				font-size: $font-size-lg;
 			}
 
-			+ .#{$component}__label-text {
+			// Account for ellipsis wrapper
+			+ div .#{$component}__label-text {
 				margin-left: $spacer-xs;
 			}
 		}
