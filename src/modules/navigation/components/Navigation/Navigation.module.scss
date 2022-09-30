@@ -111,6 +111,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	}
 
 	.c-navigation__hamburger {
+		:global(button) {
+			display: flex;
+		}
+
 		@include respond-at(md) {
 			z-index: get-z-layer("nav-hamburger"); // above all
 		}
@@ -276,11 +280,11 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	z-index: get-z-layer("nav-dropdown") + 1;
 	display: inline-flex;
 	align-items: center;
-	border-bottom: $c-navigation-border-height solid transparent;
-	margin-bottom: $c-navigation-divider-size;
 	transition: border-color $animate-md-out, color $animate-md-out;
 
 	@include respond-at(md) {
+		border-bottom: $c-navigation-border-height solid transparent;
+		margin-bottom: $c-navigation-divider-size;
 		position: relative;
 		height: $c-navigation-height - $c-navigation-divider-size;
 	}
@@ -442,7 +446,6 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			@include respond-to(md) {
 				display: flex;
 				justify-self: center;
-				margin-bottom: 0.7rem; // Equal to other menu items 0.6 + 0.1 (border + margin)
 			}
 		}
 	}
