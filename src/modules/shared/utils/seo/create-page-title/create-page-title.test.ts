@@ -10,7 +10,7 @@ describe('Utils', () => {
 
 		it('Should return a title based on a given param', () => {
 			const page = 'About';
-			const pageTitle = page;
+			const pageTitle = createPageTitle(page);
 
 			expect(pageTitle).toBe(`${page} | bezoekertool ***`);
 		});
@@ -18,7 +18,7 @@ describe('Utils', () => {
 		it('Should return a title based on a given param', () => {
 			const page =
 				'A very long title with Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-			const pageTitle = page;
+			const pageTitle = createPageTitle(page);
 
 			expect(pageTitle).toBe(
 				`A very long title with Lorem ipsum dolor sit am... | bezoekertool ***`
