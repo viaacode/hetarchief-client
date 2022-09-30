@@ -89,7 +89,7 @@ const TermsOfService: NextPage = () => {
 	return (
 		<div className="p-terms-of-service">
 			{renderOgTags(
-				tText('Gebruiksvoorwaarden'),
+				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden'),
 				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'),
 				publicRuntimeConfig.CLIENT_URL
 			)}

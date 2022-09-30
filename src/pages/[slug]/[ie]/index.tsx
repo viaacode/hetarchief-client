@@ -69,7 +69,6 @@ import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, License, MediaTypes, VisitorSpaceMediaType } from '@shared/types';
 import {
 	asDate,
-	createPageTitle,
 	formatMediumDate,
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,

@@ -45,12 +45,7 @@ import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { AccessStatus, Breakpoints, SortObject, VisitorSpaceMediaType } from '@shared/types';
-import {
-	asDate,
-	createPageTitle,
-	formatMediumDateWithTime,
-	formatSameDayTimeOrDate,
-} from '@shared/utils';
+import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';

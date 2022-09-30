@@ -24,7 +24,7 @@ import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissio
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, Visit, VisitStatus } from '@shared/types';
-import { createHomeWithVisitorSpaceFilterUrl, createPageTitle } from '@shared/utils';
+import { createHomeWithVisitorSpaceFilterUrl } from '@shared/utils';
 import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';

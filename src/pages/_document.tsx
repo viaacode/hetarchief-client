@@ -35,6 +35,7 @@ const Document = (): ReactElement => {
 				/>
 
 				{/* Google Tag Manager */}
+				{/* eslint-disable-next-line @next/next/next-script-for-ga */}
 				<script
 					id="google-tag-manager-script"
 					dangerouslySetInnerHTML={{

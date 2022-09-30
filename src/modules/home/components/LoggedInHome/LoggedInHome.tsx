@@ -28,7 +28,7 @@ import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
-import { asDate, createPageTitle } from '@shared/utils';
+import { asDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
@@ -391,8 +391,10 @@ const LoggedInHome: FC = () => {
 			<>
 				<div className="p-home u-page-bottom-padding">
 					{renderOgTags(
-						tText('Home'),
-						tText('Welkom op de bezoekertool'),
+						tText('modules/home/components/logged-in-home/logged-in-home___home'),
+						tText(
+							'modules/home/components/logged-in-home/logged-in-home___welkom-op-de-bezoekertool'
+						),
 						publicRuntimeConfig.CLIENT_URL
 					)}
 

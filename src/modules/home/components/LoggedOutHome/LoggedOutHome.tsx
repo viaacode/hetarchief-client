@@ -68,7 +68,11 @@ const LoggedOutHome: FC = () => {
 
 	return (
 		<div className="p-home u-page-bottom-padding">
-			{renderOgTags(tText('Home'), getPageDescription(), publicRuntimeConfig.CLIENT_URL)}
+			{renderOgTags(
+				tText('modules/home/components/logged-out-home/logged-out-home___home'),
+				getPageDescription(),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<div className={styles['c-hero']}>
 				<div className={styles['c-hero__image']}>
