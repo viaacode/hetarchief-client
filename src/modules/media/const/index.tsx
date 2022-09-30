@@ -280,9 +280,4 @@ export const METADATA_FIELDS = (mediaInfo: Media): MetadataItem[] =>
 				<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
 			) : null,
 		},
-		// {
-		// 	title: tText('modules/media/const/index___verwant'),
-		// 	data: mediaInfo.premisRelationship,
-		// },
-		...mapObjectToMetadata(mediaInfo.premisRelationship),
 	].filter((field) => !!field.data);

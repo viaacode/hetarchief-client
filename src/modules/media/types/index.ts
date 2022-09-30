@@ -5,7 +5,6 @@ export interface Media {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID (DON'T use this for identification of an object)
 	premisIdentifier: Record<string, string[]>;
-	premisRelationship: Record<string, string[]>;
 	premisIsPartOf?: string;
 	series?: string[];
 	program?: string[];
