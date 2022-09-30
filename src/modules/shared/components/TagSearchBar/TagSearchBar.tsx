@@ -1,4 +1,4 @@
-import { TagsInput, TagsInputProps } from '@meemoo/react-components';
+import { TagsInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
 import { InputActionMeta } from 'react-select';
@@ -127,6 +127,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 		<TagsInput
 			{...tagsInputProps}
 			className={rootCls}
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			components={components as any}
 			inputValue={inputValue}
 			isClearable={isClearable}
