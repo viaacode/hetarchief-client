@@ -1,6 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC, useState } from 'react';
+import { default as Scrollbar } from 'react-scrollbars-custom';
 
 import { Icon } from '@shared/components';
 
@@ -39,8 +40,7 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
 					}
 					label={title}
 				/>
-
-				{renderContent(!isOpen)}
+				<Scrollbar noScrollX>{renderContent(!isOpen)}</Scrollbar>
 			</div>
 		</div>
 	);
