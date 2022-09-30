@@ -151,6 +151,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	return (
 		<div id={id}>
 			<Card
+				className={styles['c-media-card']}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
