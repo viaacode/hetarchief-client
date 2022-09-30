@@ -72,6 +72,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				lastName: user?.lastName,
 				fullName: user?.fullName,
 				// last_access_at: user.lastAccessAt, // TODO enable once last_access_at field is added to the database
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				permissions: user?.permissions as any[],
 			};
 
@@ -236,7 +237,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 			};
 			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
-		}, []);
+		}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		useEffect(() => {

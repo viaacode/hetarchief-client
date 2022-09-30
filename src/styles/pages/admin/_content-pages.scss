@@ -1,6 +1,8 @@
 @use "src/styles/abstracts" as *;
 
 .c-admin__content {
+	padding-bottom: $spacer-3xl;
+
 	h4 + p {
 		padding: 0 $spacer-md;
 	}
@@ -46,5 +48,28 @@
 
 	> .c-content-page-preview {
 		margin-top: $spacer-lg;
+	}
+
+	.c-user-group-select {
+		.c-checkbox-group {
+			border: 1px solid grey;
+			border-radius: $input-border-radius;
+			background-color: $white;
+			padding: 1px;
+
+			.c-checkbox {
+				display: block;
+				padding: $spacer-sm;
+				border-radius: $input-border-radius;
+
+				&:hover {
+					background-color: $platinum;
+				}
+
+				.c-checkbox__check-icon {
+					margin: 1.5rem 2.2rem;
+				}
+			}
+		}
 	}
 }

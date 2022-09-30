@@ -1,5 +1,5 @@
 import { NavigationEdit } from '@meemoo/react-admin';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
@@ -8,9 +8,11 @@ import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { createPageTitle } from '@shared/utils';
+
+const { publicRuntimeConfig } = getConfig();
 
 const ContentPageEditPage: FC = () => {
 	const { tText } = useTranslation();
@@ -18,19 +20,11 @@ const ContentPageEditPage: FC = () => {
 
 	return (
 		<>
-			<Head>
-				<title>
-					{createPageTitle(
-						tText('pages/admin/content/maak/index___content-pagina-bewerken')
-					)}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/admin/content/maak/index___bewerk-pagina-van-een-content-pagina'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/admin/content/maak/index___content-pagina-bewerken'),
+				tText('pages/admin/content/maak/index___bewerk-pagina-van-een-content-pagina'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AdminLayout>
 				<AdminLayout.Content>

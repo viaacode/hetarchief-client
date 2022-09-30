@@ -9,7 +9,6 @@
 	&__btn {
 		display: flex;
 		justify-content: center;
-		align-items: center;
 		min-width: 3.2rem;
 		min-height: 3.2rem;
 		margin: 0 calc(#{$spacer-xs} / 4);
@@ -33,6 +32,7 @@
 		align-items: baseline;
 
 		.c-pagination__btn {
+			align-items: center;
 			width: 3.2rem;
 			height: 3.2rem;
 		}

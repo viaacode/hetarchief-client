@@ -6,9 +6,15 @@ const cors = Cors({
 	methods: ['GET', 'HEAD'],
 });
 
+type middlewareHandler = (
+	req: NextApiRequest,
+	res: NextApiResponse,
+	fn: (result: unknown) => unknown
+) => unknown;
+
 // Helper method to wait for a middleware to execute before continuing
 // And to throw an error when an error happens in a middleware
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: any) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: middlewareHandler) {
 	return new Promise((resolve, reject) => {
 		fn(req, res, (result: unknown) => {
 			if (result instanceof Error) {
