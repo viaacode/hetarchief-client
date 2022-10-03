@@ -1,7 +1,6 @@
 import { Box, Button } from '@meemoo/react-components';
 import { NextPage } from 'next';
 import getConfig from 'next/config';
-import Head from 'next/head';
 import Link from 'next/link';
 import { stringifyUrl } from 'query-string';
 import { useSelector } from 'react-redux';
@@ -13,9 +12,9 @@ import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { createPageTitle } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -27,17 +26,11 @@ const AccountMyProfile: NextPage = () => {
 
 	return (
 		<VisitorLayout>
-			<Head>
-				<title>
-					{createPageTitle(tText('pages/account/mijn-profiel/index___mijn-profiel'))}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/account/mijn-profiel/index___mijn-profiel'),
+				tText('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AccountLayout
 				className="p-account-my-profile"

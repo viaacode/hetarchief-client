@@ -89,7 +89,7 @@
 		outline: 1px solid transparent;
 		padding: 1.4rem 1.6rem;
 		height: 5.6rem;
-		border-radius: 2.8rem;
+		border-radius: $input-border-radius;
 
 		&:focus {
 			border-color: $teal;
@@ -106,7 +106,7 @@
 	.c-color-select .react-select__control,
 	.c-icon-picker .react-select__control {
 		height: 5.6rem;
-		border-radius: 2.8rem;
+		border-radius: $input-border-radius;
 		background-color: $white;
 		border-color: $zinc;
 

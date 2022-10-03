@@ -1,18 +1,20 @@
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import Html from '@shared/components/Html/Html';
 import { ROUTES } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { createPageTitle } from '@shared/utils';
 
 import { CardImage } from '../../../shared/components';
 import { useNavigationBorder } from '../../../shared/hooks/use-navigation-border';
 import { VisitorSpaceNavigation } from '../VisitorSpaceNavigation';
 
 import { WaitingPageProps } from './WaitingPage.types';
+
+const { publicRuntimeConfig } = getConfig();
 
 const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 	useNavigationBorder();
@@ -23,18 +25,14 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 
 	return (
 		<div className="p-visit-requested">
-			<Head>
-				<title>{createPageTitle(space?.name)}</title>
-				<meta
-					name="description"
-					content={
-						space?.info ||
-						tText(
-							'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
-						)
-					}
-				/>
-			</Head>
+			{renderOgTags(
+				space?.name,
+				space?.info ||
+					tText(
+						'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
+					),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<VisitorSpaceNavigation
 				title={space?.name}

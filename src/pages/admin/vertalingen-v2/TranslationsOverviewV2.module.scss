@@ -9,7 +9,7 @@
 		:global(.c-input__field) {
 			margin: 0;
 			height: 5.6rem;
-			border-radius: 2.8rem;
+			border-radius: $input-border-radius;
 		}
 	}
 

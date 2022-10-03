@@ -2,7 +2,6 @@ import { ContentPage } from '@meemoo/react-admin';
 import { HTTPError } from 'ky';
 import { NextPage } from 'next';
 import getConfig from 'next/config';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,9 +13,9 @@ import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
-import { createPageTitle } from '@shared/utils';
 import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
@@ -112,9 +111,7 @@ const DynamicRouteResolver: NextPage = () => {
 
 	return (
 		<VisitorLayout>
-			<Head>
-				<title>{createPageTitle(contentPageInfo?.title || undefined)}</title>
-			</Head>
+			{renderOgTags(contentPageInfo?.title || undefined, '', publicRuntimeConfig.CLIENT_URL)}
 			{renderPageContent()}
 			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 		</VisitorLayout>

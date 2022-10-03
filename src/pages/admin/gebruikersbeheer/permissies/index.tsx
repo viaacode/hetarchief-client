@@ -1,7 +1,7 @@
 import { UserGroupOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import React, { FC, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
@@ -11,11 +11,13 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { createPageTitle } from '@shared/utils';
 
 import styles from './index.module.scss';
+
+const { publicRuntimeConfig } = getConfig();
 
 const PermissionsOverview: FC = () => {
 	const { tHtml, tText } = useTranslation();
@@ -85,21 +87,13 @@ const PermissionsOverview: FC = () => {
 
 	return (
 		<>
-			<Head>
-				<title>
-					{createPageTitle(
-						tText(
-							'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
-						)
-					)}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'),
+				tText(
+					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
+				),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AdminLayout
 				pageTitle={tHtml(

@@ -1,6 +1,6 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
 import { NextPage } from 'next';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { ReactNode, useMemo } from 'react';
 import { TableState } from 'react-table';
@@ -19,16 +19,19 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import { ROUTES } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, Visit, VisitStatus } from '@shared/types';
-import { createHomeWithVisitorSpaceFilterUrl, createPageTitle } from '@shared/utils';
+import { createHomeWithVisitorSpaceFilterUrl } from '@shared/utils';
 import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
 import { VisitorLayout } from 'modules/visitors';
+
+const { publicRuntimeConfig } = getConfig();
 
 const AccountMyHistory: NextPage = () => {
 	const { tHtml, tText } = useTranslation();
@@ -110,17 +113,11 @@ const AccountMyHistory: NextPage = () => {
 
 	return (
 		<VisitorLayout>
-			<Head>
-				<title>
-					{createPageTitle(tText('pages/account/mijn-historiek/index___mijn-historiek'))}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/account/mijn-historiek/index___mijn-historiek-meta-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/account/mijn-historiek/index___mijn-historiek'),
+				tText('pages/account/mijn-historiek/index___mijn-historiek-meta-omschrijving'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AccountLayout
 				className="p-account-my-history"

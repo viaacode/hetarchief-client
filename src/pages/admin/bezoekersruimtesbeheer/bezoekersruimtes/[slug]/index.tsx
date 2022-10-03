@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
@@ -8,10 +8,12 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
 import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { createPageTitle } from '@shared/utils';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
+
+const { publicRuntimeConfig } = getConfig();
 
 const VisitorSpaceEdit: FC = () => {
 	const { tHtml, tText } = useTranslation();
@@ -22,21 +24,15 @@ const VisitorSpaceEdit: FC = () => {
 
 	return (
 		<>
-			<Head>
-				<title>
-					{createPageTitle(
-						tText(
-							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
-						)
-					)}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen-meta-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
+				),
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen-meta-omschrijving'
+				),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AdminLayout
 				pageTitle={tHtml(

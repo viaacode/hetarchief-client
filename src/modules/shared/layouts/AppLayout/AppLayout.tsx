@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useQueryClient } from 'react-query';
@@ -47,8 +46,6 @@ import { Breakpoints } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import packageJson from '../../../../../package.json';
-
-const { publicRuntimeConfig } = getConfig();
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();

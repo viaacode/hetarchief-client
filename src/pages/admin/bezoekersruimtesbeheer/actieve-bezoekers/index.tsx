@@ -1,5 +1,5 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import React, { FC, ReactNode, useMemo, useState } from 'react';
 import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
@@ -21,14 +21,16 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
-import { createPageTitle } from '@shared/utils';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { VisitTimeframe } from '@visits/types';
+
+const { publicRuntimeConfig } = getConfig();
 
 const Visitors: FC = () => {
 	const { tHtml, tText } = useTranslation();
@@ -137,21 +139,13 @@ const Visitors: FC = () => {
 
 	return (
 		<>
-			<Head>
-				<title>
-					{createPageTitle(
-						tText(
-							'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
-						)
-					)}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'),
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
+				),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AdminLayout
 				pageTitle={tHtml(
