@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
@@ -9,10 +9,12 @@ import { VisitorSpaceSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { createPageTitle } from '@shared/utils';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
+
+const { publicRuntimeConfig } = getConfig();
 
 const CPSettingsPage: NextPage = () => {
 	/**
@@ -50,19 +52,11 @@ const CPSettingsPage: NextPage = () => {
 		<Loading fullscreen />
 	) : (
 		<>
-			<Head>
-				<title>
-					{createPageTitle(
-						tText('pages/beheer/instellingen/index___beheer-instellingen-title')
-					)}
-				</title>
-				<meta
-					name="description"
-					content={tText(
-						'pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'
-					)}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/beheer/instellingen/index___beheer-instellingen-title'),
+				tText('pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<CPAdminLayout
 				className="p-cp-settings"

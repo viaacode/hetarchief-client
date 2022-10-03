@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -22,11 +22,13 @@ import {
 	VisitorSpaceCardType,
 } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { tText } from '@shared/helpers/translate';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
-import { asDate, createPageTitle } from '@shared/utils';
+import { asDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
@@ -38,6 +40,8 @@ import { ProcessVisitBlade, ProcessVisitBladeProps } from '../ProcessVisitBlade'
 import styles from './LoggedInHome.module.scss';
 
 type SelectedVisit = ProcessVisitBladeProps['selected'];
+
+const { publicRuntimeConfig } = getConfig();
 
 const LoggedInHome: FC = () => {
 	const { tHtml } = useTranslation();
@@ -386,10 +390,13 @@ const LoggedInHome: FC = () => {
 		return (
 			<>
 				<div className="p-home u-page-bottom-padding">
-					<Head>
-						<title>{createPageTitle('Home')}</title>
-						<meta name="description" content="TODO: Home meta description" />
-					</Head>
+					{renderOgTags(
+						tText('modules/home/components/logged-in-home/logged-in-home___home'),
+						tText(
+							'modules/home/components/logged-in-home/logged-in-home___welkom-op-de-bezoekertool'
+						),
+						publicRuntimeConfig.CLIENT_URL
+					)}
 
 					{renderHero()}
 					<div ref={searchRef}>

@@ -33,8 +33,8 @@ const CookiePolicy: NextPage = () => {
 
 	useEffect(() => {
 		// Fool cookiebot to inject the html into our react useState
+		// eslint-disable-next-line
 		(window as any).CookieDeclaration = {
-			// eslint-disable-line
 			InjectCookieDeclaration: setCookieDeclarationHtml,
 		};
 

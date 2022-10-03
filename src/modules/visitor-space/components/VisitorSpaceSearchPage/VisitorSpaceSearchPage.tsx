@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { sum } from 'lodash-es';
 import { NextPage } from 'next';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -34,6 +34,7 @@ import {
 	ToggleOption,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -44,12 +45,7 @@ import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import { AccessStatus, Breakpoints, SortObject, VisitorSpaceMediaType } from '@shared/types';
-import {
-	asDate,
-	createPageTitle,
-	formatMediumDateWithTime,
-	formatSameDayTimeOrDate,
-} from '@shared/utils';
+import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
@@ -87,6 +83,8 @@ import { WaitingPage } from '../WaitingPage';
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
+
+const { publicRuntimeConfig } = getConfig();
 
 const VisitorSpaceSearchPage: NextPage = () => {
 	useNavigationBorder();
@@ -718,18 +716,12 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	return (
 		<>
-			<Head>
-				<title>{createPageTitle(visitorSpace?.name)}</title>
-				<meta
-					name="description"
-					content={
-						visitorSpace?.info ||
-						tText(
-							'pages/bezoekersruimte/visitor-space-slug/index___een-bezoekersruimte'
-						)
-					}
-				/>
-			</Head>
+			{renderOgTags(
+				visitorSpace?.name,
+				visitorSpace?.info ||
+					tText('pages/bezoekersruimte/visitor-space-slug/index___een-bezoekersruimte'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 			{renderPageContent()}
 		</>
 	);

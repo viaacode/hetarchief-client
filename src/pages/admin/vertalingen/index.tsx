@@ -1,6 +1,6 @@
 import { TranslationsOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
-import Head from 'next/head';
+import getConfig from 'next/config';
 import React, { FC, useRef } from 'react';
 
 import { Permission } from '@account/const';
@@ -9,9 +9,11 @@ import { TranslationsOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { createPageTitle } from '@shared/utils';
+
+const { publicRuntimeConfig } = getConfig();
 
 const AdminTranslationsOverview: FC = () => {
 	const { tHtml, tText } = useTranslation();
@@ -21,15 +23,11 @@ const AdminTranslationsOverview: FC = () => {
 
 	return (
 		<>
-			<Head>
-				<title>
-					{createPageTitle(tText('pages/admin/vertalingen/index___vertalingen'))}
-				</title>
-				<meta
-					name="description"
-					content={tText('pages/admin/vertalingen/index___vertalingen')}
-				/>
-			</Head>
+			{renderOgTags(
+				tText('pages/admin/vertalingen/index___vertalingen'),
+				tText('pages/admin/vertalingen/index___vertalingen'),
+				publicRuntimeConfig.CLIENT_URL
+			)}
 
 			<AdminLayout pageTitle={tHtml('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Actions>
