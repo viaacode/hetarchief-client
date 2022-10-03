@@ -19,8 +19,11 @@ $component: "c-list-navigation";
 		}
 
 		&:hover {
-			background-color: $silver;
 			cursor: pointer;
+
+			@include respond-at("md") {
+				background-color: $silver;
+			}
 		}
 
 		&:not(:active, :hover):focus {
@@ -67,10 +70,6 @@ $component: "c-list-navigation";
 			&:hover {
 				background-color: $teal-24;
 			}
-		}
-
-		&:active {
-			background-color: $silver;
 		}
 	}
 

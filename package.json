@@ -49,7 +49,7 @@
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
 		"@viaa/avo2-components": "2.3.2",
-		"@viaa/avo2-types": "2.36.1",
+		"@viaa/avo2-types": "2.43.0",
 		"capture-stack-trace": "1.0.1",
 		"i18next-http-backend": "^1.4.1",
 		"clsx": "1.1.1",
