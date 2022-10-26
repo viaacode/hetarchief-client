@@ -306,6 +306,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onFromDateChange(date, field)}
 						selected={form.accessFrom}
 						value={formatMediumDate(form.accessFrom)}
+						popperPlacement="bottom-start"
 					/>
 
 					<Timepicker
@@ -351,6 +352,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onSimpleDateChange(date, field)}
 						selected={form.accessTo}
 						value={formatMediumDate(form.accessTo)}
+						popperPlacement="bottom-start"
 					/>
 
 					<Timepicker
