@@ -286,10 +286,15 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 	return (
 		<Blade
 			className={clsx(className, styles['c-notification-center'])}
+			footer={renderFooter()}
 			isOpen={isOpen}
 			onClose={onClose}
+			renderTitle={(props) => (
+				<h3 {...props} className={clsx(props.className, 'u-display-none')}>
+					{tText('Notificaties')}
+				</h3>
+			)}
 			showCloseButtonOnTop
-			footer={renderFooter()}
 		>
 			{renderBladeContent()}
 		</Blade>

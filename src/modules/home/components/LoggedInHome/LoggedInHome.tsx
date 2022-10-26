@@ -355,11 +355,15 @@ const LoggedInHome: FC = () => {
 	const renderVisitorSpaceNotAvailableBlade = () => {
 		return (
 			<Blade
-				isOpen={isVisitorSpaceNotAvailable}
-				title={tHtml(
-					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
-				)}
 				className={styles['c-visitor-space-not-available-blade']}
+				isOpen={isVisitorSpaceNotAvailable}
+				renderTitle={(props) => (
+					<h3 {...props}>
+						{tHtml(
+							'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
+						)}
+					</h3>
+				)}
 			>
 				<div className="u-px-32">
 					{visitorSpaceInfo && <SpacePreview space={visitorSpaceInfo} />}

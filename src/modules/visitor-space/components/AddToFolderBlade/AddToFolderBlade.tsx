@@ -329,11 +329,15 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	return (
 		<Blade
 			{...props}
-			footer={props.isOpen && renderFooter()}
-			title={tHtml(
-				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
-			)}
 			className={clsx(props.className, styles['c-add-to-folder-blade'])}
+			footer={props.isOpen && renderFooter()}
+			renderTitle={(props) => (
+				<h3 {...props}>
+					{tHtml(
+						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
+					)}
+				</h3>
+			)}
 		>
 			<div className="u-px-32">
 				{tHtml(
