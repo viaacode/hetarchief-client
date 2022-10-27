@@ -82,6 +82,10 @@ export class MediaService {
 		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
 	}
 
+	public static async getSeoById(id: string): Promise<{ title: string | null } | null> {
+		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/seo/${id}`).json();
+	}
+
 	public static async getPlayableUrl(referenceId: string | null): Promise<string | null> {
 		if (!referenceId) {
 			return null;
