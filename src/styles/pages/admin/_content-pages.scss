@@ -40,6 +40,7 @@
 
 	> .c-content-page-preview,
 	.c-content-edit-view__preview {
+		height: max-content;
 		background-color: white;
 		box-shadow: $shadow-24-black-08;
 		margin-left: $spacer-sm;
