@@ -6,127 +6,127 @@ $c-table-border: 1px solid $silver;
 // Table
 
 table[class*="c-table--styled"] {
-    thead {
-        th {
-            @include text-ellipsis;
+	thead {
+		th {
+			@include text-ellipsis;
 
-            padding: 1.6rem 2.4rem;
-            position: relative;
-            text-align: left;
-            font-weight: 700;
-            font-size: 1.2rem;
-            line-height: $line-height-1xl;
-            color: #727272;
-            user-select: none;
-        }
+			padding: 1.6rem 2.4rem;
+			position: relative;
+			text-align: left;
+			font-weight: 700;
+			font-size: 1.2rem;
+			line-height: $line-height-1xl;
+			color: #727272;
+			user-select: none;
+		}
 
-        .o-svg-icon {
-            width: 1.6rem;
-            height: 1.6rem;
-        }
-    }
+		.o-svg-icon {
+			width: 1.6rem;
+			height: 1.6rem;
+		}
+	}
 }
 
 .c-filter-table,
 .c-admin__content {
-    table {
-        border-spacing: 0;
-        border-collapse: collapse;
-    }
+	table {
+		border-spacing: 0;
+		border-collapse: collapse;
+	}
 
-    tbody {
-        background-color: $white;
-        border-bottom: $c-table-border;
-        border-top: $c-table-border;
+	tbody {
+		background-color: $white;
+		border-bottom: $c-table-border;
+		border-top: $c-table-border;
 
-        @include respond-at("lg") {
-            box-shadow: $shadow-24-black-08;
-        }
+		@include respond-at("lg") {
+			box-shadow: $shadow-24-black-08;
+		}
 
-        td {
-            text-align: left;
-            padding: $spacer-sm $spacer-md;
-            font-size: $font-size-sm;
-            line-height: $line-height-lg;
-        }
-    }
+		td {
+			text-align: left;
+			padding: $spacer-sm $spacer-md;
+			font-size: $font-size-sm;
+			line-height: $line-height-lg;
+		}
+	}
 
-    tr {
-        border-bottom: $c-table-border;
-    }
+	tr {
+		border-bottom: $c-table-border;
+	}
 }
 
 .c-filter-table {
-    .c-button-toolbar {
-        button {
-            width: 3.6rem;
-            height: 3.6rem;
-            border-radius: 1.8rem;
-            background-color: $silver;
-            color: $black;
-            border: none;
+	.c-button-toolbar {
+		button {
+			width: 3.6rem;
+			height: 3.6rem;
+			border-radius: 1.8rem;
+			background-color: $silver;
+			color: $black;
+			border: none;
 
-            &:hover {
-                background-color: $shade;
-                border-color: $shade;
-                color: $white;
-            }
+			&:hover {
+				background-color: $shade;
+				border-color: $shade;
+				color: $white;
+			}
 
-            &:active {
-                background-color: $teal-dark;
-                border-color: $teal-dark;
-                color: $white;
-            }
+			&:active {
+				background-color: $teal-dark;
+				border-color: $teal-dark;
+				color: $white;
+			}
 
-            &:focus,
-            .focus-visible:focus:not(:focus-visible) {
-                outline: 2px solid $teal;
-            }
+			&:focus,
+			.focus-visible:focus:not(:focus-visible) {
+				outline: 2px solid $teal;
+			}
 
-            &:disabled {
-                border: none;
-                background-color: $silver;
-                color: $zinc;
-            }
-        }
-    }
+			&:disabled {
+				border: none;
+				background-color: $silver;
+				color: $zinc;
+			}
+		}
+	}
 }
 
 .c-admin__content:not(.Table-module_c-table--styled__H4Ms4) tbody td {
-    &:first-child {
-        padding-left: $spacer-md;
-    }
+	&:first-child {
+		padding-left: $spacer-md;
+	}
 
-    &:last-child {
-        padding-right: $spacer-md;
-    }
+	&:last-child {
+		padding-right: $spacer-md;
+	}
 }
 
 // Pagination
 
 div[class*="c-pagination"]:not(div[class*="c-pagination__btn"]) {
-    justify-content: flex-end;
+	justify-content: flex-end;
 }
 
 div[class*="c-pagination__btn"] {
-    color: $zinc;
+	color: $zinc;
 
-    &:hover {
-        color: $shade;
-        background-color: transparent;
-    }
+	&:hover {
+		color: $shade;
+		background-color: transparent;
+	}
 }
 
 div[class*="c-pagination__btn--active"] {
-    background-color: #009690;
-    color: #fff;
-    font-weight: 700;
-    border-radius: 50%;
+	background-color: #009690;
+	color: #fff;
+	font-weight: 700;
+	border-radius: 50%;
 
-    &:hover {
-        background-color: #009690;
-        color: $white;
-    }
+	&:hover {
+		background-color: #009690;
+		color: $white;
+	}
 }
 
 // Buttons
@@ -138,95 +138,95 @@ div[class*="c-pagination__btn--active"] {
 button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 .c-accordion__item > .u-spacer-bottom button[class*="c-button"],
 .c-modal .c-toolbar button[class*="c-button"] {
-    display: inline-block;
-    padding: 1.4rem $button-horizontal-whitespace;
-    border: 1px solid $teal-dark;
-    font-family: $font-family-primary;
-    font-size: $font-size-base;
-    font-weight: $font-weight-bold;
-    line-height: 1.125;
-    text-align: center;
-    border-radius: 4rem;
-    cursor: pointer;
-    outline: 2px solid transparent;
-    transition: color $animate-default, background-color $animate-default, border-color $animate-default;
+	display: inline-block;
+	padding: 1.4rem $button-horizontal-whitespace;
+	border: 1px solid $teal-dark;
+	font-family: $font-family-primary;
+	font-size: $font-size-base;
+	font-weight: $font-weight-bold;
+	line-height: 1.125;
+	text-align: center;
+	border-radius: 4rem;
+	cursor: pointer;
+	outline: 2px solid transparent;
+	transition: color $animate-default, background-color $animate-default, border-color $animate-default;
 
-    .c-button__label,
-    div[class*="c-button__label"] {
-        font-weight: 400;
-    }
+	.c-button__label,
+	div[class*="c-button__label"] {
+		font-weight: 400;
+	}
 }
 
 button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
-    border-color: $zinc;
-    background-color: $white;
-    color: $black;
+	border-color: $zinc;
+	background-color: $white;
+	color: $black;
 
-    &:hover {
-        background-color: $silver;
-    }
+	&:hover {
+		background-color: $silver;
+	}
 
-    &:active {
-        background-color: $teal-dark;
-        border-color: $teal-dark;
-        color: $white;
-    }
+	&:active {
+		background-color: $teal-dark;
+		border-color: $teal-dark;
+		color: $white;
+	}
 
-    /**
-    * Cross-browser styles for explicit focus via
-    * keyboard-based (eg Tab) navigation or the
-    * .focus-visible utility class.
-    */
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 
-    &:focus,
-    .focus-visible:focus:not(:focus-visible) {
-        border-color: transparent;
-        outline: 2px solid $teal;
-    }
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
+		border-color: transparent;
+		outline: 2px solid $teal;
+	}
 
-    &:focus:not(:focus-visible) {
-        border-color: $zinc;
-    }
+	&:focus:not(:focus-visible) {
+		border-color: $zinc;
+	}
 }
 
 .c-admin__actions button[class*="c-button--primary"],
 .c-admin__content button[class*="c-button--primary"],
 .c-filter-table button[class*="c-button--primary"],
 .c-button-toolbar button[class*="c-button--primary"] {
-    max-height: 5.6rem;
-    background-color: $teal-dark;
-    color: $white;
-    border-radius: $input-border-radius;
+	max-height: 5.6rem;
+	background-color: $teal-dark;
+	color: $white;
+	border-radius: $input-border-radius;
 
-    &:hover {
-        background-color: $shade;
-        border-color: $shade;
-    }
+	&:hover {
+		background-color: $shade;
+		border-color: $shade;
+	}
 
-    &:active {
-        background-color: $teal-dark;
-        border-color: $teal-dark;
-    }
+	&:active {
+		background-color: $teal-dark;
+		border-color: $teal-dark;
+	}
 
-    /**
-    * Cross-browser styles for explicit focus via
-    * keyboard-based (eg Tab) navigation or the
-    * .focus-visible utility class.
-    */
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 
-    &:focus,
-    .focus-visible:focus:not(:focus-visible) {
-        outline: 2px solid $black;
-    }
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
+		outline: 2px solid $black;
+	}
 
-    /**
-    * Remove focus styles for non-keyboard focus.
-    */
+	/**
+	* Remove focus styles for non-keyboard focus.
+	*/
 
-    &:focus:not(:focus-visible) {
-        outline: 0;
-        box-shadow: none;
-    }
+	&:focus:not(:focus-visible) {
+		outline: 0;
+		box-shadow: none;
+	}
 }
 
 .c-admin__actions button[class*="c-button--secondary"],
@@ -236,446 +236,446 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 .c-file-upload-button-and-input button[class*="c-button--secondary"],
 .c-admin__actions button[class*="c-button--tertiary"],
 .c-button-toolbar button[class*="c-button--tertiary"] {
-    max-height: 5.6rem;
-    background-color: $silver;
-    border-color: $silver;
-    color: $black;
+	max-height: 5.6rem;
+	background-color: $silver;
+	border-color: $silver;
+	color: $black;
 
-    &:hover {
-        background-color: $shade;
-        border-color: $shade;
-        color: $white;
-    }
+	&:hover {
+		background-color: $shade;
+		border-color: $shade;
+		color: $white;
+	}
 
-    &:active {
-        background-color: $teal-dark;
-        border-color: $teal-dark;
-        color: $white;
-    }
+	&:active {
+		background-color: $teal-dark;
+		border-color: $teal-dark;
+		color: $white;
+	}
 
-    /**
-    * Cross-browser styles for explicit focus via
-    * keyboard-based (eg Tab) navigation or the
-    * .focus-visible utility class.
-    */
+	/**
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
 
-    &:focus,
-    .focus-visible:focus:not(:focus-visible) {
-        outline: 2px solid $teal;
-    }
+	&:focus,
+	.focus-visible:focus:not(:focus-visible) {
+		outline: 2px solid $teal;
+	}
 }
 
 .c-button-toolbar button[class*="c-button"]:disabled {
-    background-color: $silver;
-    color: $zinc;
-    border-color: $silver;
-    pointer-events: none;
+	background-color: $silver;
+	color: $zinc;
+	border-color: $silver;
+	pointer-events: none;
 }
 
 // inputs
 .c-filter-table .o-form-group-layout,
 .c-modal .o-form-group__controls {
-    align-items: center;
+	align-items: center;
 
-    .c-content-filters__search {
-        max-width: none;
-    }
+	.c-content-filters__search {
+		max-width: none;
+	}
 
-    .c-input-with-icon {
-        position: relative;
+	.c-input-with-icon {
+		position: relative;
 
-        .c-input {
-            @include reset-input-field;
+		.c-input {
+			@include reset-input-field;
 
-            background-color: $white;
-            border: 1px solid $zinc;
-            font-size: $font-size-base;
-            outline: 1px solid transparent;
-            padding: 1.4rem 1.6rem;
-            height: 5.6rem;
-            border-radius: $input-border-radius;
+			background-color: $white;
+			border: 1px solid $zinc;
+			font-size: $font-size-base;
+			outline: 1px solid transparent;
+			padding: 1.4rem 1.6rem;
+			height: 5.6rem;
+			border-radius: $input-border-radius;
 
-            &:focus {
-                border-color: $teal;
-            }
+			&:focus {
+				border-color: $teal;
+			}
 
-            &:disabled {
-                cursor: not-allowed;
-                color: $zinc;
-                border-color: $silver;
-            }
-        }
+			&:disabled {
+				cursor: not-allowed;
+				color: $zinc;
+				border-color: $silver;
+			}
+		}
 
-        .o-svg-icon {
-            position: absolute;
-            top: calc(50% - 1rem);
-            right: 2rem;
-        }
-    }
+		.o-svg-icon {
+			position: absolute;
+			top: calc(50% - 1rem);
+			right: 2rem;
+		}
+	}
 
-    .u-text-muted {
-        color: $neutral;
-    }
+	.u-text-muted {
+		color: $neutral;
+	}
 }
 
 // modal
 
 .c-modal {
-    .c-toolbar {
-        .c-modal__title {
-            font-size: $font-size-1xl;
-            font-weight: 700;
-        }
+	.c-toolbar {
+		.c-modal__title {
+			font-size: $font-size-1xl;
+			font-weight: 700;
+		}
 
-        button[class*="c-button"] {
-            padding: $spacer-xxs $spacer-md;
-            border: none;
-        }
+		button[class*="c-button"] {
+			padding: $spacer-xxs $spacer-md;
+			border: none;
+		}
 
-        .c-apply-filter-button {
-            background-color: $black;
-            border-color: $black;
+		.c-apply-filter-button {
+			background-color: $black;
+			border-color: $black;
 
-            &:focus,
-            .focus-visible:focus:not(:focus-visible) {
-                outline: 2px solid $teal;
-            }
-        }
+			&:focus,
+			.focus-visible:focus:not(:focus-visible) {
+				outline: 2px solid $teal;
+			}
+		}
 
-        button[class*="c-button--secondary"] {
-            background-color: $silver;
-            border-color: $silver;
-            color: $black;
+		button[class*="c-button--secondary"] {
+			background-color: $silver;
+			border-color: $silver;
+			color: $black;
 
-            &:hover {
-                background-color: $shade;
-                border-color: $shade;
-                color: $white;
-            }
+			&:hover {
+				background-color: $shade;
+				border-color: $shade;
+				color: $white;
+			}
 
-            &:active {
-                background-color: $teal-dark;
-                border-color: $teal-dark;
-                color: $white;
-            }
+			&:active {
+				background-color: $teal-dark;
+				border-color: $teal-dark;
+				color: $white;
+			}
 
-            /**
-            * Cross-browser styles for explicit focus via
-            * keyboard-based (eg Tab) navigation or the
-            * .focus-visible utility class.
-            */
+			/**
+			* Cross-browser styles for explicit focus via
+			* keyboard-based (eg Tab) navigation or the
+			* .focus-visible utility class.
+			*/
 
-            &:focus,
-            .focus-visible:focus:not(:focus-visible) {
-                outline: 2px solid $teal;
-            }
-        }
-    }
+			&:focus,
+			.focus-visible:focus:not(:focus-visible) {
+				outline: 2px solid $teal;
+			}
+		}
+	}
 
-    .c-checkbox-group {
-        display: flex;
-        flex-direction: column;
-        row-gap: $spacer-sm;
-        padding-top: $spacer-xs;
-    }
+	.c-checkbox-group {
+		display: flex;
+		flex-direction: column;
+		row-gap: $spacer-sm;
+		padding-top: $spacer-xs;
+	}
 
-    .c-checkbox {
-        color: $black;
+	.c-checkbox {
+		color: $black;
 
-        label {
-            display: flex;
-            align-items: center;
-        }
+		label {
+			display: flex;
+			align-items: center;
+		}
 
-        input {
-            margin-right: $spacer-xs;
-        }
+		input {
+			margin-right: $spacer-xs;
+		}
 
-        input[type="checkbox"]::after {
-            width: 1.5rem;
-            height: 1.5rem;
-            top: -0.2rem;
-            left: -0.1rem;
-            position: relative;
-            background-color: $white;
-            content: "";
-            display: inline-block;
-            visibility: visible;
-            border: 0.2rem solid $black;
-        }
+		input[type="checkbox"]::after {
+			width: 1.5rem;
+			height: 1.5rem;
+			top: -0.2rem;
+			left: -0.1rem;
+			position: relative;
+			background-color: $white;
+			content: "";
+			display: inline-block;
+			visibility: visible;
+			border: 0.2rem solid $black;
+		}
 
-        input[type="checkbox"]:checked::after {
-            width: 1.5rem;
-            height: 1.5rem;
-            top: -0.2rem;
-            left: -0.1rem;
-            position: relative;
-            background-color: $white;
-            content: "";
-            display: inline-block;
-            visibility: visible;
-            border: 0.5rem solid $black;
-        }
-    }
+		input[type="checkbox"]:checked::after {
+			width: 1.5rem;
+			height: 1.5rem;
+			top: -0.2rem;
+			left: -0.1rem;
+			position: relative;
+			background-color: $white;
+			content: "";
+			display: inline-block;
+			visibility: visible;
+			border: 0.5rem solid $black;
+		}
+	}
 
-    .c-modal__body {
-        .o-form-group {
-            .c-radio-group {
-                display: flex;
-                flex-direction: column;
-                row-gap: $spacer-sm;
-                padding-top: $spacer-xs;
-                color: $black;
-            }
+	.c-modal__body {
+		.o-form-group {
+			.c-radio-group {
+				display: flex;
+				flex-direction: column;
+				row-gap: $spacer-sm;
+				padding-top: $spacer-xs;
+				color: $black;
+			}
 
-            .c-radio {
-                label {
-                    display: flex;
-                    align-items: center;
-                }
+			.c-radio {
+				label {
+					display: flex;
+					align-items: center;
+				}
 
-                input {
-                    margin-right: $spacer-xs;
-                }
+				input {
+					margin-right: $spacer-xs;
+				}
 
-                input[type="radio"]::after {
-                    width: 1.5rem;
-                    height: 1.5rem;
-                    border-radius: 0.75rem;
-                    top: -0.2rem;
-                    left: -0.1rem;
-                    position: relative;
-                    background-color: $white;
-                    content: "";
-                    display: inline-block;
-                    visibility: visible;
-                    border: 0.2rem solid $black;
-                }
+				input[type="radio"]::after {
+					width: 1.5rem;
+					height: 1.5rem;
+					border-radius: 0.75rem;
+					top: -0.2rem;
+					left: -0.1rem;
+					position: relative;
+					background-color: $white;
+					content: "";
+					display: inline-block;
+					visibility: visible;
+					border: 0.2rem solid $black;
+				}
 
-                input[type="radio"]:checked::after {
-                    width: 1.5rem;
-                    height: 1.5rem;
-                    border-radius: 0.75rem;
-                    top: -0.2rem;
-                    left: -0.1rem;
-                    position: relative;
-                    background-color: $white;
-                    content: "";
-                    display: inline-block;
-                    visibility: visible;
-                    border: 0.5rem solid $black;
-                }
-            }
-        }
+				input[type="radio"]:checked::after {
+					width: 1.5rem;
+					height: 1.5rem;
+					border-radius: 0.75rem;
+					top: -0.2rem;
+					left: -0.1rem;
+					position: relative;
+					background-color: $white;
+					content: "";
+					display: inline-block;
+					visibility: visible;
+					border: 0.5rem solid $black;
+				}
+			}
+		}
 
-        .o-form-group-layout--standard {
-            margin-top: $spacer-xs;
-        }
+		.o-form-group-layout--standard {
+			margin-top: $spacer-xs;
+		}
 
-        .c-content-page-publish-modal__display-date {
-            .o-form-group__label {
-                display: block;
-                padding-bottom: $spacer-xs;
-            }
+		.c-content-page-publish-modal__display-date {
+			.o-form-group__label {
+				display: block;
+				padding-bottom: $spacer-xs;
+			}
 
-            .u-spacer {
-                margin: 0 !important; // override current important flag
+			.u-spacer {
+				margin: 0 !important; // override current important flag
 
-                .c-input-with-icon {
-                    .o-svg-icon {
-                        right: 4rem;
-                    }
-                }
+				.c-input-with-icon {
+					.o-svg-icon {
+						right: 4rem;
+					}
+				}
 
-                .c-tooltip-trigger {
-                    height: 2rem;
-                    top: calc(50% - 1rem);
-                    right: 1.2rem;
+				.c-tooltip-trigger {
+					height: 2rem;
+					top: calc(50% - 1rem);
+					right: 1.2rem;
 
-                    .a-info-icon {
-                        display: block;
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
+					.a-info-icon {
+						display: block;
+						width: 100%;
+						height: 100%;
+					}
+				}
 
-                .c-tooltip {
-                    background-color: $white;
-                    border: 0.1rem solid $zinc;
+				.c-tooltip {
+					background-color: $white;
+					border: 0.1rem solid $zinc;
 
-                    &--right {
-                        margin-left: $spacer-xs;
-                    }
+					&--right {
+						margin-left: $spacer-xs;
+					}
 
-                    &__arrow {
-                        visibility: hidden;
-                    }
-                }
-            }
-        }
-    }
+					&__arrow {
+						visibility: hidden;
+					}
+				}
+			}
+		}
+	}
 }
 
 // dropdowns
 
 .c-filter-table__toolbar {
-    .c-dropdown__trigger {
-        .c-checkbox-dropdown-modal__trigger {
-            padding: 0 $spacer-md;
-        }
+	.c-dropdown__trigger {
+		.c-checkbox-dropdown-modal__trigger {
+			padding: 0 $spacer-md;
+		}
 
-        [class*="TagList-module_c-tag-list"] {
-            margin: 0;
-            padding: 0;
-        }
-    }
+		[class*="TagList-module_c-tag-list"] {
+			margin: 0;
+			padding: 0;
+		}
+	}
 
-    .c-dropdown__menu {
-        .o-form-group__label {
-            font-size: $font-size-sm;
-            color: $neutral;
-        }
+	.c-dropdown__menu {
+		.o-form-group__label {
+			font-size: $font-size-sm;
+			color: $neutral;
+		}
 
-        .c-checkbox-group,
-        .c-radio-group--inline {
-            display: flex;
-            flex-direction: column;
-            row-gap: $spacer-sm;
-            padding-top: $spacer-xs;
-            color: $black;
-        }
+		.c-checkbox-group,
+		.c-radio-group--inline {
+			display: flex;
+			flex-direction: column;
+			row-gap: $spacer-sm;
+			padding-top: $spacer-xs;
+			color: $black;
+		}
 
-        .c-checkbox,
-        .c-radio {
-            color: $black;
+		.c-checkbox,
+		.c-radio {
+			color: $black;
 
-            label {
-                display: flex;
-                align-items: center;
-            }
+			label {
+				display: flex;
+				align-items: center;
+			}
 
-            input {
-                margin-right: $spacer-xs;
-            }
+			input {
+				margin-right: $spacer-xs;
+			}
 
-            input[type="radio"]::after,
-            input[type="radio"]:checked::after,
-            input[type="checkbox"]::after,
-            input[type="checkbox"]:checked::after {
-                width: 1.5rem;
-                height: 1.5rem;
-                top: -0.2rem;
-                left: -0.1rem;
-                position: relative;
-                background-color: $white;
-                content: "";
-                display: inline-block;
-                visibility: visible;
-            }
+			input[type="radio"]::after,
+			input[type="radio"]:checked::after,
+			input[type="checkbox"]::after,
+			input[type="checkbox"]:checked::after {
+				width: 1.5rem;
+				height: 1.5rem;
+				top: -0.2rem;
+				left: -0.1rem;
+				position: relative;
+				background-color: $white;
+				content: "";
+				display: inline-block;
+				visibility: visible;
+			}
 
-            input[type="radio"]::after {
-                border-radius: 0.75rem;
-                border: 0.2rem solid $black;
-            }
+			input[type="radio"]::after {
+				border-radius: 0.75rem;
+				border: 0.2rem solid $black;
+			}
 
-            input[type="radio"]:checked::after {
-                border-radius: 0.75rem;
-                border: 0.5rem solid $black;
-            }
+			input[type="radio"]:checked::after {
+				border-radius: 0.75rem;
+				border: 0.5rem solid $black;
+			}
 
-            input[type="checkbox"]::after {
-                border: 0.2rem solid $black;
-            }
+			input[type="checkbox"]::after {
+				border: 0.2rem solid $black;
+			}
 
-            input[type="checkbox"]:checked::after {
-                border: 0.5rem solid $black;
-            }
-        }
+			input[type="checkbox"]:checked::after {
+				border: 0.5rem solid $black;
+			}
+		}
 
-        .o-grid {
-            padding-top: $spacer-xs;
+		.o-grid {
+			padding-top: $spacer-xs;
 
-            input {
-                @include reset-input-field;
+			input {
+				@include reset-input-field;
 
-                background-color: $white;
-                border: 1px solid $zinc;
-                font-size: $font-size-base;
-                outline: 1px solid transparent;
-                padding: $spacer-xs;
-                height: 2.8rem;
-                border-radius: 1.4rem;
+				background-color: $white;
+				border: 1px solid $zinc;
+				font-size: $font-size-base;
+				outline: 1px solid transparent;
+				padding: $spacer-xs;
+				height: 2.8rem;
+				border-radius: 1.4rem;
 
-                &:focus {
-                    border-color: $teal;
-                }
-            }
-        }
+				&:focus {
+					border-color: $teal;
+				}
+			}
+		}
 
-        .c-content-picker {
-            .c-select__control {
-                height: 3.6rem;
-                border-radius: 1.8rem;
-            }
+		.c-content-picker {
+			.c-select__control {
+				height: 3.6rem;
+				border-radius: 1.8rem;
+			}
 
-            .c-select__menu {
-                color: $black;
+			.c-select__menu {
+				color: $black;
 
-                .c-select__option:hover {
-                    background-color: $silver;
-                }
-            }
-        }
+				.c-select__option:hover {
+					background-color: $silver;
+				}
+			}
+		}
 
-        .o-form-group__controls .c-apply-filter-button {
-            background-color: $black;
-            border-color: $black;
+		.o-form-group__controls .c-apply-filter-button {
+			background-color: $black;
+			border-color: $black;
 
-            &:focus,
-            .focus-visible:focus:not(:focus-visible) {
-                outline: 2px solid $teal;
-            }
+			&:focus,
+			.focus-visible:focus:not(:focus-visible) {
+				outline: 2px solid $teal;
+			}
 
-            &:disabled {
-                background-color: $silver;
-                color: $zinc;
-                border-color: $silver;
-            }
-        }
-    }
+			&:disabled {
+				background-color: $silver;
+				color: $zinc;
+				border-color: $silver;
+			}
+		}
+	}
 }
 
 // quote
 
 .c-content-block-preview {
-    .c-quote__text {
-        font-size: $font-size-1xl;
-    }
+	.c-quote__text {
+		font-size: $font-size-1xl;
+	}
 
-    .c-quote__author {
-        color: $neutral;
+	.c-quote__author {
+		color: $neutral;
 
-        .c-avatar {
-            width: auto;
-            height: auto;
+		.c-avatar {
+			width: auto;
+			height: auto;
 
-            .o-svg-icon {
-                display: none;
-            }
-        }
-    }
+			.o-svg-icon {
+				display: none;
+			}
+		}
+	}
 }
 
 // other
 
 .c-form-help-text {
-    padding-top: $spacer-xs;
+	padding-top: $spacer-xs;
 }
 
 .c-form-help-text--error {
-    color: $cherry;
+	color: $cherry;
 }
 
 .u-clickable {
-    cursor: pointer;
+	cursor: pointer;
 }
