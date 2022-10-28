@@ -817,7 +817,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
-	let seoInfo: { title: string | null } | null = null;
+	let seoInfo: { name: string | null } | null = null;
 	try {
 		seoInfo = await MediaService.getSeoById(context.query.ie as string);
 	} catch (err) {
@@ -826,7 +826,7 @@ export async function getServerSideProps(
 
 	return {
 		props: {
-			title: seoInfo?.title,
+			title: seoInfo?.name,
 			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
 			...(await withI18n()).props,
 		},
