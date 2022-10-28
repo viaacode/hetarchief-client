@@ -361,4 +361,21 @@ $l-container-padding-xs: 2rem;
 			outline: 2px solid $teal !important;
 		}
 	}
+
+	.u-content-flex {
+		display: flex;
+		flex: 1 0 auto;
+	
+		&--left {
+			justify-content: flex-start;
+		}
+	
+		&--center {
+			justify-content: center;
+		}
+	
+		&--right {
+			justify-content: flex-end;
+		}
+	}
 }
