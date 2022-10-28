@@ -291,7 +291,9 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			onClose={onClose}
 			renderTitle={(props) => (
 				<h3 {...props} className={clsx(props.className, 'u-display-none')}>
-					{tText('Notificaties')}
+					{tText(
+						'modules/shared/components/notification-center/notification-center___notificaties'
+					)}
 				</h3>
 			)}
 			showCloseButtonOnTop
