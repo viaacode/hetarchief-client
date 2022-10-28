@@ -127,10 +127,10 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 		>
 			<Blade
 				{...props}
-				title={getTitle()}
 				footer={footer}
-				layer={1}
 				isOpen={getCurrentLayer() === 1}
+				layer={1}
+				renderTitle={(props) => <h3 {...props}>{getTitle()}</h3>}
 			>
 				{selected && (
 					<>

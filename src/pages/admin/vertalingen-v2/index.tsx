@@ -58,11 +58,11 @@ const AdminTranslationsOverviewV2: FC = () => {
 
 		return (
 			<Blade
+				className={styles['c-translations-overview__blade']}
+				footer={renderFooter()}
 				isOpen={isOpen}
 				onClose={onClose}
-				title={title}
-				footer={renderFooter()}
-				className={styles['c-translations-overview__blade']}
+				renderTitle={(props) => <h3 {...props}>{title}</h3>}
 			>
 				<div className={styles['c-translations-overview__blade-body']}>{body}</div>
 			</Blade>

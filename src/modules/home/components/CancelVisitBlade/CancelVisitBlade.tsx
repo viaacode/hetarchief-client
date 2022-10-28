@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { FC, useState } from 'react';
 
 import { Blade } from '@shared/components';
@@ -81,11 +82,15 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 
 	return (
 		<Blade
-			className={styles['c-cancel-visit-blade']}
 			{...props}
+			className={clsx(props.className, styles['c-cancel-visit-blade'])}
 			footer={renderFooter()}
-			title={tHtml(
-				'modules/home/components/cancel-visit-blade/cancel-visit-blade___bezoek-annuleren'
+			renderTitle={(props) => (
+				<h3 {...props}>
+					{tHtml(
+						'modules/home/components/cancel-visit-blade/cancel-visit-blade___bezoek-annuleren'
+					)}
+				</h3>
 			)}
 		>
 			<div className="u-px-16 u-px-32:md u-pr-56:md">

@@ -401,7 +401,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 
 	return (
-		<Blade {...props} footer={props.isOpen && renderFooter()} title={title}>
+		<Blade
+			{...props}
+			footer={props.isOpen && renderFooter()}
+			renderTitle={(props) => <h3 {...props}>{title}</h3>}
+		>
 			{selected && <VisitSummary {...selected} />}
 
 			{props.isOpen && (

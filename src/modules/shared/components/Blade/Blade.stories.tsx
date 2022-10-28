@@ -71,7 +71,7 @@ WithoutTitleAndCloseButton.args = {
 
 export const WithCustomTitle = Template.bind({});
 WithCustomTitle.args = {
-	heading: <h3>This is a custom h3 without styling</h3>,
+	renderTitle: () => <h3>This is a custom h3 without styling</h3>,
 	children: <div style={{ backgroundColor: 'beige', height: '100%' }}>This is the content</div>,
 };
 

@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { globalLabelKeys } from '@shared/const';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
@@ -19,17 +19,18 @@ const Blade: FC<BladeProps> = ({
 	className,
 	children,
 	isOpen,
-	title,
-	heading,
 	footer,
 	hideOverlay = false,
 	hideCloseButton = false,
 	showCloseButtonOnTop = false,
 	onClose,
 	layer,
+	renderTitle,
 }) => {
 	const { tText } = useTranslation();
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
+	const [id] = useState(`${globalLabelKeys.blade.title}--${new Date().valueOf()}`);
+
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
 	const isLayered = isManaged && layer;
@@ -65,8 +66,8 @@ const Blade: FC<BladeProps> = ({
 		return (
 			<div
 				role="dialog"
-				aria-modal={isBladeOpen}
-				aria-labelledby={globalLabelKeys.blade.title}
+				aria-modal
+				aria-labelledby={id}
 				className={clsx(
 					className,
 					styles['c-blade'],
@@ -87,18 +88,13 @@ const Blade: FC<BladeProps> = ({
 				}
 			>
 				{!hideCloseButton && renderCloseButton()}
+
 				<div className={styles['c-blade__title-wrapper']}>
-					{heading ||
-						(title && (
-							<h3
-								id={globalLabelKeys.blade.title}
-								className={styles['c-blade__title']}
-							>
-								{title}
-							</h3>
-						))}
+					{renderTitle?.({ id, className: styles['c-blade__title'] })}
 				</div>
+
 				<div className={styles['c-blade__body-wrapper']}>{children}</div>
+
 				<div className={styles['c-blade__footer-wrapper']}>{footer || <></>}</div>
 			</div>
 		);
