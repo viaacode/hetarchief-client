@@ -38,7 +38,7 @@ $component: "c-filter-menu";
 		&:focus,
 		&:focus-visible,
 		&:focus-within {
-			z-index: get-z-layer("foreground");
+			z-index: get-z-layer("filter");
 		}
 
 		:global(.c-button__content) {

@@ -2,13 +2,14 @@ import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-com
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
-import { NextPage } from 'next';
+import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next/types';
 import { parseUrl } from 'query-string';
-import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { ComponentType, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
@@ -33,6 +34,7 @@ import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
+import { MediaService } from '@media/services';
 import {
 	Media,
 	MediaActions,
@@ -93,7 +95,12 @@ import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
-const ObjectDetailPage: NextPage = () => {
+type ObjectDetailPageProps = {
+	title?: string;
+	url: string;
+};
+
+const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	/**
 	 * Hooks
 	 */
@@ -795,16 +802,34 @@ const ObjectDetailPage: NextPage = () => {
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};
 
-	const title = mediaInfo?.name;
 	const description = capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
-		<VisitorLayout>
-			{renderOgTags(title, description, publicRuntimeConfig.CLIENT_URL)}
-			{renderPageContent()}
-		</VisitorLayout>
+		<>
+			<VisitorLayout>
+				{renderOgTags(title, description, url)}
+				{renderPageContent()}
+			</VisitorLayout>
+		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
+	let seoInfo: { name: string | null } | null = null;
+	try {
+		seoInfo = await MediaService.getSeoById(context.query.ie as string);
+	} catch (err) {
+		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
+	}
 
-export default withAuth(ObjectDetailPage);
+	return {
+		props: {
+			title: seoInfo?.name,
+			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
+			...(await withI18n()).props,
+		},
+	};
+}
+
+export default withAuth(ObjectDetailPage as ComponentType);

@@ -240,6 +240,16 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		);
 	};
 
+	const futureDatepickerProps = useMemo(() => {
+		const copy = { ...futureDatepicker };
+
+		// Warning: including `maxDate` in any way destroys keyboard navigation
+		// See https://stackoverflow.com/a/63564880
+		delete copy.maxDate;
+
+		return copy;
+	}, []);
+
 	const renderAccessFrom = useCallback(
 		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'> }) => {
 			const now = new Date();
@@ -297,15 +307,15 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			return (
 				<>
 					<Datepicker
-						{...futureDatepicker}
+						{...futureDatepickerProps}
 						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
 						id={labelKeys.accessFrom}
-						maxDate={null}
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
 						selected={form.accessFrom}
 						value={formatMediumDate(form.accessFrom)}
+						popperPlacement="bottom-start"
 					/>
 
 					<Timepicker
@@ -323,7 +333,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[form, onSimpleDateChange]
+		[form, onSimpleDateChange, futureDatepickerProps]
 	);
 
 	const renderAccessTo = useCallback(
@@ -341,16 +351,16 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			return (
 				<>
 					<Datepicker
-						{...futureDatepicker}
+						{...futureDatepickerProps}
 						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
 						id={labelKeys.accessTo}
-						maxDate={null}
 						minDate={accessFrom}
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
 						selected={form.accessTo}
 						value={formatMediumDate(form.accessTo)}
+						popperPlacement="bottom-start"
 					/>
 
 					<Timepicker
@@ -368,7 +378,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[form, onSimpleDateChange]
+		[form, onSimpleDateChange, futureDatepickerProps]
 	);
 
 	const renderAccessRemark = ({
