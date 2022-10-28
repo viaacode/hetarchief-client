@@ -1,29 +1,42 @@
 import { HTTPError } from 'ky';
-import { NextPage } from 'next';
+import { GetServerSidePropsResult, NextPage } from 'next';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { GetServerSidePropsContext } from 'next/types';
+import { ComponentType, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setShowZendesk } from '@shared/store/ui';
 import { AccessStatus } from '@shared/types';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
+import { VisitorSpaceService } from '@visitor-space/services';
+import { VisitorSpaceInfo } from '@visitor-space/types';
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 
 import { WaitingPage } from '../../../modules/visitor-space/components';
 
 import { VisitorLayout } from 'modules/visitors';
 
-const VisitRequestedPage: NextPage = () => {
+const { publicRuntimeConfig } = getConfig();
+
+interface VisitRequestedPageProps {
+	name: string;
+	description: string;
+	url: string;
+}
+
+const VisitRequestedPage: NextPage<VisitRequestedPageProps> = ({ name, description, url }) => {
 	useNavigationBorder();
 
 	const router = useRouter();
-	const { tHtml } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 	const dispatch = useDispatch();
 
 	const { slug } = router.query;
@@ -74,7 +87,7 @@ const VisitRequestedPage: NextPage = () => {
 
 	const renderPageContent = () => {
 		if (isLoadingAccessStatus || isLoadingSpace) {
-			return <Loading fullscreen />;
+			return <Loading fullscreen owner="request access page" />;
 		}
 		if (isNoAccessError) {
 			return (
@@ -89,9 +102,40 @@ const VisitRequestedPage: NextPage = () => {
 		return <WaitingPage space={space} />;
 	};
 
-	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
+	return (
+		<VisitorLayout>
+			{renderOgTags(
+				name,
+				description ||
+					tText(
+						'pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte'
+					),
+				url
+			)}
+
+			{renderPageContent()}
+		</VisitorLayout>
+	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<VisitRequestedPageProps>> {
+	let space: VisitorSpaceInfo | null = null;
+	try {
+		space = await VisitorSpaceService.getBySlug(context.query.slug as string, true);
+	} catch (err) {
+		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
+	}
 
-export default withAuth(VisitRequestedPage);
+	return {
+		props: {
+			name: space?.name,
+			description: space?.info,
+			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
+			...(await withI18n()).props,
+		},
+	};
+}
+
+export default withAuth(VisitRequestedPage as ComponentType);

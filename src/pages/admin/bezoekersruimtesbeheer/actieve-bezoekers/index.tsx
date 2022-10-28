@@ -1,6 +1,8 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
+import { GetServerSidePropsResult } from 'next';
 import getConfig from 'next/config';
-import React, { FC, ReactNode, useMemo, useState } from 'react';
+import { GetServerSidePropsContext } from 'next/types';
+import React, { ComponentType, FC, ReactNode, useMemo, useState } from 'react';
 import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -20,19 +22,20 @@ import {
 	SearchBar,
 	sortingIcons,
 } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { VisitTimeframe } from '@visits/types';
 
 const { publicRuntimeConfig } = getConfig();
 
-const Visitors: FC = () => {
+const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
@@ -137,16 +140,8 @@ const Visitors: FC = () => {
 		);
 	};
 
-	return (
-		<>
-			{renderOgTags(
-				tText('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'),
-				tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
-				),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageContent = () => {
+		return (
 			<AdminLayout
 				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
@@ -249,10 +244,35 @@ const Visitors: FC = () => {
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
+		);
+	};
+
+	return (
+		<>
+			{renderOgTags(
+				tText('pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'),
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers-meta-omschrijving'
+				),
+				url
+			)}
+
+			<PermissionsCheck allPermissions={[Permission.READ_ALL_VISIT_REQUESTS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return {
+		props: {
+			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
+			...(await withI18n()).props,
+		},
+	};
+}
 
-export default withAuth(withAllRequiredPermissions(Visitors, Permission.READ_ALL_VISIT_REQUESTS));
+export default withAuth(Visitors as ComponentType);

@@ -421,7 +421,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		representation: MediaRepresentation | undefined
 	): ReactNode => {
 		if (isLoadingPlayableUrl) {
-			return <Loading fullscreen={true} />;
+			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 		if (isErrorNoLicense) {
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
@@ -464,7 +464,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					/>
 				);
 			} else {
-				return <Loading fullscreen />;
+				return <Loading fullscreen owner="object detail page: waiting for peak json" />;
 			}
 		}
 
@@ -784,7 +784,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
-			return <Loading fullscreen />;
+			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
 		if (isErrorNotFound) {
 			return <ErrorNotFound />;

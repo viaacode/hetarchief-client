@@ -162,7 +162,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 	const renderContent = () => {
 		if (isFetching) {
-			return <Loading />;
+			return <Loading owner="visit request overview" />;
 		}
 		if ((visits?.items?.length || 0) <= 0) {
 			return renderEmptyMessage();

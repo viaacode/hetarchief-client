@@ -12,7 +12,7 @@ const renderHome = () => {
 		<NextQueryParamProvider>
 			<QueryClientProvider client={new QueryClient()}>
 				<Provider store={mockStore}>
-					<Home />
+					<Home url="http://localhost:3200" />
 				</Provider>
 			</QueryClientProvider>
 		</NextQueryParamProvider>

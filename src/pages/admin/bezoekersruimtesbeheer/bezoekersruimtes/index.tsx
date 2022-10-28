@@ -1,7 +1,9 @@
 import { Button, OrderDirection, Table } from '@meemoo/react-components';
+import { GetServerSidePropsResult } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import React, { FC, ReactNode, useMemo } from 'react';
+import { GetServerSidePropsContext } from 'next/types';
+import React, { ComponentType, FC, ReactNode, useMemo } from 'react';
 import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -22,12 +24,13 @@ import {
 	SearchBar,
 	sortingIcons,
 } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { globalLabelKeys, ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceStatusOptions } from '@visitor-space/const';
 import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
 import { VisitorSpaceService } from '@visitor-space/services';
@@ -35,7 +38,7 @@ import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@v
 
 const { publicRuntimeConfig } = getConfig();
 
-const VisitorSpacesOverview: FC = () => {
+const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
@@ -169,7 +172,7 @@ const VisitorSpacesOverview: FC = () => {
 		if (isFetching) {
 			return (
 				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					<Loading />
+					<Loading owner="admin visitor spaces page: table loading" />
 				</div>
 			);
 		}
@@ -252,7 +255,7 @@ const VisitorSpacesOverview: FC = () => {
 
 	const renderPageContent = () => {
 		if (isLoading) {
-			return <Loading />;
+			return <Loading owner="admin visitor spaces page: render page content" />;
 		}
 		if (isError) {
 			return (
@@ -275,18 +278,8 @@ const VisitorSpacesOverview: FC = () => {
 		return renderVisitorSpaces();
 	};
 
-	return (
-		<>
-			{renderOgTags(
-				tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
-				),
-				tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes-meta-omschrijving'
-				),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageLayoutAndContent = () => {
+		return (
 			<AdminLayout
 				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
@@ -312,12 +305,35 @@ const VisitorSpacesOverview: FC = () => {
 					<div className="l-container">{renderPageContent()}</div>
 				</AdminLayout.Content>
 			</AdminLayout>
+		);
+	};
+	return (
+		<>
+			{renderOgTags(
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
+				),
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes-meta-omschrijving'
+				),
+				url
+			)}
+			<PermissionsCheck allPermissions={[Permission.READ_ALL_SPACES]}>
+				{renderPageLayoutAndContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return {
+		props: {
+			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
+			...(await withI18n()).props,
+		},
+	};
+}
 
-export default withAuth(
-	withAnyRequiredPermissions(VisitorSpacesOverview, Permission.READ_ALL_SPACES)
-);
+export default withAuth(VisitorSpacesOverview as ComponentType);

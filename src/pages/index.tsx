@@ -1,5 +1,7 @@
-import { NextPage } from 'next';
+import { GetServerSidePropsResult, NextPage } from 'next';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next/types';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
@@ -15,10 +17,14 @@ import { Loading } from '@shared/components';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
+import { DefaultSeoInfo } from '@shared/types/seo';
+import { isBrowser } from '@shared/utils';
 
 import VisitorLayout from '../modules/visitors/layouts/VisitorLayout/VisitorLayout';
 
-const Home: NextPage = () => {
+const { publicRuntimeConfig } = getConfig();
+
+const Home: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const dispatch = useDispatch();
 	const [query, setQuery] = useQueryParams({
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
@@ -67,16 +73,16 @@ const Home: NextPage = () => {
 	 */
 
 	const renderPageContent = () => {
-		if (!hasCheckedLogin) {
-			return <Loading fullscreen />;
+		if (!hasCheckedLogin && isBrowser()) {
+			return <Loading fullscreen owner="root index page" />;
 		}
 		if (isLoggedIn && !!user) {
 			if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
-				return <Loading fullscreen />;
+				return <Loading fullscreen owner="root page logged" />;
 			}
 			return <LoggedInHome />;
 		}
-		return <LoggedOutHome />;
+		return <LoggedOutHome url={url} />;
 	};
 
 	return (
@@ -87,6 +93,15 @@ const Home: NextPage = () => {
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return {
+		props: {
+			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
+			...(await withI18n()).props,
+		},
+	};
+}
 
 export default Home;

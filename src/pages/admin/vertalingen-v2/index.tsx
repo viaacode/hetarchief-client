@@ -1,8 +1,10 @@
 import { TranslationsOverviewV2 } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { GetServerSidePropsResult } from 'next';
 import getConfig from 'next/config';
-import React, { FC, ReactNode } from 'react';
+import { GetServerSidePropsContext } from 'next/types';
+import React, { ComponentType, FC, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -10,15 +12,16 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { withI18n } from '@i18n/wrappers';
 import { Blade } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './TranslationsOverviewV2.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
 
-const AdminTranslationsOverviewV2: FC = () => {
+const AdminTranslationsOverviewV2: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 
 	const renderPopup = ({
@@ -70,13 +73,8 @@ const AdminTranslationsOverviewV2: FC = () => {
 		);
 	};
 
-	return (
-		<>
-			{renderOgTags(
-				tText('pages/admin/vertalingen/index___vertalingen'),
-				tText('pages/admin/vertalingen/index___vertalingen'),
-				publicRuntimeConfig.CLIENT_URL
-			)}
+	const renderPageContent = () => {
+		return (
 			<AdminLayout pageTitle={tHtml('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-vertalingen">
@@ -87,15 +85,33 @@ const AdminTranslationsOverviewV2: FC = () => {
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
+		);
+	};
+
+	return (
+		<>
+			{renderOgTags(
+				tText('pages/admin/vertalingen/index___vertalingen'),
+				tText('pages/admin/vertalingen/index___vertalingen'),
+				url
+			)}
+
+			<PermissionsCheck allPermissions={[Permission.EDIT_TRANSLATIONS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return {
+		props: {
+			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
+			...(await withI18n()).props,
+		},
+	};
+}
 
-export default withAuth(
-	withAnyRequiredPermissions(
-		withAdminCoreConfig(AdminTranslationsOverviewV2),
-		Permission.EDIT_TRANSLATIONS
-	)
-);
+export default withAuth(withAdminCoreConfig(AdminTranslationsOverviewV2 as ComponentType));
