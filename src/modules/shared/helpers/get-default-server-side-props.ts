@@ -1,4 +1,5 @@
 import { GetServerSidePropsResult } from 'next';
+import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import { GetServerSidePropsContext } from 'next/types';
 
@@ -11,6 +12,7 @@ export async function getDefaultServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	const translations = await getTranslations();
+	i18n?.addResources('nl', 'common', translations);
 	return {
 		props: {
 			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
