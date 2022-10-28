@@ -1,6 +1,5 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
 import { GetServerSidePropsResult, NextPage } from 'next';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, ReactNode, useMemo } from 'react';
@@ -17,10 +16,10 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ROUTES } from '@shared/const';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -32,8 +31,6 @@ import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
 
 import { VisitorLayout } from 'modules/visitors';
-
-const { publicRuntimeConfig } = getConfig();
 
 const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -182,12 +179,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return {
-		props: {
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
-		},
-	};
+	return getDefaultServerSideProps(context);
 }
 
 export default withAuth(AccountMyHistory as ComponentType);

@@ -1,5 +1,4 @@
 import { GetServerSidePropsResult } from 'next';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, FC } from 'react';
@@ -8,15 +7,13 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
-import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-
-const { publicRuntimeConfig } = getConfig();
 
 const VisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -66,12 +63,7 @@ const VisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return {
-		props: {
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
-		},
-	};
+	return getDefaultServerSideProps(context);
 }
 
 export default withAuth(VisitorSpaceEdit as ComponentType);

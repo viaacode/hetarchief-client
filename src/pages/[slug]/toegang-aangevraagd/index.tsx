@@ -1,20 +1,20 @@
 import { HTTPError } from 'ky';
 import { GetServerSidePropsResult, NextPage } from 'next';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setShowZendesk } from '@shared/store/ui';
 import { AccessStatus } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
 import { VisitorSpaceInfo } from '@visitor-space/types';
@@ -24,13 +24,11 @@ import { WaitingPage } from '../../../modules/visitor-space/components';
 
 import { VisitorLayout } from 'modules/visitors';
 
-const { publicRuntimeConfig } = getConfig();
-
-interface VisitRequestedPageProps {
-	name: string;
-	description: string;
+type VisitRequestedPageProps = {
+	name?: string;
+	description?: string;
 	url: string;
-}
+} & DefaultSeoInfo;
 
 const VisitRequestedPage: NextPage<VisitRequestedPageProps> = ({ name, description, url }) => {
 	useNavigationBorder();
@@ -128,12 +126,15 @@ export async function getServerSideProps(
 		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
 	}
 
+	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
+		context
+	);
+
 	return {
 		props: {
+			...(defaultProps as { props: DefaultSeoInfo }).props,
 			name: space?.name,
-			description: space?.info,
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
+			description: space?.info || undefined,
 		},
 	};
 }

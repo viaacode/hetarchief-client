@@ -1,5 +1,4 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { useEffect } from 'react';
@@ -12,8 +11,8 @@ import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store
 import LoggedInHome from '@home/components/LoggedInHome/LoggedInHome';
 import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
@@ -22,9 +21,7 @@ import { isBrowser } from '@shared/utils';
 
 import VisitorLayout from '../modules/visitors/layouts/VisitorLayout/VisitorLayout';
 
-const { publicRuntimeConfig } = getConfig();
-
-const Home: NextPage<DefaultSeoInfo> = ({ url }) => {
+const Home: NextPage<DefaultSeoInfo> = (props) => {
 	const dispatch = useDispatch();
 	const [query, setQuery] = useQueryParams({
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
@@ -80,11 +77,12 @@ const Home: NextPage<DefaultSeoInfo> = ({ url }) => {
 			if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
 				return <Loading fullscreen owner="root page logged" />;
 			}
-			return <LoggedInHome />;
+			return <LoggedInHome {...props} />;
 		}
-		return <LoggedOutHome url={url} />;
+		return <LoggedOutHome {...props} />;
 	};
 
+	console.log('props: ', props);
 	return (
 		<VisitorLayout>
 			{renderPageContent()}
@@ -96,12 +94,7 @@ const Home: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return {
-		props: {
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
-		},
-	};
+	return getDefaultServerSideProps(context);
 }
 
 export default Home;

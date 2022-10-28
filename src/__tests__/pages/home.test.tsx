@@ -12,7 +12,14 @@ const renderHome = () => {
 		<NextQueryParamProvider>
 			<QueryClientProvider client={new QueryClient()}>
 				<Provider store={mockStore}>
-					<Home url="http://localhost:3200" />
+					<Home
+						url="http://localhost:3200"
+						_nextI18Next={{
+							initialI18nStore: {
+								nl: { common: {} },
+							},
+						}}
+					/>
 				</Provider>
 			</QueryClientProvider>
 		</NextQueryParamProvider>

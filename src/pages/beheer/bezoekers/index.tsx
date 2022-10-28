@@ -1,6 +1,5 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
 import { GetServerSidePropsResult, NextPage } from 'next';
-import getConfig from 'next/config';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, ReactNode, useMemo, useState } from 'react';
 import { TableState } from 'react-table';
@@ -15,7 +14,6 @@ import {
 	VisitorsTableColumns,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
-import { withI18n } from '@i18n/wrappers';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
@@ -27,6 +25,7 @@ import {
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -35,8 +34,6 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
-
-const { publicRuntimeConfig } = getConfig();
 
 const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -303,12 +300,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return {
-		props: {
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
-		},
-	};
+	return getDefaultServerSideProps(context);
 }
 
 export default withAuth(CPVisitorsPage as ComponentType);

@@ -2,7 +2,6 @@ import { UserGroupOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult } from 'next';
-import getConfig from 'next/config';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, FC, useRef, useState } from 'react';
 
@@ -11,16 +10,14 @@ import { AdminLayout } from '@admin/layouts';
 import { UserGroupOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './index.module.scss';
-
-const { publicRuntimeConfig } = getConfig();
 
 const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -126,12 +123,7 @@ const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return {
-		props: {
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
-		},
-	};
+	return getDefaultServerSideProps(context);
 }
 
 export default withAuth(withAdminCoreConfig(PermissionsOverview as ComponentType));

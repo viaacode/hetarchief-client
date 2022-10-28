@@ -717,6 +717,4 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	return renderPageContent();
 };
 
-export const getServerSideProps = withI18n();
-
 export default withAuth(VisitorSpaceSearchPage);

@@ -1,5 +1,4 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
-import getConfig from 'next/config';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType } from 'react';
 
@@ -7,14 +6,12 @@ import { Permission } from '@account/const';
 import { RequestTableColumns } from '@admin/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import VisitRequestsOverview from '@visits/components/VisitRequestsOverview/VisitRequestsOverview';
-
-const { publicRuntimeConfig } = getConfig();
 
 const MeemooAdminRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -50,12 +47,7 @@ const MeemooAdminRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return {
-		props: {
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
-		},
-	};
+	return getDefaultServerSideProps(context);
 }
 
 export default withAuth(MeemooAdminRequestsPage as ComponentType);

@@ -16,7 +16,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './LoggedOutHome.module.scss';
 
-const LoggedOutHome: FC<DefaultSeoInfo> = ({ url }) => {
+const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
@@ -77,6 +77,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = ({ url }) => {
 								'modules/home/components/logged-out-home/logged-out-home___hero-alt'
 							)}
 							objectFit="contain"
+							priority
 						/>
 					</div>
 					<div className={styles['c-hero__content']}>
@@ -110,7 +111,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = ({ url }) => {
 			{renderOgTags(
 				tText('modules/home/components/logged-out-home/logged-out-home___home'),
 				getPageDescription(),
-				url
+				props.url
 			)}
 
 			{renderPageContent()}

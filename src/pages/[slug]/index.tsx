@@ -12,11 +12,12 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthModal } from '@auth/components';
 import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
@@ -30,8 +31,7 @@ const { publicRuntimeConfig } = getConfig();
 
 type DynamicRouteResolverProps = {
 	title?: string;
-	url: string;
-};
+} & DefaultSeoInfo;
 
 const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url }) => {
 	useNavigationBorder();
@@ -148,12 +148,12 @@ export async function getServerSideProps(
 		);
 	}
 
+	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
+		context
+	);
+
 	return {
-		props: {
-			title,
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
-		},
+		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title: title || undefined },
 	};
 }
 

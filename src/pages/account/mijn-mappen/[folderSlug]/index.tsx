@@ -2,7 +2,6 @@ import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
@@ -23,7 +22,6 @@ import { foldersService } from '@account/services/folders';
 import { Folder, FolderMedia } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import {
 	Icon,
 	IdentifiableMediaCard,
@@ -36,6 +34,7 @@ import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -55,8 +54,6 @@ type ListNavigationFolderItem = ListNavigationItem & Folder;
 const labelKeys = {
 	search: 'AccountMyFolders__search',
 };
-
-const { publicRuntimeConfig } = getConfig();
 
 const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
@@ -546,12 +543,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	return {
-		props: {
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
-		},
-	};
+	return getDefaultServerSideProps(context);
 }
 
 export default withAuth(AccountMyFolders as ComponentType);
