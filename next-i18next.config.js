@@ -6,7 +6,7 @@ module.exports = {
 		defaultLocale: 'nl',
 		locales: ['nl'],
 		backend: {
-			loadPath: `http://localhost:3100/translations/nl.json`,
+			loadPath: `${process.env.PROXY_URL}/translations/nl.json`,
 		},
 	},
 	use: [I18NextHttpBackend],
@@ -18,5 +18,5 @@ module.exports = {
 		}
 		return `${key} ***`;
 	},
-	debug: true,
+	debug: false,
 };
