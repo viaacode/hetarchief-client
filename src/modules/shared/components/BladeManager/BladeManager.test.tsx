@@ -11,13 +11,13 @@ const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 	return render(
 		<Provider store={mockStore}>
 			<BladeManager currentLayer={currentBlade} onCloseBlade={onClose}>
-				<Blade isOpen={true} title="Blade 1" layer={1}>
+				<Blade isOpen={true} renderTitle={() => 'Blade 1'} layer={1}>
 					<Button label="Open second blade" />
 				</Blade>
-				<Blade isOpen={false} title="Blade 2" layer={2}>
+				<Blade isOpen={false} renderTitle={() => 'Blade 2'} layer={2}>
 					<Button label="Open third blade" />
 				</Blade>
-				<Blade isOpen={false} title="Blade 3" layer={3} />
+				<Blade isOpen={false} renderTitle={() => 'Blade 3'} layer={3} />
 			</BladeManager>
 		</Provider>
 	);
@@ -45,9 +45,9 @@ describe('Component: <Blade /> (default)', () => {
 	it('render all layers under currentLayer', () => {
 		renderBladeManager(2);
 
-		const blade1 = screen.getByText('Blade 1').parentElement?.parentElement;
-		const blade2 = screen.getByText('Blade 2').parentElement?.parentElement;
-		const blade3 = screen.getByText('Blade 3').parentElement?.parentElement;
+		const blade1 = screen.getByText('Blade 1').parentElement;
+		const blade2 = screen.getByText('Blade 2').parentElement;
+		const blade3 = screen.getByText('Blade 3').parentElement;
 
 		expect(blade1).toHaveClass('c-blade--visible');
 		expect(blade2).toHaveClass('c-blade--visible');
@@ -57,7 +57,7 @@ describe('Component: <Blade /> (default)', () => {
 	it('render overlay under a blade', () => {
 		renderBladeManager(1);
 
-		const blade1 = screen.getByText('Blade 1').parentElement?.parentElement;
+		const blade1 = screen.getByText('Blade 1').parentElement;
 
 		expect(blade1?.previousSibling).toHaveClass('c-overlay');
 	});
@@ -79,8 +79,7 @@ describe('Component: <Blade /> (default)', () => {
 		const onClick = jest.fn();
 		renderBladeManager(1, onClick);
 
-		const overlay =
-			screen.getByText('Blade 1').parentElement?.parentElement?.previousElementSibling;
+		const overlay = screen.getByText('Blade 1').parentElement?.previousElementSibling;
 
 		overlay && fireEvent.click(overlay);
 

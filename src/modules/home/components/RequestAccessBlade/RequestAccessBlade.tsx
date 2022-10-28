@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Blade, Icon, SpacePreview } from '@shared/components';
-import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
@@ -99,19 +99,20 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 	return (
 		<Blade
 			{...bladeProps}
-			isOpen={isOpen}
-			footer={renderFooter()}
 			className={styles['c-request-access-blade']}
+			footer={renderFooter()}
+			isOpen={isOpen}
+			renderTitle={(props) => (
+				<h3
+					{...props}
+					className={clsx(props.className, styles['c-request-access-blade__title'])}
+				>
+					{tHtml(
+						'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
+					)}
+				</h3>
+			)}
 		>
-			<h3
-				id={globalLabelKeys.blade.title}
-				className={styles['c-request-access-blade__title']}
-			>
-				{tHtml(
-					'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
-				)}
-			</h3>
-
 			<div className="u-px-16 u-px-32:md">
 				{space && <SpacePreview space={space} />}
 

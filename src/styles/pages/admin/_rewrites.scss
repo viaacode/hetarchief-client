@@ -173,10 +173,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
@@ -208,18 +209,20 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $black;
 	}
 
 	/**
-* Remove focus styles for non-keyboard focus.
-*/
+	* Remove focus styles for non-keyboard focus.
+	*/
+
 	&:focus:not(:focus-visible) {
 		outline: 0;
 		box-shadow: none;
@@ -251,10 +254,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 
 	/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+	* Cross-browser styles for explicit focus via
+	* keyboard-based (eg Tab) navigation or the
+	* .focus-visible utility class.
+	*/
+
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
@@ -356,10 +360,11 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 			}
 
 			/**
-* Cross-browser styles for explicit focus via
-* keyboard-based (eg Tab) navigation or the
-* .focus-visible utility class.
-*/
+			* Cross-browser styles for explicit focus via
+			* keyboard-based (eg Tab) navigation or the
+			* .focus-visible utility class.
+			*/
+
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
 				outline: 2px solid $teal;

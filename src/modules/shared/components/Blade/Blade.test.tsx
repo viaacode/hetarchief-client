@@ -34,34 +34,11 @@ describe('Component: <Blade /> (default)', () => {
 
 	it('Should render a title', () => {
 		const title = 'new title';
-		const { getByText } = renderBlade({ ...mockBladeProps, title });
+		const { getByText } = renderBlade({ ...mockBladeProps, renderTitle: () => title });
 
 		const bladeTitle = getByText(title);
 
 		expect(bladeTitle).toBeInTheDocument();
-	});
-
-	it('Should render a heading', () => {
-		const headingText = 'some heading';
-		const heading = <h2>{headingText}</h2>;
-		const { getByText } = renderBlade({ ...mockBladeProps, heading });
-
-		const bladeHeading = getByText(headingText);
-
-		expect(bladeHeading).toBeInTheDocument();
-	});
-
-	it('Should render a heading when title and heading are provided', () => {
-		const title = 'new title';
-		const headingText = 'some heading';
-		const heading = <h2>{headingText}</h2>;
-		const { queryByText } = renderBlade({ ...mockBladeProps, heading, title });
-
-		const bladeHeading = queryByText(headingText);
-		const bladeTitle = queryByText(title);
-
-		expect(bladeHeading).toBeInTheDocument();
-		expect(bladeTitle).not.toBeInTheDocument();
 	});
 
 	it('Should render children', () => {

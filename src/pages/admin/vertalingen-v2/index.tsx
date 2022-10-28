@@ -8,6 +8,7 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { withI18n } from '@i18n/wrappers';
 import { Blade } from '@shared/components';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
@@ -58,11 +59,11 @@ const AdminTranslationsOverviewV2: FC = () => {
 
 		return (
 			<Blade
+				className={styles['c-translations-overview__blade']}
+				footer={renderFooter()}
 				isOpen={isOpen}
 				onClose={onClose}
-				title={title}
-				footer={renderFooter()}
-				className={styles['c-translations-overview__blade']}
+				renderTitle={(props) => <h3 {...props}>{title}</h3>}
 			>
 				<div className={styles['c-translations-overview__blade-body']}>{body}</div>
 			</Blade>
@@ -89,6 +90,8 @@ const AdminTranslationsOverviewV2: FC = () => {
 		</>
 	);
 };
+
+export const getServerSideProps = withI18n();
 
 export default withAuth(
 	withAnyRequiredPermissions(

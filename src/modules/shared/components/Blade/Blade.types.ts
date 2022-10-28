@@ -3,8 +3,6 @@ import { ReactNode } from 'react';
 import { DefaultComponentProps } from '@shared/types';
 
 export interface BladeProps extends DefaultComponentProps {
-	title?: string | ReactNode;
-	heading?: ReactNode;
 	footer?: ReactNode;
 	isOpen: boolean;
 	hideOverlay?: boolean;
@@ -15,4 +13,5 @@ export interface BladeProps extends DefaultComponentProps {
 	layer?: number;
 	isManaged?: boolean;
 	currentLayer?: number;
+	renderTitle?: (props: Pick<HTMLElement, 'id' | 'className'>) => ReactNode;
 }

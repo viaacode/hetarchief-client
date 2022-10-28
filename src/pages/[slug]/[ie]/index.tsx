@@ -74,7 +74,6 @@ import {
 	formatMediumDate,
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
-	isBrowser,
 } from '@shared/utils';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
