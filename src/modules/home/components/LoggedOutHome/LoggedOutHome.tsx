@@ -106,6 +106,8 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 			</>
 		);
 	};
+
+	console.log('home translation: ' + JSON.stringify(props, null, 2));
 	return (
 		<div className="p-home u-page-bottom-padding">
 			{renderOgTags(

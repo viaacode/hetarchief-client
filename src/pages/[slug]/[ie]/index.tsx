@@ -97,7 +97,7 @@ import { VisitorLayout } from 'modules/visitors';
 const { publicRuntimeConfig } = getConfig();
 
 type ObjectDetailPageProps = {
-	title?: string;
+	title: string | null;
 } & DefaultSeoInfo;
 
 const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
@@ -830,7 +830,7 @@ export async function getServerSideProps(
 	return {
 		props: {
 			...(defaultProps as { props: DefaultSeoInfo }).props,
-			title: seoInfo?.name || undefined,
+			title: seoInfo?.name || null,
 		},
 	};
 }

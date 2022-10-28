@@ -82,7 +82,6 @@ const Home: NextPage<DefaultSeoInfo> = (props) => {
 		return <LoggedOutHome {...props} />;
 	};
 
-	console.log('props: ', props);
 	return (
 		<VisitorLayout>
 			{renderPageContent()}

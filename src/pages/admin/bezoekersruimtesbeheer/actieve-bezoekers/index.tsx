@@ -1,6 +1,5 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
 import { GetServerSidePropsResult } from 'next';
-import getConfig from 'next/config';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, FC, ReactNode, useMemo, useState } from 'react';
 import { TableState } from 'react-table';

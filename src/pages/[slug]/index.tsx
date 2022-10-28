@@ -30,7 +30,7 @@ import { VisitorLayout } from 'modules/visitors';
 const { publicRuntimeConfig } = getConfig();
 
 type DynamicRouteResolverProps = {
-	title?: string;
+	title: string | null;
 } & DefaultSeoInfo;
 
 const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url }) => {
@@ -133,7 +133,7 @@ export async function getServerSideProps(
 	try {
 		const [space, contentPage] = await Promise.allSettled([
 			VisitorSpaceService.getBySlug(context.query.slug as string, true),
-			ContentPageService.getBySlug(context.query.slug as string),
+			ContentPageService.getBySlug(('/' + context.query.slug) as string),
 		]);
 
 		if (space.status === 'fulfilled') {
@@ -153,7 +153,7 @@ export async function getServerSideProps(
 	);
 
 	return {
-		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title: title || undefined },
+		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title },
 	};
 }
 
