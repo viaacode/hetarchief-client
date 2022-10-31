@@ -31,7 +31,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<AccountLayout
 				className="p-account-my-profile"
-				pageTitle={tHtml('pages/account/mijn-profiel/index___mijn-profiel')}
+				pageTitle={tText('pages/account/mijn-profiel/index___mijn-profiel')}
 			>
 				<div className="l-container">
 					<Box className="p-account-my-profile__user-data u-p-24">

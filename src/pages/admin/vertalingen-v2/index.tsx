@@ -19,7 +19,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 import styles from './TranslationsOverviewV2.module.scss';
 
 const AdminTranslationsOverviewV2: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
+	const { tText } = useTranslation();
 
 	const renderPopup = ({
 		title,
@@ -72,7 +72,7 @@ const AdminTranslationsOverviewV2: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout pageTitle={tHtml('pages/admin/vertalingen/index___vertalingen')}>
+			<AdminLayout pageTitle={tText('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-vertalingen">
 						<TranslationsOverviewV2

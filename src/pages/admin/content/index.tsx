@@ -18,13 +18,13 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const ContentPageOverviewPage: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
+	const { tText } = useTranslation();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tHtml('admin/content/views/content-overview___content-overzicht')}
+				pageTitle={tText('admin/content/views/content-overview___content-overzicht')}
 			>
 				<AdminLayout.Actions>
 					{canCreateContentPages && (

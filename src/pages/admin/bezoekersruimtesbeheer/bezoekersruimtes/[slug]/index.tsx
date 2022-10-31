@@ -16,7 +16,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
 const VisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
+	const { tText } = useTranslation();
 	const router = useRouter();
 	const { slug } = router.query;
 
@@ -25,7 +25,7 @@ const VisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tHtml(
+				pageTitle={tText(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/slug/index___instellingen'
 				)}
 			>

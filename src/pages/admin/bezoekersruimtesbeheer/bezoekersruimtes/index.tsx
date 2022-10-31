@@ -278,7 +278,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageLayoutAndContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tHtml(
+				pageTitle={tText(
 					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
 				)}
 			>

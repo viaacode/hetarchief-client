@@ -52,7 +52,7 @@ const CPSettingsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<CPAdminLayout
 				className="p-cp-settings"
-				pageTitle={tHtml('pages/beheer/instellingen/index___instellingen')}
+				pageTitle={tText('pages/beheer/instellingen/index___instellingen')}
 			>
 				<div className="l-container">
 					{visitorSpaceInfo ? (

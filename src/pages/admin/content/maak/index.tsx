@@ -18,7 +18,7 @@ const ContentPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout>
+			<AdminLayout bottomPadding={false}>
 				<AdminLayout.Content>
 					<div className="p-admin-content__edit">
 						<ContentPageEdit id={undefined} />

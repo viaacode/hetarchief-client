@@ -14,12 +14,12 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 import VisitRequestsOverview from '@visits/components/VisitRequestsOverview/VisitRequestsOverview';
 
 const MeemooAdminRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
+	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tHtml('pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen')}
+				pageTitle={tText('pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen')}
 			>
 				<AdminLayout.Content>
 					<VisitRequestsOverview columns={RequestTableColumns()} />

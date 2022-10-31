@@ -140,7 +140,7 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tHtml(
+				pageTitle={tText(
 					'pages/admin/bezoekersruimtesbeheer/bezoekers/index___actieve-bezoekers'
 				)}
 			>

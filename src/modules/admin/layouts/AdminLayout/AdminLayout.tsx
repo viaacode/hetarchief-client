@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { AdminLayoutComponent } from '@admin/layouts';
 import {
 	AdminActions,
 	AdminContent,
@@ -21,9 +22,13 @@ import { setShowZendesk } from '@shared/store/ui';
 import { ADMIN_NAVIGATION_LINKS } from '../../const';
 
 import styles from './AdminLayout.module.scss';
-import { AdminLayoutComponent } from './AdminLayout.types';
 
-const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) => {
+const AdminLayout: AdminLayoutComponent = ({
+	children,
+	pageTitle,
+	className,
+	bottomPadding = true,
+}) => {
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
 	const { tHtml } = useTranslation();
@@ -83,7 +88,9 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 			{(!!pageTitle || !!actions) && (
 				<header className={clsx(styles['c-admin__header'], 'l-container')}>
 					<h2 className={styles['c-admin__page-title']}>
-						<label htmlFor={globalLabelKeys.adminLayout.title}>{pageTitle}</label>
+						<label htmlFor={globalLabelKeys.adminLayout.title} title={pageTitle}>
+							{pageTitle}
+						</label>
 					</h2>
 					<div className={styles['c-admin__actions']}>{actions}</div>
 				</header>
@@ -94,7 +101,13 @@ const AdminLayout: AdminLayoutComponent = ({ children, pageTitle, className }) =
 				<div className="c-admin__filter-bar-right">{filtersRight}</div>
 			</div>
 
-			<div className="c-admin__content">{content}</div>
+			<div
+				className={clsx('c-admin__content', {
+					['c-admin__content-bottom-padding']: bottomPadding,
+				})}
+			>
+				{content}
+			</div>
 		</SidebarLayout>
 	);
 };

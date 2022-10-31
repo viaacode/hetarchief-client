@@ -14,11 +14,11 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
+	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout pageTitle={tHtml('pages/admin/navigatie/index___navigatie')}>
+			<AdminLayout pageTitle={tText('pages/admin/navigatie/index___navigatie')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-navigation">
 						<NavigationOverview />

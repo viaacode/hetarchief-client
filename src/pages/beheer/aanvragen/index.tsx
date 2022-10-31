@@ -20,7 +20,7 @@ const CPRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<CPAdminLayout
 				className="p-cp-requests"
-				pageTitle={tHtml('pages/beheer/aanvragen/index___aanvragen')}
+				pageTitle={tText('pages/beheer/aanvragen/index___aanvragen')}
 			>
 				<VisitRequestsOverview columns={RequestTableColumns()} />
 			</CPAdminLayout>

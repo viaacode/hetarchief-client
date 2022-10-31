@@ -15,12 +15,12 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 import { formatDistanceToday } from '@shared/utils';
 
 const UsersOverview: FC<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
+	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tHtml('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
+				pageTitle={tText('pages/admin/gebruikersbeheer/gebruikers/index___gebruikers')}
 			>
 				<AdminLayout.Content>
 					<div className="l-container">

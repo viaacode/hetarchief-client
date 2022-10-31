@@ -84,7 +84,7 @@ const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tHtml(
+				pageTitle={tText(
 					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
 				)}
 			>

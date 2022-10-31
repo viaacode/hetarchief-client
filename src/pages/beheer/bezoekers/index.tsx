@@ -221,7 +221,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<CPAdminLayout
 				className="p-cp-visitors"
-				pageTitle={tHtml('pages/beheer/bezoekers/index___bezoekers')}
+				pageTitle={tText('pages/beheer/bezoekers/index___bezoekers')}
 			>
 				<div className="l-container">
 					<div className="p-cp-visitors__header">

@@ -114,7 +114,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<AccountLayout
 				className="p-account-my-history"
-				pageTitle={tHtml('pages/account/mijn-historiek/index___mijn-historiek')}
+				pageTitle={tText('pages/account/mijn-historiek/index___mijn-historiek')}
 			>
 				{(visits.data?.items?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">

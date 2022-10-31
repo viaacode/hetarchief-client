@@ -23,7 +23,7 @@ const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout pageTitle={tHtml('pages/admin/vertalingen/index___vertalingen')}>
+			<AdminLayout pageTitle={tText('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Actions>
 					<Button
 						onClick={() => translationsRef.current?.onSave()}

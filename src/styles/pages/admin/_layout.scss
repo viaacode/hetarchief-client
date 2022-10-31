@@ -28,6 +28,9 @@
 
 .c-admin__page-title {
 	flex-grow: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .c-admin__actions {

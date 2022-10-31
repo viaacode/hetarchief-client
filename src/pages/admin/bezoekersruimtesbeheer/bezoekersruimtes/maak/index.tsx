@@ -35,7 +35,7 @@ const VisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tHtml(
+				pageTitle={tText(
 					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
 				)}
 			>
