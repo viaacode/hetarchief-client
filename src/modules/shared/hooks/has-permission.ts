@@ -10,6 +10,11 @@ import { selectUser } from '@auth/store/user';
  */
 export const useHasAllPermission = (...permissions: Permission[]): boolean => {
 	const user = useSelector(selectUser);
+
+	if (permissions?.length === 0) {
+		// If no permissions are required, then the user as access
+		return true;
+	}
 	if (!user) {
 		return false;
 	}
@@ -22,6 +27,11 @@ export const useHasAllPermission = (...permissions: Permission[]): boolean => {
  */
 export const useHasAnyPermission = (...permissions: Permission[]): boolean => {
 	const user = useSelector(selectUser);
+
+	if (permissions?.length === 0) {
+		// If no permissions are required, then the user as access
+		return true;
+	}
 	if (!user) {
 		return false;
 	}
