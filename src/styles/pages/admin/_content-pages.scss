@@ -6,7 +6,6 @@ $content-page-header-height: 16.2rem;
 $content-page-tabs-height: 5rem;
 $content-page-sidebar-margin: 4rem;
 $content-page-sidebar-blok-dropdown-height: 7rem;
-$color-gray-50: #edeff2;
 
 .m-resizable-panels {
 	> div {
@@ -17,7 +16,7 @@ $color-gray-50: #edeff2;
 
 		> div:not(.resizable-fragment) {
 			position: relative;
-			background-color: rgb($color-gray-50 0.4);
+			background-color: rgba(#edeff2, 0.4);
 			height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin) !important;
 
 			&::after {
