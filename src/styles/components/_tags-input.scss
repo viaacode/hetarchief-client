@@ -11,7 +11,7 @@
 	@include react-select-base("c-tags-input");
 
 	.c-tags-input__control {
-		cursor: pointer;
+		cursor: text;
 
 		.c-tags-input__value-container .c-tags-input__multi-value {
 			margin: $spacer-xxs $spacer-xs $spacer-xxs 0;
