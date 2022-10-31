@@ -8,7 +8,7 @@ import Loading from '@shared/components/Loading/Loading';
 import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import { TosService } from '@shared/services/tos-service';
-import { isCurrentTosAccepted } from '@shared/utils';
+import { isBrowser, isCurrentTosAccepted } from '@shared/utils';
 
 export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 	return function ComponentWithAuth(props: Record<string, unknown>) {
@@ -53,6 +53,11 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 			checkLoginStatus();
 		}, [checkLoginStatus]);
 
-		return tosAccepted ? <WrappedComponent {...props} /> : <Loading fullscreen />;
+		// Allow server side rendering to get past this loading screen so we can determine seo fields on the actual page
+		return !isBrowser() || tosAccepted ? (
+			<WrappedComponent {...props} />
+		) : (
+			<Loading fullscreen owner="with auth" />
+		);
 	};
 };

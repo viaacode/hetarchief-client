@@ -18,4 +18,5 @@ module.exports = {
 		}
 		return `${key} ***`;
 	},
+	debug: false,
 };

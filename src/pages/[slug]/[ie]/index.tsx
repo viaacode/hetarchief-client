@@ -2,19 +2,19 @@ import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-com
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
-import { NextPage } from 'next';
+import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { GetServerSidePropsContext } from 'next/types';
 import { parseUrl } from 'query-string';
-import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { ComponentType, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
@@ -33,6 +33,7 @@ import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
+import { MediaService } from '@media/services';
 import {
 	Media,
 	MediaActions,
@@ -51,6 +52,7 @@ import {
 	TextWithNewLines,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -67,6 +69,7 @@ import { selectPreviousUrl } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, License, MediaTypes, VisitorSpaceMediaType } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
 	formatMediumDate,
@@ -93,7 +96,11 @@ import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
-const ObjectDetailPage: NextPage = () => {
+type ObjectDetailPageProps = {
+	title: string | null;
+} & DefaultSeoInfo;
+
+const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	/**
 	 * Hooks
 	 */
@@ -414,7 +421,7 @@ const ObjectDetailPage: NextPage = () => {
 		representation: MediaRepresentation | undefined
 	): ReactNode => {
 		if (isLoadingPlayableUrl) {
-			return <Loading fullscreen={true} />;
+			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 		if (isErrorNoLicense) {
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
@@ -457,7 +464,7 @@ const ObjectDetailPage: NextPage = () => {
 					/>
 				);
 			} else {
-				return <Loading fullscreen />;
+				return <Loading fullscreen owner="object detail page: waiting for peak json" />;
 			}
 		}
 
@@ -777,7 +784,7 @@ const ObjectDetailPage: NextPage = () => {
 
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
-			return <Loading fullscreen />;
+			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
 		if (isErrorNotFound) {
 			return <ErrorNotFound />;
@@ -795,16 +802,37 @@ const ObjectDetailPage: NextPage = () => {
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};
 
-	const title = mediaInfo?.name;
 	const description = capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
-		<VisitorLayout>
-			{renderOgTags(title, description, publicRuntimeConfig.CLIENT_URL)}
-			{renderPageContent()}
-		</VisitorLayout>
+		<>
+			<VisitorLayout>
+				{renderOgTags(title, description, url)}
+				{renderPageContent()}
+			</VisitorLayout>
+		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
+	let seoInfo: { name: string | null } | null = null;
+	try {
+		seoInfo = await MediaService.getSeoById(context.query.ie as string);
+	} catch (err) {
+		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
+	}
 
-export default withAuth(ObjectDetailPage);
+	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
+		context
+	);
+
+	return {
+		props: {
+			...(defaultProps as { props: DefaultSeoInfo }).props,
+			title: seoInfo?.name || null,
+		},
+	};
+}
+
+export default withAuth(ObjectDetailPage as ComponentType);

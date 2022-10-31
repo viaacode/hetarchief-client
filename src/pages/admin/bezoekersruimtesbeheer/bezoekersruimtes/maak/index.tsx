@@ -1,21 +1,21 @@
 import { Button } from '@meemoo/react-components';
-import getConfig from 'next/config';
+import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
-import React, { FC, useRef } from 'react';
+import { GetServerSidePropsContext } from 'next/types';
+import React, { ComponentType, FC, useRef } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
-import { withI18n } from '@i18n/wrappers';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ROUTE_PARTS } from '@shared/const';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
-const { publicRuntimeConfig } = getConfig();
-
-const VisitorSpaceCreate: FC = () => {
+const VisitorSpaceCreate: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
@@ -32,18 +32,8 @@ const VisitorSpaceCreate: FC = () => {
 		slug: '',
 	};
 
-	return (
-		<>
-			{renderOgTags(
-				tText(
-					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
-				),
-				tText(
-					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte-meta-omschrijving'
-				),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageContent = () => {
+		return (
 			<AdminLayout
 				pageTitle={tHtml(
 					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
@@ -77,13 +67,30 @@ const VisitorSpaceCreate: FC = () => {
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
+		);
+	};
+	return (
+		<>
+			{renderOgTags(
+				tText(
+					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
+				),
+				tText(
+					'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte-meta-omschrijving'
+				),
+				url
+			)}
+			<PermissionsCheck allPermissions={[Permission.UPDATE_ALL_SPACES]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-// TODO: permission
-export default withAuth(
-	withAllRequiredPermissions(VisitorSpaceCreate, Permission.UPDATE_ALL_SPACES)
-);
+export default withAuth(VisitorSpaceCreate as ComponentType);

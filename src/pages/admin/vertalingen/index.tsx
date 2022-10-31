@@ -1,34 +1,28 @@
 import { TranslationsOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
-import getConfig from 'next/config';
-import React, { FC, useRef } from 'react';
+import { GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext } from 'next/types';
+import React, { ComponentType, FC, useRef } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { TranslationsOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
-const { publicRuntimeConfig } = getConfig();
-
-const AdminTranslationsOverview: FC = () => {
+const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 
 	// Access child functions
 	const translationsRef = useRef<TranslationsOverviewRef>();
 
-	return (
-		<>
-			{renderOgTags(
-				tText('pages/admin/vertalingen/index___vertalingen'),
-				tText('pages/admin/vertalingen/index___vertalingen'),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageContent = () => {
+		return (
 			<AdminLayout pageTitle={tHtml('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Actions>
 					<Button
@@ -42,15 +36,28 @@ const AdminTranslationsOverview: FC = () => {
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
+		);
+	};
+
+	return (
+		<>
+			{renderOgTags(
+				tText('pages/admin/vertalingen/index___vertalingen'),
+				tText('pages/admin/vertalingen/index___vertalingen'),
+				url
+			)}
+
+			<PermissionsCheck allPermissions={[Permission.EDIT_TRANSLATIONS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(
-	withAnyRequiredPermissions(
-		withAdminCoreConfig(AdminTranslationsOverview),
-		Permission.EDIT_TRANSLATIONS
-	)
-);
+export default withAuth(withAdminCoreConfig(AdminTranslationsOverview as ComponentType));

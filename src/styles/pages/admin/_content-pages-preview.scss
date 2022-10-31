@@ -126,8 +126,8 @@ $l-container-padding-xs: 2rem;
 			background-color: $platinum;
 
 			@include respond-at("lg") {
-				height: 32rem;
-				background-image: radial-gradient(circle at 16rem, $platinum 16rem, $white 16rem);
+				height: 100%;
+				background-image: radial-gradient(circle at 150%, $platinum 50%, $white 50%);
 			}
 		}
 	}
@@ -157,7 +157,8 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	[class*="c-button--content-page-button--"] {
+	[class*="c-button--content-page-button--"],
+	[class*="c-button--"] {
 		max-height: none !important;
 		border-radius: 4rem;
 		border-style: solid !important;
@@ -194,7 +195,8 @@ $l-container-padding-xs: 2rem;
 		}
 	}
 
-	.c-button--content-page-button--teal {
+	.c-button--content-page-button--teal,
+	.c-button--primary {
 		background-color: $teal-dark !important;
 		border-color: $teal-dark !important;
 		color: $white !important;
@@ -359,6 +361,23 @@ $l-container-padding-xs: 2rem;
 		&:focus,
 		.focus-visible:focus:not(:focus-visible) {
 			outline: 2px solid $teal !important;
+		}
+	}
+
+	.u-content-flex {
+		display: flex;
+		flex: 1 0 auto;
+	
+		&--left {
+			justify-content: flex-start;
+		}
+	
+		&--center {
+			justify-content: center;
+		}
+	
+		&--right {
+			justify-content: flex-end;
 		}
 	}
 }

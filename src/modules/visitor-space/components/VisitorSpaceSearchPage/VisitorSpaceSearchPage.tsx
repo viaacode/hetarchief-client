@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { sum } from 'lodash-es';
 import { NextPage } from 'next';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -13,7 +12,6 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
@@ -34,7 +32,6 @@ import {
 	ToggleOption,
 } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
-import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -83,8 +80,6 @@ import { WaitingPage } from '../WaitingPage';
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
-
-const { publicRuntimeConfig } = getConfig();
 
 const VisitorSpaceSearchPage: NextPage = () => {
 	useNavigationBorder();
@@ -693,7 +688,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			visitRequestIsLoading ||
 			mediaIsLoading
 		) {
-			return <Loading fullscreen />;
+			return <Loading fullscreen owner="visitor space search page: render page content" />;
 		}
 
 		if (isNoAccessError || isVisitorSpaceInactive || mediaNoAccess) {
@@ -714,19 +709,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		return renderVisitorSpace();
 	};
 
-	return (
-		<>
-			{renderOgTags(
-				visitorSpace?.name,
-				visitorSpace?.info ||
-					tText('pages/bezoekersruimte/visitor-space-slug/index___een-bezoekersruimte'),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-			{renderPageContent()}
-		</>
-	);
+	return renderPageContent();
 };
-
-export const getServerSideProps = withI18n();
 
 export default withAuth(VisitorSpaceSearchPage);

@@ -24,6 +24,7 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
+import { isBrowser } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -143,7 +144,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				components: {
 					loader: {
-						component: () => <Loading fullscreen />,
+						component: () => <Loading fullscreen owner="admin-core-loader" />,
 					},
 					table: {
 						sortingIcons,
@@ -244,8 +245,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 			initConfigValue();
 		}, [initConfigValue]);
 
-		if (!adminCoreConfig) {
-			return <Loading fullscreen />;
+		if (!adminCoreConfig && isBrowser()) {
+			return <Loading fullscreen owner="admin-core config not set yet" />;
 		}
 
 		return <WrappedComponent {...props} />;

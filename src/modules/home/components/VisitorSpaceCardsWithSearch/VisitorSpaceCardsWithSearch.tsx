@@ -103,7 +103,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 				/>
 			</div>
 
-			{isLoadingVisitorSpaces && <Loading />}
+			{isLoadingVisitorSpaces && <Loading owner="visitor space cards with search" />}
 			{!isLoadingVisitorSpaces && visitorSpaces?.items?.length === 0 && (
 				<p>{tHtml('pages/index___geen-resultaten-voor-de-geselecteerde-filters')}</p>
 			)}

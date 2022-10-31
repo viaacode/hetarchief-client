@@ -1,5 +1,4 @@
 import { capitalize, lowerCase } from 'lodash-es';
-import getConfig from 'next/config';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -13,12 +12,11 @@ import { Icon } from '@shared/components';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './LoggedOutHome.module.scss';
 
-const { publicRuntimeConfig } = getConfig();
-
-const LoggedOutHome: FC = () => {
+const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 
@@ -66,45 +64,58 @@ const LoggedOutHome: FC = () => {
 	 * Render
 	 */
 
+	const renderPageContent = () => {
+		return (
+			<>
+				{' '}
+				<div className={styles['c-hero']}>
+					<div className={styles['c-hero__image']}>
+						<Image
+							src="/images/hero.jpg"
+							layout="fill"
+							alt={tText(
+								'modules/home/components/logged-out-home/logged-out-home___hero-alt'
+							)}
+							objectFit="contain"
+							priority
+						/>
+					</div>
+					<div className={styles['c-hero__content']}>
+						<h1 className={styles['c-hero__title']}>
+							{tHtml('pages/index___logged-out-home-title')}
+						</h1>
+						<p className={styles['c-hero__description']}>
+							{tHtml('pages/index___logged-out-home-description')}
+						</p>
+						<b>
+							<Link href="/over-de-bezoekertool">
+								<a className={styles['c-hero__link']}>
+									{tHtml('pages/index___hier-kom-je-er-alles-over-te-weten')}
+								</a>
+							</Link>
+						</b>
+
+						<Icon
+							name="arrow-down"
+							type="light"
+							className={styles['c-hero__arrow-down']}
+						/>
+					</div>
+				</div>
+				<VisitorSpaceCardsWithSearch onRequestAccess={onRequestAccess} />
+			</>
+		);
+	};
+
 	return (
 		<div className="p-home u-page-bottom-padding">
 			{renderOgTags(
 				tText('modules/home/components/logged-out-home/logged-out-home___home'),
 				getPageDescription(),
-				publicRuntimeConfig.CLIENT_URL
+				props.url
 			)}
 
-			<div className={styles['c-hero']}>
-				<div className={styles['c-hero__image']}>
-					<Image
-						src="/images/hero.jpg"
-						layout="fill"
-						alt={tText(
-							'modules/home/components/logged-out-home/logged-out-home___hero-alt'
-						)}
-						objectFit="contain"
-					/>
-				</div>
-				<div className={styles['c-hero__content']}>
-					<h1 className={styles['c-hero__title']}>
-						{tHtml('pages/index___logged-out-home-title')}
-					</h1>
-					<p className={styles['c-hero__description']}>
-						{tHtml('pages/index___logged-out-home-description')}
-					</p>
-					<b>
-						<Link href="/over-de-bezoekertool">
-							<a className={styles['c-hero__link']}>
-								{tHtml('pages/index___hier-kom-je-er-alles-over-te-weten')}
-							</a>
-						</Link>
-					</b>
-
-					<Icon name="arrow-down" type="light" className={styles['c-hero__arrow-down']} />
-				</div>
-			</div>
-
-			<VisitorSpaceCardsWithSearch onRequestAccess={onRequestAccess} />
+			{renderPageContent()}
 		</div>
 	);
 };

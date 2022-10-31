@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { Loading } from '@shared/components';
+import { Loading, NotificationCenterProps } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import {
@@ -19,7 +19,6 @@ import { Icon } from '../Icon';
 import { UnreadMarker } from '../UnreadMarker';
 
 import styles from './NotificationCenter.module.scss';
-import { NotificationCenterProps } from './NotificationCenter.types';
 
 const NotificationCenter: FC<NotificationCenterProps> = ({
 	className,
@@ -188,7 +187,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 
 	const renderBladeContent = () => {
 		if (isLoading) {
-			return <Loading />;
+			return <Loading owner="notification center" />;
 		}
 
 		if (isError) {
@@ -220,7 +219,10 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				next={() => fetchNextPage()}
 				hasMore={(notificationResponse?.pages[0].total || 0) > notifications.length}
 				loader={
-					<Loading className={styles['c-notification-center__infinite-scroll-loading']} />
+					<Loading
+						className={styles['c-notification-center__infinite-scroll-loading']}
+						owner="notification center: infinite scroll loader"
+					/>
 				}
 			>
 				{!!unread.length && (
@@ -286,10 +288,17 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 	return (
 		<Blade
 			className={clsx(className, styles['c-notification-center'])}
+			footer={renderFooter()}
 			isOpen={isOpen}
 			onClose={onClose}
+			renderTitle={(props) => (
+				<h3 {...props} className={clsx(props.className, 'u-display-none')}>
+					{tText(
+						'modules/shared/components/notification-center/notification-center___notificaties'
+					)}
+				</h3>
+			)}
 			showCloseButtonOnTop
-			footer={renderFooter()}
 		>
 			{renderBladeContent()}
 		</Blade>

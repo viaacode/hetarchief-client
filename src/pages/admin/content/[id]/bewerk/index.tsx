@@ -1,31 +1,25 @@
 import { ContentPageEdit } from '@meemoo/react-admin';
-import getConfig from 'next/config';
+import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
-import React, { FC } from 'react';
+import { GetServerSidePropsContext } from 'next/types';
+import React, { ComponentType, FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
-const { publicRuntimeConfig } = getConfig();
-
-const ContentPageEditPage: FC = () => {
+const ContentPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 
-	return (
-		<>
-			{renderOgTags(
-				tText('pages/admin/content/id/bewerk/index___content-pagina-bewerken'),
-				tText('pages/admin/content/id/bewerk/index___bewerk-pagina-van-een-content-pagina'),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageContent = () => {
+		return (
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="p-admin-content__edit">
@@ -33,16 +27,31 @@ const ContentPageEditPage: FC = () => {
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
+		);
+	};
+	return (
+		<>
+			{renderOgTags(
+				tText('pages/admin/content/id/bewerk/index___content-pagina-bewerken'),
+				tText('pages/admin/content/id/bewerk/index___bewerk-pagina-van-een-content-pagina'),
+				url
+			)}
+			<PermissionsCheck
+				anyPermissions={[
+					Permission.EDIT_ANY_CONTENT_PAGES,
+					Permission.EDIT_OWN_CONTENT_PAGES,
+				]}
+			>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(
-	withAnyRequiredPermissions(
-		withAdminCoreConfig(ContentPageEditPage),
-		Permission.EDIT_ANY_CONTENT_PAGES,
-		Permission.EDIT_OWN_CONTENT_PAGES
-	)
-);
+export default withAuth(withAdminCoreConfig(ContentPageEditPage as ComponentType));

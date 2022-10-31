@@ -1,8 +1,6 @@
 @use "src/styles/abstracts" as *;
 
 .c-admin__content {
-	padding-bottom: $spacer-3xl;
-
 	h4 + p {
 		padding: 0 $spacer-md;
 	}
@@ -40,6 +38,7 @@
 
 	> .c-content-page-preview,
 	.c-content-edit-view__preview {
+		height: max-content;
 		background-color: white;
 		box-shadow: $shadow-24-black-08;
 		margin-left: $spacer-sm;

@@ -29,7 +29,7 @@ export function tText(key: string, params?: TOptions | string | undefined): stri
 
 	// Fallback to formatted key + *** if translation is missing
 	if (!translation || translation === key) {
-		return key.split('___')[1].replace('-', ' ') + ' ***';
+		return (key.split('___')[1] || key).replace('-', ' ') + ' ***';
 	}
 
 	return translation;

@@ -110,8 +110,6 @@ const VisitorSpaceSettings = forwardRef<
 		try {
 			if (room) {
 				const response = await VisitorSpaceService.update(room.id, {
-					color: room.color,
-					image: room.image,
 					...values,
 				});
 				if (response === undefined) {
