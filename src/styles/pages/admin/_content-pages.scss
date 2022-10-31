@@ -93,6 +93,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 			overflow-y: auto;
 			box-sizing: border-box;
 			height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin - $content-page-sidebar-blok-dropdown-height);
+			padding: 0 $spacer-sm;
 		}
 	}
 
