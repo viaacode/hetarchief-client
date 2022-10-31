@@ -329,6 +329,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onFromDateChange(date, field)}
 						selected={form.accessFrom}
 						value={formatTime(form.accessFrom)}
+						popperPlacement="bottom-start"
 					/>
 				</>
 			);
@@ -374,6 +375,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onSimpleDateChange(date, field)}
 						selected={form.accessTo}
 						value={formatTime(form.accessTo)}
+						popperPlacement="bottom-start"
 					/>
 				</>
 			);
