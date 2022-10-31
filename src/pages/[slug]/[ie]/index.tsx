@@ -15,7 +15,6 @@ import save from 'save-file';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { FragmentSlider } from '@media/components/FragmentSlider';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
@@ -53,6 +52,7 @@ import {
 	TextWithNewLines,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -69,6 +69,7 @@ import { selectPreviousUrl } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, License, MediaTypes, VisitorSpaceMediaType } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
 	formatMediumDate,
@@ -96,9 +97,8 @@ import { VisitorLayout } from 'modules/visitors';
 const { publicRuntimeConfig } = getConfig();
 
 type ObjectDetailPageProps = {
-	title?: string;
-	url: string;
-};
+	title: string | null;
+} & DefaultSeoInfo;
 
 const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	/**
@@ -421,7 +421,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		representation: MediaRepresentation | undefined
 	): ReactNode => {
 		if (isLoadingPlayableUrl) {
-			return <Loading fullscreen={true} />;
+			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 		if (isErrorNoLicense) {
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
@@ -464,7 +464,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					/>
 				);
 			} else {
-				return <Loading fullscreen />;
+				return <Loading fullscreen owner="object detail page: waiting for peak json" />;
 			}
 		}
 
@@ -784,7 +784,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
-			return <Loading fullscreen />;
+			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
 		if (isErrorNotFound) {
 			return <ErrorNotFound />;
@@ -823,11 +823,14 @@ export async function getServerSideProps(
 		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
 	}
 
+	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
+		context
+	);
+
 	return {
 		props: {
-			title: seoInfo?.name,
-			url: publicRuntimeConfig.CLIENT_URL + (context?.resolvedUrl || ''),
-			...(await withI18n()).props,
+			...(defaultProps as { props: DefaultSeoInfo }).props,
+			title: seoInfo?.name || null,
 		},
 	};
 }

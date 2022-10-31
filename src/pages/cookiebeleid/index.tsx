@@ -1,4 +1,5 @@
-import { NextPage } from 'next';
+import { GetServerSidePropsResult, NextPage } from 'next';
+import { GetServerSidePropsContext } from 'next/types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
@@ -6,13 +7,17 @@ import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-quer
 import { AuthModal } from '@auth/components';
 import { selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { withI18n } from '@i18n/wrappers';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import { renderOgTags } from '@shared/helpers/render-og-tags';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './cookie-policy.module.scss';
 
-const CookiePolicy: NextPage = () => {
+const CookiePolicy: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const dispatch = useDispatch();
+	const { tText } = useTranslation();
 	const [query, setQuery] = useQueryParams({
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: withDefault(StringParam, undefined),
@@ -49,6 +54,13 @@ const CookiePolicy: NextPage = () => {
 
 	return (
 		<>
+			{renderOgTags(
+				tText('pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel'),
+				tText(
+					'pages/cookiebeleid/index___cookiebeleid-seo-en-pagina-titel-seo-beschrijving'
+				),
+				url
+			)}
 			<div className={styles['p-cookie-policy__wrapper']}>
 				<div dangerouslySetInnerHTML={{ __html: cookieDeclarationHtml }} />
 			</div>
@@ -57,6 +69,10 @@ const CookiePolicy: NextPage = () => {
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
 export default CookiePolicy;

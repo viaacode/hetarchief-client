@@ -1,11 +1,11 @@
 import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
-import { NextPage } from 'next';
-import getConfig from 'next/config';
+import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { GetServerSidePropsContext } from 'next/types';
+import { ComponentType, ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
@@ -22,7 +22,6 @@ import { foldersService } from '@account/services/folders';
 import { Folder, FolderMedia } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import {
 	Icon,
 	IdentifiableMediaCard,
@@ -32,16 +31,18 @@ import {
 	SearchBar,
 } from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/media';
 import { Breakpoints } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
 
 import { AddToFolderBlade } from '../../../../modules/visitor-space/components';
@@ -54,9 +55,7 @@ const labelKeys = {
 	search: 'AccountMyFolders__search',
 };
 
-const { publicRuntimeConfig } = getConfig();
-
-const AccountMyFolders: NextPage = () => {
+const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const dispatch = useDispatch();
@@ -383,6 +382,147 @@ const AccountMyFolders: NextPage = () => {
 		);
 	};
 
+	const renderPageContent = () => {
+		return (
+			<>
+				<AccountLayout className="p-account-my-folders">
+					<SidebarLayout
+						color="platinum"
+						responsiveTo={Breakpoints.md}
+						sidebarTitle={tHtml(
+							'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
+						)}
+						sidebarLinks={[
+							...sidebarLinks,
+							{
+								id: 'p-account-my-folders__new-folder',
+								variants: ['c-list-navigation__item--no-interaction'],
+								node: <CreateFolderButton afterSubmit={getFolders.refetch} />,
+								hasDivider: true,
+							},
+						]}
+					>
+						{activeFolder && (
+							<>
+								<div className="l-container u-mt-64 u-mb-48">
+									<SidebarLayoutTitle>
+										<EditFolderTitle
+											key={activeFolder.id}
+											folder={activeFolder}
+											afterSubmit={onFolderTitleChanged}
+											buttons={renderTitleButtons}
+										/>
+									</SidebarLayoutTitle>
+								</div>
+
+								<div className="l-container u-mb-24:md u-mb-32">
+									<FormControl
+										className="c-form-control--label-hidden"
+										id={`${labelKeys.search}--${activeFolder.id}`}
+										label={tHtml(
+											'pages/account/mijn-mappen/folder-slug/index___zoeken-in-deze-map'
+										)}
+									>
+										<SearchBar
+											id={`${labelKeys.search}--${activeFolder.id}`}
+											default={filters[SEARCH_QUERY_KEY]}
+											className="p-account-my-folders__search"
+											placeholder={tText(
+												'pages/account/mijn-mappen/folder-slug/index___zoek'
+											)}
+											onSearch={(value) =>
+												setFilters({ [SEARCH_QUERY_KEY]: value })
+											}
+										/>
+									</FormControl>
+								</div>
+
+								<div className="l-container">
+									{!folderMedia?.isError && (
+										<MediaCardList
+											keywords={keywords}
+											items={folderMedia?.data?.items.map((media) => {
+												const base: IdentifiableMediaCard = {
+													schemaIdentifier: media.schemaIdentifier,
+													description: renderDescription(media),
+													title: renderTitle(media),
+													name: media.name,
+													type: media.format,
+													preview: media.thumbnailUrl,
+												};
+
+												return {
+													...base,
+													actions: renderActions(base, activeFolder),
+												};
+											})}
+											view={'list'}
+										/>
+									)}
+
+									{folderMedia.data &&
+										folderMedia.data?.total > FolderItemListSize && (
+											<PaginationBar
+												className="u-mb-48"
+												start={(filters.page - 1) * FolderItemListSize}
+												count={FolderItemListSize}
+												showBackToTop
+												total={folderMedia.data?.total || 0}
+												onPageChange={(page) =>
+													setFilters({
+														...filters,
+														page: page + 1,
+													})
+												}
+											/>
+										)}
+								</div>
+							</>
+						)}
+					</SidebarLayout>
+				</AccountLayout>
+
+				<ConfirmationModal
+					text={{
+						yes: tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen'),
+						no: tHtml('pages/account/mijn-mappen/folder-slug/index___annuleren'),
+					}}
+					isOpen={activeFolder && showConfirmDelete}
+					onClose={() => setShowConfirmDelete(false)}
+					onCancel={() => setShowConfirmDelete(false)}
+					onConfirm={() => {
+						setShowConfirmDelete(false);
+
+						activeFolder &&
+							foldersService.delete(activeFolder.id).then(() => {
+								getFolders.refetch();
+							});
+					}}
+				/>
+
+				<AddToFolderBlade
+					isOpen={isAddToFolderBladeOpen}
+					selected={
+						selected
+							? {
+									schemaIdentifier: selected.schemaIdentifier,
+									title: selected.name,
+							  }
+							: undefined
+					}
+					onClose={() => {
+						setShowAddToFolderBlade(false);
+						setSelected(null);
+					}}
+					onSubmit={async () => {
+						setShowAddToFolderBlade(false);
+						setSelected(null);
+					}}
+				/>
+			</>
+		);
+	};
+
 	return (
 		<VisitorLayout>
 			{renderOgTags(
@@ -391,146 +531,19 @@ const AccountMyFolders: NextPage = () => {
 						` | ${activeFolder?.name || folderSlug}`
 				),
 				tText('pages/account/mijn-mappen/index___mijn-mappen-meta-omschrijving'),
-				publicRuntimeConfig.CLIENT_URL
+				url
 			)}
-
-			<AccountLayout className="p-account-my-folders">
-				<SidebarLayout
-					color="platinum"
-					responsiveTo={Breakpoints.md}
-					sidebarTitle={tHtml(
-						'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
-					)}
-					sidebarLinks={[
-						...sidebarLinks,
-						{
-							id: 'p-account-my-folders__new-folder',
-							variants: ['c-list-navigation__item--no-interaction'],
-							node: <CreateFolderButton afterSubmit={getFolders.refetch} />,
-							hasDivider: true,
-						},
-					]}
-				>
-					{activeFolder && (
-						<>
-							<div className="l-container u-mt-64 u-mb-48">
-								<SidebarLayoutTitle>
-									<EditFolderTitle
-										key={activeFolder.id}
-										folder={activeFolder}
-										afterSubmit={onFolderTitleChanged}
-										buttons={renderTitleButtons}
-									/>
-								</SidebarLayoutTitle>
-							</div>
-
-							<div className="l-container u-mb-24:md u-mb-32">
-								<FormControl
-									className="c-form-control--label-hidden"
-									id={`${labelKeys.search}--${activeFolder.id}`}
-									label={tHtml(
-										'pages/account/mijn-mappen/folder-slug/index___zoeken-in-deze-map'
-									)}
-								>
-									<SearchBar
-										id={`${labelKeys.search}--${activeFolder.id}`}
-										default={filters[SEARCH_QUERY_KEY]}
-										className="p-account-my-folders__search"
-										placeholder={tText(
-											'pages/account/mijn-mappen/folder-slug/index___zoek'
-										)}
-										onSearch={(value) =>
-											setFilters({ [SEARCH_QUERY_KEY]: value })
-										}
-									/>
-								</FormControl>
-							</div>
-
-							<div className="l-container">
-								{!folderMedia?.isError && (
-									<MediaCardList
-										keywords={keywords}
-										items={folderMedia?.data?.items.map((media) => {
-											const base: IdentifiableMediaCard = {
-												schemaIdentifier: media.schemaIdentifier,
-												description: renderDescription(media),
-												title: renderTitle(media),
-												name: media.name,
-												type: media.format,
-												preview: media.thumbnailUrl,
-											};
-
-											return {
-												...base,
-												actions: renderActions(base, activeFolder),
-											};
-										})}
-										view={'list'}
-									/>
-								)}
-
-								{folderMedia.data && folderMedia.data?.total > FolderItemListSize && (
-									<PaginationBar
-										className="u-mb-48"
-										start={(filters.page - 1) * FolderItemListSize}
-										count={FolderItemListSize}
-										showBackToTop
-										total={folderMedia.data?.total || 0}
-										onPageChange={(page) =>
-											setFilters({
-												...filters,
-												page: page + 1,
-											})
-										}
-									/>
-								)}
-							</div>
-						</>
-					)}
-				</SidebarLayout>
-			</AccountLayout>
-
-			<ConfirmationModal
-				text={{
-					yes: tHtml('pages/account/mijn-mappen/folder-slug/index___verwijderen'),
-					no: tHtml('pages/account/mijn-mappen/folder-slug/index___annuleren'),
-				}}
-				isOpen={activeFolder && showConfirmDelete}
-				onClose={() => setShowConfirmDelete(false)}
-				onCancel={() => setShowConfirmDelete(false)}
-				onConfirm={() => {
-					setShowConfirmDelete(false);
-
-					activeFolder &&
-						foldersService.delete(activeFolder.id).then(() => {
-							getFolders.refetch();
-						});
-				}}
-			/>
-
-			<AddToFolderBlade
-				isOpen={isAddToFolderBladeOpen}
-				selected={
-					selected
-						? {
-								schemaIdentifier: selected.schemaIdentifier,
-								title: selected.name,
-						  }
-						: undefined
-				}
-				onClose={() => {
-					setShowAddToFolderBlade(false);
-					setSelected(null);
-				}}
-				onSubmit={async () => {
-					setShowAddToFolderBlade(false);
-					setSelected(null);
-				}}
-			/>
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</VisitorLayout>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(withAllRequiredPermissions(AccountMyFolders, Permission.MANAGE_ACCOUNT));
+export default withAuth(AccountMyFolders as ComponentType);

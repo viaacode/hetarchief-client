@@ -1,8 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
-import { FC, useEffect, useRef, useState } from 'react';
+import { ComponentType, FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
@@ -12,7 +11,6 @@ import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { withI18n } from '@i18n/wrappers';
 import {
 	Blade,
 	Loading,
@@ -28,6 +26,7 @@ import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -41,9 +40,7 @@ import styles from './LoggedInHome.module.scss';
 
 type SelectedVisit = ProcessVisitBladeProps['selected'];
 
-const { publicRuntimeConfig } = getConfig();
-
-const LoggedInHome: FC = () => {
+const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml } = useTranslation();
 	const router = useRouter();
 	const searchRef = useRef<HTMLDivElement>(null);
@@ -387,38 +384,23 @@ const LoggedInHome: FC = () => {
 		);
 	};
 
-	const renderHomePageContent = () => {
-		if (isLoadingFuture || isLoadingPending || isLoadingActive) {
-			return <Loading fullscreen />;
-		}
+	const renderPageContent = () => {
 		return (
 			<>
-				<div className="p-home u-page-bottom-padding">
-					{renderOgTags(
-						tText('modules/home/components/logged-in-home/logged-in-home___home'),
-						tText(
-							'modules/home/components/logged-in-home/logged-in-home___welkom-op-de-bezoekertool'
-						),
-						publicRuntimeConfig.CLIENT_URL
-					)}
-
-					{renderHero()}
-					<div ref={searchRef}>
-						<VisitorSpaceCardsWithSearch
-							onRequestAccess={onRequestAccess}
-							onSearch={() => setHasScrolledToSearch(true)}
-						/>
-					</div>
+				{' '}
+				{renderHero()}
+				<div ref={searchRef}>
+					<VisitorSpaceCardsWithSearch
+						onRequestAccess={onRequestAccess}
+						onSearch={() => setHasScrolledToSearch(true)}
+					/>
 				</div>
-
 				<RequestAccessBlade
 					isOpen={isRequestAccessBladeOpen}
 					onClose={onCloseRequestBlade}
 					onSubmit={onRequestAccessSubmit}
 				/>
-
 				{renderVisitorSpaceNotAvailableBlade()}
-
 				<ProcessVisitBlade
 					selected={selected}
 					isOpen={!!selected && isProcessVisitBladeOpen}
@@ -432,10 +414,27 @@ const LoggedInHome: FC = () => {
 			</>
 		);
 	};
+	const renderHomePageContent = () => {
+		if (isLoadingFuture || isLoadingPending || isLoadingActive) {
+			return <Loading fullscreen owner="logged in home" />;
+		}
+		return (
+			<>
+				<div className="p-home u-page-bottom-padding">
+					{renderOgTags(
+						tText('modules/home/components/logged-in-home/logged-in-home___home'),
+						tText(
+							'modules/home/components/logged-in-home/logged-in-home___welkom-op-de-bezoekertool'
+						),
+						url
+					)}
+					{renderPageContent()}
+				</div>
+			</>
+		);
+	};
 
 	return renderHomePageContent();
 };
 
-export const getServerSideProps = withI18n();
-
-export default withAuth(LoggedInHome);
+export default withAuth(LoggedInHome as ComponentType) as FC<DefaultSeoInfo>;

@@ -1,7 +1,7 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
-import { NextPage } from 'next';
-import getConfig from 'next/config';
-import { ReactNode, useMemo, useState } from 'react';
+import { GetServerSidePropsResult, NextPage } from 'next';
+import { GetServerSidePropsContext } from 'next/types';
+import { ComponentType, ReactNode, useMemo, useState } from 'react';
 import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -14,7 +14,6 @@ import {
 	VisitorsTableColumns,
 } from '@cp/const/visitors.const';
 import { CPAdminLayout } from '@cp/layouts';
-import { withI18n } from '@i18n/wrappers';
 import {
 	ApproveRequestBlade,
 	ConfirmationModal,
@@ -24,19 +23,19 @@ import {
 	SearchBar,
 	sortingIcons,
 } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { Visit, VisitStatus } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { useUpdateVisitRequest } from '@visits/hooks/update-visit';
 import { RequestStatusAll, VisitTimeframe } from '@visits/types';
 
-const { publicRuntimeConfig } = getConfig();
-
-const CPVisitorsPage: NextPage = () => {
+const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
@@ -170,7 +169,7 @@ const CPVisitorsPage: NextPage = () => {
 		if (isFetching) {
 			return (
 				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					<Loading />
+					<Loading owner="admin visitors page: table loading" />
 				</div>
 			);
 		}
@@ -288,16 +287,20 @@ const CPVisitorsPage: NextPage = () => {
 			{renderOgTags(
 				tText('pages/beheer/bezoekers/index___bezoekers'),
 				tText('pages/beheer/bezoekers/index___beheer-bezoekers-meta-omschrijving'),
-				publicRuntimeConfig.CLIENT_URL
+				url
 			)}
 
-			{renderPageContent()}
+			<PermissionsCheck allPermissions={[Permission.READ_CP_VISIT_REQUESTS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(
-	withAllRequiredPermissions(CPVisitorsPage, Permission.READ_CP_VISIT_REQUESTS)
-);
+export default withAuth(CPVisitorsPage as ComponentType);

@@ -8,9 +8,10 @@ import styles from './Loading.module.scss';
 
 export interface LoadingProps extends DefaultComponentProps {
 	fullscreen?: boolean;
+	owner: string; // Used to identify which loader is shown
 }
 
-const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }) => {
+const Loading: FC<LoadingProps> = ({ fullscreen = false, owner, className, style = {} }) => {
 	const { tHtml } = useTranslation();
 
 	return (
@@ -22,6 +23,7 @@ const Loading: FC<LoadingProps> = ({ fullscreen = false, className, style = {} }
 			)}
 			style={style}
 		>
+			<div dangerouslySetInnerHTML={{ __html: `<!-- ${owner} -->` }} />
 			<span>{tHtml('modules/shared/components/loading/loading___laden')}</span>
 		</div>
 	);

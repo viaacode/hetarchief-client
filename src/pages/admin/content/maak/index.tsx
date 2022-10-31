@@ -1,20 +1,32 @@
 import { ContentPageEdit } from '@meemoo/react-admin';
-import getConfig from 'next/config';
-import React, { FC } from 'react';
+import { GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext } from 'next/types';
+import React, { ComponentType, FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
-const { publicRuntimeConfig } = getConfig();
-
-const ContentPageEditPage: FC = () => {
+const ContentPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
+
+	const renderPageContent = () => {
+		return (
+			<AdminLayout>
+				<AdminLayout.Content>
+					<div className="p-admin-content__edit">
+						<ContentPageEdit id={undefined} />
+					</div>
+				</AdminLayout.Content>
+			</AdminLayout>
+		);
+	};
 
 	return (
 		<>
@@ -23,25 +35,20 @@ const ContentPageEditPage: FC = () => {
 				tText(
 					'pages/admin/content/maak/index___maak-een-nieuwe-content-pagina-adhv-blokken'
 				),
-				publicRuntimeConfig.CLIENT_URL
+				url
 			)}
 
-			<AdminLayout>
-				<AdminLayout.Content>
-					<div className="p-admin-content__edit">
-						<ContentPageEdit id={undefined} />
-					</div>
-				</AdminLayout.Content>
-			</AdminLayout>
+			<PermissionsCheck allPermissions={[Permission.CREATE_CONTENT_PAGES]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(
-	withAnyRequiredPermissions(
-		withAdminCoreConfig(ContentPageEditPage),
-		Permission.CREATE_CONTENT_PAGES
-	)
-);
+export default withAuth(withAdminCoreConfig(ContentPageEditPage as ComponentType));

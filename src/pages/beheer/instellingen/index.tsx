@@ -1,5 +1,6 @@
-import { NextPage } from 'next';
-import getConfig from 'next/config';
+import { GetServerSidePropsResult, NextPage } from 'next';
+import { GetServerSidePropsContext } from 'next/types';
+import { ComponentType } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
@@ -7,16 +8,15 @@ import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
-import { withI18n } from '@i18n/wrappers';
 import { Loading } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
-const { publicRuntimeConfig } = getConfig();
-
-const CPSettingsPage: NextPage = () => {
+const CPSettingsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	/**
 	 * Hooks
 	 */
@@ -48,16 +48,8 @@ const CPSettingsPage: NextPage = () => {
 		);
 	};
 
-	return isLoading ? (
-		<Loading fullscreen />
-	) : (
-		<>
-			{renderOgTags(
-				tText('pages/beheer/instellingen/index___beheer-instellingen-title'),
-				tText('pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageContent = () => {
+		return (
 			<CPAdminLayout
 				className="p-cp-settings"
 				pageTitle={tHtml('pages/beheer/instellingen/index___instellingen')}
@@ -70,10 +62,30 @@ const CPSettingsPage: NextPage = () => {
 					)}
 				</div>
 			</CPAdminLayout>
+		);
+	};
+
+	return isLoading ? (
+		<Loading fullscreen owner="admin visitor page settings" />
+	) : (
+		<>
+			{renderOgTags(
+				tText('pages/beheer/instellingen/index___beheer-instellingen-title'),
+				tText('pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'),
+				url
+			)}
+
+			<PermissionsCheck allPermissions={[Permission.UPDATE_OWN_SPACE]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(withAllRequiredPermissions(CPSettingsPage, Permission.UPDATE_OWN_SPACE));
+export default withAuth(CPSettingsPage as ComponentType);

@@ -1,8 +1,8 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
-import { NextPage } from 'next';
-import getConfig from 'next/config';
+import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { ReactNode, useMemo } from 'react';
+import { GetServerSidePropsContext } from 'next/types';
+import { ComponentType, ReactNode, useMemo } from 'react';
 import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -16,14 +16,15 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ROUTES } from '@shared/const';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, Visit, VisitStatus } from '@shared/types';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { createHomeWithVisitorSpaceFilterUrl } from '@shared/utils';
 import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
@@ -31,9 +32,7 @@ import { VisitTimeframe } from '@visits/types';
 
 import { VisitorLayout } from 'modules/visitors';
 
-const { publicRuntimeConfig } = getConfig();
-
-const AccountMyHistory: NextPage = () => {
+const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
@@ -111,14 +110,8 @@ const AccountMyHistory: NextPage = () => {
 		return tHtml('pages/account/mijn-historiek/index___geen-historiek');
 	};
 
-	return (
-		<VisitorLayout>
-			{renderOgTags(
-				tText('pages/account/mijn-historiek/index___mijn-historiek'),
-				tText('pages/account/mijn-historiek/index___mijn-historiek-meta-omschrijving'),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageContent = () => {
+		return (
 			<AccountLayout
 				className="p-account-my-history"
 				pageTitle={tHtml('pages/account/mijn-historiek/index___mijn-historiek')}
@@ -158,14 +151,35 @@ const AccountMyHistory: NextPage = () => {
 					</div>
 				) : (
 					<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-						{visits.isFetching ? <Loading fullscreen /> : renderEmptyMessage()}
+						{visits.isFetching ? (
+							<Loading fullscreen owner="my history page" />
+						) : (
+							renderEmptyMessage()
+						)}
 					</div>
 				)}
 			</AccountLayout>
+		);
+	};
+
+	return (
+		<VisitorLayout>
+			{renderOgTags(
+				tText('pages/account/mijn-historiek/index___mijn-historiek'),
+				tText('pages/account/mijn-historiek/index___mijn-historiek-meta-omschrijving'),
+				url
+			)}
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</VisitorLayout>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(withAllRequiredPermissions(AccountMyHistory, Permission.MANAGE_ACCOUNT));
+export default withAuth(AccountMyHistory as ComponentType);

@@ -1,8 +1,10 @@
 import { Box, Button } from '@meemoo/react-components';
-import { NextPage } from 'next';
+import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';
+import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
+import { ComponentType } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
@@ -10,28 +12,23 @@ import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAllRequiredPermissions } from '@shared/hoc/withAllRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
-const AccountMyProfile: NextPage = () => {
+const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
 
-	return (
-		<VisitorLayout>
-			{renderOgTags(
-				tText('pages/account/mijn-profiel/index___mijn-profiel'),
-				tText('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageContent = () => {
+		return (
 			<AccountLayout
 				className="p-account-my-profile"
 				pageTitle={tHtml('pages/account/mijn-profiel/index___mijn-profiel')}
@@ -91,10 +88,27 @@ const AccountMyProfile: NextPage = () => {
 					</Box>
 				</div>
 			</AccountLayout>
+		);
+	};
+	return (
+		<VisitorLayout>
+			{renderOgTags(
+				tText('pages/account/mijn-profiel/index___mijn-profiel'),
+				tText('pages/account/mijn-profiel/index___mijn-profiel-meta-omschrijving'),
+				url
+			)}
+
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</VisitorLayout>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(withAllRequiredPermissions(AccountMyProfile, Permission.MANAGE_ACCOUNT));
+export default withAuth(AccountMyProfile as ComponentType);

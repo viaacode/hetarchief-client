@@ -1,25 +1,25 @@
 import { UserGroupOverview } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import getConfig from 'next/config';
-import React, { FC, useRef, useState } from 'react';
+import { GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext } from 'next/types';
+import React, { ComponentType, FC, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { UserGroupOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { withI18n } from '@i18n/wrappers';
 import { Icon } from '@shared/components';
+import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { withAnyRequiredPermissions } from '@shared/hoc/withAnyRequiredPermissions';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './index.module.scss';
 
-const { publicRuntimeConfig } = getConfig();
-
-const PermissionsOverview: FC = () => {
+const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 
 	// Access child functions
@@ -64,10 +64,6 @@ const PermissionsOverview: FC = () => {
 		</>
 	);
 
-	const renderPageContent = () => {
-		return renderPermissions();
-	};
-
 	const renderActionButtons = () => {
 		return (
 			<>
@@ -85,16 +81,8 @@ const PermissionsOverview: FC = () => {
 		);
 	};
 
-	return (
-		<>
-			{renderOgTags(
-				tText('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'),
-				tText(
-					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
-				),
-				publicRuntimeConfig.CLIENT_URL
-			)}
-
+	const renderPageContent = () => {
+		return (
 			<AdminLayout
 				pageTitle={tHtml(
 					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'
@@ -105,22 +93,37 @@ const PermissionsOverview: FC = () => {
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className={clsx('l-container', styles['p-permissions-page'])}>
-						{renderPageContent()}
+						{renderPermissions()}
 					</div>
 					<div className={clsx('l-container', styles['p-action-buttons'])}>
 						{hasChanges && renderActionButtons()}
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
+		);
+	};
+
+	return (
+		<>
+			{renderOgTags(
+				tText('pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies'),
+				tText(
+					'pages/admin/gebruikersbeheer/permissies/index___groepen-en-permissies-omschrijving'
+				),
+				url
+			)}
+
+			<PermissionsCheck allPermissions={[Permission.EDIT_PERMISSION_GROUPS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
 
-export const getServerSideProps = withI18n();
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
-export default withAuth(
-	withAnyRequiredPermissions(
-		withAdminCoreConfig(PermissionsOverview),
-		Permission.EDIT_PERMISSION_GROUPS
-	)
-);
+export default withAuth(withAdminCoreConfig(PermissionsOverview as ComponentType));

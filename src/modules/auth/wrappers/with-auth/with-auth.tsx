@@ -57,7 +57,7 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 		return !isBrowser() || tosAccepted ? (
 			<WrappedComponent {...props} />
 		) : (
-			<Loading fullscreen />
+			<Loading fullscreen owner="with auth" />
 		);
 	};
 };

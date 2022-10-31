@@ -7,7 +7,7 @@ import { createPageTitle } from '@shared/utils';
 const { publicRuntimeConfig } = getConfig();
 
 export function renderOgTags(
-	title: string | undefined,
+	title: string | null | undefined,
 	description: string,
 	url: string
 ): ReactNode {
