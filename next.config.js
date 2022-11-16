@@ -41,6 +41,9 @@ module.exports = withTM({
 	},
 	images: {
 		domains: [
+			'assets-int.viaa.be',
+			'assets-tst.viaa.be',
+			'assets-qas.viaa.be',
 			'assets.viaa.be',
 			'assets-int.hetarchief.be',
 			'assets-tst.hetarchief.be',
