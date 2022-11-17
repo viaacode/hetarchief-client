@@ -28,6 +28,7 @@ $datepicker-border-color: $zinc;
 			border-top: 1px solid $datepicker-border-color;
 			overflow-x: auto;
 			max-width: 100%;
+			width: auto; // Critical for https://meemoo.atlassian.net/browse/ARC-1112
 
 			&[data-placement^="bottom"] {
 				top: -1px !important;
