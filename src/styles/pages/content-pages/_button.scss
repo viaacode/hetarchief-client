@@ -1,6 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 @use "src/styles/abstracts" as *;
 
+.c-content-page-preview,
 .c-block-buttons {
 	button[class*="c-button"][class*="c-button--primary"],
 	button[class*="c-button"][class*="c-button--secondary"],
@@ -13,7 +14,6 @@
 		border: 1px solid $teal-dark;
 		font-family: $font-family-primary;
 		font-size: $font-size-base;
-		font-weight: $font-weight-bold;
 		line-height: 1.125;
 		text-align: center;
 		background-color: $teal-dark;
