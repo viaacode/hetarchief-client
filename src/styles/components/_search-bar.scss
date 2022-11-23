@@ -11,9 +11,11 @@
 		background-color: $silver;
 		border-color: $silver;
 
-		&--is-focused,
-		&--is-focused:hover {
+		&.c-tags-input__control--is-focused,
+		&.c-tags-input__control--is-focused:hover {
 			border-color: $teal;
+			border-width: 0.2rem;
+			box-shadow: none;
 		}
 	}
 

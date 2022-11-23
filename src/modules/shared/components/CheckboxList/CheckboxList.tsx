@@ -18,9 +18,13 @@ const CheckboxList: FC<CheckboxListProps<unknown>> = ({ items, className, onItem
 						className={styles['c-checkbox-list__item']}
 						tabIndex={0}
 						onKeyDown={(e) =>
-							onKey(e, [...keysEnter, ...keysSpacebar], () =>
-								onItemClick(isChecked, value)
-							)
+							onKey(e, [...keysEnter, ...keysSpacebar], () => {
+								if (keysSpacebar.includes(e.key)) {
+									e.preventDefault();
+								}
+
+								onItemClick(isChecked, value);
+							})
 						}
 						onClick={() => onItemClick(isChecked, value)}
 					>

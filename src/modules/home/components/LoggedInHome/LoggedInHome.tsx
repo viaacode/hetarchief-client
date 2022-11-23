@@ -387,7 +387,6 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<>
-				{' '}
 				{renderHero()}
 				<div ref={searchRef}>
 					<VisitorSpaceCardsWithSearch

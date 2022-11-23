@@ -67,7 +67,6 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 	const renderPageContent = () => {
 		return (
 			<>
-				{' '}
 				<div className={styles['c-hero']}>
 					<div className={styles['c-hero__image']}>
 						<Image

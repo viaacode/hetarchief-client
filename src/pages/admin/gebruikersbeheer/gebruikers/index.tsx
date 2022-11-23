@@ -40,7 +40,7 @@ const UsersOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			)}
 			<PermissionsCheck allPermissions={[Permission.VIEW_USERS]}>
 				{renderPageContent()}
-			</PermissionsCheck>{' '}
+			</PermissionsCheck>
 		</>
 	);
 };
