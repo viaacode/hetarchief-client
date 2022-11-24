@@ -14,6 +14,12 @@
 		margin: 0 calc(#{$spacer-xs} / 4);
 		cursor: pointer;
 
+		&:focus-visible {
+			outline-offset: 0.2rem;
+			outline-color: $teal;
+			outline-style: solid;
+		}
+
 		&--active {
 			background-color: $seagreen;
 			color: $white;

@@ -50,6 +50,12 @@ p {
 a {
 	text-decoration: underline;
 	color: inherit;
+
+	&:focus-visible {
+		outline-offset: 0.2rem;
+		outline-color: $teal;
+		outline-style: solid;
+	}
 }
 
 small {

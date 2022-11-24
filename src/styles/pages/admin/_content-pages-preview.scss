@@ -162,6 +162,7 @@ $l-container-padding-xs: 2rem;
 		max-height: none !important;
 		border-radius: 4rem;
 		border-style: solid !important;
+		font-family: $font-family-primary;
 	}
 
 	.c-button--content-page-button--silver {
@@ -367,15 +368,15 @@ $l-container-padding-xs: 2rem;
 	.u-content-flex {
 		display: flex;
 		flex: 1 0 auto;
-	
+
 		&--left {
 			justify-content: flex-start;
 		}
-	
+
 		&--center {
 			justify-content: center;
 		}
-	
+
 		&--right {
 			justify-content: flex-end;
 		}
