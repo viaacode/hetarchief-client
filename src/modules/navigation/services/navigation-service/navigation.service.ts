@@ -2,16 +2,15 @@ import { ApiService } from '@shared/services/api-service';
 
 import { NavigationInfo, NavigationPlacement } from './navigation.types';
 
-class NavigationService {
-	private baseUrl = 'navigations/elements';
+export class NavigationService {
+	private static baseUrl = 'admin/navigations/items';
 
-	public async getAll(): Promise<Record<NavigationPlacement, NavigationInfo[]>> {
+	public static async getAll(): Promise<Record<NavigationPlacement, NavigationInfo[]>> {
 		const response: Record<NavigationPlacement, NavigationInfo[]> = await ApiService.getApi()
 			.get(this.baseUrl)
 			.json();
 
+		console.log('getting navigation items', response);
 		return response ?? {};
 	}
 }
-
-export const navigationService = new NavigationService();

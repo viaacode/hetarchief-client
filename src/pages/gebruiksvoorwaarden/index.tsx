@@ -1,4 +1,4 @@
-import { ContentPage } from '@meemoo/react-admin';
+import { ContentPage } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';

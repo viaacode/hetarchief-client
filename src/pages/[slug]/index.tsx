@@ -1,4 +1,4 @@
-import { ContentPage } from '@meemoo/react-admin';
+import { ContentPage } from '@meemoo/admin-core-ui';
 import { HTTPError } from 'ky';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';

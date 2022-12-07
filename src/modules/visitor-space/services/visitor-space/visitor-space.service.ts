@@ -1,6 +1,6 @@
 import { OrderDirection } from '@meemoo/react-components';
+import { QueryClient } from '@tanstack/react-query';
 import { stringifyUrl } from 'query-string';
-import { QueryClient } from 'react-query';
 
 import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
@@ -97,7 +97,7 @@ export class VisitorSpaceService {
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
 
-		await this.queryClient.invalidateQueries(QUERY_KEYS.getContentPartners);
+		await this.queryClient.invalidateQueries([QUERY_KEYS.getContentPartners]);
 
 		return response;
 	}

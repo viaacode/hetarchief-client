@@ -1,5 +1,5 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { queryByText, render, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';

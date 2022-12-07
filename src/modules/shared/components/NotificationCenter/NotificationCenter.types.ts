@@ -1,4 +1,4 @@
-import { UseInfiniteQueryResult, UseMutationResult } from 'react-query';
+import { UseInfiniteQueryResult, UseMutationResult } from '@tanstack/react-query';
 
 import {
 	MarkAllAsReadResult,
