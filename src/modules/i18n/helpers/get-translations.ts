@@ -1,4 +1,4 @@
-const TRANSLATIONS_URL = `${process.env.PROXY_URL}/translations/nl.json`;
+const TRANSLATIONS_URL = `${process.env.PROXY_URL}/admin/translations/nl.json`;
 
 export async function getTranslations(): Promise<Record<string, string>> {
 	try {

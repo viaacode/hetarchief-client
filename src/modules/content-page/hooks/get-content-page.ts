@@ -1,30 +1,26 @@
-import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
-
-import { QUERY_KEYS } from '@shared/const/query-keys';
+import { ContentPageInfo } from '@meemoo/admin-core-ui';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { HTTPError } from 'ky';
 
 import { ContentPageService } from '../services/content-page.service';
-import { ContentPageExistsInfo } from '../services/content-page.service.types';
 
-export function useGetContentPage(
-	slug?: string | null,
-	ignoreAuthError = false,
-	options?: Partial<
-		Omit<
-			UseQueryOptions<
-				ContentPageExistsInfo | null,
-				unknown,
-				ContentPageExistsInfo | null,
-				[QUERY_KEYS, { slug?: string | null }]
-			>,
-			'queryKey' | 'queryFn'
-		>
+export const useGetContentPageByPath = (
+	path: string | undefined,
+	options?: UseQueryOptions<
+		ContentPageInfo | null,
+		HTTPError,
+		ContentPageInfo | null,
+		'GET_CONTENT_PAGE_BY_PATH'[]
 	>
-): UseQueryResult<ContentPageExistsInfo | null> {
+) => {
 	return useQuery(
-		[QUERY_KEYS.getContentPage, { slug }],
+		['GET_CONTENT_PAGE_BY_PATH'],
 		() => {
-			return ContentPageService.getBySlug(('/' + slug) as string, ignoreAuthError);
+			if (!path) {
+				return null;
+			}
+			return ContentPageService.getBySlug(path, true);
 		},
 		options
 	);
-}
+};

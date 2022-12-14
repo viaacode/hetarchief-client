@@ -1,13 +1,13 @@
 import {
 	AdminConfig,
 	AdminConfigManager,
-	AvoOrHetArchief,
 	CommonUser,
 	ContentBlockType,
 	LinkInfo,
 	ROUTE_PARTS as ROUTE_PARTS_ADMIN_CORE,
 	ToastInfo,
 } from '@meemoo/admin-core-ui';
+import { DatabaseType } from '@viaa/avo2-types/types/core/enums';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -178,6 +178,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						},
 					],
 				},
+				content_blocks: {},
 				services: {
 					toastService: {
 						showToast: (toastInfo: ToastInfo) => {
@@ -187,6 +188,9 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							});
 						},
 					},
+					// Use the default endpoint of the admin-core-api: ${proxyUrl}/admin/content-pages
+					// https://app.diagrams.net/#G1WCrp76U14pGpajEplYlSVGiuWfEQpRqI
+					getContentPageByPathEndpoint: null,
 					i18n: { tHtml, tText },
 					educationOrganisationService: {
 						fetchEducationOrganisationName: () => Promise.resolve(null),
@@ -199,9 +203,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							push: router.push,
 							replace: router.replace,
 						}), //useRouter,
-						useParams: () => {
-							return router.query as Record<string, string>;
-						},
 					},
 					queryCache: {
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -210,7 +211,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					assetService: AssetsService,
 				},
 				database: {
-					databaseApplicationType: AvoOrHetArchief.hetArchief,
+					databaseApplicationType: DatabaseType.hetArchief,
 					proxyUrl: publicRuntimeConfig.PROXY_URL,
 				},
 				flowplayer: {
@@ -224,6 +225,9 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				user: commonUser,
 				route_parts: ROUTE_PARTS_ADMIN_CORE,
+				env: {
+					LDAP_DASHBOARD_PEOPLE_URL: '',
+				},
 			};
 			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
