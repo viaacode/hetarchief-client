@@ -9,7 +9,7 @@ import {
 	mapObjectToMetadata,
 } from '@media/utils';
 import { Icon, TextWithNewLines } from '@shared/components';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import { MediaTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
 
@@ -31,9 +31,9 @@ export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
  * Object placeholders
  */
 export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
-	description: tText('modules/media/const/index___ophalen-van-afspeel-token-mislukt'),
+	description: tHtml('modules/media/const/index___ophalen-van-afspeel-token-mislukt'),
 	reasonTitle: tText('modules/media/const/index___waarom-kan-ik-dit-object-niet-bekijken'),
-	reasonDescription: tText(
+	reasonDescription: tHtml(
 		'modules/media/const/index___er-ging-iets-mis-bij-het-ophalen-van-het-afspeel-token'
 	),
 	openModalButtonLabel: tText(
