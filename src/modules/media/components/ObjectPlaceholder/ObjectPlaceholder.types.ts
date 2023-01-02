@@ -3,9 +3,9 @@ import { ReactNode } from 'react';
 import { DefaultComponentProps } from '@shared/types';
 
 export interface ObjectPlaceholderProps extends DefaultComponentProps {
-	description?: string | ReactNode;
+	description?: ReactNode;
 	reasonTitle?: string;
-	reasonDescription?: string | ReactNode;
+	reasonDescription?: ReactNode;
 	openModalButtonLabel?: string;
 	closeModalButtonLabel?: string;
 	small?: boolean;
