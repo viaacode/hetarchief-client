@@ -29,7 +29,7 @@ export const ROUTE_PARTS = Object.freeze({
 	visitorSpaceManagement: 'bezoekersruimtesbeheer',
 	visitorSpaces: 'bezoekersruimtes',
 	visitors: 'actieve-bezoekers',
-	myMaterialRequests: 'mijn-materiaalaanvragen',
+	myMaterialRequests: 'materiaalaanvragen',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes

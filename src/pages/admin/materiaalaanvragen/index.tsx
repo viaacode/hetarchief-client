@@ -10,7 +10,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const AdminMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
+const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
@@ -45,4 +45,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AdminMyMaterialRequests as ComponentType);
+export default withAuth(AdminMaterialRequests as ComponentType);
