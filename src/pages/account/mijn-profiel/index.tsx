@@ -109,7 +109,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 									content={tHtml(
 										'pages/account/mijn-profiel/index___alert-message'
 									)}
-									icon={<Icon name="question" />}
+									icon={<Icon name="exclamation" />}
 								/>
 							)}
 						</section>
