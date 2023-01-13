@@ -10,7 +10,6 @@ export const ROUTE_PARTS = Object.freeze({
 	user: 'gebruikers',
 	permissions: 'permissies',
 	translations: 'vertalingen',
-	translationsV2: 'vertalingen-v2',
 	admin: 'admin',
 	beheer: 'beheer',
 	content: 'content',
