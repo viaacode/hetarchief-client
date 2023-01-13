@@ -1,4 +1,4 @@
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { Notification } from '@shared/services/notifications-service/notifications.types';
