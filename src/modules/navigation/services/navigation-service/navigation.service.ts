@@ -3,7 +3,7 @@ import { ApiService } from '@shared/services/api-service';
 import { NavigationInfo, NavigationPlacement } from './navigation.types';
 
 class NavigationService {
-	private baseUrl = 'navigations/elements';
+	private baseUrl = 'admin/navigations';
 
 	public async getAll(): Promise<Record<NavigationPlacement, NavigationInfo[]>> {
 		const response: Record<NavigationPlacement, NavigationInfo[]> = await ApiService.getApi()
