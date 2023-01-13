@@ -1,12 +1,13 @@
 import {
+	ROUTE_PARTS as ADMIN_CORE_ROUTE_PARTS,
 	AdminConfig,
 	AdminConfigManager,
-	AvoOrHetArchief,
 	CommonUser,
 	ContentBlockType,
 	LinkInfo,
 	ToastInfo,
-} from '@meemoo/react-admin';
+} from '@meemoo/admin-core-ui';
+import { DatabaseType } from '@viaa/avo2-types';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,10 +15,8 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { PermissionsService, UserGroupsService } from '@admin/services';
 import { selectUser } from '@auth/store/user';
-import { navigationService } from '@navigation/services/navigation-service';
-import { Icon, IconName, IconProps, sortingIcons } from '@shared/components';
+import { Icon, IconName, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -30,10 +29,13 @@ const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
+
 	return (
-		<Link href={to} passHref>
-			<a {...rest} />
-		</Link>
+		to && (
+			<Link href={to} passHref>
+				<a {...rest} />
+			</Link>
+		)
 	);
 };
 
@@ -78,14 +80,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 			};
 
 			const config: AdminConfig = {
-				navigation: {
-					service: navigationService,
-					views: {
-						overview: {
-							labels: { tableHeads: {} },
-						},
-					},
-				},
 				staticPages: [
 					'/',
 					'/404',
@@ -125,7 +119,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				navigationBars: { enableIcons: false },
 				icon: {
-					component: ({ name }: { name: IconName }) => <Icon name={name} />,
+					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
 					componentProps: {
 						add: { name: 'plus' },
 						view: { name: 'show' },
@@ -139,7 +133,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						arrowUp: { name: 'arrow-up' },
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
-					} as Record<string, IconProps>,
+					},
 					list: [],
 				},
 				components: {
@@ -206,23 +200,20 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						useHistory: () => ({
 							push: router.push,
 							replace: router.replace,
-						}), //useRouter,
-						useParams: () => {
-							return router.query as Record<string, string>;
-						},
+						}),
 					},
 					queryCache: {
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						clear: async (_key: string) => Promise.resolve(),
 					},
-					UserGroupsService,
-					PermissionsService,
-					assetService: AssetsService,
+					assetService: {
+						uploadFile: AssetsService.uploadFile,
+						deleteFile: AssetsService.deleteFile,
+					},
+					getContentPageByPathEndpoint: `${publicRuntimeConfig.PROXY_URL}/content-pages`,
 				},
 				database: {
-					databaseApplicationType: AvoOrHetArchief.hetArchief,
-					graphqlUrl: publicRuntimeConfig.GRAPHQL_URL,
-					graphqlSecret: '',
+					databaseApplicationType: DatabaseType.hetArchief,
 					proxyUrl: publicRuntimeConfig.PROXY_URL,
 				},
 				flowplayer: {
@@ -235,6 +226,9 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					},
 				},
 				user: commonUser,
+				content_blocks: {},
+				route_parts: ADMIN_CORE_ROUTE_PARTS,
+				env: {},
 			};
 			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
