@@ -67,6 +67,9 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 		longer: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
 		),
+		exact: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___exact'
+		),
 	};
 
 	return {
@@ -88,6 +91,14 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			[Operator.Between]: {
 				label: dictionary.between,
 				field: DateRangeInput,
+				filters: [
+					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.GTE },
+					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.LTE },
+				],
+			},
+			[Operator.Equals]: {
+				label: dictionary.exact,
+				field: DateInput,
 				filters: [
 					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.GTE },
 					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.LTE },

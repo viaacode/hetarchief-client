@@ -14,8 +14,15 @@ import styles from './DateInput.module.scss';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { maxDate, ...rest } = historicDatepicker;
 
-const DateInput: FC<DatepickerProps> = (props) => (
+interface DateInputProps extends DatepickerProps {
+	label?: string;
+}
+
+const DateInput: FC<DateInputProps> = (props) => (
 	<div className={styles['c-date-input']}>
+		<div className={styles['c-date-input__label']}>
+			<b>{props.label}</b>
+		</div>
 		<Datepicker
 			{...rest}
 			{...props}
