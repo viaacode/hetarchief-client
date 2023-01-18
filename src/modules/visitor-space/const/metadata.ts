@@ -421,6 +421,14 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 					},
 				],
 			},
+			[Operator.Equals]: {
+				label: dictionary.exact,
+				field: DateInput,
+				filters: [
+					{ field: MediaSearchFilterField.PUBLISHED, operator: MediaSearchOperator.GTE },
+					{ field: MediaSearchFilterField.PUBLISHED, operator: MediaSearchOperator.LTE },
+				],
+			},
 		},
 		[MetadataProp.Publisher]: {
 			[Operator.Contains]: {

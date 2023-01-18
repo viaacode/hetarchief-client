@@ -30,8 +30,6 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 		let startOfYear = asDate(`01/01/${yearFrom}`)?.valueOf();
 		let endOfYear = endOfDay(asDate(`12/31/${yearTo}`) || 0).valueOf();
 
-		console.log(type);
-
 		switch (type) {
 			case 'from':
 				setYearFrom(yearString);
