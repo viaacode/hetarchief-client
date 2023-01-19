@@ -1,0 +1,11 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-metadatadescription";
+
+.#{$component} {
+	padding: $spacer-lg;
+
+	&__title {
+		padding-bottom: $spacer-lg;
+	}
+}

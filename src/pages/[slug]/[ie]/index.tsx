@@ -49,9 +49,9 @@ import {
 	Loading,
 	ScrollableTabs,
 	TabLabel,
-	TextWithNewLines,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { MetaDataDescription } from '@shared/components/MetaDataDescription';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -556,9 +556,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					>
 						{mediaInfo?.name}
 					</h3>
-					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
-						<TextWithNewLines text={mediaInfo?.description} />
-					</p>
+
+					<MetaDataDescription description={mediaInfo?.description || ''} />
 
 					<div className="u-pb-24 p-object-detail__actions">
 						{canDownloadMetadata && (
