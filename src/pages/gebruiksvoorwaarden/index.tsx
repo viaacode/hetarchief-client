@@ -1,4 +1,4 @@
-import { ContentPage } from '@meemoo/react-admin';
+import { AdminConfigManager, ContentPage } from '@meemoo/react-admin';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -101,10 +101,12 @@ const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 							onScroll={onContentScroll}
 							className="p-terms-of-service__content"
 						>
-							<ContentPage
-								path="/gebruikersvoorwaarden-tekst"
-								userGroupId={user?.groupId}
-							/>
+							{AdminConfigManager.getConfig() && (
+								<ContentPage
+									path="/gebruikersvoorwaarden-tekst"
+									userGroupId={user?.groupId}
+								/>
+							)}
 						</div>
 					</div>
 				</section>
