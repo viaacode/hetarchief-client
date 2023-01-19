@@ -15,7 +15,7 @@ import { ComponentType, FunctionComponent, useCallback, useEffect, useState } fr
 import { useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
-import { Icon, IconName, sortingIcons } from '@shared/components';
+import { Icon, ICON_LIST_CONFIG, IconName, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -116,7 +116,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					defaultPageWidth: 'LARGE',
 					onSaveContentPage,
 				},
-				navigationBars: { enableIcons: false },
+				navigationBars: { enableIcons: true },
 				icon: {
 					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
 					componentProps: {
@@ -133,7 +133,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
 					},
-					list: () => [],
+					list: () => ICON_LIST_CONFIG,
 				},
 				components: {
 					loader: {
