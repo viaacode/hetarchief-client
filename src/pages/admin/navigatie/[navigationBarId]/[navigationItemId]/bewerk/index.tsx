@@ -1,4 +1,4 @@
-import { NavigationEdit } from '@meemoo/react-admin';
+import { NavigationEdit } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';

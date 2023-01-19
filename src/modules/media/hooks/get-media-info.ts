@@ -1,5 +1,4 @@
-import { useQuery } from 'react-query';
-import { UseQueryResult } from 'react-query/types/react/types';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { MediaService } from '@media/services';
 import { Media } from '@media/types';

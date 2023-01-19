@@ -1,4 +1,4 @@
-import { NavigationOverview } from '@meemoo/react-admin';
+import { NavigationOverview } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, FC } from 'react';

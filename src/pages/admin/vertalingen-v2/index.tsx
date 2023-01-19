@@ -1,4 +1,4 @@
-import { TranslationsOverviewV2 } from '@meemoo/react-admin';
+import { TranslationsOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult } from 'next';
@@ -75,7 +75,7 @@ const AdminTranslationsOverviewV2: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout pageTitle={tText('pages/admin/vertalingen/index___vertalingen')}>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-vertalingen">
-						<TranslationsOverviewV2
+						<TranslationsOverview
 							className={styles['c-translations-overview']}
 							renderPopup={renderPopup}
 						/>

@@ -1,6 +1,5 @@
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import ky from 'ky-universal';
-import { useQuery } from 'react-query';
-import { UseQueryResult } from 'react-query/types/react/types';
 
 import { MediaService } from '@media/services';
 import { QUERY_KEYS } from '@shared/const';
