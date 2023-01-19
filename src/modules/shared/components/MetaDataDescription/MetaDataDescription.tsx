@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 
+import useTranslation from '@shared/hooks/use-translation/use-translation';
+
 import { Blade } from '../Blade';
 import { TextWithNewLines } from '../TextWithNewLines';
 
@@ -11,6 +13,7 @@ interface MetaDataDescriptionProps {
 }
 
 const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
+	const { tText } = useTranslation();
 	const maxLength = 500;
 	const isDescriptionLong = description.length > maxLength;
 	const shortenedDescription = description.substring(0, maxLength);
@@ -22,7 +25,7 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 				<TextWithNewLines text={isDescriptionLong ? shortenedDescription : description} />
 				{isDescriptionLong && (
 					<u style={{ cursor: 'pointer' }} onClick={() => setIsBladeOpen(true)}>
-						Lees meer...
+						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
 					</u>
 				)}
 			</p>
@@ -34,7 +37,9 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 				isOpen={isBladeOpen}
 				onClose={() => setIsBladeOpen(false)}
 				renderTitle={() => (
-					<h3 className={styles['c-metadatadescription__title']}>Beschrijving</h3>
+					<h3 className={styles['c-metadatadescription__title']}>
+						{tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
+					</h3>
 				)}
 			>
 				{description}

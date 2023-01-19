@@ -1,4 +1,4 @@
-import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
+import { Alert, Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
@@ -592,7 +592,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							onClickAction={onClickAction}
 						/>
 					</div>
+					{!mediaInfo?.description && (
+						<Alert
+							className="c-Alert__margin-bottom"
+							icon={<Icon name="info" />}
+							title={''}
+							content={tHtml(
+								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
+							)}
+						/>
+					)}
 				</div>
+
 				{mediaInfo && (
 					<>
 						<Metadata
