@@ -1,6 +1,5 @@
 import { OrderDirection } from '@meemoo/react-components';
-import { useQuery } from 'react-query';
-import { UseQueryResult } from 'react-query/types/react/types';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { ApiResponseWrapper } from '@shared/types/api';

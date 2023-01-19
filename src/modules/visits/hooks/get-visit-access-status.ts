@@ -1,4 +1,4 @@
-import { useMutation, UseMutationResult, useQuery, UseQueryResult } from 'react-query';
+import { useMutation, UseMutationResult, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const';
 import { VisitAccessStatus } from '@shared/types';
