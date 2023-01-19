@@ -1,4 +1,4 @@
-import { ContentPageOverview } from '@meemoo/react-admin';
+import { ContentPageOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import { GetServerSidePropsResult } from 'next';
 import Link from 'next/link';

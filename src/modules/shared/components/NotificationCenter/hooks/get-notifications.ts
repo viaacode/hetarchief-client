@@ -1,4 +1,4 @@
-import { useInfiniteQuery, UseInfiniteQueryResult } from 'react-query';
+import { useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
@@ -9,7 +9,7 @@ export function useGetNotifications(
 	enabled: boolean
 ): UseInfiniteQueryResult<ApiResponseWrapper<Notification>> {
 	return useInfiniteQuery(
-		QUERY_KEYS.getNotifications,
+		[QUERY_KEYS.getNotifications],
 		({ pageParam = 1 }) => NotificationsService.getNotifications(pageParam, 20),
 		{
 			getNextPageParam: (lastPage) => lastPage.page + 1,

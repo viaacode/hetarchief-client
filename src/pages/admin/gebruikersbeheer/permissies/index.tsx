@@ -1,4 +1,4 @@
-import { UserGroupOverview } from '@meemoo/react-admin';
+import { UserGroupOverview } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult } from 'next';
@@ -58,7 +58,7 @@ const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			<UserGroupOverview
 				className="p-admin-permissions u-mb-40"
 				ref={permissionsRef}
-				onChangePermissions={(value) => setHasChanges(value)}
+				onChangePermissions={(value: boolean) => setHasChanges(value)}
 				renderSearchButtons={renderSearchButtons}
 			/>
 		</>
