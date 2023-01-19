@@ -1,5 +1,4 @@
 import {
-	ROUTE_PARTS as ADMIN_CORE_ROUTE_PARTS,
 	AdminConfig,
 	AdminConfigManager,
 	CommonUser,
@@ -18,7 +17,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '@auth/store/user';
 import { Icon, IconName, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
-import { ROUTE_PARTS } from '@shared/const';
+import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
@@ -134,7 +133,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
 					},
-					list: [],
+					list: () => [],
 				},
 				components: {
 					loader: {
@@ -210,7 +209,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						uploadFile: AssetsService.uploadFile,
 						deleteFile: AssetsService.deleteFile,
 					},
-					getContentPageByPathEndpoint: `${publicRuntimeConfig.PROXY_URL}/content-pages`,
+					getContentPageByPathEndpoint: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages`,
 				},
 				database: {
 					databaseApplicationType: DatabaseType.hetArchief,
@@ -227,7 +226,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				user: commonUser,
 				content_blocks: {},
-				route_parts: ADMIN_CORE_ROUTE_PARTS,
+				routes: ADMIN_CORE_ROUTES as any, // TODO: remove any when the routes record becomes a partial in admin-core
 				env: {},
 			};
 			AdminConfigManager.setConfig(config);
