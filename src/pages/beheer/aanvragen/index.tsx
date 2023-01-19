@@ -14,7 +14,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 import VisitRequestsOverview from '@visits/components/VisitRequestsOverview/VisitRequestsOverview';
 
 const CPRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
-	const { tHtml, tText } = useTranslation();
+	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
 		return (
