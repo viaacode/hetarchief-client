@@ -10,7 +10,6 @@ export class NavigationService {
 			.get(this.baseUrl)
 			.json();
 
-		console.log('getting navigation items', response);
 		return response ?? {};
 	}
 }
