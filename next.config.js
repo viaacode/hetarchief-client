@@ -7,7 +7,7 @@
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
 const withTM = require('next-transpile-modules')([
-	'@meemoo/react-admin',
+	'@meemoo/admin-core-ui',
 	'@viaa/avo2-components',
 	'ky-universal',
 ]);
