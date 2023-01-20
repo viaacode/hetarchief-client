@@ -117,7 +117,7 @@ export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
 		value: v,
 		label: tText(`modules/admin/icons/${v}`),
 	}));
-	const solidIcons = Object.values(IconNamesLight).map((v: IconNamesLight) => ({
+	const solidIcons = Object.values(IconNamesSolid).map((v: IconNamesSolid) => ({
 		value: v,
 		label: tText(`modules/admin/icons/${v}`),
 	}));
