@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 
 import RelatedObjectsBlade from './RelatedObjectsBlade';
 import { relatedObjectsBladeMock } from './__mocks__/related-objects-blade';
@@ -19,7 +19,7 @@ describe('Components', () => {
 		});
 
 		it('Should render icon', () => {
-			const icon = <Icon name="related-objects" />;
+			const icon = <Icon name={IconNamesLight.RelatedObjects} />;
 			const { getByText } = renderRelatedObjectsBlade({ icon });
 
 			const iconNode = getByText('related-objects');

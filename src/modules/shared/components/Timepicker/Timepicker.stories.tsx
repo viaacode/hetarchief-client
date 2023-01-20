@@ -2,7 +2,7 @@ import { futureTimepicker, TextInput, timepicker } from '@meemoo/react-component
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 import Timepicker from './Timepicker';
 
@@ -30,5 +30,5 @@ Future.args = {
 export const WithInput = Template.bind({});
 WithInput.args = {
 	...futureTimepicker,
-	customInput: <TextInput iconStart={<Icon name="clock" />} />,
+	customInput: <TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />,
 };

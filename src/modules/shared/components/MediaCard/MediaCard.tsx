@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 
-import { DropdownMenu } from '@shared/components';
+import { DropdownMenu, IconNamesLight } from '@shared/components';
 import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
 import { MediaTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
@@ -121,7 +121,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const renderTags = () => {
-		return hasRelated && <Badge variants="small" text={<Icon name="link" />} />;
+		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
 	};
 
 	const renderImage = (imgPath: string | undefined) =>

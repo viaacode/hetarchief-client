@@ -24,6 +24,7 @@ import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	Icon,
+	IconNamesLight,
 	IdentifiableMediaCard,
 	ListNavigationItem,
 	MediaCardList,
@@ -91,7 +92,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 								{folder.name}
 								<Icon
 									className="u-font-size-24 u-text-left"
-									name="angle-right"
+									name={IconNamesLight.AngleRight}
 									aria-hidden
 								/>
 							</a>
@@ -237,7 +238,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
-									iconStart={<Icon name="export" aria-hidden />}
+									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
 									onClick={(e) => {
 										e.stopPropagation();
 										onExportClick();
@@ -255,7 +256,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 									name={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
-									icon={<Icon name="export" aria-hidden />}
+									icon={<Icon name={IconNamesLight.Export} aria-hidden />}
 									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
@@ -277,7 +278,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 									key={'delete-folder'}
 									className="p-account-my-folders__delete"
 									variants={['silver']}
-									icon={<Icon name="trash" aria-hidden />}
+									icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
 									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
 									)}

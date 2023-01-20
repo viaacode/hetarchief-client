@@ -133,7 +133,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
 					},
-					list: () => ICON_LIST_CONFIG,
+					list: ICON_LIST_CONFIG,
 				},
 				components: {
 					loader: {

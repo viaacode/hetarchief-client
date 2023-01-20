@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 const tags = [
 	{
@@ -44,7 +44,7 @@ Default.args = {
 export const Closable = Template.bind({});
 Closable.args = {
 	tags: tags,
-	closeIcon: <Icon name="times" />,
+	closeIcon: <Icon name={IconNamesLight.Times} />,
 	onTagClosed: action('Closed tag'),
 	variants: ['closable'],
 };

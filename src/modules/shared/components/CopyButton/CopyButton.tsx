@@ -5,7 +5,7 @@ import { FC, MouseEvent, useCallback } from 'react';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (props) => {
 	const { tHtml, tText } = useTranslation();
@@ -37,7 +37,7 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 
 	return (
 		<Button
-			icon={<Icon name="copy" aria-hidden />}
+			icon={<Icon name={IconNamesLight.Copy} aria-hidden />}
 			aria-label={tText(
 				'modules/shared/components/copy-button/copy-button___kopieer-naar-klembord'
 			)}

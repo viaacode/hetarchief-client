@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 export default {
 	title: 'Components/Button',
@@ -89,32 +89,32 @@ SizeSmall.args = {
 export const TextWithIconLeft = Template.bind({});
 TextWithIconLeft.args = {
 	children: 'Click me!',
-	iconStart: <Icon name="info" />,
+	iconStart: <Icon name={IconNamesLight.Info} />,
 };
 
 export const TextWithIconRight = Template.bind({});
 TextWithIconRight.args = {
 	children: 'Click me!',
-	iconEnd: <Icon name="info" />,
+	iconEnd: <Icon name={IconNamesLight.Info} />,
 };
 
 export const IconOnly = Template.bind({});
 IconOnly.args = {
-	icon: <Icon name="info" />,
+	icon: <Icon name={IconNamesLight.Info} />,
 	title: 'Info',
 	variants: 'black',
 };
 
 export const IconOnlySmall = Template.bind({});
 IconOnlySmall.args = {
-	icon: <Icon name="info" />,
+	icon: <Icon name={IconNamesLight.Info} />,
 	title: 'Info',
 	variants: ['sm', 'black'],
 };
 
 export const IconOnlyExtraSmall = Template.bind({});
 IconOnlyExtraSmall.args = {
-	icon: <Icon name="info" />,
+	icon: <Icon name={IconNamesLight.Info} />,
 	title: 'Info',
 	variants: ['xs', 'black'],
 };

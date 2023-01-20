@@ -1,25 +1,32 @@
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { ICON_LIGHT, ICON_SOLID } from './Icon.const';
 import styles from './Icon.module.scss';
-import { IconLightNames, IconProps, IconSolidNames } from './Icon.types';
+import { IconProps } from './Icon.types';
 
-const Icon: FC<IconProps> = ({ className, name, type = 'light', ...rest }) => {
+const Icon: FC<IconProps> = ({ className, name, ...rest }) => {
+	const [iconName, type] = name.split('--');
+
 	const rootCls = clsx(className, styles['c-icon'], {
 		[styles['c-icon--solid']]: type === 'solid',
 	});
 
-	const hasIcon =
-		type === 'light'
-			? ICON_LIGHT.includes(name as IconLightNames)
-			: ICON_SOLID.includes(name as IconSolidNames);
+	// const hasIcon =
+	// 	type === 'light'
+	// 		? ICON_LIGHT.includes(name as IconNamesLight)
+	// 		: ICON_SOLID.includes(name as IconNamesLight);
 
-	return hasIcon ? (
+	// return true ? (
+	// 	<span className={rootCls} {...rest}>
+	// 		{name}
+	// 	</span>
+	// ) : null;
+
+	return (
 		<span className={rootCls} {...rest}>
-			{name}
+			{iconName}
 		</span>
-	) : null;
+	);
 };
 
 export default Icon;

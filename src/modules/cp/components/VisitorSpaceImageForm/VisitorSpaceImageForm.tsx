@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { CardImage, Icon } from '@shared/components';
+import { CardImage, Icon, IconNamesLight } from '@shared/components';
 import FileInput from '@shared/components/FileInput/FileInput';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DEFAULT_VISITOR_SPACE_COLOR } from '@visitor-space/const';
@@ -223,7 +223,7 @@ const VisitorSpaceImageForm = forwardRef<
 						label={tHtml(
 							'modules/cp/components/visitor-space-image-form/visitor-space-image-form___verwijder-afbeelding'
 						)}
-						iconStart={<Icon name="trash" />}
+						iconStart={<Icon name={IconNamesLight.Trash} />}
 						variants="text"
 						onClick={async () => {
 							setValue('image', '');
