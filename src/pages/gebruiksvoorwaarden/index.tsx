@@ -1,4 +1,4 @@
-import { ContentPage } from '@meemoo/react-admin';
+import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -23,6 +23,8 @@ import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
+import { useGetContentPageByPath } from '../../modules/content-page/hooks/get-content-page';
+
 const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 	useStickyLayout();
 	useHideFooter();
@@ -36,6 +38,7 @@ const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
+	const { data: contentPageInfo } = useGetContentPageByPath('/gebruikersvoorwaarden-tekst');
 
 	const user = useSelector(selectUser);
 
@@ -101,10 +104,7 @@ const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 							onScroll={onContentScroll}
 							className="p-terms-of-service__content"
 						>
-							<ContentPage
-								path="/gebruikersvoorwaarden-tekst"
-								userGroupId={user?.groupId}
-							/>
+							<ContentPageRenderer contentPageInfo={contentPageInfo} />
 						</div>
 					</div>
 				</section>

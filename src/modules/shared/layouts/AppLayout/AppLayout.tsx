@@ -1,7 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo } from 'react';
-import { useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 

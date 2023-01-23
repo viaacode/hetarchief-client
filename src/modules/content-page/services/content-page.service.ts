@@ -5,15 +5,15 @@ import { ContentPageExistsInfo } from './content-page.service.types';
 
 export class ContentPageService {
 	public static async getBySlug(
-		slug?: string | null,
+		path?: string | null,
 		ignoreAuthError = false
 	): Promise<ContentPageExistsInfo | null> {
-		if (!slug) {
+		if (!path) {
 			return null;
 		}
 
 		return await ApiService.getApi(ignoreAuthError)
-			.get(`${CONTENT_PAGE_SERVICE_BASE_URL}/path-exist?path=${slug}`)
+			.get(`${CONTENT_PAGE_SERVICE_BASE_URL}/path-exist?path=${path}`)
 			.json();
 	}
 }

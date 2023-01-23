@@ -1,12 +1,13 @@
 import {
 	AdminConfig,
 	AdminConfigManager,
-	AvoOrHetArchief,
 	CommonUser,
 	ContentBlockType,
 	LinkInfo,
+	ROUTE_PARTS as ROUTE_PARTS_ADMIN_CORE,
 	ToastInfo,
-} from '@meemoo/react-admin';
+} from '@meemoo/admin-core-ui';
+import { DatabaseType } from '@viaa/avo2-types/types/core/enums';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,10 +15,8 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { PermissionsService, UserGroupsService } from '@admin/services';
 import { selectUser } from '@auth/store/user';
-import { navigationService } from '@navigation/services/navigation-service';
-import { Icon, IconName, IconProps, sortingIcons } from '@shared/components';
+import { Icon, IconName, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -31,7 +30,7 @@ const { publicRuntimeConfig } = getConfig();
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
 	return (
-		<Link href={to} passHref>
+		<Link href={to as string} passHref>
 			<a {...rest} />
 		</Link>
 	);
@@ -75,17 +74,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				// last_access_at: user.lastAccessAt, // TODO enable once last_access_at field is added to the database
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				permissions: user?.permissions as any[],
+				tempAccess: null,
 			};
 
 			const config: AdminConfig = {
-				navigation: {
-					service: navigationService,
-					views: {
-						overview: {
-							labels: { tableHeads: {} },
-						},
-					},
-				},
 				staticPages: [
 					'/',
 					'/404',
@@ -125,7 +117,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				navigationBars: { enableIcons: false },
 				icon: {
-					component: ({ name }: { name: IconName }) => <Icon name={name} />,
+					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
 					componentProps: {
 						add: { name: 'plus' },
 						view: { name: 'show' },
@@ -139,7 +131,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						arrowUp: { name: 'arrow-up' },
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
-					} as Record<string, IconProps>,
+					},
 					list: [],
 				},
 				components: {
@@ -186,6 +178,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						},
 					],
 				},
+				content_blocks: {},
 				services: {
 					toastService: {
 						showToast: (toastInfo: ToastInfo) => {
@@ -195,6 +188,9 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							});
 						},
 					},
+					// Use the default endpoint of the admin-core-api: ${proxyUrl}/admin/content-pages
+					// https://app.diagrams.net/#G1WCrp76U14pGpajEplYlSVGiuWfEQpRqI
+					getContentPageByPathEndpoint: null,
 					i18n: { tHtml, tText },
 					educationOrganisationService: {
 						fetchEducationOrganisationName: () => Promise.resolve(null),
@@ -207,22 +203,15 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							push: router.push,
 							replace: router.replace,
 						}), //useRouter,
-						useParams: () => {
-							return router.query as Record<string, string>;
-						},
 					},
 					queryCache: {
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						clear: async (_key: string) => Promise.resolve(),
 					},
-					UserGroupsService,
-					PermissionsService,
 					assetService: AssetsService,
 				},
 				database: {
-					databaseApplicationType: AvoOrHetArchief.hetArchief,
-					graphqlUrl: publicRuntimeConfig.GRAPHQL_URL,
-					graphqlSecret: '',
+					databaseApplicationType: DatabaseType.hetArchief,
 					proxyUrl: publicRuntimeConfig.PROXY_URL,
 				},
 				flowplayer: {
@@ -235,6 +224,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					},
 				},
 				user: commonUser,
+				route_parts: ROUTE_PARTS_ADMIN_CORE,
+				env: {
+					LDAP_DASHBOARD_PEOPLE_URL: '',
+				},
 			};
 			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
