@@ -1,3 +1,5 @@
+import { stringifyUrl } from 'query-string';
+
 import { ApiService } from '@shared/services/api-service';
 
 import { CONTENT_PAGE_SERVICE_BASE_URL } from './content-page.service.const';
@@ -12,8 +14,13 @@ export class ContentPageService {
 			return null;
 		}
 
-		return await ApiService.getApi(ignoreAuthError)
-			.get(`${CONTENT_PAGE_SERVICE_BASE_URL}/path-exist?path=${slug}`)
-			.json();
+		const url = stringifyUrl({
+			url: `${CONTENT_PAGE_SERVICE_BASE_URL}/path-exists`,
+			query: {
+				path: slug,
+			},
+		});
+
+		return await ApiService.getApi(ignoreAuthError).get(url).json();
 	}
 }
