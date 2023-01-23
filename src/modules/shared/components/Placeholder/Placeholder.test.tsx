@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { IconTypes } from '../Icon';
+import { IconNamesLight, IconNamesSolid, IconTypes } from '../Icon';
 
 import Placeholder from './Placeholder';
 
@@ -12,13 +12,13 @@ const props = {
 describe('Components', () => {
 	describe('<Placeholder />', () => {
 		it('Should display an icon', () => {
-			const iconName = 'search';
+			const iconName = IconNamesLight.Search;
 			const { rerender, queryByText } = render(<Placeholder icon={iconName} {...props} />);
 
 			const icon1 = queryByText(iconName);
 			expect(icon1).toBeInTheDocument();
 
-			const iconObj = { name: 'lock', type: 'solid' } as IconTypes;
+			const iconObj = { name: IconNamesSolid.Lock } as IconTypes;
 			rerender(<Placeholder icon={iconObj} {...props} />);
 
 			const icon2 = queryByText(iconObj.name);

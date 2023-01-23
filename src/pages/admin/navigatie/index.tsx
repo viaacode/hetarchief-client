@@ -18,7 +18,7 @@ const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout pageTitle={tText('pages/admin/navigatie/index___navigatie')}>
+			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-navigation">
 						<NavigationOverview />

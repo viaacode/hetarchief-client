@@ -22,7 +22,7 @@ import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 
 import { Permission } from '@account/const';
-import { Blade, Icon, VisitSummary } from '@shared/components';
+import { Blade, Icon, IconNamesLight, VisitSummary } from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
@@ -308,7 +308,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<>
 					<Datepicker
 						{...futureDatepickerProps}
-						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+						customInput={
+							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
+						}
 						id={labelKeys.accessFrom}
 						name={field.name}
 						onBlur={field.onBlur}
@@ -320,7 +322,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 					<Timepicker
 						{...timepicker}
-						customInput={<TextInput iconStart={<Icon name="clock" />} />}
+						customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />}
 						id={labelKeys.accessFrom}
 						maxTime={endOfDay(field.value || now)}
 						minTime={startOfDay(field.value || now)}
@@ -353,7 +355,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<>
 					<Datepicker
 						{...futureDatepickerProps}
-						customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+						customInput={
+							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
+						}
 						id={labelKeys.accessTo}
 						minDate={accessFrom}
 						name={field.name}
@@ -366,7 +370,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 					<Timepicker
 						{...timepicker}
-						customInput={<TextInput iconStart={<Icon name="clock" />} />}
+						customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />}
 						id={labelKeys.accessTo}
 						maxTime={endOfDay(field.value || now)}
 						minTime={startOfDay(field.value || now)}

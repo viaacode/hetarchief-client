@@ -2,7 +2,7 @@ import { futureDatepicker, historicDatepicker, TextInput } from '@meemoo/react-c
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { useState } from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 import Datepicker from './Datepicker';
 
@@ -30,5 +30,5 @@ Historic.args = {
 export const WithInput = Template.bind({});
 WithInput.args = {
 	...futureDatepicker,
-	customInput: <TextInput iconStart={<Icon name="calendar" />} />,
+	customInput: <TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />,
 };

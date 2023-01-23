@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import React from 'react';
 import { Column } from 'react-table';
 
-import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
+import { CopyButton, Icon, IconNamesLight, RequestStatusBadge } from '@shared/components';
 import { tText } from '@shared/helpers/translate';
 import { Visit, VisitRow } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
@@ -65,7 +65,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 			return (
 				<Button
 					className="p-cp-requests__actions"
-					icon={<Icon name="dots-vertical" aria-hidden />}
+					icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
 					aria-label={tText('modules/admin/const/requests___meer-acties')}
 					variants={['xxs', 'text']}
 				/>

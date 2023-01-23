@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { VisitorSpaceSort } from '../../../types';
@@ -66,7 +66,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		return (
 			<FilterButton
 				key={`filter-menu-mobile-btn-${id}`}
-				icon={filterIsActive ? 'angle-left' : icon ?? 'angle-right'}
+				icon={filterIsActive ? IconNamesLight.AngleLeft : icon ?? IconNamesLight.AngleRight}
 				isActive={filterIsActive}
 				label={label}
 				onClick={() => onFilterClick(id)}
@@ -89,7 +89,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						<Button
 							key="filter-menu-mobile-nav-close"
 							className={styles['c-filter-menu-mobile__back']}
-							iconStart={<Icon className="u-text-left" name="arrow-left" />}
+							iconStart={
+								<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} />
+							}
 							label={tHtml(
 								'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten'
 							)}
@@ -107,7 +109,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 
 						<TagList
 							className={clsx(styles['c-filter-menu-mobile__tags'], 'u-mb-0')}
-							closeIcon={<Icon className="u-text-left" name="times" />}
+							closeIcon={<Icon className="u-text-left" name={IconNamesLight.Times} />}
 							onTagClosed={(id) =>
 								onRemoveValue?.(tags.filter((tag) => tag.id !== id))
 							}
@@ -121,8 +123,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 							<FilterButton
 								icon={
 									activeSort?.orderDirection === OrderDirection.desc
-										? 'sort-down'
-										: 'sort-up'
+										? IconNamesLight.SortDown
+										: IconNamesLight.SortUp
 								}
 								isActive={isSortActive}
 								label={activeSortLabel}
@@ -143,7 +145,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 						<Button
 							key="filter-menu-mobile-nav-filter"
 							className={styles['c-filter-menu-mobile__back']}
-							iconStart={<Icon className="u-text-left" name="arrow-left" />}
+							iconStart={
+								<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} />
+							}
 							label={tHtml(
 								'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
 							)}

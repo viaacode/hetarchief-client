@@ -7,7 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { foldersService } from '@account/services/folders';
 import { CreateFolderFormState } from '@account/types';
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
@@ -104,7 +104,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 									tabIndex={-1}
 									variants={['platinum', 'sm']}
 									onClick={handler}
-									icon={<Icon name="plus" aria-hidden />}
+									icon={<Icon name={IconNamesLight.Plus} aria-hidden />}
 									aria-label={tText(
 										'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken'
 									)}
@@ -118,7 +118,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 							<Button
 								tabIndex={-1}
 								variants={['black', 'sm']}
-								icon={<Icon name="check" aria-hidden />}
+								icon={<Icon name={IconNamesLight.Check} aria-hidden />}
 								aria-label={tText(
 									'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-opslaan'
 								)}
@@ -128,7 +128,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 							<Button
 								tabIndex={-1}
 								variants={['silver', 'sm']}
-								icon={<Icon name="times" aria-hidden />}
+								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 								aria-label={tText(
 									'modules/account/components/create-collection-button/create-collection-button___nieuwe-map-aanmaken-annuleren'
 								)}

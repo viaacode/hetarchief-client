@@ -12,7 +12,7 @@ import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -75,7 +75,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 										>
 											<Button
 												className="u-p-0"
-												iconStart={<Icon name="edit" />}
+												iconStart={<Icon name={IconNamesLight.Edit} />}
 												label={tHtml(
 													'pages/account/mijn-profiel/index___wijzig-mijn-gegevens'
 												)}

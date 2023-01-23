@@ -1,15 +1,15 @@
 import { MediaTypes } from '@shared/types';
 
-import { IconName } from '../Icon';
+import { IconName, IconNamesLight } from '../Icon';
 
-export const TYPE_TO_NO_ICON_MAP: Record<Exclude<MediaTypes, null>, 'no-audio' | 'no-video'> = {
-	audio: 'no-audio',
-	video: 'no-video',
-	film: 'no-video',
+export const TYPE_TO_NO_ICON_MAP: Record<Exclude<MediaTypes, null>, IconName> = {
+	audio: IconNamesLight.NoAudio,
+	video: IconNamesLight.NoVideo,
+	film: IconNamesLight.NoVideo,
 };
 
 export const TYPE_TO_ICON_MAP: Record<Exclude<MediaTypes, null>, IconName> = {
-	audio: 'audio',
-	video: 'video',
-	film: 'video',
+	audio: IconNamesLight.Audio,
+	video: IconNamesLight.Video,
+	film: IconNamesLight.Video,
 };

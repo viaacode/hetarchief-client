@@ -8,7 +8,7 @@ import {
 	mapBooleanToMetadataData,
 	mapObjectToMetadata,
 } from '@media/utils';
-import { Icon, TextWithNewLines } from '@shared/components';
+import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/components';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { MediaTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
@@ -96,20 +96,30 @@ const renderMediaTab = (mediaType?: MediaTypes, available = true) => {
 			return {
 				id: ObjectDetailTabs.Media,
 				label: tText('modules/media/const/index___audio'),
-				icon: <Icon name={available ? 'audio' : 'no-audio'} aria-hidden />,
+				icon: (
+					<Icon
+						name={available ? IconNamesLight.Audio : IconNamesLight.NoAudio}
+						aria-hidden
+					/>
+				),
 			};
 		case 'video':
 		case 'film':
 			return {
 				id: ObjectDetailTabs.Media,
 				label: tText('modules/media/const/index___video'),
-				icon: <Icon name={available ? 'video' : 'no-video'} aria-hidden />,
+				icon: (
+					<Icon
+						name={available ? IconNamesLight.Video : IconNamesLight.NoVideo}
+						aria-hidden
+					/>
+				),
 			};
 		default:
 			return {
 				id: ObjectDetailTabs.Media,
 				label: tText('modules/media/const/index___video'),
-				icon: <Icon name="no-video" aria-hidden />,
+				icon: <Icon name={IconNamesLight.NoVideo} aria-hidden />,
 			};
 	}
 };
@@ -118,7 +128,7 @@ export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes, available = true): Ta
 	{
 		id: ObjectDetailTabs.Metadata,
 		label: tText('modules/media/const/index___metadata'),
-		icon: <Icon name="info" aria-hidden />,
+		icon: <Icon name={IconNamesLight.Info} aria-hidden />,
 	},
 	renderMediaTab(mediaType, available),
 ];
@@ -138,10 +148,11 @@ export const MEDIA_ACTIONS = (
 						label: tText('modules/media/const/index___bookmark'),
 						icon: (
 							<Icon
-								className="u-font-size-24 u-text-left"
-								name="bookmark"
-								type={isInAFolder ? 'solid' : 'light'}
 								aria-hidden
+								className="u-font-size-24 u-text-left"
+								name={
+									isInAFolder ? IconNamesSolid.Bookmark : IconNamesLight.Bookmark
+								}
 							/>
 						),
 						id: MediaActions.Bookmark,
