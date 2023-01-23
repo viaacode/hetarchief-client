@@ -2,6 +2,7 @@ import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType } from 'react';
 
+import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
@@ -34,7 +35,9 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 				url
 			)}
 
-			<PermissionsCheck allPermissions={[]}>{renderPageContent()}</PermissionsCheck>
+			<PermissionsCheck allPermissions={[Permission.VIEW_OWN_MATERIAL_REQUESTS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
