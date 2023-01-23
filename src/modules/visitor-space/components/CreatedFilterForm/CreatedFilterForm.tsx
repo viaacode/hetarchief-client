@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { endOfDay, startOfDay } from 'date-fns';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
@@ -113,6 +113,15 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 		return startOfYear;
 	};
 
+	const onChangeYear = (e: ChangeEvent<HTMLInputElement>) => {
+		const isNumberReg = new RegExp(/^\d+$/);
+		const isNumber = isNumberReg.test(e.target.value) || e.target.value === '';
+
+		if (isNumber && e.target.value.length < 5) {
+			setYear(e.target.value);
+		}
+	};
+
 	useEffect(() => {
 		if (year) {
 			const yearDate = convertYearToDate(year)?.toString();
@@ -213,11 +222,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 									label={getSelectValue(operators, form.operator)?.label}
 									disabled={disabled}
 									id={labelKeys.created}
-									onChange={(e) => {
-										if (e.target.value.length < 5) {
-											setYear(e.target.value);
-										}
-									}}
+									onChange={(e) => onChangeYear(e)}
 									value={year}
 								/>
 							) : (

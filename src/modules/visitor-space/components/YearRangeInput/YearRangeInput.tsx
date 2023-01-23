@@ -27,20 +27,27 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 	const onChange = (e: ChangeEvent<HTMLInputElement>, type: 'from' | 'to') => {
 		let value = `${from}${SEPARATOR}${to}`;
 		const yearString = e.target.value;
+		const isNumberReg = new RegExp(/^\d+$/);
+		const isNumber = isNumberReg.test(yearString) || yearString === '';
 		let startOfYear = asDate(`01/01/${yearFrom}`)?.valueOf();
 		let endOfYear = endOfDay(asDate(`12/31/${yearTo}`) || 0).valueOf();
 
 		switch (type) {
 			case 'from':
-				setYearFrom(yearString);
-				startOfYear = asDate(`01/01/${yearString}`)?.valueOf() || 0;
-				value = `${startOfYear}${SEPARATOR}${endOfYear}`;
+				if (isNumber && yearString.length < 5) {
+					setYearFrom(yearString);
+
+					startOfYear = asDate(`01/01/${yearString}`)?.valueOf() || 0;
+					value = `${startOfYear}${SEPARATOR}${endOfYear}`;
+				}
 				break;
 
 			case 'to':
-				setYearTo(yearString);
-				endOfYear = endOfDay(asDate(`12/31/${yearString}`) || 0).valueOf();
-				value = `${startOfYear}${SEPARATOR}${endOfYear}`;
+				if (isNumber && yearString.length < 5) {
+					setYearTo(yearString);
+					endOfYear = endOfDay(asDate(`12/31/${yearString}`) || 0).valueOf();
+					value = `${startOfYear}${SEPARATOR}${endOfYear}`;
+				}
 				break;
 
 			default:
@@ -64,6 +71,7 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 		<div className={styles['c-year-range-input']}>
 			<YearInput
 				{...props}
+				isYearInputRange
 				label={
 					props.showLabels
 						? tText(

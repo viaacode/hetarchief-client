@@ -13,7 +13,14 @@ $component: "c-year-input";
 		position: absolute;
 		color: $zinc;
 		margin: -3.4rem 0;
-		right: 5rem;
+		right: 10%;
+
+		&-wide {
+			position: absolute;
+			color: $zinc;
+			margin: -3.4rem 0;
+			right: 55%;
+		}
 
 		&-hidden {
 			display: none;
