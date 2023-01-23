@@ -1,4 +1,4 @@
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 
 import { Visit } from '@shared/types';
 import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
