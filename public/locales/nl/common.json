@@ -42,7 +42,7 @@
   "modules/admin/const/routing___gebruikers": "Gebruikers",
   "modules/admin/const/routing___gebruikersbeheer": "Gebruikersbeheer",
   "modules/admin/const/routing___groepen-en-permissies": "Groepen en permissies",
-  "modules/admin/const/routing___mijn-materiaalaanvragen": "",
+  "modules/admin/const/routing___mijn-materiaalaanvragen": "Mijn materiaalaanvragen",
   "modules/admin/const/routing___navigatie": "Navigatie",
   "modules/admin/const/routing___vertalingen-v-2": "Vertalingen v2",
   "modules/admin/const/spaces___aanpassen": "Aanpassen",
