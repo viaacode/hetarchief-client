@@ -7,3 +7,9 @@ export const TYPE_TO_NO_ICON_MAP: Record<Exclude<MediaTypes, null>, IconName> = 
 	video: IconNamesLight.NoVideo,
 	film: IconNamesLight.NoVideo,
 };
+
+export const TYPE_TO_ICON_MAP: Record<Exclude<MediaTypes, null>, IconName> = {
+	audio: IconNamesLight.Audio,
+	video: IconNamesLight.Video,
+	film: IconNamesLight.Video,
+};

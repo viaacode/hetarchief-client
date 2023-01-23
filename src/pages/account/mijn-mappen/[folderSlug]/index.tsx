@@ -1,6 +1,6 @@
 import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { kebabCase } from 'lodash-es';
+import { isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -32,6 +32,7 @@ import {
 	SearchBar,
 } from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
+import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
@@ -455,6 +456,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 												return {
 													...base,
 													actions: renderActions(base, activeFolder),
+													...(!isNil(media.format) && {
+														icon: TYPE_TO_ICON_MAP[media.format],
+													}),
 												};
 											})}
 											view={'list'}
