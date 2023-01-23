@@ -596,7 +596,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<Alert
 							className="c-Alert__margin-bottom"
 							icon={<Icon name="info" />}
-							title={''}
 							content={tHtml(
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
 							)}
