@@ -24,6 +24,8 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 	&__header-wrapper {
 		&--list,
 		&--grid {
+			position: relative;
+
 			> span {
 				position: static !important;
 
@@ -44,6 +46,17 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 				min-width: 248px;
 			}
 		}
+	}
+
+	&__header-icon {
+		position: absolute;
+		top: 0;
+		left: 0;
+		font-size: $font-size-md;
+		line-height: 0;
+		color: #28a0c8;
+		padding: 0.25rem 0.5rem 0.5rem 0.25rem;
+		background-color: $white;
 	}
 
 	:global(.c-card__subtitle-wrapper),
