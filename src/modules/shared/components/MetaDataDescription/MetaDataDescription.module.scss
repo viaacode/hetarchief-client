@@ -8,4 +8,8 @@ $component: "c-metadatadescription";
 	&__title {
 		padding-bottom: $spacer-lg;
 	}
+
+	&__read-more {
+		cursor: pointer;
+	}
 }
