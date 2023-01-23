@@ -8,4 +8,15 @@ $component: "c-year-input";
 	&__label {
 		padding-bottom: 15px;
 	}
+
+	&__placeholder {
+		position: absolute;
+		color: $zinc;
+		margin: -3.4rem 0;
+		right: 5rem;
+
+		&-hidden {
+			display: none;
+		}
+	}
 }

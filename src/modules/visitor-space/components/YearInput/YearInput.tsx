@@ -14,13 +14,16 @@ const YearInput: FC<YearInputProps> = (props) => (
 		<div className={styles['c-year-input__label']}>
 			<b>{props.label}</b>
 		</div>
-		<TextInput
-			style={{ textAlign: 'right' }}
-			iconStart={<Icon name="calendar" />}
-			placeholder="jjjj"
-			type="number"
-			{...props}
-		/>
+		<TextInput iconStart={<Icon name="calendar" />} type="text" {...props} />
+		<span
+			className={
+				props.value
+					? styles['c-year-input__placeholder-hidden']
+					: styles['c-year-input__placeholder']
+			}
+		>
+			jjjj
+		</span>
 	</div>
 );
 
