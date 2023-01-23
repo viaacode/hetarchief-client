@@ -1,5 +1,4 @@
-import { useQuery } from 'react-query';
-import { UseQueryOptions, UseQueryResult } from 'react-query/types/react/types';
+import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 

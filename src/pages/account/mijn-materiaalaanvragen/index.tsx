@@ -1,11 +1,9 @@
-import { ContentPageEdit } from '@meemoo/admin-core-ui';
-import { GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, FC } from 'react';
+import { ComponentType } from 'react';
 
 import { Permission } from '@account/const';
-import { AdminLayout } from '@admin/layouts';
-import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
+import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -13,35 +11,36 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
+import { VisitorLayout } from 'modules/visitors';
+
+const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout bottomPadding={false}>
-				<AdminLayout.Content>
-					<div className="p-admin-content__edit">
-						<ContentPageEdit id={undefined} />
-					</div>
-				</AdminLayout.Content>
-			</AdminLayout>
+			<AccountLayout
+				className="p-account-my-material-requests"
+				pageTitle={tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen')}
+			>
+				<div className="l-container" />
+			</AccountLayout>
 		);
 	};
 
 	return (
-		<>
+		<VisitorLayout>
 			{renderOgTags(
-				tText('pages/admin/content/maak/index___content-pagina-aanmaken'),
+				tText('pages/account/mijn-profiel/index___mijn-materiaalaanvragen'),
 				tText(
-					'pages/admin/content/maak/index___maak-een-nieuwe-content-pagina-adhv-blokken'
+					'pages/account/mijn-profiel/index___mijn-materiaalaanvragen-meta-omschrijving'
 				),
 				url
 			)}
 
-			<PermissionsCheck allPermissions={[Permission.CREATE_CONTENT_PAGES]}>
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
 				{renderPageContent()}
 			</PermissionsCheck>
-		</>
+		</VisitorLayout>
 	);
 };
 
@@ -51,4 +50,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(ContentPageEditPage as ComponentType));
+export default withAuth(AccountMyMaterialRequests as ComponentType);

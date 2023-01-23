@@ -71,7 +71,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		if (visits && !selectedOnCurrentPage && requestId) {
 			// Check if visitrequest exists
 			getVisit(requestId)
-				.then((response) => {
+				.then((response: Visit | null) => {
 					if (response) {
 						setSelectedNotOnCurrentPage(response);
 					}

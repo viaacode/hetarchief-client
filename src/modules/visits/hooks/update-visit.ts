@@ -1,4 +1,4 @@
-import { QueryClient, useMutation, UseMutationResult } from 'react-query';
+import { QueryClient, useMutation, UseMutationResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const';
 import { Visit } from '@shared/types';
@@ -9,7 +9,7 @@ export function useUpdateVisitRequest(): UseMutationResult<Visit, void, UpdateVi
 	return useMutation(({ id, updatedProps }) => VisitsService.patchById(id, updatedProps), {
 		onSuccess: async () => {
 			const queryClient = new QueryClient();
-			await queryClient.invalidateQueries(QUERY_KEYS.getVisits);
+			await queryClient.invalidateQueries([QUERY_KEYS.getVisits]);
 		},
 	});
 }

@@ -1,4 +1,4 @@
-import { ContentPageDetail } from '@meemoo/react-admin';
+import { ContentPageDetail } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';

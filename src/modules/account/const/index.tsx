@@ -25,6 +25,12 @@ export const ACCOUNT_NAVIGATION_LINKS = (): {
 		href: '/account/mijn-historiek',
 		hasDivider: true,
 	},
+	{
+		id: 'account-material-requests',
+		label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+		href: '/account/mijn-materiaalaanvragen',
+		hasDivider: true,
+	},
 ];
 
 export enum Permission {

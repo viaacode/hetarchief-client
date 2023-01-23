@@ -1,5 +1,4 @@
-import { useQuery } from 'react-query';
-import { UseQueryResult } from 'react-query/types/react/types';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { foldersService } from '@account/services/folders';
 import { FolderMedia } from '@account/types';
