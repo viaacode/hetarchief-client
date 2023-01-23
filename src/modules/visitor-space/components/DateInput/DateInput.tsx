@@ -20,9 +20,7 @@ interface DateInputProps extends DatepickerProps {
 
 const DateInput: FC<DateInputProps> = (props) => (
 	<div className={styles['c-date-input']}>
-		<div className={styles['c-date-input__label']}>
-			<b>{props.label}</b>
-		</div>
+		<p className={styles['c-date-input__label']}>{props.label}</p>
 		<Datepicker
 			{...rest}
 			{...props}

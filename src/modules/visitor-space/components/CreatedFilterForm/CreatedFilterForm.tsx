@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { endOfDay, startOfDay } from 'date-fns';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { SingleValue } from 'react-select';
+import { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { SEPARATOR } from '@shared/const';
@@ -122,6 +122,27 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 		}
 	};
 
+	const onChangeDateInput = (date: Date | null) => {
+		if (form.operator === Operator.Equals) {
+			convertToRange(date || new Date());
+			return;
+		}
+		onChangeCreated((date || new Date()).valueOf().toString());
+	};
+
+	const onChangeOperatorSelect = (
+		operator: SingleValue<SelectOption> | MultiValue<SelectOption>
+	) => {
+		const value = (operator as SingleValue<SelectOption>)?.value as Operator;
+
+		if (value !== form.operator) {
+			setForm({
+				operator: value,
+				created: defaultValues.created,
+			});
+		}
+	};
+
 	useEffect(() => {
 		if (year) {
 			const yearDate = convertYearToDate(year)?.toString();
@@ -162,15 +183,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 								components={{ IndicatorSeparator: () => null }}
 								inputId={labelKeys.operator}
 								onChange={(newValue) => {
-									const value = (newValue as SingleValue<SelectOption>)
-										?.value as Operator;
-
-									if (value !== form.operator) {
-										setForm({
-											operator: value,
-											created: defaultValues.created,
-										});
-									}
+									onChangeOperatorSelect(newValue);
 								}}
 								options={operators}
 								value={getSelectValue(operators, field.value)}
@@ -231,11 +244,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 									disabled={disabled}
 									id={labelKeys.created}
 									onChange={(date) => {
-										if (form.operator === Operator.Equals) {
-											convertToRange(date || new Date());
-											return;
-										}
-										onChangeCreated((date || new Date()).valueOf().toString());
+										onChangeDateInput(date);
 									}}
 									value={(form.created || '').toString().split(SEPARATOR, 2)[0]} // in case of EXACT, a range is used
 								/>
