@@ -117,6 +117,12 @@
 
 	.m-menu-edit-form {
 		border-radius: 1.9rem;
+
+		textarea[class*="c-input"] {
+			border-radius: 2.8rem;
+			min-height: 5rem;
+			height: auto;
+		}
 	}
 
 	.o-form-group__controls {
