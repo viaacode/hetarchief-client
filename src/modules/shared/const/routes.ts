@@ -28,6 +28,7 @@ export const ROUTE_PARTS = Object.freeze({
 	visitorSpaceManagement: 'bezoekersruimtesbeheer',
 	visitorSpaces: 'bezoekersruimtes',
 	visitors: 'actieve-bezoekers',
+	myMaterialRequests: 'materiaalaanvragen',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -80,3 +81,8 @@ export const ADMIN_CORE_ROUTES = {
 	// CONTENT_PAGE_LABEL_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}`,
 	// SEARCH: `/${ROUTE_PARTS.search}`,
 };
+
+export enum KNOWN_STATIC_ROUTES {
+	TermsOfService = '/gebruikersvoorwaarden-tekst',
+	Home = '',
+}

@@ -25,6 +25,12 @@ export const ACCOUNT_NAVIGATION_LINKS = (): {
 		href: '/account/mijn-historiek',
 		hasDivider: true,
 	},
+	{
+		id: 'account-material-requests',
+		label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+		href: '/account/mijn-materiaalaanvragen',
+		hasDivider: true,
+	},
 ];
 
 export enum Permission {
@@ -88,4 +94,7 @@ export enum Permission {
 	VIEW_OWN_COLLECTIONS = 'VIEW_OWN_COLLECTIONS',
 	EDIT_NAVIGATION_BARS = 'EDIT_NAVIGATION_BARS',
 	CAN_EDIT_PROFILE_INFO = 'CAN_EDIT_PROFILE_INFO',
+	// Material Requests
+	VIEW_ANY_MATERIAL_REQUESTS = 'VIEW_ANY_MATERIAL_REQUESTS',
+	VIEW_OWN_MATERIAL_REQUESTS = 'VIEW_OWN_MATERIAL_REQUESTS',
 }

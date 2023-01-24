@@ -25,6 +25,7 @@ export enum IconNamesLight {
 	Download = 'download--light',
 	Edit = 'edit--light',
 	Email = 'email--light',
+	Exclamation = 'exclamation--light',
 	ExpandLeft = 'expand-left--light',
 	ExpandRight = 'expand-right--light',
 	Expand = 'expand--light',

@@ -1,4 +1,4 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer, ContentPageService } from '@meemoo/admin-core-ui';
 import { HTTPError } from 'ky';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
@@ -22,8 +22,7 @@ import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearch
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
 
-import { useGetContentPage } from '../../modules/content-page/hooks/get-content-page';
-import { ContentPageService } from '../../modules/content-page/services/content-page.service';
+import { useGetContentPageByPath } from '../../modules/content-page/hooks/get-content-page';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -54,21 +53,18 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 		error: visitorSpaceError,
 		isLoading: isVisitorSpaceLoading,
 		data: visitorSpaceInfo,
-	} = useGetVisitorSpace(slug as string, true);
+	} = useGetVisitorSpace(`${slug}`, true);
 	const {
 		error: contentPageError,
 		isLoading: isContentPageLoading,
 		data: contentPageInfo,
-	} = useGetContentPage(slug as string, true);
+	} = useGetContentPageByPath(`/${slug}`);
 
 	/**
 	 * Computed
 	 */
-
 	const isVisitorSpaceNotFoundError = (visitorSpaceError as HTTPError)?.response?.status === 404;
-	const isContentPageNotFoundError =
-		(!!contentPageInfo && contentPageInfo?.exists === false) ||
-		(contentPageError as HTTPError)?.response?.status === 404;
+	const isContentPageNotFoundError = (contentPageError as HTTPError)?.response?.status === 404;
 
 	/**
 	 * Methods
@@ -108,14 +104,14 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 		if (isVisitorSpaceLoading || isContentPageLoading) {
 			return <Loading fullscreen owner="slug page: render page content" />;
 		}
+
 		if (visitorSpaceInfo) {
 			dispatch(setShowZendesk(false));
 			return <VisitorSpaceSearchPage />;
 		}
+
 		if (contentPageInfo) {
-			return (
-				<ContentPageRenderer path={('/' + slug) as string} userGroupId={user?.groupId} />
-			);
+			return <ContentPageRenderer contentPageInfo={contentPageInfo} />;
 		}
 	};
 
@@ -134,8 +130,8 @@ export async function getServerSideProps(
 	let title: string | null = null;
 	try {
 		const [space, contentPage] = await Promise.allSettled([
-			VisitorSpaceService.getBySlug(context.query.slug as string, true),
-			ContentPageService.getBySlug(('/' + context.query.slug) as string),
+			VisitorSpaceService.getBySlug(String(context.query.slug), true),
+			ContentPageService.getContentPageByPath(`/${context.query.slug}`),
 		]);
 
 		if (space.status === 'fulfilled') {

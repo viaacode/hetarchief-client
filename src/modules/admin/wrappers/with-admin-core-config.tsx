@@ -76,6 +76,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				// last_access_at: user.lastAccessAt, // TODO enable once last_access_at field is added to the database
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				permissions: user?.permissions as any[],
+				tempAccess: null,
 			};
 
 			const config: AdminConfig = {
@@ -179,6 +180,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						},
 					],
 				},
+				content_blocks: {},
 				services: {
 					toastService: {
 						showToast: (toastInfo: ToastInfo) => {
@@ -225,7 +227,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					},
 				},
 				user: commonUser,
-				content_blocks: {},
 				routes: ADMIN_CORE_ROUTES as any, // TODO: remove any when the routes record becomes a partial in admin-core
 				env: {},
 			};
