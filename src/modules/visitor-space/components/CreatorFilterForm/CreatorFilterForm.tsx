@@ -30,6 +30,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 
 	const [query] = useQueryParams(CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
+	const [shouldReset, setShouldReset] = useState<boolean>(false);
 	const [selection, setSelection] = useState<string[]>(() => compact(query.creator || []));
 
 	const { setValue, reset, handleSubmit } = useForm<CreatorFilterFormState>({
@@ -65,6 +66,8 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 						'modules/visitor-space/components/creator-filter-form/creator-filter-form___zoek'
 					)}
 					onSearch={(value) => setSearch(value || '')}
+					shouldReset={shouldReset}
+					onResetFinished={() => setShouldReset(false)}
 				/>
 
 				<div className="u-my-32">
@@ -95,6 +98,8 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 				reset: () => {
 					reset();
 					setSelection(defaultValues.creators);
+					setSearch('');
+					setShouldReset(true);
 				},
 				handleSubmit,
 			})}
