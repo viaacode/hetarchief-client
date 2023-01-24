@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 
@@ -49,7 +49,9 @@ const FilterForm: FC<FilterFormProps> = ({
 					<div className={styles['c-filter-form__footer']}>
 						<Button
 							className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
-							iconStart={<Icon className="u-font-size-22" name="redo" />}
+							iconStart={
+								<Icon className="u-font-size-22" name={IconNamesLight.Redo} />
+							}
 							label={tHtml(
 								'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
 							)}

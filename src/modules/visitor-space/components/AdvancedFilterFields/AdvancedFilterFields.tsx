@@ -12,7 +12,7 @@ import clsx from 'clsx';
 import React, { FC } from 'react';
 import { SingleValue } from 'react-select';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { Operator } from '@shared/types';
@@ -233,7 +233,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 				{index > 0 && (
 					<Button
-						icon={<Icon name="trash" aria-hidden />}
+						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
 						aria-label={tText(
 							'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___criterium-verwijderen'
 						)}

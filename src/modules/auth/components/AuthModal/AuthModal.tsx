@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { FC } from 'react';
 
 import { AuthService } from '@auth/services/auth-service';
-import { Icon, Modal } from '@shared/components';
+import { Icon, IconNamesLight, Modal } from '@shared/components';
 import Html from '@shared/components/Html/Html';
 import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -79,7 +79,7 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 				/>
 
 				<Button
-					iconStart={<Icon className="u-text-left" name="log-in" />}
+					iconStart={<Icon className="u-text-left" name={IconNamesLight.LogIn} />}
 					label={tHtml(
 						'modules/auth/components/auth-modal/auth-modal___inloggen-met-het-archief-account'
 					)}

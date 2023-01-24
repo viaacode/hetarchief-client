@@ -2,7 +2,7 @@ import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react
 import clsx from 'clsx';
 import { FC, useCallback, useEffect, useState } from 'react';
 
-import { Icon, Overlay } from '@shared/components';
+import { Icon, IconNamesLight, Overlay } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { FilterButton } from '../FilterButton';
@@ -52,7 +52,11 @@ const FilterOption: FC<FilterOptionProps> = ({
 			>
 				<DropdownButton>
 					<FilterButton
-						icon={filterIsActive ? 'angle-left' : icon ?? 'angle-right'}
+						icon={
+							filterIsActive
+								? IconNamesLight.AngleLeft
+								: icon ?? IconNamesLight.AngleRight
+						}
 						isActive={filterIsActive}
 						label={label}
 					/>
@@ -60,7 +64,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 				<DropdownContent>
 					<Button
 						className={styles['c-filter-menu__flyout-close']}
-						icon={<Icon name="times" aria-hidden />}
+						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 						aria-label={tText(
 							'modules/visitor-space/components/filter-menu/filter-option/filter-option___sluiten'
 						)}

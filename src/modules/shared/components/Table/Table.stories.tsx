@@ -2,7 +2,7 @@ import { Table } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 import { PaginationBar } from '../PaginationBar';
 
 import { mockColumns, mockData } from './__mocks__/table';
@@ -30,9 +30,9 @@ Default.args = {
 		data: mockData,
 	},
 	sortingIcons: {
-		default: <Icon className="c-table__icon" name="sort-table" />,
-		asc: <Icon className="c-table__icon" name="arrow-up" />,
-		desc: <Icon className="c-table__icon" name="arrow-down" />,
+		default: <Icon className="c-table__icon" name={IconNamesLight.SortTable} />,
+		asc: <Icon className="c-table__icon" name={IconNamesLight.ArrowUp} />,
+		desc: <Icon className="c-table__icon" name={IconNamesLight.ArrowDown} />,
 	},
 	pagination: ({ gotoPage }) => {
 		return (

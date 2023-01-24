@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 
 import Icon from './Icon';
-import { IconSolidNames } from './Icon.types';
+import { IconNamesLight, IconNamesSolid } from './Icon.const';
 
 describe('Components', () => {
 	describe('<Icon />', () => {
 		it('Should display light icons', () => {
-			const iconName = 'play';
+			const iconName = IconNamesSolid.Play;
 			render(<Icon name={iconName} />);
 
 			const icon = screen.queryByText(iconName);
@@ -14,8 +14,8 @@ describe('Components', () => {
 		});
 
 		it('Should display solid icons', () => {
-			const iconName = 'trash';
-			render(<Icon name={iconName} type="solid" />);
+			const iconName = IconNamesSolid.Trash;
+			render(<Icon name={iconName} />);
 
 			const icon = screen.queryByText(iconName);
 			expect(icon).toHaveClass('c-icon--solid');
@@ -23,7 +23,7 @@ describe('Components', () => {
 
 		it('Should return null if icon is not found', () => {
 			const iconName = 'not-a-real-icon';
-			render(<Icon name={iconName as IconSolidNames} type="solid" />);
+			render(<Icon name={iconName as IconNamesSolid} />);
 
 			const icon = screen.queryByText(iconName);
 			expect(icon).not.toBeInTheDocument();
@@ -31,7 +31,7 @@ describe('Components', () => {
 
 		it('Should pass a className', () => {
 			const customClass = 'c-custom-icon';
-			const iconName = 'bookmark';
+			const iconName = IconNamesLight.Bookmark;
 			render(<Icon className={customClass} name={iconName} />);
 
 			const icon = screen.queryByText(iconName);

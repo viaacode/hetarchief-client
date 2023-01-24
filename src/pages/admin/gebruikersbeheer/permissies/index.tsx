@@ -10,7 +10,7 @@ import { AdminLayout } from '@admin/layouts';
 import { UserGroupOverviewRef } from '@admin/types';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -34,7 +34,7 @@ const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				{search && (
 					<Button
 						variants={['text', 'icon', 'xxs']}
-						icon={<Icon name="times" aria-hidden />}
+						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 						aria-label={tText(
 							'pages/admin/gebruikersbeheer/permissies/index___opnieuw-instellen'
 						)}
@@ -45,7 +45,7 @@ const PermissionsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				)}
 				<Button
 					variants={['text', 'icon', 'xxs']}
-					icon={<Icon name="search" aria-hidden />}
+					icon={<Icon name={IconNamesLight.Search} aria-hidden />}
 					aria-label={tText('pages/admin/gebruikersbeheer/permissies/index___uitvoeren')}
 					onClick={() => permissionsRef.current?.onSearch(search)}
 				/>

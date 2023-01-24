@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -52,10 +52,10 @@ const renderLink = (
 };
 
 export const MOCK_HAMBURGER_PROPS: NavigationHamburgerProps = {
-	openLabel: 'sluit',
+	openLabel: 'Sluit',
 	closedLabel: 'Menu',
-	openIcon: 'times',
-	closedIcon: 'grid-view',
+	openIcon: IconNamesLight.Times,
+	closedIcon: IconNamesLight.GridView,
 };
 
 export const MOCK_ITEMS_LEFT: NavigationItem[] = [
@@ -90,7 +90,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 								'u-visibility-visible:md',
 								styles['c-navigation__dropdown-icon--end']
 							)}
-							name="angle-right"
+							name={IconNamesLight.AngleRight}
 						/>
 					),
 					className: dropdownCls(),
@@ -108,7 +108,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 								'u-visibility-visible:md',
 								styles['c-navigation__dropdown-icon--end']
 							)}
-							name="angle-right"
+							name={IconNamesLight.AngleRight}
 						/>
 					),
 					className: dropdownCls(),
@@ -203,7 +203,7 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 								'u-text-left',
 								styles['c-navigation__dropdown-icon--start']
 							)}
-							name="log-out"
+							name={IconNamesLight.LogOut}
 						/>
 					),
 				}),

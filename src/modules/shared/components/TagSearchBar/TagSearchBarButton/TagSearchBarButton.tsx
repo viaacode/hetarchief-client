@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { Icon } from '../../Icon';
+import { Icon, IconNamesLight } from '../../Icon';
 import { dropdownIndicatorCxState } from '../../TagsInput';
 
 import styles from './TagSearchBarButton.module.scss';
@@ -36,7 +36,7 @@ const TagSearchBarButton: FC<TagSearchBarButtonProps> = ({
 				e.preventDefault();
 			}}
 		>
-			<Icon className={cx({ 'indicator-icon': true })} name="search" />
+			<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Search} />
 		</span>
 	);
 };

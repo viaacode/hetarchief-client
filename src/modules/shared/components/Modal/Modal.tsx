@@ -8,7 +8,7 @@ import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useScrollbarWidth } from '@shared/hooks/use-scrollbar-width';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 import styles from './Modal.module.scss';
 import { ModalProps } from './Modal.types';
@@ -72,7 +72,7 @@ const Modal: FC<ModalProps> = ({
 				<div className={styles['c-hetarchief-modal__close-wrapper']}>
 					<Button
 						className={styles['c-hetarchief-modal__close']}
-						icon={<Icon name="times" aria-hidden />}
+						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 						aria-label={tText('modules/shared/components/modal/modal___sluiten')}
 						variants={['text']}
 						onClick={onClose}
