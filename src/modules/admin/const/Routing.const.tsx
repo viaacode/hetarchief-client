@@ -36,6 +36,11 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 		href: '',
 		children: ADMIN_USERS_LINKS,
 	},
+	{
+		id: 'material-requests',
+		label: tText('modules/admin/const/routing___mijn-materiaalaanvragen'),
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.myMaterialRequests}`,
+	},
 ];
 
 export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
