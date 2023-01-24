@@ -96,9 +96,12 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	 */
 
 	const renderActiveSortLabel = () => {
-		const sortBtnLabel = activeSort
+		let sortBtnLabel = activeSort
 			? VISITOR_SPACE_ACTIVE_SORT_MAP()[activeSort.orderProp as VisitorSpaceSort]
 			: '';
+		if (!isMobile && sortBtnLabel.length > 15) {
+			sortBtnLabel = sortBtnLabel.substring(0, 15) + '...';
+		}
 
 		return (
 			<>

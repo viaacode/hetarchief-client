@@ -19,6 +19,7 @@ export enum VisitorSpaceSort {
 	Date = 'created',
 	Relevance = 'relevance',
 	Title = 'name',
+	Published = 'published',
 }
 
 export enum VisitorSpaceFilterId {

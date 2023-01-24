@@ -91,6 +91,11 @@ $component: "c-filter-menu";
 		border-bottom-color: $c-filter-menu-border-color;
 	}
 
+	&__button--sort-header {
+		background-color: $shade;
+		border-bottom-color: $shade !important;
+	}
+
 	&__button--active:global(.c-button) {
 		z-index: get-z-layer("filter");
 		background-color: $white;
