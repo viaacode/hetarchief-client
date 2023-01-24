@@ -1,4 +1,4 @@
-import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
+import { Alert, Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
@@ -50,9 +50,9 @@ import {
 	Loading,
 	ScrollableTabs,
 	TabLabel,
-	TextWithNewLines,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { MetaDataDescription } from '@shared/components/MetaDataDescription';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -557,9 +557,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					>
 						{mediaInfo?.name}
 					</h3>
-					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
-						<TextWithNewLines text={mediaInfo?.description} />
-					</p>
+
+					<MetaDataDescription description={mediaInfo?.description || ''} />
 
 					<div className="u-pb-24 p-object-detail__actions">
 						{canDownloadMetadata && (
@@ -594,7 +593,17 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							onClickAction={onClickAction}
 						/>
 					</div>
+					{!mediaInfo?.description && (
+						<Alert
+							className="c-Alert__margin-bottom"
+							icon={<Icon name="info" />}
+							content={tHtml(
+								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
+							)}
+						/>
+					)}
 				</div>
+
 				{mediaInfo && (
 					<>
 						<Metadata
