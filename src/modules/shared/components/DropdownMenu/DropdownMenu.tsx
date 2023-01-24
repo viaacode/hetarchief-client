@@ -11,7 +11,7 @@ import { FC, MouseEvent, useState } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 import styles from './DropdownMenu.module.scss';
 
@@ -34,7 +34,7 @@ export const DropdownMenu: FC<DropdownMenuProps> = ({ triggerButtonProps, childr
 		>
 			<DropdownButton>
 				<Button
-					icon={<Icon name="dots-vertical" aria-hidden />}
+					icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
 					aria-label={tText(
 						'modules/shared/components/dropdown-menu/dropdown-menu___meer-acties'
 					)}

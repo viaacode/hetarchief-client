@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 import { MediaTypes } from '@shared/types';
 
+import { IconName } from '../Icon';
+
 export type MediaCardViewMode = 'list' | 'grid';
 
 export interface MediaCardProps {
@@ -18,6 +20,7 @@ export interface MediaCardProps {
 	type: MediaTypes;
 	view?: MediaCardViewMode;
 	hasRelated?: boolean;
+	icon?: IconName;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

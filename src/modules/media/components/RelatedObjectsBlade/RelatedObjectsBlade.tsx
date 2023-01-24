@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React, { FC, useState } from 'react';
 import { default as Scrollbar } from 'react-scrollbars-custom';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 
 import styles from './RelatedObjectsBlade.module.scss';
 import { RelatedObjectsBladeProps } from './RelatedObjectsBlade.types';
@@ -35,7 +35,7 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
 								styles['c-related-objects-blade__arrow'],
 								'u-text-left'
 							)}
-							name={isOpen ? 'angle-down' : 'angle-up'}
+							name={isOpen ? IconNamesLight.AngleDown : IconNamesLight.AngleUp}
 						/>
 					}
 					label={title}

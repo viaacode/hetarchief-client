@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { Icon } from '../../Icon';
+import { Icon, IconNamesLight } from '../../Icon';
 import { dropdownIndicatorCxState } from '../../TagsInput';
 
 import { TagSearchBarClearProps } from './TagSearchBarClear.types';
@@ -36,11 +36,11 @@ const TagSearchBarClear: FC<TagSearchBarClearProps> = ({
 					</span>
 					<Icon
 						className={clsx('u-display-none:lg', cx({ 'indicator-icon': true }))}
-						name="times"
+						name={IconNamesLight.Times}
 					/>
 				</>
 			) : (
-				<Icon className={cx({ 'indicator-icon': true })} name="times" />
+				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Times} />
 			)}
 		</span>
 	);

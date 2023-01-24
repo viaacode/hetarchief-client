@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { FC } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { VisitorSpaceFilterId } from '../../types';
@@ -56,7 +56,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 					<Button
 						disabled={disabled}
 						className="u-p-0"
-						iconStart={<Icon name="plus" />}
+						iconStart={<Icon name={IconNamesLight.Plus} />}
 						label={tHtml(
 							'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___nieuwe-stelling'
 						)}

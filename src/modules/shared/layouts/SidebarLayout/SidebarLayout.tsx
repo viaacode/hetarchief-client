@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 
-import { Icon, ListNavigation, Sidebar } from '@shared/components';
+import { Icon, IconNamesLight, ListNavigation, Sidebar } from '@shared/components';
 
 import styles from './SidebarLayout.module.scss';
 import { SidebarLayoutProps } from './SidebarLayout.types';
@@ -52,7 +52,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 							'u-py-16'
 						)}
 					>
-						<Icon name="arrow-left" />
+						<Icon name={IconNamesLight.ArrowLeft} />
 						{sidebarTitle}
 					</div>
 				)}

@@ -12,7 +12,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { foldersService } from '@account/services/folders';
 import { EditFolderFormState } from '@account/types';
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
@@ -115,7 +115,7 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 					name={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
 					)}
-					icon={<Icon name="edit" aria-hidden />}
+					icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
 					aria-label={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
 					)}
@@ -148,7 +148,7 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 							<Button
 								tabIndex={-1}
 								variants={['silver']}
-								icon={<Icon name="times" aria-hidden />}
+								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 								aria-label={tText(
 									'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen-annuleren'
 								)}
@@ -158,7 +158,7 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 							<Button
 								tabIndex={-1}
 								variants={['black']}
-								icon={<Icon name="check" aria-hidden />}
+								icon={<Icon name={IconNamesLight.Check} aria-hidden />}
 								aria-label={tText(
 									'modules/account/components/edit-folder-title/edit-folder-title___nieuwe-titel-opslaan'
 								)}

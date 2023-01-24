@@ -10,7 +10,6 @@ export const ROUTE_PARTS = Object.freeze({
 	user: 'gebruikers',
 	permissions: 'permissies',
 	translations: 'vertalingen',
-	translationsV2: 'vertalingen-v2',
 	admin: 'admin',
 	beheer: 'beheer',
 	content: 'content',
@@ -55,3 +54,35 @@ export const ROUTES = Object.freeze({
 	adminEditSpace: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/:slug`,
 	beheerRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
 });
+
+export const ADMIN_CORE_ROUTES = {
+	CONTENT_PAGE_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}/${ROUTE_PARTS.create}`,
+	CONTENT_PAGE_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}/:id`,
+	CONTENT_PAGE_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}/:id/${ROUTE_PARTS.edit}`,
+	CONTENT_PAGE_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}}`,
+	NAVIGATION_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}/${ROUTE_PARTS.create}`,
+	NAVIGATION_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}/:navigationBarId`,
+	NAVIGATION_ITEM_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}/:navigationBarId/${ROUTE_PARTS.create}`,
+	NAVIGATION_ITEM_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}/:navigationBarId/:navigationItemId/${ROUTE_PARTS.edit}`,
+	NAVIGATION_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}`,
+	TRANSLATIONS_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
+	USER_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.users}/:id`,
+	USER_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.users}/:id/${ROUTE_PARTS.edit}`,
+	USER_GROUP_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}/${ROUTE_PARTS.create}`,
+	USER_GROUP_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}/:id`,
+	USER_GROUP_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}/:id/${ROUTE_PARTS.edit}`,
+	USER_GROUP_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}`,
+	USER_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.users}}`,
+
+	// Will be added later
+	// CONTENT_PAGE_LABEL_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/${ROUTE_PARTS.create}`,
+	// CONTENT_PAGE_LABEL_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/:id`,
+	// CONTENT_PAGE_LABEL_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/:id/${ROUTE_PARTS.edit}`,
+	// CONTENT_PAGE_LABEL_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}`,
+	// SEARCH: `/${ROUTE_PARTS.search}`,
+};
+
+export enum KNOWN_STATIC_ROUTES {
+	TermsOfService = '/gebruikersvoorwaarden-tekst',
+	Home = '',
+}

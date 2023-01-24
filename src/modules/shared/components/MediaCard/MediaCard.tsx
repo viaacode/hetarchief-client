@@ -1,11 +1,12 @@
 import { Badge, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isNil } from 'lodash';
 import Image from 'next/image';
 import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 
-import { DropdownMenu } from '@shared/components';
-import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
+import { DropdownMenu, IconNamesLight } from '@shared/components';
+import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import { MediaTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -27,6 +28,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	actions,
 	buttons,
 	hasRelated,
+	icon,
 }) => {
 	const renderDropdown = () =>
 		actions ? (
@@ -121,7 +123,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const renderTags = () => {
-		return hasRelated && <Badge variants="small" text={<Icon name="link" />} />;
+		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
 	};
 
 	const renderImage = (imgPath: string | undefined) =>
@@ -133,6 +135,11 @@ const MediaCard: FC<MediaCardProps> = ({
 				)}
 			>
 				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+				{!isNil(icon) && (
+					<div className={clsx(styles['c-media-card__header-icon'])}>
+						<Icon name={icon} />
+					</div>
+				)}
 			</div>
 		) : (
 			renderNoContent()

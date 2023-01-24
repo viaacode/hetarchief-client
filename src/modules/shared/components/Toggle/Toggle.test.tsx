@@ -1,5 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 
+import { IconNamesLight } from '../Icon';
+
 import Toggle from './Toggle';
 import { ToggleOption, ToggleProps } from './Toggle.types';
 import { toggleMock } from './__mocks__/toggle';
@@ -48,7 +50,7 @@ describe('Component: <Toggle /> (default)', () => {
 		const options: ToggleOption[] = [
 			{
 				id: 'grid',
-				iconName: 'grid-view',
+				iconName: IconNamesLight.GridView,
 				active: true,
 			},
 		];
@@ -63,7 +65,7 @@ describe('Component: <Toggle /> (default)', () => {
 		const options: ToggleOption[] = [
 			{
 				id: 'grid',
-				iconName: 'grid-view',
+				iconName: IconNamesLight.GridView,
 				active: false,
 			},
 		];

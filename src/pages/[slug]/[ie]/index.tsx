@@ -46,6 +46,7 @@ import {
 	ErrorNoAccess,
 	ErrorNotFound,
 	Icon,
+	IconNamesLight,
 	Loading,
 	ScrollableTabs,
 	TabLabel,
@@ -531,7 +532,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					{showResearchWarning && (
 						<Callout
 							className="p-object-detail__callout u-pt-32 u-pb-24"
-							icon={<Icon name="info" aria-hidden />}
+							icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 							text={tHtml(
 								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 							)}
@@ -563,7 +564,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						{canDownloadMetadata && (
 							<Button
 								className="p-object-detail__export"
-								iconStart={<Icon name="export" aria-hidden />}
+								iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
 								onClick={onExportClick}
 								aria-label={tText(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
@@ -650,7 +651,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				icon={
 					<Icon
 						className="u-font-size-24 u-mr-8 u-text-left"
-						name="related-objects"
+						name={IconNamesLight.RelatedObjects}
 						aria-hidden
 					/>
 				}
@@ -751,7 +752,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						)}
 						icon={
 							<Icon
-								name={expandMetadata ? 'expand-right' : 'expand-left'}
+								name={
+									expandMetadata
+										? IconNamesLight.ExpandRight
+										: IconNamesLight.ExpandLeft
+								}
 								aria-hidden
 							/>
 						}

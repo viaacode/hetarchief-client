@@ -3,7 +3,7 @@ import React from 'react';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
+import { CopyButton, Icon, IconNamesLight, RequestStatusBadge } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
@@ -95,7 +95,7 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 			return (
 				<Button
 					className="p-cp-requests__actions"
-					icon={<Icon name="dots-vertical" aria-hidden />}
+					icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
 					aria-label={tText('modules/cp/const/requests___meer-acties')}
 					variants={['xxs', 'text']}
 				/>

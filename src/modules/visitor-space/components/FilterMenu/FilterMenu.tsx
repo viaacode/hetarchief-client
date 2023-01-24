@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
-import { Icon, IconLightNames, Toggle } from '@shared/components';
+import { Icon, IconNamesLight, Toggle } from '@shared/components';
 import { tText } from '@shared/helpers/translate';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -45,7 +45,11 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	const windowSize = useWindowSizeContext();
 
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const openIcon: IconLightNames = isMobile ? 'filter' : isOpen ? 'angle-up' : 'angle-down';
+	const openIcon = isMobile
+		? IconNamesLight.Filter
+		: isOpen
+		? IconNamesLight.AngleUp
+		: IconNamesLight.AngleDown;
 
 	useScrollLock(lockScroll, 'FilterMenu');
 

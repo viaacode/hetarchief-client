@@ -8,7 +8,7 @@ import { Permission } from '@account/const';
 import { NavigationItem } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
-import { Icon, IconName } from '@shared/components';
+import { Icon, IconName, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
@@ -167,7 +167,7 @@ const getVisitorSpacesDropdown = (
 												'u-visibility-visible:md',
 												styles['c-navigation__dropdown-icon--end']
 											)}
-											name="angle-right"
+											name={IconNamesLight.AngleRight}
 										/>
 									),
 									className: dropdownCls(),

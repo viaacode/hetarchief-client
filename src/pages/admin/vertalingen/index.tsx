@@ -16,9 +16,9 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import styles from './TranslationsOverviewV2.module.scss';
+import styles from './TranslationsOverview.module.scss';
 
-const AdminTranslationsOverviewV2: FC<DefaultSeoInfo> = ({ url }) => {
+const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 
 	const renderPopup = ({
@@ -45,13 +45,13 @@ const AdminTranslationsOverviewV2: FC<DefaultSeoInfo> = ({ url }) => {
 					<Button
 						variants={['block', 'black']}
 						onClick={onSave}
-						label={tText('pages/admin/vertalingen-v-2/index___bewaar-wijzigingen')}
+						label={tText('pages/admin/vertalingen/index___bewaar-wijzigingen')}
 					/>
 
 					<Button
 						variants={['block', 'text']}
 						onClick={onClose}
-						label={tText('pages/admin/vertalingen-v-2/index___annuleer')}
+						label={tText('pages/admin/vertalingen/index___annuleer')}
 					/>
 				</div>
 			);
@@ -106,4 +106,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(AdminTranslationsOverviewV2 as ComponentType));
+export default withAuth(withAdminCoreConfig(AdminTranslationsOverview as ComponentType));

@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import { fireEvent, render } from '@testing-library/react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 import Callout from './Callout';
 import { CalloutProps } from './Callout.types';
@@ -20,7 +20,7 @@ describe('Component: <Callout /> (default)', () => {
 	});
 
 	it('Should render icon', () => {
-		const icon = <Icon name="info" />;
+		const icon = <Icon name={IconNamesLight.Info} />;
 		const { getByText } = renderCallout({ ...calloutMock, icon });
 
 		const iconNode = getByText('info');
