@@ -94,6 +94,11 @@ $component: "c-filter-menu";
 	&__button--sort-header {
 		background-color: $shade;
 		border-bottom-color: $shade !important;
+
+		:global(.c-button__label) {
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
 	}
 
 	&__button--active:global(.c-button) {
