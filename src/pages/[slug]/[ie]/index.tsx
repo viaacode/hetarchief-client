@@ -596,7 +596,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					{!mediaInfo?.description && (
 						<Alert
 							className="c-Alert__margin-bottom"
-							icon={<Icon name="info" />}
+							icon={<Icon name={IconNamesLight.Info} />}
 							content={tHtml(
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
 							)}
