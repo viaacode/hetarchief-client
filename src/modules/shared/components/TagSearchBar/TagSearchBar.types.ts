@@ -10,6 +10,7 @@ export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponen
 		clearLabel?: TagSearchBarClearLabel;
 		inputState?: [string | undefined, Dispatch<SetStateAction<string | undefined>>];
 		light?: boolean;
+		hasDropdown?: boolean;
 		onClear?: () => void;
 		onCreate?: (newValue: string) => void;
 		onRemoveValue?: (removedValue: TagSearchBarValue<IsMulti>) => void;

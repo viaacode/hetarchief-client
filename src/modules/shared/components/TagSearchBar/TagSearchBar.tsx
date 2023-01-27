@@ -30,6 +30,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	isClearable = true,
 	isMulti = false as IsMulti,
 	light = false,
+	hasDropdown = false,
 	menuIsOpen,
 	onChange,
 	onClear,
@@ -115,6 +116,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 		[`c-tag-search-bar--${size}`]: size,
 		['c-tag-search-bar--has-value-placeholder']: !!valuePlaceholder,
 		['c-tag-search-bar--light']: light,
+		['c-tag-search-bar--has-dropdown']: hasDropdown,
 	});
 	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 	const value = isMulti ? tagsInputProps.value : selectValue;
