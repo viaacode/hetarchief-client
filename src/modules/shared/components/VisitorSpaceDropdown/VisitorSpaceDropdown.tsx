@@ -40,7 +40,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 					['aria-expanded']: isOpen,
 					['aria-controls']: 'list-controls',
 					onClick: onClickDropdown,
-					onKeyDown: (e) => onKey(e, [...keysEnter], onClickDropdown),
+					onKeyDown: (e: any) => onKey(e, [...keysEnter], onClickDropdown),
 			  }
 			: {};
 

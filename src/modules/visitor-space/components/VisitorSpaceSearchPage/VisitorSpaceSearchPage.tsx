@@ -1,7 +1,7 @@
 import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { sum } from 'lodash-es';
+import { isNil, sum } from 'lodash-es';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,7 +11,7 @@ import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
-import { withAuth } from '@auth/wrappers/with-auth';
+import { selectIsLoggedIn } from '@auth/store/user';
 import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
 import { useGetMediaObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
@@ -32,8 +32,12 @@ import {
 	TabLabel,
 	TagSearchBar,
 	ToggleOption,
+	VisitorSpaceDropdown,
+	VisitorSpaceDropdownOption,
 } from '@shared/components';
+import {} from '@shared/components/VisitorSpaceDropdown';
 import { SEARCH_QUERY_KEY } from '@shared/const';
+import { tHtml } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -43,11 +47,11 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { AccessStatus, Breakpoints, SortObject, VisitorSpaceMediaType } from '@shared/types';
+import { Breakpoints, SortObject, Visit, VisitorSpaceMediaType, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
-import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
+import { VisitsService } from '@visits/services';
+import { VisitTimeframe } from '@visits/types';
 
 import {
 	AddToFolderBlade,
@@ -62,7 +66,6 @@ import {
 	LanguageFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
-	VisitorSpaceNavigation,
 } from '../../components';
 import {
 	VISITOR_SPACE_FILTERS,
@@ -73,14 +76,17 @@ import {
 	VISITOR_SPACE_TABS,
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '../../const';
-import { useGetVisitorSpace } from '../../hooks/get-visitor-space';
-import { MetadataProp, TagIdentity, VisitorSpaceFilterId, VisitorSpaceStatus } from '../../types';
+import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
-import { WaitingPage } from '../WaitingPage';
 
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
+};
+
+const defaultOption: VisitorSpaceDropdownOption = {
+	id: 'publieke-catalogus',
+	label: `${tHtml('pages/bezoekersruimte/publieke_catalogus')}`,
 };
 
 const VisitorSpaceSearchPage: NextPage = () => {
@@ -94,16 +100,15 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	useScrollToId((router.query.focus as string) || null);
 
-	const { slug } = router.query;
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
-	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 
 	/**
 	 * State
 	 */
-
+	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+	const collections = useSelector(selectFolders);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -117,10 +122,56 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [searchBarInputState, setSearchBarInputState] = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
+	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
+	const [activeVisitorSpace, setActiveVisitorSpace] = useState<Visit | undefined>();
+	const [activeVisitorSpaceId, setActiveVisitorSpaceId] = useState<string>('publieke-catalogus');
+
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
 	};
+
+	/**
+	 * Data
+	 */
+	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
+		const { items } = await VisitsService.getAll({
+			page: 1,
+			size: 10,
+			orderProp: 'startAt',
+			orderDirection: OrderDirection.desc,
+			status: VisitStatus.APPROVED,
+			timeframe: VisitTimeframe.ACTIVE,
+			personal: true,
+		});
+
+		setVisitorSpaces(items);
+
+		return items;
+	}, []);
+
+	const {
+		data: media,
+		isLoading: mediaIsLoading,
+		error: mediaError,
+	} = useGetMediaObjects(
+		activeVisitorSpace?.spaceMaintainerId?.toLocaleLowerCase() as string,
+		mapFiltersToElastic(query),
+		query.page || 1,
+		VISITOR_SPACE_ITEM_COUNT,
+		activeSort,
+		activeVisitorSpace !== undefined
+	);
+
+	// The result will be added to the redux store
+	useGetMediaFilterOptions(
+		activeVisitorSpace?.spaceMaintainerId?.toLocaleLowerCase() as string | undefined
+	);
+
+	/**
+	 * Effects
+	 */
 
 	useEffect(() => {
 		// New search => update history in list
@@ -128,59 +179,29 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.asPath, dispatch, query]);
 
-	/**
-	 * Data
-	 */
-
-	const {
-		error: visitRequestError,
-		data: visitRequest,
-		isLoading: visitRequestIsLoading,
-	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
-
-	const { data: accessStatus, isLoading: visitAccessStatusIsLoading } = useGetVisitAccessStatus(
-		slug as string,
-		typeof slug === 'string'
-	);
-
-	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
-		slug as string,
-		false,
-		{
-			enabled: visitRequest !== undefined || accessStatus?.status === AccessStatus.PENDING,
+	useEffect(() => {
+		if (isLoggedIn && !isNil(router.query.space)) {
+			setActiveVisitorSpaceId(String(router.query.space));
 		}
-	);
 
-	const {
-		data: media,
-		isLoading: mediaIsLoading,
-		error: mediaError,
-	} = useGetMediaObjects(
-		visitorSpace?.maintainerId?.toLocaleLowerCase() as string,
-		mapFiltersToElastic(query),
-		query.page || 1,
-		VISITOR_SPACE_ITEM_COUNT,
-		activeSort,
-		visitorSpace?.maintainerId !== undefined
-	);
+		// ToDo(Silke): Logged out version doesn't work because we still need to trigger this call
+		// Otherwise we won't be able to set a hard coded space since the public catalog isn't available yet
+		getVisitorSpaces();
+	}, [getVisitorSpaces, isLoggedIn, router.query.space]);
 
-	// The result will be added to the redux store
-	useGetMediaFilterOptions(visitorSpace?.maintainerId?.toLocaleLowerCase() as string | undefined);
+	useEffect(() => {
+		// ToDo(Silke): Temporarily set a hard coded id (which is linked to an exising space) as the public catalog id
+		const activeId =
+			activeVisitorSpaceId === 'publieke-catalogus'
+				? '7dcb671c-3872-4a6b-9594-0689fb631f31'
+				: activeVisitorSpaceId;
 
-	const collections = useSelector(selectFolders);
+		const visitorSpace: Visit | undefined = visitorSpaces.find(
+			({ id }: Visit): boolean => activeId === id
+		);
 
-	/**
-	 * Computed
-	 */
-
-	const isNoAccessError =
-		(visitRequestError as HTTPError)?.response?.status === 403 &&
-		(accessStatus?.status === AccessStatus.NO_ACCESS || !accessStatus?.status);
-	const isAccessPendingError =
-		(visitRequestError as HTTPError)?.response?.status === 403 &&
-		accessStatus?.status === AccessStatus.PENDING;
-	const isVisitorSpaceInactive = visitorSpace?.status === VisitorSpaceStatus.Inactive;
-	const mediaNoAccess = (mediaError as HTTPError)?.response?.status === 403;
+		setActiveVisitorSpace(visitorSpace);
+	}, [activeVisitorSpaceId, visitorSpaces]);
 
 	/**
 	 * Display
@@ -221,6 +242,24 @@ const VisitorSpaceSearchPage: NextPage = () => {
 			})),
 		[viewMode]
 	);
+
+	const dropdownOptions = useMemo(() => {
+		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
+			({ id, spaceName, endAt }: Visit): VisitorSpaceDropdownOption => {
+				const accessEndDate = isMobile
+					? formatSameDayTimeOrDate(asDate(endAt))
+					: formatMediumDateWithTime(asDate(endAt));
+
+				return {
+					id,
+					label: spaceName || '',
+					extraInfo: accessEndDate,
+				};
+			}
+		);
+
+		return [defaultOption, ...dynamicOptions];
+	}, [visitorSpaces, isMobile]);
 
 	/**
 	 * Methods
@@ -398,6 +437,8 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
+	const onVisitorSpaceSelected = (id: string): void => setActiveVisitorSpaceId(id);
+
 	/**
 	 * Computed
 	 */
@@ -406,9 +447,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const showNoResults = !!media && media?.items?.length === 0;
 	const showResults = !!media && media?.items?.length > 0;
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
-	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
+	const mediaNoAccess = (mediaError as HTTPError)?.response?.status === 403;
 
 	/**
 	 * Render
@@ -509,7 +548,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						(media) => media.schema_identifier === cast.schemaIdentifier
 					);
 
-					const href = `/${slug}/${source?.schema_identifier}`;
+					const href = `/${activeVisitorSpaceId}/${source?.schema_identifier}`;
 
 					const name = item.title?.toString(); // TODO double check that this still works
 					return (
@@ -546,35 +585,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		</>
 	);
 
-	const getAccessEndDate = () => {
-		if ((!accessEndDate && !accessEndDateMobile) || showLinkedSpaceAsHomepage) {
-			return undefined;
-		}
-		if (isMobile) {
-			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
-				accessEndDateMobile,
-			});
-		}
-		return tHtml(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
-			{
-				accessEndDate,
-			}
-		);
-	};
-
 	const renderVisitorSpace = () => (
 		<>
-			{visitorSpace && (
+			{visitorSpaces && (
 				<div className="p-visitor-space">
-					<VisitorSpaceNavigation
-						title={visitorSpace?.name}
-						phone={visitorSpace?.contactInfo.telephone || ''}
-						email={visitorSpace?.contactInfo.email || ''}
-						showBorder={showNavigationBorder}
-						showAccessEndDate={getAccessEndDate()}
-					/>
-
 					<section className="u-bg-black u-pt-8">
 						<div className="l-container">
 							<FormControl
@@ -584,28 +598,35 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 								)}
 							>
-								<TagSearchBar
-									allowCreate
-									clearLabel={tHtml(
-										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
-									)}
-									inputState={[searchBarInputState, setSearchBarInputState]}
-									instanceId={labelKeys.search}
-									isMulti
-									onClear={onResetFilters}
-									onRemoveValue={onRemoveTag}
-									onSearch={onSearch}
-									placeholder={tText(
-										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
-									)}
-									size="lg"
-									syncSearchValue={false}
-									value={activeFilters}
-								/>
+								<div className="p-visitor-space__searchbar">
+									<VisitorSpaceDropdown
+										options={dropdownOptions}
+										selectedOptionId={activeVisitorSpaceId}
+										onSelected={onVisitorSpaceSelected}
+									/>
+									<TagSearchBar
+										allowCreate
+										hasDropdown
+										clearLabel={tHtml(
+											'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
+										)}
+										inputState={[searchBarInputState, setSearchBarInputState]}
+										instanceId={labelKeys.search}
+										isMulti
+										onClear={onResetFilters}
+										onRemoveValue={onRemoveTag}
+										onSearch={onSearch}
+										placeholder={tText(
+											'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+										)}
+										size="lg"
+										syncSearchValue={false}
+										value={activeFilters}
+									/>
+								</div>
 							</FormControl>
-
-							<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 						</div>
+						<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 					</section>
 
 					{showResearchWarning && (
@@ -662,7 +683,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				</div>
 			)}
 
-			{visitorSpace && (
+			{!mediaIsLoading && (
 				<AddToFolderBlade
 					isOpen={isAddToFolderBladeOpen}
 					selected={
@@ -687,28 +708,18 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	);
 
 	const renderPageContent = () => {
-		if (
-			visitorSpaceIsLoading ||
-			visitAccessStatusIsLoading ||
-			visitRequestIsLoading ||
-			mediaIsLoading
-		) {
+		if (mediaIsLoading) {
 			return <Loading fullscreen owner="visitor space search page: render page content" />;
 		}
-
-		if (isNoAccessError || isVisitorSpaceInactive || mediaNoAccess) {
+		if (mediaNoAccess) {
 			return (
 				<ErrorNoAccess
-					visitorSpaceSlug={slug as string}
+					visitorSpaceSlug={String(activeVisitorSpace?.spaceSlug)}
 					description={tHtml(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___deze-bezoekersruimte-is-momenteel-niet-beschikbaar'
 					)}
 				/>
 			);
-		}
-
-		if (isAccessPendingError) {
-			return <WaitingPage space={visitorSpace ?? undefined} />;
 		}
 
 		return renderVisitorSpace();
@@ -717,4 +728,4 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	return renderPageContent();
 };
 
-export default withAuth(VisitorSpaceSearchPage);
+export default VisitorSpaceSearchPage;

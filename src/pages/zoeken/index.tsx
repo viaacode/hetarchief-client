@@ -30,4 +30,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(SearchPage as ComponentType);
+export default SearchPage;
