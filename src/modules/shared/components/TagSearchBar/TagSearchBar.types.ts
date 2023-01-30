@@ -11,6 +11,7 @@ export type TagSearchBarProps<IsMulti extends boolean = false> = DefaultComponen
 		inputState?: [string | undefined, Dispatch<SetStateAction<string | undefined>>];
 		light?: boolean;
 		hasDropdown?: boolean;
+		infoContent?: string;
 		onClear?: () => void;
 		onCreate?: (newValue: string) => void;
 		onRemoveValue?: (removedValue: TagSearchBarValue<IsMulti>) => void;

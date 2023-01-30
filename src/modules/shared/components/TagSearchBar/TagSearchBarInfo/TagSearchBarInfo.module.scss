@@ -1,0 +1,49 @@
+@use "src/styles/abstracts" as *;
+
+.c-tag-search-bar-info {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: $font-size-lg;
+	color: $white;
+	border-radius: 100%;
+	border: 0.1rem solid $shade;
+	padding: 0.6rem;
+	margin-left: 0.8rem;
+
+	&:hover {
+		cursor: pointer;
+
+		.c-tag-search-bar-info__content {
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+
+	&:focus,
+	&:focus-within {
+		outline: 0.4rem solid $teal;
+
+		.c-tag-search-bar-info__content {
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+
+	&__content {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		width: 38.4rem;
+		font-size: $font-size-sm;
+		color: $black;
+		padding: $spacer-sm;
+		background-color: $white;
+		box-shadow: $shadow-24-black-12;
+		opacity: 0;
+		visibility: hidden;
+		z-index: get-z-layer("foreground");
+		transition: opacity $animate-default;
+	}
+}
