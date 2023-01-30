@@ -10,6 +10,7 @@ export interface MediaCardProps {
 	actions?: ReactNode;
 	buttons?: ReactNode;
 	description?: ReactNode;
+	duration?: string;
 	keywords?: string[];
 	name?: string;
 	id?: string;

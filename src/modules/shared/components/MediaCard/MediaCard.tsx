@@ -17,6 +17,7 @@ import { MediaCardProps } from './MediaCard.types';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,
+	duration,
 	keywords,
 	preview,
 	publishedAt,
@@ -102,6 +103,9 @@ const MediaCard: FC<MediaCardProps> = ({
 		) : (
 			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
 				{renderNoContentIcon()}
+				{duration && (
+					<div className={clsx(styles['c-media-card__header-duration'])}>{duration}</div>
+				)}
 			</div>
 		);
 
@@ -136,9 +140,16 @@ const MediaCard: FC<MediaCardProps> = ({
 			>
 				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
 				{!isNil(icon) && (
-					<div className={clsx(styles['c-media-card__header-icon'])}>
-						<Icon name={icon} />
-					</div>
+					<>
+						<div className={clsx(styles['c-media-card__header-icon'])}>
+							<Icon name={icon} />
+						</div>
+						{duration && (
+							<div className={clsx(styles['c-media-card__header-duration'])}>
+								{duration}
+							</div>
+						)}
+					</>
 				)}
 			</div>
 		) : (

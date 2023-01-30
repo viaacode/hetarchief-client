@@ -59,6 +59,16 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		background-color: $white;
 	}
 
+	&__header-duration {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		font-size: $font-size-sm;
+		background-color: $white;
+		color: $zinc;
+		padding: 0.5rem 0.75rem;
+	}
+
 	:global(.c-card__subtitle-wrapper),
 	:global(.c-card__children-wrapper) {
 		line-height: 2.2rem;

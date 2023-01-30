@@ -451,6 +451,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													name: media.name,
 													type: media.format,
 													preview: media.thumbnailUrl,
+													duration: media.duration,
 												};
 
 												return {
