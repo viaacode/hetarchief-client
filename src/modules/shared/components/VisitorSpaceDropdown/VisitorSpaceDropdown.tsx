@@ -85,6 +85,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 			>
 				{options.map((option: VisitorSpaceDropdownOption) => (
 					<li
+						tabIndex={isOpen ? 0 : 1}
 						key={option.id}
 						role="option"
 						aria-selected={selectedOptionId === option.id}
