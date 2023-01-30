@@ -1,8 +1,7 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer, ContentPageService } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType } from 'react';
+import { ComponentType, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BooleanParam, useQueryParams } from 'use-query-params';
 
@@ -18,7 +17,6 @@ import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetContentPage } from '../modules/content-page/hooks/get-content-page';
-import { ContentPageService } from '../modules/content-page/services/content-page.service';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -29,9 +27,7 @@ type HomepageProps = {
 const Homepage: NextPage<HomepageProps> = ({ title, url }) => {
 	useNavigationBorder();
 
-	const router = useRouter();
 	const user = useSelector(selectUser);
-	const { slug } = router.query;
 	const dispatch = useDispatch();
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const [query, setQuery] = useQueryParams({
@@ -42,10 +38,13 @@ const Homepage: NextPage<HomepageProps> = ({ title, url }) => {
 	 * Data
 	 */
 
-	const { isLoading: isContentPageLoading, data: contentPageInfo } = useGetContentPage(
-		slug as string,
-		true
-	);
+	const { isLoading: isContentPageLoading, data: contentPageInfo } = useGetContentPage('', true);
+
+	useEffect(() => {
+		if (typeof query.showAuth === 'boolean') {
+			dispatch(setShowAuthModal(query.showAuth));
+		}
+	}, [dispatch, query.showAuth]);
 
 	/**
 	 * Methods
@@ -66,10 +65,10 @@ const Homepage: NextPage<HomepageProps> = ({ title, url }) => {
 
 	const renderPageContent = () => {
 		if (isContentPageLoading) {
-			return <Loading fullscreen owner="slug page: render page content" />;
+			return <Loading fullscreen owner="homepage" />;
 		}
 		if (contentPageInfo) {
-			return <ContentPageRenderer path={'/' as string} userGroupId={user?.groupId} />;
+			return <ContentPageRenderer contentPageInfo={contentPageInfo} />;
 		}
 	};
 

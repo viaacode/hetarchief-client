@@ -20,7 +20,7 @@ import { VisitorSpaceService } from '@visitor-space/services';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 
-import { WaitingPage } from '../../../modules/visitor-space/components';
+import { WaitingPage } from '../../../../modules/visitor-space/components';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -97,6 +97,7 @@ const VisitRequestedPage: NextPage<VisitRequestedPageProps> = ({ name, descripti
 				/>
 			);
 		}
+		console.log('rendering waiting page');
 		return <WaitingPage space={space} />;
 	};
 

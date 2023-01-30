@@ -21,7 +21,7 @@ import { isBrowser } from '@shared/utils';
 
 import VisitorLayout from '../../modules/visitors/layouts/VisitorLayout/VisitorLayout';
 
-const Home: NextPage<DefaultSeoInfo> = (props) => {
+const VisitorSpacesHome: NextPage<DefaultSeoInfo> = (props) => {
 	const dispatch = useDispatch();
 	const [query, setQuery] = useQueryParams({
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
@@ -96,4 +96,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default Home;
+export default VisitorSpacesHome;

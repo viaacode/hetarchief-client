@@ -1,8 +1,8 @@
+import { ContentPageService } from '@meemoo/admin-core-ui';
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
-import { ContentPageService } from '../services/content-page.service';
 import { ContentPageExistsInfo } from '../services/content-page.service.types';
 
 export function useGetContentPage(
@@ -23,7 +23,7 @@ export function useGetContentPage(
 	return useQuery(
 		[QUERY_KEYS.getContentPage, { slug }],
 		() => {
-			return ContentPageService.getBySlug(('/' + slug) as string, ignoreAuthError);
+			return ContentPageService.getContentPageByPath(('/' + slug) as string, ignoreAuthError);
 		},
 		options
 	);
