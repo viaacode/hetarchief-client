@@ -156,17 +156,23 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		isLoading: mediaIsLoading,
 		error: mediaError,
 	} = useGetMediaObjects(
-		activeVisitorSpace?.spaceMaintainerId?.toLocaleLowerCase() as string,
+		// ToDo(Silke): Remove hard coded value when the public catalog is available
+		isLoggedIn
+			? (activeVisitorSpace?.spaceMaintainerId?.toLocaleLowerCase() as string)
+			: 'or-rf5kf25',
 		mapFiltersToElastic(query),
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
 		activeSort,
-		activeVisitorSpace !== undefined
+		isLoggedIn ? activeVisitorSpace !== undefined : true
 	);
 
 	// The result will be added to the redux store
 	useGetMediaFilterOptions(
-		activeVisitorSpace?.spaceMaintainerId?.toLocaleLowerCase() as string | undefined
+		// ToDo(Silke): Remove hard coded value when the public catalog is available
+		isLoggedIn
+			? (activeVisitorSpace?.spaceMaintainerId?.toLocaleLowerCase() as string | undefined)
+			: 'or-rf5kf25'
 	);
 
 	/**
@@ -180,12 +186,14 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	}, [router.asPath, dispatch, query]);
 
 	useEffect(() => {
-		if (isLoggedIn && !isNil(router.query.space)) {
+		if (!isLoggedIn) {
+			return;
+		}
+
+		if (!isNil(router.query.space)) {
 			setActiveVisitorSpaceId(String(router.query.space));
 		}
 
-		// ToDo(Silke): Logged out version doesn't work because we still need to trigger this call
-		// Otherwise we won't be able to set a hard coded space since the public catalog isn't available yet
 		getVisitorSpaces();
 	}, [getVisitorSpaces, isLoggedIn, router.query.space]);
 
@@ -448,6 +456,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const showNoResults = !!media && media?.items?.length === 0;
 	const showResults = !!media && media?.items?.length > 0;
 	const mediaNoAccess = (mediaError as HTTPError)?.response?.status === 403;
+	const showVisitorSpacesDropdown = useMemo(
+		() => isLoggedIn && visitorSpaces.length > 1,
+		[isLoggedIn, visitorSpaces]
+	);
 
 	/**
 	 * Render
@@ -598,15 +610,22 @@ const VisitorSpaceSearchPage: NextPage = () => {
 									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 								)}
 							>
-								<div className="p-visitor-space__searchbar">
-									<VisitorSpaceDropdown
-										options={dropdownOptions}
-										selectedOptionId={activeVisitorSpaceId}
-										onSelected={onVisitorSpaceSelected}
-									/>
+								<div
+									className={clsx('p-visitor-space__searchbar', {
+										'p-visitor-space__searchbar--has-dropdown':
+											showVisitorSpacesDropdown,
+									})}
+								>
+									{showVisitorSpacesDropdown && (
+										<VisitorSpaceDropdown
+											options={dropdownOptions}
+											selectedOptionId={activeVisitorSpaceId}
+											onSelected={onVisitorSpaceSelected}
+										/>
+									)}
 									<TagSearchBar
 										allowCreate
-										hasDropdown
+										hasDropdown={showVisitorSpacesDropdown}
 										clearLabel={tHtml(
 											'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 										)}
@@ -619,14 +638,17 @@ const VisitorSpaceSearchPage: NextPage = () => {
 										placeholder={tText(
 											'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 										)}
+										infoContent={tText(
+											'pages/bezoekersruimte/zoeken-zoek-info'
+										)}
 										size="lg"
 										syncSearchValue={false}
 										value={activeFilters}
 									/>
 								</div>
 							</FormControl>
+							<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 						</div>
-						<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
 					</section>
 
 					{showResearchWarning && (
@@ -711,6 +733,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		if (mediaIsLoading) {
 			return <Loading fullscreen owner="visitor space search page: render page content" />;
 		}
+
 		if (mediaNoAccess) {
 			return (
 				<ErrorNoAccess

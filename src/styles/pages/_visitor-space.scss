@@ -59,11 +59,25 @@
 
 .p-visitor-space__searchbar {
 	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr;
+	margin-top: $spacer-lg;
 
-	@include respond-at("md") {
+	&--has-dropdown {
 		display: grid;
-		grid-template-columns: 26.5rem auto;
+		grid-template-columns: 1fr;
+
+		@include respond-at("md") {
+			display: grid;
+			grid-template-columns: 26.5rem auto;
+		}
+	}
+
+	.c-tag-search-bar {
+		&--has-info {
+			width: 100%;
+		}
+
+		&--has-dropdown {
+			height: 100%;
+		}
 	}
 }
