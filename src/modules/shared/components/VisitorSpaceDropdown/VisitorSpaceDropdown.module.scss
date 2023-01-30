@@ -35,7 +35,7 @@ $border-width: 0.2rem;
 		}
 
 		&-content {
-			width: 100%;
+			overflow: hidden;
 		}
 
 		&-label {
@@ -69,6 +69,8 @@ $border-width: 0.2rem;
 		left: 0;
 		right: 0;
 		opacity: 0;
+		min-width: 100%;
+		width: min-content;
 		box-shadow: $shadow-24-black-12;
 		transition: opacity $animate-default;
 		pointer-events: none;
