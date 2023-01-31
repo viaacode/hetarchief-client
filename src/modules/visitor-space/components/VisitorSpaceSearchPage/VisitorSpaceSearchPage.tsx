@@ -5,7 +5,7 @@ import { isNil, sum } from 'lodash-es';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
@@ -89,7 +89,7 @@ const defaultOption: VisitorSpaceDropdownOption = {
 	label: `${tHtml('pages/bezoekersruimte/publieke_catalogus')}`,
 };
 
-const VisitorSpaceSearchPage: NextPage = () => {
+const VisitorSpaceSearchPage: FC = () => {
 	useNavigationBorder();
 
 	const { tHtml, tText } = useTranslation();

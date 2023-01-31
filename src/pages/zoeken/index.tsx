@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { VisitorSpaceSearchPage } from '@visitor-space/components/VisitorSpaceSearchPage';
+import { VisitorSpaceSearchPage } from '@visitor-space/components';
 
 type SearchPageProps = DefaultSeoInfo;
 
