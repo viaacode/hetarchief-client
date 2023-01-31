@@ -329,6 +329,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	const renderDescription = (item: FolderMedia): ReactNode => {
+		console.log(item.termsAvailable);
+
 		const items: { label: string | ReactNode; value: ReactNode }[] = [
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___aanbieder'),
@@ -380,6 +382,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						</p>
 					) : null;
 				})}
+				<p className="p-account-my-folders__card-description-access-label">
+					<Icon name={IconNamesLight.Clock} />
+					<span>Tijdelijke toegang</span>
+				</p>
 			</div>
 		);
 	};
