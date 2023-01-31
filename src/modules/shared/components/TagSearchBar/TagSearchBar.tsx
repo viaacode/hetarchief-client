@@ -3,9 +3,6 @@ import clsx from 'clsx';
 import { KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
 import { InputActionMeta } from 'react-select';
 
-import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { Breakpoints } from '@shared/types';
-
 import { IconNamesLight } from '../Icon';
 import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
 
@@ -50,9 +47,6 @@ const TagSearchBar = <IsMulti extends boolean>({
 	valuePlaceholder,
 	...tagsInputProps
 }: TagSearchBarProps<IsMulti>): ReactElement => {
-	const windowSize = useWindowSizeContext();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-
 	const localInputState = useState(searchValue);
 	const [inputValue, setInputValue] = inputState || localInputState;
 
@@ -134,8 +128,6 @@ const TagSearchBar = <IsMulti extends boolean>({
 	/**
 	 * Render
 	 */
-	const renderInfo = () =>
-		infoContent && <TagSearchBarInfo icon={IconNamesLight.Info} content={infoContent} />;
 
 	return (
 		<div className="u-flex u-align-center u-justify-between">
@@ -166,7 +158,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 				onChange={onSearchChange}
 				/* eslint-enable @typescript-eslint/ban-ts-comment */
 			/>
-			{!isMobile && renderInfo()}
+			{infoContent && <TagSearchBarInfo icon={IconNamesLight.Info} content={infoContent} />}
 		</div>
 	);
 };

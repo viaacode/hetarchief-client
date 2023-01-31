@@ -1,16 +1,24 @@
 @use "src/styles/abstracts" as *;
 
 .c-tag-search-bar-info {
-	position: relative;
+	position: absolute;
+	right: $spacer-lg;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: $font-size-lg;
-	color: $white;
-	border-radius: 100%;
-	border: 0.1rem solid $shade;
 	padding: 0.6rem;
-	margin-left: 0.8rem;
+	border-radius: 100%;
+	margin-left: 0;
+	color: $neutral;
+
+	@include respond-at("md") {
+		position: relative;
+		right: unset;
+		color: $white;
+		margin-left: 0.8rem;
+		border: 0.1rem solid $shade;
+	}
 
 	&:hover {
 		cursor: pointer;
@@ -35,7 +43,7 @@
 		position: absolute;
 		top: 100%;
 		right: 0;
-		width: 38.4rem;
+		width: 75vw;
 		font-size: $font-size-sm;
 		color: $black;
 		padding: $spacer-sm;
@@ -45,5 +53,9 @@
 		visibility: hidden;
 		z-index: get-z-layer("foreground");
 		transition: opacity $animate-default;
+
+		@include respond-at("md") {
+			width: 38.4rem;
+		}
 	}
 }
