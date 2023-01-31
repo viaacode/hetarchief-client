@@ -62,8 +62,7 @@
 	margin-top: $spacer-lg;
 
 	&--has-dropdown {
-		display: grid;
-		grid-template-columns: 1fr;
+		display: block;
 
 		@include respond-at("md") {
 			display: grid;

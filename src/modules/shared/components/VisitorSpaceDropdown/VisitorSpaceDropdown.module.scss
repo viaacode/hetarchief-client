@@ -71,11 +71,14 @@ $border-width: 0.2rem;
 		right: 0;
 		opacity: 0;
 		min-width: 100%;
-		width: min-content;
 		box-shadow: $shadow-24-black-12;
 		transition: opacity $animate-default;
 		pointer-events: none;
 		z-index: get-z-layer("foreground");
+
+		@include respond-at("md") {
+			width: min-content;
+		}
 	}
 
 	&__option {
