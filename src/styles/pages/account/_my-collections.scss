@@ -32,6 +32,19 @@ $component: "p-account-my-folders";
 			font-size: $font-size-xs;
 			line-height: $line-height-4xl;
 		}
+
+		&-access {
+			display: inline-flex;
+			justify-content: space-between;
+			align-items: center;
+			color: $black;
+			background-color: $lila;
+			padding: 0 $spacer-xs;
+			font-weight: $font-weight-bold;
+			line-height: 2rem;
+			border-radius: 2.5rem;
+			margin-top: $spacer-xs;
+		}
 	}
 
 	// Hide links active state on mobile
