@@ -97,15 +97,17 @@ const MediaCard: FC<MediaCardProps> = ({
 		/>
 	);
 
+	const renderDuration = () => (
+		<div className={clsx(styles['c-media-card__header-duration'])}>{duration}</div>
+	);
+
 	const renderNoContent = () =>
 		view === 'grid' ? (
 			renderNoContentIcon()
 		) : (
 			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
 				{renderNoContentIcon()}
-				{duration && (
-					<div className={clsx(styles['c-media-card__header-duration'])}>{duration}</div>
-				)}
+				{duration && renderDuration()}
 			</div>
 		);
 
@@ -144,11 +146,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						<div className={clsx(styles['c-media-card__header-icon'])}>
 							<Icon name={icon} />
 						</div>
-						{duration && (
-							<div className={clsx(styles['c-media-card__header-duration'])}>
-								{duration}
-							</div>
-						)}
+						{duration && renderDuration()}
 					</>
 				)}
 			</div>
