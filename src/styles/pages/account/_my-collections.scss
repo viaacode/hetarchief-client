@@ -76,15 +76,6 @@ $component: "p-account-my-folders";
 		}
 	}
 
-	// Avoid clicks on container triggering events
-	.c-content-input__icon--end {
-		pointer-events: none;
-
-		& > button {
-			pointer-events: all;
-		}
-	}
-
 	@include respond-to("lg") {
 		// Hide top-level sidebar a bit earlier
 		// > :global(.l-sidebar__navigation) {

@@ -1,4 +1,10 @@
-import { Button, FormControl } from '@meemoo/react-components';
+import {
+	Button,
+	FormControl,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -288,23 +294,34 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{
 							before: false,
 							node: (
-								<Button
-									key={'delete-folder'}
-									disabled={!!activeFolder.usedForLimitedAccessUntil}
-									className="p-account-my-folders__delete"
-									variants={['silver']}
-									icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										setShowConfirmDelete(true);
-									}}
-								/>
+								<Tooltip position="top">
+									<TooltipTrigger>
+										<Button
+											key={'delete-folder'}
+											disabled={!!activeFolder.usedForLimitedAccessUntil}
+											className="p-account-my-folders__delete"
+											variants={['silver']}
+											icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+											aria-label={tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+											)}
+											name={tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+											)}
+											onClick={(e) => {
+												e.stopPropagation();
+												setShowConfirmDelete(true);
+											}}
+										/>
+									</TooltipTrigger>
+									<TooltipContent>
+										<span>
+											{tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
+											)}
+										</span>
+									</TooltipContent>
+								</Tooltip>
 							),
 						},
 				  ]
