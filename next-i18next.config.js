@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const I18NextHttpBackend = require('i18next-http-backend');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const _ = require('lodash');
 
 module.exports = {
 	i18n: {
@@ -14,7 +16,7 @@ module.exports = {
 	serializeConfig: false,
 	parseMissingKeyHandler: (key) => {
 		if (key.includes('___')) {
-			return `${key.split('___').pop()} ***`;
+			return `${_.upperFirst(_.lowerCase(key.split('___').pop()))} ***`;
 		}
 		return `${key} ***`;
 	},
