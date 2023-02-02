@@ -9,7 +9,7 @@ export interface Folder {
 	name: string;
 	updatedAt: string;
 	userProfileId: string;
-	usedForLimitedAccessUntil: string;
+	usedForLimitedAccessUntil: string | null;
 	objects?: Pick<FolderMedia, 'schemaIdentifier'>[];
 }
 
