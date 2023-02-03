@@ -1,4 +1,4 @@
-import { ContentPageRenderer, ContentPageService } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, useEffect } from 'react';
@@ -18,6 +18,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetContentPage } from '../modules/content-page/hooks/get-content-page';
 
+import { ContentPageService } from 'modules/content-page/services/content-page.service';
 import { VisitorLayout } from 'modules/visitors';
 
 type HomepageProps = {
@@ -86,13 +87,10 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<HomepageProps>> {
 	let title: string | null = null;
 	try {
-		const [contentPage] = await Promise.allSettled([
-			ContentPageService.getBySlug(('/' + context.query.slug) as string),
-		]);
-
-		if (contentPage.status === 'fulfilled') {
-			title = contentPage.value?.title || null;
-		}
+		const contentPage = await ContentPageService.getBySlug(
+			('/' + context.query.slug) as string
+		);
+		title = contentPage?.title || null;
 	} catch (err) {
 		console.error('Failed to fetch content page seo info by slug: ' + context.query.slug, err);
 	}

@@ -33,6 +33,7 @@ type DynamicRouteResolverProps = {
 	title: string | null;
 } & DefaultSeoInfo;
 
+// TODO: simplify this component to VisitorSpaceSearchPage
 const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url }) => {
 	useNavigationBorder();
 

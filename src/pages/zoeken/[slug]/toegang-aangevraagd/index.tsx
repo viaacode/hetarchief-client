@@ -97,7 +97,6 @@ const VisitRequestedPage: NextPage<VisitRequestedPageProps> = ({ name, descripti
 				/>
 			);
 		}
-		console.log('rendering waiting page');
 		return <WaitingPage space={space} />;
 	};
 
