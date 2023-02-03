@@ -31,7 +31,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 
 	const onRequestAccess = (visitorSpaceSlug: string) => {
 		return router.push(
-			`${ROUTES.home}?${stringify({
+			`${ROUTES.bezoek}?${stringify({
 				[SHOW_AUTH_QUERY_KEY]: '1',
 				[VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
 			})}`
@@ -41,7 +41,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 	useEffect(() => {
 		if (query[VISITOR_SPACE_SLUG_QUERY_KEY] && !query[SHOW_AUTH_QUERY_KEY]) {
 			router.push(
-				`${ROUTES.home}?${stringify({
+				`${ROUTES.bezoek}?${stringify({
 					[SHOW_AUTH_QUERY_KEY]: '1',
 					[VISITOR_SPACE_SLUG_QUERY_KEY]: query[VISITOR_SPACE_SLUG_QUERY_KEY],
 				})}`
