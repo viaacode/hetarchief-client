@@ -22,6 +22,8 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	// Override next/image
 	&__header-wrapper {
+		min-height: 13rem;
+
 		&--list,
 		&--grid {
 			position: relative;
