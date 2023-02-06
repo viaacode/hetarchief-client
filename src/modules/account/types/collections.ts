@@ -20,6 +20,7 @@ export interface FolderMedia {
 	collectionEntryCreatedAt?: string;
 	creator?: unknown;
 	description: string;
+	duration: string;
 	format: MediaTypes;
 	name: string;
 	numberOfPages?: unknown;
