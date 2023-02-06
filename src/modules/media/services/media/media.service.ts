@@ -1,6 +1,8 @@
+import { isNil } from 'lodash';
 import { stringifyUrl } from 'query-string';
 
 import { MediaSimilar } from '@media/types';
+import { formatMaintainerId } from '@media/utils';
 import { ApiService } from '@shared/services/api-service';
 import {
 	MediaInfo,
@@ -14,6 +16,7 @@ import { ElasticsearchResponse, GetMediaResponse } from '@shared/types/api';
 import { VisitorSpaceSort } from '@visitor-space/types';
 
 import {
+	IE_OBJECTS_SERVICE_BASE_URL,
 	MEDIA_SERVICE_BASE_URL,
 	MEDIA_SERVICE_EXPORT,
 	MEDIA_SERVICE_RELATED,
@@ -30,25 +33,36 @@ export class MediaService {
 		sort?: SortObject
 	): Promise<GetMediaResponse> {
 		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
-		const filtered = filters.filter((item) => {
-			// Don't send filters with no value(s)
-			const hasValue = !!item.value || !!item.multiValue;
-			const eitherValue = item.multiValue || item.value;
+		const filtered = [
+			// Visitor space "filter"
+			{
+				...(!isNil(orgId) && {
+					field: 'maintainer',
+					value: orgId,
+					operator: MediaSearchOperator.IS,
+				}),
+			},
+			// Actual filters
+			...filters.filter((item) => {
+				// Don't send filters with no value(s)
+				const hasValue = !!item.value || !!item.multiValue;
+				const eitherValue = item.multiValue || item.value;
 
-			// Don't send filters with an empty array/string
-			const hasLength = eitherValue && eitherValue.length > 0;
+				// Don't send filters with an empty array/string
+				const hasLength = eitherValue && eitherValue.length > 0;
 
-			// Don't send the "All" filter for FORMAT.IS
-			const isFormatAllFilter =
-				item.field === MediaSearchFilterField.FORMAT &&
-				item.operator === MediaSearchOperator.IS &&
-				item.value === VisitorSpaceMediaType.All;
+				// Don't send the "All" filter for FORMAT.IS
+				const isFormatAllFilter =
+					item.field === MediaSearchFilterField.FORMAT &&
+					item.operator === MediaSearchOperator.IS &&
+					item.value === VisitorSpaceMediaType.All;
 
-			return hasValue && hasLength && !isFormatAllFilter;
-		});
+				return hasValue && hasLength && !isFormatAllFilter;
+			}),
+		];
 
 		const parsed = (await ApiService.getApi()
-			.post(`${MEDIA_SERVICE_BASE_URL}/${orgId}`, {
+			.post(`${IE_OBJECTS_SERVICE_BASE_URL}`, {
 				body: JSON.stringify({
 					filters: filtered,
 					size,
