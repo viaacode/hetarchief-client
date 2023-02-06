@@ -380,6 +380,12 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						</p>
 					) : null;
 				})}
+				<p className="p-account-my-folders__card-description-access">
+					<Icon name={IconNamesLight.Clock} />
+					<span className="u-ml-4">
+						{tText('pages/account/mijn-mappen/folder-slug/index___tijdelijke-toegang')}
+					</span>
+				</p>
 			</div>
 		);
 	};
