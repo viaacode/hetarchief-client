@@ -29,7 +29,7 @@ export const ROUTE_PARTS = Object.freeze({
 	visitorSpaces: 'bezoekersruimtes',
 	visitors: 'actieve-bezoekers',
 	myMaterialRequests: 'materiaalaanvragen',
-	Search: 'zoeken',
+	search: 'zoeken',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -86,5 +86,4 @@ export const ADMIN_CORE_ROUTES = {
 export enum KNOWN_STATIC_ROUTES {
 	TermsOfService = '/gebruikersvoorwaarden-tekst',
 	Home = '',
-	Search = `/zoeken`,
 }
