@@ -1,8 +1,7 @@
-import { isNil } from 'lodash';
+import { isEmpty, isNil } from 'lodash';
 import { stringifyUrl } from 'query-string';
 
 import { MediaSimilar } from '@media/types';
-import { formatMaintainerId } from '@media/utils';
 import { ApiService } from '@shared/services/api-service';
 import {
 	MediaInfo,
@@ -36,7 +35,7 @@ export class MediaService {
 		const filtered = [
 			// Visitor space "filter"
 			{
-				...(!isNil(orgId) && {
+				...((!isNil(orgId) || !isEmpty(orgId)) && {
 					field: 'maintainer',
 					value: orgId,
 					operator: MediaSearchOperator.IS,

@@ -1,4 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { isNil } from 'lodash';
 import { useDispatch } from 'react-redux';
 
 import { MediaService } from '@media/services';
@@ -15,9 +16,10 @@ export function useGetMediaFilterOptions(
 	return useQuery(
 		[QUERY_KEYS.getMediaFilterOptions, { slug: orgId }],
 		async () => {
-			if (!orgId) {
+			if (isNil(orgId)) {
 				return;
 			}
+
 			const response: GetMediaResponse = await MediaService.getBySpace(orgId, [], 0, 0);
 			dispatch(setFilterOptions(response.aggregations));
 

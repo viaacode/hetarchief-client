@@ -85,7 +85,7 @@ const labelKeys = {
 };
 
 const defaultOption: VisitorSpaceDropdownOption = {
-	id: 'publieke-catalogus',
+	id: '',
 	label: `${tHtml('pages/bezoekersruimte/publieke_catalogus')}`,
 };
 
@@ -156,10 +156,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		isLoading: mediaIsLoading,
 		error: mediaError,
 	} = useGetMediaObjects(
-		// ToDo(Silke): Remove hard coded value when the public catalog is available
-		isLoggedIn
-			? (activeVisitorSpace?.spaceMaintainerId?.toLocaleLowerCase() as string)
-			: 'or-rf5kf25',
+		activeVisitorSpace?.spaceMaintainerId || '',
 		mapFiltersToElastic(query),
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
@@ -168,12 +165,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	);
 
 	// The result will be added to the redux store
-	useGetMediaFilterOptions(
-		// ToDo(Silke): Remove hard coded value when the public catalog is available
-		isLoggedIn
-			? (activeVisitorSpace?.spaceMaintainerId?.toLocaleLowerCase() as string | undefined)
-			: 'or-rf5kf25'
-	);
+	useGetMediaFilterOptions(activeVisitorSpace?.spaceMaintainerId || '');
 
 	/**
 	 * Effects
@@ -198,14 +190,8 @@ const VisitorSpaceSearchPage: FC = () => {
 	}, [getVisitorSpaces, isLoggedIn, router.query.space]);
 
 	useEffect(() => {
-		// ToDo(Silke): Temporarily set a hard coded id (which is linked to an exising space) as the public catalog id
-		const activeId =
-			activeVisitorSpaceId === 'publieke-catalogus'
-				? '7dcb671c-3872-4a6b-9594-0689fb631f31'
-				: activeVisitorSpaceId;
-
 		const visitorSpace: Visit | undefined = visitorSpaces.find(
-			({ id }: Visit): boolean => activeId === id
+			({ id }: Visit): boolean => activeVisitorSpaceId === id
 		);
 
 		setActiveVisitorSpace(visitorSpace);
