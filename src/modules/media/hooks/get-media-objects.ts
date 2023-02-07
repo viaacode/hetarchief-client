@@ -28,7 +28,7 @@ async function addRelatedCount(response: GetMediaResponse): Promise<GetMediaResp
 }
 
 export function useGetMediaObjects(
-	orgId: string,
+	// orgId: string,
 	filters: MediaSearchFilter[],
 	page: number,
 	size: number,
@@ -38,7 +38,7 @@ export function useGetMediaObjects(
 	const dispatch = useDispatch();
 
 	return useQuery(
-		[QUERY_KEYS.getMediaObjects, { slug: orgId, filters, page, size, sort, enabled }],
+		[QUERY_KEYS.getMediaObjects, { filters, page, size, sort, enabled }],
 		async () => {
 			let searchResults: GetMediaResponse;
 			if (filters.length) {
@@ -47,11 +47,8 @@ export function useGetMediaObjects(
 				//     - One to count the amount of related items
 				//     - and one to fetch the aggregates across tabs (noFormat)
 				const responses = await Promise.all([
-					MediaService.getSearchResults(orgId, filters, page, size, sort).then(
-						addRelatedCount
-					),
+					MediaService.getSearchResults(filters, page, size, sort).then(addRelatedCount),
 					MediaService.getSearchResults(
-						orgId,
 						filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
 						page,
 						0,
@@ -67,14 +64,13 @@ export function useGetMediaObjects(
 					},
 				};
 			} else {
-				searchResults = await MediaService.getSearchResults(orgId, [], page, size, sort);
+				searchResults = await MediaService.getSearchResults([], page, size, sort);
 			}
 
 			dispatch(setResults(searchResults));
 
 			// Log event
 			EventsService.triggerEvent(LogEventType.SEARCH, window.location.href, {
-				index: orgId,
 				filters,
 				page,
 				size,

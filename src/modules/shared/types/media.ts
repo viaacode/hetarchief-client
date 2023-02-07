@@ -23,6 +23,7 @@ export enum MediaSearchFilterField {
 	PUBLISHED = 'published',
 	PUBLISHER = 'publisher',
 	QUERY = 'query',
+	MAINTAINER = 'maintainer',
 }
 
 export enum MediaSearchOperator {

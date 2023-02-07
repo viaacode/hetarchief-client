@@ -1,7 +1,6 @@
 import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isNil, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -86,6 +85,8 @@ import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
 
+import { sum } from 'lodash';
+
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
@@ -162,7 +163,6 @@ const VisitorSpaceSearchPage: FC = () => {
 		isLoading: searchResultsLoading,
 		error: searchResultsError,
 	} = useGetIeObjects(
-		activeVisitorSpace?.spaceMaintainerId || '',
 		mapFiltersToElastic(query),
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
@@ -171,7 +171,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	);
 
 	// The result will be added to the redux store
-	useGetMediaFilterOptions(activeVisitorSpace?.spaceMaintainerId || '');
+	useGetMediaFilterOptions();
 
 	/**
 	 * Effects
@@ -188,12 +188,8 @@ const VisitorSpaceSearchPage: FC = () => {
 			return;
 		}
 
-		if (!isNil(router.query.space)) {
-			setActiveVisitorSpaceId(String(router.query.space));
-		}
-
 		getVisitorSpaces();
-	}, [getVisitorSpaces, isLoggedIn, router.query.space]);
+	}, [getVisitorSpaces, isLoggedIn]);
 
 	useEffect(() => {
 		const visitorSpace: Visit | undefined = visitorSpaces.find(
@@ -201,7 +197,8 @@ const VisitorSpaceSearchPage: FC = () => {
 		);
 
 		setActiveVisitorSpace(visitorSpace);
-	}, [activeVisitorSpaceId, visitorSpaces]);
+		setQuery({ maintainer: visitorSpace?.spaceMaintainerId });
+	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
 
 	/**
 	 * Display

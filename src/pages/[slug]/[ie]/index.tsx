@@ -309,19 +309,21 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	 * Mapping
 	 */
 	const mapSimilarData = (data: MediaSimilarHit[]): MediaObject[] => {
+		console.log({ data });
+
 		return data.map((hit) => {
 			return {
-				type: hit._source.dcterms_format as MediaTypes,
-				title: hit._source.schema_name,
-				subtitle: `${hit._source.schema_maintainer?.schema_name ?? ''} ${
-					hit._source.schema_date_published
-						? `(${formatMediumDate(asDate(hit._source.schema_date_published))})`
+				type: hit._source.dctermsFormat as MediaTypes,
+				title: hit._source.name,
+				subtitle: `${hit._source.maintainerName ?? ''} ${
+					hit._source.datePublished
+						? `(${formatMediumDate(asDate(hit._source.datePublished))})`
 						: ''
 				}`,
-				description: hit._source.schema_description || '',
-				thumbnail: hit._source.schema_thumbnail_url,
+				description: hit._source.description || '',
+				thumbnail: hit._source.thumbnailUrl,
 				id: hit._id,
-				maintainer_id: hit._source.schema_maintainer?.schema_identifier || '',
+				maintainer_id: hit._source.maintainerId || '',
 			};
 		});
 	};

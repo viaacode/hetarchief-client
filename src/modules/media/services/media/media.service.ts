@@ -1,4 +1,3 @@
-import { isEmpty, isNil } from 'lodash';
 import { stringifyUrl } from 'query-string';
 
 import { Media, MediaSimilar } from '@media/types';
@@ -24,27 +23,13 @@ import {
 
 export class MediaService {
 	public static async getSearchResults(
-		orgId: string,
 		filters: MediaSearchFilter[] = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject
 	): Promise<GetMediaResponse> {
-		const hasMaintainerId = !isNil(orgId) && !isEmpty(orgId);
 		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
 		const filtered = [
-			// Visitor space "filter"
-			...(hasMaintainerId
-				? [
-						// todo map
-						{
-							field: 'maintainer',
-							value: orgId,
-							operator: MediaSearchOperator.IS,
-						},
-				  ]
-				: []),
-			// Actual filters
 			...filters.filter((item) => {
 				// Don't send filters with no value(s)
 				const hasValue = !!item.value || !!item.multiValue;
