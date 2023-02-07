@@ -28,7 +28,6 @@ async function addRelatedCount(response: GetMediaResponse): Promise<GetMediaResp
 }
 
 export function useGetMediaObjects(
-	// orgId: string,
 	filters: MediaSearchFilter[],
 	page: number,
 	size: number,
