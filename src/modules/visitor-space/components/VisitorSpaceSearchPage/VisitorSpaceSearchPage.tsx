@@ -2,7 +2,6 @@ import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-com
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { isNil, sum } from 'lodash-es';
-import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -13,7 +12,7 @@ import { useQueryParams } from 'use-query-params';
 import { Permission } from '@account/const';
 import { selectIsLoggedIn } from '@auth/store/user';
 import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
-import { useGetMediaObjects } from '@media/hooks/get-media-objects';
+import { useGetMediaObjects as useGetIeObjects } from '@media/hooks/get-media-objects';
 import { isInAFolder } from '@media/utils';
 import {
 	Callout,
@@ -47,7 +46,14 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/media';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { Breakpoints, SortObject, Visit, VisitorSpaceMediaType, VisitStatus } from '@shared/types';
+import {
+	Breakpoints,
+	MediaTypes,
+	SortObject,
+	Visit,
+	VisitorSpaceMediaType,
+	VisitStatus,
+} from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 import { VisitsService } from '@visits/services';
@@ -124,7 +130,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 	const [activeVisitorSpace, setActiveVisitorSpace] = useState<Visit | undefined>();
-	const [activeVisitorSpaceId, setActiveVisitorSpaceId] = useState<string>('publieke-catalogus');
+	const [activeVisitorSpaceId, setActiveVisitorSpaceId] = useState<string>('');
 
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const activeSort: SortObject = {
@@ -152,16 +158,16 @@ const VisitorSpaceSearchPage: FC = () => {
 	}, []);
 
 	const {
-		data: media,
-		isLoading: mediaIsLoading,
-		error: mediaError,
-	} = useGetMediaObjects(
+		data: searchResults,
+		isLoading: searchResultsLoading,
+		error: searchResultsError,
+	} = useGetIeObjects(
 		activeVisitorSpace?.spaceMaintainerId || '',
 		mapFiltersToElastic(query),
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
 		activeSort,
-		isLoggedIn ? activeVisitorSpace !== undefined : true
+		true
 	);
 
 	// The result will be added to the redux store
@@ -203,14 +209,14 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const getItemCounts = useCallback(
 		(type: VisitorSpaceMediaType): number => {
-			const buckets = media?.aggregations?.dcterms_format?.buckets || [];
+			const buckets = searchResults?.aggregations?.dcterms_format?.buckets || [];
 			if (type === VisitorSpaceMediaType.All) {
 				return sum(buckets.map((item) => item.doc_count));
 			} else {
 				return buckets.find((bucket) => bucket.key === type)?.doc_count || 0;
 			}
 		},
-		[media]
+		[searchResults]
 	);
 
 	const tabs: TabProps[] = useMemo(
@@ -437,11 +443,11 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * Computed
 	 */
 
-	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
-	const showNoResults = !!media && media?.items?.length === 0;
-	const showResults = !!media && media?.items?.length > 0;
-	const mediaNoAccess = (mediaError as HTTPError)?.response?.status === 403;
+	const isLoadedWithoutResults = !!searchResults && searchResults?.items?.length === 0;
+	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
+	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
+	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const showVisitorSpacesDropdown = useMemo(
 		() => isLoggedIn && visitorSpaces.length > 1,
 		[isLoggedIn, visitorSpaces]
@@ -453,7 +459,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const renderFilterMenu = () => {
 		const filterMenuCls = clsx('p-visitor-space__filter-menu', {
-			'u-mr-32:md': viewMode === 'list' && showResults,
+			'u-mr-32:md': viewMode === 'list' && isLoadedWithResults,
 		});
 
 		return (
@@ -520,18 +526,16 @@ const VisitorSpaceSearchPage: FC = () => {
 	const renderResults = () => (
 		<>
 			<MediaCardList
-				items={media?.items.map(
+				items={searchResults?.items.map(
 					(item): IdentifiableMediaCard => ({
-						schemaIdentifier: item.schema_identifier,
-						description: item.schema_description,
-						title: item.schema_name,
-						publishedAt: item.schema_date_published
-							? asDate(item.schema_date_published)
-							: undefined,
-						publishedBy: item.schema_maintainer?.schema_name ?? '',
-						type: item.dcterms_format,
-						preview: item.schema_thumbnail_url || undefined,
-						name: item.schema_name,
+						schemaIdentifier: item.schemaIdentifier,
+						description: item.schemaIdentifier,
+						title: item.name,
+						publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
+						publishedBy: item.maintainerName || '',
+						type: item.dctermsFormat as MediaTypes,
+						preview: item.thumbnailUrl || undefined,
+						name: item.name,
 						hasRelated: (item.related_count || 0) > 0,
 					})
 				)}
@@ -542,15 +546,15 @@ const VisitorSpaceSearchPage: FC = () => {
 				className="p-media-card-list"
 				wrapper={(card, item) => {
 					const cast = item as IdentifiableMediaCard;
-					const source = media?.items.find(
-						(media) => media.schema_identifier === cast.schemaIdentifier
+					const source = searchResults?.items.find(
+						(media) => media.schemaIdentifier === cast.schemaIdentifier
 					);
 
-					const href = `/${activeVisitorSpaceId}/${source?.schema_identifier}`;
+					const href = `/${activeVisitorSpaceId}/${source?.schemaIdentifier}`;
 
 					const name = item.title?.toString(); // TODO double check that this still works
 					return (
-						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
+						<Link key={source?.schemaIdentifier} href={href.toLowerCase()}>
 							<a
 								className="u-text-no-decoration"
 								aria-label={tText(
@@ -583,144 +587,158 @@ const VisitorSpaceSearchPage: FC = () => {
 		</>
 	);
 
-	const renderVisitorSpace = () => (
-		<>
-			{visitorSpaces && (
-				<div className="p-visitor-space">
-					<section className="u-bg-black u-pt-8">
-						<div className="l-container">
-							<FormControl
-								className="c-form-control--label-hidden u-mb-24"
-								id={`react-select-${labelKeys.search}-input`}
-								label={tHtml(
-									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
-								)}
-							>
-								<div
-									className={clsx('p-visitor-space__searchbar', {
-										'p-visitor-space__searchbar--has-dropdown':
-											showVisitorSpacesDropdown,
-									})}
+	const renderVisitorSpace = () => {
+		return (
+			<>
+				{visitorSpaces && (
+					<div className="p-visitor-space">
+						<section className="u-bg-black u-pt-8">
+							<div className="l-container">
+								<FormControl
+									className="c-form-control--label-hidden u-mb-24"
+									id={`react-select-${labelKeys.search}-input`}
+									label={tHtml(
+										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+									)}
 								>
-									{showVisitorSpacesDropdown && (
-										<VisitorSpaceDropdown
-											options={dropdownOptions}
-											selectedOptionId={activeVisitorSpaceId}
-											onSelected={onVisitorSpaceSelected}
+									<div
+										className={clsx('p-visitor-space__searchbar', {
+											'p-visitor-space__searchbar--has-dropdown':
+												showVisitorSpacesDropdown,
+										})}
+									>
+										{showVisitorSpacesDropdown && (
+											<VisitorSpaceDropdown
+												options={dropdownOptions}
+												selectedOptionId={activeVisitorSpaceId}
+												onSelected={onVisitorSpaceSelected}
+											/>
+										)}
+										<TagSearchBar
+											allowCreate
+											hasDropdown={showVisitorSpacesDropdown}
+											clearLabel={tHtml(
+												'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
+											)}
+											inputState={[
+												searchBarInputState,
+												setSearchBarInputState,
+											]}
+											instanceId={labelKeys.search}
+											isMulti
+											onClear={onResetFilters}
+											onRemoveValue={onRemoveTag}
+											onSearch={onSearch}
+											placeholder={tText(
+												'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+											)}
+											infoContent={tText(
+												'pages/bezoekersruimte/zoeken-zoek-info'
+											)}
+											size="lg"
+											syncSearchValue={false}
+											value={activeFilters}
 										/>
-									)}
-									<TagSearchBar
-										allowCreate
-										hasDropdown={showVisitorSpacesDropdown}
-										clearLabel={tHtml(
-											'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
-										)}
-										inputState={[searchBarInputState, setSearchBarInputState]}
-										instanceId={labelKeys.search}
-										isMulti
-										onClear={onResetFilters}
-										onRemoveValue={onRemoveTag}
-										onSearch={onSearch}
-										placeholder={tText(
-											'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
-										)}
-										infoContent={tText(
-											'pages/bezoekersruimte/zoeken-zoek-info'
-										)}
-										size="lg"
-										syncSearchValue={false}
-										value={activeFilters}
-									/>
-								</div>
-							</FormControl>
-							<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
-						</div>
-					</section>
-
-					{showResearchWarning && (
-						<aside className="u-bg-platinum">
-							<div className="l-container u-flex u-justify-center u-py-32">
-								<Callout
-									icon={<Icon name={IconNamesLight.Info} aria-hidden />}
-									text={tHtml(
-										'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
-									)}
-									action={
-										<Link passHref href="/kiosk-voorwaarden">
-											<a aria-label={tText('pages/slug/index___meer-info')}>
-												<Button
-													className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-													label={tHtml('pages/slug/index___meer-info')}
-													variants={['text', 'underline']}
-												/>
-											</a>
-										</Link>
-									}
+									</div>
+								</FormControl>
+								<ScrollableTabs
+									variants={['dark']}
+									tabs={tabs}
+									onClick={onTabClick}
 								/>
 							</div>
-						</aside>
-					)}
-					<section
-						className={clsx(
-							'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
-							{
-								'p-visitor-space__results--placeholder': showNoResults,
-								'u-pt-0': showResearchWarning,
-							}
+						</section>
+
+						{showResearchWarning && (
+							<aside className="u-bg-platinum">
+								<div className="l-container u-flex u-justify-center u-py-32">
+									<Callout
+										icon={<Icon name={IconNamesLight.Info} aria-hidden />}
+										text={tHtml(
+											'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+										)}
+										action={
+											<Link passHref href="/kiosk-voorwaarden">
+												<a
+													aria-label={tText(
+														'pages/slug/index___meer-info'
+													)}
+												>
+													<Button
+														className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+														label={tHtml(
+															'pages/slug/index___meer-info'
+														)}
+														variants={['text', 'underline']}
+													/>
+												</a>
+											</Link>
+										}
+									/>
+								</div>
+							</aside>
 						)}
-					>
-						<div className="l-container">
-							{!showResults && renderFilterMenu()}
-
-							{showNoResults && (
-								<Placeholder
-									className="p-visitor-space__placeholder"
-									img="/images/looking-glass.svg"
-									title={tHtml(
-										'pages/bezoekersruimte/visitor-space-slug/index___geen-resultaten'
-									)}
-									description={tHtml(
-										'pages/bezoekersruimte/visitor-space-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
-									)}
-								/>
+						<section
+							className={clsx(
+								'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+								{
+									'p-visitor-space__results--placeholder': isLoadedWithoutResults,
+									'u-pt-0': showResearchWarning,
+								}
 							)}
+						>
+							<div className="l-container">
+								{/* Only render filters when there are no results yet, when the results are loaded we render the filter menu using MediaCardList */}
+								{!isLoadedWithResults && renderFilterMenu()}
+								{isLoadedWithoutResults && (
+									<Placeholder
+										className="p-visitor-space__placeholder"
+										img="/images/looking-glass.svg"
+										title={tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/index___geen-resultaten'
+										)}
+										description={tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
+										)}
+									/>
+								)}
+								{isLoadedWithResults && renderResults()}
+							</div>
+						</section>
+					</div>
+				)}
 
-							{showResults && renderResults()}
-						</div>
-					</section>
-				</div>
-			)}
-
-			{!mediaIsLoading && (
-				<AddToFolderBlade
-					isOpen={isAddToFolderBladeOpen}
-					selected={
-						selected
-							? {
-									schemaIdentifier: selected.schemaIdentifier,
-									title: selected.name,
-							  }
-							: undefined
-					}
-					onClose={() => {
-						setShowAddToFolderBlade(false);
-						setSelected(null);
-					}}
-					onSubmit={async () => {
-						setShowAddToFolderBlade(false);
-						setSelected(null);
-					}}
-				/>
-			)}
-		</>
-	);
+				{!searchResultsLoading && (
+					<AddToFolderBlade
+						isOpen={isAddToFolderBladeOpen}
+						selected={
+							selected
+								? {
+										schemaIdentifier: selected.schemaIdentifier,
+										title: selected.name,
+								  }
+								: undefined
+						}
+						onClose={() => {
+							setShowAddToFolderBlade(false);
+							setSelected(null);
+						}}
+						onSubmit={async () => {
+							setShowAddToFolderBlade(false);
+							setSelected(null);
+						}}
+					/>
+				)}
+			</>
+		);
+	};
 
 	const renderPageContent = () => {
-		if (mediaIsLoading) {
+		if (searchResultsLoading) {
 			return <Loading fullscreen owner="visitor space search page: render page content" />;
 		}
 
-		if (mediaNoAccess) {
+		if (searchResultsNoAccess) {
 			return (
 				<ErrorNoAccess
 					visitorSpaceSlug={String(activeVisitorSpace?.spaceSlug)}

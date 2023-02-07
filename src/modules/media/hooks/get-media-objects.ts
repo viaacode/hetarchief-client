@@ -14,7 +14,7 @@ import {
 
 async function addRelatedCount(response: GetMediaResponse): Promise<GetMediaResponse> {
 	const count = await MediaService.countRelated(
-		response.items.map((item) => item.meemoo_identifier)
+		response.items.map((item) => item.meemooIdentifier)
 	);
 
 	return {
@@ -22,7 +22,7 @@ async function addRelatedCount(response: GetMediaResponse): Promise<GetMediaResp
 		items: response.items.map((item) => ({
 			...item,
 			// Reduce by 1 to account for itself
-			related_count: count[item.meemoo_identifier] - 1,
+			related_count: count[item.meemooIdentifier] - 1,
 		})),
 	};
 }
@@ -44,11 +44,13 @@ export function useGetMediaObjects(
 			if (filters.length) {
 				// Run 3 queries:
 				//     - One to fetch the results for a specific tab (results),
-				//         - One to count the amount of related items
+				//     - One to count the amount of related items
 				//     - and one to fetch the aggregates across tabs (noFormat)
 				const responses = await Promise.all([
-					MediaService.getBySpace(orgId, filters, page, size, sort).then(addRelatedCount),
-					MediaService.getBySpace(
+					MediaService.getSearchResults(orgId, filters, page, size, sort).then(
+						addRelatedCount
+					),
+					MediaService.getSearchResults(
 						orgId,
 						filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
 						page,
@@ -56,6 +58,7 @@ export function useGetMediaObjects(
 						sort
 					),
 				]);
+
 				const [results, noFormat] = responses;
 				searchResults = {
 					...results,
@@ -64,7 +67,7 @@ export function useGetMediaObjects(
 					},
 				};
 			} else {
-				searchResults = await MediaService.getBySpace(orgId, [], page, size, sort);
+				searchResults = await MediaService.getSearchResults(orgId, [], page, size, sort);
 			}
 
 			dispatch(setResults(searchResults));

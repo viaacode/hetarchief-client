@@ -1,17 +1,16 @@
 import { isEmpty, isNil } from 'lodash';
 import { stringifyUrl } from 'query-string';
 
-import { MediaSimilar } from '@media/types';
+import { Media, MediaSimilar } from '@media/types';
 import { ApiService } from '@shared/services/api-service';
 import {
-	MediaInfo,
 	MediaSearchFilter,
 	MediaSearchFilterField,
 	MediaSearchOperator,
 	SortObject,
 	VisitorSpaceMediaType,
 } from '@shared/types';
-import { ElasticsearchResponse, GetMediaResponse } from '@shared/types/api';
+import { GetMediaResponse } from '@shared/types/api';
 import { VisitorSpaceSort } from '@visitor-space/types';
 
 import {
@@ -24,23 +23,27 @@ import {
 } from './media.service.const';
 
 export class MediaService {
-	public static async getBySpace(
+	public static async getSearchResults(
 		orgId: string,
 		filters: MediaSearchFilter[] = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject
 	): Promise<GetMediaResponse> {
+		const hasMaintainerId = !isNil(orgId) && !isEmpty(orgId);
 		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
 		const filtered = [
 			// Visitor space "filter"
-			{
-				...((!isNil(orgId) || !isEmpty(orgId)) && {
-					field: 'maintainer',
-					value: orgId,
-					operator: MediaSearchOperator.IS,
-				}),
-			},
+			...(hasMaintainerId
+				? [
+						// todo map
+						{
+							field: 'maintainer',
+							value: orgId,
+							operator: MediaSearchOperator.IS,
+						},
+				  ]
+				: []),
 			// Actual filters
 			...filters.filter((item) => {
 				// Don't send filters with no value(s)
@@ -76,22 +79,12 @@ export class MediaService {
 					...parsedSort,
 				}),
 			})
-			.json()) as ElasticsearchResponse<MediaInfo>;
+			.json()) as GetMediaResponse;
 
-		return {
-			items: parsed?.hits?.hits.map((item) => ({
-				...item._source,
-				schema_identifier: item._id,
-			})),
-			total: parsed?.hits?.total?.value,
-			size: size,
-			page: page,
-			pages: Math.ceil((parsed?.hits?.total?.value || 0) / size),
-			aggregations: parsed.aggregations,
-		};
+		return parsed;
 	}
 
-	public static async getById(id: string): Promise<MediaInfo> {
+	public static async getById(id: string): Promise<Media> {
 		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
 	}
 

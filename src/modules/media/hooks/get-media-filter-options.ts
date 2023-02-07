@@ -20,7 +20,7 @@ export function useGetMediaFilterOptions(
 				return;
 			}
 
-			const response: GetMediaResponse = await MediaService.getBySpace(orgId, [], 0, 0);
+			const response: GetMediaResponse = await MediaService.getSearchResults(orgId, [], 0, 0);
 			dispatch(setFilterOptions(response.aggregations));
 
 			return response.aggregations;
