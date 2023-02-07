@@ -117,7 +117,7 @@ export class MediaService {
 			.get(
 				stringifyUrl(
 					{
-						url: `${MEDIA_SERVICE_BASE_URL}/related/count`,
+						url: `${IE_OBJECTS_SERVICE_BASE_URL}/related/count`,
 						query: { meemooIdentifiers },
 					},
 					{
