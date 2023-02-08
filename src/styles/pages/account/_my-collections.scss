@@ -47,13 +47,32 @@ $component: "p-account-my-folders";
 		}
 	}
 
+	&__limited-access-label {
+		padding: $spacer-xs;
+		margin: $spacer-lg 0;
+		background-color: $lila;
+		display: flex;
+		justify-content: center;
+		text-align: center;
+
+		&__icon {
+			margin-right: $spacer-xxs;
+			font-size: larger;
+		}
+	}
+
 	// Hide links active state on mobile
 	&__link {
-		padding-right: $spacer-md;
+		display: flex;
+		justify-content: space-between;
 
 		// Hide icon on desktop
-		span {
+		&__hide-icon {
 			display: none;
+		}
+
+		&__limited-access-icon {
+			font-size: x-large;
 		}
 
 		@include respond-to("md") {
@@ -67,15 +86,6 @@ $component: "p-account-my-folders";
 			span {
 				visibility: visible;
 			}
-		}
-	}
-
-	// Avoid clicks on container triggering events
-	.c-content-input__icon--end {
-		pointer-events: none;
-
-		& > button {
-			pointer-events: all;
 		}
 	}
 

@@ -1,4 +1,10 @@
-import { Button, FormControl } from '@meemoo/react-components';
+import {
+	Button,
+	FormControl,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -92,10 +98,19 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 							>
 								{folder.name}
 								<Icon
-									className="u-font-size-24 u-text-left"
+									className={clsx(
+										'p-account-my-folders__link__hide-icon',
+										'u-font-size-24 u-text-left'
+									)}
 									name={IconNamesLight.AngleRight}
 									aria-hidden
 								/>
+								{folder.usedForLimitedAccessUntil && (
+									<Icon
+										name={IconNamesLight.OpenDoor}
+										className="p-account-my-folders__link__limited-access-icon"
+									/>
+								)}
 							</a>
 						</Link>
 					),
@@ -106,6 +121,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	const activeFolder = useMemo(() => sidebarLinks.find((link) => link.active), [sidebarLinks]);
+
+	const limitedAccesDate =
+		activeFolder?.usedForLimitedAccessUntil &&
+		new Date(activeFolder.usedForLimitedAccessUntil).toLocaleDateString().replace(/\//g, '.');
 
 	const folderMedia = useGetFolderMedia(
 		activeFolder?.id,
@@ -275,22 +294,34 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{
 							before: false,
 							node: (
-								<Button
-									key={'delete-folder'}
-									className="p-account-my-folders__delete"
-									variants={['silver']}
-									icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										setShowConfirmDelete(true);
-									}}
-								/>
+								<Tooltip position="top">
+									<TooltipTrigger>
+										<Button
+											key={'delete-folder'}
+											disabled={!!activeFolder.usedForLimitedAccessUntil}
+											className="p-account-my-folders__delete"
+											variants={['silver']}
+											icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+											aria-label={tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+											)}
+											name={tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+											)}
+											onClick={(e) => {
+												e.stopPropagation();
+												setShowConfirmDelete(true);
+											}}
+										/>
+									</TooltipTrigger>
+									<TooltipContent>
+										<span>
+											{tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
+											)}
+										</span>
+									</TooltipContent>
+								</Tooltip>
 							),
 						},
 				  ]
@@ -431,6 +462,20 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											'pages/account/mijn-mappen/folder-slug/index___zoeken-in-deze-map'
 										)}
 									>
+										{activeFolder.usedForLimitedAccessUntil && (
+											<div className="p-account-my-folders__limited-access-label">
+												<Icon
+													name={IconNamesLight.OpenDoor}
+													className="p-account-my-folders__limited-access-label__icon"
+												/>
+												<p>
+													{tText(
+														'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang'
+													)}
+													{' ' + limitedAccesDate}.
+												</p>
+											</div>
+										)}
 										<SearchBar
 											id={`${labelKeys.search}--${activeFolder.id}`}
 											default={filters[SEARCH_QUERY_KEY]}
