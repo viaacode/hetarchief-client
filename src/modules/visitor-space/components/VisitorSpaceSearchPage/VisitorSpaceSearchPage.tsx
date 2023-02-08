@@ -1,7 +1,7 @@
 import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { sum } from 'lodash-es';
+import { replace, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -553,9 +553,10 @@ const VisitorSpaceSearchPage: FC = () => {
 						(media) => media.schemaIdentifier === cast.schemaIdentifier
 					);
 
-					const space = source?.maintainerName.replace(' ', '-');
+					// TODO: Replace maintainerName with slug when BE is updated
+					const space = source?.maintainerName.replaceAll(' ', '-');
 					const id = source?.schemaIdentifier;
-					const href = `${space}/${id}`.toLowerCase();
+					const href = `${ROUTE_PARTS.search}/${space}/${id}`.toLowerCase();
 
 					const name = item.title?.toString(); // TODO double check that this still works
 
