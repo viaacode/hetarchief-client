@@ -15,7 +15,7 @@ import {
 import { toastService } from '@shared/services/toast-service';
 
 import { Blade } from '../Blade';
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 import { UnreadMarker } from '../UnreadMarker';
 
 import styles from './NotificationCenter.module.scss';
@@ -166,7 +166,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			onClick={onMarkAllAsRead}
 			className={styles['c-notification-center__button']}
 			variants={['black', 'block']}
-			iconStart={<Icon name="check" />}
+			iconStart={<Icon name={IconNamesLight.Check} />}
 			aria-label={tText(
 				'modules/shared/components/notification-center/notification-center___markeer-alle-notificaties-als-gelezen'
 			)}
@@ -249,7 +249,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 									title={tText(
 										'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
 									)}
-									icon={<Icon name="check" aria-hidden />}
+									icon={<Icon name={IconNamesLight.Check} aria-hidden />}
 									aria-label={tText(
 										'modules/shared/components/notification-center/notification-center___markeer-als-gelezen'
 									)}

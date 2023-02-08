@@ -5,7 +5,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 
 import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@media/const';
 import { MediaRepresentation } from '@media/types';
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
@@ -95,7 +95,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 			<Button
 				tabIndex={-1}
 				className={styles['c-fragment-slider__nav-button']}
-				icon={<Icon name="angle-left" aria-hidden />}
+				icon={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
 				aria-label={tText(
 					'modules/media/components/fragment-slider/fragment-slider___naar-het-vorige-fragment'
 				)}
@@ -177,7 +177,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 			<Button
 				tabIndex={-1}
 				className={styles['c-fragment-slider__nav-button']}
-				icon={<Icon name="angle-right" aria-hidden />}
+				icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 				aria-label={tText(
 					'modules/media/components/fragment-slider/fragment-slider___naar-het-volgende-fragment'
 				)}

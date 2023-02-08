@@ -1,7 +1,7 @@
 import { TextInput, TextInputProps } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 
 import styles from './YearInput.module.scss';
 
@@ -21,7 +21,7 @@ const YearInput: FC<YearInputProps> = (props) => {
 			<div className={styles['c-year-input__label']}>
 				<b>{props.label}</b>
 			</div>
-			<TextInput iconStart={<Icon name="calendar" />} type="text" {...props} />
+			<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} type="text" {...props} />
 			<span className={classname}>jjjj</span>
 		</div>
 	);

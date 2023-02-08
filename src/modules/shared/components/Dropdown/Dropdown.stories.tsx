@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { cloneElement, ReactElement, useState } from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 import { menuItemsWithIcons } from './__mocks__/dropdown';
 
@@ -64,18 +64,18 @@ const TemplateCustomButton: ComponentStory<typeof Dropdown> = (args) => (
 export const Default = Template.bind({});
 Default.args = {
 	label: 'Dropdown',
-	icon: <Icon name="timer" />,
-	iconOpen: <Icon name="angle-down" />,
-	iconClosed: <Icon name="angle-up" />,
+	icon: <Icon name={IconNamesLight.Timer} />,
+	iconOpen: <Icon name={IconNamesLight.AngleDown} />,
+	iconClosed: <Icon name={IconNamesLight.AngleUp} />,
 	isOpen: true,
 };
 
 export const RightOpen = Template.bind({});
 RightOpen.args = {
 	label: 'Dropdown',
-	icon: <Icon name="timer" />,
-	iconOpen: <Icon name="angle-down" />,
-	iconClosed: <Icon name="angle-up" />,
+	icon: <Icon name={IconNamesLight.Timer} />,
+	iconOpen: <Icon name={IconNamesLight.AngleDown} />,
+	iconClosed: <Icon name={IconNamesLight.AngleUp} />,
 	isOpen: true,
 	placement: 'right-start',
 };

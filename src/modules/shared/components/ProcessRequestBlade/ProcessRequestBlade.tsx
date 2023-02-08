@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import React, { FC, ReactNode, useState } from 'react';
 
-import { Blade, BladeManager, Icon, VisitSummary } from '@shared/components';
+import { Blade, BladeManager, Icon, IconNamesLight, VisitSummary } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { VisitStatus } from '@shared/types';
 import { formatDistanceToday } from '@shared/utils';
@@ -82,7 +82,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 									'modules/cp/components/process-request-blade/process-request-blade___goedkeuren'
 							  )
 					}
-					iconStart={<Icon name="check" />}
+					iconStart={<Icon name={IconNamesLight.Check} />}
 					variants={['block', 'black']}
 					onClick={() => setShowApprove(true)}
 				/>
@@ -97,7 +97,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 									'modules/cp/components/process-request-blade/process-request-blade___weigeren'
 							  )
 					}
-					iconStart={<Icon name="forbidden" />}
+					iconStart={<Icon name={IconNamesLight.Forbidden} />}
 					variants={['block', 'text']}
 					onClick={() => setShowDecline(true)}
 				/>

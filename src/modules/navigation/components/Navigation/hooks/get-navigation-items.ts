@@ -4,13 +4,7 @@ import { NavigationInfo, NavigationService } from '@navigation/services/navigati
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 export function useGetNavigationItems(): UseQueryResult<Record<string, NavigationInfo[]>> {
-	return useQuery(
-		[QUERY_KEYS.getNavigationItems],
-		() => {
-			return NavigationService.getAll();
-		},
-		{
-			keepPreviousData: true,
-		}
-	);
+	return useQuery([QUERY_KEYS.getNavigationItems], () => NavigationService.getAll(), {
+		keepPreviousData: true,
+	});
 }

@@ -1,7 +1,7 @@
 import { OrderDirection, TabProps } from '@meemoo/react-components';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceMediaType } from '@shared/types';
@@ -78,12 +78,12 @@ export const VISITOR_SPACE_TABS = (): TabProps[] => [
 	},
 	{
 		id: VisitorSpaceMediaType.Video,
-		icon: <Icon name="video" aria-hidden />,
+		icon: <Icon name={IconNamesLight.Video} aria-hidden />,
 		label: tText('modules/visitor-space/const/index___videos'),
 	},
 	{
 		id: VisitorSpaceMediaType.Audio,
-		icon: <Icon name="audio" aria-hidden />,
+		icon: <Icon name={IconNamesLight.Audio} aria-hidden />,
 		label: tText('modules/visitor-space/const/index___audio'),
 	},
 ];
@@ -135,7 +135,7 @@ export const VISITOR_SPACE_FILTERS = (): FilterMenuFilterOption[] => [
 	},
 	{
 		id: VisitorSpaceFilterId.Advanced,
-		icon: 'dots-horizontal',
+		icon: IconNamesLight.DotsHorizontal,
 		label: tText('modules/visitor-space/const/index___geavanceerd'),
 		form: AdvancedFilterForm,
 	},
@@ -147,6 +147,9 @@ export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in VisitorSpaceSort]: st
 		'modules/visitor-space/const/index___sorteer-op-relevantie'
 	),
 	[VisitorSpaceSort.Title]: tText('modules/visitor-space/const/index___sorteer-op-titel'),
+	[VisitorSpaceSort.Published]: tText(
+		'modules/visitor-space/const/index___sorteer-op-gearchiveerd'
+	),
 });
 
 export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
@@ -162,6 +165,11 @@ export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	{
 		label: tText('modules/visitor-space/const/index___datum-aflopend'),
 		orderProp: VisitorSpaceSort.Date,
+		orderDirection: OrderDirection.desc,
+	},
+	{
+		label: tText('modules/visitor-space/const/index___gearchiveerd'),
+		orderProp: VisitorSpaceSort.Published,
 		orderDirection: OrderDirection.desc,
 	},
 	// schema_name niet sorteerbaar in https://meemoo.atlassian.net/wiki/pages/viewpage.action?pageId=3309174878&pageVersion=3

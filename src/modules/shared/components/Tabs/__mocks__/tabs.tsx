@@ -1,4 +1,4 @@
-import { Icon } from '@shared/components/Icon';
+import { Icon, IconNamesLight } from '@shared/components/Icon';
 import { VisitorSpaceMediaType } from '@shared/types';
 
 export const mockTabs = [
@@ -20,7 +20,7 @@ export const mockTabs = [
 				<small>(52)</small>
 			</>
 		),
-		icon: <Icon name="audio" />,
+		icon: <Icon name={IconNamesLight.Audio} />,
 	},
 	{
 		id: VisitorSpaceMediaType.Video,
@@ -30,7 +30,7 @@ export const mockTabs = [
 				<small>(0)</small>
 			</>
 		),
-		icon: <Icon name="video" />,
+		icon: <Icon name={IconNamesLight.Video} />,
 	},
 	{
 		id: 'News',
@@ -40,7 +40,7 @@ export const mockTabs = [
 				<small>(0)</small>
 			</>
 		),
-		icon: <Icon name="newspaper" />,
+		icon: <Icon name={IconNamesLight.Newspaper} />,
 	},
 ];
 

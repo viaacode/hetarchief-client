@@ -9,6 +9,7 @@ export interface Folder {
 	name: string;
 	updatedAt: string;
 	userProfileId: string;
+	usedForLimitedAccessUntil: string | null;
 	objects?: Pick<FolderMedia, 'schemaIdentifier'>[];
 }
 
@@ -20,6 +21,7 @@ export interface FolderMedia {
 	collectionEntryCreatedAt?: string;
 	creator?: unknown;
 	description: string;
+	duration: string;
 	format: MediaTypes;
 	name: string;
 	numberOfPages?: unknown;

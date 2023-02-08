@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { Icon } from '../../Icon';
+import { Icon, IconNamesLight } from '../../Icon';
 import styles from '../ListNavigation.module.scss';
 import { ListNavigationItem, ListNavigationProps } from '../ListNavigation.types';
 
@@ -22,7 +22,7 @@ const renderLink = ({ to = '#', label = 'link', external = false }) => {
 
 const renderButton = ({
 	onClick = () => null,
-	icon = <Icon name="plus" />,
+	icon = <Icon name={IconNamesLight.Plus} />,
 	label = 'voeg nieuwe map toe',
 }) => {
 	return (

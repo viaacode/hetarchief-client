@@ -4,10 +4,9 @@ import {
 	CommonUser,
 	ContentBlockType,
 	LinkInfo,
-	ROUTE_PARTS as ROUTE_PARTS_ADMIN_CORE,
 	ToastInfo,
 } from '@meemoo/admin-core-ui';
-import { DatabaseType } from '@viaa/avo2-types/types/core/enums';
+import { DatabaseType } from '@viaa/avo2-types';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -16,9 +15,9 @@ import { ComponentType, FunctionComponent, useCallback, useEffect, useState } fr
 import { useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
-import { Icon, IconName, sortingIcons } from '@shared/components';
+import { Icon, ICON_LIST_CONFIG, IconName, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
-import { ROUTE_PARTS } from '@shared/const';
+import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
@@ -29,10 +28,13 @@ const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
+
 	return (
-		<Link href={to as string} passHref>
-			<a {...rest} />
-		</Link>
+		to && (
+			<Link href={to} passHref>
+				<a {...rest} />
+			</Link>
+		)
 	);
 };
 
@@ -115,7 +117,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					defaultPageWidth: 'LARGE',
 					onSaveContentPage,
 				},
-				navigationBars: { enableIcons: false },
+				navigationBars: { enableIcons: true },
 				icon: {
 					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
 					componentProps: {
@@ -125,6 +127,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						angleUp: { name: 'angle-up' },
 						angleLeft: { name: 'angle-left' },
 						angleRight: { name: 'angle-right' },
+						extraOptions: { name: 'dots-vertical' },
+						copy: { name: 'copy' },
 						delete: { name: 'trash' },
 						edit: { name: 'edit' },
 						filter: { name: 'search' },
@@ -132,7 +136,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
 					},
-					list: [],
+					list: ICON_LIST_CONFIG,
 				},
 				components: {
 					loader: {
@@ -188,9 +192,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 							});
 						},
 					},
-					// Use the default endpoint of the admin-core-api: ${proxyUrl}/admin/content-pages
-					// https://app.diagrams.net/#G1WCrp76U14pGpajEplYlSVGiuWfEQpRqI
-					getContentPageByPathEndpoint: null,
 					i18n: { tHtml, tText },
 					educationOrganisationService: {
 						fetchEducationOrganisationName: () => Promise.resolve(null),
@@ -202,13 +203,17 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						useHistory: () => ({
 							push: router.push,
 							replace: router.replace,
-						}), //useRouter,
+						}),
 					},
 					queryCache: {
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						clear: async (_key: string) => Promise.resolve(),
 					},
-					assetService: AssetsService,
+					assetService: {
+						uploadFile: AssetsService.uploadFile,
+						deleteFile: AssetsService.deleteFile,
+					},
+					getContentPageByPathEndpoint: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages`,
 				},
 				database: {
 					databaseApplicationType: DatabaseType.hetArchief,
@@ -224,10 +229,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					},
 				},
 				user: commonUser,
-				route_parts: ROUTE_PARTS_ADMIN_CORE,
-				env: {
-					LDAP_DASHBOARD_PEOPLE_URL: '',
-				},
+				routes: ADMIN_CORE_ROUTES as any, // TODO: remove any when the routes record becomes a partial in admin-core
+				env: {},
 			};
 			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
@@ -239,7 +242,11 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 		}, [initConfigValue]);
 
 		if (!adminCoreConfig && isBrowser()) {
-			return <Loading fullscreen owner="admin-core config not set yet" />;
+			return (
+				<div suppressHydrationWarning={true}>
+					<Loading fullscreen owner="admin-core config not set yet" />
+				</div>
+			);
 		}
 
 		return <WrappedComponent {...props} />;

@@ -1,7 +1,7 @@
 import { DatepickerProps, historicDatepicker, TextInput } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { Datepicker, Icon } from '@shared/components';
+import { Datepicker, Icon, IconNamesLight } from '@shared/components';
 import { asDate, formatMediumDate } from '@shared/utils';
 
 import styles from './DateInput.module.scss';
@@ -26,7 +26,7 @@ const DateInput: FC<DateInputProps> = (props) => (
 			{...props}
 			value={formatMediumDate(asDate(props.value))}
 			selected={asDate(props.value)}
-			customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
 		/>
 	</div>
 );

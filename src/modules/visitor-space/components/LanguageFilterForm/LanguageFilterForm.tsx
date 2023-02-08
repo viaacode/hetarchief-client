@@ -31,6 +31,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	const [query] = useQueryParams(LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
 	const [selection, setSelection] = useState<string[]>(() => compact(query.language || []));
+	const [shouldReset, setShouldReset] = useState<boolean>(false);
 
 	const { setValue, reset, handleSubmit } = useForm<LanguageFilterFormState>({
 		resolver: yupResolver(LANGUAGE_FILTER_FORM_SCHEMA()),
@@ -65,6 +66,8 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 						'modules/visitor-space/components/language-filter-form/language-filter-form___zoek'
 					)}
 					onSearch={(value) => setSearch(value || '')}
+					shouldReset={shouldReset}
+					onResetFinished={() => setShouldReset(false)}
 				/>
 
 				<div className="u-my-32">
@@ -95,6 +98,8 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 				reset: () => {
 					reset();
 					setSelection(defaultValues.languages);
+					setSearch('');
+					setShouldReset(true);
 				},
 				handleSubmit,
 			})}
