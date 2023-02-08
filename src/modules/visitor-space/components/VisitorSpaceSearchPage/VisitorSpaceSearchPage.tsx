@@ -35,7 +35,7 @@ import {
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
 import {} from '@shared/components/VisitorSpaceDropdown';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
@@ -526,7 +526,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				items={searchResults?.items.map(
 					(item): IdentifiableMediaCard => ({
 						schemaIdentifier: item.schemaIdentifier,
-						description: item.schemaIdentifier,
+						description: item.description,
 						title: item.name,
 						publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
 						publishedBy: item.maintainerName || '',
@@ -547,11 +547,14 @@ const VisitorSpaceSearchPage: FC = () => {
 						(media) => media.schemaIdentifier === cast.schemaIdentifier
 					);
 
-					const href = `/${activeVisitorSpaceId}/${source?.schemaIdentifier}`;
+					const space = source?.maintainerName.replace(' ', '-');
+					const id = source?.schemaIdentifier;
+					const href = `${space}/${id}`.toLowerCase();
 
 					const name = item.title?.toString(); // TODO double check that this still works
+
 					return (
-						<Link key={source?.schemaIdentifier} href={href.toLowerCase()}>
+						<Link key={source?.schemaIdentifier} href={href}>
 							<a
 								className="u-text-no-decoration"
 								aria-label={tText(
