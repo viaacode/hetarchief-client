@@ -48,7 +48,7 @@ export class MediaService {
 			}),
 		];
 
-		const parsed = (await ApiService.getApi()
+		const parsed = (await ApiService.getApi(true)
 			.post(`${IE_OBJECTS_SERVICE_BASE_URL}`, {
 				body: JSON.stringify({
 					filters: filtered,
@@ -113,7 +113,7 @@ export class MediaService {
 	public static async countRelated(
 		meemooIdentifiers: string[] = []
 	): Promise<Record<string, number>> {
-		return await ApiService.getApi()
+		return await ApiService.getApi(true)
 			.get(
 				stringifyUrl(
 					{
