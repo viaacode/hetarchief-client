@@ -22,8 +22,8 @@ import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearch
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
 
-import { useGetContentPageByPath } from '../../modules/content-page/hooks/get-content-page';
-import { ContentPageClientService } from '../../modules/content-page/services/content-page-client.service';
+import { useGetContentPageByPath } from '../../../modules/content-page/hooks/get-content-page';
+import { ContentPageClientService } from '../../../modules/content-page/services/content-page-client.service';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -33,6 +33,7 @@ type DynamicRouteResolverProps = {
 	title: string | null;
 } & DefaultSeoInfo;
 
+// TODO: simplify this component to VisitorSpaceSearchPage
 const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url }) => {
 	useNavigationBorder();
 
@@ -54,18 +55,20 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 		error: visitorSpaceError,
 		isLoading: isVisitorSpaceLoading,
 		data: visitorSpaceInfo,
-	} = useGetVisitorSpace(`${slug}`, true);
+	} = useGetVisitorSpace(slug as string, true);
 	const {
 		error: contentPageError,
 		isLoading: isContentPageLoading,
 		data: contentPageInfo,
-	} = useGetContentPageByPath(`/${slug}`);
+	} = useGetContentPageByPath(('/' + slug) as string);
 
 	/**
 	 * Computed
 	 */
+
 	const isVisitorSpaceNotFoundError = (visitorSpaceError as HTTPError)?.response?.status === 404;
-	const isContentPageNotFoundError = (contentPageError as HTTPError)?.response?.status === 404;
+	const isContentPageNotFoundError =
+		!!contentPageInfo || (contentPageError as HTTPError)?.response?.status === 404;
 
 	/**
 	 * Methods
@@ -105,14 +108,14 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 		if (isVisitorSpaceLoading || isContentPageLoading) {
 			return <Loading fullscreen owner="slug page: render page content" />;
 		}
-
 		if (visitorSpaceInfo) {
 			dispatch(setShowZendesk(false));
 			return <VisitorSpaceSearchPage />;
 		}
-
 		if (contentPageInfo) {
-			return <ContentPageRenderer contentPageInfo={contentPageInfo} />;
+			return (
+				<ContentPageRenderer path={('/' + slug) as string} userGroupId={user?.groupId} />
+			);
 		}
 	};
 
@@ -131,8 +134,8 @@ export async function getServerSideProps(
 	let title: string | null = null;
 	try {
 		const [space, contentPage] = await Promise.allSettled([
-			VisitorSpaceService.getBySlug(String(context.query.slug), true),
-			ContentPageClientService.getBySlug(`/${context.query.slug}`),
+			VisitorSpaceService.getBySlug(context.query.slug as string, true),
+			ContentPageClientService.getBySlug(('/' + context.query.slug) as string),
 		]);
 
 		if (space.status === 'fulfilled') {
