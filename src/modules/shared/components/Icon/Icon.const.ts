@@ -42,6 +42,7 @@ export enum IconNamesLight {
 	Link = 'link--light',
 	ListView = 'list-view--light',
 	Lock = 'lock--light',
+	OpenDoor = 'open-door--light',
 	LogIn = 'log-in--light',
 	LogOut = 'log-out--light',
 	Menu = 'menu--light',

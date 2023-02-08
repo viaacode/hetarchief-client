@@ -51,3 +51,54 @@
 		gap: $spacer-xs;
 	}
 }
+
+.u-useroverview-table {
+	tbody {
+		td {
+			padding: 0.4rem 2.4rem !important;
+		}
+
+		td:last-child {
+			padding-right: 1rem !important;
+		}
+	}
+}
+
+.c-actions-dropdown {
+	&.c-dropdown__trigger {
+		margin-top: 0.8rem;
+	}
+
+	.c-button {
+		background-color: $white;
+		color: $black;
+		border: none;
+		font-size: x-large;
+		padding: 0.5rem;
+
+		&:hover {
+			background-color: $platinum;
+		}
+	}
+}
+
+.c-actions-dropdown-flyout {
+	.c-menu {
+		white-space: nowrap;
+		box-shadow: $shadow-24-black-12;
+		padding: 0;
+
+		.c-menu__label {
+			font-family: $font-family-primary;
+			padding: 1rem;
+			font-size: medium;
+			display: flex;
+			align-items: center;
+
+			span {
+				margin-left: $spacer-sm;
+				font-size: xx-large;
+			}
+		}
+	}
+}
