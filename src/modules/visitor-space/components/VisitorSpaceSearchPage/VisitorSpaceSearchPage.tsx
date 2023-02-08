@@ -178,6 +178,10 @@ const VisitorSpaceSearchPage: FC = () => {
 	 */
 
 	useEffect(() => {
+		setActiveVisitorSpaceId(query?.maintainer || '');
+	}, []);
+
+	useEffect(() => {
 		// New search => update history in list
 		dispatch(setHistory([history[history.length - 1], router.asPath]));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,11 +197,11 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	useEffect(() => {
 		const visitorSpace: Visit | undefined = visitorSpaces.find(
-			({ id }: Visit): boolean => activeVisitorSpaceId === id
+			({ spaceMaintainerId }: Visit): boolean => activeVisitorSpaceId === spaceMaintainerId
 		);
 
 		setActiveVisitorSpace(visitorSpace);
-		setQuery({ maintainer: visitorSpace?.spaceMaintainerId });
+		setQuery({ maintainer: activeVisitorSpaceId });
 	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
 
 	/**
@@ -242,13 +246,13 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const dropdownOptions = useMemo(() => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
-			({ id, spaceName, endAt }: Visit): VisitorSpaceDropdownOption => {
+			({ spaceName, endAt, spaceMaintainerId }: Visit): VisitorSpaceDropdownOption => {
 				const accessEndDate = isMobile
 					? formatSameDayTimeOrDate(asDate(endAt))
 					: formatMediumDateWithTime(asDate(endAt));
 
 				return {
-					id,
+					id: spaceMaintainerId,
 					label: spaceName || '',
 					extraInfo: accessEndDate,
 				};
