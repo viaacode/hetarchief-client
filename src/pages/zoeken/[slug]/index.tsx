@@ -113,9 +113,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 			return <VisitorSpaceSearchPage />;
 		}
 		if (contentPageInfo) {
-			return (
-				<ContentPageRenderer path={('/' + slug) as string} userGroupId={user?.groupId} />
-			);
+			return <ContentPageRenderer contentPageInfo={contentPageInfo} />;
 		}
 	};
 

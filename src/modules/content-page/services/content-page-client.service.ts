@@ -1,7 +1,9 @@
-import { ContentPageInfo } from '@meemoo/admin-core-ui';
+import { ContentPageInfo, fetchWithLogoutJson } from '@meemoo/admin-core-ui';
+import { startsWith } from 'lodash';
+import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
 
-import { ApiService } from '@shared/services/api-service';
+const { publicRuntimeConfig } = getConfig();
 
 export class ContentPageClientService {
 	public static async getBySlug(slug?: string | null): Promise<ContentPageInfo | null> {
@@ -9,13 +11,17 @@ export class ContentPageClientService {
 			return null;
 		}
 
+		if (!startsWith(slug, '/')) {
+			throw new Error(`Given path doesn't start with a slash. Received path: ${slug}`);
+		}
+
 		const url = stringifyUrl({
-			url: `admin/content-pages`,
+			url: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages`,
 			query: {
 				path: slug,
 			},
 		});
 
-		return await ApiService.getApi(true).get(url).json();
+		return fetchWithLogoutJson<ContentPageInfo | null>(url);
 	}
 }

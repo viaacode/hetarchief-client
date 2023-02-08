@@ -87,9 +87,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<HomepageProps>> {
 	let title: string | null = null;
 	try {
-		const contentPage = await ContentPageClientService.getBySlug(
-			('/' + context.query.slug) as string
-		);
+		const contentPage = await ContentPageClientService.getBySlug('/');
 		title = contentPage?.title || null;
 	} catch (err) {
 		console.error('Failed to fetch content page seo info by slug: ' + context.query.slug, err);
