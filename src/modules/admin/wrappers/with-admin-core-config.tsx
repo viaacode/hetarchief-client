@@ -127,6 +127,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						angleUp: { name: 'angle-up' },
 						angleLeft: { name: 'angle-left' },
 						angleRight: { name: 'angle-right' },
+						extraOptions: { name: 'dots-vertical' },
+						copy: { name: 'copy' },
 						delete: { name: 'trash' },
 						edit: { name: 'edit' },
 						filter: { name: 'search' },
