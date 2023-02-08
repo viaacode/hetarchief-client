@@ -93,7 +93,9 @@ const labelKeys = {
 
 const defaultOption: VisitorSpaceDropdownOption = {
 	id: '',
-	label: `${tHtml('pages/bezoekersruimte/publieke_catalogus')}`,
+	label: `${tHtml(
+		'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
+	)}`,
 };
 
 const VisitorSpaceSearchPage: FC = () => {
@@ -637,7 +639,7 @@ const VisitorSpaceSearchPage: FC = () => {
 												'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 											)}
 											infoContent={tText(
-												'pages/bezoekersruimte/zoeken-zoek-info'
+												'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
 											)}
 											size="lg"
 											syncSearchValue={false}
