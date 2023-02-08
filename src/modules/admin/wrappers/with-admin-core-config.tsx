@@ -243,7 +243,11 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 		}, [initConfigValue]);
 
 		if (!adminCoreConfig && isBrowser()) {
-			return <Loading fullscreen owner="admin-core config not set yet" />;
+			return (
+				<div suppressHydrationWarning={true}>
+					<Loading fullscreen owner="admin-core config not set yet" />
+				</div>
+			);
 		}
 
 		return <WrappedComponent {...props} />;

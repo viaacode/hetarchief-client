@@ -4,7 +4,7 @@ import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 
 import { CheckLoginResponse } from './auth.service.types';
@@ -26,7 +26,10 @@ export class AuthService {
 			originalPath = '/';
 		}
 		const returnToUrl = stringifyUrl({
-			url: trimEnd(`${publicRuntimeConfig.CLIENT_URL}/${originalPath ?? slug ?? ''}`, '/'),
+			url: trimEnd(
+				`${publicRuntimeConfig.CLIENT_URL}${ROUTES.bezoek}${originalPath ?? slug ?? ''}`,
+				'/'
+			),
 			query: otherQueryParams,
 		});
 

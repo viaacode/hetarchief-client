@@ -83,7 +83,7 @@ import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit
 import {
 	AddToFolderBlade,
 	VisitorSpaceNavigation,
-} from '../../../modules/visitor-space/components';
+} from '../../../../modules/visitor-space/components';
 
 import {
 	DynamicActionMenu,
@@ -602,6 +602,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							content={tHtml(
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
 							)}
+							title=""
 						/>
 					)}
 				</div>
