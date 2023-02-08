@@ -1,6 +1,7 @@
 import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
+import { sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -85,8 +86,7 @@ import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
 
-import { sum } from 'lodash';
-
+// ToDo(Silke): check isLogged in voor filter maintainer ding -> enkel leeg gebruiken
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
