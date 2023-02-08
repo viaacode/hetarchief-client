@@ -1,4 +1,4 @@
-import { ContentPageRenderer, ContentPageService } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, useEffect } from 'react';
@@ -17,6 +17,7 @@ import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetContentPageByPath } from '../modules/content-page/hooks/get-content-page';
+import { ContentPageClientService } from '../modules/content-page/services/content-page-client.service';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -86,9 +87,8 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<HomepageProps>> {
 	let title: string | null = null;
 	try {
-		const contentPage = await ContentPageService.getBySlug(
-			('/' + context.query.slug) as string,
-			true
+		const contentPage = await ContentPageClientService.getBySlug(
+			('/' + context.query.slug) as string
 		);
 		title = contentPage?.title || null;
 	} catch (err) {

@@ -1,4 +1,4 @@
-import { ContentPageRenderer, ContentPageService } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { HTTPError } from 'ky';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
@@ -23,6 +23,7 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
 
 import { useGetContentPageByPath } from '../../../modules/content-page/hooks/get-content-page';
+import { ContentPageClientService } from '../../../modules/content-page/services/content-page-client.service';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -134,7 +135,7 @@ export async function getServerSideProps(
 	try {
 		const [space, contentPage] = await Promise.allSettled([
 			VisitorSpaceService.getBySlug(context.query.slug as string, true),
-			ContentPageService.getBySlug(('/' + context.query.slug) as string),
+			ContentPageClientService.getBySlug(('/' + context.query.slug) as string),
 		]);
 
 		if (space.status === 'fulfilled') {
