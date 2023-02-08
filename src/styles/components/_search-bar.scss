@@ -16,6 +16,7 @@
 			border-color: $teal;
 			border-width: 0.2rem;
 			box-shadow: none;
+			transition: border $animate-default;
 		}
 	}
 
@@ -86,6 +87,19 @@
 			&--is-focused,
 			&--is-focused:hover {
 				border-color: $black;
+			}
+		}
+	}
+
+	&.c-tag-search-bar--has-dropdown {
+		.c-tags-input__control {
+			height: 100%;
+			min-height: 6.4rem;
+			border-radius: 0 0 2.4rem 2.4rem;
+
+			@include respond-at("md") {
+				border-radius: 0 4.6rem 4.6rem 0;
+				border-right: none;
 			}
 		}
 	}

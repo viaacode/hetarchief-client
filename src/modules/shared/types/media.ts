@@ -23,6 +23,7 @@ export enum MediaSearchFilterField {
 	PUBLISHED = 'published',
 	PUBLISHER = 'publisher',
 	QUERY = 'query',
+	MAINTAINER = 'maintainer',
 }
 
 export enum MediaSearchOperator {
@@ -44,37 +45,4 @@ export interface MediaSearchFilter {
 	multiValue?: string[];
 	operator: MediaSearchOperator;
 	value?: string;
-}
-
-export interface MediaInfo {
-	schema_identifier: string;
-	meemoo_identifier: string; // PID (this is not unique per objects)
-	schema_in_language: unknown | null;
-	dcterms_available: string;
-	schema_creator?: {
-		Archiefvormer?: string[];
-		productionCompany?: string[];
-		Maker?: string[];
-	};
-	schema_description?: string;
-	schema_publisher?: {
-		Publisher: string[];
-	};
-	schema_duration: string;
-	schema_abstract?: string;
-	premis_identifier: string;
-	schema_genre?: string;
-	schema_date_published?: string;
-	schema_license?: string[];
-	schema_date_created?: string;
-	schema_maintainer?: {
-		schema_identifier: string;
-		schema_name: string;
-	};
-	dcterms_format: MediaTypes;
-	schema_name: string;
-	// TODO: See if this is still necessary once resolved in proxy
-	type?: string;
-	schema_thumbnail_url: string;
-	schema_keywords: string[];
 }

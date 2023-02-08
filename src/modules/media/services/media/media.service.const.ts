@@ -3,3 +3,5 @@ export const MEDIA_SERVICE_TICKET_URL = 'player-ticket';
 export const MEDIA_SERVICE_SIMILAR = 'similar';
 export const MEDIA_SERVICE_RELATED = 'related';
 export const MEDIA_SERVICE_EXPORT = 'export';
+
+export const IE_OBJECTS_SERVICE_BASE_URL = 'ie-objects';

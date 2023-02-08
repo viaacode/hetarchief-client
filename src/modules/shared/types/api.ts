@@ -1,29 +1,17 @@
-import { MediaSearchAggregations } from '@media/types';
-import { MediaInfo } from '@shared/types/media';
+import { Media, MediaSearchAggregations } from '@media/types';
 
 export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
-	took: number;
-	timed_out: boolean;
-	_shards: {
-		total: number;
-		successful: number;
-		skipped: number;
-		failed: number;
-	};
-	hits: {
-		total: {
-			value: number;
-			relation: string;
-		};
-		max_score: number;
-		hits: {
-			_index: string;
-			_type: string;
-			_id: string;
-			_score: number;
-			_source: T;
-		}[];
-	};
+	items: {
+		_index: string;
+		_type: string;
+		_id: string;
+		_score: number;
+		_source: T;
+	}[];
+	page: number;
+	pages: number;
+	size: number;
+	total: number;
 }
 
 export interface ElasticsearchAggregations {
@@ -38,5 +26,5 @@ export interface ApiResponseWrapper<T> {
 	size: number;
 }
 
-export type GetMediaResponse = ApiResponseWrapper<MediaInfo & { related_count?: number }> &
+export type GetMediaResponse = ApiResponseWrapper<Media & { related_count?: number }> &
 	ElasticsearchAggregations;

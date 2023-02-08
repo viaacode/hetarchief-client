@@ -372,6 +372,8 @@
 	"modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___naar-vorige-pagina": "Naar vorige pagina",
 	"modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___deze-bezoekersruimte-is-momenteel-niet-beschikbaar": "Deze aanbieder is momenteel niet beschikbaar",
 	"modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___navigeer-naar-de-detailpagina-van-name": "Navigeer naar de detailpagina van \"{{name}}\".",
+	"modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus": "Publieke catalogus",
+	"modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info": "Zoeken op een exacte string kan door dubbele aanhalingstekens te gebruiken. AND/OR/NOT/+/- laat je toe om meteen geavanceerd te zoeken in de zoekbalk.",
 	"modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op": "Sla dit item op",
 	"modules/visitor-space/const/index___alles": "Alles",
 	"modules/visitor-space/const/index___analoge-drager": "Fysieke drager",

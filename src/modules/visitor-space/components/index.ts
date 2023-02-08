@@ -19,3 +19,4 @@ export * from './MediumSelect';
 export * from './PublishedFilterForm';
 export * from './VisitorSpaceNavigation';
 export * from './WaitingPage';
+export * from './VisitorSpaceSearchPage';

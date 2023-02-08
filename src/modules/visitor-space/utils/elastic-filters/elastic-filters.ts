@@ -5,6 +5,12 @@ import { VisitorSpaceQueryParams } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
 export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): MediaSearchFilter[] => [
+	// Visitor space
+	{
+		field: MediaSearchFilterField.MAINTAINER,
+		operator: MediaSearchOperator.IS,
+		value: query.maintainer !== null ? query.maintainer?.toString() : '',
+	},
 	// Searchbar
 	{
 		field: MediaSearchFilterField.QUERY,

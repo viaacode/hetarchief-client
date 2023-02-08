@@ -32,6 +32,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 	// Filters
 	format: VisitorSpaceMediaType.All,
 	[SEARCH_QUERY_KEY]: undefined,
+	[VisitorSpaceFilterId.Maintainer]: '',
 	[VisitorSpaceFilterId.Medium]: undefined,
 	[VisitorSpaceFilterId.Duration]: undefined,
 	[VisitorSpaceFilterId.Created]: undefined,
@@ -52,6 +53,7 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	// Filters
 	format: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.format),
 	[SEARCH_QUERY_KEY]: ArrayParam,
+	[VisitorSpaceFilterId.Maintainer]: StringParam,
 	[VisitorSpaceFilterId.Medium]: ArrayParam,
 	[VisitorSpaceFilterId.Duration]: AdvancedFilterArrayParam,
 	[VisitorSpaceFilterId.Created]: AdvancedFilterArrayParam,
