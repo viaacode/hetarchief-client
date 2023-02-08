@@ -32,6 +32,7 @@ export enum VisitorSpaceFilterId {
 	Language = 'language',
 	Medium = 'medium',
 	Published = 'published',
+	Maintainer = 'maintainer',
 }
 
 export enum VisitorSpaceOrderProps {

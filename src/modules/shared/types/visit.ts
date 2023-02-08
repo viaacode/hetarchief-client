@@ -39,6 +39,7 @@ export interface Visit {
 	visitorName?: string;
 	updatedById: string;
 	updatedByName: string;
+	spaceMaintainerId: string;
 }
 
 export interface VisitNote {

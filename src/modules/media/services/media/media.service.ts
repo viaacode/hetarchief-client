@@ -1,19 +1,19 @@
 import { stringifyUrl } from 'query-string';
 
-import { MediaSimilar } from '@media/types';
+import { Media, MediaSimilar } from '@media/types';
 import { ApiService } from '@shared/services/api-service';
 import {
-	MediaInfo,
 	MediaSearchFilter,
 	MediaSearchFilterField,
 	MediaSearchOperator,
 	SortObject,
 	VisitorSpaceMediaType,
 } from '@shared/types';
-import { ElasticsearchResponse, GetMediaResponse } from '@shared/types/api';
+import { GetMediaResponse } from '@shared/types/api';
 import { VisitorSpaceSort } from '@visitor-space/types';
 
 import {
+	IE_OBJECTS_SERVICE_BASE_URL,
 	MEDIA_SERVICE_BASE_URL,
 	MEDIA_SERVICE_EXPORT,
 	MEDIA_SERVICE_RELATED,
@@ -22,33 +22,34 @@ import {
 } from './media.service.const';
 
 export class MediaService {
-	public static async getBySpace(
-		orgId: string,
+	public static async getSearchResults(
 		filters: MediaSearchFilter[] = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject
 	): Promise<GetMediaResponse> {
 		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
-		const filtered = filters.filter((item) => {
-			// Don't send filters with no value(s)
-			const hasValue = !!item.value || !!item.multiValue;
-			const eitherValue = item.multiValue || item.value;
+		const filtered = [
+			...filters.filter((item) => {
+				// Don't send filters with no value(s)
+				const hasValue = !!item.value || !!item.multiValue;
+				const eitherValue = item.multiValue || item.value;
 
-			// Don't send filters with an empty array/string
-			const hasLength = eitherValue && eitherValue.length > 0;
+				// Don't send filters with an empty array/string
+				const hasLength = eitherValue && eitherValue.length > 0;
 
-			// Don't send the "All" filter for FORMAT.IS
-			const isFormatAllFilter =
-				item.field === MediaSearchFilterField.FORMAT &&
-				item.operator === MediaSearchOperator.IS &&
-				item.value === VisitorSpaceMediaType.All;
+				// Don't send the "All" filter for FORMAT.IS
+				const isFormatAllFilter =
+					item.field === MediaSearchFilterField.FORMAT &&
+					item.operator === MediaSearchOperator.IS &&
+					item.value === VisitorSpaceMediaType.All;
 
-			return hasValue && hasLength && !isFormatAllFilter;
-		});
+				return hasValue && hasLength && !isFormatAllFilter;
+			}),
+		];
 
-		const parsed = (await ApiService.getApi()
-			.post(`${MEDIA_SERVICE_BASE_URL}/${orgId}`, {
+		const parsed = (await ApiService.getApi(true)
+			.post(`${IE_OBJECTS_SERVICE_BASE_URL}`, {
 				body: JSON.stringify({
 					filters: filtered,
 					size,
@@ -63,22 +64,12 @@ export class MediaService {
 					...parsedSort,
 				}),
 			})
-			.json()) as ElasticsearchResponse<MediaInfo>;
+			.json()) as GetMediaResponse;
 
-		return {
-			items: parsed?.hits?.hits.map((item) => ({
-				...item._source,
-				schema_identifier: item._id,
-			})),
-			total: parsed?.hits?.total?.value,
-			size: size,
-			page: page,
-			pages: Math.ceil((parsed?.hits?.total?.value || 0) / size),
-			aggregations: parsed.aggregations,
-		};
+		return parsed;
 	}
 
-	public static async getById(id: string): Promise<MediaInfo> {
+	public static async getById(id: string): Promise<Media> {
 		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
 	}
 
@@ -122,11 +113,11 @@ export class MediaService {
 	public static async countRelated(
 		meemooIdentifiers: string[] = []
 	): Promise<Record<string, number>> {
-		return await ApiService.getApi()
+		return await ApiService.getApi(true)
 			.get(
 				stringifyUrl(
 					{
-						url: `${MEDIA_SERVICE_BASE_URL}/related/count`,
+						url: `${IE_OBJECTS_SERVICE_BASE_URL}/related/count`,
 						query: { meemooIdentifiers },
 					},
 					{

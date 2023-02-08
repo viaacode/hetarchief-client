@@ -1,5 +1,3 @@
-import { MediaInfo } from '@shared/types';
-
 // Mapped intellectual entity object
 export interface Media {
 	schemaIdentifier: string; // Unique id per object
@@ -137,7 +135,7 @@ export interface MediaSimilarHit {
 	_id: string;
 	_ignored: string[];
 	_index: string;
-	_source: MediaInfo;
+	_source: Media;
 	_type: string;
 }
 
