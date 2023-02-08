@@ -1,12 +1,15 @@
 @use "../../abstracts" as *;
 
-.p-account-my-profile__user-data {
+.p-account-my-profile__general-info {
 	background-color: $white;
 
-	@include respond-at(md) {
-		display: grid;
-		grid-auto-flow: column;
-		grid-template-columns: 3fr 1fr;
+	.p-account-my-profile__general-info-header,
+	.p-account-my-profile__general-info-items {
+		@include respond-at(md) {
+			display: grid;
+			grid-auto-flow: column;
+			grid-template-columns: 3fr 1fr;
+		}
 	}
 
 	dl {
@@ -36,4 +39,19 @@
 
 .p-account-my-profile__edit {
 	justify-self: end;
+}
+
+.p-account-my-profile__general-info-alert {
+	background-color: $silver;
+	display: flex;
+
+	.c-Alert__icon {
+		font-size: 2rem;
+		margin-right: 0.4rem;
+	}
+
+	.c-Alert__title {
+		font-weight: bold;
+		margin-bottom: 0.4rem;
+	}
 }

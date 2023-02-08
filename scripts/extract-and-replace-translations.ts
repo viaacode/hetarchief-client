@@ -28,7 +28,6 @@ import * as path from 'path';
 import glob from 'glob';
 import { intersection, kebabCase, keys, without } from 'lodash';
 import fetch from 'node-fetch';
-import sortObject from 'sort-object-keys';
 
 import localTranslations from '../public/locales/nl/common.json';
 
@@ -206,6 +205,15 @@ function checkTranslationsForKeysAsValue(translationJson: string) {
 	}
 }
 
+function sortObjectKeys(objToSort: Record<string, any>): Record<string, any> {
+	return Object.keys(objToSort)
+		.sort()
+		.reduce((obj: Record<string, string>, key) => {
+			obj[key] = objToSort[key];
+			return obj;
+		}, {});
+}
+
 async function updateTranslations(): Promise<void> {
 	const onlineTranslations = await getOnlineTranslations();
 
@@ -235,7 +243,7 @@ async function updateTranslations(): Promise<void> {
 		combinedTranslations[key] = onlineTranslations[key] || newTranslations[key];
 	});
 
-	const nlJsonContent = JSON.stringify(sortObject(combinedTranslations), null, 2);
+	const nlJsonContent = JSON.stringify(sortObjectKeys(combinedTranslations), null, 2);
 	checkTranslationsForKeysAsValue(nlJsonContent); // Throws error if any key is found as a value
 
 	fs.writeFileSync(

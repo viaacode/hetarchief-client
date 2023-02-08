@@ -14,7 +14,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
+const NavigationBarPageDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 
@@ -54,4 +54,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(ContentPageDetailPage as ComponentType));
+export default withAuth(withAdminCoreConfig(NavigationBarPageDetailPage as ComponentType));

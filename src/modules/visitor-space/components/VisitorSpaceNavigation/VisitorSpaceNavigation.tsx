@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
 import { Navigation } from '@navigation/components';
-import { DropdownMenu, Icon } from '@shared/components';
+import { DropdownMenu, Icon, IconNamesLight } from '@shared/components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -41,7 +41,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 							)}
 						>
 							<Button
-								icon={<Icon name="arrow-left" aria-hidden />}
+								icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 								variants="text"
 								className="u-color-white u-ml--12"
 							/>
@@ -66,7 +66,11 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 							),
 							icon: undefined,
 							iconStart: (
-								<Icon className="u-font-size-24" name="contact" aria-hidden />
+								<Icon
+									className="u-font-size-24"
+									name={IconNamesLight.Contact}
+									aria-hidden
+								/>
 							),
 							label: tHtml(
 								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___contacteer'

@@ -1,6 +1,6 @@
 import { Tag, TagsInputProps } from '@meemoo/react-components';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 export const clearIndicatorCxState = {
 	indicator: true,
@@ -20,7 +20,7 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 	ClearIndicator: ({ className, cx, innerProps }) => {
 		return (
 			<span {...innerProps} className={cx(clearIndicatorCxState, className)} tabIndex={1}>
-				<Icon className={cx({ 'indicator-icon': true })} name="times" />
+				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.Times} />
 			</span>
 		);
 	},
@@ -35,7 +35,7 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 				className={cx(dropdownIndicatorCxState, className)}
 				tabIndex={1}
 			>
-				<Icon className={cx({ 'indicator-icon': true })} name="angle-down" />
+				<Icon className={cx({ 'indicator-icon': true })} name={IconNamesLight.AngleDown} />
 			</span>
 		);
 	},
@@ -44,7 +44,7 @@ export const TAGS_INPUT_COMPONENTS: TagsInputProps<boolean>['components'] = {
 		const renderCloseButton = () => {
 			return (
 				<div {...removeProps} className="c-tag__close">
-					<Icon name="times" />
+					<Icon name={IconNamesLight.Times} />
 				</div>
 			);
 		};

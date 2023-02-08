@@ -2,7 +2,7 @@ import { TextInput } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 export default {
 	title: 'Components/TextInput',
@@ -27,25 +27,25 @@ ColorGray.args = {
 export const WithIconLeft = Template.bind({});
 WithIconLeft.args = {
 	placeholder: 'dd/mm/yyyy',
-	iconStart: <Icon name="calendar" />,
+	iconStart: <Icon name={IconNamesLight.Calendar} />,
 };
 
 export const WithIconRight = Template.bind({});
 WithIconRight.args = {
 	placeholder: 'Zoek',
-	iconEnd: <Icon name="search" />,
+	iconEnd: <Icon name={IconNamesLight.Search} />,
 };
 
 export const Rounded = Template.bind({});
 Rounded.args = {
 	placeholder: 'Zoek',
-	iconEnd: <Icon name="search" />,
+	iconEnd: <Icon name={IconNamesLight.Search} />,
 	variants: 'rounded',
 };
 
 export const SizeLarge = Template.bind({});
 SizeLarge.args = {
 	placeholder: 'Zoek',
-	iconEnd: <Icon name="search" />,
+	iconEnd: <Icon name={IconNamesLight.Search} />,
 	variants: ['lg', 'rounded'],
 };

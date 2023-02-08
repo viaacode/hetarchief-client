@@ -2,7 +2,7 @@ import { Tab } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon } from '../../Icon';
+import { Icon, IconNamesLight } from '../../Icon';
 
 export default {
 	title: 'Components/Tab',
@@ -30,7 +30,7 @@ WithIcon.args = {
 	id: 'tab-id',
 	label: 'Audio',
 	active: false,
-	icon: <Icon name="audio" />,
+	icon: <Icon name={IconNamesLight.Audio} />,
 };
 
 export const WithCustomLabel = Template.bind({});
@@ -43,5 +43,5 @@ WithCustomLabel.args = {
 		</>
 	),
 	active: false,
-	icon: <Icon name="video" />,
+	icon: <Icon name={IconNamesLight.Video} />,
 };

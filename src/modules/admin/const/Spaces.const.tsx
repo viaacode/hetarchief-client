@@ -4,7 +4,7 @@ import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { AdminVisitorSpaceInfoRow } from '@admin/types';
-import { DropdownMenu, Icon } from '@shared/components';
+import { DropdownMenu, Icon, IconNamesLight } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
@@ -116,7 +116,7 @@ export const VisitorSpacesOverviewTableColumns = (
 								className="u-color-neutral u-font-size-24"
 								aria-label={tText('modules/admin/const/spaces___aanpassen')}
 							>
-								<Icon name="edit" />
+								<Icon name={IconNamesLight.Edit} />
 							</a>
 						</Link>
 					)}

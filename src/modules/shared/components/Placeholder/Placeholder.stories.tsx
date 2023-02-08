@@ -1,6 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
+import { IconNamesLight } from '../Icon';
+
 import Placeholder from './Placeholder';
 
 export default {
@@ -18,7 +20,7 @@ Default.args = {
 
 export const WithIcon = Template.bind({});
 WithIcon.args = {
-	icon: 'search',
+	icon: IconNamesLight.Search,
 	title: 'Geen resultaten',
 	description: 'Pas je zoekopdracht aan om minder filter of trefwoorden te omvatten.',
 };

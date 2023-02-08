@@ -8,7 +8,7 @@ import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -95,8 +95,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 						</b>
 
 						<Icon
-							name="arrow-down"
-							type="light"
+							name={IconNamesLight.ArrowDown}
 							className={styles['c-hero__arrow-down']}
 						/>
 					</div>

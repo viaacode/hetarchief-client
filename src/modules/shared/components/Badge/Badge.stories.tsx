@@ -2,7 +2,7 @@ import { Badge } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 export default {
 	title: 'Components/Badge',
@@ -18,14 +18,14 @@ Text.args = {
 
 export const Success = Template.bind({});
 Success.args = {
-	text: <Icon name="check" />,
+	text: <Icon name={IconNamesLight.Check} />,
 	type: 'success',
 	variants: 'icon', // Badges with icons need 'icon' variant to adjust font-size
 };
 
 export const Error = Template.bind({});
 Error.args = {
-	text: <Icon name="forbidden" />,
+	text: <Icon name={IconNamesLight.Forbidden} />,
 	type: 'error',
 	variants: 'icon',
 };
@@ -38,6 +38,6 @@ SmallText.args = {
 
 export const SmallIcon = Template.bind({});
 SmallIcon.args = {
-	text: <Icon name="link" />,
+	text: <Icon name={IconNamesLight.Link} />,
 	variants: ['small', 'icon'],
 };

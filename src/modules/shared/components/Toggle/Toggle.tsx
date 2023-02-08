@@ -2,13 +2,13 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { Icon, IconLightNames } from '../Icon';
+import { Icon, IconName } from '../Icon';
 
 import styles from './Toggle.module.scss';
 import { ToggleProps } from './Toggle.types';
 
 const Toggle: FC<ToggleProps> = ({ className, options, onChange, bordered, dark }) => {
-	const renderIcon = (name: IconLightNames) => <Icon name={name} />;
+	const renderIcon = (name: IconName) => <Icon name={name} />;
 
 	return (
 		<div

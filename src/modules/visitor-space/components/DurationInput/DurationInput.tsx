@@ -1,7 +1,7 @@
 import { TextInput, TextInputProps } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 
 import { durationRegex } from '../../components/DurationInput/DurationInput.consts';
 
@@ -13,7 +13,7 @@ const DurationInput: FC<TextInputProps> = (props) => (
 		type="text"
 		pattern={durationRegex}
 		step="1"
-		iconStart={<Icon name="clock" />}
+		iconStart={<Icon name={IconNamesLight.Clock} />}
 		iconEnd={<span className={style['c-duration-input--placeholder']}>uu:mm:ss</span>}
 	/>
 );

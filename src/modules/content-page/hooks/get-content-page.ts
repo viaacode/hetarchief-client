@@ -1,30 +1,33 @@
-import { ContentPageService } from '@meemoo/admin-core-ui';
+import { ContentPageInfo, ContentPageService } from '@meemoo/admin-core-ui';
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
+import { HTTPError } from 'ky';
+import { startsWith } from 'lodash';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
+import { ApiResponseWrapper } from '@shared/types';
 
-import { ContentPageExistsInfo } from '../services/content-page.service.types';
-
-export function useGetContentPage(
-	slug?: string | null,
-	ignoreAuthError = false,
-	options?: Partial<
-		Omit<
-			UseQueryOptions<
-				ContentPageExistsInfo | null,
-				unknown,
-				ContentPageExistsInfo | null,
-				[QUERY_KEYS, { slug?: string | null }]
-			>,
-			'queryKey' | 'queryFn'
-		>
+export const useGetContentPageByPath = (
+	path: string | undefined,
+	options?: UseQueryOptions<
+		ContentPageInfo | null,
+		HTTPError,
+		ContentPageInfo | null,
+		QUERY_KEYS[]
 	>
-): UseQueryResult<ContentPageExistsInfo | null> {
+): UseQueryResult<ApiResponseWrapper<ContentPageInfo>> => {
 	return useQuery(
-		[QUERY_KEYS.getContentPage, { slug }],
+		[QUERY_KEYS.getContentPage],
 		() => {
-			return ContentPageService.getContentPageByPath(('/' + slug) as string, ignoreAuthError);
+			if (!path) {
+				return null;
+			}
+
+			if (!startsWith(path, '/')) {
+				throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
+			}
+
+			return ContentPageService.getContentPageByPath(path);
 		},
 		options
 	);
-}
+};

@@ -1,4 +1,4 @@
-import { Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
+import { Alert, Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { capitalize, kebabCase, lowerCase } from 'lodash-es';
@@ -46,12 +46,13 @@ import {
 	ErrorNoAccess,
 	ErrorNotFound,
 	Icon,
+	IconNamesLight,
 	Loading,
 	ScrollableTabs,
 	TabLabel,
-	TextWithNewLines,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { MetaDataDescription } from '@shared/components/MetaDataDescription';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -531,7 +532,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					{showResearchWarning && (
 						<Callout
 							className="p-object-detail__callout u-pt-32 u-pb-24"
-							icon={<Icon name="info" aria-hidden />}
+							icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 							text={tHtml(
 								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 							)}
@@ -556,15 +557,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					>
 						{mediaInfo?.name}
 					</h3>
-					<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
-						<TextWithNewLines text={mediaInfo?.description} />
-					</p>
+
+					<MetaDataDescription description={mediaInfo?.description || ''} />
 
 					<div className="u-pb-24 p-object-detail__actions">
 						{canDownloadMetadata && (
 							<Button
 								className="p-object-detail__export"
-								iconStart={<Icon name="export" aria-hidden />}
+								iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
 								onClick={onExportClick}
 								aria-label={tText(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
@@ -593,7 +593,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							onClickAction={onClickAction}
 						/>
 					</div>
+					{!mediaInfo?.description && (
+						<Alert
+							className="c-Alert__margin-bottom"
+							icon={<Icon name={IconNamesLight.Info} />}
+							content={tHtml(
+								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
+							)}
+							title=""
+						/>
+					)}
 				</div>
+
 				{mediaInfo && (
 					<>
 						<Metadata
@@ -641,7 +652,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				icon={
 					<Icon
 						className="u-font-size-24 u-mr-8 u-text-left"
-						name="related-objects"
+						name={IconNamesLight.RelatedObjects}
 						aria-hidden
 					/>
 				}
@@ -742,7 +753,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						)}
 						icon={
 							<Icon
-								name={expandMetadata ? 'expand-right' : 'expand-left'}
+								name={
+									expandMetadata
+										? IconNamesLight.ExpandRight
+										: IconNamesLight.ExpandLeft
+								}
 								aria-hidden
 							/>
 						}

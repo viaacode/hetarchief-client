@@ -2,7 +2,7 @@ import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 
 import { ACCOUNT_NAVIGATION_LINKS } from '@account/const';
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
 import { tText } from '@shared/helpers/translate';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
@@ -56,7 +56,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 							[badgeCls]: hasUnreadNotifications,
 						}
 					)}
-					icon={<Icon type="solid" name="notification" aria-hidden />}
+					icon={<Icon name={IconNamesSolid.Notification} aria-hidden />}
 					aria-label={tText('modules/navigation/const/index___notificaties')}
 				/>
 			),
@@ -65,7 +65,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 			id: 'user-menu',
 			node: (
 				<Avatar variants="padded-y" text={userName}>
-					<Icon type="solid" name="user" />
+					<Icon name={IconNamesSolid.User} />
 				</Avatar>
 			),
 			children: [
@@ -77,7 +77,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 					id: 'log-out',
 					node: ({ closeDropdowns }) => (
 						<NavigationLink
-							iconStart="log-out"
+							iconStart={IconNamesLight.LogOut}
 							label={tText('modules/navigation/const/index___log-uit')}
 							onClick={() => {
 								onLogOutClick();

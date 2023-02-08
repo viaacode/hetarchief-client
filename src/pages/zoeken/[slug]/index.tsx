@@ -1,4 +1,4 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer, ContentPageService } from '@meemoo/admin-core-ui';
 import { HTTPError } from 'ky';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
@@ -22,8 +22,7 @@ import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearch
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceService } from '@visitor-space/services';
 
-import { useGetContentPage } from '../../../modules/content-page/hooks/get-content-page';
-import { ContentPageService } from '../../../modules/content-page/services/content-page.service';
+import { useGetContentPageByPath } from '../../../modules/content-page/hooks/get-content-page';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -60,7 +59,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 		error: contentPageError,
 		isLoading: isContentPageLoading,
 		data: contentPageInfo,
-	} = useGetContentPage(slug as string, true);
+	} = useGetContentPageByPath(('/' + slug) as string);
 
 	/**
 	 * Computed
@@ -68,8 +67,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 
 	const isVisitorSpaceNotFoundError = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isContentPageNotFoundError =
-		(!!contentPageInfo && contentPageInfo?.exists === false) ||
-		(contentPageError as HTTPError)?.response?.status === 404;
+		!!contentPageInfo || (contentPageError as HTTPError)?.response?.status === 404;
 
 	/**
 	 * Methods

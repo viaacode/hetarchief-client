@@ -1,4 +1,4 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer, ContentPageService } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, useEffect } from 'react';
@@ -16,9 +16,8 @@ import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import { useGetContentPage } from '../modules/content-page/hooks/get-content-page';
+import { useGetContentPageByPath } from '../modules/content-page/hooks/get-content-page';
 
-import { ContentPageService } from 'modules/content-page/services/content-page.service';
 import { VisitorLayout } from 'modules/visitors';
 
 type HomepageProps = {
@@ -39,7 +38,7 @@ const Homepage: NextPage<HomepageProps> = ({ title, url }) => {
 	 * Data
 	 */
 
-	const { isLoading: isContentPageLoading, data: contentPageInfo } = useGetContentPage('', true);
+	const { isLoading: isContentPageLoading, data: contentPageInfo } = useGetContentPageByPath('/');
 
 	useEffect(() => {
 		if (typeof query.showAuth === 'boolean') {
@@ -88,7 +87,8 @@ export async function getServerSideProps(
 	let title: string | null = null;
 	try {
 		const contentPage = await ContentPageService.getBySlug(
-			('/' + context.query.slug) as string
+			('/' + context.query.slug) as string,
+			true
 		);
 		title = contentPage?.title || null;
 	} catch (err) {

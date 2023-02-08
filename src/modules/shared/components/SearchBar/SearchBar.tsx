@@ -1,14 +1,16 @@
 import { Button, keysEnter, onKey, TextInput } from '@meemoo/react-components';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 import { SearchBarProps } from './SearchBar.types';
 
 const SearchBar: FC<SearchBarProps> = ({
 	onSearch,
+	shouldReset,
+	onResetFinished = () => null,
 	variants = ['md', 'rounded', 'grey-border', 'icon--double', 'icon-clickable'],
 	...rest
 }) => {
@@ -27,6 +29,11 @@ const SearchBar: FC<SearchBarProps> = ({
 		return [...modifiers, ...(search ? ['black-border'] : [])];
 	};
 
+	useEffect(() => {
+		setSearch('');
+		onResetFinished();
+	}, [shouldReset]);
+
 	return (
 		<TextInput
 			{...rest}
@@ -39,7 +46,7 @@ const SearchBar: FC<SearchBarProps> = ({
 					{search && (
 						<Button
 							variants={['text', 'icon', 'xxs']}
-							icon={<Icon name="times" aria-hidden />}
+							icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 							aria-label={tText(
 								'modules/shared/components/search-bar/search-bar___opnieuw-instellen'
 							)}
@@ -51,7 +58,7 @@ const SearchBar: FC<SearchBarProps> = ({
 					)}
 					<Button
 						variants={['text', 'icon', 'xxs']}
-						icon={<Icon name="search" aria-hidden />}
+						icon={<Icon name={IconNamesLight.Search} aria-hidden />}
 						aria-label={tText(
 							'modules/shared/components/search-bar/search-bar___uitvoeren'
 						)}

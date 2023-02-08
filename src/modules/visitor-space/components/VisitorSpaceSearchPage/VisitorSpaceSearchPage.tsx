@@ -19,6 +19,8 @@ import {
 	Callout,
 	ErrorNoAccess,
 	Icon,
+	IconNamesLight,
+	IconNamesSolid,
 	IdentifiableMediaCard,
 	Loading,
 	MediaCardList,
@@ -462,7 +464,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					setShowAddToFolderBlade(true);
 				}}
 				icon={
-					<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" aria-hidden />
+					<Icon
+						name={itemIsInAFolder ? IconNamesSolid.Bookmark : IconNamesLight.Bookmark}
+						aria-hidden
+					/>
 				}
 				variants={['text', 'xxs']}
 				title={tText(
@@ -607,7 +612,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 						<aside className="u-bg-platinum">
 							<div className="l-container u-flex u-justify-center u-py-32">
 								<Callout
-									icon={<Icon name="info" aria-hidden />}
+									icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 									text={tHtml(
 										'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 									)}
