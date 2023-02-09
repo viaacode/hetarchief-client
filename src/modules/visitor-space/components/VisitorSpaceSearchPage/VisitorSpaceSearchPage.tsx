@@ -39,7 +39,6 @@ import { tHtml } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
-import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
@@ -98,8 +97,6 @@ const defaultOption: VisitorSpaceDropdownOption = {
 };
 
 const VisitorSpaceSearchPage: FC = () => {
-	useNavigationBorder();
-
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
