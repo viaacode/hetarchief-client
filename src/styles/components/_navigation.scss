@@ -1,28 +1,47 @@
 @use "src/styles/abstracts" as *;
 
-.c-navigation__notifications {
-	&-badge {
-		position: relative;
+.c-navigation {
+	&__logo {
+		height: auto;
+		height: 6.5rem;
 
-		&::after {
-			position: absolute;
-			top: 0.8rem;
-			right: 0.8rem;
-			content: "";
-			width: 0.8rem;
-			height: 0.8rem;
-			border-radius: 50%;
+		&--hamburger {
+			border: 3px solid blue;
 		}
 
-		&--white {
-			&::after {
-				background-color: $white;
+		&--list {
+			margin: 1rem 8.4rem 1rem 0;
+
+			@include respond-to(md) {
+				margin: 3.5rem 0 3.5rem $spacer-md;
 			}
 		}
+	}
 
-		&--teal {
+	&__notifications {
+		&-badge {
+			position: relative;
+
 			&::after {
-				background-color: $teal;
+				position: absolute;
+				top: 0.8rem;
+				right: 0.8rem;
+				content: "";
+				width: 0.8rem;
+				height: 0.8rem;
+				border-radius: 50%;
+			}
+
+			&--white {
+				&::after {
+					background-color: $white;
+				}
+			}
+
+			&--teal {
+				&::after {
+					background-color: $teal;
+				}
 			}
 		}
 	}

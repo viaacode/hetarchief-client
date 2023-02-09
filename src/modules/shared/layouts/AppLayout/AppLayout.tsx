@@ -70,6 +70,8 @@ const AppLayout: FC = ({ children }) => {
 
 	useHistory(asPath, history);
 
+	console.log({ showBorder });
+
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
 			show && scrollTo(0);
@@ -147,7 +149,12 @@ const AppLayout: FC = ({ children }) => {
 
 		const staticItems = [
 			{
-				node: <Logo type={isMobile ? LogoType.Dark : LogoType.Light} />,
+				node: (
+					<Logo
+						className="c-navigation__logo c-navigation__logo--list"
+						type={isMobile ? LogoType.Dark : LogoType.Light}
+					/>
+				),
 				id: 'logo',
 				activeDesktop: false,
 				activeMobile: false,
@@ -178,7 +185,12 @@ const AppLayout: FC = ({ children }) => {
 			? defaultProps
 			: {
 					...defaultProps,
-					logo: <Logo type={LogoType.Light} />,
+					logo: (
+						<Logo
+							className="c-navigation__logo c-navigation__logo--hamburger"
+							type={LogoType.Light}
+						/>
+					),
 			  };
 	}, [isLoggedIn]);
 
