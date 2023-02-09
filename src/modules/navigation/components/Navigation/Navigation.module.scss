@@ -305,6 +305,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	&:not(&--active):hover {
 		.c-navigation__link,
 		.c-navigation__link + span {
+			font-weight: $font-weight-bold;
 			color: color.adjust($white, $alpha: -0.3);
 			transition: color $animate-md-in;
 		}
