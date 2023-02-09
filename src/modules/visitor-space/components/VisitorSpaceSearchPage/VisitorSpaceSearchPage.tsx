@@ -553,9 +553,10 @@ const VisitorSpaceSearchPage: FC = () => {
 						(media) => media.schemaIdentifier === cast.schemaIdentifier
 					);
 
-					const space = source?.maintainerName.replace(' ', '-');
+					// TODO: Replace maintainerName with slug when BE is updated
+					const space = source?.maintainerName.replaceAll(' ', '-');
 					const id = source?.schemaIdentifier;
-					const href = `${space}/${id}`.toLowerCase();
+					const href = `${ROUTE_PARTS.search}/${space}/${id}`.toLowerCase();
 
 					const name = item.title?.toString(); // TODO double check that this still works
 
