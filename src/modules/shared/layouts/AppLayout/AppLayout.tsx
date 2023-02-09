@@ -19,7 +19,7 @@ import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
-import { NotificationCenter, ZendeskWrapper } from '@shared/components';
+import { Logo, LogoType, NotificationCenter, ZendeskWrapper } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
@@ -135,6 +135,53 @@ const AppLayout: FC = ({ children }) => {
 		canManageAccount,
 	]);
 
+	const leftNavItems: NavigationItem[] = useMemo(() => {
+		const dynamicItems = getNavigationItemsLeft(
+			asPath,
+			accessibleVisitorSpaces || [],
+			navigationItems?.[NavigationPlacement.HeaderLeft] || [],
+			user?.permissions || [],
+			showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+			isMobile
+		);
+
+		const staticItems = [
+			{
+				node: <Logo type={isMobile ? LogoType.Dark : LogoType.Light} />,
+				id: 'logo',
+				activeDesktop: false,
+				activeMobile: false,
+				isDivider: false,
+			},
+		];
+
+		if (!isLoggedIn && isMobile) {
+			return dynamicItems;
+		}
+
+		return [...staticItems, ...dynamicItems];
+	}, [
+		accessibleVisitorSpaces,
+		asPath,
+		isMobile,
+		linkedSpaceSlug,
+		navigationItems,
+		showLinkedSpaceAsHomepage,
+		user?.permissions,
+		isLoggedIn,
+	]);
+
+	const hamburgerProps = useMemo(() => {
+		const defaultProps = NAV_HAMBURGER_PROPS();
+
+		return isLoggedIn
+			? defaultProps
+			: {
+					...defaultProps,
+					logo: <Logo type={LogoType.Light} />,
+			  };
+	}, [isLoggedIn]);
+
 	const onOpenNavDropdowns = () => {
 		// Also close notification center when opening other dropdowns in nav
 		if (showNotificationsCenter) {
@@ -151,15 +198,8 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation showBorder={showBorder}>
 				<Navigation.Left
 					currentPath={asPath}
-					hamburgerProps={NAV_HAMBURGER_PROPS()}
-					items={getNavigationItemsLeft(
-						asPath,
-						accessibleVisitorSpaces || [],
-						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
-						user?.permissions || [],
-						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
-						isMobile
-					)}
+					hamburgerProps={hamburgerProps}
+					items={leftNavItems}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}
