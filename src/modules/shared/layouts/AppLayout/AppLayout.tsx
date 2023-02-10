@@ -192,7 +192,7 @@ const AppLayout: FC = ({ children }) => {
 			})}
 		>
 			<Navigation showBorder={showBorder} loggedOutGrid={showLoggedOutGrid}>
-				{!isLoggedIn && (
+				{!isLoggedIn && isMobile && (
 					<div className="c-navigation__logo--hamburger">
 						<Logo type={LogoType.Light} />
 					</div>
