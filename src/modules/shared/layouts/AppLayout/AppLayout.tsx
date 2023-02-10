@@ -116,27 +116,36 @@ const AppLayout: FC = ({ children }) => {
 				return [];
 			}
 
-			return NAV_ITEMS_RIGHT_LOGGED_IN(asPath, navigationItems || {}, {
-				hasUnreadNotifications,
-				notificationsOpen: showNotificationsCenter,
-				userName,
-				onLogOutClick,
-				setNotificationsOpen,
-			});
+			return NAV_ITEMS_RIGHT_LOGGED_IN(
+				asPath,
+				navigationItems || {},
+				accessibleVisitorSpaces || [],
+				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+				{
+					hasUnreadNotifications,
+					notificationsOpen: showNotificationsCenter,
+					userName,
+					onLogOutClick,
+					setNotificationsOpen,
+				}
+			);
 		}
 
 		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
-		asPath,
-		canManageAccount,
-		hasUnreadNotifications,
 		isLoggedIn,
-		navigationItems,
 		onLoginRegisterClick,
-		onLogOutClick,
-		setNotificationsOpen,
+		canManageAccount,
+		asPath,
+		navigationItems,
+		accessibleVisitorSpaces,
+		showLinkedSpaceAsHomepage,
+		linkedSpaceSlug,
+		hasUnreadNotifications,
 		showNotificationsCenter,
 		userName,
+		onLogOutClick,
+		setNotificationsOpen,
 	]);
 
 	const leftNavItems: NavigationItem[] = useMemo(() => {

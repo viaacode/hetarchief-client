@@ -5,6 +5,7 @@ import { getNavigationItemsProfileDropdown } from '@navigation/components/Naviga
 import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
 import { tText } from '@shared/helpers/translate';
+import { VisitorSpaceInfo } from '@visitor-space/types';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
 import { NavItemsRightLoggedIn } from '../types';
@@ -35,6 +36,8 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 	currentPath: string,
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
+	accessibleVisitorSpaces: VisitorSpaceInfo[],
+	linkedSpaceSlug: string | null,
 	{
 		hasUnreadNotifications,
 		notificationsOpen,
@@ -74,7 +77,12 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 				</Avatar>
 			),
 			children: [
-				...getNavigationItemsProfileDropdown(currentPath, navigationItems),
+				...getNavigationItemsProfileDropdown(
+					currentPath,
+					navigationItems,
+					accessibleVisitorSpaces,
+					linkedSpaceSlug
+				),
 				{
 					id: 'log-out',
 					node: ({ closeDropdowns }) => (

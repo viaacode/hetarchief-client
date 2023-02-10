@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
-import { Navigation, NavigationItem, NavigationLink } from '@navigation/components';
+import { NavigationItem, NavigationLink } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import {
 	NavigationInfo,
@@ -16,6 +16,10 @@ import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
 import { VisitorSpaceInfo } from '@visitor-space/types';
+
+export enum NAVIGATION_DROPDOOWN {
+	VISITOR_SPACES = '<BOEZOEKERRUIMTES_DROPDOWN>',
+}
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -89,6 +93,7 @@ const renderLink = (
 };
 
 const getVisitorSpacesDropdown = (
+	navigationLabel: string,
 	currentPath: string,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceSlug: string | null
@@ -111,13 +116,9 @@ const getVisitorSpacesDropdown = (
 	} else if (accessibleVisitorSpaces.length === 0) {
 		// No visitor spaces available => show link to homepage without dropdown
 		return {
-			node: renderLink(
-				tText('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
-				'/',
-				{
-					className: linkClasses,
-				}
-			),
+			node: renderLink(navigationLabel, '/', {
+				className: linkClasses,
+			}),
 			id: 'visitor-spaces',
 			activeDesktop: currentPath === ROUTES.home,
 			activeMobile: currentPath === ROUTES.home,
@@ -125,20 +126,16 @@ const getVisitorSpacesDropdown = (
 	} else {
 		// Show dropdown list with homepage and accessible visitor spaces
 		return {
-			node: renderLink(
-				tText('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
-				'/',
-				{
-					badge: <Badge text={accessibleVisitorSpaces.length} />,
-					className: linkClasses,
-					// Make link clickable in hamburger menu
-					onClick: (e) => {
-						if (window.innerWidth > Breakpoints.md) {
-							e.preventDefault();
-						}
-					},
-				}
-			),
+			node: renderLink(navigationLabel, '/', {
+				badge: <Badge text={accessibleVisitorSpaces.length} />,
+				className: linkClasses,
+				// Make link clickable in hamburger menu
+				onClick: (e) => {
+					if (window.innerWidth > Breakpoints.md) {
+						e.preventDefault();
+					}
+				},
+			}),
 			id: 'visitor-spaces',
 			activeDesktop:
 				currentPath === ROUTES.home ||
@@ -202,7 +199,9 @@ const getVisitorSpacesDropdown = (
 const getDynamicHeaderLinks = (
 	currentPath: string,
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
-	placement: NavigationPlacement
+	placement: NavigationPlacement,
+	accessibleVisitorSpaces: VisitorSpaceInfo[],
+	linkedSpaceSlug: string | null
 ) => {
 	const itemsByPlacement = navigationItems[placement];
 
@@ -219,6 +218,15 @@ const getDynamicHeaderLinks = (
 			iconName,
 			tooltip,
 		}: NavigationInfo): NavigationItem => {
+			if (contentPath === NAVIGATION_DROPDOOWN.VISITOR_SPACES) {
+				return getVisitorSpacesDropdown(
+					label,
+					currentPath,
+					accessibleVisitorSpaces,
+					linkedSpaceSlug
+				);
+			}
+
 			return {
 				activeDesktop: currentPath === contentPath,
 				activeMobile: currentPath === contentPath,
@@ -365,12 +373,16 @@ export const getNavigationItemsLeft = (
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
-		NavigationPlacement.HeaderLeft
+		NavigationPlacement.HeaderLeft,
+		accessibleVisitorSpaces,
+		linkedSpaceSlug
 	);
 	const afterDivider = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
-		NavigationPlacement.HeaderRight
+		NavigationPlacement.HeaderRight,
+		accessibleVisitorSpaces,
+		linkedSpaceSlug
 	);
 
 	return [
@@ -395,12 +407,16 @@ export const getNavigationItemsLeft = (
 
 export const getNavigationItemsProfileDropdown = (
 	currentPath: string,
-	navigationItems: Record<NavigationPlacement, NavigationInfo[]>
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
+	accessibleVisitorSpaces: VisitorSpaceInfo[],
+	linkedSpaceSlug: string | null
 ): NavigationItem[] => {
 	const profileDropdown = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
-		NavigationPlacement.ProfileDropdown
+		NavigationPlacement.ProfileDropdown,
+		accessibleVisitorSpaces,
+		linkedSpaceSlug
 	);
 
 	const divider = [
@@ -430,7 +446,7 @@ export const getNavigationItemsProfileDropdown = (
 	);
 
 	return [
-		...defaultRoutes,
+		...(defaultRoutes || []),
 		...((adminRoutes || [])?.length > 0 ? [...divider, ...adminRoutes] : []),
 		...((cpRoutes || [])?.length > 0 ? [...divider, ...cpRoutes] : []),
 		...divider,

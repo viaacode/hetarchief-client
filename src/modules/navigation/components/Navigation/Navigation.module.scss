@@ -10,7 +10,6 @@ $c-navigation-divider-size: 0.1rem;
 $c-navigation-item-spacing: $spacer-md;
 $c-navigation-item-spacing-lg: $spacer-1xl;
 $c-navigation-dropdown-item-spacer: 1.2rem;
-$c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65px currentColor;
 
 @mixin navigation-link-border-decoration($_offset1: 0, $_offset2: 0) {
 	$offset1-border: if($_offset1 == 0, 0, calc(#{$_offset1} + 0.1rem));
@@ -312,7 +311,7 @@ $c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65
 	&:not(&--active):hover {
 		.c-navigation__link,
 		.c-navigation__link + span {
-			text-shadow: $c-navigation-active;
+			font-weight: 800;
 			color: color.adjust($white, $alpha: -0.3);
 			transition: color $animate-md-in;
 		}
@@ -347,7 +346,7 @@ $c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65
 
 	&--active {
 		z-index: get-z-layer("nav-dropdown");
-		text-shadow: $c-navigation-active;
+		font-weight: 800;
 
 		@include respond-to("md") {
 			> :global(.c-dropdown-menu__item) {
