@@ -115,7 +115,8 @@ const AppLayout: FC = ({ children }) => {
 			if (!canManageAccount) {
 				return [];
 			}
-			return NAV_ITEMS_RIGHT_LOGGED_IN({
+
+			return NAV_ITEMS_RIGHT_LOGGED_IN(asPath, navigationItems || {}, {
 				hasUnreadNotifications,
 				notificationsOpen: showNotificationsCenter,
 				userName,
@@ -123,23 +124,26 @@ const AppLayout: FC = ({ children }) => {
 				setNotificationsOpen,
 			});
 		}
+
 		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
+		asPath,
+		canManageAccount,
 		hasUnreadNotifications,
 		isLoggedIn,
-		userName,
-		showNotificationsCenter,
+		navigationItems,
 		onLoginRegisterClick,
 		onLogOutClick,
 		setNotificationsOpen,
-		canManageAccount,
+		showNotificationsCenter,
+		userName,
 	]);
 
 	const leftNavItems: NavigationItem[] = useMemo(() => {
 		const dynamicItems = getNavigationItemsLeft(
 			asPath,
 			accessibleVisitorSpaces || [],
-			navigationItems?.[NavigationPlacement.HeaderLeft] || [],
+			navigationItems || {},
 			user?.permissions || [],
 			showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
 			isMobile

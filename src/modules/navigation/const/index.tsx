@@ -2,6 +2,8 @@ import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 
 import { ACCOUNT_NAVIGATION_LINKS } from '@account/const';
+import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
+import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
 import { tText } from '@shared/helpers/translate';
 
@@ -31,13 +33,17 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 	];
 };
 
-export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
-	hasUnreadNotifications,
-	notificationsOpen,
-	userName,
-	onLogOutClick,
-	setNotificationsOpen,
-}: NavItemsRightLoggedIn): NavigationItem[] => {
+export const NAV_ITEMS_RIGHT_LOGGED_IN = (
+	currentPath: string,
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
+	{
+		hasUnreadNotifications,
+		notificationsOpen,
+		userName,
+		onLogOutClick,
+		setNotificationsOpen,
+	}: NavItemsRightLoggedIn
+): NavigationItem[] => {
 	const badgeCls = 'c-navigation__notifications-badge';
 
 	return [
@@ -69,10 +75,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 				</Avatar>
 			),
 			children: [
-				...ACCOUNT_NAVIGATION_LINKS().map(({ label, href, ...rest }) => ({
-					...rest,
-					node: <NavigationLink href={href} label={label} isDropdownItem />,
-				})),
+				...getNavigationItemsProfileDropdown(currentPath, navigationItems),
 				{
 					id: 'log-out',
 					node: ({ closeDropdowns }) => (

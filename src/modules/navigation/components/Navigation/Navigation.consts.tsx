@@ -5,9 +5,12 @@ import Link from 'next/link';
 import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
-import { NavigationItem } from '@navigation/components';
+import { Navigation, NavigationItem, NavigationLink } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
-import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
+import {
+	NavigationInfo,
+	NavigationPlacement,
+} from '@navigation/services/navigation-service/navigation.types';
 import { Icon, IconName, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -32,6 +35,7 @@ const linkClasses = linkCls(
 const renderLink = (
 	label: string,
 	href: string,
+	placement: NavigationPlacement,
 	{
 		badge,
 		iconStart,
@@ -50,23 +54,31 @@ const renderLink = (
 		onClick?: MouseEventHandler<HTMLAnchorElement>;
 	} = {}
 ): ReactNode => {
-	return href ? (
-		<Link href={href}>
-			<a
-				aria-label={tooltip}
-				className={className}
-				onClick={onClick}
-				tabIndex={0}
-				target={target}
-				title={tooltip}
-			>
-				{iconStart && iconStart}
-				{label}
-				{badge && badge}
-				{iconEnd && iconEnd}
-			</a>
-		</Link>
-	) : (
+	const isDropdown = placement === NavigationPlacement.ProfileDropdown;
+
+	if (href) {
+		return isDropdown ? (
+			<NavigationLink href={href} label={label} isDropdownItem />
+		) : (
+			<Link href={href}>
+				<a
+					aria-label={tooltip}
+					className={className}
+					onClick={onClick}
+					tabIndex={0}
+					target={target}
+					title={tooltip}
+				>
+					{iconStart && iconStart}
+					{label}
+					{badge && badge}
+					{iconEnd && iconEnd}
+				</a>
+			</Link>
+		);
+	}
+
+	return (
 		<a aria-label={tooltip} className={className} tabIndex={0} target={target} title={tooltip}>
 			{iconStart && iconStart}
 			{label}
@@ -187,22 +199,39 @@ const getVisitorSpacesDropdown = (
 	}
 };
 
-const getDynamicHeaderLinks = (currentPath: string, navigationItems: NavigationInfo[]) => {
-	return navigationItems.map((navigationItem: NavigationInfo): NavigationItem => {
-		return {
-			activeDesktop: currentPath === navigationItem.contentPath,
-			activeMobile: currentPath === navigationItem.contentPath,
-			id: navigationItem.id,
-			node: renderLink(navigationItem.label, navigationItem.contentPath, {
-				target: navigationItem.linkTarget || undefined,
-				iconStart: navigationItem.iconName ? (
-					<Icon name={navigationItem.iconName as IconName} />
-				) : null,
-				tooltip: navigationItem.tooltip || undefined,
-				className: linkClasses,
-			}),
-		};
-	});
+const getDynamicHeaderLinks = (
+	currentPath: string,
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
+	placement: NavigationPlacement
+) => {
+	const itemsByPlacement = navigationItems[placement];
+
+	if (!itemsByPlacement || !itemsByPlacement.length) {
+		return [];
+	}
+
+	return itemsByPlacement.map(
+		({
+			contentPath,
+			id,
+			label,
+			linkTarget,
+			iconName,
+			tooltip,
+		}: NavigationInfo): NavigationItem => {
+			return {
+				activeDesktop: currentPath === contentPath,
+				activeMobile: currentPath === contentPath,
+				id: id,
+				node: renderLink(label, contentPath, placement, {
+					target: linkTarget || undefined,
+					iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
+					tooltip: tooltip || undefined,
+					className: linkClasses,
+				}),
+			};
+		}
+	);
 };
 
 const getCpAdminManagementDropdown = (
@@ -323,23 +352,28 @@ const getMeemooAdminManagementDropdown = (
 export const getNavigationItemsLeft = (
 	currentPath: string,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	navigationItems: NavigationInfo[],
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	permissions: Permission[],
 	linkedSpaceSlug: string | null,
 	isMobile: boolean
 ): NavigationItem[] => {
-	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions, isMobile);
-	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
+	const beforeDivider = getDynamicHeaderLinks(
+		currentPath,
+		navigationItems,
+		NavigationPlacement.HeaderLeft
+	);
+	const afterDivider = getDynamicHeaderLinks(
+		currentPath,
+		navigationItems,
+		NavigationPlacement.HeaderRight
+	);
 
 	return [
-		// Visitor space dropdown
-		getVisitorSpacesDropdown(currentPath, accessibleVisitorSpaces, linkedSpaceSlug),
-
 		// Some dynamic links from navigations table in database
-		...getDynamicHeaderLinks(currentPath, navigationItems),
+		...beforeDivider,
 
-		// Divider separate from the other items, since items can be hidden because of permissions
-		...((cpAdminLinks.length > 0 || meemooAdminLinks.length > 0
+		// Divider separate from the other items
+		...((afterDivider.length > 0
 			? [
 					{
 						node: null,
@@ -349,10 +383,20 @@ export const getNavigationItemsLeft = (
 			  ]
 			: []) as NavigationItem[]),
 
-		// CP Admin dropdown link
-		...cpAdminLinks,
-
-		// Meemoo admin link
-		...meemooAdminLinks,
+		// Some dynamic links from navigations table in database
+		...afterDivider,
 	];
+};
+
+export const getNavigationItemsProfileDropdown = (
+	currentPath: string,
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>
+): NavigationItem[] => {
+	const profileDropdown = getDynamicHeaderLinks(
+		currentPath,
+		navigationItems,
+		NavigationPlacement.ProfileDropdown
+	);
+
+	return [...profileDropdown];
 };
