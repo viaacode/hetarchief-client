@@ -34,7 +34,6 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 						)}
 					/>
 				)}
-				{hamburgerProps?.logo}
 				<NavigationDropdown
 					id="menu"
 					isOpen={isHamburgerMenuOpen}
@@ -114,6 +113,7 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 		>
 			{renderDesktop()}
 			{renderHamburger && renderHamburgerMenu()}
+			{/* {renderHamburger && hamburgerProps?.logo} */}
 		</div>
 	);
 };

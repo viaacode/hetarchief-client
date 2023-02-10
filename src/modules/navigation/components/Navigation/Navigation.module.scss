@@ -2,12 +2,15 @@
 @use "sass:map";
 @use "src/styles/abstracts" as *;
 
-$c-navigation-border-height: 0.6rem;
+$c-navigation-border-height: 0.5rem;
+$c-navigation-border-distance: 1.2rem;
+$c-navigation-dropdown-border-distance: 0.95rem;
 $c-navigation-list-divider-color: #4e4e4e;
 $c-navigation-divider-size: 0.1rem;
 $c-navigation-item-spacing: $spacer-md;
-$c-navigation-item-spacing-lg: 4.8rem;
+$c-navigation-item-spacing-lg: $spacer-1xl;
 $c-navigation-dropdown-item-spacer: 1.2rem;
+$c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65px currentColor;
 
 @mixin navigation-link-border-decoration($_offset1: 0, $_offset2: 0) {
 	$offset1-border: if($_offset1 == 0, 0, calc(#{$_offset1} + 0.1rem));
@@ -16,7 +19,9 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		&::before,
 		&::after {
 			content: "";
+			top: 69%;
 			left: $_offset1;
+			z-index: get-z-layer("nav-dropdown");
 		}
 
 		&::after {
@@ -32,7 +37,9 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			&::before,
 			&::after {
 				content: "";
+				top: 69%;
 				left: $_offset2;
+				z-index: get-z-layer("nav-dropdown");
 			}
 
 			&::after {
@@ -99,6 +106,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	}
 
 	.c-navigation__dropdown {
+		.c-navigation__link {
+			padding: $c-navigation-dropdown-border-distance 0;
+		}
+
 		@include respond-at(md) {
 			z-index: get-z-layer("nav-dropdown"); // above overlay
 		}
@@ -230,7 +241,9 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 .c-navigation__list {
 	@extend %reset-list;
 
-	display: flex;
+	display: grid;
+	grid-auto-flow: column;
+	grid-gap: $c-navigation-item-spacing;
 
 	.c-navigation__list-flyout {
 		color: $black;
@@ -254,6 +267,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	display: block;
 	padding: 1.2rem 0 1.2rem $spacer-md;
 	text-decoration: none;
+	border-bottom: $c-navigation-border-height solid transparent;
 
 	@include respond-to(md) {
 		border-bottom: none;
@@ -261,7 +275,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	}
 	@include respond-at(md) {
 		display: inline-block;
-		padding: $spacer-md 0;
+		padding: $c-navigation-border-distance 0;
 	}
 
 	&--dropdown:hover {
@@ -273,6 +287,8 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	&--wrapper {
 		display: flex;
 		align-items: center;
+		font-size: $font-size-md;
+		line-height: 2rem;
 
 		&:focus-visible {
 			outline: 0.1rem solid $teal;
@@ -288,24 +304,15 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	transition: border-color $animate-md-out, color $animate-md-out;
 
 	@include respond-at(md) {
-		border-bottom: $c-navigation-border-height solid transparent;
 		margin-bottom: $c-navigation-divider-size;
 		position: relative;
 		height: $c-navigation-height - $c-navigation-divider-size;
 	}
 
-	&:not(:last-child) {
-		margin-right: $c-navigation-item-spacing;
-
-		@include respond-at(lg) {
-			margin-right: $c-navigation-item-spacing-lg;
-		}
-	}
-
 	&:not(&--active):hover {
 		.c-navigation__link,
 		.c-navigation__link + span {
-			font-weight: $font-weight-bold;
+			text-shadow: $c-navigation-active;
 			color: color.adjust($white, $alpha: -0.3);
 			transition: color $animate-md-in;
 		}
@@ -315,7 +322,6 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		margin-left: $c-navigation-item-spacing;
 
 		@include respond-at(lg) {
-			margin-left: $c-navigation-item-spacing-lg;
 			margin-right: 0;
 		}
 
@@ -336,18 +342,12 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			height: 4.4rem;
 			background-color: $c-navigation-list-divider-color;
 			transform: translateY(-50%);
-
-			@include respond-at(lg) {
-				left: -$c-navigation-item-spacing-lg;
-			}
 		}
 	}
 
 	&--active {
 		z-index: get-z-layer("nav-dropdown");
-		border-bottom-color: $teal;
-		font-weight: $font-weight-bold;
-		transition: border-color $animate-md-in;
+		text-shadow: $c-navigation-active;
 
 		@include respond-to("md") {
 			> :global(.c-dropdown-menu__item) {
@@ -355,23 +355,38 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			}
 		}
 
-		&.c-navigation__link--variant-1 {
+		.c-navigation__link {
+			border-bottom-color: $teal;
+			transition: border-color $animate-md-in;
+		}
+
+		&.c-navigation__link--variant-1,
+		&.c-navigation__link--variant-5,
+		&.c-navigation__link--variant-10 {
 			@include navigation-link-border-decoration;
 		}
 
-		&.c-navigation__link--variant-2 {
+		&.c-navigation__link--variant-2,
+		&.c-navigation__link--variant-7,
+		&.c-navigation__link--variant-12 {
 			@include navigation-link-border-decoration(28%);
 		}
 
-		&.c-navigation__link--variant-3 {
+		&.c-navigation__link--variant-3,
+		&.c-navigation__link--variant-8,
+		&.c-navigation__link--variant-13 {
 			@include navigation-link-border-decoration(17%, 43%);
 		}
 
-		&.c-navigation__link--variant-4 {
+		&.c-navigation__link--variant-4,
+		&.c-navigation__link--variant-9,
+		&.c-navigation__link--variant-14 {
 			@include navigation-link-border-decoration(0, 0.6rem);
 		}
 
-		&.c-navigation__link--variant-5 {
+		&.c-navigation__link--variant-5,
+		&.c-navigation__link--variant-10,
+		&.c-navigation__link--variant-15 {
 			@include navigation-link-border-decoration(0, 0.6rem);
 		}
 	}
@@ -452,6 +467,33 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			@include respond-to(md) {
 				display: flex;
 				justify-self: center;
+			}
+		}
+	}
+
+	&-logged-out {
+		grid-template-rows: repeat(2, 1fr);
+		grid-template-columns: repeat(auto, 1fr);
+		column-gap: $spacer-lg;
+
+		.c-navigation__section--left {
+			grid-row: 1;
+			justify-self: end;
+		}
+
+		.c-navigation__section--right {
+			grid-row: 2;
+			grid-column: 2;
+			justify-self: end;
+
+			.c-button {
+				padding: 0;
+
+				&__content {
+					white-space: unset;
+					text-align: right;
+					display: block;
+				}
 			}
 		}
 	}

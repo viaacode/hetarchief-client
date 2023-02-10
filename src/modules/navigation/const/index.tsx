@@ -1,6 +1,5 @@
 import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { Fragment } from 'react';
 
 import { ACCOUNT_NAVIGATION_LINKS } from '@account/const';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
@@ -12,7 +11,6 @@ import { NavItemsRightLoggedIn } from '../types';
 export const NAV_HAMBURGER_PROPS = (): NavigationHamburgerProps => ({
 	openLabel: tText('modules/shared/const/navigation___sluit'),
 	closedLabel: tText('modules/shared/const/navigation___menu'),
-	logo: Fragment,
 });
 
 export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationItem[] => {

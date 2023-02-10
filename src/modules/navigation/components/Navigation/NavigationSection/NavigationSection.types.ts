@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { IconName } from '@shared/components';
 
 import { NavigationItem } from '../Navigation.types';
@@ -18,5 +16,4 @@ export interface NavigationHamburgerProps {
 	closedLabel: string;
 	openIcon?: IconName;
 	closedIcon?: IconName;
-	logo?: ReactNode;
 }

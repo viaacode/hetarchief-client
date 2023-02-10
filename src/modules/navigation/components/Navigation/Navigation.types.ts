@@ -12,6 +12,7 @@ export type NavigationFC<P = unknown> = FC<P> & {
 
 export interface NavigationProps extends DefaultComponentProps {
 	contextual?: boolean;
+	loggedOutGrid?: boolean;
 	showBorder: boolean;
 }
 

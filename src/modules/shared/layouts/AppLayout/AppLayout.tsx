@@ -176,21 +176,7 @@ const AppLayout: FC = ({ children }) => {
 		isLoggedIn,
 	]);
 
-	const hamburgerProps = useMemo(() => {
-		const defaultProps = NAV_HAMBURGER_PROPS();
-
-		return isLoggedIn
-			? defaultProps
-			: {
-					...defaultProps,
-					logo: (
-						<Logo
-							className="c-navigation__logo c-navigation__logo--hamburger"
-							type={LogoType.Light}
-						/>
-					),
-			  };
-	}, [isLoggedIn]);
+	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
 
 	const onOpenNavDropdowns = () => {
 		// Also close notification center when opening other dropdowns in nav
@@ -205,10 +191,15 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
-			<Navigation showBorder={showBorder}>
+			<Navigation showBorder={showBorder} loggedOutGrid={showLoggedOutGrid}>
+				{!isLoggedIn && (
+					<div className="c-navigation__logo--hamburger">
+						<Logo type={LogoType.Light} />
+					</div>
+				)}
 				<Navigation.Left
 					currentPath={asPath}
-					hamburgerProps={hamburgerProps}
+					hamburgerProps={NAV_HAMBURGER_PROPS()}
 					items={leftNavItems}
 					placement="left"
 					renderHamburger={true}
