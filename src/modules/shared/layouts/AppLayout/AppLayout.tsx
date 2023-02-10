@@ -70,8 +70,6 @@ const AppLayout: FC = ({ children }) => {
 
 	useHistory(asPath, history);
 
-	console.log({ showBorder });
-
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
 			show && scrollTo(0);
