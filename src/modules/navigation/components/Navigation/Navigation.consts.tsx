@@ -1,6 +1,6 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { intersection } from 'lodash-es';
+import { groupBy, intersection } from 'lodash-es';
 import Link from 'next/link';
 import { MouseEventHandler, ReactNode } from 'react';
 
@@ -35,7 +35,6 @@ const linkClasses = linkCls(
 const renderLink = (
 	label: string,
 	href: string,
-	placement: NavigationPlacement,
 	{
 		badge,
 		iconStart,
@@ -52,7 +51,8 @@ const renderLink = (
 		tooltip?: string;
 		target?: string;
 		onClick?: MouseEventHandler<HTMLAnchorElement>;
-	} = {}
+	} = {},
+	placement: NavigationPlacement | undefined = undefined
 ): ReactNode => {
 	const isDropdown = placement === NavigationPlacement.ProfileDropdown;
 
@@ -223,12 +223,17 @@ const getDynamicHeaderLinks = (
 				activeDesktop: currentPath === contentPath,
 				activeMobile: currentPath === contentPath,
 				id: id,
-				node: renderLink(label, contentPath, placement, {
-					target: linkTarget || undefined,
-					iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
-					tooltip: tooltip || undefined,
-					className: linkClasses,
-				}),
+				node: renderLink(
+					label,
+					contentPath,
+					{
+						target: linkTarget || undefined,
+						iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
+						tooltip: tooltip || undefined,
+						className: linkClasses,
+					},
+					placement
+				),
 			};
 		}
 	);
@@ -398,5 +403,36 @@ export const getNavigationItemsProfileDropdown = (
 		NavigationPlacement.ProfileDropdown
 	);
 
-	return [...profileDropdown];
+	const divider = [
+		{
+			node: null,
+			id: 'divider-before-admin-routes',
+			isDivider: 'md',
+		},
+	] as NavigationItem[];
+
+	// Group navigation items by type
+	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
+		profileDropdown,
+		(navItem: NavigationItem) => {
+			const route = navItem?.node?.props?.href;
+
+			if (route.startsWith('/admin')) {
+				return 'adminRoutes';
+			}
+
+			if (route.startsWith('/beheer')) {
+				return 'cpRoutes';
+			}
+
+			return 'defaultRoutes';
+		}
+	);
+
+	return [
+		...defaultRoutes,
+		...((adminRoutes || [])?.length > 0 ? [...divider, ...adminRoutes] : []),
+		...((cpRoutes || [])?.length > 0 ? [...divider, ...cpRoutes] : []),
+		...divider,
+	];
 };

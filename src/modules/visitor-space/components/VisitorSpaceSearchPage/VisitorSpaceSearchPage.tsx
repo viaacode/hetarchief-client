@@ -34,7 +34,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';

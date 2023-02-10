@@ -1,7 +1,6 @@
 import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 
-import { ACCOUNT_NAVIGATION_LINKS } from '@account/const';
 import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
 import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
