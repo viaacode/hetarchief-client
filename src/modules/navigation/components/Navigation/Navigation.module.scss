@@ -297,7 +297,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 
 	&--icon {
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-start;
 		align-items: center;
 
 		span {
@@ -355,7 +355,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			content: "";
 			position: absolute;
 			top: 50%;
-			left: -$c-navigation-item-spacing;
+			left: -$c-navigation-item-spacing / 2;
 			width: 0.1rem;
 			height: 4.4rem;
 			background-color: $c-navigation-list-divider-color;
@@ -503,16 +503,6 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			grid-row: 2;
 			grid-column: 2;
 			justify-self: end;
-
-			.c-button {
-				padding: 0;
-
-				&__content {
-					white-space: unset;
-					text-align: right;
-					display: block;
-				}
-			}
 		}
 	}
 }

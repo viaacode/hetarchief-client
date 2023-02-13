@@ -23,6 +23,7 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 			path: '',
 			node: (
 				<Button
+					className="c-navigation__auth"
 					key="nav-auth-button"
 					label={tText(
 						'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'

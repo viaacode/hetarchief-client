@@ -19,6 +19,21 @@
 		}
 	}
 
+	&__auth {
+		@include respond-to(md) {
+			padding: 0;
+			margin: 0;
+
+			.c-button__content {
+				font-size: $font-size-sm;
+				padding: 0;
+				margin: 0;
+				text-align: right;
+				white-space: unset;
+			}
+		}
+	}
+
 	&__notifications {
 		&-badge {
 			position: relative;

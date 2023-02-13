@@ -401,6 +401,9 @@ export const getNavigationItemsLeft = (
 		linkedSpaceSlug
 	);
 
+	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions, isMobile);
+	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
+
 	return [
 		// Some dynamic links from navigations table in database
 		...beforeDivider,
@@ -418,6 +421,9 @@ export const getNavigationItemsLeft = (
 
 		// Some dynamic links from navigations table in database
 		...afterDivider,
+
+		// Some hard coded links we always need to show on mobile
+		...(isMobile ? [...cpAdminLinks, ...meemooAdminLinks] : []),
 	];
 };
 
@@ -447,7 +453,6 @@ export const getNavigationItemsProfileDropdown = (
 	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
 		profileDropdown,
 		(navItem: NavigationItem) => {
-			console.log(navItem);
 			if (navItem.path?.startsWith('/admin')) {
 				return 'adminRoutes';
 			}
