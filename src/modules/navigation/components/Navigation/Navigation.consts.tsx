@@ -115,6 +115,7 @@ const getVisitorSpacesDropdown = (
 				}
 			),
 			id: 'visitor-spaces',
+			path: currentPath,
 			activeDesktop: currentPath.startsWith('/' + linkedSpaceSlug),
 			activeMobile: currentPath.startsWith('/' + linkedSpaceSlug),
 		};
@@ -127,6 +128,7 @@ const getVisitorSpacesDropdown = (
 			id: 'visitor-spaces',
 			activeDesktop: currentPath === ROUTES.home,
 			activeMobile: currentPath === ROUTES.home,
+			path: currentPath,
 		};
 	} else {
 		// Show dropdown list with homepage and accessible visitor spaces
@@ -142,6 +144,7 @@ const getVisitorSpacesDropdown = (
 				},
 			}),
 			id: 'visitor-spaces',
+			path: currentPath,
 			activeDesktop:
 				currentPath === ROUTES.home ||
 				!!accessibleVisitorSpaces.find((visitorSpace) =>
@@ -160,6 +163,7 @@ const getVisitorSpacesDropdown = (
 						}
 					),
 					id: 'all-visitor-spaces',
+					path: currentPath,
 					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 				},
 				...accessibleVisitorSpaces.map(
@@ -194,6 +198,7 @@ const getVisitorSpacesDropdown = (
 							),
 						id: visitorSpace.id,
 						activeMobile: currentPath.startsWith(`/${visitorSpace.slug}`),
+						path: currentPath,
 					})
 				),
 			],
@@ -235,7 +240,8 @@ const getDynamicHeaderLinks = (
 			return {
 				activeDesktop: currentPath === contentPath,
 				activeMobile: currentPath === contentPath,
-				id: id,
+				id,
+				path: contentPath,
 				node: renderLink(
 					label,
 					contentPath,
@@ -278,6 +284,7 @@ const getCpAdminManagementDropdown = (
 			),
 			id: 'nav__beheer',
 			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
+			path: currentPath,
 			children: [
 				...(permissions.includes(Permission.APPROVE_DENY_CP_VISIT_REQUESTS)
 					? [
@@ -292,6 +299,7 @@ const getCpAdminManagementDropdown = (
 									}
 								),
 								id: 'nav__beheer--aanvragen',
+								path: currentPath,
 								activeMobile: currentPath.startsWith('/beheer/aanvragen'),
 							},
 					  ]
@@ -309,6 +317,7 @@ const getCpAdminManagementDropdown = (
 									}
 								),
 								id: 'nav__beheer--bezoekers',
+								path: currentPath,
 								activeMobile: currentPath.startsWith('/beheer/bezoekers'),
 							},
 					  ]
@@ -326,6 +335,7 @@ const getCpAdminManagementDropdown = (
 									}
 								),
 								id: 'nav__beheer--instellingen',
+								path: currentPath,
 								activeMobile: currentPath.startsWith('/beheer/instellingen'),
 							},
 					  ]
@@ -363,6 +373,7 @@ const getMeemooAdminManagementDropdown = (
 			id: 'nav__admin',
 			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
 			activeMobile: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
+			path: currentPath,
 		},
 	];
 };
@@ -436,13 +447,12 @@ export const getNavigationItemsProfileDropdown = (
 	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
 		profileDropdown,
 		(navItem: NavigationItem) => {
-			const route = navItem?.node?.props?.href;
-
-			if (route.startsWith('/admin')) {
+			console.log(navItem);
+			if (navItem.path?.startsWith('/admin')) {
 				return 'adminRoutes';
 			}
 
-			if (route.startsWith('/beheer')) {
+			if (navItem.path?.startsWith('/beheer')) {
 				return 'cpRoutes';
 			}
 

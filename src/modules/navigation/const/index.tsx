@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
 import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
+import { ROUTE_PARTS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
@@ -19,6 +20,7 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 	return [
 		{
 			id: 'auth-button',
+			path: '',
 			node: (
 				<Button
 					key="nav-auth-button"
@@ -51,6 +53,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 	return [
 		{
 			id: 'notification-center',
+			path: '',
 			node: (
 				<Button
 					key="nav-notification-center"
@@ -71,6 +74,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 		},
 		{
 			id: 'user-menu',
+			path: '',
 			node: (
 				<Avatar variants="padded-y" text={userName}>
 					<Icon name={IconNamesSolid.User} />
@@ -85,6 +89,7 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 				),
 				{
 					id: 'log-out',
+					path: ROUTE_PARTS.logout,
 					node: ({ closeDropdowns }) => (
 						<NavigationLink
 							iconStart={IconNamesLight.LogOut}

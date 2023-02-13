@@ -167,6 +167,7 @@ const AppLayout: FC = ({ children }) => {
 					/>
 				),
 				id: 'logo',
+				path: '/',
 				activeDesktop: false,
 				activeMobile: false,
 				isDivider: false,
