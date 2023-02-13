@@ -1,15 +1,24 @@
 export interface MaterialRequest {
-	type: MaterialRequestType;
-	requesterName: string;
-	requesterEmail: string;
-	maintainer: string;
 	createdAt: string;
+	id: string;
+	isPending: boolean;
+	maintainerId: string;
+	maintainerName: string;
+	maintainerSlug: string;
+	objectSchemaIdentifier: string;
+	profileId: string;
+	reason: string;
+	requesterFullName: string;
+	requesterId: string;
+	requesterMail: string;
+	type: MaterialRequestType;
+	updatedAt: string;
 }
 
 export enum MaterialRequestType {
-	REUSE = 'HERGEBRUIK',
-	MORE_INFO = 'MEER_INFO',
-	VIEW = 'BEKIJKEN',
+	REUSE = 'REUSE',
+	MORE_INFO = 'MORE_INFO',
+	VIEW = 'VIEW',
 }
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };

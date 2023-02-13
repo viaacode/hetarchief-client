@@ -6,6 +6,8 @@ import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/u
 
 import { MaterialRequest, MaterialRequestRow, MaterialRequestType } from '@material-requests/types';
 
+export const MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
+
 export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, string> = {
 	[MaterialRequestType.MORE_INFO]: tText('modules/cp/const/material-requests___type-more-info'),
 	[MaterialRequestType.REUSE]: tText('modules/cp/const/material-requests___type-reuse'),
@@ -15,40 +17,40 @@ export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, 
 export const MaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{
 		Header: tText('modules/cp/const/material-requests___naam'),
-		accessor: 'requesterName',
+		accessor: 'requesterFullName',
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___emailadres'),
-		accessor: 'requesterEmail',
-		Cell: ({ row }: MaterialRequestRow) => (
+		accessor: 'requesterMail',
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<CopyButton
 				className="u-color-neutral u-p-0 c-table__copy"
 				icon={undefined}
 				variants="text"
-				text={row.original.requesterEmail}
+				text={original.requesterMail}
 			>
-				{row.original.requesterEmail}
+				{original.requesterMail}
 			</CopyButton>
 		),
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___tijdstip'),
 		accessor: 'createdAt',
-		Cell: ({ row }: MaterialRequestRow) => (
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span
 				className="u-color-neutral"
-				title={formatMediumDateWithTime(asDate(row.original.createdAt))}
+				title={formatMediumDateWithTime(asDate(original.createdAt))}
 			>
-				{formatDistanceToday(row.original.createdAt)}
+				{formatDistanceToday(original.createdAt)}
 			</span>
 		),
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___type'),
 		accessor: 'type',
-		Cell: ({ row }: MaterialRequestRow) => (
-			<span className="u-color-neutral">
-				{MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[row.original.type]}
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<span className="u-color-neutral p-cp-material-requests__table-type">
+				{MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[original.type]}
 			</span>
 		),
 	},

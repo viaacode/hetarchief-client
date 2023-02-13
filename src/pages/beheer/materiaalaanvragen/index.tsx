@@ -20,7 +20,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<CPAdminLayout
-				className="p-cp-requests"
+				className="p-cp-material-requests"
 				pageTitle={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			>
 				<MaterialRequestOverview columns={MaterialRequestTableColumns()} />
