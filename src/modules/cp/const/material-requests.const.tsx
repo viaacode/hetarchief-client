@@ -4,7 +4,13 @@ import { CopyButton } from '@shared/components';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
-import { MaterialRequest, MaterialRequestRow } from '@material-requests/types';
+import { MaterialRequest, MaterialRequestRow, MaterialRequestType } from '@material-requests/types';
+
+export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, string> = {
+	[MaterialRequestType.MORE_INFO]: tText('modules/cp/const/material-requests___type-more-info'),
+	[MaterialRequestType.REUSE]: tText('modules/cp/const/material-requests___type-reuse'),
+	[MaterialRequestType.VIEW]: tText('modules/cp/const/material-requests___type-view'),
+};
 
 export const MaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{
@@ -42,8 +48,7 @@ export const MaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 		accessor: 'type',
 		Cell: ({ row }: MaterialRequestRow) => (
 			<span className="u-color-neutral">
-				{/* TODO TRANSLATIONS FOR TYPES */}
-				{row.original.type}
+				{MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[row.original.type]}
 			</span>
 		),
 	},
