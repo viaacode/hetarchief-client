@@ -35,8 +35,9 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 				url
 			)}
 
-			{/* TODO: check permissie */}
-			<PermissionsCheck allPermissions={[]}>{renderPageContent()}</PermissionsCheck>
+			<PermissionsCheck allPermissions={[Permission.VIEW_ANY_MATERIAL_REQUESTS]}>
+				{renderPageContent()}
+			</PermissionsCheck>
 		</>
 	);
 };
