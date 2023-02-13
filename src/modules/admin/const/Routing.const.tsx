@@ -57,7 +57,7 @@ export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'visitors',
 		label: tText('modules/admin/const/routing___actieve-bezoekers'),
-		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitors}`,
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.activeVisitors}`,
 	},
 ];
 
