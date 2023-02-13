@@ -4,12 +4,15 @@ import { ComponentType } from 'react';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { MaterialRequestTableColumns } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
+
+import MaterialRequestOverview from '@material-requests/components/MaterialRequestsOverview/MaterialRequestsOverview';
 
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
@@ -20,7 +23,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 				className="p-cp-requests"
 				pageTitle={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			>
-				<h1>REQUEST</h1>
+				<MaterialRequestOverview columns={MaterialRequestTableColumns()} />
 			</CPAdminLayout>
 		);
 	};
