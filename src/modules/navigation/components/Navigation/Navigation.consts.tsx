@@ -59,6 +59,11 @@ const renderLink = (
 	placement: NavigationPlacement | undefined = undefined
 ): ReactNode => {
 	const isDropdown = placement === NavigationPlacement.ProfileDropdown;
+	const cn = clsx(className, {
+		[styles['c-navigation__link--icon']]: iconStart || iconEnd,
+		[styles['c-navigation__link--icon-start']]: iconStart,
+		[styles['c-navigation__link--icon-end']]: iconEnd,
+	});
 
 	if (href) {
 		return isDropdown ? (
@@ -67,7 +72,7 @@ const renderLink = (
 			<Link href={href}>
 				<a
 					aria-label={tooltip}
-					className={className}
+					className={cn}
 					onClick={onClick}
 					tabIndex={0}
 					target={target}
@@ -83,7 +88,7 @@ const renderLink = (
 	}
 
 	return (
-		<a aria-label={tooltip} className={className} tabIndex={0} target={target} title={tooltip}>
+		<a aria-label={tooltip} className={cn} tabIndex={0} target={target} title={tooltip}>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}

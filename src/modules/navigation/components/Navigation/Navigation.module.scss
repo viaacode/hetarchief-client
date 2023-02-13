@@ -294,6 +294,25 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			outline-offset: 0.2rem;
 		}
 	}
+
+	&--icon {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		span {
+			font-size: $font-size-md;
+			color: $teal;
+		}
+
+		&-start span {
+			margin-right: $spacer-xxs;
+		}
+
+		&-end span {
+			margin-left: $spacer-xxs;
+		}
+	}
 }
 
 .c-navigation__item {
