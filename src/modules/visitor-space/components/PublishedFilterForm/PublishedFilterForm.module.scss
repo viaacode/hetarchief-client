@@ -1,0 +1,13 @@
+@use "src/styles/abstracts" as *;
+
+$component: "publishedFilterForm";
+
+.#{$component} {
+	&__operatorSelect {
+		overflow: visible !important;
+	}
+
+	&__date {
+		background-color: $platinum;
+	}
+}

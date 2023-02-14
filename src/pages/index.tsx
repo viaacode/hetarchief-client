@@ -12,7 +12,6 @@ import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -26,8 +25,6 @@ type HomepageProps = {
 } & DefaultSeoInfo;
 
 const Homepage: NextPage<HomepageProps> = ({ title, url }) => {
-	useNavigationBorder();
-
 	const user = useSelector(selectUser);
 	const dispatch = useDispatch();
 	const showAuthModal = useSelector(selectShowAuthModal);
