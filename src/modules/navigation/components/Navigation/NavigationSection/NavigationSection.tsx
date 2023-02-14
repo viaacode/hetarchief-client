@@ -113,7 +113,6 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 		>
 			{renderDesktop()}
 			{renderHamburger && renderHamburgerMenu()}
-			{/* {renderHamburger && hamburgerProps?.logo} */}
 		</div>
 	);
 };
