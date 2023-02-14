@@ -33,3 +33,7 @@ export interface NavigationItem {
 	isDivider?: boolean | 'md';
 	children?: NavigationItem[];
 }
+
+export enum NAVIGATION_DROPDOOWN {
+	VISITOR_SPACES = '<BOEZOEKERRUIMTES_DROPDOWN>',
+}

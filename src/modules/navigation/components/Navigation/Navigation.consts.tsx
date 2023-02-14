@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
-import { NavigationItem, NavigationLink } from '@navigation/components';
+import { NAVIGATION_DROPDOOWN, NavigationItem, NavigationLink } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import {
 	NavigationInfo,
@@ -16,10 +16,6 @@ import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
 import { VisitorSpaceInfo } from '@visitor-space/types';
-
-export enum NAVIGATION_DROPDOOWN {
-	VISITOR_SPACES = '<BOEZOEKERRUIMTES_DROPDOWN>',
-}
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
