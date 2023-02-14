@@ -69,7 +69,7 @@ export const mapAdvancedToTags = (
 		switch (prop) {
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
-				if (op === Operator.Between) {
+				if (op === Operator.Between || op === Operator.Equals) {
 					value = `${formatDate(asDate(split[0]))} - ${formatDate(asDate(split[1]))}`;
 					operator = undefined;
 				} else {

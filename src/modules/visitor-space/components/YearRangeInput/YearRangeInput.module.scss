@@ -1,0 +1,10 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-year-range-input";
+
+.#{$component} {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: $spacer-sm;
+}
