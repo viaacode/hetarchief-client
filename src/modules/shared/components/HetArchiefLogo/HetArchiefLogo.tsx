@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { FC } from 'react';
 
-import { LogoType } from './Logo.const';
-import { LogoProps } from './Logo.types';
+import { HetArchiefLogoType } from './HetArchiefLogo.const';
+import { HetArchiefLogoProps } from './HetArchiefLogo.types';
 
-const Logo: FC<LogoProps> = ({ className, type = LogoType.Dark }) => (
+const HetArchiefLogo: FC<HetArchiefLogoProps> = ({ className, type = HetArchiefLogoType.Dark }) => (
 	<svg
 		className={clsx('c-logo', className)}
 		width={178}
@@ -33,4 +33,4 @@ const Logo: FC<LogoProps> = ({ className, type = LogoType.Dark }) => (
 	</svg>
 );
 
-export default Logo;
+export default HetArchiefLogo;

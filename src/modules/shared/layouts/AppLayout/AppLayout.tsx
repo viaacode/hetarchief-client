@@ -19,7 +19,12 @@ import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
-import { Logo, LogoType, NotificationCenter, ZendeskWrapper } from '@shared/components';
+import {
+	HetArchiefLogo,
+	HetArchiefLogoType,
+	NotificationCenter,
+	ZendeskWrapper,
+} from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
@@ -148,9 +153,9 @@ const AppLayout: FC = ({ children }) => {
 		const staticItems = [
 			{
 				node: (
-					<Logo
+					<HetArchiefLogo
 						className="c-navigation__logo c-navigation__logo--list"
-						type={isMobile ? LogoType.Dark : LogoType.Light}
+						type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
 					/>
 				),
 				id: 'logo',
@@ -194,7 +199,7 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation showBorder={showBorder} loggedOutGrid={showLoggedOutGrid}>
 				{!isLoggedIn && isMobile && (
 					<div className="c-navigation__logo--hamburger">
-						<Logo type={LogoType.Light} />
+						<HetArchiefLogo type={HetArchiefLogoType.Light} />
 					</div>
 				)}
 				<Navigation.Left
