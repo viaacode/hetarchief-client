@@ -92,22 +92,20 @@ const MaterialRequestOverview: FC<MaterialRequestOverviewProps> = ({ columns }) 
 
 	const renderContent = (): ReactNode => {
 		return (
-			<div className="l-container l-container--edgeless-to-lg">
-				<Table<MaterialRequest>
-					className="u-mt-24 p-cp-material-requests__table"
-					options={{
-						columns,
-						data: materialRequests?.items || [],
-						initialState: {
-							pageSize: MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-							sortBy: sortFilters,
-						} as TableState<MaterialRequest>,
-					}}
-					sortingIcons={sortingIcons}
-					pagination={renderPagination}
-					onSortChange={onSortChange}
-				/>
-			</div>
+			<Table<MaterialRequest>
+				className="u-mt-24 p-cp-material-requests__table"
+				options={{
+					columns,
+					data: materialRequests?.items || [],
+					initialState: {
+						pageSize: MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+						sortBy: sortFilters,
+					} as TableState<MaterialRequest>,
+				}}
+				sortingIcons={sortingIcons}
+				pagination={renderPagination}
+				onSortChange={onSortChange}
+			/>
 		);
 	};
 

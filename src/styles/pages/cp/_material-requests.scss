@@ -21,6 +21,11 @@ $page: "p-cp-material-requests";
 	}
 
 	&__table {
+		tr td {
+			padding-top: 2rem;
+			padding-bottom: 2rem;
+		}
+
 		.c-table__cell {
 			text-align: left;
 		}
