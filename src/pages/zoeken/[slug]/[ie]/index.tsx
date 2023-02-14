@@ -309,8 +309,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	 * Mapping
 	 */
 	const mapSimilarData = (data: MediaSimilarHit[]): MediaObject[] => {
-		console.log({ data });
-
 		return data.map((hit) => {
 			return {
 				type: hit._source.dctermsFormat as MediaTypes,

@@ -34,13 +34,11 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import {} from '@shared/components/VisitorSpaceDropdown';
 import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
-import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
@@ -99,8 +97,6 @@ const defaultOption: VisitorSpaceDropdownOption = {
 };
 
 const VisitorSpaceSearchPage: FC = () => {
-	useNavigationBorder();
-
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
@@ -553,9 +549,10 @@ const VisitorSpaceSearchPage: FC = () => {
 						(media) => media.schemaIdentifier === cast.schemaIdentifier
 					);
 
-					const space = source?.maintainerName.replace(' ', '-');
+					// TODO: Replace maintainerName with slug when BE is updated
+					const space = source?.maintainerName.replaceAll(' ', '-');
 					const id = source?.schemaIdentifier;
-					const href = `${space}/${id}`.toLowerCase();
+					const href = `${ROUTE_PARTS.search}/${space}/${id}`.toLowerCase();
 
 					const name = item.title?.toString(); // TODO double check that this still works
 
