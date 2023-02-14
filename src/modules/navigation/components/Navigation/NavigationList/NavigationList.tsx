@@ -59,6 +59,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 				{items.map((item, index) => {
 					const itemCls = clsx(
 						styles['c-navigation__item'],
+						styles['c-navigation__link--border'],
 						styles[`c-navigation__link--variant-${index + 1}`],
 						{
 							[styles['c-navigation__item--active']]:
