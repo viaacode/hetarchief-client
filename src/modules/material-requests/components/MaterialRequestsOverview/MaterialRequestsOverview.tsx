@@ -133,7 +133,7 @@ const MaterialRequestOverview: FC<MaterialRequestOverviewProps> = ({ columns }) 
 					'u-text-center u-color-neutral u-py-48': isFetching || noData,
 				})}
 			>
-				{isFetching && <Loading owner="Material requests overview" />}s
+				{isFetching && <Loading owner="Material requests overview" />}
 				{noData && renderEmptyMessage()}
 				{!noData && !isFetching && renderContent()}
 			</div>

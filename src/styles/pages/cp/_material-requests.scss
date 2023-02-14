@@ -12,6 +12,14 @@ $page: "p-cp-material-requests";
 		}
 	}
 
+	&__searchbar {
+		width: 100%;
+
+		@include respond-at("md") {
+			max-width: 28rem;
+		}
+	}
+
 	&__table {
 		.c-table__cell {
 			text-align: left;
