@@ -12,7 +12,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import MaterialRequestOverview from '@material-requests/components/MaterialRequestsOverview/MaterialRequestsOverview';
+import { MaterialRequestsOverview } from '@material-requests/components';
 
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
@@ -23,7 +23,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 				className="p-cp-material-requests"
 				pageTitle={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			>
-				<MaterialRequestOverview columns={MaterialRequestTableColumns()} />
+				<MaterialRequestsOverview columns={MaterialRequestTableColumns()} />
 			</CPAdminLayout>
 		);
 	};

@@ -10,7 +10,7 @@ import { MaterialRequest } from 'modules/material-requests/types';
 
 export class MaterialRequestsService {
 	public static async getAll({
-		query,
+		search,
 		type,
 		maintainerIds,
 		isPending,
@@ -24,13 +24,18 @@ export class MaterialRequestsService {
 				stringifyUrl({
 					url: MATERIAL_REQUESTS_SERVICE_BASE_URL,
 					query: {
-						...(query?.trim() ? { query: `%${query}%` } : {}),
+						...(search?.trim() ? { query: `%${search}%` } : {}),
+						...(type && { type }),
+						...(maintainerIds && { maintainerIds }),
+						...(isPending && { isPending }),
+						...(page && { page }),
+						...(size && { size }),
+						...(orderProp && { orderProp }),
+						...(orderDirection && { orderDirection }),
 					},
 				})
 			)
 			.json();
-
-		console.log({ parsed: result });
 
 		return result as ApiResponseWrapper<MaterialRequest>;
 	}

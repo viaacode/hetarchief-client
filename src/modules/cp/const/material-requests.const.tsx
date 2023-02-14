@@ -1,12 +1,28 @@
 import { Column } from 'react-table';
+import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { CopyButton } from '@shared/components';
+import { SEARCH_QUERY_KEY } from '@shared/const';
+import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
-import { MaterialRequest, MaterialRequestRow, MaterialRequestType } from '@material-requests/types';
+import { MaterialRequestRow } from '@material-requests/components';
+import {
+	MaterialRequest,
+	MaterialRequestKeys,
+	MaterialRequestType,
+} from '@material-requests/types';
 
 export const MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
+
+export const CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
+	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
+	type: withDefault(StringParam, undefined),
+	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
+	orderDirection: withDefault(SortDirectionParam, undefined),
+	page: withDefault(NumberParam, 1),
+};
 
 export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, string> = {
 	[MaterialRequestType.MORE_INFO]: tText('modules/cp/const/material-requests___type-more-info'),
@@ -17,11 +33,11 @@ export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, 
 export const MaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{
 		Header: tText('modules/cp/const/material-requests___naam'),
-		accessor: 'requesterFullName',
+		accessor: MaterialRequestKeys.name,
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___emailadres'),
-		accessor: 'requesterMail',
+		accessor: MaterialRequestKeys.email,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<CopyButton
 				className="u-color-neutral u-p-0 c-table__copy"
@@ -35,7 +51,7 @@ export const MaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___tijdstip'),
-		accessor: 'createdAt',
+		accessor: MaterialRequestKeys.createdAt,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span
 				className="u-color-neutral"
@@ -47,7 +63,7 @@ export const MaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___type'),
-		accessor: 'type',
+		accessor: MaterialRequestKeys.type,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="u-color-neutral p-cp-material-requests__table-type">
 				{MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[original.type]}

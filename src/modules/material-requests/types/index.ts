@@ -21,4 +21,9 @@ export enum MaterialRequestType {
 	VIEW = 'VIEW',
 }
 
-export type MaterialRequestRow = { row: { original: MaterialRequest } };
+export enum MaterialRequestKeys {
+	createdAt = 'createdAt',
+	type = 'type',
+	name = 'requesterFullName',
+	email = 'requesterMail',
+}
