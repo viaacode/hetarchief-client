@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { stringify } from 'query-string';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
@@ -8,6 +9,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import { Permission } from '@account/const';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import {
 	footerLeftItem,
@@ -24,6 +26,7 @@ import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
+import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
@@ -106,7 +109,13 @@ const AppLayout: FC = ({ children }) => {
 
 	const userName = (user?.firstName as string) ?? '';
 
-	const onLoginRegisterClick = useCallback(() => dispatch(setShowAuthModal(true)), [dispatch]);
+	const onLoginRegisterClick = useCallback(async () => {
+		return router.replace(
+			`${ROUTES.home}?${stringify({
+				[SHOW_AUTH_QUERY_KEY]: '1',
+			})}`
+		);
+	}, [router]);
 
 	const onLogOutClick = useCallback(() => AuthService.logout(), []);
 
