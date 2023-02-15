@@ -2,6 +2,7 @@ import { tText } from '@shared/helpers/translate';
 
 export * from './my-collections.const';
 export * from './my-history.const';
+export * from './my-material-requests.const';
 
 export const ACCOUNT_NAVIGATION_LINKS = (): {
 	id: string;

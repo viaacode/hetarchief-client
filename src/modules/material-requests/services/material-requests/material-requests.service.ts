@@ -18,11 +18,14 @@ export class MaterialRequestsService {
 		size,
 		orderProp,
 		orderDirection,
+		isPersonal = false,
 	}: GetMaterialRequestsProps): Promise<ApiResponseWrapper<MaterialRequest>> {
 		const result = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: MATERIAL_REQUESTS_SERVICE_BASE_URL,
+					url: isPersonal
+						? `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/personal`
+						: MATERIAL_REQUESTS_SERVICE_BASE_URL,
 					query: {
 						...(search?.trim() ? { query: `%${search}%` } : {}),
 						...(type && { type }),

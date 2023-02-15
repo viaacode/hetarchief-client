@@ -127,7 +127,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderContent = (): ReactNode => {
 		return (
 			<Table<MaterialRequest>
-				className="u-mt-24 p-cp-material-requests__table"
+				className="u-mt-24 p-material-requests__table"
 				options={{
 					columns: CpMaterialRequestTableColumns(),
 					data: materialRequests?.items || [],
@@ -146,12 +146,12 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<CPAdminLayout
-				className="p-cp-material-requests"
+				className="p-material-requests"
 				pageTitle={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			>
 				<>
 					<div className="l-container">
-						<div className="p-cp-material-requests__header">
+						<div className="p-material-requests__header">
 							<Dropdown
 								variants="filter"
 								className="p-material-requests__dropdown"
@@ -171,7 +171,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 							<SearchBar
 								id="materiaalaanvragen-searchbar"
 								default={filters[SEARCH_QUERY_KEY]}
-								className="p-cp-material-requests__searchbar"
+								className="p-material-requests__searchbar"
 								placeholder={tText('pages/beheer/materiaalaanvragen/index___zoek')}
 								onSearch={onSearch}
 							/>

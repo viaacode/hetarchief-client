@@ -11,4 +11,5 @@ export interface GetMaterialRequestsProps {
 	size?: number;
 	orderProp?: keyof MaterialRequest;
 	orderDirection?: OrderDirection;
+	isPersonal?: boolean;
 }

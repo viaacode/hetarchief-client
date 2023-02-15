@@ -26,6 +26,8 @@ export enum MaterialRequestKeys {
 	type = 'type',
 	name = 'requesterFullName',
 	email = 'requesterMail',
+	maintainer = 'maintainerName',
+	material = 'reason',
 }
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };
