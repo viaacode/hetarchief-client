@@ -7,14 +7,14 @@ import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
-import { MaterialRequestRow } from '@material-requests/components';
 import {
 	MaterialRequest,
 	MaterialRequestKeys,
+	MaterialRequestRow,
 	MaterialRequestType,
 } from '@material-requests/types';
 
-export const MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
+export const CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
 export const MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
 
