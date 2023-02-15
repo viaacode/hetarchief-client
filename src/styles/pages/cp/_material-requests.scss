@@ -12,8 +12,10 @@ $page: "p-cp-material-requests";
 		}
 	}
 
-	&__searchbar {
+	&__searchbar,
+	&__dropdown {
 		width: 100%;
+		margin: $spacer-sm 0;
 
 		@include respond-at("md") {
 			max-width: 28rem;

@@ -1,15 +1,25 @@
-import { OrderDirection, Table } from '@meemoo/react-components';
+import { Dropdown, MenuContent, OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash';
-import { FC, ReactNode, useMemo } from 'react';
+import { FC, ReactNode, useMemo, useState } from 'react';
 import { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import {
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
+	MATERIAL_REQUEST_TYPE_FITLER_ARRAY,
+	MATERIAL_REQUEST_TYPE_FITLER_RECORD,
+	MATERIAL_REQUESTS_FILTER_ALL_ID,
 	MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 } from '@cp/const/material-requests.const';
-import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import {
+	Icon,
+	IconNamesLight,
+	Loading,
+	PaginationBar,
+	SearchBar,
+	sortingIcons,
+} from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
@@ -23,6 +33,11 @@ import {
 } from '@material-requests/types';
 
 const MaterialRequestOverview: FC<MaterialRequestOverviewProps> = ({ columns }) => {
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const [dropdownLabel, setDropdownLabel] = useState<string>(
+		MATERIAL_REQUEST_TYPE_FITLER_RECORD[MATERIAL_REQUESTS_FILTER_ALL_ID]
+	);
+
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
@@ -51,6 +66,17 @@ const MaterialRequestOverview: FC<MaterialRequestOverviewProps> = ({ columns }) 
 	const onSearch = (value: string | undefined): void => {
 		setFilters({
 			[SEARCH_QUERY_KEY]: value,
+			page: 1,
+		});
+	};
+
+	const onTypeClick = (id: string | number): void => {
+		const showAll = id === MATERIAL_REQUESTS_FILTER_ALL_ID;
+		setDropdownLabel(MATERIAL_REQUEST_TYPE_FITLER_RECORD[id]);
+		setIsDropdownOpen(false);
+
+		setFilters({
+			type: showAll ? undefined : `${id}`,
 			page: 1,
 		});
 	};
@@ -113,9 +139,22 @@ const MaterialRequestOverview: FC<MaterialRequestOverviewProps> = ({ columns }) 
 		<>
 			<div className="l-container">
 				<div className="p-cp-material-requests__header">
-					<div className="p-cp-material-requests__dropdown">
-						<p>TODO: DROPDOWN</p>
-					</div>
+					<Dropdown
+						variants="filter"
+						className="p-cp-material-requests__dropdown"
+						label={dropdownLabel}
+						isOpen={isDropdownOpen}
+						onOpen={() => setIsDropdownOpen(true)}
+						onClose={() => setIsDropdownOpen(false)}
+						iconOpen={<Icon name={IconNamesLight.AngleUp} />}
+						iconClosed={<Icon name={IconNamesLight.AngleDown} />}
+					>
+						<MenuContent
+							rootClassName="c-dropdown-menu"
+							onClick={onTypeClick}
+							menuItems={MATERIAL_REQUEST_TYPE_FITLER_ARRAY}
+						/>
+					</Dropdown>
 					<SearchBar
 						id="materiaalaanvragen-searchbar"
 						default={filters[SEARCH_QUERY_KEY]}

@@ -13,6 +13,32 @@
 	}
 }
 
+.c-dropdown--filter {
+	.c-button {
+		display: block;
+		width: 100%;
+		text-align: left;
+		background-color: $white;
+		color: $black;
+		border-color: $silver;
+		font-weight: unset;
+
+		&__content {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		&:hover {
+			border-color: $zinc;
+		}
+
+		&:focus,
+		&:focus-within {
+			border-color: $teal;
+		}
+	}
+}
+
 .c-dropdown-menu {
 	&__divider {
 		height: 0.1rem;
