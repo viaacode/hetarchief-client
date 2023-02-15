@@ -13,7 +13,7 @@ import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/compone
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { MaterialRequestOverviewProps } from './MaterialRequestsOverview.types';
+import { MaterialRequestsOverviewProps } from './MaterialRequestsOverview.types';
 
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import {
@@ -22,7 +22,7 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 
-const MaterialRequestOverview: FC<MaterialRequestOverviewProps> = ({ columns }) => {
+const MaterialRequestsOverview: FC<MaterialRequestsOverviewProps> = ({ columns }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
@@ -139,4 +139,4 @@ const MaterialRequestOverview: FC<MaterialRequestOverviewProps> = ({ columns }) 
 	);
 };
 
-export default MaterialRequestOverview;
+export default MaterialRequestsOverview;

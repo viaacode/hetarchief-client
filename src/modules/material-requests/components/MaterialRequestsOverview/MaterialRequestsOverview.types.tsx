@@ -2,7 +2,7 @@ import { Column } from 'react-table';
 
 import { MaterialRequest } from 'modules/material-requests/types';
 
-export interface MaterialRequestOverviewProps {
+export interface MaterialRequestsOverviewProps {
 	columns: Column<MaterialRequest>[];
 }
 
