@@ -10,12 +10,12 @@ import { useQueryParams } from 'use-query-params';
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
+	CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY,
+	CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD,
+	CP_MATERIAL_REQUESTS_FILTER_ALL_ID,
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-	MATERIAL_REQUEST_TYPE_FITLER_ARRAY,
-	MATERIAL_REQUEST_TYPE_FITLER_RECORD,
-	MATERIAL_REQUESTS_FILTER_ALL_ID,
-	MaterialRequestTableColumns,
+	CpMaterialRequestTableColumns,
 } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import {
@@ -43,7 +43,7 @@ import {
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [dropdownLabel, setDropdownLabel] = useState<string>(
-		MATERIAL_REQUEST_TYPE_FITLER_RECORD[MATERIAL_REQUESTS_FILTER_ALL_ID]
+		CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[CP_MATERIAL_REQUESTS_FILTER_ALL_ID]
 	);
 
 	const { tHtml, tText } = useTranslation();
@@ -79,8 +79,8 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const onTypeClick = (id: string | number): void => {
-		const showAll = id === MATERIAL_REQUESTS_FILTER_ALL_ID;
-		setDropdownLabel(MATERIAL_REQUEST_TYPE_FITLER_RECORD[id]);
+		const showAll = id === CP_MATERIAL_REQUESTS_FILTER_ALL_ID;
+		setDropdownLabel(CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[id]);
 		setIsDropdownOpen(false);
 
 		setFilters({
@@ -129,7 +129,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<Table<MaterialRequest>
 				className="u-mt-24 p-cp-material-requests__table"
 				options={{
-					columns: MaterialRequestTableColumns(),
+					columns: CpMaterialRequestTableColumns(),
 					data: materialRequests?.items || [],
 					initialState: {
 						pageSize: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -165,7 +165,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 								<MenuContent
 									rootClassName="c-dropdown-menu"
 									onClick={onTypeClick}
-									menuItems={MATERIAL_REQUEST_TYPE_FITLER_ARRAY}
+									menuItems={CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY}
 								/>
 							</Dropdown>
 							<SearchBar
