@@ -160,8 +160,8 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 								isOpen={isDropdownOpen}
 								onOpen={() => setIsDropdownOpen(true)}
 								onClose={() => setIsDropdownOpen(false)}
-								// iconOpen={<Icon name={IconNamesLight.AngleUp} />}
-								// iconClosed={<Icon name={IconNamesLight.AngleDown} />}
+								iconOpen={<Icon name={IconNamesLight.AngleUp} />}
+								iconClosed={<Icon name={IconNamesLight.AngleDown} />}
 							>
 								<MenuContent
 									rootClassName="c-dropdown-menu"
