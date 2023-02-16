@@ -15,10 +15,14 @@ $page: "p-material-requests";
 	&__searchbar,
 	&__dropdown {
 		width: 100%;
-		margin: $spacer-sm 0;
+		margin: $spacer-xs 0;
 
 		@include respond-at("md") {
 			max-width: 28rem;
+		}
+
+		&--open {
+			box-shadow: $shadow-24-black-08;
 		}
 	}
 

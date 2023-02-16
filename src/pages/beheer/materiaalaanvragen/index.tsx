@@ -154,6 +154,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 						<div className="p-material-requests__header">
 							<Dropdown
 								variants="filter"
+								flyoutClassName="p-material-requests__dropdown--open"
 								className="p-material-requests__dropdown"
 								label={dropdownLabel}
 								isOpen={isDropdownOpen}
