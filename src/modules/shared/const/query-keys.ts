@@ -6,7 +6,7 @@ export enum QUERY_KEYS {
 	getCollections = 'getCollections',
 	getMediaExport = 'getMediaExport',
 	getMediaFilterOptions = 'getMediaFilterOptions',
-	getMediaInfo = 'getMediaInfo',
+	getIeObjectsInfo = 'getIeObjectsInfo',
 	getMediaObjects = 'getMediaObjects',
 	getMediaRelated = 'getMediaRelated',
 	getMediaSimilar = 'getMediaSimilar',

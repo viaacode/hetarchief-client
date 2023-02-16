@@ -28,11 +28,11 @@ import {
 	objectPlaceholder,
 	ticketErrorPlaceholder,
 } from '@media/const';
+import { useGetIeObjectsInfo } from '@media/hooks/get-ie-objects-info';
+import { useGetIeObjectsTicketInfo } from '@media/hooks/get-ie-objects-ticket-url';
 import { useGetMediaExport } from '@media/hooks/get-media-export';
-import { useGetMediaInfo } from '@media/hooks/get-media-info';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
-import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
 import { MediaService } from '@media/services';
 import {
 	Media,
@@ -148,7 +148,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		isLoading: mediaInfoIsLoading,
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
-	} = useGetMediaInfo(router.query.ie as string);
+	} = useGetIeObjectsInfo(router.query.ie as string);
 
 	// peak file
 	const peakFileId =
@@ -176,7 +176,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetMediaTicketInfo(
+	} = useGetIeObjectsTicketInfo(
 		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
 		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
 	);

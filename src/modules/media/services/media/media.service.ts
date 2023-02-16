@@ -13,12 +13,12 @@ import { GetMediaResponse } from '@shared/types/api';
 import { VisitorSpaceSort } from '@visitor-space/types';
 
 import {
+	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
 	MEDIA_SERVICE_BASE_URL,
 	MEDIA_SERVICE_EXPORT,
 	MEDIA_SERVICE_RELATED,
 	MEDIA_SERVICE_SIMILAR,
-	MEDIA_SERVICE_TICKET_URL,
 } from './media.service.const';
 
 export class MediaService {
@@ -85,7 +85,7 @@ export class MediaService {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: `${MEDIA_SERVICE_BASE_URL}/${MEDIA_SERVICE_TICKET_URL}`,
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
 					query: {
 						id: referenceId,
 					},
