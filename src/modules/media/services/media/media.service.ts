@@ -70,7 +70,7 @@ export class MediaService {
 	}
 
 	public static async getById(id: string): Promise<Media> {
-		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/${id}`).json();
+		return await ApiService.getApi().get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
 	public static async getSeoById(id: string): Promise<{ name: string | null } | null> {
