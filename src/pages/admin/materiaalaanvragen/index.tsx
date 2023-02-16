@@ -17,9 +17,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tText(
-					'pages/admin/mijn-materiaalaanvragen/index___mijn-materiaalaanvragen'
-				)}
+				pageTitle={tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen')}
 			>
 				<AdminLayout.Content />
 			</AdminLayout>
@@ -28,14 +26,14 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			{renderOgTags(
-				tText('pages/admin/mijn-materiaalaanvragen/index___mijn-materiaalaanvragen'),
+				tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen'),
 				tText(
-					'pages/admin/mijn-materiaalaanvragen/index___mijn-materiaalaanvragen-meta-omschrijving'
+					'pages/admin/materiaalaanvragen/index___materiaalaanvragen-meta-omschrijving'
 				),
 				url
 			)}
 
-			<PermissionsCheck allPermissions={[Permission.VIEW_OWN_MATERIAL_REQUESTS]}>
+			<PermissionsCheck allPermissions={[Permission.VIEW_ANY_MATERIAL_REQUESTS]}>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</>
