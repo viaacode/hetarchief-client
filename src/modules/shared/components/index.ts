@@ -14,7 +14,7 @@ export * from './ErrorPage';
 export * from './Icon';
 export * from './ListNavigation';
 export * from './Loading';
-export * from './Logo';
+export * from './HetArchiefLogo';
 export * from './MediaCard';
 export * from './MediaCardList';
 export * from './Modal';

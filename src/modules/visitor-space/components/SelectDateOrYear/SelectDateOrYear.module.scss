@@ -1,0 +1,11 @@
+$component: "radiobuttons-container";
+
+.#{$component} {
+	display: flex;
+	flex-direction: column;
+	margin: 3rem 0;
+
+	&__radiobutton {
+		margin: 1rem 0;
+	}
+}
