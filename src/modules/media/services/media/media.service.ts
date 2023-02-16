@@ -16,8 +16,8 @@ import {
 	IE_OBJECT_SERVICE_SEO_URL,
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
+	IE_OBJECTS_SERVICE_EXPORT,
 	MEDIA_SERVICE_BASE_URL,
-	MEDIA_SERVICE_EXPORT,
 	MEDIA_SERVICE_RELATED,
 	MEDIA_SERVICE_SIMILAR,
 } from './media.service.const';
@@ -136,7 +136,7 @@ export class MediaService {
 			return null;
 		}
 		return await ApiService.getApi()
-			.get(`${MEDIA_SERVICE_BASE_URL}/${id}/${MEDIA_SERVICE_EXPORT}`)
+			.get(`${IE_OBJECT_SERVICE_TICKET_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}`)
 			.then((r) => r.blob());
 	}
 }

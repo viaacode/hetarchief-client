@@ -28,9 +28,9 @@ import {
 	objectPlaceholder,
 	ticketErrorPlaceholder,
 } from '@media/const';
+import { useGetIeObjectsExport } from '@media/hooks/get-ie-objects-export';
 import { useGetIeObjectsInfo } from '@media/hooks/get-ie-objects-info';
 import { useGetIeObjectsTicketInfo } from '@media/hooks/get-ie-objects-ticket-url';
-import { useGetMediaExport } from '@media/hooks/get-media-export';
 import { useGetMediaRelated } from '@media/hooks/get-media-related';
 import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
 import { MediaService } from '@media/services';
@@ -197,7 +197,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	// export
-	const { mutateAsync: getMediaExport } = useGetMediaExport();
+	const { mutateAsync: getMediaExport } = useGetIeObjectsExport();
 
 	// visit info
 	const {
