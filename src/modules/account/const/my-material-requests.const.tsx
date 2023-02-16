@@ -24,6 +24,9 @@ export const AccountMaterialRequestTableColumns = (): Column<MaterialRequest>[] 
 	{
 		Header: tText('modules/cp/const/material-requests___aanbieder'),
 		accessor: MaterialRequestKeys.maintainer,
+		Cell: ({ row: { original } }: MaterialRequestRow) => (
+			<span className="u-color-neutral">{original.maintainerName}</span>
+		),
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
