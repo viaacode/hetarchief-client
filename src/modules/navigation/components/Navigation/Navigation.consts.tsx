@@ -118,7 +118,7 @@ const getVisitorSpacesDropdown = (
 	} else if (accessibleVisitorSpaces.length === 0) {
 		// No visitor spaces available => show link to homepage without dropdown
 		return {
-			node: renderLink(navigationLabel, '/', {
+			node: renderLink(navigationLabel, ROUTES.bezoek, {
 				className: linkClasses,
 			}),
 			id: 'visitor-spaces',
@@ -129,7 +129,7 @@ const getVisitorSpacesDropdown = (
 	} else {
 		// Show dropdown list with homepage and accessible visitor spaces
 		return {
-			node: renderLink(navigationLabel, '/', {
+			node: renderLink(navigationLabel, ROUTES.bezoek, {
 				badge: <Badge text={accessibleVisitorSpaces.length} />,
 				className: linkClasses,
 				// Make link clickable in hamburger menu
@@ -153,7 +153,7 @@ const getVisitorSpacesDropdown = (
 						tText(
 							'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
 						),
-						'/',
+						ROUTES.bezoek,
 						{
 							className: dropdownCls('u-display-none', 'u-display-block:md'),
 						}
