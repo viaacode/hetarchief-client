@@ -16,7 +16,7 @@ export const ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	page: withDefault(NumberParam, 1),
 };
 
-export const AccountMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
+export const getAccountMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{
 		Header: tText('modules/cp/const/material-requests___materiaal'),
 		accessor: MaterialRequestKeys.material,

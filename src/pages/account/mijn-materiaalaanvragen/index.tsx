@@ -10,7 +10,7 @@ import { useQueryParams } from 'use-query-params';
 import {
 	ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-	AccountMaterialRequestTableColumns,
+	getAccountMaterialRequestTableColumns,
 	Permission,
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
@@ -91,7 +91,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<Table<MaterialRequest>
 				className="u-mt-24 p-material-requests__table"
 				options={{
-					columns: AccountMaterialRequestTableColumns(),
+					columns: getAccountMaterialRequestTableColumns(),
 					data: materialRequests?.items || [],
 					initialState: {
 						pageSize: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
