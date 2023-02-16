@@ -13,6 +13,7 @@ import { GetMediaResponse } from '@shared/types/api';
 import { VisitorSpaceSort } from '@visitor-space/types';
 
 import {
+	IE_OBJECT_SERVICE_SEO_URL,
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
 	MEDIA_SERVICE_BASE_URL,
@@ -74,7 +75,9 @@ export class MediaService {
 	}
 
 	public static async getSeoById(id: string): Promise<{ name: string | null } | null> {
-		return await ApiService.getApi().get(`${MEDIA_SERVICE_BASE_URL}/seo/${id}`).json();
+		return await ApiService.getApi()
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${id}`)
+			.json();
 	}
 
 	public static async getPlayableUrl(referenceId: string | null): Promise<string | null> {
