@@ -1,5 +1,5 @@
 // Mapped intellectual entity object
-export interface Media {
+export interface IeObject {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID (DON'T use this for identification of an object)
 	premisIdentifier: Record<string, string[]>;
@@ -13,7 +13,7 @@ export interface Media {
 	partOfSeries: string[];
 	maintainerId: string;
 	maintainerName: string;
-	contactInfo: MediaContactInfo;
+	contactInfo: IeObjectContactInfo;
 	copyrightHolder: string;
 	copyrightNotice: string;
 	durationInSeconds: number;
@@ -49,23 +49,23 @@ export interface Media {
 	meemooOriginalCp: string;
 	meemooDescriptionProgramme: string;
 	meemooDescriptionCast: string;
-	representations: MediaRepresentation[];
+	representations: IeObjectRepresentation[];
 }
 
-export interface MediaContactInfo {
+export interface IeObjectContactInfo {
 	email: string;
 	telephone: string;
-	address: MediaAddress;
+	address: IeObjectAddress;
 }
 
-export interface MediaAddress {
+export interface IeObjectAddress {
 	street: string;
 	postalCode: string;
 	locality: string;
 	postOfficeBoxNumber: string;
 }
 
-export interface MediaFile {
+export interface IeObjectFile {
 	id: string;
 	name: string;
 	alternateName: string;
@@ -76,7 +76,7 @@ export interface MediaFile {
 	embedUrl: string;
 }
 
-export interface MediaRepresentation {
+export interface IeObjectRepresentation {
 	name: string;
 	alternateName: string;
 	description: string;
@@ -84,10 +84,10 @@ export interface MediaRepresentation {
 	transcript: string;
 	dateCreated: string;
 	schemaIdentifier: string;
-	files: MediaRepresentationFile[];
+	files: IeObjectRepresentationFile[];
 }
 
-export interface MediaRepresentationFile {
+export interface IeObjectRepresentationFile {
 	name: string;
 	alternateName: string;
 	description: string;
@@ -97,33 +97,33 @@ export interface MediaRepresentationFile {
 	schemaIdentifier: string;
 }
 
-export interface MediaSearchAggregationPair<T> {
+export interface IeObjectSearchAggregationPair<T> {
 	key: T;
 	doc_count: number;
 }
 
-export interface MediaSearchAggregation<T> {
-	buckets: MediaSearchAggregationPair<T>[];
+export interface IeObjectSearchAggregation<T> {
+	buckets: IeObjectSearchAggregationPair<T>[];
 	doc_count_error_upper_bound: number;
 	sum_other_doc_count: number;
 }
 
-export interface MediaSimilar {
-	hits: MediaSimilarHits;
+export interface IeObjectSimilar {
+	hits: IeObjectSimilarHits;
 	timed_out: boolean;
 	took: number;
-	_shards: MediaSimilarShards;
+	_shards: IeObjectSimilarShards;
 }
 
-export interface MediaSimilarShards {
+export interface IeObjectSimilarShards {
 	failed: number;
 	skipped: number;
 	successful: number;
 	total: number;
 }
 
-export interface MediaSimilarHits {
-	hits: MediaSimilarHit[];
+export interface IeObjectSimilarHits {
+	hits: IeObjectSimilarHit[];
 	max_score: number;
 	total: {
 		relation: string;
@@ -131,20 +131,20 @@ export interface MediaSimilarHits {
 	};
 }
 
-export interface MediaSimilarHit {
+export interface IeObjectSimilarHit {
 	_id: string;
 	_ignored: string[];
 	_index: string;
-	_source: Media;
+	_source: IeObject;
 	_type: string;
 }
 
-export interface MediaSearchAggregations {
-	dcterms_format: MediaSearchAggregation<string>;
-	dcterms_medium: MediaSearchAggregation<string>;
-	schema_genre: MediaSearchAggregation<string>;
-	schema_creator: MediaSearchAggregation<string>;
-	schema_in_language: MediaSearchAggregation<string>;
+export interface IeObjectSearchAggregations {
+	dcterms_format: IeObjectSearchAggregation<string>;
+	dcterms_medium: IeObjectSearchAggregation<string>;
+	schema_genre: IeObjectSearchAggregation<string>;
+	schema_creator: IeObjectSearchAggregation<string>;
+	schema_in_language: IeObjectSearchAggregation<string>;
 }
 
 // UI

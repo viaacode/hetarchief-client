@@ -11,9 +11,6 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { selectIsLoggedIn } from '@auth/store/user';
-import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
-import { useGetMediaObjects as useGetIeObjects } from '@media/hooks/get-media-objects';
-import { isInAFolder } from '@media/utils';
 import {
 	Callout,
 	ErrorNoAccess,
@@ -83,6 +80,10 @@ import {
 import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
+
+import { useGetIeObjects } from 'modules/ie-objects/hooks/get-ie-objects';
+import { useGetMediaFilterOptions } from 'modules/ie-objects/hooks/get-ie-objects-filter-options';
+import { isInAFolder } from 'modules/ie-objects/utils';
 
 // ToDo(Silke): check isLogged in voor filter maintainer ding -> enkel leeg gebruiken
 const labelKeys = {
@@ -550,7 +551,7 @@ const VisitorSpaceSearchPage: FC = () => {
 					);
 
 					// TODO: Replace maintainerName with slug when BE is updated
-					const space = source?.maintainerName.replaceAll(' ', '-');
+					const space = source?.maintainerName?.replaceAll(' ', '-');
 					const id = source?.schemaIdentifier;
 					const href = `${ROUTE_PARTS.search}/${space}/${id}`.toLowerCase();
 

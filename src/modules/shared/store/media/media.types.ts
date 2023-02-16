@@ -1,9 +1,10 @@
 import { GetFoldersResponse } from '@account/types';
-import { MediaSearchAggregations } from '@media/types';
-import { GetMediaResponse } from '@shared/types';
+import { GetIeObjectsResponse } from '@shared/types';
+
+import { IeObjectSearchAggregations } from 'modules/ie-objects/types';
 
 export interface MediaState {
-	results?: GetMediaResponse;
-	filterOptions?: MediaSearchAggregations;
+	results?: GetIeObjectsResponse;
+	filterOptions?: IeObjectSearchAggregations;
 	folders?: GetFoldersResponse;
 }

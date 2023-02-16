@@ -3,8 +3,6 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from 'react';
 
-import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@media/const';
-import { MediaRepresentation } from '@media/types';
 import { Icon, IconNamesLight } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -13,6 +11,9 @@ import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './FragmentSlider.module.scss';
 import { FragmentSliderProps } from './FragmentSlider.types';
+
+import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from 'modules/ie-objects/const';
+import { IeObjectRepresentation } from 'modules/ie-objects/types';
 
 const Metadata: FC<FragmentSliderProps> = ({
 	className,
@@ -66,7 +67,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fragmentsSize, totalFragments]);
 
-	const renderThumbnail = (representation: MediaRepresentation) => {
+	const renderThumbnail = (representation: IeObjectRepresentation) => {
 		let image = null;
 		if (FLOWPLAYER_FORMATS.includes(representation.dctermsFormat)) {
 			image = thumbnail || '';
@@ -97,7 +98,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 				className={styles['c-fragment-slider__nav-button']}
 				icon={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
 				aria-label={tText(
-					'modules/media/components/fragment-slider/fragment-slider___naar-het-vorige-fragment'
+					'modules/ie-objects/components/fragment-slider/fragment-slider___naar-het-vorige-fragment'
 				)}
 				variants="black"
 				disabled={!needsScrolling || offset === 0}
@@ -179,7 +180,7 @@ const Metadata: FC<FragmentSliderProps> = ({
 				className={styles['c-fragment-slider__nav-button']}
 				icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
 				aria-label={tText(
-					'modules/media/components/fragment-slider/fragment-slider___naar-het-volgende-fragment'
+					'modules/ie-objects/components/fragment-slider/fragment-slider___naar-het-volgende-fragment'
 				)}
 				variants="black"
 				disabled={!needsScrolling || offset === totalFragments - 1}

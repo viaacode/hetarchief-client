@@ -1,4 +1,4 @@
-import { Media, MediaSearchAggregations } from '@media/types';
+import { IeObject, IeObjectSearchAggregations } from 'modules/ie-objects/types';
 
 export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 	items: {
@@ -15,7 +15,7 @@ export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 }
 
 export interface ElasticsearchAggregations {
-	aggregations: MediaSearchAggregations;
+	aggregations: IeObjectSearchAggregations;
 }
 
 export interface ApiResponseWrapper<T> {
@@ -26,5 +26,5 @@ export interface ApiResponseWrapper<T> {
 	size: number;
 }
 
-export type GetMediaResponse = ApiResponseWrapper<Media & { related_count?: number }> &
+export type GetIeObjectsResponse = ApiResponseWrapper<IeObject & { related_count?: number }> &
 	ElasticsearchAggregations;

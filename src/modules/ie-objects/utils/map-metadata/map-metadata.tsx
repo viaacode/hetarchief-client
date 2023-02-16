@@ -4,9 +4,10 @@ import router from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { ReactNode } from 'react';
 
-import { MetadataItem } from '@media/components';
 import { capitalise } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
+
+import { MetadataItem } from 'modules/ie-objects/components';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	return keywords.map((item) => {
@@ -58,6 +59,6 @@ export const mapBooleanToMetadataData = (data: boolean | undefined): string | nu
 	if (data === undefined || data === null) return null;
 
 	return data
-		? tText('modules/media/utils/map-metadata/map-metadata___ja')
-		: tText('modules/media/utils/map-metadata/map-metadata___nee');
+		? tText('modules/ie-objects/utils/map-metadata/map-metadata___ja')
+		: tText('modules/ie-objects/utils/map-metadata/map-metadata___nee');
 };

@@ -1,19 +1,20 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 
-import { MediaService } from '@media/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setResults } from '@shared/store/media';
 import {
-	GetMediaResponse,
-	MediaSearchFilter,
-	MediaSearchFilterField,
+	GetIeObjectsResponse,
+	IeObjectsSearchFilter,
+	IeObjectsSearchFilterField,
 	SortObject,
 } from '@shared/types';
 
-async function addRelatedCount(response: GetMediaResponse): Promise<GetMediaResponse> {
-	const count = await MediaService.countRelated(
+import { IeObjectsService } from 'modules/ie-objects/services';
+
+async function addRelatedCount(response: GetIeObjectsResponse): Promise<GetIeObjectsResponse> {
+	const count = await IeObjectsService.countRelated(
 		response.items.map((item) => item.meemooIdentifier)
 	);
 
@@ -27,28 +28,30 @@ async function addRelatedCount(response: GetMediaResponse): Promise<GetMediaResp
 	};
 }
 
-export function useGetMediaObjects(
-	filters: MediaSearchFilter[],
+export function useGetIeObjects(
+	filters: IeObjectsSearchFilter[],
 	page: number,
 	size: number,
 	sort?: SortObject,
 	enabled = true
-): UseQueryResult<GetMediaResponse> {
+): UseQueryResult<GetIeObjectsResponse> {
 	const dispatch = useDispatch();
 
 	return useQuery(
-		[QUERY_KEYS.getMediaObjects, { filters, page, size, sort, enabled }],
+		[QUERY_KEYS.getIeObjectsObjects, { filters, page, size, sort, enabled }],
 		async () => {
-			let searchResults: GetMediaResponse;
+			let searchResults: GetIeObjectsResponse;
 			if (filters.length) {
 				// Run 3 queries:
 				//     - One to fetch the results for a specific tab (results),
 				//     - One to count the amount of related items
 				//     - and one to fetch the aggregates across tabs (noFormat)
 				const responses = await Promise.all([
-					MediaService.getSearchResults(filters, page, size, sort).then(addRelatedCount),
-					MediaService.getSearchResults(
-						filters.filter((item) => item.field !== MediaSearchFilterField.FORMAT),
+					IeObjectsService.getSearchResults(filters, page, size, sort).then(
+						addRelatedCount
+					),
+					IeObjectsService.getSearchResults(
+						filters.filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 						page,
 						0,
 						sort
@@ -63,7 +66,7 @@ export function useGetMediaObjects(
 					},
 				};
 			} else {
-				searchResults = await MediaService.getSearchResults([], page, size, sort);
+				searchResults = await IeObjectsService.getSearchResults([], page, size, sort);
 			}
 
 			dispatch(setResults(searchResults));

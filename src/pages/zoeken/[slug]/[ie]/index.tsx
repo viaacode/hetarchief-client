@@ -15,33 +15,7 @@ import save from 'save-file';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { FragmentSlider } from '@media/components/FragmentSlider';
-import {
-	FLOWPLAYER_AUDIO_FORMATS,
-	FLOWPLAYER_VIDEO_FORMATS,
-	formatErrorPlaceholder,
-	IMAGE_FORMATS,
-	MEDIA_ACTIONS,
-	METADATA_FIELDS,
-	noLicensePlaceholder,
-	OBJECT_DETAIL_TABS,
-	objectPlaceholder,
-	ticketErrorPlaceholder,
-} from '@media/const';
-import { useGetIeObjectsExport } from '@media/hooks/get-ie-objects-export';
-import { useGetIeObjectsInfo } from '@media/hooks/get-ie-objects-info';
-import { useGetIeObjectsTicketInfo } from '@media/hooks/get-ie-objects-ticket-url';
-import { useGetMediaRelated } from '@media/hooks/get-media-related';
-import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
-import { MediaService } from '@media/services';
-import {
-	Media,
-	MediaActions,
-	MediaRepresentation,
-	MediaSimilarHit,
-	ObjectDetailTabs,
-} from '@media/types';
-import { isInAFolder, mapKeywordsToTagList } from '@media/utils';
+
 import {
 	ErrorNoAccess,
 	ErrorNotFound,
@@ -92,7 +66,34 @@ import {
 	ObjectPlaceholder,
 	RelatedObject,
 	RelatedObjectsBlade,
-} from 'modules/media/components';
+} from 'modules/ie-objects/components';
+import { FragmentSlider } from 'modules/ie-objects/components/FragmentSlider';
+import {
+	FLOWPLAYER_AUDIO_FORMATS,
+	FLOWPLAYER_VIDEO_FORMATS,
+	formatErrorPlaceholder,
+	IMAGE_FORMATS,
+	MEDIA_ACTIONS,
+	METADATA_FIELDS,
+	noLicensePlaceholder,
+	OBJECT_DETAIL_TABS,
+	objectPlaceholder,
+	ticketErrorPlaceholder,
+} from 'modules/ie-objects/const';
+import { useGetIeObjectsExport } from 'modules/ie-objects/hooks/get-ie-objects-export';
+import { useGetIeObjectsInfo } from 'modules/ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectsRelated } from 'modules/ie-objects/hooks/get-ie-objects-related';
+import { useGetIeObjectsSimilar } from 'modules/ie-objects/hooks/get-ie-objects-similar';
+import { useGetIeObjectsTicketInfo } from 'modules/ie-objects/hooks/get-ie-objects-ticket-url';
+import { IeObjectsService } from 'modules/ie-objects/services';
+import {
+	IeObject,
+	IeObjectRepresentation,
+	IeObjectSimilarHit,
+	MediaActions,
+	ObjectDetailTabs,
+} from 'modules/ie-objects/types';
+import { isInAFolder, mapKeywordsToTagList } from 'modules/ie-objects/utils';
 import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
@@ -123,7 +124,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [currentRepresentation, setCurrentRepresentation] = useState<
-		MediaRepresentation | undefined
+		IeObjectRepresentation | undefined
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
@@ -182,14 +183,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	// ook interessant
-	const { data: similarData } = useGetMediaSimilar(
-		router.query.ie as string,
-		mediaInfo?.maintainerId || '',
-		!!mediaInfo
-	);
+	const { data: similarData } = useGetIeObjectsSimilar(router.query.ie as string, !!mediaInfo);
 
 	// gerelateerd
-	const { data: relatedData } = useGetMediaRelated(
+	const { data: relatedData } = useGetIeObjectsRelated(
 		router.query.ie as string,
 		mediaInfo?.maintainerId ?? '',
 		mediaInfo?.meemooIdentifier ?? '',
@@ -308,7 +305,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	/**
 	 * Mapping
 	 */
-	const mapSimilarData = (data: MediaSimilarHit[]): MediaObject[] => {
+	const mapSimilarData = (data: IeObjectSimilarHit[]): MediaObject[] => {
 		return data.map((hit) => {
 			return {
 				type: hit._source.dctermsFormat as MediaTypes,
@@ -326,7 +323,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		});
 	};
 
-	const mapRelatedData = (data: Media[]): MediaObject[] => {
+	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
 		return data.map((item) => {
 			return {
 				type: item.dctermsFormat as MediaTypes,
@@ -419,7 +416,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const renderMedia = (
 		playableUrl: string | undefined,
-		representation: MediaRepresentation | undefined
+		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
@@ -833,7 +830,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
 	let seoInfo: { name: string | null } | null = null;
 	try {
-		seoInfo = await MediaService.getSeoById(context.query.ie as string);
+		seoInfo = await IeObjectsService.getSeoById(context.query.ie as string);
 	} catch (err) {
 		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
 	}

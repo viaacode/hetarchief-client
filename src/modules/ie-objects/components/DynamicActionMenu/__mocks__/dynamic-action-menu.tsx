@@ -1,7 +1,8 @@
-import { MediaActions } from '@media/types';
 import { Icon, IconNamesLight } from '@shared/components';
 
 import { DynamicActionMenuProps } from '../DynamicActionMenu.types';
+
+import { MediaActions } from 'modules/ie-objects/types';
 
 export const dynamicActionMenuMock: DynamicActionMenuProps = {
 	actions: [

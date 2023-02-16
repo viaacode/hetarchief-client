@@ -6,7 +6,7 @@ export enum VisitorSpaceMediaType {
 	Video = 'video',
 }
 
-export enum MediaSearchFilterField {
+export enum IeObjectsSearchFilterField {
 	ADVANCED_QUERY = 'advancedQuery',
 	CREATED = 'created',
 	CREATOR = 'creator',
@@ -26,7 +26,7 @@ export enum MediaSearchFilterField {
 	MAINTAINER = 'maintainer',
 }
 
-export enum MediaSearchOperator {
+export enum IeObjectsSearchOperator {
 	CONTAINS = 'contains',
 	CONTAINS_NOT = 'containsNot',
 	GTE = 'gte',
@@ -40,9 +40,9 @@ export enum License {
 	BEZOEKERTOOL_METADATA_ALL = 'BEZOEKERTOOL-METADATA-ALL',
 }
 
-export interface MediaSearchFilter {
-	field: MediaSearchFilterField;
+export interface IeObjectsSearchFilter {
+	field: IeObjectsSearchFilterField;
 	multiValue?: string[];
-	operator: MediaSearchOperator;
+	operator: IeObjectsSearchOperator;
 	value?: string;
 }

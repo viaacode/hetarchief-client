@@ -8,7 +8,6 @@ import {
 import clsx from 'clsx';
 import { FC, useRef, useState } from 'react';
 
-import { MediaActions } from '@media/types';
 import { Icon, IconNamesLight } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -20,6 +19,8 @@ import {
 } from './DynamicActionMenu.const';
 import styles from './DynamicActionMenu.module.scss';
 import { ActionItem, DynamicActionMenuProps } from './DynamicActionMenu.types';
+
+import { MediaActions } from 'modules/ie-objects/types';
 
 const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	className,
@@ -89,7 +90,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 						className={styles['c-dynamic-action-menu__dropdown-button']}
 						icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
 						aria-label={tText(
-							'modules/media/components/dynamic-action-menu/dynamic-action-menu___meer-acties'
+							'modules/ie-objects/components/dynamic-action-menu/dynamic-action-menu___meer-acties'
 						)}
 						variants={['silver']}
 					/>

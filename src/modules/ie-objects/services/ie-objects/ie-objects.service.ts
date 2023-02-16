@@ -1,15 +1,15 @@
+import { isEmpty } from 'lodash';
 import { stringifyUrl } from 'query-string';
 
-import { Media, MediaSimilar } from '@media/types';
 import { ApiService } from '@shared/services/api-service';
 import {
-	MediaSearchFilter,
-	MediaSearchFilterField,
-	MediaSearchOperator,
+	IeObjectsSearchFilter,
+	IeObjectsSearchFilterField,
+	IeObjectsSearchOperator,
 	SortObject,
 	VisitorSpaceMediaType,
 } from '@shared/types';
-import { GetMediaResponse } from '@shared/types/api';
+import { GetIeObjectsResponse } from '@shared/types/api';
 import { VisitorSpaceSort } from '@visitor-space/types';
 
 import {
@@ -17,18 +17,20 @@ import {
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_EXPORT,
-	MEDIA_SERVICE_BASE_URL,
-	MEDIA_SERVICE_RELATED,
-	MEDIA_SERVICE_SIMILAR,
-} from './media.service.const';
+	IE_OBJECTS_SERVICE_RELATED_COUNT,
+	IE_OBJECTS_SERVICE_SIMILAR,
+	IO_OBJECTS_SERVICE_RELATED,
+} from './ie-objects.service.const';
 
-export class MediaService {
+import { IeObject, IeObjectSimilar } from 'modules/ie-objects/types';
+
+export class IeObjectsService {
 	public static async getSearchResults(
-		filters: MediaSearchFilter[] = [],
+		filters: IeObjectsSearchFilter[] = [],
 		page = 1,
 		size = 20,
 		sort?: SortObject
-	): Promise<GetMediaResponse> {
+	): Promise<GetIeObjectsResponse> {
 		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
 		const filtered = [
 			...filters.filter((item) => {
@@ -41,8 +43,8 @@ export class MediaService {
 
 				// Don't send the "All" filter for FORMAT.IS
 				const isFormatAllFilter =
-					item.field === MediaSearchFilterField.FORMAT &&
-					item.operator === MediaSearchOperator.IS &&
+					item.field === IeObjectsSearchFilterField.FORMAT &&
+					item.operator === IeObjectsSearchOperator.IS &&
 					item.value === VisitorSpaceMediaType.All;
 
 				return hasValue && hasLength && !isFormatAllFilter;
@@ -56,21 +58,21 @@ export class MediaService {
 					size,
 					page,
 					requestedAggs: [
-						MediaSearchFilterField.FORMAT,
-						MediaSearchFilterField.GENRE,
-						MediaSearchFilterField.CREATOR,
-						MediaSearchFilterField.LANGUAGE,
-						MediaSearchFilterField.MEDIUM,
+						// MediaSearchFilterField.FORMAT,
+						IeObjectsSearchFilterField.GENRE,
+						// MediaSearchFilterField.CREATOR,
+						// MediaSearchFilterField.LANGUAGE,
+						// MediaSearchFilterField.MEDIUM,
 					],
 					...parsedSort,
 				}),
 			})
-			.json()) as GetMediaResponse;
+			.json()) as GetIeObjectsResponse;
 
 		return parsed;
 	}
 
-	public static async getById(id: string): Promise<Media> {
+	public static async getById(id: string): Promise<IeObject> {
 		return await ApiService.getApi().get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
@@ -97,9 +99,9 @@ export class MediaService {
 			.text();
 	}
 
-	public static async getSimilar(id: string, esIndex: string): Promise<MediaSimilar> {
+	public static async getSimilar(id: string): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
-			.get(`${MEDIA_SERVICE_BASE_URL}/${esIndex}/${id}/${MEDIA_SERVICE_SIMILAR}`)
+			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_SIMILAR}`)
 			.json();
 	}
 
@@ -107,9 +109,16 @@ export class MediaService {
 		id: string,
 		esIndex: string,
 		meemooId: string
-	): Promise<MediaSimilar> {
+	): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
-			.get(`${MEDIA_SERVICE_BASE_URL}/${esIndex}/${id}/${MEDIA_SERVICE_RELATED}/${meemooId}`)
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${meemooId}`,
+					query: {
+						...(!isEmpty(esIndex) && { esIndex }),
+					},
+				})
+			)
 			.json();
 	}
 
@@ -120,7 +129,7 @@ export class MediaService {
 			.get(
 				stringifyUrl(
 					{
-						url: `${IE_OBJECTS_SERVICE_BASE_URL}/related/count`,
+						url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_RELATED_COUNT}`,
 						query: { meemooIdentifiers },
 					},
 					{

@@ -3,18 +3,18 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@shared/const';
 import { ApiResponseWrapper } from '@shared/types';
 
-import { MediaService } from '../services';
-import { Media } from '../types';
+import { IeObjectsService } from '../services';
+import { IeObject } from '../types';
 
-export function useGetMediaRelated(
+export function useGetIeObjectsRelated(
 	id: string,
 	esIndex: string,
 	meemooId: string,
 	enabled = true
-): UseQueryResult<ApiResponseWrapper<Media>> {
+): UseQueryResult<ApiResponseWrapper<IeObject>> {
 	return useQuery(
-		[QUERY_KEYS.getMediaRelated, { id }],
-		() => MediaService.getRelated(id, esIndex, meemooId),
+		[QUERY_KEYS.getIeObjectsRelated, { id }],
+		() => IeObjectsService.getRelated(id, esIndex, meemooId),
 		{
 			keepPreviousData: true,
 			enabled,

@@ -1,14 +1,19 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
-import { MediaService } from '@media/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
+
+import { IeObjectsService } from 'modules/ie-objects/services';
 
 export function useGetIeObjectsTicketInfo(
 	id: string | null,
 	onComplete: () => void
 ): UseQueryResult<string> {
-	return useQuery([QUERY_KEYS.getIeObjectsInfo, { id }], () => MediaService.getPlayableUrl(id), {
-		keepPreviousData: true,
-		onSuccess: onComplete,
-	});
+	return useQuery(
+		[QUERY_KEYS.getIeObjectsInfo, { id }],
+		() => IeObjectsService.getPlayableUrl(id),
+		{
+			keepPreviousData: true,
+			onSuccess: onComplete,
+		}
+	);
 }

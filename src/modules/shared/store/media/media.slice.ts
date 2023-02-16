@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { GetFoldersResponse } from '@account/types';
-import { MediaSearchAggregations } from '@media/types';
-import { GetMediaResponse } from '@shared/types';
+import { GetIeObjectsResponse } from '@shared/types';
 
 import { MediaState } from './media.types';
+
+import { IeObjectSearchAggregations } from 'modules/ie-objects/types';
 
 const initialState: MediaState = {
 	results: undefined,
@@ -16,10 +17,10 @@ export const mediaSlice = createSlice({
 	name: 'media',
 	initialState,
 	reducers: {
-		setResults(state, action: PayloadAction<GetMediaResponse>) {
+		setResults(state, action: PayloadAction<GetIeObjectsResponse>) {
 			state.results = action.payload;
 		},
-		setFilterOptions(state, action: PayloadAction<MediaSearchAggregations>) {
+		setFilterOptions(state, action: PayloadAction<IeObjectSearchAggregations>) {
 			state.filterOptions = action.payload;
 		},
 		setFolders(state, action: PayloadAction<GetFoldersResponse>) {
