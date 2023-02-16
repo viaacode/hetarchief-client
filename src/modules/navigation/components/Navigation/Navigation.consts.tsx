@@ -142,11 +142,11 @@ const getVisitorSpacesDropdown = (
 			id: 'visitor-spaces',
 			path: currentPath,
 			activeDesktop:
-				currentPath === ROUTES.home ||
+				currentPath === ROUTES.bezoek ||
 				!!accessibleVisitorSpaces.find((visitorSpace) =>
 					currentPath.startsWith(`/${visitorSpace.slug}`)
 				),
-			activeMobile: currentPath === ROUTES.home,
+			activeMobile: currentPath === ROUTES.bezoek,
 			children: [
 				{
 					node: renderLink(
