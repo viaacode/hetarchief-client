@@ -30,7 +30,7 @@ export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, 
 	[MaterialRequestType.VIEW]: tText('modules/cp/const/material-requests___type-view'),
 };
 
-export const MaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
+export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{
 		Header: tText('modules/cp/const/material-requests___naam'),
 		accessor: MaterialRequestKeys.name,
