@@ -550,7 +550,7 @@ const VisitorSpaceSearchPage: FC = () => {
 					);
 
 					// TODO: Replace maintainerName with slug when BE is updated
-					const space = source?.maintainerName.replaceAll(' ', '-');
+					const space = source?.maintainerName?.replaceAll(' ', '-');
 					const id = source?.schemaIdentifier;
 					const href = `${ROUTE_PARTS.search}/${space}/${id}`.toLowerCase();
 
