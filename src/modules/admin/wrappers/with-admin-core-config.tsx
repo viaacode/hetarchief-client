@@ -76,7 +76,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				// last_access_at: user.lastAccessAt, // TODO enable once last_access_at field is added to the database
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				permissions: user?.permissions as any[],
-				tempAccess: null,
+				tempAccess: undefined,
 			};
 
 			const config: AdminConfig = {
@@ -136,15 +136,13 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						arrowUp: { name: 'arrow-up' },
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
+						chevronLeft: { name: 'angle-left' },
 					},
 					list: ICON_LIST_CONFIG,
 				},
 				components: {
 					loader: {
 						component: () => <Loading fullscreen owner="admin-core-loader" />,
-					},
-					table: {
-						sortingIcons,
 					},
 					buttonTypes: () => [
 						{

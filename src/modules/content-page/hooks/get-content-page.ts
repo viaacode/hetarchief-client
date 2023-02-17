@@ -1,5 +1,4 @@
 import { ContentPageInfo, ContentPageService } from '@meemoo/admin-core-ui';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 import { HTTPError } from 'ky';
 import { startsWith } from 'lodash';
@@ -14,7 +13,7 @@ export const useGetContentPageByPath = (
 		ContentPageInfo | null,
 		QUERY_KEYS[]
 	>
-): UseQueryResult<IPagination<ContentPageInfo>> => {
+): UseQueryResult<ContentPageInfo | null> => {
 	return useQuery(
 		[QUERY_KEYS.getContentPage],
 		() => {
