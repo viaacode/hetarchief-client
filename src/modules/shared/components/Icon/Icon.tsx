@@ -10,6 +10,10 @@ const Icon: FC<IconProps> = ({ className, name, ...rest }) => {
 		[styles['c-icon--solid']]: type === 'solid',
 	});
 
+	if (!type) {
+		return null;
+	}
+
 	return (
 		<span className={rootCls} {...rest}>
 			{iconName}

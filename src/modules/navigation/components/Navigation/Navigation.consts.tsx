@@ -273,7 +273,7 @@ const getCpAdminManagementDropdown = (
 		{
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___beheer'),
-				isMobile ? `/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}` : '',
+				isMobile ? ROUTES.beheerRequests : '',
 				{
 					className: linkClasses,
 				}
@@ -289,14 +289,32 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___aanvragen'
 									),
-									'/beheer/aanvragen',
+									ROUTES.beheerRequests,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--aanvragen',
 								path: currentPath,
-								activeMobile: currentPath.startsWith('/beheer/aanvragen'),
+								activeMobile: currentPath.startsWith(ROUTES.beheerRequests),
+							},
+					  ]
+					: []),
+				...(permissions.includes(Permission.VIEW_ANY_MATERIAL_REQUESTS)
+					? [
+							{
+								node: renderLink(
+									tText(
+										'modules/navigation/components/navigation/navigation___materiaalaanvragen'
+									),
+									ROUTES.beheerMaterialRequests,
+									{
+										className: dropdownCls(),
+									}
+								),
+								id: 'nav__beheer--materiaalaanvragen',
+								path: currentPath,
+								activeMobile: currentPath.startsWith(ROUTES.beheerMaterialRequests),
 							},
 					  ]
 					: []),
@@ -307,14 +325,14 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___bezoekers'
 									),
-									'/beheer/bezoekers',
+									ROUTES.beheerVisitors,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--bezoekers',
 								path: currentPath,
-								activeMobile: currentPath.startsWith('/beheer/bezoekers'),
+								activeMobile: currentPath.startsWith(ROUTES.beheerVisitors),
 							},
 					  ]
 					: []),
@@ -325,14 +343,14 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___instellingen'
 									),
-									'/beheer/instellingen',
+									ROUTES.beheerSettings,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--instellingen',
 								path: currentPath,
-								activeMobile: currentPath.startsWith('/beheer/instellingen'),
+								activeMobile: currentPath.startsWith(ROUTES.beheerSettings),
 							},
 					  ]
 					: []),
