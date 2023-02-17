@@ -1,5 +1,5 @@
-import { UseMutationResult } from 'react-query';
-import { InfiniteQueryObserverSuccessResult } from 'react-query/types/core/types';
+import type { IPagination } from '@studiohyperdrive/pagination';
+import { InfiniteQueryObserverSuccessResult, UseMutationResult } from '@tanstack/react-query';
 
 import {
 	MarkAllAsReadResult,
@@ -7,7 +7,6 @@ import {
 	NotificationStatus,
 	NotificationType,
 } from '@shared/services/notifications-service/notifications.types';
-import { ApiResponseWrapper } from '@shared/types';
 
 import { NotificationCenterProps } from '../NotificationCenter.types';
 
@@ -15,7 +14,7 @@ const mockTitle = 'Je bezoek aanvraag is goedgekeurd';
 const mockDescription =
 	'Je bezoek aanvraag aan de bezoekersruimte van Gents museum is goedgekeurd, je hebt toegang van 12:00 to 16:00 op 17 feb 2022';
 
-export const NOTIFICATIONS_FIRST_PAGE: ApiResponseWrapper<Notification> = {
+export const NOTIFICATIONS_FIRST_PAGE: IPagination<Notification> = {
 	items: [
 		{
 			id: '0274356c-249b-4337-ac07-649dfefbbe2f',
@@ -254,7 +253,7 @@ const notificationsHookResponse = {
 	refetch: () => {
 		// empty for mocking purposes
 	},
-} as unknown as InfiniteQueryObserverSuccessResult<ApiResponseWrapper<Notification>>;
+} as unknown as InfiniteQueryObserverSuccessResult<IPagination<Notification>>;
 
 const useMarkOneNotificationsAsReadResponse = {
 	mutateAsync: () => {

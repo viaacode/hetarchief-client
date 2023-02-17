@@ -9,7 +9,7 @@ import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context'
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 import { Overlay } from '../Overlay';
 
 import styles from './Blade.module.scss';
@@ -47,7 +47,7 @@ const Blade: FC<BladeProps> = ({
 				className={clsx(styles['c-blade__close-button'], {
 					[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
 				})}
-				icon={<Icon name="times" aria-hidden />}
+				icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 				aria-label={tText('modules/shared/components/blade/blade___sluiten')}
 				variants="text"
 				onClick={() => {

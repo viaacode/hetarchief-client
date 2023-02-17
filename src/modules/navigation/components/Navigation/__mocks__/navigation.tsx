@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -52,10 +52,10 @@ const renderLink = (
 };
 
 export const MOCK_HAMBURGER_PROPS: NavigationHamburgerProps = {
-	openLabel: 'sluit',
+	openLabel: 'Sluit',
 	closedLabel: 'Menu',
-	openIcon: 'times',
-	closedIcon: 'grid-view',
+	openIcon: IconNamesLight.Times,
+	closedIcon: IconNamesLight.GridView,
 };
 
 export const MOCK_ITEMS_LEFT: NavigationItem[] = [
@@ -71,6 +71,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		}),
 		id: 'bezoekersruimtes',
 		activeDesktop: true,
+		path: '',
 		children: [
 			{
 				node: renderLink('Alle bezoekersruimtes', '/', {
@@ -78,6 +79,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				}),
 				id: 'alle bezoekersruimtes',
 				isDivider: 'md',
+				path: '',
 			},
 			{
 				node: renderLink('VRT', `/OR-vrt123`, {
@@ -90,12 +92,13 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 								'u-visibility-visible:md',
 								styles['c-navigation__dropdown-icon--end']
 							)}
-							name="angle-right"
+							name={IconNamesLight.AngleRight}
 						/>
 					),
 					className: dropdownCls(),
 				}),
 				id: 'vrt',
+				path: '',
 			},
 			{
 				node: renderLink('Huis van Alijn', `/OR-huisvanalijn456`, {
@@ -108,11 +111,12 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 								'u-visibility-visible:md',
 								styles['c-navigation__dropdown-icon--end']
 							)}
-							name="angle-right"
+							name={IconNamesLight.AngleRight}
 						/>
 					),
 					className: dropdownCls(),
 				}),
+				path: '',
 				id: 'huisvanalijn',
 			},
 		],
@@ -125,6 +129,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				styles['c-navigation__link--dropdown']
 			),
 		}),
+		path: '',
 		id: 'over bezoekersruimtes',
 	},
 	{
@@ -136,6 +141,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			),
 		}),
 		id: 'vragen',
+		path: '',
 	},
 	{
 		node: renderLink('Beheer', '', {
@@ -147,24 +153,28 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		}),
 		id: 'nav__beheer',
 		isDivider: 'md',
+		path: '',
 		children: [
 			{
 				node: renderLink('Aanvragen', '/beheer/aanvragen', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--aanvragen',
+				path: '',
 			},
 			{
 				node: renderLink('Bezoekers', '/beheer/bezoekers', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--bezoekers',
+				path: '',
 			},
 			{
 				node: renderLink('Instellingen', '/beheer/instellingen', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--instellingen',
+				path: '',
 			},
 		],
 	},
@@ -174,24 +184,28 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 	{
 		node: renderLink('Inloggen of registreren', '#', { className: linkCls('u-text-right') }),
 		id: 'auth log in',
+		path: '',
 		children: [
 			{
 				node: renderLink('Mijn profiel', '#', {
 					className: dropdownCls(),
 				}),
 				id: 'profiel',
+				path: '',
 			},
 			{
 				node: renderLink('Mijn mappen', '#', {
 					className: dropdownCls(),
 				}),
 				id: 'mappen',
+				path: '',
 			},
 			{
 				node: renderLink('Mijn historiek', '#', {
 					className: dropdownCls(),
 				}),
 				id: 'historiek',
+				path: '',
 			},
 			{
 				node: renderLink('Log uit', '#', {
@@ -203,11 +217,13 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 								'u-text-left',
 								styles['c-navigation__dropdown-icon--start']
 							)}
-							name="log-out"
+							name={IconNamesLight.LogOut}
 						/>
 					),
 				}),
 				id: 'auth log uit',
+				path: '',
+
 				isDivider: true,
 			},
 		],

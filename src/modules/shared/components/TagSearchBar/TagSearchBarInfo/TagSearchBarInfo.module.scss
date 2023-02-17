@@ -1,0 +1,61 @@
+@use "src/styles/abstracts" as *;
+
+.c-tag-search-bar-info {
+	position: absolute;
+	right: $spacer-lg;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: $font-size-lg;
+	padding: 0.6rem;
+	border-radius: 100%;
+	margin-left: 0;
+	color: $neutral;
+
+	@include respond-at("md") {
+		position: relative;
+		right: unset;
+		color: $white;
+		margin-left: 0.8rem;
+		border: 0.1rem solid $shade;
+	}
+
+	&:hover {
+		cursor: pointer;
+
+		.c-tag-search-bar-info__content {
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+
+	&:focus,
+	&:focus-within {
+		outline: 0.4rem solid $teal;
+
+		.c-tag-search-bar-info__content {
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+
+	&__content {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		width: 75vw;
+		font-size: $font-size-sm;
+		color: $black;
+		padding: $spacer-sm;
+		background-color: $white;
+		box-shadow: $shadow-24-black-12;
+		opacity: 0;
+		visibility: hidden;
+		z-index: get-z-layer("foreground");
+		transition: opacity $animate-default;
+
+		@include respond-at("md") {
+			width: 38.4rem;
+		}
+	}
+}

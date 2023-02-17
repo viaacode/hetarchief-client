@@ -1,9 +1,9 @@
 import { OrderDirection } from '@meemoo/react-components';
+import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
 import { Visit, VisitAccessStatus } from '@shared/types';
-import { ApiResponseWrapper } from '@shared/types/api';
 import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 import { GetVisitsProps } from '@visits/services/visits/visits.service.types';
 import { PatchVisit } from '@visits/types';
@@ -28,7 +28,7 @@ export class VisitsService {
 		orderProp,
 		orderDirection = OrderDirection.desc,
 		personal,
-	}: GetVisitsProps): Promise<ApiResponseWrapper<Visit>> {
+	}: GetVisitsProps): Promise<IPagination<Visit>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -47,7 +47,7 @@ export class VisitsService {
 				})
 			)
 			.json();
-		return parsed as ApiResponseWrapper<Visit>;
+		return parsed as IPagination<Visit>;
 	}
 
 	public static async getById(id: string): Promise<Visit> {

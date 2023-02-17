@@ -15,11 +15,13 @@ const Navigation: NavigationFC<NavigationProps> = ({
 	children,
 	className,
 	contextual = false,
+	loggedOutGrid = false,
 	showBorder,
 }) => {
 	const rootCls = clsx(className, styles['c-navigation'], {
 		[styles['c-navigation--sm']]: contextual,
 		[styles['c-navigation--responsive']]: !contextual,
+		[styles['c-navigation--responsive-logged-out']]: !contextual && loggedOutGrid,
 		[styles['c-navigation--bordered']]: showBorder,
 	});
 

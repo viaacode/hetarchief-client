@@ -1,4 +1,4 @@
-import { ContentPage } from '@meemoo/react-admin';
+import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -11,7 +11,11 @@ import { useQueryParams } from 'use-query-params';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
-import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
+import {
+	KNOWN_STATIC_ROUTES,
+	REDIRECT_TO_QUERY_KEY,
+	TOS_INDEX_QUERY_PARAM_CONFIG,
+} from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -22,6 +26,8 @@ import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
+
+import { useGetContentPageByPath } from 'modules/content-page/hooks/get-content-page';
 
 const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 	useStickyLayout();
@@ -36,6 +42,7 @@ const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
+	const { data: contentPageInfo } = useGetContentPageByPath(KNOWN_STATIC_ROUTES.TermsOfService);
 
 	const user = useSelector(selectUser);
 
@@ -101,10 +108,7 @@ const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 							onScroll={onContentScroll}
 							className="p-terms-of-service__content"
 						>
-							<ContentPage
-								path="/gebruikersvoorwaarden-tekst"
-								userGroupId={user?.groupId}
-							/>
+							<ContentPageRenderer contentPageInfo={contentPageInfo} />
 						</div>
 					</div>
 				</section>

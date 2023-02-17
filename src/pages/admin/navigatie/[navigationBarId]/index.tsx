@@ -1,4 +1,4 @@
-import { NavigationDetail } from '@meemoo/react-admin';
+import { NavigationDetail } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
@@ -14,7 +14,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
+const NavigationBarPageDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 
@@ -54,4 +54,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(ContentPageDetailPage as ComponentType));
+export default withAuth(withAdminCoreConfig(NavigationBarPageDetailPage as ComponentType));

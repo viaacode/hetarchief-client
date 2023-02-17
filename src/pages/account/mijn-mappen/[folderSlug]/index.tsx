@@ -1,6 +1,12 @@
-import { Button, FormControl } from '@meemoo/react-components';
+import {
+	Button,
+	FormControl,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
-import { kebabCase } from 'lodash-es';
+import { isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -19,11 +25,12 @@ import { useGetFolderMedia } from '@account/hooks/get-folder-media';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { AccountLayout } from '@account/layouts';
 import { foldersService } from '@account/services/folders';
-import { Folder, FolderMedia } from '@account/types';
+import { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	Icon,
+	IconNamesLight,
 	IdentifiableMediaCard,
 	ListNavigationItem,
 	MediaCardList,
@@ -31,6 +38,7 @@ import {
 	SearchBar,
 } from '@shared/components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
+import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
@@ -40,7 +48,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders, setFolders } from '@shared/store/media';
+import { selectFolders, setFolders } from '@shared/store/ie-objects';
 import { Breakpoints } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
@@ -90,10 +98,19 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 							>
 								{folder.name}
 								<Icon
-									className="u-font-size-24 u-text-left"
-									name="angle-right"
+									className={clsx(
+										'p-account-my-folders__link__hide-icon',
+										'u-font-size-24 u-text-left'
+									)}
+									name={IconNamesLight.AngleRight}
 									aria-hidden
 								/>
+								{folder.usedForLimitedAccessUntil && (
+									<Icon
+										name={IconNamesLight.OpenDoor}
+										className="p-account-my-folders__link__limited-access-icon"
+									/>
+								)}
 							</a>
 						</Link>
 					),
@@ -237,7 +254,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
-									iconStart={<Icon name="export" aria-hidden />}
+									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
 									onClick={(e) => {
 										e.stopPropagation();
 										onExportClick();
@@ -255,7 +272,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 									name={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
-									icon={<Icon name="export" aria-hidden />}
+									icon={<Icon name={IconNamesLight.Export} aria-hidden />}
 									aria-label={tText(
 										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
 									)}
@@ -273,22 +290,34 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{
 							before: false,
 							node: (
-								<Button
-									key={'delete-folder'}
-									className="p-account-my-folders__delete"
-									variants={['silver']}
-									icon={<Icon name="trash" aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										setShowConfirmDelete(true);
-									}}
-								/>
+								<Tooltip position="top">
+									<TooltipTrigger>
+										<Button
+											key={'delete-folder'}
+											disabled={!!activeFolder.usedForLimitedAccessUntil}
+											className="p-account-my-folders__delete"
+											variants={['silver']}
+											icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+											aria-label={tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+											)}
+											name={tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+											)}
+											onClick={(e) => {
+												e.stopPropagation();
+												setShowConfirmDelete(true);
+											}}
+										/>
+									</TooltipTrigger>
+									<TooltipContent>
+										<span>
+											{tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
+											)}
+										</span>
+									</TooltipContent>
+								</Tooltip>
 							),
 						},
 				  ]
@@ -312,7 +341,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
-	const renderTitle = (item: FolderMedia): ReactNode => (
+	const renderTitle = (item: FolderIeObject): ReactNode => (
 		<Link href={`/${item.visitorSpaceSlug}/${item.schemaIdentifier}`}>
 			<a className="u-text-no-decoration" aria-label={item.schemaIdentifier}>
 				<b>
@@ -326,7 +355,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		</Link>
 	);
 
-	const renderDescription = (item: FolderMedia): ReactNode => {
+	const renderDescription = (item: FolderIeObject): ReactNode => {
 		const items: { label: string | ReactNode; value: ReactNode }[] = [
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___aanbieder'),
@@ -378,6 +407,12 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						</p>
 					) : null;
 				})}
+				<p className="p-account-my-folders__card-description-access">
+					<Icon name={IconNamesLight.Clock} />
+					<span className="u-ml-4">
+						{tText('pages/account/mijn-mappen/folder-slug/index___tijdelijke-toegang')}
+					</span>
+				</p>
 			</div>
 		);
 	};
@@ -423,6 +458,24 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											'pages/account/mijn-mappen/folder-slug/index___zoeken-in-deze-map'
 										)}
 									>
+										{activeFolder.usedForLimitedAccessUntil && (
+											<div className="p-account-my-folders__limited-access-label">
+												<Icon
+													name={IconNamesLight.OpenDoor}
+													className="p-account-my-folders__limited-access-label__icon"
+												/>
+												<p>
+													{tText(
+														'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang'
+													)}
+													{` ${formatMediumDate(
+														new Date(
+															activeFolder?.usedForLimitedAccessUntil
+														)
+													)}`}
+												</p>
+											</div>
+										)}
 										<SearchBar
 											id={`${labelKeys.search}--${activeFolder.id}`}
 											default={filters[SEARCH_QUERY_KEY]}
@@ -449,11 +502,15 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													name: media.name,
 													type: media.format,
 													preview: media.thumbnailUrl,
+													duration: media.duration,
 												};
 
 												return {
 													...base,
 													actions: renderActions(base, activeFolder),
+													...(!isNil(media.format) && {
+														icon: TYPE_TO_ICON_MAP[media.format],
+													}),
 												};
 											})}
 											view={'list'}

@@ -1,26 +1,36 @@
-import { MediaSearchFilter, MediaSearchFilterField, MediaSearchOperator } from '@shared/types';
+import {
+	IeObjectsSearchFilter,
+	IeObjectsSearchFilterField,
+	IeObjectsSearchOperator,
+} from '@shared/types';
 
 import { VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
 import { VisitorSpaceQueryParams } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
-export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): MediaSearchFilter[] => [
+export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => [
+	// Visitor space
+	{
+		field: IeObjectsSearchFilterField.MAINTAINER,
+		operator: IeObjectsSearchOperator.IS,
+		value: query.maintainer !== null ? query.maintainer?.toString() : '',
+	},
 	// Searchbar
 	{
-		field: MediaSearchFilterField.QUERY,
-		operator: MediaSearchOperator.CONTAINS,
+		field: IeObjectsSearchFilterField.QUERY,
+		operator: IeObjectsSearchOperator.CONTAINS,
 		value: query.search !== null ? query.search?.toString() : '',
 	},
 	// Tabs
 	{
-		field: MediaSearchFilterField.FORMAT,
-		operator: MediaSearchOperator.IS,
+		field: IeObjectsSearchFilterField.FORMAT,
+		operator: IeObjectsSearchOperator.IS,
 		value: query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format,
 	},
 	// Medium
 	{
-		field: MediaSearchFilterField.MEDIUM,
-		operator: MediaSearchOperator.IS,
+		field: IeObjectsSearchFilterField.MEDIUM,
+		operator: IeObjectsSearchOperator.IS,
 		multiValue: (query.medium || []).filter((item) => item !== null) as string[],
 	},
 	// Duration
@@ -31,26 +41,26 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): MediaSearch
 	...(query.published || []).flatMap(mapAdvancedToElastic),
 	// Creator
 	{
-		field: MediaSearchFilterField.CREATOR,
-		operator: MediaSearchOperator.IS,
+		field: IeObjectsSearchFilterField.CREATOR,
+		operator: IeObjectsSearchOperator.IS,
 		multiValue: (query.creator || []).filter((item) => item !== null) as string[],
 	},
 	// Genre
 	{
-		field: MediaSearchFilterField.GENRE,
-		operator: MediaSearchOperator.IS,
+		field: IeObjectsSearchFilterField.GENRE,
+		operator: IeObjectsSearchOperator.IS,
 		multiValue: (query.genre || []).filter((item) => item !== null) as string[],
 	},
 	// Keywords
 	{
-		field: MediaSearchFilterField.KEYWORD,
-		operator: MediaSearchOperator.IS,
+		field: IeObjectsSearchFilterField.KEYWORD,
+		operator: IeObjectsSearchOperator.IS,
 		multiValue: (query.keywords || []).filter((item) => item !== null) as string[],
 	},
 	// Language
 	{
-		field: MediaSearchFilterField.LANGUAGE,
-		operator: MediaSearchOperator.IS,
+		field: IeObjectsSearchFilterField.LANGUAGE,
+		operator: IeObjectsSearchOperator.IS,
 		multiValue: (query.language || []).filter((item) => item !== null) as string[],
 	},
 	// Advanced

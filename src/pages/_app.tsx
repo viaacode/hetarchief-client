@@ -1,7 +1,7 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { appWithTranslation, UserConfig } from 'next-i18next';
 import { AppProps } from 'next/app';
 import { ReactElement } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
 
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';

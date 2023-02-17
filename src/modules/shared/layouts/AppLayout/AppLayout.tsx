@@ -1,7 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo } from 'react';
-import { useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 
@@ -19,7 +19,12 @@ import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
-import { NotificationCenter, ZendeskWrapper } from '@shared/components';
+import {
+	HetArchiefLogo,
+	HetArchiefLogoType,
+	NotificationCenter,
+	ZendeskWrapper,
+} from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
@@ -115,25 +120,82 @@ const AppLayout: FC = ({ children }) => {
 			if (!canManageAccount) {
 				return [];
 			}
-			return NAV_ITEMS_RIGHT_LOGGED_IN({
-				hasUnreadNotifications,
-				notificationsOpen: showNotificationsCenter,
-				userName,
-				onLogOutClick,
-				setNotificationsOpen,
-			});
+
+			return NAV_ITEMS_RIGHT_LOGGED_IN(
+				asPath,
+				navigationItems || {},
+				accessibleVisitorSpaces || [],
+				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+				{
+					hasUnreadNotifications,
+					notificationsOpen: showNotificationsCenter,
+					userName,
+					onLogOutClick,
+					setNotificationsOpen,
+				}
+			);
 		}
+
 		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
-		hasUnreadNotifications,
 		isLoggedIn,
-		userName,
-		showNotificationsCenter,
 		onLoginRegisterClick,
+		canManageAccount,
+		asPath,
+		navigationItems,
+		accessibleVisitorSpaces,
+		showLinkedSpaceAsHomepage,
+		linkedSpaceSlug,
+		hasUnreadNotifications,
+		showNotificationsCenter,
+		userName,
 		onLogOutClick,
 		setNotificationsOpen,
-		canManageAccount,
 	]);
+
+	const leftNavItems: NavigationItem[] = useMemo(() => {
+		const dynamicItems = getNavigationItemsLeft(
+			asPath,
+			accessibleVisitorSpaces || [],
+			navigationItems || {},
+			user?.permissions || [],
+			showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+			isMobile
+		);
+
+		const staticItems = [
+			{
+				node: (
+					<HetArchiefLogo
+						className="c-navigation__logo c-navigation__logo--list"
+						type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+					/>
+				),
+				id: 'logo',
+				path: '/',
+				activeDesktop: false,
+				activeMobile: false,
+				isDivider: false,
+			},
+		];
+
+		if (!isLoggedIn && isMobile) {
+			return dynamicItems;
+		}
+
+		return [...staticItems, ...dynamicItems];
+	}, [
+		accessibleVisitorSpaces,
+		asPath,
+		isMobile,
+		linkedSpaceSlug,
+		navigationItems,
+		showLinkedSpaceAsHomepage,
+		user?.permissions,
+		isLoggedIn,
+	]);
+
+	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
 
 	const onOpenNavDropdowns = () => {
 		// Also close notification center when opening other dropdowns in nav
@@ -148,18 +210,16 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
-			<Navigation showBorder={showBorder}>
+			<Navigation showBorder={showBorder} loggedOutGrid={showLoggedOutGrid}>
+				{!isLoggedIn && isMobile && (
+					<div className="c-navigation__logo--hamburger">
+						<HetArchiefLogo type={HetArchiefLogoType.Light} />
+					</div>
+				)}
 				<Navigation.Left
 					currentPath={asPath}
 					hamburgerProps={NAV_HAMBURGER_PROPS()}
-					items={getNavigationItemsLeft(
-						asPath,
-						accessibleVisitorSpaces || [],
-						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
-						user?.permissions || [],
-						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
-						isMobile
-					)}
+					items={leftNavItems}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}

@@ -3,7 +3,7 @@ import { action } from '@storybook/addon-actions';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React, { cloneElement, ReactElement, useState } from 'react';
 
-import { Icon, IconLightNames } from '../Icon';
+import { Icon, IconName, IconNamesLight } from '../Icon';
 
 const PaginationStoryComponent = ({
 	children,
@@ -23,7 +23,7 @@ const PaginationStoryComponent = ({
 	});
 };
 
-const renderButton = (icon: IconLightNames, label: string, layout: 'left' | 'right') => (
+const renderButton = (icon: IconName, label: string, layout: 'left' | 'right') => (
 	<>
 		{layout === 'left' && <span>{label}</span>}
 		<Icon className="c-pagination__icon" name={icon} />
@@ -49,8 +49,8 @@ Default.args = {
 	currentPage: 0,
 	onPageChange: (page: number) => action(`page index is ${page}`),
 	buttons: {
-		previous: renderButton('angle-left', 'Vorige', 'right'),
-		next: renderButton('angle-right', 'Volgende', 'left'),
+		previous: renderButton(IconNamesLight.AngleLeft, 'Vorige', 'right'),
+		next: renderButton(IconNamesLight.AngleRight, 'Volgende', 'left'),
 	},
 };
 
@@ -62,7 +62,7 @@ WithFirstLastNumbers.args = {
 	onPageChange: (page: number) => action(`page index is ${page}`),
 	showFirstLastNumbers: true,
 	buttons: {
-		previous: renderButton('angle-left', 'Vorige', 'right'),
-		next: renderButton('angle-right', 'Volgende', 'left'),
+		previous: renderButton(IconNamesLight.AngleLeft, 'Vorige', 'right'),
+		next: renderButton(IconNamesLight.AngleRight, 'Volgende', 'left'),
 	},
 };

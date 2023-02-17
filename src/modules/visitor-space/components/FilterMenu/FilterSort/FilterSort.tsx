@@ -6,7 +6,7 @@ import {
 } from '@meemoo/react-components';
 import { FC, useState } from 'react';
 
-import { Overlay } from '@shared/components';
+import { IconNamesLight, Overlay } from '@shared/components';
 
 import { VisitorSpaceSort } from '../../../types';
 import { FilterButton } from '../FilterButton';
@@ -41,10 +41,11 @@ const FilterSort: FC<FilterSortProps> = ({
 			>
 				<DropdownButton>
 					<FilterButton
+						className={styles['c-filter-menu__button--sort-header']}
 						icon={
 							activeSort?.orderDirection === OrderDirection.desc
-								? 'sort-down'
-								: 'sort-up'
+								? IconNamesLight.SortDown
+								: IconNamesLight.SortUp
 						}
 						isActive={sortOptionsOpen}
 						label={activeSortLabel}

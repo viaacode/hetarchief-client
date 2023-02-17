@@ -1,28 +1,65 @@
 @use "src/styles/abstracts" as *;
 
-.c-navigation__notifications {
-	&-badge {
-		position: relative;
+.c-navigation {
+	&__logo {
+		width: 100%;
+		height: 6.5rem;
 
-		&::after {
-			position: absolute;
-			top: 0.8rem;
-			right: 0.8rem;
-			content: "";
-			width: 0.8rem;
-			height: 0.8rem;
-			border-radius: 50%;
+		&--hamburger {
+			height: 100%;
+			grid-row: 2/3;
+			grid-column: 1;
+			place-self: center start;
 		}
 
-		&--white {
-			&::after {
-				background-color: $white;
+		&--list {
+			margin: 1rem 6rem 1rem 0;
+
+			@include respond-to(md) {
+				margin: 3.5rem 0 3.5rem $spacer-md;
 			}
 		}
+	}
 
-		&--teal {
+	&__auth {
+		@include respond-to(md) {
+			padding: 0;
+			margin: 0;
+
+			.c-button__content {
+				font-size: $font-size-sm;
+				padding: 0;
+				margin: 0;
+				text-align: right;
+				white-space: unset;
+			}
+		}
+	}
+
+	&__notifications {
+		&-badge {
+			position: relative;
+
 			&::after {
-				background-color: $teal;
+				position: absolute;
+				top: 0.8rem;
+				right: 0.8rem;
+				content: "";
+				width: 0.8rem;
+				height: 0.8rem;
+				border-radius: 50%;
+			}
+
+			&--white {
+				&::after {
+					background-color: $white;
+				}
+			}
+
+			&--teal {
+				&::after {
+					background-color: $teal;
+				}
 			}
 		}
 	}

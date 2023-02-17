@@ -1,10 +1,10 @@
 import { DefaultComponentProps } from '@shared/types';
 
-import { IconLightNames } from '../Icon';
+import { IconName } from '../Icon';
 
 export interface ToggleOption {
 	id: string;
-	iconName: IconLightNames;
+	iconName: IconName;
 	active: boolean;
 }
 

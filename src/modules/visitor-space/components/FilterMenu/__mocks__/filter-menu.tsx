@@ -1,5 +1,7 @@
 import { TagOption } from '@meemoo/react-components';
 
+import { IconNamesLight } from '@shared/components';
+
 import { VisitorSpaceSort } from '../../../types';
 import { FilterMenuFilterOption, FilterMenuSortOption } from '../FilterMenu.types';
 
@@ -34,7 +36,7 @@ export const filterOptionsMock: FilterMenuFilterOption[] = [
 	{
 		id: 'advanced',
 		label: 'Geavanceerd',
-		icon: 'dots-horizontal',
+		icon: IconNamesLight.DotsHorizontal,
 		form: () => null,
 	},
 ];

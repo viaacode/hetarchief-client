@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Icon, IconLightNames, Overlay } from '@shared/components';
+import { Icon, IconName, IconNamesLight, Overlay } from '@shared/components';
 import { selectHistory } from '@shared/store/history';
 
 import styles from '../Navigation.module.scss';
@@ -32,7 +32,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 		setOpenDropdown(null);
 	};
 
-	const renderTrigger = (item: NavigationItem, iconName: IconLightNames) => {
+	const renderTrigger = (item: NavigationItem, iconName: IconName) => {
 		return (
 			<div
 				className={clsx(styles['c-navigation__link--wrapper'], 'u-cursor-pointer')}
@@ -59,6 +59,7 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 				{items.map((item, index) => {
 					const itemCls = clsx(
 						styles['c-navigation__item'],
+						styles['c-navigation__link--border'],
 						styles[`c-navigation__link--variant-${index + 1}`],
 						{
 							[styles['c-navigation__item--active']]:
@@ -78,7 +79,9 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 									items={item.children}
 									trigger={renderTrigger(
 										item,
-										openDropdown === item.id ? 'angle-up' : 'angle-down'
+										openDropdown === item.id
+											? IconNamesLight.AngleUp
+											: IconNamesLight.AngleDown
 									)}
 									onClose={closeDropdowns}
 									onOpen={openDropdowns}

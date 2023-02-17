@@ -1,0 +1,23 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-Alert";
+
+.#{$component} {
+	background-color: $silver;
+	display: flex;
+	padding: $spacer-sm;
+
+	.c-Alert__icon {
+		font-size: 2rem;
+		margin-right: 0.8rem;
+	}
+
+	.c-Alert__title {
+		font-weight: bold;
+		margin-bottom: 0.4rem;
+	}
+}
+
+.c-Alert__margin-bottom {
+	margin-bottom: $spacer-lg;
+}

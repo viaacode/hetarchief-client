@@ -1,4 +1,4 @@
-import { IconLightNames } from '@shared/components';
+import { IconName } from '@shared/components';
 
 import { NavigationItem } from '../Navigation.types';
 
@@ -14,6 +14,6 @@ export interface NavigationSectionProps {
 export interface NavigationHamburgerProps {
 	openLabel: string;
 	closedLabel: string;
-	openIcon?: IconLightNames;
-	closedIcon?: IconLightNames;
+	openIcon?: IconName;
+	closedIcon?: IconName;
 }

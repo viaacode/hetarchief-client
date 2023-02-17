@@ -1,12 +1,13 @@
 import { Badge, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isNil } from 'lodash';
 import Image from 'next/image';
 import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 
-import { DropdownMenu } from '@shared/components';
-import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
-import { MediaTypes } from '@shared/types';
+import { DropdownMenu, IconNamesLight } from '@shared/components';
+import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
 import Icon from '../Icon/Icon';
@@ -16,6 +17,7 @@ import { MediaCardProps } from './MediaCard.types';
 
 const MediaCard: FC<MediaCardProps> = ({
 	description,
+	duration,
 	keywords,
 	preview,
 	publishedAt,
@@ -27,6 +29,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	actions,
 	buttons,
 	hasRelated,
+	icon,
 }) => {
 	const renderDropdown = () =>
 		actions ? (
@@ -90,8 +93,12 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderNoContentIcon = () => (
 		<Icon
 			className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'])}
-			name={TYPE_TO_NO_ICON_MAP[type as Exclude<MediaTypes, null>]}
+			name={TYPE_TO_NO_ICON_MAP[type as Exclude<IeObjectTypes, null>]}
 		/>
+	);
+
+	const renderDuration = () => (
+		<div className={clsx(styles['c-media-card__header-duration'])}>{duration}</div>
 	);
 
 	const renderNoContent = () =>
@@ -100,6 +107,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		) : (
 			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
 				{renderNoContentIcon()}
+				{duration && renderDuration()}
 			</div>
 		);
 
@@ -121,7 +129,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const renderTags = () => {
-		return hasRelated && <Badge variants="small" text={<Icon name="link" />} />;
+		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
 	};
 
 	const renderImage = (imgPath: string | undefined) =>
@@ -133,6 +141,14 @@ const MediaCard: FC<MediaCardProps> = ({
 				)}
 			>
 				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+				{!isNil(icon) && (
+					<>
+						<div className={clsx(styles['c-media-card__header-icon'])}>
+							<Icon name={icon} />
+						</div>
+						{duration && renderDuration()}
+					</>
+				)}
 			</div>
 		) : (
 			renderNoContent()

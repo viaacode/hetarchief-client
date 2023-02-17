@@ -3,11 +3,11 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectMediaFilterOptions } from '@shared/store/media';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 
 const MediumSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
-	const aggregates = useSelector(selectMediaFilterOptions)?.dcterms_medium.buckets;
+	const aggregates = useSelector(selectIeObjectsFilterOptions)?.dcterms_medium.buckets;
 
 	const options = (aggregates || []).map((bucket) => ({
 		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results

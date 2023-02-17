@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { MediaSearchFilter, Operator } from '@shared/types';
+import { IeObjectsSearchFilter, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 
 import { getMetadataSearchFilters } from '../../const';
@@ -69,7 +69,7 @@ export const mapAdvancedToTags = (
 		switch (prop) {
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
-				if (op === Operator.Between) {
+				if (op === Operator.Between || op === Operator.Equals) {
 					value = `${formatDate(asDate(split[0]))} - ${formatDate(asDate(split[1]))}`;
 					operator = undefined;
 				} else {
@@ -148,7 +148,7 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 	];
 };
 
-export const mapAdvancedToElastic = (item: AdvancedFilter): MediaSearchFilter[] => {
+export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilter[] => {
 	const values = (item.val || '').split(SEPARATOR);
 	const filters =
 		item.prop && item.op
@@ -156,7 +156,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): MediaSearchFilter[] 
 			: [];
 
 	// Format data for Elastic
-	return filters.map((filter: MediaSearchFilter, i: number) => {
+	return filters.map((filter: IeObjectsSearchFilter, i: number) => {
 		let parsed;
 
 		switch (item.prop) {

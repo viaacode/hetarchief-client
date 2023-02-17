@@ -171,11 +171,13 @@ describe('Components', () => {
 				{
 					node: <div>link</div>,
 					id: 'link',
+					path: '',
 					hasDivider: true,
 					children: [
 						{
 							node: <div>item 1</div>,
 							id: 'item 1',
+							path: '',
 						},
 					],
 				},
@@ -198,6 +200,7 @@ describe('Components', () => {
 				{
 					node: <div>link</div>,
 					id: 'link',
+					path: '',
 					hasDivider: true,
 				},
 			];
@@ -218,11 +221,13 @@ describe('Components', () => {
 				{
 					node: <div>link</div>,
 					id: 'link',
+					path: '',
 					hasDivider: true,
 					children: [
 						{
 							node: <div>item 1</div>,
 							id: 'item 1',
+							path: '',
 						},
 					],
 				},

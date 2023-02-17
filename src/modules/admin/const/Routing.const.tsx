@@ -28,13 +28,18 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'translations-v2-admin',
 		label: tText('modules/admin/const/routing___vertalingen-v-2'),
-		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translationsV2}`,
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
 	},
 	{
 		id: 'users-admin',
 		label: tText('modules/admin/const/routing___gebruikersbeheer'),
 		href: '',
 		children: ADMIN_USERS_LINKS,
+	},
+	{
+		id: 'material-requests',
+		label: tText('modules/admin/const/routing___mijn-materiaalaanvragen'),
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.myMaterialRequests}`,
 	},
 ];
 
@@ -52,7 +57,7 @@ export const ADMIN_SPACES_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'visitors',
 		label: tText('modules/admin/const/routing___actieve-bezoekers'),
-		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitors}`,
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.activeVisitors}`,
 	},
 ];
 

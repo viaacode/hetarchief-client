@@ -1,12 +1,12 @@
 import {
 	AdminConfig,
 	AdminConfigManager,
-	AvoOrHetArchief,
 	CommonUser,
 	ContentBlockType,
 	LinkInfo,
 	ToastInfo,
-} from '@meemoo/react-admin';
+} from '@meemoo/admin-core-ui';
+import { DatabaseType } from '@viaa/avo2-types';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,12 +14,10 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { PermissionsService, UserGroupsService } from '@admin/services';
 import { selectUser } from '@auth/store/user';
-import { navigationService } from '@navigation/services/navigation-service';
-import { Icon, IconName, IconProps, sortingIcons } from '@shared/components';
+import { Icon, ICON_LIST_CONFIG, IconName, sortingIcons } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
-import { ROUTE_PARTS } from '@shared/const';
+import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { AssetsService } from '@shared/services/assets-service/assets.service';
@@ -30,10 +28,13 @@ const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
 	const { to, ...rest } = linkInfo;
+
 	return (
-		<Link href={to} passHref>
-			<a {...rest} />
-		</Link>
+		to && (
+			<Link href={to} passHref>
+				<a {...rest} />
+			</Link>
+		)
 	);
 };
 
@@ -75,17 +76,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				// last_access_at: user.lastAccessAt, // TODO enable once last_access_at field is added to the database
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				permissions: user?.permissions as any[],
+				tempAccess: undefined,
 			};
 
 			const config: AdminConfig = {
-				navigation: {
-					service: navigationService,
-					views: {
-						overview: {
-							labels: { tableHeads: {} },
-						},
-					},
-				},
 				staticPages: [
 					'/',
 					'/404',
@@ -93,7 +87,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}`,
 					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}`,
-					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitors}`,
+					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.activeVisitors}`,
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}`,
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.users}`,
@@ -101,11 +95,12 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}`,
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
 					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
-					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitors}`,
+					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.activeVisitors}`,
 					`/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.settings}`,
 					`/${ROUTE_PARTS.cookiePolicy}`,
 					`/${ROUTE_PARTS.userPolicy}`,
 					`/${ROUTE_PARTS.logout}`,
+					`/${ROUTE_PARTS.search}`,
 				],
 				contentPage: {
 					availableContentBlocks: [
@@ -123,9 +118,9 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					defaultPageWidth: 'LARGE',
 					onSaveContentPage,
 				},
-				navigationBars: { enableIcons: false },
+				navigationBars: { enableIcons: true },
 				icon: {
-					component: ({ name }: { name: IconName }) => <Icon name={name} />,
+					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
 					componentProps: {
 						add: { name: 'plus' },
 						view: { name: 'show' },
@@ -133,21 +128,21 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						angleUp: { name: 'angle-up' },
 						angleLeft: { name: 'angle-left' },
 						angleRight: { name: 'angle-right' },
+						extraOptions: { name: 'dots-vertical' },
+						copy: { name: 'copy' },
 						delete: { name: 'trash' },
 						edit: { name: 'edit' },
 						filter: { name: 'search' },
 						arrowUp: { name: 'arrow-up' },
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
-					} as Record<string, IconProps>,
-					list: [],
+						chevronLeft: { name: 'angle-left' },
+					},
+					list: ICON_LIST_CONFIG,
 				},
 				components: {
 					loader: {
 						component: () => <Loading fullscreen owner="admin-core-loader" />,
-					},
-					table: {
-						sortingIcons,
 					},
 					buttonTypes: () => [
 						{
@@ -186,6 +181,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						},
 					],
 				},
+				content_blocks: {},
 				services: {
 					toastService: {
 						showToast: (toastInfo: ToastInfo) => {
@@ -206,23 +202,20 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						useHistory: () => ({
 							push: router.push,
 							replace: router.replace,
-						}), //useRouter,
-						useParams: () => {
-							return router.query as Record<string, string>;
-						},
+						}),
 					},
 					queryCache: {
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						clear: async (_key: string) => Promise.resolve(),
 					},
-					UserGroupsService,
-					PermissionsService,
-					assetService: AssetsService,
+					assetService: {
+						uploadFile: AssetsService.uploadFile,
+						deleteFile: AssetsService.deleteFile,
+					},
+					getContentPageByPathEndpoint: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages`,
 				},
 				database: {
-					databaseApplicationType: AvoOrHetArchief.hetArchief,
-					graphqlUrl: publicRuntimeConfig.GRAPHQL_URL,
-					graphqlSecret: '',
+					databaseApplicationType: DatabaseType.hetArchief,
 					proxyUrl: publicRuntimeConfig.PROXY_URL,
 				},
 				flowplayer: {
@@ -235,6 +228,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					},
 				},
 				user: commonUser,
+				routes: ADMIN_CORE_ROUTES as any, // TODO: remove any when the routes record becomes a partial in admin-core
+				env: {},
 			};
 			AdminConfigManager.setConfig(config);
 			setAdminCoreConfig(config);
@@ -246,7 +241,11 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 		}, [initConfigValue]);
 
 		if (!adminCoreConfig && isBrowser()) {
-			return <Loading fullscreen owner="admin-core config not set yet" />;
+			return (
+				<div suppressHydrationWarning={true}>
+					<Loading fullscreen owner="admin-core config not set yet" />
+				</div>
+			);
 		}
 
 		return <WrappedComponent {...props} />;
