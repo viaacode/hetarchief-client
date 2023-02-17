@@ -39,7 +39,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	});
 
 	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.schema_in_language.buckets || []
+		useSelector(selectIeObjectsFilterOptions)?.schema_in_language?.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Effects

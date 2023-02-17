@@ -39,7 +39,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 	});
 
 	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.schema_creator.buckets || []
+		useSelector(selectIeObjectsFilterOptions)?.schema_creator?.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Effects

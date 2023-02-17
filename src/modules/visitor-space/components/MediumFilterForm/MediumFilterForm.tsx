@@ -39,7 +39,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 	});
 
 	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.dcterms_medium.buckets || []
+		useSelector(selectIeObjectsFilterOptions)?.dcterms_medium?.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Effects

@@ -5,15 +5,10 @@ import { QUERY_KEYS } from '@shared/const';
 import { IeObjectsService } from '../services';
 import { IeObjectSimilar } from '../types';
 
-export function useGetIeObjectsSimilar(
+export const useGetIeObjectsSimilar = (
 	id: string,
 	enabled = true
-): UseQueryResult<IeObjectSimilar> {
-	return useQuery(
-		[QUERY_KEYS.getIeObjectsSimilar, { id }],
-		() => IeObjectsService.getSimilar(id),
-		{
-			enabled,
-		}
-	);
-}
+): UseQueryResult<IeObjectSimilar> =>
+	useQuery([QUERY_KEYS.getIeObjectsSimilar, { id }], () => IeObjectsService.getSimilar(id), {
+		enabled,
+	});
