@@ -6,7 +6,7 @@ import { ApiResponseWrapper } from '@shared/types';
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import { GetMaterialRequestsProps } from './material-requests.service.types';
 
-import { MaterialRequest } from 'modules/material-requests/types';
+import { MaterialRequest, MaterialRequestDetails } from 'modules/material-requests/types';
 
 export class MaterialRequestsService {
 	public static async getAll({
@@ -41,5 +41,12 @@ export class MaterialRequestsService {
 			.json();
 
 		return result as ApiResponseWrapper<MaterialRequest>;
+	}
+
+	public static async getById(id: string | null): Promise<MaterialRequestDetails | null> {
+		if (!id) {
+			return null;
+		}
+		return await ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
 	}
 }

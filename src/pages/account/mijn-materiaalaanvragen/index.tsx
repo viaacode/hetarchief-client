@@ -1,9 +1,9 @@
-import { OrderDirection, Table } from '@meemoo/react-components';
+import { OrderDirection, Row, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, ReactNode, useMemo } from 'react';
+import { ComponentType, MouseEvent, ReactNode, useMemo, useState } from 'react';
 import { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -22,13 +22,21 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import MaterialRequestDetailBlade from '@material-requests/components/MaterialRequestDetailBlade';
+import {
+	useGetMaterialRequestById,
+	useGetMaterialRequests,
+} from '@material-requests/hooks/get-material-requests';
 import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
+	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
+	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
+	const { data: currentMaterialRequestDetails, isFetching: isLoading } =
+		useGetMaterialRequestById(currentMaterialRequest?.id || '');
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		isPersonal: true,
 		size: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -86,10 +94,25 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderEmptyMessage = (): ReactNode =>
 		tHtml('pages/account/mijn-profiel/index___geen-materiaal-aanvragen');
 
+	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+		setCurrentMaterialRequest(row.original);
+		setIsDetailBladeOpen(true);
+	};
+
+	const renderDetailBlade = () => {
+		return (
+			<MaterialRequestDetailBlade
+				isOpen={!isLoading && isDetailBladeOpen}
+				onClose={() => setIsDetailBladeOpen(false)}
+				currentMaterialRequestDetails={currentMaterialRequestDetails}
+			/>
+		);
+	};
+
 	const renderContent = (): ReactNode => {
 		return (
 			<Table<MaterialRequest>
-				className="u-mt-24 p-material-requests__table"
+				className="u-mt-24 p-material-requests__table p-account-my-material-requests__table"
 				options={{
 					columns: AccountMaterialRequestTableColumns(),
 					data: materialRequests?.items || [],
@@ -101,6 +124,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 				sortingIcons={sortingIcons}
 				pagination={renderPagination}
 				onSortChange={onSortChange}
+				onRowClick={onRowClick}
 			/>
 		);
 	};
@@ -119,6 +143,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 					{isFetching && <Loading owner="Material requests overview" />}
 					{noData && renderEmptyMessage()}
 					{!noData && !isFetching && renderContent()}
+					{renderDetailBlade()}
 				</div>
 			</AccountLayout>
 		);

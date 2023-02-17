@@ -1,0 +1,86 @@
+@use "../../abstracts" as *;
+
+$component: "p-account-my-material-requests";
+
+.#{$component} {
+	&__table {
+		cursor: pointer;
+	}
+
+	&__title {
+		padding: 0 $spacer-lg;
+		margin-bottom: $spacer-1xl;
+	}
+
+	&__maintainer {
+		padding: $spacer-sm $spacer-lg;
+		background-color: $platinum;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		&-details {
+			color: $neutral;
+			text-align: end;
+			font-size: $font-size-sm;
+		}
+
+		&-logo {
+			position: relative;
+			width: 8rem;
+			height: 5rem;
+		}
+	}
+
+	&__material {
+		padding: $spacer-md $spacer-lg;
+		border-bottom: 2px solid $platinum;
+
+		&-link {
+			text-decoration: none;
+		}
+
+		&-label {
+			font-weight: 900;
+			margin-bottom: $spacer-xxs;
+
+			&-icon {
+				color: $blue;
+				margin-right: $spacer-xs;
+			}
+		}
+
+		&-id {
+			font-size: $font-size-sm;
+			color: $neutral;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+
+	&__content {
+		padding: $spacer-lg;
+
+		&-label {
+			font-weight: 900;
+			margin-bottom: $spacer-xs;
+		}
+
+		&-value {
+			margin-bottom: $spacer-md;
+		}
+	}
+
+	&__close-button-container {
+		padding: $spacer-lg;
+	}
+
+	&__close-button {
+		background-color: $black;
+		color: $white;
+
+		&:hover {
+			border: 1px solid $zinc;
+		}
+	}
+}
