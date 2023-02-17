@@ -8,7 +8,7 @@
 			"@cp/*": ["modules/cp/*"],
 			"@home/*": ["modules/home/*"],
 			"@i18n/*": ["modules/i18n/*"],
-			"@media/*": ["modules/media/*"],
+			"@ie-objects/*": ["modules/ie-objects/*"],
 			"@navigation/*": ["modules/navigation/*"],
 			"@visitor-space/*": ["modules/visitor-space/*"],
 			"@shared/*": ["modules/shared/*"],

@@ -15,33 +15,6 @@ import save from 'save-file';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { FragmentSlider } from '@media/components/FragmentSlider';
-import {
-	FLOWPLAYER_AUDIO_FORMATS,
-	FLOWPLAYER_VIDEO_FORMATS,
-	formatErrorPlaceholder,
-	IMAGE_FORMATS,
-	MEDIA_ACTIONS,
-	METADATA_FIELDS,
-	noLicensePlaceholder,
-	OBJECT_DETAIL_TABS,
-	objectPlaceholder,
-	ticketErrorPlaceholder,
-} from '@media/const';
-import { useGetMediaExport } from '@media/hooks/get-media-export';
-import { useGetMediaInfo } from '@media/hooks/get-media-info';
-import { useGetMediaRelated } from '@media/hooks/get-media-related';
-import { useGetMediaSimilar } from '@media/hooks/get-media-similar';
-import { useGetMediaTicketInfo } from '@media/hooks/get-media-ticket-url';
-import { MediaService } from '@media/services';
-import {
-	Media,
-	MediaActions,
-	MediaRepresentation,
-	MediaSimilarHit,
-	ObjectDetailTabs,
-} from '@media/types';
-import { isInAFolder, mapKeywordsToTagList } from '@media/utils';
 import {
 	ErrorNoAccess,
 	ErrorNotFound,
@@ -67,9 +40,9 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
-import { selectFolders } from '@shared/store/media';
+import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, License, MediaTypes, VisitorSpaceMediaType } from '@shared/types';
+import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -86,13 +59,40 @@ import {
 } from '../../../../modules/visitor-space/components';
 
 import {
+	IeObject,
+	IeObjectLicense,
+	IeObjectRepresentation,
+	MediaActions,
+	ObjectDetailTabs,
+} from '@ie-objects/types';
+import {
 	DynamicActionMenu,
 	MediaObject,
 	Metadata,
 	ObjectPlaceholder,
 	RelatedObject,
 	RelatedObjectsBlade,
-} from 'modules/media/components';
+} from 'modules/ie-objects/components';
+import { FragmentSlider } from 'modules/ie-objects/components/FragmentSlider';
+import {
+	FLOWPLAYER_AUDIO_FORMATS,
+	FLOWPLAYER_VIDEO_FORMATS,
+	formatErrorPlaceholder,
+	IMAGE_FORMATS,
+	MEDIA_ACTIONS,
+	METADATA_FIELDS,
+	noLicensePlaceholder,
+	OBJECT_DETAIL_TABS,
+	objectPlaceholder,
+	ticketErrorPlaceholder,
+} from 'modules/ie-objects/const';
+import { useGetIeObjectsExport } from 'modules/ie-objects/hooks/get-ie-objects-export';
+import { useGetIeObjectsInfo } from 'modules/ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectsRelated } from 'modules/ie-objects/hooks/get-ie-objects-related';
+import { useGetIeObjectsSimilar } from 'modules/ie-objects/hooks/get-ie-objects-similar';
+import { useGetIeObjectsTicketInfo } from 'modules/ie-objects/hooks/get-ie-objects-ticket-url';
+import { IeObjectsService } from 'modules/ie-objects/services';
+import { isInAFolder, mapKeywordsToTagList } from 'modules/ie-objects/utils';
 import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
@@ -119,11 +119,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [metadataColumns, setMetadataColumns] = useState<number>(1);
-	const [mediaType, setMediaType] = useState<MediaTypes>(null);
+	const [mediaType, setMediaType] = useState<IeObjectTypes>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [currentRepresentation, setCurrentRepresentation] = useState<
-		MediaRepresentation | undefined
+		IeObjectRepresentation | undefined
 	>(undefined);
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
@@ -148,7 +148,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		isLoading: mediaInfoIsLoading,
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
-	} = useGetMediaInfo(router.query.ie as string);
+	} = useGetIeObjectsInfo(router.query.ie as string);
 
 	// peak file
 	const peakFileId =
@@ -176,20 +176,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		data: playableUrl,
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetMediaTicketInfo(
+	} = useGetIeObjectsTicketInfo(
 		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
 		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
 	);
 
 	// ook interessant
-	const { data: similarData } = useGetMediaSimilar(
-		router.query.ie as string,
-		mediaInfo?.maintainerId || '',
-		!!mediaInfo
-	);
+	const { data: similarData } = useGetIeObjectsSimilar(router.query.ie as string, !!mediaInfo);
 
 	// gerelateerd
-	const { data: relatedData } = useGetMediaRelated(
+	const { data: relatedData } = useGetIeObjectsRelated(
 		router.query.ie as string,
 		mediaInfo?.maintainerId ?? '',
 		mediaInfo?.meemooIdentifier ?? '',
@@ -197,7 +193,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	// export
-	const { mutateAsync: getMediaExport } = useGetMediaExport();
+	const { mutateAsync: getMediaExport } = useGetIeObjectsExport();
 
 	// visit info
 	const {
@@ -222,7 +218,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
-		!hasMedia && !mediaInfo?.license?.includes(License.BEZOEKERTOOL_CONTENT);
+		!hasMedia && !mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -272,7 +268,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [activeTab, isMobile]);
 
 	useEffect(() => {
-		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
+		setMediaType(mediaInfo?.dctermsFormat as IeObjectTypes);
 
 		// Filter out peak files if type === video
 		if (mediaInfo?.dctermsFormat === VisitorSpaceMediaType.Video) {
@@ -298,7 +294,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [mediaInfo]);
 
 	useEffect(() => {
-		similarData && setSimilar(mapSimilarData(similarData.hits.hits));
+		similarData && setSimilar(mapSimilarData(similarData?.items));
 	}, [similarData]);
 
 	useEffect(() => {
@@ -308,28 +304,28 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	/**
 	 * Mapping
 	 */
-	const mapSimilarData = (data: MediaSimilarHit[]): MediaObject[] => {
-		return data.map((hit) => {
+	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
+		return data.map((ieObject) => {
 			return {
-				type: hit._source.dctermsFormat as MediaTypes,
-				title: hit._source.name,
-				subtitle: `${hit._source.maintainerName ?? ''} ${
-					hit._source.datePublished
-						? `(${formatMediumDate(asDate(hit._source.datePublished))})`
+				type: (ieObject?.dctermsFormat || null) as IeObjectTypes,
+				title: ieObject?.name || '',
+				subtitle: `${ieObject?.maintainerName ?? ''} ${
+					ieObject?.datePublished
+						? `(${formatMediumDate(asDate(ieObject?.datePublished))})`
 						: ''
 				}`,
-				description: hit._source.description || '',
-				thumbnail: hit._source.thumbnailUrl,
-				id: hit._id,
-				maintainer_id: hit._source.maintainerId || '',
+				description: ieObject?.description || '',
+				thumbnail: ieObject?.thumbnailUrl,
+				id: ieObject?.schemaIdentifier || '',
+				maintainer_id: ieObject?.maintainerId || '',
 			};
 		});
 	};
 
-	const mapRelatedData = (data: Media[]): MediaObject[] => {
+	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
 		return data.map((item) => {
 			return {
-				type: item.dctermsFormat as MediaTypes,
+				type: item.dctermsFormat as IeObjectTypes,
 				title: item.name,
 				subtitle: `${item.maintainerName ?? ''} ${
 					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''
@@ -419,7 +415,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const renderMedia = (
 		playableUrl: string | undefined,
-		representation: MediaRepresentation | undefined
+		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
@@ -833,7 +829,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
 	let seoInfo: { name: string | null } | null = null;
 	try {
-		seoInfo = await MediaService.getSeoById(context.query.ie as string);
+		seoInfo = await IeObjectsService.getSeoById(context.query.ie as string);
 	} catch (err) {
 		console.error('Failed to fetch media info by id: ' + context.query.ie, err);
 	}

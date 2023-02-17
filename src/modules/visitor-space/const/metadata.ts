@@ -8,9 +8,9 @@ import { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
 import {
-	MediaSearchFilter,
-	MediaSearchFilterField,
-	MediaSearchOperator,
+	IeObjectsSearchFilter,
+	IeObjectsSearchFilterField,
+	IeObjectsSearchOperator,
 	Operator,
 } from '@shared/types';
 
@@ -33,7 +33,7 @@ export type MetadataConfig = {
 		[key in Operator]?: {
 			label: string;
 			field: MetadataFields;
-			filters?: MediaSearchFilter[];
+			filters?: IeObjectsSearchFilter[];
 		};
 	};
 };
@@ -78,30 +78,48 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				label: dictionary.from,
 				field: DateInput,
 				filters: [
-					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.GTE },
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
 				],
 			},
 			[Operator.LessThanOrEqual]: {
 				label: dictionary.until,
 				field: DateInput,
 				filters: [
-					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.LTE },
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
 				],
 			},
 			[Operator.Between]: {
 				label: dictionary.between,
 				field: DateRangeInput,
 				filters: [
-					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.GTE },
-					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.LTE },
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
 				],
 			},
 			[Operator.Equals]: {
 				label: dictionary.exact,
 				field: DateInput,
 				filters: [
-					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.GTE },
-					{ field: MediaSearchFilterField.CREATED, operator: MediaSearchOperator.LTE },
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
 				],
 			},
 		},
@@ -111,8 +129,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.CREATOR,
-						operator: MediaSearchOperator.CONTAINS,
+						field: IeObjectsSearchFilterField.CREATOR,
+						operator: IeObjectsSearchOperator.CONTAINS,
 					},
 				],
 			},
@@ -121,8 +139,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.CREATOR,
-						operator: MediaSearchOperator.CONTAINS_NOT,
+						field: IeObjectsSearchFilterField.CREATOR,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
 					},
 				],
 			},
@@ -131,8 +149,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.CREATOR,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.CREATOR,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -140,7 +158,10 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				label: dictionary.differs,
 				field: TextInput,
 				filters: [
-					{ field: MediaSearchFilterField.CREATOR, operator: MediaSearchOperator.IS_NOT },
+					{
+						field: IeObjectsSearchFilterField.CREATOR,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
 				],
 			},
 		},
@@ -150,8 +171,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.DESCRIPTION,
-						operator: MediaSearchOperator.CONTAINS,
+						field: IeObjectsSearchFilterField.DESCRIPTION,
+						operator: IeObjectsSearchOperator.CONTAINS,
 					},
 				],
 			},
@@ -160,8 +181,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.DESCRIPTION,
-						operator: MediaSearchOperator.CONTAINS_NOT,
+						field: IeObjectsSearchFilterField.DESCRIPTION,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
 					},
 				],
 			},
@@ -171,34 +192,46 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				label: dictionary.shorter,
 				field: DurationInput,
 				filters: [
-					{ field: MediaSearchFilterField.DURATION, operator: MediaSearchOperator.LTE },
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
+					},
 				],
 			},
 			[Operator.GreaterThanOrEqual]: {
 				label: dictionary.longer,
 				field: DurationInput,
 				filters: [
-					{ field: MediaSearchFilterField.DURATION, operator: MediaSearchOperator.GTE },
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
 				],
 			},
 			[Operator.Between]: {
 				label: dictionary.between,
 				field: DurationRangeInput,
 				filters: [
-					{ field: MediaSearchFilterField.DURATION, operator: MediaSearchOperator.GTE },
-					{ field: MediaSearchFilterField.DURATION, operator: MediaSearchOperator.LTE },
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
+					},
 				],
 			},
 		},
-		// "Temporal" missing in ES, src/modules/media/types.ts:84
+		// "Temporal" missing in ES, src/modules/ie-objects/types.ts:84
 		[MetadataProp.Era]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.ERA,
-						operator: MediaSearchOperator.CONTAINS,
+						field: IeObjectsSearchFilterField.ERA,
+						operator: IeObjectsSearchOperator.CONTAINS,
 					},
 				],
 			},
@@ -207,8 +240,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.ERA,
-						operator: MediaSearchOperator.CONTAINS_NOT,
+						field: IeObjectsSearchFilterField.ERA,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
 					},
 				],
 			},
@@ -217,8 +250,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.ERA,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.ERA,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -227,8 +260,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.ERA,
-						operator: MediaSearchOperator.IS_NOT,
+						field: IeObjectsSearchFilterField.ERA,
+						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
 			},
@@ -239,8 +272,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.ADVANCED_QUERY,
-						operator: MediaSearchOperator.CONTAINS,
+						field: IeObjectsSearchFilterField.ADVANCED_QUERY,
+						operator: IeObjectsSearchOperator.CONTAINS,
 					},
 				],
 			},
@@ -249,8 +282,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.ADVANCED_QUERY,
-						operator: MediaSearchOperator.CONTAINS_NOT,
+						field: IeObjectsSearchFilterField.ADVANCED_QUERY,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
 					},
 				],
 			},
@@ -261,8 +294,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: MediaTypeSelect,
 				filters: [
 					{
-						field: MediaSearchFilterField.FORMAT,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.FORMAT,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -271,8 +304,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: MediaTypeSelect,
 				filters: [
 					{
-						field: MediaSearchFilterField.FORMAT,
-						operator: MediaSearchOperator.IS_NOT,
+						field: IeObjectsSearchFilterField.FORMAT,
+						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
 			},
@@ -283,8 +316,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: MediumSelect,
 				filters: [
 					{
-						field: MediaSearchFilterField.MEDIUM,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.MEDIUM,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -293,8 +326,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: MediumSelect,
 				filters: [
 					{
-						field: MediaSearchFilterField.MEDIUM,
-						operator: MediaSearchOperator.IS_NOT,
+						field: IeObjectsSearchFilterField.MEDIUM,
+						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
 			},
@@ -305,8 +338,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: GenreSelect,
 				filters: [
 					{
-						field: MediaSearchFilterField.GENRE,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.GENRE,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -315,8 +348,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: GenreSelect,
 				filters: [
 					{
-						field: MediaSearchFilterField.GENRE,
-						operator: MediaSearchOperator.IS_NOT,
+						field: IeObjectsSearchFilterField.GENRE,
+						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
 			},
@@ -327,8 +360,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.LANGUAGE,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.LANGUAGE,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -337,21 +370,21 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.LANGUAGE,
-						operator: MediaSearchOperator.IS_NOT,
+						field: IeObjectsSearchFilterField.LANGUAGE,
+						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
 			},
 		},
-		// "Spatial" missing in ES, src/modules/media/types.ts:83
+		// "Spatial" missing in ES, src/modules/ie-objects/types.ts:83
 		[MetadataProp.Location]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.LOCATION,
-						operator: MediaSearchOperator.CONTAINS,
+						field: IeObjectsSearchFilterField.LOCATION,
+						operator: IeObjectsSearchOperator.CONTAINS,
 					},
 				],
 			},
@@ -360,8 +393,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.LOCATION,
-						operator: MediaSearchOperator.CONTAINS_NOT,
+						field: IeObjectsSearchFilterField.LOCATION,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
 					},
 				],
 			},
@@ -370,8 +403,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.LOCATION,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.LOCATION,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -380,8 +413,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.LOCATION,
-						operator: MediaSearchOperator.IS_NOT,
+						field: IeObjectsSearchFilterField.LOCATION,
+						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
 			},
@@ -392,8 +425,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: DateInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.PUBLISHED,
-						operator: MediaSearchOperator.GTE,
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
 					},
 				],
 			},
@@ -402,8 +435,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: DateInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.PUBLISHED,
-						operator: MediaSearchOperator.LTE,
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
 					},
 				],
 			},
@@ -412,12 +445,12 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: DateRangeInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.PUBLISHED,
-						operator: MediaSearchOperator.GTE,
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
 					},
 					{
-						field: MediaSearchFilterField.PUBLISHED,
-						operator: MediaSearchOperator.LTE,
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
 					},
 				],
 			},
@@ -425,8 +458,14 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				label: dictionary.exact,
 				field: DateInput,
 				filters: [
-					{ field: MediaSearchFilterField.PUBLISHED, operator: MediaSearchOperator.GTE },
-					{ field: MediaSearchFilterField.PUBLISHED, operator: MediaSearchOperator.LTE },
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
 				],
 			},
 		},
@@ -436,8 +475,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.PUBLISHER,
-						operator: MediaSearchOperator.CONTAINS,
+						field: IeObjectsSearchFilterField.PUBLISHER,
+						operator: IeObjectsSearchOperator.CONTAINS,
 					},
 				],
 			},
@@ -446,8 +485,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.PUBLISHER,
-						operator: MediaSearchOperator.CONTAINS_NOT,
+						field: IeObjectsSearchFilterField.PUBLISHER,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
 					},
 				],
 			},
@@ -456,8 +495,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.PUBLISHER,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.PUBLISHER,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -466,8 +505,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.PUBLISHER,
-						operator: MediaSearchOperator.IS_NOT,
+						field: IeObjectsSearchFilterField.PUBLISHER,
+						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
 			},
@@ -478,8 +517,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.NAME,
-						operator: MediaSearchOperator.CONTAINS,
+						field: IeObjectsSearchFilterField.NAME,
+						operator: IeObjectsSearchOperator.CONTAINS,
 					},
 				],
 			},
@@ -488,8 +527,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.NAME,
-						operator: MediaSearchOperator.CONTAINS_NOT,
+						field: IeObjectsSearchFilterField.NAME,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
 					},
 				],
 			},
@@ -498,8 +537,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.NAME,
-						operator: MediaSearchOperator.IS,
+						field: IeObjectsSearchFilterField.NAME,
+						operator: IeObjectsSearchOperator.IS,
 					},
 				],
 			},
@@ -508,8 +547,8 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				field: TextInput,
 				filters: [
 					{
-						field: MediaSearchFilterField.NAME,
-						operator: MediaSearchOperator.IS_NOT,
+						field: IeObjectsSearchFilterField.NAME,
+						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
 			},
@@ -520,6 +559,6 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 export const getMetadataSearchFilters = (
 	prop: MetadataProp,
 	operator: Operator
-): MediaSearchFilter[] => {
+): IeObjectsSearchFilter[] => {
 	return METADATA_CONFIG()[prop]?.[operator]?.filters || [];
 };

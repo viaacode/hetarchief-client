@@ -1,4 +1,6 @@
-import { Media, MediaSearchAggregations } from '@media/types';
+import type { IPagination } from '@studiohyperdrive/pagination';
+
+import { IeObject, IeObjectSearchAggregations } from '@ie-objects/types';
 
 export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 	items: {
@@ -15,16 +17,8 @@ export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
 }
 
 export interface ElasticsearchAggregations {
-	aggregations: MediaSearchAggregations;
+	aggregations: IeObjectSearchAggregations;
 }
 
-export interface ApiResponseWrapper<T> {
-	items: T[];
-	total: number;
-	pages: number;
-	page: number;
-	size: number;
-}
-
-export type GetMediaResponse = ApiResponseWrapper<Media & { related_count?: number }> &
+export type GetIeObjectsResponse = IPagination<IeObject & { related_count?: number }> &
 	ElasticsearchAggregations;

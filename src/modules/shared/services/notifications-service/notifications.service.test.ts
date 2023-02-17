@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { IPagination } from '@studiohyperdrive/pagination';
+
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { Notification } from '@shared/services/notifications-service/notifications.types';
 import { toastService } from '@shared/services/toast-service';
-import { ApiResponseWrapper } from '@shared/types';
 
 const oldDate = '2022-05-03T16:30:39.70604+00:00';
 const newDate = '2022-05-04T16:30:48.824352+00:00';
@@ -64,7 +65,7 @@ describe('NotificationService', () => {
 				pages: 1,
 				page: 1,
 				size: 20,
-			} as ApiResponseWrapper<Notification>);
+			} as IPagination<Notification>);
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc;
 
@@ -88,7 +89,7 @@ describe('NotificationService', () => {
 				pages: 1,
 				page: 1,
 				size: 20,
-			} as ApiResponseWrapper<Notification>);
+			} as IPagination<Notification>);
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc;
 
@@ -112,7 +113,7 @@ describe('NotificationService', () => {
 				pages: 1,
 				page: 1,
 				size: 20,
-			} as ApiResponseWrapper<Notification>);
+			} as IPagination<Notification>);
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc;
 
@@ -136,7 +137,7 @@ describe('NotificationService', () => {
 				pages: 1,
 				page: 1,
 				size: 20,
-			} as ApiResponseWrapper<Notification>);
+			} as IPagination<Notification>);
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc;
 
@@ -162,7 +163,7 @@ describe('NotificationService', () => {
 					pages: 1,
 					page: 1,
 					size: 20,
-				} as ApiResponseWrapper<Notification>)
+				} as IPagination<Notification>)
 				.mockResolvedValueOnce({
 					items: [
 						mockNewUnreadNotification,
@@ -173,7 +174,7 @@ describe('NotificationService', () => {
 					pages: 1,
 					page: 1,
 					size: 20,
-				} as ApiResponseWrapper<Notification>);
+				} as IPagination<Notification>);
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc;
 
@@ -212,7 +213,7 @@ describe('NotificationService', () => {
 					pages: 1,
 					page: 1,
 					size: 20,
-				} as ApiResponseWrapper<Notification>)
+				} as IPagination<Notification>)
 				.mockResolvedValueOnce({
 					items: [
 						mockNewUnreadNotification,
@@ -224,7 +225,7 @@ describe('NotificationService', () => {
 					pages: 1,
 					page: 1,
 					size: 20,
-				} as ApiResponseWrapper<Notification>);
+				} as IPagination<Notification>);
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc;
 
@@ -264,14 +265,14 @@ describe('NotificationService', () => {
 					pages: 1,
 					page: 1,
 					size: 20,
-				} as ApiResponseWrapper<Notification>)
+				} as IPagination<Notification>)
 				.mockResolvedValueOnce({
 					items: [mockUnreadNotification, mockReadNotification],
 					total: 2,
 					pages: 1,
 					page: 1,
 					size: 20,
-				} as ApiResponseWrapper<Notification>);
+				} as IPagination<Notification>);
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc;
 
@@ -303,7 +304,7 @@ describe('NotificationService', () => {
 					pages: 1,
 					page: 1,
 					size: 20,
-				} as ApiResponseWrapper<Notification>)
+				} as IPagination<Notification>)
 				.mockResolvedValueOnce({
 					items: [
 						mockUnreadNotification,
@@ -318,7 +319,7 @@ describe('NotificationService', () => {
 					pages: 1,
 					page: 1,
 					size: 20,
-				} as ApiResponseWrapper<Notification>);
+				} as IPagination<Notification>);
 			const mockedNotifyFunc = jest.fn();
 			toastService.notify = mockedNotifyFunc;
 

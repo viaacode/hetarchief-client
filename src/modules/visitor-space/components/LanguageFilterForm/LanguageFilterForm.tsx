@@ -9,7 +9,7 @@ import { useQueryParams } from 'use-query-params';
 import { SearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectMediaFilterOptions } from '@shared/store/media';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
@@ -39,7 +39,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	});
 
 	const buckets = (
-		useSelector(selectMediaFilterOptions)?.schema_in_language.buckets || []
+		useSelector(selectIeObjectsFilterOptions)?.schema_in_language?.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Effects
