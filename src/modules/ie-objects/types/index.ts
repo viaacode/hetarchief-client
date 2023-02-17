@@ -97,7 +97,6 @@ export interface IeObjectAddress {
 }
 
 export interface IeObjectFile {
-	id: string;
 	name: string;
 	alternateName: string;
 	description: string;
@@ -111,21 +110,11 @@ export interface IeObjectRepresentation {
 	name: string;
 	alternateName: string;
 	description: string;
+	schemaIdentifier: string;
 	dctermsFormat: string;
 	transcript: string;
 	dateCreated: string;
-	schemaIdentifier: string;
-	files: IeObjectRepresentationFile[];
-}
-
-export interface IeObjectRepresentationFile {
-	name: string;
-	alternateName: string;
-	description: string;
-	ebucoreIsMediaFragmentOf: string;
-	EbucoreMediaType: string;
-	embedUrl: string;
-	schemaIdentifier: string;
+	files: IeObjectFile[];
 }
 
 export interface IeObjectSearchAggregationPair<T> {
