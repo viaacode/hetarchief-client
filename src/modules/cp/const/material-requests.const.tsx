@@ -55,7 +55,7 @@ export const CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD: Record<string, string> =
 		{}
 	);
 
-export const CpMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
+export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	{
 		Header: tText('modules/cp/const/material-requests___naam'),
 		accessor: MaterialRequestKeys.name,
