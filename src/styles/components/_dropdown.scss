@@ -14,9 +14,12 @@
 }
 
 .c-dropdown--filter {
+	height: 5.6rem;
+
 	.c-button {
 		display: block;
 		width: 100%;
+		height: 100%;
 		text-align: left;
 		background-color: $white;
 		color: $black;

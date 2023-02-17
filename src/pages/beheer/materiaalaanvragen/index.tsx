@@ -15,7 +15,7 @@ import {
 	CP_MATERIAL_REQUESTS_FILTER_ALL_ID,
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-	CpMaterialRequestTableColumns,
+	getMaterialRequestTableColumns,
 } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
 import {
@@ -129,7 +129,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<Table<MaterialRequest>
 				className="u-mt-24 p-material-requests__table"
 				options={{
-					columns: CpMaterialRequestTableColumns(),
+					columns: getMaterialRequestTableColumns(),
 					data: materialRequests?.items || [],
 					initialState: {
 						pageSize: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -154,6 +154,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 						<div className="p-material-requests__header">
 							<Dropdown
 								variants="filter"
+								flyoutClassName="p-material-requests__dropdown--open"
 								className="p-material-requests__dropdown"
 								label={dropdownLabel}
 								isOpen={isDropdownOpen}
