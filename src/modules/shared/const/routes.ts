@@ -3,6 +3,7 @@ export const ROUTE_PARTS = Object.freeze({
 	accessRequested: 'toegang-aangevraagd',
 	account: 'account',
 	visitRequests: 'aanvragen',
+	materialRequests: 'materiaalaanvragen',
 	faq: 'faq',
 	userPolicy: 'gebruiksvoorwaarden',
 	cookiebeleid: 'cookiebeleid',
@@ -27,9 +28,10 @@ export const ROUTE_PARTS = Object.freeze({
 	visitRequest: 'aanvraag',
 	visitorSpaceManagement: 'bezoekersruimtesbeheer',
 	visitorSpaces: 'bezoekersruimtes',
-	visitors: 'actieve-bezoekers',
+	activeVisitors: 'actieve-bezoekers',
 	myMaterialRequests: 'materiaalaanvragen',
 	search: 'zoeken',
+	visitors: 'bezoekers',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -54,7 +56,10 @@ export const ROUTES = Object.freeze({
 	myHistory: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
 	visitRequested: `/:slug/${ROUTE_PARTS.accessRequested}`,
 	adminEditSpace: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/:slug`,
+	beheerVisitors: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitors}`,
+	beheerSettings: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.settings}`,
 	beheerRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
+	beheerMaterialRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.materialRequests}`,
 });
 
 export const ADMIN_CORE_ROUTES = {

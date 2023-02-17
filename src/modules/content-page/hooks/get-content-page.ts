@@ -4,7 +4,6 @@ import { HTTPError } from 'ky';
 import { startsWith } from 'lodash';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { ApiResponseWrapper } from '@shared/types';
 
 export const useGetContentPageByPath = (
 	path: string | undefined,
@@ -14,7 +13,7 @@ export const useGetContentPageByPath = (
 		ContentPageInfo | null,
 		QUERY_KEYS[]
 	>
-): UseQueryResult<ApiResponseWrapper<ContentPageInfo>> => {
+): UseQueryResult<ContentPageInfo | null> => {
 	return useQuery(
 		[QUERY_KEYS.getContentPage],
 		() => {

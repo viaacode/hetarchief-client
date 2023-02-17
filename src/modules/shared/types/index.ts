@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 
 export * from './api';
 export * from './blade';
-export * from './media';
+export * from './ie-objects';
 export * from './sidebar';
 export * from './utils';
 export * from './visit';

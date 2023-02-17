@@ -12,7 +12,7 @@ import { Folder } from '@account/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/media';
+import { selectFolders } from '@shared/store/ie-objects';
 
 import { ADD_TO_FOLDER_FORM_SCHEMA } from './AddToFolderBlade.const';
 import styles from './AddToFolderBlade.module.scss';

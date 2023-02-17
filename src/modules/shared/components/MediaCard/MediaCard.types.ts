@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { MediaTypes } from '@shared/types';
+import { IeObjectTypes } from '@shared/types';
 
 import { IconName } from '../Icon';
 
@@ -18,7 +18,7 @@ export interface MediaCardProps {
 	publishedAt?: Date;
 	publishedBy?: string;
 	title?: string | ReactNode;
-	type: MediaTypes;
+	type: IeObjectTypes;
 	view?: MediaCardViewMode;
 	hasRelated?: boolean;
 	icon?: IconName;

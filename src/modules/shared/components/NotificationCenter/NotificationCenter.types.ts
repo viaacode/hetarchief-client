@@ -1,10 +1,11 @@
+import type { IPagination } from '@studiohyperdrive/pagination';
 import { UseInfiniteQueryResult, UseMutationResult } from '@tanstack/react-query';
 
 import {
 	MarkAllAsReadResult,
 	Notification,
 } from '@shared/services/notifications-service/notifications.types';
-import { ApiResponseWrapper, DefaultComponentProps } from '@shared/types';
+import { DefaultComponentProps } from '@shared/types';
 
 export interface NotificationCenterProps extends DefaultComponentProps {
 	isOpen: boolean;
@@ -13,7 +14,7 @@ export interface NotificationCenterProps extends DefaultComponentProps {
 	// Pass hook for mocking purposes
 	useGetNotificationsHook: (
 		enabled: boolean
-	) => UseInfiniteQueryResult<ApiResponseWrapper<Notification>>;
+	) => UseInfiniteQueryResult<IPagination<Notification>>;
 	useMarkAllNotificationsAsReadHook: () => UseMutationResult<MarkAllAsReadResult, unknown, void>;
 	useMarkOneNotificationsAsReadHook: () => UseMutationResult<Notification, unknown, string>;
 }
