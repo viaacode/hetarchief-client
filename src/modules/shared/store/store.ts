@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
 import { userSlice } from '@auth/store/user';
-import { mediaSlice } from '@shared/store/media';
+import { IeObjectsSlice } from '@shared/store/ie-objects';
 import { tosSlice } from '@shared/store/tos';
 
 import { historySlice } from './history';
@@ -16,7 +16,7 @@ export const makeStore = () =>
 			[uiSlice.name]: uiSlice.reducer,
 			[userSlice.name]: userSlice.reducer,
 			[tosSlice.name]: tosSlice.reducer,
-			[mediaSlice.name]: mediaSlice.reducer,
+			[IeObjectsSlice.name]: IeObjectsSlice.reducer,
 			[historySlice.name]: historySlice.reducer,
 		},
 		devTools: process.env.DEBUG_TOOLS === 'true',

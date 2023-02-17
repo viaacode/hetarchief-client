@@ -48,7 +48,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders, setFolders } from '@shared/store/media';
+import { selectFolders, setFolders } from '@shared/store/ie-objects';
 import { Breakpoints } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';

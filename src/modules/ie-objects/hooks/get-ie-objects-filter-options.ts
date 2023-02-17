@@ -2,7 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { useDispatch } from 'react-redux';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { setFilterOptions } from '@shared/store/media';
+import { setFilterOptions } from '@shared/store/ie-objects';
 import { GetIeObjectsResponse } from '@shared/types';
 
 import { IeObjectsService } from 'modules/ie-objects/services';

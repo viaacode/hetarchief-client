@@ -3,7 +3,7 @@ import { GetIeObjectsResponse } from '@shared/types';
 
 import { IeObjectSearchAggregations } from 'modules/ie-objects/types';
 
-export interface MediaState {
+export interface IeObjectsState {
 	results?: GetIeObjectsResponse;
 	filterOptions?: IeObjectSearchAggregations;
 	folders?: GetFoldersResponse;

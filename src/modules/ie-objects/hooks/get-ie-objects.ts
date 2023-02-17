@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
-import { setResults } from '@shared/store/media';
+import { setResults } from '@shared/store/ie-objects';
 import {
 	GetIeObjectsResponse,
 	IeObjectsSearchFilter,

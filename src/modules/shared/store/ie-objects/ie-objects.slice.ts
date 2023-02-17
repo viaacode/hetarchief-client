@@ -3,18 +3,18 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GetFoldersResponse } from '@account/types';
 import { GetIeObjectsResponse } from '@shared/types';
 
-import { MediaState } from './media.types';
+import { IeObjectsState } from './ie-objects.types';
 
 import { IeObjectSearchAggregations } from 'modules/ie-objects/types';
 
-const initialState: MediaState = {
+const initialState: IeObjectsState = {
 	results: undefined,
 	filterOptions: undefined,
 	folders: undefined,
 };
 
-export const mediaSlice = createSlice({
-	name: 'media',
+export const IeObjectsSlice = createSlice({
+	name: 'IeObjects',
 	initialState,
 	reducers: {
 		setResults(state, action: PayloadAction<GetIeObjectsResponse>) {
@@ -29,4 +29,4 @@ export const mediaSlice = createSlice({
 	},
 });
 
-export const { setResults, setFilterOptions, setFolders } = mediaSlice.actions;
+export const { setResults, setFilterOptions, setFolders } = IeObjectsSlice.actions;
