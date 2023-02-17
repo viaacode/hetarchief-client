@@ -122,10 +122,6 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const activeFolder = useMemo(() => sidebarLinks.find((link) => link.active), [sidebarLinks]);
 
-	const limitedAccesDate =
-		activeFolder?.usedForLimitedAccessUntil &&
-		new Date(activeFolder.usedForLimitedAccessUntil).toLocaleDateString().replace(/\//g, '.');
-
 	const folderMedia = useGetFolderMedia(
 		activeFolder?.id,
 		filters.search,
@@ -472,7 +468,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													{tText(
 														'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang'
 													)}
-													{' ' + limitedAccesDate}.
+													{` ${formatMediumDate(
+														new Date(
+															activeFolder?.usedForLimitedAccessUntil
+														)
+													)}`}
 												</p>
 											</div>
 										)}

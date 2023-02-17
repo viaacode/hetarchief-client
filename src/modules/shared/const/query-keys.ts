@@ -23,4 +23,5 @@ export enum QUERY_KEYS {
 	getVisits = 'getVisits',
 	getContentPage = 'getContentPage',
 	getContentPartners = 'getContentPartners',
+	getMaterialRequests = 'getMaterialRequests',
 }
