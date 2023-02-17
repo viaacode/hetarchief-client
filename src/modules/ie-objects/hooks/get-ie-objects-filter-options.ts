@@ -5,10 +5,10 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import { setFilterOptions } from '@shared/store/ie-objects';
 import { GetIeObjectsResponse } from '@shared/types';
 
-import { IeObjectsService } from 'modules/ie-objects/services';
-import { IeObjectSearchAggregations } from 'modules/ie-objects/types';
+import { IeObjectsService } from './../services';
+import { IeObjectSearchAggregations } from './../types';
 
-export function useGetMediaFilterOptions(): UseQueryResult<IeObjectSearchAggregations> {
+export const useGetMediaFilterOptions = (): UseQueryResult<IeObjectSearchAggregations> => {
 	const dispatch = useDispatch();
 
 	return useQuery(
@@ -27,4 +27,4 @@ export function useGetMediaFilterOptions(): UseQueryResult<IeObjectSearchAggrega
 			keepPreviousData: true,
 		}
 	);
-}
+};

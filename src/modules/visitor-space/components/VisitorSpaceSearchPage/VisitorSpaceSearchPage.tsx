@@ -11,6 +11,9 @@ import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { selectIsLoggedIn } from '@auth/store/user';
+import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
+import { useGetMediaFilterOptions } from '@ie-objects/hooks/get-ie-objects-filter-options';
+import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,
 	ErrorNoAccess,
@@ -80,10 +83,6 @@ import {
 import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
-
-import { useGetIeObjects } from 'modules/ie-objects/hooks/get-ie-objects';
-import { useGetMediaFilterOptions } from 'modules/ie-objects/hooks/get-ie-objects-filter-options';
-import { isInAFolder } from 'modules/ie-objects/utils';
 
 // ToDo(Silke): check isLogged in voor filter maintainer ding -> enkel leeg gebruiken
 const labelKeys = {

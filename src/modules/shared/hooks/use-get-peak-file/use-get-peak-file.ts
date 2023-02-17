@@ -1,9 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import ky from 'ky-universal';
 
+import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
-
-import { IeObjectsService } from 'modules/ie-objects/services';
 
 export interface JsonWaveformData {
 	version: number;

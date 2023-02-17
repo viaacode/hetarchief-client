@@ -11,9 +11,9 @@ import {
 	SortObject,
 } from '@shared/types';
 
-import { IeObjectsService } from 'modules/ie-objects/services';
+import { IeObjectsService } from './../services';
 
-async function addRelatedCount(response: GetIeObjectsResponse): Promise<GetIeObjectsResponse> {
+const addRelatedCount = async (response: GetIeObjectsResponse): Promise<GetIeObjectsResponse> => {
 	const count = await IeObjectsService.countRelated(
 		response.items.map((item) => item.meemooIdentifier)
 	);
@@ -26,15 +26,15 @@ async function addRelatedCount(response: GetIeObjectsResponse): Promise<GetIeObj
 			related_count: count[item.meemooIdentifier] - 1,
 		})),
 	};
-}
+};
 
-export function useGetIeObjects(
+export const useGetIeObjects = (
 	filters: IeObjectsSearchFilter[],
 	page: number,
 	size: number,
 	sort?: SortObject,
 	enabled = true
-): UseQueryResult<GetIeObjectsResponse> {
+): UseQueryResult<GetIeObjectsResponse> => {
 	const dispatch = useDispatch();
 
 	return useQuery(
@@ -86,4 +86,4 @@ export function useGetIeObjects(
 			enabled,
 		}
 	);
-}
+};

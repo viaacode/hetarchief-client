@@ -16,6 +16,40 @@ import save from 'save-file';
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
+	DynamicActionMenu,
+	MediaObject,
+	Metadata,
+	ObjectPlaceholder,
+	RelatedObject,
+	RelatedObjectsBlade,
+} from '@ie-objects/components';
+import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
+import {
+	FLOWPLAYER_AUDIO_FORMATS,
+	FLOWPLAYER_VIDEO_FORMATS,
+	formatErrorPlaceholder,
+	IMAGE_FORMATS,
+	MEDIA_ACTIONS,
+	METADATA_FIELDS,
+	noLicensePlaceholder,
+	OBJECT_DETAIL_TABS,
+	objectPlaceholder,
+	ticketErrorPlaceholder,
+} from '@ie-objects/const';
+import { useGetIeObjectsExport } from '@ie-objects/hooks/get-ie-objects-export';
+import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
+import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
+import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
+import { IeObjectsService } from '@ie-objects/services';
+import {
+	IeObject,
+	IeObjectLicense,
+	IeObjectRepresentation,
+	MediaActions,
+	ObjectDetailTabs,
+} from '@ie-objects/types';
+import {
 	ErrorNoAccess,
 	ErrorNotFound,
 	Icon,
@@ -58,41 +92,8 @@ import {
 	VisitorSpaceNavigation,
 } from '../../../../modules/visitor-space/components';
 
-import {
-	IeObject,
-	IeObjectLicense,
-	IeObjectRepresentation,
-	MediaActions,
-	ObjectDetailTabs,
-} from '@ie-objects/types';
-import {
-	DynamicActionMenu,
-	MediaObject,
-	Metadata,
-	ObjectPlaceholder,
-	RelatedObject,
-	RelatedObjectsBlade,
-} from 'modules/ie-objects/components';
-import { FragmentSlider } from 'modules/ie-objects/components/FragmentSlider';
-import {
-	FLOWPLAYER_AUDIO_FORMATS,
-	FLOWPLAYER_VIDEO_FORMATS,
-	formatErrorPlaceholder,
-	IMAGE_FORMATS,
-	MEDIA_ACTIONS,
-	METADATA_FIELDS,
-	noLicensePlaceholder,
-	OBJECT_DETAIL_TABS,
-	objectPlaceholder,
-	ticketErrorPlaceholder,
-} from 'modules/ie-objects/const';
-import { useGetIeObjectsExport } from 'modules/ie-objects/hooks/get-ie-objects-export';
-import { useGetIeObjectsInfo } from 'modules/ie-objects/hooks/get-ie-objects-info';
-import { useGetIeObjectsRelated } from 'modules/ie-objects/hooks/get-ie-objects-related';
-import { useGetIeObjectsSimilar } from 'modules/ie-objects/hooks/get-ie-objects-similar';
-import { useGetIeObjectsTicketInfo } from 'modules/ie-objects/hooks/get-ie-objects-ticket-url';
-import { IeObjectsService } from 'modules/ie-objects/services';
-import { isInAFolder, mapKeywordsToTagList } from 'modules/ie-objects/utils';
+import { isInAFolder, mapKeywordsToTagList } from '@ie-objects/utils';
+
 import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
