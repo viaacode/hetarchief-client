@@ -22,7 +22,7 @@ import {
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
 
-import { IeObject, IeObjectSimilar } from 'modules/ie-objects/types';
+import { IeObject, IeObjectSimilar } from '@ie-objects/types';
 
 export class IeObjectsService {
 	public static async getSearchResults(

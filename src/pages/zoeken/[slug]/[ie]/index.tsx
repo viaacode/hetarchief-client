@@ -59,6 +59,12 @@ import {
 } from '../../../../modules/visitor-space/components';
 
 import {
+	IeObject,
+	IeObjectRepresentation,
+	MediaActions,
+	ObjectDetailTabs,
+} from '@ie-objects/types';
+import {
 	DynamicActionMenu,
 	MediaObject,
 	Metadata,
@@ -85,13 +91,6 @@ import { useGetIeObjectsRelated } from 'modules/ie-objects/hooks/get-ie-objects-
 import { useGetIeObjectsSimilar } from 'modules/ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from 'modules/ie-objects/hooks/get-ie-objects-ticket-url';
 import { IeObjectsService } from 'modules/ie-objects/services';
-import {
-	IeObject,
-	IeObjectRepresentation,
-	IeObjectSimilarHit,
-	MediaActions,
-	ObjectDetailTabs,
-} from 'modules/ie-objects/types';
 import { isInAFolder, mapKeywordsToTagList } from 'modules/ie-objects/utils';
 import { VisitorLayout } from 'modules/visitors';
 
@@ -294,7 +293,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [mediaInfo]);
 
 	useEffect(() => {
-		similarData && setSimilar(mapSimilarData(similarData.hits.hits));
+		similarData && setSimilar(mapSimilarData(similarData?.items));
 	}, [similarData]);
 
 	useEffect(() => {
@@ -304,20 +303,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	/**
 	 * Mapping
 	 */
-	const mapSimilarData = (data: IeObjectSimilarHit[]): MediaObject[] => {
-		return data.map((hit) => {
+	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
+		return data.map((ieObject) => {
 			return {
-				type: hit._source.dctermsFormat as MediaTypes,
-				title: hit._source.name,
-				subtitle: `${hit._source.maintainerName ?? ''} ${
-					hit._source.datePublished
-						? `(${formatMediumDate(asDate(hit._source.datePublished))})`
+				type: (ieObject?.dctermsFormat || null) as MediaTypes,
+				title: ieObject?.name || '',
+				subtitle: `${ieObject?.maintainerName ?? ''} ${
+					ieObject?.datePublished
+						? `(${formatMediumDate(asDate(ieObject?.datePublished))})`
 						: ''
 				}`,
-				description: hit._source.description || '',
-				thumbnail: hit._source.thumbnailUrl,
-				id: hit._id,
-				maintainer_id: hit._source.maintainerId || '',
+				description: ieObject?.description || '',
+				thumbnail: ieObject?.thumbnailUrl,
+				id: ieObject?.schemaIdentifier || '',
+				maintainer_id: ieObject?.maintainerId || '',
 			};
 		});
 	};

@@ -1,6 +1,8 @@
-import { ApiResponseWrapper, MediaTypes } from '@shared/types';
+import type { IPagination } from '@studiohyperdrive/pagination';
 
-export type GetFoldersResponse = ApiResponseWrapper<Folder>;
+import { MediaTypes } from '@shared/types';
+
+export type GetFoldersResponse = IPagination<Folder>;
 
 export interface Folder {
 	createdAt: string;

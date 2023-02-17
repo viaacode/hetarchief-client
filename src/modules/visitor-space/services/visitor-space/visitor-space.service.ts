@@ -1,10 +1,10 @@
 import { OrderDirection } from '@meemoo/react-components';
+import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
 import { stringifyUrl } from 'query-string';
 
 import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
-import { ApiResponseWrapper } from '@shared/types/api';
 
 import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '../../types';
 
@@ -25,7 +25,7 @@ export class VisitorSpaceService {
 		size = 20,
 		orderProp?: VisitorSpaceOrderProps,
 		orderDirection?: OrderDirection
-	): Promise<ApiResponseWrapper<VisitorSpaceInfo>> {
+	): Promise<IPagination<VisitorSpaceInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -42,7 +42,7 @@ export class VisitorSpaceService {
 				})
 			)
 			.json();
-		return parsed as ApiResponseWrapper<VisitorSpaceInfo>;
+		return parsed as IPagination<VisitorSpaceInfo>;
 	}
 
 	public static async getAllAccessible(page = 0, size = 20): Promise<VisitorSpaceInfo[]> {
@@ -57,7 +57,7 @@ export class VisitorSpaceService {
 					},
 				})
 			)
-			.json()) as ApiResponseWrapper<VisitorSpaceInfo>;
+			.json()) as IPagination<VisitorSpaceInfo>;
 		return parsed.items;
 	}
 

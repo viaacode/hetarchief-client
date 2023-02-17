@@ -1,3 +1,5 @@
+import type { IPagination } from '@studiohyperdrive/pagination';
+
 // Mapped intellectual entity object
 export interface IeObject {
 	schemaIdentifier: string; // Unique id per object
@@ -108,35 +110,14 @@ export interface IeObjectSearchAggregation<T> {
 	sum_other_doc_count: number;
 }
 
-export interface IeObjectSimilar {
-	hits: IeObjectSimilarHits;
-	timed_out: boolean;
-	took: number;
-	_shards: IeObjectSimilarShards;
-}
+// TODO: change Partial<IeObject> to IeObject with optional fields to prevent unknown values such as id and type
+export type IeObjectSimilar = IPagination<Partial<IeObject>>;
 
 export interface IeObjectSimilarShards {
 	failed: number;
 	skipped: number;
 	successful: number;
 	total: number;
-}
-
-export interface IeObjectSimilarHits {
-	hits: IeObjectSimilarHit[];
-	max_score: number;
-	total: {
-		relation: string;
-		value: number;
-	};
-}
-
-export interface IeObjectSimilarHit {
-	_id: string;
-	_ignored: string[];
-	_index: string;
-	_source: IeObject;
-	_type: string;
 }
 
 export interface IeObjectSearchAggregations {

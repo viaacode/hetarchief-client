@@ -1,7 +1,7 @@
+import type { IPagination } from '@studiohyperdrive/pagination';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const';
-import { ApiResponseWrapper } from '@shared/types';
 
 import { IeObjectsService } from '../services';
 import { IeObject } from '../types';
@@ -11,7 +11,7 @@ export function useGetIeObjectsRelated(
 	esIndex: string,
 	meemooId: string,
 	enabled = true
-): UseQueryResult<ApiResponseWrapper<IeObject>> {
+): UseQueryResult<IPagination<IeObject>> {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsRelated, { id }],
 		() => IeObjectsService.getRelated(id, esIndex, meemooId),

@@ -48,6 +48,7 @@
 		"@meemoo/react-components": "2.23.0",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
+		"@studiohyperdrive/pagination": "1.0.0",
 		"@tanstack/react-query": "4.22.0",
 		"@viaa/avo2-components": "2.3.2",
 		"@viaa/avo2-types": "2.46.6",
