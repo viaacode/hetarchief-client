@@ -200,7 +200,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		);
 
 		setActiveVisitorSpace(visitorSpace);
-		setQuery({ maintainer: activeVisitorSpaceId });
+		setQuery({ maintainer: activeVisitorSpaceId || undefined });
 	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
 
 	/**

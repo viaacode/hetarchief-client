@@ -51,7 +51,7 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 									: hamburgerProps?.closedLabel
 							}
 							variants="text"
-							className="u-color-white u-px-12 u-ml--12 u-line-height-1-25"
+							className="u-color-white u-px-0 u-py-0 u-ml--12 u-line-height-1-25"
 							iconStart={
 								<Icon
 									className={clsx(
