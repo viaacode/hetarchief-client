@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { GetFoldersResponse } from '@account/types';
+import { IeObjectSearchAggregations } from '@ie-objects/types';
 import { GetIeObjectsResponse } from '@shared/types';
 
 import { IeObjectsState } from './ie-objects.types';
-
-import { IeObjectSearchAggregations } from 'modules/ie-objects/types';
 
 const initialState: IeObjectsState = {
 	results: undefined,

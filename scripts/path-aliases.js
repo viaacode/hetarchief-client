@@ -6,7 +6,7 @@ const pathAliases = [
 	'cp',
 	'home',
 	'i18n',
-	'media',
+	'ie-objects',
 	'navigation',
 	'visitor-space',
 	'shared',

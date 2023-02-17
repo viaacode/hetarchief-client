@@ -4,6 +4,8 @@ import { IconNamesLight, IconNamesSolid, IconTypes } from '../Icon';
 
 import Placeholder from './Placeholder';
 
+const parseIconName = (name: IconNamesLight | IconNamesSolid): string => name.split('--')[0];
+
 const props = {
 	title: 'Placeholder title',
 	description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.',
@@ -15,13 +17,13 @@ describe('Components', () => {
 			const iconName = IconNamesLight.Search;
 			const { rerender, queryByText } = render(<Placeholder icon={iconName} {...props} />);
 
-			const icon1 = queryByText(iconName);
+			const icon1 = queryByText(parseIconName(iconName));
 			expect(icon1).toBeInTheDocument();
 
 			const iconObj = { name: IconNamesSolid.Lock } as IconTypes;
 			rerender(<Placeholder icon={iconObj} {...props} />);
 
-			const icon2 = queryByText(iconObj.name);
+			const icon2 = queryByText(parseIconName(iconObj.name));
 			expect(icon2).toBeInTheDocument();
 		});
 
