@@ -1,21 +1,31 @@
-import { OrderDirection, Table } from '@meemoo/react-components';
+import { Dropdown, MenuContent, OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, ReactNode, useMemo } from 'react';
+import { ComponentType, ReactNode, useMemo, useState } from 'react';
 import { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
+	CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY,
+	CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD,
+	CP_MATERIAL_REQUESTS_FILTER_ALL_ID,
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-	MaterialRequestTableColumns,
+	getMaterialRequestTableColumns,
 } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
-import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import {
+	Icon,
+	IconNamesLight,
+	Loading,
+	PaginationBar,
+	SearchBar,
+	sortingIcons,
+} from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -31,6 +41,11 @@ import {
 } from '@material-requests/types';
 
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const [dropdownLabel, setDropdownLabel] = useState<string>(
+		CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[CP_MATERIAL_REQUESTS_FILTER_ALL_ID]
+	);
+
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
@@ -59,6 +74,17 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const onSearch = (value: string | undefined): void => {
 		setFilters({
 			[SEARCH_QUERY_KEY]: value,
+			page: 1,
+		});
+	};
+
+	const onTypeClick = (id: string | number): void => {
+		const showAll = id === CP_MATERIAL_REQUESTS_FILTER_ALL_ID;
+		setDropdownLabel(CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[id]);
+		setIsDropdownOpen(false);
+
+		setFilters({
+			type: showAll ? undefined : `${id}`,
 			page: 1,
 		});
 	};
@@ -101,9 +127,9 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderContent = (): ReactNode => {
 		return (
 			<Table<MaterialRequest>
-				className="u-mt-24 p-cp-material-requests__table"
+				className="u-mt-24 p-material-requests__table"
 				options={{
-					columns: MaterialRequestTableColumns(),
+					columns: getMaterialRequestTableColumns(),
 					data: materialRequests?.items || [],
 					initialState: {
 						pageSize: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -120,19 +146,33 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<CPAdminLayout
-				className="p-cp-material-requests"
+				className="p-material-requests"
 				pageTitle={tText('pages/beheer/materiaalaanvragen/index___materiaalaanvragen')}
 			>
 				<>
 					<div className="l-container">
-						<div className="p-cp-material-requests__header">
-							<div className="p-cp-material-requests__dropdown">
-								<p>TODO: DROPDOWN</p>
-							</div>
+						<div className="p-material-requests__header">
+							<Dropdown
+								variants="filter"
+								flyoutClassName="p-material-requests__dropdown--open"
+								className="p-material-requests__dropdown"
+								label={dropdownLabel}
+								isOpen={isDropdownOpen}
+								onOpen={() => setIsDropdownOpen(true)}
+								onClose={() => setIsDropdownOpen(false)}
+								iconOpen={<Icon name={IconNamesLight.AngleUp} />}
+								iconClosed={<Icon name={IconNamesLight.AngleDown} />}
+							>
+								<MenuContent
+									rootClassName="c-dropdown-menu"
+									onClick={onTypeClick}
+									menuItems={CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY}
+								/>
+							</Dropdown>
 							<SearchBar
 								id="materiaalaanvragen-searchbar"
 								default={filters[SEARCH_QUERY_KEY]}
-								className="p-cp-material-requests__searchbar"
+								className="p-material-requests__searchbar"
 								placeholder={tText('pages/beheer/materiaalaanvragen/index___zoek')}
 								onSearch={onSearch}
 							/>
