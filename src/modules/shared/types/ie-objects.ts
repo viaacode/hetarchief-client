@@ -1,4 +1,4 @@
-export type MediaTypes = 'video' | 'audio' | 'film' | null;
+export type IeObjectTypes = 'video' | 'audio' | 'film' | null;
 
 export enum VisitorSpaceMediaType {
 	All = 'all',
@@ -33,11 +33,6 @@ export enum IeObjectsSearchOperator {
 	IS = 'is',
 	IS_NOT = 'isNot',
 	LTE = 'lte',
-}
-
-export enum License {
-	BEZOEKERTOOL_CONTENT = 'BEZOEKERTOOL-CONTENT',
-	BEZOEKERTOOL_METADATA_ALL = 'BEZOEKERTOOL-METADATA-ALL',
 }
 
 export interface IeObjectsSearchFilter {

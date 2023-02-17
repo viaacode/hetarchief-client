@@ -2,7 +2,7 @@ import { TabProps } from '@meemoo/react-components';
 
 import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/components';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { MediaTypes } from '@shared/types';
+import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
@@ -94,8 +94,8 @@ export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
  * Tabs
  */
 
-const renderMediaTab = (mediaType?: MediaTypes, available = true) => {
-	switch (mediaType) {
+const renderMediaTab = (type?: IeObjectTypes, available = true) => {
+	switch (type) {
 		case 'audio':
 			return {
 				id: ObjectDetailTabs.Media,
@@ -128,7 +128,7 @@ const renderMediaTab = (mediaType?: MediaTypes, available = true) => {
 	}
 };
 
-export const OBJECT_DETAIL_TABS = (mediaType?: MediaTypes, available = true): TabProps[] => [
+export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true): TabProps[] => [
 	{
 		id: ObjectDetailTabs.Metadata,
 		label: tText('modules/ie-objects/const/index___metadata'),
@@ -206,22 +206,23 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] =>
 			title: tText('modules/ie-objects/const/index___alternatieve-naam'),
 			data: mapArrayToMetadataData(mediaInfo.alternativeName),
 		},
-		{
-			title: tText('modules/ie-objects/const/index___archief'),
-			data: mapArrayToMetadataData(mediaInfo.partOfArchive),
-		},
-		{
-			title: tText('modules/ie-objects/const/index___serie'),
-			data: mapArrayToMetadataData(mediaInfo.partOfSeries),
-		},
-		{
-			title: tText('modules/ie-objects/const/index___episode'),
-			data: mapArrayToMetadataData(mediaInfo.partOfEpisode),
-		},
-		{
-			title: tText('modules/ie-objects/const/index___seizoen'),
-			data: mapArrayToMetadataData(mediaInfo.partOfSeason),
-		},
+		// TODO: check if these are still needed
+		// {
+		// 	title: tText('modules/ie-objects/const/index___archief'),
+		// 	data: mapArrayToMetadataData(mediaInfo.partOfArchive),
+		// },
+		// {
+		// 	title: tText('modules/ie-objects/const/index___serie'),
+		// 	data: mapArrayToMetadataData(mediaInfo.partOfSeries),
+		// },
+		// {
+		// 	title: tText('modules/ie-objects/const/index___episode'),
+		// 	data: mapArrayToMetadataData(mediaInfo.partOfEpisode),
+		// },
+		// {
+		// 	title: tText('modules/ie-objects/const/index___seizoen'),
+		// 	data: mapArrayToMetadataData(mediaInfo.partOfSeason),
+		// },
 		{
 			title: tText('modules/ie-objects/const/index___bestandstype'),
 			data: mediaInfo.dctermsFormat,
@@ -267,11 +268,11 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] =>
 		...mapObjectToMetadata(mediaInfo.actor),
 		{
 			title: tText('modules/ie-objects/const/index___locatie-van-de-inhoud'),
-			data: mapArrayToMetadataData(mediaInfo.spatial),
+			data: mapArrayToMetadataData([mediaInfo.spatial]),
 		},
 		{
 			title: tText('modules/ie-objects/const/index___tijdsperiode-van-de-inhoud'),
-			data: mapArrayToMetadataData(mediaInfo.temporal),
+			data: mapArrayToMetadataData([mediaInfo.temporal]),
 		},
 		{
 			title: tText('modules/ie-objects/const/index___taal'),

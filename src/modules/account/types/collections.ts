@@ -1,6 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
-import { MediaTypes } from '@shared/types';
+import { IeObjectTypes } from '@shared/types';
 
 export type GetFoldersResponse = IPagination<Folder>;
 
@@ -12,10 +12,10 @@ export interface Folder {
 	updatedAt: string;
 	userProfileId: string;
 	usedForLimitedAccessUntil: string | null;
-	objects?: Pick<FolderMedia, 'schemaIdentifier'>[];
+	objects?: Pick<FolderIeObject, 'schemaIdentifier'>[];
 }
 
-export interface FolderMedia {
+export interface FolderIeObject {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID: not unique per object
 	meemooLocalId: string;
@@ -24,7 +24,7 @@ export interface FolderMedia {
 	creator?: unknown;
 	description: string;
 	duration: string;
-	format: MediaTypes;
+	format: IeObjectTypes;
 	name: string;
 	numberOfPages?: unknown;
 	termsAvailable: string;

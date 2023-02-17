@@ -1,7 +1,7 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
-import { Folder, FolderMedia } from '@account/types';
+import { Folder, FolderIeObject } from '@account/types';
 import { ApiService } from '@shared/services/api-service';
 
 import {
@@ -16,7 +16,12 @@ class CollectionsService extends ApiService {
 		return parsed as IPagination<Folder>;
 	}
 
-	public async getById(id: string, searchInput = '', page = 0, size = 20): Promise<FolderMedia> {
+	public async getById(
+		id: string,
+		searchInput = '',
+		page = 0,
+		size = 20
+	): Promise<FolderIeObject> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({

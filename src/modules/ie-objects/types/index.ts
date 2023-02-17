@@ -3,46 +3,28 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 // Mapped intellectual entity object
 export interface IeObject {
 	schemaIdentifier: string; // Unique id per object
-	meemooIdentifier: string; // PID (DON'T use this for identification of an object)
-	premisIdentifier: Record<string, string[]>;
-	premisIsPartOf?: string;
-	series?: string[];
-	program?: string[];
-	alternativeName?: string[];
-	partOfArchive: string[];
-	partOfEpisode: string[];
-	partOfSeason: string[];
-	partOfSeries: string[];
+	meemooIdentifier: string; // PID (not unique per object)
+	premisIdentifier: any;
 	maintainerId: string;
 	maintainerName: string;
-	contactInfo: IeObjectContactInfo;
-	copyrightHolder: string;
-	copyrightNotice: string;
-	durationInSeconds: number;
-	numberOfPages: number;
 	datePublished: string;
 	dctermsAvailable: string;
 	name: string;
 	description: string;
 	abstract: string;
-	creator: Record<string, string[]>;
-	actor: Record<string, string[]>;
-	publisher: Record<string, string[]>;
-	spatial: string[];
-	temporal: string[];
+	creator: any;
+	actor?: any;
+	publisher: any;
+	spatial: string;
+	temporal: string;
 	keywords: string[];
 	genre: string[];
 	dctermsFormat: string;
 	dctermsMedium: string;
 	inLanguage: string[];
 	thumbnailUrl: string;
-	embedUrl: string;
-	alternateName: string;
 	duration: string;
-	license: string[];
-	meemooMediaObjectId: string;
 	dateCreated: string;
-	dateCreatedLowerBound: string;
 	ebucoreObjectType: string;
 	meemoofilmColor: boolean;
 	meemoofilmBase: string;
@@ -51,12 +33,59 @@ export interface IeObject {
 	meemooOriginalCp: string;
 	meemooDescriptionProgramme: string;
 	meemooDescriptionCast: string;
-	representations: IeObjectRepresentation[];
+	licenses: IeObjectLicense[];
+	series?: string[];
+	accessThrough?: IeObjectAccessThrough[];
+	program?: string[];
+	alternativeName?: string[];
+	premisIsPartOf?: string;
+	contactInfo?: IeObjectContactInfo;
+	copyrightHolder?: string;
+	copyrightNotice?: string;
+	durationInSeconds?: number;
+	numberOfPages?: number;
+	meemooMediaObjectId?: string;
+	sector?: IeObjectSector;
+	representations?: IeObjectRepresentation[];
+	dateCreatedLowerBound?: string;
+	ebucoreIsMediaFragmentOf?: string;
+	meemoofilmCaption?: string;
+	meemoofilmCaptionLanguage?: string;
+	ebucoreHasMediaFragmentOf?: boolean;
+	serviceProvider?: any; // type unknown
+	transcript?: string;
+	caption?: string;
+	categorie?: any; // type unknown
+}
+
+export enum IeObjectAccessThrough {
+	PUBLIC_INFO = 'PUBLIC_INFO',
+	VISITOR_SPACE_FULL = 'VISITOR_SPACE_FULL',
+	VISITOR_SPACE_FOLDERS = 'VISITOR_SPACE_FOLDERS',
+	SECTOR = 'SECTOR',
+}
+
+export enum IeObjectLicense {
+	PUBLIEK_METADATA_LTD = 'VIAA-PUBLIEK-METADATA-LTD',
+	PUBLIEK_METADATA_ALL = 'VIAA-PUBLIEK-METADATA-ALL',
+	BEZOEKERTOOL_METADATA_ALL = 'BEZOEKERTOOL-METADATA-ALL',
+	BEZOEKERTOOL_CONTENT = 'BEZOEKERTOOL-CONTENT',
+	INTRA_CP_METADATA_ALL = 'VIAA-INTRA_CP-METADATA-ALL',
+	INTRA_CP_METADATA_LTD = 'VIAA-INTRA_CP-METADATA-LTD',
+	INTRA_CP_CONTENT = 'VIAA-INTRA_CP-CONTENT',
+}
+
+export enum IeObjectSector {
+	CULTURE = 'Cultuur',
+	GOVERNMENT = 'Overheid',
+	PUBLIC = 'Publieke Omroep',
+	REGIONAL = 'Regionale Omroep',
+	RURAL = 'Landelijke Private Omroep',
 }
 
 export interface IeObjectContactInfo {
-	email: string;
-	telephone: string;
+	email?: string | null;
+	telephone?: string | null;
 	address: IeObjectAddress;
 }
 

@@ -42,7 +42,7 @@ import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, License, MediaTypes, VisitorSpaceMediaType } from '@shared/types';
+import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -60,6 +60,7 @@ import {
 
 import {
 	IeObject,
+	IeObjectLicense,
 	IeObjectRepresentation,
 	MediaActions,
 	ObjectDetailTabs,
@@ -118,7 +119,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [metadataColumns, setMetadataColumns] = useState<number>(1);
-	const [mediaType, setMediaType] = useState<MediaTypes>(null);
+	const [mediaType, setMediaType] = useState<IeObjectTypes>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [currentRepresentation, setCurrentRepresentation] = useState<
@@ -217,7 +218,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		(mediaInfoError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
-		!hasMedia && !mediaInfo?.license?.includes(License.BEZOEKERTOOL_CONTENT);
+		!hasMedia && !mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -267,7 +268,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [activeTab, isMobile]);
 
 	useEffect(() => {
-		setMediaType(mediaInfo?.dctermsFormat as MediaTypes);
+		setMediaType(mediaInfo?.dctermsFormat as IeObjectTypes);
 
 		// Filter out peak files if type === video
 		if (mediaInfo?.dctermsFormat === VisitorSpaceMediaType.Video) {
@@ -306,7 +307,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
 		return data.map((ieObject) => {
 			return {
-				type: (ieObject?.dctermsFormat || null) as MediaTypes,
+				type: (ieObject?.dctermsFormat || null) as IeObjectTypes,
 				title: ieObject?.name || '',
 				subtitle: `${ieObject?.maintainerName ?? ''} ${
 					ieObject?.datePublished
@@ -324,7 +325,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
 		return data.map((item) => {
 			return {
-				type: item.dctermsFormat as MediaTypes,
+				type: item.dctermsFormat as IeObjectTypes,
 				title: item.name,
 				subtitle: `${item.maintainerName ?? ''} ${
 					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''

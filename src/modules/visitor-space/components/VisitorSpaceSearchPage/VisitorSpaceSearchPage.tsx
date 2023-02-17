@@ -43,7 +43,7 @@ import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
-	MediaTypes,
+	IeObjectTypes,
 	SortObject,
 	Visit,
 	VisitorSpaceMediaType,
@@ -533,7 +533,7 @@ const VisitorSpaceSearchPage: FC = () => {
 						title: item.name,
 						publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
 						publishedBy: item.maintainerName || '',
-						type: item.dctermsFormat as MediaTypes,
+						type: item.dctermsFormat as IeObjectTypes,
 						preview: item.thumbnailUrl || undefined,
 						name: item.name,
 						hasRelated: (item.related_count || 0) > 0,
