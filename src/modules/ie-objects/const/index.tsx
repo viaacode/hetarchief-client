@@ -1,20 +1,19 @@
 import { TabProps } from '@meemoo/react-components';
 
+import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@ie-objects/components';
+import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
+import { IeObject, MediaActions, ObjectDetailTabs } from '@ie-objects/types';
+import {
+	mapArrayToMetadataData,
+	mapBooleanToMetadataData,
+	mapObjectToMetadata,
+} from '@ie-objects/utils';
 import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/components';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
-
-import { ActionItem, MetadataItem, ObjectPlaceholderProps } from 'modules/ie-objects/components';
-import { objectPlaceholderMock } from 'modules/ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
-import { IeObject, MediaActions, ObjectDetailTabs } from 'modules/ie-objects/types';
-import {
-	mapArrayToMetadataData,
-	mapBooleanToMetadataData,
-	mapObjectToMetadata,
-} from 'modules/ie-objects/utils';
 
 /**
  * Render media

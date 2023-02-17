@@ -1,6 +1,5 @@
+import { IeObjectRepresentation } from '@ie-objects/types';
 import { DefaultComponentProps } from '@shared/types';
-
-import { IeObjectRepresentation } from 'modules/ie-objects/types';
 
 export interface FragmentSliderProps extends DefaultComponentProps {
 	thumbnail?: string;

@@ -4,10 +4,9 @@ import router from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { ReactNode } from 'react';
 
+import { MetadataItem } from '@ie-objects/components';
 import { capitalise } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-
-import { MetadataItem } from 'modules/ie-objects/components';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	return keywords.map((item) => {

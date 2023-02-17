@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { FC, useEffect, useRef, useState } from 'react';
 
+import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from '@ie-objects/const';
+import { IeObjectRepresentation } from '@ie-objects/types';
 import { Icon, IconNamesLight } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -11,9 +13,6 @@ import { ObjectPlaceholder } from '../ObjectPlaceholder';
 
 import styles from './FragmentSlider.module.scss';
 import { FragmentSliderProps } from './FragmentSlider.types';
-
-import { FLOWPLAYER_FORMATS, IMAGE_FORMATS } from 'modules/ie-objects/const';
-import { IeObjectRepresentation } from 'modules/ie-objects/types';
 
 const Metadata: FC<FragmentSliderProps> = ({
 	className,
