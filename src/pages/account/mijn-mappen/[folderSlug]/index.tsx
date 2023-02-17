@@ -25,7 +25,7 @@ import { useGetFolderMedia } from '@account/hooks/get-folder-media';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { AccountLayout } from '@account/layouts';
 import { foldersService } from '@account/services/folders';
-import { Folder, FolderMedia } from '@account/types';
+import { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
@@ -48,7 +48,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders, setFolders } from '@shared/store/media';
+import { selectFolders, setFolders } from '@shared/store/ie-objects';
 import { Breakpoints } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
@@ -341,7 +341,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
-	const renderTitle = (item: FolderMedia): ReactNode => (
+	const renderTitle = (item: FolderIeObject): ReactNode => (
 		<Link href={`/${item.visitorSpaceSlug}/${item.schemaIdentifier}`}>
 			<a className="u-text-no-decoration" aria-label={item.schemaIdentifier}>
 				<b>
@@ -355,7 +355,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		</Link>
 	);
 
-	const renderDescription = (item: FolderMedia): ReactNode => {
+	const renderDescription = (item: FolderIeObject): ReactNode => {
 		const items: { label: string | ReactNode; value: ReactNode }[] = [
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___aanbieder'),

@@ -21,7 +21,7 @@ export function useGetVisitorSpace(
 	>
 ): UseQueryResult<VisitorSpaceInfo | null> {
 	return useQuery(
-		[QUERY_KEYS.getMediaInfo, { slug }],
+		[QUERY_KEYS.getIeObjectsInfo, { slug }],
 		() => VisitorSpaceService.getBySlug(slug as string, ignoreAuthError),
 		options
 	);

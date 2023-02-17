@@ -71,6 +71,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		}),
 		id: 'bezoekersruimtes',
 		activeDesktop: true,
+		path: '',
 		children: [
 			{
 				node: renderLink('Alle bezoekersruimtes', '/', {
@@ -78,6 +79,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				}),
 				id: 'alle bezoekersruimtes',
 				isDivider: 'md',
+				path: '',
 			},
 			{
 				node: renderLink('VRT', `/OR-vrt123`, {
@@ -96,6 +98,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					className: dropdownCls(),
 				}),
 				id: 'vrt',
+				path: '',
 			},
 			{
 				node: renderLink('Huis van Alijn', `/OR-huisvanalijn456`, {
@@ -113,6 +116,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 					),
 					className: dropdownCls(),
 				}),
+				path: '',
 				id: 'huisvanalijn',
 			},
 		],
@@ -125,6 +129,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 				styles['c-navigation__link--dropdown']
 			),
 		}),
+		path: '',
 		id: 'over bezoekersruimtes',
 	},
 	{
@@ -136,6 +141,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			),
 		}),
 		id: 'vragen',
+		path: '',
 	},
 	{
 		node: renderLink('Beheer', '', {
@@ -147,24 +153,28 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		}),
 		id: 'nav__beheer',
 		isDivider: 'md',
+		path: '',
 		children: [
 			{
 				node: renderLink('Aanvragen', '/beheer/aanvragen', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--aanvragen',
+				path: '',
 			},
 			{
 				node: renderLink('Bezoekers', '/beheer/bezoekers', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--bezoekers',
+				path: '',
 			},
 			{
 				node: renderLink('Instellingen', '/beheer/instellingen', {
 					className: dropdownCls(),
 				}),
 				id: 'nav__beheer--instellingen',
+				path: '',
 			},
 		],
 	},
@@ -174,24 +184,28 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 	{
 		node: renderLink('Inloggen of registreren', '#', { className: linkCls('u-text-right') }),
 		id: 'auth log in',
+		path: '',
 		children: [
 			{
 				node: renderLink('Mijn profiel', '#', {
 					className: dropdownCls(),
 				}),
 				id: 'profiel',
+				path: '',
 			},
 			{
 				node: renderLink('Mijn mappen', '#', {
 					className: dropdownCls(),
 				}),
 				id: 'mappen',
+				path: '',
 			},
 			{
 				node: renderLink('Mijn historiek', '#', {
 					className: dropdownCls(),
 				}),
 				id: 'historiek',
+				path: '',
 			},
 			{
 				node: renderLink('Log uit', '#', {
@@ -208,6 +222,8 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 					),
 				}),
 				id: 'auth log uit',
+				path: '',
+
 				isDivider: true,
 			},
 		],

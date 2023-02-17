@@ -7,7 +7,7 @@ import Highlighter from 'react-highlight-words';
 
 import { DropdownMenu, IconNamesLight } from '@shared/components';
 import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
-import { MediaTypes } from '@shared/types';
+import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
 import Icon from '../Icon/Icon';
@@ -93,7 +93,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderNoContentIcon = () => (
 		<Icon
 			className={clsx(styles['c-media-card__no-content'], styles['c-media-card__icon'])}
-			name={TYPE_TO_NO_ICON_MAP[type as Exclude<MediaTypes, null>]}
+			name={TYPE_TO_NO_ICON_MAP[type as Exclude<IeObjectTypes, null>]}
 		/>
 	);
 

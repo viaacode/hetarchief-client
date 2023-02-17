@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
 import { DecodedValueMap } from 'use-query-params';
 
-import { DefaultComponentProps, MediaTypes, Operator } from '@shared/types';
+import { DefaultComponentProps, IeObjectTypes, Operator } from '@shared/types';
 
 import { VISITOR_SPACE_QUERY_PARAM_CONFIG } from '../const';
 
@@ -104,7 +104,7 @@ export enum VisitorSpaceStatus {
 export type MediaTypeOptions = Array<
 	SelectOption & {
 		label: string;
-		value: MediaTypes;
+		value: IeObjectTypes;
 	}
 >;
 

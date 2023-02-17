@@ -1,7 +1,7 @@
+import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { ApiResponseWrapper } from '@shared/types';
 
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import { GetMaterialRequestsProps } from './material-requests.service.types';
@@ -19,7 +19,7 @@ export class MaterialRequestsService {
 		orderProp,
 		orderDirection,
 		isPersonal = false,
-	}: GetMaterialRequestsProps): Promise<ApiResponseWrapper<MaterialRequest>> {
+	}: GetMaterialRequestsProps): Promise<IPagination<MaterialRequest>> {
 		const result = await ApiService.getApi()
 			.get(
 				stringifyUrl({
@@ -40,6 +40,6 @@ export class MaterialRequestsService {
 			)
 			.json();
 
-		return result as ApiResponseWrapper<MaterialRequest>;
+		return result as IPagination<MaterialRequest>;
 	}
 }

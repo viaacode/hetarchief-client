@@ -1,8 +1,8 @@
 import { OrderDirection } from '@meemoo/react-components';
+import type { IPagination } from '@studiohyperdrive/pagination';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import { ApiResponseWrapper } from '@shared/types/api';
 
 import { VisitorSpaceService } from '../services';
 import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '../types';
@@ -14,7 +14,7 @@ export function useGetVisitorSpaces(
 	size: number,
 	orderProp?: VisitorSpaceOrderProps,
 	orderDirection?: OrderDirection
-): UseQueryResult<ApiResponseWrapper<VisitorSpaceInfo>> {
+): UseQueryResult<IPagination<VisitorSpaceInfo>> {
 	return useQuery(
 		[
 			QUERY_KEYS.getVisitorSpaces,

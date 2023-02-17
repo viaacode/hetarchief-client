@@ -120,31 +120,44 @@ const AppLayout: FC = ({ children }) => {
 			if (!canManageAccount) {
 				return [];
 			}
-			return NAV_ITEMS_RIGHT_LOGGED_IN({
-				hasUnreadNotifications,
-				notificationsOpen: showNotificationsCenter,
-				userName,
-				onLogOutClick,
-				setNotificationsOpen,
-			});
+
+			return NAV_ITEMS_RIGHT_LOGGED_IN(
+				asPath,
+				navigationItems || {},
+				accessibleVisitorSpaces || [],
+				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+				{
+					hasUnreadNotifications,
+					notificationsOpen: showNotificationsCenter,
+					userName,
+					onLogOutClick,
+					setNotificationsOpen,
+				}
+			);
 		}
+
 		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
-		hasUnreadNotifications,
 		isLoggedIn,
-		userName,
-		showNotificationsCenter,
 		onLoginRegisterClick,
+		canManageAccount,
+		asPath,
+		navigationItems,
+		accessibleVisitorSpaces,
+		showLinkedSpaceAsHomepage,
+		linkedSpaceSlug,
+		hasUnreadNotifications,
+		showNotificationsCenter,
+		userName,
 		onLogOutClick,
 		setNotificationsOpen,
-		canManageAccount,
 	]);
 
 	const leftNavItems: NavigationItem[] = useMemo(() => {
 		const dynamicItems = getNavigationItemsLeft(
 			asPath,
 			accessibleVisitorSpaces || [],
-			navigationItems?.[NavigationPlacement.HeaderLeft] || [],
+			navigationItems || {},
 			user?.permissions || [],
 			showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
 			isMobile
@@ -159,6 +172,7 @@ const AppLayout: FC = ({ children }) => {
 					/>
 				),
 				id: 'logo',
+				path: '/',
 				activeDesktop: false,
 				activeMobile: false,
 				isDivider: false,

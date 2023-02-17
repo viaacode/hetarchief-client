@@ -10,7 +10,6 @@ $c-navigation-divider-size: 0.1rem;
 $c-navigation-item-spacing: $spacer-md;
 $c-navigation-item-spacing-lg: $spacer-1xl;
 $c-navigation-dropdown-item-spacer: 1.2rem;
-$c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65px currentColor;
 
 @mixin navigation-link-border-decoration($_offset1: 0, $_offset2: 0) {
 	$offset1-border: if($_offset1 == 0, 0, calc(#{$_offset1} + 0.1rem));
@@ -295,6 +294,25 @@ $c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65
 			outline-offset: 0.2rem;
 		}
 	}
+
+	&--icon {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+
+		span {
+			font-size: $font-size-md;
+			color: $teal;
+		}
+
+		&-start span {
+			margin-right: $spacer-xxs;
+		}
+
+		&-end span {
+			margin-left: $spacer-xxs;
+		}
+	}
 }
 
 .c-navigation__item {
@@ -312,7 +330,7 @@ $c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65
 	&:not(&--active):hover {
 		.c-navigation__link,
 		.c-navigation__link + span {
-			text-shadow: $c-navigation-active;
+			font-weight: 800;
 			color: color.adjust($white, $alpha: -0.3);
 			transition: color $animate-md-in;
 		}
@@ -337,7 +355,7 @@ $c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65
 			content: "";
 			position: absolute;
 			top: 50%;
-			left: -$c-navigation-item-spacing;
+			left: -$c-navigation-item-spacing / 2;
 			width: 0.1rem;
 			height: 4.4rem;
 			background-color: $c-navigation-list-divider-color;
@@ -347,7 +365,7 @@ $c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65
 
 	&--active {
 		z-index: get-z-layer("nav-dropdown");
-		text-shadow: $c-navigation-active;
+		font-weight: 800;
 
 		@include respond-to("md") {
 			> :global(.c-dropdown-menu__item) {
@@ -472,29 +490,20 @@ $c-navigation-active: 0 0 0.65px currentColor, 0 0 0.65px currentColor, 0 0 0.65
 	}
 
 	&-logged-out {
-		grid-template-rows: repeat(2, 1fr);
+		grid-template-rows: 1fr repeat(2, 3.25rem) 1fr;
 		grid-template-columns: repeat(auto, 1fr);
 		column-gap: $spacer-lg;
 
 		.c-navigation__section--left {
-			grid-row: 1;
-			justify-self: end;
+			grid-row: 2;
+			place-content: start end;
+			width: 100%;
 		}
 
 		.c-navigation__section--right {
-			grid-row: 2;
+			grid-row: 3;
 			grid-column: 2;
-			justify-self: end;
-
-			.c-button {
-				padding: 0;
-
-				&__content {
-					white-space: unset;
-					text-align: right;
-					display: block;
-				}
-			}
+			place-self: end;
 		}
 	}
 }

@@ -27,8 +27,13 @@ export interface NavigationItemNodeProps {
 export interface NavigationItem {
 	node: ReactNode | ((nodeProps: NavigationItemNodeProps) => ReactNode);
 	id: string;
+	path: string;
 	activeDesktop?: boolean;
 	activeMobile?: boolean;
 	isDivider?: boolean | 'md';
 	children?: NavigationItem[];
+}
+
+export enum NAVIGATION_DROPDOOWN {
+	VISITOR_SPACES = '<BOEZOEKERRUIMTES_DROPDOWN>',
 }
