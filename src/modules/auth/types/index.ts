@@ -18,4 +18,5 @@ export interface User {
 	maintainerId: string | null;
 	visitorSpaceSlug?: string;
 	permissions: Permission[];
+	isKeyUser: boolean;
 }
