@@ -1,4 +1,4 @@
-@use "../../abstracts" as *;
+@use "../../../../styles/abstracts/" as *;
 
 $component: "p-account-my-material-requests";
 
@@ -34,7 +34,13 @@ $component: "p-account-my-material-requests";
 
 	&__material {
 		padding: $spacer-md $spacer-lg;
-		border-bottom: 2px solid $platinum;
+		border-bottom: 0.2rem solid $platinum;
+
+		&:focus,
+		&:focus-within {
+			outline: 0.2rem solid $teal;
+			outline-offset: -0.2rem;
+		}
 
 		&-link {
 			text-decoration: none;
@@ -61,12 +67,17 @@ $component: "p-account-my-material-requests";
 	&__content {
 		padding: $spacer-lg;
 
+		dl {
+			margin-top: 0;
+		}
+
 		&-label {
 			font-weight: 900;
 			margin-bottom: $spacer-xs;
 		}
 
 		&-value {
+			margin-left: 0;
 			margin-bottom: $spacer-md;
 		}
 	}
@@ -80,7 +91,7 @@ $component: "p-account-my-material-requests";
 		color: $white;
 
 		&:hover {
-			border: 1px solid $zinc;
+			border: 0.1rem solid $zinc;
 		}
 	}
 }

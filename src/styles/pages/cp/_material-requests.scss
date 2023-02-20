@@ -23,6 +23,8 @@ $page: "p-material-requests";
 	}
 
 	&__table {
+		cursor: pointer;
+
 		tr td {
 			padding-top: 2rem;
 			padding-bottom: 2rem;

@@ -16,29 +16,14 @@ export interface MaterialRequest {
 	updatedAt: string;
 }
 
-export interface MaterialRequestDetails {
-	createdAt: string;
-	id: string;
-	isPending: boolean;
-	maintainerId: string;
+export interface MaterialRequestDetail extends MaterialRequest {
 	maintainerLogo: string;
-	maintainerName: string;
-	maintainerSlug: string;
 	meemooIdentifier: string;
-	objectSchemaIdentifier: string;
-	objectSchemaName: string;
 	organisation?: string;
-	profileId: string;
-	reason: string;
-	requesterFullName: string;
-	requesterId: string;
-	requesterMail: string;
 	requesterUserGroupDescription: string;
 	requesterUserGroupId: string;
 	requesterUserGroupLabel: string;
 	requesterUserGroupName: string;
-	type: string;
-	updatedAt: string;
 }
 
 export enum MaterialRequestType {

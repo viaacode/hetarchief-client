@@ -22,7 +22,8 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import MaterialRequestDetailBlade from '@material-requests/components/MaterialRequestDetailBlade';
+import MaterialRequestDetailBlade from '../../../modules/account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
+
 import {
 	useGetMaterialRequestById,
 	useGetMaterialRequests,
@@ -35,8 +36,10 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
-	const { data: currentMaterialRequestDetails, isFetching: isLoading } =
-		useGetMaterialRequestById(currentMaterialRequest?.id || '');
+
+	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
+		currentMaterialRequest?.id || ''
+	);
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		isPersonal: true,
 		size: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -104,7 +107,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<MaterialRequestDetailBlade
 				isOpen={!isLoading && isDetailBladeOpen}
 				onClose={() => setIsDetailBladeOpen(false)}
-				currentMaterialRequestDetails={currentMaterialRequestDetails}
+				currentMaterialRequestDetail={currentMaterialRequestDetail}
 			/>
 		);
 	};
@@ -143,7 +146,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 					{isFetching && <Loading owner="Material requests overview" />}
 					{noData && renderEmptyMessage()}
 					{!noData && !isFetching && renderContent()}
-					{renderDetailBlade()}
+					{currentMaterialRequest?.id && renderDetailBlade()}
 				</div>
 			</AccountLayout>
 		);

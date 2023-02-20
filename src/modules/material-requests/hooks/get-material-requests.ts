@@ -4,7 +4,7 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import { ApiResponseWrapper } from '@shared/types/api';
 
 import { GetMaterialRequestsProps, MaterialRequestsService } from '../services';
-import { MaterialRequest, MaterialRequestDetails } from '../types';
+import { MaterialRequest, MaterialRequestDetail } from '../types';
 
 export const useGetMaterialRequests = (
 	props: GetMaterialRequestsProps
@@ -13,7 +13,7 @@ export const useGetMaterialRequests = (
 		keepPreviousData: true,
 	});
 
-export const useGetMaterialRequestById = (id: string): UseQueryResult<MaterialRequestDetails> =>
+export const useGetMaterialRequestById = (id: string): UseQueryResult<MaterialRequestDetail> =>
 	useQuery([QUERY_KEYS.getMaterialRequestById, id], () => MaterialRequestsService.getById(id), {
 		keepPreviousData: true,
 	});
