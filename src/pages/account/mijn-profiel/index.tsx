@@ -7,7 +7,7 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Permission } from '@account/const';
+import { Group, Permission, PERMISSION_TRANSLATIONS_BY_GROUP } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
@@ -111,6 +111,33 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 									)}
 									icon={<Icon name={IconNamesLight.Exclamation} />}
 								/>
+							)}
+						</section>
+					</Box>
+					<Box className="u-mt-32">
+						<section className="u-p-24 p-account-my-profile__general-info">
+							<header className="p-account-my-profile__general-info-header u-mb-24">
+								<h6>
+									{tText('pages/account/mijn-profiel/index___gebruikersrechten')}
+								</h6>
+							</header>
+							{user?.groupName && (
+								<div>
+									<p>
+										{
+											PERMISSION_TRANSLATIONS_BY_GROUP[
+												user.groupName as Group
+											].name
+										}
+									</p>
+									<p className="u-color-neutral u-mt-8">
+										{
+											PERMISSION_TRANSLATIONS_BY_GROUP[
+												user.groupName as Group
+											].description
+										}
+									</p>
+								</div>
 							)}
 						</section>
 					</Box>
