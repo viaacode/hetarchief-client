@@ -9,6 +9,7 @@ const pathAliases = [
 	'ie-objects',
 	'navigation',
 	'visitor-space',
+	'material-requests',
 	'shared',
 	'visits',
 ];
