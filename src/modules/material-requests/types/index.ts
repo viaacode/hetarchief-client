@@ -6,6 +6,7 @@ export interface MaterialRequest {
 	maintainerName: string;
 	maintainerSlug: string;
 	objectSchemaIdentifier: string;
+	objectSchemaName: string;
 	profileId: string;
 	reason: string;
 	requesterFullName: string;
@@ -26,6 +27,8 @@ export enum MaterialRequestKeys {
 	type = 'type',
 	name = 'requesterFullName',
 	email = 'requesterMail',
+	maintainer = 'maintainerName',
+	material = 'objectSchemaName',
 }
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };

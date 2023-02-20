@@ -90,7 +90,7 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 		Header: tText('modules/cp/const/material-requests___type'),
 		accessor: MaterialRequestKeys.type,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
-			<span className="u-color-neutral p-cp-material-requests__table-type">
+			<span className="u-color-neutral p-material-requests__table-type">
 				{MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[original.type]}
 			</span>
 		),
