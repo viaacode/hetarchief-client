@@ -1,7 +1,13 @@
 import clsx from 'clsx';
 import { FC, useState } from 'react';
 
-import { Icon, IconNamesLight, ListNavigation, Sidebar } from '@shared/components';
+import {
+	Icon,
+	IconNamesLight,
+	ListNavigation,
+	ListNavigationType,
+	Sidebar,
+} from '@shared/components';
 
 import styles from './SidebarLayout.module.scss';
 import { SidebarLayoutProps } from './SidebarLayout.types';
@@ -9,7 +15,8 @@ import { SidebarLayoutProps } from './SidebarLayout.types';
 const SidebarLayout: FC<SidebarLayoutProps> = ({
 	children,
 	className,
-	sidebarLinks,
+	sidebarLinksTop = [],
+	sidebarLinksBottom = [],
 	sidebarTitle,
 	color = 'white',
 	responsiveTo = undefined,
@@ -35,7 +42,17 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 					className={styles['l-sidebar__sidebar']}
 					title={sidebarTitle}
 				>
-					<ListNavigation color={color} listItems={sidebarLinks} />
+					<ListNavigation
+						className={styles['l-sidebar__sidebar--top']}
+						color={color}
+						listItems={sidebarLinksTop}
+					/>
+					<ListNavigation
+						className={styles['l-sidebar__sidebar--bottom']}
+						color={color}
+						listItems={sidebarLinksBottom}
+						type={ListNavigationType.Simple}
+					/>
 				</Sidebar>
 			</div>
 
