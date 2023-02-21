@@ -99,7 +99,9 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		Cell: ({ row }: VisitRow) => {
 			return (
 				<span className="u-color-neutral">
-					{CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS[row.original.accessType]}
+					{row.original.status === VisitStatus.PENDING
+						? '-'
+						: CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS[row.original.accessType]}
 				</span>
 			);
 		},
