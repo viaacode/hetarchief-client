@@ -80,9 +80,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 					setFilters({ [VISIT_REQUEST_ID_QUERY_KEY]: undefined });
 					setSelectedNotOnCurrentPage(undefined);
 					toastService.notify({
-						title: tHtml('pages/beheer/aanvragen/index___error'),
+						title: tHtml('pages/beheer/toegangsaanvragen/index___error'),
 						description: tHtml(
-							'pages/beheer/aanvragen/index___deze-aanvraag-bestaat-niet'
+							'pages/beheer/toegangsaanvragen/index___deze-aanvraag-bestaat-niet'
 						),
 					});
 				});
@@ -130,9 +130,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<Visit>) => {
 		if (!canUpdateVisitRequests) {
 			toastService.notify({
-				title: tHtml('pages/beheer/aanvragen/index___geen-rechten'),
+				title: tHtml('pages/beheer/toegangsaanvragen/index___geen-rechten'),
 				description: tHtml(
-					'pages/beheer/aanvragen/index___je-hebt-geen-rechten-om-bezoekaanvragen-te-bewerken'
+					'pages/beheer/toegangsaanvragen/index___je-hebt-geen-rechten-om-bezoekaanvragen-te-bewerken'
 				),
 			});
 			return;
@@ -146,17 +146,25 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const renderEmptyMessage = (): string | ReactNode => {
 		switch (filters.status) {
 			case VisitStatus.APPROVED:
-				return tHtml('pages/beheer/aanvragen/index___er-zijn-geen-goedgekeurde-aanvragen');
+				return tHtml(
+					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-goedgekeurde-aanvragen'
+				);
 
 			case VisitStatus.DENIED:
-				return tHtml('pages/beheer/aanvragen/index___er-zijn-geen-geweigerde-aanvragen');
+				return tHtml(
+					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-geweigerde-aanvragen'
+				);
 
 			case VisitStatus.CANCELLED_BY_VISITOR:
-				return tHtml('pages/beheer/aanvragen/index___er-zijn-geen-geannuleerde-aanvragen');
+				return tHtml(
+					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-geannuleerde-aanvragen'
+				);
 
 			case VisitStatus.PENDING:
 			default:
-				return tHtml('pages/beheer/aanvragen/index___er-zijn-geen-openstaande-aanvragen');
+				return tHtml(
+					'pages/beheer/toegangsaanvragen/index___er-zijn-geen-openstaande-aanvragen'
+				);
 		}
 	};
 
@@ -215,7 +223,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						id={globalLabelKeys.adminLayout.title}
 						default={filters[SEARCH_QUERY_KEY]}
 						className="p-cp-requests__search"
-						placeholder={tText('pages/beheer/aanvragen/index___zoek')}
+						placeholder={tText('pages/beheer/toegangsaanvragen/index___zoek')}
 						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
 					/>
 
