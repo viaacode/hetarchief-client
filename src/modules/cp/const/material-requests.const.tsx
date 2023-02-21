@@ -1,12 +1,6 @@
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { CopyButton } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
-import { SortDirectionParam } from '@shared/helpers';
-import { tText } from '@shared/helpers/translate';
-import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
-
 import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import {
 	MaterialRequest,
@@ -14,6 +8,11 @@ import {
 	MaterialRequestRow,
 	MaterialRequestType,
 } from '@material-requests/types';
+import { CopyButton } from '@shared/components';
+import { SEARCH_QUERY_KEY } from '@shared/const';
+import { SortDirectionParam } from '@shared/helpers';
+import { tText } from '@shared/helpers/translate';
+import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
 export const CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
