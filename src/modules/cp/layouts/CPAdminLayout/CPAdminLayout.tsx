@@ -1,10 +1,16 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 import { FC, useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { CP_ADMIN_NAVIGATION_LINKS } from '@cp/const';
+import { selectUser } from '@auth/store/user';
+import {
+	CP_ADMIN_NAVIGATION_BOTTOM_LINKS,
+	CP_ADMIN_NAVIGATION_TOP_LINKS,
+	CP_ADMIN_SEARCH_VISITOR_SPACE_KEY,
+} from '@cp/const';
 import { ListNavigationItem } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { globalLabelKeys } from '@shared/const';
@@ -18,10 +24,13 @@ import { CPAdminLayoutProps } from './CPAdminLayout.types';
 const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
+	const { tHtml } = useTranslation();
 
-	const sidebarLinks: ListNavigationItem[] = useMemo(
+	const user = useSelector(selectUser);
+
+	const sidebarLinksTop: ListNavigationItem[] = useMemo(
 		() =>
-			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href }) => ({
+			CP_ADMIN_NAVIGATION_TOP_LINKS().map(({ id, label, href }) => ({
 				id,
 				node: ({ linkClassName }) => (
 					<Link href={href}>
@@ -35,7 +44,33 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 		[asPath]
 	);
 
-	const { tHtml } = useTranslation();
+	const sidebarLinksBottom: ListNavigationItem[] = useMemo(
+		() =>
+			CP_ADMIN_NAVIGATION_BOTTOM_LINKS().map(({ id, label, href }) => {
+				const url =
+					id !== CP_ADMIN_SEARCH_VISITOR_SPACE_KEY
+						? href
+						: stringifyUrl({
+								url: href,
+								query: {
+									maintainer: user?.maintainerId,
+								},
+						  });
+
+				return {
+					id,
+					node: ({ linkClassName }) => (
+						<Link href={url}>
+							<a className={linkClassName} aria-label={label}>
+								{label}
+							</a>
+						</Link>
+					),
+					active: asPath.includes(url),
+				};
+			}),
+		[asPath, user]
+	);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(true));
@@ -44,7 +79,8 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 	return (
 		<SidebarLayout
 			className={className}
-			sidebarLinks={sidebarLinks}
+			sidebarLinksTop={sidebarLinksTop}
+			sidebarLinksBottom={sidebarLinksBottom}
 			sidebarTitle={tHtml('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
 		>
 			<ErrorBoundary>

@@ -427,7 +427,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						sidebarTitle={tHtml(
 							'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
 						)}
-						sidebarLinks={[
+						sidebarLinksTop={[
 							...sidebarLinks,
 							{
 								id: 'p-account-my-folders__new-folder',

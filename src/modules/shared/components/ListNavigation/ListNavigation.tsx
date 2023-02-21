@@ -2,17 +2,25 @@ import clsx from 'clsx';
 import { FC, ReactNode } from 'react';
 
 import styles from './ListNavigation.module.scss';
-import { ListNavigationItem, ListNavigationProps } from './ListNavigation.types';
+import {
+	ListNavigationItem,
+	ListNavigationProps,
+	ListNavigationType,
+} from './ListNavigation.types';
 
 const ListNavigation: FC<ListNavigationProps> = ({
 	listItems,
 	className,
 	color = 'white',
 	onClick,
+	type = ListNavigationType.Navigation,
 }) => {
 	const nodeProps = {
 		buttonClassName: styles['c-list-navigation__button'],
-		linkClassName: styles['c-list-navigation__link'],
+		linkClassName:
+			type === ListNavigationType.Navigation
+				? styles['c-list-navigation__link']
+				: styles['c-list-navigation__link--simple'],
 	};
 
 	const renderChildrenRecursively = (items: ListNavigationItem[], layer = 0): ReactNode => {
