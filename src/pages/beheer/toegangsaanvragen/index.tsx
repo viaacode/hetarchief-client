@@ -20,7 +20,7 @@ const CPRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<CPAdminLayout
 				className="p-cp-requests"
-				pageTitle={tText('pages/beheer/aanvragen/index___aanvragen')}
+				pageTitle={tText('pages/beheer/toegangsaanvragen/index___aanvragen')}
 			>
 				<VisitRequestsOverview columns={RequestTableColumns()} />
 			</CPAdminLayout>
@@ -30,8 +30,8 @@ const CPRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			{renderOgTags(
-				tText('pages/beheer/aanvragen/index___aanvragen'),
-				tText('pages/beheer/aanvragen/index___aanvragen-meta-omschrijving'),
+				tText('pages/beheer/toegangsaanvragen/index___aanvragen'),
+				tText('pages/beheer/toegangsaanvragen/index___aanvragen-meta-omschrijving'),
 				url
 			)}
 
