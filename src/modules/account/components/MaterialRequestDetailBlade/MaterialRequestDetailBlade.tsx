@@ -86,8 +86,11 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							className={
 								styles['p-account-my-material-requests__material-label-icon']
 							}
-							// TODO: make icon dynamic when objectType is returned
-							name={IconNamesLight.Video}
+							name={
+								currentMaterialRequestDetail?.objectType === 'audio'
+									? IconNamesLight.Audio
+									: IconNamesLight.Video
+							}
 						/>
 						<span>{currentMaterialRequestDetail?.objectSchemaName}</span>
 					</p>

@@ -19,6 +19,7 @@ export interface MaterialRequest {
 export interface MaterialRequestDetail extends MaterialRequest {
 	maintainerLogo: string;
 	meemooIdentifier: string;
+	objectType?: 'audio' | 'video' | 'film';
 	organisation?: string;
 	requesterUserGroupDescription: string;
 	requesterUserGroupId: string;
