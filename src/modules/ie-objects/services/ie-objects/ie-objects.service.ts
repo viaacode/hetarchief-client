@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash';
 import { stringifyUrl } from 'query-string';
 
+import { IeObject, IeObjectSimilar } from '@ie-objects/types';
 import { ApiService } from '@shared/services/api-service';
 import {
 	IeObjectsSearchFilter,
@@ -21,8 +22,6 @@ import {
 	IE_OBJECTS_SERVICE_SIMILAR,
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
-
-import { IeObject, IeObjectSimilar } from '@ie-objects/types';
 
 export class IeObjectsService {
 	public static async getSearchResults(

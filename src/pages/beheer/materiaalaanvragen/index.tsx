@@ -18,6 +18,12 @@ import {
 	getMaterialRequestTableColumns,
 } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
+import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import {
+	MaterialRequest,
+	MaterialRequestKeys,
+	MaterialRequestType,
+} from '@material-requests/types';
 import {
 	Icon,
 	IconNamesLight,
@@ -32,13 +38,6 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
-
-import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import {
-	MaterialRequest,
-	MaterialRequestKeys,
-	MaterialRequestType,
-} from '@material-requests/types';
 
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
