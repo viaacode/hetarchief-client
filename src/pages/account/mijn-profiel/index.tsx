@@ -126,8 +126,8 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 					{showPermissions && (
 						<Box className="u-mt-32">
-							<section className="u-p-24 p-account-my-profile__general-info">
-								<header className="p-account-my-profile__general-info-header u-mb-24">
+							<section className="u-p-24 p-account-my-profile__permissions">
+								<header className="p-account-my-profile__permissions-header u-mb-24">
 									<h6>
 										{tText(
 											'pages/account/mijn-profiel/index___gebruikersrechten'
@@ -135,7 +135,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 									</h6>
 								</header>
 								{
-									<dl>
+									<dl className="p-account-my-profile__permissions-list u-mb-24">
 										<dt>
 											{
 												PERMISSION_TRANSLATIONS_BY_GROUP[
@@ -152,12 +152,12 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 										</dd>
 										{user?.isKeyUser && (
 											<>
-												<dt>
+												<dt className="u-mt-32">
 													{tText(
 														'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel'
 													)}
 												</dt>
-												<dd>
+												<dd className="u-color-neutral u-mt-8">
 													{tText(
 														'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-omschrijving'
 													)}
