@@ -49,6 +49,7 @@ import {
 	MediaActions,
 	ObjectDetailTabs,
 } from '@ie-objects/types';
+import { isInAFolder, mapKeywordsToTagList } from '@ie-objects/utils';
 import {
 	ErrorNoAccess,
 	ErrorNotFound,
@@ -91,8 +92,6 @@ import {
 	AddToFolderBlade,
 	VisitorSpaceNavigation,
 } from '../../../../modules/visitor-space/components';
-
-import { isInAFolder, mapKeywordsToTagList } from '@ie-objects/utils';
 
 import { VisitorLayout } from 'modules/visitors';
 

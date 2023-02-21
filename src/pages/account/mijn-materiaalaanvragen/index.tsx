@@ -15,6 +15,8 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -22,8 +24,6 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { VisitorLayout } from 'modules/visitors';
 
 const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
