@@ -27,7 +27,9 @@ $page: "p-cp-requests";
 		}
 	}
 
-	&__actions {
+	&__actions,
+	&__edit {
+		color: $shade;
 		cursor: pointer;
 		font-size: $font-size-lg;
 		transform: translateY(0.2rem); // shift if to center on single-line
@@ -44,17 +46,8 @@ $page: "p-cp-requests";
 			}
 		}
 
-		td,
-		th {
-			&:nth-last-child(1) {
-				display: none; // Hidden, see ARC-409
-				padding-left: 0;
-			}
-		}
-
 		td:nth-last-child(2) {
 			padding-right: 0;
-			border-left: 1px solid $silver;
 		}
 	}
 

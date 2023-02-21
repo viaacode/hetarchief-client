@@ -7,7 +7,7 @@ import { CopyButton, Icon, IconNamesLight, RequestStatusBadge } from '@shared/co
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { Visit, VisitRow, VisitStatus } from '@shared/types';
+import { AccessType, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 import { RequestStatusAll } from '@visits/types';
 
@@ -21,6 +21,11 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, 'createdAt'),
 	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
+};
+
+export const CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS: Record<AccessType, string> = {
+	[AccessType.FULL]: tText('modules/cp/const/requests___volledige-toegang'),
+	[AccessType.FOLDER]: tText('modules/cp/const/requests___gedeeltelijke-toegang'),
 };
 
 export const requestStatusFilters = (): TabProps[] => {
@@ -86,6 +91,31 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		accessor: 'status',
 		Cell: ({ row }: VisitRow) => {
 			return <RequestStatusBadge status={row.original.status} />;
+		},
+	},
+	{
+		Header: tText('modules/cp/const/requests___soort-toegang'),
+		accessor: 'accessType',
+		Cell: ({ row }: VisitRow) => {
+			return (
+				<span className="u-color-neutral">
+					{CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS[row.original.accessType]}
+				</span>
+			);
+		},
+	},
+	{
+		Header: '',
+		id: 'cp-requests-table-edit',
+		Cell: () => {
+			return (
+				<Button
+					className="p-cp-requests__edit"
+					icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+					aria-label={tText('modules/cp/const/requests___bewerken')}
+					variants={['xxs', 'text']}
+				/>
+			);
 		},
 	},
 	{
