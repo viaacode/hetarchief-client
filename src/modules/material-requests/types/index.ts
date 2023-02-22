@@ -16,6 +16,17 @@ export interface MaterialRequest {
 	updatedAt: string;
 }
 
+export interface MaterialRequestDetail extends MaterialRequest {
+	maintainerLogo: string;
+	meemooIdentifier: string;
+	objectType?: 'audio' | 'video' | 'film';
+	organisation?: string;
+	requesterUserGroupDescription: string;
+	requesterUserGroupId: string;
+	requesterUserGroupLabel: string;
+	requesterUserGroupName: string;
+}
+
 export enum MaterialRequestType {
 	REUSE = 'REUSE',
 	MORE_INFO = 'MORE_INFO',
