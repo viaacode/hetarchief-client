@@ -13,7 +13,7 @@ export enum AccessStatus {
 
 export enum AccessType {
 	FULL = 'FULL',
-	FOLDER = 'FOLDER',
+	FOLDERS = 'FOLDERS',
 }
 
 export interface Visit {
