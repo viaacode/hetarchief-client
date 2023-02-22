@@ -9,10 +9,11 @@ import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, ReactNode, useMemo, useState } from 'react';
-import { SortingRule, TableState } from 'react-table';
+import React, { ComponentType, MouseEvent, ReactNode, useMemo, useState } from 'react';
+import { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
 import {
 	ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
@@ -42,6 +43,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
+import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import {
 	MaterialRequest,
@@ -59,6 +61,8 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [maintainerDropdownLabel, setMaintainerDropdownLabel] = useState(
 		tText('pages/admin/materiaalaanvragen/index___aanbieder')
 	);
+	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
+	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
@@ -87,6 +91,10 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		});
 		return arr;
 	};
+
+	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
+		currentMaterialRequest?.id || null
+	);
 
 	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
 
@@ -135,6 +143,21 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderEmptyMessage = (): ReactNode =>
 		tHtml('pages/admin/materiaalaanvragen/index___geen-materiaalaanvragen');
 
+	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<MaterialRequest>) => {
+		setCurrentMaterialRequest(row.original);
+		setIsDetailBladeOpen(true);
+	};
+
+	const renderDetailBlade = () => {
+		return (
+			<MaterialRequestDetailBlade
+				isOpen={!isLoading && isDetailBladeOpen}
+				onClose={() => setIsDetailBladeOpen(false)}
+				currentMaterialRequestDetail={currentMaterialRequestDetail}
+			/>
+		);
+	};
+
 	const renderContent = (): ReactNode => {
 		return (
 			<Table<MaterialRequest>
@@ -150,6 +173,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 				sortingIcons={sortingIcons}
 				pagination={renderPagination}
 				onSortChange={onSortChange}
+				onRowClick={onRowClick}
 			/>
 		);
 	};
@@ -244,6 +268,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{noData && renderEmptyMessage()}
 						{!noData && !isFetching && renderContent()}
 					</div>
+					{currentMaterialRequest?.id && renderDetailBlade()}
 				</AdminLayout.Content>
 			</AdminLayout>
 		);
