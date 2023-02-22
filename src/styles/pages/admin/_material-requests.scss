@@ -1,0 +1,23 @@
+@use "src/styles/abstracts" as *;
+
+$page: "p-admin-material-requests";
+
+.#{$page} {
+	&__header {
+		display: flex;
+		justify-content: space-between;
+
+		&-dropdowns {
+			display: flex;
+			flex-direction: row;
+		}
+	}
+
+	&__dropdown {
+		margin-right: $spacer-md;
+
+		&--open {
+			box-shadow: $shadow-24-black-08;
+		}
+	}
+}

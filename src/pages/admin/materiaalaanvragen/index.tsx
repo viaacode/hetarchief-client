@@ -1,9 +1,15 @@
-import { OrderDirection, Table } from '@meemoo/react-components';
+import {
+	Dropdown,
+	MenuContent,
+	MenuItemInfo,
+	OrderDirection,
+	Table,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, ReactNode, useMemo } from 'react';
+import React, { ComponentType, ReactNode, useMemo, useState } from 'react';
 import { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -15,7 +21,20 @@ import {
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { Loading, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import {
+	CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY,
+	CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD,
+	CP_MATERIAL_REQUESTS_FILTER_ALL_ID,
+} from '@cp/const/material-requests.const';
+import { useGetContentPartners } from '@cp/hooks/get-content-partners';
+import {
+	Icon,
+	IconNamesLight,
+	Loading,
+	PaginationBar,
+	SearchBar,
+	sortingIcons,
+} from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { globalLabelKeys } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -24,10 +43,22 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
+import {
+	MaterialRequest,
+	MaterialRequestKeys,
+	MaterialRequestType,
+} from '@material-requests/types';
 
 const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
+	const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
+	const [isMaintainerDropdownOpen, setIsMaintainerDropdownOpen] = useState(false);
+	const [typeDropdownLabel, setTypeDropdownLabel] = useState(
+		tText('pages/admin/materiaalaanvragen/index___type-aanvraag')
+	);
+	const [maintainerDropdownLabel, setMaintainerDropdownLabel] = useState(
+		tText('pages/admin/materiaalaanvragen/index___aanbieder')
+	);
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
@@ -39,7 +70,23 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
 		search: filters.search,
+		type: filters.type as MaterialRequestType,
+		maintainerIds: filters.maintainerIds as string[],
 	});
+
+	const { data: maintainers } = useGetContentPartners();
+
+	const getMaintainers = () => {
+		const arr = [] as MenuItemInfo[];
+		arr.push({
+			id: 'ALL',
+			label: CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[CP_MATERIAL_REQUESTS_FILTER_ALL_ID],
+		});
+		maintainers?.items.map((maintainer) => {
+			arr.push({ id: maintainer.id, label: maintainer.name });
+		});
+		return arr;
+	};
 
 	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
 
@@ -107,13 +154,80 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		);
 	};
 
+	const onTypeClick = (id: string | number): void => {
+		setTypeDropdownLabel(CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[id]);
+		if (id === 'ALL') {
+			setFilters({ ...filters, type: '' as MaterialRequestType });
+		} else {
+			setFilters({ ...filters, type: id as MaterialRequestType });
+		}
+		setIsTypeDropdownOpen(false);
+	};
+
+	const onMaintainerClick = (id: string | number): void => {
+		const allMaintainers = getMaintainers();
+		const selectedMaintainer = allMaintainers.find((maintainer) => maintainer.id === id);
+		selectedMaintainer && setMaintainerDropdownLabel(selectedMaintainer.label);
+
+		if (id === 'ALL') {
+			setFilters({ ...filters, maintainerIds: [] as string[] });
+		} else {
+			// Ward: if only 1 id is passed, error is given "maintainerIds must be an array"
+			setFilters({ ...filters, maintainerIds: [id, id] as string[] });
+		}
+		setIsMaintainerDropdownOpen(false);
+	};
+
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
 				pageTitle={tText('pages/admin/materiaalaanvragen/index___materiaalaanvragen')}
 			>
 				<AdminLayout.Content>
-					<div className={clsx('l-container l-container--edgeless-to-lg')}>
+					<div
+						className={clsx(
+							'l-container l-container--edgeless-to-lg p-admin-material-requests__header'
+						)}
+					>
+						<div className="p-admin-material-requests__header-dropdowns">
+							<Dropdown
+								variants="filter"
+								flyoutClassName="p-admin-material-requests__dropdown--open"
+								className="p-admin-material-requests__dropdown"
+								label={typeDropdownLabel}
+								isOpen={isTypeDropdownOpen}
+								onOpen={() => setIsTypeDropdownOpen(true)}
+								onClose={() => setIsTypeDropdownOpen(false)}
+								iconOpen={<Icon name={IconNamesLight.AngleUp} />}
+								iconClosed={<Icon name={IconNamesLight.AngleDown} />}
+							>
+								<MenuContent
+									rootClassName="c-dropdown-menu"
+									onClick={onTypeClick}
+									menuItems={CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY}
+								/>
+							</Dropdown>
+							{maintainers && (
+								<Dropdown
+									variants="filter"
+									flyoutClassName="p-admin-material-requests__dropdown--open"
+									className="p-admin-material-requests__dropdown"
+									label={maintainerDropdownLabel}
+									isOpen={isMaintainerDropdownOpen}
+									onOpen={() => setIsMaintainerDropdownOpen(true)}
+									onClose={() => setIsMaintainerDropdownOpen(false)}
+									iconOpen={<Icon name={IconNamesLight.AngleUp} />}
+									iconClosed={<Icon name={IconNamesLight.AngleDown} />}
+								>
+									<MenuContent
+										rootClassName="c-dropdown-menu"
+										onClick={onMaintainerClick}
+										menuItems={getMaintainers()}
+									/>
+								</Dropdown>
+							)}
+						</div>
+
 						<SearchBar
 							id={globalLabelKeys.adminLayout.title}
 							default={filters.search}

@@ -1,5 +1,5 @@
 import { Column } from 'react-table';
-import { NumberParam, StringParam, withDefault } from 'use-query-params';
+import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
@@ -15,6 +15,8 @@ export const ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
 	search: withDefault(StringParam, ''),
+	type: withDefault(StringParam, ''),
+	maintainerIds: withDefault(ArrayParam, []),
 };
 
 export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
