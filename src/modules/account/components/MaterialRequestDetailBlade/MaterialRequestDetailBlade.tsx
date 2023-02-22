@@ -58,7 +58,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 					<div className={styles['p-account-my-material-requests__maintainer-logo']}>
 						<Image
 							alt="maintainer logo"
-							src={currentMaterialRequestDetail?.maintainerLogo || ''}
+							src={currentMaterialRequestDetail.maintainerLogo}
 							layout="fill"
 							objectFit="contain"
 						/>

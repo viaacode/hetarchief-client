@@ -47,6 +47,6 @@ export class MaterialRequestsService {
 		if (!id) {
 			return null;
 		}
-		return await ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
 	}
 }

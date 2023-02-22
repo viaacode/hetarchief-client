@@ -24,10 +24,8 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 
 import MaterialRequestDetailBlade from '../../../modules/account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 
-import {
-	useGetMaterialRequestById,
-	useGetMaterialRequests,
-} from '@material-requests/hooks/get-material-requests';
+import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
+import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { VisitorLayout } from 'modules/visitors';
 
@@ -38,7 +36,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
-		currentMaterialRequest?.id || ''
+		currentMaterialRequest?.id || null
 	);
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		isPersonal: true,
