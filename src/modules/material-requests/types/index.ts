@@ -31,7 +31,6 @@ export enum MaterialRequestType {
 	REUSE = 'REUSE',
 	MORE_INFO = 'MORE_INFO',
 	VIEW = 'VIEW',
-	ALL = 'ALL',
 }
 
 export enum MaterialRequestKeys {

@@ -6,7 +6,12 @@ import { tText } from '@shared/helpers/translate';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 
 import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
-import { MaterialRequest, MaterialRequestKeys, MaterialRequestRow } from '@material-requests/types';
+import {
+	MaterialRequest,
+	MaterialRequestKeys,
+	MaterialRequestRow,
+	MaterialRequestType,
+} from '@material-requests/types';
 
 export const ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
@@ -63,3 +68,33 @@ export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[]
 		),
 	},
 ];
+
+export const ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
+
+export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = [
+	{
+		id: ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
+		label: tText('modules/cp/const/material-requests___filter-type-more-all'),
+	},
+	{
+		id: MaterialRequestType.MORE_INFO,
+		label: tText('modules/cp/const/material-requests___filter-type-more-info'),
+	},
+	{
+		id: MaterialRequestType.REUSE,
+		label: tText('modules/cp/const/material-requests___filter-type-reuse'),
+	},
+	{
+		id: MaterialRequestType.VIEW,
+		label: tText('modules/cp/const/material-requests___filter-type-view'),
+	},
+];
+
+export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD: Record<string, string> =
+	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY.reduce(
+		(
+			acc: Record<string, string>,
+			curr: { id: string | number; label: string }
+		): Record<string, string> => ({ ...acc, [curr.id]: curr.label }),
+		{}
+	);

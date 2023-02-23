@@ -16,17 +16,15 @@ import { useQueryParams } from 'use-query-params';
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
 import {
+	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
+	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD,
+	ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
 	ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 	getAdminMaterialRequestTableColumns,
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import {
-	CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY,
-	CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD,
-	CP_MATERIAL_REQUESTS_FILTER_ALL_ID,
-} from '@cp/const/material-requests.const';
 import { useGetContentPartners } from '@cp/hooks/get-content-partners';
 import {
 	Icon,
@@ -56,7 +54,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
 	const [isMaintainerDropdownOpen, setIsMaintainerDropdownOpen] = useState(false);
 	const [typeDropdownLabel, setTypeDropdownLabel] = useState(
-		tText('pages/admin/materiaalaanvragen/index___type-aanvraag')
+		ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID]
 	);
 	const [maintainerDropdownLabel, setMaintainerDropdownLabel] = useState(
 		tText('pages/admin/materiaalaanvragen/index___aanbieder')
@@ -80,17 +78,24 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const { data: maintainers } = useGetContentPartners();
 
-	const getMaintainers = () => {
-		const arr = [] as MenuItemInfo[];
-		arr.push({
-			id: 'ALL',
-			label: CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[CP_MATERIAL_REQUESTS_FILTER_ALL_ID],
-		});
-		maintainers?.items.map((maintainer) => {
-			arr.push({ id: maintainer.id, label: maintainer.name });
-		});
-		return arr;
-	};
+	const maintainerList = useMemo(() => {
+		if (maintainers) {
+			return [
+				{
+					id: ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
+					label: ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[
+						ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID
+					],
+				},
+				...maintainers.items.map(
+					({ id, name }): MenuItemInfo => ({
+						id,
+						label: name,
+					})
+				),
+			];
+		}
+	}, [maintainers]);
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
@@ -179,27 +184,30 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const onTypeClick = (id: string | number): void => {
-		setTypeDropdownLabel(CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[id]);
-		if (id === 'ALL') {
-			setFilters({ ...filters, type: '' as MaterialRequestType });
-		} else {
-			setFilters({ ...filters, type: id as MaterialRequestType });
-		}
+		const showAll = id === ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID;
+		setTypeDropdownLabel(ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[id]);
 		setIsTypeDropdownOpen(false);
+
+		setFilters({ ...filters, type: showAll ? '' : `${id}`, page: 1 });
 	};
 
 	const onMaintainerClick = (id: string | number): void => {
-		const allMaintainers = getMaintainers();
-		const selectedMaintainer = allMaintainers.find((maintainer) => maintainer.id === id);
-		selectedMaintainer && setMaintainerDropdownLabel(selectedMaintainer.label);
-
-		if (id === 'ALL') {
-			setFilters({ ...filters, maintainerIds: [] as string[] });
-		} else {
-			// Ward: if only 1 id is passed, error is given "maintainerIds must be an array"
-			setFilters({ ...filters, maintainerIds: [id, id] as string[] });
+		if (maintainerList) {
+			const selectedMaintainer = maintainerList.find((maintainer) => maintainer.id === id);
+			selectedMaintainer && setMaintainerDropdownLabel(selectedMaintainer.label);
 		}
+
+		setFilters({
+			...filters,
+			maintainerIds:
+				id === ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID ? [] : ([id, id] as string[]),
+		});
+
 		setIsMaintainerDropdownOpen(false);
+	};
+
+	const onSearch = (value: string | undefined) => {
+		setFilters({ search: value, page: 1 });
 	};
 
 	const renderPageContent = () => {
@@ -228,7 +236,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 								<MenuContent
 									rootClassName="c-dropdown-menu"
 									onClick={onTypeClick}
-									menuItems={CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY}
+									menuItems={ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY}
 								/>
 							</Dropdown>
 							{maintainers && (
@@ -246,7 +254,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 									<MenuContent
 										rootClassName="c-dropdown-menu"
 										onClick={onMaintainerClick}
-										menuItems={getMaintainers()}
+										menuItems={maintainerList || []}
 									/>
 								</Dropdown>
 							)}
@@ -256,7 +264,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 							id={globalLabelKeys.adminLayout.title}
 							default={filters.search}
 							placeholder={tText('pages/admin/materiaalaanvragen/index___zoek')}
-							onSearch={(value) => setFilters({ search: value, page: 1 })}
+							onSearch={onSearch}
 						/>
 					</div>
 					<div
