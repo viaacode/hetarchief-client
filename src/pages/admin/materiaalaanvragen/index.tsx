@@ -25,7 +25,6 @@ import {
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { useGetContentPartners } from '@cp/hooks/get-content-partners';
 import {
 	Icon,
 	IconNamesLight,
@@ -43,6 +42,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
 import {
 	MaterialRequest,
 	MaterialRequestKeys,
@@ -76,7 +76,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		maintainerIds: filters.maintainerIds as string[],
 	});
 
-	const { data: maintainers } = useGetContentPartners();
+	const { data: maintainers } = useGetMaterialRequestsMaintainers();
 
 	const maintainerList = useMemo(() => {
 		if (maintainers) {
@@ -87,7 +87,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 						ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID
 					],
 				},
-				...maintainers.items.map(
+				...maintainers.map(
 					({ id, name }): MenuItemInfo => ({
 						id,
 						label: name,
@@ -199,8 +199,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 		setFilters({
 			...filters,
-			maintainerIds:
-				id === ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID ? [] : ([id, id] as string[]),
+			maintainerIds: id === ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID ? [] : ([id] as string[]),
 		});
 
 		setIsMaintainerDropdownOpen(false);

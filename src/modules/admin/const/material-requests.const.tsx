@@ -74,19 +74,19 @@ export const ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
 export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = [
 	{
 		id: ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
-		label: tText('modules/cp/const/material-requests___filter-type-more-all'),
+		label: tText('modules/admin/const/material-requests___filter-type-all'),
 	},
 	{
 		id: MaterialRequestType.MORE_INFO,
-		label: tText('modules/cp/const/material-requests___filter-type-more-info'),
+		label: tText('modules/admin/const/material-requests___filter-type-more-info'),
 	},
 	{
 		id: MaterialRequestType.REUSE,
-		label: tText('modules/cp/const/material-requests___filter-type-reuse'),
+		label: tText('modules/admin/const/material-requests___filter-type-reuse'),
 	},
 	{
 		id: MaterialRequestType.VIEW,
-		label: tText('modules/cp/const/material-requests___filter-type-view'),
+		label: tText('modules/admin/const/material-requests___filter-type-view'),
 	},
 ];
 

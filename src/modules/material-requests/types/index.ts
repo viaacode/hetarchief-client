@@ -33,6 +33,11 @@ export enum MaterialRequestType {
 	VIEW = 'VIEW',
 }
 
+export interface MaterialRequestMaintainer {
+	id: string;
+	name: string;
+}
+
 export enum MaterialRequestKeys {
 	createdAt = 'createdAt',
 	type = 'type',
