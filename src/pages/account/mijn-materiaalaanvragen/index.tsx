@@ -7,6 +7,7 @@ import { ComponentType, MouseEvent, ReactNode, useMemo, useState } from 'react';
 import { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
+import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import {
 	ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
@@ -15,6 +16,9 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
+import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -22,12 +26,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import MaterialRequestDetailBlade from '../../../modules/account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
-
-import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
-import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
-import { VisitorLayout } from 'modules/visitors';
+import VisitorLayout from '@visitors/layouts/VisitorLayout/VisitorLayout';
 
 const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
