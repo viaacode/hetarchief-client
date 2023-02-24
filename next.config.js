@@ -76,6 +76,11 @@ module.exports = withTM({
 				destination: '/account/mijn-profiel',
 				permanent: true,
 			},
+			{
+				source: '/beheer/aanvragen',
+				destination: '/beheer/toegangsaanvragen',
+				permanent: true,
+			},
 		];
 	},
 });
