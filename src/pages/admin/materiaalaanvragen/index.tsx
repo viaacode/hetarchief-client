@@ -25,6 +25,14 @@ import {
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
+import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
+import {
+	MaterialRequest,
+	MaterialRequestKeys,
+	MaterialRequestType,
+} from '@material-requests/types';
 import {
 	Icon,
 	IconNamesLight,
@@ -39,15 +47,6 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
-
-import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
-import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
-import {
-	MaterialRequest,
-	MaterialRequestKeys,
-	MaterialRequestType,
-} from '@material-requests/types';
 
 const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
