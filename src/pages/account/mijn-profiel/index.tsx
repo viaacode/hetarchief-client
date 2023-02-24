@@ -4,10 +4,10 @@ import getConfig from 'next/config';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { ComponentType } from 'react';
+import { ComponentType, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Permission } from '@account/const';
+import { Group, Permission, PERMISSION_TRANSLATIONS_BY_GROUP } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
@@ -29,6 +29,15 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const canEdit =
 		user?.idp === Idp.HETARCHIEF && user.permissions.includes(Permission.CAN_EDIT_PROFILE_INFO);
+
+	// We only want to show the permissions box for certain types of users
+	const showPermissions = useMemo(
+		() =>
+			user?.groupName
+				? [Group.MEEMOO_ADMIN, Group.CP_ADMIN].includes(user.groupName as Group)
+				: false,
+		[user]
+	);
 
 	const renderPageContent = () => {
 		return (
@@ -114,6 +123,52 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 							)}
 						</section>
 					</Box>
+
+					{showPermissions && (
+						<Box className="u-mt-32">
+							<section className="u-p-24 p-account-my-profile__permissions">
+								<header className="p-account-my-profile__permissions-header u-mb-24">
+									<h6>
+										{tText(
+											'pages/account/mijn-profiel/index___gebruikersrechten'
+										)}
+									</h6>
+								</header>
+								{
+									<dl className="p-account-my-profile__permissions-list u-mb-24">
+										<dt>
+											{
+												PERMISSION_TRANSLATIONS_BY_GROUP[
+													user?.groupName as Group
+												].name
+											}
+										</dt>
+										<dd className="u-color-neutral u-mt-8">
+											{
+												PERMISSION_TRANSLATIONS_BY_GROUP[
+													user?.groupName as Group
+												].description
+											}
+										</dd>
+										{user?.isKeyUser && (
+											<>
+												<dt className="u-mt-32">
+													{tText(
+														'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel'
+													)}
+												</dt>
+												<dd className="u-color-neutral u-mt-8">
+													{tText(
+														'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-omschrijving'
+													)}
+												</dd>
+											</>
+										)}
+									</dl>
+								}
+							</section>
+						</Box>
+					)}
 				</div>
 			</AccountLayout>
 		);

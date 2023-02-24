@@ -29,7 +29,7 @@ export const CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 export const CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY = [
 	{
 		id: 'ALL',
-		label: tText('modules/cp/const/material-requests___filter-type-more-all'),
+		label: tText('modules/cp/const/material-requests___filter-type-all'),
 	},
 	{
 		id: MaterialRequestType.MORE_INFO,
