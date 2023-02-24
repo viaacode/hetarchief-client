@@ -89,14 +89,14 @@ const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
 
-function getDefaultOption(): VisitorSpaceDropdownOption {
+const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	return {
 		id: '',
 		label: tText(
 			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
 		),
 	};
-}
+};
 
 const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
