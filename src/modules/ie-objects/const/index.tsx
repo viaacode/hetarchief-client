@@ -142,6 +142,7 @@ export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true):
 
 export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
+	canRequestMaterial: boolean,
 	isInAFolder: boolean
 ): DynamicActionMenuProps => ({
 	actions: [
@@ -161,6 +162,23 @@ export const MEDIA_ACTIONS = (
 						id: MediaActions.Bookmark,
 						ariaLabel: tText('modules/ie-objects/const/index___bookmark'),
 						tooltip: tText('modules/ie-objects/const/index___bookmark'),
+					},
+			  ]
+			: []) as ActionItem[]),
+		...((canRequestMaterial
+			? [
+					{
+						label: tText('modules/ie-objects/const/index___vraag-materiaal-aan'),
+						icon: (
+							<Icon
+								aria-hidden
+								className="u-font-size-24 u-text-left"
+								name={IconNamesLight.Flag}
+							/>
+						),
+						id: MediaActions.RequestMaterial,
+						ariaLabel: tText('modules/ie-objects/const/index___vraag-materiaal-aan'),
+						tooltip: tText('modules/ie-objects/const/index___vraag-materiaal-aan'),
 					},
 			  ]
 			: []) as ActionItem[]),

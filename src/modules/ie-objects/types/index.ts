@@ -160,4 +160,5 @@ export enum MediaActions {
 	Contact = 'contact',
 	Calendar = 'calendar',
 	RelatedObjects = 'related-objects',
+	RequestMaterial = 'request-material',
 }

@@ -90,6 +90,7 @@ import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit
 
 import {
 	AddToFolderBlade,
+	MaterialRequestBlade,
 	VisitorSpaceNavigation,
 } from '../../../../modules/visitor-space/components';
 
@@ -113,6 +114,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+	const canRequestMaterial: boolean | null = true;
 	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 
 	// Internal state
@@ -358,6 +360,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			case MediaActions.Bookmark:
 				setActiveBlade(MediaActions.Bookmark);
 				break;
+			case MediaActions.RequestMaterial:
+				setActiveBlade(MediaActions.RequestMaterial);
+				break;
 		}
 	};
 
@@ -584,6 +589,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<DynamicActionMenu
 							{...MEDIA_ACTIONS(
 								canManageFolders,
+								canRequestMaterial,
 								isInAFolder(collections, mediaInfo?.schemaIdentifier)
 							)}
 							onClickAction={onClickAction}
@@ -788,6 +794,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					}
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
+				/>
+			)}
+			{mediaInfo && visitorSpace && canRequestMaterial && (
+				<MaterialRequestBlade
+					isOpen={activeBlade === MediaActions.RequestMaterial}
+					onClose={onCloseBlade}
+					objectName={mediaInfo?.name}
+					objectId={mediaInfo?.schemaIdentifier}
+					objectType={mediaInfo.dctermsFormat}
+					maintainerName={mediaInfo?.maintainerName}
+					maintainerLogo={visitorSpace?.logo}
+					maintainerSlug={visitorSpace?.slug}
 				/>
 			)}
 		</>
