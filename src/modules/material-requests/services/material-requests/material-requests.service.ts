@@ -6,7 +6,11 @@ import { ApiService } from '@shared/services/api-service';
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import { GetMaterialRequestsProps } from './material-requests.service.types';
 
-import { MaterialRequest, MaterialRequestDetail } from 'modules/material-requests/types';
+import {
+	MaterialRequest,
+	MaterialRequestDetail,
+	MaterialRequestMaintainer,
+} from 'modules/material-requests/types';
 
 export class MaterialRequestsService {
 	public static async getAll({
@@ -48,5 +52,9 @@ export class MaterialRequestsService {
 			return null;
 		}
 		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
+	}
+
+	public static async getMaintainers(): Promise<MaterialRequestMaintainer[] | null> {
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/maintainers`).json();
 	}
 }
