@@ -35,7 +35,7 @@ import {
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
 import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
-import { tHtml } from '@shared/helpers/translate';
+import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -89,11 +89,13 @@ const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
 
-const defaultOption: VisitorSpaceDropdownOption = {
-	id: '',
-	label: `${tHtml(
-		'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
-	)}`,
+const getDefaultOption = (): VisitorSpaceDropdownOption => {
+	return {
+		id: '',
+		label: tText(
+			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
+		),
+	};
 };
 
 const VisitorSpaceSearchPage: FC = () => {
@@ -257,7 +259,7 @@ const VisitorSpaceSearchPage: FC = () => {
 			}
 		);
 
-		return [defaultOption, ...dynamicOptions];
+		return [getDefaultOption(), ...dynamicOptions];
 	}, [visitorSpaces, isMobile]);
 
 	/**
