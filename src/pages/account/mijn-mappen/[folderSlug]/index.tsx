@@ -50,6 +50,7 @@ import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
 import { Breakpoints } from '@shared/types';
+import { AccessThroughType } from '@shared/types/access';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
 
@@ -356,6 +357,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	const renderDescription = (item: FolderIeObject): ReactNode => {
+		const showAccessLabel =
+			item?.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FULL) ||
+			item?.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FOLDERS);
+
 		const items: { label: string | ReactNode; value: ReactNode }[] = [
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___aanbieder'),
@@ -407,12 +412,16 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						</p>
 					) : null;
 				})}
-				<p className="p-account-my-folders__card-description-access">
-					<Icon name={IconNamesLight.Clock} />
-					<span className="u-ml-4">
-						{tText('pages/account/mijn-mappen/folder-slug/index___tijdelijke-toegang')}
-					</span>
-				</p>
+				{showAccessLabel && (
+					<p className="p-account-my-folders__card-description-access">
+						<Icon name={IconNamesLight.Clock} />
+						<span className="u-ml-4">
+							{tText(
+								'pages/account/mijn-mappen/folder-slug/index___tijdelijke-toegang'
+							)}
+						</span>
+					</p>
+				)}
 			</div>
 		);
 	};
@@ -427,7 +436,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						sidebarTitle={tHtml(
 							'pages/account/mijn-mappen/folder-slug/index___mijn-mappen'
 						)}
-						sidebarLinks={[
+						sidebarLinksTop={[
 							...sidebarLinks,
 							{
 								id: 'p-account-my-folders__new-folder',

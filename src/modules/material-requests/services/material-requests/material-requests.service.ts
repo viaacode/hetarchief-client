@@ -6,7 +6,11 @@ import { ApiService } from '@shared/services/api-service';
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import { GetMaterialRequestsProps } from './material-requests.service.types';
 
-import { MaterialRequest } from 'modules/material-requests/types';
+import {
+	MaterialRequest,
+	MaterialRequestDetail,
+	MaterialRequestMaintainer,
+} from 'modules/material-requests/types';
 
 export class MaterialRequestsService {
 	public static async getAll({
@@ -18,11 +22,14 @@ export class MaterialRequestsService {
 		size,
 		orderProp,
 		orderDirection,
+		isPersonal = false,
 	}: GetMaterialRequestsProps): Promise<IPagination<MaterialRequest>> {
 		const result = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: MATERIAL_REQUESTS_SERVICE_BASE_URL,
+					url: isPersonal
+						? `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/personal`
+						: MATERIAL_REQUESTS_SERVICE_BASE_URL,
 					query: {
 						...(search?.trim() ? { query: `%${search}%` } : {}),
 						...(type && { type }),
@@ -38,5 +45,16 @@ export class MaterialRequestsService {
 			.json();
 
 		return result as IPagination<MaterialRequest>;
+	}
+
+	public static async getById(id: string | null): Promise<MaterialRequestDetail | null> {
+		if (!id) {
+			return null;
+		}
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
+	}
+
+	public static async getMaintainers(): Promise<MaterialRequestMaintainer[] | null> {
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/maintainers`).json();
 	}
 }

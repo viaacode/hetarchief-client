@@ -6,6 +6,7 @@ export interface MaterialRequest {
 	maintainerName: string;
 	maintainerSlug: string;
 	objectSchemaIdentifier: string;
+	objectSchemaName: string;
 	profileId: string;
 	reason: string;
 	requesterFullName: string;
@@ -15,10 +16,26 @@ export interface MaterialRequest {
 	updatedAt: string;
 }
 
+export interface MaterialRequestDetail extends MaterialRequest {
+	maintainerLogo: string;
+	meemooIdentifier: string;
+	objectType?: 'audio' | 'video' | 'film';
+	organisation?: string;
+	requesterUserGroupDescription: string;
+	requesterUserGroupId: string;
+	requesterUserGroupLabel: string;
+	requesterUserGroupName: string;
+}
+
 export enum MaterialRequestType {
 	REUSE = 'REUSE',
 	MORE_INFO = 'MORE_INFO',
 	VIEW = 'VIEW',
+}
+
+export interface MaterialRequestMaintainer {
+	id: string;
+	name: string;
 }
 
 export enum MaterialRequestKeys {
@@ -26,6 +43,8 @@ export enum MaterialRequestKeys {
 	type = 'type',
 	name = 'requesterFullName',
 	email = 'requesterMail',
+	maintainer = 'maintainerName',
+	material = 'objectSchemaName',
 }
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };

@@ -2,7 +2,7 @@ export const ROUTE_PARTS = Object.freeze({
 	about: 'over-bezoekersruimtes',
 	accessRequested: 'toegang-aangevraagd',
 	account: 'account',
-	visitRequests: 'aanvragen',
+	visitRequests: 'toegangsaanvragen',
 	materialRequests: 'materiaalaanvragen',
 	faq: 'faq',
 	userPolicy: 'gebruiksvoorwaarden',
@@ -32,6 +32,7 @@ export const ROUTE_PARTS = Object.freeze({
 	myMaterialRequests: 'materiaalaanvragen',
 	search: 'zoeken',
 	visitors: 'bezoekers',
+	visit: 'bezoek',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes

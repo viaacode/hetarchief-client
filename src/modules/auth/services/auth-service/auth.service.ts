@@ -21,15 +21,18 @@ export class AuthService {
 		router: NextRouter
 	): Promise<void> {
 		const { redirectTo, slug, ...otherQueryParams } = query;
-		let originalPath: string = redirectTo as string;
+		let originalPath: string = (redirectTo as string) || '';
 		if ((originalPath || '').endsWith('/' + ROUTE_PARTS.logout)) {
 			originalPath = '/';
 		}
+		if (slug) {
+			originalPath = `/${ROUTE_PARTS.search}/${slug}`;
+		}
+		if ((originalPath || '') === ROUTES.home) {
+			originalPath = `/${ROUTE_PARTS.visit}`;
+		}
 		const returnToUrl = stringifyUrl({
-			url: trimEnd(
-				`${publicRuntimeConfig.CLIENT_URL}${ROUTES.bezoek}${originalPath ?? slug ?? ''}`,
-				'/'
-			),
+			url: trimEnd(`${publicRuntimeConfig.CLIENT_URL}${originalPath}`, '/'),
 			query: otherQueryParams,
 		});
 
