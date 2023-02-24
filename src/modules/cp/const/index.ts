@@ -10,7 +10,7 @@ export const CP_ADMIN_NAVIGATION_TOP_LINKS = (): {
 }[] => [
 	{
 		id: 'requests',
-		label: tText('modules/cp/const/index___aanvragen'),
+		label: tText('modules/cp/const/index___toegangsaanvragen'),
 		href: ROUTES.beheerRequests,
 	},
 	{

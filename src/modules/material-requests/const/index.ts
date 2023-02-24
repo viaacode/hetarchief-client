@@ -1,6 +1,5 @@
-import { tText } from '@shared/helpers/translate';
-
 import { MaterialRequestType } from '@material-requests/types';
+import { tText } from '@shared/helpers/translate';
 
 export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, string> = {
 	[MaterialRequestType.MORE_INFO]: tText(

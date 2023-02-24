@@ -3,14 +3,13 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC } from 'react';
 
+import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
+import { MaterialRequestDetail } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { formatMediumDate } from '@shared/utils';
 
 import styles from './MaterialRequestDetailBlade.module.scss';
-
-import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
-import { MaterialRequestDetail } from '@material-requests/types';
 
 interface MaterialRequestDetailBladeProps {
 	isOpen: boolean;

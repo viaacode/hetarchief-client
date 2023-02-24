@@ -2,7 +2,7 @@ export const ROUTE_PARTS = Object.freeze({
 	about: 'over-bezoekersruimtes',
 	accessRequested: 'toegang-aangevraagd',
 	account: 'account',
-	visitRequests: 'aanvragen',
+	visitRequests: 'toegangsaanvragen',
 	materialRequests: 'materiaalaanvragen',
 	faq: 'faq',
 	userPolicy: 'gebruiksvoorwaarden',
