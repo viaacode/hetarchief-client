@@ -258,6 +258,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 				values: form,
 				reset: () => {
 					setForm(defaultValues);
+					setYear(undefined);
 					clearErrors();
 				},
 				handleSubmit,
