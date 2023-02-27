@@ -8,6 +8,7 @@ import { scrollTo } from '@shared/utils/scroll-to-top';
 import { Icon, IconNamesLight } from '../Icon';
 import { PaginationProgress } from '../PaginationProgress';
 
+import { TablePageSize } from './PaginationBar.const';
 import styles from './PaginationBar.module.scss';
 import { PaginationBarProps } from './PaginationBar.types';
 
@@ -62,6 +63,10 @@ const PaginationBar: FC<PaginationBarProps> = ({
 			pageCount={pageCount}
 		/>
 	);
+
+	if (total <= TablePageSize) {
+		return <></>;
+	}
 
 	return (
 		<div
