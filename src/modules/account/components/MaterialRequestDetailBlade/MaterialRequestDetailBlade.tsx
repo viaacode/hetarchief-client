@@ -3,13 +3,17 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC } from 'react';
 
-import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
-import { MaterialRequestDetail } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { formatMediumDate } from '@shared/utils';
 
 import styles from './MaterialRequestDetailBlade.module.scss';
+
+import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
+import {
+	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
+	MaterialRequestDetail,
+} from '@material-requests/types';
 
 interface MaterialRequestDetailBladeProps {
 	isOpen: boolean;
@@ -76,7 +80,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			</div>
 			<a
 				tabIndex={-1}
-				href={`/${currentMaterialRequestDetail?.maintainerSlug}/${currentMaterialRequestDetail?.objectSchemaIdentifier}`}
+				href={`/zoeken/${currentMaterialRequestDetail?.maintainerSlug}/${currentMaterialRequestDetail?.objectSchemaIdentifier}`}
 				className={styles['p-account-my-material-requests__material-link']}
 			>
 				<div className={styles['p-account-my-material-requests__material']} tabIndex={0}>
@@ -94,7 +98,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 						<span>{currentMaterialRequestDetail?.objectSchemaName}</span>
 					</p>
 					<p className={styles['p-account-my-material-requests__material-id']}>
-						{currentMaterialRequestDetail?.objectSchemaIdentifier}
+						{currentMaterialRequestDetail?.objectMeemooIdentifier}
 					</p>
 				</div>
 			</a>
@@ -121,6 +125,22 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							</dt>
 							<dd className={styles['p-account-my-material-requests__content-value']}>
 								{currentMaterialRequestDetail.requesterMail}
+							</dd>
+						</>
+					)}
+					{currentMaterialRequestDetail?.requesterCapacity && (
+						<>
+							<dt className={styles['p-account-my-material-requests__content-label']}>
+								{tText(
+									'modules/account/components/material-request-detail-blade/material-requests___hoedanigheid'
+								)}
+							</dt>
+							<dd className={styles['p-account-my-material-requests__content-value']}>
+								{
+									GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD()[
+										currentMaterialRequestDetail.requesterCapacity
+									]
+								}
 							</dd>
 						</>
 					)}
