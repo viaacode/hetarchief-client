@@ -112,10 +112,10 @@ export enum Group {
 	CP_ADMIN = 'CP_ADMIN',
 }
 
-export const PERMISSION_TRANSLATIONS_BY_GROUP: Record<
+export const GET_PERMISSION_TRANSLATIONS_BY_GROUP = (): Record<
 	Group,
 	{ name: string; description: ReactNode | string }
-> = {
+> => ({
 	[Group.VISITOR]: {
 		name: tText('modules/account/const/account___groep-bezoeker--titel'),
 		description: tHtml('modules/account/const/account___groep-bezoeker--omschrijving'),
@@ -132,4 +132,4 @@ export const PERMISSION_TRANSLATIONS_BY_GROUP: Record<
 		name: tText('modules/account/const/account___groep-cp--titel'),
 		description: tHtml('modules/account/const/account___groep-cp--omschrijving'),
 	},
-};
+});

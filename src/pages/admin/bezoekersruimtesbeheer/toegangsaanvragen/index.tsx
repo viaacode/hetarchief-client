@@ -19,7 +19,9 @@ const MeemooAdminRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const renderPageContent = () => {
 		return (
 			<AdminLayout
-				pageTitle={tText('pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen')}
+				pageTitle={tText(
+					'pages/admin/bezoekersruimtesbeheer/toegangsaanvragen/index___toegangsaanvragen'
+				)}
 			>
 				<AdminLayout.Content>
 					<VisitRequestsOverview columns={RequestTableColumns()} />
@@ -30,9 +32,11 @@ const MeemooAdminRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<>
 			{renderOgTags(
-				tText('pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen'),
 				tText(
-					'pages/admin/bezoekersruimtesbeheer/aanvragen/index___aanvragen-meta-omschrijving'
+					'pages/admin/bezoekersruimtesbeheer/toegangsaanvragen/index___toegangsaanvragen'
+				),
+				tText(
+					'pages/admin/bezoekersruimtesbeheer/toegangsaanvragen/index___toegangsaanvragen-meta-omschrijving'
 				),
 				url
 			)}
