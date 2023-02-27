@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC } from 'react';
 
-import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
+import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import { MaterialRequestDetail } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -169,7 +169,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							</dt>
 							<dd className={styles['p-account-my-material-requests__content-value']}>
 								{
-									MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[
+									GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[
 										currentMaterialRequestDetail.type
 									]
 								}

@@ -16,11 +16,11 @@ import { useQueryParams } from 'use-query-params';
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
 import {
-	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
-	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD,
 	ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
 	ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+	GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
+	GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD,
 	getAdminMaterialRequestTableColumns,
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
@@ -53,7 +53,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
 	const [isMaintainerDropdownOpen, setIsMaintainerDropdownOpen] = useState(false);
 	const [typeDropdownLabel, setTypeDropdownLabel] = useState(
-		ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID]
+		GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD()[ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID]
 	);
 	const [maintainerDropdownLabel, setMaintainerDropdownLabel] = useState(
 		tText('pages/admin/materiaalaanvragen/index___aanbieder')
@@ -82,7 +82,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 			return [
 				{
 					id: ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
-					label: ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[
+					label: GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD()[
 						ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID
 					],
 				},
@@ -184,7 +184,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const onTypeClick = (id: string | number): void => {
 		const showAll = id === ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID;
-		setTypeDropdownLabel(ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[id]);
+		setTypeDropdownLabel(GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD()[id]);
 		setIsTypeDropdownOpen(false);
 
 		setFilters({ ...filters, type: showAll ? '' : `${id}`, page: 1 });
@@ -234,7 +234,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 								<MenuContent
 									rootClassName="c-dropdown-menu"
 									onClick={onTypeClick}
-									menuItems={ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY}
+									menuItems={GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY()}
 								/>
 							</Dropdown>
 							{maintainers && (

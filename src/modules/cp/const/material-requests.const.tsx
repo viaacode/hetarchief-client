@@ -1,7 +1,7 @@
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
+import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import {
 	MaterialRequest,
 	MaterialRequestKeys,
@@ -26,7 +26,7 @@ export const CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	page: withDefault(NumberParam, 1),
 };
 
-export const CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY = [
+export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): { id: string; label: string }[] => [
 	{
 		id: 'ALL',
 		label: tText('modules/cp/const/material-requests___filter-type-all'),
@@ -45,8 +45,8 @@ export const CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY = [
 	},
 ];
 
-export const CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD: Record<string, string> =
-	CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY.reduce(
+export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_RECORD = (): Record<string, string> =>
+	GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY().reduce(
 		(
 			acc: Record<string, string>,
 			curr: { id: string | number; label: string }
@@ -90,7 +90,7 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 		accessor: MaterialRequestKeys.type,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="u-color-neutral p-material-requests__table-type">
-				{MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[original.type]}
+				{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[original.type]}
 			</span>
 		),
 	},

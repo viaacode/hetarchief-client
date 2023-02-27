@@ -1,7 +1,7 @@
 import { Column } from 'react-table';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
+import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import {
 	MaterialRequest,
 	MaterialRequestKeys,
@@ -62,7 +62,7 @@ export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[]
 		accessor: MaterialRequestKeys.type,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="u-color-neutral p-material-requests__table-type">
-				{MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[original.type]}
+				{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[original.type]}
 			</span>
 		),
 	},
@@ -70,7 +70,7 @@ export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[]
 
 export const ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
 
-export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = [
+export const GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): { id: string; label: string }[] => [
 	{
 		id: ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
 		label: tText('modules/admin/const/material-requests___filter-type-all'),
@@ -89,8 +89,8 @@ export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = [
 	},
 ];
 
-export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD: Record<string, string> =
-	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY.reduce(
+export const GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD = (): Record<string, string> =>
+	GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY().reduce(
 		(
 			acc: Record<string, string>,
 			curr: { id: string | number; label: string }

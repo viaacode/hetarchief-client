@@ -10,11 +10,11 @@ import { useQueryParams } from 'use-query-params';
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
-	CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY,
-	CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD,
 	CP_MATERIAL_REQUESTS_FILTER_ALL_ID,
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+	GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
+	GET_CP_MATERIAL_REQUEST_TYPE_FILTER_RECORD,
 	getMaterialRequestTableColumns,
 } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
@@ -42,7 +42,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [dropdownLabel, setDropdownLabel] = useState<string>(
-		CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[CP_MATERIAL_REQUESTS_FILTER_ALL_ID]
+		GET_CP_MATERIAL_REQUEST_TYPE_FILTER_RECORD()[CP_MATERIAL_REQUESTS_FILTER_ALL_ID]
 	);
 
 	const { tHtml, tText } = useTranslation();
@@ -79,7 +79,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const onTypeClick = (id: string | number): void => {
 		const showAll = id === CP_MATERIAL_REQUESTS_FILTER_ALL_ID;
-		setDropdownLabel(CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[id]);
+		setDropdownLabel(GET_CP_MATERIAL_REQUEST_TYPE_FILTER_RECORD()[id]);
 		setIsDropdownOpen(false);
 
 		setFilters({
@@ -165,7 +165,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 								<MenuContent
 									rootClassName="c-dropdown-menu"
 									onClick={onTypeClick}
-									menuItems={CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY}
+									menuItems={GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY()}
 								/>
 							</Dropdown>
 							<SearchBar
