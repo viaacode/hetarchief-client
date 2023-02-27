@@ -247,6 +247,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 				reset: () => {
 					setForm(defaultValues);
 					setYear(undefined);
+					setYearRange(undefined);
 					clearErrors();
 				},
 				handleSubmit,
