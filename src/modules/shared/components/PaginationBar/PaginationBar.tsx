@@ -8,7 +8,7 @@ import { scrollTo } from '@shared/utils/scroll-to-top';
 import { Icon, IconNamesLight } from '../Icon';
 import { PaginationProgress } from '../PaginationProgress';
 
-import { TablePageSize } from './PaginationBar.const';
+import { TABLE_PAGE_SIZE } from './PaginationBar.const';
 import styles from './PaginationBar.module.scss';
 import { PaginationBarProps } from './PaginationBar.types';
 
@@ -64,10 +64,6 @@ const PaginationBar: FC<PaginationBarProps> = ({
 		/>
 	);
 
-	if (total <= TablePageSize) {
-		return <></>;
-	}
-
 	return (
 		<div
 			className={clsx(
@@ -78,7 +74,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 		>
 			{renderProgress()}
 
-			{renderPagination()}
+			{total > TABLE_PAGE_SIZE && renderPagination()}
 
 			{showBackToTop && (
 				<div className={styles['c-pagination-bar__back-to-top-wrapper']}>
