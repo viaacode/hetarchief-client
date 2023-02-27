@@ -3,14 +3,14 @@
 $component: "c-tooltip";
 
 .#{$component} {
-	background-color: $black;
-	border: 1px solid $black;
+	background-color: $black !important;
+	border: 1px solid $black !important;
 	display: inline-block;
 	max-width: 19rem !important;
-	padding: 0.5rem;
-	color: $white;
+	padding: 0.5rem !important;
+	color: $white !important;
 	opacity: 0;
-	font-size: 1.3rem;
+	font-size: 1.3rem !important;
 	font-weight: 100;
 	line-height: 1.428; // 20px equivalent
 	transition: opacity 0.2s ease-in-out, visibility 0.2s linear 0.2s;
