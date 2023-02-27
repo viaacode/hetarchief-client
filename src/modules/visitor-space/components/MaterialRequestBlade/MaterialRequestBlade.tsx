@@ -8,6 +8,8 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './MaterialRequestBlade.module.scss';
 
+import { MaterialRequestType } from '@material-requests/types';
+
 interface MaterialRequestBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
@@ -31,9 +33,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 }) => {
 	const { tText } = useTranslation();
 
-	const [isViewSelected, setIsViewSelected] = useState(false);
-	const [isReuseSelected, setIsReuseSelected] = useState(false);
-	const [isMoreInfoSelected, setIsMoreInfoSelected] = useState(false);
+	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(MaterialRequestType.VIEW);
 	const [reasonInputValue, setReasonInputValue] = useState('');
 
 	const renderFooter = () => {
@@ -65,27 +65,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				/>
 			</div>
 		);
-	};
-
-	const onViewSelect = () => {
-		setIsMoreInfoSelected(false);
-		setIsReuseSelected(false);
-
-		setIsViewSelected(true);
-	};
-
-	const onReuseSelect = () => {
-		setIsMoreInfoSelected(false);
-		setIsViewSelected(false);
-
-		setIsReuseSelected(true);
-	};
-
-	const onMoreInfoSelect = () => {
-		setIsViewSelected(false);
-		setIsReuseSelected(false);
-
-		setIsMoreInfoSelected(true);
 	};
 
 	return (
@@ -155,24 +134,24 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___view'
 								)}
-								checked={isViewSelected}
-								onClick={onViewSelect}
+								checked={typeSelected === MaterialRequestType.VIEW}
+								onClick={() => setTypeSelected(MaterialRequestType.VIEW)}
 							/>
 							<RadioButton
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___reuse'
 								)}
-								checked={isReuseSelected}
-								onClick={onReuseSelect}
+								checked={typeSelected === MaterialRequestType.REUSE}
+								onClick={() => setTypeSelected(MaterialRequestType.REUSE)}
 							/>
 							<RadioButton
 								className={styles['c-request-material__radio-button']}
 								label={tText(
 									'modules/visitor-space/components/material-request-blade/material-request-blade___more-info'
 								)}
-								checked={isMoreInfoSelected}
-								onClick={onMoreInfoSelect}
+								checked={typeSelected === MaterialRequestType.MORE_INFO}
+								onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
 							/>
 						</dd>
 						<dt className={styles['c-request-material__content-label']}>
