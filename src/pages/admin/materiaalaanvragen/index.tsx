@@ -1,6 +1,6 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash';
+import { isEmpty, isNil, xorBy } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
@@ -167,13 +167,17 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const onMultiTypeChange = (selectedItems: string[]) => {
-		if (selectedItems !== selectedTypes) {
+		const diff = xorBy(selectedItems, selectedTypes);
+
+		if (diff.length) {
 			setSelectedTypes(selectedItems);
 		}
 	};
 
 	const onMultiMaintainersChange = (selectedItems: string[]) => {
-		if (selectedItems !== selectedMaintainers) {
+		const diff = xorBy(selectedItems, selectedMaintainers);
+
+		if (diff.length) {
 			setSelectedMaintainers(selectedItems);
 		}
 	};
