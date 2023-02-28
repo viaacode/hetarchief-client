@@ -25,7 +25,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
 
 	const onCheckboxClick = (checked: boolean, value: unknown): void => {
 		// If not checked yet, we need to add the value to the list of selected items, otherwise remove it
-		// This list will be used to check wheter an option should have the checked property or not, that's why the check is "reversed" here.
+		// This list will be used to check whether an option should have the checked property or not, that's why the check is "reversed" here.
 		const selected = !checked
 			? [...selectedOptions, `${value}`]
 			: without(selectedOptions, `${value}`);
@@ -33,12 +33,19 @@ export const MultiSelect: FC<MultiSelectProps> = ({
 		setSelectedOptions(selected);
 	};
 
+	const getLabel = () => {
+		if (selectedOptions.length) {
+			return `${label} (${selectedOptions.length})`;
+		}
+		return label;
+	};
+
 	return (
 		<div className={clsx(className, styles['c-multi-select'])}>
 			<Dropdown
 				variants={variant}
 				className={styles['c-multi-select__dropdown']}
-				label={label}
+				label={getLabel()}
 				isOpen={isDropdownOpen}
 				onOpen={() => setIsDropdownOpen(true)}
 				onClose={() => setIsDropdownOpen(false)}
