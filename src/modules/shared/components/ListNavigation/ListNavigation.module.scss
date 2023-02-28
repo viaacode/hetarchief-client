@@ -14,6 +14,10 @@ $component: "c-list-navigation";
 	}
 
 	&__item {
+		display: block;
+		padding: 1.6rem;
+		padding-left: 3.2rem;
+
 		&--active {
 			font-weight: 700;
 		}
@@ -44,8 +48,6 @@ $component: "c-list-navigation";
 
 	&__link {
 		display: block;
-		padding: $spacer-sm;
-		padding-left: $spacer-lg;
 		text-decoration: none;
 	}
 
