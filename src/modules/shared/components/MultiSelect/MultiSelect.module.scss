@@ -8,6 +8,8 @@ $component: "c-multi-select";
 	}
 
 	&__checkbox-list {
+		box-shadow: $shadow-24-black-08;
+
 		&-item {
 			border-top: 0.1rem solid $zinc;
 			padding: $spacer-xxs $spacer-sm;

@@ -19,7 +19,7 @@ export const ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
 	search: withDefault(StringParam, ''),
-	type: withDefault(StringParam, ''),
+	type: withDefault(ArrayParam, []),
 	maintainerIds: withDefault(ArrayParam, []),
 };
 
@@ -70,11 +70,10 @@ export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[]
 
 export const ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
 
-export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = [
-	{
-		id: ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
-		label: tText('modules/admin/const/material-requests___filter-type-all'),
-	},
+export const GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
+	id: string;
+	label: string;
+}[] => [
 	{
 		id: MaterialRequestType.MORE_INFO,
 		label: tText('modules/admin/const/material-requests___filter-type-more-info'),
@@ -89,8 +88,8 @@ export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = [
 	},
 ];
 
-export const ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD: Record<string, string> =
-	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY.reduce(
+export const GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD = (): Record<string, string> =>
+	GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY().reduce(
 		(
 			acc: Record<string, string>,
 			curr: { id: string | number; label: string }
