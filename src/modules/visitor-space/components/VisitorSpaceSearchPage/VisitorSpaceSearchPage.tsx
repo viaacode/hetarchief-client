@@ -450,7 +450,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const showVisitorSpacesDropdown = useMemo(
-		() => isLoggedIn && visitorSpaces.length > 1,
+		() => isLoggedIn && visitorSpaces.length > 0,
 		[isLoggedIn, visitorSpaces]
 	);
 
