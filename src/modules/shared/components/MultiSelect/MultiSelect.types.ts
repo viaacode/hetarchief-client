@@ -4,6 +4,7 @@ export interface MultiSelectProps extends DefaultComponentProps {
 	label: string;
 	options: MultiSelectOption[];
 	onChange: (selected: string[]) => void;
+	variant?: string;
 }
 
 export interface MultiSelectOption {

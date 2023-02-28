@@ -14,6 +14,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
 	label,
 	options,
 	onChange,
+	variant = 'bordered',
 }): ReactElement => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 	const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -35,7 +36,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
 	return (
 		<div className={clsx(className, styles['c-multi-select'])}>
 			<Dropdown
-				variants="bordered"
+				variants={variant}
 				className={styles['c-multi-select__dropdown']}
 				label={label}
 				isOpen={isDropdownOpen}
