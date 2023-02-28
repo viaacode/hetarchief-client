@@ -9,6 +9,7 @@ const CheckboxList: FC<CheckboxListProps<unknown>> = ({
 	items,
 	className,
 	itemClassName,
+	checkIcon = null,
 	onItemClick,
 }) => {
 	return (
@@ -35,7 +36,7 @@ const CheckboxList: FC<CheckboxListProps<unknown>> = ({
 						}
 						onClick={() => onItemClick(isChecked, value)}
 					>
-						<Checkbox checked={isChecked} tabIndex={-1} />
+						<Checkbox checked={isChecked} tabIndex={-1} checkIcon={checkIcon} />
 						<span>{item.label}</span>
 					</li>
 				);
