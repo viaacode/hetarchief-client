@@ -1,5 +1,5 @@
 import { Column } from 'react-table';
-import { NumberParam, StringParam, withDefault } from 'use-query-params';
+import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import {
@@ -20,17 +20,16 @@ export const CP_MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
 
 export const CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
-	type: withDefault(StringParam, undefined),
+	type: withDefault(ArrayParam, []),
 	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
 };
 
-export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): { id: string; label: string }[] => [
-	{
-		id: 'ALL',
-		label: tText('modules/cp/const/material-requests___filter-type-all'),
-	},
+export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
+	id: string;
+	label: string;
+}[] => [
 	{
 		id: MaterialRequestType.MORE_INFO,
 		label: tText('modules/cp/const/material-requests___filter-type-more-info'),

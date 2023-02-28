@@ -421,7 +421,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		// Destructure to keyword-able filters
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { format, orderProp, orderDirection, page, ...rest } = {
+		const { format, orderProp, orderDirection, page, maintainer, ...rest } = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
 
@@ -450,7 +450,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const showVisitorSpacesDropdown = useMemo(
-		() => isLoggedIn && visitorSpaces.length > 1,
+		() => isLoggedIn && visitorSpaces.length > 0,
 		[isLoggedIn, visitorSpaces]
 	);
 

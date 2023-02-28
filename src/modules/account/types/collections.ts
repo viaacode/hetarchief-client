@@ -26,7 +26,7 @@ export interface FolderIeObject {
 	creator?: unknown;
 	description: string;
 	duration: string;
-	format: IeObjectTypes;
+	dctermsFormat: IeObjectTypes;
 	name: string;
 	numberOfPages?: unknown;
 	termsAvailable: string;
