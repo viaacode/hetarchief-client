@@ -1,7 +1,10 @@
 import { MaterialRequestType } from '@material-requests/types';
 import { tText } from '@shared/helpers/translate';
 
-export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, string> = {
+export const GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE = (): Record<
+	MaterialRequestType,
+	string
+> => ({
 	[MaterialRequestType.MORE_INFO]: tText(
 		'modules/material-requests/const/material-requests___type-more-info'
 	),
@@ -11,4 +14,4 @@ export const MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE: Record<MaterialRequestType, 
 	[MaterialRequestType.VIEW]: tText(
 		'modules/material-requests/const/material-requests___type-view'
 	),
-};
+});
