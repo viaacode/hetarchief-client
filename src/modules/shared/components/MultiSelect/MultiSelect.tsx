@@ -46,6 +46,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({
 				iconClosed={<Icon name={IconNamesLight.AngleDown} />}
 			>
 				<CheckboxList
+					checkIcon={<Icon name={IconNamesLight.Check} />}
 					className={styles['c-multi-select__checkbox-list']}
 					itemClassName={styles['c-multi-select__checkbox-list-item']}
 					items={options.map(({ id, label }: MultiSelectOption) => ({
