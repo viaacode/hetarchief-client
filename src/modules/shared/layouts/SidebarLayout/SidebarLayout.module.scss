@@ -29,6 +29,7 @@ $l-sidebar-collapse-to: "md";
 			display: grid;
 			place-items: end center;
 			padding-bottom: $spacer-lg;
+			justify-items: stretch;
 		}
 	}
 

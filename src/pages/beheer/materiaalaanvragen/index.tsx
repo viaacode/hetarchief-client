@@ -92,7 +92,14 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
+			setFilters({
+				...filters,
+				orderProp,
+				orderDirection: OrderDirection.asc,
+				page: 1,
+			});
+		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp,

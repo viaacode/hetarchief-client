@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
@@ -33,7 +34,7 @@ import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
@@ -201,10 +202,14 @@ const AppLayout: FC = ({ children }) => {
 		const staticItems = [
 			{
 				node: (
-					<HetArchiefLogo
-						className="c-navigation__logo c-navigation__logo--list"
-						type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
-					/>
+					<Link href={ROUTES.home}>
+						<a tabIndex={0}>
+							<HetArchiefLogo
+								className="c-navigation__logo c-navigation__logo--list"
+								type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+							/>
+						</a>
+					</Link>
 				),
 				id: 'logo',
 				path: '/',
@@ -248,7 +253,11 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation showBorder={showBorder} loggedOutGrid={showLoggedOutGrid}>
 				{!isLoggedIn && isMobile && (
 					<div className="c-navigation__logo--hamburger">
-						<HetArchiefLogo type={HetArchiefLogoType.Light} />
+						<Link href={ROUTES.home}>
+							<a tabIndex={0}>
+								<HetArchiefLogo type={HetArchiefLogoType.Light} />
+							</a>
+						</Link>
 					</div>
 				)}
 				<Navigation.Left
