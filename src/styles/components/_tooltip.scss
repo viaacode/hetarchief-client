@@ -1,16 +1,16 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-tooltip";
+$component: "c-tooltip-component";
 
 .#{$component} {
-	background-color: $black !important;
-	border: 1px solid $black !important;
+	background-color: $black;
+	border: 1px solid $black;
 	display: inline-block;
 	max-width: 19rem !important;
-	padding: 0.5rem !important;
-	color: $white !important;
+	padding: 0.5rem;
+	color: $white;
 	opacity: 0;
-	font-size: 1.3rem !important;
+	font-size: 1.3rem;
 	font-weight: 100;
 	line-height: 1.428; // 20px equivalent
 	transition: opacity 0.2s ease-in-out, visibility 0.2s linear 0.2s;
@@ -27,7 +27,7 @@ $component: "c-tooltip";
 		}
 	}
 
-	&[data-popper-placement^="top"] > .c-tooltip__arrow {
+	&[data-popper-placement^="top"] > .c-tooltip-component__arrow {
 		bottom: -2px !important;
 		transform: translate(-8px, 0) !important;
 		clip: rect(7px, 20px, 28px, -8px) !important;
