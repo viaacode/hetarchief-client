@@ -421,7 +421,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		// Destructure to keyword-able filters
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { format, orderProp, orderDirection, page, ...rest } = {
+		const { format, orderProp, orderDirection, page, maintainer, ...rest } = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
 
