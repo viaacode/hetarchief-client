@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
+import { AuthModalProps } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { Icon, IconNamesLight, Modal } from '@shared/components';
 import Html from '@shared/components/Html/Html';
@@ -10,7 +11,6 @@ import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './AuthModal.module.scss';
-import { AuthModalProps } from './AuthModal.types';
 
 const AuthModal: FC<AuthModalProps> = (props) => {
 	const { query } = useRouter();

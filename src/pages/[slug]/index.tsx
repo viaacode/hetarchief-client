@@ -5,18 +5,14 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
+import { useDispatch } from 'react-redux';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
-import { AuthModal } from '@auth/components';
-import { selectUser } from '@auth/store/user';
-import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
-import { selectShowAuthModal, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -37,14 +33,8 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 	useNavigationBorder();
 
 	const router = useRouter();
-	const user = useSelector(selectUser);
 	const { slug } = router.query;
 	const dispatch = useDispatch();
-	const showAuthModal = useSelector(selectShowAuthModal);
-	const [query, setQuery] = useQueryParams({
-		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: withDefault(StringParam, undefined),
-	});
 
 	/**
 	 * Data
@@ -66,20 +56,6 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 	 */
 	const isVisitorSpaceNotFoundError = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isContentPageNotFoundError = (contentPageError as HTTPError)?.response?.status === 404;
-
-	/**
-	 * Methods
-	 */
-
-	const onCloseAuthModal = () => {
-		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
-			setQuery({
-				[SHOW_AUTH_QUERY_KEY]: undefined,
-				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
-			});
-		}
-		dispatch(setShowAuthModal(false));
-	};
 
 	/**
 	 * Effects
@@ -120,7 +96,6 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 		<VisitorLayout>
 			{renderOgTags(title || undefined, '', url)}
 			{renderPageContent()}
-			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 		</VisitorLayout>
 	);
 };
