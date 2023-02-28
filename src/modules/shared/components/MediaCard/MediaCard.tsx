@@ -120,6 +120,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				return renderImage(preview ? '/images/waveform.svg' : undefined);
 
 			case 'video':
+				return renderImage(preview);
 			case 'film':
 				return renderImage(preview);
 
