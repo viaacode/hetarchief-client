@@ -234,8 +234,8 @@ const getDynamicHeaderLinks = (
 			}
 
 			return {
-				activeDesktop: currentPath === contentPath,
-				activeMobile: currentPath === contentPath,
+				activeDesktop: currentPath.includes(contentPath),
+				activeMobile: currentPath.includes(contentPath),
 				id,
 				path: contentPath,
 				node: renderLink(
