@@ -38,14 +38,8 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 	useNavigationBorder();
 
 	const router = useRouter();
-	const user = useSelector(selectUser);
 	const { slug } = router.query;
 	const dispatch = useDispatch();
-	const showAuthModal = useSelector(selectShowAuthModal);
-	const [query, setQuery] = useQueryParams({
-		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: withDefault(StringParam, undefined),
-	});
 
 	/**
 	 * Data
@@ -69,20 +63,6 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 	const isVisitorSpaceNotFoundError = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isContentPageNotFoundError =
 		!!contentPageInfo || (contentPageError as HTTPError)?.response?.status === 404;
-
-	/**
-	 * Methods
-	 */
-
-	const onCloseAuthModal = () => {
-		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
-			setQuery({
-				[SHOW_AUTH_QUERY_KEY]: undefined,
-				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
-			});
-		}
-		dispatch(setShowAuthModal(false));
-	};
 
 	/**
 	 * Effects
@@ -121,7 +101,6 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 		<VisitorLayout>
 			{renderOgTags(title || undefined, '', url)}
 			{renderPageContent()}
-			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 		</VisitorLayout>
 	);
 };
