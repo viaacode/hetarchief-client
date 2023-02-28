@@ -327,6 +327,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		height: $c-navigation-height - $c-navigation-divider-size;
 	}
 
+	.c-navigation__link {
+		font-size: $font-size-md;
+	}
+
 	&:not(&--active):hover {
 		.c-navigation__link,
 		.c-navigation__link + span {
