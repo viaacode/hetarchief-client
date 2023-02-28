@@ -1,7 +1,7 @@
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
+import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/const';
 import { MaterialRequest, MaterialRequestKeys, MaterialRequestRow } from '@material-requests/types';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
@@ -44,7 +44,7 @@ export const getAccountMaterialRequestTableColumns = (): Column<MaterialRequest>
 		accessor: MaterialRequestKeys.type,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span className="u-color-neutral p-material-requests__table-type">
-				{MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE[original.type]}
+				{GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE()[original.type]}
 			</span>
 		),
 	},

@@ -4,7 +4,7 @@ import { MaterialRequest, MaterialRequestType } from 'modules/material-requests/
 
 export interface GetMaterialRequestsProps {
 	search?: string;
-	type?: MaterialRequestType;
+	type?: MaterialRequestType[];
 	maintainerIds?: string[];
 	isPending?: boolean;
 	page?: number;
