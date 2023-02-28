@@ -1,40 +1,17 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
 
-import { AuthModal } from '@auth/components';
-import { selectUser } from '@auth/store/user';
-import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectShowAuthModal, setShowAuthModal } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import styles from './cookie-policy.module.scss';
 
 const CookiePolicy: NextPage<DefaultSeoInfo> = ({ url }) => {
-	const dispatch = useDispatch();
 	const { tText } = useTranslation();
-	const [query, setQuery] = useQueryParams({
-		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: withDefault(StringParam, undefined),
-	});
 	const [cookieDeclarationHtml, setCookieDeclarationHtml] = useState<string>('');
-	const showAuthModal = useSelector(selectShowAuthModal);
-	const user = useSelector(selectUser);
-
-	const onCloseAuthModal = () => {
-		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
-			setQuery({
-				[SHOW_AUTH_QUERY_KEY]: undefined,
-				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
-			});
-		}
-		dispatch(setShowAuthModal(false));
-	};
 
 	useEffect(() => {
 		// Fool cookiebot to inject the html into our react useState
@@ -64,7 +41,6 @@ const CookiePolicy: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<div className={styles['p-cookie-policy__wrapper']}>
 				<div dangerouslySetInnerHTML={{ __html: cookieDeclarationHtml }} />
 			</div>
-			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 		</>
 	);
 };

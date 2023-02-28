@@ -1,6 +1,6 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-tooltip";
+$component: "c-tooltip-component";
 
 .#{$component} {
 	background-color: $black;
@@ -27,7 +27,7 @@ $component: "c-tooltip";
 		}
 	}
 
-	&[data-popper-placement^="top"] > .c-tooltip__arrow {
+	&[data-popper-placement^="top"] > .c-tooltip-component__arrow {
 		bottom: -2px !important;
 		transform: translate(-8px, 0) !important;
 		clip: rect(7px, 20px, 28px, -8px) !important;
