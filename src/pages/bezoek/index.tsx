@@ -11,7 +11,6 @@ import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
 import { Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser } from '@shared/utils';
 
@@ -24,8 +23,6 @@ const VisitorSpacesHome: NextPage<DefaultSeoInfo> = (props) => {
 	const user = useSelector(selectUser);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
-
-	useNavigationBorder(!isLoggedIn);
 
 	useEffect(() => {
 		if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
