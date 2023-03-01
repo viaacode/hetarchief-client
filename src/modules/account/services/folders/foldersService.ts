@@ -10,7 +10,7 @@ import {
 	COLLECTIONS_SERVICE_OBJECTS_URL,
 } from './collections.const';
 
-class CollectionsService extends ApiService {
+class FoldersService extends ApiService {
 	public async getAll(): Promise<IPagination<Folder>> {
 		const parsed = await ApiService.getApi().get(COLLECTIONS_SERVICE_BASE_URL).json();
 		return parsed as IPagination<Folder>;
@@ -76,4 +76,4 @@ class CollectionsService extends ApiService {
 	}
 }
 
-export const foldersService = new CollectionsService();
+export const foldersService = new FoldersService();
