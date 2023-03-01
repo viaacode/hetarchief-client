@@ -11,7 +11,6 @@ import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
@@ -30,8 +29,6 @@ type DynamicRouteResolverProps = {
 } & DefaultSeoInfo;
 
 const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url }) => {
-	useNavigationBorder();
-
 	const router = useRouter();
 	const { slug } = router.query;
 	const dispatch = useDispatch();
