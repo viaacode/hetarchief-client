@@ -38,7 +38,10 @@ const ListNavigation: FC<ListNavigationProps> = ({
 							<div
 								className={clsx(
 									styles['c-list-navigation__item'],
-									item.active && styles['c-list-navigation__item--active'],
+									// Only make leaf items active, never group items that have children
+									item.active &&
+										!item.children &&
+										styles['c-list-navigation__item--active'],
 									(item.variants || []).map((variant) => styles[variant])
 								)}
 							>
