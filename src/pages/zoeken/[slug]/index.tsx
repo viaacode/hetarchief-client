@@ -5,18 +5,13 @@ import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
+import { useDispatch } from 'react-redux';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
-import { AuthModal } from '@auth/components';
-import { selectUser } from '@auth/store/user';
-import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
-import { selectShowAuthModal, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -35,8 +30,6 @@ type DynamicRouteResolverProps = {
 
 // TODO: simplify this component to VisitorSpaceSearchPage
 const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url }) => {
-	useNavigationBorder();
-
 	const router = useRouter();
 	const { slug } = router.query;
 	const dispatch = useDispatch();

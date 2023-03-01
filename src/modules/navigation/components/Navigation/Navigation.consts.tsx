@@ -116,18 +116,18 @@ const getVisitorSpacesDropdown = (
 			activeMobile: currentPath.startsWith('/' + linkedSpaceSlug),
 		};
 	} else if (accessibleVisitorSpaces.length === 0) {
-		// No visitor spaces available => show link to homepage without dropdown
+		// No visitor spaces available => show link to bezoek page without dropdown
 		return {
 			node: renderLink(navigationLabel, ROUTES.bezoek, {
 				className: linkClasses,
 			}),
 			id: 'visitor-spaces',
-			activeDesktop: currentPath === ROUTES.home,
-			activeMobile: currentPath === ROUTES.home,
+			activeDesktop: currentPath === ROUTES.bezoek,
+			activeMobile: currentPath === ROUTES.bezoek,
 			path: currentPath,
 		};
 	} else {
-		// Show dropdown list with homepage and accessible visitor spaces
+		// Show dropdown list with bezoek page and accessible visitor spaces
 		return {
 			node: renderLink(navigationLabel, ROUTES.bezoek, {
 				badge: <Badge text={accessibleVisitorSpaces.length} />,
