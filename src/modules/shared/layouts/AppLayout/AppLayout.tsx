@@ -80,6 +80,7 @@ const AppLayout: FC = ({ children }) => {
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
+	const linkedSpaceOrId: string | null = user?.maintainerId || null;
 	const [query, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 		[SEARCH_QUERY_KEY]: StringParam,
@@ -195,7 +196,7 @@ const AppLayout: FC = ({ children }) => {
 			accessibleVisitorSpaces || [],
 			navigationItems || {},
 			user?.permissions || [],
-			showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
 			isMobile
 		);
 
