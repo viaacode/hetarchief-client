@@ -10,7 +10,6 @@ import { ErrorNoAccess, Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setShowZendesk } from '@shared/store/ui';
 import { AccessStatus } from '@shared/types';
@@ -31,8 +30,6 @@ type VisitRequestedPageProps = {
 } & DefaultSeoInfo;
 
 const VisitRequestedPage: NextPage<VisitRequestedPageProps> = ({ name, description, url }) => {
-	useNavigationBorder();
-
 	const router = useRouter();
 	const { tHtml, tText } = useTranslation();
 	const dispatch = useDispatch();

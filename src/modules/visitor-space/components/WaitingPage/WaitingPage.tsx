@@ -7,14 +7,11 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 
 import { CardImage } from '../../../shared/components';
-import { useNavigationBorder } from '../../../shared/hooks/use-navigation-border';
 import { VisitorSpaceNavigation } from '../VisitorSpaceNavigation';
 
 import { WaitingPageProps } from './WaitingPage.types';
 
 const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
-	useNavigationBorder();
-
 	const { tHtml } = useTranslation();
 
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);

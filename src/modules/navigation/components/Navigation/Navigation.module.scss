@@ -3,8 +3,6 @@
 @use "src/styles/abstracts" as *;
 
 $c-navigation-border-height: 0.5rem;
-$c-navigation-border-distance: 1.2rem;
-$c-navigation-dropdown-border-distance: 0.95rem;
 $c-navigation-list-divider-color: #4e4e4e;
 $c-navigation-divider-size: 0.1rem;
 $c-navigation-item-spacing: $spacer-md;
@@ -17,14 +15,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	.c-navigation__border-decoration:first-of-type {
 		&::before,
 		&::after {
-			content: "";
-			top: 69%;
 			left: $_offset1;
-			z-index: get-z-layer("nav-dropdown");
 		}
 
 		&::after {
-			content: "";
 			left: $offset1-border;
 		}
 	}
@@ -35,14 +29,10 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		.c-navigation__border-decoration:last-of-type {
 			&::before,
 			&::after {
-				content: "";
-				top: 69%;
 				left: $_offset2;
-				z-index: get-z-layer("nav-dropdown");
 			}
 
 			&::after {
-				content: "";
 				left: $offset2-border;
 			}
 		}
@@ -106,7 +96,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 
 	.c-navigation__dropdown {
 		.c-navigation__link {
-			padding: $c-navigation-dropdown-border-distance 0;
+			padding: 1.2rem 0 0.65rem;
 		}
 
 		@include respond-at(md) {
@@ -274,7 +264,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	}
 	@include respond-at(md) {
 		display: inline-block;
-		padding: $c-navigation-border-distance 0;
+		padding: 1.2rem 0 0.95rem;
 	}
 
 	&--dropdown:hover {
@@ -407,22 +397,30 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		&.c-navigation__link--variant-4,
 		&.c-navigation__link--variant-9,
 		&.c-navigation__link--variant-14 {
-			@include navigation-link-border-decoration(0, 0.6rem);
+			@include navigation-link-border-decoration(10%, 70%);
 		}
 
 		&.c-navigation__link--variant-5,
 		&.c-navigation__link--variant-10,
 		&.c-navigation__link--variant-15 {
-			@include navigation-link-border-decoration(0, 0.6rem);
+			@include navigation-link-border-decoration(34%, 50%);
 		}
 	}
 }
 
 .c-navigation__border-decoration {
+	height: 0;
+	width: 150px;
+	position: absolute;
+	top: 69%;
+	left: 0;
+
 	&::before,
 	&::after {
+		content: "";
+		z-index: get-z-layer("nav-dropdown");
 		position: absolute;
-		bottom: -$c-navigation-border-height;
+		top: 0;
 		width: $c-navigation-border-height;
 		height: $c-navigation-border-height;
 	}

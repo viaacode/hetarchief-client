@@ -12,7 +12,7 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'spaces-admin',
 		label: tText('modules/admin/const/routing___bezoekersruimtesbeheer'),
-		href: '',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
 		children: ADMIN_SPACES_LINKS,
 	},
 	{
@@ -33,7 +33,7 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 	{
 		id: 'users-admin',
 		label: tText('modules/admin/const/routing___gebruikersbeheer'),
-		href: '',
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.userManagement}/${ROUTE_PARTS.users}`,
 		children: ADMIN_USERS_LINKS,
 	},
 	{
