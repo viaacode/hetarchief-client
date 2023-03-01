@@ -1,6 +1,7 @@
 import { OrderDirection } from '@meemoo/react-components';
 import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
+import { sortBy } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 
 import { QUERY_KEYS } from '@shared/const';
@@ -58,7 +59,7 @@ export class VisitorSpaceService {
 				})
 			)
 			.json()) as IPagination<VisitorSpaceInfo>;
-		return parsed.items;
+		return sortBy(parsed.items, (space) => space.name?.toLowerCase());
 	}
 
 	public static async getBySlug(

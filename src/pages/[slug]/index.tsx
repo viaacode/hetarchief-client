@@ -13,9 +13,6 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import VisitorSpaceSearchPage from '@visitor-space/components/VisitorSpaceSearchPage/VisitorSpaceSearchPage';
-import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceService } from '@visitor-space/services';
 
 import { useGetContentPageByPath } from '../../modules/content-page/hooks/get-content-page';
 import { ContentPageClientService } from '../../modules/content-page/services/content-page-client.service';
@@ -38,11 +35,6 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 	 */
 
 	const {
-		error: visitorSpaceError,
-		isLoading: isVisitorSpaceLoading,
-		data: visitorSpaceInfo,
-	} = useGetVisitorSpace(`${slug}`, true);
-	const {
 		error: contentPageError,
 		isLoading: isContentPageLoading,
 		data: contentPageInfo,
@@ -51,7 +43,6 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 	/**
 	 * Computed
 	 */
-	const isVisitorSpaceNotFoundError = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isContentPageNotFoundError = (contentPageError as HTTPError)?.response?.status === 404;
 
 	/**
@@ -59,10 +50,10 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 	 */
 
 	useEffect(() => {
-		if (isVisitorSpaceNotFoundError && isContentPageNotFoundError) {
+		if (isContentPageNotFoundError) {
 			window.open(`${publicRuntimeConfig.PROXY_URL}/not-found`, '_self');
 		}
-	}, [isVisitorSpaceNotFoundError, isContentPageNotFoundError]);
+	}, [isContentPageNotFoundError]);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(true));
@@ -75,13 +66,8 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 	const renderPageContent = () => {
 		dispatch(setShowZendesk(true));
 
-		if (isVisitorSpaceLoading || isContentPageLoading) {
-			return <Loading fullscreen owner="slug page: render page content" />;
-		}
-
-		if (visitorSpaceInfo) {
-			dispatch(setShowZendesk(false));
-			return <VisitorSpaceSearchPage />;
+		if (isContentPageLoading) {
+			return <Loading fullscreen owner="/[slug]/index page" />;
 		}
 
 		if (contentPageInfo) {
@@ -102,21 +88,10 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<DynamicRouteResolverProps>> {
 	let title: string | null = null;
 	try {
-		const [space, contentPage] = await Promise.allSettled([
-			VisitorSpaceService.getBySlug(String(context.query.slug), true),
-			ContentPageClientService.getBySlug(`/${context.query.slug}`),
-		]);
-
-		if (space.status === 'fulfilled') {
-			title = space.value?.name || null;
-		} else if (contentPage.status === 'fulfilled') {
-			title = contentPage.value?.title || null;
-		}
+		const contentPage = await ContentPageClientService.getBySlug(`/${context.query.slug}`);
+		title = contentPage?.title || null;
 	} catch (err) {
-		console.error(
-			'Failed to fetch visitor space or content page seo info by slug: ' + context.query.slug,
-			err
-		);
+		console.error('Failed to fetch content page seo info by slug: ' + context.query.slug, err);
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(

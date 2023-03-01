@@ -3,15 +3,16 @@ import clsx from 'clsx';
 import { KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
 import { InputActionMeta } from 'react-select';
 
-import { IconNamesLight } from '../Icon';
-import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
-
 import {
 	OnSearchSingle,
 	TagSearchBarMeta,
 	TagSearchBarProps,
 	TagSearchBarValue,
-} from './TagSearchBar.types';
+} from '@shared/components';
+
+import { IconNamesLight } from '../Icon';
+import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
+
 import { TagSearchBarButton } from './TagSearchBarButton';
 import { TagSearchBarClear } from './TagSearchBarClear';
 import { TagSearchBarInfo } from './TagSearchBarInfo';
@@ -46,7 +47,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	syncSearchValue = true,
 	valuePlaceholder,
 	...tagsInputProps
-}: TagSearchBarProps<IsMulti>): ReactElement => {
+}: Partial<TagSearchBarProps<IsMulti>>): ReactElement => {
 	const localInputState = useState(searchValue);
 	const [inputValue, setInputValue] = inputState || localInputState;
 
