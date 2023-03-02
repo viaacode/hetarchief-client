@@ -82,7 +82,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
+			<div className={clsx(className)}>
 				<div className="u-mb-32">
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
@@ -101,6 +101,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 									isDisabled={disabled}
 									components={{ IndicatorSeparator: () => null }}
 									inputId={labelKeys.operator}
+									className="u-px-20 u-px-32:md"
 									onChange={(newValue) => {
 										const value = (newValue as SingleValue<SelectOption>)
 											?.value as Operator;
@@ -134,23 +135,27 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 								// eslint-disable-next-line @typescript-eslint/no-unused-vars
 								const { ref, ...refless } = field;
 
-								return showRange ? (
-									<DurationRangeInput
-										{...refless}
-										value={
-											form.duration ||
-											`${defaultValue}${SEPARATOR}${defaultValue}`
-										}
-										onChange={onChangeDuration}
-										placeholder={form.duration}
-									/>
-								) : (
-									<DurationInput
-										{...refless}
-										value={form.duration || defaultValue}
-										onChange={onChangeDuration}
-										placeholder={form.duration}
-									/>
+								return (
+									<div className="u-py-32 u-px-20 u-px-32:md u-bg-platinum">
+										{showRange ? (
+											<DurationRangeInput
+												{...refless}
+												value={
+													form.duration ||
+													`${defaultValue}${SEPARATOR}${defaultValue}`
+												}
+												onChange={onChangeDuration}
+												placeholder={form.duration}
+											/>
+										) : (
+											<DurationInput
+												{...refless}
+												value={form.duration || defaultValue}
+												onChange={onChangeDuration}
+												placeholder={form.duration}
+											/>
+										)}
+									</div>
 								);
 							}}
 						/>
