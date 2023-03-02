@@ -16,10 +16,13 @@ import {
 
 export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 	options,
+	initialState,
 	onChange,
 }: RefinableRadioButtonProps): ReactElement => {
-	const [selectedOption, setSelectedOption] = useState<string>(options[0].id);
-	const [selectedRefineOptions, setSelectedRefineOptions] = useState<string[]>([]);
+	const [selectedOption, setSelectedOption] = useState<string>(initialState.selectedOption);
+	const [selectedRefineOptions, setSelectedRefineOptions] = useState<string[]>(
+		initialState.refinedSelection
+	);
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
 	const onRadioButtonClick = (id: string): void => {

@@ -1,6 +1,12 @@
 export interface RefinableRadioButtonProps {
 	options: RefinableRadioButtonOption[];
+	initialState: RefinableRadioButtonInitialState;
 	onChange: (selectedOption: string, refinedSelection: string[]) => void;
+}
+
+export interface RefinableRadioButtonInitialState {
+	selectedOption: string;
+	refinedSelection: string[];
 }
 
 export interface RefinableRadioButtonDefaultOption {
