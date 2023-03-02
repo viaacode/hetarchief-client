@@ -1,4 +1,4 @@
-import { VisitStatus } from '@shared/types';
+import { AccessType, VisitStatus } from '@shared/types';
 
 export * from './requests.types';
 
@@ -13,6 +13,8 @@ export interface PatchVisit {
 	startAt?: string;
 	endAt?: string;
 	note?: string;
+	accessType?: AccessType;
+	accessFolderIds?: string[];
 }
 
 export interface UpdateVisit {
