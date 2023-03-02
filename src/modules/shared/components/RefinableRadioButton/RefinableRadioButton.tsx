@@ -18,6 +18,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 	options,
 	initialState,
 	onChange,
+	className,
 }: RefinableRadioButtonProps): ReactElement => {
 	const [selectedOption, setSelectedOption] = useState<string>(initialState.selectedOption);
 	const [selectedRefineOptions, setSelectedRefineOptions] = useState<string[]>(
@@ -52,7 +53,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 
 		return (
 			<div
-				className={clsx(styles['c-refinable-radio-button__refine'], {
+				className={clsx(className, styles['c-refinable-radio-button__refine'], {
 					[styles['c-refinable-radio-button__refine--disabled']]: isDisabled,
 				})}
 			>
@@ -87,8 +88,8 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 	};
 
 	useEffect(() => {
-		onChange(selectedOption, selectedRefineOptions);
-	}, [onChange, selectedOption, selectedRefineOptions]);
+		onChange(selectedOption, selectedRefineOptions, isDropdownOpen);
+	}, [isDropdownOpen, onChange, selectedOption, selectedRefineOptions]);
 
 	return (
 		<div className={styles['c-refinable-radio-button']}>

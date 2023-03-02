@@ -73,6 +73,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		Permission.READ_ALL_VISIT_REQUESTS
 	);
 	const { data: folders } = useGetFolders();
+
+	const [accessTypeLabel, setAccessTypeLabel] = useState(
+		tText('modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map')
+	);
+
 	const {
 		selected,
 		onClose,
@@ -114,11 +119,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							label: name,
 						})
 					),
-					label: 'TODO: dynamic label',
+					label: accessTypeLabel,
 				},
 			},
 		],
-		[folders, tText]
+		[folders, tText, accessTypeLabel]
 	);
 
 	const defaultValues = useMemo(
@@ -276,7 +281,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		(
 			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
 			selectedOption: AccessType,
-			selectedRefineOptions: string[]
+			selectedRefineOptions: string[],
+			isDropdownOpen: boolean
 		): void => {
 			const { accessType } = form;
 
@@ -284,6 +290,23 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				type: selectedOption,
 				folderIds: selectedRefineOptions,
 			};
+
+			setAccessTypeLabel(
+				selectedRefineOptions.length > 0
+					? isDropdownOpen
+						? tText(
+								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd'
+						  )
+						: tText(
+								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
+								{
+									count: selectedRefineOptions.length,
+								}
+						  )
+					: tText(
+							'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
+					  )
+			);
 
 			if (isEqual(accessType, updatedAccessType)) {
 				return;
@@ -294,7 +317,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				[field.name]: updatedAccessType,
 			}));
 		},
-		[form, setForm]
+		[form, tText]
 	);
 
 	// Render
@@ -499,11 +522,16 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<RefinableRadioButton
 					initialState={initialState}
 					options={accessTypeOptions}
-					onChange={(selectedOption: string, selectedRefineOptions: string[]) =>
+					onChange={(
+						selectedOption: string,
+						selectedRefineOptions: string[],
+						isDropdownOpen
+					) =>
 						onChangeAccessType(
 							field,
 							selectedOption as AccessType,
-							selectedRefineOptions
+							selectedRefineOptions,
+							isDropdownOpen
 						)
 					}
 				/>
@@ -511,8 +539,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		},
 		[accessTypeOptions, onChangeAccessType, form]
 	);
-
-	console.log(errors);
 
 	return (
 		<Blade

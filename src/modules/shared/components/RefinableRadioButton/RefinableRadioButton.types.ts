@@ -1,7 +1,9 @@
-export interface RefinableRadioButtonProps {
+import { DefaultComponentProps } from '@shared/types';
+
+export interface RefinableRadioButtonProps extends DefaultComponentProps {
 	options: RefinableRadioButtonOption[];
 	initialState: RefinableRadioButtonInitialState;
-	onChange: (selectedOption: string, refinedSelection: string[]) => void;
+	onChange: (selectedOption: string, refinedSelection: string[], isDropdownOpen: boolean) => void;
 }
 
 export interface RefinableRadioButtonInitialState {
