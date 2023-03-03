@@ -141,6 +141,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const [form, setForm] = useState<ApproveRequestFormState>(defaultValues);
 	const [overlappingRequests, setOverlappingRequests] = useState<Visit[]>([]);
+	const [isValid, setIsValid] = useState(false);
 
 	const {
 		control,
@@ -291,8 +292,10 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				folderIds: selectedRefineOptions,
 			};
 
+			const hasRefineOptions = !isEmpty(selectedRefineOptions);
+
 			setAccessTypeLabel(
-				selectedRefineOptions.length > 0
+				hasRefineOptions
 					? isDropdownOpen
 						? tText(
 								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd'
@@ -306,6 +309,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					: tText(
 							'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
 					  )
+			);
+
+			setIsValid(
+				(selectedOption === AccessType.FOLDERS && hasRefineOptions) ||
+					(selectedOption === AccessType.FULL && !hasRefineOptions)
 			);
 
 			if (isEqual(accessType, updatedAccessType)) {
@@ -330,7 +338,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					label={approveButtonLabel}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
-					disabled={isSubmitting}
+					disabled={isSubmitting || !isValid}
 				/>
 
 				<Button
