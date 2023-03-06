@@ -17,19 +17,27 @@ import {
 	roundToNearestMinutes,
 	startOfDay,
 } from 'date-fns';
+import { isEmpty, isEqual } from 'lodash';
 import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
+import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
 
 import { Permission } from '@account/const';
-import { Blade, Icon, IconNamesLight, VisitSummary } from '@shared/components';
+import { useGetFolders } from '@account/hooks/get-folders';
+import {
+	Blade,
+	Icon,
+	IconNamesLight,
+	RefinableRadioButton,
+	RefinableRadioButtonOption,
+} from '@shared/components';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { Visit, VisitStatus } from '@shared/types';
+import { AccessType, Visit, VisitStatus } from '@shared/types';
 import { asDate, formatMediumDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitTimeframe } from '@visits/types';
@@ -42,6 +50,7 @@ const labelKeys: Record<keyof ApproveRequestFormState, string> = {
 	accessFrom: 'ApproveRequestBlade__accessFrom',
 	accessRemark: 'ApproveRequestBlade__accessRemark',
 	accessTo: 'ApproveRequestBlade__accessTo',
+	accessType: 'ApproveRequestBlade__accessType',
 };
 
 const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
@@ -53,12 +62,22 @@ const defaultAccessTo = (accessFrom: Date) => {
 	}
 	return addHours(startOfDay(accessFrom), hoursUntilNext1800);
 };
+const defaultAccessType = {
+	type: AccessType.FULL,
+	folderIds: [],
+};
 
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { tHtml, tText } = useTranslation();
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
 		Permission.READ_ALL_VISIT_REQUESTS
 	);
+	const { data: folders } = useGetFolders();
+
+	const [accessTypeLabel, setAccessTypeLabel] = useState(
+		tText('modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map')
+	);
+
 	const {
 		selected,
 		onClose,
@@ -77,17 +96,52 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		),
 	} = props;
 
+	const accessTypeOptions: RefinableRadioButtonOption[] = useMemo(
+		() => [
+			{
+				id: AccessType.FULL,
+				label: tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-de-volledige-collectie'
+				),
+			},
+			{
+				id: AccessType.FOLDERS,
+				label: tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___toegang-tot-een-deel-van-collectie'
+				),
+				refine: {
+					info: tText(
+						'modules/cp/components/approve-request-blade/approve-request-blade___mappen-dienen-op-voorhand-gemaakt-te-worden'
+					),
+					options: (folders?.items || []).map(
+						({ id, name }): RefinableRadioButtonOption => ({
+							id,
+							label: name,
+						})
+					),
+					label: accessTypeLabel,
+				},
+			},
+		],
+		[folders, tText, accessTypeLabel]
+	);
+
 	const defaultValues = useMemo(
 		() => ({
 			accessFrom: asDate(selected?.startAt) || defaultAccessFrom(new Date()),
 			accessTo: asDate(selected?.endAt) || defaultAccessTo(new Date()),
 			accessRemark: selected?.note?.note || undefined,
+			accessType: {
+				type: selected?.accessType || defaultAccessType.type,
+				folderIds: selected?.accessibleFolderIds || defaultAccessType.folderIds,
+			},
 		}),
 		[selected]
 	);
 
 	const [form, setForm] = useState<ApproveRequestFormState>(defaultValues);
 	const [overlappingRequests, setOverlappingRequests] = useState<Visit[]>([]);
+	const [isValid, setIsValid] = useState(false);
 
 	const {
 		control,
@@ -110,6 +164,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				accessFrom: asDate(selected.startAt) || defaultValues.accessFrom,
 				accessTo: asDate(selected.endAt) || defaultValues.accessTo,
 				accessRemark: selected.note?.note || defaultValues.accessRemark,
+				accessType:
+					{ type: selected.accessType, folderIds: selected.accessibleFolderIds } ||
+					defaultValues.accessType,
 			});
 	}, [selected, defaultValues, setForm]);
 
@@ -117,6 +174,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		setValue('accessFrom', form.accessFrom);
 		setValue('accessTo', form.accessTo);
 		setValue('accessRemark', form.accessRemark);
+		setValue('accessType', form.accessType);
 	}, [form, setValue]);
 
 	useEffect(() => {
@@ -189,6 +247,10 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				startAt: values.accessFrom?.toISOString(),
 				endAt: values.accessTo?.toISOString(),
 				note: values.accessRemark, // TODO check throughput
+				accessType: values.accessType?.type,
+				...(!isEmpty(values.accessType.folderIds) && {
+					accessFolderIds: values.accessType.folderIds,
+				}),
 			}).then(() => {
 				onSubmit?.(values);
 
@@ -216,6 +278,80 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		[setForm]
 	);
 
+	const onChangeAccessType = useCallback(
+		(
+			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
+			selectedOption: AccessType,
+			selectedRefineOptions: string[],
+			isDropdownOpen: boolean
+		): void => {
+			const { accessType } = form;
+
+			const updatedAccessType = {
+				type: selectedOption,
+				folderIds: selectedRefineOptions,
+			};
+
+			const hasRefineOptions = !isEmpty(selectedRefineOptions);
+			const hasMultipleRefineOptions = selectedRefineOptions.length > 1;
+
+			if (hasRefineOptions && isDropdownOpen) {
+				setAccessTypeLabel(
+					hasMultipleRefineOptions
+						? tText(
+								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd'
+						  )
+						: tText(
+								'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
+						  )
+				);
+
+				return;
+			}
+
+			if (hasRefineOptions && !isDropdownOpen) {
+				setAccessTypeLabel(
+					hasMultipleRefineOptions
+						? tText(
+								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
+								{
+									count: selectedRefineOptions.length,
+								}
+						  )
+						: tText(
+								'modules/cp/components/approve-request-blade/approve-request-blade___er-is-x-map-geselecteerd',
+								{
+									count: selectedRefineOptions.length,
+								}
+						  )
+				);
+
+				return;
+			}
+
+			setAccessTypeLabel(
+				tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
+				)
+			);
+
+			setIsValid(
+				(selectedOption === AccessType.FOLDERS && hasRefineOptions) ||
+					(selectedOption === AccessType.FULL && !hasRefineOptions)
+			);
+
+			if (isEqual(accessType, updatedAccessType)) {
+				return;
+			}
+
+			setForm((original) => ({
+				...original,
+				[field.name]: updatedAccessType,
+			}));
+		},
+		[form, tText]
+	);
+
 	// Render
 
 	const renderFooter = () => {
@@ -226,7 +362,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					label={approveButtonLabel}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
-					disabled={isSubmitting}
+					disabled={isSubmitting || !isValid}
 				/>
 
 				<Button
@@ -406,16 +542,58 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		/>
 	);
 
+	const renderAccessType = useCallback(
+		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessType'> }) => {
+			const { accessType } = form;
+			const initialState = {
+				selectedOption: accessType.type,
+				refinedSelection: accessType.folderIds,
+			};
+
+			return (
+				<RefinableRadioButton
+					initialState={initialState}
+					options={accessTypeOptions}
+					onChange={(
+						selectedOption: string,
+						selectedRefineOptions: string[],
+						isDropdownOpen
+					) =>
+						onChangeAccessType(
+							field,
+							selectedOption as AccessType,
+							selectedRefineOptions,
+							isDropdownOpen
+						)
+					}
+				/>
+			);
+		},
+		[accessTypeOptions, onChangeAccessType, form]
+	);
+
 	return (
 		<Blade
 			{...props}
 			footer={props.isOpen && renderFooter()}
 			renderTitle={(props) => <h3 {...props}>{title}</h3>}
 		>
-			{selected && <VisitSummary {...selected} />}
-
 			{props.isOpen && (
 				<div className="u-px-32">
+					<FormControl
+						className={clsx(styles['c-approve-request-blade__access-type'], 'u-mb-32')}
+						errors={[
+							errors.accessType?.type?.message,
+							(errors.accessType?.folderIds as FieldError | undefined)?.message,
+						]}
+						id={labelKeys.accessType}
+						label={tHtml(
+							'modules/cp/components/approve-request-blade/approve-request-blade___type'
+						)}
+					>
+						<Controller name="accessType" control={control} render={renderAccessType} />
+					</FormControl>
+
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__date-time'], 'u-mb-32')}
 						errors={[errors.accessFrom?.message]}

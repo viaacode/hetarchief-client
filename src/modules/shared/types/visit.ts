@@ -17,6 +17,7 @@ export enum AccessType {
 }
 
 export interface Visit {
+	accessibleFolderIds: string[];
 	createdAt: string;
 	endAt?: string;
 	id: string;

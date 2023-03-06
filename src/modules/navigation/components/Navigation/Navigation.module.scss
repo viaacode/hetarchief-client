@@ -15,10 +15,14 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	.c-navigation__border-decoration:first-of-type {
 		&::before,
 		&::after {
+			content: "";
+			top: 69%;
 			left: $_offset1;
+			z-index: get-z-layer("nav-dropdown");
 		}
 
 		&::after {
+			content: "";
 			left: $offset1-border;
 		}
 	}
@@ -29,10 +33,14 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		.c-navigation__border-decoration:last-of-type {
 			&::before,
 			&::after {
+				content: "";
+				top: 69%;
 				left: $_offset2;
+				z-index: get-z-layer("nav-dropdown");
 			}
 
 			&::after {
+				content: "";
 				left: $offset2-border;
 			}
 		}
@@ -397,30 +405,22 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		&.c-navigation__link--variant-4,
 		&.c-navigation__link--variant-9,
 		&.c-navigation__link--variant-14 {
-			@include navigation-link-border-decoration(10%, 70%);
+			@include navigation-link-border-decoration(0, 0.6rem);
 		}
 
 		&.c-navigation__link--variant-5,
 		&.c-navigation__link--variant-10,
 		&.c-navigation__link--variant-15 {
-			@include navigation-link-border-decoration(34%, 50%);
+			@include navigation-link-border-decoration(0, 0.6rem);
 		}
 	}
 }
 
 .c-navigation__border-decoration {
-	height: 0;
-	width: 150px;
-	position: absolute;
-	top: 69%;
-	left: 0;
-
 	&::before,
 	&::after {
-		content: "";
-		z-index: get-z-layer("nav-dropdown");
 		position: absolute;
-		top: 0;
+		bottom: -$c-navigation-border-height;
 		width: $c-navigation-border-height;
 		height: $c-navigation-border-height;
 	}
