@@ -6,6 +6,18 @@
 	font-size: $font-size-sm;
 	color: $neutral;
 
+	&-bar {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between !important;
+		align-items: center;
+	}
+
+	&-progress {
+		color: $zinc;
+		font-size: $font-size-sm;
+	}
+
 	&__btn {
 		display: flex;
 		justify-content: center;

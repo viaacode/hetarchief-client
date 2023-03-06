@@ -2,7 +2,7 @@ import { DefaultComponentProps } from '@shared/types';
 
 export interface VisitorSpaceDropdownProps extends DefaultComponentProps {
 	options: VisitorSpaceDropdownOption[];
-	selectedOptionId: string;
+	selectedOptionId: string | null;
 	onSelected: (visitorSpaceId: string) => void;
 }
 

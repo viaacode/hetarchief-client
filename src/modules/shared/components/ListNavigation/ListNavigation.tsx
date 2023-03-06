@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, ReactNode } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 import styles from './ListNavigation.module.scss';
 import {
@@ -15,13 +15,16 @@ const ListNavigation: FC<ListNavigationProps> = ({
 	onClick,
 	type = ListNavigationType.Navigation,
 }) => {
-	const nodeProps = {
+	const nodeProps = (layer: number) => ({
 		buttonClassName: styles['c-list-navigation__button'],
 		linkClassName:
 			type === ListNavigationType.Navigation
-				? styles['c-list-navigation__link']
+				? clsx(
+						styles['c-list-navigation__link'],
+						styles[`c-list-navigation__link--indent--${layer}`]
+				  )
 				: styles['c-list-navigation__link--simple'],
-	};
+	});
 
 	const renderChildrenRecursively = (items: ListNavigationItem[], layer = 0): ReactNode => {
 		return (
@@ -35,13 +38,16 @@ const ListNavigation: FC<ListNavigationProps> = ({
 							<div
 								className={clsx(
 									styles['c-list-navigation__item'],
-									item.active && styles['c-list-navigation__item--active'],
+									// Only make leaf items active, never group items that have children
+									item.active &&
+										!item.children &&
+										styles['c-list-navigation__item--active'],
 									(item.variants || []).map((variant) => styles[variant])
 								)}
 							>
-								<div style={{ paddingLeft: `${layer * 3.2}rem` }}>
+								<div>
 									{typeof item.node === 'function'
-										? item.node(nodeProps)
+										? item.node(nodeProps(layer))
 										: item.node}
 								</div>
 							</div>

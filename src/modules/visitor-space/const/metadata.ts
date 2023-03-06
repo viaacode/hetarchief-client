@@ -222,6 +222,20 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 					},
 				],
 			},
+			[Operator.Exact]: {
+				label: dictionary.exact,
+				field: DurationRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
 		},
 		// "Temporal" missing in ES, src/modules/ie-objects/types.ts:84
 		[MetadataProp.Era]: {
