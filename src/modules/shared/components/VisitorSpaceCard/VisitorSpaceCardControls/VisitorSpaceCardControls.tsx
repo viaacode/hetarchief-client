@@ -3,13 +3,16 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { FC, MouseEvent, ReactNode } from 'react';
 
-import { CopyButton, DropdownMenu } from '@shared/components';
+import {
+	CopyButton,
+	DropdownMenu,
+	VisitorSpaceCardProps,
+	VisitorSpaceCardType,
+} from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import { Icon, IconName, IconNamesLight } from '../../Icon';
-import { VisitorSpaceCardType } from '../VisitorSpaceCard.const';
-import { VisitorSpaceCardProps } from '../VisitorSpaceCard.types';
 import { formatDateTime } from '../VisitorSpaceCard.utils';
 
 import styles from './VisitorSpaceCardControls.module.scss';

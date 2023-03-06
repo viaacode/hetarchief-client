@@ -82,7 +82,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
+			<div className={clsx(className)}>
 				<div className="u-mb-32">
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
@@ -96,25 +96,27 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 							control={control}
 							name="operator"
 							render={({ field }) => (
-								<ReactSelect
-									{...field}
-									isDisabled={disabled}
-									components={{ IndicatorSeparator: () => null }}
-									inputId={labelKeys.operator}
-									onChange={(newValue) => {
-										const value = (newValue as SingleValue<SelectOption>)
-											?.value as Operator;
+								<div className="u-px-20 u-px-32:md">
+									<ReactSelect
+										{...field}
+										isDisabled={disabled}
+										components={{ IndicatorSeparator: () => null }}
+										inputId={labelKeys.operator}
+										onChange={(newValue) => {
+											const value = (newValue as SingleValue<SelectOption>)
+												?.value as Operator;
 
-										if (value !== form.operator) {
-											setForm({
-												duration: defaultValues.duration,
-												operator: value,
-											});
-										}
-									}}
-									options={operators}
-									value={getSelectValue(operators, field.value)}
-								/>
+											if (value !== form.operator) {
+												setForm({
+													duration: defaultValues.duration,
+													operator: value,
+												});
+											}
+										}}
+										options={operators}
+										value={getSelectValue(operators, field.value)}
+									/>
+								</div>
 							)}
 						/>
 					</FormControl>
@@ -134,23 +136,27 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 								// eslint-disable-next-line @typescript-eslint/no-unused-vars
 								const { ref, ...refless } = field;
 
-								return showRange ? (
-									<DurationRangeInput
-										{...refless}
-										value={
-											form.duration ||
-											`${defaultValue}${SEPARATOR}${defaultValue}`
-										}
-										onChange={onChangeDuration}
-										placeholder={form.duration}
-									/>
-								) : (
-									<DurationInput
-										{...refless}
-										value={form.duration || defaultValue}
-										onChange={onChangeDuration}
-										placeholder={form.duration}
-									/>
+								return (
+									<div className="u-py-32 u-px-20 u-px-32:md u-bg-platinum">
+										{showRange ? (
+											<DurationRangeInput
+												{...refless}
+												value={
+													form.duration ||
+													`${defaultValue}${SEPARATOR}${defaultValue}`
+												}
+												onChange={onChangeDuration}
+												placeholder={form.duration}
+											/>
+										) : (
+											<DurationInput
+												{...refless}
+												value={form.duration || defaultValue}
+												onChange={onChangeDuration}
+												placeholder={form.duration}
+											/>
+										)}
+									</div>
 								);
 							}}
 						/>

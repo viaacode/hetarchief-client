@@ -7,7 +7,7 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Group, Permission, PERMISSION_TRANSLATIONS_BY_GROUP } from '@account/const';
+import { GET_PERMISSION_TRANSLATIONS_BY_GROUP, Group, Permission } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
@@ -138,14 +138,14 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 									<dl className="p-account-my-profile__permissions-list u-mb-24">
 										<dt>
 											{
-												PERMISSION_TRANSLATIONS_BY_GROUP[
+												GET_PERMISSION_TRANSLATIONS_BY_GROUP()[
 													user?.groupName as Group
 												].name
 											}
 										</dt>
 										<dd className="u-color-neutral u-mt-8">
 											{
-												PERMISSION_TRANSLATIONS_BY_GROUP[
+												GET_PERMISSION_TRANSLATIONS_BY_GROUP()[
 													user?.groupName as Group
 												].description
 											}

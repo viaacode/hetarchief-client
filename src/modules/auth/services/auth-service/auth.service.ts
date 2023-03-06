@@ -21,7 +21,7 @@ export class AuthService {
 		router: NextRouter
 	): Promise<void> {
 		const { redirectTo, slug, ...otherQueryParams } = query;
-		let originalPath: string = (redirectTo as string) || '';
+		let originalPath: string = (redirectTo as string) || router.asPath || '';
 		if ((originalPath || '').endsWith('/' + ROUTE_PARTS.logout)) {
 			originalPath = '/';
 		}

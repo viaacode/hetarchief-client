@@ -18,6 +18,7 @@ export * from './HetArchiefLogo';
 export * from './MediaCard';
 export * from './MediaCardList';
 export * from './Modal';
+export * from './MultiSelect';
 export * from './NotificationCenter';
 export * from './Overlay';
 export * from './PaginationBar';

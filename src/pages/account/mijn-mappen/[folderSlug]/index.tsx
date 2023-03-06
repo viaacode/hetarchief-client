@@ -376,7 +376,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
-				value: item.format,
+				value: item.dctermsFormat,
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___creatiedatum'),
@@ -509,7 +509,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													description: renderDescription(media),
 													title: renderTitle(media),
 													name: media.name,
-													type: media.format,
+													type: media.dctermsFormat,
 													preview: media.thumbnailUrl,
 													duration: media.duration,
 												};
@@ -517,8 +517,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 												return {
 													...base,
 													actions: renderActions(base, activeFolder),
-													...(!isNil(media.format) && {
-														icon: TYPE_TO_ICON_MAP[media.format],
+													...(!isNil(media.dctermsFormat) && {
+														icon: TYPE_TO_ICON_MAP[media.dctermsFormat],
 													}),
 												};
 											})}

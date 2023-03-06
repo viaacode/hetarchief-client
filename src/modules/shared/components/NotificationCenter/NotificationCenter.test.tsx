@@ -39,7 +39,7 @@ describe('Components', () => {
 		//
 		// 	expect(notificationLink).toHaveAttribute(
 		// 		'href',
-		// 		'/beheer/aanvragen?visitRequest=' + NOTIFICATIONS_FIRST_PAGE.items[0].visitId
+		// 		'/beheer/toegangsaanvragen?visitRequest=' + NOTIFICATIONS_FIRST_PAGE.items[0].visitId
 		// 	);
 		// });
 		// it('Should render unread and read notifications', () => {

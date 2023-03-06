@@ -11,15 +11,16 @@ import {
 	CP_ADMIN_NAVIGATION_TOP_LINKS,
 	CP_ADMIN_SEARCH_VISITOR_SPACE_KEY,
 } from '@cp/const';
+import { CPAdminLayoutProps } from '@cp/layouts';
 import { ListNavigationItem } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import styles from './CPAdminLayout.module.scss';
-import { CPAdminLayoutProps } from './CPAdminLayout.types';
 
 const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
@@ -53,7 +54,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 						: stringifyUrl({
 								url: href,
 								query: {
-									maintainer: user?.maintainerId,
+									[VisitorSpaceFilterId.Maintainer]: user?.maintainerId,
 								},
 						  });
 

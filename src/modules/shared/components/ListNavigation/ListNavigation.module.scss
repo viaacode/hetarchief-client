@@ -14,6 +14,8 @@ $component: "c-list-navigation";
 	}
 
 	&__item {
+		display: block;
+
 		&--active {
 			font-weight: 700;
 		}
@@ -44,9 +46,18 @@ $component: "c-list-navigation";
 
 	&__link {
 		display: block;
-		padding: $spacer-sm;
-		padding-left: $spacer-lg;
 		text-decoration: none;
+		padding: 1.6rem 1.6rem 1.6rem $spacer-lg;
+
+		&--indent {
+			&--1 {
+				padding-left: $spacer-lg * 2;
+			}
+
+			&--2 {
+				padding-left: $spacer-lg * 3;
+			}
+		}
 	}
 
 	&__button:global(.c-button) {

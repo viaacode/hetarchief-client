@@ -1,8 +1,10 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
+import { AuthModalProps } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { Icon, IconNamesLight, Modal } from '@shared/components';
 import Html from '@shared/components/Html/Html';
@@ -10,12 +12,12 @@ import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './AuthModal.module.scss';
-import { AuthModalProps } from './AuthModal.types';
 
 const AuthModal: FC<AuthModalProps> = (props) => {
 	const { query } = useRouter();
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const { publicRuntimeConfig } = getConfig();
 
 	/**
 	 * Methods
@@ -55,17 +57,19 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	};
 
 	const renderFooter = () => {
-		return (
-			<div className="u-text-center u-bg-silver">
-				<Button
-					label={tHtml(
-						'modules/auth/components/auth-modal/auth-modal___meld-je-aan-als-admin'
-					)}
-					variants="text"
-					onClick={onLoginMeemoo}
-				/>
-			</div>
-		);
+		if (publicRuntimeConfig.ENABLE_LOGIN_FOOTER === 'true') {
+			return (
+				<div className="u-text-center u-bg-silver">
+					<Button
+						label={tHtml(
+							'modules/auth/components/auth-modal/auth-modal___meld-je-aan-als-admin'
+						)}
+						variants="text"
+						onClick={onLoginMeemoo}
+					/>
+				</div>
+			);
+		}
 	};
 
 	return (

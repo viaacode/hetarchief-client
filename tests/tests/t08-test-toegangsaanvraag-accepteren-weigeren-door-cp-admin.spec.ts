@@ -42,7 +42,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.click('nav ul li .c-dropdown a');
 
 	// Click visit requests navigation item
-	await page.click('a[href="/beheer/aanvragen"]');
+	await page.click('a[href="/beheer/toegangsaanvragen"]');
 
 	// Check page title matches visitor requests page title
 	await page.waitForFunction(() => document.title === 'Aanvragen | bezoekertool', null, {
@@ -50,7 +50,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	});
 
 	// Check Visit Requests is active in the sidebar
-	await checkActiveSidebarNavigationItem(page, 0, 'Aanvragen', '/beheer/aanvragen');
+	await checkActiveSidebarNavigationItem(page, 0, 'Aanvragen', '/beheer/toegangsaanvragen');
 
 	// Wait for results to load
 	await waitForLoading(page);

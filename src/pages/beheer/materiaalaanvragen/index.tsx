@@ -1,20 +1,18 @@
-import { Dropdown, MenuContent, OrderDirection, Table } from '@meemoo/react-components';
+import { OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, ReactNode, useMemo, useState } from 'react';
+import { ComponentType, ReactNode, useEffect, useMemo, useState } from 'react';
 import { SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
-	CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY,
-	CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD,
-	CP_MATERIAL_REQUESTS_FILTER_ALL_ID,
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+	GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
 	getMaterialRequestTableColumns,
 } from '@cp/const/material-requests.const';
 import { CPAdminLayout } from '@cp/layouts';
@@ -24,14 +22,7 @@ import {
 	MaterialRequestKeys,
 	MaterialRequestType,
 } from '@material-requests/types';
-import {
-	Icon,
-	IconNamesLight,
-	Loading,
-	PaginationBar,
-	SearchBar,
-	sortingIcons,
-} from '@shared/components';
+import { Loading, MultiSelect, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -40,18 +31,15 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
-	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-	const [dropdownLabel, setDropdownLabel] = useState<string>(
-		CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[CP_MATERIAL_REQUESTS_FILTER_ALL_ID]
-	);
-
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
+
+	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		size: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 		...(!isNil(filters.search) && { search: filters.search }),
 		...(!isNil(filters.page) && { page: filters.page }),
-		...(!isNil(filters.type) && { type: filters.type as MaterialRequestType }),
+		...(!isNil(filters.type) && { type: filters.type as MaterialRequestType[] }),
 		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as OrderDirection,
@@ -77,22 +65,32 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		});
 	};
 
-	const onTypeClick = (id: string | number): void => {
-		const showAll = id === CP_MATERIAL_REQUESTS_FILTER_ALL_ID;
-		setDropdownLabel(CP_MATERIAL_REQUEST_TYPE_FITLER_RECORD[id]);
-		setIsDropdownOpen(false);
+	const onMultiTypeChange = (selectedItems: string[]) => {
+		if (selectedItems !== selectedTypes) {
+			setSelectedTypes(selectedItems);
+		}
+	};
 
+	useEffect(() => {
 		setFilters({
-			type: showAll ? undefined : `${id}`,
+			...filters,
+			type: selectedTypes,
 			page: 1,
 		});
-	};
+	}, [selectedTypes]);
 
 	const onSortChange = (
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
+			setFilters({
+				...filters,
+				orderProp,
+				orderDirection: OrderDirection.asc,
+				page: 1,
+			});
+		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp,
@@ -151,23 +149,14 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 				<>
 					<div className="l-container">
 						<div className="p-material-requests__header">
-							<Dropdown
-								variants="filter"
-								flyoutClassName="p-material-requests__dropdown--open"
+							<MultiSelect
+								variant="rounded"
+								label="Type"
+								options={GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY()}
+								onChange={onMultiTypeChange}
 								className="p-material-requests__dropdown"
-								label={dropdownLabel}
-								isOpen={isDropdownOpen}
-								onOpen={() => setIsDropdownOpen(true)}
-								onClose={() => setIsDropdownOpen(false)}
-								iconOpen={<Icon name={IconNamesLight.AngleUp} />}
-								iconClosed={<Icon name={IconNamesLight.AngleDown} />}
-							>
-								<MenuContent
-									rootClassName="c-dropdown-menu"
-									onClick={onTypeClick}
-									menuItems={CP_MATERIAL_REQUEST_TYPE_FITLER_ARRAY}
-								/>
-							</Dropdown>
+							/>
+
 							<SearchBar
 								id="materiaalaanvragen-searchbar"
 								default={filters[SEARCH_QUERY_KEY]}

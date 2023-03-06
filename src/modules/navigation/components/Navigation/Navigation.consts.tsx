@@ -15,7 +15,7 @@ import { Icon, IconName, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
-import { VisitorSpaceInfo } from '@visitor-space/types';
+import { VisitorSpaceFilterId, VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -97,14 +97,15 @@ const getVisitorSpacesDropdown = (
 	navigationLabel: string,
 	currentPath: string,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	linkedSpaceSlug: string | null
+	linkedSpaceOrId: string | null
 ): NavigationItem => {
-	if (linkedSpaceSlug) {
+	if (linkedSpaceOrId) {
 		// Single link to go to linked visitor space (kiosk visitor)
+		const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${linkedSpaceOrId}`;
 		return {
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
-				'/' + linkedSpaceSlug,
+				searchRouteForSpace,
 				{
 					badge: null,
 					className: linkClasses,
@@ -112,22 +113,22 @@ const getVisitorSpacesDropdown = (
 			),
 			id: 'visitor-spaces',
 			path: currentPath,
-			activeDesktop: currentPath.startsWith('/' + linkedSpaceSlug),
-			activeMobile: currentPath.startsWith('/' + linkedSpaceSlug),
+			activeDesktop: currentPath.startsWith(searchRouteForSpace),
+			activeMobile: currentPath.startsWith(searchRouteForSpace),
 		};
 	} else if (accessibleVisitorSpaces.length === 0) {
-		// No visitor spaces available => show link to homepage without dropdown
+		// No visitor spaces available => show link to bezoek page without dropdown
 		return {
 			node: renderLink(navigationLabel, ROUTES.bezoek, {
 				className: linkClasses,
 			}),
 			id: 'visitor-spaces',
-			activeDesktop: currentPath === ROUTES.home,
-			activeMobile: currentPath === ROUTES.home,
+			activeDesktop: currentPath === ROUTES.bezoek,
+			activeMobile: currentPath === ROUTES.bezoek,
 			path: currentPath,
 		};
 	} else {
-		// Show dropdown list with homepage and accessible visitor spaces
+		// Show dropdown list with bezoek page and accessible visitor spaces
 		return {
 			node: renderLink(navigationLabel, ROUTES.bezoek, {
 				badge: <Badge text={accessibleVisitorSpaces.length} />,
@@ -141,11 +142,7 @@ const getVisitorSpacesDropdown = (
 			}),
 			id: 'visitor-spaces',
 			path: currentPath,
-			activeDesktop:
-				currentPath === ROUTES.bezoek ||
-				!!accessibleVisitorSpaces.find((visitorSpace) =>
-					currentPath.startsWith(`/${visitorSpace.slug}`)
-				),
+			activeDesktop: currentPath === ROUTES.bezoek,
 			activeMobile: currentPath === ROUTES.bezoek,
 			children: [
 				{
@@ -162,15 +159,16 @@ const getVisitorSpacesDropdown = (
 					path: currentPath,
 					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 				},
-				...accessibleVisitorSpaces.map(
-					(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
+				...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
+					const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.maintainerId}`;
+					return {
 						node: ({ closeDropdowns }) =>
 							renderLink(
 								visitorSpace.name ||
 									tText(
 										'modules/navigation/components/navigation/navigation___bezoekersruimte'
 									),
-								`/${visitorSpace.slug}`,
+								searchRouteForSpace,
 								{
 									iconEnd: (
 										<Icon
@@ -186,17 +184,18 @@ const getVisitorSpacesDropdown = (
 									),
 									className: dropdownCls(),
 									onClick: () => {
-										if (currentPath === `/${visitorSpace.slug}`) {
+										if (currentPath === searchRouteForSpace) {
 											closeDropdowns?.();
 										}
 									},
 								}
 							),
 						id: visitorSpace.id,
-						activeMobile: currentPath.startsWith(`/${visitorSpace.slug}`),
+						activeDesktop: currentPath.startsWith(searchRouteForSpace),
+						activeMobile: currentPath.startsWith(searchRouteForSpace),
 						path: currentPath,
-					})
-				),
+					};
+				}),
 			],
 		};
 	}
@@ -207,7 +206,7 @@ const getDynamicHeaderLinks = (
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	placement: NavigationPlacement,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	linkedSpaceSlug: string | null
+	linkedSpaceOrId: string | null
 ) => {
 	const itemsByPlacement = navigationItems[placement];
 
@@ -229,13 +228,13 @@ const getDynamicHeaderLinks = (
 					label,
 					currentPath,
 					accessibleVisitorSpaces,
-					linkedSpaceSlug
+					linkedSpaceOrId
 				);
 			}
 
 			return {
-				activeDesktop: currentPath === contentPath,
-				activeMobile: currentPath === contentPath,
+				activeDesktop: currentPath.includes(contentPath),
+				activeMobile: currentPath.includes(contentPath),
 				id,
 				path: contentPath,
 				node: renderLink(
@@ -397,7 +396,7 @@ export const getNavigationItemsLeft = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	permissions: Permission[],
-	linkedSpaceSlug: string | null,
+	linkedSpaceOrId: string | null,
 	isMobile: boolean
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
@@ -405,14 +404,14 @@ export const getNavigationItemsLeft = (
 		navigationItems,
 		NavigationPlacement.HeaderLeft,
 		accessibleVisitorSpaces,
-		linkedSpaceSlug
+		linkedSpaceOrId
 	);
 	const afterDivider = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
 		NavigationPlacement.HeaderRight,
 		accessibleVisitorSpaces,
-		linkedSpaceSlug
+		linkedSpaceOrId
 	);
 
 	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions, isMobile);
@@ -445,14 +444,14 @@ export const getNavigationItemsProfileDropdown = (
 	currentPath: string,
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	linkedSpaceSlug: string | null
+	linkedSpaceOrId: string | null
 ): NavigationItem[] => {
 	const profileDropdown = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
 		NavigationPlacement.ProfileDropdown,
 		accessibleVisitorSpaces,
-		linkedSpaceSlug
+		linkedSpaceOrId
 	);
 
 	const divider = [

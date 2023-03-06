@@ -1,26 +1,18 @@
-import {
-	Dropdown,
-	MenuContent,
-	MenuItemInfo,
-	OrderDirection,
-	Table,
-} from '@meemoo/react-components';
+import { OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash';
+import { isEmpty, isNil, xorBy } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, MouseEvent, ReactNode, useMemo, useState } from 'react';
+import React, { ComponentType, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
 import { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
 import {
-	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
-	ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD,
-	ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
 	ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
 	ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+	GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY,
 	getAdminMaterialRequestTableColumns,
 } from '@admin/const/material-requests.const';
 import { AdminLayout } from '@admin/layouts';
@@ -34,9 +26,9 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import {
-	Icon,
-	IconNamesLight,
 	Loading,
+	MultiSelect,
+	MultiSelectOption,
 	PaginationBar,
 	SearchBar,
 	sortingIcons,
@@ -50,16 +42,10 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 
 const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
-	const [isTypeDropdownOpen, setIsTypeDropdownOpen] = useState(false);
-	const [isMaintainerDropdownOpen, setIsMaintainerDropdownOpen] = useState(false);
-	const [typeDropdownLabel, setTypeDropdownLabel] = useState(
-		ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID]
-	);
-	const [maintainerDropdownLabel, setMaintainerDropdownLabel] = useState(
-		tText('pages/admin/materiaalaanvragen/index___aanbieder')
-	);
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
+	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>([]);
+	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
@@ -71,7 +57,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
 		search: filters.search,
-		type: filters.type as MaterialRequestType,
+		type: filters.type as MaterialRequestType[],
 		maintainerIds: filters.maintainerIds as string[],
 	});
 
@@ -80,14 +66,8 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const maintainerList = useMemo(() => {
 		if (maintainers) {
 			return [
-				{
-					id: ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID,
-					label: ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[
-						ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID
-					],
-				},
 				...maintainers.map(
-					({ id, name }): MenuItemInfo => ({
+					({ id, name }): MultiSelectOption => ({
 						id,
 						label: name,
 					})
@@ -116,7 +96,14 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
+			setFilters({
+				...filters,
+				orderProp,
+				orderDirection: OrderDirection.asc,
+				page: 1,
+			});
+		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
 				orderProp,
@@ -182,31 +169,41 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		);
 	};
 
-	const onTypeClick = (id: string | number): void => {
-		const showAll = id === ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID;
-		setTypeDropdownLabel(ADMIN_MATERIAL_REQUEST_TYPE_FILTER_RECORD[id]);
-		setIsTypeDropdownOpen(false);
-
-		setFilters({ ...filters, type: showAll ? '' : `${id}`, page: 1 });
-	};
-
-	const onMaintainerClick = (id: string | number): void => {
-		if (maintainerList) {
-			const selectedMaintainer = maintainerList.find((maintainer) => maintainer.id === id);
-			selectedMaintainer && setMaintainerDropdownLabel(selectedMaintainer.label);
-		}
-
-		setFilters({
-			...filters,
-			maintainerIds: id === ADMIN_MATERIAL_REQUESTS_FILTER_ALL_ID ? [] : ([id] as string[]),
-		});
-
-		setIsMaintainerDropdownOpen(false);
-	};
-
 	const onSearch = (value: string | undefined) => {
 		setFilters({ search: value, page: 1 });
 	};
+
+	const onMultiTypeChange = (selectedItems: string[]) => {
+		const diff = xorBy(selectedItems, selectedTypes);
+
+		if (diff.length) {
+			setSelectedTypes(selectedItems);
+		}
+	};
+
+	const onMultiMaintainersChange = (selectedItems: string[]) => {
+		const diff = xorBy(selectedItems, selectedMaintainers);
+
+		if (diff.length) {
+			setSelectedMaintainers(selectedItems);
+		}
+	};
+
+	useEffect(() => {
+		setFilters({
+			...filters,
+			type: selectedTypes,
+			page: 1,
+		});
+	}, [selectedTypes]);
+
+	useEffect(() => {
+		setFilters({
+			...filters,
+			maintainerIds: selectedMaintainers,
+			page: 1,
+		});
+	}, [selectedMaintainers]);
 
 	const renderPageContent = () => {
 		return (
@@ -220,41 +217,23 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 						)}
 					>
 						<div className="p-admin-material-requests__header-dropdowns">
-							<Dropdown
-								variants="filter"
-								flyoutClassName="p-admin-material-requests__dropdown--open"
+							<MultiSelect
+								variant="rounded"
+								label="Type"
+								options={GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY()}
+								onChange={onMultiTypeChange}
 								className="p-admin-material-requests__dropdown"
-								label={typeDropdownLabel}
-								isOpen={isTypeDropdownOpen}
-								onOpen={() => setIsTypeDropdownOpen(true)}
-								onClose={() => setIsTypeDropdownOpen(false)}
-								iconOpen={<Icon name={IconNamesLight.AngleUp} />}
-								iconClosed={<Icon name={IconNamesLight.AngleDown} />}
-							>
-								<MenuContent
-									rootClassName="c-dropdown-menu"
-									onClick={onTypeClick}
-									menuItems={ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY}
-								/>
-							</Dropdown>
-							{maintainers && (
-								<Dropdown
-									variants="filter"
-									flyoutClassName="p-admin-material-requests__dropdown--open"
+							/>
+							{maintainerList && (
+								<MultiSelect
+									variant="rounded"
+									label={tText(
+										'pages/admin/materiaalaanvragen/index___aanbieder'
+									)}
+									options={maintainerList}
+									onChange={onMultiMaintainersChange}
 									className="p-admin-material-requests__dropdown"
-									label={maintainerDropdownLabel}
-									isOpen={isMaintainerDropdownOpen}
-									onOpen={() => setIsMaintainerDropdownOpen(true)}
-									onClose={() => setIsMaintainerDropdownOpen(false)}
-									iconOpen={<Icon name={IconNamesLight.AngleUp} />}
-									iconClosed={<Icon name={IconNamesLight.AngleDown} />}
-								>
-									<MenuContent
-										rootClassName="c-dropdown-menu"
-										onClick={onMaintainerClick}
-										menuItems={maintainerList || []}
-									/>
-								</Dropdown>
+								/>
 							)}
 						</div>
 

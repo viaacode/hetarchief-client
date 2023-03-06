@@ -23,10 +23,13 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
 
-export const CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS: Record<AccessType, string> = {
+export const GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS = (): Record<
+	AccessType,
+	string
+> => ({
 	[AccessType.FULL]: tText('modules/cp/const/requests___volledige-toegang'),
 	[AccessType.FOLDERS]: tText('modules/cp/const/requests___gedeeltelijke-toegang'),
-};
+});
 
 export const requestStatusFilters = (): TabProps[] => {
 	return [
@@ -101,7 +104,9 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 				<span className="u-color-neutral">
 					{row.original.status === VisitStatus.PENDING
 						? '-'
-						: CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS[row.original.accessType]}
+						: GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS()[
+								row.original.accessType
+						  ]}
 				</span>
 			);
 		},

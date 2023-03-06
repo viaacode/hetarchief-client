@@ -1,7 +1,7 @@
 import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { sum } from 'lodash-es';
+import { sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -89,9 +89,11 @@ const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
 
+const PUBLIC_COLLECTION = ''; // No maintainer query param means the public collection should be selected
+
 const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	return {
-		id: '',
+		id: PUBLIC_COLLECTION,
 		label: tText(
 			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
 		),
@@ -131,7 +133,6 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 	const [activeVisitorSpace, setActiveVisitorSpace] = useState<Visit | undefined>();
-	const [activeVisitorSpaceId, setActiveVisitorSpaceId] = useState<string>('');
 
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const activeSort: SortObject = {
@@ -139,11 +140,14 @@ const VisitorSpaceSearchPage: FC = () => {
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
 	};
 
+	const activeVisitorSpaceId: string =
+		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
+
 	/**
 	 * Data
 	 */
 	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
-		const { items } = await VisitsService.getAll({
+		const { items: spaces } = await VisitsService.getAll({
 			page: 1,
 			size: 10,
 			orderProp: 'startAt',
@@ -153,9 +157,11 @@ const VisitorSpaceSearchPage: FC = () => {
 			personal: true,
 		});
 
-		setVisitorSpaces(items);
+		const sortedSpaces = sortBy(spaces, (space) => space.spaceName?.toLowerCase());
 
-		return items;
+		setVisitorSpaces(sortedSpaces);
+
+		return sortedSpaces;
 	}, []);
 
 	const {
@@ -178,10 +184,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	 */
 
 	useEffect(() => {
-		setActiveVisitorSpaceId(query?.maintainer || '');
-	}, []);
-
-	useEffect(() => {
 		// New search => update history in list
 		dispatch(setHistory([history[history.length - 1], router.asPath]));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -197,11 +199,11 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	useEffect(() => {
 		const visitorSpace: Visit | undefined = visitorSpaces.find(
-			({ spaceMaintainerId }: Visit): boolean => activeVisitorSpaceId === spaceMaintainerId
+			(visit: Visit): boolean => activeVisitorSpaceId === visit.spaceMaintainerId
 		);
 
 		setActiveVisitorSpace(visitorSpace);
-		setQuery({ maintainer: activeVisitorSpaceId || undefined });
+		setQuery({ [VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined });
 	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
 
 	/**
@@ -421,7 +423,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		// Destructure to keyword-able filters
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { format, orderProp, orderDirection, page, ...rest } = {
+		const { format, orderProp, orderDirection, page, maintainer, ...rest } = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
 
@@ -438,7 +440,13 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
-	const onVisitorSpaceSelected = (id: string): void => setActiveVisitorSpaceId(id);
+	const onVisitorSpaceSelected = (id: string): void => {
+		if (id === PUBLIC_COLLECTION) {
+			setQuery({ [VisitorSpaceFilterId.Maintainer]: undefined });
+		} else {
+			setQuery({ [VisitorSpaceFilterId.Maintainer]: id });
+		}
+	};
 
 	/**
 	 * Computed
@@ -450,7 +458,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const showVisitorSpacesDropdown = useMemo(
-		() => isLoggedIn && visitorSpaces.length > 1,
+		() => isLoggedIn && visitorSpaces.length > 0,
 		[isLoggedIn, visitorSpaces]
 	);
 
@@ -615,7 +623,9 @@ const VisitorSpaceSearchPage: FC = () => {
 										{showVisitorSpacesDropdown && (
 											<VisitorSpaceDropdown
 												options={dropdownOptions}
-												selectedOptionId={activeVisitorSpaceId}
+												selectedOptionId={
+													activeVisitorSpaceId || PUBLIC_COLLECTION
+												}
 												onSelected={onVisitorSpaceSelected}
 											/>
 										)}

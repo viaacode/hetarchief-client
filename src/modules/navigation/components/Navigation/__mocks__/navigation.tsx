@@ -156,10 +156,10 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		path: '',
 		children: [
 			{
-				node: renderLink('Aanvragen', '/beheer/aanvragen', {
+				node: renderLink('Aanvragen', '/beheer/toegangsaanvragen', {
 					className: dropdownCls(),
 				}),
-				id: 'nav__beheer--aanvragen',
+				id: 'nav__beheer--toegangsaanvragen',
 				path: '',
 			},
 			{
