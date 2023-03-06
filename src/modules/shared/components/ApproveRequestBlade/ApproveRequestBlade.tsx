@@ -293,22 +293,46 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			};
 
 			const hasRefineOptions = !isEmpty(selectedRefineOptions);
+			const hasMultipleRefineOptions = selectedRefineOptions.length > 1;
 
-			setAccessTypeLabel(
-				hasRefineOptions
-					? isDropdownOpen
+			if (hasRefineOptions && isDropdownOpen) {
+				setAccessTypeLabel(
+					hasMultipleRefineOptions
 						? tText(
 								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd'
 						  )
 						: tText(
+								'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
+						  )
+				);
+
+				return;
+			}
+
+			if (hasRefineOptions && !isDropdownOpen) {
+				setAccessTypeLabel(
+					hasMultipleRefineOptions
+						? tText(
 								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
 								{
 									count: selectedRefineOptions.length,
 								}
 						  )
-					: tText(
-							'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
-					  )
+						: tText(
+								'modules/cp/components/approve-request-blade/approve-request-blade___er-is-x-map-geselecteerd',
+								{
+									count: selectedRefineOptions.length,
+								}
+						  )
+				);
+
+				return;
+			}
+
+			setAccessTypeLabel(
+				tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
+				)
 			);
 
 			setIsValid(
