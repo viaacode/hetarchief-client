@@ -379,7 +379,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	};
 
 	const onRequestMaterialClick = () => {
-		setActiveBlade(MediaActions.RequestMaterial);
+		if (mediaInfo?.maintainerFormUrl && user) {
+			// open external form
+			const resolvedFormUrl = mediaInfo.maintainerFormUrl
+				.replaceAll('{first_name}', encodeURIComponent(user.firstName))
+				.replaceAll('{last_name}', encodeURIComponent(user.lastName))
+				.replaceAll('{email}', encodeURIComponent(user.email))
+				.replaceAll('{local_cp_id}', encodeURIComponent(mediaInfo?.meemooLocalId || ''))
+				.replaceAll('{pid}', encodeURIComponent(mediaInfo?.meemooIdentifier || ''))
+				.replaceAll('{title}', encodeURIComponent(mediaInfo?.name || ''))
+				.replaceAll('{title_serie}', encodeURIComponent(mediaInfo?.series?.[0] || ''));
+			window.open(resolvedFormUrl, '_blank');
+		} else {
+			setActiveBlade(MediaActions.RequestMaterial);
+		}
 	};
 
 	const handleOnPlay = () => {

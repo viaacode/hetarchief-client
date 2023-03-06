@@ -5,6 +5,7 @@ export interface IeObject {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID (not unique per object)
 	premisIdentifier: any;
+	maintainerFormUrl: string | null;
 	maintainerId: string;
 	maintainerName: string;
 	datePublished: string;
