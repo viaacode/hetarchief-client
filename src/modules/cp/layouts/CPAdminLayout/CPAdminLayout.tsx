@@ -18,6 +18,7 @@ import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import styles from './CPAdminLayout.module.scss';
 
@@ -53,7 +54,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 						: stringifyUrl({
 								url: href,
 								query: {
-									maintainer: user?.maintainerId,
+									[VisitorSpaceFilterId.Maintainer]: user?.maintainerId,
 								},
 						  });
 

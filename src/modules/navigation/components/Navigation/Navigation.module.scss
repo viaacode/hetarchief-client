@@ -3,8 +3,6 @@
 @use "src/styles/abstracts" as *;
 
 $c-navigation-border-height: 0.5rem;
-$c-navigation-border-distance: 1.2rem;
-$c-navigation-dropdown-border-distance: 0.95rem;
 $c-navigation-list-divider-color: #4e4e4e;
 $c-navigation-divider-size: 0.1rem;
 $c-navigation-item-spacing: $spacer-md;
@@ -106,7 +104,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 
 	.c-navigation__dropdown {
 		.c-navigation__link {
-			padding: $c-navigation-dropdown-border-distance 0;
+			padding: 1.2rem 0 0.65rem;
 		}
 
 		@include respond-at(md) {
@@ -274,7 +272,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	}
 	@include respond-at(md) {
 		display: inline-block;
-		padding: $c-navigation-border-distance 0;
+		padding: 1.2rem 0 0.95rem;
 	}
 
 	&--dropdown:hover {

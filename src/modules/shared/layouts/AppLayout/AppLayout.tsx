@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { stringify } from 'query-string';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
@@ -80,6 +81,7 @@ const AppLayout: FC = ({ children }) => {
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
+	const linkedSpaceOrId: string | null = user?.maintainerId || null;
 	const [query, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 		[SEARCH_QUERY_KEY]: StringParam,
@@ -137,7 +139,13 @@ const AppLayout: FC = ({ children }) => {
 
 	const userName = (user?.firstName as string) ?? '';
 
-	const onLoginRegisterClick = useCallback(() => dispatch(setShowAuthModal(true)), [dispatch]);
+	const onLoginRegisterClick = useCallback(async () => {
+		return router.replace(
+			`${ROUTES.home}?${stringify({
+				[SHOW_AUTH_QUERY_KEY]: '1',
+			})}`
+		);
+	}, [router]);
 
 	const onLogOutClick = useCallback(() => AuthService.logout(), []);
 
@@ -195,7 +203,7 @@ const AppLayout: FC = ({ children }) => {
 			accessibleVisitorSpaces || [],
 			navigationItems || {},
 			user?.permissions || [],
-			showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
 			isMobile
 		);
 

@@ -64,6 +64,7 @@ module.exports = withTM({
 		SSUM_EDIT_ACCOUNT_URL: process.env.SSUM_EDIT_ACCOUNT_URL,
 		PROXY_URL: process.env.PROXY_URL,
 		DEBUG_TOOLS: process.env.DEBUG_TOOLS,
+		ENABLE_LOGIN_FOOTER: process.env.ENABLE_LOGIN_FOOTER,
 		ZENDESK_KEY: process.env.ZENDESK_KEY,
 		FLOW_PLAYER_TOKEN: process.env.FLOW_PLAYER_TOKEN,
 		FLOW_PLAYER_ID: process.env.FLOW_PLAYER_ID,
@@ -79,6 +80,11 @@ module.exports = withTM({
 			{
 				source: '/beheer/aanvragen',
 				destination: '/beheer/toegangsaanvragen',
+				permanent: true,
+			},
+			{
+				source: '/admin/bezoekersruimtesbeheer/aanvragen',
+				destination: '/admin/bezoekersruimtesbeheer/toegangsaanvragen',
 				permanent: true,
 			},
 		];
