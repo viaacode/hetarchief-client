@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@testing-library/react';
+import Link from 'next/link';
 
 import ListNavigation from './ListNavigation';
 import { mockListNavigationItem, secondaryListNavigationMock } from './__mocks__/list-navigation';
@@ -38,15 +39,22 @@ describe('Component: <ListNavigation /> (default)', () => {
 	});
 
 	it('Should render nested children', () => {
-		const nestedChild = mockListNavigationItem({ node: 'nested child' });
-		const { getByText } = renderListNavigation({
+		const nestedChild = mockListNavigationItem({
+			node: ({ linkClassName }) => (
+				<Link href={'link'}>
+					<a className={linkClassName} aria-label={'test a tag'}>
+						{'test a tag'}
+					</a>
+				</Link>
+			),
+		});
+		const { getAllByText } = renderListNavigation({
 			items: mockListNavigationItem({ children: nestedChild }),
 		});
 
-		const child = getByText(nestedChild[0].node as string);
-
-		expect(child).toBeInTheDocument();
-		expect(child).toHaveStyle({ paddingLeft: '3.2rem' });
+		const child = getAllByText(nestedChild[0].node as string);
+		const link = child[0].getElementsByClassName('c-list-navigation__link--indent--1');
+		expect(link[0]).toBeInTheDocument();
 	});
 
 	it('Should render active class when child is active', () => {
