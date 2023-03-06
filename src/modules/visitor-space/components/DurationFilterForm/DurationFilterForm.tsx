@@ -96,26 +96,27 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 							control={control}
 							name="operator"
 							render={({ field }) => (
-								<ReactSelect
-									{...field}
-									isDisabled={disabled}
-									components={{ IndicatorSeparator: () => null }}
-									inputId={labelKeys.operator}
-									className="u-px-20 u-px-32:md"
-									onChange={(newValue) => {
-										const value = (newValue as SingleValue<SelectOption>)
-											?.value as Operator;
+								<div className="u-px-20 u-px-32:md">
+									<ReactSelect
+										{...field}
+										isDisabled={disabled}
+										components={{ IndicatorSeparator: () => null }}
+										inputId={labelKeys.operator}
+										onChange={(newValue) => {
+											const value = (newValue as SingleValue<SelectOption>)
+												?.value as Operator;
 
-										if (value !== form.operator) {
-											setForm({
-												duration: defaultValues.duration,
-												operator: value,
-											});
-										}
-									}}
-									options={operators}
-									value={getSelectValue(operators, field.value)}
-								/>
+											if (value !== form.operator) {
+												setForm({
+													duration: defaultValues.duration,
+													operator: value,
+												});
+											}
+										}}
+										options={operators}
+										value={getSelectValue(operators, field.value)}
+									/>
+								</div>
 							)}
 						/>
 					</FormControl>
