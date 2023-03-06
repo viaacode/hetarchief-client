@@ -38,6 +38,13 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const [reasonInputValue, setReasonInputValue] = useState('');
 	const [showError, setShowError] = useState(false);
 
+	const onCloseModal = () => {
+		onClose();
+		setReasonInputValue('');
+		setTypeSelected(MaterialRequestType.VIEW);
+		setShowError(false);
+	};
+
 	const onAddToList = async () => {
 		try {
 			if (reasonInputValue.length > 0) {
@@ -59,13 +66,13 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
 					),
 				});
-				onClose();
+				onCloseModal();
 			} else {
 				setShowError(true);
 			}
 		} catch (err) {
 			onFailedRequest();
-			onClose();
+			onCloseModal();
 		}
 	};
 
@@ -94,7 +101,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___verstuur'
 					)}
 					variants={['block', 'text']}
-					onClick={onClose}
+					onClick={onCloseModal}
 					className={styles['c-request-material__verstuur-button']}
 				/>
 				<Button
@@ -110,7 +117,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
 					)}
 					variants={['block', 'text']}
-					onClick={onClose}
+					onClick={onCloseModal}
 					className={styles['c-request-material__annuleer-button']}
 				/>
 			</div>
@@ -128,7 +135,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				</h2>
 			)}
 			footer={isOpen && renderFooter()}
-			onClose={onClose}
+			onClose={onCloseModal}
 		>
 			<div className={styles['c-request-material__maintainer']}>
 				{maintainerLogo && (
