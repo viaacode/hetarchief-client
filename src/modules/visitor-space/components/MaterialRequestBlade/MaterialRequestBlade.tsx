@@ -3,12 +3,13 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC, useState } from 'react';
 
+import { MaterialRequestsService } from '@material-requests/services';
+import { MaterialRequestType } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { toastService } from '@shared/services/toast-service';
 
 import styles from './MaterialRequestBlade.module.scss';
-
-import { MaterialRequestType } from '@material-requests/types';
 
 interface MaterialRequestBladeProps {
 	isOpen: boolean;
@@ -35,6 +36,55 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(MaterialRequestType.VIEW);
 	const [reasonInputValue, setReasonInputValue] = useState('');
+	const [showError, setShowError] = useState(false);
+
+	const onAddToList = async () => {
+		try {
+			if (reasonInputValue.length > 0) {
+				const response = await MaterialRequestsService.create({
+					objectId,
+					type: typeSelected,
+					reason: reasonInputValue,
+					requesterCapacity: 'OTHER',
+				});
+				if (response === undefined) {
+					return;
+				}
+				toastService.notify({
+					maxLines: 3,
+					title: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___succes'
+					),
+					description: tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
+					),
+				});
+				onClose();
+			} else {
+				setShowError(true);
+			}
+		} catch (err) {
+			onFailedRequest();
+			onClose();
+		}
+	};
+
+	const onFailedRequest = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis'
+			),
+			description: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan'
+			),
+		});
+	};
+
+	const onTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+		setShowError(false);
+		setReasonInputValue(e.target.value);
+	};
 
 	const renderFooter = () => {
 		return (
@@ -52,7 +102,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
 					)}
 					variants={['block', 'text']}
-					onClick={onClose}
+					onClick={onAddToList}
 					className={styles['c-request-material__voeg-toe-button']}
 				/>
 				<Button
@@ -154,6 +204,13 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
 							/>
 						</dd>
+						{showError && (
+							<span className={styles['c-request-material__reason-error']}>
+								{tText(
+									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-mag-niet-leeg-zijn'
+								)}
+							</span>
+						)}
 						<dt className={styles['c-request-material__content-label']}>
 							{tText(
 								'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
@@ -162,7 +219,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						<dd className={styles['c-request-material__content-value']}>
 							<TextArea
 								className={styles['c-request-material__reason-input']}
-								onChange={(e) => setReasonInputValue(e.target.value)}
+								onChange={onTextAreaChange}
 								value={reasonInputValue}
 							/>
 						</dd>

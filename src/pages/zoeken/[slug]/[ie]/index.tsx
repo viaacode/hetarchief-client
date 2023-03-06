@@ -13,7 +13,8 @@ import { ComponentType, Fragment, ReactNode, useEffect, useMemo, useRef, useStat
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
-import { Permission } from '@account/const';
+import { Group, Permission } from '@account/const';
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	DynamicActionMenu,
@@ -114,7 +115,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
-	const canRequestMaterial: boolean | null = true;
+	const user = useSelector(selectUser);
+	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 
 	// Internal state
@@ -360,9 +362,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			case MediaActions.Bookmark:
 				setActiveBlade(MediaActions.Bookmark);
 				break;
-			case MediaActions.RequestMaterial:
-				setActiveBlade(MediaActions.RequestMaterial);
-				break;
 		}
 	};
 
@@ -377,6 +376,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				description: tHtml('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
 			});
 		}
+	};
+
+	const onRequestMaterialClick = () => {
+		setActiveBlade(MediaActions.RequestMaterial);
 	};
 
 	const handleOnPlay = () => {
@@ -562,34 +565,60 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					<MetaDataDescription description={mediaInfo?.description || ''} />
 
 					<div className="u-pb-24 p-object-detail__actions">
-						{canDownloadMetadata && (
-							<Button
-								className="p-object-detail__export"
-								iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-								onClick={onExportClick}
-								aria-label={tText(
-									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-								)}
-								title={tText(
-									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-								)}
-							>
-								<span className="u-text-ellipsis u-display-none u-display-block:md">
-									{tHtml(
+						<div className="p-object-detail__primary-actions">
+							{canDownloadMetadata && (
+								<Button
+									className="p-object-detail__export"
+									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
+									onClick={onExportClick}
+									aria-label={tText(
 										'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
 									)}
-								</span>
-								<span className="u-text-ellipsis u-display-none:md">
-									{tHtml(
-										'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
+									title={tText(
+										'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
 									)}
-								</span>
-							</Button>
-						)}
+								>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+										)}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
+										)}
+									</span>
+								</Button>
+							)}
+							{canRequestMaterial && (
+								<Button
+									className="p-object-detail__request-material"
+									iconStart={<Icon name={IconNamesLight.Shopping} aria-hidden />}
+									onClick={onRequestMaterialClick}
+									aria-label={tText(
+										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+									)}
+									title={tText(
+										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+									)}
+								>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{tText(
+											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+										)}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{tText(
+											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+										)}
+									</span>
+								</Button>
+							)}
+						</div>
+
 						<DynamicActionMenu
 							{...MEDIA_ACTIONS(
 								canManageFolders,
-								canRequestMaterial,
 								isInAFolder(collections, mediaInfo?.schemaIdentifier)
 							)}
 							onClickAction={onClickAction}

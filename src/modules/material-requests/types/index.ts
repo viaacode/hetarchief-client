@@ -27,6 +27,14 @@ export interface MaterialRequestDetail extends MaterialRequest {
 	requesterUserGroupName: string;
 }
 
+export interface MaterialRequestCreation {
+	objectId: string;
+	type: MaterialRequestType;
+	reason: string;
+	requesterCapacity: 'OTHER' | 'WORK' | 'PRIVATE_RESEARCH' | 'EDUCATION';
+	organisation?: string;
+}
+
 export enum MaterialRequestType {
 	REUSE = 'REUSE',
 	MORE_INFO = 'MORE_INFO',

@@ -127,4 +127,10 @@ $component: "c-request-material";
 			resize: none;
 		}
 	}
+
+	&__reason-error {
+		color: $cherry;
+		display: block;
+		margin-bottom: 1rem;
+	}
 }
