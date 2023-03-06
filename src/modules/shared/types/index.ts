@@ -41,6 +41,7 @@ export enum Operator {
 	LessThanOrEqual = 'lt', // shorter (duration) or until (date)
 	GreaterThanOrEqual = 'gt', // longer (duration) or after (date)
 	Between = 'bt', // duration & date
+	Exact = 'ex', // duration
 }
 
 export const isRange = (op?: string): boolean => op === Operator.Between;

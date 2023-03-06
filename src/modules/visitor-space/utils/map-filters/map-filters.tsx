@@ -165,7 +165,12 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 				parsed = asDate(values[i]);
 				values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
 				break;
-
+			case MetadataProp.Duration:
+				if (item?.op === Operator.Exact) {
+					// Manually create a range of equal values
+					values[i] = values[0];
+				}
+				break;
 			default:
 				break;
 		}
