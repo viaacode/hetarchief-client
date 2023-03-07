@@ -55,6 +55,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					requesterCapacity: 'OTHER',
 				});
 				if (response === undefined) {
+					onFailedRequest();
 					return;
 				}
 				toastService.notify({
@@ -72,7 +73,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			}
 		} catch (err) {
 			onFailedRequest();
-			onCloseModal();
 		}
 	};
 
