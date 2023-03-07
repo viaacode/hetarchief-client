@@ -1,7 +1,7 @@
 import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isNil, sortBy, sum } from 'lodash-es';
+import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -41,7 +41,7 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
-import { selectFolders, setFilterOptions } from '@shared/store/ie-objects';
+import { selectFolders, selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
@@ -117,6 +117,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
+	const filterOptions = useSelector(selectIeObjectsFilterOptions);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -259,6 +260,11 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		return [getDefaultOption(), ...dynamicOptions];
 	}, [visitorSpaces, isMobile]);
+
+	const filters = useMemo(
+		() => VISITOR_SPACE_FILTERS().filter(({ isDisabled }) => !isDisabled?.()),
+		[]
+	);
 
 	/**
 	 * Methods
@@ -471,7 +477,7 @@ const VisitorSpaceSearchPage: FC = () => {
 			<div className={filterMenuCls}>
 				<FilterMenu
 					activeSort={activeSort}
-					filters={VISITOR_SPACE_FILTERS()}
+					filters={filters}
 					filterValues={query}
 					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
