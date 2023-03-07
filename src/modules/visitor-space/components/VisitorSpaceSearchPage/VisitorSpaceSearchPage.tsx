@@ -31,6 +31,8 @@ import {
 	TabLabel,
 	TagSearchBar,
 	ToggleOption,
+	TYPE_TO_ICON_MAP,
+	TYPE_TO_NO_ICON_MAP,
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
@@ -546,6 +548,9 @@ const VisitorSpaceSearchPage: FC = () => {
 						preview: item.thumbnailUrl || undefined,
 						name: item.name,
 						hasRelated: (item.related_count || 0) > 0,
+						icon: item.thumbnailUrl
+							? TYPE_TO_ICON_MAP[item.dctermsFormat]
+							: TYPE_TO_NO_ICON_MAP[item.dctermsFormat],
 					})
 				)}
 				keywords={keywords}
