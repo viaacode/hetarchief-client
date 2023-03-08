@@ -6,11 +6,7 @@ import { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
-import {
-	CP_ADMIN_NAVIGATION_BOTTOM_LINKS,
-	CP_ADMIN_NAVIGATION_TOP_LINKS,
-	CP_ADMIN_SEARCH_VISITOR_SPACE_KEY,
-} from '@cp/const';
+import { CP_ADMIN_NAVIGATION_LINKS, CP_ADMIN_SEARCH_VISITOR_SPACE_KEY } from '@cp/const';
 import { CPAdminLayoutProps } from '@cp/layouts';
 import { ListNavigationItem } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
@@ -29,25 +25,9 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 
 	const user = useSelector(selectUser);
 
-	const sidebarLinksTop: ListNavigationItem[] = useMemo(
+	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
-			CP_ADMIN_NAVIGATION_TOP_LINKS().map(({ id, label, href }) => ({
-				id,
-				node: ({ linkClassName }) => (
-					<Link href={href}>
-						<a className={linkClassName} aria-label={label}>
-							{label}
-						</a>
-					</Link>
-				),
-				active: asPath.includes(href),
-			})),
-		[asPath]
-	);
-
-	const sidebarLinksBottom: ListNavigationItem[] = useMemo(
-		() =>
-			CP_ADMIN_NAVIGATION_BOTTOM_LINKS().map(({ id, label, href }) => {
+			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href }) => {
 				const url =
 					id !== CP_ADMIN_SEARCH_VISITOR_SPACE_KEY
 						? href
@@ -70,7 +50,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 					active: asPath.includes(url),
 				};
 			}),
-		[asPath, user]
+		[asPath, user?.maintainerId]
 	);
 
 	useEffect(() => {
@@ -80,8 +60,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 	return (
 		<SidebarLayout
 			className={className}
-			sidebarLinksTop={sidebarLinksTop}
-			sidebarLinksBottom={sidebarLinksBottom}
+			sidebarLinks={sidebarLinks}
 			sidebarTitle={tHtml('modules/cp/layouts/cp-admin-layout/cp-admin-layout___beheer')}
 		>
 			<ErrorBoundary>
