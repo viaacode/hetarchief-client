@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { isNil } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -8,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '@auth/store/user';
 import { CP_ADMIN_NAVIGATION_LINKS, CP_ADMIN_SEARCH_VISITOR_SPACE_KEY } from '@cp/const';
 import { CPAdminLayoutProps } from '@cp/layouts';
-import { ListNavigationItem } from '@shared/components';
+import { Icon, ListNavigationItem } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -27,7 +28,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
-			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href }) => {
+			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href, iconName }) => {
 				const url =
 					id !== CP_ADMIN_SEARCH_VISITOR_SPACE_KEY
 						? href
@@ -43,7 +44,8 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 					node: ({ linkClassName }) => (
 						<Link href={url}>
 							<a className={linkClassName} aria-label={label}>
-								{label}
+								{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} />}
+								<span>{label}</span>
 							</a>
 						</Link>
 					),

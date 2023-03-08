@@ -1,3 +1,4 @@
+import { IconName, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 
@@ -7,6 +8,7 @@ export const CP_ADMIN_NAVIGATION_LINKS = (): {
 	id: string;
 	label: string;
 	href: string;
+	iconName?: IconName;
 }[] => [
 	{
 		id: 'requests',
@@ -30,7 +32,8 @@ export const CP_ADMIN_NAVIGATION_LINKS = (): {
 	},
 	{
 		id: CP_ADMIN_SEARCH_VISITOR_SPACE_KEY,
-		label: tText('modules/cp/const/index___doorzoek-eigen-collectie'),
+		label: tText('modules/cp/const/index___naar-mijn-bezoekerstool'),
 		href: `/${ROUTE_PARTS.search}`,
+		iconName: IconNamesLight.Search,
 	},
 ];
