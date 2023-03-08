@@ -13,6 +13,7 @@ export * from './GenreFilterForm';
 export * from './GenreSelect';
 export * from './KeywordsFilterForm';
 export * from './LanguageFilterForm';
+export * from './MaterialRequestBlade';
 export * from './MediaTypeSelect';
 export * from './MediumFilterForm';
 export * from './MediumSelect';

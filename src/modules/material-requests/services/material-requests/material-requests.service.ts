@@ -8,6 +8,7 @@ import { GetMaterialRequestsProps } from './material-requests.service.types';
 
 import {
 	MaterialRequest,
+	MaterialRequestCreation,
 	MaterialRequestDetail,
 	MaterialRequestMaintainer,
 } from 'modules/material-requests/types';
@@ -56,5 +57,9 @@ export class MaterialRequestsService {
 
 	public static async getMaintainers(): Promise<MaterialRequestMaintainer[] | null> {
 		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/maintainers`).json();
+	}
+
+	public static async create(json: MaterialRequestCreation): Promise<void> {
+		return ApiService.getApi().put(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}`, { json }).json();
 	}
 }

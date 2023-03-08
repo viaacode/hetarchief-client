@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { isEmpty, isNil } from 'lodash-es';
 import React, { FC, ReactNode } from 'react';
 
 import styles from './ListNavigation.module.scss';
@@ -40,7 +41,7 @@ const ListNavigation: FC<ListNavigationProps> = ({
 									styles['c-list-navigation__item'],
 									// Only make leaf items active, never group items that have children
 									item.active &&
-										!item.children &&
+										isEmpty(item.children) &&
 										styles['c-list-navigation__item--active'],
 									(item.variants || []).map((variant) => styles[variant])
 								)}
@@ -51,7 +52,9 @@ const ListNavigation: FC<ListNavigationProps> = ({
 										: item.node}
 								</div>
 							</div>
-							{item.children && renderChildrenRecursively(item.children, layer + 1)}
+							{!isEmpty(item.children) &&
+								!isNil(item.children) &&
+								renderChildrenRecursively(item.children, layer + 1)}
 						</li>
 					);
 				})}
