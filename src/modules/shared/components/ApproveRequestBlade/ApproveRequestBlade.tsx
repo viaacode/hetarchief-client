@@ -17,7 +17,7 @@ import {
 	roundToNearestMinutes,
 	startOfDay,
 } from 'date-fns';
-import { isEmpty, isEqual } from 'lodash';
+import { isEmpty } from 'lodash';
 import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
@@ -74,10 +74,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	);
 	const { data: folders } = useGetFolders();
 
-	const [accessTypeLabel, setAccessTypeLabel] = useState(
-		tText('modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map')
-	);
-
 	const {
 		selected,
 		onClose,
@@ -96,8 +92,53 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		),
 	} = props;
 
-	const accessTypeOptions: RefinableRadioButtonOption[] = useMemo(
-		() => [
+	const defaultValues = useMemo(
+		() => ({
+			accessFrom: asDate(selected?.startAt) || defaultAccessFrom(new Date()),
+			accessTo: asDate(selected?.endAt) || defaultAccessTo(new Date()),
+			accessRemark: selected?.note?.note || undefined,
+			accessType: {
+				type: selected?.accessType || defaultAccessType.type,
+				folderIds: selected?.accessibleFolderIds || defaultAccessType.folderIds,
+			},
+		}),
+		[selected]
+	);
+
+	const [overlappingRequests, setOverlappingRequests] = useState<Visit[]>([]);
+
+	const {
+		control,
+		formState: { errors, isSubmitting },
+		handleSubmit,
+		setValue,
+		getValues,
+		reset,
+	} = useForm<ApproveRequestFormState>({
+		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
+		defaultValues,
+	});
+
+	const getAccessTypeLabel = (accessType: ApproveRequestFormState['accessType']) => {
+		if (accessType?.folderIds?.length) {
+			if (accessType?.folderIds?.length > 1) {
+				return tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd'
+				);
+			} else {
+				return tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
+				);
+			}
+		} else {
+			return tText(
+				'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
+			);
+		}
+	};
+
+	const getAccessTypeOptions = useCallback(
+		(accessType: ApproveRequestFormState['accessType']): RefinableRadioButtonOption[] => [
 			{
 				id: AccessType.FULL,
 				label: tText(
@@ -119,116 +160,62 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							label: name,
 						})
 					),
-					label: accessTypeLabel,
+					label: getAccessTypeLabel(accessType),
 				},
 			},
 		],
-		[folders, tText, accessTypeLabel]
+		[getAccessTypeLabel, tText, folders?.items]
 	);
-
-	const defaultValues = useMemo(
-		() => ({
-			accessFrom: asDate(selected?.startAt) || defaultAccessFrom(new Date()),
-			accessTo: asDate(selected?.endAt) || defaultAccessTo(new Date()),
-			accessRemark: selected?.note?.note || undefined,
-			accessType: {
-				type: selected?.accessType || defaultAccessType.type,
-				folderIds: selected?.accessibleFolderIds || defaultAccessType.folderIds,
-			},
-		}),
-		[selected]
-	);
-
-	const [form, setForm] = useState<ApproveRequestFormState>(defaultValues);
-	const [overlappingRequests, setOverlappingRequests] = useState<Visit[]>([]);
-	const [isValid, setIsValid] = useState(false);
-
-	const {
-		control,
-		formState: { errors, isSubmitting },
-		handleSubmit,
-		setValue,
-	} = useForm<ApproveRequestFormState>({
-		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
-		defaultValues,
-	});
-
-	// We're using useState to store our form and an effect to synchronise it with useForm
-	const reset = useCallback(() => {
-		setForm(defaultValues);
-	}, [defaultValues]);
-
-	useEffect(() => {
-		selected &&
-			setForm({
-				accessFrom: asDate(selected.startAt) || defaultValues.accessFrom,
-				accessTo: asDate(selected.endAt) || defaultValues.accessTo,
-				accessRemark: selected.note?.note || defaultValues.accessRemark,
-				accessType:
-					{ type: selected.accessType, folderIds: selected.accessibleFolderIds } ||
-					defaultValues.accessType,
-			});
-	}, [selected, defaultValues, setForm]);
-
-	useEffect(() => {
-		setValue('accessFrom', form.accessFrom);
-		setValue('accessTo', form.accessTo);
-		setValue('accessRemark', form.accessRemark);
-		setValue('accessType', form.accessType);
-	}, [form, setValue]);
 
 	useEffect(() => {
 		props.isOpen && reset();
 	}, [props.isOpen, reset]);
 
-	const checkOverlappingRequests = useCallback(async (): Promise<Visit[]> => {
-		const visitResponse = await VisitsService.getAll({
-			status: VisitStatus.APPROVED,
-			timeframe: [VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
-			requesterId: selected?.userProfileId,
-			visitorSpaceSlug: selected?.spaceSlug,
-			page: 1,
-			size: 40,
-			orderProp: 'startAt',
-			orderDirection: OrderDirection.desc,
-			personal: false,
-		});
-		const overlappingRequests = visitResponse.items
-			.filter((visit) =>
-				areIntervalsOverlapping(
-					{
-						start: form.accessFrom as Date,
-						end: form.accessTo as Date,
-					},
-					{
-						start: asDate(visit.startAt as string) as Date,
-						end: asDate(visit.endAt as string) as Date,
-					}
+	const checkOverlappingRequests = useCallback(
+		async (formValues: ApproveRequestFormState): Promise<Visit[]> => {
+			const visitResponse = await VisitsService.getAll({
+				status: VisitStatus.APPROVED,
+				timeframe: [VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
+				requesterId: selected?.userProfileId,
+				visitorSpaceSlug: selected?.spaceSlug,
+				page: 1,
+				size: 40,
+				orderProp: 'startAt',
+				orderDirection: OrderDirection.desc,
+				personal: false,
+			});
+			const overlappingRequests = visitResponse.items
+				.filter((visit) =>
+					areIntervalsOverlapping(
+						{
+							start: formValues.accessFrom as Date,
+							end: formValues.accessTo as Date,
+						},
+						{
+							start: asDate(visit.startAt as string) as Date,
+							end: asDate(visit.endAt as string) as Date,
+						}
+					)
 				)
-			)
-			.filter((visit) => visit.id !== selected?.id);
+				.filter((visit) => visit.id !== selected?.id);
 
-		setOverlappingRequests(overlappingRequests);
+			setOverlappingRequests(overlappingRequests);
 
-		return overlappingRequests;
-	}, [
-		selected?.spaceSlug,
-		selected?.userProfileId,
-		selected?.id,
-		form.accessFrom,
-		form.accessTo,
-	]);
+			return overlappingRequests;
+		},
+		[selected?.spaceSlug, selected?.userProfileId, selected?.id]
+	);
 
 	useEffect(() => {
-		checkOverlappingRequests();
-	}, [checkOverlappingRequests]);
+		checkOverlappingRequests(getValues());
+	}, [checkOverlappingRequests, getValues]);
 
 	/**
 	 * Events
 	 */
 
-	const onFormSubmit = async (values: ApproveRequestFormState) => {
-		const overlappingVisitRequests = await checkOverlappingRequests();
+	const onFormSubmit = async (values: Partial<ApproveRequestFormState>) => {
+		const overlappingVisitRequests = await checkOverlappingRequests(getValues());
 		if (overlappingVisitRequests.length) {
 			toastService.notify({
 				title: tHtml(
@@ -248,11 +235,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				endAt: values.accessTo?.toISOString(),
 				note: values.accessRemark, // TODO check throughput
 				accessType: values.accessType?.type,
-				...(!isEmpty(values.accessType.folderIds) && {
-					accessFolderIds: values.accessType.folderIds,
+				...(!isEmpty(values.accessType?.folderIds) && {
+					accessFolderIds: values.accessType?.folderIds,
 				}),
 			}).then(() => {
-				onSubmit?.(values);
+				onSubmit?.(values as ApproveRequestFormState);
 
 				toastService.notify({
 					title: successTitle as string,
@@ -270,86 +257,23 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				| ControllerRenderProps<ApproveRequestFormState, 'accessTo'>
 				| ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
 		) => {
-			setForm((original) => ({
-				...original,
-				[field.name]: date || undefined,
-			}));
+			setValue(field.name, date as Date);
 		},
-		[setForm]
+		[setValue]
 	);
 
 	const onChangeAccessType = useCallback(
 		(
 			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
 			selectedOption: AccessType,
-			selectedRefineOptions: string[],
-			isDropdownOpen: boolean
+			selectedRefineOptions: string[]
 		): void => {
-			const { accessType } = form;
-
-			const updatedAccessType = {
+			setValue('accessType', {
 				type: selectedOption,
 				folderIds: selectedRefineOptions,
-			};
-
-			const hasRefineOptions = !isEmpty(selectedRefineOptions);
-			const hasMultipleRefineOptions = selectedRefineOptions.length > 1;
-
-			if (hasRefineOptions && isDropdownOpen) {
-				setAccessTypeLabel(
-					hasMultipleRefineOptions
-						? tText(
-								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd'
-						  )
-						: tText(
-								'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
-						  )
-				);
-
-				return;
-			}
-
-			if (hasRefineOptions && !isDropdownOpen) {
-				setAccessTypeLabel(
-					hasMultipleRefineOptions
-						? tText(
-								'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
-								{
-									count: selectedRefineOptions.length,
-								}
-						  )
-						: tText(
-								'modules/cp/components/approve-request-blade/approve-request-blade___er-is-x-map-geselecteerd',
-								{
-									count: selectedRefineOptions.length,
-								}
-						  )
-				);
-
-				return;
-			}
-
-			setAccessTypeLabel(
-				tText(
-					'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
-				)
-			);
-
-			setIsValid(
-				(selectedOption === AccessType.FOLDERS && hasRefineOptions) ||
-					(selectedOption === AccessType.FULL && !hasRefineOptions)
-			);
-
-			if (isEqual(accessType, updatedAccessType)) {
-				return;
-			}
-
-			setForm((original) => ({
-				...original,
-				[field.name]: updatedAccessType,
-			}));
+			});
 		},
-		[form, tText]
+		[setValue]
 	);
 
 	// Render
@@ -362,7 +286,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					label={approveButtonLabel}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit)}
-					disabled={isSubmitting || !isValid}
+					disabled={isSubmitting}
 				/>
 
 				<Button
@@ -396,32 +320,24 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			) => {
 				onSimpleDateChange(date, field);
 
-				const { accessTo } = form;
-
-				if (date && accessTo) {
+				if (date && field.value) {
 					const minimum = 60;
 
 					// if difference is negative => start time is after end time
-					const difference = differenceInMinutes(accessTo, date);
+					const difference = differenceInMinutes(field.value, date);
 
 					// 1h in the future
 					// Aligns with `minTime` of the `accessTo` `Timepicker`-component
 					const oneHour = (date: Date) =>
-						setForm((original) => ({
-							...original,
-							accessTo: addHours(roundToNearestQuarter(date), 1),
-						}));
+						setValue('accessTo', addHours(roundToNearestQuarter(date), 1));
 
-					if (difference <= 0 && !isSameDay(accessTo, date)) {
+					if (difference <= 0 && !isSameDay(field.value, date)) {
 						// 6PM on the selected accessFrom
 						const sixPM = defaultAccessTo(date);
 
 						if (differenceInMinutes(sixPM, date) >= minimum) {
 							// at least an hour, set to sixPM
-							setForm((original) => ({
-								...original,
-								accessTo: sixPM,
-							}));
+							setValue('accessTo', sixPM);
 						} else {
 							// less than an hour, set to accessFrom + 1h
 							oneHour(date);
@@ -451,8 +367,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
-						selected={form.accessFrom}
-						value={formatMediumDate(form.accessFrom)}
+						selected={field.value}
+						value={formatMediumDate(field.value)}
 						popperPlacement="bottom-start"
 					/>
 
@@ -465,19 +381,18 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
-						selected={form.accessFrom}
-						value={formatTime(form.accessFrom)}
+						selected={field.value}
+						value={formatTime(field.value)}
 						popperPlacement="bottom-start"
 					/>
 				</>
 			);
 		},
-		[form, onSimpleDateChange, futureDatepickerProps]
+		[onSimpleDateChange, futureDatepickerProps]
 	);
 
 	const renderAccessTo = useCallback(
 		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessTo'> }) => {
-			const { accessFrom } = form;
 			const now = new Date();
 
 			// Disabled by request of Ineke, 21/03/2022
@@ -495,12 +410,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
 						}
 						id={labelKeys.accessTo}
-						minDate={accessFrom}
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
-						selected={form.accessTo}
-						value={formatMediumDate(form.accessTo)}
+						selected={field.value}
+						value={formatMediumDate(field.value)}
 						popperPlacement="bottom-start"
 					/>
 
@@ -513,14 +427,14 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
-						selected={form.accessTo}
-						value={formatTime(form.accessTo)}
+						selected={field.value}
+						value={formatTime(field.value)}
 						popperPlacement="bottom-start"
 					/>
 				</>
 			);
 		},
-		[form, onSimpleDateChange, futureDatepickerProps]
+		[onSimpleDateChange, futureDatepickerProps]
 	);
 
 	const renderAccessRemark = ({
@@ -531,45 +445,32 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		<TextInput
 			{...field}
 			id={labelKeys.accessRemark}
-			onChange={(evt) =>
-				setForm((original) => {
-					return {
-						...original,
-						accessRemark: evt.target.value,
-					};
-				})
-			}
+			onChange={(evt) => setValue('accessRemark', evt.target.value)}
 		/>
 	);
 
 	const renderAccessType = useCallback(
 		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessType'> }) => {
-			const { accessType } = form;
 			const initialState = {
-				selectedOption: accessType.type,
-				refinedSelection: accessType.folderIds,
+				selectedOption: field.value?.type ?? 'FULL',
+				refinedSelection: field.value?.folderIds ?? [],
 			};
 
 			return (
 				<RefinableRadioButton
 					initialState={initialState}
-					options={accessTypeOptions}
-					onChange={(
-						selectedOption: string,
-						selectedRefineOptions: string[],
-						isDropdownOpen
-					) =>
+					options={getAccessTypeOptions(field.value)}
+					onChange={(selectedOption: string, selectedRefineOptions: string[]) =>
 						onChangeAccessType(
 							field,
 							selectedOption as AccessType,
-							selectedRefineOptions,
-							isDropdownOpen
+							selectedRefineOptions
 						)
 					}
 				/>
 			);
 		},
-		[accessTypeOptions, onChangeAccessType, form]
+		[getAccessTypeOptions, onChangeAccessType]
 	);
 
 	return (
@@ -673,5 +574,4 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		</Blade>
 	);
 };
-
 export default ApproveRequestBlade;
