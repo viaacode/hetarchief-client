@@ -51,7 +51,7 @@
 		"@studiohyperdrive/pagination": "1.0.0",
 		"@tanstack/react-query": "4.22.0",
 		"@viaa/avo2-components": "2.3.2",
-		"@viaa/avo2-types": "2.46.6",
+		"@viaa/avo2-types": "2.48.2",
 		"capture-stack-trace": "1.0.1",
 		"clsx": "1.1.1",
 		"copy-to-clipboard": "3.3.1",

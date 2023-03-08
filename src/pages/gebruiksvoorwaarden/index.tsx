@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
@@ -22,6 +22,7 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import withUser, { UserProps } from '@shared/hooks/with-user';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
@@ -29,7 +30,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetContentPageByPath } from 'modules/content-page/hooks/get-content-page';
 
-const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
+const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	useStickyLayout();
 	useHideFooter();
 
@@ -109,7 +110,10 @@ const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 							className="p-terms-of-service__content"
 						>
 							{AdminConfigManager.getConfig() && (
-								<ContentPageRenderer contentPageInfo={contentPageInfo} />
+								<ContentPageRenderer
+									contentPageInfo={contentPageInfo}
+									commonUser={commonUser}
+								/>
 							)}
 						</div>
 					</div>
@@ -163,4 +167,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAdminCoreConfig(TermsOfService as ComponentType);
+export default withAdminCoreConfig(withUser(TermsOfService as FC<unknown>)) as FC<DefaultSeoInfo>;
