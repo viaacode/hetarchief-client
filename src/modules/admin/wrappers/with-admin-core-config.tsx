@@ -86,6 +86,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
 					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}`,
 					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
+					`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myMaterialRequests}`,
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitRequests}`,
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.activeVisitors}`,
 					`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`,
