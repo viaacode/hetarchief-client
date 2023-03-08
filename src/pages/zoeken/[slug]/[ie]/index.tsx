@@ -13,7 +13,8 @@ import { ComponentType, Fragment, ReactNode, useEffect, useMemo, useRef, useStat
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
-import { Permission } from '@account/const';
+import { Group, Permission } from '@account/const';
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	DynamicActionMenu,
@@ -89,6 +90,7 @@ import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit
 
 import {
 	AddToFolderBlade,
+	MaterialRequestBlade,
 	VisitorSpaceNavigation,
 } from '../../../../modules/visitor-space/components';
 
@@ -112,6 +114,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+	const user = useSelector(selectUser);
+	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 
 	// Internal state
@@ -372,6 +376,23 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 	};
 
+	const onRequestMaterialClick = () => {
+		if (mediaInfo?.maintainerFormUrl && user) {
+			// open external form
+			const resolvedFormUrl = mediaInfo.maintainerFormUrl
+				.replaceAll('{first_name}', encodeURIComponent(user.firstName))
+				.replaceAll('{last_name}', encodeURIComponent(user.lastName))
+				.replaceAll('{email}', encodeURIComponent(user.email))
+				.replaceAll('{local_cp_id}', encodeURIComponent(mediaInfo?.meemooLocalId || ''))
+				.replaceAll('{pid}', encodeURIComponent(mediaInfo?.meemooIdentifier || ''))
+				.replaceAll('{title}', encodeURIComponent(mediaInfo?.name || ''))
+				.replaceAll('{title_serie}', encodeURIComponent(mediaInfo?.series?.[0] || ''));
+			window.open(resolvedFormUrl, '_blank');
+		} else {
+			setActiveBlade(MediaActions.RequestMaterial);
+		}
+	};
+
 	const handleOnPlay = () => {
 		setIsMediaPaused(false);
 		if (!hasMediaPlayed) {
@@ -555,30 +576,57 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					<MetaDataDescription description={mediaInfo?.description || ''} />
 
 					<div className="u-pb-24 p-object-detail__actions">
-						{canDownloadMetadata && (
-							<Button
-								className="p-object-detail__export"
-								iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-								onClick={onExportClick}
-								aria-label={tText(
-									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-								)}
-								title={tText(
-									'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-								)}
-							>
-								<span className="u-text-ellipsis u-display-none u-display-block:md">
-									{tHtml(
+						<div className="p-object-detail__primary-actions">
+							{canDownloadMetadata && (
+								<Button
+									className="p-object-detail__export"
+									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
+									onClick={onExportClick}
+									aria-label={tText(
 										'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
 									)}
-								</span>
-								<span className="u-text-ellipsis u-display-none:md">
-									{tHtml(
-										'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
+									title={tText(
+										'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
 									)}
-								</span>
-							</Button>
-						)}
+								>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+										)}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
+										)}
+									</span>
+								</Button>
+							)}
+							{canRequestMaterial && (
+								<Button
+									className="p-object-detail__request-material"
+									iconStart={<Icon name={IconNamesLight.Shopping} aria-hidden />}
+									onClick={onRequestMaterialClick}
+									aria-label={tText(
+										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+									)}
+									title={tText(
+										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+									)}
+								>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{tText(
+											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+										)}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{tText(
+											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+										)}
+									</span>
+								</Button>
+							)}
+						</div>
+
 						<DynamicActionMenu
 							{...MEDIA_ACTIONS(
 								canManageFolders,
@@ -786,6 +834,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					}
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
+				/>
+			)}
+			{mediaInfo && visitorSpace && canRequestMaterial && (
+				<MaterialRequestBlade
+					isOpen={activeBlade === MediaActions.RequestMaterial}
+					onClose={onCloseBlade}
+					objectName={mediaInfo?.name}
+					objectId={mediaInfo?.schemaIdentifier}
+					objectType={mediaInfo.dctermsFormat}
+					maintainerName={mediaInfo?.maintainerName}
+					maintainerLogo={visitorSpace?.logo}
+					maintainerSlug={visitorSpace?.slug}
 				/>
 			)}
 		</>
