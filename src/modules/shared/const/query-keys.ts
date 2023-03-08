@@ -1,4 +1,5 @@
 export enum QUERY_KEYS {
+	createMaterialRequest = 'createMaterialRequest',
 	getAccessibleVisitorSpaces = 'getAccessibleVisitorSpaces',
 	getActiveVisitForUserAndSpace = 'getActiveVisitForUserAndSpace',
 	getCollectionExport = 'getCollectionExport',

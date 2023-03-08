@@ -1,6 +1,6 @@
 {
 	"name": "hetarchief-client",
-	"version": "1.4.6",
+	"version": "1.4.8",
 	"private": true,
 	"contributors": [
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
@@ -45,7 +45,7 @@
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
 		"@meemoo/admin-core-ui": "2.0.52",
-		"@meemoo/react-components": "2.23.2",
+		"@meemoo/react-components": "2.24.0",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
 		"@studiohyperdrive/pagination": "1.0.0",
