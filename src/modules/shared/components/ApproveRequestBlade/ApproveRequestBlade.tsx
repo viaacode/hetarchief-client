@@ -73,6 +73,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		Permission.READ_ALL_VISIT_REQUESTS
 	);
 	const { data: folders } = useGetFolders();
+	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
 	const {
 		selected,
@@ -120,16 +121,32 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	});
 
 	const getAccessTypeLabel = (accessType: ApproveRequestFormState['accessType']) => {
-		if (accessType?.folderIds?.length) {
-			if (accessType?.folderIds?.length > 1) {
-				return tText(
-					'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd'
-				);
-			} else {
-				return tText(
-					'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
-				);
-			}
+		const folderCount = accessType?.folderIds?.length;
+		const hasRefineOptions = !!folderCount;
+		const hasMultipleRefineOptions = folderCount > 1;
+
+		if (hasRefineOptions && isDropdownOpen) {
+			return hasMultipleRefineOptions
+				? tText(
+						'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd',
+						{
+							count: folderCount,
+						}
+				  )
+				: tText(
+						'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
+				  );
+		} else if (hasRefineOptions && !isDropdownOpen) {
+			return hasMultipleRefineOptions
+				? tText(
+						'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
+						{
+							count: folderCount,
+						}
+				  )
+				: tText(
+						'modules/shared/components/approve-request-blade/approve-request-blade___er-is-1-map-geselecteerd'
+				  );
 		} else {
 			return tText(
 				'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
@@ -266,12 +283,14 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		(
 			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
 			selectedOption: AccessType,
-			selectedRefineOptions: string[]
+			selectedRefineOptions: string[],
+			newIsDropdownOpen: boolean
 		): void => {
 			setValue('accessType', {
 				type: selectedOption,
 				folderIds: selectedRefineOptions,
 			});
+			setIsDropdownOpen(newIsDropdownOpen);
 		},
 		[setValue]
 	);
@@ -460,11 +479,16 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<RefinableRadioButton
 					initialState={initialState}
 					options={getAccessTypeOptions(field.value)}
-					onChange={(selectedOption: string, selectedRefineOptions: string[]) =>
+					onChange={(
+						selectedOption: string,
+						selectedRefineOptions: string[],
+						newIsDropdownOpen: boolean
+					) =>
 						onChangeAccessType(
 							field,
 							selectedOption as AccessType,
-							selectedRefineOptions
+							selectedRefineOptions,
+							newIsDropdownOpen
 						)
 					}
 				/>
