@@ -29,7 +29,7 @@ export const ROUTE_PARTS = Object.freeze({
 	visitorSpaceManagement: 'bezoekersruimtesbeheer',
 	visitorSpaces: 'bezoekersruimtes',
 	activeVisitors: 'actieve-bezoekers',
-	myMaterialRequests: 'materiaalaanvragen',
+	myMaterialRequests: 'mijn-materiaalaanvragen',
 	search: 'zoeken',
 	visitors: 'bezoekers',
 	visit: 'bezoek',
