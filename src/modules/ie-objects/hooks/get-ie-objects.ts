@@ -1,9 +1,10 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { isEmpty, isNil } from 'lodash';
 import { useDispatch } from 'react-redux';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
-import { setResults } from '@shared/store/ie-objects';
+import { setFilterOptions, setResults } from '@shared/store/ie-objects';
 import {
 	GetIeObjectsResponse,
 	IeObjectsSearchFilter,
@@ -40,36 +41,33 @@ export const useGetIeObjects = (
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsObjects, { filters, page, size, sort, enabled }],
 		async () => {
-			let searchResults: GetIeObjectsResponse;
-			if (filters.length) {
-				// Run 3 queries:
-				//     - One to fetch the results for a specific tab (results),
-				//     - One to count the amount of related items
-				//     - and one to fetch the aggregates across tabs (noFormat)
-				const responses = await Promise.all([
-					IeObjectsService.getSearchResults(filters, page, size, sort).then(
-						addRelatedCount
-					),
-					IeObjectsService.getSearchResults(
-						filters.filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
-						page,
-						0,
-						sort
-					),
-				]);
+			const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
 
-				const [results, noFormat] = responses;
-				searchResults = {
-					...results,
-					aggregations: {
-						...noFormat.aggregations,
-					},
-				};
-			} else {
-				searchResults = await IeObjectsService.getSearchResults([], page, size, sort);
-			}
+			// Run 3 queries:
+			//     - One to fetch the results for a specific tab (results),
+			//     - One to count the amount of related items
+			//     - and one to fetch the aggregates across tabs (noFormat)
+			const [results, noFormat] = await Promise.all([
+				IeObjectsService.getSearchResults(filterQuery, page, size, sort).then(
+					addRelatedCount
+				),
+				IeObjectsService.getSearchResults(
+					filterQuery.filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
+					page,
+					0,
+					sort
+				),
+			]);
+
+			const searchResults: GetIeObjectsResponse = {
+				...results,
+				aggregations: {
+					...noFormat.aggregations,
+				},
+			};
 
 			dispatch(setResults(searchResults));
+			dispatch(setFilterOptions(searchResults.aggregations));
 
 			// Log event
 			EventsService.triggerEvent(LogEventType.SEARCH, window.location.href, {
