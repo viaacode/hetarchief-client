@@ -64,7 +64,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 			badge: <Badge text="2" />,
 			className: linkCls(
 				'u-color-black',
-				'u-color-white:md',
+				'u-color-white:lg',
 				'u-whitespace-nowrap',
 				styles['c-navigation__link--dropdown']
 			),
@@ -75,7 +75,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		children: [
 			{
 				node: renderLink('Alle bezoekersruimtes', '/', {
-					className: dropdownCls('u-display-none', 'u-display-block:md'),
+					className: dropdownCls('u-display-none', 'u-display-block:lg'),
 				}),
 				id: 'alle bezoekersruimtes',
 				isDivider: 'md',
@@ -89,7 +89,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 								'u-font-size-24',
 								'u-text-left',
 								'u-visibility-hidden',
-								'u-visibility-visible:md',
+								'u-visibility-visible:lg',
 								styles['c-navigation__dropdown-icon--end']
 							)}
 							name={IconNamesLight.AngleRight}
@@ -108,7 +108,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 								'u-font-size-24',
 								'u-text-left',
 								'u-visibility-hidden',
-								'u-visibility-visible:md',
+								'u-visibility-visible:lg',
 								styles['c-navigation__dropdown-icon--end']
 							)}
 							name={IconNamesLight.AngleRight}
@@ -125,7 +125,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		node: renderLink('Over de bezoekersruimtes', '#', {
 			className: linkCls(
 				'u-color-black',
-				'u-color-white:md',
+				'u-color-white:lg',
 				styles['c-navigation__link--dropdown']
 			),
 		}),
@@ -136,7 +136,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		node: renderLink('Vaak gestelde vragen', '#', {
 			className: linkCls(
 				'u-color-black',
-				'u-color-white:md',
+				'u-color-white:lg',
 				styles['c-navigation__link--dropdown']
 			),
 		}),
@@ -147,7 +147,7 @@ export const MOCK_ITEMS_LEFT: NavigationItem[] = [
 		node: renderLink('Beheer', '', {
 			className: linkCls(
 				'u-color-black',
-				'u-color-white:md',
+				'u-color-white:lg',
 				styles['c-navigation__link--dropdown']
 			),
 		}),
