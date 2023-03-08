@@ -1,3 +1,5 @@
+@use "src/styles/abstracts" as *;
+
 $component: "radiobuttons-container";
 
 .#{$component} {
@@ -7,6 +9,6 @@ $component: "radiobuttons-container";
 
 	&__radiobutton {
 		margin: 1rem 0;
-		z-index: 0;
+		z-index: get-z-layer("base");
 	}
 }
