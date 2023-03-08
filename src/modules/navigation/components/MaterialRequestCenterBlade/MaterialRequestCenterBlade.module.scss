@@ -1,0 +1,105 @@
+@use "../../../../styles/abstracts/" as *;
+
+$component: "c-material-request-center-blade";
+
+.#{$component} {
+	&__table {
+		cursor: pointer;
+	}
+
+	&__loading {
+		display: flex;
+		justify-content: center;
+		color: $black;
+	}
+
+	&__title {
+		color: $black;
+		padding: 0 $spacer-lg;
+		margin-bottom: $spacer-1xl;
+	}
+
+	&__maintainer {
+		padding: $spacer-sm $spacer-lg;
+		background-color: $platinum;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		&-details {
+			color: $neutral;
+			text-align: end;
+			font-size: $font-size-sm;
+		}
+
+		&-logo {
+			position: relative;
+			width: 8rem;
+			height: 5rem;
+		}
+	}
+
+	&__material {
+		padding: $spacer-md $spacer-lg;
+		border-bottom: 0.2rem solid $platinum;
+
+		&:focus,
+		&:focus-within {
+			outline: 0.2rem solid $teal;
+			outline-offset: -0.2rem;
+		}
+
+		&-link {
+			text-decoration: none;
+		}
+
+		&-label {
+			color: $black;
+			font-weight: 900;
+			margin-bottom: $spacer-xxs;
+
+			&-icon {
+				color: $blue;
+				margin-right: $spacer-xs;
+			}
+		}
+
+		&-id {
+			font-size: $font-size-sm;
+			color: $neutral;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+
+	&__content {
+		padding: $spacer-lg;
+
+		dl {
+			margin-top: 0;
+		}
+
+		&-label {
+			font-weight: 900;
+			margin-bottom: $spacer-xs;
+		}
+
+		&-value {
+			margin-left: 0;
+			margin-bottom: $spacer-md;
+		}
+	}
+
+	&__close-button-container {
+		padding: $spacer-lg;
+	}
+
+	&__close-button {
+		background-color: $black;
+		color: $white;
+
+		&:hover {
+			border: 0.1rem solid $zinc;
+		}
+	}
+}

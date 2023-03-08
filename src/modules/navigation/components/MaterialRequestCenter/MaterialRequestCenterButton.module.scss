@@ -1,0 +1,31 @@
+@use "src/styles/abstracts" as *;
+
+$badge-font-size: 1rem;
+
+.c-material-request-center {
+	position: relative;
+	margin-left: $spacer-xs;
+
+	&:hover,
+	&--active {
+		background-color: $shade-darker !important;
+	}
+
+	&__icon-container {
+		&-badge {
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: $black;
+			font-weight: 700;
+			font-size: $badge-font-size;
+			border-radius: 0.8rem;
+			top: 0.5rem;
+			left: 2.5rem;
+			width: 2rem;
+			height: 1.6rem;
+			background-color: $coral;
+		}
+	}
+}

@@ -7,23 +7,23 @@ export interface MaterialRequest {
 	maintainerId: string;
 	maintainerName: string;
 	maintainerSlug: string;
+	objectMeemooIdentifier: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
+	objectType?: 'audio' | 'video' | 'film';
 	profileId: string;
 	reason: string;
+	requesterCapacity: MaterialRequestRequesterCapacity;
 	requesterFullName: string;
 	requesterId: string;
 	requesterMail: string;
 	type: MaterialRequestType;
 	updatedAt: string;
+	organisation?: string;
 }
 
 export interface MaterialRequestDetail extends MaterialRequest {
 	maintainerLogo: string;
-	objectMeemooIdentifier: string;
-	objectType?: 'audio' | 'video' | 'film';
-	organisation?: string;
-	requesterCapacity: MaterialRequestRequesterCapacity;
 	requesterUserGroupDescription: string;
 	requesterUserGroupId: string;
 	requesterUserGroupLabel: string;

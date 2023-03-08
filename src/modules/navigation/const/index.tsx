@@ -1,6 +1,7 @@
 import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 
+import { MaterialRequestCenterButton } from '@navigation/components/MaterialRequestCenter';
 import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
 import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
@@ -52,6 +53,11 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = (
 	const badgeCls = 'c-navigation__notifications-badge';
 
 	return [
+		{
+			id: 'material-request-center',
+			path: '',
+			node: <MaterialRequestCenterButton />,
+		},
 		{
 			id: 'notification-center',
 			path: '',
