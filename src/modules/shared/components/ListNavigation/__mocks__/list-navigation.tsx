@@ -52,6 +52,20 @@ export const mockListNavigationItem = ({
 	},
 ];
 
+export const mockListNavigationItemWithoutChildren = ({
+	node = 'mock item',
+	id = 'mock item',
+	active = true,
+	hasDivider = false,
+}: Partial<ListNavigationItem> = {}): ListNavigationItem[] => [
+	{
+		node: node,
+		id: id,
+		active: active,
+		hasDivider: hasDivider,
+	},
+];
+
 export const primaryListNavigationMock: ListNavigationProps = {
 	listItems: [
 		{
