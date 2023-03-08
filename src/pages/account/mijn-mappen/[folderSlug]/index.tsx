@@ -343,17 +343,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	// We need to use Highlighter because we're passing a Link, MediaCard needs a string to auto-highlight
 	const renderTitle = (item: FolderIeObject): ReactNode => (
-		<Link href={`/${item.visitorSpaceSlug}/${item.schemaIdentifier}`}>
-			<a className="u-text-no-decoration" aria-label={item.schemaIdentifier}>
-				<b>
-					<Highlighter
-						searchWords={keywords}
-						autoEscape={true}
-						textToHighlight={item.name}
-					/>
-				</b>
-			</a>
-		</Link>
+		<b>
+			<Highlighter searchWords={keywords} autoEscape={true} textToHighlight={item.name} />
+		</b>
 	);
 
 	const renderDescription = (item: FolderIeObject): ReactNode => {
@@ -506,6 +498,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											items={folderMedia?.data?.items.map((media) => {
 												const base: IdentifiableMediaCard = {
 													schemaIdentifier: media.schemaIdentifier,
+													maintainerSlug: media.maintainerSlug,
 													description: renderDescription(media),
 													title: renderTitle(media),
 													name: media.name,

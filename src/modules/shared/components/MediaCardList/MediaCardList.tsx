@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Link from 'next/link';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
@@ -124,15 +125,19 @@ const MediaCardList: FC<MediaCardListProps> = ({
 
 	const tiles = items.map((item, i) =>
 		wrapper(
-			<MediaCard
-				key={getKey(item, i)}
-				id={getKey(item, i)}
-				buttons={buttons?.(item)}
-				actions={actions?.(item)}
-				{...item}
-				keywords={keywords}
-				view={view}
-			/>,
+			<Link href={`/zoeken/${item.maintainerSlug}/${item.schemaIdentifier}`}>
+				<a className="u-text-no-decoration" aria-label={item.schemaIdentifier}>
+					<MediaCard
+						key={getKey(item, i)}
+						id={getKey(item, i)}
+						buttons={buttons?.(item)}
+						actions={actions?.(item)}
+						{...item}
+						keywords={keywords}
+						view={view}
+					/>
+				</a>
+			</Link>,
 			item
 		)
 	);
