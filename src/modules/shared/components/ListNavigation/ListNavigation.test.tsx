@@ -2,7 +2,11 @@ import { fireEvent, render } from '@testing-library/react';
 import Link from 'next/link';
 
 import ListNavigation from './ListNavigation';
-import { mockListNavigationItem, secondaryListNavigationMock } from './__mocks__/list-navigation';
+import {
+	mockListNavigationItem,
+	mockListNavigationItemWithoutChildren,
+	secondaryListNavigationMock,
+} from './__mocks__/list-navigation';
 
 const renderListNavigation = ({ items = secondaryListNavigationMock.listItems, ...rest }) => {
 	return render(<ListNavigation listItems={items} {...rest} />);
@@ -57,15 +61,17 @@ describe('Component: <ListNavigation /> (default)', () => {
 		expect(link[0]).toBeInTheDocument();
 	});
 
-	// it('Should render active class when child is active', () => {
-	// 	const { getByText } = renderListNavigation({ items: mockListNavigationItem() });
-	//
-	// 	const child = getByText(mockListNavigationItem()[0].node as string).closest(
-	// 		'.c-list-navigation__item'
-	// 	) as HTMLElement;
-	//
-	// 	expect(child).toHaveClass('c-list-navigation__item--active');
-	// });
+	it('Should render active class when child is active', () => {
+		const { getByText } = renderListNavigation({
+			items: mockListNavigationItemWithoutChildren(),
+		});
+
+		const child = getByText(mockListNavigationItemWithoutChildren()[0].node as string).closest(
+			'.c-list-navigation__item'
+		) as HTMLElement;
+
+		expect(child).toHaveClass('c-list-navigation__item--active');
+	});
 
 	it('Should render dividers', () => {
 		const { container } = renderListNavigation({
