@@ -41,7 +41,7 @@ export const mockListNavigationItem = ({
 	id = 'mock item',
 	active = true,
 	hasDivider = false,
-	children = [],
+	children = null,
 }: Partial<ListNavigationItem> = {}): ListNavigationItem[] => [
 	{
 		node: node,
@@ -49,6 +49,20 @@ export const mockListNavigationItem = ({
 		active: active,
 		hasDivider: hasDivider,
 		children: children,
+	},
+];
+
+export const mockListNavigationItemWithoutChildren = ({
+	node = 'mock item',
+	id = 'mock item',
+	active = true,
+	hasDivider = false,
+}: Partial<ListNavigationItem> = {}): ListNavigationItem[] => [
+	{
+		node: node,
+		id: id,
+		active: active,
+		hasDivider: hasDivider,
 	},
 ];
 

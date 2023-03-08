@@ -1,6 +1,8 @@
 import { OrderDirection, TabProps } from '@meemoo/react-components';
+import { isEmpty } from 'lodash-es';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
+import { IeObjectSearchAggregations } from '@ie-objects/types';
 import { Icon, IconNamesLight } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -13,6 +15,8 @@ import {
 	DurationFilterForm,
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
+	GenreFilterForm,
+	KeywordsFilterForm,
 	LanguageFilterForm,
 	MediumFilterForm,
 	PublishedFilterForm,
@@ -119,17 +123,19 @@ export const VISITOR_SPACE_FILTERS = (): FilterMenuFilterOption[] => [
 		form: CreatorFilterForm,
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
-	// {
-	// 	id: VisitorSpaceFilterId.Genre,
-	// 	label: tText('modules/visitor-space/const/index___genre'),
-	// 	form: GenreFilterForm,
-	// },
+	{
+		id: VisitorSpaceFilterId.Genre,
+		label: tText('modules/visitor-space/const/index___genre'),
+		form: GenreFilterForm,
+		isDisabled: () => true,
+	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
-	// {
-	// 	id: VisitorSpaceFilterId.Keywords,
-	// 	label: tText('modules/visitor-space/const/index___trefwoorden'),
-	// 	form: KeywordsFilterForm,
-	// },
+	{
+		id: VisitorSpaceFilterId.Keywords,
+		label: tText('modules/visitor-space/const/index___trefwoorden'),
+		form: KeywordsFilterForm,
+		isDisabled: () => true,
+	},
 	{
 		id: VisitorSpaceFilterId.Language,
 		label: tText('modules/visitor-space/const/index___taal'),
