@@ -27,7 +27,7 @@
 
 .c-filter-form__body {
 	max-height: 100%;
-	overflow: scroll;
+	overflow-y: auto;
 
 	// Allow "overflowing" effects on input fields
 	padding-top: $spacer-xs;
