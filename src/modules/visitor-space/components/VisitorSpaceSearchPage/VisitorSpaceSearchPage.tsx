@@ -305,7 +305,11 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const onResetFilters = () => {
-		setQuery(VISITOR_SPACE_QUERY_PARAM_INIT);
+		// Reset all filters except the maintainer
+		setQuery({
+			...VISITOR_SPACE_QUERY_PARAM_INIT,
+			maintainer: query.maintainer,
+		});
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
