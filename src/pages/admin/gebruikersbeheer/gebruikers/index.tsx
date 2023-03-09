@@ -14,7 +14,7 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { formatDistanceToday } from '@shared/utils';
+import { formatDistanceTodayWithoutTime } from '@shared/utils';
 
 const UsersOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	const { tText } = useTranslation();
@@ -27,7 +27,7 @@ const UsersOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }) 
 				<AdminLayout.Content>
 					<div className="l-container">
 						<UserOverview
-							customFormatDate={formatDistanceToday}
+							customFormatDate={formatDistanceTodayWithoutTime}
 							commonUser={commonUser as Avo.User.CommonUser}
 						/>
 					</div>
