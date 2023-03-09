@@ -12,7 +12,7 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { formatDistanceToday } from '@shared/utils';
+import { formatDistanceTodayWithoutTime } from '@shared/utils';
 
 const UsersOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
@@ -24,7 +24,7 @@ const UsersOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			>
 				<AdminLayout.Content>
 					<div className="l-container">
-						<UserOverview customFormatDate={formatDistanceToday} />
+						<UserOverview customFormatDate={formatDistanceTodayWithoutTime} />
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
