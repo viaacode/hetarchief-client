@@ -57,7 +57,10 @@ export async function getServerSideProps(
 		const contentPage = await ContentPageClientService.getBySlug('/');
 		title = contentPage?.title || null;
 	} catch (err) {
-		console.error('Failed to fetch content page seo info by slug: ' + context.query.slug, err);
+		console.error(
+			'Failed to fetch content page seo info for homepage by slug: ' + context.query.slug,
+			err
+		);
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(

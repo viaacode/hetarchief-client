@@ -98,11 +98,19 @@ export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DynamicRouteResolverProps>> {
 	let title: string | null = null;
-	try {
-		const contentPage = await ContentPageClientService.getBySlug(`/${context.query.slug}`);
-		title = contentPage?.title || null;
-	} catch (err) {
-		console.error('Failed to fetch content page seo info by slug: ' + context.query.slug, err);
+	const slug = context.query.slug;
+	if (slug) {
+		try {
+			const contentPage = await ContentPageClientService.getBySlug(`/${context.query.slug}`);
+			title = contentPage?.title || null;
+		} catch (err) {
+			console.error(
+				'Failed to fetch content page seo info by slug: ' + context.query.slug,
+				err
+			);
+		}
+	} else {
+		title = 'Home - Het Archief';
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
