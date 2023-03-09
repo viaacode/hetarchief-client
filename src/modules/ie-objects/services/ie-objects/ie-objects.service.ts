@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 
 import { IeObject, IeObjectSimilar } from '@ie-objects/types';

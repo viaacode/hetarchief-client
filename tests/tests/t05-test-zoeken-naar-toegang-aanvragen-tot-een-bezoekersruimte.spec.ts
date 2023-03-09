@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { escapeRegExp } from 'lodash';
+import { escapeRegExp } from 'lodash-es';
 
 import { acceptCookies } from '../helpers/accept-cookies';
 import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';

@@ -1,6 +1,6 @@
 import { Dropdown, RadioButton } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isEmpty, isNil, without } from 'lodash';
+import { isEmpty, isNil, without } from 'lodash-es';
 import { FC, ReactElement, ReactNode, useEffect, useState } from 'react';
 
 import { CheckboxList } from '../CheckboxList';

@@ -1,5 +1,5 @@
 import { ContentPageInfo, fetchWithLogoutJson } from '@meemoo/admin-core-ui';
-import { startsWith } from 'lodash';
+import { startsWith } from 'lodash-es';
 import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
 

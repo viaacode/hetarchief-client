@@ -1,5 +1,5 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { isEmpty, isNil } from 'lodash';
+import { isEmpty, isNil } from 'lodash-es';
 import { useDispatch } from 'react-redux';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';

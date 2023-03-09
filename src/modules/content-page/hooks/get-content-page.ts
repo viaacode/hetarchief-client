@@ -1,6 +1,6 @@
 import { ContentPageInfo, ContentPageService } from '@meemoo/admin-core-ui';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
-import { startsWith } from 'lodash';
+import { startsWith } from 'lodash-es';
 
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
