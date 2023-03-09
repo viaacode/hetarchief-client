@@ -73,7 +73,7 @@ const AppLayout: FC = ({ children }) => {
 	const showNotificationsCenter = useSelector(selectShowNotificationsCenter);
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg);
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.xxl);
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
 	const history = useSelector(selectHistory);
