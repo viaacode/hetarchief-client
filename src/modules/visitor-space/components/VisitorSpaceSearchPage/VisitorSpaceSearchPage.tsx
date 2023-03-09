@@ -544,6 +544,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				items={searchResults?.items.map(
 					(item): IdentifiableMediaCard => ({
 						schemaIdentifier: item.schemaIdentifier,
+						maintainerSlug: item.maintainerSlug,
 						description: item.description,
 						title: item.name,
 						publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
@@ -559,35 +560,6 @@ const VisitorSpaceSearchPage: FC = () => {
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
-				wrapper={(card, item) => {
-					const cast = item as IdentifiableMediaCard;
-					const source = searchResults?.items.find(
-						(media) => media.schemaIdentifier === cast.schemaIdentifier
-					);
-
-					// TODO: Replace maintainerName with slug when BE is updated
-					const space = source?.maintainerName?.replaceAll(' ', '-');
-					const id = source?.schemaIdentifier;
-					const href = `${ROUTE_PARTS.search}/${space}/${id}`.toLowerCase();
-
-					const name = item.title?.toString(); // TODO double check that this still works
-
-					return (
-						<Link key={source?.schemaIdentifier} href={href}>
-							<a
-								className="u-text-no-decoration"
-								aria-label={tText(
-									'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___navigeer-naar-de-detailpagina-van-name',
-									{
-										name,
-									}
-								)}
-							>
-								{card}
-							</a>
-						</Link>
-					);
-				}}
 			/>
 			<PaginationBar
 				className="u-mb-48"

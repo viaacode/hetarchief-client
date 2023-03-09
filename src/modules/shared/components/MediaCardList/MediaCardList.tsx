@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
+import { ROUTE_PARTS } from '@shared/const';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
@@ -125,7 +126,10 @@ const MediaCardList: FC<MediaCardListProps> = ({
 
 	const tiles = items.map((item, i) =>
 		wrapper(
-			<Link href={`/zoeken/${item.maintainerSlug}/${item.schemaIdentifier}`}>
+			<Link
+				key={item.schemaIdentifier}
+				href={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
+			>
 				<a className="u-text-no-decoration" aria-label={item.schemaIdentifier}>
 					<MediaCard
 						key={getKey(item, i)}
