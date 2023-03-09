@@ -13,10 +13,24 @@ $component: "c-material-request-center-blade";
 		color: $black;
 	}
 
-	&__title {
+	&__title-container {
 		color: $black;
 		padding: 0 $spacer-lg;
 		margin-bottom: $spacer-1xl;
+	}
+
+	&__title {
+		margin-bottom: $spacer-md;
+	}
+
+	&__subtitle {
+		color: $zinc;
+	}
+
+	&__material-container {
+		display: flex;
+		align-items: center;
+		border-bottom: 0.2rem solid $platinum;
 	}
 
 	&__maintainer {
@@ -40,9 +54,6 @@ $component: "c-material-request-center-blade";
 	}
 
 	&__material {
-		padding: $spacer-md $spacer-lg;
-		border-bottom: 0.2rem solid $platinum;
-
 		&:focus,
 		&:focus-within {
 			outline: 0.2rem solid $teal;
@@ -51,6 +62,8 @@ $component: "c-material-request-center-blade";
 
 		&-link {
 			text-decoration: none;
+			padding: $spacer-md $spacer-lg;
+			flex-grow: 3;
 		}
 
 		&-label {
@@ -69,6 +82,16 @@ $component: "c-material-request-center-blade";
 			color: $neutral;
 			overflow: hidden;
 			text-overflow: ellipsis;
+		}
+
+		&-actions {
+			display: flex;
+			flex-direction: row;
+			padding: $spacer-md $spacer-lg;
+
+			&-button {
+				margin-right: $spacer-xs;
+			}
 		}
 	}
 
@@ -94,12 +117,22 @@ $component: "c-material-request-center-blade";
 		padding: $spacer-lg;
 	}
 
-	&__close-button {
-		background-color: $black;
-		color: $white;
+	&__send-button {
+		margin-bottom: $spacer-sm;
+		background-color: $black !important;
+		color: $white !important;
 
 		&:hover {
-			border: 0.1rem solid $zinc;
+			border: 0.1rem solid $zinc !important;
+			background-color: $white !important;
+			color: $zinc !important;
+		}
+	}
+
+	&__close-button {
+		&:hover {
+			border: 0.1rem solid $zinc !important;
+			color: $zinc !important;
 		}
 	}
 }

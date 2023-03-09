@@ -3,11 +3,11 @@ import Image from 'next/image';
 import { FC, useMemo, useState } from 'react';
 
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight, Loading } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './MaterialRequestCenterBlade.module.scss';
-import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
 
 interface MaterialRequestCenterBladeProps {
 	isOpen: boolean;
@@ -15,12 +15,14 @@ interface MaterialRequestCenterBladeProps {
 }
 
 const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpen, onClose }) => {
-	const { tText } = useTranslation();
+	const { tHtml, tText } = useTranslation();
 
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		isPersonal: true,
 		orderProp: MaterialRequestKeys.maintainer,
 		orderDirection: 'asc' as OrderDirection,
+		// Ward: if no size is given, only 10 results will be returned
+		size: 500,
 	});
 
 	// Ward: create an object containing all the distinct maintainerId's as properties
@@ -49,25 +51,48 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	};
 
 	const renderTitle = () => {
-		return <h2 className={styles['c-material-request-center-blade__title']}>Aanvraaglijst</h2>;
+		return (
+			<div className={styles['c-material-request-center-blade__title-container']}>
+				<h4 className={styles['c-material-request-center-blade__title']}>
+					{tText(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst'
+					)}
+				</h4>
+				{mappedRequests && Object.keys(mappedRequests).length > 1 && (
+					<p className={styles['c-material-request-center-blade__subtitle']}>
+						{tHtml(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___meerdere-aanbieders'
+						)}
+					</p>
+				)}
+			</div>
+		);
 	};
 
 	const renderFooter = () => {
 		return (
-			<div className={styles['p-account-my-material-requests__close-button-container']}>
+			<div className={styles['c-material-request-center-blade__close-button-container']}>
 				<Button
 					label={tText(
-						'modules/account/components/material-request-detail-blade/material-requests___sluit'
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
 					)}
 					variants={['block', 'text']}
 					onClick={onClose}
-					className={styles['p-account-my-material-requests__close-button']}
+					className={styles['c-material-request-center-blade__send-button']}
+				/>
+				<Button
+					label={tText(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
+					)}
+					variants={['block', 'text']}
+					onClick={onClose}
+					className={styles['c-material-request-center-blade__close-button']}
 				/>
 			</div>
 		);
 	};
 
-	const renderMaintainer = (item: MaterialRequest) => {
+	const renderMaintainer = (item: MaterialRequest, length: number) => {
 		return (
 			<div className={styles['c-material-request-center-blade__maintainer']}>
 				{/* {item.maintainerLogo && (
@@ -92,10 +117,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				</div>
 				<div>
 					<p className={styles['c-material-request-center-blade__maintainer-details']}>
-						Aangevraagd bij
+						{tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___aangevraagd'
+						)}
 					</p>
 					<p className={styles['c-material-request-center-blade__maintainer-details']}>
-						{item.maintainerName}
+						{item.maintainerName} ({length})
 					</p>
 				</div>
 			</div>
@@ -104,30 +131,60 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	const renderMaterialRequest = (item: MaterialRequest) => {
 		return (
-			<a
-				tabIndex={-1}
-				href={`/zoeken/${item.maintainerSlug}/${item.objectSchemaIdentifier}`}
-				className={styles['c-material-request-center-blade__material-link']}
-			>
-				<div className={styles['c-material-request-center-blade__material']} tabIndex={0}>
-					<p className={styles['c-material-request-center-blade__material-label']}>
-						<Icon
-							className={
-								styles['c-material-request-center-blade__material-label-icon']
-							}
-							name={
-								item.objectType === 'audio'
-									? IconNamesLight.Audio
-									: IconNamesLight.Video
-							}
-						/>
-						<span>{item.objectSchemaName}</span>
-					</p>
-					<p className={styles['c-material-request-center-blade__material-id']}>
-						{item.objectMeemooIdentifier}
-					</p>
+			<div className={styles['c-material-request-center-blade__material-container']}>
+				<a
+					tabIndex={-1}
+					href={`/zoeken/${item.maintainerSlug}/${item.objectSchemaIdentifier}`}
+					className={styles['c-material-request-center-blade__material-link']}
+				>
+					<div
+						className={styles['c-material-request-center-blade__material']}
+						tabIndex={0}
+					>
+						<p className={styles['c-material-request-center-blade__material-label']}>
+							<Icon
+								className={
+									styles['c-material-request-center-blade__material-label-icon']
+								}
+								name={
+									item.objectType === 'audio'
+										? IconNamesLight.Audio
+										: IconNamesLight.Video
+								}
+							/>
+							<span>{item.objectSchemaName}</span>
+						</p>
+						<p className={styles['c-material-request-center-blade__material-id']}>
+							{item.objectMeemooIdentifier}
+						</p>
+					</div>
+				</a>
+				<div className={styles['c-material-request-center-blade__material-actions']}>
+					<Button
+						key={'edit-material-request'}
+						className={
+							styles['c-material-request-center-blade__material-actions-button']
+						}
+						onClick={() => console.log('edit')}
+						variants={['silver']}
+						name="Edit"
+						icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+						aria-label={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
+						)}
+					/>
+					<Button
+						key={'delete-material-request'}
+						onClick={() => console.log('delete')}
+						variants={['silver']}
+						name="Delete"
+						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+						aria-label={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
+						)}
+					/>
 				</div>
-			</a>
+			</div>
 		);
 	};
 
@@ -137,7 +194,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			// Ward: render each unique maintainer
 			Object.keys(mappedRequests).map((key) => (
 				<>
-					{renderMaintainer(mappedRequests[key][0])}
+					{renderMaintainer(mappedRequests[key][0], mappedRequests[key].length)}
 
 					{/* Ward: render all materialRequests of current maintainer, sorted by objectSchemaName */}
 					{mappedRequests[key]
