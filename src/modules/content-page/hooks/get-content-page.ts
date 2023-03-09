@@ -16,7 +16,6 @@ export const useGetContentPageByPath = (
 			throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
 		}
 
-		console.log('getting page with slug');
 		return ContentPageService.getContentPageByPath(path);
 	});
 };

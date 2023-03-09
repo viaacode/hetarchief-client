@@ -34,7 +34,6 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 	const router = useRouter();
 	const { slug } = router.query;
 	const dispatch = useDispatch();
-	console.log('slug: ', slug);
 
 	/**
 	 * Data
