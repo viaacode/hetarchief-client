@@ -1,6 +1,6 @@
 import { expect, request, test } from '@playwright/test';
 import addMinutes from 'date-fns/addMinutes';
-import { kebabCase, trim } from 'lodash';
+import { kebabCase, trim } from 'lodash-es';
 
 import { acceptCookies } from '../helpers/accept-cookies';
 import { checkToastMessage } from '../helpers/check-toast-message';

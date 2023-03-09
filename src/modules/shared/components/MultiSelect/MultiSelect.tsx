@@ -1,6 +1,6 @@
 import { Dropdown } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { without } from 'lodash';
+import { without } from 'lodash-es';
 import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { CheckboxList } from '../CheckboxList';

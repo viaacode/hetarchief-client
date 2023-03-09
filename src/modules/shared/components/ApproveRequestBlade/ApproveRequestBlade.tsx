@@ -471,7 +471,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const renderAccessType = useCallback(
 		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessType'> }) => {
 			const initialState = {
-				selectedOption: field.value?.type ?? 'FULL',
+				selectedOption: field.value?.type ?? AccessType.FULL,
 				refinedSelection: field.value?.folderIds ?? [],
 			};
 
