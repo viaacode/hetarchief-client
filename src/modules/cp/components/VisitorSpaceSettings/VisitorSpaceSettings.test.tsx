@@ -15,6 +15,7 @@ const renderVisitorSpaceSettings = ({
 	const initialState: Partial<AppState> = {
 		user: {
 			user: null,
+			commonUser: null,
 			loading: false,
 			hasCheckedLogin: false,
 			error: null,

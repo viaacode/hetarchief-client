@@ -6,12 +6,12 @@ import { SidebarLayoutProps } from './SidebarLayout.types';
 
 const renderSidebarLayout = ({
 	children,
-	sidebarLinksTop: sidebarLinks = [],
+	sidebarLinks: sidebarLinks = [],
 	sidebarTitle = '',
 	...rest
 }: PropsWithChildren<Partial<SidebarLayoutProps>> = {}) => {
 	return render(
-		<SidebarLayout {...rest} sidebarLinksTop={sidebarLinks} sidebarTitle={sidebarTitle}>
+		<SidebarLayout {...rest} sidebarLinks={sidebarLinks} sidebarTitle={sidebarTitle}>
 			{children}
 		</SidebarLayout>
 	);

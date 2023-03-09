@@ -15,9 +15,10 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageOverviewPage: FC<DefaultSeoInfo> = ({ url }) => {
+const ContentPageOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	const { tText } = useTranslation();
 	const canCreateContentPages = useHasAllPermission(Permission.CREATE_CONTENT_PAGES) || true; // TODO remove once permission is added to the database
 
@@ -48,7 +49,7 @@ const ContentPageOverviewPage: FC<DefaultSeoInfo> = ({ url }) => {
 				</AdminLayout.Actions>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-content">
-						<ContentPageOverview />
+						<ContentPageOverview commonUser={commonUser} />
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
@@ -82,4 +83,6 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(ContentPageOverviewPage as ComponentType));
+export default withAuth(
+	withAdminCoreConfig(withUser(ContentPageOverviewPage as FC<unknown>))
+) as FC<DefaultSeoInfo>;

@@ -82,6 +82,22 @@ export const formatDistanceToday = (input: Date | string): string => {
 	return date ? formatMediumDateWithTime(date) : '';
 };
 
+// 10 minuten geleden
+// 3 uur geleden
+// 13 apr. 2022
+export const formatDistanceTodayWithoutTime = (input: Date | string): string => {
+	const date = asDate(input);
+
+	if (date && isToday(date)) {
+		return formatDistanceToNow(date, {
+			...localisedOptions,
+			addSuffix: true,
+		});
+	}
+
+	return date ? formatMediumDate(date) : '';
+};
+
 // 09:30
 // 13/04/2022
 export const formatSameDayTimeOrDate = (date?: Date): string => {

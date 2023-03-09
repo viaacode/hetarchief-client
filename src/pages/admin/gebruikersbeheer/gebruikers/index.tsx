@@ -1,7 +1,8 @@
 import { UserOverview } from '@meemoo/admin-core-ui';
+import { Avo } from '@viaa/avo2-types';
 import { GetServerSidePropsResult } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, FC } from 'react';
+import React, { FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -11,10 +12,11 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { formatDistanceToday } from '@shared/utils';
+import { formatDistanceTodayWithoutTime } from '@shared/utils';
 
-const UsersOverview: FC<DefaultSeoInfo> = ({ url }) => {
+const UsersOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	const { tText } = useTranslation();
 
 	const renderPageContent = () => {
@@ -24,7 +26,10 @@ const UsersOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			>
 				<AdminLayout.Content>
 					<div className="l-container">
-						<UserOverview customFormatDate={formatDistanceToday} />
+						<UserOverview
+							customFormatDate={formatDistanceTodayWithoutTime}
+							commonUser={commonUser as Avo.User.CommonUser}
+						/>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
@@ -51,4 +56,6 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(UsersOverview as ComponentType));
+export default withAuth(
+	withAdminCoreConfig(withUser(UsersOverviewPage as FC<unknown>))
+) as FC<DefaultSeoInfo>;

@@ -8,7 +8,7 @@ $visibility: (
 	"hidden": hidden,
 	"visible": visible,
 );
-@include generate-utils("visibility", "visibility", $visibility, ("md"));
+@include generate-utils("visibility", "visibility", $visibility, ("md", "xxl"));
 
 /**
  * Display
@@ -19,4 +19,4 @@ $display: (
 	"block": block,
 	"inline-block": inline-block,
 );
-@include generate-utils("display", "display", $display, ("md", "lg"));
+@include generate-utils("display", "display", $display, ("md", "lg", "xxl"));
