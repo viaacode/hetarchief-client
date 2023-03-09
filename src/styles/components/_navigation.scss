@@ -15,14 +15,14 @@
 		&--list {
 			margin: 1rem 6rem 1rem 0;
 
-			@include respond-to(md) {
+			@include respond-to(xxl) {
 				margin: 3.5rem 0 3.5rem $spacer-md;
 			}
 		}
 	}
 
 	&__auth {
-		@include respond-to(md) {
+		@include respond-to(xxl) {
 			padding: 0;
 			margin: 0;
 

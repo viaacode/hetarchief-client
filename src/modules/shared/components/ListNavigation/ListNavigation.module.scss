@@ -23,7 +23,7 @@ $component: "c-list-navigation";
 		&:hover {
 			cursor: pointer;
 
-			@include respond-at("md") {
+			@include respond-at(xxl) {
 				background-color: $silver;
 			}
 		}

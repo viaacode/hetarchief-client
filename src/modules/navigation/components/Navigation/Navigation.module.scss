@@ -58,7 +58,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	background-color: $black;
 	color: $white;
 
-	@include respond-at(md) {
+	@include respond-at(xxl) {
 		min-height: $c-navigation-height;
 		padding: 0 3.2rem;
 	}
@@ -74,7 +74,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		background-color: $shade;
 		opacity: 0.64;
 
-		@include respond-at(md) {
+		@include respond-at(xxl) {
 			left: 3.2rem;
 			right: 3.2rem;
 		}
@@ -107,12 +107,12 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			padding: 1.2rem 0 0.65rem;
 		}
 
-		@include respond-at(md) {
+		@include respond-at(xxl) {
 			z-index: get-z-layer("nav-dropdown"); // above overlay
 		}
 
 		&--open {
-			@include respond-to(md) {
+			@include respond-to(xxl) {
 				z-index: get-z-layer("nav-dropdown"); // under overlay
 			}
 		}
@@ -123,12 +123,12 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			display: flex;
 		}
 
-		@include respond-at(md) {
+		@include respond-at(xxl) {
 			z-index: get-z-layer("nav-hamburger"); // above all
 		}
 
 		&--open {
-			@include respond-to(md) {
+			@include respond-to(xxl) {
 				z-index: get-z-layer("nav-dropdown"); // under overlay
 			}
 		}
@@ -189,14 +189,14 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			height: $c-navigation-divider-size;
 			background-color: $silver;
 
-			@include respond-at(md) {
+			@include respond-at(xxl) {
 				left: 0;
 				right: 0;
 			}
 		}
 
 		&\:md {
-			@include respond-to(md) {
+			@include respond-to(xxl) {
 				margin-bottom: 0;
 
 				&::before {
@@ -211,7 +211,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		position: absolute;
 		padding-top: $c-navigation-height-md;
 
-		@include respond-at(md) {
+		@include respond-at(xxl) {
 			padding-top: $c-navigation-height;
 		}
 	}
@@ -246,7 +246,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		color: $black;
 
 		// Overwrite popper element styles
-		@include respond-to(md) {
+		@include respond-to(xxl) {
 			inset: $c-navigation-height-md 0 0 0 !important;
 			top: $c-navigation-height-md !important;
 			right: 0 !important;
@@ -254,7 +254,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 			left: 0 !important;
 			transform: translate(0) !important;
 		}
-		@include respond-at(md) {
+		@include respond-at(xxl) {
 			min-width: 26.6rem !important;
 		}
 	}
@@ -266,17 +266,17 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	text-decoration: none;
 	border-bottom: $c-navigation-border-height solid transparent;
 
-	@include respond-to(md) {
+	@include respond-to(xxl) {
 		border-bottom: none;
 		font-size: $font-size-sm;
 	}
-	@include respond-at(md) {
+	@include respond-at(xxl) {
 		display: inline-block;
 		padding: 1.2rem 0 0.95rem;
 	}
 
 	&--dropdown:hover {
-		@include respond-to(md) {
+		@include respond-to(xxl) {
 			background-color: $silver;
 		}
 	}
@@ -319,7 +319,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	align-items: center;
 	transition: border-color $animate-md-out, color $animate-md-out;
 
-	@include respond-at(md) {
+	@include respond-at(xxl) {
 		margin-bottom: $c-navigation-divider-size;
 		position: relative;
 		height: $c-navigation-height - $c-navigation-divider-size;
@@ -345,14 +345,14 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 	&--divider {
 		margin-left: $c-navigation-item-spacing;
 
-		@include respond-at(lg) {
+		@include respond-at(xxl) {
 			margin-right: 0;
 		}
 
 		&:not(:last-child) {
 			margin-right: 0;
 
-			@include respond-at(lg) {
+			@include respond-at(xxl) {
 				margin-right: 0;
 			}
 		}
@@ -373,7 +373,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		z-index: get-z-layer("nav-dropdown");
 		font-weight: 800;
 
-		@include respond-to("md") {
+		@include respond-to(xxl) {
 			> :global(.c-dropdown-menu__item) {
 				font-weight: 700;
 			}
@@ -453,12 +453,12 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 		content: none;
 	}
 
-	@include respond-to(md) {
+	@include respond-to(xxl) {
 		min-height: $c-navigation-height-contextual-md;
 	}
 
 	.c-navigation__title {
-		@include respond-to(md) {
+		@include respond-to(xxl) {
 			font-size: $font-size-base;
 		}
 	}
@@ -470,25 +470,25 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 }
 
 .c-navigation--responsive {
-	@include respond-to(md) {
+	@include respond-to(xxl) {
 		grid-template-columns: auto;
 	}
 
 	.c-navigation__section {
 		:global(.c-badge) {
-			@include respond-to(md) {
+			@include respond-to(xxl) {
 				margin-left: $spacer-xs;
 			}
 		}
 
 		&--responsive-desktop {
-			@include respond-to(md) {
+			@include respond-to(xxl) {
 				display: none;
 			}
 		}
 
 		&--responsive-mobile {
-			@include respond-to(md) {
+			@include respond-to(xxl) {
 				display: flex;
 				justify-self: center;
 			}
