@@ -33,7 +33,7 @@ export interface FolderIeObject {
 	thumbnailUrl: string;
 	maintainerId: string;
 	maintainerName: string;
-	visitorSpaceSlug: string;
+	maintainerSlug: string;
 	series: string[];
 	programs: string[];
 	datePublished?: string;

@@ -127,6 +127,7 @@ $ml: (
 
 // Right
 $mr: (
+	"4": $spacer-xxs,
 	"8": $spacer-xs,
 );
 @include generate-utils("mr", "margin-right", $mr);

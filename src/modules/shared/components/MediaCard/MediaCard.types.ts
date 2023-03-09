@@ -26,4 +26,5 @@ export interface MediaCardProps {
 
 export type IdentifiableMediaCard = MediaCardProps & {
 	schemaIdentifier: string;
+	maintainerSlug: string;
 };
