@@ -13,7 +13,7 @@ export interface ListNavigationItem {
 	id: string;
 	active?: boolean;
 	hasDivider?: boolean;
-	children?: ListNavigationItem[];
+	children?: ListNavigationItem[] | null;
 	variants?: string[];
 }
 

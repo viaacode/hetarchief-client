@@ -27,7 +27,7 @@
 
 .c-filter-form__body {
 	max-height: 100%;
-	overflow: visible;
+	overflow-y: auto;
 
 	// Allow "overflowing" effects on input fields
 	padding-top: $spacer-xs;
@@ -43,6 +43,10 @@
 	:global(.c-react-select__menu-list) {
 		overflow: auto;
 		max-height: $spacer-1xl * 4;
+	}
+
+	&--overflow {
+		overflow: visible;
 	}
 }
 

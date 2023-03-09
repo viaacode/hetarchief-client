@@ -82,7 +82,7 @@ const AdminLayout: AdminLayoutComponent = ({
 	return (
 		<SidebarLayout
 			className={className}
-			sidebarLinksTop={sidebarLinks}
+			sidebarLinks={sidebarLinks}
 			sidebarTitle={tHtml('modules/admin/layouts/admin-layout/admin-layout___admin')}
 		>
 			{(!!pageTitle || !!actions) && (
