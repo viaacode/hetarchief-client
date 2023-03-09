@@ -45,7 +45,8 @@ $component: "c-list-navigation";
 	}
 
 	&__link {
-		display: block;
+		display: flex;
+		align-items: center;
 		text-decoration: none;
 		padding: 1.6rem 1.6rem 1.6rem $spacer-lg;
 
