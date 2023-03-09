@@ -10,4 +10,4 @@ $color: (
 	"neutral": $neutral,
 	"teal": $teal,
 );
-@include generate-utils("color", "color", $color, ("md"));
+@include generate-utils("color", "color", $color, ("md", "lg", "xxl"));
