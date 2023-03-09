@@ -1,4 +1,4 @@
-import { MediaCardProps } from '@shared/components';
+import { IdentifiableMediaCard, MediaCardProps } from '@shared/components';
 
 import { MediaCardListProps } from '../MediaCardList.types';
 
@@ -7,14 +7,14 @@ export const mock = async (
 	start = 0,
 	limit = 24
 ): Promise<MediaCardListProps> => {
-	const items: MediaCardProps[] = await fetch(
+	const items: IdentifiableMediaCard[] = await fetch(
 		`https://jsonplaceholder.typicode.com/photos?_start=${start}&_limit=${limit}`
 	)
 		.then((response) => response.json())
 		.then((json: unknown) => {
 			const data = json as Array<{ id: number; title: string; url: string }>;
 
-			return data.map((item, i): MediaCardProps => {
+			return data.map((item, i): IdentifiableMediaCard => {
 				const type = Math.floor(Math.random() * 2) == 0;
 				const preview = Math.floor(Math.random() * 2) == 0;
 
@@ -40,6 +40,8 @@ export const mock = async (
 					type: type ? 'audio' : 'video',
 					preview: preview ? item.url.replace('/600/', '/496x322/') : undefined,
 					view: args.view,
+					maintainerSlug: 'vrt',
+					schemaIdentifier: 'or-3i32difh',
 				};
 			});
 		});
@@ -50,7 +52,7 @@ export const mock = async (
 	};
 };
 
-export const gridData: MediaCardProps[] = [
+export const gridData: IdentifiableMediaCard[] = [
 	{
 		title: '#1 - accusamus beatae ad facilis cum similique qui sunt',
 		description:
@@ -60,6 +62,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/92c952',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#2 - reprehenderit est deserunt velit ipsam',
@@ -69,6 +73,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'reprehenderit',
 		type: 'audio',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#3 - officia porro iure quia iusto qui ipsa ut modi',
@@ -78,6 +84,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'officia',
 		type: 'video',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#4 - culpa odio esse rerum omnis laboriosam voluptate repudiandae',
@@ -88,6 +96,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/d32776',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#5 - natus nisi omnis corporis facere molestiae rerum in',
@@ -97,6 +107,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'natus',
 		type: 'video',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#6 - accusamus ea aliquid et amet sequi nemo',
@@ -107,6 +119,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'audio',
 		preview: 'https://via.placeholder.com/496x322/56a8c2',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#7 - officia delectus consequatur vero aut veniam explicabo molestias',
@@ -117,6 +131,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'audio',
 		preview: 'https://via.placeholder.com/496x322/b0f7cc',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#8 - aut porro officiis laborum odit ea laudantium corporis',
@@ -127,6 +143,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'audio',
 		preview: 'https://via.placeholder.com/496x322/54176f',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#9 - qui eius qui autem sed',
@@ -137,6 +155,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/51aa97',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#10 - beatae et provident et ut vel',
@@ -147,6 +167,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'audio',
 		preview: 'https://via.placeholder.com/496x322/810b14',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#11 - nihil at amet non hic quia qui',
@@ -156,6 +178,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'nihil',
 		type: 'audio',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#12 - mollitia soluta ut rerum eos aliquam consequatur perspiciatis maiores',
@@ -166,6 +190,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/66b7d2',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#13 - repudiandae iusto deleniti rerum',
@@ -176,6 +202,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'audio',
 		preview: 'https://via.placeholder.com/496x322/197d29',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#14 - est necessitatibus architecto ut laborum',
@@ -186,6 +214,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'audio',
 		preview: 'https://via.placeholder.com/496x322/61a65',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#15 - harum dicta similique quis dolore earum ex qui',
@@ -195,6 +225,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'harum',
 		type: 'video',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#16 - iusto sunt nobis quasi veritatis quas expedita voluptatum deserunt',
@@ -204,6 +236,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'iusto',
 		type: 'audio',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#17 - natus doloribus necessitatibus ipsa',
@@ -214,6 +248,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/9c184f',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#18 - laboriosam odit nam necessitatibus et illum dolores reiciendis',
@@ -223,6 +259,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'laboriosam',
 		type: 'audio',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#19 - perferendis nesciunt eveniet et optio a',
@@ -233,6 +271,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/56acb2',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#20 - assumenda voluptatem laboriosam enim consequatur veniam placeat reiciendis error',
@@ -243,6 +283,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/8985dc',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#21 - ad et natus qui',
@@ -253,6 +295,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/5e12c6',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#22 - et ea illo et sit voluptas animi blanditiis porro',
@@ -262,6 +306,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'et',
 		type: 'video',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#23 - harum velit vero totam',
@@ -272,6 +318,8 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/e924e6',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#24 - beatae officiis ut aut',
@@ -281,6 +329,8 @@ export const gridData: MediaCardProps[] = [
 		publishedBy: 'beatae',
 		type: 'video',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 	{
 		title: '#25 - facere non quis fuga fugit vitae',
@@ -291,5 +341,7 @@ export const gridData: MediaCardProps[] = [
 		type: 'video',
 		preview: 'https://via.placeholder.com/496x322/5e3a73',
 		view: 'grid',
+		maintainerSlug: 'vrt',
+		schemaIdentifier: 'or-asdf38',
 	},
 ];

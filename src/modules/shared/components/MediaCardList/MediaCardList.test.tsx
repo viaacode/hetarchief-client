@@ -1,12 +1,12 @@
 import { render, RenderResult, screen } from '@testing-library/react';
 
-import { MediaCardProps } from '../MediaCard';
+import { IdentifiableMediaCard } from '../MediaCard';
 
 import MediaCardList from './MediaCardList';
 import { gridData } from './__mocks__/media-card-list';
 
 describe('Component: <MediaCardList />', () => {
-	const data: MediaCardProps[] = gridData;
+	const data: IdentifiableMediaCard[] = gridData;
 	let rendered: RenderResult | undefined;
 
 	beforeEach(() => {
