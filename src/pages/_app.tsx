@@ -10,6 +10,7 @@ import { wrapper } from '@shared/store';
 import 'styles/main.scss';
 
 import NextI18nextConfig from '../../next-i18next.config';
+import pkg from '../../package.json';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -22,6 +23,10 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
+	if (typeof window !== 'undefined') {
+		// client-side-only code, window is not available during nextjs server side prerender
+		(window as any).APP_VERSION = { version: pkg.version };
+	}
 	return (
 		<NextQueryParamProvider>
 			<QueryClientProvider client={queryClient}>
