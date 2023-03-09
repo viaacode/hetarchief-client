@@ -4,13 +4,14 @@ import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import withUser, { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -25,7 +26,11 @@ type DynamicRouteResolverProps = {
 	title: string | null;
 } & DefaultSeoInfo;
 
-const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url }) => {
+const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
+	title,
+	url,
+	commonUser,
+}) => {
 	const router = useRouter();
 	const { slug } = router.query;
 	const dispatch = useDispatch();
@@ -71,7 +76,13 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps> = ({ title, url 
 		}
 
 		if (contentPageInfo) {
-			return <ContentPageRenderer contentPageInfo={contentPageInfo} />;
+			return (
+				<ContentPageRenderer
+					contentPageInfo={contentPageInfo}
+					commonUser={commonUser}
+					key={contentPageInfo.path}
+				/>
+			);
 		}
 	};
 
@@ -103,4 +114,6 @@ export async function getServerSideProps(
 	};
 }
 
-export default withAdminCoreConfig(DynamicRouteResolver as ComponentType);
+export default withAdminCoreConfig(
+	withUser(DynamicRouteResolver as FC<unknown>)
+) as FC<DefaultSeoInfo>;
