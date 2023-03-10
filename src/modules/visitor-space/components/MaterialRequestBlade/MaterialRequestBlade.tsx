@@ -2,12 +2,14 @@ import { Button, RadioButton, TextArea } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestType } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { setMaterialRequestCount } from '@shared/store/ui';
 
 import styles from './MaterialRequestBlade.module.scss';
 
@@ -33,6 +35,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	maintainerSlug,
 }) => {
 	const { tText } = useTranslation();
+	const dispatch = useDispatch();
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(MaterialRequestType.VIEW);
 	const [reasonInputValue, setReasonInputValue] = useState('');
@@ -43,6 +46,11 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		setReasonInputValue('');
 		setTypeSelected(MaterialRequestType.VIEW);
 		setShowError(false);
+	};
+
+	const onSuccesCreated = async () => {
+		const response = await MaterialRequestsService.getAll({ isPersonal: true, size: 500 });
+		dispatch(setMaterialRequestCount(response.items.length));
 	};
 
 	const onAddToList = async () => {
@@ -66,6 +74,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
 					),
 				});
+				onSuccesCreated();
 				onCloseModal();
 			} else {
 				setShowError(true);

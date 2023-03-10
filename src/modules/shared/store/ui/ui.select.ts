@@ -14,3 +14,5 @@ export const selectLockScrollRecord = (state: AppState): AppState['ui']['lockScr
 	state.ui.lockScroll;
 export const selectIsScrollLocked = (state: AppState): boolean =>
 	!!Object.values(state.ui.lockScroll || {}).find((val) => val === true);
+export const selectMaterialRequestCount = (state: AppState): number =>
+	state.ui.materialRequestCount;

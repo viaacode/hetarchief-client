@@ -11,6 +11,7 @@ const initialState: UIState = {
 	hasUnreadNotifications: false,
 	showZendesk: true,
 	lockScroll: {},
+	materialRequestCount: 0,
 };
 
 export const uiSlice = createSlice({
@@ -47,6 +48,9 @@ export const uiSlice = createSlice({
 				state.lockScroll = { ...state.lockScroll, ...action.payload };
 			}
 		},
+		setMaterialRequestCount(state, action: PayloadAction<number>) {
+			state.materialRequestCount = action.payload;
+		},
 	},
 });
 
@@ -59,4 +63,5 @@ export const {
 	setHasUnreadNotifications,
 	setShowZendesk,
 	setLockScroll,
+	setMaterialRequestCount,
 } = uiSlice.actions;

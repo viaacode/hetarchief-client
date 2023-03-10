@@ -26,6 +26,41 @@ $badge-font-size: 1rem;
 			width: 2rem;
 			height: 1.6rem;
 			background-color: $coral;
+
+			&--animated {
+				animation: pulse 0.5s 5;
+
+				&:hover {
+					animation: none;
+				}
+
+				@keyframes pulse {
+					0% {
+						box-shadow: 0 0 0 0 rgb(212 60 60 / 36%);
+					}
+
+					70% {
+						box-shadow: 1px 0 40px 20px rgb(212 60 60 / 36%);
+					}
+
+					100% {
+						box-shadow: 0 0 0 0 rgb(212 60 60 / 36%);
+					}
+				}
+				@keyframes pulse {
+					0% {
+						box-shadow: 0 0 0 0 rgb(212 60 60 / 36%);
+					}
+
+					70% {
+						box-shadow: 1px 0 40px 20px rgb(212 60 60 / 36%);
+					}
+
+					100% {
+						box-shadow: 0 0 0 0 rgb(212 60 60 / 36%);
+					}
+				}
+			}
 		}
 	}
 }

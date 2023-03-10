@@ -1,11 +1,20 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
 import Image from 'next/image';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
-import { MaterialRequest, MaterialRequestKeys } from '@material-requests/types';
+import { MaterialRequestsService } from '@material-requests/services';
+import {
+	MaterialRequest,
+	MaterialRequestKeys,
+	MaterialRequestRequesterCapacity,
+} from '@material-requests/types';
 import { Blade, Icon, IconNamesLight, Loading } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { setMaterialRequestCount } from '@shared/store/ui';
+
+import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
 
 import styles from './MaterialRequestCenterBlade.module.scss';
 
@@ -16,8 +25,15 @@ interface MaterialRequestCenterBladeProps {
 
 const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpen, onClose }) => {
 	const { tHtml, tText } = useTranslation();
+	const dispatch = useDispatch();
 
-	const { data: materialRequests, isFetching } = useGetMaterialRequests({
+	const [isPersonalInfoBladeOpen, setIsPersonalInfoBladeOpen] = useState(false);
+
+	const {
+		data: materialRequests,
+		isFetching,
+		refetch,
+	} = useGetMaterialRequests({
 		isPersonal: true,
 		orderProp: MaterialRequestKeys.maintainer,
 		orderDirection: 'asc' as OrderDirection,
@@ -46,8 +62,19 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		}, {} as { [key: string]: MaterialRequest[] });
 	}, [materialRequests]);
 
+	useEffect(() => {
+		isOpen && refetch();
+	}, [isOpen, refetch]);
+
 	const onCloseBlade = () => {
 		onClose();
+	};
+
+	const deleteMaterialRequest = async (id: string) => {
+		const deleteResponse = await MaterialRequestsService.delete(id);
+		deleteResponse && refetch();
+		const getResponse = await MaterialRequestsService.getAll({ isPersonal: true, size: 500 });
+		dispatch(setMaterialRequestCount(getResponse.items.length));
 	};
 
 	const renderTitle = () => {
@@ -65,29 +92,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						)}
 					</p>
 				)}
-			</div>
-		);
-	};
-
-	const renderFooter = () => {
-		return (
-			<div className={styles['c-material-request-center-blade__close-button-container']}>
-				<Button
-					label={tText(
-						'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
-					)}
-					variants={['block', 'text']}
-					onClick={onClose}
-					className={styles['c-material-request-center-blade__send-button']}
-				/>
-				<Button
-					label={tText(
-						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
-					)}
-					variants={['block', 'text']}
-					onClick={onClose}
-					className={styles['c-material-request-center-blade__close-button']}
-				/>
 			</div>
 		);
 	};
@@ -175,7 +179,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					/>
 					<Button
 						key={'delete-material-request'}
-						onClick={() => console.log('delete')}
+						onClick={() => deleteMaterialRequest(item.id)}
 						variants={['silver']}
 						name="Delete"
 						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
@@ -205,6 +209,29 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		);
 	};
 
+	const renderFooter = () => {
+		return (
+			<div className={styles['c-material-request-center-blade__close-button-container']}>
+				<Button
+					label={tText(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
+					)}
+					variants={['block', 'text']}
+					onClick={() => setIsPersonalInfoBladeOpen(true)}
+					className={styles['c-material-request-center-blade__send-button']}
+				/>
+				<Button
+					label={tText(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
+					)}
+					variants={['block', 'text']}
+					onClick={onClose}
+					className={styles['c-material-request-center-blade__close-button']}
+				/>
+			</div>
+		);
+	};
+
 	if (isFetching) {
 		return (
 			<Blade isOpen={isOpen} onClose={onClose} renderTitle={renderTitle}>
@@ -217,14 +244,25 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	}
 
 	return (
-		<Blade
-			isOpen={isOpen}
-			renderTitle={renderTitle}
-			footer={isOpen && renderFooter()}
-			onClose={onCloseBlade}
-		>
-			{renderContent()}
-		</Blade>
+		<>
+			<Blade
+				isOpen={isOpen}
+				renderTitle={renderTitle}
+				footer={isOpen && renderFooter()}
+				onClose={onCloseBlade}
+			>
+				{renderContent()}
+			</Blade>
+			<PersonalInfoBlade
+				isOpen={isPersonalInfoBladeOpen}
+				onClose={() => setIsPersonalInfoBladeOpen(false)}
+				personalInfo={{
+					fullName: 'Ward',
+					email: 'ward@hotmail.com',
+					requesterCapacity: MaterialRequestRequesterCapacity.EDUCATION,
+				}}
+			/>
+		</>
 	);
 };
 
