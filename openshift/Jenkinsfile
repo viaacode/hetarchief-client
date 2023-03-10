@@ -117,7 +117,7 @@ pipeline {
     }
    }
   }
-  stage('Deploy TST') {
+  stage('Build and Deploy TST') {
    when {
     anyOf { branch 'develop'; branch 'development' }
    }
@@ -127,7 +127,7 @@ pipeline {
      script {
       sh """#!/bin/bash
       oc project $OC_PROJECT
-      oc start-build --follow=true -e DEBUG_TOOLS=true --build-arg DEBUG_TOOLS=true client-tst
+      oc start-build --follow=true --wait=true -e DEBUG_TOOLS=true --build-arg DEBUG_TOOLS=true client-tst
       """
      }
     }
