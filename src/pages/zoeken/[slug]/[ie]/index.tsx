@@ -202,7 +202,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		data: visitRequest,
 		error: visitRequestError,
 		isLoading: visitRequestIsLoading,
-	} = useGetActiveVisitForUserAndSpace(router.query.slug as string);
+	} = useGetActiveVisitForUserAndSpace(router.query.slug as string, user);
 
 	// get visitor space info, used to display contact information
 	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
@@ -904,4 +904,4 @@ export async function getServerSideProps(
 	};
 }
 
-export default withAuth(ObjectDetailPage as ComponentType);
+export default ObjectDetailPage;
