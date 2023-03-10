@@ -1,4 +1,10 @@
-import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
+import {
+	Breadcrumbs,
+	Button,
+	FormControl,
+	OrderDirection,
+	TabProps,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { isNil, sortBy, sum } from 'lodash-es';
@@ -35,7 +41,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
@@ -43,7 +49,7 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
-import { selectFolders, selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
@@ -119,7 +125,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
-	const filterOptions = useSelector(selectIeObjectsFilterOptions);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -684,7 +689,7 @@ const VisitorSpaceSearchPage: FC = () => {
 						)}
 						<section
 							className={clsx(
-								'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+								'p-visitor-space__results u-page-bottom-margin u-bg-platinum',
 								{
 									'p-visitor-space__results--placeholder': isLoadedWithoutResults,
 									'u-pt-0': showResearchWarning,
@@ -692,6 +697,25 @@ const VisitorSpaceSearchPage: FC = () => {
 							)}
 						>
 							<div className="l-container">
+								<Breadcrumbs
+									className="u-my-16"
+									items={[
+										{
+											label: `${tHtml(
+												'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___home'
+											)}`,
+											to: ROUTES.home,
+										},
+										{
+											label: `${tHtml(
+												'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___search'
+											)}`,
+											to: ROUTES.search,
+										},
+									]}
+									icon={<Icon name={IconNamesLight.AngleRight} />}
+								/>
+
 								{/* Only render filters when there are no results yet, when the results are loaded we render the filter menu using MediaCardList */}
 								{!isLoadedWithResults && renderFilterMenu()}
 								{isLoadedWithoutResults && (

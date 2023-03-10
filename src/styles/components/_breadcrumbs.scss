@@ -1,0 +1,23 @@
+@use "src/styles/abstracts" as *;
+
+.c-breadcrumbs {
+	font-size: $font-size-xs;
+	color: $shade;
+
+	&__list {
+		@extend %reset-list;
+	}
+
+	&__item {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	&__link {
+		font-size: $font-size-xs;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		margin: 0 $spacer-xxs;
+	}
+}
