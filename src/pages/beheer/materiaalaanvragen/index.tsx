@@ -4,11 +4,13 @@ import { isEmpty, isNil } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
@@ -36,6 +38,8 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 
+	const user = useSelector(selectUser);
+
 	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
@@ -48,6 +52,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
+		maintainerIds: [user?.maintainerId || ''],
 	});
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
