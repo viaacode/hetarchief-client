@@ -1,12 +1,13 @@
 import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType } from 'react';
+import { FC } from 'react';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetContentPageByPath } from '../modules/content-page/hooks/get-content-page';
@@ -18,7 +19,7 @@ type HomepageProps = {
 	title: string | null;
 } & DefaultSeoInfo;
 
-const Homepage: NextPage<HomepageProps> = ({ title, url }) => {
+const Homepage: NextPage<HomepageProps & UserProps> = ({ title, url, commonUser }) => {
 	/**
 	 * Data
 	 */
@@ -34,7 +35,9 @@ const Homepage: NextPage<HomepageProps> = ({ title, url }) => {
 			return <Loading fullscreen owner="homepage" />;
 		}
 		if (contentPageInfo) {
-			return <ContentPageRenderer contentPageInfo={contentPageInfo} />;
+			return (
+				<ContentPageRenderer contentPageInfo={contentPageInfo} commonUser={commonUser} />
+			);
 		}
 	};
 
@@ -54,7 +57,10 @@ export async function getServerSideProps(
 		const contentPage = await ContentPageClientService.getBySlug('/');
 		title = contentPage?.title || null;
 	} catch (err) {
-		console.error('Failed to fetch content page seo info by slug: ' + context.query.slug, err);
+		console.error(
+			'Failed to fetch content page seo info for homepage by slug: ' + context.query.slug,
+			err
+		);
 	}
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
@@ -66,4 +72,4 @@ export async function getServerSideProps(
 	};
 }
 
-export default withAdminCoreConfig(Homepage as ComponentType);
+export default withAdminCoreConfig(withUser(Homepage as FC<unknown>)) as FC<HomepageProps>;

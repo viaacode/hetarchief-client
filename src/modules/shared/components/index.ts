@@ -25,6 +25,7 @@ export * from './PaginationBar';
 export * from './PaginationProgress';
 export * from './Placeholder';
 export * from './ProcessRequestBlade';
+export * from './RefinableRadioButton';
 export * from './RequestStatusBadge';
 export * from './RichTextEditor';
 export * from './SearchBar';

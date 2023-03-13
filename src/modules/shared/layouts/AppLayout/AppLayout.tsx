@@ -75,7 +75,7 @@ const AppLayout: FC = ({ children }) => {
 	const showNotificationsCenter = useSelector(selectShowNotificationsCenter);
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.xxl);
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
 	const { data: materialRequests } = useGetPendingMaterialRequests({});
@@ -241,13 +241,13 @@ const AppLayout: FC = ({ children }) => {
 
 		return [...staticItems, ...dynamicItems];
 	}, [
-		accessibleVisitorSpaces,
 		asPath,
-		isMobile,
-		linkedSpaceSlug,
+		accessibleVisitorSpaces,
 		navigationItems,
-		showLinkedSpaceAsHomepage,
 		user?.permissions,
+		showLinkedSpaceAsHomepage,
+		linkedSpaceOrId,
+		isMobile,
 		isLoggedIn,
 	]);
 

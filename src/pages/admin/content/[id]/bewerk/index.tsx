@@ -2,7 +2,7 @@ import { ContentPageEdit } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, FC } from 'react';
+import React, { FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -12,9 +12,10 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
+const ContentPageEditPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 
@@ -23,7 +24,7 @@ const ContentPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout bottomPadding={false}>
 				<AdminLayout.Content>
 					<div className="p-admin-content__edit">
-						<ContentPageEdit id={router.query.id as string} />
+						<ContentPageEdit id={router.query.id as string} commonUser={commonUser} />
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
@@ -54,4 +55,6 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(ContentPageEditPage as ComponentType));
+export default withAuth(
+	withAdminCoreConfig(withUser(ContentPageEditPage as FC<unknown>))
+) as FC<DefaultSeoInfo>;

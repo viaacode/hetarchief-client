@@ -6,8 +6,7 @@ import { SidebarColor } from '@shared/types/sidebar';
 
 export interface SidebarLayoutProps extends DefaultComponentProps {
 	sidebarTitle: string | ReactNode;
-	sidebarLinksTop?: ListNavigationItem[];
-	sidebarLinksBottom?: ListNavigationItem[];
+	sidebarLinks?: ListNavigationItem[];
 	color?: SidebarColor;
 	responsiveTo?: Breakpoints;
 }

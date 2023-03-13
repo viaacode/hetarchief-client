@@ -1,6 +1,6 @@
 import { OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isEmpty, isNil, xorBy } from 'lodash';
+import { isEmpty, isNil, xorBy } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';

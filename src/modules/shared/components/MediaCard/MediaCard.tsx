@@ -1,6 +1,6 @@
 import { Badge, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 import Image from 'next/image';
 import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';

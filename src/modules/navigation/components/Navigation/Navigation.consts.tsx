@@ -27,7 +27,7 @@ const dropdownCls = (...classNames: string[]) => {
 
 const linkClasses = linkCls(
 	'u-color-black',
-	'u-color-white:md',
+	'u-color-white:xxl',
 	'u-whitespace-nowrap',
 	styles['c-navigation__link--dropdown']
 );
@@ -152,7 +152,7 @@ const getVisitorSpacesDropdown = (
 						),
 						ROUTES.bezoek,
 						{
-							className: dropdownCls('u-display-none', 'u-display-block:md'),
+							className: dropdownCls('u-display-none', 'u-display-block:xxl'),
 						}
 					),
 					id: 'all-visitor-spaces',
@@ -176,7 +176,7 @@ const getVisitorSpacesDropdown = (
 												'u-font-size-24',
 												'u-text-left',
 												'u-visibility-hidden',
-												'u-visibility-visible:md',
+												'u-visibility-visible:xxl',
 												styles['c-navigation__dropdown-icon--end']
 											)}
 											name={IconNamesLight.AngleRight}
@@ -391,6 +391,13 @@ const getMeemooAdminManagementDropdown = (
 	];
 };
 
+const getDivider = (id: string): NavigationItem =>
+	({
+		id,
+		node: null,
+		isDivider: 'md',
+	} as NavigationItem);
+
 export const getNavigationItemsLeft = (
 	currentPath: string,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
@@ -422,15 +429,7 @@ export const getNavigationItemsLeft = (
 		...beforeDivider,
 
 		// Divider separate from the other items
-		...((afterDivider.length > 0
-			? [
-					{
-						node: null,
-						id: 'divider-before-admin-routes',
-						isDivider: 'md',
-					},
-			  ]
-			: []) as NavigationItem[]),
+		...(afterDivider.length > 0 ? [getDivider('divider-before-visitor-spaces')] : []),
 
 		// Some dynamic links from navigations table in database
 		...afterDivider,
@@ -454,14 +453,6 @@ export const getNavigationItemsProfileDropdown = (
 		linkedSpaceOrId
 	);
 
-	const divider = [
-		{
-			node: null,
-			id: 'divider-before-admin-routes',
-			isDivider: 'md',
-		},
-	] as NavigationItem[];
-
 	// Group navigation items by type
 	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
 		profileDropdown,
@@ -480,8 +471,12 @@ export const getNavigationItemsProfileDropdown = (
 
 	return [
 		...(defaultRoutes || []),
-		...((adminRoutes || [])?.length > 0 ? [...divider, ...adminRoutes] : []),
-		...((cpRoutes || [])?.length > 0 ? [...divider, ...cpRoutes] : []),
-		...divider,
+		...((adminRoutes || [])?.length > 0
+			? [getDivider('divider-before-admin-routes'), ...adminRoutes]
+			: []),
+		...((cpRoutes || [])?.length > 0
+			? [getDivider('divider-before-cp-routes'), ...cpRoutes]
+			: []),
+		getDivider('divider-before-logout'),
 	];
 };

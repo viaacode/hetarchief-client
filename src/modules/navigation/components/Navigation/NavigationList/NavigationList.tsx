@@ -91,12 +91,6 @@ const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOp
 							) : (
 								item.node
 							)}
-							{item.activeDesktop && (
-								<>
-									<span className={styles['c-navigation__border-decoration']} />
-									<span className={styles['c-navigation__border-decoration']} />
-								</>
-							)}
 						</li>
 					);
 				})}

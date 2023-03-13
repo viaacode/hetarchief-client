@@ -1,7 +1,7 @@
 import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { sortBy, sum } from 'lodash-es';
+import { isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -12,7 +12,6 @@ import { useQueryParams } from 'use-query-params';
 import { Permission } from '@account/const';
 import { selectIsLoggedIn } from '@auth/store/user';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
-import { useGetMediaFilterOptions } from '@ie-objects/hooks/get-ie-objects-filter-options';
 import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,
@@ -31,6 +30,8 @@ import {
 	TabLabel,
 	TagSearchBar,
 	ToggleOption,
+	TYPE_TO_ICON_MAP,
+	TYPE_TO_NO_ICON_MAP,
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
@@ -42,7 +43,7 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
-import { selectFolders } from '@shared/store/ie-objects';
+import { selectFolders, selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
@@ -118,6 +119,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
+	const filterOptions = useSelector(selectIeObjectsFilterOptions);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -175,9 +177,6 @@ const VisitorSpaceSearchPage: FC = () => {
 		activeSort,
 		true
 	);
-
-	// The result will be added to the redux store
-	useGetMediaFilterOptions();
 
 	/**
 	 * Effects
@@ -264,6 +263,11 @@ const VisitorSpaceSearchPage: FC = () => {
 		return [getDefaultOption(), ...dynamicOptions];
 	}, [visitorSpaces, isMobile]);
 
+	const filters = useMemo(
+		() => VISITOR_SPACE_FILTERS().filter(({ isDisabled }) => !isDisabled?.()),
+		[]
+	);
+
 	/**
 	 * Methods
 	 */
@@ -303,7 +307,11 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const onResetFilters = () => {
-		setQuery(VISITOR_SPACE_QUERY_PARAM_INIT);
+		// Reset all filters except the maintainer
+		setQuery({
+			...VISITOR_SPACE_QUERY_PARAM_INIT,
+			maintainer: query.maintainer,
+		});
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
@@ -462,6 +470,28 @@ const VisitorSpaceSearchPage: FC = () => {
 		[isLoggedIn, visitorSpaces]
 	);
 
+	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
+		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
+			const type = item.dctermsFormat as IeObjectTypes;
+
+			return {
+				schemaIdentifier: item.schemaIdentifier,
+				maintainerSlug: item.maintainerSlug,
+				description: item.description,
+				title: item.name,
+				publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
+				publishedBy: item.maintainerName || '',
+				type,
+				preview: item.thumbnailUrl || undefined,
+				name: item.name,
+				hasRelated: (item.related_count || 0) > 0,
+				...(!isNil(type) && {
+					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
+				}),
+			};
+		});
+	}, [searchResults?.items]);
+
 	/**
 	 * Render
 	 */
@@ -475,7 +505,7 @@ const VisitorSpaceSearchPage: FC = () => {
 			<div className={filterMenuCls}>
 				<FilterMenu
 					activeSort={activeSort}
-					filters={VISITOR_SPACE_FILTERS()}
+					filters={filters}
 					filterValues={query}
 					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
@@ -535,53 +565,12 @@ const VisitorSpaceSearchPage: FC = () => {
 	const renderResults = () => (
 		<>
 			<MediaCardList
-				items={searchResults?.items.map(
-					(item): IdentifiableMediaCard => ({
-						schemaIdentifier: item.schemaIdentifier,
-						description: item.description,
-						title: item.name,
-						publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
-						publishedBy: item.maintainerName || '',
-						type: item.dctermsFormat as IeObjectTypes,
-						preview: item.thumbnailUrl || undefined,
-						name: item.name,
-						hasRelated: (item.related_count || 0) > 0,
-					})
-				)}
+				items={searchResultCardData}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
-				wrapper={(card, item) => {
-					const cast = item as IdentifiableMediaCard;
-					const source = searchResults?.items.find(
-						(media) => media.schemaIdentifier === cast.schemaIdentifier
-					);
-
-					// TODO: Replace maintainerName with slug when BE is updated
-					const space = source?.maintainerName?.replaceAll(' ', '-');
-					const id = source?.schemaIdentifier;
-					const href = `${ROUTE_PARTS.search}/${space}/${id}`.toLowerCase();
-
-					const name = item.title?.toString(); // TODO double check that this still works
-
-					return (
-						<Link key={source?.schemaIdentifier} href={href}>
-							<a
-								className="u-text-no-decoration"
-								aria-label={tText(
-									'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___navigeer-naar-de-detailpagina-van-name',
-									{
-										name,
-									}
-								)}
-							>
-								{card}
-							</a>
-						</Link>
-					);
-				}}
 			/>
 			<PaginationBar
 				className="u-mb-48"
