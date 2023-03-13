@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
 	MaterialRequest,
@@ -33,12 +33,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		data: materialRequests,
 		isFetching,
 		refetch,
-	} = useGetMaterialRequests({
-		isPersonal: true,
+	} = useGetPendingMaterialRequests({
 		orderProp: MaterialRequestKeys.maintainer,
 		orderDirection: 'asc' as OrderDirection,
-		// Ward: if no size is given, only 10 results will be returned
-		size: 500,
 	});
 
 	// Ward: create an object containing all the distinct maintainerId's as properties
@@ -73,7 +70,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const deleteMaterialRequest = async (id: string) => {
 		const deleteResponse = await MaterialRequestsService.delete(id);
 		deleteResponse && refetch();
-		const getResponse = await MaterialRequestsService.getAll({ isPersonal: true, size: 500 });
+		const getResponse = await MaterialRequestsService.getAll({
+			isPersonal: true,
+			size: 500,
+			isPending: true,
+		});
 		dispatch(setMaterialRequestCount(getResponse.items.length));
 	};
 
@@ -85,6 +86,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst'
 					)}
 				</h4>
+				{/* Ward: add label when there is more than 1 maintainer */}
 				{mappedRequests && Object.keys(mappedRequests).length > 1 && (
 					<p className={styles['c-material-request-center-blade__subtitle']}>
 						{tHtml(
@@ -99,26 +101,22 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const renderMaintainer = (item: MaterialRequest, length: number) => {
 		return (
 			<div className={styles['c-material-request-center-blade__maintainer']}>
-				{/* {item.maintainerLogo && (
-								<div
-									className={
-										styles['c-material-request-center-blade__maintainer-logo']
-									}
-								>
-									<Image
-										alt="maintainer logo"
-										src={item.maintainerLogo}
-										layout="fill"
-										objectFit="contain"
-									/>
-								</div>
-							)} */}
-				<div
-					className={styles['c-material-request-center-blade__maintainer-logo']}
-					style={{ color: 'black' }}
-				>
-					--image--
-				</div>
+				{item.maintainerLogo ? (
+					<div className={styles['c-material-request-center-blade__maintainer-logo']}>
+						<Image
+							alt="maintainer logo"
+							src={item.maintainerLogo}
+							layout="fill"
+							objectFit="contain"
+						/>
+					</div>
+				) : (
+					<div
+						className={styles['c-material-request-center-blade__maintainer-logo']}
+						style={{ color: 'black' }}
+					/>
+				)}
+
 				<div>
 					<p className={styles['c-material-request-center-blade__maintainer-details']}>
 						{tText(

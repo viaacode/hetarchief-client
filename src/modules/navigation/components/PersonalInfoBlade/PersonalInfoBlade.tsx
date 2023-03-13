@@ -21,7 +21,9 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity>(
 		personalInfo.requesterCapacity
 	);
-	const [organisationInputValue, setOrganisationInputValue] = useState('');
+	const [organisationInputValue, setOrganisationInputValue] = useState(
+		personalInfo.organisation || ''
+	);
 
 	const renderFooter = () => {
 		return (
@@ -58,6 +60,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onClose}
+			showBackButton
 		>
 			<div className={styles['c-personal-info-blade__content']}>
 				<dl>

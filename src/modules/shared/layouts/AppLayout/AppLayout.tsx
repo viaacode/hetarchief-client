@@ -14,7 +14,7 @@ import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import {
 	footerLeftItem,
@@ -78,11 +78,7 @@ const AppLayout: FC = ({ children }) => {
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
-	const { data: materialRequests } = useGetMaterialRequests({
-		isPersonal: true,
-		// Ward: if no size is given, only 10 results will be returned
-		size: 500,
-	});
+	const { data: materialRequests } = useGetPendingMaterialRequests({});
 	const history = useSelector(selectHistory);
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);

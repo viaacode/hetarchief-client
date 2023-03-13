@@ -26,41 +26,34 @@ $badge-font-size: 1rem;
 			width: 2rem;
 			height: 1.6rem;
 			background-color: $coral;
+			transition: all 0.5s;
 
 			&--animated {
-				animation: pulse 0.5s 5;
-
-				&:hover {
-					animation: none;
-				}
-
-				@keyframes pulse {
-					0% {
-						box-shadow: 0 0 0 0 rgb(212 60 60 / 36%);
-					}
-
-					70% {
-						box-shadow: 1px 0 40px 20px rgb(212 60 60 / 36%);
-					}
-
-					100% {
-						box-shadow: 0 0 0 0 rgb(212 60 60 / 36%);
-					}
-				}
-				@keyframes pulse {
-					0% {
-						box-shadow: 0 0 0 0 rgb(212 60 60 / 36%);
-					}
-
-					70% {
-						box-shadow: 1px 0 40px 20px rgb(212 60 60 / 36%);
-					}
-
-					100% {
-						box-shadow: 0 0 0 0 rgb(212 60 60 / 36%);
-					}
-				}
+				background-color: red;
+				color: white;
+				border-color: transparent;
+				box-shadow: 0 0 10px 2px darken(red, 10%);
+				animation-name: flash-pill;
+				animation-duration: 0.5s;
+				animation-iteration-count: 7;
+				animation-timing-function: ease-in;
+				animation-direction: alternate;
+				transition: all 0.5s;
 			}
 		}
+	}
+}
+
+@keyframes flash-pill {
+	0% {
+		box-shadow: 0 0 2px 2px darken(red, 10%);
+	}
+
+	50% {
+		box-shadow: 0 0 20px 4px darken(red, 10%);
+	}
+
+	100% {
+		box-shadow: 0 0 2px 2px darken(red, 10%);
 	}
 }

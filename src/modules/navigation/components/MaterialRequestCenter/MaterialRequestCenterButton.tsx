@@ -1,6 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { isNil } from 'lodash';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Icon, IconNamesSolid } from '@shared/components';
@@ -14,12 +15,42 @@ import styles from './MaterialRequestCenterButton.module.scss';
 const MaterialRequestCenterButton: FC = () => {
 	const { tText } = useTranslation();
 	const [isBladeOpen, setIsBladeOpen] = useState(false);
+	const [isAnimated, setIsAnimated] = useState(false);
+	const [previousMaterialCount, setPreviousMaterialCount] = useState<number | undefined>();
+
+	const animationRef = useRef<HTMLElement | null>(null);
 
 	const materialRequestCount = useSelector(selectMaterialRequestCount);
 
 	const onButtonClick = () => {
 		setIsBladeOpen(!isBladeOpen);
 	};
+
+	useEffect(() => {
+		// Ward: set isAnimated to true only if materialRequest is updated after initialisation
+		if (isNil(previousMaterialCount)) {
+			setPreviousMaterialCount(materialRequestCount);
+			return;
+		}
+		if (materialRequestCount !== previousMaterialCount) {
+			setPreviousMaterialCount(materialRequestCount);
+			setIsAnimated(true);
+		}
+	}, [materialRequestCount]);
+
+	const handleAnimationEnd = () => {
+		setIsAnimated(false);
+	};
+
+	useEffect(() => {
+		const badgeElement = animationRef.current;
+
+		badgeElement && badgeElement.addEventListener('animationend', handleAnimationEnd);
+
+		return () => {
+			badgeElement && badgeElement.removeEventListener('animationend', handleAnimationEnd);
+		};
+	}, []);
 
 	return (
 		<>
@@ -46,12 +77,14 @@ const MaterialRequestCenterButton: FC = () => {
 						/>
 						{materialRequestCount > 0 && (
 							<span
+								ref={animationRef}
 								className={clsx(
-									// TODO: if {materialRequests?.items.length} changes, apply animation styling
 									styles['c-material-request-center__icon-container-badge'],
-									styles[
-										'c-material-request-center__icon-container-badge--animated'
-									]
+									isAnimated
+										? styles[
+												'c-material-request-center__icon-container-badge--animated'
+										  ]
+										: undefined
 								)}
 							>
 								{materialRequestCount}

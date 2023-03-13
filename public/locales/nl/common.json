@@ -315,6 +315,7 @@
 	"modules/shared/components/approve-request-blade/approve-request-blade___je-kan-geen-2-aanvragen-goedkeuren-die-overlappen-pas-de-andere-aanvraag-aan": "Je kan geen 2 aanvragen goedkeuren die overlappen pas de andere aanvraag aan",
 	"modules/shared/components/approve-request-blade/approve-request-blade___navigeer-naar-de-reeds-goedgekeurde-aanvraag-voor-deze-periode": "Navigeer naar de reeds goedgekeurde aanvraag voor deze periode.",
 	"modules/shared/components/blade/blade___sluiten": "Sluiten",
+	"modules/shared/components/blade/blade___vorige-stap": "Vorige stap",
 	"modules/shared/components/confirmation-modal/confirmation-modal___ben-je-zeker": "Ben je zeker?",
 	"modules/shared/components/confirmation-modal/confirmation-modal___deze-actie-kan-niet-worden-teruggedraaid": "Deze actie kan niet worden teruggedraaid.",
 	"modules/shared/components/confirmation-modal/confirmation-modal___ja": "Ja",

@@ -5,6 +5,7 @@ export interface MaterialRequest {
 	id: string;
 	isPending: boolean;
 	maintainerId: string;
+	maintainerLogo: string;
 	maintainerName: string;
 	maintainerSlug: string;
 	objectMeemooIdentifier: string;
@@ -23,7 +24,6 @@ export interface MaterialRequest {
 }
 
 export interface MaterialRequestDetail extends MaterialRequest {
-	maintainerLogo: string;
 	requesterUserGroupDescription: string;
 	requesterUserGroupId: string;
 	requesterUserGroupLabel: string;

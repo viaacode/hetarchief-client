@@ -49,7 +49,11 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	};
 
 	const onSuccesCreated = async () => {
-		const response = await MaterialRequestsService.getAll({ isPersonal: true, size: 500 });
+		const response = await MaterialRequestsService.getAll({
+			isPersonal: true,
+			size: 500,
+			isPending: true,
+		});
 		dispatch(setMaterialRequestCount(response.items.length));
 	};
 
