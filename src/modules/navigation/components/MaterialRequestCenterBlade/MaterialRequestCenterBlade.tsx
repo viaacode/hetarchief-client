@@ -1,8 +1,9 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
 import Image from 'next/image';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
@@ -28,6 +29,8 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const dispatch = useDispatch();
 
 	const [isPersonalInfoBladeOpen, setIsPersonalInfoBladeOpen] = useState(false);
+
+	const user = useSelector(selectUser);
 
 	const {
 		data: materialRequests,
@@ -210,14 +213,16 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const renderFooter = () => {
 		return (
 			<div className={styles['c-material-request-center-blade__close-button-container']}>
-				<Button
-					label={tText(
-						'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
-					)}
-					variants={['block', 'text']}
-					onClick={() => setIsPersonalInfoBladeOpen(true)}
-					className={styles['c-material-request-center-blade__send-button']}
-				/>
+				{user && (
+					<Button
+						label={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
+						)}
+						variants={['block', 'text']}
+						onClick={() => setIsPersonalInfoBladeOpen(true)}
+						className={styles['c-material-request-center-blade__send-button']}
+					/>
+				)}
 				<Button
 					label={tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
@@ -251,15 +256,17 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			>
 				{renderContent()}
 			</Blade>
-			<PersonalInfoBlade
-				isOpen={isPersonalInfoBladeOpen}
-				onClose={() => setIsPersonalInfoBladeOpen(false)}
-				personalInfo={{
-					fullName: 'Ward',
-					email: 'ward@hotmail.com',
-					requesterCapacity: MaterialRequestRequesterCapacity.EDUCATION,
-				}}
-			/>
+			{user && (
+				<PersonalInfoBlade
+					isOpen={isPersonalInfoBladeOpen}
+					onClose={() => setIsPersonalInfoBladeOpen(false)}
+					personalInfo={{
+						fullName: user.fullName,
+						email: user.email,
+						requesterCapacity: MaterialRequestRequesterCapacity.EDUCATION,
+					}}
+				/>
+			)}
 		</>
 	);
 };
