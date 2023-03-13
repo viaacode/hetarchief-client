@@ -30,6 +30,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	buttons,
 	hasRelated,
 	icon,
+	meemooIdentifier,
 }) => {
 	const renderDropdown = () =>
 		actions ? (
@@ -72,7 +73,11 @@ const MediaCard: FC<MediaCardProps> = ({
 		return title;
 	};
 
-	const renderSubtitle = (): ReactNode => {
+	const renderSubTitle = (): ReactNode => {
+		return meemooIdentifier;
+	};
+
+	const renderSubSubtitle = (): ReactNode => {
 		let subtitle = '';
 
 		if (publishedBy) {
@@ -172,7 +177,8 @@ const MediaCard: FC<MediaCardProps> = ({
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
-				subtitle={renderSubtitle()}
+				subtitle={renderSubTitle()}
+				subsubtitle={renderSubSubtitle()}
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
