@@ -1,29 +1,36 @@
-import { AdminConfigManager, ContentPage } from '@meemoo/react-admin';
+import { AdminConfigManager, ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectUser } from '@auth/store/user';
-import { REDIRECT_TO_QUERY_KEY, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
+import {
+	KNOWN_STATIC_ROUTES,
+	REDIRECT_TO_QUERY_KEY,
+	TOS_INDEX_QUERY_PARAM_CONFIG,
+} from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import useStickyLayout from '@shared/hooks/use-sticky-layout/use-sticky-layout';
 import { useTermsOfService } from '@shared/hooks/use-terms-of-service';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import withUser, { UserProps } from '@shared/hooks/with-user';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
+import { useGetContentPageByPath } from 'modules/content-page/hooks/get-content-page';
+
+const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	useStickyLayout();
 	useHideFooter();
 
@@ -36,6 +43,7 @@ const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
+	const { data: contentPageInfo } = useGetContentPageByPath(KNOWN_STATIC_ROUTES.TermsOfService);
 
 	const user = useSelector(selectUser);
 
@@ -102,9 +110,9 @@ const TermsOfService: NextPage<DefaultSeoInfo> = ({ url }) => {
 							className="p-terms-of-service__content"
 						>
 							{AdminConfigManager.getConfig() && (
-								<ContentPage
-									path="/gebruikersvoorwaarden-tekst"
-									userGroupId={user?.groupId}
+								<ContentPageRenderer
+									contentPageInfo={contentPageInfo}
+									commonUser={commonUser}
 								/>
 							)}
 						</div>
@@ -159,4 +167,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAdminCoreConfig(TermsOfService as ComponentType);
+export default withAdminCoreConfig(withUser(TermsOfService as FC<unknown>)) as FC<DefaultSeoInfo>;

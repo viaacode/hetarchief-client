@@ -1,41 +1,59 @@
 import clsx from 'clsx';
+import { isNil } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { stringifyUrl } from 'query-string';
 import { FC, useEffect, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { CP_ADMIN_NAVIGATION_LINKS } from '@cp/const';
-import { ListNavigationItem } from '@shared/components';
+import { selectUser } from '@auth/store/user';
+import { CP_ADMIN_NAVIGATION_LINKS, CP_ADMIN_SEARCH_VISITOR_SPACE_KEY } from '@cp/const';
+import { CPAdminLayoutProps } from '@cp/layouts';
+import { Icon, ListNavigationItem } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import styles from './CPAdminLayout.module.scss';
-import { CPAdminLayoutProps } from './CPAdminLayout.types';
 
 const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
 	const dispatch = useDispatch();
+	const { tHtml } = useTranslation();
+
+	const user = useSelector(selectUser);
 
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
-			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href }) => ({
-				id,
-				node: ({ linkClassName }) => (
-					<Link href={href}>
-						<a className={linkClassName} aria-label={label}>
-							{label}
-						</a>
-					</Link>
-				),
-				active: asPath.includes(href),
-			})),
-		[asPath]
-	);
+			CP_ADMIN_NAVIGATION_LINKS().map(({ id, label, href, iconName }) => {
+				const url =
+					id !== CP_ADMIN_SEARCH_VISITOR_SPACE_KEY
+						? href
+						: stringifyUrl({
+								url: href,
+								query: {
+									[VisitorSpaceFilterId.Maintainer]: user?.maintainerId,
+								},
+						  });
 
-	const { tHtml } = useTranslation();
+				return {
+					id,
+					node: ({ linkClassName }) => (
+						<Link href={url}>
+							<a className={linkClassName} aria-label={label}>
+								{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} />}
+								<span>{label}</span>
+							</a>
+						</Link>
+					),
+					active: asPath.includes(url),
+				};
+			}),
+		[asPath, user?.maintainerId]
+	);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(true));

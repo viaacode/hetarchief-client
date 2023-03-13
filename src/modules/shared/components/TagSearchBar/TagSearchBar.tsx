@@ -3,16 +3,19 @@ import clsx from 'clsx';
 import { KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
 import { InputActionMeta } from 'react-select';
 
-import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
-
 import {
 	OnSearchSingle,
 	TagSearchBarMeta,
 	TagSearchBarProps,
 	TagSearchBarValue,
-} from './TagSearchBar.types';
+} from '@shared/components';
+
+import { IconNamesLight } from '../Icon';
+import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
+
 import { TagSearchBarButton } from './TagSearchBarButton';
 import { TagSearchBarClear } from './TagSearchBarClear';
+import { TagSearchBarInfo } from './TagSearchBarInfo';
 import { TagSearchBarValueContainer } from './TagSearchBarValueContainer';
 
 const components = {
@@ -30,6 +33,8 @@ const TagSearchBar = <IsMulti extends boolean>({
 	isClearable = true,
 	isMulti = false as IsMulti,
 	light = false,
+	hasDropdown = false,
+	infoContent,
 	menuIsOpen,
 	onChange,
 	onClear,
@@ -42,7 +47,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	syncSearchValue = true,
 	valuePlaceholder,
 	...tagsInputProps
-}: TagSearchBarProps<IsMulti>): ReactElement => {
+}: Partial<TagSearchBarProps<IsMulti>>): ReactElement => {
 	const localInputState = useState(searchValue);
 	const [inputValue, setInputValue] = inputState || localInputState;
 
@@ -115,6 +120,8 @@ const TagSearchBar = <IsMulti extends boolean>({
 		[`c-tag-search-bar--${size}`]: size,
 		['c-tag-search-bar--has-value-placeholder']: !!valuePlaceholder,
 		['c-tag-search-bar--light']: light,
+		['c-tag-search-bar--has-dropdown']: hasDropdown,
+		['c-tag-search-bar--has-info']: infoContent,
 	});
 	const showMenu = typeof menuIsOpen !== 'undefined' ? menuIsOpen : (options?.length ?? 0) > 0;
 	const value = isMulti ? tagsInputProps.value : selectValue;
@@ -124,33 +131,36 @@ const TagSearchBar = <IsMulti extends boolean>({
 	 */
 
 	return (
-		<TagsInput
-			{...tagsInputProps}
-			className={rootCls}
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			components={components as any}
-			inputValue={inputValue}
-			isClearable={isClearable}
-			isMulti={isMulti}
-			menuIsOpen={showMenu}
-			onCreateOption={onCreate}
-			onInputChange={onSearchInputChange}
-			onKeyDown={onSearchKeyDown}
-			options={options}
-			value={value}
-			// ts-igonore is necessary to provide custom props to react-select, this is explained
-			// in the react-select docs: https://react-select.com/components#defining-components
-			/* eslint-disable @typescript-eslint/ban-ts-comment */
-			// @ts-ignore
-			clearLabel={clearLabel}
-			// @ts-ignore
-			valuePlaceholder={valuePlaceholder}
-			// @ts-ignore
-			onSearch={onSafeSearchSingle}
-			// @ts-ignore
-			onChange={onSearchChange}
-			/* eslint-enable @typescript-eslint/ban-ts-comment */
-		/>
+		<div className="u-flex u-align-center u-justify-between">
+			<TagsInput
+				{...tagsInputProps}
+				className={rootCls}
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				components={components as any}
+				inputValue={inputValue}
+				isClearable={isClearable}
+				isMulti={isMulti}
+				menuIsOpen={showMenu}
+				onCreateOption={onCreate}
+				onInputChange={onSearchInputChange}
+				onKeyDown={onSearchKeyDown}
+				options={options}
+				value={value}
+				// ts-igonore is necessary to provide custom props to react-select, this is explained
+				// in the react-select docs: https://react-select.com/components#defining-components
+				/* eslint-disable @typescript-eslint/ban-ts-comment */
+				// @ts-ignore
+				clearLabel={clearLabel}
+				// @ts-ignore
+				valuePlaceholder={valuePlaceholder}
+				// @ts-ignore
+				onSearch={onSafeSearchSingle}
+				// @ts-ignore
+				onChange={onSearchChange}
+				/* eslint-enable @typescript-eslint/ban-ts-comment */
+			/>
+			{infoContent && <TagSearchBarInfo icon={IconNamesLight.Info} content={infoContent} />}
+		</div>
 	);
 };
 

@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import { FC, ReactNode, useState } from 'react';
 
-import { Blade, BladeManager, Icon, VisitSummary } from '@shared/components';
+import { Blade, BladeManager, Icon, IconNamesLight, VisitSummary } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { VisitStatus } from '@shared/types';
 
@@ -62,7 +62,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 					label={tHtml(
 						'modules/home/components/process-visit-blade/process-visit-blade___annuleer-bezoek'
 					)}
-					iconStart={<Icon name="forbidden" />}
+					iconStart={<Icon name={IconNamesLight.Forbidden} />}
 					variants={['block', 'outline']}
 					onClick={() => setShowCancel(true)}
 					disabled={!props.isOpen}

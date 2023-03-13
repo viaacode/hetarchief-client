@@ -1,7 +1,7 @@
 import { DatepickerProps, historicDatepicker, TextInput } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { Datepicker, Icon } from '@shared/components';
+import { Datepicker, Icon, IconNamesLight } from '@shared/components';
 import { asDate, formatMediumDate } from '@shared/utils';
 
 import styles from './DateInput.module.scss';
@@ -14,14 +14,19 @@ import styles from './DateInput.module.scss';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { maxDate, ...rest } = historicDatepicker;
 
-const DateInput: FC<DatepickerProps> = (props) => (
+interface DateInputProps extends DatepickerProps {
+	label?: string;
+}
+
+const DateInput: FC<DateInputProps> = (props) => (
 	<div className={styles['c-date-input']}>
+		<p className={styles['c-date-input__label']}>{props.label}</p>
 		<Datepicker
 			{...rest}
 			{...props}
 			value={formatMediumDate(asDate(props.value))}
 			selected={asDate(props.value)}
-			customInput={<TextInput iconStart={<Icon name="calendar" />} />}
+			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
 		/>
 	</div>
 );

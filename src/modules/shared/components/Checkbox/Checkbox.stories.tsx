@@ -2,7 +2,7 @@ import { Checkbox } from '@meemoo/react-components';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 
 export default {
 	title: 'Components/Checkbox',
@@ -13,7 +13,7 @@ const Template: ComponentStory<typeof Checkbox> = (args) => <Checkbox {...args} 
 
 export const Default = Template.bind({});
 Default.args = {
-	checkIcon: <Icon name="check" />,
+	checkIcon: <Icon name={IconNamesLight.Check} />,
 	checked: false,
 };
 

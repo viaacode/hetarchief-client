@@ -1,4 +1,4 @@
-import { NavigationOverview } from '@meemoo/react-admin';
+import { NavigationOverview } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, FC } from 'react';
@@ -18,7 +18,7 @@ const AdminNavigationOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout pageTitle={tText('pages/admin/navigatie/index___navigatie')}>
+			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container u-mb-40 p-admin-navigation">
 						<NavigationOverview />

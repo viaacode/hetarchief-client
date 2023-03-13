@@ -1,0 +1,43 @@
+@use "src/styles/abstracts" as *;
+
+$page: "p-material-requests";
+
+// TODO: make styles reusable (see visitors)
+
+.#{$page} {
+	&__header {
+		@include respond-at("md") {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+
+	&__searchbar,
+	&__dropdown {
+		width: 100%;
+		margin: $spacer-xs 0;
+
+		@include respond-at("md") {
+			max-width: 28rem;
+		}
+
+		&--open {
+			box-shadow: $shadow-24-black-08;
+		}
+	}
+
+	&__table {
+		tr {
+			cursor: pointer;
+		}
+
+		tr td {
+			padding-top: 2rem;
+			padding-bottom: 2rem;
+		}
+
+		.c-table__cell {
+			text-align: left;
+		}
+	}
+}

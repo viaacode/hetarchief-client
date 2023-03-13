@@ -7,7 +7,7 @@
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
 const withTM = require('next-transpile-modules')([
-	'@meemoo/react-admin',
+	'@meemoo/admin-core-ui',
 	'@viaa/avo2-components',
 	'ky-universal',
 ]);
@@ -75,6 +75,16 @@ module.exports = withTM({
 			{
 				source: '/account',
 				destination: '/account/mijn-profiel',
+				permanent: true,
+			},
+			{
+				source: '/beheer/aanvragen',
+				destination: '/beheer/toegangsaanvragen',
+				permanent: true,
+			},
+			{
+				source: '/admin/bezoekersruimtesbeheer/aanvragen',
+				destination: '/admin/bezoekersruimtesbeheer/toegangsaanvragen',
 				permanent: true,
 			},
 		];

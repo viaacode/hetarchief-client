@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
-import { Blade, Icon, SpacePreview } from '@shared/components';
+import { Blade, Icon, IconNamesLight, SpacePreview } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
@@ -62,7 +62,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 							<Checkbox
 								{...field}
 								checked={field.value}
-								checkIcon={<Icon name="check" />}
+								checkIcon={<Icon name={IconNamesLight.Check} />}
 								disabled={!isOpen}
 								id={labelKeys.acceptTerms}
 								label={tHtml(

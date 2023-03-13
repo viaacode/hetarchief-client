@@ -11,7 +11,13 @@ export enum AccessStatus {
 	NO_ACCESS = 'NO_ACCESS',
 }
 
+export enum AccessType {
+	FULL = 'FULL',
+	FOLDERS = 'FOLDERS',
+}
+
 export interface Visit {
+	accessibleFolderIds: string[];
 	createdAt: string;
 	endAt?: string;
 	id: string;
@@ -39,6 +45,8 @@ export interface Visit {
 	visitorName?: string;
 	updatedById: string;
 	updatedByName: string;
+	spaceMaintainerId: string;
+	accessType: AccessType;
 }
 
 export interface VisitNote {

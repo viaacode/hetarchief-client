@@ -1,19 +1,31 @@
 import clsx from 'clsx';
-import { FC, ReactNode } from 'react';
+import { isEmpty, isNil } from 'lodash-es';
+import React, { FC, ReactNode } from 'react';
 
 import styles from './ListNavigation.module.scss';
-import { ListNavigationItem, ListNavigationProps } from './ListNavigation.types';
+import {
+	ListNavigationItem,
+	ListNavigationProps,
+	ListNavigationType,
+} from './ListNavigation.types';
 
 const ListNavigation: FC<ListNavigationProps> = ({
 	listItems,
 	className,
 	color = 'white',
 	onClick,
+	type = ListNavigationType.Navigation,
 }) => {
-	const nodeProps = {
+	const nodeProps = (layer: number) => ({
 		buttonClassName: styles['c-list-navigation__button'],
-		linkClassName: styles['c-list-navigation__link'],
-	};
+		linkClassName:
+			type === ListNavigationType.Navigation
+				? clsx(
+						styles['c-list-navigation__link'],
+						styles[`c-list-navigation__link--indent--${layer}`]
+				  )
+				: styles['c-list-navigation__link--simple'],
+	});
 
 	const renderChildrenRecursively = (items: ListNavigationItem[], layer = 0): ReactNode => {
 		return (
@@ -27,17 +39,22 @@ const ListNavigation: FC<ListNavigationProps> = ({
 							<div
 								className={clsx(
 									styles['c-list-navigation__item'],
-									item.active && styles['c-list-navigation__item--active'],
+									// Only make leaf items active, never group items that have children
+									item.active &&
+										isEmpty(item.children) &&
+										styles['c-list-navigation__item--active'],
 									(item.variants || []).map((variant) => styles[variant])
 								)}
 							>
-								<div style={{ paddingLeft: `${layer * 3.2}rem` }}>
+								<div>
 									{typeof item.node === 'function'
-										? item.node(nodeProps)
+										? item.node(nodeProps(layer))
 										: item.node}
 								</div>
 							</div>
-							{item.children && renderChildrenRecursively(item.children, layer + 1)}
+							{!isEmpty(item.children) &&
+								!isNil(item.children) &&
+								renderChildrenRecursively(item.children, layer + 1)}
 						</li>
 					);
 				})}

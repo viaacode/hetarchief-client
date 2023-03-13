@@ -1,7 +1,7 @@
 import { Badge, Button } from '@meemoo/react-components';
 import React, { ReactNode } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import { formatDateTime } from '@shared/components/VisitorSpaceCard/VisitorSpaceCard.utils';
 import { tText } from '@shared/helpers/translate';
 
@@ -59,7 +59,7 @@ export const mockColumns = [
 			<div style={{ display: 'flex', alignItems: 'center' }}>
 				<Badge
 					className="u-mr-8"
-					text={<Icon name={value ? 'check' : 'forbidden'} />}
+					text={<Icon name={value ? IconNamesLight.Check : IconNamesLight.Forbidden} />}
 					type={value ? 'success' : 'error'}
 				/>
 				{value ? 'Ja' : 'Nee'}
@@ -70,7 +70,7 @@ export const mockColumns = [
 		id: 'Actions',
 		Cell: (
 			<Button
-				icon={<Icon name="dots-vertical" aria-hidden />}
+				icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
 				aria-label={tText('modules/shared/components/table/mocks/table___meer-acties')}
 				variants={['xxs', 'text']}
 			/>

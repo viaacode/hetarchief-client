@@ -3,13 +3,16 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { FC, MouseEvent, ReactNode } from 'react';
 
-import { CopyButton, DropdownMenu } from '@shared/components';
+import {
+	CopyButton,
+	DropdownMenu,
+	VisitorSpaceCardProps,
+	VisitorSpaceCardType,
+} from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
-import { Icon, IconLightNames } from '../../Icon';
-import { VisitorSpaceCardType } from '../VisitorSpaceCard.const';
-import { VisitorSpaceCardProps } from '../VisitorSpaceCard.types';
+import { Icon, IconName, IconNamesLight } from '../../Icon';
 import { formatDateTime } from '../VisitorSpaceCard.utils';
 
 import styles from './VisitorSpaceCardControls.module.scss';
@@ -30,7 +33,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	const flat = typeAccessAccepted || typeAccessRequested;
 	const wrap = typeAccessGranted;
 
-	const renderLabel = (icon: IconLightNames, text: ReactNode) => {
+	const renderLabel = (icon: IconName, text: ReactNode) => {
 		return (
 			<div className={styles['c-visitor-space-card-controls__label']}>
 				<Icon className={styles['c-visitor-space-card-controls__label-icon']} name={icon} />
@@ -53,7 +56,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 		if (!room.contactInfo.email?.length && !room.contactInfo.telephone?.length) {
 			return (
 				<Button
-					icon={<Icon name="contact" aria-hidden />}
+					icon={<Icon name={IconNamesLight.Contact} aria-hidden />}
 					aria-label={tText(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___geen-contactgegevens-beschikbaar'
 					)}
@@ -77,7 +80,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 				<DropdownMenu
 					placement="bottom-end"
 					triggerButtonProps={{
-						icon: <Icon name="contact" />,
+						icon: <Icon name={IconNamesLight.Contact} />,
 						variants: ['silver', 'sm'],
 					}}
 				>
@@ -116,7 +119,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 		return (
 			<>
 				{renderLabel(
-					'timer',
+					IconNamesLight.Timer,
 					<>
 						{tHtml(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___beschikbaar-tot'
@@ -146,7 +149,10 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 	const renderFutureApprovedControls = () => {
 		return (
 			<>
-				{renderLabel('calendar', <>Vanaf {access?.from && formatDateTime(access.from)}</>)}
+				{renderLabel(
+					IconNamesLight.Calendar,
+					<>Vanaf {access?.from && formatDateTime(access.from)}</>
+				)}
 				{renderContactIconButton()}
 			</>
 		);
@@ -196,7 +202,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 		return (
 			<>
 				{renderLabel(
-					'not-available',
+					IconNamesLight.NotAvailable,
 					tHtml(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___momenteel-is-er-geen-toegang-mogelijk-tot-deze-bezoekersruimte'
 					)

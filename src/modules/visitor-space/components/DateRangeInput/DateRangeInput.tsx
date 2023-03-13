@@ -3,13 +3,19 @@ import { endOfDay, startOfDay } from 'date-fns';
 import { ChangeEvent, FC, SyntheticEvent } from 'react';
 
 import { SEPARATOR } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { asDate } from '@shared/utils';
 
 import { DateInput } from '../DateInput';
 
 import styles from './DateRangeInput.module.scss';
 
-const DateRangeInput: FC<Omit<TextInputProps, 'onSelect'>> = (props) => {
+interface DateRangeInputProps extends TextInputProps {
+	showLabels?: boolean;
+}
+
+const DateRangeInput: FC<Omit<DateRangeInputProps, 'onSelect'>> = (props) => {
+	const { tText } = useTranslation();
 	const split = (props.value || '').toString().split(SEPARATOR, 2);
 
 	const from: string | undefined = split[0];
@@ -49,8 +55,30 @@ const DateRangeInput: FC<Omit<TextInputProps, 'onSelect'>> = (props) => {
 
 	return (
 		<div className={styles['c-date-range-input']}>
-			<DateInput {...props} value={from} onChange={(date, e) => onChange(date, e, 'from')} />
-			<DateInput {...props} value={to} onChange={(date, e) => onChange(date, e, 'to')} />
+			<DateInput
+				{...props}
+				label={
+					props.showLabels
+						? tText(
+								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___van'
+						  )
+						: ''
+				}
+				value={from}
+				onChange={(date, e) => onChange(date, e, 'from')}
+			/>
+			<DateInput
+				{...props}
+				label={
+					props.showLabels
+						? tText(
+								'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot'
+						  )
+						: ''
+				}
+				value={to}
+				onChange={(date, e) => onChange(date, e, 'to')}
+			/>
 		</div>
 	);
 };

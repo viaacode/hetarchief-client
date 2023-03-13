@@ -1,4 +1,4 @@
-import { NavigationEdit } from '@meemoo/react-admin';
+import { NavigationEdit } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
@@ -8,13 +8,14 @@ import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { Icon, IconNamesLight } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
+const NavigationBarPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 
@@ -23,6 +24,8 @@ const ContentPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__edit">
+						<Icon name={IconNamesLight.AngleDown} />
+
 						<NavigationEdit
 							navigationBarId={router.query.navigationBarId as string}
 							navigationItemId={router.query.navigationItemId as string}
@@ -54,4 +57,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(ContentPageEditPage as ComponentType));
+export default withAuth(withAdminCoreConfig(NavigationBarPageEditPage as ComponentType));

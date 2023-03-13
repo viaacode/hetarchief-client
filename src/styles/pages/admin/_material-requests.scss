@@ -1,0 +1,36 @@
+@use "src/styles/abstracts" as *;
+
+$page: "p-admin-material-requests";
+
+.#{$page} {
+	&__header {
+		display: flex;
+		justify-content: space-between;
+		flex-direction: column;
+
+		@include respond-at("md") {
+			flex-direction: row;
+		}
+
+		&-dropdowns {
+			display: flex;
+			flex-direction: column;
+
+			@include respond-at("md") {
+				flex-direction: row;
+			}
+		}
+	}
+
+	&__dropdown {
+		margin-bottom: $spacer-xs;
+		@include respond-at("md") {
+			margin-right: $spacer-md;
+			margin-bottom: 0;
+		}
+
+		&--open {
+			box-shadow: $shadow-24-black-08;
+		}
+	}
+}

@@ -5,9 +5,10 @@ import React, { FC } from 'react';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 
-import { Icon } from '../Icon';
+import { Icon, IconNamesLight } from '../Icon';
 import { PaginationProgress } from '../PaginationProgress';
 
+import { TABLE_PAGE_SIZE } from './PaginationBar.const';
 import styles from './PaginationBar.module.scss';
 import { PaginationBarProps } from './PaginationBar.types';
 
@@ -41,7 +42,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 						label={tHtml(
 							'modules/shared/components/pagination-bar/pagination-bar___volgende'
 						)}
-						iconEnd={<Icon name="angle-right" />}
+						iconEnd={<Icon name={IconNamesLight.AngleRight} />}
 					/>
 				),
 				previous: (
@@ -52,7 +53,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 						label={tHtml(
 							'modules/shared/components/pagination-bar/pagination-bar___vorige'
 						)}
-						iconStart={<Icon name="angle-left" />}
+						iconStart={<Icon name={IconNamesLight.AngleLeft} />}
 					/>
 				),
 			}}
@@ -73,7 +74,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 		>
 			{renderProgress()}
 
-			{renderPagination()}
+			{total > TABLE_PAGE_SIZE && renderPagination()}
 
 			{showBackToTop && (
 				<div className={styles['c-pagination-bar__back-to-top-wrapper']}>
@@ -83,7 +84,7 @@ const PaginationBar: FC<PaginationBarProps> = ({
 						label={tHtml(
 							'modules/shared/components/pagination-bar/pagination-bar___terug-naar-boven'
 						)}
-						iconEnd={<Icon name="arrow-up" />}
+						iconEnd={<Icon name={IconNamesLight.AngleUp} />}
 						onClick={() => scrollTo(0)}
 					/>
 				</div>

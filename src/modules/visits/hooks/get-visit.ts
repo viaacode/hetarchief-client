@@ -1,5 +1,4 @@
-import { useMutation } from 'react-query';
-import { UseMutationResult } from 'react-query/types/react/types';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 
 import { Visit } from '@shared/types';
 import { VisitsService } from '@visits/services';

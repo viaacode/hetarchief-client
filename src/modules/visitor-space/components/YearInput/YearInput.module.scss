@@ -1,0 +1,29 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-year-input";
+
+.#{$component} {
+	width: 100%;
+
+	&__label {
+		padding-bottom: 15px;
+	}
+
+	&__placeholder {
+		position: absolute;
+		color: $zinc;
+		margin: -3.4rem 0;
+		right: 10%;
+
+		&-wide {
+			position: absolute;
+			color: $zinc;
+			margin: -3.4rem 0;
+			right: 55%;
+		}
+
+		&-hidden {
+			display: none;
+		}
+	}
+}

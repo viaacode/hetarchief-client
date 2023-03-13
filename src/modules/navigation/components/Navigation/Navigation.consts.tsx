@@ -1,18 +1,21 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { intersection } from 'lodash-es';
+import { groupBy, intersection } from 'lodash-es';
 import Link from 'next/link';
 import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
-import { NavigationItem } from '@navigation/components';
+import { NAVIGATION_DROPDOOWN, NavigationItem, NavigationLink } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
-import { NavigationInfo } from '@navigation/services/navigation-service/navigation.types';
-import { Icon, IconName } from '@shared/components';
+import {
+	NavigationInfo,
+	NavigationPlacement,
+} from '@navigation/services/navigation-service/navigation.types';
+import { Icon, IconName, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
-import { VisitorSpaceInfo } from '@visitor-space/types';
+import { VisitorSpaceFilterId, VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
 	return clsx(styles['c-navigation__link'], ...classNames);
@@ -24,7 +27,7 @@ const dropdownCls = (...classNames: string[]) => {
 
 const linkClasses = linkCls(
 	'u-color-black',
-	'u-color-white:md',
+	'u-color-white:xxl',
 	'u-whitespace-nowrap',
 	styles['c-navigation__link--dropdown']
 );
@@ -48,26 +51,40 @@ const renderLink = (
 		tooltip?: string;
 		target?: string;
 		onClick?: MouseEventHandler<HTMLAnchorElement>;
-	} = {}
+	} = {},
+	placement: NavigationPlacement | undefined = undefined
 ): ReactNode => {
-	return href ? (
-		<Link href={href}>
-			<a
-				aria-label={tooltip}
-				className={className}
-				onClick={onClick}
-				tabIndex={0}
-				target={target}
-				title={tooltip}
-			>
-				{iconStart && iconStart}
-				{label}
-				{badge && badge}
-				{iconEnd && iconEnd}
-			</a>
-		</Link>
-	) : (
-		<a aria-label={tooltip} className={className} tabIndex={0} target={target} title={tooltip}>
+	const isDropdown = placement === NavigationPlacement.ProfileDropdown;
+	const cn = clsx(className, {
+		[styles['c-navigation__link--icon']]: iconStart || iconEnd,
+		[styles['c-navigation__link--icon-start']]: iconStart,
+		[styles['c-navigation__link--icon-end']]: iconEnd,
+	});
+
+	if (href) {
+		return isDropdown ? (
+			<NavigationLink href={href} label={label} isDropdownItem />
+		) : (
+			<Link href={href}>
+				<a
+					aria-label={tooltip}
+					className={cn}
+					onClick={onClick}
+					tabIndex={0}
+					target={target}
+					title={tooltip}
+				>
+					{iconStart && iconStart}
+					{label}
+					{badge && badge}
+					{iconEnd && iconEnd}
+				</a>
+			</Link>
+		);
+	}
+
+	return (
+		<a aria-label={tooltip} className={cn} tabIndex={0} target={target} title={tooltip}>
 			{iconStart && iconStart}
 			{label}
 			{badge && badge}
@@ -77,86 +94,81 @@ const renderLink = (
 };
 
 const getVisitorSpacesDropdown = (
+	navigationLabel: string,
 	currentPath: string,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	linkedSpaceSlug: string | null
+	linkedSpaceOrId: string | null
 ): NavigationItem => {
-	if (linkedSpaceSlug) {
+	if (linkedSpaceOrId) {
 		// Single link to go to linked visitor space (kiosk visitor)
+		const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${linkedSpaceOrId}`;
 		return {
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
-				'/' + linkedSpaceSlug,
+				searchRouteForSpace,
 				{
 					badge: null,
 					className: linkClasses,
 				}
 			),
 			id: 'visitor-spaces',
-			activeDesktop: currentPath.startsWith('/' + linkedSpaceSlug),
-			activeMobile: currentPath.startsWith('/' + linkedSpaceSlug),
+			path: currentPath,
+			activeDesktop: currentPath.startsWith(searchRouteForSpace),
+			activeMobile: currentPath.startsWith(searchRouteForSpace),
 		};
 	} else if (accessibleVisitorSpaces.length === 0) {
-		// No visitor spaces available => show link to homepage without dropdown
+		// No visitor spaces available => show link to bezoek page without dropdown
 		return {
-			node: renderLink(
-				tText('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
-				'/',
-				{
-					className: linkClasses,
-				}
-			),
+			node: renderLink(navigationLabel, ROUTES.bezoek, {
+				className: linkClasses,
+			}),
 			id: 'visitor-spaces',
-			activeDesktop: currentPath === ROUTES.home,
-			activeMobile: currentPath === ROUTES.home,
+			activeDesktop: currentPath === ROUTES.bezoek,
+			activeMobile: currentPath === ROUTES.bezoek,
+			path: currentPath,
 		};
 	} else {
-		// Show dropdown list with homepage and accessible visitor spaces
+		// Show dropdown list with bezoek page and accessible visitor spaces
 		return {
-			node: renderLink(
-				tText('modules/navigation/components/navigation/navigation___bezoekersruimtes'),
-				'/',
-				{
-					badge: <Badge text={accessibleVisitorSpaces.length} />,
-					className: linkClasses,
-					// Make link clickable in hamburger menu
-					onClick: (e) => {
-						if (window.innerWidth > Breakpoints.md) {
-							e.preventDefault();
-						}
-					},
-				}
-			),
+			node: renderLink(navigationLabel, ROUTES.bezoek, {
+				badge: <Badge text={accessibleVisitorSpaces.length} />,
+				className: linkClasses,
+				// Make link clickable in hamburger menu
+				onClick: (e) => {
+					if (window.innerWidth > Breakpoints.md) {
+						e.preventDefault();
+					}
+				},
+			}),
 			id: 'visitor-spaces',
-			activeDesktop:
-				currentPath === ROUTES.home ||
-				!!accessibleVisitorSpaces.find((visitorSpace) =>
-					currentPath.startsWith(`/${visitorSpace.slug}`)
-				),
-			activeMobile: currentPath === ROUTES.home,
+			path: currentPath,
+			activeDesktop: currentPath === ROUTES.bezoek,
+			activeMobile: currentPath === ROUTES.bezoek,
 			children: [
 				{
 					node: renderLink(
 						tText(
 							'modules/navigation/components/navigation/navigation___alle-bezoekersruimtes'
 						),
-						'/',
+						ROUTES.bezoek,
 						{
-							className: dropdownCls('u-display-none', 'u-display-block:md'),
+							className: dropdownCls('u-display-none', 'u-display-block:xxl'),
 						}
 					),
 					id: 'all-visitor-spaces',
+					path: currentPath,
 					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 				},
-				...accessibleVisitorSpaces.map(
-					(visitorSpace: VisitorSpaceInfo): NavigationItem => ({
+				...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
+					const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.maintainerId}`;
+					return {
 						node: ({ closeDropdowns }) =>
 							renderLink(
 								visitorSpace.name ||
 									tText(
 										'modules/navigation/components/navigation/navigation___bezoekersruimte'
 									),
-								`/${visitorSpace.slug}`,
+								searchRouteForSpace,
 								{
 									iconEnd: (
 										<Icon
@@ -164,45 +176,81 @@ const getVisitorSpacesDropdown = (
 												'u-font-size-24',
 												'u-text-left',
 												'u-visibility-hidden',
-												'u-visibility-visible:md',
+												'u-visibility-visible:xxl',
 												styles['c-navigation__dropdown-icon--end']
 											)}
-											name="angle-right"
+											name={IconNamesLight.AngleRight}
 										/>
 									),
 									className: dropdownCls(),
 									onClick: () => {
-										if (currentPath === `/${visitorSpace.slug}`) {
+										if (currentPath === searchRouteForSpace) {
 											closeDropdowns?.();
 										}
 									},
 								}
 							),
 						id: visitorSpace.id,
-						activeMobile: currentPath.startsWith(`/${visitorSpace.slug}`),
-					})
-				),
+						activeDesktop: currentPath.startsWith(searchRouteForSpace),
+						activeMobile: currentPath.startsWith(searchRouteForSpace),
+						path: currentPath,
+					};
+				}),
 			],
 		};
 	}
 };
 
-const getDynamicHeaderLinks = (currentPath: string, navigationItems: NavigationInfo[]) => {
-	return navigationItems.map((navigationItem: NavigationInfo): NavigationItem => {
-		return {
-			activeDesktop: currentPath === navigationItem.contentPath,
-			activeMobile: currentPath === navigationItem.contentPath,
-			id: navigationItem.id,
-			node: renderLink(navigationItem.label, navigationItem.contentPath, {
-				target: navigationItem.linkTarget || undefined,
-				iconStart: navigationItem.iconName ? (
-					<Icon name={navigationItem.iconName as IconName} />
-				) : null,
-				tooltip: navigationItem.tooltip || undefined,
-				className: linkClasses,
-			}),
-		};
-	});
+const getDynamicHeaderLinks = (
+	currentPath: string,
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
+	placement: NavigationPlacement,
+	accessibleVisitorSpaces: VisitorSpaceInfo[],
+	linkedSpaceOrId: string | null
+) => {
+	const itemsByPlacement = navigationItems[placement];
+
+	if (!itemsByPlacement || !itemsByPlacement.length) {
+		return [];
+	}
+
+	return itemsByPlacement.map(
+		({
+			contentPath,
+			id,
+			label,
+			linkTarget,
+			iconName,
+			tooltip,
+		}: NavigationInfo): NavigationItem => {
+			if (contentPath === NAVIGATION_DROPDOOWN.VISITOR_SPACES) {
+				return getVisitorSpacesDropdown(
+					label,
+					currentPath,
+					accessibleVisitorSpaces,
+					linkedSpaceOrId
+				);
+			}
+
+			return {
+				activeDesktop: currentPath.includes(contentPath),
+				activeMobile: currentPath.includes(contentPath),
+				id,
+				path: contentPath,
+				node: renderLink(
+					label,
+					contentPath,
+					{
+						target: linkTarget || undefined,
+						iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
+						tooltip: tooltip || undefined,
+						className: linkClasses,
+					},
+					placement
+				),
+			};
+		}
+	);
 };
 
 const getCpAdminManagementDropdown = (
@@ -224,13 +272,14 @@ const getCpAdminManagementDropdown = (
 		{
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___beheer'),
-				isMobile ? `/${ROUTE_PREFIXES.beheer}/${ROUTE_PARTS.visitRequests}` : '',
+				isMobile ? ROUTES.beheerRequests : '',
 				{
 					className: linkClasses,
 				}
 			),
 			id: 'nav__beheer',
 			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
+			path: currentPath,
 			children: [
 				...(permissions.includes(Permission.APPROVE_DENY_CP_VISIT_REQUESTS)
 					? [
@@ -239,13 +288,32 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___aanvragen'
 									),
-									'/beheer/aanvragen',
+									ROUTES.beheerRequests,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--aanvragen',
-								activeMobile: currentPath.startsWith('/beheer/aanvragen'),
+								path: currentPath,
+								activeMobile: currentPath.startsWith(ROUTES.beheerRequests),
+							},
+					  ]
+					: []),
+				...(permissions.includes(Permission.VIEW_ANY_MATERIAL_REQUESTS)
+					? [
+							{
+								node: renderLink(
+									tText(
+										'modules/navigation/components/navigation/navigation___materiaalaanvragen'
+									),
+									ROUTES.beheerMaterialRequests,
+									{
+										className: dropdownCls(),
+									}
+								),
+								id: 'nav__beheer--materiaalaanvragen',
+								path: currentPath,
+								activeMobile: currentPath.startsWith(ROUTES.beheerMaterialRequests),
 							},
 					  ]
 					: []),
@@ -256,13 +324,14 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___bezoekers'
 									),
-									'/beheer/bezoekers',
+									ROUTES.beheerVisitors,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--bezoekers',
-								activeMobile: currentPath.startsWith('/beheer/bezoekers'),
+								path: currentPath,
+								activeMobile: currentPath.startsWith(ROUTES.beheerVisitors),
 							},
 					  ]
 					: []),
@@ -273,13 +342,14 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___instellingen'
 									),
-									'/beheer/instellingen',
+									ROUTES.beheerSettings,
 									{
 										className: dropdownCls(),
 									}
 								),
 								id: 'nav__beheer--instellingen',
-								activeMobile: currentPath.startsWith('/beheer/instellingen'),
+								path: currentPath,
+								activeMobile: currentPath.startsWith(ROUTES.beheerSettings),
 							},
 					  ]
 					: []),
@@ -316,43 +386,97 @@ const getMeemooAdminManagementDropdown = (
 			id: 'nav__admin',
 			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
 			activeMobile: currentPath.startsWith(`/${ROUTE_PREFIXES.admin}`),
+			path: currentPath,
 		},
 	];
 };
 
+const getDivider = (id: string): NavigationItem =>
+	({
+		id,
+		node: null,
+		isDivider: 'md',
+	} as NavigationItem);
+
 export const getNavigationItemsLeft = (
 	currentPath: string,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	navigationItems: NavigationInfo[],
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	permissions: Permission[],
-	linkedSpaceSlug: string | null,
+	linkedSpaceOrId: string | null,
 	isMobile: boolean
 ): NavigationItem[] => {
+	const beforeDivider = getDynamicHeaderLinks(
+		currentPath,
+		navigationItems,
+		NavigationPlacement.HeaderLeft,
+		accessibleVisitorSpaces,
+		linkedSpaceOrId
+	);
+	const afterDivider = getDynamicHeaderLinks(
+		currentPath,
+		navigationItems,
+		NavigationPlacement.HeaderRight,
+		accessibleVisitorSpaces,
+		linkedSpaceOrId
+	);
+
 	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions, isMobile);
 	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
 
 	return [
-		// Visitor space dropdown
-		getVisitorSpacesDropdown(currentPath, accessibleVisitorSpaces, linkedSpaceSlug),
+		// Some dynamic links from navigations table in database
+		...beforeDivider,
+
+		// Divider separate from the other items
+		...(afterDivider.length > 0 ? [getDivider('divider-before-visitor-spaces')] : []),
 
 		// Some dynamic links from navigations table in database
-		...getDynamicHeaderLinks(currentPath, navigationItems),
+		...afterDivider,
 
-		// Divider separate from the other items, since items can be hidden because of permissions
-		...((cpAdminLinks.length > 0 || meemooAdminLinks.length > 0
-			? [
-					{
-						node: null,
-						id: 'divider-before-admin-routes',
-						isDivider: 'md',
-					},
-			  ]
-			: []) as NavigationItem[]),
+		// Some hard coded links we always need to show on mobile
+		...(isMobile ? [...cpAdminLinks, ...meemooAdminLinks] : []),
+	];
+};
 
-		// CP Admin dropdown link
-		...cpAdminLinks,
+export const getNavigationItemsProfileDropdown = (
+	currentPath: string,
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
+	accessibleVisitorSpaces: VisitorSpaceInfo[],
+	linkedSpaceOrId: string | null
+): NavigationItem[] => {
+	const profileDropdown = getDynamicHeaderLinks(
+		currentPath,
+		navigationItems,
+		NavigationPlacement.ProfileDropdown,
+		accessibleVisitorSpaces,
+		linkedSpaceOrId
+	);
 
-		// Meemoo admin link
-		...meemooAdminLinks,
+	// Group navigation items by type
+	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
+		profileDropdown,
+		(navItem: NavigationItem) => {
+			if (navItem.path?.startsWith('/admin')) {
+				return 'adminRoutes';
+			}
+
+			if (navItem.path?.startsWith('/beheer')) {
+				return 'cpRoutes';
+			}
+
+			return 'defaultRoutes';
+		}
+	);
+
+	return [
+		...(defaultRoutes || []),
+		...((adminRoutes || [])?.length > 0
+			? [getDivider('divider-before-admin-routes'), ...adminRoutes]
+			: []),
+		...((cpRoutes || [])?.length > 0
+			? [getDivider('divider-before-cp-routes'), ...cpRoutes]
+			: []),
+		getDivider('divider-before-logout'),
 	];
 };

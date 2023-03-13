@@ -1,24 +1,24 @@
 import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { sum } from 'lodash-es';
-import { NextPage } from 'next';
+import { isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
-import { withAuth } from '@auth/wrappers/with-auth';
-import { useGetMediaFilterOptions } from '@media/hooks/get-media-filter-options';
-import { useGetMediaObjects } from '@media/hooks/get-media-objects';
-import { isInAFolder } from '@media/utils';
+import { selectIsLoggedIn } from '@auth/store/user';
+import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
+import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,
 	ErrorNoAccess,
 	Icon,
+	IconNamesLight,
+	IconNamesSolid,
 	IdentifiableMediaCard,
 	Loading,
 	MediaCardList,
@@ -30,22 +30,33 @@ import {
 	TabLabel,
 	TagSearchBar,
 	ToggleOption,
+	TYPE_TO_ICON_MAP,
+	TYPE_TO_NO_ICON_MAP,
+	VisitorSpaceDropdown,
+	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
-import { useNavigationBorder } from '@shared/hooks/use-navigation-border';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
-import { selectFolders } from '@shared/store/media';
+import { selectFolders, selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
-import { AccessStatus, Breakpoints, SortObject, VisitorSpaceMediaType } from '@shared/types';
+import {
+	Breakpoints,
+	IeObjectTypes,
+	SortObject,
+	Visit,
+	VisitorSpaceMediaType,
+	VisitStatus,
+} from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
-import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
+import { VisitsService } from '@visits/services';
+import { VisitTimeframe } from '@visits/types';
 
 import {
 	AddToFolderBlade,
@@ -60,7 +71,6 @@ import {
 	LanguageFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
-	VisitorSpaceNavigation,
 } from '../../components';
 import {
 	VISITOR_SPACE_FILTERS,
@@ -71,19 +81,27 @@ import {
 	VISITOR_SPACE_TABS,
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '../../const';
-import { useGetVisitorSpace } from '../../hooks/get-visitor-space';
-import { MetadataProp, TagIdentity, VisitorSpaceFilterId, VisitorSpaceStatus } from '../../types';
+import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
-import { WaitingPage } from '../WaitingPage';
 
+// ToDo(Silke): check isLogged in voor filter maintainer ding -> enkel leeg gebruiken
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
 
-const VisitorSpaceSearchPage: NextPage = () => {
-	useNavigationBorder();
+const PUBLIC_COLLECTION = ''; // No maintainer query param means the public collection should be selected
 
+const getDefaultOption = (): VisitorSpaceDropdownOption => {
+	return {
+		id: PUBLIC_COLLECTION,
+		label: tText(
+			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
+		),
+	};
+};
+
+const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
@@ -92,16 +110,16 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	useScrollToId((router.query.focus as string) || null);
 
-	const { slug } = router.query;
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
-	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 
 	/**
 	 * State
 	 */
-
+	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
+	const collections = useSelector(selectFolders);
+	const filterOptions = useSelector(selectIeObjectsFilterOptions);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -115,10 +133,54 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const [searchBarInputState, setSearchBarInputState] = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
+	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
+	const [activeVisitorSpace, setActiveVisitorSpace] = useState<Visit | undefined>();
+
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
 	};
+
+	const activeVisitorSpaceId: string =
+		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
+
+	/**
+	 * Data
+	 */
+	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
+		const { items: spaces } = await VisitsService.getAll({
+			page: 1,
+			size: 10,
+			orderProp: 'startAt',
+			orderDirection: OrderDirection.desc,
+			status: VisitStatus.APPROVED,
+			timeframe: VisitTimeframe.ACTIVE,
+			personal: true,
+		});
+
+		const sortedSpaces = sortBy(spaces, (space) => space.spaceName?.toLowerCase());
+
+		setVisitorSpaces(sortedSpaces);
+
+		return sortedSpaces;
+	}, []);
+
+	const {
+		data: searchResults,
+		isLoading: searchResultsLoading,
+		error: searchResultsError,
+	} = useGetIeObjects(
+		mapFiltersToElastic(query),
+		query.page || 1,
+		VISITOR_SPACE_ITEM_COUNT,
+		activeSort,
+		true
+	);
+
+	/**
+	 * Effects
+	 */
 
 	useEffect(() => {
 		// New search => update history in list
@@ -126,59 +188,22 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [router.asPath, dispatch, query]);
 
-	/**
-	 * Data
-	 */
-
-	const {
-		error: visitRequestError,
-		data: visitRequest,
-		isLoading: visitRequestIsLoading,
-	} = useGetActiveVisitForUserAndSpace(slug as string, typeof slug === 'string');
-
-	const { data: accessStatus, isLoading: visitAccessStatusIsLoading } = useGetVisitAccessStatus(
-		slug as string,
-		typeof slug === 'string'
-	);
-
-	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
-		slug as string,
-		false,
-		{
-			enabled: visitRequest !== undefined || accessStatus?.status === AccessStatus.PENDING,
+	useEffect(() => {
+		if (!isLoggedIn) {
+			return;
 		}
-	);
 
-	const {
-		data: media,
-		isLoading: mediaIsLoading,
-		error: mediaError,
-	} = useGetMediaObjects(
-		visitorSpace?.maintainerId?.toLocaleLowerCase() as string,
-		mapFiltersToElastic(query),
-		query.page || 1,
-		VISITOR_SPACE_ITEM_COUNT,
-		activeSort,
-		visitorSpace?.maintainerId !== undefined
-	);
+		getVisitorSpaces();
+	}, [getVisitorSpaces, isLoggedIn]);
 
-	// The result will be added to the redux store
-	useGetMediaFilterOptions(visitorSpace?.maintainerId?.toLocaleLowerCase() as string | undefined);
+	useEffect(() => {
+		const visitorSpace: Visit | undefined = visitorSpaces.find(
+			(visit: Visit): boolean => activeVisitorSpaceId === visit.spaceMaintainerId
+		);
 
-	const collections = useSelector(selectFolders);
-
-	/**
-	 * Computed
-	 */
-
-	const isNoAccessError =
-		(visitRequestError as HTTPError)?.response?.status === 403 &&
-		(accessStatus?.status === AccessStatus.NO_ACCESS || !accessStatus?.status);
-	const isAccessPendingError =
-		(visitRequestError as HTTPError)?.response?.status === 403 &&
-		accessStatus?.status === AccessStatus.PENDING;
-	const isVisitorSpaceInactive = visitorSpace?.status === VisitorSpaceStatus.Inactive;
-	const mediaNoAccess = (mediaError as HTTPError)?.response?.status === 403;
+		setActiveVisitorSpace(visitorSpace);
+		setQuery({ [VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined });
+	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
 
 	/**
 	 * Display
@@ -186,14 +211,14 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const getItemCounts = useCallback(
 		(type: VisitorSpaceMediaType): number => {
-			const buckets = media?.aggregations?.dcterms_format?.buckets || [];
+			const buckets = searchResults?.aggregations?.dcterms_format?.buckets || [];
 			if (type === VisitorSpaceMediaType.All) {
 				return sum(buckets.map((item) => item.doc_count));
 			} else {
 				return buckets.find((bucket) => bucket.key === type)?.doc_count || 0;
 			}
 		},
-		[media]
+		[searchResults]
 	);
 
 	const tabs: TabProps[] = useMemo(
@@ -218,6 +243,29 @@ const VisitorSpaceSearchPage: NextPage = () => {
 				active: option.id === viewMode,
 			})),
 		[viewMode]
+	);
+
+	const dropdownOptions = useMemo(() => {
+		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
+			({ spaceName, endAt, spaceMaintainerId }: Visit): VisitorSpaceDropdownOption => {
+				const accessEndDate = isMobile
+					? formatSameDayTimeOrDate(asDate(endAt))
+					: formatMediumDateWithTime(asDate(endAt));
+
+				return {
+					id: spaceMaintainerId,
+					label: spaceName || '',
+					extraInfo: accessEndDate,
+				};
+			}
+		);
+
+		return [getDefaultOption(), ...dynamicOptions];
+	}, [visitorSpaces, isMobile]);
+
+	const filters = useMemo(
+		() => VISITOR_SPACE_FILTERS().filter(({ isDisabled }) => !isDisabled?.()),
+		[]
 	);
 
 	/**
@@ -259,7 +307,11 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	};
 
 	const onResetFilters = () => {
-		setQuery(VISITOR_SPACE_QUERY_PARAM_INIT);
+		// Reset all filters except the maintainer
+		setQuery({
+			...VISITOR_SPACE_QUERY_PARAM_INIT,
+			maintainer: query.maintainer,
+		});
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
@@ -379,7 +431,7 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 		// Destructure to keyword-able filters
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { format, orderProp, orderDirection, page, ...rest } = {
+		const { format, orderProp, orderDirection, page, maintainer, ...rest } = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
 
@@ -396,17 +448,49 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
+	const onVisitorSpaceSelected = (id: string): void => {
+		if (id === PUBLIC_COLLECTION) {
+			setQuery({ [VisitorSpaceFilterId.Maintainer]: undefined });
+		} else {
+			setQuery({ [VisitorSpaceFilterId.Maintainer]: id });
+		}
+	};
+
 	/**
 	 * Computed
 	 */
 
-	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
-	const showNoResults = !!media && media?.items?.length === 0;
-	const showResults = !!media && media?.items?.length > 0;
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
-	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
+	const isLoadedWithoutResults = !!searchResults && searchResults?.items?.length === 0;
+	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
+	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
+	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
+	const showVisitorSpacesDropdown = useMemo(
+		() => isLoggedIn && visitorSpaces.length > 0,
+		[isLoggedIn, visitorSpaces]
+	);
+
+	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
+		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
+			const type = item.dctermsFormat as IeObjectTypes;
+
+			return {
+				schemaIdentifier: item.schemaIdentifier,
+				maintainerSlug: item.maintainerSlug,
+				description: item.description,
+				title: item.name,
+				publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
+				publishedBy: item.maintainerName || '',
+				type,
+				preview: item.thumbnailUrl || undefined,
+				name: item.name,
+				hasRelated: (item.related_count || 0) > 0,
+				...(!isNil(type) && {
+					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
+				}),
+			};
+		});
+	}, [searchResults?.items]);
 
 	/**
 	 * Render
@@ -414,14 +498,14 @@ const VisitorSpaceSearchPage: NextPage = () => {
 
 	const renderFilterMenu = () => {
 		const filterMenuCls = clsx('p-visitor-space__filter-menu', {
-			'u-mr-32:md': viewMode === 'list' && showResults,
+			'u-mr-32:md': viewMode === 'list' && isLoadedWithResults,
 		});
 
 		return (
 			<div className={filterMenuCls}>
 				<FilterMenu
 					activeSort={activeSort}
-					filters={VISITOR_SPACE_FILTERS()}
+					filters={filters}
 					filterValues={query}
 					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
@@ -462,7 +546,10 @@ const VisitorSpaceSearchPage: NextPage = () => {
 					setShowAddToFolderBlade(true);
 				}}
 				icon={
-					<Icon type={itemIsInAFolder ? 'solid' : 'light'} name="bookmark" aria-hidden />
+					<Icon
+						name={itemIsInAFolder ? IconNamesSolid.Bookmark : IconNamesLight.Bookmark}
+						aria-hidden
+					/>
 				}
 				variants={['text', 'xxs']}
 				title={tText(
@@ -478,51 +565,12 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	const renderResults = () => (
 		<>
 			<MediaCardList
-				items={media?.items.map(
-					(item): IdentifiableMediaCard => ({
-						schemaIdentifier: item.schema_identifier,
-						description: item.schema_description,
-						title: item.schema_name,
-						publishedAt: item.schema_date_published
-							? asDate(item.schema_date_published)
-							: undefined,
-						publishedBy: item.schema_maintainer?.schema_name ?? '',
-						type: item.dcterms_format,
-						preview: item.schema_thumbnail_url || undefined,
-						name: item.schema_name,
-						hasRelated: (item.related_count || 0) > 0,
-					})
-				)}
+				items={searchResultCardData}
 				keywords={keywords}
 				sidebar={renderFilterMenu()}
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
-				wrapper={(card, item) => {
-					const cast = item as IdentifiableMediaCard;
-					const source = media?.items.find(
-						(media) => media.schema_identifier === cast.schemaIdentifier
-					);
-
-					const href = `/${slug}/${source?.schema_identifier}`;
-
-					const name = item.title?.toString(); // TODO double check that this still works
-					return (
-						<Link key={source?.schema_identifier} href={href.toLowerCase()}>
-							<a
-								className="u-text-no-decoration"
-								aria-label={tText(
-									'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___navigeer-naar-de-detailpagina-van-name',
-									{
-										name,
-									}
-								)}
-							>
-								{card}
-							</a>
-						</Link>
-					);
-				}}
 			/>
 			<PaginationBar
 				className="u-mb-48"
@@ -541,169 +589,168 @@ const VisitorSpaceSearchPage: NextPage = () => {
 		</>
 	);
 
-	const getAccessEndDate = () => {
-		if ((!accessEndDate && !accessEndDateMobile) || showLinkedSpaceAsHomepage) {
-			return undefined;
-		}
-		if (isMobile) {
-			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
-				accessEndDateMobile,
-			});
-		}
-		return tHtml(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
-			{
-				accessEndDate,
-			}
+	const renderVisitorSpace = () => {
+		return (
+			<>
+				{visitorSpaces && (
+					<div className="p-visitor-space">
+						<section className="u-bg-black u-pt-8">
+							<div className="l-container">
+								<FormControl
+									className="c-form-control--label-hidden u-mb-24"
+									id={`react-select-${labelKeys.search}-input`}
+									label={tHtml(
+										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+									)}
+								>
+									<div
+										className={clsx('p-visitor-space__searchbar', {
+											'p-visitor-space__searchbar--has-dropdown':
+												showVisitorSpacesDropdown,
+										})}
+									>
+										{showVisitorSpacesDropdown && (
+											<VisitorSpaceDropdown
+												options={dropdownOptions}
+												selectedOptionId={
+													activeVisitorSpaceId || PUBLIC_COLLECTION
+												}
+												onSelected={onVisitorSpaceSelected}
+											/>
+										)}
+										<TagSearchBar
+											allowCreate
+											hasDropdown={showVisitorSpacesDropdown}
+											clearLabel={tHtml(
+												'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
+											)}
+											inputState={[
+												searchBarInputState,
+												setSearchBarInputState,
+											]}
+											instanceId={labelKeys.search}
+											isMulti
+											onClear={onResetFilters}
+											onRemoveValue={onRemoveTag}
+											onSearch={onSearch}
+											placeholder={tText(
+												'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
+											)}
+											infoContent={tText(
+												'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
+											)}
+											size="lg"
+											syncSearchValue={false}
+											value={activeFilters}
+										/>
+									</div>
+								</FormControl>
+								<ScrollableTabs
+									variants={['dark']}
+									tabs={tabs}
+									onClick={onTabClick}
+								/>
+							</div>
+						</section>
+
+						{showResearchWarning && (
+							<aside className="u-bg-platinum">
+								<div className="l-container u-flex u-justify-center u-py-32">
+									<Callout
+										icon={<Icon name={IconNamesLight.Info} aria-hidden />}
+										text={tHtml(
+											'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+										)}
+										action={
+											<Link passHref href="/kiosk-voorwaarden">
+												<a
+													aria-label={tText(
+														'pages/slug/index___meer-info'
+													)}
+												>
+													<Button
+														className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+														label={tHtml(
+															'pages/slug/index___meer-info'
+														)}
+														variants={['text', 'underline']}
+													/>
+												</a>
+											</Link>
+										}
+									/>
+								</div>
+							</aside>
+						)}
+						<section
+							className={clsx(
+								'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+								{
+									'p-visitor-space__results--placeholder': isLoadedWithoutResults,
+									'u-pt-0': showResearchWarning,
+								}
+							)}
+						>
+							<div className="l-container">
+								{/* Only render filters when there are no results yet, when the results are loaded we render the filter menu using MediaCardList */}
+								{!isLoadedWithResults && renderFilterMenu()}
+								{isLoadedWithoutResults && (
+									<Placeholder
+										className="p-visitor-space__placeholder"
+										img="/images/looking-glass.svg"
+										title={tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/index___geen-resultaten'
+										)}
+										description={tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
+										)}
+									/>
+								)}
+								{isLoadedWithResults && renderResults()}
+							</div>
+						</section>
+					</div>
+				)}
+
+				{!searchResultsLoading && (
+					<AddToFolderBlade
+						isOpen={isAddToFolderBladeOpen}
+						selected={
+							selected
+								? {
+										schemaIdentifier: selected.schemaIdentifier,
+										title: selected.name,
+								  }
+								: undefined
+						}
+						onClose={() => {
+							setShowAddToFolderBlade(false);
+							setSelected(null);
+						}}
+						onSubmit={async () => {
+							setShowAddToFolderBlade(false);
+							setSelected(null);
+						}}
+					/>
+				)}
+			</>
 		);
 	};
 
-	const renderVisitorSpace = () => (
-		<>
-			{visitorSpace && (
-				<div className="p-visitor-space">
-					<VisitorSpaceNavigation
-						title={visitorSpace?.name}
-						phone={visitorSpace?.contactInfo.telephone || ''}
-						email={visitorSpace?.contactInfo.email || ''}
-						showBorder={showNavigationBorder}
-						showAccessEndDate={getAccessEndDate()}
-					/>
-
-					<section className="u-bg-black u-pt-8">
-						<div className="l-container">
-							<FormControl
-								className="c-form-control--label-hidden u-mb-24"
-								id={`react-select-${labelKeys.search}-input`}
-								label={tHtml(
-									'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
-								)}
-							>
-								<TagSearchBar
-									allowCreate
-									clearLabel={tHtml(
-										'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
-									)}
-									inputState={[searchBarInputState, setSearchBarInputState]}
-									instanceId={labelKeys.search}
-									isMulti
-									onClear={onResetFilters}
-									onRemoveValue={onRemoveTag}
-									onSearch={onSearch}
-									placeholder={tText(
-										'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
-									)}
-									size="lg"
-									syncSearchValue={false}
-									value={activeFilters}
-								/>
-							</FormControl>
-
-							<ScrollableTabs variants={['dark']} tabs={tabs} onClick={onTabClick} />
-						</div>
-					</section>
-
-					{showResearchWarning && (
-						<aside className="u-bg-platinum">
-							<div className="l-container u-flex u-justify-center u-py-32">
-								<Callout
-									icon={<Icon name="info" aria-hidden />}
-									text={tHtml(
-										'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
-									)}
-									action={
-										<Link passHref href="/kiosk-voorwaarden">
-											<a aria-label={tText('pages/slug/index___meer-info')}>
-												<Button
-													className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-													label={tHtml('pages/slug/index___meer-info')}
-													variants={['text', 'underline']}
-												/>
-											</a>
-										</Link>
-									}
-								/>
-							</div>
-						</aside>
-					)}
-					<section
-						className={clsx(
-							'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
-							{
-								'p-visitor-space__results--placeholder': showNoResults,
-								'u-pt-0': showResearchWarning,
-							}
-						)}
-					>
-						<div className="l-container">
-							{!showResults && renderFilterMenu()}
-
-							{showNoResults && (
-								<Placeholder
-									className="p-visitor-space__placeholder"
-									img="/images/looking-glass.svg"
-									title={tHtml(
-										'pages/bezoekersruimte/visitor-space-slug/index___geen-resultaten'
-									)}
-									description={tHtml(
-										'pages/bezoekersruimte/visitor-space-slug/index___pas-je-zoekopdracht-aan-om-minder-filter-of-trefwoorden-te-omvatten'
-									)}
-								/>
-							)}
-
-							{showResults && renderResults()}
-						</div>
-					</section>
-				</div>
-			)}
-
-			{visitorSpace && (
-				<AddToFolderBlade
-					isOpen={isAddToFolderBladeOpen}
-					selected={
-						selected
-							? {
-									schemaIdentifier: selected.schemaIdentifier,
-									title: selected.name,
-							  }
-							: undefined
-					}
-					onClose={() => {
-						setShowAddToFolderBlade(false);
-						setSelected(null);
-					}}
-					onSubmit={async () => {
-						setShowAddToFolderBlade(false);
-						setSelected(null);
-					}}
-				/>
-			)}
-		</>
-	);
-
 	const renderPageContent = () => {
-		if (
-			visitorSpaceIsLoading ||
-			visitAccessStatusIsLoading ||
-			visitRequestIsLoading ||
-			mediaIsLoading
-		) {
+		if (searchResultsLoading) {
 			return <Loading fullscreen owner="visitor space search page: render page content" />;
 		}
 
-		if (isNoAccessError || isVisitorSpaceInactive || mediaNoAccess) {
+		if (searchResultsNoAccess) {
 			return (
 				<ErrorNoAccess
-					visitorSpaceSlug={slug as string}
+					visitorSpaceSlug={String(activeVisitorSpace?.spaceSlug)}
 					description={tHtml(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___deze-bezoekersruimte-is-momenteel-niet-beschikbaar'
 					)}
 				/>
 			);
-		}
-
-		if (isAccessPendingError) {
-			return <WaitingPage space={visitorSpace ?? undefined} />;
 		}
 
 		return renderVisitorSpace();
@@ -712,4 +759,4 @@ const VisitorSpaceSearchPage: NextPage = () => {
 	return renderPageContent();
 };
 
-export default withAuth(VisitorSpaceSearchPage);
+export default VisitorSpaceSearchPage;

@@ -27,7 +27,7 @@
 
 .c-filter-form__body {
 	max-height: 100%;
-	overflow: auto;
+	overflow-y: auto;
 
 	// Allow "overflowing" effects on input fields
 	padding-top: $spacer-xs;
@@ -44,12 +44,15 @@
 		overflow: auto;
 		max-height: $spacer-1xl * 4;
 	}
+
+	&--overflow {
+		overflow: visible;
+	}
 }
 
 .c-filter-form__footer {
 	display: flex;
 	padding: $spacer-md 2rem;
-	border-top: 1px solid color.adjust($black, $alpha: -0.8);
 
 	@include respond-at(md) {
 		padding: $spacer-md $spacer-lg;

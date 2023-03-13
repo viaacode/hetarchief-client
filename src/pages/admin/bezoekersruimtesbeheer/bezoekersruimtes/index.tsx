@@ -16,6 +16,7 @@ import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	Icon,
+	IconNamesLight,
 	Loading,
 	PaginationBar,
 	ScrollableTabs,
@@ -285,7 +286,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				{showCreateButton && (
 					<AdminLayout.Actions>
 						<Button
-							iconStart={<Icon name="plus" />}
+							iconStart={<Icon name={IconNamesLight.Plus} />}
 							label={tHtml(
 								'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-bezoekersruimte'
 							)}

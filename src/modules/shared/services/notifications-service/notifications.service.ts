@@ -1,13 +1,13 @@
+import type { IPagination } from '@studiohyperdrive/pagination';
+import { QueryClient } from '@tanstack/react-query';
 import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { QueryClient } from 'react-query';
 
 import { ROUTES } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
-import { ApiResponseWrapper } from '@shared/types';
 import { asDate } from '@shared/utils';
 
 import { NOTIFICATION_TYPE_TO_PATH } from './notifications.consts';
@@ -100,9 +100,9 @@ export abstract class NotificationsService {
 				});
 
 				hasSpaceNotification &&
-					(await NotificationsService.queryClient.invalidateQueries(
-						QUERY_KEYS.getAccessibleVisitorSpaces
-					));
+					(await NotificationsService.queryClient.invalidateQueries([
+						QUERY_KEYS.getAccessibleVisitorSpaces,
+					]));
 
 				if (
 					newNotifications.find(
@@ -160,15 +160,15 @@ export abstract class NotificationsService {
 		NotificationsService.lastNotifications = notifications;
 		if (unreadNotifications.length > 0) {
 			NotificationsService.setHasUnreadNotifications?.(true);
-			await NotificationsService.queryClient.invalidateQueries(QUERY_KEYS.getNotifications);
+			await NotificationsService.queryClient.invalidateQueries([QUERY_KEYS.getNotifications]);
 		}
 	}
 
 	public static async getNotifications(
 		page: number,
 		size: number
-	): Promise<ApiResponseWrapper<Notification>> {
-		const response: ApiResponseWrapper<Notification> = await ApiService.getApi()
+	): Promise<IPagination<Notification>> {
+		const response: IPagination<Notification> = await ApiService.getApi()
 			.get(stringifyUrl({ url: 'notifications', query: { page, size } }))
 			.json();
 		return response;

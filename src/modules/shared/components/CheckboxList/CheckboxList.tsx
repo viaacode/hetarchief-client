@@ -5,7 +5,13 @@ import { FC } from 'react';
 import styles from './CheckboxList.module.scss';
 import { CheckboxListProps } from './CheckboxList.types';
 
-const CheckboxList: FC<CheckboxListProps<unknown>> = ({ items, className, onItemClick }) => {
+const CheckboxList: FC<CheckboxListProps<unknown>> = ({
+	items,
+	className,
+	itemClassName,
+	checkIcon = null,
+	onItemClick,
+}) => {
 	return (
 		<ul className={clsx(className, styles['c-checkbox-list'])}>
 			{items.map((item, i) => {
@@ -15,7 +21,9 @@ const CheckboxList: FC<CheckboxListProps<unknown>> = ({ items, className, onItem
 				return (
 					<li
 						key={`c-checkbox-list--${i}--${value}`}
-						className={styles['c-checkbox-list__item']}
+						className={clsx(styles['c-checkbox-list__item'], itemClassName, {
+							['is-checked']: isChecked,
+						})}
 						tabIndex={0}
 						onKeyDown={(e) =>
 							onKey(e, [...keysEnter, ...keysSpacebar], () => {
@@ -28,7 +36,7 @@ const CheckboxList: FC<CheckboxListProps<unknown>> = ({ items, className, onItem
 						}
 						onClick={() => onItemClick(isChecked, value)}
 					>
-						<Checkbox checked={isChecked} tabIndex={-1} />
+						<Checkbox checked={isChecked} tabIndex={-1} checkIcon={checkIcon} />
 						<span>{item.label}</span>
 					</li>
 				);

@@ -1,0 +1,14 @@
+@use "src/styles/abstracts" as *;
+
+$component: "radiobuttons-container";
+
+.#{$component} {
+	display: flex;
+	flex-direction: column;
+	margin: 3rem 0;
+
+	&__radiobutton {
+		margin: 1rem 0;
+		z-index: get-z-layer("base");
+	}
+}

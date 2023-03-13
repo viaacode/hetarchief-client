@@ -53,7 +53,7 @@ export const withAuth = (WrappedComponent: ComponentType): ComponentType => {
 			checkLoginStatus();
 		}, [checkLoginStatus]);
 
-		// Allow server side rendering to get past this loading screen so we can determine seo fields on the actual page
+		// Allow server side rendering to get past this loading screen, so we can determine seo fields on the actual page
 		return !isBrowser() || tosAccepted ? (
 			<WrappedComponent {...props} />
 		) : (

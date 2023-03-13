@@ -22,8 +22,12 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	// Override next/image
 	&__header-wrapper {
+		min-height: 13rem;
+
 		&--list,
 		&--grid {
+			position: relative;
+
 			> span {
 				position: static !important;
 
@@ -46,12 +50,35 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		}
 	}
 
+	&__header-icon {
+		position: absolute;
+		top: 0;
+		left: 0;
+		font-size: 2.2rem;
+		line-height: 0;
+		color: $blue;
+		padding: 0.25rem 0.5rem 0.5rem 0.25rem;
+		background-color: $white;
+	}
+
+	&__header-duration {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		font-size: $font-size-sm;
+		background-color: $white;
+		color: $zinc;
+		padding: 0.5rem 0.75rem;
+	}
+
 	:global(.c-card__subtitle-wrapper),
 	:global(.c-card__children-wrapper) {
 		line-height: 2.2rem;
 	}
 
 	&__no-content {
+		color: $blue;
+		font-variation-settings: 2.2rem;
 		display: block;
 		margin-bottom: $c-media-card-no-video-intended-spacing - $spacer-sm;
 

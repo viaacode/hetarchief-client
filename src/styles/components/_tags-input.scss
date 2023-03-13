@@ -52,8 +52,32 @@
 		}
 	}
 
+	.c-tags-input__indicators {
+		margin-right: 3.4rem;
+
+		&::after {
+			content: "";
+			display: flex;
+			width: 0.15rem;
+			height: 3.5rem;
+			margin: 0 $spacer-sm;
+			border-radius: 0.15rem;
+			background-color: $black;
+			opacity: 0.12;
+		}
+
+		@include respond-at(md) {
+			margin-right: 0;
+
+			&::after {
+				display: none;
+			}
+		}
+	}
+
 	.c-tags-input__indicator-icon {
 		font-size: $font-size-lg;
 		transition: color $animate-sm-in;
+		color: $neutral;
 	}
 }

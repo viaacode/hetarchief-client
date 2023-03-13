@@ -33,6 +33,7 @@ $py: (
 
 // Left / Right
 $px: (
+	"0": 0,
 	"8": $spacer-xs,
 	"12": $spacer-12,
 	"16": $spacer-sm,
@@ -126,12 +127,14 @@ $ml: (
 
 // Right
 $mr: (
+	"4": $spacer-xxs,
 	"8": $spacer-xs,
 );
 @include generate-utils("mr", "margin-right", $mr);
 
 // Top / Bottom
 $my: (
+	"8": $spacer-xs,
 	"16": $spacer-sm,
 	"32": $spacer-lg,
 );

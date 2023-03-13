@@ -1,8 +1,7 @@
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import ky from 'ky-universal';
-import { useQuery } from 'react-query';
-import { UseQueryResult } from 'react-query/types/react/types';
 
-import { MediaService } from '@media/services';
+import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
 
 export interface JsonWaveformData {
@@ -22,7 +21,7 @@ export function useGetPeakFile(
 		if (!fileSchemaIdentifier) {
 			return null;
 		}
-		const jsonFileUrl: string | null = await MediaService.getPlayableUrl(
+		const jsonFileUrl: string | null = await IeObjectsService.getPlayableUrl(
 			fileSchemaIdentifier as string
 		);
 		if (!jsonFileUrl) {

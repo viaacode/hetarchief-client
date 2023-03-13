@@ -1,11 +1,13 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
-import { Icon } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
+import { HAS_SHOW_OVERFLOW } from './FilterForm.const';
 import styles from './FilterForm.module.scss';
 import { FilterFormProps } from './FilterForm.types';
 
@@ -32,6 +34,11 @@ const FilterForm: FC<FilterFormProps> = ({
 		onFormSubmit(id, values);
 	};
 
+	const showOverflow = useMemo(
+		(): boolean => HAS_SHOW_OVERFLOW.includes(id as VisitorSpaceFilterId),
+		[id]
+	);
+
 	return (
 		<div className={clsx(className, styles['c-filter-form'])}>
 			<div className={styles['c-filter-form__header']}>
@@ -42,14 +49,18 @@ const FilterForm: FC<FilterFormProps> = ({
 
 			<FormComponent
 				disabled={disabled}
-				className={styles['c-filter-form__body']}
+				className={clsx(styles['c-filter-form__body'], {
+					[styles['c-filter-form__body--overflow']]: showOverflow,
+				})}
 				values={{ [id]: values }}
 			>
 				{({ reset, values, handleSubmit }) => (
 					<div className={styles['c-filter-form__footer']}>
 						<Button
 							className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
-							iconStart={<Icon className="u-font-size-22" name="redo" />}
+							iconStart={
+								<Icon className="u-font-size-22" name={IconNamesLight.Redo} />
+							}
 							label={tHtml(
 								'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
 							)}

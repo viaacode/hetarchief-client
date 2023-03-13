@@ -3,11 +3,11 @@ import React from 'react';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { CopyButton, Icon, RequestStatusBadge } from '@shared/components';
+import { CopyButton, Icon, IconNamesLight, RequestStatusBadge } from '@shared/components';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
-import { Visit, VisitRow, VisitStatus } from '@shared/types';
+import { AccessType, Visit, VisitRow, VisitStatus } from '@shared/types';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
 import { RequestStatusAll } from '@visits/types';
 
@@ -22,6 +22,14 @@ export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	orderProp: withDefault(StringParam, 'createdAt'),
 	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
 };
+
+export const GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS = (): Record<
+	AccessType,
+	string
+> => ({
+	[AccessType.FULL]: tText('modules/cp/const/requests___volledige-toegang'),
+	[AccessType.FOLDERS]: tText('modules/cp/const/requests___gedeeltelijke-toegang'),
+});
 
 export const requestStatusFilters = (): TabProps[] => {
 	return [
@@ -89,13 +97,42 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 		},
 	},
 	{
+		Header: tText('modules/cp/const/requests___soort-toegang'),
+		accessor: 'accessType',
+		Cell: ({ row }: VisitRow) => {
+			return (
+				<span className="u-color-neutral">
+					{row.original.status === VisitStatus.PENDING
+						? '-'
+						: GET_CP_ADMIN_REQUESTS_ACCESS_TYPE_TRANSLATION_KEYS()[
+								row.original.accessType
+						  ]}
+				</span>
+			);
+		},
+	},
+	{
+		Header: '',
+		id: 'cp-requests-table-edit',
+		Cell: () => {
+			return (
+				<Button
+					className="p-cp-requests__edit"
+					icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+					aria-label={tText('modules/cp/const/requests___bewerken')}
+					variants={['xxs', 'text']}
+				/>
+			);
+		},
+	},
+	{
 		Header: '',
 		id: 'cp-requests-table-actions',
 		Cell: () => {
 			return (
 				<Button
 					className="p-cp-requests__actions"
-					icon={<Icon name="dots-vertical" aria-hidden />}
+					icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
 					aria-label={tText('modules/cp/const/requests___meer-acties')}
 					variants={['xxs', 'text']}
 				/>

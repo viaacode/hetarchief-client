@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 
 export * from './api';
 export * from './blade';
-export * from './media';
+export * from './ie-objects';
 export * from './sidebar';
 export * from './utils';
 export * from './visit';
@@ -41,6 +41,7 @@ export enum Operator {
 	LessThanOrEqual = 'lt', // shorter (duration) or until (date)
 	GreaterThanOrEqual = 'gt', // longer (duration) or after (date)
 	Between = 'bt', // duration & date
+	Exact = 'ex', // duration
 }
 
 export const isRange = (op?: string): boolean => op === Operator.Between;
@@ -54,6 +55,7 @@ export enum Breakpoints {
 	md = 768,
 	lg = 992,
 	xl = 1200,
+	xxl = 1400,
 }
 
 export type AnimationTypes =

@@ -1,6 +1,9 @@
-import { ApiResponseWrapper, MediaTypes } from '@shared/types';
+import type { IPagination } from '@studiohyperdrive/pagination';
 
-export type GetFoldersResponse = ApiResponseWrapper<Folder>;
+import { IeObjectTypes } from '@shared/types';
+import { AccessThroughType } from '@shared/types/access';
+
+export type GetFoldersResponse = IPagination<Folder>;
 
 export interface Folder {
 	createdAt: string;
@@ -9,25 +12,28 @@ export interface Folder {
 	name: string;
 	updatedAt: string;
 	userProfileId: string;
-	objects?: Pick<FolderMedia, 'schemaIdentifier'>[];
+	usedForLimitedAccessUntil: string | null;
+	objects?: Pick<FolderIeObject, 'schemaIdentifier'>[];
 }
 
-export interface FolderMedia {
+export interface FolderIeObject {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID: not unique per object
 	meemooLocalId: string;
+	accessThrough: AccessThroughType[];
 	premisIsPartOf?: string;
 	collectionEntryCreatedAt?: string;
 	creator?: unknown;
 	description: string;
-	format: MediaTypes;
+	duration: string;
+	dctermsFormat: IeObjectTypes;
 	name: string;
 	numberOfPages?: unknown;
 	termsAvailable: string;
 	thumbnailUrl: string;
 	maintainerId: string;
 	maintainerName: string;
-	visitorSpaceSlug: string;
+	maintainerSlug: string;
 	series: string[];
 	programs: string[];
 	datePublished?: string;

@@ -13,6 +13,115 @@
 	}
 }
 
+.c-dropdown--filter {
+	height: 5.6rem;
+
+	.c-button {
+		display: block;
+		width: 100%;
+		height: 100%;
+		text-align: left;
+		background-color: $white;
+		color: $black;
+		border-color: $silver;
+		font-weight: unset;
+
+		&__content {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		&:hover {
+			border-color: $zinc;
+		}
+
+		&:focus,
+		&:focus-within {
+			border-color: $teal;
+		}
+	}
+}
+
+.c-dropdown--bordered {
+	height: 4.8rem;
+
+	.c-button {
+		display: block;
+		width: 100%;
+		height: 100%;
+		text-align: left;
+		background-color: $white;
+		color: $black;
+		border-color: $zinc;
+		border-radius: 0;
+		font-weight: unset;
+
+		&__content {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		&:hover {
+			border-color: $zinc;
+		}
+
+		&:focus,
+		&:focus-within {
+			border-color: $zinc;
+		}
+	}
+
+	& + .c-dropdown__content-open {
+		border: 0.1rem solid $zinc;
+		border-top: none;
+
+		.c-menu {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+.c-dropdown--rounded {
+	height: 100%;
+
+	.c-button {
+		display: block;
+		width: 100%;
+		height: 100%;
+		text-align: left;
+		background-color: $white;
+		color: $black;
+		border-color: $silver;
+		border-radius: 4rem;
+		font-weight: unset;
+
+		&__content {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		&:hover {
+			border-color: $zinc;
+		}
+
+		&:focus,
+		&:focus-within {
+			border-color: $zinc;
+		}
+	}
+
+	& + .c-dropdown__content-open {
+		border: 0.1rem solid $zinc;
+		margin-top: 0.5rem;
+
+		.c-menu {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
 .c-dropdown-menu {
 	&__divider {
 		height: 0.1rem;
@@ -49,5 +158,56 @@
 		display: flex;
 		align-items: center;
 		gap: $spacer-xs;
+	}
+}
+
+.u-useroverview-table {
+	tbody {
+		td {
+			padding: 0.4rem 2.4rem !important;
+		}
+
+		td:last-child {
+			padding-right: 1rem !important;
+		}
+	}
+}
+
+.c-actions-dropdown {
+	&.c-dropdown__trigger {
+		margin-top: 0.8rem;
+	}
+
+	.c-button {
+		background-color: $white;
+		color: $black;
+		border: none;
+		font-size: x-large;
+		padding: 0.5rem;
+
+		&:hover {
+			background-color: $platinum;
+		}
+	}
+}
+
+.c-actions-dropdown-flyout {
+	.c-menu {
+		white-space: nowrap;
+		box-shadow: $shadow-24-black-12;
+		padding: 0;
+
+		.c-menu__label {
+			font-family: $font-family-primary;
+			padding: 1rem;
+			font-size: medium;
+			display: flex;
+			align-items: center;
+
+			span {
+				margin-left: $spacer-sm;
+				font-size: xx-large;
+			}
+		}
 	}
 }

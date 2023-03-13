@@ -1,8 +1,8 @@
-import { ContentPageDetail } from '@meemoo/react-admin';
+import { ContentPageDetail } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, FC } from 'react';
+import React, { FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -12,9 +12,10 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-const ContentPageDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
+const ContentPageDetailPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 
@@ -22,7 +23,7 @@ const ContentPageDetailPage: FC<DefaultSeoInfo> = ({ url }) => {
 		return (
 			<AdminLayout>
 				<AdminLayout.Content>
-					<ContentPageDetail id={router.query.id as string} />
+					<ContentPageDetail id={router.query.id as string} commonUser={commonUser} />
 				</AdminLayout.Content>
 			</AdminLayout>
 		);
@@ -52,4 +53,6 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(ContentPageDetailPage as ComponentType));
+export default withAuth(
+	withAdminCoreConfig(withUser(ContentPageDetailPage as FC<unknown>))
+) as FC<DefaultSeoInfo>;

@@ -1,15 +1,19 @@
+import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
 import { FC, useCallback, useEffect, useMemo } from 'react';
-import { useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
+import { BooleanParam } from 'serialize-query-params/lib/params';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
+import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
-import { SHOW_AUTH_QUERY_KEY } from '@home/const';
+import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import {
 	footerLeftItem,
@@ -21,12 +25,17 @@ import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
-import { NotificationCenter, ZendeskWrapper } from '@shared/components';
+import {
+	HetArchiefLogo,
+	HetArchiefLogoType,
+	NotificationCenter,
+	ZendeskWrapper,
+} from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
-import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
@@ -38,6 +47,7 @@ import { getTosAction } from '@shared/store/tos/tos.slice';
 import {
 	selectHasUnreadNotifications,
 	selectIsStickyLayout,
+	selectShowAuthModal,
 	selectShowFooter,
 	selectShowNavigationBorder,
 	selectShowNotificationsCenter,
@@ -59,10 +69,11 @@ const AppLayout: FC = ({ children }) => {
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
 	const showFooter = useSelector(selectShowFooter);
+	const showAuthModal = useSelector(selectShowAuthModal);
 	const showNotificationsCenter = useSelector(selectShowNotificationsCenter);
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.xxl);
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
 	const history = useSelector(selectHistory);
@@ -70,6 +81,12 @@ const AppLayout: FC = ({ children }) => {
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
+	const linkedSpaceOrId: string | null = user?.maintainerId || null;
+	const [query, setQuery] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[SEARCH_QUERY_KEY]: StringParam,
+		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+	});
 
 	useHistory(asPath, history);
 
@@ -107,6 +124,19 @@ const AppLayout: FC = ({ children }) => {
 		dispatch(getTosAction());
 	}, [dispatch]);
 
+	// Sync showAuth query param with store value
+	useEffect(() => {
+		if (user) {
+			setQuery({
+				...query,
+				[SHOW_AUTH_QUERY_KEY]: undefined,
+			});
+			dispatch(setShowAuthModal(false));
+		} else if (typeof query.showAuth === 'boolean') {
+			dispatch(setShowAuthModal(query.showAuth));
+		}
+	}, [dispatch, query.showAuth, user]);
+
 	const userName = (user?.firstName as string) ?? '';
 
 	const onLoginRegisterClick = useCallback(async () => {
@@ -119,30 +149,101 @@ const AppLayout: FC = ({ children }) => {
 
 	const onLogOutClick = useCallback(() => AuthService.logout(), []);
 
+	const onCloseAuthModal = () => {
+		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
+			setQuery({
+				[SHOW_AUTH_QUERY_KEY]: undefined,
+				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+			});
+		}
+		dispatch(setShowAuthModal(false));
+	};
+
 	const rightNavItems: NavigationItem[] = useMemo(() => {
 		if (isLoggedIn) {
 			if (!canManageAccount) {
 				return [];
 			}
-			return NAV_ITEMS_RIGHT_LOGGED_IN({
-				hasUnreadNotifications,
-				notificationsOpen: showNotificationsCenter,
-				userName,
-				onLogOutClick,
-				setNotificationsOpen,
-			});
+
+			return NAV_ITEMS_RIGHT_LOGGED_IN(
+				asPath,
+				navigationItems || {},
+				accessibleVisitorSpaces || [],
+				showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
+				{
+					hasUnreadNotifications,
+					notificationsOpen: showNotificationsCenter,
+					userName,
+					onLogOutClick,
+					setNotificationsOpen,
+				}
+			);
 		}
+
 		return NAV_ITEMS_RIGHT(onLoginRegisterClick);
 	}, [
-		hasUnreadNotifications,
-		isLoggedIn,
-		userName,
-		showNotificationsCenter,
 		onLoginRegisterClick,
+		isLoggedIn,
+		canManageAccount,
+		asPath,
+		navigationItems,
+		accessibleVisitorSpaces,
+		showLinkedSpaceAsHomepage,
+		linkedSpaceSlug,
+		hasUnreadNotifications,
+		showNotificationsCenter,
+		userName,
 		onLogOutClick,
 		setNotificationsOpen,
-		canManageAccount,
 	]);
+
+	const leftNavItems: NavigationItem[] = useMemo(() => {
+		const dynamicItems = getNavigationItemsLeft(
+			asPath,
+			accessibleVisitorSpaces || [],
+			navigationItems || {},
+			user?.permissions || [],
+			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
+			isMobile
+		);
+
+		const staticItems = [
+			{
+				node: (
+					<Link href={ROUTES.home}>
+						<a tabIndex={0}>
+							<HetArchiefLogo
+								className="c-navigation__logo c-navigation__logo--list"
+								type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+							/>
+						</a>
+					</Link>
+				),
+				id: 'logo',
+				path: '/',
+				activeDesktop: false,
+				activeMobile: false,
+				isDivider: false,
+			},
+		];
+
+		if (!isLoggedIn && isMobile) {
+			return dynamicItems;
+		}
+
+		return [...staticItems, ...dynamicItems];
+	}, [
+		asPath,
+		accessibleVisitorSpaces,
+		navigationItems,
+		user?.permissions,
+		showLinkedSpaceAsHomepage,
+		linkedSpaceOrId,
+		isMobile,
+		isLoggedIn,
+	]);
+
+	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
 
 	const onOpenNavDropdowns = () => {
 		// Also close notification center when opening other dropdowns in nav
@@ -157,18 +258,20 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
-			<Navigation showBorder={showBorder}>
+			<Navigation showBorder={showBorder} loggedOutGrid={showLoggedOutGrid}>
+				{!isLoggedIn && isMobile && (
+					<div className="c-navigation__logo--hamburger">
+						<Link href={ROUTES.home}>
+							<a tabIndex={0}>
+								<HetArchiefLogo type={HetArchiefLogoType.Light} />
+							</a>
+						</Link>
+					</div>
+				)}
 				<Navigation.Left
 					currentPath={asPath}
 					hamburgerProps={NAV_HAMBURGER_PROPS()}
-					items={getNavigationItemsLeft(
-						asPath,
-						accessibleVisitorSpaces || [],
-						navigationItems?.[NavigationPlacement.HeaderLeft] || [],
-						user?.permissions || [],
-						showLinkedSpaceAsHomepage ? linkedSpaceSlug : null,
-						isMobile
-					)}
+					items={leftNavItems}
 					placement="left"
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}
@@ -205,6 +308,8 @@ const AppLayout: FC = ({ children }) => {
 			/>
 
 			<ZendeskWrapper />
+
+			<AuthModal isOpen={showAuthModal && !user} onClose={onCloseAuthModal} />
 
 			{showFooter && (
 				<Footer

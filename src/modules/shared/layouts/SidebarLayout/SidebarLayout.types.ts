@@ -5,8 +5,8 @@ import { Breakpoints, DefaultComponentProps } from '@shared/types';
 import { SidebarColor } from '@shared/types/sidebar';
 
 export interface SidebarLayoutProps extends DefaultComponentProps {
-	sidebarLinks: ListNavigationItem[];
 	sidebarTitle: string | ReactNode;
+	sidebarLinks?: ListNavigationItem[];
 	color?: SidebarColor;
 	responsiveTo?: Breakpoints;
 }

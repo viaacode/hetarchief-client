@@ -35,6 +35,7 @@ export interface FilterMenuFilterOption {
 	icon?: IconProps['name'];
 	label: string;
 	form: FC<DefaultFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
+	isDisabled?: () => boolean;
 }
 
 export type OnFilterMenuSortClick = (key: VisitorSpaceSort, order?: OrderDirection) => void;

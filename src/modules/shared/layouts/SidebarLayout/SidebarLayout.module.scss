@@ -24,6 +24,13 @@ $l-sidebar-collapse-to: "md";
 
 	&__sidebar {
 		width: $l-sidebar-width; // force overlap with border
+
+		&--bottom {
+			display: grid;
+			place-items: end center;
+			padding-bottom: $spacer-lg;
+			justify-items: stretch;
+		}
 	}
 
 	&__main {

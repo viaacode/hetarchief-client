@@ -6,7 +6,7 @@ import { SidebarLayoutProps } from './SidebarLayout.types';
 
 const renderSidebarLayout = ({
 	children,
-	sidebarLinks = [],
+	sidebarLinks: sidebarLinks = [],
 	sidebarTitle = '',
 	...rest
 }: PropsWithChildren<Partial<SidebarLayoutProps>> = {}) => {

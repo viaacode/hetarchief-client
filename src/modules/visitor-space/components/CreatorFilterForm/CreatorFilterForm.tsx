@@ -9,7 +9,7 @@ import { useQueryParams } from 'use-query-params';
 import { SearchBar } from '@shared/components';
 import { CheckboxList } from '@shared/components/CheckboxList';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectMediaFilterOptions } from '@shared/store/media';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
@@ -30,6 +30,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 
 	const [query] = useQueryParams(CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
+	const [shouldReset, setShouldReset] = useState<boolean>(false);
 	const [selection, setSelection] = useState<string[]>(() => compact(query.creator || []));
 
 	const { setValue, reset, handleSubmit } = useForm<CreatorFilterFormState>({
@@ -37,9 +38,9 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 		defaultValues,
 	});
 
-	const buckets = (useSelector(selectMediaFilterOptions)?.schema_creator.buckets || []).filter(
-		(bucket) => bucket.key.toLowerCase().includes(search.toLowerCase())
-	);
+	const buckets = (
+		useSelector(selectIeObjectsFilterOptions)?.schema_creator?.buckets || []
+	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Effects
 
@@ -65,6 +66,8 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 						'modules/visitor-space/components/creator-filter-form/creator-filter-form___zoek'
 					)}
 					onSearch={(value) => setSearch(value || '')}
+					shouldReset={shouldReset}
+					onResetFinished={() => setShouldReset(false)}
 				/>
 
 				<div className="u-my-32">
@@ -95,6 +98,8 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 				reset: () => {
 					reset();
 					setSelection(defaultValues.creators);
+					setSearch('');
+					setShouldReset(true);
 				},
 				handleSubmit,
 			})}

@@ -1,7 +1,10 @@
-import { tText } from '@shared/helpers/translate';
+import { ReactNode } from 'react';
+
+import { tHtml, tText } from '@shared/helpers/translate';
 
 export * from './my-collections.const';
 export * from './my-history.const';
+export * from './my-material-requests.const';
 
 export const ACCOUNT_NAVIGATION_LINKS = (): {
 	id: string;
@@ -23,6 +26,12 @@ export const ACCOUNT_NAVIGATION_LINKS = (): {
 		id: 'account-history',
 		label: tText('modules/account/const/index___mijn-historiek'),
 		href: '/account/mijn-historiek',
+		hasDivider: true,
+	},
+	{
+		id: 'account-material-requests',
+		label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+		href: '/account/mijn-materiaalaanvragen',
 		hasDivider: true,
 	},
 ];
@@ -88,4 +97,39 @@ export enum Permission {
 	VIEW_OWN_COLLECTIONS = 'VIEW_OWN_COLLECTIONS',
 	EDIT_NAVIGATION_BARS = 'EDIT_NAVIGATION_BARS',
 	CAN_EDIT_PROFILE_INFO = 'CAN_EDIT_PROFILE_INFO',
+	// Material Requests
+	VIEW_ANY_MATERIAL_REQUESTS = 'VIEW_ANY_MATERIAL_REQUESTS',
+	VIEW_OWN_MATERIAL_REQUESTS = 'VIEW_OWN_MATERIAL_REQUESTS',
+	CREATE_MATERIAL_REQUESTS = 'CREATE_MATERIAL_REQUESTS',
+	EDIT_OWN_MATERIAL_REQUESTS = 'EDIT_OWN_MATERIAL_REQUESTS',
+	DELETE_OWN_MATERIAL_REQUESTS = 'DELETE_OWN_MATERIAL_REQUESTS',
 }
+
+export enum Group {
+	VISITOR = 'VISITOR',
+	KIOSK_VISITOR = 'KIOSK_VISITOR',
+	MEEMOO_ADMIN = 'MEEMOO_ADMIN',
+	CP_ADMIN = 'CP_ADMIN',
+}
+
+export const GET_PERMISSION_TRANSLATIONS_BY_GROUP = (): Record<
+	Group,
+	{ name: string; description: ReactNode | string }
+> => ({
+	[Group.VISITOR]: {
+		name: tText('modules/account/const/account___groep-bezoeker--titel'),
+		description: tHtml('modules/account/const/account___groep-bezoeker--omschrijving'),
+	},
+	[Group.KIOSK_VISITOR]: {
+		name: tText('modules/account/const/account___groep-kiosk--titel'),
+		description: tHtml('modules/account/const/account___groep-kiosk--omschrijving'),
+	},
+	[Group.MEEMOO_ADMIN]: {
+		name: tText('modules/account/const/account___groep-admin--titel'),
+		description: tHtml('modules/account/const/account___groep-admin--omschrijving'),
+	},
+	[Group.CP_ADMIN]: {
+		name: tText('modules/account/const/account___groep-cp--titel'),
+		description: tHtml('modules/account/const/account___groep-cp--omschrijving'),
+	},
+});

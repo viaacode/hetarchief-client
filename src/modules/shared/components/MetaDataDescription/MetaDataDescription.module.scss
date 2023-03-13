@@ -1,0 +1,19 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-metadatadescription";
+
+.#{$component} {
+	padding: $spacer-lg 0 $spacer-lg $spacer-lg;
+
+	&__title {
+		padding-bottom: $spacer-lg;
+	}
+
+	&__read-more {
+		cursor: pointer;
+	}
+
+	[class^="Blade_c-blade__body-wrapper"] {
+		padding-right: $spacer-lg;
+	}
+}

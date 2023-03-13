@@ -1,9 +1,12 @@
 import { Avatar, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 
-import { ACCOUNT_NAVIGATION_LINKS } from '@account/const';
-import { Icon } from '@shared/components';
+import { getNavigationItemsProfileDropdown } from '@navigation/components/Navigation/Navigation.consts';
+import { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
+import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
+import { ROUTE_PARTS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
+import { VisitorSpaceInfo } from '@visitor-space/types';
 
 import { NavigationHamburgerProps, NavigationItem, NavigationLink } from '../components';
 import { NavItemsRightLoggedIn } from '../types';
@@ -17,8 +20,10 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 	return [
 		{
 			id: 'auth-button',
+			path: '',
 			node: (
 				<Button
+					className="c-navigation__auth"
 					key="nav-auth-button"
 					label={tText(
 						'modules/shared/layouts/app-layout/app-layout___inloggen-of-registreren'
@@ -31,18 +36,25 @@ export const NAV_ITEMS_RIGHT = (onLoginRegisterClick: () => void): NavigationIte
 	];
 };
 
-export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
-	hasUnreadNotifications,
-	notificationsOpen,
-	userName,
-	onLogOutClick,
-	setNotificationsOpen,
-}: NavItemsRightLoggedIn): NavigationItem[] => {
+export const NAV_ITEMS_RIGHT_LOGGED_IN = (
+	currentPath: string,
+	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
+	accessibleVisitorSpaces: VisitorSpaceInfo[],
+	linkedSpaceSlug: string | null,
+	{
+		hasUnreadNotifications,
+		notificationsOpen,
+		userName,
+		onLogOutClick,
+		setNotificationsOpen,
+	}: NavItemsRightLoggedIn
+): NavigationItem[] => {
 	const badgeCls = 'c-navigation__notifications-badge';
 
 	return [
 		{
 			id: 'notification-center',
+			path: '',
 			node: (
 				<Button
 					key="nav-notification-center"
@@ -56,28 +68,32 @@ export const NAV_ITEMS_RIGHT_LOGGED_IN = ({
 							[badgeCls]: hasUnreadNotifications,
 						}
 					)}
-					icon={<Icon type="solid" name="notification" aria-hidden />}
+					icon={<Icon name={IconNamesSolid.Notification} aria-hidden />}
 					aria-label={tText('modules/navigation/const/index___notificaties')}
 				/>
 			),
 		},
 		{
 			id: 'user-menu',
+			path: '',
 			node: (
 				<Avatar variants="padded-y" text={userName}>
-					<Icon type="solid" name="user" />
+					<Icon name={IconNamesSolid.User} />
 				</Avatar>
 			),
 			children: [
-				...ACCOUNT_NAVIGATION_LINKS().map(({ label, href, ...rest }) => ({
-					...rest,
-					node: <NavigationLink href={href} label={label} isDropdownItem />,
-				})),
+				...getNavigationItemsProfileDropdown(
+					currentPath,
+					navigationItems,
+					accessibleVisitorSpaces,
+					linkedSpaceSlug
+				),
 				{
 					id: 'log-out',
+					path: ROUTE_PARTS.logout,
 					node: ({ closeDropdowns }) => (
 						<NavigationLink
-							iconStart="log-out"
+							iconStart={IconNamesLight.LogOut}
 							label={tText('modules/navigation/const/index___log-uit')}
 							onClick={() => {
 								onLogOutClick();

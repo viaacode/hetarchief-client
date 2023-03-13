@@ -4,7 +4,7 @@ import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { ROUTE_PARTS } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 
 import { CheckLoginResponse } from './auth.service.types';
@@ -21,12 +21,18 @@ export class AuthService {
 		router: NextRouter
 	): Promise<void> {
 		const { redirectTo, slug, ...otherQueryParams } = query;
-		let originalPath: string = redirectTo as string;
+		let originalPath: string = (redirectTo as string) || router.asPath || '';
 		if ((originalPath || '').endsWith('/' + ROUTE_PARTS.logout)) {
 			originalPath = '/';
 		}
+		if (slug) {
+			originalPath = `/${ROUTE_PARTS.search}/${slug}`;
+		}
+		if ((originalPath || '') === ROUTES.home) {
+			originalPath = `/${ROUTE_PARTS.visit}`;
+		}
 		const returnToUrl = stringifyUrl({
-			url: trimEnd(`${publicRuntimeConfig.CLIENT_URL}/${originalPath ?? slug ?? ''}`, '/'),
+			url: trimEnd(`${publicRuntimeConfig.CLIENT_URL}${originalPath}`, '/'),
 			query: otherQueryParams,
 		});
 

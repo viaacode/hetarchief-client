@@ -56,3 +56,27 @@
 		width: 100%;
 	}
 }
+
+.p-visitor-space__searchbar {
+	width: 100%;
+	margin-top: $spacer-lg;
+
+	&--has-dropdown {
+		display: block;
+
+		@include respond-at("md") {
+			display: grid;
+			grid-template-columns: 26.5rem auto;
+		}
+	}
+
+	.c-tag-search-bar {
+		&--has-info {
+			width: 100%;
+		}
+
+		&--has-dropdown {
+			height: 100%;
+		}
+	}
+}

@@ -9,10 +9,10 @@ import { CreateFolderButton } from '@account/components';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { foldersService } from '@account/services/folders';
 import { Folder } from '@account/types';
-import { Blade, Icon } from '@shared/components';
+import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/media';
+import { selectFolders } from '@shared/store/ie-objects';
 
 import { ADD_TO_FOLDER_FORM_SCHEMA } from './AddToFolderBlade.const';
 import styles from './AddToFolderBlade.module.scss';
@@ -300,7 +300,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						value={`add-to--${pair.folder}`}
 						className={styles['c-add-to-folder-blade__list-item__checkbox']}
 						checked={pair.checked}
-						checkIcon={<Icon name="check" />}
+						checkIcon={<Icon name={IconNamesLight.Check} />}
 						onClick={(e) => e.stopPropagation()}
 						variants={['no-label']}
 					/>
