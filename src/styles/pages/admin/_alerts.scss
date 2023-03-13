@@ -1,0 +1,52 @@
+@use "src/styles/abstracts" as *;
+
+.p-admin-alerts {
+	.c-icon-picker .react-select__control {
+		border-radius: 0;
+		color: #000;
+		transition: outline-color 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+		background-color: #fff;
+		border: 1px solid $zinc;
+		font-size: 1.6rem;
+		height: 4.8rem;
+		outline: 1px solid transparent;
+
+		&:hover {
+			box-shadow: none;
+			border-color: $zinc;
+			outline-color: $zinc;
+		}
+
+		&:focus {
+			border-color: $teal;
+		}
+	}
+
+	.c-input--date-time {
+		.c-form-control__input {
+			@include respond-at("lg") {
+				display: flex;
+				flex-flow: row nowrap;
+			}
+		}
+
+		.react-datepicker-wrapper.c-datepicker {
+			&:not(.react-datepicker-wrapper.c-datepicker--time) {
+				@include respond-to("lg") {
+					margin-bottom: $spacer-sm;
+				}
+
+				@include respond-at("lg") {
+					margin-right: $spacer-md;
+					flex-grow: 1;
+				}
+			}
+		}
+
+		.react-datepicker-wrapper.c-datepicker--time {
+			@include respond-at("lg") {
+				flex: 0 0 14rem;
+			}
+		}
+	}
+}

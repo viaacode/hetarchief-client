@@ -14,7 +14,7 @@ import { ComponentType, FunctionComponent, useCallback, useEffect, useState } fr
 import { useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
-import { Icon, ICON_LIST_CONFIG, IconName } from '@shared/components';
+import { ALERT_ICON_LIST_CONFIG, Icon, ICON_LIST_CONFIG, IconName } from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -110,15 +110,19 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						angleRight: { name: 'angle-right' },
 						extraOptions: { name: 'dots-vertical' },
 						copy: { name: 'copy' },
-						delete: { name: 'trash' },
-						edit: { name: 'edit' },
+						delete: { name: 'trash--light' },
+						edit: { name: 'edit--light' },
 						filter: { name: 'search' },
 						arrowUp: { name: 'arrow-up' },
 						sortTable: { name: 'sort-table' },
 						arrowDown: { name: 'arrow-down' },
 						chevronLeft: { name: 'angle-left' },
+						check: { name: 'check--light' },
+						calendar: { name: 'calendar--light' },
+						clock: { name: 'clock--light' },
 					},
 					list: ICON_LIST_CONFIG,
+					alerts: ALERT_ICON_LIST_CONFIG,
 				},
 				components: {
 					loader: {
