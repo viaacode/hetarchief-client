@@ -104,8 +104,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					componentProps: {
 						add: { name: 'plus' },
 						view: { name: 'show' },
-						angleDown: { name: 'angle-down' },
-						angleUp: { name: 'angle-up' },
+						angleDown: { name: 'angle-down--light' },
+						angleUp: { name: 'angle-up--light' },
 						angleLeft: { name: 'angle-left' },
 						angleRight: { name: 'angle-right' },
 						extraOptions: { name: 'dots-vertical' },
