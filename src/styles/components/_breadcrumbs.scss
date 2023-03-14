@@ -11,6 +11,7 @@
 	&__item {
 		display: inline-flex;
 		align-items: center;
+		margin-bottom: $spacer-xxs;
 	}
 
 	&__link {
