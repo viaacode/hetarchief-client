@@ -696,7 +696,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 						{showResearchWarning && (
 							<aside className="u-bg-platinum">
-								<div className="l-container u-flex u-justify-center u-py-32">
+								<div className="l-container u-py-32">
 									<Callout
 										icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 										text={tHtml(
