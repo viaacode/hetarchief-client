@@ -12,6 +12,7 @@ import { useQueryParams } from 'use-query-params';
 import { Permission } from '@account/const';
 import { selectIsLoggedIn } from '@auth/store/user';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
+import { IeObjectAccessThrough } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,
@@ -485,6 +486,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				preview: item.thumbnailUrl || undefined,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
+				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.KEY_USER),
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),

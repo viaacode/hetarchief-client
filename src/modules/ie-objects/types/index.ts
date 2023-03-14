@@ -61,6 +61,7 @@ export interface IeObject {
 }
 
 export enum IeObjectAccessThrough {
+	KEY_USER = 'KEY_USER',
 	PUBLIC_INFO = 'PUBLIC_INFO',
 	VISITOR_SPACE_FULL = 'VISITOR_SPACE_FULL',
 	VISITOR_SPACE_FOLDERS = 'VISITOR_SPACE_FOLDERS',
