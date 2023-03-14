@@ -539,8 +539,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			},
 		];
 
-		console.log(mediaInfo);
-
 		const dynamicBreadcrumbs: Breadcrumb[] = !isNil(mediaInfo)
 			? [
 					{
