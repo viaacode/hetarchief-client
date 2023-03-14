@@ -119,7 +119,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
-	const filterOptions = useSelector(selectIeObjectsFilterOptions);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
