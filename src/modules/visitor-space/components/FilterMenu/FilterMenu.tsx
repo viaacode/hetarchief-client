@@ -140,26 +140,22 @@ const FilterMenu: FC<FilterMenuProps> = ({
 							onOptionClick={onSortClick}
 						/>
 					)}
-					{filters.map((option) => {
-						console.log(option, option.id, query);
-
-						return (
-							<FilterOption
-								{...option}
-								key={`filter-menu-option-${option.id}`}
-								className={clsx({
-									[styles['c-filter-menu__button--operative']]: !isNil(
-										filterValues?.[option?.id]
-									),
-								})}
-								activeFilter={query.filter}
-								values={filterValues?.[option.id]}
-								onClick={onFilterClick}
-								onFormReset={onFilterFormReset}
-								onFormSubmit={onFilterFormSubmit}
-							/>
-						);
-					})}
+					{filters.map((option) => (
+						<FilterOption
+							{...option}
+							key={`filter-menu-option-${option.id}`}
+							className={clsx({
+								[styles['c-filter-menu__button--operative']]: !isNil(
+									filterValues?.[option?.id]
+								),
+							})}
+							activeFilter={query.filter}
+							values={filterValues?.[option.id]}
+							onClick={onFilterClick}
+							onFormReset={onFilterFormReset}
+							onFormSubmit={onFilterFormSubmit}
+						/>
+					))}
 				</div>
 			)}
 			<FilterMenuMobile
