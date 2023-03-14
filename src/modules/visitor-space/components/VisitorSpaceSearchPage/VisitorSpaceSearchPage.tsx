@@ -477,6 +477,7 @@ const VisitorSpaceSearchPage: FC = () => {
 			return {
 				schemaIdentifier: item.schemaIdentifier,
 				maintainerSlug: item.maintainerSlug,
+				duration: item.duration,
 				description: item.description,
 				title: item.name,
 				publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
