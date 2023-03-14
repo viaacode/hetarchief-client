@@ -1,9 +1,8 @@
-import { Dropdown, RadioButton } from '@meemoo/react-components';
+import { CheckboxList, Dropdown, RadioButton } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
 import { FC, ReactElement, ReactNode, useEffect, useState } from 'react';
 
-import { CheckboxList } from '../CheckboxList';
 import { Icon, IconNamesLight } from '../Icon';
 
 import styles from './RefinableRadioButton.module.scss';
@@ -69,7 +68,9 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 					iconClosed={<Icon name={IconNamesLight.AngleDown} />}
 				>
 					<CheckboxList
-						className={styles['c-refinable-radio-button__checkbox-list']}
+						className={
+							(styles['c-refinable-radio-button__checkbox-list'], 'c-checkbox-list')
+						}
 						itemClassName={styles['c-refinable-radio-button__checkbox-list-item']}
 						items={options.map(({ id, label }: RefinableRadioButtonRefineOption) => ({
 							value: id,
