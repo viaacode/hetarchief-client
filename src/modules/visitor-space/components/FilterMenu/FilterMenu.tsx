@@ -1,5 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isNil } from 'lodash-es';
 import { FC, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
@@ -36,9 +37,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onRemoveValue,
 	showNavigationBorder,
 }) => {
-	const [query, setQuery] = useQueryParams({
-		filter: VISITOR_SPACE_QUERY_PARAM_CONFIG.filter,
-	});
+	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
 	const [lockScroll, setLockScroll] = useState<boolean>(false);
 	// We need different functionalities for different viewport sizes
@@ -129,6 +128,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					</div>
 				)}
 			</div>
+
 			{isOpen && !isMobile && (
 				<div className={styles['c-filter-menu__list']}>
 					{sortOptions.length > 0 && (
@@ -140,18 +140,26 @@ const FilterMenu: FC<FilterMenuProps> = ({
 							onOptionClick={onSortClick}
 						/>
 					)}
-					{filters.map((option) => (
-						<FilterOption
-							{...option}
-							key={`filter-menu-option-${option.id}`}
-							className={styles['c-filter-menu__option']}
-							activeFilter={query.filter}
-							values={filterValues?.[option.id]}
-							onClick={onFilterClick}
-							onFormReset={onFilterFormReset}
-							onFormSubmit={onFilterFormSubmit}
-						/>
-					))}
+					{filters.map((option) => {
+						console.log(option, option.id, query);
+
+						return (
+							<FilterOption
+								{...option}
+								key={`filter-menu-option-${option.id}`}
+								className={clsx({
+									[styles['c-filter-menu__button--operative']]: !isNil(
+										filterValues?.[option?.id]
+									),
+								})}
+								activeFilter={query.filter}
+								values={filterValues?.[option.id]}
+								onClick={onFilterClick}
+								onFormReset={onFilterFormReset}
+								onFormSubmit={onFilterFormSubmit}
+							/>
+						);
+					})}
 				</div>
 			)}
 			<FilterMenuMobile
