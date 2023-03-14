@@ -1,4 +1,5 @@
 import {
+	Breadcrumb,
 	Breadcrumbs,
 	Button,
 	FormControl,
@@ -501,6 +502,41 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * Render
 	 */
 
+	const renderBreadcrumbs = (): ReactNode => {
+		const staticBreadcrumbs: Breadcrumb[] = [
+			{
+				label: `${tHtml(
+					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___home'
+				)}`,
+				to: ROUTES.home,
+			},
+			{
+				label: `${tHtml(
+					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___search'
+				)}`,
+				to: ROUTES.search,
+			},
+		];
+
+		const dynamicBreadcrumbs: Breadcrumb[] =
+			!isNil(activeVisitorSpace) && activeVisitorSpace.spaceMaintainerId !== PUBLIC_COLLECTION
+				? [
+						{
+							label: activeVisitorSpace?.spaceName || '',
+							to: `${ROUTES.search}?maintainer=${activeVisitorSpace?.spaceMaintainerId}`,
+						},
+				  ]
+				: [];
+
+		return (
+			<Breadcrumbs
+				className="u-my-16"
+				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
+				icon={<Icon name={IconNamesLight.AngleRight} />}
+			/>
+		);
+	};
+
 	const renderFilterMenu = () => {
 		const filterMenuCls = clsx('p-visitor-space__filter-menu', {
 			'u-mr-32:md': viewMode === 'list' && isLoadedWithResults,
@@ -697,24 +733,7 @@ const VisitorSpaceSearchPage: FC = () => {
 							)}
 						>
 							<div className="l-container">
-								<Breadcrumbs
-									className="u-my-16"
-									items={[
-										{
-											label: `${tHtml(
-												'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___home'
-											)}`,
-											to: ROUTES.home,
-										},
-										{
-											label: `${tHtml(
-												'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___search'
-											)}`,
-											to: ROUTES.search,
-										},
-									]}
-									icon={<Icon name={IconNamesLight.AngleRight} />}
-								/>
+								{!showResearchWarning && renderBreadcrumbs()}
 
 								{/* Only render filters when there are no results yet, when the results are loaded we render the filter menu using MediaCardList */}
 								{!isLoadedWithResults && renderFilterMenu()}
