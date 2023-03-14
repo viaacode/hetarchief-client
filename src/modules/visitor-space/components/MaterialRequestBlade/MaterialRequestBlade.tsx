@@ -15,17 +15,23 @@ import styles from './MaterialRequestBlade.module.scss';
 
 interface MaterialRequestBladeProps {
 	isOpen: boolean;
+	isEditMode?: boolean;
 	onClose: () => void;
 	objectName: string;
 	objectId: string;
-	objectType: string;
+	objectType?: string | undefined;
 	maintainerName: string;
 	maintainerLogo: string;
 	maintainerSlug: string;
+	materialRequestId?: string;
+	reason?: string;
+	refetch?: () => void;
+	type?: MaterialRequestType;
 }
 
 const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	isOpen,
+	isEditMode = false,
 	onClose,
 	objectName,
 	objectId,
@@ -33,12 +39,18 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	maintainerName,
 	maintainerLogo,
 	maintainerSlug,
+	materialRequestId,
+	reason,
+	refetch,
+	type,
 }) => {
 	const { tText } = useTranslation();
 	const dispatch = useDispatch();
 
-	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(MaterialRequestType.VIEW);
-	const [reasonInputValue, setReasonInputValue] = useState('');
+	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(
+		type || MaterialRequestType.VIEW
+	);
+	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 	const [showError, setShowError] = useState(false);
 
 	const onCloseModal = () => {
@@ -89,6 +101,42 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		}
 	};
 
+	const onEditRequest = async () => {
+		if (!materialRequestId) {
+			onFailedRequest();
+		} else {
+			try {
+				if (reasonInputValue.length > 0) {
+					const response = await MaterialRequestsService.update(materialRequestId, {
+						type: typeSelected,
+						reason: reasonInputValue,
+						requesterCapacity: 'OTHER',
+					});
+					if (response === undefined) {
+						onFailedRequest();
+						return;
+					}
+					toastService.notify({
+						maxLines: 3,
+						title: tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
+						),
+						description: tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
+						),
+					});
+					onSuccesCreated();
+					refetch && refetch();
+					onCloseModal();
+				} else {
+					setShowError(true);
+				}
+			} catch (err) {
+				onFailedRequest();
+			}
+		}
+	};
+
 	const onFailedRequest = () => {
 		toastService.notify({
 			maxLines: 3,
@@ -106,7 +154,49 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		setReasonInputValue(e.target.value);
 	};
 
+	const renderTitle = () => {
+		if (isEditMode) {
+			return (
+				<h2 className={styles['c-request-material__title']}>
+					{tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
+					)}
+				</h2>
+			);
+		}
+		return (
+			<h2 className={styles['c-request-material__title']}>
+				{tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
+				)}
+			</h2>
+		);
+	};
+
 	const renderFooter = () => {
+		if (isEditMode) {
+			return (
+				<div className={styles['c-request-material__footer-container']}>
+					<Button
+						label={tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
+						)}
+						variants={['block', 'text']}
+						onClick={onEditRequest}
+						className={styles['c-request-material__verstuur-button']}
+					/>
+
+					<Button
+						label={tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
+						)}
+						variants={['block', 'text']}
+						onClick={onCloseModal}
+						className={styles['c-request-material__annuleer-button']}
+					/>
+				</div>
+			);
+		}
 		return (
 			<div className={styles['c-request-material__footer-container']}>
 				<Button
@@ -140,13 +230,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h2 className={styles['c-request-material__title']}>
-					{tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
-					)}
-				</h2>
-			)}
+			renderTitle={renderTitle}
 			footer={isOpen && renderFooter()}
 			onClose={onCloseModal}
 		>

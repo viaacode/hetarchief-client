@@ -11,7 +11,7 @@ export interface MaterialRequest {
 	objectMeemooIdentifier: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
-	objectType?: 'audio' | 'video' | 'film';
+	objectType?: 'audio' | 'video' | 'film' | undefined;
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
@@ -32,6 +32,13 @@ export interface MaterialRequestDetail extends MaterialRequest {
 
 export interface MaterialRequestCreation {
 	objectId: string;
+	type: MaterialRequestType;
+	reason: string;
+	requesterCapacity: 'OTHER' | 'WORK' | 'PRIVATE_RESEARCH' | 'EDUCATION';
+	organisation?: string;
+}
+
+export interface MaterialRequestUpdate {
 	type: MaterialRequestType;
 	reason: string;
 	requesterCapacity: 'OTHER' | 'WORK' | 'PRIVATE_RESEARCH' | 'EDUCATION';

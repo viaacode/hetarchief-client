@@ -14,6 +14,7 @@ import {
 import { Blade, Icon, IconNamesLight, Loading } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setMaterialRequestCount } from '@shared/store/ui';
+import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade';
 
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
 
@@ -29,6 +30,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const dispatch = useDispatch();
 
 	const [isPersonalInfoBladeOpen, setIsPersonalInfoBladeOpen] = useState(false);
+	const [isEditMaterialRequestBladeOpen, setIsEditMaterialRequestBladeOpen] = useState(false);
+	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
+		null
+	);
 
 	const user = useSelector(selectUser);
 
@@ -82,6 +87,16 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			isPending: true,
 		});
 		dispatch(setMaterialRequestCount(getResponse.items.length));
+	};
+
+	const closeEditMaterialRequestBlade = () => {
+		setIsEditMaterialRequestBladeOpen(false);
+		setSelectedMaterialRequest(null);
+	};
+
+	const editMaterialRequest = (item: MaterialRequest) => {
+		setSelectedMaterialRequest(item);
+		setIsEditMaterialRequestBladeOpen(true);
 	};
 
 	const renderTitle = () => {
@@ -173,7 +188,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						className={
 							styles['c-material-request-center-blade__material-actions-button']
 						}
-						onClick={() => console.log('edit')}
+						onClick={() => editMaterialRequest(item)}
 						variants={['silver']}
 						name="Edit"
 						icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
@@ -282,6 +297,23 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			>
 				{renderContent()}
 			</Blade>
+			{selectedMaterialRequest && (
+				<MaterialRequestBlade
+					isOpen={isEditMaterialRequestBladeOpen}
+					onClose={() => closeEditMaterialRequestBlade()}
+					objectName={selectedMaterialRequest.objectSchemaName}
+					objectId={selectedMaterialRequest.objectMeemooIdentifier}
+					objectType={selectedMaterialRequest.objectType}
+					maintainerName={selectedMaterialRequest.maintainerName}
+					maintainerLogo={selectedMaterialRequest.maintainerLogo}
+					maintainerSlug={selectedMaterialRequest.maintainerSlug}
+					materialRequestId={selectedMaterialRequest.id}
+					reason={selectedMaterialRequest.reason}
+					type={selectedMaterialRequest.type}
+					refetch={refetch}
+					isEditMode
+				/>
+			)}
 			{user && (
 				<PersonalInfoBlade
 					isOpen={isPersonalInfoBladeOpen}

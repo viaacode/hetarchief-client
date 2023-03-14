@@ -11,6 +11,7 @@ import {
 	MaterialRequestCreation,
 	MaterialRequestDetail,
 	MaterialRequestMaintainer,
+	MaterialRequestUpdate,
 } from 'modules/material-requests/types';
 
 export class MaterialRequestsService {
@@ -61,6 +62,15 @@ export class MaterialRequestsService {
 
 	public static async create(json: MaterialRequestCreation): Promise<void> {
 		return ApiService.getApi().put(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}`, { json }).json();
+	}
+
+	public static async update(
+		id: string,
+		json: MaterialRequestUpdate
+	): Promise<MaterialRequestDetail | null> {
+		return ApiService.getApi()
+			.patch(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`, { json })
+			.json();
 	}
 
 	public static async delete(id: string | null): Promise<MaterialRequestDetail | null> {
