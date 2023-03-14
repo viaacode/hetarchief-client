@@ -41,6 +41,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		orderDirection: 'asc' as OrderDirection,
 	});
 
+	const noContent =
+		!materialRequests?.items || (materialRequests?.items && materialRequests?.items.length < 1);
+
 	// Ward: create an object containing all the distinct maintainerId's as properties
 	// with per property an array of materialRequests, that has the same maintainerId as the property, as value
 	const mappedRequests = useMemo(() => {
@@ -194,6 +197,15 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	};
 
 	const renderContent = () => {
+		if (noContent) {
+			return (
+				<p className={styles['c-material-request-center-blade__no-content']}>
+					{tText(
+						'modules/navigation/components/material-request-center-blade/material-request-center-blade___no-content'
+					)}
+				</p>
+			);
+		}
 		return (
 			mappedRequests &&
 			// Ward: render each unique maintainer
@@ -211,6 +223,20 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	};
 
 	const renderFooter = () => {
+		if (noContent) {
+			return (
+				<div className={styles['c-material-request-center-blade__close-button-container']}>
+					<Button
+						label={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
+						)}
+						variants={['block', 'text']}
+						onClick={onClose}
+						className={styles['c-material-request-center-blade__send-button']}
+					/>
+				</div>
+			);
+		}
 		return (
 			<div className={styles['c-material-request-center-blade__close-button-container']}>
 				{user && (

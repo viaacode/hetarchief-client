@@ -135,4 +135,11 @@ $component: "c-material-request-center-blade";
 			color: $zinc !important;
 		}
 	}
+
+	&__no-content {
+		display: flex;
+		justify-content: center;
+		color: $black;
+		padding: $spacer-lg;
+	}
 }

@@ -293,6 +293,7 @@
 	"modules/navigation/components/material-request-center-blade/material-request-center-blade___aangevraagd": "Aangevraagd bij",
 	"modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst": "Aanvraaglijst",
 	"modules/navigation/components/material-request-center-blade/material-request-center-blade___meerdere-aanbieders": "Je hebt materiaal van meerdere aanbieders toegevoegd. <a>Meer info</a>",
+	"modules/navigation/components/material-request-center-blade/material-request-center-blade___no-content": "Geen goed te keuren materiaalaanvragen beschikbaar.",
 	"modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan": "Pas je aanvraag aan",
 	"modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit": "Sluit",
 	"modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag": "Verwijder materiaal aanvraag",
