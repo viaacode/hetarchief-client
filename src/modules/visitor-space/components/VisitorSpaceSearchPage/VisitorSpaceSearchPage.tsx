@@ -694,9 +694,13 @@ const VisitorSpaceSearchPage: FC = () => {
 							</div>
 						</section>
 
-						{showResearchWarning ? (
-							<aside className="u-bg-platinum">
-								<div className="l-container u-py-32">
+						<aside className="u-bg-platinum">
+							<div
+								className={clsx('l-container', {
+									'u-py-32': showResearchWarning,
+								})}
+							>
+								{showResearchWarning ? (
 									<Callout
 										icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 										text={tHtml(
@@ -720,11 +724,12 @@ const VisitorSpaceSearchPage: FC = () => {
 											</Link>
 										}
 									/>
-								</div>
-							</aside>
-						) : (
-							<div className="u-bg-platinum l-container">{renderBreadcrumbs()}</div>
-						)}
+								) : (
+									renderBreadcrumbs()
+								)}
+							</div>
+						</aside>
+
 						<section
 							className={clsx(
 								'p-visitor-space__results u-page-bottom-margin u-bg-platinum',
