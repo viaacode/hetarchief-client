@@ -694,7 +694,7 @@ const VisitorSpaceSearchPage: FC = () => {
 							</div>
 						</section>
 
-						{showResearchWarning && (
+						{showResearchWarning ? (
 							<aside className="u-bg-platinum">
 								<div className="l-container u-py-32">
 									<Callout
@@ -722,6 +722,8 @@ const VisitorSpaceSearchPage: FC = () => {
 									/>
 								</div>
 							</aside>
+						) : (
+							<div className="u-bg-platinum l-container">{renderBreadcrumbs()}</div>
 						)}
 						<section
 							className={clsx(
@@ -733,8 +735,6 @@ const VisitorSpaceSearchPage: FC = () => {
 							)}
 						>
 							<div className="l-container">
-								{!showResearchWarning && renderBreadcrumbs()}
-
 								{/* Only render filters when there are no results yet, when the results are loaded we render the filter menu using MediaCardList */}
 								{!isLoadedWithResults && renderFilterMenu()}
 								{isLoadedWithoutResults && (
