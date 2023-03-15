@@ -106,7 +106,7 @@ export class IeObjectsService {
 
 	public static async getRelated(
 		id: string,
-		esIndex: string,
+		maintainerId: string,
 		meemooId: string
 	): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
@@ -114,7 +114,7 @@ export class IeObjectsService {
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${meemooId}`,
 					query: {
-						...(!isEmpty(esIndex) && { esIndex }),
+						...(!isEmpty(maintainerId) && { maintainerId }),
 					},
 				})
 			)
