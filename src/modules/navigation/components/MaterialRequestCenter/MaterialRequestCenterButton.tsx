@@ -1,6 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -14,6 +14,7 @@ import styles from './MaterialRequestCenterButton.module.scss';
 
 const MaterialRequestCenterButton: FC = () => {
 	const { tText } = useTranslation();
+
 	const [isBladeOpen, setIsBladeOpen] = useState(false);
 	const [isAnimated, setIsAnimated] = useState(false);
 	const [previousMaterialCount, setPreviousMaterialCount] = useState<number | undefined>();
@@ -72,8 +73,7 @@ const MaterialRequestCenterButton: FC = () => {
 						<Icon
 							name={IconNamesSolid.Request}
 							aria-hidden
-							// Ward: mirror the icon to match design
-							style={{ transform: 'scale(-1, 1)' }}
+							className={styles['c-material-request-center__icon-container-icon']}
 						/>
 						{materialRequestCount > 0 && (
 							<span

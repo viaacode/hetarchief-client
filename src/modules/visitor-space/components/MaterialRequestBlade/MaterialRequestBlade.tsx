@@ -5,7 +5,11 @@ import React, { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { MaterialRequestsService } from '@material-requests/services';
-import { MaterialRequestType } from '@material-requests/types';
+import {
+	MaterialRequestObjectType,
+	MaterialRequestRequesterCapacity,
+	MaterialRequestType,
+} from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -19,7 +23,7 @@ interface MaterialRequestBladeProps {
 	onClose: () => void;
 	objectName: string;
 	objectId: string;
-	objectType?: string | undefined;
+	objectType?: MaterialRequestObjectType | undefined;
 	maintainerName: string;
 	maintainerLogo: string;
 	maintainerSlug: string;
@@ -76,7 +80,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					objectId,
 					type: typeSelected,
 					reason: reasonInputValue,
-					requesterCapacity: 'OTHER',
+					requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
 				});
 				if (response === undefined) {
 					onFailedRequest();
@@ -110,7 +114,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					const response = await MaterialRequestsService.update(materialRequestId, {
 						type: typeSelected,
 						reason: reasonInputValue,
-						requesterCapacity: 'OTHER',
+						requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
 					});
 					if (response === undefined) {
 						onFailedRequest();
@@ -266,7 +270,9 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						<Icon
 							className={styles['c-request-material__material-label-icon']}
 							name={
-								objectType === 'audio' ? IconNamesLight.Audio : IconNamesLight.Video
+								objectType === MaterialRequestObjectType.AUDIO
+									? IconNamesLight.Audio
+									: IconNamesLight.Video
 							}
 						/>
 						<span>{objectName}</span>

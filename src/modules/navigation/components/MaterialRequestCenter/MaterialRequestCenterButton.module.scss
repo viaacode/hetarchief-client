@@ -1,6 +1,7 @@
 @use "src/styles/abstracts" as *;
 
 $badge-font-size: 1rem;
+$pill-animation: 0.5s ease-in 7 alternate flash-pill;
 
 .c-material-request-center {
 	position: relative;
@@ -18,7 +19,7 @@ $badge-font-size: 1rem;
 			justify-content: center;
 			align-items: center;
 			color: $black;
-			font-weight: 700;
+			font-weight: $font-weight-bold;
 			font-size: $badge-font-size;
 			border-radius: 0.8rem;
 			top: 0.5rem;
@@ -26,34 +27,35 @@ $badge-font-size: 1rem;
 			width: 2rem;
 			height: 1.6rem;
 			background-color: $coral;
-			transition: all 0.5s;
+			transition: color 0.5s, border-color 0.5s, box-shadow 0.5s;
 
 			&--animated {
 				background-color: red;
 				color: white;
 				border-color: transparent;
 				box-shadow: 0 0 10px 2px darken(red, 10%);
-				animation-name: flash-pill;
-				animation-duration: 0.5s;
-				animation-iteration-count: 7;
-				animation-timing-function: ease-in;
-				animation-direction: alternate;
-				transition: all 0.5s;
+				animation: $pill-animation;
+				transition: color 0.5s, border-color 0.5s, box-shadow 0.5s;
 			}
+		}
+
+		&-icon {
+			// Ward: mirror the icon to match design
+			transform: scale(-1, 1);
 		}
 	}
 }
 
 @keyframes flash-pill {
 	0% {
-		box-shadow: 0 0 2px 2px darken(red, 10%);
+		box-shadow: 0 0 0.2rem 0.2rem darken(red, 10%);
 	}
 
 	50% {
-		box-shadow: 0 0 20px 4px darken(red, 10%);
+		box-shadow: 0 0 2rem 0.4rem darken(red, 10%);
 	}
 
 	100% {
-		box-shadow: 0 0 2px 2px darken(red, 10%);
+		box-shadow: 0 0 0.2rem 0.2rem darken(red, 10%);
 	}
 }

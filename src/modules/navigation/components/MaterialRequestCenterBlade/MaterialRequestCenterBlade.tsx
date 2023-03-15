@@ -9,6 +9,7 @@ import { MaterialRequestsService } from '@material-requests/services';
 import {
 	MaterialRequest,
 	MaterialRequestKeys,
+	MaterialRequestObjectType,
 	MaterialRequestRequesterCapacity,
 } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight, Loading } from '@shared/components';
@@ -170,7 +171,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 									styles['c-material-request-center-blade__material-label-icon']
 								}
 								name={
-									item.objectType === 'audio'
+									item.objectType === MaterialRequestObjectType.AUDIO
 										? IconNamesLight.Audio
 										: IconNamesLight.Video
 								}
