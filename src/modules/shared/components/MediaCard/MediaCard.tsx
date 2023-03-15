@@ -77,7 +77,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		return meemooIdentifier;
 	};
 
-	const renderSubSubtitle = (): ReactNode => {
+	const renderCaption = (): ReactNode => {
 		let subtitle = '';
 
 		if (publishedBy) {
@@ -178,7 +178,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				title={renderTitle()}
 				image={renderHeader()}
 				subtitle={renderSubTitle()}
-				subsubtitle={renderSubSubtitle()}
+				caption={renderCaption()}
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
