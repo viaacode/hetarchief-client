@@ -3,13 +3,13 @@
 .p-admin-alerts {
 	.c-icon-picker .react-select__control {
 		border-radius: 0;
-		color: #000;
+		color: $black;
 		transition: outline-color 200ms cubic-bezier(0.4, 0, 0.2, 1), border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 		background-color: #fff;
 		border: 1px solid $zinc;
 		font-size: 1.6rem;
 		height: 4.8rem;
-		outline: 1px solid transparent;
+		outline: 0.1rem solid transparent;
 
 		&:hover {
 			box-shadow: none;

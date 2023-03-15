@@ -129,15 +129,15 @@ export enum IconNamesSolid {
 }
 
 export enum AlertIconNames {
-	Notification = 'notification--light',
-	User = 'user--light',
-	Question = 'question--light',
-	Info = 'info--light',
-	Exclamation = 'exclamation--light',
-	Key = 'key--light',
-	Calendar = 'calendar--light',
-	Book = 'book--light',
-	AngleRight = 'angle-right--light',
+	Notification = IconNamesLight.Notification,
+	User = IconNamesLight.User,
+	Question = IconNamesLight.Question,
+	Info = IconNamesLight.Info,
+	Exclamation = IconNamesLight.Exclamation,
+	Key = IconNamesLight.Key,
+	Calendar = IconNamesLight.Calendar,
+	Book = IconNamesLight.Book,
+	AngleRight = IconNamesLight.AngleRight,
 }
 
 export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {

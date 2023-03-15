@@ -77,7 +77,7 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 					)}
 
 					<CheckboxList
-						className="u-my-16 c-checkbox-list"
+						className="u-my-16"
 						items={buckets.map((bucket) => ({
 							...bucket,
 							value: bucket.key,

@@ -68,9 +68,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 					iconClosed={<Icon name={IconNamesLight.AngleDown} />}
 				>
 					<CheckboxList
-						className={
-							(styles['c-refinable-radio-button__checkbox-list'], 'c-checkbox-list')
-						}
+						className={styles['c-refinable-radio-button__checkbox-list']}
 						itemClassName={styles['c-refinable-radio-button__checkbox-list-item']}
 						items={options.map(({ id, label }: RefinableRadioButtonRefineOption) => ({
 							value: id,
