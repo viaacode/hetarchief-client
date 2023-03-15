@@ -1,7 +1,15 @@
-import { Alert, Button, FlowPlayer, FlowPlayerProps, TabProps } from '@meemoo/react-components';
+import {
+	Alert,
+	Breadcrumb,
+	Breadcrumbs,
+	Button,
+	FlowPlayer,
+	FlowPlayerProps,
+	TabProps,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { capitalize, kebabCase, lowerCase } from 'lodash-es';
+import { capitalize, isNil, kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -62,6 +70,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { MetaDataDescription } from '@shared/components/MetaDataDescription';
+import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -518,6 +527,61 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</li>
 	);
 
+	const renderBreadcrumbs = (): ReactNode => {
+		const staticBreadcrumbs: Breadcrumb[] = [
+			{
+				label: `${tHtml('pages/slug/ie/index___breadcrumbs___home')}`,
+				to: ROUTES.home,
+			},
+			{
+				label: `${tHtml('pages/slug/ie/index___breadcrumbs___search')}`,
+				to: ROUTES.search,
+			},
+		];
+
+		const dynamicBreadcrumbs: Breadcrumb[] = !isNil(mediaInfo)
+			? [
+					{
+						label: mediaInfo?.maintainerName,
+						to: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
+					},
+					{
+						label: mediaInfo?.name,
+						to: `${ROUTES.search}/${mediaInfo?.maintainerSlug}/${mediaInfo?.schemaIdentifier}`,
+					},
+			  ]
+			: [];
+
+		return (
+			<Breadcrumbs
+				className="u-mt-32"
+				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
+				icon={<Icon name={IconNamesLight.AngleRight} />}
+			/>
+		);
+	};
+
+	const renderResearchWarning = (): ReactNode => (
+		<Callout
+			className="p-object-detail__callout u-pt-32 u-pb-24"
+			icon={<Icon name={IconNamesLight.Info} aria-hidden />}
+			text={tHtml(
+				'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+			)}
+			action={
+				<Link passHref href="/kiosk-voorwaarden">
+					<a aria-label={tText('pages/slug/index___meer-info')}>
+						<Button
+							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+							label={tHtml('pages/slug/index___meer-info')}
+							variants={['text', 'underline']}
+						/>
+					</a>
+				</Link>
+			}
+		/>
+	);
+
 	const renderMetadataCards = (
 		type: 'similar' | 'related',
 		items: MediaObject[],
@@ -544,34 +608,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		return (
 			<div>
 				<div className="p-object-detail__metadata-content">
-					{showResearchWarning && (
-						<Callout
-							className="p-object-detail__callout u-pt-32 u-pb-24"
-							icon={<Icon name={IconNamesLight.Info} aria-hidden />}
-							text={tHtml(
-								'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
-							)}
-							action={
-								<Link passHref href="/kiosk-voorwaarden">
-									<a aria-label={tText('pages/slug/index___meer-info')}>
-										<Button
-											className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-											label={tHtml('pages/slug/index___meer-info')}
-											variants={['text', 'underline']}
-										/>
-									</a>
-								</Link>
-							}
-						/>
-					)}
-					<h3
-						className={clsx('u-pb-24', 'p-object-detail__title', {
-							'u-pt-24': showResearchWarning,
-							'u-pt-32': !showResearchWarning,
-						})}
-					>
-						{mediaInfo?.name}
-					</h3>
+					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
+					<h3 className={clsx('u-py-24', 'p-object-detail__title')}>{mediaInfo?.name}</h3>
 
 					<MetaDataDescription description={mediaInfo?.description || ''} />
 

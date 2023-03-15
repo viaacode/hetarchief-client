@@ -49,6 +49,7 @@ export const ROUTE_PREFIXES = Object.freeze({
 
 export const ROUTES = Object.freeze({
 	home: '/',
+	search: `/${ROUTE_PARTS.search}`,
 	bezoek: `/${ROUTE_PARTS.visit}`,
 	space: `/${ROUTE_PARTS.search}/:slug`,
 	termsOfService: '/' + ROUTE_PARTS.userPolicy,
