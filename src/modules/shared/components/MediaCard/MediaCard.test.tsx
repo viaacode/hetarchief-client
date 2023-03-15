@@ -42,4 +42,14 @@ describe('Component: <MediaCard />', () => {
 		// rendered = render(<MediaCard view="grid" type="video" />);
 		// expect(screen.getAllByText('no-video')[0]).toBeDefined();
 	});
+
+	it('Should render key user pill if isKeyUser', () => {
+		rendered = render(<MediaCard view="list" type="video" isKeyUser />);
+
+		const iconElement = rendered.container
+			.getElementsByClassName('c-media-card--key-user-pill')
+			.item(0);
+
+		expect(iconElement).toBeInTheDocument();
+	});
 });

@@ -1,4 +1,4 @@
-import { Badge, Card } from '@meemoo/react-components';
+import { Badge, Card, Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
@@ -7,6 +7,7 @@ import Highlighter from 'react-highlight-words';
 
 import { DropdownMenu, IconNamesLight } from '@shared/components';
 import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -30,8 +31,10 @@ const MediaCard: FC<MediaCardProps> = ({
 	buttons,
 	hasRelated,
 	icon,
+	isKeyUser,
 	meemooIdentifier,
 }) => {
+	const { tText } = useTranslation();
 	const renderDropdown = () =>
 		actions ? (
 			<DropdownMenu
@@ -170,10 +173,30 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
+	const renderKeyUserPill = () => {
+		return (
+			<span className={styles['c-media-card--key-user-pill']}>
+				<Tooltip position="top">
+					<TooltipTrigger>
+						<Icon name={IconNamesLight.Key} />
+					</TooltipTrigger>
+					<TooltipContent>
+						{tText(
+							'modules/shared/components/media-card/media-card___item-bekijken-uit-jouw-sector'
+						)}
+					</TooltipContent>
+				</Tooltip>
+			</span>
+		);
+	};
+
 	return (
 		<div id={id}>
 			<Card
-				className={styles['c-media-card']}
+				className={clsx(
+					styles['c-media-card'],
+					isKeyUser && styles['c-media-card--key-user']
+				)}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
@@ -184,11 +207,17 @@ const MediaCard: FC<MediaCardProps> = ({
 				padding="both"
 			>
 				{typeof description === 'string' ? (
-					<div className="u-text-ellipsis--2">
-						<span>{description}</span>
-					</div>
+					<>
+						<div className="u-text-ellipsis--2">
+							<span>{description}</span>
+						</div>
+						{isKeyUser && renderKeyUserPill()}
+					</>
 				) : (
-					<>{description}</>
+					<>
+						{description}
+						{isKeyUser && renderKeyUserPill()}
+					</>
 				)}
 			</Card>
 		</div>

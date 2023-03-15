@@ -7,6 +7,22 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 .#{$component} {
 	cursor: pointer;
 
+	&--key-user {
+		border: 1px solid $mustard !important;
+
+		&-pill {
+			margin-top: $spacer-xs;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: $black;
+			border-radius: 2.5rem;
+			width: 3.4rem;
+			height: 2rem;
+			background-color: $mustard;
+		}
+	}
+
 	&__link {
 		text-decoration: none;
 	}
