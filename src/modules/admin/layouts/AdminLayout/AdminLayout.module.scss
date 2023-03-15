@@ -9,6 +9,7 @@
 
 	@include respond-to(lg) {
 		grid-auto-flow: row;
+		grid-gap: $spacer-md;
 	}
 }
 
