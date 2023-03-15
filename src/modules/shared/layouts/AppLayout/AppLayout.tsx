@@ -1,5 +1,8 @@
+import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
+import { isWithinInterval } from 'date-fns';
+import { relativeTimeRounding } from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
@@ -26,8 +29,11 @@ import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/g
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
 import {
+	AlertIconNames,
 	HetArchiefLogo,
 	HetArchiefLogoType,
+	Icon,
+	IconNamesLight,
 	NotificationCenter,
 	ZendeskWrapper,
 } from '@shared/components';
@@ -60,6 +66,8 @@ import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import packageJson from '../../../../../package.json';
 
+import { useGetMaintenanceAlerts } from 'modules/maintenance-alerts/hooks/get-maintenance-alerts';
+
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
@@ -87,6 +95,7 @@ const AppLayout: FC = ({ children }) => {
 		[SEARCH_QUERY_KEY]: StringParam,
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
+	const { data: alerts } = useGetMaintenanceAlerts();
 
 	useHistory(asPath, history);
 
@@ -252,6 +261,33 @@ const AppLayout: FC = ({ children }) => {
 		}
 	};
 
+	const activeAlerts = useMemo(() => {
+		return alerts?.items.filter(
+			(item) =>
+				isWithinInterval(new Date(), {
+					start: new Date(item.fromDate),
+					end: new Date(item.untilDate),
+				}) && item.userGroups.includes(user?.groupId || '')
+		);
+	}, [alerts?.items, user?.groupId]);
+
+	useEffect(() => {
+		console.log('alerts', activeAlerts, user);
+	}, [activeAlerts]);
+
+	const renderAlerts = () => {
+		return activeAlerts?.map((alert) => {
+			return (
+				<Alert
+					key={alert.id}
+					title={alert.title}
+					content={alert.message}
+					icon={<Icon name={IconNamesLight[alert.type as keyof typeof AlertIconNames]} />}
+				/>
+			);
+		});
+	};
+
 	return (
 		<div
 			className={clsx('l-app', {
@@ -283,6 +319,8 @@ const AppLayout: FC = ({ children }) => {
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
 			</Navigation>
+
+			{renderAlerts()}
 
 			<main className="l-app__main">
 				<WindowSizeContext.Provider value={windowSize}>
