@@ -8,13 +8,13 @@ import { IeObject } from './../types';
 
 export const useGetIeObjectsRelated = (
 	id: string,
-	esIndex: string,
+	maintainerId: string,
 	meemooId: string,
 	enabled = true
 ): UseQueryResult<IPagination<IeObject>> => {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsRelated, { id }],
-		() => IeObjectsService.getRelated(id, esIndex, meemooId),
+		() => IeObjectsService.getRelated(id, maintainerId, meemooId),
 		{
 			keepPreviousData: true,
 			enabled,
