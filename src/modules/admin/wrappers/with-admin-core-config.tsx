@@ -126,6 +126,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						check: { name: IconNamesLight.Check },
 						calendar: { name: IconNamesLight.Calendar },
 						clock: { name: IconNamesLight.Clock },
+						export: { name: IconNamesLight.Export },
 					},
 					list: ICON_LIST_CONFIG,
 					alerts: ALERT_ICON_LIST_CONFIG,
