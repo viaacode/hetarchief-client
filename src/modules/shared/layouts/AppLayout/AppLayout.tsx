@@ -38,6 +38,7 @@ import {
 	ZendeskWrapper,
 } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
+import Html from '@shared/components/Html/Html';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
@@ -45,6 +46,7 @@ import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
+import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
@@ -96,6 +98,11 @@ const AppLayout: FC = ({ children }) => {
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
 	const { data: alerts } = useGetMaintenanceAlerts();
+
+	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
+		'HET_ARCHIEF.alerts.ignoreUntil',
+		JSON.stringify({ id: '1' })
+	);
 
 	useHistory(asPath, history);
 
@@ -261,31 +268,56 @@ const AppLayout: FC = ({ children }) => {
 		}
 	};
 
+	const onCloseAlert = (alertId: string | undefined) => {
+		if (!alertId) {
+			return;
+		}
+
+		const alert = alerts?.items.find((alert) => alert.id === alertId);
+
+		const ignoreUntil = JSON.stringify({
+			...JSON.parse(alertsIgnoreUntil),
+			[alertId]: alert?.untilDate,
+		});
+
+		setAlertsIgnoreUntil(ignoreUntil);
+	};
+
 	const activeAlerts = useMemo(() => {
 		return alerts?.items.filter(
 			(item) =>
 				isWithinInterval(new Date(), {
 					start: new Date(item.fromDate),
 					end: new Date(item.untilDate),
-				}) && item.userGroups.includes(user?.groupId || '')
+				}) &&
+				item.userGroups.includes(user?.groupId || '') &&
+				JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate
 		);
-	}, [alerts?.items, user?.groupId]);
-
-	useEffect(() => {
-		console.log('alerts', activeAlerts, user);
-	}, [activeAlerts]);
+	}, [alerts?.items, alertsIgnoreUntil, user?.groupId]);
 
 	const renderAlerts = () => {
-		return activeAlerts?.map((alert) => {
-			return (
-				<Alert
-					key={alert.id}
-					title={alert.title}
-					content={alert.message}
-					icon={<Icon name={IconNamesLight[alert.type as keyof typeof AlertIconNames]} />}
-				/>
-			);
-		});
+		return (
+			<div className="l-app__alerts-overlay l-container">
+				{activeAlerts?.map((alert) => {
+					return (
+						<Alert
+							id={alert.id}
+							key={alert.id}
+							title={alert.title}
+							content={<Html content={alert.message} type="div" />}
+							variants="blue"
+							icon={
+								<Icon
+									name={IconNamesLight[alert.type as keyof typeof AlertIconNames]}
+								/>
+							}
+							closeIcon={<Icon name={IconNamesLight.Times} />}
+							onClose={onCloseAlert}
+						/>
+					);
+				})}
+			</div>
+		);
 	};
 
 	return (
@@ -320,8 +352,6 @@ const AppLayout: FC = ({ children }) => {
 				/>
 			</Navigation>
 
-			{renderAlerts()}
-
 			<main className="l-app__main">
 				<WindowSizeContext.Provider value={windowSize}>
 					<ErrorBoundary>{children}</ErrorBoundary>
@@ -333,6 +363,7 @@ const AppLayout: FC = ({ children }) => {
 					useMarkOneNotificationsAsReadHook={useMarkOneNotificationsAsRead}
 					useMarkAllNotificationsAsReadHook={useMarkAllNotificationsAsRead}
 				/>
+				{renderAlerts()}
 			</main>
 
 			<ToastContainer

@@ -24,6 +24,7 @@ $silver: #e6e6e6;
 $platinum: #f8f8f8;
 $lila: #c6c2e0;
 $blue: #28a0c8;
+$light-blue: #bddee7;
 
 /**
  * Derived Colors
@@ -116,8 +117,9 @@ $breakpoints: (
  */
 
 $z-layers: (
-	"modal": 8,
-	"blade": 7,
+	"modal": 9,
+	"blade": 8,
+	"alerts": 7,
 	"filter-menu-mobile": 6,
 	"filter": 5,
 	"filter-overlay": 4,
