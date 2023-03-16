@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { uniqBy } from 'lodash-es';
 import Link from 'next/link';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
@@ -7,6 +8,7 @@ import { ROUTE_PARTS } from '@shared/const';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
+import { Icon, IconNamesLight } from '..';
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
 
@@ -30,6 +32,60 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	if (!items) {
 		return null;
 	}
+
+	// Ward: get maintainers of IeObjects where hasTempAccess = true
+	const tempAccessMaintainersNotUnique = items
+		.map((item) => {
+			if (item.hasTempAccess) {
+				return {
+					maintainerId: item.maintainerId,
+					maintainerName: item.maintainerName,
+				};
+			}
+		})
+		.filter((maintainer) => maintainer !== undefined);
+
+	const tempAccessMaintainers = uniqBy(tempAccessMaintainersNotUnique, 'maintainerId');
+
+	const renderTempAccessLabel = () => {
+		const preLabel = 'Je hebt tijdelijke toegang tot het materiaal van ';
+
+		return (
+			<div className={styles['c-media-card-list__temp-access-container']}>
+				<Icon name={IconNamesLight.Clock} />
+				<span className={styles['c-media-card-list__temp-access-label']}>
+					{preLabel}
+					{tempAccessMaintainers.map((maintainer, index) => {
+						const postLabel = () => {
+							// Ward: if last element
+							if (index + 1 === tempAccessMaintainers.length) {
+								return '.';
+							}
+							// Ward: if second to last element
+							else if (index + 2 === tempAccessMaintainers.length) {
+								return ' en ';
+							} else {
+								return ', ';
+							}
+						};
+
+						const link = (
+							<>
+								<Link href={`/zoeken?maintainer=${maintainer?.maintainerId}`}>
+									<a aria-label={maintainer?.maintainerName}>
+										{maintainer?.maintainerName}
+									</a>
+								</Link>
+								{postLabel()}
+							</>
+						);
+
+						return link;
+					})}
+				</span>
+			</div>
+		);
+	};
 
 	const isMasonryView = view === 'grid';
 
@@ -156,6 +212,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 			)}
 		>
 			{!isMasonryView && renderSidebar()}
+			{tempAccessMaintainers.length > 0 && renderTempAccessLabel()}
 			<Masonry
 				breakpointCols={isMasonryView ? breakpoints : 1}
 				className={styles['c-media-card-list__content']}

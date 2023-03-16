@@ -40,6 +40,19 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 		height: 0;
 	}
 
+	&__temp-access-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: $lila;
+		padding: $spacer-xs;
+		margin: $spacer-sm;
+	}
+
+	&__temp-access-label {
+		margin-left: $spacer-xs;
+	}
+
 	// Modifiers
 
 	// two-column grid

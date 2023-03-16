@@ -483,6 +483,8 @@ const VisitorSpaceSearchPage: FC = () => {
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
+				maintainerId: item.maintainerId,
+				maintainerName: item.maintainerName,
 				maintainerSlug: item.maintainerSlug,
 				duration: item.duration,
 				description: item.description,
@@ -495,6 +497,10 @@ const VisitorSpaceSearchPage: FC = () => {
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
 				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.KEY_USER),
+				hasTempAccess: item.accessThrough?.includes(
+					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
+						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
+				),
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
