@@ -25,8 +25,6 @@ export interface MediaCardProps {
 	isKeyUser?: boolean;
 	meemooIdentifier?: string;
 	hasTempAccess?: boolean;
-	maintainerName?: string;
-	maintainerId?: string;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

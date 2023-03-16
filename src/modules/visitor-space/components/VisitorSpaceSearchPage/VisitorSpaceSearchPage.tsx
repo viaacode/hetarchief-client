@@ -483,8 +483,6 @@ const VisitorSpaceSearchPage: FC = () => {
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
-				maintainerId: item.maintainerId,
-				maintainerName: item.maintainerName,
 				maintainerSlug: item.maintainerSlug,
 				duration: item.duration,
 				description: item.description,
