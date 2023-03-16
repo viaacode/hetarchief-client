@@ -219,7 +219,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		// the other navigation items pop up through the blade if the following z-index is removed
 		ul {
 			li:first-child {
-				z-index: 5;
+				z-index: get-z-layer("filter");
 			}
 		}
 	}

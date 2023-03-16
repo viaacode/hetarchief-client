@@ -6,14 +6,8 @@ import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import { Blade } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
-import { PersonalInfoType } from './PersonalInfo.types';
+import { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
-
-interface PersonalInfoBladeBladeProps {
-	isOpen: boolean;
-	onClose: () => void;
-	personalInfo: PersonalInfoType;
-}
 
 const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, personalInfo }) => {
 	const { tText } = useTranslation();
@@ -21,7 +15,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity>(
 		personalInfo.requesterCapacity
 	);
-	const [organisationInputValue, setOrganisationInputValue] = useState(
+	const [organisationInputValue, setOrganisationInputValue] = useState<string>(
 		personalInfo.organisation || ''
 	);
 
@@ -32,7 +26,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 					label={tText(
 						'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
 					)}
-					variants={['block', 'text']}
+					variants={['block', 'text', 'dark']}
 					onClick={() => console.log('Send!')}
 					className={styles['c-personal-info-blade__send-button']}
 				/>
@@ -40,9 +34,8 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 					label={tText(
 						'modules/navigation/components/personal-info-blade/personal-info-blade___annuleer'
 					)}
-					variants={['block', 'text']}
+					variants={['block', 'text', 'light']}
 					onClick={onClose}
-					className={styles['c-personal-info-blade__close-button']}
 				/>
 			</div>
 		);

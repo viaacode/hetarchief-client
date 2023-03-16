@@ -260,7 +260,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
 						)}
-						variants={['block', 'text']}
+						variants={['block', 'text', 'dark']}
 						onClick={() => setIsPersonalInfoBladeOpen(true)}
 						className={styles['c-material-request-center-blade__send-button']}
 					/>
@@ -269,9 +269,8 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					label={tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___sluit'
 					)}
-					variants={['block', 'text']}
+					variants={['block', 'text', 'light']}
 					onClick={onClose}
-					className={styles['c-material-request-center-blade__close-button']}
 				/>
 			</div>
 		);

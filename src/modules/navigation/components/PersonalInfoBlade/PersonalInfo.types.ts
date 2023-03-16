@@ -6,3 +6,9 @@ export interface PersonalInfoType {
 	organisation?: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
 }
+
+export interface PersonalInfoBladeBladeProps {
+	isOpen: boolean;
+	onClose: () => void;
+	personalInfo: PersonalInfoType;
+}

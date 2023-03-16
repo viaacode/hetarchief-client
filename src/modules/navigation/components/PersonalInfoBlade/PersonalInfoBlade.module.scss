@@ -15,7 +15,7 @@ $component: "c-personal-info-blade";
 		background-color: $silver;
 
 		&-label {
-			font-weight: 900;
+			font-weight: bold;
 			margin-bottom: $spacer-xs;
 		}
 
@@ -47,20 +47,5 @@ $component: "c-personal-info-blade";
 
 	&__send-button {
 		margin-bottom: $spacer-sm;
-		background-color: $black !important;
-		color: $white !important;
-
-		&:hover {
-			border: 0.1rem solid $zinc !important;
-			background-color: $white !important;
-			color: $zinc !important;
-		}
-	}
-
-	&__close-button {
-		&:hover {
-			border: 0.1rem solid $zinc !important;
-			color: $zinc !important;
-		}
 	}
 }
