@@ -613,6 +613,47 @@ const VisitorSpaceSearchPage: FC = () => {
 		);
 	};
 
+	const renderTempAccessLabel = () => {
+		const preLabel = 'Je hebt tijdelijke toegang tot het materiaal van ';
+
+		return (
+			<div className="p-visitor-space__temp-access-container">
+				<Icon name={IconNamesLight.Clock} />
+				<span className="p-visitor-space__temp-access-label">
+					{preLabel}
+					{dropdownOptions
+						// Ward: remove 'Publieke catalogus'
+						.filter((maintainer) => maintainer.id !== '')
+						.map((maintainer, index) => {
+							const postLabel = () => {
+								// Ward: if last element (-1 because 'Publieke catalogus' was removed)
+								if (index + 1 === dropdownOptions.length - 1) {
+									return '.';
+								}
+								// Ward: if second to last element
+								else if (index + 2 === dropdownOptions.length - 1) {
+									return ' en ';
+								} else {
+									return ', ';
+								}
+							};
+
+							const link = (
+								<>
+									<Link href={`/zoeken?maintainer=${maintainer?.id}`}>
+										<a aria-label={maintainer?.label}>{maintainer?.label}</a>
+									</Link>
+									{postLabel()}
+								</>
+							);
+
+							return link;
+						})}
+				</span>
+			</div>
+		);
+	};
+
 	const renderResults = () => (
 		<>
 			<MediaCardList
@@ -622,6 +663,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
+				tempAccessLabel={renderTempAccessLabel()}
 			/>
 			<PaginationBar
 				className="u-mb-48"
