@@ -22,6 +22,8 @@ export interface MediaCardProps {
 	view?: MediaCardViewMode;
 	hasRelated?: boolean;
 	icon?: IconName;
+	isKeyUser?: boolean;
+	meemooIdentifier?: string;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {
