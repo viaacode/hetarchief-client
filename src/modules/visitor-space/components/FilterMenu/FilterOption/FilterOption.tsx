@@ -21,6 +21,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 	onFormReset,
 	onFormSubmit,
 	values,
+	className,
 }) => {
 	const { tText } = useTranslation();
 
@@ -52,6 +53,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 			>
 				<DropdownButton>
 					<FilterButton
+						className={className}
 						icon={
 							filterIsActive
 								? IconNamesLight.AngleLeft

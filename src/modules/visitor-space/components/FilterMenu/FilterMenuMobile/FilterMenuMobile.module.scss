@@ -88,6 +88,23 @@
 	height: calc(100% - #{$c-navigation-height-md});
 }
 
+.c-filter-menu-mobile__button:global(.c-button) {
+	position: relative;
+
+	&::before {
+		content: "";
+		position: absolute;
+		top: -0.1rem;
+		bottom: -0.1rem;
+		left: -0.1rem;
+		background-color: $teal;
+		width: 0.8rem;
+		transform: scaleX(0);
+		transition: transform $animate-default;
+		z-index: get-z-layer("filter");
+	}
+}
+
 /**
  * Modifiers
  */
@@ -95,4 +112,10 @@
 .c-filter-menu-mobile--active {
 	background-color: $white;
 	color: $black;
+}
+
+.c-filter-menu-mobile__button--operative:global(.c-button) {
+	&::before {
+		transform: scaleX(1);
+	}
 }
