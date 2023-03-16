@@ -1,6 +1,6 @@
-import { OrderDirection, Table } from '@meemoo/react-components';
+import { MultiSelect, MultiSelectOption, OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isEmpty, isNil, xorBy } from 'lodash-es';
+import { isEmpty, isNil, without } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
@@ -26,9 +26,9 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import {
+	Icon,
+	IconNamesLight,
 	Loading,
-	MultiSelect,
-	MultiSelectOption,
 	PaginationBar,
 	SearchBar,
 	sortingIcons,
@@ -70,11 +70,24 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 					({ id, name }): MultiSelectOption => ({
 						id,
 						label: name,
+						checked: selectedMaintainers.includes(id),
 					})
 				),
 			];
 		}
-	}, [maintainers]);
+	}, [maintainers, selectedMaintainers]);
+
+	const typesList = useMemo(() => {
+		return [
+			...GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY().map(
+				({ id, label }): MultiSelectOption => ({
+					id,
+					label,
+					checked: selectedTypes.includes(id),
+				})
+			),
+		];
+	}, [selectedTypes]);
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
@@ -173,20 +186,13 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		setFilters({ search: value, page: 1 });
 	};
 
-	const onMultiTypeChange = (selectedItems: string[]) => {
-		const diff = xorBy(selectedItems, selectedTypes);
-
-		if (diff.length) {
-			setSelectedTypes(selectedItems);
-		}
+	// Note: Internal selected IDs state
+	const onMultiTypeChange = (checked: boolean, id: string) => {
+		setSelectedTypes((prev) => (!checked ? [...prev, id] : without(prev, id)));
 	};
 
-	const onMultiMaintainersChange = (selectedItems: string[]) => {
-		const diff = xorBy(selectedItems, selectedMaintainers);
-
-		if (diff.length) {
-			setSelectedMaintainers(selectedItems);
-		}
+	const onMultiMaintainersChange = (checked: boolean, id: string) => {
+		setSelectedMaintainers((prev) => (!checked ? [...prev, id] : without(prev, id)));
 	};
 
 	useEffect(() => {
@@ -220,9 +226,12 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 							<MultiSelect
 								variant="rounded"
 								label="Type"
-								options={GET_ADMIN_MATERIAL_REQUEST_TYPE_FILTER_ARRAY()}
+								options={typesList}
 								onChange={onMultiTypeChange}
 								className="p-admin-material-requests__dropdown"
+								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
 							/>
 							{maintainerList && (
 								<MultiSelect
@@ -232,7 +241,12 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 									)}
 									options={maintainerList}
 									onChange={onMultiMaintainersChange}
-									className="p-admin-material-requests__dropdown"
+									className="p-admin-material-requests__dropdown c-multi-select"
+									iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+									iconClosed={
+										<Icon name={IconNamesLight.AngleDown} aria-hidden />
+									}
+									iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
 								/>
 							)}
 						</div>

@@ -1,0 +1,46 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-multi-select";
+
+.#{$component} {
+	&__dropdown {
+		width: 100%;
+	}
+
+	&__checkbox-list {
+		@extend %reset-list;
+
+		box-shadow: $shadow-24-black-08;
+
+		&-item {
+			border-top: 0.1rem solid $zinc;
+			padding: $spacer-xs $spacer-sm;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			cursor: pointer;
+			outline-color: $teal;
+			user-select: none;
+
+			.c-checkbox {
+				padding: $spacer-xs;
+				box-sizing: content-box;
+				margin-right: $spacer-xs;
+				pointer-events: none;
+			}
+
+			.c-checkbox__check-icon {
+				top: 0;
+				margin: $spacer-xs;
+			}
+
+			&.is-checked {
+				background-color: $teal-medium;
+			}
+
+			&:first-of-type {
+				border-top: none;
+			}
+		}
+	}
+}

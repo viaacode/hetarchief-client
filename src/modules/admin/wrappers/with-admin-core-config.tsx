@@ -14,7 +14,13 @@ import { ComponentType, FunctionComponent, useCallback, useEffect, useState } fr
 import { useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
-import { Icon, ICON_LIST_CONFIG, IconName } from '@shared/components';
+import {
+	ALERT_ICON_LIST_CONFIG,
+	Icon,
+	ICON_LIST_CONFIG,
+	IconName,
+	IconNamesLight,
+} from '@shared/components';
 import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -102,23 +108,27 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				icon: {
 					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
 					componentProps: {
-						add: { name: 'plus' },
-						view: { name: 'show' },
-						angleDown: { name: 'angle-down' },
-						angleUp: { name: 'angle-up' },
-						angleLeft: { name: 'angle-left' },
-						angleRight: { name: 'angle-right' },
-						extraOptions: { name: 'dots-vertical' },
-						copy: { name: 'copy' },
-						delete: { name: 'trash' },
-						edit: { name: 'edit' },
-						filter: { name: 'search' },
-						arrowUp: { name: 'arrow-up' },
-						sortTable: { name: 'sort-table' },
-						arrowDown: { name: 'arrow-down' },
-						chevronLeft: { name: 'angle-left' },
+						add: { name: IconNamesLight.Plus },
+						view: { name: IconNamesLight.Show },
+						angleDown: { name: IconNamesLight.AngleDown },
+						angleUp: { name: IconNamesLight.AngleUp },
+						angleLeft: { name: IconNamesLight.AngleLeft },
+						angleRight: { name: IconNamesLight.AngleRight },
+						extraOptions: { name: IconNamesLight.DotsVertical },
+						copy: { name: IconNamesLight.Copy },
+						delete: { name: IconNamesLight.Trash },
+						edit: { name: IconNamesLight.Edit },
+						filter: { name: IconNamesLight.Search },
+						arrowUp: { name: IconNamesLight.ArrowUp },
+						sortTable: { name: IconNamesLight.SortTable },
+						arrowDown: { name: IconNamesLight.ArrowDown },
+						chevronLeft: { name: IconNamesLight.AngleLeft },
+						check: { name: IconNamesLight.Check },
+						calendar: { name: IconNamesLight.Calendar },
+						clock: { name: IconNamesLight.Clock },
 					},
 					list: ICON_LIST_CONFIG,
+					alerts: ALERT_ICON_LIST_CONFIG,
 				},
 				components: {
 					loader: {

@@ -128,6 +128,18 @@ export enum IconNamesSolid {
 	ZoomOut = 'zoom-out--solid',
 }
 
+export enum AlertIconNames {
+	Notification = IconNamesLight.Notification,
+	User = IconNamesLight.User,
+	Question = IconNamesLight.Question,
+	Info = IconNamesLight.Info,
+	Exclamation = IconNamesLight.Exclamation,
+	Key = IconNamesLight.Key,
+	Calendar = IconNamesLight.Calendar,
+	Book = IconNamesLight.Book,
+	AngleRight = IconNamesLight.AngleRight,
+}
+
 export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
 	const lightIcons = Object.values(IconNamesLight).map((v: IconNamesLight) => ({
 		value: v,
@@ -139,4 +151,13 @@ export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
 	}));
 
 	return [...lightIcons, ...solidIcons];
+};
+
+export const ALERT_ICON_LIST_CONFIG = (): { value: string; label: string }[] => {
+	const alertIcons = Object.keys(AlertIconNames).map((v: string) => ({
+		value: v,
+		label: tText(`modules/admin/icons/${v}`),
+	}));
+
+	return [...alertIcons];
 };

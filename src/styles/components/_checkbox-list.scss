@@ -13,14 +13,14 @@ $component: "c-checkbox-list";
 		outline-color: $teal;
 		user-select: none;
 
-		:global(.c-checkbox) {
+		.c-checkbox {
 			padding: $spacer-xs;
 			box-sizing: content-box;
 			margin-right: $spacer-xs;
 			pointer-events: none;
 		}
 
-		:global(.c-checkbox__check-icon) {
+		.c-checkbox__check-icon {
 			top: 0;
 			margin: $spacer-xs;
 		}
