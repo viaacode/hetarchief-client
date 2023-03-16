@@ -1,4 +1,4 @@
-import { Icon, IconNamesLight } from '@shared/components/Icon';
+import { Icon, IconNamesLight } from '@shared/components';
 import { VisitorSpaceMediaType } from '@shared/types';
 
 export const mockTabs = [

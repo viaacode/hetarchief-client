@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import { fireEvent, render } from '@testing-library/react';
 
-import { Icon, IconNamesLight } from '../Icon';
+import { Icon, IconNamesLight } from '@shared/components';
 
 import Callout from './Callout';
 import { CalloutProps } from './Callout.types';
