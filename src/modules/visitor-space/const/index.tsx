@@ -16,6 +16,7 @@ import {
 	GenreFilterForm,
 	KeywordsFilterForm,
 	LanguageFilterForm,
+	MaintainerFilterForm,
 	MediumFilterForm,
 	PublishedFilterForm,
 } from '../components';
@@ -25,6 +26,8 @@ import { AdvancedFilterArrayParam } from './query-params';
 
 export * from './metadata';
 export * from './label-keys';
+
+export const PUBLIC_COLLECTION = ''; // No maintainer query param means the public collection should be selected
 
 export const DEFAULT_VISITOR_SPACE_COLOR = '#00c8aa';
 
@@ -94,7 +97,7 @@ export const VISITOR_SPACE_TABS = (): TabProps[] => [
 
 export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
-export const VISITOR_SPACE_FILTERS = (): FilterMenuFilterOption[] => [
+export const VISITOR_SPACE_FILTERS = (selectedMaintainer: string): FilterMenuFilterOption[] => [
 	{
 		id: VisitorSpaceFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
@@ -144,6 +147,13 @@ export const VISITOR_SPACE_FILTERS = (): FilterMenuFilterOption[] => [
 		icon: IconNamesLight.DotsHorizontal,
 		label: tText('modules/visitor-space/const/index___geavanceerd'),
 		form: AdvancedFilterForm,
+	},
+	{
+		id: VisitorSpaceFilterId.Maintainer,
+		icon: IconNamesLight.DotsHorizontal,
+		label: tText('modules/visitor-space/const/index___aanbieder'),
+		form: MaintainerFilterForm,
+		isDisabled: () => selectedMaintainer !== PUBLIC_COLLECTION,
 	},
 ];
 

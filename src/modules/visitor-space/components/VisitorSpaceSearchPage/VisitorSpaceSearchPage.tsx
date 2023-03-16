@@ -81,6 +81,7 @@ import {
 	PublishedFilterFormState,
 } from '../../components';
 import {
+	PUBLIC_COLLECTION,
 	VISITOR_SPACE_FILTERS,
 	VISITOR_SPACE_ITEM_COUNT,
 	VISITOR_SPACE_QUERY_PARAM_CONFIG,
@@ -97,8 +98,6 @@ import { mapFiltersToElastic } from '../../utils/elastic-filters';
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
-
-const PUBLIC_COLLECTION = ''; // No maintainer query param means the public collection should be selected
 
 const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	return {
@@ -271,8 +270,9 @@ const VisitorSpaceSearchPage: FC = () => {
 	}, [visitorSpaces, isMobile]);
 
 	const filters = useMemo(
-		() => VISITOR_SPACE_FILTERS().filter(({ isDisabled }) => !isDisabled?.()),
-		[]
+		() =>
+			VISITOR_SPACE_FILTERS(activeVisitorSpaceId).filter(({ isDisabled }) => !isDisabled?.()),
+		[activeVisitorSpaceId]
 	);
 
 	/**
