@@ -58,11 +58,11 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
-					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Creator}`}
+					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Maintainers}`}
 					default={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(
-						'modules/visitor-space/components/creator-filter-form/creator-filter-form___zoek'
+						'modules/visitor-space/components/maintainers-filter-form/maintainers-filter-form___zoek'
 					)}
 					onSearch={onSearch}
 					shouldReset={shouldReset}
@@ -73,7 +73,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 					{buckets.length === 0 && (
 						<p className="u-color-neutral u-text-center">
 							{tHtml(
-								'modules/visitor-space/components/creator-filter-form/creator-filter-form___geen-makers-gevonden'
+								'modules/visitor-space/components/maintainers-filter-form/maintainers-filter-form___geen-aanbieders-gevonden'
 							)}
 						</p>
 					)}
