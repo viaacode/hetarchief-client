@@ -22,6 +22,19 @@
 		}
 	}
 
+	.react-select__indicator-separator {
+		display: none;
+	}
+
+	.react-select__single-value {
+		color: $black;
+		font-size: 1.6rem;
+
+		span {
+			font-size: 2rem;
+		}
+	}
+
 	.c-multi-select__dropdown {
 		.c-button {
 			padding-right: $spacer-xs;
