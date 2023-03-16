@@ -80,7 +80,6 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					)}
 
 					<CheckboxList
-						className="c-checkbox-list"
 						items={buckets.map((bucket) => ({
 							...bucket,
 							checked: selection.includes(bucket.key),

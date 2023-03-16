@@ -34,12 +34,7 @@ const AdminAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	}) => {
 		const renderFooter = () => {
 			return (
-				<div
-					className={clsx(
-						'u-px-32 u-py-24'
-						// styles['c-translations-overview__blade-footer']
-					)}
-				>
+				<div className={clsx('u-px-32 u-py-24')}>
 					<Button
 						variants={['block', 'black']}
 						onClick={onSave}
@@ -57,7 +52,6 @@ const AdminAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 		return (
 			<Blade
-				// className={styles['c-translations-overview__blade']}
 				footer={renderFooter()}
 				isOpen={isOpen}
 				onClose={onClose}
@@ -88,7 +82,6 @@ const AdminAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				url
 			)}
 
-			{/* TODO: permission */}
 			<PermissionsCheck allPermissions={[Permission.VIEW_ANY_MAINTENANCE_ALERTS]}>
 				{renderPageContent()}
 			</PermissionsCheck>

@@ -80,7 +80,6 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					)}
 
 					<CheckboxList
-						className="c-checkbox-list"
 						items={buckets.map((bucket) => ({
 							...bucket,
 							value: bucket.key,

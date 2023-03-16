@@ -80,7 +80,6 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 					)}
 
 					<CheckboxList
-						className="c-checkbox-list"
 						items={buckets.map((bucket) => ({
 							...bucket,
 							value: bucket.key,
