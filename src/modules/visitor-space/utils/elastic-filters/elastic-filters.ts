@@ -63,6 +63,12 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 		operator: IeObjectsSearchOperator.IS,
 		multiValue: (query.language || []).filter((item) => item !== null) as string[],
 	},
+	// Maintainers
+	{
+		field: IeObjectsSearchFilterField.MAINTAINERS,
+		operator: IeObjectsSearchOperator.IS,
+		multiValue: (query.maintainers || []).filter((item) => item !== null) as string[],
+	},
 	// Advanced
 	...(query.advanced || []).flatMap(mapAdvancedToElastic),
 ];

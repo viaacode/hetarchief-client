@@ -77,6 +77,7 @@ import {
 	initialFields,
 	KeywordsFilterFormState,
 	LanguageFilterFormState,
+	MaintainerFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
 } from '../../components';
@@ -94,7 +95,6 @@ import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
 
-// ToDo(Silke): check isLogged in voor filter maintainer ding -> enkel leeg gebruiken
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
@@ -385,6 +385,10 @@ const VisitorSpaceSearchPage: FC = () => {
 				data = (values as LanguageFilterFormState).languages;
 				break;
 
+			case VisitorSpaceFilterId.Maintainers:
+				data = (values as MaintainerFilterFormState).maintainers;
+				break;
+
 			case VisitorSpaceFilterId.Advanced:
 				data = (values as AdvancedFilterFormState).advanced.filter(
 					(advanced) => advanced.val !== initialFields().val
@@ -416,6 +420,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Keywords:
 				case VisitorSpaceFilterId.Language:
 				case VisitorSpaceFilterId.Medium:
+				case VisitorSpaceFilterId.Maintainers:
 				case SEARCH_QUERY_KEY:
 					query[tag.key] = [
 						...((query[tag.key] as Array<unknown>) || []),
@@ -456,11 +461,11 @@ const VisitorSpaceSearchPage: FC = () => {
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
 	const onVisitorSpaceSelected = (id: string): void => {
-		if (id === PUBLIC_COLLECTION) {
-			setQuery({ [VisitorSpaceFilterId.Maintainer]: undefined });
-		} else {
-			setQuery({ [VisitorSpaceFilterId.Maintainer]: id });
-		}
+		const maintainerId = id === PUBLIC_COLLECTION ? undefined : id;
+
+		setQuery({
+			[VisitorSpaceFilterId.Maintainer]: maintainerId,
+		});
 	};
 
 	/**

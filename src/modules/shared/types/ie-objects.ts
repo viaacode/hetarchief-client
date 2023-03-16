@@ -24,6 +24,7 @@ export enum IeObjectsSearchFilterField {
 	PUBLISHER = 'publisher',
 	QUERY = 'query',
 	MAINTAINER = 'maintainer',
+	MAINTAINERS = 'maintainers',
 }
 
 export enum IeObjectsSearchOperator {

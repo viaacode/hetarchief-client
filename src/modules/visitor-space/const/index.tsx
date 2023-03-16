@@ -67,6 +67,7 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	[VisitorSpaceFilterId.Genre]: ArrayParam,
 	[VisitorSpaceFilterId.Keywords]: ArrayParam,
 	[VisitorSpaceFilterId.Language]: ArrayParam,
+	[VisitorSpaceFilterId.Maintainers]: ArrayParam,
 	[VisitorSpaceFilterId.Advanced]: AdvancedFilterArrayParam,
 	// Pagination
 	page: withDefault(NumberParam, VISITOR_SPACE_QUERY_PARAM_INIT.page),
@@ -97,7 +98,7 @@ export const VISITOR_SPACE_TABS = (): TabProps[] => [
 
 export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
-export const VISITOR_SPACE_FILTERS = (selectedMaintainer: string): FilterMenuFilterOption[] => [
+export const VISITOR_SPACE_FILTERS = (activeVisitorSpace: string): FilterMenuFilterOption[] => [
 	{
 		id: VisitorSpaceFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
@@ -149,11 +150,11 @@ export const VISITOR_SPACE_FILTERS = (selectedMaintainer: string): FilterMenuFil
 		form: AdvancedFilterForm,
 	},
 	{
-		id: VisitorSpaceFilterId.Maintainer,
+		id: VisitorSpaceFilterId.Maintainers,
 		icon: IconNamesLight.DotsHorizontal,
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
-		isDisabled: () => selectedMaintainer !== PUBLIC_COLLECTION,
+		isDisabled: () => activeVisitorSpace !== PUBLIC_COLLECTION,
 	},
 ];
 

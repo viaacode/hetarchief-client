@@ -62,6 +62,7 @@ export class IeObjectsService {
 						IeObjectsSearchFilterField.MEDIUM,
 						IeObjectsSearchFilterField.CREATOR,
 						IeObjectsSearchFilterField.LANGUAGE,
+						IeObjectsSearchFilterField.MAINTAINER,
 					],
 					...parsedSort,
 				}),

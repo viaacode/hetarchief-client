@@ -147,6 +147,9 @@ export interface IeObjectSearchAggregations {
 	schema_genre: IeObjectSearchAggregation<string>;
 	schema_creator: IeObjectSearchAggregation<string>;
 	schema_in_language: IeObjectSearchAggregation<string>;
+	schema_maintainer: {
+		schema_identifier: IeObjectSearchAggregation<string>;
+	};
 }
 
 // UI
