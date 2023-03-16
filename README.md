@@ -133,13 +133,16 @@ They are provided through the `env_file` property in the `docker-compose.yml` fi
 This project has been created by:
 
 -   Andry Charlier: andry.charlier@studiohyperdrive.be
+-   Bart Naessens: bart.naessens@studiohyperdrive.be
+-   Ian Emsens: ian.emsens@studiohyperdrive.be
 
 It is currently maintained by:
 
 -   Andry Charlier: andry.charlier@studiohyperdrive.be
--   Ian Emsens: ian.emsens@studiohyperdrive.be
--   Bart Naessens: bart.naessens@studiohyperdrive.be
 -   Bavo Vanderghote: bavo.vanderghote@studiohyperdrive.be
+-   Bert Verhelst: bert.verhelst@studiohyperdrive.be
+-   Silke Derudder: silke.derudder@studiohyperdrive
+-   Ward Vercruyssen: ward.vercruyssen@studiohyperdrive.be
 
 ## Deployment
 
