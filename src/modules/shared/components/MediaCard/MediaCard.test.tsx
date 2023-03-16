@@ -37,10 +37,10 @@ describe('Component: <MediaCard />', () => {
 	});
 
 	it('Should show placeholder icons based on the type of card in either view mode', () => {
-		// rendered = render(<MediaCard view="list" type="audio" />);
-		// expect(screen.getAllByText('no-audio')[0]).toBeDefined();
-		// rendered = render(<MediaCard view="grid" type="video" />);
-		// expect(screen.getAllByText('no-video')[0]).toBeDefined();
+		rendered = render(<MediaCard view="list" type="audio" />);
+		expect(screen.getAllByText('no-audio')[0]).toBeDefined();
+		rendered = render(<MediaCard view="grid" type="video" />);
+		expect(screen.getAllByText('no-video')[0]).toBeDefined();
 	});
 
 	it('Should render key user pill if isKeyUser', () => {
