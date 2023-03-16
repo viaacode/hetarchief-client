@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import { IconNamesLight, IconNamesSolid, IconTypes } from '../Icon';
+import { IconNamesLight, IconNamesSolid, IconTypes } from '@shared/components';
 
 import Placeholder from './Placeholder';
 

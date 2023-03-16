@@ -14,6 +14,7 @@ import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
+import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import {
 	footerLeftItem,
@@ -52,6 +53,7 @@ import {
 	selectShowNavigationBorder,
 	selectShowNotificationsCenter,
 	setHasUnreadNotifications,
+	setMaterialRequestCount,
 	setShowAuthModal,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
@@ -76,6 +78,7 @@ const AppLayout: FC = ({ children }) => {
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.xxl);
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
+	const { data: materialRequests } = useGetPendingMaterialRequests({});
 	const history = useSelector(selectHistory);
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
@@ -136,6 +139,11 @@ const AppLayout: FC = ({ children }) => {
 			dispatch(setShowAuthModal(query.showAuth));
 		}
 	}, [dispatch, query.showAuth, user]);
+
+	useEffect(() => {
+		// Ward: on init set materialRequestCount in navigation
+		materialRequests && dispatch(setMaterialRequestCount(materialRequests?.items.length));
+	}, [dispatch, materialRequests]);
 
 	const userName = (user?.firstName as string) ?? '';
 

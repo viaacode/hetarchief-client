@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 
-import { IconNamesLight } from '../Icon';
+import { IconNamesLight } from '@shared/components';
 
 import Toggle from './Toggle';
 import { ToggleOption, ToggleProps } from './Toggle.types';

@@ -1,0 +1,61 @@
+@use "src/styles/abstracts" as *;
+
+$badge-font-size: 1rem;
+$pill-animation: 0.5s ease-in 7 alternate flash-pill;
+
+.c-material-request-center {
+	position: relative;
+	margin-left: $spacer-xs;
+
+	&:hover,
+	&--active {
+		background-color: $shade-darker !important;
+	}
+
+	&__icon-container {
+		&-badge {
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: $black;
+			font-weight: $font-weight-bold;
+			font-size: $badge-font-size;
+			border-radius: 0.8rem;
+			top: 0.5rem;
+			left: 2.5rem;
+			width: 2rem;
+			height: 1.6rem;
+			background-color: $coral;
+			transition: color 0.5s, border-color 0.5s, box-shadow 0.5s;
+
+			&--animated {
+				background-color: red;
+				color: white;
+				border-color: transparent;
+				box-shadow: 0 0 10px 2px darken(red, 10%);
+				animation: $pill-animation;
+				transition: color 0.5s, border-color 0.5s, box-shadow 0.5s;
+			}
+		}
+
+		&-icon {
+			// Ward: mirror the icon to match design
+			transform: scale(-1, 1);
+		}
+	}
+}
+
+@keyframes flash-pill {
+	0% {
+		box-shadow: 0 0 0.2rem 0.2rem darken(red, 10%);
+	}
+
+	50% {
+		box-shadow: 0 0 2rem 0.4rem darken(red, 10%);
+	}
+
+	100% {
+		box-shadow: 0 0 0.2rem 0.2rem darken(red, 10%);
+	}
+}
