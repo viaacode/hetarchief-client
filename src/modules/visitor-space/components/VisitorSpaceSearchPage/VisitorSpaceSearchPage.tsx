@@ -614,13 +614,13 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
-		const preLabel = 'Je hebt tijdelijke toegang tot het materiaal van ';
-
 		return (
 			<div className="p-visitor-space__temp-access-container">
 				<Icon name={IconNamesLight.Clock} />
 				<span className="p-visitor-space__temp-access-label">
-					{preLabel}
+					{tText(
+						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___tijdelijke-toegang'
+					)}
 					{dropdownOptions
 						// Ward: remove 'Publieke catalogus'
 						.filter((maintainer) => maintainer.id !== '')

@@ -196,7 +196,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			<div className={styles['c-media-card--temp-access']}>
 				<Icon name={IconNamesLight.Clock} />
 				<span className={styles['c-media-card--temp-access-label']}>
-					Tijdelijke toegang
+					{tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
 				</span>
 			</div>
 		);
