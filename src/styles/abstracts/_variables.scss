@@ -27,6 +27,8 @@ $lila: #c6c2e0;
 $blue: #28a0c8;
 $coral: #e89b88;
 $mustard: #efca6a;
+$light-blue: #bddee7;
+$grey: #757575;
 
 /**
  * Derived Colors
@@ -119,8 +121,9 @@ $breakpoints: (
  */
 
 $z-layers: (
-	"modal": 8,
-	"blade": 7,
+	"modal": 9,
+	"blade": 8,
+	"alerts": 7,
 	"filter-menu-mobile": 6,
 	"filter": 5,
 	"filter-overlay": 4,
