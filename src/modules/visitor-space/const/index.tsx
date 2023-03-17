@@ -144,17 +144,17 @@ export const VISITOR_SPACE_FILTERS = (activeVisitorSpace: string): FilterMenuFil
 		form: LanguageFilterForm,
 	},
 	{
-		id: VisitorSpaceFilterId.Advanced,
-		icon: IconNamesLight.DotsHorizontal,
-		label: tText('modules/visitor-space/const/index___geavanceerd'),
-		form: AdvancedFilterForm,
-	},
-	{
 		id: VisitorSpaceFilterId.Maintainers,
 		icon: IconNamesLight.DotsHorizontal,
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		isDisabled: () => activeVisitorSpace !== PUBLIC_COLLECTION,
+	},
+	{
+		id: VisitorSpaceFilterId.Advanced,
+		icon: IconNamesLight.DotsHorizontal,
+		label: tText('modules/visitor-space/const/index___geavanceerd'),
+		form: AdvancedFilterForm,
 	},
 ];
 
