@@ -2,7 +2,8 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { Icon, IconNamesLight } from '../../Icon';
+import { Icon, IconNamesLight } from '@shared/components';
+
 import styles from '../ListNavigation.module.scss';
 import { ListNavigationItem, ListNavigationProps } from '../ListNavigation.types';
 

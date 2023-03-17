@@ -304,6 +304,24 @@
 	height: auto;
 }
 
+.c-button--light {
+	&:hover {
+		border: 0.1rem solid $zinc;
+		color: $zinc;
+	}
+}
+
+.c-button--dark {
+	background-color: $black;
+	color: $white;
+
+	&:hover {
+		border: 0.1rem solid $zinc;
+		background-color: $white;
+		color: $zinc;
+	}
+}
+
 // States
 .c-button--disabled {
 	background-color: $silver;

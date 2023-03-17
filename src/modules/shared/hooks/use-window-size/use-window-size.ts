@@ -1,9 +1,6 @@
-import { debounce } from 'lodash-es';
 import { useEffect, useState } from 'react';
 
 import { UseWindowSize, WindowSizeState } from './use-window-size.types';
-
-export const WINDOW_RESIZE_TIMEOUT = 300;
 
 const useWindowSize: UseWindowSize = () => {
 	// Initialize state with undefined width/height so server and client renders match
@@ -24,13 +21,12 @@ const useWindowSize: UseWindowSize = () => {
 			const vh = window.innerHeight * 0.01;
 			document.documentElement.style.setProperty('--vh', `${vh}px`);
 		};
-		const debouncedResize = debounce(handleResize, WINDOW_RESIZE_TIMEOUT);
 
-		window.addEventListener('resize', debouncedResize);
+		window.addEventListener('resize', handleResize);
 		handleResize();
 
 		return () => {
-			window.removeEventListener('resize', debouncedResize);
+			window.removeEventListener('resize', handleResize);
 		};
 	}, []);
 

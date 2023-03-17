@@ -23,6 +23,7 @@ const Blade: FC<BladeProps> = ({
 	hideOverlay = false,
 	hideCloseButton = false,
 	showCloseButtonOnTop = false,
+	showBackButton = false,
 	onClose,
 	layer,
 	renderTitle,
@@ -41,8 +42,33 @@ const Blade: FC<BladeProps> = ({
 		isOpen && (document.activeElement as HTMLElement)?.blur?.();
 	}, [isOpen]);
 
-	const renderCloseButton = () => {
-		return (
+	const handleClose = () => {
+		if (isLayered && onCloseBlade) {
+			onCloseBlade(layer);
+		} else if (onClose) {
+			onClose();
+		}
+	};
+
+	const renderTopBar = () => {
+		return showBackButton ? (
+			<div className={styles['c-blade__top-bar-container']}>
+				<div className={styles['c-blade__back-container']} onClick={() => handleClose()}>
+					<Button variants="text" icon={<Icon name={IconNamesLight.ArrowLeft} />} />
+					<span>{tText('modules/shared/components/blade/blade___vorige-stap')}</span>
+				</div>
+				<Button
+					className={clsx(styles['c-blade__close-button'], {
+						[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
+					})}
+					icon={<Icon name={IconNamesLight.Times} aria-hidden />}
+					aria-label={tText('modules/shared/components/blade/blade___sluiten')}
+					variants="text"
+					onClick={() => handleClose()}
+					disabled={!isOpen}
+				/>
+			</div>
+		) : (
 			<Button
 				className={clsx(styles['c-blade__close-button'], {
 					[styles['c-blade__close-button--absolute']]: showCloseButtonOnTop,
@@ -50,13 +76,7 @@ const Blade: FC<BladeProps> = ({
 				icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 				aria-label={tText('modules/shared/components/blade/blade___sluiten')}
 				variants="text"
-				onClick={() => {
-					if (isLayered && onCloseBlade) {
-						onCloseBlade(layer);
-					} else if (onClose) {
-						onClose();
-					}
-				}}
+				onClick={() => handleClose()}
 				disabled={!isOpen}
 			/>
 		);
@@ -87,7 +107,7 @@ const Blade: FC<BladeProps> = ({
 						: { visibility: hide ? 'hidden' : 'visible' }
 				}
 			>
-				{!hideCloseButton && renderCloseButton()}
+				{!hideCloseButton && renderTopBar()}
 
 				<div className={styles['c-blade__title-wrapper']}>
 					{renderTitle?.({ id, className: styles['c-blade__title'] })}
@@ -105,7 +125,7 @@ const Blade: FC<BladeProps> = ({
 			{!hideOverlay && (
 				<Overlay
 					visible={isBladeOpen}
-					onClick={isLayered && onCloseBlade ? () => onCloseBlade(layer) : onClose}
+					onClick={() => handleClose()}
 					animate="animate-default"
 					className={clsx(className, styles['c-blade__overlay'], {
 						[styles['c-blade__overlay--managed']]: isLayered && layer > 1,

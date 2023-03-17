@@ -214,6 +214,14 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	&--right {
 		grid-column: 3/4;
 		justify-self: end;
+
+		// Ward: first child element is MaterialRequestCenterButton, which has a blade
+		// the other navigation items pop up through the blade if the following z-index is removed
+		ul {
+			li:first-child {
+				z-index: get-z-layer("filter");
+			}
+		}
 	}
 
 	&--responsive-desktop {

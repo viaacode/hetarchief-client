@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react';
 
+import { IconNamesLight, IconNamesSolid } from '@shared/components';
+
 import Icon from './Icon';
-import { IconNamesLight, IconNamesSolid } from './Icon.const';
 
 const parseIconName = (name: IconNamesLight | IconNamesSolid): string => name.split('--')[0];
 

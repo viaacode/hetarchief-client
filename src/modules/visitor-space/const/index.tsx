@@ -1,8 +1,6 @@
 import { OrderDirection, TabProps } from '@meemoo/react-components';
-import { isEmpty } from 'lodash-es';
 import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
-import { IeObjectSearchAggregations } from '@ie-objects/types';
 import { Icon, IconNamesLight } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';

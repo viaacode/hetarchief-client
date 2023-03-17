@@ -1,4 +1,11 @@
-import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
+import {
+	Breadcrumb,
+	Breadcrumbs,
+	Button,
+	FormControl,
+	OrderDirection,
+	TabProps,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import { isNil, sortBy, sum } from 'lodash-es';
@@ -12,6 +19,7 @@ import { useQueryParams } from 'use-query-params';
 import { Permission } from '@account/const';
 import { selectIsLoggedIn } from '@auth/store/user';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
+import { IeObjectAccessThrough } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,
@@ -35,7 +43,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
@@ -43,7 +51,7 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
-import { selectFolders, selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
@@ -119,7 +127,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
-	const filterOptions = useSelector(selectIeObjectsFilterOptions);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -477,14 +484,17 @@ const VisitorSpaceSearchPage: FC = () => {
 			return {
 				schemaIdentifier: item.schemaIdentifier,
 				maintainerSlug: item.maintainerSlug,
+				duration: item.duration,
 				description: item.description,
 				title: item.name,
 				publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
 				publishedBy: item.maintainerName || '',
 				type,
 				preview: item.thumbnailUrl || undefined,
+				meemooIdentifier: item.meemooIdentifier,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
+				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.KEY_USER),
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
@@ -495,6 +505,41 @@ const VisitorSpaceSearchPage: FC = () => {
 	/**
 	 * Render
 	 */
+
+	const renderBreadcrumbs = (): ReactNode => {
+		const staticBreadcrumbs: Breadcrumb[] = [
+			{
+				label: `${tHtml(
+					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___home'
+				)}`,
+				to: ROUTES.home,
+			},
+			{
+				label: `${tHtml(
+					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___search'
+				)}`,
+				to: ROUTES.search,
+			},
+		];
+
+		const dynamicBreadcrumbs: Breadcrumb[] =
+			!isNil(activeVisitorSpace) && activeVisitorSpace.spaceMaintainerId !== PUBLIC_COLLECTION
+				? [
+						{
+							label: activeVisitorSpace?.spaceName || '',
+							to: `${ROUTES.search}?maintainer=${activeVisitorSpace?.spaceMaintainerId}`,
+						},
+				  ]
+				: [];
+
+		return (
+			<Breadcrumbs
+				className="u-my-16"
+				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
+				icon={<Icon name={IconNamesLight.AngleRight} />}
+			/>
+		);
+	};
 
 	const renderFilterMenu = () => {
 		const filterMenuCls = clsx('p-visitor-space__filter-menu', {
@@ -653,9 +698,13 @@ const VisitorSpaceSearchPage: FC = () => {
 							</div>
 						</section>
 
-						{showResearchWarning && (
-							<aside className="u-bg-platinum">
-								<div className="l-container u-flex u-justify-center u-py-32">
+						<aside className="u-bg-platinum">
+							<div
+								className={clsx('l-container', {
+									'u-py-32': showResearchWarning,
+								})}
+							>
+								{showResearchWarning ? (
 									<Callout
 										icon={<Icon name={IconNamesLight.Info} aria-hidden />}
 										text={tHtml(
@@ -679,12 +728,15 @@ const VisitorSpaceSearchPage: FC = () => {
 											</Link>
 										}
 									/>
-								</div>
-							</aside>
-						)}
+								) : (
+									renderBreadcrumbs()
+								)}
+							</div>
+						</aside>
+
 						<section
 							className={clsx(
-								'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+								'p-visitor-space__results u-page-bottom-margin u-bg-platinum',
 								{
 									'p-visitor-space__results--placeholder': isLoadedWithoutResults,
 									'u-pt-0': showResearchWarning,

@@ -5,25 +5,25 @@ export interface MaterialRequest {
 	id: string;
 	isPending: boolean;
 	maintainerId: string;
+	maintainerLogo: string;
 	maintainerName: string;
 	maintainerSlug: string;
+	objectMeemooIdentifier: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
+	objectType?: MaterialRequestObjectType | undefined;
 	profileId: string;
 	reason: string;
+	requesterCapacity: MaterialRequestRequesterCapacity;
 	requesterFullName: string;
 	requesterId: string;
 	requesterMail: string;
 	type: MaterialRequestType;
 	updatedAt: string;
+	organisation?: string;
 }
 
 export interface MaterialRequestDetail extends MaterialRequest {
-	maintainerLogo: string;
-	objectMeemooIdentifier: string;
-	objectType?: 'audio' | 'video' | 'film';
-	organisation?: string;
-	requesterCapacity: MaterialRequestRequesterCapacity;
 	requesterUserGroupDescription: string;
 	requesterUserGroupId: string;
 	requesterUserGroupLabel: string;
@@ -34,7 +34,14 @@ export interface MaterialRequestCreation {
 	objectId: string;
 	type: MaterialRequestType;
 	reason: string;
-	requesterCapacity: 'OTHER' | 'WORK' | 'PRIVATE_RESEARCH' | 'EDUCATION';
+	requesterCapacity: MaterialRequestRequesterCapacity;
+	organisation?: string;
+}
+
+export interface MaterialRequestUpdate {
+	type: MaterialRequestType;
+	reason: string;
+	requesterCapacity: MaterialRequestRequesterCapacity;
 	organisation?: string;
 }
 
@@ -49,6 +56,12 @@ export enum MaterialRequestRequesterCapacity {
 	WORK = 'WORK',
 	PRIVATE_RESEARCHER = 'PRIVATE_RESEARCHER',
 	EDUCATION = 'EDUCATION',
+}
+
+export enum MaterialRequestObjectType {
+	AUDIO = 'audio',
+	VIDEO = 'video',
+	FILM = 'film',
 }
 
 export const GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY = (): {

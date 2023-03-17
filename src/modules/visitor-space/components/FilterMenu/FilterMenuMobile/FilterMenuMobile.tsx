@@ -1,5 +1,6 @@
 import { Button, OrderDirection, TagList } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { isNil } from 'lodash-es';
 import { FC, ReactElement, useEffect, useState } from 'react';
 
 import { Navigation } from '@navigation/components';
@@ -66,6 +67,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		return (
 			<FilterButton
 				key={`filter-menu-mobile-btn-${id}`}
+				className={clsx({
+					[styles['c-filter-menu-mobile__button--operative']]: !isNil(filterValues?.[id]),
+				})}
 				icon={filterIsActive ? IconNamesLight.AngleLeft : icon ?? IconNamesLight.AngleRight}
 				isActive={filterIsActive}
 				label={label}

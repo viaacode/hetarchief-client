@@ -1,7 +1,7 @@
 import { CheckboxList, Dropdown, RadioButton } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
-import { FC, ReactElement, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactElement, ReactNode, useState } from 'react';
 
 import { Icon, IconNamesLight } from '../Icon';
 
@@ -15,29 +15,24 @@ import {
 
 export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 	options,
-	initialState,
+	value,
 	onChange,
 	className,
 }: RefinableRadioButtonProps): ReactElement => {
-	const [selectedOption, setSelectedOption] = useState<string>(initialState.selectedOption);
-	const [selectedRefineOptions, setSelectedRefineOptions] = useState<string[]>(
-		initialState.refinedSelection
-	);
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
 	const onRadioButtonClick = (id: string): void => {
-		setSelectedOption(id);
-		setSelectedRefineOptions([]);
+		onChange(id, [], isDropdownOpen);
 	};
 
-	const onCheckboxClick = (checked: boolean, value: unknown): void => {
+	const onCheckboxClick = (checked: boolean, newValue: unknown): void => {
 		// If not checked yet, we need to add the value to the list of selected items, otherwise remove it
-		// This list will be used to check wheter an option should have the checked property or not, that's why the check is "reversed" here.
-		const selected = !checked
-			? [...selectedRefineOptions, `${value}`]
-			: without(selectedRefineOptions, `${value}`);
+		// This list will be used to check whether an option should have the checked property or not, that's why the check is "reversed" here.
+		const newSelected = !checked
+			? [...value.refinedSelection, `${newValue}`]
+			: without(value.refinedSelection, `${newValue}`);
 
-		setSelectedRefineOptions(selected);
+		onChange(value.selectedOption, newSelected, isDropdownOpen);
 	};
 
 	const renderRefineOptions = (
@@ -48,7 +43,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 			return;
 		}
 
-		const isDisabled = selectedOption !== optionId;
+		const isDisabled = value.selectedOption !== optionId;
 
 		return (
 			<div
@@ -73,7 +68,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 						items={options.map(({ id, label }: RefinableRadioButtonRefineOption) => ({
 							value: id,
 							label,
-							checked: selectedRefineOptions.includes(id),
+							checked: value.refinedSelection.includes(id),
 						}))}
 						checkIcon={<Icon name={IconNamesLight.Check} />}
 						onItemClick={onCheckboxClick}
@@ -86,10 +81,6 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 		);
 	};
 
-	useEffect(() => {
-		onChange(selectedOption, selectedRefineOptions, isDropdownOpen);
-	}, [isDropdownOpen, onChange, selectedOption, selectedRefineOptions]);
-
 	return (
 		<div className={styles['c-refinable-radio-button']}>
 			<ul className={clsx(styles['c-refinable-radio-button__list'], 'u-list-reset')}>
@@ -99,7 +90,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 							<RadioButton
 								key={id}
 								label={label}
-								checked={selectedOption === id}
+								checked={value.selectedOption === id}
 								onClick={() => onRadioButtonClick(id)}
 								className={styles['c-refinable-radio-button__option']}
 							/>

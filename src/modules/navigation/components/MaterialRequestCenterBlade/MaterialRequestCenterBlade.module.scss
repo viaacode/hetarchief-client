@@ -1,0 +1,125 @@
+@use "../../../../styles/abstracts/" as *;
+
+$component: "c-material-request-center-blade";
+
+.#{$component} {
+	&__table {
+		cursor: pointer;
+	}
+
+	&__loading {
+		display: flex;
+		justify-content: center;
+		color: $black;
+	}
+
+	&__title-container {
+		color: $black;
+		padding: 0 $spacer-lg;
+		margin-bottom: $spacer-1xl;
+	}
+
+	&__title {
+		margin-bottom: $spacer-md;
+	}
+
+	&__subtitle {
+		color: $zinc;
+	}
+
+	&__material-container {
+		display: flex;
+		align-items: center;
+		border-bottom: 0.2rem solid $platinum;
+	}
+
+	&__maintainer {
+		padding: $spacer-sm $spacer-lg;
+		background-color: $platinum;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		&-details {
+			color: $neutral;
+			text-align: end;
+			font-size: $font-size-sm;
+		}
+
+		&-logo {
+			position: relative;
+			width: 8rem;
+			height: 5rem;
+		}
+	}
+
+	&__material {
+		&:focus,
+		&:focus-within {
+			outline: 0.2rem solid $teal;
+			outline-offset: -0.2rem;
+		}
+
+		&-link {
+			text-decoration: none;
+			padding: $spacer-md $spacer-lg;
+			flex-grow: 3;
+		}
+
+		&-label {
+			color: $black;
+			font-weight: bold;
+			margin-bottom: $spacer-xxs;
+
+			&-icon {
+				color: $blue;
+				margin-right: $spacer-xs;
+			}
+		}
+
+		&-id {
+			font-size: $font-size-sm;
+			color: $neutral;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		&-actions {
+			display: flex;
+			flex-direction: row;
+			padding: $spacer-md $spacer-lg;
+
+			&-button {
+				margin-right: $spacer-xs;
+			}
+		}
+	}
+
+	&__content {
+		padding: $spacer-lg;
+
+		dl {
+			margin-top: 0;
+		}
+
+		&-value {
+			margin-left: 0;
+			margin-bottom: $spacer-md;
+		}
+	}
+
+	&__close-button-container {
+		padding: $spacer-lg;
+	}
+
+	&__send-button {
+		margin-bottom: $spacer-sm;
+	}
+
+	&__no-content {
+		display: flex;
+		justify-content: center;
+		color: $black;
+		padding: $spacer-lg;
+	}
+}
