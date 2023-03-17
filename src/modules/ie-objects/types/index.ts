@@ -165,3 +165,15 @@ export enum MediaActions {
 	RelatedObjects = 'related-objects',
 	RequestMaterial = 'request-material',
 }
+
+// Metadata
+
+export enum MetadataExportFormats {
+	'xml',
+	'csv',
+}
+
+export interface IeMetadataExportProps {
+	id?: string;
+	format?: MetadataExportFormats;
+}

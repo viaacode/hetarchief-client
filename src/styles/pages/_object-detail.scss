@@ -329,6 +329,20 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
+	&__export-dropdown.c-menu-content-item {
+		border: $divider-black;
+		border-top: none;
+
+		&:first-of-type {
+			border-top: $divider-black;
+		}
+	}
+
+	.c-menu--default {
+		padding: 0;
+		margin-top: $spacer-xxs;
+	}
+
 	&__request-material {
 		min-width: 0;
 
