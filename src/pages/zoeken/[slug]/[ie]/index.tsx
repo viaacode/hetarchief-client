@@ -17,13 +17,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { parseUrl } from 'query-string';
-import { ComponentType, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { Group, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	DynamicActionMenu,
 	MediaObject,
@@ -228,7 +227,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
-	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
 		!hasMedia && !mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
@@ -896,16 +894,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 		if (isErrorNotFound) {
 			return <ErrorNotFound />;
-		}
-		if (isErrorSpaceNoAccess) {
-			return (
-				<ErrorNoAccess
-					visitorSpaceSlug={router.query.slug as string}
-					description={tHtml(
-						'modules/shared/components/error-space-no-access/error-space-no-access___je-hebt-geen-toegang-tot-deze-bezoekersruimte-dien-een-aanvraag-in-om-deze-te-bezoeken'
-					)}
-				/>
-			);
 		}
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};
