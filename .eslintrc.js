@@ -14,6 +14,7 @@ module.exports = {
 		'plugin:storybook/recommended',
 		'plugin:prettier/recommended',
 	],
+	ignorePatterns: ['public/locals/**/*.json'],
 	rules: {
 		'@typescript-eslint/naming-convention': [
 			'error',
