@@ -29,7 +29,9 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	const [query] = useQueryParams(MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
 	const [shouldReset, setShouldReset] = useState<boolean>(false);
-	const [selection, setSelection] = useState<string[]>(() => compact(query.maintainers || []));
+	const [selection, setSelection] = useState<string[]>(() =>
+		compact(query[VisitorSpaceFilterId.Maintainers] || [])
+	);
 
 	const { setValue, reset, handleSubmit } = useForm<MaintainerFilterFormState>({
 		resolver: yupResolver(MAINTAINER_FILTER_FORM_SCHEMA()),

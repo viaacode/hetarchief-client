@@ -317,7 +317,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Reset all filters except the maintainer
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			maintainer: query.maintainer,
+			[VisitorSpaceFilterId.Maintainer]: query[VisitorSpaceFilterId.Maintainer],
 		});
 	};
 
@@ -442,10 +442,19 @@ const VisitorSpaceSearchPage: FC = () => {
 		});
 
 		// Destructure to keyword-able filters
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { format, orderProp, orderDirection, page, maintainer, ...rest } = {
+		/* eslint-disable @typescript-eslint/no-unused-vars */
+		const {
+			format,
+			orderProp,
+			orderDirection,
+			page,
+			// Dynamically destructure the maintainer qp using our enum so we don't need to change it every time the qp value changes
+			[VisitorSpaceFilterId.Maintainer]: maintainer,
+			...rest
+		} = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
+		/* eslint-disable @typescript-eslint/no-unused-vars */
 
 		setQuery({ ...rest, ...query, page: 1 });
 	};
