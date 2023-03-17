@@ -39,7 +39,7 @@
 		"prepare": "husky install",
 		"storybook": "start-storybook -p 6006",
 		"build:storybook": "build-storybook",
-		"i18n:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix",
+		"translations:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix",
 		"gql:extract": "ts-node --transpile-only --require dotenv/config scripts/whitelist-gql-queries.ts dotenv_config_path=.env"
 	},
 	"dependencies": {
