@@ -129,15 +129,15 @@ export enum IconNamesSolid {
 }
 
 export enum AlertIconNames {
-	Notification = IconNamesLight.Notification,
-	User = IconNamesLight.User,
-	Question = IconNamesLight.Question,
-	Info = IconNamesLight.Info,
-	Exclamation = IconNamesLight.Exclamation,
-	Key = IconNamesLight.Key,
-	Calendar = IconNamesLight.Calendar,
-	Book = IconNamesLight.Book,
-	AngleRight = IconNamesLight.AngleRight,
+	Notification = 'notification--light',
+	User = 'user--light',
+	Question = 'question--light',
+	Info = 'info--light',
+	Exclamation = 'exclamation--light',
+	Key = 'key--light',
+	Calendar = 'calendar--light',
+	Book = 'book--light',
+	AngleRight = 'angle-right--light',
 }
 
 export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
@@ -153,11 +153,15 @@ export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
 	return [...lightIcons, ...solidIcons];
 };
 
-export const ALERT_ICON_LIST_CONFIG = (): { value: string; label: string; key: string }[] => {
-	const alertIcons = Object.keys(AlertIconNames).map((v: string) => ({
-		value: v,
-		label: tText(`modules/admin/icons/${v}`),
-		key: 'alert-icon-' + v,
+export const ALERT_ICON_LIST_CONFIG = (): {
+	key: string;
+	value: AlertIconNames;
+	label: string;
+}[] => {
+	const alertIcons = Object.keys(AlertIconNames).map((key: string) => ({
+		key,
+		value: AlertIconNames[key as keyof typeof AlertIconNames],
+		label: tText(`modules/admin/icons/${key}`),
 	}));
 
 	return [...alertIcons];

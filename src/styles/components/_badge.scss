@@ -46,6 +46,10 @@ $badge-font-size: 1.4rem;
 		@include icon-font-size($badge-font-size);
 	}
 
+	&--grey {
+		@include badge-variant($grey, $white, 0.6rem);
+	}
+
 	&--small {
 		@include badge-variant($black, $white, $spacer-xs);
 

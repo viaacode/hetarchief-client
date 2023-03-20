@@ -1,5 +1,8 @@
+import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
+import { isWithinInterval } from 'date-fns';
+import { relativeTimeRounding } from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
@@ -27,12 +30,16 @@ import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/g
 import { NAV_HAMBURGER_PROPS, NAV_ITEMS_RIGHT, NAV_ITEMS_RIGHT_LOGGED_IN } from '@navigation/const';
 import { NavigationPlacement } from '@navigation/services/navigation-service';
 import {
+	AlertIconNames,
 	HetArchiefLogo,
 	HetArchiefLogoType,
+	Icon,
+	IconNamesLight,
 	NotificationCenter,
 	ZendeskWrapper,
 } from '@shared/components';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
+import Html from '@shared/components/Html/Html';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
@@ -40,6 +47,7 @@ import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useHistory } from '@shared/hooks/use-history';
+import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
@@ -61,6 +69,8 @@ import { Breakpoints } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import packageJson from '../../../../../package.json';
+
+import { useGetMaintenanceAlerts } from 'modules/maintenance-alerts/hooks/get-maintenance-alerts';
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
@@ -90,6 +100,12 @@ const AppLayout: FC = ({ children }) => {
 		[SEARCH_QUERY_KEY]: StringParam,
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
+	const { data: alerts } = useGetMaintenanceAlerts();
+
+	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
+		'HET_ARCHIEF.alerts.ignoreUntil',
+		JSON.stringify({ id: '1' })
+	);
 
 	useHistory(asPath, history);
 
@@ -260,6 +276,58 @@ const AppLayout: FC = ({ children }) => {
 		}
 	};
 
+	const onCloseAlert = (alertId: string | undefined) => {
+		if (!alertId) {
+			return;
+		}
+
+		const alert = alerts?.items.find((alert) => alert.id === alertId);
+
+		const ignoreUntil = JSON.stringify({
+			...JSON.parse(alertsIgnoreUntil),
+			[alertId]: alert?.untilDate,
+		});
+
+		setAlertsIgnoreUntil(ignoreUntil);
+	};
+
+	const activeAlerts = useMemo(() => {
+		return alerts?.items.filter(
+			(item) =>
+				isWithinInterval(new Date(), {
+					start: new Date(item.fromDate),
+					end: new Date(item.untilDate),
+				}) &&
+				item.userGroups.includes(user?.groupId || '') &&
+				JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate
+		);
+	}, [alerts?.items, alertsIgnoreUntil, user?.groupId]);
+
+	const renderAlerts = () => {
+		return (
+			<div className="l-app__alerts-overlay l-container">
+				{activeAlerts?.map((alert) => {
+					return (
+						<Alert
+							id={alert.id}
+							key={alert.id}
+							title={alert.title}
+							content={<Html content={alert.message} type="div" />}
+							variants="blue"
+							icon={
+								<Icon
+									name={IconNamesLight[alert.type as keyof typeof AlertIconNames]}
+								/>
+							}
+							closeIcon={<Icon name={IconNamesLight.Times} />}
+							onClose={onCloseAlert}
+						/>
+					);
+				})}
+			</div>
+		);
+	};
+
 	return (
 		<div
 			className={clsx('l-app', {
@@ -303,6 +371,7 @@ const AppLayout: FC = ({ children }) => {
 					useMarkOneNotificationsAsReadHook={useMarkOneNotificationsAsRead}
 					useMarkAllNotificationsAsReadHook={useMarkAllNotificationsAsRead}
 				/>
+				{renderAlerts()}
 			</main>
 
 			<ToastContainer
