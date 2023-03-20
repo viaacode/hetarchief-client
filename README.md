@@ -152,6 +152,11 @@ The client is build automatically when
     -   release a new version of the react-components. Check readme-file of react-components for instructions.
     -   release a new version of the admin-core. Check readme-file of admin-core for instructions.
     -   update package.json in this repo with the new version numbers of `@meemoo/react-components` and `@meemoo/admin-core-ui`
+    -   install updated versions `npm i --force`
+    -   commit changes to package.json `git add .` and `git commit -m "fix(package.json): update versions of meemoo dependencies"`
+    -   create new hetarchief-client version `npm version patch`
+    -   push changes `git push --follow-tags`
+    -   check progress on Jenkins https://ci.meemoo.be/job/hetarchief/job/client/job/develop/
 -   you merge changes into the master branch => this deploys to QAS
 -   you tag a commit on the master branch with a version => this deploys to PRD
 
