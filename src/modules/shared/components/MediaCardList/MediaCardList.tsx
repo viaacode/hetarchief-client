@@ -24,6 +24,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	actions,
 	wrapper = (card) => card,
 	className,
+	showLocallyAvailable = false,
 }) => {
 	const windowSize = useWindowSizeContext();
 
@@ -126,23 +127,18 @@ const MediaCardList: FC<MediaCardListProps> = ({
 
 	const tiles = items.map((item, i) =>
 		wrapper(
-			<Link
-				key={item.schemaIdentifier}
-				href={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
-			>
-				<a className="u-text-no-decoration" aria-label={item.schemaIdentifier}>
-					<MediaCard
-						key={getKey(item, i)}
-						id={getKey(item, i)}
-						buttons={buttons?.(item)}
-						meemooIdentifier={item.meemooIdentifier}
-						actions={actions?.(item)}
-						{...item}
-						keywords={keywords}
-						view={view}
-					/>
-				</a>
-			</Link>,
+			<MediaCard
+				key={getKey(item, i)}
+				id={getKey(item, i)}
+				buttons={buttons?.(item)}
+				meemooIdentifier={item.meemooIdentifier}
+				actions={actions?.(item)}
+				{...item}
+				keywords={keywords}
+				view={view}
+				showLocallyAvailable={showLocallyAvailable}
+				link={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
+			/>,
 			item
 		)
 	);

@@ -516,6 +516,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 												};
 											})}
 											view={'list'}
+											showLocallyAvailable
 										/>
 									)}
 

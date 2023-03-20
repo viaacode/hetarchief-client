@@ -1,11 +1,19 @@
-import { Badge, Card, Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
+import {
+	Badge,
+	Button,
+	Card,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
-import { FC, MouseEvent, ReactNode } from 'react';
+import Link from 'next/link';
+import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 
-import { DropdownMenu, IconNamesLight } from '@shared/components';
+import { DropdownMenu, IconNamesLight, Modal } from '@shared/components';
 import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { IeObjectTypes } from '@shared/types';
@@ -33,8 +41,27 @@ const MediaCard: FC<MediaCardProps> = ({
 	icon,
 	isKeyUser,
 	meemooIdentifier,
+	showLocallyAvailable = false,
+	link,
 }) => {
 	const { tText } = useTranslation();
+
+	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+
+	const wrapInLink = (children: ReactNode) => {
+		if (link) {
+			return (
+				<Link key={id} href={link}>
+					<a className="u-text-no-decoration" aria-label={id}>
+						{children}
+					</a>
+				</Link>
+			);
+		}
+
+		return children;
+	};
+
 	const renderDropdown = () =>
 		actions ? (
 			<DropdownMenu
@@ -62,7 +89,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
-			return (
+			return wrapInLink(
 				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
 					{keywords?.length ? highlighted(title ?? '') : title}
 				</b>
@@ -73,11 +100,11 @@ const MediaCard: FC<MediaCardProps> = ({
 			console.warn('[WARN][MediaCard] Title could not be highlighted.');
 		}
 
-		return title;
+		return wrapInLink(title);
 	};
 
 	const renderSubTitle = (): ReactNode => {
-		return meemooIdentifier;
+		return wrapInLink(meemooIdentifier);
 	};
 
 	const renderCaption = (): ReactNode => {
@@ -95,7 +122,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return keywords?.length ? highlighted(subtitle) : subtitle;
+		return keywords?.length ? wrapInLink(highlighted(subtitle)) : wrapInLink(subtitle);
 	};
 
 	const renderNoContentIcon = () => (
@@ -141,27 +168,40 @@ const MediaCard: FC<MediaCardProps> = ({
 		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
 	};
 
-	const renderImage = (imgPath: string | undefined) =>
-		imgPath ? (
-			<div
-				className={clsx(
-					styles['c-media-card__header-wrapper'],
-					styles[`c-media-card__header-wrapper--${view}`]
-				)}
-			>
-				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
-				{!isNil(icon) && (
-					<>
-						<div className={clsx(styles['c-media-card__header-icon'])}>
-							<Icon name={icon} />
-						</div>
-						{duration && renderDuration()}
-					</>
-				)}
+	const renderLocallyAvailablePill = () => {
+		return (
+			<div className={styles['c-media-card__locally-available-pill']}>
+				<Icon
+					name={IconNamesLight.Forbidden}
+					className={styles['c-media-card__locally-available-pill--icon']}
+				/>
+				Enkel ter plaatse beschikbaar
 			</div>
-		) : (
-			renderNoContent()
 		);
+	};
+
+	const renderImage = (imgPath: string | undefined) =>
+		imgPath
+			? wrapInLink(
+					<div
+						className={clsx(
+							styles['c-media-card__header-wrapper'],
+							styles[`c-media-card__header-wrapper--${view}`]
+						)}
+					>
+						<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+						{!isNil(icon) && (
+							<>
+								<div className={clsx(styles['c-media-card__header-icon'])}>
+									<Icon name={icon} />
+								</div>
+								{showLocallyAvailable && renderLocallyAvailablePill()}
+								{duration && renderDuration()}
+							</>
+						)}
+					</div>
+			  )
+			: renderNoContent();
 
 	const highlighted = (toHighlight: string) => {
 		return (
@@ -190,6 +230,25 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
+	const renderLocallyAvailableButtons = () => {
+		return (
+			<div className={styles['c-media-card__locally-available-container']}>
+				<Button
+					iconStart={<Icon name={IconNamesLight.Info} />}
+					label="Meer info"
+					variants={['info']}
+					className={styles['c-media-card__info-button']}
+					onClick={() => setIsInfoModalOpen(true)}
+				/>
+				<Button
+					label="Plan een bezoek"
+					variants={['dark']}
+					className={styles['c-media-card__visit-button']}
+				/>
+			</div>
+		);
+	};
+
 	return (
 		<div id={id}>
 			<Card
@@ -208,18 +267,42 @@ const MediaCard: FC<MediaCardProps> = ({
 			>
 				{typeof description === 'string' ? (
 					<>
-						<div className="u-text-ellipsis--2">
-							<span>{description}</span>
-						</div>
+						{wrapInLink(
+							<div className="u-text-ellipsis--2">
+								<span>{description}</span>
+							</div>
+						)}
 						{isKeyUser && renderKeyUserPill()}
+						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>
 				) : (
 					<>
-						{description}
+						{wrapInLink(description)}
 						{isKeyUser && renderKeyUserPill()}
+						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>
 				)}
 			</Card>
+			<Modal
+				title="Waarom kan ik dit object niet bekijken?"
+				isOpen={isInfoModalOpen}
+				onClose={() => setIsInfoModalOpen(false)}
+				footer={
+					<div className={styles['c-media-card__close-button-container']}>
+						<Button
+							label="Sluit"
+							onClick={() => setIsInfoModalOpen(false)}
+							variants={['dark']}
+							className={styles['c-media-card__close-button']}
+						/>
+					</div>
+				}
+			>
+				<p className={styles['c-media-card__infomodal-description']}>
+					Dit object bevat geen licentie voor online raadpleging. Contacteer de aanbieder
+					voor meer informatie.
+				</p>
+			</Modal>
 		</div>
 	);
 };
