@@ -1,9 +1,10 @@
 @use "sass:color";
 @use "src/styles/abstracts" as *;
 
+$component: "c-filter-menu";
 $c-filter-menu-flyout-top-padding: 6.4rem;
 $c-filter-menu-border-color: color.adjust($white, $alpha: -0.8);
-$component: "c-filter-menu";
+$checkbox-size: $spacer-sm;
 
 .#{$component} {
 	background-color: $black;
@@ -169,10 +170,5 @@ $component: "c-filter-menu";
 
 	&__form {
 		max-height: calc(100vh - #{$c-filter-menu-flyout-top-padding});
-	}
-
-	&__checkbox {
-		border-bottom: $divider-white;
-		padding: 1.4rem $spacer-sm 1.4rem $spacer-md;
 	}
 }

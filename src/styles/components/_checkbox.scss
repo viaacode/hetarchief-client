@@ -1,6 +1,8 @@
 @use "sass:color";
 @use "src/styles/abstracts" as *;
 
+$checkbox-size: $spacer-sm;
+
 @include generate-checkbox-radio-styling("checkbox");
 
 // Variants
@@ -69,22 +71,16 @@
 }
 
 .c-checkbox--reverse {
-	display: grid;
-	grid-template-columns: auto $spacer-sm;
-	align-items: center;
-	grid-gap: $spacer-sm;
+	width: 100%;
 
 	.c-checkbox {
 		&__check-icon {
-			grid-column: 2;
+			left: calc(100% - $checkbox-size);
 		}
 
 		&__label {
-			padding: 0;
-		}
-
-		&__input {
-			grid-column: 1/2;
+			padding-left: unset;
+			padding-right: calc($checkbox-size * 2);
 		}
 	}
 }
