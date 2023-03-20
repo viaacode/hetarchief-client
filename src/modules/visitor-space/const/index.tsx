@@ -5,8 +5,6 @@ import { Icon, IconNamesLight } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceMediaType } from '@shared/types';
-import { RemoteFilterForm } from '@visitor-space/components/RemoteFilterForm';
-
 import {
 	AdvancedFilterForm,
 	CreatedFilterForm,
@@ -21,7 +19,9 @@ import {
 	MaintainerFilterForm,
 	MediumFilterForm,
 	PublishedFilterForm,
-} from '../components';
+	RemoteFilterForm,
+} from '@visitor-space/components';
+
 import { VisitorSpaceFilterId, VisitorSpaceSort, VisitorSpaceStatus } from '../types';
 
 import { AdvancedFilterArrayParam } from './query-params';
@@ -72,10 +72,7 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	[VisitorSpaceFilterId.Language]: ArrayParam,
 	[VisitorSpaceFilterId.Maintainers]: ArrayParam,
 	[VisitorSpaceFilterId.Advanced]: AdvancedFilterArrayParam,
-	[VisitorSpaceFilterId.Remote]: withDefault(
-		BooleanParam,
-		VISITOR_SPACE_QUERY_PARAM_INIT.isConsultableRemote
-	),
+	[VisitorSpaceFilterId.Remote]: BooleanParam,
 	// Pagination
 	page: withDefault(NumberParam, VISITOR_SPACE_QUERY_PARAM_INIT.page),
 	// Sorting
@@ -111,6 +108,7 @@ export const VISITOR_SPACE_FILTERS = (activeVisitorSpace: string): FilterMenuFil
 		label: tText('modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'),
 		form: RemoteFilterForm,
 		type: FilterMenuType.Checkbox,
+		isDisabled: () => activeVisitorSpace !== PUBLIC_COLLECTION,
 	},
 	{
 		id: VisitorSpaceFilterId.Medium,

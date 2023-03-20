@@ -19,6 +19,7 @@ export * from './MediaTypeSelect';
 export * from './MediumFilterForm';
 export * from './MediumSelect';
 export * from './PublishedFilterForm';
+export * from './RemoteFilterForm';
 export * from './VisitorSpaceNavigation';
 export * from './VisitorSpaceSearchPage';
 export * from './WaitingPage';

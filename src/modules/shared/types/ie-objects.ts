@@ -25,6 +25,7 @@ export enum IeObjectsSearchFilterField {
 	QUERY = 'query',
 	MAINTAINER = 'maintainer',
 	MAINTAINERS = 'maintainers',
+	REMOTE = 'isConsultableRemote',
 }
 
 export enum IeObjectsSearchOperator {

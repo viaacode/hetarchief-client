@@ -35,7 +35,7 @@ export enum VisitorSpaceFilterId {
 	Published = 'published',
 	Maintainer = 'aanbieder',
 	Maintainers = 'aanbieders',
-	Remote = 'isConsultableRemote',
+	Remote = 'remote',
 }
 
 export enum VisitorSpaceOrderProps {

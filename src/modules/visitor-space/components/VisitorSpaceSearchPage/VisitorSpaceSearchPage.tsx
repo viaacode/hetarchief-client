@@ -80,6 +80,7 @@ import {
 	MaintainerFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
+	RemoteFilterFormState,
 } from '../../components';
 import {
 	PUBLIC_COLLECTION,
@@ -389,6 +390,10 @@ const VisitorSpaceSearchPage: FC = () => {
 				data = (values as MaintainerFilterFormState).maintainers;
 				break;
 
+			case VisitorSpaceFilterId.Remote:
+				data = (values as RemoteFilterFormState).isConsultableRemote;
+				break;
+
 			case VisitorSpaceFilterId.Advanced:
 				data = (values as AdvancedFilterFormState).advanced.filter(
 					(advanced) => advanced.val !== initialFields().val
@@ -421,6 +426,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Language:
 				case VisitorSpaceFilterId.Medium:
 				case VisitorSpaceFilterId.Maintainers:
+				case VisitorSpaceFilterId.Remote:
 				case SEARCH_QUERY_KEY:
 					query[tag.key] = [
 						...((query[tag.key] as Array<unknown>) || []),

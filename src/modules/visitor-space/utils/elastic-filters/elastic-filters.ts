@@ -84,6 +84,16 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 			(item) => item !== null
 		) as string[],
 	},
+	// Consultable Remote
+	{
+		field: IeObjectsSearchFilterField.REMOTE,
+		operator: IeObjectsSearchOperator.IS,
+		value:
+			// Because the UI doesn't match with the BE property (on site vs remote), we need to pass the opposite value of the remote boolean
+			query[VisitorSpaceFilterId.Remote] !== null
+				? (!query[VisitorSpaceFilterId.Remote])?.toString()
+				: 'true',
+	},
 	// Advanced
 	...(query.advanced || []).flatMap(mapAdvancedToElastic),
 ];
