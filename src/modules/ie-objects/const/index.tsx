@@ -161,6 +161,23 @@ export const MEDIA_ACTIONS = (
 	canRequestAccess: boolean
 ): DynamicActionMenuProps => ({
 	actions: [
+		...((canRequestAccess
+			? [
+					{
+						label: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+						icon: (
+							<Icon
+								aria-hidden
+								className="u-font-size-24 u-text-left"
+								name={isInAFolder ? IconNamesSolid.Request : IconNamesLight.Request}
+							/>
+						),
+						id: MediaActions.RequestAccess,
+						ariaLabel: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+						tooltip: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+					},
+			  ]
+			: []) as ActionItem[]),
 		...((canManageFolders
 			? [
 					{
@@ -177,23 +194,6 @@ export const MEDIA_ACTIONS = (
 						id: MediaActions.Bookmark,
 						ariaLabel: tText('modules/ie-objects/const/index___bookmark'),
 						tooltip: tText('modules/ie-objects/const/index___bookmark'),
-					},
-			  ]
-			: []) as ActionItem[]),
-		...((canRequestAccess
-			? [
-					{
-						label: tText('modules/ie-objects/const/index___request'),
-						icon: (
-							<Icon
-								aria-hidden
-								className="u-font-size-24 u-text-left"
-								name={isInAFolder ? IconNamesSolid.Request : IconNamesLight.Request}
-							/>
-						),
-						id: MediaActions.RequestAccess,
-						ariaLabel: tText('modules/ie-objects/const/index___request-access'),
-						tooltip: tText('modules/ie-objects/const/index___request-access'),
 					},
 			  ]
 			: []) as ActionItem[]),
