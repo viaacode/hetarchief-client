@@ -15,6 +15,7 @@ export * from './KeywordsFilterForm';
 export * from './LanguageFilterForm';
 export * from './MaintainerFilterForm';
 export * from './MaterialRequestBlade';
+export * from './MediaFilterForm';
 export * from './MediaTypeSelect';
 export * from './MediumFilterForm';
 export * from './MediumSelect';
