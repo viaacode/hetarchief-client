@@ -153,10 +153,11 @@ export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
 	return [...lightIcons, ...solidIcons];
 };
 
-export const ALERT_ICON_LIST_CONFIG = (): { value: string; label: string }[] => {
+export const ALERT_ICON_LIST_CONFIG = (): { value: string; label: string; key: string }[] => {
 	const alertIcons = Object.keys(AlertIconNames).map((v: string) => ({
 		value: v,
 		label: tText(`modules/admin/icons/${v}`),
+		key: 'alert-icon-' + v,
 	}));
 
 	return [...alertIcons];
