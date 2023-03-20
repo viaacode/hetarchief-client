@@ -1,7 +1,9 @@
+@use "sass:color";
 @use "src/styles/abstracts" as *;
 
 $badge-font-size: 1rem;
 $pill-animation: 0.5s ease-in 7 alternate flash-pill;
+$pill-color: color.adjust(red, $lightness: 10%);
 
 .c-material-request-center {
 	position: relative;
@@ -33,7 +35,7 @@ $pill-animation: 0.5s ease-in 7 alternate flash-pill;
 				background-color: red;
 				color: white;
 				border-color: transparent;
-				box-shadow: 0 0 10px 2px darken(red, 10%);
+				box-shadow: 0 0 1rem 0.2rem $pill-color;
 				animation: $pill-animation;
 				transition: color 0.5s, border-color 0.5s, box-shadow 0.5s;
 			}
@@ -48,14 +50,14 @@ $pill-animation: 0.5s ease-in 7 alternate flash-pill;
 
 @keyframes flash-pill {
 	0% {
-		box-shadow: 0 0 0.2rem 0.2rem darken(red, 10%);
+		box-shadow: 0 0 0.2rem 0.2rem $pill-color;
 	}
 
 	50% {
-		box-shadow: 0 0 2rem 0.4rem darken(red, 10%);
+		box-shadow: 0 0 2rem 0.4rem $pill-color;
 	}
 
 	100% {
-		box-shadow: 0 0 0.2rem 0.2rem darken(red, 10%);
+		box-shadow: 0 0 0.2rem 0.2rem $pill-color;
 	}
 }
