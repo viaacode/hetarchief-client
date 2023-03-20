@@ -170,4 +170,9 @@ $component: "c-filter-menu";
 	&__form {
 		max-height: calc(100vh - #{$c-filter-menu-flyout-top-padding});
 	}
+
+	&__checkbox {
+		border-bottom: $divider-white;
+		padding: 1.4rem $spacer-sm 1.4rem $spacer-md;
+	}
 }

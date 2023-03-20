@@ -1,7 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
-import { FC, useEffect, useState } from 'react';
+import { isEmpty, isNil } from 'lodash-es';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { useQueryParams } from 'use-query-params';
 
 import { Icon, IconNamesLight, Toggle } from '@shared/components';
@@ -14,7 +14,7 @@ import { VISITOR_SPACE_ACTIVE_SORT_MAP, VISITOR_SPACE_QUERY_PARAM_CONFIG } from 
 import { VisitorSpaceSort } from '../../types';
 
 import styles from './FilterMenu.module.scss';
-import { FilterMenuProps } from './FilterMenu.types';
+import { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
 import { FilterMenuMobile } from './FilterMenuMobile';
 import { FilterOption } from './FilterOption';
 import { FilterSort } from './FilterSort';
@@ -107,6 +107,36 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		);
 	};
 
+	const renderFilterMenuSorting = (): ReactNode => (
+		<FilterSort
+			activeSort={activeSort}
+			activeSortLabel={renderActiveSortLabel()}
+			className={styles['c-filter-menu__option']}
+			options={sortOptions}
+			onOptionClick={onSortClick}
+		/>
+	);
+
+	const renderFilterMenuOptions = (): ReactNode =>
+		filters.map(
+			(option: FilterMenuFilterOption): ReactNode => (
+				<FilterOption
+					{...option}
+					key={`filter-menu-option-${option.id}`}
+					className={clsx({
+						[styles['c-filter-menu__button--operative']]: !isNil(
+							filterValues?.[option?.id]
+						),
+					})}
+					activeFilter={query.filter}
+					values={filterValues?.[option.id]}
+					onClick={onFilterClick}
+					onFormReset={onFilterFormReset}
+					onFormSubmit={onFilterFormSubmit}
+				/>
+			)
+		);
+
 	return (
 		<div className={clsx(className, styles['c-filter-menu'])}>
 			<div className={styles['c-filter-menu__header']}>
@@ -131,33 +161,11 @@ const FilterMenu: FC<FilterMenuProps> = ({
 
 			{isOpen && !isMobile && (
 				<div className={styles['c-filter-menu__list']}>
-					{sortOptions.length > 0 && (
-						<FilterSort
-							activeSort={activeSort}
-							activeSortLabel={renderActiveSortLabel()}
-							className={styles['c-filter-menu__option']}
-							options={sortOptions}
-							onOptionClick={onSortClick}
-						/>
-					)}
-					{filters.map((option) => (
-						<FilterOption
-							{...option}
-							key={`filter-menu-option-${option.id}`}
-							className={clsx({
-								[styles['c-filter-menu__button--operative']]: !isNil(
-									filterValues?.[option?.id]
-								),
-							})}
-							activeFilter={query.filter}
-							values={filterValues?.[option.id]}
-							onClick={onFilterClick}
-							onFormReset={onFilterFormReset}
-							onFormSubmit={onFilterFormSubmit}
-						/>
-					))}
+					{!isEmpty(sortOptions) && renderFilterMenuSorting()}
+					{renderFilterMenuOptions()}
 				</div>
 			)}
+
 			<FilterMenuMobile
 				activeFilter={query.filter}
 				activeSort={activeSort}

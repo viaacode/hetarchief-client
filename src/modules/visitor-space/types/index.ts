@@ -4,6 +4,7 @@ import { UseFormHandleSubmit } from 'react-hook-form';
 import { DecodedValueMap } from 'use-query-params';
 
 import { DefaultComponentProps, IeObjectTypes, Operator } from '@shared/types';
+import { OnFilterMenuFormSubmit } from '@visitor-space/components';
 
 import { VISITOR_SPACE_QUERY_PARAM_CONFIG } from '../const';
 
@@ -34,6 +35,7 @@ export enum VisitorSpaceFilterId {
 	Published = 'published',
 	Maintainer = 'aanbieder',
 	Maintainers = 'aanbieders',
+	Remote = 'isConsultableRemote',
 }
 
 export enum VisitorSpaceOrderProps {
@@ -64,6 +66,13 @@ export interface DefaultFilterFormProps<Values = unknown> extends DefaultCompone
 		reset,
 		handleSubmit,
 	}: DefaultFilterFormChildrenParams<Values>) => ReactNode;
+	disabled?: boolean;
+	values?: Values;
+}
+export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
+	id: string;
+	label: string;
+	onFormSubmit: OnFilterMenuFormSubmit;
 	disabled?: boolean;
 	values?: Values;
 }

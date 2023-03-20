@@ -1,6 +1,6 @@
 import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { Icon, IconNamesLight, Overlay } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -8,6 +8,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
 import styles from '../FilterMenu.module.scss';
+import { FilterMenuType } from '../FilterMenu.types';
 
 import { FilterOptionProps } from './FilterOption.types';
 
@@ -17,6 +18,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 	icon,
 	id,
 	label,
+	type,
 	onClick,
 	onFormReset,
 	onFormSubmit,
@@ -40,7 +42,35 @@ const FilterOption: FC<FilterOptionProps> = ({
 		setOpenedAt(new Date().valueOf());
 	}, [filterIsActive]);
 
-	return (
+	const renderFilterOptionByType = (): ReactElement => {
+		switch (type) {
+			case FilterMenuType.Modal:
+				return renderModal();
+			case FilterMenuType.Checkbox:
+				return renderCheckbox();
+			default:
+				return <></>;
+		}
+	};
+
+	const renderFilterForm = (className: string): ReactElement => (
+		<FilterForm
+			className={styles[className]}
+			form={form}
+			id={id}
+			key={openedAt}
+			onFormReset={onFormReset}
+			onFormSubmit={onFormSubmit}
+			title={label}
+			values={values}
+			disabled={!filterIsActive}
+			type={type}
+		/>
+	);
+
+	const renderCheckbox = (): ReactElement => renderFilterForm('c-filter-menu__form--inline');
+
+	const renderModal = (): ReactElement => (
 		<>
 			<Dropdown
 				className={styles['c-filter-menu__option']}
@@ -73,17 +103,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 						onClick={onFilterToggle}
 						variants="text"
 					/>
-					<FilterForm
-						className={styles['c-filter-menu__form']}
-						form={form}
-						id={id}
-						key={openedAt}
-						onFormReset={onFormReset}
-						onFormSubmit={onFormSubmit}
-						title={label}
-						values={values}
-						disabled={!filterIsActive}
-					/>
+					{renderFilterForm('c-filter-menu__form')}
 				</DropdownContent>
 			</Dropdown>
 			<Overlay
@@ -93,6 +113,8 @@ const FilterOption: FC<FilterOptionProps> = ({
 			/>
 		</>
 	);
+
+	return renderFilterOptionByType();
 };
 
 export default FilterOption;

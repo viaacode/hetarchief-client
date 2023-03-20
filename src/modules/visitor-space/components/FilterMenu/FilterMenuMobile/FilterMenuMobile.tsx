@@ -11,7 +11,7 @@ import { VisitorSpaceSort } from '../../../types';
 import { mapFiltersToTags } from '../../../utils';
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
-import { FilterMenuFilterOption } from '../FilterMenu.types';
+import { FilterMenuFilterOption, FilterMenuType } from '../FilterMenu.types';
 import { FilterSortList } from '../FilterSortList';
 
 import styles from './FilterMenuMobile.module.scss';
@@ -50,6 +50,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const selectedFilter = filters.find((filter) => filter.id === activeFilter);
 	const showFilterOrSort = activeFilter || isSortActive;
 	const showInitialScreen = !activeFilter && !isSortActive;
+	const showFilterModal = activeFilter && selectedFilter && !isSortActive;
 	const goBackToInitial = activeFilter
 		? () => onFilterClick(activeFilter)
 		: () => setIsSortActive(false);
@@ -61,7 +62,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	};
 
 	// Render
-	const renderFilterButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement => {
+	const renderModalButton = ({ icon, id, label }: FilterMenuFilterOption): ReactElement => {
 		const filterIsActive = id === activeFilter;
 
 		return (
@@ -78,6 +79,101 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		);
 	};
 
+	const renderFilterModalHeader = (): ReactElement => (
+		<Navigation
+			className={styles['c-filter-menu-mobile__nav']}
+			showBorder={showNavigationBorder}
+		>
+			<Button
+				key="filter-menu-mobile-nav-filter"
+				className={styles['c-filter-menu-mobile__back']}
+				iconStart={<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} />}
+				label={tHtml(
+					'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
+				)}
+				variants={['text']}
+				onClick={goBackToInitial}
+			/>
+		</Navigation>
+	);
+
+	const renderFilterHeader = (): ReactElement => (
+		<Navigation
+			className={styles['c-filter-menu-mobile__nav']}
+			showBorder={showNavigationBorder}
+		>
+			<Button
+				key="filter-menu-mobile-nav-close"
+				className={styles['c-filter-menu-mobile__back']}
+				iconStart={<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} />}
+				label={tHtml(
+					'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten'
+				)}
+				variants={['text']}
+				onClick={onClose}
+			/>
+		</Navigation>
+	);
+
+	const renderTagList = (): ReactElement => (
+		<div className="l-container">
+			<h4 className="u-text-center u-mt-24">
+				{tHtml(
+					'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
+				)}
+			</h4>
+
+			<TagList
+				className={clsx(styles['c-filter-menu-mobile__tags'], 'u-mb-0')}
+				closeIcon={<Icon className="u-text-left" name={IconNamesLight.Times} />}
+				onTagClosed={(id) => onRemoveValue?.(tags.filter((tag) => tag.id !== id))}
+				tags={tags}
+				variants="large"
+			/>
+		</div>
+	);
+
+	const renderSortModal = (): ReactElement => (
+		<>
+			<h4 className="u-text-center u-mt-24 u-mb-16">
+				{tHtml(
+					'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___sorteer-op'
+				)}
+			</h4>
+
+			<FilterSortList
+				activeSort={activeSort}
+				options={sortOptions}
+				onOptionClick={handleSortClick}
+			/>
+		</>
+	);
+
+	const renderFormModal = ({ form, id, label, type }: FilterMenuFilterOption): ReactElement => (
+		<FilterForm
+			className={styles['c-filter-menu-mobile__form']}
+			form={form}
+			id={id}
+			key={openedAt}
+			onFormReset={onFilterReset}
+			onFormSubmit={onFilterSubmit}
+			title={label}
+			values={filterValues?.[id]}
+			type={type}
+		/>
+	);
+
+	const renderFilterFormByType = (filterOption: FilterMenuFilterOption): ReactElement => {
+		switch (filterOption.type) {
+			case FilterMenuType.Modal:
+				return renderModalButton(filterOption);
+			case FilterMenuType.Checkbox:
+				return renderFormModal(filterOption);
+			default:
+				return <></>;
+		}
+	};
+
 	return (
 		<div
 			className={clsx(styles['c-filter-menu-mobile'], {
@@ -86,41 +182,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		>
 			{showInitialScreen && (
 				<>
-					<Navigation
-						className={styles['c-filter-menu-mobile__nav']}
-						showBorder={showNavigationBorder}
-					>
-						<Button
-							key="filter-menu-mobile-nav-close"
-							className={styles['c-filter-menu-mobile__back']}
-							iconStart={
-								<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} />
-							}
-							label={tHtml(
-								'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___zoekresultaten'
-							)}
-							variants={['text']}
-							onClick={onClose}
-						/>
-					</Navigation>
-
-					<div className="l-container">
-						<h4 className="u-text-center u-mt-24">
-							{tHtml(
-								'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
-							)}
-						</h4>
-
-						<TagList
-							className={clsx(styles['c-filter-menu-mobile__tags'], 'u-mb-0')}
-							closeIcon={<Icon className="u-text-left" name={IconNamesLight.Times} />}
-							onTagClosed={(id) =>
-								onRemoveValue?.(tags.filter((tag) => tag.id !== id))
-							}
-							tags={tags}
-							variants="large"
-						/>
-					</div>
+					{renderFilterHeader()}
+					{renderTagList()}
 
 					<div className={clsx(styles['c-filter-menu-mobile__filters'], 'u-mt-24')}>
 						{sortOptions.length > 0 && (
@@ -136,56 +199,17 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 								onClick={() => setIsSortActive(true)}
 							/>
 						)}
-						{filters.map(renderFilterButton)}
+
+						{filters.map(renderFilterFormByType)}
 					</div>
 				</>
 			)}
+
 			{showFilterOrSort && (
 				<>
-					<Navigation
-						className={styles['c-filter-menu-mobile__nav']}
-						showBorder={showNavigationBorder}
-					>
-						<Button
-							key="filter-menu-mobile-nav-filter"
-							className={styles['c-filter-menu-mobile__back']}
-							iconStart={
-								<Icon className="u-text-left" name={IconNamesLight.ArrowLeft} />
-							}
-							label={tHtml(
-								'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___filters'
-							)}
-							variants={['text']}
-							onClick={goBackToInitial}
-						/>
-					</Navigation>
-
-					{activeFilter && selectedFilter && !isSortActive && (
-						<FilterForm
-							className={styles['c-filter-menu-mobile__form']}
-							form={selectedFilter.form}
-							id={selectedFilter.id}
-							key={openedAt}
-							onFormReset={onFilterReset}
-							onFormSubmit={onFilterSubmit}
-							title={selectedFilter.label}
-							values={filterValues?.[selectedFilter.id]}
-						/>
-					)}
-					{isSortActive && !activeFilter && (
-						<>
-							<h4 className="u-text-center u-mt-24 u-mb-16">
-								{tHtml(
-									'modules/visitor-space/components/filter-menu/filter-menu-mobile/filter-menu-mobile___sorteer-op'
-								)}
-							</h4>
-							<FilterSortList
-								activeSort={activeSort}
-								options={sortOptions}
-								onOptionClick={handleSortClick}
-							/>
-						</>
-					)}
+					{renderFilterModalHeader()}
+					{showFilterModal && renderFormModal(selectedFilter)}
+					{isSortActive && !activeFilter && renderSortModal()}
 				</>
 			)}
 		</div>

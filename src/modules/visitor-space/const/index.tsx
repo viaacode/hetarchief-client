@@ -1,10 +1,11 @@
 import { OrderDirection, TabProps } from '@meemoo/react-components';
-import { ArrayParam, NumberParam, StringParam, withDefault } from 'use-query-params';
+import { ArrayParam, BooleanParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { Icon, IconNamesLight } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceMediaType } from '@shared/types';
+import { RemoteFilterForm } from '@visitor-space/components/RemoteFilterForm';
 
 import {
 	AdvancedFilterForm,
@@ -13,6 +14,7 @@ import {
 	DurationFilterForm,
 	FilterMenuFilterOption,
 	FilterMenuSortOption,
+	FilterMenuType,
 	GenreFilterForm,
 	KeywordsFilterForm,
 	LanguageFilterForm,
@@ -47,6 +49,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 	[VisitorSpaceFilterId.Keywords]: undefined,
 	[VisitorSpaceFilterId.Language]: undefined,
 	[VisitorSpaceFilterId.Advanced]: undefined,
+	[VisitorSpaceFilterId.Remote]: undefined,
 	// Pagination
 	page: 1,
 	// Sorting
@@ -69,6 +72,10 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	[VisitorSpaceFilterId.Language]: ArrayParam,
 	[VisitorSpaceFilterId.Maintainers]: ArrayParam,
 	[VisitorSpaceFilterId.Advanced]: AdvancedFilterArrayParam,
+	[VisitorSpaceFilterId.Remote]: withDefault(
+		BooleanParam,
+		VISITOR_SPACE_QUERY_PARAM_INIT.isConsultableRemote
+	),
 	// Pagination
 	page: withDefault(NumberParam, VISITOR_SPACE_QUERY_PARAM_INIT.page),
 	// Sorting
@@ -100,35 +107,47 @@ export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
 export const VISITOR_SPACE_FILTERS = (activeVisitorSpace: string): FilterMenuFilterOption[] => [
 	{
+		id: VisitorSpaceFilterId.Remote,
+		label: tText('modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'),
+		form: RemoteFilterForm,
+		type: FilterMenuType.Checkbox,
+	},
+	{
 		id: VisitorSpaceFilterId.Medium,
 		label: tText('modules/visitor-space/const/index___analoge-drager'),
 		form: MediumFilterForm,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: VisitorSpaceFilterId.Duration,
 		label: tText('modules/visitor-space/const/index___duurtijd'),
 		form: DurationFilterForm,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: VisitorSpaceFilterId.Created,
 		label: tText('modules/visitor-space/const/index___creatiedatum'),
 		form: CreatedFilterForm,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: VisitorSpaceFilterId.Published,
 		label: tText('modules/visitor-space/const/index___publicatiedatum'),
 		form: PublishedFilterForm,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: VisitorSpaceFilterId.Creator,
 		label: tText('modules/visitor-space/const/index___maker'),
 		form: CreatorFilterForm,
+		type: FilterMenuType.Modal,
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
 	{
 		id: VisitorSpaceFilterId.Genre,
 		label: tText('modules/visitor-space/const/index___genre'),
 		form: GenreFilterForm,
+		type: FilterMenuType.Modal,
 		isDisabled: () => true,
 	},
 	// Disabled for https://meemoo.atlassian.net/browse/ARC-246
@@ -136,18 +155,20 @@ export const VISITOR_SPACE_FILTERS = (activeVisitorSpace: string): FilterMenuFil
 		id: VisitorSpaceFilterId.Keywords,
 		label: tText('modules/visitor-space/const/index___trefwoorden'),
 		form: KeywordsFilterForm,
+		type: FilterMenuType.Modal,
 		isDisabled: () => true,
 	},
 	{
 		id: VisitorSpaceFilterId.Language,
 		label: tText('modules/visitor-space/const/index___taal'),
 		form: LanguageFilterForm,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: VisitorSpaceFilterId.Maintainers,
-		icon: IconNamesLight.DotsHorizontal,
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
+		type: FilterMenuType.Modal,
 		isDisabled: () => activeVisitorSpace !== PUBLIC_COLLECTION,
 	},
 	{
@@ -155,6 +176,7 @@ export const VISITOR_SPACE_FILTERS = (activeVisitorSpace: string): FilterMenuFil
 		icon: IconNamesLight.DotsHorizontal,
 		label: tText('modules/visitor-space/const/index___geavanceerd'),
 		form: AdvancedFilterForm,
+		type: FilterMenuType.Modal,
 	},
 ];
 

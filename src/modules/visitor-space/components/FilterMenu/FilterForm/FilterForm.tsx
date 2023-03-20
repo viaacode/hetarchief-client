@@ -1,11 +1,17 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useMemo } from 'react';
+import { FC, ReactElement, useMemo } from 'react';
 
 import { Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import {
+	DefaultFilterFormProps,
+	InlineFilterFormProps,
+	VisitorSpaceFilterId,
+} from '@visitor-space/types';
+
+import { FilterMenuType } from '../FilterMenu.types';
 
 import { HAS_SHOW_OVERFLOW } from './FilterForm.const';
 import styles from './FilterForm.module.scss';
@@ -20,10 +26,9 @@ const FilterForm: FC<FilterFormProps> = ({
 	onFormSubmit,
 	title,
 	values,
+	type,
 }) => {
 	const { tHtml } = useTranslation();
-
-	const FormComponent = form ?? (() => null);
 
 	const onFilterFormReset = (id: string, reset: () => void) => {
 		reset();
@@ -39,52 +44,87 @@ const FilterForm: FC<FilterFormProps> = ({
 		[id]
 	);
 
-	return (
-		<div className={clsx(className, styles['c-filter-form'])}>
-			<div className={styles['c-filter-form__header']}>
-				<h2 className={styles['c-filter-form__title']}>
-					<label htmlFor={`${visitorSpaceLabelKeys.filters.title}--${id}`}>{title}</label>
-				</h2>
-			</div>
+	const renderFilterFormByType = (): ReactElement => {
+		switch (type) {
+			case FilterMenuType.Modal:
+				return renderModal();
+			case FilterMenuType.Checkbox:
+				return renderCheckbox();
+			default:
+				return <></>;
+		}
+	};
 
-			<FormComponent
-				disabled={disabled}
-				className={clsx(styles['c-filter-form__body'], {
-					[styles['c-filter-form__body--overflow']]: showOverflow,
-				})}
-				values={{ [id]: values }}
-			>
-				{({ reset, values, handleSubmit }) => (
-					<div className={styles['c-filter-form__footer']}>
-						<Button
-							className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
-							iconStart={
-								<Icon className="u-font-size-22" name={IconNamesLight.Redo} />
-							}
-							label={tHtml(
-								'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
-							)}
-							variants="text"
-							onClick={() => onFilterFormReset(id, reset)}
-						/>
-						<Button
-							className={styles['c-filter-form__submit']}
-							label={tHtml(
-								'modules/visitor-space/components/filter-menu/filter-form/filter-form___pas-toe'
-							)}
-							variants={['black']}
-							onClick={() => {
-								handleSubmit(
-									() => onFilterFormSubmit(id, values),
-									(...args) => console.error(args)
-								)();
-							}}
-						/>
-					</div>
-				)}
-			</FormComponent>
-		</div>
-	);
+	const renderCheckbox = (): ReactElement => {
+		const FormComponent = (form as FC<InlineFilterFormProps>) ?? (() => null);
+
+		return (
+			<div className={clsx(className, styles['c-filter-form--inline'])}>
+				<FormComponent
+					id={id}
+					label={title}
+					onFormSubmit={onFormSubmit}
+					disabled={disabled}
+					values={{ [id]: values }}
+				/>
+			</div>
+		);
+	};
+
+	const renderModal = (): ReactElement => {
+		const FormComponent = (form as FC<DefaultFilterFormProps>) ?? (() => null);
+
+		return (
+			<div className={clsx(className, styles['c-filter-form'])}>
+				<div className={styles['c-filter-form__header']}>
+					<h2 className={styles['c-filter-form__title']}>
+						<label htmlFor={`${visitorSpaceLabelKeys.filters.title}--${id}`}>
+							{title}
+						</label>
+					</h2>
+				</div>
+
+				<FormComponent
+					disabled={disabled}
+					className={clsx(styles['c-filter-form__body'], {
+						[styles['c-filter-form__body--overflow']]: showOverflow,
+					})}
+					values={{ [id]: values }}
+				>
+					{({ reset, values, handleSubmit }) => (
+						<div className={styles['c-filter-form__footer']}>
+							<Button
+								className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
+								iconStart={
+									<Icon className="u-font-size-22" name={IconNamesLight.Redo} />
+								}
+								label={tHtml(
+									'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
+								)}
+								variants="text"
+								onClick={() => onFilterFormReset(id, reset)}
+							/>
+							<Button
+								className={styles['c-filter-form__submit']}
+								label={tHtml(
+									'modules/visitor-space/components/filter-menu/filter-form/filter-form___pas-toe'
+								)}
+								variants={['black']}
+								onClick={() => {
+									handleSubmit(
+										() => onFilterFormSubmit(id, values),
+										(...args) => console.error(args)
+									)();
+								}}
+							/>
+						</div>
+					)}
+				</FormComponent>
+			</div>
+		);
+	};
+
+	return renderFilterFormByType();
 };
 
 export default FilterForm;
