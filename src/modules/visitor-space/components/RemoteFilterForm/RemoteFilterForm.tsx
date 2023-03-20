@@ -21,7 +21,7 @@ const defaultValues = {
 const RemoteFilterForm: FC<RemoteFilterFormProps> = ({ id, label, onFormSubmit, className }) => {
 	const [query] = useQueryParams(REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [isChecked, setIsChecked] = useState<boolean>(
-		() => query[VisitorSpaceFilterId.Remote] || true
+		() => query[VisitorSpaceFilterId.Remote] || false
 	);
 
 	const { setValue, handleSubmit } = useForm<RemoteFilterFormState>({
