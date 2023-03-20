@@ -104,7 +104,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					defaultPageWidth: 'LARGE',
 					onSaveContentPage,
 				},
-				navigationBars: { enableIcons: true },
+				navigationBars: {
+					enableIcons: true,
+					// customNavigationElements: ['<BOEZOEKERRUIMTES_DROPDOWN>'],
+				},
 				icon: {
 					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
 					componentProps: {
