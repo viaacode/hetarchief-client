@@ -157,7 +157,8 @@ export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true):
 
 export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
-	isInAFolder: boolean
+	isInAFolder: boolean,
+	canRequestAccess: boolean
 ): DynamicActionMenuProps => ({
 	actions: [
 		...((canManageFolders
@@ -176,6 +177,23 @@ export const MEDIA_ACTIONS = (
 						id: MediaActions.Bookmark,
 						ariaLabel: tText('modules/ie-objects/const/index___bookmark'),
 						tooltip: tText('modules/ie-objects/const/index___bookmark'),
+					},
+			  ]
+			: []) as ActionItem[]),
+		...((canRequestAccess
+			? [
+					{
+						label: tText('modules/ie-objects/const/index___request'),
+						icon: (
+							<Icon
+								aria-hidden
+								className="u-font-size-24 u-text-left"
+								name={isInAFolder ? IconNamesSolid.Request : IconNamesLight.Request}
+							/>
+						),
+						id: MediaActions.RequestAccess,
+						ariaLabel: tText('modules/ie-objects/const/index___request-access'),
+						tooltip: tText('modules/ie-objects/const/index___request-access'),
 					},
 			  ]
 			: []) as ActionItem[]),
