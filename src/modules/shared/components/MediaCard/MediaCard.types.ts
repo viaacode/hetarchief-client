@@ -26,6 +26,7 @@ export interface MediaCardProps {
 	meemooIdentifier?: string;
 	showLocallyAvailable?: boolean;
 	link?: string;
+	maintainerSlug?: string;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

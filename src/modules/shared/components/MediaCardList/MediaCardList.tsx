@@ -138,6 +138,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				view={view}
 				showLocallyAvailable={showLocallyAvailable}
 				link={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
+				maintainerSlug={item.maintainerSlug}
 			/>,
 			item
 		)

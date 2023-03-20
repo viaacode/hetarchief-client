@@ -12,10 +12,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import { useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
+import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { DropdownMenu, IconNamesLight, Modal } from '@shared/components';
 import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { toastService } from '@shared/services/toast-service';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -43,10 +48,15 @@ const MediaCard: FC<MediaCardProps> = ({
 	meemooIdentifier,
 	showLocallyAvailable = false,
 	link,
+	maintainerSlug,
 }) => {
 	const { tText } = useTranslation();
 
+	const user = useSelector(selectUser);
+	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+
 	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	const wrapInLink = (children: ReactNode) => {
 		if (link) {
@@ -60,6 +70,43 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		return children;
+	};
+
+	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
+		try {
+			if (!user || !maintainerSlug) {
+				toastService.notify({
+					title: tText(
+						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd'
+					),
+					description: tText(
+						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
+					),
+				});
+				return;
+			}
+
+			await createVisitRequest({
+				acceptedTos: values.acceptTerms,
+				reason: values.requestReason,
+				visitorSpaceSlug: maintainerSlug as string,
+				timeframe: values.visitTime,
+			});
+
+			setIsRequestAccessBladeOpen(false);
+		} catch (err) {
+			console.error({
+				message: 'Failed to create visit request',
+				error: err,
+				info: values,
+			});
+			toastService.notify({
+				title: tText('modules/shared/components/media-card/media-card___er-ging-iets-mis'),
+				description: tText(
+					'modules/shared/components/media-card/media-card___er-ging-iets-mis-beschrijving'
+				),
+			});
+		}
 	};
 
 	const renderDropdown = () =>
@@ -175,7 +222,9 @@ const MediaCard: FC<MediaCardProps> = ({
 					name={IconNamesLight.Forbidden}
 					className={styles['c-media-card__locally-available-pill--icon']}
 				/>
-				Enkel ter plaatse beschikbaar
+				{tText(
+					'modules/shared/components/media-card/media-card___enkel-ter-plaatse-beschikbaar'
+				)}
 			</div>
 		);
 	};
@@ -235,15 +284,18 @@ const MediaCard: FC<MediaCardProps> = ({
 			<div className={styles['c-media-card__locally-available-container']}>
 				<Button
 					iconStart={<Icon name={IconNamesLight.Info} />}
-					label="Meer info"
+					label={tText('modules/shared/components/media-card/media-card___meer-info')}
 					variants={['info']}
 					className={styles['c-media-card__info-button']}
 					onClick={() => setIsInfoModalOpen(true)}
 				/>
 				<Button
-					label="Plan een bezoek"
+					label={tText(
+						'modules/shared/components/media-card/media-card___plan-een-bezoek'
+					)}
 					variants={['dark']}
 					className={styles['c-media-card__visit-button']}
+					onClick={() => setIsRequestAccessBladeOpen(true)}
 				/>
 			</div>
 		);
@@ -284,13 +336,15 @@ const MediaCard: FC<MediaCardProps> = ({
 				)}
 			</Card>
 			<Modal
-				title="Waarom kan ik dit object niet bekijken?"
+				title={tText(
+					'modules/shared/components/media-card/media-card___waarom-kan-ik-dit-object-niet-bekijken'
+				)}
 				isOpen={isInfoModalOpen}
 				onClose={() => setIsInfoModalOpen(false)}
 				footer={
 					<div className={styles['c-media-card__close-button-container']}>
 						<Button
-							label="Sluit"
+							label={tText('modules/shared/components/media-card/media-card___sluit')}
 							onClick={() => setIsInfoModalOpen(false)}
 							variants={['dark']}
 							className={styles['c-media-card__close-button']}
@@ -299,10 +353,14 @@ const MediaCard: FC<MediaCardProps> = ({
 				}
 			>
 				<p className={styles['c-media-card__infomodal-description']}>
-					Dit object bevat geen licentie voor online raadpleging. Contacteer de aanbieder
-					voor meer informatie.
+					{tText('modules/shared/components/media-card/media-card___geen-licentie')}
 				</p>
 			</Modal>
+			<RequestAccessBlade
+				isOpen={isRequestAccessBladeOpen}
+				onClose={() => setIsRequestAccessBladeOpen(false)}
+				onSubmit={onRequestAccessSubmit}
+			/>
 		</div>
 	);
 };
