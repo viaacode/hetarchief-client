@@ -94,6 +94,15 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 				? (!query[VisitorSpaceFilterId.Remote])?.toString()
 				: 'true',
 	},
+	// Consultable Media
+	{
+		field: IeObjectsSearchFilterField.MEDIA,
+		operator: IeObjectsSearchOperator.IS,
+		value:
+			query[VisitorSpaceFilterId.Media] !== null
+				? query[VisitorSpaceFilterId.Media]?.toString()
+				: 'false',
+	},
 	// Advanced
 	...(query.advanced || []).flatMap(mapAdvancedToElastic),
 ];

@@ -36,6 +36,7 @@ export enum VisitorSpaceFilterId {
 	Maintainer = 'aanbieder',
 	Maintainers = 'aanbieders',
 	Remote = 'remote',
+	Media = 'media',
 }
 
 export enum VisitorSpaceOrderProps {

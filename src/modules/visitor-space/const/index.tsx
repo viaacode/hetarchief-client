@@ -17,6 +17,7 @@ import {
 	KeywordsFilterForm,
 	LanguageFilterForm,
 	MaintainerFilterForm,
+	MediaFilterForm,
 	MediumFilterForm,
 	PublishedFilterForm,
 	RemoteFilterForm,
@@ -50,6 +51,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 	[VisitorSpaceFilterId.Language]: undefined,
 	[VisitorSpaceFilterId.Advanced]: undefined,
 	[VisitorSpaceFilterId.Remote]: undefined,
+	[VisitorSpaceFilterId.Media]: undefined,
 	// Pagination
 	page: 1,
 	// Sorting
@@ -73,6 +75,7 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	[VisitorSpaceFilterId.Maintainers]: ArrayParam,
 	[VisitorSpaceFilterId.Advanced]: AdvancedFilterArrayParam,
 	[VisitorSpaceFilterId.Remote]: BooleanParam,
+	[VisitorSpaceFilterId.Media]: BooleanParam,
 	// Pagination
 	page: withDefault(NumberParam, VISITOR_SPACE_QUERY_PARAM_INIT.page),
 	// Sorting
@@ -102,13 +105,23 @@ export const VISITOR_SPACE_TABS = (): TabProps[] => [
 
 export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
-export const VISITOR_SPACE_FILTERS = (activeVisitorSpace: string): FilterMenuFilterOption[] => [
+export const VISITOR_SPACE_FILTERS = (
+	isPublicCollection: boolean,
+	isKeyUser: boolean
+): FilterMenuFilterOption[] => [
+	{
+		id: VisitorSpaceFilterId.Media,
+		label: tText('modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'),
+		form: MediaFilterForm,
+		type: FilterMenuType.Checkbox,
+		isDisabled: () => !isKeyUser,
+	},
 	{
 		id: VisitorSpaceFilterId.Remote,
 		label: tText('modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'),
 		form: RemoteFilterForm,
 		type: FilterMenuType.Checkbox,
-		isDisabled: () => activeVisitorSpace !== PUBLIC_COLLECTION,
+		isDisabled: () => !isPublicCollection,
 	},
 	{
 		id: VisitorSpaceFilterId.Medium,
@@ -167,7 +180,7 @@ export const VISITOR_SPACE_FILTERS = (activeVisitorSpace: string): FilterMenuFil
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		type: FilterMenuType.Modal,
-		isDisabled: () => activeVisitorSpace !== PUBLIC_COLLECTION,
+		isDisabled: () => !isPublicCollection,
 	},
 	{
 		id: VisitorSpaceFilterId.Advanced,

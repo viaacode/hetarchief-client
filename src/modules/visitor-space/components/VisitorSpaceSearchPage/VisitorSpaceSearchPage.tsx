@@ -17,7 +17,7 @@ import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { Permission } from '@account/const';
-import { selectIsLoggedIn } from '@auth/store/user';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
@@ -78,6 +78,7 @@ import {
 	KeywordsFilterFormState,
 	LanguageFilterFormState,
 	MaintainerFilterFormState,
+	MediaFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
 	RemoteFilterFormState,
@@ -125,6 +126,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * State
 	 */
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const user = useSelector(selectUser);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 
@@ -270,11 +272,14 @@ const VisitorSpaceSearchPage: FC = () => {
 		return [getDefaultOption(), ...dynamicOptions];
 	}, [visitorSpaces, isMobile]);
 
-	const filters = useMemo(
-		() =>
-			VISITOR_SPACE_FILTERS(activeVisitorSpaceId).filter(({ isDisabled }) => !isDisabled?.()),
-		[activeVisitorSpaceId]
-	);
+	const filters = useMemo(() => {
+		const isKeyUser = user?.isKeyUser || false;
+		const isPublicCollection = activeVisitorSpaceId === PUBLIC_COLLECTION;
+
+		return VISITOR_SPACE_FILTERS(isPublicCollection, isKeyUser).filter(
+			({ isDisabled }) => !isDisabled?.()
+		);
+	}, [activeVisitorSpaceId, user]);
 
 	/**
 	 * Methods
@@ -391,7 +396,17 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Remote:
-				data = (values as RemoteFilterFormState).isConsultableRemote;
+				// Info: remove queryparam if false (= set to undefined)
+				data = (values as RemoteFilterFormState).isConsultableRemote
+					? (values as RemoteFilterFormState).isConsultableRemote
+					: undefined;
+				break;
+
+			case VisitorSpaceFilterId.Media:
+				// Info: remove queryparam if false (= set to undefined)
+				data = (values as MediaFilterFormState).isConsultableMedia
+					? (values as MediaFilterFormState).isConsultableMedia
+					: undefined;
 				break;
 
 			case VisitorSpaceFilterId.Advanced:
@@ -426,7 +441,6 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Language:
 				case VisitorSpaceFilterId.Medium:
 				case VisitorSpaceFilterId.Maintainers:
-				case VisitorSpaceFilterId.Remote:
 				case SEARCH_QUERY_KEY:
 					query[tag.key] = [
 						...((query[tag.key] as Array<unknown>) || []),

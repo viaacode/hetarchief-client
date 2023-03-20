@@ -26,6 +26,7 @@ export enum IeObjectsSearchFilterField {
 	MAINTAINER = 'maintainer',
 	MAINTAINERS = 'maintainers',
 	REMOTE = 'isConsultableRemote',
+	MEDIA = 'isConsultableMedia',
 }
 
 export enum IeObjectsSearchOperator {
