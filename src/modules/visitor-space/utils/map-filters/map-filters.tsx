@@ -26,6 +26,28 @@ const getSelectLabel = (
 
 export const tagPrefix = (key: string): string => `${key}--`;
 
+export const mapBooleanParamToTag = (value: boolean, label: string, key: string): TagIdentity[] => {
+	const unique = `${tagPrefix(key)}`;
+
+	if (!value) {
+		return [];
+	}
+
+	return [
+		{
+			label: (
+				<span>
+					{`${tText('modules/visitor-space/utils/map-filters/map-filters___filter')}: `}
+					<strong>{label}</strong>
+				</span>
+			),
+			value: unique,
+			key,
+			id: unique,
+		},
+	];
+};
+
 export const mapArrayParamToTags = (
 	values: (string | null)[],
 	label: string,
@@ -143,6 +165,18 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 			query.language || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___taal'),
 			VisitorSpaceFilterId.Language
+		),
+		...mapBooleanParamToTag(
+			query.media || false,
+			tText('modules/visitor-space/utils/map-filters/map-filters___raadpleegbare-media'),
+			VisitorSpaceFilterId.Media
+		),
+		...mapBooleanParamToTag(
+			query.remote || false,
+			tText(
+				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaag-ter-plaatse'
+			),
+			VisitorSpaceFilterId.Remote
 		),
 		...mapAdvancedToTags(query.advanced || []),
 	];
