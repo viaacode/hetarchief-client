@@ -149,6 +149,9 @@ It is currently maintained by:
 The client is build automatically when
 
 -   you merge changes into the dev branch => this deploys to TST
+    -   release a new version of the react-components. Check readme-file of react-components for instructions.
+    -   release a new version of the admin-core. Check readme-file of admin-core for instructions.
+    -   update package.json in this repo with the new version numbers of `@meemoo/react-components` and `@meemoo/admin-core-ui`
 -   you merge changes into the master branch => this deploys to QAS
 -   you tag a commit on the master branch with a version => this deploys to PRD
 
