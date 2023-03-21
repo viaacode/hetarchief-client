@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, without } from 'lodash-es';
 import { FC, useEffect, useState } from 'react';
@@ -7,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
-import { CheckboxList } from '@shared/components/CheckboxList';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';

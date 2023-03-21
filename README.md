@@ -6,9 +6,9 @@ This repository contains the `Het Archief` Next.js app for the end user.
 
 It is built with:
 
-- node: `v16.x.x` ( ~ `lts/gallium`)
-- npm: `v8.x.x`
-- Next: `v12.0.4`
+-   node: `v16.x.x` ( ~ `lts/gallium`)
+-   npm: `v8.x.x`
+-   Next: `v12.0.4`
 
 For a complete list of packages and versions check out the `package.json` file.
 
@@ -31,50 +31,49 @@ To start working, simply run `docker-compose up`, the project will be available 
 
 The available commands for development are:
 
-| command      | runs                                                                                                 |
-|--------------|------------------------------------------------------------------------------------------------------|
-| dev          | Run the development server.                                                                          |
-| start        | Run the server in production mode.                                                                   |
-| storybook    | Run Storybook in development mode.                                                                   |
+| command   | runs                               |
+| --------- | ---------------------------------- |
+| dev       | Run the development server.        |
+| start     | Run the server in production mode. |
+| storybook | Run Storybook in development mode. |
 
 <br>
 
 The available commands for building the project are:
 
-| command          | runs                                                                                             |
-|------------------|--------------------------------------------------------------------------------------------------|
-| build            | Build a production ready app to the `/dist` folder.                                              |
-| build:storybook  | Build Storybook to the `/storybook-static` folder.                                               |
+| command         | runs                                                |
+| --------------- | --------------------------------------------------- |
+| build           | Build a production ready app to the `/dist` folder. |
+| build:storybook | Build Storybook to the `/storybook-static` folder.  |
 
 <br>
 
 The available commands for testing the project are:
 
-| command      | runs                                                                                                 |
-|--------------|------------------------------------------------------------------------------------------------------|
-| test         | Run all the unit tests.                                                                              |
-| test:ci      | Run all the unit tests for CI environment.                                                           |
-| test:watch   | Run all the unit tests in watch mode.                                                                |
-| test:cov     | Run all the unit tests with coverage collected.                                                      |                                                                   |
+| command    | runs                                            |
+| ---------- | ----------------------------------------------- | --- |
+| test       | Run all the unit tests.                         |
+| test:ci    | Run all the unit tests for CI environment.      |
+| test:watch | Run all the unit tests in watch mode.           |
+| test:cov   | Run all the unit tests with coverage collected. |     |
 
 <br>
 
 Other available commands are:
 
-| command      | runs                                                                                                 |
-|--------------|------------------------------------------------------------------------------------------------------|
-| prepare      | Lifecycle script which installs husky.                                                               |
-| lint         | Lint all scripts and styling.                                                                        |
-| lint:ts      | Lint all script files.                                                                               |
-| lint:scss    | Lint all style related files.                                                                        |
-| type-check   | Perform a type check with TypeScript without emitting files.                                         |
-| i18n:extract | Extract and replace translation strings to separate json file located in `/public/locales`.          |
-| gql:extract  | Whitelist GraphQL queries and copy them over to the proxy repo.                                      |
+| command      | runs                                                                                        |
+| ------------ | ------------------------------------------------------------------------------------------- |
+| prepare      | Lifecycle script which installs husky.                                                      |
+| lint         | Lint all scripts and styling.                                                               |
+| lint:ts      | Lint all script files.                                                                      |
+| lint:scss    | Lint all style related files.                                                               |
+| type-check   | Perform a type check with TypeScript without emitting files.                                |
+| i18n:extract | Extract and replace translation strings to separate json file located in `/public/locales`. |
+| gql:extract  | Whitelist GraphQL queries and copy them over to the proxy repo.                             |
 
 ## Deploy
 
-For our deployment flow take a look at the
-official [meemoo docs for CI/CD](https://github.com/viaacode/ci-cd-docs/tree/main).
+Follow Slite doc: https://studiohyperdrive.slite.com/app/docs/L0Alk6HWq5w7il
 
 ### Branching model
 
@@ -87,21 +86,21 @@ Below you can find an explanation and example of each branch:
 Used for creating new features or refactoring. Usually associated with a Task issue in Jira.  
 If this is the case don't forget to include the correct ticket number in the branch.
 
-*example*: `feature/ARC-1-button-component`, `feature/update-readme`
+_example_: `feature/ARC-1-button-component`, `feature/update-readme`
 
 **Bugfix**:
 
 Used for fixing bugs that arise during development or after testing. Usually associated with a bug issue in Jira.  
 If this is the case don't forget to include the correct ticket number in the branch.
 
-*example*: `bugfix/ARC-1-button-component`, `bugfix/typo-in-readme`
+_example_: `bugfix/ARC-1-button-component`, `bugfix/typo-in-readme`
 
 **Release**:
 
 Used during development to mark the next release we will be deploying to QAS and PRD.  
 Release branches should be merged periodically to develop.
 
-*example*: `release/v1.0.0`
+_example_: `release/v1.0.0`
 
 **Develop**:
 
@@ -109,7 +108,7 @@ Used for deploying to the TST environment.
 Opening PR's to develop will also perform several checks to make sure code is passing all tests and the build doesn't
 fail.
 
-*branch name*: `develop`
+_branch name_: `develop`
 
 **Master**:
 
@@ -118,7 +117,7 @@ Opening PR's to master will also perform several checks to make sure code is pas
 fail.  
 Pushing a tag to master will deploy to PRD.
 
-*branch name*: `master`
+_branch name_: `master`
 
 ## Environment variables
 
@@ -133,24 +132,36 @@ They are provided through the `env_file` property in the `docker-compose.yml` fi
 
 This project has been created by:
 
-- Andry Charlier: andry.charlier@studiohyperdrive.be
+-   Andry Charlier: andry.charlier@studiohyperdrive.be
+-   Bart Naessens: bart.naessens@studiohyperdrive.be
+-   Ian Emsens: ian.emsens@studiohyperdrive.be
 
 It is currently maintained by:
 
-- Andry Charlier: andry.charlier@studiohyperdrive.be
-- Ian Emsens: ian.emsens@studiohyperdrive.be
-- Bart Naessens: bart.naessens@studiohyperdrive.be
-- Bavo Vanderghote: bavo.vanderghote@studiohyperdrive.be
+-   Andry Charlier: andry.charlier@studiohyperdrive.be
+-   Bavo Vanderghote: bavo.vanderghote@studiohyperdrive.be
+-   Bert Verhelst: bert.verhelst@studiohyperdrive.be
+-   Silke Derudder: silke.derudder@studiohyperdrive
+-   Ward Vercruyssen: ward.vercruyssen@studiohyperdrive.be
 
 ## Deployment
 
 The client is build automatically when
 
-* you merge changes into the dev branch => this deploys to TST
-* you merge changes into the master branch => this deploys to QAS
-* you tag a commit on the master branch with a version => this deploys to PRD
+-   you merge changes into the dev branch => this deploys to TST
+    1.  release a new version of the react-components. Check readme-file of react-components for instructions.
+    2.  release a new version of the admin-core. Check readme-file of admin-core for instructions.
+    3.  update package.json in this repo with the new version numbers of `@meemoo/react-components` and `@meemoo/admin-core-ui`
+    4.  install updated versions `npm i --force`
+    5.  start hetarchief client `npm run dev` to see if there are any errors. If there are, fix them.
+    6.  commit changes to package.json `git add .` and `git commit -m "fix(package.json): update versions of meemoo dependencies"`
+    7.  create new hetarchief-client version `npm version patch`
+    8.  push changes `git push --follow-tags`
+    9.  check progress on Jenkins https://ci.meemoo.be/job/hetarchief/job/client/job/develop/
+-   you merge changes into the master branch => this deploys to QAS
+-   you tag a commit on the master branch with a version => this deploys to PRD
 
 For the storybook you can trigger the build in openshift:
 
-* Builds => BuildConfigs => hetarchief => storybook-tst => actions => Start Build
-* https://console-openshift-console.meemoo2-2bc857e5f10eb63ab790a3a1d19a696c-i000.eu-de.containers.appdomain.cloud/k8s/ns/hetarchief/buildconfigs/storybook-tst/builds
+-   Builds => BuildConfigs => hetarchief => storybook-tst => actions => Start Build
+-   https://console-openshift-console.meemoo2-2bc857e5f10eb63ab790a3a1d19a696c-i000.eu-de.containers.appdomain.cloud/k8s/ns/hetarchief/buildconfigs/storybook-tst/builds

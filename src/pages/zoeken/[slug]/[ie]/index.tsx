@@ -3,13 +3,17 @@ import {
 	Breadcrumb,
 	Breadcrumbs,
 	Button,
+	Dropdown,
+	DropdownButton,
+	DropdownContent,
 	FlowPlayer,
 	FlowPlayerProps,
+	MenuContent,
 	TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { capitalize, isNil, kebabCase, lowerCase } from 'lodash-es';
+import { capitalize, intersection, isNil, kebabCase, lowerCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -17,13 +21,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { parseUrl } from 'query-string';
-import { ComponentType, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { Group, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	DynamicActionMenu,
 	MediaObject,
@@ -39,6 +42,7 @@ import {
 	formatErrorPlaceholder,
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
+	METADATA_EXPORT_OPTIONS,
 	METADATA_FIELDS,
 	noLicensePlaceholder,
 	OBJECT_DETAIL_TABS,
@@ -53,15 +57,16 @@ import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-tick
 import { IeObjectsService } from '@ie-objects/services';
 import {
 	IeObject,
+	IeObjectAccessThrough,
 	IeObjectLicense,
 	IeObjectRepresentation,
 	MediaActions,
+	MetadataExportFormats,
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTagList } from '@ie-objects/utils';
 import { MaterialRequestObjectType } from '@material-requests/types';
 import {
-	ErrorNoAccess,
 	ErrorNotFound,
 	Icon,
 	IconNamesLight,
@@ -87,7 +92,7 @@ import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
+import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType, VisitStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -141,6 +146,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | undefined>(undefined);
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
+	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
 
 	// Layout
 	useStickyLayout();
@@ -228,7 +234,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
-	const isErrorSpaceNoAccess = (visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorNoLicense =
 		!hasMedia && !mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
@@ -236,10 +241,22 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
 	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
+	const showMetadataExportDropdown =
+		canDownloadMetadata &&
+		visitRequest?.status === VisitStatus.APPROVED &&
+		intersection(mediaInfo?.accessThrough, [
+			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+			IeObjectAccessThrough.VISITOR_SPACE_FULL,
+		]).length;
 
 	/**
 	 * Effects
 	 */
+
+	useEffect(() => {
+		// Close dropdown while resizing
+		setMetadataExportDropdownOpen(false);
+	}, [windowSize]);
 
 	useEffect(() => {
 		// Store the first previous url when arriving on this page, so we can return to the visitor space search url with query params
@@ -373,17 +390,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 	};
 
-	const onExportClick = async () => {
-		const xmlBlob = await getMediaExport(router.query.ie as string);
+	const onExportClick = async (format: MetadataExportFormats) => {
+		const metadataBlob = await getMediaExport({
+			id: router.query.ie as string,
+			format,
+		});
 
-		if (xmlBlob) {
-			save(xmlBlob, `${kebabCase(mediaInfo?.name) || 'metadata'}.xml`);
+		if (metadataBlob) {
+			save(
+				metadataBlob,
+				`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
+			);
 		} else {
 			toastService.notify({
 				title: tHtml('pages/slug/ie/index___error') || 'error',
 				description: tHtml('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
 			});
 		}
+
+		setMetadataExportDropdownOpen(false);
 	};
 
 	const onRequestMaterialClick = () => {
@@ -605,6 +630,49 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</ul>
 	);
 
+	const renderExportDropdown = () => {
+		return (
+			<Dropdown
+				isOpen={metadataExportDropdownOpen}
+				onOpen={() => setMetadataExportDropdownOpen(true)}
+				onClose={() => setMetadataExportDropdownOpen(false)}
+			>
+				<DropdownButton>
+					<Button
+						className="p-object-detail__export"
+						iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
+						iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+						aria-label={tText(
+							'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+						)}
+						title={tText(
+							'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+						)}
+					>
+						<span className="u-text-ellipsis u-display-none u-display-block:md">
+							{tHtml(
+								'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+							)}
+						</span>
+						<span className="u-text-ellipsis u-display-none:md">
+							{tHtml(
+								'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
+							)}
+						</span>
+					</Button>
+				</DropdownButton>
+				<DropdownContent>
+					<MenuContent
+						rootClassName="c-dropdown-menu"
+						className="p-object-detail__export-dropdown"
+						menuItems={METADATA_EXPORT_OPTIONS()}
+						onClick={(id) => onExportClick(id as MetadataExportFormats)}
+					/>
+				</DropdownContent>
+			</Dropdown>
+		);
+	};
+
 	const renderMetaData = () => {
 		return (
 			<div>
@@ -616,30 +684,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 					<div className="u-pb-24 p-object-detail__actions">
 						<div className="p-object-detail__primary-actions">
-							{canDownloadMetadata && (
-								<Button
-									className="p-object-detail__export"
-									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-									onClick={onExportClick}
-									aria-label={tText(
-										'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-									)}
-									title={tText(
-										'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-									)}
-								>
-									<span className="u-text-ellipsis u-display-none u-display-block:md">
-										{tHtml(
-											'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-										)}
-									</span>
-									<span className="u-text-ellipsis u-display-none:md">
-										{tHtml(
-											'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
-										)}
-									</span>
-								</Button>
-							)}
+							{showMetadataExportDropdown && renderExportDropdown()}
 							{canRequestMaterial && (
 								<Button
 									className="p-object-detail__request-material"
@@ -896,16 +941,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 		if (isErrorNotFound) {
 			return <ErrorNotFound />;
-		}
-		if (isErrorSpaceNoAccess) {
-			return (
-				<ErrorNoAccess
-					visitorSpaceSlug={router.query.slug as string}
-					description={tHtml(
-						'modules/shared/components/error-space-no-access/error-space-no-access___je-hebt-geen-toegang-tot-deze-bezoekersruimte-dien-een-aanvraag-in-om-deze-te-bezoeken'
-					)}
-				/>
-			);
 		}
 		return <div className="p-object-detail">{renderObjectDetail()}</div>;
 	};
