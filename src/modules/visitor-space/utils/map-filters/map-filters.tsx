@@ -27,7 +27,7 @@ const getSelectLabel = (
 export const tagPrefix = (key: string): string => `${key}--`;
 
 export const mapBooleanParamToTag = (value: boolean, label: string, key: string): TagIdentity[] => {
-	const unique = `${tagPrefix(key)}`;
+	const unique = `${tagPrefix(key)}${value}`;
 
 	if (!value) {
 		return [];

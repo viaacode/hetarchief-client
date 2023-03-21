@@ -73,6 +73,7 @@ import {
 	CreatorFilterFormState,
 	DurationFilterFormState,
 	FilterMenu,
+	FilterMenuFilterOption,
 	GenreFilterFormState,
 	initialFields,
 	KeywordsFilterFormState,
@@ -154,6 +155,9 @@ const VisitorSpaceSearchPage: FC = () => {
 	const activeVisitorSpaceId: string =
 		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
 
+	const isKeyUser = user?.isKeyUser || false;
+	const isPublicCollection = activeVisitorSpaceId === PUBLIC_COLLECTION;
+
 	/**
 	 * Data
 	 */
@@ -214,6 +218,38 @@ const VisitorSpaceSearchPage: FC = () => {
 		setQuery({ [VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined });
 	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
 
+	useEffect(() => {
+		// Filter out all disabled query param keys/ids
+		const disabledFilterKeys: VisitorSpaceFilterId[] = VISITOR_SPACE_FILTERS(
+			isPublicCollection,
+			isKeyUser
+		)
+			.filter(({ isDisabled }: FilterMenuFilterOption): boolean => !!isDisabled?.())
+			.map(
+				({ id }: FilterMenuFilterOption): VisitorSpaceFilterId => id as VisitorSpaceFilterId
+			);
+
+		// Loop over all existing query params and strip out the disabled filters if they exist
+		const disabledKeysSet: Set<VisitorSpaceFilterId> = new Set(disabledFilterKeys);
+		const strippedQuery = Object.keys(query).reduce((result, current) => {
+			const id = current as VisitorSpaceFilterId;
+			if (disabledKeysSet.has(id)) {
+				return {
+					...result,
+					[id]: VISITOR_SPACE_QUERY_PARAM_INIT[id],
+				};
+			}
+
+			return {
+				...result,
+				[id]: query[id],
+			};
+		}, {});
+
+		setQuery(strippedQuery);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isKeyUser, isPublicCollection]);
+
 	/**
 	 * Display
 	 */
@@ -272,14 +308,13 @@ const VisitorSpaceSearchPage: FC = () => {
 		return [getDefaultOption(), ...dynamicOptions];
 	}, [visitorSpaces, isMobile]);
 
-	const filters = useMemo(() => {
-		const isKeyUser = user?.isKeyUser || false;
-		const isPublicCollection = activeVisitorSpaceId === PUBLIC_COLLECTION;
-
-		return VISITOR_SPACE_FILTERS(isPublicCollection, isKeyUser).filter(
-			({ isDisabled }) => !isDisabled?.()
-		);
-	}, [activeVisitorSpaceId, user]);
+	const filters = useMemo(
+		() =>
+			VISITOR_SPACE_FILTERS(isPublicCollection, isKeyUser).filter(
+				({ isDisabled }) => !isDisabled?.()
+			),
+		[isKeyUser, isPublicCollection]
+	);
 
 	/**
 	 * Methods

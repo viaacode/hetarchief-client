@@ -41,6 +41,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 	format: VisitorSpaceMediaType.All,
 	[SEARCH_QUERY_KEY]: undefined,
 	[VisitorSpaceFilterId.Maintainer]: '',
+	[VisitorSpaceFilterId.Maintainers]: undefined,
 	[VisitorSpaceFilterId.Medium]: undefined,
 	[VisitorSpaceFilterId.Duration]: undefined,
 	[VisitorSpaceFilterId.Created]: undefined,
