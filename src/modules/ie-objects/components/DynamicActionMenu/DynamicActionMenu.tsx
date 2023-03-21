@@ -9,7 +9,7 @@ import {
 	TooltipTrigger,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useRef, useState } from 'react';
+import { FC, ReactElement, ReactNode, useRef, useState } from 'react';
 
 import { MediaActions } from '@ie-objects/types';
 import { Icon, IconNamesLight } from '@shared/components';
@@ -55,6 +55,15 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	const visibleActions = itemsToHide > 1 ? actions.slice(0, -itemsToHide) : actions;
 	const hiddenActions = itemsToHide > 1 ? actions.slice(-itemsToHide) : [];
 
+	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
+		return (
+			<Tooltip position="top">
+				<TooltipTrigger>{trigger}</TooltipTrigger>
+				<TooltipContent>{tooltip}</TooltipContent>
+			</Tooltip>
+		);
+	};
+
 	const renderButton = (action: ActionItem) => {
 		return (
 			<li
@@ -62,17 +71,25 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				key={`media-action-${action.id}`}
 				role="listitem"
 			>
-				<Tooltip position="top">
-					<TooltipTrigger>
+				{action.tooltip ? (
+					renderInTooltip(
 						<Button
 							onClick={() => onClickAction(action.id)}
 							icon={action.icon}
 							variants={['silver']}
 							aria-label={action.ariaLabel}
-						/>
-					</TooltipTrigger>
-					<TooltipContent>{action.tooltip}</TooltipContent>
-				</Tooltip>
+						/>,
+						action.tooltip
+					)
+				) : (
+					<Button
+						onClick={() => onClickAction(action.id)}
+						icon={action.icon}
+						variants={['silver']}
+						aria-label={action.ariaLabel}
+						title={action.tooltip}
+					/>
+				)}
 			</li>
 		);
 	};
