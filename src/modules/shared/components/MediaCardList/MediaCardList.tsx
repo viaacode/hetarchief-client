@@ -1,11 +1,14 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
+import { useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
+import { IeObjectLicense } from '@ie-objects/types';
 import { ROUTE_PARTS } from '@shared/const';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
+import { useGetAllActiveVisits } from '@visits/hooks/get-all-active-visits';
 
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
@@ -27,6 +30,9 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	showLocallyAvailable = false,
 }) => {
 	const windowSize = useWindowSizeContext();
+
+	const user = useSelector(selectUser);
+	const { data: activeVisits } = useGetAllActiveVisits({ requesterId: user?.id || '' });
 
 	if (!items) {
 		return null;
@@ -125,6 +131,31 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		];
 	};
 
+	const checkLocallyAvailable = (item: IdentifiableMediaCard) => {
+		const userHasAccess = activeVisits?.items.find(
+			(visit) => visit.spaceSlug === item.maintainerSlug
+		);
+		const itemHasNoVisitLicense = !item.licenses?.includes(
+			IeObjectLicense.BEZOEKERTOOL_CONTENT
+		);
+		const itemHasNoCPLicense = !item.licenses?.includes(IeObjectLicense.INTRA_CP_CONTENT);
+		const itemHasNoThumbnail = !item.preview;
+
+		if (userHasAccess && itemHasNoVisitLicense) {
+			return true;
+		}
+
+		if (user?.isKeyUser && itemHasNoCPLicense) {
+			return true;
+		}
+
+		if (user?.isKeyUser && itemHasNoThumbnail) {
+			return true;
+		}
+
+		return false;
+	};
+
 	const tiles = items.map((item, i) =>
 		wrapper(
 			<MediaCard
@@ -136,7 +167,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				{...item}
 				keywords={keywords}
 				view={view}
-				showLocallyAvailable={showLocallyAvailable}
+				showLocallyAvailable={showLocallyAvailable && checkLocallyAvailable(item)}
 				link={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
 				maintainerSlug={item.maintainerSlug}
 			/>,

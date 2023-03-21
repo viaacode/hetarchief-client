@@ -189,6 +189,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		) : (
 			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
 				{renderNoContentIcon()}
+				{showLocallyAvailable && renderLocallyAvailablePill()}
 				{duration && renderDuration()}
 			</div>
 		);
@@ -232,23 +233,25 @@ const MediaCard: FC<MediaCardProps> = ({
 	const renderImage = (imgPath: string | undefined) =>
 		imgPath
 			? wrapInLink(
-					<div
-						className={clsx(
-							styles['c-media-card__header-wrapper'],
-							styles[`c-media-card__header-wrapper--${view}`]
-						)}
-					>
-						<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
-						{!isNil(icon) && (
-							<>
-								<div className={clsx(styles['c-media-card__header-icon'])}>
-									<Icon name={icon} />
-								</div>
-								{showLocallyAvailable && renderLocallyAvailablePill()}
-								{duration && renderDuration()}
-							</>
-						)}
-					</div>
+					<>
+						<div
+							className={clsx(
+								styles['c-media-card__header-wrapper'],
+								styles[`c-media-card__header-wrapper--${view}`]
+							)}
+						>
+							<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+							{!isNil(icon) && (
+								<>
+									<div className={clsx(styles['c-media-card__header-icon'])}>
+										<Icon name={icon} />
+									</div>
+									{showLocallyAvailable && renderLocallyAvailablePill()}
+								</>
+							)}
+						</div>
+						{duration && renderDuration()}
+					</>
 			  )
 			: renderNoContent();
 

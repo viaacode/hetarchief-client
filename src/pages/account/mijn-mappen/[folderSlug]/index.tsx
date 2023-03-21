@@ -505,6 +505,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													type: media.dctermsFormat,
 													preview: media.thumbnailUrl,
 													duration: media.duration,
+													licenses: media.licenses,
 												};
 
 												return {

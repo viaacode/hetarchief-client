@@ -138,7 +138,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	&__header-duration {
 		position: absolute;
-		right: 0;
+		right: $spacer-sm;
 		margin-top: -$spacer-md;
 		font-size: $font-size-sm;
 		background-color: $white;

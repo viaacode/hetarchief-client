@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { IeObjectLicense } from '@ie-objects/types';
 import { IeObjectTypes } from '@shared/types';
 
 import { IconName } from '../Icon';
@@ -32,4 +33,5 @@ export interface MediaCardProps {
 export type IdentifiableMediaCard = MediaCardProps & {
 	schemaIdentifier: string;
 	maintainerSlug: string;
+	licenses?: IeObjectLicense[];
 };
