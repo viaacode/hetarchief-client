@@ -166,3 +166,15 @@ export enum MediaActions {
 	RequestMaterial = 'request-material',
 	Report = 'report',
 }
+
+// Metadata
+
+export enum MetadataExportFormats {
+	'xml',
+	'csv',
+}
+
+export interface IeMetadataExportProps {
+	id?: string;
+	format?: MetadataExportFormats;
+}

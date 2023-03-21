@@ -1,8 +1,8 @@
-import { TabProps } from '@meemoo/react-components';
+import { MenuItemInfo, TabProps } from '@meemoo/react-components';
 
 import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@ie-objects/components';
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
-import { IeObject, MediaActions, ObjectDetailTabs } from '@ie-objects/types';
+import { IeObject, MediaActions, MetadataExportFormats, ObjectDetailTabs } from '@ie-objects/types';
 import {
 	mapArrayToMetadataData,
 	mapBooleanToMetadataData,
@@ -26,6 +26,21 @@ export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_AUDIO_FORMATS,
 ];
 export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
+
+export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
+	{
+		label: tText(
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-XML'
+		),
+		id: MetadataExportFormats.xml,
+	},
+	{
+		label: tText(
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata-als-CSV'
+		),
+		id: MetadataExportFormats.csv,
+	},
+];
 
 /**
  * Object placeholders

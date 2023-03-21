@@ -20,5 +20,12 @@ module.exports = {
 				tabWidth: 2,
 			},
 		},
+		{
+			files: ['public/**/*.json'],
+			options: {
+				useTabs: false,
+				tabWidth: 2,
+			},
+		},
 	],
 };

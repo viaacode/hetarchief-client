@@ -33,6 +33,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	icon,
 	isKeyUser,
 	meemooIdentifier,
+	hasTempAccess,
 }) => {
 	const { tText } = useTranslation();
 	const renderDropdown = () =>
@@ -190,6 +191,17 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
+	const renderTempAccessPill = () => {
+		return (
+			<div className={styles['c-media-card--temp-access']}>
+				<Icon name={IconNamesLight.Clock} />
+				<span className={styles['c-media-card--temp-access-label']}>
+					{tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
+				</span>
+			</div>
+		);
+	};
+
 	return (
 		<div id={id}>
 			<Card
@@ -211,6 +223,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						<div className="u-text-ellipsis--2">
 							<span>{description}</span>
 						</div>
+						{hasTempAccess && renderTempAccessPill()}
 						{isKeyUser && renderKeyUserPill()}
 					</>
 				) : (
