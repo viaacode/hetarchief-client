@@ -104,7 +104,10 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					defaultPageWidth: 'LARGE',
 					onSaveContentPage,
 				},
-				navigationBars: { enableIcons: true },
+				navigationBars: {
+					enableIcons: true,
+					customNavigationElements: ['<BOEZOEKERRUIMTES_DROPDOWN>'],
+				},
 				icon: {
 					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
 					componentProps: {
@@ -126,6 +129,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						check: { name: IconNamesLight.Check },
 						calendar: { name: IconNamesLight.Calendar },
 						clock: { name: IconNamesLight.Clock },
+						export: { name: IconNamesLight.Export },
 					},
 					list: ICON_LIST_CONFIG,
 					alerts: ALERT_ICON_LIST_CONFIG,
