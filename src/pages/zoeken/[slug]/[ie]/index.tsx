@@ -391,14 +391,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	};
 
 	const onExportClick = async (format: MetadataExportFormats) => {
-		const xmlBlob = await getMediaExport({
+		const metadataBlob = await getMediaExport({
 			id: router.query.ie as string,
 			format,
 		});
 
-		if (xmlBlob) {
+		if (metadataBlob) {
 			save(
-				xmlBlob,
+				metadataBlob,
 				`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
 			);
 		} else {
