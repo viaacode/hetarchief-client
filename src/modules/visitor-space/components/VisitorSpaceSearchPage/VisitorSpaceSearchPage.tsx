@@ -631,7 +631,13 @@ const VisitorSpaceSearchPage: FC = () => {
 			return;
 		}
 		return (
-			<div className="p-visitor-space__temp-access-container">
+			<div
+				className={
+					viewMode === 'grid'
+						? 'p-visitor-space__temp-access-container--grid'
+						: 'p-visitor-space__temp-access-container'
+				}
+			>
 				<Icon name={IconNamesLight.Clock} />
 				<span className="p-visitor-space__temp-access-label">
 					{tText(
