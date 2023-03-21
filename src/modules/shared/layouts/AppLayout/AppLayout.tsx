@@ -2,7 +2,6 @@ import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { isWithinInterval } from 'date-fns';
-import { relativeTimeRounding } from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
@@ -46,12 +45,10 @@ import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCe
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { useHistory } from '@shared/hooks/use-history';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSize } from '@shared/hooks/use-window-size';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import { useAppDispatch } from '@shared/store';
-import { selectHistory } from '@shared/store/history';
 import { getTosAction } from '@shared/store/tos/tos.slice';
 import {
 	selectHasUnreadNotifications,
@@ -89,7 +86,6 @@ const AppLayout: FC = ({ children }) => {
 	const showBorder = useSelector(selectShowNavigationBorder);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
 	const { data: materialRequests } = useGetPendingMaterialRequests({});
-	const history = useSelector(selectHistory);
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -106,8 +102,6 @@ const AppLayout: FC = ({ children }) => {
 		'HET_ARCHIEF.alerts.ignoreUntil',
 		JSON.stringify({ id: '1' })
 	);
-
-	useHistory(asPath, history);
 
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
