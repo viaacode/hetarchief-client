@@ -24,6 +24,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	actions,
 	wrapper = (card) => card,
 	className,
+	tempAccessLabel,
 }) => {
 	const windowSize = useWindowSizeContext();
 
@@ -156,6 +157,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 			)}
 		>
 			{!isMasonryView && renderSidebar()}
+			{tempAccessLabel}
 			<Masonry
 				breakpointCols={isMasonryView ? breakpoints : 1}
 				className={styles['c-media-card-list__content']}

@@ -23,6 +23,24 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		}
 	}
 
+	&--temp-access {
+		display: flex;
+		align-items: center;
+		width: fit-content;
+		background-color: $lila;
+		font-size: x-small;
+		font-weight: bold;
+		color: $black;
+		border-radius: 2.5rem;
+		height: 2rem;
+		margin-top: $spacer-xs;
+		padding: 0 $spacer-xs;
+
+		&-label {
+			margin-left: $spacer-xxs;
+		}
+	}
+
 	&__link {
 		text-decoration: none;
 	}
