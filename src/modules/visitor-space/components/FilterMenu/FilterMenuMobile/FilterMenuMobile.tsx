@@ -68,8 +68,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		return (
 			<FilterButton
 				key={`filter-menu-mobile-btn-${id}`}
-				className={clsx({
-					[styles['c-filter-menu-mobile__button--operative']]: !isNil(filterValues?.[id]),
+				className={clsx(styles['c-filter-menu-mobile__option'], {
+					[styles['c-filter-menu-mobile__option--operative']]: !isNil(filterValues?.[id]),
 				})}
 				icon={filterIsActive ? IconNamesLight.AngleLeft : icon ?? IconNamesLight.AngleRight}
 				isActive={filterIsActive}
@@ -149,9 +149,17 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		</>
 	);
 
-	const renderFormModal = ({ form, id, label, type }: FilterMenuFilterOption): ReactElement => (
+	const renderFormModal = (
+		{ form, id, label, type }: FilterMenuFilterOption,
+		isInline?: boolean
+	): ReactElement => (
 		<FilterForm
-			className={styles['c-filter-menu-mobile__form']}
+			className={clsx(styles['c-filter-menu-mobile__form'], {
+				[styles['c-filter-menu-mobile--inline']]: isInline,
+				[styles['c-filter-menu-mobile__option']]: isInline,
+				[styles['c-filter-menu-mobile__option--operative']]:
+					!isNil(filterValues?.[id]) && isInline,
+			})}
 			form={form}
 			id={id}
 			key={openedAt}
@@ -168,7 +176,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			case FilterMenuType.Modal:
 				return renderModalButton(filterOption);
 			case FilterMenuType.Checkbox:
-				return renderFormModal(filterOption);
+				return renderFormModal(filterOption, true);
 			default:
 				return <></>;
 		}
