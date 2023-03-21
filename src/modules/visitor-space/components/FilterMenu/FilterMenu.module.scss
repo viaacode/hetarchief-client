@@ -42,7 +42,7 @@ $checkbox-size: $spacer-sm;
 			transform: scaleX(0);
 			transform-origin: left;
 			transition: transform $animate-default;
-			z-index: get-z-layer("filter");
+			z-index: get-z-layer("filter-menu-mobile");
 		}
 
 		&--operative {

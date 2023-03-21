@@ -53,9 +53,11 @@ const FilterOption: FC<FilterOptionProps> = ({
 		}
 	};
 
-	const renderFilterForm = (cs: string): ReactElement => (
+	const renderFilterForm = (cs: string, isInline?: boolean): ReactElement => (
 		<FilterForm
-			className={clsx(styles['c-filter-menu__option'], className, cs)}
+			className={clsx(styles['c-filter-menu__option'], cs, {
+				[`${className}`]: isInline,
+			})}
 			form={form}
 			id={id}
 			key={openedAt}
@@ -68,7 +70,8 @@ const FilterOption: FC<FilterOptionProps> = ({
 		/>
 	);
 
-	const renderCheckbox = (): ReactElement => renderFilterForm('c-filter-menu__form--inline');
+	const renderCheckbox = (): ReactElement =>
+		renderFilterForm('c-filter-menu__form--inline', true);
 
 	const renderModal = (): ReactElement => (
 		<>
