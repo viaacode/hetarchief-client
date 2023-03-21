@@ -142,7 +142,8 @@ export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true):
 
 export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
-	isInAFolder: boolean
+	isInAFolder: boolean,
+	canReport: boolean
 ): DynamicActionMenuProps => ({
 	actions: [
 		...((canManageFolders
@@ -164,7 +165,7 @@ export const MEDIA_ACTIONS = (
 					},
 			  ]
 			: []) as ActionItem[]),
-		...((canManageFolders
+		...((canReport
 			? [
 					{
 						label: tText('modules/ie-objects/const/index___rapporteer'),

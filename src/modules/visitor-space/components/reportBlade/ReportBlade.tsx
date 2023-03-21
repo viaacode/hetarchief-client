@@ -93,7 +93,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			subject: `${tHtml('Media item gerapporteerd door gebruiker op Het Archief')}`,
 			requester: {
 				email: user?.email || email,
-				name: user?.fullName || '',
+				name: user?.fullName || `${tHtml('Niet ingelogde gebruiker')}`,
 			},
 		};
 

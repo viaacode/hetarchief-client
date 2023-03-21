@@ -236,6 +236,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
 	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
+	const canReport = user?.groupName !== Group.KIOSK_VISITOR;
 
 	/**
 	 * Effects
@@ -672,7 +673,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<DynamicActionMenu
 							{...MEDIA_ACTIONS(
 								canManageFolders,
-								isInAFolder(collections, mediaInfo?.schemaIdentifier)
+								isInAFolder(collections, mediaInfo?.schemaIdentifier),
+								canReport
 							)}
 							onClickAction={onClickAction}
 						/>
