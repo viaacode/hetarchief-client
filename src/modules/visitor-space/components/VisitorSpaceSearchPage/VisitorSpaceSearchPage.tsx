@@ -634,7 +634,10 @@ const VisitorSpaceSearchPage: FC = () => {
 			<div
 				className={
 					viewMode === 'grid'
-						? 'p-visitor-space__temp-access-container--grid'
+						? clsx(
+								'p-visitor-space__temp-access-container--grid',
+								'p-visitor-space__temp-access-container'
+						  )
 						: 'p-visitor-space__temp-access-container'
 				}
 			>
