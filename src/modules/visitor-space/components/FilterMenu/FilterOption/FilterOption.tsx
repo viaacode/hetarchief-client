@@ -53,9 +53,9 @@ const FilterOption: FC<FilterOptionProps> = ({
 		}
 	};
 
-	const renderFilterForm = (className: string): ReactElement => (
+	const renderFilterForm = (cs: string): ReactElement => (
 		<FilterForm
-			className={styles[className]}
+			className={clsx(styles['c-filter-menu__option'], className, cs)}
 			form={form}
 			id={id}
 			key={openedAt}
@@ -73,7 +73,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const renderModal = (): ReactElement => (
 		<>
 			<Dropdown
-				className={styles['c-filter-menu__option']}
+				className={clsx(styles['c-filter-menu__option'], className)}
 				flyoutClassName={flyoutCls}
 				isOpen={filterIsActive}
 				key={`filter-menu-btn-${id}`}
@@ -83,7 +83,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 			>
 				<DropdownButton>
 					<FilterButton
-						className={className}
 						icon={
 							filterIsActive
 								? IconNamesLight.AngleLeft

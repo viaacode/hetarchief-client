@@ -124,7 +124,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					{...option}
 					key={`filter-menu-option-${option.id}`}
 					className={clsx({
-						[styles['c-filter-menu__button--operative']]: !isNil(
+						[styles['c-filter-menu__option--operative']]: !isNil(
 							filterValues?.[option?.id]
 						),
 					})}
