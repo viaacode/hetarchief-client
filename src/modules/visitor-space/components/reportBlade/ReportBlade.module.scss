@@ -22,4 +22,14 @@
 			line-height: $font-size-3xl * (math.div(56, 48));
 		}
 	}
+
+	&__input--disabled {
+		label {
+			color: $neutral;
+		}
+
+		input {
+			color: $zinc;
+		}
+	}
 }

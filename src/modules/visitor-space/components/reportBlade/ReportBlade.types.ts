@@ -1,8 +1,9 @@
+import { User } from '@auth/types';
 import { FormBladeProps } from '@shared/types';
 
 export type ReportBladeProps = FormBladeProps<ReportFormState> & {
 	selected?: ReportSelected;
-	email?: string;
+	user?: User | null;
 };
 
 export interface ReportFormState {

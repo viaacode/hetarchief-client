@@ -1,21 +1,23 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormControl, TextArea, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { Requests } from 'node-zendesk';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { Folder } from '@account/types';
 import { Blade } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { useZendesk } from '@shared/hooks/use-zendesk';
 import { toastService } from '@shared/services/toast-service';
 
 import { REPORT_FORM_SCHEMA } from './ReportBlade.const';
 import styles from './ReportBlade.module.scss';
-import { ReportBladeProps, ReportFormState, ReportSelected } from './ReportBlade.types';
+import { ReportBladeProps, ReportFormState } from './ReportBlade.types';
 
 const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const { tHtml } = useTranslation();
-	const { onSubmit, selected } = props;
+	const { user } = props;
+	const { mutateAsync: createZendeskTicket } = useZendesk();
 	const [report, setReport] = useState<string>();
 	const [email, setEmail] = useState<string>();
 	const {
@@ -46,6 +48,12 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	}, [setValue, email]);
 
 	useEffect(() => {
+		if (user?.email) {
+			setValue('email', user.email);
+		}
+	}, [setValue, user?.email]);
+
+	useEffect(() => {
 		props.isOpen && reset();
 	}, [props.isOpen, reset]);
 
@@ -54,20 +62,45 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	 */
 
 	const onFailedRequest = () => {
-		// getFolders.refetch();
-
 		toastService.notify({
-			title: tHtml(
-				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___er-ging-iets-mis'
-			),
+			title: tHtml('Er ging iets mis'),
 			description: tHtml(
-				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw'
+				'Er is een fout opgetreden tijdens het opslaan. Probeer later opnieuw.'
 			),
 		});
 	};
 
-	const onFormSubmit = (values: ReportFormState) => {
-		console.log(values);
+	const onFormSubmit = async () => {
+		const ticket: Requests.CreateModel = {
+			comment: {
+				url: window.location.href,
+				body: report,
+				html_body: `<dl><dt>${tHtml(
+					'Reden van rapporteren'
+				)}</dt><dd>${report}</dd><dt>${tHtml('pagina url')}</dt><dd>${
+					window.location.href
+				}</dd></dl>`,
+				public: false,
+			},
+
+			subject: `${tHtml('Media item gerapporteerd door gebruiker op Het Archief')}`,
+			requester: {
+				email: user?.email || email,
+				name: user?.fullName || '',
+			},
+		};
+
+		try {
+			await createZendeskTicket(ticket);
+		} catch (err) {
+			onFailedRequest();
+		}
+	};
+
+	const onCloseBlade = () => {
+		setReport(undefined);
+		setEmail(undefined);
+		props.onClose?.();
 	};
 
 	/**
@@ -92,19 +125,18 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___annuleer'
 					)}
 					variants={['block', 'text']}
-					onClick={props.onClose}
+					onClick={onCloseBlade}
 				/>
 			</div>
 		);
 	};
-
-	const title = selected?.title;
 
 	return (
 		<Blade
 			{...props}
 			className={clsx(props.className, styles['c-report-blade'])}
 			footer={props.isOpen && renderFooter()}
+			onClose={onCloseBlade}
 			renderTitle={(props) => (
 				<h3 {...props}>
 					{tHtml(
@@ -127,7 +159,16 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 							name="report"
 							control={control}
 							render={(field) => (
-								<TextArea {...field} id="field" disabled={!props.isOpen} />
+								<TextArea
+									{...field}
+									id="field"
+									disabled={!props.isOpen}
+									value={report}
+									onChange={(e) => {
+										const report = e.currentTarget.value;
+										setReport(report);
+									}}
+								/>
 							)}
 						/>
 					</FormControl>
@@ -135,7 +176,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 				{props.isOpen && (
 					<FormControl
-						className="u-mb-24"
+						className={clsx('u-mb-24', {
+							[styles['c-report-blade__input--disabled']]: !!user?.email,
+						})}
 						errors={[errors.email?.message]}
 						id="email"
 						label={tHtml(
@@ -150,7 +193,16 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 									{...field}
 									type="email"
 									id="field"
-									disabled={!props.isOpen}
+									disabled={!props.isOpen || !!user?.email}
+									value={user?.email || email}
+									onChange={(e) => {
+										if (user?.email) {
+											return;
+										}
+
+										const email = e.currentTarget.value;
+										setEmail(email);
+									}}
 								/>
 							)}
 						/>

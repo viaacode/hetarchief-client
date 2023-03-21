@@ -23,7 +23,6 @@ import save from 'save-file';
 
 import { Group, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
-import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	DynamicActionMenu,
 	MediaObject,
@@ -82,6 +81,7 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { useZendesk } from '@shared/hooks/use-zendesk/use-zendesk';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';
@@ -891,7 +891,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					maintainerSlug={visitorSpace?.slug}
 				/>
 			)}
-			<ReportBlade isOpen={activeBlade === MediaActions.Report} onClose={onCloseBlade} />
+			<ReportBlade
+				user={user}
+				isOpen={activeBlade === MediaActions.Report}
+				onClose={onCloseBlade}
+			/>
 		</>
 	);
 
