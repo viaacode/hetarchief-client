@@ -49,6 +49,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	showLocallyAvailable = false,
 	link,
 	maintainerSlug,
+	hasTempAccess,
 }) => {
 	const { tText } = useTranslation();
 
@@ -304,6 +305,17 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
+	const renderTempAccessPill = () => {
+		return (
+			<div className={styles['c-media-card--temp-access']}>
+				<Icon name={IconNamesLight.Clock} />
+				<span className={styles['c-media-card--temp-access-label']}>
+					{tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
+				</span>
+			</div>
+		);
+	};
+
 	return (
 		<div id={id}>
 			<Card
@@ -327,6 +339,7 @@ const MediaCard: FC<MediaCardProps> = ({
 								<span>{description}</span>
 							</div>
 						)}
+						{hasTempAccess && renderTempAccessPill()}
 						{isKeyUser && renderKeyUserPill()}
 						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>

@@ -28,6 +28,7 @@ export interface MediaCardProps {
 	showLocallyAvailable?: boolean;
 	link?: string;
 	maintainerSlug?: string;
+	hasTempAccess?: boolean;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {
