@@ -173,7 +173,7 @@ export const MEDIA_ACTIONS = (
 							<Icon
 								aria-hidden
 								className="u-font-size-24 u-text-left"
-								name={isInAFolder ? IconNamesSolid.Rewind : IconNamesLight.Rewind}
+								name={IconNamesLight.Flag}
 							/>
 						),
 						id: MediaActions.Report,
