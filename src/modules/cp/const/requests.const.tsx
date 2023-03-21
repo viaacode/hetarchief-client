@@ -125,18 +125,4 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 			);
 		},
 	},
-	{
-		Header: '',
-		id: 'cp-requests-table-actions',
-		Cell: () => {
-			return (
-				<Button
-					className="p-cp-requests__actions"
-					icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
-					aria-label={tText('modules/cp/const/requests___meer-acties')}
-					variants={['xxs', 'text']}
-				/>
-			);
-		},
-	},
 ];
