@@ -16,8 +16,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
-import { Permission } from '@account/const';
-import { selectIsLoggedIn } from '@auth/store/user';
+import { Group, Permission } from '@account/const';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
@@ -125,6 +125,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * State
 	 */
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const user = useSelector(selectUser);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 
@@ -612,41 +613,55 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
+		const options = dropdownOptions
+			// Ward: remove 'Publieke catalogus'
+			.filter((maintainer) => {
+				return maintainer.id !== '';
+			})
+			.filter((maintainer) => {
+				if (user?.groupName === Group.CP_ADMIN) {
+					return maintainer.id !== user.maintainerId;
+				}
+				return true;
+			});
+		if (!isLoggedIn || options.length === 0) {
+			return;
+		}
+		if (user?.groupName === Group.KIOSK_VISITOR) {
+			return;
+		}
 		return (
 			<div className="p-visitor-space__temp-access-container">
 				<Icon name={IconNamesLight.Clock} />
 				<span className="p-visitor-space__temp-access-label">
 					{tText(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___tijdelijke-toegang'
-					)}
-					{dropdownOptions
-						// Ward: remove 'Publieke catalogus'
-						.filter((maintainer) => maintainer.id !== '')
-						.map((maintainer, index) => {
-							const postLabel = () => {
-								// Ward: if last element (-1 because 'Publieke catalogus' was removed)
-								if (index + 1 === dropdownOptions.length - 1) {
-									return '.';
-								}
-								// Ward: if second to last element
-								else if (index + 2 === dropdownOptions.length - 1) {
-									return ' en ';
-								} else {
-									return ', ';
-								}
-							};
+					)}{' '}
+					{options.map((maintainer, index) => {
+						const postLabel = () => {
+							// Ward: if last element (-1 because 'Publieke catalogus' was removed)
+							if (index + 1 === dropdownOptions.length - 1) {
+								return '.';
+							}
+							// Ward: if second to last element
+							else if (index + 2 === dropdownOptions.length - 1) {
+								return ' en ';
+							} else {
+								return ', ';
+							}
+						};
 
-							const link = (
-								<>
-									<Link href={`/zoeken?maintainer=${maintainer?.id}`}>
-										<a aria-label={maintainer?.label}>{maintainer?.label}</a>
-									</Link>
-									{postLabel()}
-								</>
-							);
+						const link = (
+							<>
+								<Link href={`/zoeken?maintainer=${maintainer?.id}`}>
+									<a aria-label={maintainer?.label}>{maintainer?.label}</a>
+								</Link>
+								{postLabel()}
+							</>
+						);
 
-							return link;
-						})}
+						return link;
+					})}
 				</span>
 			</div>
 		);
