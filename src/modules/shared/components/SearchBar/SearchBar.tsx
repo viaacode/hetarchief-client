@@ -1,5 +1,5 @@
 import { Button, keysEnter, onKey, TextInput } from '@meemoo/react-components';
-import { FC, useEffect, useState } from 'react';
+import { ChangeEventHandler, FC, useEffect, useState } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
@@ -12,6 +12,7 @@ const SearchBar: FC<SearchBarProps> = ({
 	shouldReset,
 	onResetFinished = () => null,
 	variants = ['md', 'rounded', 'grey-border', 'icon--double', 'icon-clickable'],
+	instantUpdate,
 	...rest
 }) => {
 	const { tText } = useTranslation();
@@ -29,6 +30,14 @@ const SearchBar: FC<SearchBarProps> = ({
 		return [...modifiers, ...(search ? ['black-border'] : [])];
 	};
 
+	const onChange = (e: any): void => {
+		setSearch(e.target.value);
+
+		if (instantUpdate) {
+			onSearch(e.target.value);
+		}
+	};
+
 	useEffect(() => {
 		setSearch('');
 		onResetFinished();
@@ -38,7 +47,7 @@ const SearchBar: FC<SearchBarProps> = ({
 		<TextInput
 			{...rest}
 			value={search}
-			onChange={(e) => setSearch(e.target.value)}
+			onChange={onChange}
 			variants={getVariants()}
 			onKeyDown={(e) => onKey(e, [...keysEnter], () => onSearch(search))}
 			iconEnd={
