@@ -162,6 +162,7 @@ $checkbox-size: $spacer-sm;
 			right: 1.2rem;
 			bottom: auto;
 			left: auto;
+			z-index: get-z-layer("filter");
 		}
 	}
 
