@@ -59,6 +59,7 @@ import {
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTagList } from '@ie-objects/utils';
+import { MaterialRequestObjectType } from '@material-requests/types';
 import {
 	ErrorNoAccess,
 	ErrorNotFound,
@@ -880,7 +881,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					onClose={onCloseBlade}
 					objectName={mediaInfo?.name}
 					objectId={mediaInfo?.schemaIdentifier}
-					objectType={mediaInfo.dctermsFormat}
+					objectType={mediaInfo.dctermsFormat as MaterialRequestObjectType}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={visitorSpace?.logo}
 					maintainerSlug={visitorSpace?.slug}

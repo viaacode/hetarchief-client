@@ -12,12 +12,27 @@ $component: "c-Alert";
 		margin-right: 0.8rem;
 	}
 
+	.c-Alert__message {
+		flex-grow: 1;
+	}
+
+	.c-Alert__close-icon {
+		align-self: start;
+		font-size: 2rem;
+		margin-left: 0.8rem;
+		padding: 0;
+	}
+
 	.c-Alert__title {
 		font-weight: bold;
 		margin-bottom: 0.4rem;
 	}
-}
 
-.c-Alert__margin-bottom {
-	margin-bottom: $spacer-lg;
+	&__margin-bottom {
+		margin-bottom: $spacer-lg;
+	}
+
+	&--blue {
+		background-color: $light-blue;
+	}
 }

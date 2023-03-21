@@ -33,6 +33,7 @@ export const ROUTE_PARTS = Object.freeze({
 	search: 'zoeken',
 	visitors: 'bezoekers',
 	visit: 'bezoek',
+	alerts: 'meldingen',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -82,6 +83,7 @@ export const ADMIN_CORE_ROUTES = {
 	USER_GROUP_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}/:id/${ROUTE_PARTS.edit}`,
 	USER_GROUP_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}`,
 	USER_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.users}}`,
+	ALERT_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.alerts}`,
 
 	// Will be added later
 	// CONTENT_PAGE_LABEL_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/${ROUTE_PARTS.create}`,

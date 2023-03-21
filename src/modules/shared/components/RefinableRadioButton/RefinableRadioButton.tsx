@@ -1,9 +1,8 @@
-import { Dropdown, RadioButton } from '@meemoo/react-components';
+import { CheckboxList, Dropdown, RadioButton } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isEmpty, isNil, without } from 'lodash-es';
 import { FC, ReactElement, ReactNode, useState } from 'react';
 
-import { CheckboxList } from '../CheckboxList';
 import { Icon, IconNamesLight } from '../Icon';
 
 import styles from './RefinableRadioButton.module.scss';
