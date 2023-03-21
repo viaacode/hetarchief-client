@@ -69,6 +69,7 @@ import {
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTagList } from '@ie-objects/utils';
 import { MaterialRequestObjectType } from '@material-requests/types';
+import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	ErrorNotFound,
 	Icon,
@@ -233,14 +234,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	// spaces
-	const { data: visitorSpaces } = useGetVisitorSpaces(
-		'',
-		[VisitorSpaceStatus.Requested, VisitorSpaceStatus.Active, VisitorSpaceStatus.Inactive],
-		1,
-		999,
-		VisitorSpaceOrderProps.Id,
-		OrderDirection.asc
-	);
+	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
 
 	/**
 	 * Computed
@@ -265,7 +259,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			IeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length;
 	const canRequestAccess =
-		!!visitorSpaces?.items.find((space) => space.maintainerId === mediaInfo?.maintainerId) &&
+		!!accessibleVisitorSpaces?.find(
+			(space) => space.maintainerId === mediaInfo?.maintainerId
+		) &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		!mediaInfo.thumbnailUrl;
 
