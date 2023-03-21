@@ -59,6 +59,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
+					instantUpdate
 					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Creator}`}
 					default={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}

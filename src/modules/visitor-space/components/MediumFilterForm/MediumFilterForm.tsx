@@ -59,6 +59,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
+					instantUpdate
 					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Medium}`}
 					default={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}

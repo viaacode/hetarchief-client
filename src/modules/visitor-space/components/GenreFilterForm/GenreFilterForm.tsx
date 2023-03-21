@@ -58,6 +58,7 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
+					instantUpdate
 					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Genre}`}
 					default={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
