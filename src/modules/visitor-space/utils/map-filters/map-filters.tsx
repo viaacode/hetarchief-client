@@ -168,7 +168,9 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 		),
 		...mapBooleanParamToTag(
 			query.media || false,
-			tText('modules/visitor-space/utils/map-filters/map-filters___raadpleegbare-media'),
+			tText(
+				'modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'
+			),
 			VisitorSpaceFilterId.Media
 		),
 		...mapBooleanParamToTag(
