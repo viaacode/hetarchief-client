@@ -95,6 +95,7 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
+import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
@@ -369,6 +370,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		switch (id) {
 			case MediaActions.Bookmark:
 				setActiveBlade(MediaActions.Bookmark);
+				break;
+			case MediaActions.Report:
+				setActiveBlade(MediaActions.Report);
 				break;
 		}
 	};
@@ -887,6 +891,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					maintainerSlug={visitorSpace?.slug}
 				/>
 			)}
+			<ReportBlade isOpen={activeBlade === MediaActions.Report} onClose={onCloseBlade} />
 		</>
 	);
 

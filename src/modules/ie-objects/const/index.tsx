@@ -164,6 +164,23 @@ export const MEDIA_ACTIONS = (
 					},
 			  ]
 			: []) as ActionItem[]),
+		...((canManageFolders
+			? [
+					{
+						label: tText('modules/ie-objects/const/index___rapporteer'),
+						icon: (
+							<Icon
+								aria-hidden
+								className="u-font-size-24 u-text-left"
+								name={isInAFolder ? IconNamesSolid.Rewind : IconNamesLight.Rewind}
+							/>
+						),
+						id: MediaActions.Report,
+						ariaLabel: tText('modules/ie-objects/const/index___rapporteer'),
+						tooltip: tText('modules/ie-objects/const/index___rapporteer'),
+					},
+			  ]
+			: []) as ActionItem[]),
 	],
 	limit: 2,
 	onClickAction: () => null,

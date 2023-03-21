@@ -164,4 +164,5 @@ export enum MediaActions {
 	Calendar = 'calendar',
 	RelatedObjects = 'related-objects',
 	RequestMaterial = 'request-material',
+	Report = 'report',
 }
