@@ -765,7 +765,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 								>
 									<span className="u-text-ellipsis u-display-none u-display-block:md">
 										{tText(
-											'modules/ie-ob‡jects/const/index___toevoegen-aan-aanvraaglijst'
+											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
 										)}
 									</span>
 									<span className="u-text-ellipsis u-display-none:md">
