@@ -63,17 +63,23 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 	const onFailedRequest = () => {
 		toastService.notify({
-			title: tHtml('Er ging iets mis'),
+			title: tHtml(
+				'modules/visitor-space/components/report-blade/report-blade___er-ging-iets-mis'
+			),
 			description: tHtml(
-				'Er is een fout opgetreden tijdens het opslaan. Probeer later opnieuw.'
+				'modules/visitor-space/components/report-blade/report-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-later-opnieuw'
 			),
 		});
 	};
 
 	const onSuccessfulRequest = () => {
 		toastService.notify({
-			title: tHtml('Gerapporteerd'),
-			description: tHtml('Uw bericht werd succesvol verstuurd.'),
+			title: tHtml(
+				'modules/visitor-space/components/report-blade/report-blade___gerapporteerd'
+			),
+			description: tHtml(
+				'modules/visitor-space/components/report-blade/report-blade___uw-bericht-werd-succesvol-verstuurd'
+			),
 		});
 	};
 
@@ -83,17 +89,23 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				url: window.location.href,
 				body: report,
 				html_body: `<dl><dt>${tHtml(
-					'Reden van rapporteren'
-				)}</dt><dd>${report}</dd><dt>${tHtml('pagina url')}</dt><dd>${
-					window.location.href
-				}</dd></dl>`,
+					'modules/visitor-space/components/report-blade/report-blade___reden-van-rapporteren'
+				)}</dt><dd>${report}</dd><dt>${tHtml(
+					'modules/visitor-space/components/report-blade/report-blade___pagina-url'
+				)}</dt><dd>${window.location.href}</dd></dl>`,
 				public: false,
 			},
 
-			subject: `${tHtml('Media item gerapporteerd door gebruiker op Het Archief')}`,
+			subject: `${tHtml(
+				'modules/visitor-space/components/report-blade/report-blade___media-item-gerapporteerd-door-gebruiker-op-het-archief'
+			)}`,
 			requester: {
 				email: user?.email || email,
-				name: user?.fullName || `${tHtml('Niet ingelogde gebruiker')}`,
+				name:
+					user?.fullName ||
+					`${tHtml(
+						'modules/visitor-space/components/report-blade/report-blade___niet-ingelogde-gebruiker'
+					)}`,
 			},
 		};
 
@@ -120,14 +132,18 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={tHtml('Rapporteer')}
+					label={tHtml(
+						'modules/visitor-space/components/report-blade/report-blade___rapporteer'
+					)}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
 					disabled={isSubmitting}
 				/>
 
 				<Button
-					label={tHtml('Annuleer')}
+					label={tHtml(
+						'modules/visitor-space/components/report-blade/report-blade___annuleer'
+					)}
 					variants={['block', 'text']}
 					onClick={onCloseBlade}
 				/>
@@ -141,7 +157,13 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			className={clsx(props.className, styles['c-report-blade'])}
 			footer={props.isOpen && renderFooter()}
 			onClose={onCloseBlade}
-			renderTitle={(props) => <h3 {...props}>{tHtml('Rapporteren')}</h3>}
+			renderTitle={(props) => (
+				<h3 {...props}>
+					{tHtml(
+						'modules/visitor-space/components/report-blade/report-blade___rapporteren'
+					)}
+				</h3>
+			)}
 		>
 			<div className="u-px-16 u-px-32:md">
 				{props.isOpen && (
@@ -149,7 +171,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						className="u-mb-24"
 						errors={[errors.report?.message]}
 						id="report"
-						label={tHtml('Beschrijf het probleem')}
+						label={tHtml(
+							'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
+						)}
 					>
 						<Controller
 							name="report"
@@ -177,7 +201,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						})}
 						errors={[errors.email?.message]}
 						id="email"
-						label={tHtml('Email adres')}
+						label={tHtml(
+							'modules/visitor-space/components/report-blade/report-blade___email-adres'
+						)}
 					>
 						<Controller
 							name="email"
