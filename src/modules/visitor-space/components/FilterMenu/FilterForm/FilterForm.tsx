@@ -61,6 +61,8 @@ const FilterForm: FC<FilterFormProps> = ({
 		return (
 			<div className={clsx(className, styles['c-filter-form--inline'])}>
 				<FormComponent
+					// Make sure to force a rerender the form by setting a key
+					key={`${id}-${JSON.stringify(values)}`}
 					id={id}
 					label={title}
 					onFormSubmit={onFormSubmit}

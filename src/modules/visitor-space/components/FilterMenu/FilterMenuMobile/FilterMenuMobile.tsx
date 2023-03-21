@@ -162,7 +162,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			})}
 			form={form}
 			id={id}
-			key={openedAt}
+			// Make sure to force a rerender the form by setting a key
+			key={`${id}-${openedAt}`}
 			onFormReset={onFilterReset}
 			onFormSubmit={onFilterSubmit}
 			title={label}

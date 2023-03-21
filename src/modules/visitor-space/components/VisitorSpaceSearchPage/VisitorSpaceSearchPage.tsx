@@ -248,7 +248,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		setQuery(strippedQuery);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isKeyUser, isPublicCollection]);
+	}, [isKeyUser, isPublicCollection]); // TODOD: SILKE// comment waarom gelijk
 
 	/**
 	 * Display
@@ -466,7 +466,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
-		const query: Record<string, unknown> = {};
+		const updatedQuery: Record<string, unknown> = {};
 
 		tags.forEach((tag) => {
 			switch (tag.key) {
@@ -477,8 +477,8 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Medium:
 				case VisitorSpaceFilterId.Maintainers:
 				case SEARCH_QUERY_KEY:
-					query[tag.key] = [
-						...((query[tag.key] as Array<unknown>) || []),
+					updatedQuery[tag.key] = [
+						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),
 					];
 					break;
@@ -487,11 +487,21 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Created:
 				case VisitorSpaceFilterId.Duration:
 				case VisitorSpaceFilterId.Published:
-					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag];
+					updatedQuery[tag.key] = [
+						...((updatedQuery[tag.key] as Array<unknown>) || []),
+						tag,
+					];
+					break;
+
+				case VisitorSpaceFilterId.Media:
+				case VisitorSpaceFilterId.Remote:
+					// eslint-disable-next-line no-case-declarations
+					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
+					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
 					break;
 
 				default:
-					query[tag.key] = tag.value;
+					updatedQuery[tag.key] = tag.value;
 					break;
 			}
 		});
@@ -511,7 +521,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		};
 		/* eslint-disable @typescript-eslint/no-unused-vars */
 
-		setQuery({ ...rest, ...query, page: 1 });
+		setQuery({ ...rest, ...updatedQuery, page: 1 });
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
