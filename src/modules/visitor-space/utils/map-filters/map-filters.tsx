@@ -24,6 +24,7 @@ const getSelectLabel = (
 	return options.find((option) => option.value === optionValue)?.label;
 };
 
+// Prevent duplicate values by prefixing the value with the filter key (e.g. creator--shd)
 export const tagPrefix = (key: string): string => `${key}--`;
 
 export const mapBooleanParamToTag = (value: boolean, label: string, key: string): TagIdentity[] => {

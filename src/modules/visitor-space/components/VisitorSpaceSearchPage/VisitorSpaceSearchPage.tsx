@@ -247,8 +247,9 @@ const VisitorSpaceSearchPage: FC = () => {
 		}, {});
 
 		setQuery(strippedQuery);
+		// Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isKeyUser, isPublicCollection]); // TODOD: SILKE// comment waarom gelijk
+	}, [isKeyUser, isPublicCollection]);
 
 	/**
 	 * Display
