@@ -2,7 +2,7 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { globalLabelKeys } from '@shared/const';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
@@ -42,13 +42,30 @@ const Blade: FC<BladeProps> = ({
 		isOpen && (document.activeElement as HTMLElement)?.blur?.();
 	}, [isOpen]);
 
-	const handleClose = () => {
+	const handleClose = useCallback(() => {
 		if (isLayered && onCloseBlade) {
 			onCloseBlade(layer);
 		} else if (onClose) {
 			onClose();
 		}
-	};
+	}, [isLayered, layer, onClose, onCloseBlade]);
+
+	const escFunction = useCallback(
+		(event) => {
+			if (event.key === 'Escape') {
+				handleClose();
+			}
+		},
+		[handleClose]
+	);
+
+	useEffect(() => {
+		document.addEventListener('keydown', escFunction, false);
+
+		return () => {
+			document.removeEventListener('keydown', escFunction, false);
+		};
+	}, [escFunction]);
 
 	const renderTopBar = () => {
 		return showBackButton ? (

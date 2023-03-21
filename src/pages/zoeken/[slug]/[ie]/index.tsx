@@ -17,7 +17,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { parseUrl } from 'query-string';
-import { ComponentType, Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
@@ -81,7 +81,6 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { useZendesk } from '@shared/hooks/use-zendesk/use-zendesk';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectPreviousUrl } from '@shared/store/history';

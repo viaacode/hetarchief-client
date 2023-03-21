@@ -4,6 +4,9 @@ import {
 	DropdownButton,
 	DropdownContent,
 	MenuContent,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useRef, useState } from 'react';
@@ -59,13 +62,17 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				key={`media-action-${action.id}`}
 				role="listitem"
 			>
-				<Button
-					onClick={() => onClickAction(action.id)}
-					icon={action.icon}
-					variants={['silver']}
-					aria-label={action.ariaLabel}
-					title={action.tooltip}
-				/>
+				<Tooltip position="top">
+					<TooltipTrigger>
+						<Button
+							onClick={() => onClickAction(action.id)}
+							icon={action.icon}
+							variants={['silver']}
+							aria-label={action.ariaLabel}
+						/>
+					</TooltipTrigger>
+					<TooltipContent>{action.tooltip}</TooltipContent>
+				</Tooltip>
 			</li>
 		);
 	};

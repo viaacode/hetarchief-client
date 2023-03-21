@@ -70,6 +70,13 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		});
 	};
 
+	const onSuccessfulRequest = () => {
+		toastService.notify({
+			title: tHtml('Gerapporteerd'),
+			description: tHtml('Uw bericht werd succesvol verstuurd.'),
+		});
+	};
+
 	const onFormSubmit = async () => {
 		const ticket: Requests.CreateModel = {
 			comment: {
@@ -92,6 +99,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 		try {
 			await createZendeskTicket(ticket);
+			onSuccessfulRequest();
 		} catch (err) {
 			onFailedRequest();
 		}
@@ -112,18 +120,14 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			<div className="u-px-32 u-py-24">
 				<Button
 					className="u-mb-16"
-					label={tHtml(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
-					)}
+					label={tHtml('Rapporteer')}
 					variants={['block', 'black']}
 					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
 					disabled={isSubmitting}
 				/>
 
 				<Button
-					label={tHtml(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___annuleer'
-					)}
+					label={tHtml('Annuleer')}
 					variants={['block', 'text']}
 					onClick={onCloseBlade}
 				/>
@@ -137,13 +141,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			className={clsx(props.className, styles['c-report-blade'])}
 			footer={props.isOpen && renderFooter()}
 			onClose={onCloseBlade}
-			renderTitle={(props) => (
-				<h3 {...props}>
-					{tHtml(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___rapporteren'
-					)}
-				</h3>
-			)}
+			renderTitle={(props) => <h3 {...props}>{tHtml('Rapporteren')}</h3>}
 		>
 			<div className="u-px-16 u-px-32:md">
 				{props.isOpen && (
@@ -151,9 +149,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						className="u-mb-24"
 						errors={[errors.report?.message]}
 						id="report"
-						label={tHtml(
-							'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
-						)}
+						label={tHtml('Beschrijf het probleem')}
 					>
 						<Controller
 							name="report"
@@ -181,9 +177,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						})}
 						errors={[errors.email?.message]}
 						id="email"
-						label={tHtml(
-							'modules/visitor-space/components/report-blade/report-blade___email'
-						)}
+						label={tHtml('Email adres')}
 					>
 						<Controller
 							name="email"
