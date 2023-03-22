@@ -210,7 +210,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		);
 
 		setActiveVisitorSpace(visitorSpace);
-		setQuery({ [VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined });
+		setQuery({
+			...VISITOR_SPACE_QUERY_PARAM_INIT,
+			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined,
+		});
 	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
 
 	/**
@@ -458,10 +461,17 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const onVisitorSpaceSelected = (id: string): void => {
 		if (id === PUBLIC_COLLECTION) {
-			setQuery({ [VisitorSpaceFilterId.Maintainer]: undefined });
-		} else {
-			setQuery({ [VisitorSpaceFilterId.Maintainer]: id });
+			setQuery({
+				...VISITOR_SPACE_QUERY_PARAM_INIT,
+				[VisitorSpaceFilterId.Maintainer]: undefined,
+			});
+			return;
 		}
+
+		setQuery({
+			...VISITOR_SPACE_QUERY_PARAM_INIT,
+			[VisitorSpaceFilterId.Maintainer]: id,
+		});
 	};
 
 	/**
@@ -495,7 +505,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				meemooIdentifier: item.meemooIdentifier,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
-				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.KEY_USER),
+				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
 				hasTempAccess: item.accessThrough?.includes(
 					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
 						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
