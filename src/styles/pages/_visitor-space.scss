@@ -11,10 +11,7 @@
 		align-items: center;
 		background-color: $lila;
 		padding: $spacer-xs;
-	}
-
-	&__temp-access-container--grid {
-		margin: 0 $spacer-sm $spacer-md $spacer-sm;
+		margin: $spacer-sm 0;
 	}
 
 	&__temp-access-label {
