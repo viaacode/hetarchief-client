@@ -122,6 +122,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const isKioskUser = useHasAnyGroup(Group.KIOSK_VISITOR);
+	const isCPAdmin = useHasAnyGroup(Group.CP_ADMIN);
 
 	/**
 	 * State
@@ -648,8 +649,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		const visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
 				const isPublicColelction = visitorSpace.id == PUBLIC_COLLECTION;
-				const isOwnVisitorSapce =
-					user?.groupName === Group.CP_ADMIN && visitorSpace.id === user.maintainerId;
+				const isOwnVisitorSapce = isCPAdmin && visitorSpace.id === user?.maintainerId;
 
 				return !isPublicColelction && !isOwnVisitorSapce;
 			}

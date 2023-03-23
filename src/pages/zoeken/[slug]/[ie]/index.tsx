@@ -84,6 +84,7 @@ import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -139,6 +140,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+	const isNotKiosk = useHasAnyGroup(Group.CP_ADMIN, Group.MEEMOO_ADMIN, Group.VISITOR);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -247,7 +249,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
 	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
-	const canReport = user?.groupName !== Group.KIOSK_VISITOR;
+	const canReport = isNotKiosk;
 	const showMetadataExportDropdown =
 		canDownloadMetadata &&
 		visitRequest?.status === VisitStatus.APPROVED &&
