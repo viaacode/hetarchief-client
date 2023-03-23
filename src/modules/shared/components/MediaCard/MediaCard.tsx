@@ -116,7 +116,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		) : (
 			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
 				{renderNoContentIcon()}
-				{duration && renderDuration()}
 			</div>
 		);
 
