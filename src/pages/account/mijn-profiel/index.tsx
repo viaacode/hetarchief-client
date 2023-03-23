@@ -142,7 +142,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 					<Box className="p-account-my-profile__user-data u-mb-32">
 						<section className="u-p-24 p-account-my-profile__general-info">
 							<header className="p-account-my-profile__general-info-header u-mb-24">
-								<h6>Algemene info</h6>
+								<h6>{tText('pages/account/mijn-profiel/index___algemene-info')}</h6>
 								{canEdit && renderEditProfile()}
 							</header>
 							<div className="p-account-my-profile__general-info-items u-mb-24">
