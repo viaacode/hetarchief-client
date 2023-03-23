@@ -1,7 +1,8 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { groupBy, intersection } from 'lodash-es';
+import { groupBy, intersection, isNil } from 'lodash-es';
 import Link from 'next/link';
+import { stringifyUrl } from 'query-string';
 import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
@@ -256,6 +257,7 @@ const getDynamicHeaderLinks = (
 const getCpAdminManagementDropdown = (
 	currentPath: string,
 	permissions: Permission[],
+	maintainerId: string | null,
 	isMobile: boolean
 ): NavigationItem[] => {
 	if (
@@ -353,6 +355,29 @@ const getCpAdminManagementDropdown = (
 							},
 					  ]
 					: []),
+
+				...(!isNil(maintainerId)
+					? [
+							{
+								node: renderLink(
+									tText(
+										'modules/navigation/components/navigation/navigation___naar-mijn-bezoekerstool'
+									),
+									stringifyUrl({
+										url: `${ROUTE_PARTS.search}`,
+										query: {
+											[VisitorSpaceFilterId.Maintainer]: maintainerId,
+										},
+									}),
+									{
+										className: dropdownCls(),
+									}
+								),
+								id: 'nav__beheer--mijn-bezoekerstool',
+								path: currentPath,
+							},
+					  ]
+					: []),
 			],
 		},
 	];
@@ -404,7 +429,8 @@ export const getNavigationItemsLeft = (
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	permissions: Permission[],
 	linkedSpaceOrId: string | null,
-	isMobile: boolean
+	isMobile: boolean,
+	maintainerId: string | null
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
@@ -421,7 +447,12 @@ export const getNavigationItemsLeft = (
 		linkedSpaceOrId
 	);
 
-	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions, isMobile);
+	const cpAdminLinks = getCpAdminManagementDropdown(
+		currentPath,
+		permissions,
+		maintainerId,
+		isMobile
+	);
 	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
 
 	return [
