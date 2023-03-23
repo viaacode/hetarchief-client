@@ -2,9 +2,11 @@ import { Button, RadioButton, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC, useState } from 'react';
 
+import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import { Blade } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { toastService } from '@shared/services/toast-service';
 
 import { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
@@ -19,6 +21,40 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 		personalInfo.organisation || ''
 	);
 
+	const onSendRequests = async () => {
+		try {
+			await MaterialRequestsService.sendAll({
+				type: typeSelected,
+				organisation: organisationInputValue,
+			});
+			toastService.notify({
+				maxLines: 3,
+				title: tText(
+					'modules/navigation/components/personal-info-blade/personal-info-blade___verzenden-succes'
+				),
+				description: tText(
+					'modules/navigation/components/personal-info-blade/personal-info-blade___requests-zijn-verzonden'
+				),
+			});
+			onClose();
+		} catch (err) {
+			console.log({ err });
+			onFailedRequest();
+		}
+	};
+
+	const onFailedRequest = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText(
+				'modules/navigation/components/personal-info-blade/personal-info-blade___er-ging-iets-mis'
+			),
+			description: tText(
+				'modules/navigation/components/personal-info-blade/personal-info-blade___er-ging-iets-mis-tijdens-het-versturen'
+			),
+		});
+	};
+
 	const renderFooter = () => {
 		return (
 			<div className={styles['c-personal-info-blade__close-button-container']}>
@@ -27,7 +63,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 						'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
 					)}
 					variants={['block', 'text', 'dark']}
-					onClick={() => console.log('Send!')}
+					onClick={() => onSendRequests()}
 					className={styles['c-personal-info-blade__send-button']}
 				/>
 				<Button
@@ -141,10 +177,10 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 								'modules/navigation/components/personal-info-blade/personal-info-blade___requester-capacity-private-researcher'
 							)}
 							checked={
-								typeSelected === MaterialRequestRequesterCapacity.PRIVATE_RESEARCHER
+								typeSelected === MaterialRequestRequesterCapacity.PRIVATE_RESEARCH
 							}
 							onClick={() =>
-								setTypeSelected(MaterialRequestRequesterCapacity.PRIVATE_RESEARCHER)
+								setTypeSelected(MaterialRequestRequesterCapacity.PRIVATE_RESEARCH)
 							}
 						/>
 						<RadioButton
