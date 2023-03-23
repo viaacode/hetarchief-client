@@ -158,9 +158,27 @@ export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true):
 export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
 	isInAFolder: boolean,
-	canReport: boolean
+	canReport: boolean,
+	canRequestAccess: boolean
 ): DynamicActionMenuProps => ({
 	actions: [
+		...((canRequestAccess
+			? [
+					{
+						label: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+						icon: (
+							<Icon
+								aria-hidden
+								className="u-font-size-24 u-text-left"
+								name={isInAFolder ? IconNamesSolid.Request : IconNamesLight.Request}
+							/>
+						),
+						id: MediaActions.RequestAccess,
+						ariaLabel: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+						tooltip: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+					},
+			  ]
+			: []) as ActionItem[]),
 		...((canManageFolders
 			? [
 					{

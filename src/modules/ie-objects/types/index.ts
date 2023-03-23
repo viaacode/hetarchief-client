@@ -164,6 +164,7 @@ export enum MediaActions {
 	RelatedObjects = 'related-objects',
 	RequestMaterial = 'request-material',
 	Report = 'report',
+	RequestAccess = 'request-access',
 }
 
 // Metadata

@@ -9,6 +9,7 @@ import {
 	FlowPlayer,
 	FlowPlayerProps,
 	MenuContent,
+	OrderDirection,
 	TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
@@ -27,6 +28,8 @@ import save from 'save-file';
 
 import { Group, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
+import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
 	DynamicActionMenu,
 	MediaObject,
@@ -66,6 +69,7 @@ import {
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTagList } from '@ie-objects/utils';
 import { MaterialRequestObjectType } from '@material-requests/types';
+import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	ErrorNotFound,
 	Icon,
@@ -101,6 +105,8 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
+import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
+import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -132,6 +138,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const user = useSelector(selectUser);
 	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
+	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -222,6 +229,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		false
 	);
 
+	// spaces
+	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
+
 	/**
 	 * Computed
 	 */
@@ -245,6 +255,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 			IeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length;
+	const canRequestAccess =
+		!!accessibleVisitorSpaces?.find(
+			(space) => space.maintainerId === mediaInfo?.maintainerId
+		) &&
+		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
+		!mediaInfo.thumbnailUrl;
 
 	/**
 	 * Effects
@@ -382,6 +398,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			case MediaActions.Report:
 				setActiveBlade(MediaActions.Report);
 				break;
+			case MediaActions.RequestAccess:
+				setActiveBlade(MediaActions.RequestAccess);
+				break;
 		}
 	};
 
@@ -436,6 +455,53 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const handleOnPause = () => {
 		setIsMediaPaused(true);
+	};
+
+	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
+		try {
+			if (!user) {
+				toastService.notify({
+					title: tHtml('pages/slug/ie/index___je-bent-niet-ingelogd'),
+					description: tHtml(
+						'pages/slug/ie/index___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
+					),
+				});
+				return;
+			}
+
+			if (!mediaInfo?.maintainerSlug) {
+				toastService.notify({
+					title: tHtml('pages/slug/ie/index___bezoekersruimte-bestaat-niet'),
+					description: tHtml(
+						'pages/slug/ie/index___de-bezoekersruimte-waarvoor-je-een-aanvraag-wil-indienen-bestaat-niet'
+					),
+				});
+				return;
+			}
+
+			const createdVisitRequest = await createVisitRequest({
+				acceptedTos: values.acceptTerms,
+				reason: values.requestReason,
+				visitorSpaceSlug: mediaInfo?.maintainerSlug as string,
+				timeframe: values.visitTime,
+			});
+			onCloseBlade();
+			await router.push(
+				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+			);
+		} catch (err) {
+			console.error({
+				message: 'Failed to create visit request',
+				error: err,
+				info: values,
+			});
+			toastService.notify({
+				title: tHtml('pages/slug/ie/index___error'),
+				description: tHtml(
+					'pages/slug/ie/index___er-ging-iets-mis-bij-het-versturen-van-je-aanvraag-probeer-het-later-opnieuw-of-contacteer-de-support'
+				),
+			});
+		}
 	};
 
 	/**
@@ -710,7 +776,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							{...MEDIA_ACTIONS(
 								canManageFolders,
 								isInAFolder(collections, mediaInfo?.schemaIdentifier),
-								canReport
+								canReport,
+								!!canRequestAccess
 							)}
 							onClickAction={onClickAction}
 						/>
@@ -932,6 +999,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 			/>
+			{mediaInfo && visitorSpace && canRequestAccess && (
+				<RequestAccessBlade
+					isOpen={activeBlade === MediaActions.RequestAccess}
+					onClose={onCloseBlade}
+					onSubmit={onRequestAccessSubmit}
+				/>
+			)}
 		</>
 	);
 
