@@ -4,6 +4,22 @@
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 auto;
+
+	&__temp-access-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color: $lila;
+		padding: $spacer-xs;
+	}
+
+	&__temp-access-container--grid {
+		margin: 0 $spacer-sm $spacer-md $spacer-sm;
+	}
+
+	&__temp-access-label {
+		margin-left: $spacer-xs;
+	}
 }
 
 .p-visitor-space__results {

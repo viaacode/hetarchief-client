@@ -22,7 +22,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { parseUrl } from 'query-string';
-import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
@@ -85,7 +85,6 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
-import { useElementSize } from '@shared/hooks/use-element-size';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
@@ -143,7 +142,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
-	const [metadataColumns, setMetadataColumns] = useState<number>(1);
 	const [mediaType, setMediaType] = useState<IeObjectTypes>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
@@ -163,9 +161,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
-
-	const metadataRef = useRef<HTMLDivElement>(null);
-	const metadataSize = useElementSize(metadataRef);
 
 	// Fetch object
 	const {
@@ -301,11 +296,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [mediaInfo]);
 
 	useEffect(() => {
-		metadataSize &&
-			setMetadataColumns(expandMetadata && !isMobile && metadataSize?.width > 500 ? 2 : 1);
-	}, [expandMetadata, isMobile, metadataSize]);
-
-	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
 		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
 			setIsMediaPaused(true);
@@ -410,14 +400,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	};
 
 	const onExportClick = async (format: MetadataExportFormats) => {
-		const xmlBlob = await getMediaExport({
+		const metadataBlob = await getMediaExport({
 			id: router.query.ie as string,
 			format,
 		});
 
-		if (xmlBlob) {
+		if (metadataBlob) {
 			save(
-				xmlBlob,
+				metadataBlob,
 				`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
 			);
 		} else {
@@ -801,7 +791,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				{mediaInfo && (
 					<>
 						<Metadata
-							columns={metadataColumns}
 							className="p-object-detail__metadata-component"
 							metadata={METADATA_FIELDS(mediaInfo)}
 						/>
@@ -823,6 +812,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 										className: 'u-pb-0',
 									},
 								].filter((field) => !!field.data)}
+								disableContainerQuery
 							/>
 						)}
 					</>
@@ -960,7 +950,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				)}
 				<div className="p-object-detail__video">{renderObjectMedia()}</div>
 				<div
-					ref={metadataRef}
 					className={clsx(
 						'p-object-detail__metadata',
 						'p-object-detail__metadata--collapsed',

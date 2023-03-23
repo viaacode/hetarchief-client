@@ -1,4 +1,5 @@
 import { Alert, Box, Button } from '@meemoo/react-components';
+import { isNil } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -16,6 +17,7 @@ import { Icon, IconNamesLight } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -27,17 +29,10 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
 
+	const isAdminUser = useHasAnyGroup(Group.MEEMOO_ADMIN, Group.CP_ADMIN);
+	const isKeyUser = user?.isKeyUser;
 	const canEdit =
 		user?.idp === Idp.HETARCHIEF && user.permissions.includes(Permission.CAN_EDIT_PROFILE_INFO);
-
-	// We only want to show the permissions box for certain types of users
-	const showPermissions = useMemo(
-		() =>
-			user?.groupName
-				? [Group.MEEMOO_ADMIN, Group.CP_ADMIN].includes(user.groupName as Group)
-				: false,
-		[user]
-	);
 
 	const renderPageContent = () => {
 		return (
@@ -109,6 +104,22 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 									>
 										{user?.email}
 									</dd>
+									{!isNil(user?.organisationName) && (isAdminUser || isKeyUser) && (
+										<>
+											<dt>
+												{tHtml(
+													'pages/account/mijn-profiel/index___organisatie'
+												)}
+											</dt>
+
+											<dd
+												className="u-text-ellipsis u-color-neutral"
+												title={user?.organisationName}
+											>
+												{user?.organisationName}
+											</dd>
+										</>
+									)}
 								</dl>
 							</div>
 							{canEdit && (
@@ -124,7 +135,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					</Box>
 
-					{showPermissions && (
+					{isAdminUser && (
 						<Box className="u-mt-32">
 							<section className="u-p-24 p-account-my-profile__permissions">
 								<header className="p-account-my-profile__permissions-header u-mb-24">
@@ -150,7 +161,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 												].description
 											}
 										</dd>
-										{user?.isKeyUser && (
+										{isKeyUser && (
 											<>
 												<dt className="u-mt-32">
 													{tText(

@@ -4,7 +4,7 @@ import { FC, ReactNode } from 'react';
 import styles from './Metadata.module.scss';
 import { MetadataItem, MetadataProps } from './Metadata.types';
 
-const Metadata: FC<MetadataProps> = ({ className, metadata, columns = 1 }) => {
+const Metadata: FC<MetadataProps> = ({ className, metadata, disableContainerQuery = false }) => {
 	const isString = (value: string | ReactNode) => typeof value === 'string';
 
 	const renderMetadataItem = (item: MetadataItem, index: number) => {
@@ -25,8 +25,12 @@ const Metadata: FC<MetadataProps> = ({ className, metadata, columns = 1 }) => {
 	};
 
 	return (
-		<div className={clsx(className, styles['c-metadata'])}>
-			<ul className={styles['c-metadata__list']} style={{ columns: columns }} role="list">
+		<div
+			className={clsx(className, styles['c-metadata'], {
+				[styles['c-metadata--container-query']]: !disableContainerQuery,
+			})}
+		>
+			<ul className={styles['c-metadata__list']} role="list">
 				{metadata.map(renderMetadataItem)}
 			</ul>
 		</div>

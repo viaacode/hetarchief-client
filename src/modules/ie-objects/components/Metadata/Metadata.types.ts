@@ -4,7 +4,7 @@ import { DefaultComponentProps } from '@shared/types';
 
 export interface MetadataProps extends DefaultComponentProps {
 	metadata: MetadataItem[];
-	columns?: number;
+	disableContainerQuery?: boolean;
 }
 
 export interface MetadataItem {
