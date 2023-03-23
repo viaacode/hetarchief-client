@@ -43,7 +43,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -530,7 +530,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 			)}
 			action={
-				<Link passHref href="/kiosk-voorwaarden">
+				<Link passHref href={`/${ROUTE_PARTS.kioskConditions}`}>
 					<a aria-label={tText('pages/slug/index___meer-info')}>
 						<Button
 							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
