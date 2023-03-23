@@ -24,8 +24,6 @@ const NavigationBarPageEditPage: FC<DefaultSeoInfo> = ({ url }) => {
 			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container p-admin-navigation__edit">
-						<Icon name={IconNamesLight.AngleDown} />
-
 						<NavigationEdit
 							navigationBarId={router.query.navigationBarId as string}
 							navigationItemId={router.query.navigationItemId as string}
