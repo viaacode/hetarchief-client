@@ -5,8 +5,9 @@ import Image from 'next/image';
 import { FC, MouseEvent, ReactNode } from 'react';
 import Highlighter from 'react-highlight-words';
 
+import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight } from '@shared/components';
-import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
@@ -75,6 +76,23 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		return title;
+	};
+
+	const renderDescription = (): ReactNode => {
+		if (typeof description === 'string' && keywords) {
+			const truncatedText = extractSnippetBySearchTerm(
+				description,
+				keywords,
+				TRUNCATED_TEXT_LENGTH
+			);
+			return <>{keywords?.length ? highlighted(truncatedText ?? '') : description}</>;
+		}
+
+		if (keywords && keywords.length > 0) {
+			console.warn('[WARN][MediaCard] Description could not be highlighted.');
+		}
+
+		return description;
 	};
 
 	const renderSubTitle = (): ReactNode => {
@@ -221,14 +239,14 @@ const MediaCard: FC<MediaCardProps> = ({
 				{typeof description === 'string' ? (
 					<>
 						<div className="u-text-ellipsis--2">
-							<span>{description}</span>
+							<span>{renderDescription()}</span>
 						</div>
 						{hasTempAccess && renderTempAccessPill()}
 						{isKeyUser && renderKeyUserPill()}
 					</>
 				) : (
 					<>
-						{description}
+						{renderDescription()}
 						{isKeyUser && renderKeyUserPill()}
 					</>
 				)}
