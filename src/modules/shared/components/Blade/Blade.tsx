@@ -1,4 +1,4 @@
-import { Button } from '@meemoo/react-components';
+import { Button, keysEscape } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
@@ -52,7 +52,7 @@ const Blade: FC<BladeProps> = ({
 
 	const escFunction = useCallback(
 		(event) => {
-			if (event.key === 'Escape') {
+			if (keysEscape.includes(event.key)) {
 				handleClose();
 			}
 		},
