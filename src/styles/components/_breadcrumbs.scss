@@ -12,19 +12,12 @@
 		display: inline-flex;
 		align-items: center;
 		margin-bottom: $spacer-xxs;
-
-		p,
-		a {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			display: flex;
-			-webkit-box-orient: vertical;
-		}
 	}
 
 	&__link {
 		font-size: $font-size-xs;
-		display: inline-flex;
+		/* stylelint-disable-next-line value-no-vendor-prefix */
+		display: -webkit-box;
 		justify-content: center;
 		align-items: center;
 		margin: 0 $spacer-xxs;
