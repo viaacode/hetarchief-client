@@ -40,6 +40,7 @@ import {
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -77,6 +78,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG);
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 
@@ -323,6 +325,25 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						},
 				  ]
 				: []),
+			...[
+				{
+					before: false,
+					node: (
+						<Button
+							variants={['silver']}
+							icon={<Icon name={IconNamesLight.Share} aria-hidden />}
+							aria-label={tText(
+								'pages/account/mijn-mappen/folder-slug/index___map-delen'
+							)}
+							name={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
+							onClick={(e) => {
+								e.stopPropagation();
+								setShowShareMapBlade(true);
+							}}
+						/>
+					),
+				},
+			],
 		];
 	}, [canDownloadMetadata, tText, activeFolder, getFolderExport, tHtml]);
 
@@ -577,6 +598,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						setShowAddToFolderBlade(false);
 						setSelected(null);
 					}}
+				/>
+
+				<ShareFolderBlade
+					onClose={() => setShowShareMapBlade(false)}
+					isOpen={showShareMapBlade}
 				/>
 			</>
 		);

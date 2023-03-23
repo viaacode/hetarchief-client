@@ -547,6 +547,7 @@
   "pages/account/mijn-mappen/folder-slug/index___item-verwijderd-uit-map-titel": "Item verwijderd uit map",
   "pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang": "Deze map wordt gebruikt om bezoekers beperkte toegang te geven t.e.m.",
   "pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen": "Een map die momenteel gebruikt wordt om beperkte toegang te verlenen, kan niet verwijderd worden.",
+  "pages/account/mijn-mappen/folder-slug/index___map-delen": "Map delen",
   "pages/account/mijn-mappen/folder-slug/index___map-verwijderen": "Map verwijderen",
   "pages/account/mijn-mappen/folder-slug/index___metadata-exporteren": "Metadata exporteren",
   "pages/account/mijn-mappen/folder-slug/index___mijn-mappen": "Mijn mappen",
