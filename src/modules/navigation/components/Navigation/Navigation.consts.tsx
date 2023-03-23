@@ -364,7 +364,7 @@ const getCpAdminManagementDropdown = (
 										'modules/navigation/components/navigation/navigation___naar-mijn-bezoekerstool'
 									),
 									stringifyUrl({
-										url: `${ROUTE_PARTS.search}`,
+										url: `/${ROUTE_PARTS.search}`,
 										query: {
 											[VisitorSpaceFilterId.Maintainer]: maintainerId,
 										},
