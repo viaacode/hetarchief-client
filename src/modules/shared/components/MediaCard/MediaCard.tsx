@@ -60,6 +60,10 @@ const MediaCard: FC<MediaCardProps> = ({
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	const wrapInLink = (children: ReactNode) => {
+		if (showLocallyAvailable) {
+			return children;
+		}
+
 		if (link) {
 			return (
 				<Link key={id} href={link}>
@@ -321,7 +325,8 @@ const MediaCard: FC<MediaCardProps> = ({
 			<Card
 				className={clsx(
 					styles['c-media-card'],
-					isKeyUser && styles['c-media-card--key-user']
+					isKeyUser && styles['c-media-card--key-user'],
+					!showLocallyAvailable && styles['c-media-card--pointer']
 				)}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}

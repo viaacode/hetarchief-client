@@ -5,7 +5,9 @@ $component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 
 .#{$component} {
-	cursor: pointer;
+	&--pointer {
+		cursor: pointer;
+	}
 
 	&--key-user {
 		border: 1px solid $mustard !important;
