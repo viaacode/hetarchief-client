@@ -1,7 +1,8 @@
 import { Button, TextInput } from '@meemoo/react-components';
+import clsx from 'clsx';
 import React, { FC, useState } from 'react';
 
-import { Blade } from '@shared/components';
+import { Blade, CopyButton } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './ShareFolderBlade.module.scss';
@@ -38,8 +39,14 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose }) => {
 					<dt className={styles['c-share-folder-blade__content-label']}>
 						<h5>Via een deellink</h5>
 					</dt>
-					<dd className={styles['c-share-folder-blade__content-value']}>
+					<dd
+						className={clsx(
+							styles['c-share-folder-blade__content-value'],
+							styles['c-share-folder-blade__content-copy-button-container']
+						)}
+					>
 						<TextInput value={link} />
+						<CopyButton text={link} isInputCopy />
 					</dd>
 					<dt className={styles['c-share-folder-blade__content-label']}>
 						<h5 className={styles['c-share-folder-blade__content-label--margin-top']}>

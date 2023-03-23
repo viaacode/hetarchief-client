@@ -27,6 +27,11 @@ $component: "c-share-folder-blade";
 			margin-left: 0;
 			margin-bottom: $spacer-md;
 		}
+
+		&-copy-button-container {
+			display: flex;
+			border: 1px solid red;
+		}
 	}
 
 	&__close-button-container {

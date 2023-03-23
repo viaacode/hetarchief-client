@@ -322,6 +322,29 @@
 	}
 }
 
+.c-button--inputCopy {
+	background-color: $white;
+	color: $black;
+	border: 1px solid $zinc;
+	border-left: none;
+	border-radius: 0;
+	font-size: $font-size-base;
+	font-weight: lighter;
+	height: 4.8rem;
+	outline: 1px solid transparent;
+	padding: 1.4rem 1.6rem;
+
+	&:focus {
+		border: 1px solid $teal;
+		outline: 1px solid transparent;
+	}
+
+	&:hover {
+		background-color: $zinc;
+		border-color: $zinc;
+	}
+}
+
 // States
 .c-button--disabled {
 	background-color: $silver;
