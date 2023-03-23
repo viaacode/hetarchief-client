@@ -1,3 +1,5 @@
+@use "src/styles/abstracts" as *;
+
 $layout: "l-app";
 
 .#{$layout} {
@@ -26,5 +28,15 @@ $layout: "l-app";
 		display: flex;
 		flex-direction: column;
 		flex: 1 1 auto;
+		position: relative;
+	}
+
+	&__alerts-overlay {
+		z-index: get-z-layer("alerts");
+		position: absolute;
+		top: $spacer-lg;
+		align-self: center;
+		display: grid;
+		row-gap: $spacer-sm;
 	}
 }

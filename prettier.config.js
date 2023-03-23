@@ -13,5 +13,19 @@ module.exports = {
 				printWidth: 1000,
 			},
 		},
+		{
+			files: ['public/**/*.json'],
+			options: {
+				useTabs: false,
+				tabWidth: 2,
+			},
+		},
+		{
+			files: ['public/**/*.json'],
+			options: {
+				useTabs: false,
+				tabWidth: 2,
+			},
+		},
 	],
 };

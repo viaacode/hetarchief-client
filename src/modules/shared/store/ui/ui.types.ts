@@ -7,4 +7,5 @@ export interface UIState {
 	hasUnreadNotifications: boolean;
 	showZendesk: boolean;
 	lockScroll: Record<string, boolean>;
+	materialRequestCount: number;
 }

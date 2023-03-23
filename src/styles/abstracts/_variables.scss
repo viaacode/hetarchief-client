@@ -18,12 +18,17 @@ $cherry: #d60039;
 $cherry-light: color.adjust($cherry, $lightness: -5%);
 $cherry-pale: color.adjust($cherry, $lightness: -10%);
 $shade: #505050;
+$shade-darker: #303030;
 $neutral: #727272;
 $zinc: #adadad;
 $silver: #e6e6e6;
 $platinum: #f8f8f8;
 $lila: #c6c2e0;
 $blue: #28a0c8;
+$coral: #e89b88;
+$mustard: #efca6a;
+$light-blue: #bddee7;
+$grey: #757575;
 
 /**
  * Derived Colors
@@ -116,8 +121,9 @@ $breakpoints: (
  */
 
 $z-layers: (
-	"modal": 8,
-	"blade": 7,
+	"modal": 9,
+	"blade": 8,
+	"alerts": 7,
 	"filter-menu-mobile": 6,
 	"filter": 5,
 	"filter-overlay": 4,

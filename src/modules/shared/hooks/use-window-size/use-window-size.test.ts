@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 
-import useWindowSize, { WINDOW_RESIZE_TIMEOUT } from './use-window-size';
+import useWindowSize from './use-window-size';
 
 describe('Hooks', () => {
 	describe('useWindowSize()', () => {
@@ -14,13 +14,10 @@ describe('Hooks', () => {
 				window.dispatchEvent(new Event('resize'));
 			});
 
-			await waitFor(
-				() => {
-					expect(result.current.height).toBe(resize.innerHeight);
-					expect(result.current.width).toBe(resize.innerWidth);
-				},
-				{ timeout: WINDOW_RESIZE_TIMEOUT } // Resize event is debounced in hook
-			);
+			await waitFor(() => {
+				expect(result.current.height).toBe(resize.innerHeight);
+				expect(result.current.width).toBe(resize.innerWidth);
+			});
 		});
 	});
 });

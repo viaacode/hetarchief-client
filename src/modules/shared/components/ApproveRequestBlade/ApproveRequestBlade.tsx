@@ -76,7 +76,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
 	const {
-		selected,
+		selected: visitRequest,
 		onClose,
 		onSubmit,
 		title = tHtml(
@@ -93,17 +93,17 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		),
 	} = props;
 
-	const defaultValues = useMemo(
+	const getInitialValues = useCallback(
 		() => ({
-			accessFrom: asDate(selected?.startAt) || defaultAccessFrom(new Date()),
-			accessTo: asDate(selected?.endAt) || defaultAccessTo(new Date()),
-			accessRemark: selected?.note?.note || undefined,
+			accessFrom: asDate(visitRequest?.startAt) || defaultAccessFrom(new Date()),
+			accessTo: asDate(visitRequest?.endAt) || defaultAccessTo(new Date()),
+			accessRemark: visitRequest?.note?.note || undefined,
 			accessType: {
-				type: selected?.accessType || defaultAccessType.type,
-				folderIds: selected?.accessibleFolderIds || defaultAccessType.folderIds,
+				type: visitRequest?.accessType || defaultAccessType.type,
+				folderIds: visitRequest?.accessibleFolderIds || defaultAccessType.folderIds,
 			},
 		}),
-		[selected]
+		[visitRequest]
 	);
 
 	const [overlappingRequests, setOverlappingRequests] = useState<Visit[]>([]);
@@ -117,8 +117,13 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		reset,
 	} = useForm<ApproveRequestFormState>({
 		resolver: yupResolver(APPROVE_REQUEST_FORM_SCHEMA()),
-		defaultValues,
+		defaultValues: getInitialValues(),
 	});
+
+	useEffect(() => {
+		// If the selectedVisitRequest changes, reinitialize the form
+		reset(getInitialValues());
+	}, [reset, getInitialValues]);
 
 	const getAccessTypeLabel = (accessType: ApproveRequestFormState['accessType']) => {
 		const folderCount = accessType?.folderIds?.length;
@@ -193,8 +198,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			const visitResponse = await VisitsService.getAll({
 				status: VisitStatus.APPROVED,
 				timeframe: [VisitTimeframe.ACTIVE, VisitTimeframe.FUTURE],
-				requesterId: selected?.userProfileId,
-				visitorSpaceSlug: selected?.spaceSlug,
+				requesterId: visitRequest?.userProfileId,
+				visitorSpaceSlug: visitRequest?.spaceSlug,
 				page: 1,
 				size: 40,
 				orderProp: 'startAt',
@@ -214,13 +219,13 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						}
 					)
 				)
-				.filter((visit) => visit.id !== selected?.id);
+				.filter((visit) => visit.id !== visitRequest?.id);
 
 			setOverlappingRequests(overlappingRequests);
 
 			return overlappingRequests;
 		},
-		[selected?.spaceSlug, selected?.userProfileId, selected?.id]
+		[visitRequest?.spaceSlug, visitRequest?.userProfileId, visitRequest?.id]
 	);
 
 	useEffect(() => {
@@ -244,9 +249,9 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			});
 			return;
 		}
-		selected &&
-			VisitsService.patchById(selected.id, {
-				...selected,
+		visitRequest &&
+			VisitsService.patchById(visitRequest.id, {
+				...visitRequest,
 				status: VisitStatus.APPROVED,
 				startAt: values.accessFrom?.toISOString(),
 				endAt: values.accessTo?.toISOString(),
@@ -407,7 +412,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[onSimpleDateChange, futureDatepickerProps]
+		[setValue, onSimpleDateChange, futureDatepickerProps]
 	);
 
 	const renderAccessTo = useCallback(
@@ -470,27 +475,28 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const renderAccessType = useCallback(
 		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessType'> }) => {
-			const initialState = {
+			const refinableRadioButtonValue = {
 				selectedOption: field.value?.type ?? AccessType.FULL,
 				refinedSelection: field.value?.folderIds ?? [],
 			};
 
 			return (
 				<RefinableRadioButton
-					initialState={initialState}
+					value={refinableRadioButtonValue}
 					options={getAccessTypeOptions(field.value)}
 					onChange={(
 						selectedOption: string,
 						selectedRefineOptions: string[],
 						newIsDropdownOpen: boolean
-					) =>
+					) => {
+						console.log('on change is called');
 						onChangeAccessType(
 							field,
 							selectedOption as AccessType,
 							selectedRefineOptions,
 							newIsDropdownOpen
-						)
-					}
+						);
+					}}
 				/>
 			);
 		},
@@ -503,7 +509,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			footer={props.isOpen && renderFooter()}
 			renderTitle={(props) => <h3 {...props}>{title}</h3>}
 		>
-			{props.isOpen && (
+			{props.isOpen && !!visitRequest && (
 				<div className="u-px-32">
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__access-type'], 'u-mb-32')}

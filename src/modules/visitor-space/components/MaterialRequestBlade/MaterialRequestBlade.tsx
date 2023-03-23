@@ -2,28 +2,40 @@ import { Button, RadioButton, TextArea } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { MaterialRequestsService } from '@material-requests/services';
-import { MaterialRequestType } from '@material-requests/types';
+import {
+	MaterialRequestObjectType,
+	MaterialRequestRequesterCapacity,
+	MaterialRequestType,
+} from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { setMaterialRequestCount } from '@shared/store/ui';
 
 import styles from './MaterialRequestBlade.module.scss';
 
 interface MaterialRequestBladeProps {
 	isOpen: boolean;
+	isEditMode?: boolean;
 	onClose: () => void;
 	objectName: string;
 	objectId: string;
-	objectType: string;
+	objectType?: MaterialRequestObjectType | undefined;
 	maintainerName: string;
 	maintainerLogo: string;
 	maintainerSlug: string;
+	materialRequestId?: string;
+	reason?: string;
+	refetch?: () => void;
+	type?: MaterialRequestType;
 }
 
 const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	isOpen,
+	isEditMode = false,
 	onClose,
 	objectName,
 	objectId,
@@ -31,11 +43,18 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	maintainerName,
 	maintainerLogo,
 	maintainerSlug,
+	materialRequestId,
+	reason,
+	refetch,
+	type,
 }) => {
 	const { tText } = useTranslation();
+	const dispatch = useDispatch();
 
-	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(MaterialRequestType.VIEW);
-	const [reasonInputValue, setReasonInputValue] = useState('');
+	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(
+		type || MaterialRequestType.VIEW
+	);
+	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 	const [showError, setShowError] = useState(false);
 
 	const onCloseModal = () => {
@@ -45,6 +64,15 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		setShowError(false);
 	};
 
+	const onSuccesCreated = async () => {
+		const response = await MaterialRequestsService.getAll({
+			isPersonal: true,
+			size: 500,
+			isPending: true,
+		});
+		dispatch(setMaterialRequestCount(response.items.length));
+	};
+
 	const onAddToList = async () => {
 		try {
 			if (reasonInputValue.length > 0) {
@@ -52,7 +80,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					objectId,
 					type: typeSelected,
 					reason: reasonInputValue,
-					requesterCapacity: 'OTHER',
+					requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
 				});
 				if (response === undefined) {
 					onFailedRequest();
@@ -67,12 +95,49 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
 					),
 				});
+				onSuccesCreated();
 				onCloseModal();
 			} else {
 				setShowError(true);
 			}
 		} catch (err) {
 			onFailedRequest();
+		}
+	};
+
+	const onEditRequest = async () => {
+		if (!materialRequestId) {
+			onFailedRequest();
+		} else {
+			try {
+				if (reasonInputValue.length > 0) {
+					const response = await MaterialRequestsService.update(materialRequestId, {
+						type: typeSelected,
+						reason: reasonInputValue,
+						requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
+					});
+					if (response === undefined) {
+						onFailedRequest();
+						return;
+					}
+					toastService.notify({
+						maxLines: 3,
+						title: tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
+						),
+						description: tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
+						),
+					});
+					onSuccesCreated();
+					refetch && refetch();
+					onCloseModal();
+				} else {
+					setShowError(true);
+				}
+			} catch (err) {
+				onFailedRequest();
+			}
 		}
 	};
 
@@ -93,7 +158,49 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		setReasonInputValue(e.target.value);
 	};
 
+	const renderTitle = () => {
+		if (isEditMode) {
+			return (
+				<h2 className={styles['c-request-material__title']}>
+					{tText(
+						'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
+					)}
+				</h2>
+			);
+		}
+		return (
+			<h2 className={styles['c-request-material__title']}>
+				{tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
+				)}
+			</h2>
+		);
+	};
+
 	const renderFooter = () => {
+		if (isEditMode) {
+			return (
+				<div className={styles['c-request-material__footer-container']}>
+					<Button
+						label={tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-opslaan'
+						)}
+						variants={['block', 'text']}
+						onClick={onEditRequest}
+						className={styles['c-request-material__verstuur-button']}
+					/>
+
+					<Button
+						label={tText(
+							'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
+						)}
+						variants={['block', 'text']}
+						onClick={onCloseModal}
+						className={styles['c-request-material__annuleer-button']}
+					/>
+				</div>
+			);
+		}
 		return (
 			<div className={styles['c-request-material__footer-container']}>
 				<Button
@@ -127,13 +234,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h2 className={styles['c-request-material__title']}>
-					{tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
-					)}
-				</h2>
-			)}
+			renderTitle={renderTitle}
 			footer={isOpen && renderFooter()}
 			onClose={onCloseModal}
 		>
@@ -169,7 +270,9 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						<Icon
 							className={styles['c-request-material__material-label-icon']}
 							name={
-								objectType === 'audio' ? IconNamesLight.Audio : IconNamesLight.Video
+								objectType === MaterialRequestObjectType.AUDIO
+									? IconNamesLight.Audio
+									: IconNamesLight.Video
 							}
 						/>
 						<span>{objectName}</span>

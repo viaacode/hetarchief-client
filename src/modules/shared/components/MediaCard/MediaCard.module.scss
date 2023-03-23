@@ -7,6 +7,40 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 .#{$component} {
 	cursor: pointer;
 
+	&--key-user {
+		border: 1px solid $mustard !important;
+
+		&-pill {
+			margin-top: $spacer-xs;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: $black;
+			border-radius: 2.5rem;
+			width: 3.4rem;
+			height: 2rem;
+			background-color: $mustard;
+		}
+	}
+
+	&--temp-access {
+		display: flex;
+		align-items: center;
+		width: fit-content;
+		background-color: $lila;
+		font-size: x-small;
+		font-weight: bold;
+		color: $black;
+		border-radius: 2.5rem;
+		height: 2rem;
+		margin-top: $spacer-xs;
+		padding: 0 $spacer-xs;
+
+		&-label {
+			margin-left: $spacer-xxs;
+		}
+	}
+
 	&__link {
 		text-decoration: none;
 	}

@@ -1,4 +1,4 @@
-import { Badge, Card } from '@meemoo/react-components';
+import { Badge, Card, Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
@@ -7,6 +7,7 @@ import Highlighter from 'react-highlight-words';
 
 import { DropdownMenu, IconNamesLight } from '@shared/components';
 import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -30,7 +31,11 @@ const MediaCard: FC<MediaCardProps> = ({
 	buttons,
 	hasRelated,
 	icon,
+	isKeyUser,
+	meemooIdentifier,
+	hasTempAccess,
 }) => {
+	const { tText } = useTranslation();
 	const renderDropdown = () =>
 		actions ? (
 			<DropdownMenu
@@ -72,7 +77,11 @@ const MediaCard: FC<MediaCardProps> = ({
 		return title;
 	};
 
-	const renderSubtitle = (): ReactNode => {
+	const renderSubTitle = (): ReactNode => {
+		return meemooIdentifier;
+	};
+
+	const renderCaption = (): ReactNode => {
 		let subtitle = '';
 
 		if (publishedBy) {
@@ -107,7 +116,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		) : (
 			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
 				{renderNoContentIcon()}
-				{duration && renderDuration()}
 			</div>
 		);
 
@@ -165,24 +173,63 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
+	const renderKeyUserPill = () => {
+		return (
+			<span className={styles['c-media-card--key-user-pill']}>
+				<Tooltip position="top">
+					<TooltipTrigger>
+						<Icon name={IconNamesLight.Key} />
+					</TooltipTrigger>
+					<TooltipContent>
+						{tText(
+							'modules/shared/components/media-card/media-card___item-bekijken-uit-jouw-sector'
+						)}
+					</TooltipContent>
+				</Tooltip>
+			</span>
+		);
+	};
+
+	const renderTempAccessPill = () => {
+		return (
+			<div className={styles['c-media-card--temp-access']}>
+				<Icon name={IconNamesLight.Clock} />
+				<span className={styles['c-media-card--temp-access-label']}>
+					{tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
+				</span>
+			</div>
+		);
+	};
+
 	return (
 		<div id={id}>
 			<Card
-				className={styles['c-media-card']}
+				className={clsx(
+					styles['c-media-card'],
+					isKeyUser && styles['c-media-card--key-user']
+				)}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
-				subtitle={renderSubtitle()}
+				subtitle={renderSubTitle()}
+				caption={renderCaption()}
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
 			>
 				{typeof description === 'string' ? (
-					<div className="u-text-ellipsis--2">
-						<span>{description}</span>
-					</div>
+					<>
+						<div className="u-text-ellipsis--2">
+							<span>{description}</span>
+						</div>
+						{hasTempAccess && renderTempAccessPill()}
+						{isKeyUser && renderKeyUserPill()}
+					</>
 				) : (
-					<>{description}</>
+					<>
+						{description}
+						{isKeyUser && renderKeyUserPill()}
+					</>
 				)}
 			</Card>
 		</div>

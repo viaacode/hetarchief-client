@@ -15,4 +15,4 @@ export const Default = Template.bind({});
 Default.args = { ...metadataMock };
 
 export const Wide = Template.bind({});
-Wide.args = { ...metadataMock, columns: 2 };
+Wide.args = { ...metadataMock };

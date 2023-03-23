@@ -1,0 +1,51 @@
+@use "../../../../styles/abstracts/" as *;
+
+$component: "c-personal-info-blade";
+
+.#{$component} {
+	&__title {
+		padding: 0 $spacer-lg;
+		margin-bottom: $spacer-1xl;
+		color: $black;
+	}
+
+	&__content {
+		color: $black;
+		padding: $spacer-lg $spacer-lg $spacer-xs $spacer-lg;
+		background-color: $silver;
+
+		&-label {
+			font-weight: bold;
+			margin-bottom: $spacer-xs;
+		}
+
+		&-value {
+			margin-left: 0;
+			margin-bottom: $spacer-md;
+		}
+	}
+
+	&__requester-capacity {
+		color: $black;
+		padding: $spacer-lg;
+	}
+
+	&__radio-buttons-container {
+		display: flex;
+		flex-direction: column;
+		margin-top: $spacer-sm;
+	}
+
+	&__radio-button {
+		margin-left: $spacer-xs;
+		margin-bottom: $spacer-sm;
+	}
+
+	&__close-button-container {
+		padding: $spacer-lg;
+	}
+
+	&__send-button {
+		margin-bottom: $spacer-sm;
+	}
+}

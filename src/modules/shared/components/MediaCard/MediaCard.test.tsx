@@ -5,14 +5,14 @@ import { formatMediumDate } from '@shared/utils';
 import MediaCard from './MediaCard';
 
 const author = 'Author';
-const now = new Date();
+const date = new Date('1994-03-18');
 
 describe('Component: <MediaCard />', () => {
 	let rendered: RenderResult;
 
 	beforeEach(() => {
 		rendered = render(
-			<MediaCard view="grid" publishedAt={now} publishedBy={author} type="video" />
+			<MediaCard view="grid" publishedAt={date} publishedBy={author} type="video" />
 		);
 	});
 
@@ -33,13 +33,23 @@ describe('Component: <MediaCard />', () => {
 	});
 
 	it('Should render the date and author in a specific format', () => {
-		expect(screen.getByText(`${author} (${formatMediumDate(now)})`)).toBeDefined();
+		expect(screen.getByText(`${author} (${formatMediumDate(date)})`)).toBeDefined();
 	});
 
 	it('Should show placeholder icons based on the type of card in either view mode', () => {
-		// rendered = render(<MediaCard view="list" type="audio" />);
-		// expect(screen.getAllByText('no-audio')[0]).toBeDefined();
-		// rendered = render(<MediaCard view="grid" type="video" />);
-		// expect(screen.getAllByText('no-video')[0]).toBeDefined();
+		rendered = render(<MediaCard view="list" type="audio" />);
+		expect(screen.getAllByText('no-audio')[0]).toBeDefined();
+		rendered = render(<MediaCard view="grid" type="video" />);
+		expect(screen.getAllByText('no-video')[0]).toBeDefined();
+	});
+
+	it('Should render key user pill if isKeyUser', () => {
+		rendered = render(<MediaCard view="list" type="video" isKeyUser />);
+
+		const iconElement = rendered.container
+			.getElementsByClassName('c-media-card--key-user-pill')
+			.item(0);
+
+		expect(iconElement).toBeInTheDocument();
 	});
 });

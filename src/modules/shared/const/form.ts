@@ -1,4 +1,4 @@
-import { IconProps } from '@shared/components';
+import { IconNamesLight } from '@shared/components/Icon';
 import { tText } from '@shared/helpers/translate';
 
 export const OPTIONAL_LABEL = (): string => `(${tText('modules/shared/const/form___optioneel')})`;
@@ -6,10 +6,10 @@ export const OPTIONAL_LABEL = (): string => `(${tText('modules/shared/const/form
 export const VIEW_TOGGLE_OPTIONS = [
 	{
 		id: 'grid',
-		iconName: 'grid-view' as IconProps['name'],
+		iconName: IconNamesLight.GridView,
 	},
 	{
 		id: 'list',
-		iconName: 'list-view' as IconProps['name'],
+		iconName: IconNamesLight.ListView,
 	},
 ];

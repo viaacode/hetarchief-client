@@ -1,7 +1,12 @@
 import { isEmpty } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 
-import { IeObject, IeObjectSimilar } from '@ie-objects/types';
+import {
+	IeMetadataExportProps,
+	IeObject,
+	IeObjectSimilar,
+	MetadataExportFormats,
+} from '@ie-objects/types';
 import { ApiService } from '@shared/services/api-service';
 import {
 	IeObjectsSearchFilter,
@@ -106,7 +111,7 @@ export class IeObjectsService {
 
 	public static async getRelated(
 		id: string,
-		esIndex: string,
+		maintainerId: string,
 		meemooId: string
 	): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
@@ -114,7 +119,7 @@ export class IeObjectsService {
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${meemooId}`,
 					query: {
-						...(!isEmpty(esIndex) && { esIndex }),
+						...(!isEmpty(maintainerId) && { maintainerId }),
 					},
 				})
 			)
@@ -139,12 +144,18 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getExport(id?: string): Promise<Blob | null> {
+	public static async getExport({ id, format }: IeMetadataExportProps): Promise<Blob | null> {
 		if (!id) {
 			return null;
 		}
+		if (format === undefined) {
+			return null;
+		}
+
 		return await ApiService.getApi()
-			.get(`${IE_OBJECT_SERVICE_TICKET_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}`)
+			.get(
+				`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}/${MetadataExportFormats[format]}`
+			)
 			.then((r) => r.blob());
 	}
 }

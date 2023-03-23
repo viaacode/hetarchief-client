@@ -1,7 +1,14 @@
-import { Button, FormControl, OrderDirection, TabProps } from '@meemoo/react-components';
+import {
+	Breadcrumb,
+	Breadcrumbs,
+	Button,
+	FormControl,
+	OrderDirection,
+	TabProps,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isNil, sortBy, sum } from 'lodash-es';
+import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -9,9 +16,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
-import { Permission } from '@account/const';
-import { selectIsLoggedIn } from '@auth/store/user';
+import { Group, Permission } from '@account/const';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
+import { IeObjectAccessThrough } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,
@@ -35,15 +43,16 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectHistory, setHistory } from '@shared/store/history';
-import { selectFolders, selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
@@ -112,14 +121,15 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
+	const isKioskUser = useHasAnyGroup(Group.KIOSK_VISITOR);
 
 	/**
 	 * State
 	 */
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const user = useSelector(selectUser);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
-	const filterOptions = useSelector(selectIeObjectsFilterOptions);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -202,7 +212,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		);
 
 		setActiveVisitorSpace(visitorSpace);
-		setQuery({ [VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined });
+		setQuery({
+			...VISITOR_SPACE_QUERY_PARAM_INIT,
+			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined,
+		});
 	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
 
 	/**
@@ -450,10 +463,17 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const onVisitorSpaceSelected = (id: string): void => {
 		if (id === PUBLIC_COLLECTION) {
-			setQuery({ [VisitorSpaceFilterId.Maintainer]: undefined });
-		} else {
-			setQuery({ [VisitorSpaceFilterId.Maintainer]: id });
+			setQuery({
+				...VISITOR_SPACE_QUERY_PARAM_INIT,
+				[VisitorSpaceFilterId.Maintainer]: undefined,
+			});
+			return;
 		}
+
+		setQuery({
+			...VISITOR_SPACE_QUERY_PARAM_INIT,
+			[VisitorSpaceFilterId.Maintainer]: id,
+		});
 	};
 
 	/**
@@ -477,14 +497,21 @@ const VisitorSpaceSearchPage: FC = () => {
 			return {
 				schemaIdentifier: item.schemaIdentifier,
 				maintainerSlug: item.maintainerSlug,
+				duration: item.duration,
 				description: item.description,
 				title: item.name,
 				publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
 				publishedBy: item.maintainerName || '',
 				type,
 				preview: item.thumbnailUrl || undefined,
+				meemooIdentifier: item.meemooIdentifier,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
+				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
+				hasTempAccess: item.accessThrough?.includes(
+					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
+						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
+				),
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
@@ -495,6 +522,60 @@ const VisitorSpaceSearchPage: FC = () => {
 	/**
 	 * Render
 	 */
+	const renderResearchWarning = (): ReactNode => (
+		<Callout
+			icon={<Icon name={IconNamesLight.Info} aria-hidden />}
+			text={tHtml(
+				'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+			)}
+			action={
+				<Link passHref href="/kiosk-voorwaarden">
+					<a aria-label={tText('pages/slug/index___meer-info')}>
+						<Button
+							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+							label={tHtml('pages/slug/index___meer-info')}
+							variants={['text', 'underline']}
+						/>
+					</a>
+				</Link>
+			}
+		/>
+	);
+
+	const renderBreadcrumbs = (): ReactNode => {
+		const staticBreadcrumbs: Breadcrumb[] = [
+			{
+				label: `${tHtml(
+					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___home'
+				)}`,
+				to: ROUTES.home,
+			},
+			{
+				label: `${tHtml(
+					'pages/bezoekersruimte/visitor-space-slug/index___breadcrumbs___search'
+				)}`,
+				to: ROUTES.search,
+			},
+		];
+
+		const dynamicBreadcrumbs: Breadcrumb[] =
+			!isNil(activeVisitorSpace) && activeVisitorSpace.spaceMaintainerId !== PUBLIC_COLLECTION
+				? [
+						{
+							label: activeVisitorSpace?.spaceName || '',
+							to: `${ROUTES.search}?maintainer=${activeVisitorSpace?.spaceMaintainerId}`,
+						},
+				  ]
+				: [];
+
+		return (
+			<Breadcrumbs
+				className="u-my-16"
+				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
+				icon={<Icon name={IconNamesLight.AngleRight} />}
+			/>
+		);
+	};
 
 	const renderFilterMenu = () => {
 		const filterMenuCls = clsx('p-visitor-space__filter-menu', {
@@ -559,6 +640,60 @@ const VisitorSpaceSearchPage: FC = () => {
 					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
 			/>
+		);
+	};
+
+	const renderTempAccessLabel = () => {
+		// Strip out public collection and own visitor space (cp)
+		const visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
+			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
+				const isPublicColelction = visitorSpace.id == PUBLIC_COLLECTION;
+				const isOwnVisitorSapce =
+					user?.groupName === Group.CP_ADMIN && visitorSpace.id === user.maintainerId;
+
+				return !isPublicColelction && !isOwnVisitorSapce;
+			}
+		);
+
+		if (isEmpty(visitorSpaces)) {
+			return;
+		}
+
+		// Create a link element for each visitor space
+		const visitorSpaceLinks = visitorSpaces.map(
+			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
+				<Link key={visitorSpace.id} href={`/zoeken?maintainer=${visitorSpace?.id}`}>
+					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
+				</Link>
+			)
+		);
+
+		return (
+			<div className="p-visitor-space__temp-access-container">
+				<Icon name={IconNamesLight.Clock} />
+				<span className="p-visitor-space__temp-access-label">
+					{tText(
+						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___tijdelijke-toegang'
+					)}{' '}
+					{visitorSpaceLinks.length === 1 && visitorSpaceLinks[0]}
+					{visitorSpaceLinks.length > 1 &&
+						visitorSpaceLinks.map(
+							(visitorSpaceLink: ReactNode, i: number): ReactNode => {
+								const isLast = i === visitorSpaceLinks.length - 1;
+								const isSecondLast = i === visitorSpaceLinks.length - 2;
+
+								return (
+									<>
+										{visitorSpaceLink}
+										{!isLast && !isSecondLast && ', '}
+										{isSecondLast && ' en '}
+									</>
+								);
+							}
+						)}
+					{'.'}
+				</span>
+			</div>
 		);
 	};
 
@@ -653,38 +788,23 @@ const VisitorSpaceSearchPage: FC = () => {
 							</div>
 						</section>
 
-						{showResearchWarning && (
-							<aside className="u-bg-platinum">
-								<div className="l-container u-flex u-justify-center u-py-32">
-									<Callout
-										icon={<Icon name={IconNamesLight.Info} aria-hidden />}
-										text={tHtml(
-											'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
-										)}
-										action={
-											<Link passHref href="/kiosk-voorwaarden">
-												<a
-													aria-label={tText(
-														'pages/slug/index___meer-info'
-													)}
-												>
-													<Button
-														className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-														label={tHtml(
-															'pages/slug/index___meer-info'
-														)}
-														variants={['text', 'underline']}
-													/>
-												</a>
-											</Link>
-										}
-									/>
-								</div>
-							</aside>
-						)}
+						<aside className="u-bg-platinum">
+							<div
+								className={clsx('l-container', {
+									'u-py-32': showResearchWarning,
+								})}
+							>
+								{showResearchWarning
+									? renderResearchWarning()
+									: renderBreadcrumbs()}
+
+								{!isKioskUser && isLoggedIn && renderTempAccessLabel()}
+							</div>
+						</aside>
+
 						<section
 							className={clsx(
-								'p-visitor-space__results u-page-bottom-margin u-bg-platinum u-py-24 u-py-48:md',
+								'p-visitor-space__results u-page-bottom-margin u-bg-platinum',
 								{
 									'p-visitor-space__results--placeholder': isLoadedWithoutResults,
 									'u-pt-0': showResearchWarning,

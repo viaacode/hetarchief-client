@@ -1,14 +1,16 @@
-import { OrderDirection, Table } from '@meemoo/react-components';
+import { MultiSelect, MultiSelectOption, OrderDirection, Table } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isEmpty, isNil } from 'lodash-es';
+import { isEmpty, isNil, without } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, MouseEvent, ReactNode, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Row, SortingRule, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,
@@ -24,7 +26,14 @@ import {
 	MaterialRequestKeys,
 	MaterialRequestType,
 } from '@material-requests/types';
-import { Loading, MultiSelect, PaginationBar, SearchBar, sortingIcons } from '@shared/components';
+import {
+	Icon,
+	IconNamesLight,
+	Loading,
+	PaginationBar,
+	SearchBar,
+	sortingIcons,
+} from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -35,6 +44,8 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
+
+	const user = useSelector(selectUser);
 
 	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
@@ -48,6 +59,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
+		...(user?.maintainerId ? { maintainerIds: [user.maintainerId] } : {}),
 	});
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
@@ -55,6 +67,18 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	const noData = useMemo((): boolean => isEmpty(materialRequests?.items), [materialRequests]);
+
+	const typesList = useMemo(() => {
+		return [
+			...GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY().map(
+				({ id, label }): MultiSelectOption => ({
+					id,
+					label,
+					checked: selectedTypes.includes(id),
+				})
+			),
+		];
+	}, [selectedTypes]);
 
 	const sortFilters = useMemo(
 		(): SortingRule<{ id: MaterialRequestKeys; desc: boolean }>[] => [
@@ -73,10 +97,8 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		});
 	};
 
-	const onMultiTypeChange = (selectedItems: string[]) => {
-		if (selectedItems !== selectedTypes) {
-			setSelectedTypes(selectedItems);
-		}
+	const onMultiTypeChange = (checked: boolean, id: string) => {
+		setSelectedTypes((prev) => (!checked ? [...prev, id] : without(prev, id)));
 	};
 
 	useEffect(() => {
@@ -176,9 +198,12 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 							<MultiSelect
 								variant="rounded"
 								label="Type"
-								options={GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY()}
+								options={typesList}
 								onChange={onMultiTypeChange}
 								className="p-material-requests__dropdown"
+								iconOpen={<Icon name={IconNamesLight.AngleUp} aria-hidden />}
+								iconClosed={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+								iconCheck={<Icon name={IconNamesLight.Check} aria-hidden />}
 							/>
 
 							<SearchBar

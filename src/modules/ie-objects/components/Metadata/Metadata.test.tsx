@@ -69,20 +69,19 @@ describe('Component: <Metadata /> (default)', () => {
 		expect(data).toHaveClass(dataMock);
 	});
 
-	it('Should display a single column by default', () => {
+	it('Should display a multiple columns by default', () => {
 		const { getByRole } = renderMetadata({});
 
-		const list = getByRole('list');
+		const list = getByRole('list').parentElement;
 
-		expect(list).toHaveStyle('columns: 1');
+		expect(list).toHaveClass(`c-metadata--container-query`);
 	});
 
-	it('Should display a multiple columns when given', () => {
-		const columns = 2;
-		const { getByRole } = renderMetadata({ columns });
+	it('Should display a single column when given', () => {
+		const { getByRole } = renderMetadata({ disableContainerQuery: true });
 
-		const list = getByRole('list');
+		const list = getByRole('list').parentElement;
 
-		expect(list).toHaveStyle(`columns: ${columns}`);
+		expect(list).not.toHaveClass(`c-metadata--container-query`);
 	});
 });

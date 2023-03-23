@@ -215,7 +215,7 @@ $metadata-collapsed-width: 36vw;
 		// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
 		margin-left: -$spacer-md;
 		margin-right: -$spacer-md;
-		margin-top: $spacer-md;
+		margin-top: $spacer-xs;
 		padding: $spacer-md;
 		background-color: $platinum;
 
@@ -327,6 +327,20 @@ $metadata-collapsed-width: 36vw;
 		.c-button__content {
 			width: 100%;
 		}
+	}
+
+	&__export-dropdown.c-menu-content-item {
+		border: $divider-black;
+		border-top: none;
+
+		&:first-of-type {
+			border-top: $divider-black;
+		}
+	}
+
+	.c-menu--default {
+		padding: 0;
+		margin-top: $spacer-xxs;
 	}
 
 	&__request-material {
