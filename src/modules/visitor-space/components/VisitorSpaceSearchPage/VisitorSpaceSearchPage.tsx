@@ -8,7 +8,7 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { isNil, sortBy, sum } from 'lodash-es';
+import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -45,6 +45,7 @@ import {
 } from '@shared/components';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
@@ -120,6 +121,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
+	const isKioskUser = useHasAnyGroup(Group.KIOSK_VISITOR);
 
 	/**
 	 * State
@@ -520,6 +522,25 @@ const VisitorSpaceSearchPage: FC = () => {
 	/**
 	 * Render
 	 */
+	const renderResearchWarning = (): ReactNode => (
+		<Callout
+			icon={<Icon name={IconNamesLight.Info} aria-hidden />}
+			text={tHtml(
+				'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+			)}
+			action={
+				<Link passHref href="/kiosk-voorwaarden">
+					<a aria-label={tText('pages/slug/index___meer-info')}>
+						<Button
+							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
+							label={tHtml('pages/slug/index___meer-info')}
+							variants={['text', 'underline']}
+						/>
+					</a>
+				</Link>
+			}
+		/>
+	);
 
 	const renderBreadcrumbs = (): ReactNode => {
 		const staticBreadcrumbs: Breadcrumb[] = [
@@ -623,64 +644,54 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
-		const options = dropdownOptions
-			// Ward: remove 'Publieke catalogus'
-			.filter((maintainer) => {
-				return maintainer.id !== '';
-			})
-			.filter((maintainer) => {
-				if (user?.groupName === Group.CP_ADMIN) {
-					return maintainer.id !== user.maintainerId;
-				}
-				return true;
-			});
-		if (!isLoggedIn || options.length === 0) {
+		// Strip out public collection and own visitor space (cp)
+		const visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
+			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
+				const isPublicColelction = visitorSpace.id == PUBLIC_COLLECTION;
+				const isOwnVisitorSapce =
+					user?.groupName === Group.CP_ADMIN && visitorSpace.id === user.maintainerId;
+
+				return !isPublicColelction && !isOwnVisitorSapce;
+			}
+		);
+
+		if (isEmpty(visitorSpaces)) {
 			return;
 		}
-		if (user?.groupName === Group.KIOSK_VISITOR) {
-			return;
-		}
+
+		// Create a link element for each visitor space
+		const visitorSpaceLinks = visitorSpaces.map(
+			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
+				<Link key={visitorSpace.id} href={`/zoeken?maintainer=${visitorSpace?.id}`}>
+					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
+				</Link>
+			)
+		);
+
 		return (
-			<div
-				className={
-					viewMode === 'grid'
-						? clsx(
-								'p-visitor-space__temp-access-container--grid',
-								'p-visitor-space__temp-access-container'
-						  )
-						: 'p-visitor-space__temp-access-container'
-				}
-			>
+			<div className="p-visitor-space__temp-access-container">
 				<Icon name={IconNamesLight.Clock} />
 				<span className="p-visitor-space__temp-access-label">
 					{tText(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___tijdelijke-toegang'
 					)}{' '}
-					{options.map((maintainer, index) => {
-						const postLabel = () => {
-							// Ward: if last element (-1 because 'Publieke catalogus' was removed)
-							if (index + 1 === dropdownOptions.length - 1) {
-								return '.';
-							}
-							// Ward: if second to last element
-							else if (index + 2 === dropdownOptions.length - 1) {
-								return ' en ';
-							} else {
-								return ', ';
-							}
-						};
+					{visitorSpaceLinks.length === 1 && visitorSpaceLinks[0]}
+					{visitorSpaceLinks.length > 1 &&
+						visitorSpaceLinks.map(
+							(visitorSpaceLink: ReactNode, i: number): ReactNode => {
+								const isLast = i === visitorSpaceLinks.length - 1;
+								const isSecondLast = i === visitorSpaceLinks.length - 2;
 
-						const link = (
-							<>
-								<Link href={`/zoeken?maintainer=${maintainer?.id}`}>
-									<a aria-label={maintainer?.label}>{maintainer?.label}</a>
-								</Link>
-								{postLabel()}
-							</>
-						);
-
-						return link;
-					})}
+								return (
+									<>
+										{visitorSpaceLink}
+										{!isLast && !isSecondLast && ', '}
+										{isSecondLast && ' en '}
+									</>
+								);
+							}
+						)}
+					{'.'}
 				</span>
 			</div>
 		);
@@ -695,7 +706,6 @@ const VisitorSpaceSearchPage: FC = () => {
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
-				tempAccessLabel={renderTempAccessLabel()}
 			/>
 			<PaginationBar
 				className="u-mb-48"
@@ -784,33 +794,11 @@ const VisitorSpaceSearchPage: FC = () => {
 									'u-py-32': showResearchWarning,
 								})}
 							>
-								{showResearchWarning ? (
-									<Callout
-										icon={<Icon name={IconNamesLight.Info} aria-hidden />}
-										text={tHtml(
-											'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
-										)}
-										action={
-											<Link passHref href="/kiosk-voorwaarden">
-												<a
-													aria-label={tText(
-														'pages/slug/index___meer-info'
-													)}
-												>
-													<Button
-														className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
-														label={tHtml(
-															'pages/slug/index___meer-info'
-														)}
-														variants={['text', 'underline']}
-													/>
-												</a>
-											</Link>
-										}
-									/>
-								) : (
-									renderBreadcrumbs()
-								)}
+								{showResearchWarning
+									? renderResearchWarning()
+									: renderBreadcrumbs()}
+
+								{!isKioskUser && isLoggedIn && renderTempAccessLabel()}
 							</div>
 						</aside>
 
