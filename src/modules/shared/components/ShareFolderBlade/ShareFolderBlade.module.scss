@@ -28,9 +28,12 @@ $component: "c-share-folder-blade";
 			margin-bottom: $spacer-md;
 		}
 
-		&-copy-button-container {
+		&-copy-container {
 			display: flex;
-			border: 1px solid red;
+		}
+
+		&-copy-input {
+			min-width: 23rem;
 		}
 	}
 

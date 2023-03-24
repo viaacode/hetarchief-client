@@ -42,10 +42,13 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose }) => {
 					<dd
 						className={clsx(
 							styles['c-share-folder-blade__content-value'],
-							styles['c-share-folder-blade__content-copy-button-container']
+							styles['c-share-folder-blade__content-copy-container']
 						)}
 					>
-						<TextInput value={link} />
+						<TextInput
+							value={link}
+							className={styles['c-share-folder-blade__content-copy-input']}
+						/>
 						<CopyButton text={link} isInputCopy />
 					</dd>
 					<dt className={styles['c-share-folder-blade__content-label']}>
