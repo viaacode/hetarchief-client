@@ -27,11 +27,11 @@ $page: "p-cp-requests";
 		}
 	}
 
-	&__actions,
 	&__edit {
-		color: $shade;
+		color: $grey;
 		cursor: pointer;
 		font-size: $font-size-lg;
+		padding-right: $spacer-lg;
 		transform: translateY(0.2rem); // shift if to center on single-line
 	}
 
@@ -44,10 +44,6 @@ $page: "p-cp-requests";
 					display: none;
 				}
 			}
-		}
-
-		td:nth-last-child(2) {
-			padding-right: 0;
 		}
 	}
 

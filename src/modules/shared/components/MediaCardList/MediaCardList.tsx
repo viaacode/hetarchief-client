@@ -185,7 +185,6 @@ const MediaCardList: FC<MediaCardListProps> = ({
 			)}
 		>
 			{!isMasonryView && renderSidebar()}
-			{tempAccessLabel}
 			<Masonry
 				breakpointCols={isMasonryView ? breakpoints : 1}
 				className={styles['c-media-card-list__content']}

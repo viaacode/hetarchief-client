@@ -17,8 +17,9 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
+import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight, Modal } from '@shared/components';
-import { TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { IeObjectTypes } from '@shared/types';
@@ -153,6 +154,19 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		return wrapInLink(title);
+	};
+
+	const renderDescription = (): ReactNode => {
+		if (typeof description === 'string' && keywords) {
+			const truncatedText = extractSnippetBySearchTerm(
+				description,
+				keywords,
+				TRUNCATED_TEXT_LENGTH
+			);
+			return <>{keywords?.length ? highlighted(truncatedText ?? '') : description}</>;
+		}
+
+		return description;
 	};
 
 	const renderSubTitle = (): ReactNode => {
@@ -341,7 +355,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					<>
 						{wrapInLink(
 							<div className="u-text-ellipsis--2">
-								<span>{description}</span>
+								<span>{renderDescription()}</span>
 							</div>
 						)}
 						{hasTempAccess && renderTempAccessPill()}
@@ -350,7 +364,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					</>
 				) : (
 					<>
-						{wrapInLink(description)}
+						{wrapInLink(renderDescription())}
 						{isKeyUser && renderKeyUserPill()}
 						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>
