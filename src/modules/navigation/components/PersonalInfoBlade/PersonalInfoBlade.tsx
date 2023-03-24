@@ -63,7 +63,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 						'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
 					)}
 					variants={['block', 'text', 'dark']}
-					onClick={() => onSendRequests()}
+					onClick={onSendRequests}
 					className={styles['c-personal-info-blade__send-button']}
 				/>
 				<Button
