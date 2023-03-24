@@ -19,7 +19,10 @@
 }
 
 .c-filter-form__title {
+	margin-top: 6.4rem;
+
 	@include respond-to(md) {
+		margin-top: unset;
 		font-size: 2.8rem;
 		text-align: center;
 	}

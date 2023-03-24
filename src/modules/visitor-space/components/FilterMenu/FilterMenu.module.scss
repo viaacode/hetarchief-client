@@ -169,8 +169,4 @@ $checkbox-size: $spacer-sm;
 	&__overlay {
 		z-index: get-z-layer("filter-overlay");
 	}
-
-	&__form {
-		max-height: calc(100vh - #{$c-filter-menu-flyout-top-padding});
-	}
 }
