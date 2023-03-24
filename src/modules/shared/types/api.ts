@@ -20,5 +20,10 @@ export interface ElasticsearchAggregations {
 	aggregations: IeObjectSearchAggregations;
 }
 
+export interface IeObjectsSearchterms {
+	searchTerms: string[];
+}
+
 export type GetIeObjectsResponse = IPagination<IeObject & { related_count?: number }> &
-	ElasticsearchAggregations;
+	ElasticsearchAggregations &
+	IeObjectsSearchterms;
