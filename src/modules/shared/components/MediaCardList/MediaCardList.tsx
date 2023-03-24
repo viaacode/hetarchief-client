@@ -28,12 +28,13 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	wrapper = (card) => card,
 	className,
 	showLocallyAvailable = false,
-	tempAccessLabel,
 }) => {
 	const windowSize = useWindowSizeContext();
 
 	const user = useSelector(selectUser);
 	const { data: activeVisits } = useGetAllActiveVisits({ requesterId: user?.id || '' });
+
+	const isKeyUser = user?.isKeyUser || false;
 
 	if (!items) {
 		return null;
@@ -146,11 +147,11 @@ const MediaCardList: FC<MediaCardListProps> = ({
 			return true;
 		}
 
-		if (user?.isKeyUser && itemHasNoCPLicense) {
+		if (isKeyUser && itemHasNoCPLicense) {
 			return true;
 		}
 
-		if (user?.isKeyUser && itemHasNoThumbnail) {
+		if (isKeyUser && itemHasNoThumbnail) {
 			return true;
 		}
 

@@ -61,11 +61,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	const wrapInLink = (children: ReactNode) => {
-		if (showLocallyAvailable) {
-			return children;
-		}
-
-		if (link) {
+		if (link && !showLocallyAvailable) {
 			return (
 				<Link key={id} href={link}>
 					<a className="u-text-no-decoration" aria-label={id}>
