@@ -88,10 +88,6 @@ const MediaCard: FC<MediaCardProps> = ({
 			return <>{keywords?.length ? highlighted(truncatedText ?? '') : description}</>;
 		}
 
-		if (keywords && keywords.length > 0) {
-			console.warn('[WARN][MediaCard] Description could not be highlighted.');
-		}
-
 		return description;
 	};
 
