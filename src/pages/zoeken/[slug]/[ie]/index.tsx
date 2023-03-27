@@ -9,7 +9,6 @@ import {
 	FlowPlayer,
 	FlowPlayerProps,
 	MenuContent,
-	OrderDirection,
 	TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
@@ -84,6 +83,7 @@ import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -103,9 +103,8 @@ import {
 	formatMediumDateWithTime,
 	formatSameDayTimeOrDate,
 } from '@shared/utils';
+import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
-import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -138,6 +137,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+	const isNotKiosk = useHasAnyGroup(
+		Group.CP_ADMIN,
+		Group.MEEMOO_ADMIN,
+		Group.VISITOR,
+		Group.ANONYMOUS
+	);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -246,6 +251,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
 	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
+	const canReport = isNotKiosk;
 	const showMetadataExportDropdown =
 		canDownloadMetadata &&
 		visitRequest?.status === VisitStatus.APPROVED &&
@@ -392,6 +398,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		switch (id) {
 			case MediaActions.Bookmark:
 				setActiveBlade(MediaActions.Bookmark);
+				break;
+			case MediaActions.Report:
+				setActiveBlade(MediaActions.Report);
 				break;
 			case MediaActions.RequestAccess:
 				setActiveBlade(MediaActions.RequestAccess);
@@ -772,6 +781,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							{...MEDIA_ACTIONS(
 								canManageFolders,
 								isInAFolder(collections, mediaInfo?.schemaIdentifier),
+								canReport,
 								!!canRequestAccess
 							)}
 							onClickAction={onClickAction}
@@ -989,6 +999,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					maintainerSlug={visitorSpace?.slug}
 				/>
 			)}
+			<ReportBlade
+				user={user}
+				isOpen={activeBlade === MediaActions.Report}
+				onClose={onCloseBlade}
+			/>
 			{mediaInfo && visitorSpace && canRequestAccess && (
 				<RequestAccessBlade
 					isOpen={activeBlade === MediaActions.RequestAccess}

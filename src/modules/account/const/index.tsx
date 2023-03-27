@@ -115,6 +115,7 @@ export enum Group {
 	KIOSK_VISITOR = 'KIOSK_VISITOR',
 	MEEMOO_ADMIN = 'MEEMOO_ADMIN',
 	CP_ADMIN = 'CP_ADMIN',
+	ANONYMOUS = 'ANONYMOUS',
 }
 
 export const GET_PERMISSION_TRANSLATIONS_BY_GROUP = (): Record<
@@ -136,5 +137,9 @@ export const GET_PERMISSION_TRANSLATIONS_BY_GROUP = (): Record<
 	[Group.CP_ADMIN]: {
 		name: tText('modules/account/const/account___groep-cp--titel'),
 		description: tHtml('modules/account/const/account___groep-cp--omschrijving'),
+	},
+	[Group.ANONYMOUS]: {
+		name: tText('modules/account/const/index___groep-anoniem--titel'),
+		description: tHtml('modules/account/const/index___groep-anoniem--omschrijving'),
 	},
 });

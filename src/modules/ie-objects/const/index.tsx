@@ -158,6 +158,7 @@ export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true):
 export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
 	isInAFolder: boolean,
+	canReport: boolean,
 	canRequestAccess: boolean
 ): DynamicActionMenuProps => ({
 	actions: [
@@ -194,6 +195,23 @@ export const MEDIA_ACTIONS = (
 						id: MediaActions.Bookmark,
 						ariaLabel: tText('modules/ie-objects/const/index___bookmark'),
 						tooltip: tText('modules/ie-objects/const/index___bookmark'),
+					},
+			  ]
+			: []) as ActionItem[]),
+		...((canReport
+			? [
+					{
+						label: tText('modules/ie-objects/const/index___rapporteer'),
+						icon: (
+							<Icon
+								aria-hidden
+								className="u-font-size-24 u-text-left"
+								name={IconNamesLight.Flag}
+							/>
+						),
+						id: MediaActions.Report,
+						ariaLabel: tText('modules/ie-objects/const/index___rapporteer'),
+						tooltip: tText('modules/ie-objects/const/index___rapporteer'),
 					},
 			  ]
 			: []) as ActionItem[]),

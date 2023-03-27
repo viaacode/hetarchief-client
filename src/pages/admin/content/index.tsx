@@ -3,7 +3,7 @@ import { Button } from '@meemoo/react-components';
 import { GetServerSidePropsResult } from 'next';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, FC } from 'react';
+import React, { FC } from 'react';
 
 import { Permission } from '@account/const';
 import { CONTENT_PATH } from '@admin/const';
