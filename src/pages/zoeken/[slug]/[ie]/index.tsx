@@ -9,7 +9,6 @@ import {
 	FlowPlayer,
 	FlowPlayerProps,
 	MenuContent,
-	OrderDirection,
 	TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
@@ -106,8 +105,6 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { useGetVisitorSpaces } from '@visitor-space/hooks/get-visitor-spaces';
-import { VisitorSpaceOrderProps, VisitorSpaceStatus } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -140,7 +137,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
-	const isNotKiosk = useHasAnyGroup(Group.CP_ADMIN, Group.MEEMOO_ADMIN, Group.VISITOR);
+	const isNotKiosk = useHasAnyGroup(
+		Group.CP_ADMIN,
+		Group.MEEMOO_ADMIN,
+		Group.VISITOR,
+		Group.ANONYMOUS
+	);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);

@@ -81,6 +81,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				'modules/visitor-space/components/report-blade/report-blade___uw-bericht-werd-succesvol-verstuurd'
 			),
 		});
+		onCloseBlade();
 	};
 
 	const onFormSubmit = async () => {
