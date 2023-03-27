@@ -780,7 +780,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		<>
 			<MediaCardList
 				items={searchResultCardData}
-				keywords={keywords}
+				keywords={searchResults?.searchTerms}
 				sidebar={renderFilterMenu()}
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
