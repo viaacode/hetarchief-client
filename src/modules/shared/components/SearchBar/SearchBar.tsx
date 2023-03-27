@@ -11,6 +11,7 @@ const SearchBar: FC<SearchBarProps> = ({
 	onSearch,
 	shouldReset,
 	onResetFinished = () => null,
+	instantSearch = false,
 	variants = ['md', 'rounded', 'grey-border', 'icon--double', 'icon-clickable'],
 	...rest
 }) => {
@@ -29,6 +30,15 @@ const SearchBar: FC<SearchBarProps> = ({
 		return [...modifiers, ...(search ? ['black-border'] : [])];
 	};
 
+	const onKeyDown = (e: { key: string }): void => {
+		if (instantSearch) {
+			onSearch(search);
+			return;
+		}
+
+		onKey(e, [...keysEnter], () => onSearch(search));
+	};
+
 	useEffect(() => {
 		setSearch('');
 		onResetFinished();
@@ -40,7 +50,7 @@ const SearchBar: FC<SearchBarProps> = ({
 			value={search}
 			onChange={(e) => setSearch(e.target.value)}
 			variants={getVariants()}
-			onKeyDown={(e) => onKey(e, [...keysEnter], () => onSearch(search))}
+			onKeyDown={onKeyDown}
 			iconEnd={
 				<>
 					{search && (

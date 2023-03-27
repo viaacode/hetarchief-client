@@ -1,17 +1,24 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact, without } from 'lodash-es';
-import { FC, useEffect, useState } from 'react';
+import { compact, initial, without } from 'lodash-es';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
+import { useGetIeObjectsAggregatesByField } from '@ie-objects/hooks/get-ie-objects-aggregates-by-field';
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
-import { visitorSpaceLabelKeys } from '@visitor-space/const';
+import { IeObjectsSearchFilter, IeObjectsSearchFilterField } from '@shared/types';
+import { isEven } from '@shared/utils';
+import { VISITOR_SPACE_QUERY_PARAM_CONFIG, visitorSpaceLabelKeys } from '@visitor-space/const';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
+import {
+	mapFiltersToElastic,
+	mapRefineFilterToElastic,
+} from '@visitor-space/utils/elastic-filters';
 
 import {
 	CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -27,29 +34,57 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 	const { tHtml, tText } = useTranslation();
 
 	// State
-
 	const [query] = useQueryParams(CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG);
+	const [currentSearchFilters] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
 	const [shouldReset, setShouldReset] = useState<boolean>(false);
 	const [selection, setSelection] = useState<string[]>(() => compact(query.creator || []));
+	const [isSearchEnabled, setIsSearchEnabled] = useState<boolean>(false);
 
 	const { setValue, reset, handleSubmit } = useForm<CreatorFilterFormState>({
 		resolver: yupResolver(CREATOR_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
 
-	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.schema_creator?.buckets || []
-	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
+	const filters: IeObjectsSearchFilter[] = [
+		...mapFiltersToElastic(currentSearchFilters),
+		...mapRefineFilterToElastic([
+			{
+				field: IeObjectsSearchFilterField.CREATOR,
+				value: search,
+			},
+		]),
+	];
+
+	const initialAggregates = useSelector(selectIeObjectsFilterOptions);
+	const { data: aggregates } = useGetIeObjectsAggregatesByField(
+		VisitorSpaceFilterId.Creator,
+		filters,
+		isSearchEnabled
+	);
+
+	const buckets = useMemo(() => {
+		// TODO: add sort
+		const initial = initialAggregates?.schema_creator?.buckets;
+		const result = aggregates || initial || [];
+		console.log({ aggregates });
+		console.log({ initial });
+
+		console.log({ result });
+
+		return result;
+	}, [aggregates, initialAggregates]);
 
 	// Effects
-
 	useEffect(() => {
 		setValue('creators', selection);
 	}, [selection, setValue]);
 
-	// Events
+	useEffect(() => {
+		setIsSearchEnabled(isEven(search.length));
+	}, [search]);
 
+	// Events
 	const onItemClick = (add: boolean, value: string) => {
 		const selected = add ? [...selection, value] : without(selection, value);
 		setSelection(selected);
@@ -59,6 +94,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
+					instantSearch
 					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Creator}`}
 					default={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}

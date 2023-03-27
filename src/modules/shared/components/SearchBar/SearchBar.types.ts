@@ -8,4 +8,5 @@ export type SearchBarProps = TextInputProps &
 		onSearch: (value: string | undefined) => void;
 		shouldReset?: boolean;
 		onResetFinished?: () => void;
+		instantSearch?: boolean;
 	};

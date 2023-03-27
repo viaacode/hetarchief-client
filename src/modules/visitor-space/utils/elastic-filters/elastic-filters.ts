@@ -66,3 +66,20 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	// Advanced
 	...(query.advanced || []).flatMap(mapAdvancedToElastic),
 ];
+
+export const mapRefineFilterToElastic = (
+	refineFilters: { field: IeObjectsSearchFilterField; value: string }[]
+): IeObjectsSearchFilter[] =>
+	refineFilters.map(
+		({
+			field,
+			value,
+		}: {
+			field: IeObjectsSearchFilterField;
+			value: string;
+		}): IeObjectsSearchFilter => ({
+			field: field,
+			operator: IeObjectsSearchOperator.CONTAINS,
+			value: value,
+		})
+	);

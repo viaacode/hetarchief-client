@@ -2,7 +2,13 @@ import { MenuItemInfo, TabProps } from '@meemoo/react-components';
 
 import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@ie-objects/components';
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
-import { IeObject, MediaActions, MetadataExportFormats, ObjectDetailTabs } from '@ie-objects/types';
+import {
+	IeObject,
+	IeObjectSearchAggregations,
+	MediaActions,
+	MetadataExportFormats,
+	ObjectDetailTabs,
+} from '@ie-objects/types';
 import {
 	mapArrayToMetadataData,
 	mapBooleanToMetadataData,
@@ -12,6 +18,7 @@ import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 
@@ -26,6 +33,15 @@ export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_AUDIO_FORMATS,
 ];
 export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
+
+export const AGGREGATE_BY_FIELD: Partial<{
+	[key in VisitorSpaceFilterId]: keyof IeObjectSearchAggregations;
+}> = {
+	[VisitorSpaceFilterId.Medium]: 'dcterms_medium',
+	[VisitorSpaceFilterId.Genre]: 'schema_genre',
+	[VisitorSpaceFilterId.Creator]: 'schema_creator',
+	[VisitorSpaceFilterId.Language]: 'schema_in_language',
+};
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
