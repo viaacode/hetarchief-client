@@ -174,6 +174,11 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 			),
 			VisitorSpaceFilterId.Media
 		),
+		...mapArrayParamToTags(
+			query[VisitorSpaceFilterId.Maintainers] || [],
+			tText('modules/visitor-space/utils/map-filters/map-filters___aanbieders'),
+			VisitorSpaceFilterId.Maintainers
+		),
 		...mapBooleanParamToTag(
 			query.remote || false,
 			tText(
