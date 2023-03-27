@@ -130,7 +130,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 					</>
 				)}
 
-				<Link href={`/${ROUTE_PARTS.search}/zoeken?aanbieder=${room.slug}`} passHref>
+				<Link href={`/${ROUTE_PARTS.search}?aanbieder=${room.slug}`} passHref>
 					<a
 						aria-label={tText(
 							'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'
