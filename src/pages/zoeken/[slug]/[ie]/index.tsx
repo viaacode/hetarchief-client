@@ -79,6 +79,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { MetaDataDescription } from '@shared/components/MetaDataDescription';
+import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
@@ -649,6 +650,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				className="u-mt-32"
 				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
 				icon={<Icon name={IconNamesLight.AngleRight} />}
+				linkComponent={NextLinkWrapper}
 			/>
 		);
 	};

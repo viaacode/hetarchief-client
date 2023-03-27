@@ -11,7 +11,7 @@ import {
 	ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG,
 	VisitorSpacesOverviewTableColumns,
 	VisitorSpacesOverviewTablePageSize,
-} from '@admin/const';
+} from '@admin/const/Spaces.const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
