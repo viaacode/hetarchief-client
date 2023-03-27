@@ -9,6 +9,7 @@ export interface IeObject {
 	maintainerId: string;
 	maintainerName: string;
 	maintainerSlug: string;
+	maintainerLogo: string | null;
 	datePublished: string;
 	dctermsAvailable: string;
 	name: string;
