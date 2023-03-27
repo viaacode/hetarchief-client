@@ -325,25 +325,29 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						},
 				  ]
 				: []),
-			...[
-				{
-					before: false,
-					node: (
-						<Button
-							variants={['silver']}
-							icon={<Icon name={IconNamesLight.Share} aria-hidden />}
-							aria-label={tText(
-								'pages/account/mijn-mappen/folder-slug/index___map-delen'
-							)}
-							name={tText('pages/account/mijn-mappen/folder-slug/index___map-delen')}
-							onClick={(e) => {
-								e.stopPropagation();
-								setShowShareMapBlade(true);
-							}}
-						/>
-					),
-				},
-			],
+			...(activeFolder?.id
+				? [
+						{
+							before: false,
+							node: (
+								<Button
+									variants={['silver']}
+									icon={<Icon name={IconNamesLight.Share} aria-hidden />}
+									aria-label={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
+									name={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
+									onClick={(e) => {
+										e.stopPropagation();
+										setShowShareMapBlade(true);
+									}}
+								/>
+							),
+						},
+				  ]
+				: []),
 		];
 	}, [canDownloadMetadata, tText, activeFolder, getFolderExport, tHtml]);
 
@@ -599,11 +603,13 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						setSelected(null);
 					}}
 				/>
-
-				<ShareFolderBlade
-					onClose={() => setShowShareMapBlade(false)}
-					isOpen={showShareMapBlade}
-				/>
+				{activeFolder?.id && (
+					<ShareFolderBlade
+						onClose={() => setShowShareMapBlade(false)}
+						isOpen={showShareMapBlade}
+						folderId={activeFolder.id}
+					/>
+				)}
 			</>
 		);
 	};

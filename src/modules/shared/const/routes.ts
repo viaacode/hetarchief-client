@@ -34,6 +34,7 @@ export const ROUTE_PARTS = Object.freeze({
 	visitors: 'bezoekers',
 	visit: 'bezoek',
 	alerts: 'meldingen',
+	shareFolder: 'map-delen',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -63,6 +64,7 @@ export const ROUTES = Object.freeze({
 	beheerSettings: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.settings}`,
 	beheerRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
 	beheerMaterialRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.materialRequests}`,
+	shareFolder: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.shareFolder}/:id`,
 });
 
 export const ADMIN_CORE_ROUTES = {

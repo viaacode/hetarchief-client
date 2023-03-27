@@ -40,7 +40,7 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean; isInpu
 			return (
 				<Button
 					iconStart={<Icon name={IconNamesLight.Copy} aria-hidden />}
-					label="Kopieer"
+					label={tText('modules/shared/components/copy-button/copy-button___kopieer')}
 					aria-label={tText(
 						'modules/shared/components/copy-button/copy-button___kopieer-naar-klembord'
 					)}

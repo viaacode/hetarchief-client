@@ -57,5 +57,11 @@ $component: "c-share-folder-blade";
 			background-color: $black;
 			color: $white;
 		}
+
+		&:disabled {
+			background-color: $zinc;
+			color: $neutral;
+			border: 1px solid $zinc !important;
+		}
 	}
 }
