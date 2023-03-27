@@ -100,6 +100,17 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		setIsEditMaterialRequestBladeOpen(true);
 	};
 
+	const onClosePersonalInfoBlade = async () => {
+		refetch();
+		const getResponse = await MaterialRequestsService.getAll({
+			isPersonal: true,
+			size: 500,
+			isPending: true,
+		});
+		dispatch(setMaterialRequestCount(getResponse.items.length));
+		setIsPersonalInfoBladeOpen(false);
+	};
+
 	const renderTitle = () => {
 		return (
 			<div className={styles['c-material-request-center-blade__title-container']}>
@@ -317,7 +328,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			{user && (
 				<PersonalInfoBlade
 					isOpen={isPersonalInfoBladeOpen}
-					onClose={() => setIsPersonalInfoBladeOpen(false)}
+					onClose={onClosePersonalInfoBlade}
 					personalInfo={{
 						fullName: user.fullName,
 						email: user.email,
