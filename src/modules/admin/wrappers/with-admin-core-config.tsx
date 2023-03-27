@@ -11,9 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
-import { selectUser } from '@auth/store/user';
 import {
 	ALERT_ICON_LIST_CONFIG,
 	Icon,
@@ -57,8 +55,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 	return function withAdminCoreConfig(props: Record<string, unknown>) {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const [adminCoreConfig, setAdminCoreConfig] = useState<AdminConfig | null>(null);
-		// eslint-disable-next-line react-hooks/rules-of-hooks
-		const user = useSelector(selectUser);
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const router = useRouter();
 
