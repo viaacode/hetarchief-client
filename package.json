@@ -1,6 +1,6 @@
 {
 	"name": "hetarchief-client",
-	"version": "1.4.17",
+	"version": "1.4.18",
 	"private": true,
 	"contributors": [
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
@@ -40,8 +40,7 @@
 		"storybook": "start-storybook -p 6006",
 		"build:storybook": "build-storybook",
 		"translations:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix",
-		"gql:extract": "ts-node --transpile-only --require dotenv/config scripts/whitelist-gql-queries.ts dotenv_config_path=.env",
-		"bump": "npm version patch"
+		"gql:extract": "ts-node --transpile-only --require dotenv/config scripts/whitelist-gql-queries.ts dotenv_config_path=.env"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",

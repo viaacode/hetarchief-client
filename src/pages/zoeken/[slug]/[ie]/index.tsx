@@ -550,6 +550,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			),
 			poster: mediaInfo?.thumbnailUrl || undefined,
 			title: representation.name,
+			logo: mediaInfo?.maintainerLogo || undefined,
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
 			onPause: handleOnPause,
