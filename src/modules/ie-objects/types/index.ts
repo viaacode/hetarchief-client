@@ -9,6 +9,7 @@ export interface IeObject {
 	maintainerId: string;
 	maintainerName: string;
 	maintainerSlug: string;
+	maintainerLogo: string | null;
 	datePublished: string;
 	dctermsAvailable: string;
 	name: string;
@@ -163,6 +164,7 @@ export enum MediaActions {
 	Calendar = 'calendar',
 	RelatedObjects = 'related-objects',
 	RequestMaterial = 'request-material',
+	Report = 'report',
 	RequestAccess = 'request-access',
 }
 
