@@ -16,6 +16,7 @@ export interface User {
 	id: string;
 	idp: Idp;
 	maintainerId: string | null;
+	organisationName: string | null;
 	visitorSpaceSlug?: string;
 	permissions: Permission[];
 	isKeyUser: boolean;

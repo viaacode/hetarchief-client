@@ -9,6 +9,7 @@ export interface IeObject {
 	maintainerId: string;
 	maintainerName: string;
 	maintainerSlug: string;
+	maintainerLogo: string | null;
 	datePublished: string;
 	dctermsAvailable: string;
 	name: string;
@@ -61,7 +62,6 @@ export interface IeObject {
 }
 
 export enum IeObjectAccessThrough {
-	KEY_USER = 'KEY_USER',
 	PUBLIC_INFO = 'PUBLIC_INFO',
 	VISITOR_SPACE_FULL = 'VISITOR_SPACE_FULL',
 	VISITOR_SPACE_FOLDERS = 'VISITOR_SPACE_FOLDERS',
@@ -164,6 +164,7 @@ export enum MediaActions {
 	Calendar = 'calendar',
 	RelatedObjects = 'related-objects',
 	RequestMaterial = 'request-material',
+	RequestAccess = 'request-access',
 }
 
 // Metadata
