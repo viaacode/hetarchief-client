@@ -1,20 +1,35 @@
+import { isNil } from 'lodash';
+
 import {
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
+	Visit,
 } from '@shared/types';
 
 import { VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
 import { VisitorSpaceQueryParams } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
-export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => [
-	// Visitor space
-	{
+export const mapMaintainerToElastic = (
+	query: VisitorSpaceQueryParams,
+	activeVisitorSpace: Visit | undefined
+): IeObjectsSearchFilter => {
+	const maintainerId =
+		activeVisitorSpace?.spaceSlug === query?.maintainer
+			? activeVisitorSpace?.spaceMaintainerId
+			: '';
+
+	console.log({ maintainerId });
+
+	return {
 		field: IeObjectsSearchFilterField.MAINTAINER,
 		operator: IeObjectsSearchOperator.IS,
-		value: query.maintainer !== null ? query.maintainer?.toString() : '',
-	},
+		value: maintainerId,
+	};
+};
+
+export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => [
 	// Searchbar
 	{
 		field: IeObjectsSearchFilterField.QUERY,

@@ -92,7 +92,7 @@ import {
 } from '../../const';
 import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
-import { mapFiltersToElastic } from '../../utils/elastic-filters';
+import { mapFiltersToElastic, mapMaintainerToElastic } from '../../utils/elastic-filters';
 
 // ToDo(Silke): check isLogged in voor filter maintainer ding -> enkel leeg gebruiken
 const labelKeys = {
@@ -153,7 +153,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
 	};
 
-	const activeVisitorSpaceId: string =
+	const activeVisitorSpaceSlug: string =
 		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
 
 	/**
@@ -182,7 +182,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		isLoading: searchResultsLoading,
 		error: searchResultsError,
 	} = useGetIeObjects(
-		mapFiltersToElastic(query),
+		[mapMaintainerToElastic(query, activeVisitorSpace), ...mapFiltersToElastic(query)],
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
 		activeSort,
@@ -209,15 +209,15 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	useEffect(() => {
 		const visitorSpace: Visit | undefined = visitorSpaces.find(
-			(visit: Visit): boolean => activeVisitorSpaceId === visit.spaceMaintainerId
+			(visit: Visit): boolean => activeVisitorSpaceSlug === visit.spaceSlug
 		);
 
 		setActiveVisitorSpace(visitorSpace);
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined,
+			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceSlug || undefined,
 		});
-	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
+	}, [activeVisitorSpaceSlug, setQuery, visitorSpaces]);
 
 	/**
 	 * Display
@@ -261,13 +261,13 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const dropdownOptions = useMemo(() => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
-			({ spaceName, endAt, spaceMaintainerId }: Visit): VisitorSpaceDropdownOption => {
+			({ spaceName, endAt, spaceSlug }: Visit): VisitorSpaceDropdownOption => {
 				const accessEndDate = isMobile
 					? formatSameDayTimeOrDate(asDate(endAt))
 					: formatMediumDateWithTime(asDate(endAt));
 
 				return {
-					id: spaceMaintainerId,
+					id: spaceSlug,
 					label: spaceName || '',
 					extraInfo: accessEndDate,
 				};
@@ -463,17 +463,9 @@ const VisitorSpaceSearchPage: FC = () => {
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
 	const onVisitorSpaceSelected = (id: string): void => {
-		if (id === PUBLIC_COLLECTION) {
-			setQuery({
-				...VISITOR_SPACE_QUERY_PARAM_INIT,
-				[VisitorSpaceFilterId.Maintainer]: undefined,
-			});
-			return;
-		}
-
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			[VisitorSpaceFilterId.Maintainer]: id,
+			[VisitorSpaceFilterId.Maintainer]: id === PUBLIC_COLLECTION ? undefined : id,
 		});
 	};
 
@@ -481,7 +473,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * Computed
 	 */
 
-	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const isLoadedWithoutResults = !!searchResults && searchResults?.items?.length === 0;
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
@@ -748,7 +739,7 @@ const VisitorSpaceSearchPage: FC = () => {
 											<VisitorSpaceDropdown
 												options={dropdownOptions}
 												selectedOptionId={
-													activeVisitorSpaceId || PUBLIC_COLLECTION
+													activeVisitorSpaceSlug || PUBLIC_COLLECTION
 												}
 												onSelected={onVisitorSpaceSelected}
 											/>
