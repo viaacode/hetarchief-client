@@ -3,9 +3,12 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
-import { Visit, VisitAccessStatus } from '@shared/types';
+import { Visit, VisitAccessStatus, VisitStatus } from '@shared/types';
 import { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
-import { GetVisitsProps } from '@visits/services/visits/visits.service.types';
+import {
+	GetAllActiveVisitsProps,
+	GetVisitsProps,
+} from '@visits/services/visits/visits.service.types';
 import { PatchVisit } from '@visits/types';
 
 import {
@@ -107,5 +110,27 @@ export class VisitsService {
 				`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_SPACE_URL}/${slug}/${VISITS_SERVICE_ACCESS_STATUS_URL}`
 			)
 			.json();
+	}
+
+	public static async getAllActiveVisits({
+		requesterId,
+		page = 0,
+		size = 20,
+	}: GetAllActiveVisitsProps): Promise<IPagination<Visit>> {
+		const parsed = await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${VISITS_SERVICE_BASE_URL}/personal`,
+					query: {
+						status: VisitStatus.APPROVED,
+						timeframe: 'ACTIVE',
+						requesterId,
+						page,
+						size,
+					},
+				})
+			)
+			.json();
+		return parsed as IPagination<Visit>;
 	}
 }

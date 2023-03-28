@@ -1,10 +1,8 @@
 import { keysSpacebar, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { FC, useState } from 'react';
 
 import { Icon, IconName, IconNamesLight, Overlay } from '@shared/components';
-import { selectHistory } from '@shared/store/history';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -12,16 +10,8 @@ import { NavigationDropdown } from '../NavigationDropdown';
 
 import { NavigationListProps } from './NavigationList.types';
 
-const NavigationList: FC<NavigationListProps> = ({ currentPath = '', items, onOpenDropdowns }) => {
+const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => {
 	const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-	const history = useSelector(selectHistory);
-
-	// Close dropdowns when the url path changed
-	useEffect(() => {
-		if (history?.[1] !== currentPath && openDropdown) {
-			setOpenDropdown(null);
-		}
-	}, [history, currentPath, openDropdown]);
 
 	const openDropdowns = (id: string) => {
 		setOpenDropdown(id);

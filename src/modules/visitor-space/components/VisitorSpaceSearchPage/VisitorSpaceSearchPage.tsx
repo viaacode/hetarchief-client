@@ -12,7 +12,7 @@ import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -51,7 +51,6 @@ import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
@@ -114,8 +113,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
-	const history = useSelector(selectHistory);
-	const dispatch = useDispatch();
 
 	useScrollToId((router.query.focus as string) || null);
 
@@ -192,12 +189,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	/**
 	 * Effects
 	 */
-
-	useEffect(() => {
-		// New search => update history in list
-		dispatch(setHistory([history[history.length - 1], router.asPath]));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.asPath, dispatch, query]);
 
 	useEffect(() => {
 		if (!isLoggedIn) {

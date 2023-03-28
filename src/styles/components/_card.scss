@@ -37,8 +37,6 @@ $component: "c-card";
 	}
 
 	.#{$component}__image-wrapper {
-		align-items: center;
-		display: flex;
 		flex-grow: 1;
 		min-width: 0;
 	}
