@@ -78,7 +78,7 @@ $border-width: 0.2rem;
 		z-index: get-z-layer("foreground");
 
 		@include respond-at("md") {
-			width: min-content;
+			width: 26.5rem;
 		}
 	}
 
@@ -87,6 +87,7 @@ $border-width: 0.2rem;
 
 		&-label {
 			padding: 1.2rem $spacer-md;
+			overflow: hidden;
 		}
 
 		&:hover,
