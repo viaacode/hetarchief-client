@@ -51,7 +51,6 @@ import {
 	objectPlaceholder,
 	ticketErrorPlaceholder,
 } from '@ie-objects/const';
-import { useGetIeObjectsExport } from '@ie-objects/hooks/get-ie-objects-export';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
@@ -213,9 +212,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		mediaInfo?.meemooIdentifier ?? '',
 		!!mediaInfo
 	);
-
-	// export
-	const { mutateAsync: getMediaExport } = useGetIeObjectsExport();
 
 	// visit info
 	const {
@@ -393,13 +389,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	};
 
 	const onExportClick = async (format: MetadataExportFormats) => {
-		const metadataBlob = await getMediaExport({
+		const metadataBlob = await IeObjectsService.getExport({
 			id: router.query.ie as string,
 			format,
 		});
 
+		setMetadataExportDropdownOpen(false);
 		if (metadataBlob) {
-			save(
+			await save(
 				metadataBlob,
 				`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
 			);
@@ -409,8 +406,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				description: tHtml('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
 			});
 		}
-
-		setMetadataExportDropdownOpen(false);
 	};
 
 	const onRequestMaterialClick = () => {
