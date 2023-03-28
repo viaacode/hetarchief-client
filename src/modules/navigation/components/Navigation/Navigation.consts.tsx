@@ -161,7 +161,7 @@ const getVisitorSpacesDropdown = (
 					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 				},
 				...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
-					const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.maintainerId}`;
+					const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.slug}`;
 					return {
 						node: ({ closeDropdowns }) =>
 							renderLink(
