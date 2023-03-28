@@ -45,6 +45,11 @@ export interface MaterialRequestUpdate {
 	organisation?: string;
 }
 
+export interface MaterialRequestSendAll {
+	type: MaterialRequestRequesterCapacity;
+	organisation?: string;
+}
+
 export enum MaterialRequestType {
 	REUSE = 'REUSE',
 	MORE_INFO = 'MORE_INFO',
@@ -54,7 +59,7 @@ export enum MaterialRequestType {
 export enum MaterialRequestRequesterCapacity {
 	OTHER = 'OTHER',
 	WORK = 'WORK',
-	PRIVATE_RESEARCHER = 'PRIVATE_RESEARCHER',
+	PRIVATE_RESEARCH = 'PRIVATE_RESEARCH',
 	EDUCATION = 'EDUCATION',
 }
 
@@ -77,7 +82,7 @@ export const GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_ARRAY = (): {
 		label: tText('modules/admin/const/material-requests___requester-capacity-work'),
 	},
 	{
-		id: MaterialRequestRequesterCapacity.PRIVATE_RESEARCHER,
+		id: MaterialRequestRequesterCapacity.PRIVATE_RESEARCH,
 		label: tText(
 			'modules/admin/const/material-requests___requester-capacity-private-researcher'
 		),
