@@ -72,6 +72,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	}, [materialRequests]);
 
 	useEffect(() => {
+		materialRequests && dispatch(setMaterialRequestCount(materialRequests.items.length));
+	}, [materialRequests]);
+
+	useEffect(() => {
 		isOpen && refetch();
 	}, [isOpen, refetch]);
 
@@ -82,12 +86,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const deleteMaterialRequest = async (id: string) => {
 		const deleteResponse = await MaterialRequestsService.delete(id);
 		deleteResponse && refetch();
-		const getResponse = await MaterialRequestsService.getAll({
-			isPersonal: true,
-			size: 500,
-			isPending: true,
-		});
-		dispatch(setMaterialRequestCount(getResponse.items.length));
 	};
 
 	const closeEditMaterialRequestBlade = () => {
@@ -102,12 +100,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	const onClosePersonalInfoBlade = async () => {
 		refetch();
-		const getResponse = await MaterialRequestsService.getAll({
-			isPersonal: true,
-			size: 500,
-			isPending: true,
-		});
-		dispatch(setMaterialRequestCount(getResponse.items.length));
 		setIsPersonalInfoBladeOpen(false);
 	};
 

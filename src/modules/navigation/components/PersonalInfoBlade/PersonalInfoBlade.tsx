@@ -38,7 +38,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 			});
 			onClose();
 		} catch (err) {
-			console.log({ err });
+			console.error({ err });
 			onFailedRequest();
 		}
 	};
