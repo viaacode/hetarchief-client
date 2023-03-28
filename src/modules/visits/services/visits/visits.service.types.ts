@@ -15,3 +15,9 @@ export interface GetVisitsProps {
 	userProfileId?: string;
 	personal?: boolean;
 }
+
+export interface GetAllActiveVisitsProps {
+	requesterId: string;
+	page?: number;
+	size?: number;
+}
