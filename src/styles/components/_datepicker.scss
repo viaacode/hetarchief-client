@@ -144,3 +144,10 @@ $datepicker-border-color: $zinc;
 		}
 	}
 }
+
+.c-datepicker {
+	.c-datepicker .react-datepicker__navigation--previous,
+	.c-datepicker .react-datepicker__navigation--next {
+		display: flex;
+	}
+}
