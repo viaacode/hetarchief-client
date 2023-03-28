@@ -1,6 +1,5 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import Link from 'next/link';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -17,7 +16,6 @@ import { VisitorSpaceNavigationProps } from '@visitor-space/components';
 import styles from './VisitorSpaceNavigation.module.scss';
 
 const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
-	backLink = '/',
 	className,
 	email,
 	phone,
@@ -34,19 +32,12 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 		<Navigation contextual className={className} showBorder={showBorder}>
 			<Navigation.Left placement="left">
 				{showLinkedSpaceAsHomepage && isSearchPage ? null : (
-					<Link href={backLink} passHref={true}>
-						<a
-							aria-label={tText(
-								'modules/visitor-space/components/visitor-space-navigation/visitor-space-navigation___naar-vorige-pagina'
-							)}
-						>
-							<Button
-								icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-								variants="text"
-								className="u-color-white u-ml--12"
-							/>
-						</a>
-					</Link>
+					<Button
+						icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+						variants="text"
+						className="u-color-white u-ml--12"
+						onClick={() => window.history.back()}
+					/>
 				)}
 			</Navigation.Left>
 
