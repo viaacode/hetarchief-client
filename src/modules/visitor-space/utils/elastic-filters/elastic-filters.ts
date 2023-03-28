@@ -1,5 +1,3 @@
-import { isNil } from 'lodash';
-
 import {
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
@@ -19,8 +17,6 @@ export const mapMaintainerToElastic = (
 		activeVisitorSpace?.spaceSlug === query?.maintainer
 			? activeVisitorSpace?.spaceMaintainerId
 			: '';
-
-	console.log({ maintainerId });
 
 	return {
 		field: IeObjectsSearchFilterField.MAINTAINER,
