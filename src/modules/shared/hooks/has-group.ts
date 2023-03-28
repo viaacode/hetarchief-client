@@ -12,7 +12,7 @@ export const useHasAnyGroup = (...groups: Group[]): boolean => {
 	}
 
 	if (!user) {
-		return false;
+		return groups.includes(Group.ANONYMOUS);
 	}
 
 	return !isEmpty(intersection([user.groupName], groups));

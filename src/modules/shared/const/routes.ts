@@ -34,6 +34,7 @@ export const ROUTE_PARTS = Object.freeze({
 	visitors: 'bezoekers',
 	visit: 'bezoek',
 	alerts: 'meldingen',
+	kioskConditions: 'kiosk-voorwaarden',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes

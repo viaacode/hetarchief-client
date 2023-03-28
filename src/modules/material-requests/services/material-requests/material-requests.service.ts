@@ -11,6 +11,7 @@ import {
 	MaterialRequestCreation,
 	MaterialRequestDetail,
 	MaterialRequestMaintainer,
+	MaterialRequestSendAll,
 	MaterialRequestUpdate,
 } from 'modules/material-requests/types';
 
@@ -78,5 +79,11 @@ export class MaterialRequestsService {
 			return null;
 		}
 		return ApiService.getApi().delete(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`).json();
+	}
+
+	public static async sendAll(json: MaterialRequestSendAll): Promise<void> {
+		return ApiService.getApi()
+			.post(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/send`, { json })
+			.json();
 	}
 }

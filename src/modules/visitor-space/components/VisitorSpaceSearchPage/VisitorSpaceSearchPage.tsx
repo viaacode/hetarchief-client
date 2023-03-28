@@ -12,7 +12,7 @@ import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -43,7 +43,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -51,7 +51,6 @@ import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
@@ -116,14 +115,13 @@ const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
-	const history = useSelector(selectHistory);
-	const dispatch = useDispatch();
 
 	useScrollToId((router.query.focus as string) || null);
 
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const isKioskUser = useHasAnyGroup(Group.KIOSK_VISITOR);
+	const isCPAdmin = useHasAnyGroup(Group.CP_ADMIN);
 
 	/**
 	 * State
@@ -196,12 +194,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	/**
 	 * Effects
 	 */
-
-	useEffect(() => {
-		// New search => update history in list
-		dispatch(setHistory([history[history.length - 1], router.asPath]));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.asPath, dispatch, query]);
 
 	useEffect(() => {
 		if (!isLoggedIn) {
@@ -608,7 +600,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 			)}
 			action={
-				<Link passHref href="/kiosk-voorwaarden">
+				<Link passHref href={`/${ROUTE_PARTS.kioskConditions}`}>
 					<a aria-label={tText('pages/slug/index___meer-info')}>
 						<Button
 							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
@@ -727,8 +719,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		const visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
 				const isPublicColelction = visitorSpace.id == PUBLIC_COLLECTION;
-				const isOwnVisitorSapce =
-					user?.groupName === Group.CP_ADMIN && visitorSpace.id === user.maintainerId;
+				const isOwnVisitorSapce = isCPAdmin && visitorSpace.id === user?.maintainerId;
 
 				return !isPublicColelction && !isOwnVisitorSapce;
 			}
