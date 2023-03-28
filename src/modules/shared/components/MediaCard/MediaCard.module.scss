@@ -5,7 +5,9 @@ $component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 
 .#{$component} {
-	cursor: pointer;
+	&--pointer {
+		cursor: pointer;
+	}
 
 	&--key-user {
 		border: 1px solid $mustard !important;
@@ -20,6 +22,65 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 			width: 3.4rem;
 			height: 2rem;
 			background-color: $mustard;
+		}
+	}
+
+	&__locally-available-container {
+		margin-top: $spacer-1xl;
+		display: flex;
+		flex-direction: row;
+	}
+
+	&__info-button {
+		display: flex !important;
+		justify-content: center !important;
+		font-size: $font-size-sm !important;
+		margin-right: $spacer-xs;
+		height: 3.7rem;
+	}
+
+	&__visit-button {
+		display: flex !important;
+		justify-content: center !important;
+		font-size: $font-size-sm !important;
+		height: 3.7rem;
+	}
+
+	&__close-button-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: $spacer-1xl;
+	}
+
+	&__close-button {
+		width: 15rem;
+	}
+
+	&__infomodal-description {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: $neutral;
+	}
+
+	&__locally-available-pill {
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		right: $spacer-xs;
+		top: $spacer-xs;
+		padding-right: $spacer-xs;
+		font-size: $font-size-xs;
+		color: $white;
+		background-color: $black;
+		border-radius: 2.5rem;
+		height: 2.1rem;
+
+		&--icon {
+			margin-left: $spacer-xs;
+			margin-right: $spacer-xxs;
 		}
 	}
 
@@ -97,8 +158,8 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	&__header-duration {
 		position: absolute;
-		bottom: 0;
-		right: 0;
+		right: $spacer-sm;
+		margin-top: -$spacer-md;
 		font-size: $font-size-sm;
 		background-color: $white;
 		color: $zinc;

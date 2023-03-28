@@ -227,7 +227,8 @@ const AppLayout: FC = ({ children }) => {
 			navigationItems || {},
 			user?.permissions || [],
 			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
-			isMobile
+			isMobile,
+			user?.maintainerId || null
 		);
 
 		const staticItems = [

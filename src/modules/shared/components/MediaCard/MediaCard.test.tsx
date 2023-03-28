@@ -1,6 +1,11 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, RenderResult, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
 
+import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { formatMediumDate } from '@shared/utils';
+
+import { mockStore } from '../../../../__mocks__/store';
 
 import MediaCard from './MediaCard';
 
@@ -12,7 +17,18 @@ describe('Component: <MediaCard />', () => {
 
 	beforeEach(() => {
 		rendered = render(
-			<MediaCard view="grid" publishedAt={date} publishedBy={author} type="video" />
+			<NextQueryParamProvider>
+				<QueryClientProvider client={new QueryClient()}>
+					<Provider store={mockStore}>
+						<MediaCard
+							view="grid"
+							publishedAt={date}
+							publishedBy={author}
+							type="video"
+						/>
+					</Provider>
+				</QueryClientProvider>
+			</NextQueryParamProvider>
 		);
 	});
 
@@ -23,7 +39,20 @@ describe('Component: <MediaCard />', () => {
 	});
 
 	it('Should apply the horizontal--at-md orientation when rendered in list view', () => {
-		rendered = render(<MediaCard view="list" type="video" />);
+		rendered = render(
+			<NextQueryParamProvider>
+				<QueryClientProvider client={new QueryClient()}>
+					<Provider store={mockStore}>
+						<MediaCard
+							view="list"
+							publishedAt={date}
+							publishedBy={author}
+							type="video"
+						/>
+					</Provider>
+				</QueryClientProvider>
+			</NextQueryParamProvider>
+		);
 
 		const element = rendered.container.getElementsByClassName(
 			'c-card--orientation-horizontal--at-md'
@@ -37,14 +66,54 @@ describe('Component: <MediaCard />', () => {
 	});
 
 	it('Should show placeholder icons based on the type of card in either view mode', () => {
-		rendered = render(<MediaCard view="list" type="audio" />);
+		rendered = render(
+			<NextQueryParamProvider>
+				<QueryClientProvider client={new QueryClient()}>
+					<Provider store={mockStore}>
+						<MediaCard
+							view="list"
+							publishedAt={date}
+							publishedBy={author}
+							type="audio"
+						/>
+					</Provider>
+				</QueryClientProvider>
+			</NextQueryParamProvider>
+		);
 		expect(screen.getAllByText('no-audio')[0]).toBeDefined();
-		rendered = render(<MediaCard view="grid" type="video" />);
+		rendered = render(
+			<NextQueryParamProvider>
+				<QueryClientProvider client={new QueryClient()}>
+					<Provider store={mockStore}>
+						<MediaCard
+							view="grid"
+							publishedAt={date}
+							publishedBy={author}
+							type="video"
+						/>
+					</Provider>
+				</QueryClientProvider>
+			</NextQueryParamProvider>
+		);
 		expect(screen.getAllByText('no-video')[0]).toBeDefined();
 	});
 
 	it('Should render key user pill if isKeyUser', () => {
-		rendered = render(<MediaCard view="list" type="video" isKeyUser />);
+		rendered = render(
+			<NextQueryParamProvider>
+				<QueryClientProvider client={new QueryClient()}>
+					<Provider store={mockStore}>
+						<MediaCard
+							view="list"
+							publishedAt={date}
+							publishedBy={author}
+							type="video"
+							isKeyUser
+						/>
+					</Provider>
+				</QueryClientProvider>
+			</NextQueryParamProvider>
+		);
 
 		const iconElement = rendered.container
 			.getElementsByClassName('c-media-card--key-user-pill')
