@@ -179,4 +179,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AccountMyMaterialRequests as ComponentType);
+export default withAuth(AccountMyMaterialRequests as ComponentType, true);

@@ -106,4 +106,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(AdminTranslationsOverview as ComponentType));
+export default withAuth(withAdminCoreConfig(AdminTranslationsOverview as ComponentType), true);
