@@ -257,7 +257,7 @@ const getDynamicHeaderLinks = (
 const getCpAdminManagementDropdown = (
 	currentPath: string,
 	permissions: Permission[],
-	maintainerId: string | null,
+	maintainerSlug: string | null,
 	isMobile: boolean
 ): NavigationItem[] => {
 	if (
@@ -356,7 +356,7 @@ const getCpAdminManagementDropdown = (
 					  ]
 					: []),
 
-				...(!isNil(maintainerId)
+				...(!isNil(maintainerSlug)
 					? [
 							{
 								node: renderLink(
@@ -366,7 +366,7 @@ const getCpAdminManagementDropdown = (
 									stringifyUrl({
 										url: `/${ROUTE_PARTS.search}`,
 										query: {
-											[VisitorSpaceFilterId.Maintainer]: maintainerId,
+											[VisitorSpaceFilterId.Maintainer]: maintainerSlug,
 										},
 									}),
 									{
@@ -430,7 +430,7 @@ export const getNavigationItemsLeft = (
 	permissions: Permission[],
 	linkedSpaceOrId: string | null,
 	isMobile: boolean,
-	maintainerId: string | null
+	maintainerSlug: string | null
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
@@ -450,7 +450,7 @@ export const getNavigationItemsLeft = (
 	const cpAdminLinks = getCpAdminManagementDropdown(
 		currentPath,
 		permissions,
-		maintainerId,
+		maintainerSlug,
 		isMobile
 	);
 	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
