@@ -3,3 +3,7 @@ export interface ShareFolderBladeProps {
 	onClose: () => void;
 	folderId: string;
 }
+
+export interface ShareFolderBladeFormState {
+	email: string;
+}
