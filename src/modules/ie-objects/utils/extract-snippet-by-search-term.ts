@@ -6,8 +6,11 @@ export function extractSnippetBySearchTerm(
 	snippetLength: number
 ): string {
 	const [firstSearchTermFound, firstOccurrenceIndex] = minBy(
-		searchTerms.map((searchTerm) => [searchTerm, fullText.indexOf(searchTerm)]),
-		(termsAndOccurnace) => termsAndOccurnace[1]
+		searchTerms.map((searchTerm) => [
+			searchTerm,
+			fullText.toLowerCase().indexOf(searchTerm.toLowerCase()),
+		]),
+		(termsAndOccurrence) => termsAndOccurrence[1]
 	) || [null, null];
 	if (
 		!firstOccurrenceIndex ||
