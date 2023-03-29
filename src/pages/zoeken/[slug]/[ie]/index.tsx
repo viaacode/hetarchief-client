@@ -903,13 +903,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			);
 		}
 
+		// Only show the back button on the media tab (mobile)
+		const showBackButton = (isMobile && activeTab === ObjectDetailTabs.Media) || !isMobile;
+
 		return (
-			<Button
-				className={clsx('p-object-detail__back')}
-				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-				onClick={() => window.history.back()}
-				variants={['white', 'xs']}
-			/>
+			showBackButton && (
+				<Button
+					className={clsx('p-object-detail__back')}
+					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+					onClick={() => window.history.back()}
+					variants={['white', 'xs']}
+				/>
+			)
 		);
 	};
 
