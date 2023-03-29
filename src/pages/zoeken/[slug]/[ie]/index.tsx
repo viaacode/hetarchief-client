@@ -889,9 +889,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		return <ObjectPlaceholder {...objectPlaceholder()} />;
 	};
 
-	const renderObjectDetail = () => (
-		<>
-			{!isNil(accessEndDate) && (
+	const renderNavigationBar = (): ReactNode => {
+		if (!isNil(accessEndDate)) {
+			return (
 				<VisitorSpaceNavigation
 					className="p-object-detail__nav"
 					showBorder={showNavigationBorder}
@@ -900,7 +900,22 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					email={visitorSpace?.contactInfo.email || ''}
 					accessEndDate={accessEndDate}
 				/>
-			)}
+			);
+		}
+
+		return (
+			<Button
+				className={clsx('p-object-detail__back')}
+				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+				onClick={() => window.history.back()}
+				variants={['white', 'xs']}
+			/>
+		);
+	};
+
+	const renderObjectDetail = () => (
+		<>
+			{renderNavigationBar()}
 			<ScrollableTabs
 				className="p-object-detail__tabs"
 				variants={['dark']}
