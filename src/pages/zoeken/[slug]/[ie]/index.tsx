@@ -130,7 +130,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 	const user = useSelector(selectUser);
-	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isNotKiosk = useHasAnyGroup(
 		Group.CP_ADMIN,
@@ -733,7 +732,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					<div className="u-pb-24 p-object-detail__actions">
 						<div className="p-object-detail__primary-actions">
 							{showMetadataExportDropdown && renderExportDropdown()}
-							{canRequestMaterial && (
+							{isNotKiosk && (
 								<Button
 									className="p-object-detail__request-material"
 									iconStart={<Icon name={IconNamesLight.Shopping} aria-hidden />}
@@ -968,7 +967,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					onSubmit={async () => onCloseBlade()}
 				/>
 			)}
-			{mediaInfo && visitorSpace && canRequestMaterial && (
+			{mediaInfo && visitorSpace && isNotKiosk && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
