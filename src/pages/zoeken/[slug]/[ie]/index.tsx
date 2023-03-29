@@ -20,8 +20,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { parseUrl } from 'query-string';
-import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
@@ -132,7 +131,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 	const user = useSelector(selectUser);
 	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
-	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isNotKiosk = useHasAnyGroup(
 		Group.CP_ADMIN,
