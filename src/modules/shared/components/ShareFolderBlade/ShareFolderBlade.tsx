@@ -26,12 +26,19 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	const link = `${window.location.origin}${ROUTES.shareFolder.replace(':id', folderId)}`;
 
 	const {
+		setValue,
 		handleSubmit,
 		formState: { errors },
 		control,
 	} = useForm<ShareFolderBladeFormState>({
 		resolver: yupResolver(SHARE_FOLDER_FORM_SCHEMA()),
 	});
+
+	const handleClose = () => {
+		setEmailInputValue('');
+		setValue('email', '');
+		onClose();
+	};
 
 	const handleSend = async () => {
 		try {
@@ -51,11 +58,12 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 				});
 				toastService.notify({
 					maxLines: 3,
-					title: tText('pages/account/map-delen/folder-id/index___gelukt'),
+					title: tText('pages/account/map-delen/folder-id/index___gelukt'), //change to je map is gedeeld
 					description: tText(
-						'pages/account/map-delen/folder-id/index___gelukt-beschrijving'
+						'pages/account/map-delen/folder-id/index___gelukt-beschrijving' //change to je map is verstuurd naar ...
 					),
 				});
+				handleClose();
 			}
 		} catch (err) {
 			console.error(err);
@@ -96,7 +104,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 				</h3>
 			)}
 			footer={isOpen && renderFooter()}
-			onClose={onClose}
+			onClose={handleClose}
 		>
 			<div className={styles['c-share-folder-blade__content']}>
 				<>
