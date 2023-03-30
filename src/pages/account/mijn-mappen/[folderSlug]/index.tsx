@@ -608,6 +608,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						onClose={() => setShowShareMapBlade(false)}
 						isOpen={showShareMapBlade}
 						folderId={activeFolder.id}
+						folderName={activeFolder.name}
 					/>
 				)}
 			</>
