@@ -73,14 +73,19 @@ import {
 	CreatorFilterFormState,
 	DurationFilterFormState,
 	FilterMenu,
+	FilterMenuFilterOption,
 	GenreFilterFormState,
 	initialFields,
 	KeywordsFilterFormState,
 	LanguageFilterFormState,
+	MaintainerFilterFormState,
+	MediaFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
+	RemoteFilterFormState,
 } from '../../components';
 import {
+	PUBLIC_COLLECTION,
 	VISITOR_SPACE_FILTERS,
 	VISITOR_SPACE_ITEM_COUNT,
 	VISITOR_SPACE_QUERY_PARAM_CONFIG,
@@ -93,12 +98,9 @@ import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic } from '../../utils/elastic-filters';
 
-// ToDo(Silke): check isLogged in voor filter maintainer ding -> enkel leeg gebruiken
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
-
-const PUBLIC_COLLECTION = ''; // No maintainer query param means the public collection should be selected
 
 const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	return {
@@ -152,6 +154,9 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const activeVisitorSpaceId: string =
 		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
+
+	const isKeyUser = user?.isKeyUser || false;
+	const isPublicCollection = activeVisitorSpaceId === PUBLIC_COLLECTION;
 
 	/**
 	 * Data
@@ -209,6 +214,39 @@ const VisitorSpaceSearchPage: FC = () => {
 			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined,
 		});
 	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
+
+	useEffect(() => {
+		// Filter out all disabled query param keys/ids
+		const disabledFilterKeys: VisitorSpaceFilterId[] = VISITOR_SPACE_FILTERS(
+			isPublicCollection,
+			isKeyUser
+		)
+			.filter(({ isDisabled }: FilterMenuFilterOption): boolean => !!isDisabled?.())
+			.map(
+				({ id }: FilterMenuFilterOption): VisitorSpaceFilterId => id as VisitorSpaceFilterId
+			);
+
+		// Loop over all existing query params and strip out the disabled filters if they exist
+		const disabledKeysSet: Set<VisitorSpaceFilterId> = new Set(disabledFilterKeys);
+		const strippedQuery = Object.keys(query).reduce((result, current) => {
+			const id = current as VisitorSpaceFilterId;
+			if (disabledKeysSet.has(id)) {
+				return {
+					...result,
+					[id]: VISITOR_SPACE_QUERY_PARAM_INIT[id],
+				};
+			}
+
+			return {
+				...result,
+				[id]: query[id],
+			};
+		}, {});
+
+		setQuery(strippedQuery);
+		// Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isKeyUser, isPublicCollection]);
 
 	/**
 	 * Display
@@ -269,8 +307,11 @@ const VisitorSpaceSearchPage: FC = () => {
 	}, [visitorSpaces, isMobile]);
 
 	const filters = useMemo(
-		() => VISITOR_SPACE_FILTERS().filter(({ isDisabled }) => !isDisabled?.()),
-		[]
+		() =>
+			VISITOR_SPACE_FILTERS(isPublicCollection, isKeyUser).filter(
+				({ isDisabled }) => !isDisabled?.()
+			),
+		[isKeyUser, isPublicCollection]
 	);
 
 	/**
@@ -315,7 +356,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Reset all filters except the maintainer
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			maintainer: query.maintainer,
+			[VisitorSpaceFilterId.Maintainer]: query[VisitorSpaceFilterId.Maintainer],
 		});
 	};
 
@@ -383,6 +424,24 @@ const VisitorSpaceSearchPage: FC = () => {
 				data = (values as LanguageFilterFormState).languages;
 				break;
 
+			case VisitorSpaceFilterId.Maintainers:
+				data = (values as MaintainerFilterFormState).maintainers;
+				break;
+
+			case VisitorSpaceFilterId.Remote:
+				// Info: remove queryparam if false (= set to undefined)
+				data = (values as RemoteFilterFormState).isConsultableRemote
+					? (values as RemoteFilterFormState).isConsultableRemote
+					: undefined;
+				break;
+
+			case VisitorSpaceFilterId.Media:
+				// Info: remove queryparam if false (= set to undefined)
+				data = (values as MediaFilterFormState).isConsultableMedia
+					? (values as MediaFilterFormState).isConsultableMedia
+					: undefined;
+				break;
+
 			case VisitorSpaceFilterId.Advanced:
 				data = (values as AdvancedFilterFormState).advanced.filter(
 					(advanced) => advanced.val !== initialFields().val
@@ -405,7 +464,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
-		const query: Record<string, unknown> = {};
+		const updatedQuery: Record<string, unknown> = {};
 
 		tags.forEach((tag) => {
 			switch (tag.key) {
@@ -414,9 +473,10 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Keywords:
 				case VisitorSpaceFilterId.Language:
 				case VisitorSpaceFilterId.Medium:
+				case VisitorSpaceFilterId.Maintainers:
 				case SEARCH_QUERY_KEY:
-					query[tag.key] = [
-						...((query[tag.key] as Array<unknown>) || []),
+					updatedQuery[tag.key] = [
+						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),
 					];
 					break;
@@ -425,22 +485,41 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Created:
 				case VisitorSpaceFilterId.Duration:
 				case VisitorSpaceFilterId.Published:
-					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag];
+					updatedQuery[tag.key] = [
+						...((updatedQuery[tag.key] as Array<unknown>) || []),
+						tag,
+					];
+					break;
+
+				case VisitorSpaceFilterId.Media:
+				case VisitorSpaceFilterId.Remote:
+					// eslint-disable-next-line no-case-declarations
+					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
+					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
 					break;
 
 				default:
-					query[tag.key] = tag.value;
+					updatedQuery[tag.key] = tag.value;
 					break;
 			}
 		});
 
 		// Destructure to keyword-able filters
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { format, orderProp, orderDirection, page, maintainer, ...rest } = {
+		/* eslint-disable @typescript-eslint/no-unused-vars */
+		const {
+			format,
+			orderProp,
+			orderDirection,
+			page,
+			// Dynamically destructure the maintainer qp using our enum so we don't need to change it every time the qp value changes
+			[VisitorSpaceFilterId.Maintainer]: maintainer,
+			...rest
+		} = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
+		/* eslint-disable @typescript-eslint/no-unused-vars */
 
-		setQuery({ ...rest, ...query, page: 1 });
+		setQuery({ ...rest, ...updatedQuery, page: 1 });
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
