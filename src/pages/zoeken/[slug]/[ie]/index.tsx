@@ -777,13 +777,17 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		maintainerSiteUrl,
 	}: IeObject): ReactNode => (
 		<div className="p-object-detail__metadata-maintainer-data">
-			<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
-			<p className="p-object-detail__metadata-link">
-				<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
-					{maintainerSiteUrl}
-				</a>
-				<Icon className="u-ml-8" name={IconNamesLight.Extern} />
-			</p>
+			{maintainerDescription && (
+				<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
+			)}
+			{maintainerSiteUrl && (
+				<p className="p-object-detail__metadata-link">
+					<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
+						{maintainerSiteUrl}
+					</a>
+					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+				</p>
+			)}
 		</div>
 	);
 
