@@ -730,11 +730,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		);
 	};
 
-	const renderMaintainerMetaTitle = ({
-		maintainerName,
-		maintainerLogo,
-		maintainerSlug,
-	}: IeObject): ReactNode => {
+	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => {
 		return (
 			<div className="p-object-detail__metadata-maintainer-title">
 				<p className="p-object-detail__metadata-name">
@@ -749,7 +745,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 								stringifyUrl({
 									url: `/${ROUTE_PARTS.search}`,
 									query: {
-										[VisitorSpaceFilterId.Maintainer]: maintainerSlug,
+										// Should be uncommented when the filters PR is merged: https://github.com/viaacode/hetarchief-client/pull/720
+										// [VisitorSpaceFilterId.Maintainers]: maintainerName,
 										search: keyword,
 									},
 								})
