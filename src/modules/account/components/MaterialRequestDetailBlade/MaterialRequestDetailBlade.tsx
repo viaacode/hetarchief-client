@@ -142,7 +142,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							</dd>
 						</>
 					)}
-					{currentMaterialRequestDetail?.organisation && (
+					{currentMaterialRequestDetail?.organisation ? (
 						<>
 							<dt className={styles['p-account-my-material-requests__content-label']}>
 								{tText(
@@ -151,6 +151,19 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 							</dt>
 							<dd className={styles['p-account-my-material-requests__content-value']}>
 								{currentMaterialRequestDetail.organisation}
+							</dd>
+						</>
+					) : (
+						<>
+							<dt className={styles['p-account-my-material-requests__content-label']}>
+								{tText(
+									'modules/account/components/material-request-detail-blade/material-requests___organisatie'
+								)}
+							</dt>
+							<dd className={styles['p-account-my-material-requests__content-value']}>
+								{tText(
+									'modules/account/components/material-request-detail-blade/material-requests___onbepaald'
+								)}
 							</dd>
 						</>
 					)}
