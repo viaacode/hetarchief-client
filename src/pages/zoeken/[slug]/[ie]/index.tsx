@@ -666,32 +666,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		items: MediaObject[],
 		isHidden = false
 	): ReactNode => (
-		<div
-			// key={`metadata-${index}-${item.title}`}
-			// className={clsx(styles['c-metadata__item'], item.className)}
-			role="listitem"
-		>
-			{/* <dt className={styles['c-metadata__item-title']}>{item.title}</dt> */}
-			<dd>
-				{
-					<ul
-						className={`
+		<dd>
+			{
+				<ul
+					className={`
 					u-list-reset p-object-detail__metadata-list
 					p-object-detail__metadata-list--${type}
 					p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
 				`}
-					>
-						{items.map((item, index) => {
-							return (
-								<Fragment key={`${type}-object-${item.id}-${index}`}>
-									{renderCard(item, isHidden)}
-								</Fragment>
-							);
-						})}
-					</ul>
-				}
-			</dd>
-		</div>
+				>
+					{items.map((item, index) => {
+						return (
+							<Fragment key={`${type}-object-${item.id}-${index}`}>
+								{renderCard(item, isHidden)}
+							</Fragment>
+						);
+					})}
+				</ul>
+			}
+		</dd>
 	);
 
 	const renderExportDropdown = () => {
