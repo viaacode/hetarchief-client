@@ -607,4 +607,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AccountMyFolders as ComponentType);
+export default withAuth(AccountMyFolders as ComponentType, true);

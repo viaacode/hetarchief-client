@@ -49,4 +49,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(AdminNavigationOverview as ComponentType));
+export default withAuth(withAdminCoreConfig(AdminNavigationOverview as ComponentType), true);

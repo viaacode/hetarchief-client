@@ -194,4 +194,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AccountMyProfile as ComponentType);
+export default withAuth(AccountMyProfile as ComponentType, true);

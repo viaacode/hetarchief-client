@@ -264,8 +264,8 @@ const MediaCard: FC<MediaCardProps> = ({
 									{showLocallyAvailable && renderLocallyAvailablePill()}
 								</>
 							)}
+							{duration && renderDuration()}
 						</div>
-						{duration && renderDuration()}
 					</>
 			  )
 			: renderNoContent();

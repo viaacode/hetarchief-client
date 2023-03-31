@@ -1,3 +1,86 @@
+@use "sass:color";
 @use "src/styles/abstracts" as *;
 
+$checkbox-size: $spacer-sm;
+
 @include generate-checkbox-radio-styling("checkbox");
+
+// Variants
+.c-checkbox--light {
+	&.c-checkbox {
+		&:focus-within {
+			.c-checkbox__check-icon {
+				&::before {
+					background-color: color.adjust($white, $alpha: -0.71);
+				}
+			}
+		}
+
+		&:hover {
+			.c-checkbox__check-icon {
+				&::before {
+					background-color: color.adjust($white, $alpha: -0.86);
+					transform: translate(-50%, -50%) scale(3.25);
+				}
+			}
+		}
+
+		&:active {
+			.c-checkbox__check-icon {
+				&::before {
+					background-color: color.adjust($teal, $alpha: -0.6);
+				}
+			}
+		}
+	}
+
+	.c-checkbox__check-icon {
+		border-color: $white;
+		background-color: $shade;
+		color: $black;
+
+		&::after {
+			background-color: $white;
+			color: $white;
+		}
+	}
+
+	&.c-checkbox--checked {
+		.c-checkbox__check-icon {
+			border-color: $teal;
+			background-color: $teal;
+
+			&::after,
+			> span {
+				opacity: 1;
+			}
+		}
+	}
+
+	&.c-checkbox--disabled {
+		.c-checkbox__check-icon {
+			border-color: $zinc;
+		}
+
+		&.c-checkbox--checked {
+			.c-checkbox__check-icon {
+				background-color: $zinc;
+			}
+		}
+	}
+}
+
+.c-checkbox--reverse {
+	width: 100%;
+
+	.c-checkbox {
+		&__check-icon {
+			left: calc(100% - $checkbox-size);
+		}
+
+		&__label {
+			padding-left: unset;
+			padding-right: calc($checkbox-size * 2);
+		}
+	}
+}
