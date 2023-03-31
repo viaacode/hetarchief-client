@@ -126,4 +126,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(PermissionsOverview as ComponentType));
+export default withAuth(withAdminCoreConfig(PermissionsOverview as ComponentType), true);

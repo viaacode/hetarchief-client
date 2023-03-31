@@ -182,4 +182,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AccountMyHistory as ComponentType);
+export default withAuth(AccountMyHistory as ComponentType, true);

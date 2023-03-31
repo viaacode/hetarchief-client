@@ -93,4 +93,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(VisitorSpaceCreate as ComponentType);
+export default withAuth(VisitorSpaceCreate as ComponentType, true);
