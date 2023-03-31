@@ -28,6 +28,18 @@ $metadata-collapsed-width: 36vw;
 		grid-template-rows: 1fr min-content;
 	}
 
+	&__back {
+		position: absolute;
+		z-index: get-z-layer("foreground");
+		top: 10rem; // 2rem + 8rem (tab bar height)
+		left: 2rem;
+
+		@include respond-at(md) {
+			top: $spacer-lg;
+			left: $spacer-lg;
+		}
+	}
+
 	&__nav {
 		z-index: get-z-layer("foreground");
 		flex-shrink: 0;
@@ -333,6 +345,7 @@ $metadata-collapsed-width: 36vw;
 		.p-object-detail__video {
 			display: grid;
 			grid-template-rows: 1fr auto;
+			margin-top: 0.1rem; // Prevent wrong alignment (https://github.com/viaacode/hetarchief-client/pull/756#discussion_r1151752068)
 		}
 	}
 

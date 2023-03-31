@@ -134,8 +134,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+	const canRequestMaterial: boolean | null = useHasAllPermission(
+		Permission.CREATE_MATERIAL_REQUESTS
+	);
 	const user = useSelector(selectUser);
-	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isNotKiosk = useHasAnyGroup(
 		Group.CP_ADMIN,
@@ -249,8 +251,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
-	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
 	const hasAccessToVisitorSpace = !!intersection(mediaInfo?.accessThrough, [
 		IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 		IeObjectAccessThrough.VISITOR_SPACE_FULL,
@@ -517,6 +517,28 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		playableUrl,
 		currentRepresentation,
 	]);
+
+	const accessEndDate = useMemo(() => {
+		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
+		const dateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
+
+		if ((!dateDesktop && !dateMobile) || showLinkedSpaceAsHomepage) {
+			return;
+		}
+
+		if (isMobile) {
+			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
+				accessEndDateMobile: dateMobile,
+			});
+		}
+
+		return tHtml(
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
+			{
+				accessEndDate: dateDesktop,
+			}
+		);
+	}, [isMobile, showLinkedSpaceAsHomepage, tHtml, visitRequest?.endAt]);
 
 	/**
 	 * Render
@@ -864,8 +886,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 					{renderMetaDataActions()}
 
-					<h3 className={clsx('u-py-24', 'p-object-detail__title')}>{mediaInfo.name}</h3>
-
 					<MetaDataDescription description={mediaInfo.description || ''} />
 
 					{showAlert && (
@@ -964,33 +984,38 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		return <ObjectPlaceholder {...objectPlaceholder()} />;
 	};
 
-	const getAccessEndDate = () => {
-		if ((!accessEndDate && !accessEndDateMobile) || showLinkedSpaceAsHomepage) {
-			return undefined;
+	const renderNavigationBar = (): ReactNode => {
+		if (!isNil(accessEndDate)) {
+			return (
+				<VisitorSpaceNavigation
+					className="p-object-detail__nav"
+					showBorder={showNavigationBorder}
+					title={mediaInfo?.maintainerName ?? ''}
+					phone={visitorSpace?.contactInfo.telephone || ''}
+					email={visitorSpace?.contactInfo.email || ''}
+					accessEndDate={accessEndDate}
+				/>
+			);
 		}
-		if (isMobile) {
-			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
-				accessEndDateMobile,
-			});
-		}
-		return tHtml(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
-			{
-				accessEndDate,
-			}
+
+		// Only show the back button on the media tab (mobile)
+		const showBackButton = (isMobile && activeTab === ObjectDetailTabs.Media) || !isMobile;
+
+		return (
+			showBackButton && (
+				<Button
+					className={clsx('p-object-detail__back')}
+					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+					onClick={() => window.history.back()}
+					variants={['white', 'xs']}
+				/>
+			)
 		);
 	};
 
 	const renderObjectDetail = () => (
 		<>
-			<VisitorSpaceNavigation
-				className="p-object-detail__nav"
-				showBorder={showNavigationBorder}
-				title={mediaInfo?.maintainerName ?? ''}
-				phone={visitorSpace?.contactInfo.telephone || ''}
-				email={visitorSpace?.contactInfo.email || ''}
-				showAccessEndDate={getAccessEndDate()}
-			/>
+			{renderNavigationBar()}
 			<ScrollableTabs
 				className="p-object-detail__tabs"
 				variants={['dark']}
@@ -1062,7 +1087,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					onSubmit={async () => onCloseBlade()}
 				/>
 			)}
-			{mediaInfo && visitorSpace && canRequestMaterial && (
+			{mediaInfo && visitorSpace && isNotKiosk && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
