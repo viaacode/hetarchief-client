@@ -158,8 +158,8 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	&__header-duration {
 		position: absolute;
-		right: $spacer-sm;
-		margin-top: -$spacer-md;
+		bottom: 0;
+		right: 0;
 		font-size: $font-size-sm;
 		background-color: $white;
 		color: $zinc;

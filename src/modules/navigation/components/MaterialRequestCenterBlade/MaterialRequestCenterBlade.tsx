@@ -158,7 +158,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	const renderMaterialRequest = (item: MaterialRequest) => {
 		return (
-			<div className={styles['c-material-request-center-blade__material-container']}>
+			<div
+				key={item.id}
+				className={styles['c-material-request-center-blade__material-container']}
+			>
 				<a
 					tabIndex={-1}
 					href={`/zoeken/${item.maintainerSlug}/${item.objectSchemaIdentifier}`}
@@ -229,14 +232,14 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			mappedRequests &&
 			// Ward: render each unique maintainer
 			Object.keys(mappedRequests).map((key) => (
-				<>
+				<div key={key}>
 					{renderMaintainer(mappedRequests[key][0], mappedRequests[key].length)}
 
 					{/* Ward: render all materialRequests of current maintainer, sorted by objectSchemaName */}
 					{mappedRequests[key]
 						.sort((a, b) => a.objectSchemaName.localeCompare(b.objectSchemaName))
 						.map((item) => renderMaterialRequest(item))}
-				</>
+				</div>
 			))
 		);
 	};
