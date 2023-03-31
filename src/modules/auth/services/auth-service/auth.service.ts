@@ -7,6 +7,7 @@ import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import { CheckLoginResponse } from './auth.service.types';
 
@@ -31,7 +32,8 @@ export class AuthService {
 
 		// Redirect /slug to the search page with filter
 		if (slug) {
-			originalPath = `/${ROUTE_PARTS.search}?${ROUTE_PARTS.maintainer}=${slug}`;
+			// TODO split backend filter names (VisitorSpaceFilterId) from filter names in the url (create a new enum for those)
+			originalPath = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${slug}`;
 		}
 		if ((originalPath || '') === ROUTES.home) {
 			originalPath = `/${ROUTE_PARTS.visit}`;
