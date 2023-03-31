@@ -58,10 +58,10 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 				});
 				toastService.notify({
 					maxLines: 3,
-					title: tText('pages/account/map-delen/folder-id/index___gelukt'), //change to je map is gedeeld
-					description: tText(
-						'pages/account/map-delen/folder-id/index___gelukt-beschrijving' //change to je map is verstuurd naar ...
-					),
+					title: tText('pages/account/map-delen/folder-id/index___map-is-gedeeld'),
+					description: `${tText(
+						'pages/account/map-delen/folder-id/index___map-is-verstuurd-naar'
+					)} ${emailInputValue}`,
 				});
 				handleClose();
 			}
