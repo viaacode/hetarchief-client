@@ -1,3 +1,4 @@
+import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect } from 'react';
@@ -46,9 +47,9 @@ const AccountSharedFolder: NextPage<DefaultSeoInfo> = () => {
 					}
 					// Ward: navigate to shared folder
 					await router.replace(
-						`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}/${response.folderName}--${
-							response.folderId.split('-')[0]
-						}`
+						`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}/${kebabCase(
+							response.folderName
+						)}--${response.folderId.split('-')[0]}`
 					);
 				} catch (err) {
 					toastService.notify({
