@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringify } from 'query-string';
+import { stringify, stringifyUrl } from 'query-string';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
@@ -158,9 +158,12 @@ const AppLayout: FC = ({ children }) => {
 
 	const onLoginRegisterClick = useCallback(async () => {
 		return router.replace(
-			`${ROUTES.home}?${stringify({
-				[SHOW_AUTH_QUERY_KEY]: '1',
-			})}`
+			stringifyUrl({
+				url: router.asPath,
+				query: {
+					[SHOW_AUTH_QUERY_KEY]: '1',
+				},
+			})
 		);
 	}, [router]);
 
