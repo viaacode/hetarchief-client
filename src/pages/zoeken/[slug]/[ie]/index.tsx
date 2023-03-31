@@ -755,43 +755,40 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		);
 	};
 
-	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => {
-		return (
-			<div className="p-object-detail__metadata-maintainer-title">
-				<p className="p-object-detail__metadata-label">
-					{tText('modules/ie-objects/const/index___aanbieder')}
-				</p>
-				<p className="p-object-detail__metadata-pill">
-					<TagList
-						className="u-pt-12"
-						tags={mapKeywordsToTags([maintainerName])}
-						onTagClicked={(keyword: string | number) => {
-							router.push(
-								stringifyUrl({
-									url: `/${ROUTE_PARTS.search}`,
-									query: {
-										[VisitorSpaceFilterId.Maintainers]: maintainerName,
-										search: keyword,
-									},
-								})
-							);
-						}}
-						variants={['clickable', 'silver', 'medium']}
+	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => (
+		<div className="p-object-detail__metadata-maintainer-title">
+			<p className="p-object-detail__metadata-label">
+				{tText('modules/ie-objects/const/index___aanbieder')}
+			</p>
+			<p className="p-object-detail__metadata-pill">
+				<TagList
+					className="u-pt-12"
+					tags={mapKeywordsToTags([maintainerName])}
+					onTagClicked={(keyword: string | number) => {
+						router.push(
+							stringifyUrl({
+								url: `/${ROUTE_PARTS.search}`,
+								query: {
+									[VisitorSpaceFilterId.Maintainers]: [`${keyword}`],
+								},
+							})
+						);
+					}}
+					variants={['clickable', 'silver', 'medium']}
+				/>
+			</p>
+			{maintainerLogo && (
+				<div className="p-object-detail__metadata-logo">
+					<Image
+						src={maintainerLogo}
+						alt={`Logo ${maintainerName}`}
+						layout="fill"
+						objectFit="contain"
 					/>
-				</p>
-				{maintainerLogo && (
-					<div className="p-object-detail__metadata-logo">
-						<Image
-							src={maintainerLogo}
-							alt={`Logo ${maintainerName}`}
-							layout="fill"
-							objectFit="contain"
-						/>
-					</div>
-				)}
-			</div>
-		);
-	};
+				</div>
+			)}
+		</div>
+	);
 
 	const renderMetaDataActions = (): ReactNode => {
 		const dynamicActions = MEDIA_ACTIONS(
