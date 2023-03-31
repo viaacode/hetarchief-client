@@ -37,7 +37,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		resolver: yupResolver(MAINTAINER_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
-	console.log(useSelector(selectIeObjectsFilterOptions));
+
 	const buckets = (
 		useSelector(selectIeObjectsFilterOptions)?.['schema_maintainer.schema_name']?.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
