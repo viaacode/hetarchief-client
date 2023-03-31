@@ -1,4 +1,4 @@
-import { Permission } from '@account/const';
+import { GroupName, Permission } from '@account/const';
 
 export enum Idp {
 	HETARCHIEF = 'HETARCHIEF',
@@ -12,7 +12,7 @@ export interface User {
 	lastName: string;
 	fullName: string;
 	groupId: string;
-	groupName: string;
+	groupName: GroupName;
 	id: string;
 	idp: Idp;
 	maintainerId: string | null;
