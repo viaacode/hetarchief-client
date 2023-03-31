@@ -329,4 +329,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(VisitorSpacesOverview as ComponentType);
+export default withAuth(VisitorSpacesOverview as ComponentType, true);

@@ -11,4 +11,7 @@ export interface MetadataItem {
 	title: string | ReactNode;
 	data: string | ReactNode;
 	className?: string;
+	customData?: boolean;
+	customTitle?: boolean;
+	isDisabled?: () => boolean;
 }

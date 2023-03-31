@@ -10,6 +10,7 @@ import {
 	FlowPlayerProps,
 	MenuContent,
 	TabProps,
+	TagList,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
@@ -20,6 +21,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
+import { stringifyUrl } from 'query-string';
 import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
@@ -32,12 +34,14 @@ import {
 	DynamicActionMenu,
 	MediaObject,
 	Metadata,
+	MetadataItem,
 	ObjectPlaceholder,
 	RelatedObject,
 	RelatedObjectsBlade,
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import {
+	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	formatErrorPlaceholder,
@@ -65,7 +69,7 @@ import {
 	MetadataExportFormats,
 	ObjectDetailTabs,
 } from '@ie-objects/types';
-import { isInAFolder, mapKeywordsToTagList } from '@ie-objects/utils';
+import { isInAFolder, mapKeywordsToTagList, mapKeywordsToTags } from '@ie-objects/utils';
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
@@ -78,7 +82,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { MetaDataDescription } from '@shared/components/MetaDataDescription';
-import { ROUTES } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -102,6 +106,7 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -129,8 +134,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+	const canRequestMaterial: boolean | null = useHasAllPermission(
+		Permission.CREATE_MATERIAL_REQUESTS
+	);
 	const user = useSelector(selectUser);
-	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isNotKiosk = useHasAnyGroup(
 		Group.CP_ADMIN,
@@ -244,16 +251,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const accessEndDate = formatMediumDateWithTime(asDate(visitRequest?.endAt));
-	const accessEndDateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
-	const canReport = isNotKiosk;
+	const hasAccessToVisitorSpace = !!intersection(mediaInfo?.accessThrough, [
+		IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+		IeObjectAccessThrough.VISITOR_SPACE_FULL,
+	]).length;
 	const showMetadataExportDropdown =
 		canDownloadMetadata &&
 		visitRequest?.status === VisitStatus.APPROVED &&
-		intersection(mediaInfo?.accessThrough, [
-			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
-			IeObjectAccessThrough.VISITOR_SPACE_FULL,
-		]).length;
+		hasAccessToVisitorSpace;
 	const canRequestAccess =
 		!!accessibleVisitorSpaces?.find(
 			(space) => space.maintainerId === mediaInfo?.maintainerId
@@ -513,6 +518,28 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		currentRepresentation,
 	]);
 
+	const accessEndDate = useMemo(() => {
+		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
+		const dateMobile = formatSameDayTimeOrDate(asDate(visitRequest?.endAt));
+
+		if ((!dateDesktop && !dateMobile) || showLinkedSpaceAsHomepage) {
+			return;
+		}
+
+		if (isMobile) {
+			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
+				accessEndDateMobile: dateMobile,
+			});
+		}
+
+		return tHtml(
+			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
+			{
+				accessEndDate: dateDesktop,
+			}
+		);
+	}, [isMobile, showLinkedSpaceAsHomepage, tHtml, visitRequest?.endAt]);
+
 	/**
 	 * Render
 	 */
@@ -664,21 +691,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		items: MediaObject[],
 		isHidden = false
 	): ReactNode => (
-		<ul
-			className={`
-				u-list-reset p-object-detail__metadata-list
-				p-object-detail__metadata-list--${type}
-				p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
-			`}
-		>
-			{items.map((item, index) => {
-				return (
-					<Fragment key={`${type}-object-${item.id}-${index}`}>
-						{renderCard(item, isHidden)}
-					</Fragment>
-				);
-			})}
-		</ul>
+		<dd>
+			{
+				<ul
+					className={`
+					u-list-reset p-object-detail__metadata-list
+					p-object-detail__metadata-list--${type}
+					p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
+				`}
+				>
+					{items.map((item, index) => {
+						return (
+							<Fragment key={`${type}-object-${item.id}-${index}`}>
+								{renderCard(item, isHidden)}
+							</Fragment>
+						);
+					})}
+				</ul>
+			}
+		</dd>
 	);
 
 	const renderExportDropdown = () => {
@@ -724,11 +755,49 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		);
 	};
 
+	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => {
+		return (
+			<div className="p-object-detail__metadata-maintainer-title">
+				<p className="p-object-detail__metadata-label">
+					{tText('modules/ie-objects/const/index___aanbieder')}
+				</p>
+				<p className="p-object-detail__metadata-pill">
+					<TagList
+						className="u-pt-12"
+						tags={mapKeywordsToTags([maintainerName])}
+						onTagClicked={(keyword: string | number) => {
+							router.push(
+								stringifyUrl({
+									url: `/${ROUTE_PARTS.search}`,
+									query: {
+										[VisitorSpaceFilterId.Maintainers]: maintainerName,
+										search: keyword,
+									},
+								})
+							);
+						}}
+						variants={['clickable', 'silver', 'medium']}
+					/>
+				</p>
+				{maintainerLogo && (
+					<div className="p-object-detail__metadata-logo">
+						<Image
+							src={maintainerLogo}
+							alt={`Logo ${maintainerName}`}
+							layout="fill"
+							objectFit="contain"
+						/>
+					</div>
+				)}
+			</div>
+		);
+	};
+
 	const renderMetaDataActions = (): ReactNode => {
 		const dynamicActions = MEDIA_ACTIONS(
 			canManageFolders,
 			isInAFolder(collections, mediaInfo?.schemaIdentifier),
-			canReport,
+			isNotKiosk,
 			!!canRequestAccess,
 			canRequestMaterial
 		);
@@ -743,7 +812,70 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		);
 	};
 
+	const renderMaintainerMetaData = ({
+		maintainerDescription,
+		maintainerSiteUrl,
+	}: IeObject): ReactNode => (
+		<div className="p-object-detail__metadata-maintainer-data">
+			{maintainerDescription && (
+				<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
+			)}
+			{maintainerSiteUrl && (
+				<p className="p-object-detail__metadata-link">
+					<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
+						{maintainerSiteUrl}
+					</a>
+					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+				</p>
+			)}
+		</div>
+	);
+
+	const getCustomTitleRenderFn = (
+		field: CustomMetaDataFields,
+		mediaInfo: IeObject
+	): ReactNode => {
+		switch (field) {
+			case CustomMetaDataFields.Maintainer:
+				return renderMaintainerMetaTitle(mediaInfo);
+
+			default:
+				return null;
+		}
+	};
+
+	const getCustomDataRenderFn = (field: CustomMetaDataFields, mediaInfo: IeObject): ReactNode => {
+		switch (field) {
+			case CustomMetaDataFields.Maintainer:
+				return renderMaintainerMetaData(mediaInfo);
+
+			default:
+				return null;
+		}
+	};
+
 	const renderMetaData = () => {
+		if (isNil(mediaInfo)) {
+			return;
+		}
+
+		const showAlert = !mediaInfo.description;
+		const showExtendedMaintainer = !hasAccessToVisitorSpace && isNotKiosk;
+		const metaDataFields = METADATA_FIELDS(mediaInfo, showExtendedMaintainer)
+			.filter(({ isDisabled }: MetadataItem): boolean => !isDisabled?.())
+			.map(
+				(field: MetadataItem): MetadataItem => ({
+					...field,
+					title: field.customTitle
+						? getCustomTitleRenderFn(field.title as CustomMetaDataFields, mediaInfo)
+						: field.title,
+					data: field.customData
+						? getCustomDataRenderFn(field.data as CustomMetaDataFields, mediaInfo)
+						: field.data,
+				})
+			)
+			.filter(({ data }: MetadataItem): boolean => !!data);
+
 		return (
 			<div>
 				<div className="p-object-detail__metadata-content">
@@ -754,9 +886,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 					{renderMetaDataActions()}
 
-					<MetaDataDescription description={mediaInfo?.description || ''} />
+					<MetaDataDescription description={mediaInfo.description || ''} />
 
-					{!mediaInfo?.description && (
+					{showAlert && (
 						<Alert
 							className="c-Alert__margin-bottom"
 							icon={<Icon name={IconNamesLight.Info} />}
@@ -767,35 +899,30 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						/>
 					)}
 				</div>
-
-				{mediaInfo && (
-					<>
-						<Metadata
-							className="p-object-detail__metadata-component"
-							metadata={METADATA_FIELDS(mediaInfo)}
-						/>
-						{(!!similar.length || !!mediaInfo.keywords?.length) && (
-							<Metadata
-								className="p-object-detail__metadata-component"
-								metadata={[
-									{
-										title: tHtml(
-											'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
-										),
-										data: mapKeywordsToTagList(mediaInfo.keywords),
-									},
-									{
-										title: tHtml('pages/slug/ie/index___ook-interessant'),
-										data: similar.length
-											? renderMetadataCards('similar', similar)
-											: null,
-										className: 'u-pb-0',
-									},
-								].filter((field) => !!field.data)}
-								disableContainerQuery
-							/>
-						)}
-					</>
+				<Metadata
+					className="p-object-detail__metadata-component"
+					metadata={metaDataFields}
+				/>
+				{(!!similar.length || !!mediaInfo.keywords?.length) && (
+					<Metadata
+						className="p-object-detail__metadata-component"
+						metadata={[
+							{
+								title: tHtml(
+									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
+								),
+								data: mapKeywordsToTagList(mediaInfo.keywords),
+							},
+							{
+								title: tHtml('pages/slug/ie/index___ook-interessant'),
+								data: similar.length
+									? renderMetadataCards('similar', similar)
+									: null,
+								className: 'u-pb-0',
+							},
+						].filter((field) => !!field.data)}
+						disableContainerQuery
+					/>
 				)}
 			</div>
 		);
@@ -857,33 +984,38 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		return <ObjectPlaceholder {...objectPlaceholder()} />;
 	};
 
-	const getAccessEndDate = () => {
-		if ((!accessEndDate && !accessEndDateMobile) || showLinkedSpaceAsHomepage) {
-			return undefined;
+	const renderNavigationBar = (): ReactNode => {
+		if (!isNil(accessEndDate)) {
+			return (
+				<VisitorSpaceNavigation
+					className="p-object-detail__nav"
+					showBorder={showNavigationBorder}
+					title={mediaInfo?.maintainerName ?? ''}
+					phone={visitorSpace?.contactInfo.telephone || ''}
+					email={visitorSpace?.contactInfo.email || ''}
+					accessEndDate={accessEndDate}
+				/>
+			);
 		}
-		if (isMobile) {
-			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
-				accessEndDateMobile,
-			});
-		}
-		return tHtml(
-			'pages/bezoekersruimte/visitor-space-slug/object-id/index___toegang-tot-access-end-date',
-			{
-				accessEndDate,
-			}
+
+		// Only show the back button on the media tab (mobile)
+		const showBackButton = (isMobile && activeTab === ObjectDetailTabs.Media) || !isMobile;
+
+		return (
+			showBackButton && (
+				<Button
+					className={clsx('p-object-detail__back')}
+					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+					onClick={() => window.history.back()}
+					variants={['white', 'xs']}
+				/>
+			)
 		);
 	};
 
 	const renderObjectDetail = () => (
 		<>
-			<VisitorSpaceNavigation
-				className="p-object-detail__nav"
-				showBorder={showNavigationBorder}
-				title={mediaInfo?.maintainerName ?? ''}
-				phone={visitorSpace?.contactInfo.telephone || ''}
-				email={visitorSpace?.contactInfo.email || ''}
-				showAccessEndDate={getAccessEndDate()}
-			/>
+			{renderNavigationBar()}
 			<ScrollableTabs
 				className="p-object-detail__tabs"
 				variants={['dark']}
@@ -955,7 +1087,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					onSubmit={async () => onCloseBlade()}
 				/>
 			)}
-			{mediaInfo && visitorSpace && canRequestMaterial && (
+			{mediaInfo && visitorSpace && isNotKiosk && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}

@@ -71,24 +71,14 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 	const onConfirmClick = () => {
 		if (user) {
 			TosService.acceptTos(user?.id).then((updated) => {
-				dispatch(checkLoginAction());
-
-				if (updated.acceptedTosAt) {
-					// Execute in separate cycle
-					setTimeout(() =>
-						router.push(query[REDIRECT_TO_QUERY_KEY]).then(() => {
-							toastService.notify({
-								title: tHtml(
-									'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'
-								),
-								description: tHtml(
-									'pages/gebruiksvoorwaarden/index___je-geniet-nu-van-volledige-toegang-tot-het-platform'
-								),
-								maxLines: 2,
-							});
-						})
-					);
-				}
+				router.push(query[REDIRECT_TO_QUERY_KEY]);
+				toastService.notify({
+					title: tHtml('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'),
+					description: tHtml(
+						'pages/gebruiksvoorwaarden/index___je-geniet-nu-van-volledige-toegang-tot-het-platform'
+					),
+					maxLines: 2,
+				});
 			});
 		}
 	};
