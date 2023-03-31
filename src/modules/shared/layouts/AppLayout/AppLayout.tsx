@@ -223,7 +223,7 @@ const AppLayout: FC = ({ children }) => {
 			user?.permissions || [],
 			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
 			isMobile,
-			user?.maintainerId || null
+			user?.visitorSpaceSlug || null
 		);
 
 		const staticItems = [

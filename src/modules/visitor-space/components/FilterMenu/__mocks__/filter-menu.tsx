@@ -3,7 +3,7 @@ import { TagOption } from '@meemoo/react-components';
 import { IconNamesLight } from '@shared/components';
 
 import { VisitorSpaceSort } from '../../../types';
-import { FilterMenuFilterOption, FilterMenuSortOption } from '../FilterMenu.types';
+import { FilterMenuFilterOption, FilterMenuSortOption, FilterMenuType } from '../FilterMenu.types';
 
 export const sortOptionsMock: FilterMenuSortOption[] = [
 	{
@@ -17,27 +17,32 @@ export const filterOptionsMock: FilterMenuFilterOption[] = [
 		id: 'period',
 		label: 'Periode',
 		form: () => null,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: 'quality',
 		label: 'Kwaliteit',
 		form: () => null,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: 'source',
 		label: 'Bron',
 		form: () => null,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: 'rights',
 		label: 'Rechten',
 		form: () => null,
+		type: FilterMenuType.Modal,
 	},
 	{
 		id: 'advanced',
 		label: 'Geavanceerd',
 		icon: IconNamesLight.DotsHorizontal,
 		form: () => null,
+		type: FilterMenuType.Modal,
 	},
 ];
 

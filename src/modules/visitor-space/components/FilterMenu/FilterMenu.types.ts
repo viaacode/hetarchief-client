@@ -1,10 +1,15 @@
 import { OrderDirection } from '@meemoo/react-components';
 import { FC } from 'react';
 
-import { IconProps, ToggleOption } from '@shared/components';
+import { IconName, ToggleOption } from '@shared/components';
 import { DefaultComponentProps, SortObject } from '@shared/types';
 
-import { DefaultFilterFormProps, TagIdentity, VisitorSpaceSort } from '../../types';
+import {
+	DefaultFilterFormProps,
+	InlineFilterFormProps,
+	TagIdentity,
+	VisitorSpaceSort,
+} from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
 	activeSort?: SortObject;
@@ -30,11 +35,17 @@ export interface FilterMenuSortOption {
 	orderDirection?: OrderDirection;
 }
 
+export enum FilterMenuType {
+	Modal,
+	Checkbox,
+}
+
 export interface FilterMenuFilterOption {
 	id: string;
-	icon?: IconProps['name'];
+	icon?: IconName;
 	label: string;
-	form: FC<DefaultFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
+	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
+	type: FilterMenuType;
 	isDisabled?: () => boolean;
 }
 
