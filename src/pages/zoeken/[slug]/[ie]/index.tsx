@@ -237,8 +237,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	// spaces
+	const canViewAllSpaces = useHasAllPermission(Permission.READ_ALL_SPACES);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
-		canViewAllSpaces: user?.permissions.includes(Permission.READ_ALL_SPACES) ?? false,
+		canViewAllSpaces,
 	});
 
 	/**
