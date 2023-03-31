@@ -2,22 +2,30 @@ import {
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
+	Visit,
 } from '@shared/types';
 
 import { VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
 import { VisitorSpaceFilterId, VisitorSpaceQueryParams } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
-export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => [
-	// Visitor space
-	{
+export const mapMaintainerToElastic = (
+	query: VisitorSpaceQueryParams,
+	activeVisitorSpace: Visit | undefined
+): IeObjectsSearchFilter => {
+	const maintainerId =
+		activeVisitorSpace?.spaceSlug === query?.[VisitorSpaceFilterId.Maintainer]
+			? activeVisitorSpace?.spaceMaintainerId
+			: '';
+
+	return {
 		field: IeObjectsSearchFilterField.MAINTAINER,
 		operator: IeObjectsSearchOperator.IS,
-		value:
-			query[VisitorSpaceFilterId.Maintainer] !== null
-				? query[VisitorSpaceFilterId.Maintainer]?.toString()
-				: '',
-	},
+		value: maintainerId,
+	};
+};
+
+export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => [
 	// Searchbar
 	{
 		field: IeObjectsSearchFilterField.QUERY,
