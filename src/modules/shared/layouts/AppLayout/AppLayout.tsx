@@ -83,7 +83,10 @@ const AppLayout: FC = ({ children }) => {
 	const windowSize = useWindowSize();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.xxl);
 	const showBorder = useSelector(selectShowNavigationBorder);
-	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
+	const canViewAllSpaces = useHasAllPermission(Permission.READ_ALL_SPACES);
+	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
+		canViewAllSpaces,
+	});
 	const { data: materialRequests } = useGetPendingMaterialRequests({});
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
