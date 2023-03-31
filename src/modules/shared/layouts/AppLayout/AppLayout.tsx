@@ -1,7 +1,6 @@
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
-import { isWithinInterval } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
@@ -67,7 +66,7 @@ import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import packageJson from '../../../../../package.json';
 
-import { useGetActiveMaintenanceAlerts } from 'modules/maintenance-alerts/hooks/get-maintenance-alerts';
+import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
@@ -100,7 +99,7 @@ const AppLayout: FC = ({ children }) => {
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
 		'HET_ARCHIEF.alerts.ignoreUntil',
-		JSON.stringify({})
+		'{}'
 	);
 
 	const setNotificationsOpen = useCallback(
@@ -260,6 +259,7 @@ const AppLayout: FC = ({ children }) => {
 		linkedSpaceOrId,
 		isMobile,
 		isLoggedIn,
+		user?.maintainerId,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
