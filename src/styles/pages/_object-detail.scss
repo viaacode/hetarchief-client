@@ -289,6 +289,10 @@ $metadata-collapsed-width: 36vw;
 
 		&-data {
 			.p-object-detail__metadata {
+				&-description {
+					margin-top: $spacer-xs;
+				}
+
 				&-link {
 					display: inline-flex;
 					align-items: center;
