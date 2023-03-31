@@ -20,8 +20,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { parseUrl } from 'query-string';
-import { Fragment, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
@@ -132,7 +131,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 	const user = useSelector(selectUser);
 	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
-	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isNotKiosk = useHasAnyGroup(
 		Group.CP_ADMIN,
@@ -389,6 +387,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			case MediaActions.RequestAccess:
 				setActiveBlade(MediaActions.RequestAccess);
 				break;
+			case MediaActions.RequestMaterial:
+				onRequestMaterialClick();
+				break;
 		}
 	};
 
@@ -425,9 +426,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				.replaceAll('{title}', encodeURIComponent(mediaInfo?.name || ''))
 				.replaceAll('{title_serie}', encodeURIComponent(mediaInfo?.series?.[0] || ''));
 			window.open(resolvedFormUrl, '_blank');
-		} else {
-			setActiveBlade(MediaActions.RequestMaterial);
+			return;
 		}
+		setActiveBlade(MediaActions.RequestMaterial);
 	};
 
 	const handleOnPlay = () => {
@@ -723,6 +724,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		);
 	};
 
+	const renderMetaDataActions = (): ReactNode => {
+		const dynamicActions = MEDIA_ACTIONS(
+			canManageFolders,
+			isInAFolder(collections, mediaInfo?.schemaIdentifier),
+			canReport,
+			!!canRequestAccess,
+			canRequestMaterial
+		);
+
+		return (
+			<div className="u-pb-24 p-object-detail__actions">
+				<div className="p-object-detail__primary-actions">
+					{showMetadataExportDropdown && renderExportDropdown()}
+					<DynamicActionMenu {...dynamicActions} onClickAction={onClickAction} />
+				</div>
+			</div>
+		);
+	};
+
 	const renderMetaData = () => {
 		return (
 			<div>
@@ -732,45 +752,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 					<MetaDataDescription description={mediaInfo?.description || ''} />
 
-					<div className="u-pb-24 p-object-detail__actions">
-						<div className="p-object-detail__primary-actions">
-							{showMetadataExportDropdown && renderExportDropdown()}
-							{canRequestMaterial && (
-								<Button
-									className="p-object-detail__request-material"
-									iconStart={<Icon name={IconNamesLight.Shopping} aria-hidden />}
-									onClick={onRequestMaterialClick}
-									aria-label={tText(
-										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-									)}
-									title={tText(
-										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-									)}
-								>
-									<span className="u-text-ellipsis u-display-none u-display-block:md">
-										{tText(
-											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-										)}
-									</span>
-									<span className="u-text-ellipsis u-display-none:md">
-										{tText(
-											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-										)}
-									</span>
-								</Button>
-							)}
-						</div>
+					{renderMetaDataActions()}
 
-						<DynamicActionMenu
-							{...MEDIA_ACTIONS(
-								canManageFolders,
-								isInAFolder(collections, mediaInfo?.schemaIdentifier),
-								canReport,
-								!!canRequestAccess
-							)}
-							onClickAction={onClickAction}
-						/>
-					</div>
 					{!mediaInfo?.description && (
 						<Alert
 							className="c-Alert__margin-bottom"
