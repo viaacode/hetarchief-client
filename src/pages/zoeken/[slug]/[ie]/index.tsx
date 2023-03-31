@@ -426,9 +426,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				.replaceAll('{title}', encodeURIComponent(mediaInfo?.name || ''))
 				.replaceAll('{title_serie}', encodeURIComponent(mediaInfo?.series?.[0] || ''));
 			window.open(resolvedFormUrl, '_blank');
-			return;
+		} else {
+			setActiveBlade(MediaActions.RequestMaterial);
 		}
-		setActiveBlade(MediaActions.RequestMaterial);
 	};
 
 	const handleOnPlay = () => {
@@ -748,11 +748,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			<div>
 				<div className="p-object-detail__metadata-content">
 					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
-					<h3 className={clsx('u-py-24', 'p-object-detail__title')}>{mediaInfo?.name}</h3>
-
-					<MetaDataDescription description={mediaInfo?.description || ''} />
+					<h3 className={clsx('u-pt-24 u-pb-32', 'p-object-detail__title')}>
+						{mediaInfo?.name}
+					</h3>
 
 					{renderMetaDataActions()}
+
+					<MetaDataDescription description={mediaInfo?.description || ''} />
 
 					{!mediaInfo?.description && (
 						<Alert
