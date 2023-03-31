@@ -111,7 +111,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				<DropdownButton>
 					<Button
 						className={styles['c-dynamic-action-menu__dropdown-button']}
-						icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
+						icon={<Icon name={IconNamesLight.DotsHorizontal} aria-hidden />}
 						aria-label={tText(
 							'modules/ie-objects/components/dynamic-action-menu/dynamic-action-menu___meer-acties'
 						)}
