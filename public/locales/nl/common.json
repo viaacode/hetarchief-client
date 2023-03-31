@@ -21,6 +21,7 @@
   "modules/account/components/material-request-detail-blade/material-requests___emailadres": "Emailadres",
   "modules/account/components/material-request-detail-blade/material-requests___hoedanigheid": "Hoedanigheid",
   "modules/account/components/material-request-detail-blade/material-requests___naam": "Naam",
+  "modules/account/components/material-request-detail-blade/material-requests___onbepaald": "Onbepaald",
   "modules/account/components/material-request-detail-blade/material-requests___organisatie": "Organisatie",
   "modules/account/components/material-request-detail-blade/material-requests___reden": "Reden van aanvraag",
   "modules/account/components/material-request-detail-blade/material-requests___sluit": "Sluit",
