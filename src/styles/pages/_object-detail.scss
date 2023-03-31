@@ -268,7 +268,7 @@ $metadata-collapsed-width: 36vw;
 			grid-template-rows: repeat(2, min-content);
 
 			.p-object-detail__metadata {
-				&-name {
+				&-label {
 					grid-row: 1;
 				}
 
@@ -283,6 +283,13 @@ $metadata-collapsed-width: 36vw;
 					width: 100%;
 					height: auto;
 					position: relative;
+
+					span img {
+						height: auto !important;
+						min-height: unset !important;
+						max-height: unset !important;
+						margin-top: 0 !important;
+					}
 				}
 			}
 		}

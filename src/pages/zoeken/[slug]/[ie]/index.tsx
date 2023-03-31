@@ -733,7 +733,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => {
 		return (
 			<div className="p-object-detail__metadata-maintainer-title">
-				<p className="p-object-detail__metadata-name">
+				<p className="p-object-detail__metadata-label">
 					{tText('modules/ie-objects/const/index___aanbieder')}
 				</p>
 				<p className="p-object-detail__metadata-pill">
