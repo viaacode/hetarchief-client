@@ -1,14 +1,27 @@
-import { Badge, Card, Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
+import {
+	Badge,
+	Button,
+	Card,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
-import { FC, MouseEvent, ReactNode } from 'react';
+import Link from 'next/link';
+import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import { useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
+import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
-import { DropdownMenu, IconNamesLight } from '@shared/components';
+import { DropdownMenu, IconNamesLight, Modal } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { toastService } from '@shared/services/toast-service';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -34,9 +47,70 @@ const MediaCard: FC<MediaCardProps> = ({
 	icon,
 	isKeyUser,
 	meemooIdentifier,
+	showLocallyAvailable = false,
+	link,
+	maintainerSlug,
 	hasTempAccess,
 }) => {
 	const { tText } = useTranslation();
+
+	const user = useSelector(selectUser);
+	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+
+	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
+
+	const wrapInLink = (children: ReactNode) => {
+		if (link && !showLocallyAvailable) {
+			return (
+				<Link key={id} href={link}>
+					<a className="u-text-no-decoration" aria-label={id}>
+						{children}
+					</a>
+				</Link>
+			);
+		}
+
+		return children;
+	};
+
+	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
+		try {
+			if (!user || !maintainerSlug) {
+				toastService.notify({
+					title: tText(
+						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd'
+					),
+					description: tText(
+						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
+					),
+				});
+				return;
+			}
+
+			await createVisitRequest({
+				acceptedTos: values.acceptTerms,
+				reason: values.requestReason,
+				visitorSpaceSlug: maintainerSlug as string,
+				timeframe: values.visitTime,
+			});
+
+			setIsRequestAccessBladeOpen(false);
+		} catch (err) {
+			console.error({
+				message: 'Failed to create visit request',
+				error: err,
+				info: values,
+			});
+			toastService.notify({
+				title: tText('modules/shared/components/media-card/media-card___er-ging-iets-mis'),
+				description: tText(
+					'modules/shared/components/media-card/media-card___er-ging-iets-mis-beschrijving'
+				),
+			});
+		}
+	};
+
 	const renderDropdown = () =>
 		actions ? (
 			<DropdownMenu
@@ -64,7 +138,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
-			return (
+			return wrapInLink(
 				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
 					{keywords?.length ? highlighted(title ?? '') : title}
 				</b>
@@ -75,7 +149,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			console.warn('[WARN][MediaCard] Title could not be highlighted.');
 		}
 
-		return title;
+		return wrapInLink(title);
 	};
 
 	const renderDescription = (): ReactNode => {
@@ -92,7 +166,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const renderSubTitle = (): ReactNode => {
-		return meemooIdentifier;
+		return wrapInLink(meemooIdentifier);
 	};
 
 	const renderCaption = (): ReactNode => {
@@ -110,7 +184,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return keywords?.length ? highlighted(subtitle) : subtitle;
+		return keywords?.length ? wrapInLink(highlighted(subtitle)) : wrapInLink(subtitle);
 	};
 
 	const renderNoContentIcon = () => (
@@ -130,6 +204,8 @@ const MediaCard: FC<MediaCardProps> = ({
 		) : (
 			<div className={clsx(styles['c-media-card__no-content-wrapper'])}>
 				{renderNoContentIcon()}
+				{showLocallyAvailable && renderLocallyAvailablePill()}
+				{duration && renderDuration()}
 			</div>
 		);
 
@@ -155,27 +231,44 @@ const MediaCard: FC<MediaCardProps> = ({
 		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
 	};
 
-	const renderImage = (imgPath: string | undefined) =>
-		imgPath ? (
-			<div
-				className={clsx(
-					styles['c-media-card__header-wrapper'],
-					styles[`c-media-card__header-wrapper--${view}`]
-				)}
-			>
-				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
-				{!isNil(icon) && (
-					<>
-						<div className={clsx(styles['c-media-card__header-icon'])}>
-							<Icon name={icon} />
-						</div>
-						{duration && renderDuration()}
-					</>
+	const renderLocallyAvailablePill = () => {
+		return (
+			<div className={styles['c-media-card__locally-available-pill']}>
+				<Icon
+					name={IconNamesLight.Forbidden}
+					className={styles['c-media-card__locally-available-pill--icon']}
+				/>
+				{tText(
+					'modules/shared/components/media-card/media-card___enkel-ter-plaatse-beschikbaar'
 				)}
 			</div>
-		) : (
-			renderNoContent()
 		);
+	};
+
+	const renderImage = (imgPath: string | undefined) =>
+		imgPath
+			? wrapInLink(
+					<>
+						<div
+							className={clsx(
+								styles['c-media-card__header-wrapper'],
+								styles[`c-media-card__header-wrapper--${view}`]
+							)}
+						>
+							<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+							{!isNil(icon) && (
+								<>
+									<div className={clsx(styles['c-media-card__header-icon'])}>
+										<Icon name={icon} />
+									</div>
+									{showLocallyAvailable && renderLocallyAvailablePill()}
+								</>
+							)}
+							{duration && renderDuration()}
+						</div>
+					</>
+			  )
+			: renderNoContent();
 
 	const highlighted = (toHighlight: string) => {
 		return (
@@ -204,6 +297,28 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
+	const renderLocallyAvailableButtons = () => {
+		return (
+			<div className={styles['c-media-card__locally-available-container']}>
+				<Button
+					iconStart={<Icon name={IconNamesLight.Info} />}
+					label={tText('modules/shared/components/media-card/media-card___meer-info')}
+					variants={['info']}
+					className={styles['c-media-card__info-button']}
+					onClick={() => setIsInfoModalOpen(true)}
+				/>
+				<Button
+					label={tText(
+						'modules/shared/components/media-card/media-card___plan-een-bezoek'
+					)}
+					variants={['dark']}
+					className={styles['c-media-card__visit-button']}
+					onClick={() => setIsRequestAccessBladeOpen(true)}
+				/>
+			</div>
+		);
+	};
+
 	const renderTempAccessPill = () => {
 		return (
 			<div className={styles['c-media-card--temp-access']}>
@@ -220,7 +335,8 @@ const MediaCard: FC<MediaCardProps> = ({
 			<Card
 				className={clsx(
 					styles['c-media-card'],
-					isKeyUser && styles['c-media-card--key-user']
+					isKeyUser && styles['c-media-card--key-user'],
+					!showLocallyAvailable && styles['c-media-card--pointer']
 				)}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
@@ -233,19 +349,49 @@ const MediaCard: FC<MediaCardProps> = ({
 			>
 				{typeof description === 'string' ? (
 					<>
-						<div className="u-text-ellipsis--2">
-							<span>{renderDescription()}</span>
-						</div>
+						{wrapInLink(
+							<div className="u-text-ellipsis--2">
+								<span>{renderDescription()}</span>
+							</div>
+						)}
 						{hasTempAccess && renderTempAccessPill()}
 						{isKeyUser && renderKeyUserPill()}
+						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>
 				) : (
 					<>
-						{renderDescription()}
+						{wrapInLink(renderDescription())}
 						{isKeyUser && renderKeyUserPill()}
+						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>
 				)}
 			</Card>
+			<Modal
+				title={tText(
+					'modules/shared/components/media-card/media-card___waarom-kan-ik-dit-object-niet-bekijken'
+				)}
+				isOpen={isInfoModalOpen}
+				onClose={() => setIsInfoModalOpen(false)}
+				footer={
+					<div className={styles['c-media-card__close-button-container']}>
+						<Button
+							label={tText('modules/shared/components/media-card/media-card___sluit')}
+							onClick={() => setIsInfoModalOpen(false)}
+							variants={['dark']}
+							className={styles['c-media-card__close-button']}
+						/>
+					</div>
+				}
+			>
+				<p className={styles['c-media-card__infomodal-description']}>
+					{tText('modules/shared/components/media-card/media-card___geen-licentie')}
+				</p>
+			</Modal>
+			<RequestAccessBlade
+				isOpen={isRequestAccessBladeOpen}
+				onClose={() => setIsRequestAccessBladeOpen(false)}
+				onSubmit={onRequestAccessSubmit}
+			/>
 		</div>
 	);
 };

@@ -20,7 +20,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { parseUrl } from 'query-string';
 import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
@@ -82,7 +81,6 @@ import { MetaDataDescription } from '@shared/components/MetaDataDescription';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
-import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -93,7 +91,6 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { selectPreviousUrl } from '@shared/store/history';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType, VisitStatus } from '@shared/types';
@@ -129,14 +126,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const dispatch = useDispatch();
-	const previousUrl = useSelector(selectPreviousUrl);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 	const user = useSelector(selectUser);
 	const canRequestMaterial: boolean | null = user?.groupName !== Group.KIOSK_VISITOR;
-	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isNotKiosk = useHasAnyGroup(
 		Group.CP_ADMIN,
@@ -277,19 +272,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [windowSize]);
 
 	useEffect(() => {
-		// Store the first previous url when arriving on this page, so we can return to the visitor space search url with query params
-		// when we click the site's back button in the header
-		if (previousUrl) {
-			const parsedUrl = parseUrl(previousUrl);
-			// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
-			if (isVisitorSpaceSearchPage(parsedUrl.url)) {
-				// Previous url appears to be a visitor space url
-				setVisitorSpaceSearchUrl(previousUrl);
-			}
-		}
-	}, [previousUrl]);
-
-	useEffect(() => {
 		dispatch(setShowZendesk(false));
 	}, [dispatch]);
 
@@ -405,6 +387,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				break;
 			case MediaActions.RequestAccess:
 				setActiveBlade(MediaActions.RequestAccess);
+				break;
+			case MediaActions.RequestMaterial:
+				onRequestMaterialClick();
 				break;
 		}
 	};
@@ -741,54 +726,38 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		);
 	};
 
+	const renderMetaDataActions = (): ReactNode => {
+		const dynamicActions = MEDIA_ACTIONS(
+			canManageFolders,
+			isInAFolder(collections, mediaInfo?.schemaIdentifier),
+			canReport,
+			!!canRequestAccess,
+			canRequestMaterial
+		);
+
+		return (
+			<div className="u-pb-24 p-object-detail__actions">
+				<div className="p-object-detail__primary-actions">
+					{showMetadataExportDropdown && renderExportDropdown()}
+					<DynamicActionMenu {...dynamicActions} onClickAction={onClickAction} />
+				</div>
+			</div>
+		);
+	};
+
 	const renderMetaData = () => {
 		return (
 			<div>
 				<div className="p-object-detail__metadata-content">
 					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
-					<h3 className={clsx('u-py-24', 'p-object-detail__title')}>{mediaInfo?.name}</h3>
+					<h3 className={clsx('u-pt-24 u-pb-32', 'p-object-detail__title')}>
+						{mediaInfo?.name}
+					</h3>
+
+					{renderMetaDataActions()}
 
 					<MetaDataDescription description={mediaInfo?.description || ''} />
 
-					<div className="u-pb-24 p-object-detail__actions">
-						<div className="p-object-detail__primary-actions">
-							{showMetadataExportDropdown && renderExportDropdown()}
-							{canRequestMaterial && (
-								<Button
-									className="p-object-detail__request-material"
-									iconStart={<Icon name={IconNamesLight.Shopping} aria-hidden />}
-									onClick={onRequestMaterialClick}
-									aria-label={tText(
-										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-									)}
-									title={tText(
-										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-									)}
-								>
-									<span className="u-text-ellipsis u-display-none u-display-block:md">
-										{tText(
-											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-										)}
-									</span>
-									<span className="u-text-ellipsis u-display-none:md">
-										{tText(
-											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-										)}
-									</span>
-								</Button>
-							)}
-						</div>
-
-						<DynamicActionMenu
-							{...MEDIA_ACTIONS(
-								canManageFolders,
-								isInAFolder(collections, mediaInfo?.schemaIdentifier),
-								canReport,
-								!!canRequestAccess
-							)}
-							onClickAction={onClickAction}
-						/>
-					</div>
 					{!mediaInfo?.description && (
 						<Alert
 							className="c-Alert__margin-bottom"
@@ -913,7 +882,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				className="p-object-detail__nav"
 				showBorder={showNavigationBorder}
 				title={mediaInfo?.maintainerName ?? ''}
-				backLink={visitorSpaceSearchUrl || `/${router.query.slug}`}
 				phone={visitorSpace?.contactInfo.telephone || ''}
 				email={visitorSpace?.contactInfo.email || ''}
 				showAccessEndDate={getAccessEndDate()}

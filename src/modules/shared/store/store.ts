@@ -5,7 +5,6 @@ import { userSlice } from '@auth/store/user';
 import { IeObjectsSlice } from '@shared/store/ie-objects';
 import { tosSlice } from '@shared/store/tos';
 
-import { historySlice } from './history';
 import { AppStore } from './store.types';
 import { uiSlice } from './ui';
 
@@ -17,7 +16,6 @@ export const makeStore = () =>
 			[userSlice.name]: userSlice.reducer,
 			[tosSlice.name]: tosSlice.reducer,
 			[IeObjectsSlice.name]: IeObjectsSlice.reducer,
-			[historySlice.name]: historySlice.reducer,
 		},
 		devTools: process.env.DEBUG_TOOLS === 'true',
 	});

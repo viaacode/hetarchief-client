@@ -35,7 +35,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 						: stringifyUrl({
 								url: href,
 								query: {
-									[VisitorSpaceFilterId.Maintainer]: user?.maintainerId,
+									[VisitorSpaceFilterId.Maintainer]: user?.visitorSpaceSlug,
 								},
 						  });
 
@@ -52,7 +52,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 					active: asPath.includes(url),
 				};
 			}),
-		[asPath, user?.maintainerId]
+		[asPath, user?.visitorSpaceSlug]
 	);
 
 	useEffect(() => {

@@ -74,6 +74,7 @@
 	&__body-wrapper {
 		grid-row-start: 3;
 		overflow-y: auto;
+		overflow-x: hidden;
 	}
 
 	&__footer-wrapper {

@@ -235,8 +235,8 @@
 	}
 
 	/**
-  * Elements
-  */
+	* Elements
+	*/
 
 	.c-#{$type}__input {
 		position: absolute;
@@ -258,7 +258,8 @@
 		border: 2px solid $black;
 		background-color: $white;
 		color: $white;
-		transition: background-color $animate-default;
+		transition: background-color $animate-default border-color $animate-default;
+
 		@if $type == "radio-button" {
 			border-radius: 50%;
 		}
@@ -286,8 +287,6 @@
 			height: 100%;
 			border-radius: 50%;
 			transition: transform $animate-default;
-
-			// transform-origin: center;
 		}
 
 		// Radio button icon
@@ -313,8 +312,8 @@
 	}
 
 	/**
-  * Modifiers
-  */
+	* Modifiers
+	*/
 
 	.c-#{$type}--checked {
 		.c-#{$type}__check-icon {
@@ -443,7 +442,8 @@
  */
 
 @mixin blade-text-styling() {
-	strong, p {
+	strong,
+	p {
 		font-size: $font-size-sm;
 		line-height: $font-size-md;
 	}

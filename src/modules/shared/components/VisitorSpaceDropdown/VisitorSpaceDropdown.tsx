@@ -45,12 +45,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 		return (
 			<li {...actionProps} className={clsx(styles['c-visitor-spaces-dropdown__active'])}>
 				<div className={clsx(styles['c-visitor-spaces-dropdown__active-content'])}>
-					<p
-						className={clsx(
-							'u-text-ellipsis',
-							styles['c-visitor-spaces-dropdown__active-label']
-						)}
-					>
+					<p className={clsx(styles['c-visitor-spaces-dropdown__active-label'])}>
 						{selected?.label}
 					</p>
 					{selected?.extraInfo && (
@@ -91,7 +86,12 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 						onKeyDown={(e) => onKey(e, [...keysEnter], () => onSelectOption(option))}
 						className={clsx(styles['c-visitor-spaces-dropdown__option'])}
 					>
-						<p className={clsx(styles['c-visitor-spaces-dropdown__option-label'])}>
+						<p
+							className={clsx(
+								styles['c-visitor-spaces-dropdown__option-label'],
+								'u-text-ellipsis'
+							)}
+						>
 							{option.label}
 						</p>
 					</li>
