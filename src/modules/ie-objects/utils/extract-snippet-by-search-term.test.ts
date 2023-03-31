@@ -31,7 +31,7 @@ describe('Extract snippet by search term', () => {
 		).toBe('This is a long piece of text and it h...');
 	});
 
-	it('should return text around the search term searchterm', () => {
+	it('should return text around the search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
@@ -41,7 +41,7 @@ describe('Extract snippet by search term', () => {
 		).toBe('This is a long piece of text and it h...');
 	});
 
-	it('should return text around the search term searchterm if searchterm is at the end', () => {
+	it('should return text around the search term if searchterm is at the end', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
@@ -51,7 +51,7 @@ describe('Extract snippet by search term', () => {
 		).toBe('... of text and it has multiple words in it');
 	});
 
-	it('should return text around the search term searchterm if searchterm is almost at the end', () => {
+	it('should return text around the search term if searchterm is almost at the end', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
@@ -61,7 +61,7 @@ describe('Extract snippet by search term', () => {
 		).toBe('... of text and it has multiple words in it');
 	});
 
-	it('should return text around the first found search term searchterm', () => {
+	it('should return text around the first found search term', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
@@ -71,7 +71,7 @@ describe('Extract snippet by search term', () => {
 		).toBe('This is a long piece of text and it h...');
 	});
 
-	it('should return text around the search term searchterm if searchterm is almost at the end', () => {
+	it('should return text around the search term if searchterm is almost at the end', () => {
 		expect(
 			extractSnippetBySearchTerm(
 				'This is a long piece of text and it has multiple words in it',
@@ -79,5 +79,25 @@ describe('Extract snippet by search term', () => {
 				40
 			)
 		).toBe('... of text and it has multiple words in it');
+	});
+
+	it('should return text around the search term if searchterm is lowercase and text is uppercase', () => {
+		expect(
+			extractSnippetBySearchTerm(
+				'This is a Long Piece of Text and it has Multiple Words in it',
+				['multiple words in', 'words in it'],
+				40
+			)
+		).toBe('... of Text and it has Multiple Words in it');
+	});
+
+	it('should return beginning of text with capitals intact if search term is not found', () => {
+		expect(
+			extractSnippetBySearchTerm(
+				'This is a Long Piece of Text and it has Multiple Words in it',
+				['NOT FOUND'],
+				40
+			)
+		).toBe('This is a Long Piece of Text and it h...');
 	});
 });
