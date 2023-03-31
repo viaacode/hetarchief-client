@@ -69,3 +69,21 @@
 .c-filter-form__submit {
 	flex-grow: 1;
 }
+
+/**
+ * Modifiers
+ */
+
+.c-filter-form--inline {
+	padding: 1.4rem $spacer-sm 1.4rem $spacer-md;
+	border-bottom: 0.1rem solid color.adjust($white, $alpha: -0.8);
+
+	:global(.c-checkbox) {
+		height: 100%;
+
+		:global(.c-checkbox__check-icon) {
+			// checkbox size = spacer-sm, default 1px top -> subtract it to center
+			top: calc((50% - ($spacer-sm / 2)) - 1px);
+		}
+	}
+}
