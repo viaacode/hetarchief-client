@@ -60,7 +60,7 @@ export const ROUTES = Object.freeze({
 	cookiePolicy: '/' + ROUTE_PARTS.cookiePolicy,
 	myFolders: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
 	myHistory: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
-	visitRequested: `/${ROUTE_PARTS.search}/:slug/${ROUTE_PARTS.accessRequested}`,
+	visitRequested: `/${ROUTE_PARTS.visit}/:slug/${ROUTE_PARTS.accessRequested}`,
 	adminEditSpace: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/:slug`,
 	beheerVisitors: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitors}`,
 	beheerSettings: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.settings}`,
