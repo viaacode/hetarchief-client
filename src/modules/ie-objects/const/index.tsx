@@ -243,7 +243,7 @@ export const MEDIA_ACTIONS = (
 				  ]
 				: []) as ActionItem[]),
 		],
-		limit: 3,
+		limit: 0,
 		onClickAction: () => null,
 	};
 };
