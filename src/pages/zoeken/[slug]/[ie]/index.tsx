@@ -392,6 +392,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			case MediaActions.RequestAccess:
 				setActiveBlade(MediaActions.RequestAccess);
 				break;
+			case MediaActions.RequestMaterial:
+				onRequestMaterialClick();
+				break;
 		}
 	};
 
@@ -745,8 +748,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 								stringifyUrl({
 									url: `/${ROUTE_PARTS.search}`,
 									query: {
-										// Should be uncommented when the filters PR is merged: https://github.com/viaacode/hetarchief-client/pull/720
-										// [VisitorSpaceFilterId.Maintainers]: maintainerName,
+										[VisitorSpaceFilterId.Maintainers]: maintainerName,
 										search: keyword,
 									},
 								})
@@ -765,6 +767,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						/>
 					</div>
 				)}
+			</div>
+		);
+	};
+
+	const renderMetaDataActions = (): ReactNode => {
+		const dynamicActions = MEDIA_ACTIONS(
+			canManageFolders,
+			isInAFolder(collections, mediaInfo?.schemaIdentifier),
+			isNotKiosk,
+			!!canRequestAccess,
+			canRequestMaterial
+		);
+
+		return (
+			<div className="u-pb-24 p-object-detail__actions">
+				<div className="p-object-detail__primary-actions">
+					{showMetadataExportDropdown && renderExportDropdown()}
+					<DynamicActionMenu {...dynamicActions} onClickAction={onClickAction} />
+				</div>
 			</div>
 		);
 	};
@@ -837,50 +858,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			<div>
 				<div className="p-object-detail__metadata-content">
 					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
+					<h3 className={clsx('u-pt-24 u-pb-32', 'p-object-detail__title')}>
+						{mediaInfo?.name}
+					</h3>
+
+					{renderMetaDataActions()}
 
 					<h3 className={clsx('u-py-24', 'p-object-detail__title')}>{mediaInfo.name}</h3>
 
 					<MetaDataDescription description={mediaInfo.description || ''} />
-
-					<div className="u-pb-24 p-object-detail__actions">
-						<div className="p-object-detail__primary-actions">
-							{showMetadataExportDropdown && renderExportDropdown()}
-							{canRequestMaterial && (
-								<Button
-									className="p-object-detail__request-material"
-									iconStart={<Icon name={IconNamesLight.Shopping} aria-hidden />}
-									onClick={onRequestMaterialClick}
-									aria-label={tText(
-										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-									)}
-									title={tText(
-										'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-									)}
-								>
-									<span className="u-text-ellipsis u-display-none u-display-block:md">
-										{tText(
-											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-										)}
-									</span>
-									<span className="u-text-ellipsis u-display-none:md">
-										{tText(
-											'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-										)}
-									</span>
-								</Button>
-							)}
-						</div>
-
-						<DynamicActionMenu
-							{...MEDIA_ACTIONS(
-								canManageFolders,
-								isInAFolder(collections, mediaInfo.schemaIdentifier),
-								isNotKiosk,
-								!!canRequestAccess
-							)}
-							onClickAction={onClickAction}
-						/>
-					</div>
 
 					{showAlert && (
 						<Alert

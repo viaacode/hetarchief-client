@@ -161,66 +161,92 @@ export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
 	isInAFolder: boolean,
 	canReport: boolean,
-	canRequestAccess: boolean
-): DynamicActionMenuProps => ({
-	actions: [
-		...((canRequestAccess
-			? [
-					{
-						label: tText('modules/ie-objects/const/index___plan-een-bezoek'),
-						icon: (
-							<Icon
-								aria-hidden
-								className="u-font-size-24 u-text-left"
-								name={isInAFolder ? IconNamesSolid.Request : IconNamesLight.Request}
-							/>
-						),
-						id: MediaActions.RequestAccess,
-						ariaLabel: tText('modules/ie-objects/const/index___plan-een-bezoek'),
-						tooltip: tText('modules/ie-objects/const/index___plan-een-bezoek'),
-					},
-			  ]
-			: []) as ActionItem[]),
-		...((canManageFolders
-			? [
-					{
-						label: tText('modules/ie-objects/const/index___bookmark'),
-						icon: (
-							<Icon
-								aria-hidden
-								className="u-font-size-24 u-text-left"
-								name={
-									isInAFolder ? IconNamesSolid.Bookmark : IconNamesLight.Bookmark
-								}
-							/>
-						),
-						id: MediaActions.Bookmark,
-						ariaLabel: tText('modules/ie-objects/const/index___bookmark'),
-						tooltip: tText('modules/ie-objects/const/index___bookmark'),
-					},
-			  ]
-			: []) as ActionItem[]),
-		...((canReport
-			? [
-					{
-						label: tText('modules/ie-objects/const/index___rapporteer'),
-						icon: (
-							<Icon
-								aria-hidden
-								className="u-font-size-24 u-text-left"
-								name={IconNamesLight.Flag}
-							/>
-						),
-						id: MediaActions.Report,
-						ariaLabel: tText('modules/ie-objects/const/index___rapporteer'),
-						tooltip: tText('modules/ie-objects/const/index___rapporteer'),
-					},
-			  ]
-			: []) as ActionItem[]),
-	],
-	limit: 2,
-	onClickAction: () => null,
-});
+	canRequestAccess: boolean,
+	canRequestMaterial: boolean
+): DynamicActionMenuProps => {
+	const activeIconSet = isInAFolder ? IconNamesSolid : IconNamesLight;
+
+	return {
+		actions: [
+			...((canRequestMaterial
+				? [
+						{
+							label: tText(
+								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+							),
+							icon: (
+								<Icon
+									aria-hidden
+									className="u-font-size-24 u-text-left"
+									name={IconNamesLight.Request}
+								/>
+							),
+							id: MediaActions.RequestMaterial,
+							ariaLabel: tText(
+								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+							),
+							tooltip: tText(
+								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
+							),
+						},
+				  ]
+				: []) as ActionItem[]),
+			...((canRequestAccess
+				? [
+						{
+							label: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+							icon: (
+								<Icon
+									aria-hidden
+									className="u-font-size-24 u-text-left"
+									name={activeIconSet.Request}
+								/>
+							),
+							id: MediaActions.RequestAccess,
+							ariaLabel: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+							tooltip: tText('modules/ie-objects/const/index___plan-een-bezoek'),
+						},
+				  ]
+				: []) as ActionItem[]),
+			...((canManageFolders
+				? [
+						{
+							label: tText('modules/ie-objects/const/index___bookmark'),
+							icon: (
+								<Icon
+									aria-hidden
+									className="u-font-size-24 u-text-left"
+									name={activeIconSet.Bookmark}
+								/>
+							),
+							id: MediaActions.Bookmark,
+							ariaLabel: tText('modules/ie-objects/const/index___bookmark'),
+							tooltip: tText('modules/ie-objects/const/index___bookmark'),
+						},
+				  ]
+				: []) as ActionItem[]),
+			...((canReport
+				? [
+						{
+							label: tText('modules/ie-objects/const/index___rapporteer'),
+							icon: (
+								<Icon
+									aria-hidden
+									className="u-font-size-24 u-text-left"
+									name={IconNamesLight.Flag}
+								/>
+							),
+							id: MediaActions.Report,
+							ariaLabel: tText('modules/ie-objects/const/index___rapporteer'),
+							tooltip: tText('modules/ie-objects/const/index___rapporteer'),
+						},
+				  ]
+				: []) as ActionItem[]),
+		],
+		limit: 0,
+		onClickAction: () => null,
+	};
+};
 
 /**
  * Metadata
