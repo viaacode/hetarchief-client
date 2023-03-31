@@ -325,6 +325,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						fullName: user.fullName,
 						email: user.email,
 						requesterCapacity: MaterialRequestRequesterCapacity.EDUCATION,
+						...(user.organisationName && {
+							organisation: user.organisationName,
+						}),
 					}}
 				/>
 			)}
