@@ -136,4 +136,4 @@ export async function getServerSideProps(
 	};
 }
 
-export default withAuth(VisitRequestedPage as ComponentType);
+export default withAuth(VisitRequestedPage as ComponentType, true);

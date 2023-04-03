@@ -1,9 +1,10 @@
 import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import { FC } from 'react';
+import { ComponentType, FC } from 'react';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
+import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -72,4 +73,6 @@ export async function getServerSideProps(
 	};
 }
 
-export default withAdminCoreConfig(withUser(Homepage as FC<unknown>)) as FC<HomepageProps>;
+export default withAdminCoreConfig(
+	withUser(withAuth(Homepage as ComponentType, false) as FC<unknown>)
+) as FC<HomepageProps>;

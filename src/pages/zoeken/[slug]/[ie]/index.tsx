@@ -26,7 +26,7 @@ import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
-import { Group, Permission } from '@account/const';
+import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
@@ -138,12 +138,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 	const user = useSelector(selectUser);
+	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isNotKiosk = useHasAnyGroup(
-		Group.CP_ADMIN,
-		Group.MEEMOO_ADMIN,
-		Group.VISITOR,
-		Group.ANONYMOUS
+		GroupName.CP_ADMIN,
+		GroupName.MEEMOO_ADMIN,
+		GroupName.VISITOR,
+		GroupName.ANONYMOUS
 	);
 
 	// Internal state
@@ -236,7 +237,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	// spaces
-	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
+	const canViewAllSpaces = useHasAllPermission(Permission.READ_ALL_SPACES);
+	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
+		canViewAllSpaces,
+	});
 
 	/**
 	 * Computed

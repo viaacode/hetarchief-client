@@ -53,4 +53,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(NavigationBarPageCreatePage as ComponentType));
+export default withAuth(withAdminCoreConfig(NavigationBarPageCreatePage as ComponentType), true);

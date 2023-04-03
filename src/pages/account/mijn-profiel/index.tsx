@@ -8,7 +8,7 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 
-import { GET_PERMISSION_TRANSLATIONS_BY_GROUP, Group, Permission } from '@account/const';
+import { GET_PERMISSION_TRANSLATIONS_BY_GROUP, GroupName, Permission } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
@@ -29,7 +29,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
 
-	const isAdminUser: boolean = useHasAnyGroup(Group.MEEMOO_ADMIN, Group.CP_ADMIN);
+	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
 	const isKeyUser: boolean = user?.isKeyUser || false;
 	const canEdit: boolean =
 		user?.idp === Idp.HETARCHIEF && user.permissions.includes(Permission.CAN_EDIT_PROFILE_INFO);
@@ -75,7 +75,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	const renderUserGroup = (): ReactNode => {
-		const userGroup: Group = user?.groupName as Group;
+		const userGroup: GroupName = user?.groupName as GroupName;
 		const { name, description } = GET_PERMISSION_TRANSLATIONS_BY_GROUP()[userGroup];
 
 		return (
@@ -194,4 +194,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AccountMyProfile as ComponentType);
+export default withAuth(AccountMyProfile as ComponentType, true);

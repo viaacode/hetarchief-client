@@ -46,13 +46,24 @@ export class VisitorSpaceService {
 		return parsed as IPagination<VisitorSpaceInfo>;
 	}
 
-	public static async getAllAccessible(page = 0, size = 20): Promise<VisitorSpaceInfo[]> {
+	public static async getAllAccessible(
+		canViewAllSpaces: boolean,
+		page = 0,
+		size = 20
+	): Promise<VisitorSpaceInfo[]> {
 		const parsed = (await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: VISITOR_SPACE_SERVICE_BASE_URL,
 					query: {
-						accessType: AccessType.ACTIVE,
+						accessType: canViewAllSpaces ? undefined : AccessType.ACTIVE,
+						status: canViewAllSpaces
+							? [
+									VisitorSpaceStatus.Requested,
+									VisitorSpaceStatus.Active,
+									VisitorSpaceStatus.Inactive,
+							  ]
+							: undefined,
 						page,
 						size,
 					},
