@@ -43,6 +43,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
+import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -636,6 +637,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				className="u-my-16"
 				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
 				icon={<Icon name={IconNamesLight.AngleRight} />}
+				linkComponent={NextLinkWrapper}
 			/>
 		);
 	};
