@@ -1,10 +1,10 @@
 import { intersection, isEmpty } from 'lodash-es';
 import { useSelector } from 'react-redux';
 
-import { Group } from '@account/const';
+import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 
-export const useHasAnyGroup = (...groups: Group[]): boolean => {
+export const useHasAnyGroup = (...groups: GroupName[]): boolean => {
 	const user = useSelector(selectUser);
 
 	if (isEmpty(groups)) {
@@ -12,7 +12,7 @@ export const useHasAnyGroup = (...groups: Group[]): boolean => {
 	}
 
 	if (!user) {
-		return groups.includes(Group.ANONYMOUS);
+		return groups.includes(GroupName.ANONYMOUS);
 	}
 
 	return !isEmpty(intersection([user.groupName], groups));
