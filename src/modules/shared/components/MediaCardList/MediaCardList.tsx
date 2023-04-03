@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '@auth/store/user';
 import { IeObjectLicense } from '@ie-objects/types';
 import { ROUTE_PARTS } from '@shared/const';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 import { useGetAllActiveVisits } from '@visits/hooks/get-all-active-visits';
@@ -31,10 +32,9 @@ const MediaCardList: FC<MediaCardListProps> = ({
 }) => {
 	const windowSize = useWindowSizeContext();
 
+	const isKeyUser = useIsKeyUser();
 	const user = useSelector(selectUser);
 	const { data: activeVisits } = useGetAllActiveVisits({ requesterId: user?.id || '' });
-
-	const isKeyUser = user?.isKeyUser || false;
 
 	if (!items) {
 		return null;
