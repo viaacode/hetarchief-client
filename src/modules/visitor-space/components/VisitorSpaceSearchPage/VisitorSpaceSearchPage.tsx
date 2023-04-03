@@ -635,6 +635,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				className="u-my-16"
 				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
 				icon={<Icon name={IconNamesLight.AngleRight} />}
+				linkComponent={({ href, className, children }) => (
+					<Link href={href} passHref>
+						<a className={className}>{children}</a>
+					</Link>
+				)}
 			/>
 		);
 	};

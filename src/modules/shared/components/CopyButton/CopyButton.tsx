@@ -37,11 +37,13 @@ const CopyButton: FC<ButtonProps & { text: string; enableToast?: boolean }> = (p
 
 	return (
 		<Button
-			icon={<Icon name={IconNamesLight.Copy} aria-hidden />}
-			aria-label={tText(
-				'modules/shared/components/copy-button/copy-button___kopieer-naar-klembord'
-			)}
-			variants="sm"
+			iconStart={props.iconStart}
+			icon={!props.iconStart && <Icon name={IconNamesLight.Copy} aria-hidden />}
+			aria-label={
+				props['aria-label'] ||
+				tText('modules/shared/components/copy-button/copy-button___kopieer-naar-klembord')
+			}
+			variants={props.variants || 'sm'}
 			{...props}
 			onClick={clickHandler}
 		/>
