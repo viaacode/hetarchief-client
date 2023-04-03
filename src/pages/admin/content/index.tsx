@@ -6,7 +6,7 @@ import { GetServerSidePropsContext } from 'next/types';
 import React, { FC } from 'react';
 
 import { Permission } from '@account/const';
-import { CONTENT_PATH } from '@admin/const';
+import { CONTENT_PATH } from '@admin/const/Routing.const';
 import { AdminLayout } from '@admin/layouts';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';

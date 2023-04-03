@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { ADMIN_NAVIGATION_LINKS } from '@admin/const/Routing.const';
 import { AdminLayoutComponent } from '@admin/layouts';
 import {
 	AdminActions,
@@ -18,8 +19,6 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import { setShowZendesk } from '@shared/store/ui';
-
-import { ADMIN_NAVIGATION_LINKS } from '../../const';
 
 import styles from './AdminLayout.module.scss';
 
