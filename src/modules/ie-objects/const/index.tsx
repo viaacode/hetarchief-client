@@ -285,34 +285,21 @@ export const METADATA_FIELDS = (
 	},
 	...mapObjectToMetadata(mediaInfo.premisIdentifier),
 	{
-		title: tText('modules/ie-objects/const/index___serie'),
-		data: mapArrayToMetadataData(mediaInfo.series),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___programma'),
-		data: mapArrayToMetadataData(mediaInfo.program),
-	},
-	{
 		title: tText('modules/ie-objects/const/index___alternatieve-naam'),
 		data: mapArrayToMetadataData(mediaInfo.alternativeName),
 	},
-	// TODO: check if these are still needed
-	// {
-	// 	title: tText('modules/ie-objects/const/index___archief'),
-	// 	data: mapArrayToMetadataData(mediaInfo.partOfArchive),
-	// },
-	// {
-	// 	title: tText('modules/ie-objects/const/index___serie'),
-	// 	data: mapArrayToMetadataData(mediaInfo.partOfSeries),
-	// },
-	// {
-	// 	title: tText('modules/ie-objects/const/index___episode'),
-	// 	data: mapArrayToMetadataData(mediaInfo.partOfEpisode),
-	// },
-	// {
-	// 	title: tText('modules/ie-objects/const/index___seizoen'),
-	// 	data: mapArrayToMetadataData(mediaInfo.partOfSeason),
-	// },
+	{
+		title: tText('modules/ie-objects/const/index___programma'),
+		data: mapArrayToMetadataData(mediaInfo.schemaIsPartOf?.programs),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___serie'),
+		data: mapArrayToMetadataData(mediaInfo.schemaIsPartOf?.series),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___seizoenen'),
+		data: mapArrayToMetadataData(mediaInfo.schemaIsPartOf?.seizoenen),
+	},
 	{
 		title: tText('modules/ie-objects/const/index___bestandstype'),
 		data: mediaInfo.dctermsFormat,
