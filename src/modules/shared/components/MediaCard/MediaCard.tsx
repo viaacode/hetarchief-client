@@ -270,65 +270,51 @@ const MediaCard: FC<MediaCardProps> = ({
 			  )
 			: renderNoContent();
 
-	const highlighted = (toHighlight: string) => {
-		return (
-			<Highlighter
-				searchWords={keywords ?? []}
-				autoEscape={true}
-				textToHighlight={toHighlight}
-			/>
-		);
-	};
+	const highlighted = (toHighlight: string) => (
+		<Highlighter searchWords={keywords ?? []} autoEscape={true} textToHighlight={toHighlight} />
+	);
 
-	const renderKeyUserPill = () => {
-		return (
-			<span className={styles['c-media-card--key-user-pill']}>
-				<Tooltip position="top">
-					<TooltipTrigger>
-						<Icon name={IconNamesLight.Key} />
-					</TooltipTrigger>
-					<TooltipContent>
-						{tText(
-							'modules/shared/components/media-card/media-card___item-bekijken-uit-jouw-sector'
-						)}
-					</TooltipContent>
-				</Tooltip>
-			</span>
-		);
-	};
-
-	const renderLocallyAvailableButtons = () => {
-		return (
-			<div className={styles['c-media-card__locally-available-container']}>
-				<Button
-					iconStart={<Icon name={IconNamesLight.Info} />}
-					label={tText('modules/shared/components/media-card/media-card___meer-info')}
-					variants={['info']}
-					className={styles['c-media-card__info-button']}
-					onClick={() => setIsInfoModalOpen(true)}
-				/>
-				<Button
-					label={tText(
-						'modules/shared/components/media-card/media-card___plan-een-bezoek'
+	const renderKeyUserPill = () => (
+		<span className={styles['c-media-card--key-user-pill']}>
+			<Tooltip position="top">
+				<TooltipTrigger>
+					<Icon name={IconNamesLight.Key} />
+				</TooltipTrigger>
+				<TooltipContent>
+					{tText(
+						'modules/shared/components/media-card/media-card___item-bekijken-uit-jouw-sector'
 					)}
-					variants={['dark']}
-					className={styles['c-media-card__visit-button']}
-					onClick={() => setIsRequestAccessBladeOpen(true)}
-				/>
-			</div>
-		);
-	};
+				</TooltipContent>
+			</Tooltip>
+		</span>
+	);
 
-	const renderTempAccessPill = () => {
-		return (
-			<div className={styles['c-media-card--temp-access']}>
-				<Icon name={IconNamesLight.Clock} />
-				<span className={styles['c-media-card--temp-access-label']}>
-					{tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
-				</span>
-			</div>
-		);
-	};
+	const renderLocallyAvailableButtons = () => (
+		<div className={styles['c-media-card__locally-available-container']}>
+			<Button
+				iconStart={<Icon name={IconNamesLight.Info} />}
+				label={tText('modules/shared/components/media-card/media-card___meer-info')}
+				variants={['info']}
+				className={styles['c-media-card__info-button']}
+				onClick={() => setIsInfoModalOpen(true)}
+			/>
+			<Button
+				label={tText('modules/shared/components/media-card/media-card___plan-een-bezoek')}
+				variants={['dark']}
+				className={styles['c-media-card__visit-button']}
+				onClick={() => setIsRequestAccessBladeOpen(true)}
+			/>
+		</div>
+	);
+
+	const renderTempAccessPill = () => (
+		<div className={styles['c-media-card--temp-access']}>
+			<Icon name={IconNamesLight.Clock} />
+			<span className={styles['c-media-card--temp-access-label']}>
+				{tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
+			</span>
+		</div>
+	);
 
 	return (
 		<div id={id}>
