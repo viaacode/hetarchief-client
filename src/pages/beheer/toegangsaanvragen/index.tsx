@@ -48,4 +48,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(CPRequestsPage as ComponentType);
+export default withAuth(CPRequestsPage as ComponentType, true);

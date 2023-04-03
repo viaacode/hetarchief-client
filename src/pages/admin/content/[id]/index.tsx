@@ -54,5 +54,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(withUser(ContentPageDetailPage as FC<unknown>))
+	withAdminCoreConfig(withUser(ContentPageDetailPage as FC<unknown>)),
+	true
 ) as FC<DefaultSeoInfo>;

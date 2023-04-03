@@ -295,4 +295,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AdminMaterialRequests as ComponentType);
+export default withAuth(AdminMaterialRequests as ComponentType, true);

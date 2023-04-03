@@ -16,6 +16,7 @@
 			"@visitors/*": ["modules/visitors/*"],
 			"@visits/*": ["modules/visits/*"],
 			"@material-requests/*": ["modules/material-requests/*"],
+      "@maintenance-alerts/*": ["modules/maintenance-alerts/*"],
 			"react": ["../node_modules/react"]
 		},
 		"target": "es5",

@@ -54,4 +54,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(MeemooAdminRequestsPage as ComponentType);
+export default withAuth(MeemooAdminRequestsPage as ComponentType, true);

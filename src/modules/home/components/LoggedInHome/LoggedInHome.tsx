@@ -436,4 +436,4 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	return renderHomePageContent();
 };
 
-export default withAuth(LoggedInHome as ComponentType) as FC<DefaultSeoInfo>;
+export default withAuth(LoggedInHome as ComponentType, true) as FC<DefaultSeoInfo>;

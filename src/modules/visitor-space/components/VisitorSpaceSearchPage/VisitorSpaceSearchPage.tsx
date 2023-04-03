@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
-import { Group, Permission } from '@account/const';
+import { GroupName, Permission } from '@account/const';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/types';
@@ -121,8 +121,8 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
-	const isKioskUser = useHasAnyGroup(Group.KIOSK_VISITOR);
-	const isCPAdmin = useHasAnyGroup(Group.CP_ADMIN);
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
+	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
 
 	/**
 	 * State

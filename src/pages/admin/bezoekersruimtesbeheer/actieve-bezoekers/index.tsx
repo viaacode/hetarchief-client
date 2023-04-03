@@ -267,4 +267,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(Visitors as ComponentType);
+export default withAuth(Visitors as ComponentType, true);

@@ -10,6 +10,8 @@ export interface IeObject {
 	maintainerName: string;
 	maintainerSlug: string;
 	maintainerLogo: string | null;
+	maintainerDescription: string;
+	maintainerSiteUrl: string;
 	datePublished: string;
 	dctermsAvailable: string;
 	name: string;

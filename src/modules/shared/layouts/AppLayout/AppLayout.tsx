@@ -1,10 +1,9 @@
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
-import { isWithinInterval } from 'date-fns';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringify } from 'query-string';
+import { stringify, stringifyUrl } from 'query-string';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
@@ -67,7 +66,7 @@ import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import packageJson from '../../../../../package.json';
 
-import { useGetMaintenanceAlerts } from 'modules/maintenance-alerts/hooks/get-maintenance-alerts';
+import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
@@ -84,7 +83,10 @@ const AppLayout: FC = ({ children }) => {
 	const windowSize = useWindowSize();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.xxl);
 	const showBorder = useSelector(selectShowNavigationBorder);
-	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces();
+	const canViewAllSpaces = useHasAllPermission(Permission.READ_ALL_SPACES);
+	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
+		canViewAllSpaces,
+	});
 	const { data: materialRequests } = useGetPendingMaterialRequests({});
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
@@ -96,11 +98,11 @@ const AppLayout: FC = ({ children }) => {
 		[SEARCH_QUERY_KEY]: StringParam,
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
-	const { data: alerts } = useGetMaintenanceAlerts();
+	const { data: alerts } = useGetActiveMaintenanceAlerts();
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
 		'HET_ARCHIEF.alerts.ignoreUntil',
-		JSON.stringify({ id: '1' })
+		'{}'
 	);
 
 	const setNotificationsOpen = useCallback(
@@ -159,9 +161,12 @@ const AppLayout: FC = ({ children }) => {
 
 	const onLoginRegisterClick = useCallback(async () => {
 		return router.replace(
-			`${ROUTES.home}?${stringify({
-				[SHOW_AUTH_QUERY_KEY]: '1',
-			})}`
+			stringifyUrl({
+				url: router.asPath,
+				query: {
+					[SHOW_AUTH_QUERY_KEY]: '1',
+				},
+			})
 		);
 	}, [router]);
 
@@ -260,6 +265,7 @@ const AppLayout: FC = ({ children }) => {
 		linkedSpaceOrId,
 		isMobile,
 		isLoggedIn,
+		user?.maintainerId,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
@@ -278,25 +284,19 @@ const AppLayout: FC = ({ children }) => {
 
 		const alert = alerts?.items.find((alert) => alert.id === alertId);
 
-		const ignoreUntil = JSON.stringify({
+		const newAlertsIgnoreUntil = JSON.stringify({
 			...JSON.parse(alertsIgnoreUntil),
 			[alertId]: alert?.untilDate,
 		});
 
-		setAlertsIgnoreUntil(ignoreUntil);
+		setAlertsIgnoreUntil(newAlertsIgnoreUntil);
 	};
 
 	const activeAlerts = useMemo(() => {
 		return alerts?.items.filter(
-			(item) =>
-				isWithinInterval(new Date(), {
-					start: new Date(item.fromDate),
-					end: new Date(item.untilDate),
-				}) &&
-				item.userGroups.includes(user?.groupId || '') &&
-				JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate
+			(item) => JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate
 		);
-	}, [alerts?.items, alertsIgnoreUntil, user?.groupId]);
+	}, [alerts?.items, alertsIgnoreUntil]);
 
 	const renderAlerts = () => {
 		return (
