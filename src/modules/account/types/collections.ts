@@ -46,4 +46,15 @@ export interface CreateFolderFormState {
 	name?: string;
 }
 
+export enum SharedFolderStatus {
+	ADDED = 'ADDED',
+	ALREADY_OWNER = 'ALREADY_OWNER',
+}
+
+export interface SharedFolderResponse {
+	folderId: string;
+	folderName: string;
+	status: SharedFolderStatus;
+}
+
 export type EditFolderFormState = CreateFolderFormState;
