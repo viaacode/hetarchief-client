@@ -530,6 +530,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													type: media.dctermsFormat,
 													preview: media.thumbnailUrl,
 													duration: media.duration,
+													licenses: media.licenses,
 												};
 
 												return {
@@ -541,6 +542,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 												};
 											})}
 											view={'list'}
+											showLocallyAvailable
 										/>
 									)}
 
@@ -638,4 +640,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AccountMyFolders as ComponentType);
+export default withAuth(AccountMyFolders as ComponentType, true);

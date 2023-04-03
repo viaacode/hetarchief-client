@@ -13,4 +13,6 @@ export interface MediaCardListProps
 	buttons?: (item: MediaCardProps) => ReactNode;
 	actions?: (item: MediaCardProps) => ReactNode;
 	wrapper?: (card: ReactNode, item: MediaCardProps) => ReactNode;
+	showLocallyAvailable?: boolean;
+	tempAccessLabel?: ReactNode;
 }

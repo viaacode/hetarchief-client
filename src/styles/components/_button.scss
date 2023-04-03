@@ -345,6 +345,19 @@
 	}
 }
 
+.c-button--info {
+	border: 0.1rem solid $black;
+	font-weight: lighter;
+	background-color: $white;
+	color: $black;
+
+	&:hover {
+		background-color: $white;
+		border-color: $zinc;
+		color: $zinc;
+	}
+}
+
 // States
 .c-button--disabled {
 	background-color: $silver;

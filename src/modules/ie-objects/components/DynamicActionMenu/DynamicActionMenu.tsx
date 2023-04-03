@@ -4,9 +4,12 @@ import {
 	DropdownButton,
 	DropdownContent,
 	MenuContent,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useRef, useState } from 'react';
+import { FC, ReactElement, ReactNode, useRef, useState } from 'react';
 
 import { MediaActions } from '@ie-objects/types';
 import { Icon, IconNamesLight } from '@shared/components';
@@ -52,6 +55,15 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	const visibleActions = itemsToHide > 1 ? actions.slice(0, -itemsToHide) : actions;
 	const hiddenActions = itemsToHide > 1 ? actions.slice(-itemsToHide) : [];
 
+	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
+		return (
+			<Tooltip position="top">
+				<TooltipTrigger>{trigger}</TooltipTrigger>
+				<TooltipContent>{tooltip}</TooltipContent>
+			</Tooltip>
+		);
+	};
+
 	const renderButton = (action: ActionItem) => {
 		return (
 			<li
@@ -59,13 +71,25 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				key={`media-action-${action.id}`}
 				role="listitem"
 			>
-				<Button
-					onClick={() => onClickAction(action.id)}
-					icon={action.icon}
-					variants={['silver']}
-					aria-label={action.ariaLabel}
-					title={action.tooltip}
-				/>
+				{action.tooltip ? (
+					renderInTooltip(
+						<Button
+							onClick={() => onClickAction(action.id)}
+							icon={action.icon}
+							variants={['silver']}
+							aria-label={action.ariaLabel}
+						/>,
+						action.tooltip
+					)
+				) : (
+					<Button
+						onClick={() => onClickAction(action.id)}
+						icon={action.icon}
+						variants={['silver']}
+						aria-label={action.ariaLabel}
+						title={action.tooltip}
+					/>
+				)}
 			</li>
 		);
 	};
@@ -87,7 +111,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				<DropdownButton>
 					<Button
 						className={styles['c-dynamic-action-menu__dropdown-button']}
-						icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
+						icon={<Icon name={IconNamesLight.DotsHorizontal} aria-hidden />}
 						aria-label={tText(
 							'modules/ie-objects/components/dynamic-action-menu/dynamic-action-menu___meer-acties'
 						)}

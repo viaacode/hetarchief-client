@@ -1,11 +1,14 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
+import { useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
+import { IeObjectLicense } from '@ie-objects/types';
 import { ROUTE_PARTS } from '@shared/const';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
+import { useGetAllActiveVisits } from '@visits/hooks/get-all-active-visits';
 
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
@@ -24,8 +27,14 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	actions,
 	wrapper = (card) => card,
 	className,
+	showLocallyAvailable = false,
 }) => {
 	const windowSize = useWindowSizeContext();
+
+	const user = useSelector(selectUser);
+	const { data: activeVisits } = useGetAllActiveVisits({ requesterId: user?.id || '' });
+
+	const isKeyUser = user?.isKeyUser || false;
 
 	if (!items) {
 		return null;
@@ -124,25 +133,46 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		];
 	};
 
+	const checkLocallyAvailable = (item: IdentifiableMediaCard) => {
+		const userHasAccess = activeVisits?.items.find(
+			(visit) => visit.spaceSlug === item.maintainerSlug
+		);
+		const itemHasNoVisitLicense = !item.licenses?.includes(
+			IeObjectLicense.BEZOEKERTOOL_CONTENT
+		);
+		const itemHasNoCPLicense = !item.licenses?.includes(IeObjectLicense.INTRA_CP_CONTENT);
+		const itemHasNoThumbnail = !item.preview;
+
+		if (userHasAccess && itemHasNoVisitLicense) {
+			return true;
+		}
+
+		if (isKeyUser && itemHasNoCPLicense) {
+			return true;
+		}
+
+		if (isKeyUser && itemHasNoThumbnail) {
+			return true;
+		}
+
+		return false;
+	};
+
 	const tiles = items.map((item, i) =>
 		wrapper(
-			<Link
-				key={item.schemaIdentifier}
-				href={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
-			>
-				<a className="u-text-no-decoration" aria-label={item.schemaIdentifier}>
-					<MediaCard
-						key={getKey(item, i)}
-						id={getKey(item, i)}
-						buttons={buttons?.(item)}
-						meemooIdentifier={item.meemooIdentifier}
-						actions={actions?.(item)}
-						{...item}
-						keywords={keywords}
-						view={view}
-					/>
-				</a>
-			</Link>,
+			<MediaCard
+				key={getKey(item, i)}
+				id={getKey(item, i)}
+				buttons={buttons?.(item)}
+				meemooIdentifier={item.meemooIdentifier}
+				actions={actions?.(item)}
+				{...item}
+				keywords={keywords}
+				view={view}
+				showLocallyAvailable={showLocallyAvailable && checkLocallyAvailable(item)}
+				link={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
+				maintainerSlug={item.maintainerSlug}
+			/>,
 			item
 		)
 	);

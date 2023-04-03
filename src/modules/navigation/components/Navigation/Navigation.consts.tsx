@@ -1,7 +1,8 @@
 import { Badge } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { groupBy, intersection } from 'lodash-es';
+import { groupBy, intersection, isNil } from 'lodash-es';
 import Link from 'next/link';
+import { stringifyUrl } from 'query-string';
 import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
@@ -160,7 +161,7 @@ const getVisitorSpacesDropdown = (
 					isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 				},
 				...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
-					const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.maintainerId}`;
+					const searchRouteForSpace = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace.slug}`;
 					return {
 						node: ({ closeDropdowns }) =>
 							renderLink(
@@ -256,6 +257,7 @@ const getDynamicHeaderLinks = (
 const getCpAdminManagementDropdown = (
 	currentPath: string,
 	permissions: Permission[],
+	maintainerSlug: string | null,
 	isMobile: boolean
 ): NavigationItem[] => {
 	if (
@@ -353,6 +355,29 @@ const getCpAdminManagementDropdown = (
 							},
 					  ]
 					: []),
+
+				...(!isNil(maintainerSlug)
+					? [
+							{
+								node: renderLink(
+									tText(
+										'modules/navigation/components/navigation/navigation___naar-mijn-bezoekerstool'
+									),
+									stringifyUrl({
+										url: `/${ROUTE_PARTS.search}`,
+										query: {
+											[VisitorSpaceFilterId.Maintainer]: maintainerSlug,
+										},
+									}),
+									{
+										className: dropdownCls(),
+									}
+								),
+								id: 'nav__beheer--mijn-bezoekerstool',
+								path: currentPath,
+							},
+					  ]
+					: []),
 			],
 		},
 	];
@@ -404,7 +429,8 @@ export const getNavigationItemsLeft = (
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	permissions: Permission[],
 	linkedSpaceOrId: string | null,
-	isMobile: boolean
+	isMobile: boolean,
+	maintainerSlug: string | null
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
@@ -421,7 +447,12 @@ export const getNavigationItemsLeft = (
 		linkedSpaceOrId
 	);
 
-	const cpAdminLinks = getCpAdminManagementDropdown(currentPath, permissions, isMobile);
+	const cpAdminLinks = getCpAdminManagementDropdown(
+		currentPath,
+		permissions,
+		maintainerSlug,
+		isMobile
+	);
 	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions);
 
 	return [

@@ -1,11 +1,13 @@
 import { Options } from 'ky/distribution/types/options';
-import { trimEnd } from 'lodash-es';
+import { omit, trimEnd } from 'lodash-es';
 import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
-import { StringifiableRecord, stringifyUrl } from 'query-string';
+import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 
+import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import { CheckLoginResponse } from './auth.service.types';
 
@@ -22,14 +24,28 @@ export class AuthService {
 	): Promise<void> {
 		const { redirectTo, slug, ...otherQueryParams } = query;
 		let originalPath: string = (redirectTo as string) || router.asPath || '';
+
+		// Don't redirect the user back to logout, after they logged in
 		if ((originalPath || '').endsWith('/' + ROUTE_PARTS.logout)) {
 			originalPath = '/';
 		}
+
+		// Redirect /slug to the search page with filter
 		if (slug) {
-			originalPath = `/${ROUTE_PARTS.search}/${slug}`;
+			// TODO split backend filter names (VisitorSpaceFilterId) from filter names in the url (create a new enum for those)
+			originalPath = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${slug}`;
 		}
 		if ((originalPath || '') === ROUTES.home) {
 			originalPath = `/${ROUTE_PARTS.visit}`;
+		}
+
+		// Make sure we don't show the auth modal after the idp login redirect
+		if (originalPath.includes(SHOW_AUTH_QUERY_KEY)) {
+			const parsedUrl = parseUrl(originalPath);
+			originalPath = stringifyUrl({
+				url: parsedUrl.url,
+				query: omit(parsedUrl.query, SHOW_AUTH_QUERY_KEY),
+			});
 		}
 		const returnToUrl = stringifyUrl({
 			url: trimEnd(`${publicRuntimeConfig.CLIENT_URL}${originalPath}`, '/'),

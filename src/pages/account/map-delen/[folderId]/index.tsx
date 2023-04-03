@@ -75,4 +75,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AccountSharedFolder as ComponentType);
+export default withAuth(AccountSharedFolder as ComponentType, true);

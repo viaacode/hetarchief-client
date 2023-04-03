@@ -13,3 +13,5 @@ export const TYPE_TO_ICON_MAP: Record<Exclude<IeObjectTypes, null>, IconName> = 
 	video: IconNamesLight.Video,
 	film: IconNamesLight.Video,
 };
+
+export const TRUNCATED_TEXT_LENGTH = 50;

@@ -95,4 +95,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(withAdminCoreConfig(AdminAlertsOverview as ComponentType));
+export default withAuth(withAdminCoreConfig(AdminAlertsOverview as ComponentType), true);

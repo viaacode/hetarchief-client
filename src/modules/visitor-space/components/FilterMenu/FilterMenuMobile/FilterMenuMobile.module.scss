@@ -88,15 +88,15 @@
 	height: calc(100% - #{$c-navigation-height-md});
 }
 
-.c-filter-menu-mobile__button:global(.c-button) {
+.c-filter-menu-mobile__option {
 	position: relative;
 
 	&::before {
 		content: "";
 		position: absolute;
-		top: -0.1rem;
-		bottom: -0.1rem;
-		left: -0.1rem;
+		top: 0;
+		bottom: 0;
+		left: 0;
 		background-color: $teal;
 		width: 0.8rem;
 		transform: scaleX(0);
@@ -109,12 +109,16 @@
  * Modifiers
  */
 
+.c-filter-menu-mobile--inline {
+	border: 0.1rem solid rgb(255 255 255 / 10%);
+}
+
 .c-filter-menu-mobile--active {
 	background-color: $white;
 	color: $black;
 }
 
-.c-filter-menu-mobile__button--operative:global(.c-button) {
+.c-filter-menu-mobile__option--operative {
 	&::before {
 		transform: scaleX(1);
 	}
