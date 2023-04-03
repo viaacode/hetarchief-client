@@ -355,11 +355,11 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 				className={styles['c-visitor-space-not-available-blade']}
 				isOpen={isVisitorSpaceNotAvailable}
 				renderTitle={(props) => (
-					<h3 {...props}>
+					<h4 {...props} className={styles['c-visitor-space-not-available-blade__title']}>
 						{tHtml(
 							'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 						)}
-					</h3>
+					</h4>
 				)}
 			>
 				<div className="u-px-32">
