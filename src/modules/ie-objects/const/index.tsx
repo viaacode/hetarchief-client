@@ -290,15 +290,27 @@ export const METADATA_FIELDS = (
 	},
 	{
 		title: tText('modules/ie-objects/const/index___programma'),
-		data: mapArrayToMetadataData(mediaInfo.schemaIsPartOf?.programs),
+		data: mapArrayToMetadataData(mediaInfo?.programma),
 	},
 	{
 		title: tText('modules/ie-objects/const/index___serie'),
-		data: mapArrayToMetadataData(mediaInfo.schemaIsPartOf?.series),
+		data: mapArrayToMetadataData(mediaInfo?.series),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___reeks'),
+		data: mapArrayToMetadataData(mediaInfo?.reeks),
 	},
 	{
 		title: tText('modules/ie-objects/const/index___seizoenen'),
-		data: mapArrayToMetadataData(mediaInfo.schemaIsPartOf?.seizoenen),
+		data: mapArrayToMetadataData(mediaInfo?.seizoen),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___alternatief'),
+		data: mapArrayToMetadataData(mediaInfo?.alternatief),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___archief'),
+		data: mapArrayToMetadataData(mediaInfo?.archief),
 	},
 	{
 		title: tText('modules/ie-objects/const/index___bestandstype'),
