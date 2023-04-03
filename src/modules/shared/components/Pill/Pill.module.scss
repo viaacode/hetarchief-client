@@ -1,0 +1,23 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-pill";
+
+.#{$component} {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 2rem;
+	width: 3.4rem;
+	font-size: $font-size-xs;
+	font-weight: $font-weight-bold;
+	padding: 0 $spacer-xs;
+	border-radius: 2.5rem;
+
+	&__label {
+		margin-left: $spacer-xxs;
+	}
+
+	&--expanded {
+		width: fit-content;
+	}
+}
