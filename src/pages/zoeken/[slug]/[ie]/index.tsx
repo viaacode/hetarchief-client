@@ -77,6 +77,7 @@ import {
 	Icon,
 	IconNamesLight,
 	Loading,
+	Pill,
 	ScrollableTabs,
 	TabLabel,
 } from '@shared/components';
@@ -138,7 +139,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 	const user = useSelector(selectUser);
-	const [visitorSpaceSearchUrl, setVisitorSpaceSearchUrl] = useState<string | null>(null);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isNotKiosk = useHasAnyGroup(
 		GroupName.CP_ADMIN,
@@ -269,6 +269,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		) &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		!mediaInfo.thumbnailUrl;
+	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 
 	/**
 	 * Effects
@@ -858,6 +859,19 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 	};
 
+	const renderKeyUserPill = (): ReactNode => (
+		<div className="u-mt-24">
+			<Pill
+				isExpanded
+				icon={IconNamesLight.Key}
+				label={tText(
+					'pages/bezoekersruimte/visitor-space-slug/object-id/index___voor-sleutelgebruikers'
+				)}
+				className="u-bg-mustard"
+			/>
+		</div>
+	);
+
 	const renderMetaData = () => {
 		if (isNil(mediaInfo)) {
 			return;
@@ -884,7 +898,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			<div>
 				<div className="p-object-detail__metadata-content">
 					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
-					<h3 className={clsx('u-pt-24 u-pb-32', 'p-object-detail__title')}>
+					{!showKeyUserPill && renderKeyUserPill()}
+					<h3
+						className={clsx(
+							'u-pb-32',
+							'p-object-detail__title',
+							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
+						)}
+					>
 						{mediaInfo?.name}
 					</h3>
 
