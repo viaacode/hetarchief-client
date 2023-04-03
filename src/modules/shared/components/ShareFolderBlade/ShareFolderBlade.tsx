@@ -7,7 +7,7 @@ import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { selectUser } from '@auth/store/user';
-import { Blade, CopyButton } from '@shared/components';
+import { Blade, CopyButton, Icon, IconNamesLight } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service/campaign-monitor.service';
@@ -64,6 +64,14 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 					)} ${emailInputValue}`,
 				});
 				handleClose();
+			} else {
+				toastService.notify({
+					maxLines: 3,
+					title: tText('pages/account/map-delen/folder-id/index___error'),
+					description: tText(
+						'pages/account/map-delen/folder-id/index___error-er-is-iets-misgelopen'
+					),
+				});
 			}
 		} catch (err) {
 			console.error(err);
@@ -108,10 +116,10 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		>
 			<div className={styles['c-share-folder-blade__content']}>
 				<>
-					<dt className={styles['c-share-folder-blade__content-label']}>
+					<label className={styles['c-share-folder-blade__content-label']}>
 						<h5>{tText('pages/account/map-delen/folder-id/index___via-deellink')}</h5>
-					</dt>
-					<dd
+					</label>
+					<div
 						className={clsx(
 							styles['c-share-folder-blade__content-value'],
 							styles['c-share-folder-blade__content-copy-container']
@@ -121,17 +129,24 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							value={link}
 							className={styles['c-share-folder-blade__content-copy-input']}
 						/>
-						<CopyButton text={link} isInputCopy />
-					</dd>
-					<dt className={styles['c-share-folder-blade__content-label']}>
+						<CopyButton
+							text={link}
+							iconStart={<Icon name={IconNamesLight.Copy} aria-hidden />}
+							label={tText(
+								'modules/shared/components/copy-button/copy-button___kopieer'
+							)}
+							variants={['inputCopy']}
+						/>
+					</div>
+					<label className={styles['c-share-folder-blade__content-label']}>
 						<h5 className={styles['c-share-folder-blade__content-label--margin-top']}>
 							{tText('pages/account/map-delen/folder-id/index___via-email')}
 						</h5>
-					</dt>
-					<dt className={styles['c-share-folder-blade__content-label']}>
+					</label>
+					<label className={styles['c-share-folder-blade__content-label']}>
 						{tText('pages/account/map-delen/folder-id/index___email')}
-					</dt>
-					<dd className={styles['c-share-folder-blade__content-value']}>
+					</label>
+					<div className={styles['c-share-folder-blade__content-value']}>
 						<FormControl
 							className="u-mb-8 u-mb-24:md"
 							id={labelKeys.email}
@@ -143,7 +158,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 								render={({ field }) => renderTextInput(field)}
 							/>
 						</FormControl>
-					</dd>
+					</div>
 
 					<Button
 						label={tText('pages/account/map-delen/folder-id/index___verstuur')}

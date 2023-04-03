@@ -16,6 +16,7 @@ $component: "c-share-folder-blade";
 
 		&-label {
 			font-weight: bold;
+			display: block;
 			margin-bottom: $spacer-sm;
 
 			&--margin-top {
@@ -24,6 +25,7 @@ $component: "c-share-folder-blade";
 		}
 
 		&-value {
+			margin-top: $spacer-md;
 			margin-left: 0;
 			margin-bottom: $spacer-md;
 		}
@@ -49,7 +51,7 @@ $component: "c-share-folder-blade";
 		background-color: $white;
 		color: $black;
 		border: 0.1rem solid $black !important;
-		font-weight: 600 !important;
+		font-weight: $font-weight-bold !important;
 		margin-bottom: $spacer-sm;
 
 		&:hover {
@@ -61,7 +63,7 @@ $component: "c-share-folder-blade";
 		&:disabled {
 			background-color: $zinc;
 			color: $neutral;
-			border: 1px solid $zinc !important;
+			border: 0.1rem solid $zinc !important;
 		}
 	}
 }
