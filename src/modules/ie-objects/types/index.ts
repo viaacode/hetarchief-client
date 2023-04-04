@@ -39,9 +39,14 @@ export interface IeObject {
 	meemooDescriptionProgramme: string;
 	meemooDescriptionCast: string;
 	licenses: IeObjectLicense[];
-	series?: string[];
 	accessThrough?: IeObjectAccessThrough[];
+	series?: string[];
 	program?: string[];
+	archief?: string[];
+	reeks?: string[];
+	programma?: string[];
+	seizoen?: string[];
+	alternatief?: string[];
 	alternativeName?: string[];
 	premisIsPartOf?: string;
 	contactInfo?: IeObjectContactInfo;
