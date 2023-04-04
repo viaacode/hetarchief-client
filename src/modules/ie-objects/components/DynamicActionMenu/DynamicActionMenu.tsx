@@ -33,11 +33,15 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	const { tText } = useTranslation();
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-	const listRef = useRef<HTMLUListElement>(null);
+	const listRef = useRef<HTMLDivElement>(null);
 	const size = useElementSize(listRef);
 
+	const primaryActions = actions.filter(({ isPrimary }: ActionItem) => isPrimary);
+	const secondaryActions = actions.filter(({ isPrimary }: ActionItem) => !isPrimary);
+
 	const totalWidth =
-		DYNAMIC_ACTION_WIDTH * actions.length + DYNAMIC_ACTION_SPACER * (actions.length - 1);
+		DYNAMIC_ACTION_WIDTH * secondaryActions.length +
+		DYNAMIC_ACTION_SPACER * (secondaryActions.length - 1);
 
 	// Counts buttons that don't fit the container
 	const overflowCount = size?.width
@@ -48,12 +52,13 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		: 0;
 
 	// Clamp items to hide at limit
-	const limitReached = actions.length - (overflowCount + 1) < limit;
-	const itemsToHide = limitReached ? actions.length - limit : overflowCount + 1;
+	const limitReached = secondaryActions.length - (overflowCount + 1) < limit;
+	const itemsToHide = limitReached ? secondaryActions.length - limit : overflowCount + 1;
 
 	// Divide actions into visible and dropdown actions
-	const visibleActions = itemsToHide > 1 ? actions.slice(0, -itemsToHide) : actions;
-	const hiddenActions = itemsToHide > 1 ? actions.slice(-itemsToHide) : [];
+	const visibleActions =
+		itemsToHide > 1 ? secondaryActions.slice(0, -itemsToHide) : secondaryActions;
+	const hiddenActions = itemsToHide > 1 ? secondaryActions.slice(-itemsToHide) : [];
 
 	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
 		return (
@@ -64,35 +69,51 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		);
 	};
 
-	const renderButton = (action: ActionItem) => {
-		return (
-			<li
-				className={styles['c-dynamic-action-menu__item']}
-				key={`media-action-${action.id}`}
-				role="listitem"
+	const renderPrimaryButton = (action: ActionItem) => (
+		<li
+			className={styles['c-dynamic-action-menu__primary-item']}
+			key={`media-action-${action.id}`}
+			role="listitem"
+		>
+			<Button
+				variants={['teal', 'md']}
+				iconStart={action.icon}
+				onClick={() => onClickAction(action.id)}
+				aria-label={action.ariaLabel}
+				title={action.tooltip}
 			>
-				{action.tooltip ? (
-					renderInTooltip(
-						<Button
-							onClick={() => onClickAction(action.id)}
-							icon={action.icon}
-							variants={['silver']}
-							aria-label={action.ariaLabel}
-						/>,
-						action.tooltip
-					)
-				) : (
+				<span className="u-text-ellipsis">{action.label}</span>
+			</Button>
+		</li>
+	);
+
+	const renderSecondaryButton = (action: ActionItem) => (
+		<li
+			className={styles['c-dynamic-action-menu__secondary-item']}
+			key={`media-action-${action.id}`}
+			role="listitem"
+		>
+			{action.tooltip ? (
+				renderInTooltip(
 					<Button
 						onClick={() => onClickAction(action.id)}
 						icon={action.icon}
 						variants={['silver']}
 						aria-label={action.ariaLabel}
-						title={action.tooltip}
-					/>
-				)}
-			</li>
-		);
-	};
+					/>,
+					action.tooltip
+				)
+			) : (
+				<Button
+					onClick={() => onClickAction(action.id)}
+					icon={action.icon}
+					variants={['silver']}
+					aria-label={action.ariaLabel}
+					title={action.tooltip}
+				/>
+			)}
+		</li>
+	);
 
 	const renderDropdown = (dropdownActions: ActionItem[]) => {
 		const mappedActions = dropdownActions.map((action) => {
@@ -101,6 +122,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				iconStart: action.icon,
 			};
 		});
+
 		return (
 			<Dropdown
 				isOpen={isDropdownOpen}
@@ -131,18 +153,20 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	return (
 		<>
-			<ul
-				ref={listRef}
-				className={clsx(className, styles['c-dynamic-action-menu'])}
-				role="list"
-				style={{
-					minWidth: `${
-						(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER
-					}px`,
-				}}
-			>
-				{visibleActions.map(renderButton)}
-				{!!hiddenActions.length && renderDropdown(hiddenActions)}
+			<ul className={clsx(className, styles['c-dynamic-action-menu'])} role="list">
+				{primaryActions.map(renderPrimaryButton)}
+				<div
+					className={clsx(className, styles['c-dynamic-action-menu__secondary'])}
+					ref={listRef}
+					style={{
+						minWidth: `${
+							(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER
+						}px`,
+					}}
+				>
+					{visibleActions.map(renderSecondaryButton)}
+					{!!hiddenActions.length && renderDropdown(hiddenActions)}
+				</div>
 			</ul>
 		</>
 	);

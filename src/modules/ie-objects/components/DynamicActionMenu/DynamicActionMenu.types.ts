@@ -15,4 +15,5 @@ export interface ActionItem {
 	id: MediaActions;
 	ariaLabel: string;
 	tooltip?: string;
+	isPrimary?: boolean;
 }
