@@ -18,7 +18,7 @@ import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
-import { DropdownMenu, IconNamesLight, Modal } from '@shared/components';
+import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -231,19 +231,18 @@ const MediaCard: FC<MediaCardProps> = ({
 		return hasRelated && <Badge variants="small" text={<Icon name={IconNamesLight.Link} />} />;
 	};
 
-	const renderLocallyAvailablePill = () => {
-		return (
-			<div className={styles['c-media-card__locally-available-pill']}>
-				<Icon
-					name={IconNamesLight.Forbidden}
-					className={styles['c-media-card__locally-available-pill--icon']}
-				/>
-				{tText(
+	const renderLocallyAvailablePill = () => (
+		<div className={styles['c-media-card__locally-available-pill']}>
+			<Pill
+				isExpanded
+				icon={IconNamesLight.Forbidden}
+				label={tText(
 					'modules/shared/components/media-card/media-card___enkel-ter-plaatse-beschikbaar'
 				)}
-			</div>
-		);
-	};
+				className="u-bg-black u-color-white"
+			/>
+		</div>
+	);
 
 	const renderImage = (imgPath: string | undefined) =>
 		imgPath
@@ -270,65 +269,52 @@ const MediaCard: FC<MediaCardProps> = ({
 			  )
 			: renderNoContent();
 
-	const highlighted = (toHighlight: string) => {
-		return (
-			<Highlighter
-				searchWords={keywords ?? []}
-				autoEscape={true}
-				textToHighlight={toHighlight}
+	const highlighted = (toHighlight: string) => (
+		<Highlighter searchWords={keywords ?? []} autoEscape={true} textToHighlight={toHighlight} />
+	);
+
+	const renderKeyUserPill = () => (
+		<div className="u-mt-8">
+			<Pill
+				icon={IconNamesLight.Key}
+				label={tText(
+					'modules/shared/components/media-card/media-card___item-bekijken-uit-jouw-sector'
+				)}
+				className="u-color-black u-bg-mustard"
 			/>
-		);
-	};
+		</div>
+	);
 
-	const renderKeyUserPill = () => {
-		return (
-			<span className={styles['c-media-card--key-user-pill']}>
-				<Tooltip position="top">
-					<TooltipTrigger>
-						<Icon name={IconNamesLight.Key} />
-					</TooltipTrigger>
-					<TooltipContent>
-						{tText(
-							'modules/shared/components/media-card/media-card___item-bekijken-uit-jouw-sector'
-						)}
-					</TooltipContent>
-				</Tooltip>
-			</span>
-		);
-	};
+	const renderLocallyAvailableButtons = () => (
+		<div className={styles['c-media-card__locally-available-container']}>
+			<Button
+				iconStart={<Icon name={IconNamesLight.Info} />}
+				label={tText('modules/shared/components/media-card/media-card___meer-info')}
+				variants={['info']}
+				className={styles['c-media-card__info-button']}
+				onClick={() => setIsInfoModalOpen(true)}
+			/>
+			<Button
+				label={tText('modules/shared/components/media-card/media-card___plan-een-bezoek')}
+				variants={['dark']}
+				className={styles['c-media-card__visit-button']}
+				onClick={() => setIsRequestAccessBladeOpen(true)}
+			/>
+		</div>
+	);
 
-	const renderLocallyAvailableButtons = () => {
-		return (
-			<div className={styles['c-media-card__locally-available-container']}>
-				<Button
-					iconStart={<Icon name={IconNamesLight.Info} />}
-					label={tText('modules/shared/components/media-card/media-card___meer-info')}
-					variants={['info']}
-					className={styles['c-media-card__info-button']}
-					onClick={() => setIsInfoModalOpen(true)}
-				/>
-				<Button
-					label={tText(
-						'modules/shared/components/media-card/media-card___plan-een-bezoek'
-					)}
-					variants={['dark']}
-					className={styles['c-media-card__visit-button']}
-					onClick={() => setIsRequestAccessBladeOpen(true)}
-				/>
-			</div>
-		);
-	};
-
-	const renderTempAccessPill = () => {
-		return (
-			<div className={styles['c-media-card--temp-access']}>
-				<Icon name={IconNamesLight.Clock} />
-				<span className={styles['c-media-card--temp-access-label']}>
-					{tText('modules/shared/components/media-card/media-card___tijdelijke-toegang')}
-				</span>
-			</div>
-		);
-	};
+	const renderTempAccessPill = () => (
+		<div className="u-mt-8 ">
+			<Pill
+				isExpanded
+				icon={IconNamesLight.Clock}
+				label={tText(
+					'modules/shared/components/media-card/media-card___tijdelijke-toegang'
+				)}
+				className="u-color-black u-bg-lila"
+			/>
+		</div>
+	);
 
 	return (
 		<div id={id}>
