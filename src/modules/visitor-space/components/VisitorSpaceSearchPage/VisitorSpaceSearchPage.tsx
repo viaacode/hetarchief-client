@@ -211,10 +211,10 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		setActiveVisitorSpace(visitorSpace);
 		setQuery({
-			...VISITOR_SPACE_QUERY_PARAM_INIT,
 			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceSlug || undefined,
 		});
-	}, [activeVisitorSpaceSlug, setQuery, visitorSpaces]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [activeVisitorSpaceSlug, visitorSpaces]);
 
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
