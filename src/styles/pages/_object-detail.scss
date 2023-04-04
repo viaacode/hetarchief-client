@@ -369,17 +369,6 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
-	&__actions {
-		display: flex;
-		flex-direction: column;
-	}
-
-	&__primary-actions {
-		display: flex;
-		flex-direction: row;
-		margin-bottom: $spacer-sm;
-	}
-
 	&__export {
 		min-width: 0;
 		margin-right: $spacer-xs;

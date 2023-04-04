@@ -1,7 +1,5 @@
 import { MenuItemInfo, TabProps } from '@meemoo/react-components';
-import Image from 'next/image';
 
-import { User } from '@auth/types';
 import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@ie-objects/components';
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import { IeObject, MediaActions, MetadataExportFormats, ObjectDetailTabs } from '@ie-objects/types';
@@ -156,18 +154,59 @@ export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true):
 /**
  * Actions
  */
+export const ANONYMOUS_ACTION_SORT_MAP = (): { id: MediaActions; isPrimary?: boolean }[] => [
+	{ id: MediaActions.RequestMaterial, isPrimary: true },
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
+
+export const KIOSK_ACTION_SORT_MAP = (): { id: MediaActions; isPrimary?: boolean }[] => [];
+
+export const VISITOR_ACTION_SORT_MAP = (): { id: MediaActions; isPrimary?: boolean }[] => [
+	{ id: MediaActions.RequestMaterial, isPrimary: true },
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
+
+export const KEY_USER_ACTION_SORT_MAP = (
+	isPublicCollection: boolean
+): { id: MediaActions; isPrimary?: boolean }[] => [
+	...(isPublicCollection ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !isPublicCollection },
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
 
 export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
 	isInAFolder: boolean,
 	canReport: boolean,
 	canRequestAccess: boolean,
-	canRequestMaterial: boolean
+	canRequestMaterial: boolean,
+	canExport: boolean
 ): DynamicActionMenuProps => {
 	const activeIconSet = isInAFolder ? IconNamesSolid : IconNamesLight;
 
+	// ToDo(Silke): Implement export button
 	return {
 		actions: [
+			...((canExport
+				? [
+						{
+							label: tText('modules/ie-objects/const/index___exporteer-metadata'),
+							icon: (
+								<Icon
+									aria-hidden
+									className="u-font-size-24 u-text-left"
+									name={IconNamesLight.Export}
+								/>
+							),
+							id: MediaActions.Export,
+							ariaLabel: tText('modules/ie-objects/const/index___exporteer-metadata'),
+							tooltip: tText('modules/ie-objects/const/index___exporteer-metadata'),
+						},
+				  ]
+				: []) as ActionItem[]),
 			...((canRequestMaterial
 				? [
 						{

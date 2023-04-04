@@ -14,7 +14,16 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { capitalize, intersection, isNil, kebabCase, lowerCase } from 'lodash-es';
+import {
+	capitalize,
+	indexOf,
+	intersection,
+	isEmpty,
+	isNil,
+	kebabCase,
+	lowerCase,
+	sortBy,
+} from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -22,7 +31,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
+import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
@@ -31,7 +40,9 @@ import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
+	ActionItem,
 	DynamicActionMenu,
+	DynamicActionMenuProps,
 	MediaObject,
 	Metadata,
 	MetadataItem,
@@ -41,11 +52,14 @@ import {
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import {
+	ANONYMOUS_ACTION_SORT_MAP,
 	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	formatErrorPlaceholder,
 	IMAGE_FORMATS,
+	KEY_USER_ACTION_SORT_MAP,
+	KIOSK_ACTION_SORT_MAP,
 	MEDIA_ACTIONS,
 	METADATA_EXPORT_OPTIONS,
 	METADATA_FIELDS,
@@ -53,6 +67,7 @@ import {
 	OBJECT_DETAIL_TABS,
 	objectPlaceholder,
 	ticketErrorPlaceholder,
+	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/const';
 import { useGetIeObjectsExport } from '@ie-objects/hooks/get-ie-objects-export';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
@@ -89,6 +104,7 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
@@ -132,20 +148,23 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
+	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+	const isKeyUser = useIsKeyUser();
+	const isNotKiosk = useHasAnyGroup(
+		GroupName.CP_ADMIN,
+		GroupName.MEEMOO_ADMIN,
+		GroupName.VISITOR,
+		GroupName.ANONYMOUS
+	);
+
+	// Permissions
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 	const canRequestMaterial: boolean | null = useHasAllPermission(
 		Permission.CREATE_MATERIAL_REQUESTS
-	);
-	const user = useSelector(selectUser);
-	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
-	const isNotKiosk = useHasAnyGroup(
-		GroupName.CP_ADMIN,
-		GroupName.MEEMOO_ADMIN,
-		GroupName.VISITOR,
-		GroupName.ANONYMOUS
 	);
 
 	// Internal state
@@ -336,6 +355,27 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [relatedData]);
 
 	/**
+	 * Helpers
+	 */
+
+	const getSortMapByUserType = useCallback((): { id: MediaActions; isPrimary?: boolean }[] => {
+		if (!isNil(user)) {
+			return ANONYMOUS_ACTION_SORT_MAP();
+		}
+
+		if (isKeyUser) {
+			// hasAccessToVisitorSpace = false -> object from public collection
+			return KEY_USER_ACTION_SORT_MAP(!hasAccessToVisitorSpace);
+		}
+
+		if (!isNotKiosk) {
+			return KIOSK_ACTION_SORT_MAP();
+		}
+
+		return VISITOR_ACTION_SORT_MAP();
+	}, [hasAccessToVisitorSpace, isKeyUser, isNotKiosk, user]);
+
+	/**
 	 * Mapping
 	 */
 	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
@@ -400,6 +440,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				break;
 			case MediaActions.RequestMaterial:
 				onRequestMaterialClick();
+				break;
+			case MediaActions.Export:
+				// ToDo(Silke): Handle export
+				// onExportClick();
 				break;
 		}
 	};
@@ -546,6 +590,51 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		);
 	}, [isMobile, showLinkedSpaceAsHomepage, tHtml, visitRequest?.endAt]);
 
+	const mediaActions: DynamicActionMenuProps = useMemo(() => {
+		const original = MEDIA_ACTIONS(
+			canManageFolders,
+			isInAFolder(collections, mediaInfo?.schemaIdentifier),
+			isNotKiosk,
+			!!canRequestAccess,
+			canRequestMaterial,
+			canDownloadMetadata
+		);
+
+		// Sort, filter and tweak actions according to the given sort map
+		const sortMap = getSortMapByUserType();
+		const actions: ActionItem[] = sortBy(original.actions, ({ id }: ActionItem) =>
+			indexOf(
+				sortMap.map((d) => d.id),
+				id
+			)
+		)
+			.map((action: ActionItem) => {
+				const existsInSortMap = !isNil(sortMap.find((d) => d.id === action.id));
+
+				return existsInSortMap
+					? {
+							...action,
+							isPrimary: sortMap.find((d) => action.id === d.id)?.isPrimary,
+					  }
+					: null;
+			})
+			.filter(Boolean) as ActionItem[];
+
+		return {
+			...original,
+			actions,
+		};
+	}, [
+		canManageFolders,
+		collections,
+		mediaInfo?.schemaIdentifier,
+		isNotKiosk,
+		canRequestAccess,
+		canRequestMaterial,
+		canDownloadMetadata,
+		getSortMapByUserType,
+	]);
+
 	/**
 	 * Render
 	 */
@@ -557,12 +646,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
+
 		if (isErrorNoLicense) {
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
 		}
+
 		if (isErrorPlayableUrl || !playableUrl || !representation) {
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
 		}
+
 		const shared: Partial<FlowPlayerProps> = {
 			className: clsx(
 				'p-object-detail__flowplayer',
@@ -583,6 +675,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		if (FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
 			return <FlowPlayer key={flowPlayerKey} src={playableUrl} {...shared} />;
 		}
+
 		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			if (!peakFileId || !!peakJson) {
 				return (
@@ -797,24 +890,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</div>
 	);
 
-	const renderMetaDataActions = (): ReactNode => {
-		const dynamicActions = MEDIA_ACTIONS(
-			canManageFolders,
-			isInAFolder(collections, mediaInfo?.schemaIdentifier),
-			isNotKiosk,
-			!!canRequestAccess,
-			canRequestMaterial
-		);
-
-		return (
-			<div className="u-pb-24 p-object-detail__actions">
-				<div className="p-object-detail__primary-actions">
-					{showMetadataExportDropdown && renderExportDropdown()}
-					<DynamicActionMenu {...dynamicActions} onClickAction={onClickAction} />
-				</div>
+	const renderMetaDataActions = (): ReactNode => (
+		<div className="u-pb-24 p-object-detail__actions">
+			<div className="p-object-detail__primary-actions">
+				{/* {showMetadataExportDropdown && renderExportDropdown()} */}
+				<DynamicActionMenu {...mediaActions} onClickAction={onClickAction} />
 			</div>
-		);
-	};
+		</div>
+	);
 
 	const renderMaintainerMetaData = ({
 		maintainerDescription,

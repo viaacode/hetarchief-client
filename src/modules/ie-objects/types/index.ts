@@ -174,6 +174,7 @@ export enum MediaActions {
 	RequestMaterial = 'request-material',
 	Report = 'report',
 	RequestAccess = 'request-access',
+	Export = 'export',
 }
 
 // Metadata
