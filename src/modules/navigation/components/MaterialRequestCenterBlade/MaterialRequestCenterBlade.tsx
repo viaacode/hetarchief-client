@@ -73,7 +73,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	useEffect(() => {
 		materialRequests && dispatch(setMaterialRequestCount(materialRequests.items.length));
-	}, [materialRequests]);
+	}, [materialRequests, dispatch]);
 
 	useEffect(() => {
 		isOpen && refetch();

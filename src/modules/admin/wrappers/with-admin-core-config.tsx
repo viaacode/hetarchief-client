@@ -126,6 +126,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						calendar: { name: IconNamesLight.Calendar },
 						clock: { name: IconNamesLight.Clock },
 						export: { name: IconNamesLight.Export },
+						info: { name: IconNamesLight.Info },
 					},
 					list: ICON_LIST_CONFIG,
 					alerts: ALERT_ICON_LIST_CONFIG,
@@ -217,7 +218,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						// Client decides what should happen when an external link is clicked
 					},
 				},
-				routes: ADMIN_CORE_ROUTES as any, // TODO: remove any when the routes record becomes a partial in admin-core
+				routes: ADMIN_CORE_ROUTES,
 				env: {},
 			};
 			AdminConfigManager.setConfig(config);

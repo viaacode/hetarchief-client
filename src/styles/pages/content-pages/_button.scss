@@ -34,18 +34,18 @@
 		}
 
 		/**
-		* Cross-browser styles for explicit focus via
-		* keyboard-based (eg Tab) navigation or the
-		* .focus-visible utility class.
-		*/
+* Cross-browser styles for explicit focus via
+* keyboard-based (eg Tab) navigation or the
+* .focus-visible utility class.
+*/
 		&:focus,
 		.focus-visible:focus:not(:focus-visible) {
 			outline: 2px solid $black;
 		}
 
 		/**
-	* Remove focus styles for non-keyboard focus.
-	*/
+* Remove focus styles for non-keyboard focus.
+*/
 		&:focus:not(:focus-visible) {
 			outline: 0;
 			box-shadow: none;
@@ -53,8 +53,8 @@
 	}
 
 	/**
-   * Elements
-   */
+* Elements
+*/
 
 	.c-button__content {
 		display: inline-flex;
@@ -78,8 +78,8 @@
 	}
 
 	/**
-   * Modifiers
-   */
+* Modifiers
+*/
 
 	// Silver
 	button[class*="c-button"][class*="c-button--secondary"][class*="skins-module_c-button--secondary"] {
@@ -100,10 +100,10 @@
 		}
 
 		/**
-	* Cross-browser styles for explicit focus via
-	* keyboard-based (eg Tab) navigation or the
-	* .focus-visible utility class.
-	*/
+* Cross-browser styles for explicit focus via
+* keyboard-based (eg Tab) navigation or the
+* .focus-visible utility class.
+*/
 		&:focus,
 		.focus-visible:focus:not(:focus-visible) {
 			outline: 2px solid $teal;
@@ -133,10 +133,10 @@ button[class*="c-button"][class*="c-button--tertiary"][class*="skins-module_c-bu
 	}
 
 	/**
-  * Cross-browser styles for explicit focus via
-  * keyboard-based (eg Tab) navigation or the
-  * .focus-visible utility class.
-  */
+* Cross-browser styles for explicit focus via
+* keyboard-based (eg Tab) navigation or the
+* .focus-visible utility class.
+*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
@@ -169,10 +169,10 @@ button[class*="c-button"][class*="c-button--link"][class*="skins-module_c-button
 	}
 
 	/**
-  * Cross-browser styles for explicit focus via
-  * keyboard-based (eg Tab) navigation or the
-  * .focus-visible utility class.
-  */
+* Cross-browser styles for explicit focus via
+* keyboard-based (eg Tab) navigation or the
+* .focus-visible utility class.
+*/
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		outline: 2px solid $teal;
