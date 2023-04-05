@@ -48,6 +48,7 @@ import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -131,6 +132,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const user = useSelector(selectUser);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
+	const isKeyUser = useIsKeyUser();
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -156,7 +158,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	const activeVisitorSpaceSlug: string =
 		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
 
-	const isKeyUser = user?.isKeyUser || false;
 	const isPublicCollection = activeVisitorSpaceSlug === PUBLIC_COLLECTION;
 
 	/**
@@ -211,10 +212,10 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		setActiveVisitorSpace(visitorSpace);
 		setQuery({
-			...VISITOR_SPACE_QUERY_PARAM_INIT,
 			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceSlug || undefined,
 		});
-	}, [activeVisitorSpaceSlug, setQuery, visitorSpaces]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [activeVisitorSpaceSlug, visitorSpaces]);
 
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids

@@ -11,18 +11,6 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	&--key-user {
 		border: 1px solid $mustard !important;
-
-		&-pill {
-			margin-top: $spacer-xs;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			color: $black;
-			border-radius: 2.5rem;
-			width: 3.4rem;
-			height: 2rem;
-			background-color: $mustard;
-		}
 	}
 
 	&__locally-available-container {
@@ -66,40 +54,9 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	&__locally-available-pill {
 		position: absolute;
-		display: flex;
-		justify-content: center;
-		align-items: center;
 		right: $spacer-xs;
 		top: $spacer-xs;
-		padding-right: $spacer-xs;
-		font-size: $font-size-xs;
-		color: $white;
-		background-color: $black;
-		border-radius: 2.5rem;
-		height: 2.1rem;
-
-		&--icon {
-			margin-left: $spacer-xs;
-			margin-right: $spacer-xxs;
-		}
-	}
-
-	&--temp-access {
-		display: flex;
-		align-items: center;
-		width: fit-content;
-		background-color: $lila;
-		font-size: x-small;
-		font-weight: bold;
-		color: $black;
-		border-radius: 2.5rem;
-		height: 2rem;
-		margin-top: $spacer-xs;
-		padding: 0 $spacer-xs;
-
-		&-label {
-			margin-left: $spacer-xxs;
-		}
+		font-weight: $font-weight-normal;
 	}
 
 	&__link {

@@ -18,6 +18,7 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -30,7 +31,8 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 
 	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
-	const isKeyUser: boolean = user?.isKeyUser || false;
+	const isKeyUser: boolean = useIsKeyUser();
+
 	const canEdit: boolean =
 		user?.idp === Idp.HETARCHIEF && user.permissions.includes(Permission.CAN_EDIT_PROFILE_INFO);
 
