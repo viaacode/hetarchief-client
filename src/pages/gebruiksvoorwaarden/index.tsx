@@ -10,7 +10,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
-import { checkLoginAction, selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user';
 import {
 	KNOWN_STATIC_ROUTES,
 	REDIRECT_TO_QUERY_KEY,
@@ -70,7 +70,7 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 
 	const onConfirmClick = () => {
 		if (user) {
-			TosService.acceptTos(user?.id).then((updated) => {
+			TosService.acceptTos(user?.id).then(() => {
 				router.push(query[REDIRECT_TO_QUERY_KEY]);
 				toastService.notify({
 					title: tHtml('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'),
