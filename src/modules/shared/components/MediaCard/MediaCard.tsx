@@ -1,11 +1,4 @@
-import {
-	Badge,
-	Button,
-	Card,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from '@meemoo/react-components';
+import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
@@ -14,6 +7,7 @@ import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useSelector } from 'react-redux';
 
+import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
@@ -303,18 +297,23 @@ const MediaCard: FC<MediaCardProps> = ({
 		</div>
 	);
 
-	const renderTempAccessPill = () => (
-		<div className="u-mt-8 ">
-			<Pill
-				isExpanded
-				icon={IconNamesLight.Clock}
-				label={tText(
-					'modules/shared/components/media-card/media-card___tijdelijke-toegang'
-				)}
-				className="u-color-black u-bg-lila"
-			/>
-		</div>
-	);
+	const renderTempAccessPill = () => {
+		if (user?.groupName === GroupName.MEEMOO_ADMIN) {
+			return null;
+		}
+		return (
+			<div className="u-mt-8 ">
+				<Pill
+					isExpanded
+					icon={IconNamesLight.Clock}
+					label={tText(
+						'modules/shared/components/media-card/media-card___tijdelijke-toegang'
+					)}
+					className="u-color-black u-bg-lila"
+				/>
+			</div>
+		);
+	};
 
 	return (
 		<div id={id}>

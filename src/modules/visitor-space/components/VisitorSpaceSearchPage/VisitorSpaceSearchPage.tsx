@@ -709,6 +709,10 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
+		if (user?.groupName === GroupName.MEEMOO_ADMIN) {
+			return null;
+		}
+
 		// Strip out public collection and own visitor space (cp)
 		const visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
