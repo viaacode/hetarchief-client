@@ -726,7 +726,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Create a link element for each visitor space
 		const visitorSpaceLinks = visitorSpaces.map(
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
-				<Link key={visitorSpace.id} href={`/zoeken?maintainer=${visitorSpace?.id}`}>
+				<Link
+					key={visitorSpace.id}
+					href={`/zoeken?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.id}`}
+				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>
 			)
