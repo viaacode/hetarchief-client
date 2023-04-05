@@ -61,6 +61,7 @@ import {
 	KEY_USER_ACTION_SORT_MAP,
 	KIOSK_ACTION_SORT_MAP,
 	MEDIA_ACTIONS,
+	MEEMOO_ADMIN_ACTION_SORT_MAP,
 	METADATA_EXPORT_OPTIONS,
 	METADATA_FIELDS,
 	noLicensePlaceholder,
@@ -82,6 +83,7 @@ import {
 	IeObjectRepresentation,
 	MediaActions,
 	MetadataExportFormats,
+	MetadataSortMap,
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTagList, mapKeywordsToTags } from '@ie-objects/utils';
@@ -102,7 +104,7 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useHasAllGroup, useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -151,6 +153,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isKeyUser = useIsKeyUser();
+	const isMeemooAdmin = useHasAllGroup(GroupName.MEEMOO_ADMIN);
 	const isNotKiosk = useHasAnyGroup(
 		GroupName.CP_ADMIN,
 		GroupName.MEEMOO_ADMIN,
@@ -275,14 +278,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const hasAccessToVisitorSpace = !!intersection(mediaInfo?.accessThrough, [
+	const hasAccessToVisitorSpaceOfObject = !!intersection(mediaInfo?.accessThrough, [
 		IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 		IeObjectAccessThrough.VISITOR_SPACE_FULL,
 	]).length;
-	const showMetadataExportDropdown =
-		canDownloadMetadata &&
-		visitRequest?.status === VisitStatus.APPROVED &&
-		hasAccessToVisitorSpace;
 	const canRequestAccess =
 		!!accessibleVisitorSpaces?.find(
 			(space) => space.maintainerId === mediaInfo?.maintainerId
@@ -355,27 +354,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [relatedData]);
 
 	/**
-	 * Helpers
-	 */
-
-	const getSortMapByUserType = useCallback((): { id: MediaActions; isPrimary?: boolean }[] => {
-		if (!isNil(user)) {
-			return ANONYMOUS_ACTION_SORT_MAP();
-		}
-
-		if (isKeyUser) {
-			// hasAccessToVisitorSpace = false -> object from public collection
-			return KEY_USER_ACTION_SORT_MAP(!hasAccessToVisitorSpace);
-		}
-
-		if (!isNotKiosk) {
-			return KIOSK_ACTION_SORT_MAP();
-		}
-
-		return VISITOR_ACTION_SORT_MAP();
-	}, [hasAccessToVisitorSpace, isKeyUser, isNotKiosk, user]);
-
-	/**
 	 * Mapping
 	 */
 	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
@@ -441,32 +419,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			case MediaActions.RequestMaterial:
 				onRequestMaterialClick();
 				break;
-			case MediaActions.Export:
-				// ToDo(Silke): Handle export
-				// onExportClick();
-				break;
 		}
-	};
-
-	const onExportClick = async (format: MetadataExportFormats) => {
-		const metadataBlob = await getMediaExport({
-			id: router.query.ie as string,
-			format,
-		});
-
-		if (metadataBlob) {
-			save(
-				metadataBlob,
-				`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
-			);
-		} else {
-			toastService.notify({
-				title: tHtml('pages/slug/ie/index___error') || 'error',
-				description: tHtml('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
-			});
-		}
-
-		setMetadataExportDropdownOpen(false);
 	};
 
 	const onRequestMaterialClick = () => {
@@ -548,6 +501,111 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 	};
 
+	const getSortMapByUserType = useCallback((): MetadataSortMap[] => {
+		const isPublicCollection = !hasAccessToVisitorSpaceOfObject;
+
+		if (!isNil(user)) {
+			return ANONYMOUS_ACTION_SORT_MAP();
+		}
+
+		if (isKeyUser) {
+			return KEY_USER_ACTION_SORT_MAP(isPublicCollection);
+		}
+
+		if (!isNotKiosk) {
+			return KIOSK_ACTION_SORT_MAP();
+		}
+
+		if (isMeemooAdmin) {
+			return MEEMOO_ADMIN_ACTION_SORT_MAP(isPublicCollection);
+		}
+
+		return VISITOR_ACTION_SORT_MAP(isPublicCollection);
+	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isNotKiosk, user]);
+
+	const onExportClick = useCallback(
+		async (format: MetadataExportFormats) => {
+			const metadataBlob = await getMediaExport({
+				id: router.query.ie as string,
+				format,
+			});
+
+			if (metadataBlob) {
+				save(
+					metadataBlob,
+					`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
+				);
+			} else {
+				toastService.notify({
+					title: tHtml('pages/slug/ie/index___error') || 'error',
+					description: tHtml(
+						'pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'
+					),
+				});
+			}
+
+			setMetadataExportDropdownOpen(false);
+		},
+		[getMediaExport, mediaInfo?.name, router.query.ie, tHtml]
+	);
+
+	const renderExportDropdown = useCallback(
+		(isPrimary: boolean) => {
+			const icon = <Icon name={IconNamesLight.Export} aria-hidden />;
+			const label = tText(
+				'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+			);
+
+			return (
+				<div className="p-object-detail__export">
+					<Dropdown
+						isOpen={metadataExportDropdownOpen}
+						onOpen={() => setMetadataExportDropdownOpen(true)}
+						onClose={() => setMetadataExportDropdownOpen(false)}
+					>
+						<DropdownButton>
+							{isPrimary ? (
+								<Button
+									variants={[isPrimary ? 'teal' : 'silver']}
+									className="p-object-detail__export"
+									iconStart={icon}
+									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+									aria-label={label}
+									title={label}
+								>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{label}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
+										)}
+									</span>
+								</Button>
+							) : (
+								<Button
+									icon={icon}
+									variants={['silver']}
+									aria-label={label}
+									title={label}
+								/>
+							)}
+						</DropdownButton>
+						<DropdownContent>
+							<MenuContent
+								rootClassName="c-dropdown-menu"
+								className="p-object-detail__export-dropdown"
+								menuItems={METADATA_EXPORT_OPTIONS()}
+								onClick={(id) => onExportClick(id as MetadataExportFormats)}
+							/>
+						</DropdownContent>
+					</Dropdown>
+				</div>
+			);
+		},
+		[metadataExportDropdownOpen, onExportClick, tHtml, tText]
+	);
+
 	/**
 	 * Content
 	 */
@@ -610,11 +668,19 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		)
 			.map((action: ActionItem) => {
 				const existsInSortMap = !isNil(sortMap.find((d) => d.id === action.id));
+				const isPrimary = sortMap.find((d) => action.id === d.id)?.isPrimary ?? false;
+				const showExport =
+					action.id === MediaActions.Export &&
+					canDownloadMetadata &&
+					hasAccessToVisitorSpaceOfObject;
 
 				return existsInSortMap
 					? {
 							...action,
-							isPrimary: sortMap.find((d) => action.id === d.id)?.isPrimary,
+							isPrimary,
+							...(showExport && {
+								customElement: renderExportDropdown(isPrimary),
+							}),
 					  }
 					: null;
 			})
@@ -633,6 +699,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		canRequestMaterial,
 		canDownloadMetadata,
 		getSortMapByUserType,
+		hasAccessToVisitorSpaceOfObject,
+		renderExportDropdown,
 	]);
 
 	/**
@@ -812,49 +880,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</dd>
 	);
 
-	const renderExportDropdown = () => {
-		return (
-			<Dropdown
-				isOpen={metadataExportDropdownOpen}
-				onOpen={() => setMetadataExportDropdownOpen(true)}
-				onClose={() => setMetadataExportDropdownOpen(false)}
-			>
-				<DropdownButton>
-					<Button
-						className="p-object-detail__export"
-						iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-						iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-						aria-label={tText(
-							'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-						)}
-						title={tText(
-							'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-						)}
-					>
-						<span className="u-text-ellipsis u-display-none u-display-block:md">
-							{tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-							)}
-						</span>
-						<span className="u-text-ellipsis u-display-none:md">
-							{tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
-							)}
-						</span>
-					</Button>
-				</DropdownButton>
-				<DropdownContent>
-					<MenuContent
-						rootClassName="c-dropdown-menu"
-						className="p-object-detail__export-dropdown"
-						menuItems={METADATA_EXPORT_OPTIONS()}
-						onClick={(id) => onExportClick(id as MetadataExportFormats)}
-					/>
-				</DropdownContent>
-			</Dropdown>
-		);
-	};
-
 	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => (
 		<div className="p-object-detail__metadata-maintainer-title">
 			<p className="p-object-detail__metadata-label">
@@ -893,7 +918,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const renderMetaDataActions = (): ReactNode => (
 		<div className="u-pb-24 p-object-detail__actions">
 			<div className="p-object-detail__primary-actions">
-				{/* {showMetadataExportDropdown && renderExportDropdown()} */}
 				<DynamicActionMenu {...mediaActions} onClickAction={onClickAction} />
 			</div>
 		</div>
@@ -960,7 +984,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		const showAlert = !mediaInfo.description;
-		const showExtendedMaintainer = !hasAccessToVisitorSpace && isNotKiosk;
+		const showExtendedMaintainer = !hasAccessToVisitorSpaceOfObject && isNotKiosk;
 		const metaDataFields = METADATA_FIELDS(mediaInfo, showExtendedMaintainer)
 			.filter(({ isDisabled }: MetadataItem): boolean => !isDisabled?.())
 			.map(

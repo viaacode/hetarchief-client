@@ -370,20 +370,20 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	&__export {
-		min-width: 0;
-		margin-right: $spacer-xs;
-
-		.c-button__content {
-			width: 100%;
+		.c-dropdown__content-open .c-menu--default {
+			box-shadow: $shadow-12-black-16;
+			border: 0.1rem solid $silver !important;
 		}
-	}
 
-	&__export-dropdown.c-menu-content-item {
-		border: $divider-black;
-		border-top: none;
+		&-dropdown {
+			&.c-menu-content-item {
+				border: 0.1rem solid $silver;
+				border-top: none;
 
-		&:first-of-type {
-			border-top: $divider-black;
+				&:first-of-type {
+					border-top: $silver;
+				}
+			}
 		}
 	}
 

@@ -2,7 +2,13 @@ import { MenuItemInfo, TabProps } from '@meemoo/react-components';
 
 import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@ie-objects/components';
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
-import { IeObject, MediaActions, MetadataExportFormats, ObjectDetailTabs } from '@ie-objects/types';
+import {
+	IeObject,
+	MediaActions,
+	MetadataExportFormats,
+	MetadataSortMap,
+	ObjectDetailTabs,
+} from '@ie-objects/types';
 import {
 	mapArrayToMetadataData,
 	mapBooleanToMetadataData,
@@ -154,23 +160,31 @@ export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true):
 /**
  * Actions
  */
-export const ANONYMOUS_ACTION_SORT_MAP = (): { id: MediaActions; isPrimary?: boolean }[] => [
+// https://meemoo.atlassian.net/browse/ARC-1302 export action follows this task
+
+export const KIOSK_ACTION_SORT_MAP = (): MetadataSortMap[] => [];
+
+export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
 	{ id: MediaActions.RequestMaterial, isPrimary: true },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const KIOSK_ACTION_SORT_MAP = (): { id: MediaActions; isPrimary?: boolean }[] => [];
-
-export const VISITOR_ACTION_SORT_MAP = (): { id: MediaActions; isPrimary?: boolean }[] => [
+export const VISITOR_ACTION_SORT_MAP = (isPublicCollection: boolean): MetadataSortMap[] => [
 	{ id: MediaActions.RequestMaterial, isPrimary: true },
+	...(isPublicCollection ? [{ id: MediaActions.Export }] : []),
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const KEY_USER_ACTION_SORT_MAP = (
-	isPublicCollection: boolean
-): { id: MediaActions; isPrimary?: boolean }[] => [
+export const KEY_USER_ACTION_SORT_MAP = (isPublicCollection: boolean): MetadataSortMap[] => [
+	...(isPublicCollection ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !isPublicCollection },
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
+
+export const MEEMOO_ADMIN_ACTION_SORT_MAP = (isPublicCollection: boolean): MetadataSortMap[] => [
 	...(isPublicCollection ? [{ id: MediaActions.Export, isPrimary: true }] : []),
 	{ id: MediaActions.RequestMaterial, isPrimary: !isPublicCollection },
 	{ id: MediaActions.Bookmark },
@@ -187,23 +201,14 @@ export const MEDIA_ACTIONS = (
 ): DynamicActionMenuProps => {
 	const activeIconSet = isInAFolder ? IconNamesSolid : IconNamesLight;
 
-	// ToDo(Silke): Implement export button
 	return {
 		actions: [
 			...((canExport
 				? [
 						{
 							label: tText('modules/ie-objects/const/index___exporteer-metadata'),
-							icon: (
-								<Icon
-									aria-hidden
-									className="u-font-size-24 u-text-left"
-									name={IconNamesLight.Export}
-								/>
-							),
 							id: MediaActions.Export,
 							ariaLabel: tText('modules/ie-objects/const/index___exporteer-metadata'),
-							tooltip: tText('modules/ie-objects/const/index___exporteer-metadata'),
 						},
 				  ]
 				: []) as ActionItem[]),
@@ -282,7 +287,7 @@ export const MEDIA_ACTIONS = (
 				  ]
 				: []) as ActionItem[]),
 		],
-		limit: 0,
+		limit: 1,
 		onClickAction: () => null,
 	};
 };
