@@ -11,9 +11,10 @@ export interface DynamicActionMenuProps extends DefaultComponentProps {
 
 export interface ActionItem {
 	label: string;
-	icon: ReactNode;
 	id: MediaActions;
 	ariaLabel: string;
+	icon?: ReactNode;
 	tooltip?: string;
 	isPrimary?: boolean;
+	customElement?: ReactNode;
 }

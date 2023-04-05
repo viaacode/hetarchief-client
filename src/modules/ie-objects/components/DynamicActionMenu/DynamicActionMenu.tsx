@@ -75,45 +75,45 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			key={`media-action-${action.id}`}
 			role="listitem"
 		>
-			<Button
-				variants={['teal', 'md']}
-				iconStart={action.icon}
-				onClick={() => onClickAction(action.id)}
-				aria-label={action.ariaLabel}
-				title={action.tooltip}
-			>
-				<span className="u-text-ellipsis">{action.label}</span>
-			</Button>
-		</li>
-	);
-
-	const renderSecondaryButton = (action: ActionItem) => (
-		<li
-			className={styles['c-dynamic-action-menu__secondary-item']}
-			key={`media-action-${action.id}`}
-			role="listitem"
-		>
-			{action.tooltip ? (
-				renderInTooltip(
-					<Button
-						onClick={() => onClickAction(action.id)}
-						icon={action.icon}
-						variants={['silver']}
-						aria-label={action.ariaLabel}
-					/>,
-					action.tooltip
-				)
+			{action.customElement ? (
+				action.customElement
 			) : (
 				<Button
+					variants={['teal', 'md']}
+					iconStart={action.icon}
 					onClick={() => onClickAction(action.id)}
-					icon={action.icon}
-					variants={['silver']}
 					aria-label={action.ariaLabel}
 					title={action.tooltip}
-				/>
+				>
+					<span className="u-text-ellipsis">{action.label}</span>
+				</Button>
 			)}
 		</li>
 	);
+
+	const renderSecondaryButton = (action: ActionItem) => {
+		const $element = action.customElement ? (
+			action.customElement
+		) : (
+			<Button
+				onClick={() => onClickAction(action.id)}
+				icon={action.icon}
+				variants={['silver']}
+				aria-label={action.ariaLabel}
+				title={action.tooltip}
+			/>
+		);
+
+		return (
+			<li
+				className={styles['c-dynamic-action-menu__secondary-item']}
+				key={`media-action-${action.id}`}
+				role="listitem"
+			>
+				{action.tooltip ? renderInTooltip($element, action.tooltip) : $element}
+			</li>
+		);
+	};
 
 	const renderDropdown = (dropdownActions: ActionItem[]) => {
 		const mappedActions = dropdownActions.map((action) => {
@@ -156,7 +156,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			<ul className={clsx(className, styles['c-dynamic-action-menu'])} role="list">
 				{primaryActions.map(renderPrimaryButton)}
 				<div
-					className={clsx(className, styles['c-dynamic-action-menu__secondary'])}
+					className={styles['c-dynamic-action-menu__secondary']}
 					ref={listRef}
 					style={{
 						minWidth: `${
