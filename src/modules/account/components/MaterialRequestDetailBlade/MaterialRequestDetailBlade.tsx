@@ -45,11 +45,11 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 		<Blade
 			isOpen={isOpen}
 			renderTitle={() => (
-				<h2 className={styles['p-account-my-material-requests__title']}>
+				<h4 className={styles['p-account-my-material-requests__title']}>
 					{tText(
 						'modules/account/components/material-request-detail-blade/material-requests___detail'
 					)}
-				</h2>
+				</h4>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onClose}

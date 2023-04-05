@@ -162,19 +162,19 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const renderTitle = () => {
 		if (isEditMode) {
 			return (
-				<h2 className={styles['c-request-material__title']}>
+				<h4 className={styles['c-request-material__title']}>
 					{tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
 					)}
-				</h2>
+				</h4>
 			);
 		}
 		return (
-			<h2 className={styles['c-request-material__title']}>
+			<h4 className={styles['c-request-material__title']}>
 				{tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
 				)}
-			</h2>
+			</h4>
 		);
 	};
 

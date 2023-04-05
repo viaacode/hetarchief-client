@@ -130,7 +130,11 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				footer={footer}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props) => <h3 {...props}>{getTitle()}</h3>}
+				renderTitle={(props) => (
+					<h4 {...props} className={styles['c-process-request-blade__title']}>
+						{getTitle()}
+					</h4>
+				)}
 			>
 				{selected && (
 					<>
