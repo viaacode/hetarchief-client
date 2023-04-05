@@ -33,6 +33,8 @@ import { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+
 	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
 		undefined
 	);
@@ -44,9 +46,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const {
 		data: visits,
 		refetch,
-		isFetching,
+		isLoading: isLoadingVisitRequests,
 	} = useGetVisits({
-		searchInput: filters.search,
+		searchInput: filters[SEARCH_QUERY_KEY],
 		status:
 			filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
 		page: filters.page,
@@ -169,7 +171,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	};
 
 	const renderContent = () => {
-		if (isFetching) {
+		if (isLoadingVisitRequests) {
 			return <Loading owner="visit request overview" />;
 		}
 		if ((visits?.items?.length || 0) <= 0) {
@@ -221,9 +223,10 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 				<div className="p-cp-requests__header">
 					<SearchBar
 						id={globalLabelKeys.adminLayout.title}
-						default={filters[SEARCH_QUERY_KEY]}
+						value={search}
 						className="p-cp-requests__search"
 						placeholder={tText('pages/beheer/toegangsaanvragen/index___zoek')}
+						onChange={setSearch}
 						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
 					/>
 
@@ -244,7 +247,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 			<div
 				className={clsx('l-container l-container--edgeless-to-lg', {
 					'u-text-center u-color-neutral u-py-48':
-						isFetching || (visits?.items?.length || 0) <= 0,
+						isLoadingVisitRequests || (visits?.items?.length || 0) <= 0,
 				})}
 			>
 				{renderContent()}

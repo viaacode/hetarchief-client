@@ -135,7 +135,7 @@ export const mapAdvancedToTags = (
 export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] => {
 	return [
 		...mapArrayParamToTags(
-			query.search || [],
+			query[SEARCH_QUERY_KEY] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
 			SEARCH_QUERY_KEY
 		),

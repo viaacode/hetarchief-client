@@ -7,6 +7,7 @@ import {
 	TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
 import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
@@ -293,10 +294,15 @@ const VisitorSpaceSearchPage: FC = () => {
 	const dropdownOptions = useMemo(() => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
 			({ spaceName, endAt, spaceSlug }: Visit): VisitorSpaceDropdownOption => {
-				const accessEndDate = isMobile
-					? formatSameDayTimeOrDate(asDate(endAt))
-					: formatMediumDateWithTime(asDate(endAt));
-
+				const endAtDate = asDate(endAt);
+				let accessEndDate: string | undefined;
+				if (!endAtDate || isAfter(endAtDate, addYears(new Date(), 100 - 1))) {
+					accessEndDate = undefined;
+				} else {
+					accessEndDate = isMobile
+						? formatSameDayTimeOrDate(endAtDate)
+						: formatMediumDateWithTime(endAtDate);
+				}
 				return {
 					id: spaceSlug,
 					label: spaceName || '',
@@ -325,9 +331,9 @@ const VisitorSpaceSearchPage: FC = () => {
 	): { [SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
 		const trimmed = value.trim();
 
-		if (trimmed && !query.search?.includes(trimmed)) {
+		if (trimmed && !query[SEARCH_QUERY_KEY]?.includes(trimmed)) {
 			return {
-				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(trimmed),
+				[SEARCH_QUERY_KEY]: (query[SEARCH_QUERY_KEY] ?? []).concat(trimmed),
 			};
 		}
 

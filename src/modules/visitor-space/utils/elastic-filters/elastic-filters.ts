@@ -1,3 +1,4 @@
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import {
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
@@ -30,7 +31,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	{
 		field: IeObjectsSearchFilterField.QUERY,
 		operator: IeObjectsSearchOperator.CONTAINS,
-		value: query.search !== null ? query.search?.toString() : '',
+		value: query[SEARCH_QUERY_KEY] !== null ? query[SEARCH_QUERY_KEY]?.toString() : '',
 	},
 	// Tabs
 	{

@@ -34,7 +34,7 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { globalLabelKeys } from '@shared/const';
+import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -45,21 +45,25 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [isDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>([]);
-	const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
 
-	const { data: materialRequests, isFetching } = useGetMaterialRequests({
-		isPersonal: false,
-		size: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-		...(!isNil(filters.page) && { page: filters.page }),
-		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
-		...(!isNil(filters.orderDirection) && {
-			orderDirection: filters.orderDirection as OrderDirection,
-		}),
-		search: filters.search,
-		type: filters.type as MaterialRequestType[],
-		maintainerIds: filters.maintainerIds as string[],
-	});
+	const { data: materialRequests, isLoading: isLoadingMaterialRequests } = useGetMaterialRequests(
+		{
+			isPersonal: false,
+			size: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
+			...(!isNil(filters.page) && { page: filters.page }),
+			...(!isNil(filters.orderProp) && {
+				orderProp: filters.orderProp as MaterialRequestKeys,
+			}),
+			...(!isNil(filters.orderDirection) && {
+				orderDirection: filters.orderDirection as OrderDirection,
+			}),
+			search: filters[SEARCH_QUERY_KEY],
+			type: filters.type as MaterialRequestType[],
+			maintainerIds: filters.maintainerIds as string[],
+		}
+	);
 
 	const { data: maintainers } = useGetMaterialRequestsMaintainers();
 
@@ -83,11 +87,11 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 				({ id, label }): MultiSelectOption => ({
 					id,
 					label,
-					checked: selectedTypes.includes(id),
+					checked: ((filters.type as string[] | null) || []).includes(id),
 				})
 			),
 		];
-	}, [selectedTypes]);
+	}, [filters]);
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
 		currentMaterialRequest?.id || null
@@ -182,26 +186,19 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		);
 	};
 
-	const onSearch = (value: string | undefined) => {
-		setFilters({ search: value, page: 1 });
-	};
-
 	// Note: Internal selected IDs state
 	const onMultiTypeChange = (checked: boolean, id: string) => {
-		setSelectedTypes((prev) => (!checked ? [...prev, id] : without(prev, id)));
+		const newSelectedTypes = !checked ? [...filters.type, id] : without(filters.type, id);
+		setFilters({
+			...filters,
+			type: newSelectedTypes,
+			page: 1,
+		});
 	};
 
 	const onMultiMaintainersChange = (checked: boolean, id: string) => {
 		setSelectedMaintainers((prev) => (!checked ? [...prev, id] : without(prev, id)));
 	};
-
-	useEffect(() => {
-		setFilters({
-			...filters,
-			type: selectedTypes,
-			page: 1,
-		});
-	}, [selectedTypes]);
 
 	useEffect(() => {
 		setFilters({
@@ -253,19 +250,25 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 						<SearchBar
 							id={globalLabelKeys.adminLayout.title}
-							default={filters.search}
+							value={search}
 							placeholder={tText('pages/admin/materiaalaanvragen/index___zoek')}
-							onSearch={onSearch}
+							onChange={setSearch}
+							onSearch={(newValue) =>
+								setFilters({ [SEARCH_QUERY_KEY]: newValue || undefined, page: 1 })
+							}
 						/>
 					</div>
 					<div
 						className={clsx('l-container l-container--edgeless-to-lg', {
-							'u-text-center u-color-neutral u-py-48': isFetching || noData,
+							'u-text-center u-color-neutral u-py-48':
+								isLoadingMaterialRequests || noData,
 						})}
 					>
-						{isFetching && <Loading owner="Material requests overview" />}
+						{isLoadingMaterialRequests && (
+							<Loading owner="Material requests overview" />
+						)}
 						{noData && renderEmptyMessage()}
-						{!noData && !isFetching && renderContent()}
+						{!noData && !isLoadingMaterialRequests && renderContent()}
 					</div>
 					{currentMaterialRequest?.id && renderDetailBlade()}
 				</AdminLayout.Content>
