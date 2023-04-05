@@ -299,8 +299,14 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderTempAccessPill = () => {
 		if (user?.groupName === GroupName.MEEMOO_ADMIN) {
+			// Don't show the temporary access label for MEEMOO admins, since they have access to all visitor spaces
 			return null;
 		}
+		if (user?.groupName === GroupName.CP_ADMIN && maintainerSlug === user?.visitorSpaceSlug) {
+			// Don't show the temporary access label for CP_ADMIN's own visitor space
+			return null;
+		}
+
 		return (
 			<div className="u-mt-8 ">
 				<Pill
