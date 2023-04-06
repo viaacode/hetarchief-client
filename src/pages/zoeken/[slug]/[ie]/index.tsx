@@ -883,32 +883,36 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			<p className="p-object-detail__metadata-label">
 				{tText('modules/ie-objects/const/index___aanbieder')}
 			</p>
-			<p className="p-object-detail__metadata-pill">
-				<TagList
-					className="u-pt-12"
-					tags={mapKeywordsToTags([maintainerName])}
-					onTagClicked={(keyword: string | number) => {
-						router.push(
-							stringifyUrl({
-								url: `/${ROUTE_PARTS.search}`,
-								query: {
-									[VisitorSpaceFilterId.Maintainers]: [`${keyword}`],
-								},
-							})
-						);
-					}}
-					variants={['clickable', 'silver', 'medium']}
-				/>
-			</p>
-			{maintainerLogo && (
-				<div className="p-object-detail__metadata-logo">
-					<Image
-						src={maintainerLogo}
-						alt={`Logo ${maintainerName}`}
-						layout="fill"
-						objectFit="contain"
-					/>
-				</div>
+			{isNotKiosk && (
+				<>
+					<p className="p-object-detail__metadata-pill">
+						<TagList
+							className="u-pt-12"
+							tags={mapKeywordsToTags([maintainerName])}
+							onTagClicked={(keyword: string | number) => {
+								router.push(
+									stringifyUrl({
+										url: `/${ROUTE_PARTS.search}`,
+										query: {
+											[VisitorSpaceFilterId.Maintainers]: [`${keyword}`],
+										},
+									})
+								);
+							}}
+							variants={['clickable', 'silver', 'medium']}
+						/>
+					</p>
+					{maintainerLogo && (
+						<div className="p-object-detail__metadata-logo">
+							<Image
+								src={maintainerLogo}
+								alt={`Logo ${maintainerName}`}
+								layout="fill"
+								objectFit="contain"
+							/>
+						</div>
+					)}
+				</>
 			)}
 		</div>
 	);
@@ -924,21 +928,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const renderMaintainerMetaData = ({
 		maintainerDescription,
 		maintainerSiteUrl,
-	}: IeObject): ReactNode => (
-		<div className="p-object-detail__metadata-maintainer-data">
-			{maintainerDescription && (
-				<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
-			)}
-			{maintainerSiteUrl && (
-				<p className="p-object-detail__metadata-link">
-					<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
-						{maintainerSiteUrl}
-					</a>
-					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
-				</p>
-			)}
-		</div>
-	);
+		maintainerName,
+	}: IeObject): ReactNode =>
+		isNotKiosk ? (
+			<div className="p-object-detail__metadata-maintainer-data">
+				{maintainerDescription && (
+					<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
+				)}
+				{maintainerSiteUrl && (
+					<p className="p-object-detail__metadata-link">
+						<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
+							{maintainerSiteUrl}
+						</a>
+						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+					</p>
+				)}
+			</div>
+		) : (
+			<div className="p-object-detail__metadata-maintainer-data">{maintainerName}</div>
+		);
 
 	const getCustomTitleRenderFn = (
 		field: CustomMetaDataFields,
