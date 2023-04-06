@@ -28,7 +28,7 @@ import save from 'save-file';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
-import { selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
@@ -97,7 +97,7 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAllGroup, useHasAnyGroup } from '@shared/hooks/has-group';
+import { useHasAllGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -287,6 +287,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		!mediaInfo.thumbnailUrl;
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+	const showVisitButton = mediaInfo && visitorSpace && canRequestAccess && isVisitorOrAnonymous;
 
 	/**
 	 * Effects
@@ -730,11 +731,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		if (isErrorPlayableUrl || !playableUrl || !representation) {
-			if (mediaInfo && visitorSpace && canRequestAccess && isVisitorOrAnonymous) {
-				<ObjectPlaceholder
-					{...ticketErrorPlaceholder()}
-					onOpenRequestAccess={onOpenRequestAccess}
-				/>;
+			if (showVisitButton) {
+				return (
+					<ObjectPlaceholder
+						{...ticketErrorPlaceholder()}
+						onOpenRequestAccess={onOpenRequestAccess}
+					/>
+				);
 			}
 
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
@@ -1053,10 +1056,19 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						/>
 					)}
 				</div>
-				<Metadata
-					className="p-object-detail__metadata-component"
-					metadata={metaDataFields}
-				/>
+				{showVisitButton ? (
+					<Metadata
+						className="p-object-detail__metadata-component"
+						metadata={metaDataFields}
+						onOpenRequestAccess={onOpenRequestAccess}
+					/>
+				) : (
+					<Metadata
+						className="p-object-detail__metadata-component"
+						metadata={metaDataFields}
+					/>
+				)}
+
 				{(!!similar.length || !!mediaInfo.keywords?.length) && (
 					<Metadata
 						className="p-object-detail__metadata-component"
@@ -1258,7 +1270,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 			/>
-			{mediaInfo && visitorSpace && canRequestAccess && isVisitorOrAnonymous && (
+			{showVisitButton && (
 				<RequestAccessBlade
 					isOpen={isRequestAccessBladeOpen}
 					onClose={() => setIsRequestAccessBladeOpen(false)}

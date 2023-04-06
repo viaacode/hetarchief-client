@@ -5,6 +5,7 @@ import { DefaultComponentProps } from '@shared/types';
 export interface MetadataProps extends DefaultComponentProps {
 	metadata: MetadataItem[];
 	disableContainerQuery?: boolean;
+	onOpenRequestAccess?: () => void;
 }
 
 export interface MetadataItem {

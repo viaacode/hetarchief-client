@@ -50,4 +50,9 @@
 		color: $neutral;
 		overflow-wrap: break-word;
 	}
+
+	&__visit-button {
+		margin-top: $spacer-sm;
+		max-width: fit-content;
+	}
 }
