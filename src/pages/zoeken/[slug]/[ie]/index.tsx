@@ -144,16 +144,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
-	const isLoggedIn = useSelector(selectIsLoggedIn);
+	// const isLoggedIn = useSelector(selectIsLoggedIn);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAllGroup(GroupName.MEEMOO_ADMIN);
-	const isNotKiosk = useHasAnyGroup(
-		GroupName.CP_ADMIN,
-		GroupName.MEEMOO_ADMIN,
-		GroupName.VISITOR,
-		GroupName.ANONYMOUS
-	);
+	const isAnonymous = useHasAllGroup(GroupName.ANONYMOUS);
+	const isVisitor = useHasAllGroup(GroupName.VISITOR);
+	const isCPAdmin = useHasAllGroup(GroupName.CP_ADMIN);
+	const isKiosk = useHasAllGroup(GroupName.KIOSK_VISITOR);
+	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const [, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
@@ -410,7 +409,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					setActiveBlade(MediaActions.Bookmark);
 				}
 
-				if (!isLoggedIn) {
+				if (isAnonymous) {
 					dispatch(setShowAuthModal(true));
 				}
 				break;
@@ -516,7 +515,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			return KEY_USER_ACTION_SORT_MAP(isPublicCollection);
 		}
 
-		if (!isNotKiosk) {
+		if (isKiosk) {
 			return KIOSK_ACTION_SORT_MAP();
 		}
 
@@ -525,7 +524,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		return VISITOR_ACTION_SORT_MAP(isPublicCollection);
-	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isNotKiosk, user]);
+	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isKiosk, user]);
 
 	const onExportClick = useCallback(
 		async (format: MetadataExportFormats) => {
@@ -659,7 +658,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
 		const original = MEDIA_ACTIONS(
-			(isLoggedIn && canManageFolders) || !isLoggedIn,
+			canManageFolders || isAnonymous,
 			isInAFolder(collections, mediaInfo?.schemaIdentifier),
 			isNotKiosk,
 			!!canRequestAccess,
@@ -700,8 +699,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			actions,
 		};
 	}, [
-		isLoggedIn,
 		canManageFolders,
+		isAnonymous,
 		collections,
 		mediaInfo?.schemaIdentifier,
 		isNotKiosk,
