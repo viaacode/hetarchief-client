@@ -153,8 +153,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
-	console.log(query.searchTerms);
-
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
