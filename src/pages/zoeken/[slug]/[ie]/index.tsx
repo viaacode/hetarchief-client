@@ -689,8 +689,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			actions,
 		};
 	}, [
+		isLoggedIn,
 		canManageFolders,
-		user,
 		collections,
 		mediaInfo?.schemaIdentifier,
 		isNotKiosk,
