@@ -883,7 +883,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			<p className="p-object-detail__metadata-label">
 				{tText('modules/ie-objects/const/index___aanbieder')}
 			</p>
-			{isNotKiosk && (
+			{isNotKiosk && !hasAccessToVisitorSpaceOfObject && (
 				<>
 					<p className="p-object-detail__metadata-pill">
 						<TagList
@@ -930,7 +930,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		maintainerSiteUrl,
 		maintainerName,
 	}: IeObject): ReactNode =>
-		isNotKiosk ? (
+		isNotKiosk && !hasAccessToVisitorSpaceOfObject ? (
 			<div className="p-object-detail__metadata-maintainer-data">
 				{maintainerDescription && (
 					<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
@@ -990,8 +990,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		const showAlert = !mediaInfo.description;
-		const showExtendedMaintainer = !hasAccessToVisitorSpaceOfObject && isNotKiosk;
-		const metaDataFields = METADATA_FIELDS(mediaInfo, showExtendedMaintainer)
+		const metaDataFields = METADATA_FIELDS(mediaInfo)
 			.filter(({ isDisabled }: MetadataItem): boolean => !isDisabled?.())
 			.map(
 				(field: MetadataItem): MetadataItem => ({
