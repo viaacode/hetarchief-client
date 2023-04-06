@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { GroupName, Permission } from '@account/const';
-import { selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
@@ -95,7 +95,7 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAllGroup, useHasAnyGroup } from '@shared/hooks/has-group';
+import { useHasAllGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -142,7 +142,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
-	// const isLoggedIn = useSelector(selectIsLoggedIn);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAllGroup(GroupName.MEEMOO_ADMIN);
