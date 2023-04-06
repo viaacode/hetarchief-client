@@ -25,10 +25,12 @@ import { stringifyUrl } from 'query-string';
 import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
 	ActionItem,
@@ -152,6 +154,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		GroupName.VISITOR,
 		GroupName.ANONYMOUS
 	);
+	const [, setQuery] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	});
 
 	// Permissions
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
@@ -175,6 +180,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
+	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	// Layout
 	useStickyLayout();
@@ -604,6 +610,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		[metadataExportDropdownOpen, onExportClick, tHtml, tText]
 	);
 
+	const onOpenRequestAccess = () => {
+		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: mediaInfo?.maintainerSlug });
+		setIsRequestAccessBladeOpen(true);
+	};
+
 	/**
 	 * Content
 	 */
@@ -719,6 +730,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		if (isErrorPlayableUrl || !playableUrl || !representation) {
+			if (mediaInfo && visitorSpace && canRequestAccess) {
+				<ObjectPlaceholder
+					{...ticketErrorPlaceholder()}
+					onOpenRequestAccess={onOpenRequestAccess}
+				/>;
+			}
+
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
 		}
 
@@ -1242,8 +1260,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			/>
 			{mediaInfo && visitorSpace && canRequestAccess && (
 				<RequestAccessBlade
-					isOpen={activeBlade === MediaActions.RequestAccess}
-					onClose={onCloseBlade}
+					isOpen={isRequestAccessBladeOpen}
+					onClose={() => setIsRequestAccessBladeOpen(false)}
 					onSubmit={onRequestAccessSubmit}
 				/>
 			)}
