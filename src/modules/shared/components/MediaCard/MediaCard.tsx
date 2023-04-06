@@ -359,16 +359,19 @@ const MediaCard: FC<MediaCardProps> = ({
 						{hasTempAccess && renderTempAccessPill()}
 						{isKeyUser && renderKeyUserPill()}
 						{showLocallyAvailable && renderLocallyAvailableButtons()}
+						{renderLocallyAvailableButtons()}
 					</>
 				) : (
 					<>
 						{wrapInLink(renderDescription())}
 						{isKeyUser && renderKeyUserPill()}
 						{showLocallyAvailable && renderLocallyAvailableButtons()}
+						{renderLocallyAvailableButtons()}
 					</>
 				)}
 			</Card>
 			<Modal
+				// add max-width? ARC-1233
 				title={tText(
 					'modules/shared/components/media-card/media-card___waarom-kan-ik-dit-object-niet-bekijken'
 				)}
