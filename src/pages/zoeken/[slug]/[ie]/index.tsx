@@ -153,6 +153,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isCPAdmin = useHasAllGroup(GroupName.CP_ADMIN);
 	const isKiosk = useHasAllGroup(GroupName.KIOSK_VISITOR);
 	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
+	const isVisitorOrAnonymous = isVisitor || isAnonymous;
 	const [, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
@@ -729,7 +730,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		if (isErrorPlayableUrl || !playableUrl || !representation) {
-			if (mediaInfo && visitorSpace && canRequestAccess) {
+			if (mediaInfo && visitorSpace && canRequestAccess && isVisitorOrAnonymous) {
 				<ObjectPlaceholder
 					{...ticketErrorPlaceholder()}
 					onOpenRequestAccess={onOpenRequestAccess}
@@ -1257,7 +1258,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 			/>
-			{mediaInfo && visitorSpace && canRequestAccess && (
+			{mediaInfo && visitorSpace && canRequestAccess && isVisitorOrAnonymous && (
 				<RequestAccessBlade
 					isOpen={isRequestAccessBladeOpen}
 					onClose={() => setIsRequestAccessBladeOpen(false)}
