@@ -303,16 +303,12 @@ export enum CustomMetaDataFields {
 }
 
 // TODO: complete mapping
-export const METADATA_FIELDS = (
-	mediaInfo: IeObject,
-	showExtendedMaintainer: boolean
-): MetadataItem[] => [
+export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	{
 		title: CustomMetaDataFields.Maintainer,
 		data: CustomMetaDataFields.Maintainer,
 		customData: true,
 		customTitle: true,
-		isDisabled: () => !showExtendedMaintainer,
 	},
 	{
 		title: tText('modules/ie-objects/const/index___oorsprong'),
