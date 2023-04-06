@@ -159,11 +159,11 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			footer={props.isOpen && renderFooter()}
 			onClose={onCloseBlade}
 			renderTitle={(props) => (
-				<h3 {...props}>
+				<h4 {...props} className={styles['c-report-blade__title']}>
 					{tHtml(
 						'modules/visitor-space/components/report-blade/report-blade___rapporteren'
 					)}
-				</h3>
+				</h4>
 			)}
 		>
 			<div className="u-px-16 u-px-32:md">

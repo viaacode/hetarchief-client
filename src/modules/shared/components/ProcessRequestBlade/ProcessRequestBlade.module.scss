@@ -4,6 +4,10 @@
 $component: "c-process-request-blade";
 
 .#{$component} {
+	&__title {
+		padding: 0 5.6rem $spacer-sm $spacer-lg;
+	}
+
 	&__info {
 		background: $platinum;
 		margin-bottom: $spacer-md;

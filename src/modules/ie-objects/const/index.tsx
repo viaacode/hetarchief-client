@@ -1,6 +1,11 @@
 import { MenuItemInfo, TabProps } from '@meemoo/react-components';
 
-import { ActionItem, MetadataItem, ObjectPlaceholderProps } from '@ie-objects/components';
+import {
+	ActionItem,
+	DynamicActionMenuProps,
+	MetadataItem,
+	ObjectPlaceholderProps,
+} from '@ie-objects/components';
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import {
 	IeObject,
@@ -18,8 +23,6 @@ import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
-
-import { DynamicActionMenuProps } from '../components/DynamicActionMenu';
 
 /**
  * Render media

@@ -159,6 +159,10 @@ $c-hero-access-card-min-width: 57.2rem;
 }
 
 .c-visitor-space-not-available-blade {
+	&__title {
+		padding: 0 5.6rem $spacer-sm $spacer-lg;
+	}
+
 	p {
 		line-height: 2.3rem;
 		margin-bottom: 2rem;

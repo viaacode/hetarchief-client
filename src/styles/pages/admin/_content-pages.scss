@@ -42,6 +42,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 		padding: 0 $spacer-md;
 	}
 
+	.p-admin-content-page-labels,
 	.p-admin-content {
 		.c-filter-table thead th,
 		.c-filter-table tbody td {
@@ -55,6 +56,29 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 		}
 	}
 
+	.p-admin-content-page-labels__create,
+	.p-admin-content-page-labels__edit {
+		[class*="c-box"] {
+			background-color: transparent;
+			padding: 0 1rem;
+		}
+	}
+
+	.p-admin-content-page-labels__detail .c-admin__content .c-table_detail-page {
+		th:first-child {
+			padding-left: $spacer-md;
+		}
+
+		.c-button--tertiary {
+			background-color: $silver;
+			border-radius: 2rem;
+			border: 0;
+		}
+	}
+
+	.p-admin-content-page-labels__detail,
+	.p-admin-content-page-labels__create,
+	.p-admin-content-page-labels__edit,
 	.p-admin-content__create,
 	.p-admin-content__edit {
 		.o-container--medium {

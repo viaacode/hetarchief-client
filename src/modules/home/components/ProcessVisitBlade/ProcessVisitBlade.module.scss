@@ -1,10 +1,8 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-cancel-visit-blade";
+$component: "c-process-visit-blade";
 
 .#{$component} {
-	@include blade-text-styling;
-
 	&__title {
 		padding: 0 5.6rem $spacer-sm $spacer-lg;
 	}

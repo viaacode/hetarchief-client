@@ -11,12 +11,12 @@
 	&__title {
 		text-align: center;
 		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
-		font-size: $font-size-sm * 2;
+		font-size: $font-size-sm;
 
 		@include respond-at(md) {
 			text-align: left;
 			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
-			font-size: $font-size-3xl;
+			font-size: $font-size-1xl;
 
 			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades
 			line-height: $font-size-3xl * (math.div(56, 48));
