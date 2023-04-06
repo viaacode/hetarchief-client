@@ -144,7 +144,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
-	// const isLoggedIn = useSelector(selectIsLoggedIn);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAllGroup(GroupName.MEEMOO_ADMIN);
