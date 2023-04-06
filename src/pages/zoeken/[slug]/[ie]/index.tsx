@@ -14,16 +14,7 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import {
-	capitalize,
-	indexOf,
-	intersection,
-	isEmpty,
-	isNil,
-	kebabCase,
-	lowerCase,
-	sortBy,
-} from 'lodash-es';
+import { capitalize, indexOf, intersection, isNil, kebabCase, lowerCase, sortBy } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -36,7 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
 
 import { GroupName, Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
@@ -115,8 +106,8 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
-import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType, VisitStatus } from '@shared/types';
+import { selectShowNavigationBorder, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -151,6 +142,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
+	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAllGroup(GroupName.MEEMOO_ADMIN);
@@ -408,7 +400,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const onClickAction = (id: MediaActions) => {
 		switch (id) {
 			case MediaActions.Bookmark:
-				setActiveBlade(MediaActions.Bookmark);
+				if (canManageFolders) {
+					setActiveBlade(MediaActions.Bookmark);
+				}
+
+				if (!isLoggedIn) {
+					dispatch(setShowAuthModal(true));
+				}
 				break;
 			case MediaActions.Report:
 				setActiveBlade(MediaActions.Report);
@@ -650,7 +648,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
 		const original = MEDIA_ACTIONS(
-			canManageFolders,
+			(isLoggedIn && canManageFolders) || !isLoggedIn,
 			isInAFolder(collections, mediaInfo?.schemaIdentifier),
 			isNotKiosk,
 			!!canRequestAccess,
@@ -692,6 +690,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		};
 	}, [
 		canManageFolders,
+		user,
 		collections,
 		mediaInfo?.schemaIdentifier,
 		isNotKiosk,
@@ -767,7 +766,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		// Image
 		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
 			return (
-				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
 						src={representation.files[0]?.schemaIdentifier ?? null}
