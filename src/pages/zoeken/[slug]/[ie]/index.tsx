@@ -956,6 +956,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</div>
 	);
 
+	const renderMobileVisitButton = () => (
+		<Button
+			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
+			variants={['dark', 'sm']}
+			className="p-object-detail__visit-button"
+			onClick={() => onOpenRequestAccess()}
+		/>
+	);
+
 	const renderMaintainerMetaData = ({
 		maintainerDescription,
 		maintainerSiteUrl,
@@ -974,30 +983,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 					</p>
 				)}
-				{showVisitButton && isMobile && (
-					<Button
-						label={tText(
-							'modules/ie-objects/components/metadata/metadata___plan-een-bezoek'
-						)}
-						variants={['dark']}
-						className="p-object-detail__visit-button"
-						onClick={() => onOpenRequestAccess()}
-					/>
-				)}
+				{showVisitButton && isMobile && renderMobileVisitButton()}
 			</div>
 		) : (
 			<div className="p-object-detail__metadata-maintainer-data">
 				{maintainerName}
-				{showVisitButton && isMobile && (
-					<Button
-						label={tText(
-							'modules/ie-objects/components/metadata/metadata___plan-een-bezoek'
-						)}
-						variants={['dark']}
-						className="p-object-detail__visit-button"
-						onClick={() => onOpenRequestAccess()}
-					/>
-				)}
+				{showVisitButton && isMobile && renderMobileVisitButton()}
 			</div>
 		);
 
