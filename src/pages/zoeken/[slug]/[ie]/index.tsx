@@ -97,7 +97,7 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAllGroup } from '@shared/hooks/has-group';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -146,11 +146,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isKeyUser = useIsKeyUser();
-	const isMeemooAdmin = useHasAllGroup(GroupName.MEEMOO_ADMIN);
-	const isAnonymous = useHasAllGroup(GroupName.ANONYMOUS);
-	const isVisitor = useHasAllGroup(GroupName.VISITOR);
-	const isCPAdmin = useHasAllGroup(GroupName.CP_ADMIN);
-	const isKiosk = useHasAllGroup(GroupName.KIOSK_VISITOR);
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
+	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
+	const isVisitor = useHasAnyGroup(GroupName.VISITOR);
+	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
+	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const isVisitorOrAnonymous = isVisitor || isAnonymous;
 	const [, setQuery] = useQueryParams({
