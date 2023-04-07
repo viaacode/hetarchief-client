@@ -57,6 +57,7 @@ import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
+	IeObjectsSearchFilterField,
 	IeObjectTypes,
 	SortObject,
 	Visit,
@@ -71,6 +72,8 @@ import { VisitTimeframe } from '@visits/types';
 import {
 	AddToFolderBlade,
 	AdvancedFilterFormState,
+	ConsultableMediaFilterFormState,
+	ConsultableOnlyOnLocationFilterFormState,
 	CreatedFilterFormState,
 	CreatorFilterFormState,
 	DurationFilterFormState,
@@ -81,10 +84,8 @@ import {
 	KeywordsFilterFormState,
 	LanguageFilterFormState,
 	MaintainerFilterFormState,
-	MediaFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
-	RemoteFilterFormState,
 } from '../../components';
 import {
 	PUBLIC_COLLECTION,
@@ -427,20 +428,30 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Maintainers:
-				data = (values as MaintainerFilterFormState).maintainers;
+				data = (values as MaintainerFilterFormState)[
+					IeObjectsSearchFilterField.MAINTAINERS_NAME
+				];
 				break;
 
-			case VisitorSpaceFilterId.Remote:
+			case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
 				// Info: remove queryparam if false (= set to undefined)
-				data = (values as RemoteFilterFormState).isConsultableRemote
-					? (values as RemoteFilterFormState).isConsultableRemote
+				data = (values as ConsultableOnlyOnLocationFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+				]
+					? (values as ConsultableOnlyOnLocationFilterFormState)[
+							IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+					  ]
 					: undefined;
 				break;
 
-			case VisitorSpaceFilterId.Media:
+			case VisitorSpaceFilterId.ConsultableMedia:
 				// Info: remove queryparam if false (= set to undefined)
-				data = (values as MediaFilterFormState).isConsultableMedia
-					? (values as MediaFilterFormState).isConsultableMedia
+				data = (values as ConsultableMediaFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
+				]
+					? (values as ConsultableMediaFilterFormState)[
+							IeObjectsSearchFilterField.CONSULTABLE_MEDIA
+					  ]
 					: undefined;
 				break;
 
@@ -493,8 +504,8 @@ const VisitorSpaceSearchPage: FC = () => {
 					];
 					break;
 
-				case VisitorSpaceFilterId.Media:
-				case VisitorSpaceFilterId.Remote:
+				case VisitorSpaceFilterId.ConsultableMedia:
+				case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
 					// eslint-disable-next-line no-case-declarations
 					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
