@@ -1,3 +1,6 @@
+export interface CommunicationFormState {
+	acceptNewsletter: boolean;
+}
 
 export interface GetNewsletterPreferencesResponse {
 	newsletter: boolean;

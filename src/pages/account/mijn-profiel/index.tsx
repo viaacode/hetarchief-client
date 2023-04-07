@@ -1,15 +1,33 @@
-import { Alert, Box, Button } from '@meemoo/react-components';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+	Alert,
+	Box,
+	Button,
+	Checkbox,
+	FormControl,
+	keysEnter,
+	keysSpacebar,
+	onKey,
+} from '@meemoo/react-components';
 import { isNil } from 'lodash';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { ComponentType, ReactNode } from 'react';
+import { ComponentType, ReactNode, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-import { GET_PERMISSION_TRANSLATIONS_BY_GROUP, GroupName, Permission } from '@account/const';
+import {
+	COMMUNICATION_FORM_SCHEMA,
+	GET_PERMISSION_TRANSLATIONS_BY_GROUP,
+	GroupName,
+	Permission,
+} from '@account/const';
+import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { AccountLayout } from '@account/layouts';
+import { CommunicationFormState } from '@account/types';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -18,23 +36,87 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
+import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
+const labelKeys: Record<keyof CommunicationFormState, string> = {
+	acceptNewsletter: 'Communication__acceptNewsletter',
+};
+
 const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
 
+	const [isFormSubmitting, setIsFormSubmitting] = useState<boolean>(false);
+	const [acceptNewsletter, setAcceptNewsletter] = useState<boolean>(false);
+
 	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
+	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
 
-	const canEdit: boolean =
-		user?.idp === Idp.HETARCHIEF && user.permissions.includes(Permission.CAN_EDIT_PROFILE_INFO);
+	const { data: preferences } = useGetNewsletterPreferences(user?.email);
+
+	const {
+		control,
+		formState: { errors },
+	} = useForm<CommunicationFormState>({
+		resolver: yupResolver(COMMUNICATION_FORM_SCHEMA()),
+	});
+
+	const canViewOrganisation = isAdminUser || isKeyUser;
+	const canEdit = user?.idp === Idp.HETARCHIEF && canEditProfile;
+
+	useEffect(() => {
+		if (isNil(preferences)) {
+			return;
+		}
+
+		setAcceptNewsletter(preferences.newsletter);
+	}, [preferences]);
+
+	const onFormSubmit = async (newsletter: boolean) => {
+		if (!user) {
+			return;
+		}
+
+		try {
+			await CampaignMonitorService.setPreferences({
+				firstName: user.firstName,
+				lastName: user.lastName,
+				mail: user.email,
+				preferences: {
+					newsletter,
+				},
+			});
+
+			setAcceptNewsletter(newsletter);
+			setIsFormSubmitting(false);
+		} catch (err) {
+			console.error(err);
+			toastService.notify({
+				maxLines: 3,
+				title: tText('pages/account/mijn-profiel/index___error-communicatie'),
+				description: tText(
+					'pages/account/mijn-profiel/index___error-communicatie-er-is-iets-misgelopen'
+				),
+			});
+
+			setIsFormSubmitting(false);
+		}
+	};
+
+	const onUpdateAcceptNewsletter = (v: boolean): void => {
+		setIsFormSubmitting(true);
+		onFormSubmit(!v);
+	};
 
 	const renderEditAlert = (): ReactNode => (
 		<Alert
@@ -57,7 +139,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<dd className="u-text-ellipsis u-color-neutral" title={user?.email}>
 				{user?.email}
 			</dd>
-			{(isAdminUser || isKeyUser) && renderOrganisation()}
+			{canViewOrganisation && renderOrganisation()}
 		</dl>
 	);
 
@@ -134,6 +216,38 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		);
 	};
 
+	const renderNewsletterForm = (): ReactNode => (
+		<FormControl id={labelKeys.acceptNewsletter} errors={[errors.acceptNewsletter?.message]}>
+			<Controller
+				name="acceptNewsletter"
+				control={control}
+				render={({ field }) => (
+					<Checkbox
+						{...field}
+						checked={acceptNewsletter}
+						checkIcon={<Icon name={IconNamesLight.Check} />}
+						id={labelKeys.acceptNewsletter}
+						value="accept-newsletter"
+						label={tHtml(
+							'pages/account/mijn-profiel/index___ik-ontvang-graag-de-nieuwsbrief'
+						)}
+						disabled={isFormSubmitting}
+						onClick={() => onUpdateAcceptNewsletter(acceptNewsletter)}
+						onKeyDown={(e) => {
+							onKey(e, [...keysEnter, ...keysSpacebar], () => {
+								if (keysSpacebar.includes(e.key)) {
+									e.preventDefault();
+								}
+
+								onUpdateAcceptNewsletter(acceptNewsletter);
+							});
+						}}
+					/>
+				)}
+			/>
+		</FormControl>
+	);
+
 	const renderPageContent = () => {
 		return (
 			<AccountLayout
@@ -171,6 +285,17 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 							</section>
 						</Box>
 					)}
+
+					<Box className="u-mb-32">
+						<section className="u-p-24 p-account-my-profile__communication">
+							<header className="p-account-my-profile__communication-header u-mb-24">
+								<h6>{tText('pages/account/mijn-profiel/index___communicatie')}</h6>
+							</header>
+							<div className="p-account-my-profile__communication-list u-mb-24">
+								{renderNewsletterForm()}
+							</div>
+						</section>
+					</Box>
 				</div>
 			</AccountLayout>
 		);
