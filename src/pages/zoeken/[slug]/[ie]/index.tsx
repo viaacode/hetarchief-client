@@ -145,17 +145,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+
+	// User types
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
 	const isVisitor = useHasAnyGroup(GroupName.VISITOR);
 	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
-	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
-	const isVisitorOrAnonymous = isVisitor || isAnonymous;
-	const [, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
-	});
 
 	// Permissions
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
@@ -189,6 +186,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
+
+	// Query params
+	const [, setQuery] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	});
 
 	// Fetch object
 	const {
@@ -265,7 +267,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	/**
 	 * Computed
 	 */
-
+	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
@@ -289,7 +291,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const showVisitButton =
 		visitorSpace?.status === VisitorSpaceStatus.Active &&
 		canRequestAccess &&
-		isVisitorOrAnonymous;
+		(isVisitor || isAnonymous);
 
 	/**
 	 * Effects
@@ -956,12 +958,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</div>
 	);
 
-	const renderMobileVisitButton = () => (
+	const renderVisitButton = (): ReactNode => (
 		<Button
 			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
 			variants={['dark', 'sm']}
 			className="p-object-detail__visit-button"
-			onClick={() => onOpenRequestAccess()}
+			onClick={onOpenRequestAccess}
 		/>
 	);
 
@@ -983,12 +985,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 					</p>
 				)}
-				{showVisitButton && isMobile && renderMobileVisitButton()}
+				{showVisitButton && isMobile && renderVisitButton()}
 			</div>
 		) : (
 			<div className="p-object-detail__metadata-maintainer-data">
 				{maintainerName}
-				{showVisitButton && isMobile && renderMobileVisitButton()}
+				{showVisitButton && isMobile && renderVisitButton()}
 			</div>
 		);
 
