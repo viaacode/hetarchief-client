@@ -709,8 +709,13 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
+		if (user?.groupName === GroupName.MEEMOO_ADMIN) {
+			// Don't show the temporary access label for MEEMOO admins, since they have access to all visitor spaces
+			return null;
+		}
+
 		// Strip out public collection and own visitor space (cp)
-		const visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
+		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
 				const isPublicColelction = visitorSpace.id == PUBLIC_COLLECTION;
 				const isOwnVisitorSapce = isCPAdmin && visitorSpace.id === user?.maintainerId;
@@ -718,6 +723,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				return !isPublicColelction && !isOwnVisitorSapce;
 			}
 		);
+
+		if (user?.groupName === GroupName.CP_ADMIN) {
+			// Don't show the temporary access label for CP_ADMIN's own visitor space
+			visitorSpaces = visitorSpaces.filter((space) => space.id !== user.visitorSpaceSlug);
+		}
 
 		if (isEmpty(visitorSpaces)) {
 			return;
