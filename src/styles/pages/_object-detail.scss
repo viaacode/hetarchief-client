@@ -307,6 +307,9 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		&-data {
+			display: flex;
+			flex-direction: column;
+
 			.p-object-detail__metadata {
 				&-description {
 					margin-top: $spacer-xs;
@@ -402,5 +405,10 @@ $metadata-collapsed-width: 36vw;
 
 	&__callout {
 		border-bottom: $divider-black;
+	}
+
+	&__visit-button {
+		margin-top: $spacer-sm;
+		max-width: fit-content;
 	}
 }

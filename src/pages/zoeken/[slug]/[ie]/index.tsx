@@ -25,10 +25,12 @@ import { stringifyUrl } from 'query-string';
 import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
 	ActionItem,
@@ -95,7 +97,7 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAllGroup } from '@shared/hooks/has-group';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
@@ -117,7 +119,7 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { VisitorSpaceFilterId, VisitorSpaceStatus } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -144,12 +146,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const isKeyUser = useIsKeyUser();
-	const isMeemooAdmin = useHasAllGroup(GroupName.MEEMOO_ADMIN);
-	const isAnonymous = useHasAllGroup(GroupName.ANONYMOUS);
-	const isVisitor = useHasAllGroup(GroupName.VISITOR);
-	const isCPAdmin = useHasAllGroup(GroupName.CP_ADMIN);
-	const isKiosk = useHasAllGroup(GroupName.KIOSK_VISITOR);
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
+	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
+	const isVisitor = useHasAnyGroup(GroupName.VISITOR);
+	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
+	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
+	const isVisitorOrAnonymous = isVisitor || isAnonymous;
+	const [, setQuery] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	});
 
 	// Permissions
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
@@ -173,6 +179,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
+	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	// Layout
 	useStickyLayout();
@@ -273,12 +280,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		IeObjectAccessThrough.VISITOR_SPACE_FULL,
 	]).length;
 	const canRequestAccess =
-		!!accessibleVisitorSpaces?.find(
-			(space) => space.maintainerId === mediaInfo?.maintainerId
+		isNil(
+			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
 		) &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
-		!mediaInfo.thumbnailUrl;
+		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+	const showVisitButton =
+		visitorSpace?.status === VisitorSpaceStatus.Active &&
+		canRequestAccess &&
+		isVisitorOrAnonymous;
 
 	/**
 	 * Effects
@@ -602,6 +613,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		[metadataExportDropdownOpen, onExportClick, tHtml, tText]
 	);
 
+	const onOpenRequestAccess = () => {
+		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: mediaInfo?.maintainerSlug });
+		setIsRequestAccessBladeOpen(true);
+	};
+
 	/**
 	 * Content
 	 */
@@ -713,10 +729,27 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		if (isErrorNoLicense) {
+			if (showVisitButton) {
+				return (
+					<ObjectPlaceholder
+						{...noLicensePlaceholder()}
+						onOpenRequestAccess={onOpenRequestAccess}
+					/>
+				);
+			}
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
 		}
 
 		if (isErrorPlayableUrl || !playableUrl || !representation) {
+			if (showVisitButton) {
+				return (
+					<ObjectPlaceholder
+						{...ticketErrorPlaceholder()}
+						onOpenRequestAccess={onOpenRequestAccess}
+					/>
+				);
+			}
+
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
 		}
 
@@ -923,6 +956,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</div>
 	);
 
+	const renderMobileVisitButton = () => (
+		<Button
+			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
+			variants={['dark', 'sm']}
+			className="p-object-detail__visit-button"
+			onClick={() => onOpenRequestAccess()}
+		/>
+	);
+
 	const renderMaintainerMetaData = ({
 		maintainerDescription,
 		maintainerSiteUrl,
@@ -941,9 +983,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 					</p>
 				)}
+				{showVisitButton && isMobile && renderMobileVisitButton()}
 			</div>
 		) : (
-			<div className="p-object-detail__metadata-maintainer-data">{maintainerName}</div>
+			<div className="p-object-detail__metadata-maintainer-data">
+				{maintainerName}
+				{showVisitButton && isMobile && renderMobileVisitButton()}
+			</div>
 		);
 
 	const getCustomTitleRenderFn = (
@@ -1033,10 +1079,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						/>
 					)}
 				</div>
+
 				<Metadata
 					className="p-object-detail__metadata-component"
 					metadata={metaDataFields}
 				/>
+
 				{(!!similar.length || !!mediaInfo.keywords?.length) && (
 					<Metadata
 						className="p-object-detail__metadata-component"
@@ -1238,10 +1286,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 			/>
-			{mediaInfo && visitorSpace && canRequestAccess && (
+			{showVisitButton && (
 				<RequestAccessBlade
-					isOpen={activeBlade === MediaActions.RequestAccess}
-					onClose={onCloseBlade}
+					isOpen={isRequestAccessBladeOpen}
+					onClose={() => setIsRequestAccessBladeOpen(false)}
 					onSubmit={onRequestAccessSubmit}
 				/>
 			)}

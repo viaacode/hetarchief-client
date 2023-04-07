@@ -17,17 +17,3 @@ export const useHasAnyGroup = (...groups: GroupName[]): boolean => {
 
 	return !isEmpty(intersection([user.groupName], groups));
 };
-
-export const useHasAllGroup = (...groups: GroupName[]): boolean => {
-	const user = useSelector(selectUser);
-
-	if (isEmpty(groups)) {
-		return true;
-	}
-
-	if (!user) {
-		return groups.includes(GroupName.ANONYMOUS);
-	}
-
-	return intersection(user.groupName, groups).length === groups.length;
-};
