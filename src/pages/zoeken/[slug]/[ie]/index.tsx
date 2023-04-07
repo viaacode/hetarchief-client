@@ -119,7 +119,7 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { VisitorSpaceFilterId, VisitorSpaceStatus } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -280,13 +280,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		IeObjectAccessThrough.VISITOR_SPACE_FULL,
 	]).length;
 	const canRequestAccess =
-		!!accessibleVisitorSpaces?.find(
-			(space) => space.maintainerId === mediaInfo?.maintainerId
+		isNil(
+			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
 		) &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
-		!mediaInfo.thumbnailUrl;
+		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
-	const showVisitButton = mediaInfo && visitorSpace && canRequestAccess && isVisitorOrAnonymous;
+	const showVisitButton =
+		visitorSpace?.status === VisitorSpaceStatus.Active &&
+		canRequestAccess &&
+		isVisitorOrAnonymous;
 
 	/**
 	 * Effects
@@ -726,6 +729,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		if (isErrorNoLicense) {
+			if (showVisitButton) {
+				return (
+					<ObjectPlaceholder
+						{...noLicensePlaceholder()}
+						onOpenRequestAccess={onOpenRequestAccess}
+					/>
+				);
+			}
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
 		}
 
@@ -963,9 +974,31 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
 					</p>
 				)}
+				{showVisitButton && isMobile && (
+					<Button
+						label={tText(
+							'modules/ie-objects/components/metadata/metadata___plan-een-bezoek'
+						)}
+						variants={['dark']}
+						className="p-object-detail__visit-button"
+						onClick={() => onOpenRequestAccess()}
+					/>
+				)}
 			</div>
 		) : (
-			<div className="p-object-detail__metadata-maintainer-data">{maintainerName}</div>
+			<div className="p-object-detail__metadata-maintainer-data">
+				{maintainerName}
+				{showVisitButton && isMobile && (
+					<Button
+						label={tText(
+							'modules/ie-objects/components/metadata/metadata___plan-een-bezoek'
+						)}
+						variants={['dark']}
+						className="p-object-detail__visit-button"
+						onClick={() => onOpenRequestAccess()}
+					/>
+				)}
+			</div>
 		);
 
 	const getCustomTitleRenderFn = (
@@ -1055,18 +1088,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						/>
 					)}
 				</div>
-				{showVisitButton ? (
-					<Metadata
-						className="p-object-detail__metadata-component"
-						metadata={metaDataFields}
-						onOpenRequestAccess={onOpenRequestAccess}
-					/>
-				) : (
-					<Metadata
-						className="p-object-detail__metadata-component"
-						metadata={metaDataFields}
-					/>
-				)}
+
+				<Metadata
+					className="p-object-detail__metadata-component"
+					metadata={metaDataFields}
+				/>
 
 				{(!!similar.length || !!mediaInfo.keywords?.length) && (
 					<Metadata
