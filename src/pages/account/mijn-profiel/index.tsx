@@ -89,9 +89,6 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 		try {
 			await CampaignMonitorService.setPreferences({
-				firstName: user.firstName,
-				lastName: user.lastName,
-				mail: user.email,
 				preferences: {
 					newsletter,
 				},
@@ -101,6 +98,8 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			setIsFormSubmitting(false);
 		} catch (err) {
 			console.error(err);
+			console.log(err);
+
 			toastService.notify({
 				maxLines: 3,
 				title: tText('pages/account/mijn-profiel/index___error-communicatie'),

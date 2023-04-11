@@ -7,8 +7,8 @@ export interface GetNewsletterPreferencesResponse {
 }
 
 export interface SetNewsletterPreferencesBody {
-	firstName: string;
-	lastName: string;
-	mail: string;
+	firstName?: string;
+	lastName?: string;
+	mail?: string;
 	preferences: GetNewsletterPreferencesResponse;
 }
