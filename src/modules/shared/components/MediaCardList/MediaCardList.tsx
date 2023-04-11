@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { stringifyUrl } from 'query-string';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 import { useSelector } from 'react-redux';
@@ -158,8 +159,14 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		return false;
 	};
 
-	const tiles = items.map((item, i) =>
-		wrapper(
+	const tiles = items.map((item, i) => {
+		const link = stringifyUrl({
+			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`,
+			query: {
+				searchTerms: keywords,
+			},
+		});
+		return wrapper(
 			<MediaCard
 				key={getKey(item, i)}
 				id={getKey(item, i)}
@@ -170,12 +177,13 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				keywords={keywords}
 				view={view}
 				showLocallyAvailable={showLocallyAvailable && checkLocallyAvailable(item)}
-				link={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
+				link={link}
 				maintainerSlug={item.maintainerSlug}
 			/>,
 			item
-		)
-	);
+		);
+	});
+
 	return (
 		<div
 			className={clsx(
