@@ -46,7 +46,6 @@ import {
 	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
-	formatErrorPlaceholder,
 	IE_OBJECT_QUERY_PARAM_CONFIG,
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
@@ -567,13 +566,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		playableUrl: string | undefined,
 		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
+		if (!playableUrl && !mediaInfo) {
+			return null;
+		}
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 		if (isErrorNoLicense) {
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
 		}
-		if (isErrorPlayableUrl || !playableUrl || !representation) {
+		if (isErrorPlayableUrl || !representation) {
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
 		}
 		const shared: Partial<FlowPlayerProps> = {
@@ -593,10 +595,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		};
 
 		// Flowplayer
-		if (FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
+		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
 			return <FlowPlayer key={flowPlayerKey} src={playableUrl} {...shared} />;
 		}
-		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
+		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			if (!peakFileId || !!peakJson) {
 				return (
 					<FlowPlayer
@@ -630,9 +632,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				</div>
 			);
 		}
-
-		// No renderer
-		return <ObjectPlaceholder {...formatErrorPlaceholder(representation.dctermsFormat)} />;
 	};
 
 	// Metadata
