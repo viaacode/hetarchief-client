@@ -6,10 +6,12 @@ import Link from 'next/link';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useSelector } from 'react-redux';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
@@ -47,6 +49,10 @@ const MediaCard: FC<MediaCardProps> = ({
 	hasTempAccess,
 }) => {
 	const { tText } = useTranslation();
+
+	const [, setQuery] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	});
 
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
@@ -103,6 +109,11 @@ const MediaCard: FC<MediaCardProps> = ({
 				),
 			});
 		}
+	};
+
+	const onOpenRequestAccess = () => {
+		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
+		setIsRequestAccessBladeOpen(true);
 	};
 
 	const renderDropdown = () =>
@@ -291,7 +302,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				label={tText('modules/shared/components/media-card/media-card___plan-een-bezoek')}
 				variants={['dark']}
 				className={styles['c-media-card__visit-button']}
-				onClick={() => setIsRequestAccessBladeOpen(true)}
+				onClick={() => onOpenRequestAccess()}
 			/>
 		</div>
 	);
