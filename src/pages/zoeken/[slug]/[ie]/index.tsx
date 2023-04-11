@@ -554,7 +554,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
 		if (!playableUrl && !mediaInfo) {
-			return <></>;
+			return null;
 		}
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
