@@ -107,7 +107,7 @@ const labelKeys = {
 
 const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	return {
-		id: PUBLIC_COLLECTION,
+		slug: PUBLIC_COLLECTION,
 		label: tText(
 			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
 		),
@@ -299,7 +299,7 @@ const VisitorSpaceSearchPage: FC = () => {
 					: formatMediumDateWithTime(asDate(endAt));
 
 				return {
-					id: spaceSlug,
+					slug: spaceSlug,
 					label: spaceName || '',
 					extraInfo: accessEndDate,
 				};
@@ -728,8 +728,8 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Strip out public collection and own visitor space (cp)
 		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicColelction = visitorSpace.id == PUBLIC_COLLECTION;
-				const isOwnVisitorSapce = isCPAdmin && visitorSpace.id === user?.maintainerId;
+				const isPublicColelction = visitorSpace.slug == PUBLIC_COLLECTION;
+				const isOwnVisitorSapce = isCPAdmin && visitorSpace.slug === user?.maintainerId;
 
 				return !isPublicColelction && !isOwnVisitorSapce;
 			}
@@ -737,7 +737,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		if (user?.groupName === GroupName.CP_ADMIN) {
 			// Don't show the temporary access label for CP_ADMIN's own visitor space
-			visitorSpaces = visitorSpaces.filter((space) => space.id !== user.visitorSpaceSlug);
+			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user.visitorSpaceSlug);
 		}
 
 		if (isEmpty(visitorSpaces)) {
@@ -747,7 +747,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Create a link element for each visitor space
 		const visitorSpaceLinks = visitorSpaces.map(
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
-				<Link key={visitorSpace.id} href={`/zoeken?maintainer=${visitorSpace?.id}`}>
+				<Link
+					key={visitorSpace.slug}
+					href={`/zoeken?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
+				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>
 			)
