@@ -726,7 +726,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		if (user?.groupName === GroupName.CP_ADMIN) {
 			// Don't show the temporary access label for CP_ADMIN's own visitor space
-			visitorSpaces = visitorSpaces.filter((space) => space.id !== user.visitorSpaceSlug);
+			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user.visitorSpaceSlug);
 		}
 
 		if (isEmpty(visitorSpaces)) {
