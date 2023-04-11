@@ -1,0 +1,47 @@
+@use "src/styles/abstracts" as *;
+
+.c-content-page-overview-block {
+	.c-content-page-overview-block__accordion--first-level {
+		.c-accordion__header {
+			background-color: $seagreen;
+			color: $white;
+			padding: 2.2rem;
+
+			.c-accordion__header-title {
+				color: $white;
+			}
+		}
+
+		&.c-accordion--closed {
+			.c-accordion__header {
+				background-color: $black;
+			}
+		}
+
+		.c-accordion__body {
+			padding: 1.2rem 0;
+		}
+
+		.c-content-page-overview-block__accordion--second-level {
+			margin-top: 0;
+
+			.c-accordion__header {
+				background-color: $white;
+				color: $black;
+				padding: 2.2rem;
+
+				.c-accordion__header-title {
+					color: $black;
+				}
+			}
+
+			&:last-child {
+				border: 0;
+			}
+
+			.c-accordion__body {
+				padding: 0 0.6rem;
+			}
+		}
+	}
+}
