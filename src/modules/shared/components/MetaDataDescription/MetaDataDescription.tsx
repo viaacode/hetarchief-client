@@ -1,10 +1,12 @@
 import clsx from 'clsx';
 import { FC, useMemo, useState } from 'react';
+import Highlighter from 'react-highlight-words';
+import { useQueryParams } from 'use-query-params';
 
+import { IE_OBJECT_QUERY_PARAM_CONFIG } from '@ie-objects/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { Blade } from '../Blade';
-import { TextWithNewLines } from '../TextWithNewLines';
 
 import { DESCRIPTION_MAX_LENGTH } from './MetaDataDescription.const';
 import styles from './MetaDataDescription.module.scss';
@@ -30,10 +32,22 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 		</h3>
 	);
 
+	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
+
+	const highlighted = (toHighlight: string) => (
+		<Highlighter
+			searchWords={(query.searchTerms as string[]) ?? []}
+			autoEscape={true}
+			textToHighlight={toHighlight}
+		/>
+	);
+
 	return (
 		<>
 			<p className="u-pb-24 u-line-height-1-4 u-font-size-14">
-				<TextWithNewLines text={parsedDescription} />
+				{/* ARC-1282: if there are issues with showing \\n or not showing new lines,
+				the parsedDescription used to be in a <TextWithNewLines /> component. This component was removed here to highlight text */}
+				{highlighted(parsedDescription.replaceAll('\\n', ' ').replaceAll('\n', ' '))}
 				{isLongDescription && (
 					<u
 						className={styles['c-metadatadescription__read-more']}
@@ -52,7 +66,7 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 				onClose={() => setIsBladeOpen(false)}
 				renderTitle={renderBladeTitle}
 			>
-				{description}
+				{highlighted(description)}
 			</Blade>
 		</>
 	);

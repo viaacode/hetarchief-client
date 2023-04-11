@@ -23,8 +23,10 @@ import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
 import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
+import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
+import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
@@ -44,6 +46,7 @@ import {
 	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
+	IE_OBJECT_QUERY_PARAM_CONFIG,
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
 	METADATA_EXPORT_OPTIONS,
@@ -146,6 +149,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		GroupName.VISITOR,
 		GroupName.ANONYMOUS
 	);
+
+	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -502,6 +507,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			});
 		}
 	};
+
+	const highlighted = (toHighlight: string) => (
+		<Highlighter
+			searchWords={(query.searchTerms as string[]) ?? []}
+			autoEscape={true}
+			textToHighlight={toHighlight}
+		/>
+	);
 
 	/**
 	 * Content
@@ -904,7 +917,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
 						)}
 					>
-						{mediaInfo?.name}
+						{highlighted(mediaInfo?.name)}
 					</h3>
 
 					{renderMetaDataActions()}

@@ -7,7 +7,7 @@ export interface VisitorSpaceDropdownProps extends DefaultComponentProps {
 }
 
 export interface VisitorSpaceDropdownOption {
-	id: string;
+	slug: string;
 	label: string;
 	extraInfo?: string;
 }
