@@ -23,12 +23,12 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 
 	const onSelectOption = (selectedOption: VisitorSpaceDropdownOption): void => {
 		setIsOpen(false);
-		onSelected(selectedOption.id);
+		onSelected(selectedOption.slug);
 	};
 
 	const renderSelectedOption = () => {
 		const selected = options.find(
-			({ id }: VisitorSpaceDropdownOption) => id === selectedOptionId
+			({ slug: id }: VisitorSpaceDropdownOption) => id === selectedOptionId
 		);
 
 		const actionProps = hasMultipleOptions
@@ -79,9 +79,9 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 				{options.map((option: VisitorSpaceDropdownOption) => (
 					<li
 						tabIndex={isOpen ? 0 : 1}
-						key={option.id}
+						key={option.slug}
 						role="option"
-						aria-selected={selectedOptionId === option.id}
+						aria-selected={selectedOptionId === option.slug}
 						onClick={() => onSelectOption(option)}
 						onKeyDown={(e) => onKey(e, [...keysEnter], () => onSelectOption(option))}
 						className={clsx(styles['c-visitor-spaces-dropdown__option'])}
