@@ -9,13 +9,12 @@ import { SearchBarProps } from './SearchBar.types';
 
 const SearchBar: FC<SearchBarProps> = ({
 	onSearch,
-	shouldReset,
-	onResetFinished = () => null,
 	variants = ['md', 'rounded', 'grey-border', 'icon--double', 'icon-clickable'],
+	value,
+	onChange,
 	...rest
 }) => {
 	const { tText } = useTranslation();
-	const [search, setSearch] = useState<string | undefined>(rest.default);
 
 	const getVariants = () => {
 		let modifiers: string[] = [];
@@ -26,24 +25,19 @@ const SearchBar: FC<SearchBarProps> = ({
 			modifiers = variants;
 		}
 
-		return [...modifiers, ...(search ? ['black-border'] : [])];
+		return [...modifiers, ...(value ? ['black-border'] : [])];
 	};
-
-	useEffect(() => {
-		setSearch('');
-		onResetFinished();
-	}, [shouldReset]);
 
 	return (
 		<TextInput
 			{...rest}
-			value={search}
-			onChange={(e) => setSearch(e.target.value)}
+			value={value}
+			onChange={(e) => onChange(e.target.value)}
 			variants={getVariants()}
-			onKeyDown={(e) => onKey(e, [...keysEnter], () => onSearch(search))}
+			onKeyDown={(e) => onKey(e, [...keysEnter], () => onSearch(value))}
 			iconEnd={
 				<>
-					{search && (
+					{value && (
 						<Button
 							variants={['text', 'icon', 'xxs']}
 							icon={<Icon name={IconNamesLight.Times} aria-hidden />}
@@ -51,8 +45,8 @@ const SearchBar: FC<SearchBarProps> = ({
 								'modules/shared/components/search-bar/search-bar___opnieuw-instellen'
 							)}
 							onClick={() => {
-								setSearch(undefined);
-								onSearch(undefined);
+								onChange('');
+								onSearch('');
 							}}
 						/>
 					)}
@@ -62,7 +56,7 @@ const SearchBar: FC<SearchBarProps> = ({
 						aria-label={tText(
 							'modules/shared/components/search-bar/search-bar___uitvoeren'
 						)}
-						onClick={() => onSearch(search)}
+						onClick={() => onSearch(value)}
 					/>
 				</>
 			}

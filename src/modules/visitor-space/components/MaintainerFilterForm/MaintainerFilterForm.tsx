@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, without } from 'lodash';
+import { noop } from 'lodash-es';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -52,8 +53,6 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		setSelection(selected);
 	};
 
-	const onSearch = (value: string | undefined): void => setSearch(value || '');
-
 	const onResetFinished = (): void => setShouldReset(false);
 
 	return (
@@ -61,12 +60,13 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
 					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Maintainers}`}
-					default={search}
+					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(
 						'modules/visitor-space/components/maintainers-filter-form/maintainers-filter-form___zoek'
 					)}
-					onSearch={onSearch}
+					onChange={setSearch}
+					onSearch={noop}
 					shouldReset={shouldReset}
 					onResetFinished={onResetFinished}
 				/>
