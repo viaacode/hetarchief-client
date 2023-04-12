@@ -98,7 +98,6 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			setIsFormSubmitting(false);
 		} catch (err) {
 			console.error(err);
-			console.log(err);
 
 			toastService.notify({
 				maxLines: 3,
