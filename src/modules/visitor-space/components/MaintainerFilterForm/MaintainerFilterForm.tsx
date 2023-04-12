@@ -10,6 +10,8 @@ import { useQueryParams } from 'use-query-params';
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { IeObjectsSearchFilterField } from '@shared/types';
+import { MaintainerFilterFormProps, MaintainerFilterFormState } from '@visitor-space/components';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
@@ -17,7 +19,6 @@ import {
 	MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG,
 	MAINTAINER_FILTER_FORM_SCHEMA,
 } from './MaintainerFilterForm.const';
-import { MaintainerFilterFormProps, MaintainerFilterFormState } from './MaintainerFilterForm.types';
 
 const defaultValues = {
 	maintainers: [],
@@ -43,7 +44,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	useEffect(() => {
-		setValue('maintainers', selection);
+		setValue(IeObjectsSearchFilterField.MAINTAINERS_NAME, selection);
 	}, [selection, setValue]);
 
 	const onItemClick = (checked: boolean, value: unknown): void => {

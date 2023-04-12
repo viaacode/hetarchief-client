@@ -7,6 +7,8 @@ import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceMediaType } from '@shared/types';
 import {
 	AdvancedFilterForm,
+	ConsultableMediaFilterForm,
+	ConsultableOnlyOnLocationFilterForm,
 	CreatedFilterForm,
 	CreatorFilterForm,
 	DurationFilterForm,
@@ -17,10 +19,8 @@ import {
 	KeywordsFilterForm,
 	LanguageFilterForm,
 	MaintainerFilterForm,
-	MediaFilterForm,
 	MediumFilterForm,
 	PublishedFilterForm,
-	RemoteFilterForm,
 } from '@visitor-space/components';
 
 import { VisitorSpaceFilterId, VisitorSpaceSort, VisitorSpaceStatus } from '../types';
@@ -51,8 +51,8 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 	[VisitorSpaceFilterId.Keywords]: undefined,
 	[VisitorSpaceFilterId.Language]: undefined,
 	[VisitorSpaceFilterId.Advanced]: undefined,
-	[VisitorSpaceFilterId.Remote]: undefined,
-	[VisitorSpaceFilterId.Media]: undefined,
+	[VisitorSpaceFilterId.ConsultableOnlyOnLocation]: undefined,
+	[VisitorSpaceFilterId.ConsultableMedia]: undefined,
 	// Pagination
 	page: 1,
 	// Sorting
@@ -75,8 +75,8 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	[VisitorSpaceFilterId.Language]: ArrayParam,
 	[VisitorSpaceFilterId.Maintainers]: ArrayParam,
 	[VisitorSpaceFilterId.Advanced]: AdvancedFilterArrayParam,
-	[VisitorSpaceFilterId.Remote]: BooleanParam,
-	[VisitorSpaceFilterId.Media]: BooleanParam,
+	[VisitorSpaceFilterId.ConsultableOnlyOnLocation]: BooleanParam,
+	[VisitorSpaceFilterId.ConsultableMedia]: BooleanParam,
 	// Pagination
 	page: withDefault(NumberParam, VISITOR_SPACE_QUERY_PARAM_INIT.page),
 	// Sorting
@@ -111,16 +111,16 @@ export const VISITOR_SPACE_FILTERS = (
 	isKeyUser: boolean
 ): FilterMenuFilterOption[] => [
 	{
-		id: VisitorSpaceFilterId.Media,
+		id: VisitorSpaceFilterId.ConsultableMedia,
 		label: tText('modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'),
-		form: MediaFilterForm,
+		form: ConsultableMediaFilterForm,
 		type: FilterMenuType.Checkbox,
 		isDisabled: () => !isKeyUser,
 	},
 	{
-		id: VisitorSpaceFilterId.Remote,
+		id: VisitorSpaceFilterId.ConsultableOnlyOnLocation,
 		label: tText('modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'),
-		form: RemoteFilterForm,
+		form: ConsultableOnlyOnLocationFilterForm,
 		type: FilterMenuType.Checkbox,
 		isDisabled: () => !isPublicCollection,
 	},
