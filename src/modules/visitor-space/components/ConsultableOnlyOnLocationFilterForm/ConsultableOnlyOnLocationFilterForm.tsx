@@ -6,26 +6,35 @@ import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
 import { Icon, IconNamesLight } from '@shared/components';
+import { IeObjectsSearchFilterField } from '@shared/types';
+import {
+	ConsultableOnlyOnLocationFilterFormProps,
+	ConsultableOnlyOnLocationFilterFormState,
+} from '@visitor-space/components';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import {
-	MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG,
-	MEDIA_FILTER_FORM_SCHEMA,
-} from './MediaFilterForm.const';
-import { MediaFilterFormProps, MediaFilterFormState } from './MediaFilterForm.types';
+	CONSULTABLE_ONLY_ON_LOCATION_FILTER_FORM_SCHEMA,
+	REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG,
+} from './ConsultableOnlyOnLocationFilterForm.const';
 
 const defaultValues = {
-	isConsultableMedia: false,
+	[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION]: false,
 };
 
-const MediaFilterForm: FC<MediaFilterFormProps> = ({ id, label, onFormSubmit, className }) => {
-	const [query] = useQueryParams(MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG);
+const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFormProps> = ({
+	id,
+	label,
+	onFormSubmit,
+	className,
+}) => {
+	const [query] = useQueryParams(REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [isChecked, setIsChecked] = useState<boolean>(
-		() => query[VisitorSpaceFilterId.Media] || false
+		() => query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] || false
 	);
 
-	const { setValue, handleSubmit } = useForm<MediaFilterFormState>({
-		resolver: yupResolver(MEDIA_FILTER_FORM_SCHEMA()),
+	const { setValue, handleSubmit } = useForm<ConsultableOnlyOnLocationFilterFormState>({
+		resolver: yupResolver(CONSULTABLE_ONLY_ON_LOCATION_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
 
@@ -35,10 +44,10 @@ const MediaFilterForm: FC<MediaFilterFormProps> = ({ id, label, onFormSubmit, cl
 	);
 
 	useEffect(() => {
-		setValue('isConsultableMedia', isChecked);
+		setValue(IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION, isChecked);
 
 		handleSubmit(
-			() => onFilterFormSubmit(id, { isConsultableMedia: isChecked }),
+			() => onFilterFormSubmit(id, { isConsultableRemote: isChecked }),
 			(...args) => console.error(args)
 		)();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,4 +79,4 @@ const MediaFilterForm: FC<MediaFilterFormProps> = ({ id, label, onFormSubmit, cl
 	);
 };
 
-export default MediaFilterForm;
+export default ConsultableOnlyOnLocationFilterForm;

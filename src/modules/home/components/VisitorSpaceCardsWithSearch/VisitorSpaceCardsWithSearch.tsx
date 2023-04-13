@@ -41,7 +41,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	const resultsAnchor = useRef<HTMLDivElement | null>(null);
 
 	const { data: visitorSpaces, isLoading: isLoadingVisitorSpaces } = useGetVisitorSpaces(
-		query.search || undefined,
+		query[SEARCH_QUERY_KEY] || undefined,
 		[VisitorSpaceStatus.Active],
 		0,
 		areAllVisitorSpacesVisible ? 200 : NUMBER_OF_VISITOR_SPACES
@@ -91,13 +91,15 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 
 				<SearchBar
 					id={labelKeys.search}
-					default={query[SEARCH_QUERY_KEY] || undefined}
+					value={query[SEARCH_QUERY_KEY] || ''}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(
 						'modules/home/components/visitor-space-cards-with-search/visitor-space-cards-with-search___zoek'
 					)}
-					onSearch={(value) => {
-						setQuery({ [SEARCH_QUERY_KEY]: value });
+					onChange={(newValue: string) => {
+						setQuery({ [SEARCH_QUERY_KEY]: newValue });
+					}}
+					onSearch={(value: string) => {
 						onSearch?.(value);
 					}}
 				/>

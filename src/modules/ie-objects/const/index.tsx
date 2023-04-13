@@ -1,4 +1,5 @@
 import { MenuItemInfo, TabProps } from '@meemoo/react-components';
+import { ArrayParam } from 'use-query-params';
 
 import {
 	ActionItem,
@@ -436,3 +437,7 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 		) : null,
 	},
 ];
+
+export const IE_OBJECT_QUERY_PARAM_CONFIG = {
+	searchTerms: ArrayParam,
+};

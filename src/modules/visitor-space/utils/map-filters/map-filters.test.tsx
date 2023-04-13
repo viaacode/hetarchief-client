@@ -12,8 +12,8 @@ describe('Utils', () => {
 			};
 			const filters = mapFiltersToTags(query);
 
-			expect(filters).toHaveLength(query.search.length);
-			expect(filters[0].value).toBe(tagPrefix(SEARCH_QUERY_KEY) + query.search[0]);
+			expect(filters).toHaveLength(query[SEARCH_QUERY_KEY].length);
+			expect(filters[0].value).toBe(tagPrefix(SEARCH_QUERY_KEY) + query[SEARCH_QUERY_KEY][0]);
 		});
 
 		it('Should filter out falsey search values', () => {
