@@ -125,39 +125,42 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		reset(getInitialValues());
 	}, [reset, getInitialValues]);
 
-	const getAccessTypeLabel = (accessType: ApproveRequestFormState['accessType']) => {
-		const folderCount = accessType?.folderIds?.length;
-		const hasRefineOptions = !!folderCount;
-		const hasMultipleRefineOptions = folderCount > 1;
+	const getAccessTypeLabel = useCallback(
+		(accessType: ApproveRequestFormState['accessType']) => {
+			const folderCount = accessType?.folderIds?.length;
+			const hasRefineOptions = !!folderCount;
+			const hasMultipleRefineOptions = folderCount > 1;
 
-		if (hasRefineOptions && isDropdownOpen) {
-			return hasMultipleRefineOptions
-				? tText(
-						'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd',
-						{
-							count: folderCount,
-						}
-				  )
-				: tText(
-						'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
-				  );
-		} else if (hasRefineOptions && !isDropdownOpen) {
-			return hasMultipleRefineOptions
-				? tText(
-						'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
-						{
-							count: folderCount,
-						}
-				  )
-				: tText(
-						'modules/shared/components/approve-request-blade/approve-request-blade___er-is-1-map-geselecteerd'
-				  );
-		} else {
-			return tText(
-				'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
-			);
-		}
-	};
+			if (hasRefineOptions && isDropdownOpen) {
+				return hasMultipleRefineOptions
+					? tText(
+							'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd',
+							{
+								count: folderCount,
+							}
+					  )
+					: tText(
+							'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
+					  );
+			} else if (hasRefineOptions && !isDropdownOpen) {
+				return hasMultipleRefineOptions
+					? tText(
+							'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
+							{
+								count: folderCount,
+							}
+					  )
+					: tText(
+							'modules/shared/components/approve-request-blade/approve-request-blade___er-is-1-map-geselecteerd'
+					  );
+			} else {
+				return tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
+				);
+			}
+		},
+		[isDropdownOpen, tText]
+	);
 
 	const getAccessTypeOptions = useCallback(
 		(accessType: ApproveRequestFormState['accessType']): RefinableRadioButtonOption[] => [
@@ -489,7 +492,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						selectedRefineOptions: string[],
 						newIsDropdownOpen: boolean
 					) => {
-						console.log('on change is called');
 						onChangeAccessType(
 							field,
 							selectedOption as AccessType,
