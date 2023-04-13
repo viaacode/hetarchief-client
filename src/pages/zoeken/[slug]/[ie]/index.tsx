@@ -514,7 +514,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const getSortMapByUserType = useCallback((): MetadataSortMap[] => {
 		const isPublicCollection = !hasAccessToVisitorSpaceOfObject;
 
-		if (!isNil(user)) {
+		if (isNil(user)) {
 			return ANONYMOUS_ACTION_SORT_MAP();
 		}
 
