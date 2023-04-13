@@ -46,6 +46,7 @@ import {
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
+	CP_ADMIN_ACTION_SORT_MAP,
 	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
@@ -529,8 +530,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			return MEEMOO_ADMIN_ACTION_SORT_MAP(isPublicCollection);
 		}
 
+		if (isCPAdmin) {
+			return CP_ADMIN_ACTION_SORT_MAP(isPublicCollection);
+		}
+
 		return VISITOR_ACTION_SORT_MAP(isPublicCollection);
-	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isKiosk, user]);
+	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isKiosk, user, isCPAdmin]);
 
 	const onExportClick = useCallback(
 		async (format: MetadataExportFormats) => {

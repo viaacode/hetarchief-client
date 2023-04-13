@@ -194,6 +194,13 @@ export const MEEMOO_ADMIN_ACTION_SORT_MAP = (isPublicCollection: boolean): Metad
 	{ id: MediaActions.Report },
 ];
 
+export const CP_ADMIN_ACTION_SORT_MAP = (isPublicCollection: boolean): MetadataSortMap[] => [
+	{ id: MediaActions.RequestMaterial, isPrimary: true },
+	...(isPublicCollection ? [{ id: MediaActions.Export }] : []),
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
+
 export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
 	isInAFolder: boolean,
