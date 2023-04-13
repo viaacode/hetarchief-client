@@ -16,5 +16,17 @@ $component: "c-block-tags-with-link";
 		padding: $spacer-xs $spacer-sm;
 		background-color: $teal-24;
 		border-radius: $spacer-md;
+		text-decoration: none;
+		font-weight: $font-weight-bold;
+	}
+
+	&__link {
+		transition: background-color $animate-default;
+
+		&:hover,
+		&:focus {
+			cursor: pointer;
+			background-color: $teal-66;
+		}
 	}
 }
