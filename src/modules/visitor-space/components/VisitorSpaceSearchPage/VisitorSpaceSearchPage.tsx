@@ -7,6 +7,7 @@ import {
 	TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
 import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
@@ -57,6 +58,7 @@ import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
+	IeObjectsSearchFilterField,
 	IeObjectTypes,
 	SortObject,
 	Visit,
@@ -71,6 +73,8 @@ import { VisitTimeframe } from '@visits/types';
 import {
 	AddToFolderBlade,
 	AdvancedFilterFormState,
+	ConsultableMediaFilterFormState,
+	ConsultableOnlyOnLocationFilterFormState,
 	CreatedFilterFormState,
 	CreatorFilterFormState,
 	DurationFilterFormState,
@@ -81,10 +85,8 @@ import {
 	KeywordsFilterFormState,
 	LanguageFilterFormState,
 	MaintainerFilterFormState,
-	MediaFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
-	RemoteFilterFormState,
 } from '../../components';
 import {
 	PUBLIC_COLLECTION,
@@ -293,10 +295,15 @@ const VisitorSpaceSearchPage: FC = () => {
 	const dropdownOptions = useMemo(() => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
 			({ spaceName, endAt, spaceSlug }: Visit): VisitorSpaceDropdownOption => {
-				const accessEndDate = isMobile
-					? formatSameDayTimeOrDate(asDate(endAt))
-					: formatMediumDateWithTime(asDate(endAt));
-
+				const endAtDate = asDate(endAt);
+				let accessEndDate: string | undefined;
+				if (!endAtDate || isAfter(endAtDate, addYears(new Date(), 100 - 1))) {
+					accessEndDate = undefined;
+				} else {
+					accessEndDate = isMobile
+						? formatSameDayTimeOrDate(endAtDate)
+						: formatMediumDateWithTime(endAtDate);
+				}
 				return {
 					slug: spaceSlug,
 					label: spaceName || '',
@@ -325,9 +332,9 @@ const VisitorSpaceSearchPage: FC = () => {
 	): { [SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
 		const trimmed = value.trim();
 
-		if (trimmed && !query.search?.includes(trimmed)) {
+		if (trimmed && !query[SEARCH_QUERY_KEY]?.includes(trimmed)) {
 			return {
-				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(trimmed),
+				[SEARCH_QUERY_KEY]: (query[SEARCH_QUERY_KEY] ?? []).concat(trimmed),
 			};
 		}
 
@@ -427,20 +434,30 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Maintainers:
-				data = (values as MaintainerFilterFormState).maintainers;
+				data = (values as MaintainerFilterFormState)[
+					IeObjectsSearchFilterField.MAINTAINERS_NAME
+				];
 				break;
 
-			case VisitorSpaceFilterId.Remote:
+			case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
 				// Info: remove queryparam if false (= set to undefined)
-				data = (values as RemoteFilterFormState).isConsultableRemote
-					? (values as RemoteFilterFormState).isConsultableRemote
+				data = (values as ConsultableOnlyOnLocationFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+				]
+					? (values as ConsultableOnlyOnLocationFilterFormState)[
+							IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+					  ]
 					: undefined;
 				break;
 
-			case VisitorSpaceFilterId.Media:
+			case VisitorSpaceFilterId.ConsultableMedia:
 				// Info: remove queryparam if false (= set to undefined)
-				data = (values as MediaFilterFormState).isConsultableMedia
-					? (values as MediaFilterFormState).isConsultableMedia
+				data = (values as ConsultableMediaFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
+				]
+					? (values as ConsultableMediaFilterFormState)[
+							IeObjectsSearchFilterField.CONSULTABLE_MEDIA
+					  ]
 					: undefined;
 				break;
 
@@ -493,8 +510,8 @@ const VisitorSpaceSearchPage: FC = () => {
 					];
 					break;
 
-				case VisitorSpaceFilterId.Media:
-				case VisitorSpaceFilterId.Remote:
+				case VisitorSpaceFilterId.ConsultableMedia:
+				case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
 					// eslint-disable-next-line no-case-declarations
 					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
@@ -726,7 +743,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		if (user?.groupName === GroupName.CP_ADMIN) {
 			// Don't show the temporary access label for CP_ADMIN's own visitor space
-			visitorSpaces = visitorSpaces.filter((space) => space.id !== user.visitorSpaceSlug);
+			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user.visitorSpaceSlug);
 		}
 
 		if (isEmpty(visitorSpaces)) {

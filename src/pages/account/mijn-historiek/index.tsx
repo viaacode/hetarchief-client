@@ -25,7 +25,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, Visit, VisitStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { createHomeWithVisitorSpaceFilterUrl } from '@shared/utils';
+import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
 import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
 import { VisitTimeframe } from '@visits/types';
@@ -88,7 +88,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 					router.push(ROUTES.visitRequested.replace(':slug', visit.spaceSlug));
 					break;
 				default:
-					router.push(createHomeWithVisitorSpaceFilterUrl(visit));
+					router.push(createVisitorSpacesWithFilterUrl(visit));
 					break;
 			}
 		} catch (err) {
@@ -100,7 +100,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 					'pages/account/mijn-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
 				),
 			});
-			router.push(createHomeWithVisitorSpaceFilterUrl(visit));
+			router.push(createVisitorSpacesWithFilterUrl(visit));
 		}
 	};
 

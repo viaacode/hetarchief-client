@@ -1,0 +1,15 @@
+import { BooleanParam } from 'use-query-params';
+import { boolean, object, SchemaOf } from 'yup';
+
+import { VisitorSpaceFilterId } from '../../types';
+
+import { ConsultableMediaFilterFormState } from './ConsultableMediaFilterForm.types';
+
+export const CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA = (): SchemaOf<ConsultableMediaFilterFormState> =>
+	object({
+		isConsultableMedia: boolean().required(),
+	});
+
+export const CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG = {
+	[VisitorSpaceFilterId.ConsultableMedia]: BooleanParam,
+};

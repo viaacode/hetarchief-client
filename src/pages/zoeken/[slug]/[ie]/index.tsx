@@ -23,8 +23,10 @@ import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
 import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
+import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
+import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
@@ -44,7 +46,7 @@ import {
 	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
-	formatErrorPlaceholder,
+	IE_OBJECT_QUERY_PARAM_CONFIG,
 	IMAGE_FORMATS,
 	MEDIA_ACTIONS,
 	METADATA_EXPORT_OPTIONS,
@@ -147,6 +149,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		GroupName.VISITOR,
 		GroupName.ANONYMOUS
 	);
+
+	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -504,6 +508,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 	};
 
+	const highlighted = (toHighlight: string) => (
+		<Highlighter
+			searchWords={(query.searchTerms as string[]) ?? []}
+			autoEscape={true}
+			textToHighlight={toHighlight}
+		/>
+	);
+
 	/**
 	 * Content
 	 */
@@ -554,13 +566,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		playableUrl: string | undefined,
 		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
+		if (!playableUrl && !mediaInfo) {
+			return null;
+		}
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 		if (isErrorNoLicense) {
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
 		}
-		if (isErrorPlayableUrl || !playableUrl || !representation) {
+		if (isErrorPlayableUrl || !representation) {
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
 		}
 		const shared: Partial<FlowPlayerProps> = {
@@ -580,10 +595,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		};
 
 		// Flowplayer
-		if (FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
+		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
 			return <FlowPlayer key={flowPlayerKey} src={playableUrl} {...shared} />;
 		}
-		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
+		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			if (!peakFileId || !!peakJson) {
 				return (
 					<FlowPlayer
@@ -617,9 +632,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				</div>
 			);
 		}
-
-		// No renderer
-		return <ObjectPlaceholder {...formatErrorPlaceholder(representation.dctermsFormat)} />;
 	};
 
 	// Metadata
@@ -905,7 +917,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
 						)}
 					>
-						{mediaInfo?.name}
+						{highlighted(mediaInfo?.name)}
 					</h3>
 
 					{renderMetaDataActions()}
