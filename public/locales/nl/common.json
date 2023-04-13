@@ -119,7 +119,7 @@
   "modules/cp/components/approve-request-blade/approve-request-blade___een-startdatum-is-verplicht": "Een startdatum is verplicht.",
   "modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd": "Er is een map geselecteerd",
   "modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd": "Er zijn meerdere mappen geselecteerd",
-  "modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd": "Er zijn x aantal mappen geselecteerd",
+  "modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd": "Er zijn \"{{count}}\" aantal mappen geselecteerd",
   "modules/cp/components/approve-request-blade/approve-request-blade___keur-goed": "Goedkeuren",
   "modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map": "Kies een map",
   "modules/cp/components/approve-request-blade/approve-request-blade___mappen-dienen-op-voorhand-gemaakt-te-worden": "Mappen dienen op voorhand gemaakt te worden",
