@@ -13,9 +13,11 @@ import {
 	areIntervalsOverlapping,
 	differenceInMinutes,
 	endOfDay,
+	isBefore,
 	isSameDay,
 	roundToNearestMinutes,
 	startOfDay,
+	subHours,
 } from 'date-fns';
 import { isEmpty } from 'lodash';
 import Link from 'next/link';
@@ -353,15 +355,18 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					// if difference is negative => start time is after end time
 					const difference = differenceInMinutes(field.value, date);
 
+					// 6PM on the selected accessFrom
+					const sixPM = defaultAccessTo(date);
+
+					// 5PM on the selected accesFrom
+					const fivePM = subHours(sixPM, 1);
+
 					// 1h in the future
 					// Aligns with `minTime` of the `accessTo` `Timepicker`-component
 					const oneHour = (date: Date) =>
 						setValue('accessTo', addHours(roundToNearestQuarter(date), 1));
 
 					if (difference <= 0 && !isSameDay(field.value, date)) {
-						// 6PM on the selected accessFrom
-						const sixPM = defaultAccessTo(date);
-
 						if (differenceInMinutes(sixPM, date) >= minimum) {
 							// at least an hour, set to sixPM
 							setValue('accessTo', sixPM);
@@ -370,8 +375,12 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							oneHour(date);
 						}
 					} else if (difference < minimum) {
-						// less than an hour, set to accessFrom + 1h
-						oneHour(date);
+						if (isBefore(field.value, fivePM)) {
+							setValue('accessTo', sixPM);
+						} else {
+							// less than an hour, set to accessFrom + 1h
+							oneHour(date);
+						}
 					}
 				}
 			};
