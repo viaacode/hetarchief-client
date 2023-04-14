@@ -515,14 +515,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	};
 
 	const getSortMapByUserType = useCallback((): MetadataSortMap[] => {
-		const isPublicCollection = !hasAccessToVisitorSpaceOfObject;
-
 		if (isNil(user)) {
 			return ANONYMOUS_ACTION_SORT_MAP();
 		}
 
 		if (isKeyUser) {
-			return KEY_USER_ACTION_SORT_MAP(isPublicCollection);
+			return KEY_USER_ACTION_SORT_MAP(hasAccessToVisitorSpaceOfObject);
 		}
 
 		if (isKiosk) {
@@ -530,14 +528,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		if (isMeemooAdmin) {
-			return MEEMOO_ADMIN_ACTION_SORT_MAP(isPublicCollection);
+			return MEEMOO_ADMIN_ACTION_SORT_MAP(hasAccessToVisitorSpaceOfObject);
 		}
 
 		if (isCPAdmin) {
-			return CP_ADMIN_ACTION_SORT_MAP(isPublicCollection);
+			return CP_ADMIN_ACTION_SORT_MAP(hasAccessToVisitorSpaceOfObject);
 		}
 
-		return VISITOR_ACTION_SORT_MAP(isPublicCollection);
+		return VISITOR_ACTION_SORT_MAP(hasAccessToVisitorSpaceOfObject);
 	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isKiosk, user, isCPAdmin]);
 
 	const onExportClick = useCallback(

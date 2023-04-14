@@ -174,30 +174,38 @@ export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
 	{ id: MediaActions.Report },
 ];
 
-export const VISITOR_ACTION_SORT_MAP = (isPublicCollection: boolean): MetadataSortMap[] => [
+export const VISITOR_ACTION_SORT_MAP = (
+	hasAccessToVisitorSpaceOfObject: boolean
+): MetadataSortMap[] => [
 	{ id: MediaActions.RequestMaterial, isPrimary: true },
-	...(isPublicCollection ? [{ id: MediaActions.Export }] : []),
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const KEY_USER_ACTION_SORT_MAP = (isPublicCollection: boolean): MetadataSortMap[] => [
-	...(isPublicCollection ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !isPublicCollection },
+export const KEY_USER_ACTION_SORT_MAP = (
+	hasAccessToVisitorSpaceOfObject: boolean
+): MetadataSortMap[] => [
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const MEEMOO_ADMIN_ACTION_SORT_MAP = (isPublicCollection: boolean): MetadataSortMap[] => [
-	...(isPublicCollection ? [{ id: MediaActions.Export, isPrimary: true }] : []),
-	{ id: MediaActions.RequestMaterial, isPrimary: !isPublicCollection },
+export const MEEMOO_ADMIN_ACTION_SORT_MAP = (
+	hasAccessToVisitorSpaceOfObject: boolean
+): MetadataSortMap[] => [
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
 
-export const CP_ADMIN_ACTION_SORT_MAP = (isPublicCollection: boolean): MetadataSortMap[] => [
+export const CP_ADMIN_ACTION_SORT_MAP = (
+	hasAccessToVisitorSpaceOfObject: boolean
+): MetadataSortMap[] => [
 	{ id: MediaActions.RequestMaterial, isPrimary: true },
-	...(isPublicCollection ? [{ id: MediaActions.Export }] : []),
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
