@@ -1,0 +1,65 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-block-three-clickable-tiles";
+$tile-size: 35rem;
+
+.#{$component} {
+	display: flex;
+	flex-direction: column;
+
+	@include respond-at("lg") {
+		flex-direction: row;
+	}
+
+	&__tile {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: $spacer-sm;
+
+		&-image {
+			display: flex;
+			justify-content: center;
+			align-content: center;
+			width: $tile-size;
+			height: $tile-size;
+			background-size: cover;
+			background-position: center center;
+			background-repeat: no-repeat;
+			padding: 0 5rem;
+			flex-wrap: wrap;
+			text-align: center;
+
+			h3 {
+				color: white;
+			}
+		}
+
+		&-subtitle {
+			width: $tile-size;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 1.5rem 0;
+
+			h5 {
+				font-size: medium;
+			}
+
+			span {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 2.8rem;
+				height: 2.8rem;
+				font-size: large;
+				background-color: $silver;
+				border-radius: 50%;
+			}
+		}
+	}
+
+	&__link {
+		text-decoration: none;
+	}
+}
