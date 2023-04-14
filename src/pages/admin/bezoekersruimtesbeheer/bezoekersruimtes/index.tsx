@@ -1,8 +1,9 @@
 import { Button, OrderDirection, Table } from '@meemoo/react-components';
+import { noop } from 'lodash-es';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { ComponentType, FC, ReactNode, useMemo } from 'react';
+import React, { ComponentType, FC, ReactNode, useMemo, useState } from 'react';
 import { TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
@@ -45,6 +46,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const showStatusDropdown = useHasAllPermission(Permission.EDIT_ALL_SPACES_STATUS);
 
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
 
 	const {
 		data: visitorSpaces,
@@ -53,7 +55,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 		refetch,
 		isFetching,
 	} = useGetVisitorSpaces(
-		filters.search,
+		filters[SEARCH_QUERY_KEY],
 		filters.status === 'ALL'
 			? [VisitorSpaceStatus.Requested, VisitorSpaceStatus.Active, VisitorSpaceStatus.Inactive]
 			: ([filters.status] as VisitorSpaceStatus[]),
@@ -226,12 +228,15 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 			<div className="p-cp-visitor-spaces__header">
 				<SearchBar
 					id={globalLabelKeys.adminLayout.title}
-					default={filters[SEARCH_QUERY_KEY]}
+					value={search}
 					className="p-cp-visitor-spaces__search"
 					placeholder={tText(
 						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
 					)}
-					onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
+					onChange={setSearch}
+					onSearch={(newValue) =>
+						setFilters({ [SEARCH_QUERY_KEY]: newValue || undefined, page: 1 })
+					}
 				/>
 
 				<ScrollableTabs

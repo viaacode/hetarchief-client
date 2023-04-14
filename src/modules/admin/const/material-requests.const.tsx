@@ -8,6 +8,7 @@ import {
 	MaterialRequestRow,
 	MaterialRequestType,
 } from '@material-requests/types';
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
@@ -18,7 +19,7 @@ export const ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
-	search: withDefault(StringParam, ''),
+	[SEARCH_QUERY_KEY]: withDefault(StringParam, ''),
 	type: withDefault(ArrayParam, []),
 	maintainerIds: withDefault(ArrayParam, []),
 };
