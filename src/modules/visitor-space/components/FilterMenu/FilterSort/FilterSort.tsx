@@ -33,6 +33,7 @@ const FilterSort: FC<FilterSortProps> = ({
 	return (
 		<>
 			<Dropdown
+				key={`dropdown-open--${sortOptionsOpen}`}
 				className={styles['c-filter-menu__option']}
 				flyoutClassName={styles['c-filter-menu__flyout']}
 				isOpen={sortOptionsOpen}
