@@ -87,6 +87,11 @@ module.exports = withTM({
 				destination: '/admin/bezoekersruimtesbeheer/toegangsaanvragen',
 				permanent: true,
 			},
+			{
+				source: '/account/mijn-historiek',
+				destination: '/account/mijn-bezoek-historiek',
+				permanent: true,
+			},
 		];
 	},
 });

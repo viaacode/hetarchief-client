@@ -85,7 +85,7 @@ export const HistoryTableColumns = (
 			return (
 				<Button
 					className="u-font-size-14 u-py-16 u-text-left"
-					variants={['text', 'block', 'fill']}
+					variants={['text', 'block', 'fill', 'underline']}
 					onClick={() => onClickRow(visit)}
 				>
 					{tText('modules/account/const/my-history___bezoek')}

@@ -318,10 +318,15 @@ test('T09: Test mappen + profielpagina basisgebruiker', async ({ page, context }
 	 */
 
 	// Click my history in sidebar
-	await page.click('.l-app__main a[href="/account/mijn-historiek"]');
+	await page.click('.l-app__main a[href="/account/mijn-bezoek-historiek"]');
 
 	// Check active nav item
-	await checkActiveSidebarNavigationItem(page, 0, 'Mijn historiek', '/account/mijn-historiek');
+	await checkActiveSidebarNavigationItem(
+		page,
+		0,
+		'Mijn bezoekhistoriek',
+		'/account/mijn-bezoek-historiek'
+	);
 
 	// No history is visible
 	await expect(page.locator('.l-container', { hasText: 'Geen historiek' })).toBeVisible();

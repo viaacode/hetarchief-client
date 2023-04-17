@@ -122,6 +122,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						arrowUp: { name: IconNamesLight.ArrowUp },
 						sortTable: { name: IconNamesLight.SortTable },
 						arrowDown: { name: IconNamesLight.ArrowDown },
+						arrowRight: { name: IconNamesLight.ArrowRight },
 						chevronLeft: { name: IconNamesLight.AngleLeft },
 						check: { name: IconNamesLight.Check },
 						calendar: { name: IconNamesLight.Calendar },

@@ -94,10 +94,10 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
-				title: tHtml('pages/account/mijn-historiek/index___error'),
+				title: tHtml('pages/account/mijn-bezoek-historiek/index___error'),
 				maxLines: 2,
 				description: tHtml(
-					'pages/account/mijn-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
+					'pages/account/mijn-bezoek-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt'
 				),
 			});
 			router.push(createVisitorSpacesWithFilterUrl(visit));
@@ -107,19 +107,22 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	// Render
 
 	const renderEmptyMessage = (): string | ReactNode => {
-		return tHtml('pages/account/mijn-historiek/index___geen-historiek');
+		return tHtml('pages/account/mijn-bezoek-historiek/index___geen-bezoek-historiek');
 	};
 
 	const renderPageContent = () => {
 		return (
 			<AccountLayout
 				className="p-account-my-history"
-				pageTitle={tText('pages/account/mijn-historiek/index___mijn-historiek')}
+				pageTitle={tText(
+					'pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek'
+				)}
 			>
 				{(visits.data?.items?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
 						<Table<Visit>
 							className="u-mt-24"
+							// onRowClick={show detail blade}
 							options={{
 								columns: HistoryTableColumns(onClickRow),
 								data: visits.data?.items || [],
@@ -165,8 +168,10 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<VisitorLayout>
 			{renderOgTags(
-				tText('pages/account/mijn-historiek/index___mijn-historiek'),
-				tText('pages/account/mijn-historiek/index___mijn-historiek-meta-omschrijving'),
+				tText('pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek'),
+				tText(
+					'pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek-meta-omschrijving'
+				),
 				url
 			)}
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>
