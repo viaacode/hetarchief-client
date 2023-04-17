@@ -44,7 +44,7 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 		isFetching,
 		refetch: refetchVisitRequests,
 	} = useGetVisits({
-		searchInput: filters.search,
+		searchInput: filters[SEARCH_QUERY_KEY],
 		timeframe: VisitTimeframe.ACTIVE,
 		status: VisitStatus.APPROVED,
 		page: filters.page,
@@ -52,7 +52,7 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: filters.orderProp as keyof Visit,
 		orderDirection: filters.orderDirection as OrderDirection,
 	});
-
+	const [search, setSearch] = useState<string>('');
 	const { mutateAsync: updateVisitRequest } = useUpdateVisitRequest();
 	const selectedItem = useMemo(
 		() => visits?.items.find((item) => item.id === selected),
@@ -149,11 +149,12 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 						<div className="p-admin-visitors__header">
 							<SearchBar
 								id={globalLabelKeys.adminLayout.title}
-								default={filters[SEARCH_QUERY_KEY]}
+								value={search}
 								className="p-admin-visitors__search"
 								placeholder={tText(
 									'pages/admin/bezoekersruimtesbeheer/bezoekers/index___zoek'
 								)}
+								onChange={setSearch}
 								onSearch={(value) =>
 									setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })
 								}

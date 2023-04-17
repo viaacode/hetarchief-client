@@ -2,10 +2,11 @@ import { TextInputProps } from '@meemoo/react-components';
 
 import { DefaultComponentProps } from '@shared/types';
 
-export type SearchBarProps = TextInputProps &
+export type SearchBarProps = Omit<TextInputProps, 'value' | 'onChange'> &
 	DefaultComponentProps & {
-		default: string | undefined;
-		onSearch: (value: string | undefined) => void;
+		value: string;
+		onChange: (newValue: string) => void;
+		onSearch: (value: string) => void;
 		shouldReset?: boolean;
 		onResetFinished?: () => void;
 	};
