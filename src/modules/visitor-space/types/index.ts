@@ -35,8 +35,8 @@ export enum VisitorSpaceFilterId {
 	Published = 'published',
 	Maintainer = 'aanbieder',
 	Maintainers = 'aanbieders',
-	Remote = 'remote',
-	Media = 'media',
+	ConsultableOnlyOnLocation = 'onLocation',
+	ConsultableMedia = 'media',
 }
 
 export enum VisitorSpaceOrderProps {
@@ -70,6 +70,7 @@ export interface DefaultFilterFormProps<Values = unknown> extends DefaultCompone
 	disabled?: boolean;
 	values?: Values;
 }
+
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
 	id: string;
 	label: string;

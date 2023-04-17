@@ -24,8 +24,8 @@ import { WaitingPage } from '../../../../modules/visitor-space/components';
 import { VisitorLayout } from 'modules/visitors';
 
 type VisitRequestedPageProps = {
-	name?: string;
-	description?: string;
+	name: string | null;
+	description: string | null;
 	url: string;
 } & DefaultSeoInfo;
 
@@ -130,8 +130,8 @@ export async function getServerSideProps(
 	return {
 		props: {
 			...(defaultProps as { props: DefaultSeoInfo }).props,
-			name: space?.name,
-			description: space?.info || undefined,
+			name: space?.name || null,
+			description: space?.info || null,
 		},
 	};
 }

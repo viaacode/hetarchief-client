@@ -1,3 +1,4 @@
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import {
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
@@ -19,7 +20,7 @@ export const mapMaintainerToElastic = (
 			: '';
 
 	return {
-		field: IeObjectsSearchFilterField.MAINTAINER,
+		field: IeObjectsSearchFilterField.MAINTAINER_ID,
 		operator: IeObjectsSearchOperator.IS,
 		value: maintainerId,
 	};
@@ -30,7 +31,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	{
 		field: IeObjectsSearchFilterField.QUERY,
 		operator: IeObjectsSearchOperator.CONTAINS,
-		value: query.search !== null ? query.search?.toString() : '',
+		value: query[SEARCH_QUERY_KEY] !== null ? query[SEARCH_QUERY_KEY]?.toString() : '',
 	},
 	// Tabs
 	{
@@ -86,7 +87,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	},
 	// Maintainers
 	{
-		field: IeObjectsSearchFilterField.MAINTAINERS,
+		field: IeObjectsSearchFilterField.MAINTAINERS_NAME,
 		operator: IeObjectsSearchOperator.IS,
 		multiValue: (query[VisitorSpaceFilterId.Maintainers] || []).filter(
 			(item) => item !== null
@@ -94,22 +95,15 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	},
 	// Consultable Remote
 	{
-		field: IeObjectsSearchFilterField.REMOTE,
+		field: IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
 		operator: IeObjectsSearchOperator.IS,
-		value:
-			// Because the UI doesn't match with the BE property (on site vs remote), we need to pass the opposite value of the remote boolean
-			query[VisitorSpaceFilterId.Remote] !== null
-				? (!query[VisitorSpaceFilterId.Remote])?.toString()
-				: 'true',
+		value: query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] ? 'true' : '',
 	},
 	// Consultable Media
 	{
-		field: IeObjectsSearchFilterField.MEDIA,
+		field: IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
 		operator: IeObjectsSearchOperator.IS,
-		value:
-			query[VisitorSpaceFilterId.Media] !== null
-				? query[VisitorSpaceFilterId.Media]?.toString()
-				: 'false',
+		value: query[VisitorSpaceFilterId.ConsultableMedia] ? 'true' : '',
 	},
 	// Advanced
 	...(query.advanced || []).flatMap(mapAdvancedToElastic),

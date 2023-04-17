@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact, initial, without } from 'lodash-es';
+import { compact, noop, without } from 'lodash-es';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -37,7 +37,6 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 	const [query] = useQueryParams(CREATOR_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [currentSearchFilters] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [shouldReset, setShouldReset] = useState<boolean>(false);
 	const [selection, setSelection] = useState<string[]>(() => compact(query.creator || []));
 	const [isSearchEnabled, setIsSearchEnabled] = useState<boolean>(false);
 
@@ -96,14 +95,13 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 				<SearchBar
 					instantSearch
 					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Creator}`}
-					default={search}
+					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(
 						'modules/visitor-space/components/creator-filter-form/creator-filter-form___zoek'
 					)}
-					onSearch={(value) => setSearch(value || '')}
-					shouldReset={shouldReset}
-					onResetFinished={() => setShouldReset(false)}
+					onChange={setSearch}
+					onSearch={noop}
 				/>
 
 				<div className="u-my-32">
@@ -135,7 +133,6 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 					reset();
 					setSelection(defaultValues.creators);
 					setSearch('');
-					setShouldReset(true);
 				},
 				handleSubmit,
 			})}

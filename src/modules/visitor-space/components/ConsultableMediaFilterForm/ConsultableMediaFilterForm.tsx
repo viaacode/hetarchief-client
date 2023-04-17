@@ -9,23 +9,31 @@ import { Icon, IconNamesLight } from '@shared/components';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import {
-	REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG,
-	REMOTE_FILTER_FORM_SCHEMA,
-} from './RemoteFilterForm.const';
-import { RemoteFilterFormProps, RemoteFilterFormState } from './RemoteFilterForm.types';
+	CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG,
+	CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA,
+} from './ConsultableMediaFilterForm.const';
+import {
+	ConsultableMediaFilterFormProps,
+	ConsultableMediaFilterFormState,
+} from './ConsultableMediaFilterForm.types';
 
 const defaultValues = {
-	isConsultableRemote: false,
+	isConsultableMedia: false,
 };
 
-const RemoteFilterForm: FC<RemoteFilterFormProps> = ({ id, label, onFormSubmit, className }) => {
-	const [query] = useQueryParams(REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG);
+const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
+	id,
+	label,
+	onFormSubmit,
+	className,
+}) => {
+	const [query] = useQueryParams(CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [isChecked, setIsChecked] = useState<boolean>(
-		() => query[VisitorSpaceFilterId.Remote] || false
+		() => query[VisitorSpaceFilterId.ConsultableMedia] || false
 	);
 
-	const { setValue, handleSubmit } = useForm<RemoteFilterFormState>({
-		resolver: yupResolver(REMOTE_FILTER_FORM_SCHEMA()),
+	const { setValue, handleSubmit } = useForm<ConsultableMediaFilterFormState>({
+		resolver: yupResolver(CONSULTABLE_MEDIA_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
 
@@ -35,10 +43,10 @@ const RemoteFilterForm: FC<RemoteFilterFormProps> = ({ id, label, onFormSubmit, 
 	);
 
 	useEffect(() => {
-		setValue('isConsultableRemote', isChecked);
+		setValue('isConsultableMedia', isChecked);
 
 		handleSubmit(
-			() => onFilterFormSubmit(id, { isConsultableRemote: isChecked }),
+			() => onFilterFormSubmit(id, { isConsultableMedia: isChecked }),
 			(...args) => console.error(args)
 		)();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,4 +78,4 @@ const RemoteFilterForm: FC<RemoteFilterFormProps> = ({ id, label, onFormSubmit, 
 	);
 };
 
-export default RemoteFilterForm;
+export default ConsultableMediaFilterForm;

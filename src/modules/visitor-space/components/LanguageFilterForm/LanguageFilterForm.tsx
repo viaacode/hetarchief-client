@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact, without } from 'lodash-es';
+import { compact, noop, without } from 'lodash-es';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -60,12 +60,13 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
 				<SearchBar
 					id={`${visitorSpaceLabelKeys.filters.title}--${VisitorSpaceFilterId.Language}`}
-					default={search}
+					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(
 						'modules/visitor-space/components/language-filter-form/language-filter-form___zoek'
 					)}
-					onSearch={(value) => setSearch(value || '')}
+					onChange={(value) => setSearch(value || '')}
+					onSearch={noop}
 					shouldReset={shouldReset}
 					onResetFinished={() => setShouldReset(false)}
 				/>

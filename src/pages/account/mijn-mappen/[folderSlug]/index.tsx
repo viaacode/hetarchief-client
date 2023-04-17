@@ -6,7 +6,7 @@ import {
 	TooltipTrigger,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil, kebabCase } from 'lodash-es';
+import { isNil, kebabCase, noop } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -76,6 +76,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 * Data
 	 */
 	const [filters, setFilters] = useQueryParams(ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
@@ -127,7 +128,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const folderMedia = useGetFolderMedia(
 		activeFolder?.id,
-		filters.search,
+		filters[SEARCH_QUERY_KEY],
 		filters.page,
 		FolderItemListSize
 	);
@@ -135,7 +136,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	// export
 	const { mutateAsync: getFolderExport } = useGetFolderExport();
 
-	const keywords = useMemo(() => (filters.search ? [filters.search] : []), [filters.search]);
+	const keywords = useMemo(
+		() => (filters[SEARCH_QUERY_KEY] ? [filters[SEARCH_QUERY_KEY] as string] : []),
+		[filters]
+	);
 
 	/**
 	 * Effects
@@ -488,7 +492,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											<div className="p-account-my-folders__limited-access-label">
 												<Icon
 													name={IconNamesLight.OpenDoor}
-													className="p-account-my-folders__limited-access-label__icon"
+													className="p-account-my-folders__limited-access-label__icon u-mr-4"
 												/>
 												<p>
 													{tText(
@@ -504,13 +508,16 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 										)}
 										<SearchBar
 											id={`${labelKeys.search}--${activeFolder.id}`}
-											default={filters[SEARCH_QUERY_KEY]}
+											value={search}
 											className="p-account-my-folders__search"
 											placeholder={tText(
 												'pages/account/mijn-mappen/folder-slug/index___zoek'
 											)}
-											onSearch={(value) =>
-												setFilters({ [SEARCH_QUERY_KEY]: value })
+											onChange={setSearch}
+											onSearch={(newValue) =>
+												setFilters({
+													[SEARCH_QUERY_KEY]: newValue || undefined,
+												})
 											}
 										/>
 									</FormControl>
