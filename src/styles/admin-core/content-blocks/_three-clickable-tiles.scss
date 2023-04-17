@@ -1,7 +1,7 @@
 @use "src/styles/abstracts" as *;
 
 $component: "c-block-three-clickable-tiles";
-$tile-size: 35rem;
+$tile-size: 27rem;
 
 .#{$component} {
 	display: flex;
