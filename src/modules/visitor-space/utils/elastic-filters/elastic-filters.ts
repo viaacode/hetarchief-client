@@ -7,7 +7,11 @@ import {
 } from '@shared/types';
 
 import { VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
-import { VisitorSpaceFilterId, VisitorSpaceQueryParams } from '../../types';
+import {
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+	VisitorSpaceQueryParams,
+} from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
 export const mapMaintainerToElastic = (
@@ -87,11 +91,13 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	},
 	// Maintainers
 	{
-		field: IeObjectsSearchFilterField.MAINTAINERS_NAME,
+		field: IeObjectsSearchFilterField.MAINTAINER_ID,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (query[VisitorSpaceFilterId.Maintainers] || []).filter(
-			(item) => item !== null
-		) as string[],
+		multiValue: (
+			(query[VisitorSpaceFilterId.Maintainers] || []).filter(
+				(item) => item !== null
+			) as string[]
+		).map((maintainerId) => maintainerId.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string),
 	},
 	// Consultable Remote
 	{

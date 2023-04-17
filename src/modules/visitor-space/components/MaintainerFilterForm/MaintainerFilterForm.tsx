@@ -1,9 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact, without } from 'lodash';
-import { noop } from 'lodash-es';
-import { FC, useEffect, useState } from 'react';
+import { compact } from 'lodash';
+import { keyBy, mapValues, noop, without } from 'lodash-es';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -14,7 +14,8 @@ import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { IeObjectsSearchFilterField } from '@shared/types';
 import { MaintainerFilterFormProps, MaintainerFilterFormState } from '@visitor-space/components';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { MaintainerInfo, useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
+import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
 
 import {
 	MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -22,7 +23,7 @@ import {
 } from './MaintainerFilterForm.const';
 
 const defaultValues = {
-	maintainers: [],
+	[IeObjectsSearchFilterField.MAINTAINER_IDS]: [],
 };
 
 const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, className }) => {
@@ -31,8 +32,13 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	const [query] = useQueryParams(MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
 	const [shouldReset, setShouldReset] = useState<boolean>(false);
-	const [selection, setSelection] = useState<string[]>(() =>
-		compact(query[VisitorSpaceFilterId.Maintainers] || [])
+	const [selectedMaintainerIds, setSelectedMaintainerIds] = useState<string[]>(() =>
+		compact(
+			(query[VisitorSpaceFilterId.Maintainers] || []).map(
+				(maintainerIdAndName) =>
+					maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
+			)
+		)
 	);
 
 	const { setValue, reset, handleSubmit } = useForm<MaintainerFilterFormState>({
@@ -41,16 +47,42 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	});
 
 	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.['schema_maintainer.schema_name']?.buckets || []
+		useSelector(selectIeObjectsFilterOptions)?.['schema_maintainer.schema_identifier']
+			?.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
+	const { data: maintainers } = useGetContentPartners({ orIds: buckets.map((b) => b.key) });
+	const maintainerNames = mapValues(
+		keyBy(maintainers || [], (m) => m.id),
+		(v) => v.name
+	);
+
+	const checkboxOptions = buckets.map((bucket) => ({
+		...bucket,
+		value: bucket.key,
+		label:
+			maintainers?.find((maintainer: MaintainerInfo) => maintainer.id === bucket.key)?.name ||
+			bucket.key,
+		checked: selectedMaintainerIds.includes(bucket.key),
+	}));
+
+	const idToIdAndNameConcatinated = useCallback(
+		(id: string) => `${id}${FILTER_LABEL_VALUE_DELIMITER}${maintainerNames[id] || ''}`,
+		[maintainerNames]
+	);
+
 	useEffect(() => {
-		setValue(IeObjectsSearchFilterField.MAINTAINERS_NAME, selection);
-	}, [selection, setValue]);
+		setValue(
+			IeObjectsSearchFilterField.MAINTAINER_IDS,
+			selectedMaintainerIds.map(idToIdAndNameConcatinated)
+		);
+	}, [selectedMaintainerIds, setValue, idToIdAndNameConcatinated]);
 
 	const onItemClick = (checked: boolean, value: unknown): void => {
-		const selected = !checked ? [...selection, `${value}`] : without(selection, `${value}`);
-		setSelection(selected);
+		const newSelectedMaintainers = !checked
+			? [...selectedMaintainerIds, value as string]
+			: without(selectedMaintainerIds, value as string);
+		setSelectedMaintainerIds(newSelectedMaintainers);
 	};
 
 	const onResetFinished = (): void => setShouldReset(false);
@@ -80,23 +112,20 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 						</p>
 					)}
 
-					<CheckboxList
-						items={buckets.map((bucket) => ({
-							...bucket,
-							value: bucket.key,
-							label: bucket.key,
-							checked: selection.includes(bucket.key),
-						}))}
-						onItemClick={onItemClick}
-					/>
+					<CheckboxList items={checkboxOptions} onItemClick={onItemClick} />
 				</div>
 			</div>
 
 			{children({
-				values: { maintainers: selection },
+				values: {
+					[IeObjectsSearchFilterField.MAINTAINER_IDS]:
+						selectedMaintainerIds.map(idToIdAndNameConcatinated),
+				},
 				reset: () => {
 					reset();
-					setSelection(defaultValues.maintainers);
+					setSelectedMaintainerIds(
+						defaultValues[IeObjectsSearchFilterField.MAINTAINER_IDS]
+					);
 					setSearch('');
 					setShouldReset(true);
 				},

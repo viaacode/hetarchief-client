@@ -15,3 +15,5 @@ export enum MetadataProp {
 	Publisher = 'am', // publisher
 	Title = 'an', // titel
 }
+
+export const FILTER_LABEL_VALUE_DELIMITER = '---';

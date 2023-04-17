@@ -435,7 +435,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 			case VisitorSpaceFilterId.Maintainers:
 				data = (values as MaintainerFilterFormState)[
-					IeObjectsSearchFilterField.MAINTAINERS_NAME
+					IeObjectsSearchFilterField.MAINTAINER_IDS
 				];
 				break;
 
