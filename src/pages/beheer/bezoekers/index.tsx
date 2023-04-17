@@ -303,4 +303,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(CPVisitorsPage as ComponentType);
+export default withAuth(CPVisitorsPage as ComponentType, true);

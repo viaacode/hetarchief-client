@@ -254,4 +254,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(CPMaterialRequestsPage as ComponentType);
+export default withAuth(CPMaterialRequestsPage as ComponentType, true);

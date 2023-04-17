@@ -11,6 +11,7 @@ import { VisitStatus } from '@shared/types';
 import { VisitsService } from '@visits/services/visits/visits.service';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
+import styles from './DeclineRequestBlade.module.scss';
 import { DeclineRequestBladeProps, DeclineRequestFormState } from './DeclineRequestBlade.types';
 
 const labelKeys: Record<keyof DeclineRequestFormState, string> = {
@@ -87,11 +88,11 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 			{...props}
 			footer={props.isOpen && renderFooter()}
 			renderTitle={(props) => (
-				<h3 {...props}>
+				<h4 {...props} className={styles['c-decline-request-blade__title']}>
 					{tHtml(
 						'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
 					)}
-				</h3>
+				</h4>
 			)}
 		>
 			{selected && <VisitSummary {...selected} />}

@@ -21,6 +21,11 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}`,
 	},
 	{
+		id: 'content-page-labels-admin',
+		label: tText('modules/admin/const/routing___content-pagina-labels'),
+		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}`,
+	},
+	{
 		id: 'navigation-admin',
 		label: tText('modules/admin/const/routing___navigatie'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}`,

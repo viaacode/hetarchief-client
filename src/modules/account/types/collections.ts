@@ -1,5 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
+import { IeObjectLicense } from '@ie-objects/types';
 import { IeObjectTypes } from '@shared/types';
 import { AccessThroughType } from '@shared/types/access';
 
@@ -38,10 +39,22 @@ export interface FolderIeObject {
 	programs: string[];
 	datePublished?: string;
 	dateCreatedLowerBound?: string;
+	licenses: IeObjectLicense[];
 }
 
 export interface CreateFolderFormState {
 	name?: string;
+}
+
+export enum SharedFolderStatus {
+	ADDED = 'ADDED',
+	ALREADY_OWNER = 'ALREADY_OWNER',
+}
+
+export interface SharedFolderResponse {
+	folderId: string;
+	folderName: string;
+	status: SharedFolderStatus;
 }
 
 export type EditFolderFormState = CreateFolderFormState;

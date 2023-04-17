@@ -86,11 +86,11 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 			className={clsx(props.className, styles['c-cancel-visit-blade'])}
 			footer={renderFooter()}
 			renderTitle={(props) => (
-				<h3 {...props}>
+				<h4 {...props} className={styles['c-cancel-visit-blade__title']}>
 					{tHtml(
 						'modules/home/components/cancel-visit-blade/cancel-visit-blade___bezoek-annuleren'
 					)}
-				</h3>
+				</h4>
 			)}
 		>
 			<div className="u-px-16 u-px-32:md u-pr-56:md">

@@ -10,6 +10,8 @@ export interface IeObject {
 	maintainerName: string;
 	maintainerSlug: string;
 	maintainerLogo: string | null;
+	maintainerDescription: string;
+	maintainerSiteUrl: string;
 	datePublished: string;
 	dctermsAvailable: string;
 	name: string;
@@ -37,9 +39,14 @@ export interface IeObject {
 	meemooDescriptionProgramme: string;
 	meemooDescriptionCast: string;
 	licenses: IeObjectLicense[];
-	series?: string[];
 	accessThrough?: IeObjectAccessThrough[];
+	series?: string[];
 	program?: string[];
+	archief?: string[];
+	reeks?: string[];
+	programma?: string[];
+	seizoen?: string[];
+	alternatief?: string[];
 	alternativeName?: string[];
 	premisIsPartOf?: string;
 	contactInfo?: IeObjectContactInfo;
@@ -147,6 +154,7 @@ export interface IeObjectSearchAggregations {
 	schema_genre: IeObjectSearchAggregation<string>;
 	schema_creator: IeObjectSearchAggregation<string>;
 	schema_in_language: IeObjectSearchAggregation<string>;
+	'schema_maintainer.schema_name': IeObjectSearchAggregation<string>;
 }
 
 // UI
@@ -164,6 +172,7 @@ export enum MediaActions {
 	Calendar = 'calendar',
 	RelatedObjects = 'related-objects',
 	RequestMaterial = 'request-material',
+	Report = 'report',
 	RequestAccess = 'request-access',
 }
 

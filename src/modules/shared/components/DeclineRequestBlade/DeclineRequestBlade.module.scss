@@ -1,0 +1,9 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-decline-request-blade";
+
+.#{$component} {
+	&__title {
+		padding: 0 5.6rem $spacer-sm $spacer-lg;
+	}
+}

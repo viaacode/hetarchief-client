@@ -15,6 +15,7 @@ export const ROUTE_PARTS = Object.freeze({
 	admin: 'admin',
 	beheer: 'beheer',
 	content: 'content',
+	contentPageLabels: 'content-pagina-labels',
 	cookiePolicy: 'cookiebeleid',
 	create: 'maak',
 	edit: 'bewerk',
@@ -34,6 +35,8 @@ export const ROUTE_PARTS = Object.freeze({
 	visitors: 'bezoekers',
 	visit: 'bezoek',
 	alerts: 'meldingen',
+	shareFolder: 'map-delen',
+	kioskConditions: 'kiosk-voorwaarden',
 });
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -57,19 +60,25 @@ export const ROUTES = Object.freeze({
 	cookiePolicy: '/' + ROUTE_PARTS.cookiePolicy,
 	myFolders: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}`,
 	myHistory: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myHistory}`,
-	visitRequested: `/${ROUTE_PARTS.search}/:slug/${ROUTE_PARTS.accessRequested}`,
+	visitRequested: `/${ROUTE_PARTS.visit}/:slug/${ROUTE_PARTS.accessRequested}`,
 	adminEditSpace: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/:slug`,
 	beheerVisitors: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitors}`,
 	beheerSettings: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.settings}`,
 	beheerRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.visitRequests}`,
 	beheerMaterialRequests: `/${ROUTE_PARTS.beheer}/${ROUTE_PARTS.materialRequests}`,
+	shareFolder: `/${ROUTE_PARTS.account}/${ROUTE_PARTS.shareFolder}/:id`,
 });
 
 export const ADMIN_CORE_ROUTES = {
+	ALERTS_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.alerts}`,
 	CONTENT_PAGE_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}/${ROUTE_PARTS.create}`,
 	CONTENT_PAGE_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}/:id`,
 	CONTENT_PAGE_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}/:id/${ROUTE_PARTS.edit}`,
 	CONTENT_PAGE_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.content}}`,
+	CONTENT_PAGE_LABEL_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/${ROUTE_PARTS.create}`,
+	CONTENT_PAGE_LABEL_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/:id`,
+	CONTENT_PAGE_LABEL_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/:id/${ROUTE_PARTS.edit}`,
+	CONTENT_PAGE_LABEL_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}`,
 	NAVIGATION_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}/${ROUTE_PARTS.create}`,
 	NAVIGATION_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}/:navigationBarId`,
 	NAVIGATION_ITEM_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}/:navigationBarId/${ROUTE_PARTS.create}`,
@@ -83,13 +92,8 @@ export const ADMIN_CORE_ROUTES = {
 	USER_GROUP_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}/:id/${ROUTE_PARTS.edit}`,
 	USER_GROUP_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}`,
 	USER_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.users}}`,
-	ALERT_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.alerts}`,
 
 	// Will be added later
-	// CONTENT_PAGE_LABEL_CREATE: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/${ROUTE_PARTS.create}`,
-	// CONTENT_PAGE_LABEL_DETAIL: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/:id`,
-	// CONTENT_PAGE_LABEL_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}/:id/${ROUTE_PARTS.edit}`,
-	// CONTENT_PAGE_LABEL_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.contentPageLabels}`,
 	// SEARCH: `/${ROUTE_PARTS.search}`,
 };
 

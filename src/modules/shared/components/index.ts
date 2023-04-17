@@ -22,6 +22,7 @@ export * from './NotificationCenter';
 export * from './Overlay';
 export * from './PaginationBar';
 export * from './PaginationProgress';
+export * from './Pill';
 export * from './Placeholder';
 export * from './ProcessRequestBlade';
 export * from './RefinableRadioButton';

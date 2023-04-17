@@ -11,6 +11,7 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
+import { ROUTE_PARTS } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount } from '@shared/store/ui';
@@ -161,19 +162,19 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const renderTitle = () => {
 		if (isEditMode) {
 			return (
-				<h2 className={styles['c-request-material__title']}>
+				<h4 className={styles['c-request-material__title']}>
 					{tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
 					)}
-				</h2>
+				</h4>
 			);
 		}
 		return (
-			<h2 className={styles['c-request-material__title']}>
+			<h4 className={styles['c-request-material__title']}>
 				{tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
 				)}
-			</h2>
+			</h4>
 		);
 	};
 
@@ -262,7 +263,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			</div>
 			<a
 				tabIndex={-1}
-				href={`/${maintainerSlug}/${objectId}`}
+				href={`/${ROUTE_PARTS.search}/${maintainerSlug}/${objectId}`}
 				className={styles['c-request-material__material-link']}
 			>
 				<div className={styles['c-request-material__material']} tabIndex={0}>

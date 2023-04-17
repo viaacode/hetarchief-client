@@ -1,0 +1,35 @@
+@use "sass:math";
+@use "src/styles/abstracts" as *;
+
+.c-report-blade {
+	:global(.c-input--textarea .c-input__field) {
+		@include respond-to("sm") {
+			min-height: 10rem;
+		}
+	}
+
+	&__title {
+		text-align: center;
+		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
+		font-size: $font-size-sm;
+
+		@include respond-at(md) {
+			text-align: left;
+			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
+			font-size: $font-size-1xl;
+
+			// Force line height to be an integer, avoids .5px misalignments in datepickers in blades
+			line-height: $font-size-3xl * (math.div(56, 48));
+		}
+	}
+
+	&__input--disabled {
+		label {
+			color: $neutral;
+		}
+
+		input {
+			color: $zinc;
+		}
+	}
+}

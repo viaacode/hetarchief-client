@@ -10,7 +10,7 @@ import {
 	ADMIN_VISITORS_QUERY_PARAM_CONFIG,
 	VisitorsTableColumns,
 	VisitorsTablePageSize,
-} from '@admin/const';
+} from '@admin/const/Visitors.const';
 import { AdminLayout } from '@admin/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
@@ -267,4 +267,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(Visitors as ComponentType);
+export default withAuth(Visitors as ComponentType, true);

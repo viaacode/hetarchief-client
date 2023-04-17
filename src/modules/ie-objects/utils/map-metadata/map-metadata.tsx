@@ -5,8 +5,10 @@ import { stringifyUrl } from 'query-string';
 import { ReactNode } from 'react';
 
 import { MetadataItem } from '@ie-objects/components';
+import { ROUTE_PARTS } from '@shared/const';
 import { capitalise } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	return keywords.map((item) => {
@@ -17,17 +19,18 @@ export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	});
 };
 
-export const mapKeywordsToTagList = (keywords: string[]): ReactNode | null => {
-	return keywords.length ? (
+export const mapKeywordsToTagList = (keywords: string[]): ReactNode | null =>
+	keywords.length ? (
 		<TagList
 			className="u-pt-12"
 			tags={mapKeywordsToTags(keywords)}
-			onTagClicked={(id) => {
+			onTagClicked={(keyword: string | number) => {
 				router.push(
 					stringifyUrl({
-						url: `/${router.query.slug}`,
+						url: `/${ROUTE_PARTS.search}`,
 						query: {
-							search: id,
+							[VisitorSpaceFilterId.Maintainer]: router.query.slug,
+							search: keyword,
 						},
 					})
 				);
@@ -35,7 +38,6 @@ export const mapKeywordsToTagList = (keywords: string[]): ReactNode | null => {
 			variants={['clickable', 'silver', 'medium']}
 		/>
 	) : null;
-};
 
 export const mapObjectToMetadata = (data: Record<string, string[]>): MetadataItem[] => {
 	if (!data) return [];

@@ -10,7 +10,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
-import { checkLoginAction, selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user';
 import {
 	KNOWN_STATIC_ROUTES,
 	REDIRECT_TO_QUERY_KEY,
@@ -70,25 +70,15 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 
 	const onConfirmClick = () => {
 		if (user) {
-			TosService.acceptTos(user?.id).then((updated) => {
-				dispatch(checkLoginAction());
-
-				if (updated.acceptedTosAt) {
-					// Execute in separate cycle
-					setTimeout(() =>
-						router.push(query[REDIRECT_TO_QUERY_KEY]).then(() => {
-							toastService.notify({
-								title: tHtml(
-									'pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'
-								),
-								description: tHtml(
-									'pages/gebruiksvoorwaarden/index___je-geniet-nu-van-volledige-toegang-tot-het-platform'
-								),
-								maxLines: 2,
-							});
-						})
-					);
-				}
+			TosService.acceptTos(user?.id).then(() => {
+				router.push(query[REDIRECT_TO_QUERY_KEY]);
+				toastService.notify({
+					title: tHtml('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'),
+					description: tHtml(
+						'pages/gebruiksvoorwaarden/index___je-geniet-nu-van-volledige-toegang-tot-het-platform'
+					),
+					maxLines: 2,
+				});
 			});
 		}
 	};

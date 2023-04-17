@@ -8,7 +8,7 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 
-import { GET_PERMISSION_TRANSLATIONS_BY_GROUP, Group, Permission } from '@account/const';
+import { GET_PERMISSION_TRANSLATIONS_BY_GROUP, GroupName, Permission } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
@@ -18,6 +18,7 @@ import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsChe
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -29,8 +30,9 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
 
-	const isAdminUser: boolean = useHasAnyGroup(Group.MEEMOO_ADMIN, Group.CP_ADMIN);
-	const isKeyUser: boolean = user?.isKeyUser || false;
+	const isAdminUser: boolean = useHasAnyGroup(GroupName.MEEMOO_ADMIN, GroupName.CP_ADMIN);
+	const isKeyUser: boolean = useIsKeyUser();
+
 	const canEdit: boolean =
 		user?.idp === Idp.HETARCHIEF && user.permissions.includes(Permission.CAN_EDIT_PROFILE_INFO);
 
@@ -75,7 +77,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	const renderUserGroup = (): ReactNode => {
-		const userGroup: Group = user?.groupName as Group;
+		const userGroup: GroupName = user?.groupName as GroupName;
 		const { name, description } = GET_PERMISSION_TRANSLATIONS_BY_GROUP()[userGroup];
 
 		return (
@@ -194,4 +196,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(AccountMyProfile as ComponentType);
+export default withAuth(AccountMyProfile as ComponentType, true);

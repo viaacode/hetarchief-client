@@ -12,11 +12,11 @@ import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
-import { Group, Permission } from '@account/const';
+import { GroupName, Permission } from '@account/const';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/types';
@@ -43,15 +43,16 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { selectHistory, setHistory } from '@shared/store/history';
 import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
@@ -74,14 +75,19 @@ import {
 	CreatorFilterFormState,
 	DurationFilterFormState,
 	FilterMenu,
+	FilterMenuFilterOption,
 	GenreFilterFormState,
 	initialFields,
 	KeywordsFilterFormState,
 	LanguageFilterFormState,
+	MaintainerFilterFormState,
+	MediaFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
+	RemoteFilterFormState,
 } from '../../components';
 import {
+	PUBLIC_COLLECTION,
 	VISITOR_SPACE_FILTERS,
 	VISITOR_SPACE_ITEM_COUNT,
 	VISITOR_SPACE_QUERY_PARAM_CONFIG,
@@ -92,17 +98,15 @@ import {
 } from '../../const';
 import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
-import { mapFiltersToElastic } from '../../utils/elastic-filters';
+import { mapFiltersToElastic, mapMaintainerToElastic } from '../../utils/elastic-filters';
 
 const labelKeys = {
 	search: 'VisitorSpaceSearchPage__search',
 };
 
-const PUBLIC_COLLECTION = ''; // No maintainer query param means the public collection should be selected
-
 const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	return {
-		id: PUBLIC_COLLECTION,
+		slug: PUBLIC_COLLECTION,
 		label: tText(
 			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
 		),
@@ -113,14 +117,13 @@ const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
-	const history = useSelector(selectHistory);
-	const dispatch = useDispatch();
 
 	useScrollToId((router.query.focus as string) || null);
 
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
-	const isKioskUser = useHasAnyGroup(Group.KIOSK_VISITOR);
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
+	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
 
 	/**
 	 * State
@@ -129,6 +132,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const user = useSelector(selectUser);
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
+	const isKeyUser = useIsKeyUser();
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -151,8 +155,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
 	};
 
-	const activeVisitorSpaceId: string =
+	const activeVisitorSpaceSlug: string =
 		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
+
+	const isPublicCollection = activeVisitorSpaceSlug === PUBLIC_COLLECTION;
 
 	/**
 	 * Data
@@ -180,7 +186,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		isLoading: searchResultsLoading,
 		error: searchResultsError,
 	} = useGetIeObjects(
-		mapFiltersToElastic(query),
+		[mapMaintainerToElastic(query, activeVisitorSpace), ...mapFiltersToElastic(query)],
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
 		activeSort,
@@ -192,12 +198,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	 */
 
 	useEffect(() => {
-		// New search => update history in list
-		dispatch(setHistory([history[history.length - 1], router.asPath]));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [router.asPath, dispatch, query]);
-
-	useEffect(() => {
 		if (!isLoggedIn) {
 			return;
 		}
@@ -207,15 +207,48 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	useEffect(() => {
 		const visitorSpace: Visit | undefined = visitorSpaces.find(
-			(visit: Visit): boolean => activeVisitorSpaceId === visit.spaceMaintainerId
+			(visit: Visit): boolean => activeVisitorSpaceSlug === visit.spaceSlug
 		);
 
 		setActiveVisitorSpace(visitorSpace);
 		setQuery({
-			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceId || undefined,
+			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceSlug || undefined,
 		});
-	}, [activeVisitorSpaceId, setQuery, visitorSpaces]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [activeVisitorSpaceSlug, visitorSpaces]);
+
+	useEffect(() => {
+		// Filter out all disabled query param keys/ids
+		const disabledFilterKeys: VisitorSpaceFilterId[] = VISITOR_SPACE_FILTERS(
+			isPublicCollection,
+			isKeyUser
+		)
+			.filter(({ isDisabled }: FilterMenuFilterOption): boolean => !!isDisabled?.())
+			.map(
+				({ id }: FilterMenuFilterOption): VisitorSpaceFilterId => id as VisitorSpaceFilterId
+			);
+
+		// Loop over all existing query params and strip out the disabled filters if they exist
+		const disabledKeysSet: Set<VisitorSpaceFilterId> = new Set(disabledFilterKeys);
+		const strippedQuery = Object.keys(query).reduce((result, current) => {
+			const id = current as VisitorSpaceFilterId;
+			if (disabledKeysSet.has(id)) {
+				return {
+					...result,
+					[id]: VISITOR_SPACE_QUERY_PARAM_INIT[id],
+				};
+			}
+
+			return {
+				...result,
+				[id]: query[id],
+			};
+		}, {});
+
+		setQuery(strippedQuery);
+		// Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isKeyUser, isPublicCollection]);
 
 	/**
 	 * Display
@@ -259,13 +292,13 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const dropdownOptions = useMemo(() => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
-			({ spaceName, endAt, spaceMaintainerId }: Visit): VisitorSpaceDropdownOption => {
+			({ spaceName, endAt, spaceSlug }: Visit): VisitorSpaceDropdownOption => {
 				const accessEndDate = isMobile
 					? formatSameDayTimeOrDate(asDate(endAt))
 					: formatMediumDateWithTime(asDate(endAt));
 
 				return {
-					id: spaceMaintainerId,
+					slug: spaceSlug,
 					label: spaceName || '',
 					extraInfo: accessEndDate,
 				};
@@ -276,8 +309,11 @@ const VisitorSpaceSearchPage: FC = () => {
 	}, [visitorSpaces, isMobile]);
 
 	const filters = useMemo(
-		() => VISITOR_SPACE_FILTERS().filter(({ isDisabled }) => !isDisabled?.()),
-		[]
+		() =>
+			VISITOR_SPACE_FILTERS(isPublicCollection, isKeyUser).filter(
+				({ isDisabled }) => !isDisabled?.()
+			),
+		[isKeyUser, isPublicCollection]
 	);
 
 	/**
@@ -322,7 +358,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Reset all filters except the maintainer
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			maintainer: query.maintainer,
+			[VisitorSpaceFilterId.Maintainer]: query[VisitorSpaceFilterId.Maintainer],
 		});
 	};
 
@@ -390,6 +426,24 @@ const VisitorSpaceSearchPage: FC = () => {
 				data = (values as LanguageFilterFormState).languages;
 				break;
 
+			case VisitorSpaceFilterId.Maintainers:
+				data = (values as MaintainerFilterFormState).maintainers;
+				break;
+
+			case VisitorSpaceFilterId.Remote:
+				// Info: remove queryparam if false (= set to undefined)
+				data = (values as RemoteFilterFormState).isConsultableRemote
+					? (values as RemoteFilterFormState).isConsultableRemote
+					: undefined;
+				break;
+
+			case VisitorSpaceFilterId.Media:
+				// Info: remove queryparam if false (= set to undefined)
+				data = (values as MediaFilterFormState).isConsultableMedia
+					? (values as MediaFilterFormState).isConsultableMedia
+					: undefined;
+				break;
+
 			case VisitorSpaceFilterId.Advanced:
 				data = (values as AdvancedFilterFormState).advanced.filter(
 					(advanced) => advanced.val !== initialFields().val
@@ -412,7 +466,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
-		const query: Record<string, unknown> = {};
+		const updatedQuery: Record<string, unknown> = {};
 
 		tags.forEach((tag) => {
 			switch (tag.key) {
@@ -421,9 +475,10 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Keywords:
 				case VisitorSpaceFilterId.Language:
 				case VisitorSpaceFilterId.Medium:
+				case VisitorSpaceFilterId.Maintainers:
 				case SEARCH_QUERY_KEY:
-					query[tag.key] = [
-						...((query[tag.key] as Array<unknown>) || []),
+					updatedQuery[tag.key] = [
+						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),
 					];
 					break;
@@ -432,22 +487,41 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Created:
 				case VisitorSpaceFilterId.Duration:
 				case VisitorSpaceFilterId.Published:
-					query[tag.key] = [...((query[tag.key] as Array<unknown>) || []), tag];
+					updatedQuery[tag.key] = [
+						...((updatedQuery[tag.key] as Array<unknown>) || []),
+						tag,
+					];
+					break;
+
+				case VisitorSpaceFilterId.Media:
+				case VisitorSpaceFilterId.Remote:
+					// eslint-disable-next-line no-case-declarations
+					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
+					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
 					break;
 
 				default:
-					query[tag.key] = tag.value;
+					updatedQuery[tag.key] = tag.value;
 					break;
 			}
 		});
 
 		// Destructure to keyword-able filters
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { format, orderProp, orderDirection, page, maintainer, ...rest } = {
+		/* eslint-disable @typescript-eslint/no-unused-vars */
+		const {
+			format,
+			orderProp,
+			orderDirection,
+			page,
+			// Dynamically destructure the maintainer qp using our enum so we don't need to change it every time the qp value changes
+			[VisitorSpaceFilterId.Maintainer]: maintainer,
+			...rest
+		} = {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
+		/* eslint-disable @typescript-eslint/no-unused-vars */
 
-		setQuery({ ...rest, ...query, page: 1 });
+		setQuery({ ...rest, ...updatedQuery, page: 1 });
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
@@ -461,17 +535,9 @@ const VisitorSpaceSearchPage: FC = () => {
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
 
 	const onVisitorSpaceSelected = (id: string): void => {
-		if (id === PUBLIC_COLLECTION) {
-			setQuery({
-				...VISITOR_SPACE_QUERY_PARAM_INIT,
-				[VisitorSpaceFilterId.Maintainer]: undefined,
-			});
-			return;
-		}
-
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
-			[VisitorSpaceFilterId.Maintainer]: id,
+			[VisitorSpaceFilterId.Maintainer]: id === PUBLIC_COLLECTION ? undefined : id,
 		});
 	};
 
@@ -479,7 +545,6 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * Computed
 	 */
 
-	const keywords = (query.search ?? []).filter((str) => !!str) as string[];
 	const isLoadedWithoutResults = !!searchResults && searchResults?.items?.length === 0;
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
@@ -528,7 +593,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				'pages/slug/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
 			)}
 			action={
-				<Link passHref href="/kiosk-voorwaarden">
+				<Link passHref href={`/${ROUTE_PARTS.kioskConditions}`}>
 					<a aria-label={tText('pages/slug/index___meer-info')}>
 						<Button
 							className="u-py-0 u-px-8 u-color-neutral u-font-size-14 u-height-auto"
@@ -572,6 +637,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				className="u-my-16"
 				items={[...staticBreadcrumbs, ...dynamicBreadcrumbs]}
 				icon={<Icon name={IconNamesLight.AngleRight} />}
+				linkComponent={NextLinkWrapper}
 			/>
 		);
 	};
@@ -643,16 +709,25 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
+		if (user?.groupName === GroupName.MEEMOO_ADMIN) {
+			// Don't show the temporary access label for MEEMOO admins, since they have access to all visitor spaces
+			return null;
+		}
+
 		// Strip out public collection and own visitor space (cp)
-		const visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
+		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicColelction = visitorSpace.id == PUBLIC_COLLECTION;
-				const isOwnVisitorSapce =
-					user?.groupName === Group.CP_ADMIN && visitorSpace.id === user.maintainerId;
+				const isPublicColelction = visitorSpace.slug == PUBLIC_COLLECTION;
+				const isOwnVisitorSapce = isCPAdmin && visitorSpace.slug === user?.maintainerId;
 
 				return !isPublicColelction && !isOwnVisitorSapce;
 			}
 		);
+
+		if (user?.groupName === GroupName.CP_ADMIN) {
+			// Don't show the temporary access label for CP_ADMIN's own visitor space
+			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user.visitorSpaceSlug);
+		}
 
 		if (isEmpty(visitorSpaces)) {
 			return;
@@ -661,7 +736,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Create a link element for each visitor space
 		const visitorSpaceLinks = visitorSpaces.map(
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
-				<Link key={visitorSpace.id} href={`/zoeken?maintainer=${visitorSpace?.id}`}>
+				<Link
+					key={visitorSpace.slug}
+					href={`/zoeken?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
+				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>
 			)
@@ -747,7 +825,7 @@ const VisitorSpaceSearchPage: FC = () => {
 											<VisitorSpaceDropdown
 												options={dropdownOptions}
 												selectedOptionId={
-													activeVisitorSpaceId || PUBLIC_COLLECTION
+													activeVisitorSpaceSlug || PUBLIC_COLLECTION
 												}
 												onSelected={onVisitorSpaceSelected}
 											/>

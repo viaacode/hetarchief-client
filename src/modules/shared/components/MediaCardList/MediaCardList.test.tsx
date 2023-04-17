@@ -1,50 +1,63 @@
-import { render, RenderResult, screen } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
 
+import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
+
+import { mockStore } from '../../../../__mocks__/store';
 import { IdentifiableMediaCard } from '../MediaCard';
 
 import MediaCardList from './MediaCardList';
+import { MediaCardListProps } from './MediaCardList.types';
 import { gridData } from './__mocks__/media-card-list';
 
-describe('Component: <MediaCardList />', () => {
+const renderMediaCardList = (args: Partial<MediaCardListProps>, list?: boolean) => {
+	const child = '<child>';
 	const data: IdentifiableMediaCard[] = gridData;
-	let rendered: RenderResult | undefined;
 
-	beforeEach(() => {
-		rendered = undefined;
-	});
+	return render(
+		<NextQueryParamProvider>
+			<QueryClientProvider client={new QueryClient()}>
+				<Provider store={mockStore}>
+					<MediaCardList
+						sidebar={child}
+						view={list ? 'list' : 'grid'}
+						items={
+							list
+								? data.map((item) => {
+										return {
+											...item,
+											view: 'list',
+										};
+								  })
+								: data
+						}
+						{...args}
+					/>
+				</Provider>
+			</QueryClientProvider>
+		</NextQueryParamProvider>
+	);
+};
 
+describe('Component: <MediaCardList />', () => {
 	it('Should be able to show children that are always visible', () => {
+		renderMediaCardList({});
 		const child = '<child>';
-
-		rendered = render(<MediaCardList sidebar={child} view="grid" items={data} />);
-
 		expect(screen.getByText(child)).toBeDefined();
 	});
 
 	it('Should apply the vertical orientation when rendered in grid view', () => {
-		rendered = render(<MediaCardList view="grid" items={data} />);
+		const { container } = renderMediaCardList({});
 
-		const element = rendered.container.getElementsByClassName('c-card--orientation-vertical');
+		const element = container.getElementsByClassName('c-card--orientation-vertical');
 
 		expect(element.length).toBeGreaterThan(0);
 	});
 
 	it('Should apply the horizontal--at-md orientation when rendered in list view', () => {
-		rendered = render(
-			<MediaCardList
-				view="list"
-				items={data.map((item) => {
-					return {
-						...item,
-						view: 'list',
-					};
-				})}
-			/>
-		);
-
-		const element = rendered.container.getElementsByClassName(
-			'c-card--orientation-horizontal--at-md'
-		);
+		const { container } = renderMediaCardList({}, true);
+		const element = container.getElementsByClassName('c-card--orientation-horizontal--at-md');
 
 		expect(element.length).toBeGreaterThan(0);
 	});

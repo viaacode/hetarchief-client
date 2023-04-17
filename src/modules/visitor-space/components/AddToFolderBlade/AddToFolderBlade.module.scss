@@ -5,6 +5,10 @@ $component: "c-add-to-folder-blade";
 $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 
 .#{$component} {
+	&__title {
+		padding: 0 5.6rem $spacer-sm $spacer-lg;
+	}
+
 	&__list {
 		@extend %reset-list;
 

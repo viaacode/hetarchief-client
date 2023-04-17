@@ -110,31 +110,36 @@ export enum Permission {
 	DELETE_OWN_MATERIAL_REQUESTS = 'DELETE_OWN_MATERIAL_REQUESTS',
 }
 
-export enum Group {
+export enum GroupName {
 	VISITOR = 'VISITOR',
 	KIOSK_VISITOR = 'KIOSK_VISITOR',
 	MEEMOO_ADMIN = 'MEEMOO_ADMIN',
 	CP_ADMIN = 'CP_ADMIN',
+	ANONYMOUS = 'ANONYMOUS',
 }
 
 export const GET_PERMISSION_TRANSLATIONS_BY_GROUP = (): Record<
-	Group,
+	GroupName,
 	{ name: string; description: ReactNode | string }
 > => ({
-	[Group.VISITOR]: {
+	[GroupName.VISITOR]: {
 		name: tText('modules/account/const/account___groep-bezoeker--titel'),
 		description: tHtml('modules/account/const/account___groep-bezoeker--omschrijving'),
 	},
-	[Group.KIOSK_VISITOR]: {
+	[GroupName.KIOSK_VISITOR]: {
 		name: tText('modules/account/const/account___groep-kiosk--titel'),
 		description: tHtml('modules/account/const/account___groep-kiosk--omschrijving'),
 	},
-	[Group.MEEMOO_ADMIN]: {
+	[GroupName.MEEMOO_ADMIN]: {
 		name: tText('modules/account/const/account___groep-admin--titel'),
 		description: tHtml('modules/account/const/account___groep-admin--omschrijving'),
 	},
-	[Group.CP_ADMIN]: {
+	[GroupName.CP_ADMIN]: {
 		name: tText('modules/account/const/account___groep-cp--titel'),
 		description: tHtml('modules/account/const/account___groep-cp--omschrijving'),
+	},
+	[GroupName.ANONYMOUS]: {
+		name: tText('modules/account/const/index___groep-anoniem--titel'),
+		description: tHtml('modules/account/const/index___groep-anoniem--omschrijving'),
 	},
 });

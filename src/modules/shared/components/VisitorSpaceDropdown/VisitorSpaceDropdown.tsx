@@ -23,12 +23,12 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 
 	const onSelectOption = (selectedOption: VisitorSpaceDropdownOption): void => {
 		setIsOpen(false);
-		onSelected(selectedOption.id);
+		onSelected(selectedOption.slug);
 	};
 
 	const renderSelectedOption = () => {
 		const selected = options.find(
-			({ id }: VisitorSpaceDropdownOption) => id === selectedOptionId
+			({ slug: id }: VisitorSpaceDropdownOption) => id === selectedOptionId
 		);
 
 		const actionProps = hasMultipleOptions
@@ -45,12 +45,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 		return (
 			<li {...actionProps} className={clsx(styles['c-visitor-spaces-dropdown__active'])}>
 				<div className={clsx(styles['c-visitor-spaces-dropdown__active-content'])}>
-					<p
-						className={clsx(
-							'u-text-ellipsis',
-							styles['c-visitor-spaces-dropdown__active-label']
-						)}
-					>
+					<p className={clsx(styles['c-visitor-spaces-dropdown__active-label'])}>
 						{selected?.label}
 					</p>
 					{selected?.extraInfo && (
@@ -84,14 +79,19 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 				{options.map((option: VisitorSpaceDropdownOption) => (
 					<li
 						tabIndex={isOpen ? 0 : 1}
-						key={option.id}
+						key={option.slug}
 						role="option"
-						aria-selected={selectedOptionId === option.id}
+						aria-selected={selectedOptionId === option.slug}
 						onClick={() => onSelectOption(option)}
 						onKeyDown={(e) => onKey(e, [...keysEnter], () => onSelectOption(option))}
 						className={clsx(styles['c-visitor-spaces-dropdown__option'])}
 					>
-						<p className={clsx(styles['c-visitor-spaces-dropdown__option-label'])}>
+						<p
+							className={clsx(
+								styles['c-visitor-spaces-dropdown__option-label'],
+								'u-text-ellipsis'
+							)}
+						>
 							{option.label}
 						</p>
 					</li>
