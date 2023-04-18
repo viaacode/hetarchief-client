@@ -85,8 +85,6 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		setSelectedMaintainerIds(newSelectedMaintainers);
 	};
 
-	const onResetFinished = (): void => setShouldReset(false);
-
 	return (
 		<>
 			<div className={clsx(className, 'u-px-20 u-px-32:md')}>
@@ -99,8 +97,6 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 					)}
 					onChange={setSearch}
 					onSearch={noop}
-					shouldReset={shouldReset}
-					onResetFinished={onResetFinished}
 				/>
 
 				<div className="u-my-32">

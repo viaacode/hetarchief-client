@@ -7,7 +7,4 @@ export type SearchBarProps = Omit<TextInputProps, 'value' | 'onChange'> &
 		value: string;
 		onChange: (newValue: string) => void;
 		onSearch: (value: string) => void;
-		shouldReset?: boolean;
-		onResetFinished?: () => void;
-		instantSearch?: boolean;
 	};

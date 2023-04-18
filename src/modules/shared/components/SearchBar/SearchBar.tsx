@@ -1,5 +1,6 @@
 import { Button, keysEnter, onKey, TextInput } from '@meemoo/react-components';
-import { FC, useEffect, useState } from 'react';
+import { isString } from 'lodash-es';
+import { FC } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
@@ -17,14 +18,7 @@ const SearchBar: FC<SearchBarProps> = ({
 	const { tText } = useTranslation();
 
 	const getVariants = () => {
-		let modifiers: string[] = [];
-
-		if (typeof variants === 'string') {
-			modifiers = [variants];
-		} else {
-			modifiers = variants;
-		}
-
+		const modifiers: string[] = isString(variants) ? [variants] : variants;
 		return [...modifiers, ...(value ? ['black-border'] : [])];
 	};
 
