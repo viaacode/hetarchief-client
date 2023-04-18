@@ -1,0 +1,66 @@
+@use "src/styles/abstracts" as *;
+
+.c-content-page-overview-block {
+	.c-content-page-overview-block__accordion--first-level {
+		.c-accordion__header {
+			background-color: $seagreen;
+			color: $white;
+			padding: 2.2rem;
+
+			.c-accordion__header-title {
+				color: $white;
+			}
+		}
+
+		&.c-accordion--closed {
+			.c-accordion__header {
+				background-color: $black;
+			}
+		}
+
+		.c-accordion__body {
+			padding: 1.2rem 0;
+		}
+
+		.c-content-page-overview-block__accordion--second-level {
+			margin-top: 0;
+
+			.c-accordion__header {
+				background-color: $white;
+				color: $black;
+				padding: 2.2rem;
+
+				.c-accordion__header-title {
+					color: $black;
+				}
+
+				.c-accordion__icon {
+					background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect y='7' width='16' height='2'/%3E%3C/svg%3E");
+					background-size: contain;
+					width: 1.6rem;
+					height: 1.6rem;
+
+					> div {
+						display: none;
+					}
+				}
+			}
+
+			&.c-accordion--closed {
+				.c-accordion__header {
+					.c-accordion__icon {
+						background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect y='7' width='16' height='2'/%3E%3Crect x='7' width='2' height='16' /%3E%3C/svg%3E");
+					}
+				}
+			}
+
+			&:last-child {
+				border: 0;
+			}
+
+			.c-accordion__body {
+				padding: 0 0.6rem;
+			}
+		}
+	}
+}
