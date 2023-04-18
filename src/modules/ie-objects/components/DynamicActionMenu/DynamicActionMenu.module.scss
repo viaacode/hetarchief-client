@@ -3,12 +3,24 @@
 .c-dynamic-action-menu {
 	@extend %reset-list;
 
-	width: 100%;
-	min-width: 0; // prevent overflow in flex container
 	display: flex;
+	align-items: center;
+	width: 100%;
 
-	&__item:not(:last-of-type) {
-		padding-right: $spacer-xs;
+	&__primary {
+		&-item {
+			padding-right: $spacer-xs;
+		}
+	}
+
+	&__secondary {
+		width: 100%;
+		min-width: 0; // prevent overflow in flex container
+		display: flex;
+
+		&-item:not(:last-of-type) {
+			padding-right: $spacer-xs;
+		}
 	}
 
 	&__dropdown-button {
@@ -17,5 +29,10 @@
 
 	&__flyout {
 		box-shadow: $shadow-24-black-12;
+	}
+
+	&__button {
+		width: 5rem !important;
+		height: 5rem !important;
 	}
 }

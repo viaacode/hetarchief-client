@@ -174,6 +174,7 @@ export enum MediaActions {
 	RequestMaterial = 'request-material',
 	Report = 'report',
 	RequestAccess = 'request-access',
+	Export = 'export',
 }
 
 // Metadata
@@ -186,4 +187,9 @@ export enum MetadataExportFormats {
 export interface IeMetadataExportProps {
 	id?: string;
 	format?: MetadataExportFormats;
+}
+
+export interface MetadataSortMap {
+	id: MediaActions;
+	isPrimary?: boolean;
 }

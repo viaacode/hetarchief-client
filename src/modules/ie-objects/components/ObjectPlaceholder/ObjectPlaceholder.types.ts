@@ -9,4 +9,5 @@ export interface ObjectPlaceholderProps extends DefaultComponentProps {
 	openModalButtonLabel?: string;
 	closeModalButtonLabel?: string;
 	small?: boolean;
+	onOpenRequestAccess?: () => void;
 }

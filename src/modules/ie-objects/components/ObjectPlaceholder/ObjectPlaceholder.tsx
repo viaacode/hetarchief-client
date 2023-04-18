@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { FC, useState } from 'react';
 
 import { Icon, IconNamesLight, Modal } from '@shared/components';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './ObjectPlaceholder.module.scss';
 import { ObjectPlaceholderProps } from './ObjectPlaceholder.types';
@@ -15,7 +16,10 @@ const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 	reasonTitle,
 	reasonDescription,
 	small = false,
+	onOpenRequestAccess,
 }) => {
+	const { tText } = useTranslation();
+
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	return (
@@ -38,6 +42,16 @@ const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 						variants={['outline']}
 						onClick={() => setIsModalOpen(true)}
 					/>
+					{onOpenRequestAccess && (
+						<Button
+							label={tText(
+								'modules/ie-objects/components/object-placeholder/object-placeholder___plan-een-bezoek'
+							)}
+							variants={['dark']}
+							className={styles['c-object-placeholder__visit-button']}
+							onClick={() => onOpenRequestAccess()}
+						/>
+					)}
 
 					{(reasonTitle || reasonDescription) && (
 						<Modal

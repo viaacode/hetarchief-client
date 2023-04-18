@@ -13,6 +13,7 @@ import {
 	IeObjectSearchAggregations,
 	MediaActions,
 	MetadataExportFormats,
+	MetadataSortMap,
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import {
@@ -174,18 +175,73 @@ export const OBJECT_DETAIL_TABS = (mediaType?: IeObjectTypes, available = true):
 /**
  * Actions
  */
+// https://meemoo.atlassian.net/browse/ARC-1302 export action follows this task
+
+export const KIOSK_ACTION_SORT_MAP = (): MetadataSortMap[] => [];
+
+export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
+	{ id: MediaActions.RequestMaterial, isPrimary: true },
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
+
+export const VISITOR_ACTION_SORT_MAP = (
+	hasAccessToVisitorSpaceOfObject: boolean
+): MetadataSortMap[] => [
+	{ id: MediaActions.RequestMaterial, isPrimary: true },
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
+
+export const KEY_USER_ACTION_SORT_MAP = (
+	hasAccessToVisitorSpaceOfObject: boolean
+): MetadataSortMap[] => [
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
+
+export const MEEMOO_ADMIN_ACTION_SORT_MAP = (
+	hasAccessToVisitorSpaceOfObject: boolean
+): MetadataSortMap[] => [
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
+
+export const CP_ADMIN_ACTION_SORT_MAP = (
+	hasAccessToVisitorSpaceOfObject: boolean
+): MetadataSortMap[] => [
+	{ id: MediaActions.RequestMaterial, isPrimary: true },
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
+	{ id: MediaActions.Bookmark },
+	{ id: MediaActions.Report },
+];
 
 export const MEDIA_ACTIONS = (
 	canManageFolders: boolean,
 	isInAFolder: boolean,
 	canReport: boolean,
 	canRequestAccess: boolean,
-	canRequestMaterial: boolean
+	canRequestMaterial: boolean,
+	canExport: boolean
 ): DynamicActionMenuProps => {
 	const activeIconSet = isInAFolder ? IconNamesSolid : IconNamesLight;
 
 	return {
 		actions: [
+			...((canExport
+				? [
+						{
+							label: tText('modules/ie-objects/const/index___exporteer-metadata'),
+							id: MediaActions.Export,
+							ariaLabel: tText('modules/ie-objects/const/index___exporteer-metadata'),
+						},
+				  ]
+				: []) as ActionItem[]),
 			...((canRequestMaterial
 				? [
 						{
@@ -261,7 +317,7 @@ export const MEDIA_ACTIONS = (
 				  ]
 				: []) as ActionItem[]),
 		],
-		limit: 0,
+		limit: 1,
 		onClickAction: () => null,
 	};
 };
@@ -274,16 +330,12 @@ export enum CustomMetaDataFields {
 }
 
 // TODO: complete mapping
-export const METADATA_FIELDS = (
-	mediaInfo: IeObject,
-	showExtendedMaintainer: boolean
-): MetadataItem[] => [
+export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	{
 		title: CustomMetaDataFields.Maintainer,
 		data: CustomMetaDataFields.Maintainer,
 		customData: true,
 		customTitle: true,
-		isDisabled: () => !showExtendedMaintainer,
 	},
 	{
 		title: tText('modules/ie-objects/const/index___oorsprong'),
