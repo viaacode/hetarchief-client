@@ -204,6 +204,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		}
 		return (
 			<div className={styles['c-request-material__footer-container']}>
+				{/* ARC-1188: requested to hide single material request button
 				<Button
 					label={tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___verstuur'
@@ -211,7 +212,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					variants={['block', 'text']}
 					onClick={onCloseModal}
 					className={styles['c-request-material__verstuur-button']}
-				/>
+				/> */}
 				<Button
 					label={tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'

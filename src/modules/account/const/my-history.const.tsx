@@ -1,4 +1,5 @@
 import { Button, OrderDirection } from '@meemoo/react-components';
+import { MouseEvent } from 'react';
 import { Column, UseSortByColumnOptions } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
@@ -29,15 +30,6 @@ export const HistoryTableColumns = (
 		Cell: (data: VisitRow) => {
 			const visit = data.row.original;
 			return <span>{visit.spaceName}</span>;
-		},
-	},
-	{
-		Header: tText('modules/account/const/my-history___adres') || '',
-		accessor: 'spaceAddress',
-		disableSortBy: true, // space.schema_maintainer.information is an array and can not be sorted on
-		Cell: (data: VisitRow) => {
-			const visit = data.row.original;
-			return <span className="u-color-neutral">{visit.spaceAddress || ''}</span>;
 		},
 	},
 	{
@@ -85,8 +77,11 @@ export const HistoryTableColumns = (
 			return (
 				<Button
 					className="u-font-size-14 u-py-16 u-text-left"
-					variants={['text', 'block', 'fill']}
-					onClick={() => onClickRow(visit)}
+					variants={['text', 'block', 'fill', 'underline']}
+					onClick={(e: MouseEvent) => {
+						e.stopPropagation();
+						onClickRow(visit);
+					}}
 				>
 					{tText('modules/account/const/my-history___bezoek')}
 				</Button>

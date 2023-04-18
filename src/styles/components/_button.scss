@@ -259,6 +259,10 @@
 
 	&.c-button--underline {
 		text-decoration: underline;
+
+		div {
+			text-decoration: underline;
+		}
 	}
 
 	&.c-button--white {
