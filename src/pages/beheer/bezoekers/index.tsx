@@ -162,7 +162,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 			case VisitTimeframe.PAST:
 			default:
 				return tHtml(
-					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-historiek'
+					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-bezoek-historiek'
 				);
 		}
 	};

@@ -21,7 +21,7 @@ export const ROUTE_PARTS = Object.freeze({
 	edit: 'bewerk',
 	logout: 'uitloggen',
 	myFolders: 'mijn-mappen',
-	myHistory: 'mijn-historiek',
+	myHistory: 'mijn-bezoek-historiek',
 	myProfile: 'mijn-profiel',
 	navigation: 'navigatie',
 	notFound: '404',

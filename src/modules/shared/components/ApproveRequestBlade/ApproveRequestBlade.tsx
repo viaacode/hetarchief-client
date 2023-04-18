@@ -13,9 +13,11 @@ import {
 	areIntervalsOverlapping,
 	differenceInMinutes,
 	endOfDay,
+	isBefore,
 	isSameDay,
 	roundToNearestMinutes,
 	startOfDay,
+	subHours,
 } from 'date-fns';
 import { isEmpty } from 'lodash';
 import Link from 'next/link';
@@ -125,39 +127,42 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		reset(getInitialValues());
 	}, [reset, getInitialValues]);
 
-	const getAccessTypeLabel = (accessType: ApproveRequestFormState['accessType']) => {
-		const folderCount = accessType?.folderIds?.length;
-		const hasRefineOptions = !!folderCount;
-		const hasMultipleRefineOptions = folderCount > 1;
+	const getAccessTypeLabel = useCallback(
+		(accessType: ApproveRequestFormState['accessType']) => {
+			const folderCount = accessType?.folderIds?.length;
+			const hasRefineOptions = !!folderCount;
+			const hasMultipleRefineOptions = folderCount > 1;
 
-		if (hasRefineOptions && isDropdownOpen) {
-			return hasMultipleRefineOptions
-				? tText(
-						'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd',
-						{
-							count: folderCount,
-						}
-				  )
-				: tText(
-						'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
-				  );
-		} else if (hasRefineOptions && !isDropdownOpen) {
-			return hasMultipleRefineOptions
-				? tText(
-						'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
-						{
-							count: folderCount,
-						}
-				  )
-				: tText(
-						'modules/shared/components/approve-request-blade/approve-request-blade___er-is-1-map-geselecteerd'
-				  );
-		} else {
-			return tText(
-				'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
-			);
-		}
-	};
+			if (hasRefineOptions && isDropdownOpen) {
+				return hasMultipleRefineOptions
+					? tText(
+							'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd',
+							{
+								count: folderCount,
+							}
+					  )
+					: tText(
+							'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
+					  );
+			} else if (hasRefineOptions && !isDropdownOpen) {
+				return hasMultipleRefineOptions
+					? tText(
+							'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
+							{
+								count: folderCount,
+							}
+					  )
+					: tText(
+							'modules/shared/components/approve-request-blade/approve-request-blade___er-is-1-map-geselecteerd'
+					  );
+			} else {
+				return tText(
+					'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
+				);
+			}
+		},
+		[isDropdownOpen, tText]
+	);
 
 	const getAccessTypeOptions = useCallback(
 		(accessType: ApproveRequestFormState['accessType']): RefinableRadioButtonOption[] => [
@@ -350,15 +355,18 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					// if difference is negative => start time is after end time
 					const difference = differenceInMinutes(field.value, date);
 
+					// 6PM on the selected accessFrom
+					const sixPM = defaultAccessTo(date);
+
+					// 5PM on the selected accesFrom
+					const fivePM = subHours(sixPM, 1);
+
 					// 1h in the future
 					// Aligns with `minTime` of the `accessTo` `Timepicker`-component
 					const oneHour = (date: Date) =>
 						setValue('accessTo', addHours(roundToNearestQuarter(date), 1));
 
 					if (difference <= 0 && !isSameDay(field.value, date)) {
-						// 6PM on the selected accessFrom
-						const sixPM = defaultAccessTo(date);
-
 						if (differenceInMinutes(sixPM, date) >= minimum) {
 							// at least an hour, set to sixPM
 							setValue('accessTo', sixPM);
@@ -367,8 +375,12 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 							oneHour(date);
 						}
 					} else if (difference < minimum) {
-						// less than an hour, set to accessFrom + 1h
-						oneHour(date);
+						if (isBefore(field.value, fivePM)) {
+							setValue('accessTo', sixPM);
+						} else {
+							// less than an hour, set to accessFrom + 1h
+							oneHour(date);
+						}
 					}
 				}
 			};
@@ -489,7 +501,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						selectedRefineOptions: string[],
 						newIsDropdownOpen: boolean
 					) => {
-						console.log('on change is called');
 						onChangeAccessType(
 							field,
 							selectedOption as AccessType,
