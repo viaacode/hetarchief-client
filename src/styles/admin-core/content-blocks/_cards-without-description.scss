@@ -1,0 +1,51 @@
+@use "sass:math";
+
+@use "src/styles/abstracts" as *;
+
+$component: "c-block-cards-without-description";
+$img-size: 15.2rem;
+
+.#{$component} {
+	width: 100%;
+	display: flex;
+	flex-flow: row wrap;
+	grid-gap: $spacer-lg;
+	justify-content: space-around;
+
+	&__card {
+		height: $img-size;
+		width: 38.4rem;
+		color: $white;
+		display: grid;
+		grid-template-columns: repeat(2, 7.6rem) 23.2rem;
+	}
+
+	&__title {
+		grid-column: 2/4;
+		grid-row: 1;
+		display: flex;
+		align-items: center;
+		padding: 0 $spacer-md 0 calc(math.div($img-size, 2) + $spacer-md);
+		font-weight: $font-weight-bold;
+		font-size: 2rem;
+		background-color: $black;
+	}
+
+	&__image {
+		width: $img-size;
+		height: $img-size;
+		overflow: hidden;
+		grid-column: 1/2;
+		grid-row: 1;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		&--round {
+			border-radius: $img-size;
+		}
+	}
+}

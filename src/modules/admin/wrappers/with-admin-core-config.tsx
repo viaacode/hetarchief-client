@@ -98,6 +98,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.Quote,
 						ContentBlockType.ThreeClickableTiles,
 						ContentBlockType.TagsWithLink,
+						ContentBlockType.CardsWithoutDescription,
 					],
 					defaultPageWidth: 'LARGE',
 					onSaveContentPage,
