@@ -2,8 +2,8 @@ import { OrderDirection, Table } from '@meemoo/react-components';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, ReactNode, useMemo } from 'react';
-import { TableState } from 'react-table';
+import { ComponentType, MouseEvent, ReactNode, useMemo, useState } from 'react';
+import { Row, TableState } from 'react-table';
 import { useQueryParams } from 'use-query-params';
 
 import {
@@ -18,6 +18,7 @@ import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -36,6 +37,8 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
+	const [currentDetailVisit, setCurrentDetailVisit] = useState<Visit | null>(null);
+	const [isVisitDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
 
 	const visits = useGetVisits({
 		searchInput: undefined,
@@ -104,6 +107,11 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 		}
 	};
 
+	const onRowClick = (evt: MouseEvent<HTMLTableRowElement>, row: Row<Visit>) => {
+		setCurrentDetailVisit(row.original);
+		setIsDetailBladeOpen(true);
+	};
+
 	// Render
 
 	const renderEmptyMessage = (): string | ReactNode => {
@@ -122,7 +130,8 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 					<div className="l-container l-container--edgeless-to-lg">
 						<Table<Visit>
 							className="u-mt-24"
-							// onRowClick={show detail blade}
+							style={{ cursor: 'pointer' }}
+							onRowClick={onRowClick}
 							options={{
 								columns: HistoryTableColumns(onClickRow),
 								data: visits.data?.items || [],
@@ -160,6 +169,13 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 							renderEmptyMessage()
 						)}
 					</div>
+				)}
+				{currentDetailVisit && (
+					<VisitDetailBlade
+						isOpen={isVisitDetailBladeOpen}
+						onClose={() => setIsDetailBladeOpen(false)}
+						visit={currentDetailVisit}
+					/>
 				)}
 			</AccountLayout>
 		);
