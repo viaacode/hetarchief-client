@@ -31,7 +31,6 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 	const [query] = useQueryParams(MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
 	const [selection, setSelection] = useState<string[]>(() => compact(query.medium || []));
-	const [shouldReset, setShouldReset] = useState<boolean>(false);
 
 	const { setValue, reset, handleSubmit } = useForm<MediumFilterFormState>({
 		resolver: yupResolver(MEDIUM_FILTER_FORM_SCHEMA()),
@@ -67,8 +66,6 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					)}
 					onChange={setSearch}
 					onSearch={noop}
-					shouldReset={shouldReset}
-					onResetFinished={() => setShouldReset(false)}
 				/>
 
 				<div className="u-my-32">
@@ -100,7 +97,6 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					reset();
 					setSelection(defaultValues.mediums);
 					setSearch('');
-					setShouldReset(true);
 				},
 				handleSubmit,
 			})}

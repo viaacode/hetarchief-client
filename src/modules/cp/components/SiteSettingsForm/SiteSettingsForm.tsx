@@ -5,9 +5,9 @@ import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 're
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 
-import { useGetContentPartners } from '@cp/hooks/get-content-partners';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 import { getSelectValue } from '@visitor-space/utils/select';
 
 import { ValidationRef } from '../VisitorSpaceSettings/VisitorSpaceSettings.types';
@@ -31,7 +31,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 		 */
 		const { tHtml } = useTranslation();
 		const { data: contentPartners, isError: isErrorContentPartners } = useGetContentPartners(
-			false,
+			{ hasSpace: false },
 			!disableDropdown
 		);
 
@@ -88,7 +88,7 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 		useEffect(() => {
 			contentPartners &&
 				setCpOptions(
-					contentPartners.items.map((cp) => ({
+					contentPartners.map((cp) => ({
 						label: cp.name,
 						value: cp.id,
 					}))

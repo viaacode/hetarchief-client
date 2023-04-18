@@ -25,7 +25,7 @@ export enum IeObjectsSearchFilterField {
 	QUERY = 'query',
 	// TODO future: rename maintainer to maintainerId and maintainers to maintainerName and also change this in the client
 	MAINTAINER_ID = 'maintainer', // Contains the OR-id of the maintainer
-	MAINTAINERS_NAME = 'maintainers', // Contains the name of the maintainer
+	MAINTAINER_IDS = 'maintainers', // Contains the name of the maintainer
 	CONSULTABLE_ONLY_ON_LOCATION = 'isConsultableOnlyOnLocation',
 	CONSULTABLE_MEDIA = 'isConsultableMedia',
 	CAST = 'cast',

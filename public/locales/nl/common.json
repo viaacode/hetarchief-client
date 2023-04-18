@@ -568,7 +568,7 @@
   "modules/visitor-space/utils/map-filters/map-filters___filter": "Filter",
   "modules/visitor-space/utils/map-filters/map-filters___genre": "Genre",
   "modules/visitor-space/utils/map-filters/map-filters___maker": "Maker",
-  "modules/visitor-space/utils/map-filters/map-filters___raadpleegbaag-ter-plaatse": "Enkel ter plaatse te bekijken",
+  "modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse": "Enkel ter plaatse te bekijken",
   "modules/visitor-space/utils/map-filters/map-filters___taal": "Taal",
   "modules/visitor-space/utils/map-filters/map-filters___trefwoord": "Trefwoord",
   "modules/visitor-space/utils/metadata/metadata___alles": "Alles",
