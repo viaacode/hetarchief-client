@@ -492,7 +492,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											<div className="p-account-my-folders__limited-access-label">
 												<Icon
 													name={IconNamesLight.OpenDoor}
-													className="p-account-my-folders__limited-access-label__icon"
+													className="p-account-my-folders__limited-access-label__icon u-mr-4"
 												/>
 												<p>
 													{tText(

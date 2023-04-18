@@ -1,0 +1,32 @@
+@use "sass:math";
+
+@use "src/styles/abstracts" as *;
+
+$component: "c-block-tags-with-link";
+
+.#{$component} {
+	width: 100%;
+	display: flex;
+	flex-flow: row wrap;
+	gap: $spacer-sm;
+
+	&__term {
+		display: inline-block;
+		width: max-content;
+		padding: $spacer-xs $spacer-sm;
+		background-color: $teal-24;
+		border-radius: $spacer-md;
+		text-decoration: none;
+		font-weight: $font-weight-bold;
+	}
+
+	&__link {
+		transition: background-color $animate-default;
+
+		&:hover,
+		&:focus {
+			cursor: pointer;
+			background-color: $teal-66;
+		}
+	}
+}
