@@ -15,5 +15,5 @@ export const toggleMock: ToggleProps = {
 			active: false,
 		},
 	],
-	onChange: (id) => console.log(id),
+	onChange: (id) => console.info(id),
 };

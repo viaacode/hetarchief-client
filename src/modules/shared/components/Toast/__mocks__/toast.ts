@@ -7,5 +7,5 @@ export const toastMock: ToastProps = {
 	buttonLabel: 'Ok',
 	maxLines: 1,
 	visible: true,
-	onClose: () => console.log('close'),
+	onClose: () => console.info('close'),
 };

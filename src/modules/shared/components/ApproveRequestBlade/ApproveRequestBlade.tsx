@@ -489,7 +489,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						selectedRefineOptions: string[],
 						newIsDropdownOpen: boolean
 					) => {
-						console.log('on change is called');
 						onChangeAccessType(
 							field,
 							selectedOption as AccessType,

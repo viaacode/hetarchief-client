@@ -22,7 +22,6 @@ export const useGetIeObjectsAggregatesByField = (
 		[QUERY_KEYS.getIeObjectsObjects, { filters, page, size, enabled }],
 		async () => {
 			const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
-			console.log(filterQuery);
 
 			const searchResults: GetIeObjectsResponse = await IeObjectsService.getSearchResults(
 				filterQuery,

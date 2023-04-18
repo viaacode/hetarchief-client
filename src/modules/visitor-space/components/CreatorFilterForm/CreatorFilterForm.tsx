@@ -66,10 +66,6 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 		// TODO: add sort
 		const initial = initialAggregates?.schema_creator?.buckets;
 		const result = aggregates || initial || [];
-		console.log({ aggregates });
-		console.log({ initial });
-
-		console.log({ result });
 
 		return result;
 	}, [aggregates, initialAggregates]);
