@@ -238,7 +238,12 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	display: grid;
 	grid-auto-flow: column;
-	grid-gap: $c-navigation-item-spacing;
+
+	li {
+		&:nth-child(2) {
+			padding: 0 1.5rem 0 0.5rem;
+		}
+	}
 
 	.c-navigation__list-flyout {
 		color: $black;
