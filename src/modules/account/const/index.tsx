@@ -33,8 +33,8 @@ export const ACCOUNT_NAVIGATION_LINKS = (): {
 	},
 	{
 		id: 'account-history',
-		label: tText('modules/account/const/index___mijn-historiek'),
-		href: '/account/mijn-historiek',
+		label: tText('modules/account/const/index___mijn-bezoek-historiek'),
+		href: '/account/mijn-bezoek-historiek',
 		hasDivider: true,
 	},
 	{

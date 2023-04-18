@@ -201,7 +201,7 @@ export const MOCK_ITEMS_RIGHT: NavigationItem[] = [
 				path: '',
 			},
 			{
-				node: renderLink('Mijn historiek', '#', {
+				node: renderLink('Mijn bezoek historiek', '#', {
 					className: dropdownCls(),
 				}),
 				id: 'historiek',
