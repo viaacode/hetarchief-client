@@ -7,12 +7,6 @@ $pill-color: color.adjust(red, $lightness: 10%);
 
 .c-material-request-center {
 	position: relative;
-	margin-left: $spacer-xs;
-
-	&:hover,
-	&--active {
-		background-color: $shade-darker !important;
-	}
 
 	&__icon-container {
 		&-badge {
