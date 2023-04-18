@@ -5,7 +5,7 @@ import { ContentPartnerResponse } from '@admin/types';
 import SiteSettingsForm from './SiteSettingsForm';
 import { SITE_SETTINGS_FORM_MOCK } from './__mocks__/siteSettingsForm';
 
-jest.mock('@cp/hooks/get-content-partners', () => {
+jest.mock('@visitor-space/hooks/get-content-partner.ts', () => {
 	return {
 		useGetContentPartners: jest.fn((): ContentPartnerResponse => {
 			return {

@@ -847,10 +847,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 		const dynamicBreadcrumbs: Breadcrumb[] = !isNil(mediaInfo)
 			? [
-					{
-						label: mediaInfo?.maintainerName,
-						to: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
-					},
+					...(hasAccessToVisitorSpaceOfObject
+						? [
+								{
+									label: mediaInfo?.maintainerName,
+									to: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
+								},
+						  ]
+						: []),
 					{
 						label: mediaInfo?.name,
 						to: `${ROUTES.search}/${mediaInfo?.maintainerSlug}/${mediaInfo?.schemaIdentifier}`,

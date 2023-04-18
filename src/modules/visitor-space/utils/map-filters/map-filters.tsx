@@ -10,6 +10,7 @@ import { getMetadataSearchFilters } from '../../const';
 import { AdvancedFilterArrayParam } from '../../const/query-params';
 import {
 	AdvancedFilter,
+	FILTER_LABEL_VALUE_DELIMITER,
 	MetadataProp,
 	TagIdentity,
 	VisitorSpaceFilterId,
@@ -63,7 +64,9 @@ export const mapArrayParamToTags = (
 				label: (
 					<span>
 						{`${label}: `}
-						<strong>{keyword}</strong>
+						<strong>
+							{keyword?.split(FILTER_LABEL_VALUE_DELIMITER).pop() as string}
+						</strong>
 					</span>
 				),
 				value: unique,
@@ -191,7 +194,7 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 		...mapBooleanParamToTag(
 			query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] || false,
 			tText(
-				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaag-ter-plaatse'
+				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
 			),
 			VisitorSpaceFilterId.ConsultableOnlyOnLocation
 		),
