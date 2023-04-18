@@ -1,14 +1,18 @@
 @use "src/styles/abstracts" as *;
 
 $component: "c-block-three-clickable-tiles";
-$tile-size: 27rem;
 
 .#{$component} {
 	display: flex;
+	align-items: center;
 	flex-direction: column;
 
 	@include respond-at("lg") {
 		flex-direction: row;
+	}
+
+	&__term {
+		width: 33%;
 	}
 
 	&__tile {
@@ -21,14 +25,14 @@ $tile-size: 27rem;
 			display: flex;
 			justify-content: center;
 			align-content: center;
-			width: $tile-size;
-			height: $tile-size;
+			width: 100%;
 			background-size: cover;
 			background-position: center center;
 			background-repeat: no-repeat;
 			padding: 0 5rem;
 			flex-wrap: wrap;
 			text-align: center;
+			aspect-ratio: 1 / 1;
 
 			h3 {
 				color: white;
@@ -36,7 +40,7 @@ $tile-size: 27rem;
 		}
 
 		&-subtitle {
-			width: $tile-size;
+			width: 100%;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
