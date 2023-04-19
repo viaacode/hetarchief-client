@@ -291,7 +291,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		) &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		isNil(mediaInfo.thumbnailUrl);
-	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+	const showKeyUserPill =
+		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR) && isKeyUser;
 	const showVisitButton =
 		visitorSpace?.status === VisitorSpaceStatus.Active &&
 		canRequestAccess &&

@@ -6,7 +6,7 @@ import {
 	TooltipTrigger,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil, kebabCase, noop } from 'lodash-es';
+import { isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -46,6 +46,7 @@ import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
@@ -71,6 +72,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const dispatch = useDispatch();
 	const { folderSlug } = router.query;
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+	const isKeyUser = useIsKeyUser();
 
 	/**
 	 * Data
@@ -538,9 +540,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													preview: media.thumbnailUrl,
 													duration: media.duration,
 													licenses: media.licenses,
-													isKeyUser: media.accessThrough?.includes(
-														AccessThroughType.SECTOR
-													),
+													isKeyUser:
+														media.accessThrough?.includes(
+															AccessThroughType.SECTOR
+														) && isKeyUser,
 												};
 
 												return {

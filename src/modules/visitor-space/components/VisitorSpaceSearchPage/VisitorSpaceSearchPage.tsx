@@ -588,7 +588,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				meemooIdentifier: item.meemooIdentifier,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
-				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
+				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR) && isKeyUser,
 				hasTempAccess: item.accessThrough?.includes(
 					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
 						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
