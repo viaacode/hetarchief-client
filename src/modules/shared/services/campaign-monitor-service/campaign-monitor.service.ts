@@ -34,7 +34,7 @@ export class CampaignMonitorService {
 
 	public static async send(json: EmailTemplate): Promise<void> {
 		await ApiService.getApi()
-			.post(`${CAMPAIGN_MONITOR_SERVICE_SEND}/${CAMPAIGN_MONITOR_SERVICE_SEND}`, { json })
+			.post(`${CAMPAIGN_MONITOR_SERVICE_BASE_URL}/${CAMPAIGN_MONITOR_SERVICE_SEND}`, { json })
 			.json();
 	}
 }
