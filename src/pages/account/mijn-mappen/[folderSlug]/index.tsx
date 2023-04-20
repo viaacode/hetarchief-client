@@ -221,6 +221,20 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		});
 	};
 
+	const getShowLocallyAvailable = (item: FolderIeObject) => {
+		const userHasAccessToMaintainer =
+			item.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FOLDERS) ||
+			item.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FULL);
+
+		const itemHasThumbnail = item.thumbnailUrl;
+
+		return (
+			!userHasAccessToMaintainer &&
+			item.accessThrough.includes(AccessThroughType.SECTOR) &&
+			!itemHasThumbnail
+		);
+	};
+
 	/**
 	 * Render
 	 */
@@ -540,10 +554,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													preview: media.thumbnailUrl,
 													duration: media.duration,
 													licenses: media.licenses,
-													isKeyUser:
-														media.accessThrough?.includes(
-															AccessThroughType.SECTOR
-														) && isKeyUser,
+													showLocallyAvailable:
+														getShowLocallyAvailable(media),
 												};
 
 												return {
@@ -555,7 +567,6 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 												};
 											})}
 											view={'list'}
-											showLocallyAvailable
 										/>
 									)}
 
