@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, noop, without } from 'lodash-es';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -16,8 +16,9 @@ import {
 	LanguageFilterFormProps,
 	LanguageFilterFormState,
 } from '@visitor-space/components';
+import { LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
 
 const defaultValues = {
 	languages: [],
@@ -37,15 +38,27 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 		defaultValues,
 	});
 
-	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.schema_in_language?.buckets || []
-	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
+	const buckets = useSelector(selectIeObjectsFilterOptions)?.schema_in_language?.buckets || [];
+
+	const filteredBuckets = buckets
+		.map((bucket) => {
+			return {
+				...bucket,
+				name: LANGUAGES.nl[bucket.key] || bucket.key,
+			};
+		})
+		.filter((bucket) => bucket.name.toLowerCase().includes(search.toLowerCase()));
+
+	const idToIdAndNameConcatinated = useCallback((id: string) => {
+		return `${id}${FILTER_LABEL_VALUE_DELIMITER}${LANGUAGES.nl?.[id] || ''}`;
+	}, []);
 
 	// Effects
 
 	useEffect(() => {
-		setValue('languages', selection);
-	}, [selection, setValue]);
+		const newValue = selection.map(idToIdAndNameConcatinated);
+		setValue('languages', newValue);
+	}, [selection, setValue, idToIdAndNameConcatinated]);
 
 	// Events
 
@@ -78,10 +91,10 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					)}
 
 					<CheckboxList
-						items={buckets.map((bucket) => ({
+						items={filteredBuckets.map((bucket) => ({
 							...bucket,
 							value: bucket.key,
-							label: bucket.key,
+							label: bucket.name,
 							checked: selection.includes(bucket.key),
 						}))}
 						onItemClick={(checked, value) => {
@@ -92,7 +105,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 			</div>
 
 			{children({
-				values: { languages: selection },
+				values: { languages: selection.map(idToIdAndNameConcatinated) },
 				reset: () => {
 					reset();
 					setSelection(defaultValues.languages);

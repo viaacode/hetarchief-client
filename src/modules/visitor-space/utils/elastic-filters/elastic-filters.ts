@@ -85,9 +85,9 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	{
 		field: IeObjectsSearchFilterField.LANGUAGE,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (query[VisitorSpaceFilterId.Language] || []).filter(
-			(item) => item !== null
-		) as string[],
+		multiValue: (query[VisitorSpaceFilterId.Language] || [])
+			.filter((item) => item !== null)
+			.map((language) => language?.split(FILTER_LABEL_VALUE_DELIMITER)[0]) as string[],
 	},
 	// Maintainers
 	{
