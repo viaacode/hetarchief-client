@@ -503,10 +503,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 										)}
 									>
 										{activeFolder.usedForLimitedAccessUntil && (
-											<div className="p-account-my-folders__limited-access-label">
+											<div className="p-account-my-folders__limited-access-wrapper">
 												<Icon
+													className="u-mr-4 u-font-size-18"
 													name={IconNamesLight.OpenDoor}
-													className="p-account-my-folders__limited-access-label__icon u-mr-4"
 												/>
 												<p>
 													{tText(
