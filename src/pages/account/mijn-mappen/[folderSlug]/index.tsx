@@ -50,10 +50,13 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
+import { selectLastScrollPosition, setLastScrollPosition } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { AccessThroughType } from '@shared/types/access';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
+import { scrollTo } from '@shared/utils/scroll-to-top';
+import useScrollPosition from '@shared/utils/useScrollPosition';
 
 import { AddToFolderBlade } from '../../../../modules/visitor-space/components';
 
@@ -71,6 +74,12 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const dispatch = useDispatch();
 	const { folderSlug } = router.query;
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
+
+	const currentScrollPosition = useScrollPosition();
+	const lastScrollPosition = useSelector(selectLastScrollPosition);
+	const saveScrollPosition = () => {
+		dispatch(setLastScrollPosition({ position: currentScrollPosition, page: ROUTES.search }));
+	};
 
 	/**
 	 * Data
@@ -157,6 +166,14 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 			folderMedia.refetch();
 		}
 	}, [activeFolder]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		// Ward: wait until items are rendered on the screen before scrolling
+		if (lastScrollPosition && folderMedia?.data?.items) {
+			console.log('Scroll to: ', lastScrollPosition);
+			scrollTo(lastScrollPosition.position);
+		}
+	}, [folderMedia?.data?.items]);
 
 	/**
 	 * Events

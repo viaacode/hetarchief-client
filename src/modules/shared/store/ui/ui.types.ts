@@ -1,3 +1,8 @@
+export interface LastScrollPositionType {
+	position: number;
+	page: string;
+}
+
 export interface UIState {
 	showAuthModal: boolean;
 	isStickyLayout: boolean;
@@ -8,4 +13,5 @@ export interface UIState {
 	showZendesk: boolean;
 	lockScroll: Record<string, boolean>;
 	materialRequestCount: number;
+	lastScrollPosition: LastScrollPositionType;
 }

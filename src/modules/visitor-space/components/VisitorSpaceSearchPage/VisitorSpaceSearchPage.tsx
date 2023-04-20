@@ -13,7 +13,7 @@ import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -55,7 +55,11 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectFolders } from '@shared/store/ie-objects';
-import { selectShowNavigationBorder } from '@shared/store/ui';
+import {
+	selectLastScrollPosition,
+	selectShowNavigationBorder,
+	setLastScrollPosition,
+} from '@shared/store/ui';
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
@@ -67,6 +71,7 @@ import {
 } from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import useScrollPosition from '@shared/utils/useScrollPosition';
 import { VisitsService } from '@visits/services';
 import { VisitTimeframe } from '@visits/types';
 
@@ -135,6 +140,13 @@ const VisitorSpaceSearchPage: FC = () => {
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 	const isKeyUser = useIsKeyUser();
+
+	const dispatch = useDispatch();
+	const currentScrollPosition = useScrollPosition();
+	const lastScrollPosition = useSelector(selectLastScrollPosition);
+	const saveScrollPosition = () => {
+		dispatch(setLastScrollPosition({ position: currentScrollPosition, page: ROUTES.search }));
+	};
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -251,6 +263,14 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isKeyUser, isPublicCollection]);
+
+	useEffect(() => {
+		// Ward: wait until items are rendered on the screen before scrolling
+		if (lastScrollPosition && searchResults?.items) {
+			console.log('Scroll to: ', lastScrollPosition);
+			scrollTo(lastScrollPosition.position);
+		}
+	}, [searchResults?.items]);
 
 	/**
 	 * Display
