@@ -73,6 +73,10 @@ $component: "c-notification-center";
 			line-height: $line-height-4xl;
 		}
 
+		:global(.u-text-xs p) {
+			font-size: $font-size-xs;
+		}
+
 		&-marker {
 			display: inline-block;
 		}

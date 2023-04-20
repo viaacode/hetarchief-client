@@ -28,6 +28,50 @@ $lines: (1, 2, 3, 4, 5, 6, 7);
 	text-decoration: none;
 }
 
+.u-text-default-font {
+	font-family: $font-family-primary;
+}
+
+.u-text-4xl {
+	font-size: $font-size-4xl;
+}
+
+.u-text-3xl {
+	font-size: $font-size-3xl;
+}
+
+.u-text-2xl {
+	font-size: $font-size-2xl;
+}
+
+.u-text-1xl {
+	font-size: $font-size-1xl;
+}
+
+.u-text-lg {
+	font-size: $font-size-lg;
+}
+
+.u-text-2xm {
+	font-size: $font-size-2xm;
+}
+
+.u-text-md {
+	font-size: $font-size-md;
+}
+
+.u-text-base {
+	font-size: $font-size-base;
+}
+
+.u-text-sm {
+	font-size: $font-size-sm;
+}
+
+.u-text-xs {
+	font-size: $font-size-xs;
+}
+
 /**
  * Alignment
  *
