@@ -126,6 +126,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 
 	/**
 	 * State
@@ -725,8 +726,10 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
-		if (user?.groupName === GroupName.MEEMOO_ADMIN) {
-			// Don't show the temporary access label for MEEMOO admins, since they have access to all visitor spaces
+		if (isMeemooAdmin || !isPublicCollection) {
+			// Don't show the temporary access label for:
+			// - MEEMOO admins, since they have access to all visitor spaces
+			// - when a visitor space is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
 			return null;
 		}
 
@@ -740,9 +743,9 @@ const VisitorSpaceSearchPage: FC = () => {
 			}
 		);
 
-		if (user?.groupName === GroupName.CP_ADMIN) {
+		if (isCPAdmin) {
 			// Don't show the temporary access label for CP_ADMIN's own visitor space
-			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user.visitorSpaceSlug);
+			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user?.visitorSpaceSlug);
 		}
 
 		if (isEmpty(visitorSpaces)) {
