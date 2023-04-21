@@ -81,7 +81,7 @@ describe('Component: <MediaCard />', () => {
 		expect(screen.getAllByText('no-video')[0]).toBeDefined();
 	});
 
-	it('Should render key user pill if isKeyUser', () => {
+	it('Should render key user pill if showKeyUserLabel', () => {
 		rendered = render(
 			renderMediaCard(
 				<MediaCard
@@ -89,7 +89,7 @@ describe('Component: <MediaCard />', () => {
 					publishedAt={date}
 					publishedBy={author}
 					type="video"
-					isKeyUser
+					showKeyUserLabel
 				/>
 			)
 		);

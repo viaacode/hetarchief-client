@@ -28,6 +28,10 @@ $lines: (1, 2, 3, 4, 5, 6, 7);
 	text-decoration: none;
 }
 
+.u-text-default-font {
+	font-family: $font-family-primary;
+}
+
 /**
  * Alignment
  *
@@ -39,10 +43,13 @@ $align: (left, right, center);
 
 /**
  * Size
+ * eg: u-font-size-14
  */
 
 $size: (
+	"12": $font-size-xs,
 	"14": $font-size-sm,
+	"18": $font-size-md,
 	"22": 2.2rem,
 	"24": $font-size-lg,
 );

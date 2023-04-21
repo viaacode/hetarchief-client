@@ -503,11 +503,13 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 										)}
 									>
 										{activeFolder.usedForLimitedAccessUntil && (
-											<div className="p-account-my-folders__limited-access-label">
-												<Icon
-													name={IconNamesLight.OpenDoor}
-													className="p-account-my-folders__limited-access-label__icon u-mr-4"
-												/>
+											<div className="p-account-my-folders__limited-access-wrapper">
+												<div>
+													<Icon
+														className="u-mr-4 u-font-size-18"
+														name={IconNamesLight.OpenDoor}
+													/>
+												</div>
 												<p>
 													{tText(
 														'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang'
@@ -552,6 +554,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													preview: media.thumbnailUrl,
 													duration: media.duration,
 													licenses: media.licenses,
+													showKeyUserLabel: media.accessThrough.includes(
+														AccessThroughType.SECTOR
+													),
 													showLocallyAvailable:
 														getShowLocallyAvailable(media),
 												};
