@@ -28,7 +28,6 @@ $img-size: 15.2rem;
 		padding: 0 $spacer-md 0 calc(math.div($img-size, 2) + $spacer-md);
 		font-weight: $font-weight-bold;
 		font-size: 2rem;
-		background-color: $black;
 	}
 
 	&__image {

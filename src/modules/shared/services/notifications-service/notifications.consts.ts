@@ -10,4 +10,5 @@ export const NOTIFICATION_TYPE_TO_PATH: Record<NotificationType, string | null> 
 	[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED]: '/{slug}',
 	[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_END_WARNING]: null,
 	[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED]: ROUTES.myHistory,
+	[NotificationType.MAINTENANCE_ALERT]: null,
 };

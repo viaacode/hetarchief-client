@@ -575,7 +575,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
 			const type = item.dctermsFormat as IeObjectTypes;
-
+			const showKeyUserLabel = item.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
 			const hasTempAccess =
 				isPublicCollection &&
@@ -598,6 +598,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
 				hasTempAccess,
+				showKeyUserLabel,
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
