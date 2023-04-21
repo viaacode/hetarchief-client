@@ -23,7 +23,7 @@ export interface MediaCardProps {
 	view?: MediaCardViewMode;
 	hasRelated?: boolean;
 	icon?: IconName;
-	isKeyUser?: boolean;
+	showKeyUserLabel?: boolean;
 	meemooIdentifier?: string;
 	showLocallyAvailable?: boolean;
 	link?: string;

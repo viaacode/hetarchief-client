@@ -616,6 +616,7 @@ const VisitorSpaceSearchPage: FC = () => {
 					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
 						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
 				),
+				showKeyUserLabel: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
