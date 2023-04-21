@@ -47,7 +47,10 @@ const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFor
 		setValue(IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION, isChecked);
 
 		handleSubmit(
-			() => onFilterFormSubmit(id, { isConsultableRemote: isChecked }),
+			() =>
+				onFilterFormSubmit(id, {
+					[IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION]: isChecked,
+				}),
 			(...args) => console.error(args)
 		)();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
