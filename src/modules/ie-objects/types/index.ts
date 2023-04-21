@@ -154,7 +154,7 @@ export interface IeObjectSearchAggregations {
 	schema_genre: IeObjectSearchAggregation<string>;
 	schema_creator: IeObjectSearchAggregation<string>;
 	schema_in_language: IeObjectSearchAggregation<string>;
-	'schema_maintainer.schema_name': IeObjectSearchAggregation<string>;
+	'schema_maintainer.schema_identifier': IeObjectSearchAggregation<string>;
 }
 
 // UI
@@ -174,6 +174,7 @@ export enum MediaActions {
 	RequestMaterial = 'request-material',
 	Report = 'report',
 	RequestAccess = 'request-access',
+	Export = 'export',
 }
 
 // Metadata
@@ -186,4 +187,9 @@ export enum MetadataExportFormats {
 export interface IeMetadataExportProps {
 	id?: string;
 	format?: MetadataExportFormats;
+}
+
+export interface MetadataSortMap {
+	id: MediaActions;
+	isPrimary?: boolean;
 }

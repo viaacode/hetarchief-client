@@ -1,10 +1,19 @@
 import { ReactNode } from 'react';
+import { boolean, object, SchemaOf } from 'yup';
 
+import { CommunicationFormState } from '@account/types';
 import { tHtml, tText } from '@shared/helpers/translate';
 
 export * from './my-collections.const';
 export * from './my-history.const';
 export * from './my-material-requests.const';
+
+export const COMMUNICATION_FORM_SCHEMA = (): SchemaOf<CommunicationFormState> =>
+	object({
+		acceptNewsletter: boolean().required(
+			tText('modules/account/const/account___ik-ontvang-graag-de-nieuwsbrief-is-verplicht')
+		),
+	});
 
 export const ACCOUNT_NAVIGATION_LINKS = (): {
 	id: string;
@@ -24,8 +33,8 @@ export const ACCOUNT_NAVIGATION_LINKS = (): {
 	},
 	{
 		id: 'account-history',
-		label: tText('modules/account/const/index___mijn-historiek'),
-		href: '/account/mijn-historiek',
+		label: tText('modules/account/const/index___mijn-bezoek-historiek'),
+		href: '/account/mijn-bezoek-historiek',
 		hasDivider: true,
 	},
 	{

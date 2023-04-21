@@ -23,10 +23,16 @@ export enum IeObjectsSearchFilterField {
 	PUBLISHED = 'published',
 	PUBLISHER = 'publisher',
 	QUERY = 'query',
-	MAINTAINER = 'maintainer',
-	MAINTAINERS = 'maintainers',
-	REMOTE = 'isConsultableRemote',
-	MEDIA = 'isConsultableMedia',
+	// TODO future: rename maintainer to maintainerId and maintainers to maintainerName and also change this in the client
+	MAINTAINER_ID = 'maintainer', // Contains the OR-id of the maintainer
+	MAINTAINER_IDS = 'maintainers', // Contains the name of the maintainer
+	CONSULTABLE_ONLY_ON_LOCATION = 'isConsultableOnlyOnLocation',
+	CONSULTABLE_MEDIA = 'isConsultableMedia',
+	CAST = 'cast',
+	CAPTION = 'caption',
+	TRANSCRIPT = 'transcript',
+	CATEGORIE = 'categorie',
+	TYPE = 'type',
 }
 
 export enum IeObjectsSearchOperator {

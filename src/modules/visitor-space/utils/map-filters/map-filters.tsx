@@ -3,13 +3,14 @@ import { format } from 'date-fns';
 
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { IeObjectsSearchFilter, Operator } from '@shared/types';
+import { IeObjectsSearchFilter, IeObjectsSearchFilterField, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 
 import { getMetadataSearchFilters } from '../../const';
 import { AdvancedFilterArrayParam } from '../../const/query-params';
 import {
 	AdvancedFilter,
+	FILTER_LABEL_VALUE_DELIMITER,
 	MetadataProp,
 	TagIdentity,
 	VisitorSpaceFilterId,
@@ -63,7 +64,9 @@ export const mapArrayParamToTags = (
 				label: (
 					<span>
 						{`${label}: `}
-						<strong>{keyword}</strong>
+						<strong>
+							{keyword?.split(FILTER_LABEL_VALUE_DELIMITER).pop() as string}
+						</strong>
 					</span>
 				),
 				value: unique,
@@ -135,44 +138,53 @@ export const mapAdvancedToTags = (
 export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] => {
 	return [
 		...mapArrayParamToTags(
-			query.search || [],
+			query[SEARCH_QUERY_KEY] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
 			SEARCH_QUERY_KEY
 		),
 		...mapArrayParamToTags(
-			query.medium || [],
+			query[VisitorSpaceFilterId.Medium] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___analoge-drager'),
 			VisitorSpaceFilterId.Medium
 		),
-		...mapAdvancedToTags(query.duration || [], VisitorSpaceFilterId.Duration),
-		...mapAdvancedToTags(query.created || [], VisitorSpaceFilterId.Created),
-		...mapAdvancedToTags(query.published || [], VisitorSpaceFilterId.Published),
+		...mapAdvancedToTags(
+			query[VisitorSpaceFilterId.Duration] || [],
+			VisitorSpaceFilterId.Duration
+		),
+		...mapAdvancedToTags(
+			query[VisitorSpaceFilterId.Created] || [],
+			VisitorSpaceFilterId.Created
+		),
+		...mapAdvancedToTags(
+			query[VisitorSpaceFilterId.Published] || [],
+			VisitorSpaceFilterId.Published
+		),
 		...mapArrayParamToTags(
-			query.creator || [],
+			query[VisitorSpaceFilterId.Creator] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___maker'),
 			VisitorSpaceFilterId.Creator
 		),
 		...mapArrayParamToTags(
-			query.genre || [],
+			query[VisitorSpaceFilterId.Genre] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___genre'),
 			VisitorSpaceFilterId.Genre
 		),
 		...mapArrayParamToTags(
-			query.keywords || [],
+			query[VisitorSpaceFilterId.Keywords] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
 			VisitorSpaceFilterId.Keywords
 		),
 		...mapArrayParamToTags(
-			query.language || [],
+			query[VisitorSpaceFilterId.Language] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___taal'),
 			VisitorSpaceFilterId.Language
 		),
 		...mapBooleanParamToTag(
-			query.media || false,
+			query[VisitorSpaceFilterId.ConsultableMedia] || false,
 			tText(
 				'modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'
 			),
-			VisitorSpaceFilterId.Media
+			VisitorSpaceFilterId.ConsultableMedia
 		),
 		...mapArrayParamToTags(
 			query[VisitorSpaceFilterId.Maintainers] || [],
@@ -180,13 +192,13 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 			VisitorSpaceFilterId.Maintainers
 		),
 		...mapBooleanParamToTag(
-			query.remote || false,
+			query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] || false,
 			tText(
-				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaag-ter-plaatse'
+				'modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'
 			),
-			VisitorSpaceFilterId.Remote
+			VisitorSpaceFilterId.ConsultableOnlyOnLocation
 		),
-		...mapAdvancedToTags(query.advanced || []),
+		...mapAdvancedToTags(query[VisitorSpaceFilterId.Advanced] || []),
 	];
 };
 

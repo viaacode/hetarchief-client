@@ -15,6 +15,7 @@ import {
 import { toastService } from '@shared/services/toast-service';
 
 import { Blade } from '../Blade';
+import Html from '../Html/Html';
 import { Icon, IconNamesLight } from '../Icon';
 import { UnreadMarker } from '../UnreadMarker';
 
@@ -136,7 +137,11 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 					{notification.title}
 				</h5>
 
-				<span className="u-color-neutral">{notification.description}</span>
+				<Html
+					type="span"
+					className="u-color-neutral u-text-default-font u-font-size-12"
+					content={notification.description}
+				/>
 			</article>
 		);
 

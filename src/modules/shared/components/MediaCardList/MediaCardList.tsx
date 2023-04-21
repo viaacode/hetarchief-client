@@ -1,15 +1,11 @@
 import clsx from 'clsx';
+import { stringifyUrl } from 'query-string';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
-import { useSelector } from 'react-redux';
 
-import { selectUser } from '@auth/store/user';
-import { IeObjectLicense } from '@ie-objects/types';
 import { ROUTE_PARTS } from '@shared/const';
-import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
-import { useGetAllActiveVisits } from '@visits/hooks/get-all-active-visits';
 
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
@@ -31,10 +27,6 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	showLocallyAvailable = false,
 }) => {
 	const windowSize = useWindowSizeContext();
-
-	const isKeyUser = useIsKeyUser();
-	const user = useSelector(selectUser);
-	const { data: activeVisits } = useGetAllActiveVisits({ requesterId: user?.id || '' });
 
 	if (!items) {
 		return null;
@@ -133,33 +125,14 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		];
 	};
 
-	const checkLocallyAvailable = (item: IdentifiableMediaCard) => {
-		const userHasAccess = activeVisits?.items.find(
-			(visit) => visit.spaceSlug === item.maintainerSlug
-		);
-		const itemHasNoVisitLicense = !item.licenses?.includes(
-			IeObjectLicense.BEZOEKERTOOL_CONTENT
-		);
-		const itemHasNoCPLicense = !item.licenses?.includes(IeObjectLicense.INTRA_CP_CONTENT);
-		const itemHasNoThumbnail = !item.preview;
-
-		if (userHasAccess && itemHasNoVisitLicense) {
-			return true;
-		}
-
-		if (isKeyUser && itemHasNoCPLicense) {
-			return true;
-		}
-
-		if (isKeyUser && itemHasNoThumbnail) {
-			return true;
-		}
-
-		return false;
-	};
-
-	const tiles = items.map((item, i) =>
-		wrapper(
+	const tiles = items.map((item, i) => {
+		const link = stringifyUrl({
+			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`,
+			query: {
+				searchTerms: keywords,
+			},
+		});
+		return wrapper(
 			<MediaCard
 				key={getKey(item, i)}
 				id={getKey(item, i)}
@@ -169,13 +142,14 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				{...item}
 				keywords={keywords}
 				view={view}
-				showLocallyAvailable={showLocallyAvailable && checkLocallyAvailable(item)}
-				link={`/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`}
+				showLocallyAvailable={showLocallyAvailable}
+				link={link}
 				maintainerSlug={item.maintainerSlug}
 			/>,
 			item
-		)
-	);
+		);
+	});
+
 	return (
 		<div
 			className={clsx(

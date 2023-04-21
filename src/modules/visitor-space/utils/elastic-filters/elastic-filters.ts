@@ -1,3 +1,4 @@
+import { SEARCH_QUERY_KEY } from '@shared/const';
 import {
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
@@ -6,7 +7,11 @@ import {
 } from '@shared/types';
 
 import { VISITOR_SPACE_QUERY_PARAM_INIT } from '../../const';
-import { VisitorSpaceFilterId, VisitorSpaceQueryParams } from '../../types';
+import {
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+	VisitorSpaceQueryParams,
+} from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
 export const mapMaintainerToElastic = (
@@ -19,7 +24,7 @@ export const mapMaintainerToElastic = (
 			: '';
 
 	return {
-		field: IeObjectsSearchFilterField.MAINTAINER,
+		field: IeObjectsSearchFilterField.MAINTAINER_ID,
 		operator: IeObjectsSearchOperator.IS,
 		value: maintainerId,
 	};
@@ -30,7 +35,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	{
 		field: IeObjectsSearchFilterField.QUERY,
 		operator: IeObjectsSearchOperator.CONTAINS,
-		value: query.search !== null ? query.search?.toString() : '',
+		value: query[SEARCH_QUERY_KEY] !== null ? query[SEARCH_QUERY_KEY]?.toString() : '',
 	},
 	// Tabs
 	{
@@ -86,31 +91,43 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	},
 	// Maintainers
 	{
-		field: IeObjectsSearchFilterField.MAINTAINERS,
+		field: IeObjectsSearchFilterField.MAINTAINER_ID,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (query[VisitorSpaceFilterId.Maintainers] || []).filter(
-			(item) => item !== null
-		) as string[],
+		multiValue: (
+			(query[VisitorSpaceFilterId.Maintainers] || []).filter(
+				(item) => item !== null
+			) as string[]
+		).map((maintainerId) => maintainerId.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string),
 	},
 	// Consultable Remote
 	{
-		field: IeObjectsSearchFilterField.REMOTE,
+		field: IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
 		operator: IeObjectsSearchOperator.IS,
-		value:
-			// Because the UI doesn't match with the BE property (on site vs remote), we need to pass the opposite value of the remote boolean
-			query[VisitorSpaceFilterId.Remote] !== null
-				? (!query[VisitorSpaceFilterId.Remote])?.toString()
-				: 'true',
+		value: query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] ? 'true' : '',
 	},
 	// Consultable Media
 	{
-		field: IeObjectsSearchFilterField.MEDIA,
+		field: IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
 		operator: IeObjectsSearchOperator.IS,
-		value:
-			query[VisitorSpaceFilterId.Media] !== null
-				? query[VisitorSpaceFilterId.Media]?.toString()
-				: 'false',
+		value: query[VisitorSpaceFilterId.ConsultableMedia] ? 'true' : '',
 	},
 	// Advanced
 	...(query.advanced || []).flatMap(mapAdvancedToElastic),
 ];
+
+export const mapRefineFilterToElastic = (
+	refineFilters: { field: IeObjectsSearchFilterField; value: string }[]
+): IeObjectsSearchFilter[] =>
+	refineFilters.map(
+		({
+			field,
+			value,
+		}: {
+			field: IeObjectsSearchFilterField;
+			value: string;
+		}): IeObjectsSearchFilter => ({
+			field: field,
+			operator: IeObjectsSearchOperator.CONTAINS,
+			value: value,
+		})
+	);

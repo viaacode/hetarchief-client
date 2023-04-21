@@ -44,6 +44,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
 
 	const user = useSelector(selectUser);
 
@@ -52,7 +53,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		size: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-		...(!isNil(filters.search) && { search: filters.search }),
+		...(!isNil(filters[SEARCH_QUERY_KEY]) && { search: filters[SEARCH_QUERY_KEY] }),
 		...(!isNil(filters.page) && { page: filters.page }),
 		...(!isNil(filters.type) && { type: filters.type as MaterialRequestType[] }),
 		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
@@ -89,13 +90,6 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		],
 		[filters]
 	);
-
-	const onSearch = (value: string | undefined): void => {
-		setFilters({
-			[SEARCH_QUERY_KEY]: value,
-			page: 1,
-		});
-	};
 
 	const onMultiTypeChange = (checked: boolean, id: string) => {
 		setSelectedTypes((prev) => (!checked ? [...prev, id] : without(prev, id)));
@@ -208,10 +202,16 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 							<SearchBar
 								id="materiaalaanvragen-searchbar"
-								default={filters[SEARCH_QUERY_KEY]}
+								value={search}
 								className="p-material-requests__searchbar"
 								placeholder={tText('pages/beheer/materiaalaanvragen/index___zoek')}
-								onSearch={onSearch}
+								onChange={setSearch}
+								onSearch={(newValue) =>
+									setFilters({
+										[SEARCH_QUERY_KEY]: newValue,
+										page: 1,
+									})
+								}
 							/>
 						</div>
 					</div>

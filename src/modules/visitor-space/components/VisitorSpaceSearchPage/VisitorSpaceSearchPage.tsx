@@ -7,6 +7,7 @@ import {
 	TabProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
 import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
@@ -57,6 +58,7 @@ import { selectFolders } from '@shared/store/ie-objects';
 import { selectShowNavigationBorder } from '@shared/store/ui';
 import {
 	Breakpoints,
+	IeObjectsSearchFilterField,
 	IeObjectTypes,
 	SortObject,
 	Visit,
@@ -71,6 +73,8 @@ import { VisitTimeframe } from '@visits/types';
 import {
 	AddToFolderBlade,
 	AdvancedFilterFormState,
+	ConsultableMediaFilterFormState,
+	ConsultableOnlyOnLocationFilterFormState,
 	CreatedFilterFormState,
 	CreatorFilterFormState,
 	DurationFilterFormState,
@@ -81,10 +85,8 @@ import {
 	KeywordsFilterFormState,
 	LanguageFilterFormState,
 	MaintainerFilterFormState,
-	MediaFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
-	RemoteFilterFormState,
 } from '../../components';
 import {
 	PUBLIC_COLLECTION,
@@ -106,7 +108,7 @@ const labelKeys = {
 
 const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	return {
-		id: PUBLIC_COLLECTION,
+		slug: PUBLIC_COLLECTION,
 		label: tText(
 			'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-publieke-catalogus'
 		),
@@ -293,12 +295,17 @@ const VisitorSpaceSearchPage: FC = () => {
 	const dropdownOptions = useMemo(() => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
 			({ spaceName, endAt, spaceSlug }: Visit): VisitorSpaceDropdownOption => {
-				const accessEndDate = isMobile
-					? formatSameDayTimeOrDate(asDate(endAt))
-					: formatMediumDateWithTime(asDate(endAt));
-
+				const endAtDate = asDate(endAt);
+				let accessEndDate: string | undefined;
+				if (!endAtDate || isAfter(endAtDate, addYears(new Date(), 100 - 1))) {
+					accessEndDate = undefined;
+				} else {
+					accessEndDate = isMobile
+						? formatSameDayTimeOrDate(endAtDate)
+						: formatMediumDateWithTime(endAtDate);
+				}
 				return {
-					id: spaceSlug,
+					slug: spaceSlug,
 					label: spaceName || '',
 					extraInfo: accessEndDate,
 				};
@@ -325,9 +332,9 @@ const VisitorSpaceSearchPage: FC = () => {
 	): { [SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
 		const trimmed = value.trim();
 
-		if (trimmed && !query.search?.includes(trimmed)) {
+		if (trimmed && !query[SEARCH_QUERY_KEY]?.includes(trimmed)) {
 			return {
-				[SEARCH_QUERY_KEY]: (query.search ?? []).concat(trimmed),
+				[SEARCH_QUERY_KEY]: (query[SEARCH_QUERY_KEY] ?? []).concat(trimmed),
 			};
 		}
 
@@ -427,20 +434,30 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Maintainers:
-				data = (values as MaintainerFilterFormState).maintainers;
+				data = (values as MaintainerFilterFormState)[
+					IeObjectsSearchFilterField.MAINTAINER_IDS
+				];
 				break;
 
-			case VisitorSpaceFilterId.Remote:
+			case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
 				// Info: remove queryparam if false (= set to undefined)
-				data = (values as RemoteFilterFormState).isConsultableRemote
-					? (values as RemoteFilterFormState).isConsultableRemote
+				data = (values as ConsultableOnlyOnLocationFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+				]
+					? (values as ConsultableOnlyOnLocationFilterFormState)[
+							IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
+					  ]
 					: undefined;
 				break;
 
-			case VisitorSpaceFilterId.Media:
+			case VisitorSpaceFilterId.ConsultableMedia:
 				// Info: remove queryparam if false (= set to undefined)
-				data = (values as MediaFilterFormState).isConsultableMedia
-					? (values as MediaFilterFormState).isConsultableMedia
+				data = (values as ConsultableMediaFilterFormState)[
+					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
+				]
+					? (values as ConsultableMediaFilterFormState)[
+							IeObjectsSearchFilterField.CONSULTABLE_MEDIA
+					  ]
 					: undefined;
 				break;
 
@@ -493,8 +510,8 @@ const VisitorSpaceSearchPage: FC = () => {
 					];
 					break;
 
-				case VisitorSpaceFilterId.Media:
-				case VisitorSpaceFilterId.Remote:
+				case VisitorSpaceFilterId.ConsultableMedia:
+				case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
 					// eslint-disable-next-line no-case-declarations
 					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
 					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
@@ -571,11 +588,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				meemooIdentifier: item.meemooIdentifier,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
-				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
 				hasTempAccess: item.accessThrough?.includes(
 					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
 						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
 				),
+				showKeyUserLabel: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
@@ -717,8 +734,8 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Strip out public collection and own visitor space (cp)
 		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicColelction = visitorSpace.id == PUBLIC_COLLECTION;
-				const isOwnVisitorSapce = isCPAdmin && visitorSpace.id === user?.maintainerId;
+				const isPublicColelction = visitorSpace.slug == PUBLIC_COLLECTION;
+				const isOwnVisitorSapce = isCPAdmin && visitorSpace.slug === user?.maintainerId;
 
 				return !isPublicColelction && !isOwnVisitorSapce;
 			}
@@ -726,7 +743,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		if (user?.groupName === GroupName.CP_ADMIN) {
 			// Don't show the temporary access label for CP_ADMIN's own visitor space
-			visitorSpaces = visitorSpaces.filter((space) => space.id !== user.visitorSpaceSlug);
+			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user.visitorSpaceSlug);
 		}
 
 		if (isEmpty(visitorSpaces)) {
@@ -736,7 +753,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Create a link element for each visitor space
 		const visitorSpaceLinks = visitorSpaces.map(
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
-				<Link key={visitorSpace.id} href={`/zoeken?maintainer=${visitorSpace?.id}`}>
+				<Link
+					key={visitorSpace.slug}
+					href={`/zoeken?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
+				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>
 			)

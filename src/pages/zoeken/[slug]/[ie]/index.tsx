@@ -14,7 +14,7 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { capitalize, intersection, isNil, kebabCase, lowerCase } from 'lodash-es';
+import { capitalize, indexOf, intersection, isNil, kebabCase, lowerCase, sortBy } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -22,16 +22,21 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { Fragment, ReactNode, useEffect, useMemo, useState } from 'react';
+import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
+import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
+import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
+	ActionItem,
 	DynamicActionMenu,
+	DynamicActionMenuProps,
 	MediaObject,
 	Metadata,
 	MetadataItem,
@@ -41,18 +46,24 @@ import {
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import {
+	ANONYMOUS_ACTION_SORT_MAP,
+	CP_ADMIN_ACTION_SORT_MAP,
 	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
-	formatErrorPlaceholder,
+	IE_OBJECT_QUERY_PARAM_CONFIG,
 	IMAGE_FORMATS,
+	KEY_USER_ACTION_SORT_MAP,
+	KIOSK_ACTION_SORT_MAP,
 	MEDIA_ACTIONS,
+	MEEMOO_ADMIN_ACTION_SORT_MAP,
 	METADATA_EXPORT_OPTIONS,
 	METADATA_FIELDS,
 	noLicensePlaceholder,
 	OBJECT_DETAIL_TABS,
 	objectPlaceholder,
 	ticketErrorPlaceholder,
+	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/const';
 import { useGetIeObjectsExport } from '@ie-objects/hooks/get-ie-objects-export';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
@@ -67,6 +78,7 @@ import {
 	IeObjectRepresentation,
 	MediaActions,
 	MetadataExportFormats,
+	MetadataSortMap,
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTagList, mapKeywordsToTags } from '@ie-objects/utils';
@@ -89,6 +101,7 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
@@ -97,8 +110,8 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
-import { selectShowNavigationBorder, setShowZendesk } from '@shared/store/ui';
-import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType, VisitStatus } from '@shared/types';
+import { selectShowNavigationBorder, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
 	asDate,
@@ -108,7 +121,7 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { VisitorSpaceFilterId, VisitorSpaceStatus } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -132,6 +145,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
+	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+
+	// User types
+	const isKeyUser = useIsKeyUser();
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
+	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
+	const isVisitor = useHasAnyGroup(GroupName.VISITOR);
+	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
+	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
+
+	// Permissions
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
@@ -139,14 +164,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const canRequestMaterial: boolean | null = useHasAllPermission(
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
-	const user = useSelector(selectUser);
-	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
-	const isNotKiosk = useHasAnyGroup(
-		GroupName.CP_ADMIN,
-		GroupName.MEEMOO_ADMIN,
-		GroupName.VISITOR,
-		GroupName.ANONYMOUS
-	);
+
+	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -161,6 +180,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
+	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	// Layout
 	useStickyLayout();
@@ -170,6 +190,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
+
+	// Query params
+	const [, setQuery] = useQueryParams({
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	});
 
 	// Fetch object
 	const {
@@ -246,7 +271,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	/**
 	 * Computed
 	 */
-
+	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
@@ -256,21 +281,21 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const hasAccessToVisitorSpace = !!intersection(mediaInfo?.accessThrough, [
+	const hasAccessToVisitorSpaceOfObject = !!intersection(mediaInfo?.accessThrough, [
 		IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 		IeObjectAccessThrough.VISITOR_SPACE_FULL,
 	]).length;
-	const showMetadataExportDropdown =
-		canDownloadMetadata &&
-		visitRequest?.status === VisitStatus.APPROVED &&
-		hasAccessToVisitorSpace;
 	const canRequestAccess =
-		!!accessibleVisitorSpaces?.find(
-			(space) => space.maintainerId === mediaInfo?.maintainerId
+		isNil(
+			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
 		) &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
-		!mediaInfo.thumbnailUrl;
+		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+	const showVisitButton =
+		visitorSpace?.status === VisitorSpaceStatus.Active &&
+		canRequestAccess &&
+		(isVisitor || isAnonymous);
 
 	/**
 	 * Effects
@@ -390,7 +415,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const onClickAction = (id: MediaActions) => {
 		switch (id) {
 			case MediaActions.Bookmark:
-				setActiveBlade(MediaActions.Bookmark);
+				if (canManageFolders) {
+					setActiveBlade(MediaActions.Bookmark);
+				}
+
+				if (isAnonymous) {
+					dispatch(setShowAuthModal(true));
+				}
 				break;
 			case MediaActions.Report:
 				setActiveBlade(MediaActions.Report);
@@ -402,27 +433,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				onRequestMaterialClick();
 				break;
 		}
-	};
-
-	const onExportClick = async (format: MetadataExportFormats) => {
-		const metadataBlob = await getMediaExport({
-			id: router.query.ie as string,
-			format,
-		});
-
-		if (metadataBlob) {
-			save(
-				metadataBlob,
-				`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
-			);
-		} else {
-			toastService.notify({
-				title: tHtml('pages/slug/ie/index___error') || 'error',
-				description: tHtml('pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'),
-			});
-		}
-
-		setMetadataExportDropdownOpen(false);
 	};
 
 	const onRequestMaterialClick = () => {
@@ -504,6 +514,126 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 	};
 
+	const getSortMapByUserType = useCallback((): MetadataSortMap[] => {
+		if (isNil(user)) {
+			return ANONYMOUS_ACTION_SORT_MAP();
+		}
+
+		if (isKeyUser) {
+			return KEY_USER_ACTION_SORT_MAP(hasAccessToVisitorSpaceOfObject);
+		}
+
+		if (isKiosk) {
+			return KIOSK_ACTION_SORT_MAP();
+		}
+
+		if (isMeemooAdmin) {
+			return MEEMOO_ADMIN_ACTION_SORT_MAP(hasAccessToVisitorSpaceOfObject);
+		}
+
+		if (isCPAdmin) {
+			return CP_ADMIN_ACTION_SORT_MAP(hasAccessToVisitorSpaceOfObject);
+		}
+
+		return VISITOR_ACTION_SORT_MAP(hasAccessToVisitorSpaceOfObject);
+	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isKiosk, user, isCPAdmin]);
+
+	const onExportClick = useCallback(
+		async (format: MetadataExportFormats) => {
+			const metadataBlob = await getMediaExport({
+				id: router.query.ie as string,
+				format,
+			});
+
+			if (metadataBlob) {
+				save(
+					metadataBlob,
+					`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
+				);
+			} else {
+				toastService.notify({
+					title: tHtml('pages/slug/ie/index___error') || 'error',
+					description: tHtml(
+						'pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'
+					),
+				});
+			}
+
+			setMetadataExportDropdownOpen(false);
+		},
+		[getMediaExport, mediaInfo?.name, router.query.ie, tHtml]
+	);
+
+	const renderExportDropdown = useCallback(
+		(isPrimary: boolean) => {
+			const icon = <Icon name={IconNamesLight.Export} aria-hidden />;
+			const label = tText(
+				'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
+			);
+
+			return (
+				<div className="p-object-detail__export">
+					<Dropdown
+						isOpen={metadataExportDropdownOpen}
+						onOpen={() => setMetadataExportDropdownOpen(true)}
+						onClose={() => setMetadataExportDropdownOpen(false)}
+					>
+						<DropdownButton>
+							{isPrimary ? (
+								<Button
+									variants={[isPrimary ? 'teal' : 'silver']}
+									className="p-object-detail__export"
+									iconStart={icon}
+									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+									aria-label={label}
+									title={label}
+								>
+									<span className="u-text-ellipsis u-display-none u-display-block:md">
+										{label}
+									</span>
+									<span className="u-text-ellipsis u-display-none:md">
+										{tHtml(
+											'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
+										)}
+									</span>
+								</Button>
+							) : (
+								<Button
+									icon={icon}
+									variants={['silver']}
+									aria-label={label}
+									title={label}
+								/>
+							)}
+						</DropdownButton>
+						<DropdownContent>
+							<MenuContent
+								rootClassName="c-dropdown-menu"
+								className="p-object-detail__export-dropdown"
+								menuItems={METADATA_EXPORT_OPTIONS()}
+								onClick={(id) => onExportClick(id as MetadataExportFormats)}
+							/>
+						</DropdownContent>
+					</Dropdown>
+				</div>
+			);
+		},
+		[metadataExportDropdownOpen, onExportClick, tHtml, tText]
+	);
+
+	const onOpenRequestAccess = () => {
+		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: mediaInfo?.maintainerSlug });
+		setIsRequestAccessBladeOpen(true);
+	};
+
+	const highlighted = (toHighlight: string) => (
+		<Highlighter
+			searchWords={(query.searchTerms as string[]) ?? []}
+			autoEscape={true}
+			textToHighlight={toHighlight}
+		/>
+	);
+
 	/**
 	 * Content
 	 */
@@ -546,6 +676,62 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		);
 	}, [isMobile, showLinkedSpaceAsHomepage, tHtml, visitRequest?.endAt]);
 
+	const mediaActions: DynamicActionMenuProps = useMemo(() => {
+		const original = MEDIA_ACTIONS(
+			canManageFolders || isAnonymous,
+			isInAFolder(collections, mediaInfo?.schemaIdentifier),
+			isNotKiosk,
+			!!canRequestAccess,
+			canRequestMaterial,
+			canDownloadMetadata
+		);
+
+		// Sort, filter and tweak actions according to the given sort map
+		const sortMap = getSortMapByUserType();
+		const actions: ActionItem[] = sortBy(original.actions, ({ id }: ActionItem) =>
+			indexOf(
+				sortMap.map((d) => d.id),
+				id
+			)
+		)
+			.map((action: ActionItem) => {
+				const existsInSortMap = !isNil(sortMap.find((d) => d.id === action.id));
+				const isPrimary = sortMap.find((d) => action.id === d.id)?.isPrimary ?? false;
+				const showExport =
+					action.id === MediaActions.Export &&
+					canDownloadMetadata &&
+					hasAccessToVisitorSpaceOfObject;
+
+				return existsInSortMap
+					? {
+							...action,
+							isPrimary,
+							...(showExport && {
+								customElement: renderExportDropdown(isPrimary),
+							}),
+					  }
+					: null;
+			})
+			.filter(Boolean) as ActionItem[];
+
+		return {
+			...original,
+			actions,
+		};
+	}, [
+		canManageFolders,
+		isAnonymous,
+		collections,
+		mediaInfo?.schemaIdentifier,
+		isNotKiosk,
+		canRequestAccess,
+		canRequestMaterial,
+		canDownloadMetadata,
+		getSortMapByUserType,
+		hasAccessToVisitorSpaceOfObject,
+		renderExportDropdown,
+	]);
+
 	/**
 	 * Render
 	 */
@@ -554,15 +740,29 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		playableUrl: string | undefined,
 		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
+		if (!playableUrl && !mediaInfo) {
+			return null;
+		}
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
+
 		if (isErrorNoLicense) {
+			if (showVisitButton) {
+				return (
+					<ObjectPlaceholder
+						{...noLicensePlaceholder()}
+						onOpenRequestAccess={onOpenRequestAccess}
+					/>
+				);
+			}
 			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
 		}
-		if (isErrorPlayableUrl || !playableUrl || !representation) {
+
+		if (isErrorPlayableUrl || !representation) {
 			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
 		}
+
 		const shared: Partial<FlowPlayerProps> = {
 			className: clsx(
 				'p-object-detail__flowplayer',
@@ -580,10 +780,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		};
 
 		// Flowplayer
-		if (FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
+		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
 			return <FlowPlayer key={flowPlayerKey} src={playableUrl} {...shared} />;
 		}
-		if (FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
+		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			if (!peakFileId || !!peakJson) {
 				return (
 					<FlowPlayer
@@ -606,7 +806,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		// Image
 		if (IMAGE_FORMATS.includes(representation.dctermsFormat)) {
 			return (
-				// TODO: replace with real image
 				<div className="p-object-detail__image">
 					<Image
 						src={representation.files[0]?.schemaIdentifier ?? null}
@@ -617,9 +816,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				</div>
 			);
 		}
-
-		// No renderer
-		return <ObjectPlaceholder {...formatErrorPlaceholder(representation.dctermsFormat)} />;
 	};
 
 	// Metadata
@@ -651,10 +847,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 		const dynamicBreadcrumbs: Breadcrumb[] = !isNil(mediaInfo)
 			? [
-					{
-						label: mediaInfo?.maintainerName,
-						to: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
-					},
+					...(hasAccessToVisitorSpaceOfObject
+						? [
+								{
+									label: mediaInfo?.maintainerName,
+									to: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
+								},
+						  ]
+						: []),
 					{
 						label: mediaInfo?.name,
 						to: `${ROUTES.search}/${mediaInfo?.maintainerSlug}/${mediaInfo?.schemaIdentifier}`,
@@ -719,121 +919,88 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</dd>
 	);
 
-	const renderExportDropdown = () => {
-		return (
-			<Dropdown
-				isOpen={metadataExportDropdownOpen}
-				onOpen={() => setMetadataExportDropdownOpen(true)}
-				onClose={() => setMetadataExportDropdownOpen(false)}
-			>
-				<DropdownButton>
-					<Button
-						className="p-object-detail__export"
-						iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-						iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-						aria-label={tText(
-							'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-						)}
-						title={tText(
-							'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-						)}
-					>
-						<span className="u-text-ellipsis u-display-none u-display-block:md">
-							{tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___exporteer-metadata'
-							)}
-						</span>
-						<span className="u-text-ellipsis u-display-none:md">
-							{tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___metadata'
-							)}
-						</span>
-					</Button>
-				</DropdownButton>
-				<DropdownContent>
-					<MenuContent
-						rootClassName="c-dropdown-menu"
-						className="p-object-detail__export-dropdown"
-						menuItems={METADATA_EXPORT_OPTIONS()}
-						onClick={(id) => onExportClick(id as MetadataExportFormats)}
-					/>
-				</DropdownContent>
-			</Dropdown>
-		);
-	};
-
 	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => (
 		<div className="p-object-detail__metadata-maintainer-title">
 			<p className="p-object-detail__metadata-label">
 				{tText('modules/ie-objects/const/index___aanbieder')}
 			</p>
-			<p className="p-object-detail__metadata-pill">
-				<TagList
-					className="u-pt-12"
-					tags={mapKeywordsToTags([maintainerName])}
-					onTagClicked={(keyword: string | number) => {
-						router.push(
-							stringifyUrl({
-								url: `/${ROUTE_PARTS.search}`,
-								query: {
-									[VisitorSpaceFilterId.Maintainers]: [`${keyword}`],
-								},
-							})
-						);
-					}}
-					variants={['clickable', 'silver', 'medium']}
-				/>
-			</p>
-			{maintainerLogo && (
-				<div className="p-object-detail__metadata-logo">
-					<Image
-						src={maintainerLogo}
-						alt={`Logo ${maintainerName}`}
-						layout="fill"
-						objectFit="contain"
-					/>
-				</div>
+			{isNotKiosk && !hasAccessToVisitorSpaceOfObject && (
+				<>
+					<p className="p-object-detail__metadata-pill">
+						<TagList
+							className="u-pt-12"
+							tags={mapKeywordsToTags([maintainerName])}
+							onTagClicked={(keyword: string | number) => {
+								router.push(
+									stringifyUrl({
+										url: `/${ROUTE_PARTS.search}`,
+										query: {
+											[VisitorSpaceFilterId.Maintainers]: [`${keyword}`],
+										},
+									})
+								);
+							}}
+							variants={['clickable', 'silver', 'medium']}
+						/>
+					</p>
+					{maintainerLogo && (
+						<div className="p-object-detail__metadata-logo">
+							<Image
+								src={maintainerLogo}
+								alt={`Logo ${maintainerName}`}
+								layout="fill"
+								objectFit="contain"
+							/>
+						</div>
+					)}
+				</>
 			)}
 		</div>
 	);
 
-	const renderMetaDataActions = (): ReactNode => {
-		const dynamicActions = MEDIA_ACTIONS(
-			canManageFolders,
-			isInAFolder(collections, mediaInfo?.schemaIdentifier),
-			isNotKiosk,
-			!!canRequestAccess,
-			canRequestMaterial
-		);
-
-		return (
-			<div className="u-pb-24 p-object-detail__actions">
-				<div className="p-object-detail__primary-actions">
-					{showMetadataExportDropdown && renderExportDropdown()}
-					<DynamicActionMenu {...dynamicActions} onClickAction={onClickAction} />
-				</div>
+	const renderMetaDataActions = (): ReactNode => (
+		<div className="u-pb-24 p-object-detail__actions">
+			<div className="p-object-detail__primary-actions">
+				<DynamicActionMenu {...mediaActions} onClickAction={onClickAction} />
 			</div>
-		);
-	};
+		</div>
+	);
+
+	const renderVisitButton = (): ReactNode => (
+		<Button
+			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
+			variants={['dark', 'sm']}
+			className="p-object-detail__visit-button"
+			onClick={onOpenRequestAccess}
+		/>
+	);
 
 	const renderMaintainerMetaData = ({
 		maintainerDescription,
 		maintainerSiteUrl,
-	}: IeObject): ReactNode => (
-		<div className="p-object-detail__metadata-maintainer-data">
-			{maintainerDescription && (
-				<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
-			)}
-			{maintainerSiteUrl && (
-				<p className="p-object-detail__metadata-link">
-					<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
-						{maintainerSiteUrl}
-					</a>
-					<Icon className="u-ml-8" name={IconNamesLight.Extern} />
-				</p>
-			)}
-		</div>
-	);
+		maintainerName,
+	}: IeObject): ReactNode =>
+		isNotKiosk && !hasAccessToVisitorSpaceOfObject ? (
+			<div className="p-object-detail__metadata-maintainer-data">
+				{maintainerDescription && (
+					<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
+				)}
+				{maintainerSiteUrl && (
+					<p className="p-object-detail__metadata-link">
+						<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
+							{maintainerSiteUrl}
+						</a>
+						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+					</p>
+				)}
+				{showVisitButton && isMobile && renderVisitButton()}
+			</div>
+		) : (
+			<div className="p-object-detail__metadata-maintainer-data">
+				{maintainerName}
+				{showVisitButton && isMobile && renderVisitButton()}
+			</div>
+		);
 
 	const getCustomTitleRenderFn = (
 		field: CustomMetaDataFields,
@@ -877,8 +1044,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		}
 
 		const showAlert = !mediaInfo.description;
-		const showExtendedMaintainer = !hasAccessToVisitorSpace && isNotKiosk;
-		const metaDataFields = METADATA_FIELDS(mediaInfo, showExtendedMaintainer)
+		const metaDataFields = METADATA_FIELDS(mediaInfo)
 			.filter(({ isDisabled }: MetadataItem): boolean => !isDisabled?.())
 			.map(
 				(field: MetadataItem): MetadataItem => ({
@@ -905,7 +1071,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 							showKeyUserPill ? 'u-pt-8' : 'u-pt-24'
 						)}
 					>
-						{mediaInfo?.name}
+						{highlighted(mediaInfo?.name)}
 					</h3>
 
 					{renderMetaDataActions()}
@@ -923,10 +1089,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						/>
 					)}
 				</div>
+
 				<Metadata
 					className="p-object-detail__metadata-component"
 					metadata={metaDataFields}
 				/>
+
 				{(!!similar.length || !!mediaInfo.keywords?.length) && (
 					<Metadata
 						className="p-object-detail__metadata-component"
@@ -1128,10 +1296,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 			/>
-			{mediaInfo && visitorSpace && canRequestAccess && (
+			{showVisitButton && (
 				<RequestAccessBlade
-					isOpen={activeBlade === MediaActions.RequestAccess}
-					onClose={onCloseBlade}
+					isOpen={isRequestAccessBladeOpen}
+					onClose={() => setIsRequestAccessBladeOpen(false)}
 					onSubmit={onRequestAccessSubmit}
 				/>
 			)}

@@ -43,5 +43,5 @@ export const dynamicActionMenuMock: DynamicActionMenuProps = {
 		},
 	],
 	limit: 2,
-	onClickAction: (id) => console.log(id),
+	onClickAction: (id) => console.info(id),
 };

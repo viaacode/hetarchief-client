@@ -215,11 +215,19 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		grid-column: 3/4;
 		justify-self: end;
 
-		// Ward: first child element is MaterialRequestCenterButton, which has a blade
-		// the other navigation items pop up through the blade if the following z-index is removed
 		ul {
-			li:first-child {
-				z-index: get-z-layer("filter");
+			grid-gap: 0;
+
+			li {
+				// Ward: first child element is MaterialRequestCenterButton, which has a blade
+				// the other navigation items pop up through the blade if the following z-index is removed
+				&:first-child {
+					z-index: get-z-layer("filter");
+				}
+
+				&:nth-child(2) {
+					padding: 0 1.5rem 0 0.5rem;
+				}
 			}
 		}
 	}

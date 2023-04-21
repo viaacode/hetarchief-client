@@ -1,0 +1,34 @@
+@use "../../../../styles/abstracts/" as *;
+
+$component: "c-visit-detail-blade";
+
+.#{$component} {
+	&__title {
+		padding: 0 $spacer-lg;
+		margin-bottom: $spacer-1xl;
+		color: $black;
+	}
+
+	&__content {
+		color: $black;
+		background-color: $platinum;
+		padding: $spacer-lg $spacer-md $spacer-sm $spacer-md;
+
+		&-element {
+			margin-bottom: $spacer-sm;
+
+			&-label {
+				font-weight: bold;
+				color: $neutral;
+			}
+		}
+	}
+
+	&__close-button-container {
+		padding: $spacer-lg;
+	}
+
+	&__plan-button {
+		margin-bottom: $spacer-sm;
+	}
+}

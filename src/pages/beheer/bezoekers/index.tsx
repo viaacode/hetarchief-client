@@ -38,6 +38,8 @@ import { RequestStatusAll, VisitTimeframe } from '@visits/types';
 const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
+	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
 	const [selected, setSelected] = useState<string | number | null>(null);
@@ -47,7 +49,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		isFetching,
 		refetch: refetchVisitRequests,
 	} = useGetVisits({
-		searchInput: filters.search,
+		searchInput: filters[SEARCH_QUERY_KEY],
 		status: VisitStatus.APPROVED,
 		timeframe:
 			filters.timeframe === RequestStatusAll.ALL
@@ -160,7 +162,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 			case VisitTimeframe.PAST:
 			default:
 				return tHtml(
-					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-historiek'
+					'pages/beheer/bezoekers/index___er-zijn-nog-geen-bezoekers-in-de-bezoek-historiek'
 				);
 		}
 	};
@@ -227,10 +229,13 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 					<div className="p-cp-visitors__header">
 						<SearchBar
 							id={globalLabelKeys.adminLayout.title}
-							default={filters[SEARCH_QUERY_KEY]}
+							value={search}
 							className="p-cp-visitors__search"
 							placeholder={tText('pages/beheer/bezoekers/index___zoek')}
-							onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value })}
+							onChange={setSearch}
+							onSearch={(value) =>
+								setFilters({ [SEARCH_QUERY_KEY]: value || undefined })
+							}
 						/>
 
 						<ScrollableTabs
