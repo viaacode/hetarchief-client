@@ -4,7 +4,6 @@ $component: "c-block-three-clickable-tiles";
 
 .#{$component} {
 	display: flex;
-	align-items: center;
 	flex-direction: column;
 
 	@include respond-at("lg") {
@@ -18,25 +17,22 @@ $component: "c-block-three-clickable-tiles";
 	&__tile {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		margin: $spacer-sm;
+
+		&:hover {
+			span {
+				outline: 0.1rem solid $teal;
+			}
+		}
 
 		&-image {
 			display: flex;
-			justify-content: center;
-			align-content: center;
 			width: 100%;
 			background-size: cover;
 			background-position: center center;
 			background-repeat: no-repeat;
-			padding: 0 5rem;
 			flex-wrap: wrap;
-			text-align: center;
 			aspect-ratio: 1 / 1;
-
-			h3 {
-				color: white;
-			}
 		}
 
 		&-subtitle {
@@ -48,13 +44,14 @@ $component: "c-block-three-clickable-tiles";
 
 			h5 {
 				font-size: medium;
+				padding-right: 0.5rem;
 			}
 
 			span {
 				display: flex;
 				justify-content: center;
 				align-items: center;
-				width: 2.8rem;
+				min-width: 2.8rem;
 				height: 2.8rem;
 				font-size: large;
 				background-color: $silver;
