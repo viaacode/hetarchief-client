@@ -85,6 +85,7 @@ import { isInAFolder, mapKeywordsToTagList, mapKeywordsToTags } from '@ie-object
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
+	ErrorNoAccessToObject,
 	ErrorNotFound,
 	Icon,
 	IconNamesLight,
@@ -203,6 +204,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
 	} = useGetIeObjectsInfo(router.query.ie as string);
+
+	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
 	// peak file
 	const peakFileId =
@@ -1214,7 +1217,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				tabs={tabs}
 				onClick={onTabClick}
 			/>
-			{mediaInfoIsError && (
+			{isNoAccessError && (
+				<ErrorNoAccessToObject
+					visitorSpaceName={visitorSpace?.name as string}
+					visitorSpaceSlug={visitorSpace?.slug as string}
+					description={tHtml(
+						'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+					)}
+				/>
+			)}
+			{mediaInfoIsError && !isNoAccessError && (
 				<p className={'p-object-detail__error'}>
 					{tHtml(
 						'pages/bezoekersruimte/visitor-space-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
