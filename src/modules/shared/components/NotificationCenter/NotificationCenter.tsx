@@ -139,7 +139,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 
 				<Html
 					type="span"
-					className="u-color-neutral u-text-default-font u-text-xs"
+					className="u-color-neutral u-text-default-font u-font-size-12"
 					content={notification.description}
 				/>
 			</article>
