@@ -149,7 +149,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 				)}
 			</dt>
 			<dd className="u-color-neutral u-mt-8">
-				{tText(
+				{tHtml(
 					'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-omschrijving'
 				)}
 			</dd>

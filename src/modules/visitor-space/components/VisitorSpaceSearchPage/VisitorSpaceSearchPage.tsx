@@ -588,11 +588,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				meemooIdentifier: item.meemooIdentifier,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
-				isKeyUser: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
 				hasTempAccess: item.accessThrough?.includes(
 					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
 						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
 				),
+				showKeyUserLabel: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),

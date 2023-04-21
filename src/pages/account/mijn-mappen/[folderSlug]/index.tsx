@@ -6,7 +6,7 @@ import {
 	TooltipTrigger,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil, kebabCase, noop } from 'lodash-es';
+import { isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -217,6 +217,20 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 				),
 			});
 		});
+	};
+
+	const getShowLocallyAvailable = (item: FolderIeObject) => {
+		const userHasAccessToMaintainer =
+			item.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FOLDERS) ||
+			item.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FULL);
+
+		const itemHasThumbnail = item.thumbnailUrl;
+
+		return (
+			!userHasAccessToMaintainer &&
+			item.accessThrough.includes(AccessThroughType.SECTOR) &&
+			!itemHasThumbnail
+		);
 	};
 
 	/**
@@ -538,9 +552,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													preview: media.thumbnailUrl,
 													duration: media.duration,
 													licenses: media.licenses,
-													isKeyUser: media.accessThrough?.includes(
+													showKeyUserLabel: media.accessThrough.includes(
 														AccessThroughType.SECTOR
 													),
+													showLocallyAvailable:
+														getShowLocallyAvailable(media),
 												};
 
 												return {
@@ -552,7 +568,6 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 												};
 											})}
 											view={'list'}
-											showLocallyAvailable
 										/>
 									)}
 
