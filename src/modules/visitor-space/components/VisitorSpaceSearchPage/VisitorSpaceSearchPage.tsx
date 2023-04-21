@@ -115,6 +115,7 @@ const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	};
 };
 
+// TODO: rename this at some point to SearchPage
 const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
@@ -145,7 +146,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
-	const [searchBarInputState, setSearchBarInputState] = useState<string>();
+	const [searchBarInputValue, setSearchBarInputValue] = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
@@ -370,7 +371,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
-		const searchValue = prepareSearchValue(searchBarInputState);
+		const searchValue = prepareSearchValue(searchBarInputValue);
 		let data;
 
 		switch (id) {
@@ -479,7 +480,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		}
 
 		setQuery({ [id]: data, filter: undefined, page: 1, ...(searchValue ? searchValue : {}) });
-		setSearchBarInputState(undefined);
+		setSearchBarInputValue('');
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -853,10 +854,8 @@ const VisitorSpaceSearchPage: FC = () => {
 											clearLabel={tHtml(
 												'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 											)}
-											inputState={[
-												searchBarInputState,
-												setSearchBarInputState,
-											]}
+											inputValue={searchBarInputValue}
+											setInputValue={setSearchBarInputValue}
 											instanceId={labelKeys.search}
 											isMulti
 											onClear={onResetFilters}
@@ -869,7 +868,6 @@ const VisitorSpaceSearchPage: FC = () => {
 												'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
 											)}
 											size="lg"
-											syncSearchValue={false}
 											value={activeFilters}
 										/>
 									</div>
