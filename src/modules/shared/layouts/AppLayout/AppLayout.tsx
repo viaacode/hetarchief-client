@@ -66,6 +66,7 @@ import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import packageJson from '../../../../../package.json';
 
+import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 
 const AppLayout: FC = ({ children }) => {
@@ -98,7 +99,8 @@ const AppLayout: FC = ({ children }) => {
 		[SEARCH_QUERY_KEY]: StringParam,
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
-	const { data: alerts } = useGetActiveMaintenanceAlerts();
+	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts();
+	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
 		'HET_ARCHIEF.alerts.ignoreUntil',
@@ -277,26 +279,30 @@ const AppLayout: FC = ({ children }) => {
 		}
 	};
 
-	const onCloseAlert = (alertId: string | undefined) => {
+	const onCloseAlert = async (alertId: string | undefined) => {
 		if (!alertId) {
 			return;
 		}
 
-		const alert = alerts?.items.find((alert) => alert.id === alertId);
+		const alert = maintenanceAlerts?.items.find((alert) => alert.id === alertId);
 
+		// Store the dismissal in local storage, so this alert isn't shown anymore
 		const newAlertsIgnoreUntil = JSON.stringify({
 			...JSON.parse(alertsIgnoreUntil),
 			[alertId]: alert?.untilDate,
 		});
 
+		// Add the alert to the users read notifications
+		await dismissMaintenanceAlert(alertId);
+
 		setAlertsIgnoreUntil(newAlertsIgnoreUntil);
 	};
 
 	const activeAlerts = useMemo(() => {
-		return alerts?.items.filter(
+		return maintenanceAlerts?.items.filter(
 			(item) => JSON.parse(alertsIgnoreUntil)[item.id] !== item.untilDate
 		);
-	}, [alerts?.items, alertsIgnoreUntil]);
+	}, [maintenanceAlerts?.items, alertsIgnoreUntil]);
 
 	const renderAlerts = () => {
 		return (
