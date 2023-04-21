@@ -55,8 +55,6 @@ import { Breakpoints } from '@shared/types';
 import { AccessThroughType } from '@shared/types/access';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
-import { scrollTo } from '@shared/utils/scroll-to-top';
-import useScrollPosition from '@shared/utils/useScrollPosition';
 
 import { AddToFolderBlade } from '../../../../modules/visitor-space/components';
 
@@ -75,12 +73,6 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { folderSlug } = router.query;
 	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
-	const currentScrollPosition = useScrollPosition();
-	const lastScrollPosition = useSelector(selectLastScrollPosition);
-	const saveScrollPosition = () => {
-		dispatch(setLastScrollPosition({ position: currentScrollPosition, page: ROUTES.search }));
-	};
-
 	/**
 	 * Data
 	 */
@@ -91,9 +83,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
-
 	const getFolders = useGetFolders();
 	const folders = useSelector(selectFolders);
+	const lastScrollPosition = useSelector(selectLastScrollPosition);
 
 	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
@@ -169,9 +161,19 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
-		if (lastScrollPosition && folderMedia?.data?.items) {
-			console.log('Scroll to: ', lastScrollPosition);
-			scrollTo(lastScrollPosition.position);
+		if (
+			lastScrollPosition &&
+			lastScrollPosition.page === ROUTES.myFolders &&
+			folderMedia?.data?.items
+		) {
+			setTimeout(() => {
+				const item = document.getElementById(
+					`${lastScrollPosition.itemId}`
+				) as HTMLElement | null;
+
+				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+			}, 100);
+			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.myFolders }));
 		}
 	}, [folderMedia?.data?.items]);
 
@@ -571,6 +573,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													licenses: media.licenses,
 													showLocallyAvailable:
 														getShowLocallyAvailable(media),
+													previousPage: ROUTES.myFolders,
 												};
 
 												return {

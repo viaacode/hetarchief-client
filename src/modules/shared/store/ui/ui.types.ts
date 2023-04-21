@@ -1,5 +1,5 @@
 export interface LastScrollPositionType {
-	position: number;
+	itemId: string;
 	page: string;
 }
 

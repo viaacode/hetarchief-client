@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
@@ -18,6 +18,7 @@ import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -47,8 +48,10 @@ const MediaCard: FC<MediaCardProps> = ({
 	link,
 	maintainerSlug,
 	hasTempAccess,
+	previousPage,
 }) => {
 	const { tText } = useTranslation();
+	const dispatch = useDispatch();
 
 	const [, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
@@ -60,11 +63,21 @@ const MediaCard: FC<MediaCardProps> = ({
 	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
+	const saveScrollPosition = () => {
+		if (id && previousPage) {
+			dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
+		}
+	};
+
 	const wrapInLink = (children: ReactNode) => {
 		if (link && !showLocallyAvailable) {
 			return (
 				<Link key={id} href={link}>
-					<a className="u-text-no-decoration" aria-label={id}>
+					<a
+						className="u-text-no-decoration"
+						aria-label={id}
+						onClick={saveScrollPosition}
+					>
 						{children}
 					</a>
 				</Link>

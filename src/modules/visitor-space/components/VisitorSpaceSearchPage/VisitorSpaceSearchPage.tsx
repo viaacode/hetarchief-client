@@ -71,7 +71,6 @@ import {
 } from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import useScrollPosition from '@shared/utils/useScrollPosition';
 import { VisitsService } from '@visits/services';
 import { VisitTimeframe } from '@visits/types';
 
@@ -124,6 +123,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
+	const dispatch = useDispatch();
 
 	useScrollToId((router.query.focus as string) || null);
 
@@ -140,13 +140,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 	const isKeyUser = useIsKeyUser();
-
-	const dispatch = useDispatch();
-	const currentScrollPosition = useScrollPosition();
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
-	const saveScrollPosition = () => {
-		dispatch(setLastScrollPosition({ position: currentScrollPosition, page: ROUTES.search }));
-	};
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -266,9 +260,19 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
-		if (lastScrollPosition && searchResults?.items) {
-			console.log('Scroll to: ', lastScrollPosition);
-			scrollTo(lastScrollPosition.position);
+		if (
+			lastScrollPosition &&
+			lastScrollPosition.page === ROUTES.search &&
+			searchResults?.items
+		) {
+			setTimeout(() => {
+				const item = document.getElementById(
+					`${lastScrollPosition.itemId}`
+				) as HTMLElement | null;
+
+				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+			}, 100);
+			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.search }));
 		}
 	}, [searchResults?.items]);
 
@@ -615,6 +619,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
+				previousPage: ROUTES.search,
 			};
 		});
 	}, [searchResults?.items]);

@@ -14,7 +14,7 @@ const initialState: UIState = {
 	showZendesk: true,
 	lockScroll: {},
 	materialRequestCount: 0,
-	lastScrollPosition: { position: 0, page: ROUTES.home },
+	lastScrollPosition: { itemId: '', page: ROUTES.home },
 };
 
 export const uiSlice = createSlice({
