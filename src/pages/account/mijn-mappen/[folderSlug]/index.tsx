@@ -552,6 +552,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													preview: media.thumbnailUrl,
 													duration: media.duration,
 													licenses: media.licenses,
+													showKeyUserLabel: media.accessThrough.includes(
+														AccessThroughType.SECTOR
+													),
 													showLocallyAvailable:
 														getShowLocallyAvailable(media),
 												};
