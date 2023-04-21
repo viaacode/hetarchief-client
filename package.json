@@ -40,7 +40,8 @@
 		"storybook": "start-storybook -p 6006",
 		"build:storybook": "build-storybook",
 		"translations:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix",
-		"gql:extract": "ts-node --transpile-only --require dotenv/config scripts/whitelist-gql-queries.ts dotenv_config_path=.env"
+		"gql:extract": "ts-node --transpile-only --require dotenv/config scripts/whitelist-gql-queries.ts dotenv_config_path=.env",
+		"changed-translations-since-last-release": "git diff d0c2f3cc0013c89a675030da04b238985d6e1748 92d84be794637e58db9bb2ef6a38eec182a0fda3 --no-ext-diff --unified=0 --exit-code -a --no-prefix public/locales/nl/common.json > translation-changes.txt"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
