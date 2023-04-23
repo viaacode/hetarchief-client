@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 	}
 
 	try {
-		await res.unstable_revalidate(req.query.path as string);
+		await res.revalidate(req.query.path as string);
 		res.json({ message: 'cache for route has been cleared' });
 	} catch (err) {
 		res.status(500).json({
