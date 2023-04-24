@@ -1,6 +1,7 @@
 import { OrderDirection, TabProps } from '@meemoo/react-components';
 import { ArrayParam, BooleanParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
+import { GroupName } from '@account/const';
 import { Icon, IconNamesLight } from '@shared/components';
 import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -106,8 +107,10 @@ export const VISITOR_SPACE_TABS = (): TabProps[] => [
 
 export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
+// TODO rename this to SEARCH_FILTERS since these are not specific to a visitor space anymore in fase2
 export const VISITOR_SPACE_FILTERS = (
 	isPublicCollection: boolean,
+	userGroup: GroupName | undefined,
 	isKeyUser: boolean
 ): FilterMenuFilterOption[] => [
 	{
@@ -181,7 +184,7 @@ export const VISITOR_SPACE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		type: FilterMenuType.Modal,
-		isDisabled: () => !isPublicCollection,
+		isDisabled: () => !isPublicCollection || userGroup === GroupName.KIOSK_VISITOR,
 	},
 	{
 		id: VisitorSpaceFilterId.Advanced,
