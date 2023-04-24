@@ -1288,7 +1288,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
 					objectName={mediaInfo?.name}
-					objectId={mediaInfo?.schemaIdentifier}
+					objectId={mediaInfo?.meemooIdentifier}
 					objectType={mediaInfo.dctermsFormat as MaterialRequestObjectType}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={visitorSpace?.logo}
