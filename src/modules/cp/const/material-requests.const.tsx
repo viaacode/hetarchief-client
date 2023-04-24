@@ -78,9 +78,9 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span
 				className="u-color-neutral"
-				title={formatMediumDateWithTime(asDate(original.createdAt))}
+				title={formatMediumDateWithTime(asDate(original.updatedAt))}
 			>
-				{formatDistanceToday(original.createdAt)}
+				{formatDistanceToday(original.updatedAt)}
 			</span>
 		),
 	},
