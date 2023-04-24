@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
 
 import { Icon, IconNamesLight } from '@shared/components';
+import { IeObjectsSearchFilterField } from '@shared/types';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import {
@@ -18,7 +19,7 @@ import {
 } from './ConsultableMediaFilterForm.types';
 
 const defaultValues = {
-	isConsultableMedia: false,
+	[IeObjectsSearchFilterField.CONSULTABLE_MEDIA]: false,
 };
 
 const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
@@ -43,10 +44,13 @@ const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
 	);
 
 	useEffect(() => {
-		setValue('isConsultableMedia', isChecked);
+		setValue(IeObjectsSearchFilterField.CONSULTABLE_MEDIA, isChecked);
 
 		handleSubmit(
-			() => onFilterFormSubmit(id, { isConsultableMedia: isChecked }),
+			() =>
+				onFilterFormSubmit(id, {
+					[IeObjectsSearchFilterField.CONSULTABLE_MEDIA]: isChecked,
+				}),
 			(...args) => console.error(args)
 		)();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
