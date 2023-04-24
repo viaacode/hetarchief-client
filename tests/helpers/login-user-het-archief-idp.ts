@@ -18,7 +18,8 @@ export async function loginUserHetArchiefIdp(
 	).toBeVisible();
 
 	// Click the login button
-	await page.click('text=Inloggen met Het Archief-account');
+	const loginButton = await page.locator('text=Inloggen').first(); //dit werkt niet
+	await loginButton.click();
 
 	// Fill in credentials
 	await page.fill('#emailId', username);

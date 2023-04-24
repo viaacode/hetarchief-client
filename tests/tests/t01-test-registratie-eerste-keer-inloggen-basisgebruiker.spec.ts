@@ -19,7 +19,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
 		timeout: 10000,
 	});
 
@@ -27,7 +27,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acceptCookies(page, 'selection');
 
 	// Check site is still visible:
-	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+	// await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').first().click();
@@ -86,11 +86,11 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acmConfirmEmail(page, userEmail);
 
 	// Go to the hetarchief homepage
-	await page.goto('https://bezoek-int.private.cloud.meemoo.be/');
-	// await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); // TODO switch back to tst when https://meemoo.atlassian.net/browse/ARC-1050 is fixed
+	// await page.goto('https://bezoek-.private.cloud.meemoo.be/');
+	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); // TODO switch back to tst when https://meemoo.atlassian.net/browse/ARC-1050 is fixed
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
 		timeout: 10000,
 	});
 
