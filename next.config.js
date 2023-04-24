@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+const path = require('path');
+
 /*
  * next-transpile-modules is necessary because:
  * - Global CSS cannot be imported from within node_modules.
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-const withTM = require('next-transpile-modules')([
-	'@viaa/avo2-components',
-	'@meemoo/react-components',
-	'ky-universal',
-]);
+const withTM = require('next-transpile-modules')(['ky-universal']);
 
 const { i18n } = require('./next-i18next.config');
 
@@ -27,12 +25,22 @@ module.exports = withTM({
 		 */
 		esmExternals: 'loose',
 	},
-	webpack: (config) => {
+	webpack: (config, options) => {
 		// Required for ky-universal top level await used in admin core inside the api service
 		config.experiments = { topLevelAwait: true, layers: true };
 
 		// https://stackoverflow.com/a/68098547/373207
 		config.resolve.fallback = { fs: false, path: false };
+
+		// Fix issues with react-query:
+		// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
+		if (options.isServer) {
+			config.externals = ['@tanstack/react-query', 'use-query-params', ...config.externals];
+		}
+		config.resolve.alias['@tanstack/react-query'] = path.resolve(
+			'./node_modules/@tanstack/react-query'
+		);
+		config.resolve.alias['use-query-params'] = path.resolve('./node_modules/use-query-params');
 
 		return config;
 	},

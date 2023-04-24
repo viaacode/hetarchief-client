@@ -23,7 +23,7 @@
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"types": ["jest", "node"],
     "module": "esnext",
-		"moduleResolution": "Node",
+    "moduleResolution": "node",
 		"allowJs": true,
 		"skipLibCheck": true,
 		"strict": true,

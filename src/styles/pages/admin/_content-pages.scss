@@ -7,6 +7,16 @@ $content-page-tabs-height: 5rem;
 $content-page-sidebar-margin: 4rem;
 $content-page-sidebar-blok-dropdown-height: 7rem;
 
+.c-filter-table__toolbar {
+	.c-toolbar__left {
+		max-width: 100%;
+
+		.o-flex--wrap {
+			gap: 1.2rem 0;
+		}
+	}
+}
+
 .m-resizable-panels {
 	> div {
 		> .resizable-fragment {
