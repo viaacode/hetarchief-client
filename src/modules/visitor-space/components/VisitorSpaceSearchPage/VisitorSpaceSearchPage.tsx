@@ -157,6 +157,8 @@ const VisitorSpaceSearchPage: FC = () => {
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 	const [activeVisitorSpace, setActiveVisitorSpace] = useState<Visit | undefined>();
 
+	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
+
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
@@ -275,6 +277,10 @@ const VisitorSpaceSearchPage: FC = () => {
 			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.search }));
 		}
 	}, [searchResults?.items]);
+
+	useEffect(() => {
+		setIsInitialPageLoad(true);
+	}, []);
 
 	/**
 	 * Display
@@ -502,8 +508,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined, page: 1, ...(searchValue ? searchValue : {}) });
+		const page = isInitialPageLoad ? query.page : 1;
+
+		setQuery({ [id]: data, filter: undefined, page, ...(searchValue ? searchValue : {}) });
 		setSearchBarInputState(undefined);
+		isInitialPageLoad && setIsInitialPageLoad(false);
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
