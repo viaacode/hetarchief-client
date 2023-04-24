@@ -115,6 +115,7 @@ const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	};
 };
 
+// TODO: rename this at some point to SearchPage
 const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
@@ -126,6 +127,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 
 	/**
 	 * State
@@ -145,7 +147,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
-	const [searchBarInputState, setSearchBarInputState] = useState<string>();
+	const [searchBarInputValue, setSearchBarInputValue] = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
@@ -370,7 +372,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
-		const searchValue = prepareSearchValue(searchBarInputState);
+		const searchValue = prepareSearchValue(searchBarInputValue);
 		let data;
 
 		switch (id) {
@@ -479,7 +481,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		}
 
 		setQuery({ [id]: data, filter: undefined, page: 1, ...(searchValue ? searchValue : {}) });
-		setSearchBarInputState(undefined);
+		setSearchBarInputValue('');
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -574,6 +576,14 @@ const VisitorSpaceSearchPage: FC = () => {
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
 			const type = item.dctermsFormat as IeObjectTypes;
+			const showKeyUserLabel = item.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
+			const hasTempAccess =
+				isPublicCollection &&
+				item.accessThrough?.includes(
+					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
+						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
+				);
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
@@ -588,17 +598,14 @@ const VisitorSpaceSearchPage: FC = () => {
 				meemooIdentifier: item.meemooIdentifier,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
-				hasTempAccess: item.accessThrough?.includes(
-					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
-						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
-				),
-				showKeyUserLabel: item.accessThrough?.includes(IeObjectAccessThrough.SECTOR),
+				hasTempAccess,
+				showKeyUserLabel,
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
 			};
 		});
-	}, [searchResults?.items]);
+	}, [isPublicCollection, searchResults?.items]);
 
 	/**
 	 * Render
@@ -726,8 +733,10 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
-		if (user?.groupName === GroupName.MEEMOO_ADMIN) {
-			// Don't show the temporary access label for MEEMOO admins, since they have access to all visitor spaces
+		if (isMeemooAdmin || !isPublicCollection) {
+			// Don't show the temporary access label for:
+			// - MEEMOO admins, since they have access to all visitor spaces
+			// - when a visitor space is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
 			return null;
 		}
 
@@ -741,9 +750,9 @@ const VisitorSpaceSearchPage: FC = () => {
 			}
 		);
 
-		if (user?.groupName === GroupName.CP_ADMIN) {
+		if (isCPAdmin) {
 			// Don't show the temporary access label for CP_ADMIN's own visitor space
-			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user.visitorSpaceSlug);
+			visitorSpaces = visitorSpaces.filter((space) => space.slug !== user?.visitorSpaceSlug);
 		}
 
 		if (isEmpty(visitorSpaces)) {
@@ -853,10 +862,8 @@ const VisitorSpaceSearchPage: FC = () => {
 											clearLabel={tHtml(
 												'pages/bezoekersruimte/slug___wis-volledige-zoekopdracht'
 											)}
-											inputState={[
-												searchBarInputState,
-												setSearchBarInputState,
-											]}
+											inputValue={searchBarInputValue}
+											setInputValue={setSearchBarInputValue}
 											instanceId={labelKeys.search}
 											isMulti
 											onClear={onResetFilters}
@@ -869,7 +876,6 @@ const VisitorSpaceSearchPage: FC = () => {
 												'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
 											)}
 											size="lg"
-											syncSearchValue={false}
 											value={activeFilters}
 										/>
 									</div>
