@@ -10,7 +10,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam } from 'serialize-query-params/lib/params';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { Permission } from '@account/const';
+import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
@@ -88,7 +88,10 @@ const AppLayout: FC = ({ children }) => {
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
 		canViewAllSpaces,
 	});
-	const { data: materialRequests } = useGetPendingMaterialRequests({});
+	const { data: materialRequests } = useGetPendingMaterialRequests(
+		{},
+		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+	);
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -99,7 +102,10 @@ const AppLayout: FC = ({ children }) => {
 		[SEARCH_QUERY_KEY]: StringParam,
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
-	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts();
+	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
+		{},
+		{ keepPreviousData: true, enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
@@ -263,11 +269,11 @@ const AppLayout: FC = ({ children }) => {
 		accessibleVisitorSpaces,
 		navigationItems,
 		user?.permissions,
+		user?.visitorSpaceSlug,
 		showLinkedSpaceAsHomepage,
 		linkedSpaceOrId,
 		isMobile,
 		isLoggedIn,
-		user?.maintainerId,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
