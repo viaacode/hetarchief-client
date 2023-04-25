@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import { useRouter } from 'next/router';
 import { FC, ReactNode, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
@@ -26,6 +27,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 	visitorSpaceSlug,
 }) => {
 	const { tHtml, tText } = useTranslation();
+	const router = useRouter();
 
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
@@ -50,7 +52,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				return;
 			}
 
-			await createVisitRequest({
+			const createdVisitRequest = await createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
 				visitorSpaceSlug: visitorSpaceSlug as string,
@@ -58,6 +60,9 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 			});
 
 			setIsRequestAccessBladeOpen(false);
+			await router.push(
+				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+			);
 		} catch (err) {
 			console.error({
 				message: 'Failed to create visit request',
