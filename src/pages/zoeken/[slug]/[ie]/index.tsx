@@ -95,6 +95,7 @@ import {
 	TabLabel,
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
+import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { MetaDataDescription } from '@shared/components/MetaDataDescription';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
@@ -260,10 +261,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	} = useGetActiveVisitForUserAndSpace(router.query.slug as string, user);
 
 	// get visitor space info, used to display contact information
-	const { data: visitorSpace, isLoading: visitorSpaceIsLoading } = useGetVisitorSpace(
-		router.query.slug as string,
-		false
-	);
+	const {
+		data: visitorSpace,
+		error: visitorSpaceError,
+		isLoading: visitorSpaceIsLoading,
+	} = useGetVisitorSpace(router.query.slug as string, false);
 
 	// spaces
 	const canViewAllSpaces = useHasAllPermission(Permission.READ_ALL_SPACES);
@@ -279,6 +281,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
+	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const isErrorNoLicense =
 		!hasMedia && !mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
@@ -1321,6 +1324,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
 			return <Loading fullscreen owner="object detail page: render page content" />;
+		}
+		if (isErrorSpaceNotActive) {
+			return <ErrorSpaceNoLongerActive />;
 		}
 		if (isErrorNotFound) {
 			return <ErrorNotFound />;
