@@ -39,6 +39,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		isPersonal: true,
+		isPending: false,
 		size: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 		...(!isNil(filters.page) && { page: filters.page }),
 		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
