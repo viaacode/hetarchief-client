@@ -1288,11 +1288,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
 					objectName={mediaInfo?.name}
-					objectId={mediaInfo?.meemooIdentifier}
+					objectId={mediaInfo?.schemaIdentifier}
 					objectType={mediaInfo.dctermsFormat as MaterialRequestObjectType}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={visitorSpace?.logo}
 					maintainerSlug={visitorSpace?.slug}
+					meemooId={mediaInfo?.meemooIdentifier}
 				/>
 			)}
 			<ReportBlade
