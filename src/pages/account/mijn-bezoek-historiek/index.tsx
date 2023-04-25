@@ -70,25 +70,18 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 		orderDirection: OrderDirection | undefined
 	) => {
 		console.log({ orderProp, orderDirection, filters });
-		// const orderPropResolved =
-		// 	orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
+		const orderPropResolved =
+			orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
 		if (!orderProp) {
 			orderProp = 'startAt';
 		}
 		if (!orderDirection) {
 			orderDirection = OrderDirection.desc;
 		}
-		if (filters.orderProp === 'startAt' && orderDirection === undefined) {
+		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
-				orderProp,
-				orderDirection: OrderDirection.asc,
-				page: 1,
-			});
-		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
-			setFilters({
-				...filters,
-				orderProp,
+				orderProp: orderPropResolved,
 				orderDirection,
 				page: 1,
 			});
