@@ -7,7 +7,14 @@ import { VisitsService } from '@visits/services';
 import { GetVisitsProps } from '@visits/services/visits/visits.service.types';
 
 export function useGetVisits(props: GetVisitsProps): UseQueryResult<IPagination<Visit>> {
-	return useQuery([QUERY_KEYS.getVisits, props], () => VisitsService.getAll(props), {
-		keepPreviousData: true,
-	});
+	return useQuery(
+		[QUERY_KEYS.getVisits, props],
+		() => {
+			console.log({ props });
+			return VisitsService.getAll(props);
+		},
+		{
+			keepPreviousData: true,
+		}
+	);
 }

@@ -54,6 +54,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { mutateAsync: getAccessStatus } = useGetVisitAccessStatusMutation();
 
 	const sortFilters = useMemo(() => {
+		console.log(filters.orderProp, filters.orderDirection);
 		return [
 			{
 				id: filters.orderProp,
@@ -68,12 +69,26 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
-		const orderPropResolved =
-			orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
-		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+		console.log({ orderProp, orderDirection, filters });
+		// const orderPropResolved =
+		// 	orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
+		if (!orderProp) {
+			orderProp = 'startAt';
+		}
+		if (!orderDirection) {
+			orderDirection = OrderDirection.desc;
+		}
+		if (filters.orderProp === 'startAt' && orderDirection === undefined) {
 			setFilters({
 				...filters,
-				orderProp: orderPropResolved,
+				orderProp,
+				orderDirection: OrderDirection.asc,
+				page: 1,
+			});
+		} else if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
+			setFilters({
+				...filters,
+				orderProp,
 				orderDirection,
 				page: 1,
 			});
