@@ -54,7 +54,6 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { mutateAsync: getAccessStatus } = useGetVisitAccessStatusMutation();
 
 	const sortFilters = useMemo(() => {
-		console.log(filters.orderProp, filters.orderDirection);
 		return [
 			{
 				id: filters.orderProp,
@@ -69,7 +68,6 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
-		console.log({ orderProp, orderDirection, filters });
 		const orderPropResolved =
 			orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
 		if (!orderProp) {
