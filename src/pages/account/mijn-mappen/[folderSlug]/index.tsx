@@ -50,6 +50,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
+import { selectLastScrollPosition, setLastScrollPosition } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { AccessThroughType } from '@shared/types/access';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -82,9 +83,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
-
 	const getFolders = useGetFolders();
 	const folders = useSelector(selectFolders);
+	const lastScrollPosition = useSelector(selectLastScrollPosition);
 
 	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
@@ -157,6 +158,24 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 			folderMedia.refetch();
 		}
 	}, [activeFolder]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		// Ward: wait until items are rendered on the screen before scrolling
+		if (
+			lastScrollPosition &&
+			lastScrollPosition.page === ROUTES.myFolders &&
+			folderMedia?.data?.items
+		) {
+			setTimeout(() => {
+				const item = document.getElementById(
+					`${lastScrollPosition.itemId}`
+				) as HTMLElement | null;
+
+				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+			}, 100);
+			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.myFolders }));
+		}
+	}, [folderMedia?.data?.items]);
 
 	/**
 	 * Events
@@ -559,6 +578,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													),
 													showLocallyAvailable:
 														getShowLocallyAvailable(media),
+													previousPage: ROUTES.myFolders,
 												};
 
 												return {
