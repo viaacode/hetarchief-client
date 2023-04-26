@@ -280,8 +280,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
-	const isErrorNoLicense =
-		!hasMedia && !mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -297,9 +295,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 	const showVisitButton =
-		visitorSpace?.status === VisitorSpaceStatus.Active &&
-		canRequestAccess &&
-		(isVisitor || isAnonymous);
+		visitorSpace?.status === VisitorSpaceStatus.Active && canRequestAccess && !isKiosk;
 
 	/**
 	 * Effects
@@ -642,21 +638,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	 * Content
 	 */
 	const tabs: TabProps[] = useMemo(() => {
-		const available =
-			!isErrorNoLicense && !isErrorPlayableUrl && !!playableUrl && !!currentRepresentation;
+		const available = !isErrorPlayableUrl && !!playableUrl && !!currentRepresentation;
 		return OBJECT_DETAIL_TABS(mediaType, available).map((tab) => ({
 			...tab,
 			label: <TabLabel label={tab.label} />,
 			active: tab.id === activeTab,
 		}));
-	}, [
-		activeTab,
-		mediaType,
-		isErrorNoLicense,
-		isErrorPlayableUrl,
-		playableUrl,
-		currentRepresentation,
-	]);
+	}, [activeTab, mediaType, isErrorPlayableUrl, playableUrl, currentRepresentation]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -744,14 +732,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		playableUrl: string | undefined,
 		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
-		if (!playableUrl && !mediaInfo) {
-			return null;
-		}
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 
-		if (isErrorNoLicense) {
+		if (!playableUrl) {
 			if (showVisitButton) {
 				return (
 					<ObjectPlaceholder
