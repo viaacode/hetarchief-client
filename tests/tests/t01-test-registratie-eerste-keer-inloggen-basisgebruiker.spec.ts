@@ -14,7 +14,7 @@ import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ page, context }) => {
 	const userId = uuid().replace(/-/g, '');
-	const userEmail = `hetarchief2.0+ateindgebruikerbzt${userId}@meemoo.be`;
+	const userEmail = `hetarchief2.0+atbasisgebruiker${userId}@meemoo.be`;
 
 	// Go to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
@@ -23,14 +23,18 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
 		timeout: 10000,
 	});
+
 	// Check searchbar contains 'Start je zoektocht':
-	// await expect(page.locator('text=Start je zoektocht')).toBeVisible(); //This does not work
+	let navigationItemTexts = await page
+		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
+		.allInnerTexts();
+	// await expect(navigationItemTexts).toContain('Start je zoektocht'); //Does not pass yet
 
 	// Accept selected cookies
 	await acceptCookies(page, 'selection');
 
 	// Check site is still visible:
-	await expect(page.locator('text=Zoeken')).toBeVisible();
+	await expect(page.locator('text=Menu').first()).toBeVisible();
 
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').first().click();
@@ -113,11 +117,14 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator('.c-avatar__text')).toHaveText('Test-at');
 
 	// Admin and beheer should not be visible
-	const navigationItemTexts = await page
+	navigationItemTexts = await page
 		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
 		.allInnerTexts();
 	await expect(navigationItemTexts).not.toContain('Admin');
 	await expect(navigationItemTexts).not.toContain('Beheer');
+
+	// Searchbar should contain 'Start je zoektocht'
+	// await expect(navigationItemTexts).toContain('Start je zoektocht'); //Does not pass yet
 
 	// Wait for close to save the videos
 	await context.close();
