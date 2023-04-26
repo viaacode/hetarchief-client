@@ -31,7 +31,14 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 
 	const [query] = useQueryParams(LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [selection, setSelection] = useState<string[]>(() => compact(query.language || []));
+	const [selectedLanguageCodes, setSelectedLanguageCodes] = useState<string[]>(() =>
+		compact(
+			(query[VisitorSpaceFilterId.Language] || []).map(
+				(languageCodeAndName) =>
+					languageCodeAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
+			)
+		)
+	);
 
 	const { setValue, reset, handleSubmit } = useForm<LanguageFilterFormState>({
 		resolver: yupResolver(LANGUAGE_FILTER_FORM_SCHEMA()),
@@ -56,15 +63,17 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	// Effects
 
 	useEffect(() => {
-		const newValue = selection.map(idToIdAndNameConcatinated);
+		const newValue = selectedLanguageCodes.map(idToIdAndNameConcatinated);
 		setValue('languages', newValue);
-	}, [selection, setValue, idToIdAndNameConcatinated]);
+	}, [selectedLanguageCodes, setValue, idToIdAndNameConcatinated]);
 
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
-		const selected = add ? [...selection, value] : without(selection, value);
-		setSelection(selected);
+		const selected = add
+			? [...selectedLanguageCodes, value]
+			: without(selectedLanguageCodes, value);
+		setSelectedLanguageCodes(selected);
 	};
 
 	return (
@@ -95,7 +104,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 							...bucket,
 							value: bucket.key,
 							label: bucket.name,
-							checked: selection.includes(bucket.key),
+							checked: selectedLanguageCodes.includes(bucket.key),
 						}))}
 						onItemClick={(checked, value) => {
 							onItemClick(!checked, value as string);
@@ -105,10 +114,10 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 			</div>
 
 			{children({
-				values: { languages: selection.map(idToIdAndNameConcatinated) },
+				values: { languages: selectedLanguageCodes.map(idToIdAndNameConcatinated) },
 				reset: () => {
 					reset();
-					setSelection(defaultValues.languages);
+					setSelectedLanguageCodes(defaultValues.languages);
 					setSearch('');
 				},
 				handleSubmit,
