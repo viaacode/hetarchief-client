@@ -225,6 +225,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Filter out all disabled query param keys/ids
 		const disabledFilterKeys: VisitorSpaceFilterId[] = VISITOR_SPACE_FILTERS(
 			isPublicCollection,
+			isKioskUser,
 			isKeyUser
 		)
 			.filter(({ isDisabled }: FilterMenuFilterOption): boolean => !!isDisabled?.())
@@ -319,10 +320,10 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const filters = useMemo(
 		() =>
-			VISITOR_SPACE_FILTERS(isPublicCollection, isKeyUser).filter(
+			VISITOR_SPACE_FILTERS(isPublicCollection, isKioskUser, isKeyUser).filter(
 				({ isDisabled }) => !isDisabled?.()
 			),
-		[isKeyUser, isPublicCollection]
+		[isPublicCollection, isKioskUser, isKeyUser]
 	);
 
 	/**
