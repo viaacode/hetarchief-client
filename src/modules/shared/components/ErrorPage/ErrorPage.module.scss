@@ -75,9 +75,15 @@ $component: "c-error-page";
 		}
 	}
 
-	&__button {
+	&__button-component {
 		@include respond-at("md") {
 			grid-row: 3;
+		}
+	}
+
+	&__button {
+		@include respond-at("md") {
+			grid-row: 4;
 		}
 	}
 }

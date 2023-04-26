@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +17,7 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import { ROUTES } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
@@ -51,6 +53,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	previousPage,
 }) => {
 	const { tText } = useTranslation();
+	const router = useRouter();
 	const dispatch = useDispatch();
 
 	const [, setQuery] = useQueryParams({
@@ -101,7 +104,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				return;
 			}
 
-			await createVisitRequest({
+			const createdVisitRequest = await createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
 				visitorSpaceSlug: maintainerSlug as string,
@@ -109,6 +112,9 @@ const MediaCard: FC<MediaCardProps> = ({
 			});
 
 			setIsRequestAccessBladeOpen(false);
+			await router.push(
+				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+			);
 		} catch (err) {
 			console.error({
 				message: 'Failed to create visit request',
