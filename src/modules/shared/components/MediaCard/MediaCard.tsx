@@ -31,7 +31,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	duration,
 	keywords,
 	preview,
-	publishedAt,
+	publishedOrCreatedDate,
 	publishedBy,
 	title,
 	type,
@@ -181,8 +181,8 @@ const MediaCard: FC<MediaCardProps> = ({
 			subtitle += publishedBy;
 		}
 
-		if (publishedAt) {
-			const formatted = formatMediumDate(publishedAt);
+		if (publishedOrCreatedDate) {
+			const formatted = formatMediumDate(publishedOrCreatedDate);
 
 			subtitle += ` (${formatted})`;
 		}
