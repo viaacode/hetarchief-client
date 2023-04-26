@@ -106,8 +106,10 @@ export const VISITOR_SPACE_TABS = (): TabProps[] => [
 
 export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
+// TODO rename this to SEARCH_FILTERS since these are not specific to a visitor space anymore in fase2
 export const VISITOR_SPACE_FILTERS = (
 	isPublicCollection: boolean,
+	isKioskUser: boolean,
 	isKeyUser: boolean
 ): FilterMenuFilterOption[] => [
 	{
@@ -181,7 +183,7 @@ export const VISITOR_SPACE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		type: FilterMenuType.Modal,
-		isDisabled: () => !isPublicCollection,
+		isDisabled: () => !isPublicCollection || isKioskUser,
 	},
 	{
 		id: VisitorSpaceFilterId.Advanced,

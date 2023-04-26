@@ -236,12 +236,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	// ook interessant
-	const { data: similarData } = useGetIeObjectsSimilar(router.query.ie as string, !!mediaInfo);
+	const { data: similarData } = useGetIeObjectsSimilar(
+		router.query.ie as string,
+		isKiosk ? mediaInfo?.maintainerId ?? '' : '',
+		!!mediaInfo
+	);
 
 	// gerelateerd
 	const { data: relatedData } = useGetIeObjectsRelated(
 		router.query.ie as string,
-		mediaInfo?.maintainerId ?? '',
+		isKiosk ? mediaInfo?.maintainerId ?? '' : '',
 		mediaInfo?.meemooIdentifier ?? '',
 		!!mediaInfo
 	);
