@@ -14,11 +14,20 @@ const ErrorSpaceNoLongerActive: FC<ErrorSpaceNoLongerActiveProps> = () => {
 
 	return (
 		<ErrorPage
-			title={tHtml('Deze aanbieder heeft geen bezoekersruimte meer')}
-			description={tHtml('Surf naar hetarchief.be en ontdek alle beschikbare aanbieders')}
+			title={tHtml(
+				'modules/shared/components/error-space-no-longer-active/error-space-no-longer-active___deze-aanbieder-heeft-geen-bezoekersruimte-meer'
+			)}
+			description={tHtml(
+				'modules/shared/components/error-space-no-longer-active/error-space-no-longer-active___surf-naar-hetarchief-be-en-ontdek-alle-beschikbare-aanbieders'
+			)}
 			link={{
 				component: (
-					<Button label={tHtml('Zoek in de publieke catalogus')} variants="black" />
+					<Button
+						label={tHtml(
+							'modules/shared/components/error-space-no-longer-active/error-space-no-longer-active___zoek-in-de-publieke-catalogus'
+						)}
+						variants="black"
+					/>
 				),
 				to: `/${ROUTE_PARTS.search}`,
 			}}
