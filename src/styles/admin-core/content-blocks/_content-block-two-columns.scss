@@ -1,0 +1,22 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-content-block__rich-text-two-columns";
+
+.#{$component} {
+	grid-template-columns: unset !important;
+
+	.o-grid {
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
+		grid-gap: $spacer-1xl;
+
+		.o-grid-col-bp2-6 {
+			width: 100% !important;
+		}
+	}
+
+	.u-spacer-top {
+		margin-top: $spacer-lg !important;
+	}
+}
