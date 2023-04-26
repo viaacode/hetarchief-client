@@ -308,12 +308,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					isOpen={isEditMaterialRequestBladeOpen}
 					onClose={() => closeEditMaterialRequestBlade()}
 					objectName={selectedMaterialRequest.objectSchemaName}
-					objectId={selectedMaterialRequest.objectMeemooIdentifier}
+					objectId={selectedMaterialRequest.objectSchemaIdentifier}
 					objectType={selectedMaterialRequest.objectType}
 					maintainerName={selectedMaterialRequest.maintainerName}
 					maintainerLogo={selectedMaterialRequest.maintainerLogo}
 					maintainerSlug={selectedMaterialRequest.maintainerSlug}
 					materialRequestId={selectedMaterialRequest.id}
+					meemooId={selectedMaterialRequest.objectMeemooIdentifier}
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
 					refetch={refetch}
