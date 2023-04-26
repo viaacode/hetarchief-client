@@ -592,7 +592,9 @@ const VisitorSpaceSearchPage: FC = () => {
 				duration: item.duration,
 				description: item.description,
 				title: item.name,
-				publishedAt: item.datePublished ? asDate(item.datePublished) : undefined,
+				publishedOrCreatedDate: asDate(
+					item.datePublished ?? item.dateCreatedLowerBound ?? null
+				),
 				publishedBy: item.maintainerName || '',
 				type,
 				preview: item.thumbnailUrl || undefined,
