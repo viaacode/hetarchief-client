@@ -43,6 +43,7 @@ import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCe
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSize } from '@shared/hooks/use-window-size';
@@ -75,6 +76,7 @@ const AppLayout: FC = ({ children }) => {
 	const router = useRouter();
 	const { asPath } = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
 	const showFooter = useSelector(selectShowFooter);
@@ -88,10 +90,7 @@ const AppLayout: FC = ({ children }) => {
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
 		canViewAllSpaces,
 	});
-	const { data: materialRequests } = useGetPendingMaterialRequests(
-		{},
-		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
-	);
+	const { data: materialRequests } = useGetPendingMaterialRequests({}, { enabled: isKioskUser });
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -104,7 +103,7 @@ const AppLayout: FC = ({ children }) => {
 	});
 	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
 		{},
-		{ keepPreviousData: true, enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+		{ keepPreviousData: true, enabled: isKioskUser }
 	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 
