@@ -31,7 +31,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	duration,
 	keywords,
 	preview,
-	publishedAt,
+	publishedOrCreatedDate,
 	publishedBy,
 	title,
 	type,
@@ -41,7 +41,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	buttons,
 	hasRelated,
 	icon,
-	isKeyUser,
+	showKeyUserLabel,
 	meemooIdentifier,
 	showLocallyAvailable = false,
 	link,
@@ -181,8 +181,8 @@ const MediaCard: FC<MediaCardProps> = ({
 			subtitle += publishedBy;
 		}
 
-		if (publishedAt) {
-			const formatted = formatMediumDate(publishedAt);
+		if (publishedOrCreatedDate) {
+			const formatted = formatMediumDate(publishedOrCreatedDate);
 
 			subtitle += ` (${formatted})`;
 		}
@@ -336,7 +336,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			<Card
 				className={clsx(
 					styles['c-media-card'],
-					isKeyUser && styles['c-media-card--key-user'],
+					showKeyUserLabel && styles['c-media-card--key-user'],
 					!showLocallyAvailable && styles['c-media-card--pointer']
 				)}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
@@ -356,13 +356,13 @@ const MediaCard: FC<MediaCardProps> = ({
 							</div>
 						)}
 						{hasTempAccess && renderTempAccessPill()}
-						{isKeyUser && renderKeyUserPill()}
+						{showKeyUserLabel && renderKeyUserPill()}
 						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>
 				) : (
 					<>
 						{wrapInLink(renderDescription())}
-						{isKeyUser && renderKeyUserPill()}
+						{showKeyUserLabel && renderKeyUserPill()}
 						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>
 				)}

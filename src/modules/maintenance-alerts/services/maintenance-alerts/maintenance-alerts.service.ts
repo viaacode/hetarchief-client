@@ -28,4 +28,15 @@ export class MaintenanceAlertsService {
 			.json();
 		return parsed as IPagination<Alert>;
 	}
+
+	public static async dismissMaintenanceAlert(maintenanceAlertId: string): Promise<void> {
+		await ApiService.getApi().post(
+			stringifyUrl({
+				url: 'notifications/create-from-maintenance-alert',
+				query: {
+					id: maintenanceAlertId,
+				},
+			})
+		);
+	}
 }

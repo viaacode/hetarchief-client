@@ -16,14 +16,14 @@ export interface MediaCardProps {
 	name?: string;
 	id?: string;
 	preview?: string;
-	publishedAt?: Date;
+	publishedOrCreatedDate?: Date;
 	publishedBy?: string;
 	title?: string | ReactNode;
 	type: IeObjectTypes;
 	view?: MediaCardViewMode;
 	hasRelated?: boolean;
 	icon?: IconName;
-	isKeyUser?: boolean;
+	showKeyUserLabel?: boolean;
 	meemooIdentifier?: string;
 	showLocallyAvailable?: boolean;
 	link?: string;
