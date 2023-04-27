@@ -1,3 +1,6 @@
+// TODO move these files to a search page module
+// metadata => advanced filters
+// visitor space search page => search page
 import { OrderDirection, TabProps } from '@meemoo/react-components';
 import { QueryParamConfig } from 'serialize-query-params/lib/types';
 import { ArrayParam, BooleanParam, NumberParam, StringParam, withDefault } from 'use-query-params';
