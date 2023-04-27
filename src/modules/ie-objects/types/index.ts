@@ -1,5 +1,7 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
+import { ElasticsearchFieldNames } from '@visitor-space/types';
+
 // Mapped intellectual entity object
 export interface IeObject {
 	schemaIdentifier: string; // Unique id per object
@@ -149,12 +151,13 @@ export interface IeObjectSimilarShards {
 }
 
 export interface IeObjectSearchAggregations {
-	dcterms_format: IeObjectSearchAggregation<string>;
-	dcterms_medium: IeObjectSearchAggregation<string>;
-	schema_genre: IeObjectSearchAggregation<string>;
-	schema_creator: IeObjectSearchAggregation<string>;
-	schema_in_language: IeObjectSearchAggregation<string>;
-	'schema_maintainer.schema_identifier': IeObjectSearchAggregation<string>;
+	[ElasticsearchFieldNames.Format]: IeObjectSearchAggregation<string>;
+	[ElasticsearchFieldNames.Medium]: IeObjectSearchAggregation<string>;
+	[ElasticsearchFieldNames.ObjectType]: IeObjectSearchAggregation<string>;
+	[ElasticsearchFieldNames.Genre]: IeObjectSearchAggregation<string>;
+	[ElasticsearchFieldNames.Creator]: IeObjectSearchAggregation<string>;
+	[ElasticsearchFieldNames.Language]: IeObjectSearchAggregation<string>;
+	[ElasticsearchFieldNames.Maintainer]: IeObjectSearchAggregation<string>;
 }
 
 // UI

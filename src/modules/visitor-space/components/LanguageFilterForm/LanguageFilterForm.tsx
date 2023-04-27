@@ -17,7 +17,7 @@ import {
 	LanguageFilterFormState,
 } from '@visitor-space/components';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 
 const defaultValues = {
 	languages: [],
@@ -38,7 +38,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	});
 
 	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.schema_in_language?.buckets || []
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Language]?.buckets || []
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Effects

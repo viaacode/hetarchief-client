@@ -65,7 +65,8 @@ export class IeObjectsService {
 						IeObjectsSearchFilterField.FORMAT,
 						IeObjectsSearchFilterField.GENRE,
 						IeObjectsSearchFilterField.MEDIUM,
-						IeObjectsSearchFilterField.CREATOR,
+						IeObjectsSearchFilterField.OBJECT_TYPE,
+						IeObjectsSearchFilterField.CREATOR, // TODO remove once pr is merged: https://github.com/viaacode/hetarchief-client/pull/814
 						IeObjectsSearchFilterField.LANGUAGE,
 						IeObjectsSearchFilterField.MAINTAINER_ID,
 					],

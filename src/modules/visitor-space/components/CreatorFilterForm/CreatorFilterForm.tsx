@@ -14,7 +14,7 @@ import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { IeObjectsSearchFilter, IeObjectsSearchFilterField } from '@shared/types';
 import { isEven } from '@shared/utils';
 import { VISITOR_SPACE_QUERY_PARAM_CONFIG, visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 import {
 	mapFiltersToElastic,
 	mapRefineFilterToElastic,
@@ -64,7 +64,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 
 	const buckets = useMemo(() => {
 		// TODO: add sort
-		const initial = initialAggregates?.schema_creator?.buckets;
+		const initial = initialAggregates?.[ElasticsearchFieldNames.Creator]?.buckets;
 		const result = aggregates || initial || [];
 
 		return result;

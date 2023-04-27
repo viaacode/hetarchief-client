@@ -24,6 +24,7 @@ export enum VisitorSpaceSort {
 }
 
 export enum VisitorSpaceFilterId {
+	Format = 'format',
 	Advanced = 'advanced',
 	Created = 'created',
 	Creator = 'creator',
@@ -37,6 +38,21 @@ export enum VisitorSpaceFilterId {
 	Maintainers = 'aanbieders',
 	ConsultableOnlyOnLocation = 'onLocation',
 	ConsultableMedia = 'media',
+	ObjectType = 'objectType',
+	Cast = 'cast',
+	SpacialCoverage = 'spacialCoverage',
+	TemporalCoverage = 'temporalCoverage',
+	Identifier = 'identifier',
+}
+
+export enum ElasticsearchFieldNames {
+	Medium = 'dcterms_medium',
+	Genre = 'schema_genre',
+	Creator = 'schema_creator', // TODO remove this once we merge the PR for creator filter as tag input: https://github.com/viaacode/hetarchief-client/pull/814
+	Language = 'schema_in_language',
+	Format = 'dcterms_format',
+	ObjectType = 'ebucore_object_type',
+	Maintainer = 'schema_maintainer.schema_identifier',
 }
 
 export enum VisitorSpaceOrderProps {

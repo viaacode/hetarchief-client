@@ -11,11 +11,14 @@ import { useQueryParams } from 'use-query-params';
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
-import { IeObjectsSearchFilterField } from '@shared/types';
 import { MaintainerFilterFormProps, MaintainerFilterFormState } from '@visitor-space/components';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { MaintainerInfo, useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
-import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import {
+	ElasticsearchFieldNames,
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+} from '@visitor-space/types';
 
 import {
 	MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -23,7 +26,7 @@ import {
 } from './MaintainerFilterForm.const';
 
 const defaultValues = {
-	[IeObjectsSearchFilterField.MAINTAINER_IDS]: [],
+	maintainers: [],
 };
 
 const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, className }) => {
@@ -31,7 +34,6 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 
 	const [query] = useQueryParams(MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [shouldReset, setShouldReset] = useState<boolean>(false);
 	const [selectedMaintainerIds, setSelectedMaintainerIds] = useState<string[]>(() =>
 		compact(
 			(query[VisitorSpaceFilterId.Maintainers] || []).map(
@@ -47,8 +49,8 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	});
 
 	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.['schema_maintainer.schema_identifier']
-			?.buckets || []
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Maintainer]?.buckets ||
+		[]
 	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	const { data: maintainers } = useGetContentPartners({ orIds: buckets.map((b) => b.key) });
@@ -72,10 +74,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	);
 
 	useEffect(() => {
-		setValue(
-			IeObjectsSearchFilterField.MAINTAINER_IDS,
-			selectedMaintainerIds.map(idToIdAndNameConcatinated)
-		);
+		setValue('maintainers', selectedMaintainerIds.map(idToIdAndNameConcatinated));
 	}, [selectedMaintainerIds, setValue, idToIdAndNameConcatinated]);
 
 	const onItemClick = (checked: boolean, value: unknown): void => {
@@ -114,16 +113,12 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 
 			{children({
 				values: {
-					[IeObjectsSearchFilterField.MAINTAINER_IDS]:
-						selectedMaintainerIds.map(idToIdAndNameConcatinated),
+					maintainers: selectedMaintainerIds.map(idToIdAndNameConcatinated),
 				},
 				reset: () => {
 					reset();
-					setSelectedMaintainerIds(
-						defaultValues[IeObjectsSearchFilterField.MAINTAINER_IDS]
-					);
+					setSelectedMaintainerIds(defaultValues.maintainers);
 					setSearch('');
-					setShouldReset(true);
 				},
 				handleSubmit,
 			})}

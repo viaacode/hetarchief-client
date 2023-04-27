@@ -25,7 +25,7 @@ import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 
 /**
  * Render media
@@ -40,12 +40,13 @@ export const FLOWPLAYER_FORMATS: string[] = [
 export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
 
 export const AGGREGATE_BY_FIELD: Partial<{
-	[key in VisitorSpaceFilterId]: keyof IeObjectSearchAggregations;
+	[key in VisitorSpaceFilterId]: ElasticsearchFieldNames;
 }> = {
-	[VisitorSpaceFilterId.Medium]: 'dcterms_medium',
-	[VisitorSpaceFilterId.Genre]: 'schema_genre',
-	[VisitorSpaceFilterId.Creator]: 'schema_creator',
-	[VisitorSpaceFilterId.Language]: 'schema_in_language',
+	[VisitorSpaceFilterId.Medium]: ElasticsearchFieldNames.Medium,
+	[VisitorSpaceFilterId.Genre]: ElasticsearchFieldNames.Genre,
+	[VisitorSpaceFilterId.Creator]: ElasticsearchFieldNames.Creator, // TODO remove once PR is merged: https://github.com/viaacode/hetarchief-client/pull/814
+	[VisitorSpaceFilterId.Language]: ElasticsearchFieldNames.Language,
+	[VisitorSpaceFilterId.ObjectType]: ElasticsearchFieldNames.ObjectType,
 };
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
