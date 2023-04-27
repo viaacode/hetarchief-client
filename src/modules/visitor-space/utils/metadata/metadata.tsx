@@ -87,6 +87,9 @@ export const getLabel = (prop: MetadataProp): string => {
 			[MetadataProp.ObjectType]: tText(
 				'modules/visitor-space/utils/metadata/metadata___object-type'
 			),
+			[MetadataProp.Keywords]: tText(
+				'modules/visitor-space/utils/metadata/metadata___trefwoord'
+			),
 		}[prop] || ''
 	);
 };

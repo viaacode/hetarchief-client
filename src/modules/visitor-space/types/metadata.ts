@@ -17,6 +17,7 @@ export enum MetadataProp {
 	TemporalCoverage = 'tc',
 	Identifier = 'id',
 	ObjectType = 'ot',
+	Keywords = 'kw',
 }
 
 export const FILTER_LABEL_VALUE_DELIMITER = '---';

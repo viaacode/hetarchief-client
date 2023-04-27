@@ -628,6 +628,49 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 		},
+
+		[MetadataProp.Keywords]: {
+			[Operator.Contains]: {
+				label: dictionary.contains,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.KEYWORD,
+						operator: IeObjectsSearchOperator.CONTAINS,
+					},
+				],
+			},
+			[Operator.ContainsNot]: {
+				label: dictionary.excludes,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.KEYWORD,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: dictionary.equals,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.KEYWORD,
+						operator: IeObjectsSearchOperator.IS,
+					},
+				],
+			},
+			[Operator.EqualsNot]: {
+				label: dictionary.differs,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.KEYWORD,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
 	};
 };
 
