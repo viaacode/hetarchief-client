@@ -846,6 +846,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
+				showManyResultsTile={searchResults && searchResults?.total > 1000}
 			/>
 			<PaginationBar
 				className="u-mb-48"

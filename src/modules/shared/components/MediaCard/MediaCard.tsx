@@ -244,7 +244,11 @@ const MediaCard: FC<MediaCardProps> = ({
 				return renderImage(preview);
 			case 'film':
 				return renderImage(preview);
-
+			case null:
+				if (id === 'manyResultsTileId') {
+					return renderImage(preview);
+				}
+				return renderNoContent();
 			default:
 				return renderNoContent();
 		}

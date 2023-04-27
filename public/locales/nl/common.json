@@ -381,6 +381,7 @@
   "modules/shared/components/media-card/media-card___sluit": "Sluit",
   "modules/shared/components/media-card/media-card___tijdelijke-toegang": "Tijdelijke toegang",
   "modules/shared/components/media-card/media-card___waarom-kan-ik-dit-object-niet-bekijken": "Waarom kan ik dit object niet bekijken?",
+  "modules/shared/components/media-card-list/media-card-list___teveel-resultaten": "Er zijn te veel resultaten bij deze zoekopdracht. Verfijn je vraag via de zoekbalk of de filters.",
   "modules/shared/components/modal/modal___sluiten": "Sluiten",
   "modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-gemarkeerd-als-gelezen": "Alle meldingen zijn gemarkeerd als gelezen.",
   "modules/shared/components/notification-center/notification-center___alle-notificaties-zijn-reeds-gelezen": "Alle meldingen zijn al gelezen.",
