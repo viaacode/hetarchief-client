@@ -155,7 +155,6 @@ export interface IeObjectSearchAggregations {
 	[ElasticsearchFieldNames.Medium]: IeObjectSearchAggregation<string>;
 	[ElasticsearchFieldNames.ObjectType]: IeObjectSearchAggregation<string>;
 	[ElasticsearchFieldNames.Genre]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Creator]: IeObjectSearchAggregation<string>;
 	[ElasticsearchFieldNames.Language]: IeObjectSearchAggregation<string>;
 	[ElasticsearchFieldNames.Maintainer]: IeObjectSearchAggregation<string>;
 }

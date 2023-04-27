@@ -48,7 +48,6 @@ export enum VisitorSpaceFilterId {
 export enum ElasticsearchFieldNames {
 	Medium = 'dcterms_medium',
 	Genre = 'schema_genre',
-	Creator = 'schema_creator', // TODO remove this once we merge the PR for creator filter as tag input: https://github.com/viaacode/hetarchief-client/pull/814
 	Language = 'schema_in_language',
 	Format = 'dcterms_format',
 	ObjectType = 'ebucore_object_type',

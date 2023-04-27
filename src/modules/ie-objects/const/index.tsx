@@ -10,7 +10,6 @@ import {
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import {
 	IeObject,
-	IeObjectSearchAggregations,
 	MediaActions,
 	MetadataExportFormats,
 	MetadataSortMap,
@@ -44,7 +43,6 @@ export const AGGREGATE_BY_FIELD: Partial<{
 }> = {
 	[VisitorSpaceFilterId.Medium]: ElasticsearchFieldNames.Medium,
 	[VisitorSpaceFilterId.Genre]: ElasticsearchFieldNames.Genre,
-	[VisitorSpaceFilterId.Creator]: ElasticsearchFieldNames.Creator, // TODO remove once PR is merged: https://github.com/viaacode/hetarchief-client/pull/814
 	[VisitorSpaceFilterId.Language]: ElasticsearchFieldNames.Language,
 	[VisitorSpaceFilterId.ObjectType]: ElasticsearchFieldNames.ObjectType,
 };
