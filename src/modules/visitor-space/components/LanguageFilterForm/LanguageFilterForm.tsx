@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { compact, noop, without } from 'lodash-es';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
@@ -16,8 +16,13 @@ import {
 	LanguageFilterFormProps,
 	LanguageFilterFormState,
 } from '@visitor-space/components';
+import { LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
+import {
+	ElasticsearchFieldNames,
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+} from '@visitor-space/types';
 
 const defaultValues = {
 	languages: [],
@@ -30,28 +35,51 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 
 	const [query] = useQueryParams(LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [selection, setSelection] = useState<string[]>(() => compact(query.language || []));
+	const [selectedLanguageCodes, setSelectedLanguageCodes] = useState<string[]>(() =>
+		compact(
+			(query[VisitorSpaceFilterId.Language] || []).map(
+				(languageCodeAndName) =>
+					languageCodeAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
+			)
+		)
+	);
 
 	const { setValue, reset, handleSubmit } = useForm<LanguageFilterFormState>({
 		resolver: yupResolver(LANGUAGE_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
 
-	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Language]?.buckets || []
-	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
+	const buckets =
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Language]?.buckets ||
+		[];
+
+	const filteredBuckets = buckets
+		.map((bucket) => {
+			return {
+				...bucket,
+				name: LANGUAGES.nl[bucket.key] || bucket.key,
+			};
+		})
+		.filter((bucket) => bucket.name.toLowerCase().includes(search.toLowerCase()));
+
+	const idToIdAndNameConcatinated = useCallback((id: string) => {
+		return `${id}${FILTER_LABEL_VALUE_DELIMITER}${LANGUAGES.nl?.[id] || ''}`;
+	}, []);
 
 	// Effects
 
 	useEffect(() => {
-		setValue('languages', selection);
-	}, [selection, setValue]);
+		const newValue = selectedLanguageCodes.map(idToIdAndNameConcatinated);
+		setValue('languages', newValue);
+	}, [selectedLanguageCodes, setValue, idToIdAndNameConcatinated]);
 
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
-		const selected = add ? [...selection, value] : without(selection, value);
-		setSelection(selected);
+		const selected = add
+			? [...selectedLanguageCodes, value]
+			: without(selectedLanguageCodes, value);
+		setSelectedLanguageCodes(selected);
 	};
 
 	return (
@@ -78,11 +106,11 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					)}
 
 					<CheckboxList
-						items={buckets.map((bucket) => ({
+						items={filteredBuckets.map((bucket) => ({
 							...bucket,
 							value: bucket.key,
-							label: bucket.key,
-							checked: selection.includes(bucket.key),
+							label: bucket.name,
+							checked: selectedLanguageCodes.includes(bucket.key),
 						}))}
 						onItemClick={(checked, value) => {
 							onItemClick(!checked, value as string);
@@ -92,10 +120,10 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 			</div>
 
 			{children({
-				values: { languages: selection },
+				values: { languages: selectedLanguageCodes.map(idToIdAndNameConcatinated) },
 				reset: () => {
 					reset();
-					setSelection(defaultValues.languages);
+					setSelectedLanguageCodes(defaultValues.languages);
 					setSearch('');
 				},
 				handleSubmit,

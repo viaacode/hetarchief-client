@@ -13,7 +13,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { MaintainerFilterFormProps, MaintainerFilterFormState } from '@visitor-space/components';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { MaintainerInfo, useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
+import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 import {
 	ElasticsearchFieldNames,
 	FILTER_LABEL_VALUE_DELIMITER,
@@ -48,29 +48,40 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		defaultValues,
 	});
 
-	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Maintainer]?.buckets ||
-		[]
-	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
-
-	const { data: maintainers } = useGetContentPartners({ orIds: buckets.map((b) => b.key) });
+	// Get all maintainer names
+	const { data: maintainers } = useGetContentPartners({});
 	const maintainerNames = mapValues(
 		keyBy(maintainers || [], (m) => m.id),
 		(v) => v.name
 	);
 
-	const checkboxOptions = buckets.map((bucket) => ({
-		...bucket,
-		value: bucket.key,
-		label:
-			maintainers?.find((maintainer: MaintainerInfo) => maintainer.id === bucket.key)?.name ||
-			bucket.key,
-		checked: selectedMaintainerIds.includes(bucket.key),
-	}));
+	const buckets =
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Maintainer]?.buckets ||
+		[];
+
+	const filteredBuckets = buckets
+		.map((bucket) => ({
+			...bucket,
+			name: maintainerNames?.[bucket.key] || bucket.key,
+		}))
+		.filter((bucket) => bucket.name.toLowerCase().includes(search.toLowerCase()));
+
+	const checkboxOptions = filteredBuckets.map((bucket) => {
+		return {
+			value: bucket.key,
+			label: bucket.name || bucket.key,
+			checked: selectedMaintainerIds.includes(bucket.key),
+		};
+	});
 
 	const idToIdAndNameConcatinated = useCallback(
-		(id: string) => `${id}${FILTER_LABEL_VALUE_DELIMITER}${maintainerNames[id] || ''}`,
-		[maintainerNames]
+		(id: string) => {
+			if (!maintainers) {
+				return '';
+			}
+			return `${id}${FILTER_LABEL_VALUE_DELIMITER}${maintainerNames?.[id] || ''}`;
+		},
+		[maintainers, maintainerNames]
 	);
 
 	useEffect(() => {
@@ -99,7 +110,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 				/>
 
 				<div className="u-my-32">
-					{buckets.length === 0 && (
+					{filteredBuckets.length === 0 && (
 						<p className="u-color-neutral u-text-center">
 							{tHtml(
 								'modules/visitor-space/components/maintainers-filter-form/maintainers-filter-form___geen-aanbieders-gevonden'
@@ -107,7 +118,9 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 						</p>
 					)}
 
-					<CheckboxList items={checkboxOptions} onItemClick={onItemClick} />
+					{maintainers && (
+						<CheckboxList items={checkboxOptions} onItemClick={onItemClick} />
+					)}
 				</div>
 			</div>
 
