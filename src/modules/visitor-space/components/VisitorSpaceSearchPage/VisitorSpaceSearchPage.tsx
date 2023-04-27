@@ -44,6 +44,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
+import { RESULTS_MAX } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -846,7 +847,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
-				showManyResultsTile={searchResults && searchResults?.total > 1000}
+				showManyResultsTile={searchResults && searchResults?.total > RESULTS_MAX}
 			/>
 			<PaginationBar
 				className="u-mb-48"

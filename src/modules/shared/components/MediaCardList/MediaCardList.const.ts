@@ -6,3 +6,5 @@ export const MEDIA_CARD_LIST_GRID_BP_COLS = {
 	[Breakpoints.md]: 2,
 	[Breakpoints.sm]: 1,
 };
+
+export const RESULTS_MAX = 1000;
