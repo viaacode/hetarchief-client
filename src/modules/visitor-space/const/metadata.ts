@@ -97,29 +97,6 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 			},
 		},
 
-		[MetadataProp.Everything]: {
-			[Operator.Contains]: {
-				label: dictionary.contains,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.ADVANCED_QUERY,
-						operator: IeObjectsSearchOperator.CONTAINS,
-					},
-				],
-			},
-			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.ADVANCED_QUERY,
-						operator: IeObjectsSearchOperator.CONTAINS_NOT,
-					},
-				],
-			},
-		},
-
 		[MetadataProp.Genre]: {
 			[Operator.Equals]: {
 				label: dictionary.equals,
