@@ -11,7 +11,7 @@ import { Breakpoints } from '@shared/types';
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
 
-import { MEDIA_CARD_LIST_GRID_BP_COLS, RESULTS_MAX } from './MediaCardList.const';
+import { MANY_RESULTS_TILE_POSITION, MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 import { MediaCardListProps } from './MediaCardList.types';
 
@@ -131,7 +131,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	const insertManyResultsTile = (tiles: ReactNode[]): ReactNode[] => {
 		if (showManyResultsTile) {
 			return [
-				...tiles.slice(0, RESULTS_MAX - 1),
+				...tiles.slice(0, MANY_RESULTS_TILE_POSITION),
 				<MediaCard
 					key="manyResultsTile"
 					id="manyResultsTileId"
@@ -142,7 +142,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 					)}
 					view={view}
 				/>,
-				...tiles.slice(RESULTS_MAX - 1),
+				...tiles.slice(MANY_RESULTS_TILE_POSITION),
 			];
 		}
 		return tiles;

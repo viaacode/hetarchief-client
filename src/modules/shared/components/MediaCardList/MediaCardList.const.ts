@@ -7,4 +7,7 @@ export const MEDIA_CARD_LIST_GRID_BP_COLS = {
 	[Breakpoints.sm]: 1,
 };
 
-export const RESULTS_MAX = 1000;
+export const RESULTS_MAX = 10000;
+export const ITEMS_PER_PAGE = 39;
+export const MANY_RESULTS_TILE_POSITION = RESULTS_MAX % ITEMS_PER_PAGE;
+export const PAGE_NUMBER_OF_MANY_RESULTS_TILE = Math.ceil(RESULTS_MAX / ITEMS_PER_PAGE);

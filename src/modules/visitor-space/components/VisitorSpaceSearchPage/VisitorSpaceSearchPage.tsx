@@ -44,7 +44,10 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { RESULTS_MAX } from '@shared/components/MediaCardList/MediaCardList.const';
+import {
+	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
+	RESULTS_MAX,
+} from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -205,6 +208,11 @@ const VisitorSpaceSearchPage: FC = () => {
 		activeSort,
 		true
 	);
+
+	// Calculate when to show the manyResultsTile
+	const resultsHasMorethanMaxItems = searchResults && searchResults?.total > RESULTS_MAX;
+	const showManyResultsTile =
+		resultsHasMorethanMaxItems && query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
 
 	/**
 	 * Effects
@@ -847,7 +855,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
-				showManyResultsTile={searchResults && searchResults?.total > RESULTS_MAX}
+				showManyResultsTile={showManyResultsTile}
 			/>
 			<PaginationBar
 				className="u-mb-48"
