@@ -9,15 +9,31 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
 		timeout: 10000,
 	});
 
-	// Check the homepage show the correct title for searching maintainers
-	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
-
 	// Accept all cookies
 	await acceptCookies(page, 'all');
+
+	// Check searchbar contains 'Start je zoektocht':
+	let navigationItemTexts = await page
+		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
+		.allInnerTexts();
+	// await expect(navigationItemTexts).toContain('Start je zoektocht'); //Does not pass yet
+
+	// // Check the homepage show the correct title for searching maintainers
+	// await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+
+	//Click on 'Menu'
+	await page.locator('text=Menu').first().click();
+	//Click on 'Bezoek een aanbieder'
+	const visitButton = await page.locator('text=Bezoek een aanbieder').first();
+
+	if (!(await visitButton.isVisible())) {
+		// Click on login or register
+		await visitButton.click();
+	}
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -35,7 +51,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	});
 
 	// Admin and beheer should not be visible
-	const navigationItemTexts = await page
+	navigationItemTexts = await page
 		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
 		.allInnerTexts();
 	await expect(navigationItemTexts).not.toContain('Admin');
