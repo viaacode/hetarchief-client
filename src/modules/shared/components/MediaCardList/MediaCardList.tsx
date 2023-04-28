@@ -11,7 +11,7 @@ import { Breakpoints } from '@shared/types';
 import { MediaCard } from '../MediaCard';
 import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
 
-import { MANY_RESULTS_TILE_POSITION, MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
+import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
 import { MediaCardListProps } from './MediaCardList.types';
 
@@ -130,8 +130,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 
 	const insertManyResultsTile = (tiles: ReactNode[]): ReactNode[] => {
 		if (showManyResultsTile) {
-			return [
-				...tiles.slice(0, MANY_RESULTS_TILE_POSITION),
+			tiles.push(
 				<MediaCard
 					key="manyResultsTile"
 					id="manyResultsTileId"
@@ -141,9 +140,8 @@ const MediaCardList: FC<MediaCardListProps> = ({
 						'modules/shared/components/media-card-list/media-card-list___teveel-resultaten'
 					)}
 					view={view}
-				/>,
-				...tiles.slice(MANY_RESULTS_TILE_POSITION),
-			];
+				/>
+			);
 		}
 		return tiles;
 	};

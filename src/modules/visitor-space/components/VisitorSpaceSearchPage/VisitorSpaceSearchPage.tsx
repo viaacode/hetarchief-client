@@ -44,10 +44,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import {
-	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
-	RESULTS_MAX,
-} from '@shared/components/MediaCardList/MediaCardList.const';
+import { PAGE_NUMBER_OF_MANY_RESULTS_TILE } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
