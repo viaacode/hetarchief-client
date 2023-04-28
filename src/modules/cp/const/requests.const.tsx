@@ -1,4 +1,5 @@
 import { Button, OrderDirection, TabProps } from '@meemoo/react-components';
+import { truncate } from 'lodash-es';
 import React from 'react';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
@@ -70,8 +71,9 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 				icon={undefined}
 				variants="text"
 				text={row.original.visitorMail}
+				title={row.original.visitorMail}
 			>
-				{row.original.visitorMail}
+				{truncate(row.original.visitorMail, { length: 30 })}
 			</CopyButton>
 		),
 	},
