@@ -102,7 +102,12 @@ import {
 	VISITOR_SPACE_TABS,
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '../../const';
-import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
+import {
+	ElasticsearchFieldNames,
+	MetadataProp,
+	TagIdentity,
+	VisitorSpaceFilterId,
+} from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '../../utils/elastic-filters';
 
@@ -176,6 +181,10 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * Data
 	 */
 	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
+		if (!user || [GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS].includes(user.groupName)) {
+			setVisitorSpaces([]);
+			return [];
+		}
 		const { items: spaces } = await VisitsService.getAll({
 			page: 1,
 			size: 10,
@@ -191,7 +200,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		setVisitorSpaces(sortedSpaces);
 
 		return sortedSpaces;
-	}, []);
+	}, [user]);
 
 	const {
 		data: searchResults,
@@ -254,7 +263,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 			return {
 				...result,
-				[id]: query[id],
+				[id]: (query as any)[id],
 			};
 		}, {});
 
@@ -291,7 +300,8 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const getItemCounts = useCallback(
 		(type: VisitorSpaceMediaType): number => {
-			const buckets = searchResults?.aggregations?.dcterms_format?.buckets || [];
+			const buckets =
+				searchResults?.aggregations?.[ElasticsearchFieldNames.Format]?.buckets || [];
 			if (type === VisitorSpaceMediaType.All) {
 				return sum(buckets.map((item) => item.doc_count));
 			} else {
@@ -467,13 +477,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Maintainers:
-				data = (values as MaintainerFilterFormState)[
-					IeObjectsSearchFilterField.MAINTAINER_IDS
-				];
+				data = (values as MaintainerFilterFormState).maintainers;
 				break;
 
 			case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
-				// Info: remove queryparam if false (= set to undefined)
+				// Info: remove query param if false (= set to undefined)
 				data = (values as ConsultableOnlyOnLocationFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
 				]
@@ -484,7 +492,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.ConsultableMedia:
-				// Info: remove queryparam if false (= set to undefined)
+				// Info: remove query param if false (= set to undefined)
 				data = (values as ConsultableMediaFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
 				]
@@ -780,10 +788,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Strip out public collection and own visitor space (cp)
 		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicColelction = visitorSpace.slug == PUBLIC_COLLECTION;
-				const isOwnVisitorSapce = isCPAdmin && visitorSpace.slug === user?.maintainerId;
+				const isPublicCollection = visitorSpace.slug == PUBLIC_COLLECTION;
+				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.maintainerId;
 
-				return !isPublicColelction && !isOwnVisitorSapce;
+				return !isPublicCollection && !isOwnVisitorSpace;
 			}
 		);
 

@@ -11,7 +11,7 @@ import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 
 import {
 	MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -37,7 +37,8 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		defaultValues,
 	});
 
-	const buckets = useSelector(selectIeObjectsFilterOptions)?.dcterms_medium?.buckets || [];
+	const buckets =
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Medium]?.buckets || [];
 	const filteredBuckets = buckets.filter((bucket) =>
 		bucket.key.toLowerCase().includes(search.toLowerCase())
 	);

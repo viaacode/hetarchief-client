@@ -10,7 +10,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam } from 'serialize-query-params/lib/params';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { Permission } from '@account/const';
+import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
@@ -43,6 +43,7 @@ import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCe
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSize } from '@shared/hooks/use-window-size';
@@ -75,6 +76,7 @@ const AppLayout: FC = ({ children }) => {
 	const router = useRouter();
 	const { asPath } = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
 	const showFooter = useSelector(selectShowFooter);
@@ -88,7 +90,7 @@ const AppLayout: FC = ({ children }) => {
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
 		canViewAllSpaces,
 	});
-	const { data: materialRequests } = useGetPendingMaterialRequests({});
+	const { data: materialRequests } = useGetPendingMaterialRequests({}, { enabled: isKioskUser });
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -99,7 +101,10 @@ const AppLayout: FC = ({ children }) => {
 		[SEARCH_QUERY_KEY]: StringParam,
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
-	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts();
+	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
+		{},
+		{ keepPreviousData: true, enabled: isKioskUser }
+	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
@@ -263,11 +268,11 @@ const AppLayout: FC = ({ children }) => {
 		accessibleVisitorSpaces,
 		navigationItems,
 		user?.permissions,
+		user?.visitorSpaceSlug,
 		showLinkedSpaceAsHomepage,
 		linkedSpaceOrId,
 		isMobile,
 		isLoggedIn,
-		user?.maintainerId,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
