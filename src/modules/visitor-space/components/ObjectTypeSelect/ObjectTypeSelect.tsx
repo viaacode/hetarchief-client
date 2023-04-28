@@ -6,10 +6,11 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
 
-const MediumSelect: FC<ReactSelectProps> = (props) => {
+const ObjectTypeSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
-	const aggregates = useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Medium]
-		.buckets;
+	const aggregates = useSelector(selectIeObjectsFilterOptions)?.[
+		ElasticsearchFieldNames.ObjectType
+	].buckets;
 
 	const options = (aggregates || []).map((bucket) => ({
 		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results
@@ -18,15 +19,15 @@ const MediumSelect: FC<ReactSelectProps> = (props) => {
 	}));
 
 	// Bind to defaultProps to access externally
-	MediumSelect.defaultProps = { options };
+	ObjectTypeSelect.defaultProps = { options };
 
 	const getPlaceholder = (): string | undefined => {
 		return options.length === 0
 			? tText(
-					'modules/visitor-space/components/medium-select/medium-select___geen-analoge-dragers-gevonden'
+					'modules/visitor-space/components/object-type-select/object-type-select___geen-object-types-gevonden'
 			  )
 			: tText(
-					'modules/visitor-space/components/medium-select/medium-select___kies-een-analoge-drager'
+					'modules/visitor-space/components/object-type-select/object-type-select___kies-een-object-type'
 			  );
 	};
 
@@ -34,9 +35,9 @@ const MediumSelect: FC<ReactSelectProps> = (props) => {
 		<ReactSelect
 			{...props}
 			placeholder={getPlaceholder()}
-			options={MediumSelect.defaultProps.options}
+			options={ObjectTypeSelect.defaultProps.options}
 		/>
 	);
 };
 
-export default MediumSelect;
+export default ObjectTypeSelect;

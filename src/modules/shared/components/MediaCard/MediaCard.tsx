@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
@@ -20,6 +20,7 @@ import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/M
 import { ROUTES } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -33,7 +34,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	duration,
 	keywords,
 	preview,
-	publishedAt,
+	publishedOrCreatedDate,
 	publishedBy,
 	title,
 	type,
@@ -49,9 +50,11 @@ const MediaCard: FC<MediaCardProps> = ({
 	link,
 	maintainerSlug,
 	hasTempAccess,
+	previousPage,
 }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
+	const dispatch = useDispatch();
 
 	const [, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
@@ -63,11 +66,21 @@ const MediaCard: FC<MediaCardProps> = ({
 	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
+	const saveScrollPosition = () => {
+		if (id && previousPage) {
+			dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
+		}
+	};
+
 	const wrapInLink = (children: ReactNode) => {
 		if (link && !showLocallyAvailable) {
 			return (
 				<Link key={id} href={link}>
-					<a className="u-text-no-decoration" aria-label={id}>
+					<a
+						className="u-text-no-decoration"
+						aria-label={id}
+						onClick={saveScrollPosition}
+					>
 						{children}
 					</a>
 				</Link>
@@ -187,8 +200,8 @@ const MediaCard: FC<MediaCardProps> = ({
 			subtitle += publishedBy;
 		}
 
-		if (publishedAt) {
-			const formatted = formatMediumDate(publishedAt);
+		if (publishedOrCreatedDate) {
+			const formatted = formatMediumDate(publishedOrCreatedDate);
 
 			subtitle += ` (${formatted})`;
 		}
@@ -231,7 +244,11 @@ const MediaCard: FC<MediaCardProps> = ({
 				return renderImage(preview);
 			case 'film':
 				return renderImage(preview);
-
+			case null:
+				if (id === 'manyResultsTileId') {
+					return renderImage(preview);
+				}
+				return renderNoContent();
 			default:
 				return renderNoContent();
 		}

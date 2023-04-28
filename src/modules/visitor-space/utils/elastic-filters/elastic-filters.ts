@@ -1,3 +1,5 @@
+import { compact } from 'lodash-es';
+
 import { SEARCH_QUERY_KEY } from '@shared/const';
 import {
 	IeObjectsSearchFilter,
@@ -47,9 +49,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	{
 		field: IeObjectsSearchFilterField.MEDIUM,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (query[VisitorSpaceFilterId.Medium] || []).filter(
-			(item) => item !== null
-		) as string[],
+		multiValue: compact(query[VisitorSpaceFilterId.Medium] || []) as string[],
 	},
 	// Duration
 	...(query[VisitorSpaceFilterId.Duration] || []).flatMap(mapAdvancedToElastic),
@@ -61,43 +61,35 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 	{
 		field: IeObjectsSearchFilterField.CREATOR,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (query[VisitorSpaceFilterId.Creator] || []).filter(
-			(item) => item !== null
-		) as string[],
+		multiValue: compact(query[VisitorSpaceFilterId.Creator] || []) as string[],
 	},
 	// Genre
 	{
 		field: IeObjectsSearchFilterField.GENRE,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (query[VisitorSpaceFilterId.Genre] || []).filter(
-			(item) => item !== null
-		) as string[],
+		multiValue: compact(query[VisitorSpaceFilterId.Genre] || []) as string[],
 	},
 	// Keywords
 	{
 		field: IeObjectsSearchFilterField.KEYWORD,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (query[VisitorSpaceFilterId.Keywords] || []).filter(
-			(item) => item !== null
-		) as string[],
+		multiValue: compact(query[VisitorSpaceFilterId.Keywords] || []) as string[],
 	},
 	// Language
 	{
 		field: IeObjectsSearchFilterField.LANGUAGE,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (query[VisitorSpaceFilterId.Language] || []).filter(
-			(item) => item !== null
+		multiValue: (compact(query[VisitorSpaceFilterId.Language] || []) as string[]).map(
+			(language) => language?.split(FILTER_LABEL_VALUE_DELIMITER)[0]
 		) as string[],
 	},
 	// Maintainers
 	{
 		field: IeObjectsSearchFilterField.MAINTAINER_ID,
 		operator: IeObjectsSearchOperator.IS,
-		multiValue: (
-			(query[VisitorSpaceFilterId.Maintainers] || []).filter(
-				(item) => item !== null
-			) as string[]
-		).map((maintainerId) => maintainerId.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string),
+		multiValue: (compact(query[VisitorSpaceFilterId.Maintainers] || []) as string[]).map(
+			(maintainerId: string) => maintainerId.split(FILTER_LABEL_VALUE_DELIMITER)[0] as string
+		),
 	},
 	// Consultable Remote
 	{

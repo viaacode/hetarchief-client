@@ -65,7 +65,7 @@ export class IeObjectsService {
 						IeObjectsSearchFilterField.FORMAT,
 						IeObjectsSearchFilterField.GENRE,
 						IeObjectsSearchFilterField.MEDIUM,
-						IeObjectsSearchFilterField.CREATOR,
+						IeObjectsSearchFilterField.OBJECT_TYPE,
 						IeObjectsSearchFilterField.LANGUAGE,
 						IeObjectsSearchFilterField.MAINTAINER_ID,
 					],
@@ -104,9 +104,16 @@ export class IeObjectsService {
 			.text();
 	}
 
-	public static async getSimilar(id: string): Promise<IeObjectSimilar> {
+	public static async getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
-			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_SIMILAR}`)
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_SIMILAR}`,
+					query: {
+						...(!isEmpty(maintainerId) && { maintainerId }),
+					},
+				})
+			)
 			.json();
 	}
 

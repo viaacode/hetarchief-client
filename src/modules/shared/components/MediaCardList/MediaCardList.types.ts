@@ -15,4 +15,5 @@ export interface MediaCardListProps
 	wrapper?: (card: ReactNode, item: MediaCardProps) => ReactNode;
 	showLocallyAvailable?: boolean;
 	tempAccessLabel?: ReactNode;
+	showManyResultsTile?: boolean;
 }

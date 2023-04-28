@@ -1,19 +1,23 @@
 // 2-letter for url parsing
 export enum MetadataProp {
-	CreatedAt = 'aa', // creatiedatum
-	Creator = 'ab', // maker
-	Description = 'ac', // beschrijving
-	Duration = 'ad', // duurtijd
-	Era = 'ae', // tijdsperiode
-	Everything = 'af', // alles
-	Genre = 'ag', // genre
-	Language = 'ah', // taal
-	Location = 'ai', // locatie
-	Mediatype = 'aj', // bestandstype
-	Medium = 'ak', // drager
-	PublishedAt = 'al', // uitzenddatum
-	Publisher = 'am', // publisher
-	Title = 'an', // titel
+	CreatedAt = 'ca',
+	Creator = 'ct',
+	Description = 'de',
+	Duration = 'du',
+	Everything = 'al',
+	Genre = 'ge',
+	Language = 'la',
+	Mediatype = 'ty',
+	Medium = 'me',
+	PublishedAt = 'pa',
+	Publisher = 'pu',
+	Title = 'ti',
+	Cast = 'cs',
+	SpacialCoverage = 'sc',
+	TemporalCoverage = 'tc',
+	Identifier = 'id',
+	ObjectType = 'ot',
+	Keywords = 'kw',
 }
 
 export const FILTER_LABEL_VALUE_DELIMITER = '---';

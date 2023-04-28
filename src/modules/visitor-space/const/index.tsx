@@ -1,4 +1,8 @@
+// TODO move these files to a search page module
+// metadata => advanced filters
+// visitor space search page => search page
 import { OrderDirection, TabProps } from '@meemoo/react-components';
+import { QueryParamConfig } from 'serialize-query-params/lib/types';
 import { ArrayParam, BooleanParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { Icon, IconNamesLight } from '@shared/components';
@@ -36,10 +40,13 @@ export const DEFAULT_VISITOR_SPACE_COLOR = '#00c8aa';
 
 export const VISITOR_SPACE_ITEM_COUNT = 39;
 
-export const VISITOR_SPACE_QUERY_PARAM_INIT = {
+export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
+	VisitorSpaceFilterId | typeof SEARCH_QUERY_KEY,
+	string | undefined
+> & { page: number; orderProp: VisitorSpaceSort; orderDirection: OrderDirection } = {
 	// Filters
-	format: VisitorSpaceMediaType.All,
 	[SEARCH_QUERY_KEY]: undefined,
+	[VisitorSpaceFilterId.Format]: VisitorSpaceMediaType.All,
 	[VisitorSpaceFilterId.Maintainer]: '',
 	[VisitorSpaceFilterId.Maintainers]: undefined,
 	[VisitorSpaceFilterId.Medium]: undefined,
@@ -53,6 +60,12 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 	[VisitorSpaceFilterId.Advanced]: undefined,
 	[VisitorSpaceFilterId.ConsultableOnlyOnLocation]: undefined,
 	[VisitorSpaceFilterId.ConsultableMedia]: undefined,
+	[VisitorSpaceFilterId.Cast]: undefined,
+	[VisitorSpaceFilterId.Identifier]: undefined,
+	[VisitorSpaceFilterId.ObjectType]: undefined,
+	[VisitorSpaceFilterId.SpacialCoverage]: undefined,
+	[VisitorSpaceFilterId.TemporalCoverage]: undefined,
+
 	// Pagination
 	page: 1,
 	// Sorting
@@ -60,9 +73,9 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT = {
 	orderDirection: OrderDirection.desc,
 };
 
-export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
+export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
 	// Filters
-	format: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.format),
+	format: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.format as string),
 	[SEARCH_QUERY_KEY]: ArrayParam,
 	[VisitorSpaceFilterId.Maintainer]: withDefault(StringParam, ''),
 	[VisitorSpaceFilterId.Medium]: ArrayParam,
@@ -78,9 +91,9 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG = {
 	[VisitorSpaceFilterId.ConsultableOnlyOnLocation]: BooleanParam,
 	[VisitorSpaceFilterId.ConsultableMedia]: BooleanParam,
 	// Pagination
-	page: withDefault(NumberParam, VISITOR_SPACE_QUERY_PARAM_INIT.page),
+	page: withDefault(NumberParam, VISITOR_SPACE_QUERY_PARAM_INIT.page as number),
 	// Sorting
-	orderProp: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.orderProp),
+	orderProp: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.orderProp as string),
 	orderDirection: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection),
 	// UI
 	filter: StringParam,
@@ -106,8 +119,10 @@ export const VISITOR_SPACE_TABS = (): TabProps[] => [
 
 export const VISITOR_SPACE_VIEW_TOGGLE_OPTIONS = VIEW_TOGGLE_OPTIONS;
 
+// TODO rename this to SEARCH_FILTERS since these are not specific to a visitor space anymore in fase2
 export const VISITOR_SPACE_FILTERS = (
 	isPublicCollection: boolean,
+	isKioskUser: boolean,
 	isKeyUser: boolean
 ): FilterMenuFilterOption[] => [
 	{
@@ -181,7 +196,7 @@ export const VISITOR_SPACE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		type: FilterMenuType.Modal,
-		isDisabled: () => !isPublicCollection,
+		isDisabled: () => !isPublicCollection || isKioskUser,
 	},
 	{
 		id: VisitorSpaceFilterId.Advanced,

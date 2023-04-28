@@ -70,6 +70,12 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	) => {
 		const orderPropResolved =
 			orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
+		if (!orderProp) {
+			orderProp = 'startAt';
+		}
+		if (!orderDirection) {
+			orderDirection = OrderDirection.desc;
+		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
