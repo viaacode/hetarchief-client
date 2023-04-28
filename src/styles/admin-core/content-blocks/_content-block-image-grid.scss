@@ -1,0 +1,22 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-content-block__image-grid";
+
+.#{$component} {
+	.c-block-grid {
+		column-gap: 4rem;
+		row-gap: 8rem;
+
+		&__item {
+			margin: 0 !important;
+
+			.u-spacer-top-s {
+				margin-top: $font-size-lg !important;
+			}
+
+			h3 {
+				font-size: $font-size-md !important;
+			}
+		}
+	}
+}
