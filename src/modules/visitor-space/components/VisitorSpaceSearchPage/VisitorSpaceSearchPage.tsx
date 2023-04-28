@@ -176,6 +176,10 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * Data
 	 */
 	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
+		if (!user || [GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS].includes(user.groupName)) {
+			setVisitorSpaces([]);
+			return [];
+		}
 		const { items: spaces } = await VisitsService.getAll({
 			page: 1,
 			size: 10,
@@ -191,7 +195,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		setVisitorSpaces(sortedSpaces);
 
 		return sortedSpaces;
-	}, []);
+	}, [user]);
 
 	const {
 		data: searchResults,
@@ -780,10 +784,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Strip out public collection and own visitor space (cp)
 		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicColelction = visitorSpace.slug == PUBLIC_COLLECTION;
-				const isOwnVisitorSapce = isCPAdmin && visitorSpace.slug === user?.maintainerId;
+				const isPublicCollection = visitorSpace.slug == PUBLIC_COLLECTION;
+				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.maintainerId;
 
-				return !isPublicColelction && !isOwnVisitorSapce;
+				return !isPublicCollection && !isOwnVisitorSpace;
 			}
 		);
 
