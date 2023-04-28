@@ -56,17 +56,11 @@ export const getLabel = (prop: MetadataProp): string => {
 			[MetadataProp.Duration]: tText(
 				'modules/visitor-space/utils/metadata/metadata___duurtijd'
 			),
-			[MetadataProp.Era]: tText(
-				'modules/visitor-space/utils/metadata/metadata___tijdsperiode-van-de-inhoud'
-			),
 			[MetadataProp.Everything]: tText(
 				'modules/visitor-space/utils/metadata/metadata___alles'
 			),
 			[MetadataProp.Genre]: tText('modules/visitor-space/utils/metadata/metadata___genre'),
 			[MetadataProp.Language]: tText('modules/visitor-space/utils/metadata/metadata___taal'),
-			[MetadataProp.Location]: tText(
-				'modules/visitor-space/utils/metadata/metadata___locatie-van-de-inhoud'
-			),
 			[MetadataProp.Mediatype]: tText(
 				'modules/visitor-space/utils/metadata/metadata___bestandstype'
 			),
@@ -80,6 +74,22 @@ export const getLabel = (prop: MetadataProp): string => {
 				'modules/visitor-space/utils/metadata/metadata___publisher'
 			),
 			[MetadataProp.Title]: tText('modules/visitor-space/utils/metadata/metadata___titel'),
+			[MetadataProp.Identifier]: tText(
+				'modules/visitor-space/utils/metadata/metadata___identifier'
+			),
+			[MetadataProp.Cast]: tText('modules/visitor-space/utils/metadata/metadata___cast'),
+			[MetadataProp.SpacialCoverage]: tText(
+				'modules/visitor-space/utils/metadata/metadata___locatie-van-de-inhoud'
+			),
+			[MetadataProp.TemporalCoverage]: tText(
+				'modules/visitor-space/utils/metadata/metadata___tijdsperiode-van-de-inhoud'
+			),
+			[MetadataProp.ObjectType]: tText(
+				'modules/visitor-space/utils/metadata/metadata___object-type'
+			),
+			[MetadataProp.Keywords]: tText(
+				'modules/visitor-space/utils/metadata/metadata___trefwoord'
+			),
 		}[prop] || ''
 	);
 };

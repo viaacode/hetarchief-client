@@ -65,7 +65,7 @@ export class IeObjectsService {
 						IeObjectsSearchFilterField.FORMAT,
 						IeObjectsSearchFilterField.GENRE,
 						IeObjectsSearchFilterField.MEDIUM,
-						IeObjectsSearchFilterField.CREATOR,
+						IeObjectsSearchFilterField.OBJECT_TYPE,
 						IeObjectsSearchFilterField.LANGUAGE,
 						IeObjectsSearchFilterField.MAINTAINER_ID,
 					],

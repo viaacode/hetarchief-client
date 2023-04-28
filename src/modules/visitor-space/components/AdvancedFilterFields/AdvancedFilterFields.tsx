@@ -26,6 +26,7 @@ import {
 	GenreSelect,
 	MediaTypeSelect,
 	MediumSelect,
+	ObjectTypeSelect,
 } from '../../components';
 import { AdvancedFilter, MetadataProp } from '../../types';
 import { getField, getOperators, getProperties } from '../../utils';
@@ -123,6 +124,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case MediaTypeSelect:
 			case GenreSelect:
 			case MediumSelect:
+			case ObjectTypeSelect:
 				Component = Component as FC<ReactSelectProps>;
 				props = props as ReactSelectProps;
 				value = getSelectValue((props.options || []) as SelectOption[], state.val);

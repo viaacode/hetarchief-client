@@ -18,7 +18,11 @@ import {
 } from '@visitor-space/components';
 import { LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import {
+	ElasticsearchFieldNames,
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+} from '@visitor-space/types';
 
 const defaultValues = {
 	languages: [],
@@ -45,7 +49,9 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 		defaultValues,
 	});
 
-	const buckets = useSelector(selectIeObjectsFilterOptions)?.schema_in_language?.buckets || [];
+	const buckets =
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Language]?.buckets ||
+		[];
 
 	const filteredBuckets = buckets
 		.map((bucket) => {
