@@ -209,10 +209,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		true
 	);
 
-	// Calculate when to show the manyResultsTile
-	const resultsHasMorethanMaxItems = searchResults && searchResults?.total > RESULTS_MAX;
-	const showManyResultsTile =
-		resultsHasMorethanMaxItems && query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
+	const showManyResultsTile = query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
 
 	/**
 	 * Effects
