@@ -1,21 +1,19 @@
 @use "src/styles/abstracts" as *;
 
 .c-admin__header {
-	display: grid;
-	grid-auto-flow: column;
+	display: flex;
+	flex-direction: row;
 	padding-top: 6.4rem;
-	justify-content: space-between;
 	padding-bottom: $spacer-1xl;
 
-	@include respond-to(lg) {
-		grid-auto-flow: row;
-		grid-gap: $spacer-md;
+	@include respond-to(md) {
+		flex-direction: column;
 	}
 }
 
 .c-admin__page-title {
 	flex-grow: 1;
-	max-width: 50%;
+	max-width: 70%;
 
 	label {
 		overflow: hidden;
@@ -24,6 +22,10 @@
 }
 
 .c-admin__actions {
+	@include respond-to(md) {
+		margin-top: $spacer-md;
+	}
+
 	> :global(*) {
 		&:not(:last-child) {
 			margin-right: 0.8rem;

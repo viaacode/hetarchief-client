@@ -37,9 +37,10 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		defaultValues,
 	});
 
-	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.dcterms_medium?.buckets || []
-	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
+	const buckets = useSelector(selectIeObjectsFilterOptions)?.dcterms_medium?.buckets || [];
+	const filteredBuckets = buckets.filter((bucket) =>
+		bucket.key.toLowerCase().includes(search.toLowerCase())
+	);
 
 	// Effects
 
@@ -78,7 +79,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					)}
 
 					<CheckboxList
-						items={buckets.map((bucket) => ({
+						items={filteredBuckets.map((bucket) => ({
 							...bucket,
 							checked: selection.includes(bucket.key),
 							label: bucket.key,

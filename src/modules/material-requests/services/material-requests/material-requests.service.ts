@@ -1,4 +1,5 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
+import { isNil } from 'lodash';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';
@@ -37,7 +38,7 @@ export class MaterialRequestsService {
 						...(search?.trim() ? { query: `%${search}%` } : {}),
 						...(type && { type }),
 						...(maintainerIds && { maintainerIds }),
-						...(isPending && { isPending }),
+						...(!isNil(isPending) && { isPending }),
 						...(page && { page }),
 						...(size && { size }),
 						...(orderProp && { orderProp }),

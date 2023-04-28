@@ -51,6 +51,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { data: materialRequests, isLoading: isLoadingMaterialRequests } = useGetMaterialRequests(
 		{
 			isPersonal: false,
+			isPending: false,
 			size: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 			...(!isNil(filters.page) && { page: filters.page }),
 			...(!isNil(filters.orderProp) && {

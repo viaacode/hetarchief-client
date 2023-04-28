@@ -13,7 +13,7 @@ import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -55,7 +55,11 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectFolders } from '@shared/store/ie-objects';
-import { selectShowNavigationBorder } from '@shared/store/ui';
+import {
+	selectLastScrollPosition,
+	selectShowNavigationBorder,
+	setLastScrollPosition,
+} from '@shared/store/ui';
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
@@ -120,6 +124,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
+	const dispatch = useDispatch();
 
 	useScrollToId((router.query.focus as string) || null);
 
@@ -137,6 +142,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 	const isKeyUser = useIsKeyUser();
+	const lastScrollPosition = useSelector(selectLastScrollPosition);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -152,6 +158,8 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 	const [activeVisitorSpace, setActiveVisitorSpace] = useState<Visit | undefined>();
+
+	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
 
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const activeSort: SortObject = {
@@ -254,6 +262,28 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Make sure the dependency array contains the same items as passed to VISITOR_SPACE_FILTERS
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isKeyUser, isPublicCollection]);
+
+	useEffect(() => {
+		// Ward: wait until items are rendered on the screen before scrolling
+		if (
+			lastScrollPosition &&
+			lastScrollPosition.page === ROUTES.search &&
+			searchResults?.items
+		) {
+			setTimeout(() => {
+				const item = document.getElementById(
+					`${lastScrollPosition.itemId}`
+				) as HTMLElement | null;
+
+				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+			}, 100);
+			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.search }));
+		}
+	}, [searchResults?.items]);
+
+	useEffect(() => {
+		setIsInitialPageLoad(true);
+	}, []);
 
 	/**
 	 * Display
@@ -481,8 +511,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined, page: 1, ...(searchValue ? searchValue : {}) });
+		const page = isInitialPageLoad ? query.page : 1;
+
+		setQuery({ [id]: data, filter: undefined, page, ...(searchValue ? searchValue : {}) });
 		setSearchBarInputValue('');
+		isInitialPageLoad && setIsInitialPageLoad(false);
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -606,6 +639,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
+				previousPage: ROUTES.search,
 			};
 		});
 	}, [isPublicCollection, searchResults?.items]);
