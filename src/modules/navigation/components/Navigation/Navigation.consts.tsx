@@ -136,7 +136,7 @@ const getVisitorSpacesDropdown = (
 				className: linkClasses,
 				// Make link clickable in hamburger menu
 				onClick: (e) => {
-					if (window.innerWidth > Breakpoints.md) {
+					if (window.innerWidth > Breakpoints.xxl) {
 						e.preventDefault();
 					}
 				},
