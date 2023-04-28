@@ -608,6 +608,8 @@
   "pages/account/map-delen/folder-id/index___verstuur": "Verstuur",
   "pages/account/map-delen/folder-id/index___via-deellink": "Via een deellink",
   "pages/account/map-delen/folder-id/index___via-email": "Via een email",
+  "pages/account/map-delen/folder-id/index___zichtbaarheid-van-de-items": "Zichtbaarheid van de items",
+  "pages/account/map-delen/folder-id/index___zichtbaarheid-message": "Niet alle objecten in jouw map hebben publieke metadata. Hou er rekening mee dat het mogelijk is dat je voor sommige objecten in de map extra rechten nodig hebt.",
   "pages/account/mijn-bezoek-historiek/index___error": "error",
   "pages/account/mijn-bezoek-historiek/index___geen-bezoek-historiek": "Geen bezoekhistoriek",
   "pages/account/mijn-bezoek-historiek/index___het-controleren-van-je-toegang-tot-deze-bezoekersruimte-is-mislukt": "Het controleren van je toegang tot deze aanbieder is mislukt",
