@@ -37,7 +37,6 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 
 	const handleClose = () => {
 		setEmailInputValue('');
-		setValue('email', '');
 		resetField('email');
 		onClose();
 	};
