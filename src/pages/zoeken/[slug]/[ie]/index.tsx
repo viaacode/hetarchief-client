@@ -817,7 +817,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	// Metadata
 	const renderCard = (item: MediaObject, isHidden: boolean) => (
 		<li>
-			<Link passHref href={`/${router.query.slug}/${item.id}`}>
+			<Link passHref href={`${ROUTES.search}/${router.query.slug}/${item.id}`}>
 				<a
 					tabIndex={isHidden ? -1 : 0}
 					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
