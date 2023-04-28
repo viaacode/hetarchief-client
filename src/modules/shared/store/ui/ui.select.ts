@@ -1,5 +1,7 @@
 import { AppState } from '../store.types';
 
+import { LastScrollPositionType } from './ui.types';
+
 export const selectShowAuthModal = (state: AppState): boolean => state.ui.showAuthModal;
 export const selectIsStickyLayout = (state: AppState): boolean => state.ui.isStickyLayout;
 export const selectShowNavigationBorder = (state: AppState): boolean =>
@@ -16,3 +18,5 @@ export const selectIsScrollLocked = (state: AppState): boolean =>
 	!!Object.values(state.ui.lockScroll || {}).find((val) => val === true);
 export const selectMaterialRequestCount = (state: AppState): number =>
 	state.ui.materialRequestCount;
+export const selectLastScrollPosition = (state: AppState): LastScrollPositionType =>
+	state.ui.lastScrollPosition;

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -42,10 +43,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		data: materialRequests,
 		isFetching,
 		refetch,
-	} = useGetPendingMaterialRequests({
-		orderProp: MaterialRequestKeys.maintainer,
-		orderDirection: 'asc' as OrderDirection,
-	});
+	} = useGetPendingMaterialRequests(
+		{
+			orderProp: MaterialRequestKeys.maintainer,
+			orderDirection: 'asc' as OrderDirection,
+		},
+		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+	);
 
 	const noContent =
 		!materialRequests?.items || (materialRequests?.items && materialRequests?.items.length < 1);
@@ -308,12 +312,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					isOpen={isEditMaterialRequestBladeOpen}
 					onClose={() => closeEditMaterialRequestBlade()}
 					objectName={selectedMaterialRequest.objectSchemaName}
-					objectId={selectedMaterialRequest.objectMeemooIdentifier}
+					objectId={selectedMaterialRequest.objectSchemaIdentifier}
 					objectType={selectedMaterialRequest.objectType}
 					maintainerName={selectedMaterialRequest.maintainerName}
 					maintainerLogo={selectedMaterialRequest.maintainerLogo}
 					maintainerSlug={selectedMaterialRequest.maintainerSlug}
 					materialRequestId={selectedMaterialRequest.id}
+					meemooId={selectedMaterialRequest.objectMeemooIdentifier}
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
 					refetch={refetch}

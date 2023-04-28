@@ -9,6 +9,7 @@ export * from './Datepicker';
 export * from './DeclineRequestBlade';
 export * from './DropdownMenu';
 export * from './ErrorNoAccess';
+export * from './ErrorNoAccessToObject';
 export * from './ErrorNotFound';
 export * from './ErrorPage';
 export * from './Icon';

@@ -85,6 +85,7 @@ import { isInAFolder, mapKeywordsToTagList, mapKeywordsToTags } from '@ie-object
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
+	ErrorNoAccessToObject,
 	ErrorNotFound,
 	Icon,
 	IconNamesLight,
@@ -121,7 +122,11 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceFilterId, VisitorSpaceStatus } from '@visitor-space/types';
+import {
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+	VisitorSpaceStatus,
+} from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -204,6 +209,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		error: mediaInfoError,
 	} = useGetIeObjectsInfo(router.query.ie as string);
 
+	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
+
 	// peak file
 	const peakFileId =
 		mediaInfo?.representations?.find(
@@ -280,8 +287,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const isErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
 		(mediaInfoError as HTTPError)?.response?.status === 404;
-	const isErrorNoLicense =
-		!hasMedia && !mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
@@ -297,9 +302,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 	const showVisitButton =
-		visitorSpace?.status === VisitorSpaceStatus.Active &&
-		canRequestAccess &&
-		(isVisitor || isAnonymous);
+		visitorSpace?.status === VisitorSpaceStatus.Active && canRequestAccess && !isKiosk;
 
 	/**
 	 * Effects
@@ -642,21 +645,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	 * Content
 	 */
 	const tabs: TabProps[] = useMemo(() => {
-		const available =
-			!isErrorNoLicense && !isErrorPlayableUrl && !!playableUrl && !!currentRepresentation;
+		const available = !isErrorPlayableUrl && !!playableUrl && !!currentRepresentation;
 		return OBJECT_DETAIL_TABS(mediaType, available).map((tab) => ({
 			...tab,
 			label: <TabLabel label={tab.label} />,
 			active: tab.id === activeTab,
 		}));
-	}, [
-		activeTab,
-		mediaType,
-		isErrorNoLicense,
-		isErrorPlayableUrl,
-		playableUrl,
-		currentRepresentation,
-	]);
+	}, [activeTab, mediaType, isErrorPlayableUrl, playableUrl, currentRepresentation]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -744,14 +739,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		playableUrl: string | undefined,
 		representation: IeObjectRepresentation | undefined
 	): ReactNode => {
-		if (!playableUrl && !mediaInfo) {
-			return null;
-		}
 		if (isLoadingPlayableUrl) {
 			return <Loading fullscreen owner="object detail page: render media" />;
 		}
 
-		if (isErrorNoLicense) {
+		if (!playableUrl) {
 			if (showVisitButton) {
 				return (
 					<ObjectPlaceholder
@@ -825,7 +817,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	// Metadata
 	const renderCard = (item: MediaObject, isHidden: boolean) => (
 		<li>
-			<Link passHref href={`/${router.query.slug}/${item.id}`}>
+			<Link passHref href={`${ROUTES.search}/${router.query.slug}/${item.id}`}>
 				<a
 					tabIndex={isHidden ? -1 : 0}
 					className={`p-object-detail__metadata-card-link u-text-no-decoration`}
@@ -923,7 +915,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</dd>
 	);
 
-	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => (
+	const renderMaintainerMetaTitle = ({
+		maintainerName,
+		maintainerLogo,
+		maintainerId,
+	}: IeObject): ReactNode => (
 		<div className="p-object-detail__metadata-maintainer-title">
 			<p className="p-object-detail__metadata-label">
 				{tText('modules/ie-objects/const/index___aanbieder')}
@@ -934,12 +930,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<TagList
 							className="u-pt-12"
 							tags={mapKeywordsToTags([maintainerName])}
-							onTagClicked={(keyword: string | number) => {
+							onTagClicked={() => {
 								router.push(
 									stringifyUrl({
 										url: `/${ROUTE_PARTS.search}`,
 										query: {
-											[VisitorSpaceFilterId.Maintainers]: [`${keyword}`],
+											[VisitorSpaceFilterId.Maintainers]: [
+												`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
+											],
 										},
 									})
 								);
@@ -1218,7 +1216,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				tabs={tabs}
 				onClick={onTabClick}
 			/>
-			{mediaInfoIsError && (
+			{isNoAccessError && (
+				<ErrorNoAccessToObject
+					visitorSpaceName={visitorSpace?.name as string}
+					visitorSpaceSlug={visitorSpace?.slug as string}
+					description={tHtml(
+						'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+					)}
+				/>
+			)}
+			{mediaInfoIsError && !isNoAccessError && (
 				<p className={'p-object-detail__error'}>
 					{tHtml(
 						'pages/bezoekersruimte/visitor-space-slug/object-id/index___er-ging-iets-mis-bij-het-ophalen-van-de-data'
@@ -1293,6 +1300,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={visitorSpace?.logo}
 					maintainerSlug={visitorSpace?.slug}
+					meemooId={mediaInfo?.meemooIdentifier}
 				/>
 			)}
 			<ReportBlade
