@@ -30,6 +30,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		handleSubmit,
 		formState: { errors },
 		control,
+		resetField,
 	} = useForm<ShareFolderBladeFormState>({
 		resolver: yupResolver(SHARE_FOLDER_FORM_SCHEMA()),
 	});
@@ -37,6 +38,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	const handleClose = () => {
 		setEmailInputValue('');
 		setValue('email', '');
+		resetField('email');
 		onClose();
 	};
 
