@@ -122,7 +122,11 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceFilterId, VisitorSpaceStatus } from '@visitor-space/types';
+import {
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+	VisitorSpaceStatus,
+} from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -947,7 +951,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 										url: `/${ROUTE_PARTS.search}`,
 										query: {
 											[VisitorSpaceFilterId.Maintainers]: [
-												`${maintainerId}---${maintainerName}`,
+												`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
 											],
 										},
 									})
