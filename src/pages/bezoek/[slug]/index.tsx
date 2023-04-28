@@ -1,6 +1,7 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
+import { stringifyUrl } from 'query-string';
 import { ComponentType, useEffect } from 'react';
 
 import { withAuth } from '@auth/wrappers/with-auth';
@@ -10,7 +11,7 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { AccessStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceService } from '@visitor-space/services';
-import { VisitorSpaceInfo } from '@visitor-space/types';
+import { VisitorSpaceFilterId, VisitorSpaceInfo } from '@visitor-space/types';
 import { useGetVisitAccessStatus } from '@visits/hooks/get-visit-access-status';
 
 import { VisitorLayout } from 'modules/visitors';
@@ -37,6 +38,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
 	const hasNoAccess = accessStatus?.status === AccessStatus.NO_ACCESS;
+	const hasAccess = accessStatus?.status === AccessStatus.ACCESS;
 
 	/**
 	 * Effects
@@ -46,6 +48,15 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 		if (hasPendingRequest) {
 			router.push(ROUTES.visitRequested.replace(':slug', slug as string));
 		}
+
+		if (hasAccess) {
+			router.push(
+				stringifyUrl({
+					url: ROUTES.search,
+					query: { [VisitorSpaceFilterId.Maintainer]: slug },
+				})
+			);
+		}
 	}, [router, accessStatus?.status, hasPendingRequest]);
 
 	/**
@@ -53,7 +64,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	 */
 
 	const renderPageContent = () => {
-		if (isLoadingAccessStatus) {
+		if (isLoadingAccessStatus || hasPendingRequest || hasAccess) {
 			return <Loading fullscreen owner="request access page" />;
 		}
 
