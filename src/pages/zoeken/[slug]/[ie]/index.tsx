@@ -122,7 +122,11 @@ import {
 } from '@shared/utils';
 import { ReportBlade } from '@visitor-space/components/reportBlade';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceFilterId, VisitorSpaceStatus } from '@visitor-space/types';
+import {
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+	VisitorSpaceStatus,
+} from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 
 import {
@@ -911,7 +915,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</dd>
 	);
 
-	const renderMaintainerMetaTitle = ({ maintainerName, maintainerLogo }: IeObject): ReactNode => (
+	const renderMaintainerMetaTitle = ({
+		maintainerName,
+		maintainerLogo,
+		maintainerId,
+	}: IeObject): ReactNode => (
 		<div className="p-object-detail__metadata-maintainer-title">
 			<p className="p-object-detail__metadata-label">
 				{tText('modules/ie-objects/const/index___aanbieder')}
@@ -922,12 +930,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						<TagList
 							className="u-pt-12"
 							tags={mapKeywordsToTags([maintainerName])}
-							onTagClicked={(keyword: string | number) => {
+							onTagClicked={() => {
 								router.push(
 									stringifyUrl({
 										url: `/${ROUTE_PARTS.search}`,
 										query: {
-											[VisitorSpaceFilterId.Maintainers]: [`${keyword}`],
+											[VisitorSpaceFilterId.Maintainers]: [
+												`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
+											],
 										},
 									})
 								);
