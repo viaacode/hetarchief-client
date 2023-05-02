@@ -6,6 +6,7 @@ import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/co
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	MaterialRequestDetail,
+	MaterialRequestObjectType,
 } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -88,7 +89,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								styles['p-account-my-material-requests__material-label-icon']
 							}
 							name={
-								currentMaterialRequestDetail?.objectType === 'audio'
+								currentMaterialRequestDetail?.objectDctermsFormat ===
+								MaterialRequestObjectType.AUDIO
 									? IconNamesLight.Audio
 									: IconNamesLight.Video
 							}
