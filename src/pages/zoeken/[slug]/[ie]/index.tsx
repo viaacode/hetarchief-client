@@ -1182,14 +1182,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	};
 
 	const renderNavigationBar = (): ReactNode => {
-		if (!isNil(accessEndDate)) {
+		if (!isNil(accessEndDate) || isKiosk) {
 			return (
 				<VisitorSpaceNavigation
 					className="p-object-detail__nav"
 					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
-					phone={visitorSpace?.contactInfo.telephone || ''}
-					email={visitorSpace?.contactInfo.email || ''}
 					accessEndDate={accessEndDate}
 				/>
 			);
