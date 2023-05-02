@@ -36,6 +36,14 @@ $component: "c-block-image-text-background";
 
 	&__button {
 		margin-top: $spacer-xs;
+
+		&-icon {
+			&--right {
+				.c-button__content {
+					flex-direction: row-reverse !important;
+				}
+			}
+		}
 	}
 
 	&__image-wrapper {
