@@ -446,6 +446,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	};
 
 	const onRequestMaterialClick = () => {
+		if (isAnonymous) {
+			dispatch(setShowAuthModal(true));
+			return;
+		}
+
 		if (mediaInfo?.maintainerFormUrl && user) {
 			// open external form
 			const resolvedFormUrl = mediaInfo.maintainerFormUrl
@@ -684,7 +689,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			isInAFolder(collections, mediaInfo?.schemaIdentifier),
 			isNotKiosk,
 			!!canRequestAccess,
-			canRequestMaterial,
+			isAnonymous || canRequestMaterial,
 			canDownloadMetadata
 		);
 
