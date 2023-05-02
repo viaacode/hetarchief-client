@@ -624,6 +624,7 @@ const VisitorSpaceSearchPage: FC = () => {
 			const showKeyUserLabel = item.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
 			const hasTempAccess =
+				!isKioskUser &&
 				isPublicCollection &&
 				item.accessThrough?.includes(
 					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
@@ -653,7 +654,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				previousPage: ROUTES.search,
 			};
 		});
-	}, [isPublicCollection, searchResults?.items]);
+	}, [isKioskUser, isPublicCollection, searchResults?.items]);
 
 	/**
 	 * Render
@@ -781,7 +782,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
-		if (isMeemooAdmin || !isPublicCollection) {
+		if (isMeemooAdmin || !isPublicCollection || isKioskUser || isLoggedIn) {
 			// Don't show the temporary access label for:
 			// - MEEMOO admins, since they have access to all visitor spaces
 			// - when a visitor space is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
@@ -947,7 +948,7 @@ const VisitorSpaceSearchPage: FC = () => {
 									? renderResearchWarning()
 									: renderBreadcrumbs()}
 
-								{!isKioskUser && isLoggedIn && renderTempAccessLabel()}
+								{renderTempAccessLabel()}
 							</div>
 						</aside>
 
