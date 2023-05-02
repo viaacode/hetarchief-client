@@ -600,7 +600,8 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const onVisitorSpaceSelected = (id: string): void => {
 		setQuery({
-			...VISITOR_SPACE_QUERY_PARAM_INIT,
+			...query,
+			page: 1,
 			[VisitorSpaceFilterId.Maintainer]: id === PUBLIC_COLLECTION ? undefined : id,
 		});
 	};
