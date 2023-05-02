@@ -20,7 +20,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 
@@ -97,7 +97,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); // TODO switch back to tst when https://meemoo.atlassian.net/browse/ARC-1050 is fixed
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 

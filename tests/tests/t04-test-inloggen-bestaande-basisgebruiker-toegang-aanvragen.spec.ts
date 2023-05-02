@@ -12,7 +12,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 
