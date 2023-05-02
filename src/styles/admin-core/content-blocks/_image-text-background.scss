@@ -40,8 +40,6 @@ $component: "c-block-image-text-background";
 	}
 
 	&__image-wrapper {
-		border: 1px solid red;
-
 		@include respond-at("md") {
 			position: absolute;
 			left: 0;
