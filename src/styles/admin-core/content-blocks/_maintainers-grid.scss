@@ -1,0 +1,55 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-block-maintainers-grid";
+
+.#{$component} {
+	&__header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: $spacer-lg;
+
+		p {
+			margin-top: $spacer-xs;
+			padding: 0 !important;
+			color: $neutral;
+		}
+
+		a {
+			color: $neutral;
+		}
+	}
+
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 5rem 8rem;
+		padding: 0;
+
+		li {
+			list-style: none;
+		}
+	}
+
+	@include respond-to("md") {
+		&__header {
+			display: block;
+
+			a {
+				display: block;
+				margin-top: $spacer-xs;
+			}
+		}
+
+		ul {
+			justify-content: space-around;
+		}
+	}
+
+	&__image {
+		width: 11rem;
+		height: 8.5rem;
+		object-fit: contain;
+	}
+}
