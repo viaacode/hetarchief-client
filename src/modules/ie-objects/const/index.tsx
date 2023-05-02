@@ -187,8 +187,8 @@ export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
 export const VISITOR_ACTION_SORT_MAP = (
 	hasAccessToVisitorSpaceOfObject: boolean
 ): MetadataSortMap[] => [
-	{ id: MediaActions.RequestMaterial, isPrimary: true },
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
