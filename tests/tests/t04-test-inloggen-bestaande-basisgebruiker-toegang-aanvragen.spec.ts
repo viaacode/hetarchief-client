@@ -4,6 +4,9 @@ import { acceptCookies } from '../helpers/accept-cookies';
 import { acceptTos } from '../helpers/accept-tos';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
+test.use({
+	viewport: { width: 1400, height: 850 },
+});
 test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
@@ -20,28 +23,13 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	const navigationItemTexts = await page
 		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
 		.allInnerTexts();
-	// await expect(navigationItemTexts).toContain('Start je zoektocht'); //Does not pass yet
+	// await expect(navigationItemTexts).toContain('Start je zoektocht'); //TODO: Uncomment when this is visible
 
-	// // Check the homepage show the correct title for searching maintainers
-	// await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
-
-	// Click on 'Menu'
-	await page.locator('text=Menu').first().click();
 	// Click on 'Bezoek een aanbieder'
-	// await page
-	// 	.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
-	// 	.first()
-	// 	.click(); // fix dit
-	// await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
-
-	// Temporary
-	// await page
-	// 	.locator('.l-app a[class*="Navigation_c-navigation__link"]', {
-	// 		hasText: 'Bezoek een aanbieder',
-	// 	})
-	// 	.first()
-	// 	.click();
-	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/bezoek'); //TODO: replace with line above once that one works
+	await page
+		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
+		.first()
+		.click();
 
 	// Check the page to contain 'Vind een aanbieder'
 	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
@@ -51,6 +39,20 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 
 	// Press 'Toon alles' to see all results
 	await page.locator('text=Toon Alles').first().click();
+
+	// Press the contact buton
+	await page
+		.locator('.c-visitor-space-card--name--vrt .c-button__content .c-button__icon')
+		.first()
+		.click();
+
+	// Check if email and phone number of VRT are visible
+	const visitorSpaceInfo = await page
+		.locator(
+			'.c-visitor-space-card--name--vrt [class^=VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list] p'
+		)
+		.allInnerTexts();
+	await expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be', '+32 2 741 37 20']);
 
 	// Click on 'Vraag toegang aan' van VRT
 	const vrtCard = await page.locator('.c-visitor-space-card--name--vrt .c-button__content', {
@@ -89,18 +91,20 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 		.click();
 
 	await expect(page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
-	// Go back to the homescreen using the navigation bar
-	// Click on 'Menu'
-	await page.locator('text=Menu').first().click();
-	// Click on the meemoo icon
-	// await page.locator('a[href="/"]').first().click();
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); //TODO: replace with line above once that one works
 
-	// Click on 'Menu'
-	await page.locator('text=Menu').first().click();
+	// Go back to the homescreen using the navigation bar
+	// Click on the meemoo icon
+	await page.locator('a[href="/"]').first().click();
+	// await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); //TODO: replace with line above once that one works
+
 	// Click on 'Bezoek een aanbieder'
-	// await page.locator('a[href="/"]').first().click();
-	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/bezoek'); //TODO: replace with line above once that one works
+	await page
+		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
+		.first()
+		.click();
+	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/bezoek'); //TODO: this line should be able to be removed once the tst data is reset (AT user has no visitor spaces).
+
+	await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
 
 	const visitorSpaceCards = await page
 		.locator(
@@ -108,28 +112,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 		)
 		.allInnerTexts();
 	await expect(visitorSpaceCards).toContain('VRT');
-	// // Login with existing user
-	// await loginUserHetArchiefIdp(
-	// 	page,
-	// 	process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
-	// 	process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
-	// );
 
-	// // Check tos is displayed, scroll down and click accept button
-	// await acceptTos(page);
-
-	// // Check homepage title
-	// await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
-	// 	timeout: 10000,
-	// });
-
-	// // Admin and beheer should not be visible
-	// navigationItemTexts = await page
-	// 	.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-	// 	.allInnerTexts();
-	// await expect(navigationItemTexts).not.toContain('Admin');
-	// await expect(navigationItemTexts).not.toContain('Beheer');
-
-	// // Wait for close to save the videos
-	// await context.close();
+	// Wait for close to save the videos
+	await context.close();
 });
