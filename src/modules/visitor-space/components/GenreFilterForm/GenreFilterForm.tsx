@@ -11,7 +11,7 @@ import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 
 import {
 	GENRE_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -37,9 +37,9 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 		defaultValues,
 	});
 
-	const buckets = (useSelector(selectIeObjectsFilterOptions)?.schema_genre.buckets || []).filter(
-		(bucket) => bucket.key.toLowerCase().includes(search.toLowerCase())
-	);
+	const buckets = (
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Genre].buckets || []
+	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
 
 	// Effects
 

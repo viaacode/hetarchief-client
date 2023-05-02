@@ -47,6 +47,9 @@ $c-table-border: 1px solid $silver;
 	&__cell {
 		text-align: left;
 		padding: $spacer-sm $spacer-md;
+		max-width: 12rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
 
 		&:last-child {
 			text-align: right;

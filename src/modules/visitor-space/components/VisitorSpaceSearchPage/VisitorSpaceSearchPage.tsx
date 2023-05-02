@@ -13,7 +13,7 @@ import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
@@ -44,6 +44,7 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
+import { PAGE_NUMBER_OF_MANY_RESULTS_TILE } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
@@ -55,7 +56,11 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectFolders } from '@shared/store/ie-objects';
-import { selectShowNavigationBorder } from '@shared/store/ui';
+import {
+	selectLastScrollPosition,
+	selectShowNavigationBorder,
+	setLastScrollPosition,
+} from '@shared/store/ui';
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
@@ -98,7 +103,12 @@ import {
 	VISITOR_SPACE_TABS,
 	VISITOR_SPACE_VIEW_TOGGLE_OPTIONS,
 } from '../../const';
-import { MetadataProp, TagIdentity, VisitorSpaceFilterId } from '../../types';
+import {
+	ElasticsearchFieldNames,
+	MetadataProp,
+	TagIdentity,
+	VisitorSpaceFilterId,
+} from '../../types';
 import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '../../utils/elastic-filters';
 
@@ -120,6 +130,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
 	const windowSize = useWindowSizeContext();
+	const dispatch = useDispatch();
 
 	useScrollToId((router.query.focus as string) || null);
 
@@ -137,6 +148,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 	const isKeyUser = useIsKeyUser();
+	const lastScrollPosition = useSelector(selectLastScrollPosition);
 
 	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
@@ -153,6 +165,8 @@ const VisitorSpaceSearchPage: FC = () => {
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 	const [activeVisitorSpace, setActiveVisitorSpace] = useState<Visit | undefined>();
 
+	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
+
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const activeSort: SortObject = {
 		orderProp: query.orderProp,
@@ -168,6 +182,10 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * Data
 	 */
 	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
+		if (!user || [GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS].includes(user.groupName)) {
+			setVisitorSpaces([]);
+			return [];
+		}
 		const { items: spaces } = await VisitsService.getAll({
 			page: 1,
 			size: 10,
@@ -183,7 +201,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		setVisitorSpaces(sortedSpaces);
 
 		return sortedSpaces;
-	}, []);
+	}, [user]);
 
 	const {
 		data: searchResults,
@@ -196,6 +214,8 @@ const VisitorSpaceSearchPage: FC = () => {
 		activeSort,
 		true
 	);
+
+	const showManyResultsTile = query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
 
 	/**
 	 * Effects
@@ -246,7 +266,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 			return {
 				...result,
-				[id]: query[id],
+				[id]: (query as any)[id],
 			};
 		}, {});
 
@@ -255,13 +275,36 @@ const VisitorSpaceSearchPage: FC = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isKeyUser, isPublicCollection]);
 
+	useEffect(() => {
+		// Ward: wait until items are rendered on the screen before scrolling
+		if (
+			lastScrollPosition &&
+			lastScrollPosition.page === ROUTES.search &&
+			searchResults?.items
+		) {
+			setTimeout(() => {
+				const item = document.getElementById(
+					`${lastScrollPosition.itemId}`
+				) as HTMLElement | null;
+
+				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+			}, 100);
+			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.search }));
+		}
+	}, [searchResults?.items]);
+
+	useEffect(() => {
+		setIsInitialPageLoad(true);
+	}, []);
+
 	/**
 	 * Display
 	 */
 
 	const getItemCounts = useCallback(
 		(type: VisitorSpaceMediaType): number => {
-			const buckets = searchResults?.aggregations?.dcterms_format?.buckets || [];
+			const buckets =
+				searchResults?.aggregations?.[ElasticsearchFieldNames.Format]?.buckets || [];
 			if (type === VisitorSpaceMediaType.All) {
 				return sum(buckets.map((item) => item.doc_count));
 			} else {
@@ -437,13 +480,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Maintainers:
-				data = (values as MaintainerFilterFormState)[
-					IeObjectsSearchFilterField.MAINTAINER_IDS
-				];
+				data = (values as MaintainerFilterFormState).maintainers;
 				break;
 
 			case VisitorSpaceFilterId.ConsultableOnlyOnLocation:
-				// Info: remove queryparam if false (= set to undefined)
+				// Info: remove query param if false (= set to undefined)
 				data = (values as ConsultableOnlyOnLocationFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION
 				]
@@ -454,7 +495,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.ConsultableMedia:
-				// Info: remove queryparam if false (= set to undefined)
+				// Info: remove query param if false (= set to undefined)
 				data = (values as ConsultableMediaFilterFormState)[
 					IeObjectsSearchFilterField.CONSULTABLE_MEDIA
 				]
@@ -481,8 +522,11 @@ const VisitorSpaceSearchPage: FC = () => {
 				break;
 		}
 
-		setQuery({ [id]: data, filter: undefined, page: 1, ...(searchValue ? searchValue : {}) });
+		const page = isInitialPageLoad ? query.page : 1;
+
+		setQuery({ [id]: data, filter: undefined, page, ...(searchValue ? searchValue : {}) });
 		setSearchBarInputValue('');
+		isInitialPageLoad && setIsInitialPageLoad(false);
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
@@ -606,6 +650,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
+				previousPage: ROUTES.search,
 			};
 		});
 	}, [isPublicCollection, searchResults?.items]);
@@ -746,10 +791,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		// Strip out public collection and own visitor space (cp)
 		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
-				const isPublicColelction = visitorSpace.slug == PUBLIC_COLLECTION;
-				const isOwnVisitorSapce = isCPAdmin && visitorSpace.slug === user?.maintainerId;
+				const isPublicCollection = visitorSpace.slug == PUBLIC_COLLECTION;
+				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.maintainerId;
 
-				return !isPublicColelction && !isOwnVisitorSapce;
+				return !isPublicCollection && !isOwnVisitorSpace;
 			}
 		);
 
@@ -812,6 +857,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				view={viewMode === 'grid' ? 'grid' : 'list'}
 				buttons={renderCardButtons}
 				className="p-media-card-list"
+				showManyResultsTile={showManyResultsTile}
 			/>
 			<PaginationBar
 				className="u-mb-48"
