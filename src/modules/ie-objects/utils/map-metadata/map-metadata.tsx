@@ -1,12 +1,11 @@
 import { TagList, TagOption } from '@meemoo/react-components';
-import { lowerCase } from 'lodash-es';
+import { capitalize, lowerCase } from 'lodash-es';
 import router from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { ReactNode } from 'react';
 
 import { MetadataItem } from '@ie-objects/components';
 import { ROUTE_PARTS } from '@shared/const';
-import { capitalise } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
@@ -44,7 +43,7 @@ export const mapObjectToMetadata = (data: Record<string, string[]>): MetadataIte
 
 	return Object.keys(data).map((key) => {
 		return {
-			title: capitalise(lowerCase(key)),
+			title: capitalize(lowerCase(key)),
 			data: data[key].join(', '),
 		};
 	});
