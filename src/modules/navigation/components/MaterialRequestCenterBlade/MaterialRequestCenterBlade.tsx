@@ -181,7 +181,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 									styles['c-material-request-center-blade__material-label-icon']
 								}
 								name={
-									item.objectType === MaterialRequestObjectType.AUDIO
+									item.objectDctermsFormat === MaterialRequestObjectType.AUDIO
 										? IconNamesLight.Audio
 										: IconNamesLight.Video
 								}
@@ -313,7 +313,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					onClose={() => closeEditMaterialRequestBlade()}
 					objectName={selectedMaterialRequest.objectSchemaName}
 					objectId={selectedMaterialRequest.objectSchemaIdentifier}
-					objectType={selectedMaterialRequest.objectType}
+					objectDctermsFormat={selectedMaterialRequest.objectDctermsFormat}
 					maintainerName={selectedMaterialRequest.maintainerName}
 					maintainerLogo={selectedMaterialRequest.maintainerLogo}
 					maintainerSlug={selectedMaterialRequest.maintainerSlug}

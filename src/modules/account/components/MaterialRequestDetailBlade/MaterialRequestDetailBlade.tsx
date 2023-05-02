@@ -88,7 +88,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								styles['p-account-my-material-requests__material-label-icon']
 							}
 							name={
-								currentMaterialRequestDetail?.objectType === 'audio'
+								currentMaterialRequestDetail?.objectDctermsFormat === 'audio'
 									? IconNamesLight.Audio
 									: IconNamesLight.Video
 							}

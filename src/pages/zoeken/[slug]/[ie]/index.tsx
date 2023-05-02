@@ -1299,7 +1299,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					onClose={onCloseBlade}
 					objectName={mediaInfo?.name}
 					objectId={mediaInfo?.schemaIdentifier}
-					objectType={mediaInfo.dctermsFormat as MaterialRequestObjectType}
+					objectDctermsFormat={mediaInfo.dctermsFormat as MaterialRequestObjectType}
 					maintainerName={mediaInfo?.maintainerName}
 					maintainerLogo={visitorSpace?.logo}
 					maintainerSlug={visitorSpace?.slug}

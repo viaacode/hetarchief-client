@@ -24,7 +24,7 @@ interface MaterialRequestBladeProps {
 	onClose: () => void;
 	objectName: string;
 	objectId: string;
-	objectType?: MaterialRequestObjectType | undefined;
+	objectDctermsFormat?: MaterialRequestObjectType | undefined;
 	maintainerName: string;
 	maintainerLogo: string;
 	maintainerSlug: string;
@@ -41,7 +41,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	onClose,
 	objectName,
 	objectId,
-	objectType,
+	objectDctermsFormat,
 	maintainerName,
 	maintainerLogo,
 	maintainerSlug,
@@ -259,7 +259,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						<Icon
 							className={styles['c-request-material__material-label-icon']}
 							name={
-								objectType === MaterialRequestObjectType.AUDIO
+								objectDctermsFormat === MaterialRequestObjectType.AUDIO
 									? IconNamesLight.Audio
 									: IconNamesLight.Video
 							}
