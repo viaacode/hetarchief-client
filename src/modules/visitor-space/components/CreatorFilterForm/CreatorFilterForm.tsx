@@ -149,7 +149,9 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 					onInputChange={onInputChange}
 					onKeyDown={onKeyDown}
 					value={creatorValueTags}
-					placeholder={tText('Naam van de maker')}
+					placeholder={tText(
+						'modules/visitor-space/components/creator-filter-form/creator-filter-form___naam-van-de-maker'
+					)}
 				/>
 
 				{/* This will probably be re-enabled during fase 3 when there are better search options in the elasticsearch mapping */}

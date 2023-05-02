@@ -4,109 +4,157 @@
 .c-footer {
 	position: relative;
 	z-index: get-z-layer("base");
-	display: grid;
-	grid-template-columns: 1fr 2fr 1fr;
-	grid-template-rows: 1fr;
-	justify-items: center;
-	align-items: center;
-	padding: $spacer-md $spacer-sm $spacer-sm $spacer-sm;
 	color: $neutral;
 	background-color: $white;
 
-	@include respond-at(xl) {
-		padding-left: $spacer-lg;
-		padding-right: $spacer-lg;
-	}
+	&__wrapper {
+		display: grid;
+		max-width: 124.8rem;
+		padding: 0 2rem;
+		margin: 0 auto;
 
-	&::after {
-		content: "";
-		position: absolute;
-		inset: 0 $spacer-sm auto $spacer-sm;
-		top: 0;
-		right: $spacer-sm;
-		bottom: auto;
-		left: $spacer-sm;
-		border-top: $divider-grey;
-
-		@include respond-at(xl) {
-			inset: 0 $spacer-lg auto $spacer-lg;
-			right: $spacer-lg;
-			left: $spacer-lg;
-		}
-	}
-
-	&__link,
-	&__left,
-	&__right {
-		font-size: $font-size-sm;
-
-		p {
+		:global(a) {
+			display: block;
+			margin-bottom: $spacer-xs;
+			text-decoration: none;
+			color: $shade;
 			font-size: $font-size-sm;
-			margin: 0;
+
+			&:hover {
+				text-decoration: underline;
+				color: $seagreen;
+			}
 		}
 	}
 
 	&__links {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		&__section-title {
+			font-weight: bold;
+			color: black;
+			margin-bottom: $spacer-xs;
+			font-size: $font-size-base;
+		}
 	}
 
-	&__link {
-		display: block;
-		color: $neutral;
-		text-decoration: none;
-		padding: 0 $spacer-md;
-	}
-
-	&__image-link {
-		display: inline-flex;
-	}
-
-	&__left,
-	&__right {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: $spacer-xs;
-	}
-
-	&__left {
-		grid-column-start: 1;
-		justify-self: start;
-	}
-
-	&__right {
-		grid-column-start: 3;
-		justify-self: end;
-		justify-content: flex-end;
-	}
-
-	@include respond-to(lg) {
-		grid-template-columns: repeat(2, 1fr);
-		gap: $spacer-sm;
+	// Desktop
+	@include respond-at(md) {
+		&__wrapper {
+			grid-template-columns: 400fr 270fr 310fr 400fr 310fr;
+			grid-template-rows: 1fr;
+			height: 21rem;
+			margin-top: 5rem;
+		}
 
 		&__links {
-			grid-row-start: 2;
-			grid-column: 1 / 3;
-			justify-content: center;
-			column-gap: $spacer-lg;
-			row-gap: $spacer-sm;
-			flex-wrap: wrap;
+			&__left {
+				justify-self: start;
+				margin-top: -1.5rem;
+
+				img {
+					width: 16.5rem;
+					height: auto;
+				}
+			}
+
+			&__section1 {
+				justify-self: start;
+			}
+
+			&__section2 {
+				justify-self: start;
+			}
+
+			&__section3 {
+				justify-self: start;
+				padding-left: 7rem;
+				position: relative;
+
+				&::before {
+					content: "";
+					border-left: 1px solid $zinc;
+					width: 1px;
+					height: 10rem;
+					left: 0;
+					position: absolute;
+				}
+			}
+
+			&__right {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
+
+				> div {
+					font-size: $font-size-xs;
+				}
+			}
+		}
+	}
+
+	// Mobile
+	@include respond-to(md) {
+		&__wrapper {
+			grid-template-columns: 2fr 1fr;
+			grid-template-rows: 1fr 1fr 0.6fr 1fr;
+			height: auto;
+			padding: 4rem 3rem;
 		}
 
-		&__link {
-			padding: 0;
-		}
+		&__links {
+			&__left {
+				grid-column-start: 1;
+				grid-row-start: 1;
+				justify-self: start;
 
-		&__left,
-		&__right {
-			row-gap: 0;
-		}
+				img {
+					width: 16.5rem;
+					height: auto;
+				}
+			}
 
-		&__right {
-			grid-column-start: 2;
+			&__section1 {
+				grid-column-start: 1;
+				grid-row-start: 2;
+				justify-self: start;
+			}
+
+			&__section2 {
+				grid-column-start: 1;
+				grid-row-start: 3;
+				justify-self: start;
+			}
+
+			&__section3 {
+				grid-column: 1 / 2;
+				grid-row-start: 4;
+				justify-self: start;
+				padding-top: 4.5rem;
+				position: relative;
+				display: flex;
+				flex-direction: column;
+
+				&::before {
+					content: "";
+					border-top: 1px solid $zinc;
+					width: 100%;
+					height: 1px;
+					top: 0;
+					position: absolute;
+				}
+			}
+
+			&__right {
+				grid-column-start: 2;
+				grid-row: 1 / 3;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-end;
+				padding: 2rem 0;
+
+				> div {
+					font-size: $font-size-xs;
+				}
+			}
 		}
 	}
 }
