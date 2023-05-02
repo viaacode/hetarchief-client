@@ -296,7 +296,10 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 					)}
 
 					{(future?.items || []).length > 0 && (
-						<section className={clsx(styles['c-hero__section'])}>
+						<section
+							className={clsx(styles['c-hero__section'])}
+							id="toekomstige-bezoeken"
+						>
 							<h5
 								className={clsx(styles['c-hero__section-title'], 'u-mb-16')}
 								id="planned-visits"
@@ -322,7 +325,10 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 					)}
 
 					{(pending?.items || []).length > 0 && (
-						<section className={clsx(styles['c-hero__section'])}>
+						<section
+							className={clsx(styles['c-hero__section'])}
+							id="aangevraagde-bezoeken"
+						>
 							<h5 className={clsx(styles['c-hero__section-title'], 'u-mb-16')}>
 								{tHtml('modules/shared/components/hero/hero___aanvragen')}
 							</h5>
