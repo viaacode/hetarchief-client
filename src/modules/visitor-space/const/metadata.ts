@@ -74,6 +74,57 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 	};
 
 	return {
+		[MetadataProp.CreatedAt]: {
+			[Operator.GreaterThanOrEqual]: {
+				label: dictionary.from,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+				],
+			},
+			[Operator.LessThanOrEqual]: {
+				label: dictionary.until,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Between]: {
+				label: dictionary.between,
+				field: DateRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: dictionary.exact,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+		},
+
 		[MetadataProp.Description]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
@@ -92,6 +143,57 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 					{
 						field: IeObjectsSearchFilterField.DESCRIPTION,
 						operator: IeObjectsSearchOperator.CONTAINS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.Duration]: {
+			[Operator.LessThanOrEqual]: {
+				label: dictionary.shorter,
+				field: DurationInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.GreaterThanOrEqual]: {
+				label: dictionary.longer,
+				field: DurationInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+				],
+			},
+			[Operator.Between]: {
+				label: dictionary.between,
+				field: DurationRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Exact]: {
+				label: dictionary.exact,
+				field: DurationRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
 					},
 				],
 			},
@@ -161,6 +263,57 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 					{
 						field: IeObjectsSearchFilterField.TEMPORAL_COVERAGE,
 						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.PublishedAt]: {
+			[Operator.GreaterThanOrEqual]: {
+				label: dictionary.from,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+				],
+			},
+			[Operator.LessThanOrEqual]: {
+				label: dictionary.until,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Between]: {
+				label: dictionary.between,
+				field: DateRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: dictionary.exact,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
 					},
 				],
 			},
