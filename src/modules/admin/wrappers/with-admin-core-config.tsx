@@ -83,6 +83,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					`/${ROUTE_PARTS.userPolicy}`,
 					`/${ROUTE_PARTS.logout}`,
 					`/${ROUTE_PARTS.search}`,
+					`/${ROUTE_PARTS.visit}`,
+					'/',
 				],
 				contentPage: {
 					availableContentBlocks: [
