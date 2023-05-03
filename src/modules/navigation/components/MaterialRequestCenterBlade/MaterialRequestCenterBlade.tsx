@@ -300,6 +300,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	return (
 		<>
 			<Blade
+				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
 				renderTitle={renderTitle}
 				footer={isOpen && renderFooter()}
