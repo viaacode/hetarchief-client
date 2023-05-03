@@ -172,6 +172,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			content: "";
 			position: absolute;
 			bottom: -$c-navigation-dropdown-item-spacer;
+			height: 0.1rem;
 			left: $spacer-md;
 			right: $spacer-md;
 			background-color: $silver;
