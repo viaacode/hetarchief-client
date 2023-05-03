@@ -99,7 +99,7 @@ const AppLayout: FC = ({ children }) => {
 	});
 	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
 		{},
-		{ keepPreviousData: true, enabled: isKioskUser }
+		{ keepPreviousData: true, enabled: !isKioskUser }
 	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 
