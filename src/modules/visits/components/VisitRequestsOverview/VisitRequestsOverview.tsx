@@ -119,6 +119,12 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
+		if (!orderProp) {
+			orderProp = 'startAt';
+		}
+		if (!orderDirection) {
+			orderDirection = OrderDirection.desc;
+		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
