@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 
 import { Icon, IconNamesSolid } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectMaterialRequestCount } from '@shared/store/ui';
+import { useAppDispatch } from '@shared/store';
+import { selectMaterialRequestCount, setShowNotificationsCenter } from '@shared/store/ui';
 
 import { MaterialRequestCenterBlade } from '../MaterialRequestCenterBlade';
 
@@ -14,6 +15,7 @@ import styles from './MaterialRequestCenterButton.module.scss';
 
 const MaterialRequestCenterButton: FC = () => {
 	const { tText } = useTranslation();
+	const dispatch = useAppDispatch();
 
 	const [isBladeOpen, setIsBladeOpen] = useState(false);
 	const [isAnimated, setIsAnimated] = useState(false);
@@ -24,6 +26,7 @@ const MaterialRequestCenterButton: FC = () => {
 	const materialRequestCount = useSelector(selectMaterialRequestCount);
 
 	const onButtonClick = () => {
+		dispatch(setShowNotificationsCenter(false));
 		setIsBladeOpen(!isBladeOpen);
 	};
 

@@ -667,11 +667,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<VisitorLayout>
 			{renderOgTags(
+				tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen') +
+					` | ${activeFolder?.name || folderSlug}`,
 				tText(
-					'pages/account/mijn-mappen/index___mijn-mappen' +
-						` | ${activeFolder?.name || folderSlug}`
+					'pages/account/mijn-mappen/folder-slug/index___mijn-mappen-meta-omschrijving'
 				),
-				tText('pages/account/mijn-mappen/index___mijn-mappen-meta-omschrijving'),
 				url
 			)}
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>

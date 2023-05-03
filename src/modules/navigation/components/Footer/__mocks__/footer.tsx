@@ -1,21 +1,52 @@
-import { FooterItem } from '@navigation/components/Footer/Footer.types';
 import { NavigationInfo } from '@navigation/services/navigation-service';
 import { ComponentLink } from '@shared/types';
 
-export const footerTestLinks: ComponentLink[] = [
-	{
-		label: 'link',
-		to: 'https://www.test.com',
-		external: true,
-	},
-	{
-		label: 'link',
-		to: 'https://www.test.com',
-	},
-	{
-		label: 'link',
-		to: 'https://www.test.com',
-	},
+export const footerTestLinks: ComponentLink[][] = [
+	[
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+			external: true,
+		},
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+		},
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+		},
+	],
+	[
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+			external: true,
+		},
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+		},
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+		},
+	],
+	[
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+			external: true,
+		},
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+		},
+		{
+			label: 'link',
+			to: 'https://www.test.com',
+		},
+	],
 ];
 
 export const footerCenterNavigationItems: NavigationInfo[] = [
@@ -71,34 +102,4 @@ export const footerLinks = (footerNavigationInfos: NavigationInfo[]): ComponentL
 			external: item.linkTarget === '_blank',
 		};
 	});
-};
-
-export const footerLeftItem: FooterItem = {
-	label: 'Een initiatief van',
-	image: {
-		name: 'logo_meemoo.svg',
-		alt: 'Meemoo logo',
-		width: 104,
-		height: 44,
-	},
-	link: {
-		label: '',
-		to: 'https://meemoo.be',
-		external: true,
-	},
-};
-
-export const footerRightItem: FooterItem = {
-	label: 'Gesteund door',
-	image: {
-		name: 'logo_vlaanderen.svg',
-		alt: 'Vlaanderen logo',
-		width: 89,
-		height: 44,
-	},
-	link: {
-		label: '',
-		to: 'https://www.vlaanderen.be',
-		external: true,
-	},
 };

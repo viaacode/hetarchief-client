@@ -17,11 +17,7 @@ import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
-import {
-	footerLeftItem,
-	footerLinks,
-	footerRightItem,
-} from '@navigation/components/Footer/__mocks__/footer';
+import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
@@ -103,7 +99,7 @@ const AppLayout: FC = ({ children }) => {
 	});
 	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
 		{},
-		{ keepPreviousData: true, enabled: isKioskUser }
+		{ keepPreviousData: true, enabled: !isKioskUser }
 	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 
@@ -396,9 +392,11 @@ const AppLayout: FC = ({ children }) => {
 
 			{showFooter && (
 				<Footer
-					leftItem={footerLeftItem}
-					links={footerLinks(navigationItems?.[NavigationPlacement.FooterCenter] || [])}
-					rightItem={footerRightItem}
+					linkSections={[
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection1] || []),
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection2] || []),
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection3] || []),
+					]}
 				/>
 			)}
 		</div>

@@ -43,6 +43,9 @@ $border-width: 0.2rem;
 			font-size: $font-size-md;
 			font-weight: $font-weight-bold;
 			line-height: 2rem;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 
 		&-info {
