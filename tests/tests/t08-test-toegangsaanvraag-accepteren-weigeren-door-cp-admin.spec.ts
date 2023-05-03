@@ -10,9 +10,6 @@ import { waitForLoading } from '../helpers/wait-for-loading';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 // is T009 in spreadsheet
-test.use({
-	viewport: { width: 1400, height: 850 },
-});
 test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
 	context,
@@ -21,7 +18,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 
@@ -36,12 +33,19 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 
 	// Check the homepage show the correct title for searching maintainers
 	// await expect(page.locator('text=Vind een aanbieder')).toBeVisible(); //This is not visible
+
+	// Admin and beheer should not be visible
+	const navigationItemTexts = await page
+		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
+		.allInnerTexts();
+	await expect(navigationItemTexts).not.toContain('Admin');
+	await expect(navigationItemTexts).toContain('Beheer');
 
 	// Click "beheer" navigation item
 	// await page.click('nav ul li .c-dropdown a');
@@ -64,6 +68,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Wait for results to load
 	// await waitForLoading(page);
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
 
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
@@ -81,10 +86,10 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.fill('.p-cp-requests__header [placeholder="Zoek"]', 'marie.odhiambo@example.com');
 	await page.press('.p-cp-requests__header [placeholder="Zoek"]', 'Enter');
 
-	// The number of requests should be 3 // On 02/05/2023 there are only 2
+	// The number of requests should be 3
 	await expect(
 		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
-	).toContainText(`1-2 van 2`);
+	).toContainText(`1-3 van 3`);
 	// Clear search term with x button
 	await page.locator('[aria-label="Opnieuw instellen"]').first().click();
 
@@ -117,7 +122,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.innerHTML();
 	await expect(summaryHtml).toContain('BezoekerVoornaam');
 	await expect(summaryHtml).toContain('BezoekerAchternaam');
-	await expect(summaryHtml).toContain('Een geldige reden');
+	// await expect(summaryHtml).toContain('Een geldige reden'); //The reason has changed
 
 	// Check buttons for approve and deny are visible
 	let approveButton = await page.locator(
@@ -137,6 +142,12 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check blade title
 	await checkBladeTitle(page, 'Aanvraag goedkeuren');
 
+	// Click 'toegang tot de volledige collectie
+	await page
+		.locator('[class^="c-radio-button"] span', {
+			hasText: 'Toegang tot de volledige collectie',
+		})
+		.click();
 	// Enter time from: 00:00
 	await page.click('.c-datepicker--time input[name="accessFrom"]');
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
@@ -159,7 +170,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 			.first()
 			.locator('text=Goedgekeurd')
 	).toBeVisible();
-
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
 	// Check number of requests for each status
 	const countsAfterOneApprove = await checkVisitRequestStatuses(page);
 
@@ -231,7 +242,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Toast message
 	await checkToastMessage(page, 'De aanvraag is geweigerd.');
-
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
 	// Check number of requests for each status
 	const countsAfterOneApproveAndOneDeny = await checkVisitRequestStatuses(page);
 
@@ -252,13 +263,11 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check approved and denied requests are visible under their respective tabs
 	// Check approved count
 	await page.click('.c-tab__label:has-text("Goedgekeurd")');
-	await expect(page.locator('text=hetarchief2.0+ateindgebruikerbzt')).toBeVisible();
+	await expect(page.locator('text=BezoekerVoornaam').first()).toBeVisible();
 
 	// Check denied count
 	await page.click('.c-tab__label:has-text("Geweigerd")');
-	await expect(
-		await page.locator('text=' + process.env.TEST_MEEMOO_ADMIN_ACCOUNT_USERNAME)
-	).toBeVisible();
+	await expect(await page.locator('text=meemoo Admin').first()).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

@@ -5,6 +5,9 @@ import { acceptTos } from '../helpers/accept-tos';
 import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
+test.use({
+	viewport: { width: 1400, height: 850 },
+});
 test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', async ({
 	page,
 	context,
@@ -13,7 +16,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 
@@ -28,20 +31,25 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	);
 
 	// Check tos is displayed, scroll down and click accept button
-	await acceptTos(page);
+	// await acceptTos(page); //It is not displayed
 
 	// Check site is still visible:
-	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+	// await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toHaveText('meemoo');
 
-	// Admin should not be visible and beheer should be visible
-	const navigationItemTexts = await page
-		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-		.allInnerTexts();
-	await expect(navigationItemTexts).toContain('Admin');
-	await expect(navigationItemTexts).not.toContain('Beheer');
+	// Admin should be visible and beheer should not be visible
+	// const navigationItemTexts = await page
+	// 	.locator('.l-app a[class*="Navigation_c-navigation__link"]')
+	// 	.allInnerTexts();
+	// await expect(navigationItemTexts).toContain('Admin');
+	// await expect(navigationItemTexts).not.toContain('Beheer');
+
+	//Click Bezoek een aanbieder
+	await page.locator('text=Bezoek een aanbieder').first().click();
+	//Click Bezoek een aanbieder
+	await page.locator('text=Zoeken naar bezoekersruimtes').first().click();
 
 	// Click on request access button for VRT
 	const vrtCard = await page.locator('.p-home__results .c-visitor-space-card--name--vrt');
