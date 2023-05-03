@@ -1,17 +1,19 @@
 import { Button } from '@meemoo/react-components';
 import { useRouter } from 'next/router';
-import { FC, ReactNode, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { FC, ReactNode, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { selectUser } from '@auth/store/user';
+import { GroupName } from '@account/const';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ErrorPage } from '@shared/components';
 import { ROUTES } from '@shared/const';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { setShowAuthModal } from '@shared/store/ui';
 
 import styles from './ErrorNoAccessToObject.module.scss';
 
@@ -28,30 +30,19 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 }) => {
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
+	const dispatch = useDispatch();
+	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
 
-	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
-	const [, setQuery] = useQueryParams({
+	const [query, setQuery] = useQueryParams({
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
 	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
 		try {
-			if (!user || !visitorSpaceSlug) {
-				toastService.notify({
-					title: tText(
-						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd'
-					),
-					description: tText(
-						'modules/shared/components/media-card/media-card___je-bent-niet-ingelogd-log-opnieuw-in-en-probeer-opnieuw'
-					),
-				});
-				return;
-			}
-
 			const createdVisitRequest = await createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
@@ -78,8 +69,18 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 		}
 	};
 
+	useEffect(() => {
+		if (query[VISITOR_SPACE_SLUG_QUERY_KEY]) {
+			setIsRequestAccessBladeOpen(true);
+		}
+	}, []);
+
 	const onOpenRequestAccess = () => {
 		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
+		if (isAnonymous) {
+			dispatch(setShowAuthModal(true));
+			return;
+		}
 		setIsRequestAccessBladeOpen(true);
 	};
 
