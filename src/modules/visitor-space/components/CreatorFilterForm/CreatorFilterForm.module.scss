@@ -1,8 +1,9 @@
 $component: "c-creator-filter-form__input";
 
 .#{$component} {
-	:global(.c-tags-input__control) {
+	:global(.c-tags-input .c-tags-input__control) {
 		border-radius: 4rem;
-		padding: 0.7rem 0;
+		padding: 0.7rem;
+		height: 6rem;
 	}
 }
