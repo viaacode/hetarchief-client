@@ -95,7 +95,6 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	// Go back to the homescreen using the navigation bar
 	// Click on the meemoo icon
 	await page.locator('a[href="/"]').first().click();
-	// await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); //TODO: replace with line above once that one works
 
 	// Click on 'Bezoek een aanbieder'
 	await page
