@@ -22,7 +22,7 @@ export class AuthService {
 		query: StringifiableRecord,
 		router: NextRouter
 	): Promise<void> {
-		const { redirectTo, slug, ...otherQueryParams } = query;
+		const { redirectTo, slug, ie, ...otherQueryParams } = query;
 		let originalPath: string = (redirectTo as string) || router.asPath || '';
 
 		// Don't redirect the user back to logout, after they logged in
@@ -31,7 +31,7 @@ export class AuthService {
 		}
 
 		// Redirect /slug to the search page with filter
-		if (slug) {
+		if (slug && !ie) {
 			// TODO split backend filter names (VisitorSpaceFilterId) from filter names in the url (create a new enum for those)
 			originalPath = `/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${slug}`;
 		}
