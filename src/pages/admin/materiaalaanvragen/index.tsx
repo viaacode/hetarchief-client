@@ -114,6 +114,12 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
+		if (!orderProp) {
+			orderProp = 'createdAt';
+		}
+		if (!orderDirection) {
+			orderDirection = OrderDirection.desc;
+		}
 		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
