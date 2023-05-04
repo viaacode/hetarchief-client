@@ -288,7 +288,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	if (isFetching) {
 		return (
-			<Blade isOpen={isOpen} onClose={onClose} renderTitle={renderTitle}>
+			<Blade
+				className={styles['c-material-request-center-blade']}
+				isOpen={isOpen}
+				onClose={onClose}
+				renderTitle={renderTitle}
+			>
 				<Loading
 					className={styles['c-material-request-center-blade__loading']}
 					owner="MaterialRequestCenterBlade: render material requests"
