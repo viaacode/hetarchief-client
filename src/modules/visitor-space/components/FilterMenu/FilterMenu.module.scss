@@ -169,4 +169,17 @@ $checkbox-size: $spacer-sm;
 	&__overlay {
 		z-index: get-z-layer("filter-overlay");
 	}
+
+	&__sorting-container {
+		margin-top: -1px;
+		padding-left: 1.7rem;
+
+		div {
+			padding: 0;
+
+			div > ul > li > div > div > button {
+				padding-left: 1.6rem !important;
+			}
+		}
+	}
 }

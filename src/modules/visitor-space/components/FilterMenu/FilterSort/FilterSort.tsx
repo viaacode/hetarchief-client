@@ -4,6 +4,7 @@ import {
 	DropdownContent,
 	OrderDirection,
 } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { FC, useState } from 'react';
 
 import { IconNamesLight, Overlay } from '@shared/components';
@@ -20,6 +21,7 @@ const FilterSort: FC<FilterSortProps> = ({
 	activeSortLabel,
 	options,
 	onOptionClick,
+	className,
 }) => {
 	const [sortOptionsOpen, setSortOptionsOpen] = useState(false);
 
@@ -35,7 +37,7 @@ const FilterSort: FC<FilterSortProps> = ({
 			<Dropdown
 				key={`dropdown-open--${sortOptionsOpen}`}
 				className={styles['c-filter-menu__option']}
-				flyoutClassName={styles['c-filter-menu__flyout']}
+				flyoutClassName={clsx(className, styles['c-filter-menu__flyout'])}
 				isOpen={sortOptionsOpen}
 				onOpen={() => setSortOptionsOpen(true)}
 				onClose={onCloseDropdown}
