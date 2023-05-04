@@ -623,13 +623,13 @@ const VisitorSpaceSearchPage: FC = () => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
 			const type = item.dctermsFormat as IeObjectTypes;
 			const showKeyUserLabel = item.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+			const hasAccessToVisitorSpaceOfObject = !!intersection(item?.accessThrough, [
+				IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+				IeObjectAccessThrough.VISITOR_SPACE_FULL,
+			]).length;
+
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
-			const hasTempAccess =
-				isPublicCollection &&
-				!!intersection(item?.accessThrough, [
-					IeObjectAccessThrough.VISITOR_SPACE_FULL,
-					IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
-				]).length;
+			const hasTempAccess = isPublicCollection && hasAccessToVisitorSpaceOfObject;
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
