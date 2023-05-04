@@ -9,7 +9,7 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
-import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
+import { includes, intersection, isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -626,10 +626,10 @@ const VisitorSpaceSearchPage: FC = () => {
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
 			const hasTempAccess =
 				isPublicCollection &&
-				item.accessThrough?.includes(
-					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
-						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
-				);
+				!!intersection(item?.accessThrough, [
+					IeObjectAccessThrough.VISITOR_SPACE_FULL,
+					IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+				]).length;
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
