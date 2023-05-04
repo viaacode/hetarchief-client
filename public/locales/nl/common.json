@@ -608,6 +608,7 @@
   "modules/visitor-space/utils/metadata/metadata___tijdsperiode-van-de-inhoud": "Datum inhoud",
   "modules/visitor-space/utils/metadata/metadata___titel": "Titel",
   "modules/visitor-space/utils/metadata/metadata___trefwoord": "Trefwoord",
+  "modules/visitor-space/utils/select/options___select": "Select...",
   "pages/404___ga-naar-de-homepage": "Ga naar de startpagina",
   "pages/account/map-delen/folder-id/index___deel-map": "Deel map",
   "pages/account/map-delen/folder-id/index___deze-map-is-reeds-deel-van-je-mappen": "Deze map is reeds deel van je mappen.",
