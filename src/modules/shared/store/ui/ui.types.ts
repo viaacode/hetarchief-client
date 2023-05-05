@@ -7,6 +7,7 @@ export interface UIState {
 	showAuthModal: boolean;
 	isStickyLayout: boolean;
 	showNavigationBorder: boolean;
+	showMaterialRequestCenter: boolean;
 	showFooter: boolean;
 	showNotificationsCenter: boolean;
 	hasUnreadNotifications: boolean;

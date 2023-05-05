@@ -3,6 +3,12 @@
 $component: "c-material-request-center-blade";
 
 .#{$component} {
+	margin-top: $c-navigation-height-md;
+
+	@include respond-at("md") {
+		margin-top: $c-navigation-height;
+	}
+
 	&__table {
 		cursor: pointer;
 	}

@@ -10,6 +10,7 @@ const initialState: UIState = {
 	showNavigationBorder: false,
 	showFooter: true,
 	showNotificationsCenter: false,
+	showMaterialRequestCenter: false,
 	hasUnreadNotifications: false,
 	showZendesk: true,
 	lockScroll: {},
@@ -35,6 +36,9 @@ export const uiSlice = createSlice({
 		},
 		setShowNotificationsCenter(state, action: PayloadAction<boolean>) {
 			state.showNotificationsCenter = action.payload;
+		},
+		setShowMaterialRequestCenter(state, action: PayloadAction<boolean>) {
+			state.showMaterialRequestCenter = action.payload;
 		},
 		setHasUnreadNotifications(state, action: PayloadAction<boolean>) {
 			state.hasUnreadNotifications = action.payload;
@@ -66,6 +70,7 @@ export const {
 	setShowNavigationBorder,
 	setShowFooter,
 	setShowNotificationsCenter,
+	setShowMaterialRequestCenter,
 	setHasUnreadNotifications,
 	setShowZendesk,
 	setLockScroll,

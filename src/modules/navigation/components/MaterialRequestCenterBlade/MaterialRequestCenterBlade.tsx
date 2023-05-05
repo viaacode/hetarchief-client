@@ -83,10 +83,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		isOpen && refetch();
 	}, [isOpen, refetch]);
 
-	const onCloseBlade = () => {
-		onClose();
-	};
-
 	const deleteMaterialRequest = async (id: string) => {
 		const deleteResponse = await MaterialRequestsService.delete(id);
 		deleteResponse && refetch();
@@ -288,7 +284,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	if (isFetching) {
 		return (
-			<Blade isOpen={isOpen} onClose={onClose} renderTitle={renderTitle}>
+			<Blade
+				className={styles['c-material-request-center-blade']}
+				isOpen={isOpen}
+				onClose={onClose}
+				renderTitle={renderTitle}
+			>
 				<Loading
 					className={styles['c-material-request-center-blade__loading']}
 					owner="MaterialRequestCenterBlade: render material requests"
@@ -300,10 +301,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	return (
 		<>
 			<Blade
+				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
 				renderTitle={renderTitle}
 				footer={isOpen && renderFooter()}
-				onClose={onCloseBlade}
+				onClose={onClose}
 			>
 				{renderContent()}
 			</Blade>

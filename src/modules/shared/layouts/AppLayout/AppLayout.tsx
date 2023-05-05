@@ -56,6 +56,7 @@ import {
 	setHasUnreadNotifications,
 	setMaterialRequestCount,
 	setShowAuthModal,
+	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
 import { Breakpoints } from '@shared/types';
@@ -111,6 +112,7 @@ const AppLayout: FC = ({ children }) => {
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
 			show && scrollTo(0);
+			dispatch(setShowMaterialRequestCenter(false));
 			dispatch(setShowNotificationsCenter(show));
 		},
 		[dispatch]

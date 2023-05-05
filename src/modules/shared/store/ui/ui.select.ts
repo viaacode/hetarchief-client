@@ -9,6 +9,8 @@ export const selectShowNavigationBorder = (state: AppState): boolean =>
 export const selectShowFooter = (state: AppState): boolean => state.ui.showFooter;
 export const selectShowNotificationsCenter = (state: AppState): boolean =>
 	state.ui.showNotificationsCenter;
+export const selectShowMaterialRequestCenter = (state: AppState): boolean =>
+	state.ui.showMaterialRequestCenter;
 export const selectHasUnreadNotifications = (state: AppState): boolean =>
 	state.ui.hasUnreadNotifications;
 export const selectShowZendesk = (state: AppState): boolean => state.ui.showZendesk;
