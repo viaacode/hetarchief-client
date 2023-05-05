@@ -176,7 +176,7 @@ $checkbox-size: $spacer-sm;
 			padding: 0;
 			margin-left: $spacer-sm;
 
-			div > ul > li > div > div > button {
+			:global(.c-button--text) {
 				padding-left: $spacer-sm !important;
 			}
 		}
