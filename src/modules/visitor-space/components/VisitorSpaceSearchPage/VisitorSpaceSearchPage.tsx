@@ -629,7 +629,8 @@ const VisitorSpaceSearchPage: FC = () => {
 			]).length;
 
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
-			const hasTempAccess = isPublicCollection && hasAccessToVisitorSpaceOfObject;
+			const hasTempAccess =
+				!isKioskUser && isPublicCollection && hasAccessToVisitorSpaceOfObject;
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
@@ -654,7 +655,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				previousPage: ROUTES.search,
 			};
 		});
-	}, [isPublicCollection, searchResults?.items]);
+	}, [isKioskUser, isPublicCollection, searchResults?.items]);
 
 	/**
 	 * Render
@@ -782,10 +783,12 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
-		if (isMeemooAdmin || !isPublicCollection) {
+		if (isMeemooAdmin || !isPublicCollection || isKioskUser || !isLoggedIn) {
 			// Don't show the temporary access label for:
 			// - MEEMOO admins, since they have access to all visitor spaces
 			// - when a visitor space is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
+			// When the user is a kiosk user, since kiosk users have unlimited access
+			// When the user is not logged in, since then he cannot have temporary access
 			return null;
 		}
 
@@ -948,7 +951,7 @@ const VisitorSpaceSearchPage: FC = () => {
 									? renderResearchWarning()
 									: renderBreadcrumbs()}
 
-								{!isKioskUser && isLoggedIn && renderTempAccessLabel()}
+								{renderTempAccessLabel()}
 							</div>
 						</aside>
 
