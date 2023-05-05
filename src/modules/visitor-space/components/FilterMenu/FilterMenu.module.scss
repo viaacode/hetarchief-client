@@ -178,7 +178,7 @@ $checkbox-size: $spacer-sm;
 			padding: 0;
 
 			div > ul > li > div > div > button {
-				padding-left: 1.6rem !important;
+				padding-left: $spacer-sm !important;
 			}
 		}
 	}
