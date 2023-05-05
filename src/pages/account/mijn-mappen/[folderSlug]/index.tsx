@@ -50,7 +50,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
-import { selectLastScrollPosition, setLastScrollPosition } from '@shared/store/ui';
+import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
 import { AccessThroughType } from '@shared/types/access';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -154,9 +154,26 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	}, [activeFolder, folders, router, blockFallbackRedirect]);
 
 	useEffect(() => {
-		if (activeFolder && folderMedia.isStale) {
+		if (!activeFolder) {
+			return;
+		}
+
+		if (folderMedia.isStale) {
 			folderMedia.refetch();
 		}
+
+		dispatch(
+			setBreadcrumbs([
+				{
+					label: tText('pages/slug/ie/index___breadcrumbs___mijn-mappen'),
+					to: ROUTES.myFolders,
+				},
+				{
+					label: activeFolder.name,
+					to: `${ROUTES.myFolders}/${createFolderSlug(activeFolder)}`,
+				},
+			])
+		);
 	}, [activeFolder]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
