@@ -9,7 +9,7 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
-import { isEmpty, isNil, sortBy, sum } from 'lodash-es';
+import { includes, intersection, isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -623,13 +623,14 @@ const VisitorSpaceSearchPage: FC = () => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
 			const type = item.dctermsFormat as IeObjectTypes;
 			const showKeyUserLabel = item.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+			const hasAccessToVisitorSpaceOfObject = !!intersection(item?.accessThrough, [
+				IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+				IeObjectAccessThrough.VISITOR_SPACE_FULL,
+			]).length;
+
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
 			const hasTempAccess =
-				isPublicCollection &&
-				item.accessThrough?.includes(
-					IeObjectAccessThrough.VISITOR_SPACE_FULL ||
-						IeObjectAccessThrough.VISITOR_SPACE_FOLDERS
-				);
+				!isKioskUser && isPublicCollection && hasAccessToVisitorSpaceOfObject;
 
 			return {
 				schemaIdentifier: item.schemaIdentifier,
@@ -654,7 +655,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				previousPage: ROUTES.search,
 			};
 		});
-	}, [isPublicCollection, searchResults?.items]);
+	}, [isKioskUser, isPublicCollection, searchResults?.items]);
 
 	/**
 	 * Render
@@ -782,10 +783,12 @@ const VisitorSpaceSearchPage: FC = () => {
 	};
 
 	const renderTempAccessLabel = () => {
-		if (isMeemooAdmin || !isPublicCollection) {
+		if (isMeemooAdmin || !isPublicCollection || isKioskUser || !isLoggedIn) {
 			// Don't show the temporary access label for:
 			// - MEEMOO admins, since they have access to all visitor spaces
 			// - when a visitor space is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
+			// When the user is a kiosk user, since kiosk users have unlimited access
+			// When the user is not logged in, since then he cannot have temporary access
 			return null;
 		}
 
@@ -948,7 +951,7 @@ const VisitorSpaceSearchPage: FC = () => {
 									? renderResearchWarning()
 									: renderBreadcrumbs()}
 
-								{!isKioskUser && isLoggedIn && renderTempAccessLabel()}
+								{renderTempAccessLabel()}
 							</div>
 						</aside>
 

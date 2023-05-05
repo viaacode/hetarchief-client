@@ -10,7 +10,7 @@ import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/u
 export const ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
 export const ACCOUNT_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
-	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
+	orderProp: withDefault(StringParam, MaterialRequestKeys.updatedAt),
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
 };
@@ -29,7 +29,7 @@ export const getAccountMaterialRequestTableColumns = (): Column<MaterialRequest>
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___aangevraagd-op'),
-		accessor: MaterialRequestKeys.createdAt,
+		accessor: MaterialRequestKeys.updatedAt,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span
 				className="u-color-neutral"

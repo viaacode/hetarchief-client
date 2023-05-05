@@ -71,7 +71,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		resolver: yupResolver(COMMUNICATION_FORM_SCHEMA()),
 	});
 
-	const canViewOrganisation = isAdminUser || isKeyUser;
+	const showOrgAndPermissions = isAdminUser || isKeyUser;
 	const canEdit = user?.idp === Idp.HETARCHIEF && canEditProfile;
 
 	useEffect(() => {
@@ -137,34 +137,37 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<dd className="u-text-ellipsis u-color-neutral" title={user?.email}>
 				{user?.email}
 			</dd>
-			{canViewOrganisation && renderOrganisation()}
+			{showOrgAndPermissions && renderOrganisation()}
 		</dl>
 	);
 
-	const renderKeyUserInfo = (): ReactNode => (
-		<>
-			<dt className="u-mt-32">
-				{tText(
-					'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel'
-				)}
-			</dt>
-			<dd className="u-color-neutral u-mt-8">
-				{tHtml(
-					'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-omschrijving'
-				)}
-			</dd>
-		</>
-	);
+	const renderKeyUserInfo = (): ReactNode =>
+		isKeyUser && (
+			<>
+				<dt className="u-mt-32">
+					{tText(
+						'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel'
+					)}
+				</dt>
+				<dd className="u-color-neutral u-mt-8">
+					{tHtml(
+						'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-omschrijving'
+					)}
+				</dd>
+			</>
+		);
 
 	const renderUserGroup = (): ReactNode => {
 		const userGroup: GroupName = user?.groupName as GroupName;
-		const { name, description } = GET_PERMISSION_TRANSLATIONS_BY_GROUP()[userGroup];
+		const { name, description, isHidden } = GET_PERMISSION_TRANSLATIONS_BY_GROUP()[userGroup];
 
 		return (
-			<>
-				<dt>{name}</dt>
-				<dd className="u-color-neutral u-mt-8">{description}</dd>
-			</>
+			!isHidden && (
+				<>
+					<dt>{name}</dt>
+					<dd className="u-color-neutral u-mt-8">{description}</dd>
+				</>
+			)
 		);
 	};
 
@@ -266,7 +269,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					</Box>
 
-					{isAdminUser && (
+					{showOrgAndPermissions && (
 						<Box className="u-mb-32">
 							<section className="u-p-24 p-account-my-profile__permissions">
 								<header className="p-account-my-profile__permissions-header u-mb-24">
@@ -278,7 +281,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 								</header>
 								<dl className="p-account-my-profile__permissions-list u-mb-24">
 									{renderUserGroup()}
-									{isKeyUser && renderKeyUserInfo()}
+									{renderKeyUserInfo()}
 								</dl>
 							</section>
 						</Box>
