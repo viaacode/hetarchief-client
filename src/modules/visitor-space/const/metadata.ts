@@ -20,9 +20,6 @@ import {
 	DurationInput,
 	DurationRangeInput,
 	GenreSelect,
-	MediaTypeSelect,
-	MediumSelect,
-	ObjectTypeSelect,
 } from '../components';
 import { MetadataProp } from '../types';
 
@@ -39,7 +36,197 @@ export type MetadataConfig = {
 	};
 };
 
-export const METADATA_CONFIG = (): MetadataConfig => {
+export const METADATA_CONFIG_REGULAR_FILTERS = (): MetadataConfig => {
+	const dictionary = {
+		from: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
+		),
+		until: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
+		),
+		between: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
+		),
+		contains: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
+		),
+		excludes: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
+		),
+		equals: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
+		),
+		differs: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
+		),
+		shorter: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
+		),
+		longer: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
+		),
+		exact: tText(
+			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___exact'
+		),
+	};
+
+	return {
+		[MetadataProp.CreatedAt]: {
+			[Operator.GreaterThanOrEqual]: {
+				label: dictionary.from,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+				],
+			},
+			[Operator.LessThanOrEqual]: {
+				label: dictionary.until,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Between]: {
+				label: dictionary.between,
+				field: DateRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: dictionary.exact,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.CREATED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.Duration]: {
+			[Operator.LessThanOrEqual]: {
+				label: dictionary.shorter,
+				field: DurationInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.GreaterThanOrEqual]: {
+				label: dictionary.longer,
+				field: DurationInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+				],
+			},
+			[Operator.Between]: {
+				label: dictionary.between,
+				field: DurationRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Exact]: {
+				label: dictionary.exact,
+				field: DurationRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.DURATION,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.PublishedAt]: {
+			[Operator.GreaterThanOrEqual]: {
+				label: dictionary.from,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+				],
+			},
+			[Operator.LessThanOrEqual]: {
+				label: dictionary.until,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Between]: {
+				label: dictionary.between,
+				field: DateRangeInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: dictionary.exact,
+				field: DateInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.GTE,
+					},
+					{
+						field: IeObjectsSearchFilterField.PUBLISHED,
+						operator: IeObjectsSearchOperator.LTE,
+					},
+				],
+			},
+		},
+	};
+};
+
+export const METADATA_CONFIG_ADVANCED_FILTERS = (): MetadataConfig => {
 	const dictionary = {
 		from: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
@@ -367,5 +554,5 @@ export const getMetadataSearchFilters = (
 	prop: MetadataProp,
 	operator: Operator
 ): IeObjectsSearchFilter[] => {
-	return METADATA_CONFIG()[prop]?.[operator]?.filters || [];
+	return METADATA_CONFIG_ADVANCED_FILTERS()[prop]?.[operator]?.filters || [];
 };
