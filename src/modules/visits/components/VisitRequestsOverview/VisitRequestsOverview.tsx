@@ -59,9 +59,12 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 	const { mutateAsync: getVisit } = useGetVisit();
 
+	// Don't show hardcoded access
+	const filteredVisits = visits?.items.filter((visit) => !visit.id.includes('permanent-id'));
+
 	// Computed
 
-	const selectedOnCurrentPage = visits?.items.find(
+	const selectedOnCurrentPage = filteredVisits?.find(
 		(x) => x.id === filters[VISIT_REQUEST_ID_QUERY_KEY]
 	);
 
@@ -70,7 +73,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	useEffect(() => {
 		const requestId = filters[VISIT_REQUEST_ID_QUERY_KEY];
 
-		if (visits && !selectedOnCurrentPage && requestId) {
+		if (filteredVisits && !selectedOnCurrentPage && requestId) {
 			// Check if visitrequest exists
 			getVisit(requestId)
 				.then((response: Visit | null) => {
@@ -89,7 +92,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 					});
 				});
 		}
-	}, [visits, setFilters, getVisit, tHtml, selectedOnCurrentPage, filters]);
+	}, [filteredVisits, setFilters, getVisit, tHtml, selectedOnCurrentPage, filters]);
 
 	// Filters
 
@@ -180,7 +183,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		if (isLoadingVisitRequests) {
 			return <Loading owner="visit request overview" />;
 		}
-		if ((visits?.items?.length || 0) <= 0) {
+		if ((filteredVisits?.length || 0) <= 0) {
 			return renderEmptyMessage();
 		} else {
 			return (
@@ -189,7 +192,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						className="u-mt-24"
 						options={{
 							columns: columns,
-							data: visits?.items || [],
+							data: filteredVisits || [],
 							initialState: {
 								pageSize: RequestTablePageSize,
 								sortBy: sortFilters,
@@ -253,7 +256,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 			<div
 				className={clsx('l-container l-container--edgeless-to-lg', {
 					'u-text-center u-color-neutral u-py-48':
-						isLoadingVisitRequests || (visits?.items?.length || 0) <= 0,
+						isLoadingVisitRequests || (filteredVisits?.length || 0) <= 0,
 				})}
 			>
 				{renderContent()}
