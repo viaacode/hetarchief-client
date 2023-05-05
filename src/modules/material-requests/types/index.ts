@@ -109,6 +109,7 @@ export interface MaterialRequestMaintainer {
 
 export enum MaterialRequestKeys {
 	createdAt = 'createdAt',
+	updatedAt = 'updatedAt',
 	type = 'type',
 	name = 'requesterFullName',
 	email = 'requesterMail',

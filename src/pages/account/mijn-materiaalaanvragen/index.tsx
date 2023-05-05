@@ -64,7 +64,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
+		if (filters.orderProp === MaterialRequestKeys.updatedAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
 				orderProp,
