@@ -8,5 +8,6 @@ export interface VisitorSpaceNavigationProps extends DefaultComponentProps {
 	phone?: string;
 	accessEndDate?: string | ReactNode;
 	showBorder: boolean;
+	showContactInfo?: boolean;
 	title?: ReactNode;
 }

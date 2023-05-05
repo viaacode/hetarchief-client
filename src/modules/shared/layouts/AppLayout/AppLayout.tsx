@@ -293,8 +293,10 @@ const AppLayout: FC = ({ children }) => {
 			[alertId]: alert?.untilDate,
 		});
 
-		// Add the alert to the users read notifications
-		await dismissMaintenanceAlert(alertId);
+		if (isLoggedIn) {
+			// Add the alert to the users read notifications
+			await dismissMaintenanceAlert(alertId);
+		}
 
 		setAlertsIgnoreUntil(newAlertsIgnoreUntil);
 	};
