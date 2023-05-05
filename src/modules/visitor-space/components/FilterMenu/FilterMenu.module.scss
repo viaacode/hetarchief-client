@@ -170,12 +170,11 @@ $checkbox-size: $spacer-sm;
 		z-index: get-z-layer("filter-overlay");
 	}
 
-	&__sorting-container {
-		margin-top: -1px;
-		padding-left: 1.7rem;
-
-		div {
+	:global(.c-dropdown__trigger:first-child + .c-dropdown__content-open) {
+		:global(.c-menu) {
+			margin-top: -1px;
 			padding: 0;
+			margin-left: $spacer-sm;
 
 			div > ul > li > div > div > button {
 				padding-left: $spacer-sm !important;
