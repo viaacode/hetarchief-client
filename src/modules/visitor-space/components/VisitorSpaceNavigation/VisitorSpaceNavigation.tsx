@@ -22,6 +22,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	phone,
 	accessEndDate,
 	title,
+	showContactInfo,
 }) => {
 	const { tHtml, tText } = useTranslation();
 	const showBorder = useSelector(selectShowNavigationBorder);
@@ -111,11 +112,10 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 			<Navigation.Center title={title} />
 
 			<Navigation.Right placement="right">
-				{!isNil(accessEndDate) ? (
+				{!isNil(accessEndDate) && (
 					<span className="u-py-8 u-text-right">{accessEndDate}</span>
-				) : (
-					renderContact()
 				)}
+				{showContactInfo && renderContact()}
 			</Navigation.Right>
 		</Navigation>
 	);

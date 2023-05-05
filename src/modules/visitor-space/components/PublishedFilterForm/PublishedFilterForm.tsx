@@ -13,7 +13,7 @@ import { isRange, Operator } from '@shared/types';
 import { asDate } from '@shared/utils';
 
 import { MetadataProp } from '../../types';
-import { getOperators } from '../../utils';
+import { getRegularOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
@@ -61,7 +61,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		defaultValues,
 	});
 
-	const operators = useMemo(() => getOperators(MetadataProp.PublishedAt), []);
+	const operators = useMemo(() => getRegularOperators(MetadataProp.PublishedAt), []);
 
 	// Effects
 

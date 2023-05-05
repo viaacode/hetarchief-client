@@ -238,6 +238,7 @@ export const MEDIA_ACTIONS = (
 							label: tText('modules/ie-objects/const/index___exporteer-metadata'),
 							id: MediaActions.Export,
 							ariaLabel: tText('modules/ie-objects/const/index___exporteer-metadata'),
+							tooltip: tText('modules/ie-objects/const/index___exporteer-metadata'),
 						},
 				  ]
 				: []) as ActionItem[]),
