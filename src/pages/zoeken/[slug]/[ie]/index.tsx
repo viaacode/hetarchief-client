@@ -955,12 +955,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					</p>
 					{maintainerLogo && (
 						<div className="p-object-detail__metadata-logo">
-							<Image
-								src={maintainerLogo}
-								alt={`Logo ${maintainerName}`}
-								layout="fill"
-								objectFit="contain"
-							/>
+							<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
 						</div>
 					)}
 				</>
