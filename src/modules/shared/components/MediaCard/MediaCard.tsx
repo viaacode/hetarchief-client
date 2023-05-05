@@ -378,17 +378,13 @@ const MediaCard: FC<MediaCardProps> = ({
 								<span>{renderDescription()}</span>
 							</div>
 						)}
-						{hasTempAccess && renderTempAccessPill()}
-						{showKeyUserLabel && renderKeyUserPill()}
-						{showLocallyAvailable && renderLocallyAvailableButtons()}
 					</>
 				) : (
-					<>
-						{wrapInLink(renderDescription())}
-						{showKeyUserLabel && renderKeyUserPill()}
-						{showLocallyAvailable && renderLocallyAvailableButtons()}
-					</>
+					<>{wrapInLink(renderDescription())}</>
 				)}
+				{hasTempAccess && renderTempAccessPill()}
+				{showKeyUserLabel && renderKeyUserPill()}
+				{showLocallyAvailable && renderLocallyAvailableButtons()}
 			</Card>
 			<Modal
 				title={tText(

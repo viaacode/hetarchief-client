@@ -12,7 +12,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
 
 import { MetadataProp } from '../../types';
-import { getOperators } from '../../utils';
+import { getRegularOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
@@ -55,7 +55,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 		reValidateMode: 'onChange',
 	});
 
-	const operators = useMemo(() => getOperators(MetadataProp.Duration), []);
+	const operators = useMemo(() => getRegularOperators(MetadataProp.Duration), []);
 
 	// Effects
 
