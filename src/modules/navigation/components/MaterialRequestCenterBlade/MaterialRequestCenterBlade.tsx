@@ -83,10 +83,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		isOpen && refetch();
 	}, [isOpen, refetch]);
 
-	const onCloseBlade = () => {
-		onClose();
-	};
-
 	const deleteMaterialRequest = async (id: string) => {
 		const deleteResponse = await MaterialRequestsService.delete(id);
 		deleteResponse && refetch();
@@ -309,7 +305,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				isOpen={isOpen}
 				renderTitle={renderTitle}
 				footer={isOpen && renderFooter()}
-				onClose={onCloseBlade}
+				onClose={onClose}
 			>
 				{renderContent()}
 			</Blade>
