@@ -129,11 +129,12 @@ export enum GroupName {
 
 export const GET_PERMISSION_TRANSLATIONS_BY_GROUP = (): Record<
 	GroupName,
-	{ name: string; description: ReactNode | string }
+	{ name: string; description: ReactNode | string; isHidden?: boolean }
 > => ({
 	[GroupName.VISITOR]: {
 		name: tText('modules/account/const/account___groep-bezoeker--titel'),
 		description: tHtml('modules/account/const/account___groep-bezoeker--omschrijving'),
+		isHidden: true,
 	},
 	[GroupName.KIOSK_VISITOR]: {
 		name: tText('modules/account/const/account___groep-kiosk--titel'),
