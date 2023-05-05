@@ -46,7 +46,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
-		"@meemoo/admin-core-ui": "2.2.0",
+		"@meemoo/admin-core-ui": "2.2.1",
 		"@meemoo/react-components": "2.25.7",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
