@@ -15,4 +15,5 @@ export interface UIState {
 	lockScroll: Record<string, boolean>;
 	materialRequestCount: number;
 	lastScrollPosition: LastScrollPositionType;
+	selectedMaintainerSlug: string;
 }

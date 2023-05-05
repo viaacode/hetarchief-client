@@ -112,7 +112,12 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
-import { selectShowNavigationBorder, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import {
+	selectSelectedMaintainerSlug,
+	selectShowNavigationBorder,
+	setShowAuthModal,
+	setShowZendesk,
+} from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -196,6 +201,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
+	const selectedMaintainerSlug = useSelector(selectSelectedMaintainerSlug);
 
 	// Query params
 	const [, setQuery] = useQueryParams({
@@ -1108,7 +1114,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 								title: tHtml(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 								),
-								data: mapKeywordsToTagList(mediaInfo.keywords),
+								data: mapKeywordsToTagList(
+									mediaInfo.keywords,
+									selectedMaintainerSlug
+								),
 							},
 							{
 								title: tHtml('pages/slug/ie/index___ook-interessant'),

@@ -20,7 +20,7 @@ import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/M
 import { ROUTES } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { setLastScrollPosition } from '@shared/store/ui';
+import { setLastScrollPosition, setSelectedMaintainerSlug } from '@shared/store/ui';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -70,6 +70,14 @@ const MediaCard: FC<MediaCardProps> = ({
 		if (id && previousPage) {
 			dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
 		}
+	};
+
+	const saveSlug = () => {
+		dispatch(
+			setSelectedMaintainerSlug(
+				router.query.aanbieder ? (router.query.aanbieder as string) : ''
+			)
+		);
 	};
 
 	const wrapInLink = (children: ReactNode) => {
@@ -370,6 +378,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
+				onClick={() => saveSlug()}
 			>
 				{typeof description === 'string' ? (
 					<>

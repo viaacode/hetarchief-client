@@ -16,6 +16,7 @@ const initialState: UIState = {
 	lockScroll: {},
 	materialRequestCount: 0,
 	lastScrollPosition: { itemId: '', page: ROUTES.home },
+	selectedMaintainerSlug: '',
 };
 
 export const uiSlice = createSlice({
@@ -61,6 +62,9 @@ export const uiSlice = createSlice({
 		setLastScrollPosition(state, action: PayloadAction<LastScrollPositionType>) {
 			state.lastScrollPosition = action.payload;
 		},
+		setSelectedMaintainerSlug(state, action: PayloadAction<string>) {
+			state.selectedMaintainerSlug = action.payload;
+		},
 	},
 });
 
@@ -76,4 +80,5 @@ export const {
 	setLockScroll,
 	setMaterialRequestCount,
 	setLastScrollPosition,
+	setSelectedMaintainerSlug,
 } = uiSlice.actions;

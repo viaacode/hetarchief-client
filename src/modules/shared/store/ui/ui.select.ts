@@ -22,3 +22,5 @@ export const selectMaterialRequestCount = (state: AppState): number =>
 	state.ui.materialRequestCount;
 export const selectLastScrollPosition = (state: AppState): LastScrollPositionType =>
 	state.ui.lastScrollPosition;
+export const selectSelectedMaintainerSlug = (state: AppState): string =>
+	state.ui.selectedMaintainerSlug;
