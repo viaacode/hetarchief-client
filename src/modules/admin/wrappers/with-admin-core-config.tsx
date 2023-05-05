@@ -103,6 +103,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.CardsWithoutDescription,
 						ContentBlockType.ImageTextBackground,
 						ContentBlockType.MaintainersGrid,
+						ContentBlockType.HetArchiefHeaderSearch,
 					],
 					defaultPageWidth: 'LARGE',
 					onSaveContentPage,

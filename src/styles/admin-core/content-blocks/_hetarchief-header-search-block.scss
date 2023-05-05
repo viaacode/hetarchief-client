@@ -1,0 +1,70 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-block-het-archief-header-search";
+
+.#{$component} {
+	display: flex;
+	flex-direction: row;
+	gap: $spacer-1xl;
+
+	@include respond-to("md") {
+		flex-direction: column;
+	}
+
+	div:first-child {
+		h1,
+		> ul > li {
+			font-size: $font-size-3xl;
+			font-weight: $font-weight-bold;
+
+			@include respond-to("md") {
+				font-size: $font-size-2xl;
+			}
+		}
+
+		ul {
+			padding: 0;
+			position: relative;
+			height: 6rem;
+			margin: 0;
+
+			li {
+				list-style: none;
+				color: $teal-light;
+				position: absolute;
+				top: 0;
+				left: 0;
+				opacity: 0;
+				transition: opacity 300ms ease-in-out;
+
+				&.current {
+					opacity: 0;
+				}
+
+				&.next {
+					opacity: 1;
+				}
+			}
+		}
+	}
+
+	div:last-child {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		input {
+			border-radius: 4rem;
+		}
+
+		.c-input .c-input__icon {
+			pointer-events: auto;
+			cursor: pointer;
+		}
+
+		p {
+			text-align: right;
+			margin-top: $spacer-md;
+		}
+	}
+}

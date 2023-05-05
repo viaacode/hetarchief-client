@@ -92,9 +92,7 @@ export const ADMIN_CORE_ROUTES = {
 	USER_GROUP_EDIT: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}/:id/${ROUTE_PARTS.edit}`,
 	USER_GROUP_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.permissions}`,
 	USER_OVERVIEW: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.users}}`,
-
-	// Will be added later
-	// SEARCH: `/${ROUTE_PARTS.search}`,
+	SEARCH: `/${ROUTE_PARTS.search}`,
 };
 
 export enum KNOWN_STATIC_ROUTES {
