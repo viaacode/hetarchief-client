@@ -11,6 +11,7 @@ import { VisitorSpaceFilterId } from '../../types';
 import { AdvancedFilterFields } from '../AdvancedFilterFields';
 
 import { ADVANCED_FILTER_FORM_SCHEMA, initialFields } from './AdvancedFilterForm.const';
+import styles from './AdvancedFilterForm.module.scss';
 import { AdvancedFilterFormProps, AdvancedFilterFormState } from './AdvancedFilterForm.types';
 
 const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
@@ -31,9 +32,18 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 		control,
 	});
 
+	const resetFields = () => {
+		setValue('advanced', [initialFields()]);
+		update(0, {
+			prop: undefined,
+			op: undefined,
+			val: undefined,
+		});
+	};
+
 	return (
 		<>
-			<div className={clsx(className, 'u-overflow-auto')}>
+			<div className={clsx(className, styles['advancedFilterForm'], 'u-overflow-auto')}>
 				<p className="u-px-20 u-px-32:md u-mt-40 u-mb-32">
 					{tHtml(
 						'modules/visitor-space/components/forms/advanced-filter-form/advanced-filter-form___stel-je-eigen-geavanceerde-filter-samen-aan-de-hand-van-deze-metadata-velden-en-waarden'
@@ -68,7 +78,7 @@ const AdvancedFilterForm: FC<AdvancedFilterFormProps> = ({
 
 			{children({
 				values: getValues(),
-				reset: () => setValue('advanced', [initialFields()]),
+				reset: () => resetFields(),
 				handleSubmit,
 			})}
 		</>
