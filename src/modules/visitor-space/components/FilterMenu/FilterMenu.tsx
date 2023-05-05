@@ -111,7 +111,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		<FilterSort
 			activeSort={activeSort}
 			activeSortLabel={renderActiveSortLabel()}
-			className={styles['c-filter-menu__option']}
 			options={sortOptions}
 			onOptionClick={onSortClick}
 		/>
