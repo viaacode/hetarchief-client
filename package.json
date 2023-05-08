@@ -56,7 +56,7 @@
 		"@viaa/avo2-types": "2.48.2",
 		"capture-stack-trace": "1.0.1",
 		"clsx": "1.1.1",
-		"copy-to-clipboard": "3.3.1",
+		"copy-to-clipboard": "3.3.3",
 		"cors": "2.8.5",
 		"date-fns": "2.29.3",
 		"focus-trap-react": "8.11.0",
