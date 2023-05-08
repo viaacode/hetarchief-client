@@ -1,5 +1,7 @@
 export interface NewsletterFormState {
 	firstName: string;
+	lastName: string;
+	mail: string;
 }
 
 export interface GetNewsletterPreferencesResponse {

@@ -46,4 +46,8 @@ $page: "p-newsletter";
 		font-size: $font-size-sm;
 		color: $grey;
 	}
+
+	&__form-button {
+		margin-top: $spacer-1xl;
+	}
 }
