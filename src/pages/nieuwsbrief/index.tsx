@@ -1,6 +1,12 @@
 import { GetServerSidePropsResult, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
+import { selectIsLoggedIn } from '@auth/store/user';
+import { Loading } from '@shared/components';
+import { ROUTE_PARTS } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -11,6 +17,23 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
 
 	const { tText } = useTranslation();
+	const router = useRouter();
+
+	const [triggerRedirect, setTriggerRedirect] = useState(false);
+
+	const isLoggedIn = useSelector(selectIsLoggedIn);
+
+	useEffect(() => {
+		setTriggerRedirect(isLoggedIn);
+	}, [isLoggedIn]);
+
+	useEffect(() => {
+		if (!triggerRedirect) {
+			return;
+		}
+
+		router.replace(`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}`);
+	}, [router, triggerRedirect]);
 
 	const renderPageContent = () => {
 		return (
@@ -28,7 +51,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 				url
 			)}
 
-			{renderPageContent()}
+			{isLoggedIn ? <Loading fullscreen owner="newsletter" /> : renderPageContent()}
 		</div>
 	);
 };
