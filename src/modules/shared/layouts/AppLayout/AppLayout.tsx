@@ -1,10 +1,10 @@
-import { Alert } from '@meemoo/react-components';
+import { Alert, OrderDirection } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam } from 'serialize-query-params/lib/params';
@@ -59,8 +59,10 @@ import {
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
-import { Breakpoints } from '@shared/types';
+import { Breakpoints, Visit, VisitStatus } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { VisitsService } from '@visits/services';
+import { VisitTimeframe } from '@visits/types';
 
 import packageJson from '../../../../../package.json';
 
@@ -109,6 +111,8 @@ const AppLayout: FC = ({ children }) => {
 		'{}'
 	);
 
+	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
+
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
 			show && scrollTo(0);
@@ -124,6 +128,26 @@ const AppLayout: FC = ({ children }) => {
 		},
 		[dispatch]
 	);
+
+	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
+		if (!user || [GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS].includes(user.groupName)) {
+			setVisitorSpaces([]);
+			return [];
+		}
+		const { items: spaces } = await VisitsService.getAll({
+			page: 1,
+			size: 10,
+			orderProp: 'endAt',
+			orderDirection: OrderDirection.asc,
+			status: VisitStatus.APPROVED,
+			timeframe: VisitTimeframe.ACTIVE,
+			personal: true,
+		});
+
+		setVisitorSpaces(spaces);
+
+		return spaces;
+	}, [user]);
 
 	useEffect(() => {
 		// Set the build version on the window object
@@ -161,6 +185,14 @@ const AppLayout: FC = ({ children }) => {
 		// Ward: on init set materialRequestCount in navigation
 		materialRequests && dispatch(setMaterialRequestCount(materialRequests?.items.length));
 	}, [dispatch, materialRequests]);
+
+	useEffect(() => {
+		if (!isLoggedIn) {
+			return;
+		}
+
+		getVisitorSpaces();
+	}, [getVisitorSpaces, isLoggedIn]);
 
 	const userName = (user?.firstName as string) ?? '';
 
@@ -233,7 +265,8 @@ const AppLayout: FC = ({ children }) => {
 			user?.permissions || [],
 			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
 			isMobile,
-			user?.visitorSpaceSlug || null
+			user?.visitorSpaceSlug || null,
+			visitorSpaces
 		);
 
 		const staticItems = [
@@ -271,6 +304,7 @@ const AppLayout: FC = ({ children }) => {
 		linkedSpaceOrId,
 		isMobile,
 		isLoggedIn,
+		visitorSpaces,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
