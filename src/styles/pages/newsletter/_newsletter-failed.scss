@@ -1,7 +1,0 @@
-@use "src/styles/abstracts" as *;
-
-$page: "p-newsletter-failed";
-
-.#{$page} {
-	background-color: red;
-}
