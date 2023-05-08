@@ -1,0 +1,7 @@
+@use "src/styles/abstracts" as *;
+
+$page: "p-newsletter-confirmation";
+
+.#{$page} {
+	background-color: red;
+}
