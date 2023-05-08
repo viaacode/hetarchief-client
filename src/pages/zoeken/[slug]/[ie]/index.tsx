@@ -460,7 +460,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				.replaceAll('{local_cp_id}', encodeURIComponent(mediaInfo?.meemooLocalId || ''))
 				.replaceAll('{pid}', encodeURIComponent(mediaInfo?.meemooIdentifier || ''))
 				.replaceAll('{title}', encodeURIComponent(mediaInfo?.name || ''))
-				.replaceAll('{title_serie}', encodeURIComponent(mediaInfo?.series?.[0] || ''));
+				.replaceAll(
+					'{title_serie}',
+					encodeURIComponent(mediaInfo?.isPartOf?.serie?.[0] || '')
+				);
 			window.open(resolvedFormUrl, '_blank');
 		} else {
 			setActiveBlade(MediaActions.RequestMaterial);
