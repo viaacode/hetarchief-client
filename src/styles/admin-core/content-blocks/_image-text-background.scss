@@ -1,0 +1,119 @@
+@use "sass:math";
+
+@use "src/styles/abstracts" as *;
+
+$component: "c-block-image-text-background";
+
+.#{$component} {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	position: relative;
+
+	@include respond-to("md") {
+		grid-template-rows: repeat(2, auto);
+		grid-template-columns: repeat(1, 1fr);
+	}
+
+	&__content-wrapper {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		flex-direction: column;
+		padding: $spacer-1xl;
+		z-index: get-z-layer("foreground");
+
+		p {
+			padding: unset !important;
+		}
+	}
+
+	&__content,
+	&__heading {
+		margin-bottom: $spacer-sm !important;
+	}
+
+	&__button {
+		margin-top: $spacer-xs;
+	}
+
+	&__image-wrapper {
+		@include respond-at("md") {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+		}
+
+		&.c-image img {
+			max-width: 100%;
+			height: 100%;
+			object-fit: contain;
+			margin: 0 !important;
+
+			@include respond-to("md") {
+				width: 100%;
+			}
+		}
+	}
+
+	&--right {
+		&.#{$component} {
+			.#{$component} {
+				&__content-wrapper {
+					grid-row: 1;
+					grid-column: 4/6;
+
+					@include respond-to("md") {
+						grid-column: 1;
+						grid-row: 2;
+					}
+				}
+
+				&__image-wrapper {
+					grid-row: 1;
+					grid-column: 1/6;
+
+					@include respond-to("md") {
+						grid-column: 1;
+						grid-row: 1;
+					}
+				}
+			}
+		}
+	}
+
+	&--left {
+		&.#{$component} {
+			.#{$component} {
+				&__content-wrapper {
+					grid-row: 1;
+					grid-column: 1/3;
+
+					@include respond-to("md") {
+						grid-column: 1;
+						grid-row: 1;
+					}
+				}
+
+				&__image-wrapper {
+					grid-row: 1;
+					grid-column: 1/6;
+
+					@include respond-to("md") {
+						grid-column: 1;
+						grid-row: 2;
+					}
+
+					&.c-image img {
+						margin-right: 0 !important;
+						margin-left: auto !important;
+					}
+				}
+			}
+		}
+	}
+}

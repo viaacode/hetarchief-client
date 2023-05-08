@@ -6,7 +6,13 @@ import { useSelector } from 'react-redux';
 
 import { Icon, IconNamesSolid } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectMaterialRequestCount } from '@shared/store/ui';
+import { useAppDispatch } from '@shared/store';
+import {
+	selectMaterialRequestCount,
+	selectShowMaterialRequestCenter,
+	setShowMaterialRequestCenter,
+	setShowNotificationsCenter,
+} from '@shared/store/ui';
 
 import { MaterialRequestCenterBlade } from '../MaterialRequestCenterBlade';
 
@@ -14,17 +20,19 @@ import styles from './MaterialRequestCenterButton.module.scss';
 
 const MaterialRequestCenterButton: FC = () => {
 	const { tText } = useTranslation();
+	const dispatch = useAppDispatch();
 
-	const [isBladeOpen, setIsBladeOpen] = useState(false);
 	const [isAnimated, setIsAnimated] = useState(false);
 	const [previousMaterialCount, setPreviousMaterialCount] = useState<number | undefined>();
 
 	const animationRef = useRef<HTMLElement | null>(null);
 
 	const materialRequestCount = useSelector(selectMaterialRequestCount);
+	const showMaterialRequestCenter = useSelector(selectShowMaterialRequestCenter);
 
 	const onButtonClick = () => {
-		setIsBladeOpen(!isBladeOpen);
+		dispatch(setShowNotificationsCenter(false));
+		dispatch(setShowMaterialRequestCenter(!showMaterialRequestCenter));
 	};
 
 	useEffect(() => {
@@ -41,6 +49,10 @@ const MaterialRequestCenterButton: FC = () => {
 
 	const handleAnimationEnd = () => {
 		setIsAnimated(false);
+	};
+
+	const onCloseMaterialRequestCenter = () => {
+		dispatch(setShowMaterialRequestCenter(false));
 	};
 
 	useEffect(() => {
@@ -61,13 +73,13 @@ const MaterialRequestCenterButton: FC = () => {
 				variants={['text', 'md']}
 				className={clsx(
 					styles['c-material-request-center'],
-					isBladeOpen && styles['c-material-request-center--active']
+					showMaterialRequestCenter && styles['c-material-request-center--active']
 				)}
 				icon={
 					<div
 						className={clsx(
 							styles['c-material-request-center__icon-container'],
-							isBladeOpen ? 'u-color-teal' : 'u-color-white'
+							showMaterialRequestCenter ? 'u-color-teal' : 'u-color-white'
 						)}
 					>
 						<Icon
@@ -94,8 +106,8 @@ const MaterialRequestCenterButton: FC = () => {
 				aria-label={tText('modules/navigation/const/index___notificaties')}
 			/>
 			<MaterialRequestCenterBlade
-				isOpen={isBladeOpen}
-				onClose={() => setIsBladeOpen(false)}
+				isOpen={showMaterialRequestCenter}
+				onClose={onCloseMaterialRequestCenter}
 			/>
 		</>
 	);

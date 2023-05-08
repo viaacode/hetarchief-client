@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, FormControl, TextInput } from '@meemoo/react-components';
+import { Alert, Button, FormControl, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash';
-import React, { FC, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -30,13 +30,14 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		handleSubmit,
 		formState: { errors },
 		control,
+		resetField,
 	} = useForm<ShareFolderBladeFormState>({
 		resolver: yupResolver(SHARE_FOLDER_FORM_SCHEMA()),
 	});
 
 	const handleClose = () => {
 		setEmailInputValue('');
-		setValue('email', '');
+		resetField('email');
 		onClose();
 	};
 
@@ -103,19 +104,29 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 		);
 	};
 
+	const renderEditAlert = (): ReactNode => (
+		<Alert
+			className={styles['c-share-folder-blade__alert']}
+			title={tText('pages/account/map-delen/folder-id/index___zichtbaarheid-van-de-items')}
+			content={tText('pages/account/map-delen/folder-id/index___zichtbaarheid-message')}
+			icon={<Icon name={IconNamesLight.Exclamation} />}
+		/>
+	);
+
 	return (
 		<Blade
 			isOpen={isOpen}
 			renderTitle={() => (
-				<h4 className={styles['c-share-folder-blade__title']}>
+				<h2 className={styles['c-share-folder-blade__title']}>
 					{tText('pages/account/map-delen/folder-id/index___deel-map')}
-				</h4>
+				</h2>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={handleClose}
 		>
 			<div className={styles['c-share-folder-blade__content']}>
 				<>
+					{renderEditAlert()}
 					<label className={styles['c-share-folder-blade__content-label']}>
 						<h5>{tText('pages/account/map-delen/folder-id/index___via-deellink')}</h5>
 					</label>
@@ -143,7 +154,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 							{tText('pages/account/map-delen/folder-id/index___via-email')}
 						</h5>
 					</label>
-					<label className={styles['c-share-folder-blade__content-label']}>
+					<label className={styles['c-share-folder-blade__content-label--email']}>
 						{tText('pages/account/map-delen/folder-id/index___email')}
 					</label>
 					<div className={styles['c-share-folder-blade__content-value']}>

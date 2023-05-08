@@ -169,4 +169,16 @@ $checkbox-size: $spacer-sm;
 	&__overlay {
 		z-index: get-z-layer("filter-overlay");
 	}
+
+	:global(.c-dropdown__trigger:first-child + .c-dropdown__content-open) {
+		:global(.c-menu) {
+			margin-top: -1px;
+			padding: 0;
+			margin-left: $spacer-sm;
+
+			:global(.c-button--text) {
+				padding-left: $spacer-sm !important;
+			}
+		}
+	}
 }

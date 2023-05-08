@@ -5,8 +5,6 @@ $component: "c-error-page";
 .#{$component} {
 	height: 100%;
 	display: grid;
-	grid-template-rows: 2fr 1fr;
-	grid-template-columns: minmax($spacer-sm, 1fr) auto minmax($spacer-sm, 1fr);
 
 	&__title {
 		z-index: get-z-layer("foreground");
@@ -56,7 +54,7 @@ $component: "c-error-page";
 		display: grid;
 		justify-items: center;
 		row-gap: $spacer-md;
-		padding: $spacer-lg 0;
+		padding: $spacer-sm 0;
 
 		@include respond-at("md") {
 			grid-template-rows: 1fr auto auto 2fr;
@@ -75,9 +73,15 @@ $component: "c-error-page";
 		}
 	}
 
-	&__button {
+	&__button-component {
 		@include respond-at("md") {
 			grid-row: 3;
+		}
+	}
+
+	&__button {
+		@include respond-at("md") {
+			grid-row: 4;
 		}
 	}
 }

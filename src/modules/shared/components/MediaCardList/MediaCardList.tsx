@@ -4,6 +4,7 @@ import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { ROUTE_PARTS } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
@@ -25,8 +26,10 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	wrapper = (card) => card,
 	className,
 	showLocallyAvailable = false,
+	showManyResultsTile,
 }) => {
 	const windowSize = useWindowSizeContext();
+	const { tText } = useTranslation();
 
 	if (!items) {
 		return null;
@@ -125,6 +128,24 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		];
 	};
 
+	const insertManyResultsTile = (tiles: ReactNode[]): ReactNode[] => {
+		if (showManyResultsTile) {
+			tiles.push(
+				<MediaCard
+					key="manyResultsTile"
+					id="manyResultsTileId"
+					type={null}
+					preview="/images/more.png"
+					title={tText(
+						'modules/shared/components/media-card-list/media-card-list___teveel-resultaten'
+					)}
+					view={view}
+				/>
+			);
+		}
+		return tiles;
+	};
+
 	const tiles = items.map((item, i) => {
 		const link = stringifyUrl({
 			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`,
@@ -166,7 +187,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				columnClassName={styles['c-media-card-list__column']}
 			>
 				{isMasonryView && renderSidebar()}
-				{insertFakeHeightItem(tiles)}
+				{insertFakeHeightItem(insertManyResultsTile(tiles))}
 			</Masonry>
 		</div>
 	);

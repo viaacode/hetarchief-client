@@ -13,4 +13,5 @@ export interface ErrorPageProps extends DefaultComponentProps {
 		image: string;
 		left?: boolean;
 	};
+	buttonsComponent?: ReactNode;
 }

@@ -12,12 +12,12 @@ export enum IeObjectsSearchFilterField {
 	CREATOR = 'creator',
 	DESCRIPTION = 'description',
 	DURATION = 'duration',
-	ERA = 'era',
+	SPACIAL_COVERAGE = 'spacialCoverage',
+	TEMPORAL_COVERAGE = 'temporalCoverage',
 	FORMAT = 'format',
 	GENRE = 'genre',
 	KEYWORD = 'keyword',
 	LANGUAGE = 'language',
-	LOCATION = 'location',
 	MEDIUM = 'medium',
 	NAME = 'name',
 	PUBLISHED = 'published',
@@ -25,14 +25,14 @@ export enum IeObjectsSearchFilterField {
 	QUERY = 'query',
 	// TODO future: rename maintainer to maintainerId and maintainers to maintainerName and also change this in the client
 	MAINTAINER_ID = 'maintainer', // Contains the OR-id of the maintainer
-	MAINTAINER_IDS = 'maintainers', // Contains the name of the maintainer
 	CONSULTABLE_ONLY_ON_LOCATION = 'isConsultableOnlyOnLocation',
 	CONSULTABLE_MEDIA = 'isConsultableMedia',
 	CAST = 'cast',
-	CAPTION = 'caption',
-	TRANSCRIPT = 'transcript',
-	CATEGORIE = 'categorie',
-	TYPE = 'type',
+	IDENTIFIER = 'identifier',
+	OBJECT_TYPE = 'objectType',
+	CAPTION = 'caption', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0
+	TRANSCRIPT = 'transcript', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0
+	CATEGORIE = 'categorie', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0
 }
 
 export enum IeObjectsSearchOperator {

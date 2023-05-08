@@ -34,7 +34,7 @@ $l-sidebar-collapse-to: "md";
 	}
 
 	&__main {
-		width: 100%;
+		width: 70%;
 
 		@include respond-at("xs") {
 			flex-grow: 1;

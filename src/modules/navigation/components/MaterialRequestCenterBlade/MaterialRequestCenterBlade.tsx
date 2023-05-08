@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -42,10 +43,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		data: materialRequests,
 		isFetching,
 		refetch,
-	} = useGetPendingMaterialRequests({
-		orderProp: MaterialRequestKeys.maintainer,
-		orderDirection: 'asc' as OrderDirection,
-	});
+	} = useGetPendingMaterialRequests(
+		{
+			orderProp: MaterialRequestKeys.maintainer,
+			orderDirection: 'asc' as OrderDirection,
+		},
+		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+	);
 
 	const noContent =
 		!materialRequests?.items || (materialRequests?.items && materialRequests?.items.length < 1);
@@ -78,10 +82,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	useEffect(() => {
 		isOpen && refetch();
 	}, [isOpen, refetch]);
-
-	const onCloseBlade = () => {
-		onClose();
-	};
 
 	const deleteMaterialRequest = async (id: string) => {
 		const deleteResponse = await MaterialRequestsService.delete(id);
@@ -177,7 +177,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 									styles['c-material-request-center-blade__material-label-icon']
 								}
 								name={
-									item.objectType === MaterialRequestObjectType.AUDIO
+									item.objectDctermsFormat === MaterialRequestObjectType.AUDIO
 										? IconNamesLight.Audio
 										: IconNamesLight.Video
 								}
@@ -284,7 +284,12 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	if (isFetching) {
 		return (
-			<Blade isOpen={isOpen} onClose={onClose} renderTitle={renderTitle}>
+			<Blade
+				className={styles['c-material-request-center-blade']}
+				isOpen={isOpen}
+				onClose={onClose}
+				renderTitle={renderTitle}
+			>
 				<Loading
 					className={styles['c-material-request-center-blade__loading']}
 					owner="MaterialRequestCenterBlade: render material requests"
@@ -296,10 +301,11 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	return (
 		<>
 			<Blade
+				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
 				renderTitle={renderTitle}
 				footer={isOpen && renderFooter()}
-				onClose={onCloseBlade}
+				onClose={onClose}
 			>
 				{renderContent()}
 			</Blade>
@@ -308,12 +314,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					isOpen={isEditMaterialRequestBladeOpen}
 					onClose={() => closeEditMaterialRequestBlade()}
 					objectName={selectedMaterialRequest.objectSchemaName}
-					objectId={selectedMaterialRequest.objectMeemooIdentifier}
-					objectType={selectedMaterialRequest.objectType}
+					objectId={selectedMaterialRequest.objectSchemaIdentifier}
+					objectDctermsFormat={selectedMaterialRequest.objectDctermsFormat}
 					maintainerName={selectedMaterialRequest.maintainerName}
 					maintainerLogo={selectedMaterialRequest.maintainerLogo}
 					maintainerSlug={selectedMaterialRequest.maintainerSlug}
 					materialRequestId={selectedMaterialRequest.id}
+					meemooId={selectedMaterialRequest.objectMeemooIdentifier}
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
 					refetch={refetch}

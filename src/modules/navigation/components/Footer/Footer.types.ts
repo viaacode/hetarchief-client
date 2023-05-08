@@ -1,9 +1,7 @@
 import { ComponentLink } from '@shared/types';
 
 export interface FooterProps {
-	links?: ComponentLink[];
-	leftItem: FooterItem;
-	rightItem: FooterItem;
+	linkSections: ComponentLink[][];
 }
 
 export interface FooterImage {

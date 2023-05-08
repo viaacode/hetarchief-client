@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { UIState } from './ui.types';
+import { ROUTES } from '@shared/const';
+
+import { LastScrollPositionType, UIState } from './ui.types';
 
 const initialState: UIState = {
 	showAuthModal: false,
@@ -8,10 +10,12 @@ const initialState: UIState = {
 	showNavigationBorder: false,
 	showFooter: true,
 	showNotificationsCenter: false,
+	showMaterialRequestCenter: false,
 	hasUnreadNotifications: false,
 	showZendesk: true,
 	lockScroll: {},
 	materialRequestCount: 0,
+	lastScrollPosition: { itemId: '', page: ROUTES.home },
 };
 
 export const uiSlice = createSlice({
@@ -33,6 +37,9 @@ export const uiSlice = createSlice({
 		setShowNotificationsCenter(state, action: PayloadAction<boolean>) {
 			state.showNotificationsCenter = action.payload;
 		},
+		setShowMaterialRequestCenter(state, action: PayloadAction<boolean>) {
+			state.showMaterialRequestCenter = action.payload;
+		},
 		setHasUnreadNotifications(state, action: PayloadAction<boolean>) {
 			state.hasUnreadNotifications = action.payload;
 		},
@@ -51,6 +58,9 @@ export const uiSlice = createSlice({
 		setMaterialRequestCount(state, action: PayloadAction<number>) {
 			state.materialRequestCount = action.payload;
 		},
+		setLastScrollPosition(state, action: PayloadAction<LastScrollPositionType>) {
+			state.lastScrollPosition = action.payload;
+		},
 	},
 });
 
@@ -60,8 +70,10 @@ export const {
 	setShowNavigationBorder,
 	setShowFooter,
 	setShowNotificationsCenter,
+	setShowMaterialRequestCenter,
 	setHasUnreadNotifications,
 	setShowZendesk,
 	setLockScroll,
 	setMaterialRequestCount,
+	setLastScrollPosition,
 } = uiSlice.actions;

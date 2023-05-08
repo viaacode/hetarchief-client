@@ -1,0 +1,7 @@
+@use "src/styles/abstracts" as *;
+
+$component: "advancedFilterForm";
+
+.#{$component} {
+	min-height: 32rem;
+}

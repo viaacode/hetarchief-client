@@ -10,18 +10,14 @@ import { Slide, ToastContainer } from 'react-toastify';
 import { BooleanParam } from 'serialize-query-params/lib/params';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { Permission } from '@account/const';
+import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
-import {
-	footerLeftItem,
-	footerLinks,
-	footerRightItem,
-} from '@navigation/components/Footer/__mocks__/footer';
+import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
@@ -43,6 +39,7 @@ import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCe
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
 import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSize } from '@shared/hooks/use-window-size';
@@ -59,6 +56,7 @@ import {
 	setHasUnreadNotifications,
 	setMaterialRequestCount,
 	setShowAuthModal,
+	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
 import { Breakpoints } from '@shared/types';
@@ -75,6 +73,7 @@ const AppLayout: FC = ({ children }) => {
 	const router = useRouter();
 	const { asPath } = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
 	const showFooter = useSelector(selectShowFooter);
@@ -88,7 +87,7 @@ const AppLayout: FC = ({ children }) => {
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
 		canViewAllSpaces,
 	});
-	const { data: materialRequests } = useGetPendingMaterialRequests({});
+	const { data: materialRequests } = useGetPendingMaterialRequests({}, { enabled: isKioskUser });
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -99,7 +98,10 @@ const AppLayout: FC = ({ children }) => {
 		[SEARCH_QUERY_KEY]: StringParam,
 		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
-	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts();
+	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
+		{},
+		{ keepPreviousData: true, enabled: !isKioskUser }
+	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
@@ -110,6 +112,7 @@ const AppLayout: FC = ({ children }) => {
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
 			show && scrollTo(0);
+			dispatch(setShowMaterialRequestCenter(false));
 			dispatch(setShowNotificationsCenter(show));
 		},
 		[dispatch]
@@ -263,11 +266,11 @@ const AppLayout: FC = ({ children }) => {
 		accessibleVisitorSpaces,
 		navigationItems,
 		user?.permissions,
+		user?.visitorSpaceSlug,
 		showLinkedSpaceAsHomepage,
 		linkedSpaceOrId,
 		isMobile,
 		isLoggedIn,
-		user?.maintainerId,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
@@ -292,8 +295,10 @@ const AppLayout: FC = ({ children }) => {
 			[alertId]: alert?.untilDate,
 		});
 
-		// Add the alert to the users read notifications
-		await dismissMaintenanceAlert(alertId);
+		if (isLoggedIn) {
+			// Add the alert to the users read notifications
+			await dismissMaintenanceAlert(alertId);
+		}
 
 		setAlertsIgnoreUntil(newAlertsIgnoreUntil);
 	};
@@ -391,9 +396,11 @@ const AppLayout: FC = ({ children }) => {
 
 			{showFooter && (
 				<Footer
-					leftItem={footerLeftItem}
-					links={footerLinks(navigationItems?.[NavigationPlacement.FooterCenter] || [])}
-					rightItem={footerRightItem}
+					linkSections={[
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection1] || []),
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection2] || []),
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection3] || []),
+					]}
 				/>
 			)}
 		</div>
