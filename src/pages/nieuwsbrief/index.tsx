@@ -10,13 +10,15 @@ import { ROUTE_PARTS } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
+import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
+	useStickyLayout();
 
-	const { tText } = useTranslation();
+	const { tText, tHtml } = useTranslation();
 	const router = useRouter();
 
 	const [triggerRedirect, setTriggerRedirect] = useState(false);
@@ -35,13 +37,25 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 		router.replace(`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}`);
 	}, [router, triggerRedirect]);
 
-	const renderPageContent = () => {
-		return (
-			<>
-				<h1>NIEUWSBRIEF PAGINA</h1>
-			</>
-		);
-	};
+	const renderPageContent = () => (
+		<div className="p-newsletter__wrapper l-container">
+			<section className="p-newsletter__content">
+				<header className="p-newsletter__header">
+					<h2 className="p-newsletter__title">
+						{tText(
+							'pages/nieuwsbrief/index___nieuwsbrief___schrijf-je-in-voor-onze-nieuwsbrief-titel'
+						)}
+					</h2>
+					<p className="p-newsletter__text">
+						{tHtml(
+							'pages/nieuwsbrief/index___nieuwsbrief___schrijf-je-in-voor-onze-nieuwsbrief-omschrijving'
+						)}
+					</p>
+				</header>
+				<div>FORM</div>
+			</section>
+		</div>
+	);
 
 	return (
 		<div className="p-newsletter">

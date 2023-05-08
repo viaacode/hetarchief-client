@@ -3,5 +3,40 @@
 $page: "p-newsletter";
 
 .#{$page} {
-	background-color: red;
+	height: 100%;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-image: url("/images/bg-newsletter.png");
+	background-position: left bottom;
+	background-size: auto 80%;
+
+	&__wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: $spacer-3xl;
+		margin-top: 14.4rem;
+
+		@include respond-to(lg) {
+			display: block;
+		}
+	}
+
+	&__content {
+		grid-column: 2;
+	}
+
+	&__header {
+		margin-bottom: $spacer-lg;
+	}
+
+	&__title {
+		font-size: $font-size-2xl;
+		line-height: $line-height-md;
+		margin-bottom: $spacer-xs;
+	}
+
+	&__text {
+		font-size: $font-size-sm;
+		color: $grey;
+	}
 }
