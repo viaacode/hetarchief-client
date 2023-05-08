@@ -271,7 +271,8 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						</p>
 					</section>
 
-					{(active?.items || []).length > 0 && (
+					{(active?.items.filter((visit) => !visit.id.includes('permanent-id')) || [])
+						.length > 0 && (
 						<section
 							className={clsx(
 								styles['c-hero__section'],
@@ -295,7 +296,8 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					)}
 
-					{(future?.items || []).length > 0 && (
+					{(future?.items.filter((visit) => !visit.id.includes('permanent-id')) || [])
+						.length > 0 && (
 						<section
 							className={clsx(styles['c-hero__section'])}
 							id="toekomstige-bezoeken"
@@ -324,7 +326,8 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					)}
 
-					{(pending?.items || []).length > 0 && (
+					{(pending?.items.filter((visit) => !visit.id.includes('permanent-id')) || [])
+						.length > 0 && (
 						<section
 							className={clsx(styles['c-hero__section'])}
 							id="aangevraagde-bezoeken"
