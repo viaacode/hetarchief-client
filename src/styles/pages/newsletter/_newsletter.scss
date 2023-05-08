@@ -5,16 +5,6 @@ $page: "p-newsletter";
 .#{$page} {
 	height: 100%;
 	width: 100%;
-	background-repeat: no-repeat;
-	background-image: url("/images/bg-newsletter.png");
-	background-position: left bottom;
-	background-size: auto 80%;
-
-	@include respond-to(lg) {
-		background-position: left top;
-		background-size: 100% auto;
-		background-image: url("/images/bg-newsletter-mobile.png");
-	}
 
 	&__wrapper {
 		display: grid;
@@ -49,5 +39,18 @@ $page: "p-newsletter";
 
 	&__form-button {
 		margin-top: $spacer-1xl;
+	}
+
+	&--wallpaper {
+		background-repeat: no-repeat;
+		background-image: url("/images/bg-newsletter.png");
+		background-position: left bottom;
+		background-size: auto 80%;
+
+		@include respond-to(lg) {
+			background-position: left top;
+			background-size: 100% auto;
+			background-image: url("/images/bg-newsletter-mobile.png");
+		}
 	}
 }

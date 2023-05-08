@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormControl, TextInput } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
@@ -7,7 +8,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-import { selectIsLoggedIn } from '@auth/store/user';
+import { selectHasCheckedLogin, selectIsLoggedIn } from '@auth/store/user';
 import { Loading } from '@shared/components';
 import { ROUTE_PARTS } from '@shared/const';
 import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';
@@ -39,10 +40,11 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [triggerRedirect, setTriggerRedirect] = useState(false);
 
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
 
 	useEffect(() => {
-		setTriggerRedirect(isLoggedIn);
-	}, [isLoggedIn]);
+		setTriggerRedirect(hasCheckedLogin && isLoggedIn);
+	}, [hasCheckedLogin, isLoggedIn]);
 
 	useEffect(() => {
 		if (!triggerRedirect) {
@@ -154,14 +156,22 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 
 	return (
-		<div className="p-newsletter">
+		<div
+			className={clsx('p-newsletter', {
+				'p-newsletter--wallpaper': !isLoggedIn && hasCheckedLogin,
+			})}
+		>
 			{renderOgTags(
 				tText('pages/nieuwsbrief/index___nieuwsbrief'),
 				tText('pages/nieuwsbrief/index___nieuwsbrief-omschrijving'),
 				url
 			)}
 
-			{isLoggedIn ? <Loading fullscreen owner="newsletter" /> : renderPageContent()}
+			{(hasCheckedLogin && isLoggedIn) || !hasCheckedLogin ? (
+				<Loading fullscreen owner="newsletter" />
+			) : (
+				renderPageContent()
+			)}
 		</div>
 	);
 };
