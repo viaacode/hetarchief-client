@@ -24,11 +24,8 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 		timeout: 10000,
 	});
 
-	// Check searchbar contains 'Start je zoektocht':
-	let navigationItemTexts = await page
-		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-		.allInnerTexts();
-	// await expect(navigationItemTexts).toContain('Start je zoektocht'); //Does not pass yet
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
 	// Accept selected cookies
 	await acceptCookies(page, 'selection');
@@ -117,14 +114,14 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator('.c-avatar__text')).toHaveText('Test-at');
 
 	// Admin and beheer should not be visible
-	navigationItemTexts = await page
+	const navigationItemTexts = await page
 		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
 		.allInnerTexts();
 	await expect(navigationItemTexts).not.toContain('Admin');
 	await expect(navigationItemTexts).not.toContain('Beheer');
 
-	// Searchbar should contain 'Start je zoektocht'
-	// await expect(navigationItemTexts).toContain('Start je zoektocht'); //Does not pass yet
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

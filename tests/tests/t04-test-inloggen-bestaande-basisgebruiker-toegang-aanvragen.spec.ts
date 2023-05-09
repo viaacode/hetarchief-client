@@ -16,14 +16,11 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 		timeout: 10000,
 	});
 
-	// Accept all cookies
-	await acceptCookies(page, 'all');
+	// // Accept all cookies
+	// await acceptCookies(page, 'all'); // enable this when running on int
 
-	// Check searchbar contains 'Start je zoektocht':
-	const navigationItemTexts = await page
-		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-		.allInnerTexts();
-	// await expect(navigationItemTexts).toContain('Start je zoektocht'); //TODO: Uncomment when this is visible
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
 	// Click on 'Bezoek een aanbieder'
 	await page
@@ -52,7 +49,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 			'.c-visitor-space-card--name--vrt [class^=VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list] p'
 		)
 		.allInnerTexts();
-	await expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be' /*, '+32 2 741 37 20'*/]); // Comment because int has wrong data
+	await expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be', '+32 2 741 37 20']); // Comment because int has wrong data
 
 	// Click on 'Vraag toegang aan' van VRT
 	const vrtCard = await page.locator('.c-visitor-space-card--name--vrt .c-button__content', {
@@ -96,6 +93,9 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	// Click on the meemoo icon
 	await page.locator('a[href="/"]').first().click();
 
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]').first()).toBeVisible();
+
 	// Click on 'Bezoek een aanbieder'
 	await page
 		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
@@ -105,11 +105,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 
 	await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
 
-	const visitorSpaceCards = await page
-		.locator(
-			'[class^=LoggedInHome_c-hero__section] [class^=c-visitor-space-card--name] [class^=VisitorSpaceCard_c-visitor-space-card__title]'
-		)
-		.allInnerTexts();
+	const visitorSpaceCards = await page.locator('#aangevraagde-bezoeken b').allInnerTexts();
 	await expect(visitorSpaceCards).toContain('VRT');
 
 	// Wait for close to save the videos

@@ -28,8 +28,8 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Login as CP admin
 	await loginUserHetArchiefIdp(
 		page,
-		process.env.TEST_CP_ADMIN_ACCOUNT_USERNAME as string,
-		process.env.TEST_CP_ADMIN_ACCOUNT_PASSWORD as string
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
 	);
 
 	// Check homepage title
@@ -37,8 +37,8 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		timeout: 10000,
 	});
 
-	// Check the homepage show the correct title for searching maintainers
-	// await expect(page.locator('text=Vind een aanbieder')).toBeVisible(); //This is not visible
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
 	// Admin and beheer should not be visible
 	const navigationItemTexts = await page
@@ -142,12 +142,13 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check blade title
 	await checkBladeTitle(page, 'Aanvraag goedkeuren');
 
-	// Click 'toegang tot de volledige collectie
-	await page
-		.locator('[class^="c-radio-button"] span', {
-			hasText: 'Toegang tot de volledige collectie',
-		})
-		.click();
+	// // Click 'toegang tot de volledige collectie'
+	// await page
+	// 	.locator('[class^="c-radio-button"] span', {
+	// 		hasText: 'Toegang tot de volledige collectie',
+	// 	})
+	// 	.click();
+	// TODO: check 'toegang tot de volledige collectie' is already checked
 	// Enter time from: 00:00
 	await page.click('.c-datepicker--time input[name="accessFrom"]');
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');

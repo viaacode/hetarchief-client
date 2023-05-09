@@ -5,20 +5,20 @@ import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
+test.use({
+	viewport: { width: 1400, height: 850 },
+});
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 
-	// Accept all cookies
-	await acceptCookies(page, 'all');
-
-	// Check the homepage show the correct title for searching maintainers
-	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+	// // Accept all cookies
+	// await acceptCookies(page, 'all'); //Enable when on int
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -28,26 +28,42 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 
 	/**
 	 * Go to search page VRT --------------------------------------------------------------------
 	 */
-
-	// Click on "start you visit" navigation item
-	await page.click('text=Start je zoekopdracht');
-
-	// Wait for search page to be ready
-	await waitForSearchResults(page);
-
-	// Check VRT in sub navigation
-	const subNavigationTitle = await page.locator(
-		'.p-visitor-space [class*="Navigation_c-navigation"] h1'
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator('a[href="/bezoek"] div[class^="c-badge"]').first()).toContainText(
+		'1'
 	);
-	await expect(subNavigationTitle).toBeVisible();
-	await expect(subNavigationTitle).toContainText('VRT');
+	// Click on "Bezoek een aanbieder" navigation item
+	await page.click('text=Bezoek een aanbieder');
+
+	const subNavItems = await page
+		.locator('div[class^="c-menu c-menu--default"]')
+		.first()
+		.locator('a')
+		.allInnerTexts();
+	await expect(subNavItems).toContain('Zoeken naar bezoekersruimtes');
+	await expect(subNavItems[1]).toMatch(/VRT.*/);
+	await page.click('text=Zoeken naar bezoekersruimtes');
+	// Wait for search page to be ready
+	// await waitForSearchResults(page);
+	await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
+
+	// Check VRT in actieve bezoekersruimtes
+	await expect(
+		await page
+			.locator('div[class^="LoggedInHome_c-hero__access-cards"]  h2')
+			.first()
+			.allInnerTexts()
+	).toContain('VRT');
+
+	await page.locator('text=Start je zoekopdracht').click();
 
 	/**
 	 * Search on search page --------------------------------------------------------------------

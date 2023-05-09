@@ -10,12 +10,12 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'homepage | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
 		timeout: 10000,
 	});
 
-	// Accept all cookies
-	await acceptCookies(page, 'all');
+	// // Accept all cookies
+	// await acceptCookies(page, 'all');  // Enable this on INT, comment bcs localhost
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(
@@ -23,6 +23,8 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 		process.env.TEST_CP_ADMIN_ACCOUNT_USERNAME as string,
 		process.env.TEST_CP_ADMIN_ACCOUNT_PASSWORD as string
 	);
+	// Check navbar is visible
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toContainText('VRT CP ADMIN');

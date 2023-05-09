@@ -20,8 +20,8 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 		timeout: 10000,
 	});
 
-	// Accept all cookies
-	await acceptCookies(page, 'all');
+	// // Accept all cookies
+	// await acceptCookies(page, 'all');  // Enable this on INT, comment bcs localhost
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(
@@ -31,7 +31,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	);
 
 	// Check tos is displayed, scroll down and click accept button
-	// await acceptTos(page); //It is not displayed
+	// await acceptTos(page); //It is not displayed //Enable when on int
 
 	// Check site is still visible:
 	// await expect(page.locator('text=Vind een aanbieder')).toBeVisible(); //This is not visible
@@ -71,14 +71,10 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	// 	.click();
 	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/bezoek'); //TODO: click te button instead of doing this
 
-	await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
+	await new Promise((resolve) => setTimeout(resolve, 5 * 1000));
 
 	// Check pending request is visible
-	const visitorSpaceCards = await page
-		.locator(
-			'[class^=LoggedInHome_c-hero__section] [class^=c-visitor-space-card--name] [class^=VisitorSpaceCard_c-visitor-space-card__title]'
-		)
-		.allInnerTexts();
+	const visitorSpaceCards = await page.locator('#aangevraagde-bezoeken b').allInnerTexts();
 	await expect(visitorSpaceCards).toContain('VRT');
 
 	// Wait for close to save the videos
