@@ -253,8 +253,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	// gerelateerd
 	const { data: relatedData } = useGetIeObjectsRelated(
 		router.query.ie as string,
-		isKiosk ? mediaInfo?.maintainerId ?? '' : '',
-		mediaInfo?.meemooIdentifier ?? '',
+		mediaInfo?.maintainerId,
+		mediaInfo?.meemooIdentifier,
 		!!mediaInfo
 	);
 
