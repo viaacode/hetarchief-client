@@ -34,7 +34,8 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -46,7 +47,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>([]);
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const { data: materialRequests, isLoading: isLoadingMaterialRequests } = useGetMaterialRequests(
 		{
@@ -60,7 +61,7 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 			...(!isNil(filters.orderDirection) && {
 				orderDirection: filters.orderDirection as OrderDirection,
 			}),
-			search: filters[SEARCH_QUERY_KEY],
+			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 			type: filters.type as MaterialRequestType[],
 			maintainerIds: filters.maintainerIds as string[],
 		}
@@ -261,7 +262,10 @@ const AdminMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 							placeholder={tText('pages/admin/materiaalaanvragen/index___zoek')}
 							onChange={setSearch}
 							onSearch={(newValue) =>
-								setFilters({ [SEARCH_QUERY_KEY]: newValue || undefined, page: 1 })
+								setFilters({
+									[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue || undefined,
+									page: 1,
+								})
 							}
 						/>
 					</div>

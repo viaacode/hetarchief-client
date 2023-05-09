@@ -6,10 +6,10 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ErrorPage } from '@shared/components';
 import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -38,7 +38,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	const [query, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
 	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
@@ -70,13 +70,13 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 	};
 
 	useEffect(() => {
-		if (query[VISITOR_SPACE_SLUG_QUERY_KEY]) {
+		if (query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]) {
 			setIsRequestAccessBladeOpen(true);
 		}
 	}, []);
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
+		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
 			return;

@@ -2,13 +2,13 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 import { object, SchemaOf, string } from 'yup';
 
 import { CreateFolderFormState } from '@account/types';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 
 export const FolderItemListSize = 20;
 
 export const ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG = {
-	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
+	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 };
 

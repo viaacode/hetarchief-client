@@ -6,21 +6,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -50,14 +49,13 @@ const MediaCard: FC<MediaCardProps> = ({
 	link,
 	maintainerSlug,
 	hasTempAccess,
-	previousPage,
 }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
-	const dispatch = useDispatch();
 
-	const [, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	const [query, setQuery] = useQueryParams({
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.LAST_CLICKED_ITEM]: StringParam,
 	});
 
 	const user = useSelector(selectUser);
@@ -67,9 +65,17 @@ const MediaCard: FC<MediaCardProps> = ({
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	const saveScrollPosition = () => {
-		if (id && previousPage) {
-			dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
-		}
+		setQuery(
+			{
+				...query,
+				[QUERY_PARAM_KEY.LAST_CLICKED_ITEM]: id,
+			},
+			'replace'
+		);
+		// if (id && previousPage) {
+		// 	console.log('setting scroll position: ', { itemId: id, page: previousPage });
+		// 	dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
+		// }
 	};
 
 	const wrapInLink = (children: ReactNode) => {
@@ -131,7 +137,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
+		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
 		setIsRequestAccessBladeOpen(true);
 	};
 
