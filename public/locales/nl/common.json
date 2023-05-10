@@ -111,7 +111,7 @@
   "modules/auth/components/auth-modal/auth-modal___meld-je-aan-als-admin": "Meld je aan als beheerder.",
   "modules/auth/components/auth-modal/auth-modal___nog-geen-strong-gratis-strong-account-op-het-archief": "Nog geen <strong>gratis</strong> account op Het Archief?",
   "modules/auth/components/auth-modal/auth-modal___registreer-je-hier": "Registreer je hier",
-  "modules/auth/components/auth-modal/auth-modal___sleutelgebruiker-rechten-voor-aanbiedermedewerkers": "// Sleutelgebruiker-rechten voor aanbiedermedewerkers. Hier kan de tekst doorlopen over twee lijnen lorem ipsum dolor site amet. <a href=\"https://bezoek-qas.hetarchief.be/vragen\" target=\"_blank\">Vraag ze hier aan.</a>",
+  "modules/auth/components/auth-modal/auth-modal___sleutelgebruiker-rechten-voor-aanbiedermedewerkers": "Sleutelgebruiker-rechten voor aanbiedermedewerkers. Hier kan de tekst doorlopen over twee lijnen lorem ipsum dolor site amet. <a href=\"https://bezoek-qas.hetarchief.be/vragen\" target=\"_blank\">Vraag ze hier aan.</a>",
   "modules/cp/components/approve-request-blade/approve-request-blade___aanvraag-goedkeuren": "Aanvraag goedkeuren",
   "modules/cp/components/approve-request-blade/approve-request-blade___annuleer": "Annuleer",
   "modules/cp/components/approve-request-blade/approve-request-blade___de-aanvraag-is-goedgekeurd": "De aanvraag is goedgekeurd.",
