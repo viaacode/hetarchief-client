@@ -35,12 +35,6 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 		await AuthService.redirectToRegisterHetArchief(queryParams, router);
 	};
 
-	const onLoginMeemoo = async () => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const { showAuth, ...queryParams } = query;
-		await AuthService.redirectToLoginMeemoo(queryParams, router);
-	};
-
 	/**
 	 * Render
 	 */
@@ -56,38 +50,18 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 		);
 	};
 
-	const renderFooter = () => {
-		const showFooterLogin = publicRuntimeConfig.ENABLE_LOGIN_FOOTER === 'true';
-
-		return (
-			<div className="u-text-center u-bg-silver">
-				{showFooterLogin && (
-					<Button
-						label={tHtml(
-							'modules/auth/components/auth-modal/auth-modal___meld-je-aan-als-admin'
-						)}
-						variants="text"
-						onClick={onLoginMeemoo}
-					/>
-				)}
-
-				<div
-					className={clsx(
-						styles['c-auth-modal__footer-keyuser'],
-						'u-p-16',
-						'u-text-left'
+	const renderFooter = () => (
+		<div className="u-text-center u-bg-silver">
+			<div className={clsx(styles['c-auth-modal__footer-keyuser'], 'u-p-16', 'u-text-left')}>
+				<Icon className="u-mr-8 u-font-size-22" name={IconNamesLight.Key} />
+				<p>
+					{tHtml(
+						'modules/auth/components/auth-modal/auth-modal___sleutelgebruiker-rechten-voor-aanbiedermedewerkers'
 					)}
-				>
-					<Icon className="u-mr-8 u-font-size-22" name={IconNamesLight.Key} />
-					<p>
-						{tHtml(
-							'modules/auth/components/auth-modal/auth-modal___sleutelgebruiker-rechten-voor-aanbiedermedewerkers'
-						)}
-					</p>
-				</div>
+				</p>
 			</div>
-		);
-	};
+		</div>
+	);
 
 	return (
 		<Modal {...props} heading={renderHeading()} footer={renderFooter()}>
