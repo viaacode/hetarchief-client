@@ -17,7 +17,12 @@ import {
 	VisitorSpaceFilterId,
 	VisitorSpaceQueryParams,
 } from '../../types';
-import { getOperators, getProperties } from '../metadata';
+import {
+	getAdvancedProperties,
+	getFilterLabel,
+	getOperators,
+	getRegularProperties,
+} from '../metadata';
 
 const getSelectLabel = (
 	options: SelectOption[],
@@ -87,7 +92,9 @@ export const mapAdvancedToTags = (
 
 		const split = (advanced.val || '').split(SEPARATOR);
 
-		const label = getSelectLabel(getProperties(), prop);
+		const label =
+			getSelectLabel(getRegularProperties(), prop) ||
+			getSelectLabel(getAdvancedProperties(), prop);
 		let operator = getSelectLabel(getOperators(prop), advanced.op);
 		let value = advanced.val;
 
@@ -145,39 +152,42 @@ export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] 
 		),
 		...mapArrayParamToTags(
 			query[VisitorSpaceFilterId.Medium] || [],
-			tText('modules/visitor-space/utils/map-filters/map-filters___analoge-drager'),
+			getFilterLabel(MetadataProp.Medium),
 			VisitorSpaceFilterId.Medium
 		),
+		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
 		...mapAdvancedToTags(
 			query[VisitorSpaceFilterId.Duration] || [],
 			VisitorSpaceFilterId.Duration
 		),
+		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
 		...mapAdvancedToTags(
 			query[VisitorSpaceFilterId.Created] || [],
 			VisitorSpaceFilterId.Created
 		),
+		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
 		...mapAdvancedToTags(
 			query[VisitorSpaceFilterId.Published] || [],
 			VisitorSpaceFilterId.Published
 		),
 		...mapArrayParamToTags(
 			query[VisitorSpaceFilterId.Creator] || [],
-			tText('modules/visitor-space/utils/map-filters/map-filters___maker'),
+			getFilterLabel(MetadataProp.Creator),
 			VisitorSpaceFilterId.Creator
 		),
 		...mapArrayParamToTags(
 			query[VisitorSpaceFilterId.Genre] || [],
-			tText('modules/visitor-space/utils/map-filters/map-filters___genre'),
+			getFilterLabel(MetadataProp.Genre),
 			VisitorSpaceFilterId.Genre
 		),
 		...mapArrayParamToTags(
 			query[VisitorSpaceFilterId.Keywords] || [],
-			tText('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
+			getFilterLabel(MetadataProp.Keywords),
 			VisitorSpaceFilterId.Keywords
 		),
 		...mapArrayParamToTags(
 			query[VisitorSpaceFilterId.Language] || [],
-			tText('modules/visitor-space/utils/map-filters/map-filters___taal'),
+			getFilterLabel(MetadataProp.Language),
 			VisitorSpaceFilterId.Language
 		),
 		...mapBooleanParamToTag(
