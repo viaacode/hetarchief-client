@@ -20,7 +20,7 @@ import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/M
 import { ROUTES } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { setLastScrollPosition, setSelectedMaintainerSlug } from '@shared/store/ui';
+import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -73,11 +73,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const saveSlug = () => {
-		dispatch(
-			setSelectedMaintainerSlug(
-				router.query.aanbieder ? (router.query.aanbieder as string) : ''
-			)
-		);
+		console.log('saveslug');
 	};
 
 	const wrapInLink = (children: ReactNode) => {
@@ -378,7 +374,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
-				onClick={() => saveSlug()}
+				onClick={saveSlug}
 			>
 				{typeof description === 'string' ? (
 					<>

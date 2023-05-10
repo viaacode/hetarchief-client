@@ -14,7 +14,16 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { capitalize, indexOf, intersection, isNil, kebabCase, lowerCase, sortBy } from 'lodash-es';
+import {
+	capitalize,
+	indexOf,
+	intersection,
+	isEmpty,
+	isNil,
+	kebabCase,
+	lowerCase,
+	sortBy,
+} from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -113,7 +122,7 @@ import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
 import {
-	selectSelectedMaintainerSlug,
+	selectBreadcrumbs,
 	selectShowNavigationBorder,
 	setShowAuthModal,
 	setShowZendesk,
@@ -158,6 +167,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+	const breadcrumbs = useSelector(selectBreadcrumbs);
 
 	// User types
 	const isKeyUser = useIsKeyUser();
@@ -176,7 +186,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 
-	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
+	const [query] = useQueryParams({
+		...IE_OBJECT_QUERY_PARAM_CONFIG,
+		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+	});
 
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
@@ -201,7 +214,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const windowSize = useWindowSizeContext();
 	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
-	const selectedMaintainerSlug = useSelector(selectSelectedMaintainerSlug);
 
 	// Query params
 	const [, setQuery] = useQueryParams({
@@ -844,16 +856,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	const renderBreadcrumbs = (): ReactNode => {
-		const staticBreadcrumbs: Breadcrumb[] = [
+		const defaultBreadcrumbs: Breadcrumb[] = [
 			{
-				label: `${tHtml('pages/slug/ie/index___breadcrumbs___home')}`,
+				label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
 				to: ROUTES.home,
 			},
 			{
-				label: `${tHtml('pages/slug/ie/index___breadcrumbs___search')}`,
+				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES.search,
 			},
 		];
+
+		const staticBreadcrumbs: Breadcrumb[] = !isEmpty(breadcrumbs)
+			? breadcrumbs
+			: defaultBreadcrumbs;
 
 		const dynamicBreadcrumbs: Breadcrumb[] = !isNil(mediaInfo)
 			? [
@@ -1116,7 +1132,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 								),
 								data: mapKeywordsToTagList(
 									mediaInfo.keywords,
-									selectedMaintainerSlug
+									query[VISITOR_SPACE_SLUG_QUERY_KEY] || ''
 								),
 							},
 							{
