@@ -14,7 +14,16 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { capitalize, indexOf, intersection, isNil, kebabCase, lowerCase, sortBy } from 'lodash-es';
+import {
+	capitalize,
+	indexOf,
+	intersection,
+	isEmpty,
+	isNil,
+	kebabCase,
+	lowerCase,
+	sortBy,
+} from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -112,7 +121,12 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
-import { selectShowNavigationBorder, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import {
+	selectBreadcrumbs,
+	selectShowNavigationBorder,
+	setShowAuthModal,
+	setShowZendesk,
+} from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -153,6 +167,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+	const breadcrumbs = useSelector(selectBreadcrumbs);
 
 	// User types
 	const isKeyUser = useIsKeyUser();
@@ -460,7 +475,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				.replaceAll('{local_cp_id}', encodeURIComponent(mediaInfo?.meemooLocalId || ''))
 				.replaceAll('{pid}', encodeURIComponent(mediaInfo?.meemooIdentifier || ''))
 				.replaceAll('{title}', encodeURIComponent(mediaInfo?.name || ''))
-				.replaceAll('{title_serie}', encodeURIComponent(mediaInfo?.series?.[0] || ''));
+				.replaceAll(
+					'{title_serie}',
+					encodeURIComponent(mediaInfo?.isPartOf?.serie?.[0] || '')
+				);
 			window.open(resolvedFormUrl, '_blank');
 		} else {
 			setActiveBlade(MediaActions.RequestMaterial);
@@ -838,16 +856,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	const renderBreadcrumbs = (): ReactNode => {
-		const staticBreadcrumbs: Breadcrumb[] = [
+		const defaultBreadcrumbs: Breadcrumb[] = [
 			{
-				label: `${tHtml('pages/slug/ie/index___breadcrumbs___home')}`,
+				label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
 				to: ROUTES.home,
 			},
 			{
-				label: `${tHtml('pages/slug/ie/index___breadcrumbs___search')}`,
+				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES.search,
 			},
 		];
+
+		const staticBreadcrumbs: Breadcrumb[] = !isEmpty(breadcrumbs)
+			? breadcrumbs
+			: defaultBreadcrumbs;
 
 		const dynamicBreadcrumbs: Breadcrumb[] = !isNil(mediaInfo)
 			? [
