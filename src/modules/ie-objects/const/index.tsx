@@ -22,6 +22,7 @@ import {
 	mapObjectToMetadata,
 } from '@ie-objects/utils';
 import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/components';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
@@ -500,5 +501,5 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 ];
 
 export const IE_OBJECT_QUERY_PARAM_CONFIG = {
-	searchTerms: ArrayParam,
+	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: ArrayParam,
 };

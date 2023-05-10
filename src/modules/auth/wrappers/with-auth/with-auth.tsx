@@ -3,9 +3,9 @@ import { stringify } from 'query-string';
 import { ComponentType, useCallback, useEffect, useState } from 'react';
 
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
-import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import Loading from '@shared/components/Loading/Loading';
-import { REDIRECT_TO_QUERY_KEY, ROUTES } from '@shared/const';
+import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { TosService } from '@shared/services/tos-service';
 import { isBrowser, isCurrentTosAccepted } from '@shared/utils';
 
@@ -34,7 +34,7 @@ export const withAuth = (
 			const tos = await TosService.getTos();
 
 			const params = {
-				[REDIRECT_TO_QUERY_KEY]: router.asPath,
+				[QUERY_PARAM_KEY.REDIRECT_TO_QUERY_KEY]: router.asPath,
 			};
 
 			const toTermsOfService = async () => {
@@ -45,7 +45,7 @@ export const withAuth = (
 				return router.replace(
 					`${ROUTES.home}?${stringify({
 						...params,
-						[SHOW_AUTH_QUERY_KEY]: '1',
+						[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 					})}`
 				);
 			};
