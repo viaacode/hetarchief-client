@@ -1,7 +1,8 @@
 import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
 
-import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
+import { SEPARATOR } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { IeObjectsSearchFilter, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
@@ -145,9 +146,9 @@ export const mapAdvancedToTags = (
 export const mapFiltersToTags = (query: VisitorSpaceQueryParams): TagIdentity[] => {
 	return [
 		...mapArrayParamToTags(
-			query[SEARCH_QUERY_KEY] || [],
+			query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
-			SEARCH_QUERY_KEY
+			QUERY_PARAM_KEY.SEARCH_QUERY_KEY
 		),
 		...mapArrayParamToTags(
 			query[VisitorSpaceFilterId.Medium] || [],

@@ -35,7 +35,7 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -44,7 +44,7 @@ import { DefaultSeoInfo } from '@shared/types/seo';
 const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const user = useSelector(selectUser);
 
@@ -53,7 +53,9 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [currentMaterialRequest, setCurrentMaterialRequest] = useState<MaterialRequest>();
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		size: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
-		...(!isNil(filters[SEARCH_QUERY_KEY]) && { search: filters[SEARCH_QUERY_KEY] }),
+		...(!isNil(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]) && {
+			search: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
+		}),
 		...(!isNil(filters.page) && { page: filters.page }),
 		...(!isNil(filters.type) && { type: filters.type as MaterialRequestType[] }),
 		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
@@ -214,7 +216,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 								onChange={setSearch}
 								onSearch={(newValue) =>
 									setFilters({
-										[SEARCH_QUERY_KEY]: newValue,
+										[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue,
 										page: 1,
 									})
 								}

@@ -4,6 +4,7 @@ import Highlighter from 'react-highlight-words';
 import { useQueryParams } from 'use-query-params';
 
 import { IE_OBJECT_QUERY_PARAM_CONFIG } from '@ie-objects/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import { Blade } from '../Blade';
@@ -36,7 +37,7 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 
 	const highlighted = (toHighlight: string) => (
 		<Highlighter
-			searchWords={(query.searchTerms as string[]) ?? []}
+			searchWords={(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string[]) ?? []}
 			autoEscape={true}
 			textToHighlight={toHighlight}
 		/>

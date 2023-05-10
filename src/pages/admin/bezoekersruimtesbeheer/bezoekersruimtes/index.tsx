@@ -1,5 +1,4 @@
 import { Button, OrderDirection, Table } from '@meemoo/react-components';
-import { noop } from 'lodash-es';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
@@ -25,7 +24,8 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { globalLabelKeys, ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys, ROUTE_PARTS } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -46,7 +46,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const showStatusDropdown = useHasAllPermission(Permission.EDIT_ALL_SPACES_STATUS);
 
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const {
 		data: visitorSpaces,
@@ -55,7 +55,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 		refetch,
 		isFetching,
 	} = useGetVisitorSpaces(
-		filters[SEARCH_QUERY_KEY],
+		filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		filters.status === 'ALL'
 			? [VisitorSpaceStatus.Requested, VisitorSpaceStatus.Active, VisitorSpaceStatus.Inactive]
 			: ([filters.status] as VisitorSpaceStatus[]),
@@ -241,7 +241,10 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 					)}
 					onChange={setSearch}
 					onSearch={(newValue) =>
-						setFilters({ [SEARCH_QUERY_KEY]: newValue || undefined, page: 1 })
+						setFilters({
+							[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue || undefined,
+							page: 1,
+						})
 					}
 				/>
 

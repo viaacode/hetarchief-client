@@ -42,7 +42,8 @@ import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts'
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -77,7 +78,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 * Data
 	 */
 	const [filters, setFilters] = useQueryParams(ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
@@ -129,7 +130,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const folderMedia = useGetFolderMedia(
 		activeFolder?.id,
-		filters[SEARCH_QUERY_KEY],
+		filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		filters.page,
 		FolderItemListSize
 	);
@@ -138,7 +139,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { mutateAsync: getFolderExport } = useGetFolderExport();
 
 	const keywords = useMemo(
-		() => (filters[SEARCH_QUERY_KEY] ? [filters[SEARCH_QUERY_KEY] as string] : []),
+		() =>
+			filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]
+				? [filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] as string]
+				: [],
 		[filters]
 	);
 
@@ -568,7 +572,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											onChange={setSearch}
 											onSearch={(newValue) =>
 												setFilters({
-													[SEARCH_QUERY_KEY]: newValue || undefined,
+													[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]:
+														newValue || undefined,
 												})
 											}
 										/>

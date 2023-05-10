@@ -7,9 +7,9 @@ import { FC, useEffect } from 'react';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
-import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Icon, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultSeoInfo } from '@shared/types/seo';
@@ -21,8 +21,8 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 	const router = useRouter();
 
 	const [query] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
-		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
 
 	/**
@@ -32,18 +32,22 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 	const onRequestAccess = (visitorSpaceSlug: string) => {
 		return router.push(
 			`${ROUTES.bezoek}?${stringify({
-				[SHOW_AUTH_QUERY_KEY]: '1',
-				[VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
+				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
+				[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
 			})}`
 		);
 	};
 
 	useEffect(() => {
-		if (query[VISITOR_SPACE_SLUG_QUERY_KEY] && !query[SHOW_AUTH_QUERY_KEY]) {
+		if (
+			query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] &&
+			!query[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]
+		) {
 			router.push(
 				`${ROUTES.bezoek}?${stringify({
-					[SHOW_AUTH_QUERY_KEY]: '1',
-					[VISITOR_SPACE_SLUG_QUERY_KEY]: query[VISITOR_SPACE_SLUG_QUERY_KEY],
+					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
+					[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]:
+						query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY],
 				})}`
 			);
 		}
