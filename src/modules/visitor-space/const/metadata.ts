@@ -36,7 +36,33 @@ export type MetadataConfig = {
 	};
 };
 
-export const METADATA_CONFIG_REGULAR_FILTERS = (): MetadataConfig => {
+export const ADVANCED_FILTERS: MetadataProp[] = [
+	MetadataProp.Description,
+	MetadataProp.Genre,
+	MetadataProp.SpacialCoverage,
+	MetadataProp.TemporalCoverage,
+	MetadataProp.Publisher,
+	MetadataProp.Title,
+	MetadataProp.Cast,
+	MetadataProp.Identifier,
+	MetadataProp.Keywords,
+];
+
+export const REGULAR_FILTERS: MetadataProp[] = [
+	MetadataProp.Medium,
+	MetadataProp.Duration,
+	MetadataProp.CreatedAt,
+	MetadataProp.PublishedAt,
+	MetadataProp.Creator,
+	MetadataProp.Language,
+
+	// These are handled separately in VisitorSpaceFilterId
+	// MetadataProp.Maintainers,
+	// MetadataProp.ConsultableOnlyOnLocation,
+	// MetadataProp.ConsultableMedia,
+];
+
+export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 	const dictionary = {
 		from: tText(
 			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
@@ -223,44 +249,6 @@ export const METADATA_CONFIG_REGULAR_FILTERS = (): MetadataConfig => {
 				],
 			},
 		},
-	};
-};
-
-export const METADATA_CONFIG_ADVANCED_FILTERS = (): MetadataConfig => {
-	const dictionary = {
-		from: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
-		),
-		until: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
-		),
-		between: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
-		),
-		contains: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
-		),
-		excludes: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
-		),
-		equals: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
-		),
-		differs: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
-		),
-		shorter: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
-		),
-		longer: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
-		),
-		exact: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___exact'
-		),
-	};
-
-	return {
 		[MetadataProp.Description]: {
 			[Operator.Contains]: {
 				label: dictionary.contains,
@@ -555,8 +543,7 @@ export const getMetadataSearchFilters = (
 	operator: Operator
 ): IeObjectsSearchFilter[] => {
 	return (
-		{ ...METADATA_CONFIG_REGULAR_FILTERS(), ...METADATA_CONFIG_ADVANCED_FILTERS() }[prop]?.[
-			operator
-		]?.filters || []
+		{ ...FILTERS_OPTIONS_CONFIG(), ...FILTERS_OPTIONS_CONFIG() }[prop]?.[operator]?.filters ||
+		[]
 	);
 };

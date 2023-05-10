@@ -29,7 +29,7 @@ import {
 	ObjectTypeSelect,
 } from '../../components';
 import { AdvancedFilter, MetadataProp } from '../../types';
-import { getField, getOperators, getProperties } from '../../utils';
+import { getAdvancedProperties, getField, getOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { defaultValue } from '../DurationInput/DurationInput';
 
@@ -193,8 +193,8 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							val: undefined,
 						});
 					}}
-					options={getProperties()}
-					value={getSelectValue(getProperties(), state.prop)}
+					options={getAdvancedProperties()}
+					value={getSelectValue(getAdvancedProperties(), state.prop)}
 				/>
 			</FormControl>
 
