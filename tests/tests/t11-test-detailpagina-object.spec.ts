@@ -6,6 +6,7 @@ import { clickToastMessageButton } from '../helpers/click-toast-message-button';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
+import { checkBladeTitle } from '../helpers/check-blade-title';
 
 test.use({
 	viewport: { width: 1400, height: 850 },
@@ -83,7 +84,7 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	const countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	// Enter search term
-	const SEARCH_TERM = 'schoen';
+	const SEARCH_TERM = 'brugge';
 	const searchField = await page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.type(SEARCH_TERM);
@@ -112,19 +113,46 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 		.innerText();
 	await expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);
 
-	// Click on the found object
-	const foundObjectButton = await page
-		.locator(
-			"[class^='MediaCardList_c-media-card-list__content__'] [class^='c-card__title-wrapper'] a"
-		)
-		.first();
+	// Bookmark this item
+	// Click bookmark button
+	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).click();
 
-	await foundObjectButton.click();
+	// Check blade opens
+	await expect(page.locator('.c-blade--active')).toBeVisible();
 
-	// For some reason it doesnt always go to the page after clicking
+	// Check bookmark folder counts
+	let bookmarkFolderCounts1 = await getFolderObjectCounts(page);
+	expect(bookmarkFolderCounts1['Favorieten']).toEqual(0);
+	expect(bookmarkFolderCounts1['Bestaande map, nieuwe naam']).toBeUndefined();
+
+	// Add object to Favorites folder
+	let folderList = await page.locator(
+		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
+	);
+	let checkboxes = await folderList.locator('.c-checkbox__input');
+	expect(await checkboxes.count()).toEqual(1);
+	await checkboxes.first().check();
+
+	// Check count changes to 1
+	let bookmarkFolderCounts2 = await getFolderObjectCounts(page);
+	expect(bookmarkFolderCounts2['Favorieten']).toEqual(1);
+	expect(bookmarkFolderCounts2['Bestaande map, nieuwe naam']).toBeUndefined();
+
+	// Click the add button
+	await page.locator('.c-blade--active').locator('.c-button', { hasText: 'Voeg toe' }).click();
+
+	// Blade closes
+	await expect(page.locator('.c-blade--active')).not.toBeVisible();
+
+	// Toast message
+	await checkToastMessage(page, 'Item toegevoegd aan map');
+	await clickToastMessageButton(page);
+
+	// Go to the following url
 	await page.goto(
 		((process.env.TEST_CLIENT_ENDPOINT as string) +
-			'/zoeken/vrt/3cdc6c0a301b45a599bcd969529850dae1f77cc02670470dad09d51b0d3249b2d3e2b291fac74b0bb0a46d44de609144?searchTerms=schoen') as string
+			'/zoeken' +
+			(process.env.TEST_OBJECT_DETAIL_PAGE_VRT as string)) as string
 	);
 
 	/**
@@ -149,21 +177,21 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	await expect(page.locator('.c-blade--active')).toBeVisible();
 
 	// Check bookmark folder counts
-	const bookmarkFolderCounts1 = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts1['Favorieten']).toEqual(0);
+	bookmarkFolderCounts1 = await getFolderObjectCounts(page);
+	expect(bookmarkFolderCounts1['Favorieten']).toEqual(1);
 	expect(bookmarkFolderCounts1['Bestaande map, nieuwe naam']).toBeUndefined();
 
 	// Add object to Favorites folder
-	const folderList = await page.locator(
+	folderList = await page.locator(
 		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
 	);
-	const checkboxes = await folderList.locator('.c-checkbox__input');
+	checkboxes = await folderList.locator('.c-checkbox__input');
 	expect(await checkboxes.count()).toEqual(1);
 	await checkboxes.first().check();
 
 	// Check count changes to 1
-	const bookmarkFolderCounts2 = await getFolderObjectCounts(page);
-	expect(bookmarkFolderCounts2['Favorieten']).toEqual(1);
+	bookmarkFolderCounts2 = await getFolderObjectCounts(page);
+	expect(bookmarkFolderCounts2['Favorieten']).toEqual(2);
 	expect(bookmarkFolderCounts2['Bestaande map, nieuwe naam']).toBeUndefined();
 
 	// Click the add button
@@ -280,6 +308,54 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	// await expect(player).toHaveClass(/is-playing/);
 
 	// TODO Click on related item when more items are added to the database
+
+	/**
+	 * Request item
+	 */
+
+	await page.locator('[aria-label="Toevoegen aan aanvraaglijst"]').click();
+
+	await checkBladeTitle(page, 'Voeg toe aan aanvragen'); // This should be 'Voeg toe aan aanvraaglijst'
+
+	// Click 'Ik wil dit materiaal hergebruiken'
+	await page.locator('text=Ik wil dit object hergebruiken').click(); // This should be 'Ik wil dit materiaal hergebruiken'
+
+	// Click 'Voeg toe aan aanvraaglijst en zoek verder'
+	await page.locator('text=Voeg toe aan aanvraaglijst en zoek verder').click();
+
+	// Toast message
+	await checkToastMessage(page, 'Toegevoegd aan aanvraaglijst');
+	await clickToastMessageButton(page);
+
+	// Click request list icon
+	await page
+		.locator('nav span[class^=MaterialRequestCenterButton]', { hasText: 'request' })
+		.click();
+	// await checkBladeTitle(page, 'Aanvraaglijst');
+
+	// Click 'Vul gegevens aan en verstuur'
+
+	await page.locator('text=Vul gegevens aan en verstuur').click();
+
+	// Check if the title of the blade is now 'Persoonlijke gegevens'
+	// await expect(page.locator('.c-blade--active')).toBeVisible({ timeout: 10000 });
+	// const bladeTitle = await page.locator(
+	// 	'.c-blade--active [class*=" PersonalInfoBlade_c-personal-info-blade__title"]'
+	// );
+	// await expect(bladeTitle).toContainText('Persoonlijke gegevens');
+	// await expect(bladeTitle).toBeVisible();
+
+	// expect firstname, lastname and emailadress to be filled in
+	const prefilledData = await page
+		.locator('[class^=PersonalInfoBlade_c-personal-info-blade__content-value]')
+		.allInnerTexts();
+
+	// Click 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
+	await page
+		.locator(
+			'text=Ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
+		)
+		.click(); // This should be 'Ik wil dit materiaal hergebruiken'
 
 	/**
 	 * Keyword links
