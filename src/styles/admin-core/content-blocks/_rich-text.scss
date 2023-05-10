@@ -1,0 +1,11 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-rich-text-block";
+
+.#{$component} {
+	hr {
+		margin: $spacer-1xl 0;
+		border: 0.1rem solid $black;
+		opacity: 0.12;
+	}
+}

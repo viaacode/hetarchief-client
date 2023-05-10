@@ -19,7 +19,8 @@ import {
 	SearchBar,
 	sortingIcons,
 } from '@shared/components';
-import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
@@ -33,7 +34,7 @@ import { VisitRequestOverviewProps } from './VisitRequestsOverview.types';
 const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const [selectedNotOnCurrentPage, setSelectedNotOnCurrentPage] = useState<Visit | undefined>(
 		undefined
@@ -48,7 +49,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		refetch,
 		isLoading: isLoadingVisitRequests,
 	} = useGetVisits({
-		searchInput: filters[SEARCH_QUERY_KEY],
+		searchInput: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		status:
 			filters.status === RequestStatusAll.ALL ? undefined : (filters.status as VisitStatus),
 		page: filters.page,
@@ -236,7 +237,9 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 						className="p-cp-requests__search"
 						placeholder={tText('pages/beheer/toegangsaanvragen/index___zoek')}
 						onChange={setSearch}
-						onSearch={(value) => setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })}
+						onSearch={(value) =>
+							setFilters({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value, page: 1 })
+						}
 					/>
 
 					<ScrollableTabs
