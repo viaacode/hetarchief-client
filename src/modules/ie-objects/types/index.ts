@@ -3,71 +3,91 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
 
 // Mapped intellectual entity object
+
+export enum IsPartOfKey {
+	alternatief = 'alternatief',
+	archief = 'archief',
+	deelarchief = 'deelarchief',
+	deelreeks = 'deelreeks',
+	programma = 'programma',
+	reeks = 'reeks',
+	seizoen = 'seizoen',
+	serie = 'serie',
+	stuk = 'stuk',
+	episode = 'episode',
+	aflevering = 'aflevering',
+	bestanddeel = 'bestanddeel',
+	registratie = 'registratie',
+	serienummer = 'serienummer',
+	seizoennummer = 'seizoennummer',
+}
+
 export interface IeObject {
-	schemaIdentifier: string; // Unique id per object
+	dctermsAvailable: string;
+	dctermsFormat: string;
+	dctermsMedium: string;
 	meemooIdentifier: string; // PID (not unique per object)
+	meemoofilmBase: string;
+	meemoofilmColor: boolean;
+	meemoofilmImageOrSound: string;
 	premisIdentifier: any;
-	maintainerFormUrl: string | null;
+	abstract: string;
+	creator: any;
+	dateCreated: string;
+	datePublished: string;
+	description: string;
+	duration: string;
+	genre: string[];
+	schemaIdentifier: string; // Unique id per object
+	inLanguage: string[];
+	keywords: string[];
+	licenses: IeObjectLicense[];
 	maintainerId: string;
 	maintainerName: string;
 	maintainerSlug: string;
 	maintainerLogo: string | null;
-	maintainerDescription: string;
-	maintainerSiteUrl: string;
-	datePublished: string;
-	dctermsAvailable: string;
 	name: string;
-	description: string;
-	abstract: string;
-	creator: any;
-	actor?: any;
 	publisher: any;
 	spatial: string;
 	temporal: string;
-	keywords: string[];
-	genre: string[];
-	dctermsFormat: string;
-	dctermsMedium: string;
-	inLanguage: string[];
 	thumbnailUrl: string;
-	duration: string;
-	dateCreated: string;
-	ebucoreObjectType: string;
-	meemoofilmColor: boolean;
-	meemoofilmBase: string;
-	meemoofilmImageOrSound: string;
-	meemooLocalId: string;
-	meemooOriginalCp: string;
-	meemooDescriptionProgramme: string;
-	meemooDescriptionCast: string;
-	licenses: IeObjectLicense[];
-	accessThrough?: IeObjectAccessThrough[];
-	series?: string[];
-	program?: string[];
-	archief?: string[];
-	reeks?: string[];
-	programma?: string[];
-	seizoen?: string[];
-	alternatief?: string[];
-	alternativeName?: string[];
-	premisIsPartOf?: string;
-	contactInfo?: IeObjectContactInfo;
-	copyrightHolder?: string;
-	copyrightNotice?: string;
-	durationInSeconds?: number;
-	numberOfPages?: number;
-	meemooMediaObjectId?: string;
+	// EXTRA
 	sector?: IeObjectSector;
+	accessThrough?: IeObjectAccessThrough[];
+	// OPTIONAL
+	ebucoreObjectType?: string | null;
+	meemoofilmContainsEmbeddedCaption?: boolean;
+	premisIsPartOf?: string;
+	contributor?: any;
+	copyrightHolder?: string;
+	isPartOf?: Partial<Record<IsPartOfKey, string[]>>;
+	numberOfPages?: number;
+	meemooDescriptionCast?: string;
 	representations?: IeObjectRepresentation[];
-	dateCreatedLowerBound?: string;
-	ebucoreIsMediaFragmentOf?: string;
+	maintainerFormUrl?: string | null;
+	maintainerDescription?: string;
+	maintainerSiteUrl?: string;
+	// FROM DB
 	meemoofilmCaption?: string;
 	meemoofilmCaptionLanguage?: string;
+	meemooDescriptionProgramme?: string;
+	meemooLocalId?: string;
+	meemooOriginalCp?: string;
+	durationInSeconds?: number;
+	copyrightNotice?: string;
+	meemooMediaObjectId?: string;
+	ebucoreIsMediaFragmentOf?: string;
 	ebucoreHasMediaFragmentOf?: boolean;
-	serviceProvider?: any; // type unknown
+	dateCreatedLowerBound?: string;
+	actor?: string | null; // string or object => not yet known, since all entries in the db are null
+	// Not yet available
 	transcript?: string;
 	caption?: string;
-	categorie?: any; // type unknown
+	categorie?: string[];
+	languageSubtitles?: string;
+	meemooDescriptionCategory?: string[];
+	meemoofilmEmbeddedCaption?: string;
+	meemoofilmEmbeddedCaptionLanguage?: string;
 }
 
 export enum IeObjectAccessThrough {
