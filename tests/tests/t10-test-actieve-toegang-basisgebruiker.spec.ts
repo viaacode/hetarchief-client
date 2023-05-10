@@ -13,7 +13,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
@@ -28,7 +28,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
@@ -73,8 +73,8 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	const countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	// Enter search term
-	const SEARCH_TERM = 'dublin';
-	const searchField = await page.locator('.c-tags-input__input-container');
+	const SEARCH_TERM = 'schoen';
+	const searchField = await page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.type(SEARCH_TERM);
 	await searchField.press('Enter');
@@ -95,11 +95,18 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		expect(countsBeforeSearch.audio >= countsAfterSearchByText.audio).toBeTruthy();
 	}
 
+	// Check item contains search term
+	const markedWord = await page
+		.locator("[class^='MediaCardList_c-media-card-list__content__'] article mark")
+		.first()
+		.innerText();
+	await expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);
+
 	// Remove search term
 	await page.click('.c-tags-input__multi-value .c-tag__close');
 
 	// Check search term is removed
-	const searchInput = await page.locator('.c-tags-input__input-container');
+	const searchInput = await page.locator('.c-tags-input__input-container').first();
 	await expect(await searchInput.innerHTML()).not.toContain(SEARCH_TERM);
 
 	// Check counts are back to all

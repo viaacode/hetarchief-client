@@ -16,13 +16,13 @@
 		"test:e2e:debug:t05": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t05-test-zoeken-naar-toegang-aanvragen-tot-een-bezoekersruimte.spec.ts",
 		"test:e2e:debug:t06": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t06-test-feedbackbutton-niet-ingelogd.spec.ts",
 		"test:e2e:debug:t07": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t07-test-faq-raadplegen-niet-ingelogd.spec.ts",
-		"test:e2e:debug:t08": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t08-test-toegangsaanvraag-accepteren-weigeren-door-cp-admin.spec.ts",
-		"test:e2e:debug:t09": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t09-test-mappen-profielpagina-basisgebruiker.spec.ts",
+		"test:e2e:debug:t09": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t09-test-toegangsaanvraag-accepteren-weigeren-door-cp-admin.spec.ts",
 		"test:e2e:debug:t10": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t10-test-actieve-toegang-basisgebruiker.spec.ts",
 		"test:e2e:debug:t11": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t11-test-detailpagina-object.spec.ts",
 		"test:e2e:debug:t12": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t12-test-einde-sessie-bezoekertool.spec.ts",
-		"test:e2e:debug:t13": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t13-test-instellingen-cp-beheer.spec.ts",
-		"test:e2e:debug:t14": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t14-meemoo-beheer-basis-beheersfunctionaliteiten.spec.ts"
+		"test:e2e:debug:t14": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t14-meemoo-beheer-basis-beheersfunctionaliteiten.spec.ts",
+		"test:e2e:debug:t13": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t13-test-mappen-profielpagina-basisgebruiker.spec.ts",
+		"test:e2e:debug:t15": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t15-test-instellingen-cp-beheer.spec.ts"
 	},
 	"dependencies": {
 	},
