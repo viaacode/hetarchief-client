@@ -1132,7 +1132,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 								),
 								data: mapKeywordsToTagList(
 									mediaInfo.keywords,
-									query[VISITOR_SPACE_SLUG_QUERY_KEY] || ''
+									visitRequest ? (router.query.slug as string) : ''
 								),
 							},
 							{
