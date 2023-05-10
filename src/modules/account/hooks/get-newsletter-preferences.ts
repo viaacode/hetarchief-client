@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { isEmpty, isNil } from 'lodash-es';
 
-import { GetNewsletterPreferencesResponse } from '@account/types';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
+import { GetNewsletterPreferencesResponse } from '@shared/types/newsletter';
 
 export const useGetNewsletterPreferences = (
 	email: string | undefined

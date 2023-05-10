@@ -443,11 +443,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
-				value: item.programs.join(', '),
+				value: item?.isPartOf?.programma?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
-				value: item.series.join(', '),
+				value: item?.isPartOf?.serie?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
