@@ -554,5 +554,9 @@ export const getMetadataSearchFilters = (
 	prop: MetadataProp,
 	operator: Operator
 ): IeObjectsSearchFilter[] => {
-	return METADATA_CONFIG_ADVANCED_FILTERS()[prop]?.[operator]?.filters || [];
+	return (
+		{ ...METADATA_CONFIG_REGULAR_FILTERS(), ...METADATA_CONFIG_ADVANCED_FILTERS() }[prop]?.[
+			operator
+		]?.filters || []
+	);
 };

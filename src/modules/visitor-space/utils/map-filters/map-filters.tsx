@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 
 import { SEARCH_QUERY_KEY, SEPARATOR } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { IeObjectsSearchFilter, IeObjectsSearchFilterField, Operator } from '@shared/types';
+import { IeObjectsSearchFilter, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 
 import { getMetadataSearchFilters } from '../../const';
