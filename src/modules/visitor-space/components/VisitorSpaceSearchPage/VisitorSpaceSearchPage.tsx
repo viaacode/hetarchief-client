@@ -209,7 +209,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		isLoading: searchResultsLoading,
 		error: searchResultsError,
 	} = useGetIeObjects(
-		[mapMaintainerToElastic(query, activeVisitorSpace), ...mapFiltersToElastic(query)],
+		[...mapMaintainerToElastic(query, activeVisitorSpace), ...mapFiltersToElastic(query)],
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
 		activeSort,

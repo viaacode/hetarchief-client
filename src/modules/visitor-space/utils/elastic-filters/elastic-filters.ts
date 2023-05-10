@@ -1,5 +1,6 @@
 import { compact } from 'lodash-es';
 
+import { IeObjectLicense } from '@ie-objects/types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import {
 	IeObjectsSearchFilter,
@@ -19,17 +20,33 @@ import { mapAdvancedToElastic } from '../map-filters';
 export const mapMaintainerToElastic = (
 	query: VisitorSpaceQueryParams,
 	activeVisitorSpace: Visit | undefined
-): IeObjectsSearchFilter => {
+): IeObjectsSearchFilter[] => {
 	const maintainerId =
 		activeVisitorSpace?.spaceSlug === query?.[VisitorSpaceFilterId.Maintainer]
 			? activeVisitorSpace?.spaceMaintainerId
 			: '';
 
-	return {
-		field: IeObjectsSearchFilterField.MAINTAINER_ID,
-		operator: IeObjectsSearchOperator.IS,
-		value: maintainerId,
-	};
+	if (!maintainerId) {
+		return [];
+	}
+
+	return [
+		{
+			field: IeObjectsSearchFilterField.MAINTAINER_ID,
+			operator: IeObjectsSearchOperator.IS,
+			value: maintainerId,
+		},
+		// If a visitor space is selected, we only want to show objects that have a visitor space license
+		// https://meemoo.atlassian.net/browse/ARC-1655
+		{
+			field: IeObjectsSearchFilterField.LICENSES,
+			operator: IeObjectsSearchOperator.IS,
+			multiValue: [
+				IeObjectLicense.BEZOEKERTOOL_METADATA_ALL,
+				IeObjectLicense.BEZOEKERTOOL_CONTENT,
+			],
+		},
+	];
 };
 
 export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => [
