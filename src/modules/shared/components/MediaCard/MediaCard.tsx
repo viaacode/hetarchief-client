@@ -72,10 +72,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 	};
 
-	const saveSlug = () => {
-		console.log('saveslug');
-	};
-
 	const wrapInLink = (children: ReactNode) => {
 		if (link && !showLocallyAvailable) {
 			return (
@@ -374,7 +370,6 @@ const MediaCard: FC<MediaCardProps> = ({
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
-				onClick={saveSlug}
 			>
 				{typeof description === 'string' ? (
 					<>

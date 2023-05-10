@@ -186,11 +186,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 
-	const [query] = useQueryParams({
-		...IE_OBJECT_QUERY_PARAM_CONFIG,
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
-	});
-
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
@@ -216,7 +211,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const collections = useSelector(selectFolders);
 
 	// Query params
-	const [, setQuery] = useQueryParams({
+	const [query, setQuery] = useQueryParams({
+		...IE_OBJECT_QUERY_PARAM_CONFIG,
 		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
