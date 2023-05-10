@@ -3,8 +3,10 @@ import { ComponentType, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { withAuth } from '@auth/wrappers/with-auth';
+import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
-import { setShowZendesk } from '@shared/store/ui';
+import { tText } from '@shared/helpers/translate';
+import { setBreadcrumbs, setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceSearchPage } from '@visitor-space/components';
 
@@ -15,6 +17,18 @@ const SearchPage: NextPage<SearchPageProps> = () => {
 
 	useEffect(() => {
 		dispatch(setShowZendesk(false));
+		dispatch(
+			setBreadcrumbs([
+				{
+					label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
+					to: ROUTES.home,
+				},
+				{
+					label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
+					to: ROUTES.search,
+				},
+			])
+		);
 	}, [dispatch]);
 
 	const renderPageContent = () => {

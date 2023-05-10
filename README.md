@@ -141,27 +141,9 @@ It is currently maintained by:
 -   Andry Charlier: andry.charlier@studiohyperdrive.be
 -   Bavo Vanderghote: bavo.vanderghote@studiohyperdrive.be
 -   Bert Verhelst: bert.verhelst@studiohyperdrive.be
--   Silke Derudder: silke.derudder@studiohyperdrive
+-   Silke Derudder: silke.derudder@studiohyperdrive.be
 -   Ward Vercruyssen: ward.vercruyssen@studiohyperdrive.be
 
 ## Deployment
 
-The client is build automatically when
-
--   you merge changes into the dev branch => this deploys to TST
-    1.  release a new version of the react-components. Check readme-file of react-components for instructions.
-    2.  release a new version of the admin-core. Check readme-file of admin-core for instructions.
-    3.  update package.json in this repo with the new version numbers of `@meemoo/react-components` and `@meemoo/admin-core-ui`
-    4.  install updated versions `npm i --force`
-    5.  start hetarchief client `npm run dev` to see if there are any errors. If there are, fix them.
-    6.  commit changes to package.json `git add .` and `git commit -m "fix(package.json): update versions of meemoo dependencies"`
-    7.  create new hetarchief-client version `npm version patch`
-    8.  push changes `git push --follow-tags`
-    9.  check progress on Jenkins https://ci.meemoo.be/job/hetarchief/job/client/job/develop/
--   you merge changes into the master branch => this deploys to QAS
--   you tag a commit on the master branch with a version => this deploys to PRD
-
-For the storybook you can trigger the build in openshift:
-
--   Builds => BuildConfigs => hetarchief => storybook-tst => actions => Start Build
--   https://console-openshift-console.meemoo2-2bc857e5f10eb63ab790a3a1d19a696c-i000.eu-de.containers.appdomain.cloud/k8s/ns/hetarchief/buildconfigs/storybook-tst/builds
+To deploy, you can follow [this checklist](https://studiohyperdrive.slite.com/app/docs/L0Alk6HWq5w7il)

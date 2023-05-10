@@ -1,3 +1,4 @@
+import { Breadcrumb } from '@meemoo/react-components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { ROUTES } from '@shared/const';
@@ -16,6 +17,7 @@ const initialState: UIState = {
 	lockScroll: {},
 	materialRequestCount: 0,
 	lastScrollPosition: { itemId: '', page: ROUTES.home },
+	breadcrumbs: [],
 };
 
 export const uiSlice = createSlice({
@@ -61,6 +63,9 @@ export const uiSlice = createSlice({
 		setLastScrollPosition(state, action: PayloadAction<LastScrollPositionType>) {
 			state.lastScrollPosition = action.payload;
 		},
+		setBreadcrumbs(state, action: PayloadAction<Breadcrumb[]>) {
+			state.breadcrumbs = action.payload;
+		},
 	},
 });
 
@@ -76,4 +81,5 @@ export const {
 	setLockScroll,
 	setMaterialRequestCount,
 	setLastScrollPosition,
+	setBreadcrumbs,
 } = uiSlice.actions;

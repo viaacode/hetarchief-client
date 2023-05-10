@@ -1,3 +1,5 @@
+import { Breadcrumb } from '@meemoo/react-components';
+
 import { AppState } from '../store.types';
 
 import { LastScrollPositionType } from './ui.types';
@@ -22,3 +24,4 @@ export const selectMaterialRequestCount = (state: AppState): number =>
 	state.ui.materialRequestCount;
 export const selectLastScrollPosition = (state: AppState): LastScrollPositionType =>
 	state.ui.lastScrollPosition;
+export const selectBreadcrumbs = (state: AppState): Breadcrumb[] => state.ui.breadcrumbs;

@@ -30,6 +30,7 @@ $checkbox-size: $spacer-sm;
 	&__option {
 		position: relative;
 		width: 100%;
+		max-height: 70vh;
 
 		&::before {
 			content: "";
