@@ -31,8 +31,8 @@
 	}
 
 	.c-button__icon.o-svg-icon svg {
-		height: 1.8rem;
-		width: 1.8rem;
+		height: $button-icon-size;
+		width: $button-icon-size;
 	}
 
 	.c-content-block-form-group button[class*="c-button"],
@@ -71,7 +71,7 @@
 		button[class*="c-button--icon"] {
 			width: 3.6rem;
 			height: 3.6rem;
-			border-radius: 1.8rem;
+			border-radius: $button-radius-size;
 			background-color: $silver;
 			color: $black;
 			border: none;
@@ -118,11 +118,11 @@
 
 		.c-button-group button[class*="c-button--icon"] {
 			&:first-child {
-				border-radius: 1.8rem 0 0 1.8rem;
+				border-radius: $button-radius-size 0 0 $button-radius-size;
 			}
 
 			&:last-child {
-				border-radius: 0 1.8rem 1.8rem 0;
+				border-radius: 0 $button-radius-size $button-radius-size 0;
 			}
 		}
 	}
