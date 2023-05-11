@@ -113,6 +113,18 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 		{ enabled: !!query[VISITOR_SPACE_SLUG_QUERY_KEY], retry: false }
 	);
 
+	// ARC-1650: Do not show all visit accesses for admin users
+	const filterOutPermanentIds = (items?: Visit[]): Visit[] => {
+		if (items === undefined) {
+			return [];
+		}
+		return items.filter((visit) => !visit.id.includes('permanent-id'));
+	};
+
+	const actualActiveVisitRequests = filterOutPermanentIds(active?.items);
+	const actualFutureVisitRequests = filterOutPermanentIds(future?.items);
+	const actualPendingVisitRequests = filterOutPermanentIds(pending?.items);
+
 	/**
 	 * Effects
 	 */
@@ -271,8 +283,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						</p>
 					</section>
 
-					{(active?.items.filter((visit) => !visit.id.includes('permanent-id')) || [])
-						.length > 0 && (
+					{actualActiveVisitRequests.length > 0 && (
 						<section
 							className={clsx(
 								styles['c-hero__section'],
@@ -280,7 +291,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 							)}
 						>
 							<div className={styles['c-hero__access-cards']}>
-								{(active?.items || []).map((visit, i) => (
+								{actualActiveVisitRequests.map((visit, i) => (
 									<VisitorSpaceCard
 										key={`hero-access-${i}`}
 										access={{
@@ -296,8 +307,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					)}
 
-					{(future?.items.filter((visit) => !visit.id.includes('permanent-id')) || [])
-						.length > 0 && (
+					{actualFutureVisitRequests.length > 0 && (
 						<section
 							className={clsx(styles['c-hero__section'])}
 							id="toekomstige-bezoeken"
@@ -309,7 +319,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 								{tHtml('modules/shared/components/hero/hero___geplande-bezoeken')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
-								{(future?.items || []).map((visit, i) => (
+								{actualFutureVisitRequests.map((visit, i) => (
 									<VisitorSpaceCard
 										onClick={() => onProcessVisit(visit)}
 										key={`hero-planned-${i}`}
@@ -326,8 +336,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					)}
 
-					{(pending?.items.filter((visit) => !visit.id.includes('permanent-id')) || [])
-						.length > 0 && (
+					{actualPendingVisitRequests.length > 0 && (
 						<section
 							className={clsx(styles['c-hero__section'])}
 							id="aangevraagde-bezoeken"
@@ -336,7 +345,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 								{tHtml('modules/shared/components/hero/hero___aanvragen')}
 							</h5>
 							<div className={styles['c-hero__requests']}>
-								{(pending?.items || []).map((visit, i) => (
+								{actualPendingVisitRequests.map((visit, i) => (
 									<VisitorSpaceCard
 										onClick={() => onProcessVisit(visit)}
 										key={`hero-requested-${i}`}
