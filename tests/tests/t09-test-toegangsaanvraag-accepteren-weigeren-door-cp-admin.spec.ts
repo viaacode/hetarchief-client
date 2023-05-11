@@ -117,7 +117,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		.innerHTML();
 	await expect(summaryHtml).toContain('BezoekerVoornaam');
 	await expect(summaryHtml).toContain('BezoekerAchternaam');
-	// await expect(summaryHtml).toContain('Een geldige reden'); //The reason has changed
+	await expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
 	let approveButton = await page.locator(
@@ -137,14 +137,13 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check blade title
 	await checkBladeTitle(page, 'Aanvraag goedkeuren');
 
-	// Click 'toegang tot de volledige collectie'
+	// Expect 'toegang tot de volledige collectie' to be checked
 	await expect(
 		page.locator('[class^="c-radio-button"] span', {
 			hasText: 'Toegang tot de volledige collectie',
 		})
 	).toBeChecked();
-	// 	.click();
-	// TODO: check 'toegang tot de volledige collectie' is already checked
+
 	// Enter time from: 00:00
 	await page.click('.c-datepicker--time input[name="accessFrom"]');
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');

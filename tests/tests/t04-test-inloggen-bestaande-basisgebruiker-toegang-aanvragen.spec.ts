@@ -69,10 +69,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.waitForLoadState('networkidle');
 
 	// Fill in 'Reden van aanvraag'
-	await page.fill(
-		'#RequestAccessBlade__requestReason',
-		`This is an automated test on ${new Date()}`
-	);
+	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);
 
 	// Enable checkbox 'Ik vraag deze toegang aan voor onderzoeksdoeleinden of privéstudie'
 	await page.locator('[class^=RequestAccessBlade_c-request-access-blade] .c-checkbox').click();

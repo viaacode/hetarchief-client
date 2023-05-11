@@ -6,6 +6,7 @@ import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { logout } from '../helpers/log-out';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
+import { checkBladeTitle } from '../helpers/check-blade-title';
 
 test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct kan worden toegekend', async ({
 	page,
@@ -49,7 +50,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// await new Promise((resolve) => setTimeout(resolve, 10 * 1000));
 
 	// Fill in 'Reden van aanvraag'
-	await page.fill('#RequestAccessBlade__requestReason', `This is an automated test`);
+	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);
 
 	// Enable checkbox 'Ik vraag deze toegang aan voor onderzoeksdoeleinden of privéstudie'
 	await page.locator('[class^=RequestAccessBlade_c-request-access-blade] .c-checkbox').click();
@@ -89,7 +90,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.click('a[href="/beheer/aanvragen"]');
 
 	// Check page title matches visitor requests page title
-	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
 		timeout: 10000,
 	});
 
@@ -103,11 +104,62 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Wait for results to load
 	// await waitForLoading(page);
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); // TODO temp bcs waitForLoading doesnt work
 
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
 
+	/**
+	 * Approve request
+	 */
+	// Click the pending visit request
+	await page
+		.locator(
+			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child',
+			{ hasText: 'BezoekerVoornaam' }
+		)
+		.first()
+		.click();
+
+	// Check the blade title
+	await checkBladeTitle(page, 'Open aanvraag');
+
+	// Check request summary contains requester name
+	const summaryHtml = await page
+		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
+		.innerHTML();
+	await expect(summaryHtml).toContain('BezoekerVoornaam');
+	await expect(summaryHtml).toContain('BezoekerAchternaam');
+	await expect(summaryHtml).toContain('Een geldige reden');
+
+	// Check buttons for approve and deny are visible
+	const approveButton = await page.locator(
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+		{ hasText: 'Goedkeuren' }
+	);
+	await expect(approveButton).toBeVisible();
+	const denyButton = await page.locator(
+		'.c-blade--active [class*="Blade_c-blade__footer-wrapper"] .c-button',
+		{ hasText: 'Weigeren' }
+	);
+	await expect(denyButton).toBeVisible();
+
+	// Click the approve button 'Goedkeuren'
+	await approveButton.click();
+
+	// Check blade title
+	await checkBladeTitle(page, 'Aanvraag goedkeuren');
+
+	// Click 'Toegang tot een deel van collectie'
+	await page
+		.locator('[class^="c-radio-button"] span', {
+			hasText: 'Toegang tot een deel van collectie',
+		})
+		.click();
+
+	// Open the dropdown
+	await page.locator('text=Kies een map').click();
+	await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
 	// Wait for close to save the videos
 	await context.close();
 });
