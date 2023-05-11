@@ -313,6 +313,13 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	 * Request item
 	 */
 
+	// First we go to a non VRT object
+	await page.goto(
+		((process.env.TEST_CLIENT_ENDPOINT as string) +
+			'/zoeken' +
+			(process.env.TEST_OBJECT_DETAIL_PAGE_AMSAB as string)) as string
+	);
+
 	await page.locator('[aria-label="Toevoegen aan aanvraaglijst"]').click();
 
 	await checkBladeTitle(page, 'Voeg toe aan aanvragen'); // This should be 'Voeg toe aan aanvraaglijst'
@@ -345,17 +352,27 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	// await expect(bladeTitle).toContainText('Persoonlijke gegevens');
 	// await expect(bladeTitle).toBeVisible();
 
-	// expect firstname, lastname and emailadress to be filled in
+	// expect firstname, lastname and emailadress to be filled in, organisation to be empty
 	const prefilledData = await page
 		.locator('[class^=PersonalInfoBlade_c-personal-info-blade__content-value]')
 		.allInnerTexts();
+	expect(prefilledData).toContain('BezoekerVoornaam-auto-2 BezoekerAchternaam');
+	expect(prefilledData).toContain('hetarchief2.0+ateindgebruikerbzt@meemoo.be');
+	expect(prefilledData[2]).toEqual('');
 
 	// Click 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
 	await page
 		.locator(
-			'text=Ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
+			'text=Ik vraag de fragmenten op in het kader van mijn beroep (uitgezonderd onderwijs)'
 		)
-		.click(); // This should be 'Ik wil dit materiaal hergebruiken'
+		.click(); // TODO: this should be: 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
+
+	// Click 'Verstuur aanvraag'
+	await page.locator('text=Verstuur meerdere aanvragen naar aanbieders').click(); // TODO: this should be: 'Verstuur aanvraag'
+
+	// Toast message
+	await checkToastMessage(page, 'Verzenden gelukt'); //TODO: this should be: 'Aanvraag verstuurd'
+	await clickToastMessageButton(page);
 
 	/**
 	 * Keyword links
