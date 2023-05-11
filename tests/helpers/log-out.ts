@@ -8,7 +8,7 @@ export async function logout(page: Page): Promise<void> {
 	await page.locator('.c-dropdown-menu__item', { hasText: 'Log uit' }).click();
 
 	// Wait for homepage to load
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 }

@@ -8,9 +8,6 @@ import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 
-test.use({
-	viewport: { width: 1400, height: 850 },
-});
 test('T11: Test detailpagina object', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
@@ -84,7 +81,7 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	const countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	// Enter search term
-	const SEARCH_TERM = 'brugge';
+	const SEARCH_TERM = 'qs251fjp7m'; // TODO: change this to 'betfred British Masters golf' when the int environment is not changing
 	const searchField = await page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.type(SEARCH_TERM);
@@ -107,15 +104,15 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	}
 
 	// Check item contains search term
-	const markedWord = await page
-		.locator("[class^='MediaCardList_c-media-card-list__content__'] article mark")
-		.first()
-		.innerText();
-	await expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);
+	// const markedWord = await page
+	// 	.locator("[class^='MediaCardList_c-media-card-list__content__'] article mark")
+	// 	.first()
+	// 	.innerText();
+	// await expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM); //TODO: enable this code when the search term is a word instead of id
 
 	// Bookmark this item
 	// Click bookmark button
-	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).click();
+	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).first().click();
 
 	// Check blade opens
 	await expect(page.locator('.c-blade--active')).toBeVisible();
@@ -171,7 +168,7 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	 */
 
 	// Click bookmark button
-	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).click();
+	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).first().click();
 
 	// Check blade opens
 	await expect(page.locator('.c-blade--active')).toBeVisible();
@@ -253,59 +250,59 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	 * Video player
 	 */
 	// Playing video is disabled because we get error: unsupported media type
-	// // Check video is playing
-	// const player = await page.locator('.flowplayer');
-	// await expect(player).toBeVisible();
+	// Check video is playing
+	const player = await page.locator('.flowplayer');
+	await expect(player).toBeVisible();
 
-	// // Click player
-	// await player.click();
+	// Click player
+	await player.click();
 
-	// // Check flowplayer starts playing
-	// await expect(player).toHaveClass(/is-playing/);
+	// Check flowplayer starts playing
+	await expect(player).toHaveClass(/is-playing/);
 
-	// // // Get player size before fullscreen
-	// // const playerSizeBeforeFullscreen =
-	// // 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
-	// //
-	// // // Make video fullscreen
-	// // await page.hover('.flowplayer'); // Hover video so controls become visible
-	// // await page.evaluate(() => {
-	// // 	(document?.querySelector('.fp-fullscreen') as any)?.click();
-	// // });
-	// //
-	// // // Wait for fullscreen to open
-	// // await page.waitForTimeout(1000);
-	// //
-	// // // Get player size after fullscreen
-	// // const playerSizeAfterFullscreen =
-	// // 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
-	// //
-	// // // Check video size is bigger
-	// // await expect(playerSizeAfterFullscreen).toBeGreaterThan(playerSizeBeforeFullscreen);
-
-	// // Check video object keeps playing
-	// await expect(player).toBeVisible();
-	// await expect(player).toHaveClass(/is-playing/);
-
-	// // Press escape key
+	// // Get player size before fullscreen
+	// const playerSizeBeforeFullscreen =
+	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+	//
+	// // Make video fullscreen
 	// await page.hover('.flowplayer'); // Hover video so controls become visible
 	// await page.evaluate(() => {
-	// 	(document?.querySelector('.fp-fullscreen-exit') as any)?.click();
+	// 	(document?.querySelector('.fp-fullscreen') as any)?.click();
 	// });
+	//
+	// // Wait for fullscreen to open
+	// await page.waitForTimeout(1000);
+	//
+	// // Get player size after fullscreen
+	// const playerSizeAfterFullscreen =
+	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+	//
+	// // Check video size is bigger
+	// await expect(playerSizeAfterFullscreen).toBeGreaterThan(playerSizeBeforeFullscreen);
 
-	// // // Wait for fullscreen to close
-	// // await page.waitForTimeout(1000);
-	// //
-	// // // Get player size after fullscreen
-	// // const playerSizeAfterCloseFullscreen =
-	// // 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
-	// //
-	// // // Check video size to be smaller than fullscreen
-	// // await expect(playerSizeAfterCloseFullscreen).toBeLessThan(playerSizeAfterFullscreen);
+	// Check video object keeps playing
+	await expect(player).toBeVisible();
+	await expect(player).toHaveClass(/is-playing/);
 
-	// // Check video object keeps playing
-	// await expect(player).toBeVisible();
-	// await expect(player).toHaveClass(/is-playing/);
+	// Press escape key
+	await page.hover('.flowplayer'); // Hover video so controls become visible
+	await page.evaluate(() => {
+		(document?.querySelector('.fp-fullscreen-exit') as any)?.click();
+	});
+
+	// // Wait for fullscreen to close
+	// await page.waitForTimeout(1000);
+	//
+	// // Get player size after fullscreen
+	// const playerSizeAfterCloseFullscreen =
+	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+	//
+	// // Check video size to be smaller than fullscreen
+	// await expect(playerSizeAfterCloseFullscreen).toBeLessThan(playerSizeAfterFullscreen);
+
+	// Check video object keeps playing
+	await expect(player).toBeVisible();
+	await expect(player).toHaveClass(/is-playing/);
 
 	// TODO Click on related item when more items are added to the database
 
@@ -374,6 +371,20 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	await checkToastMessage(page, 'Verzenden gelukt'); //TODO: this should be: 'Aanvraag verstuurd'
 	await clickToastMessageButton(page);
 
+	// TODO check blade is closed
+
+	// TODO remove this action
+	await page.locator('button:has-text("Sluit")').click();
+
+	// Click rapporteer
+	await page.locator('[aria-label=Rapporteer]').click();
+
+	// Check blade title
+	await checkBladeTitle(page, 'Rapporteren'); // This schould be 'Een probleem melden'
+
+	await expect(
+		await page.locator('input:has-value("hetarchief2.0+ateindgebruikerbzt@meemoo.be")')
+	).toBeVisible();
 	/**
 	 * Keyword links
 	 */

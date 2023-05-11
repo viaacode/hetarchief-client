@@ -7,7 +7,7 @@ import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
 import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
 import { selectText } from '../helpers/select-text';
 
-test('T13: Test instellingen CP-beheer', async ({ page, context }) => {
+test('T15: Test instellingen CP-beheer', async ({ page, context }) => {
 	// Go to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 

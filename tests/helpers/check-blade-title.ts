@@ -9,7 +9,8 @@ export async function checkBladeTitle(page: Page, title: string): Promise<void> 
 			'.c-blade--active [class*="DeclineRequestBlade_c-decline-request-blade__title"], ' +
 			'.c-blade--active [class*="MaterialRequestBlade_c-request-material__title"], ' +
 			'.c-blade--active [class*="MaterialRequestCenterBlade_c-material-request-center-blade__title"], ' +
-			'.c-blade--active [class*="PersonalInfoBlade_c-personal-info-blade__title"]'
+			'.c-blade--active [class*="PersonalInfoBlade_c-personal-info-blade__title"], ' +
+			'.c-blade--active [class*="ReportBlade_c-report-blade__title"]'
 	);
 	await expect(bladeTitle).toContainText(title);
 	await expect(bladeTitle).toBeVisible();

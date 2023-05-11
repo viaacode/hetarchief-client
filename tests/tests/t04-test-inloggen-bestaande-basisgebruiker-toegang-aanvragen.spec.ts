@@ -4,15 +4,12 @@ import { acceptCookies } from '../helpers/accept-cookies';
 import { acceptTos } from '../helpers/accept-tos';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
-test.use({
-	viewport: { width: 1400, height: 850 },
-});
 test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
@@ -35,7 +32,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.fill('#VisitorSpaceCardsWithSearch__search', 'V');
 
 	// Press 'Toon alles' to see all results
-	// await page.locator('text=Toon Alles').first().click(); // Comment because int has wrong data
+	// await page.locator('text=Toon Alles').first().click(); // TODO: when INT data is finalised, we can either remove this line or uncomment this line
 
 	// Press the contact buton
 	await page
@@ -49,7 +46,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 			'.c-visitor-space-card--name--vrt [class^=VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list] p'
 		)
 		.allInnerTexts();
-	await expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be', '+32 2 741 37 20']); // Comment because int has wrong data
+	await expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be', '+32 2 741 37 20']);
 
 	// Click on 'Vraag toegang aan' van VRT
 	const vrtCard = await page.locator('.c-visitor-space-card--name--vrt .c-button__content', {
@@ -59,7 +56,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 
 	// Login
 	// Click the login button
-	await page.locator('.c-button.c-button--black', { hasText: 'Inloggen' }).click(); //Should be 'Inloggen met het Archief-account'
+	await page.locator('.c-button.c-button--black', { hasText: 'Inloggen' }).click();
 
 	// Fill in credentials
 	await page.fill('#emailId', process.env.TEST_VISITOR_ACCOUNT_USERNAME as string);
@@ -101,7 +98,6 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
 		.first()
 		.click();
-	await page.goto((process.env.TEST_CLIENT_ENDPOINT as string) + '/bezoek'); //TODO: this line should be able to be removed once the tst data is reset (AT user has no visitor spaces).
 
 	await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
 

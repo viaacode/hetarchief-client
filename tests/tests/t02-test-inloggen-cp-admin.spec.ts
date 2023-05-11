@@ -10,7 +10,7 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
@@ -20,8 +20,8 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(
 		page,
-		process.env.TEST_CP_ADMIN_ACCOUNT_USERNAME as string,
-		process.env.TEST_CP_ADMIN_ACCOUNT_PASSWORD as string
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
 	);
 	// Check navbar is visible
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
@@ -30,11 +30,8 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	await expect(page.locator('.c-avatar__text')).toContainText('VRT CP ADMIN');
 
 	// Admin should not be visible and beheer should be visible
-	const navigationItemTexts = await page
-		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-		.allInnerTexts();
-	await expect(navigationItemTexts).not.toContain('Admin');
-	await expect(navigationItemTexts).toContain('Beheer');
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(0);
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(1);
 
 	// Check tos is displayed, scroll down and click accept button
 	// await acceptTos(page); //ENABLE THIS LINE WHEN RUNNING TESTS ON INT

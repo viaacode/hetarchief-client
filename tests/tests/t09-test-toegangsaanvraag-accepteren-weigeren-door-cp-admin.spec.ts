@@ -9,8 +9,7 @@ import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
 import { waitForLoading } from '../helpers/wait-for-loading';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
-// is T009 in spreadsheet
-test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
+test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
 	context,
 }) => {
@@ -18,12 +17,12 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
-	// Accept all cookies
-	await acceptCookies(page, 'all');
+	// // Accept all cookies
+	// await acceptCookies(page, 'all');
 
 	// Login as CP admin
 	await loginUserHetArchiefIdp(
@@ -33,28 +32,24 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
-	// Admin and beheer should not be visible
-	const navigationItemTexts = await page
-		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-		.allInnerTexts();
-	await expect(navigationItemTexts).not.toContain('Admin');
-	await expect(navigationItemTexts).toContain('Beheer');
+	// Admin should not be visible and beheer should be visible
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(0);
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(1);
 
 	// Click "beheer" navigation item
-	// await page.click('nav ul li .c-dropdown a');
 	await page.locator('.c-avatar__text').click();
 	// Click visit requests navigation item
 	await page.click('a[href="/beheer/aanvragen"]');
 
 	// Check page title matches visitor requests page title
-	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
 		timeout: 10000,
 	});
 
@@ -142,11 +137,12 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check blade title
 	await checkBladeTitle(page, 'Aanvraag goedkeuren');
 
-	// // Click 'toegang tot de volledige collectie'
-	// await page
-	// 	.locator('[class^="c-radio-button"] span', {
-	// 		hasText: 'Toegang tot de volledige collectie',
-	// 	})
+	// Click 'toegang tot de volledige collectie'
+	await expect(
+		page.locator('[class^="c-radio-button"] span', {
+			hasText: 'Toegang tot de volledige collectie',
+		})
+	).toBeChecked();
 	// 	.click();
 	// TODO: check 'toegang tot de volledige collectie' is already checked
 	// Enter time from: 00:00
@@ -243,7 +239,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Toast message
 	await checkToastMessage(page, 'De aanvraag is geweigerd.');
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); // TODO: temp bcs waitForLoading doesnt work
 	// Check number of requests for each status
 	const countsAfterOneApproveAndOneDeny = await checkVisitRequestStatuses(page);
 

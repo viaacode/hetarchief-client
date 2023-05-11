@@ -20,18 +20,15 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
-	// Accept selected cookies
-	await acceptCookies(page, 'selection');
-
-	// Check site is still visible:
-	await expect(page.locator('text=Menu').first()).toBeVisible();
+	// // Accept selected cookies
+	// await acceptCookies(page, 'selection'); //TODO enable cookies when on INT
 
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').first().click();
@@ -90,16 +87,15 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acmConfirmEmail(page, userEmail);
 
 	// Go to the hetarchief homepage
-	// await page.goto('https://bezoek-.private.cloud.meemoo.be/');
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); // TODO switch back to tst when https://meemoo.atlassian.net/browse/ARC-1050 is fixed
+	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
-	// Cookie bot should not open again
-	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
+	// // Cookie bot should not open again
+	// await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Login user
 	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
@@ -107,18 +103,15 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	// Check tos is displayed, scroll down and click accept button
 	await acceptTos(page);
 
-	// Cookie bot should not open again
-	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
+	// // Cookie bot should not open again
+	// await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toHaveText('Test-at');
 
 	// Admin and beheer should not be visible
-	const navigationItemTexts = await page
-		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-		.allInnerTexts();
-	await expect(navigationItemTexts).not.toContain('Admin');
-	await expect(navigationItemTexts).not.toContain('Beheer');
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(0);
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(0);
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();

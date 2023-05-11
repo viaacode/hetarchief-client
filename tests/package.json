@@ -22,7 +22,8 @@
 		"test:e2e:debug:t12": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t12-test-einde-sessie-bezoekertool.spec.ts",
 		"test:e2e:debug:t14": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t14-meemoo-beheer-basis-beheersfunctionaliteiten.spec.ts",
 		"test:e2e:debug:t13": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t13-test-mappen-profielpagina-basisgebruiker.spec.ts",
-		"test:e2e:debug:t15": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t15-test-instellingen-cp-beheer.spec.ts"
+		"test:e2e:debug:t15": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t15-test-instellingen-cp-beheer.spec.ts",
+    "test:e2e:debug:t17": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/T17-test-gedeeltelijke-toegang-bezoekersruimte.spec.ts"
 	},
 	"dependencies": {
 	},

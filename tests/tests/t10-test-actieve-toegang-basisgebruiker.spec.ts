@@ -5,9 +5,6 @@ import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
-test.use({
-	viewport: { width: 1400, height: 850 },
-});
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
@@ -73,7 +70,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	const countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	// Enter search term
-	const SEARCH_TERM = 'schoen';
+	const SEARCH_TERM = 'brugge';
 	const searchField = await page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.type(SEARCH_TERM);
