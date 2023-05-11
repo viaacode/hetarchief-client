@@ -115,6 +115,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 
 			// Define our promises
 			const addOrRemoveItemFromFolderPromises = dirty.map((pair) => {
+				const folder = getFolder(pair.folder)?.name || pair.folder;
 				if (pair.checked) {
 					return foldersService
 						.addToCollection(pair.folder, selected.schemaIdentifier)
@@ -125,7 +126,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							}
 
 							addedToFolders.push({
-								folder: getFolder(pair.folder)?.name || pair.folder,
+								folder,
 								item: selected,
 							});
 						});
@@ -139,7 +140,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							}
 
 							removedFromFolders.push({
-								folder: getFolder(pair.folder)?.name || pair.folder,
+								folder,
 								item: selected,
 							});
 						});
@@ -152,21 +153,31 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 
 			// Show ONE correct toast message
 			if (addedToFolders.length > 0 && removedFromFolders.length > 0) {
+				const folders = [...addedToFolders, ...removedFromFolders]
+					.map((obj) => obj.folder)
+					.join(', ');
 				toastService.notify({
 					maxLines: 3,
 					title: tHtml(
-						'Het item is toegevoegd/verwijderd van de geselecteerde mappen titel'
+						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-item-is-toegevoegd-verwijderd-van-de-geselecteerde-mappen-titel'
 					),
 					description: tHtml(
-						'Het item is toegevoegd/verwijderd van de geselecteerde mappen beschrijving',
+						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-item-is-toegevoegd-verwijderd-van-de-geselecteerde-mappen-beschrijving',
 						{
-							folders: addedToFolders.map((obj) => obj.folder).join(', '),
+							folders,
 						}
 					),
 				});
 			} else if (addedToFolders.length > 0) {
+				const folders = addedToFolders.map((obj) => obj.folder).join(', ');
 				if (addedToFolders.length === 1) {
 					// Add to one folder
+					const item = addedToFolders[0].item.title;
+					const folder =
+						addedToFolders[0].folder ||
+						tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
+						);
 					toastService.notify({
 						maxLines: 3,
 						title: tHtml(
@@ -175,12 +186,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						description: tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-map-beschrijving',
 							{
-								item: addedToFolders[0].item.title,
-								folder:
-									addedToFolders[0].folder ||
-									tHtml(
-										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
-									),
+								item,
+								folder,
 							}
 						),
 					});
@@ -194,14 +201,21 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						description: tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-mappen-beschrijving',
 							{
-								folders: addedToFolders.map((obj) => obj.folder).join(', '),
+								folders,
 							}
 						),
 					});
 				}
 			} else if (removedFromFolders.length > 0) {
+				const folders = removedFromFolders.map((obj) => obj.folder).join(', ');
 				if (removedFromFolders.length === 1) {
 					// Removed from one folder
+					const item = removedFromFolders[0].item.title;
+					const folder =
+						removedFromFolders[0].folder ||
+						tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
+						);
 					toastService.notify({
 						maxLines: 3,
 						title: tHtml(
@@ -210,12 +224,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						description: tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-map-beschrijving',
 							{
-								item: removedFromFolders[0].item.title,
-								folder:
-									removedFromFolders[0].folder ||
-									tHtml(
-										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
-									),
+								item,
+								folder,
 							}
 						),
 					});
@@ -229,7 +239,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						description: tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-mappen-beschrijving',
 							{
-								folders: removedFromFolders.map((obj) => obj.folder).join(', '),
+								folders,
 							}
 						),
 					});
