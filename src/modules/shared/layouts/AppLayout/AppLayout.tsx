@@ -1,4 +1,4 @@
-import { Alert, OrderDirection } from '@meemoo/react-components';
+import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -59,10 +59,9 @@ import {
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
-import { Breakpoints, Visit, VisitStatus } from '@shared/types';
+import { Breakpoints, Visit } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import { VisitsService } from '@visits/services';
-import { VisitTimeframe } from '@visits/types';
+import { useGetAllActiveVisits } from '@visits/hooks/get-all-active-visits';
 
 import packageJson from '../../../../../package.json';
 
@@ -105,6 +104,8 @@ const AppLayout: FC = ({ children }) => {
 		{ keepPreviousData: true, enabled: !isKioskUser }
 	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
+	const isKioskOrAnonymous = useHasAnyGroup(GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS);
+	const { data: spaces } = useGetAllActiveVisits({});
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
 		'HET_ARCHIEF.alerts.ignoreUntil',
@@ -129,24 +130,15 @@ const AppLayout: FC = ({ children }) => {
 		[dispatch]
 	);
 
-	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
-		if (!user || [GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS].includes(user.groupName)) {
+	const getVisitorSpaces = useCallback((): Visit[] => {
+		if (!user || isKioskOrAnonymous) {
 			setVisitorSpaces([]);
 			return [];
 		}
-		const { items: spaces } = await VisitsService.getAll({
-			page: 1,
-			size: 10,
-			orderProp: 'endAt',
-			orderDirection: OrderDirection.asc,
-			status: VisitStatus.APPROVED,
-			timeframe: VisitTimeframe.ACTIVE,
-			personal: true,
-		});
 
-		setVisitorSpaces(spaces);
+		spaces && setVisitorSpaces(spaces.items);
 
-		return spaces;
+		return spaces?.items || [];
 	}, [user]);
 
 	useEffect(() => {
