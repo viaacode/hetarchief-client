@@ -14,7 +14,16 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { capitalize, indexOf, intersection, isNil, kebabCase, lowerCase, sortBy } from 'lodash-es';
+import {
+	capitalize,
+	indexOf,
+	intersection,
+	isEmpty,
+	isNil,
+	kebabCase,
+	lowerCase,
+	sortBy,
+} from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Image from 'next/image';
@@ -31,7 +40,6 @@ import { StringParam, useQueryParams } from 'use-query-params';
 import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
 	ActionItem,
@@ -99,6 +107,7 @@ import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerA
 import { MetaDataDescription } from '@shared/components/MetaDataDescription';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -112,7 +121,12 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
-import { selectShowNavigationBorder, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import {
+	selectBreadcrumbs,
+	selectShowNavigationBorder,
+	setShowAuthModal,
+	setShowZendesk,
+} from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -153,6 +167,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
+	const breadcrumbs = useSelector(selectBreadcrumbs);
 
 	// User types
 	const isKeyUser = useIsKeyUser();
@@ -199,7 +214,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	// Query params
 	const [, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
 	// Fetch object
@@ -253,8 +268,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	// gerelateerd
 	const { data: relatedData } = useGetIeObjectsRelated(
 		router.query.ie as string,
-		isKiosk ? mediaInfo?.maintainerId ?? '' : '',
-		mediaInfo?.meemooIdentifier ?? '',
+		mediaInfo?.maintainerId,
+		mediaInfo?.meemooIdentifier,
 		!!mediaInfo
 	);
 
@@ -460,7 +475,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 				.replaceAll('{local_cp_id}', encodeURIComponent(mediaInfo?.meemooLocalId || ''))
 				.replaceAll('{pid}', encodeURIComponent(mediaInfo?.meemooIdentifier || ''))
 				.replaceAll('{title}', encodeURIComponent(mediaInfo?.name || ''))
-				.replaceAll('{title_serie}', encodeURIComponent(mediaInfo?.series?.[0] || ''));
+				.replaceAll(
+					'{title_serie}',
+					encodeURIComponent(mediaInfo?.isPartOf?.serie?.[0] || '')
+				);
 			window.open(resolvedFormUrl, '_blank');
 		} else {
 			setActiveBlade(MediaActions.RequestMaterial);
@@ -637,13 +655,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: mediaInfo?.maintainerSlug });
+		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: mediaInfo?.maintainerSlug });
 		setIsRequestAccessBladeOpen(true);
 	};
 
 	const highlighted = (toHighlight: string) => (
 		<Highlighter
-			searchWords={(query.searchTerms as string[]) ?? []}
+			searchWords={(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string[]) ?? []}
 			autoEscape={true}
 			textToHighlight={toHighlight}
 		/>
@@ -838,16 +856,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	);
 
 	const renderBreadcrumbs = (): ReactNode => {
-		const staticBreadcrumbs: Breadcrumb[] = [
+		const defaultBreadcrumbs: Breadcrumb[] = [
 			{
-				label: `${tHtml('pages/slug/ie/index___breadcrumbs___home')}`,
+				label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
 				to: ROUTES.home,
 			},
 			{
-				label: `${tHtml('pages/slug/ie/index___breadcrumbs___search')}`,
+				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES.search,
 			},
 		];
+
+		const staticBreadcrumbs: Breadcrumb[] = !isEmpty(breadcrumbs)
+			? breadcrumbs
+			: defaultBreadcrumbs;
 
 		const dynamicBreadcrumbs: Breadcrumb[] = !isNil(mediaInfo)
 			? [

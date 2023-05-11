@@ -9,7 +9,7 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
-import { includes, intersection, isEmpty, isNil, sortBy, sum } from 'lodash-es';
+import { intersection, isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -46,7 +46,8 @@ import {
 } from '@shared/components';
 import { PAGE_NUMBER_OF_MANY_RESULTS_TILE } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -208,7 +209,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		isLoading: searchResultsLoading,
 		error: searchResultsError,
 	} = useGetIeObjects(
-		[mapMaintainerToElastic(query, activeVisitorSpace), ...mapFiltersToElastic(query)],
+		[...mapMaintainerToElastic(query, activeVisitorSpace), ...mapFiltersToElastic(query)],
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
 		activeSort,
@@ -375,12 +376,14 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const prepareSearchValue = (
 		value = ''
-	): { [SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
+	): { [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
 		const trimmed = value.trim();
 
-		if (trimmed && !query[SEARCH_QUERY_KEY]?.includes(trimmed)) {
+		if (trimmed && !query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]?.includes(trimmed)) {
 			return {
-				[SEARCH_QUERY_KEY]: (query[SEARCH_QUERY_KEY] ?? []).concat(trimmed),
+				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (
+					query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] ?? []
+				).concat(trimmed),
 			};
 		}
 
@@ -540,7 +543,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Language:
 				case VisitorSpaceFilterId.Medium:
 				case VisitorSpaceFilterId.Maintainers:
-				case SEARCH_QUERY_KEY:
+				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),

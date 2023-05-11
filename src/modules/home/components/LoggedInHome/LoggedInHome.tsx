@@ -9,7 +9,6 @@ import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
 	Blade,
@@ -19,7 +18,8 @@ import {
 	VisitorSpaceCardProps,
 	VisitorSpaceCardType,
 } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
 import { useScrollToId } from '@shared/hooks/scroll-to-id';
@@ -46,8 +46,8 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	const searchRef = useRef<HTMLDivElement>(null);
 
 	const [query, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
-		[SEARCH_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: StringParam,
 	});
 
 	/**
@@ -108,9 +108,9 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 
 	const { data: visitorSpaceInfo, isError: isErrorGetVisitorSpace } = useGetVisitorSpace(
-		query[VISITOR_SPACE_SLUG_QUERY_KEY] as string,
+		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 		false,
-		{ enabled: !!query[VISITOR_SPACE_SLUG_QUERY_KEY], retry: false }
+		{ enabled: !!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY], retry: false }
 	);
 
 	/**
@@ -119,7 +119,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 
 	useEffect(() => {
 		if (
-			!!query[VISITOR_SPACE_SLUG_QUERY_KEY] &&
+			!!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] &&
 			(isErrorGetVisitorSpace || visitorSpaceInfo?.status === VisitorSpaceStatus.Inactive)
 		) {
 			setIsVisitorSpaceNotAvailable(true);
@@ -130,11 +130,11 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	useEffect(() => {
 		if (
 			!hasScrolledToSearch &&
-			query[SEARCH_QUERY_KEY] &&
+			query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] &&
 			!isLoadingActive &&
 			!isLoadingFuture &&
 			!isLoadingPending &&
-			!query[VISITOR_SPACE_SLUG_QUERY_KEY]
+			!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]
 		) {
 			const offset = searchRef.current?.offsetTop;
 			offset &&
@@ -149,7 +149,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	// Open request blade after user requested access and wasn't logged in
 	useEffect(() => {
 		if (
-			query[VISITOR_SPACE_SLUG_QUERY_KEY] &&
+			query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] &&
 			visitorSpaceInfo &&
 			visitorSpaceInfo.status !== VisitorSpaceStatus.Inactive
 		) {
@@ -162,8 +162,8 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	 */
 
 	const onCloseRequestBlade = () => {
-		if (query[VISITOR_SPACE_SLUG_QUERY_KEY]) {
-			setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
+		if (query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]) {
+			setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
 		}
 
 		setIsRequestAccessBladeOpen(false);
@@ -187,7 +187,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 				return;
 			}
 
-			if (!query[VISITOR_SPACE_SLUG_QUERY_KEY]) {
+			if (!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]) {
 				toastService.notify({
 					title: tHtml(
 						'modules/home/components/logged-in-home/logged-in-home___selecteer-eerst-een-bezoekersruimte'
@@ -202,10 +202,10 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 			const createdVisitRequest = await createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
-				visitorSpaceSlug: query[VISITOR_SPACE_SLUG_QUERY_KEY] as string,
+				visitorSpaceSlug: query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] as string,
 				timeframe: values.visitTime,
 			});
-			setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
+			setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
 			onCloseRequestBlade();
 			await router.push(
 				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
@@ -226,7 +226,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const onRequestAccess = (visitorSpaceSlug: string) => {
-		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
+		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug });
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -382,7 +382,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						variants="black"
 						onClick={() => {
 							setIsVisitorSpaceNotAvailable(false);
-							setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
+							setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined });
 						}}
 					/>
 				</div>

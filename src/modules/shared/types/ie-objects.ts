@@ -30,6 +30,7 @@ export enum IeObjectsSearchFilterField {
 	CAST = 'cast',
 	IDENTIFIER = 'identifier',
 	OBJECT_TYPE = 'objectType',
+	LICENSES = 'license', // Used to filter objects that are in a visitor space
 	CAPTION = 'caption', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0
 	TRANSCRIPT = 'transcript', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0
 	CATEGORIE = 'categorie', // Not available in database: https://docs.google.com/spreadsheets/d/1xAtHfkpDi4keSsBol7pw0cQAvCmg2hWRz8oxM6cP7zo/edit#gid=0

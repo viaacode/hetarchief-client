@@ -4,8 +4,8 @@ import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { SHOW_AUTH_QUERY_KEY } from '@home/const';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
@@ -40,11 +40,11 @@ export class AuthService {
 		}
 
 		// Make sure we don't show the auth modal after the idp login redirect
-		if (originalPath.includes(SHOW_AUTH_QUERY_KEY)) {
+		if (originalPath.includes(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY)) {
 			const parsedUrl = parseUrl(originalPath);
 			originalPath = stringifyUrl({
 				url: parsedUrl.url,
-				query: omit(parsedUrl.query, SHOW_AUTH_QUERY_KEY),
+				query: omit(parsedUrl.query, QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY),
 			});
 		}
 		const returnToUrl = stringifyUrl({

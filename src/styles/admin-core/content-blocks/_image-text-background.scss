@@ -9,6 +9,7 @@ $component: "c-block-image-text-background";
 	display: grid;
 	grid-template-columns: repeat(5, 1fr);
 	position: relative;
+	min-height: 34rem;
 
 	@include respond-to("md") {
 		grid-template-rows: repeat(2, auto);
