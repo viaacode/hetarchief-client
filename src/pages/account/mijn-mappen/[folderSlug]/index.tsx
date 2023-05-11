@@ -72,7 +72,6 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { folderSlug } = router.query;
-	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	/**
 	 * Data
@@ -278,74 +277,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 */
 
 	const renderTitleButtons = useMemo(() => {
-		const onExportClick = async () => {
-			if (activeFolder?.id) {
-				const xmlBlob = await getFolderExport(activeFolder?.id);
-
-				if (xmlBlob) {
-					save(xmlBlob, `${kebabCase(activeFolder?.name) || 'map'}.xml`);
-				} else {
-					toastService.notify({
-						title:
-							tHtml('pages/account/mijn-mappen/folder-slug/index___error') || 'error',
-						description: tHtml(
-							'pages/account/mijn-mappen/folder-slug/index___het-ophalen-van-de-metadata-is-mislukt'
-						),
-					});
-				}
-			}
-		};
-
 		return [
-			...(canDownloadMetadata
-				? [
-						{
-							before: true,
-							node: (
-								<Button
-									key={'export-folder'}
-									className="p-account-my-folders__export--label"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
-							),
-						},
-						{
-							before: true,
-							node: (
-								<Button
-									key={'export-folder-mobile'}
-									className="p-account-my-folders__export--icon"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									icon={<Icon name={IconNamesLight.Export} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
-							),
-						},
-				  ]
-				: []),
 			...(activeFolder && !activeFolder.isDefault
 				? [
 						{
@@ -407,7 +339,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 				  ]
 				: []),
 		];
-	}, [canDownloadMetadata, tText, activeFolder, getFolderExport, tHtml]);
+	}, [tText, activeFolder, getFolderExport, tHtml]);
 
 	const renderActions = (item: IdentifiableMediaCard, folder: Folder) => (
 		<>
