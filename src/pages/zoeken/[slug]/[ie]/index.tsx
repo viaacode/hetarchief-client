@@ -301,9 +301,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	 */
 	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
-	const isErrorNotFound =
-		(visitRequestError as HTTPError)?.response?.status === 404 ||
-		(mediaInfoError as HTTPError)?.response?.status === 404;
+	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
+	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
+	const isVisitRequestErrorNotFound = (visitRequestError as HTTPError)?.response?.status === 404;
+	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
@@ -1341,17 +1342,51 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</>
 	);
 
+	// To determine the correct error page or the object detail page, we follow this flow:
+	// fetch object
+	//    - 200: show detail page
+	//    - 404, 403: check the visitor space info
+	//           - 404: not found error page
+	//           - 410: visitor space no longer available error page
+	//           - 200: check visit request info
+	//                   - 200: not found error page
+	//                   - 404: no access error page
+
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
 			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
-		if (isErrorSpaceNotActive) {
-			return <ErrorSpaceNoLongerActive />;
+
+		if (mediaInfo) {
+			return <div className="p-object-detail">{renderObjectDetail()}</div>;
 		}
-		if (isErrorNotFound) {
-			return <ErrorNotFound />;
+
+		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {
+			if (isErrorSpaceNotFound) {
+				return <ErrorNotFound />;
+			}
+
+			if (isErrorSpaceNotActive || visitorSpace?.status === VisitorSpaceStatus.Inactive) {
+				return <ErrorSpaceNoLongerActive />;
+			}
+
+			if (visitorSpace && visitRequest) {
+				return <ErrorNotFound />;
+			}
+
+			if (visitorSpace && isVisitRequestErrorNotFound) {
+				return (
+					<ErrorNoAccessToObject
+						visitorSpaceName={visitorSpace?.name as string}
+						visitorSpaceSlug={visitorSpace?.slug as string}
+						description={tHtml(
+							'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+						)}
+					/>
+				);
+			}
 		}
-		return <div className="p-object-detail">{renderObjectDetail()}</div>;
+		return <ErrorNotFound />;
 	};
 
 	const description = capitalize(lowerCase((router.query.slug as string) || ''));
