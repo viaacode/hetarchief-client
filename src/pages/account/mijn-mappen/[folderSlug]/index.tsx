@@ -192,8 +192,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 				) as HTMLElement | null;
 
 				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+				dispatch(setLastScrollPosition(null));
 			}, 100);
-			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.myFolders }));
 		}
 	}, [folderMedia?.data?.items]);
 
