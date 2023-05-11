@@ -4,17 +4,29 @@ import { tText } from '@shared/helpers/translate';
 import { Operator } from '@shared/types';
 
 import {
-	METADATA_CONFIG_ADVANCED_FILTERS,
-	METADATA_CONFIG_REGULAR_FILTERS,
+	ADVANCED_FILTERS,
+	FILTERS_OPTIONS_CONFIG,
 	MetadataFields,
+	REGULAR_FILTERS,
 } from '../../const';
 import { MetadataProp, OperatorOptions, PropertyOptions } from '../../types';
 
-export const getProperties = (): PropertyOptions => {
+export const getRegularProperties = (): PropertyOptions => {
 	return sortBy(
-		Object.keys(METADATA_CONFIG_ADVANCED_FILTERS()).map((key) => {
+		REGULAR_FILTERS.map((key) => {
 			return {
-				label: getLabel(key as MetadataProp),
+				label: getFilterLabel(key as MetadataProp),
+				value: key as MetadataProp,
+			};
+		}),
+		(option) => option.label
+	);
+};
+export const getAdvancedProperties = (): PropertyOptions => {
+	return sortBy(
+		ADVANCED_FILTERS.map((key) => {
+			return {
+				label: getFilterLabel(key as MetadataProp),
 				value: key as MetadataProp,
 			};
 		}),
@@ -23,22 +35,7 @@ export const getProperties = (): PropertyOptions => {
 };
 
 export const getOperators = (prop: MetadataProp): OperatorOptions => {
-	const property = METADATA_CONFIG_ADVANCED_FILTERS()[prop];
-
-	if (property) {
-		return Object.keys(property).map((key) => {
-			return {
-				label: property[key as Operator]?.label || '',
-				value: key as Operator,
-			};
-		});
-	}
-
-	return [];
-};
-
-export const getRegularOperators = (prop: MetadataProp): OperatorOptions => {
-	const property = METADATA_CONFIG_REGULAR_FILTERS()[prop];
+	const property = FILTERS_OPTIONS_CONFIG()[prop];
 
 	if (property) {
 		return Object.keys(property).map((key) => {
@@ -53,7 +50,7 @@ export const getRegularOperators = (prop: MetadataProp): OperatorOptions => {
 };
 
 export const getField = (prop: MetadataProp, op: Operator): MetadataFields | null => {
-	const property = METADATA_CONFIG_ADVANCED_FILTERS()[prop];
+	const property = FILTERS_OPTIONS_CONFIG()[prop] || FILTERS_OPTIONS_CONFIG()[prop];
 
 	if (property && property[op]) {
 		return property[op]?.field || null;
@@ -62,7 +59,7 @@ export const getField = (prop: MetadataProp, op: Operator): MetadataFields | nul
 	return null;
 };
 
-export const getLabel = (prop: MetadataProp): string => {
+export const getFilterLabel = (prop: MetadataProp): string => {
 	return (
 		{
 			[MetadataProp.CreatedAt]: tText(

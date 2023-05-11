@@ -1,3 +1,5 @@
+import { Breadcrumb } from '@meemoo/react-components';
+
 export interface LastScrollPositionType {
 	itemId: string;
 	page: string;
@@ -14,5 +16,6 @@ export interface UIState {
 	showZendesk: boolean;
 	lockScroll: Record<string, boolean>;
 	materialRequestCount: number;
-	lastScrollPosition: LastScrollPositionType;
+	lastScrollPosition: LastScrollPositionType | null;
+	breadcrumbs: Breadcrumb[];
 }

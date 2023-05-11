@@ -6,7 +6,8 @@ import { QueryParamConfig } from 'serialize-query-params/lib/types';
 import { ArrayParam, BooleanParam, NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { Icon, IconNamesLight } from '@shared/components';
-import { SEARCH_QUERY_KEY, VIEW_TOGGLE_OPTIONS } from '@shared/const';
+import { VIEW_TOGGLE_OPTIONS } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceMediaType } from '@shared/types';
 import {
@@ -41,11 +42,11 @@ export const DEFAULT_VISITOR_SPACE_COLOR = '#00c8aa';
 export const VISITOR_SPACE_ITEM_COUNT = 39;
 
 export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
-	VisitorSpaceFilterId | typeof SEARCH_QUERY_KEY,
+	VisitorSpaceFilterId | QUERY_PARAM_KEY.SEARCH_QUERY_KEY,
 	string | undefined
 > & { page: number; orderProp: VisitorSpaceSort; orderDirection: OrderDirection } = {
 	// Filters
-	[SEARCH_QUERY_KEY]: undefined,
+	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: undefined,
 	[VisitorSpaceFilterId.Format]: VisitorSpaceMediaType.All,
 	[VisitorSpaceFilterId.Maintainer]: '',
 	[VisitorSpaceFilterId.Maintainers]: undefined,
@@ -76,7 +77,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
 	// Filters
 	format: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.format as string),
-	[SEARCH_QUERY_KEY]: ArrayParam,
+	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ArrayParam,
 	[VisitorSpaceFilterId.Maintainer]: withDefault(StringParam, ''),
 	[VisitorSpaceFilterId.Medium]: ArrayParam,
 	[VisitorSpaceFilterId.Duration]: AdvancedFilterArrayParam,
@@ -97,7 +98,6 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<a
 	orderDirection: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection),
 	// UI
 	filter: StringParam,
-	focus: StringParam,
 };
 
 export const VISITOR_SPACE_TABS = (): TabProps[] => [

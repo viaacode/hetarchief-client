@@ -11,11 +11,8 @@ import { useQueryParams } from 'use-query-params';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { selectUser } from '@auth/store/user';
-import {
-	KNOWN_STATIC_ROUTES,
-	REDIRECT_TO_QUERY_KEY,
-	TOS_INDEX_QUERY_PARAM_CONFIG,
-} from '@shared/const';
+import { KNOWN_STATIC_ROUTES, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -71,7 +68,7 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 	const onConfirmClick = () => {
 		if (user) {
 			TosService.acceptTos(user?.id).then(() => {
-				router.push(query[REDIRECT_TO_QUERY_KEY]);
+				router.push(query[QUERY_PARAM_KEY.REDIRECT_TO_QUERY_KEY]);
 				toastService.notify({
 					title: tHtml('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'),
 					description: tHtml(
