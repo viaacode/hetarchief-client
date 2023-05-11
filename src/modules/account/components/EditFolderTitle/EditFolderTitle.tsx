@@ -4,6 +4,9 @@ import {
 	ContentInput,
 	FormControl,
 	StopPropagationFunction,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
@@ -107,19 +110,30 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 		return (
 			<>
 				{buttons.filter((b) => b.before).map((b) => b.node)}
-				<Button
-					key={'edit-title'}
-					onClick={handler}
-					className={styles['c-edit-folder-title__edit']}
-					variants={['silver']}
-					name={tText(
-						'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
-					)}
-					icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
-					aria-label={tText(
-						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
-					)}
-				/>
+				<Tooltip position="top">
+					<TooltipTrigger>
+						<Button
+							key={'edit-title'}
+							onClick={handler}
+							className={styles['c-edit-folder-title__edit']}
+							variants={['silver']}
+							name={tText(
+								'modules/account/components/edit-folder-title/edit-folder-title___map-aanpassen'
+							)}
+							icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+							aria-label={tText(
+								'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
+							)}
+						/>
+					</TooltipTrigger>
+					<TooltipContent>
+						<span>
+							{tText(
+								'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
+							)}
+						</span>
+					</TooltipContent>
+				</Tooltip>
 				{buttons.filter((b) => !b.before).map((b) => b.node)}
 			</>
 		);

@@ -326,22 +326,33 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{
 							before: true,
 							node: (
-								<Button
-									key={'export-folder-mobile'}
-									className="p-account-my-folders__export--icon"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									icon={<Icon name={IconNamesLight.Export} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
+								<Tooltip position="top">
+									<TooltipTrigger>
+										<Button
+											key={'export-folder-mobile'}
+											className="p-account-my-folders__export--icon"
+											variants={['black']}
+											name={tText(
+												'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
+											)}
+											icon={<Icon name={IconNamesLight.Export} aria-hidden />}
+											aria-label={tText(
+												'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
+											)}
+											onClick={(e) => {
+												e.stopPropagation();
+												onExportClick();
+											}}
+										/>
+									</TooltipTrigger>
+									<TooltipContent>
+										<span>
+											{tText(
+												'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
+											)}
+										</span>
+									</TooltipContent>
+								</Tooltip>
 							),
 						},
 				  ]
@@ -388,20 +399,31 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{
 							before: false,
 							node: (
-								<Button
-									variants={['silver']}
-									icon={<Icon name={IconNamesLight.Share} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-delen'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										setShowShareMapBlade(true);
-									}}
-								/>
+								<Tooltip position="top">
+									<TooltipTrigger>
+										<Button
+											variants={['silver']}
+											icon={<Icon name={IconNamesLight.Share} aria-hidden />}
+											aria-label={tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-delen'
+											)}
+											name={tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-delen'
+											)}
+											onClick={(e) => {
+												e.stopPropagation();
+												setShowShareMapBlade(true);
+											}}
+										/>
+									</TooltipTrigger>
+									<TooltipContent>
+										<span>
+											{tText(
+												'pages/account/mijn-mappen/folder-slug/index___map-delen'
+											)}
+										</span>
+									</TooltipContent>
+								</Tooltip>
 							),
 						},
 				  ]

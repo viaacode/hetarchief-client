@@ -1,4 +1,10 @@
-import { Button, OrderDirection } from '@meemoo/react-components';
+import {
+	Button,
+	OrderDirection,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@meemoo/react-components';
 import Image from 'next/image';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -190,29 +196,53 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					</div>
 				</a>
 				<div className={styles['c-material-request-center-blade__material-actions']}>
-					<Button
-						key={'edit-material-request'}
-						className={
-							styles['c-material-request-center-blade__material-actions-button']
-						}
-						onClick={() => editMaterialRequest(item)}
-						variants={['silver']}
-						name="Edit"
-						icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
-						aria-label={tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
-						)}
-					/>
-					<Button
-						key={'delete-material-request'}
-						onClick={() => deleteMaterialRequest(item.id)}
-						variants={['silver']}
-						name="Delete"
-						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-						aria-label={tText(
-							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
-						)}
-					/>
+					<Tooltip position="top">
+						<TooltipTrigger>
+							<Button
+								key={'edit-material-request'}
+								className={
+									styles[
+										'c-material-request-center-blade__material-actions-button'
+									]
+								}
+								onClick={() => editMaterialRequest(item)}
+								variants={['silver']}
+								name="Edit"
+								icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
+								aria-label={tText(
+									'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
+								)}
+							/>
+						</TooltipTrigger>
+						<TooltipContent>
+							<span>
+								{tText(
+									'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
+								)}
+							</span>
+						</TooltipContent>
+					</Tooltip>
+					<Tooltip position="top">
+						<TooltipTrigger>
+							<Button
+								key={'delete-material-request'}
+								onClick={() => deleteMaterialRequest(item.id)}
+								variants={['silver']}
+								name="Delete"
+								icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+								aria-label={tText(
+									'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
+								)}
+							/>
+						</TooltipTrigger>
+						<TooltipContent>
+							<span>
+								{tText(
+									'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder'
+								)}
+							</span>
+						</TooltipContent>
+					</Tooltip>
 				</div>
 			</div>
 		);
