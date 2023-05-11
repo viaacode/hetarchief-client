@@ -79,6 +79,7 @@ import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
 import { IeObjectsService } from '@ie-objects/services';
+import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeObject,
 	IeObjectAccessThrough,
@@ -156,9 +157,10 @@ const { publicRuntimeConfig } = getConfig();
 
 type ObjectDetailPageProps = {
 	title: string | null;
+	description: string | null;
 } & DefaultSeoInfo;
 
-const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
+const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description, url }) => {
 	/**
 	 * Hooks
 	 */
@@ -1389,11 +1391,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		return <ErrorNotFound />;
 	};
 
-	const description = capitalize(lowerCase((router.query.slug as string) || ''));
+	const seoDescription =
+		description || capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
 		<>
 			<VisitorLayout>
-				{renderOgTags(title, description, url)}
+				{renderOgTags(title, seoDescription, url)}
 				{renderPageContent()}
 			</VisitorLayout>
 		</>
@@ -1403,7 +1406,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
-	let seoInfo: { name: string | null } | null = null;
+	let seoInfo: SeoInfo | null = null;
 	try {
 		seoInfo = await IeObjectsService.getSeoById(context.query.ie as string);
 	} catch (err) {
@@ -1418,6 +1421,7 @@ export async function getServerSideProps(
 		props: {
 			...(defaultProps as { props: DefaultSeoInfo }).props,
 			title: seoInfo?.name || null,
+			description: seoInfo?.description || null,
 		},
 	};
 }
