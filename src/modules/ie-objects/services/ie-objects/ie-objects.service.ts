@@ -126,9 +126,7 @@ export class IeObjectsService {
 			.get(
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${meemooId}`,
-					query: {
-						...(!isEmpty(maintainerId) && { maintainerId }),
-					},
+					query: maintainerId ? { maintainerId } : {},
 				})
 			)
 			.json();

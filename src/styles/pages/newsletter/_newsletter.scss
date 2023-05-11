@@ -1,0 +1,56 @@
+@use "src/styles/abstracts" as *;
+
+$page: "p-newsletter";
+
+.#{$page} {
+	height: 100%;
+	width: 100%;
+
+	&__wrapper {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		column-gap: $spacer-3xl;
+		margin-top: 14.4rem;
+
+		@include respond-to(lg) {
+			display: block;
+			margin-top: calc(50vw + 4.7rem);
+		}
+	}
+
+	&__content {
+		grid-column: 2;
+	}
+
+	&__header {
+		margin-bottom: $spacer-lg;
+	}
+
+	&__title {
+		font-size: $font-size-2xl;
+		line-height: $line-height-md;
+		margin-bottom: $spacer-xs;
+	}
+
+	&__text {
+		font-size: $font-size-sm;
+		color: $grey;
+	}
+
+	&__form-button {
+		margin-top: $spacer-1xl;
+	}
+
+	&--wallpaper {
+		background-repeat: no-repeat;
+		background-image: url("/images/bg-newsletter.png");
+		background-position: left bottom;
+		background-size: auto 80%;
+
+		@include respond-to(lg) {
+			background-position: left top;
+			background-size: 100% auto;
+			background-image: url("/images/bg-newsletter-mobile.png");
+		}
+	}
+}

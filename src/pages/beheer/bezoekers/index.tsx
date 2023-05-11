@@ -24,7 +24,8 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -38,7 +39,7 @@ import { RequestStatusAll, VisitTimeframe } from '@visits/types';
 const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { tHtml, tText } = useTranslation();
 	const [filters, setFilters] = useQueryParams(CP_ADMIN_VISITORS_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const [showDenyVisitRequestModal, setShowDenyVisitRequestModal] = useState<boolean>(false);
 	const [showEditVisitRequestModal, setShowEditVisitRequestModal] = useState<boolean>(false);
@@ -49,7 +50,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		isFetching,
 		refetch: refetchVisitRequests,
 	} = useGetVisits({
-		searchInput: filters[SEARCH_QUERY_KEY],
+		searchInput: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		status: VisitStatus.APPROVED,
 		timeframe:
 			filters.timeframe === RequestStatusAll.ALL
@@ -240,7 +241,9 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 							placeholder={tText('pages/beheer/bezoekers/index___zoek')}
 							onChange={setSearch}
 							onSearch={(value) =>
-								setFilters({ [SEARCH_QUERY_KEY]: value || undefined })
+								setFilters({
+									[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value || undefined,
+								})
 							}
 						/>
 

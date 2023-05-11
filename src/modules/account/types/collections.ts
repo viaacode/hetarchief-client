@@ -1,6 +1,6 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
-import { IeObjectLicense } from '@ie-objects/types';
+import { IeObjectLicense, IsPartOfKey } from '@ie-objects/types';
 import { IeObjectTypes } from '@shared/types';
 import { AccessThroughType } from '@shared/types/access';
 
@@ -35,8 +35,7 @@ export interface FolderIeObject {
 	maintainerId: string;
 	maintainerName: string;
 	maintainerSlug: string;
-	series: string[];
-	programs: string[];
+	isPartOf?: Partial<Record<IsPartOfKey, string[]>>;
 	datePublished?: string;
 	dateCreatedLowerBound?: string;
 	licenses: IeObjectLicense[];

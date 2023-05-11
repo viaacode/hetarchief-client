@@ -6,10 +6,10 @@ import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components';
 import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatMediumDateWithTime } from '@shared/utils';
@@ -25,7 +25,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 
 	const [, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 	const user = useSelector(selectUser);
 
@@ -76,7 +76,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 	};
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: visit.spaceSlug });
+		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visit.spaceSlug });
 		setIsRequestAccessBladeOpen(true);
 	};
 

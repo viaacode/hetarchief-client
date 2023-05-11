@@ -12,12 +12,12 @@ import { StringParam, useQueryParams } from 'use-query-params';
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
 import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
@@ -57,7 +57,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	const dispatch = useDispatch();
 
 	const [, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
 	const user = useSelector(selectUser);
@@ -131,7 +131,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
+		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
 		setIsRequestAccessBladeOpen(true);
 	};
 

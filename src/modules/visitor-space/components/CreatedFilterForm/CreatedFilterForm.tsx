@@ -11,9 +11,9 @@ import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
 import { asDate } from '@shared/utils';
+import { getOperators } from '@visitor-space/utils';
 
 import { MetadataProp } from '../../types';
-import { getRegularOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
@@ -61,7 +61,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 		defaultValues,
 	});
 
-	const operators = useMemo(() => getRegularOperators(MetadataProp.CreatedAt), []);
+	const operators = useMemo(() => getOperators(MetadataProp.CreatedAt), []);
 
 	// Effects
 
