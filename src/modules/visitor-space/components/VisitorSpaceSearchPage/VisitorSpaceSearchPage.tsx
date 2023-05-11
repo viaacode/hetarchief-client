@@ -61,6 +61,7 @@ import {
 	selectLastScrollPosition,
 	selectShowNavigationBorder,
 	setLastScrollPosition,
+	setShowZendesk,
 } from '@shared/store/ui';
 import {
 	Breakpoints,
@@ -241,6 +242,10 @@ const VisitorSpaceSearchPage: FC = () => {
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [activeVisitorSpaceSlug, visitorSpaces]);
+
+	useEffect(() => {
+		dispatch(setShowZendesk(!isKioskUser && !activeVisitorSpace));
+	}, [dispatch, isKioskUser, activeVisitorSpace]);
 
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
