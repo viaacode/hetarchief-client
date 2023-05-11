@@ -1334,19 +1334,24 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
 			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
+
 		if (mediaInfo) {
 			return <div className="p-object-detail">{renderObjectDetail()}</div>;
 		}
+
 		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {
 			if (isErrorSpaceNotFound) {
 				return <ErrorNotFound />;
 			}
-			if (isErrorSpaceNotActive) {
+
+			if (isErrorSpaceNotActive || visitorSpace?.status === VisitorSpaceStatus.Inactive) {
 				return <ErrorSpaceNoLongerActive />;
 			}
+
 			if (visitorSpace && visitRequest) {
 				return <ErrorNotFound />;
 			}
+
 			if (visitorSpace && isVisitRequestErrorNotFound) {
 				return (
 					<ErrorNoAccessToObject
