@@ -79,6 +79,7 @@ import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
 import { IeObjectsService } from '@ie-objects/services';
+import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeObject,
 	IeObjectAccessThrough,
@@ -156,9 +157,10 @@ const { publicRuntimeConfig } = getConfig();
 
 type ObjectDetailPageProps = {
 	title: string | null;
+	description: string | null;
 } & DefaultSeoInfo;
 
-const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
+const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description, url }) => {
 	/**
 	 * Hooks
 	 */
@@ -186,8 +188,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 
-	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
-
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
@@ -213,7 +213,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const collections = useSelector(selectFolders);
 
 	// Query params
-	const [, setQuery] = useQueryParams({
+	const [query, setQuery] = useQueryParams({
+		...IE_OBJECT_QUERY_PARAM_CONFIG,
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
@@ -301,9 +302,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	 */
 	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
-	const isErrorNotFound =
-		(visitRequestError as HTTPError)?.response?.status === 404 ||
-		(mediaInfoError as HTTPError)?.response?.status === 404;
+	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
+	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
+	const isVisitRequestErrorNotFound = (visitRequestError as HTTPError)?.response?.status === 404;
+	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
@@ -332,8 +334,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [windowSize]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(false));
-	}, [dispatch]);
+		dispatch(setShowZendesk(!isKiosk && !hasAccessToVisitorSpaceOfObject));
+	}, [dispatch, hasAccessToVisitorSpaceOfObject]);
 
 	useEffect(() => {
 		if (mediaInfo) {
@@ -1130,7 +1132,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 								title: tHtml(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 								),
-								data: mapKeywordsToTagList(mediaInfo.keywords),
+								data: mapKeywordsToTagList(
+									mediaInfo.keywords,
+									visitRequest ? (router.query.slug as string) : ''
+								),
 							},
 							{
 								title: tHtml('pages/slug/ie/index___ook-interessant'),
@@ -1341,24 +1346,59 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</>
 	);
 
+	// To determine the correct error page or the object detail page, we follow this flow:
+	// fetch object
+	//    - 200: show detail page
+	//    - 404, 403: check the visitor space info
+	//           - 404: not found error page
+	//           - 410: visitor space no longer available error page
+	//           - 200: check visit request info
+	//                   - 200: not found error page
+	//                   - 404: no access error page
+
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
 			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
-		if (isErrorSpaceNotActive) {
-			return <ErrorSpaceNoLongerActive />;
+
+		if (mediaInfo) {
+			return <div className="p-object-detail">{renderObjectDetail()}</div>;
 		}
-		if (isErrorNotFound) {
-			return <ErrorNotFound />;
+
+		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {
+			if (isErrorSpaceNotFound) {
+				return <ErrorNotFound />;
+			}
+
+			if (isErrorSpaceNotActive || visitorSpace?.status === VisitorSpaceStatus.Inactive) {
+				return <ErrorSpaceNoLongerActive />;
+			}
+
+			if (visitorSpace && visitRequest) {
+				return <ErrorNotFound />;
+			}
+
+			if (visitorSpace && isVisitRequestErrorNotFound) {
+				return (
+					<ErrorNoAccessToObject
+						visitorSpaceName={visitorSpace?.name as string}
+						visitorSpaceSlug={visitorSpace?.slug as string}
+						description={tHtml(
+							'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+						)}
+					/>
+				);
+			}
 		}
-		return <div className="p-object-detail">{renderObjectDetail()}</div>;
+		return <ErrorNotFound />;
 	};
 
-	const description = capitalize(lowerCase((router.query.slug as string) || ''));
+	const seoDescription =
+		description || capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
 		<>
 			<VisitorLayout>
-				{renderOgTags(title, description, url)}
+				{renderOgTags(title, seoDescription, url)}
 				{renderPageContent()}
 			</VisitorLayout>
 		</>
@@ -1368,7 +1408,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
-	let seoInfo: { name: string | null } | null = null;
+	let seoInfo: SeoInfo | null = null;
 	try {
 		seoInfo = await IeObjectsService.getSeoById(context.query.ie as string);
 	} catch (err) {
@@ -1383,6 +1423,7 @@ export async function getServerSideProps(
 		props: {
 			...(defaultProps as { props: DefaultSeoInfo }).props,
 			title: seoInfo?.name || null,
+			description: seoInfo?.description || null,
 		},
 	};
 }

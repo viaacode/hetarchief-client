@@ -43,10 +43,9 @@ export const useGetIeObjects = (
 		async () => {
 			const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
 
-			// Run 3 queries:
-			//     - One to fetch the results for a specific tab (results),
-			//     - One to count the amount of related items
-			//     - and one to fetch the aggregates across tabs (noFormat)
+			// Run 2 queries:
+			//     - One to fetch the results for a specific (all, audio, video) tab (search results),
+			//     - and one to fetch the aggregates across tabs (all-, video-, audio counts)
 			const [results, noFormat] = await Promise.all([
 				IeObjectsService.getSearchResults(filterQuery, page, size, sort).then(
 					addRelatedCount
