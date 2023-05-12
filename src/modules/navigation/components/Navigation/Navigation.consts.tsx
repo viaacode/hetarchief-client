@@ -15,7 +15,7 @@ import {
 import { Icon, IconName, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { Breakpoints } from '@shared/types';
+import { Breakpoints, Visit } from '@shared/types';
 import { VisitorSpaceFilterId, VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
@@ -207,7 +207,8 @@ const getDynamicHeaderLinks = (
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	placement: NavigationPlacement,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	linkedSpaceOrId: string | null
+	linkedSpaceOrId: string | null,
+	activeVisits: Visit[] | null
 ) => {
 	const itemsByPlacement = navigationItems[placement];
 
@@ -224,6 +225,12 @@ const getDynamicHeaderLinks = (
 			iconName,
 			tooltip,
 		}: NavigationInfo): NavigationItem => {
+			const hasActiveVisits = activeVisits && activeVisits.length > 0;
+			const isSearchNavItem = contentPath === ROUTES.search && hasActiveVisits;
+			const searchUrl = isSearchNavItem
+				? `${contentPath}?aanbieder=${activeVisits[0].spaceSlug}`
+				: contentPath;
+
 			if (contentPath === NAVIGATION_DROPDOOWN.VISITOR_SPACES) {
 				return getVisitorSpacesDropdown(
 					label,
@@ -240,7 +247,7 @@ const getDynamicHeaderLinks = (
 				path: contentPath,
 				node: renderLink(
 					label,
-					contentPath,
+					searchUrl,
 					{
 						target: linkTarget || undefined,
 						iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
@@ -430,21 +437,24 @@ export const getNavigationItemsLeft = (
 	permissions: Permission[],
 	linkedSpaceOrId: string | null,
 	isMobile: boolean,
-	maintainerSlug: string | null
+	maintainerSlug: string | null,
+	activeVisits: Visit[] | null
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
 		NavigationPlacement.HeaderLeft,
 		accessibleVisitorSpaces,
-		linkedSpaceOrId
+		linkedSpaceOrId,
+		activeVisits
 	);
 	const afterDivider = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
 		NavigationPlacement.HeaderRight,
 		accessibleVisitorSpaces,
-		linkedSpaceOrId
+		linkedSpaceOrId,
+		null
 	);
 
 	const cpAdminLinks = getCpAdminManagementDropdown(
@@ -481,7 +491,8 @@ export const getNavigationItemsProfileDropdown = (
 		navigationItems,
 		NavigationPlacement.ProfileDropdown,
 		accessibleVisitorSpaces,
-		linkedSpaceOrId
+		linkedSpaceOrId,
+		null
 	);
 
 	// Group navigation items by type

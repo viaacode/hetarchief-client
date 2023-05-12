@@ -118,6 +118,8 @@ export class VisitsService {
 
 	public static async getAllActiveVisits({
 		requesterId,
+		orderProp = 'endAt',
+		orderDirection = OrderDirection.asc,
 		page = 0,
 		size = 20,
 	}: GetAllActiveVisitsProps): Promise<IPagination<Visit>> {
@@ -131,6 +133,8 @@ export class VisitsService {
 						requesterId,
 						page,
 						size,
+						orderProp,
+						orderDirection,
 					},
 				})
 			)
