@@ -188,8 +188,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 
-	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
-
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
@@ -215,7 +213,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const collections = useSelector(selectFolders);
 
 	// Query params
-	const [, setQuery] = useQueryParams({
+	const [query, setQuery] = useQueryParams({
+		...IE_OBJECT_QUERY_PARAM_CONFIG,
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
@@ -1133,7 +1132,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								title: tHtml(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 								),
-								data: mapKeywordsToTagList(mediaInfo.keywords),
+								data: mapKeywordsToTagList(
+									mediaInfo.keywords,
+									visitRequest ? (router.query.slug as string) : ''
+								),
 							},
 							{
 								title: tHtml('pages/slug/ie/index___ook-interessant'),
