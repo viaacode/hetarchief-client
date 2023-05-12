@@ -10,9 +10,9 @@ import { useQueryParams } from 'use-query-params';
 import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
+import { getOperators } from '@visitor-space/utils';
 
 import { MetadataProp } from '../../types';
-import { getRegularOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
@@ -55,7 +55,7 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 		reValidateMode: 'onChange',
 	});
 
-	const operators = useMemo(() => getRegularOperators(MetadataProp.Duration), []);
+	const operators = useMemo(() => getOperators(MetadataProp.Duration), []);
 
 	// Effects
 

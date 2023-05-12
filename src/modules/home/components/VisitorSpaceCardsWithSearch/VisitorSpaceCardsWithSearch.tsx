@@ -10,7 +10,7 @@ import {
 	VisitorSpaceCardProps,
 } from '@shared/components';
 import { VisitorSpaceCardType } from '@shared/components/VisitorSpaceCard';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
@@ -35,13 +35,13 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 }) => {
 	const { tHtml, tText } = useTranslation();
 	const [query, setQuery] = useQueryParams({
-		[SEARCH_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: StringParam,
 	});
 	const [areAllVisitorSpacesVisible, setAreAllVisitorSpacesVisible] = useState(false);
 	const resultsAnchor = useRef<HTMLDivElement | null>(null);
 
 	const { data: visitorSpaces, isLoading: isLoadingVisitorSpaces } = useGetVisitorSpaces(
-		query[SEARCH_QUERY_KEY] || undefined,
+		query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || undefined,
 		[VisitorSpaceStatus.Active],
 		0,
 		areAllVisitorSpacesVisible ? 200 : NUMBER_OF_VISITOR_SPACES
@@ -52,7 +52,7 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 
 	useEffect(() => {
-		if (query[SEARCH_QUERY_KEY] && resultsAnchor) {
+		if (query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] && resultsAnchor) {
 			document.body.scrollTo({ top: resultsAnchor.current?.offsetTop, behavior: 'smooth' });
 		}
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -91,13 +91,13 @@ const VisitorSpaceCardsWithSearch: FC<VisitorSpaceCardsWithSearchProps> = ({
 
 				<SearchBar
 					id={labelKeys.search}
-					value={query[SEARCH_QUERY_KEY] || ''}
+					value={query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || ''}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
 					placeholder={tText(
 						'modules/home/components/visitor-space-cards-with-search/visitor-space-cards-with-search___zoek'
 					)}
 					onChange={(newValue: string) => {
-						setQuery({ [SEARCH_QUERY_KEY]: newValue });
+						setQuery({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue });
 					}}
 					onSearch={(value: string) => {
 						onSearch?.(value);

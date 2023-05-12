@@ -1,6 +1,8 @@
 import { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { GroupName } from '@account/const';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { setShowZendesk } from '@shared/store/ui';
 
 /**
@@ -11,9 +13,10 @@ import { setShowZendesk } from '@shared/store/ui';
  */
 const VisitorLayout: FC = ({ children }) => {
 	const dispatch = useDispatch();
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(true));
+		dispatch(setShowZendesk(!isKioskUser));
 	}, [dispatch]);
 
 	return <>{children}</>;

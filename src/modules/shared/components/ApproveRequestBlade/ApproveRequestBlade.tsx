@@ -33,6 +33,10 @@ import {
 	RefinableRadioButton,
 	RefinableRadioButtonOption,
 } from '@shared/components';
+import {
+	getAccessToDate,
+	roundToNextQuarter,
+} from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
 import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
@@ -55,8 +59,7 @@ const labelKeys: Record<keyof ApproveRequestFormState, string> = {
 	accessType: 'ApproveRequestBlade__accessType',
 };
 
-const roundToNearestQuarter = (date: Date) => roundToNearestMinutes(date, { nearestTo: 15 });
-const defaultAccessFrom = (start: Date) => roundToNearestQuarter(start);
+const defaultAccessFrom = (start: Date) => roundToNextQuarter(start);
 const defaultAccessTo = (accessFrom: Date) => {
 	let hoursUntilNext1800 = 18; // Same day 18:00
 	if (accessFrom.getHours() >= 18) {
@@ -344,43 +347,18 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			const now = new Date();
 
 			const onFromDateChange = (
-				date: Date | null,
+				newAccessFromDate: Date | null,
 				field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'>
 			) => {
-				onSimpleDateChange(date, field);
+				onSimpleDateChange(newAccessFromDate, field);
 
-				if (date && field.value) {
-					const minimum = 60;
-
-					// if difference is negative => start time is after end time
-					const difference = differenceInMinutes(field.value, date);
-
-					// 6PM on the selected accessFrom
-					const sixPM = defaultAccessTo(date);
-
-					// 5PM on the selected accesFrom
-					const fivePM = subHours(sixPM, 1);
-
-					// 1h in the future
-					// Aligns with `minTime` of the `accessTo` `Timepicker`-component
-					const oneHour = (date: Date) =>
-						setValue('accessTo', addHours(roundToNearestQuarter(date), 1));
-
-					if (difference <= 0 && !isSameDay(field.value, date)) {
-						if (differenceInMinutes(sixPM, date) >= minimum) {
-							// at least an hour, set to sixPM
-							setValue('accessTo', sixPM);
-						} else {
-							// less than an hour, set to accessFrom + 1h
-							oneHour(date);
-						}
-					} else if (difference < minimum) {
-						if (isBefore(field.value, fivePM)) {
-							setValue('accessTo', sixPM);
-						} else {
-							// less than an hour, set to accessFrom + 1h
-							oneHour(date);
-						}
+				if (newAccessFromDate) {
+					const newAccessToDate = getAccessToDate(
+						newAccessFromDate,
+						getValues().accessTo
+					);
+					if (newAccessToDate) {
+						setValue('accessTo', newAccessToDate);
 					}
 				}
 			};

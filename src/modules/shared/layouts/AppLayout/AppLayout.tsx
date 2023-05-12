@@ -14,7 +14,6 @@ import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
-import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
 import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
@@ -37,7 +36,8 @@ import Html from '@shared/components/Html/Html';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -95,9 +95,9 @@ const AppLayout: FC = ({ children }) => {
 	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
 	const linkedSpaceOrId: string | null = user?.maintainerId || null;
 	const [query, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
-		[SEARCH_QUERY_KEY]: StringParam,
-		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
 	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
 		{},
@@ -165,7 +165,7 @@ const AppLayout: FC = ({ children }) => {
 		if (user) {
 			setQuery({
 				...query,
-				[SHOW_AUTH_QUERY_KEY]: undefined,
+				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: undefined,
 			});
 			dispatch(setShowAuthModal(false));
 		} else if (typeof query.showAuth === 'boolean') {
@@ -193,7 +193,7 @@ const AppLayout: FC = ({ children }) => {
 			stringifyUrl({
 				url: router.asPath,
 				query: {
-					[SHOW_AUTH_QUERY_KEY]: '1',
+					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 				},
 			})
 		);
@@ -202,10 +202,10 @@ const AppLayout: FC = ({ children }) => {
 	const onLogOutClick = useCallback(() => AuthService.logout(), []);
 
 	const onCloseAuthModal = () => {
-		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
+		if (typeof query[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY] === 'boolean') {
 			setQuery({
-				[SHOW_AUTH_QUERY_KEY]: undefined,
-				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: undefined,
+				[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
 			});
 		}
 		dispatch(setShowAuthModal(false));

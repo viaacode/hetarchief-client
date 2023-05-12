@@ -1,4 +1,5 @@
 import { MenuItemInfo, TabProps } from '@meemoo/react-components';
+import { isString } from 'lodash-es';
 import { ArrayParam } from 'use-query-params';
 
 import {
@@ -21,6 +22,7 @@ import {
 	mapObjectToMetadata,
 } from '@ie-objects/utils';
 import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/components';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
@@ -356,31 +358,63 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	...mapObjectToMetadata(mediaInfo.premisIdentifier),
 	{
 		title: tText('modules/ie-objects/const/index___alternatieve-naam'),
-		data: mapArrayToMetadataData(mediaInfo.alternativeName),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___programma'),
-		data: mapArrayToMetadataData(mediaInfo?.programma),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___serie'),
-		data: mapArrayToMetadataData(mediaInfo?.series),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___reeks'),
-		data: mapArrayToMetadataData(mediaInfo?.reeks),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___seizoenen'),
-		data: mapArrayToMetadataData(mediaInfo?.seizoen),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___alternatief'),
-		data: mapArrayToMetadataData(mediaInfo?.alternatief),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.alternatief),
 	},
 	{
 		title: tText('modules/ie-objects/const/index___archief'),
-		data: mapArrayToMetadataData(mediaInfo?.archief),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.archief),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___deelarchief'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.deelarchief),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___deelreeks'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.deelreeks),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___programma'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.programma),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___reeks'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.reeks),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___seizoenen'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.seizoen),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___serie'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.serie),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___stuk'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.stuk),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___episode'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.episode),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___aflevering'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.aflevering),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___bestanddeel'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.bestanddeel),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___registratie'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.registratie),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___serienummer'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.serienummer),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___seizoennummer'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.seizoennummer),
 	},
 	{
 		title: tText('modules/ie-objects/const/index___bestandstype'),
@@ -424,7 +458,16 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 		title: tText('modules/ie-objects/const/index___genre'),
 		data: mapArrayToMetadataData(mediaInfo.genre),
 	},
-	...mapObjectToMetadata(mediaInfo.actor),
+	...(mediaInfo.actor
+		? [
+				{
+					title: tText('modules/ie-objects/const/index___genre'),
+					data: isString(mediaInfo.actor)
+						? mediaInfo.actor
+						: JSON.stringify(mediaInfo.actor as any),
+				},
+		  ]
+		: []),
 	{
 		title: tText('modules/ie-objects/const/index___locatie-van-de-inhoud'),
 		data: mapArrayToMetadataData([mediaInfo.spatial]),
@@ -458,5 +501,5 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 ];
 
 export const IE_OBJECT_QUERY_PARAM_CONFIG = {
-	searchTerms: ArrayParam,
+	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: ArrayParam,
 };

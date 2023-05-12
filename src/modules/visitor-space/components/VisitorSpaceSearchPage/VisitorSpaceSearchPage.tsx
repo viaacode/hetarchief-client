@@ -9,9 +9,8 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
-import { includes, intersection, isEmpty, isNil, sortBy, sum } from 'lodash-es';
+import { intersection, isEmpty, isNil, sortBy, sum } from 'lodash-es';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
@@ -46,12 +45,12 @@ import {
 } from '@shared/components';
 import { PAGE_NUMBER_OF_MANY_RESULTS_TILE } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
-import { useScrollToId } from '@shared/hooks/scroll-to-id';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
@@ -60,6 +59,7 @@ import {
 	selectLastScrollPosition,
 	selectShowNavigationBorder,
 	setLastScrollPosition,
+	setShowZendesk,
 } from '@shared/store/ui';
 import {
 	Breakpoints,
@@ -72,6 +72,7 @@ import {
 } from '@shared/types';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
 import { VisitsService } from '@visits/services';
 import { VisitTimeframe } from '@visits/types';
 
@@ -128,11 +129,8 @@ const getDefaultOption = (): VisitorSpaceDropdownOption => {
 // TODO: rename this at some point to SearchPage
 const VisitorSpaceSearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
-	const router = useRouter();
 	const windowSize = useWindowSizeContext();
 	const dispatch = useDispatch();
-
-	useScrollToId((router.query.focus as string) || null);
 
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
@@ -156,14 +154,15 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const [viewMode, setViewMode] = useLocalStorage('HET_ARCHIEF.search.viewmode', 'grid');
 
-	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
+	const [selectedCard, setSelectedCard] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
 	const [searchBarInputValue, setSearchBarInputValue] = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
-	const [activeVisitorSpace, setActiveVisitorSpace] = useState<Visit | undefined>();
+	const { data: activeVisitRequest, isLoading: isLoadingActiveVisitRequest } =
+		useGetActiveVisitForUserAndSpace(query[VisitorSpaceFilterId.Maintainer], user, true);
 
 	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
 
@@ -208,11 +207,11 @@ const VisitorSpaceSearchPage: FC = () => {
 		isLoading: searchResultsLoading,
 		error: searchResultsError,
 	} = useGetIeObjects(
-		[mapMaintainerToElastic(query, activeVisitorSpace), ...mapFiltersToElastic(query)],
+		[...mapMaintainerToElastic(query, activeVisitRequest), ...mapFiltersToElastic(query)],
 		query.page || 1,
 		VISITOR_SPACE_ITEM_COUNT,
 		activeSort,
-		true
+		!isLoadingActiveVisitRequest
 	);
 
 	const showManyResultsTile = query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
@@ -230,16 +229,8 @@ const VisitorSpaceSearchPage: FC = () => {
 	}, [getVisitorSpaces, isLoggedIn]);
 
 	useEffect(() => {
-		const visitorSpace: Visit | undefined = visitorSpaces.find(
-			(visit: Visit): boolean => activeVisitorSpaceSlug === visit.spaceSlug
-		);
-
-		setActiveVisitorSpace(visitorSpace);
-		setQuery({
-			[VisitorSpaceFilterId.Maintainer]: activeVisitorSpaceSlug || undefined,
-		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [activeVisitorSpaceSlug, visitorSpaces]);
+		dispatch(setShowZendesk(!isKioskUser && !query[VisitorSpaceFilterId.Maintainer]));
+	}, [dispatch, isKioskUser, query]);
 
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
@@ -280,7 +271,8 @@ const VisitorSpaceSearchPage: FC = () => {
 		if (
 			lastScrollPosition &&
 			lastScrollPosition.page === ROUTES.search &&
-			searchResults?.items
+			searchResults?.items &&
+			window.scrollY === 0
 		) {
 			setTimeout(() => {
 				const item = document.getElementById(
@@ -288,10 +280,10 @@ const VisitorSpaceSearchPage: FC = () => {
 				) as HTMLElement | null;
 
 				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+				dispatch(setLastScrollPosition(null));
 			}, 100);
-			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.search }));
 		}
-	}, [searchResults?.items]);
+	}, [lastScrollPosition, searchResults?.items]);
 
 	useEffect(() => {
 		setIsInitialPageLoad(true);
@@ -375,12 +367,14 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const prepareSearchValue = (
 		value = ''
-	): { [SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
+	): { [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (string | null)[] } | undefined => {
 		const trimmed = value.trim();
 
-		if (trimmed && !query[SEARCH_QUERY_KEY]?.includes(trimmed)) {
+		if (trimmed && !query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]?.includes(trimmed)) {
 			return {
-				[SEARCH_QUERY_KEY]: (query[SEARCH_QUERY_KEY] ?? []).concat(trimmed),
+				[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: (
+					query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] ?? []
+				).concat(trimmed),
 			};
 		}
 
@@ -540,7 +534,7 @@ const VisitorSpaceSearchPage: FC = () => {
 				case VisitorSpaceFilterId.Language:
 				case VisitorSpaceFilterId.Medium:
 				case VisitorSpaceFilterId.Maintainers:
-				case SEARCH_QUERY_KEY:
+				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),
@@ -697,11 +691,11 @@ const VisitorSpaceSearchPage: FC = () => {
 		];
 
 		const dynamicBreadcrumbs: Breadcrumb[] =
-			!isNil(activeVisitorSpace) && activeVisitorSpace.spaceMaintainerId !== PUBLIC_COLLECTION
+			!isNil(activeVisitRequest) && activeVisitRequest.spaceMaintainerId !== PUBLIC_COLLECTION
 				? [
 						{
-							label: activeVisitorSpace?.spaceName || '',
-							to: `${ROUTES.search}?maintainer=${activeVisitorSpace?.spaceMaintainerId}`,
+							label: activeVisitRequest?.spaceName || '',
+							to: `${ROUTES.search}?maintainer=${activeVisitRequest?.spaceMaintainerId}`,
 						},
 				  ]
 				: [];
@@ -762,7 +756,7 @@ const VisitorSpaceSearchPage: FC = () => {
 					e.preventDefault();
 					e.stopPropagation();
 
-					setSelected(item as IdentifiableMediaCard);
+					setSelectedCard(item as IdentifiableMediaCard);
 					setShowAddToFolderBlade(true);
 				}}
 				icon={
@@ -989,20 +983,20 @@ const VisitorSpaceSearchPage: FC = () => {
 					<AddToFolderBlade
 						isOpen={isAddToFolderBladeOpen}
 						selected={
-							selected
+							selectedCard
 								? {
-										schemaIdentifier: selected.schemaIdentifier,
-										title: selected.name,
+										schemaIdentifier: selectedCard.schemaIdentifier,
+										title: selectedCard.name,
 								  }
 								: undefined
 						}
 						onClose={() => {
 							setShowAddToFolderBlade(false);
-							setSelected(null);
+							setSelectedCard(null);
 						}}
 						onSubmit={async () => {
 							setShowAddToFolderBlade(false);
-							setSelected(null);
+							setSelectedCard(null);
 						}}
 					/>
 				)}
@@ -1018,7 +1012,7 @@ const VisitorSpaceSearchPage: FC = () => {
 		if (searchResultsNoAccess) {
 			return (
 				<ErrorNoAccess
-					visitorSpaceSlug={String(activeVisitorSpace?.spaceSlug)}
+					visitorSpaceSlug={String(activeVisitRequest?.spaceSlug)}
 					description={tHtml(
 						'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___deze-bezoekersruimte-is-momenteel-niet-beschikbaar'
 					)}

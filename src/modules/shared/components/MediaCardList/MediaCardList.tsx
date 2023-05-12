@@ -4,6 +4,7 @@ import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
 import { ROUTE_PARTS } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
@@ -150,7 +151,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		const link = stringifyUrl({
 			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`,
 			query: {
-				searchTerms: keywords,
+				[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: keywords,
 			},
 		});
 		return wrapper(
