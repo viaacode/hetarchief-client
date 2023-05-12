@@ -44,7 +44,7 @@ $img-size: 33%;
 	}
 
 	&__icon {
-		min-width: $spacer-lg;
+		width: $spacer-lg;
 		height: $spacer-lg;
 		border-radius: $spacer-lg;
 		display: flex;
@@ -55,6 +55,7 @@ $img-size: 33%;
 		line-height: 0;
 		border: 0.2rem solid transparent;
 		transition: $animate-default;
+		grid-column: 2;
 	}
 
 	&__image {

@@ -42,7 +42,8 @@ import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts'
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -71,13 +72,12 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { folderSlug } = router.query;
-	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	/**
 	 * Data
 	 */
 	const [filters, setFilters] = useQueryParams(ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
@@ -129,7 +129,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const folderMedia = useGetFolderMedia(
 		activeFolder?.id,
-		filters[SEARCH_QUERY_KEY],
+		filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		filters.page,
 		FolderItemListSize
 	);
@@ -138,7 +138,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const { mutateAsync: getFolderExport } = useGetFolderExport();
 
 	const keywords = useMemo(
-		() => (filters[SEARCH_QUERY_KEY] ? [filters[SEARCH_QUERY_KEY] as string] : []),
+		() =>
+			filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]
+				? [filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] as string]
+				: [],
 		[filters]
 	);
 
@@ -189,8 +192,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 				) as HTMLElement | null;
 
 				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+				dispatch(setLastScrollPosition(null));
 			}, 100);
-			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.myFolders }));
 		}
 	}, [folderMedia?.data?.items]);
 
@@ -274,74 +277,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 */
 
 	const renderTitleButtons = useMemo(() => {
-		const onExportClick = async () => {
-			if (activeFolder?.id) {
-				const xmlBlob = await getFolderExport(activeFolder?.id);
-
-				if (xmlBlob) {
-					save(xmlBlob, `${kebabCase(activeFolder?.name) || 'map'}.xml`);
-				} else {
-					toastService.notify({
-						title:
-							tHtml('pages/account/mijn-mappen/folder-slug/index___error') || 'error',
-						description: tHtml(
-							'pages/account/mijn-mappen/folder-slug/index___het-ophalen-van-de-metadata-is-mislukt'
-						),
-					});
-				}
-			}
-		};
-
 		return [
-			...(canDownloadMetadata
-				? [
-						{
-							before: true,
-							node: (
-								<Button
-									key={'export-folder'}
-									className="p-account-my-folders__export--label"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
-							),
-						},
-						{
-							before: true,
-							node: (
-								<Button
-									key={'export-folder-mobile'}
-									className="p-account-my-folders__export--icon"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									icon={<Icon name={IconNamesLight.Export} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
-							),
-						},
-				  ]
-				: []),
 			...(activeFolder && !activeFolder.isDefault
 				? [
 						{
@@ -403,7 +339,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 				  ]
 				: []),
 		];
-	}, [canDownloadMetadata, tText, activeFolder, getFolderExport, tHtml]);
+	}, [tText, activeFolder, getFolderExport, tHtml]);
 
 	const renderActions = (item: IdentifiableMediaCard, folder: Folder) => (
 		<>
@@ -439,11 +375,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
-				value: item.programs.join(', '),
+				value: item?.isPartOf?.programma?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
-				value: item.series.join(', '),
+				value: item?.isPartOf?.serie?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
@@ -568,7 +504,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											onChange={setSearch}
 											onSearch={(newValue) =>
 												setFilters({
-													[SEARCH_QUERY_KEY]: newValue || undefined,
+													[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]:
+														newValue || undefined,
 												})
 											}
 										/>

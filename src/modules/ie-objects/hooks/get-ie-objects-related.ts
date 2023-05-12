@@ -8,13 +8,24 @@ import { IeObject } from './../types';
 
 export const useGetIeObjectsRelated = (
 	id: string,
-	maintainerId: string,
-	meemooId: string,
+	maintainerId?: string,
+	meemooId?: string,
 	enabled = true
 ): UseQueryResult<IPagination<IeObject>> => {
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsRelated, { id }],
-		() => IeObjectsService.getRelated(id, maintainerId, meemooId),
+		() => {
+			if (!maintainerId || !meemooId) {
+				return Promise.resolve({
+					items: [],
+					page: 1,
+					size: 0,
+					pages: 1,
+					total: 0,
+				} as IPagination<IeObject>);
+			}
+			IeObjectsService.getRelated(id, maintainerId, meemooId);
+		},
 		{
 			keepPreviousData: true,
 			enabled,

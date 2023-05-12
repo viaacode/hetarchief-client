@@ -5,7 +5,8 @@ import { stringifyUrl } from 'query-string';
 import { ReactNode } from 'react';
 
 import { MetadataItem } from '@ie-objects/components';
-import { ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
@@ -29,7 +30,7 @@ export const mapKeywordsToTagList = (keywords: string[], slug: string): ReactNod
 						url: `/${ROUTE_PARTS.search}`,
 						query: {
 							[VisitorSpaceFilterId.Maintainer]: slug,
-							[SEARCH_QUERY_KEY]: keyword,
+							[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: keyword,
 						},
 					})
 				);
