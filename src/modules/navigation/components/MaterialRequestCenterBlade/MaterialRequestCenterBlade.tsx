@@ -202,6 +202,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
+						toolTipText={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
+						)}
 					/>
 					<Button
 						key={'delete-material-request'}
@@ -211,6 +214,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
+						)}
+						toolTipText={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder'
 						)}
 					/>
 				</div>
