@@ -16,7 +16,7 @@ const initialState: UIState = {
 	showZendesk: true,
 	lockScroll: {},
 	materialRequestCount: 0,
-	lastScrollPosition: { itemId: '', page: ROUTES.home },
+	lastScrollPosition: null,
 	breadcrumbs: [],
 };
 
@@ -60,7 +60,7 @@ export const uiSlice = createSlice({
 		setMaterialRequestCount(state, action: PayloadAction<number>) {
 			state.materialRequestCount = action.payload;
 		},
-		setLastScrollPosition(state, action: PayloadAction<LastScrollPositionType>) {
+		setLastScrollPosition(state, action: PayloadAction<LastScrollPositionType | null>) {
 			state.lastScrollPosition = action.payload;
 		},
 		setBreadcrumbs(state, action: PayloadAction<Breadcrumb[]>) {
