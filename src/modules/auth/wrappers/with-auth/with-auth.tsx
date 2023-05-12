@@ -70,7 +70,10 @@ export const withAuth = (
 					// User is kioskuser
 					await toSearchPage();
 				}
-				if (isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos?.updatedAt)) {
+				if (
+					isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos?.updatedAt) ||
+					login.userInfo.groupName === GroupName.KIOSK_VISITOR
+				) {
 					// User has accepted the latest version of the terms of service
 					setShowPage(true);
 				} else {
