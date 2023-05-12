@@ -1,10 +1,4 @@
-import {
-	Button,
-	FormControl,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from '@meemoo/react-components';
+import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -326,33 +320,25 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{
 							before: true,
 							node: (
-								<Tooltip position="top">
-									<TooltipTrigger>
-										<Button
-											key={'export-folder-mobile'}
-											className="p-account-my-folders__export--icon"
-											variants={['black']}
-											name={tText(
-												'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-											)}
-											icon={<Icon name={IconNamesLight.Export} aria-hidden />}
-											aria-label={tText(
-												'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-											)}
-											onClick={(e) => {
-												e.stopPropagation();
-												onExportClick();
-											}}
-										/>
-									</TooltipTrigger>
-									<TooltipContent>
-										<span>
-											{tText(
-												'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-											)}
-										</span>
-									</TooltipContent>
-								</Tooltip>
+								<Button
+									key={'export-folder-mobile'}
+									className="p-account-my-folders__export--icon"
+									variants={['black']}
+									name={tText(
+										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
+									)}
+									icon={<Icon name={IconNamesLight.Export} aria-hidden />}
+									aria-label={tText(
+										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
+									)}
+									onClick={(e) => {
+										e.stopPropagation();
+										onExportClick();
+									}}
+									toolTipText={tText(
+										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
+									)}
+								/>
 							),
 						},
 				  ]
@@ -362,34 +348,26 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{
 							before: false,
 							node: (
-								<Tooltip position="top">
-									<TooltipTrigger>
-										<Button
-											key={'delete-folder'}
-											disabled={!!activeFolder.usedForLimitedAccessUntil}
-											className="p-account-my-folders__delete"
-											variants={['silver']}
-											icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-											aria-label={tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-											)}
-											name={tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-											)}
-											onClick={(e) => {
-												e.stopPropagation();
-												setShowConfirmDelete(true);
-											}}
-										/>
-									</TooltipTrigger>
-									<TooltipContent>
-										<span>
-											{tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
-											)}
-										</span>
-									</TooltipContent>
-								</Tooltip>
+								<Button
+									key={'delete-folder'}
+									disabled={!!activeFolder.usedForLimitedAccessUntil}
+									className="p-account-my-folders__delete"
+									variants={['silver']}
+									icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+									aria-label={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+									)}
+									name={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+									)}
+									onClick={(e) => {
+										e.stopPropagation();
+										setShowConfirmDelete(true);
+									}}
+									toolTipText={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
+									)}
+								/>
 							),
 						},
 				  ]
@@ -399,31 +377,23 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						{
 							before: false,
 							node: (
-								<Tooltip position="top">
-									<TooltipTrigger>
-										<Button
-											variants={['silver']}
-											icon={<Icon name={IconNamesLight.Share} aria-hidden />}
-											aria-label={tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-delen'
-											)}
-											name={tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-delen'
-											)}
-											onClick={(e) => {
-												e.stopPropagation();
-												setShowShareMapBlade(true);
-											}}
-										/>
-									</TooltipTrigger>
-									<TooltipContent>
-										<span>
-											{tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-delen'
-											)}
-										</span>
-									</TooltipContent>
-								</Tooltip>
+								<Button
+									variants={['silver']}
+									icon={<Icon name={IconNamesLight.Share} aria-hidden />}
+									aria-label={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
+									name={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
+									onClick={(e) => {
+										e.stopPropagation();
+										setShowShareMapBlade(true);
+									}}
+									toolTipText={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
+								/>
 							),
 						},
 				  ]
