@@ -7,12 +7,15 @@ import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import { Blade } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { useAppDispatch } from '@shared/store';
+import { setShowMaterialRequestCenter } from '@shared/store/ui';
 
 import { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
 
 const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, personalInfo }) => {
 	const { tText } = useTranslation();
+	const dispatch = useAppDispatch();
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity>(
 		personalInfo.requesterCapacity
@@ -37,6 +40,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 				),
 			});
 			onClose();
+			dispatch(setShowMaterialRequestCenter(false));
 		} catch (err) {
 			console.error({ err });
 			onFailedRequest();
