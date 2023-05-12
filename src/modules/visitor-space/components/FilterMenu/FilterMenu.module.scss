@@ -3,7 +3,7 @@
 
 $component: "c-filter-menu";
 $c-filter-menu-flyout-top-padding: 6.4rem;
-$c-filter-menu-border-color: color.adjust($white, $alpha: -0.8);
+$c-filter-menu-border-color: color.adjust($shade, $alpha: -0.6);
 $checkbox-size: $spacer-sm;
 
 .#{$component} {
