@@ -335,8 +335,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	}, [windowSize]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(false));
-	}, [dispatch]);
+		dispatch(setShowZendesk(!isKiosk && !hasAccessToVisitorSpaceOfObject));
+	}, [dispatch, hasAccessToVisitorSpaceOfObject]);
 
 	useEffect(() => {
 		if (mediaInfo) {

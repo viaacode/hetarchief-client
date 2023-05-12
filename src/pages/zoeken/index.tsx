@@ -6,7 +6,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { tText } from '@shared/helpers/translate';
-import { setBreadcrumbs, setShowZendesk } from '@shared/store/ui';
+import { setBreadcrumbs } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { VisitorSpaceSearchPage } from '@visitor-space/components';
 
@@ -16,7 +16,6 @@ const SearchPage: NextPage<SearchPageProps> = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(setShowZendesk(false));
 		dispatch(
 			setBreadcrumbs([
 				{

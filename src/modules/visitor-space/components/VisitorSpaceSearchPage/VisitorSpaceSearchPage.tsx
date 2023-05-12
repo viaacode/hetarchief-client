@@ -59,6 +59,7 @@ import {
 	selectLastScrollPosition,
 	selectShowNavigationBorder,
 	setLastScrollPosition,
+	setShowZendesk,
 } from '@shared/store/ui';
 import {
 	Breakpoints,
@@ -153,7 +154,7 @@ const VisitorSpaceSearchPage: FC = () => {
 
 	const [viewMode, setViewMode] = useLocalStorage('HET_ARCHIEF.search.viewmode', 'grid');
 
-	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
+	const [selectedCard, setSelectedCard] = useState<IdentifiableMediaCard | null>(null);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 
 	const [searchBarInputValue, setSearchBarInputValue] = useState<string>();
@@ -226,6 +227,10 @@ const VisitorSpaceSearchPage: FC = () => {
 
 		getVisitorSpaces();
 	}, [getVisitorSpaces, isLoggedIn]);
+
+	useEffect(() => {
+		dispatch(setShowZendesk(!isKioskUser && !query[VisitorSpaceFilterId.Maintainer]));
+	}, [dispatch, isKioskUser, query]);
 
 	useEffect(() => {
 		// Filter out all disabled query param keys/ids
@@ -751,7 +756,7 @@ const VisitorSpaceSearchPage: FC = () => {
 					e.preventDefault();
 					e.stopPropagation();
 
-					setSelected(item as IdentifiableMediaCard);
+					setSelectedCard(item as IdentifiableMediaCard);
 					setShowAddToFolderBlade(true);
 				}}
 				icon={
@@ -978,20 +983,20 @@ const VisitorSpaceSearchPage: FC = () => {
 					<AddToFolderBlade
 						isOpen={isAddToFolderBladeOpen}
 						selected={
-							selected
+							selectedCard
 								? {
-										schemaIdentifier: selected.schemaIdentifier,
-										title: selected.name,
+										schemaIdentifier: selectedCard.schemaIdentifier,
+										title: selectedCard.name,
 								  }
 								: undefined
 						}
 						onClose={() => {
 							setShowAddToFolderBlade(false);
-							setSelected(null);
+							setSelectedCard(null);
 						}}
 						onSubmit={async () => {
 							setShowAddToFolderBlade(false);
-							setSelected(null);
+							setSelectedCard(null);
 						}}
 					/>
 				)}
