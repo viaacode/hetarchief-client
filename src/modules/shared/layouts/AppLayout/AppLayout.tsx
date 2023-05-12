@@ -139,7 +139,7 @@ const AppLayout: FC = ({ children }) => {
 		spaces && setVisitorSpaces(spaces.items);
 
 		return spaces?.items || [];
-	}, [user]);
+	}, [isKioskOrAnonymous, spaces, user]);
 
 	useEffect(() => {
 		// Set the build version on the window object
