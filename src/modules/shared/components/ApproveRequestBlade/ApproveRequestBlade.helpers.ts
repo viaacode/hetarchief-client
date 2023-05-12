@@ -1,12 +1,15 @@
-import {
-	differenceInMinutes,
-	isAfter,
-	isBefore,
-	isSameDay,
-	roundToNearestMinutes,
-	subMinutes,
-} from 'date-fns';
+import { differenceInMinutes, isAfter, isBefore, isSameDay, subMinutes } from 'date-fns';
 import addMinutes from 'date-fns/addMinutes';
+
+/**
+ * We're not using the build in date-fns roundToNearestMinutes function since it contains a bug
+ * https://github.com/date-fns/date-fns/issues/3129
+ * @param oldDate
+ */
+export const roundToNextQuarter = (oldDate: Date): Date => {
+	const minutes = Math.ceil(oldDate.getTime() / 1000 / 60 / 15) * 15;
+	return new Date(minutes * 60 * 1000);
+};
 
 /**
  * Determines if we should set the end date of an visit request when the user change the start date
@@ -15,7 +18,10 @@ import addMinutes from 'date-fns/addMinutes';
  * @param currentAccessToDate existing accessTo field value
  * @return the date that the accessTo field should be changed to, or null if it shouldn't be changed
  */
-export function getAccessToDate(newAccessFromDate: Date, currentAccessToDate: Date): Date | null {
+export const getAccessToDate = (
+	newAccessFromDate: Date,
+	currentAccessToDate: Date
+): Date | null => {
 	const MINIMUM_VISIT_DURATION = 60; // minutes
 	const sixPm = new Date(
 		newAccessFromDate.getFullYear(),
@@ -55,14 +61,4 @@ export function getAccessToDate(newAccessFromDate: Date, currentAccessToDate: Da
 			return null;
 		}
 	}
-}
-
-/**
- * We're not using the build in date-fns roundToNearestMinutes function since it contains a bug
- * https://github.com/date-fns/date-fns/issues/3129
- * @param oldDate
- */
-export function roundToNextQuarter(oldDate: Date): Date {
-	const minutes = Math.ceil(oldDate.getTime() / 1000 / 60 / 15) * 15;
-	return new Date(minutes * 60 * 1000);
-}
+};
