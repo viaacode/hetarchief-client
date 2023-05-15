@@ -137,6 +137,7 @@ const VisitorSpaceSearchPage: FC = () => {
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
+	const isAnonymousUser = useHasAnyGroup(GroupName.ANONYMOUS);
 
 	/**
 	 * State
@@ -181,10 +182,11 @@ const VisitorSpaceSearchPage: FC = () => {
 	 * Data
 	 */
 	const getVisitorSpaces = useCallback(async (): Promise<Visit[]> => {
-		if (!user || [GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS].includes(user.groupName)) {
+		if (!user || isKioskUser || isAnonymousUser) {
 			setVisitorSpaces([]);
 			return [];
 		}
+
 		const { items: spaces } = await VisitsService.getAll({
 			page: 1,
 			size: 10,
@@ -334,14 +336,13 @@ const VisitorSpaceSearchPage: FC = () => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
 			({ spaceName, endAt, spaceSlug }: Visit): VisitorSpaceDropdownOption => {
 				const endAtDate = asDate(endAt);
-				let accessEndDate: string | undefined;
-				if (!endAtDate || isAfter(endAtDate, addYears(new Date(), 100 - 1))) {
-					accessEndDate = undefined;
-				} else {
-					accessEndDate = isMobile
-						? formatSameDayTimeOrDate(endAtDate)
-						: formatMediumDateWithTime(endAtDate);
-				}
+				const hideEndDate = !endAtDate || isAfter(endAtDate, addYears(new Date(), 100 - 1));
+				const formattedDate = isMobile
+					? formatSameDayTimeOrDate(endAtDate)
+					: formatMediumDateWithTime(endAtDate);
+
+				const accessEndDate: string | undefined = hideEndDate ? undefined : formattedDate;
+
 				return {
 					slug: spaceSlug,
 					label: spaceName || '',
@@ -350,8 +351,10 @@ const VisitorSpaceSearchPage: FC = () => {
 			}
 		);
 
-		return [getDefaultOption(), ...dynamicOptions];
-	}, [visitorSpaces, isMobile]);
+		return !isKioskUser
+			? [getDefaultOption(), ...dynamicOptions]
+			: [{ slug: user?.visitorSpaceSlug || '', label: user?.organisationName || '' }];
+	}, [visitorSpaces, user, isKioskUser, isMobile]);
 
 	const filters = useMemo(
 		() =>
@@ -609,8 +612,8 @@ const VisitorSpaceSearchPage: FC = () => {
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
 	const showVisitorSpacesDropdown = useMemo(
-		() => isLoggedIn && visitorSpaces.length > 0,
-		[isLoggedIn, visitorSpaces]
+		() => (isLoggedIn && visitorSpaces.length > 0) || isKioskUser,
+		[isKioskUser, isLoggedIn, visitorSpaces.length]
 	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {

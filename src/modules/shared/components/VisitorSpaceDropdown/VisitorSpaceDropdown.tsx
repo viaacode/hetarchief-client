@@ -27,9 +27,9 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 	};
 
 	const renderSelectedOption = () => {
-		const selected = options.find(
-			({ slug: id }: VisitorSpaceDropdownOption) => id === selectedOptionId
-		);
+		const selected = !hasMultipleOptions
+			? options[0]
+			: options.find(({ slug: id }: VisitorSpaceDropdownOption) => id === selectedOptionId);
 
 		const actionProps = hasMultipleOptions
 			? {
@@ -104,6 +104,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 		<ul
 			className={clsx('u-list-reset', styles['c-visitor-spaces-dropdown'], {
 				[styles['c-visitor-spaces-dropdown--open']]: isOpen,
+				[styles['c-visitor-spaces-dropdown--selectable']]: hasMultipleOptions,
 			})}
 		>
 			{renderSelectedOption()}
