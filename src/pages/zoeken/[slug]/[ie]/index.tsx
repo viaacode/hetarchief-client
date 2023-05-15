@@ -926,13 +926,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		items: MediaObject[],
 		isHidden = false
 	): ReactNode => (
-		<dd>
+		<dd className="u-m-0">
 			{
 				<ul
-					className={`
-					u-list-reset p-object-detail__metadata-list
-					p-object-detail__metadata-list--${type}
-					p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
+					className={`u-bg-platinum u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type} p-object-detail__metadata-list--${
+						expandMetadata && !isMobile ? 'expanded' : 'collapsed'
+					}
 				`}
 				>
 					{items.map((item, index) => {
@@ -1089,7 +1088,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			.filter(({ data }: MetadataItem): boolean => !!data);
 
 		return (
-			<div>
+			<>
 				<div className="p-object-detail__metadata-content">
 					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
 					{showKeyUserPill && renderKeyUserPill()}
@@ -1148,7 +1147,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 						disableContainerQuery
 					/>
 				)}
-			</div>
+			</>
 		);
 	};
 
