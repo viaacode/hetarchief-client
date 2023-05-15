@@ -2,7 +2,7 @@ import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC } from 'react';
 
-import { Icon, IconNamesLight, TYPE_TO_ICON_MAP } from '@shared/components';
+import { Icon, TYPE_TO_ICON_MAP } from '@shared/components';
 import { CardImage } from '@shared/components/CardImage';
 
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
