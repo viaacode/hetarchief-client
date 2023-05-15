@@ -392,14 +392,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	 */
 	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
 		return data.map((ieObject) => {
+			const date = ieObject.datePublished ?? ieObject.dateCreatedLowerBound ?? null;
+
 			return {
 				type: (ieObject?.dctermsFormat || null) as IeObjectTypes,
 				title: ieObject?.name || '',
-				subtitle: `${ieObject?.maintainerName ?? ''} ${
-					ieObject?.datePublished
-						? `(${formatMediumDate(asDate(ieObject?.datePublished))})`
-						: ''
-				}`,
+				subtitle: isNil(date)
+					? `${ieObject?.maintainerName ?? ''}`
+					: `${ieObject?.maintainerName ?? ''} (${formatMediumDate(asDate(date))})`,
 				description: ieObject?.description || '',
 				thumbnail: ieObject?.thumbnailUrl,
 				id: ieObject?.schemaIdentifier || '',
@@ -410,12 +410,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
 		return data.map((item) => {
+			const date = item.datePublished ?? item.dateCreatedLowerBound ?? null;
+
 			return {
 				type: item.dctermsFormat as IeObjectTypes,
 				title: item.name,
-				subtitle: `${item.maintainerName ?? ''} ${
-					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''
-				}`,
+				subtitle: isNil(date)
+					? `${item?.maintainerName ?? ''}`
+					: `${item?.maintainerName ?? ''} (${formatMediumDate(asDate(date))})`,
 				description: item.description,
 				id: item.schemaIdentifier,
 				maintainer_id: item.maintainerId,
