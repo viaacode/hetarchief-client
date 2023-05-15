@@ -1091,7 +1091,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		return (
 			<div>
 				<div className="p-object-detail__metadata-content">
-					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
+					{showResearchWarning && renderResearchWarning()}
+					{renderBreadcrumbs()}
 					{showKeyUserPill && renderKeyUserPill()}
 					<h3
 						className={clsx(
