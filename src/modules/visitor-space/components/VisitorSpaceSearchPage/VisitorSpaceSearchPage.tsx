@@ -901,7 +901,10 @@ const VisitorSpaceSearchPage: FC = () => {
 											<VisitorSpaceDropdown
 												options={dropdownOptions}
 												selectedOptionId={
-													activeVisitorSpaceSlug || PUBLIC_COLLECTION
+													isKioskUser
+														? user?.visitorSpaceSlug ?? ''
+														: activeVisitorSpaceSlug ||
+														  PUBLIC_COLLECTION
 												}
 												onSelected={onVisitorSpaceSelected}
 											/>

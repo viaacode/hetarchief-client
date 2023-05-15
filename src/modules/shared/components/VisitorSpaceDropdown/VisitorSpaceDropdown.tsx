@@ -27,9 +27,9 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 	};
 
 	const renderSelectedOption = () => {
-		const selected = !hasMultipleOptions
-			? options[0]
-			: options.find(({ slug: id }: VisitorSpaceDropdownOption) => id === selectedOptionId);
+		const selected = options.find(
+			({ slug: id }: VisitorSpaceDropdownOption) => id === selectedOptionId
+		);
 
 		const actionProps = hasMultipleOptions
 			? {
