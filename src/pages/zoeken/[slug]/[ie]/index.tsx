@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import {
 	capitalize,
+	flatten,
 	indexOf,
 	intersection,
 	isEmpty,
@@ -392,14 +393,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	 */
 	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
 		return data.map((ieObject) => {
+			const date = ieObject.datePublished ?? ieObject.dateCreatedLowerBound ?? null;
+
 			return {
 				type: (ieObject?.dctermsFormat || null) as IeObjectTypes,
 				title: ieObject?.name || '',
-				subtitle: `${ieObject?.maintainerName ?? ''} ${
-					ieObject?.datePublished
-						? `(${formatMediumDate(asDate(ieObject?.datePublished))})`
-						: ''
-				}`,
+				subtitle: isNil(date)
+					? `${ieObject?.maintainerName ?? ''}`
+					: `${ieObject?.maintainerName ?? ''} (${formatMediumDate(asDate(date))})`,
 				description: ieObject?.description || '',
 				thumbnail: ieObject?.thumbnailUrl,
 				id: ieObject?.schemaIdentifier || '',
@@ -410,12 +411,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
 		return data.map((item) => {
+			const date = item.datePublished ?? item.dateCreatedLowerBound ?? null;
+
 			return {
 				type: item.dctermsFormat as IeObjectTypes,
 				title: item.name,
-				subtitle: `${item.maintainerName ?? ''} ${
-					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''
-				}`,
+				subtitle: isNil(date)
+					? `${item?.maintainerName ?? ''}`
+					: `${item?.maintainerName ?? ''} (${formatMediumDate(asDate(date))})`,
 				description: item.description,
 				id: item.schemaIdentifier,
 				maintainer_id: item.maintainerId,
@@ -859,15 +862,19 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const renderBreadcrumbs = (): ReactNode => {
 		const defaultBreadcrumbs: Breadcrumb[] = [
-			{
-				label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
-				to: ROUTES.home,
-			},
+			...(isKiosk
+				? []
+				: [
+						{
+							label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
+							to: ROUTES.home,
+						},
+				  ],
 			{
 				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES.search,
 			},
-		];
+		]);
 
 		const staticBreadcrumbs: Breadcrumb[] = !isEmpty(breadcrumbs)
 			? breadcrumbs
@@ -879,7 +886,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 						? [
 								{
 									label: mediaInfo?.maintainerName,
-									to: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
+									to: isKiosk
+										? ROUTES.search
+										: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
@@ -926,13 +935,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		items: MediaObject[],
 		isHidden = false
 	): ReactNode => (
-		<dd>
+		<dd className="u-m-0">
 			{
 				<ul
-					className={`
-					u-list-reset p-object-detail__metadata-list
-					p-object-detail__metadata-list--${type}
-					p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
+					className={`u-bg-platinum u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type} p-object-detail__metadata-list--${
+						expandMetadata && isMobile ? 'collaped' : 'expanded'
+					}
 				`}
 				>
 					{items.map((item, index) => {
@@ -1089,9 +1097,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			.filter(({ data }: MetadataItem): boolean => !!data);
 
 		return (
-			<div>
+			<>
 				<div className="p-object-detail__metadata-content">
-					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
+					{showResearchWarning && renderResearchWarning()}
+					{renderBreadcrumbs()}
 					{showKeyUserPill && renderKeyUserPill()}
 					<h3
 						className={clsx(
@@ -1148,7 +1157,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 						disableContainerQuery
 					/>
 				)}
-			</div>
+			</>
 		);
 	};
 
