@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import {
 	capitalize,
+	flatten,
 	indexOf,
 	intersection,
 	isEmpty,
@@ -859,15 +860,19 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const renderBreadcrumbs = (): ReactNode => {
 		const defaultBreadcrumbs: Breadcrumb[] = [
-			{
-				label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
-				to: ROUTES.home,
-			},
+			...(isKiosk
+				? []
+				: [
+						{
+							label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
+							to: ROUTES.home,
+						},
+				  ],
 			{
 				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES.search,
 			},
-		];
+		]);
 
 		const staticBreadcrumbs: Breadcrumb[] = !isEmpty(breadcrumbs)
 			? breadcrumbs
@@ -879,7 +884,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 						? [
 								{
 									label: mediaInfo?.maintainerName,
-									to: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
+									to: isKiosk
+										? ROUTES.search
+										: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
@@ -1091,7 +1098,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		return (
 			<div>
 				<div className="p-object-detail__metadata-content">
-					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
+					{showResearchWarning && renderResearchWarning()}
+					{renderBreadcrumbs()}
 					{showKeyUserPill && renderKeyUserPill()}
 					<h3
 						className={clsx(
