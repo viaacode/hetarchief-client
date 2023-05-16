@@ -884,9 +884,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 						? [
 								{
 									label: mediaInfo?.maintainerName,
-									to: !isKiosk
-										? `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`
-										: ROUTES.search,
+									to: isKiosk
+										? ROUTES.search
+										: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
