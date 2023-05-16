@@ -227,11 +227,11 @@ const getDynamicHeaderLinks = (
 			tooltip,
 		}: NavigationInfo): NavigationItem => {
 			const hasActiveVisits = activeVisits && activeVisits.length > 0;
-			const isSearchNavItem =
-				contentPath === ROUTES.search && hasActiveVisits && !isMeemooAdmin;
-			const searchUrl = isSearchNavItem
-				? `${contentPath}?aanbieder=${activeVisits[0].spaceSlug}`
-				: contentPath;
+			const isSearchNavItem = contentPath === ROUTES.search;
+			const searchUrl =
+				isSearchNavItem && hasActiveVisits && !isMeemooAdmin
+					? `${ROUTES.search}?aanbieder=${activeVisits[0].spaceSlug}`
+					: contentPath;
 
 			if (contentPath === NAVIGATION_DROPDOOWN.VISITOR_SPACES) {
 				return getVisitorSpacesDropdown(
