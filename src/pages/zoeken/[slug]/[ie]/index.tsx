@@ -859,15 +859,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	);
 
 	const renderBreadcrumbs = (): ReactNode => {
-		const defaultBreadcrumbs: Breadcrumb[] = flatten([
-			...(!isKiosk
-				? [
+		const defaultBreadcrumbs: Breadcrumb[] = [
+			...(isKiosk
+				? []
+				: [
 						{
 							label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
 							to: ROUTES.home,
 						},
-				  ]
-				: []),
+				  ],
 			{
 				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES.search,
