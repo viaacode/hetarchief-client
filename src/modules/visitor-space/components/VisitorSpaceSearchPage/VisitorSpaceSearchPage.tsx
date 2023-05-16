@@ -351,9 +351,9 @@ const VisitorSpaceSearchPage: FC = () => {
 			}
 		);
 
-		return !isKioskUser
-			? [getDefaultOption(), ...dynamicOptions]
-			: [{ slug: user?.visitorSpaceSlug || '', label: user?.organisationName || '' }];
+		return isKioskUser
+			? [{ slug: user?.visitorSpaceSlug || '', label: user?.organisationName || '' }]
+			: [getDefaultOption(), ...dynamicOptions];
 	}, [visitorSpaces, user, isKioskUser, isMobile]);
 
 	const filters = useMemo(
