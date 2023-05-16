@@ -869,12 +869,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 							label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
 							to: ROUTES.home,
 						},
-				  ],
+				  ]),
 			{
 				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES.search,
 			},
-		]);
+		];
 
 		const staticBreadcrumbs: Breadcrumb[] = !isEmpty(breadcrumbs)
 			? breadcrumbs
