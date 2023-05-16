@@ -610,11 +610,8 @@ const VisitorSpaceSearchPage: FC = () => {
 	const isLoadedWithoutResults = !!searchResults && searchResults?.items?.length === 0;
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
+	const showVisitorSpacesDropdown = (isLoggedIn && visitorSpaces.length > 0) || isKioskUser;
 	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
-	const showVisitorSpacesDropdown = useMemo(
-		() => (isLoggedIn && visitorSpaces.length > 0) || isKioskUser,
-		[isKioskUser, isLoggedIn, visitorSpaces.length]
-	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
