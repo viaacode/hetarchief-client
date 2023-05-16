@@ -367,6 +367,92 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		newFolder.locator('[class^=p-account-my-folders__link__limited-access-icon]')
 	).toBeVisible();
 
+	// Click on the newly created folder and check if it contains the added object
+	await newFolder.click();
+
+	const folderObject = await page.locator(
+		'[class^=MediaCardList_c-media-card-list] [class^=MediaCardList_c-media-card-list__content]'
+	);
+	await expect(folderObject).toHaveCount(1);
+	await expect(
+		await folderObject
+			.locator('.p-account-my-folders__card-description p')
+			.first()
+			.allInnerTexts()
+	).toEqual(['Aanbieder: Amsab-ISG']);
+
+	await new Promise((resolve) => setTimeout(resolve, 1 * 1000)); // TODO: replace this
+
+	//TODO check de paarse banner
+	const bannerText = await page
+		.locator('div.p-account-my-folders__limited-access-wrapper')
+		.allInnerTexts();
+	await expect(bannerText[0]).toMatch(
+		/Deze map wordt gebruikt om bezoekers beperkte toegang te geven t.e.m..*/
+	);
+	await logout(page);
+
+	// Login visitor
+	await loginUserHetArchiefIdp(
+		page,
+		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
+		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
+	);
+
+	// Check navbar exists and user has access to one visitor space
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+	await expect(page.locator('a[href="/bezoek"] div[class^="c-badge"]').first()).toContainText(
+		'1'
+	);
+
+	// Go to the Amsab-ISG visitor space
+	await page.click('text=Bezoek een aanbieder');
+	await page
+		.locator('div[class^="c-menu c-menu--default"]')
+		.first()
+		.locator('a', { hasText: 'Amsab-ISG' })
+		.click();
+	await new Promise((resolve) => setTimeout(resolve, 4 * 1000)); // TODO: replace this
+	await expect(
+		await page
+			.locator('button.c-tabs__item.c-tab.c-tab--dark.c-tab--all.c-tab--active')
+			.allInnerTexts()
+	).toEqual(['Alles(1)']);
+
+	// Get the pid of the single object
+	const objectPid = await page
+		.locator('article > section.c-card__bottom-wrapper > div:nth-child(2) > a')
+		.innerText();
+
+	// Go to the public catalogue
+	await page.locator('li[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active]').click();
+
+	await page
+		.locator(
+			'ul[class^="u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list"] li',
+			{ hasText: 'Publieke catalogus' } // TODO: we might have to change the text
+		)
+		.click();
+
+	// Check there is maximum one thumbnail available
+	await expect(
+		await page.locator('[class^=MediaCard_c-media-card__header-wrapper]').count()
+	).toBeLessThanOrEqual(1);
+
+	await expect(
+		await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()
+	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG.']);
+
+	// Enter pid
+	const searchField = await page.locator('.c-tags-input__input-container').first();
+	await searchField.click();
+	await searchField.type(objectPid);
+	await searchField.press('Enter');
+	//Pill_c-pill--expanded
+
+	await expect(
+		await page.locator('[class*=Pill_c-pill--expanded] span', { hasText: 'Tijdelijke toegang' })
+	).toBeVisible();
 	// Wait for close to save the videos
 	await context.close();
 });
