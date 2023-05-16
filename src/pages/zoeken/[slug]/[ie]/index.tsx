@@ -932,7 +932,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			{
 				<ul
 					className={`u-bg-platinum u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type} p-object-detail__metadata-list--${
-						expandMetadata && !isMobile ? 'expanded' : 'collapsed'
+						expandMetadata && isMobile ? 'collaped' : 'expanded'
 					}
 				`}
 				>
