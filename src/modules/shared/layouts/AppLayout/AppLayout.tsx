@@ -105,6 +105,7 @@ const AppLayout: FC = ({ children }) => {
 	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 	const isKioskOrAnonymous = useHasAnyGroup(GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS);
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 	const { data: spaces } = useGetAllActiveVisits({});
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
@@ -258,7 +259,8 @@ const AppLayout: FC = ({ children }) => {
 			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
 			isMobile,
 			user?.visitorSpaceSlug || null,
-			visitorSpaces
+			visitorSpaces,
+			isMeemooAdmin
 		);
 
 		const staticItems = [

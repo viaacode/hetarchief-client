@@ -208,7 +208,8 @@ const getDynamicHeaderLinks = (
 	placement: NavigationPlacement,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceOrId: string | null,
-	activeVisits: Visit[] | null
+	activeVisits: Visit[] | null,
+	isMeemooAdmin = false
 ) => {
 	const itemsByPlacement = navigationItems[placement];
 
@@ -226,10 +227,11 @@ const getDynamicHeaderLinks = (
 			tooltip,
 		}: NavigationInfo): NavigationItem => {
 			const hasActiveVisits = activeVisits && activeVisits.length > 0;
-			const isSearchNavItem = contentPath === ROUTES.search && hasActiveVisits;
-			const searchUrl = isSearchNavItem
-				? `${contentPath}?aanbieder=${activeVisits[0].spaceSlug}`
-				: contentPath;
+			const isSearchNavItem = contentPath === ROUTES.search;
+			const searchUrl =
+				isSearchNavItem && hasActiveVisits && !isMeemooAdmin
+					? `${ROUTES.search}?aanbieder=${activeVisits[0].spaceSlug}`
+					: contentPath;
 
 			if (contentPath === NAVIGATION_DROPDOOWN.VISITOR_SPACES) {
 				return getVisitorSpacesDropdown(
@@ -438,7 +440,8 @@ export const getNavigationItemsLeft = (
 	linkedSpaceOrId: string | null,
 	isMobile: boolean,
 	maintainerSlug: string | null,
-	activeVisits: Visit[] | null
+	activeVisits: Visit[] | null,
+	isMeemooAdmin: boolean
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
@@ -446,7 +449,8 @@ export const getNavigationItemsLeft = (
 		NavigationPlacement.HeaderLeft,
 		accessibleVisitorSpaces,
 		linkedSpaceOrId,
-		activeVisits
+		activeVisits,
+		isMeemooAdmin
 	);
 	const afterDivider = getDynamicHeaderLinks(
 		currentPath,
