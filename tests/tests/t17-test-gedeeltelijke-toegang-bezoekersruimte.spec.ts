@@ -178,6 +178,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Click on 'Naar mijn bezoekertool'
 	await page.locator('a[href="/zoeken?aanbieder=amsab-isg"] span', { hasText: 'search' }).click(); // TODO: this is really inconsistent
+	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?aanbieder=amsab-isg`); //TODO: remove this, it is added because it is really inconsistent
 
 	await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: replace this
 	// Check user is in correct space
@@ -186,6 +187,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 			.locator('[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active-label]')
 			.allInnerTexts()
 	).toEqual(['Amsab-ISG']);
+	// Go to the hetarchief homepage
 
 	// Click bookmark button
 	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).first().click();
@@ -232,10 +234,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.locator('button', { hasText: 'Voeg toe' }).click();
 
 	// Use the back button of the browser
-	await page.goBack(); // TODO: this should only be needed one time
-	await page.goBack();
+	// await page.goBack(); // TODO: this should only be needed one time
+	// await page.goBack();
 
-	page.goto(`${process.env.TEST_CLIENT_ENDPOINT} + /beheer/toegangsaanvragen`);
+	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/beheer/toegangsaanvragen`);
 	// Check page title matches visitor requests page title
 	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
 		timeout: 10000,

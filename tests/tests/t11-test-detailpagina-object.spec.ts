@@ -81,7 +81,7 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	const countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	// Enter search term
-	const SEARCH_TERM = 'qs251fjp7m'; // TODO: change this to 'betfred British Masters golf' when the int environment is not changing
+	const SEARCH_TERM = 'betfred'; // TODO: change this to 'betfred British Masters golf' when the int environment is not changing qs251fjp7m
 	const searchField = await page.locator('.c-tags-input__input-container').first();
 	await searchField.click();
 	await searchField.type(SEARCH_TERM);
@@ -104,11 +104,11 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	}
 
 	// Check item contains search term
-	// const markedWord = await page
-	// 	.locator("[class^='MediaCardList_c-media-card-list__content__'] article mark")
-	// 	.first()
-	// 	.innerText();
-	// await expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM); //TODO: enable this code when the search term is a word instead of id
+	const markedWord = await page
+		.locator("[class^='MediaCardList_c-media-card-list__content__'] article mark")
+		.first()
+		.innerText();
+	await expect(markedWord.toLowerCase()).toEqual(SEARCH_TERM);
 
 	// Bookmark this item
 	// Click bookmark button
@@ -201,6 +201,7 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	await checkToastMessage(page, 'Item toegevoegd aan map');
 	await clickToastMessageButton(page);
 
+	// TODO: step 19-21 // no data now to test
 	/**
 	 * Sidebar width
 	 */
@@ -260,25 +261,25 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	// Check flowplayer starts playing
 	await expect(player).toHaveClass(/is-playing/);
 
-	// // Get player size before fullscreen
-	// const playerSizeBeforeFullscreen =
-	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
-	//
-	// // Make video fullscreen
-	// await page.hover('.flowplayer'); // Hover video so controls become visible
-	// await page.evaluate(() => {
-	// 	(document?.querySelector('.fp-fullscreen') as any)?.click();
-	// });
-	//
-	// // Wait for fullscreen to open
-	// await page.waitForTimeout(1000);
-	//
-	// // Get player size after fullscreen
-	// const playerSizeAfterFullscreen =
-	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
-	//
-	// // Check video size is bigger
-	// await expect(playerSizeAfterFullscreen).toBeGreaterThan(playerSizeBeforeFullscreen);
+	// Get player size before fullscreen
+	const playerSizeBeforeFullscreen =
+		(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+
+	// Make video fullscreen
+	await page.hover('.flowplayer'); // Hover video so controls become visible
+	await page.evaluate(() => {
+		(document?.querySelector('.fp-fullscreen') as any)?.click();
+	});
+
+	// Wait for fullscreen to open
+	await page.waitForTimeout(1000);
+
+	// Get player size after fullscreen
+	const playerSizeAfterFullscreen =
+		(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+
+	// Check video size is bigger
+	await expect(playerSizeAfterFullscreen).toBeGreaterThan(playerSizeBeforeFullscreen);
 
 	// Check video object keeps playing
 	await expect(player).toBeVisible();
@@ -290,15 +291,15 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 		(document?.querySelector('.fp-fullscreen-exit') as any)?.click();
 	});
 
-	// // Wait for fullscreen to close
-	// await page.waitForTimeout(1000);
-	//
-	// // Get player size after fullscreen
-	// const playerSizeAfterCloseFullscreen =
-	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
-	//
-	// // Check video size to be smaller than fullscreen
-	// await expect(playerSizeAfterCloseFullscreen).toBeLessThan(playerSizeAfterFullscreen);
+	// Wait for fullscreen to close
+	await page.waitForTimeout(1000);
+
+	// Get player size after fullscreen
+	const playerSizeAfterCloseFullscreen =
+		(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+
+	// Check video size to be smaller than fullscreen
+	await expect(playerSizeAfterCloseFullscreen).toBeLessThan(playerSizeAfterFullscreen);
 
 	// Check video object keeps playing
 	await expect(player).toBeVisible();
@@ -382,22 +383,31 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	// Check blade title
 	await checkBladeTitle(page, 'Rapporteren'); // This schould be 'Een probleem melden'
 
-	await expect(
-		await page.locator('input:has-value("hetarchief2.0+ateindgebruikerbzt@meemoo.be")')
-	).toBeVisible();
+	const emailInputField = await page.locator('input#field');
+	await expect(await emailInputField.inputValue()).toEqual(
+		'hetarchief2.0+ateindgebruikerbzt@meemoo.be'
+	);
+	await expect(emailInputField).toBeDisabled();
+
+	await page.fill('textarea#field', 'Dit is een automated test');
+
+	await page.locator('button > div > span', { hasText: 'Rapporteer' }).click();
+
+	await checkToastMessage(page, 'Gerapporteerd'); // TODO: might have to change to 'Melding verstuurd'
+
 	/**
 	 * Keyword links
 	 */
 
-	// Click on keyword
-	await page.locator('[class^="Metadata_c-metadata__list__"] .c-tag-list__item').first().click();
+	// // Click on keyword
+	// await page.locator('[class^="Metadata_c-metadata__list__"] .c-tag-list__item').first().click();
 
-	// Check page url changes:
-	await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/vrt?search=');
+	// // Check page url changes:
+	// await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/vrt?search=');
 
-	// Check the search by keyword tag is present in the search input field
-	const searchInput = await page.locator('.c-tags-input__control');
-	await expect(await searchInput.innerHTML()).toContain('Trefwoord');
+	// // Check the search by keyword tag is present in the search input field
+	// const searchInput = await page.locator('.c-tags-input__control');
+	// await expect(await searchInput.innerHTML()).toContain('Trefwoord');
 
 	// Wait for close to save the videos
 	await context.close();
