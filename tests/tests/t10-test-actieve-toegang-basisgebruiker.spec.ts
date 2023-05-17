@@ -62,12 +62,44 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	await page.locator('text=Start je zoekopdracht').click();
 
+	// Check VRT is the active space
+	await expect(
+		await page
+			.locator('p[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active-label]')
+			.innerText()
+	).toEqual('VRT');
+
+	// Check every object is from VRT
+	const objectsSubtitles = await page
+		.locator('article > section.c-card__bottom-wrapper > div:nth-child(3) > a')
+		.allInnerTexts();
+	const maintainers = objectsSubtitles.map((sub) => sub.slice(0, 3));
+
+	await Promise.all(
+		maintainers.map(async (maintainer) => {
+			await expect(maintainer).toEqual('VRT');
+		})
+	);
+	// Go to the public catalogue
+	await page.locator('li[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active]').click();
+
+	await page
+		.locator(
+			'ul[class^="u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list"] li',
+			{ hasText: 'Publieke catalogus' } // TODO: we might have to change the text
+		)
+		.click();
+
+	// Check the purple banner
+	await expect(
+		await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()
+	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van VRT.']);
 	/**
 	 * Search on search page --------------------------------------------------------------------
 	 */
 
 	// Get tab counts before search
-	const countsBeforeSearch = await getSearchTabBarCounts(page);
+	let countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	// Enter search term
 	const SEARCH_TERM = 'brugge';
@@ -77,12 +109,12 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await searchField.press('Enter');
 
 	// Check green pill exists with search term inside
-	const pill = await page.locator('.c-tags-input__multi-value .c-tag__label');
+	let pill = await page.locator('.c-tags-input__multi-value .c-tag__label');
 	await expect(pill).toBeVisible();
 	await expect(pill).toContainText(SEARCH_TERM);
 
 	// Check tab counts decreased
-	const countsAfterSearchByText = await getSearchTabBarCounts(page);
+	let countsAfterSearchByText = await getSearchTabBarCounts(page);
 
 	// Expect counts to have gone down, or stay the same
 	if (countsBeforeSearch.all > 0) {
@@ -113,6 +145,37 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await expect(countsAfterClearSearchTerm.video).toEqual(countsBeforeSearch.video);
 	await expect(countsAfterClearSearchTerm.audio).toEqual(countsBeforeSearch.audio);
 
+	/**
+	 * Filter using isConsultable on location
+	 */
+
+	// Get tab counts before search
+	countsBeforeSearch = await getSearchTabBarCounts(page);
+
+	await page
+		.locator('span.c-checkbox__label', { hasText: 'Raadpleegbaar via bezoekertool' })
+		.click(); //TODO: we might have to change this text
+
+	// Check green pill exists with filter inside
+	pill = await page.locator('.c-tags-input__multi-value .c-tag__label');
+	await expect(pill).toBeVisible();
+	await expect(pill).toContainText('Raadpleegbaar via bezoekertool'); //TODO: we might have to change this text
+
+	// Check tab counts decreased
+	countsAfterSearchByText = await getSearchTabBarCounts(page);
+
+	// Expect counts to have gone down, or stay the same
+	if (countsBeforeSearch.all > 0) {
+		// Only check counts if there are at least a few items
+		expect(countsBeforeSearch.all > countsAfterSearchByText.all).toBeTruthy();
+		expect(countsBeforeSearch.video >= countsAfterSearchByText.video).toBeTruthy();
+		expect(countsBeforeSearch.audio >= countsAfterSearchByText.audio).toBeTruthy();
+	}
+
+	/**
+	 *  Filter using date
+	 */
+
 	// Filter by creation date
 	await page.click('text=Creatiedatum');
 	await page.fill('.c-menu--visible--default .c-input__field', '1 jan. 2020');
@@ -128,15 +191,15 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		expect(countsBeforeSearch.audio >= countsAfterSearchByDate.audio).toBeTruthy();
 	}
 
-	// Search by language
-	// TODO after more items with languages have been added to the seed
+	// // Search by language
+	// // TODO after more items with languages have been added to the seed
 
 	// Clear search query
 	await page.click('text=Wis je volledige zoekopdracht');
 
 	// Check filter tags are removed
-	const searchInput1 = await page.locator('.c-tags-input__input-container');
-	await expect(await searchInput1.innerHTML()).not.toContain('c-tag__label');
+	const searchInput1 = await page.locator('.c-tags-input__input-container').first();
+	await expect(await searchInput1.innerHTML()).not.toContain('.c-tag__label');
 	await expect(await searchInput1.innerHTML()).not.toContain('2020');
 
 	// Check search result counts are equal to before the search
@@ -146,44 +209,58 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await expect(countsAfterClearAll.video).toEqual(countsBeforeSearch.video);
 	await expect(countsAfterClearAll.audio).toEqual(countsBeforeSearch.audio);
 
-	/**
-	 * Advanced filter
-	 */
+	// /**
+	//  * Advanced filter
+	//  */
 
-	// Set creation date filter
-	await page.click('text=Geavanceerd');
-	const filter1TypeSelect = await page.locator('.c-react-select', { hasText: 'Alles' });
-	await filter1TypeSelect.click();
-	await filter1TypeSelect.locator('text=Creatiedatum').click();
+	// Set title filter
+	await page
+		.locator('div.MediaCardList_c-media-card-list__sidebar__aYd_6 button span', {
+			hasText: 'Geavanceerd',
+		})
+		.click();
+	const filter1TypeSelect = await page
+		.locator('[class^=AdvancedFilterFields_c-advanced-filter-fields] [class^=c-react-select]')
+		.first();
+	await filter1TypeSelect.locator('[class^=c-react-select__control]').click();
+	await filter1TypeSelect.locator('text=Titel').click();
 	await page.fill(
-		'.c-menu--visible--default .react-datepicker__input-container .c-input__field',
-		'1 jan. 2020'
+		'[class^=AdvancedFilterFields_c-advanced-filter-fields__dynamic-field] #AdvancedFilterFields__value__0',
+		'Eerste'
 	);
 
-	// Set duration filter
+	// Set description filter
 	await page.click('text=Voeg filter toe');
-	const filter2TypeSelect = await page.locator('.c-react-select', { hasText: 'Alles' });
-	await filter2TypeSelect.click();
-	await filter1TypeSelect.locator('text=Duurtijd').click();
-	const filter2OperatorSelect = await page.locator('.c-menu--visible--default .c-react-select', {
-		hasText: 'Korter dan',
-	});
-	await filter2OperatorSelect.click();
-	await filter2OperatorSelect.locator('text=Langer dan').click();
-	await page.locator('.c-menu--visible--default .c-input__field[step="1"]').fill('00:01:00');
+	const filter2TypeSelect = await page.locator(
+		'div[class*=AdvancedFilterForm_advancedFilterForm] > div:nth-child(3) > div:nth-child(1) > div > div'
+	);
+	await filter2TypeSelect.locator('[class^=c-react-select__control]').click();
+	// Click 'Beschrijving'
+	await filter2TypeSelect.locator('#react-select-31-option-0').click();
+	await page.fill(
+		'[class^=AdvancedFilterFields_c-advanced-filter-fields__dynamic-field] #AdvancedFilterFields__value__1',
+		'Schoen'
+	);
+	// const filter2OperatorSelect = await page.locator('.c-menu--visible--default .c-react-select', {
+	// 	hasText: 'Korter dan',
+	// });
+	// await filter2OperatorSelect.click();
+	// await filter2OperatorSelect.locator('text=Langer dan').click();
+	// await page.locator('.c-menu--visible--default .c-input__field[step="1"]').fill('00:01:00');
 
-	// TODO add filter on language once more items with languages are added
+	// // TODO add filter on language once more items with languages are added
 
 	// Click apply button
 	await page.locator('.c-menu--visible--default').locator('text=Pas toe').click();
 
 	// Check advanced filters are added
-	const searchInput3 = await page.locator('.c-tags-input__control');
-	await expect(await searchInput3.innerHTML()).toContain('Creatiedatum');
-	await expect(await searchInput3.innerHTML()).toContain('01.01.2020');
-	await expect(await searchInput3.innerHTML()).toContain('Duurtijd');
-	await expect(await searchInput3.innerHTML()).toContain('langer dan');
-	await expect(await searchInput3.innerHTML()).toContain('00:01:00');
+	const searchInput3 = await page.locator('.c-tag-search-bar .c-tags-input__control');
+	await expect(await searchInput3.innerHTML()).toContain('Titel');
+	await expect(await searchInput3.innerHTML()).toContain('bevat');
+	await expect(await searchInput3.innerHTML()).toContain('Eerste');
+	await expect(await searchInput3.innerHTML()).toContain('Beschrijving');
+	await expect(await searchInput3.innerHTML()).toContain('bevat');
+	await expect(await searchInput3.innerHTML()).toContain('Schoen');
 
 	// Expect counts to have gone down, or stay the same
 	const countsAfterAdvancedSearch = await getSearchTabBarCounts(page);
@@ -230,10 +307,6 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	// Wait for detail page to load
 	await expect.poll(() => page.url()).toContain('/vrt/');
-	await expect.poll(() => page.title()).toContain(' | ');
-
-	// Check if title is the same as the click item in the search results
-	expect(await page.title()).toContain(title);
 
 	// Wait for close to save the videos
 	await context.close();

@@ -441,6 +441,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		await page.locator('[class^=MediaCard_c-media-card__header-wrapper]').count()
 	).toBeLessThanOrEqual(1);
 
+	// Check the purple banner
 	await expect(
 		await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()
 	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG.']);
