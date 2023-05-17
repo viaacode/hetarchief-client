@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
+import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './ErrorPage.module.scss';
@@ -16,6 +17,7 @@ const ErrorPage: FC<ErrorPageProps> = ({
 	image,
 	buttonsComponent,
 }) => {
+	useStickyLayout(false);
 	const { tText } = useTranslation();
 
 	const rootCls = clsx(className, styles['c-error-page']);
