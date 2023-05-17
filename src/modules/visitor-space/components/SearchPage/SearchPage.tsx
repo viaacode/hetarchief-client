@@ -93,7 +93,7 @@ import {
 	MaintainerFilterFormState,
 	MediumFilterFormState,
 	PublishedFilterFormState,
-} from '../../components';
+} from '..';
 import {
 	PUBLIC_COLLECTION,
 	VISITOR_SPACE_FILTERS,
@@ -114,7 +114,7 @@ import { mapFiltersToTags, tagPrefix } from '../../utils';
 import { mapFiltersToElastic, mapMaintainerToElastic } from '../../utils/elastic-filters';
 
 const labelKeys = {
-	search: 'VisitorSpaceSearchPage__search',
+	search: 'SearchPage__search',
 };
 
 const getDefaultOption = (): VisitorSpaceDropdownOption => {
@@ -126,8 +126,7 @@ const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	};
 };
 
-// TODO: rename this at some point to SearchPage
-const VisitorSpaceSearchPage: FC = () => {
+const SearchPage: FC = () => {
 	const { tHtml, tText } = useTranslation();
 	const windowSize = useWindowSizeContext();
 	const dispatch = useDispatch();
@@ -1029,4 +1028,4 @@ const VisitorSpaceSearchPage: FC = () => {
 	return renderPageContent();
 };
 
-export default VisitorSpaceSearchPage;
+export default SearchPage;
