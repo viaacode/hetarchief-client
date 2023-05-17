@@ -1327,7 +1327,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					onSubmit={async () => onCloseBlade()}
 				/>
 			)}
-			{mediaInfo && visitorSpace && isNotKiosk && (
+			{mediaInfo && isNotKiosk && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
@@ -1335,8 +1335,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					objectId={mediaInfo?.schemaIdentifier}
 					objectDctermsFormat={mediaInfo.dctermsFormat as MaterialRequestObjectType}
 					maintainerName={mediaInfo?.maintainerName}
-					maintainerLogo={visitorSpace?.logo}
-					maintainerSlug={visitorSpace?.slug}
+					maintainerLogo={mediaInfo?.maintainerLogo}
+					maintainerSlug={mediaInfo?.maintainerSlug}
 					meemooId={mediaInfo?.meemooIdentifier}
 				/>
 			)}
