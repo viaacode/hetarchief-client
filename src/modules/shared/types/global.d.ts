@@ -15,6 +15,7 @@ declare global {
 			readonly FLOW_PLAYER_TOKEN: string;
 			readonly FLOW_PLAYER_ID: string;
 			readonly GOOGLE_TAG_MANAGER_ID: string | null;
+			readonly SITEMAP_URL: string;
 		}
 	}
 }
