@@ -21,7 +21,7 @@ export const CP_MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
 export const CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	type: withDefault(ArrayParam, []),
-	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
+	orderProp: withDefault(StringParam, MaterialRequestKeys.updatedAt),
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
 };
@@ -74,7 +74,7 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___datum-aangevraagd'),
-		accessor: MaterialRequestKeys.createdAt,
+		accessor: MaterialRequestKeys.updatedAt,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span
 				className="u-color-neutral"

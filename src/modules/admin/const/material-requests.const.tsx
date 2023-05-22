@@ -16,7 +16,7 @@ import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/u
 export const ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 
 export const ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
-	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
+	orderProp: withDefault(StringParam, MaterialRequestKeys.updatedAt),
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, ''),
@@ -48,7 +48,7 @@ export const getAdminMaterialRequestTableColumns = (): Column<MaterialRequest>[]
 	},
 	{
 		Header: tText('modules/admin/const/material-requests___datum'),
-		accessor: MaterialRequestKeys.createdAt,
+		accessor: MaterialRequestKeys.updatedAt,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span
 				className="u-color-neutral"
