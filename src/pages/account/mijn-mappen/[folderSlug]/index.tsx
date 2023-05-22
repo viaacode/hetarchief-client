@@ -1,6 +1,6 @@
 import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil, kebabCase } from 'lodash-es';
+import { isNil } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -8,7 +8,6 @@ import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-import save from 'save-file';
 import { useQueryParams } from 'use-query-params';
 
 import { CreateFolderButton } from '@account/components';
@@ -40,7 +39,6 @@ import { ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
@@ -293,9 +291,13 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 										e.stopPropagation();
 										setShowConfirmDelete(true);
 									}}
-									toolTipText={tText(
-										'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
-									)}
+									toolTipText={
+										activeFolder.usedForLimitedAccessUntil
+											? tText(
+													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
+											  )
+											: undefined
+									}
 								/>
 							),
 						},
