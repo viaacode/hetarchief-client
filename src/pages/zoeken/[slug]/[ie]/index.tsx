@@ -305,7 +305,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
 	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
 	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
-	const isVisitRequestErrorNotFound = (visitRequestError as HTTPError)?.response?.status === 404;
+	const isVisitRequestErrorNotFound =
+		(visitRequestError as HTTPError)?.response?.status === 404 ||
+		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
@@ -1363,7 +1365,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	//           - 410: visitor space no longer available error page
 	//           - 200: check visit request info
 	//                   - 200: not found error page
-	//                   - 404: no access error page
+	//                   - 404, 403: no access error page
 
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
@@ -1399,6 +1401,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				);
 			}
 		}
+
 		return <ErrorNotFound />;
 	};
 
