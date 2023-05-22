@@ -8,11 +8,11 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { tText } from '@shared/helpers/translate';
 import { setBreadcrumbs } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { VisitorSpaceSearchPage } from '@visitor-space/components';
+import { SearchPage } from '@visitor-space/components';
 
 type SearchPageProps = DefaultSeoInfo;
 
-const SearchPage: NextPage<SearchPageProps> = () => {
+const Search: NextPage<SearchPageProps> = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -31,7 +31,7 @@ const SearchPage: NextPage<SearchPageProps> = () => {
 	}, [dispatch]);
 
 	const renderPageContent = () => {
-		return <VisitorSpaceSearchPage />;
+		return <SearchPage />;
 	};
 
 	return renderPageContent();
@@ -43,4 +43,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(SearchPage as ComponentType, false);
+export default withAuth(Search as ComponentType, false);
