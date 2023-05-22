@@ -8,6 +8,7 @@ import { checkVisitRequestStatuses } from '../helpers/check-visit-request-status
 import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
 import { waitForLoading } from '../helpers/wait-for-loading';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { acceptTos } from '../helpers/accept-tos';
 
 test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
@@ -22,7 +23,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	});
 
 	// // Accept all cookies
-	// await acceptCookies(page, 'all');
+	await acceptCookies(page, 'all'); // TODO: enable when on int
 
 	// Login as CP admin
 	await loginUserHetArchiefIdp(
@@ -30,6 +31,8 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
 	);
+	// Accept the tos
+	await acceptTos(page); // TODO: Enable when on int
 
 	// Check homepage title
 	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {

@@ -28,7 +28,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
 	// // Accept selected cookies
-	// await acceptCookies(page, 'selection'); //TODO enable cookies when on INT
+	await acceptCookies(page, 'selection'); //TODO enable cookies when on INT
 
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').first().click();
@@ -80,10 +80,6 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator('text=Je account werd aangemaakt')).toBeVisible();
 
 	// Confirm email in ACM
-	// await acmConfirmEmail(
-	// 	page,
-	// 	'hetarchief2.0+ateindgebruikerbztcd39a80cd6144e99a5c6d751005536c2@meemoo.be'
-	// );
 	await acmConfirmEmail(page, userEmail);
 
 	// Go to the hetarchief homepage
@@ -95,7 +91,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	});
 
 	// // Cookie bot should not open again
-	// await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
+	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Login user
 	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
@@ -104,7 +100,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acceptTos(page);
 
 	// // Cookie bot should not open again
-	// await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
+	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toHaveText('Test-at');

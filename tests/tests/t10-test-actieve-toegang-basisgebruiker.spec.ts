@@ -15,7 +15,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	});
 
 	// // Accept all cookies
-	// await acceptCookies(page, 'all'); //Enable when on int
+	await acceptCookies(page, 'all'); //Enable when on int
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -50,7 +50,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await page.click('text=Zoeken naar bezoekersruimtes');
 	// Wait for search page to be ready
 	// await waitForSearchResults(page);
-	await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
 
 	// Check VRT in actieve bezoekersruimtes
 	await expect(
@@ -161,15 +161,16 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await expect(pill).toBeVisible();
 	await expect(pill).toContainText('Raadpleegbaar via bezoekertool'); //TODO: we might have to change this text
 
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //TODO: the checks bolow randomly fail sometimes
 	// Check tab counts decreased
 	countsAfterSearchByText = await getSearchTabBarCounts(page);
 
 	// Expect counts to have gone down, or stay the same
 	if (countsBeforeSearch.all > 0) {
 		// Only check counts if there are at least a few items
-		expect(countsBeforeSearch.all > countsAfterSearchByText.all).toBeTruthy();
-		expect(countsBeforeSearch.video >= countsAfterSearchByText.video).toBeTruthy();
-		expect(countsBeforeSearch.audio >= countsAfterSearchByText.audio).toBeTruthy();
+		await expect(countsBeforeSearch.all > countsAfterSearchByText.all).toBeTruthy();
+		await expect(countsBeforeSearch.video >= countsAfterSearchByText.video).toBeTruthy();
+		await expect(countsBeforeSearch.audio >= countsAfterSearchByText.audio).toBeTruthy();
 	}
 
 	/**
@@ -186,9 +187,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Expect counts to have gone down, or stay the same
 	if (countsBeforeSearch.all > 0) {
 		// Only check counts if there are at least a few items
-		expect(countsBeforeSearch.all > countsAfterSearchByDate.all).toBeTruthy();
-		expect(countsBeforeSearch.video >= countsAfterSearchByDate.video).toBeTruthy();
-		expect(countsBeforeSearch.audio >= countsAfterSearchByDate.audio).toBeTruthy();
+		await expect(countsBeforeSearch.all > countsAfterSearchByDate.all).toBeTruthy();
+		await expect(countsBeforeSearch.video >= countsAfterSearchByDate.video).toBeTruthy();
+		await expect(countsBeforeSearch.audio >= countsAfterSearchByDate.audio).toBeTruthy();
 	}
 
 	// // Search by language
@@ -236,17 +237,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	);
 	await filter2TypeSelect.locator('[class^=c-react-select__control]').click();
 	// Click 'Beschrijving'
-	await filter2TypeSelect.locator('#react-select-31-option-0').click();
+	await filter2TypeSelect.locator('#react-select-16-option-0').click();
 	await page.fill(
 		'[class^=AdvancedFilterFields_c-advanced-filter-fields__dynamic-field] #AdvancedFilterFields__value__1',
 		'Schoen'
 	);
-	// const filter2OperatorSelect = await page.locator('.c-menu--visible--default .c-react-select', {
-	// 	hasText: 'Korter dan',
-	// });
-	// await filter2OperatorSelect.click();
-	// await filter2OperatorSelect.locator('text=Langer dan').click();
-	// await page.locator('.c-menu--visible--default .c-input__field[step="1"]').fill('00:01:00');
 
 	// // TODO add filter on language once more items with languages are added
 
@@ -301,8 +296,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	);
 
 	// Click first search result
-	const firstResult = await page.locator('.c-card').first();
-	const title = await (await firstResult.locator('.c-card__title-wrapper')).innerText();
+	const firstResult = await page.locator('.c-card a').first();
 	await firstResult.click();
 
 	// Wait for detail page to load

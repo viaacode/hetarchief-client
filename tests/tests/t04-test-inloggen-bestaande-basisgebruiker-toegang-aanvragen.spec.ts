@@ -14,7 +14,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	});
 
 	// // Accept all cookies
-	// await acceptCookies(page, 'all'); // enable this when running on int
+	await acceptCookies(page, 'all'); // enable this when running on int
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
@@ -30,9 +30,6 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 
 	// Scroll down and enter 'V' in the searchbar
 	await page.fill('#VisitorSpaceCardsWithSearch__search', 'V');
-
-	// Press 'Toon alles' to see all results
-	// await page.locator('text=Toon Alles').first().click(); // TODO: when INT data is finalised, we can either remove this line or uncomment this line
 
 	// Press the contact buton
 	await page
@@ -67,6 +64,9 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 
 	// Wait for the new page to load
 	await page.waitForLoadState('networkidle');
+
+	// Accept the tos
+	await acceptTos(page); // TODO: Enable when on int
 
 	// Fill in 'Reden van aanvraag'
 	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);

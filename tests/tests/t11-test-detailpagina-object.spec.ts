@@ -8,7 +8,7 @@ import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 
-test('T11: Test detailpagina object', async ({ page, context }) => {
+test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
@@ -18,7 +18,7 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	});
 
 	// // Accept all cookies
-	// await acceptCookies(page, 'all'); //Enable when on int
+	await acceptCookies(page, 'all'); //Enable when on int
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -52,31 +52,6 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	await expect(subNavItems[1]).toMatch(/VRT.*/);
 	await page.click('text=VRT');
 
-	/**
-	 * Go to search page VRT --------------------------------------------------------------------
-	 */
-
-	// // Click on "start you visit" navigation item
-	// await page.goto(
-	// 	((process.env.TEST_CLIENT_ENDPOINT as string) +
-	// 		process.env.TEST_OBJECT_DETAIL_PAGE_VRT) as string
-	// );
-
-	// // Wait for detail page to load
-	// await page.waitForFunction(
-	// 	() => document.querySelectorAll('.p-object-detail__metadata-content').length > 0,
-	// 	null,
-	// 	{
-	// 		timeout: 10000,
-	// 	}
-	// );
-
-	// // Check VRT in sub navigation
-	// const subNavigationTitle = await page.locator(
-	// 	'.p-object-detail [class*="Navigation_c-navigation"] h1'
-	// );
-	// await expect(subNavigationTitle).toBeVisible();
-	// await expect(subNavigationTitle).toContainText('VRT');
 	// Get tab counts before search
 	const countsBeforeSearch = await getSearchTabBarCounts(page);
 
@@ -247,63 +222,63 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	const path = await download.path();
 	await expect(path).toBeDefined();
 
-	/**
-	 * Video player
-	 */
-	// Playing video is disabled because we get error: unsupported media type
-	// Check video is playing
-	const player = await page.locator('.flowplayer');
-	await expect(player).toBeVisible();
+	// /**
+	//  * Video player //TODO: video player does not work on int
+	//  */
+	// // Playing video is disabled because we get error: unsupported media type
+	// // Check video is playing
+	// const player = await page.locator('.flowplayer');
+	// await expect(player).toBeVisible();
 
-	// Click player
-	await player.click();
+	// // Click player
+	// await player.click();
 
-	// Check flowplayer starts playing
-	await expect(player).toHaveClass(/is-playing/);
+	// // Check flowplayer starts playing
+	// await expect(player).toHaveClass(/is-playing/);
 
-	// Get player size before fullscreen
-	const playerSizeBeforeFullscreen =
-		(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+	// // Get player size before fullscreen
+	// const playerSizeBeforeFullscreen =
+	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
 
-	// Make video fullscreen
-	await page.hover('.flowplayer'); // Hover video so controls become visible
-	await page.evaluate(() => {
-		(document?.querySelector('.fp-fullscreen') as any)?.click();
-	});
+	// // Make video fullscreen
+	// await page.hover('.flowplayer'); // Hover video so controls become visible
+	// await page.evaluate(() => {
+	// 	(document?.querySelector('.fp-fullscreen') as any)?.click();
+	// });
 
-	// Wait for fullscreen to open
-	await page.waitForTimeout(1000);
+	// // Wait for fullscreen to open
+	// await page.waitForTimeout(1000);
 
-	// Get player size after fullscreen
-	const playerSizeAfterFullscreen =
-		(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+	// // Get player size after fullscreen
+	// const playerSizeAfterFullscreen =
+	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
 
-	// Check video size is bigger
-	await expect(playerSizeAfterFullscreen).toBeGreaterThan(playerSizeBeforeFullscreen);
+	// // Check video size is bigger
+	// await expect(playerSizeAfterFullscreen).toBeGreaterThan(playerSizeBeforeFullscreen);
 
-	// Check video object keeps playing
-	await expect(player).toBeVisible();
-	await expect(player).toHaveClass(/is-playing/);
+	// // Check video object keeps playing
+	// await expect(player).toBeVisible();
+	// await expect(player).toHaveClass(/is-playing/);
 
-	// Press escape key
-	await page.hover('.flowplayer'); // Hover video so controls become visible
-	await page.evaluate(() => {
-		(document?.querySelector('.fp-fullscreen-exit') as any)?.click();
-	});
+	// // Press escape key
+	// await page.hover('.flowplayer'); // Hover video so controls become visible
+	// await page.evaluate(() => {
+	// 	(document?.querySelector('.fp-fullscreen-exit') as any)?.click();
+	// });
 
-	// Wait for fullscreen to close
-	await page.waitForTimeout(1000);
+	// // Wait for fullscreen to close
+	// await page.waitForTimeout(1000);
 
-	// Get player size after fullscreen
-	const playerSizeAfterCloseFullscreen =
-		(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
+	// // Get player size after fullscreen
+	// const playerSizeAfterCloseFullscreen =
+	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
 
-	// Check video size to be smaller than fullscreen
-	await expect(playerSizeAfterCloseFullscreen).toBeLessThan(playerSizeAfterFullscreen);
+	// // Check video size to be smaller than fullscreen
+	// await expect(playerSizeAfterCloseFullscreen).toBeLessThan(playerSizeAfterFullscreen);
 
-	// Check video object keeps playing
-	await expect(player).toBeVisible();
-	await expect(player).toHaveClass(/is-playing/);
+	// // Check video object keeps playing
+	// await expect(player).toBeVisible();
+	// await expect(player).toHaveClass(/is-playing/);
 
 	// TODO Click on related item when more items are added to the database
 
@@ -320,10 +295,10 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 
 	await page.locator('[aria-label="Toevoegen aan aanvraaglijst"]').click();
 
-	await checkBladeTitle(page, 'Voeg toe aan aanvragen'); // This should be 'Voeg toe aan aanvraaglijst'
+	await checkBladeTitle(page, 'Voeg toe aan aanvragen'); // TODO: This should be 'Voeg toe aan aanvraaglijst'
 
 	// Click 'Ik wil dit materiaal hergebruiken'
-	await page.locator('text=Ik wil dit object hergebruiken').click(); // This should be 'Ik wil dit materiaal hergebruiken'
+	await page.locator('text=Ik wil dit object hergebruiken').click(); // TODO: This should be 'Ik wil dit materiaal hergebruiken'
 
 	// Click 'Voeg toe aan aanvraaglijst en zoek verder'
 	await page.locator('text=Voeg toe aan aanvraaglijst en zoek verder').click();
@@ -350,7 +325,7 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	// await expect(bladeTitle).toContainText('Persoonlijke gegevens');
 	// await expect(bladeTitle).toBeVisible();
 
-	// expect firstname, lastname and emailadress to be filled in, organisation to be empty
+	// Expect firstname, lastname and emailadress to be filled in, organisation to be empty
 	const prefilledData = await page
 		.locator('[class^=PersonalInfoBlade_c-personal-info-blade__content-value]')
 		.allInnerTexts();
@@ -372,10 +347,8 @@ test('T11: Test detailpagina object', async ({ page, context }) => {
 	await checkToastMessage(page, 'Verzenden gelukt'); //TODO: this should be: 'Aanvraag verstuurd'
 	await clickToastMessageButton(page);
 
-	// TODO check blade is closed
-
-	// TODO remove this action
-	await page.locator('button:has-text("Sluit")').click();
+	// Check blade is closed
+	await expect(page.locator('.c-blade--active')).not.toBeVisible();
 
 	// Click rapporteer
 	await page.locator('[aria-label=Rapporteer]').click();

@@ -33,7 +33,7 @@ const config: PlaywrightTestConfig = {
 	use: {
 		headless: true,
 		launchOptions: {
-			// slowMo: 100 /* TODO disable after recording all videos */,
+			slowMo: 100 /* TODO disable after recording all videos */,
 		},
 		contextOptions: {
 			// recordVideo: { dir: 'videos/' } /* TODO disable in production */,

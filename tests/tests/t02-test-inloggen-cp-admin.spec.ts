@@ -15,7 +15,7 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	});
 
 	// // Accept all cookies
-	// await acceptCookies(page, 'all');  // Enable this on INT, comment bcs localhost
+	await acceptCookies(page, 'all'); // Enable this on INT, comment bcs localhost
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(
@@ -34,7 +34,7 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(1);
 
 	// Check tos is displayed, scroll down and click accept button
-	// await acceptTos(page); //ENABLE THIS LINE WHEN RUNNING TESTS ON INT
+	await acceptTos(page); //ENABLE THIS LINE WHEN RUNNING TESTS ON INT
 
 	// Wait for close to save the videos
 	await context.close();

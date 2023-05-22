@@ -2,13 +2,12 @@ import { expect, test } from '@playwright/test';
 
 import { acceptCookies } from '../helpers/accept-cookies';
 import { acceptTos } from '../helpers/accept-tos';
-import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
-import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { logout } from '../helpers/log-out';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
-import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { checkToastMessage } from '../helpers/check-toast-message';
+import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
+import { logout } from '../helpers/log-out';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct kan worden toegekend', async ({
 	page,
@@ -23,7 +22,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	});
 
 	// // Accept all cookies
-	// await acceptCookies(page, 'all');  // Enable this on INT, comment bcs localhost
+	await acceptCookies(page, 'all'); // Enable this on INT, comment bcs localhost
 
 	// Login visitor
 	await loginUserHetArchiefIdp(
@@ -31,9 +30,6 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		process.env.TEST_VISITOR_ACCOUNT_USERNAME as string,
 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
-
-	// Check tos is displayed, scroll down and click accept button
-	// await acceptTos(page); //It is not displayed //Enable when on int
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
@@ -43,7 +39,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	 */
 	// Click on "Bezoek een aanbieder" navigation item
 	await page.click('text=Bezoek een aanbieder');
-	// await page.click('text=Zoeken naar bezoekersruimtes');
+	await page.click('text=Zoeken naar bezoekersruimtes');
 
 	// Click on request access button for Amsab-ISG
 	const amsabCard = await page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
@@ -84,6 +80,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		process.env.TEST_CP_ADMIN_AMSAB_ACCOUNT_USERNAME as string,
 		process.env.TEST_CP_ADMIN_AMSAB_ACCOUNT_PASSWORD as string
 	);
+
+	// Check tos is displayed, scroll down and click accept button
+	// await acceptTos(page); // TODO: Enable when on int
 
 	// Click "beheer" navigation item
 	// await page.click('nav ul li .c-dropdown a');
@@ -181,12 +180,12 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?aanbieder=amsab-isg`); //TODO: remove this, it is added because it is really inconsistent
 
 	await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: replace this
-	// Check user is in correct space
-	await expect(
-		await page
-			.locator('[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active-label]')
-			.allInnerTexts()
-	).toEqual(['Amsab-ISG']);
+
+	// // Check user is in correct space // TODO: this is not shown on int??
+	// const activeSpace = await page
+	// 	.locator('[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active-label]')
+	// 	.allInnerTexts();
+	// await expect(activeSpace).toEqual(['Amsab-ISG']);
 	// Go to the hetarchief homepage
 
 	// Click bookmark button

@@ -18,8 +18,8 @@ export async function acceptTos(page: Page): Promise<void> {
 	// Click the accept tos button
 	await acceptTosButton.click();
 
-	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
+	// // Check page title is the home page // We don't check this because we dont always accept this on the home page
+	// await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
+	// 	timeout: 10000,
+	// });
 }
