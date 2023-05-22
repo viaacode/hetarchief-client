@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { Loading } from '@shared/components';
+import { ErrorNotFound, Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -86,6 +86,8 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 				/>
 			);
 		}
+
+		return <ErrorNotFound />;
 	};
 
 	return (
