@@ -400,10 +400,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		process.env.TEST_VISITOR_ACCOUNT_PASSWORD as string
 	);
 
-	// Check navbar exists and user has access to one visitor space
+	// Check navbar exists and user has access to two visitor space: VRT from a previous test and Amsab
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 	await expect(page.locator('a[href="/bezoek"] div[class^="c-badge"]').first()).toContainText(
-		'1'
+		'2'
 	);
 
 	// Go to the Amsab-ISG visitor space
@@ -418,7 +418,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		await page
 			.locator('button.c-tabs__item.c-tab.c-tab--dark.c-tab--all.c-tab--active')
 			.allInnerTexts()
-	).toEqual(['Alles(1)']);
+	).toEqual(['Alles(2)']); // TODO: this might change
 
 	// Get the pid of the single object
 	const objectPid = await page

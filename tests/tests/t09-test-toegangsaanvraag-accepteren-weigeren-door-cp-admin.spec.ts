@@ -31,9 +31,6 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
 	);
-	// Accept the tos
-	await acceptTos(page); // TODO: Enable when on int
-
 	// Check homepage title
 	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,

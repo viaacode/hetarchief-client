@@ -2,7 +2,6 @@ import { expect, test } from '@playwright/test';
 
 import { acceptCookies } from '../helpers/accept-cookies';
 import { acceptTos } from '../helpers/accept-tos';
-import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T02: Test inloggen CP-admin', async ({ page, context }) => {
