@@ -342,10 +342,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	useEffect(() => {
 		if (mediaInfo) {
-			EventsService.triggerEvent(LogEventType.ITEM_VIEW, window.location.href, {
+			const path = window.location.href;
+			const eventData = {
 				schema_identifier: mediaInfo.schemaIdentifier,
 				meemoo_identifier: mediaInfo.meemooIdentifier,
-			});
+				user_group_name: user?.groupName,
+			};
+
+			EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData);
+			EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData);
 		}
 	}, [mediaInfo]);
 
@@ -474,6 +479,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 
 		if (mediaInfo?.maintainerFormUrl && user) {
+			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
+				schema_identifier: mediaInfo?.schemaIdentifier,
+				meemoo_identifier: mediaInfo?.meemooIdentifier,
+				user_group_name: user?.groupName,
+			});
+
 			// open external form
 			const resolvedFormUrl = mediaInfo.maintainerFormUrl
 				.replaceAll('{first_name}', encodeURIComponent(user.firstName))
@@ -496,10 +507,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		setIsMediaPaused(false);
 		if (!hasMediaPlayed) {
 			setHasMediaPlayed(true);
-			EventsService.triggerEvent(LogEventType.ITEM_PLAY, window.location.href, {
+
+			const path = window.location.href;
+			const eventData = {
 				schema_identifier: mediaInfo?.schemaIdentifier,
 				meemoo_identifier: mediaInfo?.meemooIdentifier,
-			});
+				user_group_name: user?.groupName,
+			};
+			EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData);
+			EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData);
 		}
 	};
 
