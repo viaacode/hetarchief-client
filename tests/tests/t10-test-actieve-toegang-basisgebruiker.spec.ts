@@ -52,6 +52,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// await waitForSearchResults(page);
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
 
+	// Expect approved visitor space card to be visible
+	await expect(
+		await page.locator('div[class^="LoggedInHome_c-hero__access-cards"] ')
+	).toBeVisible();
+
 	// Check VRT in actieve bezoekersruimtes
 	await expect(
 		await page
@@ -80,7 +85,8 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 			await expect(maintainer).toEqual('VRT');
 		})
 	);
-	// Go to the public catalogue
+	const countsBeforepublic = await getSearchTabBarCounts(page);
+	// Go to the public catalog
 	await page.locator('li[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active]').click();
 
 	await page
@@ -89,6 +95,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 			{ hasText: 'Publieke catalogus' } // TODO: we might have to change the text
 		)
 		.click();
+
+	// Wait for user to be in the public catalog
+	await expect
+		.poll(async () => await getSearchTabBarCounts(page))
+		.not.toEqual(countsBeforepublic);
 
 	// Check the purple banner
 	await expect(
@@ -113,6 +124,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await expect(pill).toBeVisible();
 	await expect(pill).toContainText(SEARCH_TERM);
 
+	// Wait for filtered search results
+	await expect
+		.poll(async () => await getSearchTabBarCounts(page))
+		.not.toEqual(countsBeforeSearch);
+
 	// Check tab counts decreased
 	let countsAfterSearchByText = await getSearchTabBarCounts(page);
 
@@ -133,6 +149,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 
 	// Remove search term
 	await page.click('.c-tags-input__multi-value .c-tag__close');
+
+	// Wait for filtered search results
+	await expect
+		.poll(async () => await getSearchTabBarCounts(page))
+		.not.toEqual(countsAfterSearchByText);
 
 	// Check search term is removed
 	const searchInput = await page.locator('.c-tags-input__input-container').first();
@@ -161,7 +182,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	await expect(pill).toBeVisible();
 	await expect(pill).toContainText('Raadpleegbaar via bezoekertool'); //TODO: we might have to change this text
 
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //TODO: the checks bolow randomly fail sometimes
+	// Wait for filtered search results
+	await expect
+		.poll(async () => await getSearchTabBarCounts(page))
+		.not.toEqual(countsBeforeSearch);
+
 	// Check tab counts decreased
 	countsAfterSearchByText = await getSearchTabBarCounts(page);
 

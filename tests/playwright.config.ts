@@ -33,11 +33,11 @@ const config: PlaywrightTestConfig = {
 	use: {
 		headless: true,
 		launchOptions: {
-			slowMo: 100 /* TODO disable after recording all videos */,
+			// slowMo: 100 /* TODO disable after recording all videos */,
 		},
-		contextOptions: {
-			recordVideo: { dir: 'videos/' } /* TODO disable in production */,
-		},
+		// contextOptions: {
+		// 	recordVideo: { dir: 'videos/' } /* TODO disable in production */,
+		// },
 		/* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
 		actionTimeout: 0,
 		/* Base URL to use in actions like `await page.goto('/')`. */
