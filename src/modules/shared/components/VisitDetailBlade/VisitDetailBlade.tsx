@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -105,12 +106,15 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h4 className={styles['c-visit-detail-blade__title']}>
+			renderTitle={(props: any) => (
+				<h2
+					{...props}
+					className={clsx(styles['c-visit-detail-blade__title'], props.className)}
+				>
 					{tText(
 						'modules/shared/components/visit-detail-blade/visit-detail-blade___bezoekdetail'
 					)}
-				</h4>
+				</h2>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onCloseVisitDetailBlade}

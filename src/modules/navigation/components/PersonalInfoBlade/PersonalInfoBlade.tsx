@@ -84,12 +84,12 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h4 className={styles['c-personal-info-blade__title']}>
+			renderTitle={(props: any) => (
+				<h2 {...props}>
 					{tText(
 						'modules/navigation/components/personal-info-blade/personal-info-blade___persoonlijke-gegevens'
 					)}
-				</h4>
+				</h2>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onClose}

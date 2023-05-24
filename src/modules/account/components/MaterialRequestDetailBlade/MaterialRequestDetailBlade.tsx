@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC } from 'react';
 
@@ -45,12 +46,18 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h4 className={styles['p-account-my-material-requests__title']}>
+			renderTitle={(props: any) => (
+				<h2
+					{...props}
+					className={clsx(
+						props.className,
+						styles['p-account-my-material-requests__title']
+					)}
+				>
 					{tText(
 						'modules/account/components/material-request-detail-blade/material-requests___detail'
 					)}
-				</h4>
+				</h2>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onClose}

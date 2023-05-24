@@ -103,14 +103,14 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		setIsPersonalInfoBladeOpen(false);
 	};
 
-	const renderTitle = () => {
+	const renderTitle = (props: any) => {
 		return (
 			<div className={styles['c-material-request-center-blade__title-container']}>
-				<h4 className={styles['c-material-request-center-blade__title']}>
+				<h2 {...props}>
 					{tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst'
 					)}
-				</h4>
+				</h2>
 				{/* Ward: add label when there is more than 1 maintainer */}
 				{mappedRequests && Object.keys(mappedRequests).length > 1 && (
 					<p className={styles['c-material-request-center-blade__subtitle']}>
