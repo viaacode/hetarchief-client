@@ -8,7 +8,6 @@ import { acmConfirmEmail } from '../helpers/acm-confirm-email';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 /**
- * These scenarios are described in https://docs.google.com/spreadsheets/d/1yGNKFkeE-2Kv2mADOvKzDK3BYTvoiSbVO6pAsuoG5P8/edit#gid=286710078
  * New: https://docs.google.com/spreadsheets/d/1EI8MZjFlE-gkzE1YGXFabtTGURRz6fWk-0fQa8OCv4k/edit#gid=95954947
  */
 
