@@ -333,6 +333,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Toast message
 	await checkToastMessage(page, 'De aanvraag is goedgekeurd.');
 
+	await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: temp
 	const approvedRequest = await page
 		.locator('[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row', {
 			hasText: 'BezoekerVoornaam',
