@@ -518,7 +518,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 			EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData);
 			hasAccessToVisitorSpaceOfObject &&
-				EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData);
+				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData);
 		}
 	};
 
