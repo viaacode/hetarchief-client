@@ -71,24 +71,48 @@ module.exports = withTM({
 	},
 	async redirects() {
 		return [
+			// Beheer redirects
+			{
+				source: '/beheer/aanvragen',
+				destination: '/beheer/toegangsaanvragen',
+				permanent: true,
+			},
+			// Admin redirects
+			{
+				source: '/admin/bezoekersruimtesbeheer/aanvragen',
+				destination: '/admin/bezoekersruimtesbeheer/toegangsaanvragen',
+				permanent: true,
+			},
+			// Account redirects
 			{
 				source: '/account',
 				destination: '/account/mijn-profiel',
 				permanent: true,
 			},
 			{
-				source: '/beheer/aanvragen',
-				destination: '/beheer/toegangsaanvragen',
-				permanent: true,
-			},
-			{
-				source: '/admin/bezoekersruimtesbeheer/aanvragen',
-				destination: '/admin/bezoekersruimtesbeheer/toegangsaanvragen',
-				permanent: true,
-			},
-			{
 				source: '/account/mijn-historiek',
 				destination: '/account/mijn-bezoek-historiek',
+				permanent: true,
+			},
+			{
+				source: '/bladwijzers',
+				destination: '/account/mijn-mappen',
+				permanent: true,
+			},
+			// General redirects
+			{
+				source: '/home',
+				destination: '/',
+				permanent: true,
+			},
+			{
+				source: '/faq',
+				destination: '/vragen',
+				permanent: true,
+			},
+			{
+				source: '/handleiding',
+				destination: '/vragen',
 				permanent: true,
 			},
 		];
