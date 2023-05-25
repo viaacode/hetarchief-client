@@ -16,7 +16,6 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import {
 	capitalize,
-	flatten,
 	indexOf,
 	intersection,
 	isEmpty,
@@ -27,6 +26,7 @@ import {
 } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -1248,6 +1248,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const renderObjectDetail = () => (
 		<>
+			<Head>
+				<link rel="canonical" href={`https://hetarchief.be/zoeken/${router.query.ie}`} />
+			</Head>
 			{renderNavigationBar()}
 			<ScrollableTabs
 				className="p-object-detail__tabs"
