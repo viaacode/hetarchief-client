@@ -18,14 +18,17 @@ interface MetaDataDescriptionProps {
 
 const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 	const { tText } = useTranslation();
+
+	const [isBladeOpen, setIsBladeOpen] = useState(false);
+
 	const isLongDescription: boolean = useMemo(
 		() => description.length > DESCRIPTION_MAX_LENGTH,
 		[description]
 	);
+
 	const parsedDescription = isLongDescription
-		? description.substring(0, DESCRIPTION_MAX_LENGTH)
+		? `${description.substring(0, DESCRIPTION_MAX_LENGTH)}...`
 		: description;
-	const [isBladeOpen, setIsBladeOpen] = useState(false);
 
 	const renderBladeTitle = () => (
 		<h3 className={styles['c-metadatadescription__title']}>
@@ -49,13 +52,14 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 				{/* ARC-1282: if there are issues with showing \\n or not showing new lines,
 				the parsedDescription used to be in a <TextWithNewLines /> component. This component was removed here to highlight text */}
 				{highlighted(parsedDescription.replaceAll('\\n', ' ').replaceAll('\n', ' '))}
+
 				{isLongDescription && (
-					<u
+					<p
 						className={styles['c-metadatadescription__read-more']}
 						onClick={() => setIsBladeOpen(true)}
 					>
 						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
-					</u>
+					</p>
 				)}
 			</p>
 			<Blade

@@ -82,8 +82,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	 * Events
 	 */
 
-	const onFailedRequest = () => {
-		getFolders.refetch();
+	const onFailedRequest = async () => {
+		await getFolders.refetch();
 
 		toastService.notify({
 			title: tHtml(
@@ -95,7 +95,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 		});
 	};
 
-	const onFormSubmit = (values: AddToFolderFormState) => {
+	const onFormSubmit = async (values: AddToFolderFormState) => {
 		if (selected) {
 			const original = mapToPairs(collections?.items || [], selected);
 			const dirty = values.pairs.filter((current) => {
@@ -105,34 +105,17 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 			});
 
 			const addedToFolders: Array<{
-				toastMessage: {
-					maxLines: number;
-					title: string | ReactNode;
-					description: string | ReactNode;
-				};
-				descriptionVariables: Record<'item' | 'folder', unknown>;
+				item: AddToFolderSelected;
+				folder: string;
 			}> = [];
 			const removedFromFolders: Array<{
-				toastMessage: {
-					maxLines: number;
-					title: string | ReactNode;
-					description: string | ReactNode;
-				};
-				descriptionVariables: Record<'item' | 'folder', unknown>;
+				item: AddToFolderSelected;
+				folder: string;
 			}> = [];
 
 			// Define our promises
-			const promises = dirty.map((pair) => {
-				const folder = getFolder(pair.folder);
-
-				const descriptionVariables: Record<'item' | 'folder', unknown> = {
-					item: selected.title,
-					folder:
-						folder?.name ||
-						tHtml(
-							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
-						),
-				};
+			const addOrRemoveItemFromFolderPromises = dirty.map((pair) => {
+				const folder = getFolder(pair.folder)?.name || pair.folder;
 				if (pair.checked) {
 					return foldersService
 						.addToCollection(pair.folder, selected.schemaIdentifier)
@@ -143,17 +126,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							}
 
 							addedToFolders.push({
-								toastMessage: {
-									maxLines: 3,
-									title: tHtml(
-										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-map-titel'
-									),
-									description: tHtml(
-										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-map-beschrijving',
-										descriptionVariables as Record<string, string>
-									),
-								},
-								descriptionVariables,
+								folder,
+								item: selected,
 							});
 						});
 				} else {
@@ -166,71 +140,114 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 							}
 
 							removedFromFolders.push({
-								toastMessage: {
-									maxLines: 3,
-									title: tHtml(
-										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-verwijderd-uit-map-titel'
-									),
-									description: tHtml(
-										'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-map-beschrijving',
-										descriptionVariables as Record<string, string>
-									),
-								},
-								descriptionVariables,
+								folder,
+								item: selected,
 							});
 						});
 				}
 			});
 
 			// Execute calls
-			Promise.all(promises).then(() => {
-				getFolders.refetch().then(() => {
-					// bundle add toast messages
-					if (addedToFolders.length > 1) {
-						const folders = addedToFolders
-							.map((obj) => obj.descriptionVariables.folder)
-							.join(', ');
-						toastService.notify({
-							maxLines: 3,
-							title: tHtml(
-								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-mappen-titel'
-							),
-							description: tHtml(
-								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-mappen-beschrijving',
-								{
-									folders,
-								}
-							),
-						});
-					} else if (addedToFolders.length === 1) {
-						toastService.notify(addedToFolders[0].toastMessage);
-					}
+			await Promise.all(addOrRemoveItemFromFolderPromises);
+			await getFolders.refetch();
 
-					// bundle removed toast messages
-					if (removedFromFolders.length > 1) {
-						const folders = removedFromFolders
-							.map((obj) => obj.descriptionVariables.folder)
-							.join(', ');
-						toastService.notify({
-							maxLines: 3,
-							title: tHtml(
-								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-verwijderd-uit-mappen-titel'
-							),
-							description: tHtml(
-								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-mappen-beschrijving',
-								{
-									folders,
-								}
-							),
-						});
-					} else if (removedFromFolders.length === 1) {
-						toastService.notify(removedFromFolders[0].toastMessage);
-					}
-
-					onSubmit?.(values);
-					reset();
+			// Show ONE correct toast message
+			if (addedToFolders.length > 0 && removedFromFolders.length > 0) {
+				const folders = [...addedToFolders, ...removedFromFolders]
+					.map((obj) => obj.folder)
+					.join(', ');
+				toastService.notify({
+					maxLines: 3,
+					title: tHtml(
+						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-item-is-toegevoegd-verwijderd-van-de-geselecteerde-mappen-titel'
+					),
+					description: tHtml(
+						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-item-is-toegevoegd-verwijderd-van-de-geselecteerde-mappen-beschrijving',
+						{
+							folders,
+						}
+					),
 				});
-			});
+			} else if (addedToFolders.length > 0) {
+				const folders = addedToFolders.map((obj) => obj.folder).join(', ');
+				if (addedToFolders.length === 1) {
+					// Add to one folder
+					const item = addedToFolders[0].item.title;
+					const folder =
+						addedToFolders[0].folder ||
+						tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
+						);
+					toastService.notify({
+						maxLines: 3,
+						title: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-map-titel'
+						),
+						description: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-map-beschrijving',
+							{
+								item,
+								folder,
+							}
+						),
+					});
+				} else {
+					// Added to multiple folders
+					toastService.notify({
+						maxLines: 3,
+						title: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-toegevoegd-aan-mappen-titel'
+						),
+						description: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-mappen-beschrijving',
+							{
+								folders,
+							}
+						),
+					});
+				}
+			} else if (removedFromFolders.length > 0) {
+				const folders = removedFromFolders.map((obj) => obj.folder).join(', ');
+				if (removedFromFolders.length === 1) {
+					// Removed from one folder
+					const item = removedFromFolders[0].item.title;
+					const folder =
+						removedFromFolders[0].folder ||
+						tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
+						);
+					toastService.notify({
+						maxLines: 3,
+						title: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-verwijderd-uit-map-titel'
+						),
+						description: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-map-beschrijving',
+							{
+								item,
+								folder,
+							}
+						),
+					});
+				} else if (removedFromFolders.length > 1) {
+					// Removed from multiple folder
+					toastService.notify({
+						maxLines: 3,
+						title: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-verwijderd-uit-mappen-titel'
+						),
+						description: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-mappen-beschrijving',
+							{
+								folders,
+							}
+						),
+					});
+				}
+			}
+
+			onSubmit?.(values);
+			reset();
 		}
 	};
 

@@ -11,7 +11,7 @@
 	&__title {
 		text-align: center;
 		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
-		font-size: $font-size-sm;
+		font-size: $font-size-lg !important;
 
 		@include respond-at(md) {
 			text-align: left;

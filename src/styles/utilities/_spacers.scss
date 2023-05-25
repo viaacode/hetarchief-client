@@ -87,6 +87,11 @@ $pr: (
  * Margin
  */
 
+$m: (
+	"0": 0,
+);
+@include generate-utils("m", "margin", $m, ());
+
 // Top
 $mt: (
 	"4": $spacer-xs,

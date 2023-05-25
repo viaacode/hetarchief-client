@@ -6,17 +6,16 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { tText } from '@shared/helpers/translate';
-import { setBreadcrumbs, setShowZendesk } from '@shared/store/ui';
+import { setBreadcrumbs } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { VisitorSpaceSearchPage } from '@visitor-space/components';
+import { SearchPage } from '@visitor-space/components';
 
 type SearchPageProps = DefaultSeoInfo;
 
-const SearchPage: NextPage<SearchPageProps> = () => {
+const Search: NextPage<SearchPageProps> = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(setShowZendesk(false));
 		dispatch(
 			setBreadcrumbs([
 				{
@@ -32,7 +31,7 @@ const SearchPage: NextPage<SearchPageProps> = () => {
 	}, [dispatch]);
 
 	const renderPageContent = () => {
-		return <VisitorSpaceSearchPage />;
+		return <SearchPage />;
 	};
 
 	return renderPageContent();
@@ -44,4 +43,4 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAuth(SearchPage as ComponentType, false);
+export default withAuth(Search as ComponentType, false);

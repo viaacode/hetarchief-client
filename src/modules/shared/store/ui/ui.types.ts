@@ -16,6 +16,6 @@ export interface UIState {
 	showZendesk: boolean;
 	lockScroll: Record<string, boolean>;
 	materialRequestCount: number;
-	lastScrollPosition: LastScrollPositionType;
+	lastScrollPosition: LastScrollPositionType | null;
 	breadcrumbs: Breadcrumb[];
 }

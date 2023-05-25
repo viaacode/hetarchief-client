@@ -104,6 +104,7 @@ export const VisitorSpaceDropdown: FC<VisitorSpaceDropdownProps> = ({
 		<ul
 			className={clsx('u-list-reset', styles['c-visitor-spaces-dropdown'], {
 				[styles['c-visitor-spaces-dropdown--open']]: isOpen,
+				[styles['c-visitor-spaces-dropdown--selectable']]: hasMultipleOptions,
 			})}
 		>
 			{renderSelectedOption()}

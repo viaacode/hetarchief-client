@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 
+import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeMetadataExportProps,
 	IeObject,
@@ -81,7 +82,7 @@ export class IeObjectsService {
 		return await ApiService.getApi().get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async getSeoById(id: string): Promise<{ name: string | null } | null> {
+	public static async getSeoById(id: string): Promise<SeoInfo> {
 		return await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${id}`)
 			.json();

@@ -229,6 +229,13 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 	}
 }
 
+.c-admin__actions .c-button-toolbar {
+	.c-button__icon.o-svg-icon svg {
+		height: $button-icon-size;
+		width: $button-icon-size;
+	}
+}
+
 .c-admin__actions button[class*="c-button--secondary"],
 .c-admin__content button[class*="c-button--borderless"],
 .c-accordion__item button[class*="c-button--secondary"],

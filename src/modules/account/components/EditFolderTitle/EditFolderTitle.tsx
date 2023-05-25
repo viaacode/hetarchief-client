@@ -119,7 +119,11 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 					aria-label={tText(
 						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
 					)}
+					toolTipText={tText(
+						'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen'
+					)}
 				/>
+
 				{buttons.filter((b) => !b.before).map((b) => b.node)}
 			</>
 		);
@@ -152,6 +156,9 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 								aria-label={tText(
 									'modules/account/components/edit-folder-title/edit-folder-title___titel-aanpassen-annuleren'
 								)}
+								toolTipText={tText(
+									'modules/account/components/edit-folder-title/edit-folder-title___annuleren'
+								)}
 							/>
 						}
 						nodeSubmit={
@@ -161,6 +168,9 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 								icon={<Icon name={IconNamesLight.Check} aria-hidden />}
 								aria-label={tText(
 									'modules/account/components/edit-folder-title/edit-folder-title___nieuwe-titel-opslaan'
+								)}
+								toolTipText={tText(
+									'modules/account/components/edit-folder-title/edit-folder-title___toepassen'
 								)}
 							/>
 						}

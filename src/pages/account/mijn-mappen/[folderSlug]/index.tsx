@@ -1,12 +1,6 @@
-import {
-	Button,
-	FormControl,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from '@meemoo/react-components';
+import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil, kebabCase } from 'lodash-es';
+import { isNil } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -14,7 +8,6 @@ import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-import save from 'save-file';
 import { useQueryParams } from 'use-query-params';
 
 import { CreateFolderButton } from '@account/components';
@@ -46,7 +39,6 @@ import { ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
@@ -72,7 +64,6 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { folderSlug } = router.query;
-	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	/**
 	 * Data
@@ -193,8 +184,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 				) as HTMLElement | null;
 
 				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+				dispatch(setLastScrollPosition(null));
 			}, 100);
-			dispatch(setLastScrollPosition({ itemId: '', page: ROUTES.myFolders }));
 		}
 	}, [folderMedia?.data?.items]);
 
@@ -278,107 +269,36 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 */
 
 	const renderTitleButtons = useMemo(() => {
-		const onExportClick = async () => {
-			if (activeFolder?.id) {
-				const xmlBlob = await getFolderExport(activeFolder?.id);
-
-				if (xmlBlob) {
-					save(xmlBlob, `${kebabCase(activeFolder?.name) || 'map'}.xml`);
-				} else {
-					toastService.notify({
-						title:
-							tHtml('pages/account/mijn-mappen/folder-slug/index___error') || 'error',
-						description: tHtml(
-							'pages/account/mijn-mappen/folder-slug/index___het-ophalen-van-de-metadata-is-mislukt'
-						),
-					});
-				}
-			}
-		};
-
 		return [
-			...(canDownloadMetadata
-				? [
-						{
-							before: true,
-							node: (
-								<Button
-									key={'export-folder'}
-									className="p-account-my-folders__export--label"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
-							),
-						},
-						{
-							before: true,
-							node: (
-								<Button
-									key={'export-folder-mobile'}
-									className="p-account-my-folders__export--icon"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									icon={<Icon name={IconNamesLight.Export} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
-							),
-						},
-				  ]
-				: []),
 			...(activeFolder && !activeFolder.isDefault
 				? [
 						{
 							before: false,
 							node: (
-								<Tooltip position="top">
-									<TooltipTrigger>
-										<Button
-											key={'delete-folder'}
-											disabled={!!activeFolder.usedForLimitedAccessUntil}
-											className="p-account-my-folders__delete"
-											variants={['silver']}
-											icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-											aria-label={tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-											)}
-											name={tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-											)}
-											onClick={(e) => {
-												e.stopPropagation();
-												setShowConfirmDelete(true);
-											}}
-										/>
-									</TooltipTrigger>
-									<TooltipContent>
-										<span>
-											{tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
-											)}
-										</span>
-									</TooltipContent>
-								</Tooltip>
+								<Button
+									key={'delete-folder'}
+									disabled={!!activeFolder.usedForLimitedAccessUntil}
+									className="p-account-my-folders__delete"
+									variants={['silver']}
+									icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+									aria-label={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+									)}
+									name={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+									)}
+									onClick={(e) => {
+										e.stopPropagation();
+										setShowConfirmDelete(true);
+									}}
+									toolTipText={
+										activeFolder.usedForLimitedAccessUntil
+											? tText(
+													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
+											  )
+											: undefined
+									}
+								/>
 							),
 						},
 				  ]
@@ -401,13 +321,16 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 										e.stopPropagation();
 										setShowShareMapBlade(true);
 									}}
+									toolTipText={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
 								/>
 							),
 						},
 				  ]
 				: []),
 		];
-	}, [canDownloadMetadata, tText, activeFolder, getFolderExport, tHtml]);
+	}, [tText, activeFolder, getFolderExport, tHtml]);
 
 	const renderActions = (item: IdentifiableMediaCard, folder: Folder) => (
 		<>

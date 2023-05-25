@@ -44,4 +44,7 @@ module.exports = {
 	},
 	testEnvironment: 'jsdom',
 	transformIgnorePatterns: ['/node_modules/(?!(ky))', '^.+\\.module\\.(css|sass|scss)$'],
+	globals: {
+		TZ: 'UTC',
+	},
 };

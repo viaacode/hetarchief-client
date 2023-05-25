@@ -44,7 +44,9 @@ const FilterSort: FC<FilterSortProps> = ({
 			>
 				<DropdownButton>
 					<FilterButton
-						className={styles['c-filter-menu__button--sort-header']}
+						className={clsx(styles['c-filter-menu__button--sort-header'], {
+							'u-bg-shade': !sortOptionsOpen,
+						})}
 						icon={
 							activeSort?.orderDirection === OrderDirection.desc
 								? IconNamesLight.SortDown

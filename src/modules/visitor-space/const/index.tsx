@@ -98,7 +98,6 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<a
 	orderDirection: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection),
 	// UI
 	filter: StringParam,
-	focus: StringParam,
 };
 
 export const VISITOR_SPACE_TABS = (): TabProps[] => [

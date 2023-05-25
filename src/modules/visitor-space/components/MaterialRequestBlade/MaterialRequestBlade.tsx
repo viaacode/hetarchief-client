@@ -26,7 +26,7 @@ interface MaterialRequestBladeProps {
 	objectId: string;
 	objectDctermsFormat?: MaterialRequestObjectType | undefined;
 	maintainerName: string;
-	maintainerLogo: string;
+	maintainerLogo: string | null;
 	maintainerSlug: string;
 	materialRequestId?: string;
 	meemooId?: string;

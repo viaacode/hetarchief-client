@@ -1,0 +1,10 @@
+User-agent: *
+# Paths
+Disallow: /*?*
+Disallow: /admin/
+Disallow: /beheer/
+Disallow: /account/
+# Files
+Disallow: /images/
+
+Sitemap: https://hetarchief.be/sitemap.xml

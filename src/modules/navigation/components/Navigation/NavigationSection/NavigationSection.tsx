@@ -1,8 +1,10 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, Fragment, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Icon, IconNamesLight, Overlay } from '@shared/components';
+import { selectShowMaterialRequestCenter, setShowMaterialRequestCenter } from '@shared/store/ui';
 
 import styles from '../Navigation.module.scss';
 import { NavigationDropdown } from '../NavigationDropdown';
@@ -21,6 +23,12 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 }) => {
 	// Needed for overlay state. Dropdown state is saved in NavigationDropdown component
 	const [isHamburgerMenuOpen, setIsHamburgerMenuOpen] = useState(false);
+	const dispatch = useDispatch();
+	const showMaterialRequestCenter = useSelector(selectShowMaterialRequestCenter);
+
+	const closeMaterialRequestBlade = () => {
+		showMaterialRequestCenter && dispatch(setShowMaterialRequestCenter(false));
+	};
 
 	const renderHamburgerMenu = () => {
 		return (
@@ -106,6 +114,7 @@ const NavigationSection: FC<NavigationSectionProps> = ({
 				styles['c-navigation__section'],
 				styles[`c-navigation__section--${placement}`]
 			)}
+			onClick={closeMaterialRequestBlade}
 		>
 			{renderDesktop()}
 			{renderHamburger && renderHamburgerMenu()}

@@ -81,12 +81,16 @@ export class VisitsService {
 			.json();
 	}
 
-	public static async getActiveVisitForUserAndSpace(spaceId: string): Promise<Visit | null> {
-		if (!spaceId) {
+	public static async getActiveVisitForUserAndSpace(
+		visitorSpaceSlug: string
+	): Promise<Visit | null> {
+		if (!visitorSpaceSlug) {
 			return null;
 		}
 		return await ApiService.getApi()
-			.get(`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${spaceId}`)
+			.get(
+				`${VISITS_SERVICE_BASE_URL}/${VISITS_SERVICE_ACTIVE_SPACE_URL}/${visitorSpaceSlug}`
+			)
 			.json();
 	}
 
@@ -114,6 +118,8 @@ export class VisitsService {
 
 	public static async getAllActiveVisits({
 		requesterId,
+		orderProp = 'endAt',
+		orderDirection = OrderDirection.asc,
 		page = 0,
 		size = 20,
 	}: GetAllActiveVisitsProps): Promise<IPagination<Visit>> {
@@ -127,6 +133,8 @@ export class VisitsService {
 						requesterId,
 						page,
 						size,
+						orderProp,
+						orderDirection,
 					},
 				})
 			)

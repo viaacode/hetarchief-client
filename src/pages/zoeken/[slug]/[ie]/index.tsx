@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import { HTTPError } from 'ky';
 import {
 	capitalize,
+	flatten,
 	indexOf,
 	intersection,
 	isEmpty,
@@ -79,6 +80,7 @@ import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
 import { IeObjectsService } from '@ie-objects/services';
+import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeObject,
 	IeObjectAccessThrough,
@@ -156,9 +158,10 @@ const { publicRuntimeConfig } = getConfig();
 
 type ObjectDetailPageProps = {
 	title: string | null;
+	description: string | null;
 } & DefaultSeoInfo;
 
-const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
+const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description, url }) => {
 	/**
 	 * Hooks
 	 */
@@ -186,8 +189,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		Permission.CREATE_MATERIAL_REQUESTS
 	);
 
-	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
-
 	// Internal state
 	const [activeTab, setActiveTab] = useState<string | number | null>(null);
 	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
@@ -213,7 +214,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	const collections = useSelector(selectFolders);
 
 	// Query params
-	const [, setQuery] = useQueryParams({
+	const [query, setQuery] = useQueryParams({
+		...IE_OBJECT_QUERY_PARAM_CONFIG,
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
@@ -301,9 +303,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	 */
 	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
-	const isErrorNotFound =
+	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
+	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
+	const isVisitRequestErrorNotFound =
 		(visitRequestError as HTTPError)?.response?.status === 404 ||
-		(mediaInfoError as HTTPError)?.response?.status === 404;
+		(visitRequestError as HTTPError)?.response?.status === 403;
+	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
@@ -332,8 +337,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	}, [windowSize]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(false));
-	}, [dispatch]);
+		dispatch(setShowZendesk(!isKiosk && !hasAccessToVisitorSpaceOfObject));
+	}, [dispatch, hasAccessToVisitorSpaceOfObject]);
 
 	useEffect(() => {
 		if (mediaInfo) {
@@ -390,14 +395,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 	 */
 	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
 		return data.map((ieObject) => {
+			const date = ieObject.datePublished ?? ieObject.dateCreatedLowerBound ?? null;
+
 			return {
 				type: (ieObject?.dctermsFormat || null) as IeObjectTypes,
 				title: ieObject?.name || '',
-				subtitle: `${ieObject?.maintainerName ?? ''} ${
-					ieObject?.datePublished
-						? `(${formatMediumDate(asDate(ieObject?.datePublished))})`
-						: ''
-				}`,
+				subtitle: isNil(date)
+					? `${ieObject?.maintainerName ?? ''}`
+					: `${ieObject?.maintainerName ?? ''} (${formatMediumDate(asDate(date))})`,
 				description: ieObject?.description || '',
 				thumbnail: ieObject?.thumbnailUrl,
 				id: ieObject?.schemaIdentifier || '',
@@ -408,12 +413,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const mapRelatedData = (data: IeObject[]): MediaObject[] => {
 		return data.map((item) => {
+			const date = item.datePublished ?? item.dateCreatedLowerBound ?? null;
+
 			return {
 				type: item.dctermsFormat as IeObjectTypes,
 				title: item.name,
-				subtitle: `${item.maintainerName ?? ''} ${
-					item.datePublished ? `(${formatMediumDate(asDate(item.datePublished))})` : ''
-				}`,
+				subtitle: isNil(date)
+					? `${item?.maintainerName ?? ''}`
+					: `${item?.maintainerName ?? ''} (${formatMediumDate(asDate(date))})`,
 				description: item.description,
 				id: item.schemaIdentifier,
 				maintainer_id: item.maintainerId,
@@ -857,10 +864,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 
 	const renderBreadcrumbs = (): ReactNode => {
 		const defaultBreadcrumbs: Breadcrumb[] = [
-			{
-				label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
-				to: ROUTES.home,
-			},
+			...(isKiosk
+				? []
+				: [
+						{
+							label: `${tText('pages/slug/ie/index___breadcrumbs___home')}`,
+							to: ROUTES.home,
+						},
+				  ]),
 			{
 				label: `${tText('pages/slug/ie/index___breadcrumbs___search')}`,
 				to: ROUTES.search,
@@ -877,7 +888,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						? [
 								{
 									label: mediaInfo?.maintainerName,
-									to: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
+									to: isKiosk
+										? ROUTES.search
+										: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
@@ -924,13 +937,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		items: MediaObject[],
 		isHidden = false
 	): ReactNode => (
-		<dd>
+		<dd className="u-m-0">
 			{
 				<ul
-					className={`
-					u-list-reset p-object-detail__metadata-list
-					p-object-detail__metadata-list--${type}
-					p-object-detail__metadata-list--${expandMetadata && !isMobile ? 'expanded' : 'collapsed'}
+					className={`u-bg-platinum u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type} p-object-detail__metadata-list--${
+						expandMetadata && isMobile ? 'collaped' : 'expanded'
+					}
 				`}
 				>
 					{items.map((item, index) => {
@@ -1087,9 +1099,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 			.filter(({ data }: MetadataItem): boolean => !!data);
 
 		return (
-			<div>
+			<>
 				<div className="p-object-detail__metadata-content">
-					{showResearchWarning ? renderResearchWarning() : renderBreadcrumbs()}
+					{showResearchWarning && renderResearchWarning()}
+					{renderBreadcrumbs()}
 					{showKeyUserPill && renderKeyUserPill()}
 					<h3
 						className={clsx(
@@ -1130,7 +1143,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 								title: tHtml(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 								),
-								data: mapKeywordsToTagList(mediaInfo.keywords),
+								data: mapKeywordsToTagList(
+									mediaInfo.keywords,
+									visitRequest ? (router.query.slug as string) : ''
+								),
 							},
 							{
 								title: tHtml('pages/slug/ie/index___ook-interessant'),
@@ -1143,7 +1159,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 						disableContainerQuery
 					/>
 				)}
-			</div>
+			</>
 		);
 	};
 
@@ -1313,7 +1329,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					onSubmit={async () => onCloseBlade()}
 				/>
 			)}
-			{mediaInfo && visitorSpace && isNotKiosk && (
+			{mediaInfo && isNotKiosk && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
@@ -1321,8 +1337,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 					objectId={mediaInfo?.schemaIdentifier}
 					objectDctermsFormat={mediaInfo.dctermsFormat as MaterialRequestObjectType}
 					maintainerName={mediaInfo?.maintainerName}
-					maintainerLogo={visitorSpace?.logo}
-					maintainerSlug={visitorSpace?.slug}
+					maintainerLogo={mediaInfo?.maintainerLogo}
+					maintainerSlug={mediaInfo?.maintainerSlug}
 					meemooId={mediaInfo?.meemooIdentifier}
 				/>
 			)}
@@ -1341,24 +1357,60 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 		</>
 	);
 
+	// To determine the correct error page or the object detail page, we follow this flow:
+	// fetch object
+	//    - 200: show detail page
+	//    - 404, 403: check the visitor space info
+	//           - 404: not found error page
+	//           - 410: visitor space no longer available error page
+	//           - 200: check visit request info
+	//                   - 200: not found error page
+	//                   - 404, 403: no access error page
+
 	const renderPageContent = () => {
 		if (mediaInfoIsLoading || visitRequestIsLoading || visitorSpaceIsLoading) {
 			return <Loading fullscreen owner="object detail page: render page content" />;
 		}
-		if (isErrorSpaceNotActive) {
-			return <ErrorSpaceNoLongerActive />;
+
+		if (mediaInfo) {
+			return <div className="p-object-detail">{renderObjectDetail()}</div>;
 		}
-		if (isErrorNotFound) {
-			return <ErrorNotFound />;
+
+		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {
+			if (isErrorSpaceNotFound) {
+				return <ErrorNotFound />;
+			}
+
+			if (isErrorSpaceNotActive || visitorSpace?.status === VisitorSpaceStatus.Inactive) {
+				return <ErrorSpaceNoLongerActive />;
+			}
+
+			if (visitorSpace && visitRequest) {
+				return <ErrorNotFound />;
+			}
+
+			if (visitorSpace && isVisitRequestErrorNotFound) {
+				return (
+					<ErrorNoAccessToObject
+						visitorSpaceName={visitorSpace?.name as string}
+						visitorSpaceSlug={visitorSpace?.slug as string}
+						description={tHtml(
+							'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+						)}
+					/>
+				);
+			}
 		}
-		return <div className="p-object-detail">{renderObjectDetail()}</div>;
+
+		return <ErrorNotFound />;
 	};
 
-	const description = capitalize(lowerCase((router.query.slug as string) || ''));
+	const seoDescription =
+		description || capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
 		<>
 			<VisitorLayout>
-				{renderOgTags(title, description, url)}
+				{renderOgTags(title, seoDescription, url)}
 				{renderPageContent()}
 			</VisitorLayout>
 		</>
@@ -1368,7 +1420,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, url }) => {
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<ObjectDetailPageProps>> {
-	let seoInfo: { name: string | null } | null = null;
+	let seoInfo: SeoInfo | null = null;
 	try {
 		seoInfo = await IeObjectsService.getSeoById(context.query.ie as string);
 	} catch (err) {
@@ -1383,6 +1435,7 @@ export async function getServerSideProps(
 		props: {
 			...(defaultProps as { props: DefaultSeoInfo }).props,
 			title: seoInfo?.name || null,
+			description: seoInfo?.description || null,
 		},
 	};
 }

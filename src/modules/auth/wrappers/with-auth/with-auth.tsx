@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { stringify } from 'query-string';
 import { ComponentType, useCallback, useEffect, useState } from 'react';
 
+import { GroupName } from '@account/const';
 import { AuthMessage, AuthService } from '@auth/services/auth-service';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTES } from '@shared/const';
@@ -50,6 +51,10 @@ export const withAuth = (
 				);
 			};
 
+			const toSearchPage = async () => {
+				return router.replace(ROUTES.search);
+			};
+
 			if (!login?.userInfo || login.message === AuthMessage.LoggedOut) {
 				// User is logged out
 				if (isLoginRequired) {
@@ -61,7 +66,14 @@ export const withAuth = (
 				}
 			} else {
 				// User is logged in
-				if (isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos?.updatedAt)) {
+				if (login.userInfo.groupName === GroupName.KIOSK_VISITOR) {
+					// User is kioskuser
+					await toSearchPage();
+				}
+				if (
+					isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos?.updatedAt) ||
+					login.userInfo.groupName === GroupName.KIOSK_VISITOR
+				) {
 					// User has accepted the latest version of the terms of service
 					setShowPage(true);
 				} else {

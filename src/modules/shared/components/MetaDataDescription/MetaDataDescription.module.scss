@@ -11,6 +11,16 @@ $component: "c-metadatadescription";
 
 	&__read-more {
 		cursor: pointer;
+		font-size: $font-size-sm;
+		text-decoration: underline;
+		color: $neutral;
+		transition: opacity $animate-default;
+		margin-top: $spacer-xs;
+
+		&:hover,
+		&:focus {
+			opacity: 0.8;
+		}
 	}
 
 	[class^="Blade_c-blade__body-wrapper"] {

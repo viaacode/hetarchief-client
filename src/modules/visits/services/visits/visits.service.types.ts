@@ -17,7 +17,9 @@ export interface GetVisitsProps {
 }
 
 export interface GetAllActiveVisitsProps {
-	requesterId: string;
+	requesterId?: string;
 	page?: number;
 	size?: number;
+	orderProp?: keyof Visit;
+	orderDirection?: OrderDirection;
 }
