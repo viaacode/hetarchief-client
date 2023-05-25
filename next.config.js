@@ -115,6 +115,42 @@ module.exports = withTM({
 				destination: '/vragen',
 				permanent: true,
 			},
+			// Search redirects
+			{
+				source: '/catalog',
+				destination: '/zoeken',
+				permanent: true,
+			},
+			{
+				source: '/catalog/:pid',
+				destination: '/zoeken?zoekterm=:pid',
+				permanent: true,
+			},
+			{
+				source: '/catalog\\?f%5Bmedia_type_s\\%5D\\%5B\\%5D=video',
+				destination: '/zoeken',
+				permanent: true,
+			},
+			{
+				source: '/catalog\\?utf8=\\%E2\\%9C\\%93&q=&search_field=all_fields&search_field=advanced&all_fields=hond',
+				destination: '/zoeken',
+				permanent: true,
+			},
+			{
+				source: '/amsab/:slug',
+				destination: '/zoeken/amsab/:slug',
+				permanent: true,
+			},
+			{
+				source: '/advn/:slug',
+				destination: '/zoeken/advn/:slug',
+				permanent: true,
+			},
+			{
+				source: '/kadoc/:slug',
+				destination: '/zoeken/kadoc/:slug',
+				permanent: true,
+			},
 		];
 	},
 });
