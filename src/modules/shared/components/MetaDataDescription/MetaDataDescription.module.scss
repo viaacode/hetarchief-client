@@ -3,12 +3,6 @@
 $component: "c-metadatadescription";
 
 .#{$component} {
-	padding: $spacer-lg 0 $spacer-lg $spacer-lg;
-
-	&__title {
-		padding-bottom: $spacer-lg;
-	}
-
 	&__read-more {
 		cursor: pointer;
 		font-size: $font-size-sm;
@@ -21,9 +15,5 @@ $component: "c-metadatadescription";
 		&:focus {
 			opacity: 0.8;
 		}
-	}
-
-	[class^="Blade_c-blade__body-wrapper"] {
-		padding-right: $spacer-lg;
 	}
 }

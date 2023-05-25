@@ -146,23 +146,16 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		});
 	};
 
-	const renderTitle = () => {
-		if (isEditMode) {
-			return (
-				<h4 className={styles['c-request-material__title']}>
-					{tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
-					)}
-				</h4>
-			);
-		}
-		return (
-			<h4 className={styles['c-request-material__title']}>
-				{tText(
+	const renderTitle = (props: any) => {
+		const title = isEditMode
+			? tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
+			  )
+			: tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
-				)}
-			</h4>
-		);
+			  );
+
+		return <h2 {...props}>{title}</h2>;
 	};
 
 	const renderFooter = () => {
