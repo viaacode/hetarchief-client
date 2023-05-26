@@ -106,7 +106,10 @@ const AppLayout: FC = ({ children }) => {
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
 	const isKioskOrAnonymous = useHasAnyGroup(GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS);
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
-	const { data: spaces } = useGetAllActiveVisits({});
+	const { data: spaces } = useGetAllActiveVisits(
+		{},
+		{ keepPreviousData: true, enabled: isLoggedIn }
+	);
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
 		'HET_ARCHIEF.alerts.ignoreUntil',

@@ -15,7 +15,7 @@ export const useGetIeObjectsRelated = (
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsRelated, { id }],
 		() => {
-			if (!maintainerId || !meemooId) {
+			if (!maintainerId || !meemooId || !id) {
 				return Promise.resolve({
 					items: [],
 					page: 1,
@@ -24,11 +24,11 @@ export const useGetIeObjectsRelated = (
 					total: 0,
 				} as IPagination<IeObject>);
 			}
-			IeObjectsService.getRelated(id, maintainerId, meemooId);
+			return IeObjectsService.getRelated(id, maintainerId, meemooId);
 		},
 		{
 			keepPreviousData: true,
-			enabled,
+			enabled: enabled,
 		}
 	);
 };

@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { kebabCase } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
@@ -149,7 +150,9 @@ const MediaCardList: FC<MediaCardListProps> = ({
 
 	const tiles = items.map((item, i) => {
 		const link = stringifyUrl({
-			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`,
+			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${
+				item.schemaIdentifier
+			}/${kebabCase(item.name)}`,
 			query: {
 				[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: keywords,
 			},

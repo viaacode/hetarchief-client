@@ -5,11 +5,11 @@ import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
 import { ComponentType, useEffect } from 'react';
 
-import { withAuth } from '@auth/wrappers/with-auth';
-import { ErrorNotFound, Loading } from '@shared/components';
+import { ErrorNoAccessToObject, Loading } from '@shared/components';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { AccessStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
@@ -26,6 +26,7 @@ type VisitPageProps = {
 } & DefaultSeoInfo;
 
 const VisitPage: NextPage<VisitPageProps> = () => {
+	const { tText } = useTranslation();
 	const router = useRouter();
 	const { slug } = router.query;
 
@@ -42,7 +43,6 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	const { error: visitorSpaceError } = useGetVisitorSpace(router.query.slug as string, false);
 
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
-	const hasNoAccess = accessStatus?.status === AccessStatus.NO_ACCESS;
 	const hasAccess = accessStatus?.status === AccessStatus.ACCESS;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 
@@ -53,6 +53,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	useEffect(() => {
 		if (hasPendingRequest) {
 			router.push(ROUTES.visitRequested.replace(':slug', slug as string));
+			return;
 		}
 
 		if (hasAccess) {
@@ -62,8 +63,9 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 					query: { [VisitorSpaceFilterId.Maintainer]: slug },
 				})
 			);
+			return;
 		}
-	}, [router, accessStatus?.status, hasPendingRequest]);
+	}, [router, accessStatus?.status, hasPendingRequest, hasAccess, slug]);
 
 	/**
 	 * Render
@@ -78,9 +80,15 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 			return <ErrorSpaceNoLongerActive />;
 		}
 
-		if (hasNoAccess) {
-			return <ErrorNotFound />;
-		}
+		return (
+			<ErrorNoAccessToObject
+				description={tText(
+					'Je hebt geen toegang tot deze bezoekersruimte. Vraag toegang aan of doorzoek de publieke catalogus.'
+				)}
+				visitorSpaceName={(slug || null) as string | null}
+				visitorSpaceSlug={(slug || null) as string | null}
+			/>
+		);
 	};
 
 	return <VisitorLayout>{renderPageContent()}</VisitorLayout>;
@@ -109,4 +117,4 @@ export async function getServerSideProps(
 	};
 }
 
-export default withAuth(VisitPage as ComponentType, true);
+export default VisitPage as ComponentType;

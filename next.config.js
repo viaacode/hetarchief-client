@@ -12,11 +12,12 @@ const withTM = require('next-transpile-modules')([
 	'ky-universal',
 ]);
 
-const { i18n } = require('./next-i18next.config');
+const proxyUrl = process.env.PROXY_URL;
+const { getI18n } = require('./next-i18next.config');
 
 /** @type {import("next").NextConfig} */
 module.exports = withTM({
-	i18n,
+	i18n: getI18n(proxyUrl),
 	reactStrictMode: true,
 	experimental: {
 		/**
@@ -97,6 +98,11 @@ module.exports = withTM({
 			{
 				source: '/bladwijzers',
 				destination: '/account/mijn-mappen',
+				permanent: true,
+			},
+			{
+				source: '/gebruiker/profiel',
+				destination: '/account/mijn-profiel',
 				permanent: true,
 			},
 			// General redirects

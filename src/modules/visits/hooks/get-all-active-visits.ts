@@ -7,9 +7,18 @@ import { VisitsService } from '@visits/services';
 import { GetAllActiveVisitsProps } from '@visits/services/visits/visits.service.types';
 
 export function useGetAllActiveVisits(
-	props: GetAllActiveVisitsProps
-): UseQueryResult<IPagination<Visit>> {
-	return useQuery([QUERY_KEYS.getVisits, props], () => VisitsService.getAllActiveVisits(props), {
+	props: GetAllActiveVisitsProps,
+	options: {
+		keepPreviousData: boolean;
+		enabled: boolean;
+	} = {
 		keepPreviousData: true,
-	});
+		enabled: true,
+	}
+): UseQueryResult<IPagination<Visit>> {
+	return useQuery(
+		[QUERY_KEYS.getVisits, props],
+		() => VisitsService.getAllActiveVisits(props),
+		options
+	);
 }
