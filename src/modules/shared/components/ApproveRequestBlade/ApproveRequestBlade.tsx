@@ -496,11 +496,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={props.isOpen && renderFooter()}
-			renderTitle={(props) => (
-				<h4 {...props} className={styles['c-approve-request-blade__title']}>
-					{title}
-				</h4>
-			)}
+			renderTitle={(props: any) => <h2 {...props}>{title}</h2>}
 		>
 			{props.isOpen && !!visitRequest && (
 				<div className="u-px-32">

@@ -3,12 +3,6 @@
 $component: "c-visit-detail-blade";
 
 .#{$component} {
-	&__title {
-		padding: 0 $spacer-lg;
-		margin-bottom: $spacer-1xl;
-		color: $black;
-	}
-
 	&__content {
 		color: $black;
 		background-color: $platinum;
