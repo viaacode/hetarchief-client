@@ -13,7 +13,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 		timeout: 10000,
 	});
 
-	// // Accept all cookies
+	// Accept all cookies
 	await acceptCookies(page, 'all'); // enable this when running on int
 
 	// Check navbar exists

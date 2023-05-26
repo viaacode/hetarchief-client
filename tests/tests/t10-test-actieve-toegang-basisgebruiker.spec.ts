@@ -3,7 +3,6 @@ import { expect, test } from '@playwright/test';
 import { acceptCookies } from '../helpers/accept-cookies';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { waitForSearchResults } from '../helpers/wait-for-search-results';
 
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
@@ -14,7 +13,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
-	// // Accept all cookies
+	// Accept all cookies
 	await acceptCookies(page, 'all'); //Enable when on int
 
 	// Login with existing user
@@ -217,8 +216,8 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		await expect(countsBeforeSearch.audio >= countsAfterSearchByDate.audio).toBeTruthy();
 	}
 
-	// // Search by language
-	// // TODO after more items with languages have been added to the seed
+	// Search by language
+	// TODO after more items with languages have been added to the seed
 
 	// Clear search query
 	await page.click('text=Wis je volledige zoekopdracht');
@@ -268,7 +267,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		'Schoen'
 	);
 
-	// // TODO add filter on language once more items with languages are added
+	// TODO add filter on language once more items with languages are added
 
 	// Click apply button
 	await page.locator('.c-menu--visible--default').locator('text=Pas toe').click();

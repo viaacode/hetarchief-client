@@ -1,3 +1,4 @@
+export {};
 // import { expect, test } from '@playwright/test';
 
 // import { acceptCookies } from '../helpers/accept-cookies';

@@ -26,7 +26,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
-	// // Accept selected cookies
+	// Accept selected cookies
 	await acceptCookies(page, 'selection'); //TODO enable cookies when on INT
 
 	// Click on login or register
@@ -89,7 +89,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 		timeout: 10000,
 	});
 
-	// // Cookie bot should not open again
+	// Cookie bot should not open again
 	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Login user
@@ -98,7 +98,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	// Check tos is displayed, scroll down and click accept button
 	await acceptTos(page);
 
-	// // Cookie bot should not open again
+	// Cookie bot should not open again
 	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Check logged in status

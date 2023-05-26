@@ -13,7 +13,7 @@ test('T02: Test inloggen CP-admin', async ({ page, context }) => {
 		timeout: 10000,
 	});
 
-	// // Accept all cookies
+	// Accept all cookies
 	await acceptCookies(page, 'all'); // Enable this on INT, comment bcs localhost
 
 	// Login cp admin using the meemoo idp

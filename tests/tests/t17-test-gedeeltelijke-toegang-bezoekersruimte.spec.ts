@@ -5,7 +5,6 @@ import { acceptTos } from '../helpers/accept-tos';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
-import { fillRequestVisitBlade } from '../helpers/fill-request-visit-blade';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
@@ -183,7 +182,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/zoeken?aanbieder=amsab-isg`); //TODO: remove this, it is added because it is really inconsistent
 
 	// await new Promise((resolve) => setTimeout(resolve, 3 * 1000)); // TODO: replace this
-	// // Check user is in correct space
+	// Check user is in correct space
 	// await expect(
 	// 	await page
 	// 		.locator('[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active-label]')

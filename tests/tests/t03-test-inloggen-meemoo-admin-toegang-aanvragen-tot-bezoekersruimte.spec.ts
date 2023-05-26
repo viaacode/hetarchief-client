@@ -17,7 +17,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 		timeout: 10000,
 	});
 
-	// // Accept all cookies
+	// Accept all cookies
 	await acceptCookies(page, 'all'); // TODO: Enable this on INT, comment bcs localhost
 
 	// Login cp admin using the meemoo idp
@@ -37,15 +37,31 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(1);
 	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(0);
 
-	//Click Bezoek een aanbieder
+	// Wait for dropdown to load
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+
+	// Click Bezoek een aanbieder
 	await page
-		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
+		.locator('a[class*="Navigation_c-navigation__link--dropdown"]', {
+			hasText: 'Bezoek een aanbieder',
+		})
 		.first()
 		.click();
-	await page.locator('a[href="/bezoek"]').first().click();
+	await expect(
+		await page.locator('a.c-dropdown-menu__item[href="/bezoek"]').first()
+	).toBeVisible();
+	await page.locator('a.c-dropdown-menu__item[href="/bezoek"]').first().click();
+
+	// Check page title is the home page
+	// TODO this title probably has to change to Bezoek | hetarchief.be
+	await page.waitForFunction(() => document.title === 'Home | hetarchief.be', null, {
+		timeout: 10000,
+	});
 
 	// Click on request access button for VRT
 	const vrtCard = await page.locator('.p-home__results .c-visitor-space-card--name--vrt');
+	await vrtCard.scrollIntoViewIfNeeded();
+	await expect(vrtCard).toBeVisible();
 	await vrtCard.locator('.c-button--black').click();
 
 	// Fill in request blade and send
@@ -61,10 +77,6 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 		.first()
 		.click();
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
-
-	// Check pending request is visible
-	// const visitorSpaceCards = await page.locator('#aangevraagde-bezoeken b').allInnerTexts();
-	// await expect(visitorSpaceCards).toContain('VRT'); // TODO: this is required on the spreadsheet but meemoo admin does not see pending requests
 
 	// Wait for close to save the videos
 	await context.close();

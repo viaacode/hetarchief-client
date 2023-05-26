@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test';
 
 import { acceptCookies } from '../helpers/accept-cookies';
+import { acceptTos } from '../helpers/accept-tos';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { checkVisitRequestStatuses } from '../helpers/check-visit-request-statuses';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
 import { waitForLoading } from '../helpers/wait-for-loading';
-import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { acceptTos } from '../helpers/accept-tos';
 
 test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
@@ -22,7 +22,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 		timeout: 10000,
 	});
 
-	// // Accept all cookies
+	// Accept all cookies
 	await acceptCookies(page, 'all'); // TODO: enable when on int
 
 	// Login as CP admin

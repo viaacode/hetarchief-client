@@ -1,12 +1,12 @@
 import { expect, test } from '@playwright/test';
 
 import { acceptCookies } from '../helpers/accept-cookies';
+import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { clickToastMessageButton } from '../helpers/click-toast-message-button';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
-import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
-import { checkBladeTitle } from '../helpers/check-blade-title';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, context }) => {
 	// GO to the hetarchief homepage
@@ -17,7 +17,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 		timeout: 10000,
 	});
 
-	// // Accept all cookies
+	// Accept all cookies
 	await acceptCookies(page, 'all'); //Enable when on int
 
 	// Login with existing user
@@ -225,58 +225,58 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	// /**
 	//  * Video player //TODO: video player does not work on int
 	//  */
-	// // Playing video is disabled because we get error: unsupported media type
-	// // Check video is playing
+	// Playing video is disabled because we get error: unsupported media type
+	// Check video is playing
 	// const player = await page.locator('.flowplayer');
 	// await expect(player).toBeVisible();
 
-	// // Click player
+	// Click player
 	// await player.click();
 
-	// // Check flowplayer starts playing
+	// Check flowplayer starts playing
 	// await expect(player).toHaveClass(/is-playing/);
 
-	// // Get player size before fullscreen
+	// Get player size before fullscreen
 	// const playerSizeBeforeFullscreen =
 	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
 
-	// // Make video fullscreen
+	// Make video fullscreen
 	// await page.hover('.flowplayer'); // Hover video so controls become visible
 	// await page.evaluate(() => {
 	// 	(document?.querySelector('.fp-fullscreen') as any)?.click();
 	// });
 
-	// // Wait for fullscreen to open
+	// Wait for fullscreen to open
 	// await page.waitForTimeout(1000);
 
-	// // Get player size after fullscreen
+	// Get player size after fullscreen
 	// const playerSizeAfterFullscreen =
 	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
 
-	// // Check video size is bigger
+	// Check video size is bigger
 	// await expect(playerSizeAfterFullscreen).toBeGreaterThan(playerSizeBeforeFullscreen);
 
-	// // Check video object keeps playing
+	// Check video object keeps playing
 	// await expect(player).toBeVisible();
 	// await expect(player).toHaveClass(/is-playing/);
 
-	// // Press escape key
+	// Press escape key
 	// await page.hover('.flowplayer'); // Hover video so controls become visible
 	// await page.evaluate(() => {
 	// 	(document?.querySelector('.fp-fullscreen-exit') as any)?.click();
 	// });
 
-	// // Wait for fullscreen to close
+	// Wait for fullscreen to close
 	// await page.waitForTimeout(1000);
 
-	// // Get player size after fullscreen
+	// Get player size after fullscreen
 	// const playerSizeAfterCloseFullscreen =
 	// 	(await (await page.$('.flowplayer'))?.boundingBox())?.width || 0;
 
-	// // Check video size to be smaller than fullscreen
+	// Check video size to be smaller than fullscreen
 	// await expect(playerSizeAfterCloseFullscreen).toBeLessThan(playerSizeAfterFullscreen);
 
-	// // Check video object keeps playing
+	// Check video object keeps playing
 	// await expect(player).toBeVisible();
 	// await expect(player).toHaveClass(/is-playing/);
 
@@ -372,13 +372,13 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	 * Keyword links
 	 */
 
-	// // Click on keyword
+	// Click on keyword
 	// await page.locator('[class^="Metadata_c-metadata__list__"] .c-tag-list__item').first().click();
 
-	// // Check page url changes:
+	// Check page url changes:
 	// await expect.poll(() => page.url(), { timeout: 10000 }).toContain('/vrt?search=');
 
-	// // Check the search by keyword tag is present in the search input field
+	// Check the search by keyword tag is present in the search input field
 	// const searchInput = await page.locator('.c-tags-input__control');
 	// await expect(await searchInput.innerHTML()).toContain('Trefwoord');
 
