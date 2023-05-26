@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
@@ -348,12 +348,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 			{...props}
 			className={clsx(props.className, styles['c-add-to-folder-blade'])}
 			footer={props.isOpen && renderFooter()}
-			renderTitle={() => (
-				<h4 className={styles['c-add-to-folder-blade__title']}>
+			renderTitle={(props: any) => (
+				<h2 {...props}>
 					{tHtml(
 						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
 					)}
-				</h4>
+				</h2>
 			)}
 		>
 			<div className="u-px-32">

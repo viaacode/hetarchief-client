@@ -372,12 +372,18 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 			<Blade
 				className={styles['c-visitor-space-not-available-blade']}
 				isOpen={isVisitorSpaceNotAvailable}
-				renderTitle={(props) => (
-					<h4 {...props} className={styles['c-visitor-space-not-available-blade__title']}>
+				renderTitle={(props: any) => (
+					<h2
+						{...props}
+						className={clsx(
+							props.className,
+							styles['c-visitor-space-not-available-blade__title']
+						)}
+					>
 						{tHtml(
 							'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 						)}
-					</h4>
+					</h2>
 				)}
 			>
 				<div className="u-px-32">

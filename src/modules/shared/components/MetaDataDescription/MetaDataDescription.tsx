@@ -18,6 +18,7 @@ interface MetaDataDescriptionProps {
 
 const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 	const { tText } = useTranslation();
+	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
 	const [isBladeOpen, setIsBladeOpen] = useState(false);
 
@@ -29,14 +30,6 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 	const parsedDescription = isLongDescription
 		? `${description.substring(0, DESCRIPTION_MAX_LENGTH)}...`
 		: description;
-
-	const renderBladeTitle = () => (
-		<h3 className={styles['c-metadatadescription__title']}>
-			{tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
-		</h3>
-	);
-
-	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
 	const highlighted = (toHighlight: string) => (
 		<Highlighter
@@ -69,9 +62,13 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 				)}
 				isOpen={isBladeOpen}
 				onClose={() => setIsBladeOpen(false)}
-				renderTitle={renderBladeTitle}
+				renderTitle={(props: any) => (
+					<h2 {...props}>
+						{tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
+					</h2>
+				)}
 			>
-				{highlighted(description)}
+				<div className="u-px-32 u-pb-32">{highlighted(description)}</div>
 			</Blade>
 		</>
 	);

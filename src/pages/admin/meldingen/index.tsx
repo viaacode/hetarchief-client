@@ -55,7 +55,7 @@ const AdminAlertsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				footer={renderFooter()}
 				isOpen={isOpen}
 				onClose={onClose}
-				renderTitle={(props) => <h3 {...props}>{title}</h3>}
+				renderTitle={(props: any) => <h2 {...props}>{title}</h2>}
 			>
 				<div className="u-px-32">{body}</div>
 			</Blade>

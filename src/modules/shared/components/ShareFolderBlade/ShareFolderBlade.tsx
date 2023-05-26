@@ -116,10 +116,8 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h2 className={styles['c-share-folder-blade__title']}>
-					{tText('pages/account/map-delen/folder-id/index___deel-map')}
-				</h2>
+			renderTitle={(props: any) => (
+				<h2 {...props}>{tText('pages/account/map-delen/folder-id/index___deel-map')}</h2>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={handleClose}
