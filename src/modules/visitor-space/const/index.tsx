@@ -213,7 +213,7 @@ export const VISITOR_SPACE_ACTIVE_SORT_MAP = (): { [key in VisitorSpaceSort]: st
 		'modules/visitor-space/const/index___sorteer-op-relevantie'
 	),
 	[VisitorSpaceSort.Title]: tText('modules/visitor-space/const/index___sorteer-op-titel'),
-	[VisitorSpaceSort.Published]: tText(
+	[VisitorSpaceSort.Archived]: tText(
 		'modules/visitor-space/const/index___sorteer-op-gearchiveerd'
 	),
 });
@@ -235,7 +235,7 @@ export const VISITOR_SPACE_SORT_OPTIONS = (): FilterMenuSortOption[] => [
 	},
 	{
 		label: tText('modules/visitor-space/const/index___gearchiveerd'),
-		orderProp: VisitorSpaceSort.Published,
+		orderProp: VisitorSpaceSort.Archived,
 		orderDirection: OrderDirection.desc,
 	},
 	// schema_name niet sorteerbaar in https://meemoo.atlassian.net/wiki/pages/viewpage.action?pageId=3309174878&pageVersion=3
