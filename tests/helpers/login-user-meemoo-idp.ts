@@ -15,7 +15,7 @@ export async function loginUserMeemooIdp(
 	expect(authModalHeading).toBeDefined();
 
 	// Click the login button
-	await page.click('text=Meld je aan als beheerder.');
+	await page.locator('.c-button.c-button--black', { hasText: 'Inloggen' }).click(); //Should be 'Inloggen met het Archief-account'
 
 	// Fill in credentials
 	await page.fill('#inputUsername', username);

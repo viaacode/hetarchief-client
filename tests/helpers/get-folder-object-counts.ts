@@ -1,6 +1,16 @@
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 
 export async function getFolderObjectCounts(page: Page): Promise<Record<string, number>> {
+	// Wait until the favorites folder link is loaded
+	const favoritesListItem = await page.locator(
+		'li[class*="AddToFolderBlade_c-add-to-folder-blade__list-item__"]',
+		{
+			hasText: 'Favorieten',
+		}
+	);
+	await expect(await favoritesListItem).toBeVisible();
+
+	// Fetch all folder links
 	const folderListItems = await page.locator(
 		'.c-blade--active li[class*="AddToFolderBlade_c-add-to-folder-blade__list-item__"]'
 	);

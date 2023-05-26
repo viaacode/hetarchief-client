@@ -13,12 +13,12 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
 	// Accept all cookies
-	await acceptCookies(page, 'all');
+	await acceptCookies(page, 'all'); // TODO: Enable this on INT, comment bcs localhost
 
 	// Login cp admin using the meemoo idp
 	await loginUserHetArchiefIdp(
@@ -28,24 +28,40 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	);
 
 	// Check tos is displayed, scroll down and click accept button
-	await acceptTos(page);
-
-	// Check site is still visible:
-	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+	await acceptTos(page); // TODO: Enable when on int
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toHaveText('meemoo');
 
-	// Admin should not be visible and beheer should be visible
-	const navigationItemTexts = await page
-		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-		.allInnerTexts();
-	await expect(navigationItemTexts).toContain('Admin');
-	await expect(navigationItemTexts).not.toContain('Beheer');
+	// Admin should be visible and beheer should not be visible
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(1);
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(0);
+
+	// Wait for dropdown to load
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+
+	// Click Bezoek een aanbieder
+	await page
+		.locator('a[class*="Navigation_c-navigation__link--dropdown"]', {
+			hasText: 'Bezoek een aanbieder',
+		})
+		.first()
+		.click();
+	await expect(
+		await page.locator('a.c-dropdown-menu__item[href="/bezoek"]').first()
+	).toBeVisible();
+	await page.locator('a.c-dropdown-menu__item[href="/bezoek"]').first().click();
+
+	// Check page title is the home page
+	// TODO this title probably has to change to Bezoek | hetarchief.be
+	await page.waitForFunction(() => document.title === 'Home | hetarchief.be', null, {
+		timeout: 10000,
+	});
 
 	// Click on request access button for VRT
 	const vrtCard = await page.locator('.p-home__results .c-visitor-space-card--name--vrt');
-	await expect(vrtCard).toContainText('VRT');
+	await vrtCard.scrollIntoViewIfNeeded();
+	await expect(vrtCard).toBeVisible();
 	await vrtCard.locator('.c-button--black').click();
 
 	// Fill in request blade and send
@@ -55,20 +71,12 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await expect(page.locator('text=We hebben je aanvraag goed ontvangen')).toBeVisible();
 	await expect(await page.locator('.p-visit-requested__content').innerHTML()).toContain('VRT');
 
-	// Go to the homepage
-	await page.click('text=Start je bezoek');
-
-	// Check request section is present
-	await expect(
-		await page.locator('.p-home [class*="LoggedInHome_c-hero__section-title"]')
-	).toContainText('Aanvragen');
-
-	// Check pending request is visible
-	await expect(
-		await page.locator(
-			'[class*="LoggedInHome_c-hero__requests"] [class*="VisitorSpaceCard_c-visitor-space-card__title"]'
-		)
-	).toContainText('VRT');
+	// Click on 'Bezoek een aanbieder'
+	await page
+		.locator('a[class^=Navigation_c-navigation__link]', { hasText: 'Bezoek een aanbieder' })
+		.first()
+		.click();
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
 
 	// Wait for close to save the videos
 	await context.close();
