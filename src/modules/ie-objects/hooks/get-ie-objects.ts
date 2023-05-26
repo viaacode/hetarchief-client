@@ -1,7 +1,8 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { isEmpty, isNil } from 'lodash-es';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { selectUser } from '@auth/store/user';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { setFilterOptions, setResults } from '@shared/store/ie-objects';
@@ -37,6 +38,7 @@ export const useGetIeObjects = (
 	enabled = true
 ): UseQueryResult<GetIeObjectsResponse> => {
 	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
 
 	return useQuery(
 		[QUERY_KEYS.getIeObjectsObjects, { filters, page, size, sort, enabled }],
@@ -74,6 +76,7 @@ export const useGetIeObjects = (
 				page,
 				size,
 				sort,
+				user_group_name: user?.groupName,
 			});
 
 			return searchResults;

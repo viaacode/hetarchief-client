@@ -7,7 +7,6 @@ import { VisitStatus } from '@shared/types';
 
 import { CancelVisitBlade } from '../CancelVisitBlade';
 
-import styles from './ProcessVisitBlade.module.scss';
 import { ProcessVisitBladeProps } from './ProcessVisitBlade.types';
 
 const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
@@ -97,11 +96,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				footer={renderFooter()}
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
-				renderTitle={(props) => (
-					<h4 {...props} className={styles['c-process-visit-blade__title']}>
-						{getTitle()}
-					</h4>
-				)}
+				renderTitle={(props: any) => <h2 {...props}>{getTitle()}</h2>}
 			>
 				{selected && <VisitSummary preview {...selected} />}
 			</Blade>
