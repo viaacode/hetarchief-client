@@ -32,7 +32,7 @@ const NewsletterConfirmation: NextPage<DefaultSeoInfo> = ({ url }) => {
 		});
 
 		setTriggerRedirect(true);
-	}, []);
+	}, [tHtml]);
 
 	useEffect(() => {
 		if (!triggerRedirect) {
