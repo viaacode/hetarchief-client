@@ -372,7 +372,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 			<Blade
 				className={styles['c-visitor-space-not-available-blade']}
 				isOpen={isVisitorSpaceNotAvailable}
-				renderTitle={(props: any) => (
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 					<h2
 						{...props}
 						className={clsx(

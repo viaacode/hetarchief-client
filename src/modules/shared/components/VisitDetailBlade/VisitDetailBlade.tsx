@@ -106,7 +106,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={(props: any) => (
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2
 					{...props}
 					className={clsx(styles['c-visit-detail-blade__title'], props.className)}

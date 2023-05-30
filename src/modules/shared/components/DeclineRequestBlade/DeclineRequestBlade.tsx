@@ -86,7 +86,7 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={props.isOpen && renderFooter()}
-			renderTitle={(props: any) => (
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props}>
 					{tHtml(
 						'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'

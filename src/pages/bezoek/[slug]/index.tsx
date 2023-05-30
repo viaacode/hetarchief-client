@@ -83,7 +83,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 		return (
 			<ErrorNoAccessToObject
 				description={tText(
-					'Je hebt geen toegang tot deze bezoekersruimte. Vraag toegang aan of doorzoek de publieke catalogus.'
+					'pages/bezoek/slug/index___je-hebt-geen-toegang-tot-deze-bezoekersruimte-vraag-toegang-aan-of-doorzoek-de-publieke-catalogus'
 				)}
 				visitorSpaceName={(slug || null) as string | null}
 				visitorSpaceSlug={(slug || null) as string | null}

@@ -82,7 +82,7 @@ const CancelVisitBlade: FC<CancelVisitBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={renderFooter()}
-			renderTitle={(props: any) => (
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props}>
 					{tHtml(
 						'modules/home/components/cancel-visit-blade/cancel-visit-blade___bezoek-annuleren'
