@@ -62,7 +62,7 @@ const MetaDataDescription: FC<MetaDataDescriptionProps> = ({ description }) => {
 				)}
 				isOpen={isBladeOpen}
 				onClose={() => setIsBladeOpen(false)}
-				renderTitle={(props: any) => (
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 					<h2 {...props}>
 						{tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
 					</h2>

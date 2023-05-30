@@ -12,11 +12,12 @@ const withTM = require('next-transpile-modules')([
 	'ky-universal',
 ]);
 
-const { i18n } = require('./next-i18next.config');
+const proxyUrl = process.env.PROXY_URL;
+const { getI18n } = require('./next-i18next.config');
 
 /** @type {import("next").NextConfig} */
 module.exports = withTM({
-	i18n,
+	i18n: getI18n(proxyUrl),
 	reactStrictMode: true,
 	experimental: {
 		/**
@@ -71,24 +72,89 @@ module.exports = withTM({
 	},
 	async redirects() {
 		return [
+			// Beheer redirects
+			{
+				source: '/beheer/aanvragen',
+				destination: '/beheer/toegangsaanvragen',
+				permanent: true,
+			},
+			// Admin redirects
+			{
+				source: '/admin/bezoekersruimtesbeheer/aanvragen',
+				destination: '/admin/bezoekersruimtesbeheer/toegangsaanvragen',
+				permanent: true,
+			},
+			// Account redirects
 			{
 				source: '/account',
 				destination: '/account/mijn-profiel',
 				permanent: true,
 			},
 			{
-				source: '/beheer/aanvragen',
-				destination: '/beheer/toegangsaanvragen',
-				permanent: true,
-			},
-			{
-				source: '/admin/bezoekersruimtesbeheer/aanvragen',
-				destination: '/admin/bezoekersruimtesbeheer/toegangsaanvragen',
-				permanent: true,
-			},
-			{
 				source: '/account/mijn-historiek',
 				destination: '/account/mijn-bezoek-historiek',
+				permanent: true,
+			},
+			{
+				source: '/bladwijzers',
+				destination: '/account/mijn-mappen',
+				permanent: true,
+			},
+			{
+				source: '/gebruiker/profiel',
+				destination: '/account/mijn-profiel',
+				permanent: true,
+			},
+			// General redirects
+			{
+				source: '/home',
+				destination: '/',
+				permanent: true,
+			},
+			{
+				source: '/faq',
+				destination: '/vragen',
+				permanent: true,
+			},
+			{
+				source: '/handleiding',
+				destination: '/vragen',
+				permanent: true,
+			},
+			// Search redirects
+			{
+				source: '/catalog',
+				destination: '/zoeken',
+				permanent: true,
+			},
+			{
+				source: '/catalog/:pid',
+				destination: '/zoeken?zoekterm=:pid',
+				permanent: true,
+			},
+			{
+				source: '/catalog\\?f%5Bmedia_type_s\\%5D\\%5B\\%5D=video',
+				destination: '/zoeken',
+				permanent: true,
+			},
+			{
+				source: '/catalog\\?utf8=\\%E2\\%9C\\%93&q=&search_field=all_fields&search_field=advanced&all_fields=hond',
+				destination: '/zoeken',
+				permanent: true,
+			},
+			{
+				source: '/amsab/:slug',
+				destination: '/zoeken/amsab/:slug',
+				permanent: true,
+			},
+			{
+				source: '/advn/:slug',
+				destination: '/zoeken/advn/:slug',
+				permanent: true,
+			},
+			{
+				source: '/kadoc/:slug',
+				destination: '/zoeken/kadoc/:slug',
 				permanent: true,
 			},
 		];

@@ -1,6 +1,5 @@
-const TRANSLATIONS_URL = `${process.env.PROXY_URL}/admin/translations/nl.json`;
-
-export async function getTranslations(): Promise<Record<string, string>> {
+export async function getTranslations(proxyUrl: string): Promise<Record<string, string>> {
+	const TRANSLATIONS_URL = `${proxyUrl}/admin/translations/nl.json`;
 	try {
 		const response = await fetch(TRANSLATIONS_URL);
 		return response.json();

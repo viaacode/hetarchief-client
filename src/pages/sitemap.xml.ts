@@ -1,11 +1,12 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const SiteMap = (): void => {};
+const SiteMap = (): null => {
+	return null;
+};
 
 export const getServerSideProps = async ({
 	res,
-}: GetServerSidePropsContext): Promise<GetServerSidePropsResult<any>> => {
+}: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Record<string, never>>> => {
 	const request = await fetch(process.env.SITEMAP_URL);
 	const sitemap = await request.text();
 

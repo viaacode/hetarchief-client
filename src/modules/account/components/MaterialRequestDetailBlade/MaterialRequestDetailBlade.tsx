@@ -46,7 +46,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={(props: any) => (
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2
 					{...props}
 					className={clsx(
