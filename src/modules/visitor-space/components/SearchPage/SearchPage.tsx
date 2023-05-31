@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
 import { intersection, isEmpty, isNil, sortBy, sum } from 'lodash-es';
+import Head from 'next/head';
 import Link from 'next/link';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -876,6 +877,10 @@ const SearchPage: FC = () => {
 	const renderVisitorSpace = () => {
 		return (
 			<>
+				<Head>
+					<link rel="canonical" href="https://hetarchief.be/zoeken" />
+				</Head>
+
 				{visitorSpaces && (
 					<div className="p-visitor-space">
 						<section className="u-bg-black u-pt-8">

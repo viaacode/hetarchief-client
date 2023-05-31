@@ -18,7 +18,8 @@ const config: PlaywrightTestConfig = {
 		 * Maximum time expect() should wait for the condition to be met.
 		 * For example in `await expect(locator).toHaveText();`
 		 */
-		timeout: 5000,
+		// timeout: 5000, // Disabled because localhost is way too slow
+		timeout: 10000,
 	},
 	/* Fail the build on CI if you accidentally left test.only in the source code. */
 	forbidOnly: !!process.env.CI,
@@ -34,9 +35,9 @@ const config: PlaywrightTestConfig = {
 		launchOptions: {
 			// slowMo: 100 /* TODO disable after recording all videos */,
 		},
-		contextOptions: {
-			// recordVideo: { dir: 'videos/' } /* TODO disable in production */,
-		},
+		// contextOptions: {
+		// 	recordVideo: { dir: 'videos/' } /* TODO disable in production */,
+		// },
 		/* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
 		actionTimeout: 0,
 		/* Base URL to use in actions like `await page.goto('/')`. */
@@ -47,6 +48,8 @@ const config: PlaywrightTestConfig = {
 
 		// Use chrome instead of chromium, to be able to play videos
 		channel: 'chrome',
+
+		viewport: { width: 1400, height: 850 },
 	},
 
 	/* Configure projects for major browsers */

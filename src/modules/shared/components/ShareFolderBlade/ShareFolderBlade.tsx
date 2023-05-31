@@ -26,7 +26,6 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	const link = `${window.location.origin}${ROUTES.shareFolder.replace(':id', folderId)}`;
 
 	const {
-		setValue,
 		handleSubmit,
 		formState: { errors },
 		control,
@@ -116,7 +115,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={(props: any) => (
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props}>{tText('pages/account/map-delen/folder-id/index___deel-map')}</h2>
 			)}
 			footer={isOpen && renderFooter()}

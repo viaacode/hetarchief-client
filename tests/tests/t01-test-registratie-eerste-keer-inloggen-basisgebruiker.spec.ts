@@ -8,26 +8,26 @@ import { acmConfirmEmail } from '../helpers/acm-confirm-email';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 /**
- * These scenarios are described in https://docs.google.com/spreadsheets/d/1yGNKFkeE-2Kv2mADOvKzDK3BYTvoiSbVO6pAsuoG5P8/edit#gid=286710078
+ * New: https://docs.google.com/spreadsheets/d/1EI8MZjFlE-gkzE1YGXFabtTGURRz6fWk-0fQa8OCv4k/edit#gid=95954947
  */
 
 test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ page, context }) => {
 	const userId = uuid().replace(/-/g, '');
-	const userEmail = `hetarchief2.0+ateindgebruikerbzt${userId}@meemoo.be`;
+	const userEmail = `hetarchief2.0+atbasisgebruiker${userId}@meemoo.be`;
 
 	// Go to the hetarchief homepage
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
-	// Accept selected cookies
-	await acceptCookies(page, 'selection');
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
-	// Check site is still visible:
-	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+	// Accept selected cookies
+	await acceptCookies(page, 'selection'); //TODO enable cookies when on INT
 
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').first().click();
@@ -79,23 +79,18 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await expect(page.locator('text=Je account werd aangemaakt')).toBeVisible();
 
 	// Confirm email in ACM
-	// await acmConfirmEmail(
-	// 	page,
-	// 	'hetarchief2.0+ateindgebruikerbztcd39a80cd6144e99a5c6d751005536c2@meemoo.be'
-	// );
 	await acmConfirmEmail(page, userEmail);
 
 	// Go to the hetarchief homepage
-	await page.goto('https://bezoek-int.private.cloud.meemoo.be/');
-	// await page.goto(process.env.TEST_CLIENT_ENDPOINT as string); // TODO switch back to tst when https://meemoo.atlassian.net/browse/ARC-1050 is fixed
+	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
 	// Cookie bot should not open again
-	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
+	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Login user
 	await loginUserHetArchiefIdp(page, userEmail, USER_PASSWORD);
@@ -104,17 +99,17 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acceptTos(page);
 
 	// Cookie bot should not open again
-	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible();
+	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toHaveText('Test-at');
 
 	// Admin and beheer should not be visible
-	const navigationItemTexts = await page
-		.locator('.l-app a[class*="Navigation_c-navigation__link"]')
-		.allInnerTexts();
-	await expect(navigationItemTexts).not.toContain('Admin');
-	await expect(navigationItemTexts).not.toContain('Beheer');
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(0);
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(0);
+
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

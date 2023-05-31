@@ -1,14 +1,16 @@
 import { expect, test } from '@playwright/test';
 
 import { acceptCookies } from '../helpers/accept-cookies';
+import { acceptTos } from '../helpers/accept-tos';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { checkVisitRequestStatuses } from '../helpers/check-visit-request-statuses';
+import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
 import { waitForLoading } from '../helpers/wait-for-loading';
 
-test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
+test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
 	context,
 }) => {
@@ -16,44 +18,52 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
 	// Accept all cookies
-	await acceptCookies(page, 'all');
+	await acceptCookies(page, 'all'); // TODO: enable when on int
 
 	// Login as CP admin
-	await loginUserMeemooIdp(
+	await loginUserHetArchiefIdp(
 		page,
-		process.env.TEST_CP_ADMIN_ACCOUNT_USERNAME as string,
-		process.env.TEST_CP_ADMIN_ACCOUNT_PASSWORD as string
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
+		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
 	);
-
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
 		timeout: 10000,
 	});
 
-	// Check the homepage show the correct title for searching maintainers
-	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();
+	// Check navbar exists
+	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
+
+	// Admin should not be visible and beheer should be visible
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Admin' })).toHaveCount(0);
+	await expect(page.locator('a.c-dropdown-menu__item', { hasText: 'Beheer' })).toHaveCount(1);
 
 	// Click "beheer" navigation item
-	await page.click('nav ul li .c-dropdown a');
-
+	await page.locator('.c-avatar__text').click();
 	// Click visit requests navigation item
-	await page.click('a[href="/beheer/toegangsaanvragen"]');
+	await page.click('a[href="/beheer/aanvragen"]');
 
 	// Check page title matches visitor requests page title
-	await page.waitForFunction(() => document.title === 'Aanvragen | bezoekertool', null, {
+	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
 		timeout: 10000,
 	});
 
 	// Check Visit Requests is active in the sidebar
-	await checkActiveSidebarNavigationItem(page, 0, 'Aanvragen', '/beheer/toegangsaanvragen');
+	await checkActiveSidebarNavigationItem(
+		page,
+		0,
+		'Toegangsaanvragen',
+		'/beheer/toegangsaanvragen'
+	);
 
 	// Wait for results to load
-	await waitForLoading(page);
+	// await waitForLoading(page);
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
 
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
@@ -75,9 +85,8 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await expect(
 		await page.locator('[class*="PaginationProgress_c-pagination-progress"]')
 	).toContainText(`1-3 van 3`);
-
 	// Clear search term with x button
-	await page.click('text=times');
+	await page.locator('[aria-label="Opnieuw instellen"]').first().click();
 
 	// Number of results should be equal tot total results from before
 	await expect(
@@ -128,6 +137,13 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check blade title
 	await checkBladeTitle(page, 'Aanvraag goedkeuren');
 
+	// Expect 'toegang tot de volledige collectie' to be checked
+	await expect(
+		page.locator('[class^="c-radio-button"] span', {
+			hasText: 'Toegang tot de volledige collectie',
+		})
+	).toBeChecked();
+
 	// Enter time from: 00:00
 	await page.click('.c-datepicker--time input[name="accessFrom"]');
 	await page.click('.react-datepicker__time-list-item:has-text("00:00")');
@@ -150,7 +166,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 			.first()
 			.locator('text=Goedgekeurd')
 	).toBeVisible();
-
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); //temp bcs waitForLoading doesnt work
 	// Check number of requests for each status
 	const countsAfterOneApprove = await checkVisitRequestStatuses(page);
 
@@ -222,7 +238,7 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 
 	// Toast message
 	await checkToastMessage(page, 'De aanvraag is geweigerd.');
-
+	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); // TODO: temp bcs waitForLoading doesnt work
 	// Check number of requests for each status
 	const countsAfterOneApproveAndOneDeny = await checkVisitRequestStatuses(page);
 
@@ -243,13 +259,11 @@ test('T08: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	// Check approved and denied requests are visible under their respective tabs
 	// Check approved count
 	await page.click('.c-tab__label:has-text("Goedgekeurd")');
-	await expect(page.locator('text=hetarchief2.0+ateindgebruikerbzt')).toBeVisible();
+	await expect(page.locator('text=BezoekerVoornaam').first()).toBeVisible();
 
 	// Check denied count
 	await page.click('.c-tab__label:has-text("Geweigerd")');
-	await expect(
-		await page.locator('text=' + process.env.TEST_MEEMOO_ADMIN_ACCOUNT_USERNAME)
-	).toBeVisible();
+	await expect(await page.locator('text=meemoo Admin').first()).toBeVisible();
 
 	// Wait for close to save the videos
 	await context.close();

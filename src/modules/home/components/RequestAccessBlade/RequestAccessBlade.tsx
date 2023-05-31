@@ -104,7 +104,7 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 			className={styles['c-request-access-blade']}
 			footer={renderFooter()}
 			isOpen={isOpen}
-			renderTitle={(props: any) => (
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props}>
 					{tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'

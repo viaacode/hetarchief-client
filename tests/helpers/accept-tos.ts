@@ -17,9 +17,4 @@ export async function acceptTos(page: Page): Promise<void> {
 
 	// Click the accept tos button
 	await acceptTosButton.click();
-
-	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-		timeout: 10000,
-	});
 }

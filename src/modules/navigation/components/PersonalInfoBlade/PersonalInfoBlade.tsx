@@ -84,7 +84,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={(props: any) => (
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props}>
 					{tText(
 						'modules/navigation/components/personal-info-blade/personal-info-blade___persoonlijke-gegevens'

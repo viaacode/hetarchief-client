@@ -11,7 +11,7 @@ const { publicRuntimeConfig } = getConfig();
 export async function getDefaultServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	const translations = await getTranslations();
+	const translations = await getTranslations(publicRuntimeConfig.PROXY_URL);
 	i18n?.addResources('nl', 'common', translations);
 	return {
 		props: {

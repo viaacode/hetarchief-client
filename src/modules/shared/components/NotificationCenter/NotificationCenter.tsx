@@ -1,7 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { partition } from 'lodash-es';
-import getConfig from 'next/config';
 import Link from 'next/link';
 import { FC, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -21,8 +20,6 @@ import { Icon, IconNamesLight } from '../Icon';
 import { UnreadMarker } from '../UnreadMarker';
 
 import styles from './NotificationCenter.module.scss';
-
-const { publicRuntimeConfig } = getConfig();
 
 const NotificationCenter: FC<NotificationCenterProps> = ({
 	className,
@@ -300,7 +297,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			footer={renderFooter()}
 			isOpen={isOpen}
 			onClose={onClose}
-			renderTitle={(props: any) => (
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props} className={clsx(props.className, 'u-display-none')}>
 					{tText(
 						'modules/shared/components/notification-center/notification-center___notificaties'
