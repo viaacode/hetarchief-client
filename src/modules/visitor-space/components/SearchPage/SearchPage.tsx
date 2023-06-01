@@ -503,9 +503,9 @@ const SearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Advanced:
-				data = (values as AdvancedFilterFormState).advanced.filter(
-					(advanced) => advanced.val !== initialFields().val
-				);
+				data = (values as AdvancedFilterFormState).advanced.filter((advanced) => {
+					return !isNil(advanced.val) && advanced.val !== initialFields().val;
+				});
 
 				if (data.length === 0) {
 					setQuery({ [id]: undefined, filter: undefined, page: 1 });
