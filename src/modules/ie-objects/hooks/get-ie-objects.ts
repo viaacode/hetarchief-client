@@ -12,6 +12,7 @@ import {
 	IeObjectsSearchFilterField,
 	SortObject,
 } from '@shared/types';
+import { ElasticsearchFieldNames } from '@visitor-space/types';
 
 import { IeObjectsService } from './../services';
 
@@ -48,7 +49,7 @@ export const useGetIeObjects = (
 			// Run 2 queries:
 			//     - One to fetch the results for a specific (all, audio, video) tab (search results),
 			//     - and one to fetch the aggregates across tabs (all-, video-, audio counts)
-			const [results, noFormat] = await Promise.all([
+			const [results, noFormatResults] = await Promise.all([
 				IeObjectsService.getSearchResults(filterQuery, page, size, sort).then(
 					addRelatedCount
 				),
@@ -63,7 +64,13 @@ export const useGetIeObjects = (
 			const searchResults: GetIeObjectsResponse = {
 				...results,
 				aggregations: {
-					...noFormat.aggregations,
+					...results.aggregations,
+					// We want to show the counts on the video and audio tabs even when the audio is the active tab
+					//   * results => will be filtering on format === audio
+					//   * noFormatResults => will be used to fetch the count for video and audio tab
+					// All other aggregations still need to follow the strict filtering with format
+					[ElasticsearchFieldNames.Format]:
+						noFormatResults.aggregations[ElasticsearchFieldNames.Format],
 				},
 			};
 
