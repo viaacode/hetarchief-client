@@ -96,40 +96,11 @@ $l-container-padding-xs: 2rem;
 		padding: 0 $spacer-sm;
 	}
 
-	div[style*="background-color: transparent"].content-block-preview-0:not(.c-content-page-preview .c-content-page-preview div[style*="background-color: transparent"].content-block-preview-0) {
-		background-color: $platinum !important; // override inline style
-		display: grid;
-		grid-template-columns: auto;
-		min-height: 24rem;
-		align-items: center;
-
-		@include respond-at("lg") {
-			grid-template-columns: minmax($l-container-padding, 1fr) minmax(auto, 99.2rem) minmax($l-container-padding, 1fr);
-		}
-
-		.c-content-block-preview {
-			padding-bottom: $spacer-sm !important;
-			grid-column-start: 2;
-
-			@include respond-at("lg") {
-				padding-left: 0;
-			}
-		}
-
-		&::after {
-			content: "";
-			display: block;
-			height: auto;
-			grid-column-start: 3;
-			top: 0;
-			right: 0;
-			background-color: $platinum;
-
-			@include respond-at("lg") {
-				height: 100%;
-				background-image: radial-gradient(circle at 150%, $platinum 50%, $white 50%);
-			}
-		}
+	.c-content-block__meemoo-custom-background {
+		// /images/meemoo-logo-background.svg
+		background-image: url("data:image/svg+xml,%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20000 400' xml:space='preserve'%3E%3Ccircle cx='19800' cy='200' r='200' fill='%23F7F8F8'/%3E%3Crect width='19600' height='400' fill='%23F7F8F8'/%3E%3C/svg%3E%0A") !important;
+		background-size: cover !important;
+		background-position: right center !important;
 	}
 
 	// Image with copyright and description
