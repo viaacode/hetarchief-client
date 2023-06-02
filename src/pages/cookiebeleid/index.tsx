@@ -25,7 +25,7 @@ const CookiePolicy: NextPage<DefaultSeoInfo> = ({ url }) => {
 		// script.onload = moveCookieDeclaration;
 		script.id = 'CookieDeclaration';
 		script.src =
-			'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js';
+			'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js?referer=bezoek.hetarchief.be';
 		document.head.appendChild(script);
 	}, []);
 
