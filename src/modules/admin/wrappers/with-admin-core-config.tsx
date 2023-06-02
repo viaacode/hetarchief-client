@@ -212,15 +212,21 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						uploadFile: AssetsService.uploadFile,
 						deleteFile: AssetsService.deleteFile,
 					},
-					getContentPageByPathEndpoint: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages`,
+					getContentPageByPathEndpoint: `${
+						isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
+					}/admin/content-pages`,
 				},
 				database: {
 					databaseApplicationType: DatabaseType.hetArchief,
-					proxyUrl: publicRuntimeConfig.PROXY_URL,
+					proxyUrl: isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL,
 				},
 				flowplayer: {
-					FLOW_PLAYER_ID: publicRuntimeConfig.FLOW_PLAYER_ID,
-					FLOW_PLAYER_TOKEN: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
+					FLOW_PLAYER_ID: isBrowser()
+						? publicRuntimeConfig.FLOW_PLAYER_ID
+						: process.env.FLOW_PLAYER_ID,
+					FLOW_PLAYER_TOKEN: isBrowser()
+						? publicRuntimeConfig.FLOW_PLAYER_TOKEN
+						: process.env.FLOW_PLAYER_TOKEN,
 				},
 				handlers: {
 					onExternalLink: () => {

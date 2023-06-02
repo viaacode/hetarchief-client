@@ -17,6 +17,7 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { isBrowser } from '@shared/utils';
 
 import { useGetContentPageByPath } from '../../modules/content-page/hooks/get-content-page';
 import { ContentPageClientService } from '../../modules/content-page/services/content-page-client.service';
@@ -60,7 +61,10 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 
 	useEffect(() => {
 		if (isContentPageNotFoundError) {
-			window.open(`${publicRuntimeConfig.PROXY_URL}/not-found`, '_self');
+			window.open(
+				`${isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL}/not-found`,
+				'_self'
+			);
 		}
 	}, [isContentPageNotFoundError]);
 

@@ -7,6 +7,7 @@ import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
+import { isBrowser } from '@shared/utils';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import { CheckLoginResponse } from './auth.service.types';
@@ -48,13 +49,20 @@ export class AuthService {
 			});
 		}
 		const returnToUrl = stringifyUrl({
-			url: trimEnd(`${publicRuntimeConfig.CLIENT_URL}${originalPath}`, '/'),
+			url: trimEnd(
+				`${
+					isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL
+				}${originalPath}`,
+				'/'
+			),
 			query: otherQueryParams,
 		});
 
 		await router.replace(
 			stringifyUrl({
-				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/login`,
+				url: `${
+					isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
+				}/auth/hetarchief/login`,
 				query: {
 					returnToUrl,
 				},
@@ -68,13 +76,17 @@ export class AuthService {
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
-			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
+			url: `${isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL}/${
+				redirectTo ?? ''
+			}`,
 			query: otherQueryParams,
 		});
 
 		await router.replace(
 			stringifyUrl({
-				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/register`,
+				url: `${
+					isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
+				}/auth/hetarchief/register`,
 				query: {
 					returnToUrl,
 				},
@@ -88,13 +100,17 @@ export class AuthService {
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
 		const returnToUrl = stringifyUrl({
-			url: `${publicRuntimeConfig.CLIENT_URL}/${redirectTo ?? ''}`,
+			url: `${isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL}/${
+				redirectTo ?? ''
+			}`,
 			query: otherQueryParams,
 		});
 
 		await router.replace(
 			stringifyUrl({
-				url: `${publicRuntimeConfig.PROXY_URL}/auth/meemoo/login`,
+				url: `${
+					isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
+				}/auth/meemoo/login`,
 				query: {
 					returnToUrl,
 				},
@@ -103,16 +119,16 @@ export class AuthService {
 	}
 
 	public static logout(shouldRedirectToOriginalPage = false): void {
-		let returnToUrl = publicRuntimeConfig.CLIENT_URL;
+		let returnToUrl = isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL;
 		if (shouldRedirectToOriginalPage) {
 			let originalPath = window.location.href.substring(
-				publicRuntimeConfig.CLIENT_URL.length
+				(isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL).length
 			);
 			if (originalPath.startsWith(`/${ROUTE_PARTS.logout}`)) {
 				originalPath = '/';
 			}
 			returnToUrl = stringifyUrl({
-				url: publicRuntimeConfig.CLIENT_URL,
+				url: isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL,
 				query: {
 					redirectTo: originalPath,
 					showAuth: 1,
@@ -121,7 +137,9 @@ export class AuthService {
 		}
 
 		window.location.href = stringifyUrl({
-			url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
+			url: `${
+				isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
+			}/auth/global-logout`,
 			query: {
 				returnToUrl,
 			},

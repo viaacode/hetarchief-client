@@ -7,6 +7,7 @@ import { ReactElement } from 'react';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
+import { isBrowser } from '@shared/utils';
 
 import 'styles/main.scss';
 
@@ -26,7 +27,7 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
-	if (typeof window !== 'undefined') {
+	if (isBrowser()) {
 		// client-side-only code, window is not available during nextjs server side prerender
 		(window as any).APP_VERSION = { version: pkg.version };
 	}
@@ -42,5 +43,8 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 }
 
 export default wrapper.withRedux(
-	appWithTranslation(MyApp, getI18n(publicRuntimeConfig.PROXY_URL) as any)
+	appWithTranslation(
+		MyApp,
+		getI18n(isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL) as any
+	)
 );

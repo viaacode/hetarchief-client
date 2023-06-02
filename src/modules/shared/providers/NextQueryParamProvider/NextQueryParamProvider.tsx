@@ -8,6 +8,8 @@ import { useRouter } from 'next/router';
 import React, { ComponentProps, memo, useMemo } from 'react';
 import { QueryParamProvider } from 'use-query-params';
 
+import { isBrowser } from '@shared/utils/is-browser';
+
 type Props = Omit<
 	ComponentProps<typeof QueryParamProvider>,
 	'ReactRouterRoute' | 'reachHistory' | 'history' | 'location'
@@ -21,9 +23,9 @@ const NextQueryParamProvider = ({ children, ...rest }: Props) => {
 	const pathname = match ? match[0] : router.asPath;
 
 	const location = useMemo(() => {
-		if (typeof window !== 'undefined') {
+		if (isBrowser()) {
 			// For SSG, no query parameters are available on the server side,
-			// since they can't be known at build time. Therefore to avoid
+			// since they can't be known at build time. Therefore, to avoid
 			// markup mismatches, we need a two-part render in this case that
 			// patches the client with the updated query parameters lazily.
 			// Note that for SSR `router.isReady` will be `true` immediately

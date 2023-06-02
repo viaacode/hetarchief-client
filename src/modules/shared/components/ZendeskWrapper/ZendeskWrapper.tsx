@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import Zendesk, { IZendeskProps } from 'react-zendesk';
 
 import { selectShowZendesk } from '@shared/store/ui';
+import { isBrowser } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -104,7 +105,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 	return (
 		<Zendesk
 			{...settings}
-			zendeskKey={publicRuntimeConfig.ZENDESK_KEY}
+			zendeskKey={isBrowser() ? publicRuntimeConfig.ZENDESK_KEY : process.env.ZENDESK_KEY}
 			color={{ theme: '#00857d' }} // Ensure a contrast of 4.51:1 with white text
 			onLoaded={() => {
 				initListeners();
