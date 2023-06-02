@@ -22,6 +22,8 @@ import { toastService } from '@shared/services/toast-service';
 import { NewsletterFormState } from '@shared/types/newsletter';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
+import { COMMUNICATION_SECTION_ID } from '../account/mijn-profiel';
+
 const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 	useHideFooter();
 	useStickyLayout();
@@ -51,7 +53,9 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 			return;
 		}
 
-		router.replace(`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}`);
+		router.replace(
+			`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myProfile}#${COMMUNICATION_SECTION_ID}`
+		);
 	}, [router, triggerRedirect]);
 
 	const onFormSubmit = async (values: NewsletterFormState): Promise<void> => {
@@ -131,6 +135,15 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 				className="p-newsletter__form-button"
 				label={tText('pages/nieuwsbrief/index___nieuwsbrief___schrijf-me-in')}
 				onClick={handleSubmit(onFormSubmit)}
+			/>
+
+			<Button
+				variants={['silver']}
+				className="p-newsletter__form-button u-ml-8"
+				label={tText('Naar de startpagina')}
+				onClick={async () => {
+					await router.push(`/`);
+				}}
 			/>
 		</div>
 	);
