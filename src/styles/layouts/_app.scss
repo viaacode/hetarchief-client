@@ -3,11 +3,6 @@
 $layout: "l-app";
 
 .#{$layout} {
-	overflow-x: hidden;
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-
 	&--sticky {
 		height: 100vh; // fallback for browsers that do not support custom css properties
 		height: calc((var(--vh, 1vh) * 100)); // '100vh' for mobile excludes browser ui. Custom --vh prop is set in use-window-size.ts
@@ -20,14 +15,15 @@ $layout: "l-app";
 		}
 	}
 
+	.#{$layout}__main {
+		min-height: calc(100vh - 10rem - 26rem);
+	}
+
 	/**
 	* Elements
 	*/
 
 	&__main {
-		display: flex;
-		flex-direction: column;
-		flex: 1 1 auto;
 		position: relative;
 	}
 
