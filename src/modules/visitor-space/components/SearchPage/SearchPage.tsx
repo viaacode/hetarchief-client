@@ -695,8 +695,7 @@ const SearchPage: FC = () => {
 				? [
 						{
 							label: activeVisitRequest?.spaceName || '',
-							to: `${ROUTES.search}?maintainer=${activeVisitRequest?.spaceMaintainerId}`,
-						},
+						} as Breadcrumb, // Last breadcrumb doesn't need a link, since you are on that page
 				  ]
 				: [];
 

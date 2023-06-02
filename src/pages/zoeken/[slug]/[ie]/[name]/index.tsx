@@ -312,10 +312,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const expandMetadata = activeTab === ObjectDetailTabs.Metadata;
 	const showFragmentSlider = representationsToDisplay.length > 1;
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
-	const hasAccessToVisitorSpaceOfObject = !!intersection(mediaInfo?.accessThrough, [
-		IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
-		IeObjectAccessThrough.VISITOR_SPACE_FULL,
-	]).length;
+	const hasAccessToVisitorSpaceOfObject =
+		intersection(mediaInfo?.accessThrough, [
+			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+			IeObjectAccessThrough.VISITOR_SPACE_FULL,
+		]).length > 0;
 	const canRequestAccess =
 		isNil(
 			accessibleVisitorSpaces?.find((space) => space.maintainerId === mediaInfo?.maintainerId)
@@ -908,7 +909,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 									label: mediaInfo?.maintainerName,
 									to: isKiosk
 										? ROUTES.search
-										: `${ROUTES.search}?maintainer=${mediaInfo?.maintainerSlug}`,
+										: `${ROUTES.search}?${VisitorSpaceFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
 								},
 						  ]
 						: []),
