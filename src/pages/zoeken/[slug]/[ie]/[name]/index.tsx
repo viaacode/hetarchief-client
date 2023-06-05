@@ -487,16 +487,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			});
 
 			// open external form
+			// Sometimes we want to encode the url params and sometimes we dont. https://meemoo.atlassian.net/browse/ARC-1710
+			// For UGent the whole url is inside one param, so we cannot encode it
+			// For vrt the url is stored in the form_url and the params should be encoded
+			const encodeOrNotUriComponent = mediaInfo.maintainerFormUrl.startsWith('http')
+				? encodeURIComponent
+				: (param: string) => param;
 			const resolvedFormUrl = mediaInfo.maintainerFormUrl
-				.replaceAll('{first_name}', encodeURIComponent(user.firstName))
-				.replaceAll('{last_name}', encodeURIComponent(user.lastName))
-				.replaceAll('{email}', encodeURIComponent(user.email))
-				.replaceAll('{local_cp_id}', encodeURIComponent(mediaInfo?.meemooLocalId || ''))
-				.replaceAll('{pid}', encodeURIComponent(mediaInfo?.meemooIdentifier || ''))
-				.replaceAll('{title}', encodeURIComponent(mediaInfo?.name || ''))
+				.replaceAll('{first_name}', encodeOrNotUriComponent(user.firstName))
+				.replaceAll('{last_name}', encodeOrNotUriComponent(user.lastName))
+				.replaceAll('{email}', encodeOrNotUriComponent(user.email))
+				.replaceAll(
+					'{local_cp_id}',
+					encodeOrNotUriComponent(mediaInfo?.meemooLocalId || '')
+				)
+				.replaceAll('{pid}', encodeOrNotUriComponent(mediaInfo?.meemooIdentifier || ''))
+				.replaceAll('{title}', encodeOrNotUriComponent(mediaInfo?.name || ''))
 				.replaceAll(
 					'{title_serie}',
-					encodeURIComponent(mediaInfo?.isPartOf?.serie?.[0] || '')
+					encodeOrNotUriComponent(mediaInfo?.isPartOf?.serie?.[0] || '')
 				);
 			window.open(resolvedFormUrl, '_blank');
 		} else {
