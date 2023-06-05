@@ -104,6 +104,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.ImageTextBackground,
 						ContentBlockType.MaintainersGrid,
 						ContentBlockType.HetArchiefHeaderSearch,
+						ContentBlockType.IFrame,
 					],
 					defaultPageWidth: 'LARGE',
 					onSaveContentPage,
