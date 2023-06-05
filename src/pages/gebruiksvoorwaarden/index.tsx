@@ -25,8 +25,6 @@ import { TosService } from '@shared/services/tos-service';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import styles from './index.module.scss';
-
 import { useGetContentPageByPath } from 'modules/content-page/hooks/get-content-page';
 
 const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
@@ -85,19 +83,19 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 	const renderPageContent = () => {
 		return (
 			<>
-				<div className={styles['p-terms-of-service__background']} />
+				<div className="p-terms-of-service__background" />
 
-				<section
-					className={clsx('u-pt-96', styles['p-terms-of-service__text'])}
-					ref={scrollable}
-					onScroll={onContentScroll}
-				>
+				<section className="u-pt-96 p-terms-of-service__text">
 					<div className="l-container">
-						<h1 className={styles['p-terms-of-service__title']}>
+						<h1 className="p-terms-of-service__title">
 							{tHtml('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden')}
 						</h1>
 
-						<div className={styles['p-terms-of-service__content']}>
+						<div
+							ref={scrollable}
+							onScroll={onContentScroll}
+							className="p-terms-of-service__content"
+						>
 							{AdminConfigManager.getConfig() && (
 								<ContentPageRenderer
 									contentPageInfo={contentPageInfo}
@@ -109,17 +107,15 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 				</section>
 
 				<div
-					className={clsx(styles['p-terms-of-service__gradient'], {
-						[styles['p-terms-of-service__gradient--hidden']]: isAtBottom || tosAccepted,
+					className={clsx('p-terms-of-service__gradient', {
+						'p-terms-of-service__gradient--hidden': isAtBottom || tosAccepted,
 					})}
 				/>
 
 				{user && !tosAccepted && (
-					<section
-						className={clsx('u-pt-96', styles['p-terms-of-service__buttons-wrapper'])}
-					>
+					<section className="u-pt-96 p-terms-of-service__buttons-wrapper">
 						<div className="l-container">
-							<div className={styles['p-terms-of-service__buttons']}>
+							<div className="p-terms-of-service__buttons">
 								<Button className="u-mr-8" variants="text" onClick={onCancelClick}>
 									{tHtml('pages/gebruiksvoorwaarden/index___annuleer')}
 								</Button>
@@ -140,7 +136,7 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 	};
 
 	return (
-		<div className={styles['p-terms-of-service']}>
+		<div className="p-terms-of-service">
 			{renderOgTags(
 				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden'),
 				tText('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-omschrijving'),
