@@ -1,5 +1,4 @@
-import { isAfter, parseISO } from 'date-fns';
-import { isString } from 'lodash-es';
+import { isAfter } from 'date-fns';
 
 export function isCurrentTosAccepted(
 	acceptedAt: Date | string | null | undefined,
@@ -11,7 +10,5 @@ export function isCurrentTosAccepted(
 	if (!updatedAt) {
 		throw new Error('No TOS_LAST_UPDATED_AT was set in the database.');
 	}
-	const acceptedAtDate = isString(acceptedAt) ? parseISO(acceptedAt) : acceptedAt;
-	const updatedAtDate = isString(updatedAt) ? parseISO(updatedAt) : updatedAt;
-	return isAfter(acceptedAtDate, updatedAtDate);
+	return isAfter(new Date(acceptedAt), new Date(updatedAt));
 }
