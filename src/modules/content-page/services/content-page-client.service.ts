@@ -3,6 +3,8 @@ import { startsWith } from 'lodash-es';
 import getConfig from 'next/config';
 import { stringifyUrl } from 'query-string';
 
+import { isBrowser } from '@shared/utils';
+
 const { publicRuntimeConfig } = getConfig();
 
 export class ContentPageClientService {
@@ -16,7 +18,9 @@ export class ContentPageClientService {
 		}
 
 		const url = stringifyUrl({
-			url: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages`,
+			url: `${
+				isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
+			}/admin/content-pages`,
 			query: {
 				path: slug,
 			},

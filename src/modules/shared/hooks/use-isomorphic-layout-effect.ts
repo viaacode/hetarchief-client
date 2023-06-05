@@ -1,5 +1,7 @@
 import { useEffect, useLayoutEffect } from 'react';
 
+import { isBrowser } from '@shared/utils';
+
 /**
  * Use workaround to avoid warning about using useLayoutEffect inside Server Side Rendered components:
  *
@@ -9,5 +11,5 @@ import { useEffect, useLayoutEffect } from 'react';
  *
  * see: https://medium.com/@alexandereardon/uselayouteffect-and-ssr-192986cdcf7a
  */
-const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+const useIsomorphicLayoutEffect = isBrowser() ? useLayoutEffect : useEffect;
 export default useIsomorphicLayoutEffect;

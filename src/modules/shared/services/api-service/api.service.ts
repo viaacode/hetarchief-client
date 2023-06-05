@@ -3,6 +3,7 @@ import { KyInstance } from 'ky/distribution/types/ky';
 import getConfig from 'next/config';
 
 import { AuthService } from '@auth/services/auth-service';
+import { isBrowser } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -12,7 +13,7 @@ export abstract class ApiService {
 	public static getApi(ignoreAuthError = false): KyInstance {
 		if (!ApiService.api) {
 			this.api = ky.create({
-				prefixUrl: publicRuntimeConfig.PROXY_URL,
+				prefixUrl: isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL,
 				headers: {
 					'content-type': 'application/json',
 				},
