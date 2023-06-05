@@ -52,6 +52,8 @@ const labelKeys: Record<keyof CommunicationFormState, string> = {
 	acceptNewsletter: 'Communication__acceptNewsletter',
 };
 
+export const COMMUNICATION_SECTION_ID = 'communicatie';
+
 const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
 	const { tHtml, tText } = useTranslation();
@@ -81,6 +83,10 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		}
 
 		setAcceptNewsletter(preferences.newsletter);
+		if (window.location.href.endsWith('#' + COMMUNICATION_SECTION_ID)) {
+			const section = document.getElementById(COMMUNICATION_SECTION_ID);
+			section?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
 	}, [preferences]);
 
 	const onFormSubmit = async (newsletter: boolean) => {
@@ -294,7 +300,10 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 					)}
 
 					<Box className="u-mb-32">
-						<section className="u-p-24 p-account-my-profile__communication">
+						<section
+							className="u-p-24 p-account-my-profile__communication"
+							id={COMMUNICATION_SECTION_ID}
+						>
 							<header className="p-account-my-profile__communication-header u-mb-24">
 								<h6>{tText('pages/account/mijn-profiel/index___communicatie')}</h6>
 							</header>
