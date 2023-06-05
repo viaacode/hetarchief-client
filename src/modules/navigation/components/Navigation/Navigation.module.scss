@@ -261,6 +261,11 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		@include respond-at(xxl) {
 			min-width: 26.6rem !important;
 		}
+
+		:global(.c-menu) {
+			max-height: 70vh;
+			overflow-y: auto;
+		}
 	}
 }
 
