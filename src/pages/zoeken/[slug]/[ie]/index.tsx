@@ -29,10 +29,11 @@ const IeObjectWithoutObjectNamePage: NextPage<MaintainerSearchPageProps> = () =>
 	// If the url is: /zoeken/:slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
 	useEffect(() => {
 		if (ieObjectInfo) {
+			const objectTitleSlug = kebabCase(ieObjectInfo.name);
 			const searchUrl = stringifyUrl({
 				url: `/${ROUTE_PARTS.search}/${ieObjectInfo.maintainerSlug}/${
 					ieObjectInfo.schemaIdentifier
-				}/${kebabCase(ieObjectInfo.name)}`,
+				}/${objectTitleSlug || 'titel'}`,
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}

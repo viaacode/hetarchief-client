@@ -150,9 +150,9 @@ const MediaCardList: FC<MediaCardListProps> = ({
 
 	const tiles = items.map((item, i) => {
 		const link = stringifyUrl({
-			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${
-				item.schemaIdentifier
-			}/${kebabCase(item.name)}`,
+			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}/${
+				kebabCase(item.name) || 'titel'
+			}`,
 			query: {
 				[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: keywords,
 			},
