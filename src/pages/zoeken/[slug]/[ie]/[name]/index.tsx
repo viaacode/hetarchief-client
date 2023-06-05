@@ -261,9 +261,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	);
 
 	// ook interessant
+	const userHasAccessToMaintainer =
+		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
+		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
 	const { data: similarData } = useGetIeObjectsSimilar(
 		router.query.ie as string,
-		isKiosk ? mediaInfo?.maintainerId ?? '' : '',
+		isKiosk || userHasAccessToMaintainer ? mediaInfo?.maintainerId ?? '' : '',
 		!!mediaInfo
 	);
 
