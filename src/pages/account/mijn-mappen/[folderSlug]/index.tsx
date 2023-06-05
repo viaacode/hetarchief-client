@@ -21,6 +21,7 @@ import { foldersService } from '@account/services/folders';
 import { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { IeObjectAccessThrough } from '@ie-objects/types';
 import {
 	Icon,
 	IconNamesLight,
@@ -45,7 +46,6 @@ import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
 import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
-import { AccessThroughType } from '@shared/types/access';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
 
@@ -252,14 +252,14 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const getShowLocallyAvailable = (item: FolderIeObject) => {
 		const userHasAccessToMaintainer =
-			item.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FOLDERS) ||
-			item.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FULL);
+			item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
+			item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
 
 		const itemHasThumbnail = item.thumbnailUrl;
 
 		return (
 			!userHasAccessToMaintainer &&
-			item.accessThrough.includes(AccessThroughType.SECTOR) &&
+			item.accessThrough.includes(IeObjectAccessThrough.SECTOR) &&
 			!itemHasThumbnail
 		);
 	};
@@ -356,8 +356,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const renderDescription = (item: FolderIeObject): ReactNode => {
 		const showAccessLabel =
-			item?.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FULL) ||
-			item?.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FOLDERS);
+			item?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) ||
+			item?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS);
 
 		const items: { label: string | ReactNode; value: ReactNode }[] = [
 			{
@@ -519,7 +519,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													duration: media.duration,
 													licenses: media.licenses,
 													showKeyUserLabel: media.accessThrough.includes(
-														AccessThroughType.SECTOR
+														IeObjectAccessThrough.SECTOR
 													),
 													showLocallyAvailable:
 														getShowLocallyAvailable(media),
