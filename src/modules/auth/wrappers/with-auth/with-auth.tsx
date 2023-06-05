@@ -51,10 +51,6 @@ export const withAuth = (
 				);
 			};
 
-			const toSearchPage = async () => {
-				return router.replace(ROUTES.search);
-			};
-
 			if (!login?.userInfo || login.message === AuthMessage.LoggedOut) {
 				// User is logged out
 				if (isLoginRequired) {
@@ -66,10 +62,7 @@ export const withAuth = (
 				}
 			} else {
 				// User is logged in
-				if (login.userInfo.groupName === GroupName.KIOSK_VISITOR) {
-					// User is kioskuser
-					await toSearchPage();
-				}
+				// }
 				if (
 					isCurrentTosAccepted(login.userInfo.acceptedTosAt, tos?.updatedAt) ||
 					login.userInfo.groupName === GroupName.KIOSK_VISITOR
