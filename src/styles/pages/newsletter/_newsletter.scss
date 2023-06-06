@@ -43,14 +43,14 @@ $page: "p-newsletter";
 
 	&--wallpaper {
 		background-repeat: no-repeat;
-		background-image: url("/images/bg-newsletter.png");
+		background-image: url("/images/bg-newsletter.jpg");
 		background-position: left bottom;
 		background-size: auto 80%;
 
 		@include respond-to(lg) {
 			background-position: left top;
 			background-size: 100% auto;
-			background-image: url("/images/bg-newsletter-mobile.png");
+			background-image: url("/images/bg-newsletter-mobile.jpg");
 		}
 	}
 }
