@@ -72,24 +72,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 	};
 
-	const wrapInLink = (children: ReactNode) => {
-		if (link && !showLocallyAvailable) {
-			return (
-				<Link key={id} href={link}>
-					<a
-						className="u-text-no-decoration"
-						aria-label={id}
-						onClick={saveScrollPosition}
-					>
-						{children}
-					</a>
-				</Link>
-			);
-		}
-
-		return children;
-	};
-
 	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
 		try {
 			if (!user || !maintainerSlug) {
@@ -162,7 +144,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
-			return wrapInLink(
+			return (
 				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
 					{keywords?.length ? highlighted(title ?? '') : title}
 				</b>
@@ -173,7 +155,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			console.warn('[WARN][MediaCard] Title could not be highlighted.');
 		}
 
-		return wrapInLink(title);
+		return title;
 	};
 
 	const renderDescription = (): ReactNode => {
@@ -187,10 +169,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		return description;
-	};
-
-	const renderSubTitle = (): ReactNode => {
-		return wrapInLink(meemooIdentifier);
 	};
 
 	const renderCaption = (): ReactNode => {
@@ -208,7 +186,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 		subtitle = subtitle.trim();
 
-		return keywords?.length ? wrapInLink(highlighted(subtitle)) : wrapInLink(subtitle);
+		return keywords?.length ? highlighted(subtitle) : subtitle;
 	};
 
 	const renderNoContentIcon = () => (
@@ -272,29 +250,27 @@ const MediaCard: FC<MediaCardProps> = ({
 	);
 
 	const renderImage = (imgPath: string | undefined) =>
-		imgPath
-			? wrapInLink(
+		imgPath ? (
+			<div
+				className={clsx(
+					styles['c-media-card__header-wrapper'],
+					styles[`c-media-card__header-wrapper--${view}`]
+				)}
+			>
+				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+				{!isNil(icon) && (
 					<>
-						<div
-							className={clsx(
-								styles['c-media-card__header-wrapper'],
-								styles[`c-media-card__header-wrapper--${view}`]
-							)}
-						>
-							<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
-							{!isNil(icon) && (
-								<>
-									<div className={clsx(styles['c-media-card__header-icon'])}>
-										<Icon name={icon} />
-									</div>
-									{showLocallyAvailable && renderLocallyAvailablePill()}
-								</>
-							)}
-							{duration && renderDuration()}
+						<div className={clsx(styles['c-media-card__header-icon'])}>
+							<Icon name={icon} />
 						</div>
+						{showLocallyAvailable && renderLocallyAvailablePill()}
 					</>
-			  )
-			: renderNoContent();
+				)}
+				{duration && renderDuration()}
+			</div>
+		) : (
+			renderNoContent()
+		);
 
 	const highlighted = (toHighlight: string) => (
 		<Highlighter searchWords={keywords ?? []} autoEscape={true} textToHighlight={toHighlight} />
@@ -354,8 +330,8 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
-	return (
-		<div id={id}>
+	const renderCard = () => {
+		return (
 			<Card
 				className={clsx(
 					styles['c-media-card'],
@@ -365,27 +341,47 @@ const MediaCard: FC<MediaCardProps> = ({
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
-				subtitle={renderSubTitle()}
+				subtitle={meemooIdentifier}
 				caption={renderCaption()}
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
 			>
 				{typeof description === 'string' ? (
-					<>
-						{wrapInLink(
-							<div className="u-text-ellipsis--2">
-								<span>{renderDescription()}</span>
-							</div>
-						)}
-					</>
+					<div className="u-text-ellipsis--2">
+						<span>{renderDescription()}</span>
+					</div>
 				) : (
-					<>{wrapInLink(renderDescription())}</>
+					renderDescription()
 				)}
 				{hasTempAccess && renderTempAccessPill()}
 				{showKeyUserLabel && renderKeyUserPill()}
 				{showLocallyAvailable && renderLocallyAvailableButtons()}
 			</Card>
+		);
+	};
+
+	const renderCardWithLinkWrapperIfNeeded = () => {
+		if (link) {
+			return (
+				<Link key={id} href={link}>
+					<a
+						className="u-text-no-decoration"
+						aria-label={id}
+						onClick={saveScrollPosition}
+					>
+						{renderCard()}
+					</a>
+				</Link>
+			);
+		}
+
+		return renderCard();
+	};
+
+	return (
+		<div id={id}>
+			{renderCardWithLinkWrapperIfNeeded()}
 			<Modal
 				title={tText(
 					'modules/shared/components/media-card/media-card___waarom-kan-ik-dit-object-niet-bekijken'
@@ -407,6 +403,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					{tText('modules/shared/components/media-card/media-card___geen-licentie')}
 				</p>
 			</Modal>
+			;
 			<RequestAccessBlade
 				isOpen={isRequestAccessBladeOpen}
 				onClose={() => setIsRequestAccessBladeOpen(false)}
