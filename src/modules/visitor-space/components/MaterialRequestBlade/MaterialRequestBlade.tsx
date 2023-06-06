@@ -33,6 +33,8 @@ interface MaterialRequestBladeProps {
 	reason?: string;
 	refetch?: () => void;
 	type?: MaterialRequestType;
+	layer: number;
+	currentLayer: number;
 }
 
 const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
@@ -50,6 +52,8 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	reason,
 	refetch,
 	type,
+	layer,
+	currentLayer,
 }) => {
 	const { tText } = useTranslation();
 	const dispatch = useDispatch();
@@ -219,6 +223,10 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			renderTitle={renderTitle}
 			footer={isOpen && renderFooter()}
 			onClose={onCloseModal}
+			layer={layer}
+			currentLayer={currentLayer}
+			className={styles['c-request-material']}
+			isManaged
 		>
 			<div className={styles['c-request-material__maintainer']}>
 				{maintainerLogo && (

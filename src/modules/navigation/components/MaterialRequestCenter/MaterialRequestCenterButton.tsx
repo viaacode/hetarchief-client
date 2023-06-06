@@ -10,6 +10,7 @@ import { useAppDispatch } from '@shared/store';
 import {
 	selectMaterialRequestCount,
 	selectShowMaterialRequestCenter,
+	setOpenNavigationDropdownId,
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
@@ -31,7 +32,9 @@ const MaterialRequestCenterButton: FC = () => {
 	const showMaterialRequestCenter = useSelector(selectShowMaterialRequestCenter);
 
 	const onButtonClick = () => {
+		console.log({ showMaterialRequestCenter });
 		dispatch(setShowNotificationsCenter(false));
+		dispatch(setOpenNavigationDropdownId(null));
 		dispatch(setShowMaterialRequestCenter(!showMaterialRequestCenter));
 	};
 
@@ -65,6 +68,7 @@ const MaterialRequestCenterButton: FC = () => {
 		};
 	}, []);
 
+	console.log({ showMaterialRequestCenter });
 	return (
 		<>
 			<Button

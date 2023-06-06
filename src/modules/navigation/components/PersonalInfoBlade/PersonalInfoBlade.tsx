@@ -13,7 +13,13 @@ import { setShowMaterialRequestCenter } from '@shared/store/ui';
 import { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
 
-const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, personalInfo }) => {
+const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
+	isOpen,
+	onClose,
+	personalInfo,
+	layer,
+	currentLayer,
+}) => {
 	const { tText } = useTranslation();
 	const dispatch = useAppDispatch();
 
@@ -83,6 +89,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 
 	return (
 		<Blade
+			className={styles['c-personal-info-blade']}
 			isOpen={isOpen}
 			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props}>
@@ -92,8 +99,13 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 				</h2>
 			)}
 			footer={isOpen && renderFooter()}
-			onClose={onClose}
+			onClose={() => {
+				onClose();
+			}}
 			showBackButton
+			layer={layer}
+			currentLayer={currentLayer}
+			isManaged
 		>
 			<div className={styles['c-personal-info-blade__content']}>
 				<dl>

@@ -1,13 +1,8 @@
 import { useContext } from 'react';
 
+import { BladeManagerContextValue } from '@shared/context/BladeManagerContext';
 import BladeManagerContext from '@shared/context/BladeManagerContext/BladeManagerContext';
 
-import { UseBladeManagerContext } from './use-blade-manager-context.types';
-
-const useBladeManagerContext: UseBladeManagerContext = () => {
-	const bladeManagerContext = useContext(BladeManagerContext);
-
-	return bladeManagerContext;
+export const useBladeManagerContext = (): BladeManagerContextValue => {
+	return useContext(BladeManagerContext);
 };
-
-export default useBladeManagerContext;

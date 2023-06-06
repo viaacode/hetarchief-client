@@ -1379,6 +1379,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					maintainerLogo={mediaInfo?.maintainerLogo}
 					maintainerSlug={mediaInfo?.maintainerSlug}
 					meemooId={mediaInfo?.meemooIdentifier}
+					layer={1}
+					currentLayer={1}
 				/>
 			)}
 			<ReportBlade

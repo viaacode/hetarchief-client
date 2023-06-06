@@ -13,7 +13,7 @@ import {
 	MaterialRequestObjectType,
 	MaterialRequestRequesterCapacity,
 } from '@material-requests/types';
-import { Blade, Icon, IconNamesLight, Loading } from '@shared/components';
+import { Blade, BladeManager, Icon, IconNamesLight, Loading } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade';
@@ -21,6 +21,12 @@ import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestB
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
 
 import styles from './MaterialRequestCenterBlade.module.scss';
+
+export enum MaterialRequestBladeId {
+	Overview = 'Overview',
+	EditMaterialRequest = 'EditMaterialRequest',
+	PersonalDetails = 'PersonalDetails',
+}
 
 interface MaterialRequestCenterBladeProps {
 	isOpen: boolean;
@@ -31,11 +37,29 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const { tHtml, tText } = useTranslation();
 	const dispatch = useDispatch();
 
-	const [isPersonalInfoBladeOpen, setIsPersonalInfoBladeOpen] = useState(false);
-	const [isEditMaterialRequestBladeOpen, setIsEditMaterialRequestBladeOpen] = useState(false);
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
 		null
 	);
+	const [activeBlade, setActiveBlade] = useState<MaterialRequestBladeId>(
+		MaterialRequestBladeId.Overview
+	);
+	const getCurrentLayer = () => {
+		console.log('get current layer: ', { isOpen, activeBlade });
+		if (!isOpen) {
+			return 0;
+		}
+		switch (activeBlade) {
+			case MaterialRequestBladeId.Overview:
+				return 1;
+
+			case MaterialRequestBladeId.EditMaterialRequest:
+			case MaterialRequestBladeId.PersonalDetails:
+				return 2;
+
+			default:
+				return 0;
+		}
+	};
 
 	const user = useSelector(selectUser);
 
@@ -85,22 +109,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 	const deleteMaterialRequest = async (id: string) => {
 		const deleteResponse = await MaterialRequestsService.delete(id);
-		deleteResponse && refetch();
-	};
-
-	const closeEditMaterialRequestBlade = () => {
-		setIsEditMaterialRequestBladeOpen(false);
-		setSelectedMaterialRequest(null);
-	};
-
-	const editMaterialRequest = (item: MaterialRequest) => {
-		setSelectedMaterialRequest(item);
-		setIsEditMaterialRequestBladeOpen(true);
-	};
-
-	const onClosePersonalInfoBlade = async () => {
-		refetch();
-		setIsPersonalInfoBladeOpen(false);
+		deleteResponse && (await refetch());
 	};
 
 	const renderTitle = (props: any) => {
@@ -195,7 +204,10 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						className={
 							styles['c-material-request-center-blade__material-actions-button']
 						}
-						onClick={() => editMaterialRequest(item)}
+						onClick={() => {
+							setSelectedMaterialRequest(item);
+							setActiveBlade(MaterialRequestBladeId.EditMaterialRequest);
+						}}
 						variants={['silver']}
 						name="Edit"
 						icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
@@ -273,7 +285,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
 						)}
 						variants={['block', 'text', 'dark']}
-						onClick={() => setIsPersonalInfoBladeOpen(true)}
+						onClick={() => {
+							setActiveBlade(MaterialRequestBladeId.PersonalDetails);
+						}}
 						className={styles['c-material-request-center-blade__send-button']}
 					/>
 				)}
@@ -288,37 +302,44 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		);
 	};
 
-	if (isFetching) {
-		return (
-			<Blade
-				className={styles['c-material-request-center-blade']}
-				isOpen={isOpen}
-				onClose={onClose}
-				renderTitle={renderTitle}
-			>
-				<Loading
-					className={styles['c-material-request-center-blade__loading']}
-					owner="MaterialRequestCenterBlade: render material requests"
-				/>
-			</Blade>
-		);
-	}
-
+	console.log({ currentLayer: getCurrentLayer() });
 	return (
-		<>
+		<BladeManager
+			currentLayer={getCurrentLayer()}
+			onCloseBlade={(layer) => {
+				setActiveBlade(MaterialRequestBladeId.Overview);
+				if (layer === 1) {
+					onClose();
+				}
+			}}
+			opacityStep={0.1}
+		>
 			<Blade
 				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
+				layer={1}
+				currentLayer={getCurrentLayer()}
 				renderTitle={renderTitle}
 				footer={isOpen && renderFooter()}
 				onClose={onClose}
+				isManaged
 			>
-				{renderContent()}
+				{isFetching ? (
+					<Loading
+						className={styles['c-material-request-center-blade__loading']}
+						owner="MaterialRequestCenterBlade: render material requests"
+					/>
+				) : (
+					renderContent()
+				)}
 			</Blade>
 			{selectedMaterialRequest && (
 				<MaterialRequestBlade
-					isOpen={isEditMaterialRequestBladeOpen}
-					onClose={() => closeEditMaterialRequestBlade()}
+					isOpen={activeBlade === MaterialRequestBladeId.EditMaterialRequest}
+					onClose={() => {
+						setActiveBlade(MaterialRequestBladeId.Overview);
+						setSelectedMaterialRequest(null);
+					}}
 					objectName={selectedMaterialRequest.objectSchemaName}
 					objectId={selectedMaterialRequest.objectSchemaIdentifier}
 					objectDctermsFormat={selectedMaterialRequest.objectDctermsFormat}
@@ -331,12 +352,20 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 					type={selectedMaterialRequest.type}
 					refetch={refetch}
 					isEditMode
+					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequest ? 2 : 99}
+					currentLayer={
+						activeBlade === MaterialRequestBladeId.EditMaterialRequest
+							? getCurrentLayer()
+							: 9999
+					}
 				/>
 			)}
 			{user && (
 				<PersonalInfoBlade
-					isOpen={isPersonalInfoBladeOpen}
-					onClose={onClosePersonalInfoBlade}
+					isOpen={activeBlade === MaterialRequestBladeId.PersonalDetails}
+					onClose={() => {
+						setActiveBlade(MaterialRequestBladeId.Overview);
+					}}
 					personalInfo={{
 						fullName: user.fullName,
 						email: user.email,
@@ -345,9 +374,15 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							organisation: user.organisationName,
 						}),
 					}}
+					layer={activeBlade === MaterialRequestBladeId.PersonalDetails ? 2 : 99}
+					currentLayer={
+						activeBlade === MaterialRequestBladeId.PersonalDetails
+							? getCurrentLayer()
+							: 9999
+					}
 				/>
 			)}
-		</>
+		</BladeManager>
 	);
 };
 

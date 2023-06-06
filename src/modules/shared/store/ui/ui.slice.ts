@@ -1,8 +1,6 @@
 import { Breadcrumb } from '@meemoo/react-components';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ROUTES } from '@shared/const';
-
 import { LastScrollPositionType, UIState } from './ui.types';
 
 const initialState: UIState = {
@@ -12,6 +10,7 @@ const initialState: UIState = {
 	showFooter: true,
 	showNotificationsCenter: false,
 	showMaterialRequestCenter: false,
+	openNavigationDropdownId: null,
 	hasUnreadNotifications: false,
 	showZendesk: true,
 	lockScroll: {},
@@ -41,6 +40,9 @@ export const uiSlice = createSlice({
 		},
 		setShowMaterialRequestCenter(state, action: PayloadAction<boolean>) {
 			state.showMaterialRequestCenter = action.payload;
+		},
+		setOpenNavigationDropdownId(state, action: PayloadAction<string | null>) {
+			state.openNavigationDropdownId = action.payload;
 		},
 		setHasUnreadNotifications(state, action: PayloadAction<boolean>) {
 			state.hasUnreadNotifications = action.payload;
@@ -77,6 +79,7 @@ export const {
 	setShowNotificationsCenter,
 	setShowMaterialRequestCenter,
 	setHasUnreadNotifications,
+	setOpenNavigationDropdownId,
 	setShowZendesk,
 	setLockScroll,
 	setMaterialRequestCount,
