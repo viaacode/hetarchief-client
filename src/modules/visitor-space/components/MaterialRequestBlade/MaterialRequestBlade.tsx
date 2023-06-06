@@ -51,7 +51,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	refetch,
 	type,
 }) => {
-	const { tText } = useTranslation();
+	const { tText, tHtml } = useTranslation();
 	const dispatch = useDispatch();
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(

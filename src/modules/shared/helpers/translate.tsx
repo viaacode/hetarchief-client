@@ -1,3 +1,4 @@
+import { decode as decodeHtmlEntities } from 'html-entities';
 import { TOptions } from 'i18next';
 import { i18n } from 'next-i18next';
 import React, { ReactNode } from 'react';
@@ -32,5 +33,5 @@ export function tText(key: string, params?: TOptions | string | undefined): stri
 		return (key.split('___')[1] || key).replace('-', ' ') + ' ***';
 	}
 
-	return translation;
+	return decodeHtmlEntities(translation);
 }
