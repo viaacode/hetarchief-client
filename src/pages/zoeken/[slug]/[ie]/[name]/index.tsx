@@ -840,10 +840,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 
 		const shared: Partial<FlowPlayerProps> = {
-			className: clsx(
-				'p-object-detail__flowplayer',
-				showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
-			),
+			className: clsx('p-object-detail__flowplayer', {
+				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
+			}),
 			poster: mediaInfo?.thumbnailUrl || undefined,
 			title: representation.name,
 			logo: mediaInfo?.maintainerLogo || undefined,
@@ -991,10 +990,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		<dd className="u-m-0">
 			{
 				<ul
-					className={`u-bg-platinum u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type} p-object-detail__metadata-list--${
-						expandMetadata && isMobile ? 'collaped' : 'expanded'
-					}
-				`}
+					className={clsx(
+						'u-bg-platinum',
+						'u-list-reset p-object-detail__metadata-list',
+						`p-object-detail__metadata-list--${type}`,
+						{
+							'p-object-detail__metadata-list--collapsed':
+								!expandMetadata || isMobile,
+							'p-object-detail__metadata-list--expanded': expandMetadata && !isMobile,
+						}
+					)}
 				>
 					{items.map((item, index) => {
 						return (
@@ -1220,11 +1225,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 		return (
 			<RelatedObjectsBlade
-				className={clsx(
-					'p-object-detail__related',
-					'p-object-detail__metadata--collapsed',
-					expandMetadata && 'p-object-detail__metadata--expanded'
-				)}
+				className={clsx('p-object-detail__related', {
+					'p-object-detail__metadata--expanded': expandMetadata,
+					'p-object-detail__metadata--collapsed': !expandMetadata,
+				})}
 				icon={
 					<Icon
 						className="u-font-size-24 u-mr-8 u-text-left"
@@ -1288,7 +1292,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		return (
 			showBackButton && (
 				<Button
-					className={clsx('p-object-detail__back')}
+					className="p-object-detail__back"
 					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 					onClick={() => window.history.back()}
 					variants={['white', 'xs']}
@@ -1326,21 +1330,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				</p>
 			)}
 			<article
-				className={clsx(
-					'p-object-detail__wrapper',
-					mediaInfoIsLoading && 'p-object-detail--hidden ',
-					mediaInfoIsError && 'p-object-detail--hidden ',
-					expandMetadata && 'p-object-detail__wrapper--expanded',
-					activeTab === ObjectDetailTabs.Metadata && 'p-object-detail__wrapper--metadata',
-					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
-				)}
+				className={clsx('p-object-detail__wrapper', {
+					'p-object-detail--hidden': mediaInfoIsLoading || mediaInfoIsError,
+					'p-object-detail__wrapper--collapsed': !expandMetadata,
+					'p-object-detail__wrapper--expanded': expandMetadata,
+					'p-object-detail__wrapper--metadata': activeTab === ObjectDetailTabs.Metadata,
+					'p-object-detail__wrapper--video': activeTab === ObjectDetailTabs.Media,
+				})}
 			>
 				{mediaType && hasMedia && (
 					<Button
-						className={clsx(
-							'p-object-detail__expand-button',
-							expandMetadata && 'p-object-detail__expand-button--expanded'
-						)}
+						className={clsx('p-object-detail__expand-button', {
+							'p-object-detail__expand-button--collapsed': !expandMetadata,
+							'p-object-detail__expand-button--expanded': expandMetadata,
+						})}
 						icon={
 							<Icon
 								name={
@@ -1357,12 +1360,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				)}
 				<div className="p-object-detail__video">{renderObjectMedia()}</div>
 				<div
-					className={clsx(
-						'p-object-detail__metadata',
-						'p-object-detail__metadata--collapsed',
-						expandMetadata && 'p-object-detail__metadata--expanded',
-						!mediaType && 'p-object-detail__metadata--no-media'
-					)}
+					className={clsx('p-object-detail__metadata', {
+						'p-object-detail__metadata--collapsed': !expandMetadata,
+						'p-object-detail__metadata--expanded': expandMetadata,
+						'p-object-detail__metadata--no-media': !mediaType,
+					})}
 				>
 					{renderMetaData()}
 				</div>
