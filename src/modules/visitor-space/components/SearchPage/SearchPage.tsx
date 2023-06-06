@@ -404,14 +404,31 @@ const SearchPage: FC = () => {
 		}
 	};
 
+	/**
+	 * Reset all filters except the maintainer
+	 */
 	const onResetFilters = () => {
-		// Reset all filters except the maintainer
 		setQuery({
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 			[VisitorSpaceFilterId.Maintainer]: query[VisitorSpaceFilterId.Maintainer],
 		});
 	};
 
+	/**
+	 * Reset one filter by id
+	 * @param id
+	 */
+	const onResetFilter = (id: VisitorSpaceFilterId) => {
+		const newQueryParams = { ...query };
+		newQueryParams[id] = undefined;
+		setQuery(newQueryParams);
+	};
+
+	/**
+	 * Set one filter with its values
+	 * @param id
+	 * @param values
+	 */
 	const onSubmitFilter = (id: VisitorSpaceFilterId, values: unknown) => {
 		const searchValue = prepareSearchValue(searchBarInputValue);
 		let data;
@@ -729,9 +746,8 @@ const SearchPage: FC = () => {
 					onSortClick={onSortClick}
 					onMenuToggle={onFilterMenuToggle}
 					onViewToggle={onViewToggle}
-					onFilterSubmit={(id, values) =>
-						onSubmitFilter(id as VisitorSpaceFilterId, values)
-					}
+					onFilterSubmit={onSubmitFilter}
+					onFilterReset={onResetFilter}
 					onRemoveValue={onRemoveTag}
 				/>
 			</div>

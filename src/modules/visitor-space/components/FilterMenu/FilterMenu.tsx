@@ -11,7 +11,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
 import { VISITOR_SPACE_ACTIVE_SORT_MAP, VISITOR_SPACE_QUERY_PARAM_CONFIG } from '../../const';
-import { VisitorSpaceSort } from '../../types';
+import { VisitorSpaceFilterId, VisitorSpaceSort } from '../../types';
 
 import styles from './FilterMenu.module.scss';
 import { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
@@ -70,11 +70,11 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		setQuery({ filter });
 	};
 
-	const onFilterFormReset = (id: string) => {
+	const onFilterFormReset = (id: VisitorSpaceFilterId) => {
 		onFilterReset(id);
 	};
 
-	const onFilterFormSubmit = (id: string, values: unknown) => {
+	const onFilterFormSubmit = (id: VisitorSpaceFilterId, values: unknown) => {
 		onFilterSubmit(id, values);
 	};
 
