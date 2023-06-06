@@ -403,7 +403,6 @@ const MediaCard: FC<MediaCardProps> = ({
 					{tText('modules/shared/components/media-card/media-card___geen-licentie')}
 				</p>
 			</Modal>
-			;
 			<RequestAccessBlade
 				isOpen={isRequestAccessBladeOpen}
 				onClose={() => setIsRequestAccessBladeOpen(false)}
