@@ -1,22 +1,16 @@
 @use "src/styles/abstracts" as *;
 
-$layout: "l-app";
+.l-app {
+	.l-app__main {
+		min-height: calc(100vh - 10rem - 26rem);
+	}
 
-.#{$layout} {
 	&--sticky {
 		height: 100vh; // fallback for browsers that do not support custom css properties
 		height: calc((var(--vh, 1vh) * 100)); // '100vh' for mobile excludes browser ui. Custom --vh prop is set in use-window-size.ts
 		min-height: 72rem;
 		min-height: calc((var(--vh, 1vh) * 100));
 		overflow: hidden;
-
-		.#{$layout}__main {
-			min-height: 0;
-		}
-	}
-
-	.#{$layout}__main {
-		min-height: calc(100vh - 10rem - 26rem);
 	}
 
 	/**
