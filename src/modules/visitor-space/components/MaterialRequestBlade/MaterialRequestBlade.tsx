@@ -51,7 +51,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	refetch,
 	type,
 }) => {
-	const { tText } = useTranslation();
+	const { tText, tHtml } = useTranslation();
 	const dispatch = useDispatch();
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(
@@ -233,7 +233,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				)}
 				<div>
 					<p className={styles['c-request-material__maintainer-details']}>
-						{tText(
+						{tHtml(
 							'modules/visitor-space/components/material-request-blade/material-request-blade___item-van'
 						)}
 					</p>
