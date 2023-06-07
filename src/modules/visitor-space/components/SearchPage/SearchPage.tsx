@@ -202,7 +202,7 @@ const SearchPage: FC = () => {
 		setVisitorSpaces(sortedSpaces);
 
 		return sortedSpaces;
-	}, [user]);
+	}, [isAnonymousUser, isKioskUser, user]);
 
 	const {
 		data: searchResults,

@@ -30,7 +30,16 @@ export const mapMaintainerToElastic = (
 		return [];
 	}
 
-	return [
+	const filterByObjectIds =
+		(activeVisitorSpace?.accessibleObjectIds?.length || 0) > 0
+			? {
+					field: IeObjectsSearchFilterField.IDENTIFIER,
+					operator: IeObjectsSearchOperator.IS,
+					multiValue: activeVisitorSpace?.accessibleObjectIds,
+			  }
+			: null;
+
+	return compact([
 		{
 			field: IeObjectsSearchFilterField.MAINTAINER_ID,
 			operator: IeObjectsSearchOperator.IS,
@@ -46,7 +55,10 @@ export const mapMaintainerToElastic = (
 				IeObjectLicense.BEZOEKERTOOL_CONTENT,
 			],
 		},
-	];
+		// Filter by object ids if the user received folder access to the visitor space
+		// https://meemoo.atlassian.net/browse/ARC-1655
+		filterByObjectIds,
+	]);
 };
 
 export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => {
