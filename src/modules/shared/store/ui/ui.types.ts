@@ -13,6 +13,7 @@ export interface UIState {
 	showFooter: boolean;
 	showNotificationsCenter: boolean;
 	hasUnreadNotifications: boolean;
+	openNavigationDropdownId: string | null;
 	showZendesk: boolean;
 	lockScroll: Record<string, boolean>;
 	materialRequestCount: number;

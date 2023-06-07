@@ -10,6 +10,7 @@ import { useAppDispatch } from '@shared/store';
 import {
 	selectMaterialRequestCount,
 	selectShowMaterialRequestCenter,
+	setOpenNavigationDropdownId,
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
@@ -32,6 +33,7 @@ const MaterialRequestCenterButton: FC = () => {
 
 	const onButtonClick = () => {
 		dispatch(setShowNotificationsCenter(false));
+		dispatch(setOpenNavigationDropdownId(null));
 		dispatch(setShowMaterialRequestCenter(!showMaterialRequestCenter));
 	};
 
