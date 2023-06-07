@@ -137,7 +137,7 @@ export const VISITOR_SPACE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'),
 		form: ConsultableOnlyOnLocationFilterForm,
 		type: FilterMenuType.Checkbox,
-		isDisabled: () => !isPublicCollection,
+		isDisabled: () => !isPublicCollection || isKioskUser,
 	},
 	{
 		id: VisitorSpaceFilterId.Medium,
