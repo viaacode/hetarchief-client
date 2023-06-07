@@ -91,25 +91,6 @@ export const objectPlaceholder = (): ObjectPlaceholderProps => ({
 	),
 });
 
-export const formatErrorPlaceholder = (format: string): ObjectPlaceholderProps => ({
-	description: tText(
-		'modules/ie-objects/const/index___dit-formaat-wordt-niet-ondersteund-format',
-		{
-			format,
-		}
-	),
-	reasonTitle: tText('modules/ie-objects/const/index___waarom-kan-ik-dit-object-niet-bekijken'),
-	reasonDescription: tText(
-		'modules/ie-objects/const/index___het-formaat-van-de-data-wordt-op-dit-moment-niet-ondersteund'
-	),
-	openModalButtonLabel: tText(
-		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
-	),
-	closeModalButtonLabel: tText(
-		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
-	),
-});
-
 export const noLicensePlaceholder = (): ObjectPlaceholderProps => ({
 	description: tText(
 		'modules/ie-objects/const/index___je-kan-dit-object-enkel-bekijken-tijdens-een-fysiek-bezoek-aan-de-bezoekersruimte'
@@ -464,7 +445,7 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 					title: tText('modules/ie-objects/const/index___genre'),
 					data: isString(mediaInfo.actor)
 						? mediaInfo.actor
-						: JSON.stringify(mediaInfo.actor as any),
+						: JSON.stringify(mediaInfo.actor),
 				},
 		  ]
 		: []),

@@ -140,7 +140,7 @@ const Newsletter: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<Button
 				variants={['silver']}
 				className="p-newsletter__form-button u-ml-8"
-				label={tText('Naar de startpagina')}
+				label={tText('pages/nieuwsbrief/index___naar-de-startpagina')}
 				onClick={async () => {
 					await router.push(`/`);
 				}}
