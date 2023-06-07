@@ -48,14 +48,20 @@ export class AuthService {
 				query: omit(parsedUrl.query, QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY),
 			});
 		}
-		const returnToUrl = stringifyUrl({
-			url: trimEnd(
-				`${
-					isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL
-				}${originalPath}`,
-				'/'
-			),
-			query: otherQueryParams,
+
+		let returnToUrl = trimEnd(
+			`${
+				isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL
+			}${originalPath}`,
+			'/'
+		);
+		const parsedRedirectUrl = parseUrl(returnToUrl);
+		returnToUrl = stringifyUrl({
+			url: parsedRedirectUrl.url,
+			query: {
+				...parsedRedirectUrl.query,
+				...otherQueryParams,
+			},
 		});
 
 		await router.replace(

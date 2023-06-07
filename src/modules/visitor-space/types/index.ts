@@ -87,7 +87,7 @@ export interface DefaultFilterFormProps<Values = unknown> extends DefaultCompone
 }
 
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
-	id: string;
+	id: VisitorSpaceFilterId;
 	label: string;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	disabled?: boolean;

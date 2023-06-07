@@ -190,8 +190,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	);
 
 	// Internal state
-	const [activeTab, setActiveTab] = useState<string | number | null>(null);
-	const [activeBlade, setActiveBlade] = useState<MediaActions | null>(null);
 	const [mediaType, setMediaType] = useState<IeObjectTypes>(null);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
@@ -202,7 +200,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
-	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	// Layout
 	useStickyLayout();
@@ -216,8 +213,21 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	// Query params
 	const [query, setQuery] = useQueryParams({
 		...IE_OBJECT_QUERY_PARAM_CONFIG,
-		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.ACTIVE_BLADE]: StringParam,
+		[QUERY_PARAM_KEY.ACTIVE_TAB]: StringParam,
 	});
+
+	const setActiveTab = (tabId: ObjectDetailTabs | null) => {
+		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined });
+	};
+
+	const setActiveBlade = (blade: MediaActions | null) => {
+		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined });
+	};
+
+	const activeTab = query[QUERY_PARAM_KEY.ACTIVE_TAB];
+	const activeBlade = query[QUERY_PARAM_KEY.ACTIVE_BLADE];
 
 	// Fetch object
 	const {
@@ -342,7 +352,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKiosk && !hasAccessToVisitorSpaceOfObject));
-	}, [dispatch, hasAccessToVisitorSpaceOfObject]);
+	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk]);
 
 	useEffect(() => {
 		if (mediaInfo) {
@@ -357,7 +367,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			hasAccessToVisitorSpaceOfObject &&
 				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData);
 		}
-	}, [mediaInfo]);
+	}, [hasAccessToVisitorSpaceOfObject, mediaInfo, user?.groupName]);
 
 	useEffect(() => {
 		// Pause media if metadata tab is shown on mobile
@@ -442,16 +452,26 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	/**
 	 * Callbacks
 	 */
-	const onTabClick = (id: string | number) => {
-		setActiveTab(id);
-	};
-
 	const onClickToggle = () => {
 		setActiveTab(expandMetadata ? ObjectDetailTabs.Media : ObjectDetailTabs.Metadata);
 	};
 
 	const onCloseBlade = () => {
 		setActiveBlade(null);
+	};
+
+	const openRequestAccessBlade = () => {
+		if (user) {
+			// Open the request access blade
+			setActiveBlade(MediaActions.RequestAccess);
+		} else {
+			// Open the login blade first
+			setQuery({
+				...query,
+				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
+				[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
+			});
+		}
 	};
 
 	const onClickAction = (id: MediaActions) => {
@@ -469,7 +489,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				setActiveBlade(MediaActions.Report);
 				break;
 			case MediaActions.RequestAccess:
-				setActiveBlade(MediaActions.RequestAccess);
+				openRequestAccessBlade();
 				break;
 			case MediaActions.RequestMaterial:
 				onRequestMaterialClick();
@@ -693,11 +713,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		[metadataExportDropdownOpen, onExportClick, tHtml, tText]
 	);
 
-	const onOpenRequestAccess = () => {
-		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: mediaInfo?.maintainerSlug });
-		setIsRequestAccessBladeOpen(true);
-	};
-
 	const highlighted = (toHighlight: string) => (
 		<Highlighter
 			searchWords={(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string[]) ?? []}
@@ -813,7 +828,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				return (
 					<ObjectPlaceholder
 						{...noLicensePlaceholder()}
-						onOpenRequestAccess={onOpenRequestAccess}
+						onOpenRequestAccess={openRequestAccessBlade}
 					/>
 				);
 			}
@@ -825,10 +840,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 
 		const shared: Partial<FlowPlayerProps> = {
-			className: clsx(
-				'p-object-detail__flowplayer',
-				showFragmentSlider && 'p-object-detail__flowplayer--with-slider'
-			),
+			className: clsx('p-object-detail__flowplayer', {
+				'p-object-detail__flowplayer--with-slider': showFragmentSlider,
+			}),
 			poster: mediaInfo?.thumbnailUrl || undefined,
 			title: representation.name,
 			logo: mediaInfo?.maintainerLogo || undefined,
@@ -976,10 +990,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		<dd className="u-m-0">
 			{
 				<ul
-					className={`u-bg-platinum u-list-reset p-object-detail__metadata-list p-object-detail__metadata-list--${type} p-object-detail__metadata-list--${
-						expandMetadata && isMobile ? 'collaped' : 'expanded'
-					}
-				`}
+					className={clsx(
+						'u-bg-platinum',
+						'u-list-reset p-object-detail__metadata-list',
+						`p-object-detail__metadata-list--${type}`,
+						{
+							'p-object-detail__metadata-list--collapsed':
+								!expandMetadata || isMobile,
+							'p-object-detail__metadata-list--expanded': expandMetadata && !isMobile,
+						}
+					)}
 				>
 					{items.map((item, index) => {
 						return (
@@ -1046,7 +1066,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
 			variants={['dark', 'sm']}
 			className="p-object-detail__visit-button"
-			onClick={onOpenRequestAccess}
+			onClick={openRequestAccessBlade}
 		/>
 	);
 
@@ -1205,11 +1225,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 		return (
 			<RelatedObjectsBlade
-				className={clsx(
-					'p-object-detail__related',
-					'p-object-detail__metadata--collapsed',
-					expandMetadata && 'p-object-detail__metadata--expanded'
-				)}
+				className={clsx('p-object-detail__related', {
+					'p-object-detail__metadata--expanded': expandMetadata,
+					'p-object-detail__metadata--collapsed': !expandMetadata,
+				})}
 				icon={
 					<Icon
 						className="u-font-size-24 u-mr-8 u-text-left"
@@ -1273,7 +1292,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		return (
 			showBackButton && (
 				<Button
-					className={clsx('p-object-detail__back')}
+					className="p-object-detail__back"
 					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
 					onClick={() => window.history.back()}
 					variants={['white', 'xs']}
@@ -1292,7 +1311,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				className="p-object-detail__tabs"
 				variants={['dark']}
 				tabs={tabs}
-				onClick={onTabClick}
+				onClick={(tabId) => setActiveTab(tabId as ObjectDetailTabs | null)}
 			/>
 			{isNoAccessError && (
 				<ErrorNoAccessToObject
@@ -1311,21 +1330,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				</p>
 			)}
 			<article
-				className={clsx(
-					'p-object-detail__wrapper',
-					mediaInfoIsLoading && 'p-object-detail--hidden ',
-					mediaInfoIsError && 'p-object-detail--hidden ',
-					expandMetadata && 'p-object-detail__wrapper--expanded',
-					activeTab === ObjectDetailTabs.Metadata && 'p-object-detail__wrapper--metadata',
-					activeTab === ObjectDetailTabs.Media && 'p-object-detail__wrapper--video'
-				)}
+				className={clsx('p-object-detail__wrapper', {
+					'p-object-detail--hidden': mediaInfoIsLoading || mediaInfoIsError,
+					'p-object-detail__wrapper--collapsed': !expandMetadata,
+					'p-object-detail__wrapper--expanded': expandMetadata,
+					'p-object-detail__wrapper--metadata': activeTab === ObjectDetailTabs.Metadata,
+					'p-object-detail__wrapper--video': activeTab === ObjectDetailTabs.Media,
+				})}
 			>
 				{mediaType && hasMedia && (
 					<Button
-						className={clsx(
-							'p-object-detail__expand-button',
-							expandMetadata && 'p-object-detail__expand-button--expanded'
-						)}
+						className={clsx('p-object-detail__expand-button', {
+							'p-object-detail__expand-button--collapsed': !expandMetadata,
+							'p-object-detail__expand-button--expanded': expandMetadata,
+						})}
 						icon={
 							<Icon
 								name={
@@ -1342,12 +1360,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				)}
 				<div className="p-object-detail__video">{renderObjectMedia()}</div>
 				<div
-					className={clsx(
-						'p-object-detail__metadata',
-						'p-object-detail__metadata--collapsed',
-						expandMetadata && 'p-object-detail__metadata--expanded',
-						!mediaType && 'p-object-detail__metadata--no-media'
-					)}
+					className={clsx('p-object-detail__metadata', {
+						'p-object-detail__metadata--collapsed': !expandMetadata,
+						'p-object-detail__metadata--expanded': expandMetadata,
+						'p-object-detail__metadata--no-media': !mediaType,
+					})}
 				>
 					{renderMetaData()}
 				</div>
@@ -1388,13 +1405,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 			/>
-			{showVisitButton && (
-				<RequestAccessBlade
-					isOpen={isRequestAccessBladeOpen}
-					onClose={() => setIsRequestAccessBladeOpen(false)}
-					onSubmit={onRequestAccessSubmit}
-				/>
-			)}
+			<RequestAccessBlade
+				isOpen={activeBlade === MediaActions.RequestAccess && !!user}
+				onClose={() => setActiveBlade(null)}
+				onSubmit={onRequestAccessSubmit}
+			/>
 		</>
 	);
 

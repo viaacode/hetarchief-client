@@ -39,7 +39,7 @@ const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFor
 	});
 
 	const onFilterFormSubmit = useCallback(
-		(id: string, values: unknown) => onFormSubmit(id, values),
+		(id: VisitorSpaceFilterId, values: unknown) => onFormSubmit(id, values),
 		[onFormSubmit]
 	);
 

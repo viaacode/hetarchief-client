@@ -8,6 +8,7 @@ import {
 	DefaultFilterFormProps,
 	InlineFilterFormProps,
 	TagIdentity,
+	VisitorSpaceFilterId,
 	VisitorSpaceSort,
 } from '../../types';
 
@@ -41,7 +42,7 @@ export enum FilterMenuType {
 }
 
 export interface FilterMenuFilterOption {
-	id: string;
+	id: VisitorSpaceFilterId;
 	icon?: IconName;
 	label: string;
 	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -50,5 +51,5 @@ export interface FilterMenuFilterOption {
 }
 
 export type OnFilterMenuSortClick = (key: VisitorSpaceSort, order?: OrderDirection) => void;
-export type OnFilterMenuFormSubmit = <Values>(id: string, values: Values) => void;
-export type OnFilterMenuFormReset = (id: string) => void;
+export type OnFilterMenuFormSubmit = <Values>(id: VisitorSpaceFilterId, values: Values) => void;
+export type OnFilterMenuFormReset = (id: VisitorSpaceFilterId) => void;

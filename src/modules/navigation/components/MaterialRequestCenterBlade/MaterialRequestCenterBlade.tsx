@@ -153,7 +153,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 				<div>
 					<p className={styles['c-material-request-center-blade__maintainer-details']}>
-						{tText(
+						{tHtml(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___aangevraagd'
 						)}
 					</p>
