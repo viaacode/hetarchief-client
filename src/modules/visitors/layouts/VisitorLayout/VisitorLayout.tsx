@@ -17,7 +17,7 @@ const VisitorLayout: FC = ({ children }) => {
 
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKioskUser));
-	}, [dispatch]);
+	}, [dispatch, isKioskUser]);
 
 	return <>{children}</>;
 };

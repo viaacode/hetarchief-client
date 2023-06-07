@@ -55,6 +55,7 @@ import {
 	selectShowNotificationsCenter,
 	setHasUnreadNotifications,
 	setMaterialRequestCount,
+	setOpenNavigationDropdownId,
 	setShowAuthModal,
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
@@ -122,6 +123,7 @@ const AppLayout: FC = ({ children }) => {
 		(show: boolean) => {
 			show && scrollTo(0);
 			dispatch(setShowMaterialRequestCenter(false));
+			dispatch(setOpenNavigationDropdownId(null));
 			dispatch(setShowNotificationsCenter(show));
 		},
 		[dispatch]

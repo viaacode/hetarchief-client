@@ -34,7 +34,7 @@ const Blade: FC<BladeProps> = ({
 
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
-	const isLayered = isManaged && layer;
+	const isLayered = isManaged && !!layer;
 	const isBladeOpen = isLayered ? layer <= currentLayer : isOpen;
 
 	// Hack to remove ios outline on the close button: https://meemoo.atlassian.net/browse/ARC-1025
@@ -70,7 +70,12 @@ const Blade: FC<BladeProps> = ({
 	const renderTopBar = () => {
 		return showBackButton ? (
 			<div className={styles['c-blade__top-bar-container']}>
-				<div className={styles['c-blade__back-container']} onClick={() => handleClose()}>
+				<div
+					className={styles['c-blade__back-container']}
+					onClick={() => {
+						handleClose();
+					}}
+				>
 					<Button variants="text" icon={<Icon name={IconNamesLight.ArrowLeft} />} />
 					<span>{tText('modules/shared/components/blade/blade___vorige-stap')}</span>
 				</div>

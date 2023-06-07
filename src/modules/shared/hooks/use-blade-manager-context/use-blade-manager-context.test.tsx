@@ -2,8 +2,7 @@ import { renderHook } from '@testing-library/react-hooks';
 import { ReactNode } from 'react';
 
 import { BladeManagerContext, BladeManagerContextValue } from '@shared/context/BladeManagerContext';
-
-import useBladeManagerContext from './use-blade-manager-context';
+import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context/use-blade-manager-context';
 
 describe('Hooks', () => {
 	describe('useBladeManagerContext()', () => {

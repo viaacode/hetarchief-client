@@ -1,8 +1,15 @@
 import { keysSpacebar, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { FC } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Icon, IconName, IconNamesLight, Overlay } from '@shared/components';
+import {
+	selectOpenNavigationDropdownId,
+	setOpenNavigationDropdownId,
+	setShowMaterialRequestCenter,
+	setShowNotificationsCenter,
+} from '@shared/store/ui';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
@@ -11,15 +18,24 @@ import { NavigationDropdown } from '../NavigationDropdown';
 import { NavigationListProps } from './NavigationList.types';
 
 const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => {
-	const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+	const dispatch = useDispatch();
+
+	const openDropdownId = useSelector(selectOpenNavigationDropdownId);
+	const setOpenDropdownId = (id: string | null) => {
+		dispatch(setShowMaterialRequestCenter(false));
+		dispatch(setShowNotificationsCenter(false));
+		setTimeout(() => {
+			dispatch(setOpenNavigationDropdownId(id));
+		}, 10);
+	};
 
 	const openDropdowns = (id: string) => {
-		setOpenDropdown(id);
+		setOpenDropdownId(id);
 		onOpenDropdowns?.();
 	};
 
 	const closeDropdowns = () => {
-		setOpenDropdown(null);
+		setOpenDropdownId(null);
 	};
 
 	const renderTrigger = (item: NavigationItem, iconName: IconName) => {
@@ -39,11 +55,12 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 	return (
 		<>
 			<Overlay
-				visible={!!openDropdown}
+				visible={!!openDropdownId}
 				className={clsx(
 					styles['c-navigation__dropdown-overlay'],
 					styles['c-navigation__list-overlay']
 				)}
+				onClick={closeDropdowns}
 			/>
 			<ul className={styles['c-navigation__list']}>
 				{items.map((item, index) => {
@@ -64,12 +81,12 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 								<NavigationDropdown
 									flyoutClassName={styles['c-navigation__list-flyout']}
 									id={item.id}
-									isOpen={openDropdown === item.id}
-									lockScroll={openDropdown === item.id}
+									isOpen={openDropdownId === item.id}
+									lockScroll={openDropdownId === item.id}
 									items={item.children}
 									trigger={renderTrigger(
 										item,
-										openDropdown === item.id
+										openDropdownId === item.id
 											? IconNamesLight.AngleUp
 											: IconNamesLight.AngleDown
 									)}

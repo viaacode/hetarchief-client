@@ -13,6 +13,8 @@ export const selectShowNotificationsCenter = (state: AppState): boolean =>
 	state.ui.showNotificationsCenter;
 export const selectShowMaterialRequestCenter = (state: AppState): boolean =>
 	state.ui.showMaterialRequestCenter;
+export const selectOpenNavigationDropdownId = (state: AppState): string | null =>
+	state.ui.openNavigationDropdownId;
 export const selectHasUnreadNotifications = (state: AppState): boolean =>
 	state.ui.hasUnreadNotifications;
 export const selectShowZendesk = (state: AppState): boolean => state.ui.showZendesk;

@@ -3,6 +3,8 @@
 $component: "c-request-material";
 
 .#{$component} {
+	margin-top: $c-navigation-height;
+
 	&__maintainer {
 		padding: $spacer-sm $spacer-lg;
 		background-color: $platinum;
