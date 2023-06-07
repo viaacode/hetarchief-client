@@ -32,7 +32,6 @@ const MaterialRequestCenterButton: FC = () => {
 	const showMaterialRequestCenter = useSelector(selectShowMaterialRequestCenter);
 
 	const onButtonClick = () => {
-		console.log({ showMaterialRequestCenter });
 		dispatch(setShowNotificationsCenter(false));
 		dispatch(setOpenNavigationDropdownId(null));
 		dispatch(setShowMaterialRequestCenter(!showMaterialRequestCenter));
@@ -68,7 +67,6 @@ const MaterialRequestCenterButton: FC = () => {
 		};
 	}, []);
 
-	console.log({ showMaterialRequestCenter });
 	return (
 		<>
 			<Button

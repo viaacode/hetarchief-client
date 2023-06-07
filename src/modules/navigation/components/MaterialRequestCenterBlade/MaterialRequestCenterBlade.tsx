@@ -44,7 +44,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		MaterialRequestBladeId.Overview
 	);
 	const getCurrentLayer = () => {
-		console.log('get current layer: ', { isOpen, activeBlade });
 		if (!isOpen) {
 			return 0;
 		}
@@ -54,7 +53,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 			case MaterialRequestBladeId.EditMaterialRequest:
 			case MaterialRequestBladeId.PersonalDetails:
-				return 2;
+				return 2; // Both blades are at level 2
 
 			default:
 				return 0;
@@ -302,7 +301,6 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		);
 	};
 
-	console.log({ currentLayer: getCurrentLayer() });
 	return (
 		<BladeManager
 			currentLayer={getCurrentLayer()}

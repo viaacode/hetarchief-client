@@ -99,9 +99,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 				</h2>
 			)}
 			footer={isOpen && renderFooter()}
-			onClose={() => {
-				onClose();
-			}}
+			onClose={onClose}
 			showBackButton
 			layer={layer}
 			currentLayer={currentLayer}
