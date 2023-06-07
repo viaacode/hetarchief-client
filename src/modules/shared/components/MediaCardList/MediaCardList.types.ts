@@ -10,9 +10,9 @@ export interface MediaCardListProps
 	items?: IdentifiableMediaCard[];
 	sidebar?: ReactNode;
 	breakpoints?: Record<number | 'default', number>;
-	buttons?: (item: MediaCardProps) => ReactNode;
-	actions?: (item: MediaCardProps) => ReactNode;
-	wrapper?: (card: ReactNode, item: MediaCardProps) => ReactNode;
+	renderButtons?: (item: MediaCardProps) => ReactNode;
+	renderActions?: (item: MediaCardProps) => ReactNode;
+	renderWrapper?: (card: ReactNode, item: MediaCardProps) => ReactNode;
 	showLocallyAvailable?: boolean;
 	tempAccessLabel?: ReactNode;
 	showManyResultsTile?: boolean;

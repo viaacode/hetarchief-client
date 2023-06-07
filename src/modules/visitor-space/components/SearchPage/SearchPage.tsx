@@ -767,7 +767,7 @@ const SearchPage: FC = () => {
 		return (
 			<Button
 				onClick={(e) => {
-					// Avoid navigating to detail when opening
+					// Avoid navigating to the card object (detail page) when clicking buttons on the card (bookmark)
 					e.preventDefault();
 					e.stopPropagation();
 
@@ -868,7 +868,7 @@ const SearchPage: FC = () => {
 				keywords={searchResults?.searchTerms}
 				sidebar={renderFilterMenu()}
 				view={viewMode === 'grid' ? 'grid' : 'list'}
-				buttons={renderCardButtons}
+				renderButtons={renderCardButtons}
 				className="p-media-card-list"
 				showManyResultsTile={showManyResultsTile}
 			/>

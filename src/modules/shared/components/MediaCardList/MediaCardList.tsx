@@ -23,9 +23,9 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	view,
 	sidebar,
 	breakpoints = MEDIA_CARD_LIST_GRID_BP_COLS,
-	buttons,
-	actions,
-	wrapper = (card) => card,
+	renderButtons,
+	renderActions,
+	renderWrapper = (card) => card,
 	className,
 	showLocallyAvailable = false,
 	showManyResultsTile,
@@ -157,13 +157,13 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: keywords,
 			},
 		});
-		return wrapper(
+		return renderWrapper(
 			<MediaCard
 				key={getKey(item, i)}
 				id={getKey(item, i)}
-				buttons={buttons?.(item)}
+				buttons={renderButtons?.(item)}
 				meemooIdentifier={item.meemooIdentifier}
-				actions={actions?.(item)}
+				actions={renderActions?.(item)}
 				{...item}
 				keywords={keywords}
 				view={view}
