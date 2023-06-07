@@ -8,4 +8,6 @@ export enum QUERY_PARAM_KEY {
 	SEARCH_QUERY_KEY = 'zoekterm',
 	REDIRECT_TO_QUERY_KEY = 'redirectTo',
 	HIGHLIGHTED_SEARCH_TERMS = 'searchTerms',
+	ACTIVE_BLADE = 'blade',
+	ACTIVE_TAB = 'tab',
 }
