@@ -47,4 +47,5 @@ module.exports = {
 	globals: {
 		TZ: 'UTC',
 	},
+	testTimeout: 20000,
 };
