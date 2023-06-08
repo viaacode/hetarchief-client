@@ -358,6 +358,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		if (mediaInfo) {
 			const path = window.location.href;
 			const eventData = {
+				type: mediaInfo.dctermsFormat,
 				schema_identifier: mediaInfo.schemaIdentifier,
 				meemoo_identifier: mediaInfo.meemooIdentifier,
 				user_group_name: user?.groupName,
