@@ -13,6 +13,12 @@
 		}
 	}
 
+	:global(.c-translations-content__no-results) {
+		padding: $spacer-sm;
+		display: block;
+		color: $neutral;
+	}
+
 	:global(table) {
 		margin-top: $spacer-md;
 
