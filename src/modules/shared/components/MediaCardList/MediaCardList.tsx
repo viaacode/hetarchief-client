@@ -27,7 +27,6 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	renderActions,
 	renderWrapper = (card) => card,
 	className,
-	showLocallyAvailable = false,
 	showManyResultsTile,
 }) => {
 	const windowSize = useWindowSizeContext();
@@ -149,14 +148,6 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	};
 
 	const tiles = items.map((item, i) => {
-		const link = stringifyUrl({
-			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}/${
-				kebabCase(item.name) || 'titel'
-			}`,
-			query: {
-				[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: keywords,
-			},
-		});
 		return renderWrapper(
 			<MediaCard
 				key={getKey(item, i)}
@@ -167,8 +158,8 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				{...item}
 				keywords={keywords}
 				view={view}
-				showLocallyAvailable={showLocallyAvailable}
-				link={link}
+				showLocallyAvailable={item.showLocallyAvailable}
+				link={item.link}
 				maintainerSlug={item.maintainerSlug}
 			/>,
 			item
