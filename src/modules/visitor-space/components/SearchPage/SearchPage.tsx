@@ -879,7 +879,7 @@ const SearchPage: FC = () => {
 				showBackToTop
 				total={getItemCounts(query.format as VisitorSpaceMediaType)}
 				onPageChange={(zeroBasedPage) => {
-					scrollTo(0);
+					scrollTo(0, 'instant');
 					setQuery({
 						...query,
 						page: zeroBasedPage + 1,

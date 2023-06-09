@@ -219,11 +219,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	});
 
 	const setActiveTab = (tabId: ObjectDetailTabs | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined });
+		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined }, 'replace');
 	};
 
 	const setActiveBlade = (blade: MediaActions | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined });
+		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined }, 'replace');
 	};
 
 	const activeTab = query[QUERY_PARAM_KEY.ACTIVE_TAB];
@@ -466,11 +466,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			setActiveBlade(MediaActions.RequestAccess);
 		} else {
 			// Open the login blade first
-			setQuery({
-				...query,
-				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
-				[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
-			});
+			setQuery(
+				{
+					...query,
+					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
+					[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
+				},
+				'replace'
+			);
 		}
 	};
 
