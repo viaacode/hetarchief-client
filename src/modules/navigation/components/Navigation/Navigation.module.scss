@@ -125,7 +125,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	.c-navigation__dropdown-flyout {
 		// Overwrite element styles
 		inset: $c-navigation-height-md 0 0 0 !important;
-		inset: $c-navigation-height-md 0 0 0 !important;
 		transform: translate(0) !important;
 		color: $black;
 	}
@@ -248,7 +247,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 		// Overwrite popper element styles
 		@include respond-to(xxl) {
-			inset: $c-navigation-height-md 0 0 0 !important;
 			inset: $c-navigation-height-md 0 0 0 !important;
 			transform: translate(0) !important;
 		}
