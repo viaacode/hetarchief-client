@@ -594,7 +594,7 @@
   "modules/visitor-space/utils/map-filters/map-filters___aanbieders": "Aanbieders",
   "modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is": "Alles wat raadpleegbaar is",
   "modules/visitor-space/utils/map-filters/map-filters___filter": "Filter",
-  "modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse": "<p>Ter plaatse afspeelbaar</p><p></p>",
+  "modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse": "Ter plaatse afspeelbaar",
   "modules/visitor-space/utils/map-filters/map-filters___trefwoord": "Trefwoord",
   "modules/visitor-space/utils/metadata/metadata___alles": "Alles",
   "modules/visitor-space/utils/metadata/metadata___analoge-drager": "Fysieke drager",
@@ -875,5 +875,7 @@
   "pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte": "Beschrijving van een organisatie",
   "pages/slug/toegang-aangevraagd/index___deze-pagina-is-niet-toegankelijk-doe-een-bezoekersaavraag-op-de-startpagina": "Deze pagina is niet toegankelijk. Doe een bezoekersaavraag op de startpagina",
   "pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-bezoekersruimtes-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd": "Je kan de status van je aanvraag volgen op de 'Start je bezoek'-pagina. Je ontvangt een e-mailmelding als je aanvraag behandeld werd.",
-  "pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen": "We hebben je aanvraag goed ontvangen."
+  "pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen": "We hebben je aanvraag goed ontvangen.",
+  "pages/zoeken/index___zoek-pagina-seo-omschrijving": "Zoek in het archief van meer dan 150 aanbieders",
+  "pages/zoeken/index___zoeken-pagina-titel": "Zoeken"
 }
