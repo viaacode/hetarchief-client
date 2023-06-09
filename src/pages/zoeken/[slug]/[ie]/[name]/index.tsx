@@ -1433,6 +1433,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 
 		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {
+			if (isNoAccessError) {
+				return (
+					<ErrorNoAccessToObject
+						visitorSpaceName={visitorSpace?.name as string}
+						visitorSpaceSlug={visitorSpace?.slug as string}
+						description={tHtml(
+							'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+						)}
+					/>
+				);
+			}
+
 			if (isErrorSpaceNotFound) {
 				return <ErrorNotFound />;
 			}
