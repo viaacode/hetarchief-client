@@ -110,6 +110,10 @@
 					width: 16.5rem;
 					height: auto;
 				}
+
+				:global(.c-logo) {
+					display: block;
+				}
 			}
 
 			&__section1 {
