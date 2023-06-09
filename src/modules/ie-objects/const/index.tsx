@@ -315,12 +315,6 @@ export enum CustomMetaDataFields {
 // TODO: complete mapping
 export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	{
-		title: CustomMetaDataFields.Maintainer,
-		data: CustomMetaDataFields.Maintainer,
-		customData: true,
-		customTitle: true,
-	},
-	{
 		title: tText('modules/ie-objects/const/index___oorsprong'),
 		data: mediaInfo.meemooOriginalCp,
 	},

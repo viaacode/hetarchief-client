@@ -32,7 +32,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
@@ -47,13 +47,13 @@ import {
 	DynamicActionMenu,
 	DynamicActionMenuProps,
 	MediaObject,
-	Metadata,
-	MetadataItem,
 	ObjectPlaceholder,
 	RelatedObject,
 	RelatedObjectsBlade,
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
+import { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
+import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
 	CP_ADMIN_ACTION_SORT_MAP,
@@ -106,7 +106,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
-import { MetaDataDescription } from '@shared/components/MetaDataDescription';
+import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -151,6 +151,8 @@ import {
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
+
+import Metadata from '../../../../../modules/ie-objects/components/Metadata/Metadata';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -314,7 +316,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	/**
 	 * Computed
 	 */
-	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
 	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
 	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
@@ -763,7 +764,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		const original = MEDIA_ACTIONS(
 			canManageFolders || isAnonymous,
 			isInAFolder(collections, mediaInfo?.schemaIdentifier),
-			isNotKiosk,
+			!isKiosk,
 			!!canRequestAccess,
 			isAnonymous || canRequestMaterial,
 			canDownloadMetadata
@@ -806,7 +807,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		isAnonymous,
 		collections,
 		mediaInfo?.schemaIdentifier,
-		isNotKiosk,
+		isKiosk,
 		canRequestAccess,
 		canRequestMaterial,
 		canDownloadMetadata,
@@ -1026,14 +1027,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			<p className="p-object-detail__metadata-label">
 				{tText('modules/ie-objects/const/index___aanbieder')}
 			</p>
-			{isNotKiosk && !hasAccessToVisitorSpaceOfObject && (
+			{!isKiosk && !hasAccessToVisitorSpaceOfObject && (
 				<>
 					<p className="p-object-detail__metadata-pill">
 						<TagList
 							className="u-pt-12"
 							tags={mapKeywordsToTags([maintainerName])}
-							onTagClicked={() => {
-								router.push(
+							onTagClicked={async () => {
+								await router.push(
 									stringifyUrl({
 										url: `/${ROUTE_PARTS.search}`,
 										query: {
@@ -1049,6 +1050,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					</p>
 					{maintainerLogo && (
 						<div className="p-object-detail__metadata-logo">
+							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
 						</div>
 					)}
@@ -1078,28 +1080,35 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		maintainerDescription,
 		maintainerSiteUrl,
 		maintainerName,
-	}: IeObject): ReactNode =>
-		isNotKiosk && !hasAccessToVisitorSpaceOfObject ? (
-			<div className="p-object-detail__metadata-maintainer-data">
-				{maintainerDescription && (
-					<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
-				)}
-				{maintainerSiteUrl && (
-					<p className="p-object-detail__metadata-link">
-						<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
-							{maintainerSiteUrl}
-						</a>
-						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
-					</p>
-				)}
-				{showVisitButton && isMobile && renderVisitButton()}
-			</div>
-		) : (
-			<div className="p-object-detail__metadata-maintainer-data">
-				{maintainerName}
-				{showVisitButton && isMobile && renderVisitButton()}
-			</div>
-		);
+	}: IeObject): ReactNode => {
+		if (!isKiosk && !hasAccessToVisitorSpaceOfObject) {
+			return (
+				<div className="p-object-detail__metadata-maintainer-data">
+					{maintainerDescription && (
+						<p className="p-object-detail__metadata-description">
+							{maintainerDescription}
+						</p>
+					)}
+					{maintainerSiteUrl && (
+						<p className="p-object-detail__metadata-link">
+							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
+								{maintainerSiteUrl}
+							</a>
+							<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+						</p>
+					)}
+					{showVisitButton && isMobile && renderVisitButton()}
+				</div>
+			);
+		} else {
+			return (
+				<div className="p-object-detail__metadata-maintainer-data">
+					{maintainerName}
+					{showVisitButton && isMobile && renderVisitButton()}
+				</div>
+			);
+		}
+	};
 
 	const getCustomTitleRenderFn = (
 		field: CustomMetaDataFields,
@@ -1176,7 +1185,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 					{renderMetaDataActions()}
 
-					<MetaDataDescription description={mediaInfo.description || ''} />
+					<MetaDataFieldWithHighlightingAndMaxLength
+						title={tText(
+							'modules/visitor-space/utils/metadata/metadata___beschrijving'
+						)}
+						data={mediaInfo.description}
+					/>
 
 					{showAlert && (
 						<Alert
@@ -1190,15 +1204,30 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					)}
 				</div>
 
-				<Metadata
-					className="p-object-detail__metadata-component"
-					metadata={metaDataFields}
-				/>
+				<MetadataList disableContainerQuery={false}>
+					<Metadata title={CustomMetaDataFields.Maintainer} key={`metadata-maintainer`}>
+						{renderMaintainerMetaData(mediaInfo)}
+					</Metadata>
+					{/* other metadata fields */}
+					{metaDataFields.map((item: MetadataItem, index: number) => {
+						return (
+							<Metadata
+								title={item.title}
+								key={`metadata-${index}-${item.title}`}
+								className={item.className}
+							>
+								<MetaDataFieldWithHighlightingAndMaxLength
+									title={item.title}
+									data={item.data}
+								/>
+							</Metadata>
+						);
+					})}
+				</MetadataList>
 
 				{(!!similar.length || !!mediaInfo.keywords?.length) && (
-					<Metadata
-						className="p-object-detail__metadata-component"
-						metadata={[
+					<MetadataList disableContainerQuery>
+						{[
 							{
 								title: tHtml(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
@@ -1215,9 +1244,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 									: null,
 								className: 'u-pb-0',
 							},
-						].filter((field) => !!field.data)}
-						disableContainerQuery
-					/>
+						]
+							.filter((field) => !!field.data)
+							.map((item: MetadataItem, index: number) => {
+								return (
+									<Metadata
+										title={item.title}
+										key={`metadata-${index}-${item.title}`}
+										className={item.className}
+									>
+										{item.data}
+									</Metadata>
+								);
+							})}
+					</MetadataList>
 				)}
 			</>
 		);
@@ -1389,7 +1429,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					onSubmit={async () => onCloseBlade()}
 				/>
 			)}
-			{mediaInfo && isNotKiosk && (
+			{mediaInfo && !isKiosk && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
