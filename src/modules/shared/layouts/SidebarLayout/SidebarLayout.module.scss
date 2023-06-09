@@ -36,7 +36,7 @@ $l-sidebar-collapse-to: "md";
 	&__main {
 		width: 70%;
 
-		@include respond-at("xs") {
+		@include respond-at("md") {
 			flex-grow: 1;
 		}
 
