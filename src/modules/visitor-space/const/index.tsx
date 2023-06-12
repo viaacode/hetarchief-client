@@ -130,7 +130,7 @@ export const VISITOR_SPACE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'),
 		form: ConsultableMediaFilterForm,
 		type: FilterMenuType.Checkbox,
-		isDisabled: () => !isKeyUser,
+		isDisabled: () => !isPublicCollection || !isKeyUser,
 	},
 	{
 		id: VisitorSpaceFilterId.ConsultableOnlyOnLocation,
