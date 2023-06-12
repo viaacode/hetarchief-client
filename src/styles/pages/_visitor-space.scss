@@ -92,5 +92,10 @@
 		&--has-dropdown {
 			height: 100%;
 		}
+
+		.c-tag,
+		.c-tag--closable {
+			height: auto;
+		}
 	}
 }
