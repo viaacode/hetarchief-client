@@ -141,6 +141,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 						'modules/shared/components/media-card-list/media-card-list___teveel-resultaten'
 					)}
 					view={view}
+					link={undefined}
 				/>
 			);
 		}
