@@ -13,6 +13,7 @@ import {
 	SortObject,
 } from '@shared/types';
 import { ElasticsearchFieldNames } from '@visitor-space/types';
+import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';
 
 import { IeObjectsService } from './../services';
 
@@ -78,13 +79,22 @@ export const useGetIeObjects = (
 			dispatch(setFilterOptions(searchResults.aggregations));
 
 			// Log event
-			EventsService.triggerEvent(LogEventType.SEARCH, window.location.href, {
-				filters,
-				page,
-				size,
-				sort,
-				user_group_name: user?.groupName,
-			});
+			const isVisitorSpaceSearch = !!filters.find(
+				(filter) =>
+					filter.field === IeObjectsSearchFilterField.LICENSES &&
+					filter.multiValue === VISITOR_SPACE_LICENSES
+			);
+			EventsService.triggerEvent(
+				isVisitorSpaceSearch ? LogEventType.BEZOEK_SEARCH : LogEventType.SEARCH,
+				window.location.href,
+				{
+					filters,
+					page,
+					size,
+					sort,
+					user_group_name: user?.groupName,
+				}
+			);
 
 			return searchResults;
 		},

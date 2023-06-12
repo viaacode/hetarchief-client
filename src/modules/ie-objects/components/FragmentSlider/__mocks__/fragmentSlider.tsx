@@ -31,7 +31,7 @@ export const fragmentSliderMock: FragmentSliderProps = {
 			dctermsFormat: 'png',
 			transcript: 'item',
 			dateCreated: 'item',
-			schemaIdentifier: '/images/bg-shd.png',
+			schemaIdentifier: '/images/bg-newsletter.png',
 			files: [],
 		},
 		// {

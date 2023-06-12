@@ -2,6 +2,7 @@ export enum LogEventType {
 	// Triggered in the frontend
 	BEZOEK_ITEM_VIEW = 'be.hetarchief.bezoek.item.view',
 	BEZOEK_ITEM_PLAY = 'be.hetarchief.bezoek.item.play',
+	BEZOEK_SEARCH = 'be.hetarchief.bezoek.search',
 	ITEM_REQUEST = 'be.hetarchief.item.request',
 	ITEM_VIEW = 'be.hetarchief.item.view',
 	ITEM_PLAY = 'be.hetarchief.item.play',

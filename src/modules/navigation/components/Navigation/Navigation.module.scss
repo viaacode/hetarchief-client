@@ -125,10 +125,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	.c-navigation__dropdown-flyout {
 		// Overwrite element styles
 		inset: $c-navigation-height-md 0 0 0 !important;
-		top: $c-navigation-height-md !important;
-		right: 0 !important;
-		bottom: 0 !important;
-		left: 0 !important;
 		transform: translate(0) !important;
 		color: $black;
 	}
@@ -252,10 +248,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		// Overwrite popper element styles
 		@include respond-to(xxl) {
 			inset: $c-navigation-height-md 0 0 0 !important;
-			top: $c-navigation-height-md !important;
-			right: 0 !important;
-			bottom: 0 !important;
-			left: 0 !important;
 			transform: translate(0) !important;
 		}
 		@include respond-at(xxl) {
@@ -474,6 +466,13 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	}
 
 	.c-navigation__section {
+		:global(.c-menu) {
+			max-height: calc(100vh - $c-navigation-height);
+			overflow-x: hidden;
+			overflow-y: scroll;
+			padding-bottom: 10rem;
+		}
+
 		:global(.c-badge) {
 			@include respond-to(xxl) {
 				margin-left: $spacer-xs;
@@ -496,7 +495,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	&-logged-out {
 		grid-template-rows: 1fr repeat(2, 3.25rem) 1fr;
-		grid-template-columns: repeat(auto, 1fr);
+		grid-template-columns: repeat(auto-fill, 1fr);
 		column-gap: $spacer-lg;
 
 		.c-navigation__section--left {

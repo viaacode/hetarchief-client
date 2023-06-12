@@ -18,6 +18,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade';
 
+import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
 
 import styles from './MaterialRequestCenterBlade.module.scss';
@@ -317,11 +318,15 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				isOpen={isOpen}
 				layer={1}
 				currentLayer={getCurrentLayer()}
-				renderTitle={renderTitle}
+				renderTitle={() => null}
 				footer={isOpen && renderFooter()}
 				onClose={onClose}
 				isManaged
 			>
+				{renderTitle({
+					id: 'material-requests-overview-blade-title',
+					className: bladeStyles['c-blade__title'],
+				})}
 				{isFetching ? (
 					<Loading
 						className={styles['c-material-request-center-blade__loading']}

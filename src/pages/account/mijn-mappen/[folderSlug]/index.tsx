@@ -1,10 +1,11 @@
 import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash-es';
+import { isEmpty, isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
+import { stringifyUrl } from 'query-string';
 import { ComponentType, ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +22,7 @@ import { foldersService } from '@account/services/folders';
 import { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { IeObjectAccessThrough } from '@ie-objects/types';
+import { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/types';
 import {
 	Icon,
 	IconNamesLight,
@@ -36,7 +37,7 @@ import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts'
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTES } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -250,17 +251,15 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		});
 	};
 
+	/**
+	 * Show buttons to plan a visit if the object is accessible inside a visitor space and the user doesn't currently have access to the object
+	 * @param item
+	 */
 	const getShowLocallyAvailable = (item: FolderIeObject) => {
-		const userHasAccessToMaintainer =
-			item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
-			item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
-
-		const itemHasThumbnail = item.thumbnailUrl;
-
 		return (
-			!userHasAccessToMaintainer &&
-			item.accessThrough.includes(IeObjectAccessThrough.SECTOR) &&
-			!itemHasThumbnail
+			isEmpty(item.accessThrough) &&
+			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL))
 		);
 	};
 
@@ -508,6 +507,21 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 										<MediaCardList
 											keywords={keywords}
 											items={folderMedia?.data?.items.map((media) => {
+												let link: string | undefined = stringifyUrl({
+													url: `/${ROUTE_PARTS.search}/${
+														media.maintainerSlug
+													}/${media.schemaIdentifier}/${
+														kebabCase(media.name) || 'titel'
+													}`,
+													query: {
+														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
+															keywords,
+													},
+												});
+												if (isEmpty(media.accessThrough)) {
+													// If the user has no access to the object, do not make the card clickable
+													link = undefined;
+												}
 												const base: IdentifiableMediaCard = {
 													schemaIdentifier: media.schemaIdentifier,
 													maintainerSlug: media.maintainerSlug,
@@ -524,6 +538,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													showLocallyAvailable:
 														getShowLocallyAvailable(media),
 													previousPage: ROUTES.myFolders,
+													link: link,
 												};
 
 												return {
