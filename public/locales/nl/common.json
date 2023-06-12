@@ -594,7 +594,7 @@
   "modules/visitor-space/utils/map-filters/map-filters___aanbieders": "Aanbieders",
   "modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is": "Alles wat raadpleegbaar is",
   "modules/visitor-space/utils/map-filters/map-filters___filter": "Filter",
-  "modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse": "<p>Ter plaatse afspeelbaar</p><p></p>",
+  "modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse": "Ter plaatse afspeelbaar",
   "modules/visitor-space/utils/map-filters/map-filters___trefwoord": "Trefwoord",
   "modules/visitor-space/utils/metadata/metadata___alles": "Alles",
   "modules/visitor-space/utils/metadata/metadata___analoge-drager": "Fysieke drager",
@@ -833,9 +833,9 @@
   "pages/index___toon-alles-amount": "Toon alles ({{amount}})",
   "pages/index___vind-een-bezoekersruimte": "Vind een aanbieder",
   "pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging": "Bevestiging inschrijving nieuwsbrief",
-  "pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-omschrijving": "Inschrijving op de nieuwsbrief is gelukt.",
+  "pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging-omschrijving": "Inschrijviong op de nieuwsbrief is gelukt.",
   "pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging___bevestiging": "Bevestiging inschrijving nieuwsbrief",
-  "pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging___inschrijving-op-de-nieuwsbrief-is-gelukt": "Inschrijving op de nieuwsbrief is gelukt.",
+  "pages/nieuwsbrief-bevestiging/index___nieuwsbrief-bevestiging___inschrijving-op-de-nieuwsbrief-is-gelukt": "Inschrijviong op de nieuwsbrief is gelukt.",
   "pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt": "Inschrijving nieuwsbrief mislukt",
   "pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt-omschrijving": "Inschrijving op de nieuwsbrief is mislukt",
   "pages/nieuwsbrief-mislukt/index___nieuwsbrief-mislukt___inschrijving-op-de-nieuwsbrief-is-mislukt": "Inschrijving op de nieuwsbrief is mislukt",
@@ -847,7 +847,7 @@
   "pages/nieuwsbrief/index___nieuwsbrief___formulier-emailadres": "E-mailadres",
   "pages/nieuwsbrief/index___nieuwsbrief___formulier-error": "Versturen mislukt",
   "pages/nieuwsbrief/index___nieuwsbrief___formulier-succes": "Versturen gelukt",
-  "pages/nieuwsbrief/index___nieuwsbrief___formulier-versturen-is-gelukt": "Versturen van het nieuwsbrief formulier is gelukt, controleer je email om je email adres te bevestigen",
+  "pages/nieuwsbrief/index___nieuwsbrief___formulier-versturen-is-gelukt": "Versturen van het nieuwsbrief formulier is gelukt",
   "pages/nieuwsbrief/index___nieuwsbrief___formulier-versturen-is-mislukt": "Versturen van het nieuwsbrief formulier is mislukt",
   "pages/nieuwsbrief/index___nieuwsbrief___formulier-voornaam": "Voornaam",
   "pages/nieuwsbrief/index___nieuwsbrief___formulier___achternaam-moet-ingevuld-zijn": "Achternaam is verplicht",
@@ -875,5 +875,7 @@
   "pages/slug/toegang-aangevraagd/index___beschrijving-van-een-bezoekersruimte": "Beschrijving van een organisatie",
   "pages/slug/toegang-aangevraagd/index___deze-pagina-is-niet-toegankelijk-doe-een-bezoekersaavraag-op-de-startpagina": "Deze pagina is niet toegankelijk. Doe een bezoekersaavraag op de startpagina",
   "pages/slug/toegang-aangevraagd/index___je-kan-de-status-van-je-aanvraag-volgen-op-de-bezoekersruimtes-pagina-je-ontvangt-ook-meteen-een-e-mailmelding-als-je-aanvraag-behandeld-werd": "Je kan de status van je aanvraag volgen op de 'Start je bezoek'-pagina. Je ontvangt een e-mailmelding als je aanvraag behandeld werd.",
-  "pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen": "We hebben je aanvraag goed ontvangen."
+  "pages/slug/toegang-aangevraagd/index___we-hebben-je-aanvraag-ontvangen": "We hebben je aanvraag goed ontvangen.",
+  "pages/zoeken/index___zoek-pagina-seo-omschrijving": "Zoek in het archief van meer dan 150 aanbieders",
+  "pages/zoeken/index___zoeken-pagina-titel": "Zoeken"
 }
