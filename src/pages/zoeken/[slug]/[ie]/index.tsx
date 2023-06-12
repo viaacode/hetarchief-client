@@ -19,25 +19,25 @@ type MaintainerSearchPageProps = DefaultSeoInfo;
  */
 const IeObjectWithoutObjectNamePage: NextPage<MaintainerSearchPageProps> = () => {
 	const router = useRouter();
-	const { ie: objectId } = router.query;
+	const { ie: objectId, slug } = router.query;
 
-	const { data: ieObjectInfo } = useGetIeObjectsInfo(objectId as string, {
+	const { data: ieObjectInfo, isError } = useGetIeObjectsInfo(objectId as string, {
 		keepPreviousData: true,
 		enabled: !!objectId,
 	});
 
 	// If the url is: /zoeken/:slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
 	useEffect(() => {
-		if (ieObjectInfo) {
-			const objectTitleSlug = kebabCase(ieObjectInfo.name);
+		if (ieObjectInfo || isError) {
+			const objectTitleSlug = kebabCase(ieObjectInfo?.name || '');
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS.search}/${ieObjectInfo.maintainerSlug}/${
-					ieObjectInfo.schemaIdentifier
-				}/${objectTitleSlug || 'titel'}`,
+				url: `/${ROUTE_PARTS.search}/${ieObjectInfo?.maintainerSlug || slug}/${objectId}/${
+					objectTitleSlug || 'titel'
+				}`,
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}
-	}, [router, ieObjectInfo]);
+	}, [router, ieObjectInfo, isError]);
 
 	return <Loading owner="IeObjectWithoutObjectNamePage" fullscreen />;
 };

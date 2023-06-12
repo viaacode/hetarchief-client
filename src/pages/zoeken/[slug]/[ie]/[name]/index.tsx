@@ -219,11 +219,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	});
 
 	const setActiveTab = (tabId: ObjectDetailTabs | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined });
+		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined }, 'replace');
 	};
 
 	const setActiveBlade = (blade: MediaActions | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined });
+		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined }, 'replace');
 	};
 
 	const activeTab = query[QUERY_PARAM_KEY.ACTIVE_TAB];
@@ -358,6 +358,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		if (mediaInfo) {
 			const path = window.location.href;
 			const eventData = {
+				type: mediaInfo.dctermsFormat,
 				schema_identifier: mediaInfo.schemaIdentifier,
 				meemoo_identifier: mediaInfo.meemooIdentifier,
 				user_group_name: user?.groupName,
@@ -466,11 +467,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			setActiveBlade(MediaActions.RequestAccess);
 		} else {
 			// Open the login blade first
-			setQuery({
-				...query,
-				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
-				[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
-			});
+			setQuery(
+				{
+					...query,
+					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
+					[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
+				},
+				'replace'
+			);
 		}
 	};
 
@@ -1433,6 +1437,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 
 		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {
+			if (isNoAccessError) {
+				return (
+					<ErrorNoAccessToObject
+						visitorSpaceName={visitorSpace?.name as string}
+						visitorSpaceSlug={visitorSpace?.slug as string}
+						description={tHtml(
+							'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+						)}
+					/>
+				);
+			}
+
 			if (isErrorSpaceNotFound) {
 				return <ErrorNotFound />;
 			}

@@ -230,6 +230,7 @@ $metadata-collapsed-width: 36vw;
 		margin-top: $spacer-xs;
 		padding: $spacer-md;
 		background-color: $platinum;
+		padding-bottom: 10rem;
 
 		@include respond-at("md") {
 			// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;

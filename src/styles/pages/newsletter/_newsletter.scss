@@ -46,6 +46,8 @@ $page: "p-newsletter";
 		background-image: url("/images/bg-newsletter.jpg");
 		background-position: left bottom;
 		background-size: auto 80%;
+		overflow-y: auto;
+		padding-bottom: 10rem;
 
 		@include respond-to(lg) {
 			background-position: left top;

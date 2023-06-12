@@ -35,7 +35,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 
 	const renderFooterLeft = () => {
 		return (
-			<div className={styles[`c-footer__links__left`]}>
+			<div className={styles['c-footer__links__left']}>
 				<Link href="/">
 					<a
 						className={styles['c-footer__image-link']}
@@ -50,7 +50,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 
 	const renderFooterRight = () => {
 		return (
-			<div className={styles[`c-footer__links__right`]}>
+			<div className={styles['c-footer__links__right']}>
 				<div>{tText('modules/navigation/components/footer/footer___gesteund-door')}</div>
 				<Link href="https://www.vlaanderen.be">
 					<a
@@ -61,7 +61,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 						)}
 					>
 						<Image
-							src={`/images/logo_vlaanderen.svg`}
+							src={'/images/logo_vlaanderen.svg'}
 							alt={tText(
 								'modules/navigation/components/footer/footer___vlaanderen-logo'
 							)}
@@ -85,7 +85,7 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 						)}
 					>
 						<Image
-							src={`/images/logo_meemoo.svg`}
+							src={'/images/logo_meemoo.svg'}
 							alt={tText('modules/navigation/components/footer/footer___meemoo-logo')}
 							width={104}
 							height={44}

@@ -335,8 +335,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			<Card
 				className={clsx(
 					styles['c-media-card'],
-					showKeyUserLabel && styles['c-media-card--key-user'],
-					!showLocallyAvailable && styles['c-media-card--pointer']
+					showKeyUserLabel && styles['c-media-card--key-user']
 				)}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
@@ -366,7 +365,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			return (
 				<Link key={id} href={link}>
 					<a
-						className="u-text-no-decoration"
+						className="u-text-no-decoration c-media-card--pointer"
 						aria-label={id}
 						onClick={saveScrollPosition}
 					>

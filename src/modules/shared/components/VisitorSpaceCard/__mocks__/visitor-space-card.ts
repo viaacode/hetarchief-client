@@ -6,8 +6,8 @@ export const mockVisitorSpaceCardProps: VisitorSpaceCardProps = {
 		id: '78912',
 		slug: 'amsab',
 		color: '#220538',
-		image: '/images/bg-shd.png',
-		logo: '/images/logo-shd--small.svg',
+		image: '/images/bg-newsletter.png',
+		logo: '/images/logo_meemoo.svg',
 		name: 'Studio Hyperdrive',
 		info: 'A digital development studio that shoots for the stars. We are a bunch of JavaScript enthusiasts who thrive on getting things done. We are using a solid set of technologies and methodologies we truly believe in as a spearpoint to help you realize your full digital potential.',
 		contactInfo: {
@@ -16,11 +16,6 @@ export const mockVisitorSpaceCardProps: VisitorSpaceCardProps = {
 		},
 	},
 	type: VisitorSpaceCardType.noAccess,
-};
-
-export const NoAccess: VisitorSpaceAccess = {
-	granted: false,
-	pending: false,
 };
 
 export const AccessRequested: VisitorSpaceAccess = {

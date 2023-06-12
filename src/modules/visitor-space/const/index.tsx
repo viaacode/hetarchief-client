@@ -48,7 +48,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	// Filters
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: undefined,
 	[VisitorSpaceFilterId.Format]: VisitorSpaceMediaType.All,
-	[VisitorSpaceFilterId.Maintainer]: '',
+	[VisitorSpaceFilterId.Maintainer]: undefined,
 	[VisitorSpaceFilterId.Maintainers]: undefined,
 	[VisitorSpaceFilterId.Medium]: undefined,
 	[VisitorSpaceFilterId.Duration]: undefined,
@@ -78,7 +78,7 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<a
 	// Filters
 	format: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.format as string),
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ArrayParam,
-	[VisitorSpaceFilterId.Maintainer]: withDefault(StringParam, ''),
+	[VisitorSpaceFilterId.Maintainer]: StringParam,
 	[VisitorSpaceFilterId.Medium]: ArrayParam,
 	[VisitorSpaceFilterId.Duration]: AdvancedFilterArrayParam,
 	[VisitorSpaceFilterId.Created]: AdvancedFilterArrayParam,
@@ -130,7 +130,7 @@ export const VISITOR_SPACE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'),
 		form: ConsultableMediaFilterForm,
 		type: FilterMenuType.Checkbox,
-		isDisabled: () => !isKeyUser,
+		isDisabled: () => !isPublicCollection || !isKeyUser,
 	},
 	{
 		id: VisitorSpaceFilterId.ConsultableOnlyOnLocation,
