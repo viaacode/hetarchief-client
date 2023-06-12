@@ -47,12 +47,12 @@ import {
 	DynamicActionMenu,
 	DynamicActionMenuProps,
 	MediaObject,
+	MetadataItem,
 	ObjectPlaceholder,
 	RelatedObject,
 	RelatedObjectsBlade,
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
-import { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
@@ -91,10 +91,11 @@ import {
 	MetadataSortMap,
 	ObjectDetailTabs,
 } from '@ie-objects/types';
-import { isInAFolder, mapKeywordsToTagList, mapKeywordsToTags } from '@ie-objects/utils';
+import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
+	Blade,
 	ErrorNoAccessToObject,
 	ErrorNotFound,
 	Icon,
@@ -202,6 +203,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
+	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 
 	// Layout
 	useStickyLayout();
@@ -1110,29 +1112,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 	};
 
-	const getCustomTitleRenderFn = (
-		field: CustomMetaDataFields,
-		mediaInfo: IeObject
-	): ReactNode => {
-		switch (field) {
-			case CustomMetaDataFields.Maintainer:
-				return renderMaintainerMetaTitle(mediaInfo);
-
-			default:
-				return null;
-		}
-	};
-
-	const getCustomDataRenderFn = (field: CustomMetaDataFields, mediaInfo: IeObject): ReactNode => {
-		switch (field) {
-			case CustomMetaDataFields.Maintainer:
-				return renderMaintainerMetaData(mediaInfo);
-
-			default:
-				return null;
-		}
-	};
-
 	const renderKeyUserPill = (): ReactNode => (
 		<div className="u-mt-24">
 			<Pill
@@ -1152,20 +1131,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 
 		const showAlert = !mediaInfo.description;
-		const metaDataFields = METADATA_FIELDS(mediaInfo)
-			.filter(({ isDisabled }: MetadataItem): boolean => !isDisabled?.())
-			.map(
-				(field: MetadataItem): MetadataItem => ({
-					...field,
-					title: field.customTitle
-						? getCustomTitleRenderFn(field.title as CustomMetaDataFields, mediaInfo)
-						: field.title,
-					data: field.customData
-						? getCustomDataRenderFn(field.data as CustomMetaDataFields, mediaInfo)
-						: field.data,
-				})
-			)
-			.filter(({ data }: MetadataItem): boolean => !!data);
+		const metaDataFields = METADATA_FIELDS(mediaInfo).filter(
+			({ data }: MetadataItem): boolean => !!data
+		);
 
 		return (
 			<>
@@ -1190,6 +1158,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 							'modules/visitor-space/utils/metadata/metadata___beschrijving'
 						)}
 						data={mediaInfo.description}
+						className="u-pb-24 u-line-height-1-4 u-font-size-14"
+						onReadMoreClicked={setSelectedMetadataField}
 					/>
 
 					{showAlert && (
@@ -1205,20 +1175,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				</div>
 
 				<MetadataList disableContainerQuery={false}>
-					<Metadata title={CustomMetaDataFields.Maintainer} key={`metadata-maintainer`}>
+					<Metadata
+						title={renderMaintainerMetaTitle(mediaInfo)}
+						key={`metadata-maintainer`}
+					>
 						{renderMaintainerMetaData(mediaInfo)}
 					</Metadata>
 					{/* other metadata fields */}
 					{metaDataFields.map((item: MetadataItem, index: number) => {
 						return (
-							<Metadata
-								title={item.title}
-								key={`metadata-${index}-${item.title}`}
-								className={item.className}
-							>
+							<Metadata title={item.title} key={`metadata-${index}-${item.title}`}>
 								<MetaDataFieldWithHighlightingAndMaxLength
 									title={item.title}
-									data={item.data}
+									data={item.data as string}
+									onReadMoreClicked={setSelectedMetadataField}
 								/>
 							</Metadata>
 						);
@@ -1232,7 +1202,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								title: tHtml(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 								),
-								data: mapKeywordsToTagList(
+								data: renderKeywordsAsTags(
 									mediaInfo.keywords,
 									visitRequest ? (router.query.slug as string) : ''
 								),
@@ -1242,21 +1212,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								data: similar.length
 									? renderMetadataCards('similar', similar)
 									: null,
-								className: 'u-pb-0',
 							},
 						]
 							.filter((field) => !!field.data)
-							.map((item: MetadataItem, index: number) => {
-								return (
-									<Metadata
-										title={item.title}
-										key={`metadata-${index}-${item.title}`}
-										className={item.className}
-									>
-										{item.data}
-									</Metadata>
-								);
-							})}
+							.map(
+								(
+									item: { title: ReactNode; data: ReactNode | string },
+									index: number
+								) => {
+									return (
+										<Metadata
+											title={item.title}
+											key={`metadata-${index}-${item.title}`}
+											className="u-pb-0"
+										>
+											{item.data}
+										</Metadata>
+									);
+								}
+							)}
 					</MetadataList>
 				)}
 			</>
@@ -1454,6 +1428,19 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				onClose={() => setActiveBlade(null)}
 				onSubmit={onRequestAccessSubmit}
 			/>
+			{/* Read more metadata field blade */}
+			<Blade
+				className={clsx('u-pb-24 u-line-height-1-4 u-font-size-14')}
+				isOpen={!!selectedMetadataField}
+				onClose={() => setSelectedMetadataField(null)}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+					<h2 {...props}>{selectedMetadataField?.title}</h2>
+				)}
+			>
+				<div className="u-px-32 u-pb-32">
+					{highlighted(selectedMetadataField?.data || '')}
+				</div>
+			</Blade>
 		</>
 	);
 

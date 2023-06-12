@@ -9,9 +9,10 @@ import {
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import { HTTPError } from 'ky';
-import { intersection, isEmpty, isNil, sortBy, sum } from 'lodash-es';
+import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'lodash-es';
 import Head from 'next/head';
 import Link from 'next/link';
+import { stringifyUrl } from 'query-string';
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { MultiValue } from 'react-select';
@@ -643,6 +644,15 @@ const SearchPage: FC = () => {
 			const hasTempAccess =
 				!isKioskUser && isPublicCollection && hasAccessToVisitorSpaceOfObject;
 
+			const link: string | undefined = stringifyUrl({
+				url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}/${
+					kebabCase(item.name) || 'titel'
+				}`,
+				query: {
+					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: searchResults?.searchTerms,
+				},
+			});
+
 			return {
 				schemaIdentifier: item.schemaIdentifier,
 				maintainerSlug: item.maintainerSlug,
@@ -663,6 +673,7 @@ const SearchPage: FC = () => {
 				...(!isNil(type) && {
 					icon: item.thumbnailUrl ? TYPE_TO_ICON_MAP[type] : TYPE_TO_NO_ICON_MAP[type],
 				}),
+				link,
 				previousPage: ROUTES.search,
 			};
 		});

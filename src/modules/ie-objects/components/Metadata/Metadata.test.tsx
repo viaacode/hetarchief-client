@@ -1,26 +1,42 @@
 import { render } from '@testing-library/react';
 
+import { MetadataItem, MetadataListProps } from '@ie-objects/components';
+import MetadataList from '@ie-objects/components/Metadata/MetadataList';
+
 import Metadata from './Metadata';
 import { metadataMock } from './__mocks__/metadata';
 
-const renderMetadata = ({ ...rest }) => {
-	return render(<Metadata {...metadataMock} {...rest} />);
+const renderMetadataList = ({ ...args }: Partial<MetadataListProps>, metadata: MetadataItem[]) => {
+	return render(
+		<MetadataList {...(args as MetadataListProps)}>
+			{metadata.map((item, index) => {
+				return (
+					<Metadata title={item.title} key={`metadata-item-${index}`}>
+						{item.data}
+					</Metadata>
+				);
+			})}
+		</MetadataList>
+	);
 };
 
-describe('Component: <Metadata /> (default)', () => {
+describe('Component: <MetadataList /> (default)', () => {
 	it('Should set the correct class name', () => {
 		const className = 'custom class';
-		const { container } = renderMetadata({ className });
+		const { container } = renderMetadataList(
+			{ className, disableContainerQuery: false },
+			metadataMock
+		);
 
 		expect(container.firstChild).toHaveClass(className);
 	});
 
 	it('Should display metadata items', () => {
-		const { getAllByRole } = renderMetadata({});
+		const { getAllByRole } = renderMetadataList({ disableContainerQuery: false }, metadataMock);
 
 		const items = getAllByRole('listitem');
 
-		expect(items.length).toBe(metadataMock.metadata.length);
+		expect(items.length).toBe(metadataMock.length);
 	});
 
 	it('Should display metadata title', () => {
@@ -31,7 +47,7 @@ describe('Component: <Metadata /> (default)', () => {
 				data: 'some data',
 			},
 		];
-		const { getByText } = renderMetadata({ metadata });
+		const { getByText } = renderMetadataList({ disableContainerQuery: false }, metadata);
 
 		const title = getByText(titleMock);
 
@@ -46,7 +62,7 @@ describe('Component: <Metadata /> (default)', () => {
 				data: dataMock,
 			},
 		];
-		const { getByText } = renderMetadata({ metadata });
+		const { getByText } = renderMetadataList({ disableContainerQuery: false }, metadata);
 
 		const data = getByText(dataMock);
 
@@ -59,9 +75,9 @@ describe('Component: <Metadata /> (default)', () => {
 			{
 				title: 'title',
 				data: <span className={dataMock}>{dataMock}</span>,
-			},
+			} as unknown as MetadataItem,
 		];
-		const { getByText } = renderMetadata({ metadata });
+		const { getByText } = renderMetadataList({ disableContainerQuery: false }, metadata);
 
 		const data = getByText(dataMock);
 
@@ -70,7 +86,7 @@ describe('Component: <Metadata /> (default)', () => {
 	});
 
 	it('Should display a multiple columns by default', () => {
-		const { getByRole } = renderMetadata({});
+		const { getByRole } = renderMetadataList({ disableContainerQuery: false }, metadataMock);
 
 		const list = getByRole('list').parentElement;
 
@@ -78,7 +94,7 @@ describe('Component: <Metadata /> (default)', () => {
 	});
 
 	it('Should display a single column when given', () => {
-		const { getByRole } = renderMetadata({ disableContainerQuery: true });
+		const { getByRole } = renderMetadataList({ disableContainerQuery: true }, metadataMock);
 
 		const list = getByRole('list').parentElement;
 

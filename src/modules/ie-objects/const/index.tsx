@@ -469,9 +469,7 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	},
 	{
 		title: tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
-		data: mediaInfo?.abstract ? (
-			<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
-		) : null,
+		data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
 	},
 ];
 

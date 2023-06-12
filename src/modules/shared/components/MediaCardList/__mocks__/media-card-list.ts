@@ -42,6 +42,7 @@ export const mock = async (
 					view: args.view,
 					maintainerSlug: 'vrt',
 					schemaIdentifier: 'or-3i32difh',
+					link: undefined,
 				};
 			});
 		});
@@ -64,6 +65,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#2 - reprehenderit est deserunt velit ipsam',
@@ -75,6 +77,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#3 - officia porro iure quia iusto qui ipsa ut modi',
@@ -86,6 +89,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#4 - culpa odio esse rerum omnis laboriosam voluptate repudiandae',
@@ -98,6 +102,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#5 - natus nisi omnis corporis facere molestiae rerum in',
@@ -109,6 +114,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#6 - accusamus ea aliquid et amet sequi nemo',
@@ -121,6 +127,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#7 - officia delectus consequatur vero aut veniam explicabo molestias',
@@ -133,6 +140,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#8 - aut porro officiis laborum odit ea laudantium corporis',
@@ -145,6 +153,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#9 - qui eius qui autem sed',
@@ -157,6 +166,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#10 - beatae et provident et ut vel',
@@ -169,6 +179,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#11 - nihil at amet non hic quia qui',
@@ -180,6 +191,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#12 - mollitia soluta ut rerum eos aliquam consequatur perspiciatis maiores',
@@ -192,6 +204,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#13 - repudiandae iusto deleniti rerum',
@@ -204,6 +217,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#14 - est necessitatibus architecto ut laborum',
@@ -216,6 +230,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#15 - harum dicta similique quis dolore earum ex qui',
@@ -227,6 +242,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#16 - iusto sunt nobis quasi veritatis quas expedita voluptatum deserunt',
@@ -238,6 +254,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#17 - natus doloribus necessitatibus ipsa',
@@ -250,6 +267,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#18 - laboriosam odit nam necessitatibus et illum dolores reiciendis',
@@ -261,6 +279,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#19 - perferendis nesciunt eveniet et optio a',
@@ -273,6 +292,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#20 - assumenda voluptatem laboriosam enim consequatur veniam placeat reiciendis error',
@@ -285,6 +305,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#21 - ad et natus qui',
@@ -297,6 +318,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#22 - et ea illo et sit voluptas animi blanditiis porro',
@@ -308,6 +330,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#23 - harum velit vero totam',
@@ -320,6 +343,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#24 - beatae officiis ut aut',
@@ -331,6 +355,7 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 	{
 		title: '#25 - facere non quis fuga fugit vitae',
@@ -343,5 +368,6 @@ export const gridData: IdentifiableMediaCard[] = [
 		view: 'grid',
 		maintainerSlug: 'vrt',
 		schemaIdentifier: 'or-asdf38',
+		link: undefined,
 	},
 ];

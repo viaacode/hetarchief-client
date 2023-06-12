@@ -1,6 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import React from 'react';
 
+import MetadataList from '@ie-objects/components/Metadata/MetadataList';
+
 import Metadata from './Metadata';
 import { metadataMock } from './__mocks__/metadata';
 
@@ -9,10 +11,20 @@ export default {
 	component: Metadata,
 } as ComponentMeta<typeof Metadata>;
 
-const Template: ComponentStory<typeof Metadata> = (args) => <Metadata {...args} />;
+const Template: ComponentStory<typeof MetadataList> = (args) => (
+	<MetadataList {...args}>
+		{metadataMock.map((item, index) => {
+			return (
+				<Metadata title={item.title} key={`metadata-item-${index}`}>
+					{item.data}
+				</Metadata>
+			);
+		})}
+	</MetadataList>
+);
 
 export const Default = Template.bind({});
-Default.args = { ...metadataMock };
+Default.args = { disableContainerQuery: true };
 
 export const Wide = Template.bind({});
-Wide.args = { ...metadataMock };
+Wide.args = { disableContainerQuery: false };

@@ -19,10 +19,10 @@ export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
 	});
 };
 
-export const mapKeywordsToTagList = (keywords: string[], slug: string): ReactNode | null =>
+export const renderKeywordsAsTags = (keywords: string[], slug: string): ReactNode | null =>
 	keywords.length ? (
 		<TagList
-			className="u-pt-12"
+			className="u-pb-24 u-pt-12"
 			tags={mapKeywordsToTags(keywords)}
 			onTagClicked={(keyword: string | number) => {
 				router.push(
@@ -40,9 +40,11 @@ export const mapKeywordsToTagList = (keywords: string[], slug: string): ReactNod
 	) : null;
 
 export const mapObjectToMetadata = (data: Record<string, string[]>): MetadataItem[] => {
-	if (!data) return [];
+	if (!data) {
+		return [];
+	}
 
-	return Object.keys(data).map((key) => {
+	return Object.keys(data).map((key): MetadataItem => {
 		return {
 			title: capitalize(lowerCase(key)),
 			data: data[key].join(', '),

@@ -12,3 +12,8 @@ export interface MetadataListProps extends DefaultComponentProps {
 	children: ReactNode;
 	disableContainerQuery: boolean;
 }
+
+export interface MetadataItem {
+	title: string | ReactNode;
+	data: string | null | undefined;
+}

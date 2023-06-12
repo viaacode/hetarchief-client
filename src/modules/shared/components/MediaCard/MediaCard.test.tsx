@@ -32,6 +32,7 @@ describe('Component: <MediaCard />', () => {
 					publishedOrCreatedDate={date}
 					publishedBy={author}
 					type="video"
+					link={undefined}
 				/>
 			)
 		);
@@ -51,6 +52,7 @@ describe('Component: <MediaCard />', () => {
 					publishedOrCreatedDate={date}
 					publishedBy={author}
 					type="video"
+					link={undefined}
 				/>
 			)
 		);
@@ -74,6 +76,7 @@ describe('Component: <MediaCard />', () => {
 					publishedOrCreatedDate={date}
 					publishedBy={author}
 					type="audio"
+					link={undefined}
 				/>
 			)
 		);
@@ -88,6 +91,7 @@ describe('Component: <MediaCard />', () => {
 							publishedOrCreatedDate={date}
 							publishedBy={author}
 							type="video"
+							link={undefined}
 						/>
 					</Provider>
 				</QueryClientProvider>
@@ -105,6 +109,7 @@ describe('Component: <MediaCard />', () => {
 					publishedBy={author}
 					type="video"
 					showKeyUserLabel
+					link={undefined}
 				/>
 			)
 		);
