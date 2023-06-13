@@ -274,26 +274,6 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 		},
 
 		[MetadataProp.Genre]: {
-			[Operator.Contains]: {
-				label: dictionary.contains,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.GENRE,
-						operator: IeObjectsSearchOperator.CONTAINS,
-					},
-				],
-			},
-			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.GENRE,
-						operator: IeObjectsSearchOperator.CONTAINS_NOT,
-					},
-				],
-			},
 			[Operator.Equals]: {
 				label: dictionary.equals,
 				field: GenreSelect,
