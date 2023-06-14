@@ -23,6 +23,7 @@
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 auto;
+	padding-bottom: $c-feedback-button-height;
 
 	&--placeholder {
 		.l-container {
@@ -90,6 +91,11 @@
 
 		&--has-dropdown {
 			height: 100%;
+		}
+
+		.c-tag,
+		.c-tag--closable {
+			height: auto;
 		}
 	}
 }

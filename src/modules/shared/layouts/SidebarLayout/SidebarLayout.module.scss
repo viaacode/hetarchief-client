@@ -35,8 +35,9 @@ $l-sidebar-collapse-to: "md";
 
 	&__main {
 		width: 70%;
+		padding-bottom: $c-feedback-button-height;
 
-		@include respond-at("xs") {
+		@include respond-to("md") {
 			flex-grow: 1;
 		}
 

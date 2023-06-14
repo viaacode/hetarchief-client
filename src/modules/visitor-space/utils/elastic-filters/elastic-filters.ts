@@ -17,6 +17,11 @@ import {
 } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
+export const VISITOR_SPACE_LICENSES = [
+	IeObjectLicense.BEZOEKERTOOL_METADATA_ALL,
+	IeObjectLicense.BEZOEKERTOOL_CONTENT,
+];
+
 export const mapMaintainerToElastic = (
 	query: VisitorSpaceQueryParams,
 	activeVisitorSpace: Visit | undefined
@@ -50,10 +55,7 @@ export const mapMaintainerToElastic = (
 		{
 			field: IeObjectsSearchFilterField.LICENSES,
 			operator: IeObjectsSearchOperator.IS,
-			multiValue: [
-				IeObjectLicense.BEZOEKERTOOL_METADATA_ALL,
-				IeObjectLicense.BEZOEKERTOOL_CONTENT,
-			],
+			multiValue: VISITOR_SPACE_LICENSES,
 		},
 		// Filter by object ids if the user received folder access to the visitor space
 		// https://meemoo.atlassian.net/browse/ARC-1655

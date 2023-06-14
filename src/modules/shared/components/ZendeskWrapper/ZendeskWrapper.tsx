@@ -14,11 +14,12 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 	const router = useRouter();
 	const showZendesk = useSelector(selectShowZendesk);
 
-	const [footerHeight, setFooterHeight] = useState<number>(88);
-	const [widget, setWidget] = useState<HTMLIFrameElement | null>(null);
-
+	const feedbackButtonHeight = 46;
 	const zendeskMarginBottom = 22;
 	const zendeskMarginRight = 31;
+
+	const [footerHeight, setFooterHeight] = useState<number>(88);
+	const [widget, setWidget] = useState<HTMLIFrameElement | null>(null);
 
 	useEffect(() => {
 		if (showZendesk) {
@@ -51,11 +52,20 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 			widget.style.width = 'auto';
 			widget.style.marginRight = zendeskMarginRight + 'px';
 
-			if (scrollHeight - screenHeight - scrollTop < footerHeight + zendeskMarginBottom) {
+			if (
+				scrollHeight - screenHeight - scrollTop < footerHeight + zendeskMarginBottom &&
+				footerHeight !== 0
+			) {
+				// Collided with footer
+				// Show zendesk button on the edge of the footer
 				widget.style.marginBottom = `${
-					footerHeight + zendeskMarginBottom - (scrollHeight - screenHeight - scrollTop)
+					footerHeight -
+					feedbackButtonHeight / 2 -
+					(scrollHeight - screenHeight - scrollTop)
 				}px`;
 			} else {
+				// Still scrolling, not yet collided with the footer
+				// Or there is no footer on the page
 				widget.style.marginBottom = zendeskMarginBottom + 'px';
 			}
 		}

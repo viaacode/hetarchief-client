@@ -1,0 +1,1 @@
+export const METADATA_FIELD_MAX_LENGTH = 500;

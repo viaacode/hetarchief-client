@@ -1,6 +1,6 @@
 @use "src/styles/abstracts" as *;
 
-$component: "c-metadatadescription";
+$component: "c-metadata__field__blade";
 
 .#{$component} {
 	&__read-more {

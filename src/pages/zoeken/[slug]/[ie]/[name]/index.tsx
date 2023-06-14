@@ -32,7 +32,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
 import save from 'save-file';
@@ -47,13 +47,13 @@ import {
 	DynamicActionMenu,
 	DynamicActionMenuProps,
 	MediaObject,
-	Metadata,
 	MetadataItem,
 	ObjectPlaceholder,
 	RelatedObject,
 	RelatedObjectsBlade,
 } from '@ie-objects/components';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
+import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
 	CP_ADMIN_ACTION_SORT_MAP,
@@ -91,10 +91,11 @@ import {
 	MetadataSortMap,
 	ObjectDetailTabs,
 } from '@ie-objects/types';
-import { isInAFolder, mapKeywordsToTagList, mapKeywordsToTags } from '@ie-objects/utils';
+import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
+	Blade,
 	ErrorNoAccessToObject,
 	ErrorNotFound,
 	Icon,
@@ -106,7 +107,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
-import { MetaDataDescription } from '@shared/components/MetaDataDescription';
+import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -151,6 +152,8 @@ import {
 	VisitorSpaceStatus,
 } from '@visitor-space/types';
 import { useGetActiveVisitForUserAndSpace } from '@visits/hooks/get-active-visit-for-user-and-space';
+
+import Metadata from '../../../../../modules/ie-objects/components/Metadata/Metadata';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -200,6 +203,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [related, setRelated] = useState<MediaObject[]>([]);
 	const [metadataExportDropdownOpen, setMetadataExportDropdownOpen] = useState(false);
+	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 
 	// Layout
 	useStickyLayout();
@@ -219,11 +223,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	});
 
 	const setActiveTab = (tabId: ObjectDetailTabs | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined });
+		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_TAB]: tabId || undefined }, 'replace');
 	};
 
 	const setActiveBlade = (blade: MediaActions | null) => {
-		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined });
+		setQuery({ ...query, [QUERY_PARAM_KEY.ACTIVE_BLADE]: blade || undefined }, 'replace');
 	};
 
 	const activeTab = query[QUERY_PARAM_KEY.ACTIVE_TAB];
@@ -314,7 +318,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	/**
 	 * Computed
 	 */
-	const isNotKiosk = (isMeemooAdmin || isVisitor || isAnonymous || isCPAdmin) && !isKiosk;
 	const hasMedia = mediaInfo?.representations?.length || 0 > 0;
 	const isMediaInfoErrorNotFound = (mediaInfoError as HTTPError)?.response?.status === 404;
 	const isMediaInfoErrorNoAccess = (mediaInfoError as HTTPError)?.response?.status === 403;
@@ -358,6 +361,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		if (mediaInfo) {
 			const path = window.location.href;
 			const eventData = {
+				type: mediaInfo.dctermsFormat,
 				schema_identifier: mediaInfo.schemaIdentifier,
 				meemoo_identifier: mediaInfo.meemooIdentifier,
 				user_group_name: user?.groupName,
@@ -466,11 +470,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			setActiveBlade(MediaActions.RequestAccess);
 		} else {
 			// Open the login blade first
-			setQuery({
-				...query,
-				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
-				[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
-			});
+			setQuery(
+				{
+					...query,
+					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
+					[QUERY_PARAM_KEY.ACTIVE_BLADE]: MediaActions.RequestAccess,
+				},
+				'replace'
+			);
 		}
 	};
 
@@ -759,7 +766,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		const original = MEDIA_ACTIONS(
 			canManageFolders || isAnonymous,
 			isInAFolder(collections, mediaInfo?.schemaIdentifier),
-			isNotKiosk,
+			!isKiosk,
 			!!canRequestAccess,
 			isAnonymous || canRequestMaterial,
 			canDownloadMetadata
@@ -802,7 +809,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		isAnonymous,
 		collections,
 		mediaInfo?.schemaIdentifier,
-		isNotKiosk,
+		isKiosk,
 		canRequestAccess,
 		canRequestMaterial,
 		canDownloadMetadata,
@@ -1022,14 +1029,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			<p className="p-object-detail__metadata-label">
 				{tText('modules/ie-objects/const/index___aanbieder')}
 			</p>
-			{isNotKiosk && !hasAccessToVisitorSpaceOfObject && (
+			{!isKiosk && !hasAccessToVisitorSpaceOfObject && (
 				<>
 					<p className="p-object-detail__metadata-pill">
 						<TagList
 							className="u-pt-12"
 							tags={mapKeywordsToTags([maintainerName])}
-							onTagClicked={() => {
-								router.push(
+							onTagClicked={async () => {
+								await router.push(
 									stringifyUrl({
 										url: `/${ROUTE_PARTS.search}`,
 										query: {
@@ -1045,6 +1052,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					</p>
 					{maintainerLogo && (
 						<div className="p-object-detail__metadata-logo">
+							{/* eslint-disable-next-line @next/next/no-img-element */}
 							<img src={maintainerLogo} alt={`Logo ${maintainerName}`} />
 						</div>
 					)}
@@ -1074,49 +1082,33 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		maintainerDescription,
 		maintainerSiteUrl,
 		maintainerName,
-	}: IeObject): ReactNode =>
-		isNotKiosk && !hasAccessToVisitorSpaceOfObject ? (
-			<div className="p-object-detail__metadata-maintainer-data">
-				{maintainerDescription && (
-					<p className="p-object-detail__metadata-description">{maintainerDescription}</p>
-				)}
-				{maintainerSiteUrl && (
-					<p className="p-object-detail__metadata-link">
-						<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
-							{maintainerSiteUrl}
-						</a>
-						<Icon className="u-ml-8" name={IconNamesLight.Extern} />
-					</p>
-				)}
-				{showVisitButton && isMobile && renderVisitButton()}
-			</div>
-		) : (
-			<div className="p-object-detail__metadata-maintainer-data">
-				{maintainerName}
-				{showVisitButton && isMobile && renderVisitButton()}
-			</div>
-		);
-
-	const getCustomTitleRenderFn = (
-		field: CustomMetaDataFields,
-		mediaInfo: IeObject
-	): ReactNode => {
-		switch (field) {
-			case CustomMetaDataFields.Maintainer:
-				return renderMaintainerMetaTitle(mediaInfo);
-
-			default:
-				return null;
-		}
-	};
-
-	const getCustomDataRenderFn = (field: CustomMetaDataFields, mediaInfo: IeObject): ReactNode => {
-		switch (field) {
-			case CustomMetaDataFields.Maintainer:
-				return renderMaintainerMetaData(mediaInfo);
-
-			default:
-				return null;
+	}: IeObject): ReactNode => {
+		if (!isKiosk && !hasAccessToVisitorSpaceOfObject) {
+			return (
+				<div className="p-object-detail__metadata-maintainer-data">
+					{maintainerDescription && (
+						<p className="p-object-detail__metadata-description">
+							{maintainerDescription}
+						</p>
+					)}
+					{maintainerSiteUrl && (
+						<p className="p-object-detail__metadata-link">
+							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
+								{maintainerSiteUrl}
+							</a>
+							<Icon className="u-ml-8" name={IconNamesLight.Extern} />
+						</p>
+					)}
+					{showVisitButton && isMobile && renderVisitButton()}
+				</div>
+			);
+		} else {
+			return (
+				<div className="p-object-detail__metadata-maintainer-data">
+					{maintainerName}
+					{showVisitButton && isMobile && renderVisitButton()}
+				</div>
+			);
 		}
 	};
 
@@ -1139,20 +1131,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 
 		const showAlert = !mediaInfo.description;
-		const metaDataFields = METADATA_FIELDS(mediaInfo)
-			.filter(({ isDisabled }: MetadataItem): boolean => !isDisabled?.())
-			.map(
-				(field: MetadataItem): MetadataItem => ({
-					...field,
-					title: field.customTitle
-						? getCustomTitleRenderFn(field.title as CustomMetaDataFields, mediaInfo)
-						: field.title,
-					data: field.customData
-						? getCustomDataRenderFn(field.data as CustomMetaDataFields, mediaInfo)
-						: field.data,
-				})
-			)
-			.filter(({ data }: MetadataItem): boolean => !!data);
+		const metaDataFields = METADATA_FIELDS(mediaInfo).filter(
+			({ data }: MetadataItem): boolean => !!data
+		);
 
 		return (
 			<>
@@ -1172,7 +1153,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 					{renderMetaDataActions()}
 
-					<MetaDataDescription description={mediaInfo.description || ''} />
+					<MetaDataFieldWithHighlightingAndMaxLength
+						title={tText(
+							'modules/visitor-space/utils/metadata/metadata___beschrijving'
+						)}
+						data={mediaInfo.description}
+						className="u-pb-24 u-line-height-1-4 u-font-size-14"
+						onReadMoreClicked={setSelectedMetadataField}
+					/>
 
 					{showAlert && (
 						<Alert
@@ -1186,20 +1174,35 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					)}
 				</div>
 
-				<Metadata
-					className="p-object-detail__metadata-component"
-					metadata={metaDataFields}
-				/>
+				<MetadataList disableContainerQuery={false}>
+					<Metadata
+						title={renderMaintainerMetaTitle(mediaInfo)}
+						key={`metadata-maintainer`}
+					>
+						{renderMaintainerMetaData(mediaInfo)}
+					</Metadata>
+					{/* other metadata fields */}
+					{metaDataFields.map((item: MetadataItem, index: number) => {
+						return (
+							<Metadata title={item.title} key={`metadata-${index}-${item.title}`}>
+								<MetaDataFieldWithHighlightingAndMaxLength
+									title={item.title}
+									data={item.data as string}
+									onReadMoreClicked={setSelectedMetadataField}
+								/>
+							</Metadata>
+						);
+					})}
+				</MetadataList>
 
 				{(!!similar.length || !!mediaInfo.keywords?.length) && (
-					<Metadata
-						className="p-object-detail__metadata-component"
-						metadata={[
+					<MetadataList disableContainerQuery>
+						{[
 							{
 								title: tHtml(
 									'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
 								),
-								data: mapKeywordsToTagList(
+								data: renderKeywordsAsTags(
 									mediaInfo.keywords,
 									visitRequest ? (router.query.slug as string) : ''
 								),
@@ -1209,11 +1212,26 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 								data: similar.length
 									? renderMetadataCards('similar', similar)
 									: null,
-								className: 'u-pb-0',
 							},
-						].filter((field) => !!field.data)}
-						disableContainerQuery
-					/>
+						]
+							.filter((field) => !!field.data)
+							.map(
+								(
+									item: { title: ReactNode; data: ReactNode | string },
+									index: number
+								) => {
+									return (
+										<Metadata
+											title={item.title}
+											key={`metadata-${index}-${item.title}`}
+											className="u-pb-0"
+										>
+											{item.data}
+										</Metadata>
+									);
+								}
+							)}
+					</MetadataList>
 				)}
 			</>
 		);
@@ -1385,7 +1403,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					onSubmit={async () => onCloseBlade()}
 				/>
 			)}
-			{mediaInfo && isNotKiosk && (
+			{mediaInfo && !isKiosk && (
 				<MaterialRequestBlade
 					isOpen={activeBlade === MediaActions.RequestMaterial}
 					onClose={onCloseBlade}
@@ -1410,6 +1428,19 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				onClose={() => setActiveBlade(null)}
 				onSubmit={onRequestAccessSubmit}
 			/>
+			{/* Read more metadata field blade */}
+			<Blade
+				className={clsx('u-pb-24 u-line-height-1-4 u-font-size-14')}
+				isOpen={!!selectedMetadataField}
+				onClose={() => setSelectedMetadataField(null)}
+				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+					<h2 {...props}>{selectedMetadataField?.title}</h2>
+				)}
+			>
+				<div className="u-px-32 u-pb-32">
+					{highlighted(selectedMetadataField?.data || '')}
+				</div>
+			</Blade>
 		</>
 	);
 
@@ -1433,6 +1464,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 
 		if (isMediaInfoErrorNoAccess || isMediaInfoErrorNotFound) {
+			if (isNoAccessError) {
+				return (
+					<ErrorNoAccessToObject
+						visitorSpaceName={visitorSpace?.name as string}
+						visitorSpaceSlug={visitorSpace?.slug as string}
+						description={tHtml(
+							'pages/bezoekersruimte/visitor-space-slug/object-id/index___tot-het-materiaal-geen-toegang-dien-aanvraag-in'
+						)}
+					/>
+				);
+			}
+
 			if (isErrorSpaceNotFound) {
 				return <ErrorNotFound />;
 			}
