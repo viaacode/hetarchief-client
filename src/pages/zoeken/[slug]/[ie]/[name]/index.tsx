@@ -763,7 +763,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	}, [isMobile, showLinkedSpaceAsHomepage, tHtml, visitRequest?.endAt]);
 
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
+		const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 		const original = MEDIA_ACTIONS(
+			isMobile,
 			canManageFolders || isAnonymous,
 			isInAFolder(collections, mediaInfo?.schemaIdentifier),
 			!isKiosk,
@@ -805,6 +807,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			actions,
 		};
 	}, [
+		windowSize.width,
 		canManageFolders,
 		isAnonymous,
 		collections,
