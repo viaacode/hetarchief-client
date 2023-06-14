@@ -57,7 +57,6 @@ import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
 	CP_ADMIN_ACTION_SORT_MAP,
-	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	IE_OBJECT_QUERY_PARAM_CONFIG,
@@ -179,7 +178,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
-	const isVisitor = useHasAnyGroup(GroupName.VISITOR);
 	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
@@ -364,7 +362,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				type: mediaInfo.dctermsFormat,
 				schema_identifier: mediaInfo.schemaIdentifier,
 				meemoo_identifier: mediaInfo.meemooIdentifier,
-				user_group_name: user?.groupName,
+				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
 			};
 
 			EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData);
