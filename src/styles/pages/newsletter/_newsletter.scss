@@ -15,11 +15,14 @@ $page: "p-newsletter";
 		@include respond-to(lg) {
 			display: block;
 			margin-top: calc(50vw + 4.7rem);
+			padding: 0;
 		}
 	}
 
 	&__content {
 		grid-column: 2;
+		background-color: white;
+		padding: $spacer-lg;
 	}
 
 	&__header {
