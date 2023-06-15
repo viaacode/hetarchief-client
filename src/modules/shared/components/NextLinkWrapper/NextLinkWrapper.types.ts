@@ -1,7 +1,7 @@
-import { ReactElement } from 'react';
+import { ReactNode } from 'react';
 
 export interface NextLinkWrapperProps {
 	href: string;
 	className?: string;
-	children: ReactElement | string;
+	children: ReactNode | string;
 }

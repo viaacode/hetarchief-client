@@ -778,10 +778,6 @@ const SearchPage: FC = () => {
 		return (
 			<Button
 				onClick={(e) => {
-					// Avoid navigating to the card object (detail page) when clicking buttons on the card (bookmark)
-					e.preventDefault();
-					e.stopPropagation();
-
 					setSelectedCard(item as IdentifiableMediaCard);
 					setShowAddToFolderBlade(true);
 				}}
