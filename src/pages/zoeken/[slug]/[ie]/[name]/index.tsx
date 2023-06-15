@@ -362,8 +362,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			const path = window.location.href;
 			const eventData = {
 				type: mediaInfo.dctermsFormat,
-				schema_identifier: mediaInfo.schemaIdentifier,
-				meemoo_identifier: mediaInfo.meemooIdentifier,
+				fragment_id: mediaInfo.schemaIdentifier,
+				pid: mediaInfo.meemooIdentifier,
 				user_group_name: user?.groupName,
 			};
 
@@ -512,8 +512,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 		if (mediaInfo?.maintainerFormUrl && user) {
 			EventsService.triggerEvent(LogEventType.ITEM_REQUEST, window.location.href, {
-				schema_identifier: mediaInfo?.schemaIdentifier,
-				meemoo_identifier: mediaInfo?.meemooIdentifier,
+				fragment_id: mediaInfo?.schemaIdentifier,
+				pid: mediaInfo?.meemooIdentifier,
 				user_group_name: user?.groupName,
 			});
 
@@ -551,8 +551,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 			const path = window.location.href;
 			const eventData = {
-				schema_identifier: mediaInfo?.schemaIdentifier,
-				meemoo_identifier: mediaInfo?.meemooIdentifier,
+				type: mediaInfo?.dctermsFormat,
+				fragment_id: mediaInfo?.schemaIdentifier,
+				pid: mediaInfo?.meemooIdentifier,
 				user_group_name: user?.groupName,
 			};
 
