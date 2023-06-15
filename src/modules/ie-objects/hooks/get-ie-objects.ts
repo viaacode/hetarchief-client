@@ -2,6 +2,7 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { isEmpty, isNil } from 'lodash-es';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
@@ -92,7 +93,7 @@ export const useGetIeObjects = (
 					page,
 					size,
 					sort,
-					user_group_name: user?.groupName,
+					user_group_name: user?.groupName || GroupName.ANONYMOUS,
 				}
 			);
 
