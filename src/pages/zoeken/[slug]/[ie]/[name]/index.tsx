@@ -365,9 +365,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
 			};
 
-			EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData);
-			hasAccessToVisitorSpaceOfObject &&
+			if (hasAccessToVisitorSpaceOfObject) {
 				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData);
+			} else {
+				EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData);
+			}
 		}
 	}, [hasAccessToVisitorSpaceOfObject, mediaInfo, user?.groupName]);
 
@@ -554,9 +556,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				user_group_name: user?.groupName,
 			};
 
-			EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData);
-			hasAccessToVisitorSpaceOfObject &&
+			if (hasAccessToVisitorSpaceOfObject) {
 				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData);
+			} else {
+				EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData);
+			}
 		}
 	};
 
