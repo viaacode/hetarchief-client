@@ -5,7 +5,7 @@ import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
 import { ComponentType, useEffect } from 'react';
 
-import { ErrorNoAccessToObject, Loading } from '@shared/components';
+import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/components';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -45,6 +45,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
 	const hasAccess = accessStatus?.status === AccessStatus.ACCESS;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
+	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 
 	/**
 	 * Effects
@@ -74,6 +75,10 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	const renderPageContent = () => {
 		if (isLoadingAccessStatus || hasPendingRequest || hasAccess) {
 			return <Loading fullscreen owner="request access page" />;
+		}
+
+		if (isErrorSpaceNotFound) {
+			return <ErrorNotFound />;
 		}
 
 		if (isErrorSpaceNotActive) {
