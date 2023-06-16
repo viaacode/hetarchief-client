@@ -9,7 +9,9 @@ COPY package.json package-lock.json ./
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
 RUN npm set-script prepare "" &&\
-    npm i --legacy-peer-deps
+    npm i --legacy-peer-deps \
+# install swc compiler for nextjs https://stackoverflow.com/questions/69816589/next-failed-to-load-swc-binary
+RUN npm install -D @swc/cli @swc/core
 
 # Rebuild the source code only when needed
 FROM node:gallium-alpine AS builder
