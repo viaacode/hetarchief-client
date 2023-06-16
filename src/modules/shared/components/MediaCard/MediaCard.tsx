@@ -16,6 +16,7 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -345,6 +346,8 @@ const MediaCard: FC<MediaCardProps> = ({
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
+				to={link}
+				linkComponent={NextLinkWrapper}
 			>
 				{typeof description === 'string' ? (
 					<div className="u-text-ellipsis--2">
@@ -360,27 +363,9 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
-	const renderCardWithLinkWrapperIfNeeded = () => {
-		if (link) {
-			return (
-				<Link key={id} href={link}>
-					<a
-						className="u-text-no-decoration c-media-card--pointer"
-						aria-label={id}
-						onClick={saveScrollPosition}
-					>
-						{renderCard()}
-					</a>
-				</Link>
-			);
-		}
-
-		return renderCard();
-	};
-
 	return (
 		<div id={id}>
-			{renderCardWithLinkWrapperIfNeeded()}
+			{renderCard()}
 			<Modal
 				title={tText(
 					'modules/shared/components/media-card/media-card___waarom-kan-ik-dit-object-niet-bekijken'
