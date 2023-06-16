@@ -57,7 +57,6 @@ import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
 	CP_ADMIN_ACTION_SORT_MAP,
-	CustomMetaDataFields,
 	FLOWPLAYER_AUDIO_FORMATS,
 	FLOWPLAYER_VIDEO_FORMATS,
 	IE_OBJECT_QUERY_PARAM_CONFIG,
@@ -179,7 +178,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const isKeyUser = useIsKeyUser();
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 	const isAnonymous = useHasAnyGroup(GroupName.ANONYMOUS);
-	const isVisitor = useHasAnyGroup(GroupName.VISITOR);
 	const isCPAdmin = useHasAnyGroup(GroupName.CP_ADMIN);
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
@@ -364,12 +362,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				type: mediaInfo.dctermsFormat,
 				fragment_id: mediaInfo.schemaIdentifier,
 				pid: mediaInfo.meemooIdentifier,
-				user_group_name: user?.groupName,
+				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
 			};
 
-			EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData);
-			hasAccessToVisitorSpaceOfObject &&
+			if (hasAccessToVisitorSpaceOfObject) {
 				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_VIEW, path, eventData);
+			} else {
+				EventsService.triggerEvent(LogEventType.ITEM_VIEW, path, eventData);
+			}
 		}
 	}, [hasAccessToVisitorSpaceOfObject, mediaInfo, user?.groupName]);
 
@@ -557,9 +557,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				user_group_name: user?.groupName,
 			};
 
-			EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData);
-			hasAccessToVisitorSpaceOfObject &&
+			if (hasAccessToVisitorSpaceOfObject) {
 				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData);
+			} else {
+				EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData);
+			}
 		}
 	};
 
@@ -764,7 +766,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	}, [isMobile, showLinkedSpaceAsHomepage, tHtml, visitRequest?.endAt]);
 
 	const mediaActions: DynamicActionMenuProps = useMemo(() => {
+		const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 		const original = MEDIA_ACTIONS(
+			isMobile,
 			canManageFolders || isAnonymous,
 			isInAFolder(collections, mediaInfo?.schemaIdentifier),
 			!isKiosk,
@@ -806,6 +810,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			actions,
 		};
 	}, [
+		windowSize.width,
 		canManageFolders,
 		isAnonymous,
 		collections,

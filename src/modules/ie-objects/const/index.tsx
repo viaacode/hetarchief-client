@@ -23,8 +23,9 @@ import {
 } from '@ie-objects/utils';
 import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/components';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { WindowSizeContextValue } from '@shared/context/WindowSizeContext';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { IeObjectTypes } from '@shared/types';
+import { Breakpoints, IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
 import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 
@@ -204,6 +205,7 @@ export const CP_ADMIN_ACTION_SORT_MAP = (
 ];
 
 export const MEDIA_ACTIONS = (
+	isMobile: boolean,
 	canManageFolders: boolean,
 	isInAFolder: boolean,
 	canReport: boolean,
@@ -213,6 +215,15 @@ export const MEDIA_ACTIONS = (
 ): DynamicActionMenuProps => {
 	const activeIconSet = isInAFolder ? IconNamesSolid : IconNamesLight;
 
+	const addToMaterialRequestsListButtonLabelDesktop = tText(
+		'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-desktop'
+	);
+	const addToMaterialRequestsListButtonLabelMobile = tText(
+		'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-mobile'
+	);
+	const addToMaterialRequestsListButtonLabel = isMobile
+		? addToMaterialRequestsListButtonLabelMobile
+		: addToMaterialRequestsListButtonLabelDesktop;
 	return {
 		actions: [
 			...((canExport
@@ -228,9 +239,7 @@ export const MEDIA_ACTIONS = (
 			...((canRequestMaterial
 				? [
 						{
-							label: tText(
-								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-							),
+							label: addToMaterialRequestsListButtonLabel,
 							icon: (
 								<Icon
 									aria-hidden
@@ -239,12 +248,8 @@ export const MEDIA_ACTIONS = (
 								/>
 							),
 							id: MediaActions.RequestMaterial,
-							ariaLabel: tText(
-								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-							),
-							tooltip: tText(
-								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-							),
+							ariaLabel: addToMaterialRequestsListButtonLabel,
+							tooltip: addToMaterialRequestsListButtonLabel,
 						},
 				  ]
 				: []) as ActionItem[]),
