@@ -1,5 +1,6 @@
 import { SelectOption } from '@meemoo/react-components';
 import { format } from 'date-fns';
+import { isString } from 'lodash-es';
 
 import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -7,7 +8,7 @@ import { tText } from '@shared/helpers/translate';
 import { IeObjectsSearchFilter, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 
-import { getMetadataSearchFilters } from '../../const';
+import { FILTERS_OPTIONS_CONFIG, GET_OPERATOR_LABELS, getMetadataSearchFilters } from '../../const';
 import { AdvancedFilterArrayParam } from '../../const/query-params';
 import {
 	AdvancedFilter,
@@ -57,11 +58,12 @@ export const mapBooleanParamToTag = (value: boolean, label: string, key: string)
 };
 
 export const mapArrayParamToTags = (
-	values: (string | null)[],
+	values: (string | null)[] | string,
 	label: string,
 	key: string
 ): TagIdentity[] => {
-	return values
+	const valuesArray = isString(values) ? [values] : values;
+	return valuesArray
 		.filter((keyword) => !!keyword)
 		.map((keyword) => {
 			const unique = `${tagPrefix(key)}${keyword}`;
