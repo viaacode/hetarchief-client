@@ -9,15 +9,15 @@ COPY package.json package-lock.json ./
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
 RUN npm set-script prepare "" &&\
-    npm i --legacy-peer-deps &&\
-    # install swc compiler for nextjs https://stackoverflow.com/questions/69816589/next-failed-to-load-swc-binary
-    npm install -D @swc/cli @swc/core
+    npm i --legacy-peer-deps
 
 # Rebuild the source code only when needed
 FROM node:gallium-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# use the slower babel compiler that is compatible with the linux build pod https://stackoverflow.com/questions/69816589/next-failed-to-load-swc-binary
+RUN echo "{\"presets\": [\"next/babel\"]}" | ".babelrc"
 RUN npm run build
 
 # Production image, copy all the files and run next
