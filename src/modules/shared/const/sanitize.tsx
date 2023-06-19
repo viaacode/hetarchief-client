@@ -17,6 +17,8 @@ export const RICH_TEXT_SANITIZATION: DOMPurify.Config = {
 		'ul',
 		'ol',
 		'a',
+		'em',
+		'u',
 	],
 	RETURN_DOM: false,
 	ADD_ATTR: ['target'], // Allow target _blank for links
