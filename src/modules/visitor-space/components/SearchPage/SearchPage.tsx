@@ -175,8 +175,29 @@ const SearchPage: FC = () => {
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
 	};
 
-	const activeVisitorSpaceSlug: string =
-		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
+	const queryParamMaintainer = query?.[VisitorSpaceFilterId.Maintainer];
+	const activeVisitorSpaceSlug: string = useMemo(() => {
+		if (!visitorSpaces.length) {
+			// Until visitor spaces is loaded, we cannot know which option to select
+			return PUBLIC_COLLECTION;
+		}
+		if (queryParamMaintainer) {
+			if (
+				visitorSpaces
+					.map((visitorSpace) => visitorSpace.spaceMaintainerId)
+					.includes(queryParamMaintainer)
+			) {
+				return queryParamMaintainer;
+			}
+		}
+		// No visitor space set in query params or the visitor space is not recognized
+		setQuery({
+			...query,
+			[VisitorSpaceFilterId.Maintainer]: undefined,
+		});
+		return PUBLIC_COLLECTION;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [queryParamMaintainer, visitorSpaces]);
 
 	const isPublicCollection = activeVisitorSpaceSlug === PUBLIC_COLLECTION;
 
@@ -334,7 +355,7 @@ const SearchPage: FC = () => {
 		[viewMode]
 	);
 
-	const dropdownOptions = useMemo(() => {
+	const visitorSpaceDropdownOptions = useMemo(() => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
 			({ spaceName, endAt, spaceSlug }: Visit): VisitorSpaceDropdownOption => {
 				const endAtDate = asDate(endAt);
@@ -810,7 +831,7 @@ const SearchPage: FC = () => {
 		}
 
 		// Strip out public collection and own visitor space (cp)
-		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
+		let visitorSpaces: VisitorSpaceDropdownOption[] = visitorSpaceDropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
 				const isPublicCollection = visitorSpace.slug == PUBLIC_COLLECTION;
 				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.maintainerId;
@@ -923,7 +944,7 @@ const SearchPage: FC = () => {
 									>
 										{showVisitorSpacesDropdown && (
 											<VisitorSpaceDropdown
-												options={dropdownOptions}
+												options={visitorSpaceDropdownOptions}
 												selectedOptionId={
 													isKioskUser
 														? user?.visitorSpaceSlug ?? ''
