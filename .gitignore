@@ -49,3 +49,6 @@ tests/test-results/
 tests/videos/
 tests/videos-docker/
 tests/node_modules
+
+# Build info folder
+dist/
