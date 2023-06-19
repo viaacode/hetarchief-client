@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # use the slower babel compiler that is compatible with the linux build pod https://stackoverflow.com/questions/69816589/next-failed-to-load-swc-binary
-RUN echo "{\"presets\": [\"next/babel\"]}" | ".babelrc"
+RUN echo "{\"presets\": [\"next/babel\"]}" >> "/app/.babelrc"
 RUN npm run build
 
 # Production image, copy all the files and run next
