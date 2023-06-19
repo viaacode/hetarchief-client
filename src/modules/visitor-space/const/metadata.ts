@@ -63,44 +63,46 @@ export const REGULAR_FILTERS: MetadataProp[] = [
 	// MetadataProp.ConsultableMedia,
 ];
 
+export const GET_OPERATOR_LABELS = () => ({
+	from: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
+	),
+	until: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
+	),
+	between: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
+	),
+	contains: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
+	),
+	excludes: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
+	),
+	equals: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
+	),
+	differs: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
+	),
+	shorter: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
+	),
+	longer: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
+	),
+	exact: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___exact'
+	),
+});
+
 export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
-	const dictionary = {
-		from: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
-		),
-		until: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
-		),
-		between: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
-		),
-		contains: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
-		),
-		excludes: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
-		),
-		equals: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
-		),
-		differs: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
-		),
-		shorter: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
-		),
-		longer: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
-		),
-		exact: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___exact'
-		),
-	};
+	const operatorLabels = GET_OPERATOR_LABELS();
 
 	return {
 		[MetadataProp.CreatedAt]: {
 			[Operator.GreaterThanOrEqual]: {
-				label: dictionary.from,
+				label: operatorLabels.from,
 				field: DateInput,
 				filters: [
 					{
@@ -110,7 +112,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.LessThanOrEqual]: {
-				label: dictionary.until,
+				label: operatorLabels.until,
 				field: DateInput,
 				filters: [
 					{
@@ -120,7 +122,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Between]: {
-				label: dictionary.between,
+				label: operatorLabels.between,
 				field: DateRangeInput,
 				filters: [
 					{
@@ -134,7 +136,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.exact,
+				label: operatorLabels.exact,
 				field: DateInput,
 				filters: [
 					{
@@ -151,7 +153,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.Duration]: {
 			[Operator.LessThanOrEqual]: {
-				label: dictionary.shorter,
+				label: operatorLabels.shorter,
 				field: DurationInput,
 				filters: [
 					{
@@ -161,7 +163,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.GreaterThanOrEqual]: {
-				label: dictionary.longer,
+				label: operatorLabels.longer,
 				field: DurationInput,
 				filters: [
 					{
@@ -171,7 +173,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Between]: {
-				label: dictionary.between,
+				label: operatorLabels.between,
 				field: DurationRangeInput,
 				filters: [
 					{
@@ -185,7 +187,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Exact]: {
-				label: dictionary.exact,
+				label: operatorLabels.exact,
 				field: DurationRangeInput,
 				filters: [
 					{
@@ -202,7 +204,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.PublishedAt]: {
 			[Operator.GreaterThanOrEqual]: {
-				label: dictionary.from,
+				label: operatorLabels.from,
 				field: DateInput,
 				filters: [
 					{
@@ -212,7 +214,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.LessThanOrEqual]: {
-				label: dictionary.until,
+				label: operatorLabels.until,
 				field: DateInput,
 				filters: [
 					{
@@ -222,7 +224,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Between]: {
-				label: dictionary.between,
+				label: operatorLabels.between,
 				field: DateRangeInput,
 				filters: [
 					{
@@ -236,7 +238,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.exact,
+				label: operatorLabels.exact,
 				field: DateInput,
 				filters: [
 					{
@@ -252,7 +254,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 		},
 		[MetadataProp.Description]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -262,7 +264,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -275,7 +277,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.Genre]: {
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: GenreSelect,
 				filters: [
 					{
@@ -285,7 +287,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: GenreSelect,
 				filters: [
 					{
@@ -298,7 +300,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.SpacialCoverage]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -308,7 +310,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -318,7 +320,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -328,7 +330,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
@@ -341,7 +343,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.TemporalCoverage]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -351,7 +353,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -361,7 +363,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -371,7 +373,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
@@ -384,7 +386,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.ObjectType]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -394,7 +396,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -404,7 +406,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -414,7 +416,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
@@ -427,7 +429,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.Publisher]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -437,7 +439,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -447,7 +449,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -457,7 +459,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
@@ -470,7 +472,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.Title]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -480,7 +482,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -490,7 +492,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -500,7 +502,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
@@ -513,7 +515,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.Cast]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -523,7 +525,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -533,7 +535,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -543,7 +545,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
@@ -556,7 +558,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.Identifier]: {
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -566,7 +568,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
@@ -579,7 +581,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 
 		[MetadataProp.Keywords]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -589,7 +591,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -599,7 +601,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -609,7 +611,7 @@ export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{

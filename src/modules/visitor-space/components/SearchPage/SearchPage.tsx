@@ -66,6 +66,7 @@ import {
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
+	IeObjectsSearchOperator,
 	IeObjectTypes,
 	SortObject,
 	Visit,
@@ -286,7 +287,7 @@ const SearchPage: FC = () => {
 				dispatch(setLastScrollPosition(null));
 			}, 100);
 		}
-	}, [lastScrollPosition, searchResults?.items]);
+	}, [dispatch, lastScrollPosition, searchResults?.items]);
 
 	useEffect(() => {
 		setIsInitialPageLoad(true);
@@ -549,7 +550,6 @@ const SearchPage: FC = () => {
 
 		tags.forEach((tag) => {
 			switch (tag.key) {
-				case VisitorSpaceFilterId.Creator:
 				case VisitorSpaceFilterId.Genre:
 				case VisitorSpaceFilterId.Keywords:
 				case VisitorSpaceFilterId.Language:
@@ -566,6 +566,7 @@ const SearchPage: FC = () => {
 				case VisitorSpaceFilterId.Created:
 				case VisitorSpaceFilterId.Duration:
 				case VisitorSpaceFilterId.Published:
+				case VisitorSpaceFilterId.Creator:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						tag,
@@ -677,7 +678,7 @@ const SearchPage: FC = () => {
 				previousPage: ROUTES.search,
 			};
 		});
-	}, [isKioskUser, isPublicCollection, searchResults?.items]);
+	}, [isKioskUser, isPublicCollection, searchResults?.items, searchResults?.searchTerms]);
 
 	/**
 	 * Render
@@ -777,7 +778,7 @@ const SearchPage: FC = () => {
 
 		return (
 			<Button
-				onClick={(e) => {
+				onClick={() => {
 					setSelectedCard(item as IdentifiableMediaCard);
 					setShowAddToFolderBlade(true);
 				}}

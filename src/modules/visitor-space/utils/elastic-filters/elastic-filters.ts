@@ -95,8 +95,8 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 		// Creator
 		{
 			field: IeObjectsSearchFilterField.CREATOR,
-			operator: IeObjectsSearchOperator.IS,
-			multiValue: compact(query[VisitorSpaceFilterId.Creator] || []) as string[],
+			operator: IeObjectsSearchOperator.CONTAINS,
+			value: (query[VisitorSpaceFilterId.Creator] as string) || '',
 		},
 		// Genre
 		{
@@ -141,7 +141,7 @@ export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSe
 		},
 		// Advanced
 		...(query.advanced || []).flatMap(mapAdvancedToElastic),
-	];
+	].filter((filterField) => filterField.value || filterField.multiValue?.length);
 };
 
 export const mapRefineFilterToElastic = (
