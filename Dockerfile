@@ -42,4 +42,4 @@ USER nextjs
 
 EXPOSE 3000
 
-CMD ["npm", "docker-start"]
+CMD ["npm", "run", "docker-start"]
