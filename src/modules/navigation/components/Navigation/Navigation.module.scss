@@ -470,10 +470,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			max-height: calc(100vh - $c-navigation-height);
 			overflow-x: hidden;
 			overflow-y: auto;
-
-			@include respond-to(md) {
-				padding-bottom: 10rem;
-			}
 		}
 
 		:global(.c-badge) {

@@ -26,6 +26,7 @@ const ContentPageOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUs
 		return (
 			<AdminLayout
 				pageTitle={tText('admin/content/views/content-overview___content-overzicht')}
+				className="p-admin-content-page-overview"
 			>
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
