@@ -179,17 +179,18 @@ const SearchPage: FC = () => {
 	const activeVisitorSpaceSlug: string = useMemo(() => {
 		if (!visitorSpaces.length) {
 			// Until visitor spaces is loaded, we cannot know which option to select
-			return PUBLIC_COLLECTION;
+			return undefined;
 		}
-		if (queryParamMaintainer) {
-			if (
-				visitorSpaces
-					.map((visitorSpace) => visitorSpace.spaceMaintainerId)
-					.includes(queryParamMaintainer)
-			) {
-				return queryParamMaintainer;
-			}
+
+		if (
+			queryParamMaintainer &&
+			visitorSpaces
+				.map((visitorSpace) => visitorSpace.spaceSlug)
+				.includes(queryParamMaintainer)
+		) {
+			return queryParamMaintainer;
 		}
+
 		// No visitor space set in query params or the visitor space is not recognized
 		setQuery({
 			...query,
