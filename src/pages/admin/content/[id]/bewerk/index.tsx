@@ -21,7 +21,7 @@ const ContentPageEditPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout bottomPadding={false}>
+			<AdminLayout bottomPadding={false} className="p-admin-content-page-edit">
 				<AdminLayout.Content>
 					<div className="p-admin-content__edit">
 						<ContentPageEdit id={router.query.id as string} commonUser={commonUser} />

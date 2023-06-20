@@ -83,7 +83,7 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<a
 	[VisitorSpaceFilterId.Duration]: AdvancedFilterArrayParam,
 	[VisitorSpaceFilterId.Created]: AdvancedFilterArrayParam,
 	[VisitorSpaceFilterId.Published]: AdvancedFilterArrayParam,
-	[VisitorSpaceFilterId.Creator]: ArrayParam,
+	[VisitorSpaceFilterId.Creator]: StringParam,
 	[VisitorSpaceFilterId.Genre]: ArrayParam,
 	[VisitorSpaceFilterId.Keywords]: ArrayParam,
 	[VisitorSpaceFilterId.Language]: ArrayParam,

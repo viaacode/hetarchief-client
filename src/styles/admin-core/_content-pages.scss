@@ -148,3 +148,11 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 .c-content-block {
 	overflow: hidden;
 }
+
+/* Avoid bottom padding on the content page edit/create pages */
+.p-admin-content-page-create,
+.p-admin-content-page-edit {
+	[class*="SidebarLayout_l-sidebar__main"] {
+		padding-bottom: 0 !important;
+	}
+}

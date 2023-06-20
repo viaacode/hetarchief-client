@@ -66,6 +66,7 @@ import {
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
+	IeObjectsSearchOperator,
 	IeObjectTypes,
 	SortObject,
 	Visit,
@@ -174,8 +175,30 @@ const SearchPage: FC = () => {
 		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
 	};
 
-	const activeVisitorSpaceSlug: string =
-		query?.[VisitorSpaceFilterId.Maintainer] || PUBLIC_COLLECTION;
+	const queryParamMaintainer = query?.[VisitorSpaceFilterId.Maintainer];
+	const activeVisitorSpaceSlug: string = useMemo(() => {
+		if (!visitorSpaces.length) {
+			// Until visitor spaces is loaded, we cannot know which option to select
+			return undefined;
+		}
+
+		if (
+			queryParamMaintainer &&
+			visitorSpaces
+				.map((visitorSpace) => visitorSpace.spaceSlug)
+				.includes(queryParamMaintainer)
+		) {
+			return queryParamMaintainer;
+		}
+
+		// No visitor space set in query params or the visitor space is not recognized
+		setQuery({
+			...query,
+			[VisitorSpaceFilterId.Maintainer]: undefined,
+		});
+		return PUBLIC_COLLECTION;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [queryParamMaintainer, visitorSpaces]);
 
 	const isPublicCollection = activeVisitorSpaceSlug === PUBLIC_COLLECTION;
 
@@ -286,7 +309,7 @@ const SearchPage: FC = () => {
 				dispatch(setLastScrollPosition(null));
 			}, 100);
 		}
-	}, [lastScrollPosition, searchResults?.items]);
+	}, [dispatch, lastScrollPosition, searchResults?.items]);
 
 	useEffect(() => {
 		setIsInitialPageLoad(true);
@@ -333,7 +356,7 @@ const SearchPage: FC = () => {
 		[viewMode]
 	);
 
-	const dropdownOptions = useMemo(() => {
+	const visitorSpaceDropdownOptions = useMemo(() => {
 		const dynamicOptions: VisitorSpaceDropdownOption[] = visitorSpaces.map(
 			({ spaceName, endAt, spaceSlug }: Visit): VisitorSpaceDropdownOption => {
 				const endAtDate = asDate(endAt);
@@ -549,7 +572,6 @@ const SearchPage: FC = () => {
 
 		tags.forEach((tag) => {
 			switch (tag.key) {
-				case VisitorSpaceFilterId.Creator:
 				case VisitorSpaceFilterId.Genre:
 				case VisitorSpaceFilterId.Keywords:
 				case VisitorSpaceFilterId.Language:
@@ -566,6 +588,7 @@ const SearchPage: FC = () => {
 				case VisitorSpaceFilterId.Created:
 				case VisitorSpaceFilterId.Duration:
 				case VisitorSpaceFilterId.Published:
+				case VisitorSpaceFilterId.Creator:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						tag,
@@ -677,7 +700,7 @@ const SearchPage: FC = () => {
 				previousPage: ROUTES.search,
 			};
 		});
-	}, [isKioskUser, isPublicCollection, searchResults?.items]);
+	}, [isKioskUser, isPublicCollection, searchResults?.items, searchResults?.searchTerms]);
 
 	/**
 	 * Render
@@ -777,11 +800,7 @@ const SearchPage: FC = () => {
 
 		return (
 			<Button
-				onClick={(e) => {
-					// Avoid navigating to the card object (detail page) when clicking buttons on the card (bookmark)
-					e.preventDefault();
-					e.stopPropagation();
-
+				onClick={() => {
 					setSelectedCard(item as IdentifiableMediaCard);
 					setShowAddToFolderBlade(true);
 				}}
@@ -813,7 +832,7 @@ const SearchPage: FC = () => {
 		}
 
 		// Strip out public collection and own visitor space (cp)
-		let visitorSpaces: VisitorSpaceDropdownOption[] = dropdownOptions.filter(
+		let visitorSpaces: VisitorSpaceDropdownOption[] = visitorSpaceDropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
 				const isPublicCollection = visitorSpace.slug == PUBLIC_COLLECTION;
 				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.maintainerId;
@@ -926,7 +945,7 @@ const SearchPage: FC = () => {
 									>
 										{showVisitorSpacesDropdown && (
 											<VisitorSpaceDropdown
-												options={dropdownOptions}
+												options={visitorSpaceDropdownOptions}
 												selectedOptionId={
 													isKioskUser
 														? user?.visitorSpaceSlug ?? ''

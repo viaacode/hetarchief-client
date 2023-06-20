@@ -5,7 +5,7 @@ import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
 import { ComponentType, useEffect } from 'react';
 
-import { ErrorNoAccessToObject, Loading } from '@shared/components';
+import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/components';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -40,11 +40,16 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	);
 
 	// get visitor space info, used to display contact information
-	const { error: visitorSpaceError } = useGetVisitorSpace(router.query.slug as string, false);
+	const {
+		data: visitorSpaceInfo,
+		error: visitorSpaceError,
+		isLoading: isLoadingSpaceInfo,
+	} = useGetVisitorSpace(router.query.slug as string, false);
 
 	const hasPendingRequest = accessStatus?.status === AccessStatus.PENDING;
 	const hasAccess = accessStatus?.status === AccessStatus.ACCESS;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
+	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 
 	/**
 	 * Effects
@@ -65,15 +70,50 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 			);
 			return;
 		}
-	}, [router, accessStatus?.status, hasPendingRequest, hasAccess, slug]);
+
+		if (!isLoadingAccessStatus && !isLoadingSpaceInfo && !hasAccess && !isErrorSpaceNotFound) {
+			// No access to the visitor space, but the maintainer exists => so we can redirect to the search page
+			router.push(
+				stringifyUrl({
+					url: ROUTES.search,
+					query: {
+						[VisitorSpaceFilterId.Maintainers]:
+							visitorSpaceInfo?.maintainerId + '---' + visitorSpaceInfo?.name,
+					},
+				})
+			);
+			return;
+		}
+	}, [
+		router,
+		hasPendingRequest,
+		hasAccess,
+		slug,
+		isLoadingAccessStatus,
+		isLoadingSpaceInfo,
+		isErrorSpaceNotFound,
+		visitorSpaceInfo?.maintainerId,
+		visitorSpaceInfo?.name,
+	]);
 
 	/**
 	 * Render
 	 */
 
 	const renderPageContent = () => {
-		if (isLoadingAccessStatus || hasPendingRequest || hasAccess) {
+		if (
+			isLoadingAccessStatus ||
+			isLoadingSpaceInfo ||
+			hasPendingRequest ||
+			hasAccess ||
+			(!isLoadingAccessStatus && !isLoadingSpaceInfo && !hasAccess && !isErrorSpaceNotFound)
+		) {
+			// Show loading since we're handing the redirect in the useEffect above
 			return <Loading fullscreen owner="request access page" />;
+		}
+
+		if (isErrorSpaceNotFound) {
+			return <ErrorNotFound />;
 		}
 
 		if (isErrorSpaceNotActive) {

@@ -16,6 +16,8 @@ FROM node:gallium-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+# use the slower babel compiler that is compatible with the linux build pod https://stackoverflow.com/questions/69816589/next-failed-to-load-swc-binary
+RUN echo "{\"presets\": [\"next/babel\"]}" >> "/app/.babelrc"
 RUN npm run build
 
 # Production image, copy all the files and run next
@@ -34,9 +36,10 @@ COPY --from=builder /app/next-i18next.config.js ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/scripts/next-config-to-env-file.js ./
 
 USER nextjs
 
 EXPOSE 3000
 
-CMD ["node_modules/.bin/next", "start"]
+CMD ["npm", "run", "docker-start"]
