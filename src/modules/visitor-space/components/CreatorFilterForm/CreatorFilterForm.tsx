@@ -74,7 +74,9 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 							: undefined
 					}
 					id="CreatorFilterForm__creator"
-					label={tText('Maker')}
+					label={tText(
+						'modules/visitor-space/components/creator-filter-form/creator-filter-form___maker'
+					)}
 				>
 					<Controller
 						control={control}
