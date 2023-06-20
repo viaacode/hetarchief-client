@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact } from 'lodash';
-import { keyBy, mapValues, noop, without } from 'lodash-es';
+import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';

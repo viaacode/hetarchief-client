@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';

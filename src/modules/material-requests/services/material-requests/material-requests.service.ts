@@ -1,5 +1,5 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 
 import { ApiService } from '@shared/services/api-service';

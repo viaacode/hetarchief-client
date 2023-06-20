@@ -8,6 +8,7 @@
 	"scripts": {
 		"preinstall": "npx npm-force-resolutions",
 		"dev": "next dev -p 3200",
+		"build-with-analyse": "cross-env ANALYZE=true next build",
 		"build": "next build",
 		"start": "next start",
 		"docker-start": "node ./next-config-to-env-file.js && node_modules/.bin/next start",
@@ -62,6 +63,7 @@
 		"cors": "2.8.5",
 		"date-fns": "2.29.3",
 		"focus-trap-react": "8.11.0",
+		"html-entities": "^2.3.3",
 		"i18next-http-backend": "^1.4.1",
 		"immer": "9.0.12",
 		"isomorphic-dompurify": "0.17.0",
@@ -98,13 +100,13 @@
 		"save-file": "2.3.1",
 		"sharp": "0.29.3",
 		"use-query-params": "1.2.3",
-		"yup": "0.32.11",
-		"html-entities": "^2.3.3"
+		"yup": "0.32.11"
 	},
 	"devDependencies": {
 		"@babel/core": "7.16.0",
 		"@commitlint/cli": "15.0.0",
 		"@commitlint/config-conventional": "15.0.0",
+		"@next/bundle-analyzer": "13.4.6",
 		"@playwright/test": "^1.22.2",
 		"@storybook/addon-a11y": "6.4.19",
 		"@storybook/addon-actions": "6.4.19",

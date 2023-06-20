@@ -9,7 +9,7 @@ import {
 	keysSpacebar,
 	onKey,
 } from '@meemoo/react-components';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';

@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty } from 'lodash-es';
 import { array, date, mixed, object, ref, SchemaOf, string } from 'yup';
 
 import { tText } from '@shared/helpers/translate';
