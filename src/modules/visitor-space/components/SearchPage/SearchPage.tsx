@@ -176,7 +176,7 @@ const SearchPage: FC = () => {
 	};
 
 	const queryParamMaintainer = query?.[VisitorSpaceFilterId.Maintainer];
-	const activeVisitorSpaceSlug: string = useMemo(() => {
+	const activeVisitorSpaceSlug: string | undefined = useMemo(() => {
 		if (!visitorSpaces.length) {
 			// Until visitor spaces is loaded, we cannot know which option to select
 			return undefined;
@@ -200,7 +200,8 @@ const SearchPage: FC = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [queryParamMaintainer, visitorSpaces]);
 
-	const isPublicCollection = activeVisitorSpaceSlug === PUBLIC_COLLECTION;
+	const isPublicCollection =
+		activeVisitorSpaceSlug === undefined || activeVisitorSpaceSlug === PUBLIC_COLLECTION;
 
 	/**
 	 * Data
