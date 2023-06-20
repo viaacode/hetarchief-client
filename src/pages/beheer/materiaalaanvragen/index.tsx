@@ -229,7 +229,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 							'u-text-center u-color-neutral u-py-48': isFetching || noData,
 						})}
 					>
-						{isFetching && <Loading owner="Material requests overview" />}
+						{isFetching && <Loading owner="Material requests overview" fullscreen />}
 						{noData && renderEmptyMessage()}
 						{!noData && !isFetching && renderContent()}
 					</div>

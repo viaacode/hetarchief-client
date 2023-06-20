@@ -178,7 +178,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		if (isFetching) {
 			return (
 				<div className="l-container l-container--edgeless-to-lg u-text-center u-color-neutral u-py-48">
-					<Loading owner="admin visitors page: table loading" />
+					<Loading owner="admin visitors page: table loading" fullscreen />
 				</div>
 			);
 		}

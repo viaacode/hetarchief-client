@@ -182,7 +182,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 	const renderContent = () => {
 		if (isLoadingVisitRequests) {
-			return <Loading owner="visit request overview" />;
+			return <Loading owner="visit request overview" fullscreen />;
 		}
 		if ((filteredVisits?.length || 0) <= 0) {
 			return renderEmptyMessage();
