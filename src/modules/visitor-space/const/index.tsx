@@ -130,14 +130,18 @@ export const VISITOR_SPACE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___alles-wat-raadpleegbaar-is'),
 		form: ConsultableMediaFilterForm,
 		type: FilterMenuType.Checkbox,
-		isDisabled: () => !isPublicCollection || !isKeyUser,
+		isDisabled: () => {
+			return !isPublicCollection || !isKeyUser;
+		},
 	},
 	{
 		id: VisitorSpaceFilterId.ConsultableOnlyOnLocation,
 		label: tText('modules/visitor-space/const/index___enkel-ter-plaatse-beschikbaar'),
 		form: ConsultableOnlyOnLocationFilterForm,
 		type: FilterMenuType.Checkbox,
-		isDisabled: () => !isPublicCollection || isKioskUser,
+		isDisabled: () => {
+			return !isPublicCollection || isKioskUser;
+		},
 	},
 	{
 		id: VisitorSpaceFilterId.Medium,
@@ -196,7 +200,9 @@ export const VISITOR_SPACE_FILTERS = (
 		label: tText('modules/visitor-space/const/index___aanbieder'),
 		form: MaintainerFilterForm,
 		type: FilterMenuType.Modal,
-		isDisabled: () => !isPublicCollection || isKioskUser,
+		isDisabled: () => {
+			return !isPublicCollection || isKioskUser;
+		},
 	},
 	{
 		id: VisitorSpaceFilterId.Advanced,

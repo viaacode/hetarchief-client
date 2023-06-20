@@ -8,6 +8,7 @@ import { ROUTE_PARTS } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { isBrowser } from '@shared/utils';
 import { VisitorSpaceService } from '@visitor-space/services';
 import {
 	CreateVisitorSpaceSettings,
@@ -244,27 +245,31 @@ const VisitorSpaceSettings = forwardRef<
 						)}
 					</p>
 
-					<RichTextForm
-						editor={{
-							braft: {
-								draftProps: {
-									ariaDescribedBy: `${labelKeys.description}__description`,
-									ariaLabelledBy: `${labelKeys.description}__label`,
+					{/* Disable serverside rendering of rich text editor to conserve RAM on the server */}
+					{/* Otherwise we getJavaScript heap out of memory errors */}
+					{isBrowser() && (
+						<RichTextForm
+							editor={{
+								braft: {
+									draftProps: {
+										ariaDescribedBy: `${labelKeys.description}__description`,
+										ariaLabelledBy: `${labelKeys.description}__label`,
+									},
 								},
-							},
-							id: labelKeys.description,
-							initialHtml: (room && room.description) ?? '<p></p>',
-						}}
-						onSubmit={async (html, afterSubmit) =>
-							await updateSpace({ description: html }, afterSubmit)
-						}
-						renderCancelSaveButtons={renderCancelSaveButtons}
-						onUpdate={
-							action === 'create'
-								? (value) => updateValues({ description: value })
-								: undefined
-						}
-					/>
+								id: labelKeys.description,
+								initialHtml: (room && room.description) ?? '<p></p>',
+							}}
+							onSubmit={async (html, afterSubmit) =>
+								await updateSpace({ description: html }, afterSubmit)
+							}
+							renderCancelSaveButtons={renderCancelSaveButtons}
+							onUpdate={
+								action === 'create'
+									? (value) => updateValues({ description: value })
+									: undefined
+							}
+						/>
+					)}
 				</Box>
 			</article>
 
@@ -291,28 +296,32 @@ const VisitorSpaceSettings = forwardRef<
 						)}
 					</p>
 
-					<RichTextForm
-						className={styles['c-cp-settings__rich-text--no-heading']}
-						editor={{
-							braft: {
-								draftProps: {
-									ariaDescribedBy: `${labelKeys.serviceDescription}__description`,
-									ariaLabelledBy: `${labelKeys.serviceDescription}__label`,
+					{/* Disable serverside rendering of rich text editor to conserve RAM on the server */}
+					{/* Otherwise we getJavaScript heap out of memory errors */}
+					{isBrowser() && (
+						<RichTextForm
+							className={styles['c-cp-settings__rich-text--no-heading']}
+							editor={{
+								braft: {
+									draftProps: {
+										ariaDescribedBy: `${labelKeys.serviceDescription}__description`,
+										ariaLabelledBy: `${labelKeys.serviceDescription}__label`,
+									},
 								},
-							},
-							id: labelKeys.serviceDescription,
-							initialHtml: (room && room.serviceDescription) ?? '<p></p>',
-						}}
-						onSubmit={async (html, afterSubmit) =>
-							await updateSpace({ serviceDescription: html }, afterSubmit)
-						}
-						renderCancelSaveButtons={renderCancelSaveButtons}
-						onUpdate={
-							action === 'create'
-								? (value) => updateValues({ serviceDescription: value })
-								: undefined
-						}
-					/>
+								id: labelKeys.serviceDescription,
+								initialHtml: (room && room.serviceDescription) ?? '<p></p>',
+							}}
+							onSubmit={async (html, afterSubmit) =>
+								await updateSpace({ serviceDescription: html }, afterSubmit)
+							}
+							renderCancelSaveButtons={renderCancelSaveButtons}
+							onUpdate={
+								action === 'create'
+									? (value) => updateValues({ serviceDescription: value })
+									: undefined
+							}
+						/>
+					)}
 				</Box>
 			</article>
 		</div>
