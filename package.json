@@ -10,7 +10,7 @@
 		"dev": "next dev -p 3200",
 		"build": "next build",
 		"start": "next start",
-		"docker-start": "node ./next-config-to-env-file.js && node_modules/.bin/next start",
+		"docker-start": "node ./next-config-to-env-file.js && chown nextjs:nodejs .env.local && && node_modules/.bin/next start",
 		"lint": "npm run lint:ts && npm run lint:scss",
 		"lint:ts": "next lint --dir src",
 		"lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input",
