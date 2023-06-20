@@ -30,7 +30,7 @@ RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
 # You only need to copy next.config.js if you are NOT using the default configuration
-RUN chown nextjs:nodejs ./app
+RUN chown nextjs:nodejs /app
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/next-i18next.config.js ./
