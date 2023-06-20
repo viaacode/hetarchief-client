@@ -19,7 +19,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
-import { ROUTES } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -91,7 +91,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 			const response = await getAccessStatus(visit.spaceSlug);
 			switch (response?.status) {
 				case AccessStatus.ACCESS:
-					router.push(`/${visit.spaceSlug}`);
+					router.push(`/${ROUTE_PARTS.visit}/${visit.spaceSlug}`);
 					break;
 				case AccessStatus.PENDING:
 					router.push(ROUTES.visitRequested.replace(':slug', visit.spaceSlug));
