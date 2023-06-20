@@ -16,14 +16,15 @@ export abstract class ApiService {
 				prefixUrl: isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL,
 				headers: {
 					'content-type': 'application/json',
+					'Cache-Control': 'no-cache',
 				},
 				credentials: 'include', // TODO change to same-origin once working on server
 				hooks: {
 					afterResponse: [
-						(_request, _options, response) => {
+						async (_request, _options, response) => {
 							if (response.status === 401 && !ignoreAuthError) {
-								// user is unauthorized and should login again
-								AuthService.logout(true); // true: return to current page after login
+								// user is unauthorized and should log in again
+								await AuthService.logout(true); // true: return to current page after login
 							}
 						},
 					],

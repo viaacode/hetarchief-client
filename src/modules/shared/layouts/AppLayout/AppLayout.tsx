@@ -205,7 +205,7 @@ const AppLayout: FC = ({ children }) => {
 		);
 	}, [router]);
 
-	const onLogOutClick = useCallback(() => AuthService.logout(), []);
+	const onLogOutClick = useCallback(async () => await AuthService.logout(), []);
 
 	const onCloseAuthModal = () => {
 		if (typeof query[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY] === 'boolean') {

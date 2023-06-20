@@ -62,7 +62,7 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 	}, [scrollable]);
 
 	const onCancelClick = useCallback(async () => {
-		AuthService.logout();
+		await AuthService.logout();
 	}, []);
 
 	const onConfirmClick = () => {

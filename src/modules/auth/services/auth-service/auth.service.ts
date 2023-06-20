@@ -1,10 +1,11 @@
+import { QueryClient } from '@tanstack/react-query';
 import { Options } from 'ky/distribution/types/options';
 import { omit, trimEnd } from 'lodash-es';
 import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_KEYS, ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { isBrowser } from '@shared/utils';
@@ -124,7 +125,7 @@ export class AuthService {
 		);
 	}
 
-	public static logout(shouldRedirectToOriginalPage = false): void {
+	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
 		let returnToUrl = isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL;
 		if (shouldRedirectToOriginalPage) {
 			let originalPath = window.location.href.substring(
@@ -141,6 +142,12 @@ export class AuthService {
 				},
 			});
 		}
+
+		// Clear react-query cache to avoid any pages still being accessible using the browser back button
+		// https://meemoo.atlassian.net/browse/ARC-1828
+		const queryClient = new QueryClient();
+		await queryClient.invalidateQueries();
+		queryClient.clear();
 
 		window.location.href = stringifyUrl({
 			url: `${
