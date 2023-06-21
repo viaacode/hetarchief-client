@@ -341,6 +341,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 	const showVisitButton =
 		visitorSpace?.status === VisitorSpaceStatus.Active && canRequestAccess && !isKiosk;
+	const hasContentLicense = mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
 
 	/**
 	 * Effects
@@ -838,6 +839,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 		if (!playableUrl) {
 			if (showVisitButton) {
+				return (
+					<ObjectPlaceholder
+						{...noLicensePlaceholder()}
+						onOpenRequestAccess={openRequestAccessBlade}
+					/>
+				);
+			}
+			if (hasContentLicense) {
 				return (
 					<ObjectPlaceholder
 						{...noLicensePlaceholder()}
