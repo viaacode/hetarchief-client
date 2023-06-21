@@ -1,7 +1,9 @@
 @use "src/styles/abstracts" as *;
+@use "sass:map";
 
 $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
+$breakpoint-md: map.get($breakpoints, "md");
 
 .p-object-detail {
 	visibility: visible;
@@ -26,7 +28,7 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= 768px) {
+		@media screen and (width >= $breakpoint-md) {
 			grid-template-columns: 1fr min-content;
 		}
 
@@ -45,7 +47,7 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= 768px) {
+		@media screen and (width >= $breakpoint-md) {
 			top: $spacer-lg;
 			left: $spacer-lg;
 		}
@@ -101,7 +103,7 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= 768px) {
+		@media screen and (width >= $breakpoint-md) {
 			display: none;
 		}
 	}
@@ -372,7 +374,7 @@ $metadata-collapsed-width: 36vw;
 	}
 
 	// `include respond-at(md)` -fix for safari
-	@media screen and (width >= 768px) {
+	@media screen and (width >= $breakpoint-md) {
 		.p-object-detail__metadata {
 			display: block;
 			padding-right: 2rem;
@@ -405,7 +407,7 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		// `include respond-at(md)` -fix for safari
-		@media screen and (width >= 768px) {
+		@media screen and (width >= $breakpoint-md) {
 			visibility: visible;
 		}
 	}
