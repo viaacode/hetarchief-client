@@ -45,7 +45,10 @@ import {
 	VisitorSpaceDropdown,
 	VisitorSpaceDropdownOption,
 } from '@shared/components';
-import { PAGE_NUMBER_OF_MANY_RESULTS_TILE } from '@shared/components/MediaCardList/MediaCardList.const';
+import {
+	MAX_COUNT_SEARCH_RESULTS,
+	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
+} from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -319,6 +322,10 @@ const SearchPage: FC = () => {
 	/**
 	 * Display
 	 */
+
+	const limitToMaxResults = (count: number): number => {
+		return Math.min(count, MAX_COUNT_SEARCH_RESULTS);
+	};
 
 	const getItemCounts = useCallback(
 		(type: VisitorSpaceMediaType): number => {
@@ -908,7 +915,7 @@ const SearchPage: FC = () => {
 				start={(query.page - 1) * VISITOR_SPACE_ITEM_COUNT}
 				count={VISITOR_SPACE_ITEM_COUNT}
 				showBackToTop
-				total={getItemCounts(query.format as VisitorSpaceMediaType)}
+				total={limitToMaxResults(getItemCounts(query.format as VisitorSpaceMediaType))}
 				onPageChange={(zeroBasedPage) => {
 					scrollTo(0, 'instant');
 					setQuery({
