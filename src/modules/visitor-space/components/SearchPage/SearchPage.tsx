@@ -863,7 +863,7 @@ const SearchPage: FC = () => {
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
 				<Link
 					key={visitorSpace.slug}
-					href={`/zoeken?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
+					href={`/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
 				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>
