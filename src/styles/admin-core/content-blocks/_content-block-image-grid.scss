@@ -20,4 +20,14 @@ $component: "c-content-block__image-grid";
 			}
 		}
 	}
+
+	@include respond-to(lg) {
+		.c-block-grid--flex-3 {
+			flex-direction: column;
+
+			.c-block-grid__item {
+				width: 100% !important;
+			}
+		}
+	}
 }

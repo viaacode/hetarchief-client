@@ -467,7 +467,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	.c-navigation__section {
 		:global(.c-menu) {
-			max-height: calc(100vh - $c-navigation-height);
+			max-height: calc(100vh - $c-navigation-height - 10rem); // Extra margin for browser url bar on mobile safari
 			overflow-x: hidden;
 			overflow-y: auto;
 		}
