@@ -1,7 +1,9 @@
 @use "src/styles/abstracts" as *;
+@use "sass:map";
 
 $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
+$breakpoint-md: map.get($breakpoints, "md");
 
 .p-object-detail {
 	visibility: visible;
@@ -25,6 +27,11 @@ $metadata-collapsed-width: 36vw;
 			grid-template-columns: 1fr min-content;
 		}
 
+		// `include respond-at(md)` -fix for safari
+		@media screen and (width >= $breakpoint-md) {
+			grid-template-columns: 1fr min-content;
+		}
+
 		grid-template-rows: 1fr min-content;
 	}
 
@@ -35,6 +42,12 @@ $metadata-collapsed-width: 36vw;
 		left: 2rem;
 
 		@include respond-at(md) {
+			top: $spacer-lg;
+			left: $spacer-lg;
+		}
+
+		// `include respond-at(md)` -fix for safari
+		@media screen and (width >= $breakpoint-md) {
 			top: $spacer-lg;
 			left: $spacer-lg;
 		}
@@ -86,6 +99,11 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		@include respond-at(md) {
+			display: none;
+		}
+
+		// `include respond-at(md)` -fix for safari
+		@media screen and (width >= $breakpoint-md) {
 			display: none;
 		}
 	}
@@ -345,6 +363,21 @@ $metadata-collapsed-width: 36vw;
 	@include respond-at(md) {
 		.p-object-detail__metadata {
 			display: block;
+			padding-right: 2rem;
+		}
+
+		.p-object-detail__video {
+			display: grid;
+			grid-template-rows: 1fr auto;
+			margin-top: 0.1rem; // Prevent wrong alignment (https://github.com/viaacode/hetarchief-client/pull/756#discussion_r1151752068)
+		}
+	}
+
+	// `include respond-at(md)` -fix for safari
+	@media screen and (width >= $breakpoint-md) {
+		.p-object-detail__metadata {
+			display: block;
+			padding-right: 2rem;
 		}
 
 		.p-object-detail__video {
@@ -370,6 +403,11 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		@include respond-at(md) {
+			visibility: visible;
+		}
+
+		// `include respond-at(md)` -fix for safari
+		@media screen and (width >= $breakpoint-md) {
 			visibility: visible;
 		}
 	}
