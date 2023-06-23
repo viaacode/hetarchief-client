@@ -73,7 +73,8 @@
 		}
 
 		&__btn:first-of-type {
-			padding: 0;
+			// lower left chevron to align it centered in mobile view
+			padding: 2px 0 0;
 		}
 	}
 }
