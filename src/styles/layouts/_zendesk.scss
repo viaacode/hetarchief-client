@@ -1,5 +1,13 @@
+@use "src/styles/abstracts" as *;
+
 #launcher {
-	width: 50px !important;
+	width: 150px !important;
+}
+
+@include respond-to(md) {
+	#launcher {
+		width: 50px !important;
+	}
 }
 
 body.hide-zendesk-widget #launcher {
