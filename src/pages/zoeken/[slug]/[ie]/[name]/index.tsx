@@ -340,8 +340,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 	const showVisitButton =
-		visitorSpace?.status === VisitorSpaceStatus.Active && canRequestAccess && !isKiosk;
-	const hasContentLicense = mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT);
+		isNil(mediaInfo?.thumbnailUrl) &&
+		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
+		visitorSpace?.status === VisitorSpaceStatus.Active &&
+		!isKiosk;
 
 	/**
 	 * Effects
@@ -839,14 +841,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 		if (!playableUrl) {
 			if (showVisitButton) {
-				return (
-					<ObjectPlaceholder
-						{...noLicensePlaceholder()}
-						onOpenRequestAccess={openRequestAccessBlade}
-					/>
-				);
-			}
-			if (hasContentLicense) {
 				return (
 					<ObjectPlaceholder
 						{...noLicensePlaceholder()}
