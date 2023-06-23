@@ -18,21 +18,6 @@ import { VISITOR_SPACE_LICENSES } from '@visitor-space/utils/elastic-filters';
 
 import { IeObjectsService } from './../services';
 
-const addRelatedCount = async (response: GetIeObjectsResponse): Promise<GetIeObjectsResponse> => {
-	const count = await IeObjectsService.countRelated(
-		response.items.map((item) => item.meemooIdentifier)
-	);
-
-	return {
-		...response,
-		items: response.items.map((item) => ({
-			...item,
-			// Reduce by 1 to account for itself
-			related_count: count[item.meemooIdentifier] - 1,
-		})),
-	};
-};
-
 export const useGetIeObjects = (
 	filters: IeObjectsSearchFilter[],
 	page: number,
@@ -52,9 +37,7 @@ export const useGetIeObjects = (
 			//     - One to fetch the results for a specific (all, audio, video) tab (search results),
 			//     - and one to fetch the aggregates across tabs (all-, video-, audio counts)
 			const [results, noFormatResults] = await Promise.all([
-				IeObjectsService.getSearchResults(filterQuery, page, size, sort).then(
-					addRelatedCount
-				),
+				IeObjectsService.getSearchResults(filterQuery, page, size, sort),
 				IeObjectsService.getSearchResults(
 					filterQuery.filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 					page,
