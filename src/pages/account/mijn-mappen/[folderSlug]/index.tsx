@@ -510,13 +510,27 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											keywords={keywords}
 											items={folderMedia?.data?.items
 												.filter((media) => {
-													// if user is no keyUser AND object has license VIAA-INTRA_CP-CONTENT, do not show object
-													const noKeyUserAndHasLicense =
+													// if user is no keyUser AND object has ONLY license INTRA_CP-CONTENT AND/OR INTRA_CP-METADATA_ALL, do not show object
+													const noKeyUserAndHasOnlyLicense =
 														!isKeyUser &&
+														media.licenses.length === 1 &&
 														media.licenses.includes(
-															IeObjectLicense.INTRA_CP_CONTENT
+															IeObjectLicense.INTRA_CP_CONTENT ||
+																IeObjectLicense.INTRA_CP_METADATA_ALL
 														);
-													if (!noKeyUserAndHasLicense) {
+													const noKeyUserAndHasLicenses =
+														!isKeyUser &&
+														media.licenses.length === 2 &&
+														media.licenses.includes(
+															IeObjectLicense.INTRA_CP_CONTENT &&
+																IeObjectLicense.INTRA_CP_METADATA_ALL
+														);
+													if (
+														noKeyUserAndHasOnlyLicense ||
+														noKeyUserAndHasLicenses
+													) {
+														return;
+													} else {
 														return media;
 													}
 												})
