@@ -2,11 +2,10 @@ import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
@@ -21,7 +20,6 @@ import { ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -51,11 +49,9 @@ const MediaCard: FC<MediaCardProps> = ({
 	link,
 	maintainerSlug,
 	hasTempAccess,
-	previousPage,
 }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
-	const dispatch = useDispatch();
 
 	const [, setQuery] = useQueryParams({
 		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
@@ -66,12 +62,6 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
-
-	const saveScrollPosition = () => {
-		if (id && previousPage) {
-			dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
-		}
-	};
 
 	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
 		try {
