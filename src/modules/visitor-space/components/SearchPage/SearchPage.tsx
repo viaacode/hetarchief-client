@@ -234,8 +234,8 @@ const SearchPage: FC = () => {
 	const {
 		data: searchResults,
 		isLoading: searchResultsLoading,
+		isRefetching: searchResultsRefetching,
 		error: searchResultsError,
-		status: searchResultsStatus,
 	} = useGetIeObjects(
 		{
 			filters: [
@@ -248,7 +248,6 @@ const SearchPage: FC = () => {
 		},
 		{ enabled: !isLoadingActiveVisitRequest }
 	);
-
 	const { data: formatCounts } = useGetIeObjects(
 		{
 			filters: [
@@ -261,7 +260,7 @@ const SearchPage: FC = () => {
 			requestedAggs: [IeObjectsSearchFilterField.FORMAT],
 		},
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
-		{ enabled: searchResultsStatus !== 'loading' }
+		{ enabled: !searchResultsRefetching }
 	);
 
 	const showManyResultsTile = query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
