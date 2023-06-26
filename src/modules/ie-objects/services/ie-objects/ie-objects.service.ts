@@ -34,7 +34,8 @@ export class IeObjectsService {
 		filters: IeObjectsSearchFilter[] = [],
 		page = 1,
 		size = 20,
-		sort?: SortObject
+		sort?: SortObject,
+		requestedAggs?: IeObjectsSearchFilterField[]
 	): Promise<GetIeObjectsResponse> {
 		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
 		const filtered = [
@@ -62,7 +63,7 @@ export class IeObjectsService {
 					filters: filtered,
 					size,
 					page,
-					requestedAggs: [
+					requestedAggs: requestedAggs || [
 						IeObjectsSearchFilterField.FORMAT,
 						IeObjectsSearchFilterField.GENRE,
 						IeObjectsSearchFilterField.MEDIUM,
