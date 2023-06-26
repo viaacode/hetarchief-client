@@ -23,7 +23,6 @@ export const useGetIeObjects = (
 		page: number;
 		size: number;
 		sort?: SortObject;
-		requestedAggs?: IeObjectsSearchFilterField[];
 	},
 	options: { enabled: boolean } = { enabled: true }
 ): UseQueryResult<GetIeObjectsResponse> => {
@@ -31,18 +30,12 @@ export const useGetIeObjects = (
 	const user = useSelector(selectUser);
 
 	return useQuery(
-		[QUERY_KEYS.getIeObjectsObjects, args, options],
+		[QUERY_KEYS.getIeObjectsResults, args, options],
 		async () => {
-			const { filters, page, size, sort, requestedAggs } = args;
+			const { filters, page, size, sort } = args;
 			const filterQuery = !isNil(filters) && !isEmpty(filters) ? filters : [];
 
-			const results = await IeObjectsService.getSearchResults(
-				filterQuery,
-				page,
-				size,
-				sort,
-				requestedAggs
-			);
+			const results = await IeObjectsService.getSearchResults(filterQuery, page, size, sort);
 
 			dispatch(setResults(results));
 			dispatch(setFilterOptions(results.aggregations));
@@ -53,20 +46,19 @@ export const useGetIeObjects = (
 					filter.field === IeObjectsSearchFilterField.LICENSES &&
 					filter.multiValue === VISITOR_SPACE_LICENSES
 			);
-			if (!requestedAggs) {
-				// Only trigger events for actual search requests, not for extra tab count requests
-				EventsService.triggerEvent(
-					isVisitorSpaceSearch ? LogEventType.BEZOEK_SEARCH : LogEventType.SEARCH,
-					window.location.href,
-					{
-						filters,
-						page,
-						size,
-						sort,
-						user_group_name: user?.groupName || GroupName.ANONYMOUS,
-					}
-				).then(noop); // We don't want to wait for events calls
-			}
+
+			// Only trigger events for actual search requests, not for extra tab count requests
+			EventsService.triggerEvent(
+				isVisitorSpaceSearch ? LogEventType.BEZOEK_SEARCH : LogEventType.SEARCH,
+				window.location.href,
+				{
+					filters,
+					page,
+					size,
+					sort,
+					user_group_name: user?.groupName || GroupName.ANONYMOUS,
+				}
+			).then(noop); // We don't want to wait for events calls
 
 			return results;
 		},

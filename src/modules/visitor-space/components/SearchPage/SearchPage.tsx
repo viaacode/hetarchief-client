@@ -20,6 +20,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough, IeObjectSearchAggregations } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
@@ -50,7 +51,7 @@ import {
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_KEYS, ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -248,17 +249,12 @@ const SearchPage: FC = () => {
 		},
 		{ enabled: !isLoadingActiveVisitRequest }
 	);
-	const { data: formatCounts } = useGetIeObjects(
-		{
-			filters: [
-				...mapMaintainerToElastic(query, activeVisitRequest),
-				...mapFiltersToElastic(query),
-			].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
-			page: 0,
-			size: 0,
-			sort: undefined,
-			requestedAggs: [IeObjectsSearchFilterField.FORMAT],
-		},
+	const { data: formatCounts } = useGetIeObjectFormatCounts(
+		[
+			...mapMaintainerToElastic(query, activeVisitRequest),
+			...mapFiltersToElastic(query),
+		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
+
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
 		{ enabled: !searchResultsRefetching }
 	);
@@ -348,15 +344,10 @@ const SearchPage: FC = () => {
 
 	const getItemCounts = useCallback(
 		(type: VisitorSpaceMediaType): number => {
-			if (!formatCounts) {
-				return 0;
-			}
-			const buckets =
-				formatCounts?.aggregations?.[ElasticsearchFieldNames.Format]?.buckets || [];
 			if (type === VisitorSpaceMediaType.All) {
-				return sum(buckets.map((item) => item.doc_count));
+				return sum(Object.values(formatCounts || {})) || 0;
 			} else {
-				return buckets.find((bucket) => bucket.key === type)?.doc_count || 0;
+				return formatCounts?.[type] || 0;
 			}
 		},
 		[formatCounts]
