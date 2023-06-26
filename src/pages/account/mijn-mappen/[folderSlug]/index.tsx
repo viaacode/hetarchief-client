@@ -41,6 +41,7 @@ import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
@@ -79,6 +80,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const getFolders = useGetFolders();
 	const folders = useSelector(selectFolders);
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
+	const isKeyUser = useIsKeyUser();
 
 	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
@@ -506,49 +508,64 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 									{!folderMedia?.isError && (
 										<MediaCardList
 											keywords={keywords}
-											items={folderMedia?.data?.items.map((media) => {
-												let link: string | undefined = stringifyUrl({
-													url: `/${ROUTE_PARTS.search}/${
-														media.maintainerSlug
-													}/${media.schemaIdentifier}/${
-														kebabCase(media.name) || 'titel'
-													}`,
-													query: {
-														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
-															keywords,
-													},
-												});
-												if (isEmpty(media.accessThrough)) {
-													// If the user has no access to the object, do not make the card clickable
-													link = undefined;
-												}
-												const base: IdentifiableMediaCard = {
-													schemaIdentifier: media.schemaIdentifier,
-													maintainerSlug: media.maintainerSlug,
-													description: renderDescription(media),
-													title: renderTitle(media),
-													name: media.name,
-													type: media.dctermsFormat,
-													preview: media.thumbnailUrl,
-													duration: media.duration,
-													licenses: media.licenses,
-													showKeyUserLabel: media.accessThrough.includes(
-														IeObjectAccessThrough.SECTOR
-													),
-													showLocallyAvailable:
-														getShowLocallyAvailable(media),
-													previousPage: ROUTES.myFolders,
-													link: link,
-												};
+											items={folderMedia?.data?.items
+												.filter((media) => {
+													// if user is no keyUser AND object has license VIAA-INTRA_CP-CONTENT, do not show object
+													const noKeyUserAndHasLicense =
+														!isKeyUser &&
+														media.licenses.includes(
+															IeObjectLicense.INTRA_CP_CONTENT
+														);
+													if (!noKeyUserAndHasLicense) {
+														return media;
+													}
+												})
+												.map((media) => {
+													let link: string | undefined = stringifyUrl({
+														url: `/${ROUTE_PARTS.search}/${
+															media.maintainerSlug
+														}/${media.schemaIdentifier}/${
+															kebabCase(media.name) || 'titel'
+														}`,
+														query: {
+															[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
+																keywords,
+														},
+													});
+													if (isEmpty(media.accessThrough)) {
+														// If the user has no access to the object, do not make the card clickable
+														link = undefined;
+													}
+													const base: IdentifiableMediaCard = {
+														schemaIdentifier: media.schemaIdentifier,
+														maintainerSlug: media.maintainerSlug,
+														description: renderDescription(media),
+														title: renderTitle(media),
+														name: media.name,
+														type: media.dctermsFormat,
+														preview: media.thumbnailUrl,
+														duration: media.duration,
+														licenses: media.licenses,
+														showKeyUserLabel:
+															media.accessThrough.includes(
+																IeObjectAccessThrough.SECTOR
+															),
+														showLocallyAvailable:
+															getShowLocallyAvailable(media),
+														previousPage: ROUTES.myFolders,
+														link: link,
+													};
 
-												return {
-													...base,
-													actions: renderActions(base, activeFolder),
-													...(!isNil(media.dctermsFormat) && {
-														icon: TYPE_TO_ICON_MAP[media.dctermsFormat],
-													}),
-												};
-											})}
+													return {
+														...base,
+														actions: renderActions(base, activeFolder),
+														...(!isNil(media.dctermsFormat) && {
+															icon: TYPE_TO_ICON_MAP[
+																media.dctermsFormat
+															],
+														}),
+													};
+												})}
 											view={'list'}
 										/>
 									)}
