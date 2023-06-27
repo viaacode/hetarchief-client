@@ -510,7 +510,7 @@ const SearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Creator:
-				data = (values as CreatorFilterFormState).creators;
+				data = (values as CreatorFilterFormState).creator;
 				break;
 
 			case VisitorSpaceFilterId.Genre:
@@ -586,6 +586,7 @@ const SearchPage: FC = () => {
 				case VisitorSpaceFilterId.Medium:
 				case VisitorSpaceFilterId.Maintainers:
 				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
+				case VisitorSpaceFilterId.Creator:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),
@@ -596,7 +597,6 @@ const SearchPage: FC = () => {
 				case VisitorSpaceFilterId.Created:
 				case VisitorSpaceFilterId.Duration:
 				case VisitorSpaceFilterId.Published:
-				case VisitorSpaceFilterId.Creator:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						tag,
