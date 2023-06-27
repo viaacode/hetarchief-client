@@ -13,4 +13,5 @@ export interface PersonalInfoBladeBladeProps {
 	personalInfo: PersonalInfoType;
 	layer: number;
 	currentLayer: number;
+	refetch: () => void;
 }
