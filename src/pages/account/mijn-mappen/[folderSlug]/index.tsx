@@ -83,7 +83,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
 			(folders?.items || []).map((folder) => {
-				const slug = folder.name && createFolderSlug(folder);
+				const slug = createFolderSlug(folder);
 				const href = `${ROUTES.myFolders}/${slug}`;
 
 				return {
