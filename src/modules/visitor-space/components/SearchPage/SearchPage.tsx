@@ -979,7 +979,7 @@ const SearchPage: FC = () => {
 											placeholder={tText(
 												'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 											)}
-											infoContent={tText(
+											infoContent={tHtml(
 												'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
 											)}
 											size="lg"
