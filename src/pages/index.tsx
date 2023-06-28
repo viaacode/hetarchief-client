@@ -1,13 +1,17 @@
 import { ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { GetServerSidePropsResult, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, FC } from 'react';
+import { ComponentType, FC, useEffect } from 'react';
 
+import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading } from '@shared/components';
+import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
@@ -21,18 +25,27 @@ type HomepageProps = {
 } & DefaultSeoInfo;
 
 const Homepage: NextPage<HomepageProps & UserProps> = ({ title, url, commonUser }) => {
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
+	const router = useRouter();
+
 	/**
 	 * Data
 	 */
 
 	const { isLoading: isContentPageLoading, data: contentPageInfo } = useGetContentPageByPath('/');
 
+	useEffect(() => {
+		if (isKioskUser) {
+			router.replace(ROUTES.search);
+		}
+	}, [router, isKioskUser]);
+
 	/**
 	 * Render
 	 */
 
 	const renderPageContent = () => {
-		if (isContentPageLoading) {
+		if (isContentPageLoading || isKioskUser) {
 			return <Loading fullscreen owner="homepage" />;
 		}
 		if (contentPageInfo) {

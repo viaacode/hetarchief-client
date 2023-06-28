@@ -20,8 +20,9 @@ import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
-import { IeObjectAccessThrough } from '@ie-objects/types';
+import { IeObjectAccessThrough, IeObjectSearchAggregations } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,
@@ -50,7 +51,7 @@ import {
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_KEYS, ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -69,7 +70,6 @@ import {
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
-	IeObjectsSearchOperator,
 	IeObjectTypes,
 	SortObject,
 	Visit,
@@ -235,13 +235,28 @@ const SearchPage: FC = () => {
 	const {
 		data: searchResults,
 		isLoading: searchResultsLoading,
+		isRefetching: searchResultsRefetching,
 		error: searchResultsError,
 	} = useGetIeObjects(
-		[...mapMaintainerToElastic(query, activeVisitRequest), ...mapFiltersToElastic(query)],
-		query.page || 1,
-		VISITOR_SPACE_ITEM_COUNT,
-		activeSort,
-		!isLoadingActiveVisitRequest
+		{
+			filters: [
+				...mapMaintainerToElastic(query, activeVisitRequest),
+				...mapFiltersToElastic(query),
+			],
+			page: query.page || 1,
+			size: VISITOR_SPACE_ITEM_COUNT,
+			sort: activeSort,
+		},
+		{ enabled: !isLoadingActiveVisitRequest }
+	);
+	const { data: formatCounts } = useGetIeObjectFormatCounts(
+		[
+			...mapMaintainerToElastic(query, activeVisitRequest),
+			...mapFiltersToElastic(query),
+		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
+
+		// Enabled when search query is finished, so it loads the tab counts after the initial results
+		{ enabled: !searchResultsRefetching }
 	);
 
 	const showManyResultsTile = query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
@@ -329,15 +344,13 @@ const SearchPage: FC = () => {
 
 	const getItemCounts = useCallback(
 		(type: VisitorSpaceMediaType): number => {
-			const buckets =
-				searchResults?.aggregations?.[ElasticsearchFieldNames.Format]?.buckets || [];
 			if (type === VisitorSpaceMediaType.All) {
-				return sum(buckets.map((item) => item.doc_count));
+				return sum(Object.values(formatCounts || {})) || 0;
 			} else {
-				return buckets.find((bucket) => bucket.key === type)?.doc_count || 0;
+				return formatCounts?.[type] || 0;
 			}
 		},
-		[searchResults]
+		[formatCounts]
 	);
 
 	const tabs: TabProps[] = useMemo(
@@ -863,7 +876,7 @@ const SearchPage: FC = () => {
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
 				<Link
 					key={visitorSpace.slug}
-					href={`/zoeken?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
+					href={`/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
 				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>
