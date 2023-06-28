@@ -43,6 +43,10 @@
 			color: $zinc;
 			cursor: default;
 		}
+
+		&--long {
+			padding: 2.5rem;
+		}
 	}
 
 	&__pages {
