@@ -267,8 +267,8 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 
 			<ProcessRequestBlade
 				isOpen={
-					(!!filters[VISIT_REQUEST_ID_QUERY_KEY] && !!selectedOnCurrentPage) ||
-					!!selectedNotOnCurrentPage
+					!!filters[VISIT_REQUEST_ID_QUERY_KEY] &&
+					(!!selectedOnCurrentPage || !!selectedNotOnCurrentPage)
 				}
 				selected={selectedOnCurrentPage ?? selectedNotOnCurrentPage}
 				onClose={() => {
