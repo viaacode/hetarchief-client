@@ -2,6 +2,7 @@ import type { IPagination } from '@studiohyperdrive/pagination';
 import { QueryClient } from '@tanstack/react-query';
 import { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
+import { cssTransition } from 'react-toastify';
 
 import { ROUTES } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
@@ -11,6 +12,7 @@ import { toastService } from '@shared/services/toast-service';
 import { asDate } from '@shared/utils';
 
 import { GET_PATH_FROM_NOTIFICATION_TYPE } from './notifications.consts';
+import styles from './notifications.module.scss';
 import {
 	MarkAllAsReadResult,
 	Notification,
@@ -77,6 +79,10 @@ export abstract class NotificationsService {
 			(notification) => notification.status === NotificationStatus.UNREAD
 		);
 		const firstUnread = asDate(unreadNotifications?.[0]?.createdAt);
+		const toastTransition = cssTransition({
+			enter: styles['scale-up-center'],
+			exit: styles['scale-down-center'],
+		});
 
 		if (
 			!!NotificationsService.lastNotifications && // Do not show notifications if this is the first time we check since loading the site
@@ -117,49 +123,55 @@ export abstract class NotificationsService {
 
 			if (newNotifications.length === 1) {
 				// one => show details on the one notification
-				toastService.notify({
-					title: newNotifications[0].title,
-					description: newNotifications[0].description,
-					buttonLabel: tText(
-						'modules/shared/services/notifications-service/notifications___bekijk'
-					),
-					onClose: async () => {
-						const url = NotificationsService.getPath(newNotifications[0]);
-						if (url) {
-							// Go to page
-							await NotificationsService.markOneAsRead(newNotifications[0].id);
-							if (url.includes('//')) {
-								// If absolute url, we want to reload the whole page, so ensure all visitor spaces are reloaded
-								window.open(url, '_self');
+				toastService.notify(
+					{
+						title: newNotifications[0].title,
+						description: newNotifications[0].description,
+						buttonLabel: tText(
+							'modules/shared/services/notifications-service/notifications___bekijk'
+						),
+						onClose: async () => {
+							const url = NotificationsService.getPath(newNotifications[0]);
+							if (url) {
+								// Go to page
+								await NotificationsService.markOneAsRead(newNotifications[0].id);
+								if (url.includes('//')) {
+									// If absolute url, we want to reload the whole page, so ensure all visitor spaces are reloaded
+									window.open(url, '_self');
+								} else {
+									NotificationsService?.router?.push?.(url);
+								}
 							} else {
-								NotificationsService?.router?.push?.(url);
+								// Notification not clickable => open notification center
+								NotificationsService.showNotificationsCenter?.(true);
 							}
-						} else {
-							// Notification not clickable => open notification center
-							NotificationsService.showNotificationsCenter?.(true);
-						}
+						},
 					},
-				});
+					{ transition: toastTransition }
+				);
 			} else {
 				// multiple
-				toastService.notify({
-					title: tText(
-						'modules/shared/services/notifications-service/notifications___er-zijn-amount-nieuwe-notificaties',
-						{
-							amount: newNotifications.length,
-						}
-					),
-					description: tText(
-						'modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht',
-						{ amount: newNotifications.length }
-					),
-					buttonLabel: tText(
-						'modules/shared/services/notifications-service/notifications___bekijk'
-					),
-					onClose: () => {
-						NotificationsService.showNotificationsCenter?.(true);
+				toastService.notify(
+					{
+						title: tText(
+							'modules/shared/services/notifications-service/notifications___er-zijn-amount-nieuwe-notificaties',
+							{
+								amount: newNotifications.length,
+							}
+						),
+						description: tText(
+							'modules/shared/services/notifications-service/notifications___er-zijn-aantal-nieuwe-notificaties-bekijk-ze-in-het-notificatie-overzicht',
+							{ amount: newNotifications.length }
+						),
+						buttonLabel: tText(
+							'modules/shared/services/notifications-service/notifications___bekijk'
+						),
+						onClose: () => {
+							NotificationsService.showNotificationsCenter?.(true);
+						},
 					},
-				});
+					{ transition: toastTransition }
+				);
 			}
 		}
 		NotificationsService.lastNotifications = notifications;
