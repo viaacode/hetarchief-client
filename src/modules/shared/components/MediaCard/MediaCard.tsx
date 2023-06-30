@@ -66,6 +66,12 @@ const MediaCard: FC<MediaCardProps> = ({
 	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
+	const saveScrollPosition = () => {
+		if (id && previousPage) {
+			dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
+		}
+	};
+
 	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
 		try {
 			if (!user || !maintainerSlug) {
@@ -109,12 +115,6 @@ const MediaCard: FC<MediaCardProps> = ({
 	const onOpenRequestAccess = () => {
 		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
 		setIsRequestAccessBladeOpen(true);
-	};
-
-	const saveScrollPosition = () => {
-		if (id && previousPage) {
-			dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
-		}
 	};
 
 	const renderDropdown = () =>
