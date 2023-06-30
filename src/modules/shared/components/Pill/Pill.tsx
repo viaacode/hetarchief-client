@@ -12,7 +12,7 @@ import { PillProps } from './Pill.types';
 
 const Pill: FC<PillProps> = ({ className, icon, label, isExpanded }: PillProps): ReactElement => {
 	const windowSize = useWindowSizeContext();
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = windowSize.width && windowSize.width < Breakpoints.md;
 
 	const rootCls = clsx(className, styles['c-pill'], {
 		[styles['c-pill--expanded']]: isExpanded,
