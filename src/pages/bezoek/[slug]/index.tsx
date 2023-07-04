@@ -71,7 +71,13 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 			return;
 		}
 
-		if (!isLoadingAccessStatus && !isLoadingSpaceInfo && !hasAccess && !isErrorSpaceNotFound) {
+		if (
+			!isLoadingAccessStatus &&
+			!isLoadingSpaceInfo &&
+			!hasAccess &&
+			!isErrorSpaceNotFound &&
+			!isErrorSpaceNotActive
+		) {
 			// No access to the visitor space, but the maintainer exists => so we can redirect to the search page
 			router.push(
 				stringifyUrl({
@@ -94,6 +100,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 		isErrorSpaceNotFound,
 		visitorSpaceInfo?.maintainerId,
 		visitorSpaceInfo?.name,
+		isErrorSpaceNotActive,
 	]);
 
 	/**
@@ -106,7 +113,11 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 			isLoadingSpaceInfo ||
 			hasPendingRequest ||
 			hasAccess ||
-			(!isLoadingAccessStatus && !isLoadingSpaceInfo && !hasAccess && !isErrorSpaceNotFound)
+			(!isLoadingAccessStatus &&
+				!isLoadingSpaceInfo &&
+				!hasAccess &&
+				!isErrorSpaceNotFound &&
+				!isErrorSpaceNotActive)
 		) {
 			// Show loading since we're handing the redirect in the useEffect above
 			return <Loading fullscreen owner="request access page" />;
