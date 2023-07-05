@@ -34,6 +34,6 @@ export interface NavigationItem {
 	children?: NavigationItem[];
 }
 
-export enum NAVIGATION_DROPDOOWN {
+export enum NAVIGATION_DROPDOWN {
 	VISITOR_SPACES = '<BEZOEKERRUIMTES_DROPDOWN>',
 }
