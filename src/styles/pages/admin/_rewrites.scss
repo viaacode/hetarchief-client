@@ -39,6 +39,13 @@ table[class*="c-table--styled"] {
 		border-bottom: $c-table-border;
 		border-top: $c-table-border;
 
+		// ARC-1122: hide first child (image)
+		tr {
+			&:first-child {
+				display: none;
+			}
+		}
+
 		@include respond-at("lg") {
 			box-shadow: $shadow-24-black-08;
 		}
@@ -53,6 +60,21 @@ table[class*="c-table--styled"] {
 
 	tr {
 		border-bottom: $c-table-border;
+	}
+}
+
+// ARC-1122: hide first child (image)
+.c-content-edit-form {
+	.o-grid {
+		div {
+			&:first-child {
+				div {
+					&:first-child {
+						display: none;
+					}
+				}
+			}
+		}
 	}
 }
 
