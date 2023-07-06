@@ -1,4 +1,5 @@
-import { NextPage } from 'next';
+import { GetServerSidePropsResult, NextPage } from 'next';
+import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -10,11 +11,13 @@ import { CPAdminLayout } from '@cp/layouts';
 import { Loading } from '@shared/components';
 import DisableServerSideRendering from '@shared/components/DisableServerSideRendering/DisableServerSideRendering';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
+import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
-const CPSettingsPage: NextPage = () => {
+const CPSettingsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 	/**
 	 * Hooks
 	 */
@@ -70,7 +73,7 @@ const CPSettingsPage: NextPage = () => {
 			{renderOgTags(
 				tText('pages/beheer/instellingen/index___beheer-instellingen-title'),
 				tText('pages/beheer/instellingen/index___beheer-instellingen-meta-omschrijving'),
-				''
+				url
 			)}
 
 			<PermissionsCheck allPermissions={[Permission.UPDATE_OWN_SPACE]}>
@@ -79,5 +82,11 @@ const CPSettingsPage: NextPage = () => {
 		</>
 	);
 };
+
+export async function getServerSideProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultServerSideProps(context);
+}
 
 export default withAuth(CPSettingsPage as ComponentType, true);

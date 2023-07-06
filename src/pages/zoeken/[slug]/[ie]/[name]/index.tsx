@@ -340,7 +340,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 	const showVisitButton =
-		visitorSpace?.status === VisitorSpaceStatus.Active && canRequestAccess && !isKiosk;
+		isNil(mediaInfo?.thumbnailUrl) &&
+		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
+		visitorSpace?.status === VisitorSpaceStatus.Active &&
+		!isKiosk;
 
 	/**
 	 * Effects
