@@ -56,6 +56,28 @@ table[class*="c-table--styled"] {
 	}
 }
 
+.c-table_detail-page {
+	tbody {
+		// ARC-1122: hide first child (image)
+		tr {
+			&:first-child {
+				display: none;
+			}
+		}
+	}
+}
+
+.c-content-edit-form {
+	div {
+		div:first-child {
+			// ARC-1122: hide first child (image)
+			div:first-child {
+				display: none;
+			}
+		}
+	}
+}
+
 .c-filter-table {
 	.c-button-toolbar {
 		button {
