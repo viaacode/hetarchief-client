@@ -70,6 +70,7 @@ table[class*="c-table--styled"] {
 .c-content-edit-form {
 	div {
 		div:first-child {
+			// ARC-1122: hide first child (image)
 			div:first-child {
 				display: none;
 			}
