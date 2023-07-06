@@ -46,6 +46,13 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			align-items: center;
 			cursor: pointer;
 
+			&:active,
+			&:focus,
+			&:focus-visible {
+				outline: none;
+				border: none;
+			}
+
 			&__checkbox {
 				flex-shrink: 0;
 
