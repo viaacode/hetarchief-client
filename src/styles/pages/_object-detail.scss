@@ -182,6 +182,12 @@ $breakpoint-md: map.get($breakpoints, "md");
 	&__metadata-content {
 		padding: 0 2rem;
 
+		p {
+			span {
+				white-space: pre-line;
+			}
+		}
+
 		@include respond-at("md") {
 			padding: 0 $spacer-lg;
 		}
