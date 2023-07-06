@@ -46,7 +46,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	.p-admin-content {
 		.c-filter-table thead th,
 		.c-filter-table tbody td {
-			padding: $spacer-sm $spacer-xs;
+			padding: $spacer-md;
 			line-height: $line-height-lg;
 		}
 
@@ -60,7 +60,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	.p-admin-content-page-labels__edit {
 		[class*="c-box"] {
 			background-color: transparent;
-			padding: 0 1rem;
+			padding: $spacer-md;
 		}
 	}
 
@@ -81,6 +81,12 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	.p-admin-content-page-labels__edit,
 	.p-admin-content__create,
 	.p-admin-content__edit {
+		.c-table thead th,
+		.c-table tbody td {
+			padding: $spacer-md;
+			line-height: $line-height-lg;
+		}
+
 		.o-container--medium {
 			max-width: 100%;
 			padding: $spacer-md;
