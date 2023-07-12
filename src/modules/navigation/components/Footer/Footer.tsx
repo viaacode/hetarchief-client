@@ -1,7 +1,9 @@
+import { setTimeout } from 'timers';
+
 import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { ComponentLink } from '@shared/types';
@@ -13,6 +15,13 @@ import { FooterProps } from './Footer.types';
 
 const Footer: FC<FooterProps> = ({ linkSections }) => {
 	const { tText } = useTranslation();
+	const [showLogo, setShowLogo] = useState(true);
+
+	// ARC-1786: dirty fix for iPhone mobile view on safari
+	useEffect(() => {
+		setTimeout(() => setShowLogo(false), 100);
+		setTimeout(() => setShowLogo(true), 1000);
+	}, []);
 
 	const renderLinks = (links: ComponentLink[], key: string) => {
 		return (
@@ -38,7 +47,13 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 			<div className={styles['c-footer__links__left']}>
 				<Link href="/">
 					<a
-						className={styles['c-footer__image-link']}
+						className={clsx(
+							styles['c-footer__image-link'],
+							// ARC-1786: dirty fix for iPhone mobile view on safari
+							showLogo
+								? styles['mobile-safari-logo']
+								: styles['mobile-safari-logo-hide']
+						)}
 						aria-label={'Link naar hetarchief.be'}
 					>
 						<HetArchiefLogo />
