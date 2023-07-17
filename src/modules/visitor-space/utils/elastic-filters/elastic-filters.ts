@@ -1,4 +1,4 @@
-import { compact } from 'lodash-es';
+import { compact, isString } from 'lodash-es';
 
 import { IeObjectLicense } from '@ie-objects/types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -63,17 +63,26 @@ export const mapMaintainerToElastic = (
 	]);
 };
 
+const getFiltersForSearchTerms = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => {
+	if (!query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]) {
+		return [];
+	}
+	const searchTerms = isString(query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY])
+		? [query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]]
+		: query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY];
+	return searchTerms.map((searchTerm: string) => {
+		return {
+			field: IeObjectsSearchFilterField.QUERY,
+			operator: IeObjectsSearchOperator.CONTAINS,
+			value: searchTerm || '',
+		};
+	});
+};
+
 export const mapFiltersToElastic = (query: VisitorSpaceQueryParams): IeObjectsSearchFilter[] => {
 	return [
 		// Searchbar
-		{
-			field: IeObjectsSearchFilterField.QUERY,
-			operator: IeObjectsSearchOperator.CONTAINS,
-			value:
-				query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] !== null
-					? query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]?.toString()
-					: '',
-		},
+		...getFiltersForSearchTerms(query),
 		// Tabs
 		{
 			field: IeObjectsSearchFilterField.FORMAT,
