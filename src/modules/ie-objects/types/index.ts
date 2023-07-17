@@ -206,11 +206,6 @@ export enum MetadataExportFormats {
 	'csv',
 }
 
-export interface IeMetadataExportProps {
-	id?: string;
-	format?: MetadataExportFormats;
-}
-
 export interface MetadataSortMap {
 	id: MediaActions;
 	isPrimary?: boolean;

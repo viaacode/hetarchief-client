@@ -232,12 +232,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const activeBlade = query[QUERY_PARAM_KEY.ACTIVE_BLADE];
 
 	// Fetch object
+	const objectId = router.query.ie as string;
 	const {
 		data: mediaInfo,
 		isLoading: mediaInfoIsLoading,
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
-	} = useGetIeObjectsInfo(router.query.ie as string);
+	} = useGetIeObjectsInfo(objectId);
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
@@ -277,21 +278,22 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
 	const { data: similarData } = useGetIeObjectsSimilar(
-		router.query.ie as string,
+		objectId,
 		isKiosk || userHasAccessToMaintainer ? mediaInfo?.maintainerId ?? '' : '',
 		!!mediaInfo
 	);
 
 	// gerelateerd
 	const { data: relatedData } = useGetIeObjectsRelated(
-		router.query.ie as string,
+		objectId,
 		mediaInfo?.maintainerId,
 		mediaInfo?.meemooIdentifier,
 		!!mediaInfo
 	);
 
 	// export
-	const { mutateAsync: getMediaExport } = useGetIeObjectsExport();
+	const { data: exportContentXml } = useGetIeObjectsExport(objectId, MetadataExportFormats.xml);
+	const { data: exportContentCsv } = useGetIeObjectsExport(objectId, MetadataExportFormats.csv);
 
 	// visit info
 	const {
@@ -646,14 +648,22 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const onExportClick = useCallback(
 		async (format: MetadataExportFormats) => {
 			try {
-				const metadataBlob = await IeObjectsService.getExport({
-					id: router.query.ie as string,
-					format,
-				});
-
-				if (metadataBlob) {
+				if (
+					(format === MetadataExportFormats.xml && exportContentXml) ||
+					(format === MetadataExportFormats.csv && exportContentCsv)
+				) {
+					let blob: Blob;
+					if (format === MetadataExportFormats.xml) {
+						blob = new Blob([exportContentXml as string], {
+							type: 'text/xml;charset=utf-8',
+						});
+					} else {
+						blob = new Blob([exportContentCsv as string], {
+							type: 'text/csv;charset=utf-8',
+						});
+					}
 					await save(
-						metadataBlob,
+						blob,
 						`${kebabCase(mediaInfo?.name) || 'metadata'}.${
 							MetadataExportFormats[format]
 						}`
