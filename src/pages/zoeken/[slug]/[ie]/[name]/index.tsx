@@ -79,6 +79,10 @@ import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
 import { IeObjectsService } from '@ie-objects/services';
+import {
+	IE_OBJECTS_SERVICE_BASE_URL,
+	IE_OBJECTS_SERVICE_EXPORT,
+} from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeObject,
@@ -292,8 +296,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	);
 
 	// export
-	const { data: exportContentXml } = useGetIeObjectsExport(objectId, MetadataExportFormats.xml);
-	const { data: exportContentCsv } = useGetIeObjectsExport(objectId, MetadataExportFormats.csv);
+	const { data: exportContentXml } = useGetIeObjectsExport(objectId, MetadataExportFormats.xml, {
+		enabled: !!objectId,
+	});
+	const { data: exportContentCsv } = useGetIeObjectsExport(objectId, MetadataExportFormats.csv, {
+		enabled: !!objectId,
+	});
 
 	// visit info
 	const {
@@ -647,42 +655,68 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const onExportClick = useCallback(
 		async (format: MetadataExportFormats) => {
+			console.log('export click');
 			try {
-				if (
-					(format === MetadataExportFormats.xml && exportContentXml) ||
-					(format === MetadataExportFormats.csv && exportContentCsv)
-				) {
-					let blob: Blob;
-					if (format === MetadataExportFormats.xml) {
-						blob = new Blob([exportContentXml as string], {
-							type: 'text/xml;charset=utf-8',
-						});
-					} else {
-						blob = new Blob([exportContentCsv as string], {
-							type: 'text/csv;charset=utf-8',
-						});
-					}
-					await save(
-						blob,
-						`${kebabCase(mediaInfo?.name) || 'metadata'}.${
-							MetadataExportFormats[format]
-						}`
-					);
-				} else {
-					toastService.notify({
-						title: tHtml('pages/slug/ie/index___error') || 'error',
-						description: tHtml(
-							'pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'
-						),
-					});
-				}
+				// if (
+				// 	(format === MetadataExportFormats.xml && exportContentXml) ||
+				// 	(format === MetadataExportFormats.csv && exportContentCsv)
+				// ) {
+				// let blob: Blob;
+				// if (format === MetadataExportFormats.xml) {
+				// 	blob = new Blob([exportContentXml as string], {
+				// 		type: 'text/xml;charset=utf-8',
+				// 	});
+				// } else {
+				// 	blob = new Blob([exportContentCsv as string], {
+				// 		type: 'text/csv;charset=utf-8',
+				// 	});
+				// }
+				// await save(
+				// 	blob,
+				// 	`${kebabCase(mediaInfo?.name) || 'metadata'}.${
+				// 		MetadataExportFormats[format]
+				// 	}`
+				// );
+				// } else {
+				window.open(
+					`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${objectId}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
+				);
+				// console.log('fetching content');
+				// const content = await IeObjectsService.getExport(objectId, format);
+				// console.log('received content');
+				// const blob = new Blob([content as string], {
+				// 	type: `text/${format};charset=utf-8`,
+				// });
+				// console.log('created blob');
+				// try {
+				// 	console.log('starting saving async');
+				// 	await save(
+				// 		blob,
+				// 		`${kebabCase(mediaInfo?.name) || 'metadata'}.${
+				// 			MetadataExportFormats[format]
+				// 		}`
+				// 	);
+				// 	console.log('finished saving async');
+				// } catch (err) {
+				// 	console.log('exception drying save', err);
+				// 	toastService.notify({
+				// 		title: tHtml('pages/slug/ie/index___error') || 'error',
+				// 		description: tHtml(
+				// 			'pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'
+				// 		),
+				// 	});
+				// }
+				// setMetadataExportDropdownOpen(false);
+				// console.log('finished saving');
+				setMetadataExportDropdownOpen(false);
+
+				console.log('finished saving');
 			} catch (err) {
 				toastService.notify({
 					title: tHtml('pages/slug/ie/index___error') || 'error',
 					description: tHtml('Het exporteren van de metadata is mislukt'),
 				});
 			}
-			setMetadataExportDropdownOpen(false);
 		},
 		[mediaInfo?.name, router.query.ie, tHtml]
 	);

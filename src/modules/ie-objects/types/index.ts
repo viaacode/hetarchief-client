@@ -202,8 +202,8 @@ export enum MediaActions {
 // Metadata
 
 export enum MetadataExportFormats {
-	'xml',
-	'csv',
+	xml = 'xml',
+	csv = 'csv',
 }
 
 export interface MetadataSortMap {

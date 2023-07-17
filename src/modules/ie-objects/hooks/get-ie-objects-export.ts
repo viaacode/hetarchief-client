@@ -7,9 +7,12 @@ import { IeObjectsService } from './../services';
 
 export const useGetIeObjectsExport = (
 	id: string,
-	format: MetadataExportFormats
+	format: MetadataExportFormats,
+	options: { enabled: boolean } = { enabled: true }
 ): UseQueryResult<string> => {
-	return useQuery([QUERY_KEYS.getIeObjectsExport, id, format], () =>
-		IeObjectsService.getExport(id, format)
+	return useQuery(
+		[QUERY_KEYS.getIeObjectsExport, id, format],
+		() => IeObjectsService.getExport(id, format),
+		options
 	);
 };
