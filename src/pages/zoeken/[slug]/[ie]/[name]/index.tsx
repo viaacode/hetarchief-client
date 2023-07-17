@@ -14,16 +14,7 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import {
-	capitalize,
-	indexOf,
-	intersection,
-	isEmpty,
-	isNil,
-	kebabCase,
-	lowerCase,
-	sortBy,
-} from 'lodash-es';
+import { capitalize, indexOf, intersection, isEmpty, isNil, lowerCase, sortBy } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -35,7 +26,6 @@ import { stringifyUrl } from 'query-string';
 import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-import save from 'save-file';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
@@ -654,71 +644,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isKiosk, user, isCPAdmin]);
 
 	const onExportClick = useCallback(
-		async (format: MetadataExportFormats) => {
-			console.log('export click');
-			try {
-				// if (
-				// 	(format === MetadataExportFormats.xml && exportContentXml) ||
-				// 	(format === MetadataExportFormats.csv && exportContentCsv)
-				// ) {
-				// let blob: Blob;
-				// if (format === MetadataExportFormats.xml) {
-				// 	blob = new Blob([exportContentXml as string], {
-				// 		type: 'text/xml;charset=utf-8',
-				// 	});
-				// } else {
-				// 	blob = new Blob([exportContentCsv as string], {
-				// 		type: 'text/csv;charset=utf-8',
-				// 	});
-				// }
-				// await save(
-				// 	blob,
-				// 	`${kebabCase(mediaInfo?.name) || 'metadata'}.${
-				// 		MetadataExportFormats[format]
-				// 	}`
-				// );
-				// } else {
-				window.open(
-					`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${objectId}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
-				);
-				// console.log('fetching content');
-				// const content = await IeObjectsService.getExport(objectId, format);
-				// console.log('received content');
-				// const blob = new Blob([content as string], {
-				// 	type: `text/${format};charset=utf-8`,
-				// });
-				// console.log('created blob');
-				// try {
-				// 	console.log('starting saving async');
-				// 	await save(
-				// 		blob,
-				// 		`${kebabCase(mediaInfo?.name) || 'metadata'}.${
-				// 			MetadataExportFormats[format]
-				// 		}`
-				// 	);
-				// 	console.log('finished saving async');
-				// } catch (err) {
-				// 	console.log('exception drying save', err);
-				// 	toastService.notify({
-				// 		title: tHtml('pages/slug/ie/index___error') || 'error',
-				// 		description: tHtml(
-				// 			'pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'
-				// 		),
-				// 	});
-				// }
-				// setMetadataExportDropdownOpen(false);
-				// console.log('finished saving');
-				setMetadataExportDropdownOpen(false);
-
-				console.log('finished saving');
-			} catch (err) {
-				toastService.notify({
-					title: tHtml('pages/slug/ie/index___error') || 'error',
-					description: tHtml('Het exporteren van de metadata is mislukt'),
-				});
-			}
+		(format: MetadataExportFormats) => {
+			window.open(
+				`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${objectId}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
+			);
+			setMetadataExportDropdownOpen(false);
 		},
-		[mediaInfo?.name, router.query.ie, tHtml]
+		[objectId]
 	);
 
 	const renderExportDropdown = useCallback(
