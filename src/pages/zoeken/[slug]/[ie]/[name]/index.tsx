@@ -645,28 +645,36 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	const onExportClick = useCallback(
 		async (format: MetadataExportFormats) => {
-			const metadataBlob = await getMediaExport({
-				id: router.query.ie as string,
-				format,
-			});
+			try {
+				const metadataBlob = await IeObjectsService.getExport({
+					id: router.query.ie as string,
+					format,
+				});
 
-			if (metadataBlob) {
-				save(
-					metadataBlob,
-					`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
-				);
-			} else {
+				if (metadataBlob) {
+					await save(
+						metadataBlob,
+						`${kebabCase(mediaInfo?.name) || 'metadata'}.${
+							MetadataExportFormats[format]
+						}`
+					);
+				} else {
+					toastService.notify({
+						title: tHtml('pages/slug/ie/index___error') || 'error',
+						description: tHtml(
+							'pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'
+						),
+					});
+				}
+			} catch (err) {
 				toastService.notify({
 					title: tHtml('pages/slug/ie/index___error') || 'error',
-					description: tHtml(
-						'pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'
-					),
+					description: tHtml('Het exporteren van de metadata is mislukt'),
 				});
 			}
-
 			setMetadataExportDropdownOpen(false);
 		},
-		[getMediaExport, mediaInfo?.name, router.query.ie, tHtml]
+		[mediaInfo?.name, router.query.ie, tHtml]
 	);
 
 	const renderExportDropdown = useCallback(
