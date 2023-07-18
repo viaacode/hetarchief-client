@@ -264,6 +264,7 @@ $l-container-padding-xs: 2rem;
 		&:focus,
 		.focus-visible:focus:not(:focus-visible) {
 			outline: 2px solid $teal !important;
+			margin: 4px 0;
 		}
 	}
 
