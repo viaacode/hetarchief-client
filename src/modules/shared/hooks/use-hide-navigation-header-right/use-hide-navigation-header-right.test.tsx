@@ -9,8 +9,8 @@ jest.mock('react-redux', () => ({
 }));
 
 describe('Hooks', () => {
-	describe('useHideFooter', () => {
-		it('Should set showFooter in the store', () => {
+	describe('UseHideNavigationHeaderRight', () => {
+		it('Should set showNavigationHeaderRight in the store', () => {
 			mockDispatch = jest.fn();
 			renderHook(() => useHideNavigationHeaderRight());
 
@@ -18,11 +18,11 @@ describe('Hooks', () => {
 			expect(mockDispatch).toHaveBeenCalledTimes(1);
 			expect(mockDispatch).toHaveBeenCalledWith({
 				payload: false,
-				type: 'ui/setShowFooter',
+				type: 'ui/setShowNavigationHeaderRight',
 			});
 		});
 
-		it('Should unset showFooter in the store', () => {
+		it('Should unset showNavigationHeaderRight in the store', () => {
 			mockDispatch = jest.fn();
 			renderHook(() => useHideNavigationHeaderRight(true));
 
@@ -30,7 +30,7 @@ describe('Hooks', () => {
 			expect(mockDispatch).toHaveBeenCalledTimes(1);
 			expect(mockDispatch).toHaveBeenCalledWith({
 				payload: true,
-				type: 'ui/setShowFooter',
+				type: 'ui/setShowNavigationHeaderRight',
 			});
 		});
 	});
