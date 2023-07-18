@@ -1,13 +1,18 @@
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
-import { IeMetadataExportProps } from '@ie-objects/types';
+import { MetadataExportFormats } from '@ie-objects/types';
+import { QUERY_KEYS } from '@shared/const';
 
 import { IeObjectsService } from './../services';
 
-export const useGetIeObjectsExport = (): UseMutationResult<
-	Blob | null,
-	unknown,
-	IeMetadataExportProps
-> => {
-	return useMutation((props: IeMetadataExportProps) => IeObjectsService.getExport(props));
+export const useGetIeObjectsExport = (
+	id: string,
+	format: MetadataExportFormats,
+	options: { enabled: boolean } = { enabled: true }
+): UseQueryResult<string> => {
+	return useQuery(
+		[QUERY_KEYS.getIeObjectsExport, id, format],
+		() => IeObjectsService.getExport(id, format),
+		options
+	);
 };
