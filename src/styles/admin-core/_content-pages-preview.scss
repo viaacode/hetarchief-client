@@ -248,6 +248,7 @@ $l-container-padding-xs: 2rem;
 		border-color: transparent !important;
 		color: $teal !important;
 		text-decoration: underline;
+		margin: 4px 0;
 
 		&:hover {
 			background-color: transparent !important;
@@ -264,7 +265,6 @@ $l-container-padding-xs: 2rem;
 		&:focus,
 		.focus-visible:focus:not(:focus-visible) {
 			outline: 2px solid $teal !important;
-			margin: 4px 0;
 		}
 	}
 
