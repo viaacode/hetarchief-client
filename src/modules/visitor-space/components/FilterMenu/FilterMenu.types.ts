@@ -27,7 +27,6 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	onFilterSubmit?: OnFilterMenuFormSubmit;
 	onViewToggle?: (viewMode: string) => void;
 	onRemoveValue?: (tags: TagIdentity[]) => void;
-	showNavigationBorder: boolean;
 }
 
 export interface FilterMenuSortOption {
