@@ -50,23 +50,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		min-height: $c-navigation-height;
 		padding: 0 3.2rem;
 	}
-
-	&--bordered::after {
-		content: "";
-		position: absolute;
-		z-index: get-z-layer("foreground");
-		bottom: 0.1rem;
-		left: 2rem;
-		right: 2rem;
-		height: 1px;
-		background-color: $shade;
-		opacity: 0.64;
-
-		@include respond-at(xxl) {
-			left: 3.2rem;
-			right: 3.2rem;
-		}
-	}
 }
 
 /**
