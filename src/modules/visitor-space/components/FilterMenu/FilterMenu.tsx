@@ -35,7 +35,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onSortClick,
 	onViewToggle = () => null,
 	onRemoveValue,
-	showNavigationBorder,
 }) => {
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
@@ -177,7 +176,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onSortClick={onSortClick}
 				onFilterReset={onFilterFormReset}
 				onFilterSubmit={onFilterFormSubmit}
-				showNavigationBorder={showNavigationBorder}
 				filterValues={filterValues}
 				onRemoveValue={onRemoveValue}
 			/>

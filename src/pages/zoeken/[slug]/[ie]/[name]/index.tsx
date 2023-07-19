@@ -63,7 +63,6 @@ import {
 	ticketErrorPlaceholder,
 	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/const';
-import { useGetIeObjectsExport } from '@ie-objects/hooks/get-ie-objects-export';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
@@ -117,12 +116,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
-import {
-	selectBreadcrumbs,
-	selectShowNavigationBorder,
-	setShowAuthModal,
-	setShowZendesk,
-} from '@shared/store/ui';
+import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -203,7 +197,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	// Sizes
 	const windowSize = useWindowSizeContext();
-	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 
 	// Query params
@@ -284,14 +277,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		mediaInfo?.meemooIdentifier,
 		!!mediaInfo
 	);
-
-	// export
-	const { data: exportContentXml } = useGetIeObjectsExport(objectId, MetadataExportFormats.xml, {
-		enabled: !!objectId,
-	});
-	const { data: exportContentCsv } = useGetIeObjectsExport(objectId, MetadataExportFormats.csv, {
-		enabled: !!objectId,
-	});
 
 	// visit info
 	const {
@@ -1290,7 +1275,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			return (
 				<VisitorSpaceNavigation
 					className="p-object-detail__nav"
-					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
 					accessEndDate={accessEndDate}
 				/>

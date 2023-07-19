@@ -15,7 +15,7 @@ describe('Components', () => {
 			const leftTestId = 'leftTestId';
 
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left placement="left">
 						<div data-testid={leftTestId} />
 					</Navigation.Left>
@@ -28,7 +28,7 @@ describe('Components', () => {
 
 		it('Should render items in the left section', async () => {
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left placement="left" items={MOCK_ITEMS_LEFT} />
 				</Navigation>
 			);
@@ -43,7 +43,7 @@ describe('Components', () => {
 			const centerTestId = 'centerTestId';
 
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Center>
 						<div data-testid={centerTestId} />
 					</Navigation.Center>
@@ -58,7 +58,7 @@ describe('Components', () => {
 			const title = 'title';
 
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Center title={title} />
 				</Navigation>
 			);
@@ -71,7 +71,7 @@ describe('Components', () => {
 			const rightTestId = 'rightTestId';
 
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Right placement="right">
 						<div data-testid={rightTestId} />
 					</Navigation.Right>
@@ -84,7 +84,7 @@ describe('Components', () => {
 
 		it('Should render items in the right section', async () => {
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Right placement="right" items={MOCK_ITEMS_RIGHT} />
 				</Navigation>
 			);
@@ -97,7 +97,7 @@ describe('Components', () => {
 
 		it('Should render dropdown when renderHamburger = true', async () => {
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left
 						placement="right"
 						items={MOCK_ITEMS_LEFT}
@@ -114,7 +114,7 @@ describe('Components', () => {
 		});
 		it('Should not render dropdown when renderHamburger = false', async () => {
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left
 						placement="right"
 						items={MOCK_ITEMS_LEFT}
@@ -131,7 +131,7 @@ describe('Components', () => {
 
 		it('Should render overlay when a dropdown is rendered', async () => {
 			const { container } = render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left
 						placement="right"
 						items={MOCK_ITEMS_LEFT}
@@ -152,7 +152,7 @@ describe('Components', () => {
 
 		it('Should not render overlay when no dropdown is rendered', async () => {
 			const { container } = render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left placement="right" items={MOCK_ITEMS_LEFT} />
 				</Navigation>
 			);
@@ -184,7 +184,7 @@ describe('Components', () => {
 			];
 
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left placement="right" items={items} />
 				</Navigation>
 			);
@@ -206,7 +206,7 @@ describe('Components', () => {
 			];
 
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left placement="right" items={items} />
 				</Navigation>
 			);
@@ -234,7 +234,7 @@ describe('Components', () => {
 			];
 
 			render(
-				<Navigation showBorder>
+				<Navigation>
 					<Navigation.Left placement="right" items={items} />
 				</Navigation>
 			);

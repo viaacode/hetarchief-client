@@ -51,7 +51,7 @@ import {
 	selectIsStickyLayout,
 	selectShowAuthModal,
 	selectShowFooter,
-	selectShowNavigationBorder,
+	selectShowNavigationHeaderRight,
 	selectShowNotificationsCenter,
 	setHasUnreadNotifications,
 	setMaterialRequestCount,
@@ -78,13 +78,13 @@ const AppLayout: FC = ({ children }) => {
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
+	const showNavigationHeaderRight = useSelector(selectShowNavigationHeaderRight);
 	const showFooter = useSelector(selectShowFooter);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const showNotificationsCenter = useSelector(selectShowNotificationsCenter);
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.xxl);
-	const showBorder = useSelector(selectShowNavigationBorder);
 	const canViewAllSpaces = useHasAllPermission(Permission.READ_ALL_SPACES);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
 		canViewAllSpaces,
@@ -373,7 +373,7 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
-			<Navigation showBorder={showBorder} loggedOutGrid={showLoggedOutGrid}>
+			<Navigation loggedOutGrid={showLoggedOutGrid}>
 				{!isLoggedIn && isMobile && (
 					<div className="c-navigation__logo--hamburger">
 						<Link href={ROUTES.home}>
@@ -391,12 +391,14 @@ const AppLayout: FC = ({ children }) => {
 					renderHamburger={true}
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
-				<Navigation.Right
-					currentPath={asPath}
-					placement="right"
-					items={rightNavItems}
-					onOpenDropdowns={onOpenNavDropdowns}
-				/>
+				{showNavigationHeaderRight && (
+					<Navigation.Right
+						currentPath={asPath}
+						placement="right"
+						items={rightNavItems}
+						onOpenDropdowns={onOpenNavDropdowns}
+					/>
+				)}
 			</Navigation>
 
 			<main className="l-app__main">
