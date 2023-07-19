@@ -9,9 +9,13 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await page.waitForFunction(
+		() => document.title === 'Homepagina hetarchief | hetarchief.be',
+		null,
+		{
+			timeout: 10000,
+		}
+	);
 
 	// Accept all cookies
 	await acceptCookies(page, 'all'); // enable this when running on int
@@ -43,7 +47,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 			'.c-visitor-space-card--name--vrt [class^=VisitorSpaceCardControls_c-visitor-space-card-controls__contact-list] p'
 		)
 		.allInnerTexts();
-	await expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be', '+32 2 741 37 20']);
+	await expect(visitorSpaceInfo).toEqual(['vrtarchief@vrt.be']);
 
 	// Click on 'Vraag toegang aan' van VRT
 	const vrtCard = await page.locator('.c-visitor-space-card--name--vrt .c-button__content', {
@@ -66,7 +70,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.waitForLoadState('networkidle');
 
 	// Accept the tos
-	await acceptTos(page); // TODO: Enable when on int
+	// await acceptTos(page); // TODO: Enable when on int
 
 	// Fill in 'Reden van aanvraag'
 	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);

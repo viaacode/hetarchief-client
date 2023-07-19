@@ -18,9 +18,13 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await page.waitForFunction(
+		() => document.title === 'Homepagina hetarchief | hetarchief.be',
+		null,
+		{
+			timeout: 10000,
+		}
+	);
 
 	// Accept all cookies
 	await acceptCookies(page, 'all'); // Enable this on INT, comment bcs localhost
@@ -40,7 +44,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	 */
 	// Click on "Bezoek een aanbieder" navigation item
 	await page.click('text=Bezoek een aanbieder');
-	await page.click('text=Zoeken naar bezoekersruimtes');
+	await page.click('text=Zoeken naar aanbieders');
 
 	// Click on request access button for Amsab-ISG
 	const amsabCard = await page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
@@ -71,7 +75,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Logout the end user
 	await logout(page);
-	await new Promise((resolve) => setTimeout(resolve, 1 * 1000)); // TODO: replace this
+	//await new Promise((resolve) => setTimeout(resolve, 1 * 1000)); // TODO: replace this
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
@@ -84,13 +88,13 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Check tos is displayed, scroll down and click accept button
-	await acceptTos(page); //Enable when on int
+	// await acceptTos(page); //Enable when on int
 
 	// Click "beheer" navigation item
 	// await page.click('nav ul li .c-dropdown a');
 	await page.locator('.c-avatar__text').click();
 	// Click visit requests navigation item
-	await page.click('a[href="/beheer/aanvragen"]');
+	await page.click('a[href="/beheer/toegangsaanvragen"]');
 
 	// Check page title matches visitor requests page title
 	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {

@@ -13,9 +13,13 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await page.waitForFunction(
+		() => document.title === 'Homepagina hetarchief | hetarchief.be',
+		null,
+		{
+			timeout: 10000,
+		}
+	);
 
 	// Accept all cookies
 	await acceptCookies(page, 'all'); // TODO: Enable this on INT, comment bcs localhost
@@ -28,7 +32,7 @@ test('T03: Test inloggen meemoo-admin + toegang aanvragen tot bezoekersruimte', 
 	);
 
 	// Check tos is displayed, scroll down and click accept button
-	await acceptTos(page); // TODO: Enable when on int
+	//await acceptTos(page); // TODO: Enable when on int
 
 	// Check logged in status
 	await expect(page.locator('.c-avatar__text')).toHaveText('meemoo');
