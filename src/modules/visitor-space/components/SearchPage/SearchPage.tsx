@@ -61,12 +61,7 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectFolders } from '@shared/store/ie-objects';
-import {
-	selectLastScrollPosition,
-	selectShowNavigationBorder,
-	setLastScrollPosition,
-	setShowZendesk,
-} from '@shared/store/ui';
+import { selectLastScrollPosition, setLastScrollPosition, setShowZendesk } from '@shared/store/ui';
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
@@ -149,7 +144,6 @@ const SearchPage: FC = () => {
 	 */
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
-	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 	const isKeyUser = useIsKeyUser();
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
@@ -795,7 +789,6 @@ const SearchPage: FC = () => {
 					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileFilterMenuOpen}
-					showNavigationBorder={showNavigationBorder}
 					sortOptions={VISITOR_SPACE_SORT_OPTIONS()}
 					toggleOptions={toggleOptions}
 					onSortClick={onSortClick}

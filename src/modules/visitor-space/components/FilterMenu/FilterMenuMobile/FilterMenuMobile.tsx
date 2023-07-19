@@ -29,7 +29,6 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	onFilterSubmit,
 	onSortClick,
 	onRemoveValue,
-	showNavigationBorder,
 	sortOptions = [],
 	filterValues,
 }) => {
@@ -80,10 +79,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	};
 
 	const renderFilterModalHeader = (): ReactElement => (
-		<Navigation
-			className={styles['c-filter-menu-mobile__nav']}
-			showBorder={showNavigationBorder}
-		>
+		<Navigation className={styles['c-filter-menu-mobile__nav']}>
 			<Button
 				key="filter-menu-mobile-nav-filter"
 				className={styles['c-filter-menu-mobile__back']}
@@ -98,10 +94,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	);
 
 	const renderFilterHeader = (): ReactElement => (
-		<Navigation
-			className={styles['c-filter-menu-mobile__nav']}
-			showBorder={showNavigationBorder}
-		>
+		<Navigation className={styles['c-filter-menu-mobile__nav']}>
 			<Button
 				key="filter-menu-mobile-nav-close"
 				className={styles['c-filter-menu-mobile__back']}
