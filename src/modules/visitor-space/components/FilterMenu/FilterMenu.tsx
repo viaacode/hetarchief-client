@@ -43,7 +43,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg);
 	const openIcon = isMobile
 		? IconNamesLight.Filter
 		: isOpen

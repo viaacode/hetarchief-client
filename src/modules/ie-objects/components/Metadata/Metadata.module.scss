@@ -49,5 +49,11 @@
 		margin: 0;
 		color: $neutral;
 		overflow-wrap: break-word;
+
+		p {
+			span {
+				white-space: pre-line;
+			}
+		}
 	}
 }

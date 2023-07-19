@@ -43,6 +43,10 @@
 			color: $zinc;
 			cursor: default;
 		}
+
+		&--long {
+			padding: 2.5rem;
+		}
 	}
 
 	&__pages {
@@ -73,7 +77,8 @@
 		}
 
 		&__btn:first-of-type {
-			padding: 0;
+			// lower left chevron to align it centered in mobile view
+			padding: 0.2rem 0 0;
 		}
 	}
 }

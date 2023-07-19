@@ -15,6 +15,8 @@ import { MediaActions } from '@ie-objects/types';
 import { Icon, IconNamesLight } from '@shared/components';
 import { useElementSize } from '@shared/hooks/use-element-size';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { Breakpoints } from '@shared/types';
 
 import {
 	DYNAMIC_ACTION_BOX,
@@ -35,6 +37,9 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	const listRef = useRef<HTMLDivElement>(null);
 	const size = useElementSize(listRef);
+
+	const windowSize = useWindowSizeContext();
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 
 	const primaryActions = actions.filter(({ isPrimary }: ActionItem) => isPrimary);
 	const secondaryActions = actions.filter(({ isPrimary }: ActionItem) => !isPrimary);
@@ -110,7 +115,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				key={`media-action-${action.id}`}
 				role="listitem"
 			>
-				{action.tooltip ? renderInTooltip($element, action.tooltip) : $element}
+				{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
 			</li>
 		);
 	};

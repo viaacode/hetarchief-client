@@ -70,7 +70,7 @@ $l-container-padding-xs: 2rem;
 
 	.c-accordion__body {
 		padding-bottom: $spacer-md;
-		color: $neutral !important;
+		color: $black !important;
 		border-top: none;
 
 		p,
@@ -248,6 +248,7 @@ $l-container-padding-xs: 2rem;
 		border-color: transparent !important;
 		color: $teal !important;
 		text-decoration: underline;
+		margin: 4px 0;
 
 		&:hover {
 			background-color: transparent !important;
@@ -273,7 +274,7 @@ $l-container-padding-xs: 2rem;
 		color: $white !important;
 
 		&:hover {
-			background-color: $black-light !important;
+			background-color: $shade !important;
 		}
 
 		&:active {

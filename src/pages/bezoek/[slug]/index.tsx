@@ -75,7 +75,13 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 			return;
 		}
 
-		if (!isLoadingAccessStatus && !isLoadingSpaceInfo && !hasAccess && !isErrorSpaceNotFound) {
+		if (
+			!isLoadingAccessStatus &&
+			!isLoadingSpaceInfo &&
+			!hasAccess &&
+			!isErrorSpaceNotFound &&
+			!isErrorSpaceNotActive
+		) {
 			// If not logged in show no access page
 			if (!isLoggedIn || !hasAccess) {
 				setShowNoAccess(true);
@@ -104,6 +110,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 		isErrorSpaceNotFound,
 		visitorSpaceInfo?.maintainerId,
 		visitorSpaceInfo?.name,
+		isErrorSpaceNotActive,
 	]);
 
 	/**
@@ -128,7 +135,11 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 			isLoadingSpaceInfo ||
 			hasPendingRequest ||
 			hasAccess ||
-			(!isLoadingAccessStatus && !isLoadingSpaceInfo && !hasAccess && !isErrorSpaceNotFound)
+			(!isLoadingAccessStatus &&
+				!isLoadingSpaceInfo &&
+				!hasAccess &&
+				!isErrorSpaceNotFound &&
+				!isErrorSpaceNotActive)
 		) {
 			// Show loading since we're handing the redirect in the useEffect above
 			return <Loading fullscreen owner="request access page" />;
