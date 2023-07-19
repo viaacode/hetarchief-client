@@ -10,7 +10,7 @@ import { Loading } from '@shared/components';
 import { ROUTE_PARTS } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { DefaultSeoInfo } from '@shared/types/seo';
-import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
+import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
@@ -18,7 +18,7 @@ type MaintainerSearchPageProps = DefaultSeoInfo;
 const MaintainerSearchPage: NextPage<MaintainerSearchPageProps> = () => {
 	const router = useRouter();
 	const { slug: slugOrObjectId } = router.query;
-	const { data: visitorSpaceInfo } = useGetVisitorSpace(
+	const { data: organisation } = useGetOrganisationBySlug(
 		(slugOrObjectId || null) as string | null,
 		true,
 		{
@@ -32,16 +32,16 @@ const MaintainerSearchPage: NextPage<MaintainerSearchPageProps> = () => {
 
 	// If url is: /zoeken/slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
 	useEffect(() => {
-		if (visitorSpaceInfo) {
+		if (organisation) {
 			const searchUrl = stringifyUrl({
 				url: `/${ROUTE_PARTS.search}`,
 				query: {
-					[VisitorSpaceFilterId.Maintainers]: `${visitorSpaceInfo.maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${visitorSpaceInfo.name}`,
+					[VisitorSpaceFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
 				},
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}
-	}, [router, visitorSpaceInfo]);
+	}, [router, organisation]);
 
 	// If the url is: /zoeken/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
 	useEffect(() => {
