@@ -84,7 +84,6 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 		) {
 			// If not logged in show no access page
 			if (!isLoggedIn || !hasAccess) {
-				setShowNoAccess(true);
 				return;
 			}
 
@@ -118,7 +117,10 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	 */
 
 	const renderPageContent = () => {
-		if (showNoAccess) {
+		if (isLoadingAccessStatus) {
+			return <Loading fullscreen owner="request access page" />;
+		}
+		if (!isLoggedIn || !hasAccess) {
 			return (
 				<ErrorNoAccessToObject
 					description={tText(
