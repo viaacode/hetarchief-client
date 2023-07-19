@@ -19,6 +19,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 	personalInfo,
 	layer,
 	currentLayer,
+	refetch,
 }) => {
 	const { tText } = useTranslation();
 	const dispatch = useAppDispatch();
@@ -45,6 +46,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 					'modules/navigation/components/personal-info-blade/personal-info-blade___requests-zijn-verzonden'
 				),
 			});
+			refetch();
 			onClose();
 			dispatch(setShowMaterialRequestCenter(false));
 		} catch (err) {

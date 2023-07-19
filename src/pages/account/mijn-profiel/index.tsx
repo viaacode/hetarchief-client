@@ -74,7 +74,6 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		resolver: yupResolver(COMMUNICATION_FORM_SCHEMA()),
 	});
 
-	const showOrgAndPermissions = isAdminUser || isKeyUser;
 	const canEdit = user?.idp === Idp.HETARCHIEF && canEditProfile;
 
 	useEffect(() => {
@@ -144,7 +143,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<dd className="u-text-ellipsis u-color-neutral" title={user?.email}>
 				{user?.email}
 			</dd>
-			{showOrgAndPermissions && renderOrganisation()}
+			{renderOrganisation()}
 		</dl>
 	);
 
@@ -281,7 +280,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					</Box>
 
-					{showOrgAndPermissions && (
+					{(isAdminUser || isKeyUser) && (
 						<Box className="u-mb-32">
 							<section className="u-p-24 p-account-my-profile__permissions">
 								<header className="p-account-my-profile__permissions-header u-mb-24">

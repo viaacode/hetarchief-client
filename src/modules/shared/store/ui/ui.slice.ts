@@ -6,7 +6,7 @@ import { LastScrollPositionType, UIState } from './ui.types';
 const initialState: UIState = {
 	showAuthModal: false,
 	isStickyLayout: false,
-	showNavigationBorder: false,
+	showNavigationHeaderRight: true,
 	showFooter: true,
 	showNotificationsCenter: false,
 	showMaterialRequestCenter: false,
@@ -29,8 +29,8 @@ export const uiSlice = createSlice({
 		setIsStickyLayout(state, action: PayloadAction<boolean>) {
 			state.isStickyLayout = action.payload;
 		},
-		setShowNavigationBorder(state, action: PayloadAction<boolean>) {
-			state.showNavigationBorder = action.payload;
+		setShowNavigationHeaderRight(state, action: PayloadAction<boolean>) {
+			state.showNavigationHeaderRight = action.payload;
 		},
 		setShowFooter(state, action: PayloadAction<boolean>) {
 			state.showFooter = action.payload;
@@ -74,7 +74,7 @@ export const uiSlice = createSlice({
 export const {
 	setShowAuthModal,
 	setIsStickyLayout,
-	setShowNavigationBorder,
+	setShowNavigationHeaderRight,
 	setShowFooter,
 	setShowNotificationsCenter,
 	setShowMaterialRequestCenter,

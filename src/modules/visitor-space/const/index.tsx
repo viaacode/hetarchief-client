@@ -39,7 +39,7 @@ export const PUBLIC_COLLECTION = ''; // No maintainer query param means the publ
 
 export const DEFAULT_VISITOR_SPACE_COLOR = '#00c8aa';
 
-export const VISITOR_SPACE_ITEM_COUNT = 39;
+export const VISITOR_SPACE_ITEM_COUNT = 24;
 
 export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	VisitorSpaceFilterId | QUERY_PARAM_KEY.SEARCH_QUERY_KEY,

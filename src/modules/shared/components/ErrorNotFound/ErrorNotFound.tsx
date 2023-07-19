@@ -2,25 +2,19 @@ import { Button } from '@meemoo/react-components';
 import { FC } from 'react';
 
 import { ErrorPage } from '@shared/components';
-import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 interface ErrorNotFoundProps {
 	nlTranslations?: Record<string, string>;
 }
 
 const ErrorNotFound: FC<ErrorNotFoundProps> = () => {
-	const { tHtml } = useTranslation();
-
+	// 404 page does not support translations: https://nextjs.org/docs/messages/404-get-initial-props
 	return (
 		<ErrorPage
-			title={tHtml('modules/shared/components/error-not-found/error-not-found___404')}
-			description={tHtml(
-				'modules/shared/components/error-not-found/error-not-found___sorry-deze-pagina-konden-we-niet-terugvinden-de-link-die-je-volgde-kan-stuk-zijn-of-de-pagina-kan-niet-meer-bestaan'
-			)}
+			title="Niet gevonden (404)"
+			description="Sorry, deze pagina konden we niet terugvinden. Misschien is er iets mis met de link die je volgde of bestaat de pagina niet meer."
 			link={{
-				component: (
-					<Button label={tHtml('pages/404___ga-naar-de-homepage')} variants="black" />
-				),
+				component: <Button label="Ga naar de startpagina" variants="black" />,
 				to: '/',
 			}}
 			image={{ image: '/images/404.svg', left: true }}

@@ -114,6 +114,16 @@
 				:global(.c-logo) {
 					display: block;
 				}
+
+				// ARC-1786: dirty fix for iPhone mobile view on safari
+				.mobile-safari-logo-hide {
+					display: none;
+				}
+
+				// ARC-1786: dirty fix for iPhone mobile view on safari
+				.mobile-safari-logo {
+					display: block;
+				}
 			}
 
 			&__section1 {

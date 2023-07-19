@@ -5,7 +5,7 @@ import getConfig from 'next/config';
 import { NextRouter } from 'next/router';
 import { parseUrl, StringifiableRecord, stringifyUrl } from 'query-string';
 
-import { QUERY_KEYS, ROUTE_PARTS, ROUTES } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { isBrowser } from '@shared/utils';
@@ -50,12 +50,7 @@ export class AuthService {
 			});
 		}
 
-		let returnToUrl = trimEnd(
-			`${
-				isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL
-			}${originalPath}`,
-			'/'
-		);
+		let returnToUrl = trimEnd(`${publicRuntimeConfig.CLIENT_URL}${originalPath}`, '/');
 		const parsedRedirectUrl = parseUrl(returnToUrl);
 		returnToUrl = stringifyUrl({
 			url: parsedRedirectUrl.url,

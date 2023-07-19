@@ -79,6 +79,10 @@
 		grid-row-start: 3;
 		overflow-y: auto;
 		overflow-x: hidden;
+
+		div {
+			white-space: pre-line;
+		}
 	}
 
 	&__footer-wrapper {

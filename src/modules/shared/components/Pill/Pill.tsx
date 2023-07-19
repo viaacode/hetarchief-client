@@ -14,7 +14,7 @@ const Pill: FC<PillProps> = ({ className, icon, label, isExpanded }: PillProps):
 
 	const renderTooltipPill = (): ReactElement => (
 		<span className={rootCls}>
-			<Tooltip position="top">
+			<Tooltip position="right">
 				<TooltipTrigger>
 					<Icon name={icon} />
 				</TooltipTrigger>

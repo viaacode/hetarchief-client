@@ -1,10 +1,8 @@
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
 
 import Html from '@shared/components/Html/Html';
 import { ROUTES } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectShowNavigationBorder } from '@shared/store/ui';
 
 import { CardImage } from '../../../shared/components';
 import { VisitorSpaceNavigation } from '../VisitorSpaceNavigation';
@@ -14,8 +12,6 @@ import { WaitingPageProps } from './WaitingPage.types';
 const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 	const { tHtml } = useTranslation();
 
-	const showNavigationBorder = useSelector(selectShowNavigationBorder);
-
 	const renderPageContent = () => {
 		return (
 			<>
@@ -23,7 +19,6 @@ const WaitingPage: FC<WaitingPageProps> = ({ space, backLink }) => {
 					title={space?.name}
 					phone={space?.contactInfo.telephone || ''}
 					email={space?.contactInfo.email || ''}
-					showBorder={showNavigationBorder}
 					backLink={backLink ?? ROUTES.home}
 				/>
 

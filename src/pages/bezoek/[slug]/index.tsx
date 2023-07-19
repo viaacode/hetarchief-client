@@ -3,8 +3,10 @@ import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { ComponentType, useEffect } from 'react';
+import { ComponentType, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
+import { selectIsLoggedIn } from '@auth/store/user';
 import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/components';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { ROUTES } from '@shared/const';
@@ -29,6 +31,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	const { tText } = useTranslation();
 	const router = useRouter();
 	const { slug } = router.query;
+	const isLoggedIn = useSelector(selectIsLoggedIn);
 
 	/**
 	 * Data
@@ -71,7 +74,18 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 			return;
 		}
 
-		if (!isLoadingAccessStatus && !isLoadingSpaceInfo && !hasAccess && !isErrorSpaceNotFound) {
+		if (
+			!isLoadingAccessStatus &&
+			!isLoadingSpaceInfo &&
+			!hasAccess &&
+			!isErrorSpaceNotFound &&
+			!isErrorSpaceNotActive
+		) {
+			// If not logged in show no access page
+			if (!isLoggedIn || !hasAccess) {
+				return;
+			}
+
 			// No access to the visitor space, but the maintainer exists => so we can redirect to the search page
 			router.push(
 				stringifyUrl({
@@ -94,6 +108,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 		isErrorSpaceNotFound,
 		visitorSpaceInfo?.maintainerId,
 		visitorSpaceInfo?.name,
+		isErrorSpaceNotActive,
 	]);
 
 	/**
@@ -101,12 +116,31 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 	 */
 
 	const renderPageContent = () => {
+		if (isLoadingAccessStatus) {
+			return <Loading fullscreen owner="request access page" />;
+		}
+		if (!isLoggedIn || !hasAccess) {
+			return (
+				<ErrorNoAccessToObject
+					description={tText(
+						'pages/bezoek/slug/index___je-hebt-geen-toegang-tot-deze-bezoekersruimte-vraag-toegang-aan-of-doorzoek-de-publieke-catalogus'
+					)}
+					visitorSpaceName={(slug || null) as string | null}
+					visitorSpaceSlug={(slug || null) as string | null}
+				/>
+			);
+		}
+
 		if (
 			isLoadingAccessStatus ||
 			isLoadingSpaceInfo ||
 			hasPendingRequest ||
 			hasAccess ||
-			(!isLoadingAccessStatus && !isLoadingSpaceInfo && !hasAccess && !isErrorSpaceNotFound)
+			(!isLoadingAccessStatus &&
+				!isLoadingSpaceInfo &&
+				!hasAccess &&
+				!isErrorSpaceNotFound &&
+				!isErrorSpaceNotActive)
 		) {
 			// Show loading since we're handing the redirect in the useEffect above
 			return <Loading fullscreen owner="request access page" />;

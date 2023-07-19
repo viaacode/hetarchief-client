@@ -17,5 +17,4 @@ export interface FilterMenuMobileProps
 	onFilterReset: OnFilterMenuFormReset;
 	onFilterSubmit: OnFilterMenuFormSubmit;
 	onRemoveValue?: (removedValue: TagIdentity[]) => void;
-	showNavigationBorder: boolean;
 }
