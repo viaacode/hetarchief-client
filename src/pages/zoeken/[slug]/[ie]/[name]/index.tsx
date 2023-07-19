@@ -351,6 +351,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				fragment_id: mediaInfo.schemaIdentifier,
 				pid: mediaInfo.meemooIdentifier,
 				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
+				or_id: mediaInfo.maintainerId,
 			};
 
 			if (hasAccessToVisitorSpaceOfObject) {
@@ -503,6 +504,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				fragment_id: mediaInfo?.schemaIdentifier,
 				pid: mediaInfo?.meemooIdentifier,
 				user_group_name: user?.groupName,
+				or_id: mediaInfo.maintainerId,
 			});
 
 			// open external form
@@ -543,6 +545,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				fragment_id: mediaInfo?.schemaIdentifier,
 				pid: mediaInfo?.meemooIdentifier,
 				user_group_name: user?.groupName,
+				or_id: mediaInfo?.maintainerId,
 			};
 
 			if (hasAccessToVisitorSpaceOfObject) {
