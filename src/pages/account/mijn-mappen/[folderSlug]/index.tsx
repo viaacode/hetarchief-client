@@ -14,7 +14,6 @@ import { useQueryParams } from 'use-query-params';
 import { CreateFolderButton } from '@account/components';
 import { EditFolderTitle } from '@account/components/EditFolderTitle';
 import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } from '@account/const';
-import { useGetFolderExport } from '@account/hooks/get-folder-export';
 import { useGetFolderMedia } from '@account/hooks/get-folder-media';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { AccountLayout } from '@account/layouts';
@@ -127,9 +126,6 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		FolderItemListSize
 	);
 
-	// export
-	const { mutateAsync: getFolderExport } = useGetFolderExport();
-
 	const keywords = useMemo(
 		() =>
 			filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]
@@ -188,7 +184,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 				dispatch(setLastScrollPosition(null));
 			}, 100);
 		}
-	}, [folderMedia?.data?.items]);
+		// eslint-disable-next-line
+	}, [folderMedia?.data?.items, dispatch]);
 
 	/**
 	 * Events
@@ -329,7 +326,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 				  ]
 				: []),
 		];
-	}, [tText, activeFolder, getFolderExport, tHtml]);
+	}, [tText, activeFolder]);
 
 	const renderActions = (item: IdentifiableMediaCard, folder: Folder) => (
 		<>

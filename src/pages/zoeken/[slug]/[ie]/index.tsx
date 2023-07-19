@@ -37,7 +37,7 @@ const IeObjectWithoutObjectNamePage: NextPage<MaintainerSearchPageProps> = () =>
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}
-	}, [router, ieObjectInfo, isError]);
+	}, [router, ieObjectInfo, isError, slug, objectId]);
 
 	return <Loading owner="IeObjectWithoutObjectNamePage" fullscreen />;
 };

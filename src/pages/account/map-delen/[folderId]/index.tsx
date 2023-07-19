@@ -1,4 +1,3 @@
-import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect } from 'react';
@@ -68,7 +67,7 @@ const AccountSharedFolder: NextPage<DefaultSeoInfo> = () => {
 			}
 		}
 		shareFolder();
-	}, [folderId]);
+	}, [folderId, router, tText]);
 
 	return <Loading fullscreen owner="share folder page" />;
 };
