@@ -81,7 +81,7 @@
   "modules/admin/const/routing___materiaalaanvragen": "Materiaalaanvragen",
   "modules/admin/const/routing___meldingen": "Meldingen",
   "modules/admin/const/routing___navigatie": "Navigatie",
-  "modules/admin/const/routing___vertalingen-v-2": "Vertalingen",
+  "modules/admin/const/routing___vertalingen": "Vertalingen",
   "modules/admin/const/spaces___aanpassen": "Aanpassen",
   "modules/admin/const/spaces___activeren": "publiceren",
   "modules/admin/const/spaces___bezoekersruimte": "Organisatie",
