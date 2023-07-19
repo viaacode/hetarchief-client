@@ -3,7 +3,7 @@ import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
-import { ComponentType, useEffect, useState } from 'react';
+import { ComponentType, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { selectIsLoggedIn } from '@auth/store/user';
@@ -109,6 +109,7 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 		visitorSpaceInfo?.maintainerId,
 		visitorSpaceInfo?.name,
 		isErrorSpaceNotActive,
+		isLoggedIn,
 	]);
 
 	/**
