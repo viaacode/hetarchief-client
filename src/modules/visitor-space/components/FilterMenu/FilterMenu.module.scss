@@ -158,7 +158,6 @@ $checkbox-size: $spacer-sm;
 		&-close {
 			position: absolute;
 			inset: 1.2rem 1.2rem auto auto;
-			inset: 1.2rem 1.2rem auto auto;
 			z-index: get-z-layer("filter");
 		}
 	}
