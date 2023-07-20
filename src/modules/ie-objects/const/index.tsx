@@ -21,13 +21,11 @@ import {
 	mapBooleanToMetadataData,
 	mapObjectToMetadata,
 } from '@ie-objects/utils';
-import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/components';
+import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { WindowSizeContextValue } from '@shared/context/WindowSizeContext';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { Breakpoints, IeObjectTypes } from '@shared/types';
+import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
-import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 
 /**
  * Render media
@@ -40,15 +38,6 @@ export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_AUDIO_FORMATS,
 ];
 export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
-
-export const AGGREGATE_BY_FIELD: Partial<{
-	[key in VisitorSpaceFilterId]: ElasticsearchFieldNames;
-}> = {
-	[VisitorSpaceFilterId.Medium]: ElasticsearchFieldNames.Medium,
-	[VisitorSpaceFilterId.Genre]: ElasticsearchFieldNames.Genre,
-	[VisitorSpaceFilterId.Language]: ElasticsearchFieldNames.Language,
-	[VisitorSpaceFilterId.ObjectType]: ElasticsearchFieldNames.ObjectType,
-};
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
@@ -313,9 +302,6 @@ export const MEDIA_ACTIONS = (
 /**
  * Metadata
  */
-export enum CustomMetaDataFields {
-	Maintainer,
-}
 
 // TODO: complete mapping
 export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [

@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from '../helpers/accept-cookies';
+import { acceptTos } from '../helpers/accept-tos';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
+import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { waitForSearchResults } from '../helpers/wait-for-search-results';
@@ -14,19 +15,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	context,
 }) => {
 	// Go to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check page title is the home page
-	await page.waitForFunction(
-		() => document.title === 'Homepagina hetarchief | hetarchief.be',
-		null,
-		{
-			timeout: 10000,
-		}
-	);
-
-	// Accept all cookies
-	await acceptCookies(page, 'all'); // Enable this on INT, comment bcs localhost
+	await goToPageAndAcceptCookies(page);
 
 	// Login visitor
 	await loginUserHetArchiefIdp(
@@ -43,6 +32,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	 */
 	// Click on "Bezoek een aanbieder" navigation item
 	await page.click('text=Bezoek een aanbieder');
+
+	// Click on "Zoeken naar aanbieders" navigation option
+	await page.click('text=Zoeken naar aanbieders');
 
 	// Click on request access button for Amsab-ISG
 	const amsabCard = await page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
@@ -86,7 +78,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Check tos is displayed, scroll down and click accept button
-	// await acceptTos(page); //Enable when on int
+	await acceptTos(page); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Click "beheer" navigation item
 	// await page.click('nav ul li .c-dropdown a');

@@ -3,7 +3,8 @@ import { expect, Page } from '@playwright/test';
 export async function loginUserHetArchiefIdp(
 	page: Page,
 	username: string,
-	password: string
+	password: string,
+	titleAfterLogin = 'Homepagina hetarchief | hetarchief.be'
 ): Promise<void> {
 	// Check auth modal is open
 	const authModalHeading = await page
@@ -27,6 +28,12 @@ export async function loginUserHetArchiefIdp(
 	// Click the login button
 	await page.click('button[type="submit"]');
 
-	// Wait for the new page to load
-	await page.waitForLoadState('networkidle');
+	// Wait for site to load after login
+	await page.waitForFunction(
+		(titleAfterLogin: string) => document.title === titleAfterLogin,
+		titleAfterLogin,
+		{
+			timeout: 10000,
+		}
+	);
 }

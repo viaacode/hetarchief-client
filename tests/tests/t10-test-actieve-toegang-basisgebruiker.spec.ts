@@ -1,24 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from '../helpers/accept-cookies';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
+import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check homepage title
-	await page.waitForFunction(
-		() => document.title === 'Homepagina hetarchief | hetarchief.be',
-		null,
-		{
-			timeout: 10000,
-		}
-	);
-
-	// Accept all cookies
-	await acceptCookies(page, 'all'); //Enable when on int
+	await goToPageAndAcceptCookies(page);
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -52,8 +40,8 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		.first()
 		.locator('a')
 		.allInnerTexts();
-	await expect(subNavItems).toContain('Zoeken naar aanbieders');
-	await expect(subNavItems[1]).toMatch(/VRT.*/);
+	await expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
+	await expect(subNavItems[1]).toContain('VRT');
 	await page.click('text=Zoeken naar aanbieders');
 	// Wait for search page to be ready
 	// await waitForSearchResults(page);
@@ -92,7 +80,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 			await expect(maintainer).toEqual('VRT');
 		})
 	);
-	const countsBeforepublic = await getSearchTabBarCounts(page);
+	const countsBeforePublic = await getSearchTabBarCounts(page);
 	// Go to the public catalog
 	await page.locator('li[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active]').click();
 
@@ -106,7 +94,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Wait for user to be in the public catalog
 	await expect
 		.poll(async () => await getSearchTabBarCounts(page))
-		.not.toEqual(countsBeforepublic);
+		.not.toEqual(countsBeforePublic);
 
 	// Check the purple banner
 	await expect(

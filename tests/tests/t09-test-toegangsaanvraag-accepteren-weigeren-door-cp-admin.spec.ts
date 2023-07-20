@@ -1,47 +1,24 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from '../helpers/accept-cookies';
-import { acceptTos } from '../helpers/accept-tos';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { checkVisitRequestStatuses } from '../helpers/check-visit-request-statuses';
+import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
-import { loginUserMeemooIdp } from '../helpers/login-user-meemoo-idp';
-import { waitForLoading } from '../helpers/wait-for-loading';
 
 test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
 	context,
 }) => {
 	// GO to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check homepage title
-	await page.waitForFunction(
-		() => document.title === 'Homepagina hetarchief | hetarchief.be',
-		null,
-		{
-			timeout: 10000,
-		}
-	);
-
-	// Accept all cookies
-	await acceptCookies(page, 'all'); // TODO: enable when on int
+	await goToPageAndAcceptCookies(page);
 
 	// Login as CP admin
 	await loginUserHetArchiefIdp(
 		page,
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_USERNAME as string,
 		process.env.TEST_CP_ADMIN_VRT_ACCOUNT_PASSWORD as string
-	);
-	// Check homepage title
-	await page.waitForFunction(
-		() => document.title === 'Homepagina hetarchief | hetarchief.be',
-		null,
-		{
-			timeout: 10000,
-		}
 	);
 
 	// Check navbar exists
