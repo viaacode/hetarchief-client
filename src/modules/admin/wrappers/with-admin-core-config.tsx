@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 
+import { NAVIGATION_DROPDOWN } from '@navigation/components';
 import {
 	ALERT_ICON_LIST_CONFIG,
 	Icon,
@@ -111,7 +112,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				},
 				navigationBars: {
 					enableIcons: true,
-					customNavigationElements: ['<BOEZOEKERRUIMTES_DROPDOWN>'],
+					customNavigationElements: [NAVIGATION_DROPDOWN.VISITOR_SPACES],
 				},
 				icon: {
 					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,

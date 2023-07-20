@@ -2,7 +2,6 @@ import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
@@ -348,6 +347,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				padding="both"
 				to={link}
 				linkComponent={NextLinkWrapper}
+				onClick={saveScrollPosition}
 			>
 				{typeof description === 'string' ? (
 					<div className="u-text-ellipsis--2">

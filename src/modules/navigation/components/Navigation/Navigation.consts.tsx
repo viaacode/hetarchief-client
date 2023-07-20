@@ -6,7 +6,7 @@ import { stringifyUrl } from 'query-string';
 import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
-import { NAVIGATION_DROPDOOWN, NavigationItem, NavigationLink } from '@navigation/components';
+import { NAVIGATION_DROPDOWN, NavigationItem, NavigationLink } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import {
 	NavigationInfo,
@@ -233,7 +233,7 @@ const getDynamicHeaderLinks = (
 					? `${ROUTES.search}?aanbieder=${activeVisits[0].spaceSlug}`
 					: contentPath;
 
-			if (contentPath === NAVIGATION_DROPDOOWN.VISITOR_SPACES) {
+			if (contentPath === NAVIGATION_DROPDOWN.VISITOR_SPACES) {
 				return getVisitorSpacesDropdown(
 					label,
 					currentPath,

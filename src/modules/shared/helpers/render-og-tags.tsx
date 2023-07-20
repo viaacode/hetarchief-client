@@ -9,12 +9,13 @@ const { publicRuntimeConfig } = getConfig();
 export function renderOgTags(
 	title: string | null | undefined,
 	description: string,
-	url: string
+	url: string,
+	fullTitle = false
 ): ReactNode {
 	const resolvedTitle = createPageTitle(title);
 	return (
 		<Head>
-			<title>{resolvedTitle}</title>
+			<title>{fullTitle ? title : resolvedTitle}</title>
 			<meta name="description" content={description} />
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content={url} />

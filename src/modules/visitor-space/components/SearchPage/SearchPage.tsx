@@ -20,8 +20,9 @@ import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
-import { IeObjectAccessThrough } from '@ie-objects/types';
+import { IeObjectAccessThrough, IeObjectSearchAggregations } from '@ie-objects/types';
 import { isInAFolder } from '@ie-objects/utils';
 import {
 	Callout,
@@ -50,7 +51,7 @@ import {
 	PAGE_NUMBER_OF_MANY_RESULTS_TILE,
 } from '@shared/components/MediaCardList/MediaCardList.const';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
-import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_KEYS, ROUTE_PARTS, ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -60,16 +61,10 @@ import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storag
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectFolders } from '@shared/store/ie-objects';
-import {
-	selectLastScrollPosition,
-	selectShowNavigationBorder,
-	setLastScrollPosition,
-	setShowZendesk,
-} from '@shared/store/ui';
+import { selectLastScrollPosition, setLastScrollPosition, setShowZendesk } from '@shared/store/ui';
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
-	IeObjectsSearchOperator,
 	IeObjectTypes,
 	SortObject,
 	Visit,
@@ -149,7 +144,6 @@ const SearchPage: FC = () => {
 	 */
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
-	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 	const isKeyUser = useIsKeyUser();
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
@@ -235,13 +229,28 @@ const SearchPage: FC = () => {
 	const {
 		data: searchResults,
 		isLoading: searchResultsLoading,
+		isRefetching: searchResultsRefetching,
 		error: searchResultsError,
 	} = useGetIeObjects(
-		[...mapMaintainerToElastic(query, activeVisitRequest), ...mapFiltersToElastic(query)],
-		query.page || 1,
-		VISITOR_SPACE_ITEM_COUNT,
-		activeSort,
-		!isLoadingActiveVisitRequest
+		{
+			filters: [
+				...mapMaintainerToElastic(query, activeVisitRequest),
+				...mapFiltersToElastic(query),
+			],
+			page: query.page || 1,
+			size: VISITOR_SPACE_ITEM_COUNT,
+			sort: activeSort,
+		},
+		{ enabled: !isLoadingActiveVisitRequest }
+	);
+	const { data: formatCounts } = useGetIeObjectFormatCounts(
+		[
+			...mapMaintainerToElastic(query, activeVisitRequest),
+			...mapFiltersToElastic(query),
+		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
+
+		// Enabled when search query is finished, so it loads the tab counts after the initial results
+		{ enabled: !searchResultsRefetching }
 	);
 
 	const showManyResultsTile = query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
@@ -329,15 +338,13 @@ const SearchPage: FC = () => {
 
 	const getItemCounts = useCallback(
 		(type: VisitorSpaceMediaType): number => {
-			const buckets =
-				searchResults?.aggregations?.[ElasticsearchFieldNames.Format]?.buckets || [];
 			if (type === VisitorSpaceMediaType.All) {
-				return sum(buckets.map((item) => item.doc_count));
+				return sum(Object.values(formatCounts || {})) || 0;
 			} else {
-				return buckets.find((bucket) => bucket.key === type)?.doc_count || 0;
+				return formatCounts?.[type] || 0;
 			}
 		},
-		[searchResults]
+		[formatCounts]
 	);
 
 	const tabs: TabProps[] = useMemo(
@@ -510,7 +517,7 @@ const SearchPage: FC = () => {
 				break;
 
 			case VisitorSpaceFilterId.Creator:
-				data = (values as CreatorFilterFormState).creators;
+				data = (values as CreatorFilterFormState).creator;
 				break;
 
 			case VisitorSpaceFilterId.Genre:
@@ -586,6 +593,7 @@ const SearchPage: FC = () => {
 				case VisitorSpaceFilterId.Medium:
 				case VisitorSpaceFilterId.Maintainers:
 				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
+				case VisitorSpaceFilterId.Creator:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						`${tag.value}`.replace(tagPrefix(tag.key), ''),
@@ -596,7 +604,6 @@ const SearchPage: FC = () => {
 				case VisitorSpaceFilterId.Created:
 				case VisitorSpaceFilterId.Duration:
 				case VisitorSpaceFilterId.Published:
-				case VisitorSpaceFilterId.Creator:
 					updatedQuery[tag.key] = [
 						...((updatedQuery[tag.key] as Array<unknown>) || []),
 						tag,
@@ -782,7 +789,6 @@ const SearchPage: FC = () => {
 					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileFilterMenuOpen}
-					showNavigationBorder={showNavigationBorder}
 					sortOptions={VISITOR_SPACE_SORT_OPTIONS()}
 					toggleOptions={toggleOptions}
 					onSortClick={onSortClick}
@@ -863,7 +869,7 @@ const SearchPage: FC = () => {
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
 				<Link
 					key={visitorSpace.slug}
-					href={`/zoeken?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
+					href={`/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visitorSpace?.slug}`}
 				>
 					<a aria-label={visitorSpace?.label}>{visitorSpace?.label}</a>
 				</Link>
@@ -979,7 +985,7 @@ const SearchPage: FC = () => {
 											placeholder={tText(
 												'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 											)}
-											infoContent={tText(
+											infoContent={tHtml(
 												'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___pages-bezoekersruimte-zoeken-zoek-info'
 											)}
 											size="lg"
