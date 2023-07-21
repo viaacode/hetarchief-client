@@ -63,7 +63,7 @@ export const REGULAR_FILTERS: MetadataProp[] = [
 	// MetadataProp.ConsultableMedia,
 ];
 
-export const GET_OPERATOR_LABELS = () => ({
+export const GET_OPERATOR_LABELS = (): Record<string, string> => ({
 	from: tText(
 		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
 	),

@@ -12,6 +12,9 @@ const { publicRuntimeConfig } = getConfig();
 export async function getDefaultServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	// change caching to 30 minutes, since the backend also caches the translations for 30 minutes
+	context.res.setHeader('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=1799');
+
 	const translations = await getTranslations(
 		isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
 	);

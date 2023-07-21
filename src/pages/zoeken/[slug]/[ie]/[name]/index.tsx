@@ -14,16 +14,7 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import {
-	capitalize,
-	indexOf,
-	intersection,
-	isEmpty,
-	isNil,
-	kebabCase,
-	lowerCase,
-	sortBy,
-} from 'lodash-es';
+import { capitalize, indexOf, intersection, isEmpty, isNil, lowerCase, sortBy } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -35,7 +26,6 @@ import { stringifyUrl } from 'query-string';
 import React, { Fragment, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-import save from 'save-file';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
@@ -73,12 +63,15 @@ import {
 	ticketErrorPlaceholder,
 	VISITOR_ACTION_SORT_MAP,
 } from '@ie-objects/const';
-import { useGetIeObjectsExport } from '@ie-objects/hooks/get-ie-objects-export';
 import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/get-ie-objects-related';
 import { useGetIeObjectsSimilar } from '@ie-objects/hooks/get-ie-objects-similar';
 import { useGetIeObjectsTicketInfo } from '@ie-objects/hooks/get-ie-objects-ticket-url';
 import { IeObjectsService } from '@ie-objects/services';
+import {
+	IE_OBJECTS_SERVICE_BASE_URL,
+	IE_OBJECTS_SERVICE_EXPORT,
+} from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
 import {
 	IeObject,
@@ -123,12 +116,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects';
-import {
-	selectBreadcrumbs,
-	selectShowNavigationBorder,
-	setShowAuthModal,
-	setShowZendesk,
-} from '@shared/store/ui';
+import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -209,7 +197,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 	// Sizes
 	const windowSize = useWindowSizeContext();
-	const showNavigationBorder = useSelector(selectShowNavigationBorder);
 	const collections = useSelector(selectFolders);
 
 	// Query params
@@ -232,12 +219,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const activeBlade = query[QUERY_PARAM_KEY.ACTIVE_BLADE];
 
 	// Fetch object
+	const objectId = router.query.ie as string;
 	const {
 		data: mediaInfo,
 		isLoading: mediaInfoIsLoading,
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
-	} = useGetIeObjectsInfo(router.query.ie as string);
+	} = useGetIeObjectsInfo(objectId);
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
@@ -277,21 +265,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
 		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
 	const { data: similarData } = useGetIeObjectsSimilar(
-		router.query.ie as string,
+		objectId,
 		isKiosk || userHasAccessToMaintainer ? mediaInfo?.maintainerId ?? '' : '',
 		!!mediaInfo
 	);
 
 	// gerelateerd
 	const { data: relatedData } = useGetIeObjectsRelated(
-		router.query.ie as string,
+		objectId,
 		mediaInfo?.maintainerId,
 		mediaInfo?.meemooIdentifier,
 		!!mediaInfo
 	);
-
-	// export
-	const { mutateAsync: getMediaExport } = useGetIeObjectsExport();
 
 	// visit info
 	const {
@@ -340,7 +325,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		isNil(mediaInfo.thumbnailUrl);
 	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
 	const showVisitButton =
-		visitorSpace?.status === VisitorSpaceStatus.Active && canRequestAccess && !isKiosk;
+		isNil(mediaInfo?.thumbnailUrl) &&
+		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
+		visitorSpace?.status === VisitorSpaceStatus.Active &&
+		!isKiosk;
 
 	/**
 	 * Effects
@@ -363,6 +351,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				fragment_id: mediaInfo.schemaIdentifier,
 				pid: mediaInfo.meemooIdentifier,
 				user_group_name: user?.groupName ?? GroupName.ANONYMOUS,
+				or_id: mediaInfo.maintainerId,
 			};
 
 			if (hasAccessToVisitorSpaceOfObject) {
@@ -515,6 +504,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				fragment_id: mediaInfo?.schemaIdentifier,
 				pid: mediaInfo?.meemooIdentifier,
 				user_group_name: user?.groupName,
+				or_id: mediaInfo.maintainerId,
 			});
 
 			// open external form
@@ -555,6 +545,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				fragment_id: mediaInfo?.schemaIdentifier,
 				pid: mediaInfo?.meemooIdentifier,
 				user_group_name: user?.groupName,
+				or_id: mediaInfo?.maintainerId,
 			};
 
 			if (hasAccessToVisitorSpaceOfObject) {
@@ -641,29 +632,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	}, [hasAccessToVisitorSpaceOfObject, isKeyUser, isMeemooAdmin, isKiosk, user, isCPAdmin]);
 
 	const onExportClick = useCallback(
-		async (format: MetadataExportFormats) => {
-			const metadataBlob = await getMediaExport({
-				id: router.query.ie as string,
-				format,
-			});
-
-			if (metadataBlob) {
-				save(
-					metadataBlob,
-					`${kebabCase(mediaInfo?.name) || 'metadata'}.${MetadataExportFormats[format]}`
-				);
-			} else {
-				toastService.notify({
-					title: tHtml('pages/slug/ie/index___error') || 'error',
-					description: tHtml(
-						'pages/slug/ie/index___het-ophalen-van-de-metadata-is-mislukt'
-					),
-				});
-			}
-
+		(format: MetadataExportFormats) => {
+			window.open(
+				`${publicRuntimeConfig.PROXY_URL}/${IE_OBJECTS_SERVICE_BASE_URL}/${objectId}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`
+			);
 			setMetadataExportDropdownOpen(false);
 		},
-		[getMediaExport, mediaInfo?.name, router.query.ie, tHtml]
+		[objectId]
 	);
 
 	const renderExportDropdown = useCallback(
@@ -1303,7 +1278,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			return (
 				<VisitorSpaceNavigation
 					className="p-object-detail__nav"
-					showBorder={showNavigationBorder}
 					title={mediaInfo?.maintainerName ?? ''}
 					accessEndDate={accessEndDate}
 				/>

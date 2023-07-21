@@ -31,8 +31,8 @@ export const ADMIN_NAVIGATION_LINKS = (): AdminNavigationLink[] => [
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.navigation}`,
 	},
 	{
-		id: 'translations-v2-admin',
-		label: tText('modules/admin/const/routing___vertalingen-v-2'),
+		id: 'translations-admin',
+		label: tText('modules/admin/const/routing___vertalingen'),
 		href: `/${ROUTE_PARTS.admin}/${ROUTE_PARTS.translations}`,
 	},
 	{

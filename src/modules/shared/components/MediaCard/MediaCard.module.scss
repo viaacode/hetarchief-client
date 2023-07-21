@@ -161,10 +161,6 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 			min-width: 24.8rem;
 			place-content: center;
 
-			@include respond-at(md) {
-				min-height: 100%;
-			}
-
 			.#{$component}__no-content {
 				transform: translateY(-25%);
 			}

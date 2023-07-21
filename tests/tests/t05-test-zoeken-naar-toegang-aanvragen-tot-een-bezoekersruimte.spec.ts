@@ -1,4 +1,5 @@
 export {};
+// import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 // import { expect, test } from '@playwright/test';
 // import { escapeRegExp } from 'lodash-es';
 
@@ -11,15 +12,7 @@ export {};
 // 	context,
 // }) => {
 // 	// GO to the hetarchief homepage
-// 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-// 	// Check homepage title
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
-
-// 	// Accept all cookies
-// 	await acceptCookies(page, 'all');
+// await goToPageAndAcceptCookies(page);
 
 // 	// Check the homepage show the correct title for searching maintainers
 // 	await expect(page.locator('text=Vind een aanbieder')).toBeVisible();

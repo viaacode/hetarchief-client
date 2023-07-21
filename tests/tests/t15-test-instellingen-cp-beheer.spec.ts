@@ -1,4 +1,5 @@
 export {};
+// import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 // import { expect, test } from '@playwright/test';
 
 // import { acceptCookies } from '../helpers/accept-cookies';
@@ -10,15 +11,7 @@ export {};
 
 // test('T15: Test instellingen CP-beheer', async ({ page, context }) => {
 // 	// Go to the hetarchief homepage
-// 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-// 	// Check page title is the home page
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
-
-// 	// Accept all cookies
-// 	await acceptCookies(page, 'all');
+// await goToPageAndAcceptCookies(page);
 
 // 	// Login cp admin using the meemoo idp
 // 	await loginUserMeemooIdp(
@@ -208,12 +201,7 @@ export {};
 // 	 */
 
 // 	// Go to the hetarchief homepage
-// 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-// 	// Check page title is the home page
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// await goToPageAndAcceptCookies(page);
 
 // 	await page.reload();
 

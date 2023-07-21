@@ -2,9 +2,9 @@ import { expect, test } from '@playwright/test';
 import { v4 as uuid } from 'uuid';
 
 import { USER_PASSWORD } from '../consts/tests.consts';
-import { acceptCookies } from '../helpers/accept-cookies';
 import { acceptTos } from '../helpers/accept-tos';
 import { acmConfirmEmail } from '../helpers/acm-confirm-email';
+import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 /**
@@ -15,19 +15,15 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	const userId = uuid().replace(/-/g, '');
 	const userEmail = `hetarchief2.0+atbasisgebruiker${userId}@meemoo.be`;
 
-	// Go to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await goToPageAndAcceptCookies(
+		page,
+		process.env.TEST_CLIENT_ENDPOINT as string,
+		'Homepagina hetarchief | hetarchief.be',
+		'selection'
+	);
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
-
-	// Accept selected cookies
-	await acceptCookies(page, 'selection'); //TODO enable cookies when on INT
 
 	// Click on login or register
 	await page.locator('text=Inloggen of registreren').first().click();
@@ -82,12 +78,7 @@ test('T01: Test registratie + eerste keer inloggen basisgebruiker', async ({ pag
 	await acmConfirmEmail(page, userEmail);
 
 	// Go to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await goToPageAndAcceptCookies(page);
 
 	// Cookie bot should not open again
 	await expect(page.locator('#CybotCookiebotDialogBody')).not.toBeVisible(); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT

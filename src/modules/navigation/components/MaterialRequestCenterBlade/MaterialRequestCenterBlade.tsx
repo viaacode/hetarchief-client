@@ -383,6 +383,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							? getCurrentLayer()
 							: 9999
 					}
+					refetch={refetch}
 				/>
 			)}
 		</BladeManager>

@@ -1,20 +1,12 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from '../helpers/accept-cookies';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
+import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check homepage title
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
-
-	// Accept all cookies
-	await acceptCookies(page, 'all'); //Enable when on int
+	await goToPageAndAcceptCookies(page);
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -24,9 +16,13 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await page.waitForFunction(
+		() => document.title === 'Homepagina hetarchief | hetarchief.be',
+		null,
+		{
+			timeout: 10000,
+		}
+	);
 
 	/**
 	 * Go to search page VRT --------------------------------------------------------------------
@@ -44,9 +40,9 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		.first()
 		.locator('a')
 		.allInnerTexts();
-	await expect(subNavItems).toContain('Zoeken naar bezoekersruimtes');
-	await expect(subNavItems[1]).toMatch(/VRT.*/);
-	await page.click('text=Zoeken naar bezoekersruimtes');
+	await expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
+	await expect(subNavItems[1]).toContain('VRT');
+	await page.click('text=Zoeken naar aanbieders');
 	// Wait for search page to be ready
 	// await waitForSearchResults(page);
 	await new Promise((resolve) => setTimeout(resolve, 2 * 1000));
@@ -56,7 +52,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 		await page.locator('div[class^="LoggedInHome_c-hero__access-cards"] ')
 	).toBeVisible();
 
-	// Check VRT in actieve bezoekersruimtes
+	// Check VRT in actieve aanbieders
 	await expect(
 		await page
 			.locator('div[class^="LoggedInHome_c-hero__access-cards"]  h2')
@@ -84,7 +80,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 			await expect(maintainer).toEqual('VRT');
 		})
 	);
-	const countsBeforepublic = await getSearchTabBarCounts(page);
+	const countsBeforePublic = await getSearchTabBarCounts(page);
 	// Go to the public catalog
 	await page.locator('li[class^=VisitorSpaceDropdown_c-visitor-spaces-dropdown__active]').click();
 
@@ -98,7 +94,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Wait for user to be in the public catalog
 	await expect
 		.poll(async () => await getSearchTabBarCounts(page))
-		.not.toEqual(countsBeforepublic);
+		.not.toEqual(countsBeforePublic);
 
 	// Check the purple banner
 	await expect(
@@ -173,13 +169,13 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	countsBeforeSearch = await getSearchTabBarCounts(page);
 
 	await page
-		.locator('span.c-checkbox__label', { hasText: 'Raadpleegbaar via bezoekertool' })
+		.locator('span.c-checkbox__label', { hasText: 'Ter plaatste kijken & luisteren' })
 		.click(); //TODO: we might have to change this text
 
 	// Check green pill exists with filter inside
 	pill = await page.locator('.c-tags-input__multi-value .c-tag__label');
 	await expect(pill).toBeVisible();
-	await expect(pill).toContainText('Raadpleegbaar via bezoekertool'); //TODO: we might have to change this text
+	await expect(pill).toContainText('Ter plaatste kijken & luisteren'); //TODO: we might have to change this text
 
 	// Wait for filtered search results
 	await expect
@@ -261,7 +257,7 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	);
 	await filter2TypeSelect.locator('[class^=c-react-select__control]').click();
 	// Click 'Beschrijving'
-	await filter2TypeSelect.locator('#react-select-16-option-0').click();
+	await filter2TypeSelect.locator('#react-select-14-option-0').click();
 	await page.fill(
 		'[class^=AdvancedFilterFields_c-advanced-filter-fields__dynamic-field] #AdvancedFilterFields__value__1',
 		'Schoen'

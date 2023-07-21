@@ -1,20 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from '../helpers/accept-cookies';
 import { acceptTos } from '../helpers/accept-tos';
-import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
+import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 
 test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check homepage title
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
-
-	// Accept all cookies
-	await acceptCookies(page, 'all'); // enable this when running on int
+	await goToPageAndAcceptCookies(page);
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
@@ -31,7 +22,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	// Scroll down and enter 'V' in the searchbar
 	await page.fill('#VisitorSpaceCardsWithSearch__search', 'V');
 
-	// Press the contact buton
+	// Press the contact button
 	await page
 		.locator('.c-visitor-space-card--name--vrt .c-button__content .c-button__icon')
 		.first()
@@ -66,7 +57,7 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	await page.waitForLoadState('networkidle');
 
 	// Accept the tos
-	await acceptTos(page); // TODO: Enable when on int
+	await acceptTos(page); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Fill in 'Reden van aanvraag'
 	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);

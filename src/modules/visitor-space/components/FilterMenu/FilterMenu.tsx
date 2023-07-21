@@ -35,7 +35,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onSortClick,
 	onViewToggle = () => null,
 	onRemoveValue,
-	showNavigationBorder,
 }) => {
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
@@ -43,7 +42,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg);
 	const openIcon = isMobile
 		? IconNamesLight.Filter
 		: isOpen
@@ -177,7 +176,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onSortClick={onSortClick}
 				onFilterReset={onFilterFormReset}
 				onFilterSubmit={onFilterFormSubmit}
-				showNavigationBorder={showNavigationBorder}
 				filterValues={filterValues}
 				onRemoveValue={onRemoveValue}
 			/>

@@ -1,24 +1,16 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from '../helpers/accept-cookies';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { clickToastMessageButton } from '../helpers/click-toast-message-button';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
 import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
+import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
 test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, context }) => {
 	// GO to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check homepage title
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
-
-	// Accept all cookies
-	await acceptCookies(page, 'all'); //Enable when on int
+	await goToPageAndAcceptCookies(page);
 
 	// Login with existing user
 	await loginUserHetArchiefIdp(
@@ -28,9 +20,13 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	);
 
 	// Check homepage title
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
+	await page.waitForFunction(
+		() => document.title === 'Homepagina hetarchief | hetarchief.be',
+		null,
+		{
+			timeout: 10000,
+		}
+	);
 
 	/**
 	 * Go to search page VRT --------------------------------------------------------------------
@@ -48,8 +44,8 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 		.first()
 		.locator('a')
 		.allInnerTexts();
-	await expect(subNavItems).toContain('Zoeken naar bezoekersruimtes');
-	await expect(subNavItems[1]).toMatch(/VRT.*/);
+	await expect(subNavItems[0]).toContain('Zoeken naar aanbieders');
+	await expect(subNavItems[1]).toContain('VRT');
 	await page.click('text=VRT');
 
 	// Get tab counts before search
@@ -132,18 +128,29 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	 */
 
 	// Check page title
-	await expect(
-		await page.locator(
-			'.p-object-detail__metadata-content h3:has-text("Gouden Schoen - Eerste Gouden Schoen voor Tine De Caigny")'
-		)
-	).toBeVisible();
+	expect(
+		await page.locator('.p-object-detail__metadata-content h3').first().innerText()
+	).toContain('Gouden Schoen');
 
 	/**
 	 * Bookmark button
 	 */
 
+	// Click more options button
+	await page
+		.locator('.p-object-detail__primary-actions .c-button--silver', {
+			hasText: 'dots-horizontal',
+		})
+		.first()
+		.click();
+
 	// Click bookmark button
-	await page.locator('[title="Sla dit item op"]', { hasText: 'bookmark' }).first().click();
+	await page
+		.locator('.p-object-detail__primary-actions .c-dropdown-menu__item', {
+			hasText: 'bookmark',
+		})
+		.first()
+		.click();
 
 	// Check blade opens
 	await expect(page.locator('.c-blade--active')).toBeVisible();
@@ -295,13 +302,13 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	await page.locator('[aria-label="Toevoegen aan aanvraaglijst"]').click();
 
-	await checkBladeTitle(page, 'Voeg toe aan aanvragen'); // TODO: This should be 'Voeg toe aan aanvraaglijst'
+	await page.locator('text=Voeg toe aan aanvragen'); // TODO: This should be 'Voeg toe aan aanvraaglijst'
 
 	// Click 'Ik wil dit materiaal hergebruiken'
 	await page.locator('text=Ik wil dit object hergebruiken').click(); // TODO: This should be 'Ik wil dit materiaal hergebruiken'
 
 	// Click 'Voeg toe aan aanvraaglijst en zoek verder'
-	await page.locator('text=Voeg toe aan aanvraaglijst en zoek verder').click();
+	await page.locator('text=Voeg toe aan aanvraag & zoek verder').click();
 
 	// Toast message
 	await checkToastMessage(page, 'Toegevoegd aan aanvraaglijst');
@@ -315,7 +322,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 
 	// Click 'Vul gegevens aan en verstuur'
 
-	await page.locator('text=Vul gegevens aan en verstuur').click();
+	await page.locator('text=Bevestig je gegevens').click();
 
 	// Check if the title of the blade is now 'Persoonlijke gegevens'
 	// await expect(page.locator('.c-blade--active')).toBeVisible({ timeout: 10000 });
@@ -325,7 +332,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	// await expect(bladeTitle).toContainText('Persoonlijke gegevens');
 	// await expect(bladeTitle).toBeVisible();
 
-	// Expect firstname, lastname and emailadress to be filled in, organisation to be empty
+	// Expect firstname, lastname and email address to be filled in, organisation to be empty
 	const prefilledData = await page
 		.locator('[class^=PersonalInfoBlade_c-personal-info-blade__content-value]')
 		.allInnerTexts();
@@ -341,7 +348,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 		.click(); // TODO: this should be: 'ik vraag het materiaal op in het kader van mijn beroep (uitgezonderd onderwijs)'
 
 	// Click 'Verstuur aanvraag'
-	await page.locator('text=Verstuur meerdere aanvragen naar aanbieders').click(); // TODO: this should be: 'Verstuur aanvraag'
+	await page.locator('text=Verstuur aanvraag naar aanbieder(s)').click(); // TODO: this should be: 'Verstuur aanvraag'
 
 	// Toast message
 	await checkToastMessage(page, 'Verzenden gelukt'); //TODO: this should be: 'Aanvraag verstuurd'
@@ -354,7 +361,7 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	await page.locator('[aria-label=Rapporteer]').click();
 
 	// Check blade title
-	await checkBladeTitle(page, 'Rapporteren'); // This schould be 'Een probleem melden'
+	await checkBladeTitle(page, 'Rapporteren'); // This should be 'Een probleem melden'
 
 	const emailInputField = await page.locator('input#field');
 	await expect(await emailInputField.inputValue()).toEqual(

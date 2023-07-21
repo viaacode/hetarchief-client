@@ -1,11 +1,7 @@
 import clsx from 'clsx';
-import { kebabCase } from 'lodash-es';
-import { stringifyUrl } from 'query-string';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { ROUTE_PARTS } from '@shared/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';

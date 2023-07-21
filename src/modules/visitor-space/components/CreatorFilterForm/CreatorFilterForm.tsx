@@ -15,7 +15,7 @@ import styles from './CreatorFilterForm.module.scss';
 import { CreatorFilterFormProps } from './CreatorFilterForm.types';
 
 const defaultValues: CreatorFilterFormState = {
-	creators: [''],
+	creator: '',
 };
 
 const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) => {
@@ -26,7 +26,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 
 	const initial = query?.[VisitorSpaceFilterId.Creator] || '';
 
-	const [form, setForm] = useState<CreatorFilterFormState>({ creators: [initial] });
+	const [form, setForm] = useState<CreatorFilterFormState>({ creator: initial });
 	const {
 		clearErrors,
 		control,
@@ -42,19 +42,19 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 	// Effects
 
 	useEffect(() => {
-		setValue('creators', form.creators);
+		setValue('creator', form.creator);
 	}, [form, setValue]);
 
 	useEffect(() => {
 		if (initial) {
-			setForm((oldForm) => ({ ...oldForm, duration: initial }));
+			setForm((oldForm) => ({ ...oldForm, creator: initial }));
 		}
 	}, [initial]);
 
 	// Events
 
 	const onChangeCreator = (evt: ChangeEvent<HTMLInputElement>) => {
-		setForm({ ...form, creators: [evt.target.value] });
+		setForm({ ...form, creator: evt.target.value });
 	};
 
 	return (
@@ -68,11 +68,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 			>
 				<FormControl
 					className="c-form-control--label-hidden"
-					errors={
-						!isNil(errors.creators?.[0]?.message)
-							? [errors.creators?.[0]?.message]
-							: undefined
-					}
+					errors={!isNil(errors.creator?.message) ? [errors.creator?.message] : undefined}
 					id="CreatorFilterForm__creator"
 					label={tText(
 						'modules/visitor-space/components/creator-filter-form/creator-filter-form___maker'
@@ -80,11 +76,11 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 				>
 					<Controller
 						control={control}
-						name="creators"
+						name="creator"
 						render={({ field }) => (
 							<TextInput
 								{...field}
-								value={form.creators?.[0] || defaultValues.creators?.[0] || ''}
+								value={form.creator || defaultValues.creator || ''}
 								onChange={onChangeCreator}
 								placeholder={tText(
 									'modules/visitor-space/components/creator-filter-form/creator-filter-form___naam-van-de-maker'

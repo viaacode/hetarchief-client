@@ -2,12 +2,7 @@ import { isEmpty } from 'lodash-es';
 import { stringifyUrl } from 'query-string';
 
 import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
-import {
-	IeMetadataExportProps,
-	IeObject,
-	IeObjectSimilar,
-	MetadataExportFormats,
-} from '@ie-objects/types';
+import { IeObject, IeObjectSimilar, MetadataExportFormats } from '@ie-objects/types';
 import { ApiService } from '@shared/services/api-service';
 import {
 	IeObjectsSearchFilter,
@@ -152,18 +147,17 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getExport({ id, format }: IeMetadataExportProps): Promise<Blob | null> {
-		if (!id) {
-			return null;
-		}
-		if (format === undefined) {
+	public static async getExport(
+		id: string,
+		format: MetadataExportFormats
+	): Promise<string | null> {
+		if (!id || !format) {
 			return null;
 		}
 
-		return await ApiService.getApi()
-			.get(
-				`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}/${MetadataExportFormats[format]}`
-			)
-			.then((r) => r.blob());
+		const response = await ApiService.getApi().get(
+			`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}/${MetadataExportFormats[format]}`
+		);
+		return response.text();
 	}
 }

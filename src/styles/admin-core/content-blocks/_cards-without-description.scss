@@ -4,6 +4,7 @@
 
 $component: "c-block-cards-without-description";
 $img-size: 15.2rem;
+$img-size-mobile: 10.2rem;
 
 .#{$component} {
 	width: 100%;
@@ -33,6 +34,10 @@ $img-size: 15.2rem;
 		color: $white;
 		display: grid;
 		grid-template-columns: repeat(2, 7.6rem) 1fr;
+
+		@include respond-to("sm") {
+			height: $img-size-mobile;
+		}
 	}
 
 	a {
@@ -47,6 +52,11 @@ $img-size: 15.2rem;
 		padding: 0 $spacer-md 0 (math.div($img-size, 2) + $spacer-md);
 		font-weight: $font-weight-bold;
 		font-size: 2rem;
+
+		@include respond-to("sm") {
+			grid-column: 1/4;
+			margin-left: 5rem;
+		}
 	}
 
 	&__image {
@@ -64,6 +74,11 @@ $img-size: 15.2rem;
 
 		&--round {
 			border-radius: $img-size;
+		}
+
+		@include respond-to("sm") {
+			width: $img-size-mobile;
+			height: $img-size-mobile;
 		}
 	}
 }

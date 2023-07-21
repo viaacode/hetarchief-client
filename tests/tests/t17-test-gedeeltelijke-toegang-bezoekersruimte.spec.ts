@@ -1,11 +1,11 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptCookies } from '../helpers/accept-cookies';
 import { acceptTos } from '../helpers/accept-tos';
 import { checkActiveSidebarNavigationItem } from '../helpers/check-active-sidebar-navigation-item';
 import { checkBladeTitle } from '../helpers/check-blade-title';
 import { checkToastMessage } from '../helpers/check-toast-message';
 import { getFolderObjectCounts } from '../helpers/get-folder-object-counts';
+import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { logout } from '../helpers/log-out';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 import { waitForSearchResults } from '../helpers/wait-for-search-results';
@@ -15,15 +15,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	context,
 }) => {
 	// Go to the hetarchief homepage
-	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'hetarchief.be', null, {
-		timeout: 10000,
-	});
-
-	// Accept all cookies
-	await acceptCookies(page, 'all'); // Enable this on INT, comment bcs localhost
+	await goToPageAndAcceptCookies(page);
 
 	// Login visitor
 	await loginUserHetArchiefIdp(
@@ -40,7 +32,9 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	 */
 	// Click on "Bezoek een aanbieder" navigation item
 	await page.click('text=Bezoek een aanbieder');
-	await page.click('text=Zoeken naar bezoekersruimtes');
+
+	// Click on "Zoeken naar aanbieders" navigation option
+	await page.click('text=Zoeken naar aanbieders');
 
 	// Click on request access button for Amsab-ISG
 	const amsabCard = await page.locator('.p-home__results .c-visitor-space-card--name--amsab-isg');
@@ -71,7 +65,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 
 	// Logout the end user
 	await logout(page);
-	await new Promise((resolve) => setTimeout(resolve, 1 * 1000)); // TODO: replace this
+	//await new Promise((resolve) => setTimeout(resolve, 1 * 1000)); // TODO: replace this
 
 	// Check navbar exists
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
@@ -84,13 +78,13 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Check tos is displayed, scroll down and click accept button
-	await acceptTos(page); //Enable when on int
+	await acceptTos(page); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Click "beheer" navigation item
 	// await page.click('nav ul li .c-dropdown a');
 	await page.locator('.c-avatar__text').click();
 	// Click visit requests navigation item
-	await page.click('a[href="/beheer/aanvragen"]');
+	await page.click('a[href="/beheer/toegangsaanvragen"]');
 
 	// Check page title matches visitor requests page title
 	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
@@ -106,8 +100,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Wait for results to load
-	// await waitForLoading(page);
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); // TODO temp bcs waitForLoading doesnt work
+	await page.waitForLoadState('networkidle');
 
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
@@ -166,7 +159,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// There should be 1 folder: 'Favorieten'
 	let existingfolders = await page.locator('ul .c-checkbox-list li > span');
 	await expect(existingfolders).toHaveCount(1);
-	await expect(await existingfolders.allInnerTexts()).toContain('Favorieten');
+	await expect(await existingfolders.nth(0).innerText()).toContain('Favorieten');
 
 	// Click next to the blade to close it, need to click it two times
 	const notBlade = await page.locator('[class*=Overlay_c-overlay--visible__]').first();
@@ -234,11 +227,8 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Click on 'Voeg toe'
 	await page.locator('button', { hasText: 'Voeg toe' }).click();
 
-	// Use the back button of the browser
-	// await page.goBack(); // TODO: this should only be needed one time
-	// await page.goBack();
-
 	await page.goto(`${process.env.TEST_CLIENT_ENDPOINT as string}/beheer/toegangsaanvragen`);
+
 	// Check page title matches visitor requests page title
 	await page.waitForFunction(() => document.title === 'Toegangsaanvragen | hetarchief.be', null, {
 		timeout: 10000,
@@ -253,8 +243,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	);
 
 	// Wait for results to load
-	// await waitForLoading(page);
-	await new Promise((resolve) => setTimeout(resolve, 2 * 1000)); // TODO temp bcs waitForLoading doesnt work
+	await page.waitForLoadState('networkidle');
 
 	// Check active tab: All
 	await expect(await page.locator('.c-tab--active').innerHTML()).toContain('Alle');
@@ -414,7 +403,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Check navbar exists and user has access to one visitor space
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 	await expect(page.locator('a[href="/bezoek"] div[class^="c-badge"]').first()).toContainText(
-		'2'
+		'1'
 	);
 
 	// Go to the Amsab-ISG visitor space
@@ -431,11 +420,11 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 		await page
 			.locator('button.c-tabs__item.c-tab.c-tab--dark.c-tab--all.c-tab--active')
 			.allInnerTexts()
-	).toEqual(['Alles(2)']);
+	).toEqual(['Alles(1)']);
 
 	// Get the pid of the first object
 	const objectPid = await page
-		.locator('article > section.c-card__bottom-wrapper > div:nth-child(2) > a')
+		.locator('article > section.c-card__bottom-wrapper > a .c-card__subtitle-wrapper')
 		.first()
 		.innerText();
 
@@ -445,7 +434,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await page
 		.locator(
 			'ul[class^="u-list-reset VisitorSpaceDropdown_c-visitor-spaces-dropdown__list"] li',
-			{ hasText: 'Publieke catalogus' } // TODO: we might have to change the text
+			{ hasText: 'Publieke catalogus' }
 		)
 		.click();
 
@@ -457,7 +446,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Check the purple banner
 	await expect(
 		await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()
-	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG en VRT.']);
+	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG.']);
 
 	// Enter pid
 	const searchField = await page.locator('.c-tags-input__input-container').first();

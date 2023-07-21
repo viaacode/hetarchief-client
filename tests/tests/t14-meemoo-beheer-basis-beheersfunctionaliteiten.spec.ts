@@ -1,4 +1,5 @@
 export {};
+// import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 // import { expect, test } from '@playwright/test';
 // import { format } from 'date-fns';
 
@@ -11,15 +12,7 @@ export {};
 
 // test('T14: Meemoo-beheer: basis beheersfunctionaliteiten', async ({ page, context }) => {
 // 	// Go to the hetarchief homepage
-// 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-// 	// Check page title is the home page
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
-
-// 	// Accept all cookies
-// 	await acceptCookies(page, 'all');
+// await goToPageAndAcceptCookies(page);
 
 // 	/**
 // 	 * Set amsab space to status pending
@@ -376,12 +369,7 @@ export {};
 // 	// await expect(navItemPrivacy2).not.toBeVisible(); // TODO does not work without a reload => waiting for https://github.com/viaacode/react-admin-core-module/pull/40
 
 // 	// Go to the hetarchief homepage
-// 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
-
-// 	// Check page title is the home page
-// 	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-// 		timeout: 10000,
-// 	});
+// await goToPageAndAcceptCookies(page);
 
 // 	// Check privacy link in footer is not present
 // 	await expect(

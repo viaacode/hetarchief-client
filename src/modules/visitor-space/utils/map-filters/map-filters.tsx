@@ -8,7 +8,7 @@ import { tText } from '@shared/helpers/translate';
 import { IeObjectsSearchFilter, Operator } from '@shared/types';
 import { asDate, formatDate } from '@shared/utils';
 
-import { FILTERS_OPTIONS_CONFIG, GET_OPERATOR_LABELS, getMetadataSearchFilters } from '../../const';
+import { getMetadataSearchFilters } from '../../const';
 import { AdvancedFilterArrayParam } from '../../const/query-params';
 import {
 	AdvancedFilter,

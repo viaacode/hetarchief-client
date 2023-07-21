@@ -9,9 +9,13 @@ export async function checkSpaceVisibilityHomepage(
 	await page.goto(process.env.TEST_CLIENT_ENDPOINT as string);
 
 	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-		timeout: 10000,
-	});
+	await page.waitForFunction(
+		() => document.title === 'Homepagina hetarchief | hetarchief.be',
+		null,
+		{
+			timeout: 10000,
+		}
+	);
 
 	// Search for "searchTerm"
 	const searchFieldHomePage = await page.locator('[placeholder="zoek"]');
