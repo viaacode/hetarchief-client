@@ -44,6 +44,8 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 			.first()
 	).toBeVisible();
 
+	await new Promise((resolve) => setTimeout(resolve, 1000));
+
 	// Check entries in dropdown match expected entries
 	const subNavItems = await page
 		.locator('div[class^="c-menu c-menu--default"]')
