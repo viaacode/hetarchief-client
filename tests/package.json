@@ -7,7 +7,7 @@
 	],
 	"scripts": {
 		"test:e2e:install-chrome": "playwright install chrome",
-		"test:e2e": "npx playwright test --ui",
+		"test:e2e": "npx playwright test",
 		"test:e2e:ui": "dotenv -e ../.env.local npx playwright test -- --ui",
 		"test:e2e:debug": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test --workers=1 --retries=0 --max-failures=1",
 		"test:e2e:debug:t01": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t01-test-registratie-eerste-keer-inloggen-basisgebruiker.spec.ts",
