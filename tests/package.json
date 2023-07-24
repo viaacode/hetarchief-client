@@ -7,7 +7,8 @@
 	],
 	"scripts": {
 		"test:e2e:install-chrome": "playwright install chrome",
-		"test:e2e": "npx playwright test",
+		"test:e2e": "npx playwright test --ui",
+		"test:e2e:ui": "dotenv -e ../.env.local npx playwright test -- --ui",
 		"test:e2e:debug": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test --workers=1 --retries=0 --max-failures=1",
 		"test:e2e:debug:t01": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t01-test-registratie-eerste-keer-inloggen-basisgebruiker.spec.ts",
 		"test:e2e:debug:t02": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/t02-test-inloggen-cp-admin.spec.ts",
@@ -26,7 +27,7 @@
 		"test:e2e:debug:t17": "cross-env PWDEBUG=console dotenv -e ../.env.local npx playwright test tests/T17-test-gedeeltelijke-toegang-bezoekersruimte.spec.ts"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.22.2",
+		"@playwright/test": "^1.36.1",
 		"@types/uuid": "^9.0.1",
 		"cross-env": "7.0.3",
 		"date-fns": "2.28.0",

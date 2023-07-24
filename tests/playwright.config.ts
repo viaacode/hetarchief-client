@@ -49,7 +49,7 @@ const config: PlaywrightTestConfig = {
 		// Use chrome instead of chromium, to be able to play videos
 		channel: 'chrome',
 
-		viewport: { width: 1400, height: 850 },
+		viewport: { width: 1440, height: 772 },
 	},
 
 	/* Configure projects for major browsers */

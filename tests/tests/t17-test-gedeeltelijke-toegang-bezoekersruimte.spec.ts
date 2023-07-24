@@ -31,7 +31,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	 * Go to 'Bezoek een aanbieder'
 	 */
 	// Click on "Bezoek een aanbieder" navigation item
-	await page.click('text=Bezoek een aanbieder');
+	await page.click('[class*="Navigation_c-navigation__link--dropdown"][href="/bezoek"]');
 
 	// Click on "Zoeken naar aanbieders" navigation option
 	await page.click('text=Zoeken naar aanbieders');
@@ -81,9 +81,10 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	await acceptTos(page); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
 
 	// Click "beheer" navigation item
-	// await page.click('nav ul li .c-dropdown a');
+	await new Promise((resolve) => setTimeout(resolve, 1000));
 	await page.locator('.c-avatar__text').click();
 	// Click visit requests navigation item
+	await new Promise((resolve) => setTimeout(resolve, 1000));
 	await page.click('a[href="/beheer/toegangsaanvragen"]');
 
 	// Check page title matches visitor requests page title
@@ -215,7 +216,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	const folderList = await page.locator(
 		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
 	);
-	const checkboxes = await folderList.locator('.c-checkbox__input');
+	const checkboxes = await folderList.locator('.c-checkbox__check-icon');
 	await checkboxes.first().click();
 	await checkboxes.nth(1).click();
 
@@ -403,7 +404,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Check navbar exists and user has access to one visitor space
 	await expect(page.locator('nav[class^=Navigation_c-navigation]')).toBeVisible();
 	await expect(page.locator('a[href="/bezoek"] div[class^="c-badge"]').first()).toContainText(
-		'1'
+		'2'
 	);
 
 	// Go to the Amsab-ISG visitor space
@@ -446,7 +447,7 @@ test('t17: Verifieer of gedeeltelijke toegang tot een bezoekersruimte correct ka
 	// Check the purple banner
 	await expect(
 		await page.locator('span.p-visitor-space__temp-access-label').allInnerTexts()
-	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG.']);
+	).toEqual(['Je hebt tijdelijke toegang tot het materiaal van Amsab-ISG en VRT.']);
 
 	// Enter pid
 	const searchField = await page.locator('.c-tags-input__input-container').first();

@@ -35,6 +35,16 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Click on "Bezoek een aanbieder" navigation item
 	await page.click('text=Bezoek een aanbieder');
 
+	// Check dropdown menu is visible
+	await expect(
+		await page
+			.locator(
+				'[class*="Navigation_c-navigation__list-flyout"] div[class*="c-menu--default"]'
+			)
+			.first()
+	).toBeVisible();
+
+	// Check entries in dropdown match expected entries
 	const subNavItems = await page
 		.locator('div[class^="c-menu c-menu--default"]')
 		.first()
@@ -200,7 +210,11 @@ test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// Filter by creation date
 	await page.click('text=Creatiedatum');
 	await page.fill('.c-menu--visible--default .c-input__field', '1 jan. 2020');
-	await page.locator('.c-menu--visible--default').locator('text=Pas toe').click();
+	await page
+		.locator('.c-menu--visible--default [class*="FilterForm_c-filter-form__submit"]', {
+			hasText: 'Pas toe',
+		})
+		.click();
 
 	const countsAfterSearchByDate = await getSearchTabBarCounts(page);
 

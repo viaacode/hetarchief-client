@@ -97,9 +97,9 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	let folderList = await page.locator(
 		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
 	);
-	let checkboxes = await folderList.locator('.c-checkbox__input');
+	let checkboxes = await folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(1);
-	await checkboxes.first().check();
+	await checkboxes.first().click();
 
 	// Check count changes to 1
 	let bookmarkFolderCounts2 = await getFolderObjectCounts(page);
@@ -136,17 +136,9 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	 * Bookmark button
 	 */
 
-	// Click more options button
-	await page
-		.locator('.p-object-detail__primary-actions .c-button--silver', {
-			hasText: 'dots-horizontal',
-		})
-		.first()
-		.click();
-
 	// Click bookmark button
 	await page
-		.locator('.p-object-detail__primary-actions .c-dropdown-menu__item', {
+		.locator('.p-object-detail__metadata-content .c-button.c-button--silver.c-button--icon', {
 			hasText: 'bookmark',
 		})
 		.first()
@@ -164,9 +156,9 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	folderList = await page.locator(
 		'.c-blade--active [class*="AddToFolderBlade_c-add-to-folder-blade__list__"]'
 	);
-	checkboxes = await folderList.locator('.c-checkbox__input');
+	checkboxes = await folderList.locator('.c-checkbox__check-icon');
 	expect(await checkboxes.count()).toEqual(1);
-	await checkboxes.first().check();
+	await checkboxes.first().click();
 
 	// Check count changes to 1
 	bookmarkFolderCounts2 = await getFolderObjectCounts(page);
