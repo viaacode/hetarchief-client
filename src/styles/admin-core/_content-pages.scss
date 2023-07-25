@@ -46,8 +46,14 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	.p-admin-content {
 		.c-filter-table thead th,
 		.c-filter-table tbody td {
-			padding: $spacer-md;
+			// Keep the columns narrow, so they fit on a 1440px wide screen
+			// https://meemoo.atlassian.net/browse/ARC-1889
+			padding: $spacer-md 0.5rem;
 			line-height: $line-height-lg;
+
+			&:first-child {
+				padding-left: $spacer-md;
+			}
 		}
 
 		.c-button-toolbar button[class*="c-button"] {
