@@ -4,13 +4,13 @@ $l-container-padding: $spacer-sm;
 $l-container-padding-xs: 2rem;
 
 .l-container {
-	max-width: 121.6rem + ($l-container-padding * 2);
+	max-width: $max-page-width;
 	width: 100%;
 	padding: 0 $l-container-padding;
 	margin: 0 auto;
 
 	@include respond-at(xs) {
-		max-width: 121.6rem + ($l-container-padding * 2);
+		max-width: $max-page-width;
 		padding: 0 $l-container-padding-xs;
 	}
 
