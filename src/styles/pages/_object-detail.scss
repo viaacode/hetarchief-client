@@ -366,24 +366,10 @@ $breakpoint-md: map.get($breakpoints, "md");
 
 	// Media queries
 
-	@include respond-at(md) {
-		.p-object-detail__metadata {
-			display: block;
-			padding-right: 2rem;
-		}
-
-		.p-object-detail__video {
-			display: grid;
-			grid-template-rows: 1fr auto;
-			margin-top: 0.1rem; // Prevent wrong alignment (https://github.com/viaacode/hetarchief-client/pull/756#discussion_r1151752068)
-		}
-	}
-
 	// `include respond-at(md)` -fix for safari
 	@media screen and (width >= $breakpoint-md) {
 		.p-object-detail__metadata {
 			display: block;
-			padding-right: 2rem;
 		}
 
 		.p-object-detail__video {
