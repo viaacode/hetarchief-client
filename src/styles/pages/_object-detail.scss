@@ -225,8 +225,12 @@ $breakpoint-md: map.get($breakpoints, "md");
 
 		.ScrollbarsCustom {
 			width: 100% !important;
-			height: 500px !important;
-			max-height: 100% !important;
+			height: calc(100vh - 10rem - 5.4rem - 8rem) !important;
+			max-height: 500px !important;
+
+			@include respond-to("md") {
+				height: calc(100vh - 10rem - 5.4rem - 8rem - 6.5rem) !important;
+			}
 
 			.ScrollbarsCustom-TrackY > .ScrollbarsCustom-Thumb {
 				background-color: $neutral !important;
