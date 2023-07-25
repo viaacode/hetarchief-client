@@ -28,7 +28,9 @@ const config: PlaywrightTestConfig = {
 	/* Opt out of parallel tests on CI. */
 	workers: 1, // process.env.CI ? 1 : undefined,
 	/* Reporter to use. See https://playwright.dev/docs/test-reporters */
-	reporter: 'line',
+	reporter: [['line'], ['junit', { outputFile: 'end2end.xml' }]],
+	/* Output folder for test results and trace files */
+	outputDir: 'test_results',
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
 		headless: true,

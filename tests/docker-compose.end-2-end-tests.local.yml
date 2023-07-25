@@ -9,4 +9,4 @@ services:
     env_file:
       - ../.env.local
     volumes:
-      - ./videos-docker:/automation/videos
+      - ./test_results:/automation/test_results
