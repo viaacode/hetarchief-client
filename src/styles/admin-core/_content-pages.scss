@@ -54,6 +54,10 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 			&:first-child {
 				padding-left: $spacer-md;
 			}
+
+			&:last-child {
+				padding-right: $spacer-md;
+			}
 		}
 
 		.c-button-toolbar button[class*="c-button"] {

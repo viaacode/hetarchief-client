@@ -37,6 +37,7 @@ $l-sidebar-collapse-to: "md";
 		width: 70%;
 		padding-bottom: $c-feedback-button-height;
 		flex-grow: 1;
+		overflow-x: auto;
 
 		// sidebar layout in another sidebar layout
 		.#{$component} {
