@@ -4,12 +4,6 @@
 	width: 150px !important;
 }
 
-@include respond-to(md) {
-	#launcher {
-		width: 50px !important;
-	}
-}
-
 body.hide-zendesk-widget #launcher {
 	display: none;
 }
