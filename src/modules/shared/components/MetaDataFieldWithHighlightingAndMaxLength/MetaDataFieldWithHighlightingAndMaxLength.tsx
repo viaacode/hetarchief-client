@@ -40,7 +40,14 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<MetaDataFieldWithHighlightin
 
 		const renderHighlighted = (): ReactNode => {
 			if (isString(parsedFieldData)) {
-				return highlighted(parsedFieldData.replaceAll('\\n', ' ').replaceAll('\n', ' '));
+				// Split text on new lines and highlight each part separately + put each part in its own paragraph to show new lines
+				return parsedFieldData
+					.split(/(\\\\r|\\r)?\\\\n|\\n/)
+					.map((fieldTextPart, fieldTextPartIndex) => (
+						<span key={title + '-' + fieldTextPartIndex}>
+							{highlighted(fieldTextPart)}
+						</span>
+					));
 			} else {
 				return parsedFieldData;
 			}
