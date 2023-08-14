@@ -20,7 +20,7 @@ $component: "c-tooltip-component";
 
 	&__arrow {
 		background-color: $black;
-		width: 0;
+		width: 0 !important;
 
 		&::before {
 			border: 6px solid $black !important;
@@ -29,7 +29,7 @@ $component: "c-tooltip-component";
 
 	&[data-popper-placement^="right"] > .c-tooltip-component__arrow {
 		left: -6px !important;
-		transform: translate(0, -4px) !important;
+		transform: translate(0, -6px) !important;
 		clip: unset !important;
 	}
 
