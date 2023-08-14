@@ -1,6 +1,7 @@
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
+import getConfig from 'next/config';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -68,6 +69,8 @@ import packageJson from '../../../../../package.json';
 
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
+
+const { publicRuntimeConfig } = getConfig();
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
@@ -376,11 +379,11 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation loggedOutGrid={showLoggedOutGrid}>
 				{!isLoggedIn && isMobile && (
 					<div className="c-navigation__logo--hamburger">
-						<Link href={ROUTES.home}>
+						<a href={publicRuntimeConfig.CLIENT_URL + ROUTES.home}>
 							<a tabIndex={0}>
 								<HetArchiefLogo type={HetArchiefLogoType.Light} />
 							</a>
-						</Link>
+						</a>
 					</div>
 				)}
 				<Navigation.Left
