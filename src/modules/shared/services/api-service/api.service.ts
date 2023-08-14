@@ -13,7 +13,7 @@ export abstract class ApiService {
 	public static getApi(ignoreAuthError = false): KyInstance {
 		if (!ApiService.api) {
 			this.api = ky.create({
-				prefixUrl: isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL,
+				prefixUrl: publicRuntimeConfig.PROXY_URL,
 				headers: {
 					'content-type': 'application/json',
 					'Cache-Control': 'no-cache',

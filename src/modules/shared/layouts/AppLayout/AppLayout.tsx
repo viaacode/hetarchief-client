@@ -379,11 +379,11 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation loggedOutGrid={showLoggedOutGrid}>
 				{!isLoggedIn && isMobile && (
 					<div className="c-navigation__logo--hamburger">
-						<a href={publicRuntimeConfig.CLIENT_URL + ROUTES.home}>
+						<Link passHref href={ROUTES.home}>
 							<a tabIndex={0}>
 								<HetArchiefLogo type={HetArchiefLogoType.Light} />
 							</a>
-						</a>
+						</Link>
 					</div>
 				)}
 				<Navigation.Left
