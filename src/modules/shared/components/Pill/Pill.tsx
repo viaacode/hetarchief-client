@@ -13,14 +13,14 @@ const Pill: FC<PillProps> = ({ className, icon, label, isExpanded }: PillProps):
 	});
 
 	const renderTooltipPill = (): ReactElement => (
-		<span className={rootCls}>
-			<Tooltip position="right">
-				<TooltipTrigger>
+		<Tooltip position="right">
+			<TooltipTrigger>
+				<span className={rootCls}>
 					<Icon name={icon} />
-				</TooltipTrigger>
-				<TooltipContent>{label}</TooltipContent>
-			</Tooltip>
-		</span>
+				</span>
+			</TooltipTrigger>
+			<TooltipContent>{label}</TooltipContent>
+		</Tooltip>
 	);
 
 	const renderExpandedPill = (): ReactElement => (
