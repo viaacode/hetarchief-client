@@ -537,7 +537,8 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger {
 // dropdowns
 
 .c-filter-table__toolbar {
-	.c-dropdown__trigger {
+	.c-dropdown__trigger,
+	.c-checkbox-dropdown__trigger {
 		.c-checkbox-dropdown-modal__trigger {
 			padding: 0 $spacer-md;
 		}
