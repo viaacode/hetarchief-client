@@ -25,13 +25,17 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		margin-top: $spacer-sm;
 		display: flex;
 		flex-direction: row;
+		gap: $spacer-sm;
+
+		@include respond-to(xxl) {
+			flex-direction: column;
+		}
 	}
 
 	&__info-button {
 		display: flex !important;
 		justify-content: center !important;
 		font-size: $font-size-sm !important;
-		margin-right: $spacer-xs;
 		height: 3.7rem;
 	}
 
