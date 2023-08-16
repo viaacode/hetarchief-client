@@ -48,7 +48,7 @@ const ErrorPage: FC<ErrorPageProps> = ({
 					</div>
 				)}
 
-				{link && (
+				{link?.to && (
 					<Link href={link.to} passHref>
 						<a
 							className={styles['c-error-page__button']}
@@ -60,6 +60,7 @@ const ErrorPage: FC<ErrorPageProps> = ({
 						</a>
 					</Link>
 				)}
+				{link && !link?.to && link.component}
 			</div>
 		</section>
 	);

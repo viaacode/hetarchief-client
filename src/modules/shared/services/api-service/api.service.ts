@@ -3,7 +3,6 @@ import { KyInstance } from 'ky/distribution/types/ky';
 import getConfig from 'next/config';
 
 import { AuthService } from '@auth/services/auth-service';
-import { isBrowser } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
 

@@ -379,11 +379,13 @@ const AppLayout: FC = ({ children }) => {
 			<Navigation loggedOutGrid={showLoggedOutGrid}>
 				{!isLoggedIn && isMobile && (
 					<div className="c-navigation__logo--hamburger">
-						<Link passHref href={ROUTES.home}>
-							<a tabIndex={0}>
-								<HetArchiefLogo type={HetArchiefLogoType.Light} />
-							</a>
-						</Link>
+						<a
+							tabIndex={0} // Reload the page after going to the homepage because of nextjs issues:
+							// https://github.com/vercel/next.js/issues/37005
+							onClick={() => window.open(window.location.origin, '_self')}
+						>
+							<HetArchiefLogo type={HetArchiefLogoType.Light} />
+						</a>
 					</div>
 				)}
 				<Navigation.Left
