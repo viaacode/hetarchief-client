@@ -24,7 +24,7 @@ $component: "c-notification-center";
 
 	&__empty {
 		width: $blade-max-width;
-		padding-top: 8rem;
+		padding-top: 3.6rem;
 		text-align: center;
 		color: $neutral;
 	}
@@ -39,6 +39,7 @@ $component: "c-notification-center";
 		margin-bottom: $spacer-md;
 		font-size: $font-size-base;
 		line-height: $line-height-1xl;
+		text-align: left;
 	}
 
 	&__row {
