@@ -14,12 +14,12 @@
 
 	dl {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, 1fr);
+		grid-template-columns: 20rem 1fr;
 		row-gap: 1.2rem;
 		margin: 0;
 
-		@include respond-at(sm) {
-			grid-template-columns: repeat(auto-fill, 30rem);
+		@include respond-to(sm) {
+			grid-template-columns: 15rem 1fr;
 		}
 	}
 
