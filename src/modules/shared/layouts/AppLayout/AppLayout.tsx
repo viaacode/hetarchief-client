@@ -378,14 +378,13 @@ const AppLayout: FC = ({ children }) => {
 		>
 			<Navigation loggedOutGrid={showLoggedOutGrid}>
 				{!isLoggedIn && isMobile && (
-					<div className="c-navigation__logo--hamburger">
-						<Link passHref href={ROUTES.home}>
-							{/* Reload the page after going to the homepage because of nextjs issues: */}
-							{/* https://github.com/vercel/next.js/issues/37005 */}
-							<a tabIndex={0} onClick={() => setTimeout(window.location.reload, 200)}>
-								<HetArchiefLogo type={HetArchiefLogoType.Light} />
-							</a>
-						</Link>
+					<div
+						className="c-navigation__logo--hamburger"
+						onClick={() => window.location.reload}
+					>
+						{/* Hard reload the page when going to the homepage because of nextjs issues with the static 404 page not loading env variables */}
+						{/* https://github.com/vercel/next.js/issues/37005 */}
+						<HetArchiefLogo type={HetArchiefLogoType.Light} />
 					</div>
 				)}
 				<Navigation.Left
