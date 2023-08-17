@@ -844,7 +844,7 @@ const SearchPage: FC = () => {
 		let visitorSpaces: VisitorSpaceDropdownOption[] = visitorSpaceDropdownOptions.filter(
 			(visitorSpace: VisitorSpaceDropdownOption): boolean => {
 				const isPublicCollection = visitorSpace.slug == PUBLIC_COLLECTION;
-				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.maintainerId;
+				const isOwnVisitorSpace = isCPAdmin && visitorSpace.slug === user?.organisationId;
 
 				return !isPublicCollection && !isOwnVisitorSpace;
 			}

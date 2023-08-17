@@ -15,7 +15,7 @@ export interface User {
 	groupName: GroupName;
 	id: string;
 	idp: Idp;
-	maintainerId: string | null;
+	organisationId: string | null;
 	organisationName: string | null;
 	visitorSpaceSlug?: string;
 	permissions: Permission[];

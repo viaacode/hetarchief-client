@@ -62,7 +62,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as OrderDirection,
 		}),
-		...(user?.maintainerId ? { maintainerIds: [user.maintainerId] } : {}),
+		...(user?.organisationId ? { maintainerIds: [user.organisationId] } : {}),
 	});
 
 	const { data: currentMaterialRequestDetail, isFetching: isLoading } = useGetMaterialRequestById(
