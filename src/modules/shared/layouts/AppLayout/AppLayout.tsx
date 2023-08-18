@@ -273,15 +273,20 @@ const AppLayout: FC = ({ children }) => {
 
 		const staticItems = [
 			{
+				// Hard reload the page when going to the homepage because of nextjs issues with the static 404 page not loading env variables
+				// Otherwise you get an infinite loading state because no api calls will work
+				// https://github.com/vercel/next.js/issues/37005
 				node: (
-					<Link href={ROUTES.home}>
-						<a tabIndex={0}>
-							<HetArchiefLogo
-								className="c-navigation__logo c-navigation__logo--list"
-								type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
-							/>
-						</a>
-					</Link>
+					<div
+						onClick={() => {
+							window.open(window.location.origin, '_self');
+						}}
+					>
+						<HetArchiefLogo
+							className="c-navigation__logo c-navigation__logo--list"
+							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+						/>
+					</div>
 				),
 				id: 'logo',
 				path: '/',
@@ -380,7 +385,9 @@ const AppLayout: FC = ({ children }) => {
 				{!isLoggedIn && isMobile && (
 					<div
 						className="c-navigation__logo--hamburger"
-						onClick={() => window.location.reload}
+						onClick={() => {
+							window.open(window.location.origin, '_self');
+						}}
 					>
 						{/* Hard reload the page when going to the homepage because of nextjs issues with the static 404 page not loading env variables */}
 						{/* https://github.com/vercel/next.js/issues/37005 */}
@@ -392,7 +399,7 @@ const AppLayout: FC = ({ children }) => {
 					hamburgerProps={NAV_HAMBURGER_PROPS()}
 					items={leftNavItems}
 					placement="left"
-					renderHamburger={true}
+					renderHamburger={showNavigationHeaderRight}
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
 				{showNavigationHeaderRight && (

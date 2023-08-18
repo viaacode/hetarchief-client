@@ -5,10 +5,13 @@
 		height: 6.5rem;
 
 		&--hamburger {
-			height: 100%;
-			grid-row: 2/3;
+			height: 6.5rem;
+			grid-row: 2/4;
 			grid-column: 1;
-			place-self: center start;
+
+			svg {
+				pointer-events: none;
+			}
 		}
 
 		&--list {
