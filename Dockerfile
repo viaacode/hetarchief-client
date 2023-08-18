@@ -8,7 +8,7 @@ COPY package.json package-lock.json .npmrc ./
 #ENV DEBUG_TOOLS=false
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
-RUN npm pkg set scripts.prepare="" &&\
+RUN npm pkg delete scripts.prepare &&\
     npm i --legacy-peer-deps
 
 # Rebuild the source code only when needed
