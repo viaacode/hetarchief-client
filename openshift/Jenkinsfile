@@ -259,7 +259,7 @@ pipeline {
 }
 
 void getImageFromDockerfile() {
- return 'node:lts-gallium'
+ return 'node:20.4'
 }
 
 void getBaseImageName() {

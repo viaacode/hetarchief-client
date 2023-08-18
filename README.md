@@ -6,9 +6,9 @@ This repository contains the `Het Archief` Next.js app for the end user.
 
 It is built with:
 
--   node: `v16.x.x` ( ~ `lts/gallium`)
--   npm: `v8.x.x`
--   Next: `v12.0.4`
+- node: `v20.x.x`
+- npm: `v9.x.x`
+- Next: `v9.5.0`
 
 For a complete list of packages and versions check out the `package.json` file.
 
@@ -32,7 +32,7 @@ To start working, simply run `docker-compose up`, the project will be available 
 The available commands for development are:
 
 | command   | runs                               |
-| --------- | ---------------------------------- |
+|-----------|------------------------------------|
 | dev       | Run the development server.        |
 | start     | Run the server in production mode. |
 | storybook | Run Storybook in development mode. |
@@ -42,7 +42,7 @@ The available commands for development are:
 The available commands for building the project are:
 
 | command         | runs                                                |
-| --------------- | --------------------------------------------------- |
+|-----------------|-----------------------------------------------------|
 | build           | Build a production ready app to the `/dist` folder. |
 | build:storybook | Build Storybook to the `/storybook-static` folder.  |
 
@@ -50,19 +50,19 @@ The available commands for building the project are:
 
 The available commands for testing the project are:
 
-| command    | runs                                            |
+| command | runs |
 | ---------- | ----------------------------------------------- | --- |
-| test       | Run all the unit tests.                         |
-| test:ci    | Run all the unit tests for CI environment.      |
-| test:watch | Run all the unit tests in watch mode.           |
-| test:cov   | Run all the unit tests with coverage collected. |     |
+| test | Run all the unit tests. |
+| test:ci | Run all the unit tests for CI environment. |
+| test:watch | Run all the unit tests in watch mode. |
+| test:cov | Run all the unit tests with coverage collected. | |
 
 <br>
 
 Other available commands are:
 
 | command      | runs                                                                                        |
-| ------------ | ------------------------------------------------------------------------------------------- |
+|--------------|---------------------------------------------------------------------------------------------|
 | prepare      | Lifecycle script which installs husky.                                                      |
 | lint         | Lint all scripts and styling.                                                               |
 | lint:ts      | Lint all script files.                                                                      |
@@ -132,17 +132,17 @@ They are provided through the `env_file` property in the `docker-compose.yml` fi
 
 This project has been created by:
 
--   Andry Charlier: andry.charlier@studiohyperdrive.be
--   Bart Naessens: bart.naessens@studiohyperdrive.be
--   Ian Emsens: ian.emsens@studiohyperdrive.be
+- Andry Charlier: andry.charlier@studiohyperdrive.be
+- Bart Naessens: bart.naessens@studiohyperdrive.be
+- Ian Emsens: ian.emsens@studiohyperdrive.be
 
 It is currently maintained by:
 
--   Andry Charlier: andry.charlier@studiohyperdrive.be
--   Bavo Vanderghote: bavo.vanderghote@studiohyperdrive.be
--   Bert Verhelst: bert.verhelst@studiohyperdrive.be
--   Silke Derudder: silke.derudder@studiohyperdrive.be
--   Ward Vercruyssen: ward.vercruyssen@studiohyperdrive.be
+- Andry Charlier: andry.charlier@studiohyperdrive.be
+- Bavo Vanderghote: bavo.vanderghote@studiohyperdrive.be
+- Bert Verhelst: bert.verhelst@studiohyperdrive.be
+- Silke Derudder: silke.derudder@studiohyperdrive.be
+- Ward Vercruyssen: ward.vercruyssen@studiohyperdrive.be
 
 ## Deployment
 

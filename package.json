@@ -130,7 +130,7 @@
 		"find-cache-dir": "3.3.2",
 		"fs-extra": "10.0.0",
 		"glob": "7.2.0",
-		"husky": "7.0.4",
+		"husky": "^8.0.0",
 		"identity-obj-proxy": "3.0.0",
 		"is-extendable": "1.0.1",
 		"jest": "27.5.1",
