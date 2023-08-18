@@ -471,6 +471,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			@include respond-to(xxl) {
 				display: flex;
 				justify-self: center;
+				margin-left: auto;
 			}
 		}
 	}
