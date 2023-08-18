@@ -183,7 +183,7 @@ pipeline {
          catchError() {
           sh '''ls -ltra
          export NODE_ENV=dev
-         npm set-script prepare ""
+         npm pkg set scripts.prepare=""
          npm install --force
          npx playwright install
          npx playwright install chrome
