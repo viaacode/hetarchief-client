@@ -4,6 +4,8 @@ import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
+declare const document: any;
+
 test('T10: Test actieve toegang basisgebruiker', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);

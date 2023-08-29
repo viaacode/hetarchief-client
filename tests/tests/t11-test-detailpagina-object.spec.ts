@@ -8,6 +8,8 @@ import { getSearchTabBarCounts } from '../helpers/get-search-tab-bar-counts';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
+declare const document: any;
+
 test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, context }) => {
 	// GO to the hetarchief homepage
 	await goToPageAndAcceptCookies(page);
@@ -38,6 +40,9 @@ test('T11: Test detailpagina object + materiaal aanvraag doen', async ({ page, c
 	);
 	// Click on "Bezoek een aanbieder" navigation item
 	await page.click('text=Bezoek een aanbieder');
+
+	// Wait for menu to fully open
+	await page.waitForTimeout(1000);
 
 	const subNavItems = await page
 		.locator('div[class^="c-menu c-menu--default"]')
