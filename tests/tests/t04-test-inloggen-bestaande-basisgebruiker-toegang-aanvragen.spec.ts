@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-import { acceptTos } from '../helpers/accept-tos';
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 
 test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) => {
@@ -53,11 +52,14 @@ test('T04: Test inloggen bestaande basisgebruiker', async ({ page, context }) =>
 	// Click the login button
 	await page.click('button[type="submit"]');
 
-	// Wait for the new page to load
-	await page.waitForLoadState('networkidle');
-
-	// Accept the tos
-	await acceptTos(page); //TODO: ENABLE THIS WHEN RUNNING TESTS ON INT
+	// Wait for site to load after login
+	await page.waitForFunction(
+		(titleAfterLogin: string) => document.title === titleAfterLogin,
+		'Home | hetarchief.be',
+		{
+			timeout: 10000,
+		}
+	);
 
 	// Fill in 'Reden van aanvraag'
 	await page.fill('#RequestAccessBlade__requestReason', `Een geldige reden`);

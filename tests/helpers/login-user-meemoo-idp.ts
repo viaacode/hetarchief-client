@@ -21,9 +21,6 @@ export async function loginUserMeemooIdp(
 	await page.fill('#inputUsername', username);
 	await page.fill('#inputPassword', password);
 
-	// Click the login button
-	await page.click('#wp-submit');
-
-	// Wait for the new page to load
-	await page.waitForLoadState('networkidle');
+	// Click the login button and wait for the new page to load
+	await Promise.all([page.click('#wp-submit'), page.waitForLoadState('networkidle')]);
 }

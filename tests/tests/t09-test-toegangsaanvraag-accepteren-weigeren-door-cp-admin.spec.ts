@@ -7,6 +7,8 @@ import { checkVisitRequestStatuses } from '../helpers/check-visit-request-status
 import { goToPageAndAcceptCookies } from '../helpers/go-to-page-and-accept-cookies';
 import { loginUserHetArchiefIdp } from '../helpers/login-user-het-archief-idp';
 
+declare const document: any;
+
 test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	page,
 	context,
@@ -177,7 +179,7 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	await page
 		.locator(
 			'[class*="SidebarLayout_l-sidebar__main"] .c-table__wrapper--body .c-table__row .c-table__cell:first-child',
-			{ hasText: 'meemoo Admin' }
+			{ hasText: 'Meemoo admin' }
 		)
 		.first()
 		.click();
@@ -189,8 +191,8 @@ test('T09: Test toegangsaanvraag accepteren + weigeren door CP admin', async ({
 	summaryHtml = await page
 		.locator('.c-blade--active [class*="VisitSummary_c-visit-summary"]')
 		.innerHTML();
-	await expect(summaryHtml).toContain('meemoo');
-	await expect(summaryHtml).toContain('Admin');
+	await expect(summaryHtml).toContain('Meemoo');
+	await expect(summaryHtml).toContain('admin');
 	await expect(summaryHtml).toContain('Een geldige reden');
 
 	// Check buttons for approve and deny are visible
