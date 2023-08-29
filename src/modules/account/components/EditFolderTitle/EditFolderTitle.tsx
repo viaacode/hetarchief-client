@@ -81,7 +81,7 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 
 	const onFormSubmit = (): Promise<void> => {
 		return new Promise<void>((resolve, reject) => {
-			handleSubmit<EditFolderFormState>(async (values) => {
+			handleSubmit(async (values) => {
 				const response = await foldersService.update(folder.id, values);
 				await afterSubmit(response);
 

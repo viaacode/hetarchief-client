@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { CreateFolderButtonProps } from '@account/components';
 import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { foldersService } from '@account/services/folders';
 import { CreateFolderFormState } from '@account/types';
@@ -12,7 +13,6 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 
 import styles from './CreateFolderButton.module.scss';
-import { CreateFolderButtonProps } from './CreateFolderButton.types';
 
 const labelKeys: Record<keyof CreateFolderFormState, string> = {
 	name: 'CreateFolderButton__name',
@@ -60,7 +60,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 
 	const onFormSubmit = async () => {
 		return new Promise<void>((resolve, reject) => {
-			handleSubmit<CreateFolderFormState>(async (values) => {
+			handleSubmit(async (values) => {
 				await foldersService.create(values);
 				await afterSubmit();
 

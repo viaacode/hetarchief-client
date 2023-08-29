@@ -53,3 +53,5 @@ tests/node_modules
 
 # Build info folder
 dist/
+
+tests/end2end.xml

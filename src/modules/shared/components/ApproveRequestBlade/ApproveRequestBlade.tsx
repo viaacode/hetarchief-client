@@ -493,7 +493,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					<FormControl
 						className={clsx(styles['c-approve-request-blade__access-type'], 'u-mb-32')}
 						errors={[
-							errors.accessType?.type?.message,
+							errors.accessType?.message,
 							(errors.accessType?.folderIds as FieldError | undefined)?.message,
 						]}
 						id={labelKeys.accessType}

@@ -123,7 +123,7 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 				<div className="u-mb-32">
 					<FormControl
 						className="u-mb-24 c-form-control--label-hidden"
-						errors={(errors.values || []).map((value) => value.message)}
+						errors={(errors?.values || []).map?.((value) => value?.message) || []}
 						id={labelKeys.values}
 						label={tHtml(
 							'modules/visitor-space/components/keywords-filter-form/keywords-filter-form___waardes'
