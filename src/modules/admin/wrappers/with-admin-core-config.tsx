@@ -24,7 +24,6 @@ import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
-import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
 import { isBrowser } from '@shared/utils';
 
@@ -209,10 +208,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					queryCache: {
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						clear: async (_key: string) => Promise.resolve(),
-					},
-					assetService: {
-						uploadFile: AssetsService.uploadFile,
-						deleteFile: AssetsService.deleteFile,
 					},
 					getContentPageByPathEndpoint: `${
 						isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
