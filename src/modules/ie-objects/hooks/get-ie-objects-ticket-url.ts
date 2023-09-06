@@ -4,12 +4,17 @@ import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 
 export const useGetIeObjectsTicketInfo = (
-	id: string | null,
+	fileRepresentationSchemaIdentifier: string | null,
+	fileSchemaIdentifier: string | null,
 	onComplete: () => void
 ): UseQueryResult<string> => {
 	return useQuery(
-		[QUERY_KEYS.getIeObjectsInfo, { id }],
-		() => IeObjectsService.getPlayableUrl(id),
+		[QUERY_KEYS.getIeObjectsInfo, { fileRepresentationSchemaIdentifier, fileSchemaIdentifier }],
+		() =>
+			IeObjectsService.getPlayableUrl(
+				fileRepresentationSchemaIdentifier,
+				fileSchemaIdentifier
+			),
 		{
 			keepPreviousData: true,
 			onSuccess: onComplete,

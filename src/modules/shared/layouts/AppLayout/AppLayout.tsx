@@ -2,7 +2,6 @@ import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import getConfig from 'next/config';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -37,7 +36,6 @@ import Html from '@shared/components/Html/Html';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
-import { ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -310,8 +308,9 @@ const AppLayout: FC = ({ children }) => {
 		showLinkedSpaceAsHomepage,
 		linkedSpaceOrId,
 		isMobile,
-		isLoggedIn,
 		visitorSpaces,
+		isMeemooAdmin,
+		isLoggedIn,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);

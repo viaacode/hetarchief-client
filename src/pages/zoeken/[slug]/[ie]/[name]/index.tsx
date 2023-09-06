@@ -230,13 +230,20 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
 	// peak file
-	const peakFileId =
+	const fileRepresentationSchemaIdentifier =
+		mediaInfo?.representations?.find(
+			(representation) => representation.dctermsFormat === 'peak'
+		)?.files?.[0]?.representationSchemaIdentifier || null;
+	const fileSchemaIdentifier =
 		mediaInfo?.representations?.find(
 			(representation) => representation.dctermsFormat === 'peak'
 		)?.files?.[0]?.schemaIdentifier || null;
 
 	// media info
-	const { data: peakJson } = useGetPeakFile(peakFileId);
+	const { data: peakJson } = useGetPeakFile(
+		fileRepresentationSchemaIdentifier,
+		fileSchemaIdentifier
+	);
 	const representationsToDisplay = (mediaInfo?.representations || [])?.filter((object) => {
 		if (object.dctermsFormat === 'peak') {
 			// Ignore peak file containing the audio wave form in json format
@@ -256,8 +263,12 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetIeObjectsTicketInfo(
+		currentRepresentation?.files[0]?.representationSchemaIdentifier ?? null,
 		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
-		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
+		() =>
+			setFlowPlayerKey(
+				currentRepresentation?.files[0]?.representationSchemaIdentifier ?? undefined
+			) // Force flowplayer rerender after successful fetch
 	);
 
 	// ook interessant
@@ -851,7 +862,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			return <FlowPlayer key={flowPlayerKey} src={playableUrl} {...shared} />;
 		}
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
-			if (!peakFileId || !!peakJson) {
+			if (!fileRepresentationSchemaIdentifier || !!peakJson) {
 				return (
 					<FlowPlayer
 						key={flowPlayerKey}

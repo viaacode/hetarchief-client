@@ -102,8 +102,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		const endOfYear = endOfDay(asDate(`12/31/${yearString}`) || 0);
 
 		if (form.operator === Operator.Equals) {
-			const dateRange = `${startOfYear}${SEPARATOR}${endOfYear}`;
-			return dateRange;
+			return `${startOfYear}${SEPARATOR}${endOfYear}`;
 		}
 
 		if (form.operator === Operator.LessThanOrEqual) {
@@ -118,7 +117,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 			const yearDate = convertYearToDate(year)?.toString();
 			setForm({ ...form, published: yearDate });
 		}
-	}, [year]);
+	}, [year, convertYearToDate]);
 
 	useEffect(() => {
 		if (yearRange) {

@@ -1,6 +1,5 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
-import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
@@ -17,7 +16,6 @@ const AuthModal: FC<AuthModalProps> = (props) => {
 	const { query } = useRouter();
 	const { tHtml, tText } = useTranslation();
 	const router = useRouter();
-	const { publicRuntimeConfig } = getConfig();
 
 	/**
 	 * Methods

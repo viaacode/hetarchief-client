@@ -133,6 +133,7 @@ export interface IeObjectFile {
 	alternateName: string;
 	description: string;
 	schemaIdentifier: string;
+	representationSchemaIdentifier: string;
 	ebucoreMediaType: string;
 	ebucoreIsMediaFragmentOf: string;
 	embedUrl: string;

@@ -1,9 +1,6 @@
 import { parseISO } from 'date-fns';
 
-import {
-	getAccessToDate,
-	roundToNextQuarter,
-} from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
+import { getAccessToDate } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
 
 describe('getAccessToDate', () => {
 	it('should return 18:00 for same day 09:00', () => {

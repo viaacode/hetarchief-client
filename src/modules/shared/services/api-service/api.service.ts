@@ -1,5 +1,5 @@
-import ky from 'ky-universal';
 import { KyInstance } from 'ky/distribution/types/ky';
+import ky from 'ky-universal';
 import getConfig from 'next/config';
 
 import { AuthService } from '@auth/services/auth-service';

@@ -1,7 +1,7 @@
 import { Box, Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { FC, forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { RichTextForm } from '@shared/components/RichTextForm';

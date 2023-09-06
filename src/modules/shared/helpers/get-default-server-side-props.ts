@@ -1,7 +1,7 @@
 import { GetServerSidePropsResult } from 'next';
-import { i18n } from 'next-i18next';
 import getConfig from 'next/config';
 import { GetServerSidePropsContext } from 'next/types';
+import { i18n } from 'next-i18next';
 
 import { getTranslations } from '@i18n/helpers/get-translations';
 import { DefaultSeoInfo } from '@shared/types/seo';
