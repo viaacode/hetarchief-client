@@ -3,6 +3,7 @@
 	"version": "1.5.0",
 	"private": true,
 	"contributors": [
+		"Bert Verhelst <bert.verhelst@studiohyperdrive.be>",
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
 	],
 	"scripts": {
@@ -31,7 +32,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.8.8",
-		"@meemoo/admin-core-ui": "2.3.16",
+		"@meemoo/admin-core-ui": "2.3.17",
 		"@meemoo/react-components": "2.26.0",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
