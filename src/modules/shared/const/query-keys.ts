@@ -29,4 +29,5 @@ export enum QUERY_KEYS {
 	getMaterialRequestById = 'getMaterialRequestById',
 	getMaintenanceAlerts = 'getMaintenanceAlerts',
 	getNewsletterPreferences = 'getNewsletterPreferences',
+	getIeObjectPlayerTicket = 'getIeObjectPlayerTicket',
 }

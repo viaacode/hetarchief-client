@@ -240,10 +240,9 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		)?.files?.[0]?.schemaIdentifier || null;
 
 	// media info
-	const { data: peakJson } = useGetPeakFile(
-		fileRepresentationSchemaIdentifier,
-		fileSchemaIdentifier
-	);
+	const { data: peakJson } = useGetPeakFile(fileSchemaIdentifier, {
+		enabled: mediaInfo?.dctermsFormat === 'audio',
+	});
 	const representationsToDisplay = (mediaInfo?.representations || [])?.filter((object) => {
 		if (object.dctermsFormat === 'peak') {
 			// Ignore peak file containing the audio wave form in json format
@@ -263,12 +262,8 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		isLoading: isLoadingPlayableUrl,
 		isError: isErrorPlayableUrl,
 	} = useGetIeObjectsTicketInfo(
-		currentRepresentation?.files[0]?.representationSchemaIdentifier ?? null,
 		currentRepresentation?.files[0]?.schemaIdentifier ?? null,
-		() =>
-			setFlowPlayerKey(
-				currentRepresentation?.files[0]?.representationSchemaIdentifier ?? undefined
-			) // Force flowplayer rerender after successful fetch
+		() => setFlowPlayerKey(currentRepresentation?.files[0]?.schemaIdentifier ?? undefined) // Force flowplayer rerender after successful fetch
 	);
 
 	// ook interessant

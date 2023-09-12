@@ -85,19 +85,20 @@ export class IeObjectsService {
 	}
 
 	public static async getPlayableUrl(
-		fileRepresentationSchemaIdentifier: string | null,
 		fileSchemaIdentifier: string | null
 	): Promise<string | null> {
-		if (!fileRepresentationSchemaIdentifier || !fileSchemaIdentifier) {
+		if (!fileSchemaIdentifier) {
 			return null;
 		}
+
+		const fileSchemaIdentifierWithoutTimeCodes = fileSchemaIdentifier.split('#')[0];
 
 		const fullVideoPlayableUrl = await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
 					query: {
-						id: fileRepresentationSchemaIdentifier,
+						schemaIdentifier: fileSchemaIdentifierWithoutTimeCodes,
 					},
 				})
 			)

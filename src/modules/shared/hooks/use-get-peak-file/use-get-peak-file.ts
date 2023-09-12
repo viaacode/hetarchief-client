@@ -15,17 +15,16 @@ export interface JsonWaveformData {
 }
 
 export function useGetPeakFile(
-	fileRepresentationSchemaIdentifier: string | null,
-	fileSchemaIdentifier: string | null
+	fileSchemaIdentifier: string | null,
+	options: { enabled: boolean } = { enabled: true }
 ): UseQueryResult<JsonWaveformData | null> {
 	return useQuery(
-		[QUERY_KEYS.getPeakFile, { fileRepresentationSchemaIdentifier, fileSchemaIdentifier }],
+		[QUERY_KEYS.getPeakFile, { fileSchemaIdentifier }],
 		async () => {
-			if (!fileRepresentationSchemaIdentifier) {
+			if (!fileSchemaIdentifier) {
 				return null;
 			}
 			const jsonFileUrl: string | null = await IeObjectsService.getPlayableUrl(
-				fileRepresentationSchemaIdentifier as string,
 				fileSchemaIdentifier as string
 			);
 			if (!jsonFileUrl) {
@@ -34,6 +33,7 @@ export function useGetPeakFile(
 
 			const peakFileResponse = await ky.get(jsonFileUrl);
 			return (await peakFileResponse.json()) as JsonWaveformData;
-		}
+		},
+		options
 	);
 }
