@@ -1,14 +1,24 @@
+@use "sass:math";
 @use "src/styles/abstracts" as *;
 
+$top-navigation-bar-height: 10rem;
+$top-visitor-space-bar-height: 4.8rem;
 $component: "c-related-objects-blade";
+$expand-button-height-desktop: 8.8rem;
+$expand-button-height-mobile: 6.5rem;
+$max-drawer-height-available: calc(100vh - #{$top-navigation-bar-height} - #{$top-visitor-space-bar-height});
+$max-drawer-height-desired: 50rem;
+$max-drawer-height: min($max-drawer-height-desired, $max-drawer-height-available);
 
 .#{$component} {
-	max-height: 6.5rem;
+	max-height: $expand-button-height-mobile;
+	max-width: 100vw;
 	background-color: $black;
 	transition: max-height $animate-default;
+	height: max-content;
 
 	@include respond-at("md") {
-		max-height: 8.8rem;
+		max-height: $expand-button-height-desktop;
 	}
 
 	&__toggle {
@@ -61,6 +71,17 @@ $component: "c-related-objects-blade";
 	}
 
 	&--open {
-		max-height: 100vh;
+		max-height: $max-drawer-height;
+	}
+
+	&__scrollable {
+		overflow-x: hidden;
+		overflow-y: auto;
+		height: max-content;
+		max-height: calc($max-drawer-height - $expand-button-height-mobile);
+
+		@include respond-at("md") {
+			max-height: calc($max-drawer-height - $expand-button-height-desktop);
+		}
 	}
 }
