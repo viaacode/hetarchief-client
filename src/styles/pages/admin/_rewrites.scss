@@ -155,7 +155,10 @@ button[class*="c-button"].c-checkbox-dropdown-modal__trigger,
 	border-radius: 4rem;
 	cursor: pointer;
 	outline: 2px solid transparent;
-	transition: color $animate-default, background-color $animate-default, border-color $animate-default;
+	transition:
+		color $animate-default,
+		background-color $animate-default,
+		border-color $animate-default;
 
 	.c-button__label,
 	div[class*="c-button__label"] {

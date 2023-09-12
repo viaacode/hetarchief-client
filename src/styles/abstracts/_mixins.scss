@@ -4,7 +4,6 @@
 @use "sass:math";
 @use "sass:meta";
 @use "sass:string";
-
 @use "variables" as *;
 @use "functions" as *;
 
@@ -35,7 +34,7 @@
 		}
 	}
 
-	@media screen and (max-width: calc(#{$max-bp} - 1px)) {
+	@media screen and (width <= calc(#{$max-bp} - 1px)) {
 		@content;
 	}
 }
@@ -60,7 +59,7 @@
 		@error "Min width can not be higher than or equal to max width.";
 	}
 
-	@media screen and (min-width: $min-bp) and (max-width: calc(#{$max-bp} - 1px)) {
+	@media screen and (min-width: $min-bp) and (width <= calc(#{$max-bp} - 1px)) {
 		@content;
 	}
 }
@@ -188,7 +187,7 @@
 
 	&::after {
 		content: "";
-		inset: 0 0 0 0;
+		inset: 0;
 		position: absolute;
 		transform: scale(2);
 	}
@@ -358,7 +357,9 @@
 	color: $black;
 	display: block;
 	font-family: $font-family-primary;
-	transition: outline-color $animate-default, border-color $animate-default;
+	transition:
+		outline-color $animate-default,
+		border-color $animate-default;
 	width: 100%;
 }
 
@@ -379,7 +380,9 @@
 		border-radius: 0;
 		box-shadow: none;
 		outline: 1px solid transparent !important;
-		transition: outline-color $animate-default, border-color $animate-default;
+		transition:
+			outline-color $animate-default,
+			border-color $animate-default;
 
 		&--is-focused,
 		&--is-focused:hover {
@@ -406,7 +409,10 @@
 	.#{$_root}__option {
 		border-right: 4px solid transparent;
 		color: $black;
-		transition: background-color $animate-default, border-color $animate-default, border-right-width $animate-sm-in;
+		transition:
+			background-color $animate-default,
+			border-color $animate-default,
+			border-right-width $animate-sm-in;
 
 		&--is-focused,
 		&--is-selected,

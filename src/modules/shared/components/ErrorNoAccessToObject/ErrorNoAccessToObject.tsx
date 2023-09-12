@@ -73,6 +73,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 		if (query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]) {
 			setIsRequestAccessBladeOpen(true);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const onOpenRequestAccess = () => {

@@ -8,6 +8,7 @@ $height: (
 	"auto": auto,
 	"24": 2.4rem,
 );
+
 @include generate-utils("height", "height", $height);
 
 /**
@@ -17,4 +18,5 @@ $height: (
 $width: (
 	"24": 2.4rem,
 );
+
 @include generate-utils("width", "width", $width);

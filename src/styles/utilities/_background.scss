@@ -13,4 +13,5 @@ $bg: (
 	"lila": $lila,
 	"shade": $shade,
 );
+
 @include generate-utils("bg", "background-color", $bg);

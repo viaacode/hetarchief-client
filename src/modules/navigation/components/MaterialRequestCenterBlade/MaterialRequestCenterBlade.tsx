@@ -81,22 +81,25 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	// Ward: create an object containing all the distinct maintainerId's as properties
 	// with per property an array of materialRequests, that has the same maintainerId as the property, as value
 	const mappedRequests = useMemo(() => {
-		return materialRequests?.items.reduce((acc, curr) => {
-			// Ward: check if maintainerId is not added yet to object
-			if (!acc[curr.maintainerId]) {
+		return materialRequests?.items.reduce(
+			(acc, curr) => {
+				// Ward: check if maintainerId is not added yet to object
+				if (!acc[curr.maintainerId]) {
+					return {
+						...acc,
+						// Ward: add new property to object and add array, with current item, as value
+						[curr.maintainerId]: [curr],
+					};
+				}
+
 				return {
 					...acc,
-					// Ward: add new property to object and add array, with current item, as value
-					[curr.maintainerId]: [curr],
+					// Ward: property already exists, so push item to array as value
+					[curr.maintainerId]: [...acc[curr.maintainerId], curr],
 				};
-			}
-
-			return {
-				...acc,
-				// Ward: property already exists, so push item to array as value
-				[curr.maintainerId]: [...acc[curr.maintainerId], curr],
-			};
-		}, {} as { [key: string]: MaterialRequest[] });
+			},
+			{} as { [key: string]: MaterialRequest[] }
+		);
 	}, [materialRequests]);
 
 	useEffect(() => {

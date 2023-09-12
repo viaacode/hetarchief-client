@@ -12,7 +12,9 @@ $component: "c-tooltip-component";
 	font-size: 1.3rem;
 	font-weight: 100;
 	line-height: 1.428; // 20px equivalent
-	transition: opacity 0.2s ease-in-out, visibility 0.2s linear 0.2s;
+	transition:
+		opacity 0.2s ease-in-out,
+		visibility 0.2s linear 0.2s;
 
 	&-trigger {
 		display: inline-block !important;

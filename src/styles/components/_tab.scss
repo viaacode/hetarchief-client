@@ -9,7 +9,9 @@ $component: "c-tab";
 	display: inline-flex;
 	min-height: $tab-min-height;
 	padding: $tab-vertical-padding 1.2rem;
-	transition: background-color $animate-default, color $animate-default;
+	transition:
+		background-color $animate-default,
+		color $animate-default;
 
 	@include respond-to("md") {
 		font-size: $font-size-sm;
@@ -75,7 +77,7 @@ $component: "c-tab";
 					content: "";
 					display: block;
 					position: absolute;
-					inset: 0 0 0 0;
+					inset: 0;
 					top: auto;
 					height: 2px;
 					background: $teal;

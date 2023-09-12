@@ -84,7 +84,9 @@ $l-sidebar-collapse-to: "md";
 
 				&__navigation,
 				&__main {
-					transition: transform $animate-default, visibility $animate-default;
+					transition:
+						transform $animate-default,
+						visibility $animate-default;
 				}
 
 				&__navigation {

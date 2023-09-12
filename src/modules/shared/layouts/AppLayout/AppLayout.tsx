@@ -68,6 +68,8 @@ import packageJson from '../../../../../package.json';
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
 
+// We want to make sure config gets fetched here, no sure why anymore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { publicRuntimeConfig } = getConfig();
 
 const AppLayout: FC = ({ children }) => {

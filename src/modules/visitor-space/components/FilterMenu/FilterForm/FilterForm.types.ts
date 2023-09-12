@@ -10,7 +10,7 @@ import {
 import { FilterMenuType, OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '../FilterMenu.types';
 
 export interface FilterFormProps extends DefaultComponentProps {
-	form: FC<DefaultFilterFormProps> | FC<InlineFilterFormProps> | null;
+	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps> | null;
 	id: VisitorSpaceFilterId;
 	onFormReset: OnFilterMenuFormReset;
 	onFormSubmit: OnFilterMenuFormSubmit;

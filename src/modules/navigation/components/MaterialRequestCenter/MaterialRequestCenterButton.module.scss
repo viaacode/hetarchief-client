@@ -23,7 +23,10 @@ $pill-color: color.adjust(red, $lightness: 10%);
 			width: 2rem;
 			height: 1.6rem;
 			background-color: $coral;
-			transition: color 0.5s, border-color 0.5s, box-shadow 0.5s;
+			transition:
+				color 0.5s,
+				border-color 0.5s,
+				box-shadow 0.5s;
 
 			&--animated {
 				background-color: red;
@@ -31,7 +34,10 @@ $pill-color: color.adjust(red, $lightness: 10%);
 				border-color: transparent;
 				box-shadow: 0 0 1rem 0.2rem $pill-color;
 				animation: $pill-animation;
-				transition: color 0.5s, border-color 0.5s, box-shadow 0.5s;
+				transition:
+					color 0.5s,
+					border-color 0.5s,
+					box-shadow 0.5s;
 			}
 		}
 

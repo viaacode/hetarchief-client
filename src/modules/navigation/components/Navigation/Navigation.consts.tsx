@@ -430,7 +430,7 @@ const getDivider = (id: string): NavigationItem =>
 		id,
 		node: null,
 		isDivider: 'md',
-	} as NavigationItem);
+	}) as NavigationItem;
 
 export const getNavigationItemsLeft = (
 	currentPath: string,

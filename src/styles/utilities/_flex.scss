@@ -12,6 +12,7 @@ $direction: (
 	"col": column,
 	"row": row,
 );
+
 @include generate-utils("flex", "flex-direction", $direction, ("md"));
 
 /**
@@ -21,6 +22,7 @@ $direction: (
 $align: (
 	"center": center,
 );
+
 @include generate-utils("align", "align-items", $align, ("md"));
 
 /**
@@ -31,4 +33,5 @@ $justify: (
 	"center": center,
 	"between": space-between,
 );
+
 @include generate-utils("justify", "justify-content", $justify, ("md"));

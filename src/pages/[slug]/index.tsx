@@ -121,9 +121,8 @@ export async function getServerSideProps(
 		title = 'Home - Het Archief';
 	}
 
-	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
-		context
-	);
+	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
+		await getDefaultServerSideProps(context);
 
 	return {
 		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title },

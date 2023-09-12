@@ -29,7 +29,7 @@ const AllIconsTemplate: ComponentStory<any> = () => (
 );
 const Template: ComponentStory<typeof Icon> = (args) => <Icon {...args} />;
 
-export const allIcons = AllIconsTemplate.bind({});
+AllIconsTemplate.bind({});
 
 export const Light_icons = Template.bind({});
 Light_icons.args = { name: IconNamesLight.Trash };

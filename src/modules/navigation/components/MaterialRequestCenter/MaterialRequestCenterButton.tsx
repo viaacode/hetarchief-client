@@ -47,7 +47,7 @@ const MaterialRequestCenterButton: FC = () => {
 			setPreviousMaterialCount(materialRequestCount);
 			setIsAnimated(true);
 		}
-	}, [materialRequestCount]);
+	}, [materialRequestCount, previousMaterialCount]);
 
 	const handleAnimationEnd = () => {
 		setIsAnimated(false);

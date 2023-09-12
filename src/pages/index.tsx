@@ -77,9 +77,8 @@ export async function getServerSideProps(
 		);
 	}
 
-	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
-		context
-	);
+	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
+		await getDefaultServerSideProps(context);
 
 	return {
 		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title },

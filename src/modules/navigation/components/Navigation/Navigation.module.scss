@@ -233,6 +233,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			inset: $c-navigation-height-md 0 0 0 !important;
 			transform: translate(0) !important;
 		}
+
 		@include respond-at(xxl) {
 			min-width: 26.6rem !important;
 		}
@@ -254,6 +255,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		border-bottom: none;
 		font-size: $font-size-sm;
 	}
+
 	@include respond-at(xxl) {
 		display: inline-block;
 		padding: 1.2rem 0 0.95rem;
@@ -301,7 +303,9 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	z-index: get-z-layer("nav-dropdown") + 1;
 	display: inline-flex;
 	align-items: center;
-	transition: border-color $animate-md-out, color $animate-md-out;
+	transition:
+		border-color $animate-md-out,
+		color $animate-md-out;
 
 	@include respond-at(xxl) {
 		position: relative;

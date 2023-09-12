@@ -57,7 +57,7 @@ const LoggedOutHome: FC<DefaultSeoInfo> = (props) => {
 		// eg: /vrt/09f17b37445c4ce59f645c2d5db9dbf8dbee79eba623459caa8c6496108641a0900618cb6ceb4e9b8ad907e47b980ee3
 		const redirectTo = router.query.redirectTo as string;
 		const firstUrlPart = redirectTo?.split('/')?.[1];
-		if (!Object.values(ROUTE_PARTS).includes(firstUrlPart)) {
+		if (!(Object.values(ROUTE_PARTS) as string[]).includes(firstUrlPart)) {
 			// Not a static page => might be visitor space slug
 			return capitalize(lowerCase(firstUrlPart));
 		}

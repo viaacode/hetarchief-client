@@ -1,6 +1,7 @@
 import { SelectOption, TagInfo } from '@meemoo/react-components';
 import { ReactNode } from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form/dist/types/fields';
 import { DecodedValueMap } from 'use-query-params';
 
 import { DefaultComponentProps, IeObjectTypes, Operator } from '@shared/types';
@@ -70,13 +71,13 @@ export enum VisitorSpaceOrderProps {
 	ContentPartnerId = 'content_partner.schema_identifier',
 }
 
-export interface DefaultFilterFormChildrenParams<Values = unknown> {
+export interface DefaultFilterFormChildrenParams<Values extends FieldValues> {
 	values: Values;
 	reset: () => void;
 	handleSubmit: UseFormHandleSubmit<Values>;
 }
 
-export interface DefaultFilterFormProps<Values = unknown> extends DefaultComponentProps {
+export interface DefaultFilterFormProps<Values extends FieldValues> extends DefaultComponentProps {
 	children: ({
 		values,
 		reset,

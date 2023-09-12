@@ -392,7 +392,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[setValue, onSimpleDateChange, futureDatepickerProps]
+		[futureDatepickerProps, onSimpleDateChange, getValues, setValue]
 	);
 
 	const renderAccessTo = useCallback(

@@ -185,11 +185,14 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				content_blocks: {},
 				services: {
 					toastService: {
-						showToast: (toastInfo: ToastInfo) => {
-							toastService.notify({
+						showToast: (toastInfo: ToastInfo): string => {
+							return toastService.notify({
 								title: toastInfo.title,
 								description: toastInfo.description,
 							});
+						},
+						hideToast: (id: string) => {
+							toastService.dismiss(id);
 						},
 					},
 					i18n: { tHtml, tText },

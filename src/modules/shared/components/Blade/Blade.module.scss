@@ -16,7 +16,9 @@
 	right: 0;
 	top: 0;
 	transform: translateX(100%);
-	transition: transform $animate-default, visibility $animate-default;
+	transition:
+		transform $animate-default,
+		visibility $animate-default;
 	visibility: hidden;
 	z-index: get-z-layer("blade");
 
@@ -95,7 +97,9 @@
 		&--managed {
 			left: auto;
 			transform: translateX(5.6rem);
-			transition: opacity $timing-default linear, transform $animate-default;
+			transition:
+				opacity $timing-default linear,
+				transform $animate-default;
 			width: calc($blade-max-width + 5.6rem);
 		}
 	}

@@ -74,7 +74,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	};
 
 	const renderModal = (): ReactElement => {
-		const FormComponent = (form as FC<DefaultFilterFormProps>) ?? (() => null);
+		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
 
 		return (
 			<div className={clsx(className, styles['c-filter-form'])}>
