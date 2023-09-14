@@ -116,6 +116,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		<Zendesk
 			{...settings}
 			zendeskKey={isBrowser() ? publicRuntimeConfig.ZENDESK_KEY : process.env.ZENDESK_KEY}
+			defer={true}
 			color={{ theme: '#00857d' }} // Ensure a contrast of 4.51:1 with white text
 			onLoaded={() => {
 				initListeners();
