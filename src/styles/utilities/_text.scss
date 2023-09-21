@@ -8,6 +8,7 @@
 // Note: include `1` for completeness sake
 
 $lines: (1, 2, 3, 4, 5, 6, 7);
+
 @each $var in $lines {
 	.u-text-ellipsis--#{$var} {
 		overflow: hidden;
@@ -15,6 +16,7 @@ $lines: (1, 2, 3, 4, 5, 6, 7);
 		/* stylelint-disable-next-line value-no-vendor-prefix */
 		display: -webkit-box;
 		-webkit-line-clamp: $var; /* number of lines to show */
+		/* stylelint-disable-next-line property-no-unknown */
 		line-clamp: $var;
 		-webkit-box-orient: vertical;
 	}
@@ -39,6 +41,7 @@ $lines: (1, 2, 3, 4, 5, 6, 7);
  */
 
 $align: (left, right, center);
+
 @include generate-utils("text", "text-align", $align);
 
 /**
@@ -53,6 +56,7 @@ $size: (
 	"22": 2.2rem,
 	"24": $font-size-lg,
 );
+
 @include generate-utils("font-size", "font-size", $size);
 
 /**
@@ -62,6 +66,7 @@ $size: (
 $weight: (
 	"400": $font-weight-normal,
 );
+
 @include generate-utils("font-weight", "font-weight", $weight);
 
 /**
@@ -72,6 +77,7 @@ $height: (
 	"1-25": $line-height-1xl,
 	"1-4": $line-height-3xl,
 );
+
 @include generate-utils("line-height", "line-height", $height);
 
 /**
@@ -79,4 +85,5 @@ $height: (
  */
 
 $whitespace: (nowrap);
+
 @include generate-utils("whitespace", "white-space", $whitespace);

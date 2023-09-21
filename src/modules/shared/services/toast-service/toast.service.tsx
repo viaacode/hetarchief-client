@@ -13,13 +13,13 @@ class ToastService {
 			...toastProps
 		}: Optional<ToastProps, 'maxLines' | 'buttonLabel' | 'onClose'>,
 		toastOptions?: ToastOptions
-	) {
+	): string {
 		const onToastClose = (closeToast?: () => void) => {
 			onClose?.();
 			closeToast?.();
 		};
 
-		toast(
+		return toast(
 			({ closeToast }) => (
 				<Toast
 					{...toastProps}
@@ -30,7 +30,7 @@ class ToastService {
 				/>
 			),
 			toastOptions
-		);
+		) as string;
 	}
 
 	public dismiss = toast.dismiss;

@@ -15,20 +15,25 @@ export interface JsonWaveformData {
 }
 
 export function useGetPeakFile(
-	fileSchemaIdentifier: string | null
+	fileSchemaIdentifier: string | null,
+	options: { enabled: boolean } = { enabled: true }
 ): UseQueryResult<JsonWaveformData | null> {
-	return useQuery([QUERY_KEYS.getPeakFile, { fileSchemaIdentifier }], async () => {
-		if (!fileSchemaIdentifier) {
-			return null;
-		}
-		const jsonFileUrl: string | null = await IeObjectsService.getPlayableUrl(
-			fileSchemaIdentifier as string
-		);
-		if (!jsonFileUrl) {
-			throw new Error('Failed to get peak file url with token');
-		}
+	return useQuery(
+		[QUERY_KEYS.getPeakFile, { fileSchemaIdentifier }],
+		async () => {
+			if (!fileSchemaIdentifier) {
+				return null;
+			}
+			const jsonFileUrl: string | null = await IeObjectsService.getPlayableUrl(
+				fileSchemaIdentifier as string
+			);
+			if (!jsonFileUrl) {
+				throw new Error('Failed to get peak file url with token');
+			}
 
-		const peakFileResponse = await ky.get(jsonFileUrl);
-		return (await peakFileResponse.json()) as JsonWaveformData;
-	});
+			const peakFileResponse = await ky.get(jsonFileUrl);
+			return (await peakFileResponse.json()) as JsonWaveformData;
+		},
+		options
+	);
 }

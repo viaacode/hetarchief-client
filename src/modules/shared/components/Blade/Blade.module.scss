@@ -16,7 +16,9 @@
 	right: 0;
 	top: 0;
 	transform: translateX(100%);
-	transition: transform $animate-default, visibility $animate-default;
+	transition:
+		transform $animate-default,
+		visibility $animate-default;
 	visibility: hidden;
 	z-index: get-z-layer("blade");
 
@@ -53,6 +55,7 @@
 	}
 
 	&__title {
+		color: $black;
 		font-size: $font-size-lg;
 		line-height: $line-height-lg;
 		padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-sm;
@@ -60,6 +63,7 @@
 		@include respond-to(md) {
 			text-align: center;
 		}
+
 		@include respond-at(md) {
 			font-size: $font-size-lg;
 			padding: 0 ($spacer-lg + $spacer-md) $spacer-lg $spacer-lg;
@@ -77,6 +81,10 @@
 		grid-row-start: 3;
 		overflow-y: auto;
 		overflow-x: hidden;
+
+		div {
+			white-space: pre-line;
+		}
 	}
 
 	&__footer-wrapper {
@@ -89,7 +97,9 @@
 		&--managed {
 			left: auto;
 			transform: translateX(5.6rem);
-			transition: opacity $timing-default linear, transform $animate-default;
+			transition:
+				opacity $timing-default linear,
+				transform $animate-default;
 			width: calc($blade-max-width + 5.6rem);
 		}
 	}

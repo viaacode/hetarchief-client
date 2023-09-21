@@ -8,10 +8,10 @@ export interface MaterialRequest {
 	maintainerLogo: string;
 	maintainerName: string;
 	maintainerSlug: string;
+	objectDctermsFormat?: MaterialRequestObjectType | undefined;
 	objectMeemooIdentifier: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
-	objectType?: MaterialRequestObjectType | undefined;
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;
@@ -109,6 +109,7 @@ export interface MaterialRequestMaintainer {
 
 export enum MaterialRequestKeys {
 	createdAt = 'createdAt',
+	updatedAt = 'updatedAt',
 	type = 'type',
 	name = 'requesterFullName',
 	email = 'requesterMail',

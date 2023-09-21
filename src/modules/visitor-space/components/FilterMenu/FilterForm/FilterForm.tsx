@@ -30,12 +30,12 @@ const FilterForm: FC<FilterFormProps> = ({
 }) => {
 	const { tHtml } = useTranslation();
 
-	const onFilterFormReset = (id: string, reset: () => void) => {
+	const onFilterFormReset = (id: VisitorSpaceFilterId, reset: () => void) => {
 		reset();
 		onFormReset(id);
 	};
 
-	const onFilterFormSubmit = (id: string, values: unknown) => {
+	const onFilterFormSubmit = (id: VisitorSpaceFilterId, values: unknown) => {
 		onFormSubmit(id, values);
 	};
 
@@ -74,7 +74,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	};
 
 	const renderModal = (): ReactElement => {
-		const FormComponent = (form as FC<DefaultFilterFormProps>) ?? (() => null);
+		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
 
 		return (
 			<div className={clsx(className, styles['c-filter-form'])}>

@@ -1,8 +1,14 @@
-@use "../../../../styles/abstracts/" as *;
+@use "../../../../styles/abstracts" as *;
 
 $component: "c-material-request-center-blade";
 
 .#{$component} {
+	margin-top: $c-navigation-height-md;
+
+	@include respond-at("md") {
+		margin-top: $c-navigation-height;
+	}
+
 	&__table {
 		cursor: pointer;
 	}
@@ -15,16 +21,11 @@ $component: "c-material-request-center-blade";
 
 	&__title-container {
 		color: $black;
-		padding: 0 $spacer-lg;
-		margin-bottom: $spacer-1xl;
-	}
-
-	&__title {
-		margin-bottom: $spacer-md;
 	}
 
 	&__subtitle {
 		color: $zinc;
+		padding: 0 5.6rem 3.2rem 3.2rem;
 	}
 
 	&__material-container {
@@ -74,6 +75,7 @@ $component: "c-material-request-center-blade";
 			&-icon {
 				color: $blue;
 				margin-right: $spacer-xs;
+				font-size: 2.4rem;
 			}
 		}
 

@@ -1,4 +1,4 @@
-FROM node:gallium-alpine
+FROM node:20.4-alpine
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm i --legacy-peer-deps

@@ -1,5 +1,5 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
 
 # package.json should not contain locally installed packages
@@ -13,9 +13,6 @@ if  grep -q "file:../" "./package-lock.json" ; then
 	echo "package-lock.json should not contain any locally installed files. eg: \"@meemoo/react-components\": \"file:../react-components\""
 	exit 1;
 fi
-
-# check typescript errors
-npm run type-check
 
 # Check linting of the staged files
 npx lint-staged

@@ -1,0 +1,13 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-block-quote";
+
+.#{$component} {
+	.c-quote__author {
+		grid-gap: $spacer-sm;
+
+		> div {
+			background-color: $teal;
+		}
+	}
+}

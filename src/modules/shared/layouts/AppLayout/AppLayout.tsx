@@ -1,27 +1,21 @@
 import { Alert } from '@meemoo/react-components';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
-import Link from 'next/link';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
-import { BooleanParam } from 'serialize-query-params/lib/params';
-import { StringParam, useQueryParams } from 'use-query-params';
+import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
-import { Permission } from '@account/const';
+import { GroupName, Permission } from '@account/const';
 import { AuthModal } from '@auth/components';
 import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectIsLoggedIn, selectUser } from '@auth/store/user';
-import { SHOW_AUTH_QUERY_KEY, VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { Footer, Navigation, NavigationItem } from '@navigation/components';
-import {
-	footerLeftItem,
-	footerLinks,
-	footerRightItem,
-} from '@navigation/components/Footer/__mocks__/footer';
+import { footerLinks } from '@navigation/components/Footer/__mocks__/footer';
 import { getNavigationItemsLeft } from '@navigation/components/Navigation/Navigation.consts';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { useGetNavigationItems } from '@navigation/components/Navigation/hooks/get-navigation-items';
@@ -41,8 +35,9 @@ import Html from '@shared/components/Html/Html';
 import { useGetNotifications } from '@shared/components/NotificationCenter/hooks/get-notifications';
 import { useMarkAllNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-all-notifications-as-read';
 import { useMarkOneNotificationsAsRead } from '@shared/components/NotificationCenter/hooks/mark-one-notifications-as-read';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { WindowSizeContext } from '@shared/context/WindowSizeContext';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSize } from '@shared/hooks/use-window-size';
@@ -54,20 +49,27 @@ import {
 	selectIsStickyLayout,
 	selectShowAuthModal,
 	selectShowFooter,
-	selectShowNavigationBorder,
+	selectShowNavigationHeaderRight,
 	selectShowNotificationsCenter,
 	setHasUnreadNotifications,
 	setMaterialRequestCount,
+	setOpenNavigationDropdownId,
 	setShowAuthModal,
+	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui/';
-import { Breakpoints } from '@shared/types';
+import { Breakpoints, Visit } from '@shared/types';
 import { scrollTo } from '@shared/utils/scroll-to-top';
+import { useGetAllActiveVisits } from '@visits/hooks/get-all-active-visits';
 
 import packageJson from '../../../../../package.json';
 
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
+
+// We want to make sure config gets fetched here, no sure why anymore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { publicRuntimeConfig } = getConfig();
 
 const AppLayout: FC = ({ children }) => {
 	const dispatch = useAppDispatch();
@@ -75,41 +77,55 @@ const AppLayout: FC = ({ children }) => {
 	const router = useRouter();
 	const { asPath } = useRouter();
 	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const user = useSelector(selectUser);
 	const sticky = useSelector(selectIsStickyLayout);
+	const showNavigationHeaderRight = useSelector(selectShowNavigationHeaderRight);
 	const showFooter = useSelector(selectShowFooter);
 	const showAuthModal = useSelector(selectShowAuthModal);
 	const showNotificationsCenter = useSelector(selectShowNotificationsCenter);
 	const hasUnreadNotifications = useSelector(selectHasUnreadNotifications);
 	const windowSize = useWindowSize();
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.xxl);
-	const showBorder = useSelector(selectShowNavigationBorder);
 	const canViewAllSpaces = useHasAllPermission(Permission.READ_ALL_SPACES);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
 		canViewAllSpaces,
 	});
-	const { data: materialRequests } = useGetPendingMaterialRequests({});
+	const { data: materialRequests } = useGetPendingMaterialRequests({}, { enabled: isKioskUser });
 	const { data: navigationItems } = useGetNavigationItems();
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	const linkedSpaceSlug: string | null = user?.visitorSpaceSlug || null;
-	const linkedSpaceOrId: string | null = user?.maintainerId || null;
+	const linkedSpaceOrId: string | null = user?.organisationId || null;
 	const [query, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
-		[SEARCH_QUERY_KEY]: StringParam,
-		[SHOW_AUTH_QUERY_KEY]: BooleanParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: BooleanParam,
 	});
-	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts();
+	const { data: maintenanceAlerts } = useGetActiveMaintenanceAlerts(
+		{},
+		{ keepPreviousData: true, enabled: !isKioskUser }
+	);
 	const { mutateAsync: dismissMaintenanceAlert } = useDismissMaintenanceAlert();
+	const isKioskOrAnonymous = useHasAnyGroup(GroupName.KIOSK_VISITOR, GroupName.ANONYMOUS);
+	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
+	const { data: spaces } = useGetAllActiveVisits(
+		{},
+		{ keepPreviousData: true, enabled: isLoggedIn }
+	);
 
 	const [alertsIgnoreUntil, setAlertsIgnoreUntil] = useLocalStorage(
 		'HET_ARCHIEF.alerts.ignoreUntil',
 		'{}'
 	);
 
+	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
+
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
 			show && scrollTo(0);
+			dispatch(setShowMaterialRequestCenter(false));
+			dispatch(setOpenNavigationDropdownId(null));
 			dispatch(setShowNotificationsCenter(show));
 		},
 		[dispatch]
@@ -121,6 +137,17 @@ const AppLayout: FC = ({ children }) => {
 		},
 		[dispatch]
 	);
+
+	const getVisitorSpaces = useCallback((): Visit[] => {
+		if (!user || isKioskOrAnonymous) {
+			setVisitorSpaces([]);
+			return [];
+		}
+
+		spaces && setVisitorSpaces(spaces.items);
+
+		return spaces?.items || [];
+	}, [isKioskOrAnonymous, spaces, user]);
 
 	useEffect(() => {
 		// Set the build version on the window object
@@ -146,7 +173,7 @@ const AppLayout: FC = ({ children }) => {
 		if (user) {
 			setQuery({
 				...query,
-				[SHOW_AUTH_QUERY_KEY]: undefined,
+				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: undefined,
 			});
 			dispatch(setShowAuthModal(false));
 		} else if (typeof query.showAuth === 'boolean') {
@@ -159,6 +186,14 @@ const AppLayout: FC = ({ children }) => {
 		materialRequests && dispatch(setMaterialRequestCount(materialRequests?.items.length));
 	}, [dispatch, materialRequests]);
 
+	useEffect(() => {
+		if (!isLoggedIn) {
+			return;
+		}
+
+		getVisitorSpaces();
+	}, [getVisitorSpaces, isLoggedIn]);
+
 	const userName = (user?.firstName as string) ?? '';
 
 	const onLoginRegisterClick = useCallback(async () => {
@@ -166,19 +201,19 @@ const AppLayout: FC = ({ children }) => {
 			stringifyUrl({
 				url: router.asPath,
 				query: {
-					[SHOW_AUTH_QUERY_KEY]: '1',
+					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 				},
 			})
 		);
 	}, [router]);
 
-	const onLogOutClick = useCallback(() => AuthService.logout(), []);
+	const onLogOutClick = useCallback(async () => await AuthService.logout(), []);
 
 	const onCloseAuthModal = () => {
-		if (typeof query[SHOW_AUTH_QUERY_KEY] === 'boolean') {
+		if (typeof query[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY] === 'boolean') {
 			setQuery({
-				[SHOW_AUTH_QUERY_KEY]: undefined,
-				[VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
+				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: undefined,
+				[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: undefined,
 			});
 		}
 		dispatch(setShowAuthModal(false));
@@ -230,20 +265,27 @@ const AppLayout: FC = ({ children }) => {
 			user?.permissions || [],
 			showLinkedSpaceAsHomepage ? linkedSpaceOrId : null,
 			isMobile,
-			user?.visitorSpaceSlug || null
+			user?.visitorSpaceSlug || null,
+			visitorSpaces,
+			isMeemooAdmin
 		);
 
 		const staticItems = [
 			{
+				// Hard reload the page when going to the homepage because of nextjs issues with the static 404 page not loading env variables
+				// Otherwise you get an infinite loading state because no api calls will work
+				// https://github.com/vercel/next.js/issues/37005
 				node: (
-					<Link href={ROUTES.home}>
-						<a tabIndex={0}>
-							<HetArchiefLogo
-								className="c-navigation__logo c-navigation__logo--list"
-								type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
-							/>
-						</a>
-					</Link>
+					<div
+						onClick={() => {
+							window.open(window.location.origin, '_self');
+						}}
+					>
+						<HetArchiefLogo
+							className="c-navigation__logo c-navigation__logo--list"
+							type={isMobile ? HetArchiefLogoType.Dark : HetArchiefLogoType.Light}
+						/>
+					</div>
 				),
 				id: 'logo',
 				path: '/',
@@ -263,11 +305,13 @@ const AppLayout: FC = ({ children }) => {
 		accessibleVisitorSpaces,
 		navigationItems,
 		user?.permissions,
+		user?.visitorSpaceSlug,
 		showLinkedSpaceAsHomepage,
 		linkedSpaceOrId,
 		isMobile,
+		visitorSpaces,
+		isMeemooAdmin,
 		isLoggedIn,
-		user?.maintainerId,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);
@@ -292,8 +336,10 @@ const AppLayout: FC = ({ children }) => {
 			[alertId]: alert?.untilDate,
 		});
 
-		// Add the alert to the users read notifications
-		await dismissMaintenanceAlert(alertId);
+		if (isLoggedIn) {
+			// Add the alert to the users read notifications
+			await dismissMaintenanceAlert(alertId);
+		}
 
 		setAlertsIgnoreUntil(newAlertsIgnoreUntil);
 	};
@@ -335,14 +381,17 @@ const AppLayout: FC = ({ children }) => {
 				'l-app--sticky': sticky,
 			})}
 		>
-			<Navigation showBorder={showBorder} loggedOutGrid={showLoggedOutGrid}>
+			<Navigation loggedOutGrid={showLoggedOutGrid}>
 				{!isLoggedIn && isMobile && (
-					<div className="c-navigation__logo--hamburger">
-						<Link href={ROUTES.home}>
-							<a tabIndex={0}>
-								<HetArchiefLogo type={HetArchiefLogoType.Light} />
-							</a>
-						</Link>
+					<div
+						className="c-navigation__logo--hamburger"
+						onClick={() => {
+							window.open(window.location.origin, '_self');
+						}}
+					>
+						{/* Hard reload the page when going to the homepage because of nextjs issues with the static 404 page not loading env variables */}
+						{/* https://github.com/vercel/next.js/issues/37005 */}
+						<HetArchiefLogo type={HetArchiefLogoType.Light} />
 					</div>
 				)}
 				<Navigation.Left
@@ -350,15 +399,17 @@ const AppLayout: FC = ({ children }) => {
 					hamburgerProps={NAV_HAMBURGER_PROPS()}
 					items={leftNavItems}
 					placement="left"
-					renderHamburger={true}
+					renderHamburger={showNavigationHeaderRight}
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
-				<Navigation.Right
-					currentPath={asPath}
-					placement="right"
-					items={rightNavItems}
-					onOpenDropdowns={onOpenNavDropdowns}
-				/>
+				{showNavigationHeaderRight && (
+					<Navigation.Right
+						currentPath={asPath}
+						placement="right"
+						items={rightNavItems}
+						onOpenDropdowns={onOpenNavDropdowns}
+					/>
+				)}
 			</Navigation>
 
 			<main className="l-app__main">
@@ -391,9 +442,11 @@ const AppLayout: FC = ({ children }) => {
 
 			{showFooter && (
 				<Footer
-					leftItem={footerLeftItem}
-					links={footerLinks(navigationItems?.[NavigationPlacement.FooterCenter] || [])}
-					rightItem={footerRightItem}
+					linkSections={[
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection1] || []),
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection2] || []),
+						footerLinks(navigationItems?.[NavigationPlacement.FooterSection3] || []),
+					]}
 				/>
 			)}
 		</div>

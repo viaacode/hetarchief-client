@@ -1,19 +1,22 @@
 import { Box, Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import { useRouter } from 'next/router';
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 
 import { Permission } from '@account/const';
 import { RichTextForm } from '@shared/components/RichTextForm';
-import { ROUTE_PARTS } from '@shared/const';
+import { globalLabelKeys, ROUTE_PARTS } from '@shared/const';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { isBrowser } from '@shared/utils';
 import { VisitorSpaceService } from '@visitor-space/services';
 import {
 	CreateVisitorSpaceSettings,
 	UpdateVisitorSpaceSettings,
 } from '@visitor-space/services/visitor-space/visitor-space.service.types';
 
+import adminLayoutStyles from '../../../admin/layouts/AdminLayout/AdminLayout.module.scss';
 import { SiteSettingsForm } from '../SiteSettingsForm';
 import { SiteSettingsFormState } from '../SiteSettingsForm/SiteSettingsForm.types';
 import { VisitorSpaceImageForm, VisitorSpaceImageFormState } from '../VisitorSpaceImageForm';
@@ -32,11 +35,13 @@ const labelKeys: Record<keyof CreateVisitorSpaceSettings, string> = {
 	status: 'VisitorSpaceSettings__status',
 };
 
-const VisitorSpaceSettings = forwardRef<
-	{ createSpace: () => void } | undefined,
-	VisitorSpaceSettingsProps
->(({ className, room, refetch, action = 'edit' }, ref) => {
-	const { tHtml } = useTranslation();
+const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({
+	className,
+	room,
+	refetch,
+	action = 'edit',
+}) => {
+	const { tText, tHtml } = useTranslation();
 	const router = useRouter();
 
 	const showSiteSettings = useHasAllPermission(
@@ -139,14 +144,6 @@ const VisitorSpaceSettings = forwardRef<
 	};
 
 	/**
-	 * Expose create function to parent
-	 */
-
-	useImperativeHandle(ref, () => ({
-		createSpace,
-	}));
-
-	/**
 	 * Render
 	 */
 
@@ -166,8 +163,41 @@ const VisitorSpaceSettings = forwardRef<
 			</div>
 		) : null;
 
+	const pageTitle = tText(
+		'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___nieuwe-bezoekersruimte'
+	);
 	return (
 		<div className={className}>
+			{action === 'create' && (
+				<header className={clsx(adminLayoutStyles['c-admin__header'])}>
+					<h2 className={adminLayoutStyles['c-admin__page-title']}>
+						<label htmlFor={globalLabelKeys.adminLayout.title} title={pageTitle}>
+							{pageTitle}
+						</label>
+					</h2>
+					<div className={adminLayoutStyles['c-admin__actions']}>
+						<Button
+							label={tHtml(
+								'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___annuleren'
+							)}
+							variants="silver"
+							onClick={() =>
+								router.push(
+									`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}`
+								)
+							}
+						/>
+						<Button
+							label={tHtml(
+								'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/maak/index___opslaan'
+							)}
+							variants="black"
+							onClick={createSpace}
+						/>
+					</div>
+				</header>
+			)}
+
 			{/* Site instellingen */}
 			{/* TODO: permission */}
 			{showSiteSettings && (
@@ -244,27 +274,31 @@ const VisitorSpaceSettings = forwardRef<
 						)}
 					</p>
 
-					<RichTextForm
-						editor={{
-							braft: {
-								draftProps: {
-									ariaDescribedBy: `${labelKeys.description}__description`,
-									ariaLabelledBy: `${labelKeys.description}__label`,
+					{/* Disable serverside rendering of rich text editor to conserve RAM on the server */}
+					{/* Otherwise we getJavaScript heap out of memory errors */}
+					{isBrowser() && (
+						<RichTextForm
+							editor={{
+								braft: {
+									draftProps: {
+										ariaDescribedBy: `${labelKeys.description}__description`,
+										ariaLabelledBy: `${labelKeys.description}__label`,
+									},
 								},
-							},
-							id: labelKeys.description,
-							initialHtml: (room && room.description) ?? '<p></p>',
-						}}
-						onSubmit={async (html, afterSubmit) =>
-							await updateSpace({ description: html }, afterSubmit)
-						}
-						renderCancelSaveButtons={renderCancelSaveButtons}
-						onUpdate={
-							action === 'create'
-								? (value) => updateValues({ description: value })
-								: undefined
-						}
-					/>
+								id: labelKeys.description,
+								initialHtml: (room && room.description) ?? '<p></p>',
+							}}
+							onSubmit={async (html, afterSubmit) =>
+								await updateSpace({ description: html }, afterSubmit)
+							}
+							renderCancelSaveButtons={renderCancelSaveButtons}
+							onUpdate={
+								action === 'create'
+									? (value) => updateValues({ description: value })
+									: undefined
+							}
+						/>
+					)}
 				</Box>
 			</article>
 
@@ -291,34 +325,36 @@ const VisitorSpaceSettings = forwardRef<
 						)}
 					</p>
 
-					<RichTextForm
-						className={styles['c-cp-settings__rich-text--no-heading']}
-						editor={{
-							braft: {
-								draftProps: {
-									ariaDescribedBy: `${labelKeys.serviceDescription}__description`,
-									ariaLabelledBy: `${labelKeys.serviceDescription}__label`,
+					{/* Disable serverside rendering of rich text editor to conserve RAM on the server */}
+					{/* Otherwise we getJavaScript heap out of memory errors */}
+					{isBrowser() && (
+						<RichTextForm
+							className={styles['c-cp-settings__rich-text--no-heading']}
+							editor={{
+								braft: {
+									draftProps: {
+										ariaDescribedBy: `${labelKeys.serviceDescription}__description`,
+										ariaLabelledBy: `${labelKeys.serviceDescription}__label`,
+									},
 								},
-							},
-							id: labelKeys.serviceDescription,
-							initialHtml: (room && room.serviceDescription) ?? '<p></p>',
-						}}
-						onSubmit={async (html, afterSubmit) =>
-							await updateSpace({ serviceDescription: html }, afterSubmit)
-						}
-						renderCancelSaveButtons={renderCancelSaveButtons}
-						onUpdate={
-							action === 'create'
-								? (value) => updateValues({ serviceDescription: value })
-								: undefined
-						}
-					/>
+								id: labelKeys.serviceDescription,
+								initialHtml: (room && room.serviceDescription) ?? '<p></p>',
+							}}
+							onSubmit={async (html, afterSubmit) =>
+								await updateSpace({ serviceDescription: html }, afterSubmit)
+							}
+							renderCancelSaveButtons={renderCancelSaveButtons}
+							onUpdate={
+								action === 'create'
+									? (value) => updateValues({ serviceDescription: value })
+									: undefined
+							}
+						/>
+					)}
 				</Box>
 			</article>
 		</div>
 	);
-});
-
-VisitorSpaceSettings.displayName = 'VisitorSpaceSettings';
+};
 
 export default VisitorSpaceSettings;

@@ -2,20 +2,24 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { nlBE } from 'date-fns/locale';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 import { AppProps } from 'next/app';
-import { appWithTranslation, UserConfig } from 'next-i18next';
+import getConfig from 'next/config';
+import { appWithTranslation } from 'next-i18next';
 import { ReactElement } from 'react';
 
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
+import { isBrowser } from '@shared/utils';
 
-import NextI18nextConfig from '../../next-i18next.config';
-import pkg from '../../package.json';
-
+import { getI18n } from '../../next-i18next.config';
 import 'styles/main.scss';
+
+import pkg from '../../package.json';
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });
+
+const { publicRuntimeConfig } = getConfig();
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -28,7 +32,7 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
-	if (typeof window !== 'undefined') {
+	if (isBrowser()) {
 		// client-side-only code, window is not available during nextjs server side prerender
 		(window as any).APP_VERSION = { version: pkg.version };
 	}
@@ -43,4 +47,9 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 	);
 }
 
-export default wrapper.withRedux(appWithTranslation(MyApp, NextI18nextConfig as UserConfig));
+export default wrapper.withRedux(
+	appWithTranslation(
+		MyApp,
+		getI18n(isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL) as any
+	)
+);

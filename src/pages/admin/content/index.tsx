@@ -3,7 +3,7 @@ import { Button } from '@meemoo/react-components';
 import { GetServerSidePropsResult } from 'next';
 import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { FC } from 'react';
+import React, { ComponentType, FC } from 'react';
 
 import { Permission } from '@account/const';
 import { CONTENT_PATH } from '@admin/const/Routing.const';
@@ -26,6 +26,7 @@ const ContentPageOverviewPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUs
 		return (
 			<AdminLayout
 				pageTitle={tText('admin/content/views/content-overview___content-overzicht')}
+				className="p-admin-content-page-overview"
 			>
 				<AdminLayout.Actions>
 					{canCreateContentPages && (
@@ -84,6 +85,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(withUser(ContentPageOverviewPage as FC<unknown>)),
+	withAdminCoreConfig(withUser(ContentPageOverviewPage) as ComponentType),
 	true
 ) as FC<DefaultSeoInfo>;

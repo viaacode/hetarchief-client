@@ -1,23 +1,50 @@
 @use "sass:math";
-
 @use "src/styles/abstracts" as *;
 
 $component: "c-block-cards-without-description";
 $img-size: 15.2rem;
+$img-size-mobile: 10.2rem;
 
 .#{$component} {
 	width: 100%;
-	display: flex;
-	flex-flow: row wrap;
-	grid-gap: $spacer-lg;
-	justify-content: space-around;
+	container-type: inline-size;
+
+	&__elements-wrapper {
+		display: grid;
+		grid-gap: $spacer-lg;
+		grid-template-columns: 1fr 1fr 1fr;
+
+		@include respond-to("md") {
+			grid-gap: $spacer-sm;
+		}
+	}
+
+	@container (max-width: 120rem) {
+		&__elements-wrapper {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	@container (max-width: 80rem) {
+		&__elements-wrapper {
+			grid-template-columns: 1fr;
+		}
+	}
 
 	&__card {
 		height: $img-size;
-		width: 38.4rem;
+		width: 100%;
 		color: $white;
 		display: grid;
-		grid-template-columns: repeat(2, 7.6rem) 23.2rem;
+		grid-template-columns: repeat(2, 7.6rem) 1fr;
+
+		@include respond-to("sm") {
+			height: $img-size-mobile;
+		}
+	}
+
+	a {
+		text-decoration: none;
 	}
 
 	&__title {
@@ -25,9 +52,14 @@ $img-size: 15.2rem;
 		grid-row: 1;
 		display: flex;
 		align-items: center;
-		padding: 0 $spacer-md 0 calc(math.div($img-size, 2) + $spacer-md);
+		padding: 0 $spacer-md 0 (math.div($img-size, 2) + $spacer-md);
 		font-weight: $font-weight-bold;
 		font-size: 2rem;
+
+		@include respond-to("sm") {
+			grid-column: 1/4;
+			margin-left: 5rem;
+		}
 	}
 
 	&__image {
@@ -45,6 +77,11 @@ $img-size: 15.2rem;
 
 		&--round {
 			border-radius: $img-size;
+		}
+
+		@include respond-to("sm") {
+			width: $img-size-mobile;
+			height: $img-size-mobile;
 		}
 	}
 }

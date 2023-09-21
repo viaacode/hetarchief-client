@@ -1,0 +1,13 @@
+@use "src/styles/abstracts" as *;
+
+.p-error-no-access-to-object {
+	&__buttons-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	&__button {
+		margin-top: $spacer-sm;
+	}
+}

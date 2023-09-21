@@ -1,8 +1,7 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
-import { IeObjectLicense } from '@ie-objects/types';
+import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/types';
 import { IeObjectTypes } from '@shared/types';
-import { AccessThroughType } from '@shared/types/access';
 
 export type GetFoldersResponse = IPagination<Folder>;
 
@@ -21,7 +20,7 @@ export interface FolderIeObject {
 	schemaIdentifier: string; // Unique id per object
 	meemooIdentifier: string; // PID: not unique per object
 	meemooLocalId: string;
-	accessThrough: AccessThroughType[];
+	accessThrough: IeObjectAccessThrough[];
 	premisIsPartOf?: string;
 	collectionEntryCreatedAt?: string;
 	creator?: unknown;
@@ -35,8 +34,7 @@ export interface FolderIeObject {
 	maintainerId: string;
 	maintainerName: string;
 	maintainerSlug: string;
-	series: string[];
-	programs: string[];
+	isPartOf?: Partial<Record<IsPartOfKey, string[]>>;
 	datePublished?: string;
 	dateCreatedLowerBound?: string;
 	licenses: IeObjectLicense[];

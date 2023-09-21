@@ -1,7 +1,9 @@
 @use "src/styles/abstracts" as *;
+@use "sass:map";
 
 $metadata-expanded-width: 72vw;
 $metadata-collapsed-width: 36vw;
+$breakpoint-md: map.get($breakpoints, "md");
 
 .p-object-detail {
 	visibility: visible;
@@ -25,6 +27,11 @@ $metadata-collapsed-width: 36vw;
 			grid-template-columns: 1fr min-content;
 		}
 
+		// `include respond-at(md)` -fix for safari
+		@media screen and (width >= $breakpoint-md) {
+			grid-template-columns: 1fr min-content;
+		}
+
 		grid-template-rows: 1fr min-content;
 	}
 
@@ -35,6 +42,12 @@ $metadata-collapsed-width: 36vw;
 		left: 2rem;
 
 		@include respond-at(md) {
+			top: $spacer-lg;
+			left: $spacer-lg;
+		}
+
+		// `include respond-at(md)` -fix for safari
+		@media screen and (width >= $breakpoint-md) {
 			top: $spacer-lg;
 			left: $spacer-lg;
 		}
@@ -86,6 +99,11 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		@include respond-at(md) {
+			display: none;
+		}
+
+		// `include respond-at(md)` -fix for safari
+		@media screen and (width >= $breakpoint-md) {
 			display: none;
 		}
 	}
@@ -164,6 +182,12 @@ $metadata-collapsed-width: 36vw;
 	&__metadata-content {
 		padding: 0 2rem;
 
+		p {
+			span {
+				white-space: pre-line;
+			}
+		}
+
 		@include respond-at("md") {
 			padding: 0 $spacer-lg;
 		}
@@ -196,20 +220,6 @@ $metadata-collapsed-width: 36vw;
 		}
 	}
 
-	&__related {
-		max-width: 100vw;
-
-		.ScrollbarsCustom {
-			width: 100% !important;
-			height: 500px !important;
-			max-height: 100% !important;
-
-			.ScrollbarsCustom-TrackY > .ScrollbarsCustom-Thumb {
-				background-color: $neutral !important;
-			}
-		}
-	}
-
 	&__metadata-list {
 		display: grid;
 		gap: $spacer-sm;
@@ -230,6 +240,7 @@ $metadata-collapsed-width: 36vw;
 		margin-top: $spacer-xs;
 		padding: $spacer-md;
 		background-color: $platinum;
+		padding-bottom: 10rem;
 
 		@include respond-at("md") {
 			// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
@@ -241,6 +252,7 @@ $metadata-collapsed-width: 36vw;
 
 	&__metadata-list--related {
 		padding: 2rem;
+		height: max-content;
 
 		@include respond-at("md") {
 			padding: $spacer-lg;
@@ -276,7 +288,7 @@ $metadata-collapsed-width: 36vw;
 	&__metadata-maintainer {
 		&-title {
 			display: grid;
-			grid-template-columns: auto 3.2rem;
+			grid-template-columns: 7fr 3fr;
 			grid-template-rows: repeat(2, min-content);
 
 			.p-object-detail__metadata {
@@ -293,14 +305,15 @@ $metadata-collapsed-width: 36vw;
 					grid-row: 1/3;
 					grid-column: 2;
 					width: 100%;
-					height: auto;
+					height: 3.2rem;
+					overflow: hidden;
 					position: relative;
 
-					span img {
-						height: auto !important;
-						min-height: unset !important;
-						max-height: unset !important;
-						margin-top: 0 !important;
+					img {
+						width: 100%;
+						height: 100%;
+						object-fit: contain;
+						object-position: right top;
 					}
 				}
 			}
@@ -340,7 +353,8 @@ $metadata-collapsed-width: 36vw;
 
 	// Media queries
 
-	@include respond-at(md) {
+	// `include respond-at(md)` -fix for safari
+	@media screen and (width >= $breakpoint-md) {
 		.p-object-detail__metadata {
 			display: block;
 		}
@@ -368,6 +382,11 @@ $metadata-collapsed-width: 36vw;
 		}
 
 		@include respond-at(md) {
+			visibility: visible;
+		}
+
+		// `include respond-at(md)` -fix for safari
+		@media screen and (width >= $breakpoint-md) {
 			visibility: visible;
 		}
 	}

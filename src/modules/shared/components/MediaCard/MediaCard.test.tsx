@@ -27,7 +27,13 @@ describe('Component: <MediaCard />', () => {
 	beforeEach(() => {
 		rendered = render(
 			renderMediaCard(
-				<MediaCard view="grid" publishedAt={date} publishedBy={author} type="video" />
+				<MediaCard
+					view="grid"
+					publishedOrCreatedDate={date}
+					publishedBy={author}
+					type="video"
+					link={undefined}
+				/>
 			)
 		);
 	});
@@ -41,7 +47,13 @@ describe('Component: <MediaCard />', () => {
 	it('Should apply the horizontal--at-md orientation when rendered in list view', () => {
 		rendered = render(
 			renderMediaCard(
-				<MediaCard view="list" publishedAt={date} publishedBy={author} type="video" />
+				<MediaCard
+					view="list"
+					publishedOrCreatedDate={date}
+					publishedBy={author}
+					type="video"
+					link={undefined}
+				/>
 			)
 		);
 
@@ -59,7 +71,13 @@ describe('Component: <MediaCard />', () => {
 	it('Should show placeholder icons based on the type of card in either view mode', () => {
 		rendered = render(
 			renderMediaCard(
-				<MediaCard view="list" publishedAt={date} publishedBy={author} type="audio" />
+				<MediaCard
+					view="list"
+					publishedOrCreatedDate={date}
+					publishedBy={author}
+					type="audio"
+					link={undefined}
+				/>
 			)
 		);
 
@@ -70,9 +88,10 @@ describe('Component: <MediaCard />', () => {
 					<Provider store={mockStore}>
 						<MediaCard
 							view="grid"
-							publishedAt={date}
+							publishedOrCreatedDate={date}
 							publishedBy={author}
 							type="video"
+							link={undefined}
 						/>
 					</Provider>
 				</QueryClientProvider>
@@ -86,10 +105,11 @@ describe('Component: <MediaCard />', () => {
 			renderMediaCard(
 				<MediaCard
 					view="list"
-					publishedAt={date}
+					publishedOrCreatedDate={date}
 					publishedBy={author}
 					type="video"
 					showKeyUserLabel
+					link={undefined}
 				/>
 			)
 		);

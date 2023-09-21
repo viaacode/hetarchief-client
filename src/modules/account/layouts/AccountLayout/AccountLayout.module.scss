@@ -9,4 +9,8 @@
 
 .c-account-admin__page-title {
 	flex-grow: 1;
+
+	@include respond-to("md") {
+		font-size: 2.8rem;
+	}
 }

@@ -24,14 +24,17 @@ interface MaterialRequestBladeProps {
 	onClose: () => void;
 	objectName: string;
 	objectId: string;
-	objectType?: MaterialRequestObjectType | undefined;
+	objectDctermsFormat?: MaterialRequestObjectType | undefined;
 	maintainerName: string;
-	maintainerLogo: string;
+	maintainerLogo: string | null;
 	maintainerSlug: string;
 	materialRequestId?: string;
+	meemooId?: string;
 	reason?: string;
 	refetch?: () => void;
 	type?: MaterialRequestType;
+	layer: number;
+	currentLayer: number;
 }
 
 const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
@@ -40,29 +43,30 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	onClose,
 	objectName,
 	objectId,
-	objectType,
+	objectDctermsFormat,
 	maintainerName,
 	maintainerLogo,
 	maintainerSlug,
 	materialRequestId,
+	meemooId,
 	reason,
 	refetch,
 	type,
+	layer,
+	currentLayer,
 }) => {
-	const { tText } = useTranslation();
+	const { tText, tHtml } = useTranslation();
 	const dispatch = useDispatch();
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestType>(
 		type || MaterialRequestType.VIEW
 	);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
-	const [showError, setShowError] = useState(false);
 
 	const onCloseModal = () => {
 		onClose();
 		setReasonInputValue('');
 		setTypeSelected(MaterialRequestType.VIEW);
-		setShowError(false);
 	};
 
 	const onSuccesCreated = async () => {
@@ -76,9 +80,38 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 
 	const onAddToList = async () => {
 		try {
-			if (reasonInputValue.length > 0) {
-				const response = await MaterialRequestsService.create({
-					objectId,
+			const response = await MaterialRequestsService.create({
+				objectId,
+				type: typeSelected,
+				reason: reasonInputValue,
+				requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
+			});
+			if (response === undefined) {
+				onFailedRequest();
+				return;
+			}
+			toastService.notify({
+				maxLines: 3,
+				title: tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___succes'
+				),
+				description: tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
+				),
+			});
+			onSuccesCreated();
+			onCloseModal();
+		} catch (err) {
+			onFailedRequest();
+		}
+	};
+
+	const onEditRequest = async () => {
+		if (!materialRequestId) {
+			onFailedRequest();
+		} else {
+			try {
+				const response = await MaterialRequestsService.update(materialRequestId, {
 					type: typeSelected,
 					reason: reasonInputValue,
 					requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
@@ -90,52 +123,15 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				toastService.notify({
 					maxLines: 3,
 					title: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___succes'
+						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
 					),
 					description: tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___rond-je-aanvragenlijst-af'
+						'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
 					),
 				});
 				onSuccesCreated();
+				refetch && refetch();
 				onCloseModal();
-			} else {
-				setShowError(true);
-			}
-		} catch (err) {
-			onFailedRequest();
-		}
-	};
-
-	const onEditRequest = async () => {
-		if (!materialRequestId) {
-			onFailedRequest();
-		} else {
-			try {
-				if (reasonInputValue.length > 0) {
-					const response = await MaterialRequestsService.update(materialRequestId, {
-						type: typeSelected,
-						reason: reasonInputValue,
-						requesterCapacity: MaterialRequestRequesterCapacity.OTHER,
-					});
-					if (response === undefined) {
-						onFailedRequest();
-						return;
-					}
-					toastService.notify({
-						maxLines: 3,
-						title: tText(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-succes'
-						),
-						description: tText(
-							'modules/visitor-space/components/material-request-blade/material-request-blade___wijzigingen-toegepast'
-						),
-					});
-					onSuccesCreated();
-					refetch && refetch();
-					onCloseModal();
-				} else {
-					setShowError(true);
-				}
 			} catch (err) {
 				onFailedRequest();
 			}
@@ -154,28 +150,16 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		});
 	};
 
-	const onTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setShowError(false);
-		setReasonInputValue(e.target.value);
-	};
-
-	const renderTitle = () => {
-		if (isEditMode) {
-			return (
-				<h4 className={styles['c-request-material__title']}>
-					{tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
-					)}
-				</h4>
-			);
-		}
-		return (
-			<h4 className={styles['c-request-material__title']}>
-				{tText(
+	const renderTitle = (props: any) => {
+		const title = isEditMode
+			? tText(
+					'modules/visitor-space/components/material-request-blade/material-request-blade___pas-je-aanvraag-aan'
+			  )
+			: tText(
 					'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe'
-				)}
-			</h4>
-		);
+			  );
+
+		return <h2 {...props}>{title}</h2>;
 	};
 
 	const renderFooter = () => {
@@ -239,6 +223,10 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			renderTitle={renderTitle}
 			footer={isOpen && renderFooter()}
 			onClose={onCloseModal}
+			layer={layer}
+			currentLayer={currentLayer}
+			className={styles['c-request-material']}
+			isManaged
 		>
 			<div className={styles['c-request-material__maintainer']}>
 				{maintainerLogo && (
@@ -253,7 +241,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				)}
 				<div>
 					<p className={styles['c-request-material__maintainer-details']}>
-						{tText(
+						{tHtml(
 							'modules/visitor-space/components/material-request-blade/material-request-blade___item-van'
 						)}
 					</p>
@@ -272,14 +260,14 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						<Icon
 							className={styles['c-request-material__material-label-icon']}
 							name={
-								objectType === MaterialRequestObjectType.AUDIO
+								objectDctermsFormat === MaterialRequestObjectType.AUDIO
 									? IconNamesLight.Audio
 									: IconNamesLight.Video
 							}
 						/>
 						<span>{objectName}</span>
 					</p>
-					<p className={styles['c-request-material__material-id']}>{objectId}</p>
+					<p className={styles['c-request-material__material-id']}>{meemooId}</p>
 				</div>
 			</a>
 			<div className={styles['c-request-material__content']}>
@@ -316,13 +304,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 								onClick={() => setTypeSelected(MaterialRequestType.MORE_INFO)}
 							/>
 						</dd>
-						{showError && (
-							<span className={styles['c-request-material__reason-error']}>
-								{tText(
-									'modules/visitor-space/components/material-request-blade/material-request-blade___reden-mag-niet-leeg-zijn'
-								)}
-							</span>
-						)}
 						<dt className={styles['c-request-material__content-label']}>
 							{tText(
 								'modules/visitor-space/components/material-request-blade/material-request-blade___reden-van-aanvraag'
@@ -331,7 +312,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 						<dd className={styles['c-request-material__content-value']}>
 							<TextArea
 								className={styles['c-request-material__reason-input']}
-								onChange={onTextAreaChange}
+								onChange={(e) => setReasonInputValue(e.target.value)}
 								value={reasonInputValue}
 							/>
 						</dd>

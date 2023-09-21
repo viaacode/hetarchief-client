@@ -19,17 +19,17 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
-import { ROUTES } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { AccessStatus, Visit, VisitStatus } from '@shared/types';
+import { AccessStatus, Visit } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { createVisitorSpacesWithFilterUrl } from '@shared/utils';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 import { useGetVisitAccessStatusMutation } from '@visits/hooks/get-visit-access-status';
 import { useGetVisits } from '@visits/hooks/get-visits';
-import { VisitTimeframe } from '@visits/types';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -42,14 +42,15 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const visits = useGetVisits({
 		searchInput: undefined,
-		status: VisitStatus.APPROVED,
-		timeframe: VisitTimeframe.PAST,
 		page: filters.page,
 		size: HistoryItemListSize,
 		orderProp: filters.orderProp as keyof Visit,
 		orderDirection: filters.orderDirection as OrderDirection,
 		personal: true,
 	});
+
+	// Don't show hardcoded access
+	const filteredVisits = visits.data?.items.filter((visit) => !visit.id.includes('permanent-id'));
 
 	const { mutateAsync: getAccessStatus } = useGetVisitAccessStatusMutation();
 
@@ -70,6 +71,12 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	) => {
 		const orderPropResolved =
 			orderProp === HistoryTableAccessComboId ? HistoryTableAccessFrom : orderProp;
+		if (!orderProp) {
+			orderProp = 'startAt';
+		}
+		if (!orderDirection) {
+			orderDirection = OrderDirection.desc;
+		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
@@ -85,7 +92,9 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 			const response = await getAccessStatus(visit.spaceSlug);
 			switch (response?.status) {
 				case AccessStatus.ACCESS:
-					router.push(`/${visit.spaceSlug}`);
+					router.push(
+						`/${ROUTE_PARTS.search}?${VisitorSpaceFilterId.Maintainer}=${visit.spaceSlug}`
+					);
 					break;
 				case AccessStatus.PENDING:
 					router.push(ROUTES.visitRequested.replace(':slug', visit.spaceSlug));
@@ -126,7 +135,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 					'pages/account/mijn-bezoek-historiek/index___mijn-bezoek-historiek'
 				)}
 			>
-				{(visits.data?.items?.length || 0) > 0 ? (
+				{(filteredVisits?.length || 0) > 0 ? (
 					<div className="l-container l-container--edgeless-to-lg">
 						<Table<Visit>
 							className="u-mt-24"
@@ -134,7 +143,7 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 							onRowClick={onRowClick}
 							options={{
 								columns: HistoryTableColumns(onClickRow),
-								data: visits.data?.items || [],
+								data: filteredVisits || [],
 								initialState: {
 									pageSize: HistoryItemListSize,
 									sortBy: sortFilters,

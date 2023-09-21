@@ -15,15 +15,12 @@ export async function loginUserMeemooIdp(
 	expect(authModalHeading).toBeDefined();
 
 	// Click the login button
-	await page.click('text=Meld je aan als beheerder.');
+	await page.locator('.c-button.c-button--black', { hasText: 'Inloggen' }).click(); //Should be 'Inloggen met het Archief-account'
 
 	// Fill in credentials
 	await page.fill('#inputUsername', username);
 	await page.fill('#inputPassword', password);
 
-	// Click the login button
-	await page.click('#wp-submit');
-
-	// Wait for the new page to load
-	await page.waitForLoadState('networkidle');
+	// Click the login button and wait for the new page to load
+	await Promise.all([page.click('#wp-submit'), page.waitForLoadState('networkidle')]);
 }

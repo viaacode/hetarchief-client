@@ -1,5 +1,4 @@
 @use "sass:color";
-
 @use "../abstracts" as *;
 
 // Wrap everything for higher specificity
@@ -26,6 +25,7 @@
 			font-family: inherit;
 			line-height: inherit;
 			color: inherit;
+			word-break: break-word;
 
 			@include respond-at(md) {
 				margin: $spacer-xxs $spacer-sm $spacer-xxs 0;

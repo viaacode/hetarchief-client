@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
 import { FC } from 'react';
 
+import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+
 import { CardImage } from '../CardImage';
 
 import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
@@ -108,6 +110,7 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 			title={!flat && renderTitle()}
 			shadow={flat}
 			onClick={props.onClick}
+			linkComponent={NextLinkWrapper}
 		>
 			<div
 				className={clsx(

@@ -32,6 +32,7 @@ $component: "c-card-image";
 				margin-right: 2rem;
 				height: 100%;
 			}
+
 			@include respond-to("xs") {
 				min-width: 100px;
 				margin-right: $spacer-sm;

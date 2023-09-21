@@ -1,0 +1,368 @@
+@use "src/styles/abstracts" as *;
+
+$l-container-padding: $spacer-sm;
+$l-container-padding-xs: 2rem;
+
+.c-content-page-preview {
+	.c-content-page-preview .c-content-block-preview {
+		padding: 0;
+	}
+
+	.c-content-block-preview .o-container {
+		width: auto;
+	}
+
+	// Mobile titles
+
+	@include respond-to("md") {
+		h1 {
+			font-size: 2.8rem;
+		}
+
+		h2 {
+			font-size: 2.5rem;
+		}
+
+		h3 {
+			font-size: 2.3rem;
+		}
+
+		h4 {
+			font-size: 2.1rem;
+		}
+
+		h5 {
+			font-size: 1.8rem;
+		}
+
+		h6 {
+			font-size: 1.6rem;
+		}
+	}
+
+	// accordion
+
+	.c-accordion {
+		border: none;
+		border-bottom: 0.1rem solid $silver;
+
+		& + .c-accordion {
+			margin-top: 0;
+		}
+
+		&:first-of-type {
+			margin-top: $spacer-1xl;
+
+			@include respond-at("lg") {
+				margin-top: $spacer-2xl;
+			}
+		}
+	}
+
+	.c-accordion__header {
+		padding: $spacer-md 0;
+	}
+
+	.c-accordion__header-title {
+		color: $black;
+		font-weight: 700;
+	}
+
+	.c-accordion__body {
+		padding-bottom: $spacer-md;
+		color: $black !important;
+		border-top: none;
+
+		p,
+		b,
+		a,
+		i {
+			line-height: $line-height-3xl;
+		}
+	}
+
+	.c-accordion__item {
+		padding: 0;
+	}
+
+	// intro
+
+	.o-container-vertical-intro__intro {
+		padding-top: $spacer-md;
+		color: $neutral;
+	}
+
+	.c-content-block-preview > .o-container {
+		padding: 0 $spacer-sm;
+	}
+
+	.c-content-block__meemoo-custom-background {
+		// /images/meemoo-logo-background.svg
+		background-image: url("data:image/svg+xml,%3Csvg version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20000 400' xml:space='preserve'%3E%3Ccircle cx='19800' cy='200' r='200' fill='%23F7F8F8'/%3E%3Crect width='19600' height='400' fill='%23F7F8F8'/%3E%3C/svg%3E%0A") !important;
+		background-size: cover !important;
+		background-position: right center !important;
+	}
+
+	// Image with copyright and description
+	.a-block-image__annotation {
+		h3 {
+			font-size: 1.8rem;
+		}
+
+		.a-block-image__text {
+			font-size: 1.6rem;
+		}
+	}
+
+	// USP Block, Image grid block
+	.c-block-grid {
+		align-items: center;
+
+		@include respond-at("lg") {
+			align-items: flex-start;
+		}
+
+		.c-block-grid__text-wrapper {
+			h3,
+			p {
+				color: black;
+			}
+		}
+
+		a {
+			text-decoration: none;
+		}
+
+		.c-block-grid__item,
+		.c-block-grid__item > a {
+			width: 100%;
+			max-width: 34rem;
+		}
+	}
+
+	[class*="c-button--content-page-button--"],
+	[class*="c-button--"] {
+		max-height: none !important;
+		border-radius: 4rem;
+		border-style: solid !important;
+		font-family: $font-family-primary;
+	}
+
+	.c-button--content-page-button--silver {
+		background-color: $silver !important;
+		border-color: $silver !important;
+		color: $black !important;
+
+		.o-svg-icon svg * {
+			fill: $black !important;
+		}
+
+		&:hover {
+			background-color: $shade !important;
+			border-color: $shade !important;
+			color: $white !important;
+
+			.o-svg-icon svg * {
+				fill: $white !important;
+			}
+		}
+
+		&:active {
+			background-color: $teal-dark !important;
+			border-color: $teal-dark !important;
+			color: $white !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal;
+		}
+	}
+
+	.c-button--content-page-button--teal,
+	.c-button--primary {
+		background-color: $teal-dark !important;
+		border-color: $teal-dark !important;
+		color: $white !important;
+
+		.o-svg-icon svg * {
+			fill: $white !important;
+		}
+
+		&:hover {
+			background-color: $shade !important;
+			border-color: $shade !important;
+			color: $white !important;
+
+			.o-svg-icon svg * {
+				fill: $white !important;
+			}
+		}
+
+		&:active {
+			background-color: $teal-extra-dark !important;
+			border-color: $teal-extra-dark !important;
+			color: $white !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal-dark;
+		}
+	}
+
+	.c-button--content-page-button--white {
+		background-color: $white !important;
+		border-color: $white !important;
+		color: $black !important;
+
+		&:hover {
+			background-color: $silver !important;
+			border-color: $silver !important;
+		}
+
+		&:active {
+			background-color: $teal-dark !important;
+			border-color: $teal-dark !important;
+			color: $white !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal !important;
+		}
+	}
+
+	.c-button--content-page-button--red {
+		background-color: $cherry !important;
+		border-color: $cherry !important;
+		color: $white !important;
+
+		&:hover {
+			background-color: $cherry-light !important;
+			border-color: $cherry-light !important;
+		}
+
+		&:active {
+			background-color: $cherry-pale !important;
+			border-color: $cherry-pale !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $cherry !important;
+		}
+	}
+
+	.c-button--content-page-button--link {
+		font-weight: $font-weight-normal !important;
+		background-color: transparent !important;
+		border-color: transparent !important;
+		color: $teal !important;
+		text-decoration: underline;
+		margin: 4px 0;
+
+		&:hover {
+			background-color: transparent !important;
+			border-color: transparent !important;
+			color: $teal-light !important;
+		}
+
+		&:active {
+			color: $teal-dark !important;
+			background-color: transparent !important;
+			border-color: transparent !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal !important;
+		}
+	}
+
+	.c-button--content-page-button--black {
+		background-color: $black !important;
+		border-color: $black !important;
+		color: $white !important;
+
+		&:hover {
+			background-color: $shade !important;
+		}
+
+		&:active {
+			background-color: $black-pale !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal !important;
+		}
+	}
+
+	.c-button--content-page-button--outline {
+		background-color: $white !important;
+		border-color: $black !important;
+		color: $black !important;
+
+		&:hover {
+			background-color: $silver !important;
+		}
+
+		&:active {
+			background-color: $teal-dark !important;
+			border-color: $teal-dark !important;
+			color: $white !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			border-color: transparent !important;
+			outline: 2px solid $teal !important;
+		}
+
+		&:focus:not(:focus-visible) {
+			border-color: $black !important;
+		}
+	}
+
+	.c-button--content-page-button--text {
+		font-weight: $font-weight-normal !important;
+		background-color: transparent !important;
+		border-color: transparent !important;
+		color: $black !important;
+
+		&:hover {
+			background-color: transparent !important;
+			border-color: transparent !important;
+			color: $neutral !important;
+		}
+
+		&:active {
+			color: $teal-dark !important;
+			background-color: transparent !important;
+			border-color: transparent !important;
+		}
+
+		&:focus,
+		.focus-visible:focus:not(:focus-visible) {
+			outline: 2px solid $teal !important;
+		}
+	}
+
+	.u-content-flex {
+		display: flex;
+		flex: 1 0 auto;
+
+		&--left {
+			justify-content: flex-start;
+		}
+
+		&--center {
+			justify-content: center;
+		}
+
+		&--right {
+			justify-content: flex-end;
+		}
+	}
+}

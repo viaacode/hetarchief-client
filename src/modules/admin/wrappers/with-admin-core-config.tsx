@@ -2,6 +2,8 @@ import {
 	AdminConfig,
 	AdminConfigManager,
 	ContentBlockType,
+	ContentPageInfo,
+	ContentWidth,
 	LinkInfo,
 	ToastInfo,
 } from '@meemoo/admin-core-ui';
@@ -12,6 +14,7 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { ComponentType, FunctionComponent, useCallback, useEffect, useState } from 'react';
 
+import { NAVIGATION_DROPDOWN } from '@navigation/components';
 import {
 	ALERT_ICON_LIST_CONFIG,
 	Icon,
@@ -23,7 +26,6 @@ import Loading from '@shared/components/Loading/Loading';
 import { ADMIN_CORE_ROUTES, ROUTE_PARTS } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
-import { AssetsService } from '@shared/services/assets-service/assets.service';
 import { toastService } from '@shared/services/toast-service';
 import { isBrowser } from '@shared/utils';
 
@@ -42,7 +44,7 @@ const InternalLink = (linkInfo: LinkInfo) => {
 };
 
 // When a content page is saved, for clear the nextjs cache
-const onSaveContentPage = async (contentPageInfo: { path: string }) => {
+const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 	await ApiService.getApi(false).post(
 		stringifyUrl({
 			url: 'client-cache/clear-cache',
@@ -83,6 +85,8 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					`/${ROUTE_PARTS.userPolicy}`,
 					`/${ROUTE_PARTS.logout}`,
 					`/${ROUTE_PARTS.search}`,
+					`/${ROUTE_PARTS.visit}`,
+					'/',
 				],
 				contentPage: {
 					availableContentBlocks: [
@@ -99,13 +103,17 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						ContentBlockType.ThreeClickableTiles,
 						ContentBlockType.TagsWithLink,
 						ContentBlockType.CardsWithoutDescription,
+						ContentBlockType.ImageTextBackground,
+						ContentBlockType.MaintainersGrid,
+						ContentBlockType.HetArchiefHeaderSearch,
+						ContentBlockType.IFrame,
 					],
-					defaultPageWidth: 'LARGE',
+					defaultPageWidth: ContentWidth.LARGE,
 					onSaveContentPage,
 				},
 				navigationBars: {
 					enableIcons: true,
-					customNavigationElements: ['<BOEZOEKERRUIMTES_DROPDOWN>'],
+					customNavigationElements: [NAVIGATION_DROPDOWN.VISITOR_SPACES],
 				},
 				icon: {
 					component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
@@ -179,11 +187,14 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				content_blocks: {},
 				services: {
 					toastService: {
-						showToast: (toastInfo: ToastInfo) => {
-							toastService.notify({
+						showToast: (toastInfo: ToastInfo): string => {
+							return toastService.notify({
 								title: toastInfo.title,
 								description: toastInfo.description,
 							});
+						},
+						hideToast: (id: string) => {
+							toastService.dismiss(id);
 						},
 					},
 					i18n: { tHtml, tText },
@@ -203,19 +214,21 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						clear: async (_key: string) => Promise.resolve(),
 					},
-					assetService: {
-						uploadFile: AssetsService.uploadFile,
-						deleteFile: AssetsService.deleteFile,
-					},
-					getContentPageByPathEndpoint: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages`,
+					getContentPageByPathEndpoint: `${
+						isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
+					}/admin/content-pages`,
 				},
 				database: {
 					databaseApplicationType: DatabaseType.hetArchief,
-					proxyUrl: publicRuntimeConfig.PROXY_URL,
+					proxyUrl: isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL,
 				},
 				flowplayer: {
-					FLOW_PLAYER_ID: publicRuntimeConfig.FLOW_PLAYER_ID,
-					FLOW_PLAYER_TOKEN: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
+					FLOW_PLAYER_ID: isBrowser()
+						? publicRuntimeConfig.FLOW_PLAYER_ID
+						: process.env.FLOW_PLAYER_ID,
+					FLOW_PLAYER_TOKEN: isBrowser()
+						? publicRuntimeConfig.FLOW_PLAYER_TOKEN
+						: process.env.FLOW_PLAYER_TOKEN,
 				},
 				handlers: {
 					onExternalLink: () => {

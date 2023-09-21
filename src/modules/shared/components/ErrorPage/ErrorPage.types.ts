@@ -7,10 +7,11 @@ export interface ErrorPageProps extends DefaultComponentProps {
 	description?: string | ReactNode;
 	link?: {
 		component: ReactNode;
-		to: string;
+		to: string | null;
 	};
 	image?: {
 		image: string;
 		left?: boolean;
 	};
+	buttonsComponent?: ReactNode;
 }

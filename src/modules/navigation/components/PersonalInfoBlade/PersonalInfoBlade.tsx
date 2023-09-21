@@ -7,12 +7,22 @@ import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import { Blade } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { useAppDispatch } from '@shared/store';
+import { setShowMaterialRequestCenter } from '@shared/store/ui';
 
 import { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
 
-const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, personalInfo }) => {
+const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
+	isOpen,
+	onClose,
+	personalInfo,
+	layer,
+	currentLayer,
+	refetch,
+}) => {
 	const { tText } = useTranslation();
+	const dispatch = useAppDispatch();
 
 	const [typeSelected, setTypeSelected] = useState<MaterialRequestRequesterCapacity>(
 		personalInfo.requesterCapacity
@@ -36,7 +46,9 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 					'modules/navigation/components/personal-info-blade/personal-info-blade___requests-zijn-verzonden'
 				),
 			});
+			refetch();
 			onClose();
+			dispatch(setShowMaterialRequestCenter(false));
 		} catch (err) {
 			console.error({ err });
 			onFailedRequest();
@@ -79,17 +91,21 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({ isOpen, onClose, p
 
 	return (
 		<Blade
+			className={styles['c-personal-info-blade']}
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h4 className={styles['c-personal-info-blade__title']}>
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+				<h2 {...props}>
 					{tText(
 						'modules/navigation/components/personal-info-blade/personal-info-blade___persoonlijke-gegevens'
 					)}
-				</h4>
+				</h2>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onClose}
 			showBackButton
+			layer={layer}
+			currentLayer={currentLayer}
+			isManaged
 		>
 			<div className={styles['c-personal-info-blade__content']}>
 				<dl>

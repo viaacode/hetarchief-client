@@ -1,0 +1,9 @@
+.c-admin__content {
+	[class*="Table-module_c-table--bordered__"] {
+		border: 0 !important;
+	}
+
+	thead tr th {
+		border: 0 !important;
+	}
+}

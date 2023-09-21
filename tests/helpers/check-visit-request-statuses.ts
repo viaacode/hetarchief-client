@@ -19,7 +19,7 @@ export async function checkVisitRequestStatuses(page: Page): Promise<{
 	numberOfDenied: number;
 	totalNumberOfRequests: number;
 }> {
-	// Check number of approved on the "all" tab
+	// Check number of pending on the "all" tab
 	const numberOfPending = await page
 		.locator('[class*="RequestStatusBadge_c-request-status-badge"]:has-text("Open aanvraag")')
 		.count();

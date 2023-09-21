@@ -3,7 +3,7 @@
 
 $component: "c-filter-menu";
 $c-filter-menu-flyout-top-padding: 6.4rem;
-$c-filter-menu-border-color: color.adjust($white, $alpha: -0.8);
+$c-filter-menu-border-color: color.adjust($shade, $alpha: -0.6);
 $checkbox-size: $spacer-sm;
 
 .#{$component} {
@@ -42,7 +42,7 @@ $checkbox-size: $spacer-sm;
 			transform: scaleX(0);
 			transform-origin: left;
 			transition: transform $animate-default;
-			z-index: get-z-layer("filter-menu-mobile");
+			z-index: get-z-layer("foreground");
 		}
 
 		&--operative {
@@ -158,15 +158,23 @@ $checkbox-size: $spacer-sm;
 		&-close {
 			position: absolute;
 			inset: 1.2rem 1.2rem auto auto;
-			top: 1.2rem;
-			right: 1.2rem;
-			bottom: auto;
-			left: auto;
 			z-index: get-z-layer("filter");
 		}
 	}
 
 	&__overlay {
 		z-index: get-z-layer("filter-overlay");
+	}
+
+	:global(.c-dropdown__trigger:first-child + .c-dropdown__content-open) {
+		:global(.c-menu) {
+			margin-top: -1px;
+			padding: 0;
+			margin-left: $spacer-sm;
+
+			:global(.c-button--text) {
+				padding-left: $spacer-sm !important;
+			}
+		}
 	}
 }

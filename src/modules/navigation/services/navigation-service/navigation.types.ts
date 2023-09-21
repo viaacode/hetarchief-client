@@ -3,6 +3,9 @@ export enum NavigationPlacement {
 	HeaderRight = 'header_right',
 	FooterCenter = 'footer_center',
 	ProfileDropdown = 'profile_dropdown',
+	FooterSection1 = 'footer_section_1',
+	FooterSection2 = 'footer_section_2',
+	FooterSection3 = 'footer_section_3',
 }
 
 export interface NavigationInfo {

@@ -59,4 +59,15 @@
 			color: $black;
 		}
 	}
+
+	&__footer {
+		&-keyuser {
+			max-width: 80%;
+			display: inline-flex;
+
+			span {
+				line-height: $line-height-sm;
+			}
+		}
+	}
 }

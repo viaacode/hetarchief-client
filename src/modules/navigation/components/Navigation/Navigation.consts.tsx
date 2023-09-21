@@ -6,7 +6,7 @@ import { stringifyUrl } from 'query-string';
 import { MouseEventHandler, ReactNode } from 'react';
 
 import { Permission } from '@account/const';
-import { NAVIGATION_DROPDOOWN, NavigationItem, NavigationLink } from '@navigation/components';
+import { NAVIGATION_DROPDOWN, NavigationItem, NavigationLink } from '@navigation/components';
 import styles from '@navigation/components/Navigation/Navigation.module.scss';
 import {
 	NavigationInfo,
@@ -15,7 +15,7 @@ import {
 import { Icon, IconName, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS, ROUTE_PREFIXES, ROUTES } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
-import { Breakpoints } from '@shared/types';
+import { Breakpoints, Visit } from '@shared/types';
 import { VisitorSpaceFilterId, VisitorSpaceInfo } from '@visitor-space/types';
 
 const linkCls = (...classNames: string[]) => {
@@ -136,7 +136,7 @@ const getVisitorSpacesDropdown = (
 				className: linkClasses,
 				// Make link clickable in hamburger menu
 				onClick: (e) => {
-					if (window.innerWidth > Breakpoints.md) {
+					if (window.innerWidth > Breakpoints.xxl) {
 						e.preventDefault();
 					}
 				},
@@ -207,7 +207,9 @@ const getDynamicHeaderLinks = (
 	navigationItems: Record<NavigationPlacement, NavigationInfo[]>,
 	placement: NavigationPlacement,
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
-	linkedSpaceOrId: string | null
+	linkedSpaceOrId: string | null,
+	activeVisits: Visit[] | null,
+	isMeemooAdmin = false
 ) => {
 	const itemsByPlacement = navigationItems[placement];
 
@@ -224,7 +226,14 @@ const getDynamicHeaderLinks = (
 			iconName,
 			tooltip,
 		}: NavigationInfo): NavigationItem => {
-			if (contentPath === NAVIGATION_DROPDOOWN.VISITOR_SPACES) {
+			const hasActiveVisits = activeVisits && activeVisits.length > 0;
+			const isSearchNavItem = contentPath === ROUTES.search;
+			const searchUrl =
+				isSearchNavItem && hasActiveVisits && !isMeemooAdmin
+					? `${ROUTES.search}?aanbieder=${activeVisits[0].spaceSlug}`
+					: contentPath;
+
+			if (contentPath === NAVIGATION_DROPDOWN.VISITOR_SPACES) {
 				return getVisitorSpacesDropdown(
 					label,
 					currentPath,
@@ -240,7 +249,7 @@ const getDynamicHeaderLinks = (
 				path: contentPath,
 				node: renderLink(
 					label,
-					contentPath,
+					searchUrl,
 					{
 						target: linkTarget || undefined,
 						iconStart: iconName ? <Icon name={iconName as IconName} /> : null,
@@ -421,7 +430,7 @@ const getDivider = (id: string): NavigationItem =>
 		id,
 		node: null,
 		isDivider: 'md',
-	} as NavigationItem);
+	}) as NavigationItem;
 
 export const getNavigationItemsLeft = (
 	currentPath: string,
@@ -430,21 +439,26 @@ export const getNavigationItemsLeft = (
 	permissions: Permission[],
 	linkedSpaceOrId: string | null,
 	isMobile: boolean,
-	maintainerSlug: string | null
+	maintainerSlug: string | null,
+	activeVisits: Visit[] | null,
+	isMeemooAdmin: boolean
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
 		NavigationPlacement.HeaderLeft,
 		accessibleVisitorSpaces,
-		linkedSpaceOrId
+		linkedSpaceOrId,
+		activeVisits,
+		isMeemooAdmin
 	);
 	const afterDivider = getDynamicHeaderLinks(
 		currentPath,
 		navigationItems,
 		NavigationPlacement.HeaderRight,
 		accessibleVisitorSpaces,
-		linkedSpaceOrId
+		linkedSpaceOrId,
+		null
 	);
 
 	const cpAdminLinks = getCpAdminManagementDropdown(
@@ -481,7 +495,8 @@ export const getNavigationItemsProfileDropdown = (
 		navigationItems,
 		NavigationPlacement.ProfileDropdown,
 		accessibleVisitorSpaces,
-		linkedSpaceOrId
+		linkedSpaceOrId,
+		null
 	);
 
 	// Group navigation items by type

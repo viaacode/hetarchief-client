@@ -5,7 +5,6 @@ $component: "c-tooltip-component";
 .#{$component} {
 	background-color: $black;
 	border: 1px solid $black;
-	display: inline-block;
 	max-width: 19rem !important;
 	padding: 0.5rem;
 	color: $white;
@@ -13,24 +12,33 @@ $component: "c-tooltip-component";
 	font-size: 1.3rem;
 	font-weight: 100;
 	line-height: 1.428; // 20px equivalent
-	transition: opacity 0.2s ease-in-out, visibility 0.2s linear 0.2s;
+	transition:
+		opacity 0.2s ease-in-out,
+		visibility 0.2s linear 0.2s;
 
 	&-trigger {
-		display: inherit !important;
+		display: inline-block !important;
 	}
 
 	&__arrow {
 		background-color: $black;
+		width: 0 !important;
 
 		&::before {
 			border: 6px solid $black !important;
 		}
 	}
 
+	&[data-popper-placement^="right"] > .c-tooltip-component__arrow {
+		left: -6px !important;
+		transform: translate(0, -6px) !important;
+		clip: unset !important;
+	}
+
 	&[data-popper-placement^="top"] > .c-tooltip-component__arrow {
 		bottom: -2px !important;
 		transform: translate(-8px, 0) !important;
-		clip: rect(7px, 20px, 28px, -8px) !important;
+		clip: unset !important;
 	}
 
 	&--show {

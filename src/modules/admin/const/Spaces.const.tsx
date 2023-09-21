@@ -5,7 +5,8 @@ import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { AdminVisitorSpaceInfoRow } from '@admin/types';
 import { DropdownMenu, Icon, IconNamesLight } from '@shared/components';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatMediumDate } from '@shared/utils';
@@ -14,7 +15,7 @@ import { VisitorSpaceInfo, VisitorSpaceOrderProps, VisitorSpaceStatus } from '@v
 export const VisitorSpacesOverviewTablePageSize = 20;
 
 export const ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG = {
-	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
+	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	status: withDefault(StringParam, 'ALL'),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, VisitorSpaceOrderProps.ContentPartnerName),

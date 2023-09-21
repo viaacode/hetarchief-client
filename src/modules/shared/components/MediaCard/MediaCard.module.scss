@@ -5,6 +5,14 @@ $component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 
 .#{$component} {
+	a {
+		text-decoration: none;
+	}
+
+	&__wrapper {
+		position: relative;
+	}
+
 	&--pointer {
 		cursor: pointer;
 	}
@@ -17,13 +25,17 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		margin-top: $spacer-sm;
 		display: flex;
 		flex-direction: row;
+		gap: $spacer-sm;
+
+		@include respond-to(xxl) {
+			flex-direction: column;
+		}
 	}
 
 	&__info-button {
 		display: flex !important;
 		justify-content: center !important;
 		font-size: $font-size-sm !important;
-		margin-right: $spacer-xs;
 		height: 3.7rem;
 	}
 
@@ -102,6 +114,16 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		}
 	}
 
+	:global(.c-card__bottom-wrapper) {
+		// Ensures the absolutely positioned bookmark button that is rendered outside of the card's link is rendered in the right position
+		position: relative;
+	}
+
+	:global(.c-card__header-wrapper) {
+		// Leave room for the absolutely positioned bookmark button that is rendered outside of the card's link
+		margin-right: 4.5rem;
+	}
+
 	&__header-icon {
 		position: absolute;
 		top: 0;
@@ -119,7 +141,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		right: 0;
 		font-size: $font-size-sm;
 		background-color: $white;
-		color: $zinc;
+		color: $grey;
 		padding: 0.5rem 0.75rem;
 	}
 
@@ -143,10 +165,6 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 			min-width: 24.8rem;
 			place-content: center;
 
-			@include respond-at(md) {
-				min-height: 100%;
-			}
-
 			.#{$component}__no-content {
 				transform: translateY(-25%);
 			}
@@ -162,7 +180,9 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		display: flex;
 		flex-direction: row;
 		flex-shrink: 0;
-		position: relative;
+		position: absolute;
+		right: $spacer-sm;
+		top: $spacer-sm;
 
 		:global(.c-dropdown__content-open) {
 			box-shadow: $shadow-24-black-12;

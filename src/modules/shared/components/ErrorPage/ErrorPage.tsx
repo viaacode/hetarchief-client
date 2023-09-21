@@ -3,12 +3,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FC } from 'react';
 
+import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 
 import styles from './ErrorPage.module.scss';
 import { ErrorPageProps } from './ErrorPage.types';
 
-const ErrorPage: FC<ErrorPageProps> = ({ className, title, description, link, image }) => {
+const ErrorPage: FC<ErrorPageProps> = ({
+	className,
+	title,
+	description,
+	link,
+	image,
+	buttonsComponent,
+}) => {
+	useStickyLayout(false);
 	const { tText } = useTranslation();
 
 	const rootCls = clsx(className, styles['c-error-page']);
@@ -33,8 +42,13 @@ const ErrorPage: FC<ErrorPageProps> = ({ className, title, description, link, im
 				{description && (
 					<p className={styles['c-error-page__description']}>{description}</p>
 				)}
+				{buttonsComponent && (
+					<div className={styles['c-error-page__button-component']}>
+						{buttonsComponent}
+					</div>
+				)}
 
-				{link && (
+				{link?.to && (
 					<Link href={link.to} passHref>
 						<a
 							className={styles['c-error-page__button']}
@@ -46,6 +60,7 @@ const ErrorPage: FC<ErrorPageProps> = ({ className, title, description, link, im
 						</a>
 					</Link>
 				)}
+				{link && !link?.to && link.component}
 			</div>
 		</section>
 	);

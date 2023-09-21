@@ -1,12 +1,12 @@
-@use "../../../../styles/abstracts/" as *;
+@use "../../../../styles/abstracts" as *;
 
 $component: "c-share-folder-blade";
 
 .#{$component} {
-	&__title {
-		padding: 0 $spacer-lg;
+	&__alert {
 		margin-bottom: $spacer-1xl;
-		color: $black;
+		margin-right: 0.5rem;
+		line-height: 2.5rem;
 	}
 
 	&__content {
@@ -17,15 +17,21 @@ $component: "c-share-folder-blade";
 		&-label {
 			font-weight: bold;
 			display: block;
-			margin-bottom: $spacer-sm;
+			margin-bottom: $spacer-md;
+
+			&--email {
+				font-weight: bold;
+				display: block;
+				margin-bottom: $spacer-sm;
+			}
 
 			&--margin-top {
-				margin-top: $spacer-2xl;
+				margin-top: $spacer-1xl;
 			}
 		}
 
 		&-value {
-			margin-top: $spacer-md;
+			margin-top: $spacer-sm;
 			margin-left: 0;
 			margin-bottom: $spacer-md;
 		}

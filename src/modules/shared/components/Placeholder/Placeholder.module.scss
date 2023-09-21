@@ -33,6 +33,7 @@
 	@include respond-to(md) {
 		font-size: $font-size-1xl;
 	}
+
 	@include respond-at(md) {
 		margin: $spacer-md 0 $spacer-sm;
 	}

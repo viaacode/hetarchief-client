@@ -1,21 +1,18 @@
-import { AdminConfigManager, ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { AdminConfigManager, ContentPageInfo, ContentPageRenderer } from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { ComponentType, FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParams } from 'use-query-params';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
 import { selectUser } from '@auth/store/user';
-import {
-	KNOWN_STATIC_ROUTES,
-	REDIRECT_TO_QUERY_KEY,
-	TOS_INDEX_QUERY_PARAM_CONFIG,
-} from '@shared/const';
+import { KNOWN_STATIC_ROUTES, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -65,13 +62,13 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 	}, [scrollable]);
 
 	const onCancelClick = useCallback(async () => {
-		AuthService.logout();
+		await AuthService.logout();
 	}, []);
 
 	const onConfirmClick = () => {
 		if (user) {
 			TosService.acceptTos(user?.id).then(() => {
-				router.push(query[REDIRECT_TO_QUERY_KEY]);
+				router.push(query[QUERY_PARAM_KEY.REDIRECT_TO_QUERY_KEY]);
 				toastService.notify({
 					title: tHtml('pages/gebruiksvoorwaarden/index___gebruiksvoorwaarden-aanvaard'),
 					description: tHtml(
@@ -101,7 +98,7 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 						>
 							{AdminConfigManager.getConfig() && (
 								<ContentPageRenderer
-									contentPageInfo={contentPageInfo}
+									contentPageInfo={contentPageInfo as ContentPageInfo}
 									commonUser={commonUser}
 								/>
 							)}
@@ -157,4 +154,6 @@ export async function getServerSideProps(
 	return getDefaultServerSideProps(context);
 }
 
-export default withAdminCoreConfig(withUser(TermsOfService as FC<unknown>)) as FC<DefaultSeoInfo>;
+export default withAdminCoreConfig(
+	withUser(TermsOfService as FC<unknown>) as ComponentType
+) as FC<DefaultSeoInfo>;

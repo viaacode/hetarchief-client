@@ -12,6 +12,7 @@
 	@include respond-to("md") {
 		margin-top: $spacer-sm;
 	}
+
 	@include respond-at("md") {
 		align-self: start;
 		width: 48%;

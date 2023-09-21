@@ -20,8 +20,6 @@ import {
 	DurationInput,
 	DurationRangeInput,
 	GenreSelect,
-	MediaTypeSelect,
-	MediumSelect,
 } from '../components';
 import { MetadataProp } from '../types';
 
@@ -38,44 +36,73 @@ export type MetadataConfig = {
 	};
 };
 
-export const METADATA_CONFIG = (): MetadataConfig => {
-	const dictionary = {
-		from: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
-		),
-		until: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
-		),
-		between: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
-		),
-		contains: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
-		),
-		excludes: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
-		),
-		equals: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
-		),
-		differs: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
-		),
-		shorter: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
-		),
-		longer: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
-		),
-		exact: tText(
-			'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___exact'
-		),
-	};
+export const ADVANCED_FILTERS: MetadataProp[] = [
+	MetadataProp.Description,
+	MetadataProp.Genre,
+	MetadataProp.SpacialCoverage,
+	MetadataProp.TemporalCoverage,
+	MetadataProp.Publisher,
+	MetadataProp.Title,
+	MetadataProp.Cast,
+	MetadataProp.ObjectType,
+	MetadataProp.Identifier,
+	MetadataProp.Keywords,
+];
+
+export const REGULAR_FILTERS: MetadataProp[] = [
+	MetadataProp.Medium,
+	MetadataProp.Duration,
+	MetadataProp.CreatedAt,
+	MetadataProp.PublishedAt,
+	MetadataProp.Creator,
+	MetadataProp.Language,
+
+	// These are handled separately in VisitorSpaceFilterId
+	// MetadataProp.Maintainers,
+	// MetadataProp.ConsultableOnlyOnLocation,
+	// MetadataProp.ConsultableMedia,
+];
+
+export const GET_OPERATOR_LABELS = (): Record<string, string> => ({
+	from: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
+	),
+	until: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
+	),
+	between: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
+	),
+	contains: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
+	),
+	excludes: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
+	),
+	equals: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
+	),
+	differs: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
+	),
+	shorter: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
+	),
+	longer: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
+	),
+	exact: tText(
+		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___exact'
+	),
+});
+
+export const FILTERS_OPTIONS_CONFIG = (): MetadataConfig => {
+	const operatorLabels = GET_OPERATOR_LABELS();
 
 	return {
 		[MetadataProp.CreatedAt]: {
 			[Operator.GreaterThanOrEqual]: {
-				label: dictionary.from,
+				label: operatorLabels.from,
 				field: DateInput,
 				filters: [
 					{
@@ -85,7 +112,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.LessThanOrEqual]: {
-				label: dictionary.until,
+				label: operatorLabels.until,
 				field: DateInput,
 				filters: [
 					{
@@ -95,7 +122,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Between]: {
-				label: dictionary.between,
+				label: operatorLabels.between,
 				field: DateRangeInput,
 				filters: [
 					{
@@ -109,7 +136,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.exact,
+				label: operatorLabels.exact,
 				field: DateInput,
 				filters: [
 					{
@@ -123,73 +150,10 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 		},
-		[MetadataProp.Creator]: {
-			[Operator.Contains]: {
-				label: dictionary.contains,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.CREATOR,
-						operator: IeObjectsSearchOperator.CONTAINS,
-					},
-				],
-			},
-			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.CREATOR,
-						operator: IeObjectsSearchOperator.CONTAINS_NOT,
-					},
-				],
-			},
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.CREATOR,
-						operator: IeObjectsSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.CREATOR,
-						operator: IeObjectsSearchOperator.IS_NOT,
-					},
-				],
-			},
-		},
-		[MetadataProp.Description]: {
-			[Operator.Contains]: {
-				label: dictionary.contains,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.DESCRIPTION,
-						operator: IeObjectsSearchOperator.CONTAINS,
-					},
-				],
-			},
-			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.DESCRIPTION,
-						operator: IeObjectsSearchOperator.CONTAINS_NOT,
-					},
-				],
-			},
-		},
+
 		[MetadataProp.Duration]: {
 			[Operator.LessThanOrEqual]: {
-				label: dictionary.shorter,
+				label: operatorLabels.shorter,
 				field: DurationInput,
 				filters: [
 					{
@@ -199,7 +163,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.GreaterThanOrEqual]: {
-				label: dictionary.longer,
+				label: operatorLabels.longer,
 				field: DurationInput,
 				filters: [
 					{
@@ -209,7 +173,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Between]: {
-				label: dictionary.between,
+				label: operatorLabels.between,
 				field: DurationRangeInput,
 				filters: [
 					{
@@ -223,7 +187,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Exact]: {
-				label: dictionary.exact,
+				label: operatorLabels.exact,
 				field: DurationRangeInput,
 				filters: [
 					{
@@ -237,205 +201,10 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 		},
-		// "Temporal" missing in ES, src/modules/ie-objects/types.ts:84
-		[MetadataProp.Era]: {
-			[Operator.Contains]: {
-				label: dictionary.contains,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.ERA,
-						operator: IeObjectsSearchOperator.CONTAINS,
-					},
-				],
-			},
-			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.ERA,
-						operator: IeObjectsSearchOperator.CONTAINS_NOT,
-					},
-				],
-			},
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.ERA,
-						operator: IeObjectsSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.ERA,
-						operator: IeObjectsSearchOperator.IS_NOT,
-					},
-				],
-			},
-		},
-		[MetadataProp.Everything]: {
-			[Operator.Contains]: {
-				label: dictionary.contains,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.ADVANCED_QUERY,
-						operator: IeObjectsSearchOperator.CONTAINS,
-					},
-				],
-			},
-			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.ADVANCED_QUERY,
-						operator: IeObjectsSearchOperator.CONTAINS_NOT,
-					},
-				],
-			},
-		},
-		[MetadataProp.Mediatype]: {
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: MediaTypeSelect,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.FORMAT,
-						operator: IeObjectsSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: MediaTypeSelect,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.FORMAT,
-						operator: IeObjectsSearchOperator.IS_NOT,
-					},
-				],
-			},
-		},
-		[MetadataProp.Medium]: {
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: MediumSelect,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.MEDIUM,
-						operator: IeObjectsSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: MediumSelect,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.MEDIUM,
-						operator: IeObjectsSearchOperator.IS_NOT,
-					},
-				],
-			},
-		},
-		[MetadataProp.Genre]: {
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: GenreSelect,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.GENRE,
-						operator: IeObjectsSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: GenreSelect,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.GENRE,
-						operator: IeObjectsSearchOperator.IS_NOT,
-					},
-				],
-			},
-		},
-		[MetadataProp.Language]: {
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.LANGUAGE,
-						operator: IeObjectsSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.LANGUAGE,
-						operator: IeObjectsSearchOperator.IS_NOT,
-					},
-				],
-			},
-		},
-		// "Spatial" missing in ES, src/modules/ie-objects/types.ts:83
-		[MetadataProp.Location]: {
-			[Operator.Contains]: {
-				label: dictionary.contains,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.LOCATION,
-						operator: IeObjectsSearchOperator.CONTAINS,
-					},
-				],
-			},
-			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.LOCATION,
-						operator: IeObjectsSearchOperator.CONTAINS_NOT,
-					},
-				],
-			},
-			[Operator.Equals]: {
-				label: dictionary.equals,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.LOCATION,
-						operator: IeObjectsSearchOperator.IS,
-					},
-				],
-			},
-			[Operator.EqualsNot]: {
-				label: dictionary.differs,
-				field: TextInput,
-				filters: [
-					{
-						field: IeObjectsSearchFilterField.LOCATION,
-						operator: IeObjectsSearchOperator.IS_NOT,
-					},
-				],
-			},
-		},
+
 		[MetadataProp.PublishedAt]: {
 			[Operator.GreaterThanOrEqual]: {
-				label: dictionary.from,
+				label: operatorLabels.from,
 				field: DateInput,
 				filters: [
 					{
@@ -445,7 +214,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.LessThanOrEqual]: {
-				label: dictionary.until,
+				label: operatorLabels.until,
 				field: DateInput,
 				filters: [
 					{
@@ -455,7 +224,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Between]: {
-				label: dictionary.between,
+				label: operatorLabels.between,
 				field: DateRangeInput,
 				filters: [
 					{
@@ -469,7 +238,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.exact,
+				label: operatorLabels.exact,
 				field: DateInput,
 				filters: [
 					{
@@ -483,9 +252,184 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 		},
+		[MetadataProp.Description]: {
+			[Operator.Contains]: {
+				label: operatorLabels.contains,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DESCRIPTION,
+						operator: IeObjectsSearchOperator.CONTAINS,
+					},
+				],
+			},
+			[Operator.ContainsNot]: {
+				label: operatorLabels.excludes,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.DESCRIPTION,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.Genre]: {
+			[Operator.Equals]: {
+				label: operatorLabels.equals,
+				field: GenreSelect,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.GENRE,
+						operator: IeObjectsSearchOperator.IS,
+					},
+				],
+			},
+			[Operator.EqualsNot]: {
+				label: operatorLabels.differs,
+				field: GenreSelect,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.GENRE,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.SpacialCoverage]: {
+			[Operator.Contains]: {
+				label: operatorLabels.contains,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.SPACIAL_COVERAGE,
+						operator: IeObjectsSearchOperator.CONTAINS,
+					},
+				],
+			},
+			[Operator.ContainsNot]: {
+				label: operatorLabels.excludes,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.SPACIAL_COVERAGE,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: operatorLabels.equals,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.SPACIAL_COVERAGE,
+						operator: IeObjectsSearchOperator.IS,
+					},
+				],
+			},
+			[Operator.EqualsNot]: {
+				label: operatorLabels.differs,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.SPACIAL_COVERAGE,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.TemporalCoverage]: {
+			[Operator.Contains]: {
+				label: operatorLabels.contains,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.TEMPORAL_COVERAGE,
+						operator: IeObjectsSearchOperator.CONTAINS,
+					},
+				],
+			},
+			[Operator.ContainsNot]: {
+				label: operatorLabels.excludes,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.TEMPORAL_COVERAGE,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: operatorLabels.equals,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.TEMPORAL_COVERAGE,
+						operator: IeObjectsSearchOperator.IS,
+					},
+				],
+			},
+			[Operator.EqualsNot]: {
+				label: operatorLabels.differs,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.TEMPORAL_COVERAGE,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.ObjectType]: {
+			[Operator.Contains]: {
+				label: operatorLabels.contains,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.OBJECT_TYPE,
+						operator: IeObjectsSearchOperator.CONTAINS,
+					},
+				],
+			},
+			[Operator.ContainsNot]: {
+				label: operatorLabels.excludes,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.OBJECT_TYPE,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: operatorLabels.equals,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.OBJECT_TYPE,
+						operator: IeObjectsSearchOperator.IS,
+					},
+				],
+			},
+			[Operator.EqualsNot]: {
+				label: operatorLabels.differs,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.OBJECT_TYPE,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
+
 		[MetadataProp.Publisher]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -495,7 +439,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -505,7 +449,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -515,7 +459,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
@@ -525,9 +469,10 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 		},
+
 		[MetadataProp.Title]: {
 			[Operator.Contains]: {
-				label: dictionary.contains,
+				label: operatorLabels.contains,
 				field: TextInput,
 				filters: [
 					{
@@ -537,7 +482,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.ContainsNot]: {
-				label: dictionary.excludes,
+				label: operatorLabels.excludes,
 				field: TextInput,
 				filters: [
 					{
@@ -547,7 +492,7 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.Equals]: {
-				label: dictionary.equals,
+				label: operatorLabels.equals,
 				field: TextInput,
 				filters: [
 					{
@@ -557,11 +502,120 @@ export const METADATA_CONFIG = (): MetadataConfig => {
 				],
 			},
 			[Operator.EqualsNot]: {
-				label: dictionary.differs,
+				label: operatorLabels.differs,
 				field: TextInput,
 				filters: [
 					{
 						field: IeObjectsSearchFilterField.NAME,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.Cast]: {
+			[Operator.Contains]: {
+				label: operatorLabels.contains,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CAST,
+						operator: IeObjectsSearchOperator.CONTAINS,
+					},
+				],
+			},
+			[Operator.ContainsNot]: {
+				label: operatorLabels.excludes,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CAST,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: operatorLabels.equals,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CAST,
+						operator: IeObjectsSearchOperator.IS,
+					},
+				],
+			},
+			[Operator.EqualsNot]: {
+				label: operatorLabels.differs,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.CAST,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.Identifier]: {
+			[Operator.Equals]: {
+				label: operatorLabels.equals,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.IDENTIFIER,
+						operator: IeObjectsSearchOperator.IS,
+					},
+				],
+			},
+			[Operator.EqualsNot]: {
+				label: operatorLabels.differs,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.IDENTIFIER,
+						operator: IeObjectsSearchOperator.IS_NOT,
+					},
+				],
+			},
+		},
+
+		[MetadataProp.Keywords]: {
+			[Operator.Contains]: {
+				label: operatorLabels.contains,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.KEYWORD,
+						operator: IeObjectsSearchOperator.CONTAINS,
+					},
+				],
+			},
+			[Operator.ContainsNot]: {
+				label: operatorLabels.excludes,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.KEYWORD,
+						operator: IeObjectsSearchOperator.CONTAINS_NOT,
+					},
+				],
+			},
+			[Operator.Equals]: {
+				label: operatorLabels.equals,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.KEYWORD,
+						operator: IeObjectsSearchOperator.IS,
+					},
+				],
+			},
+			[Operator.EqualsNot]: {
+				label: operatorLabels.differs,
+				field: TextInput,
+				filters: [
+					{
+						field: IeObjectsSearchFilterField.KEYWORD,
 						operator: IeObjectsSearchOperator.IS_NOT,
 					},
 				],
@@ -574,5 +628,5 @@ export const getMetadataSearchFilters = (
 	prop: MetadataProp,
 	operator: Operator
 ): IeObjectsSearchFilter[] => {
-	return METADATA_CONFIG()[prop]?.[operator]?.filters || [];
+	return FILTERS_OPTIONS_CONFIG()[prop]?.[operator]?.filters || [];
 };

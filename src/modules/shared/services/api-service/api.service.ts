@@ -1,5 +1,5 @@
-import ky from 'ky-universal';
 import { KyInstance } from 'ky/distribution/types/ky';
+import ky from 'ky-universal';
 import getConfig from 'next/config';
 
 import { AuthService } from '@auth/services/auth-service';
@@ -15,14 +15,15 @@ export abstract class ApiService {
 				prefixUrl: publicRuntimeConfig.PROXY_URL,
 				headers: {
 					'content-type': 'application/json',
+					'Cache-Control': 'no-cache',
 				},
 				credentials: 'include', // TODO change to same-origin once working on server
 				hooks: {
 					afterResponse: [
-						(_request, _options, response) => {
+						async (_request, _options, response) => {
 							if (response.status === 401 && !ignoreAuthError) {
-								// user is unauthorized and should login again
-								AuthService.logout(true); // true: return to current page after login
+								// user is unauthorized and should log in again
+								await AuthService.logout(true); // true: return to current page after login
 							}
 						},
 					],

@@ -1,66 +1,70 @@
 @use "src/styles/abstracts" as *;
 
 $component: "c-block-three-clickable-tiles";
+$img-size: 33%;
 
 .#{$component} {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	width: 100%;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 3.3rem;
 
-	@include respond-at("lg") {
-		flex-direction: row;
-	}
-
-	&__term {
-		width: 33%;
-	}
-
-	&__tile {
-		display: flex;
-		flex-direction: column;
-		margin: $spacer-sm;
-
-		&:hover {
-			span {
-				outline: 0.1rem solid $teal;
-			}
-		}
-
-		&-image {
-			display: flex;
-			width: 100%;
-			background-size: cover;
-			background-position: center center;
-			background-repeat: no-repeat;
-			flex-wrap: wrap;
-			aspect-ratio: 1 / 1;
-		}
-
-		&-subtitle {
-			width: 100%;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 1.5rem 0;
-
-			h5 {
-				font-size: medium;
-				padding-right: 0.5rem;
-			}
-
-			span {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				min-width: 2.8rem;
-				height: 2.8rem;
-				font-size: large;
-				background-color: $silver;
-				border-radius: 50%;
-			}
-		}
+	@include respond-to(sm) {
+		grid-template-columns: 1fr;
 	}
 
 	&__link {
 		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			.#{$component} {
+				&__icon {
+					border-color: $teal;
+				}
+			}
+		}
+	}
+
+	&__tile {
+		width: 100%;
+		min-width: 15rem;
+	}
+
+	&__content {
+		margin-top: 2.2rem;
+		display: grid;
+		grid-template-columns: auto $spacer-lg;
+		column-gap: $spacer-md;
+	}
+
+	&__title {
+		font-weight: $font-weight-bold;
+		font-size: $font-size-md !important;
+	}
+
+	&__icon {
+		width: $spacer-lg;
+		height: $spacer-lg;
+		border-radius: $spacer-lg;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: $silver;
+		font-size: 2rem;
+		line-height: 0;
+		border: 0.2rem solid transparent;
+		transition: $animate-default;
+		grid-column: 2;
+	}
+
+	&__image {
+		aspect-ratio: 1 / 1;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
 	}
 }

@@ -1,4 +1,5 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC } from 'react';
 
@@ -6,6 +7,7 @@ import { GET_MATERIAL_REQUEST_TRANSLATIONS_BY_TYPE } from '@material-requests/co
 import {
 	GET_MATERIAL_REQUEST_REQUESTER_CAPACITY_RECORD,
 	MaterialRequestDetail,
+	MaterialRequestObjectType,
 } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -44,12 +46,18 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h4 className={styles['p-account-my-material-requests__title']}>
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+				<h2
+					{...props}
+					className={clsx(
+						props.className,
+						styles['p-account-my-material-requests__title']
+					)}
+				>
 					{tText(
 						'modules/account/components/material-request-detail-blade/material-requests___detail'
 					)}
-				</h4>
+				</h2>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onClose}
@@ -88,7 +96,8 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 								styles['p-account-my-material-requests__material-label-icon']
 							}
 							name={
-								currentMaterialRequestDetail?.objectType === 'audio'
+								currentMaterialRequestDetail?.objectDctermsFormat ===
+								MaterialRequestObjectType.AUDIO
 									? IconNamesLight.Audio
 									: IconNamesLight.Video
 							}

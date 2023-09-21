@@ -9,7 +9,7 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import { CopyButton } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { asDate, formatDistanceToday, formatMediumDateWithTime } from '@shared/utils';
@@ -19,9 +19,9 @@ export const CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE = 20;
 export const CP_MATERIAL_REQUESTS_FILTER_ALL_ID = 'ALL';
 
 export const CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG = {
-	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
+	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	type: withDefault(ArrayParam, []),
-	orderProp: withDefault(StringParam, MaterialRequestKeys.createdAt),
+	orderProp: withDefault(StringParam, MaterialRequestKeys.updatedAt),
 	orderDirection: withDefault(SortDirectionParam, undefined),
 	page: withDefault(NumberParam, 1),
 };
@@ -74,13 +74,13 @@ export const getMaterialRequestTableColumns = (): Column<MaterialRequest>[] => [
 	},
 	{
 		Header: tText('modules/cp/const/material-requests___datum-aangevraagd'),
-		accessor: MaterialRequestKeys.createdAt,
+		accessor: MaterialRequestKeys.updatedAt,
 		Cell: ({ row: { original } }: MaterialRequestRow) => (
 			<span
 				className="u-color-neutral"
-				title={formatMediumDateWithTime(asDate(original.createdAt))}
+				title={formatMediumDateWithTime(asDate(original.updatedAt))}
 			>
-				{formatDistanceToday(original.createdAt)}
+				{formatDistanceToday(original.updatedAt)}
 			</span>
 		),
 	},

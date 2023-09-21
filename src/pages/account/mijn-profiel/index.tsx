@@ -9,7 +9,7 @@ import {
 	keysSpacebar,
 	onKey,
 } from '@meemoo/react-components';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Link from 'next/link';
@@ -42,6 +42,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { CampaignMonitorService } from '@shared/services/campaign-monitor-service';
 import { toastService } from '@shared/services/toast-service';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { isBrowser } from '@shared/utils';
 
 import { VisitorLayout } from 'modules/visitors';
 
@@ -50,6 +51,8 @@ const { publicRuntimeConfig } = getConfig();
 const labelKeys: Record<keyof CommunicationFormState, string> = {
 	acceptNewsletter: 'Communication__acceptNewsletter',
 };
+
+export const COMMUNICATION_SECTION_ID = 'communicatie';
 
 const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const user = useSelector(selectUser);
@@ -71,7 +74,6 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		resolver: yupResolver(COMMUNICATION_FORM_SCHEMA()),
 	});
 
-	const canViewOrganisation = isAdminUser || isKeyUser;
 	const canEdit = user?.idp === Idp.HETARCHIEF && canEditProfile;
 
 	useEffect(() => {
@@ -80,6 +82,10 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 		}
 
 		setAcceptNewsletter(preferences.newsletter);
+		if (window.location.href.endsWith('#' + COMMUNICATION_SECTION_ID)) {
+			const section = document.getElementById(COMMUNICATION_SECTION_ID);
+			section?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
 	}, [preferences]);
 
 	const onFormSubmit = async (newsletter: boolean) => {
@@ -137,34 +143,37 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			<dd className="u-text-ellipsis u-color-neutral" title={user?.email}>
 				{user?.email}
 			</dd>
-			{canViewOrganisation && renderOrganisation()}
+			{renderOrganisation()}
 		</dl>
 	);
 
-	const renderKeyUserInfo = (): ReactNode => (
-		<>
-			<dt className="u-mt-32">
-				{tText(
-					'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel'
-				)}
-			</dt>
-			<dd className="u-color-neutral u-mt-8">
-				{tHtml(
-					'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-omschrijving'
-				)}
-			</dd>
-		</>
-	);
+	const renderKeyUserInfo = (): ReactNode =>
+		isKeyUser && (
+			<>
+				<dt className="u-mt-32">
+					{tText(
+						'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-titel'
+					)}
+				</dt>
+				<dd className="u-color-neutral u-mt-8">
+					{tHtml(
+						'pages/account/mijn-profiel/index___gebruikersrechten-sleutelgebruiker-omschrijving'
+					)}
+				</dd>
+			</>
+		);
 
 	const renderUserGroup = (): ReactNode => {
 		const userGroup: GroupName = user?.groupName as GroupName;
-		const { name, description } = GET_PERMISSION_TRANSLATIONS_BY_GROUP()[userGroup];
+		const { name, description, isHidden } = GET_PERMISSION_TRANSLATIONS_BY_GROUP()[userGroup];
 
 		return (
-			<>
-				<dt>{name}</dt>
-				<dd className="u-color-neutral u-mt-8">{description}</dd>
-			</>
+			!isHidden && (
+				<>
+					<dt>{name}</dt>
+					<dd className="u-color-neutral u-mt-8">{description}</dd>
+				</>
+			)
 		);
 	};
 
@@ -174,10 +183,15 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 			{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
 			<Link
 				href={stringifyUrl({
-					url: publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL,
+					url: isBrowser()
+						? publicRuntimeConfig.SSUM_EDIT_ACCOUNT_URL
+						: process.env.SSUM_EDIT_ACCOUNT_URL,
 					query: {
 						redirect_to: stringifyUrl({
-							url: publicRuntimeConfig.PROXY_URL + '/auth/global-logout',
+							url:
+								(isBrowser()
+									? publicRuntimeConfig.PROXY_URL
+									: process.env.PROXY_URL) + '/auth/global-logout',
 							query: {
 								returnToUrl: window.location.href,
 							},
@@ -266,7 +280,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 						</section>
 					</Box>
 
-					{isAdminUser && (
+					{(isAdminUser || isKeyUser) && (
 						<Box className="u-mb-32">
 							<section className="u-p-24 p-account-my-profile__permissions">
 								<header className="p-account-my-profile__permissions-header u-mb-24">
@@ -278,14 +292,17 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 								</header>
 								<dl className="p-account-my-profile__permissions-list u-mb-24">
 									{renderUserGroup()}
-									{isKeyUser && renderKeyUserInfo()}
+									{renderKeyUserInfo()}
 								</dl>
 							</section>
 						</Box>
 					)}
 
 					<Box className="u-mb-32">
-						<section className="u-p-24 p-account-my-profile__communication">
+						<section
+							className="u-p-24 p-account-my-profile__communication"
+							id={COMMUNICATION_SECTION_ID}
+						>
 							<header className="p-account-my-profile__communication-header u-mb-24">
 								<h6>{tText('pages/account/mijn-profiel/index___communicatie')}</h6>
 							</header>

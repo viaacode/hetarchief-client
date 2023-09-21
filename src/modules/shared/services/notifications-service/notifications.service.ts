@@ -10,7 +10,7 @@ import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import { asDate } from '@shared/utils';
 
-import { NOTIFICATION_TYPE_TO_PATH } from './notifications.consts';
+import { GET_PATH_FROM_NOTIFICATION_TYPE } from './notifications.consts';
 import {
 	MarkAllAsReadResult,
 	Notification,
@@ -62,8 +62,8 @@ export abstract class NotificationsService {
 
 	public static getPath(notification: Notification): string | null {
 		return (
-			NOTIFICATION_TYPE_TO_PATH[notification.type]
-				?.replace('{visitRequestId}', notification.visitId)
+			GET_PATH_FROM_NOTIFICATION_TYPE()
+				[notification.type]?.replace('{visitRequestId}', notification.visitId)
 				?.replace('{slug}', notification.visitorSpaceSlug) || null
 		);
 	}
@@ -128,7 +128,12 @@ export abstract class NotificationsService {
 						if (url) {
 							// Go to page
 							await NotificationsService.markOneAsRead(newNotifications[0].id);
-							NotificationsService?.router?.push?.(url);
+							if (url.includes('//')) {
+								// If absolute url, we want to reload the whole page, so ensure all visitor spaces are reloaded
+								window.open(url, '_self');
+							} else {
+								NotificationsService?.router?.push?.(url);
+							}
 						} else {
 							// Notification not clickable => open notification center
 							NotificationsService.showNotificationsCenter?.(true);

@@ -1,26 +1,19 @@
-import {
-	Button,
-	FormControl,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from '@meemoo/react-components';
+import { Button, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil, kebabCase } from 'lodash-es';
+import { isEmpty, isNil, kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
+import { stringifyUrl } from 'query-string';
 import { ComponentType, ReactNode, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
-import save from 'save-file';
 import { useQueryParams } from 'use-query-params';
 
 import { CreateFolderButton } from '@account/components';
 import { EditFolderTitle } from '@account/components/EditFolderTitle';
 import { ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG, FolderItemListSize, Permission } from '@account/const';
-import { useGetFolderExport } from '@account/hooks/get-folder-export';
 import { useGetFolderMedia } from '@account/hooks/get-folder-media';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { AccountLayout } from '@account/layouts';
@@ -28,6 +21,7 @@ import { foldersService } from '@account/services/folders';
 import { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
+import { IeObjectAccessThrough, IeObjectLicense } from '@ie-objects/types';
 import {
 	Icon,
 	IconNamesLight,
@@ -42,16 +36,16 @@ import { TYPE_TO_ICON_MAP } from '@shared/components/MediaCard/MediaCard.consts'
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
-import { ROUTES, SEARCH_QUERY_KEY } from '@shared/const';
+import { ROUTE_PARTS, ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
-import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders, setFolders } from '@shared/store/ie-objects';
+import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition } from '@shared/store/ui';
 import { Breakpoints } from '@shared/types';
-import { AccessThroughType } from '@shared/types/access';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
 
@@ -70,21 +64,20 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const { folderSlug } = router.query;
-	const canDownloadMetadata: boolean | null = useHasAllPermission(Permission.EXPORT_OBJECT);
 
 	/**
 	 * Data
 	 */
 	const [filters, setFilters] = useQueryParams(ACCOUNT_FOLDERS_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 	const [blockFallbackRedirect, setBlockFallbackRedirect] = useState(false);
 	const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 	const [showShareMapBlade, setShowShareMapBlade] = useState(false);
 	const [isAddToFolderBladeOpen, setShowAddToFolderBlade] = useState(false);
 	const [selected, setSelected] = useState<IdentifiableMediaCard | null>(null);
-
 	const getFolders = useGetFolders();
 	const folders = useSelector(selectFolders);
+	const lastScrollPosition = useSelector(selectLastScrollPosition);
 
 	const sidebarLinks: ListNavigationFolderItem[] = useMemo(
 		() =>
@@ -128,16 +121,16 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const folderMedia = useGetFolderMedia(
 		activeFolder?.id,
-		filters[SEARCH_QUERY_KEY],
+		filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		filters.page,
 		FolderItemListSize
 	);
 
-	// export
-	const { mutateAsync: getFolderExport } = useGetFolderExport();
-
 	const keywords = useMemo(
-		() => (filters[SEARCH_QUERY_KEY] ? [filters[SEARCH_QUERY_KEY] as string] : []),
+		() =>
+			filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]
+				? [filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] as string]
+				: [],
 		[filters]
 	);
 
@@ -153,10 +146,46 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	}, [activeFolder, folders, router, blockFallbackRedirect]);
 
 	useEffect(() => {
-		if (activeFolder && folderMedia.isStale) {
+		if (!activeFolder) {
+			return;
+		}
+
+		if (folderMedia.isStale) {
 			folderMedia.refetch();
 		}
+
+		dispatch(
+			setBreadcrumbs([
+				{
+					label: tText('pages/slug/ie/index___breadcrumbs___mijn-mappen'),
+					to: ROUTES.myFolders,
+				},
+				{
+					label: activeFolder.name,
+					to: `${ROUTES.myFolders}/${createFolderSlug(activeFolder)}`,
+				},
+			])
+		);
 	}, [activeFolder]); // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		// Ward: wait until items are rendered on the screen before scrolling
+		if (
+			lastScrollPosition &&
+			lastScrollPosition.page === ROUTES.myFolders &&
+			folderMedia?.data?.items
+		) {
+			setTimeout(() => {
+				const item = document.getElementById(
+					`${lastScrollPosition.itemId}`
+				) as HTMLElement | null;
+
+				item?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+				dispatch(setLastScrollPosition(null));
+			}, 100);
+		}
+		// eslint-disable-next-line
+	}, [folderMedia?.data?.items, dispatch]);
 
 	/**
 	 * Events
@@ -219,17 +248,15 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		});
 	};
 
+	/**
+	 * Show buttons to plan a visit if the object is accessible inside a visitor space and the user doesn't currently have access to the object
+	 * @param item
+	 */
 	const getShowLocallyAvailable = (item: FolderIeObject) => {
-		const userHasAccessToMaintainer =
-			item.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FOLDERS) ||
-			item.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FULL);
-
-		const itemHasThumbnail = item.thumbnailUrl;
-
 		return (
-			!userHasAccessToMaintainer &&
-			item.accessThrough.includes(AccessThroughType.SECTOR) &&
-			!itemHasThumbnail
+			isEmpty(item.accessThrough) &&
+			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL))
 		);
 	};
 
@@ -238,107 +265,36 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 */
 
 	const renderTitleButtons = useMemo(() => {
-		const onExportClick = async () => {
-			if (activeFolder?.id) {
-				const xmlBlob = await getFolderExport(activeFolder?.id);
-
-				if (xmlBlob) {
-					save(xmlBlob, `${kebabCase(activeFolder?.name) || 'map'}.xml`);
-				} else {
-					toastService.notify({
-						title:
-							tHtml('pages/account/mijn-mappen/folder-slug/index___error') || 'error',
-						description: tHtml(
-							'pages/account/mijn-mappen/folder-slug/index___het-ophalen-van-de-metadata-is-mislukt'
-						),
-					});
-				}
-			}
-		};
-
 		return [
-			...(canDownloadMetadata
-				? [
-						{
-							before: true,
-							node: (
-								<Button
-									key={'export-folder'}
-									className="p-account-my-folders__export--label"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									iconStart={<Icon name={IconNamesLight.Export} aria-hidden />}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
-							),
-						},
-						{
-							before: true,
-							node: (
-								<Button
-									key={'export-folder-mobile'}
-									className="p-account-my-folders__export--icon"
-									variants={['black']}
-									name={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									icon={<Icon name={IconNamesLight.Export} aria-hidden />}
-									aria-label={tText(
-										'pages/account/mijn-mappen/folder-slug/index___metadata-exporteren'
-									)}
-									onClick={(e) => {
-										e.stopPropagation();
-										onExportClick();
-									}}
-								/>
-							),
-						},
-				  ]
-				: []),
 			...(activeFolder && !activeFolder.isDefault
 				? [
 						{
 							before: false,
 							node: (
-								<Tooltip position="top">
-									<TooltipTrigger>
-										<Button
-											key={'delete-folder'}
-											disabled={!!activeFolder.usedForLimitedAccessUntil}
-											className="p-account-my-folders__delete"
-											variants={['silver']}
-											icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-											aria-label={tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-											)}
-											name={tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
-											)}
-											onClick={(e) => {
-												e.stopPropagation();
-												setShowConfirmDelete(true);
-											}}
-										/>
-									</TooltipTrigger>
-									<TooltipContent>
-										<span>
-											{tText(
-												'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
-											)}
-										</span>
-									</TooltipContent>
-								</Tooltip>
+								<Button
+									key={'delete-folder'}
+									disabled={!!activeFolder.usedForLimitedAccessUntil}
+									className="p-account-my-folders__delete"
+									variants={['silver']}
+									icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+									aria-label={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+									)}
+									name={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+									)}
+									onClick={(e) => {
+										e.stopPropagation();
+										setShowConfirmDelete(true);
+									}}
+									toolTipText={
+										activeFolder.usedForLimitedAccessUntil
+											? tText(
+													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
+											  )
+											: undefined
+									}
+								/>
 							),
 						},
 				  ]
@@ -361,13 +317,16 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 										e.stopPropagation();
 										setShowShareMapBlade(true);
 									}}
+									toolTipText={tText(
+										'pages/account/mijn-mappen/folder-slug/index___map-delen'
+									)}
 								/>
 							),
 						},
 				  ]
 				: []),
 		];
-	}, [canDownloadMetadata, tText, activeFolder, getFolderExport, tHtml]);
+	}, [tText, activeFolder]);
 
 	const renderActions = (item: IdentifiableMediaCard, folder: Folder) => (
 		<>
@@ -393,8 +352,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 
 	const renderDescription = (item: FolderIeObject): ReactNode => {
 		const showAccessLabel =
-			item?.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FULL) ||
-			item?.accessThrough.includes(AccessThroughType.VISITOR_SPACE_FOLDERS);
+			item?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) ||
+			item?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS);
 
 		const items: { label: string | ReactNode; value: ReactNode }[] = [
 			{
@@ -403,11 +362,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
-				value: item.programs.join(', '),
+				value: item?.isPartOf?.programma?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
-				value: item.series.join(', '),
+				value: item?.isPartOf?.serie?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
@@ -532,7 +491,8 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											onChange={setSearch}
 											onSearch={(newValue) =>
 												setFilters({
-													[SEARCH_QUERY_KEY]: newValue || undefined,
+													[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]:
+														newValue || undefined,
 												})
 											}
 										/>
@@ -544,6 +504,21 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 										<MediaCardList
 											keywords={keywords}
 											items={folderMedia?.data?.items.map((media) => {
+												let link: string | undefined = stringifyUrl({
+													url: `/${ROUTE_PARTS.search}/${
+														media.maintainerSlug
+													}/${media.schemaIdentifier}/${
+														kebabCase(media.name) || 'titel'
+													}`,
+													query: {
+														[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
+															keywords,
+													},
+												});
+												if (isEmpty(media.accessThrough)) {
+													// If the user has no access to the object, do not make the card clickable
+													link = undefined;
+												}
 												const base: IdentifiableMediaCard = {
 													schemaIdentifier: media.schemaIdentifier,
 													maintainerSlug: media.maintainerSlug,
@@ -555,10 +530,12 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 													duration: media.duration,
 													licenses: media.licenses,
 													showKeyUserLabel: media.accessThrough.includes(
-														AccessThroughType.SECTOR
+														IeObjectAccessThrough.SECTOR
 													),
 													showLocallyAvailable:
 														getShowLocallyAvailable(media),
+													previousPage: ROUTES.myFolders,
+													link: link,
 												};
 
 												return {
@@ -647,11 +624,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	return (
 		<VisitorLayout>
 			{renderOgTags(
+				tText('pages/account/mijn-mappen/folder-slug/index___mijn-mappen') +
+					` | ${activeFolder?.name || folderSlug}`,
 				tText(
-					'pages/account/mijn-mappen/index___mijn-mappen' +
-						` | ${activeFolder?.name || folderSlug}`
+					'pages/account/mijn-mappen/folder-slug/index___mijn-mappen-meta-omschrijving'
 				),
-				tText('pages/account/mijn-mappen/index___mijn-mappen-meta-omschrijving'),
 				url
 			)}
 			<PermissionsCheck allPermissions={[Permission.MANAGE_ACCOUNT]}>

@@ -1,13 +1,9 @@
-@use "../../../../styles/abstracts/" as *;
+@use "../../../../styles/abstracts" as *;
 
 $component: "c-personal-info-blade";
 
 .#{$component} {
-	&__title {
-		padding: 0 $spacer-lg;
-		margin-bottom: $spacer-1xl;
-		color: $black;
-	}
+	margin-top: $c-navigation-height;
 
 	&__content {
 		color: $black;

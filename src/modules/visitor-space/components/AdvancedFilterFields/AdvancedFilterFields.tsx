@@ -26,9 +26,10 @@ import {
 	GenreSelect,
 	MediaTypeSelect,
 	MediumSelect,
+	ObjectTypeSelect,
 } from '../../components';
 import { AdvancedFilter, MetadataProp } from '../../types';
-import { getField, getOperators, getProperties } from '../../utils';
+import { getAdvancedProperties, getField, getOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { defaultValue } from '../DurationInput/DurationInput';
 
@@ -123,6 +124,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 			case MediaTypeSelect:
 			case GenreSelect:
 			case MediumSelect:
+			case ObjectTypeSelect:
 				Component = Component as FC<ReactSelectProps>;
 				props = props as ReactSelectProps;
 				value = getSelectValue((props.options || []) as SelectOption[], state.val);
@@ -191,8 +193,8 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							val: undefined,
 						});
 					}}
-					options={getProperties()}
-					value={getSelectValue(getProperties(), state.prop)}
+					options={getAdvancedProperties()}
+					value={getSelectValue(getAdvancedProperties(), state.prop)}
 				/>
 			</FormControl>
 

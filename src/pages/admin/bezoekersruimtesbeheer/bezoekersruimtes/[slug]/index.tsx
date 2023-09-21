@@ -31,7 +31,7 @@ const VisitorSpaceEdit: FC<DefaultSeoInfo> = ({ url }) => {
 			>
 				<AdminLayout.Content>
 					<div className="l-container">
-						{isLoading && <Loading owner="admin visitor spaces slug page" />}
+						{isLoading && <Loading owner="admin visitor spaces slug page" fullscreen />}
 						{visitorSpaceInfo && (
 							<VisitorSpaceSettings room={visitorSpaceInfo} refetch={refetch} />
 						)}

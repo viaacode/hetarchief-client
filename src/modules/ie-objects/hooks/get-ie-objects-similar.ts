@@ -7,8 +7,13 @@ import { IeObjectSimilar } from './../types';
 
 export const useGetIeObjectsSimilar = (
 	id: string,
+	maintainerId = '',
 	enabled = true
 ): UseQueryResult<IeObjectSimilar> =>
-	useQuery([QUERY_KEYS.getIeObjectsSimilar, { id }], () => IeObjectsService.getSimilar(id), {
-		enabled,
-	});
+	useQuery(
+		[QUERY_KEYS.getIeObjectsSimilar, { id, maintainerId }],
+		() => IeObjectsService.getSimilar(id, maintainerId),
+		{
+			enabled,
+		}
+	);

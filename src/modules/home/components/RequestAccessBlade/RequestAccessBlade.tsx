@@ -1,12 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox, FormControl, TextArea, TextInput } from '@meemoo/react-components';
-import clsx from 'clsx';
 import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { Blade, Icon, IconNamesLight, SpacePreview } from '@shared/components';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
@@ -23,9 +22,11 @@ const labelKeys: Record<keyof RequestAccessFormState, string> = {
 const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...bladeProps }) => {
 	const { tHtml } = useTranslation();
 	const [query] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
-	const { data: space } = useGetVisitorSpace(query[VISITOR_SPACE_SLUG_QUERY_KEY] || null);
+	const { data: space } = useGetVisitorSpace(
+		query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] || null
+	);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
 	const {
@@ -102,15 +103,12 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 			className={styles['c-request-access-blade']}
 			footer={renderFooter()}
 			isOpen={isOpen}
-			renderTitle={(props) => (
-				<h4
-					{...props}
-					className={clsx(props.className, styles['c-request-access-blade__title'])}
-				>
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+				<h2 {...props}>
 					{tHtml(
 						'modules/home/components/request-access-blade/request-access-blade___vraag-toegang-aan'
 					)}
-				</h4>
+				</h2>
 			)}
 		>
 			<div className="u-px-16 u-px-32:md">

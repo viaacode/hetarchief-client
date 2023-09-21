@@ -1,12 +1,8 @@
 import { isEmpty } from 'lodash-es';
-import { stringifyUrl } from 'query-string';
+import { parseUrl, stringifyUrl } from 'query-string';
 
-import {
-	IeMetadataExportProps,
-	IeObject,
-	IeObjectSimilar,
-	MetadataExportFormats,
-} from '@ie-objects/types';
+import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
+import { IeObject, IeObjectSimilar, MetadataExportFormats } from '@ie-objects/types';
 import { ApiService } from '@shared/services/api-service';
 import {
 	IeObjectsSearchFilter,
@@ -33,7 +29,8 @@ export class IeObjectsService {
 		filters: IeObjectsSearchFilter[] = [],
 		page = 1,
 		size = 20,
-		sort?: SortObject
+		sort?: SortObject,
+		requestedAggs?: IeObjectsSearchFilterField[]
 	): Promise<GetIeObjectsResponse> {
 		const parsedSort = !sort || sort.orderProp === VisitorSpaceSort.Relevance ? {} : sort;
 		const filtered = [
@@ -61,11 +58,11 @@ export class IeObjectsService {
 					filters: filtered,
 					size,
 					page,
-					requestedAggs: [
+					requestedAggs: requestedAggs || [
 						IeObjectsSearchFilterField.FORMAT,
 						IeObjectsSearchFilterField.GENRE,
 						IeObjectsSearchFilterField.MEDIUM,
-						IeObjectsSearchFilterField.CREATOR,
+						IeObjectsSearchFilterField.OBJECT_TYPE,
 						IeObjectsSearchFilterField.LANGUAGE,
 						IeObjectsSearchFilterField.MAINTAINER_ID,
 					],
@@ -81,32 +78,53 @@ export class IeObjectsService {
 		return await ApiService.getApi().get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public static async getSeoById(id: string): Promise<{ name: string | null } | null> {
+	public static async getSeoById(id: string): Promise<SeoInfo> {
 		return await ApiService.getApi()
 			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_SEO_URL}/${id}`)
 			.json();
 	}
 
-	public static async getPlayableUrl(referenceId: string | null): Promise<string | null> {
-		if (!referenceId) {
+	public static async getPlayableUrl(
+		fileSchemaIdentifier: string | null
+	): Promise<string | null> {
+		if (!fileSchemaIdentifier) {
 			return null;
 		}
 
-		return await ApiService.getApi()
+		const fileSchemaIdentifierWithoutTimeCodes = fileSchemaIdentifier.split('#')[0];
+
+		const fullVideoPlayableUrl = await ApiService.getApi()
 			.get(
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
 					query: {
-						id: referenceId,
+						schemaIdentifier: fileSchemaIdentifierWithoutTimeCodes,
 					},
 				})
 			)
 			.text();
+
+		// Add timecodes if the file.schemaIdentifier contains a #t=x,x suffix
+		// eg: https://archief-media-qas.viaa.be/viaa/ERFGOEDCELKERF/b21722686aa34b239f77068d131c6155d72b5454df734b2690b42de537f753a0/browse.mp4#t=151,242
+		// https://meemoo.atlassian.net/browse/ARC-1856
+		const timeCodes = fileSchemaIdentifier.split('#')[1];
+		const parsedUrl = parseUrl(fullVideoPlayableUrl);
+		return stringifyUrl({
+			url: parsedUrl.url + (timeCodes ? '#' + timeCodes : ''),
+			query: parsedUrl.query,
+		});
 	}
 
-	public static async getSimilar(id: string): Promise<IeObjectSimilar> {
+	public static async getSimilar(id: string, maintainerId: string): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
-			.get(`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_SIMILAR}`)
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_SIMILAR}`,
+					query: {
+						...(!isEmpty(maintainerId) && { maintainerId }),
+					},
+				})
+			)
 			.json();
 	}
 
@@ -119,9 +137,7 @@ export class IeObjectsService {
 			.get(
 				stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IO_OBJECTS_SERVICE_RELATED}/${meemooId}`,
-					query: {
-						...(!isEmpty(maintainerId) && { maintainerId }),
-					},
+					query: maintainerId ? { maintainerId } : {},
 				})
 			)
 			.json();
@@ -145,18 +161,17 @@ export class IeObjectsService {
 			.json();
 	}
 
-	public static async getExport({ id, format }: IeMetadataExportProps): Promise<Blob | null> {
-		if (!id) {
-			return null;
-		}
-		if (format === undefined) {
+	public static async getExport(
+		id: string,
+		format: MetadataExportFormats
+	): Promise<string | null> {
+		if (!id || !format) {
 			return null;
 		}
 
-		return await ApiService.getApi()
-			.get(
-				`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}/${MetadataExportFormats[format]}`
-			)
-			.then((r) => r.blob());
+		const response = await ApiService.getApi().get(
+			`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}/${MetadataExportFormats[format]}`
+		);
+		return response.text();
 	}
 }

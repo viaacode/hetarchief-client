@@ -1,9 +1,8 @@
 import clsx from 'clsx';
-import { stringifyUrl } from 'query-string';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
-import { ROUTE_PARTS } from '@shared/const';
+import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
@@ -20,13 +19,14 @@ const MediaCardList: FC<MediaCardListProps> = ({
 	view,
 	sidebar,
 	breakpoints = MEDIA_CARD_LIST_GRID_BP_COLS,
-	buttons,
-	actions,
-	wrapper = (card) => card,
+	renderButtons,
+	renderActions,
+	renderWrapper = (card) => card,
 	className,
-	showLocallyAvailable = false,
+	showManyResultsTile,
 }) => {
 	const windowSize = useWindowSizeContext();
+	const { tText } = useTranslation();
 
 	if (!items) {
 		return null;
@@ -125,25 +125,38 @@ const MediaCardList: FC<MediaCardListProps> = ({
 		];
 	};
 
+	const insertManyResultsTile = (tiles: ReactNode[]): ReactNode[] => {
+		if (showManyResultsTile) {
+			tiles.push(
+				<MediaCard
+					key="manyResultsTile"
+					id="manyResultsTileId"
+					type={null}
+					preview="/images/more.png"
+					title={tText(
+						'modules/shared/components/media-card-list/media-card-list___teveel-resultaten'
+					)}
+					view={view}
+					link={undefined}
+				/>
+			);
+		}
+		return tiles;
+	};
+
 	const tiles = items.map((item, i) => {
-		const link = stringifyUrl({
-			url: `/${ROUTE_PARTS.search}/${item.maintainerSlug}/${item.schemaIdentifier}`,
-			query: {
-				searchTerms: keywords,
-			},
-		});
-		return wrapper(
+		return renderWrapper(
 			<MediaCard
 				key={getKey(item, i)}
 				id={getKey(item, i)}
-				buttons={buttons?.(item)}
+				buttons={renderButtons?.(item)}
 				meemooIdentifier={item.meemooIdentifier}
-				actions={actions?.(item)}
+				actions={renderActions?.(item)}
 				{...item}
 				keywords={keywords}
 				view={view}
-				showLocallyAvailable={showLocallyAvailable}
-				link={link}
+				showLocallyAvailable={item.showLocallyAvailable}
+				link={item.link}
 				maintainerSlug={item.maintainerSlug}
 			/>,
 			item
@@ -166,7 +179,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				columnClassName={styles['c-media-card-list__column']}
 			>
 				{isMasonryView && renderSidebar()}
-				{insertFakeHeightItem(tiles)}
+				{insertFakeHeightItem(insertManyResultsTile(tiles))}
 			</Masonry>
 		</div>
 	);

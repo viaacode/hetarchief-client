@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormControl, TextArea } from '@meemoo/react-components';
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Blade, VisitSummary } from '@shared/components';
@@ -11,7 +11,6 @@ import { VisitStatus } from '@shared/types';
 import { VisitsService } from '@visits/services/visits/visits.service';
 
 import { DECLINE_REQUEST_FORM_SCHEMA } from './DeclineRequestBlade.const';
-import styles from './DeclineRequestBlade.module.scss';
 import { DeclineRequestBladeProps, DeclineRequestFormState } from './DeclineRequestBlade.types';
 
 const labelKeys: Record<keyof DeclineRequestFormState, string> = {
@@ -87,12 +86,12 @@ const DeclineRequestBlade: FC<DeclineRequestBladeProps> = (props) => {
 		<Blade
 			{...props}
 			footer={props.isOpen && renderFooter()}
-			renderTitle={(props) => (
-				<h4 {...props} className={styles['c-decline-request-blade__title']}>
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+				<h2 {...props}>
 					{tHtml(
 						'modules/cp/components/decline-request-blade/decline-request-blade___aanvraag-afkeuren'
 					)}
-				</h4>
+				</h2>
 			)}
 		>
 			{selected && <VisitSummary {...selected} />}

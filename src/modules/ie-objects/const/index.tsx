@@ -1,4 +1,5 @@
 import { MenuItemInfo, TabProps } from '@meemoo/react-components';
+import { isString } from 'lodash-es';
 import { ArrayParam } from 'use-query-params';
 
 import {
@@ -10,7 +11,6 @@ import {
 import { objectPlaceholderMock } from '@ie-objects/components/ObjectPlaceholder/__mocks__/object-placeholder';
 import {
 	IeObject,
-	IeObjectSearchAggregations,
 	MediaActions,
 	MetadataExportFormats,
 	MetadataSortMap,
@@ -21,11 +21,11 @@ import {
 	mapBooleanToMetadataData,
 	mapObjectToMetadata,
 } from '@ie-objects/utils';
-import { Icon, IconNamesLight, IconNamesSolid, TextWithNewLines } from '@shared/components';
+import { Icon, IconNamesLight, IconNamesSolid } from '@shared/components';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectTypes } from '@shared/types';
 import { asDate, formatLongDate } from '@shared/utils';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 /**
  * Render media
@@ -38,15 +38,6 @@ export const FLOWPLAYER_FORMATS: string[] = [
 	...FLOWPLAYER_AUDIO_FORMATS,
 ];
 export const IMAGE_FORMATS: string[] = ['png', 'jpg', 'jpeg', 'gif'];
-
-export const AGGREGATE_BY_FIELD: Partial<{
-	[key in VisitorSpaceFilterId]: keyof IeObjectSearchAggregations;
-}> = {
-	[VisitorSpaceFilterId.Medium]: 'dcterms_medium',
-	[VisitorSpaceFilterId.Genre]: 'schema_genre',
-	[VisitorSpaceFilterId.Creator]: 'schema_creator',
-	[VisitorSpaceFilterId.Language]: 'schema_in_language',
-};
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
 	{
@@ -82,25 +73,6 @@ export const ticketErrorPlaceholder = (): ObjectPlaceholderProps => ({
 
 export const objectPlaceholder = (): ObjectPlaceholderProps => ({
 	...objectPlaceholderMock,
-	openModalButtonLabel: tText(
-		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
-	),
-	closeModalButtonLabel: tText(
-		'pages/bezoekersruimte/visitor-space-slug/object-id/index___sluit'
-	),
-});
-
-export const formatErrorPlaceholder = (format: string): ObjectPlaceholderProps => ({
-	description: tText(
-		'modules/ie-objects/const/index___dit-formaat-wordt-niet-ondersteund-format',
-		{
-			format,
-		}
-	),
-	reasonTitle: tText('modules/ie-objects/const/index___waarom-kan-ik-dit-object-niet-bekijken'),
-	reasonDescription: tText(
-		'modules/ie-objects/const/index___het-formaat-van-de-data-wordt-op-dit-moment-niet-ondersteund'
-	),
 	openModalButtonLabel: tText(
 		'pages/bezoekersruimte/visitor-space-slug/object-id/index___meer-info'
 	),
@@ -188,8 +160,8 @@ export const ANONYMOUS_ACTION_SORT_MAP = (): MetadataSortMap[] => [
 export const VISITOR_ACTION_SORT_MAP = (
 	hasAccessToVisitorSpaceOfObject: boolean
 ): MetadataSortMap[] => [
-	{ id: MediaActions.RequestMaterial, isPrimary: true },
-	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export }] : []),
+	...(hasAccessToVisitorSpaceOfObject ? [{ id: MediaActions.Export, isPrimary: true }] : []),
+	{ id: MediaActions.RequestMaterial, isPrimary: !hasAccessToVisitorSpaceOfObject },
 	{ id: MediaActions.Bookmark },
 	{ id: MediaActions.Report },
 ];
@@ -222,6 +194,7 @@ export const CP_ADMIN_ACTION_SORT_MAP = (
 ];
 
 export const MEDIA_ACTIONS = (
+	isMobile: boolean,
 	canManageFolders: boolean,
 	isInAFolder: boolean,
 	canReport: boolean,
@@ -231,6 +204,15 @@ export const MEDIA_ACTIONS = (
 ): DynamicActionMenuProps => {
 	const activeIconSet = isInAFolder ? IconNamesSolid : IconNamesLight;
 
+	const addToMaterialRequestsListButtonLabelDesktop = tText(
+		'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-desktop'
+	);
+	const addToMaterialRequestsListButtonLabelMobile = tText(
+		'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst-mobile'
+	);
+	const addToMaterialRequestsListButtonLabel = isMobile
+		? addToMaterialRequestsListButtonLabelMobile
+		: addToMaterialRequestsListButtonLabelDesktop;
 	return {
 		actions: [
 			...((canExport
@@ -239,15 +221,14 @@ export const MEDIA_ACTIONS = (
 							label: tText('modules/ie-objects/const/index___exporteer-metadata'),
 							id: MediaActions.Export,
 							ariaLabel: tText('modules/ie-objects/const/index___exporteer-metadata'),
+							tooltip: tText('modules/ie-objects/const/index___exporteer-metadata'),
 						},
 				  ]
 				: []) as ActionItem[]),
 			...((canRequestMaterial
 				? [
 						{
-							label: tText(
-								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-							),
+							label: addToMaterialRequestsListButtonLabel,
 							icon: (
 								<Icon
 									aria-hidden
@@ -256,12 +237,8 @@ export const MEDIA_ACTIONS = (
 								/>
 							),
 							id: MediaActions.RequestMaterial,
-							ariaLabel: tText(
-								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-							),
-							tooltip: tText(
-								'modules/ie-objects/const/index___toevoegen-aan-aanvraaglijst'
-							),
+							ariaLabel: addToMaterialRequestsListButtonLabel,
+							tooltip: addToMaterialRequestsListButtonLabel,
 						},
 				  ]
 				: []) as ActionItem[]),
@@ -325,18 +302,9 @@ export const MEDIA_ACTIONS = (
 /**
  * Metadata
  */
-export enum CustomMetaDataFields {
-	Maintainer,
-}
 
 // TODO: complete mapping
 export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
-	{
-		title: CustomMetaDataFields.Maintainer,
-		data: CustomMetaDataFields.Maintainer,
-		customData: true,
-		customTitle: true,
-	},
 	{
 		title: tText('modules/ie-objects/const/index___oorsprong'),
 		data: mediaInfo.meemooOriginalCp,
@@ -356,31 +324,63 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	...mapObjectToMetadata(mediaInfo.premisIdentifier),
 	{
 		title: tText('modules/ie-objects/const/index___alternatieve-naam'),
-		data: mapArrayToMetadataData(mediaInfo.alternativeName),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___programma'),
-		data: mapArrayToMetadataData(mediaInfo?.programma),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___serie'),
-		data: mapArrayToMetadataData(mediaInfo?.series),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___reeks'),
-		data: mapArrayToMetadataData(mediaInfo?.reeks),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___seizoenen'),
-		data: mapArrayToMetadataData(mediaInfo?.seizoen),
-	},
-	{
-		title: tText('modules/ie-objects/const/index___alternatief'),
-		data: mapArrayToMetadataData(mediaInfo?.alternatief),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.alternatief),
 	},
 	{
 		title: tText('modules/ie-objects/const/index___archief'),
-		data: mapArrayToMetadataData(mediaInfo?.archief),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.archief),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___deelarchief'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.deelarchief),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___deelreeks'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.deelreeks),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___programma'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.programma),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___reeks'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.reeks),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___seizoenen'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.seizoen),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___serie'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.serie),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___stuk'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.stuk),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___episode'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.episode),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___aflevering'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.aflevering),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___bestanddeel'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.bestanddeel),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___registratie'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.registratie),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___serienummer'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.serienummer),
+	},
+	{
+		title: tText('modules/ie-objects/const/index___seizoennummer'),
+		data: mapArrayToMetadataData(mediaInfo.isPartOf?.seizoennummer),
 	},
 	{
 		title: tText('modules/ie-objects/const/index___bestandstype'),
@@ -424,7 +424,16 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 		title: tText('modules/ie-objects/const/index___genre'),
 		data: mapArrayToMetadataData(mediaInfo.genre),
 	},
-	...mapObjectToMetadata(mediaInfo.actor),
+	...(mediaInfo.actor
+		? [
+				{
+					title: tText('modules/ie-objects/const/index___genre'),
+					data: isString(mediaInfo.actor)
+						? mediaInfo.actor
+						: JSON.stringify(mediaInfo.actor),
+				},
+		  ]
+		: []),
 	{
 		title: tText('modules/ie-objects/const/index___locatie-van-de-inhoud'),
 		data: mapArrayToMetadataData([mediaInfo.spatial]),
@@ -451,12 +460,10 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 	},
 	{
 		title: tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
-		data: mediaInfo?.abstract ? (
-			<TextWithNewLines text={mediaInfo?.abstract} className="u-color-neutral" />
-		) : null,
+		data: mediaInfo?.abstract ? mediaInfo?.abstract : null,
 	},
 ];
 
 export const IE_OBJECT_QUERY_PARAM_CONFIG = {
-	searchTerms: ArrayParam,
+	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: ArrayParam,
 };

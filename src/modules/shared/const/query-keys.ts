@@ -8,7 +8,8 @@ export enum QUERY_KEYS {
 	getIeObjectsExport = 'getIeObjectsExport',
 	getIeObjectsFilterOptions = 'getMediaFilterOptions',
 	getIeObjectsInfo = 'getIeObjectsInfo',
-	getIeObjectsObjects = 'getIeObjectsObjects',
+	getIeObjectsResults = 'getIeObjectsResults',
+	getIeObjectFormatCounts = 'getIeObjectFormatCounts',
 	getIeObjectsRelated = 'getIeObjectsRelated',
 	getIeObjectsSimilar = 'getIeObjectsSimilar',
 	getIeObjectsTicketUrl = 'getIeObjectsTicketUrl',
@@ -28,4 +29,5 @@ export enum QUERY_KEYS {
 	getMaterialRequestById = 'getMaterialRequestById',
 	getMaintenanceAlerts = 'getMaintenanceAlerts',
 	getNewsletterPreferences = 'getNewsletterPreferences',
+	getIeObjectPlayerTicket = 'getIeObjectPlayerTicket',
 }

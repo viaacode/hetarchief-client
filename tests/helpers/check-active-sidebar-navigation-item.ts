@@ -9,13 +9,9 @@ export async function checkActiveSidebarNavigationItem(
 ): Promise<Locator> {
 	const sidebarSelector = `[class*="SidebarLayout_l-sidebar__navigation__"] >> nth=${navigationListIndex}`;
 	const activeSelector = `${sidebarSelector} >> [class*="ListNavigation_c-list-navigation__item--active"]`;
-	await expect
-		.poll(async () => {
-			const activeNavigationItem = await page.locator(activeSelector);
-			return activeNavigationItem.innerHTML();
-		})
-		.toContain(label);
 	const activeNavigationItem = await page.locator(activeSelector);
+	await expect(await activeNavigationItem).toBeVisible();
+	await expect(await activeNavigationItem.innerHTML()).toContain(label);
 	await expect(await activeNavigationItem.innerHTML()).toContain(`href="${linkUrlPrefix}`);
 
 	return page.locator(sidebarSelector);

@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash-es';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
@@ -10,9 +10,9 @@ import { useQueryParams } from 'use-query-params';
 import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
+import { getOperators } from '@visitor-space/utils';
 
 import { MetadataProp } from '../../types';
-import { getOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';

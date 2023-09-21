@@ -21,7 +21,8 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { globalLabelKeys, SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -44,7 +45,7 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 		isFetching,
 		refetch: refetchVisitRequests,
 	} = useGetVisits({
-		searchInput: filters[SEARCH_QUERY_KEY],
+		searchInput: filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		timeframe: VisitTimeframe.ACTIVE,
 		status: VisitStatus.APPROVED,
 		page: filters.page,
@@ -75,6 +76,12 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
+		if (!orderProp) {
+			orderProp = 'startAt';
+		}
+		if (!orderDirection) {
+			orderDirection = OrderDirection.desc;
+		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
@@ -156,7 +163,10 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 								)}
 								onChange={setSearch}
 								onSearch={(value) =>
-									setFilters({ [SEARCH_QUERY_KEY]: value, page: 1 })
+									setFilters({
+										[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: value,
+										page: 1,
+									})
 								}
 							/>
 						</div>

@@ -7,14 +7,17 @@ import { GetServerSidePropsContext } from 'next/types';
 import { ComponentType, FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { GroupName } from '@account/const';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { Loading } from '@shared/components';
+import { ErrorNotFound, Loading } from '@shared/components';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useHasAnyGroup } from '@shared/hooks/has-group';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
+import { isBrowser } from '@shared/utils';
 
 import { useGetContentPageByPath } from '../../modules/content-page/hooks/get-content-page';
 import { ContentPageClientService } from '../../modules/content-page/services/content-page-client.service';
@@ -35,6 +38,7 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 	const router = useRouter();
 	const { slug } = router.query;
 	const dispatch = useDispatch();
+	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 
 	/**
 	 * Data
@@ -57,21 +61,22 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 
 	useEffect(() => {
 		if (isContentPageNotFoundError) {
-			window.open(`${publicRuntimeConfig.PROXY_URL}/not-found`, '_self');
+			window.open(
+				`${isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL}/not-found`,
+				'_self'
+			);
 		}
 	}, [isContentPageNotFoundError]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(true));
-	}, [dispatch]);
+		dispatch(setShowZendesk(!isKioskUser));
+	}, [dispatch, isKioskUser]);
 
 	/**
 	 * Render
 	 */
 
 	const renderPageContent = () => {
-		dispatch(setShowZendesk(true));
-
 		if (isContentPageLoading) {
 			return <Loading fullscreen owner="/[slug]/index page" />;
 		}
@@ -85,6 +90,8 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 				/>
 			);
 		}
+
+		return <ErrorNotFound />;
 	};
 
 	return (
@@ -114,9 +121,8 @@ export async function getServerSideProps(
 		title = 'Home - Het Archief';
 	}
 
-	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> = await getDefaultServerSideProps(
-		context
-	);
+	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
+		await getDefaultServerSideProps(context);
 
 	return {
 		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title },
@@ -124,5 +130,5 @@ export async function getServerSideProps(
 }
 
 export default withAdminCoreConfig(
-	withUser(withAuth(DynamicRouteResolver as ComponentType, false) as FC<unknown>)
+	withUser(withAuth(DynamicRouteResolver as ComponentType, false)) as any
 ) as FC<DefaultSeoInfo>;

@@ -16,7 +16,7 @@ export interface MediaCardProps {
 	name?: string;
 	id?: string;
 	preview?: string;
-	publishedAt?: Date;
+	publishedOrCreatedDate?: Date;
 	publishedBy?: string;
 	title?: string | ReactNode;
 	type: IeObjectTypes;
@@ -26,9 +26,10 @@ export interface MediaCardProps {
 	showKeyUserLabel?: boolean;
 	meemooIdentifier?: string;
 	showLocallyAvailable?: boolean;
-	link?: string;
+	link: string | undefined;
 	maintainerSlug?: string;
 	hasTempAccess?: boolean;
+	previousPage?: string;
 }
 
 export type IdentifiableMediaCard = MediaCardProps & {

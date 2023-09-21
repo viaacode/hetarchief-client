@@ -1,4 +1,5 @@
 import { UseFormTrigger } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form/dist/types/fields';
 
 import { DefaultComponentProps } from '@shared/types';
 import { VisitorSpaceInfo } from '@visitor-space/types';
@@ -12,4 +13,4 @@ export interface VisitorSpaceSettingsProps extends DefaultComponentProps {
 	action?: 'edit' | 'create';
 }
 
-export type ValidationRef<T> = { validate: UseFormTrigger<T> } | undefined;
+export type ValidationRef<T extends FieldValues> = { validate: UseFormTrigger<T> } | undefined;

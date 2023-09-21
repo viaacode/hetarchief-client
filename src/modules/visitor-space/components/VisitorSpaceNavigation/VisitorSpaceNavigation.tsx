@@ -2,7 +2,6 @@ import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import { FC, ReactNode } from 'react';
-import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
 import { Navigation } from '@navigation/components';
@@ -11,7 +10,6 @@ import { CopyButton } from '@shared/components/CopyButton';
 import { isVisitorSpaceSearchPage } from '@shared/helpers/is-visitor-space-search-page';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectShowNavigationBorder } from '@shared/store/ui';
 import { VisitorSpaceNavigationProps } from '@visitor-space/components';
 
 import styles from './VisitorSpaceNavigation.module.scss';
@@ -22,9 +20,9 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	phone,
 	accessEndDate,
 	title,
+	showContactInfo,
 }) => {
 	const { tHtml, tText } = useTranslation();
-	const showBorder = useSelector(selectShowNavigationBorder);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
 	// Check if the url is of the format: /vrt and not of the format: /vrt/some-id
 	const isSearchPage = isVisitorSpaceSearchPage(window.location.pathname);
@@ -96,7 +94,7 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 	};
 
 	return (
-		<Navigation contextual className={className} showBorder={showBorder}>
+		<Navigation contextual className={className}>
 			<Navigation.Left placement="left">
 				{showLinkedSpaceAsHomepage && isSearchPage ? null : (
 					<Button
@@ -111,11 +109,10 @@ const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 			<Navigation.Center title={title} />
 
 			<Navigation.Right placement="right">
-				{!isNil(accessEndDate) ? (
+				{!isNil(accessEndDate) && (
 					<span className="u-py-8 u-text-right">{accessEndDate}</span>
-				) : (
-					renderContact()
 				)}
+				{showContactInfo && renderContact()}
 			</Navigation.Right>
 		</Navigation>
 	);

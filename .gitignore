@@ -48,4 +48,10 @@ tests/test_results/junit.xml
 tests/test-results/
 tests/videos/
 tests/videos-docker/
+tests/docker-disk/
 tests/node_modules
+
+# Build info folder
+dist/
+
+tests/end2end.xml

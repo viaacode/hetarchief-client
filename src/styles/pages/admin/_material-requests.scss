@@ -24,6 +24,7 @@ $page: "p-admin-material-requests";
 
 	&__dropdown {
 		margin-bottom: $spacer-xs;
+
 		@include respond-at("md") {
 			margin-right: $spacer-md;
 			margin-bottom: 0;

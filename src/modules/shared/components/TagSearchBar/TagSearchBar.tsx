@@ -1,6 +1,6 @@
 import { TagsInput } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { KeyboardEvent, ReactElement, useEffect, useMemo, useState } from 'react';
+import { KeyboardEvent, ReactElement, useMemo } from 'react';
 import { InputActionMeta } from 'react-select';
 
 import {
@@ -29,7 +29,8 @@ const components = {
 const TagSearchBar = <IsMulti extends boolean>({
 	className,
 	clearLabel,
-	inputState,
+	inputValue,
+	setInputValue,
 	isClearable = true,
 	isMulti = false as IsMulti,
 	light = false,
@@ -42,25 +43,16 @@ const TagSearchBar = <IsMulti extends boolean>({
 	onRemoveValue,
 	onSearch,
 	options,
-	searchValue,
 	size = undefined,
-	syncSearchValue = true,
 	valuePlaceholder,
 	...tagsInputProps
-}: Partial<TagSearchBarProps<IsMulti>>): ReactElement => {
-	const localInputState = useState(searchValue);
-	const [inputValue, setInputValue] = inputState || localInputState;
-
+}: Partial<TagSearchBarProps<IsMulti>> & {
+	setInputValue: (newInputValue: string) => void;
+}): ReactElement => {
 	const selectValue = useMemo(
 		() => (inputValue ? { label: inputValue, value: inputValue } : null),
 		[inputValue]
 	);
-
-	useEffect(() => {
-		if (syncSearchValue) {
-			setInputValue(searchValue);
-		}
-	}, [searchValue, syncSearchValue, setInputValue]);
 
 	/**
 	 * Methods
@@ -75,6 +67,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 		}
 		if (actionMeta.action === 'clear') {
 			onClear?.();
+			setInputValue('');
 		}
 		onChange?.(newValue, actionMeta);
 	};
@@ -94,21 +87,15 @@ const TagSearchBar = <IsMulti extends boolean>({
 
 	const onSearchKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
 		if (e.key === 'Enter') {
-			if (tagsInputProps.allowCreate) {
-				if (!inputValue) {
-					return;
-				}
-
-				onCreate?.(inputValue);
-				setInputValue('');
-				e.preventDefault();
+			if (!inputValue) {
+				return;
 			}
 
-			onSafeSearchSingle();
-		}
+			onCreate?.(inputValue);
+			setInputValue('');
+			e.preventDefault();
 
-		if (!tagsInputProps.allowCreate) {
-			tagsInputProps.onKeyDown?.(e);
+			onSafeSearchSingle();
 		}
 	};
 
@@ -146,7 +133,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 				onKeyDown={onSearchKeyDown}
 				options={options}
 				value={value}
-				// ts-igonore is necessary to provide custom props to react-select, this is explained
+				// ts-ignore is necessary to provide custom props to react-select, this is explained
 				// in the react-select docs: https://react-select.com/components#defining-components
 				/* eslint-disable @typescript-eslint/ban-ts-comment */
 				// @ts-ignore

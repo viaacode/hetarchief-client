@@ -1,53 +1,51 @@
 import { render, screen } from '@testing-library/react';
 
 import Footer from './Footer';
-import { footerLeftItem, footerRightItem, footerTestLinks } from './__mocks__/footer';
+import { footerTestLinks } from './__mocks__/footer';
 
 // Default
 
 describe('Component: <Footer /> (default)', () => {
 	beforeEach(() => {
-		render(
-			<Footer links={footerTestLinks} leftItem={footerLeftItem} rightItem={footerRightItem} />
-		);
+		render(<Footer linkSections={footerTestLinks} />);
 	});
 
 	it('Should render meemoo reference', () => {
-		const text = screen.getByText('Een initiatief van');
-		const image = screen.getByAltText('Meemoo logo');
+		const text = screen.getByText('een initiatief-van ***');
+		const image = screen.getByAltText('meemoo logo ***');
 
 		expect(text).toBeInTheDocument();
 		expect(image).toBeInTheDocument();
 	});
 
 	it('should set the href attribute on the meemoo reference', () => {
-		const link = screen.getByAltText('Meemoo logo').closest('a');
+		const link = screen.getByAltText('meemoo logo ***').closest('a');
 
 		expect(link).toHaveAttribute('href', 'https://meemoo.be');
 	});
 
 	it('should set the target attribute on the meemoo reference', () => {
-		const link = screen.getByAltText('Meemoo logo').closest('a');
+		const link = screen.getByAltText('meemoo logo ***').closest('a');
 
 		expect(link).toHaveAttribute('target', '_blank');
 	});
 
 	it('Should render vlaanderen reference', () => {
-		const text = screen.getByText('Gesteund door');
-		const image = screen.getByAltText('Vlaanderen logo');
+		const text = screen.getByText('gesteund door ***');
+		const image = screen.getByAltText('vlaanderen logo ***');
 
 		expect(text).toBeInTheDocument();
 		expect(image).toBeInTheDocument();
 	});
 
 	it('should set the href attribute on the vlaanderen reference', () => {
-		const link = screen.getByAltText('Vlaanderen logo').closest('a');
+		const link = screen.getByAltText('vlaanderen logo ***').closest('a');
 
 		expect(link).toHaveAttribute('href', 'https://www.vlaanderen.be');
 	});
 
 	it('should set the target attribute on the vlaanderen reference', () => {
-		const link = screen.getByAltText('Vlaanderen logo').closest('a');
+		const link = screen.getByAltText('vlaanderen logo ***').closest('a');
 
 		expect(link).toHaveAttribute('target', '_blank');
 	});
@@ -55,7 +53,7 @@ describe('Component: <Footer /> (default)', () => {
 	it('should render 3 links', () => {
 		const links = screen.getAllByText('link');
 
-		expect(links.length).toBe(3);
+		expect(links.length).toBe(9);
 	});
 
 	it('should set the href attribute on the links', () => {
@@ -71,59 +69,5 @@ describe('Component: <Footer /> (default)', () => {
 
 		expect(links[0]).toHaveAttribute('target', '_blank');
 		expect(links[1]).toHaveAttribute('target', '_self');
-	});
-});
-
-// Simple
-
-describe('Component: <Footer /> (simple)', () => {
-	beforeEach(() => {
-		render(<Footer leftItem={footerLeftItem} rightItem={footerRightItem} />);
-	});
-
-	it('Should render meemoo reference', () => {
-		const text = screen.getByText('Een initiatief van');
-		const image = screen.getByAltText('Meemoo logo');
-
-		expect(text).toBeInTheDocument();
-		expect(image).toBeInTheDocument();
-	});
-
-	it('should set the href attribute on the meemoo reference', () => {
-		const link = screen.getByAltText('Meemoo logo').closest('a');
-
-		expect(link).toHaveAttribute('href', 'https://meemoo.be');
-	});
-
-	it('should set the target attribute on the meemoo reference', () => {
-		const link = screen.getByAltText('Meemoo logo').closest('a');
-
-		expect(link).toHaveAttribute('target', '_blank');
-	});
-
-	it('Should render vlaanderen reference', () => {
-		const text = screen.getByText('Gesteund door');
-		const image = screen.getByAltText('Vlaanderen logo');
-
-		expect(text).toBeInTheDocument();
-		expect(image).toBeInTheDocument();
-	});
-
-	it('should set the href attribute on the vlaanderen reference', () => {
-		const link = screen.getByAltText('Vlaanderen logo').closest('a');
-
-		expect(link).toHaveAttribute('href', 'https://www.vlaanderen.be');
-	});
-
-	it('should set the target attribute on the vlaanderen reference', () => {
-		const link = screen.getByAltText('Vlaanderen logo').closest('a');
-
-		expect(link).toHaveAttribute('target', '_blank');
-	});
-
-	it('should not render any links', () => {
-		const links = screen.queryAllByText('link');
-
-		expect(links[0]).toBeUndefined();
 	});
 });

@@ -1,6 +1,7 @@
 import { SelectOption, TagInfo } from '@meemoo/react-components';
 import { ReactNode } from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form/dist/types/fields';
 import { DecodedValueMap } from 'use-query-params';
 
 import { DefaultComponentProps, IeObjectTypes, Operator } from '@shared/types';
@@ -20,10 +21,11 @@ export enum VisitorSpaceSort {
 	Date = 'created',
 	Relevance = 'relevance',
 	Title = 'name',
-	Published = 'published',
+	Archived = 'archived',
 }
 
 export enum VisitorSpaceFilterId {
+	Format = 'format',
 	Advanced = 'advanced',
 	Created = 'created',
 	Creator = 'creator',
@@ -37,6 +39,20 @@ export enum VisitorSpaceFilterId {
 	Maintainers = 'aanbieders',
 	ConsultableOnlyOnLocation = 'onLocation',
 	ConsultableMedia = 'media',
+	ObjectType = 'objectType',
+	Cast = 'cast',
+	SpacialCoverage = 'spacialCoverage',
+	TemporalCoverage = 'temporalCoverage',
+	Identifier = 'identifier',
+}
+
+export enum ElasticsearchFieldNames {
+	Medium = 'dcterms_medium',
+	Genre = 'schema_genre',
+	Language = 'schema_in_language',
+	Format = 'dcterms_format',
+	ObjectType = 'ebucore_object_type',
+	Maintainer = 'schema_maintainer.schema_identifier',
 }
 
 export enum VisitorSpaceOrderProps {
@@ -55,13 +71,13 @@ export enum VisitorSpaceOrderProps {
 	ContentPartnerId = 'content_partner.schema_identifier',
 }
 
-export interface DefaultFilterFormChildrenParams<Values = unknown> {
+export interface DefaultFilterFormChildrenParams<Values extends FieldValues> {
 	values: Values;
 	reset: () => void;
 	handleSubmit: UseFormHandleSubmit<Values>;
 }
 
-export interface DefaultFilterFormProps<Values = unknown> extends DefaultComponentProps {
+export interface DefaultFilterFormProps<Values extends FieldValues> extends DefaultComponentProps {
 	children: ({
 		values,
 		reset,
@@ -72,7 +88,7 @@ export interface DefaultFilterFormProps<Values = unknown> extends DefaultCompone
 }
 
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
-	id: string;
+	id: VisitorSpaceFilterId;
 	label: string;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	disabled?: boolean;

@@ -1,5 +1,4 @@
 @use "sass:math";
-
 @use "../abstracts" as *;
 
 $spacer-12: math.div($spacer-md, 2);
@@ -18,6 +17,7 @@ $p: (
 	"24": $spacer-md,
 	"32": $spacer-lg,
 );
+
 @include generate-utils("p", "padding", $p, ("md"));
 
 // Top / Bottom
@@ -29,6 +29,7 @@ $py: (
 	"32": $spacer-lg,
 	"48": $spacer-48,
 );
+
 @include generate-utils("py", ("padding-top", "padding-bottom"), $py, ("md"));
 
 // Left / Right
@@ -41,6 +42,7 @@ $px: (
 	"24": $spacer-md,
 	"32": $spacer-lg,
 );
+
 @include generate-utils("px", ("padding-left", "padding-right"), $px, ("md"));
 
 // Top
@@ -53,6 +55,7 @@ $pt: (
 	"56": $spacer-md + $spacer-lg,
 	"80": $spacer-2xl,
 );
+
 @include generate-utils("pt", "padding-top", $pt, ("md"));
 
 // Bottom
@@ -65,6 +68,7 @@ $pb: (
 	"32": $spacer-lg,
 	"80": $spacer-2xl,
 );
+
 @include generate-utils("pb", "padding-bottom", $pb, ("md"));
 
 // Left
@@ -73,6 +77,7 @@ $pl: (
 	"24": $spacer-md,
 	"32": $spacer-lg,
 );
+
 @include generate-utils("pl", "padding-left", $pl, ("sm"));
 
 // Right
@@ -81,11 +86,18 @@ $pr: (
 	"24": $spacer-md,
 	"56": $spacer-md + $spacer-lg,
 );
+
 @include generate-utils("pr", "padding-right", $pr, ("sm", "md"));
 
 /**
  * Margin
  */
+
+$m: (
+	"0": 0,
+);
+
+@include generate-utils("m", "margin", $m, ());
 
 // Top
 $mt: (
@@ -99,6 +111,7 @@ $mt: (
 	"64": $spacer-64,
 	"80": $spacer-2xl,
 );
+
 @include generate-utils("mt", "margin-top", $mt, ("md"));
 
 // Bottom
@@ -114,6 +127,7 @@ $mb: (
 	"64": $spacer-64,
 	"80": $spacer-2xl,
 );
+
 @include generate-utils("mb", "margin-bottom", $mb, ("md"));
 
 // Left
@@ -123,6 +137,7 @@ $ml: (
 	"20": $spacer-20,
 	"-12": - $spacer-12,
 );
+
 @include generate-utils("ml", "margin-left", $ml);
 
 // Right
@@ -130,6 +145,7 @@ $mr: (
 	"4": $spacer-xxs,
 	"8": $spacer-xs,
 );
+
 @include generate-utils("mr", "margin-right", $mr);
 
 // Top / Bottom
@@ -138,6 +154,7 @@ $my: (
 	"16": $spacer-sm,
 	"32": $spacer-lg,
 );
+
 @include generate-utils("my", ("margin-top", "margin-bottom"), $my);
 
 // Left / Right
@@ -145,6 +162,7 @@ $mx: (
 	"16": $spacer-xxs,
 	"-32": - $spacer-lg,
 );
+
 @include generate-utils("mx", ("margin-left", "margin-right"), $mx);
 
 .u-page-bottom-padding {

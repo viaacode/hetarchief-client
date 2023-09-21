@@ -4,7 +4,6 @@
 
 $c-navigation-border-height: 0.5rem;
 $c-navigation-list-divider-color: #4e4e4e;
-$c-navigation-divider-size: 0.1rem;
 $c-navigation-item-spacing: $spacer-md;
 $c-navigation-item-spacing-lg: $spacer-1xl;
 $c-navigation-dropdown-item-spacer: 1.2rem;
@@ -44,30 +43,12 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	grid-template-columns: auto 1fr 2fr;
 	min-height: $c-navigation-height-md;
 	padding: 0 2rem;
-	margin-bottom: -0.1rem; // Note: prevent fine line artefact between navigation and header; better fix welcome
 	background-color: $black;
 	color: $white;
 
 	@include respond-at(xxl) {
 		min-height: $c-navigation-height;
 		padding: 0 3.2rem;
-	}
-
-	&--bordered::after {
-		content: "";
-		position: absolute;
-		z-index: get-z-layer("foreground");
-		bottom: 0.1rem;
-		left: 2rem;
-		right: 2rem;
-		height: 1px;
-		background-color: $shade;
-		opacity: 0.64;
-
-		@include respond-at(xxl) {
-			left: 3.2rem;
-			right: 3.2rem;
-		}
 	}
 }
 
@@ -127,10 +108,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	.c-navigation__dropdown-flyout {
 		// Overwrite element styles
 		inset: $c-navigation-height-md 0 0 0 !important;
-		top: $c-navigation-height-md !important;
-		right: 0 !important;
-		bottom: 0 !important;
-		left: 0 !important;
 		transform: translate(0) !important;
 		color: $black;
 	}
@@ -168,15 +145,15 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	.c-navigation__dropdown-item--divider {
 		position: relative;
-		margin-bottom: $c-navigation-divider-size + ($c-navigation-dropdown-item-spacer * 2);
+		margin-bottom: $c-navigation-dropdown-item-spacer * 2;
 
 		&::before {
 			content: "";
 			position: absolute;
 			bottom: -$c-navigation-dropdown-item-spacer;
+			height: 0.1rem;
 			left: $spacer-md;
 			right: $spacer-md;
-			height: $c-navigation-divider-size;
 			background-color: $silver;
 
 			@include respond-at(xxl) {
@@ -254,14 +231,16 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		// Overwrite popper element styles
 		@include respond-to(xxl) {
 			inset: $c-navigation-height-md 0 0 0 !important;
-			top: $c-navigation-height-md !important;
-			right: 0 !important;
-			bottom: 0 !important;
-			left: 0 !important;
 			transform: translate(0) !important;
 		}
+
 		@include respond-at(xxl) {
 			min-width: 26.6rem !important;
+		}
+
+		:global(.c-menu) {
+			max-height: 70vh;
+			overflow-y: auto;
 		}
 	}
 }
@@ -276,6 +255,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		border-bottom: none;
 		font-size: $font-size-sm;
 	}
+
 	@include respond-at(xxl) {
 		display: inline-block;
 		padding: 1.2rem 0 0.95rem;
@@ -323,12 +303,13 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	z-index: get-z-layer("nav-dropdown") + 1;
 	display: inline-flex;
 	align-items: center;
-	transition: border-color $animate-md-out, color $animate-md-out;
+	transition:
+		border-color $animate-md-out,
+		color $animate-md-out;
 
 	@include respond-at(xxl) {
-		margin-bottom: $c-navigation-divider-size;
 		position: relative;
-		height: $c-navigation-height - $c-navigation-divider-size;
+		height: $c-navigation-height;
 	}
 
 	.c-navigation__link {
@@ -376,7 +357,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	}
 
 	&--active {
-		z-index: get-z-layer("nav-dropdown");
+		z-index: get-z-layer("nav-dropdown") + 1;
 		font-weight: 800;
 
 		@include respond-to(xxl) {
@@ -462,7 +443,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	/* stylelint-disable-next-line no-descending-specificity */
 	.c-navigation__link {
-		height: $c-navigation-height-contextual - $c-navigation-divider-size;
+		height: $c-navigation-height-contextual;
 	}
 }
 
@@ -472,6 +453,12 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	}
 
 	.c-navigation__section {
+		:global(.c-menu) {
+			max-height: calc(100vh - $c-navigation-height - 10rem); // Extra margin for browser url bar on mobile safari
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+
 		:global(.c-badge) {
 			@include respond-to(xxl) {
 				margin-left: $spacer-xs;
@@ -488,13 +475,14 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 			@include respond-to(xxl) {
 				display: flex;
 				justify-self: center;
+				margin-left: auto;
 			}
 		}
 	}
 
 	&-logged-out {
 		grid-template-rows: 1fr repeat(2, 3.25rem) 1fr;
-		grid-template-columns: repeat(auto, 1fr);
+		grid-template-columns: repeat(auto-fill, 1fr);
 		column-gap: $spacer-lg;
 
 		.c-navigation__section--left {

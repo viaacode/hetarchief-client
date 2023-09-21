@@ -1,5 +1,4 @@
 @use "sass:color";
-
 @use "../abstracts" as *;
 
 .c-tag {
@@ -89,7 +88,10 @@
 
 // interaction
 .c-tag--clickable {
-	transition: background-color $animate-default, color $animate-default, outline $animate-default;
+	transition:
+		background-color $animate-default,
+		color $animate-default,
+		outline $animate-default;
 
 	&:not(.c-tag--disabled) {
 		&:hover {

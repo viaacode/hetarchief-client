@@ -11,4 +11,7 @@ export interface PersonalInfoBladeBladeProps {
 	isOpen: boolean;
 	onClose: () => void;
 	personalInfo: PersonalInfoType;
+	layer: number;
+	currentLayer: number;
+	refetch: () => void;
 }

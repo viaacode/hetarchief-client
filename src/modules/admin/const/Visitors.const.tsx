@@ -4,7 +4,7 @@ import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { DropdownMenu, UnreadMarker } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { Visit, VisitRow } from '@shared/types';
@@ -13,7 +13,7 @@ import { asDate, formatSameDayRange } from '@shared/utils';
 export const VisitorsTablePageSize = 20;
 
 export const ADMIN_VISITORS_QUERY_PARAM_CONFIG = {
-	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
+	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, 'startAt'),
 	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),

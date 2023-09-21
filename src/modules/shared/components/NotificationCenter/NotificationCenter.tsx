@@ -158,6 +158,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 					className="u-text-no-decoration"
 					onClick={() => onClickNotificationLink(notification)}
 					aria-label={notification.title}
+					target="_self"
 				>
 					{content}
 				</a>
@@ -296,12 +297,12 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 			footer={renderFooter()}
 			isOpen={isOpen}
 			onClose={onClose}
-			renderTitle={(props) => (
-				<h3 {...props} className={clsx(props.className, 'u-display-none')}>
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+				<h2 {...props} className={clsx(props.className, 'u-display-none')}>
 					{tText(
 						'modules/shared/components/notification-center/notification-center___notificaties'
 					)}
-				</h3>
+				</h2>
 			)}
 			showCloseButtonOnTop
 		>

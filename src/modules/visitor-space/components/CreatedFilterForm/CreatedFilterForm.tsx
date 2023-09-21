@@ -11,9 +11,9 @@ import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
 import { asDate } from '@shared/utils';
+import { getOperators } from '@visitor-space/utils';
 
 import { MetadataProp } from '../../types';
-import { getOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';

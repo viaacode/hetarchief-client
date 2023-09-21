@@ -1,10 +1,10 @@
-import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { ComponentType, useEffect } from 'react';
 
 import { foldersService } from '@account/services/folders';
 import { SharedFolderStatus } from '@account/types';
+import { createFolderSlug } from '@account/utils';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { Loading } from '@shared/components';
 import { ROUTE_PARTS } from '@shared/const';
@@ -46,11 +46,14 @@ const AccountSharedFolder: NextPage<DefaultSeoInfo> = () => {
 						});
 					}
 					// Ward: navigate to shared folder
-					await router.replace(
-						`/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}/${kebabCase(
-							response.folderName
-						)}--${response.folderId.split('-')[0]}`
-					);
+					const slug = createFolderSlug({
+						id: response.folderId,
+						name: response.folderName,
+						isDefault: false,
+					});
+					const folderUrl = `/${ROUTE_PARTS.account}/${ROUTE_PARTS.myFolders}/${slug}`;
+
+					await router.replace(folderUrl);
 				} catch (err) {
 					toastService.notify({
 						maxLines: 3,
@@ -64,7 +67,7 @@ const AccountSharedFolder: NextPage<DefaultSeoInfo> = () => {
 			}
 		}
 		shareFolder();
-	}, [folderId]);
+	}, [folderId, router, tText]);
 
 	return <Loading fullscreen owner="share folder page" />;
 };

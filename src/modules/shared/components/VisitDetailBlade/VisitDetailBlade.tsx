@@ -1,13 +1,16 @@
 import { Button } from '@meemoo/react-components';
+import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import React, { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components';
+import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { asDate, formatMediumDateWithTime } from '@shared/utils';
@@ -17,12 +20,13 @@ import styles from './VisitDetailBlade.module.scss';
 
 const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit }) => {
 	const { tText } = useTranslation();
+	const router = useRouter();
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 
 	const [, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 	const user = useSelector(selectUser);
 
@@ -44,7 +48,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 				return;
 			}
 
-			await createVisitRequest({
+			const createdVisitRequest = await createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
 				visitorSpaceSlug: visit.spaceSlug as string,
@@ -52,6 +56,9 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 			});
 
 			setIsRequestAccessBladeOpen(false);
+			await router.push(
+				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+			);
 		} catch (err) {
 			console.error({
 				message: 'Failed to create visit request',
@@ -70,7 +77,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 	};
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: visit.spaceSlug });
+		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visit.spaceSlug });
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -99,12 +106,15 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 	return (
 		<Blade
 			isOpen={isOpen}
-			renderTitle={() => (
-				<h4 className={styles['c-visit-detail-blade__title']}>
+			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
+				<h2
+					{...props}
+					className={clsx(styles['c-visit-detail-blade__title'], props.className)}
+				>
 					{tText(
 						'modules/shared/components/visit-detail-blade/visit-detail-blade___bezoekdetail'
 					)}
-				</h4>
+				</h2>
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onCloseVisitDetailBlade}

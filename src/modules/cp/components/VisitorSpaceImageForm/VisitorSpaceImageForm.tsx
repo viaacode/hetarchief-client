@@ -1,9 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, ColorPicker, FormControl } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+import { VisitorSpaceImageFormProps, VisitorSpaceImageFormState } from '@cp/components';
 import { CardImage, Icon, IconNamesLight } from '@shared/components';
 import FileInput from '@shared/components/FileInput/FileInput';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -13,10 +14,6 @@ import { ValidationRef } from '../VisitorSpaceSettings/VisitorSpaceSettings.type
 
 import { VISITOR_SPACE_IMAGE_SCHEMA } from './VisitorSpaceImageForm.const';
 import styles from './VisitorSpaceImageForm.module.scss';
-import {
-	VisitorSpaceImageFormProps,
-	VisitorSpaceImageFormState,
-} from './VisitorSpaceImageForm.types';
 
 const labelKeys: Record<keyof VisitorSpaceImageFormState, string> = {
 	color: 'VisitorSpaceImageForm__color',
@@ -81,8 +78,8 @@ const VisitorSpaceImageForm = forwardRef<
 			color: room.color || DEFAULT_VISITOR_SPACE_COLOR,
 			image: room.image || '',
 		});
-		setValue('color', room.color || DEFAULT_VISITOR_SPACE_COLOR);
-		setValue('image', room.image || '');
+		(setValue as any)('color', room.color || DEFAULT_VISITOR_SPACE_COLOR);
+		(setValue as any)('image', room.image || '');
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [room]);
@@ -124,7 +121,7 @@ const VisitorSpaceImageForm = forwardRef<
 	const onFormSubmit = (state: VisitorSpaceImageFormState) => {
 		// Default color if color picker is empty
 		if (!state.color) {
-			setValue('color', DEFAULT_VISITOR_SPACE_COLOR);
+			(setValue as any)('color', DEFAULT_VISITOR_SPACE_COLOR);
 			state.color = DEFAULT_VISITOR_SPACE_COLOR;
 		}
 		onSubmit?.(state, () => setSavedState(state));
@@ -158,18 +155,20 @@ const VisitorSpaceImageForm = forwardRef<
 				<Controller
 					name="color"
 					control={control}
-					render={() => (
-						<ColorPicker
-							input={{
-								id: labelKeys.color,
-							}}
-							color={currentState.color ?? ''}
-							onChange={(color) => {
-								setValue('color', color);
-								onUpdate?.({ color: color });
-							}}
-						/>
-					)}
+					render={() =>
+						(
+							<ColorPicker
+								input={{
+									id: labelKeys.color,
+								}}
+								color={currentState.color ?? ''}
+								onChange={(color) => {
+									(setValue as any)('color', color);
+									onUpdate?.({ color: color });
+								}}
+							/>
+						) as any
+					}
 				/>
 			</FormControl>
 

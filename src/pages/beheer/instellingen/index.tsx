@@ -9,6 +9,7 @@ import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';
 import { Loading } from '@shared/components';
+import DisableServerSideRendering from '@shared/components/DisableServerSideRendering/DisableServerSideRendering';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
@@ -76,7 +77,7 @@ const CPSettingsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 			)}
 
 			<PermissionsCheck allPermissions={[Permission.UPDATE_OWN_SPACE]}>
-				{renderPageContent()}
+				<DisableServerSideRendering>{renderPageContent()}</DisableServerSideRendering>
 			</PermissionsCheck>
 		</>
 	);

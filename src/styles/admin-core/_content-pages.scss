@@ -1,0 +1,184 @@
+@use "src/styles/abstracts" as *;
+
+$content-top-bar-and-tabs-height: 113px;
+$top-navigation-bar-height: 8.8rem;
+$content-page-header-height: 16.2rem;
+$content-page-tabs-height: 5rem;
+$content-page-sidebar-margin: 4rem;
+$content-page-sidebar-blok-dropdown-height: 7rem;
+
+.c-filter-table__toolbar {
+	.c-toolbar__left {
+		max-width: 100%;
+
+		.o-flex--wrap {
+			gap: 1.2rem 0;
+		}
+	}
+}
+
+.m-resizable-panels {
+	> div {
+		> .resizable-fragment {
+			width: 100%;
+			overflow: visible !important;
+		}
+
+		> div:not(.resizable-fragment) {
+			position: relative;
+			background-color: rgba(#edeff2, 0.4);
+			height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin) !important;
+
+			&::after {
+				content: "||";
+				border: solid 1px #666;
+				border-width: 0 1px;
+				margin: -10px 0 0 3.5px;
+				height: 20px;
+				width: 4px;
+				overflow: hidden;
+				color: transparent;
+				top: 50%;
+				left: 3px;
+				transform: translateX(-50%);
+				position: absolute;
+			}
+		}
+	}
+}
+
+.c-admin__content {
+	h4 + p {
+		padding: 0 $spacer-md;
+	}
+
+	.p-admin-content-page-labels,
+	.p-admin-content {
+		.c-filter-table thead th,
+		.c-filter-table tbody td {
+			// Keep the columns narrow, so they fit on a 1440px wide screen
+			// https://meemoo.atlassian.net/browse/ARC-1889
+			padding: $spacer-md 0.5rem;
+			line-height: $line-height-lg;
+
+			&:first-child {
+				padding-left: $spacer-md;
+			}
+
+			&:last-child {
+				padding-right: $spacer-md;
+			}
+		}
+
+		.c-button-toolbar button[class*="c-button"] {
+			padding: 0;
+			border: 1px solid $silver;
+		}
+	}
+
+	.p-admin-content-page-labels__create,
+	.p-admin-content-page-labels__edit {
+		[class*="c-box"] {
+			background-color: transparent;
+			padding: $spacer-md;
+		}
+	}
+
+	.p-admin-content-page-labels__detail .c-admin__content .c-table_detail-page {
+		th:first-child {
+			padding-left: $spacer-md;
+		}
+
+		.c-button--tertiary {
+			background-color: $silver;
+			border-radius: 2rem;
+			border: 0;
+		}
+	}
+
+	.p-admin-content-page-labels__detail,
+	.p-admin-content-page-labels__create,
+	.p-admin-content-page-labels__edit,
+	.p-admin-content__create,
+	.p-admin-content__edit {
+		.c-table thead th,
+		.c-table tbody td {
+			padding: $spacer-md;
+			line-height: $line-height-lg;
+		}
+
+		.o-container--medium {
+			max-width: 100%;
+			padding: $spacer-md;
+		}
+
+		.m-resizable-panels.m-edit-content-blocks {
+			margin-top: 2.9rem;
+
+			.resizable-fragment:last-of-type {
+				box-shadow: $shadow-24-black-08;
+			}
+		}
+	}
+
+	> .c-content-page-preview,
+	.c-content-edit-view__preview {
+		height: max-content;
+		background-color: white;
+		box-shadow: $shadow-24-black-08;
+	}
+
+	.c-content-edit-view__preview {
+		height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin);
+	}
+
+	> .c-content-page-preview {
+		margin-top: $spacer-lg;
+	}
+
+	.o-sidebar__content {
+		> .c-scrollable {
+			width: 100%;
+			overflow-x: hidden;
+			overflow-y: auto;
+			box-sizing: border-box;
+			height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin - $content-page-sidebar-blok-dropdown-height);
+			padding: 0 $spacer-sm;
+		}
+	}
+
+	.c-user-group-select {
+		.c-checkbox-group {
+			border: 1px solid grey;
+			border-radius: $input-border-radius;
+			background-color: $white;
+			padding: 1px;
+
+			.c-checkbox {
+				display: block;
+				padding: $spacer-sm;
+				border-radius: $input-border-radius;
+
+				&:hover {
+					background-color: $platinum;
+				}
+
+				.c-checkbox__check-icon {
+					margin: 1.5rem 2.2rem;
+				}
+			}
+		}
+	}
+}
+
+.c-content-block {
+	overflow: hidden;
+}
+
+/* Avoid bottom padding on the content page edit/create pages */
+.p-admin-content-page-create,
+.p-admin-content-page-edit {
+	[class*="SidebarLayout_l-sidebar__main"] {
+		padding-bottom: 0 !important;
+	}
+}

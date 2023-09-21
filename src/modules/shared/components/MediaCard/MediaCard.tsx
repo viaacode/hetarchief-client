@@ -2,22 +2,25 @@ import { Badge, Button, Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { isNil } from 'lodash-es';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FC, MouseEvent, ReactNode, useState } from 'react';
 import Highlighter from 'react-highlight-words';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
-import { VISITOR_SPACE_SLUG_QUERY_KEY } from '@home/const';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
 import { DropdownMenu, IconNamesLight, Modal, Pill } from '@shared/components';
 import { TRUNCATED_TEXT_LENGTH, TYPE_TO_NO_ICON_MAP } from '@shared/components/MediaCard';
+import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
+import { ROUTES } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
+import { setLastScrollPosition } from '@shared/store/ui';
 import { IeObjectTypes } from '@shared/types';
 import { formatMediumDate } from '@shared/utils';
 
@@ -31,7 +34,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	duration,
 	keywords,
 	preview,
-	publishedAt,
+	publishedOrCreatedDate,
 	publishedBy,
 	title,
 	type,
@@ -47,11 +50,14 @@ const MediaCard: FC<MediaCardProps> = ({
 	link,
 	maintainerSlug,
 	hasTempAccess,
+	previousPage,
 }) => {
 	const { tText } = useTranslation();
+	const router = useRouter();
+	const dispatch = useDispatch();
 
 	const [, setQuery] = useQueryParams({
-		[VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
+		[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: StringParam,
 	});
 
 	const user = useSelector(selectUser);
@@ -60,18 +66,10 @@ const MediaCard: FC<MediaCardProps> = ({
 	const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
 	const [isRequestAccessBladeOpen, setIsRequestAccessBladeOpen] = useState(false);
 
-	const wrapInLink = (children: ReactNode) => {
-		if (link && !showLocallyAvailable) {
-			return (
-				<Link key={id} href={link}>
-					<a className="u-text-no-decoration" aria-label={id}>
-						{children}
-					</a>
-				</Link>
-			);
+	const saveScrollPosition = () => {
+		if (id && previousPage) {
+			dispatch(setLastScrollPosition({ itemId: id, page: previousPage }));
 		}
-
-		return children;
 	};
 
 	const onRequestAccessSubmit = async (values: RequestAccessFormState) => {
@@ -88,7 +86,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				return;
 			}
 
-			await createVisitRequest({
+			const createdVisitRequest = await createVisitRequest({
 				acceptedTos: values.acceptTerms,
 				reason: values.requestReason,
 				visitorSpaceSlug: maintainerSlug as string,
@@ -96,6 +94,9 @@ const MediaCard: FC<MediaCardProps> = ({
 			});
 
 			setIsRequestAccessBladeOpen(false);
+			await router.push(
+				ROUTES.visitRequested.replace(':slug', createdVisitRequest.spaceSlug)
+			);
 		} catch (err) {
 			console.error({
 				message: 'Failed to create visit request',
@@ -112,7 +113,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	const onOpenRequestAccess = () => {
-		setQuery({ [VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
+		setQuery({ [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: maintainerSlug });
 		setIsRequestAccessBladeOpen(true);
 	};
 
@@ -143,7 +144,7 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
-			return wrapInLink(
+			return (
 				<b className={`u-text-ellipsis--${view === 'grid' ? 7 : 3}`}>
 					{keywords?.length ? highlighted(title ?? '') : title}
 				</b>
@@ -154,7 +155,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			console.warn('[WARN][MediaCard] Title could not be highlighted.');
 		}
 
-		return wrapInLink(title);
+		return title;
 	};
 
 	const renderDescription = (): ReactNode => {
@@ -170,10 +171,6 @@ const MediaCard: FC<MediaCardProps> = ({
 		return description;
 	};
 
-	const renderSubTitle = (): ReactNode => {
-		return wrapInLink(meemooIdentifier);
-	};
-
 	const renderCaption = (): ReactNode => {
 		let subtitle = '';
 
@@ -181,15 +178,15 @@ const MediaCard: FC<MediaCardProps> = ({
 			subtitle += publishedBy;
 		}
 
-		if (publishedAt) {
-			const formatted = formatMediumDate(publishedAt);
+		if (publishedOrCreatedDate) {
+			const formatted = formatMediumDate(publishedOrCreatedDate);
 
 			subtitle += ` (${formatted})`;
 		}
 
 		subtitle = subtitle.trim();
 
-		return keywords?.length ? wrapInLink(highlighted(subtitle)) : wrapInLink(subtitle);
+		return keywords?.length ? highlighted(subtitle) : subtitle;
 	};
 
 	const renderNoContentIcon = () => (
@@ -225,7 +222,11 @@ const MediaCard: FC<MediaCardProps> = ({
 				return renderImage(preview);
 			case 'film':
 				return renderImage(preview);
-
+			case null:
+				if (id === 'manyResultsTileId') {
+					return renderImage(preview);
+				}
+				return renderNoContent();
 			default:
 				return renderNoContent();
 		}
@@ -249,29 +250,27 @@ const MediaCard: FC<MediaCardProps> = ({
 	);
 
 	const renderImage = (imgPath: string | undefined) =>
-		imgPath
-			? wrapInLink(
+		imgPath ? (
+			<div
+				className={clsx(
+					styles['c-media-card__header-wrapper'],
+					styles[`c-media-card__header-wrapper--${view}`]
+				)}
+			>
+				<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
+				{!isNil(icon) && (
 					<>
-						<div
-							className={clsx(
-								styles['c-media-card__header-wrapper'],
-								styles[`c-media-card__header-wrapper--${view}`]
-							)}
-						>
-							<Image src={imgPath} alt={''} unoptimized={true} layout="fill" />
-							{!isNil(icon) && (
-								<>
-									<div className={clsx(styles['c-media-card__header-icon'])}>
-										<Icon name={icon} />
-									</div>
-									{showLocallyAvailable && renderLocallyAvailablePill()}
-								</>
-							)}
-							{duration && renderDuration()}
+						<div className={clsx(styles['c-media-card__header-icon'])}>
+							<Icon name={icon} />
 						</div>
+						{showLocallyAvailable && renderLocallyAvailablePill()}
 					</>
-			  )
-			: renderNoContent();
+				)}
+				{duration && renderDuration()}
+			</div>
+		) : (
+			renderNoContent()
+		);
 
 	const highlighted = (toHighlight: string) => (
 		<Highlighter searchWords={keywords ?? []} autoEscape={true} textToHighlight={toHighlight} />
@@ -331,42 +330,42 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
-	return (
-		<div id={id}>
+	const renderCard = () => {
+		return (
 			<Card
 				className={clsx(
 					styles['c-media-card'],
-					showKeyUserLabel && styles['c-media-card--key-user'],
-					!showLocallyAvailable && styles['c-media-card--pointer']
+					showKeyUserLabel && styles['c-media-card--key-user']
 				)}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
-				subtitle={renderSubTitle()}
+				subtitle={meemooIdentifier}
 				caption={renderCaption()}
 				toolbar={renderToolbar()}
 				tags={renderTags()}
 				padding="both"
+				to={link}
+				linkComponent={NextLinkWrapper}
+				onClick={saveScrollPosition}
 			>
 				{typeof description === 'string' ? (
-					<>
-						{wrapInLink(
-							<div className="u-text-ellipsis--2">
-								<span>{renderDescription()}</span>
-							</div>
-						)}
-						{hasTempAccess && renderTempAccessPill()}
-						{showKeyUserLabel && renderKeyUserPill()}
-						{showLocallyAvailable && renderLocallyAvailableButtons()}
-					</>
+					<div className="u-text-ellipsis--2">
+						<span>{renderDescription()}</span>
+					</div>
 				) : (
-					<>
-						{wrapInLink(renderDescription())}
-						{showKeyUserLabel && renderKeyUserPill()}
-						{showLocallyAvailable && renderLocallyAvailableButtons()}
-					</>
+					renderDescription()
 				)}
+				{hasTempAccess && renderTempAccessPill()}
+				{showKeyUserLabel && renderKeyUserPill()}
+				{showLocallyAvailable && renderLocallyAvailableButtons()}
 			</Card>
+		);
+	};
+
+	return (
+		<div id={id}>
+			{renderCard()}
 			<Modal
 				title={tText(
 					'modules/shared/components/media-card/media-card___waarom-kan-ik-dit-object-niet-bekijken'

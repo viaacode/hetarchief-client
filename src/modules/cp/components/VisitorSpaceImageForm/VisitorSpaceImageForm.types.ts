@@ -1,8 +1,13 @@
 import { DefaultComponentProps } from '@shared/types';
-import { VisitorSpaceInfo } from '@visitor-space/types';
 
 export interface VisitorSpaceImageFormProps extends DefaultComponentProps {
-	room: Pick<VisitorSpaceInfo, 'color' | 'image' | 'logo' | 'id' | 'name'>;
+	room: {
+		id: string;
+		name: string;
+		color: string | null;
+		logo: string;
+		image: string | null;
+	};
 	renderCancelSaveButtons: (onCancel: () => void, onSave: () => void) => void;
 	onSubmit?: (values: VisitorSpaceImageFormState, afterSubmit?: () => void) => void;
 	onUpdate?: (values: VisitorSpaceImageFormState) => void;

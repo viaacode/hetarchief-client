@@ -1,5 +1,5 @@
 import { Button, OrderDirection, Table } from '@meemoo/react-components';
-import { noop } from 'lodash-es';
+import clsx from 'clsx';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
@@ -14,6 +14,7 @@ import {
 	VisitorSpacesOverviewTablePageSize,
 } from '@admin/const/Spaces.const';
 import { AdminLayout } from '@admin/layouts';
+import styles from '@admin/layouts/AdminLayout/AdminLayout.module.scss';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	Icon,
@@ -25,7 +26,8 @@ import {
 	sortingIcons,
 } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
-import { globalLabelKeys, ROUTE_PARTS, SEARCH_QUERY_KEY } from '@shared/const';
+import { globalLabelKeys, ROUTE_PARTS } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -46,7 +48,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 	const showStatusDropdown = useHasAllPermission(Permission.EDIT_ALL_SPACES_STATUS);
 
 	const [filters, setFilters] = useQueryParams(ADMIN_VISITOR_SPACES_OVERVIEW_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>(filters[SEARCH_QUERY_KEY] || '');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 
 	const {
 		data: visitorSpaces,
@@ -55,7 +57,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 		refetch,
 		isFetching,
 	} = useGetVisitorSpaces(
-		filters[SEARCH_QUERY_KEY],
+		filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY],
 		filters.status === 'ALL'
 			? [VisitorSpaceStatus.Requested, VisitorSpaceStatus.Active, VisitorSpaceStatus.Inactive]
 			: ([filters.status] as VisitorSpaceStatus[]),
@@ -82,6 +84,12 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	) => {
+		if (!orderProp) {
+			orderProp = 'created_at';
+		}
+		if (!orderDirection) {
+			orderDirection = OrderDirection.desc;
+		}
 		if (filters.orderProp !== orderProp || filters.orderDirection !== orderDirection) {
 			setFilters({
 				...filters,
@@ -223,42 +231,73 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 		);
 	};
 
-	const renderVisitorSpaces = () => (
-		<>
-			<div className="p-cp-visitor-spaces__header">
-				<SearchBar
-					id={globalLabelKeys.adminLayout.title}
-					value={search}
-					className="p-cp-visitor-spaces__search"
-					placeholder={tText(
-						'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
-					)}
-					onChange={setSearch}
-					onSearch={(newValue) =>
-						setFilters({ [SEARCH_QUERY_KEY]: newValue || undefined, page: 1 })
-					}
-				/>
+	const renderVisitorSpaces = () => {
+		const pageTitle = tText(
+			'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
+		);
+		return (
+			<>
+				<header className={clsx(styles['c-admin__header'])}>
+					<h2 className={styles['c-admin__page-title']}>
+						<label htmlFor={globalLabelKeys.adminLayout.title} title={pageTitle}>
+							{pageTitle}
+						</label>
+					</h2>
+					<div className={styles['c-admin__actions']}>
+						{showCreateButton && (
+							<Button
+								iconStart={<Icon name={IconNamesLight.Plus} />}
+								label={tHtml(
+									'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-bezoekersruimte'
+								)}
+								variants="black"
+								onClick={() =>
+									router.push(
+										`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${ROUTE_PARTS.create}`
+									)
+								}
+							/>
+						)}
+					</div>
+				</header>
+				<div className="p-cp-visitor-spaces__header">
+					<SearchBar
+						id={globalLabelKeys.adminLayout.title}
+						value={search}
+						className="p-cp-visitor-spaces__search"
+						placeholder={tText(
+							'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___zoek'
+						)}
+						onChange={setSearch}
+						onSearch={(newValue) =>
+							setFilters({
+								[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: newValue || undefined,
+								page: 1,
+							})
+						}
+					/>
 
-				<ScrollableTabs
-					className="p-cp-visitor-spaces__status-filter"
-					tabs={statusFilters}
-					variants={['rounded', 'light', 'bordered', 'medium']}
-					onClick={(tabId) =>
-						setFilters({
-							status: tabId.toString(),
-							page: 1,
-						})
-					}
-				/>
-			</div>
+					<ScrollableTabs
+						className="p-cp-visitor-spaces__status-filter"
+						tabs={statusFilters}
+						variants={['rounded', 'light', 'bordered', 'medium']}
+						onClick={(tabId) =>
+							setFilters({
+								status: tabId.toString(),
+								page: 1,
+							})
+						}
+					/>
+				</div>
 
-			<div className="l-container--edgeless-to-lg">{renderVisitorSpacesTable()}</div>
-		</>
-	);
+				<div className="l-container--edgeless-to-lg">{renderVisitorSpacesTable()}</div>
+			</>
+		);
+	};
 
 	const renderPageContent = () => {
 		if (isLoading) {
-			return <Loading owner="admin visitor spaces page: render page content" />;
+			return <Loading owner="admin visitor spaces page: render page content" fullscreen />;
 		}
 		if (isError) {
 			return (
@@ -283,27 +322,7 @@ const VisitorSpacesOverview: FC<DefaultSeoInfo> = ({ url }) => {
 
 	const renderPageLayoutAndContent = () => {
 		return (
-			<AdminLayout
-				pageTitle={tText(
-					'pages/admin/bezoekersruimtesbeheer/bezoekersruimtes/index___alle-bezoekersruimtes'
-				)}
-			>
-				{showCreateButton && (
-					<AdminLayout.Actions>
-						<Button
-							iconStart={<Icon name={IconNamesLight.Plus} />}
-							label={tHtml(
-								'pages/admin/bezoekersruimtes-beheer/bezoekersruimtes/index___nieuwe-bezoekersruimte'
-							)}
-							variants="black"
-							onClick={() =>
-								router.push(
-									`/${ROUTE_PARTS.admin}/${ROUTE_PARTS.visitorSpaceManagement}/${ROUTE_PARTS.visitorSpaces}/${ROUTE_PARTS.create}`
-								)
-							}
-						/>
-					</AdminLayout.Actions>
-				)}
+			<AdminLayout>
 				<AdminLayout.Content>
 					<div className="l-container">{renderPageContent()}</div>
 				</AdminLayout.Content>

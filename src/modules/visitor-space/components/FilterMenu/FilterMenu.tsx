@@ -11,7 +11,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
 import { VISITOR_SPACE_ACTIVE_SORT_MAP, VISITOR_SPACE_QUERY_PARAM_CONFIG } from '../../const';
-import { VisitorSpaceSort } from '../../types';
+import { VisitorSpaceFilterId, VisitorSpaceSort } from '../../types';
 
 import styles from './FilterMenu.module.scss';
 import { FilterMenuFilterOption, FilterMenuProps } from './FilterMenu.types';
@@ -35,7 +35,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	onSortClick,
 	onViewToggle = () => null,
 	onRemoveValue,
-	showNavigationBorder,
 }) => {
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
@@ -43,7 +42,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();
 
-	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
+	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.lg);
 	const openIcon = isMobile
 		? IconNamesLight.Filter
 		: isOpen
@@ -70,11 +69,11 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		setQuery({ filter });
 	};
 
-	const onFilterFormReset = (id: string) => {
+	const onFilterFormReset = (id: VisitorSpaceFilterId) => {
 		onFilterReset(id);
 	};
 
-	const onFilterFormSubmit = (id: string, values: unknown) => {
+	const onFilterFormSubmit = (id: VisitorSpaceFilterId, values: unknown) => {
 		onFilterSubmit(id, values);
 	};
 
@@ -111,7 +110,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		<FilterSort
 			activeSort={activeSort}
 			activeSortLabel={renderActiveSortLabel()}
-			className={styles['c-filter-menu__option']}
 			options={sortOptions}
 			onOptionClick={onSortClick}
 		/>
@@ -178,7 +176,6 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onSortClick={onSortClick}
 				onFilterReset={onFilterFormReset}
 				onFilterSubmit={onFilterFormSubmit}
-				showNavigationBorder={showNavigationBorder}
 				filterValues={filterValues}
 				onRemoveValue={onRemoveValue}
 			/>

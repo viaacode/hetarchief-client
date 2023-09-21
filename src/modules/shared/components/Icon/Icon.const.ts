@@ -1,3 +1,5 @@
+import { capitalize, lowerCase } from 'lodash-es';
+
 import { tText } from '@shared/helpers/translate';
 
 import { IconName } from './Icon.types';
@@ -141,16 +143,12 @@ export enum AlertIconNames {
 }
 
 export const ICON_LIST_CONFIG = (): { value: IconName; label: string }[] => {
-	const lightIcons = Object.values(IconNamesLight).map((v: IconNamesLight) => ({
-		value: v,
-		label: tText(`modules/admin/icons/${v}`),
-	}));
-	const solidIcons = Object.values(IconNamesSolid).map((v: IconNamesSolid) => ({
-		value: v,
-		label: tText(`modules/admin/icons/${v}`),
-	}));
-
-	return [...lightIcons, ...solidIcons];
+	return [...Object.values(IconNamesLight), ...Object.values(IconNamesSolid)].map(
+		(IconName: IconName) => ({
+			value: IconName,
+			label: capitalize(lowerCase(IconName)),
+		})
+	);
 };
 
 export const ALERT_ICON_LIST_CONFIG = (): {

@@ -1,7 +1,6 @@
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC, useState } from 'react';
-import { default as Scrollbar } from 'react-scrollbars-custom';
 
 import { Icon, IconNamesLight } from '@shared/components';
 
@@ -17,30 +16,27 @@ const RelatedObjectsBlade: FC<RelatedObjectsBladeProps> = ({
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		// Wrapped to avoid conflicting css transitions and jerky motion
-		<div className={className}>
-			<div
-				className={clsx(
-					styles['c-related-objects-blade'],
-					isOpen && styles['c-related-objects-blade--open']
-				)}
-			>
-				<Button
-					className={styles['c-related-objects-blade__toggle']}
-					onClick={() => setIsOpen(!isOpen)}
-					iconStart={icon}
-					iconEnd={
-						<Icon
-							className={clsx(
-								styles['c-related-objects-blade__arrow'],
-								'u-text-left'
-							)}
-							name={isOpen ? IconNamesLight.AngleDown : IconNamesLight.AngleUp}
-						/>
-					}
-					label={title}
-				/>
-				<Scrollbar noScrollX>{renderContent(!isOpen)}</Scrollbar>
+		<div
+			className={clsx(
+				className,
+				styles['c-related-objects-blade'],
+				isOpen && styles['c-related-objects-blade--open']
+			)}
+		>
+			<Button
+				className={styles['c-related-objects-blade__toggle']}
+				onClick={() => setIsOpen(!isOpen)}
+				iconStart={icon}
+				iconEnd={
+					<Icon
+						className={clsx(styles['c-related-objects-blade__arrow'], 'u-text-left')}
+						name={isOpen ? IconNamesLight.AngleDown : IconNamesLight.AngleUp}
+					/>
+				}
+				label={title}
+			/>
+			<div className={styles['c-related-objects-blade__scrollable']}>
+				{renderContent(!isOpen)}
 			</div>
 		</div>
 	);

@@ -21,8 +21,11 @@ export function useGetVisitorSpace(
 	>
 ): UseQueryResult<VisitorSpaceInfo | null> {
 	return useQuery(
-		[QUERY_KEYS.getIeObjectsInfo, { slug }],
-		() => VisitorSpaceService.getBySlug(slug as string, ignoreAuthError),
+		[QUERY_KEYS.getVisitorSpaceInfo, { slug }],
+		async () => {
+			const space = await VisitorSpaceService.getBySlug(slug as string, ignoreAuthError);
+			return space;
+		},
 		options
 	);
 }

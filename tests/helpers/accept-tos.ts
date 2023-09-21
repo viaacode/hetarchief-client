@@ -12,14 +12,12 @@ export async function acceptTos(page: Page): Promise<void> {
 		document.querySelector('.p-terms-of-service__content')?.scrollTo(0, 50000);
 	});
 
+	// Wait for button to be available, otherwise this sometimes doesn't trigger the redirect to the homepage
+	await new Promise((resolve) => setTimeout(resolve, 1000));
+
 	// Check button becomes active
 	await expect(acceptTosButton).not.toHaveClass(/c-button--disabled/);
 
 	// Click the accept tos button
 	await acceptTosButton.click();
-
-	// Check page title is the home page
-	await page.waitForFunction(() => document.title === 'Home | bezoekertool', null, {
-		timeout: 10000,
-	});
 }

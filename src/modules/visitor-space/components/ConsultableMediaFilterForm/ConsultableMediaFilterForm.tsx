@@ -39,7 +39,7 @@ const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
 	});
 
 	const onFilterFormSubmit = useCallback(
-		(id: string, values: unknown) => onFormSubmit(id, values),
+		(id: VisitorSpaceFilterId, values: unknown) => onFormSubmit(id, values),
 		[onFormSubmit]
 	);
 

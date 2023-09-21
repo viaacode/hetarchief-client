@@ -1,10 +1,11 @@
 import { Button, OrderDirection, TabProps } from '@meemoo/react-components';
+import { truncate } from 'lodash-es';
 import React from 'react';
 import { Column } from 'react-table';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
 
 import { CopyButton, Icon, IconNamesLight, RequestStatusBadge } from '@shared/components';
-import { SEARCH_QUERY_KEY } from '@shared/const';
+import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
 import { AccessType, Visit, VisitRow, VisitStatus } from '@shared/types';
@@ -17,7 +18,7 @@ export const VISIT_REQUEST_ID_QUERY_KEY = 'aanvraag';
 export const CP_ADMIN_REQUESTS_QUERY_PARAM_CONFIG = {
 	[VISIT_REQUEST_ID_QUERY_KEY]: withDefault(StringParam, undefined),
 	status: withDefault(StringParam, RequestStatusAll.ALL),
-	[SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
+	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
 	page: withDefault(NumberParam, 1),
 	orderProp: withDefault(StringParam, 'createdAt'),
 	orderDirection: withDefault(SortDirectionParam, OrderDirection.desc),
@@ -70,8 +71,9 @@ export const RequestTableColumns = (): Column<Visit>[] => [
 				icon={undefined}
 				variants="text"
 				text={row.original.visitorMail}
+				title={row.original.visitorMail}
 			>
-				{row.original.visitorMail}
+				{truncate(row.original.visitorMail, { length: 30 })}
 			</CopyButton>
 		),
 	},

@@ -2,7 +2,7 @@ import { UserOverview } from '@meemoo/admin-core-ui';
 import { Avo } from '@viaa/avo2-types';
 import { GetServerSidePropsResult } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { FC } from 'react';
+import React, { ComponentType, FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -57,6 +57,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(withUser(UsersOverviewPage as FC<unknown>)),
+	withAdminCoreConfig(withUser(UsersOverviewPage as FC<unknown>) as ComponentType),
 	true
 ) as FC<DefaultSeoInfo>;

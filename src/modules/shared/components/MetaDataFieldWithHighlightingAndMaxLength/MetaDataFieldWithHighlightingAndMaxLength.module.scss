@@ -1,0 +1,19 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-metadata__field__blade";
+
+.#{$component} {
+	&__read-more {
+		cursor: pointer;
+		font-size: $font-size-sm;
+		text-decoration: underline;
+		color: $neutral;
+		transition: opacity $animate-default;
+		margin-top: $spacer-xs;
+
+		&:hover,
+		&:focus {
+			opacity: 0.8;
+		}
+	}
+}

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -12,14 +13,21 @@ import {
 	MaterialRequestObjectType,
 	MaterialRequestRequesterCapacity,
 } from '@material-requests/types';
-import { Blade, Icon, IconNamesLight, Loading } from '@shared/components';
+import { Blade, BladeManager, Icon, IconNamesLight, Loading } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { setMaterialRequestCount } from '@shared/store/ui';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade';
 
+import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
 import PersonalInfoBlade from '../PersonalInfoBlade/PersonalInfoBlade';
 
 import styles from './MaterialRequestCenterBlade.module.scss';
+
+export enum MaterialRequestBladeId {
+	Overview = 'Overview',
+	EditMaterialRequest = 'EditMaterialRequest',
+	PersonalDetails = 'PersonalDetails',
+}
 
 interface MaterialRequestCenterBladeProps {
 	isOpen: boolean;
@@ -30,11 +38,28 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	const { tHtml, tText } = useTranslation();
 	const dispatch = useDispatch();
 
-	const [isPersonalInfoBladeOpen, setIsPersonalInfoBladeOpen] = useState(false);
-	const [isEditMaterialRequestBladeOpen, setIsEditMaterialRequestBladeOpen] = useState(false);
 	const [selectedMaterialRequest, setSelectedMaterialRequest] = useState<MaterialRequest | null>(
 		null
 	);
+	const [activeBlade, setActiveBlade] = useState<MaterialRequestBladeId>(
+		MaterialRequestBladeId.Overview
+	);
+	const getCurrentLayer = () => {
+		if (!isOpen) {
+			return 0;
+		}
+		switch (activeBlade) {
+			case MaterialRequestBladeId.Overview:
+				return 1;
+
+			case MaterialRequestBladeId.EditMaterialRequest:
+			case MaterialRequestBladeId.PersonalDetails:
+				return 2; // Both blades are at level 2
+
+			default:
+				return 0;
+		}
+	};
 
 	const user = useSelector(selectUser);
 
@@ -42,10 +67,13 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		data: materialRequests,
 		isFetching,
 		refetch,
-	} = useGetPendingMaterialRequests({
-		orderProp: MaterialRequestKeys.maintainer,
-		orderDirection: 'asc' as OrderDirection,
-	});
+	} = useGetPendingMaterialRequests(
+		{
+			orderProp: MaterialRequestKeys.maintainer,
+			orderDirection: 'asc' as OrderDirection,
+		},
+		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+	);
 
 	const noContent =
 		!materialRequests?.items || (materialRequests?.items && materialRequests?.items.length < 1);
@@ -53,22 +81,25 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 	// Ward: create an object containing all the distinct maintainerId's as properties
 	// with per property an array of materialRequests, that has the same maintainerId as the property, as value
 	const mappedRequests = useMemo(() => {
-		return materialRequests?.items.reduce((acc, curr) => {
-			// Ward: check if maintainerId is not added yet to object
-			if (!acc[curr.maintainerId]) {
+		return materialRequests?.items.reduce(
+			(acc, curr) => {
+				// Ward: check if maintainerId is not added yet to object
+				if (!acc[curr.maintainerId]) {
+					return {
+						...acc,
+						// Ward: add new property to object and add array, with current item, as value
+						[curr.maintainerId]: [curr],
+					};
+				}
+
 				return {
 					...acc,
-					// Ward: add new property to object and add array, with current item, as value
-					[curr.maintainerId]: [curr],
+					// Ward: property already exists, so push item to array as value
+					[curr.maintainerId]: [...acc[curr.maintainerId], curr],
 				};
-			}
-
-			return {
-				...acc,
-				// Ward: property already exists, so push item to array as value
-				[curr.maintainerId]: [...acc[curr.maintainerId], curr],
-			};
-		}, {} as { [key: string]: MaterialRequest[] });
+			},
+			{} as { [key: string]: MaterialRequest[] }
+		);
 	}, [materialRequests]);
 
 	useEffect(() => {
@@ -79,38 +110,19 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		isOpen && refetch();
 	}, [isOpen, refetch]);
 
-	const onCloseBlade = () => {
-		onClose();
-	};
-
 	const deleteMaterialRequest = async (id: string) => {
 		const deleteResponse = await MaterialRequestsService.delete(id);
-		deleteResponse && refetch();
+		deleteResponse && (await refetch());
 	};
 
-	const closeEditMaterialRequestBlade = () => {
-		setIsEditMaterialRequestBladeOpen(false);
-		setSelectedMaterialRequest(null);
-	};
-
-	const editMaterialRequest = (item: MaterialRequest) => {
-		setSelectedMaterialRequest(item);
-		setIsEditMaterialRequestBladeOpen(true);
-	};
-
-	const onClosePersonalInfoBlade = async () => {
-		refetch();
-		setIsPersonalInfoBladeOpen(false);
-	};
-
-	const renderTitle = () => {
+	const renderTitle = (props: any) => {
 		return (
 			<div className={styles['c-material-request-center-blade__title-container']}>
-				<h4 className={styles['c-material-request-center-blade__title']}>
+				<h2 {...props}>
 					{tText(
 						'modules/navigation/components/material-request-center-blade/material-request-center-blade___aanvraaglijst'
 					)}
-				</h4>
+				</h2>
 				{/* Ward: add label when there is more than 1 maintainer */}
 				{mappedRequests && Object.keys(mappedRequests).length > 1 && (
 					<p className={styles['c-material-request-center-blade__subtitle']}>
@@ -144,7 +156,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 
 				<div>
 					<p className={styles['c-material-request-center-blade__maintainer-details']}>
-						{tText(
+						{tHtml(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___aangevraagd'
 						)}
 					</p>
@@ -177,7 +189,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 									styles['c-material-request-center-blade__material-label-icon']
 								}
 								name={
-									item.objectType === MaterialRequestObjectType.AUDIO
+									item.objectDctermsFormat === MaterialRequestObjectType.AUDIO
 										? IconNamesLight.Audio
 										: IconNamesLight.Video
 								}
@@ -195,11 +207,17 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						className={
 							styles['c-material-request-center-blade__material-actions-button']
 						}
-						onClick={() => editMaterialRequest(item)}
+						onClick={() => {
+							setSelectedMaterialRequest(item);
+							setActiveBlade(MaterialRequestBladeId.EditMaterialRequest);
+						}}
 						variants={['silver']}
 						name="Edit"
 						icon={<Icon name={IconNamesLight.Edit} aria-hidden />}
 						aria-label={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
+						)}
+						toolTipText={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___pas-je-aanvraag-aan'
 						)}
 					/>
@@ -211,6 +229,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
 						aria-label={tText(
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder-materiaal-aanvraag'
+						)}
+						toolTipText={tText(
+							'modules/navigation/components/material-request-center-blade/material-request-center-blade___verwijder'
 						)}
 					/>
 				</div>
@@ -267,7 +288,9 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							'modules/navigation/components/material-request-center-blade/material-request-center-blade___vul-gegevens-aan'
 						)}
 						variants={['block', 'text', 'dark']}
-						onClick={() => setIsPersonalInfoBladeOpen(true)}
+						onClick={() => {
+							setActiveBlade(MaterialRequestBladeId.PersonalDetails);
+						}}
 						className={styles['c-material-request-center-blade__send-button']}
 					/>
 				)}
@@ -282,48 +305,73 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 		);
 	};
 
-	if (isFetching) {
-		return (
-			<Blade isOpen={isOpen} onClose={onClose} renderTitle={renderTitle}>
-				<Loading
-					className={styles['c-material-request-center-blade__loading']}
-					owner="MaterialRequestCenterBlade: render material requests"
-				/>
-			</Blade>
-		);
-	}
-
 	return (
-		<>
+		<BladeManager
+			currentLayer={getCurrentLayer()}
+			onCloseBlade={(layer) => {
+				setActiveBlade(MaterialRequestBladeId.Overview);
+				if (layer === 1) {
+					onClose();
+				}
+			}}
+			opacityStep={0.1}
+		>
 			<Blade
+				className={styles['c-material-request-center-blade']}
 				isOpen={isOpen}
-				renderTitle={renderTitle}
+				layer={1}
+				currentLayer={getCurrentLayer()}
+				renderTitle={() => null}
 				footer={isOpen && renderFooter()}
-				onClose={onCloseBlade}
+				onClose={onClose}
+				isManaged
 			>
-				{renderContent()}
+				{renderTitle({
+					id: 'material-requests-overview-blade-title',
+					className: bladeStyles['c-blade__title'],
+				})}
+				{isFetching ? (
+					<Loading
+						className={styles['c-material-request-center-blade__loading']}
+						owner="MaterialRequestCenterBlade: render material requests"
+					/>
+				) : (
+					renderContent()
+				)}
 			</Blade>
 			{selectedMaterialRequest && (
 				<MaterialRequestBlade
-					isOpen={isEditMaterialRequestBladeOpen}
-					onClose={() => closeEditMaterialRequestBlade()}
+					isOpen={activeBlade === MaterialRequestBladeId.EditMaterialRequest}
+					onClose={() => {
+						setActiveBlade(MaterialRequestBladeId.Overview);
+						setSelectedMaterialRequest(null);
+					}}
 					objectName={selectedMaterialRequest.objectSchemaName}
-					objectId={selectedMaterialRequest.objectMeemooIdentifier}
-					objectType={selectedMaterialRequest.objectType}
+					objectId={selectedMaterialRequest.objectSchemaIdentifier}
+					objectDctermsFormat={selectedMaterialRequest.objectDctermsFormat}
 					maintainerName={selectedMaterialRequest.maintainerName}
 					maintainerLogo={selectedMaterialRequest.maintainerLogo}
 					maintainerSlug={selectedMaterialRequest.maintainerSlug}
 					materialRequestId={selectedMaterialRequest.id}
+					meemooId={selectedMaterialRequest.objectMeemooIdentifier}
 					reason={selectedMaterialRequest.reason}
 					type={selectedMaterialRequest.type}
 					refetch={refetch}
 					isEditMode
+					layer={activeBlade === MaterialRequestBladeId.EditMaterialRequest ? 2 : 99}
+					currentLayer={
+						activeBlade === MaterialRequestBladeId.EditMaterialRequest
+							? getCurrentLayer()
+							: 9999
+					}
 				/>
 			)}
 			{user && (
 				<PersonalInfoBlade
-					isOpen={isPersonalInfoBladeOpen}
-					onClose={onClosePersonalInfoBlade}
+					isOpen={activeBlade === MaterialRequestBladeId.PersonalDetails}
+					onClose={() => {
+						setActiveBlade(MaterialRequestBladeId.Overview);
+					}}
 					personalInfo={{
 						fullName: user.fullName,
 						email: user.email,
@@ -332,9 +380,16 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 							organisation: user.organisationName,
 						}),
 					}}
+					layer={activeBlade === MaterialRequestBladeId.PersonalDetails ? 2 : 99}
+					currentLayer={
+						activeBlade === MaterialRequestBladeId.PersonalDetails
+							? getCurrentLayer()
+							: 9999
+					}
+					refetch={refetch}
 				/>
 			)}
-		</>
+		</BladeManager>
 	);
 };
 

@@ -39,6 +39,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 	);
 	const { data: materialRequests, isFetching } = useGetMaterialRequests({
 		isPersonal: true,
+		isPending: false,
 		size: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 		...(!isNil(filters.page) && { page: filters.page }),
 		...(!isNil(filters.orderProp) && { orderProp: filters.orderProp as MaterialRequestKeys }),
@@ -63,7 +64,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 		orderProp: string | undefined,
 		orderDirection: OrderDirection | undefined
 	): void => {
-		if (filters.orderProp === MaterialRequestKeys.createdAt && orderDirection === undefined) {
+		if (filters.orderProp === MaterialRequestKeys.updatedAt && orderDirection === undefined) {
 			setFilters({
 				...filters,
 				orderProp,
@@ -147,7 +148,7 @@ const AccountMyMaterialRequests: NextPage<DefaultSeoInfo> = ({ url }) => {
 						'u-text-center u-color-neutral u-py-48': isFetching || noData,
 					})}
 				>
-					{isFetching && <Loading owner="Material requests overview" />}
+					{isFetching && <Loading owner="Material requests overview" fullscreen />}
 					{noData && renderEmptyMessage()}
 					{!noData && !isFetching && renderContent()}
 					{currentMaterialRequest?.id && renderDetailBlade()}
