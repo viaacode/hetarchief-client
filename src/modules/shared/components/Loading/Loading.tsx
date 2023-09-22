@@ -7,6 +7,7 @@ import { DefaultComponentProps } from '@shared/types';
 import styles from './Loading.module.scss';
 
 export interface LoadingProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	fullscreen?: boolean;
 	owner: string; // Used to identify which loader is shown
 }

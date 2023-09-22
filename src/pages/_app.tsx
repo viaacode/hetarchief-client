@@ -1,10 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { nlBE } from 'date-fns/locale';
+import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 import { AppProps } from 'next/app';
 import getConfig from 'next/config';
 import { appWithTranslation } from 'next-i18next';
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
@@ -12,9 +12,9 @@ import { wrapper } from '@shared/store';
 import { isBrowser } from '@shared/utils';
 
 import { getI18n } from '../../next-i18next.config';
-import 'styles/main.scss';
-
 import pkg from '../../package.json';
+
+import 'styles/main.scss';
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });

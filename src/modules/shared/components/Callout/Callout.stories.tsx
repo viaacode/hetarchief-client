@@ -17,5 +17,5 @@ export const Default = Template.bind({});
 Default.args = {
 	icon: <Icon name={IconNamesLight.Info} />,
 	text: 'Door gebruik te maken van deze applicatie bevestigt u dat u het beschikbare materiaal enkel raadpleegt voor wetenschappelijk- of privé onderzoek.',
-	action: { label: 'Meer info', onClick: () => action('click')() },
+	action: <span onClick={() => action('click')()}>Meer info</span>,
 };

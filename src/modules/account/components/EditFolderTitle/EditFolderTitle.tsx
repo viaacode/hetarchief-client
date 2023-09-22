@@ -103,7 +103,7 @@ const EditFolderTitle: FC<EditFolderTitleProps> = ({
 	 * Render
 	 */
 
-	const renderButtons = (handler: StopPropagationFunction) => {
+	const renderButtons = (handler?: StopPropagationFunction) => {
 		return (
 			<>
 				{buttons.filter((b) => b.before).map((b) => b.node)}

@@ -77,7 +77,8 @@ export interface DefaultFilterFormChildrenParams<Values extends FieldValues> {
 	handleSubmit: UseFormHandleSubmit<Values>;
 }
 
-export interface DefaultFilterFormProps<Values extends FieldValues> extends DefaultComponentProps {
+export interface DefaultFilterFormProps<Values extends FieldValues>
+	extends Omit<DefaultComponentProps, 'children'> {
 	children: ({
 		values,
 		reset,
@@ -88,6 +89,7 @@ export interface DefaultFilterFormProps<Values extends FieldValues> extends Defa
 }
 
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
+	children?: React.ReactNode;
 	id: VisitorSpaceFilterId;
 	label: string;
 	onFormSubmit: OnFilterMenuFormSubmit;

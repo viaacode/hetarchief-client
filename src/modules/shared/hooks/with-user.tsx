@@ -20,6 +20,7 @@ const mapStateToProps = (state: AppState) => ({
 export default compose(connect(mapStateToProps), withUser);
 
 export interface UserProps {
+	children?: React.ReactNode;
 	user: Avo.User.User | undefined;
 	commonUser: Avo.User.CommonUser | undefined;
 }

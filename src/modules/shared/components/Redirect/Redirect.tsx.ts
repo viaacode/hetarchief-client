@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export interface NextRedirectsProps {
+	children?: React.ReactNode;
 	to: string;
 	method: 'push' | 'replace';
 }

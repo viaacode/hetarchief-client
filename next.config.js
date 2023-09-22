@@ -4,7 +4,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const path = require('path');
-
 /*
  * next-transpile-modules is necessary because:
  * - Global CSS cannot be imported from within node_modules.
@@ -46,12 +45,11 @@ module.exports = withBundleAnalyzer(
 					...config.externals,
 				];
 			}
-			config.resolve.alias['@tanstack/react-query'] = path.resolve(
-				'./node_modules/@tanstack/react-query'
-			);
-			config.resolve.alias['use-query-params'] = path.resolve(
-				'./node_modules/use-query-params'
-			);
+			config.resolve.alias = {
+				...config.resolve.alias,
+				['@tanstack/react-query']: path.resolve('./node_modules/@tanstack/react-query'),
+				['use-query-params']: path.resolve('./node_modules/use-query-params'),
+			};
 
 			return config;
 		},

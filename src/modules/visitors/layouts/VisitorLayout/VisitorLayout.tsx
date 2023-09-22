@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { GroupName } from '@account/const';
@@ -11,7 +11,7 @@ import { setShowZendesk } from '@shared/store/ui';
  * @param children
  * @constructor
  */
-const VisitorLayout: FC = ({ children }) => {
+const VisitorLayout: FC<{ children?: ReactNode }> = ({ children }) => {
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 

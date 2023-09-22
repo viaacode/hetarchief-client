@@ -5,6 +5,7 @@ import React, { FunctionComponent } from 'react';
 import { RICH_TEXT_SANITIZATION } from '@shared/const';
 
 export interface HtmlProps {
+	children?: React.ReactNode;
 	content: string;
 	sanitizePreset?: DOMPurify.Config;
 	type?: 'p' | 'div' | 'span';

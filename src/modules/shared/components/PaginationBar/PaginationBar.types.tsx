@@ -8,6 +8,7 @@ export interface PaginationBarProps
 	extends DefaultComponentProps,
 		Pick<PaginationProps, 'onPageChange'>,
 		Pick<PaginationProgressProps, 'start' | 'total'> {
+	children?: React.ReactNode;
 	count: number;
 	showBackToTop?: boolean;
 }

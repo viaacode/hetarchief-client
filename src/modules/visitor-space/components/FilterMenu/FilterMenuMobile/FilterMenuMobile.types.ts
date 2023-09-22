@@ -9,6 +9,7 @@ export interface FilterMenuMobileProps
 		FilterMenuProps,
 		'activeSort' | 'filters' | 'sortOptions' | 'onSortClick' | 'filterValues'
 	> {
+	children?: React.ReactNode;
 	activeFilter: string | null | undefined;
 	activeSortLabel: ReactNode;
 	isOpen: boolean;

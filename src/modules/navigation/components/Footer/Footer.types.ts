@@ -1,6 +1,7 @@
 import { ComponentLink } from '@shared/types';
 
 export interface FooterProps {
+	children?: React.ReactNode;
 	linkSections: ComponentLink[][];
 }
 

@@ -8,6 +8,7 @@ export interface PersonalInfoType {
 }
 
 export interface PersonalInfoBladeBladeProps {
+	children?: React.ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
 	personalInfo: PersonalInfoType;

@@ -71,7 +71,7 @@ import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-mai
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { publicRuntimeConfig } = getConfig();
 
-const AppLayout: FC = ({ children }) => {
+const AppLayout: FC<any> = ({ children }) => {
 	const dispatch = useAppDispatch();
 	const queryClient = useQueryClient();
 	const router = useRouter();

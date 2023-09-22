@@ -1,0 +1,26 @@
+#
+#   This patch solves this issue in React v17.0.2: https://github.com/facebook/react/issues/20235
+#   This is the error that is otherwise thrown:
+#   Error: Cannot find module 'C:\...\hetarchief-client\node_modules\react\jsx-runtime' imported from C:\...\hetarchief-client\node_modules\@meemoo\react-components\dist\index.mjs
+#   Did you mean to import react/jsx-runtime.js?
+#
+#   The solution is described here:
+#   https://github.com/facebook/react/issues/20235#issuecomment-728824662
+#
+diff --git a/node_modules/react/package.json b/node_modules/react/package.json
+index 936478a..2e607f0 100644
+--- a/node_modules/react/package.json
++++ b/node_modules/react/package.json
+@@ -35,5 +35,12 @@
+     "transform": [
+       "loose-envify"
+     ]
++  },
++  "type": "commonjs",
++  "exports": {
++    ".": "./index.js",
++    "./jsx-dev-runtime": "./jsx-dev-runtime.js",
++    "./jsx-runtime": "./jsx-runtime.js",
++    "./": "./"
+   }
+ }

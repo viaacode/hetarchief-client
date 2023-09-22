@@ -10,6 +10,7 @@ import {
 import { FilterMenuType, OnFilterMenuFormReset, OnFilterMenuFormSubmit } from '../FilterMenu.types';
 
 export interface FilterFormProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps> | null;
 	id: VisitorSpaceFilterId;
 	onFormReset: OnFilterMenuFormReset;

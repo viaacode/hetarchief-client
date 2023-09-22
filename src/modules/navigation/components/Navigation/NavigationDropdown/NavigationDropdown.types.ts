@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { NavigationItem } from '../Navigation.types';
 
 export interface NavigationDropdownProps {
+	children?: React.ReactNode;
 	id: string;
 	isOpen: boolean;
 	items: NavigationItem[];

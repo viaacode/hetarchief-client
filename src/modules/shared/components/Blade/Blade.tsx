@@ -51,7 +51,7 @@ const Blade: FC<BladeProps> = ({
 	}, [isLayered, layer, onClose, onCloseBlade]);
 
 	const escFunction = useCallback(
-		(event) => {
+		(event: KeyboardEvent) => {
 			if (keysEscape.includes(event.key)) {
 				handleClose();
 			}
