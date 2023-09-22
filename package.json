@@ -7,7 +7,6 @@
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
 	],
 	"scripts": {
-		"postinstall": "patch-package",
 		"install-local": "npm i ../react-admin-core-module/ui ../react-components ../avo2-components",
 		"dev": "next dev -p 3200",
 		"build-with-analyse": "cross-env ANALYZE=true next build",
@@ -33,13 +32,13 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "2.9.11",
-		"@meemoo/admin-core-ui": "3.0.5",
-		"@meemoo/react-components": "3.0.2",
+		"@meemoo/admin-core-ui": "file:../react-admin-core-module/ui",
+		"@meemoo/react-components": "file:../react-components",
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
 		"@studiohyperdrive/pagination": "1.0.0",
 		"@tanstack/react-query": "4.35.3",
-		"@viaa/avo2-components": "4.0.3",
+		"@viaa/avo2-components": "file:../avo2-components",
 		"@viaa/avo2-types": "2.49.0",
 		"capture-stack-trace": "1.0.1",
 		"clsx": "2.0.0",
@@ -59,7 +58,6 @@
 		"next-redux-wrapper": "7.0.5",
 		"next-transpile-modules": "9.0.0",
 		"node-zendesk": "2.2.0",
-		"patch-package": "8.0.0",
 		"query-string": "7.1.1",
 		"react": "18.2.0",
 		"react-copy-to-clipboard": "5.0.4",
