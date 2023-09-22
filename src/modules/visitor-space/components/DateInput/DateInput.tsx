@@ -1,7 +1,8 @@
 import { DatepickerProps, historicDatepicker, TextInput } from '@meemoo/react-components';
 import { FC } from 'react';
+import DatePicker from 'react-datepicker';
 
-import { Datepicker, Icon, IconNamesLight } from '@shared/components';
+import { Icon, IconNamesLight } from '@shared/components';
 import { asDate, formatMediumDate } from '@shared/utils';
 
 import styles from './DateInput.module.scss';
@@ -21,12 +22,19 @@ interface DateInputProps extends DatepickerProps {
 const DateInput: FC<DateInputProps> = (props) => (
 	<div className={styles['c-date-input']}>
 		<p className={styles['c-date-input__label']}>{props.label}</p>
-		<Datepicker
+		<DatePicker
 			{...rest}
 			{...props}
 			value={formatMediumDate(asDate(props.value))}
 			selected={asDate(props.value)}
 			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
+			wrapperClassName="c-datepicker"
+			calendarClassName="c-datepicker"
+			popperClassName="c-datepicker"
+			showPopperArrow={false}
+			showMonthDropdown
+			showYearDropdown
+			dropdownMode="select"
 		/>
 	</div>
 );

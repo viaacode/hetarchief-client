@@ -49,6 +49,10 @@ module.exports = withBundleAnalyzer(
 				...config.resolve.alias,
 				['@tanstack/react-query']: path.resolve('./node_modules/@tanstack/react-query'),
 				['use-query-params']: path.resolve('./node_modules/use-query-params'),
+				['react-select']: path.resolve('./node_modules/react-select'),
+				['react-select/creatable']: path.resolve('./node_modules/react-select/creatable'),
+				['react-select/async']: path.resolve('./node_modules/react-select/async'),
+				['react-popper']: path.resolve('./node_modules/react-popper'),
 			};
 
 			return config;
