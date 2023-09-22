@@ -2,16 +2,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
 	Button,
 	FormControl,
-	futureDatepicker,
 	OrderDirection,
 	TextInput,
 	timepicker,
 } from '@meemoo/react-components';
+import { datePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import clsx from 'clsx';
 import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fns';
 import { isEmpty } from 'lodash-es';
 import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import DatePicker from 'react-datepicker';
 import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
 
 import { Permission } from '@account/const';
@@ -27,7 +28,6 @@ import {
 	getAccessToDate,
 	roundToNextQuarter,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
-import { Datepicker } from '@shared/components/Datepicker';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -38,9 +38,12 @@ import { asDate, formatMediumDate, formatMediumDateWithTime, formatTime } from '
 import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitTimeframe } from '@visits/types';
 
-import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
+import {
+	ApproveRequestBladeProps,
+	ApproveRequestFormState,
+	APPROVE_REQUEST_FORM_SCHEMA,
+} from '@shared/components';
 import styles from './ApproveRequestBlade.module.scss';
-import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
 
 const labelKeys: Record<keyof ApproveRequestFormState, string> = {
 	accessFrom: 'ApproveRequestBlade__accessFrom',
@@ -322,16 +325,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		);
 	};
 
-	const futureDatepickerProps = useMemo(() => {
-		const copy = { ...futureDatepicker };
-
-		// Warning: including `maxDate` in any way destroys keyboard navigation
-		// See https://stackoverflow.com/a/63564880
-		delete copy.maxDate;
-
-		return copy;
-	}, []);
-
 	const renderAccessFrom = useCallback(
 		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'> }) => {
 			const now = new Date();
@@ -362,8 +355,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 			return (
 				<>
-					<Datepicker
-						{...futureDatepickerProps}
+					<DatePicker
+						{...datePickerDefaultProps}
 						customInput={
 							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
 						}
@@ -392,7 +385,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[futureDatepickerProps, onSimpleDateChange, getValues, setValue]
+		[datePickerDefaultProps, onSimpleDateChange, getValues, setValue]
 	);
 
 	const renderAccessTo = useCallback(
@@ -408,8 +401,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 			return (
 				<>
-					<Datepicker
-						{...futureDatepickerProps}
+					<DatePicker
+						{...datePickerDefaultProps}
 						customInput={
 							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
 						}
@@ -438,7 +431,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[onSimpleDateChange, futureDatepickerProps]
+		[onSimpleDateChange, datePickerDefaultProps]
 	);
 
 	const renderAccessRemark = ({

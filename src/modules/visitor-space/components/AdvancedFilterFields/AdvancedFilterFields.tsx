@@ -1,6 +1,5 @@
 import {
 	Button,
-	DatepickerProps,
 	FormControl,
 	ReactSelect,
 	ReactSelectProps,
@@ -9,16 +8,15 @@ import {
 	TextInputProps,
 } from '@meemoo/react-components';
 import clsx from 'clsx';
-import React, { FC } from 'react';
+import React, { FC, SyntheticEvent } from 'react';
 import { SingleValue } from 'react-select';
 
 import { Icon, IconNamesLight } from '@shared/components';
 import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { Operator } from '@shared/types';
-import { MetadataFieldProps } from '@visitor-space/const';
-
 import {
+	AdvancedFilterFieldsProps,
 	DateInput,
 	DateRangeInput,
 	DurationInput,
@@ -27,14 +25,16 @@ import {
 	MediaTypeSelect,
 	MediumSelect,
 	ObjectTypeSelect,
-} from '../../components';
+} from '@visitor-space/components';
+import { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
+import { MetadataFieldProps } from '@visitor-space/const';
+
 import { AdvancedFilter, MetadataProp } from '../../types';
 import { getAdvancedProperties, getField, getOperators } from '../../utils';
 import { getSelectValue } from '../../utils/select';
 import { defaultValue } from '../DurationInput/DurationInput';
 
 import styles from './AdvancedFilterFields.module.scss';
-import { AdvancedFilterFieldsProps } from './AdvancedFilterFields.types';
 
 const labelKeys = {
 	prefix: 'AdvancedFilterFields',
@@ -145,7 +145,7 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				);
 
 			case DateInput:
-				Component = Component as FC<DatepickerProps>;
+				Component = Component as FC<DateInputProps>;
 				value = state.val;
 
 				return (
@@ -155,11 +155,11 @@ const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							styles['c-advanced-filter-fields__dynamic-field--datepicker']
 						)}
 						value={value}
-						onChange={(e) =>
+						onChange={(newDate: Date | null) => {
 							onFieldChange({
-								val: e?.valueOf().toString(),
-							})
-						}
+								val: newDate ? newDate.toString() : undefined,
+							});
+						}}
 					/>
 				);
 

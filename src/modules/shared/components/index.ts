@@ -5,7 +5,6 @@ export * from './Callout';
 export * from './CardImage';
 export * from './ConfirmationModal';
 export * from './CopyButton';
-export * from './Datepicker';
 export * from './DeclineRequestBlade';
 export * from './DropdownMenu';
 export * from './ErrorNoAccess';

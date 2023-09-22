@@ -11,6 +11,12 @@ import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
 import { asDate } from '@shared/utils';
+import {
+	PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG,
+	PUBLISHED_FILTER_FORM_SCHEMA,
+	PublishedFilterFormProps,
+	PublishedFilterFormState,
+} from '@visitor-space/components';
 import { getOperators } from '@visitor-space/utils';
 
 import { MetadataProp } from '../../types';
@@ -21,12 +27,7 @@ import { SelectDateOrYear } from '../SelectDateOrYear';
 import { YearInput } from '../YearInput';
 import { YearRangeInput } from '../YearRangeInput';
 
-import {
-	PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG,
-	PUBLISHED_FILTER_FORM_SCHEMA,
-} from './PublishedFilterForm.const';
 import styles from './PublishedFilterForm.module.scss';
-import { PublishedFilterFormProps, PublishedFilterFormState } from './PublishedFilterForm.types';
 
 const labelKeys: Record<keyof PublishedFilterFormState, string> = {
 	operator: 'PublishedFilterForm__operator',

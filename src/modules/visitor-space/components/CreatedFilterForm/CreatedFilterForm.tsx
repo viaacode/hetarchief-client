@@ -102,8 +102,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 		const endOfYear = endOfDay(asDate(`12/31/${yearString}`) || 0);
 
 		if (form.operator === Operator.Equals) {
-			const dateRange = `${startOfYear}${SEPARATOR}${endOfYear}`;
-			return dateRange;
+			return `${startOfYear}${SEPARATOR}${endOfYear}`;
 		}
 
 		if (form.operator === Operator.LessThanOrEqual) {
