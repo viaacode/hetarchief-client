@@ -28,6 +28,10 @@ module.exports = withBundleAnalyzer(
 			 *   Solution: https://nextjs.org/docs/messages/import-esm-externals
 			 */
 			esmExternals: 'loose',
+			/**
+			 * https://stackoverflow.com/questions/72567320/typeerror-cannot-read-properties-of-null-reading-useref
+			 */
+			appDir: false,
 		},
 		webpack: (config, options) => {
 			// Required for ky-universal top level await used in admin core inside the api service
@@ -53,6 +57,9 @@ module.exports = withBundleAnalyzer(
 				['react-select/creatable']: path.resolve('./node_modules/react-select/creatable'),
 				['react-select/async']: path.resolve('./node_modules/react-select/async'),
 				['react-popper']: path.resolve('./node_modules/react-popper'),
+				['react-hook-form']: path.resolve('./node_modules/react-hook-form'),
+				['react-table']: path.resolve('./node_modules/react-table'),
+				['react-datepicker']: path.resolve('./node_modules/react-datepicker'),
 			};
 
 			return config;
@@ -76,7 +83,7 @@ module.exports = withBundleAnalyzer(
 				'media.viaa.be',
 			],
 		},
-		productionBrowserSourceMaps: process.env.DEBUG_TOOLS === 'true',
+		productionBrowserSourceMaps: true, // process.env.DEBUG_TOOLS === 'true',
 		publicRuntimeConfig: {
 			NEXT_TELEMETRY_DISABLED: process.env.NEXT_TELEMETRY_DISABLED,
 			NODE_ENV: process.env.NODE_ENV,
