@@ -227,6 +227,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			currentLayer={currentLayer}
 			className={styles['c-request-material']}
 			isManaged
+			id="material-request-blade"
 		>
 			<div className={styles['c-request-material__maintainer']}>
 				{maintainerLogo && (

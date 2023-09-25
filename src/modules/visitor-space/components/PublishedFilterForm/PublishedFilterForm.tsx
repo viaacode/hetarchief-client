@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
+import { datePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
@@ -146,27 +147,31 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 					<Controller
 						control={control}
 						name="operator"
-						render={({ field }) => (
-							<ReactSelect
-								{...field}
-								isDisabled={disabled}
-								components={{ IndicatorSeparator: () => null }}
-								inputId={labelKeys.operator}
-								onChange={(newValue) => {
-									const value = (newValue as SingleValue<SelectOption>)
-										?.value as Operator;
+						render={({ field }) => {
+							// eslint-disable-next-line @typescript-eslint/no-unused-vars
+							const { ref, ...rest } = field;
+							return (
+								<ReactSelect
+									{...rest}
+									isDisabled={disabled}
+									components={{ IndicatorSeparator: () => null }}
+									inputId={labelKeys.operator}
+									onChange={(newValue) => {
+										const value = (newValue as SingleValue<SelectOption>)
+											?.value as Operator;
 
-									if (value !== form.operator) {
-										setForm({
-											operator: value,
-											published: defaultValues.published,
-										});
-									}
-								}}
-								options={operators}
-								value={getSelectValue(operators, field.value)}
-							/>
-						)}
+										if (value !== form.operator) {
+											setForm({
+												operator: value,
+												published: defaultValues.published,
+											});
+										}
+									}}
+									options={operators}
+									value={getSelectValue(operators, field.value)}
+								/>
+							);
+						}}
 					/>
 				</FormControl>
 			</div>

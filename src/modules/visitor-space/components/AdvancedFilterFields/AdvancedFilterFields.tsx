@@ -12,6 +12,7 @@ import React, { FC, SyntheticEvent } from 'react';
 import { SingleValue } from 'react-select';
 
 import { Icon, IconNamesLight } from '@shared/components';
+import { datePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { Operator } from '@shared/types';

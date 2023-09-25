@@ -608,6 +608,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 						setShowAddToFolderBlade(false);
 						setSelected(null);
 					}}
+					id="folder-detail__add-to-folder-blade"
 				/>
 				{activeFolder?.id && (
 					<ShareFolderBlade

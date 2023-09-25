@@ -120,6 +120,7 @@ const ShareFolderBlade: FC<ShareFolderBladeProps> = ({ isOpen, onClose, folderId
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={handleClose}
+			id="share-folder-blade"
 		>
 			<div className={styles['c-share-folder-blade__content']}>
 				<>

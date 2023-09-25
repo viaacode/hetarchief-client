@@ -106,6 +106,7 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 			layer={layer}
 			currentLayer={currentLayer}
 			isManaged
+			id="personal-info-blade"
 		>
 			<div className={styles['c-personal-info-blade__content']}>
 				<dl>

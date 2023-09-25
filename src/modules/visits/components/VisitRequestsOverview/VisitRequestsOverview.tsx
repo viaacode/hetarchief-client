@@ -276,6 +276,7 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 					setSelectedNotOnCurrentPage(undefined);
 				}}
 				onFinish={refetch}
+				id="visit-request-overview__process-request-blade"
 			/>
 		</>
 	);

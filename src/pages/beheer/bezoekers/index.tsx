@@ -291,6 +291,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 						setShowEditVisitRequestModal(false);
 					}}
 					onSubmit={handleEditVisitRequestFinished}
+					id="visitors-page__approve-request-blade"
 				/>
 			</CPAdminLayout>
 		);

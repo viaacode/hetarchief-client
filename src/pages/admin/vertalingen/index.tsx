@@ -64,6 +64,7 @@ const AdminTranslationsOverview: FC<DefaultSeoInfo> = ({ url }) => {
 				isOpen={isOpen}
 				onClose={onClose}
 				renderTitle={(props: any) => <h2 {...props}>{title}</h2>}
+				id="translations-blade"
 			>
 				<div className={styles['c-translations-overview__blade-body']}>{body}</div>
 			</Blade>

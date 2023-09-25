@@ -121,6 +121,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				isOpen={isRequestAccessBladeOpen}
 				onClose={() => setIsRequestAccessBladeOpen(false)}
 				onSubmit={onRequestAccessSubmit}
+				id="error-no-access-to-object__request-access-blade"
 			/>
 		</>
 	);

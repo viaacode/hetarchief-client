@@ -1059,6 +1059,7 @@ const SearchPage: FC = () => {
 							setShowAddToFolderBlade(false);
 							setSelectedCard(null);
 						}}
+						id="search-page__add-to-folder-blade"
 					/>
 				)}
 			</>

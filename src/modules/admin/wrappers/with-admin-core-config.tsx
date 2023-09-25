@@ -56,7 +56,7 @@ const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentType => {
 	return function withAdminCoreConfig(props: Record<string, unknown>) {
 		// eslint-disable-next-line react-hooks/rules-of-hooks
-		const [adminCoreConfig, setAdminCoreConfig] = useState<AdminConfig | null>(null);
+		const [, setAdminCoreConfig] = useState<AdminConfig | null>(null);
 		// eslint-disable-next-line react-hooks/rules-of-hooks
 		const router = useRouter();
 
@@ -246,14 +246,6 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 		useEffect(() => {
 			initConfigValue();
 		}, [initConfigValue]);
-
-		if (!adminCoreConfig && isBrowser()) {
-			return (
-				<div suppressHydrationWarning={true}>
-					<Loading fullscreen owner="admin-core config not set yet" />
-				</div>
-			);
-		}
 
 		return <WrappedComponent {...props} />;
 	};

@@ -175,19 +175,23 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 					<Controller
 						control={control}
 						name="operator"
-						render={({ field }) => (
-							<ReactSelect
-								{...field}
-								isDisabled={disabled}
-								components={{ IndicatorSeparator: () => null }}
-								inputId={labelKeys.operator}
-								onChange={(newValue) => {
-									onChangeOperatorSelect(newValue);
-								}}
-								options={operators}
-								value={getSelectValue(operators, field.value)}
-							/>
-						)}
+						render={({ field }) => {
+							// eslint-disable-next-line @typescript-eslint/no-unused-vars
+							const { ref, ...rest } = field;
+							return (
+								<ReactSelect
+									{...rest}
+									isDisabled={disabled}
+									components={{ IndicatorSeparator: () => null }}
+									inputId={labelKeys.operator}
+									onChange={(newValue) => {
+										onChangeOperatorSelect(newValue);
+									}}
+									options={operators}
+									value={getSelectValue(operators, field.value)}
+								/>
+							);
+						}}
 					/>
 				</FormControl>
 			</div>

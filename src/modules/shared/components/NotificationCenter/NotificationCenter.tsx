@@ -305,6 +305,7 @@ const NotificationCenter: FC<NotificationCenterProps> = ({
 				</h2>
 			)}
 			showCloseButtonOnTop
+			id="notification-center-blade"
 		>
 			{renderBladeContent()}
 		</Blade>

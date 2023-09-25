@@ -248,6 +248,7 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 								setShowEditVisitRequestModal(false);
 							}}
 							onSubmit={handleEditVisitRequestFinished}
+							id="active-visitors-page__approve-request-blade"
 						/>
 					</div>
 				</AdminLayout.Content>

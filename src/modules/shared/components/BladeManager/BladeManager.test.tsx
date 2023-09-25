@@ -11,13 +11,13 @@ const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 	return render(
 		<Provider store={mockStore}>
 			<BladeManager currentLayer={currentBlade} onCloseBlade={onClose}>
-				<Blade isOpen={true} renderTitle={() => 'Blade 1'} layer={1}>
+				<Blade isOpen={true} renderTitle={() => 'Blade 1'} layer={1} id="blade1">
 					<Button label="Open second blade" />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 2'} layer={2}>
+				<Blade isOpen={false} renderTitle={() => 'Blade 2'} layer={2} id="blade2">
 					<Button label="Open third blade" />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 3'} layer={3} />
+				<Blade isOpen={false} renderTitle={() => 'Blade 3'} layer={3} id="blade3" />
 			</BladeManager>
 		</Provider>
 	);

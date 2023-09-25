@@ -391,6 +391,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				isOpen={isRequestAccessBladeOpen}
 				onClose={() => setIsRequestAccessBladeOpen(false)}
 				onSubmit={onRequestAccessSubmit}
+				id="media-card__request-access-blade"
 			/>
 		</div>
 	);

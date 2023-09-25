@@ -325,6 +325,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				footer={isOpen && renderFooter()}
 				onClose={onClose}
 				isManaged
+				id="material-request-center-blade"
 			>
 				{renderTitle({
 					id: 'material-requests-overview-blade-title',

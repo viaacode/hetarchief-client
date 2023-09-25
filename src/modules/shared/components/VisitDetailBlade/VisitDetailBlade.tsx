@@ -118,6 +118,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onCloseVisitDetailBlade}
+			id="visit-detail-blade"
 		>
 			<div className={styles['c-visit-detail-blade__content']}>
 				<div className={styles['c-visit-detail-blade__content-element']}>
@@ -147,6 +148,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 					setIsRequestAccessBladeOpen(false);
 				}}
 				onSubmit={onRequestAccessSubmit}
+				id="visit-detail-blade__request-access-blade"
 			/>
 		</Blade>
 	);

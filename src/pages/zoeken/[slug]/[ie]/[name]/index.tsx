@@ -1387,6 +1387,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					}
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
+					id="object-detail-page__add-to-folder-blade"
 				/>
 			)}
 			{mediaInfo && !isKiosk && (
@@ -1408,11 +1409,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				user={user}
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
+				id="object-detail-page__report-blade"
 			/>
 			<RequestAccessBlade
 				isOpen={activeBlade === MediaActions.RequestAccess && !!user}
 				onClose={() => setActiveBlade(null)}
 				onSubmit={onRequestAccessSubmit}
+				id="object-detail-page__request-access-blade"
 			/>
 			{/* Read more metadata field blade */}
 			<Blade
@@ -1422,6 +1425,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 					<h2 {...props}>{selectedMetadataField?.title}</h2>
 				)}
+				id="object-detail-page__metadata-field-detail-blade"
 			>
 				<div className="u-px-32 u-pb-32">
 					{highlighted(selectedMetadataField?.data || '')}

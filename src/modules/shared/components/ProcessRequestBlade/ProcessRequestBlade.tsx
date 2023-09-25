@@ -169,6 +169,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				selected={selected}
 				onClose={() => setShowApprove(false)}
 				onSubmit={async () => finish(setShowApprove)}
+				id="process-request-blade__approve-request-blade"
 			/>
 
 			<DeclineRequestBlade
@@ -177,6 +178,7 @@ const ProcessRequestBlade: FC<ProcessRequestBladeProps> = (props) => {
 				selected={selected}
 				onClose={() => setShowDecline(false)}
 				onSubmit={async () => finish(setShowDecline)}
+				id="process-request-blade__decline-request-blade"
 			/>
 		</BladeManager>
 	);
