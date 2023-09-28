@@ -60,6 +60,7 @@ module.exports = withBundleAnalyzer(
 				['react-hook-form']: path.resolve('./node_modules/react-hook-form'),
 				['react-table']: path.resolve('./node_modules/react-table'),
 				['react-datepicker']: path.resolve('./node_modules/react-datepicker'),
+				['react-page-split']: path.resolve('./node_modules/react-page-split'),
 			};
 
 			return config;

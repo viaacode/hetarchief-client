@@ -7,6 +7,7 @@
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
 	],
 	"scripts": {
+		"postinstall": "patch-package",
 		"install-local": "npm i ../react-admin-core-module/ui ../react-components ../avo2-components",
 		"dev": "next dev -p 3200",
 		"build-with-analyse": "cross-env ANALYZE=true next build",
@@ -59,6 +60,7 @@
 		"next-redux-wrapper": "7.0.5",
 		"next-transpile-modules": "9.0.0",
 		"node-zendesk": "2.2.0",
+		"patch-package": "8.0.0",
 		"query-string": "7.1.1",
 		"react": "18.2.0",
 		"react-copy-to-clipboard": "5.0.4",
@@ -69,9 +71,11 @@
 		"react-infinite-scroll-component": "6.1.0",
 		"react-masonry-css": "1.0.16",
 		"react-modal": "3.14.4",
+		"react-page-split": "0.0.7",
 		"react-perfect-scrollbar": "1.5.8",
 		"react-range": "1.8.14",
 		"react-redux": "8.1.2",
+		"react-resizable-panels": "0.0.55",
 		"react-router": "5.3.4",
 		"react-router-dom": "5.3.4",
 		"react-scrollbars-custom": "4.1.1",

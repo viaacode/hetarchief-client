@@ -22,7 +22,7 @@ const ContentPageDetailPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout>
+			<AdminLayout className="p-admin-content-page-detail">
 				<AdminLayout.Content>
 					<ContentPageDetail
 						id={router.query.id as string}

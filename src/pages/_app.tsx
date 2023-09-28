@@ -14,7 +14,7 @@ import { isBrowser } from '@shared/utils';
 import { getI18n } from '../../next-i18next.config';
 import pkg from '../../package.json';
 
-import 'styles/main.scss';
+import '../styles/main.scss';
 
 // Set global locale:
 setDefaultOptions({ locale: nlBE });
