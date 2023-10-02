@@ -19,7 +19,9 @@ const { getI18n } = require('./next-i18next.config');
 module.exports = withBundleAnalyzer(
 	withTM({
 		i18n: getI18n(proxyUrl),
-		reactStrictMode: true,
+		// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
+		// Disabling react 18 strict mode, otherwise the zendesk widget is rendered twice
+		reactStrictMode: false,
 		experimental: {
 			/**
 			 * Necessary to prevent errors like:
