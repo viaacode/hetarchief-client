@@ -2,6 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import '@testing-library/jest-dom';
+import { jest } from '@jest/globals';
 
 import { mockStore } from '../../../../__mocks__/store';
 

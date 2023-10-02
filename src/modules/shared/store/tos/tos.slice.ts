@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
 
 import { TosService } from '@shared/services/tos-service/tos.service';
 import { GetTermsOfServiceResponse } from '@shared/services/tos-service/tos.service.types';
@@ -9,7 +9,7 @@ const initialState: TosState = {
 	updatedAt: undefined,
 };
 
-export const getTosAction = createAsyncThunk<
+export const getTosAction = toolkitRaw.createAsyncThunk<
 	GetTermsOfServiceResponse,
 	undefined,
 	{ rejectValue: string }
@@ -22,7 +22,7 @@ export const getTosAction = createAsyncThunk<
 	}
 });
 
-export const tosSlice = createSlice({
+export const tosSlice = toolkitRaw.createSlice({
 	name: 'tos',
 	initialState,
 	reducers: {},

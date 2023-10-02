@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { Button } from '@meemoo/react-components';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -64,7 +65,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('render call onClose when the close button is clicked', () => {
-		const onClick = jest.fn();
+		const onClick = jest.fn() as () => null;
 		renderBladeManager(1, onClick);
 
 		const closeButton = screen.getByText('Blade 1').parentElement?.previousElementSibling;
@@ -77,7 +78,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('render call onClose when the overlay is clicked', () => {
-		const onClick = jest.fn();
+		const onClick = jest.fn() as () => null;
 		renderBladeManager(1, onClick);
 
 		const overlay = screen.getByText('Blade 1').parentElement?.previousElementSibling;

@@ -1,6 +1,5 @@
 import { keysSpacebar, onKey } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { isFunction } from 'lodash-es';
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -47,7 +46,7 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 				role="button"
 				tabIndex={0}
 			>
-				{isFunction(item.node) ? item.node({ closeDropdowns }) : item.node}
+				{typeof item.node === 'function' ? item.node({ closeDropdowns }) : item.node}
 				<Icon className="u-text-left u-ml-4" name={iconName} />
 			</div>
 		);

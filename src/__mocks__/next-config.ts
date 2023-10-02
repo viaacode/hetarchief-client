@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 export default jest.mock('next/config', () => () => ({
 	publicRuntimeConfig: {
 		CLIENT_URL: '/client-url',

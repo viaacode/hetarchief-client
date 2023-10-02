@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { IPagination } from '@studiohyperdrive/pagination';
+import { jest } from '@jest/globals';
 
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
-import { Notification } from '@shared/services/notifications-service/notifications.types';
 import { toastService } from '@shared/services/toast-service';
 
 const oldDate = '2022-05-03T16:30:39.70604+00:00';
@@ -59,15 +58,17 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			NotificationsService.getNotifications = jest.fn().mockResolvedValueOnce({
+			const mockGetNotifications = jest.fn();
+			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [],
 				total: 0,
 				pages: 1,
 				page: 1,
 				size: 20,
-			} as IPagination<Notification>);
+			});
+			NotificationsService.getNotifications = mockGetNotifications as any;
 			const mockedNotifyFunc = jest.fn();
-			toastService.notify = mockedNotifyFunc;
+			toastService.notify = mockedNotifyFunc as any;
 
 			await NotificationsService.checkNotifications();
 
@@ -83,14 +84,16 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			NotificationsService.getNotifications = jest.fn().mockResolvedValueOnce({
+			const mockGetNotifications = jest.fn();
+			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockReadNotification, mockReadNotification],
 				total: 2,
 				pages: 1,
 				page: 1,
 				size: 20,
-			} as IPagination<Notification>);
-			const mockedNotifyFunc = jest.fn();
+			});
+			NotificationsService.getNotifications = mockGetNotifications as any;
+			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			await NotificationsService.checkNotifications();
@@ -107,14 +110,17 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			NotificationsService.getNotifications = jest.fn().mockResolvedValueOnce({
+
+			const mockGetNotifications = jest.fn();
+			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockUnreadNotification],
 				total: 2,
 				pages: 1,
 				page: 1,
 				size: 20,
-			} as IPagination<Notification>);
-			const mockedNotifyFunc = jest.fn();
+			});
+			NotificationsService.getNotifications = mockGetNotifications as any;
+			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			await NotificationsService.checkNotifications();
@@ -131,14 +137,17 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			NotificationsService.getNotifications = jest.fn().mockResolvedValueOnce({
+
+			const mockGetNotifications = jest.fn();
+			(mockGetNotifications.mockResolvedValueOnce as any)({
 				items: [mockUnreadNotification, mockReadNotification],
 				total: 2,
 				pages: 1,
 				page: 1,
 				size: 20,
-			} as IPagination<Notification>);
-			const mockedNotifyFunc = jest.fn();
+			});
+			NotificationsService.getNotifications = mockGetNotifications as any;
+			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			await NotificationsService.checkNotifications();
@@ -155,27 +164,24 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			NotificationsService.getNotifications = jest
-				.fn()
-				.mockResolvedValueOnce({
-					items: [mockUnreadNotification, mockReadNotification],
-					total: 2,
-					pages: 1,
-					page: 1,
-					size: 20,
-				} as IPagination<Notification>)
-				.mockResolvedValueOnce({
-					items: [
-						mockNewUnreadNotification,
-						mockUnreadNotification,
-						mockReadNotification,
-					],
-					total: 3,
-					pages: 1,
-					page: 1,
-					size: 20,
-				} as IPagination<Notification>);
-			const mockedNotifyFunc = jest.fn();
+
+			const mockGetNotifications = jest.fn();
+			(mockGetNotifications.mockResolvedValueOnce as any)({
+				items: [mockUnreadNotification, mockReadNotification],
+				total: 2,
+				pages: 1,
+				page: 1,
+				size: 20,
+			});
+			(mockGetNotifications.mockResolvedValueOnce as any)({
+				items: [mockNewUnreadNotification, mockUnreadNotification, mockReadNotification],
+				total: 3,
+				pages: 1,
+				page: 1,
+				size: 20,
+			});
+			NotificationsService.getNotifications = mockGetNotifications as any;
+			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
@@ -205,28 +211,29 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			NotificationsService.getNotifications = jest
-				.fn()
-				.mockResolvedValueOnce({
-					items: [mockUnreadNotification, mockReadNotification],
-					total: 2,
-					pages: 1,
-					page: 1,
-					size: 20,
-				} as IPagination<Notification>)
-				.mockResolvedValueOnce({
-					items: [
-						mockNewUnreadNotification,
-						mockNewUnreadNotification,
-						mockUnreadNotification,
-						mockReadNotification,
-					],
-					total: 3,
-					pages: 1,
-					page: 1,
-					size: 20,
-				} as IPagination<Notification>);
-			const mockedNotifyFunc = jest.fn();
+
+			const mockGetNotifications = jest.fn();
+			(mockGetNotifications.mockResolvedValueOnce as any)({
+				items: [mockUnreadNotification, mockReadNotification],
+				total: 2,
+				pages: 1,
+				page: 1,
+				size: 20,
+			});
+			(mockGetNotifications.mockResolvedValueOnce as any)({
+				items: [
+					mockNewUnreadNotification,
+					mockNewUnreadNotification,
+					mockUnreadNotification,
+					mockReadNotification,
+				],
+				total: 3,
+				pages: 1,
+				page: 1,
+				size: 20,
+			});
+			NotificationsService.getNotifications = mockGetNotifications as any;
+			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
@@ -257,23 +264,24 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			NotificationsService.getNotifications = jest
-				.fn()
-				.mockResolvedValueOnce({
-					items: [mockUnreadNotification, mockReadNotification],
-					total: 2,
-					pages: 1,
-					page: 1,
-					size: 20,
-				} as IPagination<Notification>)
-				.mockResolvedValueOnce({
-					items: [mockUnreadNotification, mockReadNotification],
-					total: 2,
-					pages: 1,
-					page: 1,
-					size: 20,
-				} as IPagination<Notification>);
-			const mockedNotifyFunc = jest.fn();
+
+			const mockGetNotifications = jest.fn();
+			(mockGetNotifications.mockResolvedValueOnce as any)({
+				items: [mockUnreadNotification, mockReadNotification],
+				total: 2,
+				pages: 1,
+				page: 1,
+				size: 20,
+			});
+			(mockGetNotifications.mockResolvedValueOnce as any)({
+				items: [mockUnreadNotification, mockReadNotification],
+				total: 2,
+				pages: 1,
+				page: 1,
+				size: 20,
+			});
+			NotificationsService.getNotifications = mockGetNotifications as any;
+			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch
@@ -296,31 +304,32 @@ describe('NotificationService', () => {
 				null as any,
 				mockSetHasUnreadNotifications
 			);
-			NotificationsService.getNotifications = jest
-				.fn()
-				.mockResolvedValueOnce({
-					items: [mockUnreadNotification, mockReadNotification],
-					total: 2,
-					pages: 1,
-					page: 1,
-					size: 20,
-				} as IPagination<Notification>)
-				.mockResolvedValueOnce({
-					items: [
-						mockUnreadNotification,
-						{
-							...mockReadNotification,
-							createdAt: newestDate,
-							updatedAt: newestDate,
-						},
-						mockReadNotification,
-					],
-					total: 2,
-					pages: 1,
-					page: 1,
-					size: 20,
-				} as IPagination<Notification>);
-			const mockedNotifyFunc = jest.fn();
+
+			const mockGetNotifications = jest.fn();
+			(mockGetNotifications.mockResolvedValueOnce as any)({
+				items: [mockUnreadNotification, mockReadNotification],
+				total: 2,
+				pages: 1,
+				page: 1,
+				size: 20,
+			});
+			(mockGetNotifications.mockResolvedValueOnce as any)({
+				items: [
+					mockUnreadNotification,
+					{
+						...mockReadNotification,
+						createdAt: newestDate,
+						updatedAt: newestDate,
+					},
+					mockReadNotification,
+				],
+				total: 2,
+				pages: 1,
+				page: 1,
+				size: 20,
+			});
+			NotificationsService.getNotifications = mockGetNotifications as any;
+			const mockedNotifyFunc = jest.fn() as any;
 			toastService.notify = mockedNotifyFunc;
 
 			// Initial fetch

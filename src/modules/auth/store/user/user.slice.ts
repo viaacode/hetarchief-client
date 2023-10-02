@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
 
 import { AuthService, CheckLoginResponse } from '../../services/auth-service';
 
@@ -12,7 +12,7 @@ const initialState: UserState = {
 	error: null,
 };
 
-export const checkLoginAction = createAsyncThunk<
+export const checkLoginAction = toolkitRaw.createAsyncThunk<
 	CheckLoginResponse,
 	undefined,
 	{ rejectValue: string }
@@ -24,7 +24,7 @@ export const checkLoginAction = createAsyncThunk<
 	}
 });
 
-export const userSlice = createSlice({
+export const userSlice = toolkitRaw.createSlice({
 	name: 'user',
 	initialState,
 	reducers: {},

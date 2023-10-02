@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { fireEvent, render, RenderOptions, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { PropsWithChildren } from 'react';

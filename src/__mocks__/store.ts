@@ -1,6 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
 
-export const mockStore = configureStore({
+export const mockStore = toolkitRaw.configureStore({
 	preloadedState: {
 		ui: { isStickyLayout: false },
 		user: { user: { firstName: 'Tom', lastName: 'Testerom' } },

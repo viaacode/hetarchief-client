@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { Button } from '@meemoo/react-components';
 import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom';

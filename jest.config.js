@@ -43,7 +43,11 @@ module.exports = {
 		'^.+\\.(js|jsx|mjs|ts|tsx|mts)$': ['babel-jest', { presets: ['next/babel'] }],
 	},
 	testEnvironment: 'jsdom',
-	transformIgnorePatterns: ['/node_modules/(?!(ky))', '^.+\\.module\\.(css|sass|scss)$'],
+	transformIgnorePatterns: [
+		'/node_modules/(?!(ky))',
+		'^.+\\.module\\.(css|sass|scss)$',
+		'<rootDir>/node_modules/(?!lodash-es)',
+	],
 	globals: {
 		TZ: 'UTC',
 	},
