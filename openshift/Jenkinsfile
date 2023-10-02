@@ -184,7 +184,7 @@ pipeline {
           sh '''ls -ltra
          export NODE_ENV=dev
          npm pkg delete scripts.prepare
-         npm install --force
+         npm install
          npx playwright install
          npx playwright install chrome
          npm install junit-report-builder --save --force

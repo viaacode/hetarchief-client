@@ -9,7 +9,7 @@ COPY package.json package-lock.json .npmrc ./
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
 RUN npm pkg delete scripts.prepare &&\
-    npm i --legacy-peer-deps
+    npm i
 
 # Rebuild the source code only when needed
 FROM node:20.4-alpine AS builder
