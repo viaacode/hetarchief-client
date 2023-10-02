@@ -112,6 +112,9 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		}, 100);
 	}, [initListeners, widget, router.asPath]);
 
+	if (!isBrowser()) {
+		return null; // Do not server side render this component since it would otherwise create 2 zendesk widgets in separate iframes
+	}
 	return (
 		<Zendesk
 			{...settings}
