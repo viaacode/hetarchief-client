@@ -1,5 +1,6 @@
 .c-admin__content {
-	[class*="Table-module_c-table--bordered__"] {
+	[class*="Table-module_c-table--bordered__"],
+	.c-table--bordered {
 		border: 0 !important;
 	}
 

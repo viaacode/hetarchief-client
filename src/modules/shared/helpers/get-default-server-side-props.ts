@@ -15,9 +15,7 @@ export async function getDefaultServerSideProps(
 	// change caching to 30 minutes, since the backend also caches the translations for 30 minutes
 	context.res.setHeader('Cache-Control', 'public, s-maxage=1800, stale-while-revalidate=1799');
 
-	const translations = await getTranslations(
-		isBrowser() ? publicRuntimeConfig.PROXY_URL : process.env.PROXY_URL
-	);
+	const translations = await getTranslations();
 	i18n?.addResources('nl', 'common', translations);
 	return {
 		props: {

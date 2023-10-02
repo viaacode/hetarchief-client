@@ -43,7 +43,7 @@ const InternalLink = (linkInfo: LinkInfo) => {
 	);
 };
 
-// When a content page is saved, for clear the nextjs cache
+// When a content page is saved, for clear the Next.js cache
 const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 	await ApiService.getApi(false).post(
 		stringifyUrl({
@@ -247,9 +247,9 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 			initConfigValue();
 		}, [initConfigValue]);
 
-		if (!adminCoreConfig && isBrowser()) {
+		if (!adminCoreConfig) {
 			return (
-				<div suppressHydrationWarning={true}>
+				<div suppressHydrationWarning>
 					<Loading fullscreen owner="admin-core config not set yet" />
 				</div>
 			);

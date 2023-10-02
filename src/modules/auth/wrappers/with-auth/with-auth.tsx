@@ -81,7 +81,7 @@ export const withAuth = (
 		}, [checkLoginStatus]);
 
 		// Allow server side rendering to get past this loading screen, so we can determine seo fields on the actual page
-		return !isBrowser() || showPage ? (
+		return showPage ? (
 			<WrappedComponent {...props} />
 		) : (
 			<Loading fullscreen owner="with auth" />
