@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import { ContentPartnerResponse } from '@admin/types';
 

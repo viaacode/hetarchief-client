@@ -1,12 +1,14 @@
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook, waitFor } from '@testing-library/react';
 
 import useWindowSize from './use-window-size';
+
+declare const window: any;
 
 describe('Hooks', () => {
 	describe('useWindowSize()', () => {
 		it('Should update width and height on resize', async () => {
 			const resize = { innerHeight: 600, innerWidth: 1200 };
-			const { result, waitFor } = renderHook(() => useWindowSize());
+			const { result } = renderHook(() => useWindowSize());
 
 			act(() => {
 				window.innerWidth = resize.innerWidth;

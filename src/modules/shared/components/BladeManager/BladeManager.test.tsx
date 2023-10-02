@@ -1,6 +1,7 @@
 import { Button } from '@meemoo/react-components';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import '@testing-library/jest-dom';
 
 import { mockStore } from '../../../../__mocks__/store';
 import { Blade } from '../Blade';

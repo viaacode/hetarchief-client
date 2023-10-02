@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import DynamicActionMenu from './DynamicActionMenu';
 import { dynamicActionMenuMock } from './__mocks__/dynamic-action-menu';

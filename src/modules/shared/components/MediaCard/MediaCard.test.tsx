@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, RenderResult, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 

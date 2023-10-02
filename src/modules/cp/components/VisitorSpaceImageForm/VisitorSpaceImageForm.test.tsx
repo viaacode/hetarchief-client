@@ -1,4 +1,5 @@
 import { fireEvent, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import VisitorSpaceImageForm from './VisitorSpaceImageForm';
 import { VISITOR_SPACE_IMAGE_FORM_MOCK } from './__mocks__/visitorSpaceImageForm';

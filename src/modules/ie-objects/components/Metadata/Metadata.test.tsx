@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import { MetadataItem, MetadataListProps } from '@ie-objects/components';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';

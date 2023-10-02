@@ -1,4 +1,5 @@
 import { fireEvent, render, RenderOptions, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 

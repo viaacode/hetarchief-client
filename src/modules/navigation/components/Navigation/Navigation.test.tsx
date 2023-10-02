@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import Navigation from './Navigation';
 import { MOCK_HAMBURGER_PROPS, MOCK_ITEMS_LEFT, MOCK_ITEMS_RIGHT } from './__mocks__/navigation';

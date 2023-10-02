@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import RichTextForm from './RichTextForm';
 import { RICH_TEXT_FORM_MOCK } from './__mocks__/richTextForm';
