@@ -36,7 +36,7 @@
 		"@react-hook/resize-observer": "1.2.5",
 		"@reduxjs/toolkit": "1.7.1",
 		"@studiohyperdrive/pagination": "1.0.0",
-		"@tanstack/react-query": "4.22.0",
+		"@tanstack/react-query": "4.35.3",
 		"@viaa/avo2-components": "3.10.5",
 		"@viaa/avo2-types": "2.48.40",
 		"capture-stack-trace": "1.0.1",
