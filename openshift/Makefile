@@ -7,6 +7,4 @@ test:
 	chown node:node $${WORKSPACE} -R
 	node -v
 	npm i
-	pwd
-	ls -l
-	npm run test:ci
+	ls -l /home/jenkins/agent/workspace/hetarchief_client_develop/node_modules/@meemoo/react-components/dist
