@@ -22,6 +22,9 @@ module.exports = {
 
 		/* Handle deps */
 		'^lodash-es$': '<rootDir>/node_modules/lodash/index.js',
+		'^@meemoo/react-components$':
+			'<rootDir>/node_modules/@meemoo/react-components/dist/index.js',
+		'^@viaa/avo2-components$': '<rootDir>/node_modules/@viaa/avo2-components/dist/index.js',
 	},
 	/* Report results to the console but also to a junit compatible xml file for Jenkins: ARC-523 */
 	reporters: [
