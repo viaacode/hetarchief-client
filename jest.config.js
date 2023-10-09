@@ -51,8 +51,6 @@ module.exports = {
 		'^.+\\.module\\.(css|sass|scss)$',
 		'<rootDir>/node_modules/(?!lodash-es)',
 	],
-	preset: 'ts-jest',
-	resolver: 'ts-jest-resolver',
 	globals: {
 		TZ: 'UTC',
 	},

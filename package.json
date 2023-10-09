@@ -170,7 +170,6 @@
 		"stylelint-config-prettier": "9.0.5",
 		"stylelint-config-standard-scss": "11.0.0",
 		"ts-jest": "29.1.1",
-		"ts-jest-resolver": "2.0.1",
 		"ts-node": "10.9.1",
 		"tsconfig-paths-webpack-plugin": "3.5.2",
 		"typescript": "5.1.6"

@@ -5,5 +5,8 @@ SHELL = /bin/bash
 
 test:
 	chown node:node $${WORKSPACE} -R
+	node -v
 	npm i
+	pwd
+	ls -l
 	npm run test:ci
