@@ -248,7 +248,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			// Ignore peak file containing the audio wave form in json format
 			return false;
 		}
-		if (object?.files?.[0]?.schemaIdentifier?.endsWith('/audio_mp4')) {
+		if (object?.files?.[0]?.representationSchemaIdentifier?.endsWith('/audio_mp4')) {
 			// Ignore video files containing the ugly speaker image and the audio encoded in mp4 format
 			return false;
 		}
