@@ -141,6 +141,10 @@ $checkbox-size: $spacer-sm;
 
 		&:global(.c-dropdown__content-open) {
 			z-index: get-z-layer("filter");
+
+			// Ward: Override react-popper tranform filter flyout
+			transform: translateY(235px) !important;
+			left: 33vw !important;
 		}
 
 		&--filter {
