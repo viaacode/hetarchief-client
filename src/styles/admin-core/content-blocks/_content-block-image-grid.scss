@@ -6,7 +6,7 @@ $component: "c-content-block__image-grid";
 	.c-block-grid {
 		column-gap: 3.4rem;
 		row-gap: 8rem;
-		justify-content: space-between;
+		justify-content: center;
 
 		&__item {
 			margin: 0 !important;
