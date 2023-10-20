@@ -1,4 +1,4 @@
-import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 
@@ -28,10 +28,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const { tText } = useTranslation();
 
 	const filterIsActive = id === activeFilter;
-	const flyoutCls = clsx(
-		styles['c-filter-menu__flyout'],
-		styles['c-filter-menu__flyout--filter']
-	);
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
@@ -75,27 +71,36 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 	const renderModal = (): ReactElement => (
 		<>
-			<Dropdown
+			<div
 				className={clsx(styles['c-filter-menu__option'], className)}
-				flyoutClassName={flyoutCls}
-				isOpen={filterIsActive}
 				key={`filter-menu-btn-${id}`}
-				onClose={onFilterToggle}
-				onOpen={onFilterToggle}
-				placement="right"
+				style={{
+					position: 'relative',
+				}}
 			>
-				<DropdownButton>
-					<FilterButton
-						icon={
-							filterIsActive
-								? IconNamesLight.AngleLeft
-								: icon ?? IconNamesLight.AngleRight
-						}
-						isActive={filterIsActive}
-						label={label}
-					/>
-				</DropdownButton>
-				<DropdownContent>
+				<FilterButton
+					icon={
+						filterIsActive
+							? IconNamesLight.AngleLeft
+							: icon ?? IconNamesLight.AngleRight
+					}
+					isActive={filterIsActive}
+					label={label}
+					onClick={() => onClick?.(id)}
+				/>
+
+				<div
+					style={{
+						position: 'absolute',
+						left: '100%',
+						width: '46.4rem',
+						height: '82rem',
+						top: 'calc(-41rem + 2rem)',
+						backgroundColor: 'white',
+						zIndex: 5,
+						display: filterIsActive ? 'block' : 'none',
+					}}
+				>
 					<Button
 						className={styles['c-filter-menu__flyout-close']}
 						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
@@ -106,8 +111,8 @@ const FilterOption: FC<FilterOptionProps> = ({
 						variants="text"
 					/>
 					{renderFilterForm('c-filter-menu__form')}
-				</DropdownContent>
-			</Dropdown>
+				</div>
+			</div>
 			<Overlay
 				className={styles['c-filter-menu__overlay']}
 				visible={filterIsActive}
