@@ -110,6 +110,8 @@ $breakpoint-md: map.get($breakpoints, "md");
 
 	&__flowplayer {
 		align-self: center;
+		position: absolute !important;
+		inset: 0;
 
 		&-fullscreen-button {
 			z-index: get-z-layer("modal"); // Current highest
