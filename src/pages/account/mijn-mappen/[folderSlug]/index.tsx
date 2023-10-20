@@ -292,7 +292,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											? tText(
 													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
 											  )
-											: undefined
+											: tText(
+													'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+											  )
 									}
 								/>
 							),
