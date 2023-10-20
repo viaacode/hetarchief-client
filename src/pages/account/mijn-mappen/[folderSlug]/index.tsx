@@ -435,7 +435,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 							{
 								id: 'p-account-my-folders__new-folder',
 								variants: ['c-list-navigation__item--no-interaction'],
-								node: <CreateFolderButton afterSubmit={getFolders.refetch} />,
+								node: (
+									<CreateFolderButton afterSubmit={() => getFolders.refetch()} />
+								),
 								hasDivider: true,
 							},
 						]}
