@@ -27,7 +27,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	const { tHtml } = useTranslation();
 	const { onSubmit, selected } = props;
 	const [pairs, setPairs] = useState<AddToFolderFormStatePair[]>([]);
-	const [lastCreatedFolderId, setLastCreatedFolderId] = useState('');
+	const [lastCreatedFolderId, setLastCreatedFolderId] = useState<string | null>(null);
 	const {
 		control,
 		handleSubmit,
@@ -82,13 +82,13 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	// ARC-1946: select new created map
 	useEffect(() => {
 		const folderIds = pairs.map((folder) => folder.folder);
-		if (folderIds?.includes(lastCreatedFolderId)) {
+		if (lastCreatedFolderId && folderIds?.includes(lastCreatedFolderId)) {
 			const newFolder = pairs.find((folder) => folder.folder === lastCreatedFolderId);
 			if (newFolder) {
 				newFolder.checked = true;
 				setValue('pairs', pairs);
 			}
-			setLastCreatedFolderId('');
+			setLastCreatedFolderId(null);
 		}
 	}, [pairs]);
 
