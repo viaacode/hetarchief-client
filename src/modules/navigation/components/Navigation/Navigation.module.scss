@@ -190,7 +190,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	&--right {
 		grid-column: 3/4;
-		justify-self: end;
+		justify-self: flex-end;
 
 		ul {
 			grid-gap: 0;
@@ -494,7 +494,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		.c-navigation__section--right {
 			grid-row: 3;
 			grid-column: 2;
-			place-self: end;
+			place-self: flex-end;
 		}
 	}
 }
