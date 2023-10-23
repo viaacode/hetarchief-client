@@ -27,6 +27,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	const { tHtml } = useTranslation();
 	const { onSubmit, selected } = props;
 	const [pairs, setPairs] = useState<AddToFolderFormStatePair[]>([]);
+	const [lastCreatedFolderId, setLastCreatedFolderId] = useState<string | null>(null);
 	const {
 		control,
 		handleSubmit,
@@ -77,6 +78,19 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 	useEffect(() => {
 		props.isOpen && reset();
 	}, [props.isOpen, reset]);
+
+	// ARC-1946: select new created map
+	useEffect(() => {
+		const folderIds = pairs.map((folder) => folder.folder);
+		if (lastCreatedFolderId && folderIds?.includes(lastCreatedFolderId)) {
+			const newFolder = pairs.find((folder) => folder.folder === lastCreatedFolderId);
+			if (newFolder) {
+				newFolder.checked = true;
+				setValue('pairs', pairs);
+			}
+			setLastCreatedFolderId(null);
+		}
+	}, [pairs]);
 
 	/**
 	 * Events
@@ -264,6 +278,14 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 		);
 	};
 
+	const afterCreateFolderSubmit = async (folder: Partial<Folder>) => {
+		await getFolders.refetch();
+		// select new created folder
+		if (folder.id) {
+			setLastCreatedFolderId(folder.id);
+		}
+	};
+
 	/**
 	 * Render
 	 */
@@ -374,7 +396,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 									{renderPairFields(data)}
 
 									<li className={styles['c-add-to-folder-blade__list-button']}>
-										<CreateFolderButton afterSubmit={getFolders.refetch} />
+										<CreateFolderButton afterSubmit={afterCreateFolderSubmit} />
 									</li>
 								</>
 							)}
