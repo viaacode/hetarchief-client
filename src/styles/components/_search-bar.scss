@@ -60,7 +60,7 @@
 			padding-left: $spacer-sm;
 
 			@include respond-at(md) {
-				padding-left: $spacer-lg;
+				padding-left: 1.2rem;
 			}
 
 			&--is-multi.c-tags-input__value-container--has-value {

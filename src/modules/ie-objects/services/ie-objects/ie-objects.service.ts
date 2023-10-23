@@ -59,14 +59,7 @@ export class IeObjectsService {
 					filters: filtered,
 					size,
 					page,
-					requestedAggs: requestedAggs || [
-						IeObjectsSearchFilterField.FORMAT,
-						IeObjectsSearchFilterField.GENRE,
-						IeObjectsSearchFilterField.MEDIUM,
-						IeObjectsSearchFilterField.OBJECT_TYPE,
-						IeObjectsSearchFilterField.LANGUAGE,
-						IeObjectsSearchFilterField.MAINTAINER_ID,
-					],
+					requestedAggs: requestedAggs || [IeObjectsSearchFilterField.FORMAT],
 					...parsedSort,
 				}),
 			})
