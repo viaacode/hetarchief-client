@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact, noop, sortBy, without } from 'lodash-es';
+import { compact, noop, without } from 'lodash-es';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-object
 import { IeObjectsSearchFilterField } from '@shared/types';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
 	MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -53,16 +54,13 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 	// Make sure applied values are sorted at the top of the list
 	// Options selected by the user should remain in their alphabetical order until the filter is applied
 	// https://meemoo.atlassian.net/browse/ARC-1882
-	const checkboxOptions = sortBy(
+	const checkboxOptions = sortFilterOptions(
 		filteredOptions.map((filterOption) => ({
 			label: filterOption,
 			value: filterOption,
 			checked: selectedMediums.includes(filterOption),
 		})),
-		(option) =>
-			(appliedSelectedMediums.includes(option.value) ? '0' : '1') +
-			'___' +
-			option.value.toLowerCase()
+		appliedSelectedMediums
 	);
 
 	// Effects
