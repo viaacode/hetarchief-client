@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setShowFooter } from '@shared/store/ui';
+import { setShowFooter } from '@shared/store/ui/ui.slice';
 
 import { UseHideFooter } from './use-hide-footer.types';
 

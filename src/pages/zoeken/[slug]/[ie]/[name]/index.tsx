@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
@@ -115,8 +115,9 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/ie-objects';
-import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
+import { selectBreadcrumbs } from '@shared/store/ui/ui.select';
+import { setShowAuthModal, setShowZendesk } from '@shared/store/ui/ui.slice';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {

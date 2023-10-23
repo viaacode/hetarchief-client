@@ -10,7 +10,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { AuthService } from '@auth/services/auth-service';
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { KNOWN_STATIC_ROUTES, TOS_INDEX_QUERY_PARAM_CONFIG } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -22,7 +22,7 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { toastService } from '@shared/services/toast-service';
 import { TosService } from '@shared/services/tos-service';
-import { setShowZendesk } from '@shared/store/ui';
+import { setShowZendesk } from '@shared/store/ui/ui.slice';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
 import { useGetContentPageByPath } from 'modules/content-page/hooks/get-content-page';

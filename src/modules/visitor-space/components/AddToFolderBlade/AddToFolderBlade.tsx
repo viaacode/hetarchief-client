@@ -12,7 +12,7 @@ import { Folder } from '@account/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/ie-objects';
+import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
 
 import { ADD_TO_FOLDER_FORM_SCHEMA } from './AddToFolderBlade.const';
 import styles from './AddToFolderBlade.module.scss';
@@ -79,7 +79,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 		props.isOpen && reset();
 	}, [props.isOpen, reset]);
 
-	// ARC-1946: select new created map
+	// ARC-1946: select the newly created map
 	useEffect(() => {
 		const folderIds = pairs.map((folder) => folder.folder);
 		if (lastCreatedFolderId && folderIds?.includes(lastCreatedFolderId)) {
@@ -90,7 +90,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 			}
 			setLastCreatedFolderId(null);
 		}
-	}, [pairs]);
+	}, [lastCreatedFolderId, pairs, setValue]);
 
 	/**
 	 * Events

@@ -8,7 +8,7 @@ import { Blade } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
-import { setShowMaterialRequestCenter } from '@shared/store/ui';
+import { setShowMaterialRequestCenter } from '@shared/store/ui/ui.slice';
 
 import { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';

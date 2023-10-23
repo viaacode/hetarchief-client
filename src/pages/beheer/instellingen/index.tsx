@@ -4,7 +4,7 @@ import { ComponentType } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { VisitorSpaceSettings } from '@cp/components';
 import { CPAdminLayout } from '@cp/layouts';

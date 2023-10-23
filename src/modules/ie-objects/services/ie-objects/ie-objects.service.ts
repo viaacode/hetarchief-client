@@ -5,6 +5,7 @@ import { SeoInfo } from '@ie-objects/services/ie-objects/ie-objects.service.type
 import { IeObject, IeObjectSimilar, MetadataExportFormats } from '@ie-objects/types';
 import { ApiService } from '@shared/services/api-service';
 import {
+	FilterOptions,
 	IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
@@ -173,5 +174,13 @@ export class IeObjectsService {
 			`${IE_OBJECTS_SERVICE_BASE_URL}/${id}/${IE_OBJECTS_SERVICE_EXPORT}/${MetadataExportFormats[format]}`
 		);
 		return response.text();
+	}
+
+	static async getFilterOptions(): Promise<FilterOptions> {
+		const response = await ApiService.getApi().get(
+			`${IE_OBJECTS_SERVICE_BASE_URL}/filter-options`
+		);
+
+		return response.json();
 	}
 }
