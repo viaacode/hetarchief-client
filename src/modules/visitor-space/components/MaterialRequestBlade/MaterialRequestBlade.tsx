@@ -201,7 +201,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					label={tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
 					)}
-					variants={['block', 'text']}
+					variants={['block', 'text', 'dark']}
 					onClick={onAddToList}
 					className={styles['c-request-material__voeg-toe-button']}
 				/>
