@@ -5,6 +5,7 @@ $component: "c-visitor-space-card-list";
 .#{$component} {
 	display: grid;
 	list-style: none;
+	grid-template-columns: minmax(0, 1fr);
 	margin: 0;
 	padding: 0;
 	row-gap: $spacer-md;
