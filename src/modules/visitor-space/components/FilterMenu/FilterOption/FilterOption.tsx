@@ -4,6 +4,7 @@ import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { Icon, IconNamesLight, Overlay } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -69,6 +70,16 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const renderCheckbox = (): ReactElement =>
 		renderFilterForm('c-filter-menu__form--inline', true);
 
+	const FILTER_MENU_HEIGHTS: Partial<Record<VisitorSpaceFilterId, string>> = {
+		[VisitorSpaceFilterId.Medium]: '63.7rem',
+		[VisitorSpaceFilterId.Duration]: '48.1rem',
+		[VisitorSpaceFilterId.Created]: '61.3rem',
+		[VisitorSpaceFilterId.Published]: '61.3rem',
+		[VisitorSpaceFilterId.Creator]: '33.5rem',
+		[VisitorSpaceFilterId.Language]: '53.7rem',
+		[VisitorSpaceFilterId.Maintainers]: '63.7rem',
+		[VisitorSpaceFilterId.Advanced]: '60.1rem',
+	};
 	const renderModal = (): ReactElement => (
 		<>
 			<div
@@ -94,8 +105,8 @@ const FilterOption: FC<FilterOptionProps> = ({
 						position: 'absolute',
 						left: '100%',
 						width: '46.4rem',
-						height: '82rem',
-						top: 'calc(-41rem + 2rem)',
+						height: FILTER_MENU_HEIGHTS[id],
+						top: `calc(-${FILTER_MENU_HEIGHTS[id]} / 2 + 2rem)`,
 						backgroundColor: 'white',
 						zIndex: 5,
 						display: filterIsActive ? 'block' : 'none',

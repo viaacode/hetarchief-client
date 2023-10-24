@@ -4,7 +4,7 @@
 .c-filter-form {
 	display: flex;
 	flex-direction: column;
-	height: 82rem;
+	height: max-content;
 }
 
 /**
@@ -57,9 +57,6 @@
 .c-filter-form__footer {
 	display: flex;
 	padding: $spacer-md 2rem;
-	position: absolute;
-	bottom: 0;
-	left: 0;
 	width: 100%;
 
 	@include respond-at(md) {
