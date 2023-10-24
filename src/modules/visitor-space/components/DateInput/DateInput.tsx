@@ -1,10 +1,10 @@
 import { TextInput } from '@meemoo/react-components';
-import { FC, SyntheticEvent } from 'react';
+import { isValid } from 'date-fns';
+import { FC } from 'react';
 import DatePicker from 'react-datepicker';
 
 import { Icon, IconNamesLight } from '@shared/components';
 import { datePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
-import { asDate, formatMediumDate } from '@shared/utils';
 
 import styles from './DateInput.module.scss';
 
@@ -15,23 +15,28 @@ export interface DateInputProps {
 	label?: string;
 	disabled?: boolean;
 	id?: string;
-	onChange: (date: Date | null, event: SyntheticEvent<any, Event> | undefined) => void;
-	value?: string;
+	onChange: (date: Date) => void;
+	value?: Date;
 	className?: string;
 }
 
-const DateInput: FC<DateInputProps> = (props) => (
-	<div className={styles['c-date-input']}>
-		<p className={styles['c-date-input__label']}>{props.label}</p>
-		<DatePicker
-			{...datePickerDefaultProps}
-			{...props}
-			className={props.className}
-			value={formatMediumDate(asDate(props.value))}
-			selected={asDate(props.value)}
-			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
-		/>
-	</div>
-);
+const DateInput: FC<DateInputProps> = ({ onChange, value, id, disabled, label, className }) => {
+	return (
+		<div className={styles['c-date-input']}>
+			<p className={styles['c-date-input__label']}>{label}</p>
+			<DatePicker
+				{...datePickerDefaultProps}
+				id={id}
+				onChange={onChange}
+				className={className}
+				disabled={disabled}
+				selected={isValid(value) ? value : new Date()}
+				dateFormat="dd/MM/yyyy"
+				placeholderText="dd/mm/yyyy"
+				customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
+			/>
+		</div>
+	);
+};
 
 export default DateInput;
