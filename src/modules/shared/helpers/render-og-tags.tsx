@@ -10,7 +10,8 @@ export function renderOgTags(
 	title: string | null | undefined,
 	description: string,
 	url: string,
-	fullTitle = false
+	fullTitle = false,
+	imgUrl: string | null = null
 ): ReactNode {
 	const resolvedTitle = createPageTitle(title);
 	return (
@@ -21,12 +22,16 @@ export function renderOgTags(
 			<meta property="og:url" content={url} />
 			<meta property="og:title" content={resolvedTitle} />
 			<meta property="og:description" content={description} />
-			<meta
-				property="og:image"
-				content={`${
-					isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL
-				}/images/og.jpg`}
-			/>
+			{imgUrl ? (
+				<meta property="og:image" content={imgUrl} />
+			) : (
+				<meta
+					property="og:image"
+					content={`${
+						isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL
+					}/images/og.jpg`}
+				/>
+			)}
 			<meta property="twitter:card" content="summary_large_image" />
 			<meta
 				property="twitter:domain"
