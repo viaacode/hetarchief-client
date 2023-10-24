@@ -1,11 +1,12 @@
 import { Card } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { kebabCase } from 'lodash-es';
-import { FC } from 'react';
+import { FC, useLayoutEffect, useRef, useState } from 'react';
 
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 
 import { CardImage } from '../CardImage';
+import { Icon, IconNamesLight } from '../Icon';
 
 import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
 import styles from './VisitorSpaceCard.module.scss';
@@ -14,6 +15,9 @@ import { VisitorSpaceCardControls } from './VisitorSpaceCardControls';
 
 const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 	const { room, type } = props;
+	const [expandDescription, setExpandDescription] = useState(false);
+	const descriptionElement = useRef<HTMLDivElement | null>(null);
+	const [hasOverflowingChildren, setHasOverflowingChildren] = useState(false);
 
 	const typeNoAccess = type === VisitorSpaceCardType.noAccess;
 	const typeAccessGranted = type === VisitorSpaceCardType.access;
@@ -30,6 +34,23 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 
 	const flat = typeAccessAccepted || typeAccessRequested;
 	const hasRequested = typeAccessGranted || typeAccessAccepted || typeAccessRequested;
+
+	useLayoutEffect(() => {
+		if (!window) {
+			return;
+		}
+		// check if description overflows (ARC-905)
+		setHasOverflowingChildren(
+			!!(
+				descriptionElement.current &&
+				descriptionElement.current.offsetHeight < descriptionElement.current.scrollHeight
+			) ||
+				!!(
+					descriptionElement.current &&
+					descriptionElement.current.offsetWidth < descriptionElement.current.scrollWidth
+				)
+		);
+	}, []);
 
 	const renderImage = () => {
 		let size: 'small' | 'short' | 'tall' | null = null;
@@ -82,7 +103,10 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 	};
 
 	const renderDescription = () => (
-		<div className={`u-text-ellipsis--${flat ? 2 : 3}`}>
+		<div
+			ref={descriptionElement}
+			className={expandDescription ? '' : `u-text-ellipsis--${flat ? 2 : 3}`}
+		>
 			<p
 				className={clsx(
 					styles['c-visitor-space-card__description'],
@@ -125,7 +149,24 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 					)}
 				>
 					{flat && renderTitle()}
-					{renderDescription()}
+					<div
+						className={styles['c-visitor-space-card__description--container']}
+						onClick={() => setExpandDescription(!expandDescription)}
+					>
+						{renderDescription()}
+						{hasOverflowingChildren && (
+							<Icon
+								name={
+									expandDescription
+										? IconNamesLight.AngleUp
+										: IconNamesLight.AngleDown
+								}
+								className={
+									styles['c-visitor-space-card__description--container--icon']
+								}
+							/>
+						)}
+					</div>
 				</div>
 
 				<VisitorSpaceCardControls {...props} />

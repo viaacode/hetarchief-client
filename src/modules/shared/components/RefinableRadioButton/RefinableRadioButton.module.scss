@@ -31,6 +31,18 @@
 		grid-row: 2;
 		width: 100%;
 
+		button {
+			div {
+				max-width: 310px;
+
+				span:first-child {
+					white-space: nowrap !important;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+			}
+		}
+
 		&-info {
 			color: $neutral;
 			font-size: $font-size-xs;
