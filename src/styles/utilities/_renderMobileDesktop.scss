@@ -1,0 +1,20 @@
+@use "../abstracts" as *;
+@use "sass:map";
+
+$breakpoint-md: map.get($breakpoints, "md");
+
+.u-hide {
+	// Hide the element when the viewport is at least $breakpoint-md, bigger than mobile
+	&-gte-bp2 {
+		@media (min-width: $breakpoint-md) {
+			display: none;
+		}
+	}
+
+	// Hide the element when the viewport is less than $breakpoint-md, smaller than desktop
+	&-lt-bp2 {
+		@media (max-width: ($breakpoint-md - 1px)) {
+			display: none;
+		}
+	}
+}
