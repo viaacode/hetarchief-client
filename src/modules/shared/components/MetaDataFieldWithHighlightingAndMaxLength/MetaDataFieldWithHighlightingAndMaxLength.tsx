@@ -44,9 +44,24 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 			// Split text on new lines and highlight each part separately + put each part in its own paragraph to show new lines
 			return parsedFieldData
 				.split(/(\\\\r|\\r)?\\\\n|\\n/)
-				.map((fieldTextPart, fieldTextPartIndex) => (
-					<span key={title + '-' + fieldTextPartIndex}>{highlighted(fieldTextPart)}</span>
-				));
+				.map((fieldTextPart, fieldTextPartIndex) => {
+					// ARC-1936: if url make it clickable
+					if (data.startsWith('https://') || data.startsWith('http://')) {
+						return (
+							<span key={title + '-' + fieldTextPartIndex}>
+								<a href={fieldTextPart} target="_blank" rel="noreferrer">
+									{highlighted(fieldTextPart)}
+								</a>
+							</span>
+						);
+					} else {
+						return (
+							<span key={title + '-' + fieldTextPartIndex}>
+								{highlighted(fieldTextPart)}
+							</span>
+						);
+					}
+				});
 		} else {
 			return parsedFieldData;
 		}
