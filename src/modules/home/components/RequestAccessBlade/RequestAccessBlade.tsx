@@ -77,6 +77,14 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					/>
 				</FormControl>
 
+				{!!isError && (
+					<p className={styles['c-request-access-blade__error']}>
+						{tHtml(
+							'modules/home/components/request-access-blade/request-access-blade___error'
+						)}
+					</p>
+				)}
+
 				<Button
 					className="u-mb-8 u-mb-16:md"
 					label={tHtml(
@@ -86,14 +94,6 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 					onClick={handleSubmit(onFormSubmit)}
 					disabled={!isOpen || isSubmitting}
 				/>
-
-				{!!isError && (
-					<p className={styles['c-request-access-blade__error']}>
-						{tHtml(
-							'modules/home/components/request-access-blade/request-access-blade___error'
-						)}
-					</p>
-				)}
 
 				<Button
 					label={tHtml(

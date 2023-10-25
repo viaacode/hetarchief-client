@@ -239,7 +239,7 @@
   "modules/home/components/process-visit-blade/process-visit-blade___detail-gepland-bezoek": "Detail gepland bezoek",
   "modules/home/components/process-visit-blade/process-visit-blade___sluit": "Sluit",
   "modules/home/components/request-access-blade/request-access-blade___annuleer": "Annuleer",
-  "modules/home/components/request-access-blade/request-access-blade___error": "Er liep nog iets mis in het formulier.",
+  "modules/home/components/request-access-blade/request-access-blade___error": "Bepaalde invoer velden zijn niet geldig.",
   "modules/home/components/request-access-blade/request-access-blade___ik-verklaar-deze-toegang-aan-te-vragen-met-het-oog-op-onderzoeksdoeleinden-of-prive-studie": "Ik vraag deze toegang aan voor onderzoeksdoeleinden of privéstudie.",
   "modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag": "Reden van aanvraag",
   "modules/home/components/request-access-blade/request-access-blade___reden-van-aanvraag-is-een-verplicht-veld": "\"Reden van aanvraag\" is een verplicht veld.",
