@@ -1,12 +1,12 @@
 import { SelectOption } from '@meemoo/react-components';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { isString } from 'lodash-es';
 
 import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { IeObjectsSearchFilter, Operator } from '@shared/types';
-import { asDate, formatDate } from '@shared/utils';
+import { formatDate } from '@shared/utils';
 
 import { getMetadataSearchFilters } from '../../const';
 import { AdvancedFilterArrayParam } from '../../const/query-params';
@@ -106,10 +106,10 @@ export const mapAdvancedToTags = (
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
 				if (op === Operator.Between || op === Operator.Equals) {
-					value = `${formatDate(asDate(split[0]))} - ${formatDate(asDate(split[1]))}`;
+					value = `${formatDate(parseISO(split[0]))} - ${formatDate(parseISO(split[1]))}`;
 					operator = undefined;
 				} else {
-					value = formatDate(asDate(value));
+					value = value ? formatDate(parseISO(value)) : '';
 				}
 				break;
 
@@ -229,8 +229,8 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 		switch (item.prop) {
 			case MetadataProp.CreatedAt:
 			case MetadataProp.PublishedAt:
-				parsed = asDate(values[i]);
-				values[i] = (parsed && format(parsed, 'uuuu-MM-dd')) || values[i];
+				parsed = parseISO(values[i]);
+				values[i] = (parsed && format(parsed, 'yyyy-MM-dd')) || values[i];
 				break;
 			case MetadataProp.Duration:
 				if (item?.op === Operator.Exact) {
