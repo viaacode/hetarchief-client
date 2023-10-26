@@ -256,7 +256,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		return (
 			isEmpty(item.accessThrough) &&
 			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
-				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL))
+				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
 		);
 	};
 
