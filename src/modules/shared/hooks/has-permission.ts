@@ -2,7 +2,7 @@ import { intersection } from 'lodash-es';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 
 /**
  * Checks that the user has all permissions listed

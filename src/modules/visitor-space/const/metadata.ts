@@ -9,6 +9,7 @@ import {
 	Operator,
 } from '@shared/types';
 import { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
+import { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 
 import {
 	DateInput,
@@ -19,7 +20,11 @@ import {
 } from '../components';
 import { MetadataProp } from '../types';
 
-export type MetadataFields = FC<TextInputProps> | FC<ReactSelectProps> | FC<DateInputProps>;
+export type MetadataFields =
+	| FC<TextInputProps>
+	| FC<ReactSelectProps>
+	| FC<DateInputProps>
+	| FC<DateRangeInputProps>;
 export type MetadataFieldProps = TextInputProps | ReactSelectProps | DateInputProps;
 
 export type MetadataConfig = {

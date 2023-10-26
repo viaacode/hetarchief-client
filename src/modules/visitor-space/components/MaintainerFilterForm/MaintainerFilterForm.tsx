@@ -9,15 +9,13 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
+import { IeObjectsSearchFilterField } from '@shared/types';
 import { MaintainerFilterFormProps, MaintainerFilterFormState } from '@visitor-space/components';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
-import {
-	ElasticsearchFieldNames,
-	FILTER_LABEL_VALUE_DELIMITER,
-	VisitorSpaceFilterId,
-} from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
 	MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -33,13 +31,17 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 
 	const [query] = useQueryParams(MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [selectedMaintainerIds, setSelectedMaintainerIds] = useState<string[]>(() =>
-		compact(
-			(query[VisitorSpaceFilterId.Maintainers] || []).map(
-				(maintainerIdAndName) =>
-					maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
-			)
+
+	// Contains the filters that have already been applied and are present in the url
+	const appliedSelectedMaintainerIds = compact(
+		(query[VisitorSpaceFilterId.Maintainers] || []).map(
+			(maintainerIdAndName) => maintainerIdAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
+	);
+
+	// Contains the options that have already been applied and are present in the url
+	const [selectedMaintainerIds, setSelectedMaintainerIds] = useState<string[]>(
+		() => appliedSelectedMaintainerIds
 	);
 
 	const { setValue, reset, handleSubmit } = useForm<MaintainerFilterFormState>({
@@ -54,24 +56,27 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		(v) => v.name
 	);
 
-	const buckets =
-		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Maintainer]?.buckets ||
-		[];
+	const filterOptions: { id: string; name: string }[] = useSelector(selectIeObjectsFilterOptions)[
+		IeObjectsSearchFilterField.MAINTAINER_ID
+	];
 
-	const filteredBuckets = buckets
-		.map((bucket) => ({
-			...bucket,
-			name: maintainerNames?.[bucket.key] || bucket.key,
-		}))
-		.filter((bucket) => bucket.name.toLowerCase().includes(search.toLowerCase()));
+	const filteredBuckets = filterOptions.filter((filterOption) =>
+		filterOption.name.toLowerCase().includes(search.toLowerCase())
+	);
 
-	const checkboxOptions = filteredBuckets.map((bucket) => {
-		return {
-			value: bucket.key,
-			label: bucket.name || bucket.key,
-			checked: selectedMaintainerIds.includes(bucket.key),
-		};
-	});
+	// Make sure applied values are sorted at the top of the list
+	// Options selected by the user should remain in their alphabetical order until the filter is applied
+	// https://meemoo.atlassian.net/browse/ARC-1882
+	const checkboxOptions = sortFilterOptions(
+		filteredBuckets.map((filterOption) => {
+			return {
+				label: filterOption.name,
+				value: filterOption.id,
+				checked: selectedMaintainerIds.includes(filterOption.id),
+			};
+		}),
+		appliedSelectedMaintainerIds
+	);
 
 	const idToIdAndNameConcatinated = useCallback(
 		(id: string) => {

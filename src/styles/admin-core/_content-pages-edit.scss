@@ -17,3 +17,11 @@
 .c-datepicker.react-datepicker-popper {
 	overflow: hidden;
 }
+
+.c-content-edit-view__sidebar {
+	.c-file-upload {
+		.c-loading {
+			max-height: 30rem;
+		}
+	}
+}

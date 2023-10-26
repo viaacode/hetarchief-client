@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
@@ -99,6 +99,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
@@ -115,8 +116,9 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/ie-objects';
-import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
+import { selectBreadcrumbs } from '@shared/store/ui/ui.select';
+import { setShowAuthModal, setShowZendesk } from '@shared/store/ui/ui.slice';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -1428,7 +1430,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				id="object-detail-page__metadata-field-detail-blade"
 			>
 				<div className="u-px-32 u-pb-32">
-					{highlighted(selectedMetadataField?.data || '')}
+					<HighlightedMetadata
+						title={selectedMetadataField?.title}
+						data={selectedMetadataField?.data}
+					/>
 				</div>
 			</Blade>
 		</>

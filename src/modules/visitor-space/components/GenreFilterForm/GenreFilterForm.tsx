@@ -9,9 +9,11 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
+import { IeObjectsSearchFilterField } from '@shared/types';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
 	GENRE_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -30,28 +32,45 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 
 	const [query] = useQueryParams(GENRE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [selection, setSelection] = useState<string[]>(() => compact(query.genre || []));
+
+	// Contains the options that have already been applied and are present in the url
+	const appliedSelectedGenres = compact(query.genre || []);
+
+	// Contains the options the user currently has selected, but are not necessarily applied yet
+	const [selectedGenres, setSelectedGenres] = useState<string[]>(appliedSelectedGenres);
 
 	const { setValue, reset, handleSubmit } = useForm<GenreFilterFormState>({
 		resolver: yupResolver(GENRE_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
 
-	const buckets = (
-		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Genre].buckets || []
-	).filter((bucket) => bucket.key.toLowerCase().includes(search.toLowerCase()));
+	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)[
+		IeObjectsSearchFilterField.GENRE
+	].filter((filterOption) => filterOption.toLowerCase().includes(search.toLowerCase()));
+
+	// Make sure applied values are sorted at the top of the list
+	// Options selected by the user should remain in their alphabetical order until the filter is applied
+	// https://meemoo.atlassian.net/browse/ARC-1882
+	const checkboxOptions = sortFilterOptions(
+		filterOptions.map((filterOption) => ({
+			label: filterOption,
+			value: filterOption,
+			checked: selectedGenres.includes(filterOption),
+		})),
+		appliedSelectedGenres
+	);
 
 	// Effects
 
 	useEffect(() => {
-		setValue('genres', selection);
-	}, [selection, setValue]);
+		setValue('genres', selectedGenres);
+	}, [selectedGenres, setValue]);
 
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
-		const selected = add ? [...selection, value] : without(selection, value);
-		setSelection(selected);
+		const selected = add ? [...selectedGenres, value] : without(selectedGenres, value);
+		setSelectedGenres(selected);
 	};
 
 	return (
@@ -69,7 +88,7 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 				/>
 
 				<div className="u-my-32">
-					{buckets.length === 0 && (
+					{filterOptions.length === 0 && (
 						<p className="u-color-neutral u-text-center u-my-16">
 							{tHtml(
 								'modules/visitor-space/components/genre-filter-form/genre-filter-form___geen-genres-gevonden'
@@ -79,12 +98,7 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 
 					<CheckboxList
 						className="u-my-16"
-						items={buckets.map((bucket) => ({
-							...bucket,
-							value: bucket.key,
-							label: bucket.key,
-							checked: selection.includes(bucket.key),
-						}))}
+						items={checkboxOptions}
 						onItemClick={(checked, value) => {
 							onItemClick(!checked, value as string);
 						}}
@@ -93,10 +107,10 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 			</div>
 
 			{children({
-				values: { genres: selection },
+				values: { genres: selectedGenres },
 				reset: () => {
 					reset();
-					setSelection(defaultValues.genres);
+					setSelectedGenres(defaultValues.genres);
 				},
 				handleSubmit,
 			})}

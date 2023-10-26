@@ -15,7 +15,7 @@ import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-si
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import withUser, { UserProps } from '@shared/hooks/with-user';
-import { setShowZendesk } from '@shared/store/ui';
+import { setShowZendesk } from '@shared/store/ui/ui.slice';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser } from '@shared/utils';
 
@@ -96,7 +96,13 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(title || undefined, '', url)}
+			{renderOgTags(
+				title || undefined,
+				'',
+				url,
+				undefined,
+				contentPageInfo?.thumbnailPath || null
+			)}
 			{renderPageContent()}
 		</VisitorLayout>
 	);

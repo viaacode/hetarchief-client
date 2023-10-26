@@ -5,10 +5,11 @@ import React, { FC, useState } from 'react';
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestRequesterCapacity } from '@material-requests/types';
 import { Blade } from '@shared/components';
+import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { useAppDispatch } from '@shared/store';
-import { setShowMaterialRequestCenter } from '@shared/store/ui';
+import { setShowMaterialRequestCenter } from '@shared/store/ui/ui.slice';
 
 import { PersonalInfoBladeBladeProps } from './PersonalInfo.types';
 import styles from './PersonalInfoBlade.module.scss';
@@ -70,14 +71,29 @@ const PersonalInfoBlade: FC<PersonalInfoBladeBladeProps> = ({
 	const renderFooter = () => {
 		return (
 			<div className={styles['c-personal-info-blade__close-button-container']}>
-				<Button
-					label={tText(
-						'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
-					)}
-					variants={['block', 'text', 'dark']}
-					onClick={onSendRequests}
-					className={styles['c-personal-info-blade__send-button']}
-				/>
+				{renderMobileDesktop({
+					mobile: (
+						<Button
+							label={tText(
+								'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur-mobile'
+							)}
+							variants={['block', 'text', 'dark']}
+							onClick={onSendRequests}
+							className={styles['c-personal-info-blade__send-button']}
+						/>
+					),
+					desktop: (
+						<Button
+							label={tText(
+								'modules/navigation/components/personal-info-blade/personal-info-blade___verstuur'
+							)}
+							variants={['block', 'text', 'dark']}
+							onClick={onSendRequests}
+							className={styles['c-personal-info-blade__send-button']}
+						/>
+					),
+				})}
+
 				<Button
 					label={tText(
 						'modules/navigation/components/personal-info-blade/personal-info-blade___annuleer'

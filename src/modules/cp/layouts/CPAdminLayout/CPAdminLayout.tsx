@@ -6,7 +6,7 @@ import { stringifyUrl } from 'query-string';
 import { FC, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { CP_ADMIN_NAVIGATION_LINKS, CP_ADMIN_SEARCH_VISITOR_SPACE_KEY } from '@cp/const';
 import { CPAdminLayoutProps } from '@cp/layouts';
 import { Icon, ListNavigationItem } from '@shared/components';
@@ -14,7 +14,7 @@ import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { globalLabelKeys } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
-import { setShowZendesk } from '@shared/store/ui';
+import { setShowZendesk } from '@shared/store/ui/ui.slice';
 import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import styles from './CPAdminLayout.module.scss';
