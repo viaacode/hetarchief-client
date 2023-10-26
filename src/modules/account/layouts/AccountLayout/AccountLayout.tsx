@@ -18,7 +18,7 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
 	);
-	const hasPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
 			ACCOUNT_NAVIGATION_LINKS()
@@ -28,7 +28,8 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 					// do not show account-history navigation or account-material-requests navigation
 					const hideAccountHistory =
 						!hasAccountHistoryPerm && link.id == 'account-history';
-					const hideMaterialRequests = !hasPerm && link.id == 'account-material-requests';
+					const hideMaterialRequests =
+						!hasMaterialRequestsPerm && link.id == 'account-material-requests';
 
 					if (hideAccountHistory || hideMaterialRequests) {
 						return;
