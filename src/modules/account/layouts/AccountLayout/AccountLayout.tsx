@@ -18,13 +18,20 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 	const hasAccountHistoryPerm = useHasAnyPermission(
 		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
 	);
+	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
 			ACCOUNT_NAVIGATION_LINKS()
 				.filter((link) => {
-					// ARC-1922: If user has no READ_PERSONAL_APPROVED_VISIT_REQUESTS permission,
-					// do not show account-history navigation
-					if (!hasAccountHistoryPerm && link.id == 'account-history') {
+					// ARC-1922/ARC-1927: If user has no READ_PERSONAL_APPROVED_VISIT_REQUESTS permission,
+					// or VIEW_OWN_MATERIAL_REQUESTS,
+					// do not show account-history navigation or account-material-requests navigation
+					const hideAccountHistory =
+						!hasAccountHistoryPerm && link.id == 'account-history';
+					const hideMaterialRequests =
+						!hasMaterialRequestsPerm && link.id == 'account-material-requests';
+
+					if (hideAccountHistory || hideMaterialRequests) {
 						return;
 					} else {
 						return link;
