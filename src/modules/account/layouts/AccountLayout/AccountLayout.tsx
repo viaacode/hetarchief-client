@@ -15,14 +15,16 @@ import { ACCOUNT_NAVIGATION_LINKS, Permission } from 'modules/account/const';
 
 const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
-	const hasPerm = useHasAnyPermission(Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS);
+	const hasAccountHistoryPerm = useHasAnyPermission(
+		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
+	);
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
 			ACCOUNT_NAVIGATION_LINKS()
 				.filter((link) => {
 					// ARC-1922: If user has no READ_PERSONAL_APPROVED_VISIT_REQUESTS permission,
 					// do not show account-history navigation
-					if (!hasPerm && link.id == 'account-history') {
+					if (!hasAccountHistoryPerm && link.id == 'account-history') {
 						return;
 					} else {
 						return link;
