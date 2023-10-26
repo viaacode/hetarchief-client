@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact, noop, sortBy, without } from 'lodash-es';
+import { compact, noop, without } from 'lodash-es';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -20,6 +20,7 @@ import {
 import { LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const defaultValues = {
 	languages: [],
@@ -61,16 +62,13 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 	// Make sure applied values are sorted at the top of the list
 	// Options selected by the user should remain in their alphabetical order until the filter is applied
 	// https://meemoo.atlassian.net/browse/ARC-1882
-	const checkboxOptions = sortBy(
+	const checkboxOptions = sortFilterOptions(
 		filteredOptions.map((filterOption) => ({
 			label: LANGUAGES.nl[filterOption] || filterOption,
 			value: filterOption,
 			checked: selectedLanguageCodes.includes(filterOption),
 		})),
-		(option) =>
-			(appliedSelectedLanguageCodes.includes(option.value) ? '0' : '1') +
-			'___' +
-			option.label.toLowerCase()
+		appliedSelectedLanguageCodes
 	);
 
 	const idToIdAndNameConcatinated = useCallback((id: string) => {

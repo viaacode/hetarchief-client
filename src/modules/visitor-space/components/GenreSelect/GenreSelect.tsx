@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
 import { IeObjectsSearchFilterField } from '@shared/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const GenreSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
@@ -12,11 +13,13 @@ const GenreSelect: FC<ReactSelectProps> = (props) => {
 		IeObjectsSearchFilterField.GENRE
 	];
 
-	const options = (filterOptions || []).map((filterOption) => ({
-		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results
-		label: filterOption,
-		value: filterOption,
-	}));
+	const options = sortFilterOptions(
+		(filterOptions || []).map((filterOption) => ({
+			label: filterOption,
+			value: filterOption,
+		})),
+		[]
+	);
 
 	// Bind to defaultProps to access externally
 	GenreSelect.defaultProps = { options };

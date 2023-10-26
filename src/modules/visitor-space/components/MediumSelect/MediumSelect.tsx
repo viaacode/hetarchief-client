@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
 import { IeObjectsSearchFilterField } from '@shared/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const MediumSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
@@ -12,11 +13,13 @@ const MediumSelect: FC<ReactSelectProps> = (props) => {
 		IeObjectsSearchFilterField.MEDIUM
 	];
 
-	const selectOptions = filterOptions.map((filterOption) => ({
-		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results
-		label: filterOption,
-		value: filterOption,
-	}));
+	const selectOptions = sortFilterOptions(
+		filterOptions.map((filterOption) => ({
+			label: filterOption,
+			value: filterOption,
+		})),
+		[]
+	);
 
 	// Bind to defaultProps to access externally
 	MediumSelect.defaultProps = { options: selectOptions };

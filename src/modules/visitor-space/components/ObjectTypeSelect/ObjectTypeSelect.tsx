@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
 import { IeObjectsSearchFilterField } from '@shared/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const ObjectTypeSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
@@ -12,11 +13,13 @@ const ObjectTypeSelect: FC<ReactSelectProps> = (props) => {
 		IeObjectsSearchFilterField.OBJECT_TYPE
 	];
 
-	const options = filterOptions.map((option) => ({
-		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results
-		label: option,
-		value: option,
-	}));
+	const options = sortFilterOptions(
+		filterOptions.map((option) => ({
+			label: option,
+			value: option,
+		})),
+		[]
+	);
 
 	// Bind to defaultProps to access externally
 	ObjectTypeSelect.defaultProps = { options };

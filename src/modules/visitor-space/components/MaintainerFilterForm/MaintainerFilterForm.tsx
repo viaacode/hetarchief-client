@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckboxList } from '@meemoo/react-components';
 import clsx from 'clsx';
-import { compact, keyBy, mapValues, noop, sortBy, without } from 'lodash-es';
+import { compact, keyBy, mapValues, noop, without } from 'lodash-es';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ import { MaintainerFilterFormProps, MaintainerFilterFormState } from '@visitor-s
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
 	MAINTAINER_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -55,9 +56,9 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		(v) => v.name
 	);
 
-	const filterOptions: { id: string; name: string }[] = useSelector(
-		selectIeObjectsFilterOptions
-	)?.[IeObjectsSearchFilterField.MAINTAINER_ID];
+	const filterOptions: { id: string; name: string }[] = useSelector(selectIeObjectsFilterOptions)[
+		IeObjectsSearchFilterField.MAINTAINER_ID
+	];
 
 	const filteredBuckets = filterOptions.filter((filterOption) =>
 		filterOption.name.toLowerCase().includes(search.toLowerCase())
@@ -66,7 +67,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 	// Make sure applied values are sorted at the top of the list
 	// Options selected by the user should remain in their alphabetical order until the filter is applied
 	// https://meemoo.atlassian.net/browse/ARC-1882
-	const checkboxOptions = sortBy(
+	const checkboxOptions = sortFilterOptions(
 		filteredBuckets.map((filterOption) => {
 			return {
 				label: filterOption.name,
@@ -74,10 +75,7 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 				checked: selectedMaintainerIds.includes(filterOption.id),
 			};
 		}),
-		(filterOption) =>
-			(appliedSelectedMaintainerIds.includes(filterOption.value) ? '0' : '1') +
-			'___' +
-			filterOption.label.toLowerCase()
+		appliedSelectedMaintainerIds
 	);
 
 	const idToIdAndNameConcatinated = useCallback(
