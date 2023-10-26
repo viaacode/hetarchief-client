@@ -32,7 +32,7 @@ const DateInput: FC<DateInputProps> = ({ onChange, value, id, disabled, label, c
 				disabled={disabled}
 				selected={isValid(value) ? value : new Date()}
 				dateFormat="dd/MM/yyyy"
-				placeholderText="dd/mm/yyyy"
+				placeholderText="dd/mm/jjjj"
 				customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}
 			/>
 		</div>
