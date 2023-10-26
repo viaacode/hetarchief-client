@@ -99,6 +99,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
@@ -1428,7 +1429,10 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				id="object-detail-page__metadata-field-detail-blade"
 			>
 				<div className="u-px-32 u-pb-32">
-					{highlighted(selectedMetadataField?.data || '')}
+					<HighlightedMetadata
+						title={selectedMetadataField?.title}
+						data={selectedMetadataField?.data}
+					/>
 				</div>
 			</Blade>
 		</>

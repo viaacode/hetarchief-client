@@ -1,12 +1,8 @@
-import clsx from 'clsx';
 import { isString } from 'lodash-es';
 import { FC, ReactNode } from 'react';
-import Highlighter from 'react-highlight-words';
-import { useQueryParams } from 'use-query-params';
 
 import { MetadataItem } from '@ie-objects/components';
-import { IE_OBJECT_QUERY_PARAM_CONFIG } from '@ie-objects/const';
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { DefaultComponentProps } from '@shared/types';
 
@@ -23,7 +19,6 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	MetaDataFieldWithHighlightingAndMaxLengthProps
 > = ({ title, data, className, onReadMoreClicked }) => {
 	const { tText } = useTranslation();
-	const [query] = useQueryParams(IE_OBJECT_QUERY_PARAM_CONFIG);
 
 	const isLongFieldData: boolean = isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
 
@@ -31,58 +26,22 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 		? (data as string).substring(0, METADATA_FIELD_MAX_LENGTH) + '...'
 		: data;
 
-	const highlighted = (toHighlight: string) => (
-		<Highlighter
-			searchWords={(query[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS] as string[]) ?? []}
-			autoEscape={true}
-			textToHighlight={toHighlight}
-		/>
-	);
-
-	const renderHighlighted = (): ReactNode => {
-		if (isString(parsedFieldData)) {
-			// Split text on new lines and highlight each part separately + put each part in its own paragraph to show new lines
-			return parsedFieldData
-				.split(/(\\\\r|\\r)?\\\\n|\\n/)
-				.map((fieldTextPart, fieldTextPartIndex) => {
-					// ARC-1936: if url make it clickable
-					if (data.startsWith('https://') || data.startsWith('http://')) {
-						return (
-							<span key={title + '-' + fieldTextPartIndex}>
-								<a href={fieldTextPart} target="_blank" rel="noreferrer">
-									{highlighted(fieldTextPart)}
-								</a>
-							</span>
-						);
-					} else {
-						return (
-							<span key={title + '-' + fieldTextPartIndex}>
-								{highlighted(fieldTextPart)}
-							</span>
-						);
-					}
-				});
-		} else {
-			return parsedFieldData;
-		}
-	};
-
 	return (
 		<>
-			<p className={clsx(className, 'u-line-height-1-6 u-font-size-16')}>
+			<div className={className}>
 				{/* ARC-1282: if there are issues with showing \\n or not showing new lines,
 				the parsedDescription used to be in a <TextWithNewLines /> component. This component was removed here to highlight text */}
-				{renderHighlighted()}
+				<HighlightedMetadata title={title} data={parsedFieldData} />
 
 				{isLongFieldData && (
-					<p
+					<div
 						className={styles['c-metadata__field__blade__read-more']}
 						onClick={() => onReadMoreClicked({ title, data })}
 					>
 						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
-					</p>
+					</div>
 				)}
-			</p>
+			</div>
 		</>
 	);
 };
