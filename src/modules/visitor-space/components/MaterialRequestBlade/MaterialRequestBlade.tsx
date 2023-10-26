@@ -15,7 +15,7 @@ import { ROUTE_PARTS } from '@shared/const';
 import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { setMaterialRequestCount } from '@shared/store/ui';
+import { setMaterialRequestCount } from '@shared/store/ui/ui.slice';
 
 import styles from './MaterialRequestBlade.module.scss';
 

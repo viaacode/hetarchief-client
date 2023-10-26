@@ -6,7 +6,7 @@ import { stringifyUrl } from 'query-string';
 import { ComponentType } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectIsLoggedIn } from '@auth/store/user';
+import { selectIsLoggedIn } from '@auth/store/user/user.select';
 import { ErrorNoAccessToObject, ErrorNotFound, Loading } from '@shared/components';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
 import { NextRedirect } from '@shared/components/Redirect/Redirect.tsx';

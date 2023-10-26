@@ -3,18 +3,19 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
-import { ElasticsearchFieldNames } from '@visitor-space/types';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
+import { IeObjectsSearchFilterField } from '@shared/types';
 
 const GenreSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
-	const aggregates = useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Genre]
-		.buckets;
+	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)?.[
+		IeObjectsSearchFilterField.GENRE
+	];
 
-	const options = (aggregates || []).map((bucket) => ({
+	const options = (filterOptions || []).map((filterOption) => ({
 		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results
-		label: `${bucket.key}`,
-		value: bucket.key,
+		label: filterOption,
+		value: filterOption,
 	}));
 
 	// Bind to defaultProps to access externally

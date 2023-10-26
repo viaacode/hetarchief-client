@@ -13,7 +13,7 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { setShowAuthModal } from '@shared/store/ui';
+import { setShowAuthModal } from '@shared/store/ui/ui.slice';
 
 import styles from './ErrorNoAccessToObject.module.scss';
 
