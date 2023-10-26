@@ -96,7 +96,13 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(title || undefined, '', url)}
+			{renderOgTags(
+				title || undefined,
+				'',
+				url,
+				undefined,
+				contentPageInfo?.thumbnailPath || null
+			)}
 			{renderPageContent()}
 		</VisitorLayout>
 	);

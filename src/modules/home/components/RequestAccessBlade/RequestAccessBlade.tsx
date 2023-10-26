@@ -38,6 +38,8 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 		resolver: yupResolver(REQUEST_ACCESS_FORM_SCHEMA()),
 	});
 
+	const isError = errors.acceptTerms || errors.requestReason || errors.visitTime;
+
 	const onFormSubmit = async (values: RequestAccessFormState) => {
 		setIsSubmitting(true);
 		await onSubmit?.(values);
@@ -74,6 +76,14 @@ const RequestAccessBlade: FC<RequestAccessBladeProps> = ({ onSubmit, isOpen, ...
 						)}
 					/>
 				</FormControl>
+
+				{!!isError && (
+					<p className={styles['c-request-access-blade__error']}>
+						{tHtml(
+							'modules/home/components/request-access-blade/request-access-blade___error'
+						)}
+					</p>
+				)}
 
 				<Button
 					className="u-mb-8 u-mb-16:md"

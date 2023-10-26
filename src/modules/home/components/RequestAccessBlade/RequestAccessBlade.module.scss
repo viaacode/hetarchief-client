@@ -7,4 +7,9 @@
 			min-height: 10rem;
 		}
 	}
+
+	&__error {
+		color: $cherry;
+		margin-bottom: $spacer-xs;
+	}
 }
