@@ -44,6 +44,7 @@ export interface IeObject {
 	maintainerName: string;
 	maintainerSlug: string;
 	maintainerLogo: string | null;
+	maintainerOverlay: boolean | null;
 	name: string;
 	publisher: any;
 	spatial: string;
