@@ -18,7 +18,6 @@ export abstract class ApiService {
 					'content-type': 'application/json',
 					'Cache-Control': 'no-cache',
 				},
-				timeout: 30000,
 				credentials: 'include', // TODO change to same-origin once working on server
 				hooks: {
 					afterResponse: [
