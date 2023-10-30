@@ -266,7 +266,7 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 				url
 			)}
 
-			<PermissionsCheck allPermissions={[Permission.READ_ALL_VISIT_REQUESTS]}>
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ALL_VISIT_REQUESTS]}>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</>
