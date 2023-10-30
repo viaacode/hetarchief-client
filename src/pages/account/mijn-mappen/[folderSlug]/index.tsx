@@ -43,8 +43,10 @@ import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders, setFolders } from '@shared/store/ie-objects';
-import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition } from '@shared/store/ui';
+import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
+import { setFolders } from '@shared/store/ie-objects/ie-objects.slice';
+import { selectLastScrollPosition } from '@shared/store/ui/ui.select';
+import { setBreadcrumbs, setLastScrollPosition } from '@shared/store/ui/ui.slice';
 import { Breakpoints } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils';
@@ -256,7 +258,7 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 		return (
 			isEmpty(item.accessThrough) &&
 			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
-				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL))
+				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
 		);
 	};
 
@@ -292,7 +294,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 											? tText(
 													'pages/account/mijn-mappen/folder-slug/index___map-beperkte-toegang-niet-verwijderen'
 											  )
-											: undefined
+											: tText(
+													'pages/account/mijn-mappen/folder-slug/index___map-verwijderen'
+											  )
 									}
 								/>
 							),
@@ -435,7 +439,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 							{
 								id: 'p-account-my-folders__new-folder',
 								variants: ['c-list-navigation__item--no-interaction'],
-								node: <CreateFolderButton afterSubmit={getFolders.refetch} />,
+								node: (
+									<CreateFolderButton afterSubmit={() => getFolders.refetch()} />
+								),
 								hasDivider: true,
 							},
 						]}

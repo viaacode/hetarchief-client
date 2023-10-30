@@ -477,7 +477,7 @@ export const getNavigationItemsLeft = (
 		...(afterDivider.length > 0 ? [getDivider('divider-before-visitor-spaces')] : []),
 
 		// Some dynamic links from navigations table in database
-		...afterDivider,
+		...(isMobile ? [] : afterDivider),
 
 		// Some hard coded links we always need to show on mobile
 		...(isMobile ? [...cpAdminLinks, ...meemooAdminLinks] : []),

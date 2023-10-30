@@ -26,7 +26,7 @@ ColorGray.args = {
 
 export const WithIconLeft = Template.bind({});
 WithIconLeft.args = {
-	placeholder: 'dd/mm/yyyy',
+	placeholder: 'dd/mm/jjjj',
 	iconStart: <Icon name={IconNamesLight.Calendar} />,
 };
 

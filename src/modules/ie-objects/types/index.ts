@@ -1,7 +1,5 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
-import { ElasticsearchFieldNames } from '@visitor-space/types';
-
 // Mapped intellectual entity object
 
 export enum IsPartOfKey {
@@ -115,19 +113,6 @@ export enum IeObjectSector {
 	RURAL = 'Landelijke Private Omroep',
 }
 
-export interface IeObjectContactInfo {
-	email?: string | null;
-	telephone?: string | null;
-	address: IeObjectAddress;
-}
-
-export interface IeObjectAddress {
-	street: string;
-	postalCode: string;
-	locality: string;
-	postOfficeBoxNumber: string;
-}
-
 export interface IeObjectFile {
 	name: string;
 	alternateName: string;
@@ -163,22 +148,6 @@ export interface IeObjectSearchAggregation<T> {
 
 // TODO: change Partial<IeObject> to IeObject with optional fields to prevent unknown values such as id and type
 export type IeObjectSimilar = IPagination<Partial<IeObject>>;
-
-export interface IeObjectSimilarShards {
-	failed: number;
-	skipped: number;
-	successful: number;
-	total: number;
-}
-
-export interface IeObjectSearchAggregations {
-	[ElasticsearchFieldNames.Format]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Medium]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.ObjectType]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Genre]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Language]: IeObjectSearchAggregation<string>;
-	[ElasticsearchFieldNames.Maintainer]: IeObjectSearchAggregation<string>;
-}
 
 // UI
 

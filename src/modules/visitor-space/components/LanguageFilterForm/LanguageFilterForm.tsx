@@ -9,7 +9,8 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
+import { IeObjectsSearchFilterField } from '@shared/types';
 import {
 	LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG,
 	LANGUAGE_FILTER_FORM_SCHEMA,
@@ -18,11 +19,8 @@ import {
 } from '@visitor-space/components';
 import { LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import {
-	ElasticsearchFieldNames,
-	FILTER_LABEL_VALUE_DELIMITER,
-	VisitorSpaceFilterId,
-} from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const defaultValues = {
 	languages: [],
@@ -35,13 +33,17 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 
 	const [query] = useQueryParams(LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [selectedLanguageCodes, setSelectedLanguageCodes] = useState<string[]>(() =>
-		compact(
-			(query[VisitorSpaceFilterId.Language] || []).map(
-				(languageCodeAndName) =>
-					languageCodeAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
-			)
+
+	// Contains the options that have already been applied and are present in the url
+	const appliedSelectedLanguageCodes = compact(
+		(query[VisitorSpaceFilterId.Language] || []).map(
+			(languageCodeAndName) => languageCodeAndName?.split(FILTER_LABEL_VALUE_DELIMITER)?.[0]
 		)
+	);
+
+	// Contains the options the user currently has selected, but are not necessarily applied yet
+	const [selectedLanguageCodes, setSelectedLanguageCodes] = useState<string[]>(
+		() => appliedSelectedLanguageCodes
 	);
 
 	const { setValue, reset, handleSubmit } = useForm<LanguageFilterFormState>({
@@ -49,18 +51,25 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 		defaultValues,
 	});
 
-	const buckets =
-		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Language]?.buckets ||
-		[];
+	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)?.[
+		IeObjectsSearchFilterField.LANGUAGE
+	];
 
-	const filteredBuckets = buckets
-		.map((bucket) => {
-			return {
-				...bucket,
-				name: LANGUAGES.nl[bucket.key] || bucket.key,
-			};
-		})
-		.filter((bucket) => bucket.name.toLowerCase().includes(search.toLowerCase()));
+	const filteredOptions = filterOptions.filter((filterOption) =>
+		filterOption.toLowerCase().includes(search.toLowerCase())
+	);
+
+	// Make sure applied values are sorted at the top of the list
+	// Options selected by the user should remain in their alphabetical order until the filter is applied
+	// https://meemoo.atlassian.net/browse/ARC-1882
+	const checkboxOptions = sortFilterOptions(
+		filteredOptions.map((filterOption) => ({
+			label: LANGUAGES.nl[filterOption] || filterOption,
+			value: filterOption,
+			checked: selectedLanguageCodes.includes(filterOption),
+		})),
+		appliedSelectedLanguageCodes
+	);
 
 	const idToIdAndNameConcatinated = useCallback((id: string) => {
 		return `${id}${FILTER_LABEL_VALUE_DELIMITER}${LANGUAGES.nl?.[id] || ''}`;
@@ -97,7 +106,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 				/>
 
 				<div className="u-my-32">
-					{buckets.length === 0 && (
+					{filterOptions.length === 0 && (
 						<p className="u-color-neutral u-text-center">
 							{tHtml(
 								'modules/visitor-space/components/language-filter-form/language-filter-form___geen-talen-gevonden'
@@ -106,12 +115,7 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 					)}
 
 					<CheckboxList
-						items={filteredBuckets.map((bucket) => ({
-							...bucket,
-							value: bucket.key,
-							label: bucket.name,
-							checked: selectedLanguageCodes.includes(bucket.key),
-						}))}
+						items={checkboxOptions}
 						onItemClick={(checked, value) => {
 							onItemClick(!checked, value as string);
 						}}

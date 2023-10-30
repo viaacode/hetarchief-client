@@ -4,12 +4,12 @@ import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Icon, IconName, IconNamesLight, Overlay } from '@shared/components';
+import { selectOpenNavigationDropdownId } from '@shared/store/ui/ui.select';
 import {
-	selectOpenNavigationDropdownId,
 	setOpenNavigationDropdownId,
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
-} from '@shared/store/ui';
+} from '@shared/store/ui/ui.slice';
 
 import styles from '../Navigation.module.scss';
 import { NavigationItem } from '../Navigation.types';
