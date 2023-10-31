@@ -271,8 +271,8 @@ const getCpAdminManagementDropdown = (
 ): NavigationItem[] => {
 	if (
 		intersection(permissions, [
-			Permission.APPROVE_DENY_CP_VISIT_REQUESTS,
-			Permission.READ_CP_VISIT_REQUESTS,
+			Permission.MANAGE_CP_VISIT_REQUESTS,
+			Permission.MANAGE_CP_VISIT_REQUESTS,
 			Permission.UPDATE_OWN_SPACE,
 		]).length === 0
 	) {
@@ -292,7 +292,7 @@ const getCpAdminManagementDropdown = (
 			activeDesktop: currentPath.startsWith(`/${ROUTE_PREFIXES.beheer}`),
 			path: currentPath,
 			children: [
-				...(permissions.includes(Permission.APPROVE_DENY_CP_VISIT_REQUESTS)
+				...(permissions.includes(Permission.MANAGE_CP_VISIT_REQUESTS)
 					? [
 							{
 								node: renderLink(
@@ -328,7 +328,7 @@ const getCpAdminManagementDropdown = (
 							},
 					  ]
 					: []),
-				...(permissions.includes(Permission.READ_CP_VISIT_REQUESTS)
+				...(permissions.includes(Permission.MANAGE_CP_VISIT_REQUESTS)
 					? [
 							{
 								node: renderLink(
@@ -398,10 +398,9 @@ const getMeemooAdminManagementDropdown = (
 ): NavigationItem[] => {
 	if (
 		intersection(permissions, [
-			Permission.APPROVE_DENY_ALL_VISIT_REQUESTS,
 			Permission.EDIT_ANY_CONTENT_PAGES,
 			Permission.READ_ALL_SPACES,
-			Permission.READ_ALL_VISIT_REQUESTS,
+			Permission.MANAGE_ALL_VISIT_REQUESTS,
 			Permission.UPDATE_ALL_SPACES,
 		]).length === 0
 	) {

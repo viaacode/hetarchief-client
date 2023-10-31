@@ -66,7 +66,7 @@ const defaultAccessType = {
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { tHtml, tText } = useTranslation();
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
-		Permission.READ_ALL_VISIT_REQUESTS
+		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
 	const { data: folders } = useGetFolders();
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
