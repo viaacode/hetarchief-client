@@ -40,8 +40,8 @@ const VisitRequestOverview: FC<VisitRequestOverviewProps> = ({ columns }) => {
 		undefined
 	);
 	const canUpdateVisitRequests: boolean | null = useHasAnyPermission(
-		Permission.APPROVE_DENY_CP_VISIT_REQUESTS,
-		Permission.APPROVE_DENY_ALL_VISIT_REQUESTS
+		Permission.MANAGE_CP_VISIT_REQUESTS,
+		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
 
 	const {
