@@ -88,10 +88,11 @@ const VisitPage: NextPage<VisitPageProps> = () => {
 		if (!isLoggedIn) {
 			return renderNoAccess();
 		} else {
-			if (visitorSpaceInfo) {
-				if (isErrorSpaceNotActive) {
-					return <ErrorSpaceNoLongerActive />;
-				} else if (hasPendingRequest) {
+			if (isErrorSpaceNotActive) {
+				// Visitor space no longer active
+				return <ErrorSpaceNoLongerActive />;
+			} else if (visitorSpaceInfo) {
+				if (hasPendingRequest) {
 					// Redirect to the waiting page
 					return (
 						<>
