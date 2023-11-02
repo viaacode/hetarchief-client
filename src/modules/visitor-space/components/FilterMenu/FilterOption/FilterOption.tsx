@@ -105,7 +105,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 						position: 'absolute',
 						left: '100%',
 						width: '46.4rem',
-						height: FILTER_MENU_HEIGHTS[id],
 						top: `calc(-${FILTER_MENU_HEIGHTS[id]} / 2 + 2rem)`,
 						backgroundColor: 'white',
 						zIndex: 5,
