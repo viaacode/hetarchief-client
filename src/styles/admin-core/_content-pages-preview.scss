@@ -146,6 +146,7 @@ $l-container-padding-xs: 2rem;
 		border-radius: 4rem;
 		border-style: solid !important;
 		font-family: $font-family-primary;
+		margin: 0.2rem; // ARC-1942: make sure outline is not overflowing
 	}
 
 	.c-button--content-page-button--silver {

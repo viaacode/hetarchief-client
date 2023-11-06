@@ -1,43 +1,22 @@
-# Install dependencies only when needed
-FROM node:20.4-alpine AS deps
+FROM node:20.4-alpine AS runner
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json package-lock.json .npmrc ./
-# Manually ignore scripts instead of using --ignore-scripts, this flag will prevent running lifecycles for all dependencies
-#ENV DEBUG_TOOLS=false
+COPY . .
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
-RUN npm pkg delete scripts.prepare &&\
-    npm i --legacy-peer-deps
-
-# Rebuild the source code only when needed
-FROM node:20.4-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-# use the slower babel compiler that is compatible with the linux build pod https://stackoverflow.com/questions/69816589/next-failed-to-load-swc-binary
-RUN echo "{\"presets\": [\"next/babel\"]}" >> "/app/.babelrc"
+RUN npm pkg delete scripts.prepare
+RUN npm ci
 RUN npm run build
-
-# Production image, copy all the files and run next
-FROM node:20.4-alpine AS runner
-WORKDIR /app
 
 ENV NODE_ENV production
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
-# You only need to copy next.config.js if you are NOT using the default configuration
 RUN chown nextjs:nodejs /app
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/next-i18next.config.js ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-COPY --from=builder --chown=nextjs:nodejs /app/scripts/next-config-to-env-file.js ./
+
+RUN cp ./scripts/next-config-to-env-file.js ./
 
 USER nextjs
 

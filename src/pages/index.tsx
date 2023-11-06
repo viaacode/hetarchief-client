@@ -86,5 +86,5 @@ export async function getServerSideProps(
 }
 
 export default withAdminCoreConfig(
-	withUser(withAuth(Homepage as ComponentType, false) as FC<unknown>)
+	withUser(withAuth(Homepage as ComponentType, false)) as ComponentType
 ) as FC<HomepageProps>;

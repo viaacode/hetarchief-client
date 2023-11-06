@@ -4,6 +4,7 @@
 .c-filter-form {
 	display: flex;
 	flex-direction: column;
+	height: max-content;
 }
 
 /**
@@ -56,6 +57,7 @@
 .c-filter-form__footer {
 	display: flex;
 	padding: $spacer-md 2rem;
+	width: 100%;
 
 	@include respond-at(md) {
 		padding: $spacer-md $spacer-lg;

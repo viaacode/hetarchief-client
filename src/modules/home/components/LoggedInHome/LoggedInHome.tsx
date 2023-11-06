@@ -5,7 +5,7 @@ import { ComponentType, FC, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import VisitorSpaceCardsWithSearch from '@home/components/VisitorSpaceCardsWithSearch/VisitorSpaceCardsWithSearch';
@@ -385,6 +385,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						)}
 					</h2>
 				)}
+				id="logged-in-home__visitor-space-not-available-blade"
 			>
 				<div className="u-px-32">
 					{visitorSpaceInfo && <SpacePreview space={visitorSpaceInfo} />}
@@ -422,6 +423,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 					isOpen={isRequestAccessBladeOpen}
 					onClose={onCloseRequestBlade}
 					onSubmit={onRequestAccessSubmit}
+					id=""
 				/>
 				{renderVisitorSpaceNotAvailableBlade()}
 				<ProcessVisitBlade
@@ -433,6 +435,7 @@ const LoggedInHome: FC<DefaultSeoInfo> = ({ url }) => {
 						refetchFuture();
 						refetchPending();
 					}}
+					id=""
 				/>
 			</>
 		);

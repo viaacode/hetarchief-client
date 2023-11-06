@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
@@ -99,6 +99,7 @@ import {
 } from '@shared/components';
 import Callout from '@shared/components/Callout/Callout';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
@@ -115,8 +116,9 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/ie-objects';
-import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
+import { selectBreadcrumbs } from '@shared/store/ui/ui.select';
+import { setShowAuthModal, setShowZendesk } from '@shared/store/ui/ui.slice';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -839,7 +841,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			}),
 			poster: mediaInfo?.thumbnailUrl || undefined,
 			title: representation.name,
-			logo: mediaInfo?.maintainerLogo || undefined,
+			logo: mediaInfo?.maintainerOverlay ? mediaInfo?.maintainerLogo || undefined : undefined,
 			pause: isMediaPaused,
 			onPlay: handleOnPlay,
 			onPause: handleOnPause,
@@ -1387,6 +1389,7 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					}
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
+					id="object-detail-page__add-to-folder-blade"
 				/>
 			)}
 			{mediaInfo && !isKiosk && (
@@ -1408,11 +1411,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				user={user}
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
+				id="object-detail-page__report-blade"
 			/>
 			<RequestAccessBlade
 				isOpen={activeBlade === MediaActions.RequestAccess && !!user}
 				onClose={() => setActiveBlade(null)}
 				onSubmit={onRequestAccessSubmit}
+				id="object-detail-page__request-access-blade"
 			/>
 			{/* Read more metadata field blade */}
 			<Blade
@@ -1422,9 +1427,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 					<h2 {...props}>{selectedMetadataField?.title}</h2>
 				)}
+				id="object-detail-page__metadata-field-detail-blade"
 			>
 				<div className="u-px-32 u-pb-32">
-					{highlighted(selectedMetadataField?.data || '')}
+					<HighlightedMetadata
+						title={selectedMetadataField?.title}
+						data={selectedMetadataField?.data}
+					/>
 				</div>
 			</Blade>
 		</>

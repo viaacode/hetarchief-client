@@ -1,4 +1,6 @@
+import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import Toast from './Toast';
 import { ToastProps } from './Toast.types';

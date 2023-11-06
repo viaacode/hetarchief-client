@@ -1,4 +1,5 @@
 export interface ShareFolderBladeProps {
+	children?: React.ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
 	folderId: string;

@@ -5,7 +5,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Zendesk, { IZendeskProps } from 'react-zendesk';
 
-import { selectShowZendesk } from '@shared/store/ui';
+import { selectShowZendesk } from '@shared/store/ui/ui.select';
 import { isBrowser } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
@@ -112,6 +112,9 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 		}, 100);
 	}, [initListeners, widget, router.asPath]);
 
+	if (!isBrowser()) {
+		return null; // Do not server side render this component since it would otherwise create 2 zendesk widgets in separate iframes
+	}
 	return (
 		<Zendesk
 			{...settings}

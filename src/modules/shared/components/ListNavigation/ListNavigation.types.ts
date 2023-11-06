@@ -18,6 +18,7 @@ export interface ListNavigationItem {
 }
 
 export interface ListNavigationProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	listItems: ListNavigationItem[];
 	color?: SidebarColor;
 	onClick?: (id: string) => void;
@@ -25,6 +26,7 @@ export interface ListNavigationProps extends DefaultComponentProps {
 }
 
 export interface ListNavigationItemNodeProps {
+	children?: React.ReactNode;
 	buttonClassName: string;
 	linkClassName: string;
 }

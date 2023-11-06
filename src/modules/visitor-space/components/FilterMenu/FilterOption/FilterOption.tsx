@@ -1,9 +1,10 @@
-import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { FC, ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { Icon, IconNamesLight, Overlay } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -28,10 +29,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const { tText } = useTranslation();
 
 	const filterIsActive = id === activeFilter;
-	const flyoutCls = clsx(
-		styles['c-filter-menu__flyout'],
-		styles['c-filter-menu__flyout--filter']
-	);
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
@@ -73,29 +70,47 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const renderCheckbox = (): ReactElement =>
 		renderFilterForm('c-filter-menu__form--inline', true);
 
+	const FILTER_MENU_HEIGHTS: Partial<Record<VisitorSpaceFilterId, string>> = {
+		[VisitorSpaceFilterId.Medium]: '63.7rem',
+		[VisitorSpaceFilterId.Duration]: '48.1rem',
+		[VisitorSpaceFilterId.Created]: '61.3rem',
+		[VisitorSpaceFilterId.Published]: '61.3rem',
+		[VisitorSpaceFilterId.Creator]: '33.5rem',
+		[VisitorSpaceFilterId.Language]: '53.7rem',
+		[VisitorSpaceFilterId.Maintainers]: '63.7rem',
+		[VisitorSpaceFilterId.Advanced]: '60.1rem',
+	};
 	const renderModal = (): ReactElement => (
 		<>
-			<Dropdown
+			<div
 				className={clsx(styles['c-filter-menu__option'], className)}
-				flyoutClassName={flyoutCls}
-				isOpen={filterIsActive}
 				key={`filter-menu-btn-${id}`}
-				onClose={onFilterToggle}
-				onOpen={onFilterToggle}
-				placement="right"
+				style={{
+					position: 'relative',
+				}}
 			>
-				<DropdownButton>
-					<FilterButton
-						icon={
-							filterIsActive
-								? IconNamesLight.AngleLeft
-								: icon ?? IconNamesLight.AngleRight
-						}
-						isActive={filterIsActive}
-						label={label}
-					/>
-				</DropdownButton>
-				<DropdownContent>
+				<FilterButton
+					icon={
+						filterIsActive
+							? IconNamesLight.AngleLeft
+							: icon ?? IconNamesLight.AngleRight
+					}
+					isActive={filterIsActive}
+					label={label}
+					onClick={() => onClick?.(id)}
+				/>
+
+				<div
+					style={{
+						position: 'absolute',
+						left: '100%',
+						width: '46.4rem',
+						top: `calc(-${FILTER_MENU_HEIGHTS[id]} / 2 + 2rem)`,
+						backgroundColor: 'white',
+						zIndex: 5,
+						display: filterIsActive ? 'block' : 'none',
+					}}
+				>
 					<Button
 						className={styles['c-filter-menu__flyout-close']}
 						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
@@ -106,8 +121,8 @@ const FilterOption: FC<FilterOptionProps> = ({
 						variants="text"
 					/>
 					{renderFilterForm('c-filter-menu__form')}
-				</DropdownContent>
-			</Dropdown>
+				</div>
+			</div>
 			<Overlay
 				className={styles['c-filter-menu__overlay']}
 				visible={filterIsActive}

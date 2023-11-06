@@ -28,7 +28,7 @@ import {
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { AccountLayout } from '@account/layouts';
 import { CommunicationFormState } from '@account/types';
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { Icon, IconNamesLight } from '@shared/components';

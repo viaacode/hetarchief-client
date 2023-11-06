@@ -5,7 +5,7 @@ import React, { FC, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { Blade } from '@shared/components';
@@ -118,6 +118,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onCloseVisitDetailBlade}
+			id="visit-detail-blade"
 		>
 			<div className={styles['c-visit-detail-blade__content']}>
 				<div className={styles['c-visit-detail-blade__content-element']}>
@@ -147,6 +148,7 @@ const VisitDetailBlade: FC<VisitDetailBladeProps> = ({ isOpen, onClose, visit })
 					setIsRequestAccessBladeOpen(false);
 				}}
 				onSubmit={onRequestAccessSubmit}
+				id="visit-detail-blade__request-access-blade"
 			/>
 		</Blade>
 	);

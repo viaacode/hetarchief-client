@@ -1,6 +1,7 @@
 import { AdvancedFilter } from '../../types';
 
 export interface AdvancedFilterFieldsProps {
+	children?: React.ReactNode;
 	id: string;
 	index: number;
 	value: AdvancedFilter;

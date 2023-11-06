@@ -1,5 +1,5 @@
 import { OrderDirection } from '@meemoo/react-components';
-import { CSSProperties } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 export * from './api';
 export * from './blade';
@@ -13,6 +13,7 @@ export * from './visit';
  */
 
 export interface DefaultComponentProps {
+	children?: ReactNode;
 	className?: string;
 	style?: CSSProperties;
 }

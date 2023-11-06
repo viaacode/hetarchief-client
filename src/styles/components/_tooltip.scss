@@ -29,6 +29,12 @@ $component: "c-tooltip-component";
 		}
 	}
 
+	&[data-popper-placement^="left"] > .c-tooltip-component__arrow {
+		right: 6px !important;
+		transform: translate(0, -6px) !important;
+		clip: unset !important;
+	}
+
 	&[data-popper-placement^="right"] > .c-tooltip-component__arrow {
 		left: -6px !important;
 		transform: translate(0, -6px) !important;

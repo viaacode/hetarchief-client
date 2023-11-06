@@ -3,20 +3,23 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
-import { ElasticsearchFieldNames } from '@visitor-space/types';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
+import { IeObjectsSearchFilterField } from '@shared/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const ObjectTypeSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
-	const aggregates = useSelector(selectIeObjectsFilterOptions)?.[
-		ElasticsearchFieldNames.ObjectType
-	].buckets;
+	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)?.[
+		IeObjectsSearchFilterField.OBJECT_TYPE
+	];
 
-	const options = (aggregates || []).map((bucket) => ({
-		// label: `${bucket.key} (${bucket.doc_count})`, // Disabled due to non-representative scale of results
-		label: `${bucket.key}`,
-		value: bucket.key,
-	}));
+	const options = sortFilterOptions(
+		filterOptions.map((option) => ({
+			label: option,
+			value: option,
+		})),
+		[]
+	);
 
 	// Bind to defaultProps to access externally
 	ObjectTypeSelect.defaultProps = { options };

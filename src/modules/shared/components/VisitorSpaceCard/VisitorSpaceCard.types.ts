@@ -12,6 +12,7 @@ export interface VisitorSpaceAccess {
 }
 
 export interface VisitorSpaceCardProps extends CardProps {
+	children?: React.ReactNode;
 	access?: VisitorSpaceAccess;
 	onAccessRequest?: (room: Partial<Omit<VisitorSpaceInfo, 'status'>>) => void;
 	onContactClick?: (room: Partial<Omit<VisitorSpaceInfo, 'status'>>) => void;

@@ -73,6 +73,16 @@ $component: "c-visitor-space-card";
 	}
 
 	&__description {
+		&--container {
+			display: flex;
+			flex-direction: row;
+			cursor: pointer;
+
+			&--icon {
+				margin-top: auto;
+			}
+		}
+
 		font-size: $font-size-xs;
 		line-height: $line-height-lg;
 

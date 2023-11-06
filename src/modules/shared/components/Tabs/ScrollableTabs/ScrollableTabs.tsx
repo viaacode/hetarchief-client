@@ -57,7 +57,7 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 
 	// Set gradients to indicate it's scrollable
 	const setGradients = useCallback(
-		(element) => {
+		(element: Element) => {
 			if (!element) {
 				return;
 			}
@@ -79,8 +79,10 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 	);
 
 	const onTabsScroll = useCallback(
-		(e) => {
-			setGradients(e.target);
+		(e: Event) => {
+			if (e.target) {
+				setGradients(e.target as Element);
+			}
 		},
 		[setGradients]
 	);

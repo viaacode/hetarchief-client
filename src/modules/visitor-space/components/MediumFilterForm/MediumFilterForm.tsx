@@ -9,9 +9,11 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
+import { IeObjectsSearchFilterField } from '@shared/types';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
+import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
 	MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG,
@@ -30,30 +32,48 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 
 	const [query] = useQueryParams(MEDIUM_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [search, setSearch] = useState<string>('');
-	const [selection, setSelection] = useState<string[]>(() => compact(query.medium || []));
+
+	// Contains the options that have already been applied and are present in the url
+	const appliedSelectedMediums = compact(query.medium || []);
+
+	// Contains the options the user currently has selected, but are not necessarily applied yet
+	const [selectedMediums, setSelectedMediums] = useState<string[]>(appliedSelectedMediums);
 
 	const { setValue, reset, handleSubmit } = useForm<MediumFilterFormState>({
 		resolver: yupResolver(MEDIUM_FILTER_FORM_SCHEMA()),
 		defaultValues,
 	});
 
-	const buckets =
-		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Medium]?.buckets || [];
-	const filteredBuckets = buckets.filter((bucket) =>
-		bucket.key.toLowerCase().includes(search.toLowerCase())
+	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)?.[
+		IeObjectsSearchFilterField.MEDIUM
+	];
+	const filteredOptions = filterOptions.filter((filterOption) =>
+		filterOption.toLowerCase().includes(search.toLowerCase())
+	);
+
+	// Make sure applied values are sorted at the top of the list
+	// Options selected by the user should remain in their alphabetical order until the filter is applied
+	// https://meemoo.atlassian.net/browse/ARC-1882
+	const checkboxOptions = sortFilterOptions(
+		filteredOptions.map((filterOption) => ({
+			label: filterOption,
+			value: filterOption,
+			checked: selectedMediums.includes(filterOption),
+		})),
+		appliedSelectedMediums
 	);
 
 	// Effects
 
 	useEffect(() => {
-		setValue('mediums', selection);
-	}, [selection, setValue]);
+		setValue('mediums', selectedMediums);
+	}, [selectedMediums, setValue]);
 
 	// Events
 
 	const onItemClick = (add: boolean, value: string) => {
-		const selected = add ? [...selection, value] : without(selection, value);
-		setSelection(selected);
+		const selected = add ? [...selectedMediums, value] : without(selectedMediums, value);
+		setSelectedMediums(selected);
 	};
 
 	return (
@@ -71,7 +91,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 				/>
 
 				<div className="u-my-32">
-					{buckets.length === 0 && (
+					{filterOptions.length === 0 && (
 						<p className="u-color-neutral u-text-center">
 							{tHtml(
 								'modules/visitor-space/components/medium-filter-form/medium-filter-form___geen-analoge-dragers-gevonden'
@@ -80,12 +100,7 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 					)}
 
 					<CheckboxList
-						items={filteredBuckets.map((bucket) => ({
-							...bucket,
-							checked: selection.includes(bucket.key),
-							label: bucket.key,
-							value: bucket.key,
-						}))}
+						items={checkboxOptions}
 						onItemClick={(checked, value) => {
 							onItemClick(!checked, value as string);
 						}}
@@ -94,10 +109,10 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 			</div>
 
 			{children({
-				values: { mediums: selection },
+				values: { mediums: selectedMediums },
 				reset: () => {
 					reset();
-					setSelection(defaultValues.mediums);
+					setSelectedMediums(defaultValues.mediums);
 					setSearch('');
 				},
 				handleSubmit,

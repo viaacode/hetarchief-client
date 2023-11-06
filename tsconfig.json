@@ -19,21 +19,25 @@
 			"@maintenance-alerts/*": ["modules/maintenance-alerts/*"],
 			"react": ["../node_modules/react"]
 		},
-		"target": "es5",
+		"target": "ESNext",
 		"lib": ["dom", "dom.iterable", "esnext"],
+		"types": ["jest", "node"],
+		"module": "esnext",
+		"moduleResolution": "node",
 		"allowJs": true,
 		"skipLibCheck": true,
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
 		"noEmit": true,
 		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "node",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"jsx": "preserve",
-		"incremental": true,
-		"types": ["jest", "node"]
+		"incremental": true
+	},
+	"ts-node": {
+		"esm": true,
+		"experimentalSpecifierResolution": "node"
 	},
 	"include": ["next-env.d.ts", "jest/**/*.js", "src/**/*.ts", "src/**/*.tsx"],
 	"exclude": ["node_modules"]

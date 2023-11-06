@@ -2,7 +2,9 @@ import { OrderDirection } from '@meemoo/react-components';
 
 import { Visit, VisitStatus } from '@shared/types';
 import { VisitTimeframe } from '@visits/types';
+
 export interface GetVisitsProps {
+	children?: React.ReactNode;
 	searchInput?: string | undefined;
 	status?: VisitStatus | undefined;
 	timeframe?: VisitTimeframe | VisitTimeframe[] | undefined;
@@ -17,6 +19,7 @@ export interface GetVisitsProps {
 }
 
 export interface GetAllActiveVisitsProps {
+	children?: React.ReactNode;
 	requesterId?: string;
 	page?: number;
 	size?: number;

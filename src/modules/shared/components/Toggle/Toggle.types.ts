@@ -9,6 +9,7 @@ export interface ToggleOption {
 }
 
 export interface ToggleProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	options: ToggleOption[];
 	onChange: (id: string) => void;
 	bordered?: boolean;

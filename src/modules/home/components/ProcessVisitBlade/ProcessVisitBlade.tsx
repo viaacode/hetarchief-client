@@ -97,6 +97,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				isOpen={getCurrentLayer() === 1}
 				layer={1}
 				renderTitle={(props: any) => <h2 {...props}>{getTitle()}</h2>}
+				id="process-visit-blade__visit-summary"
 			>
 				{selected && <VisitSummary preview {...selected} />}
 			</Blade>
@@ -107,6 +108,7 @@ const ProcessVisitBlade: FC<ProcessVisitBladeProps> = (props) => {
 				selected={selected}
 				onClose={() => setShowCancel(false)}
 				onFinish={() => finish(setShowCancel)}
+				id="process-visit-blade__cancel-visit-blade"
 			/>
 		</BladeManager>
 	);

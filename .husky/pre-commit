@@ -1,4 +1,18 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+
+# package.json should not contain locally installed packages
+if  grep -q "file:../" "./package.json" ; then
+	echo "package.json should not contain any locally installed files. eg: \"@meemoo/react-components\": \"../react-components\""
+	exit 1;
+fi
+
+# package-lock.json should not contain locally installed packages
+if  [grep -q "../react-components" "./package-lock.json"] | [grep -q "../avo2-components" "./package-lock.json"] | [grep -q "../react-admin-core-module" "./package-lock.json"] ; then
+	echo "package-lock.json should not contain any locally installed files. eg: ../avo2-components"
+	exit 1;
+fi
+
+# Check linting of the staged files
 npx lint-staged

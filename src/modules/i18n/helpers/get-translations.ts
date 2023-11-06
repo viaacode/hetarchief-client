@@ -1,13 +1,13 @@
-export async function getTranslations(proxyUrl: string): Promise<Record<string, string>> {
-	const TRANSLATIONS_URL = `${proxyUrl}/admin/translations/nl.json`;
+import { ApiService } from '@shared/services/api-service';
+
+export async function getTranslations(): Promise<Record<string, string>> {
 	try {
-		const response = await fetch(TRANSLATIONS_URL);
-		return response.json();
+		return await ApiService.getApi(true).get('admin/translations/nl.json').json();
 	} catch (err) {
 		console.error({
 			message: 'Failed to fetch translations from the backend',
 			innerException: err,
-			additionalInfo: TRANSLATIONS_URL,
+			additionalInfo: 'admin/translations/nl.json',
 		});
 		return {};
 	}

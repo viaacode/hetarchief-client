@@ -1,0 +1,27 @@
+.c-content-page-edit__nav-bar > .o-container .c-content-page-edit__copy-page-button {
+	border-radius: 50%;
+	width: 4.7rem;
+	height: 4.7rem;
+	margin: 0 !important;
+	padding: 0;
+	max-height: none;
+	border: 1px solid #e6e6e6;
+
+	&:hover {
+		background-color: #505050;
+		border-color: #505050;
+		color: #fff;
+	}
+}
+
+.c-datepicker.react-datepicker-popper {
+	overflow: hidden;
+}
+
+.c-content-edit-view__sidebar {
+	.c-file-upload {
+		.c-loading {
+			max-height: 30rem;
+		}
+	}
+}

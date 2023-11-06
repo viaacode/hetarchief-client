@@ -13,5 +13,6 @@ export interface MediaObject {
 }
 
 export interface RelatedObjectProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	object: MediaObject;
 }

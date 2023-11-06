@@ -12,9 +12,10 @@ import {
 } from '@material-requests/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import { ROUTE_PARTS } from '@shared/const';
+import { renderMobileDesktop } from '@shared/helpers/renderMobileDesktop';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { setMaterialRequestCount } from '@shared/store/ui';
+import { setMaterialRequestCount } from '@shared/store/ui/ui.slice';
 
 import styles from './MaterialRequestBlade.module.scss';
 
@@ -197,14 +198,28 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 					onClick={onCloseModal}
 					className={styles['c-request-material__verstuur-button']}
 				/> */}
-				<Button
-					label={tText(
-						'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
-					)}
-					variants={['block', 'text']}
-					onClick={onAddToList}
-					className={styles['c-request-material__voeg-toe-button']}
-				/>
+				{renderMobileDesktop({
+					mobile: (
+						<Button
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek-mobile'
+							)}
+							variants={['block', 'text', 'dark']}
+							onClick={onAddToList}
+							className={styles['c-request-material__voeg-toe-button']}
+						/>
+					),
+					desktop: (
+						<Button
+							label={tText(
+								'modules/visitor-space/components/material-request-blade/material-request-blade___voeg-toe-en-zoek'
+							)}
+							variants={['block', 'text', 'dark']}
+							onClick={onAddToList}
+							className={styles['c-request-material__voeg-toe-button']}
+						/>
+					),
+				})}
 				<Button
 					label={tText(
 						'modules/visitor-space/components/material-request-blade/material-request-blade___annuleer'
@@ -227,6 +242,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			currentLayer={currentLayer}
 			className={styles['c-request-material']}
 			isManaged
+			id="material-request-blade"
 		>
 			<div className={styles['c-request-material__maintainer']}>
 				{maintainerLogo && (

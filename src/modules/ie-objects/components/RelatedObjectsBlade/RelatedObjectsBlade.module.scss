@@ -41,7 +41,7 @@ $max-drawer-height: min($max-drawer-height-desired, $max-drawer-height-available
 
 		:global(.c-button__content) {
 			width: 100%;
-			justify-content: start;
+			justify-content: flex-start;
 		}
 
 		:global(.c-button__icon--end) {

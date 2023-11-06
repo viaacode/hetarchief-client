@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
+import '@testing-library/jest-dom';
 
 import SidebarLayout from './SidebarLayout';
 import { SidebarLayoutProps } from './SidebarLayout.types';

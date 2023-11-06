@@ -1,16 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
+import * as toolkitRaw from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 
-import { userSlice } from '@auth/store/user';
-import { IeObjectsSlice } from '@shared/store/ie-objects';
-import { tosSlice } from '@shared/store/tos';
+import { userSlice } from '@auth/store/user/user.slice';
+import { IeObjectsSlice } from '@shared/store/ie-objects/ie-objects.slice';
+import { tosSlice } from '@shared/store/tos/tos.slice';
+import { uiSlice } from '@shared/store/ui/ui.slice';
 
 import { AppStore } from './store.types';
-import { uiSlice } from './ui';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const makeStore = () =>
-	configureStore({
+	toolkitRaw.configureStore({
 		reducer: {
 			[uiSlice.name]: uiSlice.reducer,
 			[userSlice.name]: userSlice.reducer,

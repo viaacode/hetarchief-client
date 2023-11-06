@@ -1,7 +1,8 @@
 import { ContentPageEdit } from '@meemoo/admin-core-ui';
+import { type Avo } from '@viaa/avo2-types';
 import { GetServerSidePropsResult } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { FC } from 'react';
+import React, { ComponentType, FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -22,7 +23,10 @@ const ContentPageEditPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }
 			<AdminLayout bottomPadding={false} className="p-admin-content-page-create">
 				<AdminLayout.Content>
 					<div className="p-admin-content__edit">
-						<ContentPageEdit id={undefined} commonUser={commonUser} />
+						<ContentPageEdit
+							id={undefined}
+							commonUser={commonUser as Avo.User.CommonUser}
+						/>
 					</div>
 				</AdminLayout.Content>
 			</AdminLayout>
@@ -53,6 +57,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(withUser(ContentPageEditPage as FC<unknown>)),
+	withAdminCoreConfig(withUser(ContentPageEditPage) as ComponentType),
 	true
 ) as FC<DefaultSeoInfo>;

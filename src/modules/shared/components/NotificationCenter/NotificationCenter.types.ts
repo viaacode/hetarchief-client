@@ -8,6 +8,7 @@ import {
 import { DefaultComponentProps } from '@shared/types';
 
 export interface NotificationCenterProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	isOpen: boolean;
 	onClose: () => void;
 

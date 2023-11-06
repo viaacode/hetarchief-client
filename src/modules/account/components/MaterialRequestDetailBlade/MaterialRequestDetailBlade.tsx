@@ -61,6 +61,7 @@ const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = ({
 			)}
 			footer={isOpen && renderFooter()}
 			onClose={onClose}
+			id="material-request-detail-blade"
 		>
 			<div className={styles['p-account-my-material-requests__maintainer']}>
 				{currentMaterialRequestDetail?.maintainerLogo && (

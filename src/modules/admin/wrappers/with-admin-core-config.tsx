@@ -2,6 +2,8 @@ import {
 	AdminConfig,
 	AdminConfigManager,
 	ContentBlockType,
+	ContentPageInfo,
+	ContentWidth,
 	LinkInfo,
 	ToastInfo,
 } from '@meemoo/admin-core-ui';
@@ -41,8 +43,8 @@ const InternalLink = (linkInfo: LinkInfo) => {
 	);
 };
 
-// When a content page is saved, for clear the nextjs cache
-const onSaveContentPage = async (contentPageInfo: { path: string }) => {
+// When a content page is saved, for clear the Next.js cache
+const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 	await ApiService.getApi(false).post(
 		stringifyUrl({
 			url: 'client-cache/clear-cache',
@@ -88,25 +90,25 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 				],
 				contentPage: {
 					availableContentBlocks: [
-						ContentBlockType.Heading,
-						ContentBlockType.Intro,
-						ContentBlockType.RichText,
-						ContentBlockType.RichTextTwoColumns,
 						ContentBlockType.Buttons,
-						ContentBlockType.Image,
-						ContentBlockType.ImageGrid,
-						ContentBlockType.PageOverview,
-						ContentBlockType.UspGrid,
-						ContentBlockType.Quote,
-						ContentBlockType.ThreeClickableTiles,
-						ContentBlockType.TagsWithLink,
 						ContentBlockType.CardsWithoutDescription,
-						ContentBlockType.ImageTextBackground,
-						ContentBlockType.MaintainersGrid,
+						ContentBlockType.Heading,
 						ContentBlockType.HetArchiefHeaderSearch,
 						ContentBlockType.IFrame,
+						ContentBlockType.Image,
+						ContentBlockType.ImageGrid,
+						ContentBlockType.ImageTextBackground,
+						ContentBlockType.Intro,
+						ContentBlockType.MaintainersGrid,
+						ContentBlockType.PageOverview,
+						ContentBlockType.Quote,
+						ContentBlockType.RichText,
+						ContentBlockType.RichTextTwoColumns,
+						ContentBlockType.TagsWithLink,
+						ContentBlockType.ThreeClickableTiles,
+						ContentBlockType.UspGrid,
 					],
-					defaultPageWidth: 'LARGE',
+					defaultPageWidth: ContentWidth.LARGE,
 					onSaveContentPage,
 				},
 				navigationBars: {
@@ -245,9 +247,9 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 			initConfigValue();
 		}, [initConfigValue]);
 
-		if (!adminCoreConfig && isBrowser()) {
+		if (!adminCoreConfig) {
 			return (
-				<div suppressHydrationWarning={true}>
+				<div suppressHydrationWarning>
 					<Loading fullscreen owner="admin-core config not set yet" />
 				</div>
 			);

@@ -8,7 +8,7 @@ import Loading from '@shared/components/Loading/Loading';
 import { ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { TosService } from '@shared/services/tos-service';
-import { isBrowser, isCurrentTosAccepted } from '@shared/utils';
+import { isCurrentTosAccepted } from '@shared/utils';
 
 /**
  * Checks the users login status
@@ -81,7 +81,7 @@ export const withAuth = (
 		}, [checkLoginStatus]);
 
 		// Allow server side rendering to get past this loading screen, so we can determine seo fields on the actual page
-		return !isBrowser() || showPage ? (
+		return showPage ? (
 			<WrappedComponent {...props} />
 		) : (
 			<Loading fullscreen owner="with auth" />

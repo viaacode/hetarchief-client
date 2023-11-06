@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import {
 	Button,
 	FormControl,
-	futureDatepicker,
 	OrderDirection,
 	TextInput,
 	timepicker,
@@ -11,12 +10,16 @@ import clsx from 'clsx';
 import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fns';
 import { isEmpty } from 'lodash-es';
 import Link from 'next/link';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
 import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
 
 import { Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import {
+	APPROVE_REQUEST_FORM_SCHEMA,
+	ApproveRequestBladeProps,
+	ApproveRequestFormState,
 	Blade,
 	Icon,
 	IconNamesLight,
@@ -27,7 +30,7 @@ import {
 	getAccessToDate,
 	roundToNextQuarter,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
-import { Datepicker } from '@shared/components/Datepicker';
+import { datePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -38,9 +41,7 @@ import { asDate, formatMediumDate, formatMediumDateWithTime, formatTime } from '
 import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitTimeframe } from '@visits/types';
 
-import { APPROVE_REQUEST_FORM_SCHEMA } from './ApproveRequestBlade.const';
 import styles from './ApproveRequestBlade.module.scss';
-import { ApproveRequestBladeProps, ApproveRequestFormState } from './ApproveRequestBlade.types';
 
 const labelKeys: Record<keyof ApproveRequestFormState, string> = {
 	accessFrom: 'ApproveRequestBlade__accessFrom',
@@ -65,7 +66,7 @@ const defaultAccessType = {
 const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const { tHtml, tText } = useTranslation();
 	const canViewAddVisitRequests: boolean = useHasAnyPermission(
-		Permission.READ_ALL_VISIT_REQUESTS
+		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
 	const { data: folders } = useGetFolders();
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
@@ -122,37 +123,17 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 	const getAccessTypeLabel = useCallback(
 		(accessType: ApproveRequestFormState['accessType']) => {
-			const folderCount = accessType?.folderIds?.length;
-			const hasRefineOptions = !!folderCount;
-			const hasMultipleRefineOptions = folderCount > 1;
+			const selectedFolders = folders?.items.filter(
+				(item) => accessType?.folderIds.includes(item.id)
+			);
+			const selectedFoldersNames = selectedFolders?.map((folder) => folder.name).join(', ');
 
-			if (hasRefineOptions && isDropdownOpen) {
-				return hasMultipleRefineOptions
-					? tText(
-							'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-meerdere-mappen-geselecteerd',
-							{
-								count: folderCount,
-							}
-					  )
-					: tText(
-							'modules/cp/components/approve-request-blade/approve-request-blade___er-is-een-map-geselecteerd'
-					  );
-			} else if (hasRefineOptions && !isDropdownOpen) {
-				return hasMultipleRefineOptions
-					? tText(
-							'modules/cp/components/approve-request-blade/approve-request-blade___er-zijn-x-aantal-mappen-geselecteerd',
-							{
-								count: folderCount,
-							}
-					  )
-					: tText(
-							'modules/shared/components/approve-request-blade/approve-request-blade___er-is-1-map-geselecteerd'
-					  );
-			} else {
-				return tText(
+			return (
+				selectedFoldersNames ||
+				tText(
 					'modules/cp/components/approve-request-blade/approve-request-blade___kies-een-map'
-				);
-			}
+				)
+			);
 		},
 		[isDropdownOpen, tText]
 	);
@@ -322,16 +303,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		);
 	};
 
-	const futureDatepickerProps = useMemo(() => {
-		const copy = { ...futureDatepicker };
-
-		// Warning: including `maxDate` in any way destroys keyboard navigation
-		// See https://stackoverflow.com/a/63564880
-		delete copy.maxDate;
-
-		return copy;
-	}, []);
-
 	const renderAccessFrom = useCallback(
 		({ field }: { field: ControllerRenderProps<ApproveRequestFormState, 'accessFrom'> }) => {
 			const now = new Date();
@@ -362,8 +333,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 			return (
 				<>
-					<Datepicker
-						{...futureDatepickerProps}
+					<DatePicker
+						{...datePickerDefaultProps}
 						customInput={
 							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
 						}
@@ -392,7 +363,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[futureDatepickerProps, onSimpleDateChange, getValues, setValue]
+		[datePickerDefaultProps, onSimpleDateChange, getValues, setValue]
 	);
 
 	const renderAccessTo = useCallback(
@@ -408,8 +379,8 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 			return (
 				<>
-					<Datepicker
-						{...futureDatepickerProps}
+					<DatePicker
+						{...datePickerDefaultProps}
 						customInput={
 							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
 						}
@@ -438,7 +409,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[onSimpleDateChange, futureDatepickerProps]
+		[onSimpleDateChange, datePickerDefaultProps]
 	);
 
 	const renderAccessRemark = ({

@@ -156,32 +156,36 @@ const SiteSettingsForm = forwardRef<ValidationRef<SiteSettingsFormState>, SiteSe
 					<Controller
 						name="orId"
 						control={control}
-						render={(field) => (
-							<ReactSelect
-								{...field}
-								isDisabled={disableDropdown}
-								components={{ IndicatorSeparator: () => null }}
-								options={cpOptions}
-								value={
-									disableDropdown
-										? { label: space.name, value: space.id }
-										: getSelectValue(cpOptions ?? [], currentState.orId)
-								}
-								onChange={(newValue) => {
-									const value = (newValue as SingleValue<SelectOption>)
-										?.value as string;
-									const slug = kebabCase(
-										(newValue as SingleValue<SelectOption>)?.label as string
-									);
-
-									if (value !== currentState.orId || '') {
-										setValue('orId', value);
-										setValue('slug', slug);
-										onUpdate?.({ orId: value, slug: slug });
+						render={({ field }) => {
+							// eslint-disable-next-line @typescript-eslint/no-unused-vars
+							const { ref, ...rest } = field;
+							return (
+								<ReactSelect
+									{...rest}
+									isDisabled={disableDropdown}
+									components={{ IndicatorSeparator: () => null }}
+									options={cpOptions}
+									value={
+										disableDropdown
+											? { label: space.name, value: space.id }
+											: getSelectValue(cpOptions ?? [], currentState.orId)
 									}
-								}}
-							/>
-						)}
+									onChange={(newValue) => {
+										const value = (newValue as SingleValue<SelectOption>)
+											?.value as string;
+										const slug = kebabCase(
+											(newValue as SingleValue<SelectOption>)?.label as string
+										);
+
+										if (value !== currentState.orId || '') {
+											setValue('orId', value);
+											setValue('slug', slug);
+											onUpdate?.({ orId: value, slug: slug });
+										}
+									}}
+								/>
+							);
+						}}
 					/>
 				</FormControl>
 

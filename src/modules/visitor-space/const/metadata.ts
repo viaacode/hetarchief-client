@@ -1,9 +1,4 @@
-import {
-	DatepickerProps,
-	ReactSelectProps,
-	TextInput,
-	TextInputProps,
-} from '@meemoo/react-components';
+import { ReactSelectProps, TextInput, TextInputProps } from '@meemoo/react-components';
 import { FC } from 'react';
 
 import { tText } from '@shared/helpers/translate';
@@ -13,6 +8,8 @@ import {
 	IeObjectsSearchOperator,
 	Operator,
 } from '@shared/types';
+import { DateInputProps } from '@visitor-space/components/DateInput/DateInput';
+import { DateRangeInputProps } from '@visitor-space/components/DateRangeInput/DateRangeInput';
 
 import {
 	DateInput,
@@ -23,8 +20,12 @@ import {
 } from '../components';
 import { MetadataProp } from '../types';
 
-export type MetadataFields = FC<TextInputProps> | FC<ReactSelectProps> | FC<DatepickerProps>;
-export type MetadataFieldProps = TextInputProps | ReactSelectProps | DatepickerProps;
+export type MetadataFields =
+	| FC<TextInputProps>
+	| FC<ReactSelectProps>
+	| FC<DateInputProps>
+	| FC<DateRangeInputProps>;
+export type MetadataFieldProps = TextInputProps | ReactSelectProps | DateInputProps;
 
 export type MetadataConfig = {
 	[key in MetadataProp]?: {

@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 const json = () => null;
 const kyResponse = { json };
 

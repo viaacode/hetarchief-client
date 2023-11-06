@@ -1,4 +1,5 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { jest } from '@jest/globals';
+import { renderHook } from '@testing-library/react';
 
 import useStickyLayout from './use-sticky-layout';
 

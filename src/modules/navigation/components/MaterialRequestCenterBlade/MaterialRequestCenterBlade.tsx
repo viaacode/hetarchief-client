@@ -4,7 +4,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { GroupName } from '@account/const';
-import { selectUser } from '@auth/store/user';
+import { selectUser } from '@auth/store/user/user.select';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
@@ -15,7 +15,7 @@ import {
 } from '@material-requests/types';
 import { Blade, BladeManager, Icon, IconNamesLight, Loading } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { setMaterialRequestCount } from '@shared/store/ui';
+import { setMaterialRequestCount } from '@shared/store/ui/ui.slice';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade';
 
 import bladeStyles from '../../../shared/components/Blade/Blade.module.scss';
@@ -325,6 +325,7 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 				footer={isOpen && renderFooter()}
 				onClose={onClose}
 				isManaged
+				id="material-request-center-blade"
 			>
 				{renderTitle({
 					id: 'material-requests-overview-blade-title',

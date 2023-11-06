@@ -1,6 +1,10 @@
+import { jest } from '@jest/globals';
+
 import kyMock from './__mocks__/ky-universal';
 import nextConfig from './__mocks__/next-config';
 import nextRouterMock from './__mocks__/next-router';
+
+declare const window: any;
 
 window.scrollTo = jest.fn();
 kyMock.mock('ky-universal');

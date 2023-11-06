@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
-import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store/user';
+import { selectHasCheckedLogin, selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import LoggedInHome from '@home/components/LoggedInHome/LoggedInHome';
 import LoggedOutHome from '@home/components/LoggedOutHome/LoggedOutHome';
 import { Loading } from '@shared/components';

@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { ReactNode } from 'react';
 
 import { BladeManagerContext, BladeManagerContextValue } from '@shared/context/BladeManagerContext';
@@ -7,23 +7,17 @@ import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context/
 describe('Hooks', () => {
 	describe('useBladeManagerContext()', () => {
 		it("Should return the provider's current value", () => {
-			const wrapper = ({
-				children,
-				value,
-			}: {
-				children: ReactNode;
-				value: BladeManagerContextValue;
-			}) => (
-				<BladeManagerContext.Provider value={value}>
-					{children}
-				</BladeManagerContext.Provider>
-			);
 			const bladeManagerValues: BladeManagerContextValue = {
 				isManaged: true,
 				currentLayer: 1,
 				opacityStep: 0.1,
 				onCloseBlade: () => null,
 			};
+			const wrapper = ({ children }: { children: ReactNode }) => (
+				<BladeManagerContext.Provider value={bladeManagerValues}>
+					{children}
+				</BladeManagerContext.Provider>
+			);
 			const { result } = renderHook(() => useBladeManagerContext(), {
 				initialProps: { children: null, value: bladeManagerValues },
 				wrapper,

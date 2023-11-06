@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setIsStickyLayout } from '@shared/store/ui';
+import { setIsStickyLayout } from '@shared/store/ui/ui.slice';
 
 import { UseStickyLayout } from './use-sticky-layout.types';
 

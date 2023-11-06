@@ -1,8 +1,9 @@
 import { ContentPageDetail } from '@meemoo/admin-core-ui';
+import { type Avo } from '@viaa/avo2-types';
 import { GetServerSidePropsResult } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import React, { FC } from 'react';
+import React, { ComponentType, FC } from 'react';
 
 import { Permission } from '@account/const';
 import { AdminLayout } from '@admin/layouts';
@@ -21,9 +22,12 @@ const ContentPageDetailPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser
 
 	const renderPageContent = () => {
 		return (
-			<AdminLayout>
+			<AdminLayout className="p-admin-content-page-detail">
 				<AdminLayout.Content>
-					<ContentPageDetail id={router.query.id as string} commonUser={commonUser} />
+					<ContentPageDetail
+						id={router.query.id as string}
+						commonUser={commonUser as Avo.User.CommonUser}
+					/>
 				</AdminLayout.Content>
 			</AdminLayout>
 		);
@@ -54,6 +58,6 @@ export async function getServerSideProps(
 }
 
 export default withAuth(
-	withAdminCoreConfig(withUser(ContentPageDetailPage as FC<unknown>)),
+	withAdminCoreConfig(withUser(ContentPageDetailPage) as ComponentType),
 	true
 ) as FC<DefaultSeoInfo>;

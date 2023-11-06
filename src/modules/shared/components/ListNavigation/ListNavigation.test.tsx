@@ -1,5 +1,7 @@
+import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
 import Link from 'next/link';
+import '@testing-library/jest-dom';
 
 import ListNavigation from './ListNavigation';
 import {

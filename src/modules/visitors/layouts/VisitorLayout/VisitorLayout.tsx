@@ -1,9 +1,9 @@
-import { FC, useEffect } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { GroupName } from '@account/const';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
-import { setShowZendesk } from '@shared/store/ui';
+import { setShowZendesk } from '@shared/store/ui/ui.slice';
 
 /**
  * Layout to wrap all pages for visitors (eg: not cp admin, not meemoo admin, but visitor pages)
@@ -11,7 +11,7 @@ import { setShowZendesk } from '@shared/store/ui';
  * @param children
  * @constructor
  */
-const VisitorLayout: FC = ({ children }) => {
+const VisitorLayout: FC<{ children?: ReactNode }> = ({ children }) => {
 	const dispatch = useDispatch();
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 

@@ -10,4 +10,5 @@ export const mockBladeProps: BladeProps = {
 			<Button label="continue" variants="block" />
 		</div>
 	),
+	id: 'mock-blade',
 };

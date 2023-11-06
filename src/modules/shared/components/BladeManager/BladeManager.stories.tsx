@@ -19,13 +19,13 @@ const BladeManagerStoryComponent = () => {
 		<>
 			<Button label="Open first blade" onClick={() => setCurrentBlade(1)} />
 			<BladeManager currentLayer={currentBlade} onCloseBlade={close}>
-				<Blade isOpen={false} renderTitle={() => 'Blade 1'} layer={1}>
+				<Blade isOpen={false} renderTitle={() => 'Blade 1'} layer={1} id="blade1">
 					<Button label="Open second blade" onClick={() => setCurrentBlade(2)} />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 1'} layer={2}>
+				<Blade isOpen={false} renderTitle={() => 'Blade 1'} layer={2} id="blade2">
 					<Button label="Open third blade" onClick={() => setCurrentBlade(3)} />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 1'} layer={3} />
+				<Blade isOpen={false} renderTitle={() => 'Blade 1'} layer={3} id="blade3" />
 			</BladeManager>
 		</>
 	);

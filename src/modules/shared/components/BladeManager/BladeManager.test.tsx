@@ -1,6 +1,8 @@
+import { jest } from '@jest/globals';
 import { Button } from '@meemoo/react-components';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import '@testing-library/jest-dom';
 
 import { mockStore } from '../../../../__mocks__/store';
 import { Blade } from '../Blade';
@@ -11,13 +13,13 @@ const renderBladeManager = (currentBlade = 0, onClose = () => null) => {
 	return render(
 		<Provider store={mockStore}>
 			<BladeManager currentLayer={currentBlade} onCloseBlade={onClose}>
-				<Blade isOpen={true} renderTitle={() => 'Blade 1'} layer={1}>
+				<Blade isOpen={true} renderTitle={() => 'Blade 1'} layer={1} id="blade1">
 					<Button label="Open second blade" />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 2'} layer={2}>
+				<Blade isOpen={false} renderTitle={() => 'Blade 2'} layer={2} id="blade2">
 					<Button label="Open third blade" />
 				</Blade>
-				<Blade isOpen={false} renderTitle={() => 'Blade 3'} layer={3} />
+				<Blade isOpen={false} renderTitle={() => 'Blade 3'} layer={3} id="blade3" />
 			</BladeManager>
 		</Provider>
 	);
@@ -63,7 +65,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('render call onClose when the close button is clicked', () => {
-		const onClick = jest.fn();
+		const onClick = jest.fn() as () => null;
 		renderBladeManager(1, onClick);
 
 		const closeButton = screen.getByText('Blade 1').parentElement?.previousElementSibling;
@@ -76,7 +78,7 @@ describe('Component: <Blade /> (default)', () => {
 	});
 
 	it('render call onClose when the overlay is clicked', () => {
-		const onClick = jest.fn();
+		const onClick = jest.fn() as () => null;
 		renderBladeManager(1, onClick);
 
 		const overlay = screen.getByText('Blade 1').parentElement?.previousElementSibling;

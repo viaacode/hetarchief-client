@@ -1,21 +1,19 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { ReactNode } from 'react';
 
-import { WindowSizeContext, WindowSizeContextValue } from '@shared/context/WindowSizeContext';
+import { WindowSizeContext } from '@shared/context/WindowSizeContext';
 
 import useWindowSizeContext from './use-window-size-context';
 
 describe('Hooks', () => {
 	describe('useWindowSizeContext()', () => {
 		it("Should return the provider's current value", () => {
-			const wrapper = ({
-				children,
-				value,
-			}: {
-				children: ReactNode;
-				value: WindowSizeContextValue;
-			}) => <WindowSizeContext.Provider value={value}>{children}</WindowSizeContext.Provider>;
 			const windowSize = { width: 1200, height: 600 };
+			const wrapper = ({ children }: { children: ReactNode }) => (
+				<WindowSizeContext.Provider value={windowSize}>
+					{children}
+				</WindowSizeContext.Provider>
+			);
 			const { result } = renderHook(() => useWindowSizeContext(), {
 				initialProps: { children: null, value: windowSize },
 				wrapper,

@@ -10,6 +10,12 @@ import { useQueryParams } from 'use-query-params';
 import { SEPARATOR } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
+import {
+	DURATION_FILTER_FORM_QUERY_PARAM_CONFIG,
+	DURATION_FILTER_FORM_SCHEMA,
+	DurationFilterFormProps,
+	DurationFilterFormState,
+} from '@visitor-space/components';
 import { getOperators } from '@visitor-space/utils';
 
 import { MetadataProp } from '../../types';
@@ -17,12 +23,6 @@ import { getSelectValue } from '../../utils/select';
 import { DurationInput } from '../DurationInput';
 import { defaultValue } from '../DurationInput/DurationInput';
 import { DurationRangeInput } from '../DurationRangeInput';
-
-import {
-	DURATION_FILTER_FORM_QUERY_PARAM_CONFIG,
-	DURATION_FILTER_FORM_SCHEMA,
-} from './DurationFilterForm.const';
-import { DurationFilterFormProps, DurationFilterFormState } from './DurationFilterForm.types';
 
 const labelKeys: Record<keyof DurationFilterFormState, string> = {
 	duration: 'DurationFilterForm__duration',
@@ -97,29 +97,33 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 					<Controller
 						control={control}
 						name="operator"
-						render={({ field }) => (
-							<div className="u-px-20 u-px-32:md">
-								<ReactSelect
-									{...field}
-									isDisabled={disabled}
-									components={{ IndicatorSeparator: () => null }}
-									inputId={labelKeys.operator}
-									onChange={(newValue) => {
-										const value = (newValue as SingleValue<SelectOption>)
-											?.value as Operator;
+						render={({ field }) => {
+							// eslint-disable-next-line @typescript-eslint/no-unused-vars
+							const { ref, ...rest } = field;
+							return (
+								<div className="u-px-20 u-px-32:md">
+									<ReactSelect
+										{...rest}
+										isDisabled={disabled}
+										components={{ IndicatorSeparator: () => null }}
+										inputId={labelKeys.operator}
+										onChange={(newValue) => {
+											const value = (newValue as SingleValue<SelectOption>)
+												?.value as Operator;
 
-										if (value !== form.operator) {
-											setForm({
-												duration: defaultValues.duration,
-												operator: value,
-											});
-										}
-									}}
-									options={operators}
-									value={getSelectValue(operators, field.value)}
-								/>
-							</div>
-						)}
+											if (value !== form.operator) {
+												setForm({
+													duration: defaultValues.duration,
+													operator: value,
+												});
+											}
+										}}
+										options={operators}
+										value={getSelectValue(operators, field.value)}
+									/>
+								</div>
+							);
+						}}
 					/>
 				</FormControl>
 

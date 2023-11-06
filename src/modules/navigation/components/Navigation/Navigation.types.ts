@@ -11,15 +11,18 @@ export type NavigationFC<P = unknown> = FC<P> & {
 };
 
 export interface NavigationProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	contextual?: boolean;
 	loggedOutGrid?: boolean;
 }
 
 export interface NavigationCenterProps {
+	children?: React.ReactNode;
 	title?: ReactNode;
 }
 
 export interface NavigationItemNodeProps {
+	children?: React.ReactNode;
 	closeDropdowns: () => void;
 }
 

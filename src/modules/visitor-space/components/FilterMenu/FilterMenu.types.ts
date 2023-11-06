@@ -13,6 +13,7 @@ import {
 } from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
 	filterValues?: Record<string, unknown>;

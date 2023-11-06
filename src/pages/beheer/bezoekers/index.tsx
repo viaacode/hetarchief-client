@@ -291,6 +291,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 						setShowEditVisitRequestModal(false);
 					}}
 					onSubmit={handleEditVisitRequestFinished}
+					id="visitors-page__approve-request-blade"
 				/>
 			</CPAdminLayout>
 		);
@@ -304,7 +305,7 @@ const CPVisitorsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 				url
 			)}
 
-			<PermissionsCheck allPermissions={[Permission.READ_CP_VISIT_REQUESTS]}>
+			<PermissionsCheck allPermissions={[Permission.MANAGE_CP_VISIT_REQUESTS]}>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</>

@@ -8,6 +8,7 @@ import { IconName } from '../Icon';
 export type MediaCardViewMode = 'list' | 'grid';
 
 export interface MediaCardProps {
+	children?: React.ReactNode;
 	actions?: ReactNode;
 	buttons?: ReactNode;
 	description?: ReactNode;

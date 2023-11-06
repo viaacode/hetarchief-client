@@ -17,11 +17,14 @@ module.exports = {
 		https://jestjs.io/docs/webpack#handling-static-assets */
 		'^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$': '<rootDir>/jest/__mocks__/file-mock.js',
 
-		/* Handle custom path aliases */
-		[pathAliasesRegex]: '<rootDir>/src/modules/$1/$2',
-
 		/* Handle deps */
 		'^lodash-es$': '<rootDir>/node_modules/lodash/index.js',
+		'^@meemoo/react-components$':
+			'<rootDir>/node_modules/@meemoo/react-components/dist/index.js',
+		'^@viaa/avo2-components$': '<rootDir>/node_modules/@viaa/avo2-components/dist/index.js',
+
+		/* Handle custom path aliases */
+		[pathAliasesRegex]: '<rootDir>/src/modules/$1/$2',
 	},
 	/* Report results to the console but also to a junit compatible xml file for Jenkins: ARC-523 */
 	reporters: [
@@ -40,10 +43,14 @@ module.exports = {
 	transform: {
 		/* Use babel-jest to transpile tests with the next/babel preset
 		https://jestjs.io/docs/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object */
-		'^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+		'^.+\\.(js|jsx|mjs|ts|tsx|mts)$': ['babel-jest', { presets: ['next/babel'] }],
 	},
 	testEnvironment: 'jsdom',
-	transformIgnorePatterns: ['/node_modules/(?!(ky))', '^.+\\.module\\.(css|sass|scss)$'],
+	transformIgnorePatterns: [
+		'/node_modules/(?!(ky))',
+		'^.+\\.module\\.(css|sass|scss)$',
+		'<rootDir>/node_modules/(?!lodash-es)',
+	],
 	globals: {
 		TZ: 'UTC',
 	},

@@ -3,17 +3,14 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 	enabled: process.env.ANALYZE === 'true',
 });
 
+const path = require('path');
 /*
  * next-transpile-modules is necessary because:
  * - Global CSS cannot be imported from within node_modules.
  *   Why: https://nextjs.org/docs/messages/css-npm
  *   RFC: https://github.com/vercel/next.js/discussions/27953
  */
-const withTM = require('next-transpile-modules')([
-	'@meemoo/admin-core-ui',
-	'@viaa/avo2-components',
-	'ky-universal',
-]);
+const withTM = require('next-transpile-modules')(['ky-universal']);
 
 const proxyUrl = process.env.PROXY_URL;
 const { getI18n } = require('./next-i18next.config');
@@ -22,7 +19,9 @@ const { getI18n } = require('./next-i18next.config');
 module.exports = withBundleAnalyzer(
 	withTM({
 		i18n: getI18n(proxyUrl),
-		reactStrictMode: true,
+		// https://stackoverflow.com/questions/71847778/why-my-nextjs-component-is-rendering-twice
+		// Disabling react 18 strict mode, otherwise the zendesk widget is rendered twice
+		reactStrictMode: false,
 		experimental: {
 			/**
 			 * Necessary to prevent errors like:
@@ -31,13 +30,40 @@ module.exports = withBundleAnalyzer(
 			 *   Solution: https://nextjs.org/docs/messages/import-esm-externals
 			 */
 			esmExternals: 'loose',
+			/**
+			 * https://stackoverflow.com/questions/72567320/typeerror-cannot-read-properties-of-null-reading-useref
+			 */
+			appDir: false,
 		},
-		webpack: (config) => {
+		webpack: (config, options) => {
 			// Required for ky-universal top level await used in admin core inside the api service
 			config.experiments = { topLevelAwait: true, layers: true };
 
 			// https://stackoverflow.com/a/68098547/373207
 			config.resolve.fallback = { fs: false, path: false };
+
+			// Fix issues with react-query:
+			// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
+			if (options.isServer) {
+				config.externals = [
+					'@tanstack/react-query',
+					'use-query-params',
+					...config.externals,
+				];
+			}
+			config.resolve.alias = {
+				...config.resolve.alias,
+				['@tanstack/react-query']: path.resolve('./node_modules/@tanstack/react-query'),
+				['use-query-params']: path.resolve('./node_modules/use-query-params'),
+				['react-select']: path.resolve('./node_modules/react-select'),
+				['react-select/creatable']: path.resolve('./node_modules/react-select/creatable'),
+				['react-select/async']: path.resolve('./node_modules/react-select/async'),
+				['react-popper']: path.resolve('./node_modules/react-popper'),
+				['react-hook-form']: path.resolve('./node_modules/react-hook-form'),
+				['react-table']: path.resolve('./node_modules/react-table'),
+				['react-datepicker']: path.resolve('./node_modules/react-datepicker'),
+				['react-page-split']: path.resolve('./node_modules/react-page-split'),
+			};
 
 			return config;
 		},
@@ -60,7 +86,7 @@ module.exports = withBundleAnalyzer(
 				'media.viaa.be',
 			],
 		},
-		productionBrowserSourceMaps: process.env.DEBUG_TOOLS === 'true',
+		productionBrowserSourceMaps: true, // process.env.DEBUG_TOOLS === 'true',
 		publicRuntimeConfig: {
 			NEXT_TELEMETRY_DISABLED: process.env.NEXT_TELEMETRY_DISABLED,
 			NODE_ENV: process.env.NODE_ENV,

@@ -2,8 +2,14 @@
 // metadata => advanced filters
 // visitor space search page => search page
 import { OrderDirection, TabProps } from '@meemoo/react-components';
-import { QueryParamConfig } from 'serialize-query-params/lib/types';
-import { ArrayParam, BooleanParam, NumberParam, StringParam, withDefault } from 'use-query-params';
+import {
+	ArrayParam,
+	BooleanParam,
+	NumberParam,
+	QueryParamConfig,
+	StringParam,
+	withDefault,
+} from 'use-query-params';
 
 import { Icon, IconNamesLight } from '@shared/components';
 import { VIEW_TOGGLE_OPTIONS } from '@shared/const';

@@ -7,32 +7,12 @@ $content-page-tabs-height: 5rem;
 $content-page-sidebar-margin: 4rem;
 $content-page-sidebar-blok-dropdown-height: 7rem;
 
-.m-resizable-panels {
-	> div {
-		> .resizable-fragment {
-			width: 100%;
-			overflow: visible !important;
-		}
+.c-filter-table__toolbar {
+	.c-toolbar__left {
+		max-width: 100%;
 
-		> div:not(.resizable-fragment) {
-			position: relative;
-			background-color: rgba(#edeff2, 0.4);
-			height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin) !important;
-
-			&::after {
-				content: "||";
-				border: solid 1px #666;
-				border-width: 0 1px;
-				margin: -10px 0 0 3.5px;
-				height: 20px;
-				width: 4px;
-				overflow: hidden;
-				color: transparent;
-				top: 50%;
-				left: 3px;
-				transform: translateX(-50%);
-				position: absolute;
-			}
+		.o-flex--wrap {
+			gap: 1.2rem 0;
 		}
 	}
 }
@@ -111,7 +91,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 		}
 	}
 
-	> .c-content-page-preview,
+	.c-content-page-preview,
 	.c-content-edit-view__preview {
 		height: max-content;
 		background-color: white;
@@ -122,8 +102,9 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 		height: calc(100vh - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin);
 	}
 
-	> .c-content-page-preview {
-		margin-top: $spacer-lg;
+	.c-content-page-preview {
+		overflow-y: auto;
+		max-height: 100%;
 	}
 
 	.o-sidebar__content {

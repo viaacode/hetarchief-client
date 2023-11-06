@@ -9,6 +9,7 @@ export enum MaintenanceAlertsOrderProps {
 }
 
 export interface GetMaterialRequestsProps {
+	children?: React.ReactNode;
 	page?: number;
 	orderProp?: MaintenanceAlertsOrderProps;
 	orderDirection?: OrderDirection;

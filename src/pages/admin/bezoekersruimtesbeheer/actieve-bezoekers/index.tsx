@@ -248,6 +248,7 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 								setShowEditVisitRequestModal(false);
 							}}
 							onSubmit={handleEditVisitRequestFinished}
+							id="active-visitors-page__approve-request-blade"
 						/>
 					</div>
 				</AdminLayout.Content>
@@ -265,7 +266,7 @@ const Visitors: FC<DefaultSeoInfo> = ({ url }) => {
 				url
 			)}
 
-			<PermissionsCheck allPermissions={[Permission.READ_ALL_VISIT_REQUESTS]}>
+			<PermissionsCheck allPermissions={[Permission.MANAGE_ALL_VISIT_REQUESTS]}>
 				{renderPageContent()}
 			</PermissionsCheck>
 		</>

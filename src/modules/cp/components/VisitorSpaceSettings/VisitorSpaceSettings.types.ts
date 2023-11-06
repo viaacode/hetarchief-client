@@ -5,6 +5,7 @@ import { DefaultComponentProps } from '@shared/types';
 import { VisitorSpaceInfo } from '@visitor-space/types';
 
 export interface VisitorSpaceSettingsProps extends DefaultComponentProps {
+	children?: React.ReactNode;
 	room: Pick<
 		VisitorSpaceInfo,
 		'id' | 'color' | 'image' | 'description' | 'serviceDescription' | 'logo' | 'name' | 'slug'

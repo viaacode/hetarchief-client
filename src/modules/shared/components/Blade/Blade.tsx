@@ -2,9 +2,8 @@ import { Button, keysEscape } from '@meemoo/react-components';
 import clsx from 'clsx';
 import FocusTrap from 'focus-trap-react';
 import { isUndefined } from 'lodash-es';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 
-import { globalLabelKeys } from '@shared/const';
 import { useBladeManagerContext } from '@shared/hooks/use-blade-manager-context';
 import { useScrollLock } from '@shared/hooks/use-scroll-lock';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -27,10 +26,10 @@ const Blade: FC<BladeProps> = ({
 	onClose,
 	layer,
 	renderTitle,
+	id,
 }) => {
 	const { tText } = useTranslation();
 	const { isManaged, currentLayer, opacityStep, onCloseBlade } = useBladeManagerContext();
-	const [id] = useState(`${globalLabelKeys.blade.title}--${new Date().valueOf()}`);
 
 	useScrollLock(!isManaged && isOpen, 'Blade');
 
@@ -51,7 +50,7 @@ const Blade: FC<BladeProps> = ({
 	}, [isLayered, layer, onClose, onCloseBlade]);
 
 	const escFunction = useCallback(
-		(event) => {
+		(event: KeyboardEvent) => {
 			if (keysEscape.includes(event.key)) {
 				handleClose();
 			}

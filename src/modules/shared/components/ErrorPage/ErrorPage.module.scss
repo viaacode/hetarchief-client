@@ -63,7 +63,7 @@ $component: "c-error-page";
 
 	&__description {
 		text-align: center;
-		align-self: end;
+		align-self: flex-end;
 		color: $neutral;
 		line-height: $line-height-4xl;
 
