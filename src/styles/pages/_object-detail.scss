@@ -369,7 +369,6 @@ $breakpoint-md: map.get($breakpoints, "md");
 		.p-object-detail__video {
 			display: grid;
 			grid-template-rows: 1fr auto;
-			margin-top: 0.1rem; // Prevent wrong alignment (https://github.com/viaacode/hetarchief-client/pull/756#discussion_r1151752068)
 		}
 	}
 
