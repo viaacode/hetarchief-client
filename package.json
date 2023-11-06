@@ -7,7 +7,6 @@
 		"Andry Charlier <andry.charlier@studiohyperdrive.be>"
 	],
 	"scripts": {
-		"postinstall": "patch-package",
 		"install-local": "npm i ../react-admin-core-module/ui ../react-components ../avo2-components",
 		"dev": "next dev -p 3200",
 		"build-with-analyse": "cross-env ANALYZE=true next build",
@@ -19,7 +18,7 @@
 		"lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input --fix",
 		"format": "prettier -c --write --ignore-unknown src",
 		"test": "jest --cache",
-		"test:ci": "jest",
+		"test:ci": "npx jest --maxWorkers=1",
 		"test:cov": "npm run test -- --coverage",
 		"test:watch": "npm run test -- --watch",
 		"type-check": "tsc --noEmit",
@@ -67,7 +66,6 @@
 		"next-redux-wrapper": "7.0.5",
 		"next-transpile-modules": "9.0.0",
 		"node-zendesk": "2.2.0",
-		"patch-package": "8.0.0",
 		"query-string": "7.1.1",
 		"raf": "3.4.1",
 		"react": "18.2.0",
