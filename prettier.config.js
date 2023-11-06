@@ -14,14 +14,7 @@ module.exports = {
 			},
 		},
 		{
-			files: ['public/**/*.json'],
-			options: {
-				useTabs: false,
-				tabWidth: 2,
-			},
-		},
-		{
-			files: ['public/**/*.json'],
+			files: ['**/*.json'],
 			options: {
 				useTabs: false,
 				tabWidth: 2,
