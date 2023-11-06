@@ -63,9 +63,16 @@ pipeline {
    }
   }
   stage('Test code') {
-   steps {
-    sh 'make -f ./openshift/Makefile test'
-   }
+    steps {
+      container('default') {
+        script {
+          sh '''#!/bin/bash
+              npm ci --include=dev
+              npm run test:ci
+            '''
+        }
+      }
+    }
   }
   stage('Build code') {
    when {
