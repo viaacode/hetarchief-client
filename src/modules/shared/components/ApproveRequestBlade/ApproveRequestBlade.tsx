@@ -29,7 +29,6 @@ import {
 	getAccessToDate,
 	roundToNextQuarter,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
-import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
@@ -39,6 +38,8 @@ import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
 import DateInput from '@visitor-space/components/DateInput/DateInput';
 import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitTimeframe } from '@visits/types';
+
+import Timepicker from '../Timepicker/Timepicker';
 
 import styles from './ApproveRequestBlade.module.scss';
 
