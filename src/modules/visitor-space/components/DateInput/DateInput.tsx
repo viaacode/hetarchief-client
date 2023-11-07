@@ -14,6 +14,8 @@ import styles from './DateInput.module.scss';
 const DatePicker =
 	(ReactDatePicker as unknown as { default: typeof ReactDatePicker }).default ?? ReactDatePicker;
 
+console.log({ ReactDatePicker, DatePicker });
+
 // Wrap the Datepicker in a div and define an input & formatting
 // The wrapping div ensures the tab loop element doesn't mess with grids (i.e. DateRangeInput)
 
