@@ -1,11 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-	Button,
-	FormControl,
-	OrderDirection,
-	TextInput,
-	timepicker,
-} from '@meemoo/react-components';
+import { Button, FormControl, OrderDirection, TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fns';
 import { isEmpty } from 'lodash-es';
@@ -20,8 +14,6 @@ import {
 	ApproveRequestBladeProps,
 	ApproveRequestFormState,
 	Blade,
-	Icon,
-	IconNamesLight,
 	RefinableRadioButton,
 	RefinableRadioButtonOption,
 } from '@shared/components';
@@ -338,8 +330,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					/>
 
 					<Timepicker
-						{...timepicker}
-						customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />}
 						id={labelKeys.accessFrom}
 						maxTime={endOfDay(field.value || now)}
 						minTime={startOfDay(field.value || now)}
@@ -348,7 +338,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onFromDateChange(date, field)}
 						selected={field.value}
 						value={formatTime(field.value)}
-						popperPlacement="bottom-start"
 					/>
 				</>
 			);
@@ -377,8 +366,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					/>
 
 					<Timepicker
-						{...timepicker}
-						customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />}
 						id={labelKeys.accessTo}
 						maxTime={endOfDay(field.value || now)}
 						minTime={startOfDay(field.value || now)}
@@ -387,7 +374,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 						onChange={(date) => onSimpleDateChange(date, field)}
 						selected={field.value}
 						value={formatTime(field.value)}
-						popperPlacement="bottom-start"
 					/>
 				</>
 			);

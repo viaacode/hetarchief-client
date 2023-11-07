@@ -1,6 +1,9 @@
+import { TextInput } from '@meemoo/react-components';
 import clsx from 'clsx';
 import React, { FC } from 'react';
 import ReactDatePicker from 'react-datepicker';
+
+import { Icon, IconNamesLight } from '@shared/components';
 
 import { TimepickerProps } from './Timepicker.types';
 
@@ -19,6 +22,10 @@ const Timepicker: FC<TimepickerProps> = (props) => {
 
 	return (
 		<DatePicker
+			showTimeSelect
+			showTimeSelectOnly
+			timeIntervals={15}
+			autoComplete="off"
 			wrapperClassName={classNames}
 			calendarClassName={classNames}
 			popperClassName={classNames}
@@ -26,7 +33,10 @@ const Timepicker: FC<TimepickerProps> = (props) => {
 			showMonthDropdown
 			showYearDropdown
 			dropdownMode="select"
+			dateFormat="HH:mm"
 			timeFormat="HH:mm"
+			popperPlacement="bottom-start"
+			customInput={<TextInput iconStart={<Icon name={IconNamesLight.Clock} />} />}
 			{...props}
 		/>
 	);
