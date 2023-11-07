@@ -11,7 +11,6 @@ import { addHours, areIntervalsOverlapping, endOfDay, startOfDay } from 'date-fn
 import { isEmpty } from 'lodash-es';
 import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
 import { Controller, ControllerRenderProps, FieldError, useForm } from 'react-hook-form';
 
 import { Permission } from '@account/const';
@@ -30,14 +29,14 @@ import {
 	getAccessToDate,
 	roundToNextQuarter,
 } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.helpers';
-import { datePickerDefaultProps } from '@shared/components/DatePicker/DatePicker.consts';
 import { Timepicker } from '@shared/components/Timepicker';
 import { OPTIONAL_LABEL, ROUTE_PARTS } from '@shared/const';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessType, Visit, VisitStatus } from '@shared/types';
-import { asDate, formatMediumDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
+import { asDate, formatMediumDateWithTime, formatTime } from '@shared/utils';
+import DateInput from '@visitor-space/components/DateInput/DateInput';
 import { VisitsService } from '@visits/services/visits/visits.service';
 import { VisitTimeframe } from '@visits/types';
 
@@ -69,7 +68,6 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		Permission.MANAGE_ALL_VISIT_REQUESTS
 	);
 	const { data: folders } = useGetFolders();
-	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
 	const {
 		selected: visitRequest,
@@ -135,7 +133,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				)
 			);
 		},
-		[isDropdownOpen, tText]
+		[folders?.items, tText]
 	);
 
 	const getAccessTypeOptions = useCallback(
@@ -267,14 +265,12 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		(
 			field: ControllerRenderProps<ApproveRequestFormState, 'accessType'>,
 			selectedOption: AccessType,
-			selectedRefineOptions: string[],
-			newIsDropdownOpen: boolean
+			selectedRefineOptions: string[]
 		): void => {
 			setValue('accessType', {
 				type: selectedOption,
 				folderIds: selectedRefineOptions,
 			});
-			setIsDropdownOpen(newIsDropdownOpen);
 		},
 		[setValue]
 	);
@@ -333,18 +329,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 			return (
 				<>
-					<DatePicker
-						{...datePickerDefaultProps}
-						customInput={
-							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
-						}
+					<DateInput
 						id={labelKeys.accessFrom}
-						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onFromDateChange(date, field)}
-						selected={field.value}
-						value={formatMediumDate(field.value)}
-						popperPlacement="bottom-start"
+						value={field.value}
 					/>
 
 					<Timepicker
@@ -363,7 +352,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[datePickerDefaultProps, onSimpleDateChange, getValues, setValue]
+		[onSimpleDateChange, getValues, setValue]
 	);
 
 	const renderAccessTo = useCallback(
@@ -379,18 +368,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 
 			return (
 				<>
-					<DatePicker
-						{...datePickerDefaultProps}
-						customInput={
-							<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />
-						}
+					<DateInput
 						id={labelKeys.accessTo}
-						name={field.name}
 						onBlur={field.onBlur}
 						onChange={(date) => onSimpleDateChange(date, field)}
-						selected={field.value}
-						value={formatMediumDate(field.value)}
-						popperPlacement="bottom-start"
+						value={field.value}
 					/>
 
 					<Timepicker
@@ -409,7 +391,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				</>
 			);
 		},
-		[onSimpleDateChange, datePickerDefaultProps]
+		[onSimpleDateChange]
 	);
 
 	const renderAccessRemark = ({
@@ -435,16 +417,11 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 				<RefinableRadioButton
 					value={refinableRadioButtonValue}
 					options={getAccessTypeOptions(field.value)}
-					onChange={(
-						selectedOption: string,
-						selectedRefineOptions: string[],
-						newIsDropdownOpen: boolean
-					) => {
+					onChange={(selectedOption: string, selectedRefineOptions: string[]) => {
 						onChangeAccessType(
 							field,
 							selectedOption as AccessType,
-							selectedRefineOptions,
-							newIsDropdownOpen
+							selectedRefineOptions
 						);
 					}}
 				/>

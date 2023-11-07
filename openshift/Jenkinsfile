@@ -265,7 +265,7 @@ pipeline {
  }
 }
 
-void getImageFromDockerfile() {
+string getImageFromDockerfile() {
  return 'node:20.4'
 }
 
