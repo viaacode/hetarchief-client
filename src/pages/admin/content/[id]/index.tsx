@@ -1,7 +1,9 @@
+'use client';
+// https://github.com/vercel/next.js/issues/47232
+
 import { ContentPageDetail } from '@meemoo/admin-core-ui';
 import { type Avo } from '@viaa/avo2-types';
 import { GetServerSidePropsResult } from 'next';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ComponentType, FC } from 'react';
@@ -17,12 +19,6 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-// https://github.com/vercel/next.js/issues/47232
-// https://github.com/vercel/next.js/discussions/15181
-const ContentPageDetailWithNoSSR = dynamic(() => Promise.resolve(ContentPageDetail), {
-	ssr: false,
-});
-
 const ContentPageDetailPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser }) => {
 	const { tText } = useTranslation();
 	const router = useRouter();
@@ -31,7 +27,7 @@ const ContentPageDetailPage: FC<DefaultSeoInfo & UserProps> = ({ url, commonUser
 		return (
 			<AdminLayout className="p-admin-content-page-detail">
 				<AdminLayout.Content>
-					<ContentPageDetailWithNoSSR
+					<ContentPageDetail
 						id={router.query.id as string}
 						commonUser={commonUser as Avo.User.CommonUser}
 					/>
