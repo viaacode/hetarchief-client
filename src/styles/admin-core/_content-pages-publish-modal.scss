@@ -1,0 +1,26 @@
+.p-content-page-publish-modal {
+	.o-form-group__controls {
+		position: relative;
+	}
+
+	.avo__c-datepicker {
+		.c-input-with-icon-right {
+			position: relative;
+		}
+
+		.o-svg-icon {
+			position: absolute;
+			right: 1rem;
+			top: 1.8rem;
+			z-index: 2;
+		}
+	}
+
+	.c-tooltip-trigger {
+		position: absolute;
+		right: 4rem;
+		top: 0.8rem;
+		z-index: 2;
+		padding: 1rem;
+	}
+}

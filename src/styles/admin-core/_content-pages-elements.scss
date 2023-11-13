@@ -74,7 +74,8 @@
 	}
 }
 
-.o-form-group-layout--standard {
+.o-form-group-layout--standard,
+.p-content-page-publish-modal {
 	label[class*="o-form-group__label"] {
 		color: $black;
 		font-size: $font-size-sm;
