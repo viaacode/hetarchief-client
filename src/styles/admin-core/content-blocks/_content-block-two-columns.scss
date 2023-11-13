@@ -6,13 +6,24 @@ $component: "c-content-block__rich-text-two-columns";
 	grid-template-columns: unset !important;
 
 	.o-grid {
+		margin-left: 0;
+		margin-right: 0;
+		grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
 		width: 100%;
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
 		grid-gap: $spacer-1xl;
 
 		.o-grid-col-bp2-6 {
-			width: calc(100% - 4rem) !important;
+			width: calc(100% - $spacer-1xl / 2) !important;
+		}
+
+		/* https://meemoo.atlassian.net/browse/ARC-1960 */
+		@include respond-to("md") {
+			grid-template-columns: repeat(auto-fill, 1fr);
+
+			.o-grid-col-bp2-6 {
+				width: calc(100% - $spacer-1xl) !important;
+			}
 		}
 	}
 
