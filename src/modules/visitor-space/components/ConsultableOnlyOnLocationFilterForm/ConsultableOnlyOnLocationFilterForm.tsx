@@ -28,6 +28,7 @@ const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFor
 	onFormSubmit,
 	className,
 }) => {
+	const [isInitialRender, setIsInitialRender] = useState(true);
 	const [query] = useQueryParams(REMOTE_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [isChecked, setIsChecked] = useState<boolean>(
 		() => query[VisitorSpaceFilterId.ConsultableOnlyOnLocation] || false
@@ -44,6 +45,11 @@ const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFilterFor
 	);
 
 	useEffect(() => {
+		if (isInitialRender) {
+			// Avoid this filter submitting results when loading the form for the first time
+			setIsInitialRender(false);
+			return;
+		}
 		setValue(IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION, isChecked);
 
 		handleSubmit(
