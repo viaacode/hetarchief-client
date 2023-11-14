@@ -160,6 +160,10 @@ $breakpoint-md: map.get($breakpoints, "md");
 	&__slider {
 		background-color: $black-8;
 		padding: 2rem 3rem;
+		position: absolute !important;
+		bottom: 0;
+		left: 0;
+		right: 0;
 	}
 
 	&__metadata {
@@ -257,8 +261,10 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 	}
 
-	&__related {
-		grid-column: 2;
+	@include respond-at("md") {
+		&__related {
+			grid-column: 2;
+		}
 	}
 
 	&__metadata-list--related {
