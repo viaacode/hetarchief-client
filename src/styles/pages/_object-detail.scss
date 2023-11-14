@@ -257,6 +257,10 @@ $breakpoint-md: map.get($breakpoints, "md");
 		}
 	}
 
+	&__related {
+		grid-column: 2;
+	}
+
 	&__metadata-list--related {
 		padding: 2rem;
 		height: max-content;
@@ -369,6 +373,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 		.p-object-detail__video {
 			display: grid;
 			grid-template-rows: 1fr auto;
+			grid-row: 1 / 3;
 		}
 	}
 
