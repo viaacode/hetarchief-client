@@ -51,4 +51,10 @@ $component: "c-tooltip-component";
 		opacity: 1;
 		transition-delay: 0s;
 	}
+
+	@include respond-to("md") {
+		// Hide tooltips on mobile since there isn't a hover state
+		// https://github.com/viaacode/hetarchief-client/pull/1090
+		display: none;
+	}
 }
