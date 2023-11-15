@@ -87,12 +87,6 @@ $component: "c-object-placeholder";
 			width: $card-image-small-width-md;
 			min-width: $card-image-small-width-md;
 		}
-
-		@include respond-to("md") {
-			.#{$component}__page {
-				display: none;
-			}
-		}
 	}
 
 	&__visit-button {
