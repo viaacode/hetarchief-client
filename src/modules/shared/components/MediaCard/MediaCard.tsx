@@ -330,13 +330,15 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
+	const classNames = clsx(
+		styles['c-media-card'],
+		!link && 'c-media-card--no-link',
+		showKeyUserLabel && styles['c-media-card--key-user']
+	);
 	const renderCard = () => {
 		return (
 			<Card
-				className={clsx(
-					styles['c-media-card'],
-					showKeyUserLabel && styles['c-media-card--key-user']
-				)}
+				className={classNames}
 				orientation={view === 'grid' ? 'vertical' : 'horizontal--at-md'}
 				title={renderTitle()}
 				image={renderHeader()}
