@@ -157,6 +157,13 @@ const SearchPage: FC = () => {
 	const [searchBarInputValue, setSearchBarInputValue] = useState<string>();
 	const [query, setQuery] = useQueryParams(VISITOR_SPACE_QUERY_PARAM_CONFIG);
 
+	// Keep defaults only in code, not in the query params in the url
+	const page = query.page || VISITOR_SPACE_QUERY_PARAM_INIT.page;
+	const format = (query.format || VISITOR_SPACE_QUERY_PARAM_INIT.format) as VisitorSpaceMediaType;
+	const orderProp = query.orderProp || VISITOR_SPACE_QUERY_PARAM_INIT.orderProp;
+	const orderDirection = (query.orderDirection ||
+		VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection) as OrderDirection;
+
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 	const { data: activeVisitRequest, isLoading: isLoadingActiveVisitRequest } =
 		useGetActiveVisitForUserAndSpace(query[VisitorSpaceFilterId.Maintainer], user, true);
@@ -165,8 +172,8 @@ const SearchPage: FC = () => {
 
 	const isMobile = !!(windowSize.width && windowSize.width < Breakpoints.md);
 	const activeSort: SortObject = {
-		orderProp: query.orderProp,
-		orderDirection: (query.orderDirection as OrderDirection) ?? undefined,
+		orderProp,
+		orderDirection,
 	};
 
 	const queryParamMaintainer = query?.[VisitorSpaceFilterId.Maintainer];
@@ -234,7 +241,7 @@ const SearchPage: FC = () => {
 				...mapMaintainerToElastic(query, activeVisitRequest),
 				...mapFiltersToElastic(query),
 			],
-			page: query.page || 1,
+			page,
 			size: VISITOR_SPACE_ITEM_COUNT,
 			sort: activeSort,
 		},
@@ -255,7 +262,7 @@ const SearchPage: FC = () => {
 		// no need to use the data here, since it is stored in the redux store
 	} = useGetFilterOptions();
 
-	const showManyResultsTile = query.page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
+	const showManyResultsTile = page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
 
 	/**
 	 * Effects
@@ -359,9 +366,9 @@ const SearchPage: FC = () => {
 						count={getItemCounts(tab.id as VisitorSpaceMediaType)}
 					/>
 				),
-				active: tab.id === query.format,
+				active: tab.id === format,
 			})),
-		[query.format, getItemCounts]
+		[format, getItemCounts]
 	);
 
 	const toggleOptions: ToggleOption[] = useMemo(
@@ -431,7 +438,7 @@ const SearchPage: FC = () => {
 		value &&
 			setQuery({
 				...value,
-				page: 1,
+				page: undefined,
 			});
 	};
 
@@ -566,7 +573,7 @@ const SearchPage: FC = () => {
 				});
 
 				if (data.length === 0) {
-					setQuery({ [id]: undefined, filter: undefined, page: 1 });
+					setQuery({ [id]: undefined, filter: undefined, page: undefined });
 					return;
 				}
 
@@ -577,9 +584,14 @@ const SearchPage: FC = () => {
 				break;
 		}
 
-		const page = isInitialPageLoad ? query.page : 1;
+		const currentPage = isInitialPageLoad ? page : undefined;
 
-		setQuery({ [id]: data, filter: undefined, page, ...(searchValue ? searchValue : {}) });
+		setQuery({
+			[id]: data,
+			filter: undefined,
+			page: currentPage,
+			...(searchValue ? searchValue : {}),
+		});
 		setSearchBarInputValue('');
 		isInitialPageLoad && setIsInitialPageLoad(false);
 	};
@@ -640,15 +652,15 @@ const SearchPage: FC = () => {
 		};
 		/* eslint-disable @typescript-eslint/no-unused-vars */
 
-		setQuery({ ...rest, ...updatedQuery, page: 1 });
+		setQuery({ ...rest, ...updatedQuery, page: undefined });
 	};
 
 	const onSortClick = (orderProp: string, orderDirection?: OrderDirection) => {
-		setQuery({ orderProp, orderDirection, page: 1 });
+		setQuery({ orderProp, orderDirection, page: undefined });
 	};
 
 	const onTabClick = (tabId: string | number) => {
-		setQuery({ format: String(tabId), page: 1 });
+		setQuery({ format: String(tabId), page: undefined });
 	};
 
 	const onViewToggle = (nextMode: string) => setViewMode(nextMode as MediaCardViewMode);
@@ -656,7 +668,7 @@ const SearchPage: FC = () => {
 	const onVisitorSpaceSelected = (id: string): void => {
 		setQuery({
 			...query,
-			page: 1,
+			page: undefined,
 			[VisitorSpaceFilterId.Maintainer]: id === PUBLIC_COLLECTION ? undefined : id,
 		});
 	};
@@ -920,10 +932,10 @@ const SearchPage: FC = () => {
 			/>
 			<PaginationBar
 				className="u-mb-48"
-				start={(query.page - 1) * VISITOR_SPACE_ITEM_COUNT}
+				start={(page - 1) * VISITOR_SPACE_ITEM_COUNT}
 				count={VISITOR_SPACE_ITEM_COUNT}
 				showBackToTop
-				total={limitToMaxResults(getItemCounts(query.format as VisitorSpaceMediaType))}
+				total={limitToMaxResults(getItemCounts(format))}
 				onPageChange={(zeroBasedPage) => {
 					scrollTo(0, 'instant');
 					setQuery({

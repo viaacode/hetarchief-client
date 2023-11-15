@@ -8,7 +8,6 @@ import {
 	NumberParam,
 	QueryParamConfig,
 	StringParam,
-	withDefault,
 } from 'use-query-params';
 
 import { Icon, IconNamesLight } from '@shared/components';
@@ -82,7 +81,7 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 
 export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any>> = {
 	// Filters
-	format: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.format as string),
+	format: StringParam,
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ArrayParam,
 	[VisitorSpaceFilterId.Maintainer]: StringParam,
 	[VisitorSpaceFilterId.Medium]: ArrayParam,
@@ -98,10 +97,10 @@ export const VISITOR_SPACE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<a
 	[VisitorSpaceFilterId.ConsultableOnlyOnLocation]: BooleanParam,
 	[VisitorSpaceFilterId.ConsultableMedia]: BooleanParam,
 	// Pagination
-	page: withDefault(NumberParam, VISITOR_SPACE_QUERY_PARAM_INIT.page as number),
+	page: NumberParam,
 	// Sorting
-	orderProp: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.orderProp as string),
-	orderDirection: withDefault(StringParam, VISITOR_SPACE_QUERY_PARAM_INIT.orderDirection),
+	orderProp: StringParam,
+	orderDirection: StringParam,
 	// UI
 	filter: StringParam,
 };
