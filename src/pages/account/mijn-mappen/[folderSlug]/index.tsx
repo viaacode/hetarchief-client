@@ -256,7 +256,11 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 */
 	const getShowLocallyAvailable = (item: FolderIeObject) => {
 		return (
-			isEmpty(item.accessThrough) &&
+			isEmpty(
+				item.accessThrough.filter(
+					(accessThroughItem) => accessThroughItem !== IeObjectAccessThrough.PUBLIC_INFO
+				)
+			) &&
 			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
 				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
 		);
