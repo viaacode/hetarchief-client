@@ -600,26 +600,24 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 					}}
 				/>
 
-				<AddToFolderBlade
-					isOpen={isAddToFolderBladeOpen}
-					selected={
-						selected
-							? {
-									schemaIdentifier: selected.schemaIdentifier,
-									title: selected.name,
-							  }
-							: undefined
-					}
-					onClose={() => {
-						setShowAddToFolderBlade(false);
-						setSelected(null);
-					}}
-					onSubmit={async () => {
-						setShowAddToFolderBlade(false);
-						setSelected(null);
-					}}
-					id="folder-detail__add-to-folder-blade"
-				/>
+				{selected && (
+					<AddToFolderBlade
+						isOpen={selected && isAddToFolderBladeOpen}
+						objectToAdd={{
+							schemaIdentifier: selected.schemaIdentifier,
+							title: selected.name,
+						}}
+						onClose={() => {
+							setShowAddToFolderBlade(false);
+							setSelected(null);
+						}}
+						onSubmit={async () => {
+							setShowAddToFolderBlade(false);
+							setSelected(null);
+						}}
+						id="folder-detail__add-to-folder-blade"
+					/>
+				)}
 				{activeFolder?.id && (
 					<ShareFolderBlade
 						onClose={() => setShowShareMapBlade(false)}

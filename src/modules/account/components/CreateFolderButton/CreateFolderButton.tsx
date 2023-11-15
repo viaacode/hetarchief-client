@@ -62,7 +62,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 		return new Promise<void>((resolve, reject) => {
 			handleSubmit(async (values) => {
 				const folder = await foldersService.create(values);
-				await afterSubmit(folder);
+				afterSubmit(folder);
 
 				toastService.notify({
 					title: tHtml(

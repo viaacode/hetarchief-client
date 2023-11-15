@@ -36,7 +36,7 @@ class FoldersService extends ApiService {
 			.json();
 	}
 
-	public async create(json: Partial<Pick<Folder, 'name'>>): Promise<Partial<Folder>> {
+	public async create(json: Partial<Pick<Folder, 'name'>>): Promise<Folder> {
 		return await ApiService.getApi().post(`${COLLECTIONS_SERVICE_BASE_URL}`, { json }).json();
 	}
 
@@ -50,7 +50,7 @@ class FoldersService extends ApiService {
 		return await ApiService.getApi().delete(`${COLLECTIONS_SERVICE_BASE_URL}/${id}`).json();
 	}
 
-	public async addToCollection(collection: string, item: string): Promise<unknown> {
+	public async addToFolder(collection: string, item: string): Promise<unknown> {
 		return await ApiService.getApi()
 			.post(
 				`${COLLECTIONS_SERVICE_BASE_URL}/${collection}/${COLLECTIONS_SERVICE_OBJECTS_URL}/${item}`

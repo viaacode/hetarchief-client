@@ -19,6 +19,7 @@ import { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
+import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetFilterOptions } from '@ie-objects/hooks/get-filter-options';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
@@ -129,6 +130,8 @@ const SearchPage: FC = () => {
 	const windowSize = useWindowSizeContext();
 	const dispatch = useDispatch();
 
+	// Get folders, to correctly show the bookmark icon statuses on the search results
+	useGetFolders();
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
@@ -1059,17 +1062,13 @@ const SearchPage: FC = () => {
 					</div>
 				)}
 
-				{!searchResultsLoading && (
+				{!searchResultsLoading && !!selectedCard && (
 					<AddToFolderBlade
 						isOpen={isAddToFolderBladeOpen}
-						selected={
-							selectedCard
-								? {
-										schemaIdentifier: selectedCard.schemaIdentifier,
-										title: selectedCard.name,
-								  }
-								: undefined
-						}
+						objectToAdd={{
+							schemaIdentifier: selectedCard.schemaIdentifier,
+							title: selectedCard.name,
+						}}
 						onClose={() => {
 							setShowAddToFolderBlade(false);
 							setSelectedCard(null);
