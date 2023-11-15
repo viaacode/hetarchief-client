@@ -1,57 +1,34 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
+import { AccountLayoutProps } from '@account/layouts';
 import { ListNavigationItem } from '@shared/components';
-import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 
 import styles from './AccountLayout.module.scss';
-import { AccountLayoutProps } from './AccountLayout.types';
 
-import { ACCOUNT_NAVIGATION_LINKS, Permission } from 'modules/account/const';
+import { GET_ACCOUNT_NAVIGATION_LINKS } from 'modules/account/const';
 
 const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle }) => {
 	const { asPath } = useRouter();
-	const hasAccountHistoryPerm = useHasAnyPermission(
-		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
-	);
-	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
-	const sidebarLinks: ListNavigationItem[] = useMemo(
-		() =>
-			ACCOUNT_NAVIGATION_LINKS()
-				.filter((link) => {
-					// ARC-1922/ARC-1927: If user has no READ_PERSONAL_APPROVED_VISIT_REQUESTS permission,
-					// or VIEW_OWN_MATERIAL_REQUESTS,
-					// do not show account-history navigation or account-material-requests navigation
-					const hideAccountHistory =
-						!hasAccountHistoryPerm && link.id == 'account-history';
-					const hideMaterialRequests =
-						!hasMaterialRequestsPerm && link.id == 'account-material-requests';
-
-					if (hideAccountHistory || hideMaterialRequests) {
-						return;
-					} else {
-						return link;
-					}
-				})
-				.map(({ id, label, href }) => ({
-					id,
-					node: ({ linkClassName }) => (
-						<Link href={href}>
-							<a className={linkClassName} aria-label={label}>
-								{label}
-							</a>
-						</Link>
-					),
-					active: asPath.includes(href),
-				})),
-		[asPath]
-	);
-
 	const { tHtml } = useTranslation();
+
+	const sidebarLinks: ListNavigationItem[] = GET_ACCOUNT_NAVIGATION_LINKS().map(
+		({ id, label, href }) => ({
+			id,
+			node: ({ linkClassName }) => (
+				<Link href={href}>
+					<a className={linkClassName} aria-label={label}>
+						{label}
+					</a>
+				</Link>
+			),
+			active: asPath.includes(href),
+		})
+	);
 
 	return (
 		<SidebarLayout
