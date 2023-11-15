@@ -55,8 +55,10 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 		IeObjectsSearchFilterField.LANGUAGE
 	];
 
-	const filteredOptions = filterOptions.filter((filterOption) =>
-		filterOption.toLowerCase().includes(search.toLowerCase())
+	const filteredOptions = filterOptions.filter(
+		(filterOption) =>
+			filterOption.toLowerCase().includes(search.toLowerCase()) ||
+			LANGUAGES.nl?.[filterOption]?.toLowerCase()?.includes(search.toLowerCase())
 	);
 
 	// Make sure applied values are sorted at the top of the list

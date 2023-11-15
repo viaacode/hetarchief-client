@@ -3,10 +3,18 @@ import { boolean, object, SchemaOf } from 'yup';
 
 import { CommunicationFormState } from '@account/types';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useHasAnyPermission } from '@shared/hooks/has-permission';
 
 export * from './my-collections.const';
 export * from './my-history.const';
 export * from './my-material-requests.const';
+
+interface NavigationLinkInfo {
+	id: string;
+	label: string;
+	href: string;
+	hasDivider?: boolean;
+}
 
 export const COMMUNICATION_FORM_SCHEMA = (): SchemaOf<CommunicationFormState> =>
 	object({
@@ -15,35 +23,45 @@ export const COMMUNICATION_FORM_SCHEMA = (): SchemaOf<CommunicationFormState> =>
 		),
 	});
 
-export const ACCOUNT_NAVIGATION_LINKS = (): {
-	id: string;
-	label: string;
-	href: string;
-	hasDivider?: boolean;
-}[] => [
-	{
-		id: 'account-profile',
-		label: tText('modules/account/const/index___mijn-profiel'),
-		href: '/account/mijn-profiel',
-	},
-	{
-		id: 'account-collections',
-		label: tText('modules/account/const/index___mijn-mappen'),
-		href: '/account/mijn-mappen',
-	},
-	{
-		id: 'account-history',
-		label: tText('modules/account/const/index___mijn-bezoek-historiek'),
-		href: '/account/mijn-bezoek-historiek',
-		hasDivider: true,
-	},
-	{
-		id: 'account-material-requests',
-		label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
-		href: '/account/mijn-materiaalaanvragen',
-		hasDivider: true,
-	},
-];
+export const GET_ACCOUNT_NAVIGATION_LINKS = (): NavigationLinkInfo[] => {
+	const hasAccountHistoryPerm = useHasAnyPermission(
+		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
+	);
+	const hasMaterialRequestsPerm = useHasAnyPermission(Permission.VIEW_OWN_MATERIAL_REQUESTS);
+
+	const links: NavigationLinkInfo[] = [
+		{
+			id: 'account-profile',
+			label: tText('modules/account/const/index___mijn-profiel'),
+			href: '/account/mijn-profiel',
+		},
+		{
+			id: 'account-collections',
+			label: tText('modules/account/const/index___mijn-mappen'),
+			href: '/account/mijn-mappen',
+		},
+	];
+
+	if (hasAccountHistoryPerm) {
+		links.push({
+			id: 'account-history',
+			label: tText('modules/account/const/index___mijn-bezoek-historiek'),
+			href: '/account/mijn-bezoek-historiek',
+			hasDivider: true,
+		});
+	}
+
+	if (hasMaterialRequestsPerm) {
+		links.push({
+			id: 'account-material-requests',
+			label: tText('modules/account/const/index___mijn-materiaalaanvragen'),
+			href: '/account/mijn-materiaalaanvragen',
+			hasDivider: true,
+		});
+	}
+
+	return links;
+};
 
 export enum Permission {
 	// Maintenance alerts

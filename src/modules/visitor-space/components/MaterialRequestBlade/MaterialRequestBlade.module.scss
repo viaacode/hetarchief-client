@@ -41,6 +41,7 @@ $component: "c-request-material";
 		&-label {
 			font-weight: 900;
 			margin-bottom: $spacer-xxs;
+			word-break: break-word;
 
 			&-icon {
 				color: $blue;

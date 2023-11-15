@@ -1,8 +1,7 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Checkbox } from '@meemoo/react-components';
 import clsx from 'clsx';
+import { compact, isNil } from 'lodash-es';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
 import { CreateFolderButton } from '@account/components';
@@ -14,83 +13,46 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
 
-import { ADD_TO_FOLDER_FORM_SCHEMA } from './AddToFolderBlade.const';
 import styles from './AddToFolderBlade.module.scss';
-import {
-	AddToFolderBladeProps,
-	AddToFolderFormState,
-	AddToFolderFormStatePair,
-	AddToFolderSelected,
-} from './AddToFolderBlade.types';
+import { AddToFolderBladeProps } from './AddToFolderBlade.types';
 
-const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
+const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
+	objectToAdd,
+	onSubmit,
+	onClose,
+	isOpen,
+	className,
+	...bladeProps
+}) => {
 	const { tHtml } = useTranslation();
-	const { onSubmit, selected } = props;
-	const [pairs, setPairs] = useState<AddToFolderFormStatePair[]>([]);
-	const [lastCreatedFolderId, setLastCreatedFolderId] = useState<string | null>(null);
-	const {
-		control,
-		handleSubmit,
-		setValue,
-		reset,
-		formState: { errors, isSubmitting },
-	} = useForm<AddToFolderFormState>({
-		resolver: yupResolver(ADD_TO_FOLDER_FORM_SCHEMA()),
-		defaultValues: useMemo(() => ({ pairs }), [pairs]),
-	});
 
 	const getFolders = useGetFolders();
-	const collections = useSelector(selectFolders);
-
-	/**
-	 * Methods
-	 */
-
-	const mapToPairs = (collections: Folder[], selected: AddToFolderSelected) => {
-		return collections.map(({ id, objects }) => {
-			return {
-				folder: id,
-				ie: selected.schemaIdentifier,
-				checked: !!(objects || []).find(
-					(obj) => obj.schemaIdentifier === selected.schemaIdentifier
-				),
-			};
-		});
-	};
-
-	const getFolder = (id: string) =>
-		(collections?.items || []).find((collection) => collection.id === id);
+	const folderResponse = useSelector(selectFolders);
+	const folders = useMemo(() => folderResponse?.items || [], [folderResponse?.items]);
+	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(
+		null
+	);
+	const [selectedFolderIds, setSelectedFolderIds] = useState<string[] | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	/**
 	 * Effects
 	 */
 
 	useEffect(() => {
-		if (selected?.schemaIdentifier && collections) {
-			setPairs(mapToPairs(collections?.items || [], selected));
+		// Only reset the selected folder ids the first time
+		if (isNil(selectedFolderIds)) {
+			const tempOriginalSelectedFolderIds = folders
+				.filter((folder) =>
+					(folder.objects || []).find(
+						(obj) => obj.schemaIdentifier === objectToAdd.schemaIdentifier
+					)
+				)
+				.map((folder) => folder.id);
+			setSelectedFolderIds(tempOriginalSelectedFolderIds);
+			setOriginalSelectedFolderIds(tempOriginalSelectedFolderIds);
 		}
-	}, [setValue, reset, collections, selected]);
-
-	useEffect(() => {
-		setValue('pairs', pairs);
-	}, [setValue, pairs]);
-
-	useEffect(() => {
-		props.isOpen && reset();
-	}, [props.isOpen, reset]);
-
-	// ARC-1946: select the newly created map
-	useEffect(() => {
-		const folderIds = pairs.map((folder) => folder.folder);
-		if (lastCreatedFolderId && folderIds?.includes(lastCreatedFolderId)) {
-			const newFolder = pairs.find((folder) => folder.folder === lastCreatedFolderId);
-			if (newFolder) {
-				newFolder.checked = true;
-				setValue('pairs', pairs);
-			}
-			setLastCreatedFolderId(null);
-		}
-	}, [lastCreatedFolderId, pairs, setValue]);
+	}, [folders, objectToAdd, selectedFolderIds]);
 
 	/**
 	 * Events
@@ -109,67 +71,64 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 		});
 	};
 
-	const onFormSubmit = async (values: AddToFolderFormState) => {
-		if (selected) {
-			const original = mapToPairs(collections?.items || [], selected);
-			const dirty = values.pairs.filter((current) => {
-				return (
-					current.checked !== original.find((o) => o.folder === current.folder)?.checked
-				);
-			});
+	const folderIdsToTitles = (folderIds: string[]) => {
+		return compact(
+			folderIds.map((folderId) => folders.find((folder) => folder.id === folderId)?.name)
+		).join(', ');
+	};
 
-			const addedToFolders: Array<{
-				item: AddToFolderSelected;
-				folder: string;
-			}> = [];
-			const removedFromFolders: Array<{
-				item: AddToFolderSelected;
-				folder: string;
-			}> = [];
+	const handleSubmit = async () => {
+		setIsSubmitting(true);
+		try {
+			const objectAddedToFolderIds = (selectedFolderIds || []).filter(
+				(folderId) => !(originalSelectedFolderIds || []).includes(folderId)
+			);
+			const objectRemovedFromFolderIds = (originalSelectedFolderIds || []).filter(
+				(folderId) => !(selectedFolderIds || []).includes(folderId)
+			);
+
+			const addedToFolderIds: string[] = [];
+			const removedFromFolderIds: string[] = [];
 
 			// Define our promises
-			const addOrRemoveItemFromFolderPromises = dirty.map((pair) => {
-				const folder = getFolder(pair.folder)?.name || pair.folder;
-				if (pair.checked) {
-					return foldersService
-						.addToCollection(pair.folder, selected.schemaIdentifier)
+			const updatePromises = [
+				...objectAddedToFolderIds.map((folderId) =>
+					foldersService
+						.addToFolder(folderId, objectToAdd.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
 								return;
 							}
 
-							addedToFolders.push({
-								folder,
-								item: selected,
-							});
-						});
-				} else {
-					return foldersService
-						.removeFromFolder(pair.folder, selected.schemaIdentifier)
+							addedToFolderIds.push(folderId);
+						})
+				),
+				...objectRemovedFromFolderIds.map((folderId) =>
+					foldersService
+						.removeFromFolder(folderId, objectToAdd.schemaIdentifier)
 						.catch(onFailedRequest)
 						.then((response) => {
 							if (response === undefined) {
 								return;
 							}
 
-							removedFromFolders.push({
-								folder,
-								item: selected,
-							});
-						});
-				}
-			});
+							removedFromFolderIds.push(folderId);
+						})
+				),
+			];
 
 			// Execute calls
-			await Promise.all(addOrRemoveItemFromFolderPromises);
+			await Promise.all(updatePromises);
+
 			await getFolders.refetch();
 
 			// Show ONE correct toast message
-			if (addedToFolders.length > 0 && removedFromFolders.length > 0) {
-				const folders = [...addedToFolders, ...removedFromFolders]
-					.map((obj) => obj.folder)
-					.join(', ');
+			if (addedToFolderIds.length > 0 && removedFromFolderIds.length > 0) {
+				const folderTitles = folderIdsToTitles([
+					...addedToFolderIds,
+					...removedFromFolderIds,
+				]);
 				toastService.notify({
 					maxLines: 3,
 					title: tHtml(
@@ -178,17 +137,16 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 					description: tHtml(
 						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-item-is-toegevoegd-verwijderd-van-de-geselecteerde-mappen-beschrijving',
 						{
-							folders,
+							folders: folderTitles,
 						}
 					),
 				});
-			} else if (addedToFolders.length > 0) {
-				const folders = addedToFolders.map((obj) => obj.folder).join(', ');
-				if (addedToFolders.length === 1) {
+			} else if (addedToFolderIds.length > 0) {
+				const folderTitles = folderIdsToTitles(addedToFolderIds);
+				if (addedToFolderIds.length === 1) {
 					// Add to one folder
-					const item = addedToFolders[0].item.title;
-					const folder =
-						addedToFolders[0].folder ||
+					const folderTitle =
+						folderTitles ||
 						tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
 						);
@@ -200,8 +158,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						description: tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-map-beschrijving',
 							{
-								item,
-								folder,
+								item: objectToAdd.title,
+								folder: folderTitle,
 							}
 						),
 					});
@@ -215,18 +173,17 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						description: tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-toegevoegd-aan-mappen-beschrijving',
 							{
-								folders,
+								folders: folderTitles,
 							}
 						),
 					});
 				}
-			} else if (removedFromFolders.length > 0) {
-				const folders = removedFromFolders.map((obj) => obj.folder).join(', ');
-				if (removedFromFolders.length === 1) {
+			} else if (removedFromFolderIds.length > 0) {
+				const folderTitles = folderIdsToTitles(removedFromFolderIds);
+				if (removedFromFolderIds.length === 1) {
 					// Removed from one folder
-					const item = removedFromFolders[0].item.title;
-					const folder =
-						removedFromFolders[0].folder ||
+					const folderTitle =
+						folderTitles ||
 						tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___onbekend'
 						);
@@ -238,12 +195,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						description: tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-map-beschrijving',
 							{
-								item,
-								folder,
+								item: objectToAdd.title,
+								folder: folderTitle,
 							}
 						),
 					});
-				} else if (removedFromFolders.length > 1) {
+				} else if (removedFromFolderIds.length > 1) {
 					// Removed from multiple folder
 					toastService.notify({
 						maxLines: 3,
@@ -253,37 +210,48 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						description: tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___item-is-verwijderd-uit-mappen-beschrijving',
 							{
-								folders,
+								folders: folderTitles,
 							}
 						),
 					});
 				}
 			}
 
-			onSubmit?.(values);
-			reset();
+			onSubmit?.(selectedFolderIds || []);
+			resetForm();
+		} catch (err) {
+			toastService.notify({
+				maxLines: 3,
+				title: tHtml(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___mislukt'
+				),
+				description: tHtml(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-aanpassen-van-de-mappen-is-mislukt'
+				),
+			});
+		}
+		setIsSubmitting(false);
+	};
+
+	const onCheckboxClick = (changedFolderId: string) => {
+		if ((selectedFolderIds || []).includes(changedFolderId)) {
+			setSelectedFolderIds(
+				(selectedFolderIds || []).filter((folderId) => folderId !== changedFolderId)
+			);
+		} else {
+			setSelectedFolderIds([...(selectedFolderIds || []), changedFolderId]);
 		}
 	};
 
-	const onCheckboxClick = (pair: AddToFolderFormStatePair) => {
-		// immutably update state, form state updated by effect
-		setPairs(
-			pairs.map((item) => {
-				if (item.folder === pair.folder) {
-					item.checked = !pair.checked;
-				}
-
-				return item;
-			})
-		);
-	};
-
-	const afterCreateFolderSubmit = async (folder: Partial<Folder>) => {
+	const afterCreateFolderSubmit = async (folder: Folder) => {
+		setSelectedFolderIds([...(selectedFolderIds || []), folder.id]);
 		await getFolders.refetch();
-		// select new created folder
-		if (folder.id) {
-			setLastCreatedFolderId(folder.id);
-		}
+	};
+
+	const resetForm = () => {
+		setOriginalSelectedFolderIds(null);
+		setSelectedFolderIds(null);
+		setIsSubmitting(false);
 	};
 
 	/**
@@ -299,7 +267,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
 					)}
 					variants={['block', 'black']}
-					onClick={handleSubmit(onFormSubmit, () => console.error(errors))}
+					onClick={handleSubmit}
 					disabled={isSubmitting}
 				/>
 
@@ -308,44 +276,40 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___annuleer'
 					)}
 					variants={['block', 'text']}
-					onClick={props.onClose}
+					onClick={onClose}
 				/>
 			</div>
 		);
 	};
 
-	const renderPairFields = (data: {
-		field: ControllerRenderProps<AddToFolderFormState, 'pairs'>;
-	}) => {
-		const { field } = data;
-
-		return field.value.map((pair) => {
-			const collection = getFolder(pair.folder);
-			const others = (collection?.objects || []).filter(
-				(object) => object.schemaIdentifier !== pair.ie
+	const renderFolderCheckboxes = () => {
+		return folders.map((folder) => {
+			const others = (folder?.objects || []).filter(
+				(object) => object.schemaIdentifier !== objectToAdd.schemaIdentifier
 			);
 
-			const count = others.length + (pair.checked ? 1 : 0);
+			const isFolderSelected = (selectedFolderIds || []).includes(folder.id);
+			const count = others.length + (isFolderSelected ? 1 : 0);
 
 			return (
 				<li
-					key={`item--${pair.folder}`}
+					key={`item--${folder.id}`}
 					className={styles['c-add-to-folder-blade__list-item']}
-					onClick={() => onCheckboxClick(pair)}
+					onClick={() => onCheckboxClick(folder.id)}
 					tabIndex={0}
 					role="button"
 				>
 					<Checkbox
-						value={`add-to--${pair.folder}`}
+						value={`add-to--${folder.id}`}
 						className={styles['c-add-to-folder-blade__list-item__checkbox']}
-						checked={pair.checked}
+						checked={isFolderSelected}
 						checkIcon={<Icon name={IconNamesLight.Check} />}
 						onClick={(e) => e.stopPropagation()}
 						variants={['no-label']}
 					/>
 
 					<span className={styles['c-add-to-folder-blade__list-item__label']}>
-						{collection?.name}
+						{folder?.name}
 					</span>
 
 					<span className={styles['c-add-to-folder-blade__list-item__count']}>
@@ -363,13 +327,13 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 		});
 	};
 
-	const title = selected?.title;
-
 	return (
 		<Blade
-			{...props}
-			className={clsx(props.className, styles['c-add-to-folder-blade'])}
-			footer={props.isOpen && renderFooter()}
+			{...bladeProps}
+			isOpen={isOpen}
+			onClose={onClose}
+			className={clsx(className, styles['c-add-to-folder-blade'])}
+			footer={isOpen && renderFooter()}
 			renderTitle={(props: Pick<HTMLElement, 'id' | 'className'>) => (
 				<h2 {...props}>
 					{tHtml(
@@ -381,26 +345,18 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = (props) => {
 			<div className="u-px-32">
 				{tHtml(
 					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
-					{ title }
+					{ title: objectToAdd.title }
 				)}
 			</div>
 
-			{props.isOpen && (
+			{isOpen && (
 				<div className="u-px-32 u-bg-platinum">
 					<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
-						<Controller
-							name="pairs"
-							control={control}
-							render={(data) => (
-								<>
-									{renderPairFields(data)}
+						{renderFolderCheckboxes()}
 
-									<li className={styles['c-add-to-folder-blade__list-button']}>
-										<CreateFolderButton afterSubmit={afterCreateFolderSubmit} />
-									</li>
-								</>
-							)}
-						/>
+						<li className={styles['c-add-to-folder-blade__list-button']}>
+							<CreateFolderButton afterSubmit={afterCreateFolderSubmit} />
+						</li>
 					</ul>
 				</div>
 			)}

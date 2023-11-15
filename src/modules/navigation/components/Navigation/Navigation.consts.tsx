@@ -502,11 +502,11 @@ export const getNavigationItemsProfileDropdown = (
 	const { defaultRoutes, adminRoutes, cpRoutes } = groupBy(
 		profileDropdown,
 		(navItem: NavigationItem) => {
-			if (navItem.path?.startsWith('/admin')) {
+			if (navItem.path?.startsWith('/' + ROUTE_PARTS.admin)) {
 				return 'adminRoutes';
 			}
 
-			if (navItem.path?.startsWith('/beheer')) {
+			if (navItem.path?.startsWith('/' + ROUTE_PARTS.beheer)) {
 				return 'cpRoutes';
 			}
 

@@ -1,12 +1,8 @@
 import { FormBladeProps } from '@shared/types';
 
-export type AddToFolderBladeProps = FormBladeProps<AddToFolderFormState> & {
-	selected?: AddToFolderSelected;
+export type AddToFolderBladeProps = FormBladeProps<string[]> & {
+	objectToAdd: AddToFolderSelected;
 };
-
-export interface AddToFolderFormState {
-	pairs: AddToFolderFormStatePair[];
-}
 
 export interface AddToFolderSelected {
 	schemaIdentifier: string;

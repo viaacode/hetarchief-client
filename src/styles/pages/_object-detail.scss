@@ -160,6 +160,10 @@ $breakpoint-md: map.get($breakpoints, "md");
 	&__slider {
 		background-color: $black-8;
 		padding: 2rem 3rem;
+		position: absolute !important;
+		bottom: 0;
+		left: 0;
+		right: 0;
 	}
 
 	&__metadata {
@@ -254,6 +258,12 @@ $breakpoint-md: map.get($breakpoints, "md");
 			margin-left: -$spacer-lg;
 			margin-right: -$spacer-lg;
 			padding: $spacer-md $spacer-lg;
+		}
+	}
+
+	@include respond-at("md") {
+		&__related {
+			grid-column: 2;
 		}
 	}
 
@@ -369,6 +379,7 @@ $breakpoint-md: map.get($breakpoints, "md");
 		.p-object-detail__video {
 			display: grid;
 			grid-template-rows: 1fr auto;
+			grid-row: 1 / 3;
 		}
 	}
 
