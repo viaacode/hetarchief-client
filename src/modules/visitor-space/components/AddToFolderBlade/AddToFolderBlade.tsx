@@ -222,8 +222,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		} catch (err) {
 			toastService.notify({
 				maxLines: 3,
-				title: tHtml('Mislukt'),
-				description: tHtml('Het aanpassen van de mappen is mislukt'),
+				title: tHtml(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___mislukt'
+				),
+				description: tHtml(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-aanpassen-van-de-mappen-is-mislukt'
+				),
 			});
 		}
 		setIsSubmitting(false);
