@@ -1,14 +1,15 @@
+import { jest } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { Provider } from 'react-redux';
-import '@testing-library/jest-dom';
-import { jest } from '@jest/globals';
 
 import { mockStore } from '../../../../__mocks__/store';
 
 import Blade from './Blade';
 import { BladeProps } from './Blade.types';
 import { mockBladeProps } from './__mocks__/blade';
+
+import '@testing-library/jest-dom';
 
 const renderBlade = (
 	bladeProps: BladeProps = mockBladeProps,

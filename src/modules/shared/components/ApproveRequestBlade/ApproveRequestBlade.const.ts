@@ -1,10 +1,9 @@
 import { isEmpty } from 'lodash-es';
 import { array, date, mixed, object, ref, SchemaOf, string } from 'yup';
 
+import { ApproveRequestFormState } from '@shared/components';
 import { tText } from '@shared/helpers/translate';
 import { AccessType } from '@shared/types';
-
-import { ApproveRequestFormState } from './ApproveRequestBlade.types';
 
 export const APPROVE_REQUEST_FORM_SCHEMA = (): SchemaOf<ApproveRequestFormState> => {
 	return object({

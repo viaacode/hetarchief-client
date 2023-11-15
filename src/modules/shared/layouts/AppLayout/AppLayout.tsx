@@ -182,6 +182,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		} else if (typeof query.showAuth === 'boolean') {
 			dispatch(setShowAuthModal(query.showAuth));
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, query.showAuth, user]);
 
 	useEffect(() => {
