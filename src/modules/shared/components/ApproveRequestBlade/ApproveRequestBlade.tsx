@@ -107,6 +107,14 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 		defaultValues: getInitialValues(),
 	});
 
+	const isError = !!(
+		errors.accessType?.types ||
+		errors.accessType?.folderIds ||
+		errors.accessFrom ||
+		errors.accessTo ||
+		errors.accessRemark
+	);
+
 	useEffect(() => {
 		// If the selectedVisitRequest changes, reinitialize the form
 		reset(getInitialValues());
@@ -219,6 +227,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			});
 			return;
 		}
+
 		visitRequest &&
 			VisitsService.patchById(visitRequest.id, {
 				...visitRequest,
@@ -273,6 +282,14 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 	const renderFooter = () => {
 		return (
 			<div className="u-px-32 u-py-24">
+				{isError && (
+					<p className={styles['c-approve-request-blade__error']}>
+						{tHtml(
+							'modules/shared/components/approve-request-blade/approve-request-blade___bepaalde-invoer-velden-zijn-niet-geldig'
+						)}
+					</p>
+				)}
+
 				<Button
 					className="u-mb-16"
 					label={approveButtonLabel}
@@ -422,6 +439,7 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 			{...props}
 			footer={props.isOpen && renderFooter()}
 			renderTitle={(props: any) => <h2 {...props}>{title}</h2>}
+			className={styles['c-approve-request-blade']}
 		>
 			{props.isOpen && !!visitRequest && (
 				<div className="u-px-32">

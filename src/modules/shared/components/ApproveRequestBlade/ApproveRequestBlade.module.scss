@@ -4,8 +4,10 @@ $component: "c-approve-request-blade";
 
 .#{$component} {
 	&__date-time {
-		:global(.c-datepicker:not(.c-datepicker--time)) :global(.c-input__field) {
-			border-right-width: 0;
+		@include respond-at("md") {
+			:global(.c-datepicker:not(.c-datepicker--time)) :global(.c-input__field) {
+				border-right-width: 0;
+			}
 		}
 
 		:global(.c-form-control__input) {
@@ -33,6 +35,11 @@ $component: "c-approve-request-blade";
 				flex: 0 0 14rem;
 			}
 		}
+	}
+
+	&__error {
+		color: $cherry;
+		margin-bottom: $spacer-sm;
 	}
 }
 

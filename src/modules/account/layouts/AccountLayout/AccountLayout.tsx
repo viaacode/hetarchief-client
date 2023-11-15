@@ -48,7 +48,7 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 					),
 					active: asPath.includes(href),
 				})),
-		[asPath]
+		[asPath, hasAccountHistoryPerm, hasMaterialRequestsPerm]
 	);
 
 	const { tHtml } = useTranslation();

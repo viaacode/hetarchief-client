@@ -103,6 +103,7 @@ const CPMaterialRequestsPage: NextPage<DefaultSeoInfo> = ({ url }) => {
 			type: selectedTypes,
 			page: 1,
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedTypes]);
 
 	const onSortChange = (
