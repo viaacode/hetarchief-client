@@ -244,6 +244,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 							'pages/account/mijn-profiel/index___ik-ontvang-graag-de-nieuwsbrief'
 						)}
 						disabled={isFormSubmitting}
+						showSpinner={isFormSubmitting}
 						onClick={() => onUpdateAcceptNewsletter(acceptNewsletter)}
 						onKeyDown={(e) => {
 							onKey(e, [...keysEnter, ...keysSpacebar], () => {
