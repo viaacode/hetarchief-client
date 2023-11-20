@@ -1,11 +1,15 @@
-import { Button, RadioButton, TextArea } from '@meemoo/react-components';
+import { Button, OrderDirection, RadioButton, TextArea } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { GroupName } from '@account/const';
+import { selectUser } from '@auth/store/user/user.select';
+import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
+	MaterialRequestKeys,
 	MaterialRequestObjectType,
 	MaterialRequestRequesterCapacity,
 	MaterialRequestType,
@@ -63,6 +67,16 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		type || MaterialRequestType.VIEW
 	);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
+	const user = useSelector(selectUser);
+
+	const { data: materialRequests, refetch: refetchMaterialRequests } =
+		useGetPendingMaterialRequests(
+			{
+				orderProp: MaterialRequestKeys.maintainer,
+				orderDirection: 'asc' as OrderDirection,
+			},
+			{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+		);
 
 	const onCloseModal = () => {
 		onClose();
@@ -80,6 +94,14 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	};
 
 	const onAddToList = async () => {
+		if (
+			materialRequests?.items &&
+			materialRequests.items.find((request) => request.objectSchemaIdentifier === objectId)
+		) {
+			onDuplicateRequest();
+			return;
+		}
+
 		try {
 			const response = await MaterialRequestsService.create({
 				objectId,
@@ -101,6 +123,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				),
 			});
 			onSuccesCreated();
+			refetchMaterialRequests();
 			onCloseModal();
 		} catch (err) {
 			onFailedRequest();
@@ -147,6 +170,18 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			),
 			description: tText(
 				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan'
+			),
+		});
+	};
+
+	const onDuplicateRequest = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst'
+			),
+			description: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving'
 			),
 		});
 	};
