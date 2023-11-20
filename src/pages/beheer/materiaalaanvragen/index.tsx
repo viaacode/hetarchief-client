@@ -10,7 +10,7 @@ import { useQueryParams } from 'use-query-params';
 
 import MaterialRequestDetailBlade from '@account/components/MaterialRequestDetailBlade/MaterialRequestDetailBlade';
 import { Permission } from '@account/const';
-import { selectUser } from '@auth/store/user/user.select';
+import { selectUser } from '@auth/store/user';
 import { withAuth } from '@auth/wrappers/with-auth';
 import {
 	CP_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG,

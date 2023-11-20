@@ -9,10 +9,9 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import { IeObjectsSearchFilterField } from '@shared/types';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
@@ -44,15 +43,20 @@ const GenreFilterForm: FC<GenreFilterFormProps> = ({ children, className }) => {
 		defaultValues,
 	});
 
-	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)[
-		IeObjectsSearchFilterField.GENRE
-	].filter((filterOption) => filterOption.toLowerCase().includes(search.toLowerCase()));
+	const filterOptions: string[] =
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Genre]?.buckets?.map(
+			(filterOption) => filterOption.key
+		) || [];
+
+	const filteredOptions: string[] = filterOptions.filter((filterOption) =>
+		filterOption.toLowerCase().includes(search.toLowerCase())
+	);
 
 	// Make sure applied values are sorted at the top of the list
 	// Options selected by the user should remain in their alphabetical order until the filter is applied
 	// https://meemoo.atlassian.net/browse/ARC-1882
 	const checkboxOptions = sortFilterOptions(
-		filterOptions.map((filterOption) => ({
+		filteredOptions.map((filterOption) => ({
 			label: filterOption,
 			value: filterOption,
 			checked: selectedGenres.includes(filterOption),

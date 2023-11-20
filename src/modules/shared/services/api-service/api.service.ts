@@ -13,7 +13,6 @@ export abstract class ApiService {
 		if (!ApiService.api) {
 			this.api = ky.create({
 				prefixUrl: publicRuntimeConfig.PROXY_URL,
-				timeout: 30000,
 				headers: {
 					'content-type': 'application/json',
 					'Cache-Control': 'no-cache',

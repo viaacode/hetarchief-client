@@ -18,7 +18,7 @@ import { globalLabelKeys } from '@shared/const';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
-import { setShowZendesk } from '@shared/store/ui/ui.slice';
+import { setShowZendesk } from '@shared/store/ui';
 
 import styles from './AdminLayout.module.scss';
 
