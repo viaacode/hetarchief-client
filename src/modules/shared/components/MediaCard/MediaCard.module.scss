@@ -15,6 +15,7 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 
 	&:global(.c-media-card--no-link) {
 		cursor: default !important;
+		background-color: $silver;
 
 		:global(.c-card__title-wrapper) {
 			color: $grey;
