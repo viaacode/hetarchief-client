@@ -251,33 +251,32 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	/**
-	 * Show label that the object is only available inside a visitor space
-	 * if the object doesn't have publically available metadata and the object doesn't have a public license
+	 * Show label if
+	 * - user doesn't have access to detail page of the object
+	 * - and object has one of the visitor space licenses
 	 * https://meemoo.atlassian.net/browse/ARC-1957
 	 * @param item
 	 */
 	const getShowLocallyAvailableLabel = (item: FolderIeObject) => {
 		return (
-			!item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) &&
-			!item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) &&
-			!item.licenses?.includes(IeObjectLicense.PUBLIEK_METADATA_LTD) &&
-			!item.licenses?.includes(IeObjectLicense.PUBLIEK_METADATA_ALL) &&
+			isEmpty(item.accessThrough) &&
 			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
 				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
 		);
 	};
 
 	/**
-	 * Show buttons to plan a visit if the essence of the object is accessible inside a visitor-space,
-	 * and the user doesn't currently have access to the visitor space
+	 * Show buttons if
+	 * - user doesn't have access to detail page of the object
+	 * - and object has one of the visitor space licenses
 	 * https://meemoo.atlassian.net/browse/ARC-1957
 	 * @param item
 	 */
 	const getShowPlanVisitButtons = (item: FolderIeObject) => {
 		return (
-			!item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) &&
-			!item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) &&
-			item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT)
+			isEmpty(item.accessThrough) &&
+			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
 		);
 	};
 
