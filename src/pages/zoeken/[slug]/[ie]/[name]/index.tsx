@@ -1375,13 +1375,17 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				</div>
 				{renderRelatedObjectsBlade()}
 			</article>
-			{canManageFolders && !!mediaInfo && (
+			{canManageFolders && (
 				<AddToFolderBlade
 					isOpen={activeBlade === MediaActions.Bookmark}
-					objectToAdd={{
-						schemaIdentifier: mediaInfo.schemaIdentifier,
-						title: mediaInfo.name,
-					}}
+					objectToAdd={
+						mediaInfo
+							? {
+									schemaIdentifier: mediaInfo.schemaIdentifier,
+									title: mediaInfo.name,
+							  }
+							: undefined
+					}
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
 					id="object-detail-page__add-to-folder-blade"

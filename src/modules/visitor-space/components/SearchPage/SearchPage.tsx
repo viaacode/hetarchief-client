@@ -1055,13 +1055,17 @@ const SearchPage: FC = () => {
 					</div>
 				)}
 
-				{!searchResultsLoading && !!selectedCard && (
+				{!searchResultsLoading && (
 					<AddToFolderBlade
 						isOpen={isAddToFolderBladeOpen}
-						objectToAdd={{
-							schemaIdentifier: selectedCard.schemaIdentifier,
-							title: selectedCard.name,
-						}}
+						objectToAdd={
+							selectedCard
+								? {
+										schemaIdentifier: selectedCard.schemaIdentifier,
+										title: selectedCard.name,
+								  }
+								: undefined
+						}
 						onClose={() => {
 							setShowAddToFolderBlade(false);
 							setSelectedCard(null);

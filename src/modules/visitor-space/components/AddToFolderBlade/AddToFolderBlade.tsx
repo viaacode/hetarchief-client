@@ -28,7 +28,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 	const getFolders = useGetFolders();
 	const folderResponse = useSelector(selectFolders);
-	const folders = useMemo(() => folderResponse?.items || [], [folderResponse?.items]);
+	const folders = useMemo(() => folderResponse?.items || null, [folderResponse?.items]);
 	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(
 		null
 	);
@@ -41,11 +41,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 	useEffect(() => {
 		// Only reset the selected folder ids the first time
-		if (isNil(selectedFolderIds)) {
+		if (isNil(selectedFolderIds) && folders && objectToAdd) {
 			const tempOriginalSelectedFolderIds = folders
 				.filter((folder) =>
 					(folder.objects || []).find(
-						(obj) => obj.schemaIdentifier === objectToAdd.schemaIdentifier
+						(obj) =>
+							!!objectToAdd && obj.schemaIdentifier === objectToAdd?.schemaIdentifier
 					)
 				)
 				.map((folder) => folder.id);
@@ -60,6 +61,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 	const onFailedRequest = async () => {
 		await getFolders.refetch();
+		setIsSubmitting(false);
 
 		toastService.notify({
 			title: tHtml(
@@ -72,12 +74,18 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	};
 
 	const folderIdsToTitles = (folderIds: string[]) => {
+		if (!folders) {
+			return '';
+		}
 		return compact(
 			folderIds.map((folderId) => folders.find((folder) => folder.id === folderId)?.name)
 		).join(', ');
 	};
 
 	const handleSubmit = async () => {
+		if (!objectToAdd) {
+			return;
+		}
 		setIsSubmitting(true);
 		try {
 			const objectAddedToFolderIds = (selectedFolderIds || []).filter(
@@ -219,6 +227,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 			onSubmit?.(selectedFolderIds || []);
 			resetForm();
+			onClose?.();
 		} catch (err) {
 			toastService.notify({
 				maxLines: 3,
@@ -283,9 +292,12 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	};
 
 	const renderFolderCheckboxes = () => {
+		if (!folders) {
+			return null;
+		}
 		return folders.map((folder) => {
 			const others = (folder?.objects || []).filter(
-				(object) => object.schemaIdentifier !== objectToAdd.schemaIdentifier
+				(object) => object.schemaIdentifier !== objectToAdd?.schemaIdentifier
 			);
 
 			const isFolderSelected = (selectedFolderIds || []).includes(folder.id);
@@ -345,7 +357,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			<div className="u-px-32">
 				{tHtml(
 					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
-					{ title: objectToAdd.title }
+					{ title: objectToAdd?.title || '' }
 				)}
 			</div>
 
