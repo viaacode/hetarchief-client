@@ -17,6 +17,7 @@ const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 	reasonDescription,
 	small = false,
 	onOpenRequestAccess,
+	addSliderPadding = false,
 }) => {
 	const { tText } = useTranslation();
 
@@ -26,6 +27,7 @@ const ObjectPlaceholder: FC<ObjectPlaceholderProps> = ({
 		<div
 			className={clsx(className, styles['c-object-placeholder'], {
 				[styles['c-object-placeholder--small']]: small,
+				[styles['c-object-placeholder--with-slider']]: addSliderPadding,
 			})}
 		>
 			<div className={styles['c-object-placeholder__page']}>
