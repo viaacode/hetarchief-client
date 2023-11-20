@@ -251,18 +251,33 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	/**
-	 * Show buttons to plan a visit if the object is accessible inside a visitor space and the user doesn't currently have access to the object
+	 * Show label that the object is only available inside a visitor space
+	 * if the object doesn't have publically available metadata and the object doesn't have a public license
+	 * https://meemoo.atlassian.net/browse/ARC-1957
 	 * @param item
 	 */
-	const getShowLocallyAvailable = (item: FolderIeObject) => {
+	const getShowLocallyAvailableLabel = (item: FolderIeObject) => {
 		return (
-			isEmpty(
-				item.accessThrough.filter(
-					(accessThroughItem) => accessThroughItem !== IeObjectAccessThrough.PUBLIC_INFO
-				)
-			) &&
+			!item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) &&
+			!item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) &&
+			!item.licenses?.includes(IeObjectLicense.PUBLIEK_METADATA_LTD) &&
+			!item.licenses?.includes(IeObjectLicense.PUBLIEK_METADATA_ALL) &&
 			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
 				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
+		);
+	};
+
+	/**
+	 * Show buttons to plan a visit if the essence of the object is accessible inside a visitor-space,
+	 * and the user doesn't currently have access to the visitor space
+	 * https://meemoo.atlassian.net/browse/ARC-1957
+	 * @param item
+	 */
+	const getShowPlanVisitButtons = (item: FolderIeObject) => {
+		return (
+			!item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) &&
+			!item.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) &&
+			item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT)
 		);
 	};
 
@@ -543,7 +558,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 														IeObjectAccessThrough.SECTOR
 													),
 													showLocallyAvailable:
-														getShowLocallyAvailable(media),
+														getShowLocallyAvailableLabel(media),
+													showPlanVisitButtons:
+														getShowPlanVisitButtons(media),
 													previousPage: ROUTES.myFolders,
 													link: link,
 												};
