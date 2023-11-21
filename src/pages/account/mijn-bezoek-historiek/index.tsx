@@ -16,12 +16,13 @@ import {
 } from '@account/const';
 import { AccountLayout } from '@account/layouts';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { Loading, PaginationBar, sortingIcons } from '@shared/components';
+import { ErrorNoAccess, Loading, PaginationBar, sortingIcons } from '@shared/components';
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
 import { ROUTE_PARTS, ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
+import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
 import { AccessStatus, Visit } from '@shared/types';
@@ -39,6 +40,10 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	const [filters, setFilters] = useQueryParams(ACCOUNT_HISTORY_QUERY_PARAM_CONFIG);
 	const [currentDetailVisit, setCurrentDetailVisit] = useState<Visit | null>(null);
 	const [isVisitDetailBladeOpen, setIsDetailBladeOpen] = useState(false);
+
+	const hasAccountHistoryPerm = useHasAnyPermission(
+		Permission.READ_PERSONAL_APPROVED_VISIT_REQUESTS
+	);
 
 	const visits = useGetVisits({
 		searchInput: undefined,
@@ -128,6 +133,16 @@ const AccountMyHistory: NextPage<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	const renderPageContent = () => {
+		if (!hasAccountHistoryPerm) {
+			return (
+				<ErrorNoAccess
+					visitorSpaceSlug={null}
+					description={tHtml(
+						'modules/shared/components/error-no-access/error-no-access___je-hebt-geen-toegang-tot-deze-pagina'
+					)}
+				/>
+			);
+		}
 		return (
 			<AccountLayout
 				className="p-account-my-history"
