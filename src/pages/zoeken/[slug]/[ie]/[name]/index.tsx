@@ -84,6 +84,7 @@ import {
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
+import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
@@ -460,6 +461,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		setActiveBlade(null);
 	};
 
+	const onDuplicateRequest = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst'
+			),
+			description: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving'
+			),
+		});
+	};
+
 	const openRequestAccessBlade = () => {
 		if (user) {
 			// Open the request access blade
@@ -500,7 +513,23 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 	};
 
-	const onRequestMaterialClick = () => {
+	const onRequestMaterialClick = async () => {
+		const materialRequests = await MaterialRequestsService.getAll({
+			size: 500,
+			isPending: true,
+			isPersonal: true,
+		});
+
+		if (
+			materialRequests?.items &&
+			materialRequests.items.find(
+				(request) => request.objectSchemaIdentifier === mediaInfo?.schemaIdentifier
+			)
+		) {
+			onDuplicateRequest();
+			return;
+		}
+
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
 			return;
