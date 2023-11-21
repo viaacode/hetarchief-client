@@ -1,15 +1,11 @@
-import { Button, OrderDirection, RadioButton, TextArea } from '@meemoo/react-components';
+import { Button, RadioButton, TextArea } from '@meemoo/react-components';
 import clsx from 'clsx';
 import Image from 'next/image';
 import React, { FC, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { GroupName } from '@account/const';
-import { selectUser } from '@auth/store/user/user.select';
-import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { MaterialRequestsService } from '@material-requests/services';
 import {
-	MaterialRequestKeys,
 	MaterialRequestObjectType,
 	MaterialRequestRequesterCapacity,
 	MaterialRequestType,
@@ -67,15 +63,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 		type || MaterialRequestType.VIEW
 	);
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
-	const user = useSelector(selectUser);
-
-	const { refetch: refetchMaterialRequests } = useGetPendingMaterialRequests(
-		{
-			orderProp: MaterialRequestKeys.maintainer,
-			orderDirection: OrderDirection.asc,
-		},
-		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
-	);
 
 	const onCloseModal = () => {
 		onClose();
@@ -114,7 +101,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				),
 			});
 			onSuccesCreated();
-			refetchMaterialRequests();
 			onCloseModal();
 		} catch (err) {
 			onFailedRequest();
