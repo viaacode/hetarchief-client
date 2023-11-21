@@ -21,7 +21,6 @@ import { useQueryParams } from 'use-query-params';
 import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
-import { useGetFilterOptions } from '@ie-objects/hooks/get-filter-options';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/get-ie-objects';
 import { IeObjectAccessThrough } from '@ie-objects/types';
@@ -62,9 +61,8 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
-import { selectLastScrollPosition } from '@shared/store/ui/ui.select';
-import { setLastScrollPosition, setShowZendesk } from '@shared/store/ui/ui.slice';
+import { selectFolders } from '@shared/store/ie-objects';
+import { selectLastScrollPosition, setLastScrollPosition, setShowZendesk } from '@shared/store/ui';
 import {
 	Breakpoints,
 	IeObjectsSearchFilterField,
@@ -148,7 +146,7 @@ const SearchPage: FC = () => {
 	const isKeyUser = useIsKeyUser();
 	const lastScrollPosition = useSelector(selectLastScrollPosition);
 
-	// We need two different states for the filter menu for different viewport sizes
+	// We need 2 different states for the filter menu for different viewport sizes
 	const [filterMenuOpen, setFilterMenuOpen] = useState(true);
 	const [mobileFilterMenuOpen, setMobileFilterMenuOpen] = useState(false);
 
@@ -182,7 +180,7 @@ const SearchPage: FC = () => {
 	const queryParamMaintainer = query?.[VisitorSpaceFilterId.Maintainer];
 	const activeVisitorSpaceSlug: string | undefined = useMemo(() => {
 		if (!visitorSpaces.length) {
-			// Until visitor spaces are loaded, we cannot know which option to select
+			// Until visitor spaces is loaded, we cannot know which option to select
 			return undefined;
 		}
 
@@ -256,14 +254,9 @@ const SearchPage: FC = () => {
 			...mapFiltersToElastic(query),
 		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 
-		// Enabled when the search query is finished, so it loads the tab counts after the initial results
+		// Enabled when search query is finished, so it loads the tab counts after the initial results
 		{ enabled: !searchResultsRefetching }
 	);
-	// Fetch filter options once, then store them in the redux store, so all filter option menus can use the info
-	// eslint-disable-next-line no-empty-pattern
-	const {
-		// no need to use the data here, since it is stored in the redux store
-	} = useGetFilterOptions();
 
 	const showManyResultsTile = page === PAGE_NUMBER_OF_MANY_RESULTS_TILE;
 

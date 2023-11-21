@@ -11,7 +11,7 @@ import { Folder } from '@account/types';
 import { Blade, Icon, IconNamesLight } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
+import { selectFolders } from '@shared/store/ie-objects';
 
 import styles from './AddToFolderBlade.module.scss';
 import { AddToFolderBladeProps } from './AddToFolderBlade.types';

@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { selectCommonUser, selectUser } from '@auth/store/user/user.select';
+import { selectCommonUser, selectUser } from '@auth/store/user';
 import { AppState } from '@shared/store';
 
 const withUser = (WrappedComponent: FunctionComponent) => {
