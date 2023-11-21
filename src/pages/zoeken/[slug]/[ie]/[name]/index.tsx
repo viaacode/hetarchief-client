@@ -9,7 +9,6 @@ import {
 	FlowPlayer,
 	FlowPlayerProps,
 	MenuContent,
-	OrderDirection,
 	TabProps,
 	TagList,
 } from '@meemoo/react-components';
@@ -85,8 +84,8 @@ import {
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
-import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
-import { MaterialRequestKeys, MaterialRequestObjectType } from '@material-requests/types';
+import { MaterialRequestsService } from '@material-requests/services';
+import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	Blade,
@@ -308,15 +307,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		canViewAllSpaces,
 	});
 
-	// materialRequests
-	const { data: materialRequests } = useGetPendingMaterialRequests(
-		{
-			orderProp: MaterialRequestKeys.maintainer,
-			orderDirection: 'asc' as OrderDirection,
-		},
-		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
-	);
-
 	/**
 	 * Computed
 	 */
@@ -524,7 +514,13 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 	};
 
-	const onRequestMaterialClick = () => {
+	const onRequestMaterialClick = async () => {
+		const materialRequests = await MaterialRequestsService.getAll({
+			size: 500,
+			isPending: true,
+			isPersonal: true,
+		});
+
 		if (
 			materialRequests?.items &&
 			materialRequests.items.find(
