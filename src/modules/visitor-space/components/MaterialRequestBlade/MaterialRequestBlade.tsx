@@ -72,7 +72,7 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const { refetch: refetchMaterialRequests } = useGetPendingMaterialRequests(
 		{
 			orderProp: MaterialRequestKeys.maintainer,
-			orderDirection: 'asc' as OrderDirection,
+			orderDirection: OrderDirection.asc,
 		},
 		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
 	);
