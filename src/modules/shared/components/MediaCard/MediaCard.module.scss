@@ -22,6 +22,10 @@ $c-media-card-no-video-intended-spacing: 0.9rem;
 		}
 	}
 
+	&__no-content-icon {
+		color: $grey !important;
+	}
+
 	&--pointer {
 		cursor: pointer;
 	}
