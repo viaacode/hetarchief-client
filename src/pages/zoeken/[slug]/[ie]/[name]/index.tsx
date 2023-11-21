@@ -9,6 +9,7 @@ import {
 	FlowPlayer,
 	FlowPlayerProps,
 	MenuContent,
+	OrderDirection,
 	TabProps,
 	TagList,
 } from '@meemoo/react-components';
@@ -84,7 +85,8 @@ import {
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
-import { MaterialRequestObjectType } from '@material-requests/types';
+import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
+import { MaterialRequestKeys, MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
 	Blade,
@@ -306,6 +308,15 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		canViewAllSpaces,
 	});
 
+	// materialRequests
+	const { data: materialRequests } = useGetPendingMaterialRequests(
+		{
+			orderProp: MaterialRequestKeys.maintainer,
+			orderDirection: 'asc' as OrderDirection,
+		},
+		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+	);
+
 	/**
 	 * Computed
 	 */
@@ -461,6 +472,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		setActiveBlade(null);
 	};
 
+	const onDuplicateRequest = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst'
+			),
+			description: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving'
+			),
+		});
+	};
+
 	const openRequestAccessBlade = () => {
 		if (user) {
 			// Open the request access blade
@@ -502,6 +525,16 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	};
 
 	const onRequestMaterialClick = () => {
+		if (
+			materialRequests?.items &&
+			materialRequests.items.find(
+				(request) => request.objectSchemaIdentifier === mediaInfo?.schemaIdentifier
+			)
+		) {
+			onDuplicateRequest();
+			return;
+		}
+
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
 			return;

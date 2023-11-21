@@ -69,14 +69,13 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const [reasonInputValue, setReasonInputValue] = useState(reason || '');
 	const user = useSelector(selectUser);
 
-	const { data: materialRequests, refetch: refetchMaterialRequests } =
-		useGetPendingMaterialRequests(
-			{
-				orderProp: MaterialRequestKeys.maintainer,
-				orderDirection: 'asc' as OrderDirection,
-			},
-			{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
-		);
+	const { refetch: refetchMaterialRequests } = useGetPendingMaterialRequests(
+		{
+			orderProp: MaterialRequestKeys.maintainer,
+			orderDirection: 'asc' as OrderDirection,
+		},
+		{ enabled: !!user && user.groupName !== GroupName.KIOSK_VISITOR }
+	);
 
 	const onCloseModal = () => {
 		onClose();
@@ -94,14 +93,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	};
 
 	const onAddToList = async () => {
-		if (
-			materialRequests?.items &&
-			materialRequests.items.find((request) => request.objectSchemaIdentifier === objectId)
-		) {
-			onDuplicateRequest();
-			return;
-		}
-
 		try {
 			const response = await MaterialRequestsService.create({
 				objectId,
@@ -170,18 +161,6 @@ const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 			),
 			description: tText(
 				'modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan'
-			),
-		});
-	};
-
-	const onDuplicateRequest = () => {
-		toastService.notify({
-			maxLines: 3,
-			title: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst'
-			),
-			description: tText(
-				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving'
 			),
 		});
 	};
