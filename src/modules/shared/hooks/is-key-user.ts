@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { selectUser } from '@auth/store/user/user.select';
+import { selectUser } from '@auth/store/user';
 
 export const useIsKeyUser = (): boolean => {
 	const user = useSelector(selectUser);

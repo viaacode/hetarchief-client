@@ -7,7 +7,7 @@ import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import { tText } from '@shared/helpers/translate';
-import { setBreadcrumbs } from '@shared/store/ui/ui.slice';
+import { setBreadcrumbs } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { SearchPage } from '@visitor-space/components';
 

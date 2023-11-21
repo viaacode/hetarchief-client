@@ -9,8 +9,7 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import { IeObjectsSearchFilterField } from '@shared/types';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import {
 	LANGUAGE_FILTER_FORM_QUERY_PARAM_CONFIG,
 	LANGUAGE_FILTER_FORM_SCHEMA,
@@ -19,7 +18,11 @@ import {
 } from '@visitor-space/components';
 import { LANGUAGES } from '@visitor-space/components/LanguageFilterForm/languages';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import {
+	ElasticsearchFieldNames,
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+} from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const defaultValues = {
@@ -51,9 +54,10 @@ const LanguageFilterForm: FC<LanguageFilterFormProps> = ({ children, className }
 		defaultValues,
 	});
 
-	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)?.[
-		IeObjectsSearchFilterField.LANGUAGE
-	];
+	const filterOptions: string[] =
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Language]?.buckets?.map(
+			(bucket) => bucket.key
+		) || [];
 
 	const filteredOptions = filterOptions.filter(
 		(filterOption) =>

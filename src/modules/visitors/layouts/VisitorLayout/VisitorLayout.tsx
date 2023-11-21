@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { GroupName } from '@account/const';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
-import { setShowZendesk } from '@shared/store/ui/ui.slice';
+import { setShowZendesk } from '@shared/store/ui';
 
 /**
  * Layout to wrap all pages for visitors (eg: not cp admin, not meemoo admin, but visitor pages)

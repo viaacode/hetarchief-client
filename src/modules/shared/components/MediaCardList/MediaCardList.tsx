@@ -2,16 +2,15 @@ import clsx from 'clsx';
 import { FC, memo, ReactNode } from 'react';
 import Masonry from 'react-masonry-css';
 
+import { IdentifiableMediaCard, MediaCardListProps, MediaCardProps } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { Breakpoints } from '@shared/types';
 
 import { MediaCard } from '../MediaCard';
-import { IdentifiableMediaCard, MediaCardProps } from '../MediaCard/MediaCard.types';
 
 import { MEDIA_CARD_LIST_GRID_BP_COLS } from './MediaCardList.const';
 import styles from './MediaCardList.module.scss';
-import { MediaCardListProps } from './MediaCardList.types';
 
 const MediaCardList: FC<MediaCardListProps> = ({
 	items,
@@ -156,6 +155,7 @@ const MediaCardList: FC<MediaCardListProps> = ({
 				keywords={keywords}
 				view={view}
 				showLocallyAvailable={item.showLocallyAvailable}
+				showPlanVisitButtons={item.showPlanVisitButtons}
 				link={item.link}
 				maintainerSlug={item.maintainerSlug}
 			/>,

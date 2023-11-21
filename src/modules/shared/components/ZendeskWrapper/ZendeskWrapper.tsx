@@ -5,7 +5,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Zendesk, { IZendeskProps } from 'react-zendesk';
 
-import { selectShowZendesk } from '@shared/store/ui/ui.select';
+import { selectShowZendesk } from '@shared/store/ui';
 import { isBrowser } from '@shared/utils';
 
 const { publicRuntimeConfig } = getConfig();
