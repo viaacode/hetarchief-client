@@ -47,6 +47,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	showKeyUserLabel,
 	meemooIdentifier,
 	showLocallyAvailable = false,
+	showPlanVisitButtons = false,
 	link,
 	maintainerSlug,
 	hasTempAccess,
@@ -288,7 +289,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		</div>
 	);
 
-	const renderLocallyAvailableButtons = () => (
+	const renderPlanVisitButtons = () => (
 		<div className={styles['c-media-card__locally-available-container']}>
 			<Button
 				iconStart={<Icon name={IconNamesLight.Info} />}
@@ -360,7 +361,7 @@ const MediaCard: FC<MediaCardProps> = ({
 				)}
 				{hasTempAccess && renderTempAccessPill()}
 				{showKeyUserLabel && renderKeyUserPill()}
-				{showLocallyAvailable && renderLocallyAvailableButtons()}
+				{showPlanVisitButtons && renderPlanVisitButtons()}
 			</Card>
 		);
 	};

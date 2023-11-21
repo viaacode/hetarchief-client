@@ -249,16 +249,30 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	};
 
 	/**
-	 * Show buttons to plan a visit if the object is accessible inside a visitor space and the user doesn't currently have access to the object
+	 * Show label if
+	 * - user doesn't have access to detail page of the object
+	 * - and object has one of the visitor space licenses
+	 * https://meemoo.atlassian.net/browse/ARC-1957
 	 * @param item
 	 */
-	const getShowLocallyAvailable = (item: FolderIeObject) => {
+	const getShowLocallyAvailableLabel = (item: FolderIeObject) => {
 		return (
-			isEmpty(
-				item.accessThrough.filter(
-					(accessThroughItem) => accessThroughItem !== IeObjectAccessThrough.PUBLIC_INFO
-				)
-			) &&
+			isEmpty(item.accessThrough) &&
+			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
+		);
+	};
+
+	/**
+	 * Show buttons if
+	 * - user doesn't have access to detail page of the object
+	 * - and object has one of the visitor space licenses
+	 * https://meemoo.atlassian.net/browse/ARC-1957
+	 * @param item
+	 */
+	const getShowPlanVisitButtons = (item: FolderIeObject) => {
+		return (
+			isEmpty(item.accessThrough) &&
 			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
 				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
 		);
@@ -541,7 +555,9 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 														IeObjectAccessThrough.SECTOR
 													),
 													showLocallyAvailable:
-														getShowLocallyAvailable(media),
+														getShowLocallyAvailableLabel(media),
+													showPlanVisitButtons:
+														getShowPlanVisitButtons(media),
 													previousPage: ROUTES.myFolders,
 													link: link,
 												};
