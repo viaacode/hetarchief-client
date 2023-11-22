@@ -7,6 +7,10 @@ $component: "c-avatar";
 	&__image {
 		background: $teal;
 		color: $white;
+		min-width: 3rem !important;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
 		@include respond-at(md) {
 			margin-right: math.div($font-size-lg, 2);
