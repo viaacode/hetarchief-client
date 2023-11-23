@@ -4,16 +4,17 @@ import { useSelector } from 'react-redux';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import { IeObjectsSearchFilterField } from '@shared/types';
+import { ElasticsearchFieldNames } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const ObjectTypeSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
-	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)?.[
-		IeObjectsSearchFilterField.OBJECT_TYPE
-	];
+	const filterOptions: string[] =
+		useSelector(selectIeObjectsFilterOptions)?.[
+			ElasticsearchFieldNames.ObjectType
+		]?.buckets?.map((filterOption) => filterOption.key) || [];
 
-	const options = sortFilterOptions(
+	const selectOptions = sortFilterOptions(
 		filterOptions.map((option) => ({
 			label: option,
 			value: option,
@@ -22,10 +23,10 @@ const ObjectTypeSelect: FC<ReactSelectProps> = (props) => {
 	);
 
 	// Bind to defaultProps to access externally
-	ObjectTypeSelect.defaultProps = { options };
+	ObjectTypeSelect.defaultProps = { options: selectOptions };
 
 	const getPlaceholder = (): string | undefined => {
-		return options.length === 0
+		return selectOptions.length === 0
 			? tText(
 					'modules/visitor-space/components/object-type-select/object-type-select___geen-object-types-gevonden'
 			  )

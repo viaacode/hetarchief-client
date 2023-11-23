@@ -28,6 +28,7 @@ const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
 	onFormSubmit,
 	className,
 }) => {
+	const [isInitialRender, setIsInitialRender] = useState(true);
 	const [query] = useQueryParams(CONSULTABLE_MEDIA_FILTER_FORM_QUERY_PARAM_CONFIG);
 	const [isChecked, setIsChecked] = useState<boolean>(
 		() => query[VisitorSpaceFilterId.ConsultableMedia] || false
@@ -44,6 +45,11 @@ const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = ({
 	);
 
 	useEffect(() => {
+		if (isInitialRender) {
+			// Avoid this filter submitting results when loading the form for the first time
+			setIsInitialRender(false);
+			return;
+		}
 		setValue(IeObjectsSearchFilterField.CONSULTABLE_MEDIA, isChecked);
 
 		handleSubmit(

@@ -11,7 +11,7 @@ import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
 import { renderOgTags } from '@shared/helpers/render-og-tags';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { setShowZendesk } from '@shared/store/ui/ui.slice';
+import { setShowZendesk } from '@shared/store/ui';
 import { AccessStatus } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';

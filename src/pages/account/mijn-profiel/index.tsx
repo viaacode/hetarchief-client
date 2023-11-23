@@ -28,7 +28,7 @@ import {
 import { useGetNewsletterPreferences } from '@account/hooks/get-newsletter-preferences';
 import { AccountLayout } from '@account/layouts';
 import { CommunicationFormState } from '@account/types';
-import { selectUser } from '@auth/store/user/user.select';
+import { selectUser } from '@auth/store/user';
 import { Idp } from '@auth/types';
 import { withAuth } from '@auth/wrappers/with-auth';
 import { Icon, IconNamesLight } from '@shared/components';
@@ -244,6 +244,7 @@ const AccountMyProfile: NextPage<DefaultSeoInfo> = ({ url }) => {
 							'pages/account/mijn-profiel/index___ik-ontvang-graag-de-nieuwsbrief'
 						)}
 						disabled={isFormSubmitting}
+						showSpinner={isFormSubmitting}
 						onClick={() => onUpdateAcceptNewsletter(acceptNewsletter)}
 						onKeyDown={(e) => {
 							onKey(e, [...keysEnter, ...keysSpacebar], () => {

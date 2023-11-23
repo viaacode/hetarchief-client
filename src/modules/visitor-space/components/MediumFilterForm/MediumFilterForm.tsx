@@ -9,10 +9,9 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import { IeObjectsSearchFilterField } from '@shared/types';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
-import { VisitorSpaceFilterId } from '@visitor-space/types';
+import { ElasticsearchFieldNames, VisitorSpaceFilterId } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
@@ -44,9 +43,10 @@ const MediumFilterForm: FC<MediumFilterFormProps> = ({ children, className }) =>
 		defaultValues,
 	});
 
-	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)?.[
-		IeObjectsSearchFilterField.MEDIUM
-	];
+	const filterOptions: string[] =
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Medium]?.buckets?.map(
+			(option) => option.key
+		) || [];
 	const filteredOptions = filterOptions.filter((filterOption) =>
 		filterOption.toLowerCase().includes(search.toLowerCase())
 	);

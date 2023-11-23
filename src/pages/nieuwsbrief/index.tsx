@@ -8,7 +8,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-import { selectHasCheckedLogin, selectIsLoggedIn } from '@auth/store/user/user.select';
+import { selectHasCheckedLogin, selectIsLoggedIn } from '@auth/store/user';
 import { Loading } from '@shared/components';
 import { ROUTE_PARTS } from '@shared/const';
 import { labelKeys, NEWSLETTER_FORM_SCHEMA } from '@shared/const/newsletter';

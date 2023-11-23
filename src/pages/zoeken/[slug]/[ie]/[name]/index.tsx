@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
 
 import { GroupName, Permission } from '@account/const';
-import { selectUser } from '@auth/store/user/user.select';
+import { selectUser } from '@auth/store/user';
 import { RequestAccessBlade, RequestAccessFormState } from '@home/components';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import {
@@ -84,6 +84,7 @@ import {
 	ObjectDetailTabs,
 } from '@ie-objects/types';
 import { isInAFolder, mapKeywordsToTags, renderKeywordsAsTags } from '@ie-objects/utils';
+import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestObjectType } from '@material-requests/types';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import {
@@ -116,9 +117,8 @@ import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { EventsService, LogEventType } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { selectFolders } from '@shared/store/ie-objects/ie-objects.select';
-import { selectBreadcrumbs } from '@shared/store/ui/ui.select';
-import { setShowAuthModal, setShowZendesk } from '@shared/store/ui/ui.slice';
+import { selectFolders } from '@shared/store/ie-objects';
+import { selectBreadcrumbs, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import { Breakpoints, IeObjectTypes, VisitorSpaceMediaType } from '@shared/types';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import {
@@ -461,6 +461,18 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		setActiveBlade(null);
 	};
 
+	const onDuplicateRequest = () => {
+		toastService.notify({
+			maxLines: 3,
+			title: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst'
+			),
+			description: tText(
+				'modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving'
+			),
+		});
+	};
+
 	const openRequestAccessBlade = () => {
 		if (user) {
 			// Open the request access blade
@@ -501,7 +513,23 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 		}
 	};
 
-	const onRequestMaterialClick = () => {
+	const onRequestMaterialClick = async () => {
+		const materialRequests = await MaterialRequestsService.getAll({
+			size: 500,
+			isPending: true,
+			isPersonal: true,
+		});
+
+		if (
+			materialRequests?.items &&
+			materialRequests.items.find(
+				(request) => request.objectSchemaIdentifier === mediaInfo?.schemaIdentifier
+			)
+		) {
+			onDuplicateRequest();
+			return;
+		}
+
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
 			return;
@@ -1376,13 +1404,17 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 				</div>
 				{renderRelatedObjectsBlade()}
 			</article>
-			{canManageFolders && !!mediaInfo && (
+			{canManageFolders && (
 				<AddToFolderBlade
 					isOpen={activeBlade === MediaActions.Bookmark}
-					objectToAdd={{
-						schemaIdentifier: mediaInfo.schemaIdentifier,
-						title: mediaInfo.name,
-					}}
+					objectToAdd={
+						mediaInfo
+							? {
+									schemaIdentifier: mediaInfo.schemaIdentifier,
+									title: mediaInfo.name,
+							  }
+							: undefined
+					}
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}
 					id="object-detail-page__add-to-folder-blade"

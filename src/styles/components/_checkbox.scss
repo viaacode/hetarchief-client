@@ -5,6 +5,16 @@ $checkbox-size: $spacer-sm;
 
 @include generate-checkbox-radio-styling("checkbox");
 
+.c-checkbox {
+	.c-spinner {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: $checkbox-size + 0.5rem;
+		display: inline-block;
+	}
+}
+
 // Variants
 .c-checkbox--light {
 	&.c-checkbox {

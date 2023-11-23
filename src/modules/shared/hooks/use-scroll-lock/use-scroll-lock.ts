@@ -1,8 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectIsScrollLocked } from '@shared/store/ui/ui.select';
-import { setLockScroll } from '@shared/store/ui/ui.slice';
+import { selectIsScrollLocked, setLockScroll } from '@shared/store/ui';
 import { findParentByClass } from '@shared/utils';
 
 import { useScrollbarWidth } from '../use-scrollbar-width';

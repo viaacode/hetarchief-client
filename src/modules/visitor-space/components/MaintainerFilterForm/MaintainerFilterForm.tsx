@@ -9,12 +9,15 @@ import { useQueryParams } from 'use-query-params';
 
 import { SearchBar } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import { IeObjectsSearchFilterField } from '@shared/types';
+import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects';
 import { MaintainerFilterFormProps, MaintainerFilterFormState } from '@visitor-space/components';
 import { visitorSpaceLabelKeys } from '@visitor-space/const';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
-import { FILTER_LABEL_VALUE_DELIMITER, VisitorSpaceFilterId } from '@visitor-space/types';
+import {
+	ElasticsearchFieldNames,
+	FILTER_LABEL_VALUE_DELIMITER,
+	VisitorSpaceFilterId,
+} from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 import {
@@ -56,9 +59,13 @@ const MaintainerFilterForm: FC<MaintainerFilterFormProps> = ({ children, classNa
 		(v) => v.name
 	);
 
-	const filterOptions: { id: string; name: string }[] = useSelector(selectIeObjectsFilterOptions)[
-		IeObjectsSearchFilterField.MAINTAINER_ID
-	];
+	const filterOptions: { id: string; name: string }[] =
+		useSelector(selectIeObjectsFilterOptions)?.[
+			ElasticsearchFieldNames.Maintainer
+		]?.buckets?.map((bucket) => ({
+			id: bucket.key,
+			name: maintainerNames?.[bucket.key] || bucket.key,
+		})) || [];
 
 	const filteredBuckets = filterOptions.filter((filterOption) =>
 		filterOption.name.toLowerCase().includes(search.toLowerCase())

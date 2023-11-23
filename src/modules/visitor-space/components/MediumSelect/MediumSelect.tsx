@@ -4,14 +4,15 @@ import { useSelector } from 'react-redux';
 
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { selectIeObjectsFilterOptions } from '@shared/store/ie-objects/ie-objects.select';
-import { IeObjectsSearchFilterField } from '@shared/types';
+import { ElasticsearchFieldNames } from '@visitor-space/types';
 import { sortFilterOptions } from '@visitor-space/utils/sort-filter-options';
 
 const MediumSelect: FC<ReactSelectProps> = (props) => {
 	const { tText } = useTranslation();
-	const filterOptions: string[] = useSelector(selectIeObjectsFilterOptions)?.[
-		IeObjectsSearchFilterField.MEDIUM
-	];
+	const filterOptions: string[] =
+		useSelector(selectIeObjectsFilterOptions)?.[ElasticsearchFieldNames.Medium]?.buckets?.map(
+			(option) => option.key
+		) || [];
 
 	const selectOptions = sortFilterOptions(
 		filterOptions.map((filterOption) => ({

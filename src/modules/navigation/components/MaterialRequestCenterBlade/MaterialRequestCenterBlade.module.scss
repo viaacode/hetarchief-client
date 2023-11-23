@@ -71,6 +71,7 @@ $component: "c-material-request-center-blade";
 			color: $black;
 			font-weight: bold;
 			margin-bottom: $spacer-xxs;
+			word-break: break-word;
 
 			&-icon {
 				color: $blue;
