@@ -1,13 +1,23 @@
 import type { IPagination } from '@studiohyperdrive/pagination';
 
-import { IeObject, IeObjectSearchAggregation } from '@ie-objects/types';
-import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import { ElasticsearchFieldNames } from '@visitor-space/types';
+import { IeObject, IeObjectSearchAggregations } from '@ie-objects/types';
+
+export interface ElasticsearchResponse<T> extends ElasticsearchAggregations {
+	items: {
+		_index: string;
+		_type: string;
+		_id: string;
+		_score: number;
+		_source: T;
+	}[];
+	page: number;
+	pages: number;
+	size: number;
+	total: number;
+}
 
 export interface ElasticsearchAggregations {
-	aggregations: {
-		[ElasticsearchFieldNames.Format]: IeObjectSearchAggregation<string>;
-	};
+	aggregations: IeObjectSearchAggregations;
 }
 
 export interface IeObjectsSearchTerms {
@@ -17,14 +27,3 @@ export interface IeObjectsSearchTerms {
 export type GetIeObjectsResponse = IPagination<IeObject & { related_count?: number }> &
 	ElasticsearchAggregations &
 	IeObjectsSearchTerms;
-
-export type FilterOptions = {
-	[IeObjectsSearchFilterField.OBJECT_TYPE]: string[];
-	[IeObjectsSearchFilterField.LANGUAGE]: string[];
-	[IeObjectsSearchFilterField.MEDIUM]: string[];
-	[IeObjectsSearchFilterField.GENRE]: string[];
-	[IeObjectsSearchFilterField.MAINTAINER_ID]: {
-		id: string;
-		name: string;
-	}[];
-};

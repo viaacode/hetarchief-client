@@ -513,6 +513,8 @@
   "modules/visitor-space/components/language-filter-form/language-filter-form___zoek": "zoek",
   "modules/visitor-space/components/maintainers-filter-form/maintainers-filter-form___geen-aanbieders-gevonden": "Geen aanbieders gevonden",
   "modules/visitor-space/components/maintainers-filter-form/maintainers-filter-form___zoek": "Zoek",
+  "modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst": "Aanvraag al in lijst",
+  "modules/visitor-space/components/material-request-blade/material-request-blade___aanvraag-al-in-lijst-beschrijving": "Dit item zit al in jouw lijst met aanvragen",
   "modules/visitor-space/components/material-request-blade/material-request-blade___annuleer": "Annuleer",
   "modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis": "Er ging iets mis",
   "modules/visitor-space/components/material-request-blade/material-request-blade___er-ging-iets-mis-tijdens-het-opslaan": "Er ging iets mis tijdens het opslaan. Probeer het opnieuw.",

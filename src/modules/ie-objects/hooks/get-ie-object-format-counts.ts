@@ -25,12 +25,10 @@ export const useGetIeObjectFormatCounts = (
 			]);
 
 			return Object.fromEntries(
-				results.aggregations[ElasticsearchFieldNames.Format].buckets.map(
-					(bucket: { key: string; doc_count: number }) => [
-						bucket.key as VisitorSpaceMediaType,
-						bucket.doc_count,
-					]
-				)
+				results.aggregations[ElasticsearchFieldNames.Format].buckets.map((bucket) => [
+					bucket.key as VisitorSpaceMediaType,
+					bucket.doc_count,
+				])
 			);
 		},
 		{

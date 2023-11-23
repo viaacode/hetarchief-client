@@ -3,10 +3,10 @@ import { isEmpty, isNil, noop } from 'lodash-es';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { GroupName } from '@account/const';
-import { selectUser } from '@auth/store/user/user.select';
+import { selectUser } from '@auth/store/user';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { EventsService, LogEventType } from '@shared/services/events-service';
-import { setResults } from '@shared/store/ie-objects/ie-objects.slice';
+import { setFilterOptions, setResults } from '@shared/store/ie-objects';
 import {
 	GetIeObjectsResponse,
 	IeObjectsSearchFilter,
@@ -38,6 +38,7 @@ export const useGetIeObjects = (
 			const results = await IeObjectsService.getSearchResults(filterQuery, page, size, sort);
 
 			dispatch(setResults(results));
+			dispatch(setFilterOptions(results.aggregations));
 
 			// Log event
 			const isVisitorSpaceSearch = !!filters.find(

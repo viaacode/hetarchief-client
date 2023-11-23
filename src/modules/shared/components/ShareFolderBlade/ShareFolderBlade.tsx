@@ -6,7 +6,7 @@ import React, { FC, ReactNode, useState } from 'react';
 import { Controller, ControllerRenderProps, useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 
-import { selectUser } from '@auth/store/user/user.select';
+import { selectUser } from '@auth/store/user';
 import { Blade, CopyButton, Icon, IconNamesLight } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import useTranslation from '@shared/hooks/use-translation/use-translation';

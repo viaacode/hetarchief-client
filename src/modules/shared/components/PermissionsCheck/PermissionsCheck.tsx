@@ -3,8 +3,7 @@ import { FC, ReactElement, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Permission } from '@account/const';
-import { selectCheckLoginLoading, selectHasCheckedLogin } from '@auth/store/user/user.select';
-import { checkLoginAction } from '@auth/store/user/user.slice';
+import { checkLoginAction, selectCheckLoginLoading, selectHasCheckedLogin } from '@auth/store/user';
 import { ErrorNoAccess } from '@shared/components';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
 import useTranslation from '@shared/hooks/use-translation/use-translation';

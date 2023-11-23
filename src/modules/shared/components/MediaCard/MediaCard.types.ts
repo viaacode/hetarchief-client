@@ -27,6 +27,7 @@ export interface MediaCardProps {
 	showKeyUserLabel?: boolean;
 	meemooIdentifier?: string;
 	showLocallyAvailable?: boolean;
+	showPlanVisitButtons?: boolean;
 	link: string | undefined;
 	maintainerSlug?: string;
 	hasTempAccess?: boolean;

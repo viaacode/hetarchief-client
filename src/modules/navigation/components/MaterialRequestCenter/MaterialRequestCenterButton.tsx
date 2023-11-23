@@ -10,12 +10,10 @@ import { useAppDispatch } from '@shared/store';
 import {
 	selectMaterialRequestCount,
 	selectShowMaterialRequestCenter,
-} from '@shared/store/ui/ui.select';
-import {
 	setOpenNavigationDropdownId,
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
-} from '@shared/store/ui/ui.slice';
+} from '@shared/store/ui';
 
 import { MaterialRequestCenterBlade } from '../MaterialRequestCenterBlade';
 
