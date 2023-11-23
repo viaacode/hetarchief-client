@@ -149,6 +149,17 @@ const AppLayout: FC<any> = ({ children }) => {
 		return spaces?.items || [];
 	}, [isKioskOrAnonymous, spaces, user]);
 
+	const [isLoaded, setIsloaded] = useState(false);
+
+	useEffect(() => {
+		// ARC-2011: small timeout so login is not shown before user is checked
+		// If this gives issues in the future, we might want to look into replacing this timeout with
+		// selectHasCheckedLogin from the redux store
+		setTimeout(() => {
+			setIsloaded(true);
+		}, 300);
+	}, []);
+
 	useEffect(() => {
 		// Set the build version on the window object
 		(window as unknown as Record<string, unknown>).HETARCHIEF_VERSION = packageJson.version;
@@ -403,7 +414,7 @@ const AppLayout: FC<any> = ({ children }) => {
 					renderHamburger={showNavigationHeaderRight}
 					onOpenDropdowns={onOpenNavDropdowns}
 				/>
-				{showNavigationHeaderRight && (
+				{isLoaded && showNavigationHeaderRight && (
 					<Navigation.Right
 						currentPath={asPath}
 						placement="right"
