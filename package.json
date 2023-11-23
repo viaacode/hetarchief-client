@@ -25,7 +25,7 @@
     "prepare": "husky install",
     "storybook": "start-storybook -p 6006",
     "build:storybook": "build-storybook",
-    "translations:extract": "ts-node --transpile-only --project ./scripts/tsconfig.json scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix",
+    "translations:extract": "tsx scripts/extract-and-replace-translations.ts && npm run lint:ts -- --fix",
     "gql:extract": "ts-node --transpile-only --require dotenv/config scripts/whitelist-gql-queries.ts dotenv_config_path=.env",
     "changed-translations-since-last-release": "git diff d0c2f3cc0013c89a675030da04b238985d6e1748 92d84be794637e58db9bb2ef6a38eec182a0fda3 --no-ext-diff --unified=0 --exit-code -a --no-prefix public/locales/nl/common.json > translation-changes.txt",
     "bump": "bump-package-versions --part=patch --strategy=highest ./package.json"
@@ -33,8 +33,8 @@
   "dependencies": {
     "@emotion/cache": "11.11.0",
     "@hookform/resolvers": "2.9.11",
-    "@meemoo/admin-core-ui": "3.1.10",
-    "@meemoo/react-components": "3.0.14",
+    "@meemoo/admin-core-ui": "3.1.12",
+    "@meemoo/react-components": "3.0.17",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "1.9.6",
     "@studiohyperdrive/pagination": "1.0.0",
@@ -170,6 +170,7 @@
     "ts-jest": "29.1.1",
     "ts-node": "10.9.1",
     "tsconfig-paths-webpack-plugin": "3.5.2",
+    "tsx": "4.4.0",
     "typescript": "5.1.6"
   },
   "overrides": {
