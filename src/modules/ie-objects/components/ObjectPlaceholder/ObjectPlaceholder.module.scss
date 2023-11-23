@@ -11,6 +11,10 @@ $component: "c-object-placeholder";
 	background-color: $silver;
 	position: relative;
 
+	&--with-slider {
+		padding-bottom: 135px;
+	}
+
 	&__page {
 		position: relative;
 		display: flex;

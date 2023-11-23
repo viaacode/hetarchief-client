@@ -11,4 +11,5 @@ export interface ObjectPlaceholderProps extends DefaultComponentProps {
 	closeModalButtonLabel?: string;
 	small?: boolean;
 	onOpenRequestAccess?: () => void;
+	addSliderPadding?: boolean;
 }

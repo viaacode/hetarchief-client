@@ -853,14 +853,25 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 					<ObjectPlaceholder
 						{...noLicensePlaceholder()}
 						onOpenRequestAccess={openRequestAccessBlade}
+						addSliderPadding={showFragmentSlider}
 					/>
 				);
 			}
-			return <ObjectPlaceholder {...noLicensePlaceholder()} />;
+			return (
+				<ObjectPlaceholder
+					{...noLicensePlaceholder()}
+					addSliderPadding={showFragmentSlider}
+				/>
+			);
 		}
 
 		if (isErrorPlayableUrl || !representation) {
-			return <ObjectPlaceholder {...ticketErrorPlaceholder()} />;
+			return (
+				<ObjectPlaceholder
+					{...ticketErrorPlaceholder()}
+					addSliderPadding={showFragmentSlider}
+				/>
+			);
 		}
 
 		const shared: Partial<FlowPlayerProps> = {
