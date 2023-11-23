@@ -153,6 +153,8 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	useEffect(() => {
 		// ARC-2011: small timeout so login is not shown before user is checked
+		// If this gives issues in the future, we might want to look into replacing this timeout with
+		// selectHasCheckedLogin from the redux store
 		setTimeout(() => {
 			setIsloaded(true);
 		}, 300);
