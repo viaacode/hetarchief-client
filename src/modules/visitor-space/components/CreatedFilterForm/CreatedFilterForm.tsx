@@ -2,12 +2,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
-import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { SEPARATOR } from '@shared/const';
+import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
 import { getOperators } from '@visitor-space/utils';
@@ -106,42 +107,28 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 		}
 	};
 
-	const onChangeDateInput = (date: Date | null) => {
-		if (form.operator === Operator.Equals) {
-			convertToRange(date || new Date());
+	const onChangeDateInput = (newDate: Date | null) => {
+		if (!newDate) {
+			setForm((oldForm) => ({ ...oldForm, created: undefined }));
 			return;
 		}
-		onChangeCreated((date || new Date()).toISOString());
+		if (form.operator === Operator.Equals) {
+			convertToRange(newDate);
+			return;
+		}
+		onChangeCreated((newDate || new Date()).toISOString());
 	};
 
 	const onChangeCreated = (created: string) => {
 		setForm((oldForm) => ({ ...oldForm, created }));
 	};
 
-	const convertYearToDate = useCallback(
-		(yearString: string) => {
-			const startOfYear = `${yearString}-01-01T00:00:00Z`;
-			const endOfYear = `${yearString}-12-31T23:59:59Z`;
-
-			if (form.operator === Operator.Equals) {
-				return `${startOfYear}${SEPARATOR}${endOfYear}`;
-			}
-
-			if (form.operator === Operator.LessThanOrEqual) {
-				return endOfYear;
-			}
-
-			return startOfYear;
-		},
-		[form.operator]
-	);
-
 	useEffect(() => {
 		if (year) {
-			const yearDate = convertYearToDate(year)?.toString();
+			const yearDate = convertYearToDate(year, form.operator)?.toString();
 			setForm((oldForm) => ({ ...oldForm, created: yearDate }));
 		}
-	}, [year, convertYearToDate, setForm]);
+	}, [year, setForm, form.operator]);
 
 	useEffect(() => {
 		if (yearRange) {
@@ -179,17 +166,19 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 		if (showRange) {
 			const split = ((form.created || '') as string).split(SEPARATOR, 2);
 
-			const from: Date = split[0] ? parseISO(split[0]) : new Date();
-			const to: Date = split[1] ? parseISO(split[1]) : new Date();
+			const from: Date | undefined = split[0] ? parseISO(split[0]) : undefined;
+			const to: Date | undefined = split[1] ? parseISO(split[1]) : undefined;
 
 			return (
 				<DateRangeInput
 					disabled={disabled}
 					showLabels
 					id="created"
-					onChange={(newFromDate: Date, newToDate: Date) => {
+					onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
 						onChangeCreated(
-							`${newFromDate.toISOString()}${SEPARATOR}${newToDate.toISOString()}`
+							`${newFromDate ? newFromDate.toISOString() : ''}${SEPARATOR}${
+								newToDate ? newToDate.toISOString() : ''
+							}`
 						);
 					}}
 					from={from}
@@ -208,6 +197,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 				/>
 			);
 		}
+		const value = form.created?.split(SEPARATOR, 2)[0];
 		return (
 			<DateInput
 				label={getSelectValue(operators, form.operator)?.label}
@@ -216,7 +206,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 				onChange={(date) => {
 					onChangeDateInput(date);
 				}}
-				value={form.created ? parseISO(form.created.split(SEPARATOR, 2)[0]) : new Date()}
+				value={value ? parseISO(value) : undefined}
 			/>
 		);
 	};

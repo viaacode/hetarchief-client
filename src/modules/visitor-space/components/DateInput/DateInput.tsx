@@ -25,6 +25,7 @@ export interface DateInputProps {
 	onBlur?: (evt: Event) => void;
 	value?: Date;
 	className?: string;
+	defaultValue?: Date;
 }
 
 const DateInput: FC<DateInputProps> = ({
@@ -35,6 +36,7 @@ const DateInput: FC<DateInputProps> = ({
 	label,
 	onBlur = noop,
 	className,
+	defaultValue,
 }) => {
 	return (
 		<div className={styles['c-date-input']}>
@@ -46,7 +48,7 @@ const DateInput: FC<DateInputProps> = ({
 				onBlur={onBlur}
 				className={className}
 				disabled={disabled}
-				selected={isValid(value) ? value : new Date()}
+				selected={isValid(value) ? value : defaultValue}
 				dateFormat="dd/MM/yyyy"
 				placeholderText="dd/mm/jjjj"
 				customInput={<TextInput iconStart={<Icon name={IconNamesLight.Calendar} />} />}

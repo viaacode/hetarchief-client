@@ -12,7 +12,7 @@ export const roundToNextQuarter = (oldDate: Date): Date => {
 };
 
 /**
- * Determines if we should set the end date of an visit request when the user change the start date
+ * Determines if we should set the end date of a visit request when the user change the start date
  *
  * @param newAccessFromDate newly entered date for the accessFrom field modified by the user
  * @param currentAccessToDate existing accessTo field value
