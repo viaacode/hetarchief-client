@@ -75,10 +75,10 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 		if (initialValue) {
 			const { val, op } = initialValue;
 
-			op && setForm((f) => ({ ...f, operator: op as Operator }));
-			val && setForm((f) => ({ ...f, created: val }));
+			op && setForm((oldForm) => ({ ...oldForm, operator: op as Operator }));
+			val && setForm((oldForm) => ({ ...oldForm, created: val }));
 
-			setShowRange(isRange(op)); // Not covered by other effect in time
+			setShowRange(isRange(op)); // Not covered by other useEffects in time
 		}
 	}, [initialValue, setForm]);
 
@@ -91,7 +91,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 
 			const value = `${parsedFrom}${SEPARATOR}${parsedTo}`;
 
-			setForm({ ...form, created: value });
+			setForm((oldForm) => ({ ...oldForm, created: value }));
 		} catch (err) {
 			// ignore invalid dates since the user can still be typing something
 		}
@@ -115,7 +115,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 	};
 
 	const onChangeCreated = (created: string) => {
-		setForm({ ...form, created });
+		setForm((oldForm) => ({ ...oldForm, created }));
 	};
 
 	const convertYearToDate = useCallback(
@@ -216,7 +216,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 				onChange={(date) => {
 					onChangeDateInput(date);
 				}}
-				value={form.created ? parseISO(form.created) : new Date()}
+				value={form.created ? parseISO(form.created.split(SEPARATOR, 2)[0]) : new Date()}
 			/>
 		);
 	};

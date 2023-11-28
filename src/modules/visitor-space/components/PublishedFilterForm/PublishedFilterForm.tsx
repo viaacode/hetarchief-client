@@ -194,7 +194,9 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 					}
 					onChangePublished(date.toISOString());
 				}}
-				value={form.published ? parseISO(form.published) : new Date()}
+				value={
+					form.published ? parseISO(form.published.split(SEPARATOR, 2)[0]) : new Date()
+				}
 			/>
 		);
 	};
