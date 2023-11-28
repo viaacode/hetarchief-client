@@ -70,15 +70,15 @@ const DurationFilterForm: FC<DurationFilterFormProps> = ({ children, className, 
 		if (initial) {
 			const { val, op } = initial;
 
-			val && setForm((f) => ({ ...f, duration: val }));
-			op && setForm((f) => ({ ...f, operator: op as Operator }));
+			val && setForm((oldForm) => ({ ...oldForm, duration: val }));
+			op && setForm((oldForm) => ({ ...oldForm, operator: op as Operator }));
 		}
 	}, [initial]);
 
 	// Events
 
 	const onChangeDuration = (e: ChangeEvent<HTMLInputElement>) => {
-		setForm({ ...form, duration: e.target.value });
+		setForm((oldForm) => ({ ...oldForm, duration: e.target.value }));
 	};
 
 	return (
