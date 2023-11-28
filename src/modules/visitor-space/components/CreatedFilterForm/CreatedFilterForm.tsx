@@ -80,7 +80,7 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 
 			setShowRange(isRange(op)); // Not covered by other effect in time
 		}
-	}, [initialValue]);
+	}, [initialValue, setForm]);
 
 	// Events
 
@@ -139,15 +139,15 @@ const CreatedFilterForm: FC<CreatedFilterFormProps> = ({ children, className, di
 	useEffect(() => {
 		if (year) {
 			const yearDate = convertYearToDate(year)?.toString();
-			setForm({ ...form, created: yearDate });
+			setForm((oldForm) => ({ ...oldForm, created: yearDate }));
 		}
-	}, [year, convertYearToDate, form]);
+	}, [year, convertYearToDate, setForm]);
 
 	useEffect(() => {
 		if (yearRange) {
-			setForm({ ...form, created: yearRange });
+			setForm((oldForm) => ({ ...oldForm, created: yearRange }));
 		}
-	}, [form, yearRange]);
+	}, [setForm, yearRange]);
 
 	const onChangeOperatorSelect = (
 		operator: SingleValue<SelectOption> | MultiValue<SelectOption>

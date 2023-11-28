@@ -75,10 +75,10 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		if (initial) {
 			const { val, op } = initial;
 
-			val && setForm((f) => ({ ...f, published: val }));
-			op && setForm((f) => ({ ...f, operator: op as Operator }));
+			val && setForm((oldForm) => ({ ...oldForm, published: val }));
+			op && setForm((oldForm) => ({ ...oldForm, operator: op as Operator }));
 
-			setShowRange(isRange(op)); // Not covered by other effect in time
+			setShowRange(isRange(op)); // Not covered by other useEffects in time
 		}
 	}, [initial]);
 
@@ -91,14 +91,14 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 
 			const value = `${parsedFrom}${SEPARATOR}${parsedTo}`;
 
-			setForm({ ...form, published: value });
+			setForm((oldForm) => ({ ...oldForm, published: value }));
 		} catch (err) {
 			// ignore invalid dates since the user can still be typing something
 		}
 	};
 
 	const onChangePublished = (published: string) => {
-		setForm({ ...form, published });
+		setForm((oldForm) => ({ ...oldForm, published }));
 	};
 
 	const convertYearToDate = useCallback(
@@ -122,15 +122,15 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 	useEffect(() => {
 		if (year) {
 			const yearDate = convertYearToDate(year)?.toString();
-			setForm({ ...form, published: yearDate });
+			setForm((oldForm) => ({ ...oldForm, published: yearDate }));
 		}
-	}, [year, convertYearToDate, form]);
+	}, [year, convertYearToDate, setForm]);
 
 	useEffect(() => {
 		if (yearRange) {
-			setForm({ ...form, published: yearRange });
+			setForm((oldForm) => ({ ...oldForm, published: yearRange }));
 		}
-	}, [form, yearRange]);
+	}, [yearRange, setForm]);
 
 	const renderInputField = () => {
 		if (yearsSelected && showRange) {
