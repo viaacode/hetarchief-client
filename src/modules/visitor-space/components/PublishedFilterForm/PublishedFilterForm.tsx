@@ -2,12 +2,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, ReactSelect, SelectOption } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { endOfDay, parseISO, startOfDay } from 'date-fns';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { SingleValue } from 'react-select';
+import { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { SEPARATOR } from '@shared/const';
+import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
 import {
@@ -42,9 +43,9 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 	const { tHtml } = useTranslation();
 	const [query] = useQueryParams(PUBLISHED_FILTER_FORM_QUERY_PARAM_CONFIG);
 
-	const initial = query?.published?.[0];
+	const initialValue = query?.published?.[0];
 
-	const [showRange, setShowRange] = useState(isRange(initial?.op));
+	const [showRange, setShowRange] = useState(isRange(initialValue?.op));
 	const [form, setForm] = useState<PublishedFilterFormState>(defaultValues);
 	const [yearsSelected, setYearsSelected] = useState(false);
 	const [year, setYear] = useState<string | undefined>(undefined);
@@ -72,15 +73,15 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 	}, [form, setValue]);
 
 	useEffect(() => {
-		if (initial) {
-			const { val, op } = initial;
+		if (initialValue) {
+			const { val, op } = initialValue;
 
-			val && setForm((f) => ({ ...f, published: val }));
-			op && setForm((f) => ({ ...f, operator: op as Operator }));
+			val && setForm((oldForm) => ({ ...oldForm, published: val }));
+			op && setForm((oldForm) => ({ ...oldForm, operator: op as Operator }));
 
-			setShowRange(isRange(op)); // Not covered by other effect in time
+			setShowRange(isRange(op)); // Not covered by other useEffects in time
 		}
-	}, [initial]);
+	}, [initialValue]);
 
 	// Events
 
@@ -91,46 +92,62 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 
 			const value = `${parsedFrom}${SEPARATOR}${parsedTo}`;
 
-			setForm({ ...form, published: value });
+			setForm((oldForm) => ({ ...oldForm, published: value }));
 		} catch (err) {
 			// ignore invalid dates since the user can still be typing something
 		}
 	};
 
-	const onChangePublished = (published: string) => {
-		setForm({ ...form, published });
+	const onChangeYear = (e: ChangeEvent<HTMLInputElement>) => {
+		const isNumberReg = new RegExp(/^\d+$/);
+		const isNumber = isNumberReg.test(e.target.value) || e.target.value === '';
+
+		if (isNumber && e.target.value.length < 5) {
+			setYear(e.target.value);
+		}
 	};
 
-	const convertYearToDate = useCallback(
-		(yearString: string) => {
-			const startOfYear = `${yearString}-01-01T00:00:00Z`;
-			const endOfYear = `${yearString}-12-31T23:59:59Z`;
+	const onChangeDateInput = (newDate: Date | null) => {
+		if (!newDate) {
+			setForm((oldForm) => ({ ...oldForm, published: undefined }));
+			return;
+		}
+		if (form.operator === Operator.Equals) {
+			convertToRange(newDate);
+			return;
+		}
+		onChangePublished((newDate || new Date()).toISOString());
+	};
 
-			if (form.operator === Operator.Equals) {
-				return `${startOfYear}${SEPARATOR}${endOfYear}`;
-			}
-
-			if (form.operator === Operator.LessThanOrEqual) {
-				return endOfYear;
-			}
-
-			return startOfYear;
-		},
-		[form.operator]
-	);
+	const onChangePublished = (published: string) => {
+		setForm((oldForm) => ({ ...oldForm, published }));
+	};
 
 	useEffect(() => {
 		if (year) {
-			const yearDate = convertYearToDate(year)?.toString();
-			setForm({ ...form, published: yearDate });
+			const yearDate = convertYearToDate(year, form.operator)?.toString();
+			setForm((oldForm) => ({ ...oldForm, published: yearDate }));
 		}
-	}, [year, convertYearToDate, form]);
+	}, [year, setForm, form.operator]);
 
 	useEffect(() => {
 		if (yearRange) {
-			setForm({ ...form, published: yearRange });
+			setForm((oldForm) => ({ ...oldForm, published: yearRange }));
 		}
-	}, [form, yearRange]);
+	}, [yearRange, setForm]);
+
+	const onChangeOperatorSelect = (
+		operator: SingleValue<SelectOption> | MultiValue<SelectOption>
+	) => {
+		const value = (operator as SingleValue<SelectOption>)?.value as Operator;
+
+		if (value !== form.operator) {
+			setForm({
+				operator: value,
+				published: defaultValues.published,
+			});
+		}
+	};
 
 	const renderInputField = () => {
 		if (yearsSelected && showRange) {
@@ -149,17 +166,19 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		if (showRange) {
 			const split = ((form.published || '') as string).split(SEPARATOR, 2);
 
-			const from: Date = split[0] ? parseISO(split[0]) : new Date();
-			const to: Date = split[1] ? parseISO(split[1]) : new Date();
+			const from: Date | undefined = split[0] ? parseISO(split[0]) : undefined;
+			const to: Date | undefined = split[1] ? parseISO(split[1]) : undefined;
 
 			return (
 				<DateRangeInput
 					disabled={disabled}
 					showLabels
 					id="published"
-					onChange={(newFromDate: Date, newToDate: Date) => {
+					onChange={(newFromDate: Date | undefined, newToDate: Date | undefined) => {
 						onChangePublished(
-							`${newFromDate.toISOString()}${SEPARATOR}${newToDate.toISOString()}`
+							`${newFromDate ? newFromDate.toISOString() : ''}${SEPARATOR}${
+								newToDate ? newToDate.toISOString() : ''
+							}`
 						);
 					}}
 					from={from}
@@ -173,28 +192,21 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 					label={getSelectValue(operators, form.operator)?.label}
 					disabled={disabled}
 					id="published"
-					onChange={(e) => {
-						if (e.target.value.length < 5) {
-							setYear(e.target.value);
-						}
-					}}
+					onChange={(e) => onChangeYear(e)}
 					value={year}
 				/>
 			);
 		}
+		const value = form.published?.split(SEPARATOR, 2)[0];
 		return (
 			<DateInput
 				label={getSelectValue(operators, form.operator)?.label}
 				disabled={disabled}
 				id="published"
 				onChange={(date) => {
-					if (form.operator === Operator.Equals) {
-						convertToRange(date || new Date());
-						return;
-					}
-					onChangePublished(date.toISOString());
+					onChangeDateInput(date);
 				}}
-				value={form.published ? parseISO(form.published) : new Date()}
+				value={value ? parseISO(value) : undefined}
 			/>
 		);
 	};
@@ -229,15 +241,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 									components={{ IndicatorSeparator: () => null }}
 									inputId={labelKeys.operator}
 									onChange={(newValue) => {
-										const value = (newValue as SingleValue<SelectOption>)
-											?.value as Operator;
-
-										if (value !== form.operator) {
-											setForm({
-												operator: value,
-												published: defaultValues.published,
-											});
-										}
+										onChangeOperatorSelect(newValue);
 									}}
 									options={operators}
 									value={getSelectValue(operators, field.value)}

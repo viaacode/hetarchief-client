@@ -8,12 +8,12 @@ import { useQueryParams } from 'use-query-params';
 
 import { TAGS_INPUT_COMPONENTS } from '@shared/components';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
-
 import {
 	KEYWORDS_FILTER_FORM_QUERY_PARAM_CONFIG,
 	KEYWORDS_FILTER_FORM_SCHEMA,
-} from './KeywordsFilterForm.const';
-import { KeywordsFilterFormProps, KeywordsFilterFormState } from './KeywordsFilterForm.types';
+	KeywordsFilterFormProps,
+	KeywordsFilterFormState,
+} from '@visitor-space/components';
 
 type multi = MultiValue<TagInfo>;
 
@@ -54,8 +54,8 @@ const KeywordsFilterForm: FC<KeywordsFilterFormProps> = ({ children, className }
 
 	const saveInput = () => {
 		if (input && input.length > 0) {
-			setForm((f) => ({
-				values: [...(f.values || []), input.toLowerCase()],
+			setForm((oldForm) => ({
+				values: [...(oldForm.values || []), input.toLowerCase()],
 			}));
 
 			setInput('');

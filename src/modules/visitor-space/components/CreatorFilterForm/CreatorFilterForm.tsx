@@ -54,7 +54,7 @@ const CreatorFilterForm: FC<CreatorFilterFormProps> = ({ children, className }) 
 	// Events
 
 	const onChangeCreator = (evt: ChangeEvent<HTMLInputElement>) => {
-		setForm({ ...form, creator: evt.target.value });
+		setForm((oldForm) => ({ ...oldForm, creator: evt.target.value }));
 	};
 
 	return (

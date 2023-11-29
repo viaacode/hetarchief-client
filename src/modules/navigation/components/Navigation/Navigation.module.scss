@@ -294,7 +294,6 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 }
 
 .c-navigation__item {
-	z-index: get-z-layer("nav-dropdown") + 1;
 	display: inline-flex;
 	align-items: center;
 	transition:
