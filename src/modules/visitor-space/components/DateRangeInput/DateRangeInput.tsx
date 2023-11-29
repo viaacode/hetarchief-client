@@ -8,9 +8,9 @@ import styles from './DateRangeInput.module.scss';
 
 export interface DateRangeInputProps {
 	showLabels?: boolean;
-	from: Date;
-	to: Date;
-	onChange: (from: Date, to: Date) => void;
+	from: Date | undefined;
+	to: Date | undefined;
+	onChange: (from: Date | undefined, to: Date | undefined) => void;
 	disabled?: boolean;
 	id?: string;
 }
