@@ -12,6 +12,7 @@ $checkbox-size: $spacer-sm;
 		top: 0;
 		width: $checkbox-size + 0.5rem;
 		display: inline-block;
+		text-indent: unset !important;
 	}
 }
 
