@@ -3,6 +3,7 @@ import { endOfDay } from 'date-fns';
 import { ChangeEvent, FC, useState } from 'react';
 
 import { SEPARATOR } from '@shared/const';
+import { YEAR_LENGTH } from '@shared/const/date';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { asDate } from '@shared/utils';
 
@@ -29,23 +30,27 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 		const yearString = e.target.value;
 		const isNumberReg = new RegExp(/^\d+$/);
 		const isNumber = isNumberReg.test(yearString) || yearString === '';
-		let startOfYear = asDate(`01/01/${yearFrom}`)?.valueOf();
-		let endOfYear = endOfDay(asDate(`12/31/${yearTo}`) || 0).valueOf();
+
+		const newYearFrom = type === 'from' ? yearString : yearFrom;
+		const newYearTo = type === 'to' ? yearString : yearFrom;
+
+		const startOfYear = newYearFrom ? asDate(`01/01/${newYearFrom}`)?.toISOString() : undefined;
+		const endOfYear = newYearTo
+			? endOfDay(asDate(`12/31/${newYearTo}`) as Date).toISOString()
+			: undefined;
 
 		switch (type) {
 			case 'from':
-				if (isNumber && yearString.length < 5) {
+				if (isNumber && yearString.length <= YEAR_LENGTH) {
 					setYearFrom(yearString);
 
-					startOfYear = asDate(`01/01/${yearString}`)?.valueOf() || 0;
 					value = `${startOfYear}${SEPARATOR}${endOfYear}`;
 				}
 				break;
 
 			case 'to':
-				if (isNumber && yearString.length < 5) {
+				if (isNumber && yearString.length <= YEAR_LENGTH) {
 					setYearTo(yearString);
-					endOfYear = endOfDay(asDate(`12/31/${yearString}`) || 0).valueOf();
 					value = `${startOfYear}${SEPARATOR}${endOfYear}`;
 				}
 				break;
@@ -81,7 +86,7 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 				}
 				value={yearFrom}
 				onChange={(e) => {
-					if (e.target.value.length < 5) {
+					if (e.target.value.length <= YEAR_LENGTH) {
 						onChange(e, 'from');
 					}
 				}}
@@ -97,7 +102,7 @@ const YearRangeInput: FC<Omit<YearRangeInputProps, 'onSelect'>> = (props) => {
 				}
 				value={yearTo}
 				onChange={(e) => {
-					if (e.target.value.length < 5) {
+					if (e.target.value.length <= YEAR_LENGTH) {
 						onChange(e, 'to');
 					}
 				}}

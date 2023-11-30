@@ -8,6 +8,7 @@ import { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 
 import { SEPARATOR } from '@shared/const';
+import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import useTranslation from '@shared/hooks/use-translation/use-translation';
 import { isRange, Operator } from '@shared/types';
@@ -102,7 +103,7 @@ const PublishedFilterForm: FC<PublishedFilterFormProps> = ({ children, className
 		const isNumberReg = new RegExp(/^\d+$/);
 		const isNumber = isNumberReg.test(e.target.value) || e.target.value === '';
 
-		if (isNumber && e.target.value.length < 5) {
+		if (isNumber && e.target.value.length <= YEAR_LENGTH) {
 			setYear(e.target.value);
 		}
 	};
