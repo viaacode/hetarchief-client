@@ -256,6 +256,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 * @param item
 	 */
 	const getShowLocallyAvailableLabel = (item: FolderIeObject) => {
+		// ARC-2021: Do not show locally available label if no visitor space
+		if (!item.maintainerSlug) {
+			return false;
+		}
 		return (
 			isEmpty(item.accessThrough) &&
 			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
@@ -271,6 +275,10 @@ const AccountMyFolders: NextPage<DefaultSeoInfo> = ({ url }) => {
 	 * @param item
 	 */
 	const getShowPlanVisitButtons = (item: FolderIeObject) => {
+		// ARC-2021: Do not show plan visit buttons if no visitor space
+		if (!item.maintainerSlug) {
+			return false;
+		}
 		return (
 			isEmpty(item.accessThrough) &&
 			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||

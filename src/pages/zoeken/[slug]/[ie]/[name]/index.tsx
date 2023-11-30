@@ -514,6 +514,11 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	};
 
 	const onRequestMaterialClick = async () => {
+		if (isAnonymous) {
+			dispatch(setShowAuthModal(true));
+			return;
+		}
+
 		const materialRequests = await MaterialRequestsService.getAll({
 			size: 500,
 			isPending: true,
@@ -527,11 +532,6 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 			)
 		) {
 			onDuplicateRequest();
-			return;
-		}
-
-		if (isAnonymous) {
-			dispatch(setShowAuthModal(true));
 			return;
 		}
 
