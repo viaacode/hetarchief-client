@@ -14,7 +14,16 @@ import {
 } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { HTTPError } from 'ky';
-import { capitalize, indexOf, intersection, isEmpty, isNil, lowerCase, sortBy } from 'lodash-es';
+import {
+	capitalize,
+	indexOf,
+	intersection,
+	isEmpty,
+	isNil,
+	lowerCase,
+	noop,
+	sortBy,
+} from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import Head from 'next/head';
@@ -573,22 +582,36 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 	const handleOnPlay = () => {
 		setIsMediaPaused(false);
 		if (!hasMediaPlayed) {
-			setHasMediaPlayed(true);
+			// Check state inside setState function since this is an event handler outside React
+			// so state doesn't update automatically
+			// https://stackoverflow.com/questions/53845595/wrong-react-hooks-behaviour-with-event-listener
+			// https://meemoo.atlassian.net/browse/ARC-2039
+			setHasMediaPlayed((oldHasMediaPlayed) => {
+				if (!oldHasMediaPlayed) {
+					const path = window.location.href;
+					const eventData = {
+						type: mediaInfo?.dctermsFormat,
+						fragment_id: mediaInfo?.schemaIdentifier,
+						pid: mediaInfo?.meemooIdentifier,
+						user_group_name: user?.groupName,
+						or_id: mediaInfo?.maintainerId,
+					};
 
-			const path = window.location.href;
-			const eventData = {
-				type: mediaInfo?.dctermsFormat,
-				fragment_id: mediaInfo?.schemaIdentifier,
-				pid: mediaInfo?.meemooIdentifier,
-				user_group_name: user?.groupName,
-				or_id: mediaInfo?.maintainerId,
-			};
+					if (hasAccessToVisitorSpaceOfObject) {
+						EventsService.triggerEvent(
+							LogEventType.BEZOEK_ITEM_PLAY,
+							path,
+							eventData
+						).then(noop);
+					} else {
+						EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData).then(
+							noop
+						);
+					}
+				}
 
-			if (hasAccessToVisitorSpaceOfObject) {
-				EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData);
-			} else {
-				EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData);
-			}
+				return true;
+			});
 		}
 	};
 
