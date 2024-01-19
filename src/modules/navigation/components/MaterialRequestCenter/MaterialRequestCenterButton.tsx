@@ -14,6 +14,7 @@ import {
 	setShowMaterialRequestCenter,
 	setShowNotificationsCenter,
 } from '@shared/store/ui';
+import { scrollTo } from '@shared/utils/scroll-to-top';
 
 import { MaterialRequestCenterBlade } from '../MaterialRequestCenterBlade';
 
@@ -30,6 +31,12 @@ const MaterialRequestCenterButton: FC = () => {
 
 	const materialRequestCount = useSelector(selectMaterialRequestCount);
 	const showMaterialRequestCenter = useSelector(selectShowMaterialRequestCenter);
+
+	useEffect(() => {
+		if (showMaterialRequestCenter) {
+			scrollTo(0, 'instant');
+		}
+	}, [showMaterialRequestCenter]);
 
 	const onButtonClick = () => {
 		dispatch(setShowNotificationsCenter(false));

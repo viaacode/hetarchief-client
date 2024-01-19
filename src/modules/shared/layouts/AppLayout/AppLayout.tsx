@@ -121,6 +121,12 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const [visitorSpaces, setVisitorSpaces] = useState<Visit[]>([]);
 
+	useEffect(() => {
+		if (showNotificationsCenter) {
+			scrollTo(0, 'instant');
+		}
+	}, [showNotificationsCenter]);
+
 	const setNotificationsOpen = useCallback(
 		(show: boolean) => {
 			show && scrollTo(0);
