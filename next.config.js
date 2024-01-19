@@ -34,6 +34,11 @@ module.exports = withBundleAnalyzer(
 			 * https://stackoverflow.com/questions/72567320/typeerror-cannot-read-properties-of-null-reading-useref
 			 */
 			appDir: false,
+			/**
+			 * Ignore warnings about big page data, since we load translations like that
+			 * https://meemoo.atlassian.net/browse/ARC-1932
+			 */
+			largePageDataBytes: 300 * 1000,
 		},
 		webpack: (config, options) => {
 			// Required for ky-universal top level await used in admin core inside the api service
