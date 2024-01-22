@@ -158,8 +158,7 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 					>
 						{renderDescription()}
 						{hasOverflowingChildren && (
-							<Icon
-								name={IconNamesLight.AngleDown}
+							<div
 								className={
 									styles['c-visitor-space-card__description__container__icon']
 								}

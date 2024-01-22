@@ -79,14 +79,21 @@ $component: "c-visitor-space-card";
 			cursor: pointer;
 
 			&__icon {
-				margin-top: auto;
-				width: 2rem;
+				margin: auto 0.5rem 0.1rem 0;
+				min-width: 0.8rem;
+				height: 1.1rem;
+				opacity: 0.6;
+
+				// Render png instead of svg chevron-down icon to avoid iphone render bug
+				// https://meemoo.atlassian.net/browse/ARC-905
+				background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAALBAMAAACAOcA3AAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAB5QTFRFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAtyhvagAAAAp0Uk5TAIB8/3ZwamReWAJYBVwAAABNSURBVHicY2BUYAABJgEGYRMwy9mQQdg4AMhgNTZkYDQ2A7KSjQUYgIIFDOxAIQagoAVDM0gIJDgTLAQSNIYIgQQhQiBBqBADgyCIAADoTQgKKN4CAwAAAABJRU5ErkJggg==");
+				background-size: contain;
+				background-position: center;
+				background-repeat: no-repeat;
 			}
 
 			&--expanded {
 				.c-visitor-space-card__description__container__icon {
-					// Use rotation of the arrow to avoid iphone render bug when we switch the icon to arrow up
-					// https://meemoo.atlassian.net/browse/ARC-905
 					transform: rotate(180deg);
 				}
 			}
