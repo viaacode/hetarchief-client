@@ -150,19 +150,17 @@ const VisitorSpaceCard: FC<VisitorSpaceCardProps> = (props) => {
 				>
 					{flat && renderTitle()}
 					<div
-						className={styles['c-visitor-space-card__description--container']}
+						className={clsx(styles['c-visitor-space-card__description__container'], {
+							[styles['c-visitor-space-card__description__container--expanded']]:
+								expandDescription,
+						})}
 						onClick={() => setExpandDescription(!expandDescription)}
 					>
 						{renderDescription()}
 						{hasOverflowingChildren && (
-							<Icon
-								name={
-									expandDescription
-										? IconNamesLight.AngleUp
-										: IconNamesLight.AngleDown
-								}
+							<div
 								className={
-									styles['c-visitor-space-card__description--container--icon']
+									styles['c-visitor-space-card__description__container__icon']
 								}
 							/>
 						)}
