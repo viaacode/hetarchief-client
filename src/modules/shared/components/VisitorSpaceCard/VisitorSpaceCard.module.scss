@@ -73,14 +73,22 @@ $component: "c-visitor-space-card";
 	}
 
 	&__description {
-		&--container {
+		&__container {
 			display: flex;
 			flex-direction: row;
 			cursor: pointer;
 
-			&--icon {
+			&__icon {
 				margin-top: auto;
 				width: 2rem;
+			}
+
+			&--expanded {
+				.c-visitor-space-card__description__container__icon {
+					// Use rotation of the arrow to avoid iphone render bug when we switch the icon to arrow up
+					// https://meemoo.atlassian.net/browse/ARC-905
+					transform: rotate(180deg);
+				}
 			}
 		}
 
