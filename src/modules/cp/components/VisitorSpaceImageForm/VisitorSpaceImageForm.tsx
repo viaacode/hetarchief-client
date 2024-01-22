@@ -124,7 +124,9 @@ const VisitorSpaceImageForm = forwardRef<
 			(setValue as any)('color', DEFAULT_VISITOR_SPACE_COLOR);
 			state.color = DEFAULT_VISITOR_SPACE_COLOR;
 		}
-		onSubmit?.(state, () => setSavedState(state));
+		onSubmit?.(state, () => {
+			setSavedState({ ...state });
+		});
 		resetFileInput();
 	};
 
