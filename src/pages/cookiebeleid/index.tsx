@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +18,16 @@ const CookiePolicy: NextPage<DefaultSeoInfo> = ({ url }) => {
 		// Fool cookiebot to inject the html into our react useState
 		// eslint-disable-next-line
 		(window as any).CookieDeclaration = {
-			InjectCookieDeclaration: setCookieDeclarationHtml,
+			InjectCookieDeclaration: (declarationHtml: string) => {
+				const declarationHtmlWithCrawlDate = declarationHtml.replace(
+					'[#LOCALIZED_CRAWLDATE#]',
+					format(
+						new Date((window as any).CookieDeclaration.lastUpdatedDate),
+						'dd MMM yyyy'
+					)
+				);
+				setCookieDeclarationHtml(declarationHtmlWithCrawlDate);
+			},
 		};
 
 		// Load cookiebot script that has the cookie declaration html baked in
