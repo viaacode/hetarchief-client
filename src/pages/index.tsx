@@ -65,7 +65,6 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 
 	return (
 		<VisitorLayout>
-			test og tags
 			{renderOgTags(
 				title,
 				description ||
