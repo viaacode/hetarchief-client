@@ -1,5 +1,5 @@
 import { OrderDirection } from '@meemoo/react-components';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 import { IconName, ToggleOption } from '@shared/components';
 import { DefaultComponentProps, SortObject } from '@shared/types';
@@ -13,7 +13,7 @@ import {
 } from '../../types';
 
 export interface FilterMenuProps extends DefaultComponentProps {
-	children?: React.ReactNode;
+	children?: ReactNode;
 	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
 	filterValues?: Record<string, unknown>;

@@ -144,6 +144,7 @@ export const withAdminCoreConfig = (WrappedComponent: ComponentType): ComponentT
 					alerts: ALERT_ICON_LIST_CONFIG,
 				},
 				components: {
+					defaultAudioStill: '/images/waveform.svg',
 					loader: {
 						component: () => <Loading fullscreen owner="admin-core-loader" />,
 					},

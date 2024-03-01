@@ -7,8 +7,8 @@ import { createPageTitle, isBrowser } from '@shared/utils';
 const { publicRuntimeConfig } = getConfig();
 
 export function renderOgTags(
-	title: string | null | undefined,
-	description: string,
+	title: string | null,
+	description: string | null,
 	url: string,
 	fullTitle = false,
 	imgUrl: string | null = null
@@ -17,11 +17,11 @@ export function renderOgTags(
 	return (
 		<Head>
 			<title>{fullTitle ? title : resolvedTitle}</title>
-			<meta name="description" content={description} />
+			{description && <meta name="description" content={description} />}
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content={url} />
 			<meta property="og:title" content={resolvedTitle} />
-			<meta property="og:description" content={description} />
+			{description && <meta property="og:description" content={description} />}
 			{imgUrl ? (
 				<meta property="og:image" content={imgUrl} />
 			) : (
@@ -38,7 +38,7 @@ export function renderOgTags(
 				content={isBrowser() ? publicRuntimeConfig.CLIENT_URL : process.env.CLIENT_URL}
 			/>
 			<meta property="twitter:title" content={resolvedTitle} />
-			<meta property="twitter:description" content={description} />
+			{description && <meta property="twitter:description" content={description} />}
 		</Head>
 	);
 }

@@ -918,13 +918,14 @@ const ObjectDetailPage: NextPage<ObjectDetailPageProps> = ({ title, description,
 
 		// Flowplayer
 		if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(representation.dctermsFormat)) {
-			return <FlowPlayer key={flowPlayerKey} src={playableUrl} {...shared} />;
+			return <FlowPlayer key={flowPlayerKey} type="video" src={playableUrl} {...shared} />;
 		}
 		if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(representation.dctermsFormat)) {
 			if (!fileRepresentationSchemaIdentifier || !!peakJson) {
 				return (
 					<FlowPlayer
 						key={flowPlayerKey}
+						type="audio"
 						src={[
 							{
 								src: playableUrl,

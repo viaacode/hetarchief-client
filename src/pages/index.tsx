@@ -22,9 +22,17 @@ import { VisitorLayout } from 'modules/visitors';
 
 type HomepageProps = {
 	title: string | null;
+	description: string | null;
+	image: string | null;
 } & DefaultSeoInfo;
 
-const Homepage: NextPage<HomepageProps & UserProps> = ({ title, url, commonUser }) => {
+const Homepage: NextPage<HomepageProps & UserProps> = ({
+	title,
+	description,
+	image,
+	url,
+	commonUser,
+}) => {
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	const router = useRouter();
 
@@ -57,7 +65,17 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({ title, url, commonUser 
 
 	return (
 		<VisitorLayout>
-			{renderOgTags(title || undefined, '', url)}
+			test og tags
+			{renderOgTags(
+				title,
+				description ||
+					contentPageInfo?.seoDescription ||
+					contentPageInfo?.description ||
+					null,
+				url,
+				undefined,
+				image || contentPageInfo?.thumbnailPath || null
+			)}
 			{renderPageContent()}
 		</VisitorLayout>
 	);
@@ -67,9 +85,13 @@ export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<HomepageProps>> {
 	let title: string | null = null;
+	let description: string | null = null;
+	let image: string | null = null;
 	try {
 		const contentPage = await ContentPageClientService.getBySlug('/');
 		title = contentPage?.title || null;
+		description = contentPage?.seoDescription || contentPage?.description || null;
+		image = contentPage?.thumbnailPath || null;
 	} catch (err) {
 		console.error(
 			'Failed to fetch content page seo info for homepage by slug: ' + context.query.slug,
@@ -81,7 +103,7 @@ export async function getServerSideProps(
 		await getDefaultServerSideProps(context);
 
 	return {
-		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title },
+		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title, description, image },
 	};
 }
 

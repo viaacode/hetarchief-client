@@ -179,7 +179,7 @@ module.exports = withBundleAnalyzer(
 				},
 				{
 					source: '/amsab/:slug',
-					destination: '/zoeken/amsab/:slug',
+					destination: '/zoeken/amsab-isg/:slug',
 					permanent: true,
 				},
 				{
