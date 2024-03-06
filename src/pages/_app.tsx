@@ -1,11 +1,12 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import nlBE from 'date-fns/locale/nl-BE/index.js';
 import setDefaultOptions from 'date-fns/setDefaultOptions';
 import { AppProps } from 'next/app';
 import getConfig from 'next/config';
 import { appWithTranslation } from 'next-i18next';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 
+import { initAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import { AppLayout } from '@shared/layouts/AppLayout';
 import { NextQueryParamProvider } from '@shared/providers/NextQueryParamProvider';
 import { wrapper } from '@shared/store';
@@ -21,17 +22,22 @@ setDefaultOptions({ locale: nlBE });
 
 const { publicRuntimeConfig } = getConfig();
 
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			refetchOnWindowFocus: false,
-			keepPreviousData: true,
-			retry: 0,
-		},
-	},
-});
+initAdminCoreConfig();
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
+	const [queryClient] = React.useState(
+		() =>
+			new QueryClient({
+				defaultOptions: {
+					queries: {
+						refetchOnWindowFocus: false,
+						keepPreviousData: true,
+						retry: 0,
+					},
+				},
+			})
+	);
+
 	if (isBrowser()) {
 		// client-side-only code, window is not available during nextjs server side prerender
 		(window as any).APP_VERSION = { version: pkg.version };
@@ -39,9 +45,11 @@ function MyApp({ Component, pageProps }: AppProps): ReactElement {
 	return (
 		<NextQueryParamProvider>
 			<QueryClientProvider client={queryClient}>
-				<AppLayout>
-					<Component {...pageProps} />
-				</AppLayout>
+				<Hydrate state={pageProps.dehydratedState}>
+					<AppLayout>
+						<Component {...pageProps} />
+					</AppLayout>
+				</Hydrate>
 			</QueryClientProvider>
 		</NextQueryParamProvider>
 	);

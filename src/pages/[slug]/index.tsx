@@ -1,17 +1,22 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import { ContentPageRenderer, convertDbContentPageToContentPageInfo } from '@meemoo/admin-core-ui';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { HTTPError } from 'ky';
 import { kebabCase } from 'lodash-es';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, FC, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { GroupName } from '@account/const';
+import { initAdminCoreConfig } from '@admin/wrappers/admin-core-config';
 import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
 import { withAuth } from '@auth/wrappers/with-auth';
-import { useGetIeObjectsInfo } from '@ie-objects/hooks/get-ie-objects-info';
+import {
+	prefetchGetIeObjectsInfo,
+	useGetIeObjectsInfo,
+} from '@ie-objects/hooks/get-ie-objects-info';
 import { ErrorNotFound, Loading } from '@shared/components';
 import { ROUTE_PARTS } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -22,23 +27,25 @@ import { setShowZendesk } from '@shared/store/ui';
 import { DefaultSeoInfo } from '@shared/types/seo';
 import { isBrowser } from '@shared/utils';
 
-import { useGetContentPageByPath } from '../../modules/content-page/hooks/get-content-page';
-import { ContentPageClientService } from '../../modules/content-page/services/content-page-client.service';
+import {
+	prefetchGetContentPageByPath,
+	useGetContentPageByPath,
+} from '../../modules/content-page/hooks/get-content-page';
 
 import { VisitorLayout } from 'modules/visitors';
 
 const { publicRuntimeConfig } = getConfig();
 
 type DynamicRouteResolverProps = {
-	title: string | null;
-	description: string | null;
-	image: string | null;
+	// title: string | null;
+	// description: string | null;
+	// image: string | null;
 } & DefaultSeoInfo;
 
 const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
-	title,
-	description,
-	image,
+	// title,
+	// description,
+	// image,
 	url,
 	commonUser,
 }) => {
@@ -54,8 +61,10 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 	const {
 		error: contentPageError,
 		isLoading: isContentPageLoading,
-		data: contentPageInfo,
+		data: dbContentPage,
 	} = useGetContentPageByPath(`/${slug}`);
+	const contentPageInfo = convertDbContentPageToContentPageInfo(dbContentPage);
+
 	const { isLoading: isIeObjectLoading, data: ieObjectInfo } = useGetIeObjectsInfo(
 		slug as string,
 		{ enabled: !!slug }
@@ -114,14 +123,14 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 	return (
 		<VisitorLayout>
 			{renderOgTags(
-				title,
-				description ||
+				contentPageInfo?.title || null,
+				contentPageInfo?.description ||
 					contentPageInfo?.seoDescription ||
 					contentPageInfo?.description ||
 					null,
 				url,
 				undefined,
-				image || contentPageInfo?.thumbnailPath || null
+				contentPageInfo?.thumbnailPath || null
 			)}
 			{renderPageContent()}
 		</VisitorLayout>
@@ -131,34 +140,46 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DynamicRouteResolverProps>> {
-	let title: string | null = null;
-	let description: string | null = null;
-	let image: string | null = null;
-	const slug = context.query.slug;
-	if (slug) {
-		try {
-			const contentPage = await ContentPageClientService.getBySlug(`/${context.query.slug}`);
-			title = contentPage?.title || null;
-			description = contentPage?.seoDescription || contentPage?.description || null;
-			image = contentPage?.thumbnailPath || null;
-		} catch (err) {
-			console.error(
-				'Failed to fetch content page seo info by slug: ' + context.query.slug,
-				err
-			);
-		}
-	} else {
-		title = 'Home - Het Archief';
-	}
+	// react-query prefetching data for server side rendering
+	const queryClient = new QueryClient();
+
+	initAdminCoreConfig();
+	await prefetchGetContentPageByPath(`/${context.params?.slug}`, queryClient);
+	await prefetchGetIeObjectsInfo(context.params?.slug as string, queryClient);
+	//
+	// // Fetch title, description and image for server side rendering
+	// let title: string | null = null;
+	// let description: string | null = null;
+	// let image: string | null = null;
+	// const slug = context.query.slug;
+	// if (slug) {
+	// 	try {
+	// 		const contentPage = await ContentPageClientService.getBySlug(`/${context.query.slug}`);
+	// 		title = contentPage?.title || null;
+	// 		description = contentPage?.seoDescription || contentPage?.description || null;
+	// 		image = contentPage?.thumbnailPath || null;
+	// 	} catch (err) {
+	// 		console.error(
+	// 			'Failed to fetch content page seo info by slug: ' + context.query.slug,
+	// 			err
+	// 		);
+	// 	}
+	// } else {
+	// 	title = 'Home - Het Archief';
+	// }
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
 		await getDefaultServerSideProps(context);
 
 	return {
-		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title, description, image },
+		props: {
+			...(defaultProps as { props: DefaultSeoInfo }).props,
+			// title,
+			// description,
+			// image,
+			dehydratedState: dehydrate(queryClient),
+		},
 	};
 }
 
-export default withAdminCoreConfig(
-	withUser(withAuth(DynamicRouteResolver as ComponentType, false)) as any
-) as FC<DefaultSeoInfo>;
+export default DynamicRouteResolver;

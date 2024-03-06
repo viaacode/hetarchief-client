@@ -1,12 +1,19 @@
-import { ContentPageRenderer } from '@meemoo/admin-core-ui';
+import {
+	AdminConfig,
+	AdminConfigManager,
+	ContentPageRenderer,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { GetServerSidePropsContext } from 'next/types';
-import { ComponentType, FC, useEffect } from 'react';
+import { ComponentType, useEffect } from 'react';
 
 import { GroupName } from '@account/const';
-import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
-import { withAuth } from '@auth/wrappers/with-auth';
+import { adminCoreConfig, initAdminCoreConfig } from '@admin/wrappers/admin-core-config';
+import { prefetchCheckLogin } from '@auth/wrappers/with-auth/useCheckLogin';
+import { prefetchGetTos } from '@auth/wrappers/with-auth/useGetTos';
 import { Loading } from '@shared/components';
 import { ROUTES } from '@shared/const';
 import { getDefaultServerSideProps } from '@shared/helpers/get-default-server-side-props';
@@ -15,21 +22,23 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import withUser, { UserProps } from '@shared/hooks/with-user';
 import { DefaultSeoInfo } from '@shared/types/seo';
 
-import { useGetContentPageByPath } from '../modules/content-page/hooks/get-content-page';
-import { ContentPageClientService } from '../modules/content-page/services/content-page-client.service';
+import {
+	prefetchGetContentPageByPath,
+	useGetContentPageByPath,
+} from '../modules/content-page/hooks/get-content-page';
 
 import { VisitorLayout } from 'modules/visitors';
 
 type HomepageProps = {
-	title: string | null;
-	description: string | null;
-	image: string | null;
+	// title: string | null;
+	// description: string | null;
+	// image: string | null;
 } & DefaultSeoInfo;
 
 const Homepage: NextPage<HomepageProps & UserProps> = ({
-	title,
-	description,
-	image,
+	// title,
+	// description,
+	// image,
 	url,
 	commonUser,
 }) => {
@@ -40,7 +49,18 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	 * Data
 	 */
 
-	const { isLoading: isContentPageLoading, data: contentPageInfo } = useGetContentPageByPath('/');
+	const { isLoading: isContentPageLoading, data: dbContentPage } = useGetContentPageByPath('/');
+
+	// Server side rendering vs client side rendering import module issue
+	const config = ((adminCoreConfig as any)?.adminCoreConfig || adminCoreConfig) as AdminConfig;
+
+	const contentPageInfo = dbContentPage
+		? convertDbContentPageToContentPageInfo(
+				dbContentPage,
+				config.services.toastService.showToast,
+				config.services.i18n.tText
+		  )
+		: null;
 
 	useEffect(() => {
 		if (isKioskUser) {
@@ -53,10 +73,10 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	 */
 
 	const renderPageContent = () => {
-		if (isContentPageLoading || isKioskUser) {
+		if (isContentPageLoading || isKioskUser || !AdminConfigManager.getConfig()) {
 			return <Loading fullscreen owner="homepage" />;
 		}
-		if (contentPageInfo) {
+		if (contentPageInfo && AdminConfigManager.getConfig()) {
 			return (
 				<ContentPageRenderer contentPageInfo={contentPageInfo} commonUser={commonUser} />
 			);
@@ -66,14 +86,11 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 	return (
 		<VisitorLayout>
 			{renderOgTags(
-				title,
-				description ||
-					contentPageInfo?.seoDescription ||
-					contentPageInfo?.description ||
-					null,
+				contentPageInfo?.title || null,
+				contentPageInfo?.seoDescription || contentPageInfo?.description || null,
 				url,
 				undefined,
-				image || contentPageInfo?.thumbnailPath || null
+				contentPageInfo?.thumbnailPath || null
 			)}
 			{renderPageContent()}
 		</VisitorLayout>
@@ -83,29 +100,41 @@ const Homepage: NextPage<HomepageProps & UserProps> = ({
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<HomepageProps>> {
-	let title: string | null = null;
-	let description: string | null = null;
-	let image: string | null = null;
-	try {
-		const contentPage = await ContentPageClientService.getBySlug('/');
-		title = contentPage?.title || null;
-		description = contentPage?.seoDescription || contentPage?.description || null;
-		image = contentPage?.thumbnailPath || null;
-	} catch (err) {
-		console.error(
-			'Failed to fetch content page seo info for homepage by slug: ' + context.query.slug,
-			err
-		);
-	}
+	// react-query prefetching data for server side rendering
+	const queryClient = new QueryClient();
+
+	initAdminCoreConfig();
+	await prefetchGetContentPageByPath('/', queryClient);
+	await prefetchCheckLogin(queryClient);
+	await prefetchGetTos(queryClient);
+
+	// let title: string | null = null;
+	// let description: string | null = null;
+	// let image: string | null = null;
+	// try {
+	// 	const contentPage = await ContentPageClientService.getBySlug('/');
+	// 	title = contentPage?.title || null;
+	// 	description = contentPage?.seoDescription || contentPage?.description || null;
+	// 	image = contentPage?.thumbnailPath || null;
+	// } catch (err) {
+	// 	console.error(
+	// 		'Failed to fetch content page seo info for homepage by slug: ' + context.query.slug,
+	// 		err
+	// 	);
+	// }
 
 	const defaultProps: GetServerSidePropsResult<DefaultSeoInfo> =
 		await getDefaultServerSideProps(context);
 
 	return {
-		props: { ...(defaultProps as { props: DefaultSeoInfo }).props, title, description, image },
+		props: {
+			...(defaultProps as { props: DefaultSeoInfo }).props,
+			// title,
+			// description,
+			// image,
+			dehydratedState: dehydrate(queryClient),
+		},
 	};
 }
 
-export default withAdminCoreConfig(
-	withUser(withAuth(Homepage as ComponentType, false)) as ComponentType
-) as FC<HomepageProps>;
+export default withUser(Homepage as ComponentType) as ComponentType;

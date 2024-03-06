@@ -3,11 +3,12 @@ import { stringify } from 'query-string';
 import { ComponentType, useCallback, useEffect, useState } from 'react';
 
 import { GroupName } from '@account/const';
-import { AuthMessage, AuthService } from '@auth/services/auth-service';
+import { AuthMessage } from '@auth/services/auth-service';
+import { useCheckLogin } from '@auth/wrappers/with-auth/useCheckLogin';
+import { useGetTos } from '@auth/wrappers/with-auth/useGetTos';
 import Loading from '@shared/components/Loading/Loading';
 import { ROUTES } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { TosService } from '@shared/services/tos-service';
 import { isCurrentTosAccepted } from '@shared/utils';
 
 /**
@@ -30,9 +31,12 @@ export const withAuth = (
 		const router = useRouter();
 		const [showPage, setShowPage] = useState<boolean>(false);
 
+		const { data: login } = useCheckLogin();
+		const { data: tos } = useGetTos();
+
 		const checkLoginStatus = useCallback(async (): Promise<void> => {
-			const login = await AuthService.checkLogin();
-			const tos = await TosService.getTos();
+			// const login = await AuthService.checkLogin();
+			// const tos = await TosService.getTos();
 
 			const params = {
 				[QUERY_PARAM_KEY.REDIRECT_TO_QUERY_KEY]: router.asPath,
@@ -74,11 +78,13 @@ export const withAuth = (
 					await toTermsOfService();
 				}
 			}
-		}, []); // eslint-disable-line react-hooks/exhaustive-deps
+		}, [login, tos]); // eslint-disable-line react-hooks/exhaustive-deps
 
 		useEffect(() => {
-			checkLoginStatus();
-		}, [checkLoginStatus]);
+			if (login && tos) {
+				checkLoginStatus();
+			}
+		}, [checkLoginStatus, login, tos]);
 
 		// Allow server side rendering to get past this loading screen, so we can determine seo fields on the actual page
 		return showPage ? (

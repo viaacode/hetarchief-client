@@ -1,4 +1,9 @@
-import { AdminConfigManager, ContentPageInfo, ContentPageRenderer } from '@meemoo/admin-core-ui';
+import {
+	AdminConfigManager,
+	ContentPageInfo,
+	ContentPageRenderer,
+	convertDbContentPageToContentPageInfo,
+} from '@meemoo/admin-core-ui';
 import { Button } from '@meemoo/react-components';
 import clsx from 'clsx';
 import { GetServerSidePropsResult, NextPage } from 'next';
@@ -40,7 +45,8 @@ const TermsOfService: NextPage<DefaultSeoInfo & UserProps> = ({ url, commonUser 
 	const [hasFinished, setHasFinished] = useState(false);
 	const [isAtBottom, setIsAtBottom] = useState(false);
 	const tosAccepted = useTermsOfService();
-	const { data: contentPageInfo } = useGetContentPageByPath(KNOWN_STATIC_ROUTES.TermsOfService);
+	const { data: dbContentPage } = useGetContentPageByPath(KNOWN_STATIC_ROUTES.TermsOfService);
+	const contentPageInfo = convertDbContentPageToContentPageInfo(dbContentPage);
 
 	const user = useSelector(selectUser);
 
