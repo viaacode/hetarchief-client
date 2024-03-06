@@ -29,7 +29,7 @@ class ToastService {
 					onClose={() => onToastClose(closeToast)}
 				/>
 			),
-			toastOptions
+			{ autoClose: 10000, ...toastOptions }
 		) as string;
 	}
 
