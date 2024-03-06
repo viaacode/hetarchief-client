@@ -183,6 +183,11 @@ module.exports = withBundleAnalyzer(
 					permanent: true,
 				},
 				{
+					source: '/amsab-isg/:slug',
+					destination: '/zoeken/amsab-isg/:slug',
+					permanent: true,
+				},
+				{
 					source: '/advn/:slug',
 					destination: '/zoeken/advn/:slug',
 					permanent: true,
