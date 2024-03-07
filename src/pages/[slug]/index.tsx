@@ -77,13 +77,16 @@ const DynamicRouteResolver: NextPage<DynamicRouteResolverProps & UserProps> = ({
 				'_self'
 			);
 		}
+	}, [ieObjectInfo, isContentPageNotFoundError, isIeObjectLoading]);
+
+	useEffect(() => {
 		if (ieObjectInfo) {
 			const objectDetailPagePath = `/${ROUTE_PARTS.search}/${ieObjectInfo.maintainerSlug}/${
 				ieObjectInfo.schemaIdentifier
 			}/${kebabCase(ieObjectInfo.name)}`;
 			window.open(objectDetailPagePath, '_self');
 		}
-	}, [ieObjectInfo, isContentPageNotFoundError, isIeObjectLoading]);
+	}, [ieObjectInfo]);
 
 	useEffect(() => {
 		dispatch(setShowZendesk(!isKioskUser));
