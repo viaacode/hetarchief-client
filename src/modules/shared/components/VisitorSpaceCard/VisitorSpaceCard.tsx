@@ -6,7 +6,6 @@ import { FC, useLayoutEffect, useRef, useState } from 'react';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 
 import { CardImage } from '../CardImage';
-import { Icon, IconNamesLight } from '../Icon';
 
 import { VisitorSpaceCardType } from './VisitorSpaceCard.const';
 import styles from './VisitorSpaceCard.module.scss';
