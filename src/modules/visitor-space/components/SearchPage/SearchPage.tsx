@@ -697,7 +697,8 @@ const SearchPage: FC = () => {
 					kebabCase(item.name) || 'titel'
 				}`,
 				query: {
-					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: searchResults?.searchTerms,
+					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]:
+						searchResults?.searchTerms.join(','),
 				},
 			});
 
