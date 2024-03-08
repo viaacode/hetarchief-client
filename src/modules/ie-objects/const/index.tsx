@@ -1,6 +1,6 @@
 import { MenuItemInfo, TabProps } from '@meemoo/react-components';
 import { isString } from 'lodash-es';
-import { ArrayParam } from 'use-query-params';
+import { StringParam } from 'use-query-params';
 
 import {
 	ActionItem,
@@ -465,5 +465,5 @@ export const METADATA_FIELDS = (mediaInfo: IeObject): MetadataItem[] => [
 ];
 
 export const IE_OBJECT_QUERY_PARAM_CONFIG = {
-	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: ArrayParam,
+	[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: StringParam,
 };
