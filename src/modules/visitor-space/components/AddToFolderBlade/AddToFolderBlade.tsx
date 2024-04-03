@@ -129,8 +129,6 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			// Execute calls
 			await Promise.all(updatePromises);
 
-			await getFolders.refetch();
-
 			// Show ONE correct toast message
 			if (addedToFolderIds.length > 0 && removedFromFolderIds.length > 0) {
 				const folderTitles = folderIdsToTitles([
@@ -224,6 +222,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 					});
 				}
 			}
+
+			// Placing this refetch after the toast messages, otherwise you get this error where the toast message disappears instantly:
+			// https://meemoo.atlassian.net/browse/ARC-2048
+			await getFolders.refetch();
 
 			onSubmit?.(selectedFolderIds || []);
 			resetForm();
