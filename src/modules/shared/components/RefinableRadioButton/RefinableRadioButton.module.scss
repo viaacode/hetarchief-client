@@ -19,6 +19,12 @@
 			margin: 0 $spacer-md 0 calc($c-check-radio-size / 2);
 		}
 
+		:global(.c-dropdown__content-open) {
+			max-height: 30rem;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
 		&--disabled {
 			.c-refinable-radio-button__dropdown,
 			.c-refinable-radio-button__dropdown-info {
